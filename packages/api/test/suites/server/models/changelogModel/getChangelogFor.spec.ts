@@ -2,20 +2,21 @@ import SequelizeMock from 'sequelize-mock';
 import rewiremock from 'rewiremock/node';
 import { expect } from 'chai';
 
-import { serialized: createUser } from '#test/utils/user';
-import { raw: createChangelogItem } from '#test/utils/changelog';
+import { serialized as createUser } from '#test/utils/user';
+import { raw as createChangelogItem } from '#test/utils/changelog';
 
 describe.only('ChangelogModel', () => {
     describe('.getChangelogFor()', () => {
         let getChangelogFor;
         let sequelizeStub;
-        beforeEach(() => {
+        beforeEach(async () => {
             sequelizeStub = new SequelizeMock();
             sequelizeStub.QueryTypes = SequelizeMock.QueryTypes;
 
-            ({ getChangelogFor } = rewiremock.proxy('#server/models/changelogModel', {
-                '#db/sequelize': sequelizeStub,
-            }));
+            const { default: changelogModel } = await rewiremock.module(() => import('#server/models/changelogModel'), {
+                '#db/sequelize': { sequelize: sequelizeStub },
+            });
+            ({ getChangelogFor } = changelogModel);
         });
 
         it('Si l\'utilisateur se connecte à l\'application pour la première fois, on ne lui retourne aucun changelog', async () => {

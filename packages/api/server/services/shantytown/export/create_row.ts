@@ -1,6 +1,6 @@
-const {
+import {
     TableRow, TableCell, Paragraph, TextRun, VerticalAlign, convertInchesToTwip,
-} = require('docx');
+} from 'docx';
 
 export default cells => new TableRow({
     children:

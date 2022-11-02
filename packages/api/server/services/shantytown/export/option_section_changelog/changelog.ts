@@ -1,6 +1,6 @@
-const {
+import {
     TableRow, TableCell, Paragraph, TextRun,
-} = require('docx');
+} from 'docx';
 
 export default (date, author, field, oldValue, newValue) => new TableRow({
     children: [

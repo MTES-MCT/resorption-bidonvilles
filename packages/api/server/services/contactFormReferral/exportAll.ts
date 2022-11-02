@@ -1,8 +1,8 @@
 import ServiceError from '#server/errors/ServiceError';
-import contactFormReferralModelFactory from '#server/models/contactFormReferralModel';
+import contactFormReferralModel from '#server/models/contactFormReferralModel';
 import permissionUtils from '#server/utils/permission';
 
-const { list } = contactFormReferralModelFactory();
+const { list } = contactFormReferralModel;
 const { where: fWhere } = permissionUtils;
 
 export default async (user) => {

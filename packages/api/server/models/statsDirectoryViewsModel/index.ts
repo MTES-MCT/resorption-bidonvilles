@@ -1,7 +1,7 @@
 import create from './create';
 import count from './count';
 
-export default () => ({
+export default {
     create,
     count,
-});
+};

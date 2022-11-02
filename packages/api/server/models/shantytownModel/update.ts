@@ -1,7 +1,5 @@
 import { sequelize } from '#db/sequelize';
-import incomingTownsModelFactory from '#server/models/incomingTownsModel';
-
-const incomingTownsModel = incomingTownsModelFactory();
+import incomingTownsModel from '#server/models/incomingTownsModel';
 
 export default async (editor, shantytownId, data, argTransaction = undefined) => {
     let transaction = argTransaction;

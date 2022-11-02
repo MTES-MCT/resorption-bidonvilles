@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import chaiAsPromised from 'chai-as-promised';
 import rewiremock from 'rewiremock/node';
-import { serialized: fakeUser } from '#test/utils/user';
+import { serialized as fakeUser } from '#test/utils/user';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -19,11 +19,14 @@ const mattermostUtils = {
 const userModel = {
     findOne: sinon.stub(),
 };
-const createUser = rewiremock.proxy('./createUser.js', {
-    '#db/sequelize': sequelize,
-    '#server/utils/mattermost': mattermostUtils,
-    '#server/models/userModel': userModel,
-});
+
+rewiremock('#db/sequelize').with({ sequelize });
+rewiremock('#server/utils/mattermost').with(mattermostUtils);
+rewiremock('#server/models/userModel').with(userModel);
+
+rewiremock.enable();
+import createUser from "./createUser";
+rewiremock.disable();
 
 describe.only('userService.createUser()', () => {
     afterEach(() => {
@@ -37,7 +40,7 @@ describe.only('userService.createUser()', () => {
         sequelize.transaction.resolves(user.id);
         userModel.findOne.withArgs(user.id).resolves(user);
         // execute
-        await createUser();
+        await createUser({});
         // assert
         expect(mattermostUtils.triggerNotifyNewUserFromRectorat).to.have.been.calledWith(user);
     });
@@ -48,7 +51,7 @@ describe.only('userService.createUser()', () => {
         sequelize.transaction.resolves(user.id);
         userModel.findOne.withArgs(user.id).resolves(user);
         // execute
-        await createUser();
+        await createUser({});
         // assert
         expect(mattermostUtils.triggerNotifyNewUserFromRectorat).to.not.have.been.called;
     });
@@ -59,7 +62,7 @@ describe.only('userService.createUser()', () => {
         sequelize.transaction.resolves(user.id);
         userModel.findOne.withArgs(user.id).resolves(user);
         // execute
-        const response = await createUser();
+        const response = await createUser({});
         // assert
         expect(response).to.be.eql(user);
     });
@@ -72,6 +75,6 @@ describe.only('userService.createUser()', () => {
         userModel.findOne.withArgs(user.id).resolves(user);
         mattermostUtils.triggerNotifyNewUserFromRectorat.rejects(new Error('une erreur'));
         // assert
-        await expect(createUser()).not.to.be.rejected;
+        await expect(createUser({})).not.to.be.rejected;
     });
 });

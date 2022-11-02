@@ -1,11 +1,9 @@
 /* eslint-disable no-throw-literal */
 import validator from 'validator';
-import geoModelFactory from '#server/models/geoModel';
-import highCovidCommentModelFactory from '#server/models/highCovidCommentModel';
+import geoModel from '#server/models/geoModel';
+import highCovidCommentModel from '#server/models/highCovidCommentModel';
 
 const { trim } = validator;
-const geoModel = geoModelFactory();
-const highCovidCommentModel = highCovidCommentModelFactory();
 
 export default () => {
     /**

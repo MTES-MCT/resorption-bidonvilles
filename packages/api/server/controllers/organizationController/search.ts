@@ -1,14 +1,11 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import validator from 'validator';
-import organizationModelFactory from '#server/models/organizationModel';
-import userModelFactory from '#server/models/userModel';
-import geoModelFactory from '#server/models/geoModel';
+import organizationModel from '#server/models/organizationModel';
+import userModel from '#server/models/userModel';
+import geoModel from '#server/models/geoModel';
 
 const { trim } = validator;
-const geoModel = geoModelFactory();
-const organizationModel = organizationModelFactory();
-const userModel = userModelFactory();
 
 export default async (req, res, next) => {
     // parse query

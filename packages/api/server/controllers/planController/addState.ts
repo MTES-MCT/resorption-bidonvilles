@@ -1,10 +1,8 @@
 import { sequelize } from '#db/sequelize';
 
-import planModelFactory from '#server/models/planModel';
-import etpTypeModelFactory from '#server/models/etpTypeModel/index';
+import planModel from '#server/models/planModel';
+import etpTypeModel from '#server/models/etpTypeModel/index';
 
-const planModel = planModelFactory();
-const etpTypeModel = etpTypeModelFactory();
 function sanitizeState(plan, data) {
     const sanitizedData: any = {};
 

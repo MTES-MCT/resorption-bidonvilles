@@ -1,9 +1,7 @@
 import moment from 'moment';
-import planCommentModelFactory from '#server/models/planCommentModel';
+import planCommentModel from '#server/models/planCommentModel';
 import ServiceError from '#server/errors/ServiceError';
 import permissionUtils from '#server/utils/permission';
-
-const planCommentModel = planCommentModelFactory();
 
 export default async (user) => {
     const nationalLevel = { type: 'nation' };
@@ -11,7 +9,6 @@ export default async (user) => {
     if (!permissionUtils.can(user).do('export', 'plan_comment').on(nationalLevel)) {
         throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission d\'exporter les commentaires'));
     }
-
 
     let comments;
     try {

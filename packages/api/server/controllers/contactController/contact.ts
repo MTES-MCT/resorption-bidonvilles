@@ -5,11 +5,9 @@ import accessRequestService from '#server/services/accessRequest/accessRequestSe
 
 import mailsUtils from '#server/mails/mails';
 
-import userModelFactory from '#server/models/userModel';
-import contactFormReferralModelFactory from '#server/models/contactFormReferralModel';
+import userModel from '#server/models/userModel';
+import contactFormReferralModel from '#server/models/contactFormReferralModel';
 
-const userModel = userModelFactory();
-const contactFormReferralModel = contactFormReferralModelFactory();
 const { toString: dateToString } = dateUtils;
 const { sendAdminContactMessage, sendContactNewsletterRegistration } = mailsUtils;
 

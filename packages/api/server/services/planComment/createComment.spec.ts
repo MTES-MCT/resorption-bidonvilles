@@ -5,23 +5,17 @@ import sinonChai from 'sinon-chai';
 const { expect } = chai;
 chai.use(sinonChai);
 
-import planCommentModelFactory from '#server/models/planCommentModel';
-import userModelFactory from '#server/models/userModel';
+import planCommentModel from '#server/models/planCommentModel';
+import userModel from '#server/models/userModel';
 
 
 import mails from '#server/mails/mails';
 
 import mattermostUtils from '#server/utils/mattermost';
-import userUtils from '#test/utils/user';
-import planUtils from '#test/utils/plan';
+import { serialized as fakeUser } from '#test/utils/user';
+import { serialized as fakePlan } from '#test/utils/plan';
 
 import createCommentService from './createComment';
-
-const { serialized: fakeUser } = userUtils;
-const { serialized: fakePlan } = planUtils;
-const userModel = userModelFactory();
-const planCommentModel = planCommentModelFactory();
-
 
 describe.only('services/planComment', () => {
     describe('createComment()', () => {

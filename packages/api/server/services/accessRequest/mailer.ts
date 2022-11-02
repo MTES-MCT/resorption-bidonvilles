@@ -3,7 +3,7 @@ import config from '#server/config';
 
 import mails from '#server/mails/mails';
 
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 
 const {
     sendAdminNewRequestNotification,
@@ -21,7 +21,7 @@ const {
 
 
 const { toString: dateToString } = dateUtils;
-const { formatName } = userModelFactory();
+const { formatName } = userModel;
 const { webappUrl } = config;
 
 export default {

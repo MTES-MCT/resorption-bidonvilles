@@ -1,12 +1,10 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
 
-const userModel = userModelFactory();
 const { restrict } = permissionUtils;
-
 
 export default async (user, location, numberOfActivities, lastDate, maxDate) => {
     // apply geographic level restrictions

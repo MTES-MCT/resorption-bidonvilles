@@ -5,19 +5,13 @@ import geoUtils from '#server/utils/geo';
 import excelUtils from '#server/utils/excel';
 import moment from 'moment';
 
-import geoModelFactory from '#server/models/geoModel';
-import shantytownModelFactory from '#server/models/shantytownModel';
-import closingSolutionModelFactory from '#server/models/closingSolutionModel';
-import statsExportsModelFactory from '#server/models/statsExports';
-
+import geoModel from '#server/models/geoModel';
+import shantytownModel from '#server/models/shantytownModel';
+import closingSolutionModel from '#server/models/closingSolutionModel';
+import statsExportsModel from '#server/models/statsExportsModel';
 
 import serializeExportProperties from './_common/serializeExportProperties';
 import createExportSections from './_common/createExportSections';
-
-const geoModel = geoModelFactory();
-const shantytownModel = shantytownModelFactory();
-const closingSolutionModel = closingSolutionModelFactory();
-const statsExportsModel = statsExportsModelFactory();
 
 export default async (user, data) => {
     if (!Object.prototype.hasOwnProperty.call(data, 'locationType')

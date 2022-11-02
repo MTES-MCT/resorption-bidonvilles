@@ -1,6 +1,6 @@
-const {
+import {
     Paragraph, TextRun, SectionType,
-} = require('docx');
+} from 'docx';
 
 import themes from '#server/config/shantytown_actor_themes';
 import heading from './heading';

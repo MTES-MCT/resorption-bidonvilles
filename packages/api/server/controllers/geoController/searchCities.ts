@@ -1,8 +1,6 @@
 import url from 'url';
 import validator from 'validator';
-import cityModelFactory from '#server/models/cityModel/index';
-
-const cityModel = cityModelFactory();
+import cityModel from '#server/models/cityModel/index';
 
 const { trim } = validator;
 export default async (req, res, next) => {

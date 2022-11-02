@@ -1,5 +1,3 @@
-/* eslint-disable global-require */
-
 /* **************************************************************************************************
  * TOOLS
  * *********************************************************************************************** */
@@ -75,7 +73,7 @@ describe.only('townController.createCovidComment()', () => {
         const res = mockRes();
 
         // execute
-        await createCovidCommentController(req, res);
+        await createCovidCommentController(req, res, () => { });
 
         // assert
         expect(createCovidCommentStub).to.have.been.calledOnceWith(
@@ -92,7 +90,7 @@ describe.only('townController.createCovidComment()', () => {
         const res = mockRes();
 
         // execute
-        await createCovidCommentController(req, res);
+        await createCovidCommentController(req, res, () => { });
 
         // assert
         expect(createCovidCommentStub).to.have.been.calledOnceWith(
@@ -110,7 +108,7 @@ describe.only('townController.createCovidComment()', () => {
 
 
         // execute
-        await createCovidCommentController(req, res);
+        await createCovidCommentController(req, res, () => { });
 
         // assert
         expect(createCovidCommentStub).to.have.been.calledOnceWith(
@@ -127,7 +125,7 @@ describe.only('townController.createCovidComment()', () => {
         const res = mockRes();
 
         // execute
-        const returnValue = await createCovidCommentController(req, res);
+        const returnValue = await createCovidCommentController(req, res, () => { });
 
         // assert
         expect(returnValue).to.be.eql(res);
@@ -147,7 +145,7 @@ describe.only('townController.createCovidComment()', () => {
             const req = mockReq(reqArg);
             const res = mockRes();
 
-            createCovidCommentStub.rejects(new ServiceError('fetch_failed', {}));
+            createCovidCommentStub.rejects(new ServiceError('fetch_failed', new Error()));
             await createCovidCommentController(req, res, next);
             expect(res.status).to.have.been.calledOnceWith(400);
         });
@@ -156,7 +154,7 @@ describe.only('townController.createCovidComment()', () => {
             const req = mockReq(reqArg);
             const res = mockRes();
 
-            createCovidCommentStub.rejects(new ServiceError('data_incomplete', {}));
+            createCovidCommentStub.rejects(new ServiceError('data_incomplete', new Error()));
             await createCovidCommentController(req, res, next);
             expect(res.status).to.have.been.calledOnceWith(400);
         });
@@ -165,7 +163,7 @@ describe.only('townController.createCovidComment()', () => {
             const req = mockReq(reqArg);
             const res = mockRes();
 
-            createCovidCommentStub.rejects(new ServiceError('write_failed', {}));
+            createCovidCommentStub.rejects(new ServiceError('write_failed', new Error()));
             await createCovidCommentController(req, res, next);
             expect(res.status).to.have.been.calledOnceWith(500);
         });

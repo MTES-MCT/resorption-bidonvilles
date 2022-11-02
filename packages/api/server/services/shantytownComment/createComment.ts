@@ -1,18 +1,14 @@
 
-import shantytownCommentModelFactory from '#server/models/shantytownCommentModel';
-import shantytownModelFactory from '#server/models/shantytownModel';
-import shantytownCommentTagModelFactory from '#server/models/shantytownCommentTagModel';
+import shantytownCommentModel from '#server/models/shantytownCommentModel';
+import shantytownModel from '#server/models/shantytownModel';
+import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel';
 import mattermostUtils from '#server/utils/mattermost';
 
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 import mails from '#server/mails/mails';
 import ServiceError from '#server/errors/ServiceError';
 import { sequelize } from '#db/sequelize';
 
-const shantytownCommentModel = shantytownCommentModelFactory();
-const shantytownModel = shantytownModelFactory();
-const shantytownCommentTagModel = shantytownCommentTagModelFactory();
-const userModel = userModelFactory();
 /**
  * @param {Service_ShantytownComment_Create_CommentData} comment Commentaire
  * @param {Model_Shantytown} shantytown site rattaché au commentaire

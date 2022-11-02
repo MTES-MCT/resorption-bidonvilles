@@ -1,12 +1,11 @@
 import nodeMailjet from 'node-mailjet';
 import config from '#server/config';
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 
 const { mail: mailConfig, wwwUrl } = config;
 const mailjet = mailConfig.publicKey
     ? nodeMailjet.connect(mailConfig.publicKey, mailConfig.privateKey)
     : null;
-const userModel = userModelFactory();
 
 export default {
     generateUserSignature(user) {

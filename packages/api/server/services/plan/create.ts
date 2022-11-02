@@ -1,40 +1,24 @@
 import ServiceError from '#server/errors/ServiceError';
 import { sequelize } from '#db/sequelize';
 
-import userModelFactory from '#server/models/userModel';
-import permissionModelFactory from '#server/models/permissionModel';
-import planModelFactory from '#server/models/planModel';
-import shantytownModelFactory from '#server/models/shantytownModel';
-import departementModelFactory from '#server/models/departementModel';
+import userModel from '#server/models/userModel';
+import permissionModel from '#server/models/permissionModel';
+import planModel from '#server/models/planModel';
+import shantytownModel from '#server/models/shantytownModel';
+import departementModel from '#server/models/departementModel';
 
-import financeModelFactory from '#server/models/financeModel';
-import financeTypeModelFactory from '#server/models/financeTypeModel';
-import financeRowModelFactory from '#server/models/financeRowModel';
-import planManagerModelFactory from '#server/models/planManagerModel';
-import topicModelFactory from '#server/models/topicModel';
-import locationModelFactory from '#server/models/locationModel';
-import planDepartementModelFactory from '#server/models/planDepartementModel';
-import planTopicsModelFactory from '#server/models/planTopicsModel';
-import planShantytownModelFactory from '#server/models/planShantytownModel';
-import planOperatorModelFactory from '#server/models/planOperatorModel';
+import financeModel from '#server/models/financeModel';
+import financeTypeModel from '#server/models/financeTypeModel';
+import financeRowModel from '#server/models/financeRowModel';
+import planManagerModel from '#server/models/planManagerModel';
+import topicModel from '#server/models/topicModel';
+import locationModel from '#server/models/locationModel';
+import planDepartementModel from '#server/models/planDepartementModel';
+import planTopicsModel from '#server/models/planTopicsModel';
+import planShantytownModel from '#server/models/planShantytownModel';
+import planOperatorModel from '#server/models/planOperatorModel';
 
 import sanitize from '#server/controllers/planController/_common/sanitize';
-
-const departementModel = departementModelFactory();
-const financeModel = financeModelFactory();
-const financeTypeModel = financeTypeModelFactory();
-const financeRowModel = financeRowModelFactory();
-const planManagerModel = planManagerModelFactory();
-const topicModel = topicModelFactory();
-const locationModel = locationModelFactory();
-const planDepartementModel = planDepartementModelFactory();
-const userModel = userModelFactory();
-const permissionModel = permissionModelFactory();
-const planModel = planModelFactory();
-const shantytownModel = shantytownModelFactory();
-const planTopicsModel = planTopicsModelFactory();
-const planShantytownModel = planShantytownModelFactory();
-const planOperatorModel = planOperatorModelFactory();
 
 export default async (data, user) => {
     // sanitize data

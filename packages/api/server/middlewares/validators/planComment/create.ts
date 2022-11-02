@@ -1,9 +1,6 @@
 /* eslint-disable newline-per-chained-call */
 import { body, param } from 'express-validator';
-import planModelFactory from '#server/models/planModel';
-import { copyFileSync } from 'fs';
-
-const planModel = planModelFactory();
+import planModel from '#server/models/planModel';
 
 export default [
     param('id')

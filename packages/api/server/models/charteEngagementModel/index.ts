@@ -1,5 +1,5 @@
 import getLatest from './getLatest';
 
-export default () => ({
+export default {
     getLatest,
-});
+};

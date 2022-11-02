@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize'
 import geoUtils from '#server/utils/geo';
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
 import getUsenameOf from './_common/getUsenameOf';
 import serializeShantytown from './_common/serializeShantytown';
@@ -10,7 +10,6 @@ import SQL from './_common/SQL';
 
 const { fromGeoLevelToTableName } = geoUtils;
 const { restrict } = permissionUtils;
-const userModel = userModelFactory();
 
 export default async (user, location, shantytownFilter, numberOfActivities, lastDate, maxDate) => {
     // apply geographic level restrictions

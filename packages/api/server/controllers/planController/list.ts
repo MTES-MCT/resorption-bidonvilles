@@ -1,6 +1,4 @@
-import planModelFactory from '#server/models/planModel';
-
-const planModel = planModelFactory();
+import planModel from '#server/models/planModel';
 
 export default async (req, res) => {
     try {

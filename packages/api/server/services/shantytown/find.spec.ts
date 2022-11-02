@@ -2,14 +2,14 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-import shantytownModelFactory from '#server/models/shantytownModel';
+import shantytownModel from '#server/models/shantytownModel';
 import ServiceError from '#server/errors/ServiceError';
 import findService from './find';
+import { serialized as fakeUser } from "#test/utils/user";
+import { serialized as fakeTown } from "#test/utils/shantytown";
 
 const { expect } = chai;
 chai.use(sinonChai);
-
-const shantytownModel = shantytownModelFactory();
 
 describe.only('services/shantytown', () => {
     describe('find()', () => {
@@ -25,9 +25,9 @@ describe.only('services/shantytown', () => {
         });
 
         it('retourne le site', async () => {
-            const town = { id: 0, address: '' };
+            const town = fakeTown();
             stubs.findOne.resolves(town);
-            const response = await findService();
+            const response = await findService(fakeUser(), 1);
             expect(response).to.be.an('object');
             expect(response).to.be.eql(town);
         });
@@ -35,7 +35,7 @@ describe.only('services/shantytown', () => {
             stubs.findOne.resolves(null);
             let responseError = null;
             try {
-                await findService();
+                await findService(fakeUser(), 1);
             } catch (error) {
                 responseError = error;
             }

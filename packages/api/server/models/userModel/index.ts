@@ -24,7 +24,7 @@ import setPermissionOptions from './setPermissionOptions';
 import update from './update';
 import upgradeLocalAdmin from './upgradeLocalAdmin';
 
-export default () => ({
+export default {
     create,
     deactivate,
     delete: deleteUser,
@@ -50,4 +50,4 @@ export default () => ({
     setPermissionOptions,
     update,
     upgradeLocalAdmin,
-});
+};

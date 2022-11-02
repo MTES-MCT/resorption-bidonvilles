@@ -1,10 +1,10 @@
 import validator from 'validator';
 import { sequelize } from '#db/sequelize';
-import planModelFactory from '#server/models/planModel';
+import planModel from '#server/models/planModel';
 import historize from './_common/historize';
 
 const { trim } = validator;
-const planModel = planModelFactory();
+
 function sanitizeClose(data) {
     const sanitizedData: any = {};
 

@@ -1,6 +1,4 @@
-import organizationModelFactory from '#server/models/organizationModel';
-
-const organizationModel = organizationModelFactory();
+import organizationModel from '#server/models/organizationModel';
 
 export default async (req, res) => res.status(200).send({
     success: true,

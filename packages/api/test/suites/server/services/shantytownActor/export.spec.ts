@@ -7,10 +7,9 @@ chai.use(sinonChai);
 
 import ServiceError from '#server/errors/ServiceError';
 import permissionUtils from '#server/utils/permission';
-import shantytownActorModelFactory from '#server/models/shantytownActorModel';
+import shantytownActorModel from '#server/models/shantytownActorModel';
 import exportService from '#server/services/shantytownActor/export';
-
-const shantytownActorModel = shantytownActorModelFactory();
+import { serialized as fakeUser } from "#test/utils/user";
 
 describe.only('services/shantytownActor', () => {
     describe('export()', () => {
@@ -34,7 +33,7 @@ describe.only('services/shantytownActor', () => {
         });
 
         it('vérifie la permission export.shantytown_actor', async () => {
-            const user = {};
+            const user = fakeUser();
             try {
                 await exportService(user);
             } catch (error) {
@@ -52,7 +51,7 @@ describe.only('services/shantytownActor', () => {
             stubs.findAllByLocation = sinon.stub(shantytownActorModel, 'findAllByLocation');
             stubs.findAllByLocation.resolves(rawActors);
 
-            const response = await exportService();
+            const response = await exportService(fakeUser());
             expect(response).to.be.an('array');
             expect(response).to.have.lengthOf(rawActors.length);
         });
@@ -60,7 +59,7 @@ describe.only('services/shantytownActor', () => {
         it('retourne un tableau vide, si on a pas la permission de lister les intervenants', async () => {
             stubs.do.returns(null);
 
-            const response = await exportService();
+            const response = await exportService(fakeUser());
             expect(response).to.be.eql([]);
         });
 
@@ -72,7 +71,7 @@ describe.only('services/shantytownActor', () => {
 
             let error = null;
             try {
-                await exportService();
+                await exportService(fakeUser());
             } catch (argError) {
                 error = argError;
             }

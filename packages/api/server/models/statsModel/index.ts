@@ -30,7 +30,7 @@ import numberOfUsersAtMonth from './numberOfUsersAtMonth';
 import populationTotal from './populationTotal';
 import wau from './wau';
 
-export default () => ({
+export default {
     averageCompletionPercentage,
     averageCompletionPercentageByDepartement,
     getStats,
@@ -62,4 +62,4 @@ export default () => ({
     numberOfUsersAtMonth,
     populationTotal,
     wau,
-});
+};

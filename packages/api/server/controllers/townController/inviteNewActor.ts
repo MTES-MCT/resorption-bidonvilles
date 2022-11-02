@@ -1,11 +1,10 @@
 
 import mattermostUtils from '#server/utils/mattermost';
 import mailsUtils from '#server/mails/mails';
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 
 const { triggerActorInvitedAlert } = mattermostUtils;
 const { sendUserShantytownActorInvitation } = mailsUtils;
-const userModel = userModelFactory();
 
 export default () => async (req, res, next) => {
     try {

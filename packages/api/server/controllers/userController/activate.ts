@@ -1,17 +1,14 @@
 import jwt from 'jsonwebtoken';
 import CONFIG from '#server/config';
 import { sequelize } from '#db/sequelize';
-import userModelFactory from '#server/models/userModel';
-import userAccessModelFactory from '#server/models/userAccessModel';
-import organizationModelFactory from '#server/models/organizationModel';
+import userModel from '#server/models/userModel';
+import userAccessModel from '#server/models/userAccessModel';
+import organizationModel from '#server/models/organizationModel';
 import accessRequestService from '#server/services/accessRequest/accessRequestService';
 import checkPassword from '#server/controllers/userController/helpers/checkPassword';
 import mattermostUtils from '#server/utils/mattermost';
 import authUtils from '#server/utils/auth';
 
-const userModel = userModelFactory();
-const userAccessModel = userAccessModelFactory();
-const organizationModel = organizationModelFactory();
 const { triggerNewUserAlert } = mattermostUtils;
 const { hashPassword } = authUtils;
 

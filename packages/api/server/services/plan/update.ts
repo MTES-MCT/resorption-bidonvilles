@@ -1,27 +1,17 @@
 import ServiceError from '#server/errors/ServiceError';
 import { sequelize } from '#db/sequelize';
 
-import planModelFactory from '#server/models/planModel';
-import financeModelFactory from '#server/models/financeModel';
-import financeRowModelFactory from '#server/models/financeRowModel';
-import financeTypeModelFactory from '#server/models/financeTypeModel';
-import topicModelFactory from '#server/models/topicModel';
-import userModelFactory from '#server/models/userModel';
-import planManagerModelFactory from '#server/models/planManagerModel';
-import permissionModelFactory from '#server/models/permissionModel';
-import planShantytownModelFactory from '#server/models/planShantytownModel';
+import planModel from '#server/models/planModel';
+import financeModel from '#server/models/financeModel';
+import financeRowModel from '#server/models/financeRowModel';
+import financeTypeModel from '#server/models/financeTypeModel';
+import topicModel from '#server/models/topicModel';
+import userModel from '#server/models/userModel';
+import planManagerModel from '#server/models/planManagerModel';
+import permissionModel from '#server/models/permissionModel';
+import planShantytownModel from '#server/models/planShantytownModel';
 import sanitize from '#server/controllers/planController/_common/sanitize';
 import historize from '#server/controllers/planController/_common/historize';
-
-const planModel = planModelFactory();
-const financeModel = financeModelFactory();
-const financeRowModel = financeRowModelFactory();
-const financeTypeModel = financeTypeModelFactory();
-const topicModel = topicModelFactory();
-const userModel = userModelFactory();
-const planManagerModel = planManagerModelFactory();
-const permissionModel = permissionModelFactory();
-const planShantytownModel = planShantytownModelFactory();
 
 export default async (data, planId, user) => {
     let plan;

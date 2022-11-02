@@ -1,7 +1,7 @@
 import findAll from './findAll';
 import findOneById from './findOneById';
 
-export default () => ({
+export default {
     findAll,
     findOneById,
-});
+};

@@ -1,8 +1,6 @@
 import { body } from 'express-validator';
 // models
-import userModelFactory from '#server/models/userModel';
-
-const userModel = userModelFactory();
+import userModel from '#server/models/userModel';
 
 export default [
     body('email')

@@ -3,9 +3,9 @@ import deletePlanShantytown from './delete';
 import findAll from './findAll';
 import serializePlan from './serializePlan';
 
-export default () => ({
+export default {
     create,
     delete: deletePlanShantytown,
     serializePlan,
     findAll,
-});
+};

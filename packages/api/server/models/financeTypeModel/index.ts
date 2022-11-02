@@ -1,5 +1,5 @@
 import findAll from './findAll';
 
-export default () => ({
+export default {
     findAll,
-});
+};

@@ -1,21 +1,22 @@
-export default {
-    serialized(location, override = {}) {
-        const {
-            city, epci, departement, region,
-        } = location;
+import locations from "./location";
+const defaultLocation = locations.paris.city();
 
-        const shantytown = {
-            type: 'shantytown',
-            id: 1,
-            city,
-            epci,
-            departement,
-            region,
-        };
+export function serialized(location = defaultLocation, override = {}) {
+    const {
+        city, epci, departement, region,
+    } = location;
 
-        return {
-            ...shantytown,
-            ...override,
-        };
-    },
-};
+    const shantytown = {
+        type: 'shantytown',
+        id: 1,
+        city,
+        epci,
+        departement,
+        region,
+    };
+
+    return {
+        ...shantytown,
+        ...override,
+    };
+}

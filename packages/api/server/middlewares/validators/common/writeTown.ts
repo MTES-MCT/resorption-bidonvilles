@@ -3,19 +3,14 @@ import { body, param } from 'express-validator';
 import validator from 'validator';
 import permissionUtils from '#server/utils/permission';
 // models
-import shantytownModelFactory from '#server/models/shantytownModel';
-import fieldTypeModelFactory from '#server/models/fieldTypeModel';
-import geoModelFactory from '#server/models/geoModel';
-import ownerTypeModelFactory from '#server/models/ownerTypeModel';
-import socialOriginModelFactory from '#server/models/socialOriginModel';
+import shantytownModel from '#server/models/shantytownModel';
+import fieldTypeModel from '#server/models/fieldTypeModel';
+import geoModel from '#server/models/geoModel';
+import ownerTypeModel from '#server/models/ownerTypeModel';
+import socialOriginModel from '#server/models/socialOriginModel';
 
 const { isLatLong, trim } = validator;
 const { can } = permissionUtils;
-const fieldTypeModel = fieldTypeModelFactory();
-const shantytownModel = shantytownModelFactory();
-const geoModel = geoModelFactory();
-const ownerTypeModel = ownerTypeModelFactory();
-const socialOriginModel = socialOriginModelFactory();
 
 function fromIntToBoolSanitizer(value) {
     if (value === -1) {

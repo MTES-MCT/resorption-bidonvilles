@@ -1,12 +1,10 @@
 import insert from '#server/services/userNavigationLogs/insert';
-import userNavigationLogsModelFactory from '#server/models/userNavigationLogsModel';
+import userNavigationLogsModel from '#server/models/userNavigationLogsModel';
 import ServiceError from '#server/errors/ServiceError';
 
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-
-const userNavigationLogsModel = userNavigationLogsModelFactory();
 
 const { expect } = chai;
 chai.use(sinonChai);

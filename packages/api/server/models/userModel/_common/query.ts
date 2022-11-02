@@ -1,13 +1,10 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes, Transaction } from 'sequelize';
-import charteEngagementModelFactory from '#server/models/charteEngagementModel';
-import permissionModelFactory from '#server/models/permissionModel';
+import charteEngagementModel from '#server/models/charteEngagementModel';
+import permissionModel from '#server/models/permissionModel';
 import permissionUtils from '#server/utils/permission';
 import { Where } from '#server/models/_common/types/Where';
 import serializeUser from './serializeUser';
-
-const charteEngagementModel = charteEngagementModelFactory();
-const permissionModel = permissionModelFactory();
 
 const { where: fWhere } = permissionUtils;
 

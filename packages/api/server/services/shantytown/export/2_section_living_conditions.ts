@@ -12,7 +12,7 @@ const {
 } = docx;
 
 export default (shantytown) => {
-    const section = {
+    const section: any = {
         properties: {
             type: SectionType.CONTINUOUS,
         },

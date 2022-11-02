@@ -1,13 +1,10 @@
 import { sequelize } from '#db/sequelize';
-import userModelFactory from '#server/models/userModel';
-import organizationModelFactory from '#server/models/organizationModel';
-import organizationTypeModelFactory from '#server/models/organizationTypeModel';
+import userModel from '#server/models/userModel';
+import organizationModel from '#server/models/organizationModel';
+import organizationTypeModel from '#server/models/organizationTypeModel';
 import authUtils from '#server/utils/auth';
 import mattermostUtils from '#server/utils/mattermost';
 
-const userModel = userModelFactory();
-const organizationModel = organizationModelFactory();
-const organizationTypeModel = organizationTypeModelFactory();
 const { generateSalt } = authUtils;
 
 async function createUser(data) {

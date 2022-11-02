@@ -7,10 +7,10 @@ chai.use(sinonChai);
 
 const { expect } = chai;
 import ServiceError from '#server/errors/ServiceError';
-import shantytownCommentModelFactory from '#server/models/shantytownCommentModel';
-import shantytownCommentTagModelFactory from '#server/models/shantytownCommentTagModel';
-import shantytownModelFactory from '#server/models/shantytownModel';
-import userModelFactory from '#server/models/userModel';
+import shantytownCommentModel from '#server/models/shantytownCommentModel';
+import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel';
+import shantytownModel from '#server/models/shantytownModel';
+import userModel from '#server/models/userModel';
 import mattermostUtils from '#server/utils/mattermost';
 import mails from '#server/mails/mails';
 
@@ -19,16 +19,8 @@ const sequelizeStub = new SequelizeMock();
 
 import createComment from '#server/services/shantytownComment/createComment';
 
-import userUtils from '#test/utils/user';
-import shantytownCommentUtils from '#test/utils/shantytownComment';
-
-const shantytownCommentModel = shantytownCommentModelFactory();
-const shantytownCommentTagModel = shantytownCommentTagModelFactory();
-const shantytownModel = shantytownModelFactory();
-const userModel = userModelFactory();
-
-const { serialized: fakeUser } = userUtils;
-const { serialized: fakeComment } = shantytownCommentUtils;
+import { serialized as fakeUser } from '#test/utils/user';
+import { serialized as fakeComment } from '#test/utils/shantytownComment';
 
 describe.only('services/shantytownComment', () => {
     const dependencies = {

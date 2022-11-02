@@ -1,14 +1,13 @@
 import { sequelize } from '#db/sequelize';
 
-import shantytownActorModelFactory from '#server/models/shantytownActorModel';
+import shantytownActorModel from '#server/models/shantytownActorModel';
 import mattermostUtils from '#server/utils/mattermost';
 import mailsUtils from '#server/mails/mails';
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 
-const shantytownActorModel = shantytownActorModelFactory();
 const { triggerDeclaredActor, triggerInvitedActor } = mattermostUtils;
 const { sendUserShantytownActorNotification } = mailsUtils;
-const userModel = userModelFactory();
+
 export default async (req, res, next) => {
     // if the actor to be added is the current user, proceed
     if (req.body.user.id === req.user.id) {

@@ -11,7 +11,7 @@ import findOneByLocation from './findOneByLocation';
 import findPrefAndDdets from './findPrefAndDdets';
 import getName from './getName';
 
-export default () => ({
+export default {
     activate,
     updateBeingFunded,
     create,
@@ -24,4 +24,4 @@ export default () => ({
     findOneByLocation,
     findPrefAndDdets,
     getName,
-});
+};

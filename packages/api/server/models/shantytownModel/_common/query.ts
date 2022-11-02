@@ -1,8 +1,8 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import shantytownActorModelFactory from '#server/models/shantytownActorModel';
-import planShantytownModelFactory from '#server/models/planShantytownModel';
-import incomingTownsModelFactory from '#server/models/incomingTownsModel';
+import shantytownActorModel from '#server/models/shantytownActorModel';
+import planShantytownModel from '#server/models/planShantytownModel';
+import incomingTownsModel from '#server/models/incomingTownsModel';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 import permissionUtils from '#server/utils/permission';
 import getComments from './getComments';
@@ -10,9 +10,6 @@ import serializeShantytown from './serializeShantytown';
 import getDiff from './getDiff';
 import SQL from './SQL';
 
-const shantytownActorModel = shantytownActorModelFactory();
-const planShantytownModel = planShantytownModelFactory();
-const incomingTownsModel = incomingTownsModelFactory();
 const { where: pWhere } = permissionUtils;
 
 function getBaseSql(table, whereClause = null, order = null, additionalSQL: any = {}) {

@@ -3,9 +3,9 @@ import findOne from './findOne';
 import findAll from './findAll';
 import getHistory from './getHistory';
 
-export default () => ({
+export default {
     create,
     findOne,
     findAll,
     getHistory,
-});
+};

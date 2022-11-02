@@ -1,7 +1,5 @@
-import shantytownModelFactory from '#server/models/shantytownModel';
+import shantytownModel from '#server/models/shantytownModel';
 import ServiceError from '#server/errors/ServiceError';
-
-const shantytownModel = shantytownModelFactory();
 
 export default async (user, shantytown_id) => {
     // check if the town exists

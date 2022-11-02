@@ -1,6 +1,6 @@
-const {
+import {
     Paragraph, TextRun, SectionType,
-} = require('docx');
+} from 'docx';
 
 import heading from './heading';
 

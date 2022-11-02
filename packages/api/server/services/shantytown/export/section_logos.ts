@@ -4,9 +4,9 @@ import config from '#server/config';
 
 const { assetsSrc } = config;
 
-const {
+import {
     SectionType, Paragraph, ImageRun, HorizontalPositionRelativeFrom,
-} = require('docx');
+} from 'docx';
 
 export default () => {
     const marianne = new ImageRun({

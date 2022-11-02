@@ -5,11 +5,11 @@ import sinonChai from 'sinon-chai';
 const { expect } = chai;
 chai.use(sinonChai);
 
-import shantytownModelFactory from '#server/models/shantytownModel';
+import shantytownModel from '#server/models/shantytownModel';
 import ServiceError from '#server/errors/ServiceError';
 import deleteTownService from './deleteTown';
-
-const shantytownModel = shantytownModelFactory();
+import { serialized as fakeUser } from "#test/utils/user";
+import { serialized as fakeTown } from "#test/utils/shantytown";
 
 describe.only('services/shantytown', () => {
     describe('deleteTown()', () => {
@@ -26,10 +26,10 @@ describe.only('services/shantytown', () => {
         });
 
         it('supprime le site', async () => {
-            const town = { id: 0 };
+            const town = fakeTown();
             stubs.findOne.resolves(town);
             try {
-                await deleteTownService();
+                await deleteTownService(fakeUser(), 1);
             } catch (error) {
                 // ignore
             }
@@ -40,7 +40,7 @@ describe.only('services/shantytown', () => {
             stubs.findOne.rejects(new Error());
             let responseError;
             try {
-                await deleteTownService();
+                await deleteTownService(fakeUser(), 1);
             } catch (error) {
                 responseError = error;
             }
@@ -51,7 +51,7 @@ describe.only('services/shantytown', () => {
             stubs.findOne.resolves(null);
             let responseError;
             try {
-                await deleteTownService();
+                await deleteTownService(fakeUser(), 1);
             } catch (error) {
                 responseError = error;
             }

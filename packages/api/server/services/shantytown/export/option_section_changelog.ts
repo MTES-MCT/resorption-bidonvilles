@@ -1,6 +1,6 @@
-const {
+import {
     Paragraph, TextRun, Table, SectionType,
-} = require('docx');
+} from 'docx';
 import formatDate from '../_common/formatDate';
 import heading from './heading';
 import createRow from './create_row';

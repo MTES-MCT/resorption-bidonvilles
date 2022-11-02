@@ -1,7 +1,5 @@
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 import accessRequestService from '#server/services/accessRequest/accessRequestService';
-
-const userModel = userModelFactory();
 
 export default async (req, res, next) => {
     let user;

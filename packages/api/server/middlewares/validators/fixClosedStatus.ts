@@ -1,8 +1,6 @@
 /* eslint-disable newline-per-chained-call */
 import { body, param } from 'express-validator';
-import shantytownModelFactory from '#server/models/shantytownModel';
-
-const shantytownModel = shantytownModelFactory();
+import shantytownModel from '#server/models/shantytownModel';
 
 export default [
     param('id')

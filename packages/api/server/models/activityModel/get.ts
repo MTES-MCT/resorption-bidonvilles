@@ -2,13 +2,12 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import moment from 'moment';
 
-import userModelFactory from '#server/models/userModel';
-import shantytownModelFactory from '#server/models/shantytownModel';
-import { ActivityNationalSummary } from './types/ActivityNationalSummary';
+import userModel from '#server/models/userModel';
+import shantytownModel from '#server/models/shantytownModel';
 
-const { formatName } = userModelFactory();
+const { formatName } = userModel;
 
-const { getUsenameOf } = shantytownModelFactory();
+const { getUsenameOf } = shantytownModel;
 
 export default async (argFrom: Date, argTo: Date): Promise<any> => {
     const from = moment(argFrom);

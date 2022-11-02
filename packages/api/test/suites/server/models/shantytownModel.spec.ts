@@ -1,10 +1,12 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import { serialized: generateUser } from '#test/utils/user';
+import { serialized as generateUser } from '#test/utils/user';
 
 import { sequelize } from '#db/sequelize';
-import { update } from '#server/models/shantytownModel';
+import shantytownModel from '#server/models/shantytownModel';
+
+const { update } = shantytownModel;
 
 const { expect } = chai;
 chai.use(sinonChai);

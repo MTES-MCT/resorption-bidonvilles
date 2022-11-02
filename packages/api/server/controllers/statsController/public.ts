@@ -1,10 +1,6 @@
-import statsModelFactory from '#server/models/statsModel';
-import statsExportsModelFactory from '#server/models/statsExports';
-import statsDirectoryViewsModelFactory from '#server/models/statsDirectoryViews';
-
-const statsModel = statsModelFactory();
-const statsExportsModel = statsExportsModelFactory();
-const statsDirectoryViewsModel = statsDirectoryViewsModelFactory();
+import statsModel from '#server/models/statsModel';
+import statsExportsModel from '#server/models/statsExportsModel';
+import statsDirectoryViewsModel from '#server/models/statsDirectoryViewsModel';
 
 export default async (req, res) => {
     // date used for numberOfUsersPerMonth & numberOfUsersAtMonth

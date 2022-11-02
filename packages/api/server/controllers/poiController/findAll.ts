@@ -1,7 +1,5 @@
 import nodeFetch from 'node-fetch';
-import regionModelFactory from '#server/models/regionModel';
-
-const regionModel = regionModelFactory();
+import regionModel from '#server/models/regionModel';
 
 export default async (req, res, next) => {
     const authKey = process.env.RB_API_SOLIGUIDE_KEY;

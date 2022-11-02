@@ -1,10 +1,13 @@
 /* eslint-disable no-use-before-define */
 import { expect } from 'chai';
-import { restrict } from '#server/utils/permission/index';
-import { serialized: fakeUser } from '#test/utils/user';
+import permissionUtils from '#server/utils/permission';
+import { serialized as fakeUser } from '#test/utils/user';
+import locationUtils from "#test/utils/location";
+
+const { restrict } = permissionUtils;
 const {
     nation, paris, marseille,
-} = require('#test/utils/location');
+} = locationUtils;
 
 describe.only('utils/permission.restrict()', () => {
     let user;

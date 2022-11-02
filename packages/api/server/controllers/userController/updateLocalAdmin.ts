@@ -1,7 +1,6 @@
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 import mailsUtils from '#server/mails/mails';
 
-const userModel = userModelFactory();
 const { sendAdminWelcome } = mailsUtils;
 
 export default async (req, res, next) => {

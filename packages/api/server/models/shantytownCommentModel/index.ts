@@ -4,10 +4,10 @@ import findOne from './findOne';
 import getHistory from './getHistory';
 import deleteComment from './deleteComment';
 
-export default () => ({
+export default {
     create,
     findAll,
     findOne,
     getHistory,
     deleteComment,
-});
+};

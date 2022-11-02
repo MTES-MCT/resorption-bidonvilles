@@ -1,8 +1,6 @@
 import jwt from 'jsonwebtoken';
 import CONFIG from '#server/config';
-import userModelFactory from '#server/models/userModel';
-
-const userModel = userModelFactory();
+import userModel from '#server/models/userModel';
 
 export default async (req, res) => {
     if (!req.params.token) {

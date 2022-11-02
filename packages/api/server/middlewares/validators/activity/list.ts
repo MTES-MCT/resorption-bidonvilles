@@ -1,9 +1,7 @@
 /* eslint-disable newline-per-chained-call */
 
 import { query } from 'express-validator';
-import geoModelFactory from '#server/models/geoModel';
-
-const geoModel = geoModelFactory();
+import geoModel from '#server/models/geoModel';
 
 export default [
     // number of activities

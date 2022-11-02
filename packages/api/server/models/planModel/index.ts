@@ -7,7 +7,7 @@ import serializeComment from './_common/serializeComment';
 import getComments from './_common/getComments';
 import update from './update';
 
-export default () => ({
+export default {
     create,
     delete: deletePlan, // renamed to avoid conflict with reserved keyword 'delete'
     findAll,
@@ -16,4 +16,4 @@ export default () => ({
     serializeComment,
     getComments,
     update,
-});
+};

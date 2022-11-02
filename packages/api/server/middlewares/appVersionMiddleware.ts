@@ -1,7 +1,5 @@
 import semver from 'semver';
-import userModelFactory from '#server/models/userModel';
-
-const userModel = userModelFactory();
+import userModel from '#server/models/userModel';
 
 export default {
     async sync(req, res, next, respond = true) {

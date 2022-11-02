@@ -1,9 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import shantytownCommentTagModelFactory from '#server/models/shantytownCommentTagModel/index';
+import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
 import serializeComment from './serializeComment';
-
-const shantytownCommentTagModel = shantytownCommentTagModelFactory();
 
 export default async (user, shantytownIds, covid = false) => {
     if (covid === false && !user.isAllowedTo('list', 'shantytown_comment')) {

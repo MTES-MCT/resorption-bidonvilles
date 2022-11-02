@@ -1,9 +1,8 @@
 import url from 'url';
 import validator from 'validator';
-import epciModelFactory from '#server/models/epciModel/index';
+import epciModel from '#server/models/epciModel/index';
 
 const { trim } = validator;
-const epciModel = epciModelFactory();
 
 export default async (req, res, next) => {
     const { query: { q } } = url.parse(req.url, true);

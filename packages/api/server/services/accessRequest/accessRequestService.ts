@@ -1,9 +1,8 @@
-import userModelFactory from '#server/models/userModel/index';
+import userModel from '#server/models/userModel/index';
 import authUtils from '#server/utils/auth';
 import sendEmail from './mailer';
 import scheduler from './scheduler';
 
-const userModel = userModelFactory();
 const { getAccountActivationLink } = authUtils;
 const { scheduleEvent, cancelEvent } = scheduler;
 

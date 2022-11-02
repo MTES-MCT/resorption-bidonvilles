@@ -6,7 +6,7 @@ import removeActor from './removeActor';
 import updateThemes from './updateThemes';
 import removeTheme from './removeTheme';
 
-export default () => ({
+export default {
     serializeActor,
     findAll,
     findAllByLocation,
@@ -14,4 +14,4 @@ export default () => ({
     removeActor,
     updateThemes,
     removeTheme,
-});
+};

@@ -1,6 +1,6 @@
-const {
+import {
     Paragraph, TextRun, SectionType,
-} = require('docx');
+} from 'docx';
 
 import moment from 'moment';
 import heading from './heading';
@@ -46,9 +46,6 @@ export default (shantytown) => {
                         ...(comment.tags.length > 0
                             ? comment.tags.map(tag => new TextRun({
                                 text: `    -    ${tag.label}`,
-                                bullet: {
-                                    level: 0,
-                                },
                                 break: 1,
                                 bold: false,
                                 size: 22,

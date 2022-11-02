@@ -1,8 +1,7 @@
 import { sequelize } from '#db/sequelize';
-import planModelFactory from '#server/models/planModel';
+import planModel from '#server/models/planModel';
 import { QueryTypes } from 'sequelize';
 
-const planModel = planModelFactory();
 /**
  * @param {Number} id A plan_comment_id
  */

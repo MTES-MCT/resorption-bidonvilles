@@ -1,11 +1,11 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-import shantytownModelFactory from '#server/models/shantytownModel';
-import shantytownCommentTagModelFactory from '#server/models/shantytownCommentTagModel/index';
+import shantytownModel from '#server/models/shantytownModel';
+import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
 
-const { serializeComment } = shantytownModelFactory();
-const shantytownCommentTagModel = shantytownCommentTagModelFactory();
+const { serializeComment } = shantytownModel;
+
 /**
  * @param {Number} id A shantytown_comment_id
  */

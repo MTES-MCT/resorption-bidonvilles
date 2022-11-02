@@ -1,12 +1,9 @@
 
-import planCommentModelFactory from '#server/models/planCommentModel';
+import planCommentModel from '#server/models/planCommentModel';
 import mattermostUtils from '#server/utils/mattermost';
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 import mails from '#server/mails/mails';
 import ServiceError from '#server/errors/ServiceError';
-
-const planCommentModel = planCommentModelFactory();
-const userModel = userModelFactory();
 
 export default async (comment, plan, author) => {
     // on insère le commentaire

@@ -1,7 +1,5 @@
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 import mails from '#server/mails/mails';
-
-const userModel = userModelFactory();
 
 export default async (shantytown, updatedTown, user) => {
     const {

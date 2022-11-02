@@ -1,6 +1,4 @@
-import userModelFactory from '#server/models/userModel';
-
-const userModel = userModelFactory();
+import userModel from '#server/models/userModel';
 
 export default async (req, res) => {
     try {

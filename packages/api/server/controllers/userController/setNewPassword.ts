@@ -1,11 +1,10 @@
 import jwt from 'jsonwebtoken';
 import CONFIG from '#server/config';
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 import authUtils from '#server/utils/auth';
 import checkPassword from './helpers/checkPassword';
 
 const { hashPassword } = authUtils;
-const userModel = userModelFactory();
 
 export default async (req, res, next) => {
     if (!req.body.token) {

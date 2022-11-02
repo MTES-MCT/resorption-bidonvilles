@@ -3,9 +3,9 @@ import addAttachments from './applyAttachments';
 import applyAttachments from './applyAttachments';
 import removeAttachments from './removeAttachments';
 
-export default () => ({
+export default {
     find,
     addAttachments,
     applyAttachments,
     removeAttachments,
-});
+};

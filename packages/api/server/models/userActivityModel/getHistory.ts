@@ -1,14 +1,8 @@
-import shantytownModelFactory from '#server/models/shantytownModel';
-import shantytownCommentModelFactory from '#server/models/shantytownCommentModel';
-import highCovidCommentModelFactory from '#server/models/highCovidCommentModel';
-import userModelFactory from '#server/models/userModel';
-import planCommentModelFactory from '#server/models/planCommentModel';
-
-const shantytownModel = shantytownModelFactory();
-const shantytownCommentModel = shantytownCommentModelFactory();
-const highCovidCommentModel = highCovidCommentModelFactory();
-const userModel = userModelFactory();
-const planCommentModel = planCommentModelFactory();
+import shantytownModel from '#server/models/shantytownModel';
+import shantytownCommentModel from '#server/models/shantytownCommentModel';
+import highCovidCommentModel from '#server/models/highCovidCommentModel';
+import userModel from '#server/models/userModel';
+import planCommentModel from '#server/models/planCommentModel';
 
 /**
  * @param {Object} userLocation Location to be used for 'local' permissions

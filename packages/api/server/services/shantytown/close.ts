@@ -1,8 +1,6 @@
-import shantytownModelFactory from '#server/models/shantytownModel';
+import shantytownModel from '#server/models/shantytownModel';
 import mattermostUtils from '#server/utils/mattermost';
 import sendMailForClosedTown from './_common/sendMailForClosedTown';
-
-const shantytownModel = shantytownModelFactory();
 
 export default async (user, data) => {
     // close the town

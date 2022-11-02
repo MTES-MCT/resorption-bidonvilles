@@ -1,8 +1,6 @@
 /* eslint-disable newline-per-chained-call */
 import { body, param } from 'express-validator';
-import organizationModelFactory from '#server/models/organizationModel';
-
-const organizationModel = organizationModelFactory();
+import organizationModel from '#server/models/organizationModel';
 
 export default [
     param('id')

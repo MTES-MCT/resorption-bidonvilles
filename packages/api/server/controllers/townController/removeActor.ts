@@ -1,9 +1,8 @@
 import { sequelize } from '#db/sequelize';
 
-import shantytownActorModelFactory from '#server/models/shantytownActorModel';
+import shantytownActorModel from '#server/models/shantytownActorModel';
 import mattermostUtils from '#server/utils/mattermost';
 
-const shantytownActorModel = shantytownActorModelFactory();
 const { triggerRemoveDeclaredActor } = mattermostUtils;
 
 export default async (req, res, next) => {

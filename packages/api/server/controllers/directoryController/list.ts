@@ -1,6 +1,4 @@
-import userModelFactory from '#server/models/userModel/index';
-
-const userModel = userModelFactory();
+import userModel from '#server/models/userModel/index';
 
 export default async (req, res, next) => {
     let organizations;

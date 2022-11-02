@@ -1,7 +1,6 @@
-import shantytownModelFactory from '#server/models/shantytownModel';
+import shantytownModel from '#server/models/shantytownModel';
 import ServiceError from '#server/errors/ServiceError';
 
-const shantytownModel = shantytownModelFactory();
 export default async (user, townId) => {
     const town = await shantytownModel.findOne(user, townId);
     if (town === null) {

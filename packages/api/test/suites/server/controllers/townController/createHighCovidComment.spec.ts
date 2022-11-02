@@ -1,5 +1,3 @@
-/* eslint-disable global-require */
-
 /* **************************************************************************************************
  * TOOLS
  * *********************************************************************************************** */
@@ -13,14 +11,15 @@ import { mockReq, mockRes } from 'sinon-express-mock';
  * FIXTURES
  * *********************************************************************************************** */
 
-import geoModelFactory from '#server/models/geoModel';
-import highCovidCommentModelFactory from '#server/models/highCovidCommentModel';
+import geoModel from '#server/models/geoModel';
+import highCovidCommentModel from '#server/models/highCovidCommentModel';
 
-const stubs = {};
-import { createHighCovidComment } from '#server/controllers/townController';
-
-const geoModel = geoModelFactory();
-const highCovidCommentModel = highCovidCommentModelFactory();
+const stubs = {
+    getDepartementsFor: undefined,
+    create: undefined
+};
+import townController from '#server/controllers/townController';
+const createHighCovidComment = townController.createHighCovidComment();
 
 /* **************************************************************************************************
  * TESTS
@@ -156,7 +155,7 @@ describe.only('townController.createHighCovidComment()', () => {
                     const res = mockRes();
 
                     // execute
-                    await createHighCovidComment(req, res);
+                    await createHighCovidComment(req, res, () => { });
 
                     // assert
                     expect(stubs.create).to.have.been.calledOnceWith(
@@ -176,7 +175,7 @@ describe.only('townController.createHighCovidComment()', () => {
                     const res = mockRes();
 
                     // execute
-                    await createHighCovidComment(req, res);
+                    await createHighCovidComment(req, res, () => { });
 
                     // assert
                     expect(stubs.create).to.have.been.calledOnceWith(
@@ -204,7 +203,7 @@ describe.only('townController.createHighCovidComment()', () => {
                     const res = mockRes();
 
                     // execute
-                    await createHighCovidComment(req, res);
+                    await createHighCovidComment(req, res, () => { });
 
                     // assert
                     expect(stubs.create).to.have.been.calledOnceWith(
@@ -227,7 +226,7 @@ describe.only('townController.createHighCovidComment()', () => {
         const res = mockRes();
 
         // execute
-        await createHighCovidComment(req, res);
+        await createHighCovidComment(req, res, () => { });
 
         // assert
         expect(stubs.create).to.have.been.calledOnceWith(
@@ -246,7 +245,7 @@ describe.only('townController.createHighCovidComment()', () => {
         const res = mockRes();
 
         // execute
-        await createHighCovidComment(req, res);
+        await createHighCovidComment(req, res, () => { });
 
         // assert
         expect(res.status).to.have.been.calledOnceWith(204);
@@ -259,7 +258,7 @@ describe.only('townController.createHighCovidComment()', () => {
         const res = mockRes();
 
         // execute
-        await createHighCovidComment(req, res);
+        await createHighCovidComment(req, res, () => { });
 
         // assert
         expect(res.send).to.have.been.calledOnceWith({});
@@ -272,7 +271,7 @@ describe.only('townController.createHighCovidComment()', () => {
         const res = mockRes();
 
         // execute
-        const returnValue = await createHighCovidComment(req, res);
+        const returnValue = await createHighCovidComment(req, res, () => { });
 
         // assert
         expect(returnValue).to.be.eql(res);
@@ -294,7 +293,7 @@ describe.only('townController.createHighCovidComment()', () => {
             res = mockRes();
 
             // execute
-            returnValue = await createHighCovidComment(req, res);
+            returnValue = await createHighCovidComment(req, res, () => { });
         });
 
         it('responds with a 401', async () => {
@@ -328,7 +327,7 @@ describe.only('townController.createHighCovidComment()', () => {
                 res = mockRes();
 
                 // execute
-                returnValue = await createHighCovidComment(req, res);
+                returnValue = await createHighCovidComment(req, res, () => { });
             });
 
             it('responds with a 400', () => {
@@ -359,7 +358,7 @@ describe.only('townController.createHighCovidComment()', () => {
             res = mockRes();
 
             // execute
-            returnValue = await createHighCovidComment(req, res);
+            returnValue = await createHighCovidComment(req, res, () => { });
         });
 
         it('responds with a 400', () => {
@@ -389,7 +388,7 @@ describe.only('townController.createHighCovidComment()', () => {
             res = mockRes();
 
             // execute
-            returnValue = await createHighCovidComment(req, res);
+            returnValue = await createHighCovidComment(req, res, () => { });
         });
 
         it('responds with a 400', () => {
@@ -439,7 +438,7 @@ describe.only('townController.createHighCovidComment()', () => {
                     res = mockRes();
 
                     // execute
-                    returnValue = await createHighCovidComment(req, res);
+                    returnValue = await createHighCovidComment(req, res, () => { });
                 });
 
                 it('responds with a 400', () => {

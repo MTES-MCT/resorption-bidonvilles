@@ -1,5 +1,5 @@
 import getHistory from './getHistory';
 
-export default () => ({
+export default {
     getHistory,
-});
+};

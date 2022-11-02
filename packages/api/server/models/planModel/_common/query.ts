@@ -1,16 +1,15 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-import userModelFactory from '#server/models/userModel';
-import shantytownModelFactory from '#server/models/shantytownModel';
+import userModel from '#server/models/userModel';
+import shantytownModel from '#server/models/shantytownModel';
 import permissionUtils from '#server/utils/permission';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 import getComments from './getComments';
 import serializePlan from './serializePlan';
 
-const shantytownModel = shantytownModelFactory();
 const { where } = permissionUtils;
-const userModel = userModelFactory();
+
 export default async (user, feature, filters = {}) => {
     const replacements = Object.assign({}, filters);
 

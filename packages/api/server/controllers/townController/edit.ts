@@ -1,6 +1,4 @@
-import shantytownModelFactory from '#server/models/shantytownModel';
-
-const shantytownModel = shantytownModelFactory();
+import shantytownModel from '#server/models/shantytownModel';
 
 export default async (req, res, next) => {
     try {

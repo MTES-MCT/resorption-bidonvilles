@@ -1,9 +1,6 @@
-import shantytownModelFactory from '#server/models/shantytownModel';
+import shantytownModel from '#server/models/shantytownModel';
 import ServiceError from '#server/errors/ServiceError';
 import permissionUtils from '#server/utils/permission';
-
-const shantytownModel = shantytownModelFactory();
-
 
 export default async (user, data) => {
     if (!permissionUtils.can(user).do('fix_status', 'shantytown').on(data.shantytown)) {

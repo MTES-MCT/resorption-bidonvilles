@@ -1,15 +1,12 @@
 import validator from 'validator';
-import shantytownModelFactory from '#server/models/shantytownModel';
-import shantytownCommentModelFactory from '#server/models/shantytownCommentModel';
-import userModelFactory from '#server/models/userModel';
+import shantytownModel from '#server/models/shantytownModel';
+import shantytownCommentModel from '#server/models/shantytownCommentModel';
+import userModel from '#server/models/userModel';
 import mails from '#server/mails/mails';
 import permissionUtils from '#server/utils/permission';
 import dateUtils from '#server/utils/date';
 import ServiceError from '#server/errors/ServiceError';
 
-const shantytownModel = shantytownModelFactory();
-const shantytownCommentModel = shantytownCommentModelFactory();
-const userModel = userModelFactory();
 const { fromTsToFormat: tsToString } = dateUtils;
 
 export default async (user, shantytownId, commentId, deletionMessage) => {

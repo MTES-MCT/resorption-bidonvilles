@@ -2,7 +2,7 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import { mockReq, mockRes } from 'sinon-express-mock';
-import { serialized: generateUser } from '#test/utils/user';
+import { serialized as generateUser } from '#test/utils/user';
 
 import shantytownService from '#server/services/shantytown';
 
@@ -72,7 +72,7 @@ describe.only('townController.close()', () => {
             closeStub.resolves(output);
 
             res = mockRes();
-            await closeController(mockReq(input), res);
+            await closeController(mockReq(input), res, () => { });
         });
 
         it('fait appel au service shantytown/close', async () => {

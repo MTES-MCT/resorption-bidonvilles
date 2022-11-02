@@ -1,12 +1,9 @@
-import activityModelFactory from '#server/models/activityModel';
+import activityModel from '#server/models/activityModel';
 import sendNationalSummary from './sendNationalSummary';
 import sendRegionalSummary from './sendRegionalSummary';
 import sendDepartementalSummary from './sendDepartementalSummary';
 
-import userModelFactory from '#server/models/userModel';
-
-const activityModel = activityModelFactory();
-const userModel = userModelFactory();
+import userModel from '#server/models/userModel';
 
 // @todo: créer une fonction qui permet de générer facilement from et to
 export default async (day: number, month: number, year: number): Promise<void> => {

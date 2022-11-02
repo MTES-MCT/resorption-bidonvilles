@@ -1,9 +1,7 @@
 import moment from 'moment';
 import ServiceError from '#server/errors/ServiceError';
-import shantytownActorModelFactory from '#server/models/shantytownActorModel';
+import shantytownActorModel from '#server/models/shantytownActorModel';
 import permissionUtils from '#server/utils/permission';
-
-const shantytownActorModel = shantytownActorModelFactory();
 
 export default async (user) => {
     const permissionClauseGroup = permissionUtils.where().can(user).do('export', 'shantytown_actor');

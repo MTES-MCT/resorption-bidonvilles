@@ -1,6 +1,6 @@
-const {
+import {
     AlignmentType, Paragraph, ShadingType, TextRun,
-} = require('docx');
+} from 'docx';
 
 export default text => new Paragraph({
     alignment: AlignmentType.CENTER,

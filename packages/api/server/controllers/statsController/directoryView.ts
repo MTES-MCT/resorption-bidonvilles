@@ -1,8 +1,5 @@
-import organizationModelFactory from '#server/models/organizationModel/index';
-import statsDirectoryViewsModelFactory from '#server/models/statsDirectoryViews';
-
-const organizationModel = organizationModelFactory();
-const statsDirectoryViewsModel = statsDirectoryViewsModelFactory();
+import organizationModel from '#server/models/organizationModel/index';
+import statsDirectoryViewsModel from '#server/models/statsDirectoryViewsModel';
 
 export default async (req, res, next) => {
     const organizationId = parseInt(req.body.organization, 10);

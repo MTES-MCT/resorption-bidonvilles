@@ -1,12 +1,10 @@
 import { sequelize } from '#db/sequelize';
-import userModelFactory from '#server/models/userModel';
-import userAccessModelFactory from '#server/models/userAccessModel';
+import userModel from '#server/models/userModel';
+import userAccessModel from '#server/models/userAccessModel';
 import accessRequestService from '#server/services/accessRequest/accessRequestService';
 import permissionsDescription from '#server/permissions_description';
 import authUtils from '#server/utils/auth';
 
-const userModel = userModelFactory();
-const userAccessModel = userAccessModelFactory();
 const { getExpiracyDateForActivationTokenCreatedAt } = authUtils;
 
 export default async (req, res, next) => {

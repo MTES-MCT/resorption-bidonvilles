@@ -1,6 +1,6 @@
-import shantytownModelFactory from '#server/models/shantytownModel';
+import shantytownModel from '#server/models/shantytownModel';
 
-const { findNearby } = shantytownModelFactory();
+const { findNearby } = shantytownModel;
 
 export default () => async (req, res, next) => {
     try {

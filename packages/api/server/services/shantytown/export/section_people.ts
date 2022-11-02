@@ -1,6 +1,6 @@
-const {
+import {
     Table, SectionType, Paragraph, TextRun,
-} = require('docx');
+} from 'docx';
 import heading from './heading';
 import populationHistory from './section_people/populationHistory';
 import socialDiagnostic from './section_people/socialDiagnostic';

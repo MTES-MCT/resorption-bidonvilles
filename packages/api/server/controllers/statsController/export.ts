@@ -1,7 +1,5 @@
 import JSONToCSV from 'json2csv';
-import statsModelFactory from '#server/models/statsModel';
-
-const statsModel = statsModelFactory();
+import statsModel from '#server/models/statsModel';
 
 const groupByKey = (list, key) => list.reduce((hash, obj) => ({ ...hash, [obj[key]]: { ...hash[obj[key]], ...obj } }), {});
 

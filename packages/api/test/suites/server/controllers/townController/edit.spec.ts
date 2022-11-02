@@ -3,16 +3,14 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 import { mockReq, mockRes } from 'sinon-express-mock';
-import userUtils from '#test/utils/user';
+import { serialized as generateUser } from '#test/utils/user';
 
-import shantytownModelFactory from '#server/models/shantytownModel';
+import shantytownModel from '#server/models/shantytownModel';
 
 import edit from '#server/controllers/townController/edit';
 
 const { expect } = chai;
 chai.use(sinonChai);
-const { serialized: generateUser } = userUtils;
-const shantytownModel = shantytownModelFactory();
 
 describe.only('townController.edit()', () => {
     const dependencies: any = {
@@ -141,7 +139,7 @@ describe.only('townController.edit()', () => {
                 .resolves(output.updatedShantytown);
 
             res = mockRes();
-            await edit(mockReq(input), res);
+            await edit(mockReq(input), res, () => { });
         });
 
         it('met à jour le site', async () => {

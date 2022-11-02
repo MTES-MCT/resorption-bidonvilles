@@ -1,11 +1,10 @@
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 import dateUtils from '#server/utils/date';
 import authUtils from '#server/utils/auth';
 import mailsUtils from '#server/mails/mails';
 import sanitize from './helpers/sanitize';
 import validate from './helpers/validate';
 
-const userModel = userModelFactory();
 const { toString: dateToString } = dateUtils;
 const { getPasswordResetLink } = authUtils;
 const { sendUserNewPassword } = mailsUtils;

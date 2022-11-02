@@ -1,8 +1,6 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import geoModelFactory from '#server/models/geoModel';
-
-const geoModel = geoModelFactory();
+import geoModel from '#server/models/geoModel';
 
 function serialize(comment) {
     return {

@@ -1,6 +1,4 @@
-import statsModelFactory from '#server/models/statsModel';
-
-const statsModel = statsModelFactory();
+import statsModel from '#server/models/statsModel';
 
 export default async (req, res) => {
     const { departement } = req.params;

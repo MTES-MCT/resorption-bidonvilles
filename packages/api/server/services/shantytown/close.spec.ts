@@ -1,17 +1,28 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
+import rewiremock from 'rewiremock/node';
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-import proxyquire from 'proxyquire';
-import shantytownModelFactory from '#server/models/shantytownModel';
-import mattermostUtils from '#server/utils/mattermost';
 
-const shantytownModel = shantytownModelFactory();
-let closeService;
+const stubs = {
+    update: sinon.stub(),
+    findOne: sinon.stub(),
+    triggerShantytownCloseAlert: sinon.stub(),
+    sendMail: sinon.stub(),
+};
+rewiremock('./_common/sendMailForClosedTown').with(stubs.sendMail);
+rewiremock('#server/models/shantytownModel/update').with(stubs.update);
+rewiremock('#server/models/shantytownModel/findOne').with(stubs.findOne);
+rewiremock('#server/utils/mattermost').with({
+    triggerShantytownCloseAlert: stubs.triggerShantytownCloseAlert
+});
 
+rewiremock.enable();
+import closeService from './close';
+rewiremock.disable();
 
 describe.only('services/shantytown', () => {
     describe('close()', () => {
@@ -25,24 +36,10 @@ describe.only('services/shantytown', () => {
             closing_context: 'contexte',
             status: 'unknown',
             solutions: [],
-
         };
 
-        let stubs;
-        let sendMailStub;
-
-        beforeEach(() => {
-            sendMailStub = sinon.stub();
-            closeService = proxyquire('./close', { './_common/sendMailForClosedTown': sendMailStub });
-            stubs = {
-                update: sinon.stub(shantytownModel, 'update'),
-                findOne: sinon.stub(shantytownModel, 'findOne'),
-                triggerShantytownCloseAlert: sinon.stub(mattermostUtils, 'triggerShantytownCloseAlert'),
-            };
-        });
-
         afterEach(() => {
-            sinon.restore();
+            Object.values(stubs).forEach((stub: sinon.SinonStub) => stub.reset());
         });
 
         it('met à jour le site en l\'indiquant comme fermé et renvoie le site ainsi modifié', async () => {
@@ -67,7 +64,7 @@ describe.only('services/shantytown', () => {
         it('envoie une notification mail aux utilisateurs du departement', async () => {
             await closeService(user, data);
             // eslint-disable-next-line no-unused-expressions
-            expect(sendMailStub).to.have.been.calledOnce;
+            expect(stubs.sendMail).to.have.been.calledOnce;
         });
     });
 });

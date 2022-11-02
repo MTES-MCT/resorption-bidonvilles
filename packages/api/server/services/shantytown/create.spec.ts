@@ -5,24 +5,17 @@ import sinonChai from 'sinon-chai';
 const { expect } = chai;
 chai.use(sinonChai);
 
-import shantytownModelFactory from '#server/models/shantytownModel';
-import socialOriginModelFactory from '#server/models/socialOriginModel';
-import shantytownToiletTypesModelFactory from '#server/models/shantytownToiletTypesModel';
-import electricityAccessTypesModelFactory from '#server/models/electricityAccessTypesModel';
-import incomingTownsModelFactory from '#server/models/incomingTownsModel';
+import shantytownModel from '#server/models/shantytownModel';
+import socialOriginModel from '#server/models/socialOriginModel';
+import shantytownToiletTypesModel from '#server/models/shantytownToiletTypesModel';
+import electricityAccessTypesModel from '#server/models/electricityAccessTypesModel';
+import incomingTownsModel from '#server/models/incomingTownsModel';
 import mattermostUtils from '#server/utils/mattermost';
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 import mails from '#server/mails/mails';
 import config from '#server/config';
 
 import createService from './create';
-
-const shantytownModel = shantytownModelFactory();
-const socialOriginModel = socialOriginModelFactory();
-const shantytownToiletTypesModel = shantytownToiletTypesModelFactory();
-const incomingTownsModel = incomingTownsModelFactory();
-const electricityAccessTypesModel = electricityAccessTypesModelFactory();
-const userModel = userModelFactory();
 
 describe.only('services/shantytown', () => {
     describe('create()', () => {

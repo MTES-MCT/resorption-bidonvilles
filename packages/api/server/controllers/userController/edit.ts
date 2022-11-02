@@ -1,7 +1,6 @@
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 import authUtils from '#server/utils/auth';
 
-const userModel = userModelFactory();
 const { hashPassword } = authUtils;
 
 export default async (req, res, next) => {

@@ -1,5 +1,5 @@
 import get from './get';
 
-export default () => ({
+export default {
     get,
-});
+};

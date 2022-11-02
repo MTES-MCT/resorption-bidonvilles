@@ -5,19 +5,15 @@ import sinonChai from 'sinon-chai';
 const { expect } = chai;
 chai.use(sinonChai);
 
-const {
-    paris,
-} = require('#test/utils/location');
-import shantytownUtils from '#test/utils/shantytown';
-import userUtils from '#test/utils/user';
+import locationUtils from "#test/utils/location";
 
-import shantytownModelFactory from '#server/models/shantytownModel';
+const { paris } = locationUtils;
+import { serialized as fakeShantytown } from '#test/utils/shantytown';
+import { serialized as fakeUser } from '#test/utils/user';
+
+import shantytownModel from '#server/models/shantytownModel';
 
 import setHeatwaveStatusService from './setHeatwaveStatus';
-
-const { serialized: fakeShantytown } = shantytownUtils;
-const { serialized: fakeUser } = userUtils;
-const shantytownModel = shantytownModelFactory();
 
 describe.only('services/shantytown', () => {
     describe('setHeatwaveStatus()', () => {

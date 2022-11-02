@@ -1,9 +1,8 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 import permsissionUtils from '#server/utils/permission';
 
-const userModel = userModelFactory();
 const { restrict } = permsissionUtils;
 
 export default async (user, location, numberOfActivities, lastDate, maxDate) => {

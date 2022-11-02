@@ -2,17 +2,16 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
 import geoUtils from '#server/utils/geo';
-import userModelFactory from '#server/models/userModel';
-import shantytownModelFactory from '#server/models/shantytownModel';
-import permsissionUtils from '#server/utils/permission';
-import shantytownCommentTagModelFactory from '#server/models/shantytownCommentTagModel/index';
+import userModel from '#server/models/userModel';
+import shantytownModel from '#server/models/shantytownModel';
+import permissionUtils from '#server/utils/permission';
+import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
 import getAddressSimpleOf from '#server/models//shantytownModel/_common/getAddressSimpleOf';
 
 const { fromGeoLevelToTableName } = geoUtils;
-const { formatName } = userModelFactory();
-const { getUsenameOf, serializeComment } = shantytownModelFactory();
-const { restrict } = permsissionUtils;
-const shantytownCommentTagModel = shantytownCommentTagModelFactory();
+const { formatName } = userModel;
+const { getUsenameOf, serializeComment } = shantytownModel;
+const { restrict } = permissionUtils;
 
 export default async (user, location, numberOfActivities, lastDate, maxDate, onlyCovid = false) => {
     // apply geographic level restrictions

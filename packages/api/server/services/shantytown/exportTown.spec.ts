@@ -5,21 +5,17 @@ import sinonChai from 'sinon-chai';
 const { expect } = chai;
 chai.use(sinonChai);
 
-import proxyquire from 'proxyquire';
+import rewiremock from 'rewiremock/node';
 import ServiceError from '#server/errors/ServiceError';
 
 import permissionUtils from '#server/utils/permission';
-import geoModelFactory from '#server/models/geoModel';
+import geoModel from '#server/models/geoModel';
 import geoUtils from '#server/utils/geo';
-import shantytownModelFactory from '#server/models/shantytownModel';
-import closingSolutionModelFactory from '#server/models/closingSolutionModel';
+import shantytownModel from '#server/models/shantytownModel';
+import closingSolutionModel from '#server/models/closingSolutionModel';
 import excelUtils from '#server/utils/excel';
-import statsExportsModelFactory from '#server/models/statsExports';
+import statsExportsModel from '#server/models/statsExportsModel';
 
-const geoModel = geoModelFactory();
-const shantytownModel = shantytownModelFactory();
-const closingSolutionModel = closingSolutionModelFactory();
-const statsExportsModel = statsExportsModelFactory();
 let exportTownService;
 
 
@@ -37,13 +33,13 @@ describe.only('services/shantytown', () => {
         const location = {
             type: 'region', region: { code: 0 }, departement: null, epci: null, city: null,
         };
-        beforeEach(() => {
+        beforeEach(async () => {
             createExportSectionsStub = sinon.stub();
             serializeExportPropertiesStub = sinon.stub();
-            exportTownService = proxyquire('./exportTown', {
+            ({ default: exportTownService } = await rewiremock.module(() => import('./exportTown'), {
                 './_common/createExportSections': createExportSectionsStub,
                 './_common/serializeExportProperties': serializeExportPropertiesStub,
-            });
+            }));
             stubs = {
                 can: sinon.stub(permissionUtils, 'can'),
                 do: sinon.stub(),
@@ -78,6 +74,7 @@ describe.only('services/shantytown', () => {
                 try {
                     await exportTownService(user, {});
                 } catch (error) {
+                    console.log(error);
                     responseError = error;
                 }
                 expect(responseError).to.be.instanceOf(ServiceError);

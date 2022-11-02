@@ -1,9 +1,12 @@
 import { expect } from 'chai';
-import { where } from '#server/utils/permission/index';
-import { serialized: fakeUser } from '#test/utils/user';
-import { serialized: fakeShantytown } from '#test/utils/shantytown';
-import { serialized: fakePlan } from '#test/utils/plan';
-import { paris, marseille } from '#test/utils/location';
+import permissionUtils from '#server/utils/permission';
+import { serialized as fakeUser } from '#test/utils/user';
+import { serialized as fakeShantytown } from '#test/utils/shantytown';
+import { serialized as fakePlan } from '#test/utils/plan';
+import locationUtils from '#test/utils/location';
+
+const { where } = permissionUtils;
+const { paris, marseille } = locationUtils;
 
 describe.only('utils/permission.where()', () => {
     let user;

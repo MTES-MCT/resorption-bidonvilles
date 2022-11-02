@@ -1,5 +1,5 @@
 import search from './search';
 
-export default () => ({
+export default {
     search,
-});
+};

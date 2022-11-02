@@ -1,9 +1,7 @@
 /* eslint-disable newline-per-chained-call */
 import { body } from 'express-validator';
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 import themesValidator from './utils/themes';
-
-const userModel = userModelFactory();
 
 export default [
     body('user_id')

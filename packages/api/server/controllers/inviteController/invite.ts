@@ -1,12 +1,12 @@
 import mailsUtils from '#server/mails/mails';
 import mattermostUtils from '#server/utils/mattermost';
 import config from '#server/config';
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 
 const { sendUserPlatformInvitation } = mailsUtils;
 const { triggerPeopleInvitedAlert } = mattermostUtils;
 const { mattermost } = config;
-const { formatName } = userModelFactory();
+const { formatName } = userModel;
 
 async function sendEmailsInvitations(guests, greeter) {
     for (let i = 0; i < guests.length; i += 1) {

@@ -1,14 +1,9 @@
 /* eslint-disable newline-per-chained-call */
 import { body, param } from 'express-validator';
-import shantytownModelFactory from '#server/models/shantytownModel';
-import userModelFactory from '#server/models/userModel/index';
-import organizationModelFactory from '#server/models/organizationModel/index';
-import commentTagModelFactory from '#server/models/commentTagModel';
-
-const shantytownModel = shantytownModelFactory();
-const userModel = userModelFactory();
-const organizationModel = organizationModelFactory();
-const commentTagModel = commentTagModelFactory();
+import shantytownModel from '#server/models/shantytownModel';
+import userModel from '#server/models/userModel/index';
+import organizationModel from '#server/models/organizationModel/index';
+import commentTagModel from '#server/models/commentTagModel';
 
 export default [
     param('id')

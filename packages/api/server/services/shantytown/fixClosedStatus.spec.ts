@@ -5,18 +5,15 @@ import sinonChai from 'sinon-chai';
 const { expect } = chai;
 chai.use(sinonChai);
 
-import userUtils from '#test/utils/user';
+import { serialized as fakeUser } from '#test/utils/user';
 import locationUtils from '#test/utils/location';
-import shantytownUtils from '#test/utils/shantytown';
-import shantytownModelFactory from '#server/models/shantytownModel';
+import { serialized as fakeShantytown } from '#test/utils/shantytown';
+import shantytownModel from '#server/models/shantytownModel';
 import ServiceError from '#server/errors/ServiceError';
 
 import fixClosedStatusService from './fixClosedStatus';
 
-const { serialized: fakeUser } = userUtils;
 const { paris } = locationUtils;
-const { serialized: fakeShantytown } = shantytownUtils;
-const shantytownModel = shantytownModelFactory();
 
 describe.only('services/shantytown', () => {
     describe('fixClosedStatus()', () => {

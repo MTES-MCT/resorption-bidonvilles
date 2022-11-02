@@ -1,5 +1,5 @@
 import create from './create';
 
-export default () => ({
+export default {
     create,
-});
+};

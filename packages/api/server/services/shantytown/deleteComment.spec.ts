@@ -6,17 +6,13 @@ const { expect } = chai;
 chai.use(sinonChai);
 
 import validator from 'validator';
-import shantytownModelFactory from '#server/models/shantytownModel';
-import shantytownCommentModelFactory from '#server/models/shantytownCommentModel';
-import userModelFactory from '#server/models/userModel';
+import shantytownModel from '#server/models/shantytownModel';
+import shantytownCommentModel from '#server/models/shantytownCommentModel';
+import userModel from '#server/models/userModel';
 import mails from '#server/mails/mails';
 import permissionUtils from '#server/utils/permission';
 import ServiceError from '#server/errors/ServiceError';
 import deleteCommentService from './deleteComment';
-
-const shantytownModel = shantytownModelFactory();
-const shantytownCommentModel = shantytownCommentModelFactory();
-const userModel = userModelFactory();
 
 describe.only('services/shantytown', () => {
     describe('deleteComment()', () => {

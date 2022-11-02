@@ -15,7 +15,7 @@ import deleteShantytown from './delete';
 import fixClosedStatus from './fixClosedStatus';
 import setHeatwaveStatus from './setHeatwaveStatus';
 
-export default () => ({
+export default {
     create,
     createCovidComment,
     findAll,
@@ -32,4 +32,4 @@ export default () => ({
     deleteShantytown,
     fixClosedStatus,
     setHeatwaveStatus,
-});
+};

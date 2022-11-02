@@ -1,20 +1,13 @@
 import { sequelize } from '#db/sequelize';
-import shantytownModelFactory from '#server/models/shantytownModel';
-import socialOriginModelFactory from '#server/models/socialOriginModel';
-import shantytownToiletTypesModelFactory from '#server/models/shantytownToiletTypesModel';
-import electricityAccessTypesModelFactory from '#server/models/electricityAccessTypesModel';
-import incomingTownsModelFactory from '#server/models/incomingTownsModel';
+import shantytownModel from '#server/models/shantytownModel';
+import socialOriginModel from '#server/models/socialOriginModel';
+import shantytownToiletTypesModel from '#server/models/shantytownToiletTypesModel';
+import electricityAccessTypesModel from '#server/models/electricityAccessTypesModel';
+import incomingTownsModel from '#server/models/incomingTownsModel';
 import config from '#server/config';
 import mattermostUtils from '#server/utils/mattermost';
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 import mails from '#server/mails/mails';
-
-const shantytownModel = shantytownModelFactory();
-const socialOriginModel = socialOriginModelFactory();
-const shantytownToiletTypesModel = shantytownToiletTypesModelFactory();
-const electricityAccessTypesModel = electricityAccessTypesModelFactory();
-const incomingTownsModel = incomingTownsModelFactory();
-const userModel = userModelFactory();
 
 export default async (townData, user) => {
     const baseTown = {

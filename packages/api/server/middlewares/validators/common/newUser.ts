@@ -1,19 +1,14 @@
 /* eslint-disable newline-per-chained-call */
 import * as expressValidator from 'express-validator';
 // models
-import organizationCategoryModelFactory from '#server/models/organizationCategoryModel';
-import organizationTypeModelFactory from '#server/models/organizationTypeModel';
-import organizationModelFactory from '#server/models/organizationModel';
-import departementModelFactory from '#server/models/departementModel';
-import userModelFactory from '#server/models/userModel';
+import organizationCategoryModel from '#server/models/organizationCategoryModel';
+import organizationTypeModel from '#server/models/organizationTypeModel';
+import organizationModel from '#server/models/organizationModel';
+import departementModel from '#server/models/departementModel';
+import userModel from '#server/models/userModel';
 import { ValidationChain, CustomValidator } from 'express-validator';
 
 const { body } = expressValidator;
-const organizationCategoryModel = organizationCategoryModelFactory();
-const organizationTypeModel = organizationTypeModelFactory();
-const organizationModel = organizationModelFactory();
-const departementModel = departementModelFactory();
-const userModel = userModelFactory();
 
 export default (
     additionalValidators: ValidationChain[] = [],

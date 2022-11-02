@@ -1,7 +1,7 @@
 import getChangelogFor from './getChangelogFor';
 import getLastChangelogVersion from './getLastChangelogVersion';
 
-export default () => ({
+export default {
     getChangelogFor,
     getLastChangelogVersion,
-});
+};

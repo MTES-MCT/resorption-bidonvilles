@@ -1,7 +1,5 @@
-import userNavigationLogsModelFactory from '#server/models/userNavigationLogsModel';
+import userNavigationLogsModel from '#server/models/userNavigationLogsModel';
 import ServiceError from '#server/errors/ServiceError';
-
-const userNavigationLogsModel = userNavigationLogsModelFactory();
 
 export default async (fk_user: number, page: String): Promise<number> => {
     // on insère le log

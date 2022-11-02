@@ -1,9 +1,8 @@
 import moment from 'moment';
-import shantytownCommentModelFactory from '#server/models/shantytownCommentModel';
+import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import ServiceError from '#server/errors/ServiceError';
 import permissionUtils from '#server/utils/permission';
 
-const shantytownCommentModel = shantytownCommentModelFactory();
 const { restrict } = permissionUtils;
 
 export default async (user) => {

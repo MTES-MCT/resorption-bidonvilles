@@ -1,8 +1,7 @@
 import url from 'url';
 import validator from 'validator';
-import geoModelFactory from '#server/models/geoModel';
+import geoModel from '#server/models/geoModel';
 
-const geoModel = geoModelFactory();
 const { trim } = validator;
 
 export default async (req, res, next) => {

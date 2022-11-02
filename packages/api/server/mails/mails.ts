@@ -1,11 +1,11 @@
 import moment from 'moment';
-import userModelFactory from '#server/models/userModel';
+import userModel from '#server/models/userModel';
 import mailService from '#server/services/mailService';
 import config from '#server/config';
 
 import generateTrackingUTM from './generateTrackingUTM';
 
-const { formatName } = userModelFactory();
+const { formatName } = userModel;
 const { wwwUrl, webappUrl, backUrl, blogUrl } = config;
 
 const formationUrl = 'https://app.evalandgo.com/s/index.php?id=JTk5aSU5M2slOTklQUI%3D&a=JTk2cCU5N2slOUElQjA%3D';

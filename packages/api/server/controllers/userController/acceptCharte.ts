@@ -1,8 +1,5 @@
-import charteEngagementModelFactory from '#server/models/charteEngagementModel';
-import userModelFactory from '#server/models/userModel';
-
-const charteEngagementModel = charteEngagementModelFactory();
-const userModel = userModelFactory();
+import charteEngagementModel from '#server/models/charteEngagementModel';
+import userModel from '#server/models/userModel';
 
 export default async (req, res, next) => {
     if (parseInt(req.params.id, 10) !== req.user.id) {

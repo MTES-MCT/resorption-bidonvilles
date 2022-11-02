@@ -7,37 +7,21 @@ const { expect } = chai;
 chai.use(sinonChai);
 chai.use(chaiSubset);
 
-import departementModelFactory from '#server/models/departementModel';
-import financeTypeModelFactory from '#server/models/financeTypeModel';
-import topicModelFactory from '#server/models/topicModel';
-import userModelFactory from '#server/models/userModel';
-import planModelFactory from '#server/models/planModel';
-import financeModelFactory from '#server/models/financeModel';
-import financeRowModelFactory from '#server/models/financeRowModel';
-import planManagerModelFactory from '#server/models/planManagerModel';
-import locationModelFactory from '#server/models/locationModel';
-import planDepartementModelFactory from '#server/models/planDepartementModel';
-import planTopicsModelFactory from '#server/models/planTopicsModel';
-import planShantytownModelFactory from '#server/models/planShantytownModel';
-import planOperatorModelFactory from '#server/models/planOperatorModel';
-import permissionModelFactory from '#server/models/permissionModel';
-import attachmentsObject from '#server/models/permissionModel/addAttachments';
+import departementModel from '#server/models/departementModel';
+import financeTypeModel from '#server/models/financeTypeModel';
+import topicModel from '#server/models/topicModel';
+import userModel from '#server/models/userModel';
+import planModel from '#server/models/planModel';
+import financeModel from '#server/models/financeModel';
+import financeRowModel from '#server/models/financeRowModel';
+import planManagerModel from '#server/models/planManagerModel';
+import locationModel from '#server/models/locationModel';
+import planDepartementModel from '#server/models/planDepartementModel';
+import planTopicsModel from '#server/models/planTopicsModel';
+import planShantytownModel from '#server/models/planShantytownModel';
+import planOperatorModel from '#server/models/planOperatorModel';
+import permissionModel from '#server/models/permissionModel';
 import createService from './create';
-
-const departementModel = departementModelFactory();
-const financeTypeModel = financeTypeModelFactory();
-const topicModel = topicModelFactory();
-const userModel = userModelFactory();
-const planModel = planModelFactory();
-const financeModel = financeModelFactory();
-const financeRowModel = financeRowModelFactory();
-const planManagerModel = planManagerModelFactory();
-const locationModel = locationModelFactory();
-const planDepartementModel = planDepartementModelFactory();
-const planTopicsModel = planTopicsModelFactory();
-const planShantytownModel = planShantytownModelFactory();
-const planOperatorModel = planOperatorModelFactory();
-const permissionModel = permissionModelFactory();
 
 function randomIndex(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -143,10 +127,9 @@ describe.only('services/plan', () => {
                 financeRowCreate: sinon.stub(financeRowModel, 'create'),
                 planManagerCreate: sinon.stub(planManagerModel, 'create'),
                 planOperatorCreate: sinon.stub(planOperatorModel, 'create'),
-                permissionCreate: sinon.stub(permissionModel, 'addAttachments'),
+                applyAttachments: sinon.stub(permissionModel, 'applyAttachments'),
                 findOne: sinon.stub(planModel, 'findOne'),
                 getUser: sinon.stub(userModel, 'findOne'),
-                createAttachments: sinon.stub(attachmentsObject, 'addAttachments'),
             };
         });
 
@@ -172,7 +155,14 @@ describe.only('services/plan', () => {
                 stubs.planManagerCreate.resolves([]);
                 stubs.planOperatorCreate.resolves([]);
                 stubs.planOperatorCreate.resolves([]);
-                stubs.createAttachments.resolves([]);
+                stubs.applyAttachments.returns({
+                    toUser: sinon.stub().returns({
+                        onFeature: sinon.stub().resolves(undefined)
+                    }),
+                    toOrganization: sinon.stub().returns({
+                        onFeature: sinon.stub().resolves(undefined)
+                    })
+                });
                 stubs.findOne.resolves(plan);
                 await createService(planData, user);
                 expect(stubs.planCreate).to.have.been.calledOnce;

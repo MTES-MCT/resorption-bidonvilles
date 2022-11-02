@@ -1,6 +1,4 @@
-import statsModelFactory from '#server/models/statsModel/index';
-
-const statsModel = statsModelFactory();
+import statsModel from '#server/models/statsModel/index';
 
 export default async (req, res, next) => {
     const { location } = req.body;

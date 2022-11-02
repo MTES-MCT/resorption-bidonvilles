@@ -1,7 +1,5 @@
 import moment from 'moment';
-import userActivityModelFactory from '#server/models/userActivityModel';
-
-const userActivityModel = userActivityModelFactory();
+import userActivityModel from '#server/models/userActivityModel';
 
 export default async (req, res, next) => {
     const {

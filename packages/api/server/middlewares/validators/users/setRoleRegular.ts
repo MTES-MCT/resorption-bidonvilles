@@ -1,10 +1,7 @@
 /* eslint-disable newline-per-chained-call */
 import { body, param } from 'express-validator';
-import roleModelFactory from '#server/models/roleModel';
-import userModelFactory from '#server/models/userModel';
-
-const roleModel = roleModelFactory();
-const userModel = userModelFactory();
+import roleModel from '#server/models/roleModel';
+import userModel from '#server/models/userModel';
 
 export default [
     param('id')

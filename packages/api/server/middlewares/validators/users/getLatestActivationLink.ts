@@ -1,8 +1,6 @@
 /* eslint-disable newline-per-chained-call */
 import { param } from 'express-validator';
-import userAccessModelFactory from '#server/models/userAccessModel';
-
-const userAccessModel = userAccessModelFactory();
+import userAccessModel from '#server/models/userAccessModel';
 
 export default [
     param('id')

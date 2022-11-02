@@ -2,11 +2,11 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-import shantytownModelFactory from '#server/models/shantytownModel';
+import shantytownModel from '#server/models/shantytownModel';
 import ServiceError from '#server/errors/ServiceError';
 import findAllByActorService from './findAllByActor';
-
-const shantytownModel = shantytownModelFactory();
+import { serialized as fakeUser } from "#test/utils/user";
+import { serialized as fakeTown } from "#test/utils/shantytown";
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -25,9 +25,12 @@ describe.only('services/shantytown', () => {
         });
 
         it('retourne les site sur lesquelles l\'utilisateur intervient', async () => {
-            const towns = [{ id: 0, address: 'addresse test 1' }, { id: 1, address: 'addresse test 2' }];
+            const towns = [
+                fakeTown(undefined, { id: 0, address: 'addresse test 1' }),
+                fakeTown(undefined, { id: 1, address: 'addresse test 2' }),
+            ];
             stubs.findAllByActor.resolves(towns);
-            const response = await findAllByActorService();
+            const response = await findAllByActorService(fakeUser());
             expect(response).to.be.an('array');
             expect(response).to.be.eql(towns);
         });
@@ -35,7 +38,7 @@ describe.only('services/shantytown', () => {
             stubs.findAllByActor.rejects(new Error());
             let responseError = null;
             try {
-                await findAllByActorService();
+                await findAllByActorService(fakeUser());
             } catch (error) {
                 responseError = error;
             }

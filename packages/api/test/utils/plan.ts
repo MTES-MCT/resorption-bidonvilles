@@ -1,24 +1,22 @@
-export default {
-    serialized(location, override = {}) {
-        const { departement, region } = location;
+export function serialized(location, override = {}) {
+    const { departement, region } = location;
 
-        const plan = {
-            type: 'plan',
-            id: 1,
-            departement,
+    const plan = {
+        type: 'plan',
+        id: 1,
+        departement,
+        region,
+        geo_location: {
+            type: 'departement',
             region,
-            geo_location: {
-                type: 'departement',
-                region,
-                departement,
-                epci: null,
-                city: null,
-            },
-        };
+            departement,
+            epci: null,
+            city: null,
+        },
+    };
 
-        return {
-            ...plan,
-            ...override,
-        };
-    },
+    return {
+        ...plan,
+        ...override,
+    };
 };

@@ -1,8 +1,6 @@
 import { sequelize } from '#db/sequelize';
 
-import shantytownActorModelFactory from '#server/models/shantytownActorModel';
-
-const shantytownActorModel = shantytownActorModelFactory();
+import shantytownActorModel from '#server/models/shantytownActorModel';
 
 export default async (req, res, next) => {
     let actors;

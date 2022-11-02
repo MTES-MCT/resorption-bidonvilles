@@ -1,6 +1,4 @@
-import geoModelFactory from '#server/models/geoModel';
-
-const geoModel = geoModelFactory();
+import geoModel from '#server/models/geoModel';
 
 export default async (req, res, next) => {
     try {

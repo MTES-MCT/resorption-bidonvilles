@@ -1,7 +1,7 @@
 import create from './create';
 import deletePlanManager from './delete';
 
-export default () => ({
+export default {
     create,
     delete: deletePlanManager,
-});
+};
