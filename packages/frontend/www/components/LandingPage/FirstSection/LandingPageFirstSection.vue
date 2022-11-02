@@ -120,35 +120,6 @@
             </div>
             <LandingPageUserFeedback class="mt-32" />
         </div>
-
-        <div class="pt-24" v-if="$i18n.locale === 'fr'" >
-            <div class="max-w-screen-lg mx-auto">
-                <LandingCTABanner :img="ctaDecouvrir" alt="Illustration du wébinaire découverte" href="https://app.evalandgo.com/s/index.php?id=JTk5aSU5M2slOTklQUQ%3D&a=JTk2cCU5N2slOUElQjA%3D">
-                    <template v-slot:title>
-                        Webinaire découverte <span class="italic">Résorption-bidonvilles</span>
-                    </template>
-                    <template v-slot:content>
-                        Vous souhaitez découvrir la plateforme numérique
-                        <span class="italic">Résorption-bidonvilles</span> ?
-                        comprendre son rôle dans la politique publique ?<br />
-                        Inscrivez-vous ! Nous répondrons à toutes vos questions.
-                    </template>
-                </LandingCTABanner>
-
-                <LandingCTABanner :img="ctaPrendreEnMain" alt="Illustration du wébinaire prise en main" href="https://app.evalandgo.com/s/index.php?id=JTk5aSU5M2slOTklQUI%3D&a=JTk2cCU5N2slOUElQjA%3D">
-                    <template v-slot:title>
-                        Webinaire prise en main de
-                    <span class="italic">Résorption-bidonvilles</span>
-                    </template>
-                    <template v-slot:content>
-                        Vous souhaitez prendre en main la plateforme ? découvrir les
-                        fonctionnalités qui vous seront utiles ? vous remettre à
-                        niveau ? Nous vous montrerons l'essentiel avec une
-                        démonstration personnalisée et en direct.
-                    </template>
-                </LandingCTABanner>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -156,16 +127,12 @@
 import LandingPageFeatureBlock from "./LandingPageFeatureBlock.vue";
 import LandingPageContextImage from "./LandingPageContextImage.vue";
 import LandingPageUserFeedback from "./UserFeedback/LandingPageUserFeedback.vue";
-import LandingCTABanner from "./LandingCTABanner.vue";
-import ctaDecouvrir from "~/assets/img/LandingPage/FirstSection/cta_decouvrir.jpg";
-import ctaPrendreEnMain from "~/assets/img/LandingPage/FirstSection/cta_prendre_en_main.jpg";
 
 export default {
     components: {
         LandingPageContextImage,
         LandingPageFeatureBlock,
-        LandingPageUserFeedback,
-        LandingCTABanner
+        LandingPageUserFeedback
     },
 
     data() {
