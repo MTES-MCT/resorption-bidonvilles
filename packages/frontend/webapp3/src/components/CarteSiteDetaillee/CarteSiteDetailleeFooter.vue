@@ -7,6 +7,7 @@
             iconPosition="left"
             type="button"
             size="sm"
+            :loading="heatwaveRequestStatus?.loading === true"
             @click="toggleHeatwave"
         >
             <template v-if="heatwaveStatus === false"
@@ -31,9 +32,9 @@
 
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
+import { useNotificationStore } from "@/stores/notification.store";
+import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
-import { setHeatwaveStatus } from "@/api/towns.api";
-import { trackEvent } from "@/helpers/matomo";
 
 import { Icon, Button, Link } from "@resorptionbidonvilles/ui";
 
@@ -44,6 +45,8 @@ const props = defineProps({
         default: false,
     },
 });
+const notificationStore = useNotificationStore();
+const townsStore = useTownsStore();
 const userStore = useUserStore();
 const { shantytown, isHover } = toRefs(props);
 
@@ -56,23 +59,29 @@ const heatwaveStatus = computed(() => {
 const isOpen = computed(() => {
     return shantytown.value.status === "open";
 });
+const heatwaveRequestStatus = computed(() => {
+    return townsStore.heatwaveStatuses[shantytown.value.id] || null;
+});
 
 async function toggleHeatwave(event) {
-    event.preventDefault();
-    const value = !heatwaveStatus.value;
+    event.preventDefault(); // éviter que le clic ne redirige vers la fiche site
+    await townsStore.setHeatwaveStatus(
+        shantytown.value.id,
+        !heatwaveStatus.value
+    );
 
-    try {
-        // @todo : déplacer dans le store
-        await setHeatwaveStatus(shantytown.value.id, {
-            heatwave_status: value,
-        });
-        trackEvent(
-            "Site",
-            `${value ? "Déclenchement" : "Suppression"} alerte canicule`,
-            `S${shantytown.value.id}`
+    if (heatwaveRequestStatus.value?.error !== null) {
+        notificationStore.error(
+            "Risque canicule",
+            heatwaveRequestStatus.value.error
         );
-    } catch (e) {
-        // @todo
+    } else {
+        notificationStore.success(
+            "Risque canicule",
+            heatwaveStatus.value === true
+                ? "Le site a été marqué comme particulièrement exposé à la canicule"
+                : "Le site n'est plus marqué comme à risque"
+        );
     }
 }
 </script>
