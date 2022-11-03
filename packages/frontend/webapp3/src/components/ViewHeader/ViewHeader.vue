@@ -1,15 +1,8 @@
 <template>
-    <header
-        :class="responsive ? 'hidden 2xl:flex' : 'flex'"
-        class="mb-10 flex-col lg:flex-row lg:justify-between lg:items-center"
-    >
-        <div
-            class="flex space-x-4 items-center"
-            :class="$slots.actions ? 'border-b pb-4 lg:border-0 lg:pb-0' : ''"
-        >
-            <div
-                class="rounded-full bg-primary w-16 h-16 flex justify-center items-center text-2xl text-white"
-            >
+    <header :class="responsive ? 'hidden 2xl:flex' : 'flex'"
+        class="mb-10 flex-col lg:flex-row lg:justify-between lg:items-center print:hidden">
+        <div class="flex space-x-4 items-center" :class="$slots.actions ? 'border-b pb-4 lg:border-0 lg:pb-0' : ''">
+            <div class="rounded-full bg-primary w-16 h-16 flex justify-center items-center text-2xl text-white">
                 <Icon :icon="icon" />
             </div>
             <div>

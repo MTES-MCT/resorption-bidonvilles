@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-between">
+    <div class="flex justify-between print:hidden">
         <section class="flex items-end flex-wrap space-x-4">
             <article>
                 <p>Filtrer par</p>

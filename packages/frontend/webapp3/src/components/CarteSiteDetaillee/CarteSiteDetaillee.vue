@@ -1,6 +1,6 @@
 <template>
     <div :class="[
-        'rounded-sm cursor-pointer border-1 border-cardBorder preventPrintBreak',
+        'rounded-sm cursor-pointer border-1 border-cardBorder preventPrintBreak print:h-[17.3rem]',
         isHover ? 'bg-blue200 border-transparent' : '',
         shantytown.closedAt ? 'closedShantytown' : ''
     ]" @mouseenter="isHover = true" @mouseleave="isHover = false">
