@@ -41,7 +41,8 @@
                     Résorbé le {{ formatDate(shantytown.closedAt, "d/m/y") }}
                 </div>
                 <!-- Fin site fermé ou résorbé ? -->
-                <div class="lg:grid print:grid cardGridTemplateColumns gap-10 px-6 py-4">
+                <div
+                    class="flex flex-col space-y-5 lg:flex-none lg:grid cardGridTemplateColumns print:grid lg:gap-10 px-6 py-4">
                     <!-- first column -->
                     <div>
                         <TypeDeSite :fieldType="shantytown.fieldType" />
@@ -306,7 +307,7 @@ async function toggleHeatwave(event) {
 
 <style scoped lang="scss">
 .cardGridTemplateColumns {
-    grid-template-columns: 160px 208px 170px 200px auto;
+    grid-template-columns: 160px 208px 170px auto 140px;
 
     @media print {
         grid-template-columns: 160px 208px 164px 200px 236px;
