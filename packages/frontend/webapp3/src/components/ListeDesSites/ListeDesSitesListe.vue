@@ -1,19 +1,28 @@
 <template>
     <div>
         <section class="flex flex-col space-y-4">
-            <CarteSiteDetaillee v-for="shantytown in (printMode
-            ? townsStore.filteredTowns
-            : townsStore.currentPage.content)" :key="shantytown.id" :shantytown="shantytown" />
+            <CarteSiteDetaillee
+                v-for="shantytown in printMode
+                    ? townsStore.filteredTowns
+                    : townsStore.currentPage.content"
+                :key="shantytown.id"
+                :shantytown="shantytown"
+            />
         </section>
-        <BottomPagination :from="townsStore.currentPage.from" :to="townsStore.currentPage.to"
-            :total="townsStore.filteredTowns.length" :currentPage="townsStore.currentPage.index"
-            :numberOfPages="townsStore.numberOfPages" @pagechange="changePage" />
+        <BottomPagination
+            :from="townsStore.currentPage.from"
+            :to="townsStore.currentPage.to"
+            :total="townsStore.filteredTowns.length"
+            :currentPage="townsStore.currentPage.index"
+            :numberOfPages="townsStore.numberOfPages"
+            @pagechange="changePage"
+        />
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useTownsStore } from '@/stores/towns.store';
+import { useTownsStore } from "@/stores/towns.store";
 import { BottomPagination } from "@resorptionbidonvilles/ui";
 import CarteSiteDetaillee from "@/components/CarteSiteDetaillee/CarteSiteDetaillee.vue";
 
