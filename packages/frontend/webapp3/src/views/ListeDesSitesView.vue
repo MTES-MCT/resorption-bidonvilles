@@ -13,6 +13,7 @@
 <script setup>
 import { computed, onMounted } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
+import { trackEvent } from "@/helpers/matomo";
 
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import ListeDesSites from "@/components/ListeDesSites/ListeDesSites.vue";
@@ -26,6 +27,8 @@ const location = computed({
         };
     },
     set(newValue) {
+        trackEvent("Liste des sites", "Recherche");
+
         if (!newValue) {
             townsStore.filters.search = "";
             townsStore.filters.location = null;
