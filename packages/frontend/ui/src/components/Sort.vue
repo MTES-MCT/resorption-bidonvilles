@@ -12,20 +12,10 @@
                 </Button>
             </template>
             <template v-slot:menu>
-                <Menu containerClasses="py-0">
-                    <div v-for="option in options" :key="option.id"
-                        class="flex items-center whitespace-no-wrap text-sm menuWidth">
-                        <Radio :checkValue="option.value" v-model="modelValue"
-                            @input="$emit('update:modelValue', $event)" variant="invisible" containerClasses="w-full"
-                            labelClasses="w-full block" v-slot="{ isChecked }">
-                            <div
-                                class="flex items-center justify-between w-full hover:bg-blue200 py-2 px-3 text-primary">
-                                <div class="flex-1">{{ option.label }}</div>
-                                <div class="ml-4" v-if="isChecked">
-                                    <Icon icon="check" />
-                                </div>
-                            </div>
-                        </Radio>
+                <Menu variant="withoutPadding">
+                    <div class="flex flex-col text-sm menuWidth">
+                        <Radio v-for="option in options" :key="option.id" :value="option.value" v-model="value"
+                            :label="option.label" :name="name" variant="check" />
                     </div>
                 </Menu>
             </template>
@@ -34,15 +24,15 @@
 </template>
 
 <script setup>
-import { defineProps, computed } from "vue";
+import { defineProps, toRefs, defineEmits, computed } from "vue";
 
 import Button from './Button.vue';
 import Dropdown from './Dropdown.vue';
-import Icon from './Icon.vue';
 import Menu from './Menu/Menu.vue';
 import Radio from './Input/Radio.vue';
 
 const props = defineProps({
+    name: String,
     modelValue: {
         type: String
     },
@@ -53,13 +43,23 @@ const props = defineProps({
         }
     }
 });
+const { modelValue } = toRefs(props);
+const emit = defineEmits(['update:modelValue']);
 
 const title = computed(() => {
     const option = props.options.find(
-        option => option.value === props.modelValue
+        option => option.value === modelValue.value
     );
 
     return option.label;
+});
+const value = computed({
+    get() {
+        return modelValue.value;
+    },
+    set(newValue) {
+        emit('update:modelValue', newValue);
+    }
 });
 </script>
 
