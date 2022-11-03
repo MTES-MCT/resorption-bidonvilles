@@ -5,47 +5,17 @@
                 <p>Filtrer par</p>
                 <div class="flex space-x-2">
                     <Filter
-                        v-for="filter in defaultFilters"
+                        v-for="filter in currentFilters.default"
                         :key="filter.id"
                         :title="filter.label"
                         :options="filter.options"
                         v-model="townsStore.filters.properties[filter.id]"
                         @checkedItem="trackFilter(filter.label, $event)"
-                    />
-                    <Filter
-                        v-if="townsStore.filters.status === 'open'"
-                        title="Conditions de vie"
-                        v-model="townsStore.filters.properties.conditions"
-                        @checkedItem="trackFilter('Conditions de vie', $event)"
-                        :options="[
-                            {
-                                value: 'accessToWater',
-                                label: 'eau',
-                            },
-                            {
-                                value: 'accessToSanitary',
-                                label: 'toilettes',
-                            },
-                            {
-                                value: 'accessToElectricity',
-                                label: 'électricité',
-                            },
-                            {
-                                value: 'accessToTrash',
-                                label: 'évac. des déchets',
-                            },
-
-                            {
-                                value: 'vermin',
-                                label: 'pres. de nuisibles',
-                            },
-                            {
-                                value: 'firePreventionMeasures',
-                                label: 'prev. incendie',
-                            },
-                        ]"
                     >
-                        <template v-slot:default="{ label }">
+                        <template
+                            v-if="filter.id === 'conditions'"
+                            v-slot:default="{ label }"
+                        >
                             <div class="text-red flex items-center">
                                 <div class="mr-2">
                                     <Icon icon="times" />/
@@ -61,7 +31,7 @@
                     v-if="displayOptionalFilters === true"
                 >
                     <Filter
-                        v-for="filter in optionalFilters"
+                        v-for="filter in currentFilters.optional"
                         :key="filter.id"
                         :title="filter.label"
                         :options="filter.options"
@@ -82,7 +52,7 @@
             <Sort
                 v-model="townsStore.sort"
                 name="towns_list_sort"
-                :options="sortOptions[townsStore.filters.status]"
+                :options="groupedSorts[townsStore.filters.status]"
             />
         </section>
     </div>
@@ -93,273 +63,49 @@ import { computed, ref } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
 import { trackEvent } from "@/helpers/matomo";
+import filters from "./filtres/filters";
+import sorts from "./filtres/sorts";
 
 import { Filter, Icon, Link, Sort } from "@resorptionbidonvilles/ui";
 
 const townsStore = useTownsStore();
 const userStore = useUserStore();
 const displayOptionalFilters = ref(false);
-const defaultOpenTownsFilter = ref([
-    {
-        label: "Nombre de personnes",
-        id: "population",
-        display: true,
-        options: [
-            { value: null, label: "Inconnu" },
-            { value: "-9", label: "Moins de 10 personnes" },
-            {
-                value: "10-99",
-                label: "Entre 10 et 99 personnes",
-            },
-            {
-                value: "100-",
-                label: "Plus de 100 personnes",
-            },
+
+const groupedFilters = {
+    open: {
+        default: [
+            filters.population,
+            filters.fieldType,
+            filters.origin,
+            filters.conditions,
+        ],
+        optional: [
+            filters.target,
+            filters.actors,
+            filters.heatwave,
+            ...(userStore.user?.hasJusticePermission ? [filters.justice] : []),
         ],
     },
-    {
-        label: "Type de sites",
-        id: "fieldType",
-        display: true,
-        options: [
-            { value: 3, label: "Terrain" },
-            { value: 2, label: "Immeuble bâti" },
-            { value: 1, label: "Inconnu" },
+    close: {
+        default: [filters.solvedOrClosed],
+        optional: [
+            filters.target,
+            filters.origin,
+            filters.closingReason,
+            ...(userStore.user?.hasJusticePermission ? [filters.justice] : []),
+            filters.fieldType,
+            filters.population,
         ],
     },
-    {
-        label: "Origines",
-        id: "origin",
-        display: true,
-        options: [
-            {
-                value: 1,
-                label: "Français",
-            },
-            {
-                value: 2,
-                label: "Union européenne",
-            },
-            {
-                value: 3,
-                label: "Hors Union européenne",
-            },
-            {
-                value: null,
-                label: "Inconnu",
-            },
-        ],
-    },
-]);
-const optionalOpenTownFilters = ref([
-    {
-        label: "Objectif résorption",
-        id: "target",
-        display: true,
-        options: [
-            { value: "yes", label: "Oui" },
-            { value: "no", label: "Non" },
-        ],
-    },
-    {
-        label: "Intervenants",
-        display: true,
-        id: "actors",
-        options: [
-            { value: "yes", label: "Oui" },
-            { value: "no", label: "Non" },
-        ],
-    },
-    {
-        label: "Procédure judiciaire",
-        id: "justice",
-        display: userStore.user?.hasJusticePermission,
-        options: [
-            { value: null, label: "Inconnu" },
-            { value: "none", label: "Aucune" },
-            {
-                value: "ownerComplaint",
-                label: "Plainte déposée",
-            },
-            {
-                value: "justiceProcedure",
-                label: "Procédure en cours",
-            },
-            {
-                value: "justiceRendered",
-                label: "Décision rendue",
-            },
-        ],
-    },
-    {
-        label: "Risque Canicule",
-        id: "heatwave",
-        display: true,
-        options: [
-            { value: "yes", label: "Oui" },
-            { value: "no", label: "Non" },
-        ],
-    },
-]);
-const defaultClosedTownsFilter = ref([
-    {
-        label: "Résorbé / fermé",
-        id: "solvedOrClosed",
-        options: [
-            {
-                value: "closed",
-                label: "Fermé",
-            },
-            {
-                value: "solved",
-                label: "Résorbé",
-            },
-        ],
-    },
-]);
-const optionalClosedTownsFilter = ref([
-    {
-        label: "Objectif résorption",
-        id: "target",
-        display: true,
-        options: [
-            { value: "yes", label: "Oui" },
-            { value: "no", label: "Non" },
-        ],
-    },
-    {
-        label: "Origines",
-        id: "origin",
-        display: true,
-        options: [
-            {
-                value: 1,
-                label: "Français",
-            },
-            {
-                value: 2,
-                label: "Union européenne",
-            },
-            {
-                value: 3,
-                label: "Hors Union européenne",
-            },
-            {
-                value: null,
-                label: "Inconnu",
-            },
-        ],
-    },
-    {
-        label: "Cause de la fermeture",
-        id: "closingReason",
-        display: true,
-        options: [
-            {
-                value: "closed_by_justice",
-                label: "Exécution d'une décision de justice",
-            },
-            {
-                value: "closed_by_admin",
-                label: "Exécution d'une décision administrative",
-            },
-            { value: "other", label: "Autre" },
-            { value: "unknown", label: "Raison inconnue" },
-        ],
-    },
-    {
-        label: "Procédure judiciaire",
-        id: "justice",
-        display: userStore.user?.hasJusticePermission,
-        options: [
-            { value: null, label: "Inconnu" },
-            { value: "none", label: "Aucune" },
-            {
-                value: "ownerComplaint",
-                label: "Plainte déposée",
-            },
-            {
-                value: "justiceProcedure",
-                label: "Procédure en cours",
-            },
-            {
-                value: "justiceRendered",
-                label: "Décision rendue",
-            },
-        ],
-    },
-    {
-        label: "Type de sites",
-        id: "fieldType",
-        display: true,
-        options: [
-            { value: 3, label: "Terrain" },
-            { value: 2, label: "Immeuble bâti" },
-            { value: 1, label: "Inconnu" },
-        ],
-    },
-    {
-        label: "Nombre de personnes",
-        id: "population",
-        display: true,
-        options: [
-            { value: null, label: "Inconnu" },
-            { value: "-9", label: "Moins de 10 personnes" },
-            {
-                value: "10-99",
-                label: "Entre 10 et 99 personnes",
-            },
-            {
-                value: "100-",
-                label: "Plus de 100 personnes",
-            },
-        ],
-    },
-]);
-const sortOptions = {
-    open: [
-        {
-            value: `cityName`,
-            label: `Commune`,
-        },
-        {
-            value: `builtAt`,
-            label: `Date d'installation`,
-        },
-        {
-            value: `updatedAt`,
-            label: `Date d'actualisation`,
-        },
-        {
-            value: `declaredAt`,
-            label: `Date de signalement`,
-        },
-    ],
-    close: [
-        {
-            value: `cityName`,
-            label: `Commune`,
-        },
-        {
-            value: `closedAt`,
-            label: `Date de fermeture`,
-        },
-        {
-            value: `updatedAt`,
-            label: `Date d'actualisation`,
-        },
-    ],
+};
+const groupedSorts = {
+    open: [sorts.cityName, sorts.builtAt, sorts.updatedAt, sorts.declaredAt],
+    close: [sorts.cityName, sorts.closedAt, sorts.updatedAt],
 };
 
-const defaultFilters = computed(() => {
-    return townsStore.filters.status === "close"
-        ? defaultClosedTownsFilter.value
-        : defaultOpenTownsFilter.value;
-});
-const optionalFilters = computed(() => {
-    return townsStore.filters.status === "close"
-        ? optionalClosedTownsFilter.value
-        : optionalOpenTownFilters.value;
+const currentFilters = computed(() => {
+    return groupedFilters[townsStore.filters.status];
 });
 
 function showOptional() {
