@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
 import { ref, watch, computed } from "vue";
 import { useEventBus } from "@/helpers/event-bus";
+import { trackEvent } from "@/helpers/matomo";
 import { useUserStore } from "@/stores/user.store";
 import { useConfigStore } from "./config.store";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
-import { fetchList } from "@/api/towns.api";
+import { fetchList, setHeatwaveStatus } from "@/api/towns.api";
 import enrichShantytown from "@/utils/enrichShantytown";
 import filterShantytowns from "@/utils/filterShantytowns";
 
@@ -12,6 +13,7 @@ const ITEMS_PER_PAGE = 20;
 
 export const useTownsStore = defineStore("towns", () => {
     const towns = ref([]);
+    const hash = ref({});
     const isLoading = ref(null);
     const error = ref(null);
     const filters = {
@@ -20,6 +22,7 @@ export const useTownsStore = defineStore("towns", () => {
         location: ref(null),
         properties: ref({}),
     };
+    const heatwaveStatuses = ref({});
     const sort = ref("updatedAt");
     const filteredTowns = computed(() => {
         return filterShantytowns(towns.value, {
@@ -139,9 +142,13 @@ export const useTownsStore = defineStore("towns", () => {
             error.value = null;
             try {
                 const rawTowns = await fetchList();
-                towns.value = rawTowns.map((town) =>
-                    enrichShantytown(town, configStore.config.field_types)
-                );
+                towns.value = rawTowns.map((town) => {
+                    hash.value[town.id] = enrichShantytown(
+                        town,
+                        configStore.config.field_types
+                    );
+                    return hash.value[town.id];
+                });
                 currentPage.index.value = rawTowns.length > 0 ? 1 : -1;
             } catch (e) {
                 error.value =
@@ -151,6 +158,38 @@ export const useTownsStore = defineStore("towns", () => {
             }
 
             isLoading.value = false;
+        },
+        heatwaveStatuses,
+        async setHeatwaveStatus(id, status) {
+            if (heatwaveStatuses.value[id]?.loading === true) {
+                return;
+            }
+
+            if (!heatwaveStatuses.value[id]) {
+                heatwaveStatuses.value[id] = {
+                    loading: ref(false),
+                    error: ref(null),
+                };
+            }
+
+            heatwaveStatuses.value[id].loading = true;
+            heatwaveStatuses.value[id].error = null;
+            try {
+                await setHeatwaveStatus(id, status);
+                hash.value[id].heatwaveStatus = status;
+                trackEvent(
+                    "Site",
+                    `${
+                        status ? "Déclenchement" : "Suppression"
+                    } alerte canicule`,
+                    `S${id}`
+                );
+            } catch (e) {
+                heatwaveStatuses.value[id].error =
+                    e?.user_message || "Une erreur inconnue est survenue";
+            }
+
+            heatwaveStatuses.value[id].loading = false;
         },
     };
 });
