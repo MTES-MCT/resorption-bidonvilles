@@ -19,7 +19,7 @@
 
                 <NotesPublicationFormLoading v-if="loadingLinkedShantytown" />
                 <template v-else>
-                    <NotesPublicationFormInput
+                    <SearchInput
                         class="mt-4"
                         @click="openSearch"
                         :disabled="publicationIsPending"
@@ -58,7 +58,7 @@
 import BottomSlidingBlock from "#src/js/components/BottomSlidingBlock.vue";
 import Container from "#src/js/components/Container.vue";
 import NotesPublicationFormLoading from "./NotesPublicationFormLoading.vue";
-import NotesPublicationFormInput from "./NotesPublicationFormInput.vue";
+import SearchInput from "#src/js/components/SearchInput.vue";
 import NotesPublicationFormSubmitButton from "./NotesPublicationFormSubmitButton.vue";
 
 export default {
@@ -66,7 +66,7 @@ export default {
         BottomSlidingBlock,
         Container,
         NotesPublicationFormLoading,
-        NotesPublicationFormInput,
+        SearchInput,
         NotesPublicationFormSubmitButton,
     },
 
