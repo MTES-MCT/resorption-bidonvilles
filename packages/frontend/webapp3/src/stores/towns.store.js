@@ -122,6 +122,13 @@ export const useTownsStore = defineStore("towns", () => {
         towns,
         sort,
         currentPage,
+        numberOfPages: computed(() => {
+            if (filteredTowns.value.length === 0) {
+                return 0;
+            }
+
+            return Math.ceil(filteredTowns.value.length / ITEMS_PER_PAGE);
+        }),
         filteredTowns,
         async fetchTowns() {
             if (isLoading.value === true) {
