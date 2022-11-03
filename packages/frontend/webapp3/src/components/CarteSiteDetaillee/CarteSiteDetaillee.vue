@@ -1,32 +1,49 @@
 <template>
-    <div :class="[
-        'rounded-sm cursor-pointer border-1 border-cardBorder preventPrintBreak print:h-[17.3rem]',
-        isHover ? 'bg-blue200 border-transparent' : '',
-        shantytown.closedAt ? 'closedShantytown' : ''
-    ]" @mouseenter="isHover = true" @mouseleave="isHover = false">
+    <div
+        :class="[
+            'rounded-sm cursor-pointer border-1 border-cardBorder preventPrintBreak print:h-[17.3rem]',
+            isHover ? 'bg-blue200 border-transparent' : '',
+            shantytown.closedAt ? 'closedShantytown' : '',
+        ]"
+        @mouseenter="isHover = true"
+        @mouseleave="isHover = false"
+    >
         <RouterLink :to="`/site/${shantytown.id}`">
             <div class="-mt-1 print:mt-0">
                 <div class="mb-4 px-6">
-                    <Tag :variant="pinVariant" :class="[
-                        'text-xs uppercase',
-                        isHover ? 'shadow-md' : ''
-                    ]">
+                    <Tag
+                        :variant="pinVariant"
+                        :class="[
+                            'text-xs uppercase',
+                            isHover ? 'shadow-md' : '',
+                        ]"
+                    >
                         {{ lastUpdate }}
                     </Tag>
-                    <Tag v-if="heatwaveStatus === true" :variant="'highlight'" :class="[
-                        'ml-4 text-xs uppercase text-primary',
-                        isHover ? 'shadow-md' : ''
-                    ]">
+                    <Tag
+                        v-if="heatwaveStatus === true"
+                        :variant="'highlight'"
+                        :class="[
+                            'ml-4 text-xs uppercase text-primary',
+                            isHover ? 'shadow-md' : '',
+                        ]"
+                    >
                         Risque Canicule
                     </Tag>
-                    <ResorptionTargetTag class="ml-4" v-if="shantytown.resorptionTarget"
-                        :target="shantytown.resorptionTarget" :isHover="isHover" />
+                    <ResorptionTargetTag
+                        class="ml-4"
+                        v-if="shantytown.resorptionTarget"
+                        :target="shantytown.resorptionTarget"
+                        :isHover="isHover"
+                    />
                 </div>
                 <div class="text-md px-6">
                     <div class="text-primary text-display-md font-bold">
                         <span class="font-bold">
                             {{ shantytown.addressSimple }}
-                            <span v-if="shantytown.name">« {{ shantytown.name }} »</span>
+                            <span v-if="shantytown.name"
+                                >« {{ shantytown.name }} »</span
+                            >
                         </span>
                         <span class="font-normal">
                             {{ shantytown.city.name }}
@@ -42,7 +59,8 @@
                 </div>
                 <!-- Fin site fermé ou résorbé ? -->
                 <div
-                    class="flex flex-col space-y-5 lg:flex-none lg:grid cardGridTemplateColumns print:grid lg:gap-10 px-6 py-4">
+                    class="flex flex-col space-y-5 lg:flex-none lg:grid cardGridTemplateColumns print:grid lg:gap-10 px-6 py-4"
+                >
                     <!-- first column -->
                     <div>
                         <TypeDeSite :fieldType="shantytown.fieldType" />
@@ -50,7 +68,7 @@
                             <div>
                                 {{ shantytown.statusName }} depuis <br />
                                 <span class="font-bold">{{
-                                        shantytown.statusSince
+                                    shantytown.statusSince
                                 }}</span>
                             </div>
                         </div>
@@ -58,16 +76,31 @@
 
                     <!-- second column -->
                     <div>
-                        <div v-if="shantytown.populationTotal === null" class="font-bold">
+                        <div
+                            v-if="shantytown.populationTotal === null"
+                            class="font-bold"
+                        >
                             Population : inconnu
                         </div>
-                        <NombreHabitants v-else class="text-lg font-bold" :population="shantytown.populationTotal" />
+                        <NombreHabitants
+                            v-else
+                            class="text-lg font-bold"
+                            :population="shantytown.populationTotal"
+                        />
                         <div>
                             <div v-if="!socialOrigins.length" class="text-G600">
                                 Origine : inconnu
                             </div>
-                            <div class="flex" v-for="origin in socialOrigins" v-else :key="origin.id">
-                                <img :src="origin.img" class=" w-6 h-4 mr-2 mt-1" />
+                            <div
+                                class="flex"
+                                v-for="origin in socialOrigins"
+                                v-else
+                                :key="origin.id"
+                            >
+                                <img
+                                    :src="origin.img"
+                                    class="w-6 h-4 mr-2 mt-1"
+                                />
                                 <div>{{ origin.label }}</div>
                             </div>
                         </div>
@@ -75,112 +108,189 @@
                     <!-- third column - open shantytowns -->
                     <div v-if="showLivingConditionDetails">
                         <div v-if="shantytown.livingConditions.version === 2">
-                            <CarteSiteDetailleeIcon :status="
-                                shantytown.livingConditions.water.status
-                                    .status
-                            ">eau</CarteSiteDetailleeIcon>
-                            <CarteSiteDetailleeIcon :status="
-                                shantytown.livingConditions.sanitary.status
-                                    .status
-                            ">toilettes</CarteSiteDetailleeIcon>
-                            <CarteSiteDetailleeIcon :status="
-                                shantytown.livingConditions.electricity
-                                    .status.status
-                            ">électricité</CarteSiteDetailleeIcon>
+                            <CarteSiteDetailleeIcon
+                                :status="
+                                    shantytown.livingConditions.water.status
+                                        .status
+                                "
+                                >eau</CarteSiteDetailleeIcon
+                            >
+                            <CarteSiteDetailleeIcon
+                                :status="
+                                    shantytown.livingConditions.sanitary.status
+                                        .status
+                                "
+                                >toilettes</CarteSiteDetailleeIcon
+                            >
+                            <CarteSiteDetailleeIcon
+                                :status="
+                                    shantytown.livingConditions.electricity
+                                        .status.status
+                                "
+                                >électricité</CarteSiteDetailleeIcon
+                            >
 
-                            <CarteSiteDetailleeIcon :status="
-                                shantytown.livingConditions.trash.status
-                                    .status
-                            ">évac. des déchets</CarteSiteDetailleeIcon>
+                            <CarteSiteDetailleeIcon
+                                :status="
+                                    shantytown.livingConditions.trash.status
+                                        .status
+                                "
+                                >évac. des déchets</CarteSiteDetailleeIcon
+                            >
 
-                            <CarteSiteDetailleeIcon :status="
-                                shantytown.livingConditions[verminKey]
-                                    .status.status
-                            ">{{
-        shantytown.livingConditions[verminKey]
-            .status.status === "good"
-            ? "abs. de nuisibles"
-            : "pres. de nuisibles"
-}}
+                            <CarteSiteDetailleeIcon
+                                :status="
+                                    shantytown.livingConditions[verminKey]
+                                        .status.status
+                                "
+                                >{{
+                                    shantytown.livingConditions[verminKey]
+                                        .status.status === "good"
+                                        ? "abs. de nuisibles"
+                                        : "pres. de nuisibles"
+                                }}
                             </CarteSiteDetailleeIcon>
-                            <CarteSiteDetailleeIcon :status="
-                                shantytown.livingConditions[fireKey].status
-                                    .status
-                            ">prev. incendie</CarteSiteDetailleeIcon>
+                            <CarteSiteDetailleeIcon
+                                :status="
+                                    shantytown.livingConditions[fireKey].status
+                                        .status
+                                "
+                                >prev. incendie</CarteSiteDetailleeIcon
+                            >
                         </div>
                         <div v-else>
-                            <Tag variant="pin_red">Les conditions de vie évoluent : mettez les à
-                                jour !</Tag>
+                            <Tag variant="pin_red"
+                                >Les conditions de vie évoluent : mettez les à
+                                jour !</Tag
+                            >
                         </div>
                     </div>
                     <!-- third column - closed shantytowns -->
                     <div v-else>
-                        <SolutionsDeFermeture :shantytownClosingSolutions="
-                            shantytown.closingSolutions
-                        "></SolutionsDeFermeture>
+                        <SolutionsDeFermeture
+                            :shantytownClosingSolutions="
+                                shantytown.closingSolutions
+                            "
+                        ></SolutionsDeFermeture>
                     </div>
                     <!-- fourth column -->
                     <div v-if="userStore.hasJusticePermission">
-                        <div v-if="
-                            !shantytown.justiceStatuses ||
-                            !shantytown.justiceStatuses.length
-                        " class="text-G600">
-                            <Icon icon="ban" />
-                            Aucune procédure judiciaire en cours
+                        <div
+                            v-if="
+                                !shantytown.justiceStatuses ||
+                                !shantytown.justiceStatuses.length
+                            "
+                            class="text-G600"
+                        >
+                            <Icon icon="ban" />&nbsp;
+                            <template
+                                v-if="
+                                    shantytown.ownerComplaint === false &&
+                                    shantytown.justiceProcedure === false
+                                "
+                                >Aucune procédure judiciaire en cours</template
+                            >
+                            <template v-else
+                                >Aucune information sur les procédures
+                                judiciaires</template
+                            >
                         </div>
                         <div v-else>
-                            <div class="flex " v-for="status in shantytown.justiceStatuses" :key="status.label">
+                            <div
+                                class="flex"
+                                v-for="status in shantytown.justiceStatuses"
+                                :key="status.label"
+                            >
                                 <Icon v-if="status.icon" :icon="status.icon" />
-                                <img class="w-5 h-4 mt-1" :src="status.img" v-if="status.img" />
+                                <img
+                                    class="w-5 h-4 mt-1"
+                                    :src="status.img"
+                                    v-if="status.img"
+                                />
                                 <div class="ml-2">
                                     <span class="font-bold">{{
-                                            status.label
+                                        status.label
                                     }}</span>
                                     <span v-if="status.date" class="secondary">
                                         le
                                         {{
-                                                formatDate(status.date, "d/m/y")
-                                        }}</span>
+                                            formatDate(status.date, "d/m/y")
+                                        }}</span
+                                    >
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- fifth column -->
                     <div class="flex">
-                        <div v-bind:class="{
-                            'text-G600': shantytown.actors.length === 0,
-                            'text-primary': shantytown.actors.length > 0,
-                            'font-bold': shantytown.actors.length > 0
-                        }">
+                        <div
+                            v-bind:class="{
+                                'text-G600': shantytown.actors.length === 0,
+                                'text-primary': shantytown.actors.length > 0,
+                                'font-bold': shantytown.actors.length > 0,
+                            }"
+                        >
                             <span>
                                 <Icon icon="user-circle" />
                             </span>
                         </div>
                         <div class="ml-2 flex-grow">
-                            <span v-if="shantytown.actors.length === 0" class="text-G600">
-                                Aucun intervenant</span>
-                            <span v-else class="text-primary font-bold">{{ shantytown.actors.length }} intervenant{{
+                            <span
+                                v-if="shantytown.actors.length === 0"
+                                class="text-G600"
+                            >
+                                Aucun intervenant</span
+                            >
+                            <span v-else class="text-primary font-bold"
+                                >{{ shantytown.actors.length }} intervenant{{
                                     shantytown.actors.length > 1 ? "s" : ""
-                            }}</span>
-                            <ul v-if="shantytown.actors.length > 0" class="text-primary">
-                                <li v-for="actor in mergedActors" v-bind:key="actor.id">
+                                }}</span
+                            >
+                            <ul
+                                v-if="shantytown.actors.length > 0"
+                                class="text-primary"
+                            >
+                                <li
+                                    v-for="actor in mergedActors"
+                                    v-bind:key="actor.id"
+                                >
                                     - {{ actor.name }}
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-end h-14 items-center mr-4 space-x-4 print:hidden">
-                    <Button v-if="isHover" variant="primaryOutline" icon="fa-regular fa-sun" iconPosition="left"
-                        type="button" size="sm" @click="toggleHeatwave">
-                        <template v-if="heatwaveStatus === false">Indiquer un risque "Canicule"</template>
+                <div
+                    class="flex justify-end h-14 items-center mr-4 space-x-4 print:hidden"
+                >
+                    <Button
+                        v-if="isHover"
+                        variant="primaryOutline"
+                        icon="fa-regular fa-sun"
+                        iconPosition="left"
+                        type="button"
+                        size="sm"
+                        @click="toggleHeatwave"
+                    >
+                        <template v-if="heatwaveStatus === false"
+                            >Indiquer un risque "Canicule"</template
+                        >
                         <template v-else>Retirer le risque "Canicule"</template>
                     </Button>
-                    <Button v-if="isHover && isOpen && hasUpdateShantytownPermission" variant="primaryOutline" size="sm"
-                        icon="pencil-alt" iconPosition="left" :href="`/site/${shantytown.id}/mise-a-jour`">Mettre à
-                        jour</Button>
+                    <Button
+                        v-if="
+                            isHover && isOpen && hasUpdateShantytownPermission
+                        "
+                        variant="primaryOutline"
+                        size="sm"
+                        icon="pencil-alt"
+                        iconPosition="left"
+                        :href="`/site/${shantytown.id}/mise-a-jour`"
+                        >Mettre à jour</Button
+                    >
                     <Link :to="`/site/${shantytown.id}`">
-                    <Icon icon="arrow-right" /> Voir la fiche du site</Link>
+                        <Icon icon="arrow-right" /> Voir la fiche du site</Link
+                    >
                 </div>
             </div>
         </RouterLink>
@@ -212,7 +322,7 @@ import flagExtraCommunautaires from "@/assets/flags/extra-communautaires.png";
 
 const props = defineProps({
     shantytown: {
-        type: Object
+        type: Object,
     },
 });
 const userStore = useUserStore();
@@ -239,7 +349,7 @@ const socialOrigins = computed(() => {
             return {
                 id: 3,
                 label: "Hors Union européenne",
-                img: flagExtraCommunautaires
+                img: flagExtraCommunautaires,
             };
         }
 
@@ -272,7 +382,7 @@ const mergedActors = computed(() => {
 
             return {
                 ...acc,
-                [actor.organization.id]: actor.organization
+                [actor.organization.id]: actor.organization,
             };
         }, {})
     );
@@ -291,12 +401,11 @@ async function toggleHeatwave(event) {
     try {
         // @todo : déplacer dans le store
         await setHeatwaveStatus(shantytown.value.id, {
-            heatwave_status: value
+            heatwave_status: value,
         });
         trackEvent(
             "Site",
-            `${value ? "Déclenchement" : "Suppression"
-            } alerte canicule`,
+            `${value ? "Déclenchement" : "Suppression"} alerte canicule`,
             `S${shantytown.value.id}`
         );
     } catch (e) {
@@ -332,11 +441,13 @@ async function toggleHeatwave(event) {
         position: absolute;
         pointer-events: none;
         content: "";
-        background: linear-gradient(to left bottom,
-                transparent 50%,
-                currentColor 49.8%,
-                currentColor 50.2%,
-                transparent 50%);
+        background: linear-gradient(
+            to left bottom,
+            transparent 50%,
+            currentColor 49.8%,
+            currentColor 50.2%,
+            transparent 50%
+        );
         left: 0;
         right: 0;
         top: 0;
