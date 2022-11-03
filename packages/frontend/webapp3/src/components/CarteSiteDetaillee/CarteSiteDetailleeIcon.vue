@@ -35,7 +35,7 @@ const colorClass = computed(() => {
 const icon = computed(() => {
     const icons = {
         good: "check",
-        toImprove: "exclamation-triangle",
+        toImprove: "triangle-exclamation",
         bad: "times",
         unknown: "question"
     };

@@ -17,7 +17,7 @@
                         'ml-4 text-xs uppercase text-primary',
                         isHover ? 'shadow-md' : ''
                     ]">
-                        Alerte Canicule
+                        Risque Canicule
                     </Tag>
                     <ResorptionTargetTag class="ml-4" v-if="shantytown.resorptionTarget"
                         :target="shantytown.resorptionTarget" :isHover="isHover" />
@@ -41,7 +41,7 @@
                     Résorbé le {{ formatDate(shantytown.closedAt, "d/m/y") }}
                 </div>
                 <!-- Fin site fermé ou résorbé ? -->
-                <div class="md:grid print:grid cardGridTemplateColumns gap-10 px-6 py-4">
+                <div class="lg:grid print:grid cardGridTemplateColumns gap-10 px-6 py-4">
                     <!-- first column -->
                     <div>
                         <TypeDeSite :fieldType="shantytown.fieldType" />
@@ -169,23 +169,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-end h-16 px-4 pt-4 print:hidden">
-                    <div class="print:hidden">
-                        <Button v-if="isHover && heatwaveStatus === false" variant="primary" iconPosition="left"
-                            type="button" class="text-display-sm font-bold hover:underline" @click="setHeatwave(true)">
-                            Déclencher Alerte Canicule</Button>
-                        <Button v-if="isHover && heatwaveStatus === true" variant="primary" iconPosition="left"
-                            type="button" class="text-display-sm font-bold hover:underline" @click="setHeatwave(false)">
-                            Supprimer alerte Canicule</Button>
-                        <transition name="fade" v-if="isOpen && hasUpdateShantytownPermission">
-                            <RouterLink v-if="isHover" :to="`/site/${shantytown.id}/mise-a-jour`">
-                                <Button variant="primaryText" icon="pen" iconPosition="left"
-                                    class="text-display-sm font-bold hover:underline -mb-1">Mettre à jour</Button>
-                            </RouterLink>
-                        </transition>
-                        <Button variant="primaryText" icon="arrow-right"
-                            class="text-display-sm font-bold hover:underline -mb-1">Voir la fiche du site</Button>
-                    </div>
+                <div class="flex justify-end h-14 items-center mr-4 space-x-4 print:hidden">
+                    <Button v-if="isHover" variant="primaryOutline" icon="fa-regular fa-sun" iconPosition="left"
+                        type="button" size="sm" @click="toggleHeatwave">
+                        <template v-if="heatwaveStatus === false">Indiquer un risque "Canicule"</template>
+                        <template v-else>Retirer le risque "Canicule"</template>
+                    </Button>
+                    <Button v-if="isHover && isOpen && hasUpdateShantytownPermission" variant="primaryOutline" size="sm"
+                        icon="pencil-alt" iconPosition="left" :href="`/site/${shantytown.id}/mise-a-jour`">Mettre à
+                        jour</Button>
+                    <Link :to="`/site/${shantytown.id}`">
+                    <Icon icon="arrow-right" /> Voir la fiche du site</Link>
                 </div>
             </div>
         </RouterLink>
@@ -204,7 +198,7 @@ import isSolved from "@/utils/isShantytownSolved";
 import isClosed from "@/utils/isShantytownClosed";
 import { trackEvent } from "@/helpers/matomo";
 
-import { Tag, Icon, Button } from "@resorptionbidonvilles/ui";
+import { Tag, Icon, Button, Link } from "@resorptionbidonvilles/ui";
 import ResorptionTargetTag from "@/components/TagObjectifResorption/TagObjectifResorption.vue";
 import TypeDeSite from "@/components/TypeDeSite/TypeDeSite.vue";
 import NombreHabitants from "@/components/NombreHabitants/NombreHabitants.vue";
@@ -289,7 +283,10 @@ const showLivingConditionDetails = computed(() => {
     return !(isSolved(shantytown.value) || isClosed(shantytown.value));
 });
 
-async function setHeatwave(value) {
+async function toggleHeatwave(event) {
+    event.preventDefault();
+    const value = !heatwaveStatus.value;
+
     try {
         // @todo : déplacer dans le store
         await setHeatwaveStatus(shantytown.value.id, {

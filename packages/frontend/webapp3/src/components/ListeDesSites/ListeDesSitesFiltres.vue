@@ -171,7 +171,7 @@ const optionalOpenTownFilters = ref([
         ],
     },
     {
-        label: "Alerte Canicule",
+        label: "Risque Canicule",
         id: "heatwave",
         display: true,
         options: [
