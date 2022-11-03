@@ -112,10 +112,11 @@ const router = createRouter({
         },
         {
             path: "/deconnexion",
-            beforeEnter: () => logout(),
-            meta: {
-                authRequirement: "none",
+            beforeEnter: (to, from, next) => {
+                logout();
+                return next('/connexion');
             },
+            component: () => null
         },
         {
             path: "/invitation",
