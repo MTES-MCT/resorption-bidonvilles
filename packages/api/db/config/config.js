@@ -1,9 +1,9 @@
-import * as dotenv from "dotenv";
-import * as pg from 'pg';
+const dotenv = require('dotenv');
+const pg = require('pg');
 
 dotenv.config();
 
-export const config = {
+module.exports = {
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DB,
@@ -19,5 +19,3 @@ export const config = {
         freezeTableName: false,
     },
 };
-
-export default config;
