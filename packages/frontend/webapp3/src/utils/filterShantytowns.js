@@ -2,7 +2,7 @@ import isShantytownClosed from "./isShantytownClosed";
 import isShantytownSolved from "./isShantytownSolved";
 
 export default function (shantytowns, filters) {
-    return shantytowns.filter(shantytown => {
+    return shantytowns.filter((shantytown) => {
         if (filters.status === "open" && shantytown.status !== "open") {
             return false;
         }
@@ -98,18 +98,18 @@ export default function (shantytowns, filters) {
 }
 
 function checkConditions(shantytown, filters) {
-    return filters.some(filter => {
+    return filters.some((filter) => {
         let filterToCondition = {
             accessToSanitary: ["sanitary"],
             accessToWater: ["water"],
             accessToTrash: ["trash"],
             accessToElectricity: ["electricity"],
             vermin: ["vermin", "pest_animals"],
-            firePreventionMeasures: ["firePrevention", "fire_prevention"]
+            firePreventionMeasures: ["firePrevention", "fire_prevention"],
         };
 
         return filterToCondition[filter].some(
-            key =>
+            (key) =>
                 shantytown.livingConditions[key] &&
                 ["bad", "unknown"].includes(
                     shantytown.livingConditions[key].status.status
@@ -127,9 +127,9 @@ function checkOrigin(shantytown, filters) {
         return true;
     }
 
-    const origins = shantytown.socialOrigins.map(origin => origin.id);
+    const origins = shantytown.socialOrigins.map((origin) => origin.id);
 
-    const filteredArray = origins.filter(value => filters.includes(value));
+    const filteredArray = origins.filter((value) => filters.includes(value));
 
     return filteredArray.length;
 }
@@ -170,7 +170,7 @@ function checkFieldType(shantytown, filters) {
  *
  */
 function checkPopulation(shantytown, filters) {
-    return filters.some(value => {
+    return filters.some((value) => {
         if (value === null) {
             return shantytown.populationTotal === null;
         }
@@ -196,20 +196,31 @@ function checkPopulation(shantytown, filters) {
  *
  */
 function checkJustice(shantytown, filters) {
-    return filters.some(value => {
+    return filters.some((value) => {
         if (value === "ownerComplaint") {
             return shantytown.ownerComplaint === true;
         }
 
-        if (shantytown.justiceRendered === true) {
-            return value === "justiceRendered";
+        if (value === "justiceProcedure") {
+            return shantytown.justiceProcedure === true;
         }
 
-        if (shantytown.justiceProcedure === true) {
-            return value === "justiceProcedure";
+        if (value === "justiceRendered") {
+            return shantytown.justiceRendered === true;
         }
 
-        return value === null;
+        if (value === "none") {
+            return (
+                shantytown.ownerComplaint === false &&
+                shantytown.justiceProcedure === false
+            );
+        }
+
+        // value === null (inconnu)
+        return (
+            typeof shantytown.ownerComplaint !== "boolean" &&
+            typeof shantytown.justiceProcedure !== "boolean"
+        );
     });
 }
 
