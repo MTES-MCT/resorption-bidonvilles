@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-between space-x-6">
+    <div class="flex justify-between space-x-6 print:hidden">
         <section class="flex space-x-6 flex-1">
             <p>
                 <MiniCarte :location="mapLocation" />

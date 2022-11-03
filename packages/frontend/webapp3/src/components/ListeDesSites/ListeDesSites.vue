@@ -1,6 +1,6 @@
 <template>
     <ContentWrapper>
-        <TabList :tabs="tabs" v-model="currentTab" class="mb-4" />
+        <TabList :tabs="tabs" v-model="currentTab" class="mb-4 print:hidden" />
 
         <ViewHeader icon="tent">
             <template v-slot:title>Liste des sites</template>
@@ -8,7 +8,7 @@
                 territoire</template>
             <template v-slot:actions>
                 <p class="flex space-x-2">
-                    <Button icon="print" iconPosition="left" variant="primaryOutline" @click="togglePrintModal"
+                    <Button icon="print" iconPosition="left" variant="primaryOutline" @click="print"
                         size="sm">Imprimer</Button>
                     <Button v-if="userStore.hasPermission('shantytown.export')" icon="file-excel" iconPosition="left"
                         variant="primary" :disabled="townsStore.filteredTowns.length === 0" @click="showExport"
@@ -58,6 +58,7 @@ import ViewError from "@/components/ViewError/ViewError.vue";
 import ListeDesSitesHeader from "./ListeDesSitesHeader.vue";
 import ListeDesSitesFiltres from "./ListeDesSitesFiltres.vue";
 import ListeDesSitesListe from "./ListeDesSitesListe.vue";
+import { trackEvent } from "@/helpers/matomo";
 
 const userStore = useUserStore();
 const townsStore = useTownsStore();
@@ -74,7 +75,10 @@ const currentTab = computed({
     },
 });
 
-function togglePrintModal() { }
+function print() {
+    window.print();
+    trackEvent("Impression", "Impression liste des sites");
+}
 
 function showExport() { }
 </script>
