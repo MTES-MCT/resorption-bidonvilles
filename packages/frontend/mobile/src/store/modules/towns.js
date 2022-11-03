@@ -36,18 +36,8 @@ export default {
                 }
             });
         },
-        async setDetailedTown(state, townId) {
-            if (townId === null) {
-                state.detailedTown = null;
-            } else if (!state.hash[townId]) {
-                try {
-                    state.detailedTown = await findTown(townId);
-                } catch (error) {
-                    throw new Error("Impossible de trouver le site");
-                }
-            } else {
-                state.detailedTown = state.hash[townId];
-            }
+        SET_DETAILED_TOWN(state, town) {
+            state.detailedTown = town;
         },
 
         SET_COMMENTS_SCROLL(state, scroll) {
@@ -105,7 +95,8 @@ export default {
             }
         },
 
-        async fetchShantytown({ state }, shantytownId) {
+        async fetchShantytown({ state, rootState }, shantytownId) {
+            const { field_types: fieldTypes } = rootState.config.configuration;
             // fetch locally first
             const town = state.hash[shantytownId];
             if (town !== undefined) {
@@ -113,12 +104,31 @@ export default {
             }
 
             try {
-                return await findTown(shantytownId);
+                const fetchedTown = await findTown(shantytownId);
+                return enrichShantytown(fetchedTown, fieldTypes);
             } catch (error) {
                 // ignore
             }
 
             return null;
+        },
+        async setDetailedTown({ state, commit, rootState }, townId) {
+            const { field_types: fieldTypes } = rootState.config.configuration;
+            if (townId === null) {
+                commit("SET_DETAILED_TOWN", null);
+            } else if (!state.hash[townId]) {
+                try {
+                    const town = await findTown(townId);
+                    commit(
+                        "SET_DETAILED_TOWN",
+                        enrichShantytown(town, fieldTypes)
+                    );
+                } catch (error) {
+                    throw new Error("Impossible de trouver le site");
+                }
+            } else {
+                commit("SET_DETAILED_TOWN", state.hash[townId]);
+            }
         },
     },
 

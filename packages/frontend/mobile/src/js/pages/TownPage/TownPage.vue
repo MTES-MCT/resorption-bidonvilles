@@ -143,13 +143,13 @@ export default {
         try {
             this.$store.commit("SET_COMMENTS_ARE_OPEN", false);
             this.$store.commit("SET_COMMENTS_SCROLL", 0);
-            this.$store.commit("setDetailedTown", this.$route.params.id);
+            this.$store.dispatch("setDetailedTown", this.$route.params.id);
         } catch (error) {
             this.error = "Erreur: " + error.message;
         }
     },
     beforeUnmount() {
-        this.$store.commit("setDetailedTown", null);
+        this.$store.dispatch("setDetailedTown", null);
     },
     methods: {
         async toTownsList() {
