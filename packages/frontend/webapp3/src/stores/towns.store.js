@@ -26,7 +26,7 @@ export const useTownsStore = defineStore("towns", () => {
             status: filters.status.value,
             search: filters.search.value,
             location: filters.location.value,
-            ...filters.properties.value
+            ...filters.properties.value,
         }).sort(sortFn.value);
     });
     const configStore = useConfigStore();
