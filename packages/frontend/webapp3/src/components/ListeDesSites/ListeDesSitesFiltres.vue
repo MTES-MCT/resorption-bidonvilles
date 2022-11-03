@@ -4,38 +4,47 @@
             <article>
                 <p>Filtrer par</p>
                 <div class="flex space-x-2">
-                    <Filter v-for="filter in defaultFilters" :key="filter.id" :title="filter.label"
-                        :options="filter.options" v-model="townsStore.filters.properties[filter.id]"
-                        @checkedItem="trackFilter(filter.label, $event)" />
-                    <Filter v-if="townsStore.filters.status === 'open'" title="Conditions de vie"
+                    <Filter
+                        v-for="filter in defaultFilters"
+                        :key="filter.id"
+                        :title="filter.label"
+                        :options="filter.options"
+                        v-model="townsStore.filters.properties[filter.id]"
+                        @checkedItem="trackFilter(filter.label, $event)"
+                    />
+                    <Filter
+                        v-if="townsStore.filters.status === 'open'"
+                        title="Conditions de vie"
                         v-model="townsStore.filters.properties.conditions"
-                        @checkedItem="trackFilter('Conditions de vie', $event)" :options="[
+                        @checkedItem="trackFilter('Conditions de vie', $event)"
+                        :options="[
                             {
                                 value: 'accessToWater',
-                                label: 'eau'
+                                label: 'eau',
                             },
                             {
                                 value: 'accessToSanitary',
-                                label: 'toilettes'
+                                label: 'toilettes',
                             },
                             {
                                 value: 'accessToElectricity',
-                                label: 'électricité'
+                                label: 'électricité',
                             },
                             {
                                 value: 'accessToTrash',
-                                label: 'évac. des déchets'
+                                label: 'évac. des déchets',
                             },
-                        
+
                             {
                                 value: 'vermin',
-                                label: 'pres. de nuisibles'
+                                label: 'pres. de nuisibles',
                             },
                             {
                                 value: 'firePreventionMeasures',
-                                label: 'prev. incendie'
-                            }
-                        ]">
+                                label: 'prev. incendie',
+                            },
+                        ]"
+                    >
                         <template v-slot:default="{ label }">
                             <div class="text-red flex items-center">
                                 <div class="mr-2">
@@ -47,14 +56,22 @@
                         </template>
                     </Filter>
                 </div>
-                <div class="mt-2 flex space-x-2" v-if="displayOptionalFilters === true">
-                    <Filter v-for="filter in optionalFilters" :key="filter.id" :title="filter.label"
-                        :options="filter.options" v-model="townsStore.filters.properties[filter.id]"
-                        @checkedItem="trackFilter(filter.label, $event)" />
+                <div
+                    class="mt-2 flex space-x-2"
+                    v-if="displayOptionalFilters === true"
+                >
+                    <Filter
+                        v-for="filter in optionalFilters"
+                        :key="filter.id"
+                        :title="filter.label"
+                        :options="filter.options"
+                        v-model="townsStore.filters.properties[filter.id]"
+                        @checkedItem="trackFilter(filter.label, $event)"
+                    />
                 </div>
             </article>
             <Link v-if="displayOptionalFilters === false" @click="showOptional">
-            Voir plus de filtres
+                Voir plus de filtres
             </Link>
         </section>
 
@@ -62,7 +79,11 @@
             <article>
                 <p>Trier par</p>
             </article>
-            <Sort v-model="townsStore.sort" :options="sortOptions[townsStore.filters.status]" />
+            <Sort
+                v-model="townsStore.sort"
+                name="towns_list_sort"
+                :options="sortOptions[townsStore.filters.status]"
+            />
         </section>
     </div>
 </template>
