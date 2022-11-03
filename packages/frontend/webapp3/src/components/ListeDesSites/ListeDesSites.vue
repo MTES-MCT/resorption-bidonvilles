@@ -8,8 +8,8 @@
                 territoire</template>
             <template v-slot:actions>
                 <p class="flex space-x-2">
-                    <Button icon="print" iconPosition="left" variant="primaryOutline" @click="print"
-                        size="sm">Imprimer</Button>
+                    <Button icon="print" iconPosition="left" variant="primaryOutline"
+                        :disabled="townsStore.filteredTowns.length === 0" @click="print" size="sm">Imprimer</Button>
                     <Button v-if="userStore.hasPermission('shantytown.export')" icon="file-excel" iconPosition="left"
                         variant="primary" :disabled="townsStore.filteredTowns.length === 0" @click="showExport"
                         size="sm">Exporter</Button>
@@ -39,7 +39,8 @@
         <template v-else>
             <ListeDesSitesHeader />
             <ListeDesSitesFiltres class="mt-4" />
-            <ListeDesSitesListe class="mt-4" />
+            <ListeDesSitesListe class="mt-4" v-if="townsStore.filteredTowns.length > 0" />
+            <ListeDesSitesVide class="mt-10" v-else />
         </template>
     </ContentWrapper>
 </template>
@@ -58,6 +59,7 @@ import ViewError from "@/components/ViewError/ViewError.vue";
 import ListeDesSitesHeader from "./ListeDesSitesHeader.vue";
 import ListeDesSitesFiltres from "./ListeDesSitesFiltres.vue";
 import ListeDesSitesListe from "./ListeDesSitesListe.vue";
+import ListeDesSitesVide from "./ListeDesSitesVide.vue";
 import { trackEvent } from "@/helpers/matomo";
 
 const userStore = useUserStore();
