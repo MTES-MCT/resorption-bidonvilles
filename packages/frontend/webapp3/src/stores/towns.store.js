@@ -50,7 +50,6 @@ export const useTownsStore = defineStore("towns", () => {
             );
         }),
         content: computed(() => {
-            console.log(currentPage.index.value);
             if (currentPage.index.value === -1) {
                 return [];
             }

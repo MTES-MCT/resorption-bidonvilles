@@ -1,26 +1,17 @@
 <template>
-    <component
-        :class="[
-            'btn inline-block relative',
-            sizeClasses,
-            variantClasses,
-            disabled && 'opacity-50 cursor-not-allowed'
-        ]"
-        :disabled="disabled || isLoading"
-        :to="isLink && isInternalLink ? (disabled ? null : href) : null"
-        :href="href"
-        :is="isLink ? (isInternalLink ? 'router-link' : 'a') : 'button'"
-        :type="isLink ? null : type"
-        @click="onClick"
-    >
-        <div
-            :class="[
-                'flex',
-                'items-center',
-                iconPosition === 'right' ? 'flex-row-reverse' : 'flex-row',
-                isLoading && 'invisible'
-            ]"
-        >
+    <component :class="[
+        'inline-flex relative items-center',
+        sizeClasses,
+        variantClasses,
+        disabled && 'opacity-50 cursor-not-allowed'
+    ]" :disabled="disabled || isLoading" :to="isLink && isInternalLink ? (disabled ? null : href) : null" :href="href"
+        :is="isLink ? (isInternalLink ? 'router-link' : 'a') : 'button'" :type="isLink ? null : type" @click="onClick">
+        <div :class="[
+            'flex',
+            'items-center',
+            iconPosition === 'right' ? 'flex-row-reverse' : 'flex-row',
+            isLoading && 'invisible'
+        ]">
             <div v-if="icon || $slots.icon">
                 <slot name="icon">
                     <Icon :icon="icon" />
@@ -31,10 +22,7 @@
                 <slot></slot>
             </div>
         </div>
-        <div
-            v-if="isLoading"
-            class="absolute inset-0 flex justify-center items-center"
-        >
+        <div v-if="isLoading" class="absolute inset-0 flex justify-center items-center">
             <Icon icon="spinner" spin />
         </div>
     </component>

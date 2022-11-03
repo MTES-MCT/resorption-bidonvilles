@@ -7,6 +7,7 @@ import {
     faArrowRight,
     faArrowRightToBracket,
     faArrowUpRightFromSquare,
+    faBalanceScale,
     faBan,
     faBars,
     faBolt,
@@ -42,6 +43,7 @@ import {
     faQuestion,
     faRotateLeft,
     faRotateRight,
+    faScroll,
     faSpinner,
     faTent,
     faTimes,
@@ -62,6 +64,7 @@ import {
     faEye,
     faEyeSlash,
     faNewspaper,
+    faSun,
     faTrashAlt,
     faUser,
 } from "@fortawesome/free-regular-svg-icons";
@@ -77,6 +80,7 @@ library.add(faArrowLeft);
 library.add(faArrowRight);
 library.add(faArrowRightToBracket);
 library.add(faArrowUpRightFromSquare);
+library.add(faBalanceScale);
 library.add(faBan);
 library.add(faBars);
 library.add(faBolt);
@@ -119,7 +123,9 @@ library.add(faPlus);
 library.add(faQuestion);
 library.add(faRotateLeft);
 library.add(faRotateRight);
+library.add(faScroll);
 library.add(faSpinner);
+library.add(faSun);
 library.add(faTent);
 library.add(faTimes);
 library.add(faTint);
