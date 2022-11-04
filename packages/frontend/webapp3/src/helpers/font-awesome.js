@@ -31,6 +31,7 @@ import {
     faFileExcel,
     faFilePdf,
     faFlag,
+    faHandshakeAngle,
     faKey,
     faMagnifyingGlass,
     faMale,
@@ -112,6 +113,7 @@ library.add(faFacebook);
 library.add(faFileExcel);
 library.add(faFilePdf);
 library.add(faFlag);
+library.add(faHandshakeAngle);
 library.add(faKey);
 library.add(faLinkedin);
 library.add(faNewspaper);
