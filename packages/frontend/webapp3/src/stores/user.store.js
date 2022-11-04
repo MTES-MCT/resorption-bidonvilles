@@ -48,11 +48,9 @@ export const useUserStore = defineStore("user", {
             return this.hasPermission("shantytown_justice.access");
         },
         hasUpdateShantytownPermission() {
-            return (shantytown) => this.hasLocalizedPermission(
-                'shantytown.update',
-                shantytown
-            );
-        }
+            return (shantytown) =>
+                this.hasLocalizedPermission("shantytown.update", shantytown);
+        },
     },
     actions: {
         getPermission(permissionName) {
@@ -92,9 +90,7 @@ export const useUserStore = defineStore("user", {
 
             return (
                 (town.region &&
-                    permission.allowed_on.regions.includes(
-                        town.region.code
-                    )) ||
+                    permission.allowed_on.regions.includes(town.region.code)) ||
                 (town.departement &&
                     permission.allowed_on.departements.includes(
                         town.departement.code
@@ -102,9 +98,7 @@ export const useUserStore = defineStore("user", {
                 (town.epci &&
                     permission.allowed_on.epci.includes(town.epci.code)) ||
                 (town.city &&
-                    (permission.allowed_on.cities.includes(
-                        town.city.code
-                    ) ||
+                    (permission.allowed_on.cities.includes(town.city.code) ||
                         permission.allowed_on.cities.includes(
                             town.city.main
                         ))) ||

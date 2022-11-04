@@ -1,6 +1,6 @@
 <template>
     <button type="button" class="text-left" :class="direction === 'col' ? 'w-full' : ''" @click="onChange(value)"
-        :disabled="isSubmitting">
+        :disabled="isSubmitting || disabled">
         <template v-if="variant === 'checkbox'">
             <span class="inline-block w-6 h-6 rounded border-2 align-middle mr-2 text-center" :class="checkboxStyle">
                 <Icon icon="check" class="text-white" :class="checked ? 'inline-block' : 'hidden'" />
@@ -35,10 +35,15 @@ const props = defineProps({
     direction: { // soit 'row', soit 'col'
         type: String,
         default: 'row'
-    }
+    },
+    disabled: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
 });
 
-const { name, variant, value, direction } = toRefs(props);
+const { name, variant, value, direction, disabled } = toRefs(props);
 const isSubmitting = useIsSubmitting();
 const { checked, handleChange } = useField(name, undefined, {
     type: 'checkbox',
@@ -52,14 +57,14 @@ function onChange() {
 
 const checkboxStyle = computed(() => {
     if (checked.value) {
-        if (isSubmitting.value) {
+        if (isSubmitting.value || disabled.value) {
             return 'bg-blue300 border-blue300';
         }
 
         return 'bg-primary border-primary';
     }
 
-    if (isSubmitting.value) {
+    if (isSubmitting.value || disabled.value) {
         return 'bg-G200 hover:border-G400';
     }
 

@@ -1,38 +1,22 @@
 <template>
-    <div
-        :class="[
-            'fixed z-40 inset-0 transform transition ease-in-out duration-300',
-            isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none',
-        ]"
-    >
+    <div :class="[
+        'fixed z-40 inset-0 transform transition ease-in-out duration-300',
+        isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none',
+    ]">
         <div class="absolute w-full h-full bg-gray-500 opacity-75"></div>
-        <div class="flex items-center justify-center min-h-screen">
-            <div
-                role="dialog"
-                ref="dialog"
-                aria-modal="true"
-                aria-labelledby="modal-headline"
-                class="opacity-100 z-50 shadow-xl"
-            >
+        <div class="flex items-center justify-center h-full">
+            <div role="dialog" ref="dialog" aria-modal="true" aria-labelledby="modal-headline"
+                class="opacity-100 z-50 shadow-xl max-h-[95vh] overflow-auto">
                 <div class="bg-white">
                     <slot name="header">
                         <div class="pt-10 px-10 pb-4">
-                            <div
-                                class="flex justify-between items-center border-b-1 border-G400"
-                            >
-                                <div
-                                    class="text-display-md font-bold text-primary"
-                                >
+                            <div class="flex justify-between items-center border-b-1 border-G400">
+                                <div class="text-display-md font-bold text-primary">
                                     <slot name="title" />
                                 </div>
                                 <div>
-                                    <Button
-                                        v-if="allowClose"
-                                        variant="primaryText"
-                                        icon="times"
-                                        size="lg"
-                                        @click="$emit('close')"
-                                    />
+                                    <Button v-if="allowClose" variant="primaryText" icon="times" size="lg"
+                                        @click="$emit('close')" />
                                 </div>
                             </div>
                         </div>
@@ -41,10 +25,7 @@
                         <slot name="body" />
                     </div>
 
-                    <div
-                        v-if="$slots.footer"
-                        class="px-4 pb-8 sm:px-6 flex justify-end"
-                    >
+                    <div v-if="$slots.footer" class="px-4 pb-8 sm:px-6 flex justify-end">
                         <slot name="footer"></slot>
                     </div>
                 </div>
@@ -108,11 +89,13 @@ function onVisible() {
     if (closeWhenClickOutside.value === true) {
         document.addEventListener("click", checkOutsideClick);
     }
+    document.addEventListener("keyup", checkEscape);
 }
 function onHidden() {
     if (closeWhenClickOutside.value === true) {
         document.removeEventListener("click", checkOutsideClick);
     }
+    document.removeEventListener("keyup", checkEscape);
 }
 
 function checkOutsideClick(event) {
@@ -122,6 +105,12 @@ function checkOutsideClick(event) {
     }
 
     if (isOpen.value === true && !dialog.value?.contains(event.target)) {
+        emit("close");
+    }
+}
+
+function checkEscape(event) {
+    if (isOpen.value === true && event.keyCode === 27) {
         emit("close");
     }
 }

@@ -10,7 +10,7 @@
 
 <script setup>
 import { defineProps, toRefs, ref } from "vue";
-import downloadFile from "@/utils/downloadFile";
+import downloadCsv from "@/utils/downloadCsv";
 import { Icon, Link, Spinner, Warning } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
@@ -32,7 +32,7 @@ async function download() {
     error.value = null;
     try {
         const { csv } = await downloadFn.value();
-        downloadFile(csv, `${filename.value}.csv`);
+        downloadCsv(csv, `${filename.value}.csv`);
     } catch (e) {
         error.value = "Le téléchargement a des données échoué";
     }
