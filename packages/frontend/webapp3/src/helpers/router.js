@@ -134,6 +134,14 @@ const router = createRouter({
             },
         },
         {
+            path: "/liste-des-actions",
+            component: () => import("@/views/ListeDesActionsView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "actions",
+            },
+        },
+        {
             path: "/mon-compte",
             redirect: "/mon-compte/informations-personnelles",
         },
