@@ -1,5 +1,4 @@
 import shantytownService from '#server/services/shantytown';
-import moment from 'moment';
 
 const { exportTown } = shantytownService;
 
@@ -11,7 +10,6 @@ const ERROR_RESPONSES = {
 };
 
 export default async (req, res, next) => {
-    const closedTowns = parseInt(req.query.closedTowns, 10) === 1;
     let buffer;
     try {
         buffer = await exportTown(req.user, req.query);
@@ -24,7 +22,6 @@ export default async (req, res, next) => {
         });
         return next(error.nativeError || error);
     }
-    res.attachment(`${moment(req.query.date).format('YYYY-MM-DD')}-sites-${closedTowns ? 'fermés' : 'existants'}-resorption-bidonvilles.xlsx`);
 
     return res.end(buffer);
 };

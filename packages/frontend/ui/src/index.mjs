@@ -6,6 +6,7 @@ export { default as BottomPagination } from './components/BottomPagination.vue';
 export { default as Button } from './components/Button.vue';
 export { default as CheckableGroup } from './components/Input/CheckableGroup.vue';
 export { default as Checkbox } from './components/Input/Checkbox.vue';
+export { default as DatepickerInput } from './components/Input/DatepickerInput.vue';
 export { default as Dropdown } from './components/Dropdown.vue';
 export { default as ErrorSummary } from './components/ErrorSummary.vue';
 export { default as Filter } from './components/Filter.vue';

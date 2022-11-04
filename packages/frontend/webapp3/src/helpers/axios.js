@@ -11,7 +11,7 @@ const ERRORS = {
 
 export const axios = axiosLib.create({
     baseURL: API_URL,
-    timeout: 5000,
+    timeout: 15000,
     headers: {
         "x-app-version": __APP_VERSION__,
     },

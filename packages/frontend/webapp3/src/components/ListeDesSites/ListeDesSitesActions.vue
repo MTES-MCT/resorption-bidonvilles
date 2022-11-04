@@ -30,14 +30,20 @@
             Déclarer un nouveau site
         </Button>
     </p>
+
+    <ListeDesSitesExport ref="modalExport" />
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
 import { trackEvent } from "@/helpers/matomo";
 
 import { Button } from "@resorptionbidonvilles/ui";
+import ListeDesSitesExport from "./ListeDesSitesExport/ListeDesSitesExport.vue";
+
+const modalExport = ref(null);
 
 const townsStore = useTownsStore();
 const userStore = useUserStore();
@@ -47,5 +53,7 @@ function print() {
     trackEvent("Impression", "Impression liste des sites");
 }
 
-function showExport() {}
+function showExport() {
+    modalExport.value.open();
+}
 </script>

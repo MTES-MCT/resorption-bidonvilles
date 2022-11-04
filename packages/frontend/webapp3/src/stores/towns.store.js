@@ -23,6 +23,7 @@ export const useTownsStore = defineStore("towns", () => {
         properties: ref({}),
     };
     const heatwaveStatuses = ref({});
+    const exportOptions = ref([]);
     const sort = ref("updatedAt");
     const filteredTowns = computed(() => {
         return filterShantytowns(towns.value, {
@@ -114,9 +115,20 @@ export const useTownsStore = defineStore("towns", () => {
         filters.properties.value.heatwave = [];
     }
 
+    function reset() {
+        towns.value = [];
+        hash.value = {};
+        isLoading.value = false;
+        error.value = null;
+        heatwaveStatuses.value = {};
+        sort.value = "updatedAt";
+        resetPagination();
+        resetFilters();
+    }
+
     const { bus } = useEventBus();
-    watch(() => bus.value.get("new-user"), resetFilters);
-    resetFilters();
+    watch(() => bus.value.get("new-user"), reset);
+    reset();
 
     return {
         isLoading,
@@ -125,6 +137,7 @@ export const useTownsStore = defineStore("towns", () => {
         towns,
         sort,
         currentPage,
+        exportOptions,
         numberOfPages: computed(() => {
             if (filteredTowns.value.length === 0) {
                 return 0;
