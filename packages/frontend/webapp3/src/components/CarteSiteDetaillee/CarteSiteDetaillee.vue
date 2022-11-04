@@ -76,7 +76,7 @@ const isOpen = computed(() => {
 
 <style scoped lang="scss">
 .cardGridTemplateColumns {
-    grid-template-columns: 160px 208px 170px auto 140px;
+    grid-template-columns: 160px 208px 170px auto 200px;
 
     @media print {
         grid-template-columns: 160px 208px 164px 200px 236px;

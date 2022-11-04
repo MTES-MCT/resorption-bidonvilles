@@ -2,15 +2,16 @@
     <ContentWrapper>
         <TabList :tabs="tabs" v-model="currentTab" class="mb-4" />
         <ListeDesActionsHeader />
-        <Loading v-if="plansStore.isLoading !== false" />
 
+        <Loading v-if="plansStore.isLoading !== false" />
         <ListeDesActionsErreur v-else-if="plansStore.error" />
 
         <template v-else>
-            <ListeDesActionsFiltres />
+            <ListeDesActionsStatistiques />
+            <ListeDesActionsFiltres class="mt-4" />
             <ListeDesActionsListe
-                v-if="plansStore.filteredPlans.length > 0"
                 class="mt-4"
+                v-if="plansStore.filteredPlans.length > 0"
             />
 
             <ListeDesActionsVide v-else class="mt-10" />
@@ -26,6 +27,7 @@ import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import Loading from "@/components/Loading/Loading.vue";
 import ListeDesActionsHeader from "./ListeDesActionsHeader.vue";
 import ListeDesActionsErreur from "./ListeDesActionsErreur.vue";
+import ListeDesActionsStatistiques from "./ListeDesActionsStatistiques.vue";
 import ListeDesActionsFiltres from "./ListeDesActionsFiltres.vue";
 import ListeDesActionsListe from "./ListeDesActionsListe.vue";
 import ListeDesActionsVide from "./ListeDesActionsVide.vue";

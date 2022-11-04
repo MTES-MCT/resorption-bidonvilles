@@ -6,13 +6,23 @@
             </p>
             <div>
                 <h1 class="text-3xl text-info font-bold">{{ title }}</h1>
-                <p>{{ populationTotal }} personnes</p>
+                <p>
+                    {{ populationTotal }} personne<template
+                        v-if="populationTotal > 1"
+                        >s</template
+                    >
+                </p>
                 <p>
                     {{ townsStore.filteredTowns.length }}
-                    sites
+                    site<template v-if="townsStore.filteredTowns.length > 1"
+                        >s</template
+                    >
                 </p>
-                <p v-if="userStore.hasJusticePermission && justiceTotal">
-                    {{ justiceTotal }} site(s) avec une procédure judiciaire
+                <p v-if="userStore.hasJusticePermission">
+                    {{ justiceTotal }} site<template v-if="justiceTotal > 1"
+                        >s</template
+                    >
+                    avec une procédure judiciaire
                 </p>
             </div>
         </section>

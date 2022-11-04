@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed top-0 z-10 pt-4 w-64 md:w-96 left-1/2 -ml-32 md:-ml-48">
+    <div class="fixed top-0 z-50 pt-4 w-64 md:w-96 left-1/2 -ml-32 md:-ml-48">
         <div class="flex flex-col space-y-4">
             <Notification
                 v-for="item in notificationStore.items"

@@ -22,7 +22,9 @@
             >
             <ul v-if="shantytown.actors.length > 0" class="text-primary">
                 <li v-for="actor in mergedActors" v-bind:key="actor.id">
-                    - {{ actor.name }}
+                    <LinkOrganization :to="`/annuaire/${actor.id}`">{{
+                        actor.name
+                    }}</LinkOrganization>
                 </li>
             </ul>
         </div>
@@ -32,7 +34,7 @@
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
 
-import { Icon } from "@resorptionbidonvilles/ui";
+import { Icon, LinkOrganization } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     shantytown: Object,

@@ -67,6 +67,7 @@ export const useTownsStore = defineStore("towns", () => {
     watch(filters.search, resetPagination);
     watch(filters.location, resetPagination);
     watch(filters.status, resetPagination);
+    watch(filters.properties, resetPagination, { deep: true });
 
     const sortFn = computed(() => {
         if (sort.value === "cityName") {

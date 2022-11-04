@@ -2,21 +2,19 @@
     <div>
         <div class="ml-2">
             <Icon icon="user-circle" />
-            <span class="text-dark font-bold"> Opérateur <br /></span>
-            <Button
-                variant="text"
-                :href="`/annuaire/${operator_contact.organization.id}`"
-                class="text-primary text-display-sm font-bold hover:underline -mb-1"
+            <span class="text-dark font-bold"> Opérateur</span><br />
+            <LinkOrganization
+                :to="`/annuaire/${operator_contact.organization.id}`"
             >
                 {{ operator_contact.organization.name }}
-            </Button>
+            </LinkOrganization>
         </div>
     </div>
 </template>
 
 <script setup>
 import { defineProps, toRefs } from "vue";
-import { Icon, Button } from "@resorptionbidonvilles/ui";
+import { Icon, LinkOrganization } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     operator_contact: {
