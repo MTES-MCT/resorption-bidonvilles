@@ -10,6 +10,7 @@
 
 <script setup>
 import { defineProps, toRefs, ref } from "vue";
+import { useNotificationStore } from "@/stores/notification.store";
 import downloadCsv from "@/utils/downloadCsv";
 import { Icon, Link, Spinner, Warning } from "@resorptionbidonvilles/ui";
 
@@ -19,6 +20,7 @@ const props = defineProps({
     downloadFn: Function,
 });
 const { label, filename, downloadFn } = toRefs(props);
+const notificationStore = useNotificationStore();
 
 const isLoading = ref(null);
 const error = ref(null);
@@ -33,8 +35,16 @@ async function download() {
     try {
         const { csv } = await downloadFn.value();
         downloadCsv(csv, `${filename.value}.csv`);
+        notificationStore.success(
+            label.value,
+            "Le fichier a bien été téléchargé"
+        );
     } catch (e) {
         error.value = "Le téléchargement a des données échoué";
+        notificationStore.error(
+            label.value,
+            e?.user_message || "Une erreur inconnue est survenue"
+        );
     }
 
     isLoading.value = false;

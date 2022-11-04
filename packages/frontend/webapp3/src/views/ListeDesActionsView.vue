@@ -3,9 +3,10 @@
         allowFreeSearch
         searchTitle=" Rechercher une action, une commune, un département..."
         searchPlaceholder="Nom d'une action, commune, département..."
+        showNationalWording="Voir toutes les actions de France"
         v-model:location="location"
     >
-    <ListeDesActions />
+        <ListeDesActions />
     </LayoutSearch>
 </template>
 

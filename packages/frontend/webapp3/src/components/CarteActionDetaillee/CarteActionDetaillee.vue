@@ -17,11 +17,18 @@
                         ]"
                     >
                         <span v-if="plan.expected_to_end_at"
-                            >du {{ formatDate(plan.started_at) }} au
-                            {{ formatDate(plan.expected_to_end_at) }}</span
+                            >du
+                            {{ formatDate(plan.started_at / 1000, "d/m/y") }} au
+                            {{
+                                formatDate(
+                                    plan.expected_to_end_at / 1000,
+                                    "d/m/y"
+                                )
+                            }}</span
                         >
                         <span v-else>
-                            depuis le {{ formatDate(plan.started_at) }}
+                            depuis le
+                            {{ formatDate(plan.started_at / 1000, "d/m/y") }}
                         </span>
                     </Tag>
                 </div>
@@ -35,41 +42,27 @@
                 </div>
 
                 <div class="md:grid cardGridTemplateColumns gap-10 px-6 py-4">
-                    <!-- 1ère colonne -->
                     <CarteActionColonneChampsIntervention
                         :topics="plan.topics"
                     />
-
-                    <!-- 2ème colonne -->
                     <CarteActionDetailleeColonneDepartement
                         :departement="plan.departement"
                     />
-
-                    <!-- 3ème colonne -->
                     <CarteActionDetailleeColonneLocalisation :plan="plan" />
-
-                    <!-- 4ème colonne -->
                     <CarteActionDetailleeColonnePilote
                         :government_contact="plan.government_contacts[0]"
                     />
-
-                    <!-- 5ème colonne -->
                     <CarteActionDetailleeColonneOperateur
                         :operator_contact="plan.operator_contacts[0]"
                     />
-
-                    <!-- fin des colonnes -->
                 </div>
 
-                <div class="flex justify-end px-4 pt-4">
+                <div class="flex justify-end px-4 py-4">
                     <div>
-                        <Button
-                            variant="text"
-                            icon="arrow-right"
-                            class="text-primary text-display-sm hover:underline -mb-1"
-                        >
-                            Voir la fiche de l'action
-                        </Button>
+                        <Link :to="`/action/${plan.id}`">
+                            <Icon icon="arrow-right" /> Voir la fiche de
+                            l'action
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -79,9 +72,10 @@
 
 <script setup>
 import { defineProps, toRefs, ref } from "vue";
+import formatDate from "@/utils/formatDate";
 
 import { RouterLink } from "vue-router";
-import { Tag, Button } from "@resorptionbidonvilles/ui";
+import { Icon, Link, Tag } from "@resorptionbidonvilles/ui";
 import CarteActionColonneChampsIntervention from "./CarteActionColonneChampsIntervention.vue";
 import CarteActionDetailleeColonneDepartement from "./CarteActionDetailleeColonneDepartement.vue";
 import CarteActionDetailleeColonneLocalisation from "./CarteActionDetailleeColonneLocalisation.vue";
@@ -97,16 +91,10 @@ const props = defineProps({
 const { plan } = toRefs(props);
 
 const isHover = ref(false);
-
-function formatDate(value) {
-    const date = new Date();
-    date.setTime(value);
-    return date.toLocaleDateString();
-}
 </script>
 
 <style scoped lang="scss">
 .cardGridTemplateColumns {
-    grid-template-columns: 222px 208px 164px 200px auto;
+    grid-template-columns: 222px 208px auto 300px 200px;
 }
 </style>

@@ -18,8 +18,6 @@ export const usePlansStore = defineStore("plans", () => {
         location: ref(null),
         properties: ref({}),
     };
-    const exportCommentIsPending = ref(false);
-    const exportPlanIsPending = ref(false);
 
     const filteredPlans = computed(() => {
         return filterPlans(plans.value, {
@@ -61,6 +59,7 @@ export const usePlansStore = defineStore("plans", () => {
     watch(filters.search, resetPagination);
     watch(filters.location, resetPagination);
     watch(filters.status, resetPagination);
+    watch(filters.properties, resetPagination, { deep: true });
 
     function resetPagination() {
         if (filteredPlans.value.length === 0) {
@@ -83,9 +82,17 @@ export const usePlansStore = defineStore("plans", () => {
         filters.properties.value.interventionLocation = [];
     }
 
+    function reset() {
+        plans.value = [];
+        isLoading.value = false;
+        error.value = null;
+        resetPagination();
+        resetFilters();
+    }
+
     const { bus } = useEventBus();
-    watch(() => bus.value.get("new-user"), resetFilters);
-    resetFilters();
+    watch(() => bus.value.get("new-user"), reset);
+    reset();
 
     async function fetchPlans() {
         if (isLoading.value === true) {
@@ -115,8 +122,6 @@ export const usePlansStore = defineStore("plans", () => {
         filters,
         filteredPlans,
         currentPage,
-        exportCommentIsPending,
-        exportPlanIsPending,
         numberOfPages: computed(() => {
             if (filteredPlans.value.length === 0) {
                 return 0;

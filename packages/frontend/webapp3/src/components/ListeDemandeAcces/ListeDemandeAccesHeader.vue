@@ -20,7 +20,7 @@
                     @click="openModalExport"
                     icon="file-excel"
                     iconPosition="left"
-                    variant="primaryOutline"
+                    variant="primary"
                     size="sm"
                 >
                     Exporter</Button
@@ -38,7 +38,7 @@
         </template>
     </ViewHeader>
 
-    <ListeDemandeAccesModalExport ref="modalExport" />
+    <ModalExport ref="modalExport" :exports="exportList" />
 </template>
 
 <script setup>
@@ -47,7 +47,7 @@ import exportList from "./ListeDemandeAcces.exports";
 
 import { Button } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
-import ListeDemandeAccesModalExport from "./ListeDemandeAccesModalExport.vue";
+import ModalExport from "@/components/ModalExport/ModalExport.vue";
 
 const modalExport = ref(null);
 

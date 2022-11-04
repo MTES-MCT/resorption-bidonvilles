@@ -63,8 +63,8 @@ import { computed, ref } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
 import { trackEvent } from "@/helpers/matomo";
-import filters from "./filtres/filters";
-import sorts from "./filtres/sorts";
+import filters from "./ListeDesSites.filtres";
+import sorts from "./ListeDesSites.tris";
 
 import { Filter, Icon, Link, Sort } from "@resorptionbidonvilles/ui";
 

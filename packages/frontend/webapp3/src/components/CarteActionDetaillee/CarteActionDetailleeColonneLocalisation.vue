@@ -1,6 +1,6 @@
 <template>
     <div class="items-center">
-        <Icon icon="map-marker-alt" class="text-lg" :style="`color: blue`" />
+        <Icon icon="map-marker-alt" class="text-lg" style="color: blue" />
         <span class="text-dark font-bold"> Lieu </span>
         <div>
             <span v-if="plan.location_type.id === 'shantytowns'">
