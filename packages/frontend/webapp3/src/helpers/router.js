@@ -114,9 +114,9 @@ const router = createRouter({
             path: "/deconnexion",
             beforeEnter: (to, from, next) => {
                 logout();
-                return next('/connexion');
+                return next("/connexion");
             },
-            component: () => null
+            component: () => null,
         },
         {
             path: "/invitation",
@@ -200,6 +200,14 @@ const router = createRouter({
             component: () => import("@/views/SessionExpiree.vue"),
             meta: {
                 authRequirement: "signedOut",
+            },
+        },
+        {
+            path: "/site/:id",
+            component: () => import("@/views/FicheSiteView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "sites",
             },
         },
         {

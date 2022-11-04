@@ -1,5 +1,9 @@
 import { axios } from "@/helpers/axios";
 
+export function fetch(id) {
+    return axios.get(`/towns/${encodeURI(id)}`);
+}
+
 export function fetchList() {
     return axios.get("/towns");
 }

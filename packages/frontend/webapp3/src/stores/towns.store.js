@@ -5,7 +5,7 @@ import { trackEvent } from "@/helpers/matomo";
 import { useUserStore } from "@/stores/user.store";
 import { useConfigStore } from "./config.store";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
-import { fetchList, setHeatwaveStatus } from "@/api/towns.api";
+import { fetch, fetchList, setHeatwaveStatus } from "@/api/towns.api";
 import enrichShantytown from "@/utils/enrichShantytown";
 import filterShantytowns from "@/utils/filterShantytowns";
 
@@ -172,6 +172,16 @@ export const useTownsStore = defineStore("towns", () => {
             }
 
             isLoading.value = false;
+        },
+        async fetchTown(townId) {
+            if (!hash.value[townId]) {
+                hash.value[townId] = enrichShantytown(
+                    await fetch(townId),
+                    configStore.config.field_types
+                );
+            }
+
+            return hash.value[townId];
         },
         heatwaveStatuses,
         async setHeatwaveStatus(id, status) {
