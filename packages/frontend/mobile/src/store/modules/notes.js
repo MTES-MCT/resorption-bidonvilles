@@ -134,10 +134,10 @@ export default {
             }
 
             if (
-                state.notes[index].publications.filter(
+                state.notes[index].publications.some(
                     (publication) =>
                         publication.shantytown.shantytownId === shantytown.id
-                ).length > 0
+                )
             ) {
                 throw new Error(
                     "La note a déjà été publiée sur le site sélectionné"

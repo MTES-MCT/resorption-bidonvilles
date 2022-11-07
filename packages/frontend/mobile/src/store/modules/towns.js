@@ -36,10 +36,6 @@ export default {
                 }
             });
         },
-        SET_DETAILED_TOWN(state, town) {
-            state.detailedTown = town;
-        },
-
         SET_COMMENTS_SCROLL(state, scroll) {
             state.commentsScroll = scroll;
         },
@@ -104,31 +100,15 @@ export default {
             }
 
             try {
-                const fetchedTown = await findTown(shantytownId);
-                return enrichShantytown(fetchedTown, fieldTypes);
+                const rawTown = await findTown(shantytownId);
+                const town = enrichShantytown(rawTown, fieldTypes);
+                state.hash[town.id] = town;
+                return town;
             } catch (error) {
                 // ignore
             }
 
             return null;
-        },
-        async setDetailedTown({ state, commit, rootState }, townId) {
-            const { field_types: fieldTypes } = rootState.config.configuration;
-            if (townId === null) {
-                commit("SET_DETAILED_TOWN", null);
-            } else if (!state.hash[townId]) {
-                try {
-                    const town = await findTown(townId);
-                    commit(
-                        "SET_DETAILED_TOWN",
-                        enrichShantytown(town, fieldTypes)
-                    );
-                } catch (error) {
-                    throw new Error("Impossible de trouver le site");
-                }
-            } else {
-                commit("SET_DETAILED_TOWN", state.hash[townId]);
-            }
         },
     },
 

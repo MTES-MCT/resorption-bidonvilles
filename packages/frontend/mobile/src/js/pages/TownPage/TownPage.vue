@@ -120,36 +120,34 @@ export default {
     data() {
         return {
             error: null,
+            town: null,
         };
     },
     computed: {
         ...mapGetters({
-            town: "detailedTown",
             state: "townsState",
         }),
     },
     async mounted() {
+        const townId = parseInt(this.$route.params.id, 10);
         if (this.$store.state.towns.state !== "loaded") {
             await this.$store.dispatch("fetchTowns");
         }
-        if (
-            this.$store.state.towns.detailedTown &&
-            this.$store.state.towns.detailedTown.id ===
-                parseInt(this.$route.params.id, 10)
-        ) {
+        if (this.$store.state.towns.hash[townId]) {
+            this.town = this.$store.state.towns.hash[townId];
             return;
         }
 
         try {
+            this.town = await this.$store.dispatch(
+                "fetchShantytown",
+                this.$route.params.id
+            );
             this.$store.commit("SET_COMMENTS_ARE_OPEN", false);
             this.$store.commit("SET_COMMENTS_SCROLL", 0);
-            this.$store.dispatch("setDetailedTown", this.$route.params.id);
         } catch (error) {
             this.error = "Erreur: " + error.message;
         }
-    },
-    beforeUnmount() {
-        this.$store.dispatch("setDetailedTown", null);
     },
     methods: {
         async toTownsList() {
