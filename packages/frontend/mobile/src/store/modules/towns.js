@@ -8,7 +8,6 @@ export default {
         hash: {},
         myTowns: [],
         consultedTowns: [],
-        detailedTown: null,
         commentsAreOpen: false,
         commentsScroll: 0,
     },
@@ -105,10 +104,8 @@ export default {
                 state.hash[town.id] = town;
                 return town;
             } catch (error) {
-                // ignore
+                throw new Error("Impossible de trouver le site");
             }
-
-            return null;
         },
     },
 
@@ -124,9 +121,6 @@ export default {
         },
         consultedTowns(state) {
             return state.consultedTowns;
-        },
-        detailedTown(state) {
-            return state.detailedTown;
         },
     },
 };
