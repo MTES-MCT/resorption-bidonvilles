@@ -31,6 +31,11 @@
             >
         </div>
         <div class="my-2" v-if="note.publications.length > 0">
+            <p class="text-secondary mb-2 px-2">
+                Il est impossible de modifier cette note car elle a déjà été
+                publiée. Vous pouvez cependant la publier à nouveau sur un autre
+                site
+            </p>
             <Button
                 :icon="showTowns ? 'chevron-up' : 'chevron-down'"
                 iconPosition="right"
@@ -44,7 +49,7 @@
                 <li
                     v-for="publication in note.publications"
                     :key="publication.shantytown"
-                    class="text-primary ml-4"
+                    class="text-primary ml-6"
                     @click="
                         $router.push(
                             `/site/${publication.shantytown.shantytownId}`
@@ -54,11 +59,6 @@
                     {{ publication.shantytown.addressSimple }}
                 </li>
             </section>
-            <p class="italic mt-2">
-                Il est impossible de modifier cette note car elle a déjà été
-                publiée. Vous pouvez cependant la publier à nouveau sur un autre
-                site
-            </p>
         </div>
     </Container>
 </template>
