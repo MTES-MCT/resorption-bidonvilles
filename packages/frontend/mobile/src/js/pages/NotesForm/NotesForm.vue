@@ -12,14 +12,11 @@
             <template v-slot:scroll>
                 <div ref="textarea">
                     <textarea
-                        v-if="note.publications.length === 0"
+                        :disabled="note.publications.length !== 0"
                         class="px-6 w-full h-full outline-none"
                         v-model="description"
                         placeholder="Cliquez ici pour commencer la saisie..."
                     ></textarea>
-                    <p class="px-6 w-full h-full outline-none" v-else>
-                        {{ description }}
-                    </p>
                 </div>
             </template>
         </Layout>
