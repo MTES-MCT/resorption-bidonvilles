@@ -31,8 +31,8 @@
                         class="text-secondary text-center mt-4"
                         v-if="isNotePublishedOnLinkedShantytown"
                     >
-                        La note a déjà été publiée sur ce site: veuillez choisir
-                        un autre site
+                        La note a déjà été publiée sur ce site : veuillez
+                        choisir un autre site
                     </p>
                     <NotesPublicationFormSubmitButton
                         class="mt-12"
@@ -101,12 +101,10 @@ export default {
             if (this.linkedShantytown === null) {
                 return false;
             }
-            return (
-                this.note.publications.filter(
-                    (publication) =>
-                        publication.shantytown.shantytownId ===
-                        this.linkedShantytown.id
-                ).length > 0
+            return this.note.publications.some(
+                (publication) =>
+                    publication.shantytown.shantytownId ===
+                    this.linkedShantytown.id
             );
         },
     },
