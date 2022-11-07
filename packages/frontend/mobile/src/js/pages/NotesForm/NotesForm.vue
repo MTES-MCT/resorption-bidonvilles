@@ -10,14 +10,13 @@
                 />
             </template>
             <template v-slot:scroll>
-                <div ref="textarea">
-                    <textarea
-                        :disabled="note.publications.length !== 0"
-                        class="px-6 w-full h-full outline-none"
-                        v-model="description"
-                        placeholder="Cliquez ici pour commencer la saisie..."
-                    ></textarea>
-                </div>
+                <textarea
+                    ref="textarea"
+                    :disabled="note.publications.length !== 0"
+                    class="px-6 w-full h-full outline-none"
+                    v-model="description"
+                    placeholder="Cliquez ici pour commencer la saisie..."
+                ></textarea>
             </template>
         </Layout>
 
