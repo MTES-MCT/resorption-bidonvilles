@@ -1,12 +1,16 @@
 <template>
-    <header :class="responsive ? 'hidden 2xl:flex' : 'flex'"
-        class="mb-10 flex-col lg:flex-row lg:justify-between lg:items-center print:hidden">
-        <div class="flex space-x-4 items-center" :class="$slots.actions ? 'border-b pb-4 lg:border-0 lg:pb-0' : ''">
-            <div class="rounded-full bg-primary w-16 h-16 flex justify-center items-center text-2xl text-white">
+    <header :class="classes.header.value">
+        <div
+            class="flex space-x-4 items-center"
+            :class="$slots.actions ? classes.title.value : ''"
+        >
+            <div
+                class="rounded-full bg-primary w-16 h-16 flex justify-center items-center text-2xl text-white"
+            >
                 <Icon :icon="icon" />
             </div>
             <div>
-                <h1 class="text-xl font-bold">
+                <h1 class="text-[1.5rem] font-bold leading-[1.8rem]">
                     <slot name="title" />
                 </h1>
                 <p class="text-G500">
@@ -14,14 +18,14 @@
                 </p>
             </div>
         </div>
-        <div v-if="$slots.actions" class="mt-4 lg:mt-0">
+        <div v-if="$slots.actions" :class="classes.actions.value">
             <slot name="actions" />
         </div>
     </header>
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { defineProps, toRefs, computed } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
@@ -35,7 +39,45 @@ const props = defineProps({
         required: false,
         default: false,
     },
+    direction: {
+        type: String, // soit "col" pour un layout en colonne, soit "row" pour un layout en ligne (à partir d'une certaine largeur d'écran !)
+        required: false,
+        default: "row",
+    },
 });
 
-const { icon, responsive } = toRefs(props);
+const { icon, responsive, direction } = toRefs(props);
+const classes = {
+    header: computed(() => {
+        const c = ["print:hidden"];
+        if (responsive.value === true) {
+            c.push("hidden 2xl:flex");
+        } else {
+            c.push("flex");
+        }
+
+        c.push("flex-col mb-10");
+        if (direction.value === "row") {
+            c.push("lg:flex-row lg:justify-between lg:items-center");
+        }
+
+        return c.join(" ");
+    }),
+    title: computed(() => {
+        const c = ["border-b pb-4"];
+        if (direction.value === "row") {
+            c.push("lg:border-0 lg:pb-0");
+        }
+
+        return c.join(" ");
+    }),
+    actions: computed(() => {
+        const c = ["mt-4"];
+        if (direction.value === "row") {
+            c.push("lg:mt-0");
+        }
+
+        return c.join(" ");
+    }),
+};
 </script>

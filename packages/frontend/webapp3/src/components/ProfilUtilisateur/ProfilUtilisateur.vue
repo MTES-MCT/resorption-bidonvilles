@@ -7,6 +7,17 @@
             <template v-slot:description>
                 <slot name="description" />
             </template>
+            <template v-slot:actions>
+                <Button
+                    icon="file-pdf"
+                    iconPosition="left"
+                    variant="primaryOutline"
+                    size="sm"
+                    :href="configStore.config.version_charte_engagement.fichier"
+                >
+                    Charte d'engagement de l'utilisateur</Button
+                >
+            </template>
         </ViewHeader>
 
         <InactiveUserWarning v-if="user.status === 'inactive'" class="mt-5" />
@@ -22,11 +33,13 @@ import { computed, defineProps, toRefs } from "vue";
 import router from "@/helpers/router";
 import tabsDefinition from "./ProfilUtilisateur.tabs.js";
 
+import { Button } from "@resorptionbidonvilles/ui";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import { useUserStore } from "@/stores/user.store";
 import InactiveUserWarning from "@/components/InactiveUserWarning/InactiveUserWarning.vue";
+import { useConfigStore } from "@/stores/config.store";
 
 const props = defineProps({
     user: {
@@ -39,8 +52,8 @@ const props = defineProps({
         required: true,
     },
 });
-
 const { user, buildTabRoute } = toRefs(props);
+const configStore = useConfigStore();
 
 const self = computed(() => {
     const userStore = useUserStore();

@@ -58,7 +58,7 @@ const { fn, name, withoutMargin, allowFreeSearch, modelValue } = toRefs(props);
 const rawResults = ref([]);
 const isLoading = ref(false);
 const lastPromise = ref(null);
-const { handleChange, errors, validate } = useField(name, undefined, {
+const { handleChange, errors, validate, value } = useField(name, undefined, {
     initialValue: modelValue,
     valueProp: modelValue
 });
@@ -73,6 +73,11 @@ let lastEvent = undefined;
 
 watch(modelValue, () => {
     input.value.setValue(modelValue?.value?.search || "");
+});
+watch(value, () => {
+    if (value.value === undefined) {
+        clear();
+    }
 });
 
 let timeout = null;

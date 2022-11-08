@@ -1,6 +1,6 @@
 import userModel from '#server/models/userModel';
 
-export default () => async (req, res, next) => {
+export default async (req, res, next) => {
     let users;
     try {
         users = await userModel.findForRegion(req.shantytown.region.code, req.query.q || undefined);

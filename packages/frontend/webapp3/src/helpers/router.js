@@ -16,6 +16,22 @@ import logout from "@/utils/logout";
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
 
+    scrollBehavior: (to, from, savedPosition) => {
+        if (to.hash) {
+            return {
+                selector: to.hash,
+            };
+        }
+
+        if (savedPosition) {
+            return savedPosition;
+        }
+
+        return {
+            top: 0,
+        };
+    },
+
     routes: [
         {
             path: "/",
@@ -292,7 +308,7 @@ router.beforeEach((to) => {
     // signedIn requirement
     if (authRequirement === "signedIn" && !userStore.isLoggedIn) {
         const navigationStore = useNavigationStore();
-        navigationStore.entrypoint = to.path;
+        navigationStore.entrypoint = to.fullPath;
         return `/connexion`;
     }
 
@@ -300,7 +316,7 @@ router.beforeEach((to) => {
     const configStore = useConfigStore();
     if (configRequired === true && !configStore.isLoaded) {
         const navigationStore = useNavigationStore();
-        navigationStore.entrypoint = to.path;
+        navigationStore.entrypoint = to.fullPath;
         return "/chargement";
     }
 
@@ -310,7 +326,7 @@ router.beforeEach((to) => {
         to.path !== "/nouvelle-version"
     ) {
         const navigationStore = useNavigationStore();
-        navigationStore.entrypoint = to.path;
+        navigationStore.entrypoint = to.fullPath;
         return "/nouvelle-version";
     }
 

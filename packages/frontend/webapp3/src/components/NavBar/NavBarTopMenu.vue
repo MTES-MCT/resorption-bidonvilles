@@ -22,8 +22,10 @@
 </template>
 
 <script setup>
+import { defineEmits } from "vue";
 import { useNavigationStore } from "@/stores/navigation.store.js";
 import { Button, LinkButton } from "@resorptionbidonvilles/ui";
 
 const navigationStore = useNavigationStore();
+defineEmits(["showMobile"]);
 </script>

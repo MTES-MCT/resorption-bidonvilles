@@ -31,4 +31,5 @@ export { default as Tag } from './components/Tag.vue';
 export { default as TagList } from './components/TagList.vue';
 export { default as TextArea } from './components/Input/TextArea.vue';
 export { default as TextInput } from './components/Input/TextInput.vue';
+export { default as ToolTip } from './components/ToolTip.vue';
 export { default as Warning } from './components/Warning.vue';

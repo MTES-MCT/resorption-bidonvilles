@@ -82,7 +82,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "yarn test"
+      "pre-push": "yarn test:unit"
     }
   },
   "lint-staged": {
@@ -95,7 +95,6 @@
     "dev": "ts-node-dev ./server/index.ts",
     "build": "tsc && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist && cp .sequelizerc dist && cp -r db/data dist/db/data",
     "start": "nodemon dist/server/index.js",
-    "test": "mocha --recursive --require ./test/bootstrap.ts --bail",
     "test:unit": "yarn mocha -r ts-node/register --require ./test/bootstrap.ts 'server/**/*.spec.ts' 'test/**/*.spec.ts' --bail --exit",
     "test:integration": "yarn test --grep '.*server/models.*'",
     "lint": "eslint  --max-warnings=0",

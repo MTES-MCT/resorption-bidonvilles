@@ -1,6 +1,10 @@
 <template>
     <div class="flex space-x-8 justify-center">
-        <ArrangementLeftMenuColumn :tabs="tabs" class="print:hidden">
+        <ArrangementLeftMenuColumn
+            :tabs="tabs"
+            class="print:hidden"
+            :class="columnWidthClass"
+        >
             <template v-slot:title v-if="$slots.menuTitle"
                 ><slot name="menuTitle"
             /></template>
@@ -22,6 +26,11 @@ const props = defineProps({
         required: true,
     },
     maxWClass: {
+        type: String,
+        required: false,
+        default: null,
+    },
+    columnWidthClass: {
         type: String,
         required: false,
         default: null,
