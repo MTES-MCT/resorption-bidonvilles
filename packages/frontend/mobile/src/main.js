@@ -5,10 +5,12 @@ import App from "./App.vue";
 import store from "#src/store/index.js";
 import "@resorptionbidonvilles/ui/src/css/styles.css";
 import FontAwesomeIcon from "./init/icons";
+import { useMatomo } from "#src/js/helpers/matomo";
 
 const app = createApp(App);
 app.use(router);
 app.use(store);
 app.component("font-awesome-icon", FontAwesomeIcon);
+useMatomo(app, router);
 
 app.mount("#app");
