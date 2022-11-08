@@ -4,6 +4,7 @@
         <ErrorSummary
             v-if="error || Object.keys(errors).length > 0"
             :message="error"
+            :summary="errors"
         />
         <Button type="submit" @click="onSubmit">Sauvegarder</Button>
     </form>

@@ -1,10 +1,10 @@
 <template>
     <NavBar />
-    <main :class="!hero && !$slots.banner && padding ? 'pt-12' : ''">
+    <main :class="!hero && !$slots.banner && paddingTop ? 'pt-12' : ''">
         <div
             v-if="hero"
             class="h-44 bg-G300 text-white text-3xl sm:text-4xl lg:text-5xl bg-illustration"
-            :class="!$slots.banner && padding ? 'mb-12' : ''"
+            :class="!$slots.banner && paddingTop ? 'mb-12' : ''"
         >
             <div
                 class="bg-G800 bg-opacity-50 h-full font-bold flex items-center drop-shadow-lg"
@@ -19,14 +19,14 @@
         <div
             v-if="$slots.banner"
             class="bg-G200"
-            :class="padding ? 'mb-12' : ''"
+            :class="paddingTop ? 'mb-12' : ''"
         >
             <slot name="banner" />
         </div>
 
         <slot />
     </main>
-    <FooterBar class="print:hidden" :class="padding ? 'mt-16' : ''" />
+    <FooterBar class="print:hidden" :class="paddingBottom ? 'mt-16' : ''" />
 </template>
 
 <style scoped>
@@ -49,12 +49,17 @@ const props = defineProps({
         required: false,
         default: false,
     },
-    padding: {
+    paddingTop: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
+    paddingBottom: {
         type: Boolean,
         required: false,
         default: true,
     },
 });
 
-const { hero, padding } = toRefs(props);
+const { hero, paddingTop, paddingBottom } = toRefs(props);
 </script>

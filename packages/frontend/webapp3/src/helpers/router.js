@@ -6,6 +6,16 @@ import { useConfigStore } from "@/stores/config.store.js";
 import { useNavigationStore } from "@/stores/navigation.store";
 import { createNavigationLog } from "@/api/me.api";
 import logout from "@/utils/logout";
+import waitForElement from "@/utils/waitForElement";
+
+// au chargement d'une page, on scroll automatiquement vers l'élément indiqué par le hash
+// dans certains cas cela pose problème : par exemple dans le cas de la fiche site, quand on scrolle
+// manuellement pour passer de sections en sections le hash est changé manuellement. Cela revient,
+// pour le routeur, à un changement de page et le scroll automatique s'active, ce qui n'est pas
+// souhaitable dans ce cas.
+// cette variable est utilisée en combinaison avec la fonction setHashWithoutScroll() plus bas
+// pour pouvoir changer le hash de la page sans activer le scroll automatique
+let ignoreNextScroll = false;
 
 // les meta existantes sont
 // - navTab : indique à quel onglet de navigation la page appartient (sert à indiquer l'onglet actif)
@@ -15,6 +25,33 @@ import logout from "@/utils/logout";
 // - permissions : une liste de permissions (au format "entity.list") nécessaires pour accéder à la page
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
+
+    scrollBehavior: (to, from, savedPosition) => {
+        if (savedPosition) {
+            return savedPosition;
+        }
+
+        if (to.hash) {
+            if (ignoreNextScroll === true) {
+                ignoreNextScroll = false;
+                return;
+            }
+
+            waitForElement(to.hash, (el) => {
+                setTimeout(() => {
+                    el.scrollIntoView({ behavior: "smooth" });
+                }, 100);
+            });
+
+            return {
+                selector: to.hash,
+            };
+        }
+
+        return {
+            top: 0,
+        };
+    },
 
     routes: [
         {
@@ -272,6 +309,13 @@ const router = createRouter({
     ],
 });
 
+router.setHashWithoutScroll = (hash) => {
+    ignoreNextScroll = true;
+    router.replace({
+        hash,
+    });
+};
+
 router.beforeEach((to) => {
     const userStore = useUserStore();
 
@@ -292,7 +336,7 @@ router.beforeEach((to) => {
     // signedIn requirement
     if (authRequirement === "signedIn" && !userStore.isLoggedIn) {
         const navigationStore = useNavigationStore();
-        navigationStore.entrypoint = to.path;
+        navigationStore.entrypoint = to.fullPath;
         return `/connexion`;
     }
 
@@ -300,7 +344,7 @@ router.beforeEach((to) => {
     const configStore = useConfigStore();
     if (configRequired === true && !configStore.isLoaded) {
         const navigationStore = useNavigationStore();
-        navigationStore.entrypoint = to.path;
+        navigationStore.entrypoint = to.fullPath;
         return "/chargement";
     }
 
@@ -310,7 +354,7 @@ router.beforeEach((to) => {
         to.path !== "/nouvelle-version"
     ) {
         const navigationStore = useNavigationStore();
-        navigationStore.entrypoint = to.path;
+        navigationStore.entrypoint = to.fullPath;
         return "/nouvelle-version";
     }
 

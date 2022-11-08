@@ -22,7 +22,7 @@
         </template>
     </LayoutError>
 
-    <Layout v-else>
+    <Layout :paddingBottom="false" v-else>
         <FicheSite :town="town" />
     </Layout>
 </template>
@@ -31,6 +31,7 @@
 import { onMounted, ref, computed } from "vue";
 import { useTownsStore } from "@/stores/towns.store.js";
 import router from "@/helpers/router";
+import { trackEvent } from "@/helpers/matomo";
 
 import { Button } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
@@ -44,7 +45,10 @@ const isLoading = ref(null);
 const error = ref(null);
 const town = ref(null);
 
-onMounted(load);
+onMounted(() => {
+    trackEvent("Site", "Visite page site", `S${townId.value}`);
+    load();
+});
 
 const townId = computed(() => {
     return parseInt(router.currentRoute.value.params.id, 10);

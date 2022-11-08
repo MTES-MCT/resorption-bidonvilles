@@ -36,6 +36,3 @@ export default {
         token: process.env.RB_API_MATOMO_AUTH_TOKEN,
     },
 };
-
-
-

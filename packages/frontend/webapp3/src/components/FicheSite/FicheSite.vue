@@ -1,15 +1,107 @@
 <template>
+    <FicheSiteHeader
+        :town="town"
+        v-on:openCancel="openCancel"
+        v-on:openCovid="openCovid"
+        v-on:deleteTown="deleteTown"
+        v-on:showExport="showExport"
+    />
+
     <ContentWrapper>
-        <p>{{ town.id }}</p>
+        <ArrangementLeftMenu columnWidthClass="w-92" :tabs="tabs" autonav>
+            <FicheSiteCaracteristiques :town="town" id="caracteristiques" />
+            <FicheSiteFermeture
+                v-if="town.closedAt !== null"
+                :town="town"
+                id="fermeture"
+                class="mt-5"
+            />
+            <FicheSiteActions
+                v-if="town.plans.length"
+                :town="town"
+                id="actions"
+                class="mt-5"
+            />
+            <FicheSiteHabitants :town="town" id="habitants" class="mt-5" />
+            <FicheSiteConditionsDeVie
+                :town="town"
+                id="conditions_de_vie"
+                class="mt-5"
+            />
+            <FicheSiteProceduresJudiciaires
+                v-if="userStore.hasJusticePermission"
+                :town="town"
+                id="procedure_judiciaire"
+                class="mt-5"
+            />
+            <FicheSiteIntervenants
+                :town="town"
+                id="intervenants"
+                class="mt-5"
+            />
+        </ArrangementLeftMenu>
     </ContentWrapper>
+
+    <FicheSiteJournal class="mt-10" :town="town" />
+    <FicheSiteHistorique :town="town" ref="historique" />
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { defineProps, toRefs, computed, watch, ref } from "vue";
+import { useEventBus } from "@/helpers/event-bus";
+import { useUserStore } from "@/stores/user.store";
+import menu from "./FicheSite.menu";
+
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
+import FicheSiteHeader from "./FicheSiteHeader/FicheSiteHeader.vue";
+import FicheSiteCaracteristiques from "./FicheSiteCaracteristiques/FicheSiteCaracteristiques.vue";
+import FicheSiteFermeture from "./FicheSiteFermeture/FicheSiteFermeture.vue";
+import FicheSiteActions from "./FicheSiteActions/FicheSiteActions.vue";
+import FicheSiteHabitants from "./FicheSiteHabitants/FicheSiteHabitants.vue";
+import FicheSiteConditionsDeVie from "./FicheSiteConditionsDeVie/FicheSiteConditionsDeVie.vue";
+import FicheSiteProceduresJudiciaires from "./FicheSiteProceduresJudiciaires/FicheSiteProceduresJudiciaires.vue";
+import FicheSiteIntervenants from "./FicheSiteIntervenants/FicheSiteIntervenants.vue";
+import FicheSiteJournal from "./FicheSiteJournal/FicheSiteJournal.vue";
+import FicheSiteHistorique from "./FicheSiteHistorique/FicheSiteHistorique.vue";
 
 const props = defineProps({
     town: Object,
 });
 const { town } = toRefs(props);
+const userStore = useUserStore();
+const { bus } = useEventBus();
+const historique = ref(null);
+
+const tabs = computed(() => {
+    return menu
+        .filter((item) => {
+            if (!item.condition) {
+                return item;
+            }
+
+            return item.condition(town.value, userStore.hasJusticePermission);
+        })
+        .map((item) => {
+            return {
+                ...item,
+                label: item.label(town.value),
+            };
+        });
+});
+
+function openCancel() {}
+
+function openCovid() {}
+
+function deleteTown() {}
+
+function showExport() {}
+
+watch(
+    () => bus.value.get("fichesite:openHistorique"),
+    () => {
+        historique.value.open();
+    }
+);
 </script>

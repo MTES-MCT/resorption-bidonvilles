@@ -6,7 +6,7 @@ import userModel from '#server/models/userModel';
 const { triggerActorInvitedAlert } = mattermostUtils;
 const { sendUserShantytownActorInvitation } = mailsUtils;
 
-export default () => async (req, res, next) => {
+export default async (req, res, next) => {
     try {
         await sendUserShantytownActorInvitation({ email: req.body.email }, {
             variables: {

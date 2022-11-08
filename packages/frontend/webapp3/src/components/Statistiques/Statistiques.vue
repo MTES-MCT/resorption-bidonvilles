@@ -8,7 +8,7 @@
             >
         </ViewHeader>
 
-        <ArrangementLeftMenu :tabs="tabs">
+        <ArrangementLeftMenu :tabs="tabs" :activeTab="currentTabId">
             <template v-slot:menuTitle>Territoires</template>
 
             <header class="flex justify-between">
@@ -115,13 +115,11 @@ const tabs = computed(() => {
     const arr = departements.map(({ code, name }) => ({
         id: code,
         route: `/statistiques/${code}`,
-        active: currentTabId.value === code,
         label: `${code} - ${name}`,
     }));
     arr.unshift({
         id: "france",
         route: "/statistiques",
-        active: currentTabId.value === "france",
         label: "France",
     });
     return arr;

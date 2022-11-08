@@ -30,7 +30,7 @@ const props = defineProps({
     label: String,
     variant: {
         type: String,
-        default: 'card'
+        default: 'card' // soit "card", "checkbox", ou "invisible"
     },
     direction: { // soit 'row', soit 'col'
         type: String,

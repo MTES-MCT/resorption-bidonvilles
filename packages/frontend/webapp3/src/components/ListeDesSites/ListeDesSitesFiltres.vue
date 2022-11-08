@@ -84,7 +84,7 @@ const groupedFilters = {
             filters.target,
             filters.actors,
             filters.heatwave,
-            ...(userStore.user?.hasJusticePermission ? [filters.justice] : []),
+            ...(userStore.hasJusticePermission ? [filters.justice] : []),
         ],
     },
     close: {
@@ -93,7 +93,7 @@ const groupedFilters = {
             filters.target,
             filters.origin,
             filters.closingReason,
-            ...(userStore.user?.hasJusticePermission ? [filters.justice] : []),
+            ...(userStore.hasJusticePermission ? [filters.justice] : []),
             filters.fieldType,
             filters.population,
         ],

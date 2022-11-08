@@ -15,13 +15,17 @@
                                     <slot name="title" />
                                 </div>
                                 <div>
-                                    <Button v-if="allowClose" variant="primaryText" icon="times" size="lg"
+                                    <Button v-if="allowClose" variant="primaryText" icon="times" size="lg" type="button"
                                         @click="$emit('close')" />
                                 </div>
                             </div>
+
+                            <div v-if="$slots.subtitle" class="mt-2">
+                                <slot name="subtitle" />
+                            </div>
                         </div>
                     </slot>
-                    <div class="px-10 pt-6 pb-10 max-w-2xl">
+                    <div class="px-10 pb-10 max-w-2xl">
                         <slot name="body" />
                     </div>
 
