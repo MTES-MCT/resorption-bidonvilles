@@ -17,6 +17,9 @@ coverage
 /cypress/videos/
 /cypress/screenshots/
 
+# Confidential environment variables
+.env
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
