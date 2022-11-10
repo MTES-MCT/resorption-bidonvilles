@@ -68,9 +68,10 @@
                 <template slot="info">
                     À l'aide du tableau ci-dessous sélectionnez les sites où
                     vivaient précédemment les habitants du site en cours de
-                    saisie. La tableau liste les sites ouverts à date et les
-                    sites fermés avant l'installation de celui-ci.</template
-                >
+                    saisie. Le tableau liste les sites ouverts à date et les
+                    sites fermés trois mois avant ou après l'installation de
+                    celui-ci.
+                </template>
             </InputShantytowns>
             <p v-else>
                 <InputLabel
@@ -163,20 +164,23 @@ export default {
                 return false;
             }
 
-            // on ne conserve que les sites ouverts ou les sites fermés 90 jours avant la date
-            // d'installation du site courant
+            // on ne conserve que les sites ouverts ou les sites fermés dans la période allant de
+            // 90 jours avant jusqu'à 90 jours après la date d'installation du site courant
             if (town.closedAt === null) {
                 return true;
             }
 
-            const max = this.reinstallationConfig.builtAt || new Date();
-            max.setHours(0, 0, 0, 0);
+            const dateRef = this.reinstallationConfig.builtAt || new Date();
+            dateRef.setHours(0, 0, 0, 0);
 
-            const min = new Date(max);
+            const maxDate = new Date(dateRef);
+            maxDate.setDate(maxDate.getDate() + 89);
+
+            const min = new Date(dateRef);
             min.setDate(min.getDate() - 89);
 
             return (
-                town.closedAt <= max.getTime() / 1000 &&
+                town.closedAt <= maxDate.getTime() / 1000 &&
                 town.closedAt >= min.getTime() / 1000
             );
         }
