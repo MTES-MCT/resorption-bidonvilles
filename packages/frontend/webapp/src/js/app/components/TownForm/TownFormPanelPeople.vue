@@ -176,12 +176,12 @@ export default {
             const maxDate = new Date(dateRef);
             maxDate.setDate(maxDate.getDate() + 89);
 
-            const min = new Date(dateRef);
-            min.setDate(min.getDate() - 89);
+            const minDate = new Date(dateRef);
+            minDate.setDate(minDate.getDate() - 89);
 
             return (
                 town.closedAt <= maxDate.getTime() / 1000 &&
-                town.closedAt >= min.getTime() / 1000
+                town.closedAt >= minDate.getTime() / 1000
             );
         }
     }
