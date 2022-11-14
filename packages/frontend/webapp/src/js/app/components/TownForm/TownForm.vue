@@ -47,7 +47,9 @@
                         class="mt-10"
                         v-model="updatedAt"
                         :value="updatedAt"
-                        :disableBefore="new Date(data.updatedAt * 1000)"
+                        :disableBefore="
+                            new Date(data.updatedAt * 1000 + 1000 * 3600 * 24)
+                        "
                     >
                     </TownFormPanelUpdatedAt>
 
@@ -363,7 +365,7 @@ export default {
                     declared_at: this.formatDate(
                         this.town.characteristics.declared_at
                     ),
-                    updated_at: this.formatDate(this.updatedAt),
+                    updated_at: this.updatedAt,
                     field_type: this.town.characteristics.field_type,
                     detailed_address: this.town.characteristics
                         .detailed_address,

@@ -28,6 +28,7 @@
             v-if="checked !== 1"
             v-model="updatedAt"
             :disableBefore="disableBefore"
+            :disableAfter="new Date(new Date().valueOf() - 1000 * 3600 * 24)"
         ></InputUpdatedAt>
     </div>
 </template>
@@ -60,6 +61,7 @@ export default {
     },
     watch: {
         updatedAt() {
+            this.updatedAt.setHours(0, 0, 0, 0);
             this.$emit("input", this.updatedAt);
         }
     }

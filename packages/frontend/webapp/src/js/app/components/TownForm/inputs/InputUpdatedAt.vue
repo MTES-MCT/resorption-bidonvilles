@@ -4,7 +4,7 @@
         label="Date de mise à jour"
         v-model="updatedAt"
         rules="required"
-        :disabled-dates="{ to: this.disableBefore, from: new Date() }"
+        :disabled-dates="{ to: this.disableBefore, from: disableAfter }"
         cypressName="updated_at"
     ></DatepickerV2>
 </template>
@@ -23,6 +23,11 @@ export default {
         disableBefore: {
             type: Date,
             required: false
+        },
+        disableAfter: {
+            type: Date,
+            required: false,
+            default: new Date()
         }
     },
 
