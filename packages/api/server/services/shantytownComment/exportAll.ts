@@ -27,6 +27,10 @@ export default async (user) => {
     return comments.map((raw) => {
         const createdAt = moment(raw.commentCreatedAt).utcOffset(2);
 
+        // Replaces the problematic sharps characters in the csv file
+        const stringToReplace = /#/gi;
+        raw.commentDescription = raw.commentDescription.replace(stringToReplace, "♯");
+
         return {
             S: createdAt.format('w'),
             'ID du commentaire': raw.commentId,
