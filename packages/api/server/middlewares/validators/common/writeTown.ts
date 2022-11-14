@@ -123,14 +123,11 @@ export default mode => ([
 
         .toDate()
         .custom((value, { req }) => {
-            console.log(value)
-            console.log(typeof value)
             const today = new Date();
 
             if (value > today) {
                 throw new Error('La date de mise à jour du site ne peut pas être future');
             }
-
             // for updates only
             if (req.town) {
                 const lastUpdate = new Date(req.town.updatedAt);
