@@ -26,6 +26,7 @@ rewiremock.disable();
 
 describe.only('services/shantytown', () => {
     describe('close()', () => {
+        const date = new Date()
         const user = {};
         const data = {
             shantytown: {
@@ -36,6 +37,7 @@ describe.only('services/shantytown', () => {
             closing_context: 'contexte',
             status: 'unknown',
             solutions: [],
+            updated_at: date
         };
 
         afterEach(() => {
@@ -53,6 +55,7 @@ describe.only('services/shantytown', () => {
                 status: 'unknown',
                 closing_context: 'contexte',
                 closing_solutions: [],
+                updated_at: date
             });
             expect(response).to.be.eql({});
         });
