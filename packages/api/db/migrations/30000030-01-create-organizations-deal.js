@@ -78,7 +78,7 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
 
         await queryInterface.sequelize.query(
-            'DELETE FROM organizations WHERE abbreviation = \'DEAL\'',
+            'DELETE FROM organizations WHERE abbreviation ILIKE \'DEAL - %\'',
             {
                 transaction,
             },
