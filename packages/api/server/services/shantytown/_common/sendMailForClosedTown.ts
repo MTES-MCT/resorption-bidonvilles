@@ -11,7 +11,7 @@ export default async (shantytown, updatedTown, user) => {
         departement,
         epci,
         city,
-    }, 'shantytown_closure', true);
+    }, 'shantytown_closure');
     watchers
         .filter(({ user_id }: any) => user_id !== user.id) // do not send an email to the user who closed the town
         .forEach((watcher) => {
