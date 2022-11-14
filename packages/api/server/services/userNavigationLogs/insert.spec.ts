@@ -19,13 +19,13 @@ describe('services/userNavigationLogs/insert()', () => {
     });
 
     it('demande l\'insertion du log en base de données', async () => {
-        await insert(1, 'page');
-        expect(stub).to.have.been.calledOnceWithExactly(1, 'page');
+        await insert(1, 'page', 'webapp');
+        expect(stub).to.have.been.calledOnceWithExactly(1, 'page', 'webapp');
     });
 
     it('retourne l\'identifiant du log nouvellement inséré', async () => {
         stub.resolves(2);
-        const logId = await insert(1, 'page');
+        const logId = await insert(1, 'page', 'webapp');
         expect(logId).to.be.equal(2);
     });
 
@@ -33,7 +33,7 @@ describe('services/userNavigationLogs/insert()', () => {
         stub.rejects(new Error('insertion failed'));
 
         try {
-            await insert(1, 'page');
+            await insert(1, 'page', 'webapp');
         } catch (error) {
             expect(error).to.be.instanceOf(ServiceError);
             expect(error.code).to.be.equal('insert_failed');
