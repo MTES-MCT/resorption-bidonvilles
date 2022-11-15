@@ -54,8 +54,24 @@ export default {
     },
 
     actions: {
-        async load({ commit }) {
-            commit("SET_NOTES", (await get("notes")) || []);
+        async load({ commit, state }) {
+            const notes = (await get("notes")) || [];
+
+            // les premières notes ne contenaient que l'identifiant du site, on reformate ces
+            // anciennes notes au nouveau format
+            notes.forEach((note) => {
+                note.publications.forEach((publication) => {
+                    if (typeof publication.shantytown === "number") {
+                        publication.shantytown = {
+                            shantytownId: publication.shantytown,
+                            addressSimple: "adresse inconnue",
+                        };
+                    }
+                });
+            });
+
+            commit("SET_NOTES", notes);
+            await setNotes(state.notes);
         },
 
         async create(

@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
     <div class="h-full flex flex-col">
         <section class="flex-1 flex flex-col">

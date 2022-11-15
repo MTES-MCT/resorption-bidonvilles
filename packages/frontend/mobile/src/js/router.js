@@ -186,6 +186,7 @@ const router = createRouter({
         {
             path: "/",
             beforeEnter: home,
+            component: Launcher,
             meta: {
                 analyticsIgnore: true,
             },

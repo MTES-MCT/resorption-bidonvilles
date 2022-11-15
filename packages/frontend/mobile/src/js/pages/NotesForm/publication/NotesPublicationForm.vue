@@ -92,7 +92,7 @@ export default {
 
     computed: {
         linkedShantytownId() {
-            return this.note.shantytown.shantytownId;
+            return this.note.shantytown?.shantytownId || null;
         },
         linkedShantytown() {
             return this.$store.state.notes.linkedShantytown;

@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
     <Layout :navbar="false">
         <template v-slot:scroll>
@@ -33,6 +34,7 @@ import { Button, Spinner } from "@resorptionbidonvilles/ui";
 
 export default {
     components: {
+        // eslint-disable-next-line vue/no-reserved-component-names
         Button,
         Layout,
         Spinner,
