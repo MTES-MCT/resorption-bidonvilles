@@ -113,6 +113,7 @@ const methods = {
             `SELECT
                 cities.name AS name,
                 cities.code AS code,
+                cities.fk_main as main,
                 epci.name AS "epciName",
                 epci.code AS "epciCode",
                 departements.name AS "departementName",
@@ -151,6 +152,7 @@ const methods = {
             city: {
                 name: city.name,
                 code: city.code,
+                main: city.main,
             },
         };
     },
