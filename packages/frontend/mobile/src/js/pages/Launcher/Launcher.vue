@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
     <Layout :navbar="false">
         <template v-slot:scroll>
@@ -33,9 +34,10 @@ import { Button, Spinner } from "@resorptionbidonvilles/ui";
 
 export default {
     components: {
+        // eslint-disable-next-line vue/no-reserved-component-names
         Button,
         Layout,
-        Spinner
+        Spinner,
     },
 
     data() {
@@ -44,7 +46,7 @@ export default {
             blockLoaderTimeout: null,
             showLoadingBlock: false,
             textLoaderTimeout: null,
-            showLoadingText: false
+            showLoadingText: false,
         };
     },
 
@@ -58,7 +60,7 @@ export default {
         }, 3000);
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         clearTimeout(this.blockLoaderTimeout);
         this.blockLoaderTimeout = null;
         clearTimeout(this.textLoaderTimeout);
@@ -84,7 +86,7 @@ export default {
         },
         redirect() {
             this.$router.push(getEntryPoint()).catch(() => {});
-        }
-    }
+        },
+    },
 };
 </script>

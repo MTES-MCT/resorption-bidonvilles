@@ -1,5 +1,5 @@
 <template>
-    <Container>
+    <Container class="mb-4">
         <div class="flex justify-end">
             <Button
                 icon="arrow-left"
