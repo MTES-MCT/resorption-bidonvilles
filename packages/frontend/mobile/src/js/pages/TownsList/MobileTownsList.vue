@@ -18,8 +18,9 @@
         <template v-slot:scroll>
             <template v-if="state !== 'error'">
                 <Container class="mt-6">
+                    <div class="font-bold text-lg">Rechercher un site</div>
                     <SearchInput
-                        class="my-4"
+                        class="mt-2 mb-6"
                         @click="openSearch"
                         placeholder="Rechercher un site"
                     />
@@ -116,7 +117,9 @@ export default {
             this.$router.push("/recherche-de-site");
         },
         onSearch(town) {
-            this.$router.push(`/site/${town.id}`);
+            setTimeout(() => {
+                this.$router.push(`/site/${town.id}`);
+            }, 100);
         },
     },
 };
