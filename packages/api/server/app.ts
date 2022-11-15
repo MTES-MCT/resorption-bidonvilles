@@ -1,6 +1,9 @@
 import * as Sentry from '@sentry/node';
 import loaders from '#server/loaders';
-import { port, sendActivitySummary } from '#server/config';
+import config from "#server/config";
+
+
+const { port, sendActivitySummary } = config;
 
 const sentryContextHandlers = (app) => {
     app.use(Sentry.Handlers.requestHandler());
@@ -47,7 +50,7 @@ export default {
         });
 
         // agenda
-        const agenda = loaders.agenda.getAgenda();
+        const agenda = loaders.agenda();
         loaders.agendaJobs(agenda);
 
         try {

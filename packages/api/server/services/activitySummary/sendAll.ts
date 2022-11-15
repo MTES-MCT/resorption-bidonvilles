@@ -1,10 +1,9 @@
-import * as sequelize from '#db/sequelize';
 import activityModel from '#server/models/activityModel';
 import sendNationalSummary from './sendNationalSummary';
 import sendRegionalSummary from './sendRegionalSummary';
 import sendDepartementalSummary from './sendDepartementalSummary';
 
-const userModel = require('#server/models/userModel');
+import userModel from '#server/models/userModel';
 
 // @todo: créer une fonction qui permet de générer facilement from et to
 export default async (day: number, month: number, year: number): Promise<void> => {

@@ -9,7 +9,8 @@ import MiseANiveau from "#src/js/pages/MiseANiveau/MiseANiveau.vue";
 import NotesList from "#src/js/pages/NotesList/NotesList.vue";
 import NotesForm from "#src/js/pages/NotesForm/NotesForm.vue";
 import SignatureCharteEngagement from "#src/js/pages/SignatureCharteEngagement/SignatureCharteEngagement.vue";
-import store from "../store/index";
+import store from "#src/store/index.js";
+import { insert as insertNavigationLog } from "./helpers/navigationLogs";
 
 function isLoggedIn() {
     return store.getters["user/loggedIn"];
@@ -21,6 +22,11 @@ function getConfig() {
 
 function isConfigLoaded() {
     return store.getters["config/loaded"] === true;
+}
+
+function logNavigation(to) {
+    insertNavigationLog(to.path);
+    return true;
 }
 
 /**
@@ -157,7 +163,8 @@ const guardians = {
         { checker: isPermitted, target: "/", saveEntrypoint: false },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
         { checker: isUpgraded, target: "/mise-a-niveau" },
-        { checker: saveTabNavigation }
+        { checker: saveTabNavigation },
+        { checker: logNavigation }
     ]),
     loadedAndUpToDate: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
@@ -165,7 +172,8 @@ const guardians = {
         { checker: isPermitted, target: "/", saveEntrypoint: false },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
         { checker: isUpgraded, target: "/mise-a-niveau" },
-        { checker: saveTabNavigation }
+        { checker: saveTabNavigation },
+        { checker: logNavigation }
     ])
 };
 

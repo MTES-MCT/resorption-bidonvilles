@@ -7,6 +7,7 @@ export default async (req, res, next) => {
         userNavigationLogsId = await userNavigationLogs.insert(
             req.user.id,
             req.body.page,
+            req.body.domain
         );
     } catch (error) {
         let message;
