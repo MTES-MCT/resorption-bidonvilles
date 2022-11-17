@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { onMounted, computed } from "vue";
+import { onMounted, onUnmounted, computed } from "vue";
 import { useDashboardStore } from "@/stores/dashboard.store";
 import { useActivitiesStore } from "@/stores/activities.store";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
@@ -49,6 +49,10 @@ onMounted(() => {
     if (dashboardStore.stats.data.length === 0) {
         fetch();
     }
+});
+
+onUnmounted(() => {
+    activitiesStore.resetPage();
 });
 
 function fetch() {

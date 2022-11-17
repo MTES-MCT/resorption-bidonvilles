@@ -8,6 +8,7 @@ import {
     faArrowRightToBracket,
     faArrowUpRightFromSquare,
     faBalanceScale,
+    faBell,
     faBan,
     faBars,
     faBolt,
@@ -33,10 +34,12 @@ import {
     faFlag,
     faHandshakeAngle,
     faKey,
+    faLock,
     faMagnifyingGlass,
     faMale,
     faMapMarkerAlt,
     faPaperPlane,
+    faPen,
     faPencilAlt,
     faPhone,
     faPlus,
@@ -84,6 +87,7 @@ library.add(faArrowUpRightFromSquare);
 library.add(faBalanceScale);
 library.add(faBan);
 library.add(faBars);
+library.add(faBell);
 library.add(faBolt);
 library.add(faBuilding);
 library.add(faChalkboardTeacher);
@@ -115,9 +119,11 @@ library.add(faFilePdf);
 library.add(faFlag);
 library.add(faHandshakeAngle);
 library.add(faKey);
+library.add(faLock);
 library.add(faLinkedin);
 library.add(faNewspaper);
 library.add(faPaperPlane);
+library.add(faPen);
 library.add(faPencilAlt);
 library.add(faPhone);
 library.add(faPrint);

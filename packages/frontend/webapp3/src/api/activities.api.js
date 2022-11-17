@@ -8,8 +8,8 @@ export function list(
     locationCode,
     maxActivityDate = null
 ) {
-    const realActivityFilter =
-        activityFilter.length === 0
+    const activityTypeFilter =
+        activityFilter.activityType.length === 0
             ? [
                   "shantytownCreation",
                   "shantytownClosing",
@@ -19,12 +19,22 @@ export function list(
                   "user",
                   "planComment",
               ]
-            : activityFilter;
+            : activityFilter.activityType;
+    const resorbedFilter =
+        activityFilter.resorbed.length === 0
+            ? ["yes", "no"]
+            : activityFilter.resorbed;
+    const myTownsFilter =
+        activityFilter.myTowns.length === 0
+            ? ["yes", "no"]
+            : activityFilter.myTowns;
 
     const query = [
         { name: "lastActivityDate", value: lastActivityDate },
         { name: "numberOfActivities", value: numberOfActivities },
-        { name: "filter", value: realActivityFilter.join(",") },
+        { name: "activityTypeFilter", value: activityTypeFilter.join(",") },
+        { name: "resorbedFilter", value: resorbedFilter.join(",") },
+        { name: "myTownsFilter", value: myTownsFilter.join(",") },
         { name: "locationType", value: locationType },
         { name: "locationCode", value: locationCode },
     ];
