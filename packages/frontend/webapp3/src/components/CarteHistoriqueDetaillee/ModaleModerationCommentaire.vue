@@ -97,7 +97,6 @@ async function remove() {
         activitiesStore.removeComment(comment.value.id);
         townsStore.updateShantytownComments(comment.value.shantytown, comments);
     } catch (e) {
-        console.log(e);
         error.value =
             (e && e.user_message) || "Une erreur inconnue est survenue";
     }
