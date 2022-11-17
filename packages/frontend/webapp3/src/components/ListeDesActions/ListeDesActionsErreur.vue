@@ -1,7 +1,7 @@
 <template>
     <ViewError>
         <template v-slot:title>Liste des actions indisponible</template>
-        <template v-slot:code></template>
+        <template v-slot:code>{{ plansStore.error }}</template>
         <template v-slot:content
             >Vous souhaitiez accéder à la liste des actions mais la collecte des
             données a échoué. Vous pouvez réessayer un peu plus tard ou nous
