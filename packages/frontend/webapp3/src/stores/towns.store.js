@@ -127,6 +127,16 @@ export const useTownsStore = defineStore("towns", () => {
         resetFilters();
     }
 
+    function updateShantytownComments(id, comments) {
+        const index = hash.value[id];
+        if (index !== undefined) {
+            towns.value.splice(index, 1, {
+                ...towns.value[index],
+                comments: comments,
+            });
+        }
+    }
+
     const { bus } = useEventBus();
     watch(() => bus.value.get("new-user"), reset);
     reset();
@@ -147,6 +157,7 @@ export const useTownsStore = defineStore("towns", () => {
             return Math.ceil(filteredTowns.value.length / ITEMS_PER_PAGE);
         }),
         filteredTowns,
+        updateShantytownComments,
         async fetchTowns() {
             if (isLoading.value === true) {
                 return;
