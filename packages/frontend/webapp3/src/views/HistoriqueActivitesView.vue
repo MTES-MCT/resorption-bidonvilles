@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { watch, onMounted, onUnmounted, computed } from "vue";
+import { watch, onMounted, onBeforeUnmount, computed } from "vue";
 import { useActivitiesStore } from "@/stores/activities.store";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import HistoriqueActivites from "@/components/HistoriqueActivites/HistoriqueActivites.vue";
@@ -68,7 +68,7 @@ onMounted(() => {
     window.addEventListener("scroll", reachBottom);
 });
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
     activitiesStore.reset();
     window.removeEventListener("scroll", reachBottom);
 });

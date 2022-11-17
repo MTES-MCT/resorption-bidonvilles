@@ -28,6 +28,9 @@ export const useActivitiesStore = defineStore("activities", () => {
 
     async function fetchActivities(target) {
         error.value = null;
+        if (isLoading.value === true) {
+            return;
+        }
         isLoading.value = true;
         if (target.location) {
             lastActivityDate.value = Date.now() / 1000;
