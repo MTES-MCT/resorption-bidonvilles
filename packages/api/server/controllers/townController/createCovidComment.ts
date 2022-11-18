@@ -12,7 +12,7 @@ export default async (req, res, next) => {
         const comments = await shantytownService.createCovidComment(req.user, req.params.id, req.body);
         return res.status(200).send(comments);
     } catch (error) {
-        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES['undefined'];
+        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({
             error: {
                 user_message: message,
