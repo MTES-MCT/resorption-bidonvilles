@@ -57,7 +57,7 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
             GROUP BY s.${tables.toilet_types_foreign_key})
 
         SELECT
-            ${Object.keys(selection).map(key => `${key} AS "${selection[key]}"`).join(',')},
+            ${Object.keys(selection).map((key) => `${key} AS "${selection[key]}"`).join(',')},
             sco.origins AS "socialOrigins",
             eat.electricity_access_types AS "electricityAccessTypes",
             stt.toilet_types AS "toiletTypes"
@@ -174,7 +174,7 @@ export default async (where = [], order = ['departements.code ASC', 'cities.name
     const [history, comments, covidComments, closingSolutions, actors, plans, incomingTowns] = await Promise.all(promises);
 
     if (history !== undefined && history.length > 0) {
-        const serializedHistory = history.map(h => serializeShantytown(h, user));
+        const serializedHistory = history.map((h) => serializeShantytown(h, user));
         for (let i = 1, { id } = serializedHistory[0]; i <= serializedHistory.length; i += 1) {
             if (!serializedHistory[i] || id !== serializedHistory[i].id) {
                 if (!serializedTowns.hash[id]) {

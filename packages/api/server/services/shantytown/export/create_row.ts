@@ -2,9 +2,9 @@ import {
     TableRow, TableCell, Paragraph, TextRun, VerticalAlign, convertInchesToTwip,
 } from 'docx';
 
-export default cells => new TableRow({
+export default (cells) => new TableRow({
     children:
-        cells.map(cell => new TableCell({
+        cells.map((cell) => new TableCell({
             verticalAlign: VerticalAlign.CENTER,
             margins: {
                 left: convertInchesToTwip(0.10),

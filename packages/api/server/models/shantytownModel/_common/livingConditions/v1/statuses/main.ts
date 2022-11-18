@@ -5,7 +5,7 @@ import getSanitaryStatus from './sanitary';
 import getVerminStatus from './vermin';
 import getFirePreventionStatus from './firePrevention';
 
-export default town => ({
+export default (town: any) => ({
     electricity: getElectricityStatus(town),
     water: getWaterStatus(town),
     trash: getTrashStatus(town),
