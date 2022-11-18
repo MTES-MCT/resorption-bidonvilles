@@ -209,6 +209,13 @@ const router = createRouter({
             },
         },
         {
+            path: "/activer-mon-compte/:token",
+            component: () => import("@/views/ActivationCompteView.vue"),
+            meta: {
+                authRequirement: "none",
+            },
+        },
+        {
             path: "/session-expiree",
             component: () => import("@/views/SessionExpiree.vue"),
             meta: {
