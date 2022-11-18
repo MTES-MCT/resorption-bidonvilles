@@ -98,7 +98,6 @@ export default async (user, data) => {
     const sections = createExportSections(user, data, properties, closedTowns, closingSolutions);
     let locationName = '';
 
-
     if (location.type === 'nation') {
         locationName = 'France';
     } else if (location.type === 'departement' || location.type === 'city') {
@@ -106,7 +105,6 @@ export default async (user, data) => {
     } else {
         locationName = location[location.type].name;
     }
-
 
     const buffer = await excelUtils.createExport(
         closedTowns ? 'fermés' : 'existants',

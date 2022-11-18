@@ -22,7 +22,6 @@ export default (user, data, properties, closedTowns, closingSolutions) => {
     localizationSection.properties.push(properties.latitude);
     localizationSection.properties.push(properties.longitude);
 
-
     let section = {
         title: 'Site',
         properties: [
@@ -47,7 +46,6 @@ export default (user, data, properties, closedTowns, closingSolutions) => {
         section.properties.push(properties.ownerType);
         section.properties.push(properties.owner);
     }
-
 
     sections.push(section);
 
@@ -74,9 +72,11 @@ export default (user, data, properties, closedTowns, closingSolutions) => {
             title: 'Conditions de vie',
             properties: [
                 properties.heatwaveStatus,
+                properties.electricityAccessStatus,
                 properties.electricityAccess,
                 properties.electricityAccessTypes,
                 properties.electricityAccessIsUnequal,
+                properties.waterAccessStatus,
                 properties.waterAccessType,
                 properties.waterAccessTypeDetails,
                 properties.waterAccessIsPublic,
@@ -88,19 +88,23 @@ export default (user, data, properties, closedTowns, closingSolutions) => {
                 properties.waterAccessIsUnequalDetails,
                 properties.waterAccessHasStagnantWater,
                 properties.waterAccessComments,
+                properties.sanitaryAccessStatus,
                 properties.sanitaryOpenAirDefecation,
                 properties.sanitaryWorkingToilets,
                 properties.sanitaryToiletTypes,
                 properties.sanitaryToiletsAreInside,
                 properties.sanitaryToiletsAreLighted,
                 properties.sanitaryHandWashing,
+                properties.trashEvacuationStatus,
                 properties.trashIsPiling,
                 properties.trashEvacuationIsClose,
                 properties.trashEvacuationIsSafe,
                 properties.trashEvacuationIsRegular,
                 properties.trashBulkyIsPiling,
+                properties.pestAnimalsStatus,
                 properties.pestAnimalsPresence,
                 properties.pestAnimalsDetails,
+                properties.firePreventionStatus,
                 properties.firePreventionDiagnostic,
             ],
         });
