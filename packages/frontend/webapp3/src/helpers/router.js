@@ -86,6 +86,7 @@ const router = createRouter({
                 analyticsIgnore: true,
                 authRequirement: "signedIn",
                 configRequired: false,
+                charteRequirement: false,
             },
         },
         {
@@ -117,6 +118,9 @@ const router = createRouter({
                 return next("/connexion");
             },
             component: () => null,
+            meta: {
+                charteRequirement: false,
+            },
         },
         {
             path: "/invitation",
@@ -172,6 +176,14 @@ const router = createRouter({
             component: () => import("@/views/NouveautesView.vue"),
             meta: {
                 authRequirement: "signedIn",
+            },
+        },
+        {
+            path: "/signature-charte-engagement",
+            component: () => import("@/views/CharteEngagementView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                charteRequirement: false,
             },
         },
         {
@@ -276,10 +288,13 @@ router.beforeEach((to) => {
     const userStore = useUserStore();
 
     // compute default requirements
-    let { authRequirement, configRequired } = to.meta;
+    let { authRequirement, configRequired, charteRequirement } = to.meta;
     if (authRequirement === undefined) {
         authRequirement = "signedIn";
     }
+    charteRequirement =
+        authRequirement === "signedIn" && charteRequirement !== false;
+
     if (configRequired === undefined) {
         configRequired = authRequirement === "signedIn";
     }
@@ -288,12 +303,15 @@ router.beforeEach((to) => {
     if (authRequirement === "signedOut" && userStore.isLoggedIn) {
         return "/";
     }
-
     // signedIn requirement
     if (authRequirement === "signedIn" && !userStore.isLoggedIn) {
         const navigationStore = useNavigationStore();
         navigationStore.entrypoint = to.path;
         return `/connexion`;
+    }
+    // Chart requirement
+    if (!userStore.hasAcceptedChart && charteRequirement) {
+        return "/signature-charte-engagement";
     }
 
     // config requirement
