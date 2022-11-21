@@ -286,7 +286,7 @@ router.beforeEach((to) => {
 
     // signedOut requirement
     if (authRequirement === "signedOut" && userStore.isLoggedIn) {
-        return "/page-interdite";
+        return "/";
     }
 
     // signedIn requirement
