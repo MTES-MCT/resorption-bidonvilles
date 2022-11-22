@@ -166,7 +166,7 @@ const guardians = {
         { checker: saveTabNavigation },
         { checker: logNavigation },
         { checker: saveTabNavigation },
-        { checker: logNavigation }
+        { checker: logNavigation },
     ]),
     loadedAndUpToDate: guard.bind(this, [
         { checker: isLoggedIn, target: "/connexion" },
@@ -177,9 +177,6 @@ const guardians = {
         { checker: saveTabNavigation },
         { checker: logNavigation },
     ]),
-        { checker: saveTabNavigation },
-        { checker: logNavigation }
-    ])
 };
 
 const router = createRouter({
