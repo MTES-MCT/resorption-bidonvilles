@@ -103,6 +103,6 @@
     "test:integration": "yarn test --grep '.*server/models.*'",
     "lint": "eslint --max-warnings=0 --ext .ts",
     "lint:all": "eslint --no-error-on-unmatched-pattern --max-warnings=0 --ext .ts server",
-    "emails:build": "node server/mails/build.js"
+    "emails:build": "ts-node server/mails/build.ts"
   }
 }
