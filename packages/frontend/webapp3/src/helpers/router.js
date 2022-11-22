@@ -90,6 +90,14 @@ const router = createRouter({
             },
         },
         {
+            path: "/action/:id",
+            component: () => import("@/views/FicheActionView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "actions",
+            },
+        },
+        {
             path: "/activites",
             component: () => import("@/views/HistoriqueActivitesView.vue"),
             meta: {

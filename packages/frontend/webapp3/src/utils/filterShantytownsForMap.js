@@ -1,12 +1,16 @@
-import map_filters from "./map_filters";
-
 const filterBy = {
     waterAccessConditions(shantytown, checked) {
-        return checked.indexOf(shantytown.livingConditions.water.status.status) !== -1;
+        return (
+            checked.indexOf(shantytown.livingConditions.water.status.status) !==
+            -1
+        );
     },
 
     fieldType(shantytown, checked) {
-        return shantytown.fieldType && checked.indexOf(shantytown.fieldType.id) !== -1;
+        return (
+            shantytown.fieldType &&
+            checked.indexOf(shantytown.fieldType.id) !== -1
+        );
     },
 
     population(shantytown, checked) {
@@ -25,7 +29,8 @@ const filterBy = {
 
             if (!Number.isNaN(min) && !Number.isNaN(max)) {
                 return (
-                    shantytown.populationTotal >= min && shantytown.populationTotal <= max
+                    shantytown.populationTotal >= min &&
+                    shantytown.populationTotal <= max
                 );
             }
 
@@ -42,15 +47,18 @@ const filterBy = {
     },
 
     status(shantytown, checked) {
-        if (shantytown.status === 'open') {
-            return checked.indexOf('open') !== -1;
+        if (shantytown.status === "open") {
+            return checked.indexOf("open") !== -1;
         }
 
-        return checked.indexOf('closed') !== -1;
+        return checked.indexOf("closed") !== -1;
     },
 
     ownerType(shantytown, checked) {
-        return shantytown.ownerType && checked.indexOf(shantytown.ownerType.id) !== -1
+        return (
+            shantytown.ownerType &&
+            checked.indexOf(shantytown.ownerType.id) !== -1
+        );
     },
 };
 
