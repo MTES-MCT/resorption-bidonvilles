@@ -10,6 +10,7 @@ const ITEMS_PER_PAGE = 10;
 
 export const usePlansStore = defineStore("plans", () => {
     const plans = ref([]);
+    const hash = ref({});
     const isLoading = ref(null);
     const error = ref(null);
     const filters = {
@@ -104,6 +105,13 @@ export const usePlansStore = defineStore("plans", () => {
         try {
             const rawPlans = await fetchList();
             plans.value = rawPlans;
+            hash.value = rawPlans.reduce(
+                (hash, { id }, index) => ({
+                    ...hash,
+                    [id]: index,
+                }),
+                {}
+            );
             currentPage.index.value = rawPlans.length > 0 ? 1 : -1;
         } catch (e) {
             error.value =
@@ -130,5 +138,8 @@ export const usePlansStore = defineStore("plans", () => {
             return Math.ceil(filteredPlans.value.length / ITEMS_PER_PAGE);
         }),
         fetchPlans,
+        async fetchPlan(planId) {
+            return plans.value[hash.value[planId]];
+        },
     };
 });

@@ -227,6 +227,14 @@ const router = createRouter({
             },
         },
         {
+            path: "/action/:id",
+            component: () => import("@/views/FicheActionView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "actions",
+            },
+        },
+        {
             path: "/statistiques/:code?",
             component: () => import("@/views/StatistiquesView.vue"),
             meta: {
