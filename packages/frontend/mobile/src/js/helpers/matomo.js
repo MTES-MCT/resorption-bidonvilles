@@ -7,16 +7,7 @@ const $piwik = computed(() => {
     return typeof window !== "undefined" ? window.Piwik?.getTracker() : null;
 });
 
-if ($piwik.value) {
-    console.log("matomo est bien initialisé");
-    console.log(`$piwik: ${$piwik.value}`);
-} else {
-    console.log("matomo n'est pas initialisé");
-}
-
 export function useMatomo(app, router) {
-    console.log(`$piwik.value: ${$piwik.value}`);
-
     if (!$piwik.value) {
         return;
     }
