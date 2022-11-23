@@ -34,19 +34,31 @@
                             « {{ town.name }} »</span
                         >
                     </div>
+
+                    <TownPageMenu />
                 </header>
             </template>
             <template v-slot:scroll>
                 <Container>
-                    <TownPagePanelCharacteristics :town="town" />
+                    <TownPagePanelCharacteristics
+                        id="caracteristics"
+                        :town="town"
+                    />
 
-                    <TownPagePanelPeople :town="town" />
+                    <TownPagePanelPeople id="peoples" :town="town" />
 
-                    <TownPagePanelLivingConditions :town="town" />
+                    <TownPagePanelLivingConditions
+                        id="living_conditions"
+                        :town="town"
+                    />
 
-                    <TownPagePanelJudicial :town="town" />
+                    <TownPagePanelJudicial id="judicial" :town="town" />
 
-                    <TownPagePanelActors :town="town" class="mb-3" />
+                    <TownPagePanelActors
+                        id="actors"
+                        :town="town"
+                        class="mb-3"
+                    />
                 </Container>
             </template>
             <template v-slot:footer>
@@ -74,6 +86,7 @@
 <script>
 import Layout from "#src/js/components/Layout.vue";
 import Container from "#src/js/components/Container.vue";
+import TownPageMenu from "./TownPageMenu.vue";
 import TownPagePanelCharacteristics from "./TownPagePanelCharacteristics.vue";
 import TownPagePanelPeople from "./TownPagePanelPeople.vue";
 import TownPagePanelLivingConditions from "./TownPagePanelLivingConditions.vue";
@@ -87,6 +100,7 @@ export default {
     components: {
         Layout,
         Container,
+        TownPageMenu,
         TownComments,
         TownPagePanelCharacteristics,
         TownPagePanelPeople,
