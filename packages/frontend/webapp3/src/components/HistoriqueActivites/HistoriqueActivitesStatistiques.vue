@@ -22,6 +22,7 @@
 import { toRefs, computed } from "vue";
 import { useActivitiesStore } from "@/stores/activities.store";
 import computeLocationSearchTitle from "@/utils/computeLocationSearchTitle";
+
 import MiniCarte from "@/components/MiniCarte/MiniCarte.vue";
 
 const activitiesStore = useActivitiesStore();

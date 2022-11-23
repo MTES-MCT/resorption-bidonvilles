@@ -1,10 +1,5 @@
 <template>
-    <Autocomplete
-        v-bind="$attrs"
-        :fn="autocompleteFn"
-        @search="onSearch"
-        v-model="location"
-    />
+    <Autocomplete v-bind="$attrs" :fn="autocompleteFn" v-model="location" />
 </template>
 
 <script setup>

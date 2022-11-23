@@ -1,28 +1,27 @@
 <template>
-    <div>
-        <section class="flex flex-col space-y-4">
-            <CarteGroupeHistorique
-                v-for="group in parsedActivities"
-                :key="group.id"
-                :group="group"
-            />
-            <div
-                class="text-center text-primary text-display-md font-bold"
-                v-if="activitiesStore.isLoading"
-            >
-                <Spinner />
-            </div>
-        </section>
-    </div>
+    <section class="flex flex-col space-y-4">
+        <CarteGroupeHistorique
+            v-for="group in parsedActivities"
+            :key="group.id"
+            :group="group"
+        />
+        <div
+            class="text-center text-primary text-display-md font-bold"
+            v-if="activitiesStore.isLoading"
+        >
+            <Spinner />
+        </div>
+    </section>
 </template>
 
 <script setup>
 import { computed } from "vue";
 import { useActivitiesStore } from "@/stores/activities.store";
+
 import { Spinner } from "@resorptionbidonvilles/ui";
 import CarteGroupeHistorique from "@/components/CarteHistoriqueDetaillee/CarteGroupeHistorique.vue";
-const activitiesStore = useActivitiesStore();
 
+const activitiesStore = useActivitiesStore();
 const parsedActivities = computed(() => {
     const groups = [];
     for (let i = 0, lastDate; i < activitiesStore.activities.length; i += 1) {

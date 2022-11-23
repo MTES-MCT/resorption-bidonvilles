@@ -2,9 +2,9 @@
     <div>
         <div class="ml-2">
             <Icon icon="user-circle" />
-            <span class="text-dark font-bold"> Opérateur</span><br />
+            <span class="text-dark font-bold">Opérateur</span><br />
             <LinkOrganization
-                :to="`/annuaire/${operator_contact.organization.id}`"
+                :to="`/structure/${operator_contact.organization.id}`"
             >
                 {{ operator_contact.organization.name }}
             </LinkOrganization>

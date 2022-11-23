@@ -5,9 +5,10 @@
 </template>
 
 <script setup>
-import { Tag } from "@resorptionbidonvilles/ui";
-import specialTags from "./specialTags";
 import { defineProps, toRefs, computed } from "vue";
+import specialTags from "@/utils/special_tags";
+
+import { Tag } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     tag: {

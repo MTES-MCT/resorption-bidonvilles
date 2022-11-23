@@ -16,10 +16,7 @@
                 <Icon icon="fa-trash-alt" alt="Supprimer le message"
             /></span>
         </div>
-        <div
-            class="text-G600 text-sm mb-1"
-            v-if="comment.covid && comment.covid.date"
-        >
+        <div class="text-G600 text-sm mb-1" v-if="comment.covid?.date">
             Date de l'intervention:
             {{ formatDate(comment.covid.date, "d M y à h:i") }}
         </div>
@@ -44,48 +41,49 @@
             </div>
         </div>
         <div class="text-primary font-bold mb-1 mt-2">
-            <router-link :to="`/annuaire/${comment.createdBy.organization_id}`">
-                <Icon icon="user" /> {{ comment.createdBy.first_name }}
+            <LinkOrganization
+                :to="`/structure/${comment.createdBy.organization_id}`"
+            >
+                {{ comment.createdBy.first_name }}
                 {{ comment.createdBy.last_name }} -
                 {{ comment.createdBy.organization }}
-            </router-link>
+            </LinkOrganization>
         </div>
-        <div class="ml-5">
-            <div class="flex flex-wrap">
-                <Tag
-                    v-if="!!comment.covid"
-                    variant="withoutBackground"
-                    :class="['inline-block', 'bg-red', 'text-white']"
-                    >Covid-19</Tag
-                >
-                <TagCommentaireCovid
-                    v-for="tag in covidTags"
-                    :key="tag.prop"
-                    :class="['mr-2', 'mb-2']"
-                    :tag="tag"
-                />
-                <TagCommentaireStandard
-                    v-for="(tag, index) in comment.tags"
-                    :key="index"
-                    :class="['mr-2', 'mb-2']"
-                    :tag="tag"
-                />
-            </div>
-            <div class="whitespace-pre-line">{{ comment.description }}</div>
+        <div class="mt-2 flex flex-wrap">
+            <Tag
+                v-if="!!comment.covid"
+                variant="withoutBackground"
+                class="inline-block bg-red text-white"
+                >Covid-19</Tag
+            >
+            <TagCommentaireCovid
+                v-for="tag in covidTags"
+                :key="tag.prop"
+                class="mr-2 mb-2"
+                :tag="tag"
+            />
+            <TagCommentaireStandard
+                v-for="(tag, index) in comment.tags"
+                :key="index"
+                class="mr-2 mb-2"
+                :tag="tag"
+            />
+        </div>
+        <div class="whitespace-pre-line break-words">
+            {{ comment.description }}
         </div>
     </div>
 </template>
 <script setup>
 import { defineProps, toRefs, ref, computed } from "vue";
-import formatDate from "@/utils/formatDate";
-import { Icon, Tag } from "@resorptionbidonvilles/ui";
-import TagCommentaireStandard from "@/components/TagCommentaireStandard/TagCommentaireStandard.vue";
-import TagCommentaireCovid from "@/components/TagCommentaireCovid/TagCommentaireCovid.vue";
 import { useConfigStore } from "@/stores/config.store";
 import { useUserStore } from "@/stores/user.store";
+import covidTagsList from "@/utils/covid_tags";
+import formatDate from "@/utils/formatDate";
 
-const configStore = useConfigStore();
-const userStore = useUserStore();
+import { Icon, LinkOrganization, Tag } from "@resorptionbidonvilles/ui";
+import TagCommentaireStandard from "@/components/TagCommentaireStandard/TagCommentaireStandard.vue";
+import TagCommentaireCovid from "@/components/TagCommentaireCovid/TagCommentaireCovid.vue";
 
 const props = defineProps({
     comment: {
@@ -98,7 +96,6 @@ const props = defineProps({
 });
 
 const isHover = ref(false);
-
 const { comment, showActionIcons } = toRefs(props);
 
 const covidTags = computed(() => {
@@ -106,15 +103,18 @@ const covidTags = computed(() => {
         return [];
     }
 
-    return covidTags.value.filter((t) => {
+    return covidTagsList.filter((t) => {
         return !!comment.value.covid[t.prop];
     });
 });
 
 const isOwner = computed(() => {
+    const configStore = useConfigStore();
     return comment.value.createdBy.id === configStore.config.user.id;
 });
+
 const canModerate = computed(() => {
+    const userStore = useUserStore();
     return userStore.hasPermission("shantytown_comment.moderate");
 });
 

@@ -15,7 +15,6 @@ export function list(
                   "shantytownClosing",
                   "shantytownUpdate",
                   "shantytownComment",
-                  "highCovidComment",
                   "user",
                   "planComment",
               ]

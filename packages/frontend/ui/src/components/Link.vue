@@ -1,6 +1,6 @@
 <template>
     <span class="border-b border-b-G400 hover:border-b-2 hover:border-b-primary">
-        <span class="cursor-pointer" v-if="!to">
+        <span v-if="!to" :class="withStyle ? linkClasses : 'cursor-pointer'">
             <slot />
         </span>
         <template v-else>
@@ -45,6 +45,13 @@ export default {
             type: String,
             required: false,
             default: "text-primaryDark"
+        },
+        withStyle: {
+            // pour les liens sans prop "to" on n'intègre pas les styles par défaut (ce qui donne un lien noir)
+            // en passant "withStyle" à true, on intègre les styles malgré tout
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 

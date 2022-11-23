@@ -57,7 +57,7 @@ onBeforeUnmount(() => {
 
 function fetch() {
     dashboardStore.fetchStats();
-    activitiesStore.fetchActivities({
+    activitiesStore.fetch({
         location: {
             locationType: dashboardStore.filters.location?.typeUid || "nation",
             locationCode: dashboardStore.filters.location?.code,

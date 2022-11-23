@@ -27,10 +27,7 @@ export default async (user, location, activityTypeFilter, resorbedFilter, myTown
         promises.push(shantytownModel.getHistory(user, location, shantytownFilter, resorbedFilter, myTownsFilter, numberOfActivities, lastDate, maxDate));
     }
     if (activityTypeFilter.includes('shantytownComment')) {
-        promises.push(shantytownCommentModel.getHistory(user, location, numberOfActivities, lastDate, maxDate, activityTypeFilter.includes('onlyCovid')));
-    }
-    if (activityTypeFilter.includes('highCovidComment')) {
-        promises.push(highCovidCommentModel.getHistory(user, location, numberOfActivities, lastDate, maxDate));
+        promises.push(shantytownCommentModel.getHistory(user, location, numberOfActivities, lastDate, maxDate));
     }
     if (activityTypeFilter.includes('user')) {
         promises.push(userModel.getHistory(location, numberOfActivities, lastDate, maxDate));

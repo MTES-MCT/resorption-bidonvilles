@@ -13,7 +13,7 @@ const { formatName } = userModel;
 const { getUsenameOf, serializeComment } = shantytownModel;
 const { restrict } = permissionUtils;
 
-export default async (user, location, numberOfActivities, lastDate, maxDate, onlyCovid = false) => {
+export default async (user, location, numberOfActivities, lastDate, maxDate) => {
     // apply geographic level restrictions
     const where = [];
     const replacements: any = {
@@ -95,9 +95,6 @@ export default async (user, location, numberOfActivities, lastDate, maxDate, onl
     where.push(`comments.created_at < '${lastDate}'`);
     if (maxDate) {
         where.push('comments.created_at >= :maxDate');
-    }
-    if (onlyCovid) {
-        where.push('covid_comments.shantytown_covid_comment_id IS NOT NULL');
     }
 
     const activities = await sequelize.query(

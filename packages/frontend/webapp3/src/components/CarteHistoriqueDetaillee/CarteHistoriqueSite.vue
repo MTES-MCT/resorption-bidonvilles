@@ -1,9 +1,10 @@
 <template>
     <div>
         <p>
-            <span class="font-bold">Champ(s) modifié(s) :</span>
+            <span class="font-bold">Champ(s) modifié(s) :</span><br />
             {{ fieldList }}
         </p>
+
         <div class="mt-2">
             <Button
                 variant="text"
@@ -14,6 +15,7 @@
                 @click="toggle"
                 >{{ toggleWording }} le détail des modifications</Button
             >
+
             <div v-if="showDetails" class="bg-G100 py-4 px-6">
                 <div v-for="item in activity.diff" :key="item.fieldKey">
                     <p class="text-info">{{ item.field }}</p>
@@ -33,9 +35,8 @@
 </template>
 
 <script setup>
-import { Button } from "@resorptionbidonvilles/ui";
-
 import { defineProps, toRefs, ref, computed } from "vue";
+import { Button } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     activity: {

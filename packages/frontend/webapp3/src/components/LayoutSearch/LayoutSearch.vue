@@ -1,25 +1,34 @@
 <template>
     <Layout v-bind="$attrs">
         <template v-slot:banner>
-            <div class="pt-6 text-center print:hidden" :class="
-                isNotOnDefaultFilter || showNationalWording
-                    ? 'pb-5'
-                    : 'pb-10'
-            ">
+            <div
+                class="pt-6 text-center print:hidden"
+                :class="showReset ? 'pb-4' : 'pb-10'"
+            >
                 <h1 class="text-lg xl:text-xl font-bold">{{ searchTitle }}</h1>
                 <ContentWrapper class="mt-3" size="medium">
                     <div class="flex items-center space-x-2">
-                        <InputLocation class="flex-1" name="territorial_collectivity" :label="label"
-                            :placeholder="searchPlaceholder" withoutMargin :allowFreeSearch="allowFreeSearch"
-                            v-model="inputLocation" />
+                        <InputLocation
+                            class="flex-1"
+                            name="territorial_collectivity"
+                            :placeholder="searchPlaceholder"
+                            withoutMargin
+                            :allowFreeSearch="allowFreeSearch"
+                            v-model="inputLocation"
+                        />
                         <Button size="sm" type="button">Rechercher</Button>
                     </div>
-                    <p class="mt-1 text-right text-sm font-bold" v-if="isNotOnDefaultFilter || showNationalWording">
+                    <p
+                        class="mt-1 text-right text-sm font-bold"
+                        v-if="showReset"
+                    >
                         <Link v-if="isNotOnDefaultFilter" @click="resetSearch">
-                        <Icon icon="rotate-left" /> Revenir à mon
-                        territoire</Link>
-                        <Link v-else-if="showNationalWording" @click="emptySearch">
-                        {{ showNationalWording }}</Link>
+                            <Icon icon="rotate-left" /> Revenir à mon
+                            territoire</Link
+                        >
+                        <Link v-else @click="emptySearch">
+                            {{ showNationalWording }}</Link
+                        >
                     </p>
                 </ContentWrapper>
             </div>
@@ -80,6 +89,16 @@ const inputLocation = computed({
     set(newValue) {
         emit("update:location", newValue);
     },
+});
+const showReset = computed(() => {
+    if (isNotOnDefaultFilter.value) {
+        return true;
+    }
+
+    return (
+        showNationalWording.value &&
+        userStore.user.organization.location.type !== "nation"
+    );
 });
 
 const isNotOnDefaultFilter = computed(() => {

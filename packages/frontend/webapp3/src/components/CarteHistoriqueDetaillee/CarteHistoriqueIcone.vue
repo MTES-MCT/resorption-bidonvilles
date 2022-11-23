@@ -37,10 +37,7 @@ const icon = computed(() => {
     }
 
     // commentaires
-    if (
-        (activity.value.comment && activity.value.comment.covid) ||
-        activity.value.highCovidComment
-    ) {
+    if (activity.value.comment?.covid) {
         return "exclamation";
     }
 
