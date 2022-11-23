@@ -3,9 +3,15 @@ import { ref, watch, computed } from "vue";
 import { useEventBus } from "@/helpers/event-bus";
 import { trackEvent } from "@/helpers/matomo";
 import { useUserStore } from "@/stores/user.store";
+import { useActivitiesStore } from "./activities.store";
 import { useConfigStore } from "./config.store";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
-import { fetch, fetchList, setHeatwaveStatus } from "@/api/towns.api";
+import {
+    fetch,
+    fetchList,
+    setHeatwaveStatus,
+    deleteComment,
+} from "@/api/towns.api";
 import enrichShantytown from "@/utils/enrichShantytown";
 import filterShantytowns from "@/utils/filterShantytowns";
 
@@ -157,7 +163,6 @@ export const useTownsStore = defineStore("towns", () => {
             return Math.ceil(filteredTowns.value.length / ITEMS_PER_PAGE);
         }),
         filteredTowns,
-        updateShantytownComments,
         async fetchTowns() {
             if (isLoading.value === true) {
                 return;
@@ -193,6 +198,17 @@ export const useTownsStore = defineStore("towns", () => {
             }
 
             return hash.value[townId];
+        },
+        async deleteComment(shantytownId, commentId, reason = "") {
+            const activitiesStore = useActivitiesStore();
+            const { comments } = await deleteComment(
+                shantytownId,
+                commentId,
+                reason
+            );
+
+            updateShantytownComments(shantytownId, comments);
+            activitiesStore.removeComment(commentId);
         },
         heatwaveStatuses,
         async setHeatwaveStatus(id, status) {

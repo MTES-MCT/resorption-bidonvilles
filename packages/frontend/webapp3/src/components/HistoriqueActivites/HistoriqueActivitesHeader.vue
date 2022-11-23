@@ -8,6 +8,18 @@
         <template v-slot:actions>
             <p class="flex space-x-2">
                 <Button
+                    v-if="
+                        userStore.hasPermission('shantytown_comment.moderate')
+                    "
+                    icon="info-circle"
+                    iconPosition="left"
+                    variant="secondaryOutline"
+                    @click="showModeration"
+                    size="sm"
+                >
+                    Voir les règles de modération
+                </Button>
+                <Button
                     v-if="userStore.hasPermission('shantytown_comment.export')"
                     icon="file-excel"
                     iconPosition="left"
@@ -18,20 +30,26 @@
                     >Exporter tous les commentaires</Button
                 >
             </p>
+
+            <HistoriqueActivitesReglesModeration ref="modaleModeration" />
         </template>
     </ViewHeader>
 </template>
 
 <script setup>
-import { useUserStore } from "@/stores/user.store";
 import { ref } from "vue";
+import { useUserStore } from "@/stores/user.store";
+import { getAll } from "@/api/comments.api";
+import downloadCsv from "@/utils/downloadCsv";
+import formatDate from "@/utils/formatDate";
 
 import { Button } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
-import { getAll } from "@/api/comments.api";
+import HistoriqueActivitesReglesModeration from "./HistoriqueActivitesReglesModeration.vue";
 
 const userStore = useUserStore();
 const exportLoading = ref(false);
+const modaleModeration = ref(null);
 
 async function exportShantytownComments() {
     if (exportLoading.value === true) {
@@ -41,21 +59,18 @@ async function exportShantytownComments() {
     exportLoading.value = true;
     try {
         const { csv } = await getAll();
-
-        const hiddenElement = document.createElement("a");
-        hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURI(csv);
-        hiddenElement.target = "_blank";
-        hiddenElement.download = "messages.csv";
-        hiddenElement.click();
+        downloadCsv(
+            csv,
+            `${formatDate(Date.now() / 1000, "y_m_d")}_messages.csv`
+        );
     } catch (error) {
-        let message = "Une erreur inconnue est survenue";
-        if (error && error.user_message) {
-            message = error.user_message;
-        }
-
-        alert(message);
+        alert(error?.user_message || "Une erreur inconnue est survenue");
     }
 
     exportLoading.value = false;
+}
+
+function showModeration() {
+    modaleModeration.value.open();
 }
 </script>

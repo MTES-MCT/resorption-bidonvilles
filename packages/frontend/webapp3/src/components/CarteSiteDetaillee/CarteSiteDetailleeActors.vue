@@ -22,7 +22,7 @@
             >
             <ul v-if="shantytown.actors.length > 0" class="text-primary">
                 <li v-for="actor in mergedActors" v-bind:key="actor.id">
-                    <LinkOrganization :to="`/annuaire/${actor.id}`">{{
+                    <LinkOrganization :to="`/structure/${actor.id}`">{{
                         actor.name
                     }}</LinkOrganization>
                 </li>

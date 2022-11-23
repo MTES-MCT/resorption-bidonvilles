@@ -26,12 +26,14 @@ export const useActivitiesStore = defineStore("activities", () => {
     const lastActivityDate = ref(new Date());
     const endOfActivities = ref(false);
 
-    async function fetchActivities(target) {
-        error.value = null;
+    async function fetchActivities(target = {}) {
         if (isLoading.value === true) {
             return;
         }
+
+        error.value = null;
         isLoading.value = true;
+
         if (target.location) {
             lastActivityDate.value = Date.now() / 1000;
             endOfActivities.value = false;
@@ -74,6 +76,16 @@ export const useActivitiesStore = defineStore("activities", () => {
 
         isLoading.value = false;
     }
+
+    function fetchDefault() {
+        return fetchActivities({
+            location: {
+                locationType: filters.location.value?.typeUid || "nation",
+                locationCode: filters.location.value?.code,
+            },
+        });
+    }
+
     function reset() {
         const userStore = useUserStore();
 
@@ -97,28 +109,24 @@ export const useActivitiesStore = defineStore("activities", () => {
         activities.value = [];
         lastActivityDate.value = new Date();
         endOfActivities.value = false;
-        if (filters.location.value?.typeUid) {
-            fetchActivities({
-                location: {
-                    locationType: filters.location.value?.typeUid,
-                    locationCode: filters.location.value?.code,
-                },
-            });
-        }
+        loaded.locationType.value = null;
+        loaded.locationCode.value = null;
+        loaded.filters.value = [];
     }
-    function removeComment(commentId) {
-        const index = activities.value.findIndex(({ comment }) => {
-            return comment && comment.id === commentId;
-        });
 
-        if (index >= 0) {
-            activities.value.splice(index, 1);
-        }
+    function refetch() {
+        resetPage();
+        fetchDefault();
     }
 
     const { bus } = useEventBus();
     watch(() => bus.value.get("new-user"), reset);
     reset();
+
+    watch(filters.search, refetch);
+    watch(filters.properties, refetch, {
+        deep: true,
+    });
 
     return {
         activities,
@@ -131,6 +139,19 @@ export const useActivitiesStore = defineStore("activities", () => {
         fetchActivities,
         reset,
         resetPage,
-        removeComment,
+        removeComment(commentId) {
+            const index = activities.value.findIndex(({ comment }) => {
+                return comment?.id === commentId;
+            });
+
+            if (index !== -1) {
+                activities.value.splice(index, 1);
+            }
+        },
+        fetch: fetchActivities,
+        fetchDefault,
+        fetchNext() {
+            return fetchActivities();
+        },
     };
 });

@@ -256,13 +256,6 @@ const router = createRouter({
             },
         },
         {
-            path: "/typologie-des-acces",
-            beforeEnter(to, from, next) {
-                window.open("/doc/guide_de_l_administrateur.pdf");
-                next(false);
-            },
-        },
-        {
             path: "/utilisateur/:id",
             redirect(to) {
                 return `/utilisateur/${to.params.id}/informations-personnelles`;

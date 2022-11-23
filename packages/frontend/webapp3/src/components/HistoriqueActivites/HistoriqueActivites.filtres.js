@@ -17,7 +17,7 @@ export default {
             },
             {
                 label: "Nouveaux messages site",
-                value: "shantytownComment_highCovidComment",
+                value: "shantytownComment",
             },
             {
                 label: "Nouveaux messages action",

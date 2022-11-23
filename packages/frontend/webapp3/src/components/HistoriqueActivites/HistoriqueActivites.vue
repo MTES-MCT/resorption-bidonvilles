@@ -1,5 +1,7 @@
 <template>
     <ContentWrapper>
+        <HistoriqueActivitesHeader />
+
         <Loading
             v-if="
                 activitiesStore.isLoading !== false &&
@@ -8,10 +10,13 @@
         />
         <HistoriqueActivitesErreur v-else-if="activitiesStore.error" />
         <template v-else>
-            <HistoriqueActivitesHeader />
             <HistoriqueActivitesStatistiques />
             <HistoriqueActivitesFiltres class="mt-4" />
-            <HistoriqueActivitesListe class="mt-4" />
+            <HistoriqueActivitesListe
+                class="mt-4"
+                v-if="activitiesStore.activities.length > 0"
+            />
+            <HistoriqueActivitesVide class="mt-10" v-else />
         </template>
     </ContentWrapper>
 </template>
@@ -24,6 +29,7 @@ import HistoriqueActivitesErreur from "./HistoriqueActivitesErreur.vue";
 import HistoriqueActivitesHeader from "./HistoriqueActivitesHeader.vue";
 import HistoriqueActivitesFiltres from "./HistoriqueActivitesFiltres.vue";
 import HistoriqueActivitesListe from "./HistoriqueActivitesListe.vue";
+import HistoriqueActivitesVide from "./HistoriqueActivitesVide.vue";
 import { useActivitiesStore } from "@/stores/activities.store";
 
 const activitiesStore = useActivitiesStore();

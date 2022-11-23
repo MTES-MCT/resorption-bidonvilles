@@ -12,7 +12,6 @@
 <script setup>
 import { Tag } from "@resorptionbidonvilles/ui";
 import { defineProps, toRefs } from "vue";
-
 const props = defineProps({
     tag: {
         type: Object,

@@ -80,6 +80,8 @@ import { getExport } from "@/api/statistics.api";
 import { useConfigStore } from "@/stores/config.store";
 import { useUserStore } from "@/stores/user.store";
 import router from "@/helpers/router";
+import downloadCsv from "@/utils/downloadCsv";
+import formatDate from "@/utils/formatDate";
 
 // components
 import { Button } from "@resorptionbidonvilles/ui";
@@ -164,14 +166,8 @@ async function exportCSV() {
 
     exportLoading.value = true;
     try {
-        // We don't open it directly as permissions needs to be checked with user's token
         const { csv } = await getExport();
-
-        const hiddenElement = document.createElement("a");
-        hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURI(csv);
-        hiddenElement.target = "_blank";
-        hiddenElement.download = "stats.csv";
-        hiddenElement.click();
+        downloadCsv(csv, `${formatDate(Date.now() / 1000, "y_m_d")}_stats.csv`);
     } catch (err) {
         alert("Une erreur est survenue durant l'export");
     }

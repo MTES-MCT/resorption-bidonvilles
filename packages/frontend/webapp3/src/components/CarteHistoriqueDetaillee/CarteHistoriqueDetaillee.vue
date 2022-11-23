@@ -9,32 +9,23 @@
             ref="moderationModal"
             :comment="activity.comment"
         />
-        <div :class="classes.column">
-            <CarteHistoriqueIcone
-                :color="colors.bg"
-                :activity="activity"
-                class="mr-4 flex-shrink-0"
-            />
-        </div>
+        <CarteHistoriqueIcone
+            :color="colors.bg"
+            :activity="activity"
+            class="mr-4 flex-shrink-0"
+        />
 
-        <div class="flex-grow" :class="classes.column">
+        <div class="flex-1">
             <header>
-                <h1 :class="classes.title">
+                <h1 :class="`${colors.text} font-bold mt-2`">
                     {{ title }}
                 </h1>
 
                 <p v-if="activity.author">
                     par :
                     <LinkOrganization
-                        :to="`/annuaire/${activity.author.organization}`"
+                        :to="`/structure/${activity.author.organization}`"
                         >{{ activity.author.name }}</LinkOrganization
-                    >
-                </p>
-
-                <p v-if="activity.user">
-                    <LinkOrganization
-                        :to="`/annuaire/${activity.user.organization}`"
-                        >{{ activity.user.name }}</LinkOrganization
                     >
                 </p>
 
@@ -48,20 +39,19 @@
                         ></Link
                     >
                 </p>
+
+                <p v-if="activity.user">
+                    <LinkOrganization
+                        :to="`/structure/${activity.user.organization}`"
+                        >{{ activity.user.name }}</LinkOrganization
+                    >
+                </p>
+
                 <p v-if="activity.plan">
                     action :
                     <Link :to="`/action/${activity.plan.id}`">{{
                         activity.plan.name
                     }}</Link>
-                </p>
-
-                <p v-if="activity.highCovidComment">
-                    territoire(s) :
-                    {{
-                        activity.highCovidComment.departements
-                            .map(({ name }) => name)
-                            .join(", ")
-                    }}
                 </p>
             </header>
 
@@ -86,26 +76,20 @@
                 <span class="text-G500">{{
                     formatActivityDate(activity.date)
                 }}</span>
-                <div>
+                <div class="h-10 flex space-x-4 items-center">
                     <Button
-                        variant="secondaryText"
+                        variant="primaryOutline"
                         icon="fa-regular fa-trash-alt"
                         iconPosition="left"
-                        class="text-display-sm font-bold mr-4"
-                        :padding="false"
+                        size="sm"
                         v-if="showModerationButton && isHover"
                         @click="openModerationModal"
-                        >Supprimer le message</Button
                     >
-                    <Button
-                        variant="primaryText"
-                        icon="arrow-right"
-                        iconPosition="right"
-                        class="text-display-sm font-bold hover:underline"
-                        :padding="false"
-                        :href="link"
-                        ><span>{{ seeMoreWording }}</span></Button
-                    >
+                        Supprimer le message
+                    </Button>
+                    <Link :to="link"
+                        ><Icon icon="arrow-right" /> {{ seeMoreWording }}
+                    </Link>
                 </div>
             </footer>
         </div>
@@ -115,16 +99,19 @@
 <script setup>
 import { defineProps, toRefs, ref, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
-import { LinkOrganization, Link, Button } from "@resorptionbidonvilles/ui";
+import {
+    Icon,
+    LinkOrganization,
+    Link,
+    Button,
+} from "@resorptionbidonvilles/ui";
 import formatActivityDate from "@/utils/formatActivityDate";
 
 import ModaleModerationCommentaire from "./ModaleModerationCommentaire.vue";
 import CarteHistoriqueIcone from "./CarteHistoriqueIcone.vue";
 import CarteHistoriqueCommentaire from "./CarteHistoriqueCommentaire.vue";
 import CarteHistoriqueSite from "./CarteHistoriqueSite.vue";
-const userStore = useUserStore();
 
-const permission = userStore.getPermission("shantytown_comment.moderate");
 const isHover = ref(false);
 const moderationModal = ref(null);
 const props = defineProps({
@@ -133,6 +120,13 @@ const props = defineProps({
     },
 });
 const { activity } = toRefs(props);
+
+const showDepartementCode = computed(() => {
+    const userStore = useUserStore();
+    return userStore.showDepartementCode(
+        activity.value.shantytown.departement.code
+    );
+});
 
 const title = computed(() => {
     switch (`${activity.value.action}-${activity.value.entity}`) {
@@ -149,10 +143,7 @@ const title = computed(() => {
             return "Nouvel utilisateur";
 
         case "creation-comment":
-            if (
-                (activity.value.comment && activity.value.comment.covid) ||
-                activity.value.highCovidComment
-            ) {
+            if (activity.value.comment?.covid) {
                 return "Nouveau message Covid-19";
             }
 
@@ -194,10 +185,7 @@ const colors = computed(() => {
     }
 
     // création de commentaire
-    if (
-        (activity.value.comment && activity.value.comment.covid) ||
-        activity.value.highCovidComment
-    ) {
+    if (activity.value.comment?.covid) {
         return {
             text: "text-error",
             bg: "bg-error",
@@ -217,23 +205,30 @@ const colors = computed(() => {
     };
 });
 
-const classes = computed(() => {
-    return {
-        title: {
-            [`${colors.value.text} font-bold mt-2`]: true,
-        },
-    };
+const link = computed(() => {
+    if (activity.value.entity === "comment") {
+        if (activity.value.plan) {
+            return `/action/${activity.value.plan.id}`;
+        }
+
+        return `/site/${activity.value.shantytown.id}#message${activity.value.comment.id}`;
+    }
+
+    if (activity.value.entity === "user") {
+        return `/structure/${activity.value.user.organization}`;
+    }
+
+    return `/site/${activity.value.shantytown.id}`;
 });
 
 const showModerationButton = computed(() => {
-    // on vérifie que l'activité en question est modérable (= un commentaire ou un commentaire COVID non territoire)
-    if (
-        activity.value.entity !== "comment" ||
-        activity.value.highCovidComment ||
-        activity.value.plan
-    ) {
+    // on vérifie que l'activité en question est modérable (= un commentaire de site)
+    if (activity.value.entity !== "comment" || activity.value.plan) {
         return false;
     }
+
+    const userStore = useUserStore();
+    const permission = userStore.getPermission("shantytown_comment.moderate");
 
     // on vérifie que l'utilisateur a le droit de modérer
     if (permission === null || !permission.allowed) {
@@ -271,10 +266,6 @@ const seeMoreWording = computed(() => {
 
     if (activity.value.entity === "user") {
         return "Voir la fiche dans l'annuaire";
-    }
-
-    if (activity.value.highCovidComment) {
-        return "Voir les messages Covid-19";
     }
 
     return "Voir le message";

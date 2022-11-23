@@ -1,11 +1,11 @@
 <template>
-    <Modal :isOpen="isOpen" @close="onClose">
+    <Modal :isOpen="isOpen" closeWhenClickOutside @close="close">
         <template v-slot:title>
             Confirmez-vous la suppression du message ?
         </template>
 
         <template v-slot:body>
-            <BlocCommentaire
+            <CarteCommentaire
                 :comment="comment"
                 class="bg-G100 p-6 border-1 max-w-2xl"
             />
@@ -16,18 +16,14 @@
                     v-model="reason"
                 />
             </div>
-            <div class="error text-error" v-if="error">{{ error }}</div>
+            <ErrorSummary v-if="error" :message="error" class="mb-0 mt-6" />
         </template>
 
         <template v-slot:footer>
             <Button variant="primaryText" @click="isOpen = false"
                 >Annuler</Button
             >
-            <Button
-                class="ml-5"
-                variant="tertiary"
-                :loading="loading"
-                @click="remove"
+            <Button class="ml-5" :loading="loading" @click="remove"
                 >Supprimer</Button
             >
         </template>
@@ -36,73 +32,76 @@
 
 <script setup>
 import { defineProps, toRefs, ref, computed, defineExpose } from "vue";
-import { useConfigStore } from "@/stores/config.store";
+import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
-import { useActivitiesStore } from "@/stores/activities.store";
 import { useTownsStore } from "@/stores/towns.store";
-import { deleteComment } from "@/api/towns.api";
-import { Button, Modal, TextArea } from "@resorptionbidonvilles/ui";
+import {
+    Button,
+    ErrorSummary,
+    Modal,
+    TextArea,
+} from "@resorptionbidonvilles/ui";
 
-import BlocCommentaire from "../BlocCommentaire/BlocCommentaire.vue";
-
-const configStore = useConfigStore();
-const notificationStore = useNotificationStore();
-const activitiesStore = useActivitiesStore();
-const townsStore = useTownsStore();
+import CarteCommentaire from "@/components/CarteCommentaire/CarteCommentaire.vue";
 
 const props = defineProps({
     comment: {
         type: Object,
     },
 });
-
 const { comment } = toRefs(props);
 
-const loading = ref(false);
 const isOpen = ref(false);
+const loading = ref(false);
 const error = ref(null);
 const reason = ref("");
 
 const isOwner = computed(() => {
-    return comment.value.createdBy.id === configStore.config.user.id;
+    const userStore = useUserStore();
+    return comment.value.createdBy.id === userStore.user.id;
 });
 
-function onClose() {
+function reset() {
+    loading.value = false;
+    error.value = null;
+    reason.value = "";
+}
+
+function close() {
     isOpen.value = false;
+    reset();
 }
 
 async function remove() {
-    if (loading.value) {
+    if (loading.value === true) {
         return;
     }
 
     loading.value = true;
     error.value = null;
-
     try {
-        const { comments } = await deleteComment(
+        const notificationStore = useNotificationStore();
+        const townsStore = useTownsStore();
+        await townsStore.deleteComment(
             comment.value.shantytown,
             comment.value.id,
             reason.value
         );
 
-        reason.value = "";
-        isOpen.value = false;
         notificationStore.success(
             "Message supprimé",
             !isOwner.value
                 ? "L'auteur du message en a été notifié par mail"
-                : ""
+                : "Votre message a bien été supprimé"
         );
-        activitiesStore.removeComment(comment.value.id);
-        townsStore.updateShantytownComments(comment.value.shantytown, comments);
+        close();
     } catch (e) {
-        error.value =
-            (e && e.user_message) || "Une erreur inconnue est survenue";
+        error.value = e?.user_message || "Une erreur inconnue est survenue";
     }
 
     loading.value = false;
 }
+
 defineExpose({
     open() {
         isOpen.value = true;

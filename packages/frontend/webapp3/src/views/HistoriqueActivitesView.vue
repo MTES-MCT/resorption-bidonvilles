@@ -1,8 +1,8 @@
 <template>
     <LayoutSearch
         :allowFreeSearch="false"
-        searchTitle="Rechercher un site, une commune, un département..."
-        searchPlaceholder="Nom d'une commune, d'un département, ..."
+        searchTitle="Rechercher une commune, un département, une région..."
+        searchPlaceholder="Nom d'une commune, d'un département, d'une région..."
         v-model:location="location"
     >
         <HistoriqueActivites />
@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { watch, onMounted, onBeforeUnmount, computed } from "vue";
+import { onMounted, onBeforeUnmount, computed } from "vue";
 import { useActivitiesStore } from "@/stores/activities.store";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import HistoriqueActivites from "@/components/HistoriqueActivites/HistoriqueActivites.vue";
@@ -27,53 +27,51 @@ const location = computed({
     set(newValue) {
         if (!newValue) {
             activitiesStore.filters.search = "";
-            activitiesStore.filters.location = { typeUid: "nation" };
+            activitiesStore.filters.location = null;
         } else {
             activitiesStore.filters.search = newValue?.search;
-            activitiesStore.filters.location = newValue.data || {
-                typeUid: "nation",
-            };
+            activitiesStore.filters.location = newValue?.data;
         }
-        fetch();
     },
-});
-const locationType = computed(() => {
-    return location.value.typeUid;
-});
-const locationCode = computed(() => {
-    return location.value.code || undefined;
-});
-
-function reachBottom() {
-    let bottomOfWindow =
-        document.documentElement.scrollHeight -
-            document.documentElement.scrollTop -
-            document.documentElement.offsetHeight <
-        document.documentElement.offsetHeight;
-    if (bottomOfWindow) {
-        loadNext();
-    }
-}
-watch(activitiesStore.filters.properties, activitiesStore.resetPage, {
-    deep: true,
 });
 
 onMounted(() => {
-    if (!activitiesStore.filters.location) {
-        activitiesStore.filters.location = { typeUid: "nation", code: null };
-    }
     if (activitiesStore.activities.length === 0) {
-        fetch();
+        activitiesStore.fetchDefault();
     }
+
     window.addEventListener("scroll", reachBottom);
 });
 
 onBeforeUnmount(() => {
-    activitiesStore.reset();
     window.removeEventListener("scroll", reachBottom);
 });
 
-async function loadNext() {
+function reachBottom() {
+    if (activitiesStore.isLoading === true) {
+        return;
+    }
+
+    if (activitiesStore.activities.length === 0) {
+        return;
+    }
+
+    if (activitiesStore.error !== null) {
+        return;
+    }
+
+    const bottomOfWindow =
+        document.documentElement.scrollHeight -
+            document.documentElement.scrollTop -
+            document.documentElement.offsetHeight <
+        document.documentElement.offsetHeight;
+
+    if (bottomOfWindow) {
+        loadNext();
+    }
+}
+
+function loadNext() {
     // on a déjà chargé toutes les activités : stop !
     if (activitiesStore.endOfActivities === true) {
         return;
@@ -85,31 +83,6 @@ async function loadNext() {
     }
 
     // on fetch les activités
-    activitiesStore.fetchActivities({});
-}
-
-async function fetch() {
-    // si cette location est déjà la dernière a avoir été chargée : stop
-    const loaded = activitiesStore.loaded;
-    if (
-        loaded.locationType === locationType.value &&
-        loaded.locationCode === locationCode.value &&
-        (loaded.filters.some(
-            (filter) => !activitiesStore.filters.activityTypes.includes(filter)
-        ) ||
-            activitiesStore.filters.activityTypes.some(
-                (filter) => !loaded.filters.includes(filter)
-            ))
-    ) {
-        return;
-    }
-
-    // on fetch les activités
-    await activitiesStore.fetchActivities({
-        location: {
-            locationType: activitiesStore.filters.location?.typeUid,
-            locationCode: activitiesStore.filters.location?.code,
-        },
-    });
+    activitiesStore.fetchNext();
 }
 </script>
