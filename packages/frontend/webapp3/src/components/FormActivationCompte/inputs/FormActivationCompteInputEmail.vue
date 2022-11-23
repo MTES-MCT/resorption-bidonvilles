@@ -1,5 +1,5 @@
 <template>
-    <TextInput id="email" :label="label" :disabled="true" />
+    <TextInput id="email" :label="label" disabled />
 </template>
 
 <script setup>

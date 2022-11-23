@@ -212,7 +212,7 @@ const router = createRouter({
             path: "/activer-mon-compte/:token",
             component: () => import("@/views/ActivationCompteView.vue"),
             meta: {
-                authRequirement: "none",
+                authRequirement: "signedOut",
             },
         },
         {

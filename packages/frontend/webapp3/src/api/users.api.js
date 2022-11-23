@@ -13,6 +13,10 @@ export function acceptCharte(
     });
 }
 
+export function activate(userId, data) {
+    return axios.post(`/users/${encodeURI(userId)}/activate`, data);
+}
+
 export function create(user) {
     return axios.post("/users", user);
 }
@@ -53,14 +57,6 @@ export function newPassword(email) {
 
 export function sendActivationLink(userId, data) {
     return axios.post(`/users/${encodeURI(userId)}/sendActivationLink`, data);
-}
-
-export function checkActivationToken(token) {
-    return axios.get(`/activation-tokens/${encodeURIComponent(token)}/check`);
-}
-
-export function activate(userId, data) {
-    return axios.post(`/users/${userId}/activate`, data);
 }
 
 export function setAdminComments(userId, comment) {
