@@ -36,13 +36,11 @@
 
 <script setup>
 import { computed } from "vue";
-import { useActivitiesStore } from "@/stores/activities.store";
 import { useDashboardStore } from "@/stores/dashboard.store";
 
 import { Link } from "@resorptionbidonvilles/ui";
 import TableauDeBordActivite from "./TableauDeBordActivite.vue";
 
-const activitiesStore = useActivitiesStore();
 const dashboardStore = useDashboardStore();
 const monday = new Date();
 monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
@@ -60,7 +58,7 @@ aMonthAgo.setMilliseconds(0);
 const splitActivities = computed(() => {
     const filter = dashboardStore.activities.filter;
 
-    return activitiesStore.activities.reduce(
+    return dashboardStore.formattedAcvities.reduce(
         (acc, activity) => {
             let signature = `${activity.entity}_${activity.action}`;
 
