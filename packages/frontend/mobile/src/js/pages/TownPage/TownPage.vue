@@ -38,35 +38,14 @@
             </template>
             <template v-slot:scroll>
                 <Container>
-                    <div
-                        class="text-primary font-bold text-display-sm mt-4 mb-2"
-                    >
-                        Caractéristiques
-                    </div>
                     <TownPagePanelCharacteristics :town="town" />
-                    <div
-                        class="text-primary font-bold text-display-sm mt-8 mb-2"
-                    >
-                        Habitants
-                    </div>
+
                     <TownPagePanelPeople :town="town" />
-                    <div
-                        class="text-primary font-bold text-display-sm mt-8 mb-2"
-                    >
-                        Conditions de vie
-                    </div>
+
                     <TownPagePanelLivingConditions :town="town" />
-                    <div
-                        class="text-primary font-bold text-display-sm mt-8 mb-2"
-                    >
-                        Procédures judiciaires
-                    </div>
+
                     <TownPagePanelJudicial :town="town" />
-                    <div
-                        class="text-primary font-bold text-display-sm mt-8 mb-2"
-                    >
-                        Intervenants
-                    </div>
+
                     <TownPagePanelActors :town="town" class="mb-3" />
                 </Container>
             </template>
