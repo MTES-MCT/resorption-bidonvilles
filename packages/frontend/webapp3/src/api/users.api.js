@@ -13,6 +13,10 @@ export function acceptCharte(
     });
 }
 
+export function activate(userId, data) {
+    return axios.post(`/users/${encodeURI(userId)}/activate`, data);
+}
+
 export function create(user) {
     return axios.post("/users", user);
 }
