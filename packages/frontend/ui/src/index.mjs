@@ -23,7 +23,6 @@ export { default as Radio } from './components/Input/Radio.vue';
 export { default as RbLogo } from './components/RbLogo.vue';
 export { default as Spinner } from './components/Spinner.vue';
 export { default as Pagination } from './components/Pagination.vue';
-export { default as PasswordInfo } from './components/PasswordInfo.vue';
 export { default as PasswordInput } from './components/Input/PasswordInput.vue';
 export { default as Select } from './components/Input/Select.vue';
 export { default as Sort } from './components/Sort.vue';
