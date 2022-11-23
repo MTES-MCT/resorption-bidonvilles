@@ -1,5 +1,18 @@
 import { axios } from "@/helpers/axios";
 
+export function acceptCharte(
+    userId,
+    charteVersion,
+    charteAgreement,
+    confidentialityAgreement
+) {
+    return axios.put(`/users/${encodeURI(userId)}/charte_engagement`, {
+        version_de_charte: charteVersion,
+        charte_agreement: charteAgreement,
+        confidentiality_agreement: confidentialityAgreement,
+    });
+}
+
 export function create(user) {
     return axios.post("/users", user);
 }

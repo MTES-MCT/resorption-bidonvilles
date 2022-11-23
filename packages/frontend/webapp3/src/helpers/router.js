@@ -86,6 +86,7 @@ const router = createRouter({
                 analyticsIgnore: true,
                 authRequirement: "signedIn",
                 configRequired: false,
+                charteRequirement: false,
             },
         },
         {
@@ -117,6 +118,10 @@ const router = createRouter({
                 return next("/connexion");
             },
             component: () => null,
+            meta: {
+                authRequirement: "signedIn",
+                charteRequirement: false,
+            },
         },
         {
             path: "/invitation",
@@ -172,6 +177,14 @@ const router = createRouter({
             component: () => import("@/views/NouveautesView.vue"),
             meta: {
                 authRequirement: "signedIn",
+            },
+        },
+        {
+            path: "/signature-charte-engagement",
+            component: () => import("@/views/CharteEngagementView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                charteRequirement: false,
             },
         },
         {
@@ -276,10 +289,15 @@ router.beforeEach((to) => {
     const userStore = useUserStore();
 
     // compute default requirements
-    let { authRequirement, configRequired } = to.meta;
+    let { authRequirement, configRequired, charteRequirement } = to.meta;
     if (authRequirement === undefined) {
         authRequirement = "signedIn";
     }
+
+    if (charteRequirement === undefined) {
+        charteRequirement = authRequirement === "signedIn";
+    }
+
     if (configRequired === undefined) {
         configRequired = authRequirement === "signedIn";
     }
@@ -302,6 +320,11 @@ router.beforeEach((to) => {
         const navigationStore = useNavigationStore();
         navigationStore.entrypoint = to.path;
         return "/chargement";
+    }
+
+    // charte requirement
+    if (charteRequirement === true && !userStore.hasAcceptedCharte) {
+        return "/signature-charte-engagement";
     }
 
     // changelog requirement

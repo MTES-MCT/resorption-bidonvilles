@@ -17,7 +17,6 @@
                 <slot name="title"></slot>
             </h1>
             <p class="px-3" :class="$slots.description ? 'mt-6' : ''">
-                {{ isSubmitting }}
                 <slot name="description"></slot>
             </p>
         </header>

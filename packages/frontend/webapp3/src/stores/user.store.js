@@ -51,6 +51,9 @@ export const useUserStore = defineStore("user", {
             return (shantytown) =>
                 this.hasLocalizedPermission("shantytown.update", shantytown);
         },
+        hasAcceptedCharte() {
+            return this.user?.charte_engagement_a_jour === true;
+        },
     },
     actions: {
         getPermission(permissionName) {
