@@ -88,7 +88,7 @@ const colors = {
 const showDepartementCode = computed(() => {
     const userStore = useUserStore();
     return userStore.showDepartementCode(
-        activity.value.shantytown.departement.code
+        activity.value.shantytown?.departement.code
     );
 });
 const event = computed(() => {
