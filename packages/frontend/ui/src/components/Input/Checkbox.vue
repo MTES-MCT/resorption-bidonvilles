@@ -2,9 +2,15 @@
     <button type="button" class="text-left" :class="direction === 'col' ? 'w-full' : ''" @click="onChange(value)"
         :disabled="isSubmitting || disabled">
         <template v-if="variant === 'checkbox'">
-            <span class="inline-block w-6 h-6 rounded border-2 align-middle mr-2 text-center" :class="checkboxStyle">
-                <Icon icon="check" class="text-white" :class="checked ? 'inline-block' : 'hidden'" />
-            </span> {{ label }}
+            <p class="flex">
+                <span class="inline-block w-6 h-6 rounded border-2 align-middle mr-2 text-center"
+                    :class="checkboxStyle">
+                    <Icon icon="check" class="text-white" :class="checked ? 'inline-block' : 'hidden'" />
+                </span>
+                <span class="flex-1">
+                    <slot>{{ label }}</slot>
+                </span>
+            </p>
         </template>
         <template v-else-if="variant === 'invisible'">
             <slot :checked="checked">{{ label }}</slot>
@@ -24,8 +30,8 @@ import { useField, useIsSubmitting } from 'vee-validate';
 import Icon from "../Icon.vue";
 
 const props = defineProps({
-    modelValue: [Array, String, Number],
-    value: String,
+    modelValue: [Array, String, Number, Boolean],
+    value: [String, Number, Boolean],
     name: String,
     label: String,
     variant: {

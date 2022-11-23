@@ -1,5 +1,18 @@
 import { axios } from "@/helpers/axios";
 
+export function acceptCharte(
+    userId,
+    charteVersion,
+    charteAgreement,
+    confidentialityAgreement
+) {
+    return axios.put(`/users/${encodeURI(userId)}/charte_engagement`, {
+        version_de_charte: charteVersion,
+        charte_agreement: charteAgreement,
+        confidentiality_agreement: confidentialityAgreement,
+    });
+}
+
 export function create(user) {
     return axios.post("/users", user);
 }
@@ -38,18 +51,6 @@ export function newPassword(email) {
     });
 }
 
-export function acceptCharte(
-    userId,
-    charteVersion,
-    charteAgreement,
-    confidentialityAgreement
-) {
-    return axios.put(`/users/${userId}/charte_engagement`, {
-        version_de_charte: charteVersion,
-        charte_agreement: charteAgreement,
-        confidentiality_agreement: confidentialityAgreement,
-    });
-}
 export function sendActivationLink(userId, data) {
     return axios.post(`/users/${encodeURI(userId)}/sendActivationLink`, data);
 }

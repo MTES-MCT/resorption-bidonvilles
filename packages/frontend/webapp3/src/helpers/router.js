@@ -119,6 +119,7 @@ const router = createRouter({
             },
             component: () => null,
             meta: {
+                authRequirement: "signedIn",
                 charteRequirement: false,
             },
         },
@@ -292,8 +293,10 @@ router.beforeEach((to) => {
     if (authRequirement === undefined) {
         authRequirement = "signedIn";
     }
-    charteRequirement =
-        authRequirement === "signedIn" && charteRequirement !== false;
+
+    if (charteRequirement === undefined) {
+        charteRequirement = authRequirement === "signedIn";
+    }
 
     if (configRequired === undefined) {
         configRequired = authRequirement === "signedIn";
@@ -303,15 +306,12 @@ router.beforeEach((to) => {
     if (authRequirement === "signedOut" && userStore.isLoggedIn) {
         return "/";
     }
+
     // signedIn requirement
     if (authRequirement === "signedIn" && !userStore.isLoggedIn) {
         const navigationStore = useNavigationStore();
         navigationStore.entrypoint = to.path;
         return `/connexion`;
-    }
-    // Chart requirement
-    if (!userStore.hasAcceptedChart && charteRequirement) {
-        return "/signature-charte-engagement";
     }
 
     // config requirement
@@ -320,6 +320,11 @@ router.beforeEach((to) => {
         const navigationStore = useNavigationStore();
         navigationStore.entrypoint = to.path;
         return "/chargement";
+    }
+
+    // charte requirement
+    if (charteRequirement === true && !userStore.hasAcceptedCharte) {
+        return "/signature-charte-engagement";
     }
 
     // changelog requirement

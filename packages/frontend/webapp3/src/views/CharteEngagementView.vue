@@ -1,5 +1,7 @@
 <template>
-    <Layout hero> <CharteEngagement /></Layout>
+    <Layout hero>
+        <CharteEngagement />
+    </Layout>
 </template>
 
 <script setup>
