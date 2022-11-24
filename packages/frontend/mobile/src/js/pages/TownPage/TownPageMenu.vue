@@ -1,5 +1,7 @@
 <template>
-    <div class="whitespace-nowrap overflow-y-auto py-4">
+    <div
+        class="whitespace-nowrap overflow-y-auto py-4 border-t-1 border-b-1 border-blue600"
+    >
         <TownPageMenuItem
             v-for="(section, index) in menu"
             :key="section.id"
