@@ -14,7 +14,7 @@ app.start().then((expressApp) => {
                 release: `rb-api@${version}`,
                 environment: 'production',
                 beforeSend(err) {
-                    console.log('sentry send', err);
+                    // console.log('sentry send', err);
                     return err;
                 },
                 integrations: [
