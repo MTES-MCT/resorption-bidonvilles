@@ -70,7 +70,7 @@ function load() {
         }) ||
         activitiesStore.endOfActivities !== true
     ) {
-        activitiesStore.fetchActivities({
+        activitiesStore.fetch({
             location: {
                 locationType:
                     dashboardStore.filters.location?.typeUid || "nation",

@@ -35,3 +35,12 @@ export function setHeatwaveStatus(id, status) {
         heatwave_status: status,
     });
 }
+
+export function deleteComment(townId, commentId, message) {
+    return axios.delete(
+        `/towns/${encodeURI(townId)}/comments/${encodeURI(commentId)}`,
+        {
+            data: { message },
+        }
+    );
+}

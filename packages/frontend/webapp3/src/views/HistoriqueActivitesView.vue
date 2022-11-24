@@ -1,8 +1,8 @@
 <template>
     <LayoutSearch
         :allowFreeSearch="false"
-        searchTitle="Rechercher un site, une commune, un département..."
-        searchPlaceholder="Nom d'une commune, d'un département, ..."
+        searchTitle="Rechercher une commune, un département, une région..."
+        searchPlaceholder="Nom d'une commune, d'un département, d'une région..."
         v-model:location="location"
     >
         <HistoriqueActivites />
@@ -10,17 +10,12 @@
 </template>
 
 <script setup>
-import { onMounted, computed } from "vue";
+import { onMounted, onBeforeUnmount, computed } from "vue";
 import { useActivitiesStore } from "@/stores/activities.store";
-import { useUserStore } from "@/stores/user.store";
-import { useLocationStore } from "@/stores/location.store";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import HistoriqueActivites from "@/components/HistoriqueActivites/HistoriqueActivites.vue";
-import router from "@/helpers/router";
 
 const activitiesStore = useActivitiesStore();
-const userStore = useUserStore();
-const locationStore = useLocationStore();
 
 const location = computed({
     get() {
@@ -37,105 +32,57 @@ const location = computed({
             activitiesStore.filters.search = newValue?.search;
             activitiesStore.filters.location = newValue?.data;
         }
-
-        fetch();
     },
 });
-const locationType = computed(() => {
-    return router.currentRoute.value.params.locationType;
-});
-const locationCode = computed(() => {
-    return router.currentRoute.value.params.locationCode || undefined;
-});
-const defaultPath = computed(() => {
-    const location = userStore.user?.organization.location;
-    return `/activites/${location.type}/${location[location.type]?.code || ""}`;
-});
-const locationName = computed(() => {
-    if (locationType.value === "nation") {
-        return "France";
+
+onMounted(() => {
+    if (activitiesStore.activities.length === 0) {
+        activitiesStore.fetchDefault();
     }
 
-    return (
-        locationStore.locations[locationType.value]?.[locationCode.value]
-            ?.label || null
-    );
+    window.addEventListener("scroll", reachBottom);
 });
 
-async function syncLocationFilterToUrl() {
-    // si le filtre en place correspond déjà à l'URL, on ne fait rien
-    if (
-        locationType.value === "nation" &&
-        activitiesStore.filters.location === null
-    ) {
-        return fetch();
-    }
+onBeforeUnmount(() => {
+    window.removeEventListener("scroll", reachBottom);
+});
 
-    if (
-        locationType.value !== "nation" &&
-        activitiesStore.filters.location?.typeUid === locationType.value &&
-        activitiesStore.filters.location?.code === locationCode.value
-    ) {
-        return fetch();
-    }
-
-    // on set le filtre
-    activitiesStore.filters.location = {
-        typeUid: locationType.value,
-        code: locationCode.value,
-        departement: null,
-        typeName: "-",
-    };
-
-    // on essaie de mettre à jour le contenu de la barre de recherche en même temps
-    activitiesStore.filters.search = "";
-    if (locationType.value === "nation") {
+function reachBottom() {
+    if (activitiesStore.isLoading === true) {
         return;
     }
 
-    // si on a pas le nom de la localisation actuelle, c'est qu'il faut la fetch...
-    if (!locationName.value) {
-        await locationStore.fetchLocation(
-            locationType.value,
-            locationCode.value
-        );
-        activitiesStore.filters.search =
-            locationName.value || "Localisation inconnue";
+    if (activitiesStore.activities.length === 0) {
+        return;
+    }
+
+    if (activitiesStore.error !== null) {
+        return;
+    }
+
+    const bottomOfWindow =
+        document.documentElement.scrollHeight -
+            document.documentElement.scrollTop -
+            document.documentElement.offsetHeight <
+        document.documentElement.offsetHeight;
+
+    if (bottomOfWindow) {
+        loadNext();
     }
 }
 
-onMounted(async () => {
-    // on réécrit l'URL si l'accès se fait par "/activites"
-    if (!locationType.value) {
-        router.replace(defaultPath.value);
+function loadNext() {
+    // on a déjà chargé toutes les activités : stop !
+    if (activitiesStore.endOfActivities === true) {
         return;
     }
 
-    syncLocationFilterToUrl();
-});
-
-function fetch() {
-    // si cette location est déjà la dernière a avoir été chargée : stop
-    const loaded = activitiesStore.loaded;
-    if (
-        loaded.locationType === locationType.value &&
-        loaded.locationCode === locationCode.value &&
-        (loaded.filters.some(
-            (filter) => !activitiesStore.filters.activityTypes.includes(filter)
-        ) ||
-            activitiesStore.filters.activityTypes.some(
-                (filter) => !loaded.filters.includes(filter)
-            ))
-    ) {
+    // on est déjà en train de fetch : stop !
+    if (activitiesStore.isLoading === true) {
         return;
     }
 
     // on fetch les activités
-    activitiesStore.fetchActivities({
-        location: {
-            locationType: activitiesStore.filters.location?.typeUid,
-            locationCode: activitiesStore.filters.location?.code,
-        },
-    });
+    activitiesStore.fetchNext();
 }
 </script>

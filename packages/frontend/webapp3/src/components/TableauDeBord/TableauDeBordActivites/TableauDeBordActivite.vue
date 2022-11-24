@@ -289,11 +289,11 @@ function routeToDetails() {
     if (activity.value.entity === "user") {
         if (activity.value.users.length === 1) {
             return router.push(
-                `/annuaire/${activity.value.users[0].organization}`
+                `/structure/${activity.value.users[0].organization}`
             );
         }
 
-        return router.push("/annuaire");
+        return router.push("/communaute");
     }
 
     if (activity.value.shantytown) {

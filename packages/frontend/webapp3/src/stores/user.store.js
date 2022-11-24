@@ -33,15 +33,11 @@ export const useUserStore = defineStore("user", {
         showDepartementCode() {
             return (code) => {
                 const userLocation = this.user?.organization.location;
-                if (["nation", "region"].includes(userLocation.type)) {
+                if (["nation", "region"].includes(userLocation?.type)) {
                     return true;
                 }
 
-                if (userLocation.departement?.code !== code) {
-                    return true;
-                }
-
-                return false;
+                return userLocation.departement?.code !== code;
             };
         },
         hasJusticePermission() {

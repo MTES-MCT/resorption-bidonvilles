@@ -49,9 +49,7 @@ export default [
                 'shantytownClosing',
                 'shantytownUpdate',
                 'shantytownComment',
-                'highCovidComment',
                 'user',
-                'onlyCovid',
                 'planComment',
             ];
             const unknownFilters = value.filter(s => !knownFilters.includes(s));

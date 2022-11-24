@@ -1,0 +1,110 @@
+<template>
+    <Modal :isOpen="isOpen" closeWhenClickOutside @close="close">
+        <template v-slot:title>
+            Confirmez-vous la suppression du message ?
+        </template>
+
+        <template v-slot:body>
+            <CarteCommentaire
+                :comment="comment"
+                class="bg-G100 p-6 border-1 max-w-2xl"
+            />
+            <div class="mt-6" v-if="!isOwner">
+                <TextArea
+                    :disabled="loading"
+                    label="Pourquoi souhaitez-vous supprimer ce message ?"
+                    v-model="reason"
+                />
+            </div>
+            <ErrorSummary v-if="error" :message="error" class="mb-0 mt-6" />
+        </template>
+
+        <template v-slot:footer>
+            <Button variant="primaryText" @click="isOpen = false"
+                >Annuler</Button
+            >
+            <Button class="ml-5" :loading="loading" @click="remove"
+                >Supprimer</Button
+            >
+        </template>
+    </Modal>
+</template>
+
+<script setup>
+import { defineProps, toRefs, ref, computed, defineExpose } from "vue";
+import { useUserStore } from "@/stores/user.store";
+import { useNotificationStore } from "@/stores/notification.store";
+import { useTownsStore } from "@/stores/towns.store";
+import {
+    Button,
+    ErrorSummary,
+    Modal,
+    TextArea,
+} from "@resorptionbidonvilles/ui";
+
+import CarteCommentaire from "@/components/CarteCommentaire/CarteCommentaire.vue";
+
+const props = defineProps({
+    comment: {
+        type: Object,
+    },
+});
+const { comment } = toRefs(props);
+
+const isOpen = ref(false);
+const loading = ref(false);
+const error = ref(null);
+const reason = ref("");
+
+const isOwner = computed(() => {
+    const userStore = useUserStore();
+    return comment.value.createdBy.id === userStore.user.id;
+});
+
+function reset() {
+    loading.value = false;
+    error.value = null;
+    reason.value = "";
+}
+
+function close() {
+    isOpen.value = false;
+    reset();
+}
+
+async function remove() {
+    if (loading.value === true) {
+        return;
+    }
+
+    loading.value = true;
+    error.value = null;
+    try {
+        const notificationStore = useNotificationStore();
+        const townsStore = useTownsStore();
+        await townsStore.deleteComment(
+            comment.value.shantytown,
+            comment.value.id,
+            reason.value
+        );
+
+        notificationStore.success(
+            "Message supprimé",
+            !isOwner.value
+                ? "L'auteur du message en a été notifié par mail"
+                : "Votre message a bien été supprimé"
+        );
+        close();
+    } catch (e) {
+        error.value = e?.user_message || "Une erreur inconnue est survenue";
+    }
+
+    loading.value = false;
+}
+
+defineExpose({
+    open() {
+        isOpen.value = true;
+    },
+});
+</script>

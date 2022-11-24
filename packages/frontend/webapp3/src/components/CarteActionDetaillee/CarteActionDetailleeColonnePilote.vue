@@ -4,7 +4,7 @@
             <Icon icon="user-circle" />
             <span class="text-dark font-bold"> Pilote</span><br />
             <LinkOrganization
-                :to="`/annuaire/${government_contact.organization.id}`"
+                :to="`/structure/${government_contact.organization.id}`"
             >
                 {{
                     government_contact.organization.abbreviation ||
