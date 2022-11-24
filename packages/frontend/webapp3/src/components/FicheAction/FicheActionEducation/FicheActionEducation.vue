@@ -33,7 +33,7 @@ const columns = computed(() => {
 const data = computed(() => {
     return [
         {
-            label: "Mineurs en âge d'être scolarisé ou suivant une formation",
+            label: "Mineurs en âge d'être scolarisés ou de suivre une formation",
             ...getEntry("scolarisables"),
         },
         {
