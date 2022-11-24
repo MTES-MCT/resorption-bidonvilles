@@ -17,6 +17,7 @@ const props = defineProps({
 const sizes = {
     extralarge: "max-w-screen-2xl",
     large: "max-w-screen-xl",
+    intermediate: "max-w-5xl",
     medium: "max-w-2xl",
     small: "max-w-md",
 };

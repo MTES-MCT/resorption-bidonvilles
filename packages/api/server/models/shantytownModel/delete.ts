@@ -12,7 +12,7 @@ export default async (id) => {
                 },
             },
         );
-        sequelize.query(
+        await sequelize.query(
             'DELETE FROM "ShantytownHistories" WHERE shantytown_id = :id',
             {
                 transaction,

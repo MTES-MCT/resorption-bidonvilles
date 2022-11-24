@@ -27,7 +27,10 @@
                 :label="labels.request_type"
             />
             <FormUtilisateurInputIsActor
-                v-if="values.request_type?.includes('access-request')"
+                v-if="
+                    values.request_type &&
+                    values.request_type.includes('access-request')
+                "
                 :label="labels.is_actor"
             />
             <section

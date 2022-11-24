@@ -1,9 +1,4 @@
 import exportShantytown from '#server/services/shantytown/export';
-import stringUtils from '#server/utils/string';
-import dateUtils from '#server/utils/date';
-
-const { normalizeTownName } = stringUtils;
-const { toFormat: dateToString } = dateUtils;
 
 export default async (req, res, next) => {
     let buffer;
@@ -17,6 +12,5 @@ export default async (req, res, next) => {
         return;
     }
 
-    res.attachment(`${dateToString(new Date(), 'Y-m-d')}-fiche-site-${normalizeTownName(req.shantytown.usename)}.docx`);
-    res.end(buffer);
+    return res.end(buffer);
 };

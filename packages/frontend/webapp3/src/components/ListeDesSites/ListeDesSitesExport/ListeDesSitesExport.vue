@@ -15,7 +15,11 @@
             <Button variant="primaryOutline" @click="close" class="mr-2"
                 >Annuler</Button
             >
-            <Button @click="download" :loading="isLoading"
+            <Button
+                icon="file-excel"
+                iconPosition="left"
+                @click="download"
+                :loading="isLoading"
                 >Exporter les
                 {{ townsStore.filteredTowns.length }} sites</Button
             >

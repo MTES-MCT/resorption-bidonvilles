@@ -22,6 +22,9 @@ export const useUserStore = defineStore("user", {
             const configStore = useConfigStore();
             return configStore.config?.user;
         },
+        id() {
+            return this.user?.id || null;
+        },
         defaultLocationFilter() {
             return getDefaultLocationFilter(this.user);
         },

@@ -29,18 +29,25 @@ import {
     faEnvelope,
     faEuroSign,
     faExclamation,
+    faFile,
     faFileExcel,
     faFilePdf,
+    faFileWord,
     faFlag,
     faHandshakeAngle,
+    faHistory,
+    faHome,
+    faHouseCircleXmark,
     faKey,
     faLock,
     faMagnifyingGlass,
     faMale,
     faMapMarkerAlt,
+    faMinus,
     faPaperPlane,
     faPen,
     faPencilAlt,
+    faPersonMilitaryPointing,
     faPhone,
     faPlus,
     faPrint,
@@ -52,6 +59,7 @@ import {
     faTent,
     faTimes,
     faTint,
+    faTrashAlt as faTrashAltSolid,
     faTriangleExclamation,
     faUnlink,
     faUser as faUserSolid,
@@ -59,6 +67,7 @@ import {
     faUserCircle,
     faUserPen,
     faUserPlus,
+    faUsers,
     faUserShield,
     faUserSlash,
 } from "@fortawesome/free-solid-svg-icons";
@@ -105,26 +114,33 @@ library.add(faCircleUser);
 library.add(faCircleXmark);
 library.add(faComment);
 library.add(faCopy);
-library.add(faMagnifyingGlass);
-library.add(faMale);
-library.add(faMapMarkerAlt);
 library.add(faEnvelope);
 library.add(faEuroSign);
 library.add(faExclamation);
 library.add(faEye);
 library.add(faEyeSlash);
 library.add(faFacebook);
+library.add(faFile);
 library.add(faFileExcel);
 library.add(faFilePdf);
+library.add(faFileWord);
 library.add(faFlag);
 library.add(faHandshakeAngle);
+library.add(faHistory);
+library.add(faHome);
+library.add(faHouseCircleXmark);
 library.add(faKey);
 library.add(faLock);
 library.add(faLinkedin);
+library.add(faMagnifyingGlass);
+library.add(faMale);
+library.add(faMapMarkerAlt);
+library.add(faMinus);
 library.add(faNewspaper);
 library.add(faPaperPlane);
 library.add(faPen);
 library.add(faPencilAlt);
+library.add(faPersonMilitaryPointing);
 library.add(faPhone);
 library.add(faPrint);
 library.add(faPlus);
@@ -138,6 +154,7 @@ library.add(faTent);
 library.add(faTimes);
 library.add(faTint);
 library.add(faTrashAlt);
+library.add(faTrashAltSolid);
 library.add(faTriangleExclamation);
 library.add(faTwitter);
 library.add(faUnlink);
@@ -146,6 +163,7 @@ library.add(faUserCheck);
 library.add(faUserCircle);
 library.add(faUserPen);
 library.add(faUserPlus);
+library.add(faUsers);
 library.add(faUserShield);
 library.add(faUserSlash);
 library.add(faUserSolid);

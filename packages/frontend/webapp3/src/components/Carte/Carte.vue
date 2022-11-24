@@ -9,50 +9,44 @@
         </Address> -->
 
         <div id="map" :style="mapStyle">
+            <div class="absolute w-full h-full top-0 left-0 z-[1001]" v-if="loading">
+                <div class="absolute w-full h-full top-0 left-0 bg-black opacity-50"></div>
+                <div class="flex w-full h-full items-center justify-center text-white text-3xl">
+                    <Spinner />
+                </div>
+            </div>
             <div ref="cadastreToggler" class="leaflet-cadastre-toggler">
                 <input type="checkbox" v-model="showCadastre" />
                 Voir le cadastre
             </div>
 
-            <div
-                ref="adressToggler"
-                class="leaflet-address-toggler"
-                v-show="displayAddressToggler"
-            >
+            <div ref="adressToggler" class="leaflet-address-toggler" v-show="displayAddressToggler">
                 <input type="checkbox" v-model="showAddresses" />
                 Voir les adresses des sites
             </div>
 
             <div ref="legends" class="leaflet-legend">
                 <h1>Légende</h1>
-                <p
-                    class="fieldType"
-                    v-for="fieldType in fieldTypes"
-                    :key="fieldType.label"
-                >
-                    <span
-                        v-bind:style="{ 'background-color': fieldType.color }"
-                    ></span>
+                <p class="fieldType" v-for="fieldType in fieldTypes" :key="fieldType.label">
+                    <span v-bind:style="{ 'background-color': fieldType.color }"></span>
                     {{ fieldType.label }}
                 </p>
             </div>
 
-            <div
-                ref="printer"
-                class="leaflet-printer"
-                @click="printMapScreenshot"
-                v-show="displayPrinter"
-            >
+            <div ref="printer" class="leaflet-printer" @click="printMapScreenshot" v-show="displayPrinter">
                 <Icon icon="print" /> Imprimer la carte
             </div>
+
+
         </div>
     </section>
 </template>
 
 <script>
 /* eslint-disable no-underscore-dangle */
+import { createApp } from "vue";
 import L from "leaflet";
-import { Icon } from "@resorptionbidonvilles/ui";
+import { Icon, Spinner } from "@resorptionbidonvilles/ui";
 // import Address from "#app/components/address/address.vue";
 // import ShantytownPopupVue from "../ShantytownPopup/ShantytownPopup.vue";
 import "leaflet-providers";
@@ -63,16 +57,16 @@ import "leaflet.markercluster/dist/leaflet.markercluster";
 // import { notify } from "#helpers/notificationHelper";
 // import "./map.scss"; // on importe le scss ici pour que le html généré par le js y ait accès
 
-// import utensils from "../../../../img/utensils.png";
-// import waterYes from "../../../../img/water-yes.png";
-// import waterNo from "../../../../img/water-no.png";
-// import waterToImprove from "../../../../img/water-to-improve.png";
-// import waterNull from "../../../../img/water-null.png";
+import cutlery from "@/assets/img/map/cutlery.png";
+import waterYes from "@/assets/img/map/water-yes.png";
+import waterNo from "@/assets/img/map/water-no.png";
+import waterToImprove from "@/assets/img/map/water-to-improve.png";
+import waterNull from "@/assets/img/map/water-null.png";
 // import genericMarkerImage from "./assets/map-marker.svg";
 
 // données tirées de https://github.com/gregoiredavid/france-geojson
-// import departements from "@/assets/geojson/departements.json";
-// import regions from "@/assets/geojson/regions.json";
+import departements from "@/assets/geojson/departements.json";
+import regions from "@/assets/geojson/regions.json";
 
 // const popup = Vue.extend(ShantytownPopupVue);
 const DEFAULT_VIEW = [46.7755829, 2.0497727];
@@ -97,9 +91,17 @@ export default {
     components: {
         // Address,
         Icon,
+        Spinner,
+        LMarker: L.Marker
     },
 
     props: {
+        loading: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+
         /* *****************************
          * Options pour la liste des sites
          * ************************** */
@@ -229,18 +231,18 @@ export default {
              *
              * @type {L.geoJSON}
              */
-            // regionalLayer: this.loadTerritoryLayers
-            //     ? L.geoJSON(regions)
-            //     : false,
+            regionalLayer: this.loadTerritoryLayers
+                ? L.geoJSON(regions, { style: { color: "#6A6A6A", weight: 1 } })
+                : false,
 
             /**
              * La couche départementale
              *
              * @type {L.geoJSON}
              */
-            // departementalLayer: this.loadTerritoryLayers
-            //     ? L.geoJSON(departements)
-            //     : false,
+            departementalLayer: this.loadTerritoryLayers
+                ? L.geoJSON(departements, { style: { color: "#6A6A6A", weight: 1 } })
+                : false,
 
             /**
              * La couche communale
@@ -267,7 +269,9 @@ export default {
              * @type {Object.<String, L.markerClusterGroup>}
              */
             markersGroup: {
-                towns: L.markerClusterGroup(),
+                towns: L.markerClusterGroup({
+                    chunkedLoading: true,
+                }),
                 search: L.markerClusterGroup(),
                 pois: L.markerClusterGroup({
                     disableClusteringAtZoom: POI_ZOOM_LEVEL,
@@ -862,20 +866,33 @@ export default {
             this.map = L.map("map", {
                 layers: this.mapLayers[this.layerName], // fond de carte à afficher
                 scrollWheelZoom: false, // interdire le zoom via la molette de la souris
+                preferCanvas: true,
             });
 
-            // if (this.cadastre) {
-            //     this.cadastreLayer = this.createCadastreLayer();
-            // }
+            if (this.cadastre) {
+                this.cadastreLayer = this.createCadastreLayer();
+            }
 
-            // this.map.on("zoomend", this.onZoomEnd);
-            // if (this.loadTerritoryLayers) {
-            //     this.countNumberOfTowns();
-            // }
-            // this.setupMapControls();
-            // this.setupMarkerGroups();
+            this.map.on("zoomend", this.bla);
+            if (this.loadTerritoryLayers) {
+                this.countNumberOfTowns();
+            }
+            this.setupMapControls();
+            this.setupMarkerGroups();
             this.setupView();
-            // this.onZoomEnd();
+            this.onZoomEnd();
+        },
+
+        bla() {
+            const zoomLevel = this.map.getZoom();
+
+            if (!this.poiMarkersVisible && zoomLevel > POI_ZOOM_LEVEL) {
+                this.poiMarkersVisible = true;
+                this.pois.forEach(this.createPOIMarker);
+            } else if (this.poiMarkersVisible && zoomLevel <= POI_ZOOM_LEVEL) {
+                this.poiMarkersVisible = false;
+                this.removeAllPOIMarkers();
+            }
         },
 
         /**
@@ -1035,16 +1052,17 @@ export default {
             const marker = L.marker(coordinates, {
                 title: address,
                 icon: L.divIcon({
-                    className: "leaflet-marker",
-                    html: `<span class="mapPin mapPin--${
-                        town.status === "open" ? "open" : "closed"
-                    } mapPin--shantytown" ${style}>
-                        <span class="mapPin-wrapper">
-                            <span class="mapPin-water"><img src="${waterImage}" /></span>
-                            <span class="mapPin-marker" style="background-color: ${color}"></span>
-                        </span>
-                        <span class="mapPin-address">${address}</span>
-                    </span>`,
+                    className: "my-marker",
+                    html: `<div class="mapPin--${town.status === "open" ? "open" : "closed"
+                        } mapPin--shantytown" ${style}>
+                        <div class="bg-red rounded-full h-6 w-6 flex items-center justify-center">
+                            <div class="h-5 w-5 bg-white rounded-full flex items-center justify-center">
+                                <span class="mapPin-water"><img src="${waterImage}" class="h-4" /></span>
+                                <span class="mapPin-marker" style="background-color: ${color}"></span>
+                            </div>
+                        </div>
+                        <div class="mapPin-address">${address}</div>
+                    </div>`,
                     iconAnchor: [13, 28],
                 }),
             });
@@ -1082,7 +1100,7 @@ export default {
                     className: "leaflet-marker",
                     html: `<span class="mapPin mapPin--poi" >
                         <span class="mapPin-wrapper">
-                            <img src="${utensils}" width="12" height="12"/>
+                            <img src="${cutlery}" width="12" height="12"/>
                         </span>
                         <span class="mapPin-address">${poi.address}</span>
                     </span>`,
@@ -1255,7 +1273,7 @@ export default {
                         `<div><strong>${name}</strong><br/>${nbSites} ${siteLabel}</div>`,
                         45,
                         3,
-                        "dept"
+                        "departement"
                     ).addTo(this.departementalLayer);
                 }
             );
@@ -1283,7 +1301,7 @@ export default {
                             this.numberOfShantytownsBy.cities[key].latitude,
                             this.numberOfShantytownsBy.cities[key].longitude,
                         ],
-                        `<div>${this.numberOfShantytownsBy.cities[key].name}<br/>${this.numberOfShantytownsBy.cities[key].sites} ${siteLabel}</div>`,
+                        `<div><strong>${this.numberOfShantytownsBy.cities[key].name}</strong><br/>${this.numberOfShantytownsBy.cities[key].sites} ${siteLabel}</div>`,
                         35,
                         3,
                         "city"
@@ -1300,13 +1318,13 @@ export default {
             this.hideCityLayer();
             this.hideTownsLayer();
 
-            if (!this.map.hasLayer(this.regionalLayer)) {
+            if (this.regionalLayer && !this.map.hasLayer(this.regionalLayer)) {
                 this.map.addLayer(this.regionalLayer);
             }
         },
 
         hideRegionalLayer() {
-            if (this.map.hasLayer(this.regionalLayer)) {
+            if (this.regionalLayer && this.map.hasLayer(this.regionalLayer)) {
                 this.map.removeLayer(this.regionalLayer);
             }
         },
@@ -1316,13 +1334,19 @@ export default {
             this.hideCityLayer();
             this.hideTownsLayer();
 
-            if (!this.map.hasLayer(this.departementalLayer)) {
+            if (
+                this.departementalLayer &&
+                !this.map.hasLayer(this.departementalLayer)
+            ) {
                 this.map.addLayer(this.departementalLayer);
             }
         },
 
         hideDepartementalLayer() {
-            if (this.map.hasLayer(this.departementalLayer)) {
+            if (
+                this.departementalLayer &&
+                this.map.hasLayer(this.departementalLayer)
+            ) {
                 this.map.removeLayer(this.departementalLayer);
             }
         },
@@ -1332,13 +1356,13 @@ export default {
             this.hideDepartementalLayer();
             this.hideTownsLayer();
 
-            if (!this.map.hasLayer(this.cityLayer)) {
+            if (this.cityLayer && !this.map.hasLayer(this.cityLayer)) {
                 this.map.addLayer(this.cityLayer);
             }
         },
 
         hideCityLayer() {
-            if (this.map.hasLayer(this.cityLayer)) {
+            if (this.cityLayer && this.map.hasLayer(this.cityLayer)) {
                 this.map.removeLayer(this.cityLayer);
             }
         },
@@ -1361,29 +1385,19 @@ export default {
             txt,
             radius,
             borderWidth,
-            circleClass
+            type
         ) {
             const size = radius * 2;
-            const style =
-                'style="width: ' +
-                size +
-                "px; height: " +
-                size +
-                "px; border-width: " +
-                borderWidth +
-                'px;"';
             const iconSize = size + borderWidth * 2;
+            const classes = {
+                region: 'w-12 h-12 text-lg',
+                departement: 'w-24 h-24',
+                city: ""
+            };
+
             const icon = L.divIcon({
-                html:
-                    '<span class="' +
-                    "circle " +
-                    circleClass +
-                    '" ' +
-                    style +
-                    ">" +
-                    txt +
-                    "</span>",
-                className: "",
+                html: `<span class="opacity-75 rounded-full bg-green400 text-black flex items-center justify-center text-center border-2 border-green200 ${classes[type]}">${txt}</span>`,
+                className: "my-marker",
                 iconSize: [iconSize, iconSize],
             });
             const marker = L.marker(latLng, {
@@ -1428,4 +1442,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "https://unpkg.com/leaflet@1.3.4/dist/leaflet.css";
+
+.rbCarte-marqueur {}
 </style>
