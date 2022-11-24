@@ -80,6 +80,8 @@ export default async (user, location, numberOfActivities, lastDate, maxDate) => 
             ${geo.length > 0 ? `OR (${geo.join(' OR ')})` : ''}
         )`,
     );
+    permissionWhere.privateComments.push(`(${geo.join(' OR ')})`);
+
     replacements.userId = user.id;
     replacements.organizationId = user.organization.id;
 
