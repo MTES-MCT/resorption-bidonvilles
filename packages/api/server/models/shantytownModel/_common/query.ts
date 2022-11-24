@@ -36,7 +36,7 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
         WITH
             shantytown_computed_origins AS (SELECT
                 s.${tables.origin_foreign_key} AS fk_shantytown,
-                string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.label), ','), ',') AS origins
+                string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.uid || '|' || soo.label), ','), ',') AS origins
             FROM "${tables.shantytowns}" s
             LEFT JOIN "${tables.shantytown_origins}" so ON so.fk_shantytown = s.${tables.origin_foreign_key}
             LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id

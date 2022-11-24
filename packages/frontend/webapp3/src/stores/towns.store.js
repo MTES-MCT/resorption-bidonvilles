@@ -1,16 +1,24 @@
 import { defineStore } from "pinia";
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, toRef } from "vue";
 import { useEventBus } from "@/helpers/event-bus";
 import { trackEvent } from "@/helpers/matomo";
 import { useUserStore } from "@/stores/user.store";
 import { useActivitiesStore } from "./activities.store";
+import { useNotificationStore } from "./notification.store";
 import { useConfigStore } from "./config.store";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
 import {
+    addActor,
+    addComment,
+    deleteComment,
+    destroy,
     fetch,
     fetchList,
+    findNearby,
+    removeActor,
+    removeActorTheme,
     setHeatwaveStatus,
-    deleteComment,
+    updateActorThemes,
 } from "@/api/towns.api";
 import enrichShantytown from "@/utils/enrichShantytown";
 import filterShantytowns from "@/utils/filterShantytowns";
@@ -134,12 +142,8 @@ export const useTownsStore = defineStore("towns", () => {
     }
 
     function updateShantytownComments(id, comments) {
-        const index = hash.value[id];
-        if (index !== undefined) {
-            towns.value.splice(index, 1, {
-                ...towns.value[index],
-                comments: comments,
-            });
+        if (hash.value[id]) {
+            hash.value[id].comments = comments;
         }
     }
 
@@ -197,7 +201,35 @@ export const useTownsStore = defineStore("towns", () => {
                 );
             }
 
-            return hash.value[townId];
+            return toRef(hash.value, townId);
+        },
+        setTown(townId, town) {
+            hash.value[townId] = enrichShantytown(
+                town,
+                configStore.config.field_types
+            );
+        },
+        async destroy(townId) {
+            await destroy(townId);
+
+            const index = towns.value.findIndex(({ id }) => id === townId);
+            if (index !== -1) {
+                towns.value.splice(index, 1);
+            }
+
+            delete hash.value[townId];
+            hash.value[townId] = undefined;
+        },
+        async addComment(shantytownId, comment) {
+            const notificationStore = useNotificationStore();
+            const { comments } = await addComment(shantytownId, comment);
+            updateShantytownComments(shantytownId, comments);
+
+            trackEvent("Site", "Création commentaire", `S${shantytownId}`);
+            notificationStore.success(
+                "Publication d'un message",
+                "Votre message est bien enregistré et a été envoyé aux acteurs concernés de votre département par mail"
+            );
         },
         async deleteComment(shantytownId, commentId, reason = "") {
             const activitiesStore = useActivitiesStore();
@@ -241,6 +273,72 @@ export const useTownsStore = defineStore("towns", () => {
             }
 
             heatwaveStatuses.value[id].loading = false;
+        },
+
+        async fetchNearbyTowns(townId) {
+            if (!hash.value[townId]) {
+                throw new Error(
+                    "Cannot fetch nearby towns of a town that has not been fetched itself"
+                );
+            }
+
+            const { towns } = await findNearby(
+                hash.value[townId].latitude,
+                hash.value[townId].longitude
+            );
+            hash.value[townId].nearbyTowns = towns.filter(
+                ({ id }) => id !== townId
+            );
+        },
+
+        async addActor(townId, userId, themes) {
+            const response = await addActor(townId, {
+                user_id: userId,
+                themes,
+            });
+
+            // response.actors is not defined when an actor other than the connected user is added (we send an email to get his confirmation instead)
+            if (response?.actors && hash.value[townId]) {
+                hash.value[townId].actors = response.actors;
+            }
+        },
+
+        async updateActor(townId, userId, themes) {
+            const { themes: updatedThemes } = await updateActorThemes(
+                townId,
+                userId,
+                themes
+            );
+
+            if (hash.value[townId]) {
+                const actor = hash.value[townId].actors.find(
+                    ({ id }) => id === userId
+                );
+                if (actor) {
+                    actor.themes = updatedThemes;
+                }
+            }
+        },
+
+        async removeActor(townId, userId) {
+            const { actors } = await removeActor(townId, userId);
+
+            if (hash.value[townId]) {
+                hash.value[townId].actors = actors;
+            }
+        },
+
+        async removeActorTheme(townId, userId, themeId) {
+            const { themes } = await removeActorTheme(townId, userId, themeId);
+
+            if (hash.value[townId]) {
+                const actor = hash.value[townId].actors.find(
+                    ({ id }) => id === userId
+                );
+                if (actor) {
+                    actor.themes = themes;
+                }
+            }
         },
     };
 });

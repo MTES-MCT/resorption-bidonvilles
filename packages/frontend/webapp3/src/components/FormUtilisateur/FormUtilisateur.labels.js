@@ -13,7 +13,7 @@ export default (variant) => ({
             : "Quelle est la structure de l'utilisateur ?",
     organization_type: "Précisez le type de structure",
     organization_public: "Territoire de rattachement",
-    territorial_collectivity: "Territoire de rattachement",
+    territorial_collectivity: "Territoire de la collectivité",
     association: "Nom de l'association",
     new_association_name: "Précisez le nom complet",
     new_association_abbreviation: "Précisez l'acronyme, si applicable",

@@ -1,10 +1,8 @@
 import { defineStore } from "pinia";
 import router from "@/helpers/router";
-import ENV from "@/helpers/env";
 import { useConfigStore } from "@/stores/config.store.js";
 import { useUserStore } from "@/stores/user.store.js";
 
-const { CONTACT_EMAIL } = ENV;
 const topItems = [
     {
         icon: "arrow-right-to-bracket",
@@ -83,7 +81,7 @@ export const useNavigationStore = defineStore("navigation", {
             }
 
             const items = [
-                { label: "Tableau de bord", route: "/" },
+                { label: "Accueil", route: "/" },
                 { label: "Sites", route: "/liste-des-sites" },
                 { label: "Actions", route: "/liste-des-actions" },
                 { label: "Communauté", route: "/communaute" },

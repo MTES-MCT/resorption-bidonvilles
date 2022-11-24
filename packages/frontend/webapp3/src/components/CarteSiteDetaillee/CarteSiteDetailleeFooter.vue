@@ -1,21 +1,6 @@
 <template>
     <div class="flex justify-end h-14 items-center mr-4 space-x-4 print:hidden">
         <Button
-            v-if="isHover"
-            variant="primaryOutline"
-            icon="fa-regular fa-sun"
-            iconPosition="left"
-            type="button"
-            size="sm"
-            :loading="heatwaveRequestStatus?.loading === true"
-            @click="toggleHeatwave"
-        >
-            <template v-if="heatwaveStatus === false"
-                >Indiquer un risque "Canicule"</template
-            >
-            <template v-else>Retirer le risque "Canicule"</template>
-        </Button>
-        <Button
             v-if="isHover && isOpen && hasUpdateShantytownPermission"
             variant="primaryOutline"
             size="sm"

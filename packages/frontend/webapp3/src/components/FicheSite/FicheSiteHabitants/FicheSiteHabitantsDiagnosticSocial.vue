@@ -1,0 +1,49 @@
+<template>
+    <FicheSiteSousRubrique>
+        <div class="flex items-center justify-between">
+            <p class="w-96">
+                <span class="font-bold">Diagnostic social</span><br />
+                {{ diagnostic }}
+            </p>
+            <p class="italic">
+                Un diagnostic social vise à identifier les situations et besoins
+                des familles et personnes, de repérer le contexte territorial et
+                les acteurs en présence.
+            </p>
+        </div>
+    </FicheSiteSousRubrique>
+</template>
+
+<script setup>
+import { defineProps, toRefs, computed } from "vue";
+import formatDate from "@/utils/formatDate";
+
+import FicheSiteSousRubrique from "../FicheSiteSousRubrique.vue";
+
+const props = defineProps({
+    town: Object,
+});
+const { town } = toRefs(props);
+
+const diagnostic = computed(() => {
+    if (town.value.censusStatus === "done") {
+        return `réalisé le ${formatDate(
+            town.value.censusConductedAt,
+            "d/m/y"
+        )} par ${town.value.censusConductedBy}`;
+    }
+
+    if (town.value.censusStatus === "scheduled") {
+        return `prévu le ${formatDate(
+            town.value.censusConductedAt,
+            "d/m/y"
+        )} par ${town.value.censusConductedBy}`;
+    }
+
+    if (town.value.censusStatus === "none") {
+        return "non réalisé";
+    }
+
+    return "non communiqué";
+});
+</script>

@@ -1,34 +1,21 @@
 <template>
-    <div class="inline-block" v-bind:class="disabled ? [] : 'has-tooltip'">
-        <div
-            class="tooltip mt-10 ml-5 bg-yellow-200 shadow-md text-black py-4 px-6"
-        >
-            {{ text }}
-        </div>
-        <slot />
+  <div @mouseenter="hovered = true" @mouseleave="hovered = false">
+    <div
+      class="mt-10 ml-5 bg-yellow-200 shadow-md text-black py-4 px-6"
+      :class="hovered ? 'absolute z-50' : 'hidden'"
+    >
+      {{ text }}
     </div>
+    <slot />
+  </div>
 </template>
 
-<script>
-export default {
-    props: {
-        text: {
-            type: String
-        },
-        disabled: {
-            type: Boolean,
-            default: false
-        }
-    }
-};
+<script setup>
+import { defineProps, toRefs, ref } from "vue";
+
+const props = defineProps({
+  tip: String
+});
+const { text } = toRefs(props);
+const hovered = ref(false);
 </script>
-
-<style scoped>
-.tooltip {
-    @apply invisible absolute;
-}
-
-.has-tooltip:hover .tooltip {
-    @apply visible z-50;
-}
-</style>
