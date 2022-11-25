@@ -35,7 +35,10 @@
                         >
                     </div>
 
-                    <TownPageMenu />
+                    <TownPageMenu
+                        :currentSection="currentSection"
+                        @changeSection="changeSection"
+                    />
                 </header>
             </template>
             <template v-slot:scroll>
@@ -96,6 +99,8 @@ import TownComments from "./comments/TownComments.vue";
 import { Icon, Spinner } from "@resorptionbidonvilles/ui";
 import { mapGetters } from "vuex";
 
+import menu from "./TownPage.menu";
+
 export default {
     components: {
         Layout,
@@ -114,6 +119,7 @@ export default {
         return {
             error: null,
             town: null,
+            currentSection: "caracteristics",
         };
     },
     computed: {
@@ -123,6 +129,7 @@ export default {
     },
     async mounted() {
         const townId = parseInt(this.$route.params.id, 10);
+        window.addEventListener("touchmove", this.onTouch);
         if (this.$store.state.towns.state !== "loaded") {
             await this.$store.dispatch("fetchTowns");
         }
@@ -142,9 +149,26 @@ export default {
             this.error = "Erreur: " + error.message;
         }
     },
+    unmounted() {
+        window.removeEventListener("touchmove", this.onTouch);
+    },
     methods: {
         async toTownsList() {
             this.$router.push(`/liste-des-sites`);
+        },
+        changeSection(value) {
+            this.currentSection = value;
+        },
+        onTouch(ev) {
+            const tab = menu.find(({ id }) => {
+                const el = document.getElementById(id);
+                // la section active celle sur laquelle on a cliqué pour scroller la page
+                return el.contains(ev.target);
+            });
+            if (tab?.id) {
+                history.pushState({}, "", `#${tab.id}`);
+                this.changeSection(tab.id);
+            }
         },
     },
 };

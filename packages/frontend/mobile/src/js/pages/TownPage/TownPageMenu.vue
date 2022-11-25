@@ -22,15 +22,17 @@ export default {
     data() {
         return {
             menu,
-            currentSection: menu[0].id,
         };
+    },
+    props: {
+        currentSection: { type: String },
     },
     components: {
         TownPageMenuItem,
     },
     methods: {
         changeSection(value) {
-            this.currentSection = value;
+            this.$emit("changeSection", value);
         },
     },
 };
