@@ -1,5 +1,12 @@
 <template>
     <div>
+        <div v-if="usePagination && nbPages > 1" class="mb-4 flex justify-end">
+            <Pagination
+                :currentPage="currentPage"
+                :nbPages="nbPages"
+                :onChangePage="onChangePage"
+            />
+        </div>
         <table class="zebra w-full">
             <!-- header rows and columns -->
             <thead>
@@ -34,11 +41,20 @@
                 </TableauLigne>
             </tbody>
         </table>
+
+        <div v-if="usePagination && nbPages > 1" class="mt-4 flex justify-end">
+            <Pagination
+                :currentPage="currentPage"
+                :nbPages="nbPages"
+                :onChangePage="onChangePage"
+            />
+        </div>
     </div>
 </template>
 
 <script setup>
-import { defineProps, toRefs, defineEmits, computed } from "vue";
+import { defineProps, ref, toRefs, defineEmits, computed, watch } from "vue";
+import { Pagination } from "@resorptionbidonvilles/ui";
 
 import TableauLigne from "./TableauLigne.vue";
 import TableauCellule from "./TableauCellule.vue";
@@ -55,9 +71,20 @@ const props = defineProps({
             return [];
         },
     },
+    usePagination: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
+    itemsPerPage: {
+        type: Number,
+        required: false,
+        default: 10,
+    },
 });
-const { columns, data } = toRefs(props);
+const { columns, data, usePagination, itemsPerPage } = toRefs(props);
 
+const currentPage = ref(1);
 const emit = defineEmits(["datachange"]);
 
 const columnIds = computed(() => {
@@ -70,6 +97,26 @@ const isEmpty = computed(() => {
     emit("datachange");
     return data.value.length < 1;
 });
+
+const nbPages = computed(() => {
+    return data.value.length > 0
+        ? Math.ceil(data.value.length / itemsPerPage.value)
+        : 0;
+});
+
+watch(usePagination, () => {
+    this.currentPage = 1;
+});
+watch(itemsPerPage, () => {
+    this.currentPage = 1;
+});
+watch(data, () => {
+    this.currentPage = 1;
+});
+
+function onChangePage(page) {
+    currentPage.value = page;
+}
 </script>
 
 <style lang="scss" scoped>
