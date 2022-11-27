@@ -1,5 +1,9 @@
 <template>
-    <InputLocation name="territorial_collectivity" :label="label" />
+    <InputLocation
+        name="territorial_collectivity"
+        :label="label"
+        placeholder="Nom de la commune, epci, département, ou région"
+    />
 </template>
 
 <script setup>

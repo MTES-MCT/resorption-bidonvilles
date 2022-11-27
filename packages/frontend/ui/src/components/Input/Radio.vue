@@ -1,6 +1,11 @@
 <template>
-    <button type="button" :disabled="isSubmitting" :class="classes" :name="name" @click="onClick">
-        {{ label }}
+    <button type="button" :disabled="isSubmitting || disabled" :class="classes" :name="name" @click="onClick">
+        <span v-if="variant === 'radio'"
+            class="inline-flex items-center justify-center rounded-full border w-5 h-5 text-white"
+            :class="checked ? 'bg-primary border-primary' : ''">
+            <Icon v-if="checked" icon="check" class="text-xs" />
+        </span>
+        <span>{{ label }}</span>
         <Icon v-if="variant === 'check' && checked" class="text-primary font-bold text-md" icon="check" />
     </button>
 </template>
@@ -15,10 +20,15 @@ const props = defineProps({
     label: String,
     value: String,
     modelValue: String,
-    variant: String, // soit "default", soit "check"
+    variant: String, // soit "default", soit "check", soit "radio"
+    disabled: {
+        type: Boolean,
+        required: false,
+        default: false
+    }
 });
 
-const { name, variant } = toRefs(props);
+const { name, variant, disabled } = toRefs(props);
 const isSubmitting = useIsSubmitting();
 
 const { checked, handleChange } = useField(name, undefined, {
@@ -49,6 +59,17 @@ const variants = {
             [true]: 'opacity-50 cursor-default',
             [false]: ''
         }
+    },
+    radio: {
+        base: 'flex items-center space-x-2',
+        checked: {
+            [true]: '',
+            [false]: ''
+        },
+        disabled: {
+            [true]: '',
+            [false]: ''
+        }
     }
 };
 const classes = computed(() => {
@@ -58,7 +79,7 @@ const classes = computed(() => {
     }
 
     const v = variants[actualVariant];
-    return `${v.base} ${v.checked[checked.value === true]} ${v.disabled[isSubmitting.value === true]}`;
+    return `${v.base} ${v.checked[checked.value === true]} ${v.disabled[(disabled.value || isSubmitting.value) === true]}`;
 });
 
 function onClick() {

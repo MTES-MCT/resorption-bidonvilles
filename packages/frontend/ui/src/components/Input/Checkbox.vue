@@ -5,7 +5,7 @@
             <p class="flex">
                 <span class="inline-block w-6 h-6 rounded border-2 align-middle mr-2 text-center"
                     :class="checkboxStyle">
-                    <Icon icon="check" class="text-white" :class="checked ? 'inline-block' : 'hidden'" />
+                    <Icon icon="check" class="inline-block" :class="checked ? 'text-white' : 'text-transparent'" />
                 </span>
                 <span class="flex-1">
                     <slot>{{ label }}</slot>
@@ -36,7 +36,7 @@ const props = defineProps({
     label: String,
     variant: {
         type: String,
-        default: 'card'
+        default: 'card' // soit "card", "checkbox", ou "invisible"
     },
     direction: { // soit 'row', soit 'col'
         type: String,

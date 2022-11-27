@@ -29,9 +29,9 @@
 import { defineProps, toRefs, computed } from "vue";
 import NombreHabitants from "@/components/NombreHabitants/NombreHabitants.vue";
 
-import flagEU from "@/assets/flags/eu.png";
-import flagFR from "@/assets/flags/fr.png";
-import flagExtraCommunautaires from "@/assets/flags/extra-communautaires.png";
+import flagEU from "@/assets/img/flags/eu.png";
+import flagFR from "@/assets/img/flags/fr.png";
+import flagExtraCommunautaires from "@/assets/img/flags/extra-communautaires.png";
 
 const props = defineProps({
     shantytown: Object,

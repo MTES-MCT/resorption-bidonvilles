@@ -2,7 +2,7 @@
     <InputWrapper :hasErrors="!!errors.length" :withoutMargin="withoutMargin">
         <Input prefixIcon="magnifying-glass" :suffixIcon="isLoading ? 'spinner' : ''" :withoutMargin="true"
             :spinSuffixIcon="true" :clear="!isLoading" :id="name" v-bind="$attrs" autocomplete="off" @input="onInput"
-            @blur="onBlur" @keydown="onKeydown" @clear="clear" ref="input">
+            :disabled="isDisabled" @blur="onBlur" @keydown="onKeydown" @clear="clear" ref="input">
         <div class="absolute top-10 w-full z-10 border-1 border-G300 bg-white" v-if="results.length > 0">
             <div class="flex" v-for="section in results" :key="section.title">
                 <div class="w-40 px-3 py-2 text-right text-sm text-G600 border-r border-G200 border-b">
@@ -26,8 +26,8 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed, onMounted, onBeforeUnmount, defineEmits, watch } from "vue";
-import { useField } from "vee-validate";
+import { defineProps, defineExpose, toRefs, ref, computed, onMounted, onBeforeUnmount, defineEmits, watch } from "vue";
+import { useIsSubmitting, useField } from "vee-validate";
 import InputWrapper from "./utils/InputWrapper.vue";
 import InputError from "./utils/InputError.vue";
 import Input from "./Input.vue";
@@ -50,15 +50,21 @@ const props = defineProps({
         type: Boolean,
         required: false,
         default: false
-    }
+    },
+    disabled: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
 });
 const emit = defineEmits(['update:modelValue']);
-const { fn, name, withoutMargin, allowFreeSearch, modelValue } = toRefs(props);
+const { fn, name, withoutMargin, allowFreeSearch, modelValue, disabled } = toRefs(props);
 
 const rawResults = ref([]);
 const isLoading = ref(false);
 const lastPromise = ref(null);
-const { handleChange, errors, validate } = useField(name, undefined, {
+const isSubmitting = useIsSubmitting();
+const { handleChange, errors, validate, value } = useField(name, undefined, {
     initialValue: modelValue,
     valueProp: modelValue
 });
@@ -70,9 +76,17 @@ const selectedItem = ref(modelValue.value ? {
 const focusedItemIndex = ref(null);
 const error = ref(false);
 let lastEvent = undefined;
+const isDisabled = computed(() => {
+    return disabled.value === true || isSubmitting.value === true;
+});
 
 watch(modelValue, () => {
     input.value.setValue(modelValue?.value?.search || "");
+});
+watch(value, () => {
+    if (value.value === undefined) {
+        clear();
+    }
 });
 
 let timeout = null;
@@ -205,6 +219,8 @@ function onKeydown(event) {
             if (focusedItemIndex.value !== null) {
                 selectItem(rawResults.value[focusedItemIndex.value]);
                 input.value.blur();
+                event.stopPropagation();
+                event.preventDefault();
             } else if (allowFreeSearch.value === true) {
                 input.value.blur();
             }
@@ -268,5 +284,12 @@ const results = computed(() => {
         categories[category].items.push(item);
         return acc;
     }, []);
+});
+
+defineExpose({
+    clear,
+    focus() {
+        return input.value.focus();
+    }
 });
 </script>
