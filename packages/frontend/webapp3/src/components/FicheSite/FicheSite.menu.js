@@ -1,4 +1,5 @@
 import { useEventBus } from "@/helpers/event-bus";
+import { useUserStore } from "@/stores/user.store";
 
 export default [
     {
@@ -36,8 +37,9 @@ export default [
         id: "procedure_judiciaire",
         label: () => "Procédure judiciaire",
         route: "#procedure_judiciaire",
-        condition(town, hasJusticePermission) {
-            return hasJusticePermission === true;
+        condition() {
+            const userStore = useUserStore();
+            return userStore.hasJusticePermission === true;
         },
     },
     {
@@ -55,6 +57,13 @@ export default [
         route: "#journal_du_site",
         icon: "comment",
         variant: "secondary",
+        condition(town) {
+            const userStore = useUserStore();
+            return userStore.hasLocalizedPermission(
+                "shantytown_comment.list",
+                town
+            );
+        },
     },
     {
         id: "historique",

@@ -2,7 +2,7 @@
     <CarteUtilisateurWrapper
         :user="user"
         :linkToUser="linkToUser"
-        class="bg-G200 p-4 grid grid-cols-2 grid-gap-32"
+        class="bg-G200 p-4 grid grid-cols-2 gap-8"
         :class="userStore.hasPermission('user.read') ? 'hover:bg-blue200' : ''"
     >
         <div>

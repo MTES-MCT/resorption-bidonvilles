@@ -1,5 +1,5 @@
 <template>
-    <FicheSiteSousRubrique>
+    <FicheSousRubrique>
         <div class="flex items-center" :class="colorClass">
             <Icon class="mr-1 font-bold" :icon="icon" />
             <div>
@@ -91,14 +91,14 @@
                 </div>
             </div>
         </div>
-    </FicheSiteSousRubrique>
+    </FicheSousRubrique>
 </template>
 
 <script setup>
 import { defineProps, toRefs, ref, computed } from "vue";
 
 import { Button, Icon } from "@resorptionbidonvilles/ui";
-import FicheSiteSousRubrique from "../FicheSiteSousRubrique.vue";
+import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
 import FicheSiteConditionsDeVieDetails from "./FicheSiteConditionsDeVieDetails.vue";
 
 const props = defineProps({

@@ -22,8 +22,8 @@
         </div>
         <div
             v-if="
-                comment.user_target_name.length > 0 ||
-                comment.organization_target_name.length > 0
+                comment.user_target_name?.length > 0 ||
+                comment.organization_target_name?.length > 0
             "
         >
             <Icon icon="lock" class="text-red" />

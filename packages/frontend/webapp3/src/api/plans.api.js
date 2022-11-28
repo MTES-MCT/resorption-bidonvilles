@@ -1,7 +1,7 @@
 import { axios } from "@/helpers/axios";
 
-export function fetchList() {
-    return axios.get("/plans");
+export function addComment(planId, comment) {
+    return axios.post(`/plans/${encodeURI(planId)}/comments`, comment);
 }
 
 export function exportComments() {
@@ -10,4 +10,12 @@ export function exportComments() {
 
 export function exportPlans() {
     return axios.get("/plans/export");
+}
+
+export function fetchList() {
+    return axios.get("/plans");
+}
+
+export function fetchOne(planId) {
+    return axios.get(`/plans/${encodeURI(planId)}`);
 }

@@ -1,5 +1,5 @@
 <template>
-    <FicheSiteSousRubrique>
+    <FicheSousRubrique>
         <div class="flex items-center justify-between">
             <p class="w-96">
                 <span class="font-bold">Diagnostic social</span><br />
@@ -11,14 +11,14 @@
                 les acteurs en présence.
             </p>
         </div>
-    </FicheSiteSousRubrique>
+    </FicheSousRubrique>
 </template>
 
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
 import formatDate from "@/utils/formatDate";
 
-import FicheSiteSousRubrique from "../FicheSiteSousRubrique.vue";
+import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
 
 const props = defineProps({
     town: Object,

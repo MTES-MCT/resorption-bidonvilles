@@ -1,5 +1,5 @@
 <template>
-    <FicheSiteRubrique title="Caractéristiques du site">
+    <FicheRubrique title="Caractéristiques du site">
         <FicheSiteDatesInstallation :town="town" />
         <FicheSiteTypeDeSite :town="town" />
         <FicheSiteInfosAcces v-if="town.addressDetails" :town="town" />
@@ -9,14 +9,14 @@
             v-if="town.nearbyTowns?.length > 0"
             :towns="town.nearbyTowns"
         />
-    </FicheSiteRubrique>
+    </FicheRubrique>
 </template>
 
 <script setup>
 import { defineProps, toRefs, onMounted } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 
-import FicheSiteRubrique from "../FicheSiteRubrique.vue";
+import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import FicheSiteDatesInstallation from "./FicheSiteDatesInstallation.vue";
 import FicheSiteTypeDeSite from "./FicheSiteTypeDeSite.vue";
 import FicheSiteInfosAcces from "./FicheSiteInfosAcces.vue";

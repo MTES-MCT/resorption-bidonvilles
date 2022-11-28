@@ -1,35 +1,34 @@
 <template>
-    <div class="flex items-center">
+    <div class="flex items-center uppercase text-sm">
         <div
-            v-if="isClosed || isSolved"
-            class="flex items-center uppercase text-sm mr-4"
-        >
-            <div v-if="isClosed">
+            class="rounded-full h-3 w-3 mr-2"
+            :class="isClosed || isSolved ? 'bg-red' : 'bg-corail'"
+        />
+
+        <p v-if="isClosed || isSolved" class="mr-4">
+            <template v-if="isClosed">
                 Fermé le
                 {{ formatDate(town.closedAt, "d/m/y") }}
-            </div>
-            <div v-else-if="isSolved">
+            </template>
+            <template v-else-if="isSolved">
                 Résorbé le
                 {{ formatDate(town.closedAt, "d/m/y") }}
-            </div>
-        </div>
-        <div class="flex items-center uppercase text-sm mr-4">
-            <div class="rounded-full bg-corail h-3 w-3 mr-2" />
-            Mis à jour le
-            {{ formatDate(town.updatedAt, "d/m/y") }}
-        </div>
-        <div class="flex items-center uppercase text-sm mr-4">
-            <TagObjectifResorption
-                v-if="town.resorptionTarget"
-                :target="town.resorptionTarget"
-            />
-        </div>
+            </template>
+        </p>
+        <p class="mr-4" v-else>
+            {{ formatLastUpdatedAt(town) }}
+        </p>
+        <TagObjectifResorption
+            v-if="town.resorptionTarget"
+            :target="town.resorptionTarget"
+        />
     </div>
 </template>
 
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
 import formatDate from "@/utils/formatDate";
+import formatLastUpdatedAt from "@/utils/formatLastUpdatedAt";
 
 import TagObjectifResorption from "@/components/TagObjectifResorption/TagObjectifResorption.vue";
 

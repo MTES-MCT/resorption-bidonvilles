@@ -13,6 +13,8 @@ import {
     faBars,
     faBolt,
     faBuilding,
+    faBullseye,
+    faCalendar,
     faChalkboardTeacher,
     faChartSimple,
     faCheck,
@@ -42,6 +44,7 @@ import {
     faLock,
     faMagnifyingGlass,
     faMale,
+    faMapPin,
     faMapMarkerAlt,
     faMinus,
     faPaperPlane,
@@ -99,6 +102,8 @@ library.add(faBars);
 library.add(faBell);
 library.add(faBolt);
 library.add(faBuilding);
+library.add(faBullseye);
+library.add(faCalendar);
 library.add(faChalkboardTeacher);
 library.add(faChartSimple);
 library.add(faCheck);
@@ -134,6 +139,7 @@ library.add(faLock);
 library.add(faLinkedin);
 library.add(faMagnifyingGlass);
 library.add(faMale);
+library.add(faMapPin);
 library.add(faMapMarkerAlt);
 library.add(faMinus);
 library.add(faNewspaper);

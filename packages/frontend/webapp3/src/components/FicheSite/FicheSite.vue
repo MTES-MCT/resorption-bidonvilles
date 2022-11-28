@@ -7,40 +7,47 @@
 
     <ContentWrapper>
         <ArrangementLeftMenu columnWidthClass="w-96" :tabs="tabs" autonav>
-            <FicheSiteCaracteristiques :town="town" id="caracteristiques" />
+            <FicheSiteCaracteristiques
+                :town="town"
+                id="caracteristiques"
+                class="mb-8"
+            />
             <FicheSiteFermeture
                 v-if="town.closedAt !== null"
                 :town="town"
                 id="fermeture"
-                class="mt-5"
+                class="mb-8"
             />
             <FicheSiteActions
                 v-if="town.plans.length"
                 :town="town"
                 id="actions"
-                class="mt-5"
+                class="mb-8"
             />
-            <FicheSiteHabitants :town="town" id="habitants" class="mt-5" />
+            <FicheSiteHabitants :town="town" id="habitants" class="mb-8" />
             <FicheSiteConditionsDeVie
                 :town="town"
                 id="conditions_de_vie"
-                class="mt-5"
+                class="mb-8"
             />
             <FicheSiteProceduresJudiciaires
                 v-if="userStore.hasJusticePermission"
                 :town="town"
                 id="procedure_judiciaire"
-                class="mt-5"
+                class="mb-8"
             />
             <FicheSiteIntervenants
                 :town="town"
                 id="intervenants"
-                class="mt-5"
+                class="mb-12"
             />
         </ArrangementLeftMenu>
     </ContentWrapper>
 
-    <FicheSiteJournal class="mt-10" :town="town" />
+    <FicheSiteJournal
+        :town="town"
+        v-if="userStore.hasLocalizedPermission('shantytown_comment.list', town)"
+    />
     <FicheSiteHistorique :town="town" ref="historique" />
 </template>
 
@@ -78,7 +85,7 @@ const tabs = computed(() => {
                 return item;
             }
 
-            return item.condition(town.value, userStore.hasJusticePermission);
+            return item.condition(town.value);
         })
         .map((item) => {
             return {

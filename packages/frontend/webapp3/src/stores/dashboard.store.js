@@ -81,12 +81,15 @@ export const useDashboardStore = defineStore("dashboard", () => {
                 delete activity.user;
             }
 
-            if (activity.entity === "shantytown" && activity.action === "update") {
+            if (
+                activity.entity === "shantytown" &&
+                activity.action === "update"
+            ) {
                 const updates = activity.diff.reduce((diffAcc, diff) => {
                     if (
                         ![
                             "livingConditions.water.access_is_local",
-                            "livingConditions.electricity.access"
+                            "livingConditions.electricity.access",
                         ].includes(diff.fieldKey)
                     ) {
                         return diffAcc;
@@ -112,13 +115,14 @@ export const useDashboardStore = defineStore("dashboard", () => {
                         ...diffAcc,
                         {
                             entity:
-                                diff.fieldKey === "livingConditions.electricity.access"
+                                diff.fieldKey ===
+                                "livingConditions.electricity.access"
                                     ? "electricity"
                                     : "water",
                             action,
                             date: activity.date,
-                            shantytown: activity.shantytown
-                        }
+                            shantytown: activity.shantytown,
+                        },
                     ];
                 }, []);
 
@@ -130,8 +134,8 @@ export const useDashboardStore = defineStore("dashboard", () => {
             }
 
             return [...acc, activity];
-        }, [])
-    })
+        }, []);
+    });
     const userStore = useUserStore();
     const defaultLocationFilter = computed(() => {
         return getDefaultLocationFilter(userStore.user);

@@ -1,5 +1,5 @@
 <template>
-    <FicheSiteRubrique title="Conditions de vie et environnement">
+    <FicheRubrique title="Conditions de vie et environnement">
         <p
             class="mt-4 mb-2 border border-red bg-red200 px-4 py-3"
             v-if="town.livingConditions.version < 2 && !town.closedAt"
@@ -21,6 +21,7 @@
 
         <FicheSiteConditionsDeVieRubrique
             :border="false"
+            :marginTop="false"
             title="Accès à l’eau"
             info="Un accès à l'eau est caractérisé par la mise à disposition d'une eau potable avec un nombre adapté de robinets (minimum recommandé 1 robinet pour 50 personnes, qui doit être adapté aux spécificités du site), à une distance limitant le portage de charges lourdes (à l'intérieur du site, à moins de 200 m de l'habitation la plus éloignée)."
             :status="town.livingConditions.water.status"
@@ -74,7 +75,7 @@
                 :status="town.livingConditions.fire_prevention.status"
             />
         </div>
-    </FicheSiteRubrique>
+    </FicheRubrique>
 </template>
 
 <script setup>
@@ -82,7 +83,7 @@ import { defineProps, toRefs, computed } from "vue";
 import serializeLivingConditions from "@common/helpers/town/living_conditions/serializeLivingConditions";
 
 import { Icon, Link } from "@resorptionbidonvilles/ui";
-import FicheSiteRubrique from "../FicheSiteRubrique.vue";
+import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import FicheSiteConditionsDeVieRubrique from "./FicheSiteConditionsDeVieRubrique.vue";
 
 const props = defineProps({
