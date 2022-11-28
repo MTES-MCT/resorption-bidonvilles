@@ -5,54 +5,63 @@
         <ViewErrorInline v-else-if="townsStore.error">
             <template v-slot:title>Liste des sites indisponible</template>
             <template v-slot:code>{{ townsStore.error }}</template>
-            <template v-slot:content>Une erreur est survenue lors de la collecte des données. Vous
+            <template v-slot:content
+                >Une erreur est survenue lors de la collecte des données. Vous
                 pouvez essayer de rafraîchir la page ou réessayer un peu plus
-                tard.</template>
+                tard.</template
+            >
             <template v-slot:actions>
-                <Button type="button" icon="rotate-right" iconPosition="left" @click="load">Réessayer</Button>
+                <Button
+                    type="button"
+                    icon="rotate-right"
+                    iconPosition="left"
+                    @click="load"
+                    >Réessayer</Button
+                >
                 <ButtonContact />
             </template>
         </ViewErrorInline>
 
         <section v-else>
-            <section v-if="dashboardStore.towns.display === 'map'">
-                <!-- <Map
-                    :display-searchbar="false"
-                    :towns="rawShantytowns"
-                    :default-view="mapSetup"
-                    :displayPopupOnTownClick="true"
-                    :displayAddressToggler="false"
-                    :displayPrinter="false"
-                    mapHeight="500px"
-                    @leaveMap="leaveMap"
-                >
-                </Map> -->
-                TODO
-            </section>
-
-            <p v-else-if="
-                currentTabContent.length === 0 &&
-                dashboardStore.towns.filter === 'my_shantytowns'
-            " class="text-primary p-4 bg-blue200 text-center font-bold">
+            <p
+                v-if="
+                    currentTabContent.length === 0 &&
+                    dashboardStore.towns.filter === 'my_shantytowns'
+                "
+                class="text-primary p-4 bg-blue200 text-center font-bold"
+            >
                 Vous n'intervenez sur aucun site. Rendez-vous sur la fiche d'un
                 site pour vous déclarer intervenant(e).
             </p>
 
-            <p v-else-if="currentTabContent.length === 0" class="mt-6 text-G600 italic">
+            <p
+                v-else-if="currentTabContent.length === 0"
+                class="mt-6 text-G600 italic"
+            >
                 Aucune donnée à afficher
             </p>
 
             <section class="-ml-16 -mr-16 flex justify-between" v-else>
                 <div class="w-12 mr-4">
-                    <TableauDeBordSitesPaginationButton icon="arrow-left" :disabled="currentPage === 1"
-                        @click="onChangePage(currentPage - 1)" />
+                    <TableauDeBordSitesPaginationButton
+                        icon="arrow-left"
+                        :disabled="currentPage === 1"
+                        @click="onChangePage(currentPage - 1)"
+                    />
                 </div>
                 <div class="grid grid-cols-3 gap-x-8 gap-y-6 flex-1">
-                    <CarteSite v-for="shantytown in pageContent" :key="shantytown.id" :shantytown="shantytown" />
+                    <CarteSite
+                        v-for="shantytown in pageContent"
+                        :key="shantytown.id"
+                        :shantytown="shantytown"
+                    />
                 </div>
                 <div class="w-12 ml-4">
-                    <TableauDeBordSitesPaginationButton icon="arrow-right" :disabled="currentPage === numberOfPages"
-                        @click="onChangePage(currentPage + 1)" />
+                    <TableauDeBordSitesPaginationButton
+                        icon="arrow-right"
+                        :disabled="currentPage === numberOfPages"
+                        @click="onChangePage(currentPage + 1)"
+                    />
                 </div>
             </section>
 
@@ -74,7 +83,6 @@ import ViewErrorInline from "@/components/ViewErrorInline/ViewErrorInline.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 import CarteSite from "@/components/CarteSite/CarteSite.vue";
 import TableauDeBordSitesPaginationButton from "./TableauDeBordSitesPaginationButton.vue";
-// import Map from "#app/components/map/map.vue";
 
 const ITEMS_PER_PAGE = 6;
 const townsStore = useTownsStore();
@@ -105,12 +113,6 @@ async function load() {
     }
 }
 
-function leaveMap(center, zoom) {
-    dashboardStore.towns.mapView = {
-        center,
-        zoom,
-    };
-}
 function onChangePage(page) {
     trackEvent("TB", "Pagination sites");
     dashboardStore.towns.page = Math.min(

@@ -5,6 +5,7 @@
         :fn="autocompleteFn"
         v-model="target"
         ref="input"
+        showCategory
     />
     <TagList :tags="tags" :onDelete="removeTarget" :disabled="isSubmitting" />
 </template>
