@@ -86,7 +86,7 @@ async function download() {
             date.value
         );
         downloadBlob(
-            data,
+            new Blob([data]),
             `${formatDate(date.value.getTime() / 1000, "y-m-d")}-sites-${
                 isClosed.value ? "fermés" : "existants"
             }-resorption-bidonvilles.xlsx`

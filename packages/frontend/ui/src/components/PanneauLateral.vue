@@ -1,24 +1,19 @@
 <template>
     <div>
-        <div
-            class="fixed top-0 left-0 bg-black w-full h-full transition ease-in-out duration-500"
-            :class="isOpen ? 'opacity-50' : 'opacity-0'"
-            @transitionstart="showShadow"
-            @transitionend="hideShadow"
-            ref="shadow"
-        ></div>
+        <div class="fixed top-0 left-0 bg-black w-full h-full transition ease-in-out duration-500"
+            :class="isOpen ? 'opacity-50' : 'opacity-0'" @transitionstart="showShadow" @transitionend="hideShadow"
+            ref="shadow"></div>
 
-        <div
-            class="fixed top-0 h-full right-0 z-[2001] bg-white p-6 overflow-y-auto w-128 transform transition ease-in-out duration-500"
-            :class="isOpen ? 'translate-x-0' : 'translate-x-full'"
-            ref="container"
-        >
+        <div class="fixed top-0 h-full right-0 z-[2001] bg-white p-6 overflow-y-auto w-128 transform transition ease-in-out duration-500"
+            :class="isOpen ? 'translate-x-0' : 'translate-x-full'" ref="container">
             <header v-if="$slots.header" class="mb-3">
                 <h1 class="text-primary border-b-2 pb-2">
-                    <span class="text-md"
-                        ><Icon v-if="icon" :icon="icon" class="mr-2"
-                    /></span>
-                    <span class="text-lg"><slot name="header" /></span>
+                    <span class="text-md">
+                        <Icon v-if="icon" :icon="icon" class="mr-2" />
+                    </span>
+                    <span class="text-lg">
+                        <slot name="header" />
+                    </span>
                 </h1>
             </header>
 
@@ -36,6 +31,7 @@ import {
     watch,
     onMounted,
     onBeforeUnmount,
+    defineEmits,
 } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
@@ -54,6 +50,7 @@ const zIndexes = {
     visible: "z-[2000]",
     hidden: "-z-50",
 };
+const emit = defineEmits(["emit"]);
 
 watch(isOpen, () => {
     if (isOpen.value === true) {
@@ -103,6 +100,7 @@ function onVisible() {
 function onHidden() {
     document.removeEventListener("click", checkOutsideClick);
     document.removeEventListener("keyup", checkEscape);
+    emit("closed");
 }
 
 function checkOutsideClick(event) {

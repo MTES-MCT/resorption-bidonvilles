@@ -3,5 +3,5 @@ import labels from "./FicheSiteModaleInviterIntervenant.labels";
 
 export default object({
     email: string().label(labels.email),
-    user: string().label(labels.user),
+    user: object(),
 });

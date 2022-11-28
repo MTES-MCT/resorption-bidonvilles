@@ -1,1447 +1,733 @@
 <template>
-    <section class="h-full">
-        <!-- <Address
-            :placeholder="placeholder"
-            v-model="address"
-            v-if="displaySearchbar"
-            class="leaflet-searchbar"
+    <section
+        class="h-full relative"
+        :class="showAddresses ? 'rb-showAddresses' : 'rb-hideAddresses'"
+    >
+        <div
+            v-if="showSearchbar"
+            class="absolute top-3 left-4 right-28 z-[1001]"
         >
-        </Address> -->
+            <InputAddress :placeholder="placeholder" v-model="address" />
+        </div>
 
-        <div id="map" :style="mapStyle">
-            <div class="absolute w-full h-full top-0 left-0 z-[1001]" v-if="loading">
-                <div class="absolute w-full h-full top-0 left-0 bg-black opacity-50"></div>
-                <div class="flex w-full h-full items-center justify-center text-white text-3xl">
+        <div id="map" class="h-full border">
+            <div
+                class="absolute w-full h-full top-0 left-0 z-[1001]"
+                v-if="isLoading"
+            >
+                <div
+                    class="absolute w-full h-full top-0 left-0 bg-black opacity-50"
+                ></div>
+                <div
+                    class="flex w-full h-full items-center justify-center text-white text-3xl"
+                >
                     <Spinner />
                 </div>
             </div>
-            <div ref="cadastreToggler" class="leaflet-cadastre-toggler">
-                <input type="checkbox" v-model="showCadastre" />
-                Voir le cadastre
+
+            <div
+                ref="cadastreToggler"
+                class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden"
+                v-show="cadastre"
+            >
+                <label class="flex items-center space-x-2">
+                    <input type="checkbox" v-model="showCadastre" />
+                    <span>Voir le cadastre</span>
+                </label>
             </div>
 
-            <div ref="adressToggler" class="leaflet-address-toggler" v-show="displayAddressToggler">
-                <input type="checkbox" v-model="showAddresses" />
-                Voir les adresses des sites
+            <div
+                ref="addressToggler"
+                class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden"
+                v-show="showAddressToggler"
+            >
+                <label class="flex items-center space-x-2">
+                    <input type="checkbox" v-model="showAddressesModel" />
+                    <span>Voir les adresses des sites</span>
+                </label>
             </div>
 
-            <div ref="legends" class="leaflet-legend">
-                <h1>Légende</h1>
-                <p class="fieldType" v-for="fieldType in fieldTypes" :key="fieldType.label">
-                    <span v-bind:style="{ 'background-color': fieldType.color }"></span>
-                    {{ fieldType.label }}
+            <div
+                ref="fieldTypes"
+                class="bg-white mr-3 my-3 border-2 border-G500 py-1 px-2 rounded"
+                v-show="showLegend"
+            >
+                <h1 class="text-md mb-2">Légende</h1>
+                <p
+                    class="flex items-center space-x-2"
+                    v-for="fieldType in configStore.config.field_types"
+                    :key="fieldType.label"
+                >
+                    <span
+                        class="my-1 inline-block w-4 h-4 rounded"
+                        v-bind:style="{
+                            'background-color': fieldType.color,
+                        }"
+                    ></span>
+                    <span>{{ fieldType.label }}</span>
                 </p>
             </div>
 
-            <div ref="printer" class="leaflet-printer" @click="printMapScreenshot" v-show="displayPrinter">
+            <div
+                ref="printer"
+                class="bg-white mr-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden cursor-pointer"
+                @click="printMapScreenshot"
+                v-show="showPrinter"
+            >
                 <Icon icon="print" /> Imprimer la carte
             </div>
-
-
         </div>
     </section>
 </template>
 
-<script>
-/* eslint-disable no-underscore-dangle */
-import { createApp } from "vue";
+<style>
+@import "https://unpkg.com/leaflet@1.3.4/dist/leaflet.css";
+
+.rb-map-address {
+    display: none;
+}
+
+.rb-showAddresses .rb-map-address {
+    display: block;
+}
+</style>
+
+<script setup>
+import {
+    ref,
+    computed,
+    defineProps,
+    toRefs,
+    onMounted,
+    onBeforeUnmount,
+    watch,
+    defineEmits,
+} from "vue";
 import L from "leaflet";
-import { Icon, Spinner } from "@resorptionbidonvilles/ui";
-// import Address from "#app/components/address/address.vue";
-// import ShantytownPopupVue from "../ShantytownPopup/ShantytownPopup.vue";
-import "leaflet-providers";
+import domtoimage from "dom-to-image-more";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/leaflet.markercluster";
-// import html2canvas from "html2canvas";
-// import { notify } from "#helpers/notificationHelper";
-// import "./map.scss"; // on importe le scss ici pour que le html généré par le js y ait accès
-
-import cutlery from "@/assets/img/map/cutlery.png";
-import waterYes from "@/assets/img/map/water-yes.png";
-import waterNo from "@/assets/img/map/water-no.png";
-import waterToImprove from "@/assets/img/map/water-to-improve.png";
-import waterNull from "@/assets/img/map/water-null.png";
-// import genericMarkerImage from "./assets/map-marker.svg";
+import { useConfigStore } from "@/stores/config.store";
+import { useNotificationStore } from "@/stores/notification.store";
+import mapLayers from "./Carte.layers";
+import mapControls from "./Carte.controls";
+import { trackEvent } from "@/helpers/matomo";
+import downloadBlob from "@/utils/downloadBlob";
+import formatDate from "@/utils/formatDate";
+import copyToClipboard from "@/utils/copyToClipboard";
 
 // données tirées de https://github.com/gregoiredavid/france-geojson
 import departements from "@/assets/geojson/departements.json";
 import regions from "@/assets/geojson/regions.json";
+import waterYes from "@/assets/img/map/water-yes.png";
+import waterNo from "@/assets/img/map/water-no.png";
+import waterToImprove from "@/assets/img/map/water-to-improve.png";
+import waterNull from "@/assets/img/map/water-null.png";
+import cutlery from "@/assets/img/map/cutlery.png";
 
-// const popup = Vue.extend(ShantytownPopupVue);
-const DEFAULT_VIEW = [46.7755829, 2.0497727];
-const POI_ZOOM_LEVEL = 13;
+import { Icon, Spinner } from "@resorptionbidonvilles/ui";
+import InputAddress from "@/components/InputAddress/InputAddress.vue";
+
 const REGION_MAX_ZOOM_LEVEL = 7;
 const DEPT_MAX_ZOOM_LEVEL = 11;
 const CITY_MAX_ZOOM_LEVEL = 13;
+const POI_ZOOM_LEVEL = 13;
 
-/* **************************************************************************************************
- * Ce composant fait apparaître une carte qui propose deux fonctionnalités distinctes :
- *
- * - la possibilité de faire apparaître une liste de bidonvilles sur la carte, chacun d'entre eux
- *   étant représenté par un marqueur dont la position est fixe (townMarker)
- *   Cette fonctionnalité vient avec une légende spécifique et la possibilité de faire apparaître ou
- *   non l'adresse des sites en question.
- *
- * - la possibilité de se déplacer sur la carte en recherchant une adresse via une barre de recherche
- *   avec autocomplétion (searchbar)
- ************************************************************************************************* */
-
-export default {
-    components: {
-        // Address,
-        Icon,
-        Spinner,
-        LMarker: L.Marker
+const props = defineProps({
+    isLoading: {
+        type: Boolean,
+        required: false,
+        default: false,
     },
-
-    props: {
-        loading: {
-            type: Boolean,
-            required: false,
-            default: false,
-        },
-
-        /* *****************************
-         * Options pour la liste des sites
-         * ************************** */
-
-        /**
-         * Liste des bidonvilles à afficher
-         *
-         * @type {Array.<Shantytown>}
-         */
-        towns: {
-            type: Array,
-            required: false,
-            default() {
-                return [];
-            },
-        },
-
-        /**
-         * Liste des points d'interets à afficher
-         *
-         * @type {Array.<poi>}
-         */
-        pois: {
-            type: Array,
-            required: false,
-            default() {
-                return [];
-            },
-        },
-
-        /**
-         * Indique s'il faut afficher en mode popup lorsque l'on clique sur le marqueur d'un site
-         *
-         */
-        displayPopupOnTownClick: {
-            type: Boolean,
-            required: false,
-            default: false,
-        },
-
-        /* *****************************
-         * Options de la searchbar
-         * ************************** */
-
-        /**
-         * Indique si la searchbar doit être affichée ou non
-         *
-         * @type {Boolean}
-         */
-        displaySearchbar: {
-            type: Boolean,
-            required: false,
-            default: true,
-        },
-
-        /**
-         * Placeholder de la searchbar
-         *
-         * @type {String}
-         */
-        placeholder: {
-            type: String,
-            required: false,
-            default: "Recherchez un lieu en saisissant une adresse",
-        },
-
-        /* *****************************
-         * Options génériques
-         * ************************** */
-
-        /**
-         * Centre et niveau de zoom par défaut de la carte
-         *
-         * @type {MapView}
-         */
-        defaultView: {
-            type: Object,
-            default: () => ({
-                // basically, centering on France
-                center: DEFAULT_VIEW,
-                zoom: 6,
-            }),
-        },
-
-        loadTerritoryLayers: {
-            type: Boolean,
-            default: false,
-            required: false,
-        },
-
-        layerName: {
-            type: String,
-            required: false,
-            default: "Dessin",
-        },
-
-        displayPrinter: {
-            type: Boolean,
-            default: true,
-            required: false,
-        },
-        displayAddressToggler: {
-            type: Boolean,
-            default: true,
-            required: false,
-        },
-
-        /* *****************************
-         * Options pour le cadastre
-         * ************************** */
-        cadastre: {
-            type: Object,
-            required: false,
-            default: null,
-        },
-        mapHeight: {
-            type: String,
-            required: false,
-            default: "100%",
-        },
+    defaultLayer: {
+        type: String,
+        required: false,
+        default: "Dessin",
     },
-
-    data() {
-        return {
-            /**
-             * La couche régionale
-             *
-             * @type {L.geoJSON}
-             */
-            regionalLayer: this.loadTerritoryLayers
-                ? L.geoJSON(regions, { style: { color: "#6A6A6A", weight: 1 } })
-                : false,
-
-            /**
-             * La couche départementale
-             *
-             * @type {L.geoJSON}
-             */
-            departementalLayer: this.loadTerritoryLayers
-                ? L.geoJSON(departements, { style: { color: "#6A6A6A", weight: 1 } })
-                : false,
-
-            /**
-             * La couche communale
-             *
-             * @type {L.layerGroup}
-             */
-            cityLayer: this.loadTerritoryLayers ? L.layerGroup() : false,
-
-            /**
-             * La couche cadastrale
-             */
-            cadastreLayer: null,
-
-            /**
-             * La carte
-             *
-             * @type {L.Map}
-             */
-            map: null,
-
-            /**
-             * Groupement de markers
-             *
-             * @type {Object.<String, L.markerClusterGroup>}
-             */
-            markersGroup: {
-                towns: L.markerClusterGroup({
-                    chunkedLoading: true,
-                }),
-                search: L.markerClusterGroup(),
-                pois: L.markerClusterGroup({
-                    disableClusteringAtZoom: POI_ZOOM_LEVEL,
-                }),
-            },
-
-            /**
-             * Search marker
-             *
-             * @type {L.Marker}
-             */
-            searchMarker: this.createSearchMarker(),
-
-            /**
-             * Town marker that was marked as a search result
-             *
-             * @type {L.Marker}
-             */
-            townSearchMarker: null,
-
-            /**
-             * Town markers
-             *
-             * @type {Array.<L.Marker>}
-             */
-            townMarkers: [],
-
-            /**
-             * POI markers
-             *
-             * @type {Array.<L.Marker>}
-             */
-            poiMarkers: [],
-
-            /**
-             * POI markers visible
-             *
-             * @type Boolean
-             */
-            poiMarkersVisible: false,
-
-            /**
-             * Town markers, hashed by coordinates
-             *
-             * @type {Object.<String, DOMElement>}
-             */
-            hashedTownMarkers: {},
-
-            /**
-             * Valeur de la searchbar
-             *
-             * @type {Address}
-             */
-            address: null,
-
-            /**
-             * Indique s'il faut afficher les adresses des sites sur la carte ou non
-             *
-             * Cette valeur est contrôlée par une checkbox directement sur la carte
-             *
-             * @type {Boolean}
-             */
-            showAddresses: false,
-
-            /**
-             * Indique s'il faut afficher la parcelle cadastrale ou non
-             *
-             * Cette valeur est contrôlée par une checkbox directement sur la carte
-             *
-             * @type {Boolean}
-             */
-            showCadastre: false,
-
-            /**
-             *
-             */
-            cadastreTogglerControl: null,
-
-            /**
-             * Value of showAddresses before the print
-             *
-             * Used to restore the original value after the print
-             *
-             * @type {Boolean}
-             */
-            showAddressesBeforePrint: false,
-
-            /**
-             * Total of shantytowns per region and departement
-             *
-             * @type {Object}
-             */
-            numberOfShantytownsBy: {
-                regions: {},
-                departements: {},
-                cities: {},
-            },
-
-            /**
-             * Indicate if the map reached the level to display the shantytowns
-             *
-             * @type {Boolean}
-             */
-            displayShantytownsLevel: false,
-        };
+    showSearchbar: {
+        type: Boolean,
+        required: false,
+        default: false,
     },
-
-    computed: {
-        fieldTypes() {
+    showPrinter: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    showAddressToggler: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    showAddresses: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    showLegend: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    showTerritories: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    defaultView: {
+        type: Object,
+        required: false,
+        default: () => ({
+            // basically, centering on France
+            center: [46.7755829, 2.0497727],
+            zoom: 6,
+        }),
+    },
+    towns: {
+        type: Array,
+        required: false,
+        default: () => [],
+    },
+    pois: {
+        type: Array,
+        required: false,
+        default() {
             return [];
         },
-
-        /**
-         * Codes couleur des types de terrain, hashés par id
-         *
-         * @returns {Object.<String, String>}
-         */
-        fieldTypeColors() {
-            if (!this.fieldTypes) {
-                return {};
-            }
-
-            return this.fieldTypes.reduce(
-                (acc, fieldType) =>
-                    Object.assign(acc, {
-                        [fieldType.id]: fieldType.color,
-                    }),
-                {}
-            );
-        },
-
-        /**
-         * Liste des fonds de carte disponibles
-         *
-         * @returns {Object.<String, L.TileLayer>}
-         */
-        mapLayers() {
-            return {
-                Satellite: L.tileLayer.provider("Esri.WorldImagery"),
-                Dessin: L.tileLayer.provider("OpenStreetMap.Mapnik"),
-            };
-        },
-        mapStyle() {
-            return { height: this.mapHeight };
-        },
     },
-
-    watch: {
-        towns() {
-            if (this.displayShantytownsLevel) {
-                this.syncTownMarkers();
-
-                // The method syncTownMarkers recreates the layer and make it visible even if it wasn't before
-                // Call onZoomEnd to hide if if necessary
-                this.onZoomEnd();
-            }
-
-            if (this.loadTerritoryLayers) {
-                this.countNumberOfTowns();
-                this.loadRegionalData();
-                this.loadDepartementalData();
-                this.loadCityData();
-            }
-        },
-
-        pois() {
-            this.syncPOIMarkers();
-        },
-
-        /**
-         * Affiche/masque les adresses des sites
-         *
-         * @returns {undefined}
-         */
-        showAddresses() {
-            if (this.showAddresses === true) {
-                document.body.classList.add("leaflet-show-addresses");
-            } else {
-                document.body.classList.remove("leaflet-show-addresses");
-            }
-        },
-
-        /**
-         * Ajoute un résultat de recherche sur la carte
-         *
-         * @returns {undefined}
-         */
-        address() {
-            if (this.address === null) {
-                this.clearSearchMarker();
-                return;
-            }
-
-            const {
-                coordinates: [lon, lat],
-                label,
-                addressType: type,
-            } = this.address;
-            this.centerMap([lat, lon], 20);
-
-            this.$nextTick(() => {
-                this.setSearchMarker(type, label, [lat, lon]);
-            });
-        },
-
-        cadastre() {
-            this.setupCadastreTogglerControl();
-
-            if (this.cadastreLayer) {
-                this.map.removeLayer(this.cadastreLayer);
-                delete this.cadastreLayer;
-                this.cadastreLayer = null;
-            }
-
-            if (!this.cadastre) {
-                return;
-            }
-
-            this.cadastreLayer = this.createCadastreLayer();
-
-            if (this.showCadastre === true) {
-                this.map.addLayer(this.cadastreLayer);
-            }
-        },
-
-        showCadastre() {
-            if (this.showCadastre === true) {
-                this.map.addLayer(this.cadastreLayer);
-
-                const { center } = this.defaultView;
-                this.centerMap(center, 18);
-            } else {
-                this.map.removeLayer(this.cadastreLayer);
-            }
-        },
+    cadastre: {
+        type: Object,
+        required: false,
+        default: null,
     },
-
-    mounted() {
-        this.createMap();
-
-        window.onbeforeprint = () => {
-            this.onBeforePrint(false);
-            this.printMapScreenshot();
-        };
-        window.onafterprint = () => {
-            this.onAfterPrint(false);
-        };
+    placeholder: {
+        type: String,
+        required: false,
+        default: "Recherchez un lieu en saisissant une adresse",
     },
+});
+const {
+    isLoading,
+    showPrinter,
+    showSearchbar,
+    showAddressToggler,
+    showAddresses,
+    showLegend,
+    showTerritories,
+    defaultView,
+    towns,
+    pois,
+    cadastre,
+} = toRefs(props);
+const configStore = useConfigStore();
+const notificationStore = useNotificationStore();
 
-    beforeUnmount() {
-        // before destroying, we emit this event to enable registration of position in the store
-        // only used in dashboard at the moment
-        this.$emit("leaveMap", this.map.getCenter(), this.map.getZoom());
+const map = ref(null);
+const controls = {};
+const printer = ref(null);
+const cadastreToggler = ref(null);
+const addressToggler = ref(null);
+const fieldTypes = ref(null);
+const fieldTypeColors = computed(() => {
+    return configStore.config.field_types.reduce((acc, fieldType) => {
+        acc[fieldType.id] = fieldType.color;
+        return acc;
+    }, {});
+});
+const waterImages = {
+    unknown: waterNull,
+    [undefined]: waterNull,
+    good: waterYes,
+    bad: waterNo,
+    toImprove: waterToImprove,
+};
+const showAddressesModel = computed({
+    get() {
+        return showAddresses.value;
     },
-
-    methods: {
-        createCadastreLayer() {
-            return L.geoJSON(this.cadastre, {
-                onEachFeature(feature, layer) {
-                    const { numero, feuille, section, code_insee } =
-                        feature.properties;
-                    layer.bindTooltip(
-                        `N°${numero}<br/>Feuille ${feuille}<br/>Section ${section}<br/>N°INSEE ${code_insee}`
-                    );
-
-                    layer.on("click", () => {
-                        const input = document.createElement("textarea");
-                        input.value = `N°${numero}\nFeuille ${feuille}\nSection ${section}\nN°INSEE ${code_insee}`;
-                        document.body.appendChild(input);
-                        input.select();
-                        document.execCommand("copy");
-                        document.body.removeChild(input);
-
-                        // notify({
-                        //     group: "notifications",
-                        //     type: "success",
-                        //     title: "Succès",
-                        //     text: "Le cadastre a été copié dans le presse-papier",
-                        // });
-                    });
-                },
-            });
-        },
-        printMapScreenshot() {
-            this.onBeforePrint(true);
-            // timeout nécessaire pour Chrome
-            setTimeout(() => {
-                const printWindow = window.open(
-                    "",
-                    "PrintWindow",
-                    "width=800,height=600"
-                );
-                if (!printWindow) {
-                    return;
-                }
-
-                html2canvas(document.getElementById("map"), {
-                    useCORS: true,
-                    width: this.map._size.x,
-                    height: this.map._size.y,
-                    logging: false,
-                }).then((canvas) => {
-                    const doc = printWindow.document;
-                    const img = doc.createElement("img");
-                    img.src = canvas.toDataURL("image/png");
-                    doc.body.appendChild(img);
-                    setTimeout(() => {
-                        printWindow.print();
-                        printWindow.close();
-                    }, 200);
-                });
-                // Restauration de l'environnement tel qu'il était avant la préparation de l'impression
-                this.onAfterPrint(true);
-            }, 200);
-        },
-        onBeforePrint(manualPrint = false) {
-            // Affiche l'adresse des sites pour l'impression
-            // Stocke le paramètre "showAddress" avant le passage en mode impression
-            this.showAddressesBeforePrint = this.showAddresses;
-            if (manualPrint === true) {
-                setTimeout(() => {
-                    // timeout nécessaire pour Chrome
-                    this.showAddresses = true;
-                }, 200);
-            } else {
-                this.showAddresses = true;
-            }
-            // Masque le contrôle de zoom
-
-            this.map.removeControl(this.map.zoomControl);
-            // Masque le contrôle affichant les couches
-            this.removeLayersControl();
-            // Ajoute la feuille de style "preprint"
-            // (masque barre de recherche, bouton d'impression et commutateur d'affichage des adresses de sites)
-            document.body.classList.add("preprint");
-        },
-        onAfterPrint(manualPrint = false) {
-            document.body.classList.remove("preprint");
-            this.setupLayersControl();
-            this.map.addControl(this.map.zoomControl);
-
-            // timeout nécessaire pour Chrome
-            if (manualPrint === true) {
-                setTimeout(() => {
-                    this.showAddresses = this.showAddressesBeforePrint;
-                }, 200);
-            } else {
-                this.showAddresses = this.showAddressesBeforePrint;
-            }
-        },
-        countNumberOfTowns() {
-            this.numberOfShantytownsBy = this.towns.reduce(
-                (acc, obj) => {
-                    if (acc.departements[obj.departement.code] === undefined) {
-                        acc.departements[obj.departement.code] = {
-                            sites: 0,
-                            code: obj.departement.code,
-                            name: obj.departement.name,
-                            latitude: obj.departement.latitude,
-                            longitude: obj.departement.longitude,
-                            chieftown: obj.departement.chieftown,
-                        };
-                    }
-
-                    if (acc.regions[obj.region.code] === undefined) {
-                        acc.regions[obj.region.code] = {
-                            sites: 0,
-                            code: obj.region.code,
-                            name: obj.region.name,
-                            latitude: obj.region.latitude,
-                            longitude: obj.region.longitude,
-                            chieftown: obj.region.chieftown,
-                        };
-                    }
-
-                    if (acc.cities[obj.city.code] === undefined) {
-                        acc.cities[obj.city.code] = {
-                            sites: 0,
-                            code: obj.city.code,
-                            name: obj.city.name,
-                            latitude: obj.city.latitude,
-                            longitude: obj.city.longitude,
-                        };
-                    }
-
-                    acc.departements[obj.departement.code].sites += 1;
-                    acc.regions[obj.region.code].sites += 1;
-                    acc.cities[obj.city.code].sites += 1;
-
-                    return acc;
-                },
-                { regions: {}, departements: {}, cities: {} }
-            );
-        },
-
-        /**
-         * Initialise tous les contrôles de la carte
-         *
-         * @returns {undefined}
-         */
-        setupMapControls() {
-            this.map.attributionControl.setPosition("bottomleft");
-            this.setupZoomControl();
-            this.setupLayersControl();
-            this.setupScaleControl();
-            this.setupPrintControl();
-            this.setupAddressTogglerControl();
-            this.setupFieldTypesLegendControl();
-        },
-
-        /**
-         * Ajoute une échelle à la carte
-         */
-        setupScaleControl() {
-            const control = L.control
-                .scale({
-                    imperial: false,
-                    metric: true,
-                })
-                .addTo(this.map);
-
-            control.setPosition("topright");
-        },
-
-        /**
-         * Initialise le contrôle "Zoom"
-         *
-         * @returns {undefined}
-         */
-        setupZoomControl() {
-            this.map.zoomControl.setPosition("bottomright");
-        },
-
-        /**
-         * Initialise le contrôle "Fonds de carte"
-         *
-         * @returns {undefined}
-         */
-        setupLayersControl() {
-            if (!this.layersControl) {
-                this.layersControl = L.control.layers(
-                    this.mapLayers,
-                    undefined,
-                    {
-                        collapsed: false,
-                    }
-                );
-            }
-
-            if (!this.layersControl._map) {
-                this.map.addControl(this.layersControl);
-            }
-        },
-
-        /**
-         *
-         */
-        removeLayersControl() {
-            if (this.layersControl) {
-                this.map.removeControl(this.layersControl);
-            }
-        },
-
-        /**
-         * Initialise le contrôle "Voir les adresses des sites"
-         *
-         * @returns {undefined}
-         */
-        setupPrintControl() {
-            const { printer } = this.$refs;
-            const Printer = L.Control.extend({
-                options: {
-                    position: "bottomright",
-                },
-
-                onAdd() {
-                    return printer;
-                },
-            });
-
-            this.map.addControl(new Printer());
-        },
-
-        /**
-         * Initialise le contrôle "Voir les adresses des sites"
-         *
-         * @returns {undefined}
-         */
-        setupAddressTogglerControl() {
-            const { adressToggler } = this.$refs;
-            const AddressToggler = L.Control.extend({
-                options: {
-                    position: "bottomleft",
-                },
-
-                onAdd() {
-                    return adressToggler;
-                },
-            });
-
-            this.map.addControl(new AddressToggler());
-        },
-
-        /**
-         * Initialise le contrôle "Voir les adresses des sites"
-         *
-         * @returns {undefined}
-         */
-        setupCadastreTogglerControl() {
-            if (!this.cadastre) {
-                if (!this.cadastreTogglerControl) {
-                    return;
-                }
-
-                this.cadastreTogglerControl.remove();
-                return;
-            }
-
-            if (!this.cadastreTogglerControl) {
-                const { cadastreToggler } = this.$refs;
-                const CadastreToggler = L.Control.extend({
-                    options: {
-                        position: "topright",
-                    },
-
-                    onAdd(map) {
-                        map.cadastreToggler = this;
-                        return cadastreToggler;
-                    },
-
-                    onRemove(map) {
-                        delete map.cadastreToggler;
-                    },
-                });
-                this.cadastreTogglerControl = new CadastreToggler();
-            }
-
-            if (!this.map.cadastreToggler) {
-                this.map.addControl(this.cadastreTogglerControl);
-            }
-        },
-
-        /**
-         * Initialise le contrôle "Légende"
-         *
-         * @returns {undefined}
-         */
-        setupFieldTypesLegendControl() {
-            const { legends } = this.$refs;
-            const Legend = L.Control.extend({
-                options: {
-                    position: "bottomleft",
-                },
-
-                onAdd() {
-                    return legends;
-                },
-            });
-
-            this.map.addControl(new Legend());
-        },
-
-        /**
-         * Initialise tous les clusters de markers
-         *
-         * @returns {undefined}
-         */
-        setupMarkerGroups() {
-            this.map.addLayer(this.markersGroup.towns);
-            this.map.addLayer(this.markersGroup.search);
-            this.map.addLayer(this.markersGroup.pois);
-        },
-
-        /**
-         * Met en place la vue par défaut sur la carte
-         *
-         * @returns {undefined}
-         */
-        setupView() {
-            const { center, zoom } = this.defaultView;
-            this.centerMap(center, zoom);
-        },
-
-        /**
-         * Crée la carte et initialise sa vue et ses contrôles
-         *
-         * Attention, cette méthode n'initialise pas le contenu (les markers) de la carte !
-         *
-         * @returns {undefined}
-         */
-        createMap() {
-            this.map = L.map("map", {
-                layers: this.mapLayers[this.layerName], // fond de carte à afficher
-                scrollWheelZoom: false, // interdire le zoom via la molette de la souris
-                preferCanvas: true,
-            });
-
-            if (this.cadastre) {
-                this.cadastreLayer = this.createCadastreLayer();
-            }
-
-            this.map.on("zoomend", this.bla);
-            if (this.loadTerritoryLayers) {
-                this.countNumberOfTowns();
-            }
-            this.setupMapControls();
-            this.setupMarkerGroups();
-            this.setupView();
-            this.onZoomEnd();
-        },
-
-        bla() {
-            const zoomLevel = this.map.getZoom();
-
-            if (!this.poiMarkersVisible && zoomLevel > POI_ZOOM_LEVEL) {
-                this.poiMarkersVisible = true;
-                this.pois.forEach(this.createPOIMarker);
-            } else if (this.poiMarkersVisible && zoomLevel <= POI_ZOOM_LEVEL) {
-                this.poiMarkersVisible = false;
-                this.removeAllPOIMarkers();
-            }
-        },
-
-        /**
-         * Affiche les points d'interet à partir d'un certain niveau de zoom
-         *
-         * @returns {undefined}
-         */
-        onZoomEnd() {
-            const zoomLevel = this.map.getZoom();
-
-            if (this.loadTerritoryLayers) {
-                if (zoomLevel <= REGION_MAX_ZOOM_LEVEL) {
-                    this.displayShantytownsLevel = false;
-                    this.loadRegionalData();
-                    this.showRegionalLayer();
-                } else if (zoomLevel <= DEPT_MAX_ZOOM_LEVEL) {
-                    this.displayShantytownsLevel = false;
-                    this.loadDepartementalData();
-                    this.showDepartementalLayer();
-                } else if (zoomLevel <= CITY_MAX_ZOOM_LEVEL) {
-                    this.displayShantytownsLevel = false;
-                    this.loadCityData();
-                    this.showCityLayer();
-                } else {
-                    this.displayShantytownsLevel = true;
-                    this.showTownsLayer();
-                }
-            } else {
-                this.displayShantytownsLevel = true;
-                this.showTownsLayer();
-            }
-
-            if (!this.poiMarkersVisible && zoomLevel > POI_ZOOM_LEVEL) {
-                this.poiMarkersVisible = true;
-                this.pois.forEach(this.createPOIMarker);
-            } else if (this.poiMarkersVisible && zoomLevel <= POI_ZOOM_LEVEL) {
-                this.poiMarkersVisible = false;
-                this.removeAllPOIMarkers();
-            }
-        },
-
-        /**
-         * Supprime et recrée la liste des marqueurs de site
-         *
-         * @returns {undefined}
-         */
-        syncTownMarkers() {
-            this.removeAllTownMarkers();
-            this.towns.forEach(this.createTownMarker);
-        },
-
-        /**
-         * Supprime et recrée la liste des marqueurs de site
-         *
-         * @returns {undefined}
-         */
-        syncPOIMarkers() {
-            this.removeAllPOIMarkers();
-            if (this.poiMarkersVisible) {
-                this.pois.forEach(this.createPOIMarker);
-            }
-        },
-
-        /**
-         * Supprime tous les marqueurs de site existants
-         *
-         * @returns {undefined}
-         */
-        removeAllTownMarkers() {
-            this.markersGroup.towns.clearLayers();
-            this.townMarkers = [];
-            this.hashedTownMarkers = {};
-        },
-
-        /**
-         * Supprime tous les marqueurs de site existants
-         *
-         * @returns {undefined}
-         */
-        removeAllPOIMarkers() {
-            this.markersGroup.pois.clearLayers();
-            this.poiMarkers = [];
-        },
-
-        getTownAddress(town) {
-            return town.usename;
-        },
-
-        getTownCoordinates(town) {
-            const { latitude, longitude } = town;
-            return [latitude, longitude];
-        },
-
-        getTownColor(town) {
-            if (town.fieldType !== undefined) {
-                return this.fieldTypeColors[town.fieldType.id];
-            }
-
-            return "#cccccc";
-        },
-
-        getTownWaterImage(town) {
-            if (
-                !town ||
-                !town.livingConditions ||
-                !town.livingConditions.water
-            ) {
-                return genericMarkerImage;
-            }
-
-            const { status } = town.livingConditions.water.status;
-            const hash = {
-                unknown: waterNull,
-                good: waterYes,
-                bad: waterNo,
-                toImprove: waterToImprove,
-            };
-
-            return hash[status] || waterNull;
-        },
-
-        /**
-         * Crée le marqueur de résultat de recherche
-         *
-         * @returns {L.Marker}
-         */
-        createSearchMarker() {
-            return L.marker(DEFAULT_VIEW, {
-                title: "A",
-                icon: L.divIcon({
-                    className: "leaflet-marker",
-                    html: `<span class="mapPin mapPin--result">
-                        <span class="mapPin-wrapper">
-                            <span class="mapPin-marker" style="background-color: red"></span>
-                        </span>
-                        <span class="mapPin-address"></span>
-                    </span>`,
-                    iconAnchor: [13, 28],
-                }),
-            });
-        },
-
-        /**
-         * Crée un marqueur de site et l'ajoute sur la carte
-         *
-         * @param {Shantytown} town
-         *
-         * @returns {undefined}
-         */
-        createTownMarker(town) {
-            const address = this.getTownAddress(town);
-            const coordinates = this.getTownCoordinates(town);
-            const color = this.getTownColor(town);
-            const waterImage = this.getTownWaterImage(town);
-            const style = town.style ? `style="${town.style}"` : "";
-
-            const marker = L.marker(coordinates, {
-                title: address,
-                icon: L.divIcon({
-                    className: "my-marker",
-                    html: `<div class="mapPin--${town.status === "open" ? "open" : "closed"
-                        } mapPin--shantytown" ${style}>
-                        <div class="bg-red rounded-full h-6 w-6 flex items-center justify-center">
-                            <div class="h-5 w-5 bg-white rounded-full flex items-center justify-center">
-                                <span class="mapPin-water"><img src="${waterImage}" class="h-4" /></span>
-                                <span class="mapPin-marker" style="background-color: ${color}"></span>
-                            </div>
-                        </div>
-                        <div class="mapPin-address">${address}</div>
-                    </div>`,
-                    iconAnchor: [13, 28],
-                }),
-            });
-            if (this.displayPopupOnTownClick) {
-                const component = new popup({
-                    propsData: { shantytown: town },
-                }).$mount();
-                marker.bindPopup(component.$el);
-            }
-            marker.on("click", this.handleTownMarkerClick.bind(this, town));
-            marker.on("add", () => {
-                if (marker.searchResult === true) {
-                    this.markTownAsSearchResult(marker);
-                }
-            });
-            marker.addTo(this.markersGroup.towns);
-            this.townMarkers.push(marker);
-            this.hashedTownMarkers[coordinates.join(";")] = marker;
-        },
-
-        /**
-         * Crée un marqueur de site et l'ajoute sur la carte
-         *
-         * @param {Shantytown} town
-         *
-         * @returns {undefined}
-         */
-        createPOIMarker(poi) {
-            // Longitude/latitudes returned by soliguide are in the wrong order
-            const coordinates = poi.location.coordinates.reverse();
-
-            const marker = L.marker(coordinates, {
-                title: poi.address,
-                icon: L.divIcon({
-                    className: "leaflet-marker",
-                    html: `<span class="mapPin mapPin--poi" >
-                        <span class="mapPin-wrapper">
-                            <img src="${cutlery}" width="12" height="12"/>
-                        </span>
-                        <span class="mapPin-address">${poi.address}</span>
-                    </span>`,
-                    iconAnchor: [13, 28],
-                }),
-            });
-            marker.on("click", this.handlePOIMarkerClick.bind(this, poi));
-
-            marker.addTo(this.markersGroup.pois);
-
-            this.poiMarkers.push(marker);
-        },
-
-        /**
-         * Gère un clic sur un marqueur de site
-         *
-         * @param {L.Marker} marker
-         * @param {Event}    event
-         *
-         * @returns {undefined}
-         */
-        handleTownMarkerClick(marker, event) {
-            this.$emit("town-click", marker, event);
-        },
-
-        /**
-         * Gère un clic sur un marqueur de point d'interet
-         *
-         * @param {L.Marker} marker
-         * @param {Event}    event
-         *
-         * @returns {undefined}
-         */
-        handlePOIMarkerClick(marker, event) {
-            this.$emit("poi-click", marker, event);
-        },
-
-        /**
-         * Met à jour le centre et le zoom de la carte
-         *
-         * @param {MapCoordinates} coordinates
-         * @param {Number}         zoom
-         *
-         * @returns {undefined}
-         */
-        centerMap(coordinates, zoom) {
-            this.map.setView(coordinates, zoom);
-        },
-
-        /**
-         * Force un redimensionnement de la carte pour prendre toute la place disponible
-         *
-         * @returns {undefined}
-         */
-        resize() {
-            if (this.map === null) {
-                return;
-            }
-
-            this.map.invalidateSize(true);
-        },
-
-        clearSearchMarker() {
-            if (this.townSearchMarker !== null) {
-                if (this.townSearchMarker._icon) {
-                    this.townSearchMarker._icon
-                        .querySelector(".mapPin")
-                        .classList.remove("mapPin--result");
-                }
-
-                this.townSearchMarker.searchResult = false;
-                this.townSearchMarker = null;
-                return;
-            }
-
-            this.searchMarker.remove();
-        },
-
-        getMatchingTownMarker(coordinates) {
-            return this.hashedTownMarkers[coordinates.join(";")] || null;
-        },
-
-        markTownAsSearchResult(marker) {
-            this.townSearchMarker = marker;
-            this.townSearchMarker.searchResult = true;
-            marker._icon
-                .querySelector(".mapPin")
-                .classList.add("mapPin--result");
-        },
-
-        setSearchMarker(type, address, coordinates) {
-            this.$trackMatomoEvent("Cartographie", "Recherche");
-            this.clearSearchMarker();
-
-            // check if there is a marker existing at that exact address
-            const townMarker = this.getMatchingTownMarker(coordinates);
-            if (townMarker !== null) {
-                this.markTownAsSearchResult(townMarker);
-                return;
-            }
-
-            this.searchMarker.addTo(this.markersGroup.search);
-            this.searchMarker.setLatLng(coordinates);
-
-            this.searchMarker._icon.querySelector(".mapPin-address").innerHTML =
-                address;
-
-            let action = "add";
-            if (type !== "housenumber") {
-                action = "remove";
-            }
-
-            this.searchMarker._icon
-                .querySelector(".mapPin")
-                .classList[action]("mapPin--street");
-        },
-
-        // Fonction de chargement des marqueurs régionaux
-        loadRegionalData() {
-            this.regionalLayer.getLayers().forEach((layer) => {
-                if (layer instanceof L.Marker) {
-                    layer.remove();
-                    return;
-                }
-            });
-            Object.keys(this.numberOfShantytownsBy.regions).forEach((key) => {
-                const {
-                    sites: nbSites,
-                    latitude,
-                    longitude,
-                    chieftown,
-                } = this.numberOfShantytownsBy.regions[key];
-
-                this.circleWithText(
-                    this.map,
-                    [latitude, longitude],
-                    [chieftown.latitude, chieftown.longitude],
-                    `<div>${nbSites}</div>`,
-                    20,
-                    3,
-                    "region"
-                ).addTo(this.regionalLayer);
-            });
-        },
-
-        // Fonction de chargement des marqueurs départementaux
-        loadDepartementalData() {
-            this.departementalLayer.getLayers().forEach((layer) => {
-                if (layer instanceof L.Marker) {
-                    layer.remove();
-                    return;
-                }
-            });
-
-            Object.keys(this.numberOfShantytownsBy.departements).forEach(
-                (key) => {
-                    const {
-                        sites: nbSites,
-                        latitude,
-                        longitude,
-                        chieftown,
-                        name,
-                    } = this.numberOfShantytownsBy.departements[key];
-
-                    const siteLabel = nbSites > 1 ? "sites" : "site";
-                    this.circleWithText(
-                        this.map,
-                        [latitude, longitude],
-                        [chieftown.latitude, chieftown.longitude],
-                        `<div><strong>${name}</strong><br/>${nbSites} ${siteLabel}</div>`,
-                        45,
-                        3,
-                        "departement"
-                    ).addTo(this.departementalLayer);
-                }
-            );
-        },
-
-        // Fonction de chargement des marqueurs par commune
-        loadCityData() {
-            this.cityLayer.clearLayers();
-
-            // On crée les marqueurs
-            const citiesMarkers = [];
-            Object.keys(this.numberOfShantytownsBy.cities).forEach((key) => {
-                const siteLabel =
-                    this.numberOfShantytownsBy.cities[key].sites > 1
-                        ? "sites"
-                        : "site";
-                citiesMarkers.push(
-                    this.circleWithText(
-                        this.map,
-                        [
-                            this.numberOfShantytownsBy.cities[key].latitude,
-                            this.numberOfShantytownsBy.cities[key].longitude,
-                        ],
-                        [
-                            this.numberOfShantytownsBy.cities[key].latitude,
-                            this.numberOfShantytownsBy.cities[key].longitude,
-                        ],
-                        `<div><strong>${this.numberOfShantytownsBy.cities[key].name}</strong><br/>${this.numberOfShantytownsBy.cities[key].sites} ${siteLabel}</div>`,
-                        35,
-                        3,
-                        "city"
-                    )
-                );
-            });
-            if (citiesMarkers.length > 0) {
-                L.layerGroup(citiesMarkers).addTo(this.cityLayer);
-            }
-        },
-
-        showRegionalLayer() {
-            this.hideDepartementalLayer();
-            this.hideCityLayer();
-            this.hideTownsLayer();
-
-            if (this.regionalLayer && !this.map.hasLayer(this.regionalLayer)) {
-                this.map.addLayer(this.regionalLayer);
-            }
-        },
-
-        hideRegionalLayer() {
-            if (this.regionalLayer && this.map.hasLayer(this.regionalLayer)) {
-                this.map.removeLayer(this.regionalLayer);
-            }
-        },
-
-        showDepartementalLayer() {
-            this.hideRegionalLayer();
-            this.hideCityLayer();
-            this.hideTownsLayer();
-
-            if (
-                this.departementalLayer &&
-                !this.map.hasLayer(this.departementalLayer)
-            ) {
-                this.map.addLayer(this.departementalLayer);
-            }
-        },
-
-        hideDepartementalLayer() {
-            if (
-                this.departementalLayer &&
-                this.map.hasLayer(this.departementalLayer)
-            ) {
-                this.map.removeLayer(this.departementalLayer);
-            }
-        },
-
-        showCityLayer() {
-            this.hideRegionalLayer();
-            this.hideDepartementalLayer();
-            this.hideTownsLayer();
-
-            if (this.cityLayer && !this.map.hasLayer(this.cityLayer)) {
-                this.map.addLayer(this.cityLayer);
-            }
-        },
-
-        hideCityLayer() {
-            if (this.cityLayer && this.map.hasLayer(this.cityLayer)) {
-                this.map.removeLayer(this.cityLayer);
-            }
-        },
-
-        showTownsLayer() {
-            this.hideRegionalLayer();
-            this.hideDepartementalLayer();
-            this.hideCityLayer();
-            this.syncTownMarkers();
-        },
-
-        hideTownsLayer() {
-            this.removeAllTownMarkers();
-        },
-
-        circleWithText(
-            map,
-            latLng,
-            chiefTownLatLng,
-            txt,
-            radius,
-            borderWidth,
-            type
-        ) {
-            const size = radius * 2;
-            const iconSize = size + borderWidth * 2;
-            const classes = {
-                region: 'w-12 h-12 text-lg',
-                departement: 'w-24 h-24',
-                city: ""
-            };
-
-            const icon = L.divIcon({
-                html: `<span class="opacity-75 rounded-full bg-green400 text-black flex items-center justify-center text-center border-2 border-green200 ${classes[type]}">${txt}</span>`,
-                className: "my-marker",
-                iconSize: [iconSize, iconSize],
-            });
-            const marker = L.marker(latLng, {
-                icon: icon,
-            }).on("click", function () {
-                if (map.getZoom() <= REGION_MAX_ZOOM_LEVEL) {
-                    // Nous sommes au-delà du niveau régional, un clic affiche le niveau régional
-                    map.setView(chiefTownLatLng, REGION_MAX_ZOOM_LEVEL + 1);
-                } else if (map.getZoom() <= DEPT_MAX_ZOOM_LEVEL) {
-                    // nous sommes au niveau régional, un clic affiche le niveau des départements
-                    map.setView(chiefTownLatLng, DEPT_MAX_ZOOM_LEVEL + 1);
-                } else if (map.getZoom() <= CITY_MAX_ZOOM_LEVEL) {
-                    // nous sommes au niveau départemental, un clic affiche le niveau des communes
-                    map.setView(chiefTownLatLng, CITY_MAX_ZOOM_LEVEL + 1);
-                }
-            });
-            return marker;
-        },
+    set(value) {
+        emit("update:showAddresses", value);
     },
+});
+const showCadastre = ref(false);
+const address = ref(null);
+const searchMarker = L.marker([46.7755829, 2.0497727], {
+    title: "Recherche",
+    icon: L.divIcon({
+        className: "my-marker",
+        html: `<div class="w-6 relative">
+            <div
+                class="bg-white rounded-full w-6 h-6 border-2 flex items-center justify-center"
+                style="border: 3px solid #ff0000"
+                ></div>
+            <div
+                class="-mt-[1px] w-3 border-l-6 border-l-transparent border-r-6 border-r-transparent border-t-6 m-auto"
+                style="border-top-color: #ff0000"
+            ></div>
+        </div>`,
+        iconAnchor: [13, 28],
+    }),
+});
+const defaultLayer = computed(() => {
+    return mapLayers[props.defaultLayer];
+});
+const layersControl = ref(null);
+const currentMarkerGroup = ref(null);
+const markersGroupData = {
+    departements,
+    regions,
+};
+const markersGroup = {
+    towns: ref(L.markerClusterGroup({})),
+    cities: ref(L.layerGroup()),
+    departements: showTerritories.value
+        ? ref(
+              L.geoJSON(/*markersGroupData.departements*/ [], {
+                  style: { color: "#6A6A6A", weight: 1 },
+              })
+          )
+        : null,
+    regions: showTerritories.value
+        ? ref(
+              L.geoJSON(/**markersGroupData.regions**/ [], {
+                  style: { color: "#6A6A6A", weight: 1 },
+              })
+          )
+        : null,
+    search: ref(L.layerGroup()),
+    pois: ref(
+        L.markerClusterGroup({
+            disableClusteringAtZoom: POI_ZOOM_LEVEL,
+        })
+    ),
+    cadastre: ref(
+        L.geoJSON([], {
+            onEachFeature: handleParcelle,
+        })
+    ),
 };
 
-/**
- * @typedef {Array} MapCoordinates
- * @property {Float} [0] Latitude
- * @property {Float} [1] Longitude
- */
+const emit = defineEmits([
+    "viewchange",
+    "townclick",
+    "poiclick",
+    "update:showAddresses",
+]);
+onMounted(() => {
+    createMap();
+    syncTownMarkers();
+});
 
-/**
- * @typedef {Object} MapView
- * @property {MapCoordinates} center Coordonnées géographiques du centre de la vue
- * @property {Number}         zoom   Niveau de zoom, voir la documentation de Leaflet
- */
+onBeforeUnmount(() => {
+    map.value.remove();
+});
 
-/**
- * @typedef {Object} Address Une adresse au format adresse.data.gouv.fr
- * @property {String}         label       Adresse complète
- * @property {String}         city        Nom de la ville
- * @property {String}         citycode    Code communal (/!\ différent du code postal)
- * @property {MapCoordinates} coordinates Coordonnées géographiques
- */
+function createMap() {
+    map.value = L.map("map", {
+        layers: [defaultLayer.value], // fond de carte à afficher
+        scrollWheelZoom: false, // interdire le zoom via la molette de la souris
+    });
+    map.value.on("zoomend", onZoomEnd);
+    map.value.on("move", onMove);
+    map.value.addLayer(markersGroup.search.value);
+
+    setupMapControls();
+    setupView();
+    onZoomEnd();
+}
+
+function setupMapControls() {
+    mapControls.attribution(map.value);
+    mapControls.zoom(map.value);
+    controls.zoom = map.value.zoomControl;
+    controls.layers = addLayersControl();
+    controls.scale = mapControls.scale(map.value);
+    controls.printer = mapControls.printer(map.value, printer.value);
+    controls.cadastreToggler = mapControls.cadastreToggler(
+        map.value,
+        cadastreToggler.value
+    );
+    controls.addressToggler = mapControls.addressToggler(
+        map.value,
+        addressToggler.value
+    );
+    controls.fieldTypes = mapControls.fieldTypes(map.value, fieldTypes.value);
+}
+
+function removeControls() {
+    Object.values(controls).forEach((control) => {
+        map.value.removeControl(control);
+    });
+}
+
+function restoreControls() {
+    Object.values(controls).forEach((control) => {
+        map.value.addControl(control);
+    });
+}
+
+function addLayersControl() {
+    if (!layersControl.value) {
+        layersControl.value = mapControls.layers();
+    }
+
+    if (!layersControl.value._map) {
+        map.value.addControl(layersControl.value);
+    }
+
+    return layersControl.value;
+}
+
+function setupView() {
+    centerMap(defaultView.value.center, defaultView.value.zoom);
+}
+
+function centerMap(coordinates, zoom) {
+    map.value.setView(coordinates, zoom);
+}
+
+function onMove() {
+    const { lat: latitude, lng: longitude } = map.value.getCenter();
+    emit("viewchange", {
+        center: [latitude, longitude],
+        zoom: map.value.getZoom(),
+    });
+}
+
+function onZoomEnd() {
+    const zoomLevel = map.value.getZoom();
+
+    let targetMarkerGroup = "towns";
+    if (showTerritories.value) {
+        if (zoomLevel <= REGION_MAX_ZOOM_LEVEL) {
+            targetMarkerGroup = "regions";
+        } else if (zoomLevel <= DEPT_MAX_ZOOM_LEVEL) {
+            targetMarkerGroup = "departements";
+        } else if (zoomLevel <= CITY_MAX_ZOOM_LEVEL) {
+            targetMarkerGroup = "cities";
+        }
+    }
+
+    if (targetMarkerGroup !== currentMarkerGroup.value) {
+        if (currentMarkerGroup.value) {
+            map.value.removeLayer(markersGroup[currentMarkerGroup.value].value);
+        }
+
+        map.value.addLayer(markersGroup[targetMarkerGroup].value);
+        currentMarkerGroup.value = targetMarkerGroup;
+    }
+
+    const poiIsVisible = map.value.hasLayer(markersGroup.pois.value);
+    if (zoomLevel > POI_ZOOM_LEVEL) {
+        if (!poiIsVisible) {
+            map.value.addLayer(markersGroup.pois.value);
+        }
+    } else if (map.value.hasLayer(markersGroup.pois.value)) {
+        map.value.removeLayer(markersGroup.pois.value);
+    }
+}
+
+async function printMapScreenshot() {
+    removeControls();
+    const container = document.getElementById("map");
+
+    try {
+        const blob = await domtoimage.toBlob(container, {
+            width: container.offsetWidth,
+            height: container.offsetHeight,
+            bgcolor: "#ffffff",
+            filter(node) {
+                // pour une raison inconnue domtoimage rajoute des bordures grises énormes
+                // à tous les éléments...
+                // malheureusement impossible d'empêcher ces bordures via une feuille de style,
+                // il faut obligatoirement rajouter un style inline à chaque élément pour
+                // dire explicitement qu'on ne veut pas de bordure dessus
+                // c'est ce qu'on fait ici : si le noeud n'est pas censé avoir une bordure
+                // (via classe tailwind border-quelquechose) alors on set
+                // explicitement sa bordure à 0
+                if (
+                    node.style &&
+                    !/(?:^|\s)border/gi.test(node.classList?.value)
+                ) {
+                    node.style.borderWidth = "0";
+                }
+
+                return true;
+            },
+        });
+        const ts = Date.now() / 1000;
+        downloadBlob(
+            blob,
+            `${formatDate(ts, "y-m-d")}-carte-des-bidonvilles.png`
+        );
+    } catch (error) {
+        console.log("Failed printing the map");
+    }
+
+    restoreControls();
+}
+
+function createTownMarker(town) {
+    const waterImage =
+        waterImages[town.livingConditions?.water?.status.status] ||
+        waterImages.unknown;
+    const color = fieldTypeColors.value[town.fieldType?.id] || "#ff0000";
+
+    const marker = L.marker([town.latitude, town.longitude], {
+        icon: L.divIcon({
+            className: "my-marker",
+            html: `<div class="w-6 relative"${
+                town.style ? ` style="${town.style}"` : ""
+            }>
+                <div
+                    class="bg-white rounded-full w-6 h-6 border-2 flex items-center justify-center"
+                    style="border: 3px solid ${color}"
+                    ><img src="${waterImage}" class="w-4 h-4"
+                /></div>
+                <div
+                    class="-mt-[1px] w-3 border-l-6 border-l-transparent border-r-6 border-r-transparent border-t-6 m-auto"
+                    style="border-top-color: ${color}"
+                ></div>
+                <div class="absolute top-1 left-8 bg-white/75 whitespace-nowrap px-2 rb-map-address">${
+                    town.usename
+                }</div>
+            </div>`,
+            iconAnchor: [13, 28],
+        }),
+    });
+
+    if (town.id) {
+        marker.on("click", () => {
+            emit("townclick", town);
+        });
+    }
+
+    return marker;
+}
+
+function createCircleMarker(
+    markerGroupId,
+    coordinates,
+    chieftownCoordinates,
+    content,
+    radius,
+    borderWidth
+) {
+    const size = radius * 2;
+    const iconSize = size + borderWidth * 2;
+    const classes = {
+        regions: "w-24 h-24",
+        departements: "w-24 h-24",
+        cities: "",
+    };
+
+    const marker = L.marker(coordinates, {
+        icon: L.divIcon({
+            className: "my-marker",
+            html: `<span class="opacity-75 rounded-full bg-green400 text-black flex items-center justify-center text-center border-2 border-green200 ${classes[markerGroupId]}">${content}</span>`,
+            iconSize: [iconSize, iconSize],
+        }),
+    }).on("click", function () {
+        if (map.value.getZoom() <= REGION_MAX_ZOOM_LEVEL) {
+            // Nous sommes au-delà du niveau régional, un clic affiche le niveau régional
+            map.value.setView(chieftownCoordinates, REGION_MAX_ZOOM_LEVEL + 1);
+        } else if (map.value.getZoom() <= DEPT_MAX_ZOOM_LEVEL) {
+            // nous sommes au niveau régional, un clic affiche le niveau des départements
+            map.value.setView(chieftownCoordinates, DEPT_MAX_ZOOM_LEVEL + 1);
+        } else if (map.value.getZoom() <= CITY_MAX_ZOOM_LEVEL) {
+            // nous sommes au niveau départemental, un clic affiche le niveau des communes
+            map.value.setView(chieftownCoordinates, CITY_MAX_ZOOM_LEVEL + 1);
+        }
+    });
+
+    marker.addTo(markersGroup[markerGroupId].value);
+}
+
+function createPoiMarker(poi) {
+    // Longitude/latitudes returned by soliguide are in the wrong order
+    const coordinates = poi.location.coordinates.reverse();
+
+    const marker = L.marker(coordinates, {
+        title: poi.address,
+        icon: L.divIcon({
+            className: "my-marker",
+            html: `<img src="${cutlery}" width="12" height="12" />`,
+            iconAnchor: [13, 28],
+        }),
+    });
+    marker.on("click", () => {
+        emit("poiclick", poi);
+    });
+
+    marker.addTo(markersGroup.pois.value);
+}
+
+function removeAllTownMarkers() {
+    markersGroup.towns.value.clearLayers();
+}
+
+function syncTownMarkers() {
+    removeAllTownMarkers();
+    if (showTerritories.value) {
+        clearMarkerGroup("cities");
+        clearMarkerGroup("departements");
+        clearMarkerGroup("regions");
+    }
+
+    const territoryData = {
+        cities: {},
+        departements: {},
+        regions: {},
+    };
+    markersGroup.towns.value.addLayers(
+        towns.value.map((town) => {
+            if (showTerritories.value) {
+                const { city, departement, region } = town;
+                if (!territoryData.cities[city.code]) {
+                    territoryData.cities[city.code] = {
+                        total: 0,
+                        name: city.name,
+                        latitude: city.latitude,
+                        longitude: city.longitude,
+                    };
+                }
+
+                if (!territoryData.departements[departement.code]) {
+                    territoryData.departements[departement.code] = {
+                        total: 0,
+                        name: departement.name,
+                        latitude: departement.latitude,
+                        longitude: departement.longitude,
+                        chieftown: departement.chieftown,
+                    };
+                }
+
+                if (!territoryData.regions[region.code]) {
+                    territoryData.regions[region.code] = {
+                        total: 0,
+                        name: region.name,
+                        latitude: region.latitude,
+                        longitude: region.longitude,
+                        chieftown: region.chieftown,
+                    };
+                }
+
+                territoryData.cities[city.code].total += 1;
+                territoryData.departements[departement.code].total += 1;
+                territoryData.regions[region.code].total += 1;
+            }
+
+            return createTownMarker(town);
+        })
+    );
+
+    if (showTerritories.value) {
+        Object.values(territoryData.regions).forEach((regionData) => {
+            const { total, name, latitude, longitude, chieftown } = regionData;
+            const label = total > 1 ? "sites" : "site";
+            createCircleMarker(
+                "regions",
+                [latitude, longitude],
+                [chieftown.latitude, chieftown.longitude],
+                `<div><strong>${name}</strong><br/>${total} ${label}</div>`,
+                20,
+                3
+            );
+        });
+        Object.values(territoryData.departements).forEach((departementData) => {
+            const { total, name, latitude, longitude, chieftown } =
+                departementData;
+            const label = total > 1 ? "sites" : "site";
+            createCircleMarker(
+                "departements",
+                [latitude, longitude],
+                [chieftown.latitude, chieftown.longitude],
+                `<div><strong>${name}</strong><br/>${total} ${label}</div>`,
+                45,
+                3
+            );
+        });
+        Object.values(territoryData.cities).forEach((cityData) => {
+            const { total, name, latitude, longitude } = cityData;
+            const label = total > 1 ? "sites" : "site";
+
+            createCircleMarker(
+                "cities",
+                [latitude, longitude],
+                [latitude, longitude],
+                `<div><strong>${name}</strong><br/>${total} ${label}</div>`,
+                35,
+                3
+            );
+        });
+    }
+}
+
+function syncPoiMarkers() {
+    markersGroup.pois.value.clearLayers();
+    // sans le timeout, les nouveaux marqueurs n'apparaissent jamais :/
+    setTimeout(() => {
+        pois.value.forEach(createPoiMarker);
+    }, 1000);
+}
+
+function clearMarkerGroup(id) {
+    markersGroup[id].value.clearLayers();
+    if (markersGroupData[id]) {
+        // markersGroup[id].value.addData(markersGroupData[id]);
+    }
+}
+
+function handleParcelle(feature, layer) {
+    const { numero, feuille, section, code_insee } = feature.properties;
+    layer.bindTooltip(
+        `N°${numero}<br/>Feuille ${feuille}<br/>Section ${section}<br/>N°INSEE ${code_insee}`
+    );
+
+    layer.on("click", () => {
+        copyToClipboard(
+            `N°${numero}\nFeuille ${feuille}\nSection ${section}\nN°INSEE ${code_insee}`
+        );
+        notificationStore.success(
+            "Copie de la parcelle cadastrale",
+            "Les données de cette parcelle cadastrale ont bien été copiées dans votre presse-papier"
+        );
+    });
+}
+
+watch(towns, syncTownMarkers);
+watch(pois, syncPoiMarkers);
+watch(cadastre, () => {
+    markersGroup.cadastre.value.clearLayers();
+    markersGroup.cadastre.value.addData(cadastre.value);
+});
+watch(showCadastre, () => {
+    if (showCadastre.value === false) {
+        if (map.value.hasLayer(markersGroup.cadastre.value)) {
+            map.value.removeLayer(markersGroup.cadastre.value);
+        }
+    } else if (!map.value.hasLayer(markersGroup.cadastre.value)) {
+        map.value.addLayer(markersGroup.cadastre.value);
+        centerMap(defaultView.value.center, 18);
+    }
+});
+watch(address, () => {
+    markersGroup.search.value.clearLayers();
+
+    if (address.value?.data?.coordinates) {
+        searchMarker.addTo(markersGroup.search.value);
+        searchMarker.setLatLng(address.value.data.coordinates);
+        centerMap(address.value.data.coordinates, 20);
+        trackEvent("Cartographie", "Recherche");
+    }
+});
+
+defineExpose({
+    resize() {
+        if (map.value) {
+            map.value.invalidateSize();
+        }
+    },
+});
 </script>
-
-<style lang="scss" scoped>
-@import "https://unpkg.com/leaflet@1.3.4/dist/leaflet.css";
-
-.rbCarte-marqueur {}
-</style>

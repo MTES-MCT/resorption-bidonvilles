@@ -2,6 +2,7 @@ import { computed, ref, watch } from "vue";
 import { defineStore } from "pinia";
 import { useEventBus } from "@/helpers/event-bus";
 import { useTownsStore } from "@/stores/towns.store";
+import { usePoiStore } from "@/stores/poi.store";
 import mapFilters from "@/utils/map_filters.js";
 import filterShantytownsForMap from "@/utils/filterShantytownsForMap";
 
@@ -22,6 +23,13 @@ export const useMapStore = defineStore("map", () => {
             return acc;
         }, {})
     );
+    const filtersAreOpen = ref(true);
+    const showAddresses = ref(false);
+    const lastView = ref(null);
+    const quickview = {
+        town: ref(null),
+        poi: ref(null),
+    };
 
     const townsStore = useTownsStore();
     const filteredTowns = computed(() => {
@@ -32,6 +40,15 @@ export const useMapStore = defineStore("map", () => {
                 return acc;
             }, {})
         );
+    });
+
+    const poiStore = usePoiStore();
+    const filteredPois = computed(() => {
+        if (filters.value.poi.checked.length === 0) {
+            return [];
+        }
+
+        return poiStore.pois;
     });
 
     function reset() {
@@ -48,6 +65,10 @@ export const useMapStore = defineStore("map", () => {
             filters.value[id].opened = opened;
             filters.value[id].checked = checked;
         }, {});
+        filtersAreOpen.value = true;
+        lastView.value = null;
+        quickview.town.value = null;
+        quickview.poi.value = null;
     }
 
     const { bus } = useEventBus();
@@ -55,7 +76,12 @@ export const useMapStore = defineStore("map", () => {
     reset();
 
     return {
+        lastView,
+        quickview,
+        showAddresses,
         filters,
+        filtersAreOpen,
         filteredTowns,
+        filteredPois,
     };
 });
