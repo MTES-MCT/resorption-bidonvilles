@@ -7,12 +7,22 @@
             <p>Territoire</p>
             <p>Type d'accès</p>
         </div>
-        <ListeDemandeAccesLigne class="tableau-acces" v-for="(user, index) in accesStore.currentPage.content"
-            :key="user.id" :user="user" :odd="index % 2 !== 0" />
+        <ListeDemandeAccesLigne
+            class="tableau-acces"
+            v-for="(user, index) in accesStore.currentPage.content"
+            :key="user.id"
+            :user="user"
+            :odd="index % 2 !== 0"
+        />
 
-        <BottomPagination :from="accesStore.currentPage.from" :to="accesStore.currentPage.to" :total="accesStore.total"
-            :currentPage="accesStore.currentPage.index" :numberOfPages="accesStore.numberOfPages"
-            @pagechange="changePage" />
+        <BottomPagination
+            :from="accesStore.currentPage.from"
+            :to="accesStore.currentPage.to"
+            :total="accesStore.total"
+            :currentPage="accesStore.currentPage.index"
+            :numberOfPages="accesStore.numberOfPages"
+            @pagechange="changePage"
+        />
     </div>
 </template>
 
@@ -21,8 +31,8 @@
     @apply grid grid-cols-5;
 }
 
-.tableau-acces>div,
-.tableau-acces>p {
+.tableau-acces > div,
+.tableau-acces > p {
     @apply p-3;
 }
 </style>

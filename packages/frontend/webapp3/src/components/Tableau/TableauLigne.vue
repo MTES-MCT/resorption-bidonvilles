@@ -33,7 +33,8 @@ const { columns, row, variant } = toRefs(props);
 
 const variantClasses = computed(() => {
     return {
-        primary: "bg-G200 font-bold border-0 border-b-2 border-black px-4 py-2",
+        primary:
+            "bg-G200 font-bold border-0 border-b-2 border-black px-4 py-2 text-left",
         secondary: "border-0 font-normal text-left px-4 py-2",
     }[variant.value];
 });

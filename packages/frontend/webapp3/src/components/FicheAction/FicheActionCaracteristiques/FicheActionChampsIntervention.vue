@@ -1,13 +1,10 @@
 <template>
-    <FicheSousRubrique :border="false">
+    <FicheSousRubrique>
         <p class="font-bold">Champs d'intervention</p>
         <p class="flex">
-            <Tag
-                v-for="topic in plan.topics"
-                :key="topic.uid"
-                :class="['mr-2']"
-                >{{ topic.name }}</Tag
-            >
+            <Tag v-for="topic in plan.topics" :key="topic.uid" class="mr-2">{{
+                topic.name
+            }}</Tag>
         </p>
     </FicheSousRubrique>
 </template>

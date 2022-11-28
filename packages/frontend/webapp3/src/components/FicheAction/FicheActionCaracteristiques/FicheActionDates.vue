@@ -1,5 +1,5 @@
 <template>
-    <FicheSousRubrique :border="false">
+    <section>
         <FicheGrille>
             <template v-slot:col1>
                 <Icon icon="calendar" class="mr-2" />
@@ -7,41 +7,39 @@
             </template>
 
             <template v-slot:col2>
-                <span>
-                    {{ startedAt }} ({{
-                        formatDateSince(plan.started_at / 1000)
-                    }})
-                </span>
+                {{ formatDate(plan.started_at / 1000, "d M y") }} ({{
+                    formatDateSince(plan.started_at / 1000)
+                }})
             </template>
         </FicheGrille>
 
-        <FicheGrille v-if="!closedAt && expectedToEndAt">
+        <FicheGrille v-if="!plan.closed_at && plan.expected_to_end_at">
             <template v-slot:col1>
-                <span class="font-bold mt-1">Fin prévue le</span>
+                <span class="font-bold">Fin prévue le</span>
             </template>
 
             <template v-slot:col2>
-                <span class="mt-1">{{ expectedToEndAt }}</span>
+                {{ formatDate(plan.expected_to_end_at / 1000, "d M y") }}
             </template>
         </FicheGrille>
 
-        <FicheGrille v-if="closedAt">
+        <FicheGrille v-if="plan.closed_at">
             <template v-slot:col1>
-                <span class="font-bold mt-1">Terminée le</span>
+                <span class="font-bold">Terminée le</span>
             </template>
 
             <template v-slot:col2>
-                <span class="mt-1">{{ closedAt }}</span>
+                {{ formatDate(plan.closed_at / 1000, "d M y") }}
             </template>
         </FicheGrille>
-    </FicheSousRubrique>
+    </section>
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { defineProps, toRefs } from "vue";
+import formatDate from "@/utils/formatDate";
 import formatDateSince from "@/utils/formatDateSince";
 
-import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
 import FicheGrille from "@/components/FicheRubrique/FicheGrille.vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
@@ -49,35 +47,4 @@ const props = defineProps({
     plan: Object,
 });
 const { plan } = toRefs(props);
-
-const startedAt = computed(() => {
-    return new Date(plan.value.started_at).toLocaleDateString("fr-FR", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
-});
-const expectedToEndAt = computed(() => {
-    if (!plan.value.expected_to_end_at) {
-        return null;
-    }
-
-    return new Date(plan.value.expected_to_end_at).toLocaleDateString("fr-FR", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
-});
-
-const closedAt = computed(() => {
-    if (!plan.value.closed_at) {
-        return null;
-    }
-
-    return new Date(plan.value.closed_at).toLocaleDateString("fr-FR", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
-});
 </script>

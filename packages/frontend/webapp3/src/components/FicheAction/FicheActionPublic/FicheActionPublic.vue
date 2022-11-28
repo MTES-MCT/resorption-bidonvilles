@@ -1,6 +1,6 @@
 <template>
-    <FicheRubrique title="Public">
-        <TableauRb class="mt-4" :columns="columns" :data="data"></TableauRb>
+    <FicheRubrique title="Public" id="public">
+        <TableauRb class="my-4" :columns="columns" :data="data"></TableauRb>
     </FicheRubrique>
 </template>
 

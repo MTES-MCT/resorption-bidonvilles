@@ -1,5 +1,5 @@
 <template>
-    <FicheSiteCaracteristiquesGrille :border="false">
+    <FicheGrille :border="false" :marginTop="false">
         <template v-slot:col1>
             <p class="font-bold">Installé depuis</p>
             <p>
@@ -21,14 +21,14 @@
                 <template v-else>non communiquée</template>
             </p>
         </template>
-    </FicheSiteCaracteristiquesGrille>
+    </FicheGrille>
 </template>
 
 <script setup>
 import { defineProps, toRefs } from "vue";
 import formatDate from "@/utils/formatDate";
 import formatDateSince from "@/utils/formatDateSince";
-import FicheSiteCaracteristiquesGrille from "./FicheSiteCaracteristiquesGrille.vue";
+import FicheGrille from "@/components/FicheRubrique/FicheGrille.vue";
 
 const props = defineProps({
     town: Object,

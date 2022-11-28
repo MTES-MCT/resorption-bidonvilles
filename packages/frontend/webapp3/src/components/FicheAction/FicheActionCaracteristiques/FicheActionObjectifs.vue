@@ -1,10 +1,10 @@
 <template>
     <FicheSousRubrique>
-        <section>
+        <p>
             <Icon icon="bullseye" class="mr-2" />
             <span class="font-bold">Objectifs de l'intervention</span>
-            <p class="whitespace-pre-line">{{ plan.goals }}</p>
-        </section>
+        </p>
+        <p class="whitespace-pre-line">{{ plan.goals }}</p>
     </FicheSousRubrique>
 </template>
 

@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, toRef } from "vue";
 import { useEventBus } from "@/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
-import { fetchList } from "@/api/plans.api";
+import { useNotificationStore } from "@/stores/notification.store";
+import { fetchList, fetchOne, addComment } from "@/api/plans.api";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
 import filterPlans from "@/utils/filterPlans";
 
@@ -105,13 +106,10 @@ export const usePlansStore = defineStore("plans", () => {
         try {
             const rawPlans = await fetchList();
             plans.value = rawPlans;
-            hash.value = rawPlans.reduce(
-                (hash, { id }, index) => ({
-                    ...hash,
-                    [id]: index,
-                }),
-                {}
-            );
+            hash.value = plans.value.reduce((hash, plan) => {
+                hash[plan.id] = plan;
+                return hash;
+            }, {});
             currentPage.index.value = rawPlans.length > 0 ? 1 : -1;
         } catch (e) {
             error.value =
@@ -139,7 +137,24 @@ export const usePlansStore = defineStore("plans", () => {
         }),
         fetchPlans,
         async fetchPlan(planId) {
-            return plans.value[hash.value[planId]];
+            if (!hash.value[planId]) {
+                hash.value[planId] = await fetchOne(planId);
+            }
+
+            return toRef(hash.value, planId);
+        },
+        async addComment(planId, comment) {
+            const notificationStore = useNotificationStore();
+            const { comment: newComment } = await addComment(planId, comment);
+
+            if (hash.value[planId]) {
+                hash.value[planId].comments.unshift(newComment);
+            }
+
+            notificationStore.success(
+                "Publication d'un message",
+                "Votre message est bien enregistré et a été envoyé aux acteurs concernés de votre département par mail"
+            );
         },
     };
 });

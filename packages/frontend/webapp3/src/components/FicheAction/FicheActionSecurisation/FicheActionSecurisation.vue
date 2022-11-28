@@ -1,5 +1,8 @@
 <template>
-    <FicheRubrique title="Stabilisation et sécurisation du site">
+    <FicheRubrique
+        title="Stabilisation et sécurisation du site"
+        id="securisation"
+    >
         <TableauRb class="mt-4" :columns="columns" :data="data" />
     </FicheRubrique>
 </template>

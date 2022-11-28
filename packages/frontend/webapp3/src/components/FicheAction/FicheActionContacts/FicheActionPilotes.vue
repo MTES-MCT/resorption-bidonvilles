@@ -1,5 +1,5 @@
 <template>
-    <FicheSousRubrique>
+    <FicheSousRubrique :border="false" :marginTop="false">
         <span class="font-bold"
             >Pilote{{ plan.government_contacts.length > 1 ? "s" : "" }}</span
         >

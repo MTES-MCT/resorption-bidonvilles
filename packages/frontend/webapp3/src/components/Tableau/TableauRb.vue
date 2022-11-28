@@ -105,13 +105,13 @@ const nbPages = computed(() => {
 });
 
 watch(usePagination, () => {
-    this.currentPage = 1;
+    currentPage.value = 1;
 });
 watch(itemsPerPage, () => {
-    this.currentPage = 1;
+    currentPage.value = 1;
 });
 watch(data, () => {
-    this.currentPage = 1;
+    currentPage.value = 1;
 });
 
 function onChangePage(page) {

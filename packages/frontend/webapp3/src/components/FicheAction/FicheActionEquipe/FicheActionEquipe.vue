@@ -1,6 +1,6 @@
 <template>
-    <FicheRubrique title="Équipe">
-        <TableauRb class="mt-4" :columns="columns" :data="data" />
+    <FicheRubrique title="Équipe" id="equipe">
+        <TableauRb class="my-4" :columns="columns" :data="data" />
     </FicheRubrique>
 </template>
 

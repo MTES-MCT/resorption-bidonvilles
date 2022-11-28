@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="ml-2">
-            <Icon icon="user-circle" />
+            <Icon icon="user-circle" class="mr-1" />
             <span class="text-dark font-bold">Opérateur</span><br />
             <LinkOrganization
                 :to="`/structure/${operator_contact.organization.id}`"

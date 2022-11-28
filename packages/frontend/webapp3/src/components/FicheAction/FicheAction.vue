@@ -1,75 +1,75 @@
 <template>
-    <FicheActionHeader :plan="plan" v-on:openCancel="closePlan" />
+    <FicheActionHeader :plan="plan" />
+
     <ContentWrapper>
-        <ArrangementLeftMenu columnWidthClass="w-92" :tabs="tabs">
-            <FicheActionCaracteristiques :plan="plan" id="caracteristiques" />
-            <FicheActionLocalisation :plan="plan" id="localisation" />
-            <FicheActionContacts :plan="plan" id="contacts" />
+        <ArrangementLeftMenu columnWidthClass="w-96" :tabs="tabs" autonav>
+            <FicheActionCaracteristiques :plan="plan" class="mb-8" />
+            <FicheActionLocalisation :plan="plan" class="mb-8" />
+            <FicheActionContacts :plan="plan" class="mb-8" />
             <FicheActionFinancements
                 v-if="userStore.hasPermission('plan_finances.access')"
                 :plan="plan"
-                id="financements"
+                class="mb-8"
             />
             <FicheActionEquipe
                 v-if="plan.states.length > 0"
                 :plan="plan"
-                id="equipe"
+                class="mb-8"
             />
             <FicheActionPublic
                 v-if="plan.states.length > 0"
                 :audience="audience"
-                id="public"
+                class="mb-8"
             />
             <FicheActionDroitsCommuns
                 v-if="plan.states.length > 0"
                 :plan="plan"
-                id="droits_communs"
+                class="mb-8"
             />
             <FicheActionSante
                 v-if="plan.states.length > 0 && topics.includes('health')"
                 :plan="plan"
-                id="sante"
+                class="mb-8"
             />
             <FicheActionEducation
                 v-if="plan.states.length > 0 && topics.includes('school')"
                 :plan="plan"
-                id="education"
+                class="mb-8"
             />
             <FicheActionEmploi
                 v-if="plan.states.length > 0 && topics.includes('work')"
                 :plan="plan"
-                id="emploi"
+                class="mb-8"
             />
             <FicheActionLogement
                 v-if="plan.states.length > 0 && topics.includes('housing')"
                 :plan="plan"
-                id="logement"
+                class="mb-8"
             />
             <FicheActionSecurisation
                 v-if="plan.states.length > 0 && topics.includes('safety')"
                 :plan="plan"
-                id="securisation"
+                class="mb-8"
             />
             <FicheActionAbsenceIndicateurs
-                v-if="plan.states.length === 0 && plan.canUpdateMarks"
+                v-if="plan.states.length === 0"
+                :plan="plan"
+                class="mb-8"
             />
         </ArrangementLeftMenu>
     </ContentWrapper>
-    <FicheActionJournal id="journal_de_l_action" :plan="plan" />
+
+    <FicheActionJournal
+        :plan="plan"
+        class="mt-4"
+        v-if="userStore.hasLocalizedPermission('plan_comment.list', plan)"
+    />
 </template>
 
 <script setup>
-import {
-    defineProps,
-    toRefs,
-    ref,
-    computed,
-    onMounted,
-    onBeforeUnmount,
-} from "vue";
-import router from "@/helpers/router";
-import menu from "./FicheAction.menu";
+import { defineProps, toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
+import menu from "./FicheAction.menu";
 
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
@@ -93,58 +93,24 @@ const props = defineProps({
     plan: Object,
 });
 const { plan } = toRefs(props);
-const currentTab = ref(null);
 
 const userStore = useUserStore();
 
-onMounted(() => {
-    window.addEventListener("scroll", handleMenuScroll);
-    scrollToHash();
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener("scroll", handleMenuScroll);
-});
-
-function handleMenuScroll() {
-    const tab = tabs.value.find(({ id }) => {
-        const el = document.getElementById(id);
-        // la section active est la première dont la bordure supérieure est visible à l'écran
-        // OU dont la bordure inférieure dépasse la moitié de l'écran
-        return (
-            el?.offsetTop >= window.scrollY ||
-            el?.offsetTop + el?.offsetHeight >
-                window.scrollY + document.body.offsetHeight / 2
-        );
-    });
-
-    currentTab.value = tab?.id || null;
-}
-
-function scrollToHash() {
-    if (!router.currentRoute.value.hash) {
-        return;
-    }
-
-    const el = document.querySelector(router.currentRoute.value.hash);
-    if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-    }
-}
-
 const tabs = computed(() => {
-    const arr = menu.filter((item) => {
-        if (!item.condition) {
-            return item;
-        }
+    return menu
+        .filter((item) => {
+            if (!item.condition) {
+                return item;
+            }
 
-        return item.condition(plan.value);
-    });
-
-    return arr.map((item) => {
-        item.active = item.id === currentTab.value;
-        return item;
-    });
+            return item.condition(plan.value);
+        })
+        .map((item) => {
+            return {
+                ...item,
+                label: item.label(plan.value),
+            };
+        });
 });
 
 const topics = computed(() => {
@@ -159,6 +125,7 @@ const audience = computed(() => {
     if (!plan.value || plan.value.states.length === 0) {
         return null;
     }
+
     function sum(originalObj, additionalObj) {
         return {
             total: originalObj.total + additionalObj.total,
@@ -219,8 +186,4 @@ const audience = computed(() => {
         }
     );
 });
-
-function closePlan() {
-    // TODO gérer modale de fermeture d'action
-}
 </script>

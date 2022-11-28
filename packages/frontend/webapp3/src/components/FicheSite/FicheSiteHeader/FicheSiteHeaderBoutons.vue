@@ -6,10 +6,6 @@
                 userStore.hasLocalizedPermission(
                     'shantytown_comment.list',
                     town
-                ) ||
-                userStore.hasLocalizedPermission(
-                    'shantytown_comment.create',
-                    town
                 )
             "
         >

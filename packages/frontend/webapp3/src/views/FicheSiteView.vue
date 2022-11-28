@@ -1,5 +1,5 @@
 <template>
-    <LayoutLoading v-if="isLoading !== false"></LayoutLoading>
+    <LayoutLoading v-if="isLoading !== false" />
 
     <LayoutError v-else-if="error !== null">
         <template v-slot:title>Fiche site inaccessible</template>

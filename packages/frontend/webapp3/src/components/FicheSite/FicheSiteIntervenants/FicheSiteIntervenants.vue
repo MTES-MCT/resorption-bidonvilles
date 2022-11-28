@@ -1,5 +1,5 @@
 <template>
-    <FicheSiteRubrique title="Intervenants">
+    <FicheRubrique title="Intervenants">
         <FicheSiteIntervenantsVide
             v-if="town.actors.length === 0"
             :town="town"
@@ -14,7 +14,7 @@
             :town="town"
             ref="modaleInviterIntervenant"
         />
-    </FicheSiteRubrique>
+    </FicheRubrique>
 </template>
 
 <script setup>
@@ -23,7 +23,7 @@ import router from "@/helpers/router";
 import { useEventBus } from "@/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
 
-import FicheSiteRubrique from "../FicheSiteRubrique.vue";
+import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import FicheSiteIntervenantsCTA from "./FicheSiteIntervenantsCTA.vue";
 import FicheSiteIntervenantsVide from "./FicheSiteIntervenantsVide.vue";
 import FicheSiteIntervenantsListe from "./FicheSiteIntervenantsListe.vue";

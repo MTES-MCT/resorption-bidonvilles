@@ -1,27 +1,36 @@
+import { useUserStore } from "@/stores/user.store";
+
 export default [
     {
         id: "caracteristiques",
-        label: "Intervention",
+        label: () => "Intervention",
         route: "#caracteristiques",
     },
     {
         id: "localisation",
-        label: "Lieu",
+        label: () => "Lieu",
         route: "#localisation",
     },
     {
         id: "contacts",
-        label: "Contacts",
+        label: () => "Contacts",
         route: "#contacts",
     },
     {
         id: "financements",
-        label: "Financements",
+        label: () => "Financements",
         route: "#financements",
+        condition(plan) {
+            const userStore = useUserStore();
+            return userStore.hasLocalizedPermission(
+                "plan_finances.access",
+                plan
+            );
+        },
     },
     {
         id: "equipe",
-        label: "Équipe",
+        label: () => "Équipe",
         route: "#equipe",
         condition(plan) {
             return plan.states.length > 0;
@@ -29,7 +38,7 @@ export default [
     },
     {
         id: "public",
-        label: "Public",
+        label: () => "Public",
         route: "#public",
         condition(plan) {
             return plan.states.length > 0;
@@ -37,7 +46,7 @@ export default [
     },
     {
         id: "droits_communs",
-        label: "Droits communs et ressources",
+        label: () => "Droits communs et ressources",
         route: "#droits_communs",
         condition(plan) {
             return plan.states.length > 0;
@@ -45,49 +54,81 @@ export default [
     },
     {
         id: "sante",
-        label: "Santé",
+        label: () => "Santé",
         route: "#sante",
         condition(plan) {
-            return plan.topics.map(({ uid }) => uid).includes("health");
+            return (
+                plan.states.length > 0 &&
+                plan.topics.map(({ uid }) => uid).includes("health")
+            );
         },
     },
     {
         id: "education",
-        label: "Éducation et scolarisation",
+        label: () => "Éducation et scolarisation",
         route: "#education",
         condition(plan) {
-            return plan.topics.map(({ uid }) => uid).includes("school");
+            return (
+                plan.states.length > 0 &&
+                plan.topics.map(({ uid }) => uid).includes("school")
+            );
         },
     },
     {
         id: "emploi",
-        label: "Formation et emploi",
+        label: () => "Formation et emploi",
         route: "#emploi",
         condition(plan) {
-            return plan.topics.map(({ uid }) => uid).includes("work");
+            return (
+                plan.states.length > 0 &&
+                plan.topics.map(({ uid }) => uid).includes("work")
+            );
         },
     },
     {
         id: "logement",
-        label: "Logement",
+        label: () => "Logement",
         route: "#logement",
         condition(plan) {
-            return plan.topics.map(({ uid }) => uid).includes("housing");
+            return (
+                plan.states.length > 0 &&
+                plan.topics.map(({ uid }) => uid).includes("housing")
+            );
         },
     },
     {
         id: "securisation",
-        label: "Stabilisation et sécurisation du site",
+        label: () => "Stabilisation et sécurisation du site",
         route: "#securisation",
         condition(plan) {
-            return plan.topics.map(({ uid }) => uid).includes("safety");
+            return (
+                plan.states.length > 0 &&
+                plan.topics.map(({ uid }) => uid).includes("safety")
+            );
+        },
+    },
+    {
+        id: "indicateurs",
+        label: () => "Indicateurs de suivi",
+        route: "#indicateurs",
+        condition(plan) {
+            return plan.states.length === 0;
         },
     },
     {
         id: "journal_de_l_action",
-        label: "Journal de l'action",
+        label: (plan) => {
+            const total = plan.comments.length;
+            return `Journal de l'action (${total} message${
+                total > 1 ? "s" : ""
+            })`;
+        },
         route: "#journal_de_l_action",
         icon: "comment",
         variant: "tertiary",
+        condition(plan) {
+            const userStore = useUserStore();
+            return userStore.hasLocalizedPermission("plan_comment.list", plan);
+        },
     },
 ];

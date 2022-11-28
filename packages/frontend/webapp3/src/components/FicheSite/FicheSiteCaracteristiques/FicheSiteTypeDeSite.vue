@@ -1,5 +1,5 @@
 <template>
-    <FicheSiteCaracteristiquesGrille>
+    <FicheGrille>
         <template v-slot:col1>
             <p class="font-bold">Type de site</p>
         </template>
@@ -12,14 +12,14 @@
             />
             {{ town.fieldType.label }}
         </template>
-    </FicheSiteCaracteristiquesGrille>
+    </FicheGrille>
 </template>
 
 <script setup>
 import { defineProps, toRefs } from "vue";
 
 import { Icon } from "@resorptionbidonvilles/ui";
-import FicheSiteCaracteristiquesGrille from "./FicheSiteCaracteristiquesGrille.vue";
+import FicheGrille from "@/components/FicheRubrique/FicheGrille.vue";
 
 const props = defineProps({
     town: Object,
