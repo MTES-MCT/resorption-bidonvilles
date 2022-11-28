@@ -1,5 +1,5 @@
 <template>
-    <span class="">{{ plan.name }}</span>
+    <p>{{ plan.location_details }}</p>
 </template>
 
 <script setup>

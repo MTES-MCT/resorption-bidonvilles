@@ -1,5 +1,5 @@
 <template>
-    <FicheSiteCaracteristiquesGrille>
+    <FicheGrille>
         <template v-slot:col1>
             <p class="font-bold">Sites à proximité</p>
             <p class="text-sm text-G600">Dans un rayon de 500m</p>
@@ -19,14 +19,14 @@
                 </li>
             </ul>
         </template>
-    </FicheSiteCaracteristiquesGrille>
+    </FicheGrille>
 </template>
 
 <script setup>
 import { defineProps, toRefs } from "vue";
 
 import { Link } from "@resorptionbidonvilles/ui";
-import FicheSiteCaracteristiquesGrille from "./FicheSiteCaracteristiquesGrille.vue";
+import FicheGrille from "@/components/FicheRubrique/FicheGrille.vue";
 
 const props = defineProps({
     towns: Array,

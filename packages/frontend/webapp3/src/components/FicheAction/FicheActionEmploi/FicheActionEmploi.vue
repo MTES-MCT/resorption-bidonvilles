@@ -1,5 +1,5 @@
 <template>
-    <FicheRubrique title="Formation et emploi">
+    <FicheRubrique title="Formation et emploi" id="emploi">
         <p class="font-bold mt-4">
             Nombre de personnes inscrites ou suivies par...
         </p>

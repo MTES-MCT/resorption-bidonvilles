@@ -1,5 +1,11 @@
 <template>
-    <div class="py-4" :class="border ? 'border-t-1 border-G200' : ''">
+    <div
+        class="pt-4"
+        :class="{
+            'border-t-1 border-G200': border === true,
+            'mt-4': marginTop === true,
+        }"
+    >
         <slot />
     </div>
 </template>
@@ -13,6 +19,11 @@ const props = defineProps({
         required: false,
         default: true,
     },
+    marginTop: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
 });
-const { border } = toRefs(props);
+const { border, marginTop } = toRefs(props);
 </script>

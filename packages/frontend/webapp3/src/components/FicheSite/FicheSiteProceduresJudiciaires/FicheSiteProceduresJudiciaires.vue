@@ -1,9 +1,10 @@
 <template>
-    <FicheSiteRubrique title="Procédure judiciaire">
+    <FicheRubrique title="Procédure judiciaire">
         <FicheSiteProceduresJudiciaireLigne
             icon="scroll"
             label="Dépôt de plainte du propriétaire"
             :border="false"
+            :marginTop="false"
         >
             {{ formatBool(town.ownerComplaint) }}
         </FicheSiteProceduresJudiciaireLigne>
@@ -36,7 +37,7 @@
         >
             {{ town.bailiff || "non communiqué" }}
         </FicheSiteProceduresJudiciaireLigne>
-    </FicheSiteRubrique>
+    </FicheRubrique>
 </template>
 
 <script setup>
@@ -44,7 +45,7 @@ import { defineProps, toRefs, computed } from "vue";
 import formatBool from "@/utils/formatBool";
 import formatDate from "@/utils/formatDate";
 
-import FicheSiteRubrique from "../FicheSiteRubrique.vue";
+import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import FicheSiteProceduresJudiciaireLigne from "./FicheSiteProceduresJudiciaireLigne.vue";
 
 const props = defineProps({

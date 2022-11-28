@@ -1,6 +1,6 @@
 <template>
-    <FicheRubrique title="Financements">
-        <div class="flex justify-between mb-2">
+    <FicheRubrique title="Financements" id="financements">
+        <div class="flex justify-between mb-2 mt-4">
             <Button
                 icon="chevron-left"
                 iconPosition="left"
@@ -26,7 +26,7 @@
             >
         </div>
 
-        <TableauRb :columns="columns" :data="currentYearData">
+        <TableauRb :columns="columns" :data="currentYearData" class="mb-4">
             <template v-slot:cell="{ column, content }">
                 <span v-if="column === 'type'">{{ content.name }}</span>
                 <span v-else-if="column === 'amount'"
@@ -37,7 +37,7 @@
                 <span v-else-if="column === 'details'">{{ content }}</span>
                 <span v-else-if="column === 'realAmount'">
                     <span v-if="content !== null">{{ content }} &euro;</span>
-                    <span v-else>N/R</span>
+                    <span v-else>non renseigné</span>
                 </span>
             </template>
         </TableauRb>

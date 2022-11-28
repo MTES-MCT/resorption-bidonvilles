@@ -1,5 +1,5 @@
 <template>
-    <LayoutLoading v-if="isLoading !== false"></LayoutLoading>
+    <LayoutLoading v-if="isLoading !== false" />
 
     <LayoutError v-else-if="error !== null">
         <template v-slot:title>Fiche action inaccessible</template>
@@ -22,8 +22,8 @@
         </template>
     </LayoutError>
 
-    <Layout v-else>
-        <FicheAction :plan="plan" />
+    <Layout :paddingBottom="false" v-else>
+        <FicheAction :plan="plan" v-if="plan" />
     </Layout>
 </template>
 
@@ -54,9 +54,7 @@ async function load() {
     if (isLoading.value === true) {
         return;
     }
-    if (plansStore.plans.length === 0) {
-        await plansStore.fetchPlans();
-    }
+
     isLoading.value = true;
     error.value = null;
     try {

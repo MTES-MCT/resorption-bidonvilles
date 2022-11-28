@@ -1,5 +1,5 @@
 <template>
-    <FicheRubrique title="Éducation et scolarisation">
+    <FicheRubrique title="Éducation et scolarisation" id="education">
         <TableauRb class="mt-4" :columns="columns" :data="data" />
     </FicheRubrique>
 </template>

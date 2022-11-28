@@ -1,5 +1,5 @@
 <template>
-    <FicheRubrique title="Logement">
+    <FicheRubrique title="Logement" id="logement">
         <div
             class="mt-4"
             v-for="(field, index) in housingFields"

@@ -1,5 +1,5 @@
 <template>
-    <FicheRubrique title="Santé">
+    <FicheRubrique title="Santé" id="sante">
         <p class="font-bold mt-4">Nombre de personnes avec...</p>
         <TableauRb :columns="columns" :data="data1" />
 

@@ -1,6 +1,10 @@
 <template>
-    <FicheRubrique title="Intervention">
-        <FicheActionChampsIntervention :plan="plan" />
+    <FicheRubrique title="Intervention" id="caracteristiques">
+        <FicheActionChampsIntervention
+            :plan="plan"
+            :border="false"
+            :marginTop="false"
+        />
         <FicheActionDates :plan="plan" />
         <FicheActionObjectifs :plan="plan" />
     </FicheRubrique>

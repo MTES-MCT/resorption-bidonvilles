@@ -1,5 +1,5 @@
 <template>
-    <FicheSousRubrique>
+    <FicheSousRubrique :border="false" :marginTop="false">
         <span class="font-bold">Opérateur ou service en charge</span>
         <CarteUtilisateur
             class="my-2"

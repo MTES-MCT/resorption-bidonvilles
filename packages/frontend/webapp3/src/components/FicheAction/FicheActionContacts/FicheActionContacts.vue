@@ -1,6 +1,6 @@
 <template>
-    <FicheRubrique title="Contacts">
-        <FicheActionPilotes class="mt-4" :plan="plan" />
+    <FicheRubrique title="Contacts" id="contacts">
+        <FicheActionPilotes :plan="plan" />
         <FicheActionOperateur :plan="plan" />
     </FicheRubrique>
 </template>

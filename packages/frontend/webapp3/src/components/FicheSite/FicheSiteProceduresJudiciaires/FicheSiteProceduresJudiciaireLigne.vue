@@ -1,12 +1,12 @@
 <template>
-    <FicheSiteSousRubrique>
+    <FicheSousRubrique>
         <div class="grid grid-template items-center">
             <p v-if="icon" class="text-center"><Icon :icon="icon" /></p>
             <p v-else></p>
             <p class="font-bold">{{ label }}</p>
             <p><slot /></p>
         </div>
-    </FicheSiteSousRubrique>
+    </FicheSousRubrique>
 </template>
 
 <style scoped>
@@ -18,7 +18,7 @@
 <script setup>
 import { defineProps, toRefs } from "vue";
 
-import FicheSiteSousRubrique from "../FicheSiteSousRubrique.vue";
+import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({

@@ -1,6 +1,6 @@
 <template>
-    <FicheRubrique title="Droits communs et ressources">
-        <TableauRb class="mt-4" :columns="columns" :data="data" />
+    <FicheRubrique title="Droits communs et ressources" id="droits_communs">
+        <TableauRb class="my-4" :columns="columns" :data="data" />
     </FicheRubrique>
 </template>
 

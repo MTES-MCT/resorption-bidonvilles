@@ -1,5 +1,5 @@
 <template>
-    <FicheSiteRubrique title="Habitants">
+    <FicheRubrique title="Habitants">
         <p class="italic mt-4">
             Le nombre de personnes sur un site est mouvant, les données fournies
             par les acteurs, même des estimations, participent à l'amélioration
@@ -12,13 +12,13 @@
         <FicheSiteHabitantsOrigines :border="false" :town="town" />
         <FicheSiteHabitantsDiagnosticSocial :town="town" />
         <FicheSiteHabitantsReinstallation :town="town" />
-    </FicheSiteRubrique>
+    </FicheRubrique>
 </template>
 
 <script setup>
 import { defineProps, toRefs } from "vue";
 
-import FicheSiteRubrique from "../FicheSiteRubrique.vue";
+import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import FicheSiteHabitantsTableau from "./FicheSiteHabitantsTableau.vue";
 import FicheSiteHabitantsOrigines from "./FicheSiteHabitantsOrigines.vue";
 import FicheSiteHabitantsDiagnosticSocial from "./FicheSiteHabitantsDiagnosticSocial.vue";
