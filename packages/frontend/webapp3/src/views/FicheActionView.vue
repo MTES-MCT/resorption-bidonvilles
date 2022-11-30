@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
 import { usePlansStore } from "@/stores/plans.store.js";
 import router from "@/helpers/router";
 
@@ -44,11 +44,12 @@ const isLoading = ref(null);
 const error = ref(null);
 const plan = ref(null);
 
-onMounted(load);
-
 const planId = computed(() => {
     return parseInt(router.currentRoute.value.params.id, 10);
 });
+
+onMounted(load);
+watch(planId, load);
 
 async function load() {
     if (isLoading.value === true) {

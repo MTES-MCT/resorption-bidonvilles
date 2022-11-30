@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
 import { useTownsStore } from "@/stores/towns.store.js";
 import router from "@/helpers/router";
 import { trackEvent } from "@/helpers/matomo";
@@ -45,14 +45,17 @@ const isLoading = ref(null);
 const error = ref(null);
 const town = ref(null);
 
-onMounted(() => {
-    trackEvent("Site", "Visite page site", `S${townId.value}`);
-    load();
-});
-
 const townId = computed(() => {
     return parseInt(router.currentRoute.value.params.id, 10);
 });
+
+onMounted(mount);
+watch(townId, mount);
+
+function mount() {
+    trackEvent("Site", "Visite page site", `S${townId.value}`);
+    load();
+}
 
 async function load() {
     if (isLoading.value === true) {

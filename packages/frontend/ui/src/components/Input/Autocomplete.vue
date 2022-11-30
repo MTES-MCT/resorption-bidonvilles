@@ -4,12 +4,20 @@
             :spinSuffixIcon="true" :clear="!isLoading" :id="name" v-bind="$attrs" autocomplete="off" @input="onInput"
             :disabled="isDisabled" @blur="onBlur" @keydown="onKeydown" @clear="clear" ref="input">
         <div class="absolute top-10 w-full z-10 border-1 border-G300 bg-white" v-if="results.length > 0">
-            <div class="flex" v-for="section in results" :key="section.title">
+            <div v-if="showCategory" class="flex" v-for="section in results" :key="section.title">
                 <div class="w-40 px-3 py-2 text-right text-sm text-G600 border-r border-G200 border-b">
                     {{ section.title }}
                 </div>
                 <div class="border-b border-G200 flex-1">
                     <div v-for="item in section.items" class="hover:bg-blue100 cursor-pointer px-3 py-2"
+                        :class="focusedItemId === item.id ? 'bg-blue100' : ''" :key="item.id" @click="selectItem(item)">
+                        {{ item.label }}
+                    </div>
+                </div>
+            </div>
+            <div v-else>
+                <div class="border-b border-G200 flex-1">
+                    <div v-for="item in rawResults" class="hover:bg-blue100 cursor-pointer px-3 py-2"
                         :class="focusedItemId === item.id ? 'bg-blue100' : ''" :key="item.id" @click="selectItem(item)">
                         {{ item.label }}
                     </div>
@@ -51,6 +59,11 @@ const props = defineProps({
         required: false,
         default: false
     },
+    showCategory: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
     disabled: {
         type: Boolean,
         required: false,
@@ -58,7 +71,7 @@ const props = defineProps({
     },
 });
 const emit = defineEmits(['update:modelValue']);
-const { fn, name, withoutMargin, allowFreeSearch, modelValue, disabled } = toRefs(props);
+const { fn, name, withoutMargin, allowFreeSearch, showCategory, modelValue, disabled } = toRefs(props);
 
 const rawResults = ref([]);
 const isLoading = ref(false);

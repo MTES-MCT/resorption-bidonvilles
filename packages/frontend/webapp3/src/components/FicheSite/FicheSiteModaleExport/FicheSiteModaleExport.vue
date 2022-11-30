@@ -65,7 +65,7 @@ async function download() {
 
         const ts = Date.now() / 1000;
         downloadBlob(
-            data,
+            new Blob([data]),
             `${formatDate(ts, "y-m-d")}-fiche-site-${normalizeTownName(
                 town.value.usename
             )}.docx`

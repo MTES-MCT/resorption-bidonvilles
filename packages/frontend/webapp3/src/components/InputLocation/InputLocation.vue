@@ -1,5 +1,10 @@
 <template>
-    <Autocomplete v-bind="$attrs" :fn="autocompleteFn" v-model="location" />
+    <Autocomplete
+        v-bind="$attrs"
+        :fn="autocompleteFn"
+        v-model="location"
+        showCategory
+    />
 </template>
 
 <script setup>
@@ -37,6 +42,8 @@ async function autocompleteFn(value) {
             departement: location.departement,
             typeName: location.label,
             typeUid: location.type,
+            latitude: location.latitude,
+            longitude: location.longitude,
         },
     }));
 }

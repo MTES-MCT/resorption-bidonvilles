@@ -1,5 +1,5 @@
 export default function (value) {
-    const input = document.createElement("input");
+    const input = document.createElement("textarea");
     input.value = value;
     document.body.appendChild(input);
     input.select();

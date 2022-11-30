@@ -28,6 +28,7 @@ import {
     faCircleXmark,
     faComment,
     faCopy,
+    faCutlery,
     faEnvelope,
     faEuroSign,
     faExclamation,
@@ -119,6 +120,7 @@ library.add(faCircleUser);
 library.add(faCircleXmark);
 library.add(faComment);
 library.add(faCopy);
+library.add(faCutlery);
 library.add(faEnvelope);
 library.add(faEuroSign);
 library.add(faExclamation);

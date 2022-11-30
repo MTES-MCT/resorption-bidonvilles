@@ -3,7 +3,7 @@
         <ArrangementLeftMenuColumn
             :tabs="tabs"
             :activeTab="computedActiveTab"
-            class="print:hidden"
+            class="print:hidden mb-12"
             :class="columnWidthClass"
         >
             <template v-slot:title v-if="$slots.menuTitle"

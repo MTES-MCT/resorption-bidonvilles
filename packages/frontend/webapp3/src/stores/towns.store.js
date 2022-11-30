@@ -204,9 +204,8 @@ export const useTownsStore = defineStore("towns", () => {
             return toRef(hash.value, townId);
         },
         setTown(townId, town) {
-            hash.value[townId] = enrichShantytown(
-                town,
-                configStore.config.field_types
+            hash.value[townId] = Object.assign(
+                enrichShantytown(town, configStore.config.field_types)
             );
         },
         async destroy(townId) {
