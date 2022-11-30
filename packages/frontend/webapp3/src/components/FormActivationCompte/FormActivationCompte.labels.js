@@ -1,4 +1,5 @@
 export default {
     email: "Votre courriel",
-    password: "Votre mot de passe",
+    password: "Définissez votre mot de passe",
+    password_confirm: "Confirmez votre mot de passe",
 };

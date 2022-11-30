@@ -4,6 +4,7 @@
         <template v-slot:body>
             <FormActivationCompteInputEmail v-model="email" />
             <FormActivationCompteInputPassword />
+            <FormActivationCompteInputPasswordConfirm />
         </template>
 
         <template v-slot:button>
@@ -26,6 +27,7 @@ import { Button } from "@resorptionbidonvilles/ui";
 import FormPublic from "@/components/FormPublic/FormPublic.vue";
 import FormActivationCompteInputEmail from "./inputs/FormActivationCompteInputEmail.vue";
 import FormActivationCompteInputPassword from "./inputs/FormActivationCompteInputPassword.vue";
+import FormActivationCompteInputPasswordConfirm from "./inputs/FormActivationCompteInputPasswordConfirm.vue";
 
 const props = defineProps({
     user: Object,
