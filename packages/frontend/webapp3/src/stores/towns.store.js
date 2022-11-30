@@ -204,9 +204,15 @@ export const useTownsStore = defineStore("towns", () => {
             return toRef(hash.value, townId);
         },
         setTown(townId, town) {
-            hash.value[townId] = Object.assign(
-                enrichShantytown(town, configStore.config.field_types)
+            hash.value[townId] = enrichShantytown(
+                town,
+                configStore.config.field_types
             );
+
+            const index = towns.value.findIndex(({ id }) => id === townId);
+            if (index !== -1) {
+                towns.value.splice(index, 1, hash.value[townId]);
+            }
         },
         async destroy(townId) {
             await destroy(townId);

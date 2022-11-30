@@ -125,7 +125,16 @@ export const useAccesStore = defineStore("acces", () => {
 
         updateUser(userId, user) {
             if (hash.value[userId]) {
+                enrichUserWithAccessStatus(user);
+                enrichUserWithLocationName(user);
                 hash.value[userId] = user;
+
+                const index = sortedAcces.value.findIndex(
+                    ({ id }) => id === userId
+                );
+                if (index !== -1) {
+                    sortedAcces.value.splice(index, 1, user);
+                }
             } else {
                 // si l'utilisateur n'est pas dans le hash, on ignore car on ne peut pas facilement
                 // intégrer ce nouvel utilisateur à la liste sortedAccess, car le tri n'est pas géré
