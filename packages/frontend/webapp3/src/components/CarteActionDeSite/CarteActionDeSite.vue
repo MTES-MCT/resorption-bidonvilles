@@ -1,5 +1,5 @@
 <template>
-    <article class="border p-3">
+    <article class="flex flex-col border p-3">
         <header class="text-primary text-lg">Action « {{ plan.name }} »</header>
         <p class="mt-2">
             <span class="font-bold">Thématiques</span><br />
@@ -10,7 +10,7 @@
                 >{{ topic }}</Tag
             >
         </p>
-        <p class="mt-2">
+        <p class="mt-2 flex-1">
             <span class="font-bold">Opérateur de l'action</span><br />
             <LinkOrganization :to="'/structure/' + plan.operator.id">{{
                 plan.operator.abbreviation || plan.operator.name
