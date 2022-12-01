@@ -1,6 +1,6 @@
 <template>
     <div :class="[
-        'fixed z-40 inset-0 transform transition ease-in-out duration-300',
+        'fixed z-[1005] inset-0 transform transition ease-in-out duration-300',
         isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none',
     ]">
         <div class="absolute w-full h-full bg-gray-500 opacity-75"></div>
