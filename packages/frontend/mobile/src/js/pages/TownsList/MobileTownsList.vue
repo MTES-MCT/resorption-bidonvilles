@@ -10,6 +10,17 @@
                     />
                     <h1 class="font-bold text-lg">Résorption-bidonvilles</h1>
                 </header>
+                <Button
+                    icon="arrow-left"
+                    iconPosition="left"
+                    size="sm"
+                    variant="textPrimary"
+                    class="text-primary"
+                    @click="redirectToWebapp"
+                >
+                    Retour vers la version navigateur
+                </Button>
+
                 <h2 class="font-bold text-display-md">
                     Bienvenue {{ user.first_name }} {{ user.last_name }}
                 </h2>
@@ -81,6 +92,7 @@ import TownCarousel from "./TownCarousel.vue";
 import { mapGetters } from "vuex";
 import Layout from "#src/js/components/Layout.vue";
 import SearchInput from "#src/js/components/SearchInput.vue";
+import ENV from "#src/env.js";
 
 export default {
     components: {
@@ -120,6 +132,9 @@ export default {
             setTimeout(() => {
                 this.$router.push(`/site/${town.id}`);
             }, 100);
+        redirectToWebapp() {
+            document.cookie = `device=webapp;domain=${ENV.VITE_MOBILE_DOMAIN}`;
+            location.replace(ENV.VITE_WEBAPP_URL);
         },
     },
 };
