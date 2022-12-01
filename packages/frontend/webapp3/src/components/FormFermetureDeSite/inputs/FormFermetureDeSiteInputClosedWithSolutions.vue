@@ -17,20 +17,18 @@
             variant="card"
             class="mr-1"
             name="closed_with_solutions"
-            v-model="closedWithSolutions"
         />
         <Radio
             :value="false"
             label="Non"
             variant="card"
             name="closed_with_solutions"
-            v-model="closedWithSolutions"
         />
     </CheckableGroup>
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs, ref } from "vue";
+import { computed, defineProps, toRefs } from "vue";
 import { CheckableGroup, Radio } from "@resorptionbidonvilles/ui";
 import labels from "../FormFermetureDeSite.labels";
 
@@ -39,9 +37,8 @@ const props = defineProps({
         type: Number,
         required: false,
     },
-    defaultValue: Boolean,
 });
-const { peopleWithSolutions, defaultValue } = toRefs(props);
+const { peopleWithSolutions } = toRefs(props);
 
 const info = computed(() => {
     if (
@@ -58,6 +55,4 @@ const info = computed(() => {
         logement adapté longue durée avec accompagnement,
         dont espace temporaire d’insertion, ou logement`;
 });
-
-const closedWithSolutions = ref(defaultValue.value);
 </script>

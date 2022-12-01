@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs } from "vue";
+import { computed, defineProps, toRefs, defineEmits } from "vue";
 import { useField, useIsSubmitting } from "vee-validate";
 import { fr } from "date-fns/locale";
 
@@ -32,21 +32,27 @@ const props = defineProps({
         required: false,
         default: false
     },
-    modelValue: [Date, String]
+    modelValue: {
+        type: [Date, String],
+        required: false,
+        default: null
+    }
 });
 
 const { name, label, info, showMandatoryStar, rules, disabled, modelValue } = toRefs(props);
 const isSubmitting = useIsSubmitting();
-const { handleChange, errors } = useField(name.value, rules.value, {
+const { handleChange, errors, value } = useField(name.value, rules.value, {
     initialValue: modelValue.value
 });
+const emit = defineEmits(["update:modelValue"]);
 
 const date = computed({
     get() {
-        return modelValue.value;
+        return value.value;
     },
     set(newValue) {
         handleChange(newValue);
+        emit("update:modelValue", newValue);
     }
 });
 </script>

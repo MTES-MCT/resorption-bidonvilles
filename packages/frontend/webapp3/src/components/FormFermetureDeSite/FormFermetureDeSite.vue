@@ -13,31 +13,12 @@
     <FormSection>
         <template v-slot:title>Déclaration de fermeture</template>
 
-        <FormFermetureDeSiteInputClosedAt
-            :disabled="mode === 'fix'"
-            :defaultValue="
-                town.closedAt ? formatDate(town.closedAt, 'y-m-d') : null
-            "
-        />
-        <FormFermetureDeSiteInputStatus
-            :disabled="mode === 'fix'"
-            :defaultValue="town.status"
-        />
-        <FormFermetureDeSiteInputClosingContext
-            :disabled="mode === 'fix'"
-            :defaultValue="town.closingContext"
-        />
-        <FormFermetureDeSiteInputSolutions
-            :disabled="mode === 'fix'"
-            :defaultValue="town.closingSolutions"
-        />
+        <FormFermetureDeSiteInputClosedAt :disabled="mode === 'fix'" />
+        <FormFermetureDeSiteInputStatus :disabled="mode === 'fix'" />
+        <FormFermetureDeSiteInputClosingContext :disabled="mode === 'fix'" />
+        <FormFermetureDeSiteInputSolutions :disabled="mode === 'fix'" />
         <FormFermetureDeSiteInputClosedWithSolutions
             :peopleWithSolutions="peopleWithSolutions"
-            :defaultValue="
-                town.closedWithSolutions
-                    ? town.closedWithSolutions === 'yes'
-                    : undefined
-            "
         />
     </FormSection>
 
@@ -117,6 +98,28 @@ const peopleWithSolutions = computed(() => {
 
 const { handleSubmit, setErrors } = useForm({
     validationSchema: schema,
+    initialValues: {
+        closed_at: town.value.closedAt
+            ? formatDate(town.value.closedAt, "y-m-d")
+            : null,
+        status: town.value.status,
+        closing_context: town.value.closingContext,
+        solutions: town.value.closingSolutions.map(({ id }) => id),
+        solution_details: town.value.closingSolutions.reduce(
+            (acc, { id, householdsAffected, peopleAffected, message }) => {
+                acc[id] = {
+                    householdsAffected,
+                    peopleAffected,
+                    message,
+                };
+                return acc;
+            },
+            {}
+        ),
+        closed_with_solutions: town.value.closedWithSolutions
+            ? town.value.closedWithSolutions === "yes"
+            : undefined,
+    },
 });
 
 const config = {

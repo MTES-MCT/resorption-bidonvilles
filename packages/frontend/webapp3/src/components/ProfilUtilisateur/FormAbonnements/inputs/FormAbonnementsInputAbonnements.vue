@@ -5,7 +5,6 @@
             :key="item.value"
             :value="item.value"
             :label="item.label"
-            v-model="$props.default"
             variant="checkbox"
             name="email_subscriptions"
         />
@@ -13,18 +12,10 @@
 </template>
 
 <script setup>
-import { computed, defineProps } from "vue";
+import { computed } from "vue";
 import { CheckableGroup, Checkbox } from "@resorptionbidonvilles/ui";
 import labels from "../FormAbonnements.labels";
 import subscriptions from "@/utils/email_subscriptions";
-
-defineProps({
-    default: {
-        type: Array,
-        required: false,
-        default: () => [],
-    },
-});
 
 const { email_subscriptions: label } = labels;
 const items = computed(() => {

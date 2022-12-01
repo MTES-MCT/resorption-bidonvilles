@@ -6,8 +6,8 @@
                 <FicheSiteModaleSubtitle :town="town" />
             </template>
             <template v-slot:body>
-                <ModaleMesThemesInputThemes :default="defaultValues.themes" />
-                <ModaleMesThemesInputOtherTheme :value="defaultValues.other" />
+                <ModaleMesThemesInputThemes />
+                <ModaleMesThemesInputOtherTheme />
 
                 <ErrorSummary
                     class="mt-4"
@@ -51,9 +51,6 @@ const props = defineProps({
 const { town } = toRefs(props);
 const userStore = useUserStore();
 
-const { handleSubmit, isSubmitting, setErrors, errors } = useForm({
-    validationSchema: schema,
-});
 const isOpen = ref(false);
 const error = ref(null);
 const customTitle = ref(null);
@@ -102,6 +99,11 @@ const defaultValues = computed(() => {
 });
 const currentConfig = computed(() => {
     return config[self.value ? "update" : "add"];
+});
+
+const { handleSubmit, isSubmitting, setErrors, errors } = useForm({
+    validationSchema: schema,
+    initialValues: defaultValues.value,
 });
 
 function close() {

@@ -1,6 +1,6 @@
 <template>
     <form>
-        <FormAbonnementsInputAbonnements :default="user.email_subscriptions" />
+        <FormAbonnementsInputAbonnements />
         <ErrorSummary
             v-if="error || Object.keys(errors).length > 0"
             :message="error"
@@ -35,8 +35,12 @@ const props = defineProps({
 const { user } = toRefs(props);
 
 const error = ref(null);
+
 const { handleSubmit, setErrors, errors } = useForm({
     validationSchema: schema,
+    initialValues: {
+        email_subscriptions: user.value.email_subscriptions,
+    },
 });
 const self = computed(() => {
     const userStore = useUserStore();
