@@ -6,13 +6,6 @@
             </p>
             <div>
                 <h1 class="text-3xl text-info font-bold">{{ title }}</h1>
-                <p>
-                    {{ activitiesStore.activities.length }}
-                    activité<template
-                        v-if="activitiesStore.activities.length > 1"
-                        >s</template
-                    >
-                </p>
             </div>
         </section>
     </div>
