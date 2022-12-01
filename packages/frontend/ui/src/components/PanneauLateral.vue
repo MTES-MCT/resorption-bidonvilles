@@ -100,7 +100,7 @@ function onVisible() {
 function onHidden() {
     document.removeEventListener("click", checkOutsideClick);
     document.removeEventListener("keyup", checkEscape);
-    emit("closed");
+    emit("close");
 }
 
 function checkOutsideClick(event) {
