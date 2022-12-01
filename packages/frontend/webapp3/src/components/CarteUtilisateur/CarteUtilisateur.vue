@@ -47,7 +47,8 @@ const props = defineProps({
 const { user, linkToUser } = toRefs(props);
 const userStore = useUserStore();
 
-function trackEmail() {
+function trackEmail(event) {
+    event.stopPropagation();
     trackEvent("Mail", "Envoi mail entre utilisateurs");
 }
 </script>
