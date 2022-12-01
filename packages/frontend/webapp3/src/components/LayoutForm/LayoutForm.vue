@@ -5,7 +5,7 @@
                 <section class="py-12">
                     <ContentWrapper
                         class="flex justify-between items-center"
-                        size="intermediate"
+                        :size="size"
                     >
                         <p>
                             <h1 class="text-2xl font-bold">
@@ -24,7 +24,7 @@
 
             <ContentWrapper
                 class="mt-12 flex justify-end space-x-3"
-                size="intermediate"
+                :size="size"
             >
                 <slot name="buttons" />
             </ContentWrapper>
@@ -33,6 +33,16 @@
 </template>
 
 <script setup>
+import { defineProps, toRefs } from "vue";
 import Layout from "@/components/Layout/Layout.vue";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+
+const props = defineProps({
+    size: {
+        type: String,
+        required: false,
+        default: "medium"
+    }
+});
+const { size } = toRefs(props);
 </script>

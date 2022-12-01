@@ -22,7 +22,23 @@
         </template>
     </LayoutError>
 
-    <FormFermetureDeSite :town="town" v-else />
+    <LayoutForm size="intermediate" v-else>
+        <template v-slot:title>Fermeture du site</template>
+        <template v-slot:subtitle>
+            {{ town.addressSimple
+            }}<template v-if="town.name"> « {{ town.name }} »</template>
+        </template>
+        <template v-slot:buttons>
+            <Button variant="primaryOutline" type="button" @click="back"
+                >Annuler</Button
+            >
+            <Button @click="submit">Valider</Button>
+        </template>
+
+        <ContentWrapper size="intermediate">
+            <FormFermetureDeSite :town="town" ref="form" />
+        </ContentWrapper>
+    </LayoutForm>
 </template>
 
 <script setup>
@@ -34,13 +50,16 @@ import router from "@/helpers/router";
 import { Button } from "@resorptionbidonvilles/ui";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
 import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
+import LayoutForm from "@/components/LayoutForm/LayoutForm.vue";
 import FormFermetureDeSite from "@/components/FormFermetureDeSite/FormFermetureDeSite.vue";
+import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 
 const townsStore = useTownsStore();
 const isLoading = ref(null);
 const error = ref(null);
 const town = ref(null);
+const form = ref(null);
 
 onMounted(load);
 
@@ -85,5 +104,13 @@ async function load() {
     }
 
     isLoading.value = false;
+}
+
+function submit(...args) {
+    return form.value.submit(...args);
+}
+
+function back() {
+    router.back();
 }
 </script>

@@ -51,9 +51,16 @@
 
 <script setup>
 import ENV from "@/helpers/env.js";
-import { defineProps, toRefs, computed } from "vue";
+import { defineProps, defineExpose, ref, toRefs, computed } from "vue";
+import { useForm, useFormValues, useFormErrors } from "vee-validate";
 import { useConfigStore } from "@/stores/config.store";
-import { useFormValues, useFormErrors } from "vee-validate";
+import { useNotificationStore } from "@/stores/notification.store";
+import { useTownsStore } from "@/stores/towns.store";
+import formatDate from "@/utils/formatDate";
+import { close, setClosedWithSolutions } from "@/api/towns.api";
+import { trackEvent } from "@/helpers/matomo";
+import router from "@/helpers/router";
+import schemaFn from "./FormFermetureDeSite.schema";
 
 import { ErrorSummary, Link, Warning } from "@resorptionbidonvilles/ui";
 import FormSection from "@/components/FormSection/FormSection.vue";
@@ -62,21 +69,22 @@ import FormFermetureDeSiteInputStatus from "./inputs/FormFermetureDeSiteInputSta
 import FormFermetureDeSiteInputClosingContext from "./inputs/FormFermetureDeSiteInputClosingContext.vue";
 import FormFermetureDeSiteInputSolutions from "./inputs/FormFermetureDeSiteInputSolutions.vue";
 import FormFermetureDeSiteInputClosedWithSolutions from "./inputs/FormFermetureDeSiteInputClosedWithSolutions.vue";
-import formatDate from "@/utils/formatDate";
 
 const { CONTACT_EMAIL } = ENV;
 const props = defineProps({
     town: Object,
-    mode: String,
-    error: {
-        type: String,
-        required: false,
-        default: null,
-    },
 });
-const { town, mode, error } = toRefs(props);
+const { town } = toRefs(props);
 const values = useFormValues();
 const errors = useFormErrors();
+const error = ref(null);
+
+const mode = computed(() => {
+    return town.value.closedAt !== null ? "fix" : "declare";
+});
+const schema = computed(() => {
+    return schemaFn(mode.value);
+});
 
 const actualSolutionIds = computed(() => {
     const actualSolutions = [
@@ -105,5 +113,71 @@ const peopleWithSolutions = computed(() => {
         );
     }, 0);
     return ((total / town.value.populationTotal) * 100).toFixed(0);
+});
+
+const { handleSubmit, setErrors } = useForm({
+    validationSchema: schema,
+});
+
+const config = {
+    declare: {
+        async submit(values) {
+            const updatedTown = await close(town.value.id, {
+                closed_at: formatDate(values.closed_at / 1000, "y-m-d"),
+                status: values.status,
+                closing_context: values.closing_context,
+                solutions: values.solutions.map((id) => {
+                    return {
+                        id,
+                        ...values.solution_details[id],
+                    };
+                }),
+                closed_with_solutions: values.closed_with_solutions,
+            });
+
+            trackEvent("Site", "Fermeture site", `S${town.value.id}`);
+
+            if (values.closed_with_solutions) {
+                trackEvent("Site", "Résorption du site", `S${town.value.id}`);
+            }
+
+            return updatedTown;
+        },
+        successTitle: "Fermeture du site",
+        successWording:
+            "Le site a bien été déclaré comme fermé. Les acteurs concernés ont été prévenus par mail",
+    },
+    fix: {
+        submit(values) {
+            return setClosedWithSolutions(town.value.id, {
+                closed_with_solutions: values.closed_with_solutions,
+            });
+        },
+        successTitle: "Correction de la fermeture",
+        successWording:
+            "Les données relatives à la fermeture du site ont bien été modifiées",
+    },
+};
+
+defineExpose({
+    submit: handleSubmit(async (values) => {
+        const { submit, successTitle, successWording } = config[mode.value];
+        const townsStore = useTownsStore();
+        const notificationStore = useNotificationStore();
+        error.value = null;
+
+        try {
+            const updatedTown = await submit(values);
+            townsStore.setTown(town.value.id, updatedTown);
+            notificationStore.success(successTitle, successWording);
+
+            router.replace(`/site/${town.value.id}`);
+        } catch (e) {
+            error.value = e?.user_message || "Une erreur inconnue est survenue";
+            if (e?.fields) {
+                setErrors(e.fields);
+            }
+        }
+    }),
 });
 </script>
