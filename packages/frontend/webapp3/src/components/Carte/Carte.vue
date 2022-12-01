@@ -118,8 +118,8 @@ import formatDate from "@/utils/formatDate";
 import copyToClipboard from "@/utils/copyToClipboard";
 
 // données tirées de https://github.com/gregoiredavid/france-geojson
-import departements from "@/assets/geojson/departements.json";
-import regions from "@/assets/geojson/regions.json";
+// import departements from "@/assets/geojson/departements.json";
+// import regions from "@/assets/geojson/regions.json";
 import waterYes from "@/assets/img/map/water-yes.png";
 import waterNo from "@/assets/img/map/water-no.png";
 import waterToImprove from "@/assets/img/map/water-to-improve.png";
@@ -274,10 +274,10 @@ const defaultLayer = computed(() => {
 });
 const layersControl = ref(null);
 const currentMarkerGroup = ref(null);
-const markersGroupData = {
-    departements,
-    regions,
-};
+// const markersGroupData = {
+//     departements,
+//     regions,
+// };
 const markersGroup = {
     towns: ref(L.markerClusterGroup({})),
     cities: ref(L.layerGroup()),
@@ -674,9 +674,9 @@ function syncPoiMarkers() {
 
 function clearMarkerGroup(id) {
     markersGroup[id].value.clearLayers();
-    if (markersGroupData[id]) {
-        // markersGroup[id].value.addData(markersGroupData[id]);
-    }
+    // if (markersGroupData[id]) {
+    //     markersGroup[id].value.addData(markersGroupData[id]);
+    // }
 }
 
 function handleParcelle(feature, layer) {
