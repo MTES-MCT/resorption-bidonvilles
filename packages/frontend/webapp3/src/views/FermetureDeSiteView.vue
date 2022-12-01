@@ -22,7 +22,7 @@
         </template>
     </LayoutError>
 
-    <FermetureDeSite :town="town" v-else />
+    <FormFermetureDeSite :town="town" v-else />
 </template>
 
 <script setup>
@@ -34,7 +34,7 @@ import router from "@/helpers/router";
 import { Button } from "@resorptionbidonvilles/ui";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
 import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
-import FermetureDeSite from "@/components/FermetureDeSite/FermetureDeSite.vue";
+import FormFermetureDeSite from "@/components/FormFermetureDeSite/FormFermetureDeSite.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 
 const townsStore = useTownsStore();
