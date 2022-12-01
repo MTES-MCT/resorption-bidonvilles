@@ -201,7 +201,7 @@ export const useTownsStore = defineStore("towns", () => {
                 );
             }
 
-            return toRef(hash.value, townId);
+            return hash.value[townId];
         },
         setTown(townId, town) {
             hash.value[townId] = enrichShantytown(

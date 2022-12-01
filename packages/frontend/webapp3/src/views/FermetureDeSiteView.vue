@@ -78,11 +78,11 @@ async function load() {
         const userStore = useUserStore();
         town.value = await townsStore.fetchTown(townId.value);
 
-        if (town.value.value.status === "open") {
+        if (town.value.status === "open") {
             if (
                 !userStore.hasLocalizedPermission(
                     "shantytown.close",
-                    town.value.value
+                    town.value
                 )
             ) {
                 throw {
@@ -92,7 +92,7 @@ async function load() {
         } else if (
             !userStore.hasLocalizedPermission(
                 "shantytown.fix_status",
-                town.value.value
+                town.value
             )
         ) {
             throw {
