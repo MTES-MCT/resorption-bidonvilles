@@ -174,7 +174,15 @@ defineExpose({
             townsStore.setTown(town.value.id, updatedTown);
             notificationStore.success(successTitle, successWording);
 
-            router.replace(`/site/${town.value.id}`);
+            const reg = new RegExp(
+                `\/site\/${town.value.id}(?:[^0-9]|$)`,
+                "gi"
+            );
+            if (reg.test(router.options.history.state.back)) {
+                router.back();
+            } else {
+                router.replace(`/site/${town.value.id}`);
+            }
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             if (e?.fields) {
