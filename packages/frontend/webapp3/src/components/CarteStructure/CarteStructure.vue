@@ -47,14 +47,10 @@
                 </li>
             </ul>
             <div class="text-right">
-                <Button
-                    variant="primaryText"
-                    icon="arrow-right"
-                    :class="[
-                        'text-display-sm font-bold whitespace-no-wrap hover:underline -mb-4',
-                    ]"
-                    >{{ isHover ? "Voir la fiche complète" : "" }}</Button
-                >
+                <Link :to="`/structure/${organization.id}`"
+                    >{{ isHover ? "Voir la fiche complète" : "" }}
+                    <Icon icon="arrow-right"
+                /></Link>
             </div>
         </RouterLink>
     </article>
@@ -64,7 +60,7 @@
 import { defineProps, toRefs, ref, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { RouterLink } from "vue-router";
-import { Button, Icon } from "@resorptionbidonvilles/ui";
+import { Icon, Link } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     organization: {

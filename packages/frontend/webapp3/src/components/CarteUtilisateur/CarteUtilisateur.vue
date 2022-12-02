@@ -2,20 +2,26 @@
     <CarteUtilisateurWrapper
         :user="user"
         :linkToUser="linkToUser"
-        class="bg-G200 p-4 grid grid-cols-2 gap-8"
+        class="border p-4 grid grid-cols-2 gap-8"
         :class="{
             'hover:bg-blue200': userStore.hasPermission('user.read'),
-            'border border-blue400': user.is_admin,
+            'bg-blue100': user.is_admin,
         }"
     >
         <div>
             <h1 class="font-bold" :class="user.is_admin ? 'text-info' : ''">
-                <Icon icon="user-shield" v-if="user.is_admin" />
                 {{ user.last_name.toUpperCase() }}
                 {{ user.first_name }}
             </h1>
-            <div class="text-info">Fonction : {{ user.position }}</div>
-            <div class="text-info">Rôle : {{ user.role }}</div>
+            <p>{{ user.position }}</p>
+            <p class="mt-2">
+                <span class="text-G500 text-sm">Rôle sur la plateforme :</span
+                ><br />
+                <span :class="user.is_admin ? 'text-info' : ''"
+                    ><Icon icon="user-shield" v-if="user.is_admin" />
+                    {{ user.role }}</span
+                >
+            </p>
         </div>
         <div>
             <CarteUtilisateurDetailsIcon icon="envelope">
