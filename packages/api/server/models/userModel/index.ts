@@ -19,6 +19,7 @@ import getLocationWatchers from './getLocationWatchers';
 import getNationalAdmins from './_common/getNationalAdmins';
 import getShantytownWatchers from './getShantytownWatchers';
 import getPlanObservers from './getPlanObservers';
+import isTracked from './isTracked';
 import listExport from './listExport';
 import setPermissionOptions from './setPermissionOptions';
 import update from './update';
@@ -46,6 +47,7 @@ export default {
     getNationalAdmins,
     getShantytownWatchers,
     getPlanObservers,
+    isTracked,
     listExport,
     setPermissionOptions,
     update,
