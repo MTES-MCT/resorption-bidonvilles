@@ -32,7 +32,7 @@
             <Button variant="primaryOutline" type="button" @click="back"
                 >Annuler</Button
             >
-            <Button @click="submit">Valider</Button>
+            <Button @click="submit">{{ submitWording }}</Button>
         </template>
 
         <ContentWrapper size="intermediate">
@@ -65,6 +65,12 @@ onMounted(load);
 
 const townId = computed(() => {
     return parseInt(router.currentRoute.value.params.id, 10);
+});
+
+const submitWording = computed(() => {
+    return town.value.status === "open"
+        ? "Fermer le site"
+        : "Corriger la fermeture";
 });
 
 async function load() {

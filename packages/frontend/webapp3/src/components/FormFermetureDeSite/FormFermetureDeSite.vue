@@ -38,9 +38,9 @@ import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
 import formatDate from "@/utils/formatDate";
+import backOrReplace from "@/utils/backOrReplace";
 import { close, setClosedWithSolutions } from "@/api/towns.api";
 import { trackEvent } from "@/helpers/matomo";
-import router from "@/helpers/router";
 import schemaFn from "./FormFermetureDeSite.schema";
 
 import { ErrorSummary, Link, Warning } from "@resorptionbidonvilles/ui";
@@ -174,15 +174,7 @@ defineExpose({
             townsStore.setTown(town.value.id, updatedTown);
             notificationStore.success(successTitle, successWording);
 
-            const reg = new RegExp(
-                `\/site\/${town.value.id}(?:[^0-9]|$)`,
-                "gi"
-            );
-            if (reg.test(router.options.history.state.back)) {
-                router.back();
-            } else {
-                router.replace(`/site/${town.value.id}`);
-            }
+            backOrReplace(`/site/${town.value.id}`);
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             if (e?.fields) {
