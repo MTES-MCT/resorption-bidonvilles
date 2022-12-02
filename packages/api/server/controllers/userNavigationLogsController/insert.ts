@@ -15,6 +15,9 @@ export default async (req, res, next) => {
             case 'insert_failed':
                 message = 'Le log n\'a pas pu être enregistré.';
                 break;
+            case 'fetch_failed':
+                message = 'Impossible de trouver l\'utilisateur';
+                break;
 
             default:
                 message = 'Une erreur inconnue est survenue.';
