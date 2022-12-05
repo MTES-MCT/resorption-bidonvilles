@@ -22,6 +22,7 @@ export default defineConfig({
         __APP_VERSION__: JSON.stringify(version),
     },
     resolve: {
+        dedupe: ["vue"],
         alias: {
             "#src": fileURLToPath(new URL("./src", import.meta.url)),
             "#helpers": fileURLToPath(
