@@ -1,5 +1,5 @@
 import find from './find';
-import addAttachments from './applyAttachments';
+import addAttachments from './addAttachments';
 import applyAttachments from './applyAttachments';
 import removeAttachments from './removeAttachments';
 

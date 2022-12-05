@@ -24,7 +24,9 @@ export default defineConfig({
     resolve: {
         alias: {
             "#src": fileURLToPath(new URL("./src", import.meta.url)),
-            "#helpers": fileURLToPath(new URL("./src/js/helpers", import.meta.url)),
+            "#helpers": fileURLToPath(
+                new URL("./src/js/helpers", import.meta.url)
+            ),
             "#frontend": fileURLToPath(new URL("..", import.meta.url)),
         },
     },
@@ -33,11 +35,11 @@ export default defineConfig({
         themeColor: "#00006D",
         msTileColor: "#ffffff",
         manifestOptions: {
-            icons: icons.map(icon => {
+            icons: icons.map((icon) => {
                 icon.src = `./img/icons/${icon.src}`;
                 return icon;
-            })
+            }),
         },
-        appleMobileWebAppCapable: "yes"
-    }
+        appleMobileWebAppCapable: "yes",
+    },
 });

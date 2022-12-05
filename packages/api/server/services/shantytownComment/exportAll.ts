@@ -29,6 +29,7 @@ export default async (user) => {
 
         // Replaces the problematic sharps characters in the csv file
         const stringToReplace = /#/gi;
+        // eslint-disable-next-line no-param-reassign
         raw.commentDescription = raw.commentDescription.replace(stringToReplace, '♯');
 
         return {

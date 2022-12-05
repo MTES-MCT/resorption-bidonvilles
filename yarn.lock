@@ -2652,6 +2652,7 @@ __metadata:
     proxyquire: ^2.1.0
     request: ^2.88.0
     rewiremock: ^3.13.9
+    rimraf: ^3.0.2
     semver: ^6.3.0
     sequelize: ^6.0.0
     sequelize-cli: ^6.5.0

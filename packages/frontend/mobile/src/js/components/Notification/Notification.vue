@@ -7,7 +7,7 @@
             <span class="text-xs mr-1"><Icon v-if="icon" :icon="icon" /></span>
             {{ text }}
         </p>
-        <Icon icon="times" @click.native="close" />
+        <Icon icon="times" @click="close" />
     </article>
 </template>
 

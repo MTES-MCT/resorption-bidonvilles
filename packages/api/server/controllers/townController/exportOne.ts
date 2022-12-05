@@ -9,7 +9,7 @@ export default async (req, res, next) => {
             user_message: 'Une erreur inconnue est survenue',
         });
         next(error.nativeError || error);
-        return;
+        return res;
     }
 
     return res.end(buffer);

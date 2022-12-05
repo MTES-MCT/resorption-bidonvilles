@@ -14,9 +14,9 @@ async function createUser(data) {
             const types: any = (await organizationTypeModel.findByCategory('association'));
             const type = types[0].id;
             const [[association]]: any = (await organizationModel.create(
+                type,
                 data.new_association_name,
                 data.new_association_abbreviation,
-                type,
                 null,
                 data.departement,
                 null,

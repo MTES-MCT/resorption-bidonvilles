@@ -8,7 +8,7 @@
                 v-for="town in towns"
                 :key="town.id"
                 :town="town"
-                @click.native="showTownPage(town)"
+                @click="showTownPage(town)"
             ></TownCard>
         </Container>
     </div>

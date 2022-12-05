@@ -1,17 +1,9 @@
 <template>
     <nav class="bg-primary text-white w-full py-4 px-6">
         <div class="flex justify-between max-w-lg mx-auto">
-            <NavbarItem
-                icon="home"
-                label="Sites"
-                @click.native="showTownsTab"
-            />
-            <NavbarItem icon="pen" label="Notes" @click.native="showNotesTab" />
-            <NavbarItem
-                icon="unlink"
-                label="Déconnexion"
-                @click.native="signout"
-            />
+            <NavbarItem icon="home" label="Sites" @click="showTownsTab" />
+            <NavbarItem icon="pen" label="Notes" @click="showNotesTab" />
+            <NavbarItem icon="unlink" label="Déconnexion" @click="signout" />
         </div>
     </nav>
 </template>

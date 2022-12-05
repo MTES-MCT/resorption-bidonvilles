@@ -25,7 +25,6 @@ rewiremock.disable();
 
 describe.only('services/shantytown', () => {
     describe('close()', () => {
-        const now = new Date();
         const user = {};
         const data = {
             shantytown: {

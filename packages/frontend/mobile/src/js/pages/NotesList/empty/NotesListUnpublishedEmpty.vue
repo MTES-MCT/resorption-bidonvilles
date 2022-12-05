@@ -4,7 +4,7 @@
             src="/img/illustrations/notes_empty.svg"
             class="w-1/2 mx-auto max-w-lg"
         />
-        <Button @click.native="$emit('create')">{{ wording }}</Button>
+        <Button @click="$emit('create')">{{ wording }}</Button>
     </p>
 </template>
 

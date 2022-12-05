@@ -55,7 +55,9 @@
     "ts-node": "^10.9.1",
     "tsc-alias": "^1.4.0",
     "typescript": "^4.4.2",
-    "validator": "^13.7.0"
+    "validator": "^13.7.0",
+    "rimraf": "^3.0.2",
+    "docx": "^7.3.0"
   },
   "devDependencies": {
     "@types/chai-as-promised": "^7.1.5",
@@ -68,7 +70,6 @@
     "chai-as-promised": "^7.1.1",
     "chai-http": "^4.2.1",
     "chai-subset": "^1.6.0",
-    "docx": "^7.3.0",
     "eslint": "8.22.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-airbnb-typescript": "^17.0.0",

@@ -4,6 +4,8 @@ export default (user, latitude, longitude, distance, closed = false) => {
     const distanceCalc = '(6371 * 2 * ASIN(SQRT( POWER(SIN(( :latitude - shantytowns.latitude) *  pi()/180 / 2), 2) +COS( :latitude * pi()/180) * COS(shantytowns.latitude * pi()/180) * POWER(SIN(( :longitude - shantytowns.longitude) * pi()/180 / 2), 2) )))';
 
     return query(
+        user,
+        'list',
         [
             {
                 distance: {
@@ -17,8 +19,6 @@ export default (user, latitude, longitude, distance, closed = false) => {
             },
         ],
         undefined,
-        user,
-        'list',
         false,
         // SQL
         {

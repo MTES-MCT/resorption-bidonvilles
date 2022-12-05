@@ -8,7 +8,7 @@ import serializeUser from './serializeUser';
 
 const { where: fWhere } = permissionUtils;
 
-export default async (where: Where = [], filters, user: string = null, feature: string = undefined, transaction: Transaction = undefined) => {
+export default async (where: Where = [], filters = {}, user: string = null, feature: string = undefined, transaction: Transaction = undefined) => {
     const replacements = {};
 
     if (user !== null) {

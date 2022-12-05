@@ -1,6 +1,5 @@
 import shantytownModel from '#server/models/shantytownModel';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
-import highCovidCommentModel from '#server/models/highCovidCommentModel';
 import userModel from '#server/models/userModel';
 import planCommentModel from '#server/models/planCommentModel';
 

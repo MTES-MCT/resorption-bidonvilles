@@ -1,6 +1,8 @@
 import query from './_common/query';
 
 export default user => query(
+    user,
+    'list',
     [
         {
             actors: {
@@ -12,6 +14,4 @@ export default user => query(
         },
     ],
     undefined, // order
-    user,
-    'list',
 );

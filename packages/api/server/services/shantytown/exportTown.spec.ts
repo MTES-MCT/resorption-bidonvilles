@@ -74,7 +74,6 @@ describe.only('services/shantytown', () => {
                 try {
                     await exportTownService(user, {});
                 } catch (error) {
-                    console.log(error);
                     responseError = error;
                 }
                 expect(responseError).to.be.instanceOf(ServiceError);

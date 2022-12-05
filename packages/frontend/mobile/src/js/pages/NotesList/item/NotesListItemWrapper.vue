@@ -1,7 +1,7 @@
 <template>
     <LeftSlidingBlock>
         <template v-slot:body>
-            <Container @click.native="$router.push(`/notes/${note.id}`)">
+            <Container @click="$router.push(`/notes/${note.id}`)">
                 <NotesListItem :note="note" />
             </Container>
         </template>

@@ -71,7 +71,7 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
     `;
 }
 
-export default async (where = [], order = ['departements.code ASC', 'cities.name ASC'], user, feature, includeChangelog = false, additionalSQL = {}, argReplacements = {}) => {
+export default async (user, feature, where = [], order = ['departements.code ASC', 'cities.name ASC'], includeChangelog = false, additionalSQL = {}, argReplacements = {}) => {
     const permissionsClauseGroup = pWhere().can(user).do(feature, 'shantytown');
     if (permissionsClauseGroup === null) {
         return [];
