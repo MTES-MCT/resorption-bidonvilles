@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import Container from "#src/js/components/Container.vue";
 import {
     Button,
@@ -55,11 +54,6 @@ export default {
             password: "",
         };
     },
-    computed: {
-        ...mapGetters({
-            isLoggedIn: "user/loggedIn",
-        }),
-    },
     methods: {
         async onLogin() {
             try {
@@ -77,9 +71,6 @@ export default {
                 this.error =
                     err.user_message || "Une erreur inconnue est survenue";
                 this.loading = false;
-                if (err.fields) {
-                    this.$refs.form.setErrors(err.fields);
-                }
             }
         },
     },
