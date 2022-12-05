@@ -4,6 +4,10 @@ export default (town) => {
         details: null,
     };
 
+    if ([null, 'inconnu'].includes(town.waterAccessType)) {
+        return status;
+    }
+
     if (town.waterAccessIsPublic === true) {
         status.globalImpact = 'bad';
         status.details = 'negative';

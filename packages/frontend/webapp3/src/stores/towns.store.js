@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref, watch, computed, toRef } from "vue";
+import { ref, watch, computed } from "vue";
 import { useEventBus } from "@/helpers/event-bus";
 import { trackEvent } from "@/helpers/matomo";
 import { useUserStore } from "@/stores/user.store";
@@ -10,8 +10,10 @@ import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
 import {
     addActor,
     addComment,
+    create,
     deleteComment,
     destroy,
+    edit,
     fetch,
     fetchList,
     findNearby,
@@ -147,6 +149,18 @@ export const useTownsStore = defineStore("towns", () => {
         }
     }
 
+    function setTown(townId, town) {
+        hash.value[townId] = enrichShantytown(
+            town,
+            configStore.config.field_types
+        );
+
+        const index = towns.value.findIndex(({ id }) => id === townId);
+        if (index !== -1) {
+            towns.value.splice(index, 1, hash.value[townId]);
+        }
+    }
+
     const { bus } = useEventBus();
     watch(() => bus.value.get("new-user"), reset);
     reset();
@@ -203,17 +217,7 @@ export const useTownsStore = defineStore("towns", () => {
 
             return hash.value[townId];
         },
-        setTown(townId, town) {
-            hash.value[townId] = enrichShantytown(
-                town,
-                configStore.config.field_types
-            );
-
-            const index = towns.value.findIndex(({ id }) => id === townId);
-            if (index !== -1) {
-                towns.value.splice(index, 1, hash.value[townId]);
-            }
-        },
+        setTown,
         async destroy(townId) {
             await destroy(townId);
 
@@ -267,8 +271,7 @@ export const useTownsStore = defineStore("towns", () => {
                 hash.value[id].heatwaveStatus = status;
                 trackEvent(
                     "Site",
-                    `${
-                        status ? "Déclenchement" : "Suppression"
+                    `${status ? "Déclenchement" : "Suppression"
                     } alerte canicule`,
                     `S${id}`
                 );
@@ -344,6 +347,25 @@ export const useTownsStore = defineStore("towns", () => {
                     actor.themes = themes;
                 }
             }
+        },
+
+        async create(data) {
+            const { town } = await create(data);
+            const enrichedTown = enrichShantytown(
+                town,
+                configStore.config.field_types
+            );
+            hash.value[town.id] = enrichedTown;
+            towns.value.push(enrichedTown);
+
+            return town;
+        },
+
+        async edit(townId, data) {
+            const town = await edit(townId, data);
+            setTown(townId, town);
+
+            return hash.value[town.id];
         },
     };
 });

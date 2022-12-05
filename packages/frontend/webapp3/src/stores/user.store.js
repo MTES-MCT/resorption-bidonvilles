@@ -46,6 +46,9 @@ export const useUserStore = defineStore("user", {
         hasJusticePermission() {
             return this.hasPermission("shantytown_justice.access");
         },
+        hasOwnerPermission() {
+            return this.hasPermission("shantytown_owner.access");
+        },
         hasUpdateShantytownPermission() {
             return (shantytown) =>
                 this.hasLocalizedPermission("shantytown.update", shantytown);

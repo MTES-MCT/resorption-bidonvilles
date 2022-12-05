@@ -66,7 +66,6 @@
                 :title="pestAnimalsWording"
                 :status="town.livingConditions.pest_animals.status"
                 :showStatus="false"
-                :inverted="true"
                 :answers="answers.pest_animals"
             />
 

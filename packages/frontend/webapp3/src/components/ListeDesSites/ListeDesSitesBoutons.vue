@@ -21,7 +21,7 @@
         >
         <Button
             v-if="userStore.hasPermission('shantytown.create')"
-            href="/nouveau-site"
+            href="/site/nouveau"
             icon="plus"
             iconPosition="left"
             variant="secondary"

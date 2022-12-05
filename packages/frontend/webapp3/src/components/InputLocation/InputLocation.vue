@@ -1,10 +1,5 @@
 <template>
-    <Autocomplete
-        v-bind="$attrs"
-        :fn="autocompleteFn"
-        v-model="location"
-        showCategory
-    />
+    <Autocomplete v-bind="$attrs" :fn="autocompleteFn" v-model="location" showCategory />
 </template>
 
 <script setup>

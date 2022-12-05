@@ -21,6 +21,9 @@ export default defineConfig({
     define: {
         __APP_VERSION__: JSON.stringify(version),
     },
+    optimizeDeps: {
+        include: ['@turf/turf']
+    },
     resolve: {
         alias: {
             "@common": fileURLToPath(new URL("../common", import.meta.url)),

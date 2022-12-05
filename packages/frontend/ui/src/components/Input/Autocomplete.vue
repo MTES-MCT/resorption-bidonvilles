@@ -78,13 +78,12 @@ const isLoading = ref(false);
 const lastPromise = ref(null);
 const isSubmitting = useIsSubmitting();
 const { handleChange, errors, validate, value } = useField(name, undefined, {
-    initialValue: modelValue,
-    valueProp: modelValue
+    ...(modelValue.value ? { initialValue: modelValue } : {}),
 });
 const input = ref(null);
-const selectedItem = ref(modelValue.value ? {
-    label: modelValue.value.search,
-    data: modelValue.value.data
+const selectedItem = ref(value.value ? {
+    label: value.value.search,
+    data: value.value.data
 } : null);
 const focusedItemIndex = ref(null);
 const error = ref(false);
@@ -94,7 +93,7 @@ const isDisabled = computed(() => {
 });
 
 watch(modelValue, () => {
-    input.value.setValue(modelValue?.value?.search || "");
+    input.value.setValue(modelValue.value?.search || "");
 });
 watch(value, () => {
     if (value.value === undefined) {
@@ -217,7 +216,7 @@ function sendEvent(data) {
 }
 
 onMounted(() => {
-    input.value.setValue(modelValue?.value?.search || "");
+    input.value.setValue(value?.value?.search || "");
 });
 
 onBeforeUnmount(() => {

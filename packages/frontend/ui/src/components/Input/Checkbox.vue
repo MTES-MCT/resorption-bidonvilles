@@ -1,79 +1,36 @@
 <template>
-    <button type="button" class="text-left" :class="direction === 'col' ? 'w-full' : ''" @click="onChange(value)"
-        :disabled="isSubmitting || disabled">
-        <template v-if="variant === 'checkbox'">
-            <p class="flex">
-                <span class="inline-block w-6 h-6 rounded border-2 align-middle mr-2 text-center"
-                    :class="checkboxStyle">
-                    <Icon icon="check" class="inline-block" :class="checked ? 'text-white' : 'text-transparent'" />
-                </span>
-                <span class="flex-1">
-                    <slot>{{ label }}</slot>
-                </span>
-            </p>
-        </template>
-        <template v-else-if="variant === 'invisible'">
-            <slot :checked="checked">{{ label }}</slot>
-        </template>
-        <template v-else><span class="inline-block px-4 py-1 border border-blue200" :class="[
-            checked
-                ? 'bg-blue500 text-white border-blue500'
-                : 'bg-blue200 text-primary',
-            isSubmitting ? 'opacity-50' : 'hover:border-blue500',
-        ]">{{ label }}</span></template>
-    </button>
+    <CheckboxUi v-model="checkedModel" :isSubmitting="isSubmitting" />
 </template> 
 
 <script setup>
-import { toRefs, computed } from 'vue';
+import CheckboxUi from "./CheckboxUi.vue";
+
+import { defineProps, toRefs, computed } from 'vue';
 import { useField, useIsSubmitting } from 'vee-validate';
-import Icon from "../Icon.vue";
 
 const props = defineProps({
-    modelValue: [Array, String, Number, Boolean],
-    value: [String, Number, Boolean],
     name: String,
-    label: String,
-    variant: {
-        type: String,
-        default: 'card' // soit "card", "checkbox", ou "invisible"
-    },
-    direction: { // soit 'row', soit 'col'
-        type: String,
-        default: 'row'
-    },
-    disabled: {
-        type: Boolean,
-        required: false,
-        default: false
-    },
+    value: [String, Number, Boolean],
+    modelValue: [Array, String, Number, Boolean],
 });
+const { name, value, modelValue } = toRefs(props);
 
-const { name, variant, value, direction, disabled } = toRefs(props);
 const isSubmitting = useIsSubmitting();
-const { checked, handleChange } = useField(name, undefined, {
+const { checked, handleChange } = useField(name.value, undefined, {
     type: 'checkbox',
-    checkedValue: props.value,
-    initialValue: props.modelValue
+    checkedValue: value.value,
+    initialValue: modelValue.value
 });
-
-function onChange() {
-    handleChange(props.value);
-}
-
-const checkboxStyle = computed(() => {
-    if (checked.value) {
-        if (isSubmitting.value || disabled.value) {
-            return 'bg-blue300 border-blue300';
+const checkedModel = computed({
+    get() {
+        return checked.value;
+    },
+    set(v) {
+        if (v === checked.value) {
+            return;
         }
 
-        return 'bg-primary border-primary';
+        handleChange(value.value);
     }
-
-    if (isSubmitting.value || disabled.value) {
-        return 'bg-G200 hover:border-G400';
-    }
-
-    return 'bg-white hover:border-G400';
 });
 </script>

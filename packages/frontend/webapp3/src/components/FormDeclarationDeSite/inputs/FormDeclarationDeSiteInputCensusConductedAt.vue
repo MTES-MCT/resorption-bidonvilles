@@ -1,0 +1,17 @@
+<template>
+    <DatepickerInput
+        name="census_conducted_at"
+        id="census_conducted_at"
+        :label="labels.census_conducted_at"
+        :minDate="values.built_at || undefined"
+        showMandatoryStar
+    />
+</template>
+
+<script setup>
+import { useFormValues } from "vee-validate";
+import { DatepickerInput } from "@resorptionbidonvilles/ui";
+import labels from "../FormDeclarationDeSite.labels";
+
+const values = useFormValues();
+</script>

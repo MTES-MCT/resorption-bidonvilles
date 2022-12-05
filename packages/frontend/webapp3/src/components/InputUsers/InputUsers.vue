@@ -80,7 +80,9 @@ function unusedTarget(target) {
 
 function removeTarget(target) {
     const [type, id] = target.split(".");
-    const index = value.value[`${type}s`].findIndex((item) => item.id === id);
+    const index = value.value[`${type}s`].findIndex(
+        (item) => `${item.id}` === `${id}`
+    );
     value.value[`${type}s`].splice(index, 1);
 }
 

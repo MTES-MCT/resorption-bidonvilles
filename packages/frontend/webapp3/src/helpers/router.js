@@ -284,6 +284,22 @@ const router = createRouter({
             },
         },
         {
+            path: "/site/:id/mise-a-jour",
+            component: () => import("@/views/MiseAJourDeSiteView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "sites",
+            },
+        },
+        {
+            path: "/site/nouveau",
+            component: () => import("@/views/DeclarationDeSiteView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "sites",
+            },
+        },
+        {
             path: "/statistiques/:code?",
             component: () => import("@/views/StatistiquesView.vue"),
             meta: {
@@ -409,7 +425,7 @@ router.beforeEach((to) => {
     }
 
     // if logged, register navigation log
-    if (userStore.isLoggedIn) {
+    if (userStore.isLoggedIn && router.currentRoute.value?.path !== to.path) {
         createNavigationLog(to.path);
     }
 });

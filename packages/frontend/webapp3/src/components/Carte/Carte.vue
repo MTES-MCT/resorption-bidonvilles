@@ -1,79 +1,47 @@
 <template>
-    <section
-        class="h-full relative"
-        :class="showAddresses ? 'rb-showAddresses' : 'rb-hideAddresses'"
-    >
-        <div
-            v-if="showSearchbar"
-            class="absolute top-3 left-4 right-28 z-[1001]"
-        >
+    <section class="h-full relative" :class="showAddresses ? 'rb-showAddresses' : 'rb-hideAddresses'">
+        <div v-if="showSearchbar" class="absolute top-3 left-4 right-28 z-[1001]">
             <InputAddress :placeholder="placeholder" v-model="address" />
         </div>
 
         <div id="map" class="h-full border">
-            <div
-                class="absolute w-full h-full top-0 left-0 z-[1001]"
-                v-if="isLoading"
-            >
-                <div
-                    class="absolute w-full h-full top-0 left-0 bg-black opacity-50"
-                ></div>
-                <div
-                    class="flex w-full h-full items-center justify-center text-white text-3xl"
-                >
+            <div class="absolute w-full h-full top-0 left-0 z-[1001]" v-if="isLoading || disabled">
+                <div class="absolute w-full h-full top-0 left-0 bg-black opacity-50"></div>
+                <div class="flex w-full h-full items-center justify-center text-white text-3xl">
                     <Spinner />
                 </div>
             </div>
 
-            <div
-                ref="cadastreToggler"
-                class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden"
-                v-show="cadastre"
-            >
+            <div ref="cadastreToggler" class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden"
+                v-show="cadastre">
                 <label class="flex items-center space-x-2">
                     <input type="checkbox" v-model="showCadastre" />
                     <span>Voir le cadastre</span>
                 </label>
             </div>
 
-            <div
-                ref="addressToggler"
-                class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden"
-                v-show="showAddressToggler"
-            >
+            <div ref="addressToggler" class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden"
+                v-show="showAddressToggler">
                 <label class="flex items-center space-x-2">
                     <input type="checkbox" v-model="showAddressesModel" />
                     <span>Voir les adresses des sites</span>
                 </label>
             </div>
 
-            <div
-                ref="fieldTypes"
-                class="bg-white mr-3 my-3 border-2 border-G500 py-1 px-2 rounded"
-                v-show="showLegend"
-            >
+            <div ref="fieldTypes" class="bg-white mr-3 my-3 border-2 border-G500 py-1 px-2 rounded" v-show="showLegend">
                 <h1 class="text-md mb-2">Légende</h1>
-                <p
-                    class="flex items-center space-x-2"
-                    v-for="fieldType in configStore.config.field_types"
-                    :key="fieldType.label"
-                >
-                    <span
-                        class="my-1 inline-block w-4 h-4 rounded"
-                        v-bind:style="{
-                            'background-color': fieldType.color,
-                        }"
-                    ></span>
+                <p class="flex items-center space-x-2" v-for="fieldType in configStore.config.field_types"
+                    :key="fieldType.label">
+                    <span class="my-1 inline-block w-4 h-4 rounded" v-bind:style="{
+                        'background-color': fieldType.color,
+                    }"></span>
                     <span>{{ fieldType.label }}</span>
                 </p>
             </div>
 
-            <div
-                ref="printer"
+            <div ref="printer"
                 class="bg-white mr-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden cursor-pointer"
-                @click="printMapScreenshot"
-                v-show="showPrinter"
-            >
+                @click="printMapScreenshot" v-show="showPrinter">
                 <Icon icon="print" /> Imprimer la carte
             </div>
         </div>
@@ -125,6 +93,7 @@ import waterNo from "@/assets/img/map/water-no.png";
 import waterToImprove from "@/assets/img/map/water-to-improve.png";
 import waterNull from "@/assets/img/map/water-null.png";
 import cutlery from "@/assets/img/map/cutlery.png";
+import defaultMarker from "@/assets/img/map/marker.png";
 
 import { Icon, Spinner } from "@resorptionbidonvilles/ui";
 import InputAddress from "@/components/InputAddress/InputAddress.vue";
@@ -206,6 +175,23 @@ const props = defineProps({
         required: false,
         default: "Recherchez un lieu en saisissant une adresse",
     },
+    withInput: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    modelValue: {
+        type: Array,
+        required: false,
+        default() {
+            return [46.7755829, 2.0497727];
+        },
+    },
+    disabled: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 const {
     isLoading,
@@ -219,6 +205,9 @@ const {
     towns,
     pois,
     cadastre,
+    withInput,
+    modelValue,
+    disabled,
 } = toRefs(props);
 const configStore = useConfigStore();
 const notificationStore = useNotificationStore();
@@ -252,6 +241,14 @@ const showAddressesModel = computed({
 });
 const showCadastre = ref(false);
 const address = ref(null);
+const inputMarker = L.marker(modelValue.value, {
+    draggable: true,
+    icon: L.icon({
+        iconUrl: defaultMarker,
+        iconSize: [30, 30],
+        iconAnchor: [15, 28],
+    }),
+});
 const searchMarker = L.marker([46.7755829, 2.0497727], {
     title: "Recherche",
     icon: L.divIcon({
@@ -283,17 +280,17 @@ const markersGroup = {
     cities: ref(L.layerGroup()),
     departements: showTerritories.value
         ? ref(
-              L.geoJSON(/*markersGroupData.departements*/ [], {
-                  style: { color: "#6A6A6A", weight: 1 },
-              })
-          )
+            L.geoJSON(/*markersGroupData.departements*/[], {
+                style: { color: "#6A6A6A", weight: 1 },
+            })
+        )
         : null,
     regions: showTerritories.value
         ? ref(
-              L.geoJSON(/**markersGroupData.regions**/ [], {
-                  style: { color: "#6A6A6A", weight: 1 },
-              })
-          )
+            L.geoJSON(/**markersGroupData.regions**/[], {
+                style: { color: "#6A6A6A", weight: 1 },
+            })
+        )
         : null,
     search: ref(L.layerGroup()),
     pois: ref(
@@ -313,6 +310,7 @@ const emit = defineEmits([
     "townclick",
     "poiclick",
     "update:showAddresses",
+    "update:modelValue",
 ]);
 onMounted(() => {
     createMap();
@@ -320,8 +318,30 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-    map.value.remove();
+    if (map.value) {
+        map.value.remove();
+    }
 });
+
+let clickTimeout = null;
+function handleClick({ latlng: { lat, lng } }) {
+    refreshInput([lat, lng]);
+    clearTimeout(clickTimeout);
+    clickTimeout = null;
+}
+
+function refreshInput(center, emitInput = true) {
+    if (disabled.value === true) {
+        return;
+    }
+
+    inputMarker.setLatLng(center);
+    map.value.setView(center, map.value.getZoom());
+
+    if (emitInput === true) {
+        emit("update:modelValue", center);
+    }
+}
 
 function createMap() {
     map.value = L.map("map", {
@@ -331,6 +351,23 @@ function createMap() {
     map.value.on("zoomend", onZoomEnd);
     map.value.on("move", onMove);
     map.value.addLayer(markersGroup.search.value);
+
+    if (withInput.value === true) {
+        inputMarker.addTo(map.value);
+        inputMarker.addEventListener("dragend", () => {
+            const { lat, lng } = inputMarker.getLatLng();
+            refreshInput([lat, lng]);
+        });
+
+        map.value.on("click", (event) => {
+            clearTimeout(clickTimeout);
+            clickTimeout = setTimeout(handleClick.bind(this, event), 200);
+        });
+        map.value.on("dblclick", () => {
+            clearTimeout(clickTimeout);
+            clickTimeout = null;
+        });
+    }
 
     setupMapControls();
     setupView();
@@ -477,9 +514,8 @@ function createTownMarker(town) {
     const marker = L.marker([town.latitude, town.longitude], {
         icon: L.divIcon({
             className: "my-marker",
-            html: `<div class="w-6 relative"${
-                town.style ? ` style="${town.style}"` : ""
-            }>
+            html: `<div class="w-6 relative"${town.style ? ` style="${town.style}"` : ""
+                }>
                 <div
                     class="bg-white rounded-full w-6 h-6 border-2 flex items-center justify-center"
                     style="border: 3px solid ${color}"
@@ -489,8 +525,7 @@ function createTownMarker(town) {
                     class="-mt-[1px] w-3 border-l-6 border-l-transparent border-r-6 border-r-transparent border-t-6 m-auto"
                     style="border-top-color: ${color}"
                 ></div>
-                <div class="absolute top-1 left-8 bg-white/75 whitespace-nowrap px-2 rb-map-address">${
-                    town.usename
+                <div class="absolute top-1 left-8 bg-white/75 whitespace-nowrap px-2 rb-map-address">${town.usename
                 }</div>
             </div>`,
             iconAnchor: [13, 28],
@@ -722,12 +757,18 @@ watch(address, () => {
         trackEvent("Cartographie", "Recherche");
     }
 });
+watch(modelValue, () => {
+    refreshInput(modelValue.value, false);
+});
 
 defineExpose({
     resize() {
         if (map.value) {
             map.value.invalidateSize();
         }
+    },
+    setView(view) {
+        map.value.setView(view.center, view.zoom || map.value.getZoom());
     },
 });
 </script>

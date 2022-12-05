@@ -4,7 +4,7 @@
             <Pagination
                 :currentPage="currentPage"
                 :nbPages="nbPages"
-                :onChangePage="onChangePage"
+                @pagechange="onChangePage"
             />
         </div>
         <table class="zebra w-full">
@@ -27,7 +27,7 @@
                 <!-- if data provided -->
                 <TableauLigne
                     v-else
-                    v-for="(row, key) in data"
+                    v-for="(row, key) in pageContent"
                     :columns="columnIds"
                     :row="row"
                     variant="secondary"
@@ -46,7 +46,8 @@
             <Pagination
                 :currentPage="currentPage"
                 :nbPages="nbPages"
-                :onChangePage="onChangePage"
+                @pagechange="onChangePage"
+                autoScrollFix
             />
         </div>
     </div>
@@ -97,7 +98,18 @@ const isEmpty = computed(() => {
     emit("datachange");
     return data.value.length < 1;
 });
+const pageContent = computed(() => {
+    emit("datachange");
 
+    if (usePagination.value === false) {
+        return data.value;
+    }
+
+    return data.value.slice(
+        (currentPage.value - 1) * itemsPerPage.value,
+        currentPage.value * itemsPerPage.value
+    );
+});
 const nbPages = computed(() => {
     return data.value.length > 0
         ? Math.ceil(data.value.length / itemsPerPage.value)

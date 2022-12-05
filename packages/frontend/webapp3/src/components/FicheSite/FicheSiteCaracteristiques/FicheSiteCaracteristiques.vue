@@ -7,25 +7,16 @@
                 <FicheSiteInfosAcces v-if="town.addressDetails" :town="town" />
                 <FicheSiteGPS :town="town" />
                 <FicheSiteProprietaire :town="town" />
-                <FicheSiteSitesAProximite
-                    v-if="town.nearbyTowns?.length > 0"
-                    :towns="town.nearbyTowns"
-                />
+                <FicheSiteSitesAProximite v-if="town.nearbyTowns?.length > 0" :towns="town.nearbyTowns" />
             </div>
             <div class="w-1/2">
-                <Carte
-                    :towns="[
-                        town,
-                        ...(town.nearbyTowns || []).map((t) => ({
-                            ...t,
-                            style: `opacity: 0.6`,
-                        })),
-                    ]"
-                    :defaultView="mapCenter"
-                    :cadastre="cadastre"
-                    defaultLayer="Satellite"
-                    @townclick="onTownClick"
-                />
+                <Carte :towns="[
+                    town,
+                    ...(town.nearbyTowns || []).map((t) => ({
+                        ...t,
+                        style: `opacity: 0.6`,
+                    })),
+                ]" :defaultView="mapCenter" :cadastre="cadastre" defaultLayer="Satellite" @townclick="onTownClick" />
             </div>
         </section>
     </FicheRubrique>

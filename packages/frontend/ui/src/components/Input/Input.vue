@@ -115,9 +115,10 @@ export default {
     computed: {
         classes() {
             const inputOptions = {
-                error: this.error,
+                error: !!this.errors.length,
                 prefixIcon: this.prefixIcon,
-                suffixIcon: this.suffixIcon
+                suffixIcon: this.suffixIcon,
+                clear: this.clear
             };
 
             return {

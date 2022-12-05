@@ -1,18 +1,11 @@
 <template>
     <FicheRubrique title="Procédure judiciaire">
-        <FicheSiteProceduresJudiciaireLigne
-            icon="scroll"
-            label="Dépôt de plainte du propriétaire"
-            :border="false"
-            :marginTop="false"
-        >
+        <FicheSiteProceduresJudiciaireLigne icon="scroll" label="Dépôt de plainte du propriétaire" :border="false"
+            :marginTop="false">
             {{ formatBool(town.ownerComplaint) }}
         </FicheSiteProceduresJudiciaireLigne>
 
-        <FicheSiteProceduresJudiciaireLigne
-            icon="balance-scale"
-            label="Existence d’une procédure judiciaire"
-        >
+        <FicheSiteProceduresJudiciaireLigne icon="balance-scale" label="Existence d’une procédure judiciaire">
             {{ formatBool(town.justiceProcedure) }}
         </FicheSiteProceduresJudiciaireLigne>
 
@@ -24,17 +17,11 @@
             {{ formatBool(town.justiceChallenged) }}
         </FicheSiteProceduresJudiciaireLigne>
 
-        <FicheSiteProceduresJudiciaireLigne
-            icon="person-military-pointing"
-            label="Concours de la police publique"
-        >
+        <FicheSiteProceduresJudiciaireLigne icon="person-military-pointing" label="Concours de la police publique">
             {{ policeStatus }}
         </FicheSiteProceduresJudiciaireLigne>
 
-        <FicheSiteProceduresJudiciaireLigne
-            icon="file"
-            label="Nom de l'étude d'huissier"
-        >
+        <FicheSiteProceduresJudiciaireLigne icon="file" label="Nom de l'étude d'huissier">
             {{ town.bailiff || "non communiqué" }}
         </FicheSiteProceduresJudiciaireLigne>
     </FicheRubrique>
@@ -54,7 +41,7 @@ const props = defineProps({
 const { town } = toRefs(props);
 
 const justiceRendered = computed(() => {
-    if (town.value.justicedRendered === null) {
+    if (town.value.justiceRendered === null) {
         return "non communiqué";
     }
 

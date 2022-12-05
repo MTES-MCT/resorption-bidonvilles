@@ -18,17 +18,27 @@ import Icon from "../Icon.vue";
 const props = defineProps({
     name: String,
     label: String,
-    value: String,
+    value: [String, Boolean, Number],
     modelValue: String,
     variant: String, // soit "default", soit "check", soit "radio"
     disabled: {
         type: Boolean,
         required: false,
         default: false
-    }
+    },
+    allowNull: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    nullValue: {
+        type: [Object, String, Boolean, Number],
+        required: false,
+        default: undefined
+    },
 });
 
-const { name, variant, disabled } = toRefs(props);
+const { name, variant, disabled, allowNull, nullValue } = toRefs(props);
 const isSubmitting = useIsSubmitting();
 
 const { checked, handleChange } = useField(name, undefined, {
@@ -67,7 +77,7 @@ const variants = {
             [false]: ''
         },
         disabled: {
-            [true]: '',
+            [true]: 'opacity-50 cursor-default',
             [false]: ''
         }
     }
@@ -85,6 +95,8 @@ const classes = computed(() => {
 function onClick() {
     if (!checked.value) {
         handleChange(props.value);
+    } else if (allowNull.value === true) {
+        handleChange(nullValue.value);
     }
 }
 </script>

@@ -12,6 +12,10 @@ export function close(id, data) {
     return axios.post(`/towns/${encodeURI(id)}/close`, data);
 }
 
+export function create(data) {
+    return axios.post("/towns", data);
+}
+
 export function deleteComment(townId, commentId, message) {
     return axios.delete(
         `/towns/${encodeURI(townId)}/comments/${encodeURI(commentId)}`,
@@ -23,6 +27,10 @@ export function deleteComment(townId, commentId, message) {
 
 export function destroy(townId) {
     return axios.delete(`/towns/${encodeURI(townId)}`);
+}
+
+export function edit(id, data) {
+    return axios.post(`/towns/${encodeURI(id)}`, data);
 }
 
 export function exportList(
