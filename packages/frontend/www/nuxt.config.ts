@@ -4,7 +4,7 @@ import messages from "./assets/i18n/index.js";
 export default defineNuxtConfig({
     modules: [
         "@nuxtjs/tailwindcss",
-        ["@nuxtjs/i18n-edge", {
+        ["@nuxtjs/i18n", {
             locales: ["fr", "en", "bg", "ro"],
             defaultLocale: "fr",
             vueI18n: {

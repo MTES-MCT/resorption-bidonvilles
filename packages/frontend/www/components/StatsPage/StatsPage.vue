@@ -13,10 +13,7 @@
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 mt-4">
                 <div>
-                    <PieChart
-                        class="mb-16 md:mb-0 md:mr-16"
-                        :height="250"
-                        :chartData="organizationRepartitionData"
+                    <PieChart class="mb-16 md:mb-0 md:mr-16" :height="250" :chartData="organizationRepartitionData"
                         :chartOptions="{
                             plugins: {
                                 legend: {
@@ -28,25 +25,15 @@
                                 },
                             },
                             maintainAspectRatio: false
-                        }"
-                        v-if="numberOfPublicEstablishmentUsers !== '...'"
-                    />
+                        }" v-if="numberOfPublicEstablishmentUsers !== '...'" />
                     <span class="text-display-lg font-bold" v-else>...</span>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-                    <StatsBlock
-                        :title="numberOfDepartements"
-                        icon="flag"
-                        subtitle="départements"
-                    />
-                    <StatsBlock
-                        :title="numberOfNewUsers.total"
-                        icon="user-plus"
-                        :subtitle="
-                            'nouveaux utilisateurs en ' +
-                                numberOfNewUsers.month.toLowerCase()
-                        "
-                    />
+                    <StatsBlock :title="numberOfDepartements" icon="flag" subtitle="départements" />
+                    <StatsBlock :title="numberOfNewUsers.total" icon="user-plus" :subtitle="
+                        'nouveaux utilisateurs en ' +
+                        numberOfNewUsers.month.toLowerCase()
+                    " />
                 </div>
             </div>
 
@@ -55,12 +42,8 @@
                     Nombre d'utilisateurs
                 </h2>
                 <div class="chartWrapper">
-                    <LineChart
-                        v-if="numberOfNewUsersPerMonth !== null"
-                        :chartData="usersEvolutionData"
-                        :chartOptions="{ maintainAspectRatio: false }"
-                        :height="250"
-                    />
+                    <LineChart v-if="numberOfNewUsersPerMonth !== null" :chartData="usersEvolutionData"
+                        :chartOptions="{ maintainAspectRatio: false }" :height="250" />
                     <span class="text-display-lg font-bold" v-else>...</span>
                 </div>
             </div>
@@ -70,61 +53,36 @@
                     Nombre d'utilisateurs par semaine
                 </h2>
                 <div class="chartWrapper">
-                    <LineChart
-                        v-if="wauData !== null"
-                        :chartData="wauData"
-                        :chartOptions="{ maintainAspectRatio: false }"
-                        :height="250"
-                    />
+                    <LineChart v-if="wauData !== null" :chartData="wauData"
+                        :chartOptions="{ maintainAspectRatio: false }" :height="250" />
                     <span class="text-display-lg font-bold" v-else>...</span>
                 </div>
             </div>
 
             <StatsSection title="Usage" class="mt-16">
-                <StatsBlock
-                    :title="numberOfExports"
-                    icon="file-download"
-                    subtitle="extractions de données réalisées"
-                    info="Les exports Excel permettent aux acteurs locaux d'utiliser et d'analyser les données afin de suivre, communiquer et optimiser les actions de résorption depuis le 15/11/2019."
-                />
-                <StatsBlock
-                    :title="numberOfComments"
-                    icon="comment"
-                    subtitle="commentaires créés"
-                    info="Au delà du suivi des chiffrés, les commentaires permettent de suivre et de partager des informations qualitative utiles dans une action multi-partenariale."
-                />
-                <StatsBlock
-                    :title="numberOfDirectoryViews"
-                    icon="address-book"
-                    subtitle="fiches contact consultées"
-                    info="L'annuaire permet d'accéder aux coordonnées de tous les utilisateurs de la plateforme. Son utilisation participe à la mise en réseau partenaires locaux ou des pairs depuis le 15/11/2019"
-                />
+                <StatsBlock :title="numberOfExports" icon="file-download" subtitle="extractions de données réalisées"
+                    info="Les exports Excel permettent aux acteurs locaux d'utiliser et d'analyser les données afin de suivre, communiquer et optimiser les actions de résorption depuis le 15/11/2019." />
+                <StatsBlock :title="numberOfComments" icon="comment" subtitle="commentaires créés"
+                    info="Au delà du suivi des chiffrés, les commentaires permettent de suivre et de partager des informations qualitative utiles dans une action multi-partenariale." />
+                <StatsBlock :title="numberOfDirectoryViews" icon="address-book" subtitle="fiches contact consultées"
+                    info="L'annuaire permet d'accéder aux coordonnées de tous les utilisateurs de la plateforme. Son utilisation participe à la mise en réseau partenaires locaux ou des pairs depuis le 15/11/2019" />
             </StatsSection>
 
             <StatsSection title="Fréquence de mise à jour" class="mt-16">
-                <template v-slot:info
-                    ><span class="text-secondary"
-                        ><Icon icon="sync" width="16" height="16"
-                    /></span>
+                <template v-slot:info><span class="text-secondary">
+                        <Icon icon="sync" width="16" height="16" />
+                    </span>
                     La mise à jour régulière des données garantissent des
-                    informations justes à tous les acteurs.</template
-                >
+                    informations justes à tous les acteurs.</template>
                 <template v-slot:default>
-                    <StatsBlock
-                        :title="meanTimeBeforeCreationDeclaration"
+                    <StatsBlock :title="meanTimeBeforeCreationDeclaration"
                         subtitle="jours entre l'installation d'un bidonville ou squat et sa déclaration"
-                        info="Médiane depuis le 01/09/2019."
-                    />
-                    <StatsBlock
-                        :title="meanTimeBeforeClosingDeclaration"
+                        info="Médiane depuis le 01/09/2019." />
+                    <StatsBlock :title="meanTimeBeforeClosingDeclaration"
                         subtitle="jours entre la fermeture du site et sa déclaration"
-                        info="Médiane depuis le 01/09/2019."
-                    />
-                    <StatsBlock
-                        :title="numberOfShantytownOperations"
-                        subtitle="mises à jour de bidonvilles et squats"
-                        info="Toutes opérations confondues : création, modification, fermeture"
-                    />
+                        info="Médiane depuis le 01/09/2019." />
+                    <StatsBlock :title="numberOfShantytownOperations" subtitle="mises à jour de bidonvilles et squats"
+                        info="Toutes opérations confondues : création, modification, fermeture" />
                 </template>
             </StatsSection>
         </Container>
@@ -175,28 +133,28 @@ export default {
         numberOfTerritorialCollectivitieUsers() {
             return this.stats
                 ? this.stats.numberOfCollaboratorAndAssociationUsers
-                      .territorial_collectivity || 0
+                    .territorial_collectivity || 0
                 : "...";
         },
 
         numberOfAssociationUsers() {
             return this.stats
                 ? this.stats.numberOfCollaboratorAndAssociationUsers
-                      .association || 0
+                    .association || 0
                 : "...";
         },
 
         numberOfPublicEstablishmentUsers() {
             return this.stats
                 ? this.stats.numberOfCollaboratorAndAssociationUsers
-                      .public_establishment || 0
+                    .public_establishment || 0
                 : "...";
         },
 
         numberOfAdministrationUsers() {
             return this.stats
                 ? this.stats.numberOfCollaboratorAndAssociationUsers
-                      .administration || 0
+                    .administration || 0
                 : "...";
         },
 
@@ -284,16 +242,16 @@ export default {
         meanTimeBeforeCreationDeclaration() {
             return this.stats
                 ? Math.round(
-                      this.stats.meanTimeBeforeCreationDeclaration.average
-                  ) || "?"
+                    this.stats.meanTimeBeforeCreationDeclaration.average
+                ) || "?"
                 : "...";
         },
 
         meanTimeBeforeClosingDeclaration() {
             return this.stats
                 ? Math.round(
-                      this.stats.meanTimeBeforeClosingDeclaration.average
-                  ) || "?"
+                    this.stats.meanTimeBeforeClosingDeclaration.average
+                ) || "?"
                 : "...";
         },
 
@@ -328,7 +286,7 @@ export default {
         generateLabels(chart) {
             const data = chart.data;
             if (data.labels.length && data.datasets.length) {
-                return data.labels.map(function(label, i) {
+                return data.labels.map(function (label, i) {
                     // We get the value of the current label
                     const value = chart.config.data.datasets[0].data[i];
                     const background =

@@ -17,7 +17,6 @@
     "prepare": "husky install",
     "lint:all": "yarn workspaces foreach --verbose run lint:all",
     "lint:staged": "yarn workspaces foreach --verbose run lint-staged",
-    "test:unit": "yarn workspaces foreach --verbose run test:unit",
-    "www:build": "npx nuxi build ./packages/frontend/www"
+    "test:unit": "yarn workspaces foreach --verbose run test:unit"
   }
 }
