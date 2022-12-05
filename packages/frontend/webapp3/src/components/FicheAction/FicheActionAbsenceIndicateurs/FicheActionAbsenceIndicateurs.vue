@@ -12,6 +12,7 @@
                 icon="pen"
                 iconPosition="left"
                 :href="`/action/${plan.id}/indicateurs/mise-a-jour`"
+                disabled
                 >Mettre à jour les indicateurs</Button
             >
         </p>

@@ -18,8 +18,9 @@
             variant="primary"
             icon="house-circle-xmark"
             iconPosition="left"
-            :disabled="!plan.canClose"
+            :disabled="!plan.canClose || true"
             :href="`/action/${plan.id}/fermeture`"
+            @click="unavailable"
             >Fermer l'action</Button
         >
         <Button
@@ -28,8 +29,9 @@
             variant="primary"
             icon="pencil"
             iconPosition="left"
-            :disabled="!plan.canUpdate"
+            :disabled="!plan.canUpdate || true"
             :href="`/action/${plan.id}/mise-a-jour`"
+            @click="unavailable"
             >Mettre à jour</Button
         >
         <Button
@@ -38,8 +40,9 @@
             variant="primary"
             icon="pencil"
             iconPosition="left"
-            :disabled="!plan.canUpdateMarks"
+            :disabled="!plan.canUpdateMarks || true"
             :href="`/action/${plan.id}/indicateurs/mise-a-jour`"
+            @click="unavailable"
             >Mettre à jour les indicateurs</Button
         >
     </p>
@@ -56,4 +59,10 @@ const props = defineProps({
 });
 const { plan } = toRefs(props);
 const userStore = useUserStore();
+
+function unavailable() {
+    alert(
+        "Ce formulaire est temporairement indisponible, pour des raisons techniques"
+    );
+}
 </script>

@@ -18,7 +18,10 @@
                 >
                 <Button
                     v-if="userStore.hasPermission('plan.create')"
-                    href="/nouvelle_action"
+                    type="button"
+                    href="/action/nouvelle"
+                    disabled
+                    @click="unavailable"
                     icon="plus"
                     iconPosition="left"
                     variant="secondary"
@@ -47,5 +50,11 @@ const modalExport = ref(null);
 
 function openModalExport() {
     modalExport.value.open();
+}
+
+function unavailable() {
+    alert(
+        "Ce formulaire est temporairement indisponible, pour des raisons techniques"
+    );
 }
 </script>

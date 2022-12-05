@@ -4,8 +4,9 @@
         sizeClasses,
         variantClasses,
         disabled && 'opacity-50 cursor-not-allowed'
-    ]" :disabled="disabled || isLoading" :to="isLink && isInternalLink ? (disabled ? null : href) : null" :href="href"
-        :is="isLink ? (isInternalLink ? 'router-link' : 'a') : 'button'" :type="isLink ? null : type" @click="onClick">
+    ]" :disabled="disabled || isLoading" :to="isLink && isInternalLink && !disabled ? href : null" :href="href"
+        :is="isLink ? (isInternalLink && !disabled ? 'router-link' : 'a') : 'button'" :type="isLink ? null : type"
+        @click="onClick">
         <div :class="[
             'flex',
             'items-center',
@@ -128,6 +129,9 @@ export default {
     },
     methods: {
         onClick(e) {
+            if (this.disabled) {
+                e.preventDefault();
+            }
             this.$emit("clicked", e);
         }
     },
