@@ -208,7 +208,7 @@ const colors = computed(() => {
 const link = computed(() => {
     if (activity.value.entity === "comment") {
         if (activity.value.plan) {
-            return `/action/${activity.value.plan.id}`;
+            return `/action/${activity.value.plan.id}#journal_de_l_action`;
         }
 
         return `/site/${activity.value.shantytown.id}#message${activity.value.comment.id}`;
