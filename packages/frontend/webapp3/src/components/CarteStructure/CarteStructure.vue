@@ -1,10 +1,5 @@
 <template>
-    <article
-        class="cursor-pointer border-1"
-        :class="isHover ? 'border-blue400' : ''"
-        @mouseenter="isHover = true"
-        @mouseleave="isHover = false"
-    >
+    <article class="cursor-pointer border-1 hover:border-blue400">
         <RouterLink
             :to="`/structure/${organization.id}`"
             class="inline-block p-4 h-full flex flex-col"
@@ -47,17 +42,17 @@
                 </li>
             </ul>
             <div class="text-right">
-                <Link :to="`/structure/${organization.id}`"
-                    >{{ isHover ? "Voir la fiche complète" : "" }}
-                    <Icon icon="arrow-right"
-                /></Link>
+                <Link :to="`/structure/${organization.id}`">
+                    <Icon icon="arrow-right" class="mr-1" /> Voir la fiche
+                    complète</Link
+                >
             </div>
         </RouterLink>
     </article>
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed } from "vue";
+import { defineProps, toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { RouterLink } from "vue-router";
 import { Icon, Link } from "@resorptionbidonvilles/ui";
@@ -69,7 +64,6 @@ const props = defineProps({
     },
 });
 const { organization } = toRefs(props);
-const isHover = ref(false);
 
 const userStore = useUserStore();
 const name = computed(() => {
