@@ -61,7 +61,7 @@ export function exportSingle(townId, options = []) {
         url += `?options=${encodeURIComponent(options.join(","))}`;
     }
 
-    return axios.get(url);
+    return axios.get(url, { responseType: "blob" });
 }
 
 export function fetch(id) {

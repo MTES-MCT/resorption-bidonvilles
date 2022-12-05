@@ -68,7 +68,10 @@ async function download() {
             new Blob([data]),
             `${formatDate(ts, "y-m-d")}-fiche-site-${normalizeTownName(
                 town.value.usename
-            )}.docx`
+            )}.docx`,
+            {
+                type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            }
         );
         trackEvent("Export", "Export fiche site", `S${town.value.id}`);
         close();
