@@ -28,6 +28,9 @@ rewiremock.disable();
 
 describe.only('services/shantytown', () => {
     describe('close()', () => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
         const user = {};
         const data = {
             shantytown: {
@@ -60,6 +63,9 @@ describe.only('services/shantytown', () => {
                 closing_context: 'contexte',
                 closing_solutions: [],
             });
+            const updatedAt = args[2].updated_at;
+            updatedAt.setHours(0, 0, 0, 0);
+            expect(updatedAt).to.be.eql(today);
             expect(response).to.be.eql({});
         });
         it('envoie une notification mattermost', async () => {
