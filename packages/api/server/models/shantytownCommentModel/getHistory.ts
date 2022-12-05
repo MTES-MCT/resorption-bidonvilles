@@ -92,15 +92,17 @@ export default async (user, location, numberOfActivities, lastDate, maxDate) => 
         )`,
     );
 
-    // on vérifie que le commentaire est bien sur le territoire de la recherche 
+    // on vérifie que le commentaire est bien sur le territoire de la recherche
     const searchLocationClause = [];
     if (location.type !== 'nation') {
         searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.code = :shantytownCommentSearchLocationCode`);
         if (location.type === 'city') {
             searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.fk_main = :shantytownCommentSearchLocationCode`);
         }
-        replacements.shantytownCommentSearchLocationCode = location[location.type].code
-    } else { searchLocationClause.push('true') }
+        replacements.shantytownCommentSearchLocationCode = location[location.type].code;
+    } else {
+        searchLocationClause.push('true');
+    }
 
     where.push(`(${searchLocationClause.join(' OR ')})`);
 
