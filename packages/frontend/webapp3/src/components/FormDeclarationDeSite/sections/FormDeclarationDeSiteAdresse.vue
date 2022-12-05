@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { defineProps, toRefs, ref, watch } from "vue";
 import { useFieldValue, useFormValues } from "vee-validate";
 import { findNearby } from "@/api/towns.api";
 
@@ -60,6 +60,14 @@ import InputAddress from "../inputs/FormDeclarationDeSiteInputAddress.vue";
 import InputCoordinates from "../inputs/FormDeclarationDeSiteInputCoordinates.vue";
 import InputName from "../inputs/FormDeclarationDeSiteInputName.vue";
 
+const props = defineProps({
+    townId: {
+        type: Number,
+        required: false,
+        default: undefined,
+    },
+});
+const { townId } = toRefs(props);
 const values = useFormValues();
 const address = useFieldValue("address");
 const coordinates = useFieldValue("coordinates");
@@ -83,7 +91,9 @@ watch(coordinates, async () => {
             coordinates.value[0],
             coordinates.value[1]
         );
-        nearbyShantytowns.value = towns;
+        nearbyShantytowns.value = townId.value
+            ? towns.filter(({ id }) => id !== townId.value)
+            : towns;
     } catch (e) {
         console.log("Failed fetching nearby shantytowns");
     }

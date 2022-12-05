@@ -9,7 +9,7 @@
                 town?.updatedAt ? new Date(town.updatedAt * 1000) : undefined
             "
         />
-        <FormDeclarationDeSiteAdresse class="mt-6" />
+        <FormDeclarationDeSiteAdresse :townId="town?.id" class="mt-6" />
         <FormDeclarationDeSiteCaracteristiques class="mt-6" />
         <FormDeclarationDeSiteHabitants
             :location="location"
