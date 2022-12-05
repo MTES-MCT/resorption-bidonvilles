@@ -13,6 +13,7 @@ export default async (user, data) => {
             status: data.status,
             closing_context: data.closing_context,
             closing_solutions: data.solutions,
+            updated_at: new Date(),
         },
     );
     const updatedTown = await shantytownModel.findOne(user, data.shantytown.id);

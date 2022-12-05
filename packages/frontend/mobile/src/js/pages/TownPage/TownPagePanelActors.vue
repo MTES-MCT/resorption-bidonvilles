@@ -6,9 +6,7 @@
         <div v-for="actor in town.actors" :key="actor.id">
             <TownPageInfo
                 icon="user"
-                :title="
-                    `${actor.first_name} ${actor.last_name}\n(${actor.organization.name})`
-                "
+                :title="`${actor.first_name} ${actor.last_name}\n(${actor.organization.name})`"
             >
                 <div v-if="actor.themes.length > 0" class="mt-4 text-center">
                     <Tag
@@ -31,12 +29,12 @@ import { Tag } from "@resorptionbidonvilles/ui";
 export default {
     props: {
         town: {
-            type: Object
-        }
+            type: Object,
+        },
     },
     components: {
         TownPageInfo,
-        Tag
-    }
+        Tag,
+    },
 };
 </script>

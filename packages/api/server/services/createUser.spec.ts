@@ -4,6 +4,7 @@ import sinonChai from 'sinon-chai';
 import chaiAsPromised from 'chai-as-promised';
 import rewiremock from 'rewiremock/node';
 import { serialized as fakeUser } from '#test/utils/user';
+import createUser from './createUser';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -25,7 +26,6 @@ rewiremock('#server/utils/mattermost').with(mattermostUtils);
 rewiremock('#server/models/userModel').with(userModel);
 
 rewiremock.enable();
-import createUser from "./createUser";
 rewiremock.disable();
 
 describe.only('userService.createUser()', () => {

@@ -7,9 +7,7 @@
             </h1>
         </header>
 
-        <form
-            @submit.prevent="onLogin"
-        >
+        <form @submit.prevent="onLogin">
             <TextInput
                 placeholder="marcel.dupont@example.com"
                 label="Votre courriel"
@@ -38,7 +36,7 @@ import {
     Button,
     TextInput,
     PasswordInput,
-    RbLogo
+    RbLogo,
 } from "@resorptionbidonvilles/ui";
 
 export default {
@@ -47,20 +45,20 @@ export default {
         Button,
         TextInput,
         PasswordInput,
-        RbLogo
+        RbLogo,
     },
     data() {
         return {
             loading: null,
             error: null,
             email: "",
-            password: ""
+            password: "",
         };
     },
     computed: {
         ...mapGetters({
-            isLoggedIn: "user/loggedIn"
-        })
+            isLoggedIn: "user/loggedIn",
+        }),
     },
     methods: {
         async onLogin() {
@@ -69,7 +67,7 @@ export default {
                 this.loading = true;
                 await this.$store.dispatch("user/login", {
                     email: this.email,
-                    password: this.password
+                    password: this.password,
                 });
 
                 this.$router.push({ path: "/" }).catch(() => {});
@@ -83,7 +81,7 @@ export default {
                     this.$refs.form.setErrors(err.fields);
                 }
             }
-        }
-    }
+        },
+    },
 };
 </script>

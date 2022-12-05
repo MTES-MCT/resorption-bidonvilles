@@ -25,16 +25,16 @@ export default {
         logo: {
             type: Boolean,
             required: false,
-            default: true
+            default: true,
         },
         navbar: {
             type: Boolean,
             required: false,
-            default: true
-        }
+            default: true,
+        },
     },
     components: {
-        Navbar
-    }
+        Navbar,
+    },
 };
 </script>

@@ -22,7 +22,7 @@ export default {
     components: {
         Container,
         NotesListTopBar,
-        NotesListFilters
+        NotesListFilters,
     },
 
     computed: {
@@ -32,8 +32,8 @@ export default {
             },
             set(value) {
                 this.$store.commit("notes/SET_FILTER_BAR_IS_OPEN", value);
-            }
-        }
+            },
+        },
     },
 
     mounted() {
@@ -59,7 +59,7 @@ export default {
             } else {
                 this.showFilters();
             }
-        }
-    }
+        },
+    },
 };
 </script>

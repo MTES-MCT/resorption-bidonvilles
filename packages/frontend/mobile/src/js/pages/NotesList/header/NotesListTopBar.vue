@@ -31,7 +31,7 @@ import { Button } from "@resorptionbidonvilles/ui";
 export default {
     components: {
         Container,
-        Button
-    }
+        Button,
+    },
 };
 </script>

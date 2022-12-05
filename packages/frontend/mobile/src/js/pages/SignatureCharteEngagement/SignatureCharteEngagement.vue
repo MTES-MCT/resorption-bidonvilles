@@ -25,7 +25,7 @@ import Layout from "#src/js/components/Layout.vue";
 export default {
     components: {
         Container,
-        Layout
-    }
+        Layout,
+    },
 };
 </script>

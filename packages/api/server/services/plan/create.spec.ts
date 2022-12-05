@@ -3,10 +3,6 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import chaiSubset from 'chai-subset';
 
-const { expect } = chai;
-chai.use(sinonChai);
-chai.use(chaiSubset);
-
 import departementModel from '#server/models/departementModel';
 import financeTypeModel from '#server/models/financeTypeModel';
 import topicModel from '#server/models/topicModel';
@@ -22,6 +18,10 @@ import planShantytownModel from '#server/models/planShantytownModel';
 import planOperatorModel from '#server/models/planOperatorModel';
 import permissionModel from '#server/models/permissionModel';
 import createService from './create';
+
+const { expect } = chai;
+chai.use(sinonChai);
+chai.use(chaiSubset);
 
 function randomIndex(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -157,11 +157,11 @@ describe.only('services/plan', () => {
                 stubs.planOperatorCreate.resolves([]);
                 stubs.applyAttachments.returns({
                     toUser: sinon.stub().returns({
-                        onFeature: sinon.stub().resolves(undefined)
+                        onFeature: sinon.stub().resolves(undefined),
                     }),
                     toOrganization: sinon.stub().returns({
-                        onFeature: sinon.stub().resolves(undefined)
-                    })
+                        onFeature: sinon.stub().resolves(undefined),
+                    }),
                 });
                 stubs.findOne.resolves(plan);
                 await createService(planData, user);

@@ -286,4 +286,4 @@ export default async function validate(data, fields) {
     }
 
     return errors;
-};
+}

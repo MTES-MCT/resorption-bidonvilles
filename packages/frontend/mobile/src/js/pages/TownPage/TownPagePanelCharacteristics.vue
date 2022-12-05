@@ -6,9 +6,7 @@
                     {{ formatDateSince(town.builtAt) }}
                 </div>
             </div>
-            <div v-else>
-                non communiquée
-            </div>
+            <div v-else>non communiquée</div>
         </TownPageInfo>
 
         <TownPageInfo :title="'Signalé depuis'">
@@ -17,9 +15,7 @@
                     {{ formatDateSince(town.declaredAt) }}
                 </div>
             </div>
-            <div v-else>
-                non communiquée
-            </div>
+            <div v-else>non communiquée</div>
         </TownPageInfo>
 
         <TownPageInfo :title="'Type de site'">
@@ -50,9 +46,9 @@
             :title="'Nom du propriétaire'"
             v-if="
                 town.ownerType.label !== 'Inconnu' &&
-                    $store.getters['config/hasPermission'](
-                        'shantytown_owner.access'
-                    )
+                $store.getters['config/hasPermission'](
+                    'shantytown_owner.access'
+                )
             "
         >
             {{ town.owner || "non communiqué" }}
@@ -72,12 +68,12 @@ export default {
     props: {
         town: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     components: {
         Icon,
-        TownPageInfo
+        TownPageInfo,
     },
     methods: {
         formatDateSince,
@@ -86,7 +82,7 @@ export default {
                 return "non communiqué";
             }
             return bool ? "Oui" : "Non";
-        }
-    }
+        },
+    },
 };
 </script>

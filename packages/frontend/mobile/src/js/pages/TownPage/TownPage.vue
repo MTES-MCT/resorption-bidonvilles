@@ -112,18 +112,18 @@ export default {
         TownPagePanelActors,
         TownPagePanelJudicial,
         Icon,
-        Spinner
+        Spinner,
     },
     data() {
         return {
-            error: null
+            error: null,
         };
     },
     computed: {
         ...mapGetters({
             town: "detailedTown",
-            state: "townsState"
-        })
+            state: "townsState",
+        }),
     },
     async mounted() {
         if (this.$store.state.towns.state !== "loaded") {
@@ -148,7 +148,7 @@ export default {
     methods: {
         async toTownsList() {
             this.$router.push(`/liste-des-sites`);
-        }
-    }
+        },
+    },
 };
 </script>

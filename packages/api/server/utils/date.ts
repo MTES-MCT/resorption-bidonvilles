@@ -14,8 +14,8 @@ const MONTHS = [
 ];
 
 /**
- * 
- * @param num adds a leading zero to the month, the day, the hours, the minutes or seconds 
+ *
+ * @param num adds a leading zero to the month, the day, the hours, the minutes or seconds
  *            if it only contains a single digit (when value is less than 10)
  * @returns num: number
  */
@@ -25,17 +25,17 @@ function padTo2Digits(num: number) {
 
 function formatDate(date: Date) {
     return (
-        [
+        `${[
             date.getFullYear(),
             padTo2Digits(date.getMonth() + 1),
             padTo2Digits(date.getDate()),
-        ].join('-') +
-        ' ' +
-        [
-            padTo2Digits(date.getHours()),
-            padTo2Digits(date.getMinutes()),
-            padTo2Digits(date.getSeconds()),
-        ].join(':')
+        ].join('-')
+        } ${
+            [
+                padTo2Digits(date.getHours()),
+                padTo2Digits(date.getMinutes()),
+                padTo2Digits(date.getSeconds()),
+            ].join(':')}`
     );
 }
 

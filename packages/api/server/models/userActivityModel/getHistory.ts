@@ -43,6 +43,4 @@ export default async (user, location, activityTypeFilter, resorbedFilter, myTown
     }
 
     return sortedActivities;
-
-
 };

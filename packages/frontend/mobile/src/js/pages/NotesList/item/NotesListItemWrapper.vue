@@ -27,14 +27,14 @@ export default {
         Icon,
         Container,
         LeftSlidingBlock,
-        NotesListItem
+        NotesListItem,
     },
 
     props: {
         note: {
             type: Object,
-            required: true
-        }
-    }
+            required: true,
+        },
+    },
 };
 </script>

@@ -38,15 +38,15 @@ import Container from "#src/js/components/Container.vue";
 export default {
     components: {
         Button,
-        Container
+        Container,
     },
 
     props: {
         disablePublish: {
             type: Boolean,
             required: false,
-            default: true
-        }
-    }
+            default: true,
+        },
+    },
 };
 </script>

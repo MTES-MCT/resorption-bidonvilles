@@ -2,10 +2,10 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import rewiremock from 'rewiremock/node';
+import closeService from './close';
 
 const { expect } = chai;
 chai.use(sinonChai);
-
 
 const stubs = {
     update: sinon.stub(),
@@ -17,15 +17,15 @@ rewiremock('./_common/sendMailForClosedTown').with(stubs.sendMail);
 rewiremock('#server/models/shantytownModel/update').with(stubs.update);
 rewiremock('#server/models/shantytownModel/findOne').with(stubs.findOne);
 rewiremock('#server/utils/mattermost').with({
-    triggerShantytownCloseAlert: stubs.triggerShantytownCloseAlert
+    triggerShantytownCloseAlert: stubs.triggerShantytownCloseAlert,
 });
 
 rewiremock.enable();
-import closeService from './close';
 rewiremock.disable();
 
 describe.only('services/shantytown', () => {
     describe('close()', () => {
+        const now = new Date();
         const user = {};
         const data = {
             shantytown: {

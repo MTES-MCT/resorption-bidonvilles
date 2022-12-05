@@ -15,14 +15,14 @@ export default async ({
             :expires_at,
             :created_at
         ) RETURNING user_access_id AS id`, {
-        replacements: {
-            fk_user,
-            sent_by,
-            expires_at,
-            created_at,
+            replacements: {
+                fk_user,
+                sent_by,
+                expires_at,
+                created_at,
+            },
+            transaction,
         },
-        transaction,
-    },
     );
 
     return result[0][0].id;

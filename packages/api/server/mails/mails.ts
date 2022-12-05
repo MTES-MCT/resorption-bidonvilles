@@ -6,7 +6,9 @@ import config from '#server/config';
 import generateTrackingUTM from './generateTrackingUTM';
 
 const { formatName } = userModel;
-const { wwwUrl, webappUrl, backUrl, blogUrl } = config;
+const {
+    wwwUrl, webappUrl, backUrl, blogUrl,
+} = config;
 
 const formationUrl = 'https://app.evalandgo.com/s/index.php?id=JTk5aSU5M2slOTklQUI%3D&a=JTk2cCU5N2slOUElQjA%3D';
 const connexionUrl = `${webappUrl}/connexion`;

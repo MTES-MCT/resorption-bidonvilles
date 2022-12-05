@@ -11,8 +11,8 @@
 export default {
     props: {
         town: {
-            type: Object
-        }
-    }
+            type: Object,
+        },
+    },
 };
 </script>

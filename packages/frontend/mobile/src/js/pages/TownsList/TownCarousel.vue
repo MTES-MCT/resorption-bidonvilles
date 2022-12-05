@@ -21,15 +21,15 @@ export default {
     props: {
         towns: {
             type: Array,
-            required: true
-        }
+            required: true,
+        },
     },
 
     components: { Container, TownCard },
     methods: {
         showTownPage(town) {
             this.$router.push(`/site/${town.id}`);
-        }
-    }
+        },
+    },
 };
 </script>

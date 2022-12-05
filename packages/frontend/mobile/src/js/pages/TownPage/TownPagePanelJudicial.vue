@@ -27,11 +27,11 @@ export default {
     props: {
         town: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     components: {
-        TownPageInfo
+        TownPageInfo,
     },
     computed: {
         justiceRendered() {
@@ -61,7 +61,7 @@ export default {
             }
 
             return "NC";
-        }
+        },
     },
     methods: {
         boolToStr(bool) {
@@ -72,7 +72,7 @@ export default {
         },
         formatDate(timestamp) {
             return new Date(timestamp * 1000).toLocaleDateString();
-        }
-    }
+        },
+    },
 };
 </script>

@@ -6,7 +6,7 @@ export default async () => {
             {
                 fk_status: {
                     value: ['active'],
-                }
+                },
             },
             {
                 zeroUnsubscriptions: {

@@ -229,7 +229,7 @@ export default async (argFrom: Date, argTo: Date): Promise<any> => {
                 organizationId: row.userOrganizationId,
             });
             // obligatoire pour les mails car la propriété .length y est inaccessible...
-            acc[row.regionCode][row.departementCode][`new_users_length`] += 1;
+            acc[row.regionCode][row.departementCode].new_users_length += 1;
 
             return acc;
         }
@@ -247,7 +247,7 @@ export default async (argFrom: Date, argTo: Date): Promise<any> => {
                 id: row.shantytownCommentId,
                 city: row.city,
                 shantytownId,
-                shantytownUsename: shantytownUsename,
+                shantytownUsename,
             };
         } else {
             summary = {

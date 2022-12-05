@@ -25,8 +25,8 @@ export default (shantytownId, userId, themes, createdBy, transaction = undefined
             :autre,
             :created_by
         )`, {
-        replacements,
-        transaction,
-    },
+            replacements,
+            transaction,
+        },
     );
 };

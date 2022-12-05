@@ -80,7 +80,7 @@ export default {
         Button,
         Container,
         Layout,
-        TownCarousel
+        TownCarousel,
     },
     mounted() {
         this.load();
@@ -90,11 +90,11 @@ export default {
             myTowns: "myTowns",
             consultedTowns: "consultedTowns",
             error: "townsError",
-            state: "townsState"
+            state: "townsState",
         }),
         user() {
             return this.$store.state.config.configuration.user;
-        }
+        },
     },
 
     methods: {
@@ -102,7 +102,7 @@ export default {
             if (this.state !== "loaded") {
                 this.$store.dispatch("fetchTowns");
             }
-        }
-    }
+        },
+    },
 };
 </script>

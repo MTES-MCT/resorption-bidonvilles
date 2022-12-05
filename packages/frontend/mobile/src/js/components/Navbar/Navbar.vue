@@ -1,5 +1,5 @@
 <template>
-    <nav class="bg-primary text-white w-full py-4 px-6 ">
+    <nav class="bg-primary text-white w-full py-4 px-6">
         <div class="flex justify-between max-w-lg mx-auto">
             <NavbarItem
                 icon="home"
@@ -21,12 +21,14 @@ import NavbarItem from "./NavbarItem.vue";
 
 export default {
     components: {
-        NavbarItem
+        NavbarItem,
     },
     methods: {
         async showTownsTab() {
             if (this.$router.currentRoute.value.meta.tab === "sites") {
-                if (this.$router.currentRoute.value.path !== "/liste-des-sites") {
+                if (
+                    this.$router.currentRoute.value.path !== "/liste-des-sites"
+                ) {
                     this.$router.push("/liste-des-sites");
                 }
 
@@ -37,7 +39,9 @@ export default {
         },
         async showNotesTab() {
             if (this.$router.currentRoute.value.meta.tab === "notes") {
-                if (this.$router.currentRoute.value.path !== "/liste-des-notes") {
+                if (
+                    this.$router.currentRoute.value.path !== "/liste-des-notes"
+                ) {
                     this.$router.push("/liste-des-notes");
                 }
 
@@ -48,7 +52,7 @@ export default {
         },
         signout() {
             this.$router.push("/deconnexion");
-        }
-    }
+        },
+    },
 };
 </script>

@@ -19,9 +19,7 @@
                 >
             </span>
         </template>
-        <template v-slot:header>
-            Journal du site
-        </template>
+        <template v-slot:header> Journal du site </template>
         <template v-slot:body>
             <Container>
                 <template v-if="sortedComments.length > 0">
@@ -58,36 +56,36 @@ export default {
         Container,
         BottomSlidingBlock,
         TownComment,
-        Button
+        Button,
     },
 
     props: {
         town: {
             type: Object,
-            required: true
+            required: true,
         },
         openByDefault: {
             type: Boolean,
             required: false,
-            default: false
+            default: false,
         },
         defaultScroll: {
             type: Number,
             required: false,
-            default: 0
-        }
+            default: 0,
+        },
     },
 
     computed: {
         sortedComments() {
             const sortedComments = [
                 ...this.town.comments.regular,
-                ...this.town.comments.covid
+                ...this.town.comments.covid,
             ];
             return sortedComments.sort((a, b) => {
                 return b.createdAt - a.createdAt;
             });
-        }
+        },
     },
 
     methods: {
@@ -108,7 +106,7 @@ export default {
         },
         onScroll(scroll) {
             this.$store.commit("SET_COMMENTS_SCROLL", scroll);
-        }
-    }
+        },
+    },
 };
 </script>

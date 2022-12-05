@@ -50,7 +50,7 @@ export default {
         Layout,
         SearchSection,
         Spinner,
-        TownsSearchHeader
+        TownsSearchHeader,
     },
     mounted() {
         if (this.$store.state.towns.state !== "loaded") {
@@ -77,8 +77,8 @@ export default {
                 return [
                     {
                         title: "Résultats de recherche",
-                        items: this.$store.state.search.results
-                    }
+                        items: this.$store.state.search.results,
+                    },
                 ];
             }
 
@@ -86,10 +86,10 @@ export default {
                 { title: "Mes sites", items: this.$store.state.towns.myTowns },
                 {
                     title: "Sites récemment consultés",
-                    items: this.$store.state.towns.consultedTowns
-                }
+                    items: this.$store.state.towns.consultedTowns,
+                },
             ];
-        }
-    }
+        },
+    },
 };
 </script>

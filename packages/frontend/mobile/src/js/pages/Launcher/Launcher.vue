@@ -35,7 +35,7 @@ export default {
     components: {
         Button,
         Layout,
-        Spinner
+        Spinner,
     },
 
     data() {
@@ -44,7 +44,7 @@ export default {
             blockLoaderTimeout: null,
             showLoadingBlock: false,
             textLoaderTimeout: null,
-            showLoadingText: false
+            showLoadingText: false,
         };
     },
 
@@ -58,7 +58,7 @@ export default {
         }, 3000);
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         clearTimeout(this.blockLoaderTimeout);
         this.blockLoaderTimeout = null;
         clearTimeout(this.textLoaderTimeout);
@@ -84,7 +84,7 @@ export default {
         },
         redirect() {
             this.$router.push(getEntryPoint()).catch(() => {});
-        }
-    }
+        },
+    },
 };
 </script>

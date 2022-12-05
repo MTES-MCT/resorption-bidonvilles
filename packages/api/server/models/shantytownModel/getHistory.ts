@@ -1,5 +1,5 @@
 import { sequelize } from '#db/sequelize';
-import { QueryTypes } from 'sequelize'
+import { QueryTypes } from 'sequelize';
 import geoUtils from '#server/utils/geo';
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
@@ -83,8 +83,8 @@ export default async (user, location, shantytownFilter, resorbedFilter, myTownsF
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE ((${where.join(') OR (')}))` : ''}
                     ${where.length > 0 ? 'AND' : 'WHERE'} shantytowns.updated_at < '${lastDate}'
-                    ${resorbedFilter.includes('no') ? '' : `AND shantytowns.closed_with_solutions = 'yes'`}
-                    ${resorbedFilter.includes('yes') ? '' : `AND shantytowns.closed_with_solutions != 'yes'`}
+                    ${resorbedFilter.includes('no') ? '' : 'AND shantytowns.closed_with_solutions = \'yes\''}
+                    ${resorbedFilter.includes('yes') ? '' : 'AND shantytowns.closed_with_solutions != \'yes\''}
                     ${myTownsFilter.includes('no') ? '' : 'AND shantytown_actors.fk_user IS NOT NULL'}
                     ${myTownsFilter.includes('yes') ? '' : 'AND shantytown_actors.fk_user IS NULL'}
                     ${shantytownFilter.includes('shantytownCreation') ? '' : 'AND shantytowns.updated_at - shantytowns.created_at > \'00:00:01\''}
@@ -136,8 +136,8 @@ export default async (user, location, shantytownFilter, resorbedFilter, myTownsF
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE (${where.join(') OR (')})` : ''}
                     ${where.length > 0 ? 'AND' : 'WHERE'} shantytowns.updated_at < '${lastDate}'
-                    ${resorbedFilter.includes('no') ? '' : `AND shantytowns.closed_with_solutions = 'yes'`}
-                    ${resorbedFilter.includes('yes') ? '' : `AND shantytowns.closed_with_solutions != 'yes'`}
+                    ${resorbedFilter.includes('no') ? '' : 'AND shantytowns.closed_with_solutions = \'yes\''}
+                    ${resorbedFilter.includes('yes') ? '' : 'AND shantytowns.closed_with_solutions != \'yes\''}
                     ${myTownsFilter.includes('no') ? '' : 'AND shantytown_actors.fk_user IS NOT NULL'}
                     ${myTownsFilter.includes('yes') ? '' : 'AND shantytown_actors.fk_user IS NULL'}
                     ${shantytownFilter.includes('shantytownCreation') ? '' : 'AND shantytowns.updated_at - shantytowns.created_at > \'00:00:01\''}

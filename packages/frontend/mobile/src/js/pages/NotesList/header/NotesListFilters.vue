@@ -5,7 +5,7 @@
                 class="flex-1 py-2"
                 v-for="filter in filters"
                 v-bind:class="{
-                    'bg-primary text-white': filter.key === currentFilter
+                    'bg-primary text-white': filter.key === currentFilter,
                 }"
                 :key="filter.key"
                 @click="setFilter(filter.key)"
@@ -29,15 +29,15 @@ export default {
             filters: [
                 { key: "all", label: "Toutes" },
                 { key: "unpublished", label: "Non publiées" },
-                { key: "published", label: "Publiées" }
-            ]
+                { key: "published", label: "Publiées" },
+            ],
         };
     },
 
     computed: {
         currentFilter() {
             return this.$store.state.notes.filter;
-        }
+        },
     },
 
     methods: {
@@ -49,7 +49,7 @@ export default {
         },
         setFilter(filter) {
             this.$store.commit("notes/SET_FILTER", filter);
-        }
-    }
+        },
+    },
 };
 </script>

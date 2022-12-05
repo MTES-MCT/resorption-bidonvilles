@@ -6,7 +6,7 @@ const { generateAccessTokenFor, hashPassword } = authUtils;
 export default async (req, res) => {
     const { email, password } = req.body;
 
-    let typeOfEmail: string = typeof email;
+    const typeOfEmail: string = typeof email;
 
     if (typeof email !== 'string') {
         return res.status(400).send({

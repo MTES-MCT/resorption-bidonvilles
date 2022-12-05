@@ -2,9 +2,6 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-const { expect } = chai;
-chai.use(sinonChai);
-
 import planCommentModel from '#server/models/planCommentModel';
 
 import { serialized as fakePlanComment } from '#test/utils/planComment';
@@ -13,6 +10,9 @@ import permissionUtils from '#server/utils/permission';
 import moment from 'moment';
 
 import exportAllService from './exportAll';
+
+const { expect } = chai;
+chai.use(sinonChai);
 
 describe.only('services/exportAll', () => {
     describe('exportAll()', () => {

@@ -154,7 +154,7 @@ export default {
         // notify the user and the admin
         await Promise.all([
             sendEmail.toUser.accessExpired(
-                user
+                user,
             ),
             sendEmail.toAdmin.accessExpired(
                 user.user_accesses[0].sent_by,

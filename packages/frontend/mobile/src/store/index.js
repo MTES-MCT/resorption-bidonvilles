@@ -1,4 +1,4 @@
-import { createStore } from 'vuex';
+import { createStore } from "vuex";
 import api from "#src/js/api";
 import moduleConfig from "#frontend/common/store/modules/config";
 import moduleNavigation from "./modules/navigation";
@@ -16,8 +16,8 @@ const store = createStore({
         notifications: moduleNotifications,
         search: moduleSearch,
         towns: moduleTowns,
-        user: moduleUser
-    }
+        user: moduleUser,
+    },
 });
 api.setStore(store);
 

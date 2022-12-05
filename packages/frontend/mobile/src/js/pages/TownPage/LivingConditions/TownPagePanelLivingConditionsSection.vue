@@ -32,26 +32,26 @@ import TownPageLivingConditionsDetails from "./TownPageLivingConditionsDetails.v
 export default {
     props: {
         title: {
-            type: String
+            type: String,
         },
         status: {
-            type: Object
+            type: Object,
         },
         showStatus: {
             type: Boolean,
             default: true,
-            required: false
+            required: false,
         },
         answers: {
             type: Array,
             default() {
                 return [];
-            }
+            },
         },
         inverted: {
             type: Boolean,
-            default: false
-        }
+            default: false,
+        },
     },
     data() {
         return {
@@ -59,27 +59,27 @@ export default {
                 good: "text-green500",
                 toImprove: "text-secondary",
                 bad: "text-red",
-                unknown: "text-red"
+                unknown: "text-red",
             },
             icons: {
                 good: "check",
                 toImprove: "exclamation-triangle",
                 bad: "times",
-                unknown: "question"
+                unknown: "question",
             },
             texts: {
                 good: "oui",
                 toImprove: "à améliorer",
                 bad: "non",
-                unknown: "inconnu"
+                unknown: "inconnu",
             },
-            collapsed: true
+            collapsed: true,
         };
     },
     components: {
         Icon,
         TownPageLivingConditionsDetails,
-        TownPageInfo
+        TownPageInfo,
     },
     computed: {
         colorClass() {
@@ -99,7 +99,7 @@ export default {
             }
 
             return this.texts[status] || "inconnu";
-        }
-    }
+        },
+    },
 };
 </script>

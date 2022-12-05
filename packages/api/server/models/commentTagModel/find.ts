@@ -1,5 +1,6 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+
 export default (filters: any = {}) => {
     const where = [];
     const replacements: any = {};

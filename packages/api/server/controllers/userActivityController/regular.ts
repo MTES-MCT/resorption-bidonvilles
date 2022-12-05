@@ -3,7 +3,7 @@ import userActivityModel from '#server/models/userActivityModel';
 
 export default async (req, res, next) => {
     const {
-        lastActivityDate, maxActivityDate, numberOfActivities, activityTypeFilter, resorbedFilter, myTownsFilter
+        lastActivityDate, maxActivityDate, numberOfActivities, activityTypeFilter, resorbedFilter, myTownsFilter,
     } = req.query;
     try {
         return res.status(200).send(

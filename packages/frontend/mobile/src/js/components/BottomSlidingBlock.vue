@@ -59,23 +59,23 @@ const BACKGROUND_OPACITY = 0.75;
 
 export default {
     components: {
-        Button
+        Button,
     },
     props: {
         openByDefault: {
             type: Boolean,
             required: false,
-            default: false
+            default: false,
         },
         defaultScroll: {
             type: Number,
             required: false,
-            default: 0
-        }
+            default: 0,
+        },
     },
     data() {
         return {
-            sliding: false
+            sliding: false,
         };
     },
     mounted() {
@@ -94,7 +94,7 @@ export default {
             this.$refs.main.scrollTop = this.defaultScroll;
         });
     },
-    beforeDestroy() {
+    beforeUnmount() {
         this.$refs.slider.removeEventListener("transitionend", this.onSlideEnd);
     },
     methods: {
@@ -141,7 +141,7 @@ export default {
         },
         onScroll() {
             this.$emit("scroll", this.$refs.main.scrollTop);
-        }
-    }
+        },
+    },
 };
 </script>

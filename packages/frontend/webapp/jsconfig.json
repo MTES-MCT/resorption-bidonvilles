@@ -2,17 +2,11 @@
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
-            "#helpers/*": [
-                "./src/js/helpers/*"
+            "@common/*": [
+                "../common/*"
             ],
-            "#matomo/*": [
-                "./src/js/matomo/*"
-            ],
-            "#app/*": [
-                "./src/js/app/*"
-            ],
-            "#frontend/*": [
-                "../*"
+            "@/*": [
+                "./src/*"
             ]
         }
     },

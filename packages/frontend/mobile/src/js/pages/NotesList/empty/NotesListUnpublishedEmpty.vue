@@ -13,7 +13,7 @@ import { Button } from "@resorptionbidonvilles/ui";
 
 export default {
     components: {
-        Button
+        Button,
     },
 
     computed: {
@@ -23,7 +23,7 @@ export default {
             }
 
             return "Cliquez ici pour rédiger une nouvelle note";
-        }
-    }
+        },
+    },
 };
 </script>

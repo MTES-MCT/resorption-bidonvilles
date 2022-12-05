@@ -32,15 +32,15 @@ export default {
         Layout,
         NotesListHeader,
         NotesListEmpty,
-        NotesListItemWrapper
+        NotesListItemWrapper,
     },
     computed: {
         ...mapGetters({
-            notes: "notes/filteredNotes"
+            notes: "notes/filteredNotes",
         }),
         currentFilter() {
             return this.$store.state.notes.filter;
-        }
+        },
     },
     methods: {
         async create() {
@@ -58,7 +58,7 @@ export default {
             }
 
             this.$store.dispatch("notes/deleteNote", noteId);
-        }
-    }
+        },
+    },
 };
 </script>

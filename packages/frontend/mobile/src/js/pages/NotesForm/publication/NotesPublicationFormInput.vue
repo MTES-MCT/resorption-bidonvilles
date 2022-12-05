@@ -18,20 +18,20 @@ import { Button } from "@resorptionbidonvilles/ui";
 
 export default {
     components: {
-        Button
+        Button,
     },
 
     props: {
         disabled: {
             type: Boolean,
             required: false,
-            default: false
+            default: false,
         },
         value: {
             type: String,
             required: false,
-            default: null
-        }
+            default: null,
+        },
     },
 
     computed: {
@@ -48,7 +48,7 @@ export default {
             }
 
             return "text-primary";
-        }
-    }
+        },
+    },
 };
 </script>

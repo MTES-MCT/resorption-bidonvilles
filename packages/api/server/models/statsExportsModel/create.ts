@@ -18,13 +18,13 @@ export default ({
         :closed_shantytowns,
         :exported_by
     )`, {
-    replacements: {
-        fk_region,
-        fk_departement,
-        fk_epci,
-        fk_city,
-        closed_shantytowns,
-        exported_by,
+        replacements: {
+            fk_region,
+            fk_departement,
+            fk_epci,
+            fk_city,
+            closed_shantytowns,
+            exported_by,
+        },
     },
-},
 );

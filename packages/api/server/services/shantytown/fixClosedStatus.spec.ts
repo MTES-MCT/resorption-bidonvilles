@@ -2,9 +2,6 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-const { expect } = chai;
-chai.use(sinonChai);
-
 import { serialized as fakeUser } from '#test/utils/user';
 import locationUtils from '#test/utils/location';
 import { serialized as fakeShantytown } from '#test/utils/shantytown';
@@ -12,6 +9,9 @@ import shantytownModel from '#server/models/shantytownModel';
 import ServiceError from '#server/errors/ServiceError';
 
 import fixClosedStatusService from './fixClosedStatus';
+
+const { expect } = chai;
+chai.use(sinonChai);
 
 const { paris } = locationUtils;
 

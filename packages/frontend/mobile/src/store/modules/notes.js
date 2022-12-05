@@ -14,7 +14,7 @@ export default {
         filter: "unpublished",
         filterBarIsOpen: false,
         publishFormIsOpen: false,
-        linkedShantytown: null
+        linkedShantytown: null,
     },
 
     mutations: {
@@ -50,7 +50,7 @@ export default {
         },
         ADD_NOTE_PUBLICATION(state, { index, publication }) {
             state.notes[index].publications.push(publication);
-        }
+        },
     },
 
     actions: {
@@ -64,7 +64,7 @@ export default {
                 description: "",
                 shantytown,
                 publications: [],
-                created_at: (new Date()).toString()
+                created_at: new Date().toString(),
             };
 
             commit("ADD_NOTE", note);
@@ -132,14 +132,14 @@ export default {
 
             try {
                 const { comments } = await createComment(shantytownId, {
-                    description: state.notes[index].description
+                    description: state.notes[index].description,
                 });
 
                 commit(
                     "SET_COMMENTS",
                     {
                         shantytown: shantytownId,
-                        comments
+                        comments,
                     },
                     { root: true }
                 );
@@ -147,8 +147,8 @@ export default {
                     index,
                     publication: {
                         shantytown: shantytownId,
-                        published_at: (new Date()).toString()
-                    }
+                        published_at: new Date().toString(),
+                    },
                 });
                 await setNotes(state.notes);
             } catch (error) {
@@ -157,7 +157,7 @@ export default {
                         "Une erreur inconnue est survenue"
                 );
             }
-        }
+        },
     },
 
     getters: {
@@ -167,7 +167,7 @@ export default {
             }
 
             return sortBy(
-                state.notes.filter(note => {
+                state.notes.filter((note) => {
                     if (state.filter === "unpublished") {
                         return note.publications.length === 0;
                     }
@@ -176,8 +176,8 @@ export default {
                 }),
                 state.filter === "published" ? "publication" : "creation"
             );
-        }
-    }
+        },
+    },
 };
 
 function sortBy(notes, sortType) {

@@ -1,8 +1,15 @@
 <template>
-    <BottomSlidingBlock ref="slidingBlock" @cancel="$emit('close')" :openByDefault="openByDefault">
+    <BottomSlidingBlock
+        ref="slidingBlock"
+        @cancel="$emit('close')"
+        :openByDefault="openByDefault"
+    >
         <template v-slot:header>Publier ma note</template>
         <template v-slot:body>
-            <img src="/img/illustrations/notes_publish.svg" class="mt-4 w-1/2 m-auto" />
+            <img
+                src="/img/illustrations/notes_publish.svg"
+                class="mt-4 w-1/2 m-auto"
+            />
             <Container>
                 <p class="mt-12 text-center">
                     Veuillez sélectionner le site sur lequel vous souhaitez
@@ -12,13 +19,22 @@
 
                 <NotesPublicationFormLoading v-if="loadingLinkedShantytown" />
                 <template v-else>
-                    <NotesPublicationFormInput class="mt-4" @click="openSearch" :disabled="publicationIsPending" :value="
-                        linkedShantytown ? linkedShantytown.usename : null
-                    " />
-                    <NotesPublicationFormSubmitButton class="mt-12" @click="publish" :loading="publicationIsPending"
+                    <NotesPublicationFormInput
+                        class="mt-4"
+                        @click="openSearch"
+                        :disabled="publicationIsPending"
+                        :value="
+                            linkedShantytown ? linkedShantytown.usename : null
+                        "
+                    />
+                    <NotesPublicationFormSubmitButton
+                        class="mt-12"
+                        @click="publish"
+                        :loading="publicationIsPending"
                         :disabled="
-    publicationIsPending || linkedShantytown === null
-                        " />
+                            publicationIsPending || linkedShantytown === null
+                        "
+                    />
                 </template>
             </Container>
         </template>
@@ -38,25 +54,25 @@ export default {
         Container,
         NotesPublicationFormLoading,
         NotesPublicationFormInput,
-        NotesPublicationFormSubmitButton
+        NotesPublicationFormSubmitButton,
     },
 
     props: {
         note: {
             type: Object,
-            required: true
+            required: true,
         },
         openByDefault: {
             type: Boolean,
             required: false,
-            default: false
-        }
+            default: false,
+        },
     },
 
     data() {
         return {
             loadingLinkedShantytown: false,
-            publicationIsPending: false
+            publicationIsPending: false,
         };
     },
 
@@ -66,7 +82,7 @@ export default {
         },
         linkedShantytown() {
             return this.$store.state.notes.linkedShantytown;
-        }
+        },
     },
 
     mounted() {
@@ -127,7 +143,7 @@ export default {
             this.$store.commit("notes/SET_LINKED_SHANTYTOWN", result);
             this.$store.dispatch("notes/setShantytown", {
                 id: noteId,
-                shantytownId: result.id
+                shantytownId: result.id,
             });
         },
 
@@ -141,11 +157,11 @@ export default {
             try {
                 await this.$store.dispatch("notes/publishNote", {
                     id: this.note.id,
-                    shantytown: this.note.shantytown
+                    shantytown: this.note.shantytown,
                 });
                 this.$store.dispatch("notifications/add", {
                     text: "Note publiée dans le journal du site",
-                    icon: "paper-plane"
+                    icon: "paper-plane",
                 });
                 this.$store.commit("notes/SET_FILTER", "published");
                 this.$store.commit("notes/SET_FILTER_BAR_IS_OPEN", true);
@@ -155,7 +171,7 @@ export default {
             } catch (error) {
                 this.publicationIsPending = false;
             }
-        }
-    }
+        },
+    },
 };
 </script>
