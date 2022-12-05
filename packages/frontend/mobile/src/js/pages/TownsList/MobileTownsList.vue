@@ -18,6 +18,12 @@
         <template v-slot:scroll>
             <template v-if="state !== 'error'">
                 <Container class="mt-6">
+                    <div class="font-bold text-lg">Rechercher un site</div>
+                    <SearchInput
+                        class="mt-2 mb-6"
+                        @click="openSearch"
+                        placeholder="Rechercher un site"
+                    />
                     <div class="font-bold text-lg">
                         Mes sites ({{ myTowns.length }})
                     </div>
@@ -74,13 +80,16 @@ import Container from "../../components/Container.vue";
 import TownCarousel from "./TownCarousel.vue";
 import { mapGetters } from "vuex";
 import Layout from "#src/js/components/Layout.vue";
+import SearchInput from "#src/js/components/SearchInput.vue";
 
 export default {
     components: {
+        // eslint-disable-next-line vue/no-reserved-component-names
         Button,
         Container,
         Layout,
         TownCarousel,
+        SearchInput,
     },
     mounted() {
         this.load();
@@ -102,6 +111,15 @@ export default {
             if (this.state !== "loaded") {
                 this.$store.dispatch("fetchTowns");
             }
+        },
+        openSearch() {
+            this.$store.commit("search/SET_LISTENER", this.onSearch.bind(this));
+            this.$router.push("/recherche-de-site");
+        },
+        onSearch(town) {
+            setTimeout(() => {
+                this.$router.push(`/site/${town.id}`);
+            }, 100);
         },
     },
 };

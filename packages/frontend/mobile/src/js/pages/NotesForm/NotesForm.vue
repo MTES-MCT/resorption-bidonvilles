@@ -6,15 +6,19 @@
                     @publish="showPublish"
                     @copy="copy"
                     :disablePublish="isEmpty"
+                    :note="note"
                 />
             </template>
             <template v-slot:scroll>
-                <textarea
-                    class="px-6 w-full h-full outline-none"
-                    ref="textarea"
-                    v-model="description"
-                    placeholder="Cliquez ici pour commencer la saisie..."
-                ></textarea>
+                <div class="h-full overflow-hidden">
+                    <textarea
+                        ref="textarea"
+                        :disabled="note.publications.length !== 0"
+                        class="px-6 py-3 w-full h-full outline-none"
+                        v-model="description"
+                        placeholder="Cliquez ici pour commencer la saisie..."
+                    ></textarea>
+                </div>
             </template>
         </Layout>
 

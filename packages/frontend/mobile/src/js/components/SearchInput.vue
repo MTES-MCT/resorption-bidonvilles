@@ -18,6 +18,7 @@ import { Button } from "@resorptionbidonvilles/ui";
 
 export default {
     components: {
+        // eslint-disable-next-line vue/no-reserved-component-names
         Button,
     },
 
@@ -32,12 +33,17 @@ export default {
             required: false,
             default: null,
         },
+        placeholder: {
+            type: String,
+            required: false,
+            default: "Saisissez le nom d'un site",
+        },
     },
 
     computed: {
         wording() {
             if (!this.value) {
-                return "Saisissez le nom d'un site";
+                return this.placeholder;
             }
 
             return this.value;

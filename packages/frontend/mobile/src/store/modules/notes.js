@@ -30,8 +30,8 @@ export default {
         UPDATE_DESCRIPTION(state, { index, description }) {
             state.notes[index].description = description;
         },
-        UPDATE_SHANTYTOWN(state, { index, shantytownId }) {
-            state.notes[index].shantytown = shantytownId;
+        UPDATE_SHANTYTOWN(state, { index, shantytownId, addressSimple }) {
+            state.notes[index].shantytown = { shantytownId, addressSimple };
         },
         REMOVE_NOTE(state, index) {
             state.notes.splice(index, 1);
@@ -54,11 +54,30 @@ export default {
     },
 
     actions: {
-        async load({ commit }) {
-            commit("SET_NOTES", (await get("notes")) || []);
+        async load({ commit, state }) {
+            const notes = (await get("notes")) || [];
+
+            // les premières notes ne contenaient que l'identifiant du site, on reformate ces
+            // anciennes notes au nouveau format
+            notes.forEach((note) => {
+                note.publications.forEach((publication) => {
+                    if (typeof publication.shantytown === "number") {
+                        publication.shantytown = {
+                            shantytownId: publication.shantytown,
+                            addressSimple: "adresse inconnue",
+                        };
+                    }
+                });
+            });
+
+            commit("SET_NOTES", notes);
+            await setNotes(state.notes);
         },
 
-        async create({ commit, state }, shantytown = null) {
+        async create(
+            { commit, state },
+            shantytown = { shantytownId: null, addressSimple: null }
+        ) {
             const note = {
                 id: getRandomString(30),
                 description: "",
@@ -91,13 +110,16 @@ export default {
             await setNotes(state.notes);
         },
 
-        async setShantytown({ commit, state }, { id: noteId, shantytownId }) {
+        async setShantytown(
+            { commit, state },
+            { id: noteId, shantytownId, addressSimple }
+        ) {
             const index = state.notes.findIndex(({ id }) => id === noteId);
             if (index === -1) {
                 return;
             }
 
-            commit("UPDATE_SHANTYTOWN", { index, shantytownId });
+            commit("UPDATE_SHANTYTOWN", { index, shantytownId, addressSimple });
             await setNotes(state.notes);
         },
 
@@ -121,24 +143,31 @@ export default {
             await setNotes(state.notes);
         },
 
-        async publishNote(
-            { commit, state },
-            { id: noteId, shantytown: shantytownId }
-        ) {
+        async publishNote({ commit, state }, { id: noteId, shantytown }) {
             const index = state.notes.findIndex(({ id }) => id === noteId);
             if (index === -1) {
                 throw new Error("La note à publier n'a pas été retrouvée");
             }
 
+            if (
+                state.notes[index].publications.some(
+                    (publication) =>
+                        publication.shantytown.shantytownId === shantytown.id
+                )
+            ) {
+                throw new Error(
+                    "La note a déjà été publiée sur le site sélectionné"
+                );
+            }
             try {
-                const { comments } = await createComment(shantytownId, {
+                const { comments } = await createComment(shantytown.id, {
                     description: state.notes[index].description,
                 });
 
                 commit(
                     "SET_COMMENTS",
                     {
-                        shantytown: shantytownId,
+                        shantytown: shantytown.id,
                         comments,
                     },
                     { root: true }
@@ -146,7 +175,10 @@ export default {
                 commit("ADD_NOTE_PUBLICATION", {
                     index,
                     publication: {
-                        shantytown: shantytownId,
+                        shantytown: {
+                            addressSimple: shantytown.addressSimple,
+                            shantytownId: shantytown.id,
+                        },
                         published_at: new Date().toString(),
                     },
                 });

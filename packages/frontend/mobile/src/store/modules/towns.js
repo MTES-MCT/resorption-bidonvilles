@@ -8,7 +8,6 @@ export default {
         hash: {},
         myTowns: [],
         consultedTowns: [],
-        detailedTown: null,
         commentsAreOpen: false,
         commentsScroll: 0,
     },
@@ -36,14 +35,6 @@ export default {
                 }
             });
         },
-        setDetailedTown(state, townId) {
-            if (!state.hash[townId]) {
-                throw new Error("Impossible de trouver le site");
-            }
-
-            state.detailedTown = state.hash[townId];
-        },
-
         SET_COMMENTS_SCROLL(state, scroll) {
             state.commentsScroll = scroll;
         },
@@ -99,7 +90,8 @@ export default {
             }
         },
 
-        async fetchShantytown({ state }, shantytownId) {
+        async fetchShantytown({ state, rootState }, shantytownId) {
+            const { field_types: fieldTypes } = rootState.config.configuration;
             // fetch locally first
             const town = state.hash[shantytownId];
             if (town !== undefined) {
@@ -107,12 +99,13 @@ export default {
             }
 
             try {
-                return await findTown(shantytownId);
+                const rawTown = await findTown(shantytownId);
+                const town = enrichShantytown(rawTown, fieldTypes);
+                state.hash[town.id] = town;
+                return town;
             } catch (error) {
-                // ignore
+                throw new Error("Impossible de trouver le site");
             }
-
-            return null;
         },
     },
 
@@ -128,9 +121,6 @@ export default {
         },
         consultedTowns(state) {
             return state.consultedTowns;
-        },
-        detailedTown(state) {
-            return state.detailedTown;
         },
     },
 };
