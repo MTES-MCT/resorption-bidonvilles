@@ -8,7 +8,7 @@ export default async (fk_user: number, page: String, domain: 'webapp' | 'mobile'
         logId = await userNavigationLogsModel.insert(
             fk_user,
             page,
-            domain
+            domain,
         );
     } catch (error) {
         throw new ServiceError('insert_failed', error);

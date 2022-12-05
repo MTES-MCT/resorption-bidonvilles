@@ -2,7 +2,9 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import config from '#server/config';
 
-const { webappUrl, auth: authConfig, activationTokenExpiresIn, passwordResetDuration } = config;
+const {
+    webappUrl, auth: authConfig, activationTokenExpiresIn, passwordResetDuration,
+} = config;
 
 /**
  * Generates an access token for the given user

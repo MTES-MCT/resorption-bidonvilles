@@ -4,10 +4,10 @@
         ref="container"
     >
         <p>
-            <span class="text-xs mr-1"><Icon v-if="icon" :icon="icon"/></span>
+            <span class="text-xs mr-1"><Icon v-if="icon" :icon="icon" /></span>
             {{ text }}
         </p>
-        <Icon icon="times" @click.native="close" />
+        <Icon icon="times" @click="close" />
     </article>
 </template>
 
@@ -28,21 +28,21 @@ export default {
     props: {
         id: {
             type: String,
-            required: true
+            required: true,
         },
         text: {
             type: String,
-            required: true
+            required: true,
         },
         icon: {
             type: String,
-            required: false
+            required: false,
         },
         duration: {
             type: Number,
             required: false,
-            default: 5000 // in ms
-        }
+            default: 5000, // in ms
+        },
     },
 
     data() {
@@ -50,11 +50,11 @@ export default {
             isOpening: false,
             isClosing: false,
             openingTimeout: null,
-            closingTimeout: null
+            closingTimeout: null,
         };
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         clearTimeout(this.openingTimeout);
         clearTimeout(this.closingTimeout);
     },
@@ -107,7 +107,7 @@ export default {
             );
             this.isClosing = false;
             this.$store.dispatch("notifications/remove", this.id);
-        }
-    }
+        },
+    },
 };
 </script>

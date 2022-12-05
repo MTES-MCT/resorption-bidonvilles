@@ -39,4 +39,4 @@ export default async (attachments, user, feature, entity, transaction = undefine
     }
 
     await insertAttachments(attachments, userPermissionId, transaction);
-}
+};

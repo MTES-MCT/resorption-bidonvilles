@@ -8,6 +8,6 @@ export default {
         this.$store.dispatch("user/logout", this.$piwik).then(() => {
             this.$router.push("/").catch(() => {});
         });
-    }
+    },
 };
 </script>

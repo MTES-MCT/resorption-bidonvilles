@@ -87,9 +87,10 @@ export default (town, user) => {
             label: town.ownerTypeLabel,
         },
         socialOrigins: (town.socialOrigins || []).map((socialOrigin) => {
-            const [id, label] = socialOrigin.split('|');
+            const [id, uid, label] = socialOrigin.split('|');
             return {
                 id: parseInt(id, 10),
+                uid,
                 label,
             };
         }),

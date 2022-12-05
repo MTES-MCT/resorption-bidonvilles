@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-export default (categoryUid, withTotalOfOrganizations = false) => {
+export default async (categoryUid, withTotalOfOrganizations = false) => {
     const columns = {
         'organization_types.organization_type_id': 'id',
         'organization_types.name_singular': 'name_singular',
@@ -14,14 +14,14 @@ export default (categoryUid, withTotalOfOrganizations = false) => {
         columns['COUNT(organizations.organization_id)'] = 'numberOfOrganizations';
     }
 
-    return sequelize.query(
+    const rows = await sequelize.query(
         `SELECT
             ${Object.keys(columns).map(column => `${column} AS "${columns[column]}"`).join(', ')}
         FROM organization_types
         ${withTotalOfOrganizations ? 'LEFT JOIN organizations ON organizations.fk_type = organization_types.organization_type_id' : ''}
         WHERE organization_types.fk_category = :categoryUid
         ${withTotalOfOrganizations ? 'GROUP BY organization_types.organization_type_id' : ''}
-        ORDER BY organization_types.name_singular`,
+        ORDER BY UNACCENT(organization_types.name_singular)`,
         {
             type: QueryTypes.SELECT,
             replacements: {
@@ -29,4 +29,8 @@ export default (categoryUid, withTotalOfOrganizations = false) => {
             },
         },
     );
+
+    // eslint-disable-next-line no-param-reassign
+    rows.forEach((row: any) => { row.numberOfOrganizations = parseInt(row.numberOfOrganizations, 10); });
+    return rows;
 };

@@ -25,4 +25,4 @@ export default function sanitize(data, fields) {
     return fields.reduce((acc, { key, sanitizer }) => Object.assign(acc, {
         [key]: sanitizers[sanitizer](data[key]),
     }), {});
-};
+}

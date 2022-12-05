@@ -29,14 +29,14 @@ import formatDate from "#frontend/common/helpers/formatDate";
 
 export default {
     components: {
-        Tag
+        Tag,
     },
 
     props: {
         comment: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
 
     computed: {
@@ -45,20 +45,20 @@ export default {
         },
 
         tags() {
-            const tags = this.comment.tags.map(tag => ({
+            const tags = this.comment.tags.map((tag) => ({
                 variant: "pin",
-                ...tag
+                ...tag,
             }));
             if (this.comment.covid) {
                 tags.push({
                     variant: "pin_red",
                     uid: "covid",
-                    label: "COVID-19"
+                    label: "COVID-19",
                 });
             }
 
             return tags;
-        }
-    }
+        },
+    },
 };
 </script>

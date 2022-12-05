@@ -239,12 +239,9 @@ describe.only('contactController.contact()', () => {
                 phone: '',
                 organization_category: 'territorial_collectivity',
                 territorial_collectivity: {
-                    category: 'Commune',
-                    data: { code: '40101', type: 'city' },
+                    typeName: 'Commune',
+                    typeUid: 'city',
                     code: '40101',
-                    type: 'city',
-                    id: '40101',
-                    label: '(40) Gaas',
                 },
                 organization_full: {
                     id: 92,

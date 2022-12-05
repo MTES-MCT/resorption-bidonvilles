@@ -26,13 +26,13 @@ import { Icon } from "@resorptionbidonvilles/ui";
 
 export default {
     components: {
-        Icon
+        Icon,
     },
     props: {
         item: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     methods: {
         formatDateSince,
@@ -44,7 +44,7 @@ export default {
             }
 
             this.$router.back();
-        }
-    }
+        },
+    },
 };
 </script>

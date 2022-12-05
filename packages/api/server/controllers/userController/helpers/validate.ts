@@ -163,9 +163,9 @@ const validators = {
         let organization = null;
         try {
             organization = await organizationModel.findOneByLocation(
-                data.territorial_collectivity.category,
-                data.territorial_collectivity.data.type,
-                data.territorial_collectivity.data.code,
+                data.territorial_collectivity.typeName,
+                data.territorial_collectivity.typeUid,
+                data.territorial_collectivity.code,
             );
         } catch (error) {
             throw new Error('Une erreur est survenue lors de la vérification du nom de la structure');
@@ -210,7 +210,7 @@ const validators = {
             throw new Error('Le nom de la structure est obligatoire');
         }
 
-        if (data.association === 'Autre') {
+        if (data.association === 'autre') {
             return;
         }
 
@@ -227,7 +227,7 @@ const validators = {
     },
 
     async newAssociationName(data) {
-        if (data.association !== 'Autre') {
+        if (data.association !== 'autre') {
             return;
         }
 
@@ -286,4 +286,4 @@ export default async function validate(data, fields) {
     }
 
     return errors;
-};
+}

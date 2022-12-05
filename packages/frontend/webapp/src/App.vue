@@ -1,25 +1,9 @@
 <template>
-    <div>
-        <router-view />
-        <NotificationsGroup />
-    </div>
+    <NotificationGroup />
+    <RouterView />
 </template>
 
-<script>
-export default {
-    mounted() {
-        window.addEventListener("callRouter", ({ detail }) => {
-            this.$router[detail.routerMethod](...(detail.routerArgs || []));
-        });
-    },
-
-    watch: {
-        $route: {
-            handler(to) {
-                document.title = to.meta.title || "Résorption-bidonvilles";
-            },
-            immediate: true
-        }
-    }
-};
+<script setup>
+import NotificationGroup from "@/components/NotificationGroup/NotificationGroup.vue";
+import { RouterView } from "vue-router";
 </script>

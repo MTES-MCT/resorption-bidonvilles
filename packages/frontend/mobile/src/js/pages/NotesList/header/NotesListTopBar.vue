@@ -8,7 +8,7 @@
                     icon="filter"
                     iconPosition="left"
                     variant="primaryText"
-                    @click.native="$emit('toggle')"
+                    @click="$emit('toggle')"
                     >Filtrer</Button
                 >
                 <Button
@@ -16,7 +16,7 @@
                     icon="plus"
                     iconPosition="left"
                     variant="primaryText"
-                    @click.native="$emit('create')"
+                    @click="$emit('create')"
                     >Créer</Button
                 >
             </div>
@@ -31,7 +31,7 @@ import { Button } from "@resorptionbidonvilles/ui";
 export default {
     components: {
         Container,
-        Button
-    }
+        Button,
+    },
 };
 </script>

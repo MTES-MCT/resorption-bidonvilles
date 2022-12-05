@@ -2,9 +2,6 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-const { expect } = chai;
-chai.use(sinonChai);
-
 import shantytownModel from '#server/models/shantytownModel';
 import socialOriginModel from '#server/models/socialOriginModel';
 import shantytownToiletTypesModel from '#server/models/shantytownToiletTypesModel';
@@ -16,6 +13,9 @@ import mails from '#server/mails/mails';
 import config from '#server/config';
 
 import createService from './create';
+
+const { expect } = chai;
+chai.use(sinonChai);
 
 describe.only('services/shantytown', () => {
     describe('create()', () => {

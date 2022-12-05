@@ -11,20 +11,20 @@
 export default {
     props: {
         onDelete: {
-            type: Function
+            type: Function,
         },
         variant: {
             type: String,
-            default: "default"
+            default: "default",
         },
         display: {
             type: String,
-            default: "inline-flex"
+            default: "inline-flex",
         },
         uppercase: {
             type: Boolean,
-            default: true
-        }
+            default: true,
+        },
     },
     computed: {
         variantClasses() {
@@ -45,9 +45,9 @@ export default {
                 pin_red: `px-2 py-1 bg-red600 text-white ${
                     this.uppercase ? "uppercase" : ""
                 } text-xs`,
-                info: "bg-blue100 text-primary px-2 py-1 text-xs"
+                info: "bg-blue100 text-primary px-2 py-1 text-xs",
             }[this.variant];
-        }
-    }
+        },
+    },
 };
 </script>

@@ -13,7 +13,7 @@ const { formatName } = userModel;
 const { getUsenameOf, serializeComment } = shantytownModel;
 const { restrict } = permissionUtils;
 
-export default async (user, location, numberOfActivities, lastDate, maxDate, onlyCovid = false) => {
+export default async (user, location, numberOfActivities, lastDate, maxDate) => {
     // apply geographic level restrictions
     const where = [];
     const replacements: any = {
@@ -45,27 +45,27 @@ export default async (user, location, numberOfActivities, lastDate, maxDate, onl
         permissionWhere.publicComments.push('false');
     } else if (restrictedLocations.public.type !== 'nation') {
         // geo permission
-        const geo = [`${fromGeoLevelToTableName(restrictedLocations.public.type)}.code = :shantytownCommentLocationCode`];
+        const publicCommentLocationClause = [`${fromGeoLevelToTableName(restrictedLocations.public.type)}.code = :shantytownCommentLocationCode`];
         if (restrictedLocations.public.type === 'city') {
-            geo.push(`${fromGeoLevelToTableName(restrictedLocations.public.type)}.fk_main = :shantytownCommentLocationCode`);
+            publicCommentLocationClause.push(`${fromGeoLevelToTableName(restrictedLocations.public.type)}.fk_main = :shantytownCommentLocationCode`);
         }
 
-        permissionWhere.publicComments.push(`(${geo.join(' OR ')})`);
+        permissionWhere.publicComments.push(`(${publicCommentLocationClause.join(' OR ')})`);
         replacements.shantytownCommentLocationCode = restrictedLocations.public[restrictedLocations.public.type].code;
     }
 
     // private comments
-    const geo = [];
+    const privateCommentLocationClause = [];
     if (restrictedLocations.private !== null) {
         if (restrictedLocations.private.type !== 'nation') {
-            geo.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.code = :privateShantytownCommentLocationCode`);
+            privateCommentLocationClause.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.code = :privateShantytownCommentLocationCode`);
             if (restrictedLocations.public.type === 'city') {
-                geo.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.fk_main = :privateShantytownCommentLocationCode`);
+                privateCommentLocationClause.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.fk_main = :privateShantytownCommentLocationCode`);
             }
 
             replacements.privateShantytownCommentLocationCode = restrictedLocations.private[restrictedLocations.private.type].code;
         } else {
-            geo.push('true');
+            privateCommentLocationClause.push('true');
         }
     }
 
@@ -77,9 +77,10 @@ export default async (user, location, numberOfActivities, lastDate, maxDate, onl
                 :userId = ANY(uca.user_target_id)
             OR :organizationId = ANY(oca.organization_target_id)
             OR :userId = comments.created_by
-            ${geo.length > 0 ? `OR (${geo.join(' OR ')})` : ''}
+            ${privateCommentLocationClause.length > 0 ? `OR (${privateCommentLocationClause.join(' OR ')})` : ''}
         )`,
     );
+
     replacements.userId = user.id;
     replacements.organizationId = user.organization.id;
 
@@ -91,13 +92,24 @@ export default async (user, location, numberOfActivities, lastDate, maxDate, onl
         )`,
     );
 
+    // on vérifie que le commentaire est bien sur le territoire de la recherche
+    const searchLocationClause = [];
+    if (location.type !== 'nation') {
+        searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.code = :shantytownCommentSearchLocationCode`);
+        if (location.type === 'city') {
+            searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.fk_main = :shantytownCommentSearchLocationCode`);
+        }
+        replacements.shantytownCommentSearchLocationCode = location[location.type].code;
+    } else {
+        searchLocationClause.push('true');
+    }
+
+    where.push(`(${searchLocationClause.join(' OR ')})`);
+
     // additional filters
     where.push(`comments.created_at < '${lastDate}'`);
     if (maxDate) {
         where.push('comments.created_at >= :maxDate');
-    }
-    if (onlyCovid) {
-        where.push('covid_comments.shantytown_covid_comment_id IS NOT NULL');
     }
 
     const activities = await sequelize.query(

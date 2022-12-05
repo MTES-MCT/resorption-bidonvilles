@@ -106,9 +106,9 @@ export default (user, location = null, privateLocation = null) => {
         LEFT JOIN user_comment_access uca ON sc.shantytown_comment_id = uca.shantytown_comment_id
         LEFT JOIN tags ON tags.fk_shantytown_comment = sc.shantytown_comment_id
         ${additionalWhere.length > 0
-            ? `WHERE ${additionalWhere.join(' OR ')}`
-            : ''
-        }
+        ? `WHERE ${additionalWhere.join(' OR ')}`
+        : ''
+}
         ORDER BY sc.created_at DESC`,
         {
             type: QueryTypes.SELECT,

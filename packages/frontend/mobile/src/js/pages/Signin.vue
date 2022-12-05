@@ -7,30 +7,25 @@
             </h1>
         </header>
 
-        <ValidationObserver ref="form" v-slot="{ handleSubmit }">
-            <form
-                @submit.prevent="handleSubmit(onLogin)"
-                class="mx-auto max-w-sm"
-            >
-                <TextInput
-                    placeholder="marcel.dupont@example.com"
-                    label="Votre courriel"
-                    v-model="email"
-                />
+        <form @submit.prevent="onLogin">
+            <TextInput
+                placeholder="marcel.dupont@example.com"
+                label="Votre courriel"
+                v-model="email"
+            />
 
-                <PasswordInput label="Votre mot de passe" v-model="password" />
+            <PasswordInput label="Votre mot de passe" v-model="password" />
 
-                <div class="text-center mt-12">
-                    <Button type="submit" class="mb-8" :loading="loading">
-                        Me connecter
-                    </Button>
+            <div class="text-center mt-12">
+                <Button type="submit" class="mb-8" :loading="loading">
+                    Me connecter
+                </Button>
 
-                    <div v-if="error" class="bg-red200 p-3 mb-8">
-                        {{ error }}
-                    </div>
+                <div v-if="error" class="bg-red200 p-3 mb-8">
+                    {{ error }}
                 </div>
-            </form>
-        </ValidationObserver>
+            </div>
+        </form>
     </Container>
 </template>
 
@@ -41,7 +36,7 @@ import {
     Button,
     TextInput,
     PasswordInput,
-    RbLogo
+    RbLogo,
 } from "@resorptionbidonvilles/ui";
 
 export default {
@@ -50,20 +45,20 @@ export default {
         Button,
         TextInput,
         PasswordInput,
-        RbLogo
+        RbLogo,
     },
     data() {
         return {
             loading: null,
             error: null,
             email: "",
-            password: ""
+            password: "",
         };
     },
     computed: {
         ...mapGetters({
-            isLoggedIn: "user/loggedIn"
-        })
+            isLoggedIn: "user/loggedIn",
+        }),
     },
     methods: {
         async onLogin() {
@@ -72,7 +67,7 @@ export default {
                 this.loading = true;
                 await this.$store.dispatch("user/login", {
                     email: this.email,
-                    password: this.password
+                    password: this.password,
                 });
 
                 this.$router.push({ path: "/" }).catch(() => {});
@@ -86,7 +81,7 @@ export default {
                     this.$refs.form.setErrors(err.fields);
                 }
             }
-        }
-    }
+        },
+    },
 };
 </script>

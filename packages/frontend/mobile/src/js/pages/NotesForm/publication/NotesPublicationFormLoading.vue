@@ -12,7 +12,7 @@ import { Spinner } from "@resorptionbidonvilles/ui";
 
 export default {
     components: {
-        Spinner
-    }
+        Spinner,
+    },
 };
 </script>

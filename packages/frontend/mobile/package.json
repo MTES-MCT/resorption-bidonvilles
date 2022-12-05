@@ -2,35 +2,35 @@
   "name": "@resorptionbidonvilles/mobile",
   "version": "1.30.26",
   "scripts": {
-    "build": "vue-cli-service build",
-    "lint": "eslint --max-warnings=0 --ext .js,.vue",
-    "dev": "vue-cli-service serve"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint --max-warnings=0 --ext .vue,.js,.jsx,.cjs,.mjs",
+    "lint:all": "eslint --no-error-on-unmatched-pattern --max-warnings=0 --ext .vue,.js,.jsx,.cjs,.mjs src public"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.22",
-    "@fortawesome/free-brands-svg-icons": "^5.15.1",
-    "@fortawesome/free-solid-svg-icons": "^5.10.2",
-    "@fortawesome/vue-fontawesome": "^0.1.6",
-    "@vue/cli": "^5.0.6",
-    "@vue/cli-service": "^4.5.8",
-    "@vue/eslint-config-prettier": "^6.0.0",
-    "eslint-import-resolver-alias": "^1.1.2",
-    "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-vue": "^7.10.0",
+    "@fortawesome/fontawesome-svg-core": "^6.2.0",
+    "@fortawesome/free-brands-svg-icons": "^6.2.0",
+    "@fortawesome/free-regular-svg-icons": "^6.2.0",
+    "@fortawesome/free-solid-svg-icons": "^6.2.0",
+    "@fortawesome/vue-fontawesome": "latest-3",
+    "@vue/eslint-config-prettier": "^7.0.0",
+    "eslint-plugin-vue": "^9.3.0",
     "register-service-worker": "^1.7.2",
-    "tailwindcss": "^1.8.10",
-    "vee-validate": "^3.4.0",
-    "vue-router": "^3.0.2",
-    "vue-template-compiler": "^2.5.21",
-    "vuex": "^3.6.0"
+    "tailwindcss": "^3.1.8",
+    "vee-validate": "^4.7.0",
+    "vue": "3.2.38",
+    "vue-router": "^4.1.5",
+    "vuex": "^4.0.0"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue": "^3.0.3",
     "@vue/cli-plugin-pwa": "~4.5.15",
-    "eslint": "^6.7.2",
+    "autoprefixer": "^10.4.12",
+    "eslint": "^8.22.0",
     "lint-staged": "^11.0.0",
-    "prettier": "^1.19.1",
-    "vue": "^2.6.10"
+    "postcss": "^8.4.18",
+    "prettier": "^2.7.1",
+    "vite": "^3.0.9"
   },
   "installConfig": {
     "hoistingLimits": "dependencies"

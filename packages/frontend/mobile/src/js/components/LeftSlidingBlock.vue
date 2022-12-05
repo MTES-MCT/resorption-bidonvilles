@@ -31,8 +31,8 @@ export default {
             required: false,
             default() {
                 return SLIDER_WIDTH_RATIO;
-            }
-        }
+            },
+        },
     },
     data() {
         return {
@@ -40,7 +40,7 @@ export default {
             originalX: null,
             originalWidth: 0,
             slideDistance: null,
-            maxSlideDistance: null
+            maxSlideDistance: null,
         };
     },
     methods: {
@@ -52,7 +52,7 @@ export default {
                 this.$refs.section.offsetLeft + this.$refs.section.offsetWidth;
             const hotzone = {
                 min: slidingBlockRightEdge * (1 - HOT_ZONE_WIDTH_RATIO),
-                max: slidingBlockRightEdge
+                max: slidingBlockRightEdge,
             };
             const x = event.touches[0].pageX;
 
@@ -111,7 +111,7 @@ export default {
             } else {
                 this.$refs.slide.style.width = targetWidth;
             }
-        }
-    }
+        },
+    },
 };
 </script>

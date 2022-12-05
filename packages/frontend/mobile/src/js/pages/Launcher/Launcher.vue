@@ -1,6 +1,7 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
     <Layout :navbar="false">
-        <template slot="scroll">
+        <template v-slot:scroll>
             <p v-if="error" class="mt-24 text-center">
                 <span class="font-bold text-primary"
                     >Le chargement de l'application a échoué :</span
@@ -28,14 +29,15 @@
 
 <script>
 import Layout from "#src/js/components/Layout.vue";
-import { getEntryPoint } from "../../router";
+import { getEntryPoint } from "#src/js/router";
 import { Button, Spinner } from "@resorptionbidonvilles/ui";
 
 export default {
     components: {
+        // eslint-disable-next-line vue/no-reserved-component-names
         Button,
         Layout,
-        Spinner
+        Spinner,
     },
 
     data() {
@@ -44,7 +46,7 @@ export default {
             blockLoaderTimeout: null,
             showLoadingBlock: false,
             textLoaderTimeout: null,
-            showLoadingText: false
+            showLoadingText: false,
         };
     },
 
@@ -58,7 +60,7 @@ export default {
         }, 3000);
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         clearTimeout(this.blockLoaderTimeout);
         this.blockLoaderTimeout = null;
         clearTimeout(this.textLoaderTimeout);
@@ -84,7 +86,7 @@ export default {
         },
         redirect() {
             this.$router.push(getEntryPoint()).catch(() => {});
-        }
-    }
+        },
+    },
 };
 </script>

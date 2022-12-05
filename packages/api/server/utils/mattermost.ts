@@ -1,11 +1,11 @@
 import IncomingWebhook from 'node-mattermost';
 import config from '#server/config';
 
+const { mattermost, webappUrl } = config;
 const formatAddress = town => `${town.address} ${town.name ? `« ${town.name} » ` : ''}`;
 const formatUsername = user => `[${user.first_name} ${user.last_name}](${webappUrl}/nouvel-utilisateur/${user.id}) `;
 const formatTownLink = (townID, text) => `[${text}](${webappUrl}/site/${townID})`;
 const formatPlanLink = (planID, text) => `[${text}](${webappUrl}/plan/${planID})`;
-const { mattermost, webappUrl } = config;
 
 const formatDate = ((dateToFormat) => {
     const day = dateToFormat.getDate();

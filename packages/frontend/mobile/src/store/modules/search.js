@@ -6,7 +6,7 @@ export default {
         search: "",
         request: null,
         results: null,
-        error: null
+        error: null,
     },
 
     mutations: {
@@ -24,6 +24,6 @@ export default {
         },
         SET_ERROR(state, error) {
             state.error = error;
-        }
-    }
+        },
+    },
 };

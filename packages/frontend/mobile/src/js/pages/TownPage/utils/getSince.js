@@ -17,6 +17,6 @@ export default function getSince(ts) {
         days,
         weeks,
         months,
-        years
+        years,
     };
 }

@@ -25,21 +25,21 @@ export default {
                 { title: "16 - 18 ans", content: "populationMinors16To18" },
                 {
                     title: "Inscrits en établissement scolaire",
-                    content: "minorsInSchool"
+                    content: "minorsInSchool",
                 },
                 { title: "Nombre de caravanes", content: "caravans" },
-                { title: "Nombre de cabanes", content: "huts" }
-            ]
+                { title: "Nombre de cabanes", content: "huts" },
+            ],
         };
     },
     props: {
         town: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     components: {
-        TownPageInfo
-    }
+        TownPageInfo,
+    },
 };
 </script>

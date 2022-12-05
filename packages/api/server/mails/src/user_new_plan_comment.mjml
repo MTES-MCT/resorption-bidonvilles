@@ -37,5 +37,6 @@
       </mj-column>
     </mj-section>
     <mj-include path='common/footer.mjml' />
+    <mj-include path='common/unsubscribe_push_mails.mjml' />
   </mj-body>
 </mjml>

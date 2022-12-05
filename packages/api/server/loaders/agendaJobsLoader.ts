@@ -21,7 +21,7 @@ export default (agenda) => {
                 const now = moment().utcOffset(2).subtract(7, 'days');
                 await activitySummary.sendAll(now.date(), now.month(), now.year());
             }
-        }
+        },
     );
 
     agenda.define(

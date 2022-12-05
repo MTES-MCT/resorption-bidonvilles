@@ -8,4 +8,3 @@ export default (shantytownId, incomingTowns, transaction = undefined) => sequeli
         transaction,
     },
 );
-

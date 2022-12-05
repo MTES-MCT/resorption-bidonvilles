@@ -2,11 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import config from '#server/config';
 
-const { assetsSrc } = config;
-
 import {
     SectionType, Paragraph, ImageRun, HorizontalPositionRelativeFrom,
 } from 'docx';
+
+const { assetsSrc } = config;
 
 export default () => {
     const marianne = new ImageRun({

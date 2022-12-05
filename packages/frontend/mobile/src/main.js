@@ -1,22 +1,16 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import { createApp } from "vue";
+import router from "./js/router";
 import App from "./App.vue";
-import "./registerServiceWorker";
-import store from "#src/store/index";
+// import "./registerServiceWorker";
+import store from "#src/store/index.js";
 import "@resorptionbidonvilles/ui/src/css/styles.css";
-import router from "#src/js/router.js";
-import registerIcons from "./init/icons";
+import FontAwesomeIcon from "./init/icons";
+import { useMatomo } from "#src/js/helpers/matomo";
 
-import { ValidationProvider, ValidationObserver } from "vee-validate";
+const app = createApp(App);
+app.use(router);
+app.use(store);
+app.component("font-awesome-icon", FontAwesomeIcon);
+useMatomo(app, router);
 
-Vue.use(VueRouter);
-Vue.component("ValidationProvider", ValidationProvider);
-Vue.component("ValidationObserver", ValidationObserver);
-registerIcons(Vue);
-
-new Vue({
-    el: "#app",
-    store,
-    router,
-    render: h => h(App)
-});
+app.mount("#app");

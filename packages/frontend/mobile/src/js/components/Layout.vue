@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
     <div class="h-full flex flex-col">
         <section class="flex-1 flex flex-col">
@@ -25,16 +26,16 @@ export default {
         logo: {
             type: Boolean,
             required: false,
-            default: true
+            default: true,
         },
         navbar: {
             type: Boolean,
             required: false,
-            default: true
-        }
+            default: true,
+        },
     },
     components: {
-        Navbar
-    }
+        Navbar,
+    },
 };
 </script>

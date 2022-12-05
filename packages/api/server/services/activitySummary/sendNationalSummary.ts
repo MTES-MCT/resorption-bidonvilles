@@ -1,4 +1,4 @@
-import { ActivityNationalSummary } from "#server/models/activityModel/types/ActivityNationalSummary";
+import { ActivityNationalSummary } from '#server/models/activityModel/types/ActivityNationalSummary';
 import { User } from '#server/models/userModel/_common/types/User';
 import mailsUtils from '#server/mails/mails';
 import moment from 'moment';
@@ -10,12 +10,10 @@ export default async (argFrom: Date, argTo: Date, argSummaries: ActivityNational
     const from = moment(argFrom);
     const to = moment(argTo);
 
-    const departements = Object.values(argSummaries).reduce((acc, d) => {
-        return {
-            ...acc,
-            ...d,
-        };
-    }, {});
+    const departements = Object.values(argSummaries).reduce((acc, d) => ({
+        ...acc,
+        ...d,
+    }), {});
 
     const summaries = Object.keys(departements)
         .sort()
