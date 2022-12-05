@@ -2,10 +2,11 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import rewiremock from 'rewiremock/node';
-import closeService from './close';
+import chaiSubset from 'chai-subset';
 
 const { expect } = chai;
 chai.use(sinonChai);
+chai.use(chaiSubset);
 
 const stubs = {
     update: sinon.stub(),
@@ -21,6 +22,8 @@ rewiremock('#server/utils/mattermost').with({
 });
 
 rewiremock.enable();
+// eslint-disable-next-line import/newline-after-import, import/first
+import closeService from './close';
 rewiremock.disable();
 
 describe.only('services/shantytown', () => {
@@ -46,7 +49,11 @@ describe.only('services/shantytown', () => {
             stubs.findOne.resolves(updatedTown);
 
             const response = await closeService(user, data);
-            expect(stubs.update).to.have.been.calledOnceWith(user, data.shantytown.id, {
+            expect(stubs.update).to.have.been.calledOnce;
+            const { args } = stubs.update.getCall(0);
+            expect(args[0]).to.be.eql(user);
+            expect(args[1]).to.be.eql(data.shantytown.id);
+            expect(args[2]).to.containSubset({
                 closed_at: '01-01-2019',
                 closed_with_solutions: 'no',
                 status: 'unknown',
