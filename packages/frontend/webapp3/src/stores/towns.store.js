@@ -271,7 +271,8 @@ export const useTownsStore = defineStore("towns", () => {
                 hash.value[id].heatwaveStatus = status;
                 trackEvent(
                     "Site",
-                    `${status ? "Déclenchement" : "Suppression"
+                    `${
+                        status ? "Déclenchement" : "Suppression"
                     } alerte canicule`,
                     `S${id}`
                 );

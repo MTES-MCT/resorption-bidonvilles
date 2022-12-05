@@ -5,5 +5,5 @@ export default function (date) {
         return date;
     }
 
-    return formatDate(date.getTime() / 1000, 'y-m-d');
+    return formatDate(date.getTime() / 1000, "y-m-d");
 }
