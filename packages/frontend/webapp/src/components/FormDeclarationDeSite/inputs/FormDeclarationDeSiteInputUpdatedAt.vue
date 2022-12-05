@@ -4,7 +4,7 @@
         id="updated_at"
         :label="labels.updated_at"
         :minDate="minDate"
-        :maxDate="new Date()"
+        :maxDate="yesterday"
         width="w-64"
         showMandatoryStar
     />
@@ -23,4 +23,6 @@ const props = defineProps({
     },
 });
 const { minDate } = toRefs(props);
+const yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
 </script>

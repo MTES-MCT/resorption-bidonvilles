@@ -4,10 +4,8 @@
 
         <FormDeclarationDeSiteInfo v-if="town === null" />
         <FormDeclarationDeSiteDateDeMaj
-            v-else
-            :minDate="
-                town?.updatedAt ? new Date(town.updatedAt * 1000) : undefined
-            "
+            v-else-if="canSetUpdatedAt"
+            :minDate="minUpdatedAt"
         />
         <FormDeclarationDeSiteAdresse :townId="town?.id" class="mt-6" />
         <FormDeclarationDeSiteCaracteristiques class="mt-6" />
@@ -81,7 +79,6 @@ const props = defineProps({
 const { town } = toRefs(props);
 const initialValues = {
     update_to_date: 1,
-    updated_at: new Date(),
     living_conditions_version: town.value?.livingConditions?.version || 2,
     show_old_living_conditions: false,
     ...formatFormTown(town.value || {}),
@@ -89,6 +86,31 @@ const initialValues = {
 
 const mode = computed(() => {
     return town.value === null ? "create" : "edit";
+});
+const canSetUpdatedAt = computed(() => {
+    if (!town.value) {
+        return false;
+    }
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setHours(0, 0, 0, 0);
+
+    const updatedAt = new Date(town.value.updatedAt * 1000);
+    updatedAt.setHours(0, 0, 0, 0);
+
+    return updatedAt < yesterday;
+});
+const minUpdatedAt = computed(() => {
+    if (!town.value) {
+        return null;
+    }
+
+    const updatedAt = new Date(town.value.updatedAt * 1000);
+    updatedAt.setHours(0, 0, 0, 0);
+    updatedAt.setDate(updatedAt.getDate() + 1);
+
+    return updatedAt;
 });
 const { handleSubmit, values, errors, setErrors } = useForm({
     validationSchema: schemaFn(mode.value),
@@ -216,7 +238,9 @@ defineExpose({
                             values.living_conditions_version || 2,
                         built_at: formatFormDate(values.built_at),
                         declared_at: formatFormDate(values.declared_at),
-                        updated_at: formatFormDate(values.updated_at),
+                        updated_at: formatFormDate(
+                            values.updated_at || new Date()
+                        ),
                         census_conducted_at: formatFormDate(
                             values.census_conducted_at
                         ),
