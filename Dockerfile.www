@@ -36,7 +36,7 @@ ADD --chown=node:node ./packages/frontend/www ./packages/frontend/www/
 USER node
 
 WORKDIR /home/node/app/packages/frontend/www
-RUN yarn www:build
+RUN yarn build
 
 ###
 # PRODUCTION STAGE
