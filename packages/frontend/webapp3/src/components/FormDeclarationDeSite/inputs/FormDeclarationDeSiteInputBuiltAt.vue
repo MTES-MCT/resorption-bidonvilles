@@ -3,7 +3,7 @@
         name="built_at"
         id="built_at"
         :label="labels.built_at"
-        :maxDate="values.declared_at || undefined"
+        :maxDate="values.declared_at || new Date()"
     />
 </template>
 

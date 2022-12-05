@@ -5,7 +5,9 @@
         </template>
 
         <template v-slot:col2>
-            {{ town.addressDetails }}
+            <p class="whitespace-pre-line break-words">
+                {{ town.addressDetails }}
+            </p>
         </template>
     </FicheGrille>
 </template>

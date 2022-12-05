@@ -4,6 +4,7 @@
         id="justice_rendered_at"
         :label="labels.justice_rendered_at"
         :minDate="values.built_at || undefined"
+        :maxDate="new Date()"
         showMandatoryStar
     />
 </template>

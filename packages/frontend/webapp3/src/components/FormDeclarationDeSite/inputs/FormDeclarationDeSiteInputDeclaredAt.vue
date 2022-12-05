@@ -4,6 +4,7 @@
         id="declared_at"
         :label="labels.declared_at"
         :minDate="values.built_at || undefined"
+        :maxDate="new Date()"
         showMandatoryStar
     />
 </template>

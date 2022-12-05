@@ -1,6 +1,13 @@
 <template>
-    <DatepickerInput name="updated_at" id="updated_at" :label="labels.updated_at" :minDate="minDate"
-        :maxDate="new Date()" width="w-64" showMandatoryStar />
+    <DatepickerInput
+        name="updated_at"
+        id="updated_at"
+        :label="labels.updated_at"
+        :minDate="minDate"
+        :maxDate="new Date()"
+        width="w-64"
+        showMandatoryStar
+    />
 </template>
 
 <script setup>
@@ -12,8 +19,8 @@ const props = defineProps({
     minDate: {
         type: Date,
         required: false,
-        default: undefined
-    }
+        default: undefined,
+    },
 });
 const { minDate } = toRefs(props);
 </script>

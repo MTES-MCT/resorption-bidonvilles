@@ -4,6 +4,7 @@
         id="police_granted_at"
         :label="labels.police_granted_at"
         :minDate="values.police_requested_at"
+        :maxDate="new Date()"
         showMandatoryStar
     />
 </template>
