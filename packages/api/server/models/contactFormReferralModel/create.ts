@@ -18,14 +18,14 @@ export default async ({
             :reason_word_of_mouth,
             :fk_user
         ) RETURNING contact_form_referral_id AS id`, {
-        replacements: {
-            reason,
-            reason_other,
-            reason_word_of_mouth,
-            fk_user,
+            replacements: {
+                reason,
+                reason_other,
+                reason_word_of_mouth,
+                fk_user,
+            },
+            transaction,
         },
-        transaction,
-    },
     );
 
     return result[0][0].id;

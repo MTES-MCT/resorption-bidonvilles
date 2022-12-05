@@ -1,6 +1,8 @@
 export default class ServiceError extends Error {
     code: string;
+
     nativeError: Error;
+
     /**
      * @param {String} code Un code interne d'identification de l'erreur
      * @param {Error} nativeError Erreur originelle
@@ -12,4 +14,4 @@ export default class ServiceError extends Error {
         this.code = code;
         this.nativeError = nativeError;
     }
-};
+}

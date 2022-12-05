@@ -21,4 +21,4 @@ export default function checkPassword(str) {
     }
 
     return errors;
-};
+}

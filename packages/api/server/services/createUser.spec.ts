@@ -25,7 +25,8 @@ rewiremock('#server/utils/mattermost').with(mattermostUtils);
 rewiremock('#server/models/userModel').with(userModel);
 
 rewiremock.enable();
-import createUser from "./createUser";
+// eslint-disable-next-line import/newline-after-import, import/first
+import createUser from './createUser';
 rewiremock.disable();
 
 describe.only('userService.createUser()', () => {

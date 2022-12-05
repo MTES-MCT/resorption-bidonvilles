@@ -15,7 +15,7 @@ export default async (req, res, next) => {
         await deleteTown(req.user, req.params.id);
         return res.status(204).send({});
     } catch (error) {
-        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES['undefined'];
+        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({
             error: {
                 user_message: message,

@@ -81,5 +81,5 @@ export default async (req, res, next) => {
         return next(error);
     }
 
-    return res.status(200).send({});
+    return res.status(200).send(await userModel.findOne(req.params.id));
 };

@@ -4,8 +4,8 @@
         @cancel="$emit('close')"
         :openByDefault="openByDefault"
     >
-        <template slot="header">Publier ma note</template>
-        <template slot="body">
+        <template v-slot:header>Publier ma note</template>
+        <template v-slot:body>
             <img
                 src="/img/illustrations/notes_publish.svg"
                 class="mt-4 w-1/2 m-auto"
@@ -19,7 +19,7 @@
 
                 <NotesPublicationFormLoading v-if="loadingLinkedShantytown" />
                 <template v-else>
-                    <NotesPublicationFormInput
+                    <SearchInput
                         class="mt-4"
                         @click="openSearch"
                         :disabled="publicationIsPending"
@@ -27,6 +27,13 @@
                             linkedShantytown ? linkedShantytown.usename : null
                         "
                     />
+                    <p
+                        class="text-secondary text-center mt-4"
+                        v-if="isNotePublishedOnLinkedShantytown"
+                    >
+                        La note a déjà été publiée sur ce site : veuillez
+                        choisir un autre site
+                    </p>
                     <NotesPublicationFormSubmitButton
                         class="mt-12"
                         @click="publish"
@@ -35,6 +42,12 @@
                             publicationIsPending || linkedShantytown === null
                         "
                     />
+                    <p
+                        class="text-error text-center mt-4"
+                        v-if="errorOfPublication"
+                    >
+                        Erreur : {{ errorOfPublication }}
+                    </p>
                 </template>
             </Container>
         </template>
@@ -45,7 +58,7 @@
 import BottomSlidingBlock from "#src/js/components/BottomSlidingBlock.vue";
 import Container from "#src/js/components/Container.vue";
 import NotesPublicationFormLoading from "./NotesPublicationFormLoading.vue";
-import NotesPublicationFormInput from "./NotesPublicationFormInput.vue";
+import SearchInput from "#src/js/components/SearchInput.vue";
 import NotesPublicationFormSubmitButton from "./NotesPublicationFormSubmitButton.vue";
 
 export default {
@@ -53,36 +66,47 @@ export default {
         BottomSlidingBlock,
         Container,
         NotesPublicationFormLoading,
-        NotesPublicationFormInput,
-        NotesPublicationFormSubmitButton
+        SearchInput,
+        NotesPublicationFormSubmitButton,
     },
 
     props: {
         note: {
             type: Object,
-            required: true
+            required: true,
         },
         openByDefault: {
             type: Boolean,
             required: false,
-            default: false
-        }
+            default: false,
+        },
     },
 
     data() {
         return {
             loadingLinkedShantytown: false,
-            publicationIsPending: false
+            publicationIsPending: false,
+            errorOfPublication: null,
         };
     },
 
     computed: {
         linkedShantytownId() {
-            return this.note.shantytown;
+            return this.note.shantytown?.shantytownId || null;
         },
         linkedShantytown() {
             return this.$store.state.notes.linkedShantytown;
-        }
+        },
+        isNotePublishedOnLinkedShantytown() {
+            if (this.linkedShantytown === null) {
+                return false;
+            }
+            return this.note.publications.some(
+                (publication) =>
+                    publication.shantytown.shantytownId ===
+                    this.linkedShantytown.id
+            );
+        },
     },
 
     mounted() {
@@ -121,7 +145,7 @@ export default {
                 );
                 this.$store.commit("notes/SET_LINKED_SHANTYTOWN", shantytown);
             } catch (error) {
-                console.log(error);
+                // ignore
             }
 
             this.loadingLinkedShantytown = false;
@@ -143,7 +167,8 @@ export default {
             this.$store.commit("notes/SET_LINKED_SHANTYTOWN", result);
             this.$store.dispatch("notes/setShantytown", {
                 id: noteId,
-                shantytownId: result.id
+                shantytownId: result.id,
+                addressSimple: result.addressSimple,
             });
         },
 
@@ -157,11 +182,11 @@ export default {
             try {
                 await this.$store.dispatch("notes/publishNote", {
                     id: this.note.id,
-                    shantytown: this.note.shantytown
+                    shantytown: this.linkedShantytown,
                 });
                 this.$store.dispatch("notifications/add", {
                     text: "Note publiée dans le journal du site",
-                    icon: "paper-plane"
+                    icon: "paper-plane",
                 });
                 this.$store.commit("notes/SET_FILTER", "published");
                 this.$store.commit("notes/SET_FILTER_BAR_IS_OPEN", true);
@@ -169,9 +194,10 @@ export default {
                 this.publicationIsPending = false;
                 this.$router.back();
             } catch (error) {
+                this.errorOfPublication = error.message;
                 this.publicationIsPending = false;
             }
-        }
-    }
+        },
+    },
 };
 </script>

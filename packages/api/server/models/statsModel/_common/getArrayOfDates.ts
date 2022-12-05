@@ -1,4 +1,5 @@
 import dateUtils from '#server/utils/date';
+
 const { substractWeek } = dateUtils;
 
 export default (startDate, endDate) => {

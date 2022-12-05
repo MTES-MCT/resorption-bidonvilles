@@ -1,5 +1,5 @@
 import { sequelize } from '#db/sequelize';
-import { QueryTypes } from 'sequelize'
+import { QueryTypes } from 'sequelize';
 import geoUtils from '#server/utils/geo';
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
@@ -11,7 +11,7 @@ import SQL from './_common/SQL';
 const { fromGeoLevelToTableName } = geoUtils;
 const { restrict } = permissionUtils;
 
-export default async (user, location, shantytownFilter, numberOfActivities, lastDate, maxDate) => {
+export default async (user, location, shantytownFilter, resorbedFilter, myTownsFilter, numberOfActivities, lastDate, maxDate) => {
     // apply geographic level restrictions
     const where = [];
     const replacements: any = {
@@ -45,7 +45,7 @@ export default async (user, location, shantytownFilter, numberOfActivities, last
                     WITH
                         shantytown_computed_origins AS (SELECT
                             s.hid AS fk_shantytown,
-                            string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.label), ','), ',') AS origins
+                            string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.uid || '|' || soo.label), ','), ',') AS origins
                         FROM "ShantytownHistories" s
                         LEFT JOIN "ShantytownOriginHistories" so ON so.fk_shantytown = s.hid
                         LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
@@ -83,6 +83,14 @@ export default async (user, location, shantytownFilter, numberOfActivities, last
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE ((${where.join(') OR (')}))` : ''}
                     ${where.length > 0 ? 'AND' : 'WHERE'} shantytowns.updated_at < '${lastDate}'
+                    ${resorbedFilter.includes('no') ? '' : 'AND shantytowns.closed_with_solutions = \'yes\''}
+                    ${resorbedFilter.includes('yes') ? '' : 'AND shantytowns.closed_with_solutions != \'yes\''}
+                    ${myTownsFilter.includes('no') ? '' : 'AND shantytown_actors.fk_user IS NOT NULL'}
+                    ${myTownsFilter.includes('yes') ? '' : 'AND shantytown_actors.fk_user IS NULL'}
+                    ${shantytownFilter.includes('shantytownCreation') ? '' : 'AND shantytowns.updated_at - shantytowns.created_at > \'00:00:01\''}
+                    ${shantytownFilter.includes('shantytownClosing') ? '' : 'AND shantytowns.closed_at IS NULL'}
+                    ${shantytownFilter.includes('shantytownUpdate') ? '' : 'AND (shantytowns.closed_at IS NOT NULL OR shantytowns.updated_at - shantytowns.created_at <= \'00:00:01\')'}
+                    ${maxDate ? ' AND shantytowns.updated_at >= :maxDate' : ''}
                     ORDER BY shantytowns.updated_at DESC
                     ${limit}
                     )
@@ -91,7 +99,7 @@ export default async (user, location, shantytownFilter, numberOfActivities, last
                     WITH
                         shantytown_computed_origins AS (SELECT
                             s.shantytown_id AS fk_shantytown,
-                            string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.label), ','), ',') AS origins
+                            string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.uid || '|' || soo.label), ','), ',') AS origins
                         FROM shantytowns s
                         LEFT JOIN shantytown_origins so ON so.fk_shantytown = s.shantytown_id
                         LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
@@ -128,15 +136,19 @@ export default async (user, location, shantytownFilter, numberOfActivities, last
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE (${where.join(') OR (')})` : ''}
                     ${where.length > 0 ? 'AND' : 'WHERE'} shantytowns.updated_at < '${lastDate}'
+                    ${resorbedFilter.includes('no') ? '' : 'AND shantytowns.closed_with_solutions = \'yes\''}
+                    ${resorbedFilter.includes('yes') ? '' : 'AND shantytowns.closed_with_solutions != \'yes\''}
+                    ${myTownsFilter.includes('no') ? '' : 'AND shantytown_actors.fk_user IS NOT NULL'}
+                    ${myTownsFilter.includes('yes') ? '' : 'AND shantytown_actors.fk_user IS NULL'}
+                    ${shantytownFilter.includes('shantytownCreation') ? '' : 'AND shantytowns.updated_at - shantytowns.created_at > \'00:00:01\''}
+                    ${shantytownFilter.includes('shantytownClosing') ? '' : 'AND shantytowns.closed_at IS NULL'}
+                    ${shantytownFilter.includes('shantytownUpdate') ? '' : 'AND (shantytowns.closed_at IS NOT NULL OR shantytowns.updated_at - shantytowns.created_at <= \'00:00:01\')'}
+                    ${maxDate ? ' AND shantytowns.updated_at >= :maxDate' : ''}
                     ORDER BY shantytowns.updated_at DESC
                     ${limit}
                 )) activities
             LEFT JOIN users author ON activities.author_id = author.user_id
             WHERE activities.date < '${lastDate}'
-            ${maxDate ? ' AND activities.date >= :maxDate' : ''}
-            ${shantytownFilter.includes('shantytownCreation') ? '' : 'AND activities.date - activities.created_at > \'00:00:01\''}
-            ${shantytownFilter.includes('shantytownClosing') ? '' : 'AND activities.closed_at IS NULL'}
-            ${shantytownFilter.includes('shantytownUpdate') ? '' : 'AND (activities.closed_at IS NOT NULL OR activities.date - activities.created_at <= \'00:00:01\')'}
             ORDER BY activities.date DESC
             ${limit}
             `,

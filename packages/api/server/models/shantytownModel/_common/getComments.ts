@@ -49,7 +49,7 @@ export default async (user, shantytownIds, covid = false) => {
                 shantytown_covid_comments.personnes_orientees AS "covidPersonnesOrientees",
                 shantytown_covid_comments.personnes_avec_symptomes AS "covidPersonnesAvecSymptomes",
                 shantytown_covid_comments.besoin_action AS "covidBesoinAction",`
-            : ''}
+        : ''}
             users.first_name AS "userFirstName",
             users.last_name AS "userLastName",
             users.position AS "userPosition",

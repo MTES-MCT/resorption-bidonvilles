@@ -15,15 +15,15 @@ export default {
     props: {
         title: {
             type: String,
-            required: true
+            required: true,
         },
         icon: {
             type: String,
-            required: false
-        }
+            required: false,
+        },
     },
     components: {
-        Icon
-    }
+        Icon,
+    },
 };
 </script>

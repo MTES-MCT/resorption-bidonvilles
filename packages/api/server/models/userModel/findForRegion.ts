@@ -17,7 +17,7 @@ export default async (regionCode, name = undefined) => {
         {
             fk_status: {
                 value: ['active'],
-            }
+            },
         },
     ];
     if (name !== undefined) {

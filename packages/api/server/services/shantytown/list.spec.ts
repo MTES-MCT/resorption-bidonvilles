@@ -2,12 +2,12 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-const { expect } = chai;
-chai.use(sinonChai);
-
 import shantytownModel from '#server/models/shantytownModel';
 import ServiceError from '#server/errors/ServiceError';
 import listService from './list';
+
+const { expect } = chai;
+chai.use(sinonChai);
 
 describe.only('services/shantytown', () => {
     describe('list()', () => {

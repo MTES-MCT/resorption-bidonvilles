@@ -3,15 +3,16 @@ import userActivityModel from '#server/models/userActivityModel';
 
 export default async (req, res, next) => {
     const {
-        lastActivityDate, maxActivityDate, numberOfActivities, filter,
+        lastActivityDate, maxActivityDate, numberOfActivities, activityTypeFilter, resorbedFilter, myTownsFilter,
     } = req.query;
-
     try {
         return res.status(200).send(
             await userActivityModel.getHistory(
                 req.user,
                 req.body.location,
-                filter,
+                activityTypeFilter,
+                resorbedFilter,
+                myTownsFilter,
                 numberOfActivities,
                 moment(lastActivityDate).format('YYYY-MM-DD HH:mm:ss ZZ'),
                 maxActivityDate ? moment(maxActivityDate).format('YYYY-MM-DD HH:mm:ss ZZ') : null,

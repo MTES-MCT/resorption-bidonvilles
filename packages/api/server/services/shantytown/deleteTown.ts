@@ -19,7 +19,7 @@ export default async (user, shantytown_id) => {
 
     // delete the town
     try {
-        await shantytownModel.deleteShantytown(town.id);
+        await shantytownModel.deleteShantytown(shantytown_id);
     } catch (error) {
         throw new ServiceError('delete_failed', error);
     }

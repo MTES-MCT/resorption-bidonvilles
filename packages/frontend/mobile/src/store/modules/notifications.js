@@ -4,7 +4,7 @@ export default {
     namespaced: true,
 
     state: {
-        items: []
+        items: [],
     },
 
     mutations: {
@@ -13,7 +13,7 @@ export default {
         },
         REMOVE_ITEM(state, itemIndex) {
             state.items.splice(itemIndex, 1);
-        }
+        },
     },
 
     actions: {
@@ -21,7 +21,7 @@ export default {
             commit("ADD_ITEM", {
                 id: getRandomString(),
                 text,
-                icon
+                icon,
             });
         },
         remove({ state, commit }, itemId) {
@@ -31,6 +31,6 @@ export default {
             }
 
             commit("REMOVE_ITEM", index);
-        }
-    }
+        },
+    },
 };

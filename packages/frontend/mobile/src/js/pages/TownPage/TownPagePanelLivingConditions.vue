@@ -64,8 +64,8 @@ export default {
     props: {
         town: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     components: { TownPagePanelLivingConditionsSection },
     computed: {
@@ -80,7 +80,7 @@ export default {
             ].status.status === "good"
                 ? "Absence de nuisible"
                 : "Présence de nuisibles";
-        }
-    }
+        },
+    },
 };
 </script>

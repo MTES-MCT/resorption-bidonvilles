@@ -2,18 +2,18 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-const { expect } = chai;
-chai.use(sinonChai);
-
-import locationUtils from "#test/utils/location";
-
-const { paris } = locationUtils;
+import locationUtils from '#test/utils/location';
 import { serialized as fakeShantytown } from '#test/utils/shantytown';
 import { serialized as fakeUser } from '#test/utils/user';
 
 import shantytownModel from '#server/models/shantytownModel';
 
 import setHeatwaveStatusService from './setHeatwaveStatus';
+
+const { expect } = chai;
+chai.use(sinonChai);
+
+const { paris } = locationUtils;
 
 describe.only('services/shantytown', () => {
     describe('setHeatwaveStatus()', () => {

@@ -25,9 +25,9 @@ export default {
     components: {
         Container,
         TextInput,
-        Button
+        Button,
     },
-    beforeDestroy() {
+    beforeUnmount() {
         if (this.request !== null) {
             this.request.abort();
             this.request = null;
@@ -43,7 +43,7 @@ export default {
             },
             set(value) {
                 this.$store.commit("search/SET_REQUEST", value);
-            }
+            },
         },
         search: {
             get() {
@@ -51,7 +51,7 @@ export default {
             },
             set(value) {
                 this.$store.commit("search/SET_SEARCH", value);
-            }
+            },
         },
         results: {
             get() {
@@ -59,7 +59,7 @@ export default {
             },
             set(value) {
                 this.$store.commit("search/SET_RESULTS", value);
-            }
+            },
         },
         error: {
             get() {
@@ -67,13 +67,13 @@ export default {
             },
             set(value) {
                 this.$store.commit("search/SET_ERROR", value);
-            }
-        }
+            },
+        },
     },
     watch: {
         search() {
             this.startSearch();
-        }
+        },
     },
     mounted() {
         this.$refs.input.focus();
@@ -102,7 +102,7 @@ export default {
                         "Une erreur inconnue est survenue";
                 }
             }
-        }
-    }
+        },
+    },
 };
 </script>

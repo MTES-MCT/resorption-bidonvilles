@@ -1,5 +1,6 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+
 export default async () => {
     const promises = [
         sequelize.query(

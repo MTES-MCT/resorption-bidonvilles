@@ -1,0 +1,179 @@
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import {
+    faAddressBook,
+    faArrowAltCircleRight,
+    faArrowLeft,
+    faArrowRight,
+    faArrowRightToBracket,
+    faArrowUpRightFromSquare,
+    faBalanceScale,
+    faBell,
+    faBan,
+    faBars,
+    faBolt,
+    faBuilding,
+    faBullseye,
+    faCalendar,
+    faChalkboardTeacher,
+    faChartSimple,
+    faCheck,
+    faChevronDown,
+    faChevronLeft,
+    faChevronRight,
+    faChevronUp,
+    faChild,
+    faCircleCheck,
+    faCircleInfo,
+    faCircleXmark,
+    faComment,
+    faCopy,
+    faCutlery,
+    faEnvelope,
+    faEuroSign,
+    faExclamation,
+    faFile,
+    faFileExcel,
+    faFilePdf,
+    faFileWord,
+    faFlag,
+    faHandshakeAngle,
+    faHistory,
+    faHome,
+    faHouseCircleXmark,
+    faKey,
+    faLock,
+    faMagnifyingGlass,
+    faMale,
+    faMapPin,
+    faMapMarkerAlt,
+    faMinus,
+    faPaperPlane,
+    faPen,
+    faPencilAlt,
+    faPersonMilitaryPointing,
+    faPhone,
+    faPlus,
+    faPrint,
+    faQuestion,
+    faRotateLeft,
+    faRotateRight,
+    faScroll,
+    faSpinner,
+    faTent,
+    faTimes,
+    faTint,
+    faTrashAlt as faTrashAltSolid,
+    faTriangleExclamation,
+    faUnlink,
+    faUser as faUserSolid,
+    faUserCheck,
+    faUserCircle,
+    faUserPen,
+    faUserPlus,
+    faUsers,
+    faUserShield,
+    faUserSlash,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+    faCircleQuestion,
+    faCircleUser,
+    faEye,
+    faEyeSlash,
+    faNewspaper,
+    faSun,
+    faTrashAlt,
+    faUser,
+} from "@fortawesome/free-regular-svg-icons";
+import {
+    faFacebook,
+    faLinkedin,
+    faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
+
+library.add(faAddressBook);
+library.add(faArrowAltCircleRight);
+library.add(faArrowLeft);
+library.add(faArrowRight);
+library.add(faArrowRightToBracket);
+library.add(faArrowUpRightFromSquare);
+library.add(faBalanceScale);
+library.add(faBan);
+library.add(faBars);
+library.add(faBell);
+library.add(faBolt);
+library.add(faBuilding);
+library.add(faBullseye);
+library.add(faCalendar);
+library.add(faChalkboardTeacher);
+library.add(faChartSimple);
+library.add(faCheck);
+library.add(faChevronDown);
+library.add(faChevronLeft);
+library.add(faChevronRight);
+library.add(faChevronUp);
+library.add(faChild);
+library.add(faCircleCheck);
+library.add(faCircleInfo);
+library.add(faCircleQuestion);
+library.add(faCircleUser);
+library.add(faCircleXmark);
+library.add(faComment);
+library.add(faCopy);
+library.add(faCutlery);
+library.add(faEnvelope);
+library.add(faEuroSign);
+library.add(faExclamation);
+library.add(faEye);
+library.add(faEyeSlash);
+library.add(faFacebook);
+library.add(faFile);
+library.add(faFileExcel);
+library.add(faFilePdf);
+library.add(faFileWord);
+library.add(faFlag);
+library.add(faHandshakeAngle);
+library.add(faHistory);
+library.add(faHome);
+library.add(faHouseCircleXmark);
+library.add(faKey);
+library.add(faLock);
+library.add(faLinkedin);
+library.add(faMagnifyingGlass);
+library.add(faMale);
+library.add(faMapPin);
+library.add(faMapMarkerAlt);
+library.add(faMinus);
+library.add(faNewspaper);
+library.add(faPaperPlane);
+library.add(faPen);
+library.add(faPencilAlt);
+library.add(faPersonMilitaryPointing);
+library.add(faPhone);
+library.add(faPrint);
+library.add(faPlus);
+library.add(faQuestion);
+library.add(faRotateLeft);
+library.add(faRotateRight);
+library.add(faScroll);
+library.add(faSpinner);
+library.add(faSun);
+library.add(faTent);
+library.add(faTimes);
+library.add(faTint);
+library.add(faTrashAlt);
+library.add(faTrashAltSolid);
+library.add(faTriangleExclamation);
+library.add(faTwitter);
+library.add(faUnlink);
+library.add(faUser);
+library.add(faUserCheck);
+library.add(faUserCircle);
+library.add(faUserPen);
+library.add(faUserPlus);
+library.add(faUsers);
+library.add(faUserShield);
+library.add(faUserSlash);
+library.add(faUserSolid);
+
+export default FontAwesomeIcon;

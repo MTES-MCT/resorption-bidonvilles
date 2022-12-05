@@ -12,16 +12,19 @@
             </template>
         </Layout>
 
+        <Layout v-else-if="error !== null">
+            <template v-slot:header>
+                <header>
+                    <p class="text-center text-red text-display-lg mb-4">
+                        {{ error }}
+                    </p>
+                </header>
+            </template>
+        </Layout>
+
         <Layout v-else-if="this.town !== null">
             <template v-slot:header>
                 <header>
-                    <p
-                        v-if="error !== null"
-                        class="text-center text-red text-display-lg mb-4"
-                    >
-                        {{ error }}
-                    </p>
-
                     <div
                         class="bg-G200 text-display-sm font-bold text-center pt-3 pb-2"
                         style="line-height: 1em"
@@ -112,35 +115,36 @@ export default {
         TownPagePanelActors,
         TownPagePanelJudicial,
         Icon,
-        Spinner
+        Spinner,
     },
     data() {
         return {
-            error: null
+            error: null,
+            town: null,
         };
     },
     computed: {
         ...mapGetters({
-            town: "detailedTown",
-            state: "townsState"
-        })
+            state: "townsState",
+        }),
     },
     async mounted() {
+        const townId = parseInt(this.$route.params.id, 10);
         if (this.$store.state.towns.state !== "loaded") {
             await this.$store.dispatch("fetchTowns");
         }
-        if (
-            this.$store.state.towns.detailedTown &&
-            this.$store.state.towns.detailedTown.id ===
-                parseInt(this.$route.params.id, 10)
-        ) {
+        if (this.$store.state.towns.hash[townId]) {
+            this.town = this.$store.state.towns.hash[townId];
             return;
         }
 
         try {
+            this.town = await this.$store.dispatch(
+                "fetchShantytown",
+                this.$route.params.id
+            );
             this.$store.commit("SET_COMMENTS_ARE_OPEN", false);
             this.$store.commit("SET_COMMENTS_SCROLL", 0);
-            this.$store.commit("setDetailedTown", this.$route.params.id);
         } catch (error) {
             this.error = "Erreur: " + error.message;
         }
@@ -148,7 +152,7 @@ export default {
     methods: {
         async toTownsList() {
             this.$router.push(`/liste-des-sites`);
-        }
-    }
+        },
+    },
 };
 </script>

@@ -8,9 +8,9 @@ export default (organization, viewed_by) => sequelize.query(
         :organization,
         :viewed_by
     )`, {
-    replacements: {
-        organization,
-        viewed_by,
+        replacements: {
+            organization,
+            viewed_by,
+        },
     },
-},
 );

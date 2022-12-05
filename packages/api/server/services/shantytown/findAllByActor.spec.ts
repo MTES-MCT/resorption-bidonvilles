@@ -4,9 +4,9 @@ import sinonChai from 'sinon-chai';
 
 import shantytownModel from '#server/models/shantytownModel';
 import ServiceError from '#server/errors/ServiceError';
+import { serialized as fakeUser } from '#test/utils/user';
+import { serialized as fakeTown } from '#test/utils/shantytown';
 import findAllByActorService from './findAllByActor';
-import { serialized as fakeUser } from "#test/utils/user";
-import { serialized as fakeTown } from "#test/utils/shantytown";
 
 const { expect } = chai;
 chai.use(sinonChai);

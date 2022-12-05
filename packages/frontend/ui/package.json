@@ -15,6 +15,7 @@
     "storybook": "start-storybook -p 6006"
   },
   "dependencies": {
-    "vee-validate": "^3.4.0"
+    "@fortawesome/free-regular-svg-icons": "^6.2.0",
+    "vee-validate": "^4.7.0"
   }
 }

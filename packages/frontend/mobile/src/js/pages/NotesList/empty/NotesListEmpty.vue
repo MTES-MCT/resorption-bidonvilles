@@ -16,13 +16,13 @@ export default {
     components: {
         Container,
         NotesListPublishedEmpty,
-        NotesListUnpublishedEmpty
+        NotesListUnpublishedEmpty,
     },
 
     computed: {
         currentFilter() {
             return this.$store.state.notes.filter;
-        }
-    }
+        },
+    },
 };
 </script>

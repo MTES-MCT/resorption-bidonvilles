@@ -5,12 +5,12 @@ export default async (departementCode) => {
         {
             fk_role: {
                 value: ['local_admin'],
-            }
+            },
         },
         {
             fk_status: {
                 value: ['active'],
-            }
+            },
         },
         {
             organization_active: {

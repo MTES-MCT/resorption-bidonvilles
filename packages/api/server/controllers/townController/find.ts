@@ -10,7 +10,7 @@ export default async (req, res, next) => {
     try {
         town = await shantytownService.find(req.user, req.params.id);
     } catch (error) {
-        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES['undefined'];
+        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({
             error: {
                 user_message: message,

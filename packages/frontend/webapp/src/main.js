@@ -1,34 +1,23 @@
-import "./init/styles";
-import "./init/formatDate";
-import registerGlobalComponents from "#app/components/ui/registerGlobalComponents";
-import registerIcons from "./init/icons";
-import registerMatomo from "./init/matomo";
-import registerSentry from "./init/sentry";
+import { createApp } from "vue";
+import { createPinia } from "pinia";
 
-// Import vue libs
 import App from "./App.vue";
-import VueI18n from "vue-i18n";
-import VueRouter from "vue-router";
-import messages from "#app/messages";
-import { router } from "#app/router";
-import store from "#app/store/index";
-import Vue from "vue";
+import router from "./helpers/router";
+import FontAwesomeIcon from "./helpers/font-awesome";
+import Datepicker from "./helpers/datepicker";
+import { useMatomo } from "./helpers/matomo";
+import { useSentry } from "./helpers/sentry";
+import "./helpers/yup";
 
-Vue.use(VueRouter);
-Vue.use(VueI18n);
-registerIcons(Vue);
-registerGlobalComponents(Vue);
-registerIcons(Vue);
-registerMatomo(Vue);
-registerSentry(Vue);
+import "./assets/main.css";
 
-new Vue({
-    el: "#app",
-    router,
-    store,
-    i18n: new VueI18n({
-        locale: "fr",
-        messages
-    }),
-    render: h => h(App)
-});
+const app = createApp(App);
+useSentry(app);
+
+app.use(createPinia());
+app.use(router);
+useMatomo(app, router);
+app.component("font-awesome-icon", FontAwesomeIcon);
+app.component("DatePicker", Datepicker);
+
+app.mount("#app");

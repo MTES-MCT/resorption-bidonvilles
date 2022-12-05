@@ -4,9 +4,7 @@
         <ul class="mt-1 flex flex-col space-y-3" v-if="items.length > 0">
             <SearchItem v-for="item in items" :key="item.id" :item="item" />
         </ul>
-        <p v-else class="text-G500">
-            Aucun site trouvé
-        </p>
+        <p v-else class="text-G500">Aucun site trouvé</p>
     </section>
 </template>
 
@@ -15,20 +13,20 @@ import SearchItem from "./SearchItem.vue";
 
 export default {
     components: {
-        SearchItem
+        SearchItem,
     },
     props: {
         title: {
             type: String,
-            required: true
+            required: true,
         },
         items: {
             type: Array,
             required: false,
             default() {
                 return [];
-            }
-        }
-    }
+            },
+        },
+    },
 };
 </script>

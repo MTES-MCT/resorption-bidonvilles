@@ -9,12 +9,12 @@ import Notification from "./Notification.vue";
 
 export default {
     components: {
-        Notification
+        Notification,
     },
     computed: {
         items() {
             return this.$store.state.notifications.items;
-        }
-    }
+        },
+    },
 };
 </script>

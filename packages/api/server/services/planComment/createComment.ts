@@ -1,4 +1,3 @@
-
 import planCommentModel from '#server/models/planCommentModel';
 import mattermostUtils from '#server/utils/mattermost';
 import userModel from '#server/models/userModel';

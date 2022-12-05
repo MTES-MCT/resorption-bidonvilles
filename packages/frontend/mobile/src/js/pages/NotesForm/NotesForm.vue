@@ -1,20 +1,24 @@
 <template>
     <div class="h-full">
         <Layout class="pt-4">
-            <template slot="header">
+            <template v-slot:header>
                 <NotesFormHeader
                     @publish="showPublish"
                     @copy="copy"
                     :disablePublish="isEmpty"
+                    :note="note"
                 />
             </template>
-            <template slot="scroll">
-                <textarea
-                    class="px-6 w-full h-full outline-none"
-                    ref="textarea"
-                    v-model="description"
-                    placeholder="Cliquez ici pour commencer la saisie..."
-                ></textarea>
+            <template v-slot:scroll>
+                <div class="h-full overflow-hidden">
+                    <textarea
+                        ref="textarea"
+                        :disabled="note.publications.length !== 0"
+                        class="px-6 py-3 w-full h-full outline-none"
+                        v-model="description"
+                        placeholder="Cliquez ici pour commencer la saisie..."
+                    ></textarea>
+                </div>
             </template>
         </Layout>
 
@@ -36,7 +40,7 @@ export default {
     components: {
         Layout,
         NotesFormHeader,
-        NotesPublicationForm
+        NotesPublicationForm,
     },
     async mounted() {
         this.$nextTick(() => {
@@ -58,16 +62,16 @@ export default {
             async set(text) {
                 await this.$store.dispatch("notes/setDescription", {
                     id: this.$route.params.id,
-                    description: text
+                    description: text,
                 });
-            }
+            },
         },
         isEmpty() {
             return this.note.description.replace(/^\s+|\s+$/g, "") === "";
         },
         isPublishOpenByDefault() {
             return this.$store.state.notes.publishFormIsOpen;
-        }
+        },
     },
     methods: {
         copy() {
@@ -75,7 +79,7 @@ export default {
             document.execCommand("copy");
             this.$store.dispatch("notifications/add", {
                 text: "Note copiée dans le presse-papier",
-                icon: "copy"
+                icon: "copy",
             });
         },
         showPublish() {
@@ -85,7 +89,7 @@ export default {
         onPublishClose() {
             this.$refs.textarea.focus();
             this.$store.commit("notes/SET_PUBLISH_FORM_IS_OPEN", false);
-        }
-    }
+        },
+    },
 };
 </script>

@@ -26,8 +26,8 @@ export default {
     props: {
         note: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
     computed: {
         rawDescription() {
@@ -57,7 +57,7 @@ export default {
                 : "text-red";
         },
         createdAt() {
-            return formatDate(this.note.created_at / 1000);
+            return formatDate(new Date(this.note.created_at).getTime() / 1000);
         },
         publishedAt() {
             if (this.note.publications.length === 0) {
@@ -65,9 +65,11 @@ export default {
             }
 
             return formatDate(
-                this.note.publications.slice(-1)[0].published_at / 1000
+                new Date(
+                    this.note.publications.slice(-1)[0].published_at
+                ).getTime() / 1000
             );
-        }
-    }
+        },
+    },
 };
 </script>

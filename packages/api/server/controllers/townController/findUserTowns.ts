@@ -14,7 +14,7 @@ export default async (req, res, next) => {
             towns = await shantytownService.findAllByActor(req.user);
         }
     } catch (error) {
-        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES['undefined'];
+        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({
             error: {
                 user_message: message,

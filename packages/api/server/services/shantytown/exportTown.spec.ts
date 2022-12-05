@@ -2,9 +2,6 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-const { expect } = chai;
-chai.use(sinonChai);
-
 import rewiremock from 'rewiremock/node';
 import ServiceError from '#server/errors/ServiceError';
 
@@ -15,6 +12,9 @@ import shantytownModel from '#server/models/shantytownModel';
 import closingSolutionModel from '#server/models/closingSolutionModel';
 import excelUtils from '#server/utils/excel';
 import statsExportsModel from '#server/models/statsExportsModel';
+
+const { expect } = chai;
+chai.use(sinonChai);
 
 let exportTownService;
 
@@ -74,7 +74,6 @@ describe.only('services/shantytown', () => {
                 try {
                     await exportTownService(user, {});
                 } catch (error) {
-                    console.log(error);
                     responseError = error;
                 }
                 expect(responseError).to.be.instanceOf(ServiceError);

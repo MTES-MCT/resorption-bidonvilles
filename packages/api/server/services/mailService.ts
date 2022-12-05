@@ -4,7 +4,9 @@ import config from '#server/config';
 import mailsUtils from '#server/utils/mail';
 
 const { send: sendMail } = mailsUtils;
-const { wwwUrl, webappUrl, backUrl, testEmail } = config;
+const {
+    wwwUrl, webappUrl, backUrl, testEmail,
+} = config;
 
 export default {
     PRESERVE_RECIPIENT: true,

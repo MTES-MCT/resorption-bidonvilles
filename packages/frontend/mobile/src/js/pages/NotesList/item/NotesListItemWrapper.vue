@@ -1,11 +1,11 @@
 <template>
     <LeftSlidingBlock>
-        <template slot="body">
-            <Container @click.native="$router.push(`/notes/${note.id}`)">
+        <template v-slot:body>
+            <Container @click="$router.push(`/notes/${note.id}`)">
                 <NotesListItem :note="note" />
             </Container>
         </template>
-        <template slot="slider">
+        <template v-slot:slider>
             <div
                 class="bg-red h-full flex justify-center items-center text-white text-xl"
                 @click="$emit('delete', note.id)"
@@ -27,14 +27,14 @@ export default {
         Icon,
         Container,
         LeftSlidingBlock,
-        NotesListItem
+        NotesListItem,
     },
 
     props: {
         note: {
             type: Object,
-            required: true
-        }
-    }
+            required: true,
+        },
+    },
 };
 </script>

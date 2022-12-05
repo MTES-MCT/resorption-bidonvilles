@@ -2,13 +2,13 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-const { expect } = chai;
-chai.use(sinonChai);
-
 
 import shantytownModel from '#server/models/shantytownModel';
 import ServiceError from '#server/errors/ServiceError';
 import createCovidCommentService from './createCovidComment';
+
+const { expect } = chai;
+chai.use(sinonChai);
 
 describe.only('services/shantytown', () => {
     const metadata = {

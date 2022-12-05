@@ -38,19 +38,16 @@ export default {
                 withoutBackground: "px-3 mr-2 mb-2 text-sm",
                 primary:
                     "bg-blue100 text-primary px-3 mr-2 mb-2 rounded-lg text-sm",
-                highlight: `bg-yellow-200 py-1 px-3 ${
-                    this.uppercase ? "uppercase" : ""
-                } text-xs text-primary text-sm`,
-                date: `bg-blue100 text-primary ${
-                    this.uppercase ? "uppercase" : ""
-                } px-2 py-1 text-sm`,
-                pin: `px-2 py-1 bg-blue100 text-primary ${
-                    this.uppercase ? "uppercase" : ""
-                } text-xs`,
-                pin_red: `px-2 py-1 bg-red600 text-white ${
-                    this.uppercase ? "uppercase" : ""
-                } text-xs`,
-                info: "bg-blue100 text-primary px-2 py-1 text-xs"
+                highlight: `bg-yellow-200 py-1 px-3 ${this.uppercase ? "uppercase" : ""
+                    } text-xs text-primary text-sm`,
+                date: `bg-blue100 text-primary ${this.uppercase ? "uppercase" : ""
+                    } px-2 py-1 text-sm`,
+                pin: `px-2 py-1 bg-blue100 text-primary ${this.uppercase ? "uppercase" : ""
+                    } text-xs`,
+                pin_red: `px-2 py-1 bg-red600 text-white ${this.uppercase ? "uppercase" : ""
+                    } text-xs`,
+                info: "bg-blue100 text-primary px-2 py-1 text-xs",
+                selfTheme: "text-sm border-primary border rounded-lg px-4 py-1 bg-white text-primary"
             }[this.variant];
         }
     }

@@ -175,7 +175,8 @@ export default async (data, planId, user) => {
                 planManagerModel.create(plan.id, planData.government.map(manager => manager.id), user.id, t),
 
                 ...['list', 'read', 'update', 'close'].map(
-                    feature => planData.government.map(manager => permissionModel.addAttachments([{ type: 'plan', id: plan.id }])
+                    feature => planData.government.map(manager => permissionModel
+                        .applyAttachments([{ type: 'plan', id: plan.id }])
                         .toUser(manager.id)
                         .onFeature(feature, 'plan', t)),
                 ).flat(),

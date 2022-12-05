@@ -55,20 +55,24 @@
     "ts-node": "^10.9.1",
     "tsc-alias": "^1.4.0",
     "typescript": "^4.4.2",
-    "validator": "^13.7.0"
+    "validator": "^13.7.0",
+    "rimraf": "^3.0.2",
+    "docx": "^7.3.0"
   },
   "devDependencies": {
     "@types/chai-as-promised": "^7.1.5",
     "@types/chai-subset": "^1.3.3",
     "@types/mocha": "^9.1.1",
     "@types/sinon-chai": "^3.2.8",
+    "@typescript-eslint/eslint-plugin": "^5.45.1",
+    "@typescript-eslint/parser": "^5.45.1",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "chai-http": "^4.2.1",
     "chai-subset": "^1.6.0",
-    "docx": "^7.3.0",
-    "eslint": "^5.10.0",
+    "eslint": "8.22.0",
     "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
     "husky": "^1.2.0",
     "lint-staged": "^11.0.0",
     "mocha": "^6.0.2",
@@ -97,8 +101,8 @@
     "start": "nodemon dist/server/index.js",
     "test:unit": "yarn mocha -r ts-node/register --require ./test/bootstrap.ts 'server/**/*.spec.ts' 'test/**/*.spec.ts' --bail --exit",
     "test:integration": "yarn test --grep '.*server/models.*'",
-    "lint": "eslint  --max-warnings=0",
-    "lint:all": "eslint  --max-warnings=0 server",
-    "emails:build": "node server/mails/build.js"
+    "lint": "eslint --max-warnings=0 --ext .ts",
+    "lint:all": "eslint --no-error-on-unmatched-pattern --max-warnings=0 --ext .ts server",
+    "emails:build": "ts-node server/mails/build.ts"
   }
 }

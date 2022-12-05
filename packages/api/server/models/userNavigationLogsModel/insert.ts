@@ -1,4 +1,4 @@
-import { sequelize } from "#db/sequelize";
+import { sequelize } from '#db/sequelize';
 
 type Domain = 'webapp' | 'mobile';
 

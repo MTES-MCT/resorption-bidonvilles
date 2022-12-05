@@ -1,0 +1,104 @@
+<template>
+    <FicheSiteHeader
+        :town="town"
+        v-on:openCancel="openCancel"
+        v-on:deleteTown="deleteTown"
+    />
+
+    <ContentWrapper>
+        <ArrangementLeftMenu columnWidthClass="w-96" :tabs="tabs" autonav>
+            <FicheSiteCaracteristiques
+                :town="town"
+                id="caracteristiques"
+                class="mb-8"
+            />
+            <FicheSiteFermeture
+                v-if="town.closedAt !== null"
+                :town="town"
+                id="fermeture"
+                class="mb-8"
+            />
+            <FicheSiteActions
+                v-if="town.plans.length"
+                :town="town"
+                id="actions"
+                class="mb-8"
+            />
+            <FicheSiteHabitants :town="town" id="habitants" class="mb-8" />
+            <FicheSiteConditionsDeVie
+                :town="town"
+                id="conditions_de_vie"
+                class="mb-8"
+            />
+            <FicheSiteProceduresJudiciaires
+                v-if="userStore.hasJusticePermission"
+                :town="town"
+                id="procedure_judiciaire"
+                class="mb-8"
+            />
+            <FicheSiteIntervenants
+                :town="town"
+                id="intervenants"
+                class="mb-12"
+            />
+        </ArrangementLeftMenu>
+    </ContentWrapper>
+
+    <FicheSiteJournal
+        :town="town"
+        v-if="userStore.hasLocalizedPermission('shantytown_comment.list', town)"
+    />
+    <FicheSiteHistorique :town="town" ref="historique" />
+</template>
+
+<script setup>
+import { defineProps, toRefs, computed, watch, ref } from "vue";
+import { useEventBus } from "@/helpers/event-bus";
+import { useUserStore } from "@/stores/user.store";
+import menu from "./FicheSite.menu";
+
+import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
+import FicheSiteHeader from "./FicheSiteHeader/FicheSiteHeader.vue";
+import FicheSiteCaracteristiques from "./FicheSiteCaracteristiques/FicheSiteCaracteristiques.vue";
+import FicheSiteFermeture from "./FicheSiteFermeture/FicheSiteFermeture.vue";
+import FicheSiteActions from "./FicheSiteActions/FicheSiteActions.vue";
+import FicheSiteHabitants from "./FicheSiteHabitants/FicheSiteHabitants.vue";
+import FicheSiteConditionsDeVie from "./FicheSiteConditionsDeVie/FicheSiteConditionsDeVie.vue";
+import FicheSiteProceduresJudiciaires from "./FicheSiteProceduresJudiciaires/FicheSiteProceduresJudiciaires.vue";
+import FicheSiteIntervenants from "./FicheSiteIntervenants/FicheSiteIntervenants.vue";
+import FicheSiteJournal from "./FicheSiteJournal/FicheSiteJournal.vue";
+import FicheSiteHistorique from "./FicheSiteHistorique/FicheSiteHistorique.vue";
+
+const props = defineProps({
+    town: Object,
+});
+const { town } = toRefs(props);
+const userStore = useUserStore();
+const { bus } = useEventBus();
+const historique = ref(null);
+
+const tabs = computed(() => {
+    return menu
+        .filter((item) => {
+            if (!item.condition) {
+                return item;
+            }
+
+            return item.condition(town.value);
+        })
+        .map((item) => {
+            return {
+                ...item,
+                label: item.label(town.value),
+            };
+        });
+});
+
+watch(
+    () => bus.value.get("fichesite:openHistorique"),
+    () => {
+        historique.value.open();
+    }
+);
+</script>

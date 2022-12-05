@@ -1,10 +1,9 @@
+const path = require("path");
 const commonConfig = require("@resorptionbidonvilles/ui/tailwind.config.js");
+const uiPath = path.dirname(require.resolve("@resorptionbidonvilles/ui"));
 
+/** @type {import('tailwindcss').Config} */
 module.exports = {
     ...commonConfig,
-    purge: {
-        mode: "layers",
-        layers: ["base", "components", "utilities"],
-        content: ["./src/**/*.{vue,js}"]
-    }
+    content: ["./index.html", "./src/**/*.{vue,js}", `${uiPath}/**/*.{vue,js}`],
 };

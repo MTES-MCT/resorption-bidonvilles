@@ -2,9 +2,6 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-const { expect } = chai;
-chai.use(sinonChai);
-
 import validator from 'validator';
 import shantytownModel from '#server/models/shantytownModel';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
@@ -13,6 +10,9 @@ import mails from '#server/mails/mails';
 import permissionUtils from '#server/utils/permission';
 import ServiceError from '#server/errors/ServiceError';
 import deleteCommentService from './deleteComment';
+
+const { expect } = chai;
+chai.use(sinonChai);
 
 describe.only('services/shantytown', () => {
     describe('deleteComment()', () => {

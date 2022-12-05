@@ -5,7 +5,6 @@
             iconPosition="left"
             :disabled="disabled"
             :loading="loading"
-            @click="$emit('click')"
             >Publier la note</Button
         >
     </p>
@@ -16,20 +15,20 @@ import { Button } from "@resorptionbidonvilles/ui";
 
 export default {
     components: {
-        Button
+        Button,
     },
 
     props: {
         disabled: {
             type: Boolean,
             required: false,
-            default: false
+            default: false,
         },
         loading: {
             type: Boolean,
             required: false,
-            default: false
-        }
-    }
+            default: false,
+        },
+    },
 };
 </script>

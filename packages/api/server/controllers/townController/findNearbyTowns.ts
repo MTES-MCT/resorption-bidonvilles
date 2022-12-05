@@ -2,7 +2,7 @@ import shantytownModel from '#server/models/shantytownModel';
 
 const { findNearby } = shantytownModel;
 
-export default () => async (req, res, next) => {
+export default async (req, res, next) => {
     try {
         const { latitude, longitude } = req.query;
         const distance = 0.5;
