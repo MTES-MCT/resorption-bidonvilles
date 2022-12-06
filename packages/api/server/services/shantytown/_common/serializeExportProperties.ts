@@ -283,7 +283,7 @@ export default (closingSolutions) => {
                     return null;
                 }
 
-                return data.map((at) => electricityAccessTypes[at]).join('\n');
+                return data.map(at => electricityAccessTypes[at]).join('\n');
             },
             width: COLUMN_WIDTHS.MEDIUM,
         },
@@ -325,7 +325,7 @@ export default (closingSolutions) => {
         },
         waterAccessTypeDetails: {
             title: "Précisions concernant les modalités d'accès à l'eau",
-            data: (shantytown) => shantytown.livingConditions.water.access_type_details,
+            data: shantytown => shantytown.livingConditions.water.access_type_details,
             width: COLUMN_WIDTHS.MEDIUM,
         },
         waterAccessIsPublic: {
@@ -362,7 +362,7 @@ export default (closingSolutions) => {
         },
         waterAccessIsContinuousDetails: {
             title: "Précisions concernant la discontinuité de l'accès à l'eau",
-            data: (shantytown) => shantytown.livingConditions.water.access_is_continuous_details,
+            data: shantytown => shantytown.livingConditions.water.access_is_continuous_details,
             width: COLUMN_WIDTHS.MEDIUM,
         },
         waterAccessIsLocal: {
@@ -436,7 +436,7 @@ export default (closingSolutions) => {
         },
         waterAccessComments: {
             title: 'Informations complémentaires sur l\'accès à l\'eau',
-            data: (shantytown) => shantytown.livingConditions.water.access_comments,
+            data: shantytown => shantytown.livingConditions.water.access_comments,
             width: COLUMN_WIDTHS.MEDIUM,
         },
         sanitaryAccessStatus: {
@@ -487,7 +487,7 @@ export default (closingSolutions) => {
                     return null;
                 }
 
-                return data.map((tt) => toiletTypes[tt]).join('\n');
+                return data.map(tt => toiletTypes[tt]).join('\n');
             },
             width: COLUMN_WIDTHS.MEDIUM,
         },
@@ -833,15 +833,15 @@ export default (closingSolutions) => {
         },
         comments: {
             title: 'Commentaires',
-            data: ({ comments }) => comments.regular.slice(0, 5).map((comment) => `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${userModel.formatName(comment.createdBy)}\n${comment.description}`).join('\n----\n'),
+            data: ({ comments }) => comments.regular.slice(0, 5).map(comment => `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${userModel.formatName(comment.createdBy)}\n${comment.description}`).join('\n----\n'),
             width: COLUMN_WIDTHS.LARGE,
         },
         covidComments: {
             title: 'Commentaires COVID-19',
             data: ({ comments }) => comments.covid.slice(0, 5).map((comment) => {
                 const tags = Object.keys(covidTags)
-                    .filter((tag) => comment.covid[tag] === true)
-                    .map((tag) => covidTags[tag])
+                    .filter(tag => comment.covid[tag] === true)
+                    .map(tag => covidTags[tag])
                     .join('\n');
 
                 return `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${userModel.formatName(comment.createdBy)}\nDate de l'intervention : ${tsToString(comment.covid.date, 'd/m/Y')}\n${tags}\n${comment.description}`;
