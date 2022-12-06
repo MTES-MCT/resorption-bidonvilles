@@ -9,7 +9,7 @@ export default computed(() => {
             "waterAccessConditions",
             "fieldType",
             "population",
-            "ban",
+            "status",
             "ownerType",
             "poi",
         ],
@@ -84,12 +84,12 @@ export default computed(() => {
                     },
                 ],
             },
-            ban: {
+            status: {
                 icon: "ban",
                 label: "Statut des sites",
                 options: [
                     { value: "closed", label: "Fermés", checked: false },
-                    { value: "opened", label: "Existants", checked: true },
+                    { value: "open", label: "Existants", checked: true },
                 ],
             },
             ownerType: {
