@@ -89,242 +89,212 @@
     </section>
 </template>
 
-<script>
+<script setup>
 import Container from "~/components/Layout/Container/Container.vue";
 import StatsBlock from "./StatsBlock.vue";
 import StatsSection from "./StatsSection.vue";
+import { Icon } from "@resorptionbidonvilles/ui";
 import { Line as LineChart, Pie as PieChart } from "vue-chartjs";
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, ArcElement, PointElement, LineElement, CategoryScale, LinearScale } from 'chart.js';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, ArcElement, PointElement, LineElement, CategoryScale, LinearScale);
 
-import { Icon, Spinner } from "@resorptionbidonvilles/ui";
+const { API_URL } = useRuntimeConfig();
 
-export default {
-    components: {
-        Container,
-        StatsSection,
-        StatsBlock,
-        LineChart,
-        PieChart,
-        Spinner,
-        Icon
-    },
+const state = ref(null);
+const stats = ref(null);
 
-    data() {
-        const { API_URL } = useRuntimeConfig();
+onMounted(load);
 
-        return {
-            state: null,
-            stats: null,
-            API_URL
-        };
-    },
-
-    mounted() {
-        this.load();
-    },
-
-    computed: {
-        numberOfDepartements() {
-            return this.stats ? this.stats.numberOfDepartements : "...";
-        },
-
-        numberOfTerritorialCollectivitieUsers() {
-            return this.stats
-                ? this.stats.numberOfCollaboratorAndAssociationUsers
-                    .territorial_collectivity || 0
-                : "...";
-        },
-
-        numberOfAssociationUsers() {
-            return this.stats
-                ? this.stats.numberOfCollaboratorAndAssociationUsers
-                    .association || 0
-                : "...";
-        },
-
-        numberOfPublicEstablishmentUsers() {
-            return this.stats
-                ? this.stats.numberOfCollaboratorAndAssociationUsers
-                    .public_establishment || 0
-                : "...";
-        },
-
-        numberOfAdministrationUsers() {
-            return this.stats
-                ? this.stats.numberOfCollaboratorAndAssociationUsers
-                    .administration || 0
-                : "...";
-        },
-
-        numberOfExports() {
-            return this.stats ? this.stats.numberOfExports : "...";
-        },
-
-        numberOfComments() {
-            return this.stats ? this.stats.numberOfComments : "...";
-        },
-
-        numberOfDirectoryViews() {
-            return this.stats ? this.stats.numberOfDirectoryViews : "...";
-        },
-
-        numberOfNewUsersPerMonth() {
-            return (this.stats && this.stats.numberOfNewUsersPerMonth) || null;
-        },
-
-        usersEvolutionData() {
-            if (
-                this.numberOfNewUsersPerMonth === null ||
-                this.stats.numberOfUsersOnJune2020 === null
-            ) {
-                return [];
-            }
-
-            const initialValue = parseInt(
-                this.stats.numberOfUsersOnJune2020,
-                10
-            );
-
-            const cumulativeData = this.numberOfNewUsersPerMonth.reduce(
-                (acc, { total }, index) =>
-                    index === 0
-                        ? [parseInt(total, 10) + initialValue]
-                        : [...acc, parseInt(total, 10) + acc[acc.length - 1]],
-                []
-            );
-
-            return {
-                labels: this.numberOfNewUsersPerMonth.map(({ month }) => month),
-                datasets: [{
-                    label: "Nombre d'utilisateurs",
-                    data: cumulativeData,
-                    fill: true
-                }],
-            };
-        },
-
-        organizationRepartitionData() {
-            return {
-                labels: [
-                    "services de l'État",
-                    "collectivités territoriales",
-                    "associations",
-                    "administration"
-                ],
-                datasets: [
-                    {
-                        backgroundColor: [
-                            "#169B62",
-                            "#5770BE",
-                            "#FF8D7E",
-                            "#6A6A6A"
-                        ],
-                        data: [
-                            this.numberOfPublicEstablishmentUsers,
-                            this.numberOfTerritorialCollectivitieUsers,
-                            this.numberOfAssociationUsers,
-                            this.numberOfAdministrationUsers
-                        ],
-                        label: "utilisateurs institutionnels et associatifs"
-                    }
-                ]
-            };
-        },
-
-        numberOfNewUsers() {
-            return this.stats && this.stats.numberOfNewUsersPerMonth
-                ? this.stats.numberOfNewUsersPerMonth.slice(-1)[0]
-                : { total: "...", month: "..." };
-        },
-
-        meanTimeBeforeCreationDeclaration() {
-            return this.stats
-                ? Math.round(
-                    this.stats.meanTimeBeforeCreationDeclaration.average
-                ) || "?"
-                : "...";
-        },
-
-        meanTimeBeforeClosingDeclaration() {
-            return this.stats
-                ? Math.round(
-                    this.stats.meanTimeBeforeClosingDeclaration.average
-                ) || "?"
-                : "...";
-        },
-
-        numberOfShantytownOperations() {
-            return this.stats ? this.stats.numberOfShantytownOperations : "...";
-        },
-
-        wauData() {
-            if (!this.stats) {
-                return null;
-            }
-
-            return {
-                scales: {
-                    y: {
-                        min: 0
-                    }
-                },
-                labels: this.stats.wau.map(({ monday }) => `Semaine du ${monday}`),
-                datasets: [
-                    {
-                        backgroundColor: "#E5E5F4",
-                        data: this.stats.wau.map(({ wau }) => wau),
-                        label: "Nombre d'utilisateurs sur la semaine"
-                    }
-                ]
-            };
-        }
-    },
-    methods: {
-        // Generate custom labels for user repartition
-        generateLabels(chart) {
-            const data = chart.data;
-            if (data.labels.length && data.datasets.length) {
-                return data.labels.map(function (label, i) {
-                    // We get the value of the current label
-                    const value = chart.config.data.datasets[0].data[i];
-                    const background =
-                        chart.config.data.datasets[0].backgroundColor[i];
-
-                    return {
-                        text: label + " : " + value,
-                        index: i,
-                        fillStyle: background
-                    };
-                });
-            } else {
-                return [];
-            }
-        },
-
-        /**
-         * Tries fetching the data from the API
-         *
-         * Please note that this cannot be done if the data has already been loaded
-         * before.
-         */
-        load() {
-            if (this.state === "loading") {
-                return;
-            }
-
-            this.state = "loading";
-
-            fetch(`${this.API_URL}/stats`)
-                .then((response) => response.json())
-                .then((response) => {
-                    this.stats = response.response.statistics;
-                    this.state = "loaded";
-                });
-        }
+function load() {
+    if (state.value === "loading") {
+        return;
     }
-};
+
+    state.value = "loading";
+
+    fetch(`${API_URL}/stats`)
+        .then((response) => response.json())
+        .then((response) => {
+            stats.value = response.response.statistics;
+            stats.state = "loaded";
+        });
+}
+
+const numberOfDepartements = computed(() => {
+    return stats.value ? stats.value.numberOfDepartements : "...";
+});
+
+const numberOfTerritorialCollectivitieUsers = computed(() => {
+    return stats.value
+        ? stats.value.numberOfCollaboratorAndAssociationUsers
+            .territorial_collectivity || 0
+        : "...";
+});
+
+const numberOfAssociationUsers = computed(() => {
+    return stats.value
+        ? stats.value.numberOfCollaboratorAndAssociationUsers
+            .association || 0
+        : "...";
+});
+
+const numberOfPublicEstablishmentUsers = computed(() => {
+    return stats.value
+        ? stats.value.numberOfCollaboratorAndAssociationUsers
+            .public_establishment || 0
+        : "...";
+});
+
+const numberOfAdministrationUsers = computed(() => {
+    return stats.value
+        ? stats.value.numberOfCollaboratorAndAssociationUsers
+            .administration || 0
+        : "...";
+});
+
+const numberOfExports = computed(() => {
+    return stats.value ? stats.value.numberOfExports : "...";
+});
+
+const numberOfComments = computed(() => {
+    return stats.value ? stats.value.numberOfComments : "...";
+});
+
+const numberOfDirectoryViews = computed(() => {
+    return stats.value ? stats.value.numberOfDirectoryViews : "...";
+});
+
+const numberOfNewUsersPerMonth = computed(() => {
+    return (stats.value && stats.value.numberOfNewUsersPerMonth) || null;
+});
+
+const usersEvolutionData = computed(() => {
+    if (
+        numberOfNewUsersPerMonth.value === null ||
+        stats.value.numberOfUsersOnJune2020 === null
+    ) {
+        return [];
+    }
+
+    const initialValue = parseInt(
+        stats.value.numberOfUsersOnJune2020,
+        10
+    );
+
+    const cumulativeData = numberOfNewUsersPerMonth.value.reduce(
+        (acc, { total }, index) =>
+            index === 0
+                ? [parseInt(total, 10) + initialValue]
+                : [...acc, parseInt(total, 10) + acc[acc.length - 1]],
+        []
+    );
+
+    return {
+        labels: numberOfNewUsersPerMonth.value.map(({ month }) => month),
+        datasets: [{
+            label: "Nombre d'utilisateurs",
+            data: cumulativeData,
+            fill: true
+        }],
+    };
+});
+
+const organizationRepartitionData = computed(() => {
+    return {
+        labels: [
+            "services de l'État",
+            "collectivités territoriales",
+            "associations",
+            "administration"
+        ],
+        datasets: [
+            {
+                backgroundColor: [
+                    "#169B62",
+                    "#5770BE",
+                    "#FF8D7E",
+                    "#6A6A6A"
+                ],
+                data: [
+                    numberOfPublicEstablishmentUsers.value,
+                    numberOfTerritorialCollectivitieUsers.value,
+                    numberOfAssociationUsers.value,
+                    numberOfAdministrationUsers.value
+                ],
+                label: "utilisateurs institutionnels et associatifs"
+            }
+        ]
+    };
+});
+
+const numberOfNewUsers = computed(() => {
+    return stats.value && stats.value.numberOfNewUsersPerMonth
+        ? stats.value.numberOfNewUsersPerMonth.slice(-1)[0]
+        : { total: "...", month: "..." };
+});
+
+const meanTimeBeforeCreationDeclaration = computed(() => {
+    return stats.value
+        ? Math.round(
+            stats.value.meanTimeBeforeCreationDeclaration.average
+        ) || "?"
+        : "...";
+});
+
+const meanTimeBeforeClosingDeclaration = computed(() => {
+    return stats.value
+        ? Math.round(
+            stats.value.meanTimeBeforeClosingDeclaration.average
+        ) || "?"
+        : "...";
+});
+
+const numberOfShantytownOperations = computed(() => {
+    return stats.value ? stats.value.numberOfShantytownOperations : "...";
+});
+
+const wauData = computed(() => {
+    if (!stats.value) {
+        return null;
+    }
+
+    return {
+        scales: {
+            y: {
+                min: 0
+            }
+        },
+        labels: stats.value.wau.map(({ monday }) => `Semaine du ${monday}`),
+        datasets: [
+            {
+                backgroundColor: "#E5E5F4",
+                data: stats.value.wau.map(({ wau }) => wau),
+                label: "Nombre d'utilisateurs sur la semaine"
+            }
+        ]
+    };
+});
+
+function generateLabels(chart) {
+    const data = chart.data;
+    if (data.labels.length && data.datasets.length) {
+        return data.labels.map(function (label, i) {
+            // We get the value of the current label
+            const value = chart.config.data.datasets[0].data[i];
+            const background =
+                chart.config.data.datasets[0].backgroundColor[i];
+
+            return {
+                text: label + " : " + value,
+                index: i,
+                fillStyle: background
+            };
+        });
+    } else {
+        return [];
+    }
+}
 </script>
 
 <style scoped>
