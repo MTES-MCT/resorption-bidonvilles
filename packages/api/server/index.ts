@@ -1,6 +1,6 @@
 import '../module_alias';
 import * as Sentry from '@sentry/node';
-import Tracing from '@sentry/tracing';
+import * as Tracing from '@sentry/tracing';
 import app from '#server/app';
 import { version } from '#root/package.json';
 

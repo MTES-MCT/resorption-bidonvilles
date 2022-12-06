@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/api",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "API d'Action Bidonvilles",
   "main": "server/index.ts",
   "repository": "git+https://github.com/MTES-MCT/action-bidonvilles.git",
@@ -10,8 +10,8 @@
   },
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@sentry/node": "^6.2.2",
-    "@sentry/tracing": "^6.2.2",
+    "@sentry/node": "^7.21.1",
+    "@sentry/tracing": "^7.21.1",
     "@supercharge/promise-pool": "^1.7.0",
     "@types/node": "*",
     "@types/superagent": "^4.1.13",
@@ -79,7 +79,7 @@
     "proxyquire": "^2.1.0",
     "rewiremock": "^3.13.9",
     "sequelize-test-helpers": "^1.4.0",
-    "sinon": "^7.2.7",
+    "sinon": "^10.0.0",
     "sinon-chai": "^3.3.0",
     "sinon-express-mock": "^2.1.0",
     "ts-node-dev": "^2.0.0"
@@ -97,7 +97,7 @@
   "scripts": {
     "db:create": "sequelize db:migrate && sequelize db:seed:all",
     "dev": "ts-node-dev ./server/index.ts",
-    "build": "tsc && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist && cp .sequelizerc dist && cp -r db/data dist/db/data",
+    "build": "tsc -p tsconfig.production.json && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist && cp .sequelizerc dist && cp -r db/data dist/db/data",
     "start": "nodemon dist/server/index.js",
     "test:unit": "yarn mocha -r ts-node/register --require ./test/bootstrap.ts 'server/**/*.spec.ts' 'test/**/*.spec.ts' --bail --exit",
     "test:integration": "yarn test --grep '.*server/models.*'",

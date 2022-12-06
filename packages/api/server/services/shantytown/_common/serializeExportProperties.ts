@@ -5,6 +5,12 @@ import config from '#server/config';
 import electricityAccessTypes from '#server/models/electricityAccessTypesModel/_common/electricityAccessTypes';
 import waterAccessTypes from '#server/models/_common/waterAccessTypes';
 import toiletTypes from '#server/models/shantytownToiletTypesModel/_common/toiletTypes';
+import electricityAccessStatusLabels from './livingConditionsStatusLabels/electricityAccessStatusLabels';
+import waterAccessStatusLabels from './livingConditionsStatusLabels/waterAccessStatusLabels';
+import sanitaryAccessStatusLabels from './livingConditionsStatusLabels/sanitaryAccessStatusLabels';
+import trashEvacuationStatusLabels from './livingConditionsStatusLabels/trashEvacuationStatusLabels';
+import pestAnimalsStatusLabels from './livingConditionsStatusLabels/pestAnimalsStatusLabels';
+import firePreventionStatusLabels from './livingConditionsStatusLabels/firePreventionStatusLabels';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 const { webappUrl } = config;
@@ -243,6 +249,16 @@ export default (closingSolutions) => {
             },
             width: COLUMN_WIDTHS.SMALL,
         },
+        electricityAccessStatus: {
+            title: "Statut de l'accès à l'électricité",
+            data: (shantytown) => {
+                const data = electricityAccessStatusLabels[shantytown.livingConditions.electricity.status.status] || 'Aucune information concernant l\'accès à l\'électricité';
+                return data;
+                return data;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+
         electricityAccess: {
             title: 'Y a-t-il présence d’une installation électrique ?',
             data: (shantytown) => {
@@ -284,6 +300,14 @@ export default (closingSolutions) => {
                 }
 
                 return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        waterAccessStatus: {
+            title: "Statut de l'accès à l'eau",
+            data: (shantytown) => {
+                const data = waterAccessStatusLabels[shantytown.livingConditions.water.status.status] || 'Aucune information concernant l\'accès à l\'eau';
+                return data;
             },
             width: COLUMN_WIDTHS.MEDIUM,
         },
@@ -391,7 +415,7 @@ export default (closingSolutions) => {
         },
         waterAccessIsUnequalDetails: {
             title: 'Précisions concernant les inégalités d\'accès à l\'eau',
-            data: shantytown => shantytown.livingConditions.water.access_is_unequal_details,
+            data: (shantytown: any) => shantytown.livingConditions.water.access_is_unequal_details,
             width: COLUMN_WIDTHS.MEDIUM,
         },
         waterAccessHasStagnantWater: {
@@ -413,6 +437,14 @@ export default (closingSolutions) => {
         waterAccessComments: {
             title: 'Informations complémentaires sur l\'accès à l\'eau',
             data: shantytown => shantytown.livingConditions.water.access_comments,
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        sanitaryAccessStatus: {
+            title: 'Statut de l\'accès aux sanitaires',
+            data: (shantytown) => {
+                const data = sanitaryAccessStatusLabels[shantytown.livingConditions.sanitary.status.status] || 'Aucune information concernant l\'accès aux toilettes';
+                return data;
+            },
             width: COLUMN_WIDTHS.MEDIUM,
         },
         sanitaryOpenAirDefecation: {
@@ -507,6 +539,14 @@ export default (closingSolutions) => {
             },
             width: COLUMN_WIDTHS.MEDIUM,
         },
+        trashEvacuationStatus: {
+            title: 'Statut de l\'évacuation des déchets',
+            data: (shantytown) => {
+                const data = trashEvacuationStatusLabels[shantytown.livingConditions.trash.status.status] || 'Aucune information concernant le ramassage des déchets';
+                return data;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
         trashIsPiling: {
             title: 'Constate-t-on une accumulation de déchets type ordures ménagères sur le site ou aux abords ?',
             data: (shantytown) => {
@@ -557,7 +597,7 @@ export default (closingSolutions) => {
         },
         trashEvacuationIsRegular: {
             title: 'La collecte des poubelles est-elle réalisée de manière régulière ?',
-            data: (shantytown) => {
+            data: (shantytown: any) => {
                 const data = shantytown.livingConditions.trash.evacuation_is_regular;
                 if (data === true) {
                     return 'oui';
@@ -573,7 +613,7 @@ export default (closingSolutions) => {
         },
         trashBulkyIsPiling: {
             title: 'Constate-t-on une accumulation de déchets type encombrants ?',
-            data: (shantytown) => {
+            data: (shantytown: any) => {
                 const data = shantytown.livingConditions.trash.bulky_is_piling;
                 if (data === true) {
                     return 'oui';
@@ -584,6 +624,14 @@ export default (closingSolutions) => {
                 }
 
                 return null;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        pestAnimalsStatus: {
+            title: 'Statut de la présence de nuisibles',
+            data: (shantytown) => {
+                const data = pestAnimalsStatusLabels[shantytown.livingConditions.pest_animals.status.status] || 'Aucune information concernant la présence de nuisibles';
+                return data;
             },
             width: COLUMN_WIDTHS.MEDIUM,
         },
@@ -618,14 +666,23 @@ export default (closingSolutions) => {
             },
             width: COLUMN_WIDTHS.MEDIUM,
         },
+        firePreventionStatus: {
+            title: 'Statut du diagnostic prévention incendie',
+            data: (shantytown) => {
+                const data = firePreventionStatusLabels[shantytown.livingConditions.fire_prevention.status.status] || 'Aucune information concernant le diagnostic';
+                return data;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+
+        },
         firePreventionDiagnostic: {
             title: 'Est-ce qu’un diagnostic prévention incendie par le SDIS a été réalisé ?',
             data: (shantytown) => {
-                if (!shantytown.livingConditions.firePrevention) {
+                if (!shantytown.livingConditions.fire_prevention) {
                     return null;
                 }
 
-                const data = shantytown.livingConditions.firePrevention.diagnostic;
+                const data = shantytown.livingConditions.fire_prevention.diagnostic;
                 if (data === true) {
                     return 'oui';
                 }

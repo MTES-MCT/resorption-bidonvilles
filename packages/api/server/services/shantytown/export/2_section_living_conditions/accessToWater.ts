@@ -1,11 +1,7 @@
 import createRow from '../create_row';
+import waterAccessStatusLabels from '../../_common/livingConditionsStatusLabels/waterAccessStatusLabels';
 
 export default (shantytown) => {
-    const labels = {
-        good: 'Accès à l\'eau existant',
-        toImprove: 'Accès à l\'eau existant mais à améliorer',
-        bad: 'Accès à l\'eau inexistant',
-    };
     const { status, access_comments: comments } = shantytown.livingConditions.water;
 
     const access_types = {
@@ -20,7 +16,7 @@ export default (shantytown) => {
 
     const access_type = access_types[shantytown.livingConditions.water.access_type];
 
-    let text = labels[status.status] || 'Aucune information concernant l\'accès à l\'eau';
+    let text = waterAccessStatusLabels[status.status] || 'Aucune information concernant l\'accès à l\'eau';
     if (comments) {
         text = `${text} - ${access_type}\n${comments}`;
     }
