@@ -10,8 +10,8 @@
   },
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@sentry/node": "^6.2.2",
-    "@sentry/tracing": "^6.2.2",
+    "@sentry/node": "^7.21.1",
+    "@sentry/tracing": "^7.21.1",
     "@supercharge/promise-pool": "^1.7.0",
     "@types/node": "*",
     "@types/superagent": "^4.1.13",
@@ -97,7 +97,7 @@
   "scripts": {
     "db:create": "sequelize db:migrate && sequelize db:seed:all",
     "dev": "ts-node-dev ./server/index.ts",
-    "build": "tsc && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist && cp .sequelizerc dist && cp -r db/data dist/db/data",
+    "build": "tsc -p tsconfig.production.json && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist && cp .sequelizerc dist && cp -r db/data dist/db/data",
     "start": "nodemon dist/server/index.js",
     "test:unit": "yarn mocha -r ts-node/register --require ./test/bootstrap.ts 'server/**/*.spec.ts' 'test/**/*.spec.ts' --bail --exit",
     "test:integration": "yarn test --grep '.*server/models.*'",
