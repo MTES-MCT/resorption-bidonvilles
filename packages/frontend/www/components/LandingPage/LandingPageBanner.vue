@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, ref, onMounted, onUnmounted } from "vue";
+import { defineProps, toRefs } from "vue";
 
 import { Link, Button } from "@resorptionbidonvilles/ui";
 import Container from "~/components/Layout/Container/Container.vue";
