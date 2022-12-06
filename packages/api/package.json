@@ -10,8 +10,8 @@
   },
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@sentry/node": "^6.2.2",
-    "@sentry/tracing": "^6.2.2",
+    "@sentry/node": "^7.21.1",
+    "@sentry/tracing": "^7.21.1",
     "@supercharge/promise-pool": "^1.7.0",
     "@types/node": "*",
     "@types/superagent": "^4.1.13",
