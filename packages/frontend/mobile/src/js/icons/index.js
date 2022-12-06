@@ -7,6 +7,7 @@ import {
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import {
     faChalkboardTeacher,
+    faClipboardQuestion,
     faFlag,
     faLock,
     faPaperPlane,
@@ -92,6 +93,7 @@ import {
     faBolt,
 } from "@fortawesome/free-solid-svg-icons";
 library.add(faChalkboardTeacher);
+library.add(faClipboardQuestion);
 library.add(faFlag);
 library.add(faBan);
 library.add(faChevronDown);
