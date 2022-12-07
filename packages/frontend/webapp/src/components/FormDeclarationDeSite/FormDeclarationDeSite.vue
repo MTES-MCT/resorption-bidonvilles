@@ -29,6 +29,7 @@
         />
 
         <ErrorSummary
+            id="erreurs"
             class="mt-12"
             v-if="error || Object.keys(errors).length > 0"
             :message="error"
@@ -53,6 +54,8 @@ import { useTownsStore } from "@/stores/towns.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import * as locationsApi from "@/api/locations.api";
 import { trackEvent } from "@/helpers/matomo";
+import router from "@/helpers/router";
+import isDeepEqual from "@/utils/isDeepEqual";
 import backOrReplace from "@/utils/backOrReplace";
 import formatFormTown from "@/utils/formatFormTown";
 import formatFormDate from "@/utils/formatFormDate";
@@ -112,11 +115,13 @@ const minUpdatedAt = computed(() => {
 
     return updatedAt;
 });
+const validationSchema = schemaFn(mode.value);
 const { handleSubmit, values, errors, setErrors } = useForm({
-    validationSchema: schemaFn(mode.value),
+    validationSchema,
     initialValues,
 });
 
+const originalValues = formatValuesForApi(values);
 const townsStore = useTownsStore();
 const userStore = useUserStore();
 const error = ref(null);
@@ -214,60 +219,55 @@ const config = {
     },
 };
 
+function formatValuesForApi(v) {
+    const { citycode, label } = v.address.data;
+
+    return {
+        ...Object.keys(validationSchema.getDefaultFromShape()).reduce(
+            (acc, key) => {
+                acc[key] = v[key];
+                return acc;
+            },
+            {}
+        ),
+        ...{
+            living_conditions_version: v.living_conditions_version || 2,
+            built_at: formatFormDate(v.built_at),
+            declared_at: formatFormDate(v.declared_at),
+            updated_at: formatFormDate(v.updated_at || new Date()),
+            census_conducted_at: formatFormDate(v.census_conducted_at),
+            justice_rendered_at: formatFormDate(v.justice_rendered_at),
+            police_requested_at: formatFormDate(v.police_requested_at),
+            police_granted_at: formatFormDate(v.police_granted_at),
+            census_status: v.census_status === "null" ? null : v.census_status,
+            police_status: v.police_status === "null" ? null : v.police_status,
+            citycode,
+            address: label,
+            coordinates: `${v.coordinates[0]},${v.coordinates[1]}`,
+        },
+    };
+}
+
 defineExpose({
-    submit: handleSubmit(async (values) => {
-        //   if (isEqual(this.town, this.initialTown)) {
-        //     this.mainError =
-        //       "Modification impossible : aucun champ n'a été modifié";
-        //     this.$router.replace("#top", () => this.$router.replace("#erreurs"));
-        //     return;
-        //   }
+    submit: handleSubmit(async (sentValues) => {
+        const formattedValues = formatValuesForApi(sentValues);
+        if (
+            mode.value === "edit" &&
+            isDeepEqual(originalValues, formattedValues)
+        ) {
+            router.replace("#erreurs");
+            error.value =
+                "Modification impossible : aucun champ n'a été modifié";
+            return;
+        }
 
         error.value = null;
 
         try {
             const notificationStore = useNotificationStore();
-            const { citycode, label } = values.address.data;
 
             const { submit, notification } = config[mode.value];
-            const respondedTown = await submit(
-                {
-                    ...values,
-                    ...{
-                        living_conditions_version:
-                            values.living_conditions_version || 2,
-                        built_at: formatFormDate(values.built_at),
-                        declared_at: formatFormDate(values.declared_at),
-                        updated_at: formatFormDate(
-                            values.updated_at || new Date()
-                        ),
-                        census_conducted_at: formatFormDate(
-                            values.census_conducted_at
-                        ),
-                        justice_rendered_at: formatFormDate(
-                            values.justice_rendered_at
-                        ),
-                        police_requested_at: formatFormDate(
-                            values.police_requested_at
-                        ),
-                        police_granted_at: formatFormDate(
-                            values.police_granted_at
-                        ),
-                        census_status:
-                            values.census_status === "null"
-                                ? null
-                                : values.census_status,
-                        police_status:
-                            values.police_status === "null"
-                                ? null
-                                : values.police_status,
-                        citycode,
-                        address: label,
-                        coordinates: `${values.coordinates[0]},${values.coordinates[1]}`,
-                    },
-                },
-                town.value?.id
-            );
+            const respondedTown = await submit(formattedValues, town.value?.id);
 
             notificationStore.success(notification.title, notification.content);
             backOrReplace(`/site/${respondedTown.id}`);
