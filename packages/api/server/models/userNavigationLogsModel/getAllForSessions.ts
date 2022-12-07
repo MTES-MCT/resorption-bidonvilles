@@ -1,4 +1,4 @@
-import { sequelize } from "#db/sequelize";
+import { sequelize } from '#db/sequelize';
 
 type Domain = 'webapp' | 'mobile';
 
@@ -19,7 +19,7 @@ export default async (domain: Domain): Promise<Array<Object>> => {
         navigation_logs.fk_user AS user_id,
         navigation_logs.datetime as date,
         navigation_logs.page,
-        users.fk_role AS role,
+        users.fk_role_regular AS role,
         lo.location_type,
         lo.region_code,
         lo.region_name,
