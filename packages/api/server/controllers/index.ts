@@ -16,6 +16,10 @@ import geoSearchCities from './geoController/searchCities';
 import geoSearchEpci from './geoController/searchEpci';
 // invite
 import inviteInvite from './inviteController/invite';
+// note
+import noteAddPublication from './noteController/addPublication';
+import noteCreate from './noteController/create';
+import noteAddCopy from './noteController/addCopy';
 // organization
 import organizationCategories from './organizationController/categories';
 import organizationGetByCategory from './organizationController/getByCategory';
@@ -105,6 +109,11 @@ export default () => ({
     },
     invite: {
         invite: inviteInvite,
+    },
+    note: {
+        addPublication: noteAddPublication,
+        create: noteCreate,
+        addCopy: noteAddCopy,
     },
     organization: {
         categories: organizationCategories,
