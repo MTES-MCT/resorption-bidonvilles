@@ -132,6 +132,7 @@ export default {
             setTimeout(() => {
                 this.$router.push(`/site/${town.id}`);
             }, 100);
+        },
         redirectToWebapp() {
             document.cookie = `device=webapp;domain=${ENV.VITE_MOBILE_DOMAIN}`;
             location.replace(ENV.VITE_WEBAPP_URL);
