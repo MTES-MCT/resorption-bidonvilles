@@ -13,19 +13,20 @@ import { mockReq, mockRes } from 'sinon-express-mock';
 
 import geoModel from '#server/models/geoModel';
 import highCovidCommentModel from '#server/models/highCovidCommentModel';
+import townController from '#server/controllers/townController';
 
 const stubs = {
     getDepartementsFor: undefined,
-    create: undefined
+    create: undefined,
 };
-import townController from '#server/controllers/townController';
+
 const createHighCovidComment = townController.createHighCovidComment();
 
 /* **************************************************************************************************
  * TESTS
  * *********************************************************************************************** */
 
-describe.only('townController.createHighCovidComment()', () => {
+describe('townController.createHighCovidComment()', () => {
     /* *******************
      * Common resources
      * **************** */

@@ -11,7 +11,7 @@ const { update } = shantytownModel;
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe.only('shantytownModel.update()', () => {
+describe('shantytownModel.update()', () => {
     const dependencies = {
         query: undefined,
     };

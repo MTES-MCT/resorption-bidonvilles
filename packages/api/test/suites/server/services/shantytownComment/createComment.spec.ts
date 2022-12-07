@@ -2,10 +2,6 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import SequelizeMock from 'sequelize-mock';
-
-chai.use(sinonChai);
-
-const { expect } = chai;
 import ServiceError from '#server/errors/ServiceError';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel';
@@ -14,15 +10,19 @@ import userModel from '#server/models/userModel';
 import mattermostUtils from '#server/utils/mattermost';
 import mails from '#server/mails/mails';
 
-
-const sequelizeStub = new SequelizeMock();
-
 import createComment from '#server/services/shantytownComment/createComment';
 
 import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeComment } from '#test/utils/shantytownComment';
 
-describe.only('services/shantytownComment', () => {
+chai.use(sinonChai);
+
+const { expect } = chai;
+
+
+const sequelizeStub = new SequelizeMock();
+
+describe('services/shantytownComment', () => {
     const dependencies = {
         createComment: undefined,
         createCommentTag: undefined,

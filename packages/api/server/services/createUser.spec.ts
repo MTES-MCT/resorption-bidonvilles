@@ -29,7 +29,7 @@ rewiremock.enable();
 import createUser from './createUser';
 rewiremock.disable();
 
-describe.only('userService.createUser()', () => {
+describe('userService.createUser()', () => {
     afterEach(() => {
         sinon.reset();
     });

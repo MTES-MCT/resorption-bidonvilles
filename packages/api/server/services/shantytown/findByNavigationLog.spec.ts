@@ -11,7 +11,7 @@ import findByNavigationLogService from './findByNavigationLog';
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe.only('services/shantytown', () => {
+describe('services/shantytown', () => {
     describe('findByNavigationLog()', () => {
         let stubs;
         beforeEach(() => {

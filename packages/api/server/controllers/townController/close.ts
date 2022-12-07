@@ -1,11 +1,9 @@
 import shantytownService from '#server/services/shantytown';
 
-const { close } = shantytownService;
-
 export default async (req, res, next) => {
     // close the town
     try {
-        const updatedTown = await close(req.user, req.body);
+        const updatedTown = await shantytownService.close(req.user, req.body);
         return res.status(200).send(updatedTown);
     } catch (e) {
         res.status(500).send({

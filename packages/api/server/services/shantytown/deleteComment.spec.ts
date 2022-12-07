@@ -14,7 +14,7 @@ import deleteCommentService from './deleteComment';
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe.only('services/shantytown', () => {
+describe('services/shantytown', () => {
     describe('deleteComment()', () => {
         let stubs;
         const user = { id: 0 };

@@ -6,9 +6,6 @@ import sinon from 'sinon';
 import chai from 'chai';
 import sinonChai from 'sinon-chai';
 
-const { expect } = chai;
-chai.use(sinonChai);
-
 
 import { mockReq, mockRes } from 'sinon-express-mock';
 
@@ -20,12 +17,15 @@ import createCovidCommentController from '#server/controllers/townController/cre
 
 import ServiceError from '#server/errors/ServiceError';
 
+const { expect } = chai;
+chai.use(sinonChai);
+
 
 /* **************************************************************************************************
  * TESTS
  * *********************************************************************************************** */
 
-describe.only('townController.createCovidComment()', () => {
+describe('townController.createCovidComment()', () => {
     /* *******************
      * Common resources
      * **************** */

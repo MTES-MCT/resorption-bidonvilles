@@ -4,15 +4,15 @@ import sinonChai from 'sinon-chai';
 import { mockReq, mockRes } from 'sinon-express-mock';
 import { serialized as fakeUser } from '#test/utils/user';
 
-const { expect } = chai;
-chai.use(sinonChai);
-
 import shantytownCommentService from '#server/services/shantytownComment';
 import ctlCreate from '#server/controllers/shantytownCommentController/create';
 
 import ServiceError from '#server/errors/ServiceError';
 
-describe.only('controllers/shantytownComment', () => {
+const { expect } = chai;
+chai.use(sinonChai);
+
+describe('controllers/shantytownComment', () => {
     let createCommentService;
     beforeEach(() => {
         createCommentService = sinon.stub(shantytownCommentService, 'createComment');

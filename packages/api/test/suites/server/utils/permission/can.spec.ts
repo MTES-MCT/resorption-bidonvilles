@@ -11,7 +11,7 @@ const {
     nation, paris, marseille,
 } = locationUtils;
 
-describe.only('utils/permission.can()', () => {
+describe('utils/permission.can()', () => {
     let user;
     beforeEach(() => {
         user = fakeUser();

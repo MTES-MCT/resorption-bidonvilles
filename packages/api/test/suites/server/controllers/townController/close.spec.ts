@@ -5,17 +5,18 @@ import { mockReq, mockRes } from 'sinon-express-mock';
 import { serialized as generateUser } from '#test/utils/user';
 
 import shantytownService from '#server/services/shantytown';
-
-const closeStub = sinon.stub(shantytownService, 'close');
-
 import closeController from '#server/controllers/townController/close';
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe.only('townController.close()', () => {
+describe('townController.close()', () => {
+    let closeStub;
+    beforeEach(() => {
+        closeStub = sinon.stub(shantytownService, 'close');
+    });
     afterEach(() => {
-        closeStub.restore();
+        sinon.restore();
     });
 
     describe('Avec un input valide', () => {

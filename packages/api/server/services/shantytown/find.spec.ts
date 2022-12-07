@@ -11,7 +11,7 @@ import findService from './find';
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe.only('services/shantytown', () => {
+describe('services/shantytown', () => {
     describe('find()', () => {
         let stubs;
         beforeEach(() => {

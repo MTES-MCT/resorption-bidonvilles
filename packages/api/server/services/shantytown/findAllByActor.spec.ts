@@ -11,7 +11,7 @@ import findAllByActorService from './findAllByActor';
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe.only('services/shantytown', () => {
+describe('services/shantytown', () => {
     describe('findAllByActor()', () => {
         let stubs;
         beforeEach(() => {
