@@ -1,10 +1,10 @@
 export default [
     {
-        id: "caracteristics",
+        id: "characteristics",
         label: "Caractéristiques",
     },
     {
-        id: "peoples",
+        id: "people",
         label: "Habitants",
     },
     {

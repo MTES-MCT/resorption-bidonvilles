@@ -1,9 +1,11 @@
 <template>
     <div
-        class="whitespace-nowrap overflow-y-auto py-4 border-t-1 border-b-1 border-blue600"
+        class="whitespace-nowrap overflow-y-auto py-4 bg-G300 border-b-2 border-G400"
+        ref="menu"
     >
         <TownPageMenuItem
             v-for="(section, index) in menu"
+            :id="`item-${section.id}`"
             :key="section.id"
             :item="section"
             :isSelected="section.id === currentSection"
@@ -33,6 +35,14 @@ export default {
     methods: {
         changeSection(value) {
             this.$emit("changeSection", value);
+        },
+    },
+    watch: {
+        currentSection() {
+            const item = document.getElementById(`item-${this.currentSection}`);
+            if (item) {
+                this.$refs.menu.scrollLeft = item.offsetLeft - 15;
+            }
         },
     },
 };

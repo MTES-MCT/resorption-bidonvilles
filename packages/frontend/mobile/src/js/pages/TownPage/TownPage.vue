@@ -44,11 +44,11 @@
             <template v-slot:scroll>
                 <Container>
                     <TownPagePanelCharacteristics
-                        id="caracteristics"
+                        id="characteristics"
                         :town="town"
                     />
 
-                    <TownPagePanelPeople id="peoples" :town="town" />
+                    <TownPagePanelPeople id="people" :town="town" />
 
                     <TownPagePanelLivingConditions
                         id="living_conditions"
@@ -119,7 +119,7 @@ export default {
         return {
             error: null,
             town: null,
-            currentSection: "caracteristics",
+            currentSection: "characteristics",
         };
     },
     computed: {
