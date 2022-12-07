@@ -9,7 +9,7 @@ const {
     nation, paris, marseille,
 } = locationUtils;
 
-describe.only('utils/permission.restrict()', () => {
+describe('utils/permission.restrict()', () => {
     let user;
     beforeEach(() => {
         user = fakeUser();

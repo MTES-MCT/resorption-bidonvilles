@@ -2,16 +2,16 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-const { expect } = chai;
-chai.use(sinonChai);
-
 import ServiceError from '#server/errors/ServiceError';
 import permissionUtils from '#server/utils/permission';
 import shantytownActorModel from '#server/models/shantytownActorModel';
 import exportService from '#server/services/shantytownActor/export';
-import { serialized as fakeUser } from "#test/utils/user";
+import { serialized as fakeUser } from '#test/utils/user';
 
-describe.only('services/shantytownActor', () => {
+const { expect } = chai;
+chai.use(sinonChai);
+
+describe('services/shantytownActor', () => {
     describe('export()', () => {
         let stubs;
         beforeEach(() => {

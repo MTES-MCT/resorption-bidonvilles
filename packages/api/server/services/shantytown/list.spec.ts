@@ -9,7 +9,7 @@ import listService from './list';
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe.only('services/shantytown', () => {
+describe('services/shantytown', () => {
     describe('list()', () => {
         const user = {};
         const towns = [global.generate('string'), global.generate('string'), global.generate('string')];

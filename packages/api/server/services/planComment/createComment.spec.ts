@@ -17,7 +17,7 @@ import createCommentService from './createComment';
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe.only('services/planComment', () => {
+describe('services/planComment', () => {
     describe('createComment()', () => {
         const user = fakeUser();
         const plan = fakePlan({ departement: 1, region: 84 });

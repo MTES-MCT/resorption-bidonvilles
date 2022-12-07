@@ -10,7 +10,7 @@ import createCovidCommentService from './createCovidComment';
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe.only('services/shantytown', () => {
+describe('services/shantytown', () => {
     const metadata = {
         date: {
             label: 'La date',

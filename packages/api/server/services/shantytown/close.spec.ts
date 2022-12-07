@@ -26,7 +26,7 @@ rewiremock.enable();
 import closeService from './close';
 rewiremock.disable();
 
-describe.only('services/shantytown', () => {
+describe('services/shantytown', () => {
     describe('close()', () => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);

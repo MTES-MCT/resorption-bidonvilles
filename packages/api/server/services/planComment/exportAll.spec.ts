@@ -14,7 +14,7 @@ import exportAllService from './exportAll';
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe.only('services/exportAll', () => {
+describe('services/exportAll', () => {
     describe('exportAll()', () => {
         const user = fakeUser();
         const planComment: any = fakePlanComment();

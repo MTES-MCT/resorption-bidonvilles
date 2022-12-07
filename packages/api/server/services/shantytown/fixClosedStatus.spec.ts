@@ -15,7 +15,7 @@ chai.use(sinonChai);
 
 const { paris } = locationUtils;
 
-describe.only('services/shantytown', () => {
+describe('services/shantytown', () => {
     describe('fixClosedStatus()', () => {
         const user: any = fakeUser();
         user.permissions.shantytown.fix_status = {
