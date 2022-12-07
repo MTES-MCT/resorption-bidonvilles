@@ -25,6 +25,8 @@ import userGetLatestActivationLink from './users/getLatestActivationLink';
 import userSetRoleRegular from './users/setRoleRegular';
 import mePostNavigationLogs from './me/post.navigationLogs';
 import findUserTowns from './findUserTowns';
+import createNote from './note/create';
+import publishNote from './note/publish';
 
 export default {
     closeTown,
@@ -64,6 +66,10 @@ export default {
     },
     me: {
         postNavigationLogs: mePostNavigationLogs,
+    },
+    note: {
+        createNote,
+        publishNote,
     },
     setUserAdminComments,
     editOrganization,
