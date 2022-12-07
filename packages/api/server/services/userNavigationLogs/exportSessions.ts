@@ -3,6 +3,22 @@ import userNavigationLogsModel from '#server/models/userNavigationLogsModel';
 import ServiceError from '#server/errors/ServiceError';
 import moment from 'moment';
 
+function serializeSession(user, session, beginning, duration) {
+    return {
+        'Id de l\'utilisateur': user,
+        'Niveau géographique de l\'utilisateur': session.location_type,
+        'Nom de la région': session.region_name,
+        'Code de la région': session.region_code,
+        'Nom du département': session.departement_name,
+        'Code du département': session.departement_code,
+        'Catégorie de structure de l\'utilisateur': session.organization_category,
+        'Type de structure de l\'utilisateur': session.organization_type,
+        'Rôle de l\'utilisateur': session.role,
+        'Début de la session': moment(beginning).utcOffset(2).format('DD/MM/YYYY-HH:mm:ss'),
+        'Durée de la session (en minutes)': Math.round(duration / 60000),
+    };
+}
+
 export default async (domain: 'webapp' | 'mobile'): Promise<Array<Object>> => {
     let logs;
     try {
@@ -23,19 +39,15 @@ export default async (domain: 'webapp' | 'mobile'): Promise<Array<Object>> => {
         if (log.user_id !== currentUser || log.date - beginningOfSession > 3600000) {
             // si on change d'utilisateur ou que la session dépasse l'heure,
             // on commence une nouvelle session
-            sessions.push({
-                'Id de l\'utilisateur': currentUser,
-                'Niveau géographique de l\'utilisateur': logs[index - 1].location_type,
-                'Nom de la région': logs[index - 1].region_name,
-                'Code de la région': logs[index - 1].region_code,
-                'Nom du département': logs[index - 1].departement_name,
-                'Code du département': logs[index - 1].departement_code,
-                'Catégorie de structure de l\'utilisateur': logs[index - 1].organization_category,
-                'Type de structure de l\'utilisateur': logs[index - 1].organization_type,
-                'Rôle de l\'utilisateur': logs[index - 1].role,
-                'Début de la session': moment(beginningOfSession).utcOffset(2).format('DD/MM/YYYY-HH:mm:ss'),
-                'Durée de la session (en minutes)': Math.round(durationOfSession / 60000),
-            });
+            sessions.push(
+                serializeSession(
+                    currentUser,
+                    logs[index - 1],
+                    beginningOfSession,
+                    durationOfSession,
+                ),
+            );
+
             currentUser = log.user_id;
             durationOfSession = 0;
             beginningOfSession = log.date;
@@ -43,19 +55,17 @@ export default async (domain: 'webapp' | 'mobile'): Promise<Array<Object>> => {
             durationOfSession = log.date - beginningOfSession;
         }
     });
-    const lastSession = logs[logs.length - 1];
-    sessions.push({
-        'Id de l\'utilisateur': currentUser,
-        'Niveau géographique de l\'utilisateur': lastSession.location_type,
-        'Nom de la région': lastSession.region_name,
-        'Code de la région': lastSession.region_code,
-        'Nom du département': lastSession.departement_name,
-        'Code du département': lastSession.departement_code,
-        'Catégorie de structure de l\'utilisateur': lastSession.organization_category,
-        'Type de structure de l\'utilisateur': lastSession.organization_type,
-        'Rôle de l\'utilisateur': lastSession.role,
-        'Début de la session': moment(beginningOfSession).utcOffset(2).format('DD/MM/YYYY-HH:mm:ss'),
-        'Durée de la session (en minutes)': Math.round(durationOfSession / 60000),
-    });
+
+    if (logs.length > 0) {
+        sessions.push(
+            serializeSession(
+                currentUser,
+                logs[logs.length - 1],
+                beginningOfSession,
+                durationOfSession,
+            ),
+        );
+    }
+
     return sessions;
 };

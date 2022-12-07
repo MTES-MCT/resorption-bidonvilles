@@ -4,8 +4,10 @@ import { useUserStore } from "@/stores/user.store";
 import { exportList as exportUsers } from "@/api/users.api";
 import { exportList as exportActors } from "@/api/actors.api";
 import { exportList as exportReferrals } from "@/api/contact_form_referrals.api";
-import { exportMobileSessions } from "@/api/navigation_logs.api";
-import { exportWebappSessions } from "@/api/navigation_logs.api";
+import {
+    exportMobileSessions,
+    exportWebappSessions,
+} from "@/api/navigation_logs.api";
 
 const exportList = {
     users: {

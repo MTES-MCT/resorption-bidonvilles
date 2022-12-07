@@ -8,25 +8,20 @@ export default async (domain: Domain): Promise<Array<Object>> => {
         mobile: 'user_mobile_navigation_logs',
     };
 
-    if (!tables[domain]) {
-        throw new Error('Invalid table name');
-    }
-
-
     const response: any = await sequelize.query(
         `SELECT 
-        navigation_logs.user_navigation_log_id AS log_id,
-        navigation_logs.fk_user AS user_id,
-        navigation_logs.datetime as date,
-        navigation_logs.page,
-        users.fk_role_regular AS role,
-        lo.location_type,
-        lo.region_code,
-        lo.region_name,
-        lo.departement_code,
-        lo.departement_name,
-        ot.name_singular AS organization_type,
-        oc.name_singular AS organization_category
+            navigation_logs.user_navigation_log_id AS log_id,
+            navigation_logs.fk_user AS user_id,
+            navigation_logs.datetime as date,
+            navigation_logs.page,
+            users.fk_role_regular AS role,
+            lo.location_type,
+            lo.region_code,
+            lo.region_name,
+            lo.departement_code,
+            lo.departement_name,
+            ot.name_singular AS organization_type,
+            oc.name_singular AS organization_category
         FROM ${tables[domain]} navigation_logs
         LEFT JOIN users ON users.user_id = navigation_logs.fk_user
         LEFT JOIN localized_organizations lo ON lo.organization_id = users.fk_organization

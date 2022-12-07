@@ -1,29 +1,25 @@
 import userNavigationLogs from '#server/services/userNavigationLogs/index';
 import JSONToCSV from 'json2csv';
 
+const ERROR_RESPONSES = {
+    fetch_failed: { code: 400, message: 'Les logs n\'ont pas pu être récupérés' },
+    undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
+};
+
 export default async (req, res, next) => {
-    console.log('on exporte pour la webapp');
     let logs;
     try {
         logs = await userNavigationLogs.exportSessions('webapp');
     } catch (error) {
-        let message;
-        switch (error && error.code) {
-            case 'fetch_failed':
-                message = 'Les logs n\'ont pas pu être récupérés';
-                break;
-
-            default:
-                message = 'Une erreur inconnue est survenue.';
-        }
-
-        res.status(500).send({
+        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
+        res.status(code).send({
             user_message: message,
         });
+
         return next((error && error.nativeError) || error);
     }
 
-    return res.status(201).send({
-        csv: JSONToCSV.parse(logs)
+    return res.status(200).send({
+        csv: JSONToCSV.parse(logs),
     });
 };

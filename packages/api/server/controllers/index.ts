@@ -81,7 +81,6 @@ import insertUserNavigationLogs from './userNavigationLogsController/insert';
 import exportMobileUserNavigationLogs from './userNavigationLogsController/exportMobileSessions';
 import exportWebappUserNavigationLogs from './userNavigationLogsController/exportWebappSessions';
 
-
 export default () => ({
     config: {
         list: configList,
@@ -177,6 +176,6 @@ export default () => ({
     userNavigationLogs: {
         insert: insertUserNavigationLogs,
         exportForMobile: exportMobileUserNavigationLogs,
-        exportForWebapp: exportWebappUserNavigationLogs
+        exportForWebapp: exportWebappUserNavigationLogs,
     },
 });
