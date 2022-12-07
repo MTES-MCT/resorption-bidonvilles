@@ -34,40 +34,34 @@
                             « {{ town.name }} »</span
                         >
                     </div>
+
+                    <TownPageMenu
+                        :currentSection="currentSection"
+                        @changeSection="changeSection"
+                    />
                 </header>
             </template>
             <template v-slot:scroll>
                 <Container>
-                    <div
-                        class="text-primary font-bold text-display-sm mt-4 mb-2"
-                    >
-                        Caractéristiques
-                    </div>
-                    <TownPagePanelCharacteristics :town="town" />
-                    <div
-                        class="text-primary font-bold text-display-sm mt-8 mb-2"
-                    >
-                        Habitants
-                    </div>
-                    <TownPagePanelPeople :town="town" />
-                    <div
-                        class="text-primary font-bold text-display-sm mt-8 mb-2"
-                    >
-                        Conditions de vie
-                    </div>
-                    <TownPagePanelLivingConditions :town="town" />
-                    <div
-                        class="text-primary font-bold text-display-sm mt-8 mb-2"
-                    >
-                        Procédures judiciaires
-                    </div>
-                    <TownPagePanelJudicial :town="town" />
-                    <div
-                        class="text-primary font-bold text-display-sm mt-8 mb-2"
-                    >
-                        Intervenants
-                    </div>
-                    <TownPagePanelActors :town="town" class="mb-3" />
+                    <TownPagePanelCharacteristics
+                        id="characteristics"
+                        :town="town"
+                    />
+
+                    <TownPagePanelPeople id="people" :town="town" />
+
+                    <TownPagePanelLivingConditions
+                        id="living_conditions"
+                        :town="town"
+                    />
+
+                    <TownPagePanelJudicial id="judicial" :town="town" />
+
+                    <TownPagePanelActors
+                        id="actors"
+                        :town="town"
+                        class="mb-3"
+                    />
                 </Container>
             </template>
             <template v-slot:footer>
@@ -95,6 +89,7 @@
 <script>
 import Layout from "#src/js/components/Layout.vue";
 import Container from "#src/js/components/Container.vue";
+import TownPageMenu from "./TownPageMenu.vue";
 import TownPagePanelCharacteristics from "./TownPagePanelCharacteristics.vue";
 import TownPagePanelPeople from "./TownPagePanelPeople.vue";
 import TownPagePanelLivingConditions from "./TownPagePanelLivingConditions.vue";
@@ -104,10 +99,13 @@ import TownComments from "./comments/TownComments.vue";
 import { Icon, Spinner } from "@resorptionbidonvilles/ui";
 import { mapGetters } from "vuex";
 
+import menu from "./TownPage.menu";
+
 export default {
     components: {
         Layout,
         Container,
+        TownPageMenu,
         TownComments,
         TownPagePanelCharacteristics,
         TownPagePanelPeople,
@@ -121,6 +119,7 @@ export default {
         return {
             error: null,
             town: null,
+            currentSection: "characteristics",
         };
     },
     computed: {
@@ -130,6 +129,7 @@ export default {
     },
     async mounted() {
         const townId = parseInt(this.$route.params.id, 10);
+        window.addEventListener("touchmove", this.onTouch);
         if (this.$store.state.towns.state !== "loaded") {
             await this.$store.dispatch("fetchTowns");
         }
@@ -149,9 +149,26 @@ export default {
             this.error = "Erreur: " + error.message;
         }
     },
+    unmounted() {
+        window.removeEventListener("touchmove", this.onTouch);
+    },
     methods: {
         async toTownsList() {
             this.$router.push(`/liste-des-sites`);
+        },
+        changeSection(value) {
+            this.currentSection = value;
+        },
+        onTouch(ev) {
+            const tab = menu.find(({ id }) => {
+                const el = document.getElementById(id);
+                // la section active celle sur laquelle on a cliqué pour scroller la page
+                return el.contains(ev.target);
+            });
+            if (tab?.id) {
+                history.pushState({}, "", `#${tab.id}`);
+                this.changeSection(tab.id);
+            }
         },
     },
 };

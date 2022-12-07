@@ -1,5 +1,6 @@
 <template>
     <div>
+        <TownPagePanelTitle :title="'Caractéristiques'" />
         <TownPageInfo :title="'Installé depuis'">
             <div v-if="town.builtAt">
                 <div>
@@ -63,6 +64,7 @@
 import formatDateSince from "./utils/formatDateSince";
 import { Icon } from "@resorptionbidonvilles/ui";
 import TownPageInfo from "./TownPageInfo.vue";
+import TownPagePanelTitle from "./TownPagePanelTitle.vue";
 
 export default {
     props: {
@@ -74,6 +76,7 @@ export default {
     components: {
         Icon,
         TownPageInfo,
+        TownPagePanelTitle,
     },
     methods: {
         formatDateSince,

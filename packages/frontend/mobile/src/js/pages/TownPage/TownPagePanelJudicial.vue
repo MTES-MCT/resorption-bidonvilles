@@ -1,27 +1,31 @@
 <template>
-    <div class="flex flex-col">
-        <TownPageInfo :title="'Dépôt de plainte du propriétaire'">
-            {{ boolToStr(town.ownerComplaint) }}
-        </TownPageInfo>
-        <TownPageInfo :title="'Existence d’une procédure judiciaire'">
-            {{ boolToStr(town.justiceProcedure) }}
-        </TownPageInfo>
-        <TownPageInfo :title="'Décision de justice rendue'">
-            {{ justiceRendered }}
-        </TownPageInfo>
-        <TownPageInfo :title="'contentieux'">
-            {{ boolToStr(town.justiceChallenged) }}
-        </TownPageInfo>
-        <TownPageInfo :title="'Concours de la force publique'">
-            {{ policeStatusLabel }}
-        </TownPageInfo>
-        <TownPageInfo :title="'Nom de l\'étude d\'huissier'">
-            {{ town.bailiff || "Non Communiqué" }}
-        </TownPageInfo>
+    <div>
+        <TownPagePanelTitle :title="'Procédures judiciaires'" />
+        <div class="flex flex-col">
+            <TownPageInfo :title="'Dépôt de plainte du propriétaire'">
+                {{ boolToStr(town.ownerComplaint) }}
+            </TownPageInfo>
+            <TownPageInfo :title="'Existence d’une procédure judiciaire'">
+                {{ boolToStr(town.justiceProcedure) }}
+            </TownPageInfo>
+            <TownPageInfo :title="'Décision de justice rendue'">
+                {{ justiceRendered }}
+            </TownPageInfo>
+            <TownPageInfo :title="'contentieux'">
+                {{ boolToStr(town.justiceChallenged) }}
+            </TownPageInfo>
+            <TownPageInfo :title="'Concours de la force publique'">
+                {{ policeStatusLabel }}
+            </TownPageInfo>
+            <TownPageInfo :title="'Nom de l\'étude d\'huissier'">
+                {{ town.bailiff || "Non Communiqué" }}
+            </TownPageInfo>
+        </div>
     </div>
 </template>
 <script>
 import TownPageInfo from "./TownPageInfo.vue";
+import TownPagePanelTitle from "./TownPagePanelTitle.vue";
 
 export default {
     props: {
@@ -32,6 +36,7 @@ export default {
     },
     components: {
         TownPageInfo,
+        TownPagePanelTitle,
     },
     computed: {
         justiceRendered() {
