@@ -1,5 +1,6 @@
 import insert from '#server/services/userNavigationLogs/insert';
 import userNavigationLogsModel from '#server/models/userNavigationLogsModel';
+import userModel from '#server/models/userModel';
 import ServiceError from '#server/errors/ServiceError';
 
 import chai from 'chai';
@@ -10,27 +11,54 @@ const { expect } = chai;
 chai.use(sinonChai);
 
 describe('services/userNavigationLogs/insert()', () => {
-    let stub;
+    let stubs;
     beforeEach(() => {
-        stub = sinon.stub(userNavigationLogsModel, 'insert');
+        stubs = {
+            insert: sinon.stub(userNavigationLogsModel, 'insert'),
+            isTracked: sinon.stub(userModel, 'isTracked'),
+        };
     });
+
     afterEach(() => {
-        stub.restore();
+        sinon.restore();
     });
 
     it('demande l\'insertion du log en base de données', async () => {
+        stubs.isTracked.resolves(true);
         await insert(1, 'page', 'webapp');
-        expect(stub).to.have.been.calledOnceWithExactly(1, 'page', 'webapp');
+        expect(stubs.insert).to.have.been.calledOnceWithExactly(1, 'page', 'webapp');
     });
 
     it('retourne l\'identifiant du log nouvellement inséré', async () => {
-        stub.resolves(2);
+        stubs.isTracked.resolves(true);
+        stubs.insert.resolves(2);
         const logId = await insert(1, 'page', 'webapp');
         expect(logId).to.be.equal(2);
     });
 
+    it('génère une exception adaptée en cas d\'erreur pour vérifier si l\'utilisateur est tracké ', async () => {
+        stubs.isTracked.rejects(new Error('fetch failed'));
+        try {
+            await insert(1, 'page', 'webapp');
+        } catch (error) {
+            expect(error).to.be.instanceOf(ServiceError);
+            expect(error.code).to.be.equal('fetch_failed');
+            expect(error.message).to.be.equal('fetch failed');
+            return;
+        }
+
+        expect.fail();
+    });
+
+    it('n\'insère pas de log si l\'utilisateur n\'est pas tracké', async () => {
+        stubs.isTracked.resolves(false);
+        await insert(1, 'page', 'webapp');
+        expect(stubs.insert).not.to.have.been.called;
+    });
+
     it('génère une exception adaptée en cas d\'erreur d\'insertion en base de données', async () => {
-        stub.rejects(new Error('insertion failed'));
+        stubs.isTracked.resolves(true);
+        stubs.insert.rejects(new Error('insertion failed'));
 
         try {
             await insert(1, 'page', 'webapp');
