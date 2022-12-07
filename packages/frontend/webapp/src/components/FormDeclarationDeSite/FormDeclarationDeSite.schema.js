@@ -1,5 +1,6 @@
 import { object, string, date, number, array, ref } from "yup";
 import labels from "./FormDeclarationDeSite.labels.js";
+import { useUserStore } from "@/stores/user.store";
 
 function emptyStringToNull(value, originalValue) {
     if (typeof originalValue === "string" && originalValue === "") {
@@ -26,6 +27,8 @@ function makeNullableIfEdit(s, mode) {
 }
 
 export default function (mode = "create") {
+    const userStore = useUserStore();
+
     const schema = object({
         address: object().required().label(labels.address),
         name: string().nullable().label(labels.name),
@@ -43,7 +46,9 @@ export default function (mode = "create") {
         field_type: string().required().label(labels.field_type),
         detailed_address: string().nullable().label(labels.detailed_address),
         owner_type: number().required().label(labels.owner_type),
-        owner: string().nullable().label(labels.owner),
+        owner: userStore.hasOwnerPermission
+            ? string().nullable().label(labels.owner)
+            : undefined,
         population_total: number()
             .nullable()
             .min(1)
@@ -139,50 +144,61 @@ export default function (mode = "create") {
         reinstallation_incoming_towns: array()
             .of(number())
             .label(labels.reinstallation_incoming_towns),
-        owner_complaint: number().required().label(labels.owner_complaint),
-        justice_procedure: number().required().label(labels.justice_procedure),
-        justice_rendered: number()
-            .when("justice_procedure", {
-                is: 1,
-                then: (schema) => schema.required(),
-            })
-            .label(labels.justice_rendered),
-        justice_rendered_at: date()
-            .when("justice_rendered", {
-                is: 1,
-                then: (schema) =>
-                    schema.typeError(
-                        `${labels.justice_rendered_at} est obligatoire`
-                    ),
-                otherwise: (schema) => schema.nullable(),
-            })
-            .label(labels.justice_rendered_at),
-        justice_rendered_by: string()
-            .when("justice_rendered", {
-                is: 1,
-                then: (schema) => schema.required(),
-            })
-            .label(labels.justice_rendered_by),
-        justice_challenged: number()
-            .when("justice_rendered", {
-                is: 1,
-                then: (schema) => schema.required(),
-            })
-            .label(labels.justice_challenged),
-        police_status: string().required().label(labels.police_status),
-        police_requested_at: string()
-            .when("police_status", {
-                is: (value) => ["requested", "granted"].includes(value),
-                then: (schema) => schema.required(),
-            })
-            .label(labels.police_requested_at),
-        police_granted_at: string()
-            .when("police_status", {
-                is: "granted",
-                then: (schema) => schema.required(),
-            })
-            .label(labels.police_granted_at),
-        bailiff: string().label(labels.bailiff),
+        ...(userStore.hasJusticePermission
+            ? {
+                  owner_complaint: number()
+                      .required()
+                      .label(labels.owner_complaint),
+                  justice_procedure: number()
+                      .required()
+                      .label(labels.justice_procedure),
+                  justice_rendered: number()
+                      .when("justice_procedure", {
+                          is: 1,
+                          then: (schema) => schema.required(),
+                      })
+                      .label(labels.justice_rendered),
+                  justice_rendered_at: date()
+                      .when("justice_rendered", {
+                          is: 1,
+                          then: (schema) =>
+                              schema.typeError(
+                                  `${labels.justice_rendered_at} est obligatoire`
+                              ),
+                          otherwise: (schema) => schema.nullable(),
+                      })
+                      .label(labels.justice_rendered_at),
+                  justice_rendered_by: string()
+                      .when("justice_rendered", {
+                          is: 1,
+                          then: (schema) => schema.required(),
+                      })
+                      .label(labels.justice_rendered_by),
+                  justice_challenged: number()
+                      .when("justice_rendered", {
+                          is: 1,
+                          then: (schema) => schema.required(),
+                      })
+                      .label(labels.justice_challenged),
+                  police_status: string()
+                      .required()
+                      .label(labels.police_status),
+                  police_requested_at: string()
+                      .when("police_status", {
+                          is: (value) =>
+                              ["requested", "granted"].includes(value),
+                          then: (schema) => schema.required(),
+                      })
+                      .label(labels.police_requested_at),
+                  police_granted_at: string()
+                      .when("police_status", {
+                          is: "granted",
+                          then: (schema) => schema.required(),
+                      })
+                      .label(labels.police_granted_at),
+                  bailiff: string().label(labels.bailiff),
+              }
+            : {}),
     });
 
     if (mode === "edit") {
