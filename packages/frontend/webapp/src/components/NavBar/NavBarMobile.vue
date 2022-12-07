@@ -16,7 +16,7 @@
                 >{{ item.label }}</LinkBlock
             >
             <LinkBlock @click="redirectToMobile" icon="arrow-alt-circle-right">
-                Retour vers la version mobile
+                Retour à la version mobile
             </LinkBlock>
         </nav>
         <nav class="mt-3 border-t pt-3 px-3">
@@ -84,9 +84,10 @@ function onMobileMenuTransitionEnd() {
 }
 
 function redirectToMobile() {
-    document.cookie = `device=mobile;domain=${ENV.WEBAPP_DOMAIN}`;
+    document.cookie = `device= ; domain=${ENV.WEBAPP_DOMAIN}; expires = Thu, 01 Jan 1970 00:00:00 GMT`;
     location.replace(ENV.MOBILE_URL);
 }
+
 // exposure
 defineExpose({
     show: showMobileMenu,

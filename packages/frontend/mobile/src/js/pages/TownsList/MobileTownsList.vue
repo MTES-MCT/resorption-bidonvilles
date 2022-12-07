@@ -1,6 +1,13 @@
 <template>
     <Layout>
         <template v-slot:header>
+            <div
+                class="bg-primary text-white py-3 text-center"
+                @click="redirectToWebapp"
+            >
+                <Icon icon="arrow-alt-circle-right" class="mr-1" /> Voir la
+                version navigateur
+            </div>
             <Container class="mt-4">
                 <header class="flex items-center space-x-2 mb-3">
                     <img
@@ -10,16 +17,6 @@
                     />
                     <h1 class="font-bold text-lg">Résorption-bidonvilles</h1>
                 </header>
-                <Button
-                    icon="arrow-left"
-                    iconPosition="left"
-                    size="sm"
-                    variant="textPrimary"
-                    class="text-primary"
-                    @click="redirectToWebapp"
-                >
-                    Retour vers la version navigateur
-                </Button>
 
                 <h2 class="font-bold text-display-md">
                     Bienvenue {{ user.first_name }} {{ user.last_name }}
@@ -86,7 +83,7 @@
 </template>
 
 <script>
-import { Button } from "@resorptionbidonvilles/ui";
+import { Button, Icon } from "@resorptionbidonvilles/ui";
 import Container from "../../components/Container.vue";
 import TownCarousel from "./TownCarousel.vue";
 import { mapGetters } from "vuex";
@@ -98,6 +95,7 @@ export default {
     components: {
         // eslint-disable-next-line vue/no-reserved-component-names
         Button,
+        Icon,
         Container,
         Layout,
         TownCarousel,
