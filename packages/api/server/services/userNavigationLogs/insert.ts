@@ -11,7 +11,7 @@ export default async (fk_user: number, page: String, domain: 'webapp' | 'mobile'
     }
 
     if (toBeTracked === false) {
-        return;
+        return null;
     }
 
     // on insère le log
