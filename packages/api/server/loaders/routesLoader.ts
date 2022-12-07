@@ -728,4 +728,34 @@ export default (app) => {
         middlewares.appVersion.sync,
         controllers.contactFormReferral.export,
     );
+
+    // Notes (mobile)
+    app.post(
+        '/notes',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.note.createNote,
+        middlewares.validation,
+        controllers.note.create,
+    );
+
+    app.patch(
+        '/notes/:id/add-copy',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        middlewares.validation,
+        controllers.note.addCopy,
+    );
+
+    app.post(
+        '/publish-note',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.note.publishNote,
+        middlewares.validation,
+        controllers.note.addPublication,
+    );
 };
