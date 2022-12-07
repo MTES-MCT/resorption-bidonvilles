@@ -94,12 +94,22 @@ export default async (user, location) => {
             FROM (
                 SELECT fk_user, week 
                     FROM (
-                        SELECT
-                            fk_user,
-                            (floor(((now() - INTERVAL '1 day')::date - datetime::date) / 7)) AS week
+                        (
+                            SELECT
+                                fk_user,
+                                (floor(((now() - INTERVAL '1 day')::date - datetime::date) / 7)) AS week
                             FROM user_webapp_navigation_logs
-                        WHERE datetime::date < now()::date
-                    )AS unl
+                            WHERE datetime::date < now()::date
+                        )
+                        UNION
+                        (
+                            SELECT
+                                fk_user,
+                                (floor(((now() - INTERVAL '1 day')::date - datetime::date) / 7)) AS week
+                            FROM user_mobile_navigation_logs
+                            WHERE datetime::date < now()::date
+                        )
+                    ) AS unl
                     GROUP BY fk_user, week
             ) t
             ${where !== null ? `
