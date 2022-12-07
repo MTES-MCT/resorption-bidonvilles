@@ -8,6 +8,7 @@ import Logout from "#src/js/pages/Logout/Logout.vue";
 import MiseANiveau from "#src/js/pages/MiseANiveau/MiseANiveau.vue";
 import NotesList from "#src/js/pages/NotesList/NotesList.vue";
 import NotesForm from "#src/js/pages/NotesForm/NotesForm.vue";
+import QuestionnaireSatisfaction from "#src/js/pages/QuestionnaireSatisfaction/QuestionnaireSatisfaction.vue";
 import SignatureCharteEngagement from "#src/js/pages/SignatureCharteEngagement/SignatureCharteEngagement.vue";
 import store from "#src/store/index.js";
 import { insert as insertNavigationLog } from "./helpers/navigationLogs";
@@ -214,6 +215,11 @@ const router = createRouter({
             },
             path: "/liste-des-sites",
             component: TownsList,
+            beforeEnter: guardians.loadedAndUpToDate,
+        },
+        {
+            path: "/questionnaire-de-satisfaction",
+            component: QuestionnaireSatisfaction,
             beforeEnter: guardians.loadedAndUpToDate,
         },
         {

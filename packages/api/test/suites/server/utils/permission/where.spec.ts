@@ -8,7 +8,7 @@ import locationUtils from '#test/utils/location';
 const { where } = permissionUtils;
 const { paris, marseille } = locationUtils;
 
-describe.only('utils/permission.where()', () => {
+describe('utils/permission.where()', () => {
     let user;
     beforeEach(() => {
         user = fakeUser();

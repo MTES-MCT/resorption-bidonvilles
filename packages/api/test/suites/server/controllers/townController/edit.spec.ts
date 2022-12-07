@@ -12,7 +12,7 @@ import edit from '#server/controllers/townController/edit';
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe.only('townController.edit()', () => {
+describe('townController.edit()', () => {
     const dependencies: any = {
         update: undefined,
         findOne: undefined,

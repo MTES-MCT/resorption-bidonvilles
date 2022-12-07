@@ -1,16 +1,21 @@
 <template>
-    <div class="flex flex-col">
-        <TownPageInfo
-            v-for="section in data"
-            :key="section.title"
-            :title="section.title"
-        >
-            {{ town[section.content] || "Non communiqué" }}
-        </TownPageInfo>
+    <div>
+        <TownPagePanelTitle :title="'Habitants'" />
+        <div class="flex flex-col">
+            <TownPageInfo
+                v-for="section in data"
+                :key="section.title"
+                :title="section.title"
+            >
+                {{ town[section.content] || "Non communiqué" }}
+            </TownPageInfo>
+        </div>
     </div>
 </template>
 <script>
 import TownPageInfo from "./TownPageInfo.vue";
+import TownPagePanelTitle from "./TownPagePanelTitle.vue";
+
 export default {
     data() {
         return {
@@ -40,6 +45,7 @@ export default {
     },
     components: {
         TownPageInfo,
+        TownPagePanelTitle,
     },
 };
 </script>

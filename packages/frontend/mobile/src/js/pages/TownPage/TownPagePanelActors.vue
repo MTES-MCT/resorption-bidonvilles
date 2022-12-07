@@ -1,5 +1,7 @@
 <template>
     <div>
+        <TownPagePanelTitle :title="'Intervenants'" />
+
         <div v-if="town.actors.length === 0">
             <p class="italic">Aucun intervenant connu sur ce site</p>
         </div>
@@ -24,6 +26,7 @@
 
 <script>
 import TownPageInfo from "./TownPageInfo.vue";
+import TownPagePanelTitle from "./TownPagePanelTitle.vue";
 import { Tag } from "@resorptionbidonvilles/ui";
 
 export default {
@@ -35,6 +38,7 @@ export default {
     components: {
         TownPageInfo,
         Tag,
+        TownPagePanelTitle,
     },
 };
 </script>

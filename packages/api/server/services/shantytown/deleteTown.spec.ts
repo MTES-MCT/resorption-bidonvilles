@@ -11,7 +11,7 @@ import deleteTownService from './deleteTown';
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe.only('services/shantytown', () => {
+describe('services/shantytown', () => {
     describe('deleteTown()', () => {
         let stubs;
         beforeEach(() => {

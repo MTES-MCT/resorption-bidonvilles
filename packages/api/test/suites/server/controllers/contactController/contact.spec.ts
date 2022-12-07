@@ -57,7 +57,7 @@ const mockModels = {
  * TESTS
  * *********************************************************************************************** */
 
-describe.only('contactController.contact()', () => {
+describe('contactController.contact()', () => {
     const req: any = {};
     let res;
     let stubs;

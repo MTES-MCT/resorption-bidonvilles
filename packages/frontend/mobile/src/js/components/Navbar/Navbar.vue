@@ -3,6 +3,11 @@
         <div class="flex justify-between max-w-lg mx-auto">
             <NavbarItem icon="home" label="Sites" @click="showTownsTab" />
             <NavbarItem icon="pen" label="Notes" @click="showNotesTab" />
+            <NavbarItem
+                icon="clipboard-question"
+                label="Questionnaire"
+                @click="showQuestionnaire"
+            ></NavbarItem>
             <NavbarItem icon="unlink" label="Déconnexion" @click="signout" />
         </div>
     </nav>
@@ -44,6 +49,9 @@ export default {
         },
         signout() {
             this.$router.push("/deconnexion");
+        },
+        showQuestionnaire() {
+            this.$router.push("/questionnaire-de-satisfaction");
         },
     },
 };

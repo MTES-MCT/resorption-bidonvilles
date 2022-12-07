@@ -15,7 +15,7 @@ chai.use(sinonChai);
 
 const { paris } = locationUtils;
 
-describe.only('services/shantytown', () => {
+describe('services/shantytown', () => {
     describe('setHeatwaveStatus()', () => {
         const user = fakeUser();
         const data = {

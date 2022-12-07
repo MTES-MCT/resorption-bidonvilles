@@ -5,7 +5,7 @@ import { expect } from 'chai';
 import { serialized as createUser } from '#test/utils/user';
 import { raw as createChangelogItem } from '#test/utils/changelog';
 
-describe.only('ChangelogModel', () => {
+describe('ChangelogModel', () => {
     describe('.getChangelogFor()', () => {
         let getChangelogFor;
         let sequelizeStub;

@@ -27,7 +27,7 @@ function randomIndex(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-describe.only('services/plan', () => {
+describe('services/plan', () => {
     describe('create()', () => {
         let stubs;
         const departement: string = global.generate('string');

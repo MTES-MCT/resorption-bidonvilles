@@ -19,7 +19,7 @@ chai.use(sinonChai);
 let exportTownService;
 
 
-describe.only('services/shantytown', () => {
+describe('services/shantytown', () => {
     describe('exportTown()', () => {
         let stubs;
         let createExportSectionsStub;
