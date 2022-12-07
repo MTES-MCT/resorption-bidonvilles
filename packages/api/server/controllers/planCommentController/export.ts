@@ -8,7 +8,6 @@ const ERROR_RESPONSES = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
-
 export default async (req, res, next) => {
     let comments;
     try {

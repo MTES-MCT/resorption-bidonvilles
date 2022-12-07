@@ -64,6 +64,20 @@ export default (app) => {
         controllers.user.listExport,
     );
     app.get(
+        '/navigationLogs/mobile/export',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        controllers.userNavigationLogs.exportForMobile,
+
+    );
+    app.get(
+        '/navigationLogs/webapp/export',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        controllers.userNavigationLogs.exportForWebapp,
+
+    );
+    app.get(
         '/me',
         middlewares.auth.authenticate,
         middlewares.appVersion.sync,
