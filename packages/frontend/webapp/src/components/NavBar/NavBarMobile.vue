@@ -15,6 +15,9 @@
                 :icon="item.icon"
                 >{{ item.label }}</LinkBlock
             >
+            <LinkBlock @click="redirectToMobile" icon="arrow-alt-circle-right">
+                Retour à la version mobile
+            </LinkBlock>
         </nav>
         <nav class="mt-3 border-t pt-3 px-3">
             <LinkBlock
@@ -44,6 +47,7 @@
 <script setup>
 import { ref, onMounted, defineExpose } from "vue";
 import { useNavigationStore } from "@/stores/navigation.store.js";
+import ENV from "@/helpers/env.js";
 
 // components
 import { Button, LinkBlock } from "@resorptionbidonvilles/ui";
@@ -77,6 +81,11 @@ function onMobileMenuTransitionEnd() {
         mobileMenu.value.style.zIndex = "-10";
         document.body.style.overflow = "auto";
     }
+}
+
+function redirectToMobile() {
+    document.cookie = `device= ; domain=${ENV.WEBAPP_DOMAIN}; expires = Thu, 01 Jan 1970 00:00:00 GMT`;
+    location.replace(ENV.MOBILE_URL);
 }
 
 // exposure

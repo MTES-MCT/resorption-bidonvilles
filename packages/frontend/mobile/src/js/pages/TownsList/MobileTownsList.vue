@@ -1,6 +1,13 @@
 <template>
     <Layout>
         <template v-slot:header>
+            <div
+                class="bg-primary text-white py-3 text-center"
+                @click="redirectToWebapp"
+            >
+                <Icon icon="arrow-alt-circle-right" class="mr-1" /> Voir la
+                version navigateur
+            </div>
             <Container class="mt-4">
                 <header class="flex items-center space-x-2 mb-3">
                     <img
@@ -10,6 +17,7 @@
                     />
                     <h1 class="font-bold text-lg">Résorption-bidonvilles</h1>
                 </header>
+
                 <h2 class="font-bold text-display-md">
                     Bienvenue {{ user.first_name }} {{ user.last_name }}
                 </h2>
@@ -75,17 +83,19 @@
 </template>
 
 <script>
-import { Button } from "@resorptionbidonvilles/ui";
+import { Button, Icon } from "@resorptionbidonvilles/ui";
 import Container from "../../components/Container.vue";
 import TownCarousel from "./TownCarousel.vue";
 import { mapGetters } from "vuex";
 import Layout from "#src/js/components/Layout.vue";
 import SearchInput from "#src/js/components/SearchInput.vue";
+import ENV from "#src/env.js";
 
 export default {
     components: {
         // eslint-disable-next-line vue/no-reserved-component-names
         Button,
+        Icon,
         Container,
         Layout,
         TownCarousel,
@@ -120,6 +130,10 @@ export default {
             setTimeout(() => {
                 this.$router.push(`/site/${town.id}`);
             }, 100);
+        },
+        redirectToWebapp() {
+            document.cookie = `device=webapp;domain=${ENV.VITE_MOBILE_DOMAIN}`;
+            location.replace(ENV.VITE_WEBAPP_URL);
         },
     },
 };
