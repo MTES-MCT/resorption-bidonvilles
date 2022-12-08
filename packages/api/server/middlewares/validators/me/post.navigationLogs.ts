@@ -9,5 +9,10 @@ export default [
     body('domain')
         .isString().bail().withMessage('Le domaine est invalide')
         .isIn(['webapp', 'mobile']).bail().withMessage('La valeur du domaine est invalide'),
-
+    body('origin')
+        .optional({ nullable: true })
+        .isString().bail().withMessage('L\'origine doit être une chaîne de caractères')
+        .trim(),
+    body('origin')
+        .customSanitizer(value => value || null),
 ];

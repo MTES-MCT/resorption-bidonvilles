@@ -14,7 +14,7 @@ describe('services/userNavigationLogs/insert()', () => {
     let stubs;
     beforeEach(() => {
         stubs = {
-            insert: sinon.stub(userNavigationLogsModel, 'insert'),
+            insertWebapp: sinon.stub(userNavigationLogsModel, 'insertWebapp'),
             isTracked: sinon.stub(userModel, 'isTracked'),
         };
     });
@@ -26,12 +26,18 @@ describe('services/userNavigationLogs/insert()', () => {
     it('demande l\'insertion du log en base de données', async () => {
         stubs.isTracked.resolves(true);
         await insert(1, 'page', 'webapp');
-        expect(stubs.insert).to.have.been.calledOnceWithExactly(1, 'page', 'webapp');
+        expect(stubs.insertWebapp).to.have.been.calledOnceWithExactly(1, 'page', null);
+    });
+
+    it('demande l\'insertion du log avec l\'origine', async () => {
+        stubs.isTracked.resolves(true);
+        await insert(1, 'page', 'webapp', 'test');
+        expect(stubs.insertWebapp).to.have.been.calledOnceWithExactly(1, 'page', 'test');
     });
 
     it('retourne l\'identifiant du log nouvellement inséré', async () => {
         stubs.isTracked.resolves(true);
-        stubs.insert.resolves(2);
+        stubs.insertWebapp.resolves(2);
         const logId = await insert(1, 'page', 'webapp');
         expect(logId).to.be.equal(2);
     });
@@ -53,12 +59,12 @@ describe('services/userNavigationLogs/insert()', () => {
     it('n\'insère pas de log si l\'utilisateur n\'est pas tracké', async () => {
         stubs.isTracked.resolves(false);
         await insert(1, 'page', 'webapp');
-        expect(stubs.insert).not.to.have.been.called;
+        expect(stubs.insertWebapp).not.to.have.been.called;
     });
 
     it('génère une exception adaptée en cas d\'erreur d\'insertion en base de données', async () => {
         stubs.isTracked.resolves(true);
-        stubs.insert.rejects(new Error('insertion failed'));
+        stubs.insertWebapp.rejects(new Error('insertion failed'));
 
         try {
             await insert(1, 'page', 'webapp');
