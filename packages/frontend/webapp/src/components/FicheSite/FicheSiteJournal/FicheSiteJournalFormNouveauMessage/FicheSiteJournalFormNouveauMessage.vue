@@ -5,22 +5,15 @@
         <div class="bg-white p-6">
             <FormNouveauMessageInputMessage />
             <FormNouveauMessageInputTags />
-            <template
-                v-if="
-                    userStore.hasPermission('shantytown_comment.createPrivate')
-                "
-            >
-                <FormNouveauMessageInputMode />
-                <FormNouveauMessageInputTarget
-                    v-if="values.mode === 'custom'"
-                    :departement="town.departement.code"
-                />
-                <p class="text-sm mb-4">
-                    (*) Quelle que soit l'option retenue, les administrateurs
-                    locaux et nationaux auront accès au message à des fins de
-                    modération
-                </p>
-            </template>
+            <FormNouveauMessageInputMode />
+            <FormNouveauMessageInputTarget
+                v-if="values.mode === 'custom'"
+                :departement="town.departement.code"
+            />
+            <p class="text-sm mb-4">
+                (*) Quelle que soit l'option retenue, les administrateurs locaux
+                et nationaux auront accès au message à des fins de modération
+            </p>
 
             <ErrorSummary v-if="error" :message="error" class="mt-2" />
             <p class="text-right">
@@ -36,7 +29,6 @@
 import { defineProps, toRefs, ref } from "vue";
 import { useForm } from "vee-validate";
 import { useTownsStore } from "@/stores/towns.store";
-import { useUserStore } from "@/stores/user.store";
 import schema from "./FicheSiteJournalFormNouveauMessage.schema";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
@@ -57,8 +49,6 @@ const { handleSubmit, setErrors, resetForm, values } = useForm({
         mode: "public",
     },
 });
-
-const userStore = useUserStore();
 
 const error = ref(null);
 const submit = handleSubmit(async (values) => {

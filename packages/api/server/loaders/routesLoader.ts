@@ -528,14 +528,7 @@ export default (app) => {
     app.post(
         '/towns/:id/comments',
         middlewares.auth.authenticate,
-        (req, res, next, respond = true) => {
-            // Only check permissions for private comments
-            if (req.body?.targets?.organizations?.length || req.body?.targets?.users?.length) {
-                return middlewares.auth.checkPermissions(['shantytown_comment.createPrivate'], req, res, next, respond);
-            }
-
-            return next();
-        },
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown_comment.create'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.shantytownComment.createShantytownComment,
