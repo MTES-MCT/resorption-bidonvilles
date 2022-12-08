@@ -8,6 +8,7 @@ export default async (req, res, next) => {
             req.user.id,
             req.body.page,
             req.body.domain,
+            req.body.origin,
         );
     } catch (error) {
         let message;

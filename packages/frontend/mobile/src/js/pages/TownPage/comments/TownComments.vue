@@ -94,10 +94,10 @@ export default {
             this.$refs.comments.show();
         },
         async createNote() {
-            const { id } = await this.$store.dispatch(
-                "notes/create",
-                this.town.id
-            );
+            const { id } = await this.$store.dispatch("notes/create", {
+                town: this.town.id,
+                created_from: "journal_de_site",
+            });
             this.$router.push(`/notes/${id}`);
             this.$store.dispatch("notes/setupFilterBarAfterCreation");
         },

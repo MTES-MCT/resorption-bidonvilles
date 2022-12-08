@@ -528,14 +528,7 @@ export default (app) => {
     app.post(
         '/towns/:id/comments',
         middlewares.auth.authenticate,
-        (req, res, next, respond = true) => {
-            // Only check permissions for private comments
-            if (req.body?.targets?.organizations?.length || req.body?.targets?.users?.length) {
-                return middlewares.auth.checkPermissions(['shantytown_comment.createPrivate'], req, res, next, respond);
-            }
-
-            return next();
-        },
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown_comment.create'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.shantytownComment.createShantytownComment,
@@ -734,5 +727,34 @@ export default (app) => {
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.contactFormReferral.export,
+    );
+
+    // Notes (mobile)
+    app.post(
+        '/notes',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.note.createNote,
+        middlewares.validation,
+        controllers.note.create,
+    );
+
+    app.patch(
+        '/notes/:id/number_of_copies',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.note.addCopy,
+    );
+
+    app.post(
+        '/notes/:id/publications',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.note.publishNote,
+        middlewares.validation,
+        controllers.note.addPublication,
     );
 };

@@ -1,7 +1,9 @@
-import insert from './insert';
 import getAllForSessions from './getAllForSessions';
+import insertMobile from './insertMobile';
+import insertWebapp from './insertWebapp';
 
 export default {
-    insert,
     getAllForSessions,
+    insertMobile,
+    insertWebapp,
 };

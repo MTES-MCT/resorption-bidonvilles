@@ -1,13 +1,29 @@
 import { fileURLToPath, URL } from "node:url";
 
 import { defineConfig } from "vite";
+import { VitePWA } from "vite-plugin-pwa";
 import vue from "@vitejs/plugin-vue";
 import { version } from "./package.json";
 const { icons } = require("./public/img/icons/icons.json");
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [vue()],
+    plugins: [
+        vue(),
+        VitePWA({
+            registerType: "autoUpdate",
+            manifest: {
+                name: "Résorption-bidonvilles",
+                short_name: "R-B",
+                description: "Agir pour résorber les bidonvilles",
+                theme_color: "#00006D",
+                icons: icons.map((icon) => {
+                    icon.src = `./img/icons/${icon.src}`;
+                    return icon;
+                }),
+            },
+        }),
+    ],
     server: {
         host: "0.0.0.0",
         port: 8093,
@@ -30,17 +46,5 @@ export default defineConfig({
             ),
             "#frontend": fileURLToPath(new URL("..", import.meta.url)),
         },
-    },
-    pwa: {
-        name: "Résorption-bidonvilles",
-        themeColor: "#00006D",
-        msTileColor: "#ffffff",
-        manifestOptions: {
-            icons: icons.map((icon) => {
-                icon.src = `./img/icons/${icon.src}`;
-                return icon;
-            }),
-        },
-        appleMobileWebAppCapable: "yes",
     },
 });

@@ -234,7 +234,7 @@ function formatValuesForApi(v) {
             living_conditions_version: v.living_conditions_version || 2,
             built_at: formatFormDate(v.built_at),
             declared_at: formatFormDate(v.declared_at),
-            updated_at: formatFormDate(v.updated_at || new Date()),
+            updated_at: v.updated_at || new Date(),
             census_conducted_at: formatFormDate(v.census_conducted_at),
             justice_rendered_at: formatFormDate(v.justice_rendered_at),
             police_requested_at: formatFormDate(v.police_requested_at),

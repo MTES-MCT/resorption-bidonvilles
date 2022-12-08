@@ -72,7 +72,6 @@ export function serialized(override = {}) {
             },
             shantytown_comment: {
                 create: { allowed: true, allow_all: true, allowed_on: null },
-                createPrivate: { allowed: true, allow_all: true, allowed_on: null },
                 list: { allowed: true, allow_all: true, allowed_on: null },
                 listPrivate: { allowed: true, allow_all: true, allowed_on: null },
             },

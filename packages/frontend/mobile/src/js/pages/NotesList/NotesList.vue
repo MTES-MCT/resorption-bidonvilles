@@ -44,7 +44,10 @@ export default {
     },
     methods: {
         async create() {
-            const { id } = await this.$store.dispatch("notes/create");
+            const { id } = await this.$store.dispatch("notes/create", {
+                town: null,
+                created_from: "onglet_notes",
+            });
             this.$router.push(`/notes/${id}`);
             this.$store.dispatch("notes/setupFilterBarAfterCreation");
         },

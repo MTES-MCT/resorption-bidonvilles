@@ -25,8 +25,20 @@ function isConfigLoaded() {
     return store.getters["config/loaded"] === true;
 }
 
-function logNavigation(to) {
-    insertNavigationLog(to.path);
+function logNavigation(to, from) {
+    let origin;
+    if (/^\/site\/[0-9]+\/?[?#]?/.test(to.path)) {
+        origin = from.meta.origin;
+        if (from.path === "/launcher") {
+            origin = "acces_direct";
+        }
+
+        if (!origin) {
+            return;
+        }
+    }
+
+    insertNavigationLog(to.path, origin);
     return true;
 }
 
@@ -164,8 +176,6 @@ const guardians = {
         { checker: isPermitted, target: "/", saveEntrypoint: false },
         { checker: hasAcceptedCharte, target: "/signature-charte-engagement" },
         { checker: isUpgraded, target: "/mise-a-niveau" },
-        { checker: saveTabNavigation },
-        { checker: logNavigation },
         { checker: saveTabNavigation },
         { checker: logNavigation },
     ]),
