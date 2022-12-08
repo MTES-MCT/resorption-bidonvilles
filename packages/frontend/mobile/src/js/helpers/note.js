@@ -1,22 +1,13 @@
 import { postApi, patchApi } from "#src/js/api";
 
-/**
- * POST /note
- */
 export function createNote(note) {
     return postApi("/notes", note);
 }
 
-/**
- * PATCH /note
- */
-export function addCopyNote(noteId) {
-    return patchApi(`/notes/${encodeURI(noteId)}/add-copy`);
+export function incrementNumberOfCopies(noteId) {
+    return patchApi(`/notes/${encodeURI(noteId)}/number_of_copies`);
 }
 
-/**
- * POST /note-publication
- */
-export function publishNoteInBdd(note) {
-    return postApi("/publish-note", note);
+export function registerPublication(note) {
+    return postApi(`/notes/${encodeURI(note.note_id)}/publications`, note);
 }

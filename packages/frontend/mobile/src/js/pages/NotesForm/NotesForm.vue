@@ -35,7 +35,7 @@
 import Layout from "#src/js/components/Layout.vue";
 import NotesFormHeader from "./NotesFormHeader.vue";
 import NotesPublicationForm from "./publication/NotesPublicationForm.vue";
-import { addCopyNote } from "#src/js/helpers/note";
+import { incrementNumberOfCopies } from "#src/js/helpers/note";
 
 export default {
     components: {
@@ -78,7 +78,7 @@ export default {
         async copy() {
             this.$refs.textarea.select();
             document.execCommand("copy");
-            await addCopyNote(this.note.id);
+            await incrementNumberOfCopies(this.note.id);
             this.$store.dispatch("notifications/add", {
                 text: "Note copiée dans le presse-papier",
                 icon: "copy",

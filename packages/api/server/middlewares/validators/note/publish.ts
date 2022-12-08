@@ -1,4 +1,5 @@
-import { body, param } from 'express-validator';
+/* eslint-disable newline-per-chained-call */
+import { body } from 'express-validator';
 import noteModel from '#server/models/noteModel';
 import shantytownModel from '#server/models/shantytownModel';
 
@@ -25,7 +26,6 @@ export default [
             try {
                 shantytown = await shantytownModel.findOne(req.user, value);
             } catch (error) {
-                console.log(error);
                 throw new Error('Impossible de retrouver le site concerné en base de données');
             }
 
@@ -38,14 +38,14 @@ export default [
 
     body('created_at')
         .exists({ checkNull: true }).bail().withMessage('La date de publication de la note est obligatoire')
-        .isDate().bail().withMessage('La date de publication de la note est invalide')
         .toDate()
-        .custom((value, { req }) => {
-            value.setHours(0, 0, 0, 0);
+        .custom((value) => {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
 
-            if (value > today) {
+            const d = new Date(value);
+            d.setHours(0, 0, 0, 0);
+            if (d > today) {
                 throw new Error('La date de publication de la note ne peut pas être future');
             }
 

@@ -20,8 +20,8 @@ const note = {
     created_from: 'onglet_note',
     number_of_copies: 0,
     created_by: 1,
-    created_at: (new Date()).toString()
-}
+    created_at: (new Date()).toString(),
+};
 
 describe.only('services/note', () => {
     describe('create()', () => {
@@ -36,12 +36,6 @@ describe.only('services/note', () => {
         it('demande l\'insertion de la note en base de données', async () => {
             await create(note.note_id, note.created_from, note.number_of_copies, note.created_by, note.created_at);
             expect(stub).to.have.been.calledOnceWithExactly(note.note_id, note.created_from, note.number_of_copies, note.created_by, note.created_at);
-        });
-
-        it('retourne l\'identifiant de la note nouvellement insérée', async () => {
-            stub.resolves(note.note_id);
-            const noteId = await create(note.note_id, note.created_from, note.number_of_copies, note.created_by, note.created_at);
-            expect(noteId).to.be.equal(note.note_id);
         });
 
         it('génère une exception adaptée en cas d\'erreur d\'insertion en base de données', async () => {
@@ -60,4 +54,3 @@ describe.only('services/note', () => {
         });
     });
 });
-

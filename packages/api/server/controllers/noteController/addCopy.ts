@@ -9,12 +9,15 @@ const ERROR_RESPONSES = {
         code: 500,
         message: 'Une erreur est survenue lors de l\'écriture en base de données',
     },
+    note_not_found: {
+        code: 404,
+        message: 'La note n\'existe pas',
+    },
 };
 
 export default async (req, res, next) => {
-    let updatedNote;
     try {
-        updatedNote = await noteService.addCopy(req.params.id);
+        await noteService.addCopy(req.params.id);
     } catch (error) {
         const response = ERROR_RESPONSES[error && error.code];
         if (!response) {
@@ -31,5 +34,6 @@ export default async (req, res, next) => {
         });
         return next(error.nativeError || error);
     }
-    return res.status(200).send(updatedNote);
+
+    return res.status(200).send({});
 };

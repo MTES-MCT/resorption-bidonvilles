@@ -1,7 +1,7 @@
-import { body, param } from 'express-validator';
+/* eslint-disable newline-per-chained-call */
+import { body } from 'express-validator';
 import noteModel from '#server/models/noteModel';
-import { createdFrom } from "#server/models/noteModel/common/createdFrom";
-import userModel from '#server/models/userModel';
+import { createdFrom } from '#server/models/noteModel/common/createdFrom';
 
 export default [
     body('note_id')
@@ -21,45 +21,33 @@ export default [
         }),
 
     body('created_from')
-        .customSanitizer((value) => {
-            if (value === null || value === undefined) {
-                throw new Error('L\origine de la note doit être renseignée.');
-            }
-
-            return value;
-        })
+        .exists({ checkNull: true }).bail().withMessage('L\'origine de la note doit être renseignée.')
         .custom((value) => {
             if (!createdFrom.includes(value)) {
-                throw new Error('L\origine de la note n\'est pas reconnue.');
+                throw new Error('L\'origine de la note n\'est pas reconnue.');
             }
 
             return true;
         }),
 
     body('number_of_copies')
+        .optional({ nullable: true })
+        .toInt()
+        .isInt().bail().withMessage('Le champ "Nombre de copies" est invalide'),
+
+    body('number_of_copies')
         .customSanitizer(value => (Number.isInteger(value) ? value : 0)),
-
-    body('created_by')
-        .custom(async (value) => {
-            // on vérifie que l'utilisateur existe
-            const users = await userModel.findByIds(null, value);
-            if (users.length < 1) {
-                throw new Error('l\'auteur de la note n\'existe pas');
-            }
-
-            return true;
-        }),
 
     body('created_at')
         .exists({ checkNull: true }).bail().withMessage('La date de création de la note est obligatoire')
-        .isDate().bail().withMessage('La date de création de la note est invalide')
         .toDate()
-        .custom((value, { req }) => {
-            value.setHours(0, 0, 0, 0);
+        .custom((value) => {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
 
-            if (value > today) {
+            const d = new Date(value);
+            d.setHours(0, 0, 0, 0);
+            if (d > today) {
                 throw new Error('La date de création de la note ne peut pas être future');
             }
 

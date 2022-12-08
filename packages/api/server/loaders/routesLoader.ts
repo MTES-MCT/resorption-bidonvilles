@@ -741,16 +741,15 @@ export default (app) => {
     );
 
     app.patch(
-        '/notes/:id/add-copy',
+        '/notes/:id/number_of_copies',
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,
-        middlewares.validation,
         controllers.note.addCopy,
     );
 
     app.post(
-        '/publish-note',
+        '/notes/:id/publications',
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,

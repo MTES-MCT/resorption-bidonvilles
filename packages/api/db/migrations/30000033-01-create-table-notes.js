@@ -1,7 +1,9 @@
 module.exports = {
-    up: (queryInterface, Sequelize) => queryInterface.sequelize.transaction(
+    async up(queryInterface, Sequelize) {
+        const transaction = await queryInterface.sequelize.transaction();
+
         // on crée la table
-        transaction => queryInterface.createTable(
+        await queryInterface.createTable(
             'notes',
             {
                 note_id: {
@@ -12,7 +14,6 @@ module.exports = {
                 created_from: {
                     type: Sequelize.ENUM('onglet_notes', 'journal_de_site'),
                     allowNull: false,
-                    defaultValue: 'onglet_notes',
                 },
                 number_of_copies: {
                     type: Sequelize.INTEGER,
@@ -30,34 +31,41 @@ module.exports = {
                 },
             },
             { transaction },
-        )
+        );
 
-            // on crée la contrainte
-            .then(() => queryInterface.addConstraint(
-                'notes', {
+        // on crée la contrainte
+        await queryInterface.addConstraint(
+            'notes',
+            {
                 fields: ['created_by'],
                 type: 'foreign key',
-                name: 'fk_notes__created_by',
+                name: 'fk_notes_created_by',
                 references: {
                     table: 'users',
                     field: 'user_id',
                 },
                 onUpdate: 'cascade',
-                onDelete: 'restrict',
+                onDelete: 'cascade',
                 transaction,
             },
-            )),
-    ),
+        );
 
-    down: queryInterface => queryInterface.sequelize.transaction(
+        return transaction.commit();
+    },
+
+    async down(queryInterface) {
+        const transaction = await queryInterface.sequelize.transaction();
+
         // on supprime la contrainte
-        transaction => queryInterface.removeConstraint(
+        await queryInterface.removeConstraint(
             'notes',
-            'fk_notes__created_by',
+            'fk_notes_created_by',
             { transaction },
-        )
+        );
 
-            // on supprime la table
-            .then(() => queryInterface.dropTable('notes', { transaction })),
-    ),
-};    
+        // on supprime la table
+        await queryInterface.dropTable('notes', { transaction });
+
+        return transaction.commit();
+    },
+};

@@ -1,8 +1,7 @@
 import { get, set } from "idb-keyval";
 import getRandomString from "#src/js/utils/getRandomString";
 import { createComment } from "#src/js/helpers/townComment";
-import { createNote, publishNoteInBdd } from "#src/js/helpers/note";
-import formatDate from "#frontend/common/helpers/formatDate";
+import { createNote, registerPublication } from "#src/js/helpers/note";
 
 function setNotes(value) {
     set("notes", JSON.parse(JSON.stringify(value)));
@@ -76,14 +75,17 @@ export default {
             await setNotes(state.notes);
         },
 
-        async create({ commit, state, rootState }, payload) {
+        async create({ commit, state }, payload) {
             const { town, created_from } = payload;
-            const { user } = rootState.config.configuration;
+
             const currentDate = new Date();
             const note = {
                 id: getRandomString(30),
                 description: "",
-                town,
+                town: town || {
+                    shantytownId: null,
+                    addressSimple: null,
+                },
                 created_from,
                 publications: [],
                 created_at: currentDate.toString(),
@@ -91,14 +93,18 @@ export default {
 
             commit("ADD_NOTE", note);
             await setNotes(state.notes);
-            const noteForDb = {
-                note_id: note.id,
-                created_from,
-                number_of_copies: 0,
-                created_by: user.id,
-                created_at: formatDate(currentDate / 1000, "y-m-d"),
-            };
-            await createNote(noteForDb);
+
+            try {
+                const noteForDb = {
+                    note_id: note.id,
+                    created_from,
+                    number_of_copies: 0,
+                    created_at: currentDate,
+                };
+                await createNote(noteForDb);
+            } catch (e) {
+                // ignore
+            }
 
             return note;
         },
@@ -183,6 +189,7 @@ export default {
                     },
                     { root: true }
                 );
+
                 const datePublication = new Date();
                 commit("ADD_NOTE_PUBLICATION", {
                     index,
@@ -194,12 +201,18 @@ export default {
                         published_at: datePublication.toString(),
                     },
                 });
+
                 // Enregistrer la publication de la note en BDD
-                await publishNoteInBdd({
-                    note_id: noteId,
-                    shantytown_id: shantytown.id,
-                    created_at: formatDate(datePublication / 1000, "y-m-d"),
-                });
+                try {
+                    await registerPublication({
+                        note_id: noteId,
+                        shantytown_id: shantytown.id,
+                        created_at: datePublication,
+                    });
+                } catch (e) {
+                    // ignore
+                }
+
                 await setNotes(state.notes);
             } catch (error) {
                 throw new Error(

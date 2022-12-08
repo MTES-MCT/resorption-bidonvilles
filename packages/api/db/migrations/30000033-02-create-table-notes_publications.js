@@ -26,31 +26,31 @@ module.exports = {
         await Promise.all([
             queryInterface.addConstraint(
                 'notes_publications', {
-                fields: ['fk_note'],
-                type: 'foreign key',
-                name: 'fk_notes_publications__note_id',
-                references: {
-                    table: 'notes',
-                    field: 'note_id',
+                    fields: ['fk_note'],
+                    type: 'foreign key',
+                    name: 'fk_notes_publications_note_id',
+                    references: {
+                        table: 'notes',
+                        field: 'note_id',
+                    },
+                    onUpdate: 'cascade',
+                    onDelete: 'cascade',
+                    transaction,
                 },
-                onUpdate: 'cascade',
-                onDelete: 'restrict',
-                transaction,
-            },
             ),
             queryInterface.addConstraint(
                 'notes_publications', {
-                fields: ['fk_shantytown'],
-                type: 'foreign key',
-                name: 'fk_notes_publications__shantytown_id',
-                references: {
-                    table: 'shantytowns',
-                    field: 'shantytown_id',
+                    fields: ['fk_shantytown'],
+                    type: 'foreign key',
+                    name: 'fk_notes_publications_shantytown_id',
+                    references: {
+                        table: 'shantytowns',
+                        field: 'shantytown_id',
+                    },
+                    onUpdate: 'cascade',
+                    onDelete: 'cascade',
+                    transaction,
                 },
-                onUpdate: 'cascade',
-                onDelete: 'restrict',
-                transaction,
-            },
             ),
         ]);
 
@@ -62,12 +62,12 @@ module.exports = {
         await Promise.all([
             queryInterface.removeConstraint(
                 'notes_publications',
-                'fk_notes_publications__shantytown_id',
+                'fk_notes_publications_shantytown_id',
                 { transaction },
             ),
             queryInterface.removeConstraint(
                 'notes_publications',
-                'fk_notes_publications__note_id',
+                'fk_notes_publications_note_id',
                 { transaction },
             ),
         ]);
