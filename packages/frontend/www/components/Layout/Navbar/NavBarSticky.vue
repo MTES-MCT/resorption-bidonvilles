@@ -7,7 +7,7 @@
                 <div class="hidden md:block">
                     <slot name="anchors"></slot>
 
-                    <Link :to="`${WEBAPP_URL}/contact`" class="mr-2 inline-block">
+                    <Link @click="routeToContact" class="mr-2 inline-block">
                     <Button variant="secondary">{{
                             $t("landingPage.header.contact")
                     }}</Button>
@@ -27,6 +27,7 @@
 
 <script setup>
 import { defineProps, toRefs } from "vue";
+import redirectToContact from "~~/utils/redirectToContact";
 
 import NavBarLogo from "./NavBarLogo.vue";
 import NavBarMobileButton from "./NavBarMobileButton.vue";
@@ -43,4 +44,8 @@ const props = defineProps({
     }
 });
 const { toggleMenu } = toRefs(props);
+
+function routeToContact() {
+    return redirectToContact();
+}
 </script>
