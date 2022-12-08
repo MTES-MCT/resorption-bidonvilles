@@ -6,9 +6,9 @@
                     <slot />
                 </h2>
                 <div class="pt-4">
-                    <Link :to="`${WEBAPP_URL}/contact`"><Button variant="primary">{{
+                    <Button variant="primary" @click="redirectToContact">{{
                             cta
-                    }}</Button></Link>
+                    }}</Button>
                 </div>
             </div>
         </Container>
@@ -17,11 +17,10 @@
 
 <script setup>
 import { defineProps, toRefs } from "vue";
+import redirectToContact from "~~/utils/redirectToContact";
 
-import { Link, Button } from "@resorptionbidonvilles/ui";
+import { Button } from "@resorptionbidonvilles/ui";
 import Container from "~/components/Layout/Container/Container.vue";
-
-const { WEBAPP_URL } = useRuntimeConfig();
 
 const props = defineProps({
     cta: {

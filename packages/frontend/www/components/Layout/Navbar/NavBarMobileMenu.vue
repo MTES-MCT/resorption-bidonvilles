@@ -8,7 +8,7 @@
             </MenuItem>
 
             <MenuItem>
-            <Link :to="`${WEBAPP_URL}/contact`">
+            <Link @click="routeToContact" withStyle>
             {{ $t("landingPage.header.contact") }}
             </Link>
             </MenuItem>
@@ -21,7 +21,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, defineEmits } from "vue";
-
+import redirectToContact from "~~/utils/redirectToContact";
 
 import { Link, Menu, MenuItem } from "@resorptionbidonvilles/ui";
 import LanguagePicker from "./LanguagePicker";
@@ -46,5 +46,9 @@ function checkOutsideClick(event) {
     if (!navbarMobile.value.contains(event.target)) {
         emit('closeMenu');
     }
+}
+
+function routeToContact() {
+    return redirectToContact();
 }
 </script>
