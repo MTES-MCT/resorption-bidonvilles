@@ -1,6 +1,7 @@
 import { get, set } from "idb-keyval";
 import getRandomString from "#src/js/utils/getRandomString";
 import { createComment } from "#src/js/helpers/townComment";
+import { createNote, registerPublication } from "#src/js/helpers/note";
 
 function setNotes(value) {
     set("notes", JSON.parse(JSON.stringify(value)));
@@ -74,20 +75,36 @@ export default {
             await setNotes(state.notes);
         },
 
-        async create(
-            { commit, state },
-            shantytown = { shantytownId: null, addressSimple: null }
-        ) {
+        async create({ commit, state }, payload) {
+            const { town, created_from } = payload;
+
+            const currentDate = new Date();
             const note = {
                 id: getRandomString(30),
                 description: "",
-                shantytown,
+                town: town || {
+                    shantytownId: null,
+                    addressSimple: null,
+                },
+                created_from,
                 publications: [],
-                created_at: new Date().toString(),
+                created_at: currentDate.toString(),
             };
 
             commit("ADD_NOTE", note);
             await setNotes(state.notes);
+
+            try {
+                const noteForDb = {
+                    note_id: note.id,
+                    created_from,
+                    number_of_copies: 0,
+                    created_at: currentDate,
+                };
+                await createNote(noteForDb);
+            } catch (e) {
+                // ignore
+            }
 
             return note;
         },
@@ -172,6 +189,8 @@ export default {
                     },
                     { root: true }
                 );
+
+                const datePublication = new Date();
                 commit("ADD_NOTE_PUBLICATION", {
                     index,
                     publication: {
@@ -179,9 +198,21 @@ export default {
                             addressSimple: shantytown.addressSimple,
                             shantytownId: shantytown.id,
                         },
-                        published_at: new Date().toString(),
+                        published_at: datePublication.toString(),
                     },
                 });
+
+                // Enregistrer la publication de la note en BDD
+                try {
+                    await registerPublication({
+                        note_id: noteId,
+                        shantytown_id: shantytown.id,
+                        created_at: datePublication,
+                    });
+                } catch (e) {
+                    // ignore
+                }
+
                 await setNotes(state.notes);
             } catch (error) {
                 throw new Error(
