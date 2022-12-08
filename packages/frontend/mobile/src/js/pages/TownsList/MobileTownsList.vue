@@ -44,7 +44,7 @@
                         >
                     </div>
                 </Container>
-                <TownCarousel :towns="myTowns" />
+                <TownCarousel :towns="myTowns" id="mes_sites" />
 
                 <Container class="mt-6">
                     <div class="font-bold text-lg">
@@ -59,7 +59,10 @@
                         >
                     </div>
                 </Container>
-                <TownCarousel :towns="consultedTowns" />
+                <TownCarousel
+                    :towns="consultedTowns"
+                    id="sites_recemment_consultes"
+                />
             </template>
 
             <Container class="mt-24 text-center" v-else>
@@ -90,6 +93,7 @@ import { mapGetters } from "vuex";
 import Layout from "#src/js/components/Layout.vue";
 import SearchInput from "#src/js/components/SearchInput.vue";
 import ENV from "#src/env.js";
+import routeToTown from "#src/js/utils/routeToTown";
 
 export default {
     components: {
@@ -128,7 +132,7 @@ export default {
         },
         onSearch(town) {
             setTimeout(() => {
-                this.$router.push(`/site/${town.id}`);
+                routeToTown(town.id, "recherche");
             }, 100);
         },
         redirectToWebapp() {

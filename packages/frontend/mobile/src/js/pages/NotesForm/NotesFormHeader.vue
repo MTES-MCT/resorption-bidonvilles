@@ -51,8 +51,9 @@
                     :key="publication.shantytown"
                     class="text-primary ml-6"
                     @click="
-                        $router.push(
-                            `/site/${publication.shantytown.shantytownId}`
+                        routeToTown(
+                            publication.shantytown.shantytownId,
+                            'note_publications'
                         )
                     "
                 >
@@ -66,6 +67,7 @@
 <script>
 import { Button } from "@resorptionbidonvilles/ui";
 import Container from "#src/js/components/Container.vue";
+import routeToTown from "#src/js/utils/routeToTown";
 
 export default {
     components: {
@@ -88,6 +90,9 @@ export default {
         return {
             showTowns: false,
         };
+    },
+    methods: {
+        routeToTown,
     },
 };
 </script>
