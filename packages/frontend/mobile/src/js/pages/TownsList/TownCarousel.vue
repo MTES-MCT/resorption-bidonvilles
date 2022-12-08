@@ -15,10 +15,15 @@
 </template>
 <script>
 import Container from "#src/js/components/Container.vue";
+import routeToTown from "#src/js/utils/routeToTown";
 import TownCard from "./TownCard.vue";
 
 export default {
     props: {
+        id: {
+            type: String,
+            required: true,
+        },
         towns: {
             type: Array,
             required: true,
@@ -28,7 +33,7 @@ export default {
     components: { Container, TownCard },
     methods: {
         showTownPage(town) {
-            this.$router.push(`/site/${town.id}`);
+            routeToTown(town.id, this.id);
         },
     },
 };
