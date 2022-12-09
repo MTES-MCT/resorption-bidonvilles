@@ -29,7 +29,7 @@ function makeNullableIfEdit(s, mode) {
 export default function (mode = "create") {
     const userStore = useUserStore();
 
-    const schema = object({
+    const schema = {
         address: object().required().label(labels.address),
         name: string().nullable().label(labels.name),
         built_at: date()
@@ -199,7 +199,7 @@ export default function (mode = "create") {
                   bailiff: string().label(labels.bailiff),
               }
             : {}),
-    });
+    };
 
     if (mode === "edit") {
         schema.update_to_date = number()
@@ -307,5 +307,5 @@ export default function (mode = "create") {
         mode
     );
 
-    return schema;
+    return object(schema);
 }
