@@ -12,7 +12,15 @@ function emptyStringToNull(value, originalValue) {
 
 function makeNullableIfEdit(s, mode) {
     if (mode === "edit") {
-        return s.nullable();
+        return s.when("living_conditions_version", {
+            is: 2,
+            then: (s2) => {
+                return s2.required();
+            },
+            otherwise: (s2) => {
+                return s2.nullable();
+            },
+        });
     }
 
     return s.required();

@@ -227,13 +227,10 @@ function formatValuesForApi(v) {
     }
 
     return {
-        ...Object.keys(validationSchema.getDefaultFromShape()).reduce(
-            (acc, key) => {
-                acc[key] = v[key];
-                return acc;
-            },
-            {}
-        ),
+        ...Object.keys(validationSchema.fields).reduce((acc, key) => {
+            acc[key] = v[key];
+            return acc;
+        }, {}),
         ...{
             living_conditions_version: v.living_conditions_version || 2,
             built_at: formatFormDate(v.built_at),
