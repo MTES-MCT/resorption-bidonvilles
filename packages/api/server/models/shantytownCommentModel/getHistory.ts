@@ -234,7 +234,7 @@ export default async (user, location, numberOfActivities, lastDate, maxDate) => 
 
             comment: serializeComment({
                 ...activity,
-                tags: commentTags[activity.commentId],
+                tags: commentTags[activity.commentId] || [],
             }),
         }));
 };
