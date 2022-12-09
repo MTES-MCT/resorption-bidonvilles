@@ -75,7 +75,7 @@
     "eslint-config-airbnb-typescript": "^17.0.0",
     "husky": "^1.2.0",
     "lint-staged": "^11.0.0",
-    "mocha": "^6.0.2",
+    "mocha": "^10.1.0",
     "proxyquire": "^2.1.0",
     "rewiremock": "^3.13.9",
     "sequelize-test-helpers": "^1.4.0",
