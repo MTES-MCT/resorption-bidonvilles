@@ -220,7 +220,11 @@ const config = {
 };
 
 function formatValuesForApi(v) {
-    const { citycode, label } = v.address.data;
+    let citycode = null;
+    let label = null;
+    if (v.address?.data) {
+        ({ citycode, label } = v.address.data);
+    }
 
     return {
         ...Object.keys(validationSchema.getDefaultFromShape()).reduce(

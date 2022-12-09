@@ -35,6 +35,10 @@ export default [
         .exists({ checkNull: true }).bail().withMessage('Le champ "Date de signalement du site" est obligatoire')
         .isDate().bail().withMessage('Le champ "Date de la fermeture du site" est invalide')
         .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
         .custom((value, { req }) => {
             const today = new Date();
             today.setHours(0, 0, 0, 0);

@@ -67,6 +67,6 @@ export default async (id) => {
 
     return serializeComment({
         ...comments[0],
-        tags: commentTags[id],
+        tags: commentTags[id] || [],
     });
 };

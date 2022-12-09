@@ -10,6 +10,10 @@ export default (variant) => {
     };
 
     if (variant === "declare") {
+        const maxClosedAt = new Date();
+        maxClosedAt.setDate(maxClosedAt.getDate() + 1);
+        maxClosedAt.setHours(0, 0, 0, 0);
+
         schema.closed_at = date()
             .typeError(`${labels.closed_at} est obligatoire`)
             .required()
@@ -17,9 +21,13 @@ export default (variant) => {
             .label(labels.closed_at);
         schema.status = string()
             .required()
-            .oneOf(closingReasons.map(({ value }) => value))
+            .oneOf(
+                closingReasons.map(({ value }) => value),
+                `${labels.status} est obligatoire`
+            )
             .label(labels.status);
         schema.closing_context = string()
+            .typeError(`${labels.closing_context} est obligatoire`)
             .required()
             .label(labels.closing_context);
         schema.solutions = array()
