@@ -27,6 +27,7 @@ import mePostNavigationLogs from './me/post.navigationLogs';
 import findUserTowns from './findUserTowns';
 import createNote from './note/create';
 import publishNote from './note/publish';
+import createQuestion from './question/create';
 
 export default {
     closeTown,
@@ -70,6 +71,9 @@ export default {
     note: {
         createNote,
         publishNote,
+    },
+    question: {
+        createQuestion,
     },
     setUserAdminComments,
     editOrganization,
