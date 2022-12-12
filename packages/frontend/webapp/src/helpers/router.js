@@ -159,6 +159,15 @@ const router = createRouter({
             },
         },
         {
+            path: "/communaute/nouvelle-question",
+            component: () =>
+                import("@/views/NouvelleQuestionCommunauteView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "communaute",
+            },
+        },
+        {
             path: "/connexion",
             component: () => import("@/views/ConnexionView.vue"),
             meta: {

@@ -1,0 +1,36 @@
+<template>
+    <LayoutForm size="large">
+        <template v-slot:title>Poser une question à la communauté</template>
+
+        <template v-slot:buttons>
+            <Button variant="primaryOutline" type="button" @click="back"
+                >Annuler</Button
+            >
+            <Button @click="submit">Publier</Button>
+        </template>
+
+        <ContentWrapper size="large">
+            <FormNouvelleQuestion ref="form" />
+        </ContentWrapper>
+    </LayoutForm>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import router from "@/helpers/router";
+
+import { Button } from "@resorptionbidonvilles/ui";
+import LayoutForm from "@/components/LayoutForm/LayoutForm.vue";
+import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import FormNouvelleQuestion from "@/components/FormNouvelleQuestion/FormNouvelleQuestion.vue";
+
+const form = ref(null);
+
+function submit(...args) {
+    return form.value.submit(...args);
+}
+
+function back() {
+    router.back();
+}
+</script>
