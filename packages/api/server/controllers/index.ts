@@ -6,6 +6,8 @@ import actionExportComments from './actionController/exportComments';
 import actionFetchOne from './actionController/fetchOne';
 import actionList from './actionController/list';
 import actionUpdate from './actionController/update';
+// communaute
+import createQuestion from './questionController/create';
 // config
 import configList from './configController/list';
 // contact
@@ -126,6 +128,9 @@ export default () => ({
     },
     poi: {
         findAll: poiFindAll,
+    },
+    question: {
+        create: createQuestion,
     },
     shantytownComment: {
         create: createShantytownComment,
