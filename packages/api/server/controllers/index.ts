@@ -1,3 +1,5 @@
+// communaute
+import createQuestion from './questionController/create';
 // config
 import configList from './configController/list';
 // contact
@@ -140,6 +142,9 @@ export default () => ({
     },
     poi: {
         findAll: poiFindAll,
+    },
+    question: {
+        create: createQuestion,
     },
     shantytownComment: {
         create: createShantytownComment,
