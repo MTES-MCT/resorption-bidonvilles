@@ -101,6 +101,15 @@ export default (app) => {
         middlewares.validation,
         controllers.userNavigationLogs.insert,
     );
+    app.post(
+        '/questions',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.question.createQuestion,
+        middlewares.validation,
+        controllers.question.create,
+    );
     app.get(
         '/users/:id',
         middlewares.auth.authenticate,
