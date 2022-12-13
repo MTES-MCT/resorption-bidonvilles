@@ -62,10 +62,6 @@ module.exports = {
                     uid: 'safety',
                     name: 'Stabilisation et sécurisation du site',
                 },
-                {
-                    uid: 'other',
-                    name: 'Autre',
-                },
             ],
             {
                 transaction,

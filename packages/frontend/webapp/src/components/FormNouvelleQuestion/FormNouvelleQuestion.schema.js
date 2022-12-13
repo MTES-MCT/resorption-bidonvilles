@@ -10,6 +10,7 @@ export default object({
         .of(
             string().oneOf([
                 ...configStore.config.question_tags.map(({ uid }) => uid),
+                "other",
             ])
         )
         .label(labels.tags),

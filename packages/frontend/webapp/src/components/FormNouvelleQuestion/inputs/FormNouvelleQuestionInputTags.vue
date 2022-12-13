@@ -19,6 +19,9 @@ import labels from "../FormNouvelleQuestion.labels";
 
 const configStore = useConfigStore();
 const items = computed(() => {
-    return configStore.config.question_tags;
+    return [
+        ...configStore.config.question_tags,
+        { uid: "other", name: "Autre" },
+    ];
 });
 </script>
