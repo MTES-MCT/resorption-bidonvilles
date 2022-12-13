@@ -4,6 +4,8 @@ export default question => Object.assign(
         question: question.question,
         details: question.details,
         peopleAffected: question.peopleAffected,
+        tags: question.tags,
+        other_tag: question.other_tags,
         createdAt: question.questionCreatedAt !== null ? (question.questionCreatedAt.getTime() / 1000) : null,
         updatedAt: question.questionUpdatedAt !== null ? (question.questionUpdatedAt.getTime() / 1000) : null,
         solvedAt: question.questionSolvedAt !== null ? (question.questionSolvedAt.getTime() / 1000) : null,
