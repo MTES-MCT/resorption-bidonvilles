@@ -64,14 +64,16 @@ export default async (req, res, next) => {
                     OR
                     ${generateWhere('users.last_name', atoms.length)}
                 )
+                ${departement !== null ? `
                 AND
-                    (
-                        localized_organizations.location_type = 'nation'
-                        OR (localized_organizations.location_type = 'region' AND localized_organizations.region_code = ?)
-                        OR localized_organizations.departement_code = ?
-                    )`,
+                (
+                    localized_organizations.location_type = 'nation'
+                    OR (localized_organizations.location_type = 'region' AND localized_organizations.region_code = '${departement.region.code}')
+                    OR localized_organizations.departement_code = '${departementCode}'
+                )` : ''}
+                    `,
             {
-                replacements: [...queryAtoms, ...queryAtoms, departement.region.code, departementCode],
+                replacements: [...queryAtoms, ...queryAtoms],
                 type: QueryTypes.SELECT,
             },
         );
@@ -109,14 +111,15 @@ export default async (req, res, next) => {
                     OR
                     ${generateWhere('localized_organizations.abbreviation', atoms.length)}
                 )
+                ${departement !== null ? `
                 AND
-                    (
-                        localized_organizations.location_type = 'nation'
-                        OR (localized_organizations.location_type = 'region' AND localized_organizations.region_code = ?)
-                        OR localized_organizations.departement_code = ?
-                    )`,
+                (
+                    localized_organizations.location_type = 'nation'
+                    OR (localized_organizations.location_type = 'region' AND localized_organizations.region_code = '${departement.region.code}')
+                    OR localized_organizations.departement_code = '${departementCode}'
+                )` : ''}`,
             {
-                replacements: [...queryAtoms, ...queryAtoms, departement.region.code, departementCode],
+                replacements: [...queryAtoms, ...queryAtoms],
                 type: QueryTypes.SELECT,
             },
         );
