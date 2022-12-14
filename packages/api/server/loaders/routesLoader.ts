@@ -111,6 +111,20 @@ export default (app) => {
         controllers.question.create,
     );
     app.get(
+        '/questions',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.question.list,
+    );
+    app.get(
+        '/questions/:id',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.question.fetch,
+    );
+    app.get(
         '/users/:id',
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.read'], ...args),
