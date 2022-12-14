@@ -152,6 +152,14 @@ const router = createRouter({
             },
         },
         {
+            path: "/communaute/:id",
+            component: () => import("@/views/FicheQuestionView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "communaute",
+            },
+        },
+        {
             path: "/connexion",
             component: () => import("@/views/ConnexionView.vue"),
             meta: {
