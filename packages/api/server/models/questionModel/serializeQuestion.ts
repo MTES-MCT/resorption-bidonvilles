@@ -1,6 +1,6 @@
 export default question => Object.assign(
     {
-        id: question.commentId,
+        id: question.questionId,
         question: question.question,
         details: question.details,
         peopleAffected: question.peopleAffected,
