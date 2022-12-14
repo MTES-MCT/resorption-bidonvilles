@@ -1,4 +1,6 @@
 // communaute
+import questionFetch from './questionController/fetch';
+import questionList from './questionController/list';
 import createQuestion from './questionController/create';
 // config
 import configList from './configController/list';
@@ -145,6 +147,9 @@ export default () => ({
     },
     question: {
         create: createQuestion,
+        fetch: questionFetch,
+        list: questionList,
+
     },
     shantytownComment: {
         create: createShantytownComment,
