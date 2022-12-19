@@ -23,7 +23,7 @@ const note = {
     created_at: (new Date()).toString(),
 };
 
-describe.only('services/note', () => {
+describe('services/note', () => {
     describe('create()', () => {
         let stub;
         beforeEach(() => {
