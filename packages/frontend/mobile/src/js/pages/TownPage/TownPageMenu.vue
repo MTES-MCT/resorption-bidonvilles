@@ -16,17 +16,11 @@
 </template>
 
 <script>
-import menu from "./TownPage.menu";
-
 import TownPageMenuItem from "./TownPageMenuItem.vue";
 
 export default {
-    data() {
-        return {
-            menu,
-        };
-    },
     props: {
+        menu: { type: Object },
         currentSection: { type: String },
     },
     components: {

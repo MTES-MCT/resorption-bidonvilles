@@ -36,6 +36,7 @@
                     </div>
 
                     <TownPageMenu
+                        :menu="userMenu"
                         :currentSection="currentSection"
                         @changeSection="changeSection"
                     />
@@ -55,7 +56,11 @@
                         :town="town"
                     />
 
-                    <TownPagePanelJudicial id="judicial" :town="town" />
+                    <TownPagePanelJudicial
+                        v-if="hasJusticePermission"
+                        id="judicial"
+                        :town="town"
+                    />
 
                     <TownPagePanelActors
                         id="actors"
@@ -126,6 +131,22 @@ export default {
         ...mapGetters({
             state: "townsState",
         }),
+        hasJusticePermission() {
+            return (
+                this.$store.getters["config/hasLocalizedPermission"](
+                    "shantytown_justice.access",
+                    this.town
+                ) === true
+            );
+        },
+        userMenu() {
+            return menu.filter((item) => {
+                if (item.id === "judicial" && !this.hasJusticePermission) {
+                    return false;
+                }
+                return true;
+            });
+        },
     },
     async mounted() {
         const townId = parseInt(this.$route.params.id, 10);
