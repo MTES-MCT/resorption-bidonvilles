@@ -1,8 +1,17 @@
 <template>
-    <div class="bg-yellow-200 flex flex-row p-5">
-        <Checkbox :value="true" :name="name" variant="checkbox">
+    <div class="bg-yellow-200 flex flex-row p-5 items-center">
+        <div>
+            <Checkbox
+                class="px-5"
+                :value="true"
+                :name="name"
+                variant="checkbox"
+            >
+            </Checkbox>
+        </div>
+        <div>
             <slot />
-        </Checkbox>
+        </div>
     </div>
 </template>
 
