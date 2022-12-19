@@ -2,10 +2,30 @@ import moment from 'moment';
 
 export default (towns, connectedUsers, listOfDates) => {
     const date2019 = new Date('2019-01-01T00:00:00');
+    // connectedUsers ne contient pas les semaines sans utilisateur connecté, on les remplit donc ici
+    const filledConnectedUsers = [];
+    let index = 0;
+    for (let compteur = 0; compteur < connectedUsers.length; compteur += 1) {
+        if (connectedUsers[index].week === compteur) {
+            filledConnectedUsers.push(connectedUsers[index]);
+            index += 1;
+        } else {
+            const begginingOfWeek = new Date();
+            const endOfWeek = new Date();
+            begginingOfWeek.setDate(begginingOfWeek.getDate() - 7 * (compteur + 1));
+            endOfWeek.setDate(endOfWeek.getDate() - 1 - 7 * compteur);
+            filledConnectedUsers.push({
+                count: '0',
+                week: compteur,
+                date_debut: moment(begginingOfWeek).format('DD/MM'),
+                date_fin: moment(endOfWeek).format('DD/MM'),
+            });
+        }
+    }
 
     const connectedUserStats = {
         evolution: 0,
-        data: connectedUsers.reverse().map(connectedUser => ({
+        data: filledConnectedUsers.reverse().map(connectedUser => ({
             figure: connectedUser.count,
             formatedDateFrom: connectedUser.date_debut,
             formatedDate: connectedUser.date_fin,
