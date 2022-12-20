@@ -11,7 +11,12 @@ export default [
         .trim()
         .notEmpty().withMessage('Le détail de la question est obligatoire'),
     body('people_affected')
-        .isNumeric().withMessage('Le nombre d\'habitants concernés doit être un nombre'),
+        .optional({ nullable: true })
+        .toInt()
+        .isInt().bail().withMessage('Le nombre d\'habitants concernés doit être un nombre entier')
+        .isInt({ min: 0 }).withMessage('Le nombre d\'habitants concernés ne peut pas être négatif'),
+    body('people_affected')
+        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
     body('other_tag')
         .customSanitizer((value) => {
             if (value === undefined) {
