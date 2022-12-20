@@ -136,6 +136,14 @@ const router = createRouter({
         },
         {
             path: "/communaute",
+            component: () => import("@/views/ListeDesQuestionsView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "communaute",
+            },
+        },
+        {
+            path: "/annuaire",
             component: () => import("@/views/AnnuaireView.vue"),
             meta: {
                 authRequirement: "signedIn",
@@ -353,6 +361,14 @@ const router = createRouter({
             meta: {
                 authRequirement: "signedIn",
                 navTab: "administration",
+            },
+        },
+        {
+            path: "/liste-des-questions",
+            component: () => import("@/views/ListeDesQuestionsView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "communaute",
             },
         },
 
