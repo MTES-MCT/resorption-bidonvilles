@@ -1,11 +1,9 @@
 import create from './create';
 import findOne from './findOne';
 import findAll from './findAll';
-import serializeQuestion from './serializeQuestion';
 
 export default {
     create,
     findOne,
     findAll,
-    serializeQuestion,
 };
