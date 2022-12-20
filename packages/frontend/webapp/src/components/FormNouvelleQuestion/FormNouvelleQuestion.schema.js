@@ -15,6 +15,6 @@ export default object({
         )
         .label(labels.tags),
     other_tag: string().label(labels.other_tag),
-    people_affected: number().label(labels.people_affected),
+    people_affected: number().nullable().min(0).label(labels.people_affected),
     details: string().required().label(labels.details),
 });
