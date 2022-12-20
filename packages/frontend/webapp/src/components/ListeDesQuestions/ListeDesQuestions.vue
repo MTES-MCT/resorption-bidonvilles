@@ -1,7 +1,6 @@
 <template>
     <ContentWrapper>
-        <ListeQuestionHeader />
-        {{ questionsList }}
+        <ListeDesQuestionsHeader />
         <Loading class="py-28" v-if="isLoading !== false" />
         <ViewError v-else-if="error">
             <template v-slot:title>Échec de la collecte des données</template>
@@ -51,7 +50,7 @@ import { Button } from "@resorptionbidonvilles/ui";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import Loading from "@/components/Loading/Loading.vue";
-import ListeQuestionHeader from "./ListeQuestionHeader.vue";
+import ListeDesQuestionsHeader from "./ListeDesQuestionsHeader.vue";
 import ListeDesQuestionsVide from "./ListeDesQuestionsVide.vue";
 import ViewError from "@/components/ViewError/ViewError.vue";
 import { BottomPagination } from "@resorptionbidonvilles/ui";
