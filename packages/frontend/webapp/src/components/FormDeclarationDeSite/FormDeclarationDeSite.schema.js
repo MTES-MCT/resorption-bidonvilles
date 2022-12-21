@@ -243,7 +243,7 @@ export default function (mode = "create") {
     schema.water_access_is_unequal_details = string()
         .nullable()
         .when("water_access_is_unequal", {
-            is: 0,
+            is: 1,
             then: (schema) => schema.required(),
         })
         .label(labels.water_access_is_unequal_details);
