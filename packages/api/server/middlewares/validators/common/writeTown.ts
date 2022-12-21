@@ -169,6 +169,10 @@ export default mode => ([
         .optional({ nullable: true })
         .isDate().bail().withMessage('Le champ "Date d\'installation du site" est invalide')
         .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
         .custom((value) => {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
