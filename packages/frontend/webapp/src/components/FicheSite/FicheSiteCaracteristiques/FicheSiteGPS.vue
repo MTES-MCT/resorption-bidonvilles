@@ -4,7 +4,7 @@
 
         <p>Lat {{ town.latitude }}, Long {{ town.longitude }}</p>
         <ButtonCopy
-            :value="`${this.town.latitude},${this.town.longitude}`"
+            :value="`${town.latitude},${town.longitude}`"
             @copied="notifyCopy"
             >Copier</ButtonCopy
         >
