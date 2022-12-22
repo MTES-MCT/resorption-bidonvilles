@@ -208,10 +208,14 @@ export const useTownsStore = defineStore("towns", () => {
             isLoading.value = false;
         },
         async fetchTown(townId) {
-            return enrichShantytown(
+            const town = enrichShantytown(
                 await fetch(townId),
                 configStore.config.field_types
             );
+            if (!hash.value[town.id]) {
+                hash.value[town.id] = town;
+            }
+            return town;
         },
         setTown,
         async destroy(townId) {
