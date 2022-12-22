@@ -104,7 +104,7 @@ const sections = [
         icon: "housing",
     },
     {
-        title: "Baraques",
+        title: "Habitats autoconstruits",
         data: "huts",
     },
 ];
