@@ -123,13 +123,15 @@ function checkOrigin(shantytown, filters) {
         return false;
     }
 
-    if (!shantytown.socialOrigins.length && filters.includes(null)) {
+    if (!shantytown.socialOrigins.length && filters.includes("null")) {
         return true;
     }
 
     const origins = shantytown.socialOrigins.map((origin) => origin.id);
 
-    const filteredArray = origins.filter((value) => filters.includes(value));
+    const filteredArray = origins.filter((value) =>
+        filters.includes(value.toString())
+    );
 
     return filteredArray.length;
 }
@@ -163,7 +165,7 @@ function checkLocation(shantytown, filters) {
  *
  */
 function checkFieldType(shantytown, filters) {
-    return filters.indexOf(shantytown.fieldType.id) !== -1;
+    return filters.indexOf(shantytown.fieldType.id.toString()) !== -1;
 }
 
 /**
