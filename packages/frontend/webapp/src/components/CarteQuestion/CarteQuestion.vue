@@ -5,7 +5,18 @@
     >
         <div class="content">
             <CarteQuestionQuestion :question="question.question" />
-            <CarteQuestionAuteurOrganisation :auteur="question.createdBy" />
+            <div class="flex justify-between">
+                <CarteQuestionAuteurOrganisation :auteur="question.createdBy" />
+                <div>
+                    <Tag
+                        variant="primary"
+                        v-for="tag in question.tags"
+                        :key="tag"
+                    >
+                        {{ tag }}
+                    </Tag>
+                </div>
+            </div>
 
             <p class="whitespace-pre-line mt-4">
                 <template v-if="showAll">{{ question.details }}</template>
@@ -29,7 +40,7 @@ import router from "@/helpers/router";
 import CarteQuestionQuestion from "./CarteQuestionQuestion.vue";
 import CarteQuestionAuteurOrganisation from "./CarteQuestionAuteurOrganisation.vue";
 import CarteQuestionFooter from "./CarteQuestionFooter.vue";
-import { Link } from "@resorptionbidonvilles/ui";
+import { Link, Tag } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     question: {
