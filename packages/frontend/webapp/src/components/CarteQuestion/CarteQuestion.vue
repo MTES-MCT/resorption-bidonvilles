@@ -1,12 +1,18 @@
 <template>
-    <div
+    <RouterLink
         class="container rounded border-1 border-blue300 px-4 pb-4 cursor-pointer hover:bg-blue200 flex flex-col"
-        @click="routeToDetailedQuestion"
+        :to="`/question/${question.id}`"
     >
         <div class="content">
             <CarteQuestionQuestion :question="question.question" />
             <div class="flex justify-between">
-                <CarteQuestionAuteurOrganisation :auteur="question.createdBy" />
+                <LinkOrganization
+                    :to="`/structure/${question.createdBy.organization_id}`"
+                >
+                    {{ question.createdBy.first_name }}
+                    {{ question.createdBy.last_name }} -
+                    {{ question.createdBy.organization }}
+                </LinkOrganization>
                 <div>
                     <Tag
                         variant="primary"
@@ -30,17 +36,16 @@
             <main class="mb-4"></main>
             <CarteQuestionFooter :question="question" />
         </div>
-    </div>
+    </RouterLink>
 </template>
 
 <script setup>
 import { toRefs, ref } from "vue";
-import router from "@/helpers/router";
 
+import { RouterLink } from "vue-router";
 import CarteQuestionQuestion from "./CarteQuestionQuestion.vue";
-import CarteQuestionAuteurOrganisation from "./CarteQuestionAuteurOrganisation.vue";
 import CarteQuestionFooter from "./CarteQuestionFooter.vue";
-import { Link, Tag } from "@resorptionbidonvilles/ui";
+import { Link, Tag, LinkOrganization } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     question: {
@@ -50,8 +55,4 @@ const props = defineProps({
 });
 const { question } = toRefs(props);
 const showAll = ref(question.value.details.length < 300);
-
-function routeToDetailedQuestion() {
-    router.push(`/question/${question.value.id}`);
-}
 </script>
