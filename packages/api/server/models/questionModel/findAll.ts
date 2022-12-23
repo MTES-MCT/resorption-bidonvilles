@@ -53,7 +53,7 @@ export default async () => {
     );
 
     if (rows.length !== 1) {
-        return null;
+        return [];
     }
 
     return rows.map(question => serializeQuestion(question));
