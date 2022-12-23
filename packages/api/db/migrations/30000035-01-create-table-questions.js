@@ -3,9 +3,9 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
 
         await queryInterface.createTable(
-            'communaute_questions',
+            'questions',
             {
-                communaute_question_id: {
+                question_id: {
                     type: Sequelize.INTEGER,
                     allowNull: false,
                     primaryKey: true,
@@ -51,10 +51,10 @@ module.exports = {
             { transaction },
         );
 
-        await queryInterface.addConstraint('communaute_questions', {
+        await queryInterface.addConstraint('questions', {
             fields: ['created_by'],
             type: 'foreign key',
-            name: 'fk_communaute_question_creator',
+            name: 'fk_question_creator',
             references: {
                 table: 'users',
                 field: 'user_id',
@@ -71,12 +71,12 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
 
         await queryInterface.removeConstraint(
-            'communaute_questions',
-            'fk_communaute_question_creator',
+            'questions',
+            'fk_question_creator',
             { transaction },
         );
 
-        await queryInterface.dropTable('communaute_questions', { transaction });
+        await queryInterface.dropTable('questions', { transaction });
 
         return transaction.commit();
     },

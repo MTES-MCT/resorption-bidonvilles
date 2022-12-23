@@ -4,8 +4,8 @@ import { sequelize } from '#db/sequelize';
 export default async (data) => {
     const transaction = await sequelize.transaction();
 
-    const [[{ communaute_question_id }]]: any = await sequelize.query(
-        `INSERT INTO communaute_questions(
+    const [[{ question_id }]]: any = await sequelize.query(
+        `INSERT INTO questions(
             question,
             details,
             people_affected,
@@ -19,7 +19,7 @@ export default async (data) => {
             :other_tags,
             :created_by
         )
-        RETURNING communaute_question_id`,
+        RETURNING question_id`,
         {
             replacements: data,
             transaction,
@@ -27,17 +27,17 @@ export default async (data) => {
     );
 
     await Promise.all(data.tags.map(tag => sequelize.query(
-        `INSERT INTO communaute_question_to_tags(
+        `INSERT INTO question_to_tags(
             fk_question,
             fk_question_tag
         )
         VALUES (
-            :communaute_question_id,
+            :question_id,
             :tag
         )`,
         {
             replacements: {
-                communaute_question_id,
+                question_id,
                 tag,
             },
             transaction,
@@ -46,5 +46,5 @@ export default async (data) => {
 
     await transaction.commit();
 
-    return communaute_question_id;
+    return question_id;
 };
