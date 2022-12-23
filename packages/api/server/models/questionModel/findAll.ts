@@ -56,5 +56,5 @@ export default async () => {
         return null;
     }
 
-    return rows[0].map(question => serializeQuestion(question));
+    return rows.map(question => serializeQuestion(question));
 };
