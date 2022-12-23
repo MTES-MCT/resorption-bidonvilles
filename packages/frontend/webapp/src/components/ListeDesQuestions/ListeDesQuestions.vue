@@ -42,7 +42,6 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
 import { useQuestionsStore } from "@/stores/questions.store";
 import CarteQuestion from "@/components/CarteQuestion/CarteQuestion.vue";
 
@@ -56,17 +55,6 @@ import ViewError from "@/components/ViewError/ViewError.vue";
 import { BottomPagination } from "@resorptionbidonvilles/ui";
 
 const questionsStore = useQuestionsStore();
-
-onMounted(() => {
-    if (questionsStore.questions.length === 0) {
-        load();
-    }
-});
-
-async function load() {
-    await questionsStore.fetchQuestions();
-    questionsStore.currentPage.index = 1;
-}
 
 function changePage(page) {
     questionsStore.currentPage.index = page;
