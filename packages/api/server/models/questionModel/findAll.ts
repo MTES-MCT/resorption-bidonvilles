@@ -5,21 +5,21 @@ import serializeQuestion from './serializeQuestion';
 export default async () => {
     const rows:any = await sequelize.query(
         `
-        WITH aggregate_communaute_question_tags AS (
+        WITH aggregate_question_tags AS (
             SELECT 
-                cq.communaute_question_id AS id,
+                cq.question_id AS id,
                 ARRAY_AGG(cqt.name) AS tags
             FROM 
-                communaute_questions cq
+                questions cq
             LEFT JOIN
-                communaute_question_to_tags cqtt ON cqtt.fk_question = cq.communaute_question_id
+                question_to_tags cqtt ON cqtt.fk_question = cq.question_id
             LEFT JOIN
-                communaute_question_tags cqt ON cqt.uid = cqtt.fk_question_tag
+                question_tags cqt ON cqt.uid = cqtt.fk_question_tag
             GROUP BY 
-                cq.communaute_question_id
+                cq.question_id
         )
         SELECT
-            cq.communaute_question_id AS "questionId",
+            cq.question_id AS "questionId",
             cq.question AS "question",
             cq.details AS "details",
             cq.people_affected AS "peopleAffected",
@@ -38,9 +38,9 @@ export default async () => {
             o.name AS "organizationName",
             o.abbreviation AS "organizationAbbreviation"
         FROM
-            communaute_questions cq
+            questions cq
         LEFT JOIN 
-            aggregate_communaute_question_tags acqt ON acqt.id = cq.communaute_question_id
+            aggregate_question_tags acqt ON acqt.id = cq.question_id
         LEFT JOIN
             users u ON cq.created_by = u.user_id
         LEFT JOIN
