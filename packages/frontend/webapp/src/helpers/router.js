@@ -123,13 +123,9 @@ const router = createRouter({
             },
         },
         {
-            path: "/annuaire/:id?",
+            path: "/annuaire/:id",
             redirect(to) {
-                if (to.params.id) {
-                    return `/structure/${to.params.id}`;
-                }
-
-                return "/communaute";
+                return `/structure/${to.params.id}`;
             },
         },
         {
