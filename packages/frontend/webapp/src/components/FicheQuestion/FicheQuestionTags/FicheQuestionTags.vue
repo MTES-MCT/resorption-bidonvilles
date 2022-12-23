@@ -2,9 +2,6 @@
     <Tag variant="primary" v-for="tag in question.tags" :key="tag">
         {{ tag }}
     </Tag>
-    <Tag variant="primary" v-if="question.other_tag">
-        {{ question.other_tag }}</Tag
-    >
 </template>
 
 <script setup>
