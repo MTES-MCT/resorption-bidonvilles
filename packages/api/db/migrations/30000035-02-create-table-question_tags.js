@@ -2,7 +2,7 @@ module.exports = {
     async up(queryInterface, Sequelize) {
         const transaction = await queryInterface.sequelize.transaction();
         await queryInterface.createTable(
-            'communaute_question_tags',
+            'question_tags',
             {
                 uid: {
                     type: Sequelize.STRING,
@@ -31,16 +31,16 @@ module.exports = {
         );
 
         await queryInterface.addConstraint(
-            'communaute_question_tags', {
+            'question_tags', {
                 fields: ['name'],
                 type: 'unique',
-                name: 'uk_communaute_question_tags_name',
+                name: 'uk_question_tags_name',
                 transaction,
             },
         );
 
         await queryInterface.bulkInsert(
-            'communaute_question_tags',
+            'question_tags',
             [
                 {
                     uid: 'health',
@@ -73,11 +73,11 @@ module.exports = {
     async down(queryInterface) {
         const transaction = await queryInterface.sequelize.transaction();
         await queryInterface.removeConstraint(
-            'communaute_question_tags',
-            'uk_communaute_question_tags_name',
+            'question_tags',
+            'uk_question_tags_name',
             { transaction },
         );
-        await queryInterface.dropTable('communaute_question_tags', { transaction });
+        await queryInterface.dropTable('question_tags', { transaction });
         return transaction.commit();
     },
 };
