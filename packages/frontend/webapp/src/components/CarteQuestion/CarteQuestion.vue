@@ -24,6 +24,8 @@
 
 <script setup>
 import { toRefs, ref } from "vue";
+import router from "@/helpers/router";
+
 import CarteQuestionQuestion from "./CarteQuestionQuestion.vue";
 import CarteQuestionAuteurOrganisation from "./CarteQuestionAuteurOrganisation.vue";
 import CarteQuestionFooter from "./CarteQuestionFooter.vue";
@@ -37,4 +39,8 @@ const props = defineProps({
 });
 const { question } = toRefs(props);
 const showAll = ref(question.value.details.length < 300);
+
+function routeToDetailedQuestion() {
+    router.push(`/communaute/${question.value.id}`);
+}
 </script>
