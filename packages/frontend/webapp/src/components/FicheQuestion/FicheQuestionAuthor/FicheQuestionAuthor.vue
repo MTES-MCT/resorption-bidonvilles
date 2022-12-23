@@ -8,7 +8,10 @@
             </span>
         </aside>
         <section>
-            <p>{{ author.first_name }} {{ author.last_name }}</p>
+            <LinkOrganization :to="`/structure/${author.organization_id}`">
+                {{ author.first_name }}
+                {{ author.last_name }}
+            </LinkOrganization>
             <p class="italic text-G500">
                 {{ author.organization }}
             </p>
@@ -19,7 +22,7 @@
 <script setup>
 import { defineProps, toRefs } from "vue";
 
-import { Icon } from "@resorptionbidonvilles/ui";
+import { Icon, LinkOrganization } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     author: Object,
