@@ -52,7 +52,7 @@ export default async () => {
         },
     );
 
-    if (rows.length !== 1) {
+    if (!rows.length || rows.length === 0) {
         return [];
     }
 
