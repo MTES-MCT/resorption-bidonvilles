@@ -3,7 +3,7 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
 
         await queryInterface.createTable(
-            'communaute_question_to_tags',
+            'question_to_tags',
             {
                 fk_question: {
                     type: Sequelize.INTEGER,
@@ -29,13 +29,13 @@ module.exports = {
 
         await Promise.all([
             queryInterface.addConstraint(
-                'communaute_question_to_tags', {
+                'question_to_tags', {
                     fields: ['fk_question'],
                     type: 'foreign key',
-                    name: 'fk_question_communaute_question_to_tags',
+                    name: 'fk_question_question_to_tags',
                     references: {
-                        table: 'communaute_questions',
-                        field: 'communaute_question_id',
+                        table: 'questions',
+                        field: 'question_id',
                     },
                     onUpdate: 'cascade',
                     onDelete: 'cascade',
@@ -43,12 +43,12 @@ module.exports = {
                 },
             ),
             queryInterface.addConstraint(
-                'communaute_question_to_tags', {
+                'question_to_tags', {
                     fields: ['fk_question_tag'],
                     type: 'foreign key',
-                    name: 'fk_question_tag_communaute_question_to_tags',
+                    name: 'fk_question_tag_question_to_tags',
                     references: {
-                        table: 'communaute_question_tags',
+                        table: 'question_tags',
                         field: 'uid',
                     },
                     onUpdate: 'cascade',
@@ -66,21 +66,21 @@ module.exports = {
 
         await Promise.all([
             queryInterface.removeConstraint(
-                'communaute_question_to_tags',
-                'fk_question_communaute_question_to_tags',
+                'question_to_tags',
+                'fk_question_question_to_tags',
                 {
                     transaction,
                 },
             ),
             queryInterface.removeConstraint(
-                'communaute_question_to_tags',
-                'fk_question_tag_communaute_question_to_tags',
+                'question_to_tags',
+                'fk_question_tag_question_to_tags',
                 {
                     transaction,
                 },
             ),
         ]);
-        await queryInterface.dropTable('communaute_question_to_tags', { transaction });
+        await queryInterface.dropTable('question_to_tags', { transaction });
         return transaction.commit();
     },
 };
