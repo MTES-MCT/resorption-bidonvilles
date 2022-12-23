@@ -29,6 +29,12 @@ export default [
                 throw new Error('Le champ "Préciser votre thématique" ne peut être rempli que si la thématique Autre a été sélectionnée');
             }
             return true;
+        })
+        .custom((value, { req }) => {
+            if (value === null && req.body.tags.includes('other')) {
+                throw new Error('Le champ "Préciser votre thématique" ne peut être pas être vide  si la thématique Autre a été sélectionnée');
+            }
+            return true;
         }),
     body('tags')
         .customSanitizer((value) => {
