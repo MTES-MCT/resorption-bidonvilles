@@ -11,7 +11,7 @@ export default async (question, author) => {
             details: question.details,
             people_affected: question.people_affected,
             tags: question.tags,
-            other_tags: question.other_tag || null,
+            other_tag: question.other_tag || null,
             created_by: author.id,
         });
     } catch (error) {
