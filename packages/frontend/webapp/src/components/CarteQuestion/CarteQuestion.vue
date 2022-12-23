@@ -41,6 +41,6 @@ const { question } = toRefs(props);
 const showAll = ref(question.value.details.length < 300);
 
 function routeToDetailedQuestion() {
-    router.push(`/communaute/${question.value.id}`);
+    router.push(`/question/${question.value.id}`);
 }
 </script>
