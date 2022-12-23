@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, watch, computed } from "vue";
 import { useEventBus } from "@/helpers/event-bus";
-import { getQuestions } from "@/api/questions.api";
+import { getQuestions, fetch } from "@/api/questions.api";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -88,6 +88,13 @@ export const useQuestionsStore = defineStore("questions", () => {
         isLoading.value = false;
     }
 
+    async function fetchQuestion(questionId) {
+        if (!hash.value[questionId]) {
+            hash.value[questionId] = await fetch(questionId);
+        }
+        return hash.value[questionId];
+    }
+
     return {
         questions,
         isLoading,
@@ -102,14 +109,6 @@ export const useQuestionsStore = defineStore("questions", () => {
         }),
         total: computed(() => questions.value.length),
         fetchQuestions,
-        /*
-        async addAnswer(questionId, answer) {
-            const { answer: newAnswer } = await addAnswer(questionId, answer);
-
-            if (hash.value[questionId]) {
-                hash.value[questionId].answers.unshift(newAnswer);
-            }
-        },
-        */
+        fetchQuestion,
     };
 });
