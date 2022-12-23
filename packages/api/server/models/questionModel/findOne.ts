@@ -24,7 +24,7 @@ export default async (id) => {
             cq.details AS "details",
             cq.people_affected AS "peopleAffected",
             acqt.tags,
-            cq.other_tags,
+            cq.other_tag,
             cq.created_at AS "questionCreatedAt",
             cq.updated_at AS "questionUpdatedAt",
             cq.solved_at AS "questionSolvedAt",
