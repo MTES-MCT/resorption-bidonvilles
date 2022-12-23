@@ -29,7 +29,7 @@
 
 <script setup>
 import { onMounted, ref, computed, watch } from "vue";
-import { useCommunauteStore } from "@/stores/communaute.store.js";
+import { useQuestionsStore } from "@/stores/questions.store.js";
 import router from "@/helpers/router";
 
 import { Button } from "@resorptionbidonvilles/ui";
@@ -39,7 +39,7 @@ import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 import FicheQuestion from "@/components/FicheQuestion/FicheQuestion.vue";
 
-const communauteStore = useCommunauteStore();
+const questionsStore = useQuestionsStore();
 const isLoading = ref(null);
 const error = ref(null);
 const question = ref(null);
@@ -60,7 +60,7 @@ async function load() {
     error.value = null;
 
     try {
-        question.value = await communauteStore.fetchQuestion(questionId.value);
+        question.value = await questionsStore.fetchQuestion(questionId.value);
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
     }

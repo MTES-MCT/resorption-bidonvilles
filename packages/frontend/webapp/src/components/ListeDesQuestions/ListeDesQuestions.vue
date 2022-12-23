@@ -1,8 +1,8 @@
 <template>
     <ContentWrapper>
         <ListeDesQuestionsHeader />
-        <Loading class="py-28" v-if="isLoading !== false" />
-        <ViewError v-else-if="error">
+        <Loading class="py-28" v-if="questionsStore.isLoading !== false" />
+        <ViewError v-else-if="questionsStore.error">
             <template v-slot:title>Échec de la collecte des données</template>
             <template v-slot:code>{{ error }}</template>
             <template v-slot:content
@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { useQuestionsStore } from "@/stores/questions.store";
 import CarteQuestion from "@/components/CarteQuestion/CarteQuestion.vue";
 
@@ -56,31 +56,18 @@ import ViewError from "@/components/ViewError/ViewError.vue";
 import { BottomPagination } from "@resorptionbidonvilles/ui";
 
 const questionsStore = useQuestionsStore();
-const isLoading = ref(null);
-const error = ref(null);
 
-onMounted(load);
+onMounted(() => {
+    if (questionsStore.questions.length === 0) {
+        load();
+    }
+});
+
 async function load() {
-    if (questionsStore.loaded) {
-        isLoading.value = false;
-        return;
-    }
-
-    if (isLoading.value === true) {
-        return;
-    }
-
-    isLoading.value = true;
-    error.value = null;
-    try {
-        await questionsStore.fetchQuestions();
-        questionsStore.currentPage.index = 1;
-    } catch (e) {
-        error.value = e?.code || e?.user_message || "Erreur inconnue";
-    }
-
-    isLoading.value = false;
+    await questionsStore.fetchQuestions();
+    questionsStore.currentPage.index = 1;
 }
+
 function changePage(page) {
     questionsStore.currentPage.index = page;
 }
