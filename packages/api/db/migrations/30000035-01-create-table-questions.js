@@ -19,7 +19,7 @@ module.exports = {
                     type: Sequelize.TEXT,
                     allowNull: false, // false ou true ?
                 },
-                other_tags: {
+                other_tag: {
                     type: Sequelize.STRING,
                     allowNull: true,
                 },

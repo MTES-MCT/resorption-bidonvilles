@@ -9,14 +9,14 @@ export default async (data) => {
             question,
             details,
             people_affected,
-            other_tags,
+            other_tag,
             created_by
         )
         VALUES (
             :question,
             :details,
             :people_affected,
-            :other_tags,
+            :other_tag,
             :created_by
         )
         RETURNING question_id`,
