@@ -6,18 +6,22 @@
         showNationalWording="Voir tous les acteurs en France"
         v-model:search="search"
     >
-        <ListeDesActions />
+        <ListeDesQuestions />
     </LayoutCommunauteSearch>
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import router from "@/helpers/router";
+import { useQuestionsStore } from "@/stores/questions.store";
 import { useDirectoryStore } from "@/stores/directory.store";
 
 import LayoutCommunauteSearch from "@/components/LayoutCommunauteSearch/LayoutCommunauteSearch.vue";
+import ListeDesQuestions from "@/components/ListeDesQuestions/ListeDesQuestions.vue";
 
+const questionsStore = useQuestionsStore();
 const directoryStore = useDirectoryStore();
+
 const search = computed({
     get() {
         return {
@@ -40,4 +44,15 @@ const search = computed({
         }
     },
 });
+
+onMounted(() => {
+    if (questionsStore.questions.length === 0) {
+        load();
+    }
+});
+
+async function load() {
+    await questionsStore.fetchQuestions();
+    questionsStore.currentPage.index = 1;
+}
 </script>

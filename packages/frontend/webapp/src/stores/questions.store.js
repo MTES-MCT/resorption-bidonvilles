@@ -60,7 +60,7 @@ export const useQuestionsStore = defineStore("questions", () => {
     }
 
     const { bus } = useEventBus();
-    watch(() => bus.value.get("new-question"), reset);
+    watch(() => bus.value.get("new-user"), reset);
     reset();
 
     async function fetchQuestions() {
