@@ -107,7 +107,7 @@ import {
 } from "@resorptionbidonvilles/ui";
 import formatActivityDate from "@/utils/formatActivityDate";
 
-import ModaleModerationCommentaire from "./ModaleModerationCommentaire.vue";
+import ModaleModerationCommentaire from "@/components/ModaleModerationCommentaire/ModaleModerationCommentaire.vue";
 import CarteHistoriqueIcone from "./CarteHistoriqueIcone.vue";
 import CarteHistoriqueCommentaire from "./CarteHistoriqueCommentaire.vue";
 import CarteHistoriqueSite from "./CarteHistoriqueSite.vue";
