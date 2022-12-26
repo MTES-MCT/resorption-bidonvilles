@@ -75,7 +75,7 @@
     </div>
 </template>
 <script setup>
-import { defineProps, toRefs, ref, computed } from "vue";
+import { defineProps, defineEmits, toRefs, ref, computed } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 import { useUserStore } from "@/stores/user.store";
 import covidTagsList from "@/utils/covid_tags";
@@ -94,6 +94,8 @@ const props = defineProps({
         default: false,
     },
 });
+
+const emit = defineEmits(["moderate"]);
 
 const isHover = ref(false);
 const { comment, showActionIcons } = toRefs(props);
@@ -119,6 +121,6 @@ const canModerate = computed(() => {
 });
 
 function deleteMessage() {
-    // TODO
+    emit("moderate");
 }
 </script>

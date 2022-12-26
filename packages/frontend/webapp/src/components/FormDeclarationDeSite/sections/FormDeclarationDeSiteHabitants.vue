@@ -11,7 +11,7 @@
         </FormParagraph>
 
         <FormParagraph
-            title="Combien y a-t-il de caravanes et d'habitats auto-construits sur le site ?"
+            title="Combien y a-t-il de caravanes et d'habitats autoconstruits sur le site ?"
         >
             <InputCaravans />
         </FormParagraph>
