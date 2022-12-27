@@ -6,7 +6,7 @@ export default async (id) => {
     const rows = await sequelize.query(
         `
         SELECT
-            ca.communaute_answer_id AS "answerId",
+            ca.answer_id AS "answerId",
             ca.description AS "answerDescription",
             ca.fk_question AS "questionId",
             ca.created_at AS "answerCreatedAt",
@@ -20,7 +20,7 @@ export default async (id) => {
             o.name AS "organizationName",
             o.abbreviation AS "organizationAbbreviation"
         FROM
-            communaute_answers ca
+            answers ca
         LEFT JOIN
             users u ON ca.created_by = u.user_id
         LEFT JOIN
