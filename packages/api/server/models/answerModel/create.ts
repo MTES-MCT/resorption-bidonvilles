@@ -2,8 +2,8 @@ import { sequelize } from '#db/sequelize';
 
 
 export default async (data) => {
-    const [[{ communaute_answer_id }]]: any = await sequelize.query(
-        `INSERT INTO communaute_answers(
+    const [[{ answer_id }]]: any = await sequelize.query(
+        `INSERT INTO answers(
             description,
             fk_question,
             created_by
@@ -13,11 +13,11 @@ export default async (data) => {
             :fk_question,
             :created_by
         )
-        RETURNING communaute_answer_id`,
+        RETURNING answer_id`,
         {
             replacements: data,
         },
     );
 
-    return communaute_answer_id;
+    return answer_id;
 };
