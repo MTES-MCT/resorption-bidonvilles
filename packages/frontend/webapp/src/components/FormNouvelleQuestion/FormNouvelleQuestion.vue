@@ -1,7 +1,7 @@
 <template>
     <form>
         <FormParagraph :title="labels.question">
-            <FormNouvelleQuestionInputQuestion />
+            <FormNouvelleQuestionInputQuestion :question="question" />
         </FormParagraph>
         <FormParagraph :title="labels.tags">
             <FormNouvelleQuestionInputTags
@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref, defineExpose, computed } from "vue";
+import { ref, defineExpose, computed, toRefs } from "vue";
 import { useForm, useFieldValue } from "vee-validate";
 import schema from "./FormNouvelleQuestion.schema";
 import labels from "./FormNouvelleQuestion.labels";
@@ -47,6 +47,15 @@ const { handleSubmit, setErrors, errors } = useForm({
     initialValues: {},
 });
 
+const props = defineProps({
+    question: {
+        type: String,
+        required: false,
+        default: "",
+    },
+});
+
+const { question } = toRefs(props);
 const tags = useFieldValue("tags");
 
 const showOtherTag = computed(() => {
