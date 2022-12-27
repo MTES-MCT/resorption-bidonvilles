@@ -10,13 +10,13 @@
         </template>
 
         <ContentWrapper size="large">
-            <FormNouvelleQuestion ref="form" />
+            <FormNouvelleQuestion :question="question" ref="form" />
         </ContentWrapper>
     </LayoutForm>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import router from "@/helpers/router";
 
 import { Button } from "@resorptionbidonvilles/ui";
@@ -25,6 +25,10 @@ import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import FormNouvelleQuestion from "@/components/FormNouvelleQuestion/FormNouvelleQuestion.vue";
 
 const form = ref(null);
+
+const question = computed(() => {
+    return router.currentRoute.value.params.question;
+});
 
 function submit(...args) {
     return form.value.submit(...args);

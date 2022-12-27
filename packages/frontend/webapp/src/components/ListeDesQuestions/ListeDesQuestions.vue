@@ -1,5 +1,7 @@
 <template>
     <ContentWrapper>
+        <ListeDesQuestionsBanniere class="mb-8" />
+
         <ListeDesQuestionsHeader />
         <Loading class="py-28" v-if="questionsStore.isLoading !== false" />
         <ViewError v-else-if="questionsStore.error">
@@ -49,6 +51,7 @@ import { Button } from "@resorptionbidonvilles/ui";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import Loading from "@/components/Loading/Loading.vue";
+import ListeDesQuestionsBanniere from "./ListeDesQuestionsBanniere.vue";
 import ListeDesQuestionsHeader from "./ListeDesQuestionsHeader.vue";
 import ListeDesQuestionsVide from "./ListeDesQuestionsVide.vue";
 import ViewError from "@/components/ViewError/ViewError.vue";
