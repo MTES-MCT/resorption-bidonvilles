@@ -3,9 +3,9 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
 
         await queryInterface.createTable(
-            'communaute_answers',
+            'answers',
             {
-                communaute_answer_id: {
+                answer_id: {
                     type: Sequelize.INTEGER,
                     primaryKey: true,
                     autoIncrement: true,
@@ -36,22 +36,22 @@ module.exports = {
             },
         );
         await Promise.all([
-            queryInterface.addConstraint('communaute_answers', {
+            queryInterface.addConstraint('answers', {
                 fields: ['fk_question'],
                 type: 'foreign key',
-                name: 'fk_communaute_answers_question',
+                name: 'fk_answers_question',
                 references: {
-                    table: 'communaute_questions',
-                    field: 'communaute_question_id',
+                    table: 'questions',
+                    field: 'question_id',
                 },
                 onUpdate: 'cascade',
                 onDelete: 'cascade',
             }),
 
-            queryInterface.addConstraint('communaute_answers', {
+            queryInterface.addConstraint('answers', {
                 fields: ['created_by'],
                 type: 'foreign key',
-                name: 'fk_communaute_answer_creator',
+                name: 'fk_answer_creator',
                 references: {
                     table: 'users',
                     field: 'user_id',
@@ -68,11 +68,11 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
 
         await Promise.all([
-            queryInterface.removeConstraint('communaute_answers', 'fk_communaute_answers_question', { transaction }),
-            queryInterface.removeConstraint('communaute_answers', 'fk_communaute_answer_creator', { transaction }),
+            queryInterface.removeConstraint('answers', 'fk_answers_question', { transaction }),
+            queryInterface.removeConstraint('answers', 'fk_answer_creator', { transaction }),
         ]);
 
-        await queryInterface.dropTable('communaute_answers', { transaction });
+        await queryInterface.dropTable('answers', { transaction });
 
         await transaction.commit();
     },
