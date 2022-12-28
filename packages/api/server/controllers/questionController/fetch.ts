@@ -1,4 +1,4 @@
-import questionService from '#server/services/communauteQuestion';
+import questionService from '#server/services/question';
 
 const ERROR_RESPONSES = {
     fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
@@ -8,7 +8,7 @@ const ERROR_RESPONSES = {
 export default async (req, res, next) => {
     let question;
     try {
-        question = await questionService.find(req.params.id);
+        question = await questionService.findOne(req.params.id);
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({

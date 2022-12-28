@@ -1,14 +1,22 @@
-import questionModel from '#server/models/questionModel';
+import questionService from '#server/services/question';
 
-export default async (req, res) => {
+const ERROR_RESPONSES = {
+    fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
+    undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
+};
+
+export default async (req, res, next) => {
+    let questions;
     try {
-        const questions = await questionModel.findAll();
-        res.status(200).send(questions);
+        questions = await questionService.findAll();
     } catch (error) {
-        res.status(500).send({
+        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
+        res.status(code).send({
             error: {
-                user_message: 'Une erreur est survenue lors de la récupération des données en base',
+                user_message: message,
             },
         });
+        return next(error.nativeError || error);
     }
+    return res.status(200).send(questions);
 };
