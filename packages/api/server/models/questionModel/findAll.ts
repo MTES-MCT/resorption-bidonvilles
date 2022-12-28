@@ -46,7 +46,8 @@ export default async () => {
         LEFT JOIN
             organizations o ON u.fk_organization = o.organization_id
         LEFT JOIN
-            roles_regular rr ON u.fk_role_regular = rr.role_id`,
+            roles_regular rr ON u.fk_role_regular = rr.role_id
+        ORDER BY cq.created_at DESC`,
         {
             type: QueryTypes.SELECT,
         },
