@@ -11,3 +11,7 @@ export function fetch(id) {
 export function createQuestion(question) {
     return axios.post(`/questions`, question);
 }
+
+export function addAnswer(questionId, answer) {
+    return axios.post(`/questions/${encodeURI(questionId)}/answers`, answer);
+}
