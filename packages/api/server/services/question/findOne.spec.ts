@@ -4,17 +4,18 @@ import sinonChai from 'sinon-chai';
 
 import questionModel from '#server/models/questionModel';
 import ServiceError from '#server/errors/ServiceError';
-import findService from './find';
+import findService from './findOne';
 
 const { expect } = chai;
 chai.use(sinonChai);
 
 describe('services/question', () => {
-    describe('find()', () => {
+    describe('findOne()', () => {
         let stubs;
         beforeEach(() => {
             stubs = {
                 findOne: sinon.stub(questionModel, 'findOne'),
+                getAnswers: sinon.stub(questionModel, 'getAnswers'),
             };
         });
 
@@ -31,10 +32,21 @@ describe('services/question', () => {
                 tags: [],
                 other_tag: null,
             };
+            const answers = [
+                {
+                    id: 1,
+                    description: 'réponse test 1',
+                },
+                {
+                    id: 2,
+                    description: 'réponse test 2',
+                },
+            ];
             stubs.findOne.resolves(question);
+            stubs.getAnswers.resolves(answers);
             const response = await findService(1);
             expect(response).to.be.an('object');
-            expect(response).to.be.eql(question);
+            expect(response).to.be.eql({ ...question, answers });
         });
         it('renvoie une exception ServiceError \'fetch_failed\'  si la question n\'existe pas en bdd', async () => {
             stubs.findOne.resolves(null);
