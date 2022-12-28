@@ -38,7 +38,6 @@ import { ref, computed } from "vue";
 import img from "@/assets/img/illustrations/communaute.svg";
 import { useDirectoryStore } from "@/stores/directory.store";
 
-// import ListeDesQuestionsInputNouvellequestion from "./ListeDesQuestionsInputNouvellequestion.vue";
 import { Button, TextInput } from "@resorptionbidonvilles/ui";
 
 const question = ref("");
