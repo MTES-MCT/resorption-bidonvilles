@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import { ref, watch, computed } from "vue";
 import { useEventBus } from "@/helpers/event-bus";
-import { getQuestions, fetch } from "@/api/questions.api";
+import { useNotificationStore } from "@/stores/notification.store";
+import { getQuestions, fetch, addAnswer } from "@/api/questions.api";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -94,6 +95,19 @@ export const useQuestionsStore = defineStore("questions", () => {
         }
         return hash.value[questionId];
     }
+    async function createAnswer(questionId, answer) {
+        const notificationStore = useNotificationStore();
+        const { answer: newAnswer } = await addAnswer(questionId, answer);
+
+        if (hash.value[questionId]) {
+            hash.value[questionId].answers.unshift(newAnswer);
+        }
+
+        notificationStore.success(
+            "Publication d'une réponse",
+            "Votre réponse est bien enregistrée"
+        );
+    }
 
     return {
         questions,
@@ -110,5 +124,6 @@ export const useQuestionsStore = defineStore("questions", () => {
         total: computed(() => questions.value.length),
         fetchQuestions,
         fetchQuestion,
+        createAnswer,
     };
 });
