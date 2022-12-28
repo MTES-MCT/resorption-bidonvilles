@@ -51,8 +51,9 @@ onMounted(() => {
     }
 });
 
-async function load() {
-    await questionsStore.fetchQuestions();
+function load() {
+    questionsStore.fetchQuestions();
+    directoryStore.fetchDirectory();
     questionsStore.currentPage.index = 1;
 }
 </script>
