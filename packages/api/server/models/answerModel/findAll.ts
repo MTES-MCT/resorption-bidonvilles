@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-import questionModel from '#server/models/questionModel';
+import serializeAnswer from './_common/serializeAnswer';
 
 export default async () => {
     const rows = await sequelize.query(
@@ -33,5 +33,5 @@ export default async () => {
             type: QueryTypes.SELECT,
         },
     );
-    return rows.map(questionModel.serializeQuestion);
+    return rows.map(serializeAnswer);
 };
