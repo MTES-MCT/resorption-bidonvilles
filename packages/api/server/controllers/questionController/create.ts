@@ -1,4 +1,4 @@
-import questionService from '#server/services/communauteQuestion';
+import questionService from '#server/services/question';
 
 export default async (req, res, next) => {
     let question;
