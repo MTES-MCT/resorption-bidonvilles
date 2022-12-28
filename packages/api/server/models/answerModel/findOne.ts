@@ -1,6 +1,6 @@
 import { sequelize } from '#db/sequelize';
-import questionModel from '#server/models/questionModel';
 import { QueryTypes } from 'sequelize';
+import serializeAnswer from './_common/serializeAnswer';
 
 export default async (id) => {
     const rows = await sequelize.query(
@@ -28,7 +28,7 @@ export default async (id) => {
         LEFT JOIN
             roles_regular rr ON u.fk_role_regular = rr.role_id
         WHERE
-            pc.plan_comment_id = :id`,
+            ca.answer_id = :id`,
         {
             type: QueryTypes.SELECT,
             replacements: {
@@ -41,5 +41,5 @@ export default async (id) => {
         return null;
     }
 
-    return questionModel.serializeQuestion(rows[0]);
+    return serializeAnswer(rows[0]);
 };
