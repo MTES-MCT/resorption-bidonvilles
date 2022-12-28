@@ -124,6 +124,15 @@ export default (app) => {
         middlewares.appVersion.sync,
         controllers.question.fetch,
     );
+    app.post(
+        '/questions/:id/answers',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.answer.createAnswer,
+        middlewares.validation,
+        controllers.answer.create,
+    );
     app.get(
         '/users/:id',
         middlewares.auth.authenticate,
