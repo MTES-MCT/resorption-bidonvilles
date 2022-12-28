@@ -6,10 +6,8 @@ import actionExportComments from './actionController/exportComments';
 import actionFetchOne from './actionController/fetchOne';
 import actionList from './actionController/list';
 import actionUpdate from './actionController/update';
-// communaute
-import questionFetch from './questionController/fetch';
-import questionList from './questionController/list';
-import createQuestion from './questionController/create';
+// answer
+import createAnswer from './answerController/create';
 // config
 import configList from './configController/list';
 // contact
@@ -39,6 +37,10 @@ import organizationTypes from './organizationController/types';
 import organizationUpdateBeingFunded from './organizationController/updateBeingFunded';
 // poi
 import poiFindAll from './poiController/findAll';
+// questions
+import questionFetch from './questionController/fetch';
+import questionList from './questionController/list';
+import createQuestion from './questionController/create';
 // shantytown
 import townController from './townController';
 // shantytown comments
@@ -92,6 +94,9 @@ export default () => ({
         fetchOne: actionFetchOne,
         list: actionList,
         update: actionUpdate,
+    },
+    answer: {
+        create: createAnswer,
     },
     config: {
         list: configList,
