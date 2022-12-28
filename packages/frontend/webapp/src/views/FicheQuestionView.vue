@@ -2,7 +2,7 @@
     <LayoutLoading v-if="isLoading !== false" />
 
     <LayoutError v-else-if="error !== null">
-        <template v-slot:title>Fiche action inaccessible</template>
+        <template v-slot:title>Fiche question inaccessible</template>
         <template v-slot:code>{{ error }}</template>
         <template v-slot:content
             >Vous souhaitiez consulter la fiche détaillée d'une question, mais
