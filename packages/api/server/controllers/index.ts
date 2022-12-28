@@ -1,7 +1,5 @@
-// communaute
-import questionFetch from './questionController/fetch';
-import questionList from './questionController/list';
-import createQuestion from './questionController/create';
+// answer
+import createAnswer from './answerController/create';
 // config
 import configList from './configController/list';
 // contact
@@ -46,6 +44,10 @@ import createPlanComment from './planCommentController/create';
 import exportComments from './planCommentController/export';
 // poi
 import poiFindAll from './poiController/findAll';
+// questions
+import questionFetch from './questionController/fetch';
+import questionList from './questionController/list';
+import createQuestion from './questionController/create';
 // shantytown
 import townController from './townController';
 // shantytown comments
@@ -90,6 +92,9 @@ import exportMobileUserNavigationLogs from './userNavigationLogsController/expor
 import exportWebappUserNavigationLogs from './userNavigationLogsController/exportWebappSessions';
 
 export default () => ({
+    answer: {
+        create: createAnswer,
+    },
     config: {
         list: configList,
     },
