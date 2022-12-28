@@ -10,6 +10,8 @@ import actionUpdate from './actionController/update';
 import questionFetch from './questionController/fetch';
 import questionList from './questionController/list';
 import createQuestion from './questionController/create';
+// answer
+import createAnswer from './answerController/create';
 // config
 import configList from './configController/list';
 // contact
@@ -92,6 +94,9 @@ export default () => ({
         fetchOne: actionFetchOne,
         list: actionList,
         update: actionUpdate,
+    },
+    answer: {
+        create: createAnswer,
     },
     config: {
         list: configList,
