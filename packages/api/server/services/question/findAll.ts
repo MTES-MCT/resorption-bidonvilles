@@ -12,7 +12,7 @@ export default async () => {
     }
 
     if (questions.length === 0) {
-        throw new ServiceError('fetch_failed', new Error('Aucune question n\'est enregistrée en base de données'));
+        return [];
     }
 
 
