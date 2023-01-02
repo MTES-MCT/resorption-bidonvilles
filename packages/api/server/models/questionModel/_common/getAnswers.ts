@@ -4,6 +4,9 @@ import answerModel from '#server/models/answerModel';
 
 
 export default async (questionIds) => {
+    if (questionIds.length === 0) {
+        return [];
+    }
     const answers = questionIds.reduce((acc, id) => Object.assign({}, acc, {
         [id]: [],
     }), {});
