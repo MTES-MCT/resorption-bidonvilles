@@ -33,6 +33,7 @@ import schema from "./FormNouvelleQuestion.schema";
 import labels from "./FormNouvelleQuestion.labels";
 import { useNotificationStore } from "@/stores/notification.store";
 import { createQuestion } from "@/api/questions.api";
+import router from "@/helpers/router";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import FormParagraph from "@/components/FormParagraph/FormParagraph.vue";
@@ -75,11 +76,12 @@ defineExpose({
 
         try {
             const notificationStore = useNotificationStore();
-            await submit(sentValues);
+            const question = await submit(sentValues);
             notificationStore.success(
                 "Question publiée",
                 "Votre question a été publiée, vous la retrouverez dans l'onglet communauté"
             );
+            router.push(`/question/${question.id}`);
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             if (e?.fields) {
