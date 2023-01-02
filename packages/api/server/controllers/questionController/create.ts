@@ -29,7 +29,7 @@ export default async (req, res, next) => {
         return next((error && error.nativeError) || error);
     }
 
-    return res.status(201).send({
+    return res.status(201).send(
         question,
-    });
+    );
 };
