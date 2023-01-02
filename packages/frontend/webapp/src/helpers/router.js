@@ -378,14 +378,6 @@ const router = createRouter({
                 navTab: "administration",
             },
         },
-        {
-            path: "/liste-des-questions",
-            component: () => import("@/views/ListeDesQuestionsView.vue"),
-            meta: {
-                authRequirement: "signedIn",
-                navTab: "communaute",
-            },
-        },
 
         // special
         {
