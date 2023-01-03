@@ -19,7 +19,7 @@ const topItems = [
     {
         icon: "fa-newspaper fa-regular",
         label: "Blog",
-        route: "https://www.blog-resorption-bidonvilles.fr/",
+        route: "https://www.blog-resorption-bidonvilles.fr",
         authRequirement: "none",
     },
     {
