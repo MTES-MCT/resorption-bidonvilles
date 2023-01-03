@@ -23,6 +23,7 @@
     </FormSection>
 
     <ErrorSummary
+        id="erreurs"
         class="mt-12"
         v-if="error || Object.keys(errors).length > 0"
         :message="error"
@@ -41,6 +42,7 @@ import formatDate from "@/utils/formatDate";
 import backOrReplace from "@/utils/backOrReplace";
 import { close, setClosedWithSolutions } from "@/api/towns.api";
 import { trackEvent } from "@/helpers/matomo";
+import router from "@/helpers/router";
 import schemaFn from "./FormFermetureDeSite.schema";
 
 import { ErrorSummary, Link, Warning } from "@resorptionbidonvilles/ui";
@@ -164,6 +166,16 @@ const config = {
 
 defineExpose({
     submit: handleSubmit(async (values) => {
+        if (mode.value === "fix") {
+            const originalValue = town.value.closedWithSolutions === "yes";
+            if (originalValue === values.closed_with_solutions) {
+                router.replace("#erreurs");
+                error.value =
+                    "Modification impossible : aucun champ n'a été modifié";
+                return;
+            }
+        }
+
         const { submit, successTitle, successWording } = config[mode.value];
         const townsStore = useTownsStore();
         const notificationStore = useNotificationStore();
