@@ -6,7 +6,7 @@
                     <slot />
                 </h2>
                 <div class="pt-4">
-                    <Button variant="primary" @click="redirectToContact">{{
+                    <Button variant="primary" @click="() => redirectToContact()">{{
                             cta
                     }}</Button>
                 </div>
