@@ -14,8 +14,13 @@
                 >
             </p>
             <p class="text-sm text-G600">
-                Dernière modification le
-                {{ town ? formatDate(town?.updatedAt) : "" }}
+                <template v-if="town?.status === 'open'">
+                    Dernière modification le
+                    {{ town ? formatDate(town?.updatedAt) : "" }}
+                </template>
+                <template v-else-if="town"
+                    >Site fermé le {{ formatDate(town?.closedAt) }}</template
+                >
             </p>
         </template>
 
