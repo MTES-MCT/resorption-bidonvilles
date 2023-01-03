@@ -31,8 +31,7 @@ export default async (owners) => {
         },
     });
 
-    return permissions.reduce((argAcc, row: any) => {
-        const acc = { ...argAcc };
+    return permissions.reduce((acc, row: any) => {
         if (!acc[row.user_id]) {
             acc[row.user_id] = {};
         }
