@@ -13,7 +13,7 @@
             </template>
             <template v-slot:menu>
                 <Menu variant="withoutPadding">
-                    <div class="flex flex-col text-sm menuWidth">
+                    <div class="flex flex-col text-sm menuWidth whitespace-nowrap">
                         <Radio v-for="option in options" :key="option.id" :value="option.value" v-model="value"
                             :label="option.label" :name="name" variant="check" />
                     </div>
