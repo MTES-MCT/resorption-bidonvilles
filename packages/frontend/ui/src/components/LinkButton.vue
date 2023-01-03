@@ -4,7 +4,7 @@
         <router-link v-if="internalLink" :to="to">
             <slot></slot>
         </router-link>
-        <a v-else-if="to" :href="to">
+        <a v-else-if="to" :href="to" :target="!toRB && !isMailto ? '_blank' : ''">
             <slot></slot>
             <Icon v-if="!toRB && !isMailto" icon="arrow-up-right-from-square" class="text-xs text-blue300 ml-1" />
         </a>
