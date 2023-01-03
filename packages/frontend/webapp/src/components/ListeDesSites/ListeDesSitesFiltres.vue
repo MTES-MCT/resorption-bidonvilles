@@ -16,7 +16,6 @@
                             v-if="filter.id === 'conditions'"
                             v-slot:default="{ label }"
                         >
-                            ?
                             <div class="text-red flex items-center">
                                 <div class="mr-2">
                                     <Icon icon="times" />/
