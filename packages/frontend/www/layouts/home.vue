@@ -5,7 +5,7 @@
             <a href="#strategie">La stratégie de résorption</a>
             <a href="#faq">FAQ</a>
             <a href="#equipe">{{ $t("footer.aboutUs") }}</a>
-            <Link to="https://blog-resorption-bidonvilles.fr">Blog</Link>
+            <a href="https://www.blog-resorption-bidonvilles.fr" target="_blank">Blog</a>
         </template>
 
         <slot />
@@ -14,5 +14,4 @@
 
 <script setup>
 import Layout from "~/components/Layout/Layout.vue";
-import { Link } from "@resorptionbidonvilles/ui";
 </script>

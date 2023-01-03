@@ -2,7 +2,8 @@
     <section class="py-4 border-b border-b-G400">
         <LinkOrganization :to="`/structure/${author.organization.id}`">
             {{ author.first_name }}
-            {{ author.last_name }}
+            {{ author.last_name }} -
+            {{ author.organization.abbreviation || author.organization.name }}
         </LinkOrganization>
         <p class="text-sm text-G600">
             le {{ formatDate(date, "d M y à h:i") }}

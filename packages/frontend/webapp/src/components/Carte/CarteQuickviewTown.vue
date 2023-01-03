@@ -14,10 +14,20 @@
                 >
             </p>
             <p class="text-sm text-G600">
-                Dernière modification le
-                {{ town ? formatDate(town?.updatedAt) : "" }}
+                <template v-if="town?.status === 'open'">
+                    Dernière modification le
+                    {{ town ? formatDate(town?.updatedAt) : "" }}
+                </template>
+                <template v-else-if="town"
+                    >Site fermé le {{ formatDate(town?.closedAt) }}</template
+                >
             </p>
         </template>
+
+        <section v-if="town">
+            <p class="text-primary font-bold text-lg">Coordonnées GPS</p>
+            <ButtonGPS :town="town" />
+        </section>
 
         <section
             class="mt-6"
@@ -61,6 +71,7 @@ import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
 
 import { Icon, Link, Button, PanneauLateral } from "@resorptionbidonvilles/ui";
+import ButtonGPS from "../ButtonGPS/ButtonGPS.vue";
 
 const props = defineProps({
     open: {

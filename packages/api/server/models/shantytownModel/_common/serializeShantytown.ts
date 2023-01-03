@@ -112,6 +112,8 @@ export default (town, user) => {
             position: town.createdByPosition,
             organization: {
                 id: town.createdByOrganization,
+                name: town.createdByOrganizationName,
+                abbreviation: town.createdByOrganizationAbbreviation,
             },
         },
         updatedBy: {
@@ -121,6 +123,8 @@ export default (town, user) => {
             position: town.updatedByPosition,
             organization: {
                 id: town.updatedByOrganization,
+                name: town.updatedByOrganizationName,
+                abbreviation: town.updatedByOrganizationAbbreviation,
             },
         },
         heatwaveStatus: town.heatwaveStatus,
