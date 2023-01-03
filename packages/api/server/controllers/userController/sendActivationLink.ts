@@ -40,7 +40,7 @@ export default async (req, res, next) => {
         await sequelize.transaction(async (transaction) => {
             const { options } = permissionsDescription[user.role_id];
             const requestedOptions = options
-                .filter(({ id }) => req.body.options && req.body.options[id] === true)
+                .filter(({ id }) => req.body.options && req.body.options.includes(id))
                 .map(({ id }) => id);
             await userModel.setPermissionOptions(user.id, requestedOptions, transaction);
 
