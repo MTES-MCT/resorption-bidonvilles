@@ -24,13 +24,18 @@ export default async (user, shantytownIds) => {
             incoming.fk_shantytown AS "shantytownId",
             incoming.fk_incoming_town AS "incomingTownId",
             shantytowns.name AS "name",
-            address
+            address,
+            cities.code AS "cityCode",
+            cities.name AS "cityName",
+            field_types.label AS "fieldTypeLabel",
+            field_types.color AS "fieldTypeColor"
         FROM shantytown_incoming_towns AS incoming
         LEFT JOIN shantytowns ON incoming.fk_incoming_town = shantytowns.shantytown_id
         LEFT JOIN cities ON shantytowns.fk_city = cities.code
         LEFT JOIN departements ON cities.fk_departement = departements.code
         LEFT JOIN epci ON cities.fk_epci = epci.code
         LEFT JOIN regions ON departements.fk_region = regions.code
+        LEFT JOIN field_types ON shantytowns.fk_field_type = field_types.field_type_id
         WHERE ${whereClauses.join(' AND ')}`,
         {
             type: QueryTypes.SELECT,
@@ -47,5 +52,13 @@ export default async (user, shantytownIds) => {
         name: row.name,
         addressSimple: getAddressSimpleOf(row.address),
         usename: getUsenameOf(row),
+        city: {
+            code: row.cityCode,
+            name: row.cityName,
+        },
+        fieldType: {
+            label: row.fieldTypeLabel,
+            color: row.fieldTypeColor,
+        },
     }));
 };
