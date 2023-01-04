@@ -169,8 +169,8 @@ export const useAccesStore = defineStore("acces", () => {
             return users;
         },
 
-        async fetchUser(userId) {
-            if (hash.value[userId]) {
+        async fetchUser(userId, refetch = false) {
+            if (hash.value[userId] && refetch === false) {
                 return computed(() => hash.value[userId] || null);
             }
 
