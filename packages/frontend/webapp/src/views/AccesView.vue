@@ -69,7 +69,7 @@ async function load() {
     isLoading.value = true;
     error.value = null;
     try {
-        userRef = await accesStore.fetchUser(userId.value);
+        userRef = await accesStore.fetchUser(userId.value, true);
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
     }

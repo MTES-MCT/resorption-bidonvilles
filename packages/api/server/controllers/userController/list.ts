@@ -27,7 +27,7 @@ export default async (req, res) => {
                 },
             });
         }
-        const users = await userModel.findAll(req.user, search, { auth: false, extended: true });
+        const users = await userModel.findAll(req.user, search);
         res.status(200).send(users);
     } catch (error) {
         res.status(500).send({
