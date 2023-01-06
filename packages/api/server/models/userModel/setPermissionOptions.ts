@@ -8,26 +8,34 @@ export default async (userId, options, argTransaction) => {
         commitTransaction = true;
     }
 
-    await sequelize.query('DELETE FROM user_permission_options WHERE fk_user = :userId', {
-        transaction,
-        replacements: {
-            userId,
-        },
-    })
-        .then(() => Promise.all(
-            options.map(option => sequelize.query(
-                'INSERT INTO user_permission_options(fk_user, fk_option) VALUES (:userId, :option)',
-                {
-                    transaction,
-                    replacements: {
-                        userId,
-                        option,
+    try {
+        await sequelize.query('DELETE FROM user_permission_options WHERE fk_user = :userId', {
+            transaction,
+            replacements: {
+                userId,
+            },
+        })
+            .then(() => Promise.all(
+                options.map(option => sequelize.query(
+                    'INSERT INTO user_permission_options(fk_user, fk_option) VALUES (:userId, :option)',
+                    {
+                        transaction,
+                        replacements: {
+                            userId,
+                            option,
+                        },
                     },
-                },
-            )),
-        ));
+                )),
+            ));
 
-    if (commitTransaction === true) {
-        await transaction.commit();
+        if (commitTransaction === true) {
+            await transaction.commit();
+        }
+    } catch (error) {
+        if (commitTransaction === true) {
+            await transaction.rollback();
+        }
+
+        throw error;
     }
 };

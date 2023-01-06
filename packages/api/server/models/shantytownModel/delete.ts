@@ -21,9 +21,10 @@ export default async (id) => {
                 },
             },
         );
+
+        await transaction.commit();
     } catch (error) {
         await transaction.rollback();
+        throw error;
     }
-
-    await transaction.commit();
 };
