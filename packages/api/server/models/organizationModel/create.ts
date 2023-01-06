@@ -6,36 +6,44 @@ export default async (type, name, abbreviation = null, region = null, departemen
         transaction = await sequelize.transaction();
     }
 
-    const response = await sequelize.query(
-        `INSERT INTO
-        organizations(name, abbreviation, fk_type, fk_region, fk_departement, fk_epci, fk_city, active)
-    VALUES
-        (:name, :abbreviation, :type, :region, :departement, :epci, :city, :active)
-    RETURNING organization_id AS id`,
-        {
-            replacements: {
-                name,
-                abbreviation,
-                type,
-                region,
-                departement,
-                epci,
-                city,
-                active,
+    try {
+        const response = await sequelize.query(
+            `INSERT INTO
+            organizations(name, abbreviation, fk_type, fk_region, fk_departement, fk_epci, fk_city, active)
+        VALUES
+            (:name, :abbreviation, :type, :region, :departement, :epci, :city, :active)
+        RETURNING organization_id AS id`,
+            {
+                replacements: {
+                    name,
+                    abbreviation,
+                    type,
+                    region,
+                    departement,
+                    epci,
+                    city,
+                    active,
+                },
+                transaction,
             },
-            transaction,
-        },
-    );
-    await sequelize.query(
-        'REFRESH MATERIALIZED VIEW localized_organizations',
-        {
-            transaction,
-        },
-    );
+        );
+        await sequelize.query(
+            'REFRESH MATERIALIZED VIEW localized_organizations',
+            {
+                transaction,
+            },
+        );
 
-    if (argTransaction === undefined) {
-        await transaction.commit();
+        if (argTransaction === undefined) {
+            await transaction.commit();
+        }
+
+        return response;
+    } catch (error) {
+        if (argTransaction === undefined) {
+            await transaction.rollback();
+        }
+
+        throw error;
     }
-
-    return response;
 };

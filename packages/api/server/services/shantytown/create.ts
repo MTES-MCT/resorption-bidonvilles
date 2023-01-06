@@ -76,64 +76,70 @@ export default async (townData, user) => {
     };
 
     const transaction = await sequelize.transaction();
-    const shantytown_id = await shantytownModel.create(
-        Object.assign(
-            {},
-            baseTown,
-            user.isAllowedTo('access', 'shantytown_justice')
-                ? {
-                    ownerComplaint: townData.owner_complaint,
-                    justiceProcedure: townData.justice_procedure,
-                    justiceRendered: townData.justice_rendered,
-                    justiceRenderedBy: townData.justice_rendered_by,
-                    justiceRenderedAt: townData.justice_rendered_at,
-                    justiceChallenged: townData.justice_challenged,
-                    policeStatus: townData.police_status,
-                    policeRequestedAt: townData.police_requested_at,
-                    policeGrantedAt: townData.police_granted_at,
-                    bailiff: townData.bailiff,
-                }
-                : {},
-            user.isAllowedTo('access', 'shantytown_owner')
-                ? {
-                    owner: townData.owner,
-                }
-                : {},
-        ),
-        transaction,
-    );
-
-    const promises = [];
-    if (townData.social_origins.length > 0) {
-        promises.push(socialOriginModel.create(shantytown_id, townData.social_origins, transaction));
-    }
-
-    if (townData.sanitary_toilet_types.length > 0) {
-        promises.push(shantytownToiletTypesModel.create(
-            shantytown_id,
-            townData.sanitary_toilet_types,
+    let shantytown_id;
+    try {
+        shantytown_id = await shantytownModel.create(
+            Object.assign(
+                {},
+                baseTown,
+                user.isAllowedTo('access', 'shantytown_justice')
+                    ? {
+                        ownerComplaint: townData.owner_complaint,
+                        justiceProcedure: townData.justice_procedure,
+                        justiceRendered: townData.justice_rendered,
+                        justiceRenderedBy: townData.justice_rendered_by,
+                        justiceRenderedAt: townData.justice_rendered_at,
+                        justiceChallenged: townData.justice_challenged,
+                        policeStatus: townData.police_status,
+                        policeRequestedAt: townData.police_requested_at,
+                        policeGrantedAt: townData.police_granted_at,
+                        bailiff: townData.bailiff,
+                    }
+                    : {},
+                user.isAllowedTo('access', 'shantytown_owner')
+                    ? {
+                        owner: townData.owner,
+                    }
+                    : {},
+            ),
             transaction,
-        ));
-    }
+        );
 
-    if (townData.electricity_access_types.length > 0) {
-        promises.push(electricityAccessTypesModel.create(
-            shantytown_id,
-            townData.electricity_access_types,
-            transaction,
-        ));
-    }
+        const promises = [];
+        if (townData.social_origins.length > 0) {
+            promises.push(socialOriginModel.create(shantytown_id, townData.social_origins, transaction));
+        }
 
-    if (townData.reinstallation_incoming_towns_full.length > 0) {
-        promises.push(incomingTownsModel.create(
-            shantytown_id,
-            townData.reinstallation_incoming_towns_full.map(({ id }) => id),
-            transaction,
-        ));
-    }
+        if (townData.sanitary_toilet_types.length > 0) {
+            promises.push(shantytownToiletTypesModel.create(
+                shantytown_id,
+                townData.sanitary_toilet_types,
+                transaction,
+            ));
+        }
 
-    await Promise.all(promises);
-    await transaction.commit();
+        if (townData.electricity_access_types.length > 0) {
+            promises.push(electricityAccessTypesModel.create(
+                shantytown_id,
+                townData.electricity_access_types,
+                transaction,
+            ));
+        }
+
+        if (townData.reinstallation_incoming_towns_full.length > 0) {
+            promises.push(incomingTownsModel.create(
+                shantytown_id,
+                townData.reinstallation_incoming_towns_full.map(({ id }) => id),
+                transaction,
+            ));
+        }
+
+        await Promise.all(promises);
+        await transaction.commit();
+    } catch (error) {
+        await transaction.rollback();
+        throw error;
+    }
 
     const town = await shantytownModel.findOne(user, shantytown_id);
 

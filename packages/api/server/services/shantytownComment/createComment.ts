@@ -37,7 +37,7 @@ export default async (comment, shantytown, author) => {
         }
         await transaction.commit();
     } catch (error) {
-        transaction.rollback();
+        await transaction.rollback();
         throw new ServiceError('insert_failed', error);
     }
 
