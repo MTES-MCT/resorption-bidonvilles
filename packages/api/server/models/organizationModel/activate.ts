@@ -6,20 +6,28 @@ export default async (organizationId, argTransaction = undefined) => {
         transaction = await sequelize.transaction();
     }
 
-    const response = await sequelize.query('UPDATE organizations SET active = TRUE WHERE organization_id = :organizationId', {
-        replacements: {
-            organizationId,
-        },
-        transaction,
-    });
-    await sequelize.query('REFRESH MATERIALIZED VIEW localized_organizations',
-        {
+    try {
+        const response = await sequelize.query('UPDATE organizations SET active = TRUE WHERE organization_id = :organizationId', {
+            replacements: {
+                organizationId,
+            },
             transaction,
         });
+        await sequelize.query('REFRESH MATERIALIZED VIEW localized_organizations',
+            {
+                transaction,
+            });
 
-    if (argTransaction === undefined) {
-        await transaction.commit();
+        if (argTransaction === undefined) {
+            await transaction.commit();
+        }
+
+        return response;
+    } catch (error) {
+        if (argTransaction === undefined) {
+            await transaction.rollback();
+        }
+
+        throw error;
     }
-
-    return response;
 };
