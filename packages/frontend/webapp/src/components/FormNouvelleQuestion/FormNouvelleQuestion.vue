@@ -45,7 +45,9 @@ import FormNouvelleQuestionInputOtherTag from "./inputs/FormNouvelleQuestionInpu
 
 const { handleSubmit, setErrors, errors } = useForm({
     validationSchema: schema,
-    initialValues: {},
+    initialValues: {
+        tags: [],
+    },
 });
 
 const props = defineProps({
