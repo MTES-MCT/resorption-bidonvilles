@@ -149,6 +149,8 @@ function sanitizeState(plan, data) {
 
 export default async (req, res, next) => {
     let plan;
+    let result;
+
     try {
         plan = await planModel.findOne(req.user, req.params.id);
     } catch (error) {
@@ -160,13 +162,11 @@ export default async (req, res, next) => {
         return next(error);
     }
 
-    // console.log(req.body);
     // sanitize data
     const stateData = Object.assign({}, sanitizeState(plan, req.body), {
         createdBy: req.user.id,
     });
 
-    console.log(stateData);
 
     // validate data
     const errors = {};
@@ -714,9 +714,8 @@ export default async (req, res, next) => {
                 },
             );
         });
+        result = await planModel.findOne(req.user, req.params.id);
     } catch (error) {
-        console.log('erreur dans controlleur');
-        console.log(error);
         res.status(500).send({
             success: false,
             error: {
@@ -726,6 +725,5 @@ export default async (req, res, next) => {
         return next(error);
     }
 
-    // insert into database
-    return res.status(200).send({});
+    return res.status(200).send(result);
 };

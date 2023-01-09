@@ -40,9 +40,8 @@
             variant="primary"
             icon="pencil"
             iconPosition="left"
-            :disabled="!plan.canUpdateMarks || true"
+            :disabled="!plan.canUpdateMarks"
             :href="`/action/${plan.id}/indicateurs/mise-a-jour`"
-            @click="unavailable"
             >Mettre à jour les indicateurs</Button
         >
     </p>
