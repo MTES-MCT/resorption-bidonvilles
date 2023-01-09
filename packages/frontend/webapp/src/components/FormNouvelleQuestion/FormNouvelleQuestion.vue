@@ -1,6 +1,6 @@
 <template>
     <form>
-        <FormParagraph :title="labels.question">
+        <FormParagraph :title="labels.question" showMandatoryStar>
             <FormNouvelleQuestionInputQuestion :question="question" />
         </FormParagraph>
         <FormParagraph :title="labels.tags">
@@ -12,7 +12,7 @@
         <FormParagraph :title="labels.people_affected">
             <FormNouvelleQuestionInputPeopleAffected />
         </FormParagraph>
-        <FormParagraph :title="labels.details">
+        <FormParagraph :title="labels.details" showMandatoryStar>
             <FormNouvelleQuestionInputDetails />
         </FormParagraph>
 
