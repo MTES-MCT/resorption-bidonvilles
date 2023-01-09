@@ -47,10 +47,10 @@ function sanitizeState(plan, data) {
         }
 
         return {
-            total: parseInt(audience[key].total, 10),
-            families: parseInt(audience[key].families, 10),
-            women: parseInt(audience[key].women, 10),
-            minors: parseInt(audience[key].minors, 10),
+            total: parseInt(audience[key].total, 10) || 0,
+            families: parseInt(audience[key].families, 10) || 0,
+            women: parseInt(audience[key].women, 10) || 0,
+            minors: parseInt(audience[key].minors, 10) || 0,
         };
     }
 
@@ -160,10 +160,13 @@ export default async (req, res, next) => {
         return next(error);
     }
 
+    // console.log(req.body);
     // sanitize data
     const stateData = Object.assign({}, sanitizeState(plan, req.body), {
         createdBy: req.user.id,
     });
+
+    console.log(stateData);
 
     // validate data
     const errors = {};
@@ -712,6 +715,8 @@ export default async (req, res, next) => {
             );
         });
     } catch (error) {
+        console.log('erreur dans controlleur');
+        console.log(error);
         res.status(500).send({
             success: false,
             error: {
