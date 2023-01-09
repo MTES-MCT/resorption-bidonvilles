@@ -25,14 +25,20 @@ export default [
             return value;
         })
         .custom((value, { req }) => {
+            if (value !== null && value.length > 255) {
+                throw new Error('Le champ "Veuillez préciser votre thématique" ne doit pas excéder 255 caractères');
+            }
+            return true;
+        })
+        .custom((value, { req }) => {
             if (value !== null && !req.body.tags.includes('other')) {
-                throw new Error('Le champ "Préciser votre thématique" ne peut être rempli que si la thématique Autre a été sélectionnée');
+                throw new Error('Le champ "Veuillez préciser votre thématique" ne peut être rempli que si la thématique Autre a été sélectionnée');
             }
             return true;
         })
         .custom((value, { req }) => {
             if (value === null && req.body.tags.includes('other')) {
-                throw new Error('Le champ "Préciser votre thématique" ne peut être pas être vide  si la thématique Autre a été sélectionnée');
+                throw new Error('Le champ "Veuillez préciser votre thématique" ne peut être pas être vide  si la thématique Autre a été sélectionnée');
             }
             return true;
         }),
