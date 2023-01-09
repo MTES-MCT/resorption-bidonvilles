@@ -18,7 +18,7 @@
                     size="sm"
                     icon="fa-regular fa-eye"
                     iconPosition="left"
-                    :href="`/site/${question.id}`"
+                    :href="`/question/${question.id}`"
                     >Voir toutes les réponses</Button
                 >
             </div>
