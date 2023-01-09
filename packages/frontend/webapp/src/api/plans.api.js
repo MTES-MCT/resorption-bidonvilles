@@ -19,3 +19,7 @@ export function fetchList() {
 export function fetchOne(planId) {
     return axios.get(`/plans/${encodeURI(planId)}`);
 }
+
+export function addState(planId, data) {
+    return axios.post(`/plans/${planId}/states`, data);
+}
