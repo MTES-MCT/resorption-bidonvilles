@@ -1,5 +1,5 @@
 <template>
-    <CheckableGroup id="tags" :label="labels.tags">
+    <CheckableGroup id="tags" :label="labels.tags_info">
         <Checkbox
             v-for="item in items"
             :key="item.uid"
