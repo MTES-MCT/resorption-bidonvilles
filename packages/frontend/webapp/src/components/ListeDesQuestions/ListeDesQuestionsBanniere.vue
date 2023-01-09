@@ -12,12 +12,12 @@
                 <span class="text-secondary"
                     >{{ numberOfUsers }} personnes</span
                 >
-                de notre communauté pour vous aider à réoudre un problème ou une
-                question pratique que vous vous posez dans le cadre de votre
+                de notre communauté pour vous aider à résoudre un problème ou
+                une question pratique que vous vous posez dans le cadre de votre
                 résorption.
             </h2>
             <h3 class="mt-4">
-                En une phrase, comment résumeriez vous votre question ?
+                En une phrase, comment résumeriez-vous votre question ?
             </h3>
             <div class="flex items-center mt-4 space-x-2">
                 <TextInput
