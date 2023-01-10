@@ -183,6 +183,12 @@ export default (app) => {
         middlewares.appVersion.sync,
         controllers.user.upgrade,
     );
+    app.post(
+        '/users/:id/options',
+        middlewares.auth.authenticate,
+        middlewares.appVersion.sync,
+        controllers.user.modifyOptions,
+    );
     app.put(
         '/users/:id/admin_comments',
         middlewares.auth.authenticate,

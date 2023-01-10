@@ -78,6 +78,7 @@ import userSetRoleRegular from './userController/setRoleRegular';
 import userSignin from './userController/signin';
 import userUpdateLocalAdmin from './userController/updateLocalAdmin';
 import userUpgrade from './userController/upgrade';
+import userUpdatePermissionOptions from './userController/updatePermissionOptions';
 // user activity
 import userActivityRegular from './userActivityController/regular';
 // user navigation logs
@@ -166,6 +167,7 @@ export default () => ({
         list: userList,
         listExport: userListExport,
         me: userMe,
+        modifyOptions: userUpdatePermissionOptions,
         remove: userRemove,
         renewToken: userRenewToken,
         requestNewPassword: userRequestNewPassword,
