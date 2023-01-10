@@ -32,7 +32,7 @@ import { useForm, useFieldValue } from "vee-validate";
 import schema from "./FormNouvelleQuestion.schema";
 import labels from "./FormNouvelleQuestion.labels";
 import { useNotificationStore } from "@/stores/notification.store";
-import { createQuestion } from "@/api/questions.api";
+import { useQuestionsStore } from "@/stores/questions.store";
 import router from "@/helpers/router";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
@@ -67,18 +67,14 @@ const showOtherTag = computed(() => {
 
 const error = ref(null);
 
-async function submit(values) {
-    const question = await createQuestion(values);
-    return question;
-}
-
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
         error.value = null;
 
         try {
+            const questionsStore = useQuestionsStore();
+            const question = await questionsStore.create(sentValues);
             const notificationStore = useNotificationStore();
-            const question = await submit(sentValues);
             notificationStore.success(
                 "Question publiée",
                 "Votre question a été publiée, vous la retrouverez dans l'onglet communauté"
