@@ -23,7 +23,17 @@
                     </Tag>
                 </div>
             </div>
-
+            <div
+                class="text-sm font-bold"
+                v-if="question.peopleAffected && question.peopleAffected > 0"
+            >
+                {{ question.peopleAffected }}
+                {{
+                    question.peopleAffected > 1
+                        ? "habitants concernés"
+                        : "habitant concerné"
+                }}
+            </div>
             <p class="whitespace-pre-line mt-4">
                 <template v-if="showAll">{{ question.details }}</template>
                 <template v-else>
