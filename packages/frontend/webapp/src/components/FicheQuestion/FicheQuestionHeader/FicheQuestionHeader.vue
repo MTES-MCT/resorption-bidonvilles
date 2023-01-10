@@ -1,6 +1,6 @@
 <template>
     <ContentWrapper>
-        <ViewHeader icon="question" direction="col">
+        <ViewHeader icon="person-circle-question" direction="col">
             <template v-slot:title>
                 <p>Posez vos questions,</p>
                 <p>Partagez votre expertise,</p>
