@@ -49,6 +49,11 @@ export function list() {
     return axios.get("/users");
 }
 
+export function modifyOptions(userId, options) {
+    return axios.post(`/users/${encodeURI(userId)}/options`, {
+        options,
+    });
+}
 export function newPassword(email) {
     return axios.post("/users/new-password", {
         email,
