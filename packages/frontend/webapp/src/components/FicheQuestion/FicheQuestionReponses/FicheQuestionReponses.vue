@@ -3,19 +3,24 @@
         <FicheQuestionNouvelleReponse :question="question" class="mb-12" />
 
         <h1 class="text-lg font-bold mb-2">
-            {{ question.answers.length }} réponse{{
-                question.answers.length > 1 ? "s" : ""
+            {{ questionHasAtLeastOneAnswer ? question.answers.length : "0" }}
+            réponse{{
+                questionHasAtLeastOneAnswer
+                    ? question.answers.length > 1
+                        ? "s"
+                        : ""
+                    : ""
             }}
         </h1>
         <FicheQuestionListeDesReponses
             :answers="question.answers"
-            v-if="question.answers.length > 0"
+            v-if="questionHasAtLeastOneAnswer"
         />
     </div>
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { computed, defineProps, toRefs } from "vue";
 
 import FicheQuestionNouvelleReponse from "./FicheQuestionNouvelleReponse/FicheQuestionNouvelleReponse.vue";
 import FicheQuestionListeDesReponses from "./FicheQuestionListeDesReponses.vue";
@@ -24,4 +29,11 @@ const props = defineProps({
     question: Object,
 });
 const { question } = toRefs(props);
+
+const questionHasAtLeastOneAnswer = computed(() => {
+    if (question.value.answers) {
+        return question.value.answers.length > 0;
+    }
+    return false;
+});
 </script>
