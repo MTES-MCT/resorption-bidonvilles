@@ -1,5 +1,5 @@
 <template>
-    <FicheQuestionHeader :plan="plan" />
+    <FicheQuestionHeader />
 
     <ContentWrapper>
         <FicheQuestionTags class="mb-4" :question="question" />
