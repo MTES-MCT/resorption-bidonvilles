@@ -50,6 +50,9 @@ const props = defineProps({
 const { question } = toRefs(props);
 
 const questionHasAtLeastOneAnswer = computed(() => {
-    return question.value.answers.length > 0;
+    if (question.value.answers) {
+        return question.value.answers.length > 0;
+    }
+    return false;
 });
 </script>
