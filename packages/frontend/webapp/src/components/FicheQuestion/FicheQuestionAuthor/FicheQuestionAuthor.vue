@@ -1,28 +1,17 @@
 <template>
-    <article class="flex items-center">
-        <aside class="self-start">
-            <span
-                :class="`bg-G200 mr-4 text-xl rounded-full inline-flex items-center justify-center w-12 h-12`"
-            >
-                <Icon icon="user" />
-            </span>
-        </aside>
-        <section>
-            <LinkOrganization :to="`/structure/${author.organization_id}`">
-                {{ author.first_name }}
-                {{ author.last_name }}
-            </LinkOrganization>
-            <p class="italic text-G500">
-                {{ author.organization }}
-            </p>
-        </section>
-    </article>
+    <div class="flex justify-between">
+        <LinkOrganization :to="`/structure/${author.organization_id}`">
+            {{ author.first_name }}
+            {{ author.last_name }} -
+            {{ author.organization }}
+        </LinkOrganization>
+    </div>
 </template>
 
 <script setup>
 import { defineProps, toRefs } from "vue";
 
-import { Icon, LinkOrganization } from "@resorptionbidonvilles/ui";
+import { LinkOrganization } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     author: Object,
