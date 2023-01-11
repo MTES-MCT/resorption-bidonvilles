@@ -9,6 +9,8 @@ const { expect } = chai;
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
+
+const sandbox = sinon.createSandbox();
 // stubs
 const sandbox = sinon.createSandbox();
 const sequelize = {
