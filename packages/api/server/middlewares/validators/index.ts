@@ -21,6 +21,7 @@ import findNearbyTowns from './findNearbyTowns';
 import exportTown from './exportTown';
 import setUserAdminComments from './setUserAdminComments';
 import editOrganization from './editOrganization';
+import userUpdatePermissionOptions from './users/updatePermissionOptions';
 import userGetLatestActivationLink from './users/getLatestActivationLink';
 import userSetRoleRegular from './users/setRoleRegular';
 import mePostNavigationLogs from './me/post.navigationLogs';
@@ -63,6 +64,7 @@ export default {
     user: {
         getLatestActivationLink: userGetLatestActivationLink,
         setRoleRegular: userSetRoleRegular,
+        updatePermissionOptions: userUpdatePermissionOptions,
     },
     me: {
         postNavigationLogs: mePostNavigationLogs,

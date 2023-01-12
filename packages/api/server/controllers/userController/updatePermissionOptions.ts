@@ -1,35 +1,26 @@
 import userService from '#server/services/user';
 
+const ERROR_RESPONSES = {
+    insert_failed: 'Les options n\'ont pas pu être enregistrées',
+    undefined: 'Une erreur inconnue est survenue.',
+};
+
 export default async (req, res, next) => {
-    let user;
+    let updatedUser;
 
     try {
-        user = await userService.updatePermissionOptions(
-            req.params.id,
+        updatedUser = await userService.updatePermissionOptions(
+            req.body.user.id,
             req.body.options,
         );
     } catch (error) {
-        let message;
-        switch (error && error.code) {
-            case 'insert_failed':
-                message = 'Les options n\'ont pas pu être enregistrées';
-                break;
-
-            case 'fetch_failed':
-                message = 'Impossible de trouver l\'utilisateur en base de données';
-                break;
-
-            default:
-                message = 'Une erreur inconnue est survenue.';
-        }
-
         res.status(500).send({
-            user_message: message,
+            user_message: ERROR_RESPONSES[error?.code] || ERROR_RESPONSES.undefined,
         });
         return next((error && error.nativeError) || error);
     }
 
     return res.status(201).send({
-        user,
+        user: updatedUser,
     });
 };

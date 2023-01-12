@@ -167,7 +167,7 @@ export default () => ({
         list: userList,
         listExport: userListExport,
         me: userMe,
-        modifyOptions: userUpdatePermissionOptions,
+        updatePermissionOptions: userUpdatePermissionOptions,
         remove: userRemove,
         renewToken: userRenewToken,
         requestNewPassword: userRequestNewPassword,

@@ -1,6 +1,6 @@
 import { sequelize } from '#db/sequelize';
 
-export default async (userId, options, argTransaction) => {
+export default async (userId, options, argTransaction = undefined) => {
     let transaction = argTransaction;
     let commitTransaction = false;
     if (!transaction) {
