@@ -23,12 +23,10 @@ export default async (user, location, lastDate, closedTowns) => {
         where.push(`${fromGeoLevelToTableName(restrictedLocation.type)}.code = :shantytownLocationCode`);
         replacements.shantytownLocationCode = restrictedLocation[restrictedLocation.type].code;
     }
-    const shantytown_history = await sequelize.query(
+
+    const rows:any = await sequelize.query(
         `
-        SELECT * FROM 
-            (
             SELECT
-                ROW_NUMBER() OVER(PARTITION BY id ORDER BY date DESC) AS row_number,
                 shantytown_history.*
             FROM
                 ((
@@ -115,17 +113,24 @@ export default async (user, location, lastDate, closedTowns) => {
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE (${where.join(') OR (')})` : ''}
                 )) shantytown_history
-            WHERE shantytown_history.date < '${lastDate}'
-            ORDER BY shantytown_history.date DESC
-            ) ranked_shantytown_history
-            WHERE row_number = 1
-            ${closedTowns === true ? 'AND closed_at is NOT NULL' : 'AND closed_at is NULL'}
+            WHERE shantytown_history.date < '${lastDate}'  
             `,
         {
             type: QueryTypes.SELECT,
             replacements,
         },
     );
+
+
+    const acc = {};
+    rows.forEach((row) => {
+        if (!acc[row.id] || row.updatedAt > acc[row.id].updatedAt) {
+            acc[row.id] = row;
+        }
+        return {};
+    });
+    const shantytown_history = Object.values(acc).filter((el:any) => ((closedTowns && (el.closedAt !== null)) || (!closedTowns && (el.closedAt === null))));
+
 
     return shantytown_history.map(town => serializeShantytown(town, user));
 };
