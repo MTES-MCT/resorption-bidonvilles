@@ -3,7 +3,7 @@
         <ViewHeader icon="person-circle-question" direction="col">
             <template v-slot:title>
                 <p>Posez vos questions,</p>
-                <p>Partagez votre expertise,</p>
+                <p>Partagez votre expertise</p>
             </template>
             <template v-slot:description>
                 Ensemble, résorbons les bidonvilles
