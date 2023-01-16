@@ -1,6 +1,6 @@
 <template>
     <form>
-        <div class="p-6">
+        <div class="mx-auto p-4 lg:px-16 max-w-screen-2xl">
             <FicheQuestionNouvelleReponseInputReponse />
 
             <ErrorSummary v-if="error" :message="error" class="mt-2" />
