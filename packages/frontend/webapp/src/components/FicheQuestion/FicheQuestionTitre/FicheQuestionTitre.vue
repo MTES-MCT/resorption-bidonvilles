@@ -1,6 +1,6 @@
 <template>
     <ContentWrapper>
-        <p>{{ question.details }}</p>
+        <h1 class="text-3xl text-primary">{{ question.question }}</h1>
     </ContentWrapper>
 </template>
 
