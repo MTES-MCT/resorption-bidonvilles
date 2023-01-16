@@ -50,6 +50,7 @@ import Checkbox from "./Input/CheckboxUi.vue";
 import Dropdown from "./Dropdown.vue";
 import Icon from "./Icon.vue";
 import Menu from "./Menu/Menu.vue";
+import isDeepEqual from "@/utils/isDeepEqual";
 
 const props = defineProps({
     title: {
@@ -73,12 +74,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'checkedFilter']);
 
 const { title, options, modelValue, disabled } = toRefs(props);
-const checked = ref(
-    options.value.reduce((acc, option) => {
-        acc[option.value] = modelValue.value.includes(option.value);
-        return acc;
-    }, {}),
-);
+const checked = ref(computeChecked());
 const checkedIds = computed(() => {
     return Object.keys(checked.value).filter(key => checked.value[key] === true);
 });
@@ -86,6 +82,13 @@ watch(checkedIds, () => {
     emit('update:modelValue', checkedIds.value);
     emit('checkedItem', checkedIds.value);
 });
+
+watch(modelValue, () => {
+    const checkedTest = computeChecked();
+    if (!isDeepEqual(checkedTest, checked.value)) {
+        checked.value = checkedTest;
+    }
+})
 
 const titleWithActiveFilters = computed(() => {
     if (!checkedIds.length) {
@@ -97,5 +100,12 @@ const titleWithActiveFilters = computed(() => {
 
 function clear() {
     Object.keys(checked.value).forEach(key => checked.value[key] = false);
+}
+
+function computeChecked() {
+    return options.value.reduce((acc, option) => {
+        acc[option.value] = modelValue.value.includes(option.value);
+        return acc;
+    }, {});
 }
 </script>
