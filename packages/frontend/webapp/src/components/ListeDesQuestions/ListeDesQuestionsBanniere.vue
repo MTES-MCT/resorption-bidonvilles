@@ -5,21 +5,17 @@
         <img :src="img" class="max-w-xs w-3/4" />
         <div class="mt-10 md:mt-20 mb-10 md:mb-20">
             <h1 class="text-3xl text-primary font-bold">
-                Demander de l'aide à la communauté
+                Posez votre question,
             </h1>
             <h2 class="mt-4">
-                Sollicitez l'expérience des
+                Demandez de l'aide et profitez de l'expérience des
                 <span class="text-secondary"
-                    >{{ numberOfUsers }} personnes</span
+                    >{{ numberOfUsers }} utilisateurs</span
                 >
-                de notre communauté pour vous aider à résoudre un problème ou
-                une question pratique que vous vous posez dans le cadre de votre
-                résorption.
+                de la plateforme.
             </h2>
-            <h3 class="mt-4">
-                En une phrase, comment résumeriez-vous votre question ?
-            </h3>
-            <div class="flex items-center mt-4 space-x-2">
+            <h3 class="mt-4">Votre question en une phrase:</h3>
+            <div class="flex items-center mt-2 space-x-2">
                 <TextInput
                     class="mb-0 flex-1"
                     placeholder="Votre question ... "
