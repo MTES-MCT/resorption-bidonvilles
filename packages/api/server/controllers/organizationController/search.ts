@@ -58,6 +58,8 @@ export default async (req, res, next) => {
             LEFT JOIN organization_types ON localized_organizations.fk_type = organization_types.organization_type_id
             WHERE
                 users.fk_status = 'active'
+                AND 
+                users.to_be_tracked = TRUE
                 AND
                 (
                     ${generateWhere('users.first_name', atoms.length)}
