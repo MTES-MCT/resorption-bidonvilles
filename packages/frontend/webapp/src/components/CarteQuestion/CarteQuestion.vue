@@ -6,13 +6,15 @@
         <div class="content">
             <CarteQuestionQuestion :question="question.question" />
             <div class="flex justify-between">
-                <LinkOrganization
-                    :to="`/structure/${question.createdBy.organization_id}`"
-                >
-                    {{ question.createdBy.first_name }}
-                    {{ question.createdBy.last_name }} -
-                    {{ question.createdBy.organization }}
-                </LinkOrganization>
+                <div class="text-primary font-bold mb-1 mt-2">
+                    <LinkOrganization
+                        :to="`/structure/${question.createdBy.organization_id}`"
+                    >
+                        {{ question.createdBy.first_name }}
+                        {{ question.createdBy.last_name }} -
+                        {{ question.createdBy.organization }}
+                    </LinkOrganization>
+                </div>
                 <div>
                     <Tag
                         variant="primary"
