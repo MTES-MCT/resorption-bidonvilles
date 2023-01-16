@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-blue200 py-10">
+    <div class="bg-blue200">
         <FicheQuestionNouvelleReponse :question="question" class="mb-12" />
 
         <h1 class="text-lg font-bold mb-2">
