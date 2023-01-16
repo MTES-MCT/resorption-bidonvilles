@@ -15,8 +15,13 @@
                     @click="router.push('/communaute/nouvelle-question')"
                     >Poser une question</Button
                 >
-
-                <Button size="sm" @click="router.push('/annuaire')"
+                <Button
+                    class="mx-4"
+                    size="sm"
+                    @click="router.push('/communaute')"
+                    >Voir toutes les questions</Button
+                >
+                <Button class="mx-4" size="sm" @click="router.push('/annuaire')"
                     >Voir l'annuaire</Button
                 >
             </template>
