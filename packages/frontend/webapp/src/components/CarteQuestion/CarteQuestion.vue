@@ -1,6 +1,6 @@
 <template>
     <RouterLink
-        class="container rounded border-1 border-blue300 px-4 pb-4 cursor-pointer hover:bg-blue200 flex flex-col"
+        class="rounded border-1 border-blue300 px-4 pb-4 cursor-pointer hover:bg-blue200 flex flex-col"
         :to="`/question/${question.id}`"
     >
         <div class="content">
