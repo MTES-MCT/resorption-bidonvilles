@@ -1,5 +1,5 @@
 <template>
-    <FicheRubrique title="Habitants">
+    <FicheRubrique title="Habitants" category="people">
         <p class="italic mt-4">
             Le nombre de personnes sur un site est mouvant, les données fournies
             par les acteurs, même des estimations, participent à l'amélioration

@@ -2,6 +2,12 @@
     <PanneauLateral icon="history" ref="panneauLateral">
         <template v-slot:header>Historique des modifications</template>
 
+        <Filter
+            v-model="townsStore.townCategoryFilter"
+            title="Filtrer par rubrique"
+            :options="filters.categories"
+        />
+
         <FicheSiteHistoriqueItem
             v-if="town.closedAt"
             :author="town.updatedBy"
@@ -11,14 +17,18 @@
 
         <div
             class="text-sm font-bold mt-4"
-            :class="town.changelog.length < 1 ? 'mb-4' : ''"
+            :class="filteredChangelog.length < 1 ? 'mb-4' : ''"
         >
-            {{ town.changelog.length >= 1 ? town.changelog.length : "Aucune" }}
-            modification{{ town.changelog.length > 1 ? "s" : "" }}
+            {{
+                filteredChangelog.length >= 1
+                    ? filteredChangelog.length
+                    : "Aucune"
+            }}
+            modification{{ filteredChangelog.length > 1 ? "s" : "" }}
         </div>
 
         <FicheSiteHistoriqueItem
-            v-for="changelog in town.changelog"
+            v-for="changelog in filteredChangelog"
             :key="changelog.id"
             :author="changelog.author"
             :date="changelog.date"
@@ -32,11 +42,15 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, defineExpose } from "vue";
+import { defineProps, toRefs, ref, defineExpose, computed } from "vue";
+import filters from "../FicheSite.filter";
+import { useTownsStore } from "@/stores/towns.store";
 
+import { Filter } from "@resorptionbidonvilles/ui";
 import { PanneauLateral } from "@resorptionbidonvilles/ui";
 import FicheSiteHistoriqueItem from "./FicheSiteHistoriqueItem/FicheSiteHistoriqueItem.vue";
 
+const townsStore = useTownsStore();
 const props = defineProps({
     town: Object,
 });
@@ -47,5 +61,31 @@ defineExpose({
     open() {
         panneauLateral.value.open();
     },
+});
+
+function checkFilter(field) {
+    let res = false;
+    townsStore.townCategoryFilter.forEach((category) => {
+        if (filters.fields[category].includes(field)) {
+            res = true;
+        }
+    });
+    return res;
+}
+
+const filteredChangelog = computed(() => {
+    if (townsStore.townCategoryFilter.length === 0) {
+        return town.value.changelog;
+    }
+    return town.value.changelog
+        .map((change) => {
+            return {
+                ...change,
+                diff: change.diff.filter((difference) => {
+                    return checkFilter(difference.fieldKey);
+                }),
+            };
+        })
+        .filter((change) => change.diff.length !== 0);
 });
 </script>

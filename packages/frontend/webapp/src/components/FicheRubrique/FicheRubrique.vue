@@ -3,6 +3,7 @@
         <div class="flex justify-between">
             <h1 class="text-3xl text-primary">{{ title }}</h1>
             <Button
+                v-if="category"
                 size="sm"
                 icon="history"
                 iconPosition="left"
@@ -23,11 +24,12 @@ import { Button } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     title: String,
+    category: String,
 });
-const { title } = toRefs(props);
+const { title, category } = toRefs(props);
 const { emit } = useEventBus();
 
 function openHistorique() {
-    emit("fichesite:openHistorique");
+    emit("fichesite:openHistorique", category.value);
 }
 </script>
