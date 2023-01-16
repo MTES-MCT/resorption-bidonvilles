@@ -59,6 +59,7 @@ async function autocompleteFn(value) {
                     id: item.id,
                     label: item.label,
                     type: item.type.id,
+                    organization_id: item.organization,
                 },
             };
         }),
