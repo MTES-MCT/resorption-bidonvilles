@@ -229,6 +229,12 @@ export default (closingSolutions) => {
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
+        tents: {
+            title: 'Nombre de tentes',
+            data: ({ tents }) => tents,
+            width: COLUMN_WIDTHS.SMALL,
+            sum: true,
+        },
         socialOrigins: {
             title: 'Origines',
             data: ({ socialOrigins }) => (socialOrigins.length > 0 ? socialOrigins.map(({ label }) => label).join(';') : null),

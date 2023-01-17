@@ -136,6 +136,9 @@ export default (oldVersion, newVersion) => {
         huts: {
             label: 'Nombre de cabanes',
         },
+        tents: {
+            label: 'Nombre de tentes',
+        },
         socialOrigins: {
             label: 'Origines',
             processor(s) {
