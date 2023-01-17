@@ -50,7 +50,7 @@ import Checkbox from "./Input/CheckboxUi.vue";
 import Dropdown from "./Dropdown.vue";
 import Icon from "./Icon.vue";
 import Menu from "./Menu/Menu.vue";
-import isDeepEqual from "@/utils/isDeepEqual";
+import isDeepEqual from "../utils/isDeepEqual";
 
 const props = defineProps({
     title: {
