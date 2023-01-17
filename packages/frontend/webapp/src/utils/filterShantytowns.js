@@ -123,7 +123,7 @@ function checkOrigin(shantytown, filters) {
         return false;
     }
 
-    if (!shantytown.socialOrigins.length && filters.includes("null")) {
+    if (!shantytown.socialOrigins.length && filters.includes("unknown")) {
         return true;
     }
 
@@ -173,7 +173,7 @@ function checkFieldType(shantytown, filters) {
  */
 function checkPopulation(shantytown, filters) {
     return filters.some((value) => {
-        if (value === null) {
+        if (value === "unknown") {
             return shantytown.populationTotal === null;
         }
 

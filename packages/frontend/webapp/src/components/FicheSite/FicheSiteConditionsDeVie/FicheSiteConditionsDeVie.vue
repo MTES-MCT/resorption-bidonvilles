@@ -1,5 +1,8 @@
 <template>
-    <FicheRubrique title="Conditions de vie et environnement">
+    <FicheRubrique
+        title="Conditions de vie et environnement"
+        category="living_conditions"
+    >
         <p
             class="mt-4 mb-2 border border-red bg-red200 px-4 py-3"
             v-if="town.livingConditions.version < 2 && !town.closedAt"

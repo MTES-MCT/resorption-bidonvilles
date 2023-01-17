@@ -354,7 +354,7 @@ export default (oldVersion, newVersion) => {
                 'livingConditions.pest_animals.details': {
                     label: 'Précision concernant les nuisibles',
                 },
-                'livingConditions.firePrevention.diagnostic': {
+                'livingConditions.fire_prevention.diagnostic': {
                     label: 'Est-ce qu’un diagnostic prévention incendie par le SDIS a été réalisé ?',
                     processor: baseProcessors.bool,
                 },

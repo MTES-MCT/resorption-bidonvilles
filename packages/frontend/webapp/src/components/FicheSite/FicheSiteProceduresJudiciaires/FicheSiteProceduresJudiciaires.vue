@@ -1,5 +1,5 @@
 <template>
-    <FicheRubrique title="Procédure judiciaire">
+    <FicheRubrique title="Procédure judiciaire" category="justice">
         <FicheSiteProceduresJudiciaireLigne
             icon="scroll"
             label="Dépôt de plainte du propriétaire"

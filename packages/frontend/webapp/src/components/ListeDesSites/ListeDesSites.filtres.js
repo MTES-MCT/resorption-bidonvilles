@@ -3,7 +3,7 @@ export default {
         label: "Nombre de personnes",
         id: "population",
         options: [
-            { value: null, label: "Inconnu" },
+            { value: "unknown", label: "Inconnu" },
             { value: "-9", label: "Moins de 10 personnes" },
             {
                 value: "10-99",
@@ -19,9 +19,9 @@ export default {
         label: "Type de sites",
         id: "fieldType",
         options: [
-            { value: 3, label: "Terrain" },
-            { value: 2, label: "Immeuble bâti" },
-            { value: 1, label: "Inconnu" },
+            { value: "3", label: "Terrain" },
+            { value: "2", label: "Immeuble bâti" },
+            { value: "1", label: "Inconnu" },
         ],
     },
     origin: {
@@ -29,19 +29,19 @@ export default {
         id: "origin",
         options: [
             {
-                value: 1,
+                value: "1",
                 label: "Français",
             },
             {
-                value: 2,
+                value: "2",
                 label: "Union européenne",
             },
             {
-                value: 3,
+                value: "3",
                 label: "Hors Union européenne",
             },
             {
-                value: null,
+                value: "unknown",
                 label: "Inconnu",
             },
         ],
@@ -66,7 +66,7 @@ export default {
         label: "Procédure judiciaire",
         id: "justice",
         options: [
-            { value: null, label: "Inconnu" },
+            { value: "unknown", label: "Inconnu" },
             { value: "none", label: "Aucune" },
             {
                 value: "ownerComplaint",
