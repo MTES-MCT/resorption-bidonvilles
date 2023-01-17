@@ -183,6 +183,15 @@ export default (app) => {
         middlewares.appVersion.sync,
         controllers.user.upgrade,
     );
+    app.post(
+        '/users/:id/options',
+        middlewares.auth.authenticate,
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.activate'], ...args),
+        middlewares.appVersion.sync,
+        validators.user.updatePermissionOptions,
+        middlewares.validation,
+        controllers.user.updatePermissionOptions,
+    );
     app.put(
         '/users/:id/admin_comments',
         middlewares.auth.authenticate,
