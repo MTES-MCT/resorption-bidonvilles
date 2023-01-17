@@ -15,17 +15,23 @@
             >Fermeture du site</FicheSiteHistoriqueItem
         >
 
-        <div
-            class="text-sm font-bold mt-4"
+        <p
+            class="text-sm mt-4"
             :class="filteredChangelog.length < 1 ? 'mb-4' : ''"
         >
-            {{
-                filteredChangelog.length >= 1
-                    ? filteredChangelog.length
-                    : "Aucune"
-            }}
-            modification{{ filteredChangelog.length > 1 ? "s" : "" }}
-        </div>
+            <span class="font-bold"
+                >{{
+                    filteredChangelog.length >= 1
+                        ? filteredChangelog.length
+                        : "Aucune"
+                }}
+                modification{{ filteredChangelog.length > 1 ? "s" : "" }}</span
+            ><br />
+            <span v-if="townsStore.townCategoryFilter.length"
+                >correspondant à vos filtres, sur un total de
+                {{ town.changelog.length }} modifications</span
+            >
+        </p>
 
         <FicheSiteHistoriqueItem
             v-for="changelog in filteredChangelog"
