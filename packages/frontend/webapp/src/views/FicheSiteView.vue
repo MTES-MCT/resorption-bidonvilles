@@ -66,6 +66,7 @@ async function load() {
     error.value = null;
     try {
         town.value = await townsStore.fetchTown(townId.value);
+        townsStore.townCategoryFilter = [];
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
     }

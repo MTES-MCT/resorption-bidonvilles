@@ -119,6 +119,13 @@ export default mode => ([
      * Date de mise à jour des données du site
      ********************************************************************************************* */
     body('updated_at')
+        .customSanitizer((value) => {
+            if (mode === 'update') {
+                return value;
+            }
+
+            return new Date();
+        })
         .exists({ checkNull: true }).bail().withMessage('Le champ "Date de mise à jour" est obligatoire')
         .toDate()
         .custom((value, { req }) => {

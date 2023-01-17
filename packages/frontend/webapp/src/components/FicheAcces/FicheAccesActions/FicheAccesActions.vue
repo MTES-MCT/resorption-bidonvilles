@@ -27,6 +27,7 @@ import copyActivationLink from "./actions/copyActivationLink.action";
 import deactivate from "./actions/deactivate.action";
 import denyAccess from "./actions/denyAccess.action";
 import grantAccess from "./actions/grantAccess.action";
+import modifyOptions from "./actions/modifyOptions.action";
 import ACTION_DESCRIPTIONS from "./FicheAccesActions.descriptions";
 
 // boutons d'action
@@ -37,6 +38,7 @@ import FicheAccesActionCopyActivationLink from "./FicheAccesActionCopyActivation
 import FicheAccesActionDeactivate from "./FicheAccesActionDeactivate.vue";
 import FicheAccesActionDenyAccess from "./FicheAccesActionDenyAccess.vue";
 import FicheAccesActionGrantAccess from "./FicheAccesActionGrantAccess.vue";
+import FicheAccesActionModifyOptions from "./FicheAccesActionModifyOptions.vue";
 
 const props = defineProps({
     user: {
@@ -90,6 +92,13 @@ const actions = [
         component: FicheAccesActionGrantAccess,
         action: (...args) => {
             return grantAccess(...args, options.value);
+        },
+    },
+    {
+        id: "modify_options",
+        component: FicheAccesActionModifyOptions,
+        action: (...args) => {
+            return modifyOptions(...args, options.value);
         },
     },
 ];

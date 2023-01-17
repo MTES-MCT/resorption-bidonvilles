@@ -49,6 +49,7 @@ export const useTownsStore = defineStore("towns", () => {
             ...filters.properties.value,
         }).sort(sortFn.value);
     });
+    const townCategoryFilter = ref([]);
     const configStore = useConfigStore();
     const currentPage = {
         index: ref(-1), // index = 1 pour la première page
@@ -139,6 +140,7 @@ export const useTownsStore = defineStore("towns", () => {
         error.value = null;
         heatwaveStatuses.value = {};
         sort.value = "updatedAt";
+        townCategoryFilter.value = [];
         resetPagination();
         resetFilters();
     }
@@ -169,6 +171,7 @@ export const useTownsStore = defineStore("towns", () => {
         isLoading,
         error,
         filters,
+        townCategoryFilter,
         towns,
         sort,
         currentPage,

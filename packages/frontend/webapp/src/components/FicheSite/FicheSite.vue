@@ -55,6 +55,7 @@
 import { defineProps, toRefs, computed, watch, ref } from "vue";
 import { useEventBus } from "@/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
+import { useTownsStore } from "@/stores/towns.store";
 import menu from "./FicheSite.menu";
 
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
@@ -75,6 +76,7 @@ const props = defineProps({
 });
 const { town } = toRefs(props);
 const userStore = useUserStore();
+const townsStore = useTownsStore();
 const { bus } = useEventBus();
 const historique = ref(null);
 
@@ -97,7 +99,8 @@ const tabs = computed(() => {
 
 watch(
     () => bus.value.get("fichesite:openHistorique"),
-    () => {
+    (data) => {
+        townsStore.townCategoryFilter = [...data];
         historique.value.open();
     }
 );

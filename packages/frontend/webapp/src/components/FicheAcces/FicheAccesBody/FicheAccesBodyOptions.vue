@@ -18,7 +18,7 @@
                 name="options"
                 variant="checkbox"
                 direction="col"
-                :disabled="user.status !== 'new'"
+                :disabled="user.status === 'inactive'"
             />
         </p>
     </div>
@@ -41,7 +41,6 @@ const props = defineProps({
 });
 const { user, options } = toRefs(props);
 const emit = defineEmits(["update:options"]);
-
 const accessPermission = computed(() => {
     const configStore = useConfigStore();
     return configStore.config.permissions_description[user.value.role_id];
