@@ -1,5 +1,3 @@
-layouts/error.vue
-
 <template>
     <Container class="mb-10">
         <p>

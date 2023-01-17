@@ -1,5 +1,3 @@
-layouts/error.vue
-
 <template>
     <NuxtLayout>
         <Error />
