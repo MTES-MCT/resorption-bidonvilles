@@ -18,7 +18,7 @@ export default (shantytown) => {
             new Table({
                 columnWidths: [880, 880, 880, 880, 880, 880, 880, 880, 880, 880, 880], // total page width is 9638 DXA for A4 portrait
                 rows: [
-                    createRow(['Date', 'Personnes', 'Ménages', '0-3 ans', '3-6 ans', '6-12 ans', '12-16 ans', '16-18 ans', 'Inscrits dans un établissement scolaire', 'Caravanes', 'Cabanes']),
+                    createRow(['Date', 'Personnes', 'Ménages', '0-3 ans', '3-6 ans', '6-12 ans', '12-16 ans', '16-18 ans', 'Inscrits dans un établissement scolaire', 'Caravanes', 'Cabanes', 'Tentes']),
                     ...population.map(row => createRow([row.date, row.populationTotal, row.populationCouples, row.population0to3, row.population3to6, row.population6to12, row.population12to16, row.population16to18, row.minorsInSchool, row.caravans, row.huts, row.tents])),
                 ],
             }),

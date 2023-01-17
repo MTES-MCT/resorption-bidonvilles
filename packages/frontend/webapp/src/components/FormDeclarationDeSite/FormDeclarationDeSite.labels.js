@@ -22,6 +22,7 @@ export default {
     social_origins: "Quelle est l'origine des habitants ?",
     caravans: "Caravanes",
     huts: "Habitats autoconstruits",
+    tents: "Tentes",
     census_status: "Quel est le statut du diagnostic social ?",
     census_conducted_at: "Date du diagnostic",
     census_conducted_by: "Intervenant en charge du diagnostic",

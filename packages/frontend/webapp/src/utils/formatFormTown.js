@@ -45,6 +45,7 @@ export default function (data) {
         minors_in_school: formatIntToStr(data.minorsInSchool),
         caravans: formatIntToStr(data.caravans),
         huts: formatIntToStr(data.huts),
+        tents: formatIntToStr(data.tents),
         social_origins: data.socialOrigins
             ? data.socialOrigins.map(({ id }) => id)
             : [],
