@@ -100,7 +100,7 @@ const tabs = computed(() => {
 watch(
     () => bus.value.get("fichesite:openHistorique"),
     (data) => {
-        townsStore.townCategoryFilter = data;
+        townsStore.townCategoryFilter = [...data];
         historique.value.open();
     }
 );
