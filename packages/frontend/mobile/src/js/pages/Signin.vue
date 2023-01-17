@@ -7,6 +7,10 @@
             </h1>
         </header>
 
+        <p class="bg-orange300 py-2 px-4 mb-6 text-center" v-if="isExpired">
+            Votre session a expiré, veuillez vous reconnecter
+        </p>
+
         <form @submit.prevent="onLogin">
             <TextInput
                 placeholder="marcel.dupont@example.com"
@@ -53,6 +57,11 @@ export default {
             email: "",
             password: "",
         };
+    },
+    computed: {
+        isExpired() {
+            return this.$route.query && this.$route.query.r === "1";
+        },
     },
     methods: {
         async onLogin() {
