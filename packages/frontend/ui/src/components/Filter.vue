@@ -4,10 +4,20 @@
             <Button variant="custom" size="sm" :icon="isOpen ? 'chevron-up' : 'chevron-down'" iconPosition="right"
                 :class="[
                     'px-4 rounded focus:outline-none border-1 border-primary whitespace-nowrap',
-                    isOpen
+                    isOpen || checkedIds.length > 0
                         ? 'bg-primary text-white hover:text-white focus:text-white'
                         : 'hover:bg-blue200 hover:text-primary text-primary',
-                ]">{{ titleWithActiveFilters }}</Button>
+                ]">
+                <p class="flex items-center justify-between space-x-2">
+                    <span class="block w-4 h-4 bg-white text-primary text-center leading-4 rounded-full"
+                        v-if="checkedIds.length">{{
+                            checkedIds.length
+                        }}</span>
+                    <span>{{
+                        titleWithActiveFilters
+                    }}</span>
+                </p>
+            </Button>
         </template>
         <template v-slot:menu>
             <Menu containerClasses="py-0">
