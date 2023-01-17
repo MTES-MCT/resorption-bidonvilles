@@ -14,7 +14,7 @@
                             checkedIds.length
                         }}</span>
                     <span>{{
-                        titleWithActiveFilters
+                        title
                     }}</span>
                 </p>
             </Button>
@@ -98,14 +98,6 @@ watch(modelValue, () => {
     if (!isDeepEqual(checkedTest, checked.value)) {
         checked.value = checkedTest;
     }
-})
-
-const titleWithActiveFilters = computed(() => {
-    if (!checkedIds.length) {
-        return title.value;
-    }
-
-    return `${title.value} (${checkedIds.length})`;
 });
 
 function clear() {
