@@ -4,13 +4,101 @@
 <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
+    <style>
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .card {
+            position: relative;
+            padding: 25px 50px 25px 50px;
+            background-color: #e5e5f4;
+            border: solid;
+            border-color: black;
+            border-width: 1px;
+        }
+
+        .card-content {
+            font-family: arial, sans-serif;
+            margin-left: 50px;
+            margin-right: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card-content-row {
+            width: 100%;
+            padding: 20px 0 20px 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .bolded {
+            font-weight: bold;
+        }
+
+        .card-image {
+            max-height: 240px;
+            position: absolute;
+            right: -160px;
+            bottom: -110px;
+        }
+
+        .ibutton-icon {
+            height: 16px;
+            position: relative;
+            top: 3px;
+            padding-right: 5px;
+        }
+
+        .signature {
+            margin-top: 50px;
+        }
+    </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Résorption-bidonvilles — Agir pour résorber les bidonvilles</title>
 </head>
 
 <body>
-    <div id="app"></div>
+    <div id="app">
+    </div>
     <script type="module" src="/src/main.js"></script>
+    <script nomodule>
+        console.log('This browser DOES NOT support <script type="module">');
+        document.getElementById("app").innerHTML = `
+        <div>
+            <div class="container">
+                <div class="card">
+                    <div class="card-content mb-3">
+                        <p>La plateforme collaborative <a href="/"><em class="italic">Résorption-bidonvilles</em></a> opérée par la DIHAL nécessite l'utilisation d'un navigateur internet récent.</p>
+                        <p class="card-content-text bolded"><em>Nous vous invitons à  mettre à jour votre navigateur.</em></p>
+                        <p class="card-content-text">Voici quelques navigateurs supportés par la plateforme:</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-content-row">
+                            <a class="card-content-link" href="https://www.google.fr/chrome/" target="_blank"><img class="ibutton-icon" src="/public/assets/images/browsers/google_chrome.png"/><span>Google Chrome (version 61 minimum)</span></a>
+                            <a class="card-content-link" href="https://www.mozilla.org/fr/firefox/new/" target="_blank"><img class="ibutton-icon" src="/public/assets/images/browsers/mozilla.png"/><span>Firefox (version 60 minimum)</span></a>
+                            <a class="card-content-link" href="https://www.microsoft.com/fr-fr/edge" target="_blank"><img class="ibutton-icon" src="/public/assets/images/browsers/edge.png"/><span>Microsoft Edge (version 16 minimum)</span></a>
+                    </div>
+                    <div class="card-content-row">
+                        <a class="card-content-link" href="https://brave.com/fr/" target="_blank"><img class="ibutton-icon" src="/public/assets/images/browsers/brave.png"/><span>Brave</span></a>
+                        <a class="card-content-link" href="https://www.opera.com/fr" target="_blank"><img class="ibutton-icon" src="/public/assets/images/browsers/opera.png"/><span>Opera (version 48 minimum)</span></a>
+                        <a class="card-content-link" href="https://vivaldi.com/fr/" target="_blank"><img class="ibutton-icon" src="/public/assets/images/browsers/vivaldi.png"/><span>Vivaldi</span></a>
+                    </div>
+                    <div class="signature">
+                        <a href="https://beta.gouv.fr/startups/resorption-bidonvilles.html#equipe">
+                            L'équipe de <em class="italic">Résorption-bidonvilles</em>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>                
+        `;
+    </script>
 </body>
 
 </html>
