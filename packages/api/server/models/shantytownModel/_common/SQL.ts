@@ -24,6 +24,7 @@ export default {
         'shantytowns.minors_in_school': 'minorsInSchool',
         'shantytowns.caravans': 'caravans',
         'shantytowns.huts': 'huts',
+        'shantytowns.tents': 'tents',
         'shantytowns.living_conditions_version': 'livingConditionsVersion',
         'shantytowns.access_to_sanitary': 'accessToSanitary',
         'shantytowns.sanitary_comments': 'sanitaryComments',

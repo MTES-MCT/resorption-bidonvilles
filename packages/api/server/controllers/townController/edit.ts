@@ -28,6 +28,7 @@ export default async (req, res, next) => {
                 minors_in_school: req.body.minors_in_school,
                 caravans: req.body.caravans,
                 huts: req.body.huts,
+                tents: req.body.tents,
                 fk_field_type: req.body.field_type,
                 fk_owner_type: req.body.owner_type,
                 fk_city: req.body.citycode,

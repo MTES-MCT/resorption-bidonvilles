@@ -113,6 +113,11 @@ export default function (mode = "create") {
             .min(0)
             .transform(emptyStringToNull)
             .label(labels.huts),
+        tents: number()
+            .nullable()
+            .min(0)
+            .transform(emptyStringToNull)
+            .label(labels.tents),
         census_status: string().required().label(labels.census_status),
         census_conducted_at: date()
             .when("census_status", {

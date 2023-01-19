@@ -34,6 +34,7 @@ export default {
                 },
                 { title: "Nombre de caravanes", content: "caravans" },
                 { title: "Nombre de cabanes", content: "huts" },
+                { title: "Nombre de tentes", content: "tents" },
             ],
         };
     },
