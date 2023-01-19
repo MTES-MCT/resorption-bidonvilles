@@ -7,6 +7,7 @@ export default async () => sequelize.query(
       FROM users
       LEFT JOIN localized_organizations on users.fk_organization = localized_organizations.organization_id
       WHERE fk_status = 'active'
+      AND to_be_tracked = TRUE
       GROUP BY fk_departement
       ORDER BY fk_departement
         `,

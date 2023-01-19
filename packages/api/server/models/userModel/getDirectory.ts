@@ -41,6 +41,8 @@ export default async () => {
             organizations.active = TRUE
             AND
             users.fk_status = 'active'
+            AND
+            users.to_be_tracked = TRUE
         ORDER BY organizations.name, users.last_name, users.first_name
         `,
         {
