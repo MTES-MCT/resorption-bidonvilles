@@ -10,6 +10,8 @@ export default async () => {
         WHERE
             users.fk_status='active'
             AND
+            to_be_tracked = TRUE
+            AND
             organizations.active = TRUE
         `,
         {

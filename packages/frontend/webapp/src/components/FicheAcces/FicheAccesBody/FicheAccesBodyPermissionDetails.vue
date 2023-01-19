@@ -25,7 +25,12 @@
                 </div>
                 <div v-if="item.comments" class="flex items-center">
                     <div class="w-6">
-                        <Icon class="text-error" icon="times" />
+                        <Icon
+                            v-if="item.comments.startsWith('hors')"
+                            class="text-error"
+                            icon="times"
+                        />
+                        <Icon v-else class="text-tertiary" icon="check" />
                     </div>
                     <div>
                         {{ item.comments }}

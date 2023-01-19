@@ -107,6 +107,10 @@ const sections = [
         title: "Habitats autoconstruits",
         data: "huts",
     },
+    {
+        title: "Tentes",
+        data: "tents",
+    },
 ];
 
 const populationHistory = computed(() => {
@@ -128,6 +132,7 @@ const populationHistory = computed(() => {
         minorsInSchool: formatInt(town.value.minorsInSchool, "-"),
         caravans: formatInt(town.value.caravans, "-"),
         huts: formatInt(town.value.huts, "-"),
+        tents: formatInt(town.value.tents, "-"),
     };
 
     // on traite le changelog pour n'y conserver que les étapes qui contiennent au moins un
@@ -141,7 +146,8 @@ const populationHistory = computed(() => {
                         fieldKey.startsWith("population") ||
                         fieldKey === "minorsInSchool" ||
                         fieldKey === "caravans" ||
-                        fieldKey === "huts"
+                        fieldKey === "huts" ||
+                        fieldKey === "tents"
                 ),
             };
         })

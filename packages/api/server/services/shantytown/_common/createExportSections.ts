@@ -65,6 +65,7 @@ export default (user, data, properties, closedTowns, closingSolutions) => {
             properties.minorsInSchool,
             properties.caravans,
             properties.huts,
+            properties.tents,
             properties.socialOrigins,
         ],
     });

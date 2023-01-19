@@ -437,6 +437,18 @@ export default mode => ([
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     /* **********************************************************************************************
+     * Nombre de tentes
+     ********************************************************************************************* */
+    body('tents')
+        .optional({ nullable: true })
+        .toInt()
+        .isInt().bail().withMessage('Le champ "Nombre de tentes" est invalide')
+        .isInt({ min: 0 }).withMessage('Le champ "Nombre de tentes" ne peut pas être inférieur à 0'),
+
+    body('tents')
+        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+
+    /* **********************************************************************************************
      * Nombre de ménages
      ********************************************************************************************* */
     body('population_couples')

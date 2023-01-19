@@ -7,6 +7,7 @@
             width="w-32"
         />
         <TextInput id="huts" name="huts" :label="labels.huts" width="w-32" />
+        <TextInput id="tents" name="tents" :label="labels.tents" width="w-32" />
     </div>
 </template>
 

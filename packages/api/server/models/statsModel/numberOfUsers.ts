@@ -7,6 +7,7 @@ export default async (departement) => {
         SELECT COUNT(*) from users
         LEFT JOIN localized_organizations on users.fk_organization = localized_organizations.organization_id
         WHERE fk_status = 'active'
+        AND to_be_tracked = TRUE
         ${departement ? `AND departement_code = '${departement}'` : ''}
         `,
         {
