@@ -18,7 +18,7 @@
                 userStore.hasLocalizedPermission(
                     'shantytown_comment.create',
                     town
-                ) && !town.closedAt
+                )
             "
         >
             <template v-slot:aside>
