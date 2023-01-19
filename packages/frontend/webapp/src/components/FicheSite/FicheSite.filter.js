@@ -29,6 +29,7 @@ export default {
             "minorsInSchool",
             "caravans",
             "huts",
+            "tents",
             "socialOrigins",
         ],
         living_conditions: [
