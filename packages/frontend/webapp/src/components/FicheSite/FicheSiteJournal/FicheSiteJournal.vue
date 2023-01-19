@@ -22,11 +22,20 @@
             "
         >
             <template v-slot:aside>
-                <FicheSiteJournalAside :town="town" />
+                <FicheSiteJournalAside
+                    :showFullForm="showFullForm"
+                    :town="town"
+                />
             </template>
             <template v-slot:body>
                 <FicheSiteJournalFormNouveauMessage
                     :town="town"
+                    :showFullForm="showFullForm"
+                    @show="
+                        (value) => {
+                            showFullForm = value;
+                        }
+                    "
                     class="mb-12"
                 />
             </template>
@@ -34,11 +43,24 @@
 
         <FicheJournalLayout>
             <template v-slot:body>
-                <h1 class="text-lg font-bold mb-2">
-                    {{ comments.length }} message{{
-                        comments.length > 1 ? "s" : ""
-                    }}
-                </h1>
+                <div class="flex sticky top-0 py-2 mb-2 bg-orange200">
+                    <h1 class="text-lg font-bold mr-4">
+                        {{ comments.length }} message{{
+                            comments.length > 1 ? "s" : ""
+                        }}
+                    </h1>
+                    <Button
+                        v-if="!showFullForm"
+                        variant="primary"
+                        :class="`border rounded-lg`"
+                        icon="pen"
+                        size="sm"
+                        iconPosition="left"
+                        @click="writeMessage"
+                    >
+                        Ecrire un message
+                    </Button>
+                </div>
                 <FicheSiteJournalListeDesMessages
                     :comments="comments"
                     v-if="comments.length > 0"
@@ -53,10 +75,11 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { defineProps, ref, toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
+import router from "@/helpers/router";
 
-import { Icon } from "@resorptionbidonvilles/ui";
+import { Icon, Button } from "@resorptionbidonvilles/ui";
 import FicheJournalLayout from "@/components/FicheJournalLayout/FicheJournalLayout.vue";
 import FicheSiteJournalAside from "./FicheSiteJournalAside.vue";
 import FicheSiteJournalFormNouveauMessage from "./FicheSiteJournalFormNouveauMessage/FicheSiteJournalFormNouveauMessage.vue";
@@ -68,9 +91,16 @@ const props = defineProps({
 const { town } = toRefs(props);
 const userStore = useUserStore();
 
+const showFullForm = ref(false);
+
 const comments = computed(() => {
     return [...town.value.comments.regular, ...town.value.comments.covid].sort(
         (a, b) => b.createdAt - a.createdAt
     );
 });
+
+function writeMessage() {
+    router.push("#journal_du_site");
+    showFullForm.value = true;
+}
 </script>
