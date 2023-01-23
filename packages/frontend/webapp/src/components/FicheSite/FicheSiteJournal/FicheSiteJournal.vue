@@ -42,15 +42,11 @@
         </FicheJournalLayout>
 
         <FicheJournalLayout>
-            <template v-slot:body>
-                <div class="flex sticky top-0 py-2 mb-2 bg-orange200">
-                    <h1 class="text-lg font-bold mr-4">
-                        {{ comments.length }} message{{
-                            comments.length > 1 ? "s" : ""
-                        }}
-                    </h1>
+            <template v-slot:aside
+                ><div
+                    class="flex sticky justify-center top-8 py-2 mb-2 bg-orange200"
+                >
                     <Button
-                        v-if="!showFullForm"
                         variant="primary"
                         :class="`border rounded-lg`"
                         icon="pen"
@@ -60,7 +56,14 @@
                     >
                         Ecrire un message
                     </Button>
-                </div>
+                </div></template
+            >
+            <template v-slot:body>
+                <h1 class="text-lg font-bold mr-4">
+                    {{ comments.length }} message{{
+                        comments.length > 1 ? "s" : ""
+                    }}
+                </h1>
                 <FicheSiteJournalListeDesMessages
                     :comments="comments"
                     v-if="comments.length > 0"

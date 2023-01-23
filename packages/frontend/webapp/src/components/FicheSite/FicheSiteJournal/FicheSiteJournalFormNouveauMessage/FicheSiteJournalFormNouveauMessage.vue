@@ -1,19 +1,19 @@
 <template>
     <form>
-        <div class="flex items-center">
-            <p class="font-bold text-lg">Partager une info</p>
-            <Button
-                :icon="showFullForm ? 'chevron-up' : 'chevron-down'"
-                variant="text"
-                class="text-primary"
-                type="button"
-                @click="toggleCollapse"
-                >{{ showFullForm ? "Replier" : "Déplier" }}
-            </Button>
-        </div>
+        <p class="font-bold text-lg">Partager une info</p>
 
         <div class="bg-white p-6">
             <FormNouveauMessageInputMessage :rows="showFullForm ? 5 : 2" />
+            <Button
+                :icon="showFullForm ? 'chevron-up' : 'chevron-down'"
+                variant="text"
+                class="text-primary mb-2"
+                type="button"
+                @click="toggleCollapse"
+                >{{
+                    showFullForm ? "Masquer les options" : "voir plus d'options"
+                }}
+            </Button>
             <div v-if="showFullForm">
                 <FormNouveauMessageInputTags />
                 <FormNouveauMessageInputMode />
