@@ -45,6 +45,7 @@ import { defineProps, toRefs, ref, watch } from "vue";
 import { useForm } from "vee-validate";
 import { useTownsStore } from "@/stores/towns.store";
 import schema from "./FicheSiteJournalFormNouveauMessage.schema";
+import router from "@/helpers/router";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
 import FormNouveauMessageInputMessage from "./inputs/FormNouveauMessageInputMessage.vue";
@@ -94,6 +95,8 @@ const submit = handleSubmit(async (values) => {
         });
 
         resetForm();
+        // on rafraîchit la page pour avoir le site mis à jour
+        router.push(`/site/${town.value.id}/#journal_du_site`);
     } catch (e) {
         error.value = e?.user_message || "Une erreur inconnue est survenue";
         if (e?.fields) {
