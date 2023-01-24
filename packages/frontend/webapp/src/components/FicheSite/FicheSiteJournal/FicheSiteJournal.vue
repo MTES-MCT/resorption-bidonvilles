@@ -48,7 +48,6 @@
                 >
                     <Button
                         variant="primary"
-                        :class="`border rounded-lg`"
                         icon="pen"
                         size="sm"
                         iconPosition="left"

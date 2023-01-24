@@ -7,11 +7,11 @@
             <Button
                 :icon="showFullForm ? 'chevron-up' : 'chevron-down'"
                 variant="text"
-                class="text-primary mb-2"
+                class="text-primary"
                 type="button"
                 @click="toggleCollapse"
                 >{{
-                    showFullForm ? "Masquer les options" : "voir plus d'options"
+                    showFullForm ? "Masquer les options" : "Voir plus d'options"
                 }}
             </Button>
             <div v-if="showFullForm">
