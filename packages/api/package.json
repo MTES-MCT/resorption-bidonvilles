@@ -100,8 +100,10 @@
     "build": "tsc -p tsconfig.production.json && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist && cp .sequelizerc dist && cp -r db/data dist/db/data",
     "start": "nodemon dist/server/index.js",
     "test": "yarn mocha -r ts-node/register --require ./test/bootstrap.ts --bail",
-    "test:unit": "yarn mocha -r ts-node/register --require ./test/bootstrap.ts './**/*.spec.ts' --bail --exit",
-    "test:integration": "yarn test --grep '.*server/models.*'",
+    "test:unit": "yarn mocha -r ts-node/register --require ./test/bootstrap.ts './**/!(*.int.spec.ts|!(*.spec.ts))' --bail --exit",
+    "test:integration": "yarn mocha -r ts-node/register --require ./test/globalFixtures.ts --require ./test/bootstrap.int.ts --bail --exit",
+    "test:integration:watch": "TS_NODE_TRANSPILE_ONLY=true yarn mocha -r ts-node/register --require ./test/globalFixtures.ts --require ./test/bootstrap.int.ts --bail --watch --watch-extensions ts --watch-files server",
+    "test:integration:all": "yarn mocha -r ts-node/register --require ./test/globalFixtures.ts --require ./test/bootstrap.int.ts './server/**/*.int.spec.ts' --bail --exit",
     "lint": "eslint --max-warnings=0 --ext .ts",
     "lint:all": "eslint --no-error-on-unmatched-pattern --max-warnings=0 --ext .ts server",
     "emails:build": "ts-node server/mails/build.ts"
