@@ -1,3 +1,10 @@
+// action
+import actionCreate from './actionController/create';
+import actionCreateComment from './actionController/createComment';
+import actionFetchOne from './actionController/fetchOne';
+import actionList from './actionController/list';
+import actionSetIndicateurs from './actionController/setIndicateurs';
+import actionUpdate from './actionController/update';
 // config
 import configList from './configController/list';
 // contact
@@ -87,6 +94,14 @@ import exportMobileUserNavigationLogs from './userNavigationLogsController/expor
 import exportWebappUserNavigationLogs from './userNavigationLogsController/exportWebappSessions';
 
 export default () => ({
+    action: {
+        create: actionCreate,
+        createComment: actionCreateComment,
+        fetchOne: actionFetchOne,
+        list: actionList,
+        setIndicateurs: actionSetIndicateurs,
+        update: actionUpdate,
+    },
     config: {
         list: configList,
     },

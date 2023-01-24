@@ -332,6 +332,42 @@ export default (app) => {
         controllers.town.findNearbyTowns,
     );
 
+    //
+    app.get(
+        '/actions',
+        middlewares.auth.authenticate,
+        controllers.action.list,
+    );
+    app.get(
+        '/actions/:id',
+        middlewares.auth.authenticate,
+        controllers.action.fetchOne,
+    );
+    app.post(
+        '/actions',
+        middlewares.auth.authenticate,
+        validators.action.create,
+        controllers.action.create,
+    );
+    app.patch(
+        '/actions/:id',
+        middlewares.auth.authenticate,
+        validators.action.update,
+        controllers.action.update,
+    );
+    app.put(
+        '/actions/:id/indicateurs/:year',
+        middlewares.auth.authenticate,
+        validators.action.setIndicateurs,
+        controllers.action.setIndicateurs,
+    );
+    app.post(
+        '/actions/:id/comments',
+        middlewares.auth.authenticate,
+        validators.action.createComment,
+        controllers.action.createComment,
+    );
+
     // plans
     app.get(
         '/plans',

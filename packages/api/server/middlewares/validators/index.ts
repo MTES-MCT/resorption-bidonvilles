@@ -29,6 +29,11 @@ import findUserTowns from './findUserTowns';
 import createNote from './note/create';
 import publishNote from './note/publish';
 
+import actionCreate from './actions/create';
+import actionCreateComment from './actions/createComment';
+import actionSetIndicateurs from './actions/setIndicateurs';
+import actionUpdate from './actions/update';
+
 export default {
     closeTown,
     fixClosedStatus,
@@ -55,6 +60,12 @@ export default {
         createPlanComment,
     },
     invite,
+    action: {
+        create: actionCreate,
+        createComment: actionCreateComment,
+        setIndicateurs: actionSetIndicateurs,
+        update: actionUpdate,
+    },
     activity: {
         list: activityList,
     },
