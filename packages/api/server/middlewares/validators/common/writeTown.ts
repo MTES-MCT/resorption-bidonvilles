@@ -126,15 +126,17 @@ export default mode => ([
 
             return new Date();
         })
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de mise à jour" est obligatoire')
-        .toDate()
-        .custom((value, { req }) => {
+        .customSanitizer((value) => {
             const today = new Date();
 
             if (value > today) {
-                throw new Error('La date de mise à jour du site ne peut pas être future');
+                return today;
             }
-
+            return value;
+        })
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de mise à jour" est obligatoire')
+        .toDate()
+        .custom((value, { req }) => {
             // for updates only
             if (req.town) {
                 const lastUpdate = new Date(req.town.updatedAt);
