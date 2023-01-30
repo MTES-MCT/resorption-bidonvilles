@@ -2,6 +2,11 @@
     <Layout :logo="false" :navbar="false">
         <template v-slot:header>
             <TownsSearchHeader ref="searchbar" />
+            <TownSearchFilter
+                :selectedFilter="filter"
+                @changeFilter="changeFilter"
+                v-if="this.$store.state.search.search"
+            />
         </template>
 
         <template v-slot:scroll>
@@ -41,9 +46,15 @@ import Container from "#src/js/components/Container.vue";
 import Layout from "#src/js/components/Layout.vue";
 import SearchSection from "./SearchSection.vue";
 import TownsSearchHeader from "./TownsSearchHeader.vue";
+import TownSearchFilter from "./TownSearchFilter.vue";
 import { Button, Spinner } from "@resorptionbidonvilles/ui";
 
 export default {
+    data() {
+        return {
+            filter: "all",
+        };
+    },
     components: {
         Button,
         Container,
@@ -51,11 +62,17 @@ export default {
         SearchSection,
         Spinner,
         TownsSearchHeader,
+        TownSearchFilter,
     },
     mounted() {
         if (this.$store.state.towns.state !== "loaded") {
             this.$store.dispatch("fetchTowns");
         }
+    },
+    methods: {
+        changeFilter(value) {
+            this.filter = value;
+        },
     },
     computed: {
         loading() {
@@ -68,6 +85,20 @@ export default {
         error() {
             return this.$store.state.search.error;
         },
+        filteredResults() {
+            if (this.$store.state.search.results) {
+                return this.$store.state.search.results.filter((town) => {
+                    if (this.filter === "all") {
+                        return true;
+                    } else if (this.filter === "open") {
+                        return town.closedAt === null;
+                    } else if (this.filter === "closed") {
+                        return town.closedAt !== null;
+                    }
+                });
+            }
+            return [];
+        },
         sections() {
             if (this.loading) {
                 return;
@@ -77,7 +108,7 @@ export default {
                 return [
                     {
                         title: "Résultats de recherche",
-                        items: this.$store.state.search.results,
+                        items: this.filteredResults,
                     },
                 ];
             }
