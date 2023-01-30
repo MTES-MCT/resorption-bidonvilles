@@ -145,6 +145,9 @@ export default (user, data, properties, closedTowns, closingSolutions) => {
             title: 'Intervenants',
             properties: [
                 properties.actors,
+                {
+                    title: 'Intervenant de ma structure', data: ({ actors }) => (actors.map(actor => actor.organization.id).includes(user.organization.id) ? 'Oui' : 'Non'), width: 20, sum: true,
+                },
             ],
         });
     }
