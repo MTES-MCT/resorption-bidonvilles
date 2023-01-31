@@ -66,7 +66,6 @@
                 <StatistiquesMetriquesPrincipales class="mt-4" :stats="stats" />
                 <StatistiquesSites class="mt-8" :stats="stats" />
                 <StatistiquesHabitants class="mt-8" :stats="stats" />
-                <StatistiquesActions class="mt-8" :stats="stats" />
                 <StatistiquesUtilisateurs class="mt-8" :stats="stats" />
             </template>
         </ArrangementLeftMenu>
@@ -93,7 +92,6 @@ import Loading from "@/components/Loading/Loading.vue";
 import StatistiquesMetriquesPrincipales from "./StatistiquesMetriquesPrincipales/StatistiquesMetriquesPrincipales.vue";
 import StatistiquesSites from "./StatistiquesSites/StatistiquesSites.vue";
 import StatistiquesHabitants from "./StatistiquesHabitants/StatistiquesHabitants.vue";
-import StatistiquesActions from "./StatistiquesActions/StatistiquesActions.vue";
 import StatistiquesUtilisateurs from "./StatistiquesUtilisateurs/StatistiquesUtilisateurs.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 

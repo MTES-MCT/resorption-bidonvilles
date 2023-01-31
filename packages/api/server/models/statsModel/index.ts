@@ -8,7 +8,6 @@ import numberOfClosedShantytownsPerMonth from './numberOfClosedShantytownsPerMon
 import numberOfCollaboratorAndAssociationOrganizations from './numberOfCollaboratorAndAssociationOrganizations';
 import numberOfCollaboratorAndAssociationUsers from './numberOfCollaboratorAndAssociationUsers';
 import numberOfComments from './numberOfComments';
-import numberOfCreditsPerYear from './numberOfCreditsPerYear';
 import numberOfDepartements from './numberOfDepartements';
 import numberOfNewShantytownsPerMonth from './numberOfNewShantytownsPerMonth';
 import numberOfNewUsersPerMonth from './numberOfNewUsersPerMonth';
@@ -41,7 +40,6 @@ export default {
     numberOfCollaboratorAndAssociationOrganizations,
     numberOfCollaboratorAndAssociationUsers,
     numberOfComments,
-    numberOfCreditsPerYear,
     numberOfDepartements,
     numberOfNewShantytownsPerMonth,
     numberOfNewUsersPerMonth,
