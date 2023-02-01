@@ -21,11 +21,9 @@
                 </p>
             </header>
 
-            <p class="mt-4 text-sm text-G500">
-                {{ organization.users.length }} membre{{
-                    plural ? "s" : ""
-                }}
-                inscrit{{ plural ? "s" : "" }} sur la plateforme
+            <p class="my-2 text-sm text-G500">
+                {{ organization.users.length }} membre{{ plural ? "s" : "" }}
+                {{ wording.first }}{{ plural ? "s" : "" }} {{ wording.second }}
             </p>
             <ul class="flex-1">
                 <li
@@ -62,8 +60,12 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    wording: {
+        type: Object,
+        required: true,
+    },
 });
-const { organization } = toRefs(props);
+const { organization, wording } = toRefs(props);
 
 const userStore = useUserStore();
 const name = computed(() => {
