@@ -1,7 +1,6 @@
 <template>
     <Modal :isOpen="isOpen" closeWhenClickOutside @close="close">
         <template v-slot:title>
-            <!-- Qui a accès aux données judiciaires de ce site ? -->
             {{ title }}
         </template>
 
@@ -12,7 +11,6 @@
             />
         </template>
         <template v-slot:footer>
-            <!-- <Button variant="primaryText" @click="isOpen = false" -->
             <Button class="ml-5" :loading="loading" @click="isOpen = false"
                 >J'ai compris</Button
             >
