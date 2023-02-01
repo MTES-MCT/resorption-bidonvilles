@@ -8,7 +8,6 @@
         >
             {{ formatBool(town.ownerComplaint) }}
         </FicheSiteProceduresJudiciaireLigne>
-
         <FicheSiteProceduresJudiciaireLigne
             icon="balance-scale"
             label="Existence d’une procédure judiciaire"
@@ -38,20 +37,34 @@
             {{ town.bailiff || "non communiqué" }}
         </FicheSiteProceduresJudiciaireLigne>
     </FicheRubrique>
+    <ModaleListeAccesPJ
+        ref="accessPjModal"
+        v-if="permissionsToAccessJustice"
+        :permissionsToAccessJustice="permissionsToAccessJustice"
+        :title="title"
+    />
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { defineProps, ref, toRefs, computed, watch } from "vue";
 import formatBool from "@/utils/formatBool";
 import formatDate from "@/utils/formatDate";
 
+import { useEventBus } from "@/helpers/event-bus";
+
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import FicheSiteProceduresJudiciaireLigne from "./FicheSiteProceduresJudiciaireLigne.vue";
+import ModaleListeAccesPJ from "@/components/ModaleListeAccesPJ/ModaleListeAccesPJ.vue";
 
 const props = defineProps({
     town: Object,
+    permissionsToAccessJustice: Array,
 });
 const { town } = toRefs(props);
+const { permissionsToAccessJustice } = toRefs(props);
+const { bus } = useEventBus();
+
+const accessPjModal = ref(null);
 
 const justiceRendered = computed(() => {
     if (town.value.justiceRendered === null) {
@@ -83,4 +96,13 @@ const policeStatus = computed(() => {
 
     return "non communiqué";
 });
+
+const title = " Qui a accès aux données judiciaires de ce site ?";
+
+watch(
+    () => bus.value.get("fichesitepj:openListAccesPJ"),
+    () => {
+        accessPjModal.value.open();
+    }
+);
 </script>
