@@ -709,4 +709,9 @@ export default (app) => {
         middlewares.validation,
         controllers.note.addPublication,
     );
+
+    app.get(
+        '/permissionsToAccessJustice',
+        controllers.permission.findPermissionsToAccessJustice,
+    );
 };

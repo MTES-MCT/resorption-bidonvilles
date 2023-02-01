@@ -36,6 +36,8 @@ import organizationGetMembers from './organizationController/getMembers';
 import organizationSearch from './organizationController/search/search';
 import organizationTypes from './organizationController/types';
 import organizationUpdateBeingFunded from './organizationController/updateBeingFunded';
+// permission
+import findPermissionsToAccessJustice from './permissionController/findPermissionsToAccessJustice';
 // poi
 import poiFindAll from './poiController/findAll';
 // shantytown
@@ -129,6 +131,9 @@ export default () => ({
         search: organizationSearch,
         types: organizationTypes,
         updateBeingFunded: organizationUpdateBeingFunded,
+    },
+    permission: {
+        findPermissionsToAccessJustice,
     },
     poi: {
         findAll: poiFindAll,
