@@ -3,12 +3,24 @@
         <div class="flex justify-between">
             <h1 class="text-3xl text-primary">{{ title }}</h1>
             <div>
-                <Button v-if="category == 'justice'" size="sm" icon="user-group" iconPosition="left"
-                    variant="primaryText" @click="openListAccesPJ">
+                <Button
+                    v-if="category == 'justice'"
+                    size="sm"
+                    icon="user-group"
+                    iconPosition="left"
+                    variant="primaryText"
+                    @click="openListAccesPJ"
+                >
                     Qui a accès aux données judiciaires de ce site ?
                 </Button>
-                <Button v-if="category" size="sm" icon="history" iconPosition="left" variant="primaryText"
-                    @click="openHistorique">
+                <Button
+                    v-if="category"
+                    size="sm"
+                    icon="history"
+                    iconPosition="left"
+                    variant="primaryText"
+                    @click="openHistorique"
+                >
                     voir l'historique des modifications
                 </Button>
             </div>
