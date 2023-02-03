@@ -163,14 +163,6 @@ const permissionsToAccessJustice = computed(() => {
                 return acc;
             }, {});
     }
-    console.log(
-        `usersWithPermissionsToAccessJustice: ${JSON.stringify(
-            usersWithPermissionsToAccessJustice
-        )}`
-    );
-
     return usersWithPermissionsToAccessJustice;
 });
-
-watch(loadedPermissionsToAccessJustice);
 </script>
