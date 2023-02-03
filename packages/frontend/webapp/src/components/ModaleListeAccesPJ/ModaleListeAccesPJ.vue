@@ -11,7 +11,11 @@
             />
         </template>
         <template v-slot:footer>
-            <Button class="ml-5" :loading="loading" @click="isOpen = false"
+            <Button
+                type="button"
+                class="ml-5"
+                :loading="loading"
+                @click="isOpen = false"
                 >J'ai compris</Button
             >
         </template>
