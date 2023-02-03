@@ -58,7 +58,7 @@ import ModaleListeAccesPJ from "@/components/ModaleListeAccesPJ/ModaleListeAcces
 
 const props = defineProps({
     town: Object,
-    permissionsToAccessJustice: Array,
+    permissionsToAccessJustice: Object,
 });
 const { town } = toRefs(props);
 const { permissionsToAccessJustice } = toRefs(props);

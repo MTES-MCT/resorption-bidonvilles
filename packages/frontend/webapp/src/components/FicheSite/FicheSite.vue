@@ -74,7 +74,7 @@ import FicheSiteHistorique from "./FicheSiteHistorique/FicheSiteHistorique.vue";
 
 const props = defineProps({
     town: Object,
-    permissionsToAccessJustice: Array,
+    permissionsToAccessJustice: Object,
 });
 const { town } = toRefs(props);
 const { permissionsToAccessJustice } = toRefs(props);

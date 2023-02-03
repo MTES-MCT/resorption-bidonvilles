@@ -71,7 +71,7 @@ import InputBailiff from "../inputs/FormDeclarationDeSiteInputBailiff.vue";
 import ModaleListeAccesPJ from "@/components/ModaleListeAccesPJ/ModaleListeAccesPJ.vue";
 
 const props = defineProps({
-    permissionsToAccessJustice: Array,
+    permissionsToAccessJustice: Object,
     isLocationDefined: Boolean,
     mode: String,
 });

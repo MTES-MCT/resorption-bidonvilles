@@ -25,11 +25,11 @@ import CarteStructure from "@/components/CarteStructure/CarteStructure.vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
-    usersWithPermissionOnJustice: Object,
+    permissionsToAccessJustice: Object,
 });
 
 const isHover = ref(false);
-const { usersWithPermissionOnJustice } = toRefs(props);
+const { permissionsToAccessJustice } = toRefs(props);
 
 const wording = ref({
     first: "autorisé",
@@ -37,6 +37,6 @@ const wording = ref({
 });
 
 const organizationsWithUsersHavingJusticePermissions = computed(() => {
-    return Object.values(usersWithPermissionOnJustice.value);
+    return Object.values(permissionsToAccessJustice.value);
 });
 </script>

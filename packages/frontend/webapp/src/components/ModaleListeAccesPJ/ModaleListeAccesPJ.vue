@@ -6,7 +6,7 @@
 
         <template v-slot:body>
             <CarteAutorisationAccesAuxPJ
-                :usersWithPermissionOnJustice="permissionsToAccessJustice"
+                :permissionsToAccessJustice="permissionsToAccessJustice"
                 class="max-w-2xl"
             />
         </template>
@@ -28,10 +28,7 @@ import { Button, Modal } from "@resorptionbidonvilles/ui";
 import CarteAutorisationAccesAuxPJ from "@/components/CarteAutorisationAccesAuxPJ/CarteAutorisationAccesAuxPJ.vue";
 
 const props = defineProps({
-    permissionsToAccessJustice: {
-        type: Array,
-        default: () => {},
-    },
+    permissionsToAccessJustice: Object,
     title: {
         type: String,
         required: true,

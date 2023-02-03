@@ -56,10 +56,7 @@ import { RouterLink } from "vue-router";
 import { Icon, Link } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
-    organization: {
-        type: Object,
-        required: true,
-    },
+    organization: Object,
     wording: {
         type: Object,
         required: true,
