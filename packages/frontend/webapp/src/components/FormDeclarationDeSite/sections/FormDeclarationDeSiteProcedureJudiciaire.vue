@@ -1,7 +1,22 @@
 <template>
     <FormSection id="justice">
-        <template v-slot:title>Procédure judiciaire</template>
-
+        <template v-slot:title>
+            <div class="flex justify-between">
+                <div>Procédure judiciaire</div>
+                <div v-if="isLocationDefined" class="text-sm">
+                    <Button
+                        type="button"
+                        size="sm"
+                        icon="user-group"
+                        iconPosition="left"
+                        variant="primaryText"
+                        @click="openModaleListeAccesPJ"
+                    >
+                        {{ title }}
+                    </Button>
+                </div>
+            </div>
+        </template>
         <FormParagraph
             title="Une plainte a-t-elle été déposée par le propriétaire ?"
             showMandatoryStar
@@ -27,13 +42,20 @@
             <InputBailiff />
         </FormParagraph>
     </FormSection>
+    <ModaleListeAccesPJ
+        v-if="Object.values(permissionsToAccessJustice).length > 0"
+        ref="modaleListeAccesPJ"
+        :permissionsToAccessJustice="permissionsToAccessJustice"
+        :title="title"
+    />
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref, toRefs } from "vue";
 import { useFormValues } from "vee-validate";
 import FormSection from "@/components/FormSection/FormSection.vue";
 import FormParagraph from "@/components/FormParagraph/FormParagraph.vue";
+import { Button } from "@resorptionbidonvilles/ui";
 
 import InputOwnerComplaint from "../inputs/FormDeclarationDeSiteInputOwnerComplaint.vue";
 import InputJusticeProcedure from "../inputs/FormDeclarationDeSiteInputJusticeProcedure.vue";
@@ -46,6 +68,15 @@ import InputPoliceRequestedAt from "../inputs/FormDeclarationDeSiteInputPoliceRe
 import InputPoliceGrantedAt from "../inputs/FormDeclarationDeSiteInputPoliceGrantedAt.vue";
 import InputBailiff from "../inputs/FormDeclarationDeSiteInputBailiff.vue";
 
+import ModaleListeAccesPJ from "@/components/ModaleListeAccesPJ/ModaleListeAccesPJ.vue";
+
+const props = defineProps({
+    permissionsToAccessJustice: Array,
+    isLocationDefined: Boolean,
+    mode: String,
+});
+const { permissionsToAccessJustice, isLocationDefined, mode } = toRefs(props);
+
 const values = useFormValues();
 const policeWasRequested = computed(() => {
     return ["requested", "granted"].includes(values.value.police_status);
@@ -54,4 +85,18 @@ const policeWasRequested = computed(() => {
 const policeWasGranted = computed(() => {
     return values.value.police_status === "granted";
 });
+
+const modaleListeAccesPJ = ref(null);
+
+const title = computed(() => {
+    return mode.value === "create"
+        ? "Qui aura accès aux données judiciaires de ce site ?"
+        : "Qui a accès aux données judiciaires de ce site ?";
+});
+
+function openModaleListeAccesPJ() {
+    if (Object.values(permissionsToAccessJustice.value).length > 0) {
+        modaleListeAccesPJ.value.open();
+    }
+}
 </script>
