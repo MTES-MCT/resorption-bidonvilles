@@ -4,7 +4,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <CarteStructure
                     v-for="organization in organizationsWithUsersHavingJusticePermissions"
-                    :key="organization.organization_id"
+                    :key="organization.id"
                     :organization="organization"
                     :wording="wording"
                 />
@@ -37,11 +37,6 @@ const wording = ref({
 });
 
 const organizationsWithUsersHavingJusticePermissions = computed(() => {
-    console.log(
-        `usersWithPermissionOnJustice: ${JSON.stringify(
-            Object.values(usersWithPermissionOnJustice.value)
-        )}`
-    );
     return Object.values(usersWithPermissionOnJustice.value);
 });
 </script>
