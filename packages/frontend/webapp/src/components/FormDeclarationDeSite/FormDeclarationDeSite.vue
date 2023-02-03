@@ -26,6 +26,9 @@
         <FormDeclarationDeSiteProcedureJudiciaire
             class="mt-6"
             v-if="hasJusticePermission"
+            :permissionsToAccessJustice="permissionsToAccessJustice"
+            :isLocationDefined="isLocationDefined"
+            :mode="mode"
         />
 
         <ErrorSummary
@@ -40,13 +43,14 @@
 
 <script setup>
 import {
-    defineProps,
-    toRefs,
     computed,
     defineExpose,
-    toRef,
-    watch,
+    defineProps,
+    onMounted,
     ref,
+    toRef,
+    toRefs,
+    watch,
 } from "vue";
 import { useForm } from "vee-validate";
 import { useUserStore } from "@/stores/user.store";
@@ -71,6 +75,8 @@ import FormDeclarationDeSiteConditionsDeVie from "./sections/FormDeclarationDeSi
 import FormDeclarationDeSiteConditionsDeVieV1 from "./sections/FormDeclarationDeSiteConditionsDeVieV1.vue";
 import FormDeclarationDeSiteProcedureJudiciaire from "./sections/FormDeclarationDeSiteProcedureJudiciaire.vue";
 import schemaFn from "./FormDeclarationDeSite.schema";
+
+import { fetchAll } from "@/api/permissions.api";
 
 const props = defineProps({
     town: {
@@ -127,6 +133,28 @@ const userStore = useUserStore();
 const error = ref(null);
 const location = ref(town.value ? initialValues.location : null);
 const address = toRef(values, "address");
+const loadedPermissionsToAccessJustice = ref(null);
+let isLocationDefined = ref(town.value ? true : false);
+
+onMounted(load);
+
+async function load() {
+    const locationInfo = town.value
+        ? {
+              type: "city",
+              ...initialValues.location,
+          }
+        : null;
+    loadPermissionsToAccessJustice(locationInfo);
+}
+
+async function loadPermissionsToAccessJustice(location) {
+    try {
+        loadedPermissionsToAccessJustice.value = await fetchAll(location);
+    } catch (e) {
+        // Do nothing
+    }
+}
 
 watch(address, async () => {
     location.value = null;
@@ -141,6 +169,89 @@ watch(address, async () => {
             console.log("Failed fetching more information about the city");
         }
     }
+});
+
+watch(location, async () => {
+    if (location.value?.type) {
+        isLocationDefined.value = true;
+        try {
+            await loadPermissionsToAccessJustice(location.value);
+        } catch (error) {
+            // Do nothing
+        }
+    } else {
+        isLocationDefined.value = false;
+    }
+});
+
+const permissionsToAccessJustice = computed(() => {
+    let usersWithPermissionsToAccessJustice = [];
+    if (loadedPermissionsToAccessJustice.value) {
+        usersWithPermissionsToAccessJustice =
+            loadedPermissionsToAccessJustice.value.reduce((argAcc, org) => {
+                const acc = { ...argAcc };
+                if (!acc[org.id]) {
+                    let computedLocation = {};
+                    if (org.location_type === "nation") {
+                        computedLocation = {
+                            label: "nation",
+                            type: "",
+                            name: "National",
+                            code: null,
+                        };
+                    } else if (["region"].includes(org.location_type)) {
+                        computedLocation = {
+                            label: "Région",
+                            type: "region",
+                            name: org.region_name,
+                            code: org.region_code,
+                        };
+                    } else if (["departement"].includes(org.location_type)) {
+                        computedLocation = {
+                            label: "Département",
+                            type: "departement",
+                            name: org.departement_name,
+                            code: org.departement_code,
+                        };
+                    } else if (["epci"].includes(org.location_type)) {
+                        computedLocation = {
+                            label: "Intercommunalité",
+                            type: "epci",
+                            name: org.epci_name,
+                            code: org.epci_code,
+                        };
+                    } else if (["city"].includes(org.location_type)) {
+                        computedLocation = {
+                            label: "Commune",
+                            type: "city",
+                            name: org.city_name,
+                            code: org.city_code,
+                        };
+                    } else {
+                        computedLocation = {
+                            name: location.value.name,
+                            code: null,
+                        };
+                    }
+                    acc[org.id] = {
+                        id: org.id,
+                        name: org.name,
+                        abbreviation: org.abbreviation,
+                        type: {
+                            category: org.type_category,
+                            name: org.type_name,
+                        },
+                        location_name: computedLocation.name,
+                        location: computedLocation,
+                        users: [org],
+                    };
+                } else {
+                    acc[org.id].users.push(org);
+                }
+                return acc;
+            }, {});
+    }
+    return usersWithPermissionsToAccessJustice;
 });
 
 const hasJusticePermission = computed(() => {
