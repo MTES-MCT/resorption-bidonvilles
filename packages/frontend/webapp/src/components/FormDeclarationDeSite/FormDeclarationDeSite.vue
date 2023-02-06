@@ -146,7 +146,7 @@ async function load() {
               ...initialValues.location,
           }
         : null;
-    loadPermissionsToAccessJustice(locationInfo);
+    await loadPermissionsToAccessJustice(locationInfo);
 }
 
 async function loadPermissionsToAccessJustice(location) {

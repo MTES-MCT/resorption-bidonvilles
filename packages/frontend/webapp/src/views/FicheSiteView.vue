@@ -74,7 +74,7 @@ async function load() {
     try {
         town.value = await townsStore.fetchTown(townId.value);
         townsStore.townCategoryFilter = [];
-        loadPermissionsToAccessJustice();
+        await loadPermissionsToAccessJustice();
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
     }
