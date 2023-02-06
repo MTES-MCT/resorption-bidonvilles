@@ -73,7 +73,6 @@ export default async () => {
 
 
     const hash = {};
-    const organizations = [];
     organizationsWithUsersHavingPermissionsOnJustice.forEach((user: any) => {
         if (!Object.prototype.hasOwnProperty.call(hash, user.organization_id)) {
             hash[user.organization_id] = {
@@ -110,7 +109,6 @@ export default async () => {
                 },
                 users: [],
             };
-            organizations.push(hash[user.organization_id]);
         }
 
         if (user.user_id !== null) {
