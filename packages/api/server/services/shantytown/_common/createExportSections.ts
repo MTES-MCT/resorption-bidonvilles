@@ -1,4 +1,6 @@
-export default (user, data, properties, closedTowns, closingSolutions) => {
+import organizationModel from '#server/models/organizationModel';
+
+export default async (user, data, properties, closedTowns, closingSolutions) => {
     const options = data.options ? data.options.split(',') : [];
     const sections = [];
 
@@ -141,12 +143,16 @@ export default (user, data, properties, closedTowns, closingSolutions) => {
     }
 
     if (options.indexOf('actors') !== -1) {
+        const allOrganizations = (await organizationModel.findByName(user.organization.name)).map((organization:any) => organization.id);
         sections.push({
             title: 'Intervenants',
             properties: [
                 properties.actors,
                 {
-                    title: 'Intervenant de ma structure', data: ({ actors }) => (actors.map(actor => actor.organization.id).includes(user.organization.id) ? 'Oui' : 'Non'), width: 20, sum: true,
+                    title: 'Intervenant de ma structure',
+                    data: ({ actors }) => (actors.filter(actor => allOrganizations.includes(actor.organization.id)).length > 0 ? 'Oui' : 'Non'),
+                    width: 20,
+                    sum: true,
                 },
             ],
         });
