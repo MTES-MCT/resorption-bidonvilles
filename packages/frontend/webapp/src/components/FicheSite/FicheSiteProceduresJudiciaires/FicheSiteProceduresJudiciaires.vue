@@ -36,13 +36,13 @@
         >
             {{ town.bailiff || "non communiqué" }}
         </FicheSiteProceduresJudiciaireLigne>
+        <ModaleListeAccesPJ
+            ref="accessPjModal"
+            v-if="permissionsToAccessJustice"
+            :permissionsToAccessJustice="permissionsToAccessJustice"
+            :title="title"
+        />
     </FicheRubrique>
-    <ModaleListeAccesPJ
-        ref="accessPjModal"
-        v-if="permissionsToAccessJustice"
-        :permissionsToAccessJustice="permissionsToAccessJustice"
-        :title="title"
-    />
 </template>
 
 <script setup>
