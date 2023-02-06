@@ -29,14 +29,16 @@ export default async (day: number, month: number, year: number): Promise<void> =
     }
 
     // compute the activity summaries
-    const [summary, subscribers] = await Promise.all([
+    const [questions, summary, subscribers] = await Promise.all([
+        activityModel.getQuestions(monday, sunday),
         activityModel.get(monday, sunday),
         userModel.findDepartementSummarySubscribers(),
     ]);
+    const questionSummary = { questions, has_question_summary: questions.length > 0 };
 
     // send the summaries
     await Promise.all([
-        sendNationalSummary(monday, sunday, summary, subscribers.nation),
+        sendNationalSummary(monday, sunday, questionSummary, summary, [subscribers.nation]),
         sendRegionalSummary(monday, sunday, summary, subscribers.region),
         sendDepartementalSummary(monday, sunday, summary, subscribers.departement),
     ]);

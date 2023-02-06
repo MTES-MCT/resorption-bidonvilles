@@ -1,4 +1,5 @@
 import { ActivityNationalSummary } from '#server/models/activityModel/types/ActivityNationalSummary';
+import { QuestionNationalSummary } from '#server/models/activityModel/types/QuestionNationalSummary';
 import { User } from '#server/models/userModel/_common/types/User';
 import mailsUtils from '#server/mails/mails';
 import moment from 'moment';
@@ -6,7 +7,7 @@ import PromisePool from '@supercharge/promise-pool';
 
 const { sendActivitySummary } = mailsUtils;
 
-export default async (argFrom: Date, argTo: Date, argSummaries: ActivityNationalSummary, subscribers: Array<User>): Promise<any> => {
+export default async (argFrom: Date, argTo: Date, questionSummary: QuestionNationalSummary, argSummaries: ActivityNationalSummary, subscribers: Array<User>): Promise<any> => {
     const from = moment(argFrom);
     const to = moment(argTo);
 
@@ -28,6 +29,7 @@ export default async (argFrom: Date, argTo: Date, argSummaries: ActivityNational
                 campaign: `n-${from.format('DD-MM-YYYY')}`,
                 from: from.format('DD'),
                 to: to.format('DD MMMM YYYY'),
+                questionSummary,
                 summaries,
                 showDetails: false,
             },

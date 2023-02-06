@@ -745,6 +745,7 @@ export default {
                 recipientName: formatName(recipient),
                 connexionUrl: `${connexionUrl}?${utm}`,
                 showDetails: variables.showDetails || false,
+                ...variables.questionSummary,
                 summaries: variables.summaries,
                 wwwUrl,
                 webappUrl,

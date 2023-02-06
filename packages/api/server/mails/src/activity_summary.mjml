@@ -15,7 +15,7 @@
                 <mj-text mj-class='text-primary text-display pt-4 pb-4'>
                     Semaine du {{ var:from }} au {{ var:to }}
                 </mj-text>
-
+                <mj-include path='common/question_summary.mjml' />
                 <mj-raw>{% for summary in var:summaries %}</mj-raw>
                 <mj-include path='common/summary.mjml' />
                 <mj-raw> {% endfor%} </mj-raw>
