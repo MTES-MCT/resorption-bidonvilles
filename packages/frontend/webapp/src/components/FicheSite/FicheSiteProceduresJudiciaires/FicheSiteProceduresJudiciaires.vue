@@ -60,8 +60,7 @@ const props = defineProps({
     town: Object,
     permissionsToAccessJustice: Object,
 });
-const { town } = toRefs(props);
-const { permissionsToAccessJustice } = toRefs(props);
+const { town, permissionsToAccessJustice } = toRefs(props);
 const { bus } = useEventBus();
 
 const accessPjModal = ref(null);
