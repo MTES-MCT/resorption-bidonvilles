@@ -70,59 +70,5 @@ export default async () => {
             type: QueryTypes.SELECT,
         },
     );
-
-
-    const hash = {};
-    organizationsWithUsersHavingPermissionsOnJustice.forEach((user: any) => {
-        if (!Object.prototype.hasOwnProperty.call(hash, user.organization_id)) {
-            hash[user.organization_id] = {
-                id: user.organization_id,
-                name: user.name,
-                abbreviation: user.abbreviation,
-                being_funded: user.being_funded,
-                being_funded_at: user.being_funded_at,
-                location: {
-                    type: user.location_type,
-                    region: user.region_code !== null ? {
-                        code: user.region_code,
-                        name: user.region_name,
-                    } : null,
-                    departement: user.departement_code !== null ? {
-                        code: user.departement_code,
-                        name: user.departement_name,
-                    } : null,
-                    epci: user.epci_code !== null ? {
-                        code: user.epci_code,
-                        name: user.epci_name,
-                    } : null,
-                    city: user.city_code !== null ? {
-                        code: user.city_code,
-                        name: user.city_name,
-                        main: user.city_main,
-                    } : null,
-                },
-                type: {
-                    id: user.type_id,
-                    category: user.type_category,
-                    name: user.type_name,
-                    abbreviation: user.type_abbreviation,
-                },
-                users: [],
-            };
-        }
-
-        if (user.user_id !== null) {
-            hash[user.organization_id].users.push({
-                id: user.user_id,
-                is_admin: user.user_role_admin !== null,
-                role: user.user_role_admin || user.user_role_regular,
-                first_name: user.user_firstName,
-                last_name: user.user_lastName,
-                email: user.user_email,
-                phone: user.user_phone,
-                position: user.user_position,
-            });
-        }
-    });
     return organizationsWithUsersHavingPermissionsOnJustice;
 };
