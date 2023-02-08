@@ -27,11 +27,11 @@ import getReducedLoadedPermissionsToAccessJustice from "@common/helpers/permissi
 
 const props = defineProps({
     town: Object,
+    title: String,
 });
-const { town } = toRefs(props);
+const { title, town } = toRefs(props);
 
 const loadedPermissionsToAccessJustice = ref(null);
-const title = " Qui a accès aux données judiciaires de ce site ?";
 
 const loading = ref(false);
 const error = ref(null);
