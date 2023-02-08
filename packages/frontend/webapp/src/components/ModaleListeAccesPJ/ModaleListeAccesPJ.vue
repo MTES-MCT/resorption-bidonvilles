@@ -1,14 +1,14 @@
 <template>
     <Modal :isOpen="isOpen" closeWhenClickOutside @close="close">
-        <template v-slot:title>
-            {{ title }}
-        </template>
-
+        <template v-slot:title> {{ title }} </template>
         <template v-slot:body>
             <CarteAutorisationAccesAuxPJ
+                v-if="!error"
                 :permissionsToAccessJustice="permissionsToAccessJustice"
+                :loading="loading"
                 class="max-w-2xl"
             />
+            <ErrorSummary v-if="error" :message="error" class="mb-0 mt-6" />
         </template>
         <template v-slot:footer>
             <Button type="button" class="ml-5" @click="isOpen = false"
@@ -19,24 +19,63 @@
 </template>
 
 <script setup>
-import { ref, defineExpose, toRefs } from "vue";
-import { Button, Modal } from "@resorptionbidonvilles/ui";
+import { computed, defineExpose, onMounted, ref, toRefs } from "vue";
+import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import CarteAutorisationAccesAuxPJ from "@/components/CarteAutorisationAccesAuxPJ/CarteAutorisationAccesAuxPJ.vue";
+import { fetchAll } from "@/api/permissions.api";
+import getReducedLoadedPermissionsToAccessJustice from "@common/helpers/permission/getReducedLoadedPermissionsToAccessJustice";
 
 const props = defineProps({
-    permissionsToAccessJustice: Object,
-    title: {
-        type: String,
-        required: true,
-    },
+    town: Object,
 });
+const { town } = toRefs(props);
 
-const { permissionsToAccessJustice, title } = toRefs(props);
+const loadedPermissionsToAccessJustice = ref(null);
+const title = " Qui a accès aux données judiciaires de ce site ?";
 
-const isOpen = ref(false);
+const loading = ref(false);
 const error = ref(null);
 
+onMounted(load);
+
+async function load() {
+    await loadPermissionsToAccessJustice();
+}
+
+async function loadPermissionsToAccessJustice() {
+    loading.value = true;
+    error.value = null;
+
+    try {
+        const location = {
+            type: "city",
+            city: town.value.city,
+            epci: town.value.epci,
+            departement: town.value.departement,
+            region: town.value.region,
+        };
+        loadedPermissionsToAccessJustice.value = await fetchAll(location);
+    } catch (e) {
+        error.value = e?.user_message || "Une erreur inconnue est survenue";
+    }
+    loading.value = false;
+}
+
+const permissionsToAccessJustice = computed(() => {
+    let usersWithPermissionsToAccessJustice = [];
+    if (loadedPermissionsToAccessJustice.value) {
+        usersWithPermissionsToAccessJustice =
+            getReducedLoadedPermissionsToAccessJustice(
+                loadedPermissionsToAccessJustice.value
+            );
+    }
+    return Object.values(usersWithPermissionsToAccessJustice);
+});
+
+const isOpen = ref(false);
+
 function reset() {
+    loading.value = false;
     error.value = null;
 }
 
