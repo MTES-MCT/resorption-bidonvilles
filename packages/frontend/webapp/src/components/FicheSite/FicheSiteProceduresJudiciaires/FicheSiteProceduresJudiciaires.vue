@@ -36,12 +36,7 @@
         >
             {{ town.bailiff || "non communiqué" }}
         </FicheSiteProceduresJudiciaireLigne>
-        <ModaleListeAccesPJ
-            ref="accessPjModal"
-            v-if="permissionsToAccessJustice"
-            :permissionsToAccessJustice="permissionsToAccessJustice"
-            :title="title"
-        />
+        <ModaleListeAccesPJ ref="accessPjModal" :town="town" />
     </FicheRubrique>
 </template>
 
@@ -58,9 +53,8 @@ import ModaleListeAccesPJ from "@/components/ModaleListeAccesPJ/ModaleListeAcces
 
 const props = defineProps({
     town: Object,
-    permissionsToAccessJustice: Object,
 });
-const { town, permissionsToAccessJustice } = toRefs(props);
+const { town } = toRefs(props);
 const { bus } = useEventBus();
 
 const accessPjModal = ref(null);
@@ -95,8 +89,6 @@ const policeStatus = computed(() => {
 
     return "non communiqué";
 });
-
-const title = " Qui a accès aux données judiciaires de ce site ?";
 
 watch(
     () => bus.value.get("fichesitepj:openListAccesPJ"),
