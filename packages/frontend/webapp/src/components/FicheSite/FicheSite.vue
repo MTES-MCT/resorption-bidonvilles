@@ -33,7 +33,6 @@
             <FicheSiteProceduresJudiciaires
                 v-if="userStore.hasJusticePermission"
                 :town="town"
-                :permissionsToAccessJustice="permissionsToAccessJustice"
                 id="procedure_judiciaire"
                 class="mb-8"
             />
@@ -74,9 +73,8 @@ import FicheSiteHistorique from "./FicheSiteHistorique/FicheSiteHistorique.vue";
 
 const props = defineProps({
     town: Object,
-    permissionsToAccessJustice: Object,
 });
-const { town, permissionsToAccessJustice } = toRefs(props);
+const { town } = toRefs(props);
 const userStore = useUserStore();
 const townsStore = useTownsStore();
 const { bus } = useEventBus();
