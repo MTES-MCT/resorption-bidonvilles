@@ -38,8 +38,8 @@
         </FicheSiteProceduresJudiciaireLigne>
         <ModaleListeAccesPJ
             ref="modaleListeAccesPJ"
-            :town="town"
             :title="title"
+            :location="location"
         />
     </FicheRubrique>
 </template>
@@ -93,6 +93,16 @@ const policeStatus = computed(() => {
     }
 
     return "non communiqué";
+});
+
+const location = computed(() => {
+    return {
+        type: "city",
+        city: town.value.city,
+        epci: town.value.epci,
+        departement: town.value.departement,
+        region: town.value.region,
+    };
 });
 
 watch(
