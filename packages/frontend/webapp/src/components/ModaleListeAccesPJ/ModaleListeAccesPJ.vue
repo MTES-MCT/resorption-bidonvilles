@@ -19,18 +19,17 @@
 </template>
 
 <script setup>
-import { computed, defineExpose, onMounted, ref, toRefs } from "vue";
+import { computed, defineExpose, onMounted, ref, toRefs, watch } from "vue";
 import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import CarteAutorisationAccesAuxPJ from "@/components/CarteAutorisationAccesAuxPJ/CarteAutorisationAccesAuxPJ.vue";
 import { fetchAll } from "@/api/permissions.api";
 import getReducedLoadedPermissionsToAccessJustice from "@common/helpers/permission/getReducedLoadedPermissionsToAccessJustice";
 
 const props = defineProps({
-    town: Object,
+    location: String,
     title: String,
 });
-const { title, town } = toRefs(props);
-
+const { location, title } = toRefs(props);
 const loadedPermissionsToAccessJustice = ref(null);
 
 const loading = ref(false);
@@ -45,16 +44,8 @@ async function load() {
 async function loadPermissionsToAccessJustice() {
     loading.value = true;
     error.value = null;
-
     try {
-        const location = {
-            type: "city",
-            city: town.value.city,
-            epci: town.value.epci,
-            departement: town.value.departement,
-            region: town.value.region,
-        };
-        loadedPermissionsToAccessJustice.value = await fetchAll(location);
+        loadedPermissionsToAccessJustice.value = await fetchAll(location.value);
     } catch (e) {
         error.value = e?.user_message || "Une erreur inconnue est survenue";
     }
@@ -70,6 +61,16 @@ const permissionsToAccessJustice = computed(() => {
             );
     }
     return Object.values(usersWithPermissionsToAccessJustice);
+});
+
+watch(location, async () => {
+    if (location.value?.type) {
+        try {
+            await loadPermissionsToAccessJustice();
+        } catch (e) {
+            error.value = e?.user_message || "Une erreur inconnue est survenue";
+        }
+    }
 });
 
 const isOpen = ref(false);
