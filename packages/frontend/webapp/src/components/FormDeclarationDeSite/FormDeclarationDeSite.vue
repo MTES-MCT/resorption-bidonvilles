@@ -26,8 +26,8 @@
         <FormDeclarationDeSiteProcedureJudiciaire
             class="mt-6"
             v-if="hasJusticePermission"
-            :permissionsToAccessJustice="permissionsToAccessJustice"
             :isLocationDefined="isLocationDefined"
+            :location="location"
             :mode="mode"
         />
 
@@ -46,7 +46,6 @@ import {
     computed,
     defineExpose,
     defineProps,
-    onMounted,
     ref,
     toRef,
     toRefs,
@@ -63,7 +62,6 @@ import isDeepEqual from "@/utils/isDeepEqual";
 import backOrReplace from "@/utils/backOrReplace";
 import formatFormTown from "@/utils/formatFormTown";
 import formatFormDate from "@/utils/formatFormDate";
-import getReducedLoadedPermissionsToAccessJustice from "@common/helpers/permission/getReducedLoadedPermissionsToAccessJustice";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
@@ -77,8 +75,6 @@ import FormDeclarationDeSiteConditionsDeVieV1 from "./sections/FormDeclarationDe
 import FormDeclarationDeSiteProcedureJudiciaire from "./sections/FormDeclarationDeSiteProcedureJudiciaire.vue";
 import schemaFn from "./FormDeclarationDeSite.schema";
 
-import { fetchAll } from "@/api/permissions.api";
-
 const props = defineProps({
     town: {
         type: Object,
@@ -87,6 +83,7 @@ const props = defineProps({
     },
 });
 const { town } = toRefs(props);
+
 const initialValues = {
     update_to_date: 1,
     living_conditions_version: town.value?.livingConditions?.version || 2,
@@ -134,28 +131,7 @@ const userStore = useUserStore();
 const error = ref(null);
 const location = ref(town.value ? initialValues.location : null);
 const address = toRef(values, "address");
-const loadedPermissionsToAccessJustice = ref(null);
 let isLocationDefined = ref(town.value ? true : false);
-
-onMounted(load);
-
-async function load() {
-    const locationInfo = town.value
-        ? {
-              type: "city",
-              ...initialValues.location,
-          }
-        : null;
-    await loadPermissionsToAccessJustice(locationInfo);
-}
-
-async function loadPermissionsToAccessJustice(location) {
-    try {
-        loadedPermissionsToAccessJustice.value = await fetchAll(location);
-    } catch (e) {
-        // Do nothing
-    }
-}
 
 watch(address, async () => {
     location.value = null;
@@ -175,25 +151,9 @@ watch(address, async () => {
 watch(location, async () => {
     if (location.value?.type) {
         isLocationDefined.value = true;
-        try {
-            await loadPermissionsToAccessJustice(location.value);
-        } catch (error) {
-            // Do nothing
-        }
     } else {
         isLocationDefined.value = false;
     }
-});
-
-const permissionsToAccessJustice = computed(() => {
-    let usersWithPermissionsToAccessJustice = [];
-    if (loadedPermissionsToAccessJustice.value) {
-        usersWithPermissionsToAccessJustice =
-            getReducedLoadedPermissionsToAccessJustice(
-                loadedPermissionsToAccessJustice.value
-            );
-    }
-    return usersWithPermissionsToAccessJustice;
 });
 
 const hasJusticePermission = computed(() => {
