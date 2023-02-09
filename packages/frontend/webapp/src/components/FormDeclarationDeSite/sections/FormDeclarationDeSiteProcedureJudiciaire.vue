@@ -43,9 +43,8 @@
         </FormParagraph>
     </FormSection>
     <ModaleListeAccesPJ
-        v-if="Object.values(permissionsToAccessJustice).length > 0"
         ref="modaleListeAccesPJ"
-        :permissionsToAccessJustice="permissionsToAccessJustice"
+        :location="location"
         :title="title"
     />
 </template>
@@ -71,11 +70,11 @@ import InputBailiff from "../inputs/FormDeclarationDeSiteInputBailiff.vue";
 import ModaleListeAccesPJ from "@/components/ModaleListeAccesPJ/ModaleListeAccesPJ.vue";
 
 const props = defineProps({
-    permissionsToAccessJustice: Object,
     isLocationDefined: Boolean,
+    location: Object,
     mode: String,
 });
-const { permissionsToAccessJustice, isLocationDefined, mode } = toRefs(props);
+const { isLocationDefined, location, mode } = toRefs(props);
 
 const values = useFormValues();
 const policeWasRequested = computed(() => {
@@ -95,8 +94,6 @@ const title = computed(() => {
 });
 
 function openModaleListeAccesPJ() {
-    if (Object.values(permissionsToAccessJustice.value).length > 0) {
-        modaleListeAccesPJ.value.open();
-    }
+    modaleListeAccesPJ.value.open();
 }
 </script>
