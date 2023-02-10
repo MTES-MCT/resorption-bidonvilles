@@ -89,8 +89,8 @@ const modaleListeAccesPJ = ref(null);
 
 const title = computed(() => {
     return mode.value === "create"
-        ? "Qui aura accès aux données judiciaires de ce site ?"
-        : "Qui a accès aux données judiciaires de ce site ?";
+        ? "Qui aura accès aux données sur la procédure judiciaire ?"
+        : "Qui a accès aux données  sur la procédure judiciaire ?";
 });
 
 function openModaleListeAccesPJ() {

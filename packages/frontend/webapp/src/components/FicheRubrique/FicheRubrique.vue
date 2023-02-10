@@ -11,7 +11,7 @@
                     variant="primaryText"
                     @click="openListAccesPJ"
                 >
-                    Qui a accès aux données judiciaires de ce site ?
+                    Qui a accès aux données sur la procédure judiciaire ?
                 </Button>
                 <Button
                     v-if="category"

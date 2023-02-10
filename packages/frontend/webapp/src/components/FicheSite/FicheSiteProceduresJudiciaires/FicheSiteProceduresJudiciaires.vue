@@ -62,7 +62,7 @@ const { town } = toRefs(props);
 const { bus } = useEventBus();
 
 const modaleListeAccesPJ = ref(null);
-const title = " Qui a accès aux données judiciaires de ce site ?";
+const title = " Qui a accès aux données sur la procédure judiciaire ?";
 
 const justiceRendered = computed(() => {
     if (town.value.justiceRendered === null) {
