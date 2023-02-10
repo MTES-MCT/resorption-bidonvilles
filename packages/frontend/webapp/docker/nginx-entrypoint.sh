@@ -1,13 +1,14 @@
 #!/bin/sh
 
-ENV_FILE=$(find /usr/share/nginx/html/assets/ -iname 'index.*.js')
-TEMPLATE="$ENV_FILE.template"
+find /usr/share/nginx/html/assets/ -iname 'index.*.js' -print0 | while read -d $'\0' file
+do
+    TEMPLATE="$file.template"
+    if [ ! -f "$TEMPLATE" ]
+    then
+        cp "$file" "$file.template"
+    fi
 
-if [ ! -f "$TEMPLATE" ]
-then
-    cp "$ENV_FILE" "$ENV_FILE.template"
-fi
-
-envsubst "$(printf '${%s} ' $(env | sed 's/=.*//'))" < "${TEMPLATE}" > "${ENV_FILE}"
+    envsubst "$(printf '${%s} ' $(env | sed 's/=.*//'))" < "${TEMPLATE}" > "${file}"
+done
 
 [ -z "$@" ] && nginx-debug -g 'daemon off;' || $@
