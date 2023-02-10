@@ -14,14 +14,14 @@ export default [
         label: "Lieu d'intervention",
         id: "interventionLocation",
         options: [
-            { value: "shantytowns", label: "Sur Site" },
-            { value: "location", label: "Sur terrain d'insertion" },
+            { value: "sur_site", label: "Sur Site" },
+            { value: "eti", label: "Sur terrain d'insertion" },
             {
-                value: "housing",
+                value: "logement",
                 label: "Dans le logement",
             },
             {
-                value: "other",
+                value: "autre",
                 label: "Dans plusieurs lieux(hébergement, permanence, rue)",
             },
         ],

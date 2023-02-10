@@ -8,7 +8,7 @@
         <template v-slot:actions>
             <p class="flex space-x-2">
                 <Button
-                    v-if="userStore.hasPermission('plan.export')"
+                    v-if="userStore.hasPermission('action.read')"
                     icon="file-excel"
                     iconPosition="left"
                     variant="primary"
@@ -17,11 +17,9 @@
                     >Exporter</Button
                 >
                 <Button
-                    v-if="userStore.hasPermission('plan.create')"
+                    v-if="userStore.hasPermission('action.create')"
                     type="button"
-                    href="/action/nouvelle"
-                    disabled
-                    @click="unavailable"
+                    href="/action/nouveau"
                     icon="plus"
                     iconPosition="left"
                     variant="secondary"
@@ -50,11 +48,5 @@ const modalExport = ref(null);
 
 function openModalExport() {
     modalExport.value.open();
-}
-
-function unavailable() {
-    alert(
-        "Ce formulaire est temporairement indisponible, pour des raisons techniques"
-    );
 }
 </script>

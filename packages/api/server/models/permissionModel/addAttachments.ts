@@ -2,8 +2,9 @@ import getUserPermission from './_common/getUserPermission';
 import updateUserPermission from './_common/updateUserPermission';
 import insertUserPermission from './_common/insertUserPermission';
 import insertAttachments from './_common/insertAttachments';
+import { Attachment } from './types/Attachment.d';
 
-export default async (attachments, user, feature, entity, transaction = undefined) => {
+export default async (attachments: Attachment[], user, feature, entity, transaction = undefined) => {
     const [userPermission, defaultPermission] = await getUserPermission(feature, entity)[`of${user.type}`](user.id, transaction);
 
     let userPermissionId;

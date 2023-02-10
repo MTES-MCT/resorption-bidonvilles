@@ -31,8 +31,8 @@ import publishNote from './note/publish';
 
 import actionCreate from './actions/create';
 import actionCreateComment from './actions/createComment';
-import actionSetIndicateurs from './actions/setIndicateurs';
 import actionUpdate from './actions/update';
+import organizationSearch from './organizations/search';
 
 export default {
     closeTown,
@@ -63,7 +63,6 @@ export default {
     action: {
         create: actionCreate,
         createComment: actionCreateComment,
-        setIndicateurs: actionSetIndicateurs,
         update: actionUpdate,
     },
     activity: {
@@ -83,6 +82,9 @@ export default {
     note: {
         createNote,
         publishNote,
+    },
+    organization: {
+        search: organizationSearch,
     },
     setUserAdminComments,
     editOrganization,

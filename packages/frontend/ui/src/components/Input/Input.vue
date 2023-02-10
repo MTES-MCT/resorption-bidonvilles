@@ -110,6 +110,11 @@ export default {
         autocomplete: {
             type: String,
             required: false
+        },
+        size: {
+            type: String,
+            required: false,
+            default: "md"
         }
     },
     computed: {
@@ -118,13 +123,15 @@ export default {
                 error: !!this.errors.length,
                 prefixIcon: this.prefixIcon,
                 suffixIcon: this.suffixIcon,
-                clear: this.clear
+                clear: this.clear,
+                size: this.size,
             };
 
             return {
                 state: [...getInputClasses("state", inputOptions)],
                 default: getInputClasses("default", inputOptions),
-                filter: getInputClasses("filter", inputOptions)
+                filter: getInputClasses("filter", inputOptions),
+                minimal: getInputClasses("minimal", inputOptions),
             }[this.variant];
         }
     },

@@ -12,37 +12,37 @@
 
 <script setup>
 import { computed, onMounted } from "vue";
-import { usePlansStore } from "@/stores/plans.store";
+import { useActionsStore } from "@/stores/actions.store";
 
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import ListeDesActions from "@/components/ListeDesActions/ListeDesActions.vue";
 
-const plansStore = usePlansStore();
+const actionsStore = useActionsStore();
 const location = computed({
     get() {
         return {
-            search: plansStore.filters.search,
-            data: plansStore.filters.location,
+            search: actionsStore.filters.search,
+            data: actionsStore.filters.location,
         };
     },
     set(newValue) {
         if (!newValue) {
-            plansStore.filters.search = "";
-            plansStore.filters.location = null;
+            actionsStore.filters.search = "";
+            actionsStore.filters.location = null;
         } else {
-            plansStore.filters.search = newValue?.search;
-            plansStore.filters.location = newValue?.data;
+            actionsStore.filters.search = newValue?.search;
+            actionsStore.filters.location = newValue?.data;
         }
     },
 });
 
 onMounted(() => {
-    if (plansStore.plans.length === 0) {
+    if (actionsStore.actions.length === 0) {
         load();
     }
 });
 
 function load() {
-    plansStore.fetchPlans();
+    actionsStore.fetchActions();
 }
 </script>

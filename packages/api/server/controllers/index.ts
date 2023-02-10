@@ -3,7 +3,6 @@ import actionCreate from './actionController/create';
 import actionCreateComment from './actionController/createComment';
 import actionFetchOne from './actionController/fetchOne';
 import actionList from './actionController/list';
-import actionSetIndicateurs from './actionController/setIndicateurs';
 import actionUpdate from './actionController/update';
 // config
 import configList from './configController/list';
@@ -32,7 +31,7 @@ import organizationCategories from './organizationController/categories';
 import organizationGetByCategory from './organizationController/getByCategory';
 import organizationGetByType from './organizationController/getByType';
 import organizationGetMembers from './organizationController/getMembers';
-import organizationSearch from './organizationController/search';
+import organizationSearch from './organizationController/search/search';
 import organizationTypes from './organizationController/types';
 import organizationUpdateBeingFunded from './organizationController/updateBeingFunded';
 // plan
@@ -99,7 +98,6 @@ export default () => ({
         createComment: actionCreateComment,
         fetchOne: actionFetchOne,
         list: actionList,
-        setIndicateurs: actionSetIndicateurs,
         update: actionUpdate,
     },
     config: {

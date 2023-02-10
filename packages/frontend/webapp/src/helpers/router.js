@@ -98,6 +98,22 @@ const router = createRouter({
             },
         },
         {
+            path: "/action/:id/mise-a-jour",
+            component: () => import("@/views/MiseAJourActionView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "actions",
+            },
+        },
+        {
+            path: "/action/nouveau",
+            component: () => import("@/views/DeclarationActionView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "actions",
+            },
+        },
+        {
             path: "/activites",
             component: () => import("@/views/HistoriqueActivitesView.vue"),
             meta: {

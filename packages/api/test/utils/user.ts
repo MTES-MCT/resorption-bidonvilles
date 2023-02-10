@@ -1,3 +1,5 @@
+import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+
 export function serialized(override = {}) {
     const defaultUser = {
         id: 2,
@@ -8,7 +10,7 @@ export function serialized(override = {}) {
         position: 'Mock',
         status: 'active',
         created_at: (new Date(2020, 0, 1, 0, 0, 0)).getTime() / 1000,
-        user_access: {
+        user_accesses: [{
             id: 2,
             sent_by: {
                 id: 1,
@@ -24,7 +26,7 @@ export function serialized(override = {}) {
             created_at: (new Date(2020, 0, 1, 1, 0, 0)).getTime() / 1000,
             expires_at: (new Date(2020, 0, 8, 1, 0, 0)).getTime() / 1000,
             used_at: (new Date(2020, 0, 1, 2, 0, 0)).getTime() / 1000,
-        },
+        }],
         organization: {
             id: 2,
             name: 'Délégation Interministérielle à l\'Hébergement et à l\'Accès au Logement',
@@ -110,7 +112,10 @@ export function serialized(override = {}) {
                 list: { allowed: true, allow_all: true, allowed_on: null },
             },
         },
+        admin_comments: null,
+        email_subscriptions: [],
         permission_options: [],
+        last_access: Date.now() / 1000,
         last_version: '0.0.0',
         last_changelog: '0.0.0',
         isAllowedTo: undefined,

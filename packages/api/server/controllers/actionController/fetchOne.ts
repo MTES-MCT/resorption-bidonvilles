@@ -6,7 +6,10 @@ const ERRORS = {
 
 export default async (req, res, next) => {
     try {
-        const actions = await actionService.fetch(req.params.id);
+        const actions = await actionService.fetch(
+            req.user.permissions.action.read,
+            [req.params.id],
+        );
 
         if (actions.length === 0) {
             return res.status(404).send({});

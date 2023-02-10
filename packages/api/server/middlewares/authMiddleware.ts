@@ -22,6 +22,12 @@ class AuthenticateError extends Error {
     }
 }
 
+const MAGIC_TOKENS = {
+    national_admin: {
+        userId: 1,
+    },
+};
+
 async function authenticateUser(req) {
     const token = (req.headers && req.headers['x-access-token']) || req.query.accessToken;
 
@@ -33,13 +39,17 @@ async function authenticateUser(req) {
     }
 
     let decoded;
-    try {
-        decoded = jwt.verify(token, authConfig.secret);
-    } catch (error) {
-        throw new AuthenticateError({
-            code: 2,
-            user_message: 'Votre session a expiré',
-        });
+    if (process.env.NODE_ENV === 'dev' && MAGIC_TOKENS[token] !== undefined) {
+        decoded = MAGIC_TOKENS[token];
+    } else {
+        try {
+            decoded = jwt.verify(token, authConfig.secret);
+        } catch (error) {
+            throw new AuthenticateError({
+                code: 2,
+                user_message: 'Votre session a expiré',
+            });
+        }
     }
 
     const user = await userModelFindOne(decoded.userId, {

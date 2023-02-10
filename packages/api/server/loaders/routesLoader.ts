@@ -336,35 +336,37 @@ export default (app) => {
     app.get(
         '/actions',
         middlewares.auth.authenticate,
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action.read'], ...args),
         controllers.action.list,
     );
     app.get(
         '/actions/:id',
         middlewares.auth.authenticate,
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action.read'], ...args),
         controllers.action.fetchOne,
     );
     app.post(
         '/actions',
         middlewares.auth.authenticate,
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action.create'], ...args),
         validators.action.create,
+        middlewares.validation,
         controllers.action.create,
     );
     app.patch(
         '/actions/:id',
         middlewares.auth.authenticate,
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action.update'], ...args),
         validators.action.update,
+        middlewares.validation,
         controllers.action.update,
-    );
-    app.put(
-        '/actions/:id/indicateurs/:year',
-        middlewares.auth.authenticate,
-        validators.action.setIndicateurs,
-        controllers.action.setIndicateurs,
     );
     app.post(
         '/actions/:id/comments',
         middlewares.auth.authenticate,
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action_comment.create'], ...args),
         validators.action.createComment,
+        middlewares.validation,
         controllers.action.createComment,
     );
 
@@ -625,8 +627,8 @@ export default (app) => {
     app.get(
         '/organizations/search',
         middlewares.auth.authenticate,
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
+        validators.organization.search,
+        middlewares.validation,
         controllers.organization.search,
     );
 

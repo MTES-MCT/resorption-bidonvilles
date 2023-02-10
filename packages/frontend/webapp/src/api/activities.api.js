@@ -16,7 +16,7 @@ export function list(
                   "shantytownUpdate",
                   "shantytownComment",
                   "user",
-                  "planComment",
+                  "actionComment",
               ]
             : activityFilter.activityType;
     const resorbedFilter =

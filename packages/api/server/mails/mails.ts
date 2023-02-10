@@ -564,12 +564,12 @@ export default {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
-    sendUserNewPlanComment: (recipient, options: MailOptions = {}) => {
+    sendUserNewActionComment: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient = false } = options;
 
         const utm = generateTrackingUTM(USER_CAMPAIGN, 'nouveau-commentaire-action');
 
-        return mailService.send('user_new_plan_comment', {
+        return mailService.send('user_new_action_comment', {
             recipient,
             variables: {
                 recipientName: formatName(recipient),
@@ -577,7 +577,7 @@ export default {
                 webappUrl,
                 utm,
                 wwwUrl: `${wwwUrl}?${utm}`,
-                plan: variables.plan,
+                action: variables.action,
                 createdBy: {
                     name: formatName(variables.comment.createdBy),
                     organization: variables.comment.createdBy.organization,
@@ -585,8 +585,8 @@ export default {
                 comment: variables.comment.description,
                 rootAnnuaireUrl: `${webappUrl}/annuaire?${utm}`,
                 annuaireUrl: `${webappUrl}/annuaire/${variables.comment.createdBy.organization_id}?${utm}`,
-                planUrl: `${webappUrl}/action/${variables.plan.id}`,
-                messageUrl: `${webappUrl}/action/${variables.plan.id}#comment`,
+                actionUrl: `${webappUrl}/action/${variables.action.id}`,
+                messageUrl: `${webappUrl}/action/${variables.action.id}#comment`,
             },
             preserveRecipient,
         });

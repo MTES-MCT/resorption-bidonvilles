@@ -20,7 +20,8 @@ export default async (owners) => {
             uap.epci,
             uap.cities,
             uap.shantytowns,
-            uap.plans
+            uap.plans,
+            uap.actions
         FROM user_actual_permissions uap
         WHERE uap.user_id IN (:owners)
         ORDER BY user_id ASC, entity ASC, feature ASC
@@ -51,6 +52,7 @@ export default async (owners) => {
                 cities: row.cities || [],
                 shantytowns: row.shantytowns || [],
                 plans: row.plans || [],
+                actions: row.actions || [],
             } : null,
         };
 

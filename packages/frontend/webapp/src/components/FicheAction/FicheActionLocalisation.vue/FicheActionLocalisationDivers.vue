@@ -1,12 +1,12 @@
 <template>
-    <p>{{ plan.location_details }}</p>
+    <p>{{ action.location_other }}</p>
 </template>
 
 <script setup>
 import { defineProps, toRefs } from "vue";
 
 const props = defineProps({
-    plan: Object,
+    action: Object,
 });
-const { plan } = toRefs(props);
+const { action } = toRefs(props);
 </script>

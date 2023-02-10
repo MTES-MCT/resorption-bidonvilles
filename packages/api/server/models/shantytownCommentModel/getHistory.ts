@@ -212,6 +212,7 @@ export default async (user, location, numberOfActivities, lastDate, maxDate) => 
                 id: activity.shantytownId,
                 usename: getUsenameOf({
                     addressSimple: getAddressSimpleOf(activity.address),
+                    address: '',
                     name: activity.shantytownName,
                 }),
                 city: {

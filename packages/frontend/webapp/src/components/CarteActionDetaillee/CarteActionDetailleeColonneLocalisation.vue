@@ -3,21 +3,21 @@
         <Icon icon="map-marker-alt" class="text-lg" style="color: blue" />
         <span class="text-dark font-bold"> Lieu </span>
         <div>
-            <span v-if="plan.location_type.id === 'shantytowns'">
+            <span v-if="action.location_type === 'sur_site'">
                 <span
-                    v-for="shantytown in plan.shantytowns"
+                    v-for="shantytown in action.location_shantytowns"
                     :key="shantytown.id"
                     >- {{ shantytown.usename }}<br
                 /></span>
             </span>
-            <span v-if="plan.location_type.id === 'location'">{{
-                plan.location.label
+            <span v-if="action.location_type === 'eti'">{{
+                action.eti.address
             }}</span>
-            <span v-if="plan.location_type.id === 'housing'"
+            <span v-if="action.location_type === 'logement'"
                 >Dans le logement</span
             >
-            <span v-if="plan.location_type.id === 'other'"
-                >{{ plan.location_details }}
+            <span v-if="action.location_type === 'autre'"
+                >{{ action.location_other }}
             </span>
         </div>
     </div>
@@ -28,9 +28,9 @@ import { defineProps, toRefs } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
-    plan: {
+    action: {
         type: Object,
     },
 });
-const { plan } = toRefs(props);
+const { action } = toRefs(props);
 </script>

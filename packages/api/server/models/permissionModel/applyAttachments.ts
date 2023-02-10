@@ -1,8 +1,10 @@
+import { Transaction } from 'sequelize';
 import addAttachments from './addAttachments';
+import { Attachment } from './types/Attachment.d';
 
-export default attachments => ({
-    toUser: userId => ({
-        onFeature(feature, entity, transaction = undefined) {
+export default (attachments: Attachment[]) => ({
+    toUser: (userId: number) => ({
+        onFeature(feature: string, entity: string, transaction: Transaction = undefined) {
             return addAttachments(
                 attachments,
                 { type: 'User', id: userId },
@@ -13,8 +15,8 @@ export default attachments => ({
         },
     }),
 
-    toOrganization: organizationId => ({
-        onFeature(feature, entity, transaction = undefined) {
+    toOrganization: (organizationId: number) => ({
+        onFeature(feature: string, entity: string, transaction: Transaction = undefined) {
             return addAttachments(
                 attachments,
                 { type: 'Organization', id: organizationId },

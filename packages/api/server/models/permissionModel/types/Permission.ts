@@ -9,5 +9,6 @@ export interface Permission {
         cities: string[],
         shantytowns: number[],
         plans: number[],
+        actions: number[],
     },
 }

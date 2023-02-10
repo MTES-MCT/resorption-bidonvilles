@@ -1,11 +1,9 @@
 <template>
     <FicheSousRubrique :border="false" :marginTop="false">
-        <span class="font-bold"
-            >Pilote{{ plan.government_contacts.length > 1 ? "s" : "" }}</span
-        >
+        <span class="font-bold">Pilote{{ users.length > 1 ? "s" : "" }}</span>
         <CarteUtilisateur
             class="my-2"
-            v-for="user in plan.government_contacts"
+            v-for="user in users"
             :key="user.id"
             :user="user"
             :linkToUser="false"
@@ -14,13 +12,16 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { defineProps, toRefs, computed } from "vue";
 
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
 import CarteUtilisateur from "@/components/CarteUtilisateur/CarteUtilisateur.vue";
 
 const props = defineProps({
-    plan: Object,
+    action: Object,
 });
-const { plan } = toRefs(props);
+const { action } = toRefs(props);
+const users = computed(() => {
+    return action.value.managers.map(({ users }) => users).flat();
+});
 </script>

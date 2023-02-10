@@ -1,7 +1,7 @@
 <template>
     <FicheRubrique title="Contacts" id="contacts">
-        <FicheActionPilotes :plan="plan" />
-        <FicheActionOperateur :plan="plan" />
+        <FicheActionPilotes :action="action" />
+        <FicheActionOperateur :action="action" />
     </FicheRubrique>
 </template>
 
@@ -13,7 +13,7 @@ import FicheActionPilotes from "./FicheActionPilotes.vue";
 import FicheActionOperateur from "./FicheActionOperateur.vue";
 
 const props = defineProps({
-    plan: Object,
+    action: Object,
 });
-const { plan } = toRefs(props);
+const { action } = toRefs(props);
 </script>

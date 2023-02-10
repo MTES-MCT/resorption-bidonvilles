@@ -1,13 +1,21 @@
 <template>
-    <Autocomplete
-        v-bind="$attrs"
-        name="users"
-        :fn="autocompleteFn"
-        v-model="target"
-        ref="input"
-        showCategory
-    />
-    <TagList :tags="tags" :onDelete="removeTarget" :disabled="isSubmitting" />
+    <InputWrapper :hasErrors="!!errors.length">
+        <Autocomplete
+            :id="name"
+            v-bind="$attrs"
+            :name="`users-${name}`"
+            :fn="autocompleteFn"
+            v-model="target"
+            ref="input"
+            showCategory
+        />
+        <TagList
+            :tags="tags"
+            :onDelete="removeTarget"
+            :disabled="isSubmitting"
+        />
+        <InputError v-if="errors.length">{{ errors[0] }}</InputError>
+    </InputWrapper>
 </template>
 
 <script setup>
@@ -15,7 +23,12 @@ import { defineProps, toRefs, ref, watch, computed, nextTick } from "vue";
 import { useIsSubmitting, useField } from "vee-validate";
 import { autocomplete } from "@/api/organizations.api.js";
 
-import { Autocomplete, TagList } from "@resorptionbidonvilles/ui";
+import {
+    Autocomplete,
+    TagList,
+    InputWrapper,
+    InputError,
+} from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     name: String,
@@ -23,28 +36,25 @@ const props = defineProps({
         type: String,
         required: false,
     },
-    value: {
-        type: Object,
+    usersOnly: {
+        type: Boolean,
         required: false,
-        default() {
-            return {
-                users: [],
-                organizations: [],
-            };
-        },
+        default: false,
     },
 });
 const target = ref(null);
 const input = ref(null);
-const { name, departement, value: defaultValue } = toRefs(props);
+const { name, departement, usersOnly } = toRefs(props);
 
-const { value } = useField(name.value, undefined, {
-    initialValue: defaultValue,
-});
+const { value, errors } = useField(name.value);
 const isSubmitting = useIsSubmitting();
 
 async function autocompleteFn(search) {
-    const results = await autocomplete(search, departement.value);
+    const results = await autocomplete(
+        search,
+        departement.value,
+        usersOnly.value === true ? "1" : "0"
+    );
     return results
         .map((item) => {
             return {

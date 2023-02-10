@@ -15,7 +15,7 @@
         <div v-else>
             <TabList :tabs="tabs" v-model="currentTab" class="mb-3" />
             <TextInput
-                name="incoming_towns_search"
+                :name="`${name}_search`"
                 prefixIcon="search"
                 placeholder="Adresse, nom d'un site, ville..."
             />
@@ -97,7 +97,7 @@ const { name, label, filter, columns, showMandatoryStar, defaultTab } =
     toRefs(props);
 
 const currentTab = ref(defaultTab.value);
-const search = useFieldValue("incoming_towns_search");
+const search = useFieldValue(`${name.value}_search`);
 const { value, handleChange } = useField(name, undefined, {
     type: "checkbox",
 });

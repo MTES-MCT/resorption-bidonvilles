@@ -31,8 +31,8 @@ export default async (where: Where = [], filters: UserQueryFilters = {}, user: s
     const whereClause = where.map((clauses, index) => {
         const clauseGroup = Object.keys(clauses).map((column) => {
             replacements[`${column}${index}`] = clauses[column].value !== undefined ? clauses[column].value : clauses[column];
-            if (clauses[column].operator === 'isAny') {
-                const clause = `(:${column}${index}) = ANY(${clauses[column].query || `users.${column}`})`;
+            if (clauses[column].anyOperator !== undefined) {
+                const clause = `(:${column}${index}) ${clauses[column].anyOperator} ANY(${clauses[column].query || `users.${column}`})`;
                 if (clauses[column].not === true) {
                     return `NOT(${clause})`;
                 }

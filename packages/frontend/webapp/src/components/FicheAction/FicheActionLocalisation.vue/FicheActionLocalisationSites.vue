@@ -26,17 +26,17 @@ import enrichShantytown from "@/utils/enrichShantytown";
 import { Icon, Link } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
-    plan: Object,
+    action: Object,
 });
-const { plan } = toRefs(props);
+const { action } = toRefs(props);
 const configStore = useConfigStore();
 
 const shantytowns = computed(() => {
-    if (!Array.isArray(plan.value.shantytowns)) {
+    if (!Array.isArray(action.value.location_shantytowns)) {
         return [];
     }
 
-    return plan.value.shantytowns.map((shantytown) =>
+    return action.value.location_shantytowns.map((shantytown) =>
         enrichShantytown(shantytown, configStore.config.field_types)
     );
 });

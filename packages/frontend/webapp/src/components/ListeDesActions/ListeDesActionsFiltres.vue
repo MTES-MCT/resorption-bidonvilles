@@ -8,7 +8,7 @@
                     :key="filter.id"
                     :title="filter.label"
                     :options="filter.options"
-                    v-model="plansStore.filters.properties[filter.id]"
+                    v-model="actionsStore.filters.properties[filter.id]"
                 />
             </div>
         </article>
@@ -16,10 +16,10 @@
 </template>
 
 <script setup>
-import { usePlansStore } from "@/stores/plans.store";
+import { useActionsStore } from "@/stores/actions.store";
 import filters from "./ListeDesActions.filtres";
 
 import { Filter } from "@resorptionbidonvilles/ui";
 
-const plansStore = usePlansStore();
+const actionsStore = useActionsStore();
 </script>

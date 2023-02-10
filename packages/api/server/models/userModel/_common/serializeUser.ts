@@ -1,5 +1,5 @@
 import EMAIL_SUBSCRIPTIONS from '#server/config/email_subscriptions';
-import serializeUserAccess from './serializeUserAccess';
+import serializeUserAccess, { SerializedUserAccess } from './serializeUserAccess';
 
 /**
  * @typedef {Object} UserFilters
@@ -12,6 +12,69 @@ import serializeUserAccess from './serializeUserAccess';
  *   would not need to display a user's profile page
  * - auth data is any private authentication material: password, salt...
  */
+type UserStatus = 'new' | 'active' | 'inactive';
+type UserLocationType = 'nation' | 'region' | 'departement' | 'epci' | 'city';
+
+export type SerializedUser = {
+    id: number,
+    first_name: string,
+    last_name: string,
+    email: string,
+    phone: string | null,
+    position: string | null,
+    status: UserStatus,
+    created_at: number,
+    user_accesses: SerializedUserAccess[],
+    organization: {
+        id: number,
+        name: string,
+        abbreviation: string | null,
+        active: boolean,
+        type: {
+            id: number,
+            uid: string,
+            name_singular: string,
+            name_plural: string,
+            abbreviation: string | null,
+        },
+        category: {
+            uid: string,
+            name_singular: string,
+            name_plural: string,
+        },
+        location: {
+            type: UserLocationType,
+            latitude: number,
+            longitude: number,
+            region: {
+                code: string,
+                name: string,
+            } | null,
+            departement: {
+                code: string,
+                name: string,
+            } | null,
+            epci: {
+                code: string,
+                name: string,
+            } | null,
+            city: {
+                code: string,
+                name: string,
+                main: string | null
+            } | null,
+        },
+    },
+    access_request_message: string,
+    charte_engagement_a_jour: boolean,
+    email_subscriptions: string[],
+    last_access: number | null,
+    admin_comments: string | null,
+    is_admin: boolean,
+    role: string,
+    role_id: string,
+    is_superuser: boolean,
+};
 
 export default (user, latestCharte, filters, permissionMap) => {
     const serialized = {

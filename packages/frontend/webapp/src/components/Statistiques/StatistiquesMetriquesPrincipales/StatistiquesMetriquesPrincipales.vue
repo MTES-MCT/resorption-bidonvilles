@@ -15,7 +15,7 @@
                 info="depuis janvier 2019"
             />
             <StatistiquesMetriquePrincipale
-                :value="stats.numberOfPlans || 0"
+                :value="stats.numberOfActions || 0"
                 label="actions"
             />
             <StatistiquesMetriquePrincipale

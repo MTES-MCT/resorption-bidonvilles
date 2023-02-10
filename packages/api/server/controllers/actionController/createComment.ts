@@ -1,12 +1,15 @@
 import actionService from '#server/services/action/actionService';
 
 const ERRORS = {
+    write_fail: { code: 500, message: 'Une erreur est survenue lors de l\'écriture en base de données' },
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
 export default async (req, res, next) => {
     try {
-        const comment = await actionService.createComment(req.params.id, req.body);
+        const comment = await actionService.createComment(req.user.id, req.body.action, {
+            description: req.body.description,
+        });
         return res.status(201).send(comment);
     } catch (error) {
         const { code, message } = ERRORS[error?.code] || ERRORS.undefined;

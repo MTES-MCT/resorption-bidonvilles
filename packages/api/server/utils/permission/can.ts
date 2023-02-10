@@ -39,6 +39,14 @@ export default user => ({
                     geoLocation = location.geo_location;
                 }
 
+                if (location.type === 'action') {
+                    if (permission.allowed_on.actions.includes(location.id)) {
+                        return true;
+                    }
+
+                    geoLocation = location.geo_location;
+                }
+
                 // check locations
                 if (geoLocation.city && (permission.allowed_on.cities.includes(geoLocation.city.code) || permission.allowed_on.cities.includes(geoLocation.city.main))) {
                     return true;

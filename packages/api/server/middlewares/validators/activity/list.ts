@@ -50,7 +50,7 @@ export default [
                 'shantytownUpdate',
                 'shantytownComment',
                 'user',
-                'planComment',
+                'actionComment',
             ];
             const unknownFilters = value.filter(s => !knownFilters.includes(s));
 
@@ -69,7 +69,7 @@ export default [
             'shantytownComment',
             'highCovidComment',
             'user',
-            'planComment',
+            'actionComment',
         ]),
 
     // location (type and code)
