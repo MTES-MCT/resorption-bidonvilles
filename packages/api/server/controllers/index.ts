@@ -1,6 +1,7 @@
 // action
 import actionCreate from './actionController/create';
 import actionCreateComment from './actionController/createComment';
+import actionExportComments from './actionController/exportComments';
 import actionFetchOne from './actionController/fetchOne';
 import actionList from './actionController/list';
 import actionUpdate from './actionController/update';
@@ -96,6 +97,7 @@ export default () => ({
     action: {
         create: actionCreate,
         createComment: actionCreateComment,
+        exportComments: actionExportComments,
         fetchOne: actionFetchOne,
         list: actionList,
         update: actionUpdate,
