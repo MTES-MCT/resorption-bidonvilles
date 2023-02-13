@@ -33,11 +33,11 @@ module.exports = {
             );
 
             // on crée toutes les contraintes
-            // await queryInterface.removeConstraint(
-            //     'user_permission_attachments',
-            //     'must_have_one_and_only_one_attachment',
-            //     { transaction },
-            // );
+            await queryInterface.removeConstraint(
+                'user_permission_attachments',
+                'must_have_one_and_only_one_attachment',
+                { transaction },
+            );
             await Promise.all([
                 queryInterface.addConstraint(
                     'user_permission_attachments', {
