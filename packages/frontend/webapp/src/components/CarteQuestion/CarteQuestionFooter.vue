@@ -19,7 +19,7 @@
                     icon="fa-regular fa-eye"
                     iconPosition="left"
                     :href="`/question/${question.id}`"
-                    >Voir toutes les réponses</Button
+                    >{{ seeAnswerWording }}</Button
                 >
             </div>
         </template>
@@ -54,5 +54,11 @@ const questionHasAtLeastOneAnswer = computed(() => {
         return question.value.answers.length > 0;
     }
     return false;
+});
+
+const seeAnswerWording = computed(() => {
+    return question.value.answers.length > 1
+        ? `Voir les ${question.value.answers.length} réponses`
+        : "Voir la réponse";
 });
 </script>
