@@ -11,9 +11,9 @@ import IndicateursTableRowInputs from "@/components/IndicateursTable/Indicateurs
 import IndicateursLabelPersonnes from "@/components/IndicateursLabel/IndicateursLabelPersonnes.vue";
 
 const inputs = [
-    { name: "nombre_personnes", tableLabel: "Personnes" },
+    { name: "nombre_personnes", tableLabel: "Personnes *" },
+    { name: "nombre_femmes", tableLabel: "... dont femmes" },
+    { name: "nombre_mineurs", tableLabel: "... dont mineurs" },
     { name: "nombre_menages", tableLabel: "Ménages" },
-    { name: "nombre_femmes", tableLabel: "Femmes" },
-    { name: "nombre_mineurs", tableLabel: "Mineurs" },
 ];
 </script>
