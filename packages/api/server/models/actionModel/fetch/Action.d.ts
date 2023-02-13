@@ -87,14 +87,11 @@ type ActionOrganization = {
     users: ActionOrganizationMember[]
 };
 
-type Action = {
-    type: 'action',
+interface IAction {
     id: number,
     name: string,
-    started_at: number,
-    ended_at: number | null,
-    goals: string | null,
     topics: ActionTopic[],
+    operators: ActionOrganization[],
     location: {
         type: 'departement',
         city: null,
@@ -107,7 +104,18 @@ type Action = {
             code: string,
             name: string,
         }
-    },
+    }
+}
+
+export interface ShantytownAction extends IAction {
+    shantytowns: number[]
+}
+
+interface Action extends IAction {
+    type: 'action',
+    started_at: number,
+    ended_at: number | null,
+    goals: string | null,
     location_type: ActionLocationType,
     eti: {
         address: string,
@@ -117,13 +125,12 @@ type Action = {
     location_other: string | null,
     location_shantytowns: ActionShantytown[] | null,
     managers: ActionOrganization[],
-    operators: ActionOrganization[],
     metrics: ActionMetrics[],
     comments: Comment[],
     created_at: number,
     created_by: ActionUser,
     updated_at: number,
     updated_by: ActionUser,
-};
+}
 
 export default Action;

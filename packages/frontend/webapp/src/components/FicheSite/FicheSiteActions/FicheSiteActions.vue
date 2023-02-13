@@ -2,9 +2,9 @@
     <FicheRubrique title="Actions">
         <section class="grid grid-cols-2 gap-4 my-4">
             <CarteActionDeSite
-                v-for="plan in town.plans"
-                :key="plan.plan_id"
-                :plan="plan"
+                v-for="action in town.actions"
+                :key="action.id"
+                :action="action"
             />
         </section>
     </FicheRubrique>
