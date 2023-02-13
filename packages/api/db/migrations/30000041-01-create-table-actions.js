@@ -40,6 +40,10 @@ module.exports = {
                 type: Sequelize.DOUBLE,
                 allowNull: true,
             },
+            eti_fk_city: {
+                type: Sequelize.STRING,
+                allowNull: true
+            },    
             location_other: {
                 type: Sequelize.TEXT,
                 allowNull: true,
@@ -75,6 +79,18 @@ module.exports = {
                     onUpdate: 'cascade',
                     onDelete: 'restrict',
                     transaction,
+                }),
+                queryInterface.addConstraint(table, {
+                    fields: ['eti_fk_city'],
+                    type: 'foreign key',
+                    name: `fk__${table}__city`,
+                    references: {
+                        table: 'cities',
+                        field: 'code'
+                    },
+                    onUpdate: 'cascade',
+                    onDelete: 'restrict',
+                    transaction
                 }),
                 queryInterface.addConstraint(table, {
                     fields: ['created_by'],
@@ -220,6 +236,7 @@ module.exports = {
         function removeConstraints(table) {
             return [
                 queryInterface.removeConstraint(table, `fk__${table}__departement`, { transaction }),
+                queryInterface.removeConstraint(table, `fk__${table}__city`, { transaction }),
                 queryInterface.removeConstraint(table, `fk__${table}__creator`, { transaction }),
                 queryInterface.removeConstraint(table, `fk__${table}__editor`, { transaction }),
                 queryInterface.removeConstraint(table, `check_${table}_dates`, { transaction }),
