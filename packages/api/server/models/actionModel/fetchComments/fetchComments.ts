@@ -13,6 +13,7 @@ export type ActionCommentRow = {
     creator_organization_id: number,
     creator_organization_name: string,
     creator_organization_abbreviation: string | null,
+    creator_user_role: string,
 };
 
 export default function fetchComments(actionIds: number[] = null, commentIds: number[] = null, clauseGroup: object = {}): Promise<ActionCommentRow[]> {
@@ -39,11 +40,13 @@ export default function fetchComments(actionIds: number[] = null, commentIds: nu
             creator.user_id AS creator_id,
             creator.first_name AS creator_first_name,
             creator.last_name AS creator_last_name,
+            roles_regular.name AS creator_user_role,
             creator_organizations.organization_id AS creator_organization_id,
             creator_organizations.name AS creator_organization_name,
             creator_organizations.abbreviation AS creator_organization_abbreviation
         FROM action_comments
         LEFT JOIN users AS creator ON action_comments.created_by = creator.user_id
+        LEFT JOIN roles_regular ON creator.fk_role_regular = roles_regular.role_id
         LEFT JOIN organizations AS creator_organizations ON creator.fk_organization = creator_organizations.organization_id
         LEFT JOIN actions ON action_comments.fk_action = actions.action_id
         LEFT JOIN departements ON actions.fk_departement = departements.code

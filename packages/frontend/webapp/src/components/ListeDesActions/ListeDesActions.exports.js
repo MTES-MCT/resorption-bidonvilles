@@ -1,10 +1,10 @@
-import { exportComments, exportPlans } from "@/api/plans.api";
+import { exportComments, exportActions } from "@/api/actions.api";
 
 export default [
     {
         label: "Export des actions",
         filename: "actions",
-        downloadFn: exportPlans,
+        downloadFn: exportActions,
     },
     {
         label: "Export des commentaires",

@@ -369,6 +369,15 @@ export default (app) => {
         middlewares.validation,
         controllers.action.createComment,
     );
+    app.get(
+        '/actions/comments/export',
+        middlewares.auth.authenticate,
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan_comment.export'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.action.exportComments,
+    );
+
 
     // plans
     app.get(
