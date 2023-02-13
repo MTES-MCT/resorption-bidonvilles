@@ -87,6 +87,7 @@ module.exports = {
                 200: "50rem"
             },
             screens: {
+                xs: '426px',
                 print: { raw: "print" }
             },
             spacing: {
