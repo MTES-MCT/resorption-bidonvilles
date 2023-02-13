@@ -51,7 +51,7 @@ const search = computed({
     set(newValue) {
         if (newValue) {
             if (newValue.data?.type === "user") {
-                router.push(`/annuaire/${newValue.data.organization_id}`); // TODO
+                router.push(`/annuaire/${newValue.data.organization_id}`);
             } else if (newValue.data?.type === "organization") {
                 router.push(`/structure/${newValue.data.id}`);
             } else {
