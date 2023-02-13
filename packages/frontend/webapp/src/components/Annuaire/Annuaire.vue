@@ -1,31 +1,6 @@
 <template>
     <ContentWrapper>
-        <div class="m-auto w-1/2 pt-6 pb-10 text-center print:hidden">
-            <h1 class="text-lg xl:text-xl font-bold">
-                Rechercher un contact, un acteur, une structure...
-            </h1>
-            <ContentWrapper class="mt-3" size="medium">
-                <div class="flex items-center space-x-2">
-                    <InputCommunauteSearch
-                        class="flex-1"
-                        placeholder="Nom d'un territoire, d'une structure, d'un acteur..."
-                        withoutMargin
-                        :allowFreeSearch="true"
-                        v-model="inputSearch"
-                    />
-                    <Button size="sm" type="button">Rechercher</Button>
-                </div>
-                <p class="mt-1 text-right text-sm font-bold" v-if="showReset">
-                    <Link v-if="isNotOnDefaultFilter" @click="resetSearch">
-                        <Icon icon="rotate-left" /> Revenir à mon
-                        territoire</Link
-                    >
-                    <Link v-else @click="emptySearch">
-                        {{ showNationalWording }}</Link
-                    >
-                </p>
-            </ContentWrapper>
-        </div>
+        <AnnuaireBanniere v-model:search="search" />
         <ViewHeader icon="user">
             <template v-slot:title
                 >Découvrez notre communauté —
@@ -37,7 +12,10 @@
             </template>
         </ViewHeader>
 
-        <AnnuaireHeader :location="location" :search="search" />
+        <AnnuaireHeader
+            :location="directoryStore.filters.location"
+            :search="directoryStore.filters.search"
+        />
         <AnnuaireFiltres class="mt-6 mb-4" />
 
         <AnnuaireContent v-if="directoryStore.total > 0" />
@@ -48,63 +26,47 @@
 </template>
 
 <script setup>
-import { Button, Link, Icon } from "@resorptionbidonvilles/ui";
-import { computed, toRefs, defineEmits } from "vue";
+import router from "@/helpers/router";
+import { computed } from "vue";
 import computeLocationSearchTitle from "@/utils/computeLocationSearchTitle";
 import { useDirectoryStore } from "@/stores/directory.store";
-import { useUserStore } from "@/stores/user.store";
+
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
+import AnnuaireBanniere from "./AnnuaireBanniere.vue";
 import AnnuaireHeader from "./AnnuaireHeader.vue";
 import AnnuaireFiltres from "./AnnuaireFiltres.vue";
 import AnnuaireContent from "./AnnuaireContent.vue";
 import AnnuaireVide from "./AnnuaireVide.vue";
-import InputCommunauteSearch from "../InputCommunauteSearch/InputCommunauteSearch.vue";
 
 const directoryStore = useDirectoryStore();
-const userStore = useUserStore();
-const { location, search } = toRefs(directoryStore.filters);
-const showNationalWording = "Voir tous les acteurs de France";
 
-const emit = defineEmits(["update:search"]);
-
-const inputSearch = computed({
+const search = computed({
     get() {
         return {
-            search: search.value,
-            data: location.value,
+            search: "",
+            data: null,
         };
     },
     set(newValue) {
-        console.log();
-        emit("update:search", newValue);
+        if (newValue) {
+            if (newValue.data?.type === "user") {
+                router.push(`/annuaire/${newValue.data.organization_id}`); // TODO
+            } else if (newValue.data?.type === "organization") {
+                router.push(`/structure/${newValue.data.id}`);
+            } else {
+                // location ou recherche textuelle
+                directoryStore.filters.search = newValue.search;
+                directoryStore.filters.location = newValue.data;
+            }
+        } else {
+            directoryStore.filters.search = "";
+            directoryStore.filters.location = null;
+        }
     },
 });
+
 const title = computed(() => {
-    return computeLocationSearchTitle(search.value, location.value);
+    return computeLocationSearchTitle(search.value.search, search.value.data);
 });
-
-const showReset = computed(() => {
-    if (isNotOnDefaultFilter.value) {
-        return true;
-    }
-
-    return userStore.user.organization.location.type !== "nation";
-});
-
-const isNotOnDefaultFilter = computed(() => {
-    console.log("filtre a changé");
-    return !userStore.isMyLocation(inputSearch.value);
-});
-
-function resetSearch() {
-    inputSearch.value = userStore.defaultLocationFilter;
-}
-
-function emptySearch() {
-    inputSearch.value = {
-        search: "",
-        data: null,
-    };
-}
 </script>
