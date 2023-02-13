@@ -31,6 +31,7 @@
                         withoutMargin
                         variant="minimal"
                         size="sm"
+                        :inlineError="true"
                     />
                 </p>
             </div>
