@@ -4,9 +4,9 @@ import ServiceError from '#server/errors/ServiceError';
 import permissionUtils from '#server/utils/permission';
 import actionModel from '#server/models/actionModel';
 import { ActionCommentRow } from '#server/models/actionModel/fetchComments/fetchComments';
-import { User } from '#server/models/userModel/_common/types/User';
+import { AuthUser } from '#server/middlewares/authMiddleware';
 
-export default async (user: User): Promise<string> => {
+export default async (user: AuthUser): Promise<string> => {
     const nationalLevel = { type: 'nation' };
 
     if (!permissionUtils.can(user).do('export', 'action_comment').on(nationalLevel)) {
@@ -25,7 +25,7 @@ export default async (user: User): Promise<string> => {
     }
 
     // build excel file
-    return JSONToCSV(
+    return JSONToCSV.parse(
         comments.map((row) => {
             const createdAt = moment(row.created_at).utcOffset(2);
 
