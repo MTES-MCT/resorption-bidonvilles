@@ -136,7 +136,7 @@ module.exports = {
                     transaction,
                 }),
                 queryInterface.addConstraint(table, {
-                    fields: ['location_type', 'address', 'latitude', 'longitude', 'location_other'],
+                    fields: ['location_type', 'address', 'latitude', 'longitude', 'eti_fk_city', 'location_other'],
                     type: 'check',
                     name: `check_${table}_location_columns`,
                     where: {
@@ -146,6 +146,7 @@ module.exports = {
                                 address: { [Sequelize.Op.ne]: null },
                                 latitude: { [Sequelize.Op.ne]: null },
                                 longitude: { [Sequelize.Op.ne]: null },
+                                eti_fk_city: { [Sequelize.Op.ne]: null },
                                 location_other: { [Sequelize.Op.eq]: null },
                             },
                             {
@@ -153,6 +154,7 @@ module.exports = {
                                 address: { [Sequelize.Op.eq]: null },
                                 latitude: { [Sequelize.Op.eq]: null },
                                 longitude: { [Sequelize.Op.eq]: null },
+                                eti_fk_city: { [Sequelize.Op.eq]: null },
                                 location_other: { [Sequelize.Op.ne]: null },
                             },
                             {
@@ -160,6 +162,7 @@ module.exports = {
                                 address: { [Sequelize.Op.eq]: null },
                                 latitude: { [Sequelize.Op.eq]: null },
                                 longitude: { [Sequelize.Op.eq]: null },
+                                eti_fk_city: { [Sequelize.Op.eq]: null },
                                 location_other: { [Sequelize.Op.eq]: null },
                             },
                         ],
