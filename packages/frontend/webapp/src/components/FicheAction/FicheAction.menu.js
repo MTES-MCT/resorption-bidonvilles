@@ -18,7 +18,7 @@ export default [
     },
     {
         id: "indicateurs",
-        label: () => "Indicateurs de suivi",
+        label: () => "Indicateurs",
         route: "#indicateurs",
     },
     {

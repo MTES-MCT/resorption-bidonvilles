@@ -1,5 +1,5 @@
 <template>
-    <FicheRubrique title="Indicateurs de suivi" id="indicateurs">
+    <FicheRubrique title="Indicateurs" id="indicateurs">
         <IndicateursGrid class="overflow-x-auto">
             <IndicateursRow>
                 <template v-slot:right>
