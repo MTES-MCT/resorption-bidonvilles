@@ -1,7 +1,7 @@
 <template>
     <FormSection id="indicateurs">
         <template v-slot:title>Indicateurs</template>
-
+        <FormActionIndicateursInfo />
         <InputIndicateursAnnuels />
         <InputIndicateursScolaires
             v-if="values.topics && values.topics.includes('school')"
@@ -15,6 +15,7 @@ import FormSection from "@/components/FormSection/FormSection.vue";
 
 import InputIndicateursAnnuels from "../inputs/FormDeclarationActionInputIndicateursAnnuels.vue";
 import InputIndicateursScolaires from "../inputs/FormDeclarationActionInputIndicateursScolaires.vue";
+import FormActionIndicateursInfo from "./FormDeclarationActionIndicateursInfo.vue";
 
 const values = useFormValues();
 </script>

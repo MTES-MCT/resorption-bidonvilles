@@ -1,8 +1,8 @@
 <template>
-    <IndicateursLabel
-        >au moins 1
-        <span class="text-tertiary">contrat de travail</span></IndicateursLabel
-    >
+    <IndicateursLabel>
+        au moins 1 <span>contrat de </span>
+        <span class="text-tertiary">travail</span>
+    </IndicateursLabel>
     (tout type de contrat)
 </template>
 

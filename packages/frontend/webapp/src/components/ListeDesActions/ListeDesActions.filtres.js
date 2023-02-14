@@ -22,7 +22,7 @@ export default [
             },
             {
                 value: "autre",
-                label: "Dans plusieurs lieux(hébergement, permanence, rue)",
+                label: "Autres (hébergement, permanence, rue)",
             },
         ],
     },

@@ -16,8 +16,8 @@ export default [
         .notEmpty().withMessage('Le nom de l\'action ne peut être vide'),
 
     body('started_at')
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de démarrage" est obligatoire')
-        .isDate().bail().withMessage('Le champ "Date de démarrage" est invalide')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de début" est obligatoire')
+        .isDate().bail().withMessage('Le champ "Date de début" est invalide')
         .toDate()
         .customSanitizer((value) => {
             value.setHours(0, 0, 0, 0);
@@ -37,7 +37,7 @@ export default [
             today.setHours(0, 0, 0, 0);
 
             if (value < req.body.started_at) {
-                throw new Error('La date de fin ne peut pas être antérieure à la date de démarrage');
+                throw new Error('La date de fin ne peut pas être antérieure à la date de début');
             }
 
             return true;

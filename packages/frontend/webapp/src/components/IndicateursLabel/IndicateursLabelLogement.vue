@@ -1,7 +1,8 @@
 <template>
-    <IndicateursLabel class="text-tertiary"
-        >accès à un logement</IndicateursLabel
-    >
+    <IndicateursLabel>
+        <span>accès à un </span>
+        <span class="text-tertiary">logement</span>
+    </IndicateursLabel>
 </template>
 
 <script setup>
