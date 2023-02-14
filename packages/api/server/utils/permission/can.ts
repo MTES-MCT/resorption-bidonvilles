@@ -1,9 +1,10 @@
+import { User } from '#server/models/userModel/_common/types/User';
 import getPermission from './getPermission';
 
-export default user => ({
-    do(feature, entity) {
+export default (user: User) => ({
+    do(feature: string, entity: string) {
         return {
-            on(location) {
+            on(location): boolean {
                 // ensure the user has the permission (has it AND allowed is true)
                 const permission = getPermission(user, feature, entity);
                 if (!permission) {

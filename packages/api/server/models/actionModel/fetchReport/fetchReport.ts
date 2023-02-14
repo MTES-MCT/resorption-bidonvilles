@@ -1,7 +1,23 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-export default async () => sequelize.query(
+type ActionReportRow = {
+    'Identifiant': number,
+    'Description': string,
+    'Date de début': string,
+    'Date de fin': string | null,
+    'Saisie par (identifiant)': number,
+    'Saisie par (nom)': string,
+    'Saisie le': string,
+    'Dernière mise à jour par (identifiant)': number | null,
+    'Dernière mise à jour par (nom)': string | null,
+    'Dernière mise à jour le': string | null,
+    'Pilotes': string,
+    'Opérateurs': string,
+    "Champs d''intervention": string,
+};
+
+export default (): Promise<ActionReportRow[]> => sequelize.query(
     `WITH
     grouped_topics AS (
         SELECT

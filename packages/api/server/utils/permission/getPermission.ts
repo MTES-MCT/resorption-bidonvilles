@@ -1,4 +1,6 @@
-export default (user, feature, entity) => {
+import { User } from '#server/models/userModel/_common/types/User';
+
+export default (user: User, feature: string, entity: string) => {
     if (!user.permissions[entity]) {
         return null;
     }

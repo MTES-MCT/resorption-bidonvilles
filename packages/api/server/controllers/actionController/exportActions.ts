@@ -1,20 +1,17 @@
-import JSONToCSV from 'json2csv';
-import actionModel from '#server/models/actionModel';
+import actionService from '#server/services/action/actionService';
 
-export default async (req, res) => {
+export default async (req, res, next) => {
     try {
-        const actions = await actionModel.exportActions();
-        const csv = JSONToCSV.parse(actions);
-
         // The frontend expects a JSON for every API calls, so we wrap the CSV in a json entry
         res.status(200).send({
-            csv,
+            csv: await actionService.getActionReport(),
         });
     } catch (error) {
         res.status(500).send({
             error: {
-                user_message: 'Une erreur est survenue lors de la récupération des actions',
+                user_message: 'Une erreur est survenue lors de la récupération des données',
             },
         });
+        next(error);
     }
 };

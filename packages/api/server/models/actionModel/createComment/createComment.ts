@@ -1,4 +1,3 @@
-
 import { QueryTypes } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 import fetchComments from '../fetchComments/fetchComments';

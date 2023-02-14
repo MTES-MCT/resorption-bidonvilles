@@ -26,24 +26,27 @@ module.exports = {
             );
 
             // reset sequence of primary key
-            const [{ max }] = await queryInterface.sequelize.query(
+            const response = await queryInterface.sequelize.query(
                 'SELECT action_comment_id AS max FROM action_comments ORDER BY action_comment_id DESC LIMIT 1',
                 {
                     type: queryInterface.sequelize.QueryTypes.SELECT,
                     transaction,
                 },
             );
-            await Promise.all([
-                queryInterface.sequelize.query(
-                    'ALTER SEQUENCE action_comments_action_comment_id_seq RESTART WITH :max',
-                    {
-                        transaction,
-                        replacements: {
-                            max: parseInt(max, 10) + 1,
+            if (response.length > 0) {
+                const [{ max }] = response;
+                await Promise.all([
+                    queryInterface.sequelize.query(
+                        'ALTER SEQUENCE action_comments_action_comment_id_seq RESTART WITH :max',
+                        {
+                            transaction,
+                            replacements: {
+                                max: parseInt(max, 10) + 1,
+                            },
                         },
-                    },
-                ),
-            ]);
+                    ),
+                ]);
+            }
 
             return transaction.commit();
         } catch (error) {
