@@ -13,6 +13,7 @@ export default (id: number, data: ActionUpdateRow, transaction: Transaction) => 
         address = :address,
         latitude = :latitude,
         longitude = :longitude,
+        eti_fk_city = :location_eti_citycode,
         location_other = :location_autre,
         updated_by = :updated_by,
         updated_at = NOW()
