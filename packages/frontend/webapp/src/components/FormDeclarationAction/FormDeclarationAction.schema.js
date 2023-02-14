@@ -3,6 +3,14 @@ import labels from "./FormDeclarationAction.labels";
 import locationTypes from "@/utils/action_location_types";
 import { useConfigStore } from "@/stores/config.store";
 
+function emptyStringToNull(value, originalValue) {
+    if (typeof originalValue === "string" && originalValue === "") {
+        return null;
+    }
+
+    return value;
+}
+
 addMethod(object, "usersIsNotEmpty", function () {
     return this.test(
         "usersIsNotEmpty",
@@ -83,24 +91,108 @@ export default function () {
             .required()
             .usersIsNotEmpty()
             .label(labels.operators),
-        nombre_personnes: number(),
-        nombre_menages: number(),
-        nombre_femmes: number(),
-        nombre_mineurs: number(),
-        sante_nombre_personnes: number(),
-        travail_nombre_personnes: number(),
-        travail_nombre_femmes: number(),
-        hebergement_nombre_personnes: number(),
-        hebergement_nombre_menages: number(),
-        logement_nombre_personnes: number(),
-        logement_nombre_menages: number(),
-        scolaire_mineurs_scolarisables: number(),
-        scolaire_mineurs_en_mediation: number(),
-        scolaire_nombre_maternelle: number(),
-        scolaire_nombre_elementaire: number(),
-        scolaire_nombre_college: number(),
-        scolaire_nombre_lycee: number(),
-        scolaire_nombre_autre: number(),
+        nombre_personnes: number()
+            .required()
+            .typeError(`Nombre de personnes doit être un nombre`)
+            .nullable()
+            .transform(emptyStringToNull)
+            .label("Nombre de personnes"),
+        nombre_menages: number()
+            .typeError(`Nombre de ménages doit être un nombre`)
+            .nullable()
+            .transform(emptyStringToNull),
+        nombre_femmes: number()
+            .typeError(`Nombre de femmes doit être un nombre`)
+            .nullable()
+            .transform(emptyStringToNull),
+        nombre_mineurs: number()
+            .typeError(`Nombre de mineurs doit être un nombre`)
+            .nullable()
+            .transform(emptyStringToNull),
+        sante_nombre_personnes: number()
+            .typeError(
+                `Nombre de personnes ayant bénéficié d'un accompagnement vers la santé doit être un nombre`
+            )
+            .nullable()
+            .transform(emptyStringToNull),
+        travail_nombre_personnes: number()
+            .typeError(
+                `Nombre de personnes ayant eu au moins 1 contrat de travail doit être un nombre`
+            )
+            .nullable()
+            .transform(emptyStringToNull),
+        travail_nombre_femmes: number()
+            .typeError(
+                `Nombre de femmes ayant eu au moins 1 contrat de travail doit être un nombre`
+            )
+            .nullable()
+            .transform(emptyStringToNull),
+        hebergement_nombre_personnes: number()
+            .typeError(
+                `Nombre de personnes ayant eu accès à un hébergement doit être un nombre`
+            )
+            .nullable()
+            .transform(emptyStringToNull),
+        hebergement_nombre_menages: number()
+            .typeError(
+                `Nombre de ménages ayant eu accès à un hébergement doit être un nombre`
+            )
+            .nullable()
+            .transform(emptyStringToNull),
+        logement_nombre_personnes: number()
+            .typeError(
+                `Nombre de personnes ayant eu accès à un logement doit être un nombre`
+            )
+            .nullable()
+            .transform(emptyStringToNull),
+        logement_nombre_menages: number()
+            .typeError(
+                `Nombre de ménages ayant eu accès à un logement doit être un nombre`
+            )
+            .nullable()
+            .transform(emptyStringToNull),
+        scolaire_mineurs_scolarisables: number()
+            .typeError(
+                `Nombre de mineurs en âge d'être scolarisés doit être un nombre`
+            )
+            .nullable()
+            .transform(emptyStringToNull),
+        scolaire_mineurs_en_mediation: number()
+            .typeError(
+                `Nombre de mineurs bénéficiant d'une action de médiation doit être un nombre`
+            )
+            .nullable()
+            .transform(emptyStringToNull),
+        scolaire_nombre_maternelle: number()
+            .typeError(
+                `Nombre de mineurs scolarisés en maternelle doit être un nombre`
+            )
+            .nullable()
+            .transform(emptyStringToNull),
+        scolaire_nombre_elementaire: number()
+            .typeError(
+                `Nombre de mineurs scolarisés en élémentaire doit être un nombre`
+            )
+            .nullable()
+            .transform(emptyStringToNull),
+        scolaire_nombre_college: number()
+            .typeError(
+                `Nombre de mineurs scolarisés au collège doit être un nombre`
+            )
+            .nullable()
+            .transform(emptyStringToNull),
+        scolaire_nombre_lycee: number()
+            .typeError(
+                `Nombre de mineurs scolarisés au lycée doit être un nombre`
+            )
+            .nullable()
+            .transform(emptyStringToNull),
+        scolaire_nombre_autre: number()
+            .typeError(
+                `Nombre de mineurs scolarisés "autre" doit être un nombre`
+            )
+            .nullable()
+            .transform(emptyStringToNull),
     };
 
     return object(schema);
