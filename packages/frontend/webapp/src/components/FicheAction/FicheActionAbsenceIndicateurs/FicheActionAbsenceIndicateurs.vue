@@ -18,7 +18,6 @@
                 icon="pen"
                 iconPosition="left"
                 :href="`/action/${action.id}/mise-a-jour`"
-                disabled
                 >Mettre à jour les indicateurs</Button
             >
         </p>

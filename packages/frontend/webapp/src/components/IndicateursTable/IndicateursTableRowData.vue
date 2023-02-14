@@ -6,8 +6,9 @@
                 <p
                     v-for="(label, index) in labels"
                     :key="label"
-                    class="flex items-center px-4 h-8 bg-G200"
+                    class="flex items-center h-8 bg-G200"
                     :class="{
+                        'px-4': label !== '' && label !== undefined,
                         'border-b border-b-G400': index < labels.length - 1,
                     }"
                 >

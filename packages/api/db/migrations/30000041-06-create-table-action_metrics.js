@@ -7,7 +7,7 @@ module.exports = {
             return queryInterface.addConstraint('action_metrics', {
                 fields: [colA, colB],
                 type: 'check',
-                name: `check__${colA}_lt_${colB}`,
+                name: `check__${colA}_lte_${colB}`,
                 where: {
                     [Sequelize.Op.or]: [
                         { [colB]: { [Sequelize.Op.eq]: null } },
@@ -16,7 +16,7 @@ module.exports = {
                             [colB]: { [Sequelize.Op.ne]: null },
                             [colA]: {
                                 [Sequelize.Op.ne]: null,
-                                [Sequelize.Op.lt]: Sequelize.col(colB),
+                                [Sequelize.Op.lte]: Sequelize.col(colB),
                             },
                         },
                     ],
@@ -187,7 +187,7 @@ module.exports = {
         function removeConstraintLowerThan(colA, colB) {
             return queryInterface.removeConstraint(
                 'action_metrics',
-                `check__${colA}_lt_${colB}`,
+                `check__${colA}_lte_${colB}`,
                 { transaction },
             );
         }

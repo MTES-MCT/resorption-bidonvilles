@@ -6,8 +6,11 @@
                 <p
                     v-for="(input, index) in inputs"
                     :key="input.name"
-                    class="flex items-center px-4 h-8 bg-G200"
+                    class="flex items-center h-8 bg-G200"
                     :class="{
+                        'px-4':
+                            input.tableLabel !== '' &&
+                            input.tableLabel !== undefined,
                         'border-b border-b-G400': index < inputs.length - 1,
                     }"
                 >
