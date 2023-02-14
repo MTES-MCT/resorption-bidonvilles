@@ -1,8 +1,7 @@
 <template>
     <FicheRubrique title="Indicateurs" id="indicateurs">
         <p class="mt-6 text-center">
-            Il n'y a aucun indicateur de suivi renseigné par l'opérateur pour le
-            moment.
+            Il n'y a aucun indicateur renseigné par l'opérateur pour le moment.
         </p>
 
         <p
