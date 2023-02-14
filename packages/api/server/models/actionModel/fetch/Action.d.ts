@@ -120,7 +120,8 @@ interface Action extends IAction {
     eti: {
         address: string,
         latitude: number,
-        longitude: number
+        longitude: number,
+        citycode: string,
     } | null,
     location_other: string | null,
     location_shantytowns: ActionShantytown[] | null,

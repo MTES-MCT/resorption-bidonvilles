@@ -13,6 +13,7 @@ export type ActionInput = {
     location_eti: string | null,
     latitude: number | null,
     longitude: number | null,
+    eti_fk_city: string | null,
     location_shantytowns: number[] | null,
     location_other: string | null,
     nombre_personnes: number,
