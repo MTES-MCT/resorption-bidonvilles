@@ -10,7 +10,7 @@ const ERROR_RESPONSES = {
 export default async (req, res, next) => {
     try {
         res.status(200).send({
-            csv: await actionService.fetchCommentReport(req.user),
+            csv: await actionService.getCommentReport(req.user),
         });
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;

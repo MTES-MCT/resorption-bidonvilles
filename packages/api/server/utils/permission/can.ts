@@ -1,7 +1,7 @@
-import { User } from '#server/models/userModel/_common/types/User';
+import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
 import getPermission from './getPermission';
 
-export default (user: User) => ({
+export default (user: SerializedUser) => ({
     do(feature: string, entity: string) {
         return {
             on(location): boolean {
@@ -45,7 +45,7 @@ export default (user: User) => ({
                         return true;
                     }
 
-                    geoLocation = location.geo_location;
+                    geoLocation = location.location;
                 }
 
                 // check locations

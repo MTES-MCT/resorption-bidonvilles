@@ -3,6 +3,7 @@ import * as Sentry from '@sentry/node';
 import config from '#server/config';
 import userModelUpdate from '#server/models/userModel/update';
 import userModelFindOne from '#server/models/userModel/findOne';
+import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
 
 const { auth: authConfig } = config;
 
@@ -10,6 +11,10 @@ type AuthenticateErrorDetails = {
     code: number,
     user_message: string,
 };
+
+export interface AuthUser extends SerializedUser {
+    isAllowedTo: Function
+}
 
 class AuthenticateError extends Error {
     details: AuthenticateErrorDetails;

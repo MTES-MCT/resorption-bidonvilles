@@ -1,14 +1,14 @@
 import create from './create';
 import createComment from './createComment';
 import getActionReport from './getActionReport';
-import fetchCommentReport from './fetchCommentReport';
+import getCommentReport from './getCommentReport';
 import fetch from './fetch';
 import update from './update';
 
 export default {
     create,
     createComment,
-    fetchCommentReport,
+    getCommentReport,
     fetch,
     getActionReport,
     update,

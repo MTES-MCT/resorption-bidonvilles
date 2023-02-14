@@ -20,7 +20,7 @@ export interface User {
         abbreviation: string | null,
         active: boolean,
         type: {
-            id: string,
+            id: number,
             uid: string,
             name_singular: string,
             name_plural: string,
@@ -58,6 +58,8 @@ export interface User {
     role: string,
     role_id: string,
     is_superuser: boolean,
+    admin_comments: string,
+    email_subscriptions: [],
 
     // filter: auth
     password: string | undefined,

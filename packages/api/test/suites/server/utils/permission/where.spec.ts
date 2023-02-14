@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import permissionUtils from '#server/utils/permission';
 import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeShantytown } from '#test/utils/shantytown';
-import { serialized as fakePlan } from '#test/utils/plan';
 import locationUtils from '#test/utils/location';
+import { serialized as fakeAction } from '#test/utils/action';
 
 const { where } = permissionUtils;
 const { paris, marseille } = locationUtils;
@@ -70,7 +70,7 @@ describe('utils/permission.where()', () => {
                     epci: [location.epci.code, otherLocation.epci.code],
                     cities: [location.city.code, otherLocation.city.code],
                     shantytowns: [fakeShantytown(paris.city()).id],
-                    plans: [fakePlan(paris.departement()).id],
+                    plans: [fakeAction({ location: paris.departement() }).id],
                 },
             },
         };
