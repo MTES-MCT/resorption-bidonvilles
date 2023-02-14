@@ -53,6 +53,6 @@ const info = computed(() => {
         des habitants du site ont été
         orientées vers une solution d’hébergement, de
         logement adapté longue durée avec accompagnement,
-        dont espace temporaire d’insertion, ou logement`;
+        dont espace temporaire accompagnement, ou logement`;
 });
 </script>

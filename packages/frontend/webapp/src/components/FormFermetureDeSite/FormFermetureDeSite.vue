@@ -71,7 +71,7 @@ const schema = computed(() => {
 
 const actualSolutionIds = computed(() => {
     const actualSolutions = [
-        "Hébergement ou logement adapté longue durée avec accompagnement, dont espace temporaire d’insertion",
+        "Hébergement ou logement adapté longue durée avec accompagnement, dont espace temporaire d’accompagnement",
         "Logement",
     ];
 

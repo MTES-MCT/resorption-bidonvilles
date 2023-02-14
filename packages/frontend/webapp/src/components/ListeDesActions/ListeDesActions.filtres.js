@@ -14,8 +14,8 @@ export default [
         label: "Lieu d'intervention",
         id: "interventionLocation",
         options: [
-            { value: "sur_site", label: "Sur Site" },
-            { value: "eti", label: "Sur terrain d'insertion" },
+            { value: "sur_site", label: "Sur site" },
+            { value: "eti", label: "Sur espace temporaire d'accompagnement" },
             {
                 value: "logement",
                 label: "Dans le logement",
