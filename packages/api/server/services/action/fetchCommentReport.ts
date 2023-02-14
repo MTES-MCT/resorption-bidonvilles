@@ -1,0 +1,45 @@
+import moment from 'moment';
+import JSONToCSV from 'json2csv';
+import ServiceError from '#server/errors/ServiceError';
+import permissionUtils from '#server/utils/permission';
+import actionModel from '#server/models/actionModel';
+import { ActionCommentRow } from '#server/models/actionModel/fetchComments/fetchComments';
+import { User } from '#server/models/userModel/_common/types/User';
+
+export default async (user: User): Promise<string> => {
+    const nationalLevel = { type: 'nation' };
+
+    if (!permissionUtils.can(user).do('export', 'action_comment').on(nationalLevel)) {
+        throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission d\'exporter les commentaires'));
+    }
+
+    let comments: ActionCommentRow[];
+    try {
+        comments = await actionModel.fetchComments();
+    } catch (error) {
+        throw new ServiceError('fetch_failed', error);
+    }
+
+    if (comments.length === 0) {
+        throw new ServiceError('no_data', new Error('Il n\'y a aucun commentaire à exporter'));
+    }
+
+    // build excel file
+    return JSONToCSV(
+        comments.map((row) => {
+            const createdAt = moment(row.created_at).utcOffset(2);
+
+            return {
+                S: createdAt.format('w'),
+                'ID du commentaire': row.id,
+                'ID de l\'action': row.action_id,
+                'Publié le': createdAt.format('DD/MM/YYYY'),
+                Description: row.description,
+                'ID de l\'auteur(e)': row.creator_id,
+                'Nom de famille': row.creator_last_name,
+                Structure: row.creator_organization_abbreviation || row.creator_organization_name,
+                Role: row.creator_user_role,
+            };
+        }),
+    );
+};

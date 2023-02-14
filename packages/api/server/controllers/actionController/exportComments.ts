@@ -1,4 +1,3 @@
-import JSONToCSV from 'json2csv';
 import actionService from '#server/services/action/actionService';
 
 const ERROR_RESPONSES = {
@@ -9,9 +8,10 @@ const ERROR_RESPONSES = {
 };
 
 export default async (req, res, next) => {
-    let comments;
     try {
-        comments = await actionService.exportComments(req.user);
+        res.status(200).send({
+            csv: await actionService.fetchCommentReport(req.user),
+        });
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({
@@ -20,10 +20,6 @@ export default async (req, res, next) => {
             },
         });
 
-        return next(error.nativeError || error);
+        next(error.nativeError || error);
     }
-
-    return res.status(200).send({
-        csv: JSONToCSV.parse(comments),
-    });
 };
