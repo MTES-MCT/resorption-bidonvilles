@@ -1,6 +1,6 @@
 export default {
     name: "Quel est le nom de l'action ?",
-    started_at: "Date de démarrage",
+    started_at: "Date de début",
     ended_at: "Date de fin",
     topics: "Quels sont les champs d'intervention de l'action ?",
     goals: "Quels sont les objectifs de l'action ?",
