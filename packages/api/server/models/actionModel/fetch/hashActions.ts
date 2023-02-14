@@ -31,6 +31,7 @@ export default function hashActions(actions: ActionRow[]): ActionHash {
                 address: row.address,
                 latitude: row.latitude,
                 longitude: row.longitude,
+                citycode: row.eti_fk_city,
             } : null,
             location_other: row.location_other,
             location_shantytowns: [],

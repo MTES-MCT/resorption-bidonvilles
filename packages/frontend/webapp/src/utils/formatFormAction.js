@@ -12,7 +12,7 @@ export default function (data) {
             ? {
                   search: data.eti.address,
                   data: {
-                      citycode: undefined,
+                      citycode: data.eti.citycode,
                       city: "",
                       label: data.eti.address,
                       coordinates: data.latitude

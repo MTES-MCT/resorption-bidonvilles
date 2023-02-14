@@ -13,6 +13,7 @@ export default async (data: ActionInsertionRow, transaction: Transaction): Promi
         address,
         latitude,
         longitude,
+        eti_fk_city,
         location_other,
         created_by
     ) VALUES (
@@ -25,6 +26,7 @@ export default async (data: ActionInsertionRow, transaction: Transaction): Promi
         :address,
         :latitude,
         :longitude,
+        :eti_fk_city,
         :location_autre,
         :created_by
     ) RETURNING action_id`, {
