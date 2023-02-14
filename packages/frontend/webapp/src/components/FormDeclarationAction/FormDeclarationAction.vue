@@ -2,7 +2,9 @@
     <ArrangementLeftMenu :tabs="tabs" autonav>
         <template v-slot:menuTitle>Rubriques</template>
 
-        <FormDeclarationActionDescription class="mt-6" />
+        <FormDeclarationActionCaracteristiques class="mt-6" />
+        <FormDeclarationActionLocalisation class="mt-6" />
+        <FormDeclarationActionContacts class="mt-6" />
         <FormDeclarationActionIndicateurs class="mt-6" />
 
         <ErrorSummary
@@ -29,7 +31,9 @@ import formatFormAction from "@/utils/formatFormAction";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
-import FormDeclarationActionDescription from "./sections/FormDeclarationActionDescription.vue";
+import FormDeclarationActionCaracteristiques from "./sections/FormDeclarationActionCaracteristiques.vue";
+import FormDeclarationActionLocalisation from "./sections/FormDeclarationActionLocalisation.vue";
+import FormDeclarationActionContacts from "./sections/FormDeclarationActionContacts.vue";
 import FormDeclarationActionIndicateurs from "./sections/FormDeclarationActionIndicateurs.vue";
 import schemaFn from "./FormDeclarationAction.schema";
 import formatFormDate from "@/utils/formatFormDate";
@@ -67,9 +71,19 @@ const error = ref(null);
 
 const tabs = [
     {
-        id: "description",
-        label: "Description",
-        route: "#description",
+        id: "intervention",
+        label: "Intervention",
+        route: "#intervention",
+    },
+    {
+        id: "lieu",
+        label: "Lieu",
+        route: "#lieu",
+    },
+    {
+        id: "contacts",
+        label: "Contacts",
+        route: "#contacts",
     },
     {
         id: "indicateurs",
