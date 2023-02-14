@@ -340,6 +340,14 @@ export default (app) => {
         controllers.action.list,
     );
     app.get(
+        '/actions/export',
+        middlewares.auth.authenticate,
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan.export'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.action.exportActions,
+    );
+    app.get(
         '/actions/:id',
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action.read'], ...args),
