@@ -340,6 +340,14 @@ export default (app) => {
         controllers.action.list,
     );
     app.get(
+        '/actions/export',
+        middlewares.auth.authenticate,
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action.export'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.action.exportActions,
+    );
+    app.get(
         '/actions/:id',
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action.read'], ...args),
@@ -369,6 +377,15 @@ export default (app) => {
         middlewares.validation,
         controllers.action.createComment,
     );
+    app.get(
+        '/actions/comments/export',
+        middlewares.auth.authenticate,
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action_comment.export'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        controllers.action.exportComments,
+    );
+
 
     // plans
     app.get(

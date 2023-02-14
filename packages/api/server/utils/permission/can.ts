@@ -1,9 +1,10 @@
+import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
 import getPermission from './getPermission';
 
-export default user => ({
-    do(feature, entity) {
+export default (user: SerializedUser) => ({
+    do(feature: string, entity: string) {
         return {
-            on(location) {
+            on(location): boolean {
                 // ensure the user has the permission (has it AND allowed is true)
                 const permission = getPermission(user, feature, entity);
                 if (!permission) {
@@ -44,7 +45,7 @@ export default user => ({
                         return true;
                     }
 
-                    geoLocation = location.geo_location;
+                    geoLocation = location.location;
                 }
 
                 // check locations

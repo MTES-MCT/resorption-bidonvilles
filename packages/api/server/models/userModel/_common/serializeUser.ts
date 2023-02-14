@@ -1,4 +1,6 @@
 import EMAIL_SUBSCRIPTIONS from '#server/config/email_subscriptions';
+import { permissionOption } from '#server/models/permissionModel/types/permissionOption';
+import { Permissions } from '#server/models/permissionModel/types/Permissions';
 import serializeUserAccess, { SerializedUserAccess } from './serializeUserAccess';
 
 /**
@@ -65,7 +67,6 @@ export type SerializedUser = {
             } | null,
         },
     },
-    access_request_message: string,
     charte_engagement_a_jour: boolean,
     email_subscriptions: string[],
     last_access: number | null,
@@ -74,10 +75,24 @@ export type SerializedUser = {
     role: string,
     role_id: string,
     is_superuser: boolean,
+
+    // filter: auth
+    password?: string,
+    salt?: string,
+
+    // filter: extended
+    access_request_message?: string,
+    default_export?: Array<string>,
+    permissions?: Permissions,
+    permission_options?: Array<permissionOption>,
+
+    // filter: app
+    last_version?: string | null,
+    last_changelog?: string | null
 };
 
-export default (user, latestCharte, filters, permissionMap) => {
-    const serialized = {
+export default (user, latestCharte, filters, permissionMap): SerializedUser => {
+    const serialized: SerializedUser = {
         id: user.id,
         first_name: user.first_name,
         last_name: user.last_name,

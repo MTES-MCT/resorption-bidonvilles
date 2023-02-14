@@ -1,7 +1,8 @@
 import moment from 'moment';
-import planCommentModel from '#server/models/planCommentModel';
 import ServiceError from '#server/errors/ServiceError';
 import permissionUtils from '#server/utils/permission';
+import actionModel from '#server/models/actionModel';
+import { ActionCommentRow } from '#server/models/actionModel/fetchComments/fetchComments';
 
 export default async (user) => {
     const nationalLevel = { type: 'nation' };
@@ -10,9 +11,9 @@ export default async (user) => {
         throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission d\'exporter les commentaires'));
     }
 
-    let comments;
+    let comments: ActionCommentRow[];
     try {
-        comments = await planCommentModel.findAll();
+        comments = await actionModel.fetchComments();
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
@@ -22,18 +23,18 @@ export default async (user) => {
     }
     // build excel file
     return comments.map((row) => {
-        const createdAt = moment(row.commentCreatedAt).utcOffset(2);
+        const createdAt = moment(row.created_at).utcOffset(2);
 
         return {
             S: createdAt.format('w'),
             'ID du commentaire': row.id,
-            'ID de l\'action': row.plan,
+            'ID de l\'action': row.action_id,
             'Publié le': createdAt.format('DD/MM/YYYY'),
             Description: row.description,
-            'ID de l\'auteur(e)': row.createdBy.id,
-            'Nom de famille': row.createdBy.last_name,
-            Structure: row.createdBy.organization,
-            Role: row.createdBy.role,
+            'ID de l\'auteur(e)': row.creator_id,
+            'Nom de famille': row.creator_last_name,
+            Structure: row.creator_organization_abbreviation || row.creator_organization_name,
+            Role: row.creator_user_role,
         };
     });
 };

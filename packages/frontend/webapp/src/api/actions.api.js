@@ -16,6 +16,10 @@ export function exportActions() {
     return axios.get("/actions/export");
 }
 
+export function exportComments() {
+    return axios.get("/actions/comments/export");
+}
+
 export function fetchList() {
     return axios.get("/actions");
 }

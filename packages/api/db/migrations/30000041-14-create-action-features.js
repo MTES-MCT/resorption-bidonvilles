@@ -17,7 +17,9 @@ module.exports = {
                     ('read', 'action', false),
                     ('create', 'action', true),
                     ('update', 'action', true),
+                    ('export', 'action', false),
                     ('read', 'action_comment', false),
+                    ('export', 'action_comment', false),
                     ('create', 'action_comment', true)`,
                 {
                     type: queryInterface.sequelize.QueryTypes.INSERT,

@@ -130,8 +130,8 @@ interface Action extends IAction {
     comments: Comment[],
     created_at: number,
     created_by: ActionUser,
-    updated_at: number,
-    updated_by: ActionUser,
+    updated_at: number | null,
+    updated_by: ActionUser | null,
 }
 
 export default Action;

@@ -2,9 +2,9 @@
 import { expect } from 'chai';
 import permissionUtils from '#server/utils/permission';
 import { serialized as fakeUser } from '#test/utils/user';
-import locationUtils from "#test/utils/location";
+import locationUtils from '#test/utils/location';
 import { serialized as fakeShantytown } from '#test/utils/shantytown';
-import { serialized as fakePlan } from '#test/utils/plan';
+import { serialized as fakeAction } from '#test/utils/action';
 
 const { can } = permissionUtils;
 const {
@@ -64,7 +64,7 @@ describe('utils/permission.can()', () => {
                         epci: [],
                         cities: [],
                         shantytowns: [],
-                        plans: [],
+                        actions: [],
                     },
                 },
             };
@@ -83,7 +83,7 @@ describe('utils/permission.can()', () => {
         });
 
         it('retourne true pour une action située dans cette région', () => {
-            expect(can(user).do('write', 'something').on(fakePlan(paris.departement()))).to.be.true;
+            expect(can(user).do('write', 'something').on(fakeAction({ location: paris.departement() }))).to.be.true;
         });
 
         it('retourne false pour le national', () => {
@@ -103,7 +103,7 @@ describe('utils/permission.can()', () => {
         });
 
         it('retourne false pour une action située dans une autre région', () => {
-            expect(can(user).do('write', 'something').on(fakePlan(marseille.departement()))).to.be.false;
+            expect(can(user).do('write', 'something').on(fakeAction({ location: marseille.departement() }))).to.be.false;
         });
     });
 
@@ -119,7 +119,7 @@ describe('utils/permission.can()', () => {
                         epci: [],
                         cities: [],
                         shantytowns: [],
-                        plans: [],
+                        actions: [],
                     },
                 },
             };
@@ -138,7 +138,7 @@ describe('utils/permission.can()', () => {
         });
 
         it('retourne true pour une action située dans ce département', () => {
-            expect(can(user).do('write', 'something').on(fakePlan(paris.departement()))).to.be.true;
+            expect(can(user).do('write', 'something').on(fakeAction({ location: paris.departement() }))).to.be.true;
         });
 
         it('retourne false pour le national', () => {
@@ -162,7 +162,7 @@ describe('utils/permission.can()', () => {
         });
 
         it('retourne false pour une action située dans un autre département', () => {
-            expect(can(user).do('write', 'something').on(fakePlan(marseille.departement()))).to.be.false;
+            expect(can(user).do('write', 'something').on(fakeAction({ location: marseille.departement() }))).to.be.false;
         });
     });
 
@@ -178,7 +178,7 @@ describe('utils/permission.can()', () => {
                         epci: [paris.epci().epci.code],
                         cities: [],
                         shantytowns: [],
-                        plans: [],
+                        actions: [],
                     },
                 },
             };
@@ -221,7 +221,7 @@ describe('utils/permission.can()', () => {
         });
 
         it('retourne false pour n\'importe quelle action', () => {
-            expect(can(user).do('write', 'something').on(fakePlan(paris.departement()))).to.be.false;
+            expect(can(user).do('write', 'something').on(fakeAction({ location: paris.departement() }))).to.be.false;
         });
     });
 
@@ -237,7 +237,7 @@ describe('utils/permission.can()', () => {
                         epci: [],
                         cities: [paris.city().city.code],
                         shantytowns: [],
-                        plans: [],
+                        actions: [],
                     },
                 },
             };
@@ -280,7 +280,7 @@ describe('utils/permission.can()', () => {
         });
 
         it('retourne false pour n\'importe quelle action', () => {
-            expect(can(user).do('write', 'something').on(fakePlan(paris.departement()))).to.be.false;
+            expect(can(user).do('write', 'something').on(fakeAction({ location: paris.departement() }))).to.be.false;
         });
     });
 
@@ -296,7 +296,7 @@ describe('utils/permission.can()', () => {
                         epci: [],
                         cities: [],
                         shantytowns: [fakeShantytown(paris.city()).id],
-                        plans: [],
+                        actions: [],
                     },
                 },
             };
@@ -331,7 +331,7 @@ describe('utils/permission.can()', () => {
         });
 
         it('retourne false pour n\'importe quelle action', () => {
-            expect(can(user).do('write', 'something').on(fakePlan(paris.departement()))).to.be.false;
+            expect(can(user).do('write', 'something').on(fakeAction({ location: paris.departement() }))).to.be.false;
         });
     });
 });
