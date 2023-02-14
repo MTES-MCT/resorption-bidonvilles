@@ -342,7 +342,7 @@ export default (app) => {
     app.get(
         '/actions/export',
         middlewares.auth.authenticate,
-        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan.export'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action.export'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.action.exportActions,
@@ -380,7 +380,7 @@ export default (app) => {
     app.get(
         '/actions/comments/export',
         middlewares.auth.authenticate,
-        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan_comment.export'], ...args),
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action_comment.export'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.action.exportComments,
