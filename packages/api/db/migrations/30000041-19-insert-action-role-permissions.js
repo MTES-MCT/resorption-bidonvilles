@@ -36,7 +36,9 @@ module.exports = {
             (null, 'national_admin', 'read', 'action', true, true),
             (null, 'national_admin', 'create', 'action', true, true),
             (null, 'national_admin', 'update', 'action', true, true),
+            (null, 'national_admin', 'export', 'action', true, true),
             (null, 'national_admin', 'read', 'action_comment', true, true),
+            (null, 'national_admin', 'export', 'action_comment', true, true),
             (null, 'national_admin', 'create', 'action_comment', true, true)`,
         {
             type: queryInterface.sequelize.QueryTypes.INSERT,
