@@ -186,9 +186,19 @@ export default [
         .exists({ checkNull: true }).bail().withMessage('Le champ "Pilotes de l\'action" est obligatoire')
         .isArray().bail().withMessage('Le format des utilisateurs ciblés n\'est pas valide')
         .isLength({ min: 1 }).bail().withMessage('Le champ "Pilotes de l\'action" est obligatoire')
-        .custom(async (value) => {
+        .customSanitizer(async (value) => {
             const users = await userModel.findByIds(null, value);
             if (users.length !== value.length) {
+                return null;
+            }
+
+            return users.map(u => ({
+                id: u.id,
+                organization_id: u.organization.id,
+            }));
+        })
+        .custom((value) => {
+            if (value === null) {
                 throw new Error('Un ou plusieurs utilisateurs ciblés n\'existent pas');
             }
 
@@ -199,9 +209,19 @@ export default [
         .exists({ checkNull: true }).bail().withMessage('Le champ "Opérateurs de l\'action" est obligatoire')
         .isArray().bail().withMessage('Le format des utilisateurs ciblés n\'est pas valide')
         .isLength({ min: 1 }).bail().withMessage('Le champ "Opérateurs de l\'action" est obligatoire')
-        .custom(async (value) => {
+        .customSanitizer(async (value) => {
             const users = await userModel.findByIds(null, value);
             if (users.length !== value.length) {
+                return null;
+            }
+
+            return users.map(u => ({
+                id: u.id,
+                organization_id: u.organization.id,
+            }));
+        })
+        .custom((value) => {
+            if (value === null) {
                 throw new Error('Un ou plusieurs utilisateurs ciblés n\'existent pas');
             }
 

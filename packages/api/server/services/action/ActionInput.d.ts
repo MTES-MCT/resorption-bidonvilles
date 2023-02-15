@@ -1,5 +1,10 @@
 import ActionLocationType from '#server/models/actionModel/fetch/ActionLocationType.d';
 
+type ActionInputUser = {
+    id: number,
+    organization_id: number
+};
+
 export interface ActionInput {
     name: string,
     started_at: Date,
@@ -14,8 +19,8 @@ export interface ActionInput {
     longitude: number | null,
     location_shantytowns: number[] | null,
     location_autre: string | null,
-    managers: number[],
-    operators: number[],
+    managers: ActionInputUser[],
+    operators: ActionInputUser[],
     date_indicateurs: Date,
     nombre_personnes: number,
     nombre_menages: number | null,

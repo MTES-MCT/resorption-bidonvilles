@@ -4,7 +4,7 @@ import charteEngagementModel from '#server/models/charteEngagementModel';
 import permissionModel from '#server/models/permissionModel';
 import permissionUtils from '#server/utils/permission';
 import { Where } from '#server/models/_common/types/Where';
-import serializeUser from './serializeUser';
+import serializeUser, { SerializedUser } from './serializeUser';
 
 const { where: fWhere } = permissionUtils;
 
@@ -14,7 +14,7 @@ type UserQueryFilters = {
     app?: boolean
 };
 
-export default async (where: Where = [], filters: UserQueryFilters = {}, user: string = null, feature: string = undefined, transaction: Transaction = undefined) => {
+export default async (where: Where = [], filters: UserQueryFilters = {}, user: string = null, feature: string = undefined, transaction: Transaction = undefined): Promise<SerializedUser[]> => {
     const replacements = {};
 
     if (user !== null) {
