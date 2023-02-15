@@ -3,7 +3,7 @@ import { sequelize } from '#db/sequelize';
 import ActionLocationType from './ActionLocationType.d';
 import enrichWhere from './enrichWhere';
 
-export type ActionRow = {
+export type ActionSelectRow = {
     action_id: number,
     name: string,
     started_at: string,
@@ -35,7 +35,7 @@ export type ActionRow = {
     updated_at: Date,
 };
 
-export default function fetchActions(actionIds: number[] = null, clauseGroup: object = {}): Promise<ActionRow[]> {
+export default function fetchActions(actionIds: number[] = null, clauseGroup: object = {}): Promise<ActionSelectRow[]> {
     const where = [];
     const replacements = { actionIds };
     if (actionIds !== null) {

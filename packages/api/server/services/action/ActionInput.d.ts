@@ -1,22 +1,22 @@
 import ActionLocationType from '#server/models/actionModel/fetch/ActionLocationType.d';
 
-export type ActionInput = {
+export interface ActionInput {
     name: string,
     started_at: Date,
     ended_at: Date | null,
-    updated_at: Date | null,
-    goals: string | null,
     topics: string[],
+    goals: string,
     location_departement: string,
     location_type: ActionLocationType,
-    managers: number[],
-    operators: number[],
     location_eti: string | null,
+    location_eti_citycode: string | null,
     latitude: number | null,
     longitude: number | null,
-    eti_fk_city: string | null,
     location_shantytowns: number[] | null,
-    location_other: string | null,
+    location_autre: string | null,
+    managers: number[],
+    operators: number[],
+    date_indicateurs: Date,
     nombre_personnes: number,
     nombre_menages: number | null,
     nombre_femmes: number | null,
@@ -35,4 +35,16 @@ export type ActionInput = {
     scolaire_nombre_college: number | null,
     scolaire_nombre_lycee: number | null,
     scolaire_nombre_autre: number | null,
-};
+}
+
+export interface ActionEnrichedInput extends ActionInput {
+    address: string | null
+}
+
+export interface ActionCreateInput extends ActionEnrichedInput {
+    created_by: number
+}
+
+export interface ActionUpdateInput extends ActionEnrichedInput {
+    updated_by: number
+}
