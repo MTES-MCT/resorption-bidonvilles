@@ -6,7 +6,7 @@
             >
                 <Icon icon="flag" />
             </div>
-            <p class="ml-4">
+            <p class="ml-4 flex-1">
                 <span class="text-sm">
                     Les indicateurs concernent le bilan de l'année. Exemple : le
                     nombre de personnes ayant eu un contrat au cours de l'année
