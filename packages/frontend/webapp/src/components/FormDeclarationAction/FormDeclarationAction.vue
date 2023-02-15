@@ -121,8 +121,12 @@ const config = {
 function formatValuesForApi(v) {
     let citycode = null;
     let label = null;
+    let updated_at = new Date();
     if (v.location_eti?.data) {
         ({ citycode, label } = v.location_eti.data);
+    }
+    if (v.started_at && v.started_at.getFullYear() !== 2023) {
+        updated_at = new Date("December 31, 2022 00:00:00");
     }
 
     return {
@@ -133,6 +137,7 @@ function formatValuesForApi(v) {
         ...{
             started_at: formatFormDate(v.started_at),
             ended_at: formatFormDate(v.ended_at),
+            updated_at: updated_at,
             managers: v.managers.users.map(({ id }) => id),
             operators: v.operators.users.map(({ id }) => id),
             location_eti_citycode: citycode,

@@ -4,6 +4,7 @@ export interface ActionRow {
     name: string,
     started_at: Date,
     ended_at: Date | null,
+    updated_at: Date | null,
     goals: string | null,
     topics: string[],
     location_departement: string,

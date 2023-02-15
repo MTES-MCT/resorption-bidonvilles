@@ -17,7 +17,7 @@ export default async (id: number, data: ActionUpdateRow): Promise<void> => {
 
         // update
         await updateAction(id, data, transaction);
-        await insertAsideData(id, data.updated_by, new Date(), data, transaction);
+        await insertAsideData(id, data.updated_by, data.updated_at, data, transaction);
 
         await transaction.commit();
     } catch (error) {
