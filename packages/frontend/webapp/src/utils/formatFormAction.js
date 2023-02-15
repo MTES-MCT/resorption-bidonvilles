@@ -1,4 +1,4 @@
-export default function (data) {
+export default function (dateIndicateurs, data) {
     const formatted = {
         name: data.name || "",
         started_at: data.started_at ? new Date(data.started_at) : undefined,
@@ -57,10 +57,8 @@ export default function (data) {
     };
 
     if (data.metrics && data.metrics.length > 0) {
-        const now = new Date();
-
         const lastDate = new Date(data.metrics[0].date);
-        if (lastDate.getFullYear() === now.getFullYear()) {
+        if (lastDate.getFullYear() === dateIndicateurs.getFullYear()) {
             const fields = [
                 "nombre_personnes",
                 "nombre_menages",

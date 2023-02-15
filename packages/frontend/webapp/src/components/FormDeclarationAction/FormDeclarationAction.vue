@@ -48,17 +48,19 @@ const props = defineProps({
 const { action } = toRefs(props);
 
 const userStore = useUserStore();
+const dateIndicateurs =
+    action.value?.created_at &&
+    new Date(action.value.created_at).getFullYear() !== 2023
+        ? new Date("December 31, 2022 00:00:00")
+        : new Date();
 const initialValues = {
     ...formatFormAction(
+        dateIndicateurs,
         action.value || {
             location_departement: userStore.departementsForActions[0]?.code,
         }
     ),
-    date_indicateurs:
-        action.value?.created_at &&
-        new Date(action.value.created_at).getFullYear() !== 2023
-            ? new Date("December 31, 2022 00:00:00")
-            : new Date(),
+    date_indicateurs: dateIndicateurs,
 };
 
 const mode = computed(() => {
