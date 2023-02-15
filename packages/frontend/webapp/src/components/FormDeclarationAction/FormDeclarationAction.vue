@@ -18,7 +18,15 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, defineExpose, ref } from "vue";
+import {
+    defineProps,
+    toRefs,
+    toRef,
+    computed,
+    defineExpose,
+    ref,
+    watch,
+} from "vue";
 import { useForm } from "vee-validate";
 import { useActionsStore } from "@/stores/actions.store";
 import { useUserStore } from "@/stores/user.store";
@@ -48,11 +56,8 @@ const props = defineProps({
 const { action } = toRefs(props);
 
 const userStore = useUserStore();
-const dateIndicateurs =
-    action.value?.created_at &&
-    new Date(action.value.created_at).getFullYear() !== 2023
-        ? new Date("December 31, 2022 00:00:00")
-        : new Date();
+
+const dateIndicateurs = getDateIndicateurs(action.value?.started_at);
 const initialValues = {
     ...formatFormAction(
         dateIndicateurs,
@@ -70,6 +75,16 @@ const validationSchema = schemaFn(mode.value);
 const { handleSubmit, values, errors, setErrors } = useForm({
     validationSchema,
     initialValues,
+});
+
+function getDateIndicateurs(startedAt) {
+    return startedAt && new Date(startedAt).getFullYear() !== 2023
+        ? new Date("December 31, 2022 00:00:00")
+        : new Date();
+}
+
+watch(toRef(values, "started_at"), () => {
+    values.date_indicateurs = getDateIndicateurs(values.started_at);
 });
 
 const originalValues = formatValuesForApi(values);
