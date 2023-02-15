@@ -416,6 +416,8 @@ export default mode => ([
      * Nombre de caravanes
      ********************************************************************************************* */
     body('caravans')
+        .customSanitizer(value => (value === '' ? null : value)),
+    body('caravans')
         .optional({ nullable: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de caravanes" est invalide')
@@ -427,6 +429,8 @@ export default mode => ([
     /* **********************************************************************************************
      * Nombre de cabanes
      ********************************************************************************************* */
+    body('huts')
+        .customSanitizer(value => (value === '' ? null : value)),
     body('huts')
         .optional({ nullable: true })
         .toInt()
@@ -440,6 +444,9 @@ export default mode => ([
      * Nombre de tentes
      ********************************************************************************************* */
     body('tents')
+        .customSanitizer(value => (value === '' ? null : value)),
+
+    body('tents')
         .optional({ nullable: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de tentes" est invalide')
@@ -452,6 +459,8 @@ export default mode => ([
      * Nombre de voitures dortoir
      ********************************************************************************************* */
     body('cars')
+        .customSanitizer(value => (value === '' ? null : value)),
+    body('cars')
         .optional({ nullable: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de voitures dortoir" est invalide')
@@ -463,6 +472,8 @@ export default mode => ([
     /* **********************************************************************************************
      * Nombre de matelas
      ********************************************************************************************* */
+    body('mattresses')
+        .customSanitizer(value => (value === '' ? null : value)),
     body('mattresses')
         .optional({ nullable: true })
         .toInt()
