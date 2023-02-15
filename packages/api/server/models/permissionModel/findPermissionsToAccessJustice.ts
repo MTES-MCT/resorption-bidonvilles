@@ -1,21 +1,16 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-export default async () => {
+export default async (location) => {
     const organizationsWithUsersHavingPermissionsOnJustice = await sequelize.query(
         `
         WITH user_options AS (
             SELECT fk_user, ARRAY_AGG(fk_option) AS options FROM user_permission_options GROUP BY fk_user
         )
         SELECT
-            uap.level,
             uap.user_id,
             u.first_name,
             u.last_name,
-            U.fk_status,
-            u.to_be_tracked,
-            u.fk_role,
-            u.fk_role_regular,
             uap.organization_id as id,
             o.name,
             o.abbreviation,
@@ -29,9 +24,6 @@ export default async () => {
             o.city_code,
             o.city_name,
             o.city_main,
-            o.being_funded,
-            o.being_funded_at,
-            ot.fk_role,
             o.fk_type AS "type_id",
             ot.fk_category AS "type_category",
             ot.name_singular AS "type_name",
@@ -39,6 +31,11 @@ export default async () => {
             uap.fk_entity,
             uap.fk_feature,
             uap.allowed,
+            uap.allow_all,
+            uap.regions as "regions_allowed",
+            uap.departements as "departements_allowed",
+            uap.epci as "epci_allowed",
+            uap.cities as "cities_allowed",
             COALESCE(uo.options, array[]::varchar[]) AS permission_options
         FROM
             user_actual_permissions uap
@@ -64,9 +61,80 @@ export default async () => {
         AND
             -- On supprime les utilisateurs de structures de type 'national_establisment'
             -- Mais on laisse les utilisateurs qui ont un fk_role_regular de type 'national_establisment'
-            ot.fk_role NOT IN ('national_establisment') ;
+            ot.fk_role NOT IN ('national_establisment')
+        AND
+            -- utilisateurs traqués
+            u.fk_status = 'active' 
+        AND
+            -- et actifs
+            u.to_be_tracked = true
+            -- Vérification des droits
+        AND
+        (
+            allow_all IS true
+            OR
+                (
+                    ARRAY_LENGTH(uap.regions, 1) > 0
+                AND
+                    :regionCode = ANY(uap.regions)
+                )
+            OR
+                (
+                    ARRAY_LENGTH(uap.departements, 1) > 0
+                AND
+                    :departementCode = ANY(uap.departements)
+                )
+            OR
+                (
+                    ARRAY_LENGTH(uap.epci, 1) > 0
+                AND
+                    :epciCode = ANY(uap.epci)
+                )
+            OR
+                (
+                    ARRAY_LENGTH(uap.cities, 1) > 0
+                AND
+                    :cityCode = ANY(uap.cities)
+                )
+            OR
+                (
+                    (uap.regions IS NULL OR ARRAY_LENGTH(uap.regions, 1) < 1)
+                AND
+                    (uap.departements IS NULL OR ARRAY_LENGTH(uap.departements, 1) < 1)
+                AND
+                    (uap.epci IS NULL OR ARRAY_LENGTH(uap.epci, 1) < 1)
+                AND
+                    (uap.cities IS NULL OR ARRAY_LENGTH(uap.cities, 1) < 1)
+                AND
+                    :departementCode = o.departement_code
+                )
+            OR
+                (
+                    (uap.regions IS NULL OR ARRAY_LENGTH(uap.regions, 1) < 1)
+                AND
+                    (uap.departements IS NULL OR ARRAY_LENGTH(uap.departements, 1) < 1)
+                AND
+                    (uap.epci IS NULL OR ARRAY_LENGTH(uap.epci, 1) < 1)
+                AND
+                    (uap.cities IS NULL OR ARRAY_LENGTH(uap.cities, 1) < 1)
+                AND
+                    o.departement_code is null
+                AND
+                    o.region_code IS NULL
+                AND
+                    o.epci_code IS NULL
+                AND
+                    o.city_code IS NULL
+                )
+        )       
         `,
         {
+            replacements: {
+                regionCode: location.region.code,
+                departementCode: location.departement.code,
+                epciCode: location.epci.code,
+                cityCode: location.city.code,
+            },
             type: QueryTypes.SELECT,
         },
     );
