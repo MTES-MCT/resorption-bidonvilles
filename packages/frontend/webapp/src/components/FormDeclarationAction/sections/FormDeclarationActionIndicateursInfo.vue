@@ -2,7 +2,7 @@
     <div class="bg-yellow-200 mb-4 px-4 py-2 flex items-center justify-between">
         <div class="flex items-center">
             <div
-                class="rounded-full bg-yellow-400 w-6 h-6 text-center text-size-xs leading-6"
+                class="rounded-full bg-yellow-400 w-8 h-6 text-center text-size-xs leading-6"
             >
                 <Icon icon="flag" />
             </div>
