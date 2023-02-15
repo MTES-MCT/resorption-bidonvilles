@@ -3,7 +3,7 @@
         >accès à un
         <span class="text-tertiary">hébergement ou logement adapté</span>
         longue durée avec accompagnement, dont espace temporaire
-        d'insertion</IndicateursLabel
+        d'accompagnement</IndicateursLabel
     >
 </template>
 

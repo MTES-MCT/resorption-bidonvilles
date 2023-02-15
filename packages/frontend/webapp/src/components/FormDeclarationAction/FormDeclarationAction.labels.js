@@ -6,8 +6,9 @@ export default {
     goals: "Quels sont les objectifs de l'action ?",
     location_type: "Où se déroule l'action ?",
     location_departement: "Département d'intervention principal",
-    location_eti: "Adresse de l'ETI",
-    location_eti_coordinates: "Coordonnées GPS l'ETI",
+    location_eti: "Adresse de l'Espace Temporaire d'Accompagnement",
+    location_eti_coordinates:
+        "Coordonnées GPS l'Espace Temporaire d'Accompagnement",
     location_autre: "Veuillez préciser",
     location_shantytowns: "Sites concernés",
     managers: "Pilote(s) de l'action",
@@ -31,7 +32,7 @@ export default {
     indicateurs_hebergement: {
         raw: "Nombre de personnes ayant accédé à un hébergement ou logement adapté",
         formatted:
-            "_à un hébergement ou logement adapté_ longue durée avec accompagnement, dont espace terrain d'insertion",
+            "_à un hébergement ou logement adapté_ longue durée avec accompagnement, dont espace terrain d'accompagnement",
     },
     indicateurs_logement: {
         raw: "Nombre de personnes ayant accédé à un logement",

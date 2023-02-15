@@ -107,7 +107,7 @@ export default [
 
     body('location_eti')
         .if((value, { req }) => req.body.location_type === 'eti')
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Adresse de l\'ETI" est obligatoire')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Adresse de l\'Espace Temporaire d\'Accompagnement" est obligatoire')
         .isString().bail().withMessage('Le champ "Où se déroule l\'action ?" est obligatoire')
         .trim()
         // ville
@@ -124,7 +124,7 @@ export default [
             }
 
             if (city.departement.code !== req.body.location_departement) {
-                throw new Error('L\'adresse de l\'ETI doit se situer dans le département d\'intervention principal');
+                throw new Error('L\'adresse de l\'Espace Temporaire d\'Accompagnement doit se situer dans le département d\'intervention principal');
             }
 
             req.body.city = city;
