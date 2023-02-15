@@ -7,6 +7,7 @@ export default (id: number, data: ActionUpdateRow, transaction: Transaction) => 
         name = :name,
         started_at = :started_at,
         ended_at = :ended_at,
+        updated_at = :updated_at,
         goals = :goals,
         fk_departement = :location_departement,
         location_type = :location_type,
@@ -15,8 +16,7 @@ export default (id: number, data: ActionUpdateRow, transaction: Transaction) => 
         longitude = :longitude,
         eti_fk_city = :location_eti_citycode,
         location_other = :location_autre,
-        updated_by = :updated_by,
-        updated_at = NOW()
+        updated_by = :updated_by
     WHERE action_id = :id`,
     {
         type: QueryTypes.UPDATE,

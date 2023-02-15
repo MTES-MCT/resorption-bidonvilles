@@ -60,7 +60,9 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import icons from "@/utils/action_metrics_icons";
+import { useFormValues } from "vee-validate";
 
 import IndicateursRow from "@/components/IndicateursTable/IndicateursRow.vue";
 import IndicateursTableRowInputs from "@/components/IndicateursTable/IndicateursTableRowInputs.vue";
@@ -83,7 +85,14 @@ const schoolInputs = {
     lycee: [{ name: "scolaire_nombre_lycee" }],
     autre: [{ name: "scolaire_nombre_autre" }],
 };
+const values = useFormValues();
 
-const now = new Date();
-const year = now.getFullYear();
+const year = computed(() => {
+    if (!values.value.started_at) {
+        return 2023;
+    } else {
+        const now = new Date(values.value.started_at);
+        return now.getFullYear() === 2023 ? 2023 : 2022;
+    }
+});
 </script>

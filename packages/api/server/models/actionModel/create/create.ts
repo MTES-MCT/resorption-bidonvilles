@@ -8,7 +8,7 @@ export default async (data: ActionInsertionRow): Promise<number> => {
     const transaction = await sequelize.transaction();
     try {
         const actionId = await insertAction(data, transaction);
-        await insertAsideData(actionId, data.created_by, new Date(), data, transaction);
+        await insertAsideData(actionId, data.created_by, data.updated_at, data, transaction);
 
         await transaction.commit();
 
