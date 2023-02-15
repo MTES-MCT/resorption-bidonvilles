@@ -8,7 +8,7 @@
         <template v-slot:actions>
             <p class="flex space-x-2">
                 <Button
-                    v-if="userStore.hasPermission('action.read')"
+                    v-if="exportList.length > 0"
                     icon="file-excel"
                     iconPosition="left"
                     variant="primary"
@@ -35,9 +35,9 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
-import exportList from "./ListeDesActions.exports";
+import { exportComments, exportActions } from "@/api/actions.api";
 
 import { Button } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
@@ -49,4 +49,26 @@ const modalExport = ref(null);
 function openModalExport() {
     modalExport.value.open();
 }
+
+const exportList = computed(() => {
+    const list = [];
+
+    if (userStore.hasPermission("action.export")) {
+        list.push({
+            label: "Export des actions",
+            filename: "actions",
+            downloadFn: exportActions,
+        });
+    }
+
+    if (userStore.hasPermission("action_comment.export")) {
+        list.push({
+            label: "Export des commentaires",
+            filename: "messages",
+            downloadFn: exportComments,
+        });
+    }
+
+    return list;
+});
 </script>
