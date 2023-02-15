@@ -139,6 +139,12 @@ export default (oldVersion, newVersion) => {
         tents: {
             label: 'Nombre de tentes',
         },
+        cars: {
+            label: 'Nombre de voitures dortoir',
+        },
+        mattresses: {
+            label: 'Nombre de matelas',
+        },
         socialOrigins: {
             label: 'Origines',
             processor(s) {

@@ -29,6 +29,8 @@ export default async (townData, user) => {
         caravans: townData.caravans,
         huts: townData.huts,
         tents: townData.tents,
+        cars: townData.cars,
+        mattresses: townData.mattresses,
         fieldType: townData.field_type,
         ownerType: townData.owner_type,
         isReinstallation: townData.is_reinstallation,

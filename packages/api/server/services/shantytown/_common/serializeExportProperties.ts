@@ -235,6 +235,18 @@ export default (closingSolutions) => {
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
+        cars: {
+            title: 'Nombre de voitures dortoir',
+            data: ({ cars }) => cars,
+            width: COLUMN_WIDTHS.SMALL,
+            sum: true,
+        },
+        mattresses: {
+            title: 'Nombre de matelas',
+            data: ({ mattresses }) => mattresses,
+            width: COLUMN_WIDTHS.SMALL,
+            sum: true,
+        },
         socialOrigins: {
             title: 'Origines',
             data: ({ socialOrigins }) => (socialOrigins.length > 0 ? socialOrigins.map(({ label }) => label).join(';') : null),

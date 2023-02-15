@@ -75,6 +75,8 @@ export default (town, user) => {
         caravans: town.caravans,
         huts: town.huts,
         tents: town.tents,
+        cars: town.cars,
+        mattresses: town.mattresses,
         livingConditions: serializeLivingConditions(town),
         censusStatus: town.censusStatus,
         censusConductedBy: town.censusConductedBy,

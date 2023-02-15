@@ -449,6 +449,30 @@ export default mode => ([
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     /* **********************************************************************************************
+     * Nombre de voitures dortoir
+     ********************************************************************************************* */
+    body('cars')
+        .optional({ nullable: true })
+        .toInt()
+        .isInt().bail().withMessage('Le champ "Nombre de voitures dortoir" est invalide')
+        .isInt({ min: 0 }).withMessage('Le champ "Nombre de voitures dortoir" ne peut pas être inférieur à 0'),
+
+    body('cars')
+        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+
+    /* **********************************************************************************************
+     * Nombre de matelas
+     ********************************************************************************************* */
+    body('mattresses')
+        .optional({ nullable: true })
+        .toInt()
+        .isInt().bail().withMessage('Le champ "Nombre de matelas" est invalide')
+        .isInt({ min: 0 }).withMessage('Le champ "Nombre de matelas" ne peut pas être inférieur à 0'),
+
+    body('mattresses')
+        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+
+    /* **********************************************************************************************
      * Nombre de ménages
      ********************************************************************************************* */
     body('population_couples')
