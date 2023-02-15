@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import enrichWhere from '../fetch/enrichWhere';
 
-export type ActionRow = {
+export type ActionSelectRow = {
     id: number,
     name: string,
     shantytowns: number[],
@@ -12,7 +12,7 @@ export type ActionRow = {
     region_name: string,
 };
 
-export default (shantytownIds: number[], clauseGroup: object = {}): Promise<ActionRow[]> => {
+export default (shantytownIds: number[], clauseGroup: object = {}): Promise<ActionSelectRow[]> => {
     const where = ['action_shantytowns.fk_shantytown IN (:shantytownIds)'];
     const replacements = { shantytownIds };
 

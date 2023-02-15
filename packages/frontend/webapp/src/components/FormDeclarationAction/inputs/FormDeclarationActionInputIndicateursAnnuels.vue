@@ -78,6 +78,7 @@ const sections = computed(() => {
     );
 });
 
-const now = new Date();
-const year = now.getFullYear();
+const year = computed(() => {
+    return values.value.date_indicateurs.getFullYear();
+});
 </script>

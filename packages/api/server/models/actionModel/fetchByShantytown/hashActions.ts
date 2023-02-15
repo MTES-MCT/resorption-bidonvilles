@@ -1,11 +1,11 @@
 import { ShantytownAction } from '../fetch/Action.d';
-import { ActionRow } from './fetchActions';
+import { ActionSelectRow } from './fetchActions';
 
 export type ActionHash = {
     [key: number]: ShantytownAction
 };
 
-export default (actions: ActionRow[]): ActionHash => actions.reduce((acc, row) => {
+export default (actions: ActionSelectRow[]): ActionHash => actions.reduce((acc, row) => {
     acc[row.id] = {
         id: row.id,
         name: row.name,

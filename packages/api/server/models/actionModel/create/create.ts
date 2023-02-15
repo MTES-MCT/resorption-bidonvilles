@@ -1,14 +1,14 @@
 import { sequelize } from '#db/sequelize';
-import { ActionInsertionRow } from './ActionInsertionRow.d';
+import { ActionCreateInput } from '#server/services/action/ActionInput.d';
 
 import insertAction from './insertAction';
 import insertAsideData from './insertAsideData';
 
-export default async (data: ActionInsertionRow): Promise<number> => {
+export default async (data: ActionCreateInput): Promise<number> => {
     const transaction = await sequelize.transaction();
     try {
         const actionId = await insertAction(data, transaction);
-        await insertAsideData(actionId, data.created_by, new Date(), data, transaction);
+        await insertAsideData(actionId, data.created_by, data.date_indicateurs, data, transaction);
 
         await transaction.commit();
 
