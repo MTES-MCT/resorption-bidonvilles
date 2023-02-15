@@ -229,7 +229,7 @@ export default [
         .isInt({ min: 1 }).withMessage('Le champ "Nombre de personnes" ne peut pas être inférieur à 1'),
 
     body('nombre_menages')
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de ménages" doit être un nombre')
         .isInt({ min: 1 }).withMessage('Le champ "Nombre de ménages" ne peut pas être inférieur à 1')
@@ -244,7 +244,7 @@ export default [
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('nombre_femmes')
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de femmes" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de femmes" ne peut pas être inférieur à 0')
@@ -259,7 +259,7 @@ export default [
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('nombre_mineurs')
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de mineurs" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs" ne peut pas être inférieur à 0')
@@ -276,7 +276,7 @@ export default [
     // indicateurs santé
     body('sante_nombre_personnes')
         .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('health'))
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de personnes ayant eu un accompagnement vers la santé" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de personnes ayant eu un accompagnement vers la santé" ne peut pas être inférieur à 0')
@@ -294,7 +294,7 @@ export default [
     // indicateurs travail
     body('travail_nombre_personnes')
         .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('work'))
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de personnes ayant eu au moins 1 contrat de travail" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de personnes ayant eu au moins 1 contrat de travail" ne peut pas être inférieur à 0')
@@ -310,7 +310,7 @@ export default [
 
     body('travail_nombre_femmes')
         .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('work'))
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de femmes ayant eu au moins 1 contrat de travail" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de femmes ayant eu au moins 1 contrat de travail" ne peut pas être inférieur à 0')
@@ -336,7 +336,7 @@ export default [
     // indicateurs hébergement
     body('hebergement_nombre_personnes')
         .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('housing'))
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de personnes ayant eu accès à un hébergement" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de personnes ayant eu accès à un hébergement" ne peut pas être inférieur à 0')
@@ -352,7 +352,7 @@ export default [
 
     body('hebergement_nombre_menages')
         .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('housing'))
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de ménages ayant eu accès à un hébergement" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de ménages ayant eu accès à un hébergement" ne peut pas être inférieur à 0')
@@ -376,7 +376,7 @@ export default [
 
     body('logement_nombre_personnes')
         .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('housing'))
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de personnes ayant eu accès à un logement" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de personnes ayant eu accès à un logement" ne peut pas être inférieur à 0')
@@ -392,7 +392,7 @@ export default [
 
     body('logement_nombre_menages')
         .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('housing'))
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de ménages ayant eu accès à un logement" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de ménages ayant eu accès à un logement" ne peut pas être inférieur à 0')
@@ -418,7 +418,7 @@ export default [
     // indicateurs scolaires
     body('scolaire_mineurs_scolarisables')
         .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('school'))
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de mineurs en âge d\'être scolarisés" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs en âge d\'être scolarisés" ne peut pas être inférieur à 0')
@@ -438,7 +438,7 @@ export default [
 
     body('scolaire_mineurs_en_mediation')
         .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('school'))
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de mineurs bénéficiant d\'une médiation" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs bénéficiant d\'une médiation" ne peut pas être inférieur à 0')
@@ -458,7 +458,7 @@ export default [
 
     body('scolaire_nombre_maternelle')
         .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('school'))
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de scolarisés en maternelle" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de scolarisés en maternelle" ne peut pas être inférieur à 0')
@@ -478,7 +478,7 @@ export default [
 
     body('scolaire_nombre_elementaire')
         .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('school'))
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de scolarisés en élémentaire" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de scolarisés en élémentaire" ne peut pas être inférieur à 0')
@@ -498,7 +498,7 @@ export default [
 
     body('scolaire_nombre_college')
         .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('school'))
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de scolarisés au collège" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de scolarisés au collège" ne peut pas être inférieur à 0')
@@ -518,7 +518,7 @@ export default [
 
     body('scolaire_nombre_lycee')
         .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('school'))
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de scolarisés au lycée" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de scolarisés au lycée" ne peut pas être inférieur à 0')
@@ -538,7 +538,7 @@ export default [
 
     body('scolaire_nombre_autre')
         .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('school'))
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Autre" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Autre" ne peut pas être inférieur à 0')
