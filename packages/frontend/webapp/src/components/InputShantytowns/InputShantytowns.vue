@@ -18,6 +18,7 @@
                 :name="`${name}_search`"
                 prefixIcon="search"
                 placeholder="Adresse, nom d'un site, ville..."
+                @keypress="preventSubmit"
             />
 
             <Tableau :columns="filteredColumns" :data="currentTabData">
@@ -185,6 +186,13 @@ const currentTabData = computed(() => {
 
 function onCheckChange(id) {
     handleChange(id);
+}
+
+function preventSubmit(event) {
+    const key = event.charCode || event.keyCode;
+    if (key === 13) {
+        event.preventDefault();
+    }
 }
 
 const townsStore = useTownsStore();
