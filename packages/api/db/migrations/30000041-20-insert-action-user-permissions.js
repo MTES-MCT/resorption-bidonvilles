@@ -38,7 +38,7 @@ module.exports = {
                         fk_entity: 'action',
                         allowed: true,
                         allow_all: false,
-                        is_cumulative: false,
+                        is_cumulative: true,
                     },
                     {
                         fk_organization: organizationId,
@@ -46,7 +46,7 @@ module.exports = {
                         fk_entity: 'action',
                         allowed: true,
                         allow_all: false,
-                        is_cumulative: false,
+                        is_cumulative: true,
                     },
                     {
                         fk_organization: organizationId,
@@ -54,7 +54,7 @@ module.exports = {
                         fk_entity: 'action_comment',
                         allowed: true,
                         allow_all: false,
-                        is_cumulative: false,
+                        is_cumulative: true,
                     },
                     {
                         fk_organization: organizationId,
@@ -62,7 +62,7 @@ module.exports = {
                         fk_entity: 'action_comment',
                         allowed: true,
                         allow_all: false,
-                        is_cumulative: false,
+                        is_cumulative: true,
                     },
                 ]).flat(),
                 { transaction },

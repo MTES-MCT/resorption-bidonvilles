@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref, watch, computed, toRef } from "vue";
 import { useEventBus } from "@/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
+import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import {
     create,
@@ -152,7 +153,10 @@ export const useActionsStore = defineStore("actions", () => {
             return Math.ceil(filteredActions.value.length / ITEMS_PER_PAGE);
         }),
         async create(data) {
-            const action = await create(data);
+            const { action, permissions } = await create(data);
+            const configStore = useConfigStore();
+            configStore.setPermissions(permissions);
+
             hash.value[action.id] = action;
             actions.value.push(action);
 
@@ -160,9 +164,11 @@ export const useActionsStore = defineStore("actions", () => {
         },
 
         async edit(actionId, data) {
-            const action = await edit(actionId, data);
-            setAction(actionId, action);
+            const { action, permissions } = await edit(actionId, data);
+            const configStore = useConfigStore();
+            configStore.setPermissions(permissions);
 
+            setAction(actionId, action);
             return hash.value[action.id];
         },
 

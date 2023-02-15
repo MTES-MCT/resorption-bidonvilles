@@ -1,13 +1,30 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import { Permissions } from './types/Permissions';
+import { Permission } from './types/Permission';
 
-/**
- * @param {Array.<Number>} owners User ids
- *
- * @returns {Object}
- */
-export default async (owners) => {
-    const permissions = await sequelize.query(`
+type PermissionRow = {
+    user_id: number,
+    entity: string,
+    feature: string,
+    is_writing: boolean,
+    allowed: boolean,
+    allow_all: boolean | null,
+    regions: string[] | null,
+    departements: string[] | null,
+    epci: string[] | null,
+    cities: string[] | null,
+    shantytowns: number[] | null,
+    plans: number[] | null,
+    actions: number[] | null
+};
+
+type PermissionHash = {
+    [key: number]: Permissions
+};
+
+export default async (owners: number[]): Promise<PermissionHash> => {
+    const permissions: PermissionRow[] = await sequelize.query(`
         SELECT
             uap.user_id,
             uap.fk_entity AS entity,
@@ -32,7 +49,7 @@ export default async (owners) => {
         },
     });
 
-    return permissions.reduce((acc, row: any) => {
+    return permissions.reduce((acc, row) => {
         if (!acc[row.user_id]) {
             acc[row.user_id] = {};
         }
@@ -41,7 +58,7 @@ export default async (owners) => {
             acc[row.user_id][row.entity] = {};
         }
 
-        const permission = {
+        const permission: Permission = {
             is_writing: row.is_writing,
             allowed: row.allowed,
             allow_all: row.allow_all === true,
@@ -77,5 +94,5 @@ export default async (owners) => {
 
         acc[row.user_id][row.entity][row.feature] = permission;
         return acc;
-    }, {});
+    }, {} as PermissionHash);
 };
