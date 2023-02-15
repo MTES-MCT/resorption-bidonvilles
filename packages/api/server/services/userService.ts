@@ -1,23 +1,16 @@
+import ServiceError from '#server/errors/ServiceError';
+import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
 import createUser from './createUser';
 
 const userService = {
-    async create(data, createdBy = null) {
+    async create(data, createdBy = null): Promise<SerializedUser> {
         // insert user into database
         try {
             return await createUser(Object.assign({}, data, {
                 created_by: createdBy,
             }));
         } catch (error) {
-            return {
-                error: {
-                    code: 500,
-                    response: {
-                        error: {
-                            user_message: 'Une erreur est survenue lors de l\'écriture en base de données',
-                        },
-                    },
-                },
-            };
+            throw new ServiceError('db_write', error);
         }
     },
 };

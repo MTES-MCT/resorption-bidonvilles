@@ -75,7 +75,7 @@ async function authenticateUser(req) {
         });
     }
 
-    Sentry.setUser({ id: user.id });
+    Sentry.setUser({ id: `${user.id}` });
 
     const now = new Date();
     await userModelUpdate(user.id, {

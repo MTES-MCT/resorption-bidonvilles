@@ -4,10 +4,11 @@ import organizationModel from '#server/models/organizationModel';
 import organizationTypeModel from '#server/models/organizationTypeModel';
 import authUtils from '#server/utils/auth';
 import mattermostUtils from '#server/utils/mattermost';
+import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
 
 const { generateSalt } = authUtils;
 
-async function createUser(data) {
+async function createUser(data): Promise<SerializedUser> {
     const userId = await sequelize.transaction(async (t) => {
     // create association if necessary
         if (data.new_association === true) {
