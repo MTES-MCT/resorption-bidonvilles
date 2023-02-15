@@ -111,6 +111,14 @@ const sections = [
         title: "Tentes",
         data: "tents",
     },
+    {
+        title: "Voitures dortoir",
+        data: "cars",
+    },
+    {
+        title: "Matelas",
+        data: "mattresses",
+    },
 ];
 
 const populationHistory = computed(() => {
@@ -133,6 +141,8 @@ const populationHistory = computed(() => {
         caravans: formatInt(town.value.caravans, "-"),
         huts: formatInt(town.value.huts, "-"),
         tents: formatInt(town.value.tents, "-"),
+        cars: formatInt(town.value.cars, "-"),
+        mattresses: formatInt(town.value.mattresses, "-"),
     };
 
     // on traite le changelog pour n'y conserver que les étapes qui contiennent au moins un
@@ -147,7 +157,9 @@ const populationHistory = computed(() => {
                         fieldKey === "minorsInSchool" ||
                         fieldKey === "caravans" ||
                         fieldKey === "huts" ||
-                        fieldKey === "tents"
+                        fieldKey === "tents" ||
+                        fieldKey === "cars" ||
+                        fieldKey === "mattresses"
                 ),
             };
         })
