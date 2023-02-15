@@ -1,13 +1,13 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes, Transaction } from 'sequelize';
-import { ActionUpdateRow } from './ActionUpdateRow';
+import { ActionUpdateInput } from '#server/services/action/ActionInput.d';
 
-export default (id: number, data: ActionUpdateRow, transaction: Transaction) => sequelize.query(
+export default (id: number, data: ActionUpdateInput, transaction: Transaction) => sequelize.query(
     `UPDATE actions SET
         name = :name,
         started_at = :started_at,
         ended_at = :ended_at,
-        updated_at = :updated_at,
+        updated_at = NOW(),
         goals = :goals,
         fk_departement = :location_departement,
         location_type = :location_type,
@@ -22,8 +22,19 @@ export default (id: number, data: ActionUpdateRow, transaction: Transaction) => 
         type: QueryTypes.UPDATE,
         transaction,
         replacements: {
-            ...data,
             id,
+            name: data.name,
+            started_at: data.started_at,
+            ended_at: data.ended_at,
+            goals: data.goals,
+            location_departement: data.location_departement,
+            location_type: data.location_type,
+            address: data.address,
+            latitude: data.latitude,
+            longitude: data.longitude,
+            location_eti_citycode: data.location_eti_citycode,
+            location_autre: data.location_autre,
+            updated_by: data.updated_by,
         },
     },
 );

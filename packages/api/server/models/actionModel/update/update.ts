@@ -1,12 +1,12 @@
 import { sequelize } from '#db/sequelize';
-import { ActionUpdateRow } from './ActionUpdateRow';
 
+import { ActionUpdateInput } from '#server/services/action/ActionInput.d';
 import historize from '../historize/historize';
 import resetAsideData from './resetAsideData';
 import insertAsideData from '../create/insertAsideData';
 import updateAction from './updateAction';
 
-export default async (id: number, data: ActionUpdateRow): Promise<void> => {
+export default async (id: number, data: ActionUpdateInput): Promise<void> => {
     const transaction = await sequelize.transaction();
     try {
         // save current state into history tables
@@ -17,7 +17,7 @@ export default async (id: number, data: ActionUpdateRow): Promise<void> => {
 
         // update
         await updateAction(id, data, transaction);
-        await insertAsideData(id, data.updated_by, data.updated_at, data, transaction);
+        await insertAsideData(id, data.updated_by, data.date_indicateurs, data, transaction);
 
         await transaction.commit();
     } catch (error) {

@@ -127,7 +127,6 @@ export default [
                 throw new Error('L\'adresse de l\'Espace Temporaire d\'Accompagnement doit se situer dans le département d\'intervention principal');
             }
 
-            req.body.city = city;
             return true;
         })
         // coordonnées GPS
@@ -147,6 +146,11 @@ export default [
             return true;
         }),
 
+    body('latitude')
+        .customSanitizer((value, { req }) => (req.body.location_type === 'eti' ? value : null)),
+    body('longitude')
+        .customSanitizer((value, { req }) => (req.body.location_type === 'eti' ? value : null)),
+
     body('location_shantytowns')
         .if((value, { req }) => req.body.location_type === 'sur_site')
         .exists({ checkNull: true }).bail().withMessage('Le champ "Sites concernés" est obligatoire')
@@ -154,15 +158,16 @@ export default [
         .isLength({ min: 1 }).bail().withMessage('Le champ "Sites concernés" est obligatoire')
         .customSanitizer(value => value.map(id => parseInt(id, 10)))
         .custom(async (value, { req }) => {
+            let shantytowns = [];
             try {
-                req.body.location_shantytowns_full = await shantytownModel.findAll(req.user, [
+                shantytowns = await shantytownModel.findAll(req.user, [
                     { shantytown_id: value },
                 ]);
             } catch (error) {
                 throw new Error('Une erreur est survenue lors de la validation des sites');
             }
 
-            if (req.body.location_shantytowns_full.length !== value.length) {
+            if (shantytowns.length !== value.length) {
                 throw new Error('Certains des sites sélectionnés comme sites concernés n\'existent pas en base de données');
             }
 
@@ -176,11 +181,6 @@ export default [
         .notEmpty().withMessage('Vous devez préciser où se déroule l\'action'),
     body('location_autre')
         .customSanitizer(value => value || null),
-
-    body('latitude')
-        .customSanitizer((value, { req }) => (req.body.location_type === 'eti' ? value : null)),
-    body('longitude')
-        .customSanitizer((value, { req }) => (req.body.location_type === 'eti' ? value : null)),
 
     body('managers')
         .exists({ checkNull: true }).bail().withMessage('Le champ "Pilotes de l\'action" est obligatoire')
@@ -209,6 +209,19 @@ export default [
         }),
 
     // indicateurs communs
+    body('date_indicateurs')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de mise à jour" est obligatoire')
+        .toDate()
+        .customSanitizer((value) => {
+            const today = new Date();
+
+            if (value > today) {
+                return today;
+            }
+
+            return value;
+        }),
+
     body('nombre_personnes')
         .exists({ checkNull: true }).bail().withMessage('Le champ "Nombre de personnes" est obligatoire')
         .toInt()

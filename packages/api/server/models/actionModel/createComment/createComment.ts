@@ -19,7 +19,8 @@ export default async (actionId: number, comment: ActionCommentInsertionRow): Pro
             type: QueryTypes.INSERT,
             replacements: {
                 actionId,
-                ...comment,
+                description: comment.description,
+                created_by: comment.created_by,
             },
         },
     );

@@ -1,9 +1,9 @@
-import { ActionRow } from './fetchActions';
+import { ActionSelectRow } from './fetchActions';
 import Action from './Action';
 
 export type ActionHash = { [key: number]: Action };
 
-export default function hashActions(actions: ActionRow[]): ActionHash {
+export default function hashActions(actions: ActionSelectRow[]): ActionHash {
     return actions.reduce((acc, row) => {
         acc[row.action_id] = {
             type: 'action',

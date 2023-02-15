@@ -79,11 +79,6 @@ const sections = computed(() => {
 });
 
 const year = computed(() => {
-    if (!values.value.started_at) {
-        return 2023;
-    } else {
-        const now = new Date(values.value.started_at);
-        return now.getFullYear() === 2023 ? 2023 : 2022;
-    }
+    return values.value.date_indicateurs.getFullYear();
 });
 </script>
