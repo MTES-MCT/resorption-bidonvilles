@@ -6,6 +6,8 @@ export type UserAutocompleteRow = {
     first_name: string,
     last_name: string,
     organization_id: number,
+    organization_name: string,
+    organization_abbreviation: string | null,
     similarity: number,
 };
 
@@ -15,6 +17,8 @@ export default async (search: string, departementCode: string = null): Promise<U
         users.first_name,
         users.last_name,
         users.fk_organization AS organization_id,
+        localized_organizations.name AS organization_name,
+        localized_organizations.abbreviation AS organization_abbreviation,
         GREATEST(
             word_similarity(unaccent(:search), unaccent(users.first_name)),
             word_similarity(unaccent(:search), unaccent(users.last_name))

@@ -34,7 +34,7 @@ export default async (search: string, departementCode: string = null, usersOnly:
 
         const serializedUsers = users.map((row): UserAutocompleteResult => ({
             id: row.id,
-            label: formatName(row),
+            label: `${formatName(row)} (${row.organization_abbreviation || row.organization_name})`,
             organization: row.organization_id,
             type: {
                 id: 'user',
