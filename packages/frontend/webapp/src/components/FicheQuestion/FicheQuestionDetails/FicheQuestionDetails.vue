@@ -1,12 +1,9 @@
 <template>
-    <ContentWrapper>
-        <p>{{ question.details }}</p>
-    </ContentWrapper>
+    <p class="whitespace-pre-line">{{ question.details }}</p>
 </template>
 
 <script setup>
 import { defineProps, toRefs } from "vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 
 const props = defineProps({
     question: Object,

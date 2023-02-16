@@ -1,39 +1,40 @@
 <template>
-    <div class="bg-blue200">
-        <FicheQuestionNouvelleReponse :question="question" class="mb-12" />
+    <div class="bg-blue200 py-6">
+        <ContentWrapper>
+            <h1 class="text-xl font-bold mb-4">
+                <Icon icon="comment" /> Section des réponses —
+                {{ question.answers.length }} réponse{{
+                    question.answers.length > 1 ? "s" : ""
+                }}
+            </h1>
+            <FicheQuestionNouvelleReponse :question="question" class="mb-2" />
 
-        <h1 class="text-lg font-bold mb-2">
-            {{ questionHasAtLeastOneAnswer ? question.answers.length : "0" }}
-            réponse{{
-                questionHasAtLeastOneAnswer
-                    ? question.answers.length > 1
-                        ? "s"
-                        : ""
-                    : ""
-            }}
-        </h1>
-        <FicheQuestionListeDesReponses
-            :answers="question.answers"
-            v-if="questionHasAtLeastOneAnswer"
-        />
+            <section class="mt-4 mb-4">
+                <h1 class="text-lg font-bold">
+                    {{ question.answers.length }} réponse{{
+                        question.answers.length > 1 ? "s" : ""
+                    }}
+                </h1>
+                <FicheQuestionListeDesReponses
+                    v-if="question.answers.length > 0"
+                    :answers="question.answers"
+                />
+                <p v-else>Cette question n'a pas encore reçu de réponses.</p>
+            </section>
+        </ContentWrapper>
     </div>
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs } from "vue";
+import { defineProps, toRefs } from "vue";
 
 import FicheQuestionNouvelleReponse from "./FicheQuestionNouvelleReponse/FicheQuestionNouvelleReponse.vue";
 import FicheQuestionListeDesReponses from "./FicheQuestionListeDesReponses.vue";
+import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     question: Object,
 });
 const { question } = toRefs(props);
-
-const questionHasAtLeastOneAnswer = computed(() => {
-    if (question.value.answers) {
-        return question.value.answers.length > 0;
-    }
-    return false;
-});
 </script>

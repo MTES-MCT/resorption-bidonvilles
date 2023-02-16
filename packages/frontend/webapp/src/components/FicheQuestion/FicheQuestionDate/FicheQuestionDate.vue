@@ -1,13 +1,10 @@
 <template>
-    <ContentWrapper>
-        <p class="text-G500">{{ formatActivityDate(question.createdAt) }}</p>
-    </ContentWrapper>
+    <p class="text-G500">{{ formatActivityDate(question.createdAt) }}</p>
 </template>
 
 <script setup>
 import formatActivityDate from "@/utils/formatActivityDate";
 import { defineProps, toRefs } from "vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 
 const props = defineProps({
     question: Object,

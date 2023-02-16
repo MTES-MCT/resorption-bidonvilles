@@ -1,3 +1,3 @@
 export default {
-    answer: "Ajouter une réponse",
+    answer: "Ajoutez une réponse",
 };

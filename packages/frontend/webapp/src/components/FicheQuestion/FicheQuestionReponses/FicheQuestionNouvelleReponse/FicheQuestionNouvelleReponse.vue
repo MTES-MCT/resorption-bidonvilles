@@ -1,15 +1,13 @@
 <template>
     <form>
-        <div class="flex flex-col mx-auto py-8 lg:px-6 max-w-screen-2xl">
-            <FicheQuestionNouvelleReponseInputReponse />
+        <FicheQuestionNouvelleReponseInputReponse />
 
-            <ErrorSummary v-if="error" :message="error" class="mt-2" />
-            <p class="text-right">
-                <Button icon="paper-plane" iconPosition="left" @click="submit"
-                    >Publier ma réponse</Button
-                >
-            </p>
-        </div>
+        <ErrorSummary v-if="error" :message="error" class="mt-2" />
+        <p class="text-right">
+            <Button icon="paper-plane" iconPosition="left" @click="submit"
+                >Publier ma réponse</Button
+            >
+        </p>
     </form>
 </template>
 

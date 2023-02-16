@@ -37,22 +37,25 @@
                 }}
             </div>
             <p class="whitespace-pre-line mt-4">
-                <template v-if="showAll">{{ question.details }}</template>
-                <template v-else>
-                    {{ question.details.substr(0, 300) }} [...]<br /><br />
-                    <Link withStyle @click="showAll = true"
-                        >[...] Lire la suite</Link
-                    >
+                {{
+                    question.details
+                        .substr(0, 300)
+                        .split("\n")
+                        .slice(0, 5)
+                        .join("\n")
+                }}
+                <template v-if="showMore"
+                    >[...]<br /><br />
+                    <Link withStyle>[...] Lire la suite</Link>
                 </template>
             </p>
-            <main class="mb-4"></main>
             <CarteQuestionFooter :question="question" />
         </div>
     </RouterLink>
 </template>
 
 <script setup>
-import { toRefs, ref } from "vue";
+import { toRefs, computed } from "vue";
 
 import { RouterLink } from "vue-router";
 import CarteQuestionQuestion from "./CarteQuestionQuestion.vue";
@@ -66,5 +69,11 @@ const props = defineProps({
     },
 });
 const { question } = toRefs(props);
-const showAll = ref(question.value.details.length < 300);
+
+const showMore = computed(() => {
+    return (
+        question.value.details.length > 300 ||
+        question.value.details.split("\n").length > 4
+    );
+});
 </script>
