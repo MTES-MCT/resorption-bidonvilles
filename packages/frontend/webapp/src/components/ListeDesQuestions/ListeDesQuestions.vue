@@ -1,13 +1,16 @@
 <template>
     <ContentWrapper>
         <ListeDesQuestionsBanniere class="mb-8" />
-
         <ListeDesQuestionsHeader />
-        <Loading class="py-28" v-if="questionsStore.isLoading !== false" />
+
+        <Loading v-if="questionsStore.isLoading !== false" />
         <ListeDesQuestionsErreur v-else-if="questionsStore.error" />
 
-        <div v-else-if="questionsStore.questions.length > 0">
-            <section class="flex flex-col space-y-4">
+        <template v-else>
+            <section
+                v-if="questionsStore.questions.length > 0"
+                class="flex flex-col space-y-4"
+            >
                 <CarteQuestion
                     v-for="question in questionsStore.currentPage.content"
                     :key="question.id"
@@ -22,8 +25,9 @@
                     @pagechange="changePage"
                 />
             </section>
-        </div>
-        <ListeDesQuestionsVide class="mt-12" v-else />
+
+            <ListeDesQuestionsVide v-else />
+        </template>
     </ContentWrapper>
 </template>
 

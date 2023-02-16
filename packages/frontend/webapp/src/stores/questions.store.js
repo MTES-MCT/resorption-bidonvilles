@@ -16,7 +16,6 @@ export const useQuestionsStore = defineStore("questions", () => {
     const hash = ref({});
     const isLoading = ref(null);
     const error = ref(null);
-    const tab = ref("communaute");
 
     const currentPage = {
         index: ref(-1), // index = 1 pour la première page
@@ -78,6 +77,9 @@ export const useQuestionsStore = defineStore("questions", () => {
         isLoading.value = true;
         error.value = null;
         try {
+            await new Promise((s, f) => {
+                setTimeout(f, 5000);
+            });
             const rawQuestions = await getQuestions();
             questions.value = rawQuestions;
             hash.value = questions.value.reduce((hash, question) => {
@@ -127,7 +129,6 @@ export const useQuestionsStore = defineStore("questions", () => {
         questions,
         isLoading,
         error,
-        tab,
         currentPage,
         numberOfPages: computed(() => {
             if (questions.value.length === 0) {
