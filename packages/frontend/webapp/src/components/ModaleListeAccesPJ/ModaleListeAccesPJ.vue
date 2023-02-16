@@ -66,7 +66,7 @@ const permissionsToAccessJustice = computed(() => {
 watch(location, async () => {
     if (location.value?.type) {
         try {
-            load();
+            await load();
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
         }
