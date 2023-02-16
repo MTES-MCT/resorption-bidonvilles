@@ -56,6 +56,21 @@ export const useUserStore = defineStore("user", {
         hasAcceptedCharte() {
             return this.user?.charte_engagement_a_jour === true;
         },
+        departementsForActions() {
+            const configStore = useConfigStore();
+            const { departements } = configStore.config;
+            const permission = this.user.permissions.action.create;
+
+            if (permission.allow_all === true) {
+                return departements;
+            }
+
+            return departements.filter(
+                ({ code, region }) =>
+                    permission.allowed_on.departements?.includes(code) ||
+                    permission.allowed_on.regions?.includes(region)
+            );
+        },
     },
     actions: {
         getPermission(permissionName) {
@@ -83,7 +98,7 @@ export const useUserStore = defineStore("user", {
                 (data === undefined || permission[data] === true)
             );
         },
-        hasLocalizedPermission(permissionName, town) {
+        hasLocalizedPermission(permissionName, entity) {
             const permission = this.getPermission(permissionName);
             if (permission === null) {
                 return false;
@@ -94,20 +109,44 @@ export const useUserStore = defineStore("user", {
             }
 
             return (
-                (town.region &&
-                    permission.allowed_on.regions.includes(town.region.code)) ||
-                (town.departement &&
-                    permission.allowed_on.departements.includes(
-                        town.departement.code
+                (entity.region &&
+                    permission.allowed_on.regions.includes(
+                        entity.region.code
                     )) ||
-                (town.epci &&
-                    permission.allowed_on.epci.includes(town.epci.code)) ||
-                (town.city &&
-                    (permission.allowed_on.cities.includes(town.city.code) ||
+                (entity.departement &&
+                    permission.allowed_on.departements.includes(
+                        entity.departement.code
+                    )) ||
+                (entity.epci &&
+                    permission.allowed_on.epci.includes(entity.epci.code)) ||
+                (entity.city &&
+                    (permission.allowed_on.cities.includes(entity.city.code) ||
                         permission.allowed_on.cities.includes(
-                            town.city.main
+                            entity.city.main
                         ))) ||
-                permission.allowed_on.shantytowns.includes(town.id)
+                permission.allowed_on.shantytowns.includes(entity.id)
+            );
+        },
+        hasActionPermission(permissionName, entity) {
+            const permission = this.getPermission(permissionName);
+            if (permission === null) {
+                return false;
+            }
+
+            if (permission.allow_all) {
+                return true;
+            }
+
+            return (
+                (entity.location.region &&
+                    permission.allowed_on.regions.includes(
+                        entity.location.region.code
+                    )) ||
+                (entity.location.departement &&
+                    permission.allowed_on.departements.includes(
+                        entity.location.departement.code
+                    )) ||
+                permission.allowed_on.actions.includes(entity.id)
             );
         },
         setToken(token) {

@@ -2,7 +2,7 @@
     <p class="flex space-x-2">
         <RouterLink
             to="#journal_de_l_action"
-            v-if="userStore.hasLocalizedPermission('plan_comment.list', plan)"
+            v-if="userStore.hasActionPermission('action_comment.read', action)"
         >
             <Button
                 size="sm"
@@ -13,56 +13,33 @@
             >
         </RouterLink>
         <Button
-            v-if="plan.closed_at === null"
-            size="sm"
-            variant="primary"
-            icon="house-circle-xmark"
-            iconPosition="left"
-            :disabled="!plan.canClose || true"
-            :href="`/action/${plan.id}/fermeture`"
-            @click="unavailable"
-            >Fermer l'action</Button
-        >
-        <Button
-            v-if="plan.closed_at === null"
+            v-if="
+                !isClosed &&
+                userStore.hasActionPermission('action.update', action)
+            "
             size="sm"
             variant="primary"
             icon="pencil"
             iconPosition="left"
-            :disabled="!plan.canUpdate || true"
-            :href="`/action/${plan.id}/mise-a-jour`"
-            @click="unavailable"
+            :href="`/action/${action.id}/mise-a-jour`"
             >Mettre à jour</Button
-        >
-        <Button
-            v-if="plan.closed_at === null"
-            size="sm"
-            variant="primary"
-            icon="pencil"
-            iconPosition="left"
-            :disabled="!plan.canUpdateMarks || true"
-            :href="`/action/${plan.id}/indicateurs/mise-a-jour`"
-            @click="unavailable"
-            >Mettre à jour les indicateurs</Button
         >
     </p>
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { computed, defineProps, toRefs } from "vue";
 import { RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
 import { Button } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
-    plan: Object,
+    action: Object,
 });
-const { plan } = toRefs(props);
+const { action } = toRefs(props);
 const userStore = useUserStore();
 
-function unavailable() {
-    alert(
-        "Ce formulaire est temporairement indisponible, pour des raisons techniques"
-    );
-}
+const isClosed = computed(() => {
+    return action.value.ended_at && action.value.ended_at < Date.now();
+});
 </script>

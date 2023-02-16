@@ -79,8 +79,8 @@ function getAllTypesOtherThan(types) {
 global.generate = (types) => {
     if (types === undefined) {
         return {
-            not(types) {
-                return getRandomValue(getAllTypesOtherThan(Array.isArray(types) ? types : [types]));
+            not(argTypes) {
+                return getRandomValue(getAllTypesOtherThan(Array.isArray(argTypes) ? argTypes : [argTypes]));
             },
         };
     }

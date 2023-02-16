@@ -16,7 +16,7 @@ export default async () => {
                 notUnsubscribedToWeeklySummary: {
                     not: true,
                     value: 'weekly_summary',
-                    operator: 'isAny',
+                    anyOperator: '=',
                     query: 'email_unsubscriptions.unsubscriptions',
                 },
             },

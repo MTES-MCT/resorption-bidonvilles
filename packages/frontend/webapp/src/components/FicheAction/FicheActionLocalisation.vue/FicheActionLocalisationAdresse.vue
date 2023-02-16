@@ -1,10 +1,10 @@
 <template>
-    <p>{{ plan.location.label }}</p>
+    <p>{{ action.eti.address }}</p>
     <div class="h-128">
         <Carte
             defaultLayer="Satellite"
             :defaultView="center"
-            :towns="[address]"
+            :towns="[action.eti]"
             @townclick="onTownClick"
         />
     </div>
@@ -16,21 +16,13 @@ import router from "@/helpers/router";
 import Carte from "@/components/Carte/Carte.vue";
 
 const props = defineProps({
-    plan: Object,
+    action: Object,
 });
-const { plan } = toRefs(props);
-
-const address = computed(() => {
-    return {
-        latitude: plan.value.location.latitude,
-        longitude: plan.value.location.longitude,
-        address: plan.value.location.label,
-    };
-});
+const { action } = toRefs(props);
 
 const center = computed(() => {
     return {
-        center: [plan.value.location.latitude, plan.value.location.longitude],
+        center: [action.value.eti.latitude, action.value.eti.longitude],
         zoom: 15,
     };
 });

@@ -100,7 +100,7 @@ export default (town, user) => {
             covid: [],
         },
         actors: [],
-        plans: [],
+        actions: [],
         closingSolutions: [],
         closedWithSolutions: town.closedWithSolutions,
         changelog: [],

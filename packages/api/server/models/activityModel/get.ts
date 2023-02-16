@@ -239,6 +239,7 @@ export default async (argFrom: Date, argTo: Date): Promise<any> => {
         const { shantytownId } = row;
         const shantytownUsename = getUsenameOf({
             name: row.shantytownName,
+            address: '',
             addressSimple: row.shantytownAddressSimple,
         });
 

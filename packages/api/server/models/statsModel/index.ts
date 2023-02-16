@@ -8,15 +8,14 @@ import numberOfClosedShantytownsPerMonth from './numberOfClosedShantytownsPerMon
 import numberOfCollaboratorAndAssociationOrganizations from './numberOfCollaboratorAndAssociationOrganizations';
 import numberOfCollaboratorAndAssociationUsers from './numberOfCollaboratorAndAssociationUsers';
 import numberOfComments from './numberOfComments';
-import numberOfCreditsPerYear from './numberOfCreditsPerYear';
 import numberOfDepartements from './numberOfDepartements';
 import numberOfNewShantytownsPerMonth from './numberOfNewShantytownsPerMonth';
 import numberOfNewUsersPerMonth from './numberOfNewUsersPerMonth';
 import numberOfOpenShantytownsAtMonth from './numberOfOpenShantytownsAtMonth';
 import numberOfPeople from './numberOfPeople';
 import numberOfPeopleByDepartement from './numberOfPeopleByDepartement';
-import numberOfPlans from './numberOfPlans';
-import numberOfPlansByDepartement from './numberOfPlansByDepartement';
+import numberOfActions from './numberOfActions';
+import numberOfActionsByDepartement from './numberOfActionsByDepartement';
 import numberOfResorbedShantytown from './numberOfResorbedShantytown';
 import numberOfResorbedShantytownByDepartement from './numberOfResorbedShantytownByDepartement';
 import numberOfResorbedShantytownsPerMonth from './numberOfResorbedShantytownsPerMonth';
@@ -41,15 +40,14 @@ export default {
     numberOfCollaboratorAndAssociationOrganizations,
     numberOfCollaboratorAndAssociationUsers,
     numberOfComments,
-    numberOfCreditsPerYear,
     numberOfDepartements,
     numberOfNewShantytownsPerMonth,
     numberOfNewUsersPerMonth,
     numberOfOpenShantytownsAtMonth,
     numberOfPeople,
     numberOfPeopleByDepartement,
-    numberOfPlans,
-    numberOfPlansByDepartement,
+    numberOfActions,
+    numberOfActionsByDepartement,
     numberOfResorbedShantytown,
     numberOfResorbedShantytownByDepartement,
     numberOfResorbedShantytownsPerMonth,

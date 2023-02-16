@@ -23,13 +23,13 @@
     </LayoutError>
 
     <Layout :paddingBottom="false" v-else>
-        <FicheAction :plan="plan" v-if="plan" />
+        <FicheAction :action="action" v-if="action" />
     </Layout>
 </template>
 
 <script setup>
 import { onMounted, ref, computed, watch } from "vue";
-import { usePlansStore } from "@/stores/plans.store.js";
+import { useActionsStore } from "@/stores/actions.store.js";
 import router from "@/helpers/router";
 
 import { Button } from "@resorptionbidonvilles/ui";
@@ -39,17 +39,17 @@ import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
 import FicheAction from "@/components/FicheAction/FicheAction.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 
-const plansStore = usePlansStore();
+const actionsStore = useActionsStore();
 const isLoading = ref(null);
 const error = ref(null);
-const plan = ref(null);
+const action = ref(null);
 
-const planId = computed(() => {
+const actionId = computed(() => {
     return parseInt(router.currentRoute.value.params.id, 10);
 });
 
 onMounted(load);
-watch(planId, load);
+watch(actionId, load);
 
 async function load() {
     if (isLoading.value === true) {
@@ -59,7 +59,7 @@ async function load() {
     isLoading.value = true;
     error.value = null;
     try {
-        plan.value = await plansStore.fetchPlan(planId.value);
+        action.value = await actionsStore.fetchAction(actionId.value);
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
     }

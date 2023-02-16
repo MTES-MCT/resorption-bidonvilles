@@ -20,6 +20,8 @@ export default () => ({
                             primaryKey = 'shantytown_id';
                         } else if (tableName === 'plans') {
                             primaryKey = 'plan_id';
+                        } else if (tableName === 'actions') {
+                            primaryKey = 'action_id';
                         }
 
                         const where = {

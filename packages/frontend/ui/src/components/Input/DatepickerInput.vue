@@ -1,11 +1,11 @@
 <template>
     <InputWrapper :hasErrors="!!errors.length" :withoutMargin="withoutMargin">
-        <InputLabel :label="label" :info="info" :showMandatoryStar="showMandatoryStar" />
+        <InputLabel :label="label" :info="info" :inlineInfo="inlineInfo" :showMandatoryStar="showMandatoryStar" />
 
         <div :class="width">
             <DatePicker v-model="date" locale="fr" :format-locale="fr" format="dd LLLL yyyy"
-                :disabled="isSubmitting || disabled" autoApply :enableTimePicker="false" preventMinMaxNavigation
-                v-bind="$attrs">
+                :disabled="isSubmitting || disabled" autoApply :enableTimePicker="false"
+                :preventMinMaxNavigation="$attrs.maxDate || $attrs.minDate" v-bind="$attrs">
             </DatePicker>
         </div>
         <InputError v-if="errors.length">{{ errors[0] }}</InputError>
@@ -25,6 +25,11 @@ const props = defineProps({
     name: String,
     label: String,
     info: String,
+    inlineInfo: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
     showMandatoryStar: Boolean,
     rules: {
         type: Object,
@@ -52,7 +57,7 @@ const props = defineProps({
     },
 });
 
-const { name, label, info, showMandatoryStar, rules, disabled, modelValue, width, withoutMargin } = toRefs(props);
+const { name, label, info, inlineInfo, showMandatoryStar, rules, disabled, modelValue, width, withoutMargin } = toRefs(props);
 const isSubmitting = useIsSubmitting();
 const { handleChange, errors, value } = useField(name.value, rules.value, {
     initialValue: modelValue.value

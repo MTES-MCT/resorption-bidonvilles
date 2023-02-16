@@ -7,7 +7,7 @@
         @mouseenter="isHover = true"
         @mouseleave="isHover = false"
     >
-        <RouterLink :to="`/action/${plan.id}`">
+        <RouterLink :to="`/action/${action.id}`">
             <div class="-mt-1">
                 <div class="mb-4 px-6">
                     <Tag
@@ -16,19 +16,17 @@
                             isHover ? 'shadow-md' : '',
                         ]"
                     >
-                        <span v-if="plan.expected_to_end_at"
+                        <span v-if="action.ended_at"
                             >du
-                            {{ formatDate(plan.started_at / 1000, "d/m/y") }} au
+                            {{ formatDate(action.started_at / 1000, "d/m/y") }}
+                            au
                             {{
-                                formatDate(
-                                    plan.expected_to_end_at / 1000,
-                                    "d/m/y"
-                                )
+                                formatDate(action.ended_at / 1000, "d/m/y")
                             }}</span
                         >
                         <span v-else>
                             depuis le
-                            {{ formatDate(plan.started_at / 1000, "d/m/y") }}
+                            {{ formatDate(action.started_at / 1000, "d/m/y") }}
                         </span>
                     </Tag>
                 </div>
@@ -36,30 +34,30 @@
                 <div class="text-md px-6">
                     <div class="text-display-md">
                         <span class="font-bold">
-                            {{ plan.name }}
+                            {{ action.name }}
                         </span>
                     </div>
                 </div>
 
                 <div class="md:grid cardGridTemplateColumns gap-10 px-6 py-4">
                     <CarteActionColonneChampsIntervention
-                        :topics="plan.topics"
+                        :topics="action.topics"
                     />
                     <CarteActionDetailleeColonneDepartement
-                        :departement="plan.departement"
+                        :departement="action.location.departement"
                     />
-                    <CarteActionDetailleeColonneLocalisation :plan="plan" />
+                    <CarteActionDetailleeColonneLocalisation :action="action" />
                     <CarteActionDetailleeColonnePilote
-                        :government_contact="plan.government_contacts[0]"
+                        :managers="action.managers"
                     />
                     <CarteActionDetailleeColonneOperateur
-                        :operator_contact="plan.operator_contacts[0]"
+                        :operators="action.operators"
                     />
                 </div>
 
                 <div class="flex justify-end px-4 py-4">
                     <div>
-                        <Link :to="`/action/${plan.id}`">
+                        <Link :to="`/action/${action.id}`">
                             <Icon icon="arrow-right" /> Voir la fiche de
                             l'action
                         </Link>
@@ -83,12 +81,12 @@ import CarteActionDetailleeColonnePilote from "./CarteActionDetailleeColonnePilo
 import CarteActionDetailleeColonneOperateur from "./CarteActionDetailleeColonneOperateur.vue";
 
 const props = defineProps({
-    plan: {
+    action: {
         type: Object,
     },
 });
 
-const { plan } = toRefs(props);
+const { action } = toRefs(props);
 
 const isHover = ref(false);
 </script>

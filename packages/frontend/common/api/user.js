@@ -188,8 +188,6 @@ export function autocompleteOrganization(
             str
         )}&departementCode=${encodeURIComponent(
             departementCode
-        )}&onlyUsersAndOrganizations=${encodeURIComponent(
-            onlyUsersAndOrganizations
         )}`
     );
 }

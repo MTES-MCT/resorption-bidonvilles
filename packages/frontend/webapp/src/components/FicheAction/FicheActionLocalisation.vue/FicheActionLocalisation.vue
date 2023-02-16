@@ -3,28 +3,29 @@
         <FicheSousRubrique>
             <p>
                 <Icon icon="map-pin" class="mr-2" />
-                <span class="font-bold">{{ plan.location_type.label }}</span>
+                <span class="font-bold">{{ label }}</span>
             </p>
 
             <FicheActionLocalisationAdresse
-                v-if="plan.location_type.id === 'location'"
-                :plan="plan"
+                v-if="action.location_type === 'eti'"
+                :action="action"
             />
             <FicheActionLocalisationSites
                 class="mt-4"
-                v-if="plan.location_type.id === 'shantytowns'"
-                :plan="plan"
+                v-if="action.location_type === 'sur_site'"
+                :action="action"
             />
             <FicheActionLocalisationDivers
-                v-if="plan.location_type.id === 'other'"
-                :plan="plan"
+                v-if="action.location_type === 'autre'"
+                :action="action"
             />
         </FicheSousRubrique>
     </FicheRubrique>
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { defineProps, toRefs, computed } from "vue";
+import locationTypes from "@/utils/action_location_types";
 
 import { Icon } from "@resorptionbidonvilles/ui";
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
@@ -34,7 +35,12 @@ import FicheActionLocalisationSites from "./FicheActionLocalisationSites.vue";
 import FicheActionLocalisationDivers from "./FicheActionLocalisationDivers.vue";
 
 const props = defineProps({
-    plan: Object,
+    action: Object,
 });
-const { plan } = toRefs(props);
+const { action } = toRefs(props);
+
+const label = computed(() => {
+    return locationTypes.find(({ uid }) => uid === action.value.location_type)
+        .label;
+});
 </script>

@@ -1,12 +1,12 @@
 <template>
     <FicheRubrique title="Intervention" id="caracteristiques">
         <FicheActionChampsIntervention
-            :plan="plan"
+            :action="action"
             :border="false"
             :marginTop="false"
         />
-        <FicheActionDates :plan="plan" />
-        <FicheActionObjectifs :plan="plan" />
+        <FicheActionDates :action="action" />
+        <FicheActionObjectifs :action="action" />
     </FicheRubrique>
 </template>
 
@@ -19,7 +19,7 @@ import FicheActionDates from "./FicheActionDates.vue";
 import FicheActionObjectifs from "./FicheActionObjectifs.vue";
 
 const props = defineProps({
-    plan: Object,
+    action: Object,
 });
-const { plan } = toRefs(props);
+const { action } = toRefs(props);
 </script>

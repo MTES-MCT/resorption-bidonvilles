@@ -2,13 +2,13 @@
     <ContentWrapper>
         <ViewHeader icon="handshake-angle" direction="col">
             <template v-slot:title>
-                <span>{{ plan.name }}</span>
+                <span>{{ action.name }}</span>
             </template>
             <template v-slot:description>
-                <FicheActionHeaderStatus :plan="plan" />
+                <FicheActionHeaderStatus :action="action" />
             </template>
             <template v-slot:actions>
-                <FicheActionHeaderBoutons :plan="plan" />
+                <FicheActionHeaderBoutons :action="action" />
             </template>
         </ViewHeader>
     </ContentWrapper>
@@ -22,7 +22,7 @@ import FicheActionHeaderStatus from "./FicheActionHeaderStatus.vue";
 import FicheActionHeaderBoutons from "./FicheActionHeaderBoutons.vue";
 
 const props = defineProps({
-    plan: Object,
+    action: Object,
 });
-const { plan } = toRefs(props);
+const { action } = toRefs(props);
 </script>

@@ -1,7 +1,8 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import shantytownActorModel from '#server/models/shantytownActorModel';
-import planShantytownModel from '#server/models/planShantytownModel';
+import actionModel from '#server/models/actionModel';
+import { ShantytownAction } from '#server/models/actionModel/fetch/Action.d';
 import incomingTownsModel from '#server/models/incomingTownsModel';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 import permissionUtils from '#server/utils/permission';
@@ -162,8 +163,9 @@ export default async (user, feature, where = [], order = ['departements.code ASC
     );
 
     promises.push(
-        planShantytownModel.findAll(
-            Object.keys(serializedTowns.hash),
+        actionModel.fetchByShantytown(
+            Object.keys(serializedTowns.hash).map(id => parseInt(id, 10)),
+            null,
         ),
     );
 
@@ -171,7 +173,7 @@ export default async (user, feature, where = [], order = ['departements.code ASC
         incomingTownsModel.findAll(user, Object.keys(serializedTowns.hash)),
     );
 
-    const [history, comments, covidComments, closingSolutions, actors, plans, incomingTowns] = await Promise.all(promises);
+    const [history, comments, covidComments, closingSolutions, actors, actions, incomingTowns] = await Promise.all(promises);
 
     if (history !== undefined && history.length > 0) {
         const serializedHistory = history.map(h => serializeShantytown(h, user));
@@ -233,10 +235,14 @@ export default async (user, feature, where = [], order = ['departements.code ASC
         );
     });
 
-    plans.forEach((plan) => {
-        serializedTowns.hash[plan.shantytown_id].plans.push(
-            planShantytownModel.serializePlan(plan),
-        );
+    actions.forEach((action: ShantytownAction) => {
+        action.shantytowns.forEach((shantytownId) => {
+            if (serializedTowns.hash[shantytownId]?.actions === undefined) {
+                return;
+            }
+
+            serializedTowns.hash[shantytownId].actions.push(action);
+        });
     });
 
     incomingTowns.forEach((incomingTown) => {

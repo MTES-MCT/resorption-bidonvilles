@@ -1,4 +1,6 @@
 import { sequelize } from '#db/sequelize';
+import { Transaction } from 'sequelize';
+import { Attachment } from './types/Attachment';
 import getUserPermission from './_common/getUserPermission';
 
 async function removeAttachments(attachments, feature, entity, userId = null, organizationId = null, transaction = undefined) {
@@ -26,15 +28,15 @@ async function removeAttachments(attachments, feature, entity, userId = null, or
     );
 }
 
-export default attachments => ({
-    fromUser: userId => ({
-        onFeature(feature, entity, transaction = undefined) {
+export default (attachments: Attachment[]) => ({
+    fromUser: (userId: number) => ({
+        onFeature(feature: string, entity: string, transaction: Transaction = undefined) {
             return removeAttachments(attachments, feature, entity, userId, null, transaction);
         },
     }),
 
-    fromOrganization: organizationId => ({
-        onFeature(feature, entity, transaction = undefined) {
+    fromOrganization: (organizationId: number) => ({
+        onFeature(feature: string, entity: string, transaction: Transaction = undefined) {
             return removeAttachments(attachments, feature, entity, null, organizationId, transaction);
         },
     }),

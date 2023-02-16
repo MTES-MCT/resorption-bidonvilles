@@ -29,6 +29,11 @@ import findUserTowns from './findUserTowns';
 import createNote from './note/create';
 import publishNote from './note/publish';
 
+import actionCreate from './actions/create';
+import actionCreateComment from './actions/createComment';
+import actionUpdate from './actions/update';
+import organizationSearch from './organizations/search';
+
 export default {
     closeTown,
     fixClosedStatus,
@@ -55,6 +60,11 @@ export default {
         createPlanComment,
     },
     invite,
+    action: {
+        create: actionCreate,
+        createComment: actionCreateComment,
+        update: actionUpdate,
+    },
     activity: {
         list: activityList,
     },
@@ -72,6 +82,9 @@ export default {
     note: {
         createNote,
         publishNote,
+    },
+    organization: {
+        search: organizationSearch,
     },
     setUserAdminComments,
     editOrganization,

@@ -1,6 +1,12 @@
 import getAddressSimpleOf from './getAddressSimpleOf';
 
-export default (shantytown) => {
+type Shantytown = {
+    addressSimple?: string,
+    address: string,
+    name: string | null,
+};
+
+export default (shantytown: Shantytown): string => {
     const addressSimple = shantytown.addressSimple || getAddressSimpleOf(shantytown.address);
 
     // process usename

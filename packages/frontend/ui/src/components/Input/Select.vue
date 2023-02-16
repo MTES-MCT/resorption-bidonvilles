@@ -1,20 +1,11 @@
 <template>
-    <InputWrapper
-        :hasErrors="!!error"
-        :withoutMargin="withoutMargin"
-        :id="name"
-    >
-        <InputLabel :label="label" :info="info" />
+    <InputWrapper :hasErrors="!!error" :withoutMargin="withoutMargin" :id="name">
+        <InputLabel :label="label" :info="info" :showMandatoryStar="showMandatoryStar" />
 
         <div class="relative">
             <InputIcon position="before" :icon="icon" />
-            <Field
-                :class="classes"
-                :value="defaultValue"
-                :disabled="disabled || isLoading || isSubmitting"
-                :name="name"
-                as="select"
-            >
+            <Field :class="classes" :value="defaultValue" :disabled="disabled || isLoading || isSubmitting" :name="name"
+                as="select">
                 <slot />
             </Field>
             <InputIcon position="after" :icon="isLoading ? 'spinner' : 'chevron-down'" :spin="isLoading" />
@@ -52,10 +43,14 @@ const props = defineProps({
     disabled: {
         type: Boolean,
         default: false
+    },
+    showMandatoryStar: {
+        type: Boolean,
+        default: false,
     }
 });
 
-const { name, variant, withoutMargin, disabled, isLoading, icon, info, label, value: defaultValue } = toRefs(props);
+const { name, variant, withoutMargin, disabled, isLoading, icon, info, label, value: defaultValue, showMandatoryStar } = toRefs(props);
 const isSubmitting = useIsSubmitting();
 const error = useFieldError(name.value);
 

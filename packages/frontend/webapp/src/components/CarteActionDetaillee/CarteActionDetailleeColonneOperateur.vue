@@ -2,12 +2,12 @@
     <div>
         <div class="ml-2">
             <Icon icon="user-circle" class="mr-1" />
-            <span class="text-dark font-bold">Opérateur</span><br />
-            <LinkOrganization
-                :to="`/structure/${operator_contact.organization.id}`"
-            >
-                {{ operator_contact.organization.name }}
-            </LinkOrganization>
+            <span class="text-dark font-bold">Opérateur(s)</span><br />
+            <p v-for="operator in operators" :key="operator.id">
+                <LinkOrganization :to="`/structure/${operator.id}`">
+                    {{ operator.abbreviation || operator.name }}
+                </LinkOrganization>
+            </p>
         </div>
     </div>
 </template>
@@ -17,9 +17,9 @@ import { defineProps, toRefs } from "vue";
 import { Icon, LinkOrganization } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
-    operator_contact: {
-        type: Object,
+    operators: {
+        type: Array,
     },
 });
-const { operator_contact } = toRefs(props);
+const { operators } = toRefs(props);
 </script>

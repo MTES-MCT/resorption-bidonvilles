@@ -8,14 +8,14 @@ export default async (req, res) => {
         const [
             averageCompletion,
             people,
-            plans,
+            actions,
             resorbedShantytowns,
             shantytowns,
             users,
         ] = await Promise.all([
             statsModel.averageCompletionPercentageByDepartement(),
             statsModel.numberOfPeopleByDepartement(),
-            statsModel.numberOfPlansByDepartement(),
+            statsModel.numberOfActionsByDepartement(),
             statsModel.numberOfResorbedShantytownByDepartement(),
             statsModel.numberOfShantytownByDepartement(),
             statsModel.numberOfUsersByDepartement(),
@@ -24,7 +24,7 @@ export default async (req, res) => {
         const result = Object.values(groupByKey([
             ...averageCompletion.map((r: any) => ({ Département: r.fk_departement, 'Taux de completion': `${(r.avg * 100).toFixed(2)}%` })),
             ...people.map((r: any) => ({ Département: r.fk_departement, 'Nombre habitants': r.total })),
-            ...plans.map((r: any) => ({ Département: r.fk_departement, 'Nombre d\'actions': r.total })),
+            ...actions.map((r: any) => ({ Département: r.fk_departement, 'Nombre d\'actions': r.total })),
             ...resorbedShantytowns.map((r: any) => ({ Département: r.fk_departement, 'Nombre de résorptions': r.total })),
             ...shantytowns.map((r: any) => ({ Département: r.fk_departement, 'Nombre de sites': r.total })),
             ...users.filter((r: any) => r.fk_departement !== null).map((r: any) => ({ Département: r.fk_departement, "Nombre d'utilisateurs": r.count })),

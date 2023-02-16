@@ -1,4 +1,5 @@
 import activate from './activate';
+import autocomplete from './autocomplete';
 import updateBeingFunded from './updateBeingFunded';
 import create from './create';
 import findAssociationName from './findAssociationName';
@@ -13,6 +14,7 @@ import getName from './getName';
 
 export default {
     activate,
+    autocomplete,
     updateBeingFunded,
     create,
     findAssociationName,

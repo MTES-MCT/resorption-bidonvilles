@@ -27,5 +27,12 @@ export const useConfigStore = defineStore("config", {
         unload() {
             this.config = null;
         },
+        setPermissions(permissions) {
+            if (!this.config?.user) {
+                return;
+            }
+
+            this.config.user.permissions = permissions;
+        },
     },
 });

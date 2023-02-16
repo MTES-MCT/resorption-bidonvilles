@@ -7,29 +7,24 @@
             </template>
 
             <template v-slot:col2>
-                {{ formatDate(plan.started_at / 1000, "d M y") }} ({{
-                    formatDateSince(plan.started_at / 1000)
+                {{ formatDate(action.started_at / 1000, "d M y") }} ({{
+                    formatDateSince(action.started_at / 1000)
                 }})
             </template>
         </FicheGrille>
 
-        <FicheGrille v-if="!plan.closed_at && plan.expected_to_end_at">
+        <FicheGrille v-if="action.ended_at">
             <template v-slot:col1>
-                <span class="font-bold">Fin prévue le</span>
+                <span class="font-bold">
+                    <template v-if="action.ended_at < Date.now()"
+                        >Terminée le</template
+                    >
+                    <template v-else>Fin prévue le</template>
+                </span>
             </template>
 
             <template v-slot:col2>
-                {{ formatDate(plan.expected_to_end_at / 1000, "d M y") }}
-            </template>
-        </FicheGrille>
-
-        <FicheGrille v-if="plan.closed_at">
-            <template v-slot:col1>
-                <span class="font-bold">Terminée le</span>
-            </template>
-
-            <template v-slot:col2>
-                {{ formatDate(plan.closed_at / 1000, "d M y") }}
+                {{ formatDate(action.ended_at / 1000, "d M y") }}
             </template>
         </FicheGrille>
     </section>
@@ -44,7 +39,7 @@ import FicheGrille from "@/components/FicheRubrique/FicheGrille.vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
-    plan: Object,
+    action: Object,
 });
-const { plan } = toRefs(props);
+const { action } = toRefs(props);
 </script>
