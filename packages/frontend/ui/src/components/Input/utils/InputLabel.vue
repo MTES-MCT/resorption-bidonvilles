@@ -1,8 +1,8 @@
 <template>
-    <div v-if="label" class="font-bold">{{ label }}
+    <div v-if="label" class="font-bold" :class="info && inlineInfo ? 'inline' : ''">{{ label }}
         <MandatoryStar class="ml-1" v-if="showMandatoryStar" />
     </div>
-    <div v-if="info" class="mb-3 text-G600">{{ info }}
+    <div v-if="info" class="mb-3 text-G600" :class="inlineInfo ? 'inline' : ''">{{ info }}
         <MandatoryStar class="ml-1" v-if="(showMandatoryStar && !label)" />
     </div>
 </template>
@@ -17,6 +17,11 @@ export default {
         },
         info: {
             type: String
+        },
+        inlineInfo: {
+            type: Boolean,
+            required: false,
+            default: false,
         },
         showMandatoryStar: {
             required: false,

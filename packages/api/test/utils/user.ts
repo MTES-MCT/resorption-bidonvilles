@@ -1,5 +1,8 @@
-export function serialized(override = {}) {
-    const defaultUser = {
+import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import { AuthUser } from '#server/middlewares/authMiddleware';
+
+export function serialized(override: Partial<SerializedUser> = {}): AuthUser {
+    const defaultUser: AuthUser = {
         id: 2,
         first_name: 'Jean',
         last_name: 'Dupont',
@@ -8,13 +11,13 @@ export function serialized(override = {}) {
         position: 'Mock',
         status: 'active',
         created_at: (new Date(2020, 0, 1, 0, 0, 0)).getTime() / 1000,
-        user_access: {
+        user_accesses: [{
             id: 2,
             sent_by: {
                 id: 1,
+                email: 'pierre@untel.fr',
                 first_name: 'Pierre',
                 last_name: 'Untel',
-                email: 'pierre.untel@gouv.fr',
                 position: 'Mock',
                 organization: {
                     id: 1,
@@ -24,7 +27,7 @@ export function serialized(override = {}) {
             created_at: (new Date(2020, 0, 1, 1, 0, 0)).getTime() / 1000,
             expires_at: (new Date(2020, 0, 8, 1, 0, 0)).getTime() / 1000,
             used_at: (new Date(2020, 0, 1, 2, 0, 0)).getTime() / 1000,
-        },
+        }],
         organization: {
             id: 2,
             name: 'Délégation Interministérielle à l\'Hébergement et à l\'Accès au Logement',
@@ -60,63 +63,119 @@ export function serialized(override = {}) {
         access_request_message: 'Demande d\'accès pour tests automatisés',
         permissions: {
             shantytown: {
-                create: { allowed: true, allow_all: true, allowed_on: null },
-                list: { allowed: true, allow_all: true, allowed_on: null },
-                read: { allowed: true, allow_all: true, allowed_on: null },
-                update: { allowed: true, allow_all: true, allowed_on: null },
-                close: { allowed: true, allow_all: true, allowed_on: null },
-                export: { allowed: true, allow_all: true, allowed_on: null },
+                create: {
+                    allowed: true, allow_all: true, allowed_on: null, is_writing: true,
+                },
+                list: {
+                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                },
+                read: {
+                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                },
+                update: {
+                    allowed: true, allow_all: true, allowed_on: null, is_writing: true,
+                },
+                close: {
+                    allowed: true, allow_all: true, allowed_on: null, is_writing: true,
+                },
+                export: {
+                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                },
             },
             shantytown_justice: {
-                access: { allowed: true, allow_all: true, allowed_on: null },
+                access: {
+                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                },
             },
             shantytown_comment: {
-                create: { allowed: true, allow_all: true, allowed_on: null },
-                list: { allowed: true, allow_all: true, allowed_on: null },
-                listPrivate: { allowed: true, allow_all: true, allowed_on: null },
+                create: {
+                    allowed: true, allow_all: true, allowed_on: null, is_writing: true,
+                },
+                list: {
+                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                },
+                listPrivate: {
+                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                },
             },
             plan: {
-                create: { allowed: true, allow_all: true, allowed_on: null },
-                list: { allowed: true, allow_all: true, allowed_on: null },
-                read: { allowed: true, allow_all: true, allowed_on: null },
+                create: {
+                    allowed: true, allow_all: true, allowed_on: null, is_writing: true,
+                },
+                list: {
+                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                },
+                read: {
+                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                },
                 update: {
                     allowed: true,
                     allow_all: false,
                     allowed_on: {
+                        regions: [],
+                        departements: [],
+                        epci: [],
+                        cities: [],
+                        shantytowns: [],
                         plans: [],
+                        actions: [],
                     },
+                    is_writing: true,
                 },
                 updateMarks: {
                     allowed: true,
                     allow_all: false,
                     allowed_on: {
+                        regions: [],
+                        departements: [],
+                        epci: [],
+                        cities: [],
+                        shantytowns: [],
                         plans: [],
+                        actions: [],
                     },
+                    is_writing: true,
                 },
                 close: {
                     allowed: true,
                     allow_all: false,
                     allowed_on: {
+                        regions: [],
+                        departements: [],
+                        epci: [],
+                        cities: [],
+                        shantytowns: [],
                         plans: [],
+                        actions: [],
                     },
+                    is_writing: true,
                 },
             },
             user: {},
             stats: {},
             plan_finances: {
-                access: { allowed: true, allow_all: true, allowed_on: null },
+                access: {
+                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                },
             },
             covid_comment: {
-                list: { allowed: true, allow_all: true, allowed_on: null },
+                list: {
+                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                },
             },
         },
+        admin_comments: null,
+        email_subscriptions: [],
         permission_options: [],
+        last_access: Date.now() / 1000,
         last_version: '0.0.0',
         last_changelog: '0.0.0',
-        isAllowedTo: undefined,
+        isAllowedTo(feature, entity) {
+            return defaultUser.permissions && defaultUser.permissions[entity] && defaultUser.permissions[entity][feature] && defaultUser.permissions[entity][feature].allowed === true;
+        },
     };
-
-    defaultUser.isAllowedTo = (feature, entity) => defaultUser.permissions && defaultUser.permissions[entity] && defaultUser.permissions[entity][feature] && defaultUser.permissions[entity][feature].allowed === true;
 
     return Object.assign(defaultUser, override);
 }
+
+export default serialized;

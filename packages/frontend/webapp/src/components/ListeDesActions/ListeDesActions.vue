@@ -3,15 +3,15 @@
         <TabList :tabs="tabs" v-model="currentTab" class="mb-4" />
         <ListeDesActionsHeader />
 
-        <Loading v-if="plansStore.isLoading !== false" />
-        <ListeDesActionsErreur v-else-if="plansStore.error" />
+        <Loading v-if="actionsStore.isLoading !== false" />
+        <ListeDesActionsErreur v-else-if="actionsStore.error" />
 
         <template v-else>
             <ListeDesActionsStatistiques />
             <ListeDesActionsFiltres class="mt-4" />
             <ListeDesActionsListe
                 class="mt-4"
-                v-if="plansStore.filteredPlans.length > 0"
+                v-if="actionsStore.filteredActions.length > 0"
             />
 
             <ListeDesActionsVide v-else class="mt-10" />
@@ -21,7 +21,7 @@
 
 <script setup>
 import { computed } from "vue";
-import { usePlansStore } from "@/stores/plans.store";
+import { useActionsStore } from "@/stores/actions.store";
 import { TabList } from "@resorptionbidonvilles/ui";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import Loading from "@/components/Loading/Loading.vue";
@@ -32,15 +32,18 @@ import ListeDesActionsFiltres from "./ListeDesActionsFiltres.vue";
 import ListeDesActionsListe from "./ListeDesActionsListe.vue";
 import ListeDesActionsVide from "./ListeDesActionsVide.vue";
 
-const plansStore = usePlansStore();
+const actionsStore = useActionsStore();
 
-const tabs = [{ id: "open", label: "Actions existantes" }];
+const tabs = [
+    { id: "open", label: "Actions en cours" },
+    { id: "closed", label: "Actions terminées" },
+];
 const currentTab = computed({
     get() {
-        return plansStore.filters.status;
+        return actionsStore.filters.status;
     },
     set(newValue) {
-        plansStore.filters.status = newValue;
+        actionsStore.filters.status = newValue;
     },
 });
 </script>

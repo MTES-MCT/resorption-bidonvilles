@@ -19,7 +19,7 @@
                 class="mb-8"
             />
             <FicheSiteActions
-                v-if="town.plans.length"
+                v-if="town.actions.length"
                 :town="town"
                 id="actions"
                 class="mb-8"

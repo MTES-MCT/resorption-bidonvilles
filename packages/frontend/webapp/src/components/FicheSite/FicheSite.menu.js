@@ -20,7 +20,7 @@ export default [
         label: () => "Actions",
         route: "#actions",
         condition(town) {
-            return town.plans.length > 0;
+            return town.actions.length > 0;
         },
     },
     {

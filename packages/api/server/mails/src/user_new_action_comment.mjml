@@ -1,0 +1,42 @@
+<mjml>
+  <mj-head>
+    <mj-title>[Résorption-bidonvilles] - Nouveau message action "{{var:action.name}}"</mj-title>
+    <mj-include path='common/attributes.mjml' />
+    <mj-include path='common/styles.mjml' />
+  </mj-head>
+  <mj-body mj-class='bg-white'>
+    <mj-include path='common/hero.mjml' />
+
+    <mj-section>
+      <mj-column>
+        <mj-text mj-class="pb-4">Bonjour,</mj-text>
+        <mj-text>
+          Un nouveau message a été publié par {{var:createdBy.name}} ({{var:createdBy.organization}}) sur l'action {{var:actionUrl}}.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section mj-class="pb-4">
+      <mj-column padding="1rem" background-color="#dddddd">
+        <mj-text>{{var:comment}}</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-button href="{{var:messageUrl}}" mj-class="button-primary" rel="noopener noreferrer">Voir le message</mj-button><br />
+        <mj-button href="{{var:annuaireUrl}}" mj-class="button-secondary" padding="0 0 2rem 0" rel="noopener noreferrer">Contacter {{var:createdBy.name}}</mj-button>
+        <mj-text mj-class="pb-4">
+          En tant que personne concernée par l'action, vous êtes informé(e) en temps réel de tout nouveau message.<br />
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text>
+          Ce mail a été envoyé aux opérateurs ou services en charge de l'action et aux acteurs en DDETS et Préfecture.</a>.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-include path='common/footer.mjml' />
+    <mj-include path='common/unsubscribe_push_mails.mjml' />
+  </mj-body>
+</mjml>

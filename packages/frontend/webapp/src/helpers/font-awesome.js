@@ -35,12 +35,14 @@ import {
     faFile,
     faFileExcel,
     faFilePdf,
+    faFileSignature,
     faFileWord,
     faFlag,
     faHandshakeAngle,
     faHistory,
     faHome,
     faHouseCircleXmark,
+    faHouseUser,
     faKey,
     faLock,
     faMagnifyingGlass,
@@ -48,6 +50,7 @@ import {
     faMapPin,
     faMapMarkerAlt,
     faMinus,
+    faNotesMedical,
     faPaperPlane,
     faPen,
     faPencilAlt,
@@ -58,6 +61,7 @@ import {
     faQuestion,
     faRotateLeft,
     faRotateRight,
+    faSchool,
     faScroll,
     faSpinner,
     faTent,
@@ -130,12 +134,14 @@ library.add(faFacebook);
 library.add(faFile);
 library.add(faFileExcel);
 library.add(faFilePdf);
+library.add(faFileSignature);
 library.add(faFileWord);
 library.add(faFlag);
 library.add(faHandshakeAngle);
 library.add(faHistory);
 library.add(faHome);
 library.add(faHouseCircleXmark);
+library.add(faHouseUser);
 library.add(faKey);
 library.add(faLock);
 library.add(faLinkedin);
@@ -145,6 +151,7 @@ library.add(faMapPin);
 library.add(faMapMarkerAlt);
 library.add(faMinus);
 library.add(faNewspaper);
+library.add(faNotesMedical);
 library.add(faPaperPlane);
 library.add(faPen);
 library.add(faPencilAlt);
@@ -155,6 +162,7 @@ library.add(faPlus);
 library.add(faQuestion);
 library.add(faRotateLeft);
 library.add(faRotateRight);
+library.add(faSchool);
 library.add(faScroll);
 library.add(faSpinner);
 library.add(faSun);

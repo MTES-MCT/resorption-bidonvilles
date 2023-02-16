@@ -18,16 +18,16 @@
 <script setup>
 import { defineProps, toRefs, ref } from "vue";
 import { useForm } from "vee-validate";
-import { usePlansStore } from "@/stores/plans.store";
+import { useActionsStore } from "@/stores/actions.store";
 import schema from "./FicheActionJournalFormNouveauMessage.schema";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
 import FormNouveauMessageInputMessage from "./inputs/FormNouveauMessageInputMessage.vue";
 
 const props = defineProps({
-    plan: Object,
+    action: Object,
 });
-const { plan } = toRefs(props);
+const { action } = toRefs(props);
 
 const { handleSubmit, setErrors, resetForm } = useForm({
     validationSchema: schema,
@@ -38,8 +38,8 @@ const submit = handleSubmit(async (values) => {
     error.value = null;
 
     try {
-        const plansStore = usePlansStore();
-        await plansStore.addComment(plan.value.id, {
+        const actionsStore = useActionsStore();
+        await actionsStore.addComment(action.value.id, {
             description: values.comment,
         });
 

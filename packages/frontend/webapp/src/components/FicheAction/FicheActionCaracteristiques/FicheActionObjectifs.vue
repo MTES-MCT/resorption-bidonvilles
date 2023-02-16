@@ -5,9 +5,9 @@
             <span class="font-bold">Objectifs de l'intervention</span>
         </p>
         <p class="whitespace-pre-line">
-            <template v-if="showAll">{{ plan.goals }}</template>
+            <template v-if="showAll">{{ action.goals }}</template>
             <template v-else>
-                {{ plan.goals.substr(0, 300) }} [...]<br /><br />
+                {{ action.goals.substr(0, 300) }} [...]<br /><br />
                 <Link withStyle @click="showAll = true"
                     >[...] Lire la suite</Link
                 >
@@ -23,8 +23,8 @@ import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue"
 import { Icon, Link } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
-    plan: Object,
+    action: Object,
 });
-const { plan } = toRefs(props);
-const showAll = ref(plan.value.goals.length < 300);
+const { action } = toRefs(props);
+const showAll = ref(action.value.goals.length < 300);
 </script>

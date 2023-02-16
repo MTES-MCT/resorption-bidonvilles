@@ -21,7 +21,7 @@ export default {
             },
             {
                 label: "Nouveaux messages action",
-                value: "planComment",
+                value: "actionComment",
             },
             {
                 label: "Nouveaux utilisateurs",

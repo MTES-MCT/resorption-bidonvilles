@@ -27,10 +27,14 @@ describe('shantytownModel.update()', () => {
             const editor = generateUser({
                 permissions: {
                     shantytown: {
-                        update: { allowed: true },
+                        update: {
+                            allowed: true, is_writing: true, allow_all: true, allowed_on: null,
+                        },
                     },
                     shantytown_justice: {
-                        access: { allowed: false },
+                        access: {
+                            allowed: false, is_writing: false, allow_all: false, allowed_on: null,
+                        },
                     },
                 },
             });

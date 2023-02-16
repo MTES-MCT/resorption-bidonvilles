@@ -3,6 +3,7 @@ import * as Sentry from '@sentry/node';
 import config from '#server/config';
 import userModelUpdate from '#server/models/userModel/update';
 import userModelFindOne from '#server/models/userModel/findOne';
+import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
 
 const { auth: authConfig } = config;
 
@@ -10,6 +11,10 @@ type AuthenticateErrorDetails = {
     code: number,
     user_message: string,
 };
+
+export interface AuthUser extends SerializedUser {
+    isAllowedTo: Function
+}
 
 class AuthenticateError extends Error {
     details: AuthenticateErrorDetails;
@@ -22,6 +27,12 @@ class AuthenticateError extends Error {
     }
 }
 
+const MAGIC_TOKENS = {
+    national_admin: {
+        userId: 1,
+    },
+};
+
 async function authenticateUser(req) {
     const token = (req.headers && req.headers['x-access-token']) || req.query.accessToken;
 
@@ -33,13 +44,17 @@ async function authenticateUser(req) {
     }
 
     let decoded;
-    try {
-        decoded = jwt.verify(token, authConfig.secret);
-    } catch (error) {
-        throw new AuthenticateError({
-            code: 2,
-            user_message: 'Votre session a expiré',
-        });
+    if (process.env.NODE_ENV === 'dev' && MAGIC_TOKENS[token] !== undefined) {
+        decoded = MAGIC_TOKENS[token];
+    } else {
+        try {
+            decoded = jwt.verify(token, authConfig.secret);
+        } catch (error) {
+            throw new AuthenticateError({
+                code: 2,
+                user_message: 'Votre session a expiré',
+            });
+        }
     }
 
     const user = await userModelFindOne(decoded.userId, {
@@ -60,7 +75,7 @@ async function authenticateUser(req) {
         });
     }
 
-    Sentry.setUser({ id: user.id });
+    Sentry.setUser({ id: `${user.id}` });
 
     const now = new Date();
     await userModelUpdate(user.id, {

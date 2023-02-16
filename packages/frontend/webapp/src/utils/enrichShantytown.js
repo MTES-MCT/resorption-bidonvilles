@@ -106,7 +106,7 @@ export default function (shantytown, fieldTypes) {
     const statusSince = statusDate ? formatDateSince(statusDate) : "";
 
     // closing solutions
-    const totalSolutions = shantytown.closingSolutions.reduce(
+    const totalSolutions = (shantytown.closingSolutions || []).reduce(
         (total, solution) => {
             if (!solution.householdsAffected) {
                 return total;

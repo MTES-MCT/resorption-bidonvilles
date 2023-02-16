@@ -8,24 +8,22 @@
         <template v-slot:actions>
             <p class="flex space-x-2">
                 <Button
-                    v-if="userStore.hasPermission('plan.export')"
+                    v-if="exportList.length > 0"
                     icon="file-excel"
                     iconPosition="left"
                     variant="primary"
                     @click="openModalExport"
-                    size="sm"
+                    size="md"
                     >Exporter</Button
                 >
                 <Button
-                    v-if="userStore.hasPermission('plan.create')"
+                    v-if="userStore.hasPermission('action.create')"
                     type="button"
-                    href="/action/nouvelle"
-                    disabled
-                    @click="unavailable"
+                    href="/action/nouveau"
                     icon="plus"
                     iconPosition="left"
                     variant="secondary"
-                    size="sm"
+                    size="md"
                 >
                     Déclarer une nouvelle action
                 </Button>
@@ -37,9 +35,9 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
-import exportList from "./ListeDesActions.exports";
+import { exportComments, exportActions } from "@/api/actions.api";
 
 import { Button } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
@@ -52,9 +50,25 @@ function openModalExport() {
     modalExport.value.open();
 }
 
-function unavailable() {
-    alert(
-        "Ce formulaire est temporairement indisponible, pour des raisons techniques"
-    );
-}
+const exportList = computed(() => {
+    const list = [];
+
+    if (userStore.hasPermission("action.export")) {
+        list.push({
+            label: "Export des actions",
+            filename: "actions",
+            downloadFn: exportActions,
+        });
+    }
+
+    if (userStore.hasPermission("action_comment.export")) {
+        list.push({
+            label: "Export des commentaires",
+            filename: "messages",
+            downloadFn: exportComments,
+        });
+    }
+
+    return list;
+});
 </script>

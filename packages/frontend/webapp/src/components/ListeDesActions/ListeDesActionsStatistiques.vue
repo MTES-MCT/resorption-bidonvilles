@@ -7,9 +7,19 @@
             <div>
                 <h1 class="text-3xl text-info font-bold">{{ title }}</h1>
                 <p>
-                    {{ plansStore.filteredPlans.length }}
-                    action<template v-if="plansStore.filteredPlans.length > 1"
+                    {{ actionsStore.filteredActions.length }}
+                    action<template
+                        v-if="actionsStore.filteredActions.length > 1"
                         >s</template
+                    >
+                    <template v-if="actionsStore.filters.status === 'open'"
+                        >&nbsp;en cours</template
+                    >
+                    <template v-else
+                        >&nbsp;terminée<template
+                            v-if="actionsStore.filteredActions.length > 1"
+                            >s</template
+                        ></template
                     >
                 </p>
             </div>
@@ -19,12 +29,12 @@
 
 <script setup>
 import { toRefs, computed } from "vue";
-import { usePlansStore } from "@/stores/plans.store";
+import { useActionsStore } from "@/stores/actions.store";
 import computeLocationSearchTitle from "@/utils/computeLocationSearchTitle";
 import MiniCarte from "@/components/MiniCarte/MiniCarte.vue";
 
-const plansStore = usePlansStore();
-const { location, search } = toRefs(plansStore.filters);
+const actionsStore = useActionsStore();
+const { location, search } = toRefs(actionsStore.filters);
 
 const mapLocation = computed(() => {
     return location.value || { typeUid: "nation" };

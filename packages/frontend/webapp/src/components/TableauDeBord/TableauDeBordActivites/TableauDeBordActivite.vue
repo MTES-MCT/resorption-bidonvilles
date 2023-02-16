@@ -29,8 +29,8 @@
                     >
                 </span>
             </p>
-            <p class="mt-1" v-if="activity.plan">
-                <span class="font-bold">{{ activity.plan.name }}</span>
+            <p class="mt-1" v-if="activity.actionEntity">
+                <span class="font-bold">{{ activity.actionEntity.name }}</span>
             </p>
             <TagObjectifResorption
                 v-if="resorptionTarget"
@@ -164,7 +164,7 @@ const subtitle = computed(() => {
                 return "";
             }
 
-            if (activity.value.plan) {
+            if (activity.value.actionEntity) {
                 return "dans le journal de l'action";
             }
 
@@ -246,7 +246,7 @@ const iconColor = computed(() => {
                 return colors.red;
             }
 
-            if (activity.value.plan) {
+            if (activity.value.actionEntity) {
                 return colors.green;
             }
 
@@ -277,8 +277,10 @@ function routeToDetails() {
     if (activity.value.entity === "comment") {
         if (activity.value.highCovidComment) {
             return router.push("/covid-19");
-        } else if (activity.value.plan) {
-            return router.push(`/action/${activity.value.plan.id}/#comment`);
+        } else if (activity.value.actionEntity) {
+            return router.push(
+                `/action/${activity.value.actionEntity.id}/#comment`
+            );
         } else {
             return router.push(
                 `/site/${activity.value.shantytown.id}#message${activity.value.comment.id}`

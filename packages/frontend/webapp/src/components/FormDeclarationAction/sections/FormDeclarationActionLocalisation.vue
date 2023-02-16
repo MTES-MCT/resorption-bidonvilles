@@ -1,0 +1,30 @@
+<template>
+    <FormSection id="lieu">
+        <template v-slot:title>Lieu</template>
+
+        <FormParagraph :title="labels.location_type" showMandatoryStar>
+            <InputLocationDepartement />
+            <InputLocationType />
+            <InputLocationAutre v-if="values.location_type === 'autre'" />
+            <InputLocationETI v-else-if="values.location_type === 'eti'" />
+            <InputLocationShantytowns
+                v-else-if="values.location_type === 'sur_site'"
+            />
+        </FormParagraph>
+    </FormSection>
+</template>
+
+<script setup>
+import { useFormValues } from "vee-validate";
+import FormSection from "@/components/FormSection/FormSection.vue";
+import FormParagraph from "@/components/FormParagraph/FormParagraph.vue";
+import labels from "../FormDeclarationAction.labels";
+
+import InputLocationType from "../inputs/FormDeclarationActionInputLocationType.vue";
+import InputLocationDepartement from "../inputs/FormDeclarationActionInputLocationDepartement.vue";
+import InputLocationAutre from "../inputs/FormDeclarationActionInputLocationAutre.vue";
+import InputLocationETI from "../inputs/FormDeclarationActionInputLocationETI.vue";
+import InputLocationShantytowns from "../inputs/FormDeclarationActionInputLocationShantytowns.vue";
+
+const values = useFormValues();
+</script>

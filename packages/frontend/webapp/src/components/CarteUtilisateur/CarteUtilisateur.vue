@@ -2,9 +2,8 @@
     <CarteUtilisateurWrapper
         :user="user"
         :linkToUser="linkToUser"
-        class="border p-4 grid grid-cols-2 gap-8"
+        class="hover:bg-blue200 border p-4 grid grid-cols-2 gap-8"
         :class="{
-            'hover:bg-blue200': userStore.hasPermission('user.read'),
             'bg-blue100': user.is_admin,
         }"
     >
@@ -39,7 +38,6 @@
 <script setup>
 import { defineProps, toRefs } from "vue";
 import { trackEvent } from "@/helpers/matomo";
-import { useUserStore } from "@/stores/user.store";
 import { Icon, Link } from "@resorptionbidonvilles/ui";
 import CarteUtilisateurWrapper from "./CarteUtilisateurWrapper.vue";
 import CarteUtilisateurDetailsIcon from "./CarteUtilisateurDetailsIcon.vue";
@@ -56,7 +54,6 @@ const props = defineProps({
     },
 });
 const { user, linkToUser } = toRefs(props);
-const userStore = useUserStore();
 
 function trackEmail(event) {
     event.stopPropagation();

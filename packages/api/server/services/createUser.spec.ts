@@ -10,14 +10,15 @@ chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
 // stubs
+const sandbox = sinon.createSandbox();
 const sequelize = {
-    transaction: sinon.stub(),
+    transaction: sandbox.stub(),
 };
 const mattermostUtils = {
-    triggerNotifyNewUserFromRectorat: sinon.stub(),
+    triggerNotifyNewUserFromRectorat: sandbox.stub(),
 };
 const userModel = {
-    findOne: sinon.stub(),
+    findOne: sandbox.stub(),
 };
 
 rewiremock('#db/sequelize').with({ sequelize });
@@ -31,7 +32,7 @@ rewiremock.disable();
 
 describe('userService.createUser()', () => {
     afterEach(() => {
-        sinon.reset();
+        sandbox.reset();
     });
 
     it('envoie une notification mattermost lorsqu\'un utilisateur de rectorat est créé', async () => {

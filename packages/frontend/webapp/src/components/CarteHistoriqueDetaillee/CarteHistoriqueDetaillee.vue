@@ -5,7 +5,7 @@
         @mouseleave="isHover = false"
     >
         <ModaleModerationCommentaire
-            v-if="activity.comment && !activity.plan"
+            v-if="activity.comment && !activity.actionEntity"
             ref="moderationModal"
             :comment="activity.comment"
         />
@@ -47,10 +47,10 @@
                     >
                 </p>
 
-                <p v-if="activity.plan">
+                <p v-if="activity.actionEntity">
                     action :
-                    <Link :to="`/action/${activity.plan.id}`">{{
-                        activity.plan.name
+                    <Link :to="`/action/${activity.actionEntity.id}`">{{
+                        activity.actionEntity.name
                     }}</Link>
                 </p>
             </header>
@@ -147,7 +147,7 @@ const title = computed(() => {
                 return "Nouveau message Covid-19";
             }
 
-            if (activity.value.plan) {
+            if (activity.value.actionEntity) {
                 return "Nouveau message action";
             }
 
@@ -192,7 +192,7 @@ const colors = computed(() => {
         };
     }
 
-    if (activity.value.plan) {
+    if (activity.value.actionEntity) {
         return {
             text: "text-green600",
             bg: "bg-green500",
@@ -207,8 +207,8 @@ const colors = computed(() => {
 
 const link = computed(() => {
     if (activity.value.entity === "comment") {
-        if (activity.value.plan) {
-            return `/action/${activity.value.plan.id}#journal_de_l_action`;
+        if (activity.value.actionEntity) {
+            return `/action/${activity.value.actionEntity.id}#journal_de_l_action`;
         }
 
         return `/site/${activity.value.shantytown.id}#message${activity.value.comment.id}`;
@@ -223,7 +223,7 @@ const link = computed(() => {
 
 const showModerationButton = computed(() => {
     // on vérifie que l'activité en question est modérable (= un commentaire de site)
-    if (activity.value.entity !== "comment" || activity.value.plan) {
+    if (activity.value.entity !== "comment" || activity.value.actionEntity) {
         return false;
     }
 

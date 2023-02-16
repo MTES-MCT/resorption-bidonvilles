@@ -1,7 +1,7 @@
 <template>
     <ViewError>
         <template v-slot:title>Liste des actions indisponible</template>
-        <template v-slot:code>{{ plansStore.error }}</template>
+        <template v-slot:code>{{ actionsStore.error }}</template>
         <template v-slot:content
             >Vous souhaitiez accéder à la liste des actions mais la collecte des
             données a échoué. Vous pouvez réessayer un peu plus tard ou nous
@@ -12,7 +12,7 @@
                 icon="rotate-right"
                 iconPosition="left"
                 type="button"
-                @clicked="plansStore.fetchPlans"
+                @clicked="actionsStore.fetchActions"
                 >Réessayer</Button
             >
             <ButtonContact />
@@ -24,6 +24,6 @@
 import { Button } from "@resorptionbidonvilles/ui";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 import ViewError from "@/components/ViewError/ViewError.vue";
-import { usePlansStore } from "@/stores/plans.store";
-const plansStore = usePlansStore();
+import { useActionsStore } from "@/stores/actions.store";
+const actionsStore = useActionsStore();
 </script>

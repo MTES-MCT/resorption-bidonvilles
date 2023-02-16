@@ -7,6 +7,7 @@ import mailsUtils from '#server/mails/mails';
 
 import userModel from '#server/models/userModel';
 import contactFormReferralModel from '#server/models/contactFormReferralModel';
+import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
 
 const { toString: dateToString } = dateUtils;
 const { sendAdminContactMessage, sendContactNewsletterRegistration } = mailsUtils;
@@ -77,25 +78,26 @@ export default async (req, res, next) => {
     // user creation
     if (request_type.includes('access-request') && is_actor) {
         // create the user
-        const result = await userService.create({
-            last_name,
-            first_name,
-            email,
-            phone,
-            organization: req.body.organization_full
-                ? req.body.organization_full.id
-                : null,
-            new_association: req.body.new_association === true,
-            new_association_name: req.body.new_association_name || null,
-            new_association_abbreviation:
-                req.body.new_association_abbreviation || null,
-            departement: req.body.departement || null,
-            position: req.body.position,
-            access_request_message,
-        });
-
-        if (result.error) {
-            return res.status(result.error.code).send(result.error.response);
+        let result: SerializedUser;
+        try {
+            result = await userService.create({
+                last_name,
+                first_name,
+                email,
+                phone,
+                organization: req.body.organization_full
+                    ? req.body.organization_full.id
+                    : null,
+                new_association: req.body.new_association === true,
+                new_association_name: req.body.new_association_name || null,
+                new_association_abbreviation:
+                    req.body.new_association_abbreviation || null,
+                departement: req.body.departement || null,
+                position: req.body.position,
+                access_request_message,
+            });
+        } catch (error) {
+            return res.status(500).send('Une erreur est survenue lors de l\'écriture en base de données');
         }
 
         try {

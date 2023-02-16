@@ -5,7 +5,8 @@ export default async (code) => {
     const departement = await sequelize.query(
         `SELECT
             departements.code AS code,
-            departements.name AS name
+            departements.name AS name,
+            departements.fk_region AS region
         FROM departements
         WHERE code = :code`,
         {

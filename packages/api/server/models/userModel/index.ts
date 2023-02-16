@@ -1,3 +1,4 @@
+import autocomplete from './autocomplete';
 import create from './create';
 import deactivate from './deactivate';
 import deleteUser from './delete';
@@ -18,7 +19,7 @@ import getHistory from './getHistory';
 import getLocationWatchers from './getLocationWatchers';
 import getNationalAdmins from './_common/getNationalAdmins';
 import getShantytownWatchers from './getShantytownWatchers';
-import getPlanObservers from './getPlanObservers';
+import getActionObservers from './getActionObservers';
 import isTracked from './isTracked';
 import listExport from './listExport';
 import setPermissionOptions from './setPermissionOptions';
@@ -26,6 +27,7 @@ import update from './update';
 import upgradeLocalAdmin from './upgradeLocalAdmin';
 
 export default {
+    autocomplete,
     create,
     deactivate,
     delete: deleteUser,
@@ -46,7 +48,7 @@ export default {
     getLocationWatchers,
     getNationalAdmins,
     getShantytownWatchers,
-    getPlanObservers,
+    getActionObservers,
     isTracked,
     listExport,
     setPermissionOptions,

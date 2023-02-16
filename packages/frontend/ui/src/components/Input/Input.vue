@@ -7,18 +7,23 @@
             <input :id="id" v-bind="filteredProps" :class="classes" :data-cy-field="cypressName" :step="step"
                 :disabled="disabled" ref="input" @blur="$emit('blur', $event)" @change="setValue($refs.input.value)" />
             <InputIcon position="after" v-if="(clear && currentValue) || suffixIcon || $slots.suffix">
-                <slot name="suffix">
+                <slot name="suffix" v-if="$slots.suffix" />
+                <template v-else>
                     <span v-if="clear" @click="$emit('clear')" class="cursor-pointer hover:text-G800 text-sm text-G500">
                         <Icon icon="fa-trash-alt fa-regular" />
                         Vider
                     </span>
 
                     <Icon :icon="suffixIcon" :spin="spinSuffixIcon" v-if="suffixIcon" />
-                </slot>
+                </template>
             </InputIcon>
             <slot />
+            <ToolTip v-if="inlineError && errors.length" :tip="errors[0]"
+                class="inline-block ml-2 text-red text-sm cursor-pointer">
+                <Icon icon="triangle-exclamation" /> Voir l'erreur
+            </ToolTip>
         </div>
-        <InputError v-if="errors.length">{{ errors[0] }}</InputError>
+        <InputError v-if="!inlineError && errors.length">{{ errors[0] }}</InputError>
     </InputWrapper>
 </template>
 
@@ -29,6 +34,7 @@ import InputLabel from "./utils/InputLabel.vue";
 import InputWrapper from "./utils/InputWrapper.vue";
 import InputError from "./utils/InputError.vue";
 import InputIcon from "./utils/InputIcon.vue";
+import ToolTip from "../ToolTip.vue";
 import getInputClasses from "./utils/getInputClasses";
 
 export default {
@@ -110,6 +116,16 @@ export default {
         autocomplete: {
             type: String,
             required: false
+        },
+        size: {
+            type: String,
+            required: false,
+            default: "md"
+        },
+        inlineError: {
+            type: Boolean,
+            required: false,
+            default: false,
         }
     },
     computed: {
@@ -118,13 +134,15 @@ export default {
                 error: !!this.errors.length,
                 prefixIcon: this.prefixIcon,
                 suffixIcon: this.suffixIcon,
-                clear: this.clear
+                clear: this.clear,
+                size: this.size,
             };
 
             return {
                 state: [...getInputClasses("state", inputOptions)],
                 default: getInputClasses("default", inputOptions),
-                filter: getInputClasses("filter", inputOptions)
+                filter: getInputClasses("filter", inputOptions),
+                minimal: getInputClasses("minimal", inputOptions),
             }[this.variant];
         }
     },
@@ -133,7 +151,8 @@ export default {
         InputWrapper,
         InputError,
         InputIcon,
-        Icon
+        Icon,
+        ToolTip,
     },
     data() {
         return {

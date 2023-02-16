@@ -1,3 +1,11 @@
+// action
+import actionCreate from './actionController/create';
+import actionCreateComment from './actionController/createComment';
+import actionExportActions from './actionController/exportActions';
+import actionExportComments from './actionController/exportComments';
+import actionFetchOne from './actionController/fetchOne';
+import actionList from './actionController/list';
+import actionUpdate from './actionController/update';
 // config
 import configList from './configController/list';
 // contact
@@ -25,7 +33,7 @@ import organizationCategories from './organizationController/categories';
 import organizationGetByCategory from './organizationController/getByCategory';
 import organizationGetByType from './organizationController/getByType';
 import organizationGetMembers from './organizationController/getMembers';
-import organizationSearch from './organizationController/search';
+import organizationSearch from './organizationController/search/search';
 import organizationTypes from './organizationController/types';
 import organizationUpdateBeingFunded from './organizationController/updateBeingFunded';
 // plan
@@ -87,6 +95,15 @@ import exportMobileUserNavigationLogs from './userNavigationLogsController/expor
 import exportWebappUserNavigationLogs from './userNavigationLogsController/exportWebappSessions';
 
 export default () => ({
+    action: {
+        create: actionCreate,
+        createComment: actionCreateComment,
+        exportActions: actionExportActions,
+        exportComments: actionExportComments,
+        fetchOne: actionFetchOne,
+        list: actionList,
+        update: actionUpdate,
+    },
     config: {
         list: configList,
     },

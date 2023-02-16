@@ -26,6 +26,10 @@ export default function getInputClasses(variant, inputOptions = {}) {
             "border border-primary px-2 w-full rounded outline-none leading-7 hover",
             prefixIcon && "pl-10",
             suffixIcon && "pr-10"
-        ]
+        ],
+        minimal: [
+            "border border-white py-1 px-1 outline-none focus:border-primary hover:border-inputHover",
+            size === "sm" ? "text-xs" : "",
+        ],
     }[variant];
 }

@@ -5,8 +5,8 @@
                 <h1 class="text-3xl text-green mb-8">
                     <Icon icon="comment" /> Journal de l'action
                     <span
-                        >— {{ plan.comments.length }} message{{
-                            plan.comments.length > 1 ? "s" : ""
+                        >— {{ action.comments.length }} message{{
+                            action.comments.length > 1 ? "s" : ""
                         }}</span
                     >
                 </h1>
@@ -15,16 +15,15 @@
 
         <FicheJournalLayout
             v-if="
-                userStore.hasLocalizedPermission('plan_comment.create', plan) &&
-                !plan.closed_at
+                userStore.hasActionPermission('action_comment.create', action)
             "
         >
             <template v-slot:aside>
-                <FicheActionJournalAside :plan="plan" />
+                <FicheActionJournalAside />
             </template>
             <template v-slot:body>
                 <FicheActionJournalFormNouveauMessage
-                    :plan="plan"
+                    :action="action"
                     class="mb-12"
                 />
             </template>
@@ -33,13 +32,13 @@
         <FicheJournalLayout>
             <template v-slot:body>
                 <h1 class="text-lg font-bold mb-2">
-                    {{ plan.comments.length }} message{{
-                        plan.comments.length > 1 ? "s" : ""
+                    {{ action.comments.length }} message{{
+                        action.comments.length > 1 ? "s" : ""
                     }}
                 </h1>
                 <FicheActionJournalListeDesMessages
-                    :comments="plan.comments"
-                    v-if="plan.comments.length > 0"
+                    :comments="action.comments"
+                    v-if="action.comments.length > 0"
                 />
                 <template v-else
                     >Le journal de l'action ne contient aucun message pour le
@@ -61,8 +60,8 @@ import FicheActionJournalFormNouveauMessage from "./FicheActionJournalFormNouvea
 import FicheActionJournalListeDesMessages from "./FicheActionJournalListeDesMessages.vue";
 
 const props = defineProps({
-    plan: Object,
+    action: Object,
 });
-const { plan } = toRefs(props);
+const { action } = toRefs(props);
 const userStore = useUserStore();
 </script>

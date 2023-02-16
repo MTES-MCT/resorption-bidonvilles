@@ -2,29 +2,29 @@
     <div>
         <section class="flex flex-col space-y-4">
             <CarteActionDetaillee
-                v-for="plan in plansStore.currentPage.content"
-                :key="plan.id"
-                :plan="plan"
+                v-for="action in actionsStore.currentPage.content"
+                :key="action.id"
+                :action="action"
             />
         </section>
         <BottomPagination
-            :from="plansStore.currentPage.from"
-            :to="plansStore.currentPage.to"
-            :total="plansStore.filteredPlans.length"
-            :currentPage="plansStore.currentPage.index"
-            :numberOfPages="plansStore.numberOfPages"
+            :from="actionsStore.currentPage.from"
+            :to="actionsStore.currentPage.to"
+            :total="actionsStore.filteredActions.length"
+            :currentPage="actionsStore.currentPage.index"
+            :numberOfPages="actionsStore.numberOfPages"
             @pagechange="changePage"
         />
     </div>
 </template>
 
 <script setup>
-import { usePlansStore } from "@/stores/plans.store";
+import { useActionsStore } from "@/stores/actions.store";
 import { BottomPagination } from "@resorptionbidonvilles/ui";
 import CarteActionDetaillee from "@/components/CarteActionDetaillee/CarteActionDetaillee.vue";
 
-const plansStore = usePlansStore();
+const actionsStore = useActionsStore();
 function changePage(page) {
-    plansStore.currentPage.index = page;
+    actionsStore.currentPage.index = page;
 }
 </script>
