@@ -77,9 +77,6 @@ export const useQuestionsStore = defineStore("questions", () => {
         isLoading.value = true;
         error.value = null;
         try {
-            await new Promise((s, f) => {
-                setTimeout(f, 5000);
-            });
             const rawQuestions = await getQuestions();
             questions.value = rawQuestions;
             hash.value = questions.value.reduce((hash, question) => {

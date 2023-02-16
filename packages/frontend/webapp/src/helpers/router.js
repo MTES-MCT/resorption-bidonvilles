@@ -152,6 +152,7 @@ const router = createRouter({
             meta: {
                 authRequirement: "signedIn",
                 navTab: "communaute",
+                communauteTab: "annuaire",
             },
         },
 
@@ -161,6 +162,7 @@ const router = createRouter({
             meta: {
                 authRequirement: "signedIn",
                 navTab: "communaute",
+                communauteTab: "communaute",
             },
         },
         {
@@ -187,6 +189,7 @@ const router = createRouter({
             meta: {
                 authRequirement: "signedIn",
                 navTab: "communaute",
+                communauteTab: "communaute",
             },
         },
         {
@@ -354,6 +357,7 @@ const router = createRouter({
             meta: {
                 authRequirement: "signedIn",
                 navTab: "communaute",
+                communauteTab: "annuaire",
             },
         },
         {

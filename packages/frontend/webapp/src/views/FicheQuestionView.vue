@@ -1,30 +1,30 @@
 <template>
-    <LayoutLoading v-if="isLoading !== false" />
+    <LayoutCommunaute :paddingBottom="question === null">
+        <Loading v-if="isLoading !== false" />
 
-    <LayoutError v-else-if="error !== null">
-        <template v-slot:title>Fiche question inaccessible</template>
-        <template v-slot:code>{{ error }}</template>
-        <template v-slot:content
-            >Vous souhaitiez consulter la fiche détaillée d'une question, mais
-            nous ne parvenons pas à collecter les informations nécessaires. Vous
-            pouvez réessayer un peu plus tard ou nous contacter en cas
-            d'urgence.</template
-        >
-        <template v-slot:actions>
-            <Button
-                icon="rotate-right"
-                iconPosition="left"
-                type="button"
-                @click="load"
-                >Réessayer</Button
+        <ViewError v-else-if="error !== null || question === null">
+            <template v-slot:title>Fiche question inaccessible</template>
+            <template v-slot:code>{{ error }}</template>
+            <template v-slot:content
+                >Vous souhaitiez consulter la fiche détaillée d'une question,
+                mais nous ne parvenons pas à collecter les informations
+                nécessaires. Vous pouvez réessayer un peu plus tard ou nous
+                contacter en cas d'urgence.</template
             >
-            <ButtonContact />
-        </template>
-    </LayoutError>
+            <template v-slot:actions>
+                <Button
+                    icon="rotate-right"
+                    iconPosition="left"
+                    type="button"
+                    @click="load"
+                    >Réessayer</Button
+                >
+                <ButtonContact />
+            </template>
+        </ViewError>
 
-    <Layout :paddingBottom="false" v-else>
-        <FicheQuestion :question="question" />
-    </Layout>
+        <FicheQuestion v-else :question="question" />
+    </LayoutCommunaute>
 </template>
 
 <script setup>
@@ -33,9 +33,9 @@ import { useQuestionsStore } from "@/stores/questions.store.js";
 import router from "@/helpers/router";
 
 import { Button } from "@resorptionbidonvilles/ui";
-import Layout from "@/components/Layout/Layout.vue";
-import LayoutError from "@/components/LayoutError/LayoutError.vue";
-import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
+import ViewError from "@/components/ViewError/ViewError.vue";
+import Loading from "@/components/Loading/Loading.vue";
+import LayoutCommunaute from "@/components/LayoutCommunaute/LayoutCommunaute.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 import FicheQuestion from "@/components/FicheQuestion/FicheQuestion.vue";
 

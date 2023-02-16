@@ -1,27 +1,29 @@
 <template>
-    <Layout v-bind="$attrs" :paddingTop="false">
+    <Layout v-bind="$attrs">
         <template v-slot:banner>
             <ContentWrapper
                 class="flex justify-center lg:py-3 items-start lg:items-center"
             >
-                <LinkButton
+                <LinkBlock
                     to="/communaute"
                     :class="[
                         'w-44 text-center font-bold border-blue600',
-                        currentTab === 'communaute' ? 'border-b-4' : '',
+                        currentTab === 'communaute'
+                            ? 'border-b-4'
+                            : 'text-black',
                     ]"
                 >
                     Espace d'entraide
-                </LinkButton>
-                <LinkButton
+                </LinkBlock>
+                <LinkBlock
                     to="/annuaire"
                     :class="[
                         'w-44 text-center font-bold border-blue600',
-                        currentTab === 'directory' ? 'border-b-4' : '',
+                        currentTab === 'annuaire' ? 'border-b-4' : 'text-black',
                     ]"
                 >
                     Annuaire
-                </LinkButton>
+                </LinkBlock>
             </ContentWrapper>
         </template>
 
@@ -32,19 +34,12 @@
 <script setup>
 import { computed } from "vue";
 import router from "@/helpers/router";
-import { LinkButton } from "@resorptionbidonvilles/ui";
+import { LinkBlock } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 
 const currentTab = computed(() => {
-    const { path } = router.currentRoute.value;
-    if (path.startsWith("/annuaire")) {
-        return "directory";
-    }
-    if (path.startsWith("/communaute")) {
-        return "communaute";
-    }
-
-    return null;
+    const { meta } = router.currentRoute.value;
+    return meta.communauteTab || null;
 });
 </script>

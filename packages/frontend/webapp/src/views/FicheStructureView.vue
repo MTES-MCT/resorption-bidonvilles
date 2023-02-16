@@ -1,34 +1,33 @@
 <template>
-    <LayoutLoading v-if="directoryStore.isLoading !== false"></LayoutLoading>
-
-    <LayoutError
-        v-else-if="directoryStore.error !== null || organization === null"
-    >
-        <template v-slot:title>Fiche de structure inaccessible</template>
-        <template v-slot:code>{{
-            directoryStore.error || "Structure introuvable"
-        }}</template>
-        <template v-slot:content
-            >Vous souhaitiez consulter la fiche d'une structure, mais nous ne
-            parvenons pas à collecter les informations nécessaires. Vous pouvez
-            réessayer un peu plus tard ou nous contacter en cas
-            d'urgence.</template
+    <LayoutCommunaute :paddingTop="organization !== null">
+        <Loading v-if="directoryStore.isLoading !== false" class="mt-16" />
+        <ViewError
+            v-else-if="directoryStore.error !== null || organization === null"
         >
-        <template v-slot:actions>
-            <Button
-                icon="rotate-right"
-                iconPosition="left"
-                type="button"
-                @click="load"
-                >Réessayer</Button
+            <template v-slot:title>Fiche de structure inaccessible</template>
+            <template v-slot:code>{{
+                directoryStore.error || "Structure introuvable"
+            }}</template>
+            <template v-slot:content
+                >Vous souhaitiez consulter la fiche d'une structure, mais nous
+                ne parvenons pas à collecter les informations nécessaires. Vous
+                pouvez réessayer un peu plus tard ou nous contacter en cas
+                d'urgence.</template
             >
-            <ButtonContact />
-        </template>
-    </LayoutError>
+            <template v-slot:actions>
+                <Button
+                    icon="rotate-right"
+                    iconPosition="left"
+                    type="button"
+                    @click="load"
+                    >Réessayer</Button
+                >
+                <ButtonContact />
+            </template>
+        </ViewError>
 
-    <Layout v-else>
-        <FicheStructure :organization="organization" />
-    </Layout>
+        <FicheStructure v-else :organization="organization" />
+    </LayoutCommunaute>
 </template>
 
 <script setup>
@@ -38,11 +37,11 @@ import router from "@/helpers/router";
 import { registerDirectoryView } from "@/api/statistics.api";
 
 import { Button } from "@resorptionbidonvilles/ui";
-import Layout from "@/components/Layout/Layout.vue";
-import LayoutError from "@/components/LayoutError/LayoutError.vue";
-import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
+import ViewError from "@/components/ViewError/ViewError.vue";
+import Loading from "@/components/Loading/Loading.vue";
 import FicheStructure from "@/components/FicheStructure/FicheStructure.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
+import LayoutCommunaute from "@/components/LayoutCommunaute/LayoutCommunaute.vue";
 
 const directoryStore = useDirectoryStore();
 const organizationId = computed(() => {

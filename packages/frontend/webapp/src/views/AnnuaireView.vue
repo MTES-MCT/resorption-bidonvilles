@@ -1,5 +1,5 @@
 <template>
-    <LayoutCommunaute>
+    <LayoutCommunaute :paddingTop="false">
         <Annuaire />
     </LayoutCommunaute>
 </template>

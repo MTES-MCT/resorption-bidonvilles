@@ -1,6 +1,6 @@
 <template>
     <div class="m-auto w-1/2 pt-6 pb-10 text-center print:hidden">
-        <h1 class="text-lg xl:text-xl font-bold">
+        <h1 class="text-lg xl:text-xl font-bold text-primary">
             Rechercher un contact, un acteur, une structure...
         </h1>
         <ContentWrapper class="mt-3" size="medium">
