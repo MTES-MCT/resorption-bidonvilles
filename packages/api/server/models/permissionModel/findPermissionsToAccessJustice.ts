@@ -4,9 +4,6 @@ import { QueryTypes } from 'sequelize';
 export default async (location) => {
     const organizationsWithUsersHavingPermissionsOnJustice = await sequelize.query(
         `
-        WITH user_options AS (
-            SELECT fk_user, ARRAY_AGG(fk_option) AS options FROM user_permission_options GROUP BY fk_user
-        )
         SELECT
             uap.user_id,
             u.first_name,
@@ -27,22 +24,12 @@ export default async (location) => {
             o.fk_type AS "type_id",
             ot.fk_category AS "type_category",
             ot.name_singular AS "type_name",
-            ot.abbreviation AS "type_abbreviation",
-            uap.fk_entity,
-            uap.fk_feature,
-            uap.allowed,
-            uap.allow_all,
-            uap.regions as "regions_allowed",
-            uap.departements as "departements_allowed",
-            uap.epci as "epci_allowed",
-            uap.cities as "cities_allowed",
-            COALESCE(uo.options, array[]::varchar[]) AS permission_options
+            ot.abbreviation AS "type_abbreviation"
         FROM
             user_actual_permissions uap
             LEFT JOIN users u ON uap.user_id = u.user_id
             LEFT JOIN localized_organizations o ON uap.organization_id = o.organization_id
             LEFT JOIN organization_types ot ON o.fk_type = ot.organization_type_id
-            LEFT JOIN user_options uo ON uo.fk_user = uap.user_id
         WHERE
                 uap.fk_entity = 'shantytown_justice'
         AND
@@ -72,51 +59,32 @@ export default async (location) => {
         AND
         (
             allow_all IS true
+            OR :regionCode = ANY(uap.regions)
+                
+            OR :departementCode = ANY(uap.departements)
+            OR :epciCode = ANY(uap.epci)
+            OR :cityCode = ANY(uap.cities)
             OR
                 (
-                    ARRAY_LENGTH(uap.regions, 1) > 0
+                    uap.regions IS NULL
                 AND
-                    :regionCode = ANY(uap.regions)
-                )
-            OR
-                (
-                    ARRAY_LENGTH(uap.departements, 1) > 0
+                    uap.departements IS NULL
                 AND
-                    :departementCode = ANY(uap.departements)
-                )
-            OR
-                (
-                    ARRAY_LENGTH(uap.epci, 1) > 0
+                    uap.epci IS NULL
                 AND
-                    :epciCode = ANY(uap.epci)
-                )
-            OR
-                (
-                    ARRAY_LENGTH(uap.cities, 1) > 0
-                AND
-                    :cityCode = ANY(uap.cities)
-                )
-            OR
-                (
-                    (uap.regions IS NULL OR ARRAY_LENGTH(uap.regions, 1) < 1)
-                AND
-                    (uap.departements IS NULL OR ARRAY_LENGTH(uap.departements, 1) < 1)
-                AND
-                    (uap.epci IS NULL OR ARRAY_LENGTH(uap.epci, 1) < 1)
-                AND
-                    (uap.cities IS NULL OR ARRAY_LENGTH(uap.cities, 1) < 1)
+                    uap.cities IS NULL
                 AND
                     :departementCode = o.departement_code
                 )
             OR
                 (
-                    (uap.regions IS NULL OR ARRAY_LENGTH(uap.regions, 1) < 1)
+                    uap.regions IS NULL
                 AND
-                    (uap.departements IS NULL OR ARRAY_LENGTH(uap.departements, 1) < 1)
+                    uap.departements IS NULL
                 AND
-                    (uap.epci IS NULL OR ARRAY_LENGTH(uap.epci, 1) < 1)
+                    uap.epci IS NULL
                 AND
-                    (uap.cities IS NULL OR ARRAY_LENGTH(uap.cities, 1) < 1)
+                    uap.cities IS NULL
                 AND
                     o.departement_code is null
                 AND
