@@ -18,6 +18,6 @@ export default async () => {
 
     return questions.map((question: any) => ({
         ...question,
-        answers: answers[question.id],
+        answers: answers[question.id] || [],
     }));
 };

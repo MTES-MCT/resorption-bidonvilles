@@ -13,5 +13,5 @@ export default async (questionId) => {
     if (question === null) {
         throw new ServiceError('fetch_failed', new Error('Impossible de retrouver la question en base de données'));
     }
-    return { ...question, answers };
+    return { ...question, answers: answers[questionId] || [] };
 };
