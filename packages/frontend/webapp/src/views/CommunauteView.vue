@@ -1,6 +1,6 @@
 <template>
     <LayoutCommunaute :paddingTop="false">
-        <ListeDesQuestions />
+        <Entraide />
     </LayoutCommunaute>
 </template>
 
@@ -9,7 +9,7 @@ import { onMounted } from "vue";
 import { useQuestionsStore } from "@/stores/questions.store";
 
 import LayoutCommunaute from "@/components/LayoutCommunaute/LayoutCommunaute.vue";
-import ListeDesQuestions from "@/components/ListeDesQuestions/ListeDesQuestions.vue";
+import Entraide from "@/components/Entraide/Entraide.vue";
 
 const questionsStore = useQuestionsStore();
 
