@@ -17,5 +17,6 @@ export default question => Object.assign(
             organization: question.organizationAbbreviation || question.organizationName,
             organization_id: question.organizationId,
         },
+        answers: [],
     },
 );
