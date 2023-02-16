@@ -332,7 +332,7 @@ export default (app) => {
         controllers.town.findNearbyTowns,
     );
 
-    //
+    // actions
     app.get(
         '/actions',
         middlewares.auth.authenticate,
@@ -384,118 +384,6 @@ export default (app) => {
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.action.exportComments,
-    );
-
-
-    // plans
-    app.get(
-        '/plans',
-        middlewares.auth.authenticate,
-        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan.list'], ...args),
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        controllers.plan.list,
-    );
-    app.get(
-        '/plans/export',
-        middlewares.auth.authenticate,
-        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan.export'], ...args),
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        controllers.plan.listExport,
-    );
-    app.get(
-        '/plans/:id',
-        middlewares.auth.authenticate,
-        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan.read'], ...args),
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        controllers.plan.find,
-    );
-    app.post(
-        '/plans',
-        middlewares.auth.authenticate,
-        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan.create'], ...args),
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        controllers.plan.create,
-    );
-    app.post(
-        '/plans/:id',
-        middlewares.auth.authenticate,
-        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan.update'], ...args),
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        controllers.plan.update,
-    );
-    app.post(
-        '/plans/:id/states',
-        middlewares.auth.authenticate,
-        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan.updateMarks'], ...args),
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        controllers.plan.addState,
-    );
-    app.post(
-        '/plans/:id/comments',
-        middlewares.auth.authenticate,
-        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan_comment.create'], ...args),
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        validators.planComment.createPlanComment,
-        middlewares.validation,
-        controllers.planComment.create,
-    );
-    app.patch(
-        '/plans/:id',
-        middlewares.auth.authenticate,
-        async (req, res, next) => {
-            // parse body to check the requested operation
-            let controller;
-            switch (req.body.operation) {
-                case 'close':
-                    try {
-                        middlewares.auth.checkPermissions(['plan.close'], req, res, next, false);
-                    } catch (error) {
-                        return res.status(500).send({
-                            success: false,
-                        });
-                    }
-
-                    controller = controllers.plan.close;
-                    break;
-
-                default:
-                    return res.status(404).send({});
-            }
-
-            // check charte
-            try {
-                await middlewares.charte.check(req, res, next, false);
-            } catch (error) {
-                return res.status(400).send({
-                    user_message: error.message,
-                });
-            }
-
-            // sync app-version
-            try {
-                await middlewares.appVersion.sync(req, res, next, false);
-            } catch (error) {
-                return res.status(500).send({});
-            }
-
-            // route to proper controller
-            return controller(req, res, next);
-        },
-    );
-    app.get(
-        '/plans/comments/export',
-        middlewares.auth.authenticate,
-        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['plan_comment.export'], ...args),
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        controllers.planComment.export,
     );
 
     // towns
