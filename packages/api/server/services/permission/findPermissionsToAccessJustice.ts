@@ -1,14 +1,10 @@
 import permissionModel from '#server/models/permissionModel';
 import ServiceError from '#server/errors/ServiceError';
 
-function getUsersWhoCanAccessJustice(location) {
-    return permissionModel.findPermissionsToAccessJustice(location);
-}
-
 export default async (location) => {
     let usersWhoCanAccessJustice = [];
     try {
-        usersWhoCanAccessJustice = await getUsersWhoCanAccessJustice(location);
+        usersWhoCanAccessJustice = await permissionModel.findPermissionsToAccessJustice(location);
         if (usersWhoCanAccessJustice.length > 0) {
             return usersWhoCanAccessJustice;
         }

@@ -4,7 +4,7 @@
             <h1 class="text-3xl text-primary">{{ title }}</h1>
             <div>
                 <Button
-                    v-if="category == 'justice'"
+                    v-if="category === 'justice'"
                     size="sm"
                     icon="user-group"
                     iconPosition="left"
