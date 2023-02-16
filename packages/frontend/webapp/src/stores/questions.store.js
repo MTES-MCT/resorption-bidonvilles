@@ -60,6 +60,7 @@ export const useQuestionsStore = defineStore("questions", () => {
 
     function reset() {
         questions.value = [];
+        hash.value = {};
         isLoading.value = false;
         error.value = null;
         resetPagination();
