@@ -26,7 +26,7 @@ type PermissionHash = {
 export default async (owners: number[]): Promise<PermissionHash> => {
     const permissions: PermissionRow[] = await sequelize.query(`
         SELECT
-            uap.user_id,
+            uap.fk_user AS user_id,
             uap.fk_entity AS entity,
             uap.fk_feature AS feature,
             uap.is_writing,
@@ -40,7 +40,7 @@ export default async (owners: number[]): Promise<PermissionHash> => {
             uap.plans,
             uap.actions
         FROM user_actual_permissions uap
-        WHERE uap.user_id IN (:owners)
+        WHERE uap.fk_user IN (:owners)
         ORDER BY user_id ASC, entity ASC, feature ASC
     `, {
         type: QueryTypes.SELECT,

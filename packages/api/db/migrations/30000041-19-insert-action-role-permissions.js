@@ -12,9 +12,9 @@ module.exports = {
             ('collaborator', null, 'create', 'action', true, false),
             ('collaborator', null, 'read', 'action_comment', true, false),
 
-            ('direct_collaborator', null, 'read', 'action', true, false),
+            ('direct_collaborator', null, 'read', 'action', true, true),
             ('direct_collaborator', null, 'create', 'action', true, false),
-            ('direct_collaborator', null, 'read', 'action_comment', true, false),
+            ('direct_collaborator', null, 'read', 'action_comment', true, true),
 
             ('external_observator', null, 'read', 'action', true, false),
             ('external_observator', null, 'read', 'action_comment', true, false),
@@ -23,9 +23,9 @@ module.exports = {
             ('intervener', null, 'create', 'action', true, false),
             ('intervener', null, 'read', 'action_comment', true, false),
 
-            ('national_establisment', null, 'read', 'action', true, false),
-            ('national_establisment', null, 'create', 'action', true, false),
-            ('national_establisment', null, 'read', 'action_comment', true, false),
+            ('national_establisment', null, 'read', 'action', true, true),
+            ('national_establisment', null, 'create', 'action', true, true),
+            ('national_establisment', null, 'read', 'action_comment', true, true),
 
             (null, 'local_admin', 'read', 'action', true, true),
             (null, 'local_admin', 'create', 'action', true, false),
