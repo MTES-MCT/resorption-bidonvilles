@@ -14,7 +14,6 @@ import removeShantytownActorTheme from './shantytownActors/removeShantytownActor
 import inviteShantytownActor from './shantytownActors/inviteShantytownActor';
 import invite from './invite';
 import createShantytownComment from './shantytownComment/create';
-import createPlanComment from './planComment/create';
 import activityList from './activity/list';
 import dashboardLocation from './dashboard/location';
 import findNearbyTowns from './findNearbyTowns';
@@ -55,9 +54,6 @@ export default {
     },
     shantytownComment: {
         createShantytownComment,
-    },
-    planComment: {
-        createPlanComment,
     },
     invite,
     action: {
