@@ -24,6 +24,7 @@
             <FormUtilisateurInputPhone :label="labels.phone" />
             <FormUtilisateurInputRequestType
                 v-if="variant === 'demande-acces'"
+                :requestType="requestType"
                 :label="labels.request_type"
             />
             <FormUtilisateurInputIsActor
@@ -177,8 +178,12 @@ const props = defineProps({
         type: Function,
         required: true,
     },
+    requestType: {
+        type: String,
+        required: false,
+    },
 });
-const { variant, submit } = toRefs(props);
+const { variant, submit, requestType } = toRefs(props);
 const schema = computed(() => {
     return schemaFn(variant.value);
 });
