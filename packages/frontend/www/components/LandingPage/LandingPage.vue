@@ -28,11 +28,7 @@
         <CreditWrapper credit="© Ville de Strasbourg">
             <img width="1440" class="h-128 w-full object-cover object-top"
                 src="~/assets/img/LandingPage/resorption-bidonvilles-2.jpg"
-<<<<<<< HEAD
                 alt="Photo d'un espace temporaire d'accompagnement" />
-=======
-                alt="Photo d'un espace temporaire d'insertion" />
->>>>>>> (1778) Adds a property to specify the call to the component
         </CreditWrapper>
 
         <!-- third section -->
