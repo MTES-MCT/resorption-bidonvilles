@@ -5,6 +5,7 @@
             :key="item.value"
             :value="item.value"
             :label="item.label"
+            v-model="selectedOption"
             name="request_type"
         />
     </CheckableGroup>
@@ -13,10 +14,18 @@
 <script setup>
 import { CheckableGroup, Checkbox } from "@resorptionbidonvilles/ui";
 import items from "@/utils/access_request_types.js";
-import { defineProps, toRefs } from "vue";
+import { computed, defineProps, toRefs } from "vue";
 
 const props = defineProps({
     label: String,
+    requestType: {
+        type: String,
+        required: false,
+    },
 });
-const { label } = toRefs(props);
+const { label, requestType } = toRefs(props);
+
+const selectedOption = computed(() => {
+    return requestType.value === "access-request" ? requestType.value : "";
+});
 </script>
