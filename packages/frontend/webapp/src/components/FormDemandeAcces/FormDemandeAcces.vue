@@ -1,5 +1,9 @@
 <template>
-    <FormUtilisateur variant="demande-acces" :submit="submit">
+    <FormUtilisateur
+        variant="demande-acces"
+        :submit="submit"
+        :requestType="requestType"
+    >
         <template v-slot:subtitle
             >Voisin, citoyen, habitant d’un bidonville… Une info ? Une question
             ? Une alerte ?</template
@@ -16,6 +20,18 @@ import { trackEvent } from "@/helpers/matomo.js";
 import router from "@/helpers/router.js";
 import { useNotificationStore } from "@/stores/notification.store.js";
 import FormUtilisateur from "@/components/FormUtilisateur/FormUtilisateur.vue";
+import { ref, onMounted } from "vue";
+
+let requestType = ref("");
+
+onMounted(() => {
+    let queryString = window.location.search;
+    let urlParams = new URLSearchParams(queryString);
+
+    if (urlParams.has("request_type")) {
+        requestType.value = urlParams.get("request_type");
+    }
+});
 
 async function submit(values) {
     await createContact(values);
