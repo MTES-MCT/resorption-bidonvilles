@@ -98,66 +98,8 @@ export function serialized(override: Partial<SerializedUser> = {}): AuthUser {
                     allowed: true, allow_all: true, allowed_on: null, is_writing: false,
                 },
             },
-            plan: {
-                create: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: true,
-                },
-                list: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
-                },
-                read: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
-                },
-                update: {
-                    allowed: true,
-                    allow_all: false,
-                    allowed_on: {
-                        regions: [],
-                        departements: [],
-                        epci: [],
-                        cities: [],
-                        shantytowns: [],
-                        plans: [],
-                        actions: [],
-                    },
-                    is_writing: true,
-                },
-                updateMarks: {
-                    allowed: true,
-                    allow_all: false,
-                    allowed_on: {
-                        regions: [],
-                        departements: [],
-                        epci: [],
-                        cities: [],
-                        shantytowns: [],
-                        plans: [],
-                        actions: [],
-                    },
-                    is_writing: true,
-                },
-                close: {
-                    allowed: true,
-                    allow_all: false,
-                    allowed_on: {
-                        regions: [],
-                        departements: [],
-                        epci: [],
-                        cities: [],
-                        shantytowns: [],
-                        plans: [],
-                        actions: [],
-                    },
-                    is_writing: true,
-                },
-            },
             user: {},
             stats: {},
-            plan_finances: {
-                access: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
-                },
-            },
             covid_comment: {
                 list: {
                     allowed: true, allow_all: true, allowed_on: null, is_writing: false,

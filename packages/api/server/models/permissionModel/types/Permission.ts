@@ -8,7 +8,6 @@ export interface Permission {
         epci: string[],
         cities: string[],
         shantytowns: number[],
-        plans: number[],
         actions: number[],
     },
 }

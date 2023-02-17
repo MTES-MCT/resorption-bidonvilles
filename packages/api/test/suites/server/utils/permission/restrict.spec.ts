@@ -2,7 +2,7 @@
 import { expect } from 'chai';
 import permissionUtils from '#server/utils/permission';
 import { serialized as fakeUser } from '#test/utils/user';
-import locationUtils from "#test/utils/location";
+import locationUtils from '#test/utils/location';
 
 const { restrict } = permissionUtils;
 const {
@@ -58,7 +58,6 @@ describe('utils/permission.restrict()', () => {
                         epci: [],
                         cities: [],
                         shantytowns: [],
-                        plans: [],
                     },
                     max_level: paris.region(),
                     out_of_bounds: marseille.district(),
@@ -73,7 +72,6 @@ describe('utils/permission.restrict()', () => {
                         epci: [],
                         cities: [],
                         shantytowns: [],
-                        plans: [],
                     },
                     max_level: paris.departement(),
                     out_of_bounds: marseille.district(),
@@ -88,7 +86,6 @@ describe('utils/permission.restrict()', () => {
                         epci: [paris.city().epci.code],
                         cities: [],
                         shantytowns: [],
-                        plans: [],
                     },
                     max_level: paris.epci(),
                     out_of_bounds: marseille.district(),
@@ -103,7 +100,6 @@ describe('utils/permission.restrict()', () => {
                         epci: [],
                         cities: [paris.city().city.code],
                         shantytowns: [],
-                        plans: [],
                     },
                     max_level: paris.city(),
                     out_of_bounds: marseille.district(),
@@ -118,7 +114,6 @@ describe('utils/permission.restrict()', () => {
                         epci: [],
                         cities: [],
                         shantytowns: [],
-                        plans: [],
                     },
                     is_writing: false,
                     max_level: paris.departement(),
@@ -144,7 +139,6 @@ describe('utils/permission.restrict()', () => {
                         epci: [],
                         cities: [],
                         shantytowns: [],
-                        plans: [],
                     },
                     max_level: paris.region(),
                     out_of_bounds: marseille.district(),
@@ -159,7 +153,6 @@ describe('utils/permission.restrict()', () => {
                         epci: [],
                         cities: [],
                         shantytowns: [],
-                        plans: [],
                     },
                     max_level: paris.departement(),
                     out_of_bounds: marseille.district(),
@@ -174,7 +167,6 @@ describe('utils/permission.restrict()', () => {
                         epci: [paris.city().epci.code],
                         cities: [],
                         shantytowns: [],
-                        plans: [],
                     },
                     max_level: paris.epci(),
                     out_of_bounds: marseille.district(),
@@ -189,7 +181,6 @@ describe('utils/permission.restrict()', () => {
                         epci: [],
                         cities: [],
                         shantytowns: [],
-                        plans: [],
                     },
                     is_writing: false,
                     max_level: paris.departement(),
@@ -215,7 +206,6 @@ describe('utils/permission.restrict()', () => {
                         epci: [],
                         cities: [],
                         shantytowns: [],
-                        plans: [],
                     },
                     max_level: paris.region(),
                     out_of_bounds: marseille.district(),
@@ -230,7 +220,6 @@ describe('utils/permission.restrict()', () => {
                         epci: [],
                         cities: [],
                         shantytowns: [],
-                        plans: [],
                     },
                     max_level: paris.departement(),
                     out_of_bounds: marseille.district(),
@@ -255,7 +244,6 @@ describe('utils/permission.restrict()', () => {
                         epci: [],
                         cities: [],
                         shantytowns: [],
-                        plans: [],
                     },
                     max_level: paris.region(),
                     out_of_bounds: marseille.district(),
