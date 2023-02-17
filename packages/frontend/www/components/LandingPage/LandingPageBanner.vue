@@ -6,8 +6,8 @@
                     <slot />
                 </h2>
                 <div class="pt-4">
-                    <Button variant="primary" @click="() => redirectToContact()">{{
-                            cta
+                    <Button variant="primary" @click="redirectToContactOrAccessRequest">{{
+                        cta
                     }}</Button>
                 </div>
             </div>
@@ -18,6 +18,7 @@
 <script setup>
 import { defineProps, toRefs } from "vue";
 import redirectToContact from "~~/utils/redirectToContact";
+import redirectToAccessRequest from "~~/utils/redirectToAccessRequest";
 
 import { Button } from "@resorptionbidonvilles/ui";
 import Container from "~/components/Layout/Container/Container.vue";
@@ -26,7 +27,22 @@ const props = defineProps({
     cta: {
         type: String,
         required: true
+    },
+    route_to: {
+        type: String,
+        required: true
     }
 });
-const { cta } = toRefs(props);
+const { cta, route_to } = toRefs(props);
+
+function redirectToContactOrAccessRequest() {
+    switch (route_to.value) {
+        case "accessRequest":
+            redirectToAccessRequest();
+            break;
+        case "contact":
+            redirectToContact();
+
+    }
+}
 </script>
