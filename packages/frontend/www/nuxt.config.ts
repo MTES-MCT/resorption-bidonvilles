@@ -40,5 +40,6 @@ export default defineNuxtConfig({
             WEBAPP_URL: process.env.NUXT_WEBAPP_URL || "${NUXT_WEBAPP_URL}",
             DOMAIN: process.env.NUXT_DOMAIN || "${NUXT_DOMAIN}",
         }
-    }
+    },
+    telemetry: true
 });
