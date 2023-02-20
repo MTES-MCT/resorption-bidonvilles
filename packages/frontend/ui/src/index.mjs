@@ -16,6 +16,7 @@ export { default as InputGroup } from './components/Input/InputGroup.vue';
 export { default as InputError } from './components/Input/utils/InputError.vue';
 export { default as InputLabel } from './components/Input/utils/InputLabel.vue';
 export { default as InputWrapper } from './components/Input/utils/InputWrapper.vue';
+export { default as LanguagePicker } from './components/LanguagePicker.vue'
 export { default as Link } from './components/Link.vue';
 export { default as LinkButton } from './components/LinkButton.vue';
 export { default as LinkBlock } from './components/LinkBlock.vue';

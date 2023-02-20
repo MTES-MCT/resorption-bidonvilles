@@ -8,6 +8,13 @@
         />
         <TextInput id="huts" name="huts" :label="labels.huts" width="w-32" />
         <TextInput id="tents" name="tents" :label="labels.tents" width="w-32" />
+        <TextInput id="cars" name="cars" :label="labels.cars" width="w-32" />
+        <TextInput
+            id="mattresses"
+            name="mattresses"
+            :label="labels.mattresses"
+            width="w-32"
+        />
     </div>
 </template>
 

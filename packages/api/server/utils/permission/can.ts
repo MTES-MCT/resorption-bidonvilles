@@ -16,7 +16,7 @@ export default (user: SerializedUser) => ({
                     return true;
                 }
 
-                // check shantytowns and plans
+                // check shantytowns and actions
                 let geoLocation = location;
                 if (location.type === 'shantytown') {
                     if (permission.allowed_on.shantytowns.includes(location.id)) {
@@ -30,14 +30,6 @@ export default (user: SerializedUser) => ({
                         epci: location.epci,
                         city: location.city,
                     };
-                }
-
-                if (location.type === 'plan') {
-                    if (permission.allowed_on.plans.includes(location.id)) {
-                        return true;
-                    }
-
-                    geoLocation = location.geo_location;
                 }
 
                 if (location.type === 'action') {

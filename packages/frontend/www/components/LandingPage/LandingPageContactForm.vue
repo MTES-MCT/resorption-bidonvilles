@@ -11,7 +11,6 @@
 
 <script>
 import ButtonContact from "~~/components/ButtonContact/ButtonContact.vue";
-import setWebappDevice from "~~/utils/setWebappDevice";
 
 export default {
     components: {
@@ -22,9 +21,6 @@ export default {
         return {
             WEBAPP_URL
         };
-    },
-    methods: {
-        setWebappDevice,
     }
 };
 </script>

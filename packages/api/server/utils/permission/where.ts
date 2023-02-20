@@ -18,8 +18,6 @@ export default () => ({
                         let primaryKey = 'code';
                         if (tableName === 'shantytowns') {
                             primaryKey = 'shantytown_id';
-                        } else if (tableName === 'plans') {
-                            primaryKey = 'plan_id';
                         } else if (tableName === 'actions') {
                             primaryKey = 'action_id';
                         }

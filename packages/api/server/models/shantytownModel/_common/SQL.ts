@@ -25,6 +25,8 @@ export default {
         'shantytowns.caravans': 'caravans',
         'shantytowns.huts': 'huts',
         'shantytowns.tents': 'tents',
+        'shantytowns.cars': 'cars',
+        'shantytowns.mattresses': 'mattresses',
         'shantytowns.living_conditions_version': 'livingConditionsVersion',
         'shantytowns.access_to_sanitary': 'accessToSanitary',
         'shantytowns.sanitary_comments': 'sanitaryComments',

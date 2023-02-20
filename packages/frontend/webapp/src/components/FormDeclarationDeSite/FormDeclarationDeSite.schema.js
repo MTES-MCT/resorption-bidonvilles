@@ -118,6 +118,16 @@ export default function (mode = "create") {
             .min(0)
             .transform(emptyStringToNull)
             .label(labels.tents),
+        cars: number()
+            .nullable()
+            .min(0)
+            .transform(emptyStringToNull)
+            .label(labels.cars),
+        mattresses: number()
+            .nullable()
+            .min(0)
+            .transform(emptyStringToNull)
+            .label(labels.mattresses),
         census_status: string().required().label(labels.census_status),
         census_conducted_at: date()
             .when("census_status", {

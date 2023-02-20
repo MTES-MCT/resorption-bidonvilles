@@ -30,6 +30,8 @@ export default {
             "caravans",
             "huts",
             "tents",
+            "cars",
+            "mattresses",
             "socialOrigins",
         ],
         living_conditions: [

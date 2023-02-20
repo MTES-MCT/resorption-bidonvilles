@@ -26,6 +26,7 @@
                 v-if="variant === 'demande-acces'"
                 :class="{ hidden: demandeAccesOnly }"
                 :label="labels.request_type"
+                :language="language"
             />
             <FormUtilisateurInputIsActor
                 v-if="
@@ -116,6 +117,7 @@
             <FormUtilisateurInputReferral
                 v-if="variant === 'demande-acces'"
                 :label="labels.referral"
+                :language="language"
             />
             <FormUtilisateurInputReferralOther
                 v-if="values.referral === 'other'"
@@ -180,14 +182,20 @@ const props = defineProps({
         type: Function,
         required: true,
     },
+    language: {
+        type: String,
+        default: "fr",
+    },
 });
+
 const form = ref(null);
-const { variant, submit } = toRefs(props);
+const { variant, submit, language } = toRefs(props);
+
 const schema = computed(() => {
-    return schemaFn(variant.value);
+    return schemaFn(variant.value, language.value);
 });
 const labels = computed(() => {
-    return labelsFn(variant.value);
+    return labelsFn(variant.value)[language.value];
 });
 const demandeAccesOnly = computed(() => {
     const { acces } = router.currentRoute.value.query;

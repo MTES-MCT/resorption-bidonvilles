@@ -43,6 +43,8 @@ export default (town) => {
         caravans: intToStr(town.caravans, '-'),
         huts: intToStr(town.huts, '-'),
         tents: intToStr(town.tents, '-'),
+        cars: intToStr(town.cars, '-'),
+        mattresses: intToStr(town.mattresses, '-'),
     };
 
     // on traite le changelog pour n'y conserver que les étapes qui contiennent au moins un changement sur les champs de population
@@ -54,7 +56,9 @@ export default (town) => {
                     || fieldKey === 'minorsInSchool'
                     || fieldKey === 'caravans'
                     || fieldKey === 'huts'
-                    || fieldKey === 'tents',
+                    || fieldKey === 'tents'
+                    || fieldKey === 'cars'
+                    || fieldKey === 'mattresses',
             ),
         }))
         .filter(({ diff }) => diff.length > 0);

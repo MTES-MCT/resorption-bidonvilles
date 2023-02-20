@@ -22,7 +22,7 @@ export default async (actionId, commentId) => sequelize.query(
     WHERE u.fk_status = 'active'
         AND (lo.departement_code = (SELECT fk_departement FROM actions WHERE action_id = :actionId)
             AND lo.active IS TRUE)
-        AND (email_unsubscriptions.unsubscriptions IS NULL OR NOT('plan_comment_notification' = ANY(email_unsubscriptions.unsubscriptions)))
+        AND (email_unsubscriptions.unsubscriptions IS NULL OR NOT('action_comment_notification' = ANY(email_unsubscriptions.unsubscriptions)))
         AND (u.fk_role_regular = 'direct_collaborator' OR op.fk_action IS NOT null)
     `,
     {

@@ -252,9 +252,23 @@ function formatValuesForApi(v) {
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
         const formattedValues = formatValuesForApi(sentValues);
+
+        /* eslint-disable no-unused-vars */
+        let {
+            updated_at: _1,
+            update_to_date: _2,
+            ...originalValuesRest
+        } = originalValues;
+        let {
+            updated_at: _3,
+            update_to_date: _4,
+            ...formattedValuesRest
+        } = formattedValues;
+        /* eslint-enable no-unused-vars */
+
         if (
             mode.value === "edit" &&
-            isDeepEqual(originalValues, formattedValues)
+            isDeepEqual(originalValuesRest, formattedValuesRest)
         ) {
             router.replace("#erreurs");
             error.value =

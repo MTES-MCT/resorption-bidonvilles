@@ -7,12 +7,49 @@ import {
     number,
     ref,
     addMethod,
+    setLocale,
 } from "yup";
+import { fr } from "yup-locales";
 import labelsFn from "./FormUtilisateur.labels.js";
 
 import requestTypes from "@/utils/access_request_types";
 import organizationCategories from "@/utils/organization_categories";
 import referrals from "@/utils/contact_referrals";
+
+const locales = {
+    fr: {
+        string: {
+            verif_email: "Les deux courriels ne correspondent pas",
+        },
+    },
+    en: {
+        mixed: {
+            required: (value) => `${value.label} is required`,
+        },
+        string: {
+            email: (value) => `${value.label} must be a valid email`,
+            verif_email: "the two emails do not match",
+        },
+    },
+    ro: {
+        mixed: {
+            required: (value) => `${value.label} este necesară`,
+        },
+        string: {
+            email: (value) => `${value.label} trebuie să fie un e-mail valid`,
+            verif_email: "cele două e-mailuri nu se potrivesc",
+        },
+    },
+    bg: {
+        mixed: {
+            required: (value) => `${value.label} изисква се`,
+        },
+        string: {
+            email: (value) => `${value.label} трябва да е валиден имейл`,
+            verif_email: "двата имейла не съвпадат",
+        },
+    },
+};
 
 addMethod(object, "territorialCollectivity", function (schema) {
     return this.test(
@@ -33,16 +70,22 @@ addMethod(object, "territorialCollectivity", function (schema) {
     );
 });
 
-export default (variant) => {
+export default (variant, language) => {
     const schema = {};
-    const labels = labelsFn(variant);
+    const labels = labelsFn(variant)[language];
+
+    if (language === "fr") {
+        setLocale(fr);
+    } else {
+        setLocale(locales[language]);
+    }
 
     // personal information
     schema.email = string().required().email().label(labels.email);
     if (variant === "demande-acces") {
         schema.verif_email = string()
             .required()
-            .oneOf([ref("email")], "Les deux courriels ne correspondent pas")
+            .oneOf([ref("email")], locales[language].string.verif_email)
             .label(labels.verif_email);
     }
     schema.first_name = string().required().label(labels.first_name);
@@ -53,7 +96,9 @@ export default (variant) => {
     // request-type and is-actor
     if (variant === "demande-acces") {
         schema.request_type = array()
-            .of(string().oneOf(requestTypes.map(({ value }) => value)))
+            .of(
+                string().oneOf(requestTypes[language].map(({ value }) => value))
+            )
             .required()
             .min(1, ({ label }) => `${label} est un champ obligatoire`)
             .label(labels.request_type);
@@ -159,13 +204,13 @@ export default (variant) => {
         });
     }
 
-    if (variant === "demande-acces") {
+    if (variant === "demande-acces" && language === "fr") {
         schema.access_request_message = string()
             .required()
             .label(labels.access_request_message);
         schema.referral = string()
             .required()
-            .oneOf(referrals.map(({ value }) => value))
+            .oneOf(referrals[language].map(({ value }) => value))
             .label(labels.referral);
         schema.referral_other = string()
             .when("referral", {
