@@ -12,12 +12,12 @@
                         ? 'bg-primary text-white rounded px-2 py-1'
                         : ''
                 "
-            >
-                {{ filter.label }}</span
+                >{{ filter.label }}</span
             >
         </div>
     </div>
 </template>
+
 <script>
 import filters from "./TownsSearch.filter";
 

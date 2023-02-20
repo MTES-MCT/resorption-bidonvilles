@@ -1,7 +1,7 @@
 export default [
     {
         id: "all",
-        label: "tous les sites",
+        label: "Tous les sites",
     },
     {
         id: "open",
