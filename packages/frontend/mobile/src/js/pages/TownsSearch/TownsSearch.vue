@@ -104,6 +104,15 @@ export default {
                 return town.closedAt !== null;
             });
         },
+        sortedResults() {
+            return [...this.filteredResults].sort(function (a, b) {
+                if (a.updated_at < b.updated_at) {
+                    return -1;
+                }
+
+                return 1;
+            });
+        },
         sections() {
             if (this.loading) {
                 return;
@@ -113,7 +122,7 @@ export default {
                 return [
                     {
                         title: "Résultats de recherche",
-                        items: this.filteredResults,
+                        items: this.sortedResults,
                     },
                 ];
             }
