@@ -22,7 +22,7 @@ const { isDemandeAcces } = toRefs(props);
 const { WEBAPP_URL } = useRuntimeConfig();
 const href = computed(() => {
     const url = `${WEBAPP_URL}/contact?language=${i18n.locale.value}`;
-    if (!isDemandeAcces.value) {
+    if (!isDemandeAcces.value || i18n.locale.value !== "fr") {
         return url;
     }
 

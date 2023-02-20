@@ -1,6 +1,11 @@
 <template>
     <div class="flex flex-col items-center">
-        <LanguagePicker v-model="language" :language="language" class="mb-4" />
+        <LanguagePicker
+            v-model="language"
+            :language="language"
+            class="mb-4"
+            v-if="!demandeAccesOnly"
+        />
 
         <FormUtilisateur
             variant="demande-acces"
@@ -22,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { create as createContact } from "@/api/contact.api.js";
 import { trackEvent } from "@/helpers/matomo.js";
@@ -36,6 +41,10 @@ import { LanguagePicker } from "@resorptionbidonvilles/ui";
 const route = useRoute();
 
 const language = ref(route.query.language || "fr");
+const demandeAccesOnly = computed(() => {
+    const { acces } = router.currentRoute.value.query;
+    return acces !== undefined;
+});
 
 async function submit(values) {
     await createContact(values);
