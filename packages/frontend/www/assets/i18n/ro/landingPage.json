@@ -145,7 +145,8 @@
   },
   "contactForm": {
     "email": "E-mailul dumneavoastră",
-    "cta": "Contactaţi-ne"
+    "ctaContact": "Contactaţi-ne",
+    "ctaSignup": "Solicitaţi accesul"
   },
   "newsletter": {
     "title": "Abonați-vă la newsletter-ul nostru lunar (in franceza)",

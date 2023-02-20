@@ -1,30 +1,30 @@
 <template>
-    <form class="flex flex-row justify-center mt-4 w-full max-w-md" @submit.prevent="onSubmit">
-        <input class="hidden md:block border-2 border-G200 rounded-md flex-1 py-2 px-4 outline-none focus:border-G400"
-            :placeholder="$t('landingPage.contactForm.email')" v-model="email" />
-        <Button type="submit" variant="secondary" class="ml-1">{{
-                $t("landingPage.contactForm.cta")
+    <div class="flex flex-row justify-center mt-4 w-full max-w-md">
+        <Button variant="secondary" class="ml-1" :href="`${WEBAPP_URL}/contact?acces`" @click="setWebappDevice">{{
+            $t("landingPage.contactForm.ctaSignup")
         }}</Button>
-    </form>
+        <Button variant="primary" class="ml-1" :href="`${WEBAPP_URL}/contact`" @click="setWebappDevice">{{
+            $t("landingPage.contactForm.ctaContact")
+        }}</Button>
+    </div>
 </template>
 
 <script>
 import { Button } from "@resorptionbidonvilles/ui";
-import redirectToContact from "~~/utils/redirectToContact";
+import setWebappDevice from "~~/utils/setWebappDevice";
 
 export default {
     components: {
         Button
     },
     data() {
+        const { WEBAPP_URL } = useRuntimeConfig();
         return {
-            email: "",
+            WEBAPP_URL
         };
     },
     methods: {
-        onSubmit() {
-            redirectToContact(this.email);
-        }
+        setWebappDevice,
     }
 };
 </script>

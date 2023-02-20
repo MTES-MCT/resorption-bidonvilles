@@ -145,7 +145,8 @@
   },
   "contactForm": {
     "email": "Your email",
-    "cta": "Contact us"
+    "ctaContact": "Contact us",
+    "ctaSignup": "Request access"
   },
   "newsletter": {
     "title": "Subscribe to our monthly newsletter (in French)",
