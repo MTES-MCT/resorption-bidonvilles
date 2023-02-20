@@ -30,7 +30,7 @@
                     <SearchInput
                         class="mt-2 mb-6"
                         @click="openSearch"
-                        placeholder="Rechercher un site"
+                        placeholder="une ville, un département, un site..."
                     />
                     <div class="font-bold text-lg">
                         Mes sites ({{ myTowns.length }})
