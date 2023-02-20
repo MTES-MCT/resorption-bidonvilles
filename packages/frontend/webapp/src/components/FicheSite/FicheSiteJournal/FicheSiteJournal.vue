@@ -24,7 +24,8 @@
             <template v-slot:aside>
                 <FicheSiteJournalAside
                     :town="town"
-                    v-if="messageForm?.isFocused"
+                    ref="aside"
+                    class="opacity-0 transition-opacity"
                 />
             </template>
             <template v-slot:body>
@@ -72,7 +73,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, toRefs, computed } from "vue";
+import { defineProps, ref, toRefs, computed, watch } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import router from "@/helpers/router";
 
@@ -88,12 +89,18 @@ const props = defineProps({
 const { town } = toRefs(props);
 const userStore = useUserStore();
 
+const aside = ref(null);
 const messageForm = ref(null);
+const isFocused = computed(() => messageForm.value?.isFocused);
 
 const comments = computed(() => {
     return [...town.value.comments.regular, ...town.value.comments.covid].sort(
         (a, b) => b.createdAt - a.createdAt
     );
+});
+
+watch(isFocused, () => {
+    aside.value.$el.style.opacity = isFocused.value === true ? "1" : "0";
 });
 
 function focusForm() {
