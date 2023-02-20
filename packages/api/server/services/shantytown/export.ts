@@ -4,7 +4,7 @@ import context from './export/1_section_context';
 import people from './export/section_people';
 import livingConditions from './export/2_section_living_conditions';
 import actors from './export/option_section_actors';
-import plans from './export/option_section_plans';
+import actions from './export/option_section_actions';
 import justiceProcedure from './export/option_justice_procedure';
 import comments from './export/option_section_comments';
 import changelog from './export/option_section_changelog';
@@ -21,7 +21,7 @@ export default (user, shantytown, options) => {
         sections.push(actors(shantytown));
     }
     if (options.includes('actions')) {
-        sections.push(plans(shantytown));
+        sections.push(actions(shantytown));
     }
     if (options.includes('justice')) {
         sections.push(justiceProcedure(shantytown));
