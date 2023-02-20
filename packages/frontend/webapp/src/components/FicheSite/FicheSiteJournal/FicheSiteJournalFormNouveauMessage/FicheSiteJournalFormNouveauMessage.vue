@@ -7,60 +7,58 @@
                 :rows="showFullForm ? 5 : 2"
                 ref="messageInput"
             />
-            <div v-if="showFullForm">
-                <Button
-                    :icon="collapse ? 'chevron-down' : 'chevron-up'"
-                    variant="primaryText"
-                    class="mb-4"
-                    type="button"
-                    :padding="false"
-                    @click="toggleCollapse"
-                    >{{
-                        collapse ? "Voir plus d'options" : "Masquer les options"
-                    }}
-                </Button>
-
-                <div v-if="!collapse">
-                    <FormNouveauMessageInputTags />
-                    <FormNouveauMessageInputMode />
-                    <FormNouveauMessageInputTarget
-                        v-if="values.mode === 'custom'"
-                        :departement="town.departement.code"
-                    />
-                    <p class="text-sm mb-4">
-                        (*) Quelle que soit l'option retenue, les
-                        administrateurs locaux et nationaux auront accès au
-                        message à des fins de modération
-                    </p>
-                    <ErrorSummary v-if="error" :message="error" class="mt-2" />
-                    <p class="text-right space-x-2">
-                        <Button
-                            type="button"
-                            icon="rotate-left"
-                            iconPosition="left"
-                            variant="secondary"
-                            @click="cancel"
-                            >Annuler</Button
-                        >
-                        <Button
-                            icon="paper-plane"
-                            iconPosition="left"
-                            @click="submit"
-                            >Publier le message</Button
-                        >
-                    </p>
-                </div>
+            <div
+                class="transition-height h-0 overflow-hidden"
+                ref="formContainer"
+            >
+                <FormNouveauMessageInputTags />
+                <FormNouveauMessageInputMode />
+                <FormNouveauMessageInputTarget
+                    v-if="values.mode === 'custom'"
+                    :departement="town.departement.code"
+                />
+                <p class="text-sm mb-4">
+                    (*) Quelle que soit l'option retenue, les administrateurs
+                    locaux et nationaux auront accès au message à des fins de
+                    modération
+                </p>
+                <ErrorSummary v-if="error" :message="error" class="mt-2" />
+                <p class="text-right space-x-2">
+                    <Button
+                        type="button"
+                        icon="rotate-left"
+                        iconPosition="left"
+                        variant="secondary"
+                        @click="resetForm"
+                        >Annuler</Button
+                    >
+                    <Button
+                        icon="paper-plane"
+                        iconPosition="left"
+                        @click="submit"
+                        >Publier le message</Button
+                    >
+                </p>
             </div>
         </div>
     </form>
 </template>
 
+<style scoped>
+.transition-height {
+    transition-property: height;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+</style>
+
 <script setup>
-import { defineProps, defineExpose, toRefs, ref, computed } from "vue";
+import { defineProps, defineExpose, toRefs, ref, computed, watch } from "vue";
 import { useForm } from "vee-validate";
 import { useTownsStore } from "@/stores/towns.store";
 import schema from "./FicheSiteJournalFormNouveauMessage.schema";
 import router from "@/helpers/router";
+import getHiddenHeight from "@/utils/getHiddenHeight";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
 import FormNouveauMessageInputMessage from "./inputs/FormNouveauMessageInputMessage.vue";
@@ -82,20 +80,30 @@ const { handleSubmit, setErrors, resetForm, values } = useForm({
 });
 
 const error = ref(null);
-const collapse = ref(false);
+const formContainer = ref(null);
 const messageInput = ref(null);
 const showFullForm = computed(() => {
     return messageInput.value?.isFocused === true || values.comment?.length > 0;
 });
+const isFocused = computed(() => messageInput.value?.isFocused);
 
-function cancel() {
-    resetForm();
-    collapse.value = false;
-}
+watch(showFullForm, () => {
+    if (showFullForm.value === true) {
+        formContainer.value.style.height = `${getHiddenHeight(
+            formContainer.value
+        )}px`;
+    } else {
+        formContainer.value.style.height = `0px`;
+    }
+});
 
-function toggleCollapse() {
-    collapse.value = !collapse.value;
-}
+watch(isFocused, () => {
+    if (isFocused.value === true || values.comment?.length > 0) {
+        return;
+    }
+
+    setTimeout(resetForm, 100);
+});
 
 const submit = handleSubmit(async (values) => {
     error.value = null;
@@ -112,7 +120,6 @@ const submit = handleSubmit(async (values) => {
         });
 
         resetForm();
-        collapse.value = false;
 
         // on rafraîchit la page pour avoir le site mis à jour
         router.push(`/site/${town.value.id}/#journal_du_site`);
@@ -124,7 +131,6 @@ const submit = handleSubmit(async (values) => {
     }
 });
 
-const isFocused = computed(() => messageInput.value?.isFocused);
 defineExpose({
     isFocused,
     focus: (...args) => messageInput.value.focus(...args),
