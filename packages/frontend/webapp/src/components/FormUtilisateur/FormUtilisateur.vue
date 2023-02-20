@@ -1,5 +1,5 @@
 <template>
-    <FormPublic :schema="schema" :submit="intermediateSubmit">
+    <FormPublic :schema="schema" :submit="intermediateSubmit" ref="form">
         <template v-slot:subtitle><slot name="subtitle" /></template>
         <template v-slot:title><slot name="title" /></template>
 
@@ -136,7 +136,8 @@
 
 <script setup>
 // utils
-import { defineProps, toRefs, computed } from "vue";
+import { defineProps, toRefs, computed, ref, onMounted } from "vue";
+import router from "@/helpers/router";
 
 // components
 import { Button } from "@resorptionbidonvilles/ui";
@@ -178,12 +179,20 @@ const props = defineProps({
         required: true,
     },
 });
+const form = ref(null);
 const { variant, submit } = toRefs(props);
 const schema = computed(() => {
     return schemaFn(variant.value);
 });
 const labels = computed(() => {
     return labelsFn(variant.value);
+});
+
+onMounted(() => {
+    const { acces } = router.currentRoute.value.query;
+    if (acces !== undefined) {
+        form.value.setFieldValue("request_type", ["access-request"]);
+    }
 });
 
 function intermediateSubmit(values) {

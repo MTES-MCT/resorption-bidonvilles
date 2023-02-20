@@ -94,5 +94,8 @@ defineExpose({
         error.value = message;
         form.value.setErrors(errors);
     },
+    setFieldValue(...args) {
+        return form.value.setFieldValue(...args);
+    },
 });
 </script>
