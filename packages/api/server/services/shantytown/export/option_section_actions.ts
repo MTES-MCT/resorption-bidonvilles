@@ -1,7 +1,7 @@
 import {
     Paragraph, TextRun, SectionType,
 } from 'docx';
-import { ShantytownAction } from '#server/models/actionModel/fetch/Action';
+import { ShantytownAction } from '#server/models/actionModel/fetch/Action.d';
 
 import heading from './heading';
 
