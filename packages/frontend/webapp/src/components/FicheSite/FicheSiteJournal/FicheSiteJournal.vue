@@ -22,10 +22,15 @@
             "
         >
             <template v-slot:aside>
-                <FicheSiteJournalAside :town="town" />
+                <FicheSiteJournalAside
+                    :town="town"
+                    ref="aside"
+                    class="opacity-0 transition-opacity"
+                />
             </template>
             <template v-slot:body>
                 <FicheSiteJournalFormNouveauMessage
+                    ref="messageForm"
                     :town="town"
                     class="mb-12"
                 />
@@ -33,8 +38,23 @@
         </FicheJournalLayout>
 
         <FicheJournalLayout>
+            <template v-slot:aside
+                ><div
+                    class="flex sticky justify-center top-8 py-2 mb-2 bg-orange200"
+                >
+                    <Button
+                        variant="primary"
+                        icon="pen"
+                        size="sm"
+                        iconPosition="left"
+                        @click="focusForm"
+                    >
+                        Ecrire un message
+                    </Button>
+                </div></template
+            >
             <template v-slot:body>
-                <h1 class="text-lg font-bold mb-2">
+                <h1 class="text-lg font-bold mr-4">
                     {{ comments.length }} message{{
                         comments.length > 1 ? "s" : ""
                     }}
@@ -53,10 +73,11 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { defineProps, ref, toRefs, computed, watch } from "vue";
 import { useUserStore } from "@/stores/user.store";
+import router from "@/helpers/router";
 
-import { Icon } from "@resorptionbidonvilles/ui";
+import { Icon, Button } from "@resorptionbidonvilles/ui";
 import FicheJournalLayout from "@/components/FicheJournalLayout/FicheJournalLayout.vue";
 import FicheSiteJournalAside from "./FicheSiteJournalAside.vue";
 import FicheSiteJournalFormNouveauMessage from "./FicheSiteJournalFormNouveauMessage/FicheSiteJournalFormNouveauMessage.vue";
@@ -68,9 +89,22 @@ const props = defineProps({
 const { town } = toRefs(props);
 const userStore = useUserStore();
 
+const aside = ref(null);
+const messageForm = ref(null);
+const isFocused = computed(() => messageForm.value?.isFocused);
+
 const comments = computed(() => {
     return [...town.value.comments.regular, ...town.value.comments.covid].sort(
         (a, b) => b.createdAt - a.createdAt
     );
 });
+
+watch(isFocused, () => {
+    aside.value.$el.style.opacity = isFocused.value === true ? "1" : "0";
+});
+
+function focusForm() {
+    router.push("#journal_du_site");
+    messageForm.value.focus();
+}
 </script>
