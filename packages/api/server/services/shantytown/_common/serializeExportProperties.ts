@@ -855,9 +855,9 @@ export default (closingSolutions) => {
             width: COLUMN_WIDTHS.LARGE,
         },
 
-        hasPlan: {
+        hasAction: {
             title: 'Le site fait-il l’objet d’une action ?',
-            data: ({ plans }) => (plans.length > 0 ? 'oui' : 'non'),
+            data: ({ actions }) => (actions.length > 0 ? 'oui' : 'non'),
             width: COLUMN_WIDTHS.SMALL,
         },
 

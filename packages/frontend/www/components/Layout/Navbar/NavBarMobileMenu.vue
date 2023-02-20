@@ -2,16 +2,17 @@
     <div ref="navbarMobile" class="origin-top-right right-0 mt-2 w-48 rounded-md shadow-lg">
         <Menu>
             <MenuItem>
-            <Link :to="`${WEBAPP_URL}/connexion`">
-            {{ $t("landingPage.header.connect") }}
-            </Link>
+            <Link :to="`${WEBAPP_URL}/connexion`">{{
+                $t("landingPage.header.connect")
+            }}</Link>
             </MenuItem>
 
             <MenuItem>
-            <Link @click="routeToContact" withStyle>
-            {{ $t("landingPage.header.contact") }}
-            </Link>
+            <LinkContact withStyle>{{
+                $t("landingPage.header.contact")
+            }}</LinkContact>
             </MenuItem>
+
             <MenuItem>
             <LanguagePicker />
             </MenuItem>
@@ -21,9 +22,9 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, defineEmits } from "vue";
-import redirectToContact from "~~/utils/redirectToContact";
 
 import { Link, Menu, MenuItem } from "@resorptionbidonvilles/ui";
+import LinkContact from "~/components/LinkContact/LinkContact.vue";
 import LanguagePicker from "./LanguagePicker";
 
 const { WEBAPP_URL } = useRuntimeConfig();
@@ -46,9 +47,5 @@ function checkOutsideClick(event) {
     if (!navbarMobile.value.contains(event.target)) {
         emit('closeMenu');
     }
-}
-
-function routeToContact() {
-    return redirectToContact();
 }
 </script>

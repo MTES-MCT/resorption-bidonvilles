@@ -6,9 +6,9 @@
                     <slot />
                 </h2>
                 <div class="pt-4">
-                    <Button variant="primary" @click="() => redirectToContact()">{{
-                            cta
-                    }}</Button>
+                    <ButtonContact variant="primary" isDemandeAcces>{{
+                        cta
+                    }}</ButtonContact>
                 </div>
             </div>
         </Container>
@@ -17,9 +17,8 @@
 
 <script setup>
 import { defineProps, toRefs } from "vue";
-import redirectToContact from "~~/utils/redirectToContact";
 
-import { Button } from "@resorptionbidonvilles/ui";
+import ButtonContact from "~~/components/ButtonContact/ButtonContact.vue";
 import Container from "~/components/Layout/Container/Container.vue";
 
 const props = defineProps({

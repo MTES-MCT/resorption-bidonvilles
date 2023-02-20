@@ -1,5 +1,5 @@
 <template>
-    <FormPublic :schema="schema" :submit="intermediateSubmit">
+    <FormPublic :schema="schema" :submit="intermediateSubmit" ref="form">
         <template v-slot:subtitle><slot name="subtitle" /></template>
         <template v-slot:title><slot name="title" /></template>
 
@@ -24,6 +24,7 @@
             <FormUtilisateurInputPhone :label="labels.phone" />
             <FormUtilisateurInputRequestType
                 v-if="variant === 'demande-acces'"
+                :class="{ hidden: demandeAccesOnly }"
                 :label="labels.request_type"
             />
             <FormUtilisateurInputIsActor
@@ -31,6 +32,7 @@
                     values.request_type &&
                     values.request_type.includes('access-request')
                 "
+                :class="{ hidden: demandeAccesOnly }"
                 :label="labels.is_actor"
             />
             <section
@@ -136,7 +138,8 @@
 
 <script setup>
 // utils
-import { defineProps, toRefs, computed } from "vue";
+import { defineProps, toRefs, computed, ref, onMounted } from "vue";
+import router from "@/helpers/router";
 
 // components
 import { Button } from "@resorptionbidonvilles/ui";
@@ -178,12 +181,24 @@ const props = defineProps({
         required: true,
     },
 });
+const form = ref(null);
 const { variant, submit } = toRefs(props);
 const schema = computed(() => {
     return schemaFn(variant.value);
 });
 const labels = computed(() => {
     return labelsFn(variant.value);
+});
+const demandeAccesOnly = computed(() => {
+    const { acces } = router.currentRoute.value.query;
+    return variant.value === "demande-acces" && acces !== undefined;
+});
+
+onMounted(() => {
+    if (demandeAccesOnly.value === true) {
+        form.value.setFieldValue("is_actor", true);
+        form.value.setFieldValue("request_type", ["access-request"]);
+    }
 });
 
 function intermediateSubmit(values) {

@@ -148,7 +148,8 @@
   },
   "contactForm": {
     "email": "Votre email",
-    "cta": "Nous contacter"
+    "ctaContact": "Nous contacter",
+    "ctaSignup": "Demander un accès"
   },
   "newsletter": {
     "title": "Abonnez-vous à notre lettre d'information mensuelle",

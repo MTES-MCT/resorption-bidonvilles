@@ -31,7 +31,7 @@ export default (user, data, properties, closedTowns, closingSolutions) => {
             properties.declaredAt,
             properties.isReinstallation,
             properties.reinstallationComments,
-            properties.hasPlan,
+            properties.hasAction,
             properties.resorptionTarget,
         ],
     };

@@ -1,6 +1,7 @@
 import {
     Paragraph, TextRun, SectionType,
 } from 'docx';
+import { ShantytownAction } from '#server/models/actionModel/fetch/Action.d';
 
 import heading from './heading';
 
@@ -15,27 +16,27 @@ export default shantytown => ({
                 before: 300,
                 after: 100,
             },
-            children: shantytown.plans.length > 0
+            children: shantytown.actions.length > 0
                 ? [
-                    ...shantytown.plans.reduce(
-                        (acc, plan) => [
+                    ...shantytown.actions.reduce(
+                        (acc, action: ShantytownAction) => [
                             ...acc,
                             new TextRun({
-                                text: `    -    Action «${plan.name}»`,
+                                text: `    -    Action «${action.name}»`,
                                 bold: true,
                                 break: 1,
                                 size: 22,
                                 font: 'Arial',
                             }),
                             new TextRun({
-                                text: `         Menée par ${plan.operator.name}`,
+                                text: `         Menée par ${action.operators.map(({ name, abbreviation }) => abbreviation || name).join(', ')}`,
                                 bold: false,
                                 break: 1,
                                 size: 22,
                                 font: 'Arial',
                             }),
                             new TextRun({
-                                text: `         ${plan.topics.join(', ')}`,
+                                text: `         ${action.topics.map(({ name }) => name).join(', ')}`,
                                 bold: false,
                                 break: 1,
                                 size: 22,
