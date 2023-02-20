@@ -4,7 +4,7 @@
         <h2 class="text-secondary text-display-lg font-bold mt-2">
             {{ $t("landingPage.hero.subtitle") }}
         </h2>
-        <LandingPageContactForm class="mx-auto" />
+        <LandingPageContactForm class="mx-auto mb-12" />
         <div class="my-4 text-display-md font-bold">
             <span class="text-white bg-black px-2 py-1">3</span>
             <span class="text-white bg-black px-2 py-1 ml-1">4</span>
