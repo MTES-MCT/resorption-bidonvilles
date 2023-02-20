@@ -23,11 +23,12 @@
                         <div>
                             <Link :to="`${WEBAPP_URL}/connexion`" class="ml-2">
                             <Button variant="primary">{{
-                                    $t("landingPage.header.connect")
+                                $t("landingPage.header.connect")
                             }}</Button>
                             </Link>
                         </div>
-                        <LanguagePicker v-if="displayLanguagePicker" class="ml-2" />
+                        <LanguagePicker v-model="language" :language="language" v-if="displayLanguagePicker"
+                            class="ml-2" />
                     </div>
 
                     <NavBarMobileButton class="md:hidden" :onClick="toggleMenu" />
@@ -40,16 +41,14 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, ref, onMounted, onUnmounted } from "vue";
-
-
+import { defineProps, toRefs, computed, ref, onMounted, onUnmounted, watch } from "vue";
+import { useI18n } from 'vue-i18n'
 import NavBarLogo from "./NavBarLogo.vue";
 import NavBarSticky from "./NavBarSticky.vue";
-import LanguagePicker from "./LanguagePicker";
 import NavBarMobileButton from "./NavBarMobileButton.vue";
 import NavBarMobileMenu from "./NavBarMobileMenu.vue";
 import Container from "~/components/Layout/Container/Container.vue";
-import { Link, Button } from "@resorptionbidonvilles/ui";
+import { Link, Button, LanguagePicker } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     stickyHeader: {
@@ -60,12 +59,18 @@ const props = defineProps({
         default: true
     }
 });
+const i18n = useI18n();
 const { stickyHeader, displayLanguagePicker } = toRefs(props);
 
 const { WEBAPP_URL } = useRuntimeConfig();
 const scrollTop = ref(0)
 const menuDisplayed = ref(false)
 const navbar = ref(null);
+const language = ref('fr')
+
+watch(language, () => {
+    i18n.locale.value = language.value
+})
 
 function handleScroll() {
     // Header is 76px but 0px when sticky

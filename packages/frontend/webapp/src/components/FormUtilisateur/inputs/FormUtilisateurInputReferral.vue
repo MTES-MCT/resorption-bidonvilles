@@ -1,7 +1,7 @@
 <template>
     <CheckableGroup id="referral" :label="label">
         <Radio
-            v-for="item in items"
+            v-for="item in items[language]"
             :key="item.value"
             :value="item.value"
             :label="item.label"
@@ -17,6 +17,10 @@ import { defineProps, toRefs } from "vue";
 
 const props = defineProps({
     label: String,
+    language: {
+        type: String,
+        default: "fr",
+    },
 });
-const { label } = toRefs(props);
+const { label, language } = toRefs(props);
 </script>

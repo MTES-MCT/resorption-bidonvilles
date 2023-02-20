@@ -14,18 +14,25 @@
             </MenuItem>
 
             <MenuItem>
-            <LanguagePicker />
+            <LanguagePicker :language="language" v-model="language" />
             </MenuItem>
         </Menu>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, defineEmits } from "vue";
+import { ref, watch, onMounted, onUnmounted, defineEmits } from "vue";
+import { useI18n } from 'vue-i18n';
 
-import { Link, Menu, MenuItem } from "@resorptionbidonvilles/ui";
+import { Link, Menu, LanguagePicker, MenuItem } from "@resorptionbidonvilles/ui";
 import LinkContact from "~/components/LinkContact/LinkContact.vue";
-import LanguagePicker from "./LanguagePicker";
+
+const i18n = useI18n();
+const language = ref('fr')
+
+watch(language, () => {
+    i18n.locale.value = language.value
+});
 
 const { WEBAPP_URL } = useRuntimeConfig();
 
