@@ -24,6 +24,7 @@
             <FormUtilisateurInputPhone :label="labels.phone" />
             <FormUtilisateurInputRequestType
                 v-if="variant === 'demande-acces'"
+                :class="{ hidden: demandeAccesOnly }"
                 :label="labels.request_type"
             />
             <FormUtilisateurInputIsActor
@@ -31,6 +32,7 @@
                     values.request_type &&
                     values.request_type.includes('access-request')
                 "
+                :class="{ hidden: demandeAccesOnly }"
                 :label="labels.is_actor"
             />
             <section
@@ -187,10 +189,14 @@ const schema = computed(() => {
 const labels = computed(() => {
     return labelsFn(variant.value);
 });
+const demandeAccesOnly = computed(() => {
+    const { acces } = router.currentRoute.value.query;
+    return variant.value === "demande-acces" && acces !== undefined;
+});
 
 onMounted(() => {
-    const { acces } = router.currentRoute.value.query;
-    if (acces !== undefined) {
+    if (demandeAccesOnly.value === true) {
+        form.value.setFieldValue("is_actor", true);
         form.value.setFieldValue("request_type", ["access-request"]);
     }
 });
