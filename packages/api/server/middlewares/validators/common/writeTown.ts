@@ -126,6 +126,8 @@ export default mode => ([
 
             return new Date();
         })
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de mise à jour" est obligatoire')
+        .toDate()
         .customSanitizer((value) => {
             const today = new Date();
 
@@ -134,8 +136,6 @@ export default mode => ([
             }
             return value;
         })
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de mise à jour" est obligatoire')
-        .toDate()
         .custom((value, { req }) => {
             // for updates only
             if (req.town) {
