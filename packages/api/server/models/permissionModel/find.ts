@@ -15,7 +15,6 @@ type PermissionRow = {
     epci: string[] | null,
     cities: string[] | null,
     shantytowns: number[] | null,
-    plans: number[] | null,
     actions: number[] | null
 };
 
@@ -37,7 +36,6 @@ export default async (owners: number[]): Promise<PermissionHash> => {
             uap.epci,
             uap.cities,
             uap.shantytowns,
-            uap.plans,
             uap.actions
         FROM user_actual_permissions uap
         WHERE uap.fk_user IN (:owners)
@@ -68,7 +66,6 @@ export default async (owners: number[]): Promise<PermissionHash> => {
                 epci: row.epci || [],
                 cities: row.cities || [],
                 shantytowns: row.shantytowns || [],
-                plans: row.plans || [],
                 actions: row.actions || [],
             } : null,
         };

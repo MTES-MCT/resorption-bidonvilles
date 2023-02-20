@@ -36,18 +36,6 @@ import organizationGetMembers from './organizationController/getMembers';
 import organizationSearch from './organizationController/search/search';
 import organizationTypes from './organizationController/types';
 import organizationUpdateBeingFunded from './organizationController/updateBeingFunded';
-// plan
-import planAddState from './planController/addState';
-import planClose from './planController/close';
-import planCreate from './planController/create';
-import planDelete from './planController/delete';
-import planFind from './planController/find';
-import planList from './planController/list';
-import planListExport from './planController/listExport';
-import planUpdate from './planController/update';
-// plan comments
-import createPlanComment from './planCommentController/create';
-import exportComments from './planCommentController/export';
 // poi
 import poiFindAll from './poiController/findAll';
 // shantytown
@@ -141,20 +129,6 @@ export default () => ({
         search: organizationSearch,
         types: organizationTypes,
         updateBeingFunded: organizationUpdateBeingFunded,
-    },
-    plan: {
-        addState: planAddState,
-        close: planClose,
-        create: planCreate,
-        delete: planDelete,
-        find: planFind,
-        list: planList,
-        listExport: planListExport,
-        update: planUpdate,
-    },
-    planComment: {
-        create: createPlanComment,
-        export: exportComments,
     },
     poi: {
         findAll: poiFindAll,

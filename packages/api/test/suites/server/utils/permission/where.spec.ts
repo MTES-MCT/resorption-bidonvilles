@@ -70,7 +70,7 @@ describe('utils/permission.where()', () => {
                     epci: [location.epci.code, otherLocation.epci.code],
                     cities: [location.city.code, otherLocation.city.code],
                     shantytowns: [fakeShantytown(paris.city()).id],
-                    plans: [fakeAction({ location: paris.departement() }).id],
+                    actions: [fakeAction({ location: paris.departement() }).id],
                 },
             },
         };
@@ -99,8 +99,8 @@ describe('utils/permission.where()', () => {
                 query: 'shantytowns.shantytown_id',
                 value: [1],
             },
-            plans: {
-                query: 'plans.plan_id',
+            actions: {
+                query: 'actions.action_id',
                 value: [1],
             },
         });

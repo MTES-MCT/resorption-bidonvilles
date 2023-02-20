@@ -106,7 +106,6 @@ export default (user, data, properties, closedTowns, closingSolutions) => {
             ],
         });
     }
-
     if (options.indexOf('demographics') !== -1) {
         section = {
             title: 'Diagnostic',
