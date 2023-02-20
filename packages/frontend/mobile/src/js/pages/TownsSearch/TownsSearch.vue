@@ -86,18 +86,23 @@ export default {
             return this.$store.state.search.error;
         },
         filteredResults() {
-            if (this.$store.state.search.results) {
-                return this.$store.state.search.results.filter((town) => {
-                    if (this.filter === "all") {
-                        return true;
-                    } else if (this.filter === "open") {
-                        return town.closedAt === null;
-                    } else if (this.filter === "closed") {
-                        return town.closedAt !== null;
-                    }
-                });
+            const { results } = this.$store.state.search;
+            if (!results) {
+                return [];
             }
-            return [];
+
+            if (this.filter === "all") {
+                return results;
+            }
+
+            return results.filter((town) => {
+                if (this.filter === "open") {
+                    return town.closedAt === null;
+                }
+
+                // filter = "closed"
+                return town.closedAt !== null;
+            });
         },
         sections() {
             if (this.loading) {
