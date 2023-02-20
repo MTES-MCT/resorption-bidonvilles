@@ -7,13 +7,13 @@
         <LandingPageContactForm class="mx-auto mb-6" />
 
         <div class="flex justify-center items-center my-4 text-display-md">
-            <span :class="squareClass">{{ resorptions[index].figure1 }}</span>
-            <span :class="[squareClass, 'ml-2']"> {{ resorptions[index].figure2 }}</span>
+            <span :class="squareClass" data-animation="3">{{ resorptions[index].figure1 }}</span>
+            <span :class="[squareClass, 'ml-2']" data-animation="2"> {{ resorptions[index].figure2 }}</span>
             <span class="ml-2">{{ $t("landingPage.hero.review") }}</span>
-            <span :class="[squareClass, 'ml-2']">{{ resorptions[index].year1 }}</span>
-            <span :class="[squareClass, 'ml-2']">{{ resorptions[index].year2 }}</span>
-            <span :class="[squareClass, 'ml-2']">{{ resorptions[index].year3 }}</span>
-            <span :class="[squareClass, 'ml-2']">{{ resorptions[index].year4 }}</span>
+            <span :class="[squareClass, 'ml-2']" data-animation="2">{{ resorptions[index].year1 }}</span>
+            <span :class="[squareClass, 'ml-2']" data-animation="1">{{ resorptions[index].year2 }}</span>
+            <span :class="[squareClass, 'ml-2']" data-animation="3">{{ resorptions[index].year3 }}</span>
+            <span :class="[squareClass, 'ml-2']" data-animation="2">{{ resorptions[index].year4 }}</span>
         </div>
         <p class="text-lg font-bold">Au total plus de <span class="underline">3 000</span> personnes relogées</p>
     </div>
@@ -50,7 +50,7 @@ const resorptions = [
 ]
 const index = ref(0)
 let squares = null
-const framesPerSecond = 0.4;
+const framesPerSecond = 0.3;
 const squareClass = "px-2 py-3 square"
 
 onMounted(() => {
@@ -60,9 +60,9 @@ onMounted(() => {
 
 function animate() {
     Object.keys(squares).forEach((index) => {
-        squares[index].classList.remove('animateSquare');
+        squares[index].classList.remove("animateSquare1", "animateSquare2", "animateSquare3");
         void squares[index].offsetWidth; // trigger reflow
-        squares[index].classList.add('animateSquare');
+        squares[index].classList.add(`animateSquare${Math.round(Math.random() * 2 + 1)}`);
     })
 
     setTimeout(function () {
@@ -78,21 +78,55 @@ function animate() {
     background-color: black;
 }
 
-@keyframes rotateAnimation {
+@keyframes rotateAnimation1 {
     from {
         color: black;
-        transform: rotateX(45deg);
+        transform: rotateX(0deg);
     }
 
     to {
         color: black;
-        transform: rotateX(225deg);
+        transform: rotateX(180deg);
     }
 }
 
-.animateSquare {
-    animation: rotateAnimation 0.5s;
-    transform: rotateX(45deg);
+@keyframes rotateAnimation2 {
+    from {
+        color: black;
+        transform: rotateX(0deg);
+    }
+
+    to {
+        color: black;
+        transform: rotateX(360deg);
+    }
+}
+
+@keyframes rotateAnimation3 {
+    from {
+        color: black;
+        transform: rotateX(0deg);
+    }
+
+    to {
+        color: black;
+        transform: rotateX(540deg);
+    }
+}
+
+.animateSquare1 {
+    animation: rotateAnimation1 0.5s;
+    transform: rotateX(0deg);
+}
+
+.animateSquare2 {
+    animation: rotateAnimation2 1s;
+    transform: rotateX(0deg);
+}
+
+.animateSquare3 {
+    animation: rotateAnimation3 1.5s;
+    transform: rotateX(0deg);
 }
 </style>
 
