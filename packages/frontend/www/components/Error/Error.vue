@@ -24,20 +24,17 @@
         <p class="mt-6">
             Et si vous ne trouvez vraiment pas ce que vous cherchez, vous
             pouvez aussi
-            <Button class="underline" variant="primaryText" @click="() => redirectToContact()">nous contacter</Button>
+            <Link to="mailto:contact@resorption-bidonvilles.beta.gouv.fr">nous contacter</Link>
         </p>
         <p class="mt-8">
             <Link to="https://beta.gouv.fr/startups/resorption-bidonvilles.html#equipe">— L'équipe de
             <em class="italic">Résorption-bidonvilles</em></Link>
         </p>
     </Container>
-
 </template>
 
 <script setup>
-import redirectToContact from "~~/utils/redirectToContact";
-
-import { Link, Button } from "@resorptionbidonvilles/ui";
+import { Link } from "@resorptionbidonvilles/ui";
 import Container from "../Layout/Container/Container.vue";
 </script>
 
