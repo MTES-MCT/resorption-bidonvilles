@@ -5,6 +5,7 @@ import create from './create';
 import findAssociationName from './findAssociationName';
 import findByCategory from './findByCategory';
 import findByIds from './findByIds';
+import findByName from './findByName';
 import findByType from './findByType';
 import findOneAssociation from './findOneAssociation';
 import findOneById from './findOneById';
@@ -20,6 +21,7 @@ export default {
     findAssociationName,
     findByCategory,
     findByIds,
+    findByName,
     findByType,
     findOneAssociation,
     findOneById,

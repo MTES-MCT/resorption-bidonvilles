@@ -95,7 +95,7 @@ export default async (user, data) => {
     }
 
     const properties = serializeExportProperties(closingSolutions);
-    const sections = createExportSections(user, data, properties, closedTowns, closingSolutions);
+    const sections = await createExportSections(user, data, properties, closedTowns, closingSolutions);
     let locationName = '';
 
 
