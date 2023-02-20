@@ -3,45 +3,60 @@
         <p class="font-bold text-lg">Partager une info</p>
 
         <div class="bg-white p-6">
-            <FormNouveauMessageInputMessage :rows="showFullForm ? 5 : 2" />
-            <Button
-                :icon="showFullForm ? 'chevron-up' : 'chevron-down'"
-                variant="text"
-                class="text-primary"
-                type="button"
-                @click="toggleCollapse"
-                >{{
-                    showFullForm ? "Masquer les options" : "Voir plus d'options"
-                }}
-            </Button>
+            <FormNouveauMessageInputMessage
+                :rows="showFullForm ? 5 : 2"
+                ref="messageInput"
+            />
             <div v-if="showFullForm">
-                <FormNouveauMessageInputTags />
-                <FormNouveauMessageInputMode />
-                <FormNouveauMessageInputTarget
-                    v-if="values.mode === 'custom'"
-                    :departement="town.departement.code"
-                />
-                <p class="text-sm mb-4">
-                    (*) Quelle que soit l'option retenue, les administrateurs
-                    locaux et nationaux auront accès au message à des fins de
-                    modération
-                </p>
-                <ErrorSummary v-if="error" :message="error" class="mt-2" />
-                <p class="text-right">
-                    <Button
-                        icon="paper-plane"
-                        iconPosition="left"
-                        @click="submit"
-                        >Publier le message</Button
-                    >
-                </p>
+                <Button
+                    :icon="collapse ? 'chevron-down' : 'chevron-up'"
+                    variant="primaryText"
+                    class="mb-4"
+                    type="button"
+                    :padding="false"
+                    @click="toggleCollapse"
+                    >{{
+                        collapse ? "Voir plus d'options" : "Masquer les options"
+                    }}
+                </Button>
+
+                <div v-if="!collapse">
+                    <FormNouveauMessageInputTags />
+                    <FormNouveauMessageInputMode />
+                    <FormNouveauMessageInputTarget
+                        v-if="values.mode === 'custom'"
+                        :departement="town.departement.code"
+                    />
+                    <p class="text-sm mb-4">
+                        (*) Quelle que soit l'option retenue, les
+                        administrateurs locaux et nationaux auront accès au
+                        message à des fins de modération
+                    </p>
+                    <ErrorSummary v-if="error" :message="error" class="mt-2" />
+                    <p class="text-right space-x-2">
+                        <Button
+                            type="button"
+                            icon="rotate-left"
+                            iconPosition="left"
+                            variant="secondary"
+                            @click="cancel"
+                            >Annuler</Button
+                        >
+                        <Button
+                            icon="paper-plane"
+                            iconPosition="left"
+                            @click="submit"
+                            >Publier le message</Button
+                        >
+                    </p>
+                </div>
             </div>
         </div>
     </form>
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, watch } from "vue";
+import { defineProps, defineExpose, toRefs, ref, computed } from "vue";
 import { useForm } from "vee-validate";
 import { useTownsStore } from "@/stores/towns.store";
 import schema from "./FicheSiteJournalFormNouveauMessage.schema";
@@ -55,9 +70,8 @@ import FormNouveauMessageInputTarget from "./inputs/FormNouveauMessageInputTarge
 
 const props = defineProps({
     town: Object,
-    showFullForm: Boolean,
 });
-const { town, showFullForm } = toRefs(props);
+const { town } = toRefs(props);
 
 const { handleSubmit, setErrors, resetForm, values } = useForm({
     validationSchema: schema,
@@ -68,17 +82,20 @@ const { handleSubmit, setErrors, resetForm, values } = useForm({
 });
 
 const error = ref(null);
-const emit = defineEmits(["show"]);
+const collapse = ref(false);
+const messageInput = ref(null);
+const showFullForm = computed(() => {
+    return messageInput.value?.isFocused === true || values.comment?.length > 0;
+});
+
+function cancel() {
+    resetForm();
+    collapse.value = false;
+}
 
 function toggleCollapse() {
-    values.comment = "";
-    emit("show", !showFullForm.value);
+    collapse.value = !collapse.value;
 }
-watch(values, () => {
-    if (values.comment !== undefined && values.comment.length > 0) {
-        emit("show", true);
-    }
-});
 
 const submit = handleSubmit(async (values) => {
     error.value = null;
@@ -95,6 +112,8 @@ const submit = handleSubmit(async (values) => {
         });
 
         resetForm();
+        collapse.value = false;
+
         // on rafraîchit la page pour avoir le site mis à jour
         router.push(`/site/${town.value.id}/#journal_du_site`);
     } catch (e) {
@@ -103,5 +122,11 @@ const submit = handleSubmit(async (values) => {
             setErrors(e.fields);
         }
     }
+});
+
+const isFocused = computed(() => messageInput.value?.isFocused);
+defineExpose({
+    isFocused,
+    focus: (...args) => messageInput.value.focus(...args),
 });
 </script>

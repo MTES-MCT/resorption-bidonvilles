@@ -1,6 +1,6 @@
 <template>
     <aside class="text-sm">
-        <template v-if="!town.closedAt && showFullForm">
+        <template v-if="!town.closedAt">
             <FicheSiteJournalAsideRubrique icon="info-circle" class="mb-4">
                 <template v-slot:title
                     >À qui sont destinés les messages ?</template
@@ -33,7 +33,6 @@ import FicheSiteJournalAsideRubrique from "./FicheSiteJournalAsideRubrique.vue";
 
 const props = defineProps({
     town: Object,
-    showFullForm: Boolean,
 });
-const { town, showFullForm } = toRefs(props);
+const { town } = toRefs(props);
 </script>

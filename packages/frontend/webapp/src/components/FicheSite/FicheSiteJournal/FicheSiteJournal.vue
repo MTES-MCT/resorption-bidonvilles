@@ -23,19 +23,14 @@
         >
             <template v-slot:aside>
                 <FicheSiteJournalAside
-                    :showFullForm="showFullForm"
                     :town="town"
+                    v-if="messageForm?.isFocused"
                 />
             </template>
             <template v-slot:body>
                 <FicheSiteJournalFormNouveauMessage
+                    ref="messageForm"
                     :town="town"
-                    :showFullForm="showFullForm"
-                    @show="
-                        (value) => {
-                            showFullForm = value;
-                        }
-                    "
                     class="mb-12"
                 />
             </template>
@@ -51,7 +46,7 @@
                         icon="pen"
                         size="sm"
                         iconPosition="left"
-                        @click="writeMessage"
+                        @click="focusForm"
                     >
                         Ecrire un message
                     </Button>
@@ -93,7 +88,7 @@ const props = defineProps({
 const { town } = toRefs(props);
 const userStore = useUserStore();
 
-const showFullForm = ref(false);
+const messageForm = ref(null);
 
 const comments = computed(() => {
     return [...town.value.comments.regular, ...town.value.comments.covid].sort(
@@ -101,8 +96,8 @@ const comments = computed(() => {
     );
 });
 
-function writeMessage() {
+function focusForm() {
     router.push("#journal_du_site");
-    showFullForm.value = true;
+    messageForm.value.focus();
 }
 </script>
