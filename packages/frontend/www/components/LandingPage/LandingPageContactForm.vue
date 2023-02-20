@@ -1,21 +1,21 @@
 <template>
     <div class="flex flex-row justify-center mt-4 w-full max-w-md">
-        <Button variant="secondary" class="ml-1" :href="`${WEBAPP_URL}/contact?acces`" @click="setWebappDevice">{{
+        <ButtonContact variant="secondary" class="ml-1" isDemandeAcces>{{
             $t("landingPage.contactForm.ctaSignup")
-        }}</Button>
-        <Button variant="primary" class="ml-1" :href="`${WEBAPP_URL}/contact`" @click="setWebappDevice">{{
+        }}</ButtonContact>
+        <ButtonContact variant="primary" class="ml-1">{{
             $t("landingPage.contactForm.ctaContact")
-        }}</Button>
+        }}</ButtonContact>
     </div>
 </template>
 
 <script>
-import { Button } from "@resorptionbidonvilles/ui";
+import ButtonContact from "~~/components/ButtonContact/ButtonContact.vue";
 import setWebappDevice from "~~/utils/setWebappDevice";
 
 export default {
     components: {
-        Button
+        ButtonContact
     },
     data() {
         const { WEBAPP_URL } = useRuntimeConfig();
