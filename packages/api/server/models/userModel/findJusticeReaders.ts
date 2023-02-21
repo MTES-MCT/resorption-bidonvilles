@@ -1,7 +1,31 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import { userLocationType } from './_common/types/userLocationType';
 
-export default (shantytownId: number) => sequelize.query(
+export type JusticeReaderRow = {
+    user_id: number,
+    first_name: string,
+    last_name: string,
+    id: number,
+    name: string,
+    abbreviation: string | null,
+    location_type: userLocationType,
+    region_code: string | null,
+    region_name: string | null,
+    departement_code: string | null,
+    departement_name: string | null,
+    epci_code: string | null,
+    epci_name: string | null,
+    city_code: string | null,
+    city_name: string | null,
+    city_main: string | null,
+    type_id: number,
+    type_category: string,
+    type_name: string,
+    type_abbreviation: string | null
+};
+
+export default (shantytownId: number): Promise<JusticeReaderRow[]> => sequelize.query(
     `WITH location AS (
         SELECT
             cities.code AS city,
