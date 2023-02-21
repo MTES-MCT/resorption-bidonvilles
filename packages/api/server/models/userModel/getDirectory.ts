@@ -1,8 +1,85 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import { userLocationType } from './_common/types/userLocationType';
 
-export default async () => {
-    const users = await sequelize.query(
+type OrganizationRow = {
+    organization_id: number,
+    name: string,
+    abbreviation: string | null,
+    location_type: userLocationType,
+    region_code: string | null,
+    region_name: string | null,
+    departement_code: string | null,
+    departement_name: string | null,
+    epci_code: string | null,
+    epci_name: string | null,
+    city_code: string | null,
+    city_name: string | null,
+    city_main: string | null,
+    being_funded: boolean,
+    being_funded_at: Date,
+    user_id: number,
+    user_role_admin: string | null,
+    user_firstName: string,
+    user_lastName: string,
+    user_email: string,
+    user_phone: string | null,
+    user_position: string,
+    user_role_regular: string,
+    type_id: number,
+    type_category: string,
+    type_name: string,
+    type_abbreviation: string | null,
+};
+
+type SerializedOrganizationUser = {
+    id: number,
+    is_admin: boolean,
+    role: string,
+    first_name: string,
+    last_name: string,
+    email: string,
+    phone: string | null,
+    position: string,
+};
+
+export type SerializedOrganization = {
+    id: number,
+    name: string,
+    abbreviation: string | null,
+    being_funded: boolean,
+    being_funded_at: Date,
+    location: {
+        type: userLocationType,
+        region: {
+            code: string,
+            name: string,
+        } | null,
+        departement: {
+            code: string,
+            name: string,
+        } | null,
+        epci: {
+            code: string,
+            name: string,
+        } | null,
+        city: {
+            code: string,
+            name: string,
+            main: string | null,
+        } | null,
+    },
+    type: {
+        id: number,
+        category: string,
+        name: string,
+        abbreviation: string | null,
+    },
+    users: SerializedOrganizationUser[],
+};
+
+export default async (): Promise<SerializedOrganization[]> => {
+    const users: OrganizationRow[] = await sequelize.query(
         `
         SELECT
             organizations.organization_id,
@@ -50,9 +127,9 @@ export default async () => {
         },
     );
 
-    const hash = {};
-    const organizations = [];
-    users.forEach((user: any) => {
+    const hash: { [key: number]: SerializedOrganization } = {};
+    const organizations: SerializedOrganization[] = [];
+    users.forEach((user: OrganizationRow) => {
         if (!Object.prototype.hasOwnProperty.call(hash, user.organization_id)) {
             hash[user.organization_id] = {
                 id: user.organization_id,
