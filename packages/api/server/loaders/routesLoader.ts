@@ -417,7 +417,7 @@ export default (app) => {
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.list'], ...args),
         middlewares.shantytown.checkReadPermission,
-        controllers.permission.findPermissionsToAccessJustice,
+        controllers.town.findJusticeReaders,
     );
     app.get(
         '/towns/:id/exports',

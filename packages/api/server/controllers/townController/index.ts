@@ -18,6 +18,7 @@ import inviteNewActor from './inviteNewActor';
 import removeActor from './removeActor';
 import exportActors from './exportActors';
 import getRelations from './getRelations';
+import findJusticeReaders from './findJusticeReaders';
 import findNearbyTowns from './findNearbyTowns';
 import findUserTowns from './findUserTowns';
 
@@ -42,6 +43,7 @@ export default {
     removeActor,
     exportActors,
     getRelations,
+    findJusticeReaders,
     findNearbyTowns,
     findUserTowns,
 };
