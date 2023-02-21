@@ -1,9 +1,19 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-export default async (location) => {
+export default async (shantytownId: number) => {
     const organizationsWithUsersHavingPermissionsOnJustice = await sequelize.query(
-        `
+        `WITH location AS (
+            SELECT
+                cities.code AS city,
+                cities.fk_epci AS epci,
+                departements.code AS departement,
+                departements.fk_region AS region
+            FROM shantytowns
+            LEFT JOIN cities ON shantytowns.fk_city = cities.code
+            LEFT JOIN departements ON cities.fk_departement = departements.code
+            WHERE shantytown_id = :shantytownId
+        )
         SELECT
             uap.user_id,
             u.first_name,
@@ -25,11 +35,11 @@ export default async (location) => {
             ot.fk_category AS "type_category",
             ot.name_singular AS "type_name",
             ot.abbreviation AS "type_abbreviation"
-        FROM
-            user_actual_permissions uap
-            LEFT JOIN users u ON uap.user_id = u.user_id
-            LEFT JOIN localized_organizations o ON uap.organization_id = o.organization_id
-            LEFT JOIN organization_types ot ON o.fk_type = ot.organization_type_id
+        FROM user_actual_permissions uap
+        LEFT JOIN location ON TRUE
+        LEFT JOIN users u ON uap.user_id = u.user_id
+        LEFT JOIN localized_organizations o ON uap.organization_id = o.organization_id
+        LEFT JOIN organization_types ot ON o.fk_type = ot.organization_type_id
         WHERE
                 uap.fk_entity = 'shantytown_justice'
         AND
@@ -59,11 +69,11 @@ export default async (location) => {
         AND
         (
             allow_all IS true
-            OR :regionCode = ANY(uap.regions)
+            OR location.region = ANY(uap.regions)
                 
-            OR :departementCode = ANY(uap.departements)
-            OR :epciCode = ANY(uap.epci)
-            OR :cityCode = ANY(uap.cities)
+            OR location.departement = ANY(uap.departements)
+            OR location.epci = ANY(uap.epci)
+            OR location.city = ANY(uap.cities)
             OR
                 (
                     uap.regions IS NULL
@@ -74,7 +84,7 @@ export default async (location) => {
                 AND
                     uap.cities IS NULL
                 AND
-                    :departementCode = o.departement_code
+                    location.departement = o.departement_code
                 )
             OR
                 (
@@ -98,10 +108,7 @@ export default async (location) => {
         `,
         {
             replacements: {
-                regionCode: location.region.code,
-                departementCode: location.departement.code,
-                epciCode: location.epci.code,
-                cityCode: location.city.code,
+                shantytownId,
             },
             type: QueryTypes.SELECT,
         },

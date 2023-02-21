@@ -39,7 +39,7 @@
         <ModaleListeAccesPJ
             ref="modaleListeAccesPJ"
             :title="title"
-            :location="location"
+            :townId="town.id"
         />
     </FicheRubrique>
 </template>
@@ -93,16 +93,6 @@ const policeStatus = computed(() => {
     }
 
     return "non communiqué";
-});
-
-const location = computed(() => {
-    return {
-        type: "city",
-        city: town.value.city,
-        epci: town.value.epci,
-        departement: town.value.departement,
-        region: town.value.region,
-    };
 });
 
 watch(

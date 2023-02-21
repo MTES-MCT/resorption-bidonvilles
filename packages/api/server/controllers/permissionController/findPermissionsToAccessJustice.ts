@@ -6,17 +6,9 @@ const ERROR_RESPONSES = {
 };
 
 export default async (req, res, next) => {
-    const location = {
-        type: req.query.type,
-        city: req.query.city,
-        epci: req.query.epci,
-        departement: req.query.departement,
-        region: req.query.region,
-    };
-
     let usersWhoCanAccessJustice;
     try {
-        usersWhoCanAccessJustice = await permissionService.findPermissionsToAccessJustice(location);
+        usersWhoCanAccessJustice = await permissionService.findPermissionsToAccessJustice(req.params.id);
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({

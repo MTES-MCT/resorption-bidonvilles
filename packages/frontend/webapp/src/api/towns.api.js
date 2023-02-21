@@ -86,6 +86,10 @@ export function findRelations(townId, query) {
     );
 }
 
+export function getJusticeReaders(townId) {
+    return axios.get(`/towns/${encodeURI(townId)}/justice_readers`);
+}
+
 export function inviteNewActor(townId, email) {
     return axios.put(`/towns/${encodeURI(townId)}/invitations`, { email });
 }

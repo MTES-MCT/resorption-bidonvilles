@@ -413,6 +413,12 @@ export default (app) => {
         controllers.town.find,
     );
     app.get(
+        '/towns/:id/justice_readers',
+        middlewares.auth.authenticate,
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.list'], ...args),
+        controllers.permission.findPermissionsToAccessJustice,
+    );
+    app.get(
         '/towns/:id/exports',
         middlewares.auth.authenticate,
         middlewares.shantytown.checkReadPermission,
@@ -708,11 +714,5 @@ export default (app) => {
         validators.note.publishNote,
         middlewares.validation,
         controllers.note.addPublication,
-    );
-
-    app.get(
-        '/permissionsToAccessJustice',
-        middlewares.auth.authenticate,
-        controllers.permission.findPermissionsToAccessJustice,
     );
 };
