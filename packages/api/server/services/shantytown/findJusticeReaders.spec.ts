@@ -4,7 +4,7 @@ import sinonChai from 'sinon-chai';
 
 import userModel from '#server/models/userModel';
 import ServiceError from '#server/errors/ServiceError';
-import fakePermissionsToAccessJustice from '#test/utils/permissionsToAccessJustice';
+import fakeJusticeReader from '#root/test/utils/justiceReader';
 
 import findService from './findJusticeReaders';
 
@@ -24,7 +24,7 @@ describe('services/shantytown.findJusticeReaders()', () => {
     });
 
     it('retourne la liste des utilisateurs ayant la permission d\'accéder aux PJ', async () => {
-        const permissions = fakePermissionsToAccessJustice();
+        const permissions = [fakeJusticeReader(), fakeJusticeReader()];
         stubs.findJusticeReaders.resolves(permissions);
         const response = await findService(1);
         expect(response).to.be.an('array');
