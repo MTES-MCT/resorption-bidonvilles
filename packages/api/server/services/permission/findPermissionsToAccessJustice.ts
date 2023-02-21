@@ -10,6 +10,6 @@ export default async (shantytownId: number) => {
         }
         return [];
     } catch (error) {
-        throw new ServiceError('fetch_failed', new Error('Impossible de trouver les permissions d\'accès aux procédures judiciaires en base de données'));
+        throw new ServiceError('fetch_failed', error);
     }
 };
