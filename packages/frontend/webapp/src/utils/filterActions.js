@@ -33,10 +33,10 @@ export default function (actions, filters) {
 
 function checkStatus(action, status) {
     if (status === "open") {
-        return action.ended_at === null;
+        return action.ended_at === null || new Date() < action.ended_at;
     }
 
-    return action.ended_at !== null;
+    return action.ended_at !== null && new Date() > action.ended_at;
 }
 
 function checkSearch(action, search) {
