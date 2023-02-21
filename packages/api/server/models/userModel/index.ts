@@ -9,6 +9,7 @@ import findByOrganization from './findByOrganization';
 import findByOrganizationCategory from './findByOrganizationCategory';
 import findDepartementSummarySubscribers from './findDepartementSummarySubscribers';
 import findForRegion from './findForRegion';
+import findJusticeReaders from './findJusticeReaders';
 import findOne from './findOne';
 import findOneByAccessId from './findOneByAccessId';
 import findOneByEmail from './findOneByEmail';
@@ -38,6 +39,7 @@ export default {
     findByOrganizationCategory,
     findDepartementSummarySubscribers,
     findForRegion,
+    findJusticeReaders,
     findOne,
     findOneByAccessId,
     findOneByEmail,
