@@ -32,7 +32,7 @@ describe('services/shantytown.findJusticeReaders()', () => {
     });
 
     it('renvoie une exception ServiceError \'fetch_failed\' si aucune permission n\'existe pas en bdd', async () => {
-        stubs.findJusticeReaders.resolves(null);
+        stubs.findJusticeReaders.rejects(new Error('une erreur'));
         let responseError = null;
         try {
             await findService(1);
