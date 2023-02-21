@@ -2,7 +2,7 @@
     <section class="shadow-lg p-6">
         <div class="flex justify-between">
             <h1 class="text-3xl text-primary">{{ title }}</h1>
-            <div>
+            <div class="flex flex-col items-end">
                 <Button
                     v-if="category === 'justice'"
                     size="sm"
