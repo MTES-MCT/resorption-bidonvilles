@@ -31,6 +31,7 @@ import publishNote from './note/publish';
 import actionCreate from './actions/create';
 import actionCreateComment from './actions/createComment';
 import actionUpdate from './actions/update';
+import justiceReaderFindByLocation from './justiceReaders/findByLocation';
 import organizationSearch from './organizations/search';
 
 export default {
@@ -66,6 +67,9 @@ export default {
     },
     dashboard: {
         location: dashboardLocation,
+    },
+    justiceReader: {
+        findByLocation: justiceReaderFindByLocation,
     },
     user: {
         getLatestActivationLink: userGetLatestActivationLink,

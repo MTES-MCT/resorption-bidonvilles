@@ -26,6 +26,8 @@
         <FormDeclarationDeSiteProcedureJudiciaire
             class="mt-6"
             v-if="hasJusticePermission"
+            :location="location"
+            :mode="mode"
         />
 
         <ErrorSummary
@@ -40,13 +42,13 @@
 
 <script setup>
 import {
-    defineProps,
-    toRefs,
     computed,
     defineExpose,
-    toRef,
-    watch,
+    defineProps,
     ref,
+    toRef,
+    toRefs,
+    watch,
 } from "vue";
 import { useForm } from "vee-validate";
 import { useUserStore } from "@/stores/user.store";
@@ -80,6 +82,7 @@ const props = defineProps({
     },
 });
 const { town } = toRefs(props);
+
 const initialValues = {
     update_to_date: 1,
     living_conditions_version: town.value?.livingConditions?.version || 2,
@@ -125,7 +128,17 @@ const originalValues = formatValuesForApi(values);
 const townsStore = useTownsStore();
 const userStore = useUserStore();
 const error = ref(null);
-const location = ref(town.value ? initialValues.location : null);
+const location = ref(
+    town.value
+        ? {
+              type: "city",
+              city: town.value.city,
+              epci: town.value.epci,
+              departement: town.value.departement,
+              region: town.value.region,
+          }
+        : null
+);
 const address = toRef(values, "address");
 
 watch(address, async () => {

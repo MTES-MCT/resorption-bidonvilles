@@ -14,5 +14,6 @@
 import { useDirectoryStore } from "@/stores/directory.store";
 import CarteStructure from "@/components/CarteStructure/CarteStructure.vue";
 import AnnuairePagination from "./AnnuairePagination.vue";
+
 const directoryStore = useDirectoryStore();
 </script>
