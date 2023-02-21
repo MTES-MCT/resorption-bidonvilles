@@ -42,8 +42,8 @@ module.exports = {
             },
             eti_fk_city: {
                 type: Sequelize.STRING,
-                allowNull: true
-            },    
+                allowNull: true,
+            },
             location_other: {
                 type: Sequelize.TEXT,
                 allowNull: true,
@@ -86,11 +86,11 @@ module.exports = {
                     name: `fk__${table}__city`,
                     references: {
                         table: 'cities',
-                        field: 'code'
+                        field: 'code',
                     },
                     onUpdate: 'cascade',
                     onDelete: 'restrict',
-                    transaction
+                    transaction,
                 }),
                 queryInterface.addConstraint(table, {
                     fields: ['created_by'],
