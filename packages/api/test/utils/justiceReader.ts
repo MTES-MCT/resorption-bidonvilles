@@ -1,14 +1,21 @@
-import { JusticeReaderRow } from '#server/models/organizationModel/findJusticeReaders';
+import { JusticeReaderRow } from '#server/models/organizationModel/findJusticeReadersByShantytown';
 
 export default function raw(): JusticeReaderRow {
     return {
         user_id: 2,
+        email: 'jean@dupont.fr',
         first_name: 'Jean',
         last_name: 'Dupont',
+        phone: '0102030405',
+        position: 'Test',
+        role_admin: null,
+        role_regular: 'collaborator',
         id: 1,
         name: 'Orgnaisation 02',
         abbreviation: 'ORGA2',
         location_type: 'departement',
+        being_funded: false,
+        being_funded_at: new Date(),
         region_code: '93',
         region_name: "Provence-Alpes-Côte d'Azur",
         departement_code: '13',

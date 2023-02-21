@@ -1,6 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import { userLocationType } from '#server/models/userModel/_common/types/userLocationType';
+import { Location } from '#server/models/geoModel/Location.d';
+import { LocationType } from '#server/models/geoModel/LocationType.d';
 import { SerializedOrganization } from '#server/models/userModel/getDirectory';
 
 export type JusticeReaderRow = {
@@ -15,7 +16,7 @@ export type JusticeReaderRow = {
     id: number,
     name: string,
     abbreviation: string | null,
-    location_type: userLocationType,
+    location_type: LocationType,
     region_code: string | null,
     region_name: string | null,
     departement_code: string | null,
@@ -33,11 +34,13 @@ export type JusticeReaderRow = {
     type_abbreviation: string | null
 };
 
-export default async (shantytownId: number): Promise<SerializedOrganization[]> => {
+export default async (shantytownId?: number, location?: Location): Promise<SerializedOrganization[]> => {
     const rows: JusticeReaderRow[] = await sequelize.query(
-        `WITH location AS (
+        `${shantytownId ? `
+        WITH location AS (
             SELECT
                 cities.code AS city,
+                cities.fk_main AS cityMain,
                 cities.fk_epci AS epci,
                 departements.code AS departement,
                 departements.fk_region AS region
@@ -45,7 +48,7 @@ export default async (shantytownId: number): Promise<SerializedOrganization[]> =
             LEFT JOIN cities ON shantytowns.fk_city = cities.code
             LEFT JOIN departements ON cities.fk_departement = departements.code
             WHERE shantytown_id = :shantytownId
-        )
+        )` : ''}
         SELECT
             uap.fk_user AS user_id,
             u.email,
@@ -108,11 +111,12 @@ export default async (shantytownId: number): Promise<SerializedOrganization[]> =
         AND
         (
             allow_all IS true
-            OR location.region = ANY(uap.regions)
+            OR ${shantytownId ? 'location.region' : ':region'} = ANY(uap.regions)
                 
-            OR location.departement = ANY(uap.departements)
-            OR location.epci = ANY(uap.epci)
-            OR location.city = ANY(uap.cities)
+            OR ${shantytownId ? 'location.departement' : ':departement'} = ANY(uap.departements)
+            OR ${shantytownId ? 'location.epci' : ':epci'} = ANY(uap.epci)
+            OR ${shantytownId ? 'location.city' : ':city'} = ANY(uap.cities)
+            OR ${shantytownId ? 'location.cityMain' : ':cityMain'} = ANY(uap.cities)
             OR
                 (
                     uap.regions IS NULL
@@ -123,7 +127,7 @@ export default async (shantytownId: number): Promise<SerializedOrganization[]> =
                 AND
                     uap.cities IS NULL
                 AND
-                    location.departement = o.departement_code
+                    ${shantytownId ? 'location.departement' : ':departement'} = o.departement_code
                 )
             OR
                 (
@@ -148,6 +152,11 @@ export default async (shantytownId: number): Promise<SerializedOrganization[]> =
         {
             replacements: {
                 shantytownId,
+                region: location?.region.code,
+                departement: location?.departement.code,
+                epci: location?.epci.code,
+                city: location?.city.code,
+                cityMain: location?.city.main,
             },
             type: QueryTypes.SELECT,
         },

@@ -30,6 +30,7 @@ import noteCreate from './noteController/create';
 import noteAddCopy from './noteController/addCopy';
 // organization
 import organizationCategories from './organizationController/categories';
+import organizationFindJusticeReadersByLocation from './organizationController/findJusticeReadersByLocation';
 import organizationGetByCategory from './organizationController/getByCategory';
 import organizationGetByType from './organizationController/getByType';
 import organizationGetMembers from './organizationController/getMembers';
@@ -123,6 +124,7 @@ export default () => ({
     },
     organization: {
         categories: organizationCategories,
+        findJusticeReadersByLocation: organizationFindJusticeReadersByLocation,
         getByCategory: organizationGetByCategory,
         getByType: organizationGetByType,
         getMembers: organizationGetMembers,

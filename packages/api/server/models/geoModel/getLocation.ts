@@ -1,15 +1,19 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import {
+    Location, Nation, Region, Departement, EPCI, City,
+} from './Location.d';
+import { LocationType } from './LocationType.d';
 
 const methods = {
-    nation: () => ({
+    nation: (): Promise<Nation> => Promise.resolve({
         type: 'nation',
         region: null,
         departement: null,
         epci: null,
         city: null,
     }),
-    region: async (code) => {
+    region: async (code: string): Promise<Region> => {
         const [region]: any = await sequelize.query(
             'SELECT name, code FROM regions WHERE code = :code',
             {
@@ -33,7 +37,7 @@ const methods = {
             city: null,
         };
     },
-    departement: async (code) => {
+    departement: async (code: string): Promise<Departement> => {
         const [departement]: any = await sequelize.query(
             `SELECT
                 departements.name AS name,
@@ -67,7 +71,7 @@ const methods = {
             city: null,
         };
     },
-    epci: async (code) => {
+    epci: async (code: string): Promise<EPCI> => {
         const [epci]: any = await sequelize.query(
             `SELECT
                 epci.name AS name,
@@ -108,7 +112,7 @@ const methods = {
             city: null,
         };
     },
-    city: async (code) => {
+    city: async (code: string): Promise<City> => {
         const [city]: any = await sequelize.query(
             `SELECT
                 cities.name AS name,
@@ -158,4 +162,4 @@ const methods = {
     },
 };
 
-export default (type, code) => methods[type](code);
+export default (type: LocationType, code: string): Promise<Location> => methods[type](code);

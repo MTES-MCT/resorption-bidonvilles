@@ -1,12 +1,12 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import { userLocationType } from './_common/types/userLocationType';
+import { LocationType } from '#server/models/geoModel/LocationType.d';
 
 type OrganizationRow = {
     organization_id: number,
     name: string,
     abbreviation: string | null,
-    location_type: userLocationType,
+    location_type: LocationType,
     region_code: string | null,
     region_name: string | null,
     departement_code: string | null,
@@ -50,7 +50,7 @@ export type SerializedOrganization = {
     being_funded: boolean,
     being_funded_at: Date,
     location: {
-        type: userLocationType,
+        type: LocationType,
         region: {
             code: string,
             name: string,

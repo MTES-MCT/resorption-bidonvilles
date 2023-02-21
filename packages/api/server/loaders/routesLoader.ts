@@ -413,6 +413,13 @@ export default (app) => {
         controllers.town.find,
     );
     app.get(
+        '/justice-readers/:locationType/:locationCode',
+        middlewares.auth.authenticate,
+        validators.justiceReader.findByLocation,
+        middlewares.validation,
+        controllers.organization.findJusticeReadersByLocation,
+    );
+    app.get(
         '/towns/:id/justice_readers',
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.list'], ...args),
