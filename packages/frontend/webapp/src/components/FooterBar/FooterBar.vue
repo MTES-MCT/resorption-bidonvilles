@@ -2,9 +2,10 @@
     <footer>
         <section class="bg-blue100 py-8">
             <ContentWrapper
-                class="flex flex-col md:flex-row md:justify-between"
+                class="flex flex-col lg:flex-row md:justify-between"
             >
                 <FooterBarNewsletter />
+                <FooterBarHotline />
                 <FooterBarSocialMedia />
             </ContentWrapper>
         </section>
@@ -32,10 +33,6 @@
                 <FooterBarFootLink
                     >Accessibilité : non conforme</FooterBarFootLink
                 >
-                <span class="w-px bg-G300 mx-3 h-4"></span>
-                <FooterBarFootLink
-                    >Hotline : +33 1 40 81 95 39</FooterBarFootLink
-                >
             </div>
         </ContentWrapper>
     </footer>
@@ -46,6 +43,7 @@ import ENV from "@/helpers/env.js";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import IdentiteVisuelle from "@/components/IdentiteVisuelle/IdentiteVisuelle.vue";
 import FooterBarNewsletter from "./FooterBarNewsletter.vue";
+import FooterBarHotline from "./FooterBarHotline.vue";
 import FooterBarSocialMedia from "./FooterBarSocialMedia.vue";
 import FooterBarFootLink from "./FooterBarFootLink.vue";
 import FooterBarPartnerLink from "./FooterBarPartnerLink.vue";
