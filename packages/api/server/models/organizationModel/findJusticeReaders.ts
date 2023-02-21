@@ -78,7 +78,7 @@ export default async (shantytownId?: number, location?: Location): Promise<Seria
             ot.name_singular AS "type_name",
             ot.abbreviation AS "type_abbreviation"
         FROM user_actual_permissions uap
-        LEFT JOIN location ON TRUE
+        ${shantytownId ? 'LEFT JOIN location ON TRUE' : ''}
         LEFT JOIN users u ON uap.fk_user = u.user_id
         LEFT JOIN localized_organizations o ON u.fk_organization = o.organization_id
         LEFT JOIN organization_types ot ON o.fk_type = ot.organization_type_id
@@ -152,11 +152,11 @@ export default async (shantytownId?: number, location?: Location): Promise<Seria
         {
             replacements: {
                 shantytownId,
-                region: location?.region.code,
-                departement: location?.departement.code,
-                epci: location?.epci.code,
-                city: location?.city.code,
-                cityMain: location?.city.main,
+                region: location?.region.code || null,
+                departement: location?.departement.code || null,
+                epci: location?.epci.code || null,
+                city: location?.city.code || null,
+                cityMain: location?.city.main || null,
             },
             type: QueryTypes.SELECT,
         },

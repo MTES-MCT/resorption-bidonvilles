@@ -26,7 +26,6 @@
         <FormDeclarationDeSiteProcedureJudiciaire
             class="mt-6"
             v-if="hasJusticePermission"
-            :isLocationDefined="isLocationDefined"
             :location="location"
             :mode="mode"
         />
@@ -129,9 +128,18 @@ const originalValues = formatValuesForApi(values);
 const townsStore = useTownsStore();
 const userStore = useUserStore();
 const error = ref(null);
-const location = ref(town.value ? initialValues.location : null);
+const location = ref(
+    town.value
+        ? {
+              type: "city",
+              city: town.value.city,
+              epci: town.value.epci,
+              departement: town.value.departement,
+              region: town.value.region,
+          }
+        : null
+);
 const address = toRef(values, "address");
-let isLocationDefined = ref(town.value ? true : false);
 
 watch(address, async () => {
     location.value = null;
@@ -145,14 +153,6 @@ watch(address, async () => {
         } catch (e) {
             console.log("Failed fetching more information about the city");
         }
-    }
-});
-
-watch(location, async () => {
-    if (location.value?.type) {
-        isLocationDefined.value = true;
-    } else {
-        isLocationDefined.value = false;
     }
 });
 

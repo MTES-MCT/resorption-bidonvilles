@@ -3,7 +3,7 @@
         <template v-slot:title>
             <div class="flex justify-between">
                 <div>Procédure judiciaire</div>
-                <div v-if="isLocationDefined" class="text-sm">
+                <div v-if="location?.type" class="text-sm">
                     <Button
                         type="button"
                         size="sm"
@@ -12,7 +12,7 @@
                         variant="primaryText"
                         @click="openModaleListeAccesPJ"
                     >
-                        {{ title }}
+                        Qui aura accès aux données sur la procédure judiciaire ?
                     </Button>
                 </div>
             </div>
@@ -45,7 +45,7 @@
     <ModaleListeAccesPJ
         ref="modaleListeAccesPJ"
         :location="location"
-        :title="title"
+        :future="future"
     />
 </template>
 
@@ -70,11 +70,10 @@ import InputBailiff from "../inputs/FormDeclarationDeSiteInputBailiff.vue";
 import ModaleListeAccesPJ from "@/components/ModaleListeAccesPJ/ModaleListeAccesPJ.vue";
 
 const props = defineProps({
-    isLocationDefined: Boolean,
     location: Object,
     mode: String,
 });
-const { isLocationDefined, location, mode } = toRefs(props);
+const { location, mode } = toRefs(props);
 
 const values = useFormValues();
 const policeWasRequested = computed(() => {
@@ -87,10 +86,8 @@ const policeWasGranted = computed(() => {
 
 const modaleListeAccesPJ = ref(null);
 
-const title = computed(() => {
-    return mode.value === "create"
-        ? "Qui aura accès aux données sur la procédure judiciaire ?"
-        : "Qui a accès aux données  sur la procédure judiciaire ?";
+const future = computed(() => {
+    return mode.value === "create";
 });
 
 function openModaleListeAccesPJ() {
