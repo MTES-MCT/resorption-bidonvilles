@@ -1,4 +1,4 @@
-import { JusticeReaderRow } from '#server/models/organizationModel/findJusticeReadersByShantytown';
+import { JusticeReaderRow } from '#server/models/organizationModel/findJusticeReaders';
 
 export default function raw(): JusticeReaderRow {
     return {
