@@ -23,7 +23,7 @@
     </LayoutError>
 
     <Layout :paddingBottom="false" v-else>
-        <FicheSite :town="town" :v-if="town" />
+        <FicheSite :town="town" v-if="town" />
     </Layout>
 </template>
 
