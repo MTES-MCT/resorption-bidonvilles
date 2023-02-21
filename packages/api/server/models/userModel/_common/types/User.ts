@@ -1,8 +1,8 @@
 import { permissionOption } from '#server/models/permissionModel/types/permissionOption';
 import { Permissions } from '#server/models/permissionModel/types/Permissions';
+import { LocationType } from '#server/models/geoModel/LocationType.d';
 import { userStatus } from './userStatus';
 import type { UserAccess } from './UserAccess';
-import { userLocationType } from './userLocationType';
 
 export interface User {
     id: number,
@@ -32,7 +32,7 @@ export interface User {
             name_plural: string
         },
         location: {
-            type: userLocationType,
+            type: LocationType,
             latitude: number,
             longitude: number,
             region: {

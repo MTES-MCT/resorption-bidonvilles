@@ -19,13 +19,14 @@
                 <p v-if="displayBeingFunded" class="text-info">
                     <Icon icon="euro-sign" /> Structure financée
                 </p>
+                -
             </header>
 
-            <p class="mt-4 text-sm text-G500">
-                {{ organization.users.length }} membre{{
-                    plural ? "s" : ""
-                }}
-                inscrit{{ plural ? "s" : "" }} sur la plateforme
+            <p class="my-2 text-sm text-G500">
+                {{ organization.users.length }} membre{{ plural ? "s" : "" }}
+                <template v-if="showWording"
+                    >inscrit{{ plural ? "s" : "" }} sur la plateforme</template
+                >
             </p>
             <ul class="flex-1">
                 <li
@@ -58,12 +59,14 @@ import { RouterLink } from "vue-router";
 import { Icon, Link } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
-    organization: {
-        type: Object,
-        required: true,
+    organization: Object,
+    showWording: {
+        type: Boolean,
+        required: false,
+        default: true,
     },
 });
-const { organization } = toRefs(props);
+const { organization, showWording } = toRefs(props);
 
 const userStore = useUserStore();
 const name = computed(() => {

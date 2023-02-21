@@ -73,6 +73,7 @@ import {
     faUser as faUserSolid,
     faUserCheck,
     faUserCircle,
+    faUserGroup,
     faUserPen,
     faUserPlus,
     faUsers,
@@ -177,6 +178,7 @@ library.add(faUnlink);
 library.add(faUser);
 library.add(faUserCheck);
 library.add(faUserCircle);
+library.add(faUserGroup);
 library.add(faUserPen);
 library.add(faUserPlus);
 library.add(faUsers);
