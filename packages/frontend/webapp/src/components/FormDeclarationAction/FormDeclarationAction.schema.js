@@ -92,7 +92,6 @@ export default function () {
             .usersIsNotEmpty()
             .label(labels.operators),
         nombre_personnes: number()
-            .required()
             .typeError(`Nombre de personnes doit être un nombre`)
             .nullable()
             .transform(emptyStringToNull)

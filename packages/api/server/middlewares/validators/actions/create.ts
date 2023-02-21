@@ -243,10 +243,12 @@ export default [
         }),
 
     body('nombre_personnes')
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Nombre de personnes" est obligatoire')
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de personnes" doit être un nombre')
         .isInt({ min: 1 }).withMessage('Le champ "Nombre de personnes" ne peut pas être inférieur à 1'),
+    body('nombre_personnes')
+        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('nombre_menages')
         .optional({ nullable: true, checkFalsy: true })

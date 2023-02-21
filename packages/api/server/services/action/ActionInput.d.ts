@@ -22,7 +22,7 @@ export interface ActionInput {
     managers: ActionInputUser[],
     operators: ActionInputUser[],
     date_indicateurs: Date,
-    nombre_personnes: number,
+    nombre_personnes: number | null,
     nombre_menages: number | null,
     nombre_femmes: number | null,
     nombre_mineurs: number | null,
