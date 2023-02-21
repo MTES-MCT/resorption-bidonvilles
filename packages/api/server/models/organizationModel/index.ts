@@ -7,6 +7,7 @@ import findByCategory from './findByCategory';
 import findByIds from './findByIds';
 import findByName from './findByName';
 import findByType from './findByType';
+import findJusticeReaders from './findJusticeReaders';
 import findOneAssociation from './findOneAssociation';
 import findOneById from './findOneById';
 import findOneByLocation from './findOneByLocation';
@@ -23,6 +24,7 @@ export default {
     findByIds,
     findByName,
     findByType,
+    findJusticeReaders,
     findOneAssociation,
     findOneById,
     findOneByLocation,

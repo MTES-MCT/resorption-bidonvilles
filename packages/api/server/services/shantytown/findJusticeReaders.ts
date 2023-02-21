@@ -1,10 +1,10 @@
-import userModel from '#server/models/userModel';
+import organizationModel from '#server/models/organizationModel';
 import ServiceError from '#server/errors/ServiceError';
-import { JusticeReaderRow } from '#server/models/userModel/findJusticeReaders';
+import { SerializedOrganization } from '#server/models/userModel/getDirectory';
 
-export default async (shantytownId: number): Promise<JusticeReaderRow[]> => {
+export default async (shantytownId: number): Promise<SerializedOrganization[]> => {
     try {
-        return await userModel.findJusticeReaders(shantytownId);
+        return await organizationModel.findJusticeReaders(shantytownId);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }

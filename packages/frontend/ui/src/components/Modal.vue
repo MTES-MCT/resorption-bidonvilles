@@ -25,7 +25,7 @@
                             </div>
                         </div>
                     </slot>
-                    <div class="px-10 pb-10 max-w-2xl">
+                    <div class="px-10 pb-10 max-w-3xl">
                         <slot name="body" />
                     </div>
 

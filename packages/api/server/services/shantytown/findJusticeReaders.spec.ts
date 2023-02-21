@@ -2,7 +2,7 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-import userModel from '#server/models/userModel';
+import organizationModel from '#server/models/organizationModel';
 import ServiceError from '#server/errors/ServiceError';
 import fakeJusticeReader from '#root/test/utils/justiceReader';
 
@@ -15,7 +15,7 @@ describe('services/shantytown.findJusticeReaders()', () => {
     let stubs;
     beforeEach(() => {
         stubs = {
-            findJusticeReaders: sinon.stub(userModel, 'findJusticeReaders'),
+            findJusticeReaders: sinon.stub(organizationModel, 'findJusticeReaders'),
         };
     });
 

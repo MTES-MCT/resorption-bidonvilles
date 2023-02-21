@@ -19,11 +19,14 @@
                 <p v-if="displayBeingFunded" class="text-info">
                     <Icon icon="euro-sign" /> Structure financée
                 </p>
+                -
             </header>
 
             <p class="my-2 text-sm text-G500">
                 {{ organization.users.length }} membre{{ plural ? "s" : "" }}
-                {{ wording.first }}{{ plural ? "s" : "" }} {{ wording.second }}
+                <template v-if="showWording"
+                    >inscrit{{ plural ? "s" : "" }} sur la plateforme</template
+                >
             </p>
             <ul class="flex-1">
                 <li
@@ -57,12 +60,13 @@ import { Icon, Link } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     organization: Object,
-    wording: {
-        type: Object,
-        required: true,
+    showWording: {
+        type: Boolean,
+        required: false,
+        default: true,
     },
 });
-const { organization, wording } = toRefs(props);
+const { organization, showWording } = toRefs(props);
 
 const userStore = useUserStore();
 const name = computed(() => {
