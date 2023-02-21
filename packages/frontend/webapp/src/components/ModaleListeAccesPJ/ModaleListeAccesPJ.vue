@@ -12,6 +12,7 @@
                     <template v-slot:actions>&nbsp;</template>
                 </ViewErrorInline>
                 <p v-else-if="organizationList.length === 0">
+                    <Icon icon="lock" class="text-red" />
                     Seuls les utilisateurs en préfecture et DEETS / DREETS ont
                     accès aux données judiciaires de ce site.
                 </p>
@@ -54,7 +55,7 @@
 
 <script setup>
 import { defineExpose, ref, toRefs, watch, computed } from "vue";
-import { Button, Modal } from "@resorptionbidonvilles/ui";
+import { Button, Modal, Icon } from "@resorptionbidonvilles/ui";
 import ViewErrorInline from "@/components/ViewErrorInline/ViewErrorInline.vue";
 import CarteStructure from "@/components/CarteStructure/CarteStructure.vue";
 import { getJusticeReaders } from "@/api/towns.api";
