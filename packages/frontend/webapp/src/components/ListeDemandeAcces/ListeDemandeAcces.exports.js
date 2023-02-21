@@ -41,8 +41,11 @@ export default computed(() => {
     const userStore = useUserStore();
 
     const filteredExportList = [];
-    if (userStore.user?.is_superuser) {
+    if (userStore.hasPermission("user.export")) {
         filteredExportList.push(exportList.users);
+    }
+
+    if (userStore.user?.is_superuser) {
         filteredExportList.push(exportList.mobileSessions);
         filteredExportList.push(exportList.webappSessions);
     }

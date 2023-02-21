@@ -60,7 +60,7 @@ export default (app) => {
     app.get(
         '/users/export',
         middlewares.auth.authenticate,
-        middlewares.auth.isSuperAdmin,
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.export'], ...args),
         controllers.user.listExport,
     );
     app.get(
