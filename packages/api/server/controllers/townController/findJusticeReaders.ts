@@ -13,9 +13,7 @@ export default async (req, res, next): Promise<void> => {
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({
-            error: {
-                user_message: message,
-            },
+            user_message: message,
         });
         next(error.nativeError || error);
     }
