@@ -712,6 +712,7 @@ export default (app) => {
 
     app.get(
         '/permissionsToAccessJustice',
+        middlewares.auth.authenticate,
         controllers.permission.findPermissionsToAccessJustice,
     );
 };
