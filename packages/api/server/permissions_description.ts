@@ -48,10 +48,10 @@ export default {
             [
                 { type: 'edit', label: 'Mettre à jour les %sites%', comments: null },
                 {
-                    type: 'deny', label: 'hors fermeture des sites', comments: null, option: 'create_and_close_shantytown',
+                    type: 'deny', label: 'hors fermeture des sites', comments: null, option: 'close_shantytown',
                 },
                 {
-                    type: 'deny', label: 'hors création des sites', comments: null, option: 'create_and_close_shantytown',
+                    type: 'deny', label: 'hors création des sites', comments: null, option: 'create_shantytown',
                 },
                 {
                     type: 'deny', label: 'hors procédures judiciaires', comments: null, option: 'access_justice',
@@ -60,7 +60,8 @@ export default {
             [{ type: 'view', label: 'Mettre à jour les %actions%', comments: 'hors financements' }],
         ],
         options: [
-            { id: 'create_and_close_shantytown', label: 'Autoriser l\'opérateur à créer un site et déclarer la fermeture d\'un site' },
+            { id: 'create_shantytown', label: 'Autoriser l\'opérateur à déclarer un site' },
+            { id: 'close_shantytown', label: 'Autoriser l\'opérateur à déclarer la fermeture d\'un site' },
             { id: 'access_justice', label: 'Accéder aux procédures judiciaires' },
         ],
     },
