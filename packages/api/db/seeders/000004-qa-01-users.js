@@ -91,7 +91,7 @@ const users = [
             epci: null,
             city: 33063, // bordeaux
         },
-        options: ['create_and_close_shantytown'],
+        options: ['create_shantytown', 'close_shantytown'],
     },
     {
         user: generate({
