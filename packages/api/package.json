@@ -49,7 +49,7 @@
     "request": "^2.88.0",
     "rimraf": "^3.0.2",
     "semver": "^6.3.0",
-    "sequelize": "^6.0.0",
+    "sequelize": "^6.29.0",
     "sequelize-cli": "^6.5.0",
     "sequelize-mock": "^0.10.2",
     "sequelize-temporal": "^1.0.6",
