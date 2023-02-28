@@ -50,7 +50,7 @@ export default async (shantytownId?: number, location?: Location): Promise<Seria
             WHERE shantytown_id = :shantytownId
         )` : ''}
         SELECT
-            uap.fk_user AS user_id,
+            uap.user_id,
             u.email,
             u.first_name,
             u.last_name,
@@ -79,13 +79,13 @@ export default async (shantytownId?: number, location?: Location): Promise<Seria
             ot.abbreviation AS "type_abbreviation"
         FROM user_actual_permissions uap
         ${shantytownId ? 'LEFT JOIN location ON TRUE' : ''}
-        LEFT JOIN users u ON uap.fk_user = u.user_id
+        LEFT JOIN users u ON uap.user_id = u.user_id
         LEFT JOIN localized_organizations o ON u.fk_organization = o.organization_id
         LEFT JOIN organization_types ot ON o.fk_type = ot.organization_type_id
         WHERE
-            uap.fk_entity = 'shantytown_justice'
+            uap.entity = 'shantytown_justice'
         AND
-            uap.fk_feature = 'access'
+            uap.feature = 'access'
         AND
             uap.allowed IS true
         AND

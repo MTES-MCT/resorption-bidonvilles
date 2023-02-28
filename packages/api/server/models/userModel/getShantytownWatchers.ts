@@ -36,9 +36,9 @@ export default async (shantytownId, commentId, isPrivate) => {
                         FROM users u
                         LEFT JOIN constants ON TRUE
                         LEFT JOIN localized_organizations lo ON u.fk_organization = lo.organization_id
-                        LEFT JOIN user_actual_permissions up ON u.user_id = up.fk_user
-                        WHERE up.fk_feature = 'listPrivate'
-                        AND up.fk_entity = 'shantytown_comment'
+                        LEFT JOIN user_actual_permissions up ON u.user_id = up.user_id
+                        WHERE up.feature = 'listPrivate'
+                        AND up.entity = 'shantytown_comment'
                         AND up.allowed IS TRUE
                         AND lo.departement_code = constants.departement
                     )
