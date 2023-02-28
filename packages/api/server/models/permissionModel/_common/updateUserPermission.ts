@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 
 export default async (userPermissionId, data, transaction = undefined) => {
     const { sql, replacements } = Object.keys(data)
-        .filter(key => ['allowed', 'allow_all', 'is_cumulative'].includes(key))
+        .filter(key => ['allowed', 'allow_all'].includes(key))
         .reduce((acc, key) => ({
             sql: [...acc.sql, `${key} = :${key}`],
             replacements: {

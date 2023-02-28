@@ -25,9 +25,9 @@ type PermissionHash = {
 export default async (owners: number[]): Promise<PermissionHash> => {
     const permissions: PermissionRow[] = await sequelize.query(`
         SELECT
-            uap.fk_user AS user_id,
-            uap.fk_entity AS entity,
-            uap.fk_feature AS feature,
+            uap.user_id,
+            uap.entity,
+            uap.feature,
             uap.is_writing,
             uap.allowed,
             uap.allow_all,
@@ -38,7 +38,7 @@ export default async (owners: number[]): Promise<PermissionHash> => {
             uap.shantytowns,
             uap.actions
         FROM user_actual_permissions uap
-        WHERE uap.fk_user IN (:owners)
+        WHERE uap.user_id IN (:owners)
         ORDER BY user_id ASC, entity ASC, feature ASC
     `, {
         type: QueryTypes.SELECT,
@@ -69,25 +69,6 @@ export default async (owners: number[]): Promise<PermissionHash> => {
                 actions: row.actions || [],
             } : null,
         };
-
-        // ugly patch for shantytown_justice.access.allow_all qui doit avoir la même valeur que
-        // shantytown.list.allow_all
-        // la vue user_actual_permissions default shantytown_justice.access.allow_all à false
-        if (row.entity === 'shantytown'
-            && row.feature === 'list'
-            && acc[row.user_id].shantytown_justice
-            && acc[row.user_id].shantytown_justice.access
-            && acc[row.user_id].shantytown_justice.access.allowed === true) {
-            acc[row.user_id].shantytown_justice.access.allow_all = permission.allow_all;
-            acc[row.user_id].shantytown_justice.access.allowed_on = permission.allowed_on;
-        } else if (row.entity === 'shantytown_justice'
-            && row.feature === 'access'
-            && row.allowed === true
-            && acc[row.user_id].shantytown
-            && acc[row.user_id].shantytown.list) {
-            permission.allow_all = acc[row.user_id].shantytown.list.allow_all;
-            permission.allowed_on = acc[row.user_id].shantytown.list.allowed_on;
-        }
 
         acc[row.user_id][row.entity][row.feature] = permission;
         return acc;

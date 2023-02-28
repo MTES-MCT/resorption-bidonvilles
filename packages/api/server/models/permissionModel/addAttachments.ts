@@ -16,16 +16,11 @@ export default async (attachments: Attachment[], user, feature, entity, transact
         userPermissionId = userPermission.user_permission_id;
 
         if (userPermission.allowed === false) {
-            await updateUserPermission(userPermissionId, { allowed: true, allow_all: false, is_cumulative: false }, transaction);
+            await updateUserPermission(userPermissionId, { allowed: true, allow_all: false }, transaction);
         }
     } else {
-        let is_cumulative = false;
-        if (defaultPermission !== null) {
-            if (defaultPermission.allow_all === true) {
-                return;
-            }
-
-            is_cumulative = defaultPermission.allowed;
+        if (defaultPermission !== null && defaultPermission.allow_all === true) {
+            return;
         }
 
         userPermissionId = await insertUserPermission({
@@ -35,7 +30,6 @@ export default async (attachments: Attachment[], user, feature, entity, transact
             fk_organization: user.type === 'Organization' ? user.id : null,
             allowed: true,
             allow_all: false,
-            is_cumulative,
         }, transaction);
     }
 
