@@ -5,7 +5,10 @@
         <mj-include path='common/styles.mjml' />
     </mj-head>
     <mj-body mj-class='bg-white'>
-        <mj-include path='common/hero.mjml' />
+
+        <mj-include path='promo_mobile/promo_mobile_hero.mjml' />
+        <mj-include path='promo_mobile/promo_mobile_title.mjml' />
+        <mj-include path='promo_mobile/promo_mobile_text.mjml' />
 
         <mj-section>
             <mj-column>
