@@ -15,14 +15,14 @@ export default [
         id: "interventionLocation",
         options: [
             { value: "sur_site", label: "Sur Site" },
-            { value: "eti", label: "Sur terrain d'accompagnement" },
+            { value: "eti", label: "Sur espace temporaire d'accompagnement" },
             {
                 value: "logement",
                 label: "Dans le logement",
             },
             {
                 value: "autre",
-                label: "Autres (hébergement, permanence, rue)",
+                label: "Autre (hébergement, permanence, rue)",
             },
         ],
     },
