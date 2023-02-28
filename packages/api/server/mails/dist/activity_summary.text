@@ -1,3 +1,11 @@
+Nouveau : la plateforme dans votre poche !
+
+Connectez-vous à la plateforme depuis votre téléphone portable pour consulter la
+fiche d'un site, écrire sur le journal du site et créer des notes personnelles.
+Pour vous connecter, utilisez la même adresse :
+https://resorption-bidonvilles.beta.gouv.fr/
+[https://resorption-bidonvilles.beta.gouv.fr/] et vos identifiants habituels.
+
 Semaine du {{ var:from }} au {{ var:to }}
 {% for summary in var:summaries %}
 {{ summary.code }} – {{ summary.name }}
