@@ -32,7 +32,7 @@ export default {
     indicateurs_hebergement: {
         raw: "Nombre de personnes ayant accédé à un hébergement ou logement adapté",
         formatted:
-            "_à un hébergement ou logement adapté_ longue durée avec accompagnement, dont espace terrain d'accompagnement",
+            "_à un hébergement ou logement adapté_ longue durée avec accompagnement, dont espace temporaire d'accompagnement",
     },
     indicateurs_logement: {
         raw: "Nombre de personnes ayant accédé à un logement",
