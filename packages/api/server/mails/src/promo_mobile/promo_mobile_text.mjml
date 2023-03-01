@@ -1,0 +1,8 @@
+<mj-section>
+    <mj-column background-color="#CFE0F4">
+        <mj-text padding="1.25rem">
+        Connectez-vous à la plateforme depuis votre téléphone portable pour consulter la fiche d'un site, écrire sur le journal du site et créer des notes personnelles.
+        Pour vous connecter, utilisez la même adresse : <a href="https://resorption-bidonvilles.beta.gouv.fr/" class="link" target="_blank" rel="noopener noreferrer">https://resorption-bidonvilles.beta.gouv.fr/</a> et vos identifiants habituels.
+        </mj-text>
+    </mj-column>
+</mj-section>
