@@ -29,6 +29,7 @@ export default {
     },
     testEmail: process.env.RB_API_TEST_EMAIL || null,
     sendActivitySummary: process.env.RB_API_SEND_ACTIVITY_SUMMARY === '1',
+    sendActionAlerts: process.env.RB_API_SEND_ACTION_ALERTS === '1',
     matomo: {
         token: process.env.RB_API_MATOMO_AUTH_TOKEN,
     },

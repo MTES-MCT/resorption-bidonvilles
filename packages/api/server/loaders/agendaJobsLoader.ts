@@ -2,6 +2,7 @@ import accessRequestService from '#server/services/accessRequest/accessRequestSe
 import mailUtils from '#server/mails/mails';
 import moment from 'moment';
 import activitySummary from '#server/services/activitySummary';
+import sendActionAlert from '#server/services/action/sendAlert';
 import config from '#server/config';
 
 const {
@@ -11,9 +12,27 @@ const {
     sendUserShare,
     sendUserReview,
 } = mailUtils;
-const { sendActivitySummary } = config;
+const { sendActivitySummary, sendActionAlerts } = config;
 
 export default (agenda) => {
+    agenda.define(
+        'send_action_alert_postshot',
+        async () => {
+            if (sendActionAlerts) {
+                await sendActionAlert('postshot');
+            }
+        },
+    );
+
+    agenda.define(
+        'send_action_alert_preshot',
+        async () => {
+            if (sendActionAlerts) {
+                await sendActionAlert('preshot');
+            }
+        },
+    );
+
     agenda.define(
         'send_activity_summary',
         async () => {

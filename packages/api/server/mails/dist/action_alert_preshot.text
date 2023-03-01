@@ -1,0 +1,28 @@
+Avez-vous mis à jour vos actions et indicateurs ?
+Bonjour {{var:recipientName}},
+{% if var:actions_length > 1 %}
+Vous êtes déclaré(e) sur la plateforme comme intervenant sur les
+{{var:actions_length}} actions suivantes :
+{% else %}
+Vous êtes déclaré(e) sur la plateforme comme intervenant sur l'action suivante :
+{% endif %}{% for action in var:actions %}
+{{action.name}} [{{var:webappUrl}}/action/{{action.id}}?{{var:utm}}]
+{% endfor %}
+Cette liste et les indicateurs liés sont-ils à jour ? Si ce n'est pas le cas,
+pensez à mettre à jour la situation de vos actions sur la plateforme avant la
+fin de l'année !
+
+Cordialement,
+L'équipe Résorption-bidonvilles
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact@resorption-bidonvilles.beta.gouv.fr
+[contact@resorption-bidonvilles.beta.gouv.fr]
+Suivez toute l'actualité de la résorption des bidonvilles et retrouvez tous vos
+outils méthodologiques sur votre blog [{{var:blogUrl}}]
+Abonnez-vous à la lettre d'info
+[https://email.developpement-durable.gouv.fr/users/subscribe/js_id/5n4i/id/3]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]

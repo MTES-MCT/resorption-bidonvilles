@@ -1,0 +1,36 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Renseignez vos actions</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Avez-vous mis à jour vos actions et indicateurs ?
+                </mj-text>
+                <mj-include path='common/hello.mjml' />
+                <mj-raw>{% if var:actions_length > 1 %}</mj-raw>
+                <mj-text mj-class='pb-4'>
+                    Vous êtes déclaré(e) sur la plateforme comme intervenant sur les {{var:actions_length}} actions suivantes :
+                </mj-text>
+                <mj-raw>{% else %}</mj-raw>
+                <mj-text mj-class='pb-4'>
+                    Vous êtes déclaré(e) sur la plateforme comme intervenant sur l'action suivante :
+                </mj-text>
+                <mj-raw>{% endif %}</mj-raw>
+
+                <mj-raw>{% for action in var:actions %}</mj-raw>
+                <mj-text><a href="{{var:webappUrl}}/action/{{action.id}}?{{var:utm}}" class="link" target="_blank" rel="noopener noreferrer">{{action.name}}</a></mj-text>
+                <mj-raw>{% endfor %}</mj-raw>
+
+                <mj-text mj-class='pt-4'>Cette liste et les indicateurs liés sont-ils à jour ? Si ce n'est pas le cas, pensez à mettre à jour la situation de vos actions sur la plateforme !</mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>
