@@ -43,10 +43,12 @@ import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 const townsStore = useTownsStore();
 const isLoading = ref(null);
 const error = ref(null);
-const town = ref(null);
 
 const townId = computed(() => {
     return parseInt(router.currentRoute.value.params.id, 10);
+});
+const town = computed(() => {
+    return townsStore.hash[townId.value] || null;
 });
 
 onMounted(mount);
@@ -65,7 +67,7 @@ async function load() {
     isLoading.value = true;
     error.value = null;
     try {
-        town.value = await townsStore.fetchTown(townId.value);
+        await townsStore.fetchTown(townId.value);
         townsStore.townCategoryFilter = [];
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
