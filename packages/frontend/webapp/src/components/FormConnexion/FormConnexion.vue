@@ -1,12 +1,8 @@
 <template>
-    <ContentWrapper
-        size="medium"
-        class="mb-10"
-        v-if="navigationStore.entrypoint"
-    >
+    <ContentWrapper size="medium" class="mb-10" v-if="displayMessage">
         <p class="bg-red200 p-4 flex items-center justify-center space-x-2">
             <Icon icon="circle-info" class="text-red600" />
-            <span>Veuillez vous connecter pour accéder à la page demandée</span>
+            <span>{{ message }}</span>
         </p>
     </ContentWrapper>
     <FormPublic
@@ -42,6 +38,9 @@
 </template>
 
 <script setup>
+// vue
+import { computed, defineProps, toRefs } from "vue";
+
 // utils
 import router from "@/helpers/router.js";
 import { trackEvent } from "@/helpers/matomo.js";
@@ -62,10 +61,32 @@ import { useNavigationStore } from "@/stores/navigation.store.js";
 const userStore = useUserStore();
 const navigationStore = useNavigationStore();
 
+// reason: why the user has been redirected to the connexion page ?
+const props = defineProps({
+    reason: {
+        type: String,
+        required: false,
+    },
+});
+
+const { reason } = toRefs(props);
+console.log(`reason: ${reason.value}`);
+
 // methods
 async function submit({ email, password }) {
     await userStore.signin(email, password);
     trackEvent("Login", "Connection");
     router.push("/chargement");
 }
+
+const message = computed(() => {
+    if (reason.value && reason.value.length > 0) {
+        return "Votre session est expirée, veuillez-vous reconnecter";
+    }
+    return "Veuillez vous connecter pour accéder à la page demandée";
+});
+
+const displayMessage = computed(() => {
+    return reason.value || navigationStore.entrypoint ? true : false;
+});
 </script>
