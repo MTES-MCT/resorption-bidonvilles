@@ -72,7 +72,12 @@ const justiceRendered = computed(() => {
         return "non";
     }
 
-    return `rendue le ${formatDate(town.value.justiceRenderedAt, "d/m/y")}`;
+    const str = `le ${formatDate(town.value.justiceRenderedAt, "d/m/y")}`;
+    if (!town.value.justiceRenderedBy) {
+        return str;
+    }
+
+    return `${str} par « ${town.value.justiceRenderedBy} »`;
 });
 
 const policeStatus = computed(() => {
