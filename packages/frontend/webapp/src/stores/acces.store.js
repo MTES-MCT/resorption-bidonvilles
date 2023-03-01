@@ -11,7 +11,7 @@ const ITEMS_PER_PAGE = 50;
 
 export const useAccesStore = defineStore("acces", () => {
     const sortedAcces = ref([]);
-    let hash = ref({});
+    const hash = ref({});
 
     // filtres
     const fuse = computed(() => {
