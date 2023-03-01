@@ -54,7 +54,7 @@ axios.interceptors.response.use(
                 error.code
             )
         ) {
-            return logout("/session-expiree");
+            return logout("/connexion?reason=invalid_token");
         }
 
         return Promise.reject(error);
