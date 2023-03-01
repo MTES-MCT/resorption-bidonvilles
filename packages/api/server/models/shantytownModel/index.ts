@@ -1,5 +1,4 @@
 import create from './create';
-import createCovidComment from './createCovidComment';
 import findAll from './findAll';
 import findAllByActor from './findAllByActor';
 import findByNavigationLog from './findByNavigationLog';
@@ -17,7 +16,6 @@ import setHeatwaveStatus from './setHeatwaveStatus';
 
 export default {
     create,
-    createCovidComment,
     findAll,
     findAllByActor,
     findByNavigationLog,

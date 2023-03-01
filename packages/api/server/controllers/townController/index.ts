@@ -6,11 +6,9 @@ import deleteTown from './deleteTown';
 import deleteComment from './deleteComment';
 import exportTown from './export';
 import exportOne from './exportOne';
-import createCovidComment from './createCovidComment';
 import fixClosedStatus from './fixClosedStatus';
 import setHeatwaveStatus from './setHeatwaveStatus';
 import edit from './edit';
-import createHighCovidComment from './createHighCovidComment';
 import addActor from './addActor';
 import updateActor from './updateActor';
 import removeActorTheme from './removeActorTheme';
@@ -31,11 +29,9 @@ export default {
     deleteComment,
     exportTown,
     exportOne,
-    createCovidComment,
     fixClosedStatus,
     setHeatwaveStatus,
     edit,
-    createHighCovidComment,
     addActor,
     updateActor,
     removeActorTheme,

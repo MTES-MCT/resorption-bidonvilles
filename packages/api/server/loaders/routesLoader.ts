@@ -500,13 +500,6 @@ export default (app) => {
         middlewares.validation,
         controllers.shantytownComment.create,
     );
-    app.post(
-        '/towns/:id/covidComments',
-        middlewares.auth.authenticate,
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        controllers.town.createCovidComment,
-    );
     app.delete(
         '/towns/:id/comments/:commentId',
         middlewares.auth.authenticate,
@@ -522,15 +515,6 @@ export default (app) => {
         middlewares.charte.check,
         middlewares.appVersion.sync,
         controllers.shantytownComment.export,
-    );
-
-    // high covid comment
-    app.post(
-        '/high-covid-comments',
-        middlewares.auth.authenticate,
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        controllers.town.createHighCovidComment,
     );
 
     app.patch(
@@ -594,30 +578,8 @@ export default (app) => {
         controllers.geo.get,
     );
     app.get(
-        '/cities/search',
-        middlewares.auth.authenticate,
-        middlewares.appVersion.sync,
-        controllers.geo.searchCities,
-    );
-    app.get(
-        '/epci/search',
-        middlewares.auth.authenticate,
-        middlewares.appVersion.sync,
-        controllers.geo.searchEpci,
-    );
-    app.get(
         '/departements',
         controllers.geo.listDepartements,
-    );
-
-    app.get(
-        '/regions/:id/departements',
-        controllers.geo.getDepartementsForRegion,
-    );
-
-    app.get(
-        '/epci/:id/departements',
-        controllers.geo.getDepartementsForEpci,
     );
 
     // dashboard

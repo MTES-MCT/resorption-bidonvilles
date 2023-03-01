@@ -16,12 +16,8 @@ import contactFormReferralExport from './contactFormReferralController/export';
 import directoryList from './directoryController/list';
 // geo
 import geoGet from './geoController/get';
-import geoGetDepartementsForEpci from './geoController/getDepartementsForEpci';
-import geoGetDepartementsForRegion from './geoController/getDepartementsForRegion';
 import geoListDepartements from './geoController/listDepartements';
 import geoSearch from './geoController/search';
-import geoSearchCities from './geoController/searchCities';
-import geoSearchEpci from './geoController/searchEpci';
 // invite
 import inviteInvite from './inviteController/invite';
 // note
@@ -107,12 +103,8 @@ export default () => ({
     },
     geo: {
         get: geoGet,
-        getDepartementsForEpci: geoGetDepartementsForEpci,
-        getDepartementsForRegion: geoGetDepartementsForRegion,
         listDepartements: geoListDepartements,
         search: geoSearch,
-        searchCities: geoSearchCities,
-        searchEpci: geoSearchEpci,
     },
     invite: {
         invite: inviteInvite,
