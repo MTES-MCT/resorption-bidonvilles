@@ -12,7 +12,7 @@
 
         <mj-section>
             <mj-column>
-                <mj-text mj-class='text-primary text-display pb-4'>
+                <mj-text mj-class='text-primary text-display pt-4 pb-4'>
                     Semaine du {{ var:from }} au {{ var:to }}
                 </mj-text>
 
