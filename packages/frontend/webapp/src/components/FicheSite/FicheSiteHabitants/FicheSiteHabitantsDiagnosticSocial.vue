@@ -1,16 +1,14 @@
 <template>
     <FicheSousRubrique>
-        <div class="flex items-center justify-between">
-            <p class="w-96">
-                <span class="font-bold">Diagnostic social</span><br />
-                {{ diagnostic }}
-            </p>
-            <p class="italic">
-                Un diagnostic social vise à identifier les situations et besoins
-                des familles et personnes, de repérer le contexte territorial et
-                les acteurs en présence.
-            </p>
-        </div>
+        <p>
+            <span class="font-bold">Diagnostic social</span><br />
+            {{ diagnostic }}
+        </p>
+        <p class="italic mt-6">
+            <Icon icon="info-circle" /> Un diagnostic social vise à identifier
+            les situations et besoins des familles et personnes, de repérer le
+            contexte territorial et les acteurs en présence.
+        </p>
     </FicheSousRubrique>
 </template>
 
@@ -18,6 +16,7 @@
 import { defineProps, toRefs, computed } from "vue";
 import formatDate from "@/utils/formatDate";
 
+import { Icon } from "@resorptionbidonvilles/ui";
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
 
 const props = defineProps({
