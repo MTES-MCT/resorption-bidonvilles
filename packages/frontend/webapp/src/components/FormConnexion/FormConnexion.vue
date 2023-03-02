@@ -1,5 +1,5 @@
 <template>
-    <ContentWrapper size="medium" class="mb-10" v-if="displayMessage">
+    <ContentWrapper size="medium" class="mb-10" v-if="message !== null">
         <p class="bg-red200 p-4 flex items-center justify-center space-x-2">
             <Icon icon="circle-info" class="text-red600" />
             <span>{{ message }}</span>
@@ -57,11 +57,9 @@ import schema from "./FormConnexion.schema.js";
 
 // stores and api
 import { useUserStore } from "@/stores/user.store.js";
-import { useNavigationStore } from "@/stores/navigation.store.js";
 const userStore = useUserStore();
-const navigationStore = useNavigationStore();
 
-// reason: why the user has been redirected to the connexion page ?
+// reason: raison pour laquelle l'utilisateur est redirigé vers la page de connexion
 const props = defineProps({
     reason: {
         type: String,
@@ -70,7 +68,6 @@ const props = defineProps({
 });
 
 const { reason } = toRefs(props);
-console.log(`reason: ${reason.value}`);
 
 // methods
 async function submit({ email, password }) {
@@ -84,9 +81,5 @@ const message = computed(() => {
         return "Votre session est expirée, veuillez-vous reconnecter";
     }
     return "Veuillez vous connecter pour accéder à la page demandée";
-});
-
-const displayMessage = computed(() => {
-    return reason.value || navigationStore.entrypoint ? true : false;
 });
 </script>
