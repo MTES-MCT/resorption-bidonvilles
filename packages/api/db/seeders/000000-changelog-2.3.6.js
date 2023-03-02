@@ -2,7 +2,7 @@ const { backUrl } = require('./config/config');
 
 const changelog = {
     app_version: '2.3.6',
-    date: new Date(2023, 03, 02),
+    date: new Date(2023, 3, 2),
     items: [
         {
             title: 'La plateforme dans votre poche !',
@@ -12,9 +12,9 @@ const changelog = {
         {
             title: 'Faites-le bilan de vos actions !',
             description: '<p>Rendez-vous sur le volet action pour déclarer vos actions et transmettre vos résultats 2022. Une belle occasion de valoriser le travail de terrain mené !</p>',
-            image: `${backUrl}/assets/changelog/2.3.6/item_2.gif`,    
-        }
-],
+            image: `${backUrl}/assets/changelog/2.3.6/item_2.gif`,
+        },
+    ],
 };
 
 module.exports = {
