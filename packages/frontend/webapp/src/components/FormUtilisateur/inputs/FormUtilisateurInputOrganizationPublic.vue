@@ -35,6 +35,10 @@ async function refreshOptions() {
             label = "France";
         } else if (organization.organization_type_uid === "rectorat") {
             label = organization.name.split(" - ")[1];
+        } else if (organization.organization_type_uid === "sous_pref") {
+            label = `${organization[`departement_code`]} - ${
+                organization.name.split(" de ")[1]
+            }`;
         } else if (level === "departement") {
             label = `${organization[`${level}_code`]} - ${
                 organization[`${level}_name`]
