@@ -9,9 +9,11 @@ import findByOrganization from './findByOrganization';
 import findByOrganizationCategory from './findByOrganizationCategory';
 import findDepartementSummarySubscribers from './findDepartementSummarySubscribers';
 import findForRegion from './findForRegion';
+import findInactiveUsers from './findInactiveUsers';
 import findOne from './findOne';
 import findOneByAccessId from './findOneByAccessId';
 import findOneByEmail from './findOneByEmail';
+import findUsersToBeDeactivated from './findUsersToBeDeactivated';
 import formatName from './_common/formatName';
 import getAdminsFor from './getAdminsFor';
 import getDirectory from './getDirectory';
@@ -22,6 +24,8 @@ import getShantytownWatchers from './getShantytownWatchers';
 import getActionObservers from './getActionObservers';
 import isTracked from './isTracked';
 import listExport from './listExport';
+import resetInactivityAlertSentAt from './resetInactivityAlertSentAt';
+import setInactivityAlertSentAt from './setInactivityAlertSentAt';
 import setPermissionOptions from './setPermissionOptions';
 import update from './update';
 import upgradeLocalAdmin from './upgradeLocalAdmin';
@@ -38,9 +42,11 @@ export default {
     findByOrganizationCategory,
     findDepartementSummarySubscribers,
     findForRegion,
+    findInactiveUsers,
     findOne,
     findOneByAccessId,
     findOneByEmail,
+    findUsersToBeDeactivated,
     formatName,
     getAdminsFor,
     getDirectory,
@@ -51,6 +57,8 @@ export default {
     getActionObservers,
     isTracked,
     listExport,
+    resetInactivityAlertSentAt,
+    setInactivityAlertSentAt,
     setPermissionOptions,
     update,
     upgradeLocalAdmin,

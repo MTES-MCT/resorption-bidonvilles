@@ -1,0 +1,33 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Votre accès va être désactivé</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Votre accès à <span class="font-italic">Résorption-bidonvilles</span> va bientôt être désactivé
+                </mj-text>
+                <mj-include path='common/hello.mjml' />
+                <mj-text mj-class="pb-4">
+                    Vous ne vous êtes pas connecté(e) sur la plateforme <span class="font-italic">Résorption-Bidonvilles</span> depuis plus de 6 mois.
+                </mj-text>
+                <mj-text mj-class="pb-4">
+                    Sans aucune connexion de votre part dans un délai de 1 mois à compter d'aujourd'hui, votre compte sera désactivé.
+                </mj-text>
+                <mj-text mj-class="text-primary text-lg">
+                    Afin de conserver votre compte, veuillez cliquer sur le lien ci-dessous
+                </mj-text>
+                <mj-button mj-class="button-primary" href="{{var:webappUrl}}" rel="noopener noreferrer">
+                    Me connecter
+                </mj-button>
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

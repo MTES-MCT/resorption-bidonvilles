@@ -1,16 +1,16 @@
 import { sequelize } from '#db/sequelize';
 
-export default id => sequelize.query(
+export default (ids: number[]) => sequelize.query(
     `UPDATE
         users
     SET
         fk_status = 'inactive'
     WHERE
-        user_id = :id
+        user_id IN (:ids)
     `,
     {
         replacements: {
-            id,
+            ids,
         },
     },
 );

@@ -248,6 +248,37 @@ export default {
         });
     },
 
+    sendInactiveUserAlert: (recipient, options: MailOptions = {}) => {
+        const { preserveRecipient = false } = options;
+
+        const utm = generateTrackingUTM(USER_CAMPAIGN, 'inactivity-alert');
+
+        return mailService.send('inactive_user_alert', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient),
+                backUrl,
+                blogUrl,
+                webappUrl: `${webappUrl}?${utm}`,
+            },
+            preserveRecipient,
+        });
+    },
+
+    sendInactiveUserDeactivationAlert: (recipient, options: MailOptions = {}) => {
+        const { preserveRecipient = false } = options;
+
+        return mailService.send('inactive_user_deactivation_alert', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient),
+                backUrl,
+                blogUrl,
+            },
+            preserveRecipient,
+        });
+    },
+
     /**
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
