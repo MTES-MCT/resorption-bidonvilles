@@ -57,7 +57,10 @@ import schema from "./FormConnexion.schema.js";
 
 // stores and api
 import { useUserStore } from "@/stores/user.store.js";
+import { useNavigationStore } from "@/stores/navigation.store.js";
+
 const userStore = useUserStore();
+const navigationStore = useNavigationStore();
 
 // reason: raison pour laquelle l'utilisateur est redirigé vers la page de connexion
 const props = defineProps({
@@ -77,9 +80,13 @@ async function submit({ email, password }) {
 }
 
 const message = computed(() => {
-    if (reason.value && reason.value.length > 0) {
+    if (reason.value === "invalid_token") {
         return "Votre session est expirée, veuillez-vous reconnecter";
     }
-    return "Veuillez vous connecter pour accéder à la page demandée";
+
+    if (navigationStore.entrypoint) {
+        return "Veuillez vous connecter pour accéder à la page demandée";
+    }
+    return null;
 });
 </script>
