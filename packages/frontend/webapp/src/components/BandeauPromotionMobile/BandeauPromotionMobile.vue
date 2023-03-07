@@ -44,6 +44,5 @@ const mobileImage = computed(() => {
         img: imagePromotionMobile,
         text: "Application Mobile Résorption-Bidonvilles",
     };
-    // { "text": "Application Mobile Résorption-Bidonvilles", "img": "/@fs/src/assets/img/promotion_mobile/promotion_mobile.png" }
 });
 </script>
