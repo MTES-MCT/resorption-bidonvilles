@@ -37,7 +37,7 @@ export default {
             [{ type: 'edit', label: 'Mettre à jour les %actions%', comments: 'hors financements' }],
         ],
         options: [
-            { id: 'close_shantytown', label: 'Autoriser le partenaire à créer un site et déclarer la fermeture d\'un site' },
+            { id: 'close_shantytown', label: 'Autoriser le partenaire à déclarer la fermeture d\'un site' },
             { id: 'access_justice', label: 'Accéder aux procédures judiciaires' },
         ],
     },

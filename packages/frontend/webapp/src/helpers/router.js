@@ -277,13 +277,6 @@ const router = createRouter({
             },
         },
         {
-            path: "/session-expiree",
-            component: () => import("@/views/SessionExpiree.vue"),
-            meta: {
-                authRequirement: "signedOut",
-            },
-        },
-        {
             path: "/site/:id",
             component: () => import("@/views/FicheSiteView.vue"),
             meta: {

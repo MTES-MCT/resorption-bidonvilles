@@ -58,13 +58,15 @@ import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 const townsStore = useTownsStore();
 const isLoading = ref(null);
 const error = ref(null);
-const town = ref(null);
 const form = ref(null);
 
 onMounted(load);
 
 const townId = computed(() => {
     return parseInt(router.currentRoute.value.params.id, 10);
+});
+const town = computed(() => {
+    return townsStore.hash[townId.value] || null;
 });
 
 const submitWording = computed(() => {
@@ -82,7 +84,7 @@ async function load() {
     error.value = null;
     try {
         const userStore = useUserStore();
-        town.value = await townsStore.fetchTown(townId.value);
+        await townsStore.fetchTown(townId.value);
 
         if (town.value.status === "open") {
             if (

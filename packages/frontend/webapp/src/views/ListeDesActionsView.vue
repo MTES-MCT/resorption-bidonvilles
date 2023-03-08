@@ -6,6 +6,7 @@
         showNationalWording="Voir toutes les actions de France"
         v-model:location="location"
     >
+        <BandeauPromotionMobile />
         <ListeDesActions />
     </LayoutSearch>
 </template>
@@ -16,6 +17,8 @@ import { useActionsStore } from "@/stores/actions.store";
 
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import ListeDesActions from "@/components/ListeDesActions/ListeDesActions.vue";
+
+import BandeauPromotionMobile from "@/components/BandeauPromotionMobile/BandeauPromotionMobile.vue";
 
 const actionsStore = useActionsStore();
 const location = computed({
