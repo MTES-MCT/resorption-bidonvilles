@@ -1,6 +1,6 @@
 import { param } from 'express-validator';
 import actionModel from '#server/models/actionModel';
-import common from './create';
+import writeAction from './writeAction';
 
 export default [
     param('id')
@@ -20,5 +20,5 @@ export default [
             req.action = action;
         }),
 
-    ...common,
+    ...writeAction('update'),
 ];
