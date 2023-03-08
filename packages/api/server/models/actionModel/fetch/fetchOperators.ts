@@ -1,9 +1,9 @@
-import { QueryTypes } from 'sequelize';
+import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 import ActionUserRow from './ActionUserRow';
 import enrichWhere from './enrichWhere';
 
-export default function fetchOperators(actionIds: number[] = null, clauseGroup: object = {}): Promise<ActionUserRow[]> {
+export default function fetchOperators(actionIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionUserRow[]> {
     const where = [];
     const replacements = { actionIds };
     if (actionIds !== null) {
@@ -39,6 +39,7 @@ export default function fetchOperators(actionIds: number[] = null, clauseGroup: 
         {
             type: QueryTypes.SELECT,
             replacements,
+            transaction,
         },
     );
 }

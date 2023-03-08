@@ -1,4 +1,5 @@
 import { Permission } from '#server/models/permissionModel/types/Permission';
+import { Transaction } from 'sequelize';
 import where from '#server/utils/permission/where';
 import fetchActions from './fetchActions';
 import fetchComments from '../fetchComments/fetchComments';
@@ -16,7 +17,7 @@ import mergeShantytowns from './mergeShantytowns';
 import mergeTopics from './mergeTopics';
 import Action from './Action';
 
-export default async (actionIds: number[] = null, permission: Permission = null): Promise<Action[]> => {
+export default async (actionIds: number[] = null, permission: Permission = null, transaction?: Transaction): Promise<Action[]> => {
     let clauseGroup = {};
     if (permission !== null) {
         clauseGroup = where()
@@ -25,13 +26,13 @@ export default async (actionIds: number[] = null, permission: Permission = null)
     }
 
     const [actions, topics, managers, operators, shantytowns, comments, metrics] = await Promise.all([
-        fetchActions(actionIds, clauseGroup),
-        fetchTopics(actionIds, clauseGroup),
-        fetchManagers(actionIds, clauseGroup),
-        fetchOperators(actionIds, clauseGroup),
-        fetchShantytowns(actionIds, clauseGroup),
-        fetchComments(actionIds, null, clauseGroup),
-        fetchMetrics(actionIds, clauseGroup),
+        fetchActions(actionIds, clauseGroup, transaction),
+        fetchTopics(actionIds, clauseGroup, transaction),
+        fetchManagers(actionIds, clauseGroup, transaction),
+        fetchOperators(actionIds, clauseGroup, transaction),
+        fetchShantytowns(actionIds, clauseGroup, transaction),
+        fetchComments(actionIds, null, clauseGroup, transaction),
+        fetchMetrics(actionIds, clauseGroup, transaction),
     ]);
 
     const hash = hashActions(actions);

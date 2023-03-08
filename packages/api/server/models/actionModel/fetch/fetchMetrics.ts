@@ -1,4 +1,4 @@
-import { QueryTypes } from 'sequelize';
+import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 import enrichWhere from './enrichWhere';
 
@@ -33,7 +33,7 @@ export type ActionMetricsRow = {
     creator_organization_abbreviation: string | null,
 };
 
-export default function fetchMetrics(actionIds: number[] = null, clauseGroup: object = {}): Promise<ActionMetricsRow[]> {
+export default function fetchMetrics(actionIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionMetricsRow[]> {
     const where = [];
     const replacements = { actionIds };
     if (actionIds !== null) {
@@ -85,6 +85,7 @@ export default function fetchMetrics(actionIds: number[] = null, clauseGroup: ob
         {
             type: QueryTypes.SELECT,
             replacements,
+            transaction,
         },
     );
 }
