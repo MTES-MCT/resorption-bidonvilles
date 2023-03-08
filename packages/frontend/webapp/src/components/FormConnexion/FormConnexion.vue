@@ -1,12 +1,8 @@
 <template>
-    <ContentWrapper
-        size="medium"
-        class="mb-10"
-        v-if="navigationStore.entrypoint"
-    >
+    <ContentWrapper size="medium" class="mb-10" v-if="message !== null">
         <p class="bg-red200 p-4 flex items-center justify-center space-x-2">
             <Icon icon="circle-info" class="text-red600" />
-            <span>Veuillez vous connecter pour accéder à la page demandée</span>
+            <span>{{ message }}</span>
         </p>
     </ContentWrapper>
     <FormPublic
@@ -42,6 +38,9 @@
 </template>
 
 <script setup>
+// vue
+import { computed, defineProps, toRefs } from "vue";
+
 // utils
 import router from "@/helpers/router.js";
 import { trackEvent } from "@/helpers/matomo.js";
@@ -59,8 +58,19 @@ import schema from "./FormConnexion.schema.js";
 // stores and api
 import { useUserStore } from "@/stores/user.store.js";
 import { useNavigationStore } from "@/stores/navigation.store.js";
+
 const userStore = useUserStore();
 const navigationStore = useNavigationStore();
+
+// reason: raison pour laquelle l'utilisateur est redirigé vers la page de connexion
+const props = defineProps({
+    reason: {
+        type: String,
+        required: false,
+    },
+});
+
+const { reason } = toRefs(props);
 
 // methods
 async function submit({ email, password }) {
@@ -68,4 +78,15 @@ async function submit({ email, password }) {
     trackEvent("Login", "Connection");
     router.push("/chargement");
 }
+
+const message = computed(() => {
+    if (reason.value === "invalid_token") {
+        return "Votre session est expirée, veuillez-vous reconnecter";
+    }
+
+    if (navigationStore.entrypoint) {
+        return "Veuillez vous connecter pour accéder à la page demandée";
+    }
+    return null;
+});
 </script>
