@@ -26,8 +26,8 @@
                         consulter la fiche d'un site, d'écrire sur le journal du
                         site et de créer des notes personnelles. Pour vous
                         connecter, utilisez la même adresse :
-                        https://resorption-bidonvilles.beta.gouv.fr et vos
-                        identifiants habituels.
+                        resorption-bidonvilles.beta.gouv.fr et vos identifiants
+                        habituels.
                     </p>
                 </div>
             </div>
@@ -35,14 +35,11 @@
     </ContentWrapper>
 </template>
 <script setup>
-import { computed } from "vue";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import imagePromotionMobile from "@/assets/img/promotion_mobile/promotion_mobile.png";
 
-const mobileImage = computed(() => {
-    return {
-        img: imagePromotionMobile,
-        text: "Application Mobile Résorption-Bidonvilles",
-    };
-});
+const mobileImage = {
+    img: imagePromotionMobile,
+    text: "Application Mobile Résorption-Bidonvilles",
+};
 </script>
