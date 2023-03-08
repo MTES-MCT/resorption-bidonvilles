@@ -1,4 +1,4 @@
-import { QueryTypes } from 'sequelize';
+import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 import enrichWhere from '../fetch/enrichWhere';
 
@@ -16,7 +16,7 @@ export type ActionCommentRow = {
     creator_user_role: string,
 };
 
-export default function fetchComments(actionIds: number[] = null, commentIds: number[] = null, clauseGroup: object = {}): Promise<ActionCommentRow[]> {
+export default function fetchComments(actionIds: number[] = null, commentIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionCommentRow[]> {
     const where = [];
     const replacements = {
         actionIds,
@@ -57,6 +57,7 @@ export default function fetchComments(actionIds: number[] = null, commentIds: nu
         {
             type: QueryTypes.SELECT,
             replacements,
+            transaction,
         },
     );
 }

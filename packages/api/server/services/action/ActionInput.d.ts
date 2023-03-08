@@ -1,8 +1,22 @@
 import ActionLocationType from '#server/models/actionModel/fetch/ActionLocationType.d';
+import { Departement } from '#server/models/geoModel/Location.d';
 
 type ActionInputUser = {
     id: number,
     organization_id: number
+};
+
+type ActionFinanceType = 'etatique' | 'dedie' | 'collectivite' | 'europeen' | 'prive' | 'autre';
+type ActionFinances = {
+    [key: number]: ActionSingleYearFinances
+};
+
+type ActionSingleYearFinances = ActionFinanceRow[];
+type ActionFinanceRow = {
+    finance_type: ActionFinanceType,
+    comments: string,
+    amount: number,
+    real_amount: number,
 };
 
 export interface ActionInput {
@@ -11,6 +25,8 @@ export interface ActionInput {
     ended_at: Date | null,
     topics: string[],
     goals: string,
+    finances?: ActionFinances,
+    departement: Departement,
     location_departement: string,
     location_type: ActionLocationType,
     location_eti: string | null,
