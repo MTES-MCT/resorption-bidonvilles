@@ -173,6 +173,7 @@ export const useTownsStore = defineStore("towns", () => {
         filters,
         townCategoryFilter,
         towns,
+        hash,
         sort,
         currentPage,
         exportOptions,
