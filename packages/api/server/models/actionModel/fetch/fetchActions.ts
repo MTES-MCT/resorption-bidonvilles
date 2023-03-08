@@ -1,4 +1,4 @@
-import { QueryTypes } from 'sequelize';
+import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 import ActionLocationType from './ActionLocationType.d';
 import enrichWhere from './enrichWhere';
@@ -35,7 +35,7 @@ export type ActionSelectRow = {
     updated_at: Date,
 };
 
-export default function fetchActions(actionIds: number[] = null, clauseGroup: object = {}): Promise<ActionSelectRow[]> {
+export default function fetchActions(actionIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionSelectRow[]> {
     const where = [];
     const replacements = { actionIds };
     if (actionIds !== null) {
@@ -87,6 +87,7 @@ export default function fetchActions(actionIds: number[] = null, clauseGroup: ob
         {
             type: QueryTypes.SELECT,
             replacements,
+            transaction,
         },
     );
 }

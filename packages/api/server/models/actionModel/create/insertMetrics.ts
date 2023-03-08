@@ -1,8 +1,8 @@
 import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
-import { ActionEnrichedInput } from '#server/services/action/ActionInput.d';
+import { ActionInput } from '#server/services/action/ActionInput.d';
 
-export default (authorId: number, actionId: number, date: Date, data: ActionEnrichedInput, transaction: Transaction) => sequelize.query(
+export default (actionId: number, authorId: number, date: Date, data: ActionInput, transaction: Transaction) => sequelize.query(
     `INSERT INTO action_metrics(
         fk_action,
         date,
