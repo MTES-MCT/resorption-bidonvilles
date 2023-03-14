@@ -4,4 +4,5 @@ export default [
     'action_comment_notification',
     'shantytown_closure',
     'shantytown_creation',
+    'community_new_answer',
 ];
