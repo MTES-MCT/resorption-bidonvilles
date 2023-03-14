@@ -1,6 +1,8 @@
+import userModel from '#server/models/userModel';
 import answerModel from '#server/models/answerModel';
 import ServiceError from '#server/errors/ServiceError';
 import Answer from '#server/models/answerModel/Answer.d';
+import sendMailForNewAnswer from './_common/sendMailForNewAnswer';
 
 type AnswerData = {
     description: string,
@@ -25,6 +27,14 @@ export default async (answer: AnswerData, question: QuestionData, author: Author
         });
     } catch (error) {
         throw new ServiceError('insert_failed', error);
+    }
+
+    // On essaie d'envoyer un mail de notification à l'auteur de la question
+    try {
+        const questionAuthor = await userModel.findOne(question.createdBy.id);
+        await sendMailForNewAnswer(question.id, author, questionAuthor);
+    } catch (ignore) {
+        // ignore
     }
 
     // on retourne la réponse
