@@ -1,4 +1,10 @@
 <template>
+    <Warning v-if="disable" :autohide="false"
+        >Vous n'avez pas le droit de modifier le champ "{{
+            labels.location_departement
+        }}" (si besoin, veuillez contacter l'un des pilotes de l'action ou
+        l'équipe de la plateforme)</Warning
+    >
     <Select
         name="location_departement"
         :label="labels.location_departement"
@@ -17,15 +23,22 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, toRefs, defineProps } from "vue";
 import labels from "../FormDeclarationAction.labels";
 import { useUserStore } from "@/stores/user.store";
 
-import { Select } from "@resorptionbidonvilles/ui";
+import { Select, Warning } from "@resorptionbidonvilles/ui";
+
+const props = defineProps({
+    disable: Boolean,
+});
+const { disable } = toRefs(props);
 
 const userStore = useUserStore();
 const disabled = computed(() => {
-    return userStore.departementsForActions.length === 1;
+    return (
+        userStore.departementsForActions.length === 1 || disable.value === true
+    );
 });
 const info = computed(() => {
     if (userStore.departementsForActions.length === 1) {

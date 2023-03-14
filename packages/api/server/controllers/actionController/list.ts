@@ -6,7 +6,12 @@ const ERRORS = {
 
 export default async (req, res, next) => {
     try {
-        const actions = await actionService.fetch(req.user.permissions.action.read);
+        const actions = await actionService.fetch(
+            req.user.permissions.action.read,
+            req.user.permissions.action_finances.access || {
+                allowed: false,
+            },
+        );
         return res.status(200).send(actions);
     } catch (error) {
         const { code, message } = ERRORS[error?.code] || ERRORS.undefined;

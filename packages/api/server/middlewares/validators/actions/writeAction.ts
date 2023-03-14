@@ -1,5 +1,4 @@
 /* eslint-disable newline-per-chained-call */
-import departementModel from '#server/models/departementModel';
 import geoModel from '#server/models/geoModel';
 import shantytownModel from '#server/models/shantytownModel';
 import topicModel from '#server/models/topicModel';
@@ -9,6 +8,26 @@ import { body } from 'express-validator';
 import validator from 'validator';
 
 const { isLatLong } = validator;
+
+function canWriteFinances(mode: 'create' | 'update', req): boolean {
+    if (mode === 'create') {
+        if (req.body.location && can(req.user).do('access', 'action_finances').on(req.body.location)) {
+            return true;
+        }
+
+        return req.body.managers.some(({ organization_id }) => req.user.organization.id === organization_id);
+    }
+
+    return req.action && can(req.user).do('access', 'action_finances').on(req.action);
+}
+
+function canWriteManagersAndDepartement(mode: 'create' | 'update', req) {
+    if (mode === 'create') {
+        return true;
+    }
+
+    return canWriteFinances(mode, req);
+}
 
 export default (mode: 'create' | 'update') => [
     body('name')
@@ -72,20 +91,42 @@ export default (mode: 'create' | 'update') => [
         .notEmpty().withMessage('Vous devez préciser les objectifs de l\'action'),
 
     body('location_departement')
+        .customSanitizer((value, { req }) => {
+            // en cas de mise à jour, si l'utilisateur n'a pas le droit de modifier le département
+            // on conserve le département actuel
+            if (mode === 'update' && !canWriteManagersAndDepartement(mode, req)) {
+                return req.action.location.departement.code;
+            }
+
+            return value;
+        })
         .exists({ checkNull: true }).bail().withMessage('Le champ "Département d\'intervention principal" est obligatoire')
         .custom(async (value, { req }) => {
-            let departement;
+            let location;
             try {
-                departement = await departementModel.findOne(value);
+                location = await geoModel.getLocation('departement', value);
             } catch (error) {
                 throw new Error('Une lecture en base de données a échoué lors de la validation du champ "Département d\'intervention principal"');
             }
 
-            if (departement === null) {
+            if (location === null) {
                 throw new Error('Le département sélectionné n\'existe pas en base de données');
             }
 
             const permission = req.user.permissions?.action?.create;
+            req.body.location = location;
+
+            // si le département n'a pas changé, on ne vérifie pas les permissions
+            // un cas possible est celui d'un utilisateur désigné pilote ou opérateur d'une action
+            // sur un territoire sur lequel il n'a pas les droits de déclaration d'une action
+            // son statut de pilote ou opérateur devrait lui autoriser à modifier l'action mais il
+            // serait confronté à une erreur si on vérifiait les permissions ici
+            // les seuls cas à vérifier sont donc : en cas de création d'une action ou de modification
+            // de son territoire
+            if (req.action?.location?.departement?.code === value) {
+                return true;
+            }
+
             if (!permission) {
                 throw new Error('Votre compte ne dispose pas des droits suffisants pour déclarer une action');
             }
@@ -94,12 +135,11 @@ export default (mode: 'create' | 'update') => [
                 return true;
             }
 
-            if (!permission.allowed_on.departements?.includes(departement.code)
-                    && !permission.allowed_on.regions?.includes(departement.region)) {
+            if (!permission.allowed_on.departements?.includes(location.departement.code)
+                    && !permission.allowed_on.regions?.includes(location.region.code)) {
                 throw new Error('Votre compte ne dispose pas des droits suffisants pour déclarer une action sur ce département');
             }
 
-            req.body.departement = departement;
             return true;
         }),
 
@@ -185,6 +225,15 @@ export default (mode: 'create' | 'update') => [
         .customSanitizer(value => value || null),
 
     body('managers')
+        .customSanitizer((value, { req }) => {
+            // en cas de mise à jour, si l'utilisateur n'a pas le droit de modifier les managers
+            // on conserve les managers actuels
+            if (mode === 'update' && !canWriteManagersAndDepartement(mode, req)) {
+                return req.action.managers.map(({ users }) => users.map(({ id }) => id)).flat();
+            }
+
+            return value;
+        })
         .exists({ checkNull: true }).bail().withMessage('Le champ "Pilotes de l\'action" est obligatoire')
         .isArray().bail().withMessage('Le format des utilisateurs ciblés n\'est pas valide')
         .isLength({ min: 1 }).bail().withMessage('Le champ "Pilotes de l\'action" est obligatoire')
@@ -234,38 +283,60 @@ export default (mode: 'create' | 'update') => [
     // transformer finances en un array pour faciliter la validation plus bas
     body('finances')
         .customSanitizer((value, { req }) => {
-            if (mode === 'create') {
-                if (!req.body.departement || !can(req.user).do('access', 'action_finances').on(req.body.departement)) {
-                    return [];
+            if (!canWriteFinances(mode, req)) {
+                // en cas de mise à jour, si l'utilisateur n'a pas le droit de modifier les financements
+                // on conserve les financements existants
+                if (mode === 'update') {
+                    return Object.keys(req.action.finances)
+                        .map(year => ({
+                            year,
+                            rows: req.action.finances[year].map(row => ({
+                                finance_type: row.type.uid,
+                                amount: row.amount,
+                                real_amount: row.real_amount,
+                                comments: row.comments,
+                            })),
+                        }));
                 }
-            } else if (!req.action || !can(req.user).do('access', 'action_finances').on(req.action)) {
+
                 return [];
             }
 
-            return Object.keys(value).map(year => ({
-                year,
-                rows: value[year],
-            }));
+            if (!value) {
+                return [];
+            }
+
+            return Object.keys(value)
+                .map(year => ({
+                    year,
+                    rows: value[year],
+                }))
+                .filter(finance => finance.rows.length > 0);
         }),
 
-    body('finances.*.finance_type')
+    body('finances.*.rows.*.finance_type')
         .exists({ checkNull: true }).bail().withMessage('Le champ "Type de financement" est obligatoire')
         .isIn(['etatique', 'dedie', 'collectivite', 'europeen', 'prive', 'autre'])
         .bail().withMessage('Le type de financement est invalide'),
 
-    body('finances.*.amount')
+    body('finances.*.rows.*.amount')
         .exists({ checkNull: true }).bail().withMessage('Le champ "Montant" est obligatoire')
+        .customSanitizer(value => (typeof value === 'string' ? value.replace(',', '.') : value))
         .toFloat()
         .isFloat().bail().withMessage('Le champ "Montant" doit être un nombre')
         .isFloat({ min: 0 }).bail().withMessage('Le champ "Montant" doit être supérieur ou égal à 0'),
 
-    body('finances.*.real_amount')
-        .customSanitizer(value => value || 0.0)
+    body('finances.*.rows.*.real_amount')
+        .optional({ nullable: true, checkFalsy: true })
+        .customSanitizer(value => (typeof value === 'string' ? value.replace(',', '.') : value))
         .toFloat()
         .isFloat().bail().withMessage('Le champ "Dépenses exécutées" doit être un nombre')
         .isFloat({ min: 0 }).bail().withMessage('Le champ "Dépenses exécutées" doit être supérieur ou égal à 0'),
 
-    body('finances.*.comments')
+    body('finances.*.rows.*.real_amount')
+        .customSanitizer(value => (typeof value === 'number' ? value : null)),
+
+    body('finances.*.rows.*.comments')
         .customSanitizer(value => value || '')
         .isString().bail().withMessage('Le champ "Commentaires" doit être une chaîne de caractères')
         .isLength({ max: 255 }).bail().withMessage('Le champ "Commentaires" ne doit pas dépasser 255 caractères')

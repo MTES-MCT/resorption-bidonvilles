@@ -8,10 +8,8 @@ type ActionInputUser = {
 
 type ActionFinanceType = 'etatique' | 'dedie' | 'collectivite' | 'europeen' | 'prive' | 'autre';
 type ActionFinances = {
-    [key: number]: ActionSingleYearFinances
+    [key: number]: ActionFinanceRow[]
 };
-
-type ActionSingleYearFinances = ActionFinanceRow[];
 type ActionFinanceRow = {
     finance_type: ActionFinanceType,
     comments: string,
@@ -26,7 +24,7 @@ export interface ActionInput {
     topics: string[],
     goals: string,
     finances?: ActionFinances,
-    departement: Departement,
+    location: Departement,
     location_departement: string,
     location_type: ActionLocationType,
     location_eti: string | null,
