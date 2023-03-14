@@ -32,7 +32,9 @@ export default async (answer: AnswerData, question: QuestionData, author: Author
     // On essaie d'envoyer un mail de notification à l'auteur de la question
     try {
         const questionAuthor = await userModel.findOne(question.createdBy.id);
-        await sendMailForNewAnswer(question.id, author, questionAuthor);
+        if (questionAuthor.email_subscriptions.includes('community_new_answer')) {
+            await sendMailForNewAnswer(question.id, author, questionAuthor);
+        }
     } catch (ignore) {
         // ignore
     }
