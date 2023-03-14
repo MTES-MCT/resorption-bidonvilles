@@ -37,6 +37,7 @@ export default function hashActions(actions: ActionSelectRow[]): ActionHash {
             location_shantytowns: [],
             managers: [],
             operators: [],
+            finances: {},
             metrics: [],
             comments: [],
             created_at: row.created_at.getTime(),

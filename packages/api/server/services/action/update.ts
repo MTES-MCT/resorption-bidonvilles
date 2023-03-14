@@ -1,19 +1,39 @@
+import { sequelize } from '#db/sequelize';
 import ServiceError from '#server/errors/ServiceError';
-import actionModel from '#server/models/actionModel';
 import Action from '#server/models/actionModel/fetch/Action.d';
+import update from '#server/models/actionModel/update/update';
+import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import can from '#server/utils/permission/can';
+import fetchAction from './write.fetchAction';
 import { ActionInput } from './ActionInput.d';
 
-export default async (actionId: number, authorId: number, data: ActionInput): Promise<Action> => {
+export default async (action: Action, author: SerializedUser, data: ActionInput): Promise<Action> => {
+    const canWriteFinances = can(author).do('access', 'action_finances').on(action);
+
+    const transaction = await sequelize.transaction();
     try {
-        await actionModel.update(actionId, {
+        await update(action.id, {
             ...data,
             address: data.location_eti,
-            updated_by: authorId,
-        });
-        const actions = await actionModel.fetch([actionId]);
-
-        return actions[0];
+            updated_by: author.id,
+        }, transaction);
     } catch (error) {
-        throw new ServiceError('db_write_error', error);
+        await transaction.rollback();
+        throw new ServiceError('action_insert_error', error);
+    }
+
+    try {
+        const updatedAction = await fetchAction(action.id, canWriteFinances, transaction);
+        await transaction.commit();
+
+        return updatedAction;
+    } catch (error) {
+        await transaction.rollback();
+
+        if (error instanceof ServiceError) {
+            throw error;
+        }
+
+        throw new ServiceError('action_fetch_error', error);
     }
 };

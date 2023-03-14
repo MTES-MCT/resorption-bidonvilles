@@ -1,16 +1,38 @@
 import { sequelize } from '#db/sequelize';
+import ServiceError from '#server/errors/ServiceError';
 import Action from '#server/models/actionModel/fetch/Action.d';
+import create from '#server/models/actionModel/create/create';
 import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
 
 import { ActionInput } from './ActionInput.d';
-import insertData from './create.insertData';
-import fetchAction from './create.fetchAction';
+import fetchAction from './write.fetchAction';
 
 export default async (user: SerializedUser, data: ActionInput): Promise<Action> => {
     const transaction = await sequelize.transaction();
-    const actionId = await insertData(user, data, transaction);
-    const action = await fetchAction(actionId, transaction);
-    await transaction.commit();
+    let actionId;
+    try {
+        actionId = await create({
+            ...data,
+            address: data.location_eti,
+            created_by: user.id,
+        }, transaction);
+    } catch (error) {
+        await transaction.rollback();
+        throw new ServiceError('action_insert_error', error);
+    }
 
-    return action;
+    try {
+        const action = await fetchAction(actionId, true, transaction);
+        await transaction.commit();
+
+        return action;
+    } catch (error) {
+        await transaction.rollback();
+
+        if (error instanceof ServiceError) {
+            throw error;
+        }
+
+        throw new ServiceError('action_fetch_error', error);
+    }
 };

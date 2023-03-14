@@ -41,6 +41,11 @@ export default {
     name: "RbTextInput",
     mixins: [filteredProps],
     props: {
+        defaultValue: {
+            type: String,
+            required: false,
+            default: "",
+        },
         label: {
             type: String
         },
@@ -156,7 +161,7 @@ export default {
     },
     data() {
         return {
-            currentValue: ""
+            currentValue: this.defaultValue,
         };
     },
     mounted() {
@@ -172,6 +177,7 @@ export default {
         setValue(str) {
             this.$refs.input.value = str;
             this.currentValue = str;
+            this.$emit('changed', this.currentValue);
         }
     }
 };

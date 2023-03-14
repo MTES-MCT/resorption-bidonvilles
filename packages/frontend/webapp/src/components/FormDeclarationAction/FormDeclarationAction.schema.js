@@ -91,6 +91,7 @@ export default function () {
             .required()
             .usersIsNotEmpty()
             .label(labels.operators),
+        finances: object(),
         nombre_personnes: number()
             .typeError(`Nombre de personnes doit être un nombre`)
             .nullable()

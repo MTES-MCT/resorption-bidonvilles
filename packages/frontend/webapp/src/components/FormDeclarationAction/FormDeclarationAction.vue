@@ -2,9 +2,16 @@
     <ArrangementLeftMenu :tabs="tabs" autonav>
         <template v-slot:menuTitle>Rubriques</template>
 
-        <FormDeclarationActionCaracteristiques class="mt-6" :mode="mode" />
-        <FormDeclarationActionLocalisation class="mt-6" />
-        <FormDeclarationActionContacts class="mt-6" />
+        <FormDeclarationActionCaracteristiques class="mt-6" />
+        <FormDeclarationActionLocalisation
+            :disableDepartement="mode === 'edit' && !canAccessFinances"
+            class="mt-6"
+        />
+        <FormDeclarationActionContacts
+            :disableManagers="mode === 'edit' && !canAccessFinances"
+            class="mt-6"
+        />
+        <FormDeclarationActionFinances class="mt-6" v-if="canAccessFinances" />
         <FormDeclarationActionIndicateurs class="mt-6" />
 
         <ErrorSummary
@@ -27,24 +34,26 @@ import {
     ref,
     watch,
 } from "vue";
-import { useForm } from "vee-validate";
+import { useForm, useFieldValue } from "vee-validate";
 import { useActionsStore } from "@/stores/actions.store";
 import { useUserStore } from "@/stores/user.store";
+import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
 import isDeepEqual from "@/utils/isDeepEqual";
 import backOrReplace from "@/utils/backOrReplace";
 import formatFormAction from "@/utils/formatFormAction";
+import formatFormDate from "@/utils/formatFormDate";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
 import FormDeclarationActionCaracteristiques from "./sections/FormDeclarationActionCaracteristiques.vue";
 import FormDeclarationActionLocalisation from "./sections/FormDeclarationActionLocalisation.vue";
 import FormDeclarationActionContacts from "./sections/FormDeclarationActionContacts.vue";
+import FormDeclarationActionFinances from "./sections/FormDeclarationActionFinances.vue";
 import FormDeclarationActionIndicateurs from "./sections/FormDeclarationActionIndicateurs.vue";
 import schemaFn from "./FormDeclarationAction.schema";
-import formatFormDate from "@/utils/formatFormDate";
 
 const props = defineProps({
     action: {
@@ -90,29 +99,61 @@ watch(toRef(values, "started_at"), () => {
 const originalValues = formatValuesForApi(values);
 const actionsStore = useActionsStore();
 const error = ref(null);
+const departement = useFieldValue("location_departement");
+const canAccessFinances = computed(() => {
+    const configStore = useConfigStore();
+    const { region } = configStore.config.departements.find(
+        ({ code }) => code === departement.value
+    );
 
-const tabs = [
-    {
-        id: "intervention",
-        label: "Intervention",
-        route: "#intervention",
-    },
-    {
-        id: "lieu",
-        label: "Lieu",
-        route: "#lieu",
-    },
-    {
-        id: "contacts",
-        label: "Contacts",
-        route: "#contacts",
-    },
-    {
+    return userStore.hasActionPermission("action_finances.access", {
+        id: action.value?.id,
+        location: {
+            departement: {
+                code: departement.value,
+            },
+            region: {
+                code: region,
+            },
+        },
+    });
+});
+
+const tabs = computed(() => {
+    const arr = [
+        {
+            id: "intervention",
+            label: "Intervention",
+            route: "#intervention",
+        },
+        {
+            id: "lieu",
+            label: "Lieu",
+            route: "#lieu",
+        },
+        {
+            id: "contacts",
+            label: "Contacts",
+            route: "#contacts",
+        },
+    ];
+
+    if (canAccessFinances.value === true) {
+        arr.push({
+            id: "financements",
+            label: "Financements",
+            route: "#financements",
+        });
+    }
+
+    arr.push({
         id: "indicateurs",
         label: "Indicateurs",
         route: "#indicateurs",
-    },
-];
+    });
+
+    return arr;
+});
 
 const config = {
     create: {
@@ -149,7 +190,7 @@ function formatValuesForApi(v) {
 
     return {
         ...Object.keys(validationSchema.fields).reduce((acc, key) => {
-            acc[key] = v[key];
+            acc[key] = v[key] ? JSON.parse(JSON.stringify(v[key])) : v[key];
             return acc;
         }, {}),
         ...{
