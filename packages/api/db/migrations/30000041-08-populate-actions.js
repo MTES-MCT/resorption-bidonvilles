@@ -43,7 +43,7 @@ module.exports = {
                     ) t
                     LEFT JOIN cities c ON c.name = t.city_name
                     WHERE c.fk_departement = t.departement_code
-                  )                  
+                  )
                 SELECT
                     plans2.plan_id,
                     plans2.name,

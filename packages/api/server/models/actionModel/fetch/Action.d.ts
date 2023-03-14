@@ -86,6 +86,18 @@ type ActionOrganization = {
     abbreviation: string | null,
     users: ActionOrganizationMember[]
 };
+type ActionFinances = {
+    [key: number]: ActionFinanceRow[],
+};
+type ActionFinanceRow = {
+    type: {
+        uid: string,
+        name: string,
+    },
+    amount: number,
+    real_amount: number | null,
+    comments: string,
+};
 
 interface IAction {
     id: number,
@@ -127,6 +139,7 @@ interface Action extends IAction {
     location_shantytowns: ActionShantytown[] | null,
     managers: ActionOrganization[],
     metrics: ActionMetrics[],
+    finances?: ActionFinances,
     comments: Comment[],
     created_at: number,
     created_by: ActionUser,

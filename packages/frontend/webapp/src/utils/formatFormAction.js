@@ -54,6 +54,13 @@ export default function (dateIndicateurs, data) {
                       .flat()
                 : [],
         },
+        finances: Object.keys(data.finances || {}).reduce((acc, year) => {
+            acc[year] = data.finances[year].map((row) => ({
+                ...row,
+                finance_type: row.type.uid,
+            }));
+            return acc;
+        }, {}),
     };
 
     if (data.metrics && data.metrics.length > 0) {

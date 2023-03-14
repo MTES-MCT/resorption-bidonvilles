@@ -13,6 +13,7 @@ export default {
     location_shantytowns: "Sites concernés",
     managers: "Pilote(s) de l'action",
     operators: "Association(s) ou service(s) en charge de la mise en œuvre",
+    finances: "Quels sont les financements de l'action ?",
 
     // indicateurs
     public: {

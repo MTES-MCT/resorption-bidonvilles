@@ -21,7 +21,7 @@
                         class="border-collapse text-center border-1 p-6 text-G600 italic"
                         :colspan="columns.length"
                     >
-                        Aucune donnée à afficher
+                        <slot name="empty">Aucune donnée à afficher</slot>
                     </td>
                 </tr>
                 <!-- if data provided -->

@@ -6,6 +6,16 @@
             <FicheActionCaracteristiques :action="action" class="mb-8" />
             <FicheActionLocalisation :action="action" class="mb-8" />
             <FicheActionContacts :action="action" class="mb-8" />
+            <FicheActionFinancements
+                v-if="
+                    userStore.hasActionPermission(
+                        'action_finances.access',
+                        action
+                    )
+                "
+                :action="action"
+                class="mb-8"
+            />
             <FicheActionAbsenceIndicateurs
                 v-if="action.metrics.length === 0"
                 :action="action"
@@ -33,6 +43,7 @@ import FicheActionHeader from "./FicheActionHeader/FicheActionHeader.vue";
 import FicheActionCaracteristiques from "./FicheActionCaracteristiques/FicheActionCaracteristiques.vue";
 import FicheActionLocalisation from "./FicheActionLocalisation.vue/FicheActionLocalisation.vue";
 import FicheActionContacts from "./FicheActionContacts/FicheActionContacts.vue";
+import FicheActionFinancements from "./FicheActionFinancements/FicheActionFinancements.vue";
 import FicheActionIndicateurs from "./FicheActionIndicateurs/FicheActionIndicateurs.vue";
 import FicheActionAbsenceIndicateurs from "./FicheActionAbsenceIndicateurs/FicheActionAbsenceIndicateurs.vue";
 import FicheActionJournal from "./FicheActionJournal/FicheActionJournal.vue";

@@ -10,8 +10,8 @@ import ownerTypeModel from '#server/models/ownerTypeModel';
 import departementModel from '#server/models/departementModel';
 import regionModel from '#server/models/regionModel';
 import etpTypeModel from '#server/models/etpTypeModel';
-import financeTypeModel from '#server/models/financeTypeModel';
 import questionTagModel from '#server/models/questionTagModel';
+import actionFinanceTypeModel from '#server/models/actionFinanceTypeModel';
 import topicModel from '#server/models/topicModel';
 import electricityTypeModel from '#server/models/electricityTypeModel';
 import changelogModel from '#server/models/changelogModel';
@@ -29,8 +29,8 @@ export default async (req, res, next) => {
         regions: regionModel.findAll(),
         closing_solutions: closingSolutionModel.findAll(),
         etp_types: etpTypeModel.findAll(),
-        finance_types: financeTypeModel.findAll(),
         question_tags: questionTagModel.findAll(),
+        action_finance_types: actionFinanceTypeModel.findAll(),
         topics: topicModel.findAll(),
         electricity_types: electricityTypeModel.findAll(),
         permissions_description: permissionsDescription,
