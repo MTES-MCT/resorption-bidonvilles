@@ -110,8 +110,7 @@ export const useQuestionsStore = defineStore("questions", () => {
 
     async function createAnswer(questionId, answer) {
         const notificationStore = useNotificationStore();
-        const { answer: newAnswer } = await addAnswer(questionId, answer);
-
+        const newAnswer = await addAnswer(questionId, answer);
         if (hash.value[questionId]) {
             hash.value[questionId].answers.unshift(newAnswer);
         }
