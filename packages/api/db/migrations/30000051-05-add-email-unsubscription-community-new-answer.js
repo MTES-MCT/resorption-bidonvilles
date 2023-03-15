@@ -19,7 +19,7 @@ module.exports = {
 
                 queryInterface.sequelize.query(
                     `CREATE TYPE enum_user_email_subscriptions_email_subscription_new AS ENUM ('weekly_summary', 'comment_notification', 
-                        'plan_comment_notification', 'shantytown_closure', 'shantytown_creation')`,
+                        'action_comment_notification', 'shantytown_closure', 'shantytown_creation')`,
                     {
                         transaction,
                     },
