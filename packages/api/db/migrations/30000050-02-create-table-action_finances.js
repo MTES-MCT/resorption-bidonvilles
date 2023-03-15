@@ -111,7 +111,6 @@ module.exports = {
         function removeConstraints(table) {
             return [
                 queryInterface.removeConstraint(table, `fk__${table}__type`, { transaction }),
-                queryInterface.removeConstraint(table, `fk__${table}__author`, { transaction }),
             ];
         }
         try {

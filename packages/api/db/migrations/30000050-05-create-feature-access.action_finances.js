@@ -32,7 +32,7 @@ module.exports = {
             );
 
             await queryInterface.sequelize.query(
-                'DELETE FROM entity WHERE name = \'action_finances\'',
+                'DELETE FROM entities WHERE name = \'action_finances\'',
                 { transaction },
             );
 
