@@ -6,6 +6,7 @@ import answerModel from '#server/models/answerModel';
 
 import { serialized as fakeUser } from '#test/utils/user';
 
+import Question from '#server/models/questionModel/Question.d';
 import createAnswerService from './createAnswer';
 
 const { expect } = chai;
@@ -14,15 +15,25 @@ chai.use(sinonChai);
 describe('services/answer', () => {
     describe('createAnswer()', () => {
         const user = fakeUser();
-        const question = {
+        const question: Question = {
             id: 2,
             question: 'question test',
+            details: 'détails de la question',
+            peopleAffected: null,
             tags: [],
             answers: [],
             createdBy: {
                 id: 1,
-
+                first_name: 'Jean',
+                last_name: 'Dupont',
+                role: 'Acteur national',
+                position: 'Mock',
+                organization_id: 1,
+                organization: 'Délégation Interministérielle à l\'Hébergement et à l\'Accès au Logement',
             },
+            createdAt: new Date().getTime() / 1000,
+            updatedAt: null,
+            solvedAt: null,
         };
         const newAnswer = { description: 'ceci est une réponse de test', id: 2 };
         let stubs;
