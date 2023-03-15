@@ -32,18 +32,21 @@ describe('services/question', () => {
                 tags: [],
                 other_tag: null,
             };
-            const answers = [
-                {
-                    id: 1,
-                    description: 'réponse test 1',
-                },
-                {
-                    id: 2,
-                    description: 'réponse test 2',
-                },
-            ];
+            const apiAnswers = {
+                6: [
+                    {
+                        id: 1,
+                        description: 'réponse test 1',
+                    },
+                    {
+                        id: 2,
+                        description: 'réponse test 2',
+                    },
+                ],
+            };
             stubs.findOne.resolves(question);
-            stubs.getAnswers.resolves(answers);
+            stubs.getAnswers.resolves(apiAnswers);
+            const answers = apiAnswers[1];
             const response = await findService(1);
             expect(response).to.be.an('object');
             expect(response).to.be.eql({ ...question, answers });
