@@ -6,6 +6,7 @@ import Answer from '#server/models/answerModel/Answer.d';
 export default async (questionId: number): Promise<Question> => {
     let question: Question;
     let answers: { [key: number]: Answer[] };
+
     try {
         question = await questionModel.findOne(questionId);
         answers = await questionModel.getAnswers([questionId]);
