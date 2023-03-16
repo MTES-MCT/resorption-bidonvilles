@@ -64,7 +64,6 @@ export const useUserStore = defineStore("user", {
             if (permission.allow_all === true) {
                 return departements;
             }
-            // @todo 1803 : gérer le cas des EPCI
             return departements.filter(
                 ({ code, region }) =>
                     permission.allowed_on.departements?.includes(code) ||

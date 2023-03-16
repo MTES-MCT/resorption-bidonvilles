@@ -102,7 +102,7 @@ const error = ref(null);
 const departement = useFieldValue("location_departement");
 const canAccessFinances = computed(() => {
     const configStore = useConfigStore();
-    const { region } = configStore.config.departements.find(
+    const fullDepartement = configStore.config.departements.find(
         ({ code }) => code === departement.value
     );
 
@@ -113,7 +113,7 @@ const canAccessFinances = computed(() => {
                 code: departement.value,
             },
             region: {
-                code: region,
+                code: fullDepartement?.region,
             },
         },
     });
