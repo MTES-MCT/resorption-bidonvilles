@@ -13,10 +13,7 @@
             >
         </RouterLink>
         <Button
-            v-if="
-                !isClosed &&
-                userStore.hasActionPermission('action.update', action)
-            "
+            v-if="userStore.hasActionPermission('action.update', action)"
             size="sm"
             variant="primary"
             icon="pencil"
@@ -28,7 +25,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs } from "vue";
+import { defineProps, toRefs } from "vue";
 import { RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
 import { Button } from "@resorptionbidonvilles/ui";
@@ -38,8 +35,4 @@ const props = defineProps({
 });
 const { action } = toRefs(props);
 const userStore = useUserStore();
-
-const isClosed = computed(() => {
-    return action.value.ended_at && action.value.ended_at < Date.now();
-});
 </script>
