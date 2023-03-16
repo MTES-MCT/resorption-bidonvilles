@@ -43,7 +43,7 @@ describe('services/question', () => {
                 },
             ];
             stubs.findOne.resolves(question);
-            stubs.getAnswers.resolves(answers);
+            stubs.getAnswers.resolves({ 1: answers });
             const response = await findService(1);
             expect(response).to.be.an('object');
             expect(response).to.be.eql({ ...question, answers });
