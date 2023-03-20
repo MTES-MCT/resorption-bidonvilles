@@ -1,44 +1,47 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import permissionUtils from '#server/utils/permission';
-import geoUtils from '#server/utils/geo';
+import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 import decomposeForDiagramm from './_common/decomposeForDiagramm';
 import getArrayOfDates from './_common/getArrayOfDates';
 
-const { restrict } = permissionUtils;
-const { fromGeoLevelToTableName } = geoUtils;
+
+const { where: pWhere } = permissionUtils;
 
 export default async (user, location) => {
-    const restrictedLocation = restrict(location).for(user).askingTo('list', 'shantytown');
-    if (restrictedLocation === null) {
-        return null;
-    }
+    const permissionWhereClauseGroup:any = pWhere().can(user).do('list', 'shantytown');
+    const permissionWhereClause = stringifyWhereClause('shantytowns', [permissionWhereClauseGroup], { userId: user.id });
+
+    const replacements = {
+        regions0: permissionWhereClauseGroup.regions ? permissionWhereClauseGroup.regions.value : [],
+        departements0: permissionWhereClauseGroup.departements ? permissionWhereClauseGroup.departements.value : [],
+        epci0: permissionWhereClauseGroup.epci ? permissionWhereClauseGroup.epci.value : [],
+        cities0: permissionWhereClauseGroup.cities ? permissionWhereClauseGroup.cities.value : [],
+    };
+
 
     let where = '';
+    let shantytownWhere = '';
     switch (location.type) {
         case 'nation':
             break;
         case 'region':
             where = `WHERE lo.region_code = '${location.region.code}'`;
+            shantytownWhere = `WHERE regions.code = '${location.region.code}'`;
             break;
         default:
             where = `WHERE lo.departement_code = '${location.departement.code}'`;
+            shantytownWhere = `WHERE departements.code = '${location.departement.code}'`;
             break;
+    }
+    if (shantytownWhere.length > 0 && permissionWhereClause !== '()') {
+        shantytownWhere += ` AND ${permissionWhereClause}`;
+    } else if (permissionWhereClause !== '()') {
+        shantytownWhere += ` WHERE ${permissionWhereClause}`;
     }
 
     const date = new Date();
     const otherDate = new Date();
-    const shantytownWhere = [];
-    const shantytownReplacements: any = {};
-    if (restrictedLocation.type !== 'nation') {
-        shantytownReplacements.locationCode = restrictedLocation[restrictedLocation.type].code;
-        shantytownWhere.push(`${fromGeoLevelToTableName(restrictedLocation.type)}.code = :locationCode`);
-
-        if (restrictedLocation.type === 'city') {
-            shantytownWhere.push(`${fromGeoLevelToTableName(restrictedLocation.type)}.fk_main = :locationCode`);
-        }
-    }
-
     otherDate.setMonth(date.getMonth() - 3);
     const [shantytownStats, connectedUsers] = await Promise.all([
         // Shantytown stats
@@ -63,7 +66,6 @@ export default async (user, location) => {
                         FROM "ShantytownHistories" shantytowns
                     )
                 ) shantytowns
-            ${shantytownWhere.length > 0 ? `
             -- -------
             -- une adresse d'un site peut changer en cours de route, donc on fait un select where uniquement sur shantytowns
             -- puis on filtre l'ensemble par id
@@ -75,12 +77,12 @@ export default async (user, location) => {
                 LEFT JOIN epci ON cities.fk_epci = epci.code
                 LEFT JOIN departements ON cities.fk_departement = departements.code
                 LEFT JOIN regions ON departements.fk_region = regions.code
-                WHERE ${shantytownWhere.join(' OR ')}
-            )` : ''}
+                ${shantytownWhere}
+            )
             ORDER BY shantytowns.updated_at DESC`,
             {
                 type: QueryTypes.SELECT,
-                replacements: shantytownReplacements,
+                replacements: { ...replacements },
             },
         ),
         // WAU
@@ -125,6 +127,9 @@ export default async (user, location) => {
         ),
     ]);
 
+    if (shantytownStats.length === 0) {
+        return null;
+    }
     const listOfDates = getArrayOfDates(otherDate, date);
 
     return decomposeForDiagramm(shantytownStats, connectedUsers, listOfDates);

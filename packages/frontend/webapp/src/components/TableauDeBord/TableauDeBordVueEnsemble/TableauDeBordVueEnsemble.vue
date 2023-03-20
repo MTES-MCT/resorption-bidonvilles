@@ -22,6 +22,13 @@
             </template>
         </ViewErrorInline>
 
+        <p
+            v-else-if="dashboardStore.stats.data.length === 0"
+            class="mt-6 text-G600 italic"
+        >
+            Aucune donnée à afficher
+        </p>
+
         <section v-else>
             <div class="flex">
                 <TableauDeBordCarteStatistique
