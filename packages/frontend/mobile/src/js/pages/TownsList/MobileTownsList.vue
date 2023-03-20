@@ -59,10 +59,52 @@
                         >
                     </div>
                 </Container>
+
                 <TownCarousel
                     :towns="consultedTowns"
                     id="sites_recemment_consultes"
                 />
+
+                <template v-if="gettingLocation === false">
+                    <Container v-if="nearbyTowns.length > 0" class="mt-6">
+                        <div class="font-bold text-lg">
+                            Sites à proximité ({{ nearbyTowns.length }})
+                        </div>
+                        <div class="italic" v-if="nearbyTowns.length === 0">
+                            Aucun site trouvé à proximité
+                        </div>
+                    </Container>
+                    <TownCarousel
+                        v-if="nearbyTowns.length > 0"
+                        :towns="nearbyTowns"
+                    />
+                </template>
+
+                <Container class="mt-6">
+                    <div
+                        class="text-secondary text-sm mb-2"
+                        v-if="locationError"
+                    >
+                        {{ locationError }}
+                    </div>
+                    <div class="mb-2" v-if="!isOnline">
+                        Veuillez vous connecter au réseau pour que nous
+                        puissions vous indiquer les sites à proximité.
+                    </div>
+                    <div v-if="gettingLocation === true">
+                        <Spinner /> <i>Calcul de votre position en cours...</i>
+                    </div>
+
+                    <template v-else>
+                        <div class="mb-2" v-if="!geoLocation">
+                            Veuillez activer la géolocalisation pour afficher
+                            les sites à proximité...
+                        </div>
+                        <Button size="sm" @click="refreshLocation"
+                            >Rafraîchir ma position</Button
+                        >
+                    </template>
+                </Container>
             </template>
 
             <Container class="mt-24 text-center" v-else>
@@ -86,10 +128,11 @@
 </template>
 
 <script>
-import { Button, Icon } from "@resorptionbidonvilles/ui";
+import { Button, Icon, Spinner } from "@resorptionbidonvilles/ui";
 import Container from "../../components/Container.vue";
 import TownCarousel from "./TownCarousel.vue";
 import { mapGetters } from "vuex";
+import { findNearby } from "#helpers/town";
 import Layout from "#src/js/components/Layout.vue";
 import SearchInput from "#src/js/components/SearchInput.vue";
 import ENV from "#src/env.js";
@@ -100,10 +143,18 @@ export default {
         // eslint-disable-next-line vue/no-reserved-component-names
         Button,
         Icon,
+        Spinner,
         Container,
         Layout,
         TownCarousel,
         SearchInput,
+    },
+    data: function () {
+        return {
+            geoLocation: null,
+            gettingLocation: false,
+            locationError: null,
+        };
     },
     mounted() {
         this.load();
@@ -112,14 +163,31 @@ export default {
         ...mapGetters({
             myTowns: "myTowns",
             consultedTowns: "consultedTowns",
+            nearbyTowns: "nearbyTowns",
             error: "townsError",
             state: "townsState",
+            loadingNearbyTowns: "loadingNearbyTowns",
         }),
         user() {
             return this.$store.state.config.configuration.user;
         },
+        isOnline() {
+            return navigator.onLine;
+        },
     },
-
+    watch: {
+        geoLocation: async function () {
+            try {
+                const { towns } = await findNearby(
+                    this.geoLocation.coords.latitude,
+                    this.geoLocation.coords.longitude
+                );
+                this.$store.dispatch("setNearbyTowns", towns);
+            } catch (err) {
+                console.log(err);
+            }
+        },
+    },
     methods: {
         load() {
             if (this.state !== "loaded") {
@@ -138,6 +206,54 @@ export default {
         redirectToWebapp() {
             document.cookie = `device=webapp;domain=${ENV.VITE_MOBILE_DOMAIN}`;
             location.replace(ENV.VITE_WEBAPP_URL);
+        },
+        async getLocation() {
+            return new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        resolve(pos);
+                    },
+                    (err) => {
+                        reject(err);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        maximumAge: 2000,
+                        timeout: 15000,
+                    }
+                );
+            });
+        },
+        async refreshLocation() {
+            this.locationError = "";
+            this.gettingLocation = true;
+            this.$store.dispatch("setNearbyTowns", []);
+            try {
+                this.geoLocation = await this.getLocation();
+                if (this.geoLocation.coords.accuracy > 100) {
+                    this.locationError = `La position calculée n'est pas très précise: (${parseFloat(
+                        this.geoLocation.coords.accuracy
+                    ).toFixed(2)} m)`;
+                }
+                this.gettingLocation = false;
+            } catch (e) {
+                console.log(e);
+                this.gettingLocation = false;
+                this.locationError = this.getLocationErrorMessage(e.code);
+            }
+        },
+        getLocationErrorMessage(code) {
+            let message = "Une erreur inconnue est survenue.";
+            if (code === 1) {
+                message =
+                    "L'utilisateur a refusé la requête de géolocalisation.";
+            } else if (code === 2) {
+                message = "La localisation géographique n'a pas été trouvée.";
+            } else if (code === 3) {
+                message =
+                    "La requête de localisation géographique a mis trop de temps à s'exécuter.";
+            }
+            return message;
         },
     },
 };
