@@ -2,6 +2,14 @@ import { object, string, number, array } from "yup";
 import { useConfigStore } from "@/stores/config.store";
 import labels from "./FormNouvelleQuestion.labels";
 
+function emptyStringToNull(value, originalValue) {
+    if (typeof originalValue === "string" && originalValue === "") {
+        return null;
+    }
+
+    return value;
+}
+
 const configStore = useConfigStore();
 
 export default object({
@@ -15,6 +23,11 @@ export default object({
         )
         .label(labels.tags),
     other_tag: string().label(labels.other_tag),
-    people_affected: number().nullable().min(0).label(labels.people_affected),
+    people_affected: number()
+        .typeError(`Nombre de personnes doit être un nombre`)
+        .nullable()
+        .transform(emptyStringToNull)
+        .min(0)
+        .label(labels.people_affected),
     details: string().required().label(labels.details),
 });
