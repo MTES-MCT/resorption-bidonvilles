@@ -1,5 +1,6 @@
 import activityModel from '#server/models/activityModel';
 import userModel from '#server/models/userModel';
+import { SummarySubscribers } from '#server/models/userModel/findDepartementSummarySubscribers';
 import sendNationalSummary from './sendNationalSummary';
 import sendRegionalSummary from './sendRegionalSummary';
 import sendDepartementalSummary from './sendDepartementalSummary';
@@ -29,11 +30,16 @@ export default async (day: number, month: number, year: number): Promise<void> =
     }
 
     // compute the activity summaries
-    const [questions, summary, subscribers] = await Promise.all([
+    const promises: [
+        Promise<any>,
+        Promise<any>,
+        Promise<SummarySubscribers>,
+    ] = [
         activityModel.getQuestions(monday, sunday),
         activityModel.get(monday, sunday),
         userModel.findDepartementSummarySubscribers(),
-    ]);
+    ];
+    const [questions, summary, subscribers] = await Promise.all(promises);
     const questionSummary = { questions, has_question_summary: questions.length > 0 };
 
     // send the summaries
