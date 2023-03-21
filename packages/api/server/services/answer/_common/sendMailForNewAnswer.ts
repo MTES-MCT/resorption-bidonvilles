@@ -1,11 +1,10 @@
 import mails from '#server/mails/mails';
+import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
 
-export default async (questionId, answerAuthor, questionAuthor) => {
-    mails.sendUserNewAnswerToQuestion(questionAuthor, {
-        variables: {
-            questionId,
-            author: answerAuthor,
-        },
-        preserveRecipient: false,
-    });
-};
+export default (questionId: number, answerAuthor: SerializedUser, questionAuthor: SerializedUser): Promise<any> => mails.sendUserNewAnswerToQuestion(questionAuthor, {
+    variables: {
+        questionId,
+        author: answerAuthor,
+    },
+    preserveRecipient: false,
+});

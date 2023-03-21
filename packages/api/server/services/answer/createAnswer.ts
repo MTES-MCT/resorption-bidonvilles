@@ -3,17 +3,14 @@ import answerModel from '#server/models/answerModel';
 import ServiceError from '#server/errors/ServiceError';
 import Answer from '#server/models/answerModel/Answer.d';
 import Question from '#server/models/questionModel/Question.d';
+import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
 import sendMailForNewAnswer from './_common/sendMailForNewAnswer';
 
 type AnswerData = {
     description: string,
 };
 
-type AuthorData = {
-    id: number,
-};
-
-export default async (answer: AnswerData, question: Question, author: AuthorData): Promise<Answer> => {
+export default async (answer: AnswerData, question: Question, author: SerializedUser): Promise<Answer> => {
     // on insère la réponse
     let answerId: number;
     try {
