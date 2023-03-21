@@ -1,10 +1,9 @@
 <template>
-    <Field
-        :rules="rules"
-        :name="id"
-        v-slot="{ field, errors }">
+    <Field :rules="rules" :name="id" v-slot="{ field, errors }">
         <Input v-bind="{ ...$attrs, ...field }" :id="id" :errors="errors" :disabled="isSubmitting || disabled" ref="input">
-            <template v-slot:suffix><slot name="suffix" /></template>
+        <template v-slot:suffix>
+            <slot name="suffix" />
+        </template>
         </Input>
     </Field>
 </template>
