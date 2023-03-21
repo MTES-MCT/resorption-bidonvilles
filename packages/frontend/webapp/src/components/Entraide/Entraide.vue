@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
     <ContentWrapper>
         <EntraideBanniere class="mb-8" />
