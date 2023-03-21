@@ -1,15 +1,13 @@
 module.exports = {
-    async up(queryInterface) {
-        await queryInterface.sequelize.query(
-            "ALTER TYPE enum_user_email_subscriptions_email_subscription ADD VALUE 'community_new_answer'",
-        );
-    },
+    up: queryInterface => queryInterface.sequelize.query(
+        "ALTER TYPE enum_user_email_subscriptions_email_subscription ADD VALUE 'community_new_answer'",
+    ),
 
     async down(queryInterface) {
         const transaction = await queryInterface.sequelize.transaction();
 
-        await Promise.all(
-            [
+        try {
+            await Promise.all([
                 queryInterface.sequelize.query(
                     "DELETE FROM user_email_unsubscriptions WHERE email_subscription = 'community_new_answer'",
                     {
@@ -27,7 +25,7 @@ module.exports = {
                 queryInterface.sequelize.query(
                     `ALTER TABLE user_email_unsubscriptions
                         ALTER COLUMN email_subscription TYPE enum_user_email_subscriptions_email_subscription_new
-                      USING (email_subscription::text::enum_user_email_subscriptions_email_subscription_new)`,
+                        USING (email_subscription::text::enum_user_email_subscriptions_email_subscription_new)`,
                     {
                         transaction,
                     },
@@ -44,10 +42,13 @@ module.exports = {
                         transaction,
                     },
                 ),
-            ],
-        );
+            ]);
 
-        await transaction.commit();
+            return transaction.commit();
+        } catch (error) {
+            await transaction.rollback();
+            throw error;
+        }
     },
 
 };
