@@ -1,5 +1,5 @@
 <template>
-    <p class="whitespace-pre-line">{{ question.details }}</p>
+    <p class="whitespace-pre-line break-words">{{ question.details }}</p>
 </template>
 
 <script setup>
