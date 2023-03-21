@@ -29,7 +29,7 @@
             size="sm"
             icon="rectangle-list"
             iconPosition="left"
-            :href="`/question/${question.id}`"
+            :href="`/question/${question.id}#reponses`"
             >Soyez le premier à répondre</Button
         >
     </div>

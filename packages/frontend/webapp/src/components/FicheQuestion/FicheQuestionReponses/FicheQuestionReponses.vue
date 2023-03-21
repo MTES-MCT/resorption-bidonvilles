@@ -1,7 +1,7 @@
 <template>
     <div class="bg-blue200 py-6">
         <ContentWrapper>
-            <h1 class="text-xl font-bold mb-4">
+            <h1 class="text-xl font-bold mb-4" id="reponses">
                 <Icon icon="comment" /> Section des réponses —
                 {{ question.answers.length }} réponse{{
                     question.answers.length > 1 ? "s" : ""
