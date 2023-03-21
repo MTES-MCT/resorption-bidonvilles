@@ -37,7 +37,7 @@
                         : "habitant concerné"
                 }}
             </div>
-            <p class="whitespace-pre-line mt-4">
+            <p class="whitespace-pre-line mt-4 break-words">
                 {{
                     question.details
                         .substr(0, 300)
