@@ -10,7 +10,7 @@
                 <Icon :icon="icon" />
             </div>
             <div>
-                <h1 class="text-[1.5rem] font-bold leading-[1.8rem]">
+                <h1 class="text-[1.5rem] font-bold leading-[1.8rem] break-all">
                     <slot name="title" />
                 </h1>
                 <p class="text-G500">
