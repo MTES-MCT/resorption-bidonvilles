@@ -2,13 +2,16 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import serializeQuestion from './serializeQuestion';
 
-export default async () => {
-    const rows:any = await sequelize.query(
+import QuestionRow from './QuestionRow';
+import Question from './Question';
+
+export default async (): Promise<Question[]> => {
+    const rows:QuestionRow[] = await sequelize.query(
         `
         WITH aggregate_question_tags AS (
             SELECT 
                 cq.question_id AS id,
-                ARRAY_AGG(cqt.name) AS tags
+                ARRAY_REMOVE(ARRAY_AGG(cqt.uid || '.' || cqt.name), NULL) AS tags
             FROM 
                 questions cq
             LEFT JOIN
@@ -52,10 +55,6 @@ export default async () => {
             type: QueryTypes.SELECT,
         },
     );
-
-    if (!rows.length || rows.length === 0) {
-        return [];
-    }
 
     return rows.map(question => serializeQuestion(question));
 };

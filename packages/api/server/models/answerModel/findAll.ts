@@ -1,18 +1,19 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import Answer from './Answer.d';
+import AnswerRow from './AnswerRow.d';
 
 import serializeAnswer from './_common/serializeAnswer';
 
-export default async () => {
-    const rows = await sequelize.query(
+export default async (): Promise<Answer[]> => {
+    const rows: AnswerRow[] = await sequelize.query(
         `
         SELECT
             ca.answer_id AS "answerId",
-            ca.description AS "answerDescription",
             ca.fk_question AS "questionId",
-            ca.created_at AS "commentCreatedAt",
-            ca.created_by "commentCreatedBy",
-            u.user_id AS "userId",
+            ca.description AS "answerDescription",
+            ca.created_at AS "answerCreatedAt",
+            ca.created_by "answerCreatedBy",
             u.first_name AS "userFirstName",
             u.last_name AS "userLastName",
             u.position AS "userPosition",
@@ -33,5 +34,6 @@ export default async () => {
             type: QueryTypes.SELECT,
         },
     );
+
     return rows.map(serializeAnswer);
 };

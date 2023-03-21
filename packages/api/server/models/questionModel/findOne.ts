@@ -1,14 +1,16 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import serializeQuestion from './serializeQuestion';
+import QuestionRow from './QuestionRow.d';
+import Question from './Question';
 
-export default async (id) => {
-    const rows = await sequelize.query(
+export default async (id: number): Promise<Question | null> => {
+    const rows: QuestionRow[] = await sequelize.query(
         `
         WITH aggregate_question_tags AS (
             SELECT 
                 cq.question_id AS id,
-                ARRAY_AGG(cqt.name) AS tags
+                ARRAY_REMOVE(ARRAY_AGG(cqt.uid || '.' || cqt.name), NULL) AS tags
             FROM 
                 questions cq
             LEFT JOIN

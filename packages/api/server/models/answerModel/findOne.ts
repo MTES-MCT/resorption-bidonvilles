@@ -1,17 +1,18 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import Answer from './Answer.d';
+import AnswerRow from './AnswerRow.d';
 import serializeAnswer from './_common/serializeAnswer';
 
-export default async (id) => {
-    const rows = await sequelize.query(
+export default async (id: number): Promise<Answer | null> => {
+    const rows: AnswerRow[] = await sequelize.query(
         `
         SELECT
             ca.answer_id AS "answerId",
-            ca.description AS "answerDescription",
             ca.fk_question AS "questionId",
+            ca.description AS "answerDescription",
             ca.created_at AS "answerCreatedAt",
             ca.created_by "answerCreatedBy",
-            u.user_id AS "userId",
             u.first_name AS "userFirstName",
             u.last_name AS "userLastName",
             u.position AS "userPosition",

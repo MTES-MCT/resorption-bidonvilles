@@ -16,13 +16,13 @@
                     </LinkOrganization>
                 </div>
                 <div>
-                    <Tag
-                        variant="primary"
+                    <QuestionTag
                         v-for="tag in question.tags"
-                        :key="tag"
+                        :key="tag.uid"
+                        :tag="tag"
                     >
-                        {{ tag }}
-                    </Tag>
+                        {{ tag.name }}
+                    </QuestionTag>
                 </div>
             </div>
             <div
@@ -61,7 +61,8 @@ import { toRefs, computed } from "vue";
 import { RouterLink } from "vue-router";
 import CarteQuestionQuestion from "./CarteQuestionQuestion.vue";
 import CarteQuestionFooter from "./CarteQuestionFooter.vue";
-import { Icon, Link, Tag, LinkOrganization } from "@resorptionbidonvilles/ui";
+import QuestionTag from "@/components/QuestionTag/QuestionTag.vue";
+import { Icon, Link, LinkOrganization } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     question: {

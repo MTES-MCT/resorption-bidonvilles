@@ -1,9 +1,15 @@
 import ServiceError from '#server/errors/ServiceError';
 import questionModel from '#server/models/questionModel';
+import Question from '#server/models/questionModel/Question.d';
+import QuestionInput from '#server/models/questionModel/QuestionInput.d';
 
-export default async (question, author) => {
+type AuthorData = {
+    id: number
+};
+
+export default async (question: QuestionInput, author: AuthorData): Promise<Question> => {
     // on insère la question
-    let questionId;
+    let questionId: number;
     try {
         questionId = await questionModel.create({
             question: question.question,
@@ -16,8 +22,9 @@ export default async (question, author) => {
     } catch (error) {
         throw new ServiceError('insert_failed', error);
     }
+
     // on retourne la question
-    let serializedQuestion;
+    let serializedQuestion: Question;
     try {
         serializedQuestion = await questionModel.findOne(questionId);
     } catch (error) {

@@ -1,10 +1,10 @@
 import { sequelize } from '#db/sequelize';
+import QuestionInput from './QuestionInput.d';
 
-
-export default async (data) => {
+export default async (data: QuestionInput): Promise<number> => {
     const transaction = await sequelize.transaction();
 
-    const [[{ question_id }]]: any = await sequelize.query(
+    const questionResponse = await sequelize.query(
         `INSERT INTO questions(
             question,
             details,
@@ -26,6 +26,9 @@ export default async (data) => {
         },
     );
 
+    type ReturnValue = { question_id: number };
+    const rows: ReturnValue[] = (questionResponse[0] as unknown) as ReturnValue[];
+
     await Promise.all(data.tags.map(tag => sequelize.query(
         `INSERT INTO question_to_tags(
             fk_question,
@@ -37,7 +40,7 @@ export default async (data) => {
         )`,
         {
             replacements: {
-                question_id,
+                question_id: rows[0].question_id,
                 tag,
             },
             transaction,
@@ -46,5 +49,5 @@ export default async (data) => {
 
     await transaction.commit();
 
-    return question_id;
+    return rows[0].question_id;
 };

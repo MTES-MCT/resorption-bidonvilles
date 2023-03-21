@@ -1,9 +1,11 @@
 import questionModel from '#server/models/questionModel';
 import ServiceError from '#server/errors/ServiceError';
+import Question from '#server/models/questionModel/Question.d';
+import Answer from '#server/models/answerModel/Answer.d';
 
-export default async () => {
-    let questions;
-    let answers;
+export default async (): Promise<Question[]> => {
+    let questions: Question[];
+    let answers: { [key: number]: Answer[] };
     try {
         questions = await questionModel.findAll();
         answers = await questionModel.getAnswers(questions.map(({ id }: any) => id));
@@ -15,9 +17,12 @@ export default async () => {
         return [];
     }
 
+    questions.forEach((question) => {
+        if (answers[question.id] !== undefined) {
+            // eslint-disable-next-line no-param-reassign
+            question.answers = answers[question.id];
+        }
+    });
 
-    return questions.map((question: any) => ({
-        ...question,
-        answers: answers[question.id] || [],
-    }));
+    return questions;
 };

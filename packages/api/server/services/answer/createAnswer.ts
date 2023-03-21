@@ -1,9 +1,22 @@
 import answerModel from '#server/models/answerModel';
 import ServiceError from '#server/errors/ServiceError';
+import Answer from '#server/models/answerModel/Answer.d';
 
-export default async (answer, question, author) => {
+type AnswerData = {
+    description: string,
+};
+
+type QuestionData = {
+    id: number,
+};
+
+type AuthorData = {
+    id: number,
+};
+
+export default async (answer: AnswerData, question: QuestionData, author: AuthorData): Promise<Answer> => {
     // on insère la réponse
-    let answerId;
+    let answerId: number;
     try {
         answerId = await answerModel.create({
             description: answer.description,
@@ -15,7 +28,7 @@ export default async (answer, question, author) => {
     }
 
     // on retourne la réponse
-    let serializedAnswer;
+    let serializedAnswer: Answer;
     try {
         serializedAnswer = await answerModel.findOne(answerId);
     } catch (error) {
