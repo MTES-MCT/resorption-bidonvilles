@@ -26,9 +26,10 @@
                 </div>
             </div>
             <div
-                class="text-sm font-bold"
+                class="text-sm font-bold text-secondary"
                 v-if="question.peopleAffected && question.peopleAffected > 0"
             >
+                <Icon icon="exclamation-circle" />
                 {{ question.peopleAffected }}
                 {{
                     question.peopleAffected > 1
@@ -60,7 +61,7 @@ import { toRefs, computed } from "vue";
 import { RouterLink } from "vue-router";
 import CarteQuestionQuestion from "./CarteQuestionQuestion.vue";
 import CarteQuestionFooter from "./CarteQuestionFooter.vue";
-import { Link, Tag, LinkOrganization } from "@resorptionbidonvilles/ui";
+import { Icon, Link, Tag, LinkOrganization } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     question: {

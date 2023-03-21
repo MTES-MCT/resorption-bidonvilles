@@ -33,6 +33,7 @@ import {
     faEnvelope,
     faEuroSign,
     faExclamation,
+    faExclamationCircle,
     faFile,
     faFileExcel,
     faFilePdf,
@@ -131,6 +132,7 @@ library.add(faCutlery);
 library.add(faEnvelope);
 library.add(faEuroSign);
 library.add(faExclamation);
+library.add(faExclamationCircle);
 library.add(faEye);
 library.add(faEyeSlash);
 library.add(faFacebook);
