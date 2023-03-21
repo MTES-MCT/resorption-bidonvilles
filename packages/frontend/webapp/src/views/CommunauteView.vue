@@ -7,6 +7,7 @@
 <script setup>
 import { onMounted } from "vue";
 import { useQuestionsStore } from "@/stores/questions.store";
+import { useDirectoryStore } from "@/stores/directory.store";
 
 import LayoutCommunaute from "@/components/LayoutCommunaute/LayoutCommunaute.vue";
 import Entraide from "@/components/Entraide/Entraide.vue";
@@ -20,7 +21,8 @@ onMounted(() => {
 });
 
 function load() {
+    const directoryStore = useDirectoryStore();
     questionsStore.fetchQuestions();
-    questionsStore.currentPage.index = 1;
+    directoryStore.fetchDirectory(); // nécessaire pour afficher le nombre total d'utilisateurs
 }
 </script>

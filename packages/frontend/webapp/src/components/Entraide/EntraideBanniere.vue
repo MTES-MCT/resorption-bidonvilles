@@ -8,7 +8,10 @@
             <h2 class="mt-2">
                 Sollicitez l'expérience des
                 <span class="text-secondary"
-                    >{{ numberOfUsers }} utilisateurs</span
+                    ><template v-if="directoryStore.isLoading"
+                        ><Spinner /></template
+                    ><template v-else>{{ numberOfUsers }}</template>
+                    utilisateurs</span
                 >
                 de notre communauté pour vous aider à résoudre un problème ou
                 une question pratique que vous vous posez dans le cadre de votre
@@ -37,7 +40,7 @@ import { ref, computed } from "vue";
 import img from "@/assets/img/illustrations/communaute.svg";
 import { useDirectoryStore } from "@/stores/directory.store";
 
-import { Button, TextInput } from "@resorptionbidonvilles/ui";
+import { Button, Spinner, TextInput } from "@resorptionbidonvilles/ui";
 
 const question = ref("");
 const directoryStore = useDirectoryStore();
