@@ -17,16 +17,17 @@
             <h3 class="mt-2">
                 En une phrase, comment résumeriez-vous votre question?
             </h3>
-            <div class="flex items-center mt-2 space-x-2">
+            <form
+                class="flex items-center mt-2 space-x-2"
+                @submit="redirectToNewQuestion"
+            >
                 <TextInput
                     class="mb-0 flex-1"
                     placeholder="Votre question ... "
                     v-model="question"
                 />
-                <Button size="sm" type="button" @clicked="redirectToNewQuestion"
-                    >Demander</Button
-                >
-            </div>
+                <Button size="sm">Demander</Button>
+            </form>
         </div>
     </div>
 </template>
@@ -47,9 +48,13 @@ const numberOfUsers = computed(() => {
     }, 0);
 });
 
-function redirectToNewQuestion() {
+function redirectToNewQuestion(event) {
+    event.preventDefault();
+
     router.push(
-        `/communaute/nouvelle-question/${question.value ? question.value : ""}`
+        `/communaute/nouvelle-question?resume=${
+            question.value ? encodeURIComponent(question.value) : ""
+        }`
     );
 }
 </script>

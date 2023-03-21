@@ -46,6 +46,7 @@ import FormNouvelleQuestionInputOtherTag from "./inputs/FormNouvelleQuestionInpu
 const { handleSubmit, setErrors, errors } = useForm({
     validationSchema: schema,
     initialValues: {
+        question: router.currentRoute.value.query?.resume || "",
         tags: [],
     },
 });
