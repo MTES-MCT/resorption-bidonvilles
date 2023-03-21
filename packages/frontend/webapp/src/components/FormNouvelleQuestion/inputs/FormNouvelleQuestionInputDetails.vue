@@ -1,5 +1,5 @@
 <template>
-    <TextArea :rows="5" id="details" />
+    <TextArea :rows="12" id="details" />
 </template>
 
 <script setup>
