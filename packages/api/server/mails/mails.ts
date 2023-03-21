@@ -763,7 +763,7 @@ export default {
      * @param {Object} options
      */
     sendUserNewAnswerToQuestion: (recipient, options: MailOptions = {}) => {
-        const { variables, preserveRecipient } = options;
+        const { variables, preserveRecipient = false } = options;
         const utm = generateTrackingUTM(USER_CAMPAIGN, 'nouvelle-reponse');
 
         return mailService.send('user_answer_to_question', {
