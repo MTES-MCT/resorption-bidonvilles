@@ -7,9 +7,14 @@
                 <div class="hidden md:block">
                     <slot name="anchors"></slot>
 
-                    <LinkContact class="mr-2 inline-block">
-                        <Button variant="secondary">{{
-                            $t("landingPage.header.contact")
+                    <LinkContact v-if="i18n.locale.value === 'fr'" class="mr-2 inline-block" isDemandeAcces>
+                        <Button variant="primary">{{
+                            $t("landingPage.contactForm.ctaSignup")
+                        }}</Button>
+                    </LinkContact>
+                    <LinkContact v-else class="mr-2 inline-block">
+                        <Button variant="primary">{{
+                            $t("landingPage.contactForm.ctaContact")
                         }}</Button>
                     </LinkContact>
 
@@ -32,11 +37,13 @@ import { defineProps, toRefs } from "vue";
 import NavBarLogo from "./NavBarLogo.vue";
 import NavBarMobileButton from "./NavBarMobileButton.vue";
 import Container from "~/components/Layout/Container/Container.vue";
+import { useI18n } from 'vue-i18n';
 import LinkContact from "~/components/LinkContact/LinkContact.vue";
 import { Button, Link } from "@resorptionbidonvilles/ui";
 
 const { WEBAPP_URL } = useRuntimeConfig();
 
+const i18n = useI18n();
 const props = defineProps({
     toggleMenu: {
         type: Function,
