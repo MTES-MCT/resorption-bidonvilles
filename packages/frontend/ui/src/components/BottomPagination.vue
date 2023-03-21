@@ -4,10 +4,11 @@
             Vous consultez actuellement les lignes
             {{ from }} à
             {{ to }} sur
-            <span class="font-bold">{{ total }} résultats</span>
+            <span class="font-bold">{{ total }} résultat<template v-if="total > 1">s</template></span>
         </p>
         <div class="flex justify-center mt-4">
-            <Pagination class="mx-auto" :currentPage="currentPage" :nbPages="numberOfPages" autoScrollFix @pagechange="onPageChange" />
+            <Pagination class="mx-auto" :currentPage="currentPage" :nbPages="numberOfPages" autoScrollFix
+                @pagechange="onPageChange" />
         </div>
     </div>
 </template>
