@@ -2,24 +2,28 @@
     <Layout v-bind="$attrs">
         <template v-slot:banner>
             <ContentWrapper
-                class="flex justify-center lg:py-3 items-start lg:items-center"
+                class="flex justify-center items-start lg:items-center"
             >
                 <LinkBlock
+                    icon="person-circle-question"
                     to="/communaute"
                     :class="[
-                        'w-44 text-center font-bold border-blue600',
+                        'w-52 text-center font-bold border-t-transparent border-y-4',
                         currentTab === 'communaute'
-                            ? 'border-b-4'
-                            : 'text-black',
+                            ? 'border-b-blue600'
+                            : 'border-b-transparent text-black',
                     ]"
                 >
                     Espace d'entraide
                 </LinkBlock>
                 <LinkBlock
+                    icon="user"
                     to="/annuaire"
                     :class="[
-                        'w-44 text-center font-bold border-blue600',
-                        currentTab === 'annuaire' ? 'border-b-4' : 'text-black',
+                        'w-52 text-center font-bold border-t-transparent border-y-4',
+                        currentTab === 'annuaire'
+                            ? 'border-b-blue600'
+                            : 'border-b-transparent text-black',
                     ]"
                 >
                     Annuaire
