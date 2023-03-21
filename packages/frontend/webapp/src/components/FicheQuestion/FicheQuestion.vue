@@ -4,7 +4,7 @@
         <FicheQuestionTags
             :question="question"
             v-if="question.tags.length > 0"
-            class="mb-4"
+            class="-mt-4 mb-4"
         />
         <FicheQuestionDetails class="mb-4" :question="question" />
         <FicheQuestionDate :question="question" />
