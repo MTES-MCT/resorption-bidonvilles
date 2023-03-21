@@ -1,8 +1,7 @@
-interface QuestionSummary {
+export interface QuestionSummary {
     id: number,
     question: string
     created_by: string
-
 }
 
 export interface QuestionNationalSummary {

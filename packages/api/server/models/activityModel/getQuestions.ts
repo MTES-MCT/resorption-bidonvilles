@@ -1,13 +1,22 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import moment from 'moment';
+import { QuestionSummary } from '#server/models/activityModel/types/QuestionNationalSummary';
 
+type Row = {
+    id: number,
+    question: string,
+    first_name: string,
+    last_name: string,
+    organization_abbreviation: string,
+    organization_name: string,
+};
 
-export default async (argFrom: Date, argTo: Date): Promise<any> => {
+export default async (argFrom: Date, argTo: Date): Promise<QuestionSummary[]> => {
     const from = moment(argFrom);
     const to = moment(argTo);
 
-    const raws = await sequelize.query(
+    const rows: Row[] = await sequelize.query(
         `
         SELECT
             question_id as id,
@@ -30,9 +39,9 @@ export default async (argFrom: Date, argTo: Date): Promise<any> => {
         },
     );
 
-    return raws.map((raw:any) => ({
-        id: raw.id,
-        question: raw.question,
-        created_by: `${raw.first_name} ${raw.last_name} (${raw.organization_abbreviation ? raw.organization_abbreviation : raw.organization_name})`,
+    return rows.map(row => ({
+        id: row.id,
+        question: row.question,
+        created_by: `${row.first_name} ${row.last_name} (${row.organization_abbreviation ? row.organization_abbreviation : row.organization_name})`,
     }));
 };

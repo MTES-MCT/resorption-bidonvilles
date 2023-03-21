@@ -7,15 +7,14 @@ https://resorption-bidonvilles.beta.gouv.fr/
 [https://resorption-bidonvilles.beta.gouv.fr/] et vos identifiants habituels.
 
 Semaine du {{ var:from }} au {{ var:to }}
-
-{% if var:has_question_summary %}
-Questions posées cette semaine à la communauté :
-{% else %}
-Aucune question n'a été posée cette semaine à la communauté
-{% endif %}{% for question in var:questions %}
-- {{ question.question }} [{{var:webappUrl}}/question/{{question.id}}] par
+Questions à la communauté
+{% if var:has_question_summary %}{% for question in var:questions %}
+- {{ question.question }}
+[{{var:webappUrl}}/question/{{question.id}}?{{var:utm}}] par
 {{question.created_by}}
-{% endfor%}
+{% endfor%}{% else %}
+Aucune question n'a été posée cette semaine à la communauté
+{% endif %}
 
 {% for summary in var:summaries %}
 {{ summary.code }} – {{ summary.name }}

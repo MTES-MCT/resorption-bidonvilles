@@ -1,6 +1,8 @@
 import activityModel from '#server/models/activityModel';
 import userModel from '#server/models/userModel';
 import { SummarySubscribers } from '#server/models/userModel/findDepartementSummarySubscribers';
+import { QuestionSummary } from '#server/models/activityModel/types/QuestionNationalSummary';
+import { ActivityNationalSummary } from '#server/models/activityModel/types/ActivityNationalSummary';
 import sendNationalSummary from './sendNationalSummary';
 import sendRegionalSummary from './sendRegionalSummary';
 import sendDepartementalSummary from './sendDepartementalSummary';
@@ -31,8 +33,8 @@ export default async (day: number, month: number, year: number): Promise<void> =
 
     // compute the activity summaries
     const promises: [
-        Promise<any>,
-        Promise<any>,
+        Promise<QuestionSummary[]>,
+        Promise<ActivityNationalSummary>,
         Promise<SummarySubscribers>,
     ] = [
         activityModel.getQuestions(monday, sunday),
@@ -44,8 +46,8 @@ export default async (day: number, month: number, year: number): Promise<void> =
 
     // send the summaries
     await Promise.all([
-        sendNationalSummary(monday, sunday, questionSummary, summary, [subscribers.nation]),
-        sendRegionalSummary(monday, sunday, summary, subscribers.region),
-        sendDepartementalSummary(monday, sunday, summary, subscribers.departement),
+        sendNationalSummary(monday, sunday, questionSummary, summary, subscribers.nation),
+        sendRegionalSummary(monday, sunday, questionSummary, summary, subscribers.region),
+        sendDepartementalSummary(monday, sunday, questionSummary, summary, subscribers.departement),
     ]);
 };
