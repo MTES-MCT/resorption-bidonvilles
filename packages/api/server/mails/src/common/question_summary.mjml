@@ -1,0 +1,18 @@
+<mj-section>
+    <mj-column>
+        <mj-text mj-class='text-display font-bold'>
+            Questions à la communauté
+        </mj-text>
+
+        <mj-raw>{% if var:has_question_summary %}</mj-raw>
+            <mj-raw>{% for question in var:questions %}</mj-raw>
+                <mj-text mj-class='pb-2'>
+                - <a href="{{var:webappUrl}}/question/{{question.id}}?{{var:utm}}" class="link" target="_blank" rel="noopener noreferrer"> {{ question.question }} </a>
+                par {{question.created_by}}
+                </mj-text>
+            <mj-raw> {% endfor%} </mj-raw>
+        <mj-raw>{% else %}</mj-raw>
+            <mj-text mj-class='font-bold pt-2 pb-4'>Aucune question n'a été posée cette semaine à la communauté</mj-text>
+        <mj-raw>{% endif %}</mj-raw>
+    </mj-column>
+</mj-section>
