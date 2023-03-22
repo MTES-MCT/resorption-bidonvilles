@@ -2,7 +2,7 @@
     <ArrangementLeftMenu :tabs="tabs" autonav>
         <template v-slot:menuTitle>Rubriques</template>
 
-        <FormDeclarationActionCaracteristiques class="mt-6" />
+        <FormDeclarationActionCaracteristiques class="mt-6" :mode="mode" />
         <FormDeclarationActionLocalisation class="mt-6" />
         <FormDeclarationActionContacts class="mt-6" />
         <FormDeclarationActionIndicateurs class="mt-6" />
