@@ -8,10 +8,10 @@
             showMandatoryStar
         />
         <DatepickerInput
+            v-if="mode === 'edit'"
             name="ended_at"
             id="ended_at"
             :label="labels.ended_at"
-            info="(effective)"
             inlineInfo
             :minDate="values.started_at"
         />
@@ -22,6 +22,15 @@
 import { useFormValues } from "vee-validate";
 import { DatepickerInput } from "@resorptionbidonvilles/ui";
 import labels from "../FormDeclarationAction.labels";
+import { defineProps, toRefs } from "vue";
 
+const props = defineProps({
+    mode: {
+        type: String,
+        required: true,
+        default: "create",
+    },
+});
+const { mode } = toRefs(props);
 const values = useFormValues();
 </script>
