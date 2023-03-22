@@ -9,7 +9,7 @@
         <FormParagraph
             title="Quelles sont les dates et les objectifs de l'action ?"
         >
-            <InputDates />
+            <InputDates :mode="mode" />
             <InputTopics />
             <InputGoals />
         </FormParagraph>
@@ -25,4 +25,14 @@ import InputName from "../inputs/FormDeclarationActionInputName.vue";
 import InputDates from "../inputs/FormDeclarationActionInputDates.vue";
 import InputTopics from "../inputs/FormDeclarationActionInputTopics.vue";
 import InputGoals from "../inputs/FormDeclarationActionInputGoals.vue";
+import { defineProps, toRefs } from "vue";
+
+const props = defineProps({
+    mode: {
+        type: String,
+        required: true,
+        default: "create",
+    },
+});
+const { mode } = toRefs(props);
 </script>
