@@ -10,7 +10,7 @@
                     size="sm"
                     icon="rectangle-list"
                     iconPosition="left"
-                    :href="`/question/${question.id}`"
+                    :href="`/question/${question.id}#reponses`"
                     >Répondre</Button
                 >
                 <Button
@@ -18,7 +18,7 @@
                     size="sm"
                     icon="fa-regular fa-eye"
                     iconPosition="left"
-                    :href="`/question/${question.id}`"
+                    :href="`/question/${question.id}#reponses`"
                     >{{ seeAnswerWording }}</Button
                 >
             </div>
