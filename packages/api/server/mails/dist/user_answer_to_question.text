@@ -1,11 +1,13 @@
 La communauté vous a répondu !
 Bonjour,
-Vous avez posé une question sur l'espace "communauté" de la la plateforme
-Résorption-bidonvilles [{{var:webappUrl}}].
-{{var:authorName}} [{{var:webappUrl}}/structure/{{var:authorOrganization}}] vous
-a répondu.
-Vous pouvez consulter la réponse en suivant ce lien
-[{{var:webappUrl}}/question/{{var:questionId}}].
+Vous avez posé une question sur l'espace "communauté" de la plateforme
+Résorption-bidonvilles [{{var:webappUrl}}?{{var:utm}}].
+{{var:authorName}}
+[{{var:webappUrl}}/structure/{{var:authorOrganization}}?{{var:utm}}] vous a
+répondu.
+
+Consulter la réponse
+[{{var:webappUrl}}/question/{{var:questionId}}?{{var:utm}}#reponses]
 
 Cordialement,
 L'équipe Résorption-bidonvilles

@@ -155,7 +155,7 @@
               <tr>
                 <td align="left" style="font-size:0px;padding:0;padding-bottom:1rem;word-break:break-word;">
                   
-      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;">Vous avez posé une question sur l'espace "communauté" de la la plateforme <a href="{{var:webappUrl}}" class="font-italic link" target="_blank" rel="noopener noreferrer" style="color: #000091; text-decoration: none; font-style: italic;">Résorption-bidonvilles</a>.</div>
+      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;">Vous avez posé une question sur l'espace "communauté" de la plateforme <a href="{{var:webappUrl}}?{{var:utm}}" class="font-italic link" target="_blank" rel="noopener noreferrer" style="color: #000091; text-decoration: none; font-style: italic;">Résorption-bidonvilles</a>.</div>
     
                 </td>
               </tr>
@@ -163,15 +163,25 @@
               <tr>
                 <td align="left" style="font-size:0px;padding:0;padding-bottom:1rem;word-break:break-word;">
                   
-      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;"><a href="{{var:webappUrl}}/structure/{{var:authorOrganization}}" class="font-italic link" target="_blank" rel="noopener noreferrer" style="color: #000091; text-decoration: none; font-style: italic;">{{var:authorName}}</a> vous a répondu.</div>
+      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;"><a href="{{var:webappUrl}}/structure/{{var:authorOrganization}}?{{var:utm}}" class="font-italic link" target="_blank" rel="noopener noreferrer" style="color: #000091; text-decoration: none; font-style: italic;">{{var:authorName}}</a> vous a répondu.</div>
     
                 </td>
               </tr>
             
               <tr>
-                <td align="left" style="font-size:0px;padding:0;padding-bottom:1rem;word-break:break-word;">
+                <td align="center" vertical-align="middle" style="font-size:0px;padding:2rem 0;word-break:break-word;">
                   
-      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-style:italic;font-weight:400;line-height:1.5em;text-align:left;color:#000000;">Vous pouvez consulter la réponse <a href="{{var:webappUrl}}/question/{{var:questionId}}" class="link" target="_blank" rel="noopener noreferrer" style="color: #000091; text-decoration: none;">en suivant ce lien</a>.</div>
+      <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
+        <tbody>
+          <tr>
+            <td align="center" bgcolor="#000091" role="presentation" style="border:none;border-radius:3px;cursor:auto;mso-padding-alt:10px 25px;background:#000091;" valign="middle">
+              <a href="{{var:webappUrl}}/question/{{var:questionId}}?{{var:utm}}#reponses" rel="noopener noreferrer" style="display:inline-block;background:#000091;color:#FFFFFF;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:3px;" target="_blank">
+                Consulter la réponse
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     
                 </td>
               </tr>
