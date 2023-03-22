@@ -6,7 +6,7 @@
         <template v-else>
             <AnnuaireBanniere v-model:search="search" />
 
-            <ViewHeader icon="user">
+            <ViewHeader icon="users">
                 <template v-slot:title
                     >Découvrez notre communauté —
                     <span class="text-info">{{ title }}</span></template

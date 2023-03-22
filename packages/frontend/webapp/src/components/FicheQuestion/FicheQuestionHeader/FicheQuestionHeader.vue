@@ -1,5 +1,5 @@
 <template>
-    <ViewHeader icon="person-circle-question" direction="col">
+    <ViewHeader icon="comments" direction="col">
         <template v-slot:title>{{ question.question }}</template>
         <template v-slot:description>
             Question posée par

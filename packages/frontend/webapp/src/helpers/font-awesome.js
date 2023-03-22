@@ -17,7 +17,6 @@ import {
     faCalendar,
     faChalkboardTeacher,
     faChartSimple,
-    faPersonCircleQuestion,
     faCheck,
     faChevronDown,
     faChevronLeft,
@@ -28,6 +27,7 @@ import {
     faCircleInfo,
     faCircleXmark,
     faComment,
+    faComments,
     faCopy,
     faCutlery,
     faEnvelope,
@@ -127,6 +127,7 @@ library.add(faCircleQuestion);
 library.add(faCircleUser);
 library.add(faCircleXmark);
 library.add(faComment);
+library.add(faComments);
 library.add(faCopy);
 library.add(faCutlery);
 library.add(faEnvelope);
@@ -160,7 +161,6 @@ library.add(faNotesMedical);
 library.add(faPaperPlane);
 library.add(faPen);
 library.add(faPencilAlt);
-library.add(faPersonCircleQuestion);
 library.add(faPersonMilitaryPointing);
 library.add(faPhone);
 library.add(faPrint);

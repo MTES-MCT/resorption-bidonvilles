@@ -1,5 +1,5 @@
 <template>
-    <ViewHeader icon="person-circle-question">
+    <ViewHeader icon="comments">
         <template v-slot:title>Questions de la communauté</template>
         <template v-slot:description
             >Consultez et répondez aux questions posées par la

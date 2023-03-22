@@ -5,7 +5,7 @@
                 class="flex justify-center items-start lg:items-center text-xl"
             >
                 <LinkBlock
-                    icon="person-circle-question"
+                    icon="comments"
                     to="/communaute"
                     :class="[
                         'w-72 text-center font-bold border-t-transparent border-y-4',
@@ -17,7 +17,7 @@
                     Espace d'entraide
                 </LinkBlock>
                 <LinkBlock
-                    icon="user"
+                    icon="users"
                     to="/annuaire"
                     :class="[
                         'w-72 text-center font-bold border-t-transparent border-y-4',
