@@ -40,7 +40,7 @@
             <p class="whitespace-pre-line mt-4 break-words">
                 {{
                     question.details
-                        .substr(0, 300)
+                        .substr(0, 250)
                         .split("\n")
                         .slice(0, 5)
                         .join("\n")
