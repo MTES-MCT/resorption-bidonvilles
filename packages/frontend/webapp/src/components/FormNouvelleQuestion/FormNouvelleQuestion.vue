@@ -3,13 +3,13 @@
         <FormParagraph :title="labels.question" showMandatoryStar>
             <FormNouvelleQuestionInputQuestion :question="question" />
         </FormParagraph>
-        <FormParagraph :title="labels.tags">
+        <FormParagraph :title="labels.tags" info="(optionnel)">
             <FormNouvelleQuestionInputTags
         /></FormParagraph>
         <FormParagraph :title="labels.other_tag" v-if="showOtherTag">
             <FormNouvelleQuestionInputOtherTag />
         </FormParagraph>
-        <FormParagraph :title="labels.people_affected">
+        <FormParagraph :title="labels.people_affected" info="(optionnel)">
             <FormNouvelleQuestionInputPeopleAffected />
         </FormParagraph>
         <FormParagraph :title="labels.details" showMandatoryStar>
