@@ -2,13 +2,13 @@
     <Layout v-bind="$attrs">
         <template v-slot:banner>
             <ContentWrapper
-                class="flex justify-center items-start lg:items-center"
+                class="flex justify-center items-start lg:items-center text-xl"
             >
                 <LinkBlock
                     icon="person-circle-question"
                     to="/communaute"
                     :class="[
-                        'w-52 text-center font-bold border-t-transparent border-y-4',
+                        'w-72 text-center font-bold border-t-transparent border-y-4',
                         currentTab === 'communaute'
                             ? 'border-b-blue600'
                             : 'border-b-transparent text-black',
@@ -20,7 +20,7 @@
                     icon="user"
                     to="/annuaire"
                     :class="[
-                        'w-52 text-center font-bold border-t-transparent border-y-4',
+                        'w-72 text-center font-bold border-t-transparent border-y-4',
                         currentTab === 'annuaire'
                             ? 'border-b-blue600'
                             : 'border-b-transparent text-black',
