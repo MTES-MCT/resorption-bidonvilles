@@ -18,7 +18,7 @@
                 résorption.
             </h2>
             <h3 class="mt-2">
-                En une phrase, comment résumeriez-vous votre question?
+                En une phrase, comment résumeriez-vous votre question ?
             </h3>
             <form
                 class="flex items-center mt-2 space-x-2"

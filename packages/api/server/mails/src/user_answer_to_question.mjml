@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-text mj-class="pb-4">Bonjour,</mj-text>
                 <mj-text mj-class="pb-4">
-                    Vous avez posé une question sur l'espace "communauté" de la la plateforme <a href="{{var:webappUrl}}" class="font-italic link" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
+                    Vous avez posé une question sur l'espace "communauté" de la plateforme <a href="{{var:webappUrl}}" class="font-italic link" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
                 </mj-text>
                 <mj-text mj-class="pb-4">
                     <a href="{{var:webappUrl}}/structure/{{var:authorOrganization}}" class="font-italic link" target="_blank" rel="noopener noreferrer">{{var:authorName}}</a> vous a répondu.
