@@ -3,6 +3,7 @@
         <h1 :class="`font-bold text-${size}`">
             {{ title }}
             <MandatoryStar v-if="showMandatoryStar" />
+            <span class="text-G600" v-if="info">{{ info }}</span>
         </h1>
         <p class="mt-1 mb-4">
             <slot />
@@ -19,6 +20,10 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    info: {
+        type: String,
+        required: false,
+    },
     showMandatoryStar: {
         type: Boolean,
         required: false,
@@ -30,5 +35,5 @@ const props = defineProps({
         default: "xl",
     },
 });
-const { title, showMandatoryStar, size } = toRefs(props);
+const { title, info, showMandatoryStar, size } = toRefs(props);
 </script>

@@ -4,16 +4,35 @@ import moment from 'moment';
 
 import userModel from '#server/models/userModel';
 import shantytownModel from '#server/models/shantytownModel';
+import { ActivityNationalSummary } from './types/ActivityNationalSummary';
 
 const { formatName } = userModel;
 
 const { getUsenameOf } = shantytownModel;
 
-export default async (argFrom: Date, argTo: Date): Promise<any> => {
+type Row = {
+    departementCode: string,
+    departementName: string,
+    regionCode: string,
+    shantytownsTotal: number,
+    populationTotal: number,
+    activityType: string,
+    city: string,
+    departement: string,
+    shantytownId: number,
+    shantytownName: string,
+    shantytownAddressSimple: string,
+    shantytownCommentId: number | null,
+    userFirstName: string,
+    userLastName: string,
+    userOrganizationId: number,
+};
+
+export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSummary> => {
     const from = moment(argFrom);
     const to = moment(argTo);
 
-    const raw = await sequelize.query(
+    const rows: Row[] = await sequelize.query(
         `
         WITH
             activities AS (
@@ -186,7 +205,7 @@ export default async (argFrom: Date, argTo: Date): Promise<any> => {
         },
     );
 
-    return raw.reduce((argAcc, row: any) => {
+    return rows.reduce((argAcc, row) => {
         const acc = { ...argAcc };
         if (acc[row.regionCode] === undefined) {
             acc[row.regionCode] = {};
@@ -263,5 +282,5 @@ export default async (argFrom: Date, argTo: Date): Promise<any> => {
         acc[row.regionCode][row.departementCode][`${row.activityType}_length`] += 1;
 
         return acc;
-    }, {});
+    }, {} as ActivityNationalSummary);
 };

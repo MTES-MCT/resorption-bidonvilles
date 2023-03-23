@@ -6,7 +6,9 @@
   "hero": {
     "title": "Agir pour résorber les bidonvilles",
     "subtitle": "Posez-nous une question ou demandez un accès",
-    "review": "sites résorbés en"
+    "review": "sites résorbés en",
+    "moreThan": "Au total plus de",
+    "people": "personnes relogées"
   },
   "firstSection": {
     "features": {

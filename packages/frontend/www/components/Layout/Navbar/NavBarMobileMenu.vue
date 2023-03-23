@@ -8,7 +8,10 @@
             </MenuItem>
 
             <MenuItem>
-            <LinkContact withStyle>{{
+            <LinkContact withStyle v-if="i18n.locale.value === 'fr'">{{
+                $t("landingPage.contactForm.ctaSignup")
+            }}</LinkContact>
+            <LinkContact withStyle v-else>{{
                 $t("landingPage.header.contact")
             }}</LinkContact>
             </MenuItem>

@@ -6,7 +6,7 @@
                     <slot />
                 </h2>
                 <div class="pt-4">
-                    <ButtonContact variant="primary" isDemandeAcces>{{
+                    <ButtonContact variant="primary" :isDemandeAcces="isDemandeAcces">{{
                         cta
                     }}</ButtonContact>
                 </div>
@@ -25,7 +25,12 @@ const props = defineProps({
     cta: {
         type: String,
         required: true
-    }
+    },
+    isDemandeAcces: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
 });
-const { cta } = toRefs(props);
+const { cta, isDemandeAcces } = toRefs(props);
 </script>

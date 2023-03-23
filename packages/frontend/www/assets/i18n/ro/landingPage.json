@@ -6,7 +6,9 @@
   "hero": {
     "title": "Acționăm pentru resorbția de bidonville",
     "subtitle": "Puneți o întrebare sau solicitați accesul",
-    "review": "platz resorbite în"
+    "review": "platz resorbite în",
+    "moreThan": "Peste",
+    "people": "de persoane relocate"
   },
   "firstSection": {
     "features": {

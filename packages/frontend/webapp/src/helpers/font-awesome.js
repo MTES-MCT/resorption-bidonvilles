@@ -27,11 +27,13 @@ import {
     faCircleInfo,
     faCircleXmark,
     faComment,
+    faComments,
     faCopy,
     faCutlery,
     faEnvelope,
     faEuroSign,
     faExclamation,
+    faExclamationCircle,
     faFile,
     faFileExcel,
     faFilePdf,
@@ -59,6 +61,7 @@ import {
     faPlus,
     faPrint,
     faQuestion,
+    faRectangleList,
     faRotateLeft,
     faRotateRight,
     faSchool,
@@ -124,11 +127,13 @@ library.add(faCircleQuestion);
 library.add(faCircleUser);
 library.add(faCircleXmark);
 library.add(faComment);
+library.add(faComments);
 library.add(faCopy);
 library.add(faCutlery);
 library.add(faEnvelope);
 library.add(faEuroSign);
 library.add(faExclamation);
+library.add(faExclamationCircle);
 library.add(faEye);
 library.add(faEyeSlash);
 library.add(faFacebook);
@@ -161,6 +166,7 @@ library.add(faPhone);
 library.add(faPrint);
 library.add(faPlus);
 library.add(faQuestion);
+library.add(faRectangleList);
 library.add(faRotateLeft);
 library.add(faRotateRight);
 library.add(faSchool);

@@ -1,7 +1,13 @@
+import { LocationType } from '#server/models/geoModel/LocationType.d';
 import query from './_common/query';
+import { SerializedUser } from './_common/serializeUser';
 
-export default async () => {
-    const users: any = await query(
+export type SummarySubscribers = {
+    [key in LocationType]: SerializedUser[]
+};
+
+export default async (): Promise<SummarySubscribers> => {
+    const users: SerializedUser[] = await query(
         [
             {
                 fk_status: {
@@ -24,9 +30,7 @@ export default async () => {
         {},
     );
 
-    return users.reduce((argAcc, user) => {
-        const acc = { ...argAcc };
-
+    return users.reduce((acc, user) => {
         let locationType = user.organization.location.type;
         if (!acc[locationType]) {
             locationType = 'departement';
@@ -38,5 +42,5 @@ export default async () => {
         nation: [],
         region: [],
         departement: [],
-    });
+    } as SummarySubscribers);
 };

@@ -3,7 +3,7 @@
         <div :class="!sticky && 'hidden'">
             <NavBarSticky :menuDisplayed="menuDisplayed" :toggleMenu="toggleMenu">
                 <template v-slot:anchors>
-                    <div class="mr-8 hidden xl:inline-block space-x-5">
+                    <div class="mr-8 hidden 2xl:inline-block space-x-5">
                         <slot name="anchors"></slot>
                     </div>
                 </template>
@@ -27,8 +27,7 @@
                             }}</Button>
                             </Link>
                         </div>
-                        <LanguagePicker v-model="language" :language="language" v-if="displayLanguagePicker"
-                            class="ml-2" />
+                        <LanguagePicker v-model="language" :language="language" v-if="displayLanguagePicker" class="ml-2" />
                     </div>
 
                     <NavBarMobileButton class="md:hidden" :onClick="toggleMenu" />
