@@ -12,6 +12,7 @@
             name="ended_at"
             id="ended_at"
             :label="labels.ended_at"
+            info="(optionnel)"
             inlineInfo
             :minDate="values.started_at"
         />
