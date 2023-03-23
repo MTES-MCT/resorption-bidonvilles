@@ -28,7 +28,6 @@ const props = defineProps({
     mode: {
         type: String,
         required: true,
-        default: "create",
     },
 });
 const { mode } = toRefs(props);
