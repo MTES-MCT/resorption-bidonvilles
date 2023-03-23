@@ -27,6 +27,8 @@ import mePostNavigationLogs from './me/post.navigationLogs';
 import findUserTowns from './findUserTowns';
 import createNote from './note/create';
 import publishNote from './note/publish';
+import createQuestion from './question/create';
+import createAnswer from './answer/create';
 
 import actionCreate from './actions/create';
 import actionCreateComment from './actions/createComment';
@@ -85,6 +87,12 @@ export default {
     },
     organization: {
         search: organizationSearch,
+    },
+    question: {
+        createQuestion,
+    },
+    answer: {
+        createAnswer,
     },
     setUserAdminComments,
     editOrganization,

@@ -1,0 +1,31 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Une réponse vous attend sur la plateforme Résorption-bidonvilles</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    La communauté vous a répondu !
+                </mj-text>
+                <mj-text mj-class="pb-4">Bonjour,</mj-text>
+                <mj-text mj-class="pb-4">
+                    Vous avez posé une question sur l'espace "communauté" de la plateforme <a href="{{var:webappUrl}}?{{var:utm}}" class="font-italic link" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
+                </mj-text>
+                <mj-text mj-class="pb-4">
+                    <a href="{{var:webappUrl}}/structure/{{var:authorOrganization}}?{{var:utm}}" class="font-italic link" target="_blank" rel="noopener noreferrer">{{var:authorName}}</a> vous a répondu.
+                </mj-text>
+                <mj-button mj-class="button-primary" href="{{var:webappUrl}}/question/{{var:questionId}}?{{var:utm}}#reponses" rel="noopener noreferrer">
+                    Consulter la réponse
+                </mj-button>
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+        <mj-include path='common/unsubscribe_push_mails.mjml' />
+    </mj-body>
+</mjml>

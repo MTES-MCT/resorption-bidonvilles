@@ -123,13 +123,9 @@ const router = createRouter({
             },
         },
         {
-            path: "/annuaire/:id?",
+            path: "/annuaire/:id",
             redirect(to) {
-                if (to.params.id) {
-                    return `/structure/${to.params.id}`;
-                }
-
-                return "/communaute";
+                return `/structure/${to.params.id}`;
             },
         },
         {
@@ -151,11 +147,40 @@ const router = createRouter({
             },
         },
         {
-            path: "/communaute",
+            path: "/annuaire",
             component: () => import("@/views/AnnuaireView.vue"),
             meta: {
                 authRequirement: "signedIn",
                 navTab: "communaute",
+                communauteTab: "annuaire",
+            },
+        },
+
+        {
+            path: "/communaute",
+            component: () => import("@/views/CommunauteView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "communaute",
+                communauteTab: "communaute",
+            },
+        },
+        {
+            path: "/communaute/nouvelle-question",
+            component: () =>
+                import("@/views/NouvelleQuestionCommunauteView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "communaute",
+            },
+        },
+        {
+            path: "/question/:id",
+            component: () => import("@/views/FicheQuestionView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "communaute",
+                communauteTab: "communaute",
             },
         },
         {
@@ -323,6 +348,7 @@ const router = createRouter({
             meta: {
                 authRequirement: "signedIn",
                 navTab: "communaute",
+                communauteTab: "annuaire",
             },
         },
         {

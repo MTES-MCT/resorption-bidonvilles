@@ -1,14 +1,15 @@
 import { ActivityNationalSummary } from '#server/models/activityModel/types/ActivityNationalSummary';
-import { User } from '#server/models/userModel/_common/types/User';
 import mailsUtils from '#server/mails/mails';
 import moment from 'moment';
 import PromisePool from '@supercharge/promise-pool';
+import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import { QuestionNationalSummary } from '#server/models/activityModel/types/QuestionNationalSummary';
 
 moment.locale('fr');
 
 const { sendActivitySummary } = mailsUtils;
 
-export default async (argFrom: Date, argTo: Date, summaries: ActivityNationalSummary, subscribers: Array<User>): Promise<any> => {
+export default async (argFrom: Date, argTo: Date, questionSummary: QuestionNationalSummary, summaries: ActivityNationalSummary, subscribers: Array<SerializedUser>): Promise<any> => {
     const from = moment(argFrom);
     const to = moment(argTo);
 
@@ -26,6 +27,7 @@ export default async (argFrom: Date, argTo: Date, summaries: ActivityNationalSum
                     title: subscriber.organization.location.region.name,
                     from: from.format('DD'),
                     to: to.format('DD MMMM YYYY'),
+                    questionSummary,
                     summaries: Object.keys(s).sort().map(departementCode => s[departementCode]),
                     showDetails: true,
                 },

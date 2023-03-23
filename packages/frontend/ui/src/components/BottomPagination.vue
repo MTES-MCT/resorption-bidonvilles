@@ -4,7 +4,7 @@
             Vous consultez actuellement les lignes
             {{ from }} à
             {{ to }} sur
-            <span class="font-bold">{{ total }} résultats</span>
+            <span class="font-bold">{{ total }} résultat<template v-if="total > 1">s</template></span>
         </p>
         <div class="flex justify-center mt-4">
             <Pagination class="mx-auto" :currentPage="currentPage" :nbPages="numberOfPages" autoScrollFix
@@ -12,7 +12,6 @@
         </div>
     </div>
 </template>
-x
 <script setup>
 import { defineProps, toRefs, defineEmits } from "vue";
 import Pagination from "./Pagination.vue";
@@ -35,9 +34,9 @@ const props = defineProps({
     },
 });
 const { from, to, total, currentPage, numberOfPages } = toRefs(props);
-const emit = defineEmits(['pagechange']);
+const emit = defineEmits(["pagechange"]);
 
 function onPageChange(...args) {
-    emit('pagechange', ...args);
+    emit("pagechange", ...args);
 }
 </script>
