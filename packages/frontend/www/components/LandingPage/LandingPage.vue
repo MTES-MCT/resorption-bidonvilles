@@ -22,7 +22,7 @@
                 <LandingPageSecondSection />
             </div>
         </Container>
-        <LandingPageBanner :cta="$t('landingPage.secondBanner.cta')">
+        <LandingPageBanner :cta="$t('landingPage.secondBanner.cta')" :isDemandeAcces="false">
             {{ $t("landingPage.secondBanner.text") }}
         </LandingPageBanner>
         <CreditWrapper credit="© Ville de Strasbourg">
