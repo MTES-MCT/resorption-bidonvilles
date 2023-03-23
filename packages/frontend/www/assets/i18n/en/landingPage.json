@@ -6,7 +6,9 @@
   "hero": {
     "title": "Taking action for slum clearance",
     "subtitle": "Ask a question or request an access",
-    "review": "slums cleared in"
+    "review": "slums cleared in",
+    "moreThan": "More than",
+    "people": "people re-housed"
   },
   "firstSection": {
     "features": {
