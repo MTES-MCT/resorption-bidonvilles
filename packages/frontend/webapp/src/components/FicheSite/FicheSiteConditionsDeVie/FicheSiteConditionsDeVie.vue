@@ -66,9 +66,20 @@
 
         <div v-if="town.livingConditions.version === 2">
             <FicheSiteConditionsDeVieRubrique
+                v-if="
+                    ['good', 'bad'].includes(
+                        town.livingConditions.pest_animals.status.status
+                    )
+                "
                 :title="pestAnimalsWording"
                 :status="town.livingConditions.pest_animals.status"
                 :showStatus="false"
+                :answers="answers.pest_animals"
+            />
+            <FicheSiteConditionsDeVieRubrique
+                v-else
+                :title="pestAnimalsWording"
+                :status="town.livingConditions.pest_animals.status"
                 :answers="answers.pest_animals"
             />
 
