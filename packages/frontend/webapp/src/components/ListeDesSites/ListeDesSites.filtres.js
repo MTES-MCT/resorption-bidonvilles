@@ -21,7 +21,7 @@ export default {
         options: [
             { value: "3", label: "Terrain" },
             { value: "2", label: "Immeuble bâti" },
-            { value: "1", label: "Inconnu" },
+            { value: "1", label: "Autre" },
         ],
     },
     origin: {
