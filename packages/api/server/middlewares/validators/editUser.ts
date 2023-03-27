@@ -49,7 +49,7 @@ export default [
                 return true;
             }
 
-            const frenchPhoneRegex = /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/gmi;
+            const frenchPhoneRegex = /^(?:(?:\+|00)(?:33|262|590|594|596)|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/gmi;
             const match = value.match(frenchPhoneRegex);
 
             if (!match) {
