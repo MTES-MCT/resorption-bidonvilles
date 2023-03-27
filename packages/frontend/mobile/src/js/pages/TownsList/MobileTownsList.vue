@@ -24,111 +24,135 @@
             </Container>
         </template>
         <template v-slot:scroll>
-            <template v-if="state !== 'error'">
-                <Container class="mt-6">
-                    <div class="font-bold text-lg">Rechercher un site</div>
-                    <SearchInput
-                        class="mt-2 mb-6"
-                        @click="openSearch"
-                        placeholder="une ville, un département, un site..."
-                    />
-                    <div class="font-bold text-lg">
-                        Mes sites ({{ myTowns.length }})
-                    </div>
-                    <div class="italic">
-                        <span v-if="state === 'loading'"
-                            >chargement en cours...</span
-                        >
-                        <span v-else-if="myTowns.length === 0"
-                            >vous n'intervenez sur aucun site</span
-                        >
-                    </div>
-                </Container>
-                <TownCarousel :towns="myTowns" id="mes_sites" />
-
-                <Container class="mt-6">
-                    <div class="font-bold text-lg">
-                        Sites récemment consultés ({{ consultedTowns.length }})
-                    </div>
-                    <div class="italic">
-                        <span v-if="state === 'loading'"
-                            >chargement en cours...</span
-                        >
-                        <span v-else-if="consultedTowns.length === 0"
-                            >vous n'avez consulté aucun site récemment</span
-                        >
-                    </div>
-                </Container>
-
-                <TownCarousel
-                    :towns="consultedTowns"
-                    id="sites_recemment_consultes"
-                />
-
-                <template v-if="gettingLocation === false">
-                    <Container v-if="nearbyTowns.length > 0" class="mt-6">
+            <div class="pb-6">
+                <template v-if="state !== 'error'">
+                    <Container class="mt-6">
+                        <div class="font-bold text-lg">Rechercher un site</div>
+                        <SearchInput
+                            class="mt-2 mb-6"
+                            @click="openSearch"
+                            placeholder="une ville, un département, un site..."
+                        />
                         <div class="font-bold text-lg">
-                            Sites à proximité ({{ nearbyTowns.length }})
+                            Mes sites ({{ myTowns.length }})
                         </div>
-                        <div class="italic" v-if="nearbyTowns.length === 0">
-                            Aucun site trouvé à proximité
+                        <div class="italic">
+                            <span v-if="state === 'loading'"
+                                >chargement en cours...</span
+                            >
+                            <span v-else-if="myTowns.length === 0"
+                                >vous n'intervenez sur aucun site</span
+                            >
                         </div>
                     </Container>
                     <TownCarousel
-                        v-if="nearbyTowns.length > 0"
-                        :towns="nearbyTowns"
+                        :towns="myTowns"
+                        id="mes_sites"
+                        class="mb-8"
                     />
+
+                    <Container class="mt-6">
+                        <div class="font-bold text-lg">
+                            Sites récemment consultés ({{
+                                consultedTowns.length
+                            }})
+                        </div>
+                        <div class="italic">
+                            <span v-if="state === 'loading'"
+                                >chargement en cours...</span
+                            >
+                            <span v-else-if="consultedTowns.length === 0"
+                                >vous n'avez consulté aucun site récemment</span
+                            >
+                        </div>
+                    </Container>
+
+                    <TownCarousel
+                        :towns="consultedTowns"
+                        id="sites_recemment_consultes"
+                        class="mb-8"
+                    />
+
+                    <Container class="mt-6">
+                        <div class="font-bold text-lg">
+                            Sites à proximité<template
+                                v-if="geoLocation.isLoaded"
+                            >
+                                ({{ nearbyTowns.length }})</template
+                            >
+                        </div>
+                        <p class="italic">
+                            <span v-if="state === 'loading'"
+                                >chargement en cours...</span
+                            >
+                            <template
+                                v-else-if="
+                                    geoPermissionState === 'denied' ||
+                                    geoLocation.denied === true
+                                "
+                            >
+                                Nous n'avons pas accès à votre géolocalisation,
+                                veuillez vérifier les autorisations configurées
+                                sur votre appareil.
+                            </template>
+                            <template
+                                v-else-if="
+                                    geoPermissionState === 'prompt' ||
+                                    geoLocation.isLoaded === false
+                                "
+                            >
+                                <Button
+                                    @click="findNearbyShantytowns"
+                                    :loading="geoLocation.isLoading"
+                                    >Rechercher les sites à moins de
+                                    500m</Button
+                                >
+                            </template>
+                            <!-- cas "granted" ci-dessous -->
+                            <template v-else-if="nearbyTowns.length === 0">
+                                Aucun site trouvé à moins de 500m
+                            </template>
+                        </p>
+                    </Container>
+                    <TownCarousel
+                        id="sites_a_proximite"
+                        :towns="nearbyTowns"
+                        class="mb-2"
+                    />
+                    <Container v-if="geoLocation.isLoaded === true">
+                        <p>
+                            <Button
+                                @click="findNearbyShantytowns"
+                                :loading="geoLocation.isLoading"
+                                >Rafraîchir la liste</Button
+                            >
+                        </p>
+                    </Container>
                 </template>
 
-                <Container class="mt-6">
-                    <div
-                        class="text-secondary text-sm mb-2"
-                        v-if="locationError"
-                    >
-                        {{ locationError }}
-                    </div>
-                    <div class="mb-2" v-if="!isOnline">
-                        Veuillez vous connecter au réseau pour que nous
-                        puissions vous indiquer les sites à proximité.
-                    </div>
-                    <div v-if="gettingLocation === true">
-                        <Spinner /> <i>Calcul de votre position en cours...</i>
-                    </div>
-
-                    <template v-else>
-                        <div class="mb-2" v-if="!geoLocation">
-                            Veuillez activer la géolocalisation pour afficher
-                            les sites à proximité...
-                        </div>
-                        <Button size="sm" @click="refreshLocation"
-                            >Rafraîchir ma position</Button
+                <Container class="mt-24 text-center" v-else>
+                    <p>
+                        <span class="font-bold text-primary"
+                            >Le chargement des données a échoué :</span
+                        ><br />
+                        <span>{{ error }}</span
+                        ><br />
+                        <Button
+                            class="mt-3"
+                            @click="load"
+                            icon="arrow-alt-circle-right"
                         >
-                    </template>
+                            Réessayer
+                        </Button>
+                    </p>
                 </Container>
-            </template>
-
-            <Container class="mt-24 text-center" v-else>
-                <p>
-                    <span class="font-bold text-primary"
-                        >Le chargement des données a échoué :</span
-                    ><br />
-                    <span>{{ error }}</span
-                    ><br />
-                    <Button
-                        class="mt-3"
-                        @click="load"
-                        icon="arrow-alt-circle-right"
-                    >
-                        Réessayer
-                    </Button>
-                </p>
-            </Container>
+            </div>
         </template>
     </Layout>
 </template>
 
 <script>
-import { Button, Icon, Spinner } from "@resorptionbidonvilles/ui";
+import { Button, Icon } from "@resorptionbidonvilles/ui";
 import Container from "../../components/Container.vue";
 import TownCarousel from "./TownCarousel.vue";
 import { mapGetters } from "vuex";
@@ -143,7 +167,6 @@ export default {
         // eslint-disable-next-line vue/no-reserved-component-names
         Button,
         Icon,
-        Spinner,
         Container,
         Layout,
         TownCarousel,
@@ -151,13 +174,20 @@ export default {
     },
     data: function () {
         return {
-            geoLocation: null,
-            gettingLocation: false,
-            locationError: null,
+            geoPermission: null,
+            geoLocation: {
+                isLoading: false,
+                isLoaded: false,
+                denied: false,
+                error: null,
+            },
         };
     },
-    mounted() {
+    async mounted() {
         this.load();
+        this.geoPermission = await navigator.permissions.query({
+            name: "geolocation",
+        });
     },
     computed: {
         ...mapGetters({
@@ -171,21 +201,8 @@ export default {
         user() {
             return this.$store.state.config.configuration.user;
         },
-        isOnline() {
-            return navigator.onLine;
-        },
-    },
-    watch: {
-        geoLocation: async function () {
-            try {
-                const { towns } = await findNearby(
-                    this.geoLocation.coords.latitude,
-                    this.geoLocation.coords.longitude
-                );
-                this.$store.dispatch("setNearbyTowns", towns);
-            } catch (err) {
-                console.log(err);
-            }
+        geoPermissionState() {
+            return this.geoPermission && this.geoPermission.state;
         },
     },
     methods: {
@@ -207,15 +224,11 @@ export default {
             document.cookie = `device=webapp;domain=${ENV.VITE_MOBILE_DOMAIN}`;
             location.replace(ENV.VITE_WEBAPP_URL);
         },
-        async getLocation() {
+        getLocation() {
             return new Promise((resolve, reject) => {
-                navigator.geolocation.getCurrentPosition(
-                    (pos) => {
-                        resolve(pos);
-                    },
-                    (err) => {
-                        reject(err);
-                    },
+                return navigator.geolocation.getCurrentPosition(
+                    resolve,
+                    reject,
                     {
                         enableHighAccuracy: true,
                         maximumAge: 2000,
@@ -224,36 +237,51 @@ export default {
                 );
             });
         },
-        async refreshLocation() {
-            this.locationError = "";
-            this.gettingLocation = true;
+        async findNearbyShantytowns() {
+            if (this.geoLocation.isLoading === true) {
+                return;
+            }
+
+            this.geoLocation.isLoading = true;
+            this.geoLocation.isLoaded = false;
+            this.geoLocation.error = null;
+            this.geoLocation.denied = false;
             this.$store.dispatch("setNearbyTowns", []);
+
             try {
-                this.geoLocation = await this.getLocation();
-                if (this.geoLocation.coords.accuracy > 100) {
-                    this.locationError = `La position calculée n'est pas très précise: (${parseFloat(
-                        this.geoLocation.coords.accuracy
+                const geoLocation = await this.getLocation();
+                if (geoLocation.coords.accuracy > 100) {
+                    this.geoLocation.error = `La position calculée n'est pas très précise : (${parseFloat(
+                        geoLocation.coords.accuracy
                     ).toFixed(2)} m)`;
+                } else {
+                    const { towns } = await findNearby(
+                        geoLocation.coords.latitude,
+                        geoLocation.coords.longitude
+                    );
+                    this.$store.dispatch("setNearbyTowns", towns);
+                    this.geoLocation.isLoaded = true;
                 }
-                this.gettingLocation = false;
             } catch (e) {
-                console.log(e);
-                this.gettingLocation = false;
-                this.locationError = this.getLocationErrorMessage(e.code);
+                if (e.code === 1) {
+                    this.geoLocation.denied = true;
+                } else {
+                    this.geoLocation.error = this.getLocationErrorMessage(
+                        e.code
+                    );
+                }
             }
+
+            this.geoLocation.isLoading = false;
         },
+
         getLocationErrorMessage(code) {
-            let message = "Une erreur inconnue est survenue.";
-            if (code === 1) {
-                message =
-                    "L'utilisateur a refusé la requête de géolocalisation.";
-            } else if (code === 2) {
-                message = "La localisation géographique n'a pas été trouvée.";
-            } else if (code === 3) {
-                message =
-                    "La requête de localisation géographique a mis trop de temps à s'exécuter.";
-            }
-            return message;
+            const errors = {
+                2: "La géolocalisation a échoué.",
+                3: "La requête de géolocalisation a mis trop de temps à s'exécuter.",
+            };
+
+            return errors[code] || "Une erreur inconnue est survenue";
         },
     },
 };
