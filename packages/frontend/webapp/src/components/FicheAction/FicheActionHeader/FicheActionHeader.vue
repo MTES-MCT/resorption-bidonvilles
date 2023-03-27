@@ -2,7 +2,7 @@
     <ContentWrapper>
         <ViewHeader icon="handshake-angle" direction="col">
             <template v-slot:title>
-                <span>{{ action.name }}</span>
+                <FicheActionHeaderName :action="action" />
             </template>
             <template v-slot:description>
                 <FicheActionHeaderStatus :action="action" />
@@ -18,6 +18,7 @@
 import { defineProps, toRefs } from "vue";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import FicheActionHeaderName from "./FicheActionHeaderName.vue";
 import FicheActionHeaderStatus from "./FicheActionHeaderStatus.vue";
 import FicheActionHeaderBoutons from "./FicheActionHeaderBoutons.vue";
 
