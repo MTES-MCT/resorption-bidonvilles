@@ -40,8 +40,7 @@
                     withoutMargin
                 >
                     <option
-                        v-for="option in configStore.config
-                            .action_finance_types"
+                        v-for="option in financeTypes"
                         :key="option.uid"
                         :value="option.uid"
                     >
@@ -162,6 +161,20 @@ const yearsWithData = computed(() => {
     return Object.keys(value.value).filter(
         (year) => value.value[year]?.length > 0
     );
+});
+const financeTypes = computed(() => {
+    const types = [...configStore.config.action_finance_types];
+    types.sort((a, b) => {
+        if (a.name === "Autre") {
+            return 1;
+        } else if (b.name === "Autre") {
+            return -1;
+        }
+
+        return a.name < b.name ? -1 : 1;
+    });
+
+    return types;
 });
 
 function setYear(year) {
