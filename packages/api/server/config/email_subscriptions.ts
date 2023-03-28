@@ -5,4 +5,5 @@ export default [
     'shantytown_closure',
     'shantytown_creation',
     'community_new_answer',
+    'community_new_question',
 ];

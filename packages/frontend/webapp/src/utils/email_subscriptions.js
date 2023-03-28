@@ -9,4 +9,6 @@ export default {
     shantytown_creation: "Les notifications de déclaration de nouveaux sites",
     community_new_answer:
         "Les notifications de réponses à une question dans la communauté",
+    community_new_question:
+        "Les notifications de création d'une question dans la communauté",
 };
