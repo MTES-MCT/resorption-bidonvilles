@@ -71,12 +71,18 @@ const props = defineProps({
 });
 const { town } = toRefs(props);
 
+const initialValues = {
+    comment: "",
+    tags: [],
+    mode: "public",
+    target: {
+        organizations: [],
+        users: [],
+    },
+};
 const { handleSubmit, setErrors, resetForm, values } = useForm({
     validationSchema: schema,
-    initialValues: {
-        tags: [],
-        mode: "public",
-    },
+    initialValues,
 });
 
 const error = ref(null);
