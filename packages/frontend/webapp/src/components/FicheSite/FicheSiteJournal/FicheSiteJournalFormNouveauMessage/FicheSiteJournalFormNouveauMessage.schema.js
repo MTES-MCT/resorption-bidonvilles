@@ -6,7 +6,6 @@ import commentModes from "@/utils/comment_modes";
 const configStore = useConfigStore();
 
 export default object({
-    comment: string().required().label(labels.comment),
     tags: array().of(
         string().oneOf(
             configStore.config.regular_comment_tags.map(({ uid }) => uid)

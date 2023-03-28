@@ -6,7 +6,7 @@ export default async (req, res, next) => {
     try {
         comments = await shantytownCommentService.createComment(
             {
-                description: req.body.description,
+                description: req.body.comment,
                 targets: req.body.targets,
                 tags: req.tags,
             },
