@@ -7,7 +7,8 @@
             <select :class="classes" :value="modelValue" :disabled="disabled || isLoading" @change="onChange">
                 <slot />
             </select>
-            <InputIcon position="after" :icon="isLoading ? 'spinner' : 'chevron-down'" :spin="isLoading" />
+            <InputIcon class="absolute pointer-events-none" position="after" :icon="isLoading ? 'spinner' : 'chevron-down'"
+                :spin="isLoading" />
         </div>
         <InputError v-if="!!error">{{ error }}</InputError>
     </InputWrapper>
