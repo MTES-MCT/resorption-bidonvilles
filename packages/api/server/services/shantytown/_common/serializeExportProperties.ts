@@ -32,20 +32,6 @@ export default (closingSolutions) => {
         unknown: 'Raison inconnue',
     };
 
-    // properties
-    const covidTags = {
-        equipe_maraude: 'Équipe de maraude',
-        equipe_sanitaire: 'Équipe sanitaire',
-        equipe_accompagnement: 'Équipe d\'accompagnement',
-        distribution_alimentaire: 'Distribution d\'aide alimentaire',
-        action_mediation_sante: 'Action de médiation en santé',
-        sensibilisation_vaccination: 'Sensibilisation à la vaccination',
-        equipe_mobile_depistage: 'Équipe mobile de dépistage',
-        equipe_mobile_vaccination: 'Équipe mobile de vaccination',
-        personnes_orientees: 'Personne(s) orientée(s) vers un centre d\'hébergement spécialisé (desserrement)',
-        personnes_avec_symptomes: 'Personnes avec des symptômes Covid-19',
-        besoin_action: 'Besoin d\'une action prioritaire',
-    };
 
     const properties = {
         departement: {
@@ -854,18 +840,7 @@ export default (closingSolutions) => {
             data: ({ comments }) => comments.regular.slice(0, 5).map(comment => `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${userModel.formatName(comment.createdBy)}\n${comment.description}`).join('\n----\n'),
             width: COLUMN_WIDTHS.LARGE,
         },
-        covidComments: {
-            title: 'Commentaires COVID-19',
-            data: ({ comments }) => comments.covid.slice(0, 5).map((comment) => {
-                const tags = Object.keys(covidTags)
-                    .filter(tag => comment.covid[tag] === true)
-                    .map(tag => covidTags[tag])
-                    .join('\n');
 
-                return `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${userModel.formatName(comment.createdBy)}\nDate de l'intervention : ${tsToString(comment.covid.date, 'd/m/Y')}\n${tags}\n${comment.description}`;
-            }).join('\n----\n'),
-            width: COLUMN_WIDTHS.LARGE,
-        },
 
         hasAction: {
             title: 'Le site fait-il l’objet d’une action ?',
