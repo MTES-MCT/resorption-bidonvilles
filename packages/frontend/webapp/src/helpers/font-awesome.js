@@ -12,6 +12,7 @@ import {
     faBan,
     faBars,
     faBolt,
+    faBook,
     faBuilding,
     faBullseye,
     faCalendar,
@@ -110,6 +111,7 @@ library.add(faBan);
 library.add(faBars);
 library.add(faBell);
 library.add(faBolt);
+library.add(faBook);
 library.add(faBuilding);
 library.add(faBullseye);
 library.add(faCalendar);
