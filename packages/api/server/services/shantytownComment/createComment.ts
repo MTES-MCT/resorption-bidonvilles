@@ -61,8 +61,9 @@ export default async (comment, shantytown, author) => {
     }
 
     // on tente d'envoyer une notification mail à tous les intervenants du site
+    let watchers;
     try {
-        const watchers = await userModel.getShantytownWatchers(
+        watchers = await userModel.getShantytownWatchers(
             shantytown.id,
             commentId,
             comment.targets.organizations.length > 0 || comment.targets.users.length > 0,
@@ -89,5 +90,6 @@ export default async (comment, shantytown, author) => {
     return {
         regular: regularComments[shantytown.id] || [],
         covid: covidComments[shantytown.id] || [],
+        numberOfWatchers: watchers.length,
     };
 };
