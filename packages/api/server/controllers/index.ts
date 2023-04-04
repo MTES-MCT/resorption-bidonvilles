@@ -22,6 +22,7 @@ import geoListDepartements from './geoController/listDepartements';
 import geoSearch from './geoController/search';
 // invite
 import inviteInvite from './inviteController/invite';
+import inviteUserToActivateNewQuestionNotification from './inviteController/inviteUserToActivateNewQuestionNotification';
 // note
 import noteAddPublication from './noteController/addPublication';
 import noteCreate from './noteController/create';
@@ -117,6 +118,7 @@ export default () => ({
     },
     invite: {
         invite: inviteInvite,
+        inviteUserToActivateNewQuestionNotification,
     },
     note: {
         addPublication: noteAddPublication,
