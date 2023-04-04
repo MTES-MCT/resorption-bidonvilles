@@ -780,4 +780,24 @@ export default {
             preserveRecipient,
         });
     },
+    /**
+   * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
+   * @param {Object} options
+   */
+    sendUserInvitationToActivateNewQuestionNotification: (recipient, options: MailOptions = {}) => {
+        const { preserveRecipient = false } = options;
+
+        const utm = generateTrackingUTM(USER_CAMPAIGN, 'accept-new-question-notification');
+
+        return mailService.send('user_invitation_to_activate_new_question_notification', {
+            recipient,
+            variables: {
+                utm,
+                webappUrl: `${webappUrl}?${utm}`,
+                backUrl,
+                blogUrl,
+            },
+            preserveRecipient,
+        });
+    },
 };

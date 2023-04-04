@@ -1,0 +1,31 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Restez informé-e de l'actualité de la communauté</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Restez en contact avec la communauté !
+                </mj-text>
+                <mj-text mj-class="pb-4">Bonjour,</mj-text>
+                <mj-text mj-class="pb-4">
+                    L'espace "communauté" de la plateforme <a href="{{var:webappUrl}}?{{var:utm}}" class="font-italic link" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> est en ligne.
+                </mj-text>
+                <mj-text mj-class='pb-2'>
+                    Pour recevoir automatiquement les notifications de publication d'une nouvelle question, veuillez <a href="https://app.resorption-bidonvilles.localhost/mon-compte/abonnements" target="_blank" rel="noopener noreferrer" class="link">le signaler dans votre espace "Mon compte"</a>.
+                </mj-text>
+                <mj-text mj-class='pb-4'>
+                    Dans la rubrique <span class="text-primary">"Courriers automatiques"</span>, il vous suffit de cocher <span class="text-primary">"Les notifications de création d'une question dans la comunauté"</span> et de sauvegarder votre choix.
+                </mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+        <mj-include path='common/unsubscribe_push_mails.mjml' />
+    </mj-body>
+</mjml>
