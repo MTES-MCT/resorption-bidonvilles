@@ -5,8 +5,6 @@ const { sendUserInvitationToActivateNewQuestionNotification } = mailsUtils;
 async function sendUsersInvitationToActivateNewQuestionNotification(guests) {
     for (let i = 0; i < guests.length; i += 1) {
         const guest = {
-            first_name: guests[i].first_name,
-            last_name: guests[i].last_name,
             email: guests[i].email,
         };
 
@@ -20,11 +18,11 @@ async function sendUsersInvitationToActivateNewQuestionNotification(guests) {
 }
 
 export default async (req, res, next) => {
-    const guests = await userModel.getSimplifiedActiveUsers();
+    const guests = await userModel.getSimplifiedActiveUserEmails();
 
     // Send an email to each guest
     try {
-        await sendUsersInvitationToActivateNewQuestionNotification(guests);
+        await sendUsersInvitationToActivateNewQuestionNotification(guests.slice(0, 3));
     } catch (err) {
         res.status(500).send({
             error: {

@@ -4,9 +4,7 @@ import { QueryTypes } from 'sequelize';
 export default () => sequelize.query(
     `SELECT
             user_id,
-            email,
-            INITCAP(first_name) AS "first_name",
-            UPPER(last_name) AS "last_name"
+            email
         FROM
             users u
         WHERE
