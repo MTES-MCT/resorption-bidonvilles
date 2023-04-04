@@ -179,6 +179,11 @@ export default (app) => {
         middlewares.validation,
         controllers.invite.invite,
     );
+    app.get(
+        '/invite/new-question-notification',
+        middlewares.auth.authenticate,
+        controllers.invite.inviteUserToActivateNewQuestionNotification,
+    );
     app.post(
         '/users/:id/sendActivationLink',
         middlewares.auth.authenticate,
