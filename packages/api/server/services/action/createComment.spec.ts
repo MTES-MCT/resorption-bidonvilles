@@ -43,7 +43,7 @@ describe('services/action.createComment()', () => {
 
         const response = await createComment(user.id, action, comment);
         expect(stubs.createComment).to.have.been.calledOnceWith(action.id, { ...comment, created_by: user.id });
-        expect(response).to.be.eql(newComment);
+        expect(response).to.be.eql({ comment: newComment, numberOfObservers: 0 });
     });
 
     it('envoie une notification mattermost', async () => {
