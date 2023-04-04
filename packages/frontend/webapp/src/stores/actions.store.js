@@ -182,15 +182,20 @@ export const useActionsStore = defineStore("actions", () => {
         },
         async addComment(actionId, comment) {
             const notificationStore = useNotificationStore();
-            const newComment = await addComment(actionId, comment);
+            const response = await addComment(actionId, comment);
 
             if (hash.value[actionId]) {
-                hash.value[actionId].comments.unshift(newComment);
+                hash.value[actionId].comments.unshift(response.comment);
             }
+            console.log(response);
 
             notificationStore.success(
                 "Publication d'un message",
-                "Votre message est bien enregistré et a été envoyé aux acteurs concernés de votre département par mail"
+                `Votre message est bien enregistré et a été envoyé à ${
+                    response.numberOfObservers > 1
+                        ? `${response.numberOfObservers} acteurs concernés`
+                        : `${response.numberOfObservers} acteur concerné`
+                }  de votre département par mail`
             );
         },
     };

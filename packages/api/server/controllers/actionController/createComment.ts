@@ -7,10 +7,10 @@ const ERRORS = {
 
 export default async (req, res, next) => {
     try {
-        const comment = await actionService.createComment(req.user.id, req.body.action, {
+        const response = await actionService.createComment(req.user.id, req.body.action, {
             description: req.body.description,
         });
-        return res.status(201).send(comment);
+        return res.status(201).send(response);
     } catch (error) {
         const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
         res.status(code).send({
