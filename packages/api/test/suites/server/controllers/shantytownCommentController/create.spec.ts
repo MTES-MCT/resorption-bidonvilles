@@ -29,7 +29,7 @@ describe('controllers/shantytownComment', () => {
             await ctlCreate(
                 mockReq({
                     body: {
-                        description: 'description',
+                        comment: 'description',
                         targets: { users: [], organizations: [] },
                         shantytown,
                     },
@@ -63,7 +63,7 @@ describe('controllers/shantytownComment', () => {
             await ctlCreate(
                 mockReq({
                     body: {
-                        description: 'description',
+                        comment: 'description',
                         targets: { users: [{ id: 1 }], organizations: [] },
                         tags: [{ uid: 'conditions_de_vie', label: 'Conditions de vie' }, { uid: 'passage_sur_site', label: 'Passage sur site' }],
                         shantytown: { id: 1 },
@@ -94,7 +94,7 @@ describe('controllers/shantytownComment', () => {
                 await ctlCreate(
                     mockReq({
                         body: {
-                            description: '',
+                            comment: '',
                             targets: { users: [], organizations: [] },
                             tags: [{ uid: 'conditions_de_vie', label: 'Conditions de vie' }, { uid: 'passage_sur_site', label: 'Passage sur site' }],
                             shantytown: { id: 1 },
@@ -135,7 +135,7 @@ describe('controllers/shantytownComment', () => {
                 await ctlCreate(
                     mockReq({
                         body: {
-                            description: '',
+                            comment: '',
                             targets: { users: [], organizations: [] },
                             tags: [{ uid: 'conditions_de_vie', label: 'Conditions de vie' }, { uid: 'passage_sur_site', label: 'Passage sur site' }],
                             shantytown: { id: 1 },
@@ -176,7 +176,7 @@ describe('controllers/shantytownComment', () => {
                 await ctlCreate(
                     mockReq({
                         body: {
-                            description: '',
+                            comment: '',
                             targets: { users: [], organizations: [] },
                             tags: [{ uid: 'conditions_de_vie', label: 'Conditions de vie' }, { uid: 'passage_sur_site', label: 'Passage sur site' }],
                             shantytown: { id: 1 },

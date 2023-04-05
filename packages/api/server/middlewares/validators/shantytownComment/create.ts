@@ -23,9 +23,9 @@ export default [
             return true;
         }),
 
-    body('description')
+    body('comment')
         .trim()
-        .notEmpty().withMessage('La description est obligatoire'),
+        .notEmpty().withMessage('Le message est obligatoire'),
 
     body('targets.mode')
         .customSanitizer((value) => {

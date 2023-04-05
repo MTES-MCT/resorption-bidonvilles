@@ -3,16 +3,13 @@
         <p class="font-bold text-lg">Partager une info</p>
 
         <div class="bg-white p-6">
-            <FormNouveauMessageInputMessage
-                :rows="showFullForm ? 5 : 2"
-                ref="messageInput"
-            />
+            <FormNouveauMessageInputMessage :rows="rows" ref="messageInput" />
             <div
                 class="transition-height h-0 overflow-hidden"
                 ref="formContainer"
             >
                 <FormNouveauMessageInputTags />
-                <FormNouveauMessageInputMode />
+                <FormNouveauMessageInputMode @click="onModeChange" />
                 <FormNouveauMessageInputTarget
                     v-if="values.mode === 'custom'"
                     :departement="town.departement.code"
@@ -59,6 +56,7 @@ import { useTownsStore } from "@/stores/towns.store";
 import schema from "./FicheSiteJournalFormNouveauMessage.schema";
 import router from "@/helpers/router";
 import getHiddenHeight from "@/utils/getHiddenHeight";
+import isDeepEqual from "@/utils/isDeepEqual";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
 import FormNouveauMessageInputMessage from "./inputs/FormNouveauMessageInputMessage.vue";
@@ -71,38 +69,68 @@ const props = defineProps({
 });
 const { town } = toRefs(props);
 
+const initialValues = {
+    comment: "",
+    tags: [],
+    mode: "public",
+    target: {
+        organizations: [],
+        users: [],
+    },
+};
 const { handleSubmit, setErrors, resetForm, values } = useForm({
     validationSchema: schema,
-    initialValues: {
-        tags: [],
-        mode: "public",
-    },
+    initialValues,
 });
 
 const error = ref(null);
 const formContainer = ref(null);
 const messageInput = ref(null);
-const showFullForm = computed(() => {
-    return messageInput.value?.isFocused === true || values.comment?.length > 0;
-});
+const rows = ref(2);
 const isFocused = computed(() => messageInput.value?.isFocused);
-
-watch(showFullForm, () => {
-    if (showFullForm.value === true) {
-        formContainer.value.style.height = `${getHiddenHeight(
-            formContainer.value
-        )}px`;
-    } else {
-        formContainer.value.style.height = `0px`;
-    }
-});
+let timeout;
+const RESET_FORM = true;
 
 watch(isFocused, () => {
-    if (isFocused.value === true || values.comment?.length > 0) {
-        return;
+    if (isFocused.value === true) {
+        openForm();
+    } else {
+        timeout = setTimeout(onBlur, 200);
     }
+});
 
-    setTimeout(resetForm, 100);
+function openForm() {
+    rows.value = 5;
+    formContainer.value.style.height = `${getHiddenHeight(
+        formContainer.value
+    )}px`;
+}
+
+function closeForm(reset = true) {
+    rows.value = 2;
+    formContainer.value.style.height = `0px`;
+
+    if (reset === true) {
+        resetForm();
+    }
+}
+
+function onBlur() {
+    if (isDeepEqual(values, initialValues)) {
+        closeForm();
+    }
+}
+
+function onModeChange() {
+    formContainer.value.style.height = `auto`;
+}
+
+watch(values, () => {
+    if (!isFocused.value && isDeepEqual(values, initialValues)) {
+        closeForm(!RESET_FORM);
+    } else {
+        clearTimeout(timeout);
+    }
 });
 
 const submit = handleSubmit(async (values) => {
@@ -111,7 +139,7 @@ const submit = handleSubmit(async (values) => {
     try {
         const townsStore = useTownsStore();
         await townsStore.addComment(town.value.id, {
-            description: values.comment,
+            comment: values.comment,
             targets: {
                 mode: values.mode,
                 ...values.target,
