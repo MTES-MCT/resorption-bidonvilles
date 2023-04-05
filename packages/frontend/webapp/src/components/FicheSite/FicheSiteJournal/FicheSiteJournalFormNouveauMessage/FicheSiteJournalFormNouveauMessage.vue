@@ -89,6 +89,7 @@ const messageInput = ref(null);
 const rows = ref(2);
 const isFocused = computed(() => messageInput.value?.isFocused);
 let timeout;
+const RESET_FORM = true;
 
 watch(isFocused, () => {
     if (isFocused.value === true) {
@@ -105,10 +106,13 @@ function openForm() {
     )}px`;
 }
 
-function closeForm() {
+function closeForm(reset = true) {
     rows.value = 2;
     formContainer.value.style.height = `0px`;
-    resetForm();
+
+    if (reset === true) {
+        resetForm();
+    }
 }
 
 function onBlur() {
@@ -123,7 +127,7 @@ function onModeChange() {
 
 watch(values, () => {
     if (!isFocused.value && isDeepEqual(values, initialValues)) {
-        closeForm();
+        closeForm(!RESET_FORM);
     } else {
         clearTimeout(timeout);
     }
