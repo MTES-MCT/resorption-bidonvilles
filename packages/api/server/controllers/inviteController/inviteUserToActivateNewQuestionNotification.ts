@@ -22,7 +22,7 @@ export default async (req, res, next) => {
 
     // Send an email to each guest
     try {
-        await sendUsersInvitationToActivateNewQuestionNotification(guests.slice(0, 3));
+        await sendUsersInvitationToActivateNewQuestionNotification(guests);
     } catch (err) {
         res.status(500).send({
             user_message: 'Impossible d\'envoyer les invitations',
