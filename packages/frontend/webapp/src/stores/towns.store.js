@@ -244,11 +244,11 @@ export const useTownsStore = defineStore("towns", () => {
             trackEvent("Site", "Création commentaire", `S${shantytownId}`);
             notificationStore.success(
                 "Publication d'un message",
-                `Votre message est bien enregistré et a été envoyé ${
+                `Votre message est bien enregistré et a été envoyé par mail ${
                     comments.numberOfWatchers > 1
                         ? `aux ${comments.numberOfWatchers} acteurs concernés`
-                        : `à ${comments.numberOfWatchers} acteur concerné`
-                } de votre département par mail`
+                        : `aux acteurs concernés`
+                } de votre département`
             );
         },
         async deleteComment(shantytownId, commentId, reason = "") {
