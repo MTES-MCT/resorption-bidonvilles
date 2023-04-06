@@ -2,7 +2,7 @@
     <LayoutSearch
         :allowFreeSearch="false"
         searchTitle="Rechercher une commune, un département..."
-        searchPlaceholder="Nom d'une commune, d'un département, ..."
+        searchPlaceholder="Nom d'une commune, d'un département..."
         v-model:location="location"
     >
         <TableauDeBord />
