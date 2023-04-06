@@ -1,13 +1,18 @@
 Restez en contact avec la communauté !
 Bonjour,
 L'espace "communauté" de la plateforme Résorption-bidonvilles
-[{{var:webappUrl}}?{{var:utm}}] est en ligne.
+[{{var:webappUrl}}] est en ligne.
 Pour recevoir automatiquement les notifications de publication d'une nouvelle
-question, veuillez le signaler dans votre espace "Mon compte"
-[https://app.resorption-bidonvilles.localhost/mon-compte/abonnements].
-Dans la rubrique "Courriers automatiques", il vous suffit de cocher "Les
-notifications de création d'une question dans la comunauté" et de sauvegarder
-votre choix.
+question, cliquez sur le bouton suivant :
+
+Recevoir les prochaines questions de la communauté par mail
+[{{var:webappUrl}}/mon-compte/abonnements?abonnement=community_new_question&{{var:utm}}]
+
+Vous pouvez également vous rendre dans votre espace "Mon compte"
+[{{var:webappUrl}}/mon-compte/abonnements?{{var:utm}}] puis cocher "Les
+notifications de création d'une question à la communauté
+[{{var:webappUrl}}/mon-compte/abonnements?{{var:utm}}]" dans la rubrique
+"Courriels automatiques [{{var:webappUrl}}/mon-compte/abonnements?{{var:utm}}]"
 
 Cordialement,
 L'équipe Résorption-bidonvilles
@@ -23,7 +28,3 @@ outils méthodologiques sur votre blog [{{var:blogUrl}}]
 Abonnez-vous à la lettre d'info
 [https://email.developpement-durable.gouv.fr/users/subscribe/js_id/5n4i/id/3]
 Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]
-
-Pour ne plus recevoir les courriels envoyés automatiquement, veuillez le
-signaler dans votre espace "Mon compte"
-[{{var:webappUrl}}/mon-compte/abonnements?{{var:utm}}].

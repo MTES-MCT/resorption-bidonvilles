@@ -793,7 +793,7 @@ export default {
             recipient,
             variables: {
                 utm,
-                webappUrl: `${webappUrl}?${utm}`,
+                webappUrl,
                 backUrl,
                 blogUrl,
             },
