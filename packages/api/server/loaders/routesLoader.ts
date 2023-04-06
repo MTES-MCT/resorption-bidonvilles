@@ -182,6 +182,7 @@ export default (app) => {
     app.get(
         '/invite/new-question-notification',
         middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
         controllers.invite.inviteUserToActivateNewQuestionNotification,
     );
     app.post(
