@@ -29,7 +29,13 @@ export default {
     },
     testEmail: process.env.RB_API_TEST_EMAIL || null,
     sendActivitySummary: process.env.RB_API_SEND_ACTIVITY_SUMMARY === '1',
+    sendActionAlerts: process.env.RB_API_SEND_ACTION_ALERTS === '1',
     matomo: {
         token: process.env.RB_API_MATOMO_AUTH_TOKEN,
+    },
+    checkInactiveUsers: process.env.RB_API_CHECK_INACTIVE_USERS === '1',
+    inactivityAlert: {
+        delayBeforeAlert: '6 month',
+        delayBeforeDeactivation: '1 month',
     },
 };

@@ -8,6 +8,7 @@ export default {
         hash: {},
         myTowns: [],
         consultedTowns: [],
+        nearbyTowns: [],
         commentsAreOpen: false,
         commentsScroll: 0,
     },
@@ -32,6 +33,14 @@ export default {
             towns.forEach((town) => {
                 if (!state.hash[town.id]) {
                     state.hash[town.id] = town;
+                }
+            });
+        },
+        SET_NEARBY_TOWNS_ITEMS(state, nearbyTowns) {
+            state.nearbyTowns = nearbyTowns;
+            nearbyTowns.forEach((nearbyTown) => {
+                if (!state.hash[nearbyTown.id]) {
+                    state.hash[nearbyTown.id] = nearbyTown;
                 }
             });
         },
@@ -90,6 +99,15 @@ export default {
             }
         },
 
+        async setNearbyTowns({ commit, rootState }, towns) {
+            commit("SET_NEARBY_TOWNS_ITEMS", []);
+            const { field_types: fieldTypes } = rootState.config.configuration;
+            commit(
+                "SET_NEARBY_TOWNS_ITEMS",
+                towns.map((s) => enrichShantytown(s, fieldTypes))
+            );
+        },
+
         async fetchShantytown({ state, rootState }, shantytownId) {
             const { field_types: fieldTypes } = rootState.config.configuration;
             // fetch locally first
@@ -121,6 +139,9 @@ export default {
         },
         consultedTowns(state) {
             return state.consultedTowns;
+        },
+        nearbyTowns(state) {
+            return state.nearbyTowns;
         },
     },
 };

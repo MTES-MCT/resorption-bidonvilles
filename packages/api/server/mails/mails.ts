@@ -19,6 +19,7 @@ const invitationUrl = `${webappUrl}/invitation`;
 const idealcoUrl = 'https://www.idealco.fr/campagne/?utm_campaign=g-386-3036d540';
 const surveyUrl = 'https://app.evalandgo.com/s/index.php?id=JTk4ciU5MXAlOUUlQUU%3D&a=JTk2cCU5N2slOUElQjA%3D';
 
+const ACTION_CAMPAIGN = 'action-email';
 const ADMIN_CAMPAIGN = 'admin-email';
 const REQUESTER_CAMPAIGN = 'demandeur-email';
 const USER_CAMPAIGN = 'utilisateur-email';
@@ -36,6 +37,45 @@ type MailOptions = {
 };
 
 export default {
+    sendActionAlertPostshot(recipient, options: MailOptions = {}) {
+        const { preserveRecipient = false, variables } = options;
+
+        const utm = generateTrackingUTM(ACTION_CAMPAIGN, 'postshot');
+
+        return mailService.send('action_alert_postshot', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient),
+                actions: variables.actions,
+                actions_length: variables.actions.length,
+                webappUrl: `${webappUrl}`,
+                backUrl,
+                blogUrl,
+                utm,
+            },
+            preserveRecipient,
+        });
+    },
+
+    sendActionAlertPreshot(recipient, options: MailOptions = {}) {
+        const { preserveRecipient = false, variables } = options;
+
+        const utm = generateTrackingUTM(ACTION_CAMPAIGN, 'preshot');
+        return mailService.send('action_alert_preshot', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient),
+                actions: variables.actions,
+                actions_length: variables.actions.length,
+                webappUrl: `${webappUrl}`,
+                backUrl,
+                blogUrl,
+                utm,
+            },
+            preserveRecipient,
+        });
+    },
+
     /**
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
@@ -203,6 +243,37 @@ export default {
                 backUrl,
                 blogUrl,
                 webappUrl: `${webappUrl}?${utm}`,
+            },
+            preserveRecipient,
+        });
+    },
+
+    sendInactiveUserAlert: (recipient, options: MailOptions = {}) => {
+        const { preserveRecipient = false } = options;
+
+        const utm = generateTrackingUTM(USER_CAMPAIGN, 'inactivity-alert');
+
+        return mailService.send('inactive_user_alert', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient),
+                backUrl,
+                blogUrl,
+                webappUrl: `${webappUrl}?${utm}`,
+            },
+            preserveRecipient,
+        });
+    },
+
+    sendInactiveUserDeactivationAlert: (recipient, options: MailOptions = {}) => {
+        const { preserveRecipient = false } = options;
+
+        return mailService.send('inactive_user_deactivation_alert', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient),
+                backUrl,
+                blogUrl,
             },
             preserveRecipient,
         });

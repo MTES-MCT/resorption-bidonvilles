@@ -14,3 +14,9 @@ export function findTown(townId) {
 export function searchTowns(search) {
     return getApi(`/towns?q=${encodeURIComponent(search)}`);
 }
+
+export function findNearby(latitude, longitude) {
+    return getApi(
+        `/towns/findNearby?latitude=${latitude}&longitude=${longitude}`
+    );
+}

@@ -1,0 +1,31 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Votre accès a été désactivé</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Votre accès à <span class="font-italic">Résorption-bidonvilles</span> a été désactivé
+                </mj-text>
+                <mj-include path='common/hello.mjml' />
+                <mj-text mj-class="pb-4">
+                    Suite à une trop longue période d'inactivité, votre accès a été désactivé et ne peut plus être utilisé pour vous connecter à la plateforme.
+                </mj-text>
+                <mj-text mj-class="text-primary text-lg pb-4">
+                    Bonne nouvelle, vous pouvez demander à réactiver votre compte !
+                </mj-text>
+                <mj-text>
+                    Nous vous invitons à prendre contact avec l'équipe Résorption-bidonvilles pour formuler votre demande : <a class="link" href="mailto:contact@resorption-bidonvilles.beta.gouv.fr">contact@resorption-bidonvilles.beta.gouv.fr</a>.
+                </mj-text>
+                <mj-text>N° de téléphone de la hotline: +33 1 40 81 95 39</mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>
