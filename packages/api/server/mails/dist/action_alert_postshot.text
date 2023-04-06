@@ -1,4 +1,4 @@
-Avez-vous mis à jour vos actions et indicateurs ?
+C'est l'heure de faire le bilan de vos actions
 Bonjour {{var:recipientName}},
 {% if var:actions_length > 1 %}
 Vous êtes déclaré(e) sur la plateforme comme intervenant sur les
@@ -8,8 +8,12 @@ Vous êtes déclaré(e) sur la plateforme comme intervenant sur l'action suivant
 {% endif %}{% for action in var:actions %}
 {{action.name}} [{{var:webappUrl}}/action/{{action.id}}?{{var:utm}}]
 {% endfor %}
-Cette liste et les indicateurs liés sont-ils à jour ? Si ce n'est pas le cas,
-pensez à mettre à jour la situation de vos actions sur la plateforme !
+Cette liste et les indicateurs liés sont-ils à jour ?
+Si ce n'est pas le cas, nous vous invitons à vous connecter dès maintenant à la
+plateforme Résorption-bidonvilles [{{var:webappUrl}}?{{var:utm}}] pour partager
+et valoriser les résultats de vos actions pour l'année écoulée. Ces informations
+sont indispensables pour le suivi et la poursuite des actions de résorption des
+bidonvilles.
 
 Cordialement,
 L'équipe Résorption-bidonvilles

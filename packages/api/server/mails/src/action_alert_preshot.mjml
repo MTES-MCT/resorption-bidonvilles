@@ -1,6 +1,6 @@
 <mjml>
     <mj-head>
-        <mj-title>[Résorption-bidonvilles] - Renseignez vos actions avant la fin d'année</mj-title>
+        <mj-title>[Résorption-bidonvilles] - Bilan de vos actions</mj-title>
         <mj-include path='common/attributes.mjml' />
         <mj-include path='common/styles.mjml' />
     </mj-head>
@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Avez-vous mis à jour vos actions et indicateurs ?
+                    C'est l'heure de faire le bilan de vos actions
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-raw>{% if var:actions_length > 1 %}</mj-raw>
@@ -27,7 +27,8 @@
                 <mj-text><a href="{{var:webappUrl}}/action/{{action.id}}?{{var:utm}}" class="link" target="_blank" rel="noopener noreferrer">{{action.name}}</a></mj-text>
                 <mj-raw>{% endfor %}</mj-raw>
 
-                <mj-text mj-class='pt-4'>Cette liste et les indicateurs liés sont-ils à jour ? Si ce n'est pas le cas, pensez à mettre à jour la situation de vos actions sur la plateforme avant la fin de l'année !</mj-text>
+                <mj-text mj-class='pt-4'>Cette liste et les indicateurs liés sont-ils à jour ?</mj-text>
+                <mj-text mj-class='pt-2'>Si ce n'est pas le cas, nous vous invitons à vous connecter dès maintenant à la plateforme <a href="{{var:webappUrl}}?{{var:utm}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> pour partager et valoriser les résultats de vos actions pour l'année écoulée. Ces informations sont indispensables pour le suivi et la poursuite des actions de résorption des bidonvilles.</mj-text>
             </mj-column>
         </mj-section>
 
