@@ -40,7 +40,19 @@ function checkStatus(action, status) {
 }
 
 function checkSearch(action, search) {
-    return !!action.name?.match(new RegExp(search, "ig"));
+    return (
+        !!action.name?.match(new RegExp(search, "ig")) ||
+        !!action.operators?.find(
+            ({ name, abbreviation }) =>
+                name.match(new RegExp(search, "ig")) ||
+                (abbreviation && abbreviation.match(new RegExp(search, "ig")))
+        ) ||
+        !!action.managers?.find(
+            ({ name, abbreviation }) =>
+                name.match(new RegExp(search, "ig")) ||
+                (abbreviation && abbreviation.match(new RegExp(search, "ig")))
+        )
+    );
 }
 
 function checkLocation(action, filters) {
