@@ -41,12 +41,4 @@ export default [
             feature: "list",
         },
     },
-    {
-        id: "covid_comments",
-        label: "Commentaires Covid-19",
-        permission: {
-            entity: "covid_comment",
-            feature: "list",
-        },
-    },
 ];
