@@ -1,6 +1,7 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
+import chaiSubset from 'chai-subset';
 
 import validator from 'validator';
 import shantytownModel from '#server/models/shantytownModel';
@@ -9,10 +10,13 @@ import userModel from '#server/models/userModel';
 import mails from '#server/mails/mails';
 import permissionUtils from '#server/utils/permission';
 import ServiceError from '#server/errors/ServiceError';
+import { serialized as fakeUser } from '#test/utils/user';
 import deleteCommentService from './deleteComment';
+
 
 const { expect } = chai;
 chai.use(sinonChai);
+chai.use(chaiSubset);
 
 describe('services/shantytown', () => {
     describe('deleteComment()', () => {
@@ -37,13 +41,13 @@ describe('services/shantytown', () => {
             stubs = {
                 shantytownModelfindOne: sinon.stub(shantytownModel, 'findOne'),
                 userModelFindOne: sinon.stub(userModel, 'findOne'),
+                userModelGetNationalAdmins: sinon.stub(userModel, 'getNationalAdmins'),
                 shantytownCommentModeldeleteComment: sinon.stub(shantytownCommentModel, 'deleteComment'),
                 can: sinon.stub(permissionUtils, 'can'),
                 do: sinon.stub(),
                 on: sinon.stub(),
                 trim: sinon.stub(validator, 'trim'),
                 sendUserCommentDeletion: sinon.stub(mails, 'sendUserCommentDeletion'),
-
             };
             stubs.can.returns({
                 do: stubs.do,
@@ -150,15 +154,26 @@ describe('services/shantytown', () => {
             expect(responseError.code).to.be.eql('delete_failed');
         });
 
-        it('envoie une notification de suppression du message ', async () => {
+        it('envoie une notification de suppression du message', async () => {
             stubs.on.returns(true);
+
+            const nationalAdmins = [fakeUser(), fakeUser()];
+            stubs.userModelGetNationalAdmins.resolves(nationalAdmins);
+
             try {
                 await deleteCommentService(user, shantytownId, commentId, deletionMessage);
             } catch (error) {
                 // ignore
             }
-            // eslint-disable-next-line no-unused-expressions
+
             expect(stubs.sendUserCommentDeletion).to.have.been.calledOnce;
+
+            const { args } = stubs.sendUserCommentDeletion.getCall(0);
+            expect(args[1]).to.have.property('bcc');
+            expect(args[1].bcc).to.have.lengthOf(nationalAdmins.length);
+            expect(args[1]).to.containSubset({
+                bcc: nationalAdmins,
+            });
         });
     });
 });

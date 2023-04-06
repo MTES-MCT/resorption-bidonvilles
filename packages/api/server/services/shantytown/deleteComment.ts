@@ -58,6 +58,7 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
 
     try {
         if (!isOwner) {
+            const nationalAdmins = await userModel.getNationalAdmins();
             await mails.sendUserCommentDeletion(author, {
                 variables: {
                     town: {
@@ -72,6 +73,7 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
                     },
                     message,
                 },
+                bcc: nationalAdmins,
             });
         }
     } catch (error) {

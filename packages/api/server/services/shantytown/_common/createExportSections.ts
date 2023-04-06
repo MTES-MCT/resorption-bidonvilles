@@ -185,10 +185,6 @@ export default async (user, data, properties, closedTowns, closingSolutions) => 
         commentProps.push(properties.comments);
     }
 
-    if (options.indexOf('covid_comments') !== -1) {
-        commentProps.push(properties.covidComments);
-    }
-
     if (commentProps.length > 0) {
         sections.push({
             title: 'Commentaires',

@@ -1,6 +1,6 @@
 import actionModel from '#server/models/actionModel/index';
 import ServiceError from '#server/errors/ServiceError';
-import Action, { Comment } from '#server/models/actionModel/fetch/Action.d';
+import Action from '#server/models/actionModel/fetch/Action.d';
 import sendMattermostNotification from './createComment.sendMattermostNotification';
 import sendMailNotifications from './createComment.sendMailNotifications';
 
@@ -8,7 +8,7 @@ type ActionCommentInput = {
     description: string
 };
 
-export default async (authorId: number, action: Action, commentInput: ActionCommentInput): Promise<Comment> => {
+export default async (authorId: number, action: Action, commentInput: ActionCommentInput): Promise<any> => {
     let comment;
     try {
         comment = await actionModel.createComment(action.id, {
@@ -19,14 +19,21 @@ export default async (authorId: number, action: Action, commentInput: ActionComm
         throw new ServiceError('write_fail', error);
     }
 
+    // on tente d'envoyer une notification mattermost
     try {
-        await Promise.all([
-            sendMattermostNotification(action, comment),
-            sendMailNotifications(action, comment),
-        ]);
+        await sendMattermostNotification(action, comment);
     } catch (error) {
+    // ignore
+    }
+
+    // on tente d'envoyer un mail aux acteurs concernés
+    let numberOfObservers = 0;
+    try {
+        numberOfObservers = await sendMailNotifications(action, comment);
+    } catch (error) {
+
         // ignore
     }
 
-    return comment;
+    return { comment, numberOfObservers };
 };

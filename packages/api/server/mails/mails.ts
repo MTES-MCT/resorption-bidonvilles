@@ -33,7 +33,12 @@ type MailOptions = {
         email: string,
         first_name: string,
         last_name: string
-    }
+    },
+    bcc?: {
+        email: string,
+        first_name: string,
+        last_name: string
+    }[]
 };
 
 export default {
@@ -528,7 +533,7 @@ export default {
      * @param {Object} options
      */
     sendUserCommentDeletion: (recipient, options: MailOptions = {}) => {
-        const { variables, preserveRecipient } = options;
+        const { variables, preserveRecipient, bcc } = options;
 
         return mailService.send('user_comment_deletion', {
             recipient,
@@ -540,6 +545,7 @@ export default {
                 blogUrl,
             },
             preserveRecipient,
+            bcc,
         });
     },
 

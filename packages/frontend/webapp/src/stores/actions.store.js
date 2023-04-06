@@ -182,16 +182,29 @@ export const useActionsStore = defineStore("actions", () => {
         },
         async addComment(actionId, comment) {
             const notificationStore = useNotificationStore();
-            const newComment = await addComment(actionId, comment);
+            const response = await addComment(actionId, comment);
 
             if (hash.value[actionId]) {
-                hash.value[actionId].comments.unshift(newComment);
+                hash.value[actionId].comments.unshift(response.comment);
             }
 
             notificationStore.success(
                 "Publication d'un message",
-                "Votre message est bien enregistré et a été envoyé aux acteurs concernés de votre département par mail"
+                getCommentNotificationMessage(response.numberOfObservers)
             );
         },
     };
 });
+
+function getCommentNotificationMessage(numberOfObservers) {
+    if (numberOfObservers === 1) {
+        return "Votre message est bien enregistré et a été envoyé par mail aux acteurs concernés de votre département";
+    }
+
+    if (numberOfObservers > 1) {
+        return `Votre message est bien enregistré et a été envoyé par mail aux ${numberOfObservers} acteurs concernés de votre département`;
+    }
+
+    // cas où le nombre d'observateurs est à 0 (si l'envoi des mails a échoué côté API)
+    return "Votre message est bien enregistré mais nous n'avons pas pu envoyer de notification par mail aux acteurs concernés";
+}
