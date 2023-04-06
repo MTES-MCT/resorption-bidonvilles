@@ -2,8 +2,9 @@ import * as Sentry from '@sentry/node';
 import loaders from '#server/loaders';
 import config from '#server/config';
 
-
-const { port, sendActivitySummary, sendActionAlerts } = config;
+const {
+    port, sendActivitySummary, sendActionAlerts, checkInactiveUsers,
+} = config;
 
 const sentryContextHandlers = (app) => {
     app.use(Sentry.Handlers.requestHandler());
@@ -57,7 +58,11 @@ export default {
             await agenda.start();
 
             if (sendActivitySummary) {
-                await agenda.every('00 00 07 * * 1', 'send_activity_summary'); // every monday at 7AM
+                await agenda.every('0 0 7 * * 1', 'send_activity_summary'); // every monday at 7AM
+            }
+
+            if (checkInactiveUsers) {
+                await agenda.every('0 0 6 * * *', 'inactive_users_check'); // every day at 6AM
             }
 
             if (sendActionAlerts) {

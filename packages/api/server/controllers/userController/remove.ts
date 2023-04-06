@@ -22,7 +22,7 @@ export default async (req, res, next) => {
     }
 
     try {
-        await userModel.deactivate(req.params.id);
+        await userModel.deactivate([req.params.id]);
         return res.status(200).send(await userModel.findOne(req.params.id));
     } catch (error) {
         res.status(500).send({

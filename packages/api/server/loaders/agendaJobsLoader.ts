@@ -4,6 +4,7 @@ import moment from 'moment';
 import activitySummary from '#server/services/activitySummary';
 import sendActionAlert from '#server/services/action/sendAlert';
 import config from '#server/config';
+import userService from '#server/services/user/index';
 
 const {
     sendUserDemoInvitation,
@@ -12,7 +13,7 @@ const {
     sendUserShare,
     sendUserReview,
 } = mailUtils;
-const { sendActivitySummary, sendActionAlerts } = config;
+const { sendActivitySummary, sendActionAlerts, checkInactiveUsers } = config;
 
 export default (agenda) => {
     agenda.define(
@@ -39,6 +40,16 @@ export default (agenda) => {
             if (sendActivitySummary) {
                 const now = moment().utcOffset(2).subtract(7, 'days');
                 await activitySummary.sendAll(now.date(), now.month(), now.year());
+            }
+        },
+    );
+
+    agenda.define(
+        'inactive_users_check',
+        async () => {
+            if (checkInactiveUsers) {
+                await userService.sendInactiveUserAlerts();
+                await userService.deactivateInactiveUsers();
             }
         },
     );
