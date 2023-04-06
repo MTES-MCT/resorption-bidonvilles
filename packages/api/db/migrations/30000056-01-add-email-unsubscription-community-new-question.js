@@ -22,14 +22,16 @@ module.exports = {
                         transaction,
                     },
                 ),
-                queryInterface.sequelize.query(
-                    `ALTER TABLE user_email_unsubscriptions
-                        ALTER COLUMN email_subscription TYPE enum_user_email_subscriptions_email_subscription_new
-                        USING (email_subscription::text::enum_user_email_subscriptions_email_subscription_new)`,
-                    {
-                        transaction,
-                    },
-                ),
+            ]);
+            await queryInterface.sequelize.query(
+                `ALTER TABLE user_email_unsubscriptions
+                    ALTER COLUMN email_subscription TYPE enum_user_email_subscriptions_email_subscription_new
+                    USING (email_subscription::text::enum_user_email_subscriptions_email_subscription_new)`,
+                {
+                    transaction,
+                },
+            );
+            await Promise.all([
                 queryInterface.sequelize.query(
                     'DROP TYPE enum_user_email_subscriptions_email_subscription',
                     {
