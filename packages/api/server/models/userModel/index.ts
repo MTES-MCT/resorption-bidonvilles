@@ -19,7 +19,6 @@ import getHistory from './getHistory';
 import getLocationWatchers from './getLocationWatchers';
 import getNationalAdmins from './_common/getNationalAdmins';
 import getShantytownWatchers from './getShantytownWatchers';
-import getSimplifiedActiveUserEmails from './getSimplifiedActiveUserEmails';
 import getActionObservers from './getActionObservers';
 import isTracked from './isTracked';
 import listExport from './listExport';
@@ -49,7 +48,6 @@ export default {
     getLocationWatchers,
     getNationalAdmins,
     getShantytownWatchers,
-    getSimplifiedActiveUserEmails,
     getActionObservers,
     isTracked,
     listExport,

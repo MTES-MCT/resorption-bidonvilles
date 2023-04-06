@@ -1,5 +1,8 @@
 import mailsUtils from '#server/mails/mails';
 import userModel from '#server/models/userModel';
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+
 
 const { sendUserInvitationToActivateNewQuestionNotification } = mailsUtils;
 async function sendUsersInvitationToActivateNewQuestionNotification(guests) {
@@ -18,10 +21,20 @@ async function sendUsersInvitationToActivateNewQuestionNotification(guests) {
 }
 
 export default async (req, res, next) => {
-    const guests = await userModel.getSimplifiedActiveUserEmails();
-
     // Send an email to each guest
     try {
+        const guests = await sequelize.query(
+            `SELECT
+                user_id,
+                email
+            FROM
+                users
+            WHERE
+                fk_status = 'active'`,
+            {
+                type: QueryTypes.SELECT,
+            },
+        );
         await sendUsersInvitationToActivateNewQuestionNotification(guests);
     } catch (err) {
         res.status(500).send({
