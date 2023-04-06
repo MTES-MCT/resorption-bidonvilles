@@ -165,6 +165,7 @@ describe('services/shantytownComment', () => {
                 expect(response).to.be.eql({
                     regular: output.commentList,
                     covid: output.covidCommentList,
+                    numberOfWatchers: output.watchers.length,
                 });
             });
         });

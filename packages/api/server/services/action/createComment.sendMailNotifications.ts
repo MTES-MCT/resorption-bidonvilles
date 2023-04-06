@@ -2,7 +2,7 @@ import mails from '#server/mails/mails';
 import userModel from '#server/models/userModel/index';
 import Action, { Comment } from '#server/models/actionModel/fetch/Action.d';
 
-export default async (action: Action, comment: Comment): Promise<void> => {
+export default async (action: Action, comment: Comment): Promise<number> => {
     const observers = await userModel.getActionObservers(
         action.id,
         comment.id,
@@ -21,4 +21,5 @@ export default async (action: Action, comment: Comment): Promise<void> => {
             )),
         );
     }
+    return observers.length;
 };
