@@ -5,7 +5,6 @@ import express from 'express';
 import middlewares from '#server/middlewares';
 import controllersFn from '#server/controllers';
 import validators from '#server/middlewares/validators';
-import userModel from '#server/models/userModel/index';
 
 const controllers = controllersFn();
 
