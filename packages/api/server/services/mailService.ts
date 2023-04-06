@@ -20,7 +20,7 @@ export default {
      */
     send(templateName, options) {
         const {
-            recipient, preserveRecipient = true, variables, replyTo = null,
+            recipient, preserveRecipient = true, variables, replyTo = null, bcc = [],
         } = options;
 
         let finalRecipient = recipient;
@@ -30,6 +30,7 @@ export default {
                 first_name: 'Service',
                 last_name: 'Qualité',
             };
+            bcc.splice(0, bcc.length);
         }
 
         const htmlContent = fs.readFileSync(path.join(__dirname, '../mails/dist', `${templateName}.html`));
@@ -52,6 +53,7 @@ export default {
                 },
             },
             replyTo,
+            bcc,
         );
     },
 };

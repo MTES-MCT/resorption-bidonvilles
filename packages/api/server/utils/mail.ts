@@ -21,7 +21,7 @@ export default {
         };
     },
 
-    send(user, mailContent, replyTo = null) {
+    send(user, mailContent, replyTo = null, bcc = []) {
         if (mailjet === null) {
             return Promise.resolve(true);
         }
@@ -47,6 +47,10 @@ export default {
                                     : undefined,
                             },
                         ],
+                        Bcc: bcc?.length > 0 ? bcc.map(r => ({
+                            Email: r.email,
+                            Name: `${r.last_name.toUpperCase()} ${r.first_name}`,
+                        })) : undefined,
                     }, mailContent),
                 ],
             });
