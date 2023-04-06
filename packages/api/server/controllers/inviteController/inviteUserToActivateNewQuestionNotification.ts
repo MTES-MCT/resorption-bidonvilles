@@ -25,9 +25,7 @@ export default async (req, res, next) => {
         await sendUsersInvitationToActivateNewQuestionNotification(guests.slice(0, 3));
     } catch (err) {
         res.status(500).send({
-            error: {
-                user_message: 'Impossible d\'envoyer les invitations',
-            },
+            user_message: 'Impossible d\'envoyer les invitations',
         });
         return next(err);
     }
