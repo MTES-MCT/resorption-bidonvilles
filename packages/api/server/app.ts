@@ -61,8 +61,8 @@ export default {
             }
 
             if (sendActionAlerts) {
-                await agenda.every('0 0 5 15 12 *', 'send_action_alert_preshot'); // tous les 15 décembre
-                await agenda.every('0 0 5 20 1 *', 'send_action_alert_postshot'); // tous les 20 janvier
+                await agenda.every('0 0 5 15 12 *', 'send_action_alert_preshot'); // tous les 15 décembre at 5AM
+                await agenda.every('0 0 5 20 1 *', 'send_action_alert_postshot'); // tous les 20 janvier at 5AM
             }
 
             // eslint-disable-next-line no-console
