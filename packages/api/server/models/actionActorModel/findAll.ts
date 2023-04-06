@@ -46,7 +46,7 @@ export default async (year: number): Promise<ActionActor[]> => {
         ) t
         LEFT JOIN actions ON t.fk_action = actions.action_id
         LEFT JOIN users ON t.fk_user = users.user_id
-        WHERE actions.ended_at IS NULL OR (actions.started_at < :maxStartedAt AND actions.ended_at >= :minEndedAt)
+        WHERE actions.started_at < :maxStartedAt AND (actions.ended_at IS NULL OR actions.ended_at >= :minEndedAt)
         `,
         {
             type: QueryTypes.SELECT,
