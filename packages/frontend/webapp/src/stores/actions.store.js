@@ -187,7 +187,6 @@ export const useActionsStore = defineStore("actions", () => {
             if (hash.value[actionId]) {
                 hash.value[actionId].comments.unshift(response.comment);
             }
-            console.log(response);
 
             notificationStore.success(
                 "Publication d'un message",
