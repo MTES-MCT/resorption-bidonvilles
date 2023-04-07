@@ -40,6 +40,7 @@ import InputWrapper from "./utils/InputWrapper.vue";
 import InputError from "./utils/InputError.vue";
 import Input from "./Input.vue";
 import Icon from "../Icon.vue";
+import debounce from "../../utils/debounce";
 
 const props = defineProps({
     name: String,
@@ -113,24 +114,19 @@ async function onInput({ target }) {
         return;
     }
 
-    let promise;
+    await debouncedGetResults(value);
+}
+
+const debouncedGetResults = debounce(getResults, 300);
+
+async function getResults(value) {
     try {
         isLoading.value = true;
-        promise = fn.value(value);
-        lastPromise.value = promise;
-        const resultsTmp = await promise;
-        if (lastPromise.value === promise) {
-            rawResults.value = resultsTmp;
-        }
+        rawResults.value = await fn.value(value);
     } catch (e) {
-        if (lastPromise.value === promise) {
-            error.value = true;
-        }
+        error.value = true;
     }
-
-    if (lastPromise.value === promise) {
-        isLoading.value = false;
-    }
+    isLoading.value = false;
 }
 
 function onBlur(event) {
