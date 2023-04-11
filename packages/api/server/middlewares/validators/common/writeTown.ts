@@ -366,6 +366,7 @@ export default mode => ([
         .exists({ checkNull: true }).bail().withMessage('Le champ "Date du diagnostic" est obligatoire')
         .isDate().bail().withMessage('Le champ "Date du diagnostic" est invalide')
         .toDate()
+        .if((value, { req }) => mode !== 'update' || !req.town || value.getTime() / 1000 !== req.town.censusConductedAt)
         .custom((value, { req }) => {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
