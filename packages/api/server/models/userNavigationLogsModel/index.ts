@@ -1,9 +1,11 @@
-import getAllForSessions from './getAllForSessions';
+import getAllForMobileSessions from './getAllForMobileSessions';
+import getAllForWebappSessions from './getAllForWebappSessions';
 import insertMobile from './insertMobile';
 import insertWebapp from './insertWebapp';
 
 export default {
-    getAllForSessions,
+    getAllForMobileSessions,
+    getAllForWebappSessions,
     insertMobile,
     insertWebapp,
 };

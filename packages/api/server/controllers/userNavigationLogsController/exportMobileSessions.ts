@@ -9,7 +9,7 @@ const ERROR_RESPONSES = {
 export default async (req, res, next) => {
     let logs;
     try {
-        logs = await userNavigationLogs.exportSessions('mobile');
+        logs = await userNavigationLogs.exportMobileSessions();
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({

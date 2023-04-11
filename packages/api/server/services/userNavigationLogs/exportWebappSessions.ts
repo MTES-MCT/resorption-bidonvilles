@@ -19,12 +19,10 @@ function serializeSession(user, session, beginning, duration) {
     };
 }
 
-export default async (domain: 'webapp' | 'mobile'): Promise<Array<Object>> => {
+export default async (): Promise<Array<Object>> => {
     let logs;
     try {
-        logs = await userNavigationLogsModel.getAllForSessions(
-            domain,
-        );
+        logs = await userNavigationLogsModel.getAllForWebappSessions();
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
