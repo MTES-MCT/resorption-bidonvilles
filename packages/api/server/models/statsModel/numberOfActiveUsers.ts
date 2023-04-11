@@ -8,11 +8,9 @@ export default async () => {
         FROM users
         LEFT JOIN localized_organizations AS organizations ON users.fk_organization = organizations.organization_id
         WHERE
-            users.fk_status='active'
+            users.last_access IS NOT NULL
             AND
             to_be_tracked = TRUE
-            AND
-            organizations.active = TRUE
         `,
         {
             type: QueryTypes.SELECT,
