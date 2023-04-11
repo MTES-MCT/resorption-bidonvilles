@@ -8,7 +8,7 @@ export default function debounce(fn, delay = 300) {
             clearTimeout(timer);
         }
 
-        return new Promise((success, failure) => {
+        const promise = new Promise((success, failure) => {
             previousFailure = failure;
 
             timer = setTimeout(() => {
@@ -21,5 +21,11 @@ export default function debounce(fn, delay = 300) {
                 previousFailure = null;
             }, delay);
         });
+        promise.abort = function () {
+            clearTimeout(timer);
+            previousFailure = null;
+        };
+
+        return promise;
     };
 }
