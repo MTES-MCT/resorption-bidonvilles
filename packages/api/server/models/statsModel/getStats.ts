@@ -2,6 +2,7 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import permissionUtils from '#server/utils/permission';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
+import { WhereClauseGroup } from '#server/models/_common/types/WhereClauseGroup';
 import decomposeForDiagramm from './_common/decomposeForDiagramm';
 import getArrayOfDates from './_common/getArrayOfDates';
 
@@ -9,7 +10,7 @@ import getArrayOfDates from './_common/getArrayOfDates';
 const { where: pWhere } = permissionUtils;
 
 export default async (user, location) => {
-    const permissionWhereClauseGroup:any = pWhere().can(user).do('list', 'shantytown');
+    const permissionWhereClauseGroup:WhereClauseGroup = pWhere().can(user).do('list', 'shantytown');
     const permissionWhereClause = stringifyWhereClause('shantytowns', [permissionWhereClauseGroup], { userId: user.id });
 
     const replacements = {
@@ -22,6 +23,7 @@ export default async (user, location) => {
 
     let where = '';
     let shantytownWhere = '';
+
     switch (location.type) {
         case 'nation':
             break;
@@ -29,11 +31,22 @@ export default async (user, location) => {
             where = `WHERE lo.region_code = '${location.region.code}'`;
             shantytownWhere = `WHERE regions.code = '${location.region.code}'`;
             break;
-        default:
+        case 'departement':
             where = `WHERE lo.departement_code = '${location.departement.code}'`;
             shantytownWhere = `WHERE departements.code = '${location.departement.code}'`;
             break;
+        case 'epci':
+            where = `WHERE lo.departement_code = '${location.departement.code}'`;
+            shantytownWhere = `WHERE epci.code = '${location.epci.code}'`;
+            break;
+        case 'city':
+            where = `WHERE lo.departement_code = '${location.departement.code}'`;
+            shantytownWhere = `WHERE cities.code = '${location.city.code}'`;
+            break;
+        default:
+            break;
     }
+
     if (shantytownWhere.length > 0 && permissionWhereClause !== '()') {
         shantytownWhere += ` AND ${permissionWhereClause}`;
     } else if (permissionWhereClause !== '()') {
