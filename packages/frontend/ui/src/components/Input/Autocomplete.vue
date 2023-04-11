@@ -40,6 +40,7 @@ import InputWrapper from "./utils/InputWrapper.vue";
 import InputError from "./utils/InputError.vue";
 import Input from "./Input.vue";
 import Icon from "../Icon.vue";
+import debounce from "../../utils/debounce";
 
 const props = defineProps({
     name: String,
@@ -88,6 +89,7 @@ const selectedItem = ref(value.value ? {
 const focusedItemIndex = ref(null);
 const error = ref(false);
 let lastEvent = undefined;
+let callId = 0;
 const isDisabled = computed(() => {
     return disabled.value === true || isSubmitting.value === true;
 });
@@ -109,28 +111,40 @@ async function onInput({ target }) {
 
     error.value = false;
     if (value.length < 2) {
-        isLoading.value = false;
+        abort();
         return;
     }
 
-    let promise;
+    lastPromise.value = debouncedGetResults(value, callId);
+}
+
+async function getResults(value, originalCallId) {
     try {
         isLoading.value = true;
-        promise = fn.value(value);
-        lastPromise.value = promise;
-        const resultsTmp = await promise;
-        if (lastPromise.value === promise) {
-            rawResults.value = resultsTmp;
+        const results = await fn.value(value);
+
+        if (callId === originalCallId) {
+            rawResults.value = results;
         }
     } catch (e) {
-        if (lastPromise.value === promise) {
-            error.value = true;
-        }
+        error.value = true;
     }
 
-    if (lastPromise.value === promise) {
-        isLoading.value = false;
+    isLoading.value = false;
+    lastPromise.value = null;
+}
+
+const debouncedGetResults = debounce(getResults, 300);
+
+function abort() {
+    if (lastPromise.value !== null) {
+        lastPromise.value.abort();
     }
+
+    callId++;
+    isLoading.value = false;
+    error.value = false;
+    lastPromise.value = null;
 }
 
 function onBlur(event) {
@@ -142,9 +156,7 @@ function onBlur(event) {
     // (en effet, réinitialiser rawResults provoque la disparaître des résultats)
     timeout = setTimeout(() => {
         rawResults.value = [];
-        isLoading.value = false;
-        error.value = false;
-        lastPromise.value = null;
+        abort();
         if (selectedItem.value === null) {
             if (allowFreeSearch.value === true) {
                 sendEvent({
@@ -198,9 +210,7 @@ function selectItem(item) {
 
 function clear() {
     rawResults.value = [];
-    isLoading.value = false;
-    lastPromise.value = null;
-    selectedItem.value = null;
+    abort();
     handleChange(undefined);
     sendEvent(undefined);
     input.value.setValue("");
