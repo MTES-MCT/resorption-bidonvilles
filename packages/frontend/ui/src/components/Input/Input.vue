@@ -174,10 +174,13 @@ export default {
         blur() {
             this.$refs.input.blur();
         },
-        setValue(str) {
+        setValue(str, silentMode = false) {
             this.$refs.input.value = str;
             this.currentValue = str;
-            this.$emit('changed', this.currentValue);
+
+            if (silentMode !== true) {
+                this.$emit('changed', this.currentValue);
+            }
         }
     }
 };

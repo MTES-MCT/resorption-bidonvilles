@@ -2,20 +2,36 @@
     <FormSection id="indicateurs">
         <template v-slot:title>Indicateurs</template>
         <FormActionIndicateursInfo />
-        <InputIndicateursAnnuels />
-        <InputIndicateursScolaires
-            v-if="values.topics && values.topics.includes('school')"
+        <InputIndicateurs
+            name="indicateurs"
+            :minYear="minYear"
+            :maxYear="maxYear"
+            :topics="topics"
         />
     </FormSection>
 </template>
 
 <script setup>
-import { useFormValues } from "vee-validate";
+import { computed } from "vue";
+import { useFieldValue } from "vee-validate";
 import FormSection from "@/components/FormSection/FormSection.vue";
 
-import InputIndicateursAnnuels from "../inputs/FormDeclarationActionInputIndicateursAnnuels.vue";
-import InputIndicateursScolaires from "../inputs/FormDeclarationActionInputIndicateursScolaires.vue";
+import InputIndicateurs from "@/components/InputIndicateurs/InputIndicateurs.vue";
 import FormActionIndicateursInfo from "./FormDeclarationActionIndicateursInfo.vue";
 
-const values = useFormValues();
+const topics = useFieldValue("topics");
+
+const startedAt = useFieldValue("started_at");
+const minYear = computed(() => {
+    return startedAt.value
+        ? startedAt.value.getFullYear()
+        : new Date().getFullYear();
+});
+
+const endedAt = useFieldValue("ended_at");
+const maxYear = computed(() => {
+    return endedAt.value
+        ? Math.min(endedAt.value.getFullYear(), new Date().getFullYear())
+        : new Date().getFullYear();
+});
 </script>

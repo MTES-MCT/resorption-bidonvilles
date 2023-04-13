@@ -25,16 +25,8 @@
 </template>
 
 <script setup>
-import {
-    defineProps,
-    toRefs,
-    toRef,
-    computed,
-    defineExpose,
-    ref,
-    watch,
-} from "vue";
-import { useForm, useFieldValue } from "vee-validate";
+import { defineProps, toRefs, computed, defineExpose, ref, watch } from "vue";
+import { useForm, useFieldValue, useFormErrors } from "vee-validate";
 import { useActionsStore } from "@/stores/actions.store";
 import { useUserStore } from "@/stores/user.store";
 import { useConfigStore } from "@/stores/config.store";
@@ -66,34 +58,17 @@ const { action } = toRefs(props);
 
 const userStore = useUserStore();
 
-const dateIndicateurs = getDateIndicateurs(action.value?.started_at);
-const initialValues = {
-    ...formatFormAction(
-        dateIndicateurs,
-        action.value || {
-            location_departement: userStore.departementsForActions[0]?.code,
-        }
-    ),
-    date_indicateurs: dateIndicateurs,
-};
-
 const mode = computed(() => {
     return action.value === null ? "create" : "edit";
 });
 const validationSchema = schemaFn(mode.value);
 const { handleSubmit, values, errors, setErrors } = useForm({
     validationSchema,
-    initialValues,
-});
-
-function getDateIndicateurs(startedAt) {
-    return startedAt && new Date(startedAt).getFullYear() !== 2023
-        ? new Date("December 31, 2022 00:00:00")
-        : new Date();
-}
-
-watch(toRef(values, "started_at"), () => {
-    values.date_indicateurs = getDateIndicateurs(values.started_at);
+    initialValues: formatFormAction(
+        action.value || {
+            location_departement: userStore.departementsForActions[0]?.code,
+        }
+    ),
 });
 
 const originalValues = formatValuesForApi(values);
@@ -196,7 +171,6 @@ function formatValuesForApi(v) {
         ...{
             started_at: formatFormDate(v.started_at),
             ended_at: formatFormDate(v.ended_at),
-            date_indicateurs: v.date_indicateurs,
             managers: v.managers.users.map(({ id }) => id),
             operators: v.operators.users.map(({ id }) => id),
             location_eti_citycode: citycode,
@@ -207,6 +181,12 @@ function formatValuesForApi(v) {
         },
     };
 }
+
+watch(useFormErrors(), () => {
+    if (Object.keys(errors.value).length === 0) {
+        error.value = null;
+    }
+});
 
 defineExpose({
     submit: handleSubmit(async (sentValues) => {

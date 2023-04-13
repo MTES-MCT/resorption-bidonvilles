@@ -15,5 +15,5 @@ export default async (id: number, data: ActionUpdateInput, transaction: Transact
 
     // update
     await updateAction(id, data, transaction);
-    await insertAsideData(id, data.updated_by, data.date_indicateurs, data, transaction);
+    await insertAsideData(id, data.updated_by, data, transaction);
 };
