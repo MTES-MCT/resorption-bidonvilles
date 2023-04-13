@@ -6,7 +6,7 @@ import insertAsideData from './insertAsideData';
 
 export default async (data: ActionCreateInput, transaction: Transaction): Promise<number> => {
     const actionId = await insertAction(data, transaction);
-    await insertAsideData(actionId, data.created_by, data.date_indicateurs, data, transaction);
+    await insertAsideData(actionId, data.created_by, data, transaction);
 
     return actionId;
 };

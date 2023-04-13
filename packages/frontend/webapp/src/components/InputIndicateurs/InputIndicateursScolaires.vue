@@ -12,45 +12,52 @@
 
         <IndicateursTableRowInputs
             :icon="icons.ecole"
-            :inputs="schoolInputs.mineurs_scolarisables"
+            :data="data"
+            :inputs="inputs.scolarisables"
         >
             <IndicateursLabelMineursScolarisables />
         </IndicateursTableRowInputs>
         <IndicateursTableRowInputs
-            :inputs="schoolInputs.mineurs_en_mediation"
+            :data="data"
+            :inputs="inputs.mediation"
             withoutTopBorder
         >
             <IndicateursLabelMineursEnMediation />
         </IndicateursTableRowInputs>
         <IndicateursTableRowInputs
-            :inputs="schoolInputs.maternelle"
+            :data="data"
+            :inputs="inputs.maternelle"
             withoutTopBorder
         >
             <IndicateursLabelMaternelle />
         </IndicateursTableRowInputs>
         <IndicateursTableRowInputs
-            :inputs="schoolInputs.elementaire"
+            :data="data"
+            :inputs="inputs.elementaire"
             withoutPadding
             withoutTopBorder
         >
             <IndicateursLabelElementaire />
         </IndicateursTableRowInputs>
         <IndicateursTableRowInputs
-            :inputs="schoolInputs.college"
+            :data="data"
+            :inputs="inputs.college"
             withoutPadding
             withoutTopBorder
         >
             <IndicateursLabelCollege />
         </IndicateursTableRowInputs>
         <IndicateursTableRowInputs
-            :inputs="schoolInputs.lycee"
+            :data="data"
+            :inputs="inputs.lycee"
             withoutPadding
             withoutTopBorder
         >
             <IndicateursLabelLycee />
         </IndicateursTableRowInputs>
         <IndicateursTableRowInputs
-            :inputs="schoolInputs.autre"
+            :data="data"
+            :inputs="inputs.autre"
             withoutPadding
             withoutTopBorder
         >
@@ -60,9 +67,9 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { defineProps, toRefs, computed } from "vue";
 import icons from "@/utils/action_metrics_icons";
-import { useFormValues } from "vee-validate";
+import sections from "./sections.list";
 
 import IndicateursRow from "@/components/IndicateursTable/IndicateursRow.vue";
 import IndicateursTableRowInputs from "@/components/IndicateursTable/IndicateursTableRowInputs.vue";
@@ -76,18 +83,18 @@ import IndicateursLabelMaternelle from "@/components/IndicateursLabel/Indicateur
 import IndicateursLabelMineursEnMediation from "@/components/IndicateursLabel/IndicateursLabelMineursEnMediation.vue";
 import IndicateursLabelMineursScolarisables from "@/components/IndicateursLabel/IndicateursLabelMineursScolarisables.vue";
 
-const schoolInputs = {
-    mineurs_scolarisables: [{ name: "scolaire_mineurs_scolarisables" }],
-    mineurs_en_mediation: [{ name: "scolaire_mineurs_en_mediation" }],
-    maternelle: [{ name: "scolaire_nombre_maternelle" }],
-    elementaire: [{ name: "scolaire_nombre_elementaire" }],
-    college: [{ name: "scolaire_nombre_college" }],
-    lycee: [{ name: "scolaire_nombre_lycee" }],
-    autre: [{ name: "scolaire_nombre_autre" }],
-};
-const values = useFormValues();
-
-const year = computed(() => {
-    return values.value.date_indicateurs.getFullYear();
+const inputs = computed(() => {
+    return sections.find(({ id }) => id === "ecole").inputs;
 });
+const props = defineProps({
+    year: {
+        type: Number,
+        required: true,
+    },
+    data: {
+        type: Object,
+        required: true,
+    },
+});
+const { data, year } = toRefs(props);
 </script>

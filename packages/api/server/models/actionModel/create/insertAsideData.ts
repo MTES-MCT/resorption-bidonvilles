@@ -9,12 +9,12 @@ import insertPermissions from './insertPermissions';
 import insertShantytowns from './insertShantytowns';
 import insertTopics from './insertTopics';
 
-export default (actionId: number, authorId: number, date: Date, data: ActionEnrichedInput, transaction: Transaction) => {
+export default (actionId: number, authorId: number, data: ActionEnrichedInput, transaction: Transaction) => {
     const promises: Promise<any>[] = [
         insertTopics(actionId, data.topics, transaction),
         insertManagers(actionId, data.managers.map(({ id }) => id), transaction),
         insertOperators(actionId, data.operators.map(({ id }) => id), transaction),
-        insertMetrics(actionId, authorId, date, data, transaction),
+        insertMetrics(actionId, authorId, data, transaction),
         insertPermissions(
             actionId,
             data.managers.map(({ organization_id }) => organization_id),

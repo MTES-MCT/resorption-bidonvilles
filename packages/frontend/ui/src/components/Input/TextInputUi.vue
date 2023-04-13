@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, defineExpose, defineEmits } from 'vue';
+import { defineProps, toRefs, ref, defineExpose, defineEmits, watch } from 'vue';
 import Input from "./Input.vue";
 
 const props = defineProps({
@@ -38,4 +38,12 @@ defineExpose({
 function onChange(value) {
     emit('update:modelValue', value);
 }
+
+watch(modelValue, () => {
+    if (modelValue.value !== undefined) {
+        input.value.setValue(modelValue.value, true);
+    } else {
+        input.value.setValue("", true);
+    }
+});
 </script>
