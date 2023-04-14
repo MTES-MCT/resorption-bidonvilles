@@ -1,11 +1,11 @@
 
-import organizationModel from '#server/models/organizationModel';
+import actionModel from '#server/models/actionModel';
 import ServiceError from '#server/errors/ServiceError';
 import { SerializedOrganization } from '#server/models/userModel/getDirectory';
 
-export default async (): Promise<SerializedOrganization[]> => {
+export default async (actionId: number): Promise<SerializedOrganization[]> => {
     try {
-        return await organizationModel.findActionFinancesReaders();
+        return await actionModel.findActionFinancesReadersByAction(actionId);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
