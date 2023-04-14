@@ -4,6 +4,8 @@ import actionCreateComment from './actionController/createComment';
 import actionExportActions from './actionController/exportActions';
 import actionExportComments from './actionController/exportComments';
 import actionFetchOne from './actionController/fetchOne';
+import findActionFinancesReadersByAction from './actionController/findActionFinancesReadersByAction';
+import findActionFinancesReadersByManagers from './actionController/findActionFinancesReadersByManagers';
 import actionList from './actionController/list';
 import actionUpdate from './actionController/update';
 // answer
@@ -92,6 +94,8 @@ export default () => ({
         exportActions: actionExportActions,
         exportComments: actionExportComments,
         fetchOne: actionFetchOne,
+        findActionFinancesReadersByAction,
+        findActionFinancesReadersByManagers,
         list: actionList,
         update: actionUpdate,
     },
