@@ -14,6 +14,16 @@
                     Qui a accès aux données sur la procédure judiciaire ?
                 </Button>
                 <Button
+                    v-if="title === 'Financements'"
+                    size="sm"
+                    icon="user-group"
+                    iconPosition="left"
+                    variant="primaryText"
+                    @click="openListAccesActionFinances"
+                >
+                    Qui a accès aux données sur les financements ?
+                </Button>
+                <Button
                     v-if="category"
                     size="sm"
                     icon="history"
@@ -30,7 +40,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { useEventBus } from "@/helpers/event-bus";
 
 import { Button } from "@resorptionbidonvilles/ui";
@@ -48,5 +58,9 @@ function openHistorique() {
 
 function openListAccesPJ() {
     emit("fichesitepj:openListAccesPJ");
+}
+
+function openListAccesActionFinances() {
+    emit("ficheactionfinancements:openListAccesActionFinancements");
 }
 </script>
