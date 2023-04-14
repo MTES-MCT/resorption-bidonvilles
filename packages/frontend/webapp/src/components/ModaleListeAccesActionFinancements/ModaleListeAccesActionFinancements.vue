@@ -128,16 +128,8 @@ async function load() {
 
 function fetch() {
     if (actionId.value !== null && actionId.value !== undefined) {
-        console.log(`actionId.value = ${actionId?.value}`);
-    } else if (managers.value !== null && managers.value !== undefined) {
-        console.log(`managers.value = ${managers?.value}`);
-    }
-
-    if (actionId.value !== null && actionId.value !== undefined) {
-        console.log("On lance getActionFinancementsReadersByAction");
         return getActionFinancementsReadersByAction(actionId.value);
     }
-    console.log("On lance getActionFinancementsReadersByManagers");
     return getActionsFinancesdReaders({ managers: managers.value });
 }
 
