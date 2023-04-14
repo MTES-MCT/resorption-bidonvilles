@@ -27,3 +27,7 @@ export function fetchList() {
 export function fetchOne(actionId) {
     return axios.get(`/actions/${encodeURI(actionId)}`);
 }
+
+export function getActionFinancementsReadersByAction(actionId) {
+    return axios.get(`/actions/${encodeURI(actionId)}/action-finances-readers`);
+}
