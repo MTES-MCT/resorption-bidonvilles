@@ -33,7 +33,7 @@ export type ActionFinancesReaderRow = {
     type_abbreviation: string | null
 };
 
-export default async (): Promise<SerializedOrganization[]> => {
+export default async (actionId?: number, managers?: number[]): Promise<SerializedOrganization[]> => {
     const rows: ActionFinancesReaderRow[] = await sequelize.query(
         `
         SELECT
@@ -79,6 +79,8 @@ export default async (): Promise<SerializedOrganization[]> => {
         AND
             uap.allowed IS true
         AND
+            ${actionId ? ':actionId = ANY(uap.actions)' : 'uap.organization_id IN (SELECT us.fk_organization FROM users us WHERE us.user_id IN (:managers))'}
+        AND
             ot.uid NOT IN (
                 SELECT
                 DISTINCT uid
@@ -96,6 +98,10 @@ export default async (): Promise<SerializedOrganization[]> => {
         AND
             u.to_be_tracked IS true`,
         {
+            replacements: {
+                actionId,
+                managers,
+            },
             type: QueryTypes.SELECT,
         },
     );
