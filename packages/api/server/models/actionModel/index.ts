@@ -4,6 +4,8 @@ import fetch from './fetch/fetch';
 import fetchByShantytown from './fetchByShantytown/fetch';
 import fetchComments from './fetchComments/fetchComments';
 import fetchReport from './fetchReport/fetchReport';
+import findActionFinancesReadersByAction from './findActionFinancesReaders/findActionFinancesReadersByAction';
+import findActionFinancesReadersByManagers from './findActionFinancesReaders/findActionFinancesReadersByManagers';
 import getCommentHistory from './getCommentHistory/getCommentHistory';
 import update from './update/update';
 
@@ -14,6 +16,8 @@ export default {
     fetchByShantytown,
     fetchComments,
     fetchReport,
+    findActionFinancesReadersByAction,
+    findActionFinancesReadersByManagers,
     getCommentHistory,
     update,
 };

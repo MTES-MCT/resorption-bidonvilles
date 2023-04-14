@@ -2,7 +2,6 @@ import activate from './activate';
 import autocomplete from './autocomplete';
 import updateBeingFunded from './updateBeingFunded';
 import create from './create';
-import findActionFinancesReaders from './findActionFinancesReaders';
 import findAssociationName from './findAssociationName';
 import findByCategory from './findByCategory';
 import findByIds from './findByIds';
@@ -21,7 +20,6 @@ export default {
     autocomplete,
     updateBeingFunded,
     create,
-    findActionFinancesReaders,
     findAssociationName,
     findByCategory,
     findByIds,
