@@ -142,6 +142,7 @@ function delayedLoad() {
 const isOpen = ref(false);
 
 watch(actionId, reset);
+watch(managers, reset);
 
 watch(isOpen, () => {
     if (isOpen.value === true && loading.value === null) {
