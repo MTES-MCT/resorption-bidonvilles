@@ -353,6 +353,19 @@ export default (app) => {
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action.read'], ...args),
         controllers.action.fetchOne,
     );
+    app.get(
+        '/actions/:id/action-finances-readers',
+        middlewares.auth.authenticate,
+        middlewares.validation,
+        controllers.action.findActionFinancesReadersByAction,
+    );
+    app.post(
+        '/action-finances-readers',
+        middlewares.auth.authenticate,
+        middlewares.validation,
+        controllers.action.findActionFinancesReadersByManagers,
+    );
+
     app.post(
         '/actions',
         middlewares.auth.authenticate,
