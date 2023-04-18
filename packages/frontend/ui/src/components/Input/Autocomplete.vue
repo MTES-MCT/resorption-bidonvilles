@@ -210,6 +210,7 @@ function selectItem(item) {
 
 function clear() {
     rawResults.value = [];
+    selectedItem.value = null;
     abort();
     handleChange(undefined);
     sendEvent(undefined);
