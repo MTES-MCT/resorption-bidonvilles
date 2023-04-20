@@ -14,7 +14,7 @@
 <script setup>
 import { computed } from "vue";
 import { CheckableGroup, Radio } from "@resorptionbidonvilles/ui";
-import waterAccessTypes from "@/utils/water_access_types";
+import waterAccessTypes from "@common/utils/water_access_types.js";
 
 const items = computed(() => {
     return Object.keys(waterAccessTypes).map((id) => ({

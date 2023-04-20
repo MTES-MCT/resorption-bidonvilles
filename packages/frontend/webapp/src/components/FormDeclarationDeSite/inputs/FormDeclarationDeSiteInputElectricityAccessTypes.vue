@@ -17,7 +17,7 @@
 <script setup>
 import { computed } from "vue";
 import { CheckableGroup, Checkbox } from "@resorptionbidonvilles/ui";
-import accessTypes from "@/utils/electricity_access_types";
+import accessTypes from "@common/utils/electricity_access_types";
 import labels from "../FormDeclarationDeSite.labels";
 
 const items = computed(() => {
