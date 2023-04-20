@@ -53,8 +53,7 @@
 import { computed, ref, toRefs } from "vue";
 import { useFormValues } from "vee-validate";
 import FormSection from "@/components/FormSection/FormSection.vue";
-import FormParagraph from "@/components/FormParagraph/FormParagraph.vue";
-import { Button } from "@resorptionbidonvilles/ui";
+import { Button, FormParagraph } from "@resorptionbidonvilles/ui";
 
 import InputOwnerComplaint from "../inputs/FormDeclarationDeSiteInputOwnerComplaint.vue";
 import InputJusticeProcedure from "../inputs/FormDeclarationDeSiteInputJusticeProcedure.vue";
