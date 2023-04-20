@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, defineEmits } from "vue";
+import { toRefs, computed } from "vue";
 import { Autocomplete } from "@resorptionbidonvilles/ui";
 import { searchAddress } from "@/api/datagouv.api.js";
 

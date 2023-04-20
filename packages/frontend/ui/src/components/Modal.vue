@@ -40,12 +40,10 @@
 
 <script setup>
 import {
-    defineProps,
     ref,
     toRefs,
     onMounted,
     onBeforeUnmount,
-    defineEmits,
     watch
 } from "vue";
 import Button from "./Button.vue";

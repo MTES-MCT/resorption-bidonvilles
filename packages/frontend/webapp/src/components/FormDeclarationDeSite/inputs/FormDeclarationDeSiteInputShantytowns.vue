@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { useFieldValue } from "vee-validate";
 import InputShantytowns from "@/components/InputShantytowns/InputShantytowns.vue";
 import labels from "../FormDeclarationDeSite.labels";

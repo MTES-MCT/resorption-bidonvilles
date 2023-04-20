@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref } from "vue";
+import { toRefs, ref } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useEventBus } from "@common/helpers/event-bus";

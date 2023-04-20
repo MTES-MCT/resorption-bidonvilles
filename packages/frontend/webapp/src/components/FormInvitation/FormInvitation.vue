@@ -90,7 +90,7 @@
 
 <script setup>
 // utils
-import { defineProps, toRefs, ref } from "vue";
+import { toRefs, ref } from "vue";
 import schema from "./FormInvitation.schema.js";
 import router from "@/helpers/router";
 import { useNotificationStore } from "@/stores/notification.store";

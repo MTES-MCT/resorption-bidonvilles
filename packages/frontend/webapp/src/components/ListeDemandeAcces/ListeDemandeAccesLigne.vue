@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed } from "vue";
+import { toRefs, ref, computed } from "vue";
 import { RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
 import accessStatuses from "@/utils/access_statuses";

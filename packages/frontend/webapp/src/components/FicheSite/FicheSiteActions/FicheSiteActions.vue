@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import CarteActionDeSite from "@/components/CarteActionDeSite/CarteActionDeSite.vue";
 

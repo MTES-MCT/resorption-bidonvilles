@@ -13,7 +13,7 @@ import { watch, ref } from "vue";
 import { useFieldValue, useField } from "vee-validate";
 import { AsyncSelect } from "@resorptionbidonvilles/ui";
 import { getOrganizations } from "@/api/organization_types.api";
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 const props = defineProps({
     label: String,

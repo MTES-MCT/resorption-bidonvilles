@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import TypeDeSite from "@/components/TypeDeSite/TypeDeSite.vue";
 
 const props = defineProps({

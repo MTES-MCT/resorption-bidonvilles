@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref } from "vue";
+import { toRefs, ref } from "vue";
 import { useForm } from "vee-validate";
 import { useActionsStore } from "@/stores/actions.store";
 import schema from "./FicheActionJournalFormNouveauMessage.schema";

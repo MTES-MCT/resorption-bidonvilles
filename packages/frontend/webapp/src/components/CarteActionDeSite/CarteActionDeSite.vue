@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { Icon, Link, LinkOrganization, Tag } from "@resorptionbidonvilles/ui";
 import { useUserStore } from "@/stores/user.store";
 

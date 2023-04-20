@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { defineProps, computed, defineEmits } from "vue";
+import { computed } from "vue";
 import { DatepickerInput } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({

@@ -26,7 +26,7 @@
     </div>
 </template>
 <script setup>
-import { computed, defineProps, toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import store from "#src/store/index.js";
 import TownPageInfo from "./TownPageInfo.vue";
 import TownPagePanelTitle from "./TownPagePanelTitle.vue";

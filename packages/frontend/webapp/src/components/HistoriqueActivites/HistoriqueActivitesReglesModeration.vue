@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, defineExpose } from "vue";
+import { ref } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 import { Icon, Link, Modal } from "@resorptionbidonvilles/ui";
 

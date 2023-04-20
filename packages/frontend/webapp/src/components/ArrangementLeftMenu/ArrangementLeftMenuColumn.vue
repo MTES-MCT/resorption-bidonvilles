@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { RouterLink } from "vue-router";
 import { Icon, Button } from "@resorptionbidonvilles/ui";
 

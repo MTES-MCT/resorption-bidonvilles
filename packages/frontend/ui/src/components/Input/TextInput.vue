@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, defineExpose } from 'vue';
+import { toRefs, ref } from 'vue';
 import { Field, useIsSubmitting } from "vee-validate";
 import Input from "./Input.vue";
 

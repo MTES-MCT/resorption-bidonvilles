@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, defineEmits } from "vue";
+import { toRefs, computed } from "vue";
 import { Checkbox, Warning } from "@resorptionbidonvilles/ui";
 import { useConfigStore } from "@/stores/config.store";
 

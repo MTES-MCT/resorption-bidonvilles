@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, defineEmits } from "vue";
+import { toRefs, computed } from "vue";
 import FicheAccesBodyMessage from "./FicheAccesBodyMessage.vue";
 import FicheAccesBodyRole from "./FicheAccesBodyRole.vue";
 import FicheAccesBodyOptions from "./FicheAccesBodyOptions.vue";

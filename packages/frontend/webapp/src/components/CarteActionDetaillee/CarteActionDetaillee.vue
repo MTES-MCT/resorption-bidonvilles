@@ -69,7 +69,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref } from "vue";
+import { toRefs, ref } from "vue";
 import formatDate from "@/utils/formatDate";
 
 import { RouterLink } from "vue-router";

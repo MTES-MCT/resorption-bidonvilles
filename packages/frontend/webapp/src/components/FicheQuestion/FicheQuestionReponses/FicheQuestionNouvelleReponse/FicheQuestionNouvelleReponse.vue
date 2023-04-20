@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref } from "vue";
+import { toRefs, ref } from "vue";
 import { useForm } from "vee-validate";
 import schema from "./FicheQuestionNouvelleReponse.schema";
 import { useQuestionsStore } from "@/stores/questions.store";

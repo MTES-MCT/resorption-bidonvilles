@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import erreurImg from "@/assets/img/illustrations/erreur.svg";
 import interditImg from "@/assets/img/illustrations/interdit.svg";
 import videImg from "@/assets/img/illustrations/vide.svg";

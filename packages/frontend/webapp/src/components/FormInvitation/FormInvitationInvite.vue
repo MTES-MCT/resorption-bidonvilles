@@ -17,7 +17,7 @@
 
 <script setup>
 import avatarImg from "@/assets/img/illustrations/avatar.svg";
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({

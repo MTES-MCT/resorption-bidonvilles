@@ -58,7 +58,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, onMounted, computed } from "vue";
+import { toRefs, ref, onMounted, computed } from "vue";
 import { useField, useFieldValue } from "vee-validate";
 import { useTownsStore } from "@/stores/towns.store";
 import formatDate from "@/utils/formatDate";

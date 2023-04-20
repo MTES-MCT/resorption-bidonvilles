@@ -13,7 +13,7 @@
 <script setup>
 import { CheckableGroup, Checkbox } from "@resorptionbidonvilles/ui";
 import items from "@/utils/access_request_types.js";
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 const props = defineProps({
     label: String,

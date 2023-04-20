@@ -25,7 +25,7 @@ import InputName from "../inputs/FormDeclarationActionInputName.vue";
 import InputDates from "../inputs/FormDeclarationActionInputDates.vue";
 import InputTopics from "../inputs/FormDeclarationActionInputTopics.vue";
 import InputGoals from "../inputs/FormDeclarationActionInputGoals.vue";
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 const props = defineProps({
     mode: {

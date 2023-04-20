@@ -78,7 +78,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import isUserAccessExpired from "@/utils/isUserAccessExpired";
 import FicheAccesColumnAccessDate from "./FicheAccesColumnAccessDate.vue";

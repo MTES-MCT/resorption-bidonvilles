@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, toRefs, computed, watch } from "vue";
+import { ref, toRefs, computed, watch } from "vue";
 import formatBool from "@/utils/formatBool";
 import formatDate from "@/utils/formatDate";
 

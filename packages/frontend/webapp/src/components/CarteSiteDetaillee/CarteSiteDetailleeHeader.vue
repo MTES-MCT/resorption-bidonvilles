@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import getSince from "@/utils/getSince";
 import formatLastUpdatedAt from "@/utils/formatLastUpdatedAt";
 

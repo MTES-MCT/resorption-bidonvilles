@@ -44,7 +44,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import IndicateursTableRow from "./IndicateursTableRow.vue";
 import IndicateursTableRowCell from "./IndicateursTableRowCell.vue";
 

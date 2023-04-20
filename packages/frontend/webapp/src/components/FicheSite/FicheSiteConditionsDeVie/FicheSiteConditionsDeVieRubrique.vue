@@ -95,7 +95,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed } from "vue";
+import { toRefs, ref, computed } from "vue";
 
 import { Button, Icon } from "@resorptionbidonvilles/ui";
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";

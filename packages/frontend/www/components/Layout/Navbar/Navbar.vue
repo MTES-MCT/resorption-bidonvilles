@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, ref, onMounted, onUnmounted, watch } from "vue";
+import { toRefs, computed, ref, onMounted, onUnmounted, watch } from "vue";
 import { useI18n } from 'vue-i18n'
 import NavBarLogo from "./NavBarLogo.vue";
 import NavBarSticky from "./NavBarSticky.vue";

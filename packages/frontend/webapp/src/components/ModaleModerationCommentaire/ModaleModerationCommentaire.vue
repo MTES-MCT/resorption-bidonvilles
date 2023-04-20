@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed, defineExpose } from "vue";
+import { toRefs, ref, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";

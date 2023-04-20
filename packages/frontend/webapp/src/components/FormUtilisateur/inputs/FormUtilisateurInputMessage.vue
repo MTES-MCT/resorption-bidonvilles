@@ -4,7 +4,7 @@
 
 <script setup>
 import { TextArea } from "@resorptionbidonvilles/ui";
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 const props = defineProps({
     label: String,

@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import QuestionTag from "@/components/QuestionTag/QuestionTag.vue";
 
 const props = defineProps({

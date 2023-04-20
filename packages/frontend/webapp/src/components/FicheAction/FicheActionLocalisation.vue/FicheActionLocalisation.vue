@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import locationTypes from "@/utils/action_location_types";
 
 import { Icon } from "@resorptionbidonvilles/ui";

@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { DatepickerInput } from "@resorptionbidonvilles/ui";
 import labels from "../FormDeclarationDeSite.labels";
 

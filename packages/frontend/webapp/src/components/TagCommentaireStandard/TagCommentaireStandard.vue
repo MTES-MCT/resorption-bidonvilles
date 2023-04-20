@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import specialTags from "@/utils/special_tags";
 
 import { Tag } from "@resorptionbidonvilles/ui";

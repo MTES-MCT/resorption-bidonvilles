@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { toRefs, defineProps, defineEmits } from 'vue';
+import { toRefs } from 'vue';
 import Dropdown from "./Dropdown.vue";
 import Menu from "./Menu/Menu.vue";
 import MenuItem from "./Menu/MenuItem.vue";

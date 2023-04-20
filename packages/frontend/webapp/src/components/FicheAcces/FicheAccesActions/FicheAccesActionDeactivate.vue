@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import isUserAccessExpired from "@/utils/isUserAccessExpired";
 import { Button } from "@resorptionbidonvilles/ui";
 

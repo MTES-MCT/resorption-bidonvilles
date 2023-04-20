@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref } from "vue";
+import { toRefs, ref } from "vue";
 
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import InactiveUserWarning from "@/components/InactiveUserWarning/InactiveUserWarning.vue";

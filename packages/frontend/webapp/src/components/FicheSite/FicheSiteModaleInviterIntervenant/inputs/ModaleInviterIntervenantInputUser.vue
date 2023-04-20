@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { Autocomplete } from "@resorptionbidonvilles/ui";
 import { findRelations } from "@/api/towns.api.js";
 import formatUserName from "@/utils/formatUserName";

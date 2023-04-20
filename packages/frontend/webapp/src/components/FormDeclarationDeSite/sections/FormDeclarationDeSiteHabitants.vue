@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import { useFormValues } from "vee-validate";
 import { FormParagraph, InputLabel } from "@resorptionbidonvilles/ui";
 import FormSection from "@/components/FormSection/FormSection.vue";

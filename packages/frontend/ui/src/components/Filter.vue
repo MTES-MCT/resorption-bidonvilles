@@ -54,7 +54,7 @@
 </style>
 
 <script setup>
-import { defineProps, toRefs, computed, defineEmits, ref, watch } from "vue";
+import {  toRefs, computed, ref, watch } from "vue";
 import Button from "./Button.vue";
 import Checkbox from "./Input/CheckboxUi.vue";
 import Dropdown from "./Dropdown.vue";

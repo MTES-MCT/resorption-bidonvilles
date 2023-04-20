@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs, defineEmits } from "vue";
+import { computed, toRefs } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import options from "./FicheSiteModaleExport.options";
 

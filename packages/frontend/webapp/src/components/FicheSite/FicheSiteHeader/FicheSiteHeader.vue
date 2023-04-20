@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import FicheSiteHeaderName from "./FicheSiteHeaderName.vue";

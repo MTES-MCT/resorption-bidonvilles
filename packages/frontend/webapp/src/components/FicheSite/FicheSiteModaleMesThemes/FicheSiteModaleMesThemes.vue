@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed, defineExpose } from "vue";
+import { toRefs, ref, computed } from "vue";
 import { useForm } from "vee-validate";
 import { useUserStore } from "@/stores/user.store";
 import { useTownsStore } from "@/stores/towns.store";

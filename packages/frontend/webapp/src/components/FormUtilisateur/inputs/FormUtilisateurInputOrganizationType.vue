@@ -11,7 +11,7 @@
 import { computed } from "vue";
 import { AsyncSelect } from "@resorptionbidonvilles/ui";
 import { useContactStore } from "@/stores/contact.store.js";
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 const props = defineProps({
     label: String,

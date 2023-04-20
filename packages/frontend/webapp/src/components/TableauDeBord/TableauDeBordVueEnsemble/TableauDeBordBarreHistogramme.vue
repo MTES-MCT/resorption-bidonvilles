@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, toRefs, onMounted } from "vue";
+import { ref, toRefs, onMounted } from "vue";
 
 const props = defineProps({
     height: {

@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import router from "@/helpers/router";
 import Carte from "@/components/Carte/Carte.vue";
 

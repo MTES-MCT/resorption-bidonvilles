@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineExpose, toRefs, ref } from "vue";
+import { toRefs, ref } from "vue";
 import { Form } from "vee-validate";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";

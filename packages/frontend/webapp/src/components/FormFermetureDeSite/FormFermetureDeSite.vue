@@ -33,7 +33,7 @@
 
 <script setup>
 import ENV from "@/helpers/env.js";
-import { defineProps, defineExpose, ref, toRefs, computed } from "vue";
+import { ref, toRefs, computed } from "vue";
 import { useForm, useFormValues, useFormErrors } from "vee-validate";
 import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";

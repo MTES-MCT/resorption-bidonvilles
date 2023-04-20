@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, defineEmits } from "vue";
+import { toRefs } from "vue";
 import copyToClipboard from "@/utils/copyToClipboard";
 import { Button } from "@resorptionbidonvilles/ui";
 const props = defineProps({

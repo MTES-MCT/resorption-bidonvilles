@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, defineExpose } from "vue";
+import { toRefs, ref } from "vue";
 import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import { useNotificationStore } from "@/stores/notification.store";
 import { trackEvent } from "@/helpers/matomo";

@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, toRefs } from "vue";
+import { ref, toRefs } from "vue";
 import Icon from "./Icon.vue";
 
 const props = defineProps({

@@ -38,7 +38,7 @@
 </style>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import NavBar from "@/components/NavBar/NavBar.vue";
 import FooterBar from "@/components/FooterBar/FooterBar.vue";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";

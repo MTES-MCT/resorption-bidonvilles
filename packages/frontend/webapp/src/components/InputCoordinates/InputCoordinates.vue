@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, watch, ref } from "vue";
+import { toRefs, computed, watch, ref } from "vue";
 import { useField } from "vee-validate";
 import Carte from "@/components/Carte/Carte.vue";
 import InputCoordinatesTooltip from "./InputCoordinatesTooltip.vue";

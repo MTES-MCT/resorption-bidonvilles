@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import { useI18n } from 'vue-i18n';
 import { Link } from "@resorptionbidonvilles/ui";
 import setWebappDevice from "~~/utils/setWebappDevice";

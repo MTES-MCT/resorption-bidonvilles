@@ -33,7 +33,7 @@
 </style>
 
 <script setup>
-import { defineProps, toRefs, ref, computed } from "vue";
+import { toRefs, ref, computed } from "vue";
 import Icon from "./Icon.vue";
 
 const props = defineProps({

@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { useNotificationStore } from "@/stores/notification.store";
 import ButtonCopy from "@/components/ButtonCopy/ButtonCopy.vue";
 

@@ -8,7 +8,7 @@
 
 <script setup>
 import InputLocation from "@/components/InputLocation/InputLocation.vue";
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 const props = defineProps({
     label: String,

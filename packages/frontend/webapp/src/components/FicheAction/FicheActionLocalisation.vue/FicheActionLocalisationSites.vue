@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 import enrichShantytown from "@/utils/enrichShantytown";
 import { Icon, Link } from "@resorptionbidonvilles/ui";

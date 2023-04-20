@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref } from "vue";
+import { toRefs, ref } from "vue";
 import { useNotificationStore } from "@/stores/notification.store";
 import downloadCsv from "@/utils/downloadCsv";
 import { Icon, Link, Spinner, Warning } from "@resorptionbidonvilles/ui";

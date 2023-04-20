@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { useFormValues } from "vee-validate";
 import FormSection from "@/components/FormSection/FormSection.vue";
 import InputUpdateToDate from "../inputs/FormDeclarationDeSiteInputUpdateToDate.vue";

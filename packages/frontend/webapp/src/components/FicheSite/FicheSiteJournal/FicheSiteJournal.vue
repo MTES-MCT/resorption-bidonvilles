@@ -73,7 +73,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, toRefs, computed, watch } from "vue";
+import { ref, toRefs, computed, watch } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import router from "@/helpers/router";
 

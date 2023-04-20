@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { toRefs, defineProps, defineEmits } from "vue";
+import { toRefs } from "vue";
 import mapFilters from "@/utils/map_filters";
 import { trackEvent } from "@/helpers/matomo";
 import { Icon, Link } from "@resorptionbidonvilles/ui";

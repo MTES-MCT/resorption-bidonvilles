@@ -93,16 +93,7 @@
 </style>
 
 <script setup>
-import {
-    ref,
-    computed,
-    defineProps,
-    toRefs,
-    onMounted,
-    onBeforeUnmount,
-    watch,
-    defineEmits,
-} from "vue";
+import { ref, computed, toRefs, onMounted, onBeforeUnmount, watch } from "vue";
 import L from "leaflet";
 import domtoimage from "dom-to-image-more";
 import "leaflet.markercluster/dist/MarkerCluster.css";

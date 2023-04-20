@@ -66,7 +66,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import formatInt from "@/utils/formatInt";
 import formatDate from "@/utils/formatDate";
 

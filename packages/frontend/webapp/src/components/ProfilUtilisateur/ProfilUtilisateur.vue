@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import router from "@/helpers/router";
 import tabsDefinition from "./ProfilUtilisateur.tabs.js";
 

@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, watch } from "vue";
+import { toRefs, ref, watch } from "vue";
 import { useFieldValue, useFormValues } from "vee-validate";
 import { findNearby } from "@/api/towns.api";
 

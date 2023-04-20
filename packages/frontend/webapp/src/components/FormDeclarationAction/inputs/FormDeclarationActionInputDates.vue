@@ -23,7 +23,7 @@
 import { useFormValues } from "vee-validate";
 import { DatepickerInput } from "@resorptionbidonvilles/ui";
 import labels from "../FormDeclarationAction.labels";
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 const props = defineProps({
     mode: {

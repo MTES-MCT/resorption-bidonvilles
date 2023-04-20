@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 
 import { Tag } from "@resorptionbidonvilles/ui";
 import CarteSiteDetailleeLivingConditionIcon from "./CarteSiteDetailleeLivingConditionIcon.vue";

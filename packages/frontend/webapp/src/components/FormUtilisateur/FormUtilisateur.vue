@@ -140,7 +140,7 @@
 
 <script setup>
 // utils
-import { defineProps, toRefs, computed, ref, onMounted } from "vue";
+import { toRefs, computed, ref, onMounted } from "vue";
 import router from "@/helpers/router";
 
 // components

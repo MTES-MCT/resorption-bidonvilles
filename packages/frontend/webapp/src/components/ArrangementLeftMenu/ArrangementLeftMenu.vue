@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs, onMounted, onBeforeUnmount } from "vue";
+import { computed, toRefs, onMounted, onBeforeUnmount } from "vue";
 import ArrangementLeftMenuColumn from "./ArrangementLeftMenuColumn.vue";
 import router from "@/helpers/router";
 

@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import FicheActionPilotes from "./FicheActionPilotes.vue";

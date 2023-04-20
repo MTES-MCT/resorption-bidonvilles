@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, watch, computed, nextTick } from "vue";
+import { toRefs, ref, watch, computed, nextTick } from "vue";
 import { useIsSubmitting, useField } from "vee-validate";
 import { autocomplete } from "@/api/organizations.api.js";
 

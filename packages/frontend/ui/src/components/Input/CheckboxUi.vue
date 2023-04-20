@@ -25,7 +25,7 @@
 </template> 
 
 <script setup>
-import { toRefs, computed, defineEmits } from 'vue';
+import { toRefs, computed } from 'vue';
 import Icon from "../Icon.vue";
 
 const props = defineProps({

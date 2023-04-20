@@ -45,7 +45,7 @@
 </style>
 
 <script setup>
-import { ref, onMounted, defineExpose } from "vue";
+import { ref, onMounted } from "vue";
 import { useNavigationStore } from "@/stores/navigation.store.js";
 import ENV from "@/helpers/env.js";
 

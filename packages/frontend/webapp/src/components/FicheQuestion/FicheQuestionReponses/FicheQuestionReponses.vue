@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 import FicheQuestionNouvelleReponse from "./FicheQuestionNouvelleReponse/FicheQuestionNouvelleReponse.vue";
 import FicheQuestionListeDesReponses from "./FicheQuestionListeDesReponses.vue";

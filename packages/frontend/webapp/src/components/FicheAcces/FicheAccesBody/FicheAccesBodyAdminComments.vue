@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed } from "vue";
+import { toRefs, ref, computed } from "vue";
 import { Button, ErrorSummary, TextArea } from "@resorptionbidonvilles/ui";
 import { useNotificationStore } from "@/stores/notification.store";
 import { setAdminComments } from "@/api/users.api";

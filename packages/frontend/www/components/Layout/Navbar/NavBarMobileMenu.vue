@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onUnmounted, defineEmits } from "vue";
+import { ref, watch, onMounted, onUnmounted } from "vue";
 import { useI18n } from 'vue-i18n';
 
 import { Link, Menu, LanguagePicker, MenuItem } from "@resorptionbidonvilles/ui";

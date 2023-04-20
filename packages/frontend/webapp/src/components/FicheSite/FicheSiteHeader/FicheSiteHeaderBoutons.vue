@@ -79,7 +79,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, nextTick } from "vue";
+import { toRefs, ref, nextTick } from "vue";
 import { RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";

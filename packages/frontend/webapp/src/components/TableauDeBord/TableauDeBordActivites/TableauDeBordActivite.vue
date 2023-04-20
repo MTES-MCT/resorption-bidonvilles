@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import formatActivityDate from "@/utils/formatActivityDate";
 import { useUserStore } from "@/stores/user.store";
 import { trackEvent } from "@/helpers/matomo";

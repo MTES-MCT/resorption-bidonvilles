@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import icons from "@/utils/action_metrics_icons";
 
 import IndicateursTableRowData from "@/components/IndicateursTable/IndicateursTableRowData.vue";

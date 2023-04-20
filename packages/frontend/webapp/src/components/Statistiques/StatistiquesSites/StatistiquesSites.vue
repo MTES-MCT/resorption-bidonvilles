@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import StatistiquesSection from "../StatistiquesSection.vue";
 import StatistiquesSubSection from "../StatistiquesSubSection.vue";
 import { Bar, Line } from "@/helpers/chart.js";

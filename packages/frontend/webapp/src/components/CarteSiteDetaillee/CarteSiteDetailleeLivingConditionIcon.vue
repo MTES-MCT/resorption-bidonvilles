@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { defineProps, computed } from "vue";
+import { computed } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({

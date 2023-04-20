@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 import ButtonContact from "~~/components/ButtonContact/ButtonContact.vue";
 import Container from "~/components/Layout/Container/Container.vue";

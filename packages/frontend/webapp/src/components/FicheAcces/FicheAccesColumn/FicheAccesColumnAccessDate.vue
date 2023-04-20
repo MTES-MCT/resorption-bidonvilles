@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import formatDate from "@/utils/formatDate";
 import { Icon } from "@resorptionbidonvilles/ui";
 

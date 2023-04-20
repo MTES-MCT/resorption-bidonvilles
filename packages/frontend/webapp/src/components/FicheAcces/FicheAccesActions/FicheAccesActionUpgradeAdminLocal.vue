@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { Button } from "@resorptionbidonvilles/ui";
 

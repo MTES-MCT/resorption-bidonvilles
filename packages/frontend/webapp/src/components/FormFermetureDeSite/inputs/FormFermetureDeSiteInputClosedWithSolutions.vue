@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import { CheckableGroup, Radio } from "@resorptionbidonvilles/ui";
 import labels from "../FormFermetureDeSite.labels";
 

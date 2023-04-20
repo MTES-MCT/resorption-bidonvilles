@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref } from "vue";
+import { toRefs, ref } from "vue";
 import CarteCommentaire from "@/components/CarteCommentaire/CarteCommentaire.vue";
 import ModaleModerationCommentaire from "@/components/ModaleModerationCommentaire/ModaleModerationCommentaire.vue";
 

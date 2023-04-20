@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { toRefs, computed, defineEmits } from "vue";
+import { toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { useDirectoryStore } from "@/stores/directory.store";
 

@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 import FicheAccesBodySection from "./FicheAccesBodySection.vue";
 import FicheAccesBodyPermissionDetails from "./FicheAccesBodyPermissionDetails.vue";

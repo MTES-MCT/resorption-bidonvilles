@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import StatistiquesMetriquePrincipale from "./StatistiquesMetriquePrincipale.vue";
 
 const props = defineProps({

@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, toRefs, defineExpose } from "vue";
+import { ref, toRefs } from "vue";
 import { Button, Modal } from "@resorptionbidonvilles/ui";
 import ModalExportLien from "./ModalExportLien.vue";
 

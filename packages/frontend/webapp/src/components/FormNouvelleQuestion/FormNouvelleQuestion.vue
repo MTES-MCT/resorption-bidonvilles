@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref, defineExpose, computed, toRefs } from "vue";
+import { ref, computed, toRefs } from "vue";
 import { useForm, useFieldValue } from "vee-validate";
 import schema from "./FormNouvelleQuestion.schema";
 import labels from "./FormNouvelleQuestion.labels";

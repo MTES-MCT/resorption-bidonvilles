@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, ref, toRefs } from "vue";
+import { computed, ref, toRefs } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";

@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { Checkbox } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({

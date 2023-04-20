@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { trackEvent } from "@/helpers/matomo";
 import { Icon, Link } from "@resorptionbidonvilles/ui";
 import CarteUtilisateurWrapper from "./CarteUtilisateurWrapper.vue";

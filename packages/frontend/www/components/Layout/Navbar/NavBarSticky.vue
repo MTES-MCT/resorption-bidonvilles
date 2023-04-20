@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 import NavBarLogo from "./NavBarLogo.vue";
 import NavBarMobileButton from "./NavBarMobileButton.vue";

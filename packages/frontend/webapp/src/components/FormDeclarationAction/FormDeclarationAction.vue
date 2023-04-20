@@ -18,15 +18,7 @@
 </template>
 
 <script setup>
-import {
-    defineProps,
-    toRefs,
-    toRef,
-    computed,
-    defineExpose,
-    ref,
-    watch,
-} from "vue";
+import { toRefs, toRef, computed, ref, watch } from "vue";
 import { useForm } from "vee-validate";
 import { useActionsStore } from "@/stores/actions.store";
 import { useUserStore } from "@/stores/user.store";

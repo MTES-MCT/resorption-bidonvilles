@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs, defineEmits } from "vue";
+import { computed, toRefs, } from "vue";
 import { useField, useIsSubmitting } from "vee-validate";
 import { fr } from "date-fns/locale";
 

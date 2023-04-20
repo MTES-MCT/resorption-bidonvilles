@@ -49,7 +49,7 @@ import { Icon } from "@resorptionbidonvilles/ui";
 import TagCommentaireStandard from "@/components/TagCommentaireStandard/TagCommentaireStandard.vue";
 import TagCommentaireCovid from "@/components/TagCommentaireCovid/TagCommentaireCovid.vue";
 
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 
 const props = defineProps({
     activity: {

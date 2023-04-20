@@ -75,7 +75,7 @@
     </div>
 </template>
 <script setup>
-import { defineProps, defineEmits, toRefs, ref, computed } from "vue";
+import { toRefs, ref, computed } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 import { useUserStore } from "@/stores/user.store";
 import covidTagsList from "@/utils/covid_tags";

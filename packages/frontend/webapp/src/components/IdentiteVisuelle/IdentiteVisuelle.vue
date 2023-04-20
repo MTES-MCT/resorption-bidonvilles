@@ -29,7 +29,7 @@
 </style>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 
 import marianne from "@/assets/img/dsfr/marianne.svg";
 import devise from "@/assets/img/dsfr/devise.svg";

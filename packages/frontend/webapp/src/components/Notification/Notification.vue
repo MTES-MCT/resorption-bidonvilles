@@ -28,15 +28,7 @@
 </style>
 
 <script setup>
-import {
-    onMounted,
-    onBeforeUnmount,
-    defineProps,
-    defineEmits,
-    computed,
-    ref,
-    toRefs,
-} from "vue";
+import { onMounted, onBeforeUnmount, computed, ref, toRefs } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 const themes = {

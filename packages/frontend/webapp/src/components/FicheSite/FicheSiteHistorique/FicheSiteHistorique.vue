@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, defineExpose, computed } from "vue";
+import { toRefs, ref, computed } from "vue";
 import filters from "../FicheSite.filter";
 import { useTownsStore } from "@/stores/towns.store";
 

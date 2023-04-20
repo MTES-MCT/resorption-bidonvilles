@@ -4,7 +4,7 @@
 
 <script setup>
 import formatActivityDate from "@/utils/formatActivityDate";
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 const props = defineProps({
     question: Object,

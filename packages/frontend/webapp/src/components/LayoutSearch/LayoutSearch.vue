@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, defineEmits } from "vue";
+import { toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 
 import Layout from "@/components/Layout/Layout.vue";

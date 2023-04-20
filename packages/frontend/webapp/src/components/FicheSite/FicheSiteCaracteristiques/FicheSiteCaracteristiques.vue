@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, onMounted, computed } from "vue";
+import { toRefs, ref, onMounted, computed } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { getCadastre } from "@/api/ign.api";
 import generateSquare from "@/utils/generateSquare";

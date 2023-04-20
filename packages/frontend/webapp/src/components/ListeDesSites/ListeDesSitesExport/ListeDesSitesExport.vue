@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref, computed, defineExpose } from "vue";
+import { ref, computed } from "vue";
 import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";

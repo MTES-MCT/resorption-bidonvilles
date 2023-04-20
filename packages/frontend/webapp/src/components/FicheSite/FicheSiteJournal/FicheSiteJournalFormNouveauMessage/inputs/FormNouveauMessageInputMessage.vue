@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineExpose, ref, computed, toRefs } from "vue";
+import { ref, computed, toRefs } from "vue";
 import labels from "../FicheSiteJournalFormNouveauMessage.labels";
 import { TextArea } from "@resorptionbidonvilles/ui";
 

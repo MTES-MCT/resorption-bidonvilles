@@ -72,7 +72,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import store from "#src/store/index.js";
 import serializeLivingConditions from "#frontend/common/helpers/town/living_conditions/serializeLivingConditions";
 import TownPagePanelLivingConditionsSection from "./LivingConditions/TownPagePanelLivingConditionsSection.vue";

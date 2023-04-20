@@ -39,7 +39,7 @@
 
 <script setup>
 // vue
-import { computed, defineProps, toRefs } from "vue";
+import { computed, toRefs } from "vue";
 
 // utils
 import router from "@/helpers/router.js";

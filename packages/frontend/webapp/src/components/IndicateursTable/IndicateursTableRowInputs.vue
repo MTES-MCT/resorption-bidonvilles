@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { TextInput } from "@resorptionbidonvilles/ui";
 import IndicateursTableRow from "./IndicateursTableRow.vue";
 

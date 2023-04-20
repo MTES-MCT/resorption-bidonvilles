@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { defineExpose, ref, toRefs, watch, computed } from "vue";
+import { ref, toRefs, watch, computed } from "vue";
 import { Button, Modal, Icon } from "@resorptionbidonvilles/ui";
 import ViewErrorInline from "@/components/ViewErrorInline/ViewErrorInline.vue";
 import CarteStructure from "@/components/CarteStructure/CarteStructure.vue";
