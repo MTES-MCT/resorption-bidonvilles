@@ -5,6 +5,7 @@ import TownPage from "#src/js/pages/TownPage/TownPage.vue";
 import TownsSearch from "#src/js/pages/TownsSearch/TownsSearch.vue";
 import Launcher from "#src/js/pages/Launcher/Launcher.vue";
 import Logout from "#src/js/pages/Logout/Logout.vue";
+import MiseAJourSectionDeSite from "#src/js/pages/MiseAJourSectionDeSite/MiseAJourSectionDeSite.vue";
 import MiseANiveau from "#src/js/pages/MiseANiveau/MiseANiveau.vue";
 import NotesList from "#src/js/pages/NotesList/NotesList.vue";
 import NotesForm from "#src/js/pages/NotesForm/NotesForm.vue";
@@ -269,6 +270,15 @@ const router = createRouter({
             },
             path: "/site/:id",
             component: TownPage,
+            beforeEnter: guardians.loadedAndUpToDate,
+        },
+        {
+            meta: {
+                tab: "sites",
+                title: "Résorption-bidonvilles — Modification de site",
+            },
+            path: "/site/:id/mise-a-jour/:section_id",
+            component: MiseAJourSectionDeSite,
             beforeEnter: guardians.loadedAndUpToDate,
         },
         {

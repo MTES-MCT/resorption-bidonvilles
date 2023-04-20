@@ -1,6 +1,17 @@
 <template>
     <div>
-        <TownPagePanelTitle :title="'Conditions de vie'" />
+        <div class="items-center flex justify-between">
+            <TownPagePanelTitle :title="'Conditions de vie'" />
+            <Button
+                v-if="canUpdateTown"
+                class="mt-4 mb-2"
+                variant="primaryText"
+                icon="pencil"
+                iconPosition="left"
+                :href="`/site/${town.id}/mise-a-jour/living_conditions`"
+                >Modifier</Button
+            >
+        </div>
 
         <div>
             <TownPagePanelLivingConditionsSection
@@ -60,34 +71,38 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { defineProps, toRefs, computed } from "vue";
+import store from "#src/store/index.js";
 import serializeLivingConditions from "#frontend/common/helpers/town/living_conditions/serializeLivingConditions";
 import TownPagePanelLivingConditionsSection from "./LivingConditions/TownPagePanelLivingConditionsSection.vue";
 import TownPagePanelTitle from "./TownPagePanelTitle.vue";
-export default {
-    props: {
-        town: {
-            type: Object,
-            required: true,
-        },
+import { Button } from "@resorptionbidonvilles/ui";
+const props = defineProps({
+    town: {
+        type: Object,
+        required: true,
     },
-    components: {
-        TownPagePanelLivingConditionsSection,
-        TownPagePanelTitle,
-    },
-    computed: {
-        answers() {
-            return serializeLivingConditions(this.town);
-        },
-        pestAnimalsWording() {
-            return this.town.livingConditions[
-                this.town.livingConditions.version === 1
-                    ? "vermin"
-                    : "pest_animals"
-            ].status.status === "good"
-                ? "Absence de nuisible"
-                : "Présence de nuisibles";
-        },
-    },
-};
+});
+const { town } = toRefs(props);
+const answers = computed(() => {
+    return serializeLivingConditions(town.value);
+});
+
+const canUpdateTown = computed(() => {
+    return (
+        store.getters["config/hasLocalizedPermission"](
+            "shantytown.update",
+            town.value
+        ) === true && town.value.status === "open"
+    );
+});
+
+const pestAnimalsWording = computed(() => {
+    return town.value.livingConditions[
+        town.value.livingConditions.version === 1 ? "vermin" : "pest_animals"
+    ].status.status === "good"
+        ? "Absence de nuisible"
+        : "Présence de nuisibles";
+});
 </script>
