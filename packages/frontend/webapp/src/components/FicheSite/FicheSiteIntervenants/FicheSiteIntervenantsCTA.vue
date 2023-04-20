@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus.js";
 import { Button, Icon } from "@resorptionbidonvilles/ui";
 
 const { emit } = useEventBus();

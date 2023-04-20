@@ -35,7 +35,7 @@ import router from "@/helpers/router";
 import { trackLogin } from "@/helpers/matomo";
 import { useConfigStore } from "@/stores/config.store.js";
 import { useUserStore } from "@/stores/user.store.js";
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus.js";
 
 // components
 import { Button } from "@resorptionbidonvilles/ui";

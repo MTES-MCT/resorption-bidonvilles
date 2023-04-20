@@ -20,7 +20,7 @@
 <script setup>
 import { computed, defineProps, toRefs, watch, ref, onMounted } from "vue";
 import router from "@/helpers/router";
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
 
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";

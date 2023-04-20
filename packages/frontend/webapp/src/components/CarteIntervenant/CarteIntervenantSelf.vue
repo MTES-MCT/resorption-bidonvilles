@@ -43,7 +43,7 @@
 import { defineProps, toRefs, ref } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { useNotificationStore } from "@/stores/notification.store";
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus";
 import { Button, Icon, ToolTip } from "@resorptionbidonvilles/ui";
 import CarteIntervenantSelfTag from "./CarteIntervenantSelfTag.vue";
 

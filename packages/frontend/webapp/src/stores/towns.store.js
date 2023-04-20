@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, watch, computed } from "vue";
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus";
 import { trackEvent } from "@/helpers/matomo";
 import { useUserStore } from "@/stores/user.store";
 import { useActivitiesStore } from "./activities.store";
