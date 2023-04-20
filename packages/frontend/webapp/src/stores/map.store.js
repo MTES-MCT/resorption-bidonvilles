@@ -1,6 +1,6 @@
 import { computed, ref, watch } from "vue";
 import { defineStore } from "pinia";
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus";
 import { useTownsStore } from "@/stores/towns.store";
 import { usePoiStore } from "@/stores/poi.store";
 import mapFilters from "@/utils/map_filters.js";

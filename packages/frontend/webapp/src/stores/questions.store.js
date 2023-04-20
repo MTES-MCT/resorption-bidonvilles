@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, watch, computed } from "vue";
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus";
 import { useNotificationStore } from "@/stores/notification.store";
 import {
     getQuestions,

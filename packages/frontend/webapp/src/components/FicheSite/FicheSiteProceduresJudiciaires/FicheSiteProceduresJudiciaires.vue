@@ -49,7 +49,7 @@ import { defineProps, ref, toRefs, computed, watch } from "vue";
 import formatBool from "@/utils/formatBool";
 import formatDate from "@/utils/formatDate";
 
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus";
 
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import FicheSiteProceduresJudiciaireLigne from "./FicheSiteProceduresJudiciaireLigne.vue";
