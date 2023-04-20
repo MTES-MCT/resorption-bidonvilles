@@ -18,7 +18,7 @@
 
 <script setup>
 import FormSection from "@/components/FormSection/FormSection.vue";
-import FormParagraph from "@/components/FormParagraph/FormParagraph.vue";
+import { FormParagraph } from "@resorptionbidonvilles/ui";
 import labels from "../FormDeclarationAction.labels";
 
 import InputName from "../inputs/FormDeclarationActionInputName.vue";

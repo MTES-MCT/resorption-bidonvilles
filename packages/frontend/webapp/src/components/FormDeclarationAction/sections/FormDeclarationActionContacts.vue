@@ -13,7 +13,7 @@
 import { defineProps, toRefs } from "vue";
 
 import FormSection from "@/components/FormSection/FormSection.vue";
-import FormParagraph from "@/components/FormParagraph/FormParagraph.vue";
+import { FormParagraph } from "@resorptionbidonvilles/ui";
 import InputManagers from "../inputs/FormDeclarationActionInputManagers.vue";
 import InputOperators from "../inputs/FormDeclarationActionInputOperators.vue";
 

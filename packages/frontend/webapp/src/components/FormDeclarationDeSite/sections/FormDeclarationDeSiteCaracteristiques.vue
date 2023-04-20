@@ -27,9 +27,9 @@ import { computed } from "vue";
 import { useFormValues } from "vee-validate";
 import { useConfigStore } from "@/stores/config.store";
 import { useUserStore } from "@/stores/user.store";
-import FormSection from "@/components/FormSection/FormSection.vue";
-import FormParagraph from "@/components/FormParagraph/FormParagraph.vue";
 
+import FormSection from "@/components/FormSection/FormSection.vue";
+import { FormParagraph } from "@resorptionbidonvilles/ui";
 import InputBuiltAt from "../inputs/FormDeclarationDeSiteInputBuiltAt.vue";
 import InputDeclaredAt from "../inputs/FormDeclarationDeSiteInputDeclaredAt.vue";
 import InputFieldType from "../inputs/FormDeclarationDeSiteInputFieldType.vue";

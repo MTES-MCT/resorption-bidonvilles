@@ -139,8 +139,7 @@
 <script setup>
 import { computed } from "vue";
 import { useFieldValue, useFormValues } from "vee-validate";
-
-import FormParagraph from "@/components/FormParagraph/FormParagraph.vue";
+import { FormParagraph } from "@resorptionbidonvilles/ui";
 import InputWaterAccessType from "../inputs/FormDeclarationDeSiteInputWaterAccessType.vue";
 import InputWaterAccessTypeDetails from "../inputs/FormDeclarationDeSiteInputWaterAccessTypeDetails.vue";
 import InputWaterAccessIsPublic from "../inputs/FormDeclarationDeSiteInputWaterAccessIsPublic.vue";
