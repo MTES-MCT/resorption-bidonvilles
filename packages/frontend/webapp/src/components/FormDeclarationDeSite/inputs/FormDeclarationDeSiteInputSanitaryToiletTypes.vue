@@ -18,7 +18,7 @@
 <script setup>
 import { computed } from "vue";
 import { CheckableGroup, Checkbox } from "@resorptionbidonvilles/ui";
-import toiletTypes from "@/utils/toilet_types";
+import toiletTypes from "@common/utils/toilet_types";
 import labels from "../FormDeclarationDeSite.labels";
 
 const items = computed(() => {
