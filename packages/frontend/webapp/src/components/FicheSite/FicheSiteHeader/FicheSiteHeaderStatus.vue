@@ -26,8 +26,8 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
-import formatDate from "@/utils/formatDate";
+import { toRefs, computed } from "vue";
+import formatDate from "@common/utils/formatDate.js";
 import formatLastUpdatedAt from "@/utils/formatLastUpdatedAt";
 
 import TagObjectifResorption from "@/components/TagObjectifResorption/TagObjectifResorption.vue";

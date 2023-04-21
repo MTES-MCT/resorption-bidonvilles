@@ -1,4 +1,4 @@
-import formatDate from "./formatDate";
+import formatDate from "../../../common/utils/formatDate";
 
 function isSameDay(now, then) {
     return (

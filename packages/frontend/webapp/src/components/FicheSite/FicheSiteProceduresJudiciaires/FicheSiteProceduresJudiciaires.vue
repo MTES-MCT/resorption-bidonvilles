@@ -47,7 +47,7 @@
 <script setup>
 import { defineProps, ref, toRefs, computed, watch } from "vue";
 import formatBool from "@/utils/formatBool";
-import formatDate from "@/utils/formatDate";
+import formatDate from "@common/utils/formatDate";
 
 import { useEventBus } from "@common/helpers/event-bus";
 

@@ -58,15 +58,8 @@
 </template>
 
 <script setup>
-import {
-    defineProps,
-    toRefs,
-    ref,
-    computed,
-    defineEmits,
-    onMounted,
-} from "vue";
-import formatDate from "@/utils/formatDate";
+import { toRefs, ref, computed, onMounted } from "vue";
+import formatDate from "@common/utils/formatDate";
 import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
 

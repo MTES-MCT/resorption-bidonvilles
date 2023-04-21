@@ -80,7 +80,7 @@ import { useConfigStore } from "@/stores/config.store";
 import { useUserStore } from "@/stores/user.store";
 import router from "@/helpers/router";
 import downloadCsv from "@/utils/downloadCsv";
-import formatDate from "@/utils/formatDate";
+import formatDate from "@common/utils/formatDate";
 
 // components
 import { Button } from "@resorptionbidonvilles/ui";

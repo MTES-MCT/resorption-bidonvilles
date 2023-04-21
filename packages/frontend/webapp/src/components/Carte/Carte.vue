@@ -114,7 +114,7 @@ import mapLayers from "./Carte.layers";
 import mapControls from "./Carte.controls";
 import { trackEvent } from "@/helpers/matomo";
 import downloadBlob from "@/utils/downloadBlob";
-import formatDate from "@/utils/formatDate";
+import formatDate from "@common/utils/formatDate";
 import copyToClipboard from "@/utils/copyToClipboard";
 
 // données tirées de https://github.com/gregoiredavid/france-geojson
