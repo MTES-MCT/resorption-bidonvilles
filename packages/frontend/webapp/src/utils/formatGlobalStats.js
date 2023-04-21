@@ -1,4 +1,7 @@
 export default function (stats) {
+    if (!stats || stats.length === 0) {
+        return [];
+    }
     return [
         {
             ...stats.population,
