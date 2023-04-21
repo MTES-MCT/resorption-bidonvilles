@@ -11,15 +11,8 @@ const { where: pWhere } = permissionUtils;
 
 export default async (user, location) => {
     const permissionWhereClauseGroup:WhereClauseGroup = pWhere().can(user).do('list', 'shantytown');
-    const permissionWhereClause = stringifyWhereClause('shantytowns', [permissionWhereClauseGroup], { userId: user.id });
-
-    const replacements = {
-        regions0: permissionWhereClauseGroup.regions ? permissionWhereClauseGroup.regions.value : [],
-        departements0: permissionWhereClauseGroup.departements ? permissionWhereClauseGroup.departements.value : [],
-        epci0: permissionWhereClauseGroup.epci ? permissionWhereClauseGroup.epci.value : [],
-        cities0: permissionWhereClauseGroup.cities ? permissionWhereClauseGroup.cities.value : [],
-    };
-
+    const replacements = { userId: user.id };
+    const permissionWhereClause = stringifyWhereClause('shantytowns', [permissionWhereClauseGroup], replacements);
 
     let where = '';
     let shantytownWhere = '';
@@ -95,7 +88,7 @@ export default async (user, location) => {
             ORDER BY shantytowns.updated_at DESC`,
             {
                 type: QueryTypes.SELECT,
-                replacements: { ...replacements },
+                replacements,
             },
         ),
         // WAU
