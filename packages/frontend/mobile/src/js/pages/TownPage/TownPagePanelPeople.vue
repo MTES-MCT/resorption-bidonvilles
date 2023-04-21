@@ -8,7 +8,7 @@
                 icon="pencil"
                 variant="primaryText"
                 iconPosition="left"
-                :href="`/site/${town.id}/mise-a-jour/people`"
+                :href="`/site/${town.id}/mise-a-jour/habitants`"
             >
                 Modifier</Button
             >

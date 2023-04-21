@@ -9,7 +9,7 @@
                     variant="primaryText"
                     icon="pencil"
                     iconPosition="left"
-                    :href="`/site/${town.id}/mise-a-jour/living_conditions`"
+                    :href="`/site/${town.id}/mise-a-jour/conditions-de-vie`"
                     >Modifier</Button
                 >
             </div>

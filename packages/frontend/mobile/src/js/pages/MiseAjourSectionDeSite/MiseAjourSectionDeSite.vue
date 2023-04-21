@@ -26,11 +26,11 @@
             <template v-slot:scroll>
                 <FormMiseAJourDeSiteSectionHabitants
                     :town="town"
-                    v-if="section === 'people'"
+                    v-if="section === 'habitants'"
                 />
                 <FormMiseAJourDeSiteSectionConditionsDeVie
                     :town="town"
-                    v-else-if="section === 'living_conditions'"
+                    v-else-if="section === 'conditions-de-vie'"
                 />
             </template>
         </LayoutForm>
