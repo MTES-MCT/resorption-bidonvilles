@@ -30,7 +30,7 @@
                                 variant="primary"
                                 @click="submit"
                             >
-                                Valider les modifications</Button
+                                Mettre à jour le site</Button
                             >
                         </div>
                     </header>

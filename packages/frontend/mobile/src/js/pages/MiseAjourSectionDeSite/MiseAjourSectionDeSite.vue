@@ -38,7 +38,7 @@
                     variant="primary"
                     type="button"
                     class="mb-5 ml-5"
-                    >Valider</Button
+                    >Mettre à jour le site</Button
                 >
                 <ErrorSummary
                     id="erreurs"
