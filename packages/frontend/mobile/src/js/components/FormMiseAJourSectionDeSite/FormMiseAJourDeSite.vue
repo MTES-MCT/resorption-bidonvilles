@@ -52,11 +52,6 @@ const validationSchema = schemaFn(section.value);
 const initialValues = formatFormTown(town.value);
 
 const formError = ref(null);
-console.log(section.value);
-console.log(town.value);
-
-console.log(validationSchema);
-console.log(initialValues);
 
 const { values, errors, setErrors } = useForm({
     validationSchema,
@@ -126,7 +121,6 @@ async function submit() {
         );
         router.push(`/site/${town.value.id}`);
     } catch (error) {
-        console.log("error");
         formError.value =
             error?.user_message || "Une erreur inconnue est survenue";
         if (error?.fields) {
