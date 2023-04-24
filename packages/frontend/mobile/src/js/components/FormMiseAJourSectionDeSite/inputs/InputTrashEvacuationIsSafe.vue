@@ -1,8 +1,11 @@
 <template>
-    <SubQuestionWrapper :label="labels.sanitary_hand_washing">
+    <SubQuestionWrapper
+        :label="labels.trash_evacuation_is_safe"
+        info="Présence d’un couvercle ou équivalent fermant le dispositif après utilisation."
+    >
         <CheckableGroup
-            id="sanitary_hand_washing"
-            direction="horizontal"
+            id="trash_evacuation_is_safe"
+            direction="vertical"
             withoutMargin
         >
             <Radio
@@ -10,7 +13,7 @@
                 :key="item.value"
                 :value="item.value"
                 :label="item.label"
-                name="sanitary_hand_washing"
+                name="trash_evacuation_is_safe"
                 v-bind="$attrs"
                 variant="radio"
                 allowNull
@@ -27,7 +30,7 @@ import {
     Radio,
     SubQuestionWrapper,
 } from "@resorptionbidonvilles/ui";
-import labels from "#src/js/pages/MiseAjourSectionDeSite/MiseAJourSectionDeSite.labels";
+import labels from "../MiseAJourDeSite.labels";
 
 const items = [
     { value: 1, label: "Oui" },

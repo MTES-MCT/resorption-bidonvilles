@@ -1,7 +1,7 @@
 <template>
-    <SubQuestionWrapper :label="labels.water_access_is_public">
+    <SubQuestionWrapper :label="labels.water_access_is_close">
         <CheckableGroup
-            id="water_access_is_public"
+            id="water_access_is_close"
             direction="vertical"
             withoutMargin
         >
@@ -10,7 +10,7 @@
                 :key="item.value"
                 :value="item.value"
                 :label="item.label"
-                name="water_access_is_public"
+                name="water_access_is_close"
                 v-bind="$attrs"
                 variant="radio"
                 allowNull
@@ -27,10 +27,10 @@ import {
     Radio,
     SubQuestionWrapper,
 } from "@resorptionbidonvilles/ui";
-import labels from "#src/js/pages/MiseAjourSectionDeSite/MiseAJourSectionDeSite.labels";
+import labels from "../MiseAJourDeSite.labels";
 
 const items = [
-    { value: 1, label: "Oui" },
-    { value: 0, label: "Non" },
+    { value: 1, label: "Moins de 200m" },
+    { value: 0, label: "Plus de 200m" },
 ];
 </script>

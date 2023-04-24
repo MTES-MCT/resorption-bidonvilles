@@ -1,7 +1,7 @@
 <template>
-    <SubQuestionWrapper :label="labels.trash_bulky_is_piling">
+    <SubQuestionWrapper :label="labels.water_access_has_stagnant_water">
         <CheckableGroup
-            id="trash_bulky_is_piling"
+            id="water_access_has_stagnant_water"
             direction="vertical"
             withoutMargin
         >
@@ -10,7 +10,7 @@
                 :key="item.value"
                 :value="item.value"
                 :label="item.label"
-                name="trash_bulky_is_piling"
+                name="water_access_has_stagnant_water"
                 v-bind="$attrs"
                 variant="radio"
                 allowNull
@@ -27,7 +27,7 @@ import {
     Radio,
     SubQuestionWrapper,
 } from "@resorptionbidonvilles/ui";
-import labels from "#src/js/pages/MiseAjourSectionDeSite/MiseAJourSectionDeSite.labels";
+import labels from "../MiseAJourDeSite.labels";
 
 const items = [
     { value: 1, label: "Oui" },

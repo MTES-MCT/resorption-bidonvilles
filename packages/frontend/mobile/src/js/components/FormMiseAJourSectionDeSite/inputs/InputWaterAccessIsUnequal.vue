@@ -1,8 +1,11 @@
 <template>
-    <SubQuestionWrapper :label="labels.sanitary_toilets_are_inside">
+    <SubQuestionWrapper
+        :label="labels.water_access_is_unequal"
+        info="Il est recommandé 1 robinet pour 50 personnes. Cette recommandation doit être adaptée aux spécificités du site."
+    >
         <CheckableGroup
-            id="sanitary_toilets_are_inside"
-            direction="horizontal"
+            id="water_access_is_unequal"
+            direction="vertical"
             withoutMargin
         >
             <Radio
@@ -10,7 +13,7 @@
                 :key="item.value"
                 :value="item.value"
                 :label="item.label"
-                name="sanitary_toilets_are_inside"
+                name="water_access_is_unequal"
                 v-bind="$attrs"
                 variant="radio"
                 allowNull
@@ -27,7 +30,7 @@ import {
     Radio,
     SubQuestionWrapper,
 } from "@resorptionbidonvilles/ui";
-import labels from "#src/js/pages/MiseAjourSectionDeSite/MiseAJourSectionDeSite.labels";
+import labels from "#src/js/pages/MiseAJourDeSite/MiseAJourDeSite.labels";
 
 const items = [
     { value: 1, label: "Oui" },

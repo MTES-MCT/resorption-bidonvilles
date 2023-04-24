@@ -1,7 +1,7 @@
 <template>
-    <SubQuestionWrapper :label="labels.water_access_is_local">
+    <SubQuestionWrapper :label="labels.sanitary_open_air_defecation">
         <CheckableGroup
-            id="water_access_is_local"
+            id="sanitary_open_air_defecation"
             direction="vertical"
             withoutMargin
         >
@@ -10,7 +10,7 @@
                 :key="item.value"
                 :value="item.value"
                 :label="item.label"
-                name="water_access_is_local"
+                name="sanitary_open_air_defecation"
                 v-bind="$attrs"
                 variant="radio"
                 allowNull
@@ -27,10 +27,10 @@ import {
     Radio,
     SubQuestionWrapper,
 } from "@resorptionbidonvilles/ui";
-import labels from "#src/js/pages/MiseAjourSectionDeSite/MiseAJourSectionDeSite.labels";
+import labels from "../MiseAJourDeSite.labels";
 
 const items = [
-    { value: 1, label: "Sur site" },
-    { value: 0, label: "À l'extérieur du site" },
+    { value: 1, label: "Oui" },
+    { value: 0, label: "Non" },
 ];
 </script>

@@ -19,7 +19,7 @@
 
 <script setup>
 import { CheckableGroup, Radio } from "@resorptionbidonvilles/ui";
-import labels from "#src/js/pages/MiseAjourSectionDeSite/MiseAJourSectionDeSite.labels";
+import labels from "../MiseAJourDeSite.labels";
 
 const items = [
     { value: 1, label: "Oui" },

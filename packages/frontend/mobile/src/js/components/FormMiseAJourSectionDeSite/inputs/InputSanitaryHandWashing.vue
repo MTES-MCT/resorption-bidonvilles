@@ -1,7 +1,7 @@
 <template>
-    <SubQuestionWrapper :label="labels.sanitary_toilets_are_lighted">
+    <SubQuestionWrapper :label="labels.sanitary_hand_washing">
         <CheckableGroup
-            id="sanitary_toilets_are_lighted"
+            id="sanitary_hand_washing"
             direction="horizontal"
             withoutMargin
         >
@@ -10,7 +10,7 @@
                 :key="item.value"
                 :value="item.value"
                 :label="item.label"
-                name="sanitary_toilets_are_lighted"
+                name="sanitary_hand_washing"
                 v-bind="$attrs"
                 variant="radio"
                 allowNull
@@ -27,7 +27,7 @@ import {
     Radio,
     SubQuestionWrapper,
 } from "@resorptionbidonvilles/ui";
-import labels from "#src/js/pages/MiseAjourSectionDeSite/MiseAJourSectionDeSite.labels";
+import labels from "../MiseAJourDeSite.labels";
 
 const items = [
     { value: 1, label: "Oui" },

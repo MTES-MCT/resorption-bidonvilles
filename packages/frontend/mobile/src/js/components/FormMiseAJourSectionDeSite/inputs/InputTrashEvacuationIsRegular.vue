@@ -1,7 +1,10 @@
 <template>
-    <SubQuestionWrapper :label="labels.water_access_is_close">
+    <SubQuestionWrapper
+        :label="labels.trash_evacuation_is_regular"
+        info="Passages à des jours fixes, 2 à 3 X par semaine, … Indicateur : les poubelles ne débordent pas."
+    >
         <CheckableGroup
-            id="water_access_is_close"
+            id="trash_evacuation_is_regular"
             direction="vertical"
             withoutMargin
         >
@@ -10,7 +13,7 @@
                 :key="item.value"
                 :value="item.value"
                 :label="item.label"
-                name="water_access_is_close"
+                name="trash_evacuation_is_regular"
                 v-bind="$attrs"
                 variant="radio"
                 allowNull
@@ -27,10 +30,10 @@ import {
     Radio,
     SubQuestionWrapper,
 } from "@resorptionbidonvilles/ui";
-import labels from "#src/js/pages/MiseAjourSectionDeSite/MiseAJourSectionDeSite.labels";
+import labels from "../MiseAJourDeSite.labels";
 
 const items = [
-    { value: 1, label: "Moins de 200m" },
-    { value: 0, label: "Plus de 200m" },
+    { value: 1, label: "Oui" },
+    { value: 0, label: "Non" },
 ];
 </script>

@@ -1,7 +1,10 @@
 <template>
-    <SubQuestionWrapper :label="labels.water_access_has_stagnant_water">
+    <SubQuestionWrapper
+        :label="labels.water_access_is_continuous"
+        info="C'est-à-dire qu'il ne varie pas en qualité et en quantité dans la journée et les saisons, sans limite dans le temps."
+    >
         <CheckableGroup
-            id="water_access_has_stagnant_water"
+            id="water_access_is_continuous"
             direction="vertical"
             withoutMargin
         >
@@ -10,7 +13,7 @@
                 :key="item.value"
                 :value="item.value"
                 :label="item.label"
-                name="water_access_has_stagnant_water"
+                name="water_access_is_continuous"
                 v-bind="$attrs"
                 variant="radio"
                 allowNull
@@ -27,7 +30,7 @@ import {
     Radio,
     SubQuestionWrapper,
 } from "@resorptionbidonvilles/ui";
-import labels from "#src/js/pages/MiseAjourSectionDeSite/MiseAJourSectionDeSite.labels";
+import labels from "../MiseAJourDeSite.labels";
 
 const items = [
     { value: 1, label: "Oui" },

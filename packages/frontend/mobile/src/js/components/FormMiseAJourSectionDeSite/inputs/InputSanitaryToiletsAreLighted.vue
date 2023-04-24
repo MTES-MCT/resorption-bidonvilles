@@ -1,11 +1,8 @@
 <template>
-    <SubQuestionWrapper
-        :label="labels.trash_evacuation_is_regular"
-        info="Passages à des jours fixes, 2 à 3 X par semaine, … Indicateur : les poubelles ne débordent pas."
-    >
+    <SubQuestionWrapper :label="labels.sanitary_toilets_are_lighted">
         <CheckableGroup
-            id="trash_evacuation_is_regular"
-            direction="vertical"
+            id="sanitary_toilets_are_lighted"
+            direction="horizontal"
             withoutMargin
         >
             <Radio
@@ -13,7 +10,7 @@
                 :key="item.value"
                 :value="item.value"
                 :label="item.label"
-                name="trash_evacuation_is_regular"
+                name="sanitary_toilets_are_lighted"
                 v-bind="$attrs"
                 variant="radio"
                 allowNull
@@ -30,7 +27,7 @@ import {
     Radio,
     SubQuestionWrapper,
 } from "@resorptionbidonvilles/ui";
-import labels from "#src/js/pages/MiseAjourSectionDeSite/MiseAJourSectionDeSite.labels";
+import labels from "../MiseAJourDeSite.labels";
 
 const items = [
     { value: 1, label: "Oui" },

@@ -19,7 +19,7 @@
 import { computed } from "vue";
 import { CheckableGroup, Checkbox } from "@resorptionbidonvilles/ui";
 import accessTypes from "#frontend/common/utils/electricity_access_types";
-import labels from "#src/js/pages/MiseAjourSectionDeSite/MiseAJourSectionDeSite.labels";
+import labels from "../MiseAJourDeSite.labels";
 
 const items = computed(() => {
     return Object.keys(accessTypes).map((id) => ({
