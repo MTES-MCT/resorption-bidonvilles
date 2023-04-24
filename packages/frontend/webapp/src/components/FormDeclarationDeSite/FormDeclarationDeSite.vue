@@ -60,7 +60,7 @@ import router from "@/helpers/router";
 import isDeepEqual from "@/utils/isDeepEqual";
 import backOrReplace from "@/utils/backOrReplace";
 import formatFormTown from "@/utils/formatFormTown";
-import formatFormDate from "@/utils/formatFormDate";
+import formatFormDate from "@common/utils/formatFormDate";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";

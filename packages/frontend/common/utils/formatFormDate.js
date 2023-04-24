@@ -1,4 +1,4 @@
-import formatDate from "../../../common/utils/formatDate";
+import formatDate from "./formatDate";
 
 export default function (date) {
     if (!date || !(date instanceof Date)) {
