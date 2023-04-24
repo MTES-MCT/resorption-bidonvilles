@@ -254,6 +254,23 @@ export default {
         });
     },
 
+    sendCommunityAd: (recipient, options: MailOptions = {}) => {
+        const { preserveRecipient = false } = options;
+
+        const utm = generateTrackingUTM(COMMUNITY_CAMPAIGN, 'publicite');
+
+        return mailService.send('community_ad', {
+            recipient,
+            variables: {
+                utm,
+                webappUrl,
+                backUrl,
+                blogUrl,
+            },
+            preserveRecipient,
+        });
+    },
+
     sendCommunityNewQuestion: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient } = options;
 

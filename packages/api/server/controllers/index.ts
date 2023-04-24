@@ -10,6 +10,8 @@ import actionList from './actionController/list';
 import actionUpdate from './actionController/update';
 // answer
 import createAnswer from './answerController/create';
+// community
+import communityAd from './communityController/ad';
 // config
 import configList from './configController/list';
 // contact
@@ -101,6 +103,9 @@ export default () => ({
     },
     answer: {
         create: createAnswer,
+    },
+    community: {
+        ad: communityAd,
     },
     config: {
         list: configList,

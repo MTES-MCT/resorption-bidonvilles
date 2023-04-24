@@ -729,4 +729,11 @@ export default (app) => {
         middlewares.validation,
         controllers.note.addPublication,
     );
+
+    app.post(
+        '/communaute/ad',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        controllers.community.ad,
+    );
 };
