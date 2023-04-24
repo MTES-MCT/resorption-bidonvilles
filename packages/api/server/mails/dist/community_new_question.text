@@ -6,6 +6,9 @@ Bonjour,
 
 Voir la question [{{var:webappUrl}}/question/{{var:questionId}}?{{var:utm}}]
 
+Être tenu informé des réponses par mail
+[{{var:webappUrl}}/question/{{var:questionId}}?abonnement=oui&{{var:utm}}]
+
 Cordialement,
 L'équipe Résorption-bidonvilles
 

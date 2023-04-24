@@ -9,16 +9,25 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { defineProps, onMounted, toRefs } from "vue";
+import router from "@/helpers/router";
 
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import FicheQuestionHeader from "./FicheQuestionHeader/FicheQuestionHeader.vue";
 import FicheQuestionDetails from "./FicheQuestionDetails/FicheQuestionDetails.vue";
 import FicheQuestionDate from "./FicheQuestionDate/FicheQuestionDate.vue";
 import FicheQuestionReponses from "./FicheQuestionReponses/FicheQuestionReponses.vue";
+import { useQuestionsStore } from "@/stores/questions.store";
 
 const props = defineProps({
     question: Object,
 });
 const { question } = toRefs(props);
+
+onMounted(() => {
+    if (router.currentRoute.value.query.abonnement === "oui") {
+        const questionStore = useQuestionsStore();
+        questionStore.subscribe(question.value.id);
+    }
+});
 </script>

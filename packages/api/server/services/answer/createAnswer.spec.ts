@@ -12,9 +12,7 @@ import Question from '#server/models/questionModel/Question.d';
 const stubs = {
     createAnswer: sinon.stub(),
     findOne: sinon.stub(),
-    sendMailForNewAnswer: sinon.stub(),
 };
-rewiremock('./_common/sendMailForNewAnswer').with(stubs.sendMailForNewAnswer);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first

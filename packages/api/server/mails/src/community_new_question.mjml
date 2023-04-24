@@ -19,6 +19,9 @@
                 <mj-button mj-class="button-primary" href="{{var:webappUrl}}/question/{{var:questionId}}?{{var:utm}}" rel="noopener noreferrer">
                     Voir la question
                 </mj-button>
+                <mj-button mj-class="button-primary" href="{{var:webappUrl}}/question/{{var:questionId}}?abonnement=oui&{{var:utm}}" rel="noopener noreferrer">
+                    Être tenu informé des réponses par mail
+                </mj-button>
             </mj-column>
         </mj-section>
 
