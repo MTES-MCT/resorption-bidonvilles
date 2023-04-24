@@ -736,4 +736,14 @@ export default (app) => {
         middlewares.auth.isSuperAdmin,
         controllers.community.ad,
     );
+
+    app.put(
+        '/questions/:id/subscription',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.question.subscribeQuestion,
+        middlewares.validation,
+        controllers.community.subscribe,
+    );
 };

@@ -12,6 +12,7 @@ import actionUpdate from './actionController/update';
 import createAnswer from './answerController/create';
 // community
 import communityAd from './communityController/ad';
+import communitySubscribe from './communityController/subscribe';
 // config
 import configList from './configController/list';
 // contact
@@ -106,6 +107,7 @@ export default () => ({
     },
     community: {
         ad: communityAd,
+        subscribe: communitySubscribe,
     },
     config: {
         list: configList,
