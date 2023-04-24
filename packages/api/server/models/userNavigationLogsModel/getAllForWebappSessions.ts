@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-type WebappSessionRow = {
+export type WebappSessionRow = {
     log_id: number,
     user_id: number,
     date: Date,
