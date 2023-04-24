@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-type MobileSessionRow = {
+export type MobileSessionRow = {
     id: number,
     user_id: number,
     date: Date,

@@ -1,9 +1,28 @@
 
 import userNavigationLogsModel from '#server/models/userNavigationLogsModel';
 import ServiceError from '#server/errors/ServiceError';
+import { MobileSessionRow } from '#server/models/userNavigationLogsModel/getAllForMobileSessions';
 import moment from 'moment';
 
-function serializeSession(user, session, beginning, duration, townViews, noteCreations, noteViews, notePublications) {
+type SerializedMobileSession = {
+    'Id de l\'utilisateur': number,
+    'Niveau géographique de l\'utilisateur': string,
+    'Nom de la région': string | null,
+    'Code de la région': string | null,
+    'Nom du département': string | null,
+    'Code du département': string | null,
+    'Catégorie de structure de l\'utilisateur': string,
+    'Type de structure de l\'utilisateur': string,
+    'Rôle de l\'utilisateur': string,
+    'Début de la session': string,
+    'Durée de la session (en minutes)': number,
+    'Nombre de fiches sites différentes consultées': number,
+    'Nombre de notes créées': number,
+    'Nombre de notes différentes consultées': number,
+    'Nombre de publications de notes': number,
+};
+
+function serializeSession(user: number, session: MobileSessionRow, beginning: Date, duration: number, townViews: number, noteCreations: number, noteViews: number, notePublications: number): SerializedMobileSession {
     return {
         'Id de l\'utilisateur': user,
         'Niveau géographique de l\'utilisateur': session.location_type,
@@ -25,29 +44,28 @@ function serializeSession(user, session, beginning, duration, townViews, noteCre
 
 const noteRegExp = new RegExp(/(?<=\/notes\/).*/);
 const townRegExp = new RegExp(/(?<=\/site\/)\d+/);
-export default async (): Promise<Array<Object>> => {
-    let logs;
+
+export default async (): Promise<SerializedMobileSession[]> => {
+    let logs: MobileSessionRow[];
     try {
         logs = await userNavigationLogsModel.getAllForMobileSessions();
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
 
+    const sessions: SerializedMobileSession[] = [];
+    let currentUser: number = logs[0].user_id;
+    let beginningOfSession: Date = logs[0].date;
+    let durationOfSession: number = 0;
 
-    const sessions = [];
-    let currentUser = logs[0].user_id;
-    let beginningOfSession = logs[0].date;
-    let durationOfSession = 0;
-
-    let townViews = [];
-    let noteViews = [];
-    let noteCreations = 0;
-    let notePublications = 0;
-
+    let townViews: string[] = [];
+    let noteViews: string[] = [];
+    let noteCreations: number = 0;
+    let notePublications: number = 0;
 
     // La liste des logs est triée par utilisateur, puis date
     logs.forEach((log, index) => {
-        if (log.user_id !== currentUser || log.date - beginningOfSession > 3600000) {
+        if (log.user_id !== currentUser || log.date.getTime() - beginningOfSession.getTime() > 3600000) {
             // si on change d'utilisateur ou que la session dépasse l'heure,
             // on commence une nouvelle session
             sessions.push(
@@ -71,10 +89,9 @@ export default async (): Promise<Array<Object>> => {
             noteCreations = 0;
             notePublications = 0;
         } else {
-            durationOfSession = log.date - beginningOfSession;
+            durationOfSession = log.date.getTime() - beginningOfSession.getTime();
             const noteId = log.action.match(noteRegExp);
             const townId = log.action.match(townRegExp);
-
 
             if (log.action === 'creationNote') {
                 noteCreations += 1;
