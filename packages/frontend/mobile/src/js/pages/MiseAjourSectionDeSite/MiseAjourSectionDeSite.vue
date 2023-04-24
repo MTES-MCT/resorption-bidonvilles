@@ -32,7 +32,12 @@
                     :town="town"
                     v-else-if="section === 'conditions-de-vie'"
                 />
-
+                <ErrorSummary
+                    id="erreurs"
+                    v-if="formError || Object.keys(errors).length > 0"
+                    :message="formError"
+                    :summary="errors"
+                />
                 <Button
                     @click="submit"
                     variant="primary"
@@ -40,13 +45,6 @@
                     class="mb-5 ml-5"
                     >Mettre à jour le site</Button
                 >
-                <ErrorSummary
-                    id="erreurs"
-                    class="mt-12"
-                    v-if="formError || Object.keys(errors).length > 0"
-                    :message="formError"
-                    :summary="errors"
-                />
             </template>
         </LayoutForm>
     </div>
