@@ -22,15 +22,28 @@
             >
                 {{ town[section.content] || "Non communiqué" }}
             </TownPageInfo>
+
+            <TownPageInfo title="Origines">
+                <section v-if="town.socialOrigins.length === 0">
+                    Non communiqué
+                </section>
+                <section v-else>
+                    <p v-for="origin in town.socialOrigins" :key="origin.id">
+                        {{ origin.label }}
+                    </p>
+                </section>
+            </TownPageInfo>
         </div>
     </div>
 </template>
 <script setup>
 import { computed, defineProps, toRefs } from "vue";
 import store from "#src/store/index.js";
+
 import TownPageInfo from "./TownPageInfo.vue";
 import TownPagePanelTitle from "./TownPagePanelTitle.vue";
 import { Button } from "@resorptionbidonvilles/ui";
+
 const data = [
     { title: "Nombre de personnes", content: "populationTotal" },
     { title: "Nombre de ménages", content: "populationCouples" },
