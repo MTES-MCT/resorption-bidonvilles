@@ -25,6 +25,7 @@ const REQUESTER_CAMPAIGN = 'demandeur-email';
 const USER_CAMPAIGN = 'utilisateur-email';
 const INVITE_CAMPAIGN = 'invite-email';
 const SUMMARY_CAMPAIGN = 'recap-activite-email';
+const COMMUNITY_CAMPAIGN = 'community-email';
 
 type MailOptions = {
     preserveRecipient?: boolean,
@@ -248,6 +249,26 @@ export default {
                 backUrl,
                 blogUrl,
                 webappUrl: `${webappUrl}?${utm}`,
+            },
+            preserveRecipient,
+        });
+    },
+
+    sendCommunityNewQuestion: (recipient, options: MailOptions = {}) => {
+        const { variables, preserveRecipient } = options;
+
+        const utm = generateTrackingUTM(COMMUNITY_CAMPAIGN, 'nouvelle-question');
+
+        return mailService.send('community_new_question', {
+            recipient,
+            variables: {
+                backUrl,
+                blogUrl,
+                webappUrl,
+                utm,
+                created_by: `${formatName(variables.question.createdBy)} (${variables.question.createdBy.organization})`,
+                question: variables.question.question,
+                questionId: variables.question.id,
             },
             preserveRecipient,
         });
