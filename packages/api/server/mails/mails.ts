@@ -271,6 +271,25 @@ export default {
         });
     },
 
+    sendCommunityNewAnswerForAuthor: (recipient, options: MailOptions = {}) => {
+        const { variables, preserveRecipient = false } = options;
+        const utm = generateTrackingUTM(COMMUNITY_CAMPAIGN, 'nouvelle-reponse');
+
+        return mailService.send('community_new_answer_for_author', {
+            recipient,
+            variables: {
+                questionId: variables.questionId,
+                authorName: formatName(variables.author),
+                authorOrganization: variables.author.organization.id,
+                webappUrl,
+                utm,
+                backUrl,
+                blogUrl,
+            },
+            preserveRecipient,
+        });
+    },
+
     sendCommunityNewQuestion: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient } = options;
 
@@ -867,29 +886,6 @@ export default {
                 wwwUrl,
                 webappUrl,
                 utm,
-                blogUrl,
-            },
-            preserveRecipient,
-        });
-    },
-
-    /**
-     * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
-     * @param {Object} options
-     */
-    sendUserNewAnswerToQuestion: (recipient, options: MailOptions = {}) => {
-        const { variables, preserveRecipient = false } = options;
-        const utm = generateTrackingUTM(USER_CAMPAIGN, 'nouvelle-reponse');
-
-        return mailService.send('user_answer_to_question', {
-            recipient,
-            variables: {
-                questionId: variables.questionId,
-                authorName: formatName(variables.author),
-                authorOrganization: variables.author.organization.id,
-                webappUrl,
-                utm,
-                backUrl,
                 blogUrl,
             },
             preserveRecipient,
