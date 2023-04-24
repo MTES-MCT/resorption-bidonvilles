@@ -5,7 +5,7 @@ import TownPage from "#src/js/pages/TownPage/TownPage.vue";
 import TownsSearch from "#src/js/pages/TownsSearch/TownsSearch.vue";
 import Launcher from "#src/js/pages/Launcher/Launcher.vue";
 import Logout from "#src/js/pages/Logout/Logout.vue";
-import MiseAJourSectionDeSite from "#src/js/pages/MiseAJourSectionDeSite/MiseAJourSectionDeSite.vue";
+import MiseAJourDeSite from "#src/js/pages/MiseAJourDeSite/MiseAJourDeSite.vue";
 import MiseANiveau from "#src/js/pages/MiseANiveau/MiseANiveau.vue";
 import NotesList from "#src/js/pages/NotesList/NotesList.vue";
 import NotesForm from "#src/js/pages/NotesForm/NotesForm.vue";
@@ -13,6 +13,9 @@ import QuestionnaireSatisfaction from "#src/js/pages/QuestionnaireSatisfaction/Q
 import SignatureCharteEngagement from "#src/js/pages/SignatureCharteEngagement/SignatureCharteEngagement.vue";
 import store from "#src/store/index.js";
 import { insert as insertNavigationLog } from "./helpers/navigationLogs";
+import waitForElement from "./utils/waitForElement";
+
+let ignoreNextScroll = false;
 
 function isLoggedIn() {
     return store.getters["user/loggedIn"];
@@ -193,6 +196,32 @@ const guardians = {
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
+    scrollBehavior: (to, from, savedPosition) => {
+        if (savedPosition) {
+            return savedPosition;
+        }
+
+        if (to.hash) {
+            if (ignoreNextScroll === true) {
+                ignoreNextScroll = false;
+                return;
+            }
+
+            waitForElement(to.hash, (el) => {
+                setTimeout(() => {
+                    el.scrollIntoView({ behavior: "smooth" });
+                }, 100);
+            });
+
+            return {
+                selector: to.hash,
+            };
+        }
+
+        return {
+            top: 0,
+        };
+    },
 
     routes: [
         {
@@ -278,7 +307,7 @@ const router = createRouter({
                 title: "Résorption-bidonvilles — Modification de site",
             },
             path: "/site/:id/mise-a-jour/:section_id",
-            component: MiseAJourSectionDeSite,
+            component: MiseAJourDeSite,
             beforeEnter: guardians.loadedAndUpToDate,
         },
         {
