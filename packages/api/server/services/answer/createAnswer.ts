@@ -4,6 +4,7 @@ import ServiceError from '#server/errors/ServiceError';
 import Answer from '#server/models/answerModel/Answer.d';
 import Question from '#server/models/questionModel/Question.d';
 import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import userQuestionSubscriptionModel from '#server/models/userQuestionSubscriptionModel';
 import sendMailForNewAnswer from './_common/sendMailForNewAnswer';
 
 type AnswerData = {
@@ -30,6 +31,15 @@ export default async (answer: AnswerData, question: Question, author: Serialized
             await sendMailForNewAnswer(question.id, author, questionAuthor);
         }
     } catch (ignore) {
+        // ignore
+    }
+
+    // on essaie d'abonner l'auteur de la réponse à la question
+    try {
+        if (author.question_subscriptions[question.id] === undefined) {
+            await userQuestionSubscriptionModel.createSubscription(author.id, question.id);
+        }
+    } catch (error) {
         // ignore
     }
 
