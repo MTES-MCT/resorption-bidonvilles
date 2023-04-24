@@ -1,7 +1,9 @@
 import insert from './insert';
-import exportSessions from './exportSessions';
+import exportMobileSessions from './exportMobileSessions';
+import exportWebappSessions from './exportWebappSessions';
 
 export default {
     insert,
-    exportSessions,
+    exportMobileSessions,
+    exportWebappSessions,
 };
