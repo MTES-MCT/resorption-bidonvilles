@@ -25,7 +25,7 @@
 
         <FicheSiteProceduresJudiciaireLigne
             icon="person-military-pointing"
-            label="Concours de la police publique"
+            label="Concours de la force publique"
         >
             {{ policeStatus }}
         </FicheSiteProceduresJudiciaireLigne>

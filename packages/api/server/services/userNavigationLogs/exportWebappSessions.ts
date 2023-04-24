@@ -1,9 +1,24 @@
 
 import userNavigationLogsModel from '#server/models/userNavigationLogsModel';
 import ServiceError from '#server/errors/ServiceError';
+import { WebappSessionRow } from '#server/models/userNavigationLogsModel/getAllForWebappSessions';
 import moment from 'moment';
 
-function serializeSession(user, session, beginning, duration) {
+type SerializedWebappSession = {
+    'Id de l\'utilisateur': number,
+    'Niveau géographique de l\'utilisateur': string,
+    'Nom de la région': string | null,
+    'Code de la région': string | null,
+    'Nom du département': string | null,
+    'Code du département': string | null,
+    'Catégorie de structure de l\'utilisateur': string,
+    'Type de structure de l\'utilisateur': string,
+    'Rôle de l\'utilisateur': string,
+    'Début de la session': string,
+    'Durée de la session (en minutes)': number,
+};
+
+function serializeSession(user: number, session: WebappSessionRow, beginning: Date, duration: number): SerializedWebappSession {
     return {
         'Id de l\'utilisateur': user,
         'Niveau géographique de l\'utilisateur': session.location_type,
@@ -19,24 +34,22 @@ function serializeSession(user, session, beginning, duration) {
     };
 }
 
-export default async (domain: 'webapp' | 'mobile'): Promise<Array<Object>> => {
-    let logs;
+export default async (): Promise<SerializedWebappSession[]> => {
+    let logs: WebappSessionRow[];
     try {
-        logs = await userNavigationLogsModel.getAllForSessions(
-            domain,
-        );
+        logs = await userNavigationLogsModel.getAllForWebappSessions();
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
 
-    const sessions = [];
-    let currentUser = logs[0].user_id;
-    let beginningOfSession = logs[0].date;
-    let durationOfSession = 0;
+    const sessions: SerializedWebappSession[] = [];
+    let currentUser: number = logs[0].user_id;
+    let beginningOfSession: Date = logs[0].date;
+    let durationOfSession: number = 0;
 
     // La liste des logs est triée par utilisateur, puis date
     logs.forEach((log, index) => {
-        if (log.user_id !== currentUser || log.date - beginningOfSession > 3600000) {
+        if (log.user_id !== currentUser || log.date.getTime() - beginningOfSession.getTime() > 3600000) {
             // si on change d'utilisateur ou que la session dépasse l'heure,
             // on commence une nouvelle session
             sessions.push(
@@ -52,7 +65,7 @@ export default async (domain: 'webapp' | 'mobile'): Promise<Array<Object>> => {
             durationOfSession = 0;
             beginningOfSession = log.date;
         } else {
-            durationOfSession = log.date - beginningOfSession;
+            durationOfSession = log.date.getTime() - beginningOfSession.getTime();
         }
     });
 
