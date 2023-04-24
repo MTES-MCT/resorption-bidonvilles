@@ -5,6 +5,8 @@ import QuestionInput from '#server/models/questionModel/QuestionInput.d';
 import userModel from '#server/models/userModel';
 import mails from '#server/mails/mails';
 import config from '#server/config';
+import { sequelize } from '#db/sequelize';
+import userQuestionSubscriptionModel from '#server/models/userQuestionSubscriptionModel';
 
 type AuthorData = {
     id: number
@@ -13,6 +15,8 @@ type AuthorData = {
 const { testEmail } = config;
 
 export default async (question: QuestionInput, author: AuthorData): Promise<Question> => {
+    const transaction = await sequelize.transaction();
+
     // on insère la question
     let questionId: number;
     try {
@@ -23,17 +27,33 @@ export default async (question: QuestionInput, author: AuthorData): Promise<Ques
             tags: question.tags,
             other_tag: question.other_tag || null,
             created_by: author.id,
-        });
+        }, transaction);
     } catch (error) {
+        await transaction.rollback();
         throw new ServiceError('insert_failed', error);
     }
 
     // on retourne la question
     let serializedQuestion: Question;
     try {
-        serializedQuestion = await questionModel.findOne(questionId);
+        serializedQuestion = await questionModel.findOne(questionId, transaction);
     } catch (error) {
+        await transaction.rollback();
         throw new ServiceError('fetch_failed', error);
+    }
+
+    try {
+        await transaction.commit();
+    } catch (error) {
+        await transaction.rollback();
+        throw new ServiceError('insert_failed', error);
+    }
+
+    // on insère l'abonnement pour l'auteur de la question
+    try {
+        await userQuestionSubscriptionModel.createSubscription(author.id, questionId);
+    } catch (error) {
+        // ignore
     }
 
     // on notifie tous les utilisateurs concernés
