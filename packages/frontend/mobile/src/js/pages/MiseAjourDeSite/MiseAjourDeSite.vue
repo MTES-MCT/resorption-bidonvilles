@@ -22,14 +22,18 @@
             </template>
         </Layout>
 
-        <LayoutForm v-else-if="town !== null" :town="town">
+        <LayoutForm v-else-if="town !== null" :backUrl="`/site/${town.id}`">
+            <template v-slot:title
+                >{{ town.addressSimple }} <br />
+                <span v-if="town.name" class="text-sm font-normal">
+                    « {{ town.name }} »</span
+                ></template
+            >
+            <template v-slot:back> Revenir au site </template>
+            <template v-slot:validate> Mettre à jour le site </template>
+
             <template v-slot:scroll>
-                <FormMiseAJourDeSite
-                    :initialValue="initialValues"
-                    :section="section"
-                    :town="town"
-                    :validationSchema="validationSchema"
-                />
+                <FormMiseAJourDeSite :section="section" :town="town" />
             </template>
         </LayoutForm>
     </div>

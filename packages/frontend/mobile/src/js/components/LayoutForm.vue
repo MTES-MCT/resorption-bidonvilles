@@ -8,10 +8,8 @@
                             class="bg-G200 text-display-sm font-bold text-center pt-3 pb-2"
                             style="line-height: 1em"
                         >
-                            {{ town.addressSimple }}<br />
-                            <span v-if="town.name" class="text-sm font-normal">
-                                « {{ town.name }} »</span
-                            >
+                            <slot name="title" />
+
                             <br />
                             <Button
                                 icon="arrow-left"
@@ -20,9 +18,10 @@
                                 variant="textPrimary"
                                 class="text-primary"
                                 type="button"
-                                @click="router.push(`/site/${town.id}`)"
-                                >Revenir au site</Button
+                                @click="router.push(backUrl)"
                             >
+                                <slot name="back" />
+                            </Button>
                         </div>
                         <div class="text-center py-2">
                             <Button
@@ -30,8 +29,8 @@
                                 variant="primary"
                                 @click="submit"
                             >
-                                Mettre à jour le site</Button
-                            >
+                                <slot name="validate" />
+                            </Button>
                         </div>
                     </header>
                 </template>
@@ -47,18 +46,21 @@
 import { toRefs } from "vue";
 import router from "../router";
 import { useEventBus } from "#frontend/common/helpers/event-bus";
+
 import { Button } from "@resorptionbidonvilles/ui";
 import Layout from "#src/js/components/Layout.vue";
+
 const props = defineProps({
-    town: {
-        type: Object,
-        required: false,
-        default: null,
+    backUrl: {
+        type: String,
+        required: true,
     },
 });
-const { town } = toRefs(props);
+const { backUrl } = toRefs(props);
+
 const { emit } = useEventBus();
+
 function submit() {
-    emit("miseAJourSite:submit");
+    emit("validateForm:submit");
 }
 </script>

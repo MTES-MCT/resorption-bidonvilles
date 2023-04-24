@@ -61,7 +61,7 @@ const { values, errors, setErrors } = useForm({
 const { bus } = useEventBus();
 
 watch(
-    () => bus.value.get("miseAJourSite:submit"),
+    () => bus.value.get("validateForm:submit"),
     () => {
         submit();
     }
