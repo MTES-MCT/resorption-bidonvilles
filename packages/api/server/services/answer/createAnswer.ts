@@ -5,7 +5,7 @@ import Answer from '#server/models/answerModel/Answer.d';
 import Question from '#server/models/questionModel/Question.d';
 import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
 import userQuestionSubscriptionModel from '#server/models/userQuestionSubscriptionModel';
-import sendMailForNewAnswer from './_common/sendMailForNewAnswer';
+import mails from '#server/mails/mails';
 
 type AnswerData = {
     description: string,
@@ -24,12 +24,35 @@ export default async (answer: AnswerData, question: Question, author: Serialized
         throw new ServiceError('insert_failed', error);
     }
 
-    // On essaie d'envoyer un mail de notification à l'auteur de la question
+    // On essaie d'envoyer un mail de notification à aux abonnés de la question
     try {
-        const questionAuthor = await userModel.findOne(question.createdBy.id);
-        if (questionAuthor.email_subscriptions.includes('community_new_answer')) {
-            await sendMailForNewAnswer(question.id, author, questionAuthor);
-        }
+        const subscribers = await userModel.getQuestionSubscribers(question.id);
+        await Promise.all(
+            subscribers.map((subscriber) => {
+                if (author.id === subscriber.user_id) {
+                    return null;
+                }
+
+                if (subscriber.is_author) {
+                    return mails.sendCommunityNewAnswerForAuthor(subscriber, {
+                        preserveRecipient: false,
+                        variables: {
+                            questionId: question.id,
+                            author,
+                        },
+                    });
+                }
+
+                return mails.sendCommunityNewAnswerForObservers(subscriber, {
+                    preserveRecipient: false,
+                    variables: {
+                        questionId: question.id,
+                        question: question.question,
+                        author,
+                    },
+                });
+            }),
+        );
     } catch (ignore) {
         // ignore
     }
