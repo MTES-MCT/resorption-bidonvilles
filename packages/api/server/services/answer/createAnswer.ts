@@ -11,7 +11,12 @@ type AnswerData = {
     description: string,
 };
 
-export default async (answer: AnswerData, question: Question, author: SerializedUser): Promise<Answer> => {
+export type CreateAnswerServiceResponse = {
+    answer: Answer,
+    subscribed: boolean,
+};
+
+export default async (answer: AnswerData, question: Question, author: SerializedUser): Promise<CreateAnswerServiceResponse> => {
     // on insère la réponse
     let answerId: number;
     try {
@@ -58,9 +63,11 @@ export default async (answer: AnswerData, question: Question, author: Serialized
     }
 
     // on essaie d'abonner l'auteur de la réponse à la question
+    let subscribed: boolean = false;
     try {
         if (author.question_subscriptions[question.id] === undefined) {
             await userQuestionSubscriptionModel.createSubscription(author.id, question.id);
+            subscribed = true;
         }
     } catch (error) {
         // ignore
@@ -74,5 +81,8 @@ export default async (answer: AnswerData, question: Question, author: Serialized
         throw new ServiceError('fetch_failed', error);
     }
 
-    return serializedAnswer;
+    return {
+        answer: serializedAnswer,
+        subscribed,
+    };
 };

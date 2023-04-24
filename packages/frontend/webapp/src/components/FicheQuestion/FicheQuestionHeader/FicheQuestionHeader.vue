@@ -20,6 +20,21 @@
                 </span>
             </template>
         </template>
+        <template v-slot:actions>
+            <div class="flex justify-between items-start">
+                <div>
+                    <FicheQuestionTags
+                        :question="question"
+                        v-if="question.tags.length > 0"
+                        class="mb-4"
+                    />
+                </div>
+                <FicheQuestionSubscriptionButton
+                    :question="question"
+                    size="sm"
+                />
+            </div>
+        </template>
     </ViewHeader>
 </template>
 
@@ -28,6 +43,8 @@ import { defineProps, toRefs } from "vue";
 
 import { Icon, LinkOrganization } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
+import FicheQuestionTags from "../FicheQuestionTags/FicheQuestionTags.vue";
+import FicheQuestionSubscriptionButton from "../FicheQuestionSubscriptionButton/FicheQuestionSubscriptionButton.vue";
 
 const props = defineProps({
     question: Object,

@@ -1,10 +1,11 @@
 import answerService from '#server/services/answer';
+import { CreateAnswerServiceResponse } from '#server/services/answer/createAnswer';
 
 export default async (req, res, next) => {
-    let answer;
+    let response: CreateAnswerServiceResponse;
 
     try {
-        answer = await answerService.createAnswer(
+        response = await answerService.createAnswer(
             {
                 description: req.body.description,
             },
@@ -33,6 +34,6 @@ export default async (req, res, next) => {
     }
 
     return res.status(201).send(
-        answer,
+        response,
     );
 };
