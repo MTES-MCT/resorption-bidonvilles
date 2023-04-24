@@ -13,6 +13,7 @@ import createAnswer from './answerController/create';
 // community
 import communityAd from './communityController/ad';
 import communitySubscribe from './communityController/subscribe';
+import communityUnsubscribe from './communityController/unsubscribe';
 // config
 import configList from './configController/list';
 // contact
@@ -108,6 +109,7 @@ export default () => ({
     community: {
         ad: communityAd,
         subscribe: communitySubscribe,
+        unsubscribe: communityUnsubscribe,
     },
     config: {
         list: configList,

@@ -3,7 +3,7 @@ import Question from '#server/models/questionModel/Question.d';
 import { Request, NextFunction, Response } from 'express';
 import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
 
-interface SubscribeQuestionRequest extends Request {
+interface UnsubscribeQuestionRequest extends Request {
     params: {
         id: string,
     },
@@ -16,9 +16,9 @@ const ERROR_RESPONSES = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
-export default async (req: SubscribeQuestionRequest, res: Response, next: NextFunction): Promise<void> => {
+export default async (req: UnsubscribeQuestionRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        await questionService.subscribe(req.user, req.question.id);
+        await questionService.unsubscribe(req.user, req.question.id);
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({

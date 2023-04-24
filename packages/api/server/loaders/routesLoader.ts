@@ -746,4 +746,14 @@ export default (app) => {
         middlewares.validation,
         controllers.community.subscribe,
     );
+
+    app.delete(
+        '/questions/:id/subscription',
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.question.subscribeQuestion,
+        middlewares.validation,
+        controllers.community.unsubscribe,
+    );
 };
