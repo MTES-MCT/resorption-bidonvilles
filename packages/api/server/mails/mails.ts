@@ -290,6 +290,26 @@ export default {
         });
     },
 
+    sendCommunityNewAnswerForObservers: (recipient, options: MailOptions = {}) => {
+        const { variables, preserveRecipient = false } = options;
+        const utm = generateTrackingUTM(COMMUNITY_CAMPAIGN, 'nouvelle-reponse');
+
+        return mailService.send('community_new_answer_for_observers', {
+            recipient,
+            variables: {
+                questionId: variables.questionId,
+                authorName: formatName(variables.author),
+                authorOrganization: variables.author.organization.id,
+                question: variables.question,
+                webappUrl,
+                utm,
+                backUrl,
+                blogUrl,
+            },
+            preserveRecipient,
+        });
+    },
+
     sendCommunityNewQuestion: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient } = options;
 

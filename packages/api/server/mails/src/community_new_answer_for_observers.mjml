@@ -10,14 +10,14 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Une nouvelle réponse vous attend dans l'espace d'entraide !
+                    La communauté a répondu !
                 </mj-text>
                 <mj-text mj-class="pb-4">Bonjour,</mj-text>
                 <mj-text mj-class="pb-4">
-                    Vous avez posé une question sur <a href="{{var:webappUrl}}/communaute?{{var:utm}}" class="link" target="_blank" rel="noopener noreferrer">l'espace "communauté"</a> de la plateforme <a href="{{var:webappUrl}}?{{var:utm}}" class="font-italic link" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
+                    Vous êtes abonné-e à la question « {{var:question}} » sur <a href="{{var:webappUrl}}/communaute?{{var:utm}}" class="link" target="_blank" rel="noopener noreferrer">l'espace "communauté"</a> de la plateforme <a href="{{var:webappUrl}}?{{var:utm}}" class="font-italic link" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
                 </mj-text>
                 <mj-text mj-class="pb-4">
-                    <a href="{{var:webappUrl}}/structure/{{var:authorOrganization}}?{{var:utm}}" class="font-italic link" target="_blank" rel="noopener noreferrer">{{var:authorName}}</a> vous a répondu.
+                    <a href="{{var:webappUrl}}/structure/{{var:authorOrganization}}?{{var:utm}}" class="font-italic link" target="_blank" rel="noopener noreferrer">{{var:authorName}}</a> y a répondu.
                 </mj-text>
                 <mj-button mj-class="button-primary" href="{{var:webappUrl}}/question/{{var:questionId}}?{{var:utm}}#reponses" rel="noopener noreferrer">
                     Consulter la réponse
