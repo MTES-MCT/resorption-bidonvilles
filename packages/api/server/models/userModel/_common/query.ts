@@ -62,6 +62,9 @@ export default async (where: Where = [], filters: UserQueryFilters = {}, user: s
         ),
         email_unsubscriptions AS (
             SELECT fk_user, ARRAY_AGG(email_subscription) AS unsubscriptions FROM user_email_unsubscriptions GROUP BY fk_user
+        ),
+        question_subscriptions AS (
+            SELECT fk_user, ARRAY_AGG(fk_question::text || ',' || active::text) AS subscriptions FROM user_question_subscriptions GROUP BY fk_user
         )
 
         SELECT
@@ -80,6 +83,7 @@ export default async (where: Where = [], filters: UserQueryFilters = {}, user: s
             users.last_changelog,
             users.charte_engagement_signee,
             COALESCE(email_unsubscriptions.unsubscriptions, array[]::enum_user_email_subscriptions_email_subscription[]) AS email_unsubscriptions,
+            COALESCE(question_subscriptions.subscriptions, array[]::text[]) AS question_subscriptions,
             users.last_access,
             users.admin_comments,
             CASE WHEN users.fk_role IS NULL THEN FALSE
@@ -136,6 +140,8 @@ export default async (where: Where = [], filters: UserQueryFilters = {}, user: s
             user_options ON user_options.fk_user = users.user_id
         LEFT JOIN
             email_unsubscriptions ON email_unsubscriptions.fk_user = users.user_id
+        LEFT JOIN
+            question_subscriptions ON question_subscriptions.fk_user = users.user_id
         ${where.length > 0 ? `WHERE ${whereClause}` : ''}
         ORDER BY
             CASE

@@ -17,6 +17,10 @@ import serializeUserAccess, { SerializedUserAccess } from './serializeUserAccess
 type UserStatus = 'new' | 'active' | 'inactive';
 type UserLocationType = 'nation' | 'region' | 'departement' | 'epci' | 'city';
 
+type UserQuestionSubscriptions = {
+    [key: number]: boolean
+};
+
 export type SerializedUser = {
     id: number,
     first_name: string,
@@ -69,6 +73,7 @@ export type SerializedUser = {
     },
     charte_engagement_a_jour: boolean,
     email_subscriptions: string[],
+    question_subscriptions?: UserQuestionSubscriptions,
     last_access: number | null,
     admin_comments: string | null,
     is_admin: boolean,
@@ -166,6 +171,11 @@ export default (user, latestCharte, filters, permissionMap): SerializedUser => {
             access_request_message: user.access_request_message,
             permissions,
             permission_options: user.permission_options,
+            question_subscriptions: user.question_subscriptions.reduce((acc: UserQuestionSubscriptions, col) => {
+                const [questionId, active] = col.split(',');
+                acc[parseInt(questionId, 10)] = active === 'true';
+                return acc;
+            }, {}),
         });
     }
 
