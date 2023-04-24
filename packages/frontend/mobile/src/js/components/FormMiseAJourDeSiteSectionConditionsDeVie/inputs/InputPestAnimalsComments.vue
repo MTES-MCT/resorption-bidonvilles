@@ -12,5 +12,5 @@
 
 <script setup>
 import { TextArea } from "@resorptionbidonvilles/ui";
-import labels from "../FormMiseAJourDeSiteSectionConditionsDeVie.labels";
+import labels from "#src/js/pages/MiseAjourSectionDeSite/MiseAJourSectionDeSite.labels";
 </script>

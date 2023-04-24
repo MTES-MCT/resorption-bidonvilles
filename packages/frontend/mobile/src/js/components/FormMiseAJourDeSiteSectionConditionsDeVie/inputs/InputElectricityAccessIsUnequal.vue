@@ -27,7 +27,7 @@ import {
     Radio,
     SubQuestionWrapper,
 } from "@resorptionbidonvilles/ui";
-import labels from "../FormMiseAJourDeSiteSectionConditionsDeVie.labels";
+import labels from "#src/js/pages/MiseAjourSectionDeSite/MiseAJourSectionDeSite.labels";
 
 const items = [
     { value: 1, label: "Oui" },

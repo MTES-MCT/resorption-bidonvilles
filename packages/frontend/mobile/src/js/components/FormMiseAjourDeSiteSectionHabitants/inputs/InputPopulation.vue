@@ -105,7 +105,7 @@
 </template>
 
 <script setup>
-import labels from "../FormMiseAJourDeSiteSectionHabitants.labels";
+import labels from "#src/js/pages/MiseAjourSectionDeSite/MiseAJourSectionDeSite.labels";
 
 import { TextInput } from "@resorptionbidonvilles/ui";
 </script>

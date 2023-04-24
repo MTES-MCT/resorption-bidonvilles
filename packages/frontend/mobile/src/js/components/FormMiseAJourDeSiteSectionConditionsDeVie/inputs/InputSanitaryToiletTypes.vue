@@ -20,7 +20,7 @@
 import { computed } from "vue";
 import { CheckableGroup, Checkbox } from "@resorptionbidonvilles/ui";
 import toiletTypes from "#frontend/common/utils/toilet_types";
-import labels from "../FormMiseAJourDeSiteSectionConditionsDeVie.labels";
+import labels from "#src/js/pages/MiseAjourSectionDeSite/MiseAJourSectionDeSite.labels";
 
 const items = computed(() => {
     return Object.keys(toiletTypes).map((id) => ({
