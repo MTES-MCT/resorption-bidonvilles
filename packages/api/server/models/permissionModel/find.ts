@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import { Permissions } from './types/Permissions';
-import { Permission } from './types/Permission';
+import { Permissions } from './types/Permissions.d';
+import { Permission } from './types/Permission.d';
 
 type PermissionRow = {
     user_id: number,

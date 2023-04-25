@@ -1,7 +1,7 @@
 import { QueryTypes } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 
-type QuestionSubscriberRow = {
+export type QuestionSubscriberRow = {
     user_id: number,
     email: string,
     first_name: string,

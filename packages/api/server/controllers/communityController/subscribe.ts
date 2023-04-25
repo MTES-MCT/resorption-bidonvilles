@@ -1,7 +1,7 @@
 import questionService from '#server/services/question';
 import Question from '#server/models/questionModel/Question.d';
 import { Request, NextFunction, Response } from 'express';
-import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 
 interface SubscribeQuestionRequest extends Request {
     params: {

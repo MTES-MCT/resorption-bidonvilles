@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 import { Permission } from '#server/models/permissionModel/types/Permission';
 import { Transaction } from 'sequelize';
+=======
+import { Permission } from '#server/models/permissionModel/types/Permission.d';
+>>>>>>> eeebbf8c8 (feat(1861): rewrite unit tests for createAnswer service)
 import where from '#server/utils/permission/where';
 import fetchActions from './fetchActions';
 import fetchComments from '../fetchComments/fetchComments';

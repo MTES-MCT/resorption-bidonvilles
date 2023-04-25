@@ -1,4 +1,4 @@
-import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import userService from '#server/services/userService';
 
 export default async (req, res) => {

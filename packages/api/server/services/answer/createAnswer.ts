@@ -1,11 +1,13 @@
+import mails from '#server/mails/mails';
 import userModel from '#server/models/userModel';
 import answerModel from '#server/models/answerModel';
+import userQuestionSubscriptionModel from '#server/models/userQuestionSubscriptionModel';
+
+// types
 import ServiceError from '#server/errors/ServiceError';
 import Answer from '#server/models/answerModel/Answer.d';
 import Question from '#server/models/questionModel/Question.d';
-import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
-import userQuestionSubscriptionModel from '#server/models/userQuestionSubscriptionModel';
-import mails from '#server/mails/mails';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 
 type AnswerData = {
     description: string,
@@ -58,7 +60,7 @@ export default async (answer: AnswerData, question: Question, author: Serialized
                 });
             }),
         );
-    } catch (ignore) {
+    } catch (error) {
         // ignore
     }
 

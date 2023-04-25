@@ -1,5 +1,5 @@
-import { permissionOption } from '#server/models/permissionModel/types/permissionOption';
-import { Permissions } from '#server/models/permissionModel/types/Permissions';
+import { PermissionOption } from '#server/models/permissionModel/types/PermissionOption.d';
+import { Permissions } from '#server/models/permissionModel/types/Permissions.d';
 import { LocationType } from '#server/models/geoModel/LocationType.d';
 import { userStatus } from './userStatus';
 import type { UserAccess } from './UserAccess';
@@ -69,7 +69,7 @@ export interface User {
     access_request_message: string | undefined,
     default_export: Array<string> | undefined,
     permissions: Permissions | undefined,
-    permission_options: Array<permissionOption> | undefined,
+    permission_options: Array<PermissionOption> | undefined,
 
     // filter: app
     last_version: string | null | undefined,

@@ -4,7 +4,8 @@ import charteEngagementModel from '#server/models/charteEngagementModel';
 import permissionModel from '#server/models/permissionModel';
 import permissionUtils from '#server/utils/permission';
 import { Where } from '#server/models/_common/types/Where';
-import serializeUser, { SerializedUser } from './serializeUser';
+import serializeUser from './serializeUser';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 
 const { where: fWhere } = permissionUtils;
 

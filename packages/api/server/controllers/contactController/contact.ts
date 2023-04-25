@@ -7,7 +7,7 @@ import mailsUtils from '#server/mails/mails';
 
 import userModel from '#server/models/userModel';
 import contactFormReferralModel from '#server/models/contactFormReferralModel';
-import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 
 const { toString: dateToString } = dateUtils;
 const { sendAdminContactMessage, sendContactNewsletterRegistration } = mailsUtils;

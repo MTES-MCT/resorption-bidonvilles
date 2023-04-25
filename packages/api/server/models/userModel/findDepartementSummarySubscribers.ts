@@ -1,6 +1,6 @@
 import { LocationType } from '#server/models/geoModel/LocationType.d';
 import query from './_common/query';
-import { SerializedUser } from './_common/serializeUser';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 
 export type SummarySubscribers = {
     [key in LocationType]: SerializedUser[]

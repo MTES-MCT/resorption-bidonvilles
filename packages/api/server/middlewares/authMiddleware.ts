@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/node';
 import config from '#server/config';
 import userModelUpdate from '#server/models/userModel/update';
 import userModelFindOne from '#server/models/userModel/findOne';
-import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 
 const { auth: authConfig } = config;
 

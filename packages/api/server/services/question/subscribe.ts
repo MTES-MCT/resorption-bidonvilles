@@ -1,5 +1,5 @@
 import ServiceError from '#server/errors/ServiceError';
-import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import userQuestionSubscriptionModel from '#server/models/userQuestionSubscriptionModel';
 
 export default async (user: SerializedUser, questionId: number): Promise<void> => {

@@ -2,7 +2,7 @@ import { ActivityNationalSummary } from '#server/models/activityModel/types/Acti
 import mailsUtils from '#server/mails/mails';
 import moment from 'moment';
 import PromisePool from '@supercharge/promise-pool';
-import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import { QuestionNationalSummary } from '#server/models/activityModel/types/QuestionNationalSummary';
 
 moment.locale('fr');

@@ -1,4 +1,4 @@
-import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 
 export function serialized(override: Partial<SerializedUser> = {}): AuthUser {
@@ -108,6 +108,7 @@ export function serialized(override: Partial<SerializedUser> = {}): AuthUser {
         },
         admin_comments: null,
         email_subscriptions: [],
+        question_subscriptions: {},
         permission_options: [],
         last_access: Date.now() / 1000,
         last_version: '0.0.0',

@@ -1,0 +1,101 @@
+import { PermissionOption } from '#server/models/permissionModel/types/PermissionOption.d';
+import { Permissions } from '#server/models/permissionModel/types/Permissions.d';
+
+type UserStatus = 'new' | 'active' | 'inactive';
+type UserLocationType = 'nation' | 'region' | 'departement' | 'epci' | 'city';
+export type UserQuestionSubscriptions = {
+    [key: number]: boolean
+};
+
+export type SerializedUserAccess = {
+    id: number,
+    sent_by: {
+        id: number,
+        email: string,
+        first_name: string,
+        last_name: string,
+        position: string | null,
+        organization: {
+            id: number,
+            name: string,
+        },
+    } | null,
+    used_at: number | null,
+    expires_at: number,
+    created_at: number,
+};
+
+export type SerializedUser = {
+    id: number,
+    first_name: string,
+    last_name: string,
+    email: string,
+    phone: string | null,
+    position: string | null,
+    status: UserStatus,
+    created_at: number,
+    user_accesses: SerializedUserAccess[],
+    organization: {
+        id: number,
+        name: string,
+        abbreviation: string | null,
+        active: boolean,
+        type: {
+            id: number,
+            uid: string,
+            name_singular: string,
+            name_plural: string,
+            abbreviation: string | null,
+        },
+        category: {
+            uid: string,
+            name_singular: string,
+            name_plural: string,
+        },
+        location: {
+            type: UserLocationType,
+            latitude: number,
+            longitude: number,
+            region: {
+                code: string,
+                name: string,
+            } | null,
+            departement: {
+                code: string,
+                name: string,
+            } | null,
+            epci: {
+                code: string,
+                name: string,
+            } | null,
+            city: {
+                code: string,
+                name: string,
+                main: string | null
+            } | null,
+        },
+    },
+    charte_engagement_a_jour: boolean,
+    email_subscriptions: string[],
+    question_subscriptions: UserQuestionSubscriptions,
+    last_access: number | null,
+    admin_comments: string | null,
+    is_admin: boolean,
+    role: string,
+    role_id: string,
+    is_superuser: boolean,
+
+    // filter: auth
+    password?: string,
+    salt?: string,
+
+    // filter: extended
+    access_request_message?: string,
+    default_export?: Array<string>,
+    permissions?: Permissions,
+    permission_options?: Array<PermissionOption>,
+
+    // filter: app
+    last_version?: string | null,
+    last_changelog?: string | null
+};
