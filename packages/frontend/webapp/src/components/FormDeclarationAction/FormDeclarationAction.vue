@@ -11,7 +11,12 @@
             :disableManagers="mode === 'edit' && !canAccessFinances"
             class="mt-6"
         />
-        <FormDeclarationActionFinances class="mt-6" v-if="canAccessFinances" />
+
+        <FormDeclarationActionFinances
+            class="mt-6"
+            v-if="canAccessFinances"
+            :managers="managerIds"
+        />
         <FormDeclarationActionIndicateurs class="mt-6" />
 
         <ErrorSummary
@@ -25,7 +30,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, defineExpose, ref, watch } from "vue";
+import { toRefs, toRef, computed, ref, watch } from "vue";
 import { useForm, useFieldValue, useFormErrors } from "vee-validate";
 import { useActionsStore } from "@/stores/actions.store";
 import { useUserStore } from "@/stores/user.store";
@@ -70,6 +75,16 @@ const { handleSubmit, values, errors, setErrors } = useForm({
         }
     ),
 });
+
+const managerIds = ref([]);
+
+watch(
+    toRef(values, "managers"),
+    () => {
+        managerIds.value = values.managers.users.map(({ id }) => id);
+    },
+    { deep: true }
+);
 
 const originalValues = formatValuesForApi(values);
 const actionsStore = useActionsStore();

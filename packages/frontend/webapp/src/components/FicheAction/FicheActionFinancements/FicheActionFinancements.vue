@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import ActionFinances from "@/components/ActionFinances/ActionFinances.vue";
