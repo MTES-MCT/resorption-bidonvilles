@@ -80,8 +80,12 @@ const props = defineProps({
         required: false,
         default: null,
     },
+    mode: {
+        type: String,
+        required: true,
+    },
 });
-const { town } = toRefs(props);
+const { mode, town } = toRefs(props);
 
 const initialValues = {
     update_to_date: 1,
@@ -90,9 +94,6 @@ const initialValues = {
     ...formatFormTown(town.value || {}),
 };
 
-const mode = computed(() => {
-    return town.value === null ? "create" : "edit";
-});
 const canSetUpdatedAt = computed(() => {
     if (!town.value) {
         return false;
