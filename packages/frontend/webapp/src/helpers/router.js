@@ -334,6 +334,14 @@ const router = createRouter({
             },
         },
         {
+            path: "/site/signalement",
+            component: () => import("@/views/SignalementDeSiteView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "sites",
+            },
+        },
+        {
             path: "/statistiques/:code?",
             component: () => import("@/views/StatistiquesView.vue"),
             meta: {

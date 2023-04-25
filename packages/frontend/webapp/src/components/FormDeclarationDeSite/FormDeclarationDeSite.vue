@@ -2,7 +2,7 @@
     <ArrangementLeftMenu :tabs="tabs" autonav>
         <template v-slot:menuTitle>Rubriques</template>
 
-        <FormDeclarationDeSiteInfo v-if="town === null" />
+        <FormDeclarationDeSiteInfo v-if="town === null" :mode="mode" />
         <FormDeclarationDeSiteDateDeMaj
             v-else-if="canSetUpdatedAt"
             :minDate="minUpdatedAt"
@@ -55,6 +55,7 @@ import { useUserStore } from "@/stores/user.store";
 import { useTownsStore } from "@/stores/towns.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import * as locationsApi from "@/api/locations.api";
+import { report } from "@/api/towns.api";
 import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
 import isDeepEqual from "@/utils/isDeepEqual";
@@ -220,6 +221,16 @@ const config = {
                 "Le site a été déclaré, et les acteurs concernés ont été prévenus par mail",
         },
     },
+    draft: {
+        async submit(values) {
+            await report(values);
+        },
+        notification: {
+            title: "Signalement réussi",
+            content:
+                "Les données renseignées ont été transmises par mail aux administrateurs nationaux",
+        },
+    },
     edit: {
         async submit(values, id) {
             const town = await townsStore.edit(id, values);
@@ -299,7 +310,11 @@ defineExpose({
             const respondedTown = await submit(formattedValues, town.value?.id);
 
             notificationStore.success(notification.title, notification.content);
-            backOrReplace(`/site/${respondedTown.id}`);
+            if (mode.value === "draft") {
+                backOrReplace("/liste-des-sites");
+            } else {
+                backOrReplace(`/site/${respondedTown.id}`);
+            }
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             if (e?.fields) {

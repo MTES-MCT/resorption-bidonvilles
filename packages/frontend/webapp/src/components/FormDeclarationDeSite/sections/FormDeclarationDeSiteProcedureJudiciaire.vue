@@ -87,7 +87,7 @@ const policeWasGranted = computed(() => {
 const modaleListeAccesPJ = ref(null);
 
 const future = computed(() => {
-    return mode.value === "create";
+    return mode.value !== "edit";
 });
 
 function openModaleListeAccesPJ() {
