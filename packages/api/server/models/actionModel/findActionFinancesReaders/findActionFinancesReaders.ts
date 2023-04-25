@@ -35,7 +35,15 @@ export type ActionFinancesReaderRow = {
 
 export default async (actionId?: number, managers?: number[]): Promise<SerializedOrganization[]> => {
     const rows: ActionFinancesReaderRow[] = await sequelize.query(
-        `
+        `${actionId ? `
+        WITH location AS (
+            SELECT
+                departements.code AS departement,
+                departements.fk_region AS region
+            FROM actions
+            LEFT JOIN departements ON actions.fk_departement = departements.code
+            WHERE action_id = :actionId
+        )` : ''}
         SELECT
             uap.user_id AS user_id,
             u.email,
@@ -64,23 +72,15 @@ export default async (actionId?: number, managers?: number[]): Promise<Serialize
             ot.fk_category AS "type_category",
             ot.name_singular AS "type_name",
             ot.abbreviation AS "type_abbreviation"
-        FROM
-            user_actual_permissions uap
+        FROM users u
+        ${actionId ? 'LEFT JOIN location ON TRUE' : ''}
         LEFT JOIN
-            users u ON u.user_id = uap.user_id
+            user_actual_permissions uap ON u.user_id = uap.user_id AND uap.entity = 'action_finances' AND  uap.feature = 'access'
         LEFT JOIN
             localized_organizations o ON u.fk_organization = o.organization_id
         LEFT JOIN
             organization_types ot ON o.fk_type = ot.organization_type_id
         WHERE
-            uap.entity = 'action_finances'
-        AND
-            uap.feature = 'access'
-        AND
-            uap.allowed IS true
-        AND
-            ${actionId ? ':actionId = ANY(uap.actions)' : 'uap.organization_id IN (SELECT us.fk_organization FROM users us WHERE us.user_id IN (:managers))'}
-        AND
             ot.uid NOT IN (
                 SELECT
                 DISTINCT uid
@@ -88,15 +88,28 @@ export default async (actionId?: number, managers?: number[]): Promise<Serialize
                     organization_types ot
                 WHERE
                     ot.fk_category = 'public_establishment'
-                )
-        AND
+            )
+            AND
             -- On supprime les utilisateurs de structures de type 'national_establisment'
             -- Mais on laisse les utilisateurs qui ont un fk_role_regular de type 'national_establisment'
             ot.fk_role NOT IN ('national_establisment')
-        AND
-            u.fk_status = 'active'
-        AND
-            u.to_be_tracked IS true`,
+            AND
+                u.fk_status = 'active'
+            AND
+                u.to_be_tracked IS true
+            AND (
+                ${managers ? `
+                u.fk_organization IN (SELECT fk_organization FROM users WHERE user_id IN (:managers))
+                ` : `
+                uap.allowed IS true
+                AND (
+                    allow_all IS true
+                    OR location.region = ANY(uap.regions)
+                    OR location.departement = ANY(uap.departements)
+                    OR :actionId = ANY(uap.actions)
+                )`}
+            )
+        `,
         {
             replacements: {
                 actionId,
