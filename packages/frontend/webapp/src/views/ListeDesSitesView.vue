@@ -6,7 +6,7 @@
         showNationalWording="Voir tous les sites de France"
         v-model:location="location"
     >
-        <BandeauPromotionMobile />
+        <BandeauPromotionEspaceEntraide />
         <ListeDesSites />
     </LayoutSearch>
 </template>
@@ -18,7 +18,7 @@ import { trackEvent } from "@/helpers/matomo";
 
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import ListeDesSites from "@/components/ListeDesSites/ListeDesSites.vue";
-import BandeauPromotionMobile from "@/components/BandeauPromotionMobile/BandeauPromotionMobile.vue";
+import BandeauPromotionEspaceEntraide from "@/components/BandeauPromotionEspaceEntraide/BandeauPromotionEspaceEntraide.vue";
 
 const townsStore = useTownsStore();
 const location = computed({

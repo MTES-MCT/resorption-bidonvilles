@@ -3,7 +3,7 @@
         <div class="text-primary text-display-md font-bold">
             <span class="font-bold">
                 {{ shantytown.addressSimple }}
-                <span v-if="shantytown.name">« {{ shantytown.name }} »</span>
+                <span v-if="shantytown.name">« {{ shantytown.name }} » </span>
             </span>
             <span class="font-normal">
                 {{ shantytown.city.name }}

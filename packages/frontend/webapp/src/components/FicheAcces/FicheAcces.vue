@@ -20,7 +20,8 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref } from "vue";
+import { defineProps, toRefs, ref, computed } from "vue";
+import { useConfigStore } from "@/stores/config.store";
 
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import InactiveUserWarning from "@/components/InactiveUserWarning/InactiveUserWarning.vue";
@@ -35,5 +36,17 @@ const props = defineProps({
     },
 });
 const { user } = toRefs(props);
-const options = ref(user.value.permission_options || []);
+
+const accessPermission = computed(() => {
+    const configStore = useConfigStore();
+    return configStore.config.permissions_description[user.value.role_id];
+});
+const optionList = computed(() => {
+    return (accessPermission.value?.options || []).map(({ id }) => id);
+});
+const options = ref(
+    user.value.user_accesses.length > 0
+        ? user.value.permission_options || []
+        : optionList.value
+);
 </script>
