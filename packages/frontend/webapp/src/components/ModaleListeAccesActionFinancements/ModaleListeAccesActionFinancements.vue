@@ -80,7 +80,7 @@ const wording = computed(() => {
             emptyList:
                 "Seuls les utilisateurs en préfecture et DEETS / DREETS auront accès aux données sur les financements de cette action.",
             fullList: `${
-                numberOfUsers.value > 0 ? "auront" : "aura"
+                numberOfUsers.value > 1 ? "auront" : "aura"
             } accès aux données sur les financements de cette action`,
         };
     }
@@ -90,7 +90,7 @@ const wording = computed(() => {
         emptyList:
             "Seuls les utilisateurs en préfecture et DEETS / DREETS ont accès aux données sur les financements de cette action.",
         fullList: `${
-            numberOfUsers.value > 0 ? "ont" : "a"
+            numberOfUsers.value > 1 ? "ont" : "a"
         } accès aux données sur les financements de cette action`,
     };
 });

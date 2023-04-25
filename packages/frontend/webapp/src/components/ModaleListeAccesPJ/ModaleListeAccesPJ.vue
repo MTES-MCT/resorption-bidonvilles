@@ -18,7 +18,10 @@
                 <template v-else>
                     <p>
                         <span class="font-bold text-primary"
-                            >{{ numberOfUsers }} utilisateurs</span
+                            >{{ numberOfUsers }} utilisateur<template
+                                v-if="numberOfUsers > 1"
+                                >s</template
+                            ></span
                         >
                         {{ wording.fullList }}<br />
                         <em>hors préfectures et DEETS / DREETS</em>
