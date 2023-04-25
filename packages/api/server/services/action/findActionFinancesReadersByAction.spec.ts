@@ -25,7 +25,7 @@ describe('services/action.findActionFinancesReadersByAction()', () => {
 
     it('retourne la liste des utilisateurs ayant la permission d\'accéder aux financements des actions', async () => {
         const permissions = [fakeOrganization(), fakeOrganization()];
-        stubs.findActionFinancesReadersByAction.resolves(permissions);
+        stubs.findActionFinancesReadersByAction.withArgs(1).resolves(permissions);
         const response = await findService(1);
         expect(response).to.be.an('array');
         expect(response).to.be.eql(permissions);
