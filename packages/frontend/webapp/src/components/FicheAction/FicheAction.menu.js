@@ -17,6 +17,18 @@ export default [
         route: "#contacts",
     },
     {
+        id: "financements",
+        label: () => "Financements",
+        route: "#financements",
+        condition(action) {
+            const userStore = useUserStore();
+            return userStore.hasActionPermission(
+                "action_finances.access",
+                action
+            );
+        },
+    },
+    {
         id: "indicateurs",
         label: () => "Indicateurs",
         route: "#indicateurs",

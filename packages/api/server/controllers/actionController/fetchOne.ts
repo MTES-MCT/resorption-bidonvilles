@@ -8,6 +8,7 @@ export default async (req, res, next) => {
     try {
         const actions = await actionService.fetch(
             req.user.permissions.action.read,
+            req.user.permissions.action_finances.access || { allowed: false },
             [req.params.id],
         );
 

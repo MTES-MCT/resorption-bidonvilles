@@ -64,7 +64,6 @@ export const useUserStore = defineStore("user", {
             if (permission.allow_all === true) {
                 return departements;
             }
-
             return departements.filter(
                 ({ code, region }) =>
                     permission.allowed_on.departements?.includes(code) ||

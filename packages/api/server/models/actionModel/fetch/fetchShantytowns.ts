@@ -1,4 +1,4 @@
-import { QueryTypes } from 'sequelize';
+import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 import enrichWhere from './enrichWhere';
 
@@ -13,7 +13,7 @@ export type ActionShantytownRow = {
     city_name: string
 };
 
-export default function fetchShantytowns(actionIds: number[] = null, clauseGroup: object = {}): Promise<ActionShantytownRow[]> {
+export default function fetchShantytowns(actionIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionShantytownRow[]> {
     const where = [];
     const replacements = { actionIds };
     if (actionIds !== null) {
@@ -44,6 +44,7 @@ export default function fetchShantytowns(actionIds: number[] = null, clauseGroup
         {
             type: QueryTypes.SELECT,
             replacements,
+            transaction,
         },
     );
 }

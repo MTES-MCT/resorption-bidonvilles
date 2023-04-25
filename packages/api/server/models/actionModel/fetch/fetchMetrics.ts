@@ -1,4 +1,4 @@
-import { QueryTypes } from 'sequelize';
+import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 import enrichWhere from './enrichWhere';
 
@@ -33,7 +33,7 @@ export type ActionMetricsRow = {
     creator_organization_abbreviation: string | null,
 };
 
-export default function fetchMetrics(actionIds: number[] = null, clauseGroup: object = {}): Promise<ActionMetricsRow[]> {
+export default function fetchMetrics(actionIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionMetricsRow[]> {
     const where = [];
     const replacements = { actionIds };
     if (actionIds !== null) {
@@ -72,7 +72,7 @@ export default function fetchMetrics(actionIds: number[] = null, clauseGroup: ob
             creator_organizations.organization_id AS creator_organization_id,
             creator_organizations.name AS creator_organization_name,
             creator_organizations.abbreviation AS creator_organization_abbreviation,
-            ROW_NUMBER() OVER(PARTITION BY action_metrics.fk_action, action_metrics.date ORDER BY action_metrics.created_at DESC) AS rank
+            ROW_NUMBER() OVER(PARTITION BY action_metrics.fk_action, EXTRACT(YEAR FROM action_metrics.date) ORDER BY action_metrics.created_at DESC) AS rank
         FROM action_metrics
         LEFT JOIN users AS creator ON action_metrics.created_by = creator.user_id
         LEFT JOIN organizations AS creator_organizations ON creator.fk_organization = creator_organizations.organization_id
@@ -85,6 +85,7 @@ export default function fetchMetrics(actionIds: number[] = null, clauseGroup: ob
         {
             type: QueryTypes.SELECT,
             replacements,
+            transaction,
         },
     );
 }

@@ -1,4 +1,4 @@
-export default function (dateIndicateurs, data) {
+export default function (data) {
     const formatted = {
         name: data.name || "",
         started_at: data.started_at ? new Date(data.started_at) : undefined,
@@ -54,35 +54,46 @@ export default function (dateIndicateurs, data) {
                       .flat()
                 : [],
         },
+        finances: Object.keys(data.finances || {}).reduce((acc, year) => {
+            acc[year] = data.finances[year].map((row) => ({
+                ...row,
+                finance_type: row.type.uid,
+            }));
+            return acc;
+        }, {}),
+        indicateurs: {},
     };
 
-    if (data.metrics && data.metrics.length > 0) {
-        const lastDate = new Date(data.metrics[0].date);
-        if (lastDate.getFullYear() === dateIndicateurs.getFullYear()) {
-            const fields = [
-                "nombre_personnes",
-                "nombre_menages",
-                "nombre_femmes",
-                "nombre_mineurs",
-                "sante_nombre_personnes",
-                "travail_nombre_personnes",
-                "travail_nombre_femmes",
-                "hebergement_nombre_personnes",
-                "hebergement_nombre_menages",
-                "logement_nombre_personnes",
-                "logement_nombre_menages",
-                "scolaire_mineurs_scolarisables",
-                "scolaire_mineurs_en_mediation",
-                "scolaire_nombre_maternelle",
-                "scolaire_nombre_elementaire",
-                "scolaire_nombre_college",
-                "scolaire_nombre_lycee",
-                "scolaire_nombre_autre",
-            ];
+    if (data.metrics) {
+        const fields = [
+            "nombre_personnes",
+            "nombre_menages",
+            "nombre_femmes",
+            "nombre_mineurs",
+            "sante_nombre_personnes",
+            "travail_nombre_personnes",
+            "travail_nombre_femmes",
+            "hebergement_nombre_personnes",
+            "hebergement_nombre_menages",
+            "logement_nombre_personnes",
+            "logement_nombre_menages",
+            "scolaire_mineurs_scolarisables",
+            "scolaire_mineurs_en_mediation",
+            "scolaire_nombre_maternelle",
+            "scolaire_nombre_elementaire",
+            "scolaire_nombre_college",
+            "scolaire_nombre_lycee",
+            "scolaire_nombre_autre",
+        ];
+
+        data.metrics.forEach((metrics) => {
+            const d = new Date(metrics.date);
+            formatted.indicateurs[d.getFullYear()] = {};
+
             fields.forEach((field) => {
-                formatted[field] = data.metrics[0][field] || undefined;
+                formatted.indicateurs[d.getFullYear()][field] = metrics[field];
             });
-        }
+        });
     }
 
     return formatted;

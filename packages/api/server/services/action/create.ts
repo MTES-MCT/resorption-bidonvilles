@@ -1,19 +1,38 @@
+import { sequelize } from '#db/sequelize';
 import ServiceError from '#server/errors/ServiceError';
-import actionModel from '#server/models/actionModel';
 import Action from '#server/models/actionModel/fetch/Action.d';
-import { ActionInput } from './ActionInput.d';
+import create from '#server/models/actionModel/create/create';
+import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
 
-export default async (authorId: number, data: ActionInput): Promise<Action> => {
+import { ActionInput } from './ActionInput.d';
+import fetchAction from './write.fetchAction';
+
+export default async (user: SerializedUser, data: ActionInput): Promise<Action> => {
+    const transaction = await sequelize.transaction();
+    let actionId;
     try {
-        const actionId = await actionModel.create({
+        actionId = await create({
             ...data,
             address: data.location_eti,
-            created_by: authorId,
-        });
-        const actions = await actionModel.fetch([actionId]);
-
-        return actions[0];
+            created_by: user.id,
+        }, transaction);
     } catch (error) {
-        throw new ServiceError('db_write_error', error);
+        await transaction.rollback();
+        throw new ServiceError('action_insert_error', error);
+    }
+
+    try {
+        const action = await fetchAction(actionId, true, transaction);
+        await transaction.commit();
+
+        return action;
+    } catch (error) {
+        await transaction.rollback();
+
+        if (error instanceof ServiceError) {
+            throw error;
+        }
+
+        throw new ServiceError('action_fetch_error', error);
     }
 };
