@@ -4,7 +4,7 @@ import sinonChai from 'sinon-chai';
 
 import actionModel from '#server/models/actionModel';
 import ServiceError from '#server/errors/ServiceError';
-import fakeActionFinancesReader from '#test/utils/actionFinancesReader';
+import { serialized as fakeOrganization } from '#test/utils/organization';
 
 import findService from './findActionFinancesReadersByAction';
 
@@ -24,7 +24,7 @@ describe('services/action.findActionFinancesReadersByAction()', () => {
     });
 
     it('retourne la liste des utilisateurs ayant la permission d\'accéder aux financements des actions', async () => {
-        const permissions = [fakeActionFinancesReader(), fakeActionFinancesReader()];
+        const permissions = [fakeOrganization(), fakeOrganization()];
         stubs.findActionFinancesReadersByAction.resolves(permissions);
         const response = await findService(1);
         expect(response).to.be.an('array');
