@@ -489,6 +489,16 @@ export default (app) => {
         controllers.town.create,
     );
     app.post(
+        '/towns/report',
+        middlewares.auth.authenticate,
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.report'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.reportTown,
+        middlewares.validation,
+        controllers.town.report,
+    );
+    app.post(
         '/towns/:id',
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.update'], ...args),

@@ -6,6 +6,7 @@ import createTown from './createTown';
 import createUser from './createUser';
 import editUser from './editUser';
 import editTown from './editTown';
+import reportTown from './reportTown';
 import exportTowns from './exportTowns';
 import addShantytownActor from './shantytownActors/addShantytownActor';
 import updateShantytownActor from './shantytownActors/updateShantytownActor';
@@ -44,6 +45,7 @@ export default {
     createContact,
     createTown,
     editTown,
+    reportTown,
     exportTowns,
     createUser,
     editUser,

@@ -91,7 +91,20 @@ export default mode => ([
             }
 
             if (!can(req.user).do(mode, 'shantytown').on(req.body.city)) {
-                const wording = mode === 'create' ? 'déclarer' : 'modifier';
+                let wording;
+                switch (mode) {
+                    case 'create':
+                        wording = 'déclarer';
+                        break;
+                    case 'edit':
+                        wording = 'modifier';
+                        break;
+                    case 'report':
+                        wording = 'signaler';
+                        break;
+                    default:
+                        break;
+                }
                 throw new Error(`Vous n'avez pas le droit de ${wording} un site sur ce territoire`);
             }
 
