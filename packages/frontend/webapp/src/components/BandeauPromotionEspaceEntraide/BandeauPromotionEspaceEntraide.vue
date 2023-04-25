@@ -8,8 +8,8 @@
                     <img
                         width="130"
                         class="m-4 h-20r"
-                        :src="mobileImage.img"
-                        :alt="mobileImage.text"
+                        :src="EspaceEntraideImage.img"
+                        :alt="EspaceEntraideImage.text"
                     />
                 </div>
                 <div
@@ -18,16 +18,13 @@
                     <div
                         class="tracking-wide text-display-md font-bold text-primary"
                     >
-                        La plateforme dans votre poche !
+                        Tout ce que vous voulez savoir sur les bidonvilles !
                     </div>
                     <p class="text-md">
-                        Rendez-vous sur votre téléphone portable pour découvrir
-                        la première version mobile qui vous permettra de
-                        consulter la fiche d'un site, d'écrire sur le journal du
-                        site et de créer des notes personnelles. Pour vous
-                        connecter, utilisez la même adresse :
-                        resorption-bidonvilles.beta.gouv.fr et vos identifiants
-                        habituels.
+                        Vous pouvez désormais poser toutes les questions que
+                        vous souhaitez à la communauté des 1 400 utilisateurs de
+                        la plateforme grâce à un nouvel espace d'entraide !
+                        Rendez-vous dans l’onglet communauté !
                     </p>
                 </div>
             </div>
@@ -36,10 +33,10 @@
 </template>
 <script setup>
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
-import imagePromotionMobile from "@/assets/img/promotion_mobile/promotion_mobile.png";
+import imagePromotionEspaceEntraide from "@/assets/img/promotion_espace_entraide/promotion_espace_entraide.png";
 
-const mobileImage = {
-    img: imagePromotionMobile,
-    text: "Application Mobile Résorption-Bidonvilles",
+const EspaceEntraideImage = {
+    img: imagePromotionEspaceEntraide,
+    text: "Espace Entraide Résorption-Bidonvilles",
 };
 </script>
