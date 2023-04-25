@@ -5,7 +5,7 @@
             <div class="grid grid-cols-1">
                 <p
                     v-for="(input, index) in inputs"
-                    :key="input.name"
+                    :key="input.id"
                     class="flex items-center h-8 bg-G200"
                     :class="{
                         'px-4':
@@ -29,12 +29,14 @@
                         'border-b border-b-G400': index < inputs.length - 1,
                     }"
                 >
-                    <TextInput
+                    <TextInputUi
                         v-bind="input"
+                        v-model="data[input.id]"
                         withoutMargin
                         variant="minimal"
                         size="sm"
                         :inlineError="true"
+                        :errors="errors[input.id] || []"
                     />
                 </p>
             </div>
@@ -44,14 +46,25 @@
 
 <script setup>
 import { defineProps, toRefs } from "vue";
-import { TextInput } from "@resorptionbidonvilles/ui";
+import { TextInputUi } from "@resorptionbidonvilles/ui";
 import IndicateursTableRow from "./IndicateursTableRow.vue";
 
 const props = defineProps({
+    data: {
+        type: Object,
+        required: true,
+    },
     inputs: {
         type: Array,
         required: true,
     },
+    errors: {
+        type: Object,
+        required: false,
+        default() {
+            return {};
+        },
+    },
 });
-const { inputs } = toRefs(props);
+const { data, inputs, errors } = toRefs(props);
 </script>

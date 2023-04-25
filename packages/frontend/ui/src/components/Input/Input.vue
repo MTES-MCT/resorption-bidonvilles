@@ -41,6 +41,11 @@ export default {
     name: "RbTextInput",
     mixins: [filteredProps],
     props: {
+        defaultValue: {
+            type: String,
+            required: false,
+            default: "",
+        },
         label: {
             type: String
         },
@@ -156,7 +161,7 @@ export default {
     },
     data() {
         return {
-            currentValue: ""
+            currentValue: this.defaultValue,
         };
     },
     mounted() {
@@ -169,9 +174,13 @@ export default {
         blur() {
             this.$refs.input.blur();
         },
-        setValue(str) {
+        setValue(str, silentMode = false) {
             this.$refs.input.value = str;
             this.currentValue = str;
+
+            if (silentMode !== true) {
+                this.$emit('changed', this.currentValue);
+            }
         }
     }
 };

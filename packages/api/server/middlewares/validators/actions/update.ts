@@ -1,6 +1,6 @@
 import { param } from 'express-validator';
 import actionModel from '#server/models/actionModel';
-import common from './create';
+import writeAction from './writeAction';
 
 export default [
     param('id')
@@ -8,17 +8,17 @@ export default [
         .custom(async (value, { req }) => {
             let action;
             try {
-                action = await actionModel.fetch([value], req.user.permissions.action.update);
+                action = await actionModel.fetch([value], req.user.permissions.action.update, null);
             } catch (error) {
                 throw new Error('Une erreur de lecture en base de données est survenue');
             }
 
-            if (action === null) {
+            if (action.length !== 1) {
                 throw new Error('L\'action à modifier n\'existe pas');
             }
 
-            req.action = action;
+            [req.action] = action;
         }),
 
-    ...common,
+    ...writeAction('update'),
 ];

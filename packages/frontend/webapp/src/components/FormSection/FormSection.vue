@@ -5,18 +5,21 @@
             'p-6': padding,
         }"
     >
-        <h1
-            v-if="$slots.title"
-            class="text-2xl text-primary border-b pb-3 mb-6"
-        >
-            <slot name="title" />
-        </h1>
+        <div class="flex justify-between border-b pb-3 mb-6">
+            <h1 v-if="$slots.title" class="text-2xl text-primary">
+                <slot name="title" />
+            </h1>
+
+            <div v-if="$slots.detail" class="flex flex-col items-end">
+                <slot name="detail" />
+            </div>
+        </div>
         <slot />
     </div>
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs } from "vue";
+import { computed, toRefs } from "vue";
 
 const props = defineProps({
     variant: {

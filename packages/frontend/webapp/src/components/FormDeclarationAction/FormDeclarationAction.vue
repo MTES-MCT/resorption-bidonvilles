@@ -2,9 +2,21 @@
     <ArrangementLeftMenu :tabs="tabs" autonav>
         <template v-slot:menuTitle>Rubriques</template>
 
-        <FormDeclarationActionCaracteristiques class="mt-6" :mode="mode" />
-        <FormDeclarationActionLocalisation class="mt-6" />
-        <FormDeclarationActionContacts class="mt-6" />
+        <FormDeclarationActionCaracteristiques class="mt-6" />
+        <FormDeclarationActionLocalisation
+            :disableDepartement="mode === 'edit' && !canAccessFinances"
+            class="mt-6"
+        />
+        <FormDeclarationActionContacts
+            :disableManagers="mode === 'edit' && !canAccessFinances"
+            class="mt-6"
+        />
+
+        <FormDeclarationActionFinances
+            class="mt-6"
+            v-if="canAccessFinances"
+            :managers="managerIds"
+        />
         <FormDeclarationActionIndicateurs class="mt-6" />
 
         <ErrorSummary
@@ -18,33 +30,27 @@
 </template>
 
 <script setup>
-import {
-    defineProps,
-    toRefs,
-    toRef,
-    computed,
-    defineExpose,
-    ref,
-    watch,
-} from "vue";
-import { useForm } from "vee-validate";
+import { toRefs, toRef, computed, ref, watch } from "vue";
+import { useForm, useFieldValue, useFormErrors } from "vee-validate";
 import { useActionsStore } from "@/stores/actions.store";
 import { useUserStore } from "@/stores/user.store";
+import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
 import isDeepEqual from "@/utils/isDeepEqual";
 import backOrReplace from "@/utils/backOrReplace";
 import formatFormAction from "@/utils/formatFormAction";
+import formatFormDate from "@/utils/formatFormDate";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
 import FormDeclarationActionCaracteristiques from "./sections/FormDeclarationActionCaracteristiques.vue";
 import FormDeclarationActionLocalisation from "./sections/FormDeclarationActionLocalisation.vue";
 import FormDeclarationActionContacts from "./sections/FormDeclarationActionContacts.vue";
+import FormDeclarationActionFinances from "./sections/FormDeclarationActionFinances.vue";
 import FormDeclarationActionIndicateurs from "./sections/FormDeclarationActionIndicateurs.vue";
 import schemaFn from "./FormDeclarationAction.schema";
-import formatFormDate from "@/utils/formatFormDate";
 
 const props = defineProps({
     action: {
@@ -57,62 +63,87 @@ const { action } = toRefs(props);
 
 const userStore = useUserStore();
 
-const dateIndicateurs = getDateIndicateurs(action.value?.started_at);
-const initialValues = {
-    ...formatFormAction(
-        dateIndicateurs,
-        action.value || {
-            location_departement: userStore.departementsForActions[0]?.code,
-        }
-    ),
-    date_indicateurs: dateIndicateurs,
-};
-
 const mode = computed(() => {
     return action.value === null ? "create" : "edit";
 });
 const validationSchema = schemaFn(mode.value);
 const { handleSubmit, values, errors, setErrors } = useForm({
     validationSchema,
-    initialValues,
+    initialValues: formatFormAction(
+        action.value || {
+            location_departement: userStore.departementsForActions[0]?.code,
+        }
+    ),
 });
 
-function getDateIndicateurs(startedAt) {
-    return startedAt && new Date(startedAt).getFullYear() !== 2023
-        ? new Date("December 31, 2022 00:00:00")
-        : new Date();
-}
+const managerIds = ref([]);
 
-watch(toRef(values, "started_at"), () => {
-    values.date_indicateurs = getDateIndicateurs(values.started_at);
-});
+watch(
+    toRef(values, "managers"),
+    () => {
+        managerIds.value = values.managers.users.map(({ id }) => id);
+    },
+    { deep: true }
+);
 
 const originalValues = formatValuesForApi(values);
 const actionsStore = useActionsStore();
 const error = ref(null);
+const departement = useFieldValue("location_departement");
+const canAccessFinances = computed(() => {
+    const configStore = useConfigStore();
+    const fullDepartement = configStore.config.departements.find(
+        ({ code }) => code === departement.value
+    );
 
-const tabs = [
-    {
-        id: "intervention",
-        label: "Intervention",
-        route: "#intervention",
-    },
-    {
-        id: "lieu",
-        label: "Lieu",
-        route: "#lieu",
-    },
-    {
-        id: "contacts",
-        label: "Contacts",
-        route: "#contacts",
-    },
-    {
+    return userStore.hasActionPermission("action_finances.access", {
+        id: action.value?.id,
+        location: {
+            departement: {
+                code: departement.value,
+            },
+            region: {
+                code: fullDepartement?.region,
+            },
+        },
+    });
+});
+
+const tabs = computed(() => {
+    const arr = [
+        {
+            id: "intervention",
+            label: "Intervention",
+            route: "#intervention",
+        },
+        {
+            id: "lieu",
+            label: "Lieu",
+            route: "#lieu",
+        },
+        {
+            id: "contacts",
+            label: "Contacts",
+            route: "#contacts",
+        },
+    ];
+
+    if (canAccessFinances.value === true) {
+        arr.push({
+            id: "financements",
+            label: "Financements",
+            route: "#financements",
+        });
+    }
+
+    arr.push({
         id: "indicateurs",
         label: "Indicateurs",
         route: "#indicateurs",
-    },
-];
+    });
+
+    return arr;
+});
 
 const config = {
     create: {
@@ -149,13 +180,12 @@ function formatValuesForApi(v) {
 
     return {
         ...Object.keys(validationSchema.fields).reduce((acc, key) => {
-            acc[key] = v[key];
+            acc[key] = v[key] ? JSON.parse(JSON.stringify(v[key])) : v[key];
             return acc;
         }, {}),
         ...{
             started_at: formatFormDate(v.started_at),
             ended_at: formatFormDate(v.ended_at),
-            date_indicateurs: v.date_indicateurs,
             managers: v.managers.users.map(({ id }) => id),
             operators: v.operators.users.map(({ id }) => id),
             location_eti_citycode: citycode,
@@ -166,6 +196,12 @@ function formatValuesForApi(v) {
         },
     };
 }
+
+watch(useFormErrors(), () => {
+    if (Object.keys(errors.value).length === 0) {
+        error.value = null;
+    }
+});
 
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
