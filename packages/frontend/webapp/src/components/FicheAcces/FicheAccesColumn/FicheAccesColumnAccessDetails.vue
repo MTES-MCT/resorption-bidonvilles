@@ -67,7 +67,7 @@
         />
 
         <FicheAccesColumnAccessDate
-            v-if="user.last_access && userStore.user?.is_superuser"
+            v-if="user.last_access && userStore.user?.is_admin"
             text="Dernière connexion"
             :date="user.last_access"
             icon="chalkboard-teacher"
