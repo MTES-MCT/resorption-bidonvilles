@@ -75,10 +75,10 @@
                     La mise à jour régulière des données garantissent des
                     informations justes à tous les acteurs.</template>
                 <template v-slot:default>
-                    <StatsBlock :title="meanTimeBeforeCreationDeclaration"
+                    <StatsBlock :title="medianTimeBeforeCreationDeclaration"
                         subtitle="jours entre l'installation d'un bidonville ou squat et sa déclaration"
                         info="Médiane depuis le 01/09/2019." />
-                    <StatsBlock :title="meanTimeBeforeClosingDeclaration"
+                    <StatsBlock :title="medianTimeBeforeClosingDeclaration"
                         subtitle="jours entre la fermeture du site et sa déclaration"
                         info="Médiane depuis le 01/09/2019." />
                     <StatsBlock :title="numberOfShantytownOperations" subtitle="mises à jour de bidonvilles et squats"
@@ -234,18 +234,18 @@ const numberOfNewUsers = computed(() => {
         : { total: "...", month: "..." };
 });
 
-const meanTimeBeforeCreationDeclaration = computed(() => {
+const medianTimeBeforeCreationDeclaration = computed(() => {
     return stats.value
         ? Math.round(
-            stats.value.meanTimeBeforeCreationDeclaration.average
+            stats.value.meanTimeBeforeCreationDeclaration.median
         ) || "?"
         : "...";
 });
 
-const meanTimeBeforeClosingDeclaration = computed(() => {
+const medianTimeBeforeClosingDeclaration = computed(() => {
     return stats.value
         ? Math.round(
-            stats.value.meanTimeBeforeClosingDeclaration.average
+            stats.value.meanTimeBeforeClosingDeclaration.median
         ) || "?"
         : "...";
 });
