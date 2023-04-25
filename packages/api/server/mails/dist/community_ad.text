@@ -1,10 +1,10 @@
 Restez en contact avec la communauté !
 Bonjour,
-L'espace "communauté" [{{var:webappUrl}}/communaute?{{var:utm}}] de la
-plateforme Résorption-bidonvilles [{{var:webappUrl}}?{{var:utm}}] est en ligne.
+L'espace d'entraide [{{var:webappUrl}}/communaute?{{var:utm}}] de la plateforme
+Résorption-bidonvilles [{{var:webappUrl}}?{{var:utm}}] est en ligne.
 Vous recevrez automatiquement les notifications de publication d'une nouvelle
-question. Si vous ne souhaitez pas être notifié-e, cliquez sur le bouton suivant
-:
+question. Si vous ne souhaitez pas être notifié(e), cliquez sur le bouton
+suivant :
 
 Ne pas recevoir les prochaines questions de la communauté par mail
 [{{var:webappUrl}}/mon-compte/abonnements?desabonnements=community_new_question&{{var:utm}}]

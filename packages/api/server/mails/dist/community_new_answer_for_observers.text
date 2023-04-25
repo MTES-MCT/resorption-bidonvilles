@@ -1,6 +1,6 @@
 La communauté a répondu !
 Bonjour,
-Vous êtes abonné-e à la question « {{var:question}} » sur l'espace "communauté"
+Vous êtes abonné(e) à la question « {{var:question}} » sur l'espace d'entraide
 [{{var:webappUrl}}/communaute?{{var:utm}}] de la plateforme
 Résorption-bidonvilles [{{var:webappUrl}}?{{var:utm}}].
 {{var:authorName}}

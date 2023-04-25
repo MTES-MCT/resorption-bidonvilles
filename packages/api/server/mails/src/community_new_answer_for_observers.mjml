@@ -1,6 +1,6 @@
 <mjml>
     <mj-head>
-        <mj-title>[Résorption-bidonvilles] - Une réponse vous attend sur la plateforme Résorption-bidonvilles</mj-title>
+        <mj-title>[Résorption-bidonvilles] - Une réponse vous attend sur la plateforme</mj-title>
         <mj-include path='common/attributes.mjml' />
         <mj-include path='common/styles.mjml' />
     </mj-head>
@@ -14,7 +14,7 @@
                 </mj-text>
                 <mj-text mj-class="pb-4">Bonjour,</mj-text>
                 <mj-text mj-class="pb-4">
-                    Vous êtes abonné-e à la question « {{var:question}} » sur <a href="{{var:webappUrl}}/communaute?{{var:utm}}" class="link" target="_blank" rel="noopener noreferrer">l'espace "communauté"</a> de la plateforme <a href="{{var:webappUrl}}?{{var:utm}}" class="font-italic link" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
+                    Vous êtes abonné(e) à la question « {{var:question}} » sur <a href="{{var:webappUrl}}/communaute?{{var:utm}}" class="link" target="_blank" rel="noopener noreferrer">l'espace d'entraide</a> de la plateforme <a href="{{var:webappUrl}}?{{var:utm}}" class="font-italic link" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
                 </mj-text>
                 <mj-text mj-class="pb-4">
                     <a href="{{var:webappUrl}}/structure/{{var:authorOrganization}}?{{var:utm}}" class="font-italic link" target="_blank" rel="noopener noreferrer">{{var:authorName}}</a> y a répondu.
