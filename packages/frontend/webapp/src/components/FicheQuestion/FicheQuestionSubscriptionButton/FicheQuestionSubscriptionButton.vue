@@ -31,8 +31,8 @@ const isSubscribed = computed(() => {
 
 const wording = computed(() => {
     return isSubscribed.value === true
-        ? "Ne plus être tenu informé des réponses par mail"
-        : "Être tenu informé des réponses par mail";
+        ? "Ne plus recevoir les réponses par courriel"
+        : "Recevoir les réponses par courriel";
 });
 
 const isLoading = computed(() => {

@@ -6,7 +6,7 @@ Vous recevrez automatiquement les notifications de publication d'une nouvelle
 question. Si vous ne souhaitez pas être notifié(e), cliquez sur le bouton
 suivant :
 
-Ne pas recevoir les prochaines questions de la communauté par mail
+Ne pas recevoir les prochaines questions de la communauté par courriel
 [{{var:webappUrl}}/mon-compte/abonnements?desabonnements=community_new_question&{{var:utm}}]
 
 Vous pouvez également vous rendre dans votre espace "Mon compte"

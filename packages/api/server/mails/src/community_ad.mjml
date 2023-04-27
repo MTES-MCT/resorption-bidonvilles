@@ -1,6 +1,6 @@
 <mjml>
     <mj-head>
-        <mj-title>[Résorption-bidonvilles] - Restez informé(e) de l'actualité de la communauté</mj-title>
+        <mj-title>[Résorption-bidonvilles] - Ne manquez aucune question posée dans l'espace d'entride !</mj-title>
         <mj-include path='common/attributes.mjml' />
         <mj-include path='common/styles.mjml' />
     </mj-head>
@@ -20,7 +20,7 @@
                     Vous recevrez automatiquement les notifications de publication d'une nouvelle question. Si vous ne souhaitez pas être notifié(e), cliquez sur le bouton suivant :
                 </mj-text>
                 <mj-button mj-class="button-primary" href="{{var:webappUrl}}/mon-compte/abonnements?desabonnements=community_new_question&{{var:utm}}" rel="noopener noreferrer">
-                    Ne pas recevoir les prochaines questions de la communauté par mail
+                    Ne pas recevoir les prochaines questions de la communauté par courriel
                 </mj-button>
                 <mj-text mj-class='pb-2'>
                     Vous pouvez également vous rendre <a href="{{var:webappUrl}}/mon-compte/abonnements?{{var:utm}}" class="link" target="_blank" rel="noopener noreferrer">dans votre espace "Mon compte"</a> puis cocher "<a href="{{var:webappUrl}}/mon-compte/abonnements?{{var:utm}}" class="link" target="_blank" rel="noopener noreferrer">Les notifications de création d'une question à la communauté</a>" dans la rubrique "<a href="{{var:webappUrl}}/mon-compte/abonnements?{{var:utm}}" class="link" target="_blank" rel="noopener noreferrer">Courriels automatiques</a>"

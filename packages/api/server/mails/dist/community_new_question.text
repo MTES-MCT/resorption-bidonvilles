@@ -6,7 +6,7 @@ Bonjour,
 
 Voir la question [{{var:webappUrl}}/question/{{var:questionId}}?{{var:utm}}]
 
-Être tenu(e) informé(e) des réponses
+Recevoir les réponses par courriel
 [{{var:webappUrl}}/question/{{var:questionId}}?abonnement=oui&{{var:utm}}]
 
 Cordialement,
