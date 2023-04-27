@@ -10,6 +10,10 @@ import actionList from './actionController/list';
 import actionUpdate from './actionController/update';
 // answer
 import createAnswer from './answerController/create';
+// community
+import communityAd from './communityController/ad';
+import communitySubscribe from './communityController/subscribe';
+import communityUnsubscribe from './communityController/unsubscribe';
 // config
 import configList from './configController/list';
 // contact
@@ -101,6 +105,11 @@ export default () => ({
     },
     answer: {
         create: createAnswer,
+    },
+    community: {
+        ad: communityAd,
+        subscribe: communitySubscribe,
+        unsubscribe: communityUnsubscribe,
     },
     config: {
         list: configList,

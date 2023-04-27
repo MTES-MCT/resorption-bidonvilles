@@ -8,6 +8,8 @@ import {
     addAnswer,
     createQuestion,
 } from "@/api/questions.api";
+import { subscribe, unsubscribe } from "@/api/questions.api";
+import { useConfigStore } from "./config.store";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -16,6 +18,7 @@ export const useQuestionsStore = defineStore("questions", () => {
     const hash = ref({});
     const isLoading = ref(null);
     const error = ref(null);
+    const subscriptions = ref({});
 
     const currentPage = {
         index: ref(-1), // index = 1 pour la première page
@@ -61,6 +64,7 @@ export const useQuestionsStore = defineStore("questions", () => {
     function reset() {
         questions.value = [];
         hash.value = {};
+        subscriptions.value = {};
         isLoading.value = false;
         error.value = null;
         resetPagination();
@@ -103,17 +107,27 @@ export const useQuestionsStore = defineStore("questions", () => {
     }
 
     async function create(data) {
+        const configStore = useConfigStore();
         const newQuestion = await createQuestion(data);
         hash.value[newQuestion.id] = newQuestion;
         questions.value.unshift(newQuestion);
+        configStore.setQuestionSubscription(newQuestion.id, true);
         return newQuestion;
     }
 
     async function createAnswer(questionId, answer) {
+        const configStore = useConfigStore();
         const notificationStore = useNotificationStore();
-        const newAnswer = await addAnswer(questionId, answer);
+        const { answer: newAnswer, subscribed } = await addAnswer(
+            questionId,
+            answer
+        );
         if (hash.value[questionId]) {
             hash.value[questionId].answers.unshift(newAnswer);
+        }
+
+        if (subscribed === true) {
+            configStore.setQuestionSubscription(questionId, true);
         }
 
         notificationStore.success(
@@ -139,5 +153,65 @@ export const useQuestionsStore = defineStore("questions", () => {
         fetchQuestion,
         create,
         createAnswer,
+        subscriptions,
+        async subscribe(questionId) {
+            if (!subscriptions.value[questionId]) {
+                subscriptions.value[questionId] = false;
+            }
+
+            if (subscriptions.value[questionId] === true) {
+                return;
+            }
+
+            const notificationStore = useNotificationStore();
+            subscriptions.value[questionId] = true;
+
+            try {
+                const configStore = useConfigStore();
+                await subscribe(questionId);
+                configStore.setQuestionSubscription(questionId, true);
+                notificationStore.success(
+                    "Abonnement à la question réussi",
+                    "Vous recevrez une notification mail à chaque nouvelle réponse à cette question"
+                );
+            } catch (error) {
+                notificationStore.error(
+                    "Abonnement à la question échoué",
+                    error?.user_message || "Une erreur inconnue est survenue"
+                );
+            }
+
+            subscriptions.value[questionId] = false;
+        },
+
+        async unsubscribe(questionId) {
+            if (!subscriptions.value[questionId]) {
+                subscriptions.value[questionId] = false;
+            }
+
+            if (subscriptions.value[questionId] === true) {
+                return;
+            }
+
+            const notificationStore = useNotificationStore();
+            subscriptions.value[questionId] = true;
+
+            try {
+                const configStore = useConfigStore();
+                await unsubscribe(questionId);
+                configStore.setQuestionSubscription(questionId, false);
+                notificationStore.success(
+                    "Désabonnement de la question réussi",
+                    "Vous ne recevrez plus de notifications mails pour cette question"
+                );
+            } catch (error) {
+                notificationStore.error(
+                    "Désabonnement de la question échoué",
+                    error?.user_message || "Une erreur inconnue est survenue"
+                );
+            }
+
+            subscriptions.value[questionId] = false;
+        },
     };
 });

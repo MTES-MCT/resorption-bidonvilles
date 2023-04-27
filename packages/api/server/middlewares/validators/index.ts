@@ -28,6 +28,7 @@ import findUserTowns from './findUserTowns';
 import createNote from './note/create';
 import publishNote from './note/publish';
 import createQuestion from './question/create';
+import subscribeQuestion from './question/subcribe';
 import createAnswer from './answer/create';
 
 import actionCreate from './actions/create';
@@ -90,6 +91,7 @@ export default {
     },
     question: {
         createQuestion,
+        subscribeQuestion,
     },
     answer: {
         createAnswer,

@@ -1,4 +1,4 @@
-import { Permission } from './Permission';
+import { Permission } from './Permission.d';
 
 export interface Permissions {
     [entity: string]: {

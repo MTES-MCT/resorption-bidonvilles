@@ -1,4 +1,4 @@
-import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 
 export default (user: SerializedUser, feature: string, entity: string) => {
     if (!user.permissions[entity]) {

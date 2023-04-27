@@ -1,4 +1,4 @@
-import { Permission } from '#server/models/permissionModel/types/Permission';
+import { Permission } from '#server/models/permissionModel/types/Permission.d';
 import { Transaction } from 'sequelize';
 import where from '#server/utils/permission/where';
 import fetchActions from './fetchActions';

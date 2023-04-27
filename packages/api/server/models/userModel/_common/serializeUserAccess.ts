@@ -1,3 +1,5 @@
+import { SerializedUserAccess } from './types/SerializedUser.d';
+
 type RawUserAccess = {
     user_access_id: number,
     activator_id: number | null,
@@ -10,24 +12,6 @@ type RawUserAccess = {
     user_access_used_at: Date | null,
     user_access_expires_at: Date,
     user_access_created_at: Date,
-};
-
-export type SerializedUserAccess = {
-    id: number,
-    sent_by: {
-        id: number,
-        email: string,
-        first_name: string,
-        last_name: string,
-        position: string | null,
-        organization: {
-            id: number,
-            name: string,
-        },
-    } | null,
-    used_at: number | null,
-    expires_at: number,
-    created_at: number,
 };
 
 export default (userAccess: RawUserAccess): SerializedUserAccess => ({
