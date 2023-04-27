@@ -1,5 +1,5 @@
 <template>
-    <p v-if="mode === 'draft'" class="bg-yellow-200 p-4 mb-6">
+    <p v-if="mode === 'report'" class="bg-yellow-200 p-4 mb-6">
         <Icon icon="triangle-exclamation" class="mr-1" />
         <span class="font-bold">Les données ne seront pas enregistrées</span
         ><br />

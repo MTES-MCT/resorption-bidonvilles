@@ -9,7 +9,7 @@
         </template>
 
         <ContentWrapper size="large">
-            <FormDeclarationDeSite ref="form" mode="draft" />
+            <FormDeclarationDeSite ref="form" mode="report" />
         </ContentWrapper>
     </LayoutForm>
 </template>

@@ -221,7 +221,7 @@ const config = {
                 "Le site a été déclaré, et les acteurs concernés ont été prévenus par mail",
         },
     },
-    draft: {
+    report: {
         async submit(values) {
             await report(values);
         },
@@ -310,7 +310,7 @@ defineExpose({
             const respondedTown = await submit(formattedValues, town.value?.id);
 
             notificationStore.success(notification.title, notification.content);
-            if (mode.value === "draft") {
+            if (mode.value === "report") {
                 backOrReplace("/liste-des-sites");
             } else {
                 backOrReplace(`/site/${respondedTown.id}`);
