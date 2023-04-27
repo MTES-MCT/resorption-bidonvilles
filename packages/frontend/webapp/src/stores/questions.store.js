@@ -19,6 +19,7 @@ export const useQuestionsStore = defineStore("questions", () => {
     const isLoading = ref(null);
     const error = ref(null);
     const subscriptions = ref({});
+    const filters = ref([]);
 
     const currentPage = {
         index: ref(-1), // index = 1 pour la première page
@@ -141,6 +142,7 @@ export const useQuestionsStore = defineStore("questions", () => {
         isLoading,
         error,
         currentPage,
+        filters,
         numberOfPages: computed(() => {
             if (questions.value.length === 0) {
                 return 0;

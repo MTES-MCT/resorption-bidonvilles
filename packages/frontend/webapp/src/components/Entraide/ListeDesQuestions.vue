@@ -1,5 +1,6 @@
 <template>
     <section class="flex flex-col space-y-4">
+        <ListeDesQuestionsFiltres class="mt-4" />
         <CarteQuestion
             v-for="question in questionsStore.currentPage.content"
             :key="question.id"
@@ -20,6 +21,7 @@
 import { useQuestionsStore } from "@/stores/questions.store";
 
 import CarteQuestion from "@/components/CarteQuestion/CarteQuestion.vue";
+import ListeDesQuestionsFiltres from "./ListeDesQuestionsFiltres.vue";
 import { BottomPagination } from "@resorptionbidonvilles/ui";
 
 const questionsStore = useQuestionsStore();
