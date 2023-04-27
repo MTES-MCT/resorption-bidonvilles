@@ -1,6 +1,6 @@
 <template>
     <section class="flex flex-col space-y-4">
-        <ListeDesQuestionsFiltres class="mt-4" />
+        <ListeDesQuestionsFiltres />
         <CarteQuestion
             v-for="question in questionsStore.currentPage.content"
             :key="question.id"
