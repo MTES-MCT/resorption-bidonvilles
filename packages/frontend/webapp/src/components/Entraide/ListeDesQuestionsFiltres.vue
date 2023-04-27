@@ -28,10 +28,13 @@ const filter = computed(() => {
     return {
         label: "Thématique",
         id: "topic",
-        options: configStore.config.topics.map(({ uid, name }) => ({
-            value: uid,
-            label: name,
-        })),
+        options: [
+            ...configStore.config.topics.map(({ uid, name }) => ({
+                value: uid,
+                label: name,
+            })),
+            { value: "other", label: "Autre" },
+        ],
     };
 });
 </script>
