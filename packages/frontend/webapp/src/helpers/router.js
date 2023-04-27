@@ -111,6 +111,7 @@ const router = createRouter({
             meta: {
                 authRequirement: "signedIn",
                 navTab: "actions",
+                permissions: ["action.create"],
             },
         },
         {
@@ -331,6 +332,7 @@ const router = createRouter({
             meta: {
                 authRequirement: "signedIn",
                 navTab: "sites",
+                permissions: ["shantytown.create"],
             },
         },
         {
