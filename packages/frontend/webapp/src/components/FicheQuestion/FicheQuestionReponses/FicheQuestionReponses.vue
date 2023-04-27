@@ -17,7 +17,7 @@
                 </h1>
                 <FicheQuestionSubscriptionButton
                     :question="question"
-                    class="mb-2"
+                    class="mt-2 mb-4"
                 />
                 <FicheQuestionListeDesReponses
                     v-if="question.answers.length > 0"
