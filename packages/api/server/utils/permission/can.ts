@@ -1,4 +1,4 @@
-import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import getPermission from './getPermission';
 
 export default (user: SerializedUser) => ({

@@ -1,7 +1,7 @@
 import ServiceError from '#server/errors/ServiceError';
 import permissionModel from '#server/models/permissionModel';
-import { Permissions } from '#server/models/permissionModel/types/Permissions';
-import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import { Permissions } from '#server/models/permissionModel/types/Permissions.d';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import createUser from './createUser';
 
 const userService = {

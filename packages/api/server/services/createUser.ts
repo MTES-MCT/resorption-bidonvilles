@@ -4,7 +4,7 @@ import organizationModel from '#server/models/organizationModel';
 import organizationTypeModel from '#server/models/organizationTypeModel';
 import authUtils from '#server/utils/auth';
 import mattermostUtils from '#server/utils/mattermost';
-import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 
 const { generateSalt } = authUtils;
 

@@ -25,6 +25,7 @@ const REQUESTER_CAMPAIGN = 'demandeur-email';
 const USER_CAMPAIGN = 'utilisateur-email';
 const INVITE_CAMPAIGN = 'invite-email';
 const SUMMARY_CAMPAIGN = 'recap-activite-email';
+const COMMUNITY_CAMPAIGN = 'community-email';
 
 type MailOptions = {
     preserveRecipient?: boolean,
@@ -248,6 +249,82 @@ export default {
                 backUrl,
                 blogUrl,
                 webappUrl: `${webappUrl}?${utm}`,
+            },
+            preserveRecipient,
+        });
+    },
+
+    sendCommunityAd: (recipient, options: MailOptions = {}) => {
+        const { preserveRecipient = false } = options;
+
+        const utm = generateTrackingUTM(COMMUNITY_CAMPAIGN, 'publicite');
+
+        return mailService.send('community_ad', {
+            recipient,
+            variables: {
+                utm,
+                webappUrl,
+                backUrl,
+                blogUrl,
+            },
+            preserveRecipient,
+        });
+    },
+
+    sendCommunityNewAnswerForAuthor: (recipient, options: MailOptions = {}) => {
+        const { variables, preserveRecipient = false } = options;
+        const utm = generateTrackingUTM(COMMUNITY_CAMPAIGN, 'nouvelle-reponse');
+
+        return mailService.send('community_new_answer_for_author', {
+            recipient,
+            variables: {
+                questionId: variables.questionId,
+                authorName: formatName(variables.author),
+                authorOrganization: variables.author.organization.id,
+                webappUrl,
+                utm,
+                backUrl,
+                blogUrl,
+            },
+            preserveRecipient,
+        });
+    },
+
+    sendCommunityNewAnswerForObservers: (recipient, options: MailOptions = {}) => {
+        const { variables, preserveRecipient = false } = options;
+        const utm = generateTrackingUTM(COMMUNITY_CAMPAIGN, 'nouvelle-reponse');
+
+        return mailService.send('community_new_answer_for_observers', {
+            recipient,
+            variables: {
+                questionId: variables.questionId,
+                authorName: formatName(variables.author),
+                authorOrganization: variables.author.organization.id,
+                question: variables.question,
+                webappUrl,
+                utm,
+                backUrl,
+                blogUrl,
+            },
+            preserveRecipient,
+        });
+    },
+
+    sendCommunityNewQuestion: (recipient, options: MailOptions = {}) => {
+        const { variables, preserveRecipient } = options;
+
+        const utm = generateTrackingUTM(COMMUNITY_CAMPAIGN, 'nouvelle-question');
+
+        return mailService.send('community_new_question', {
+            recipient,
+            variables: {
+                backUrl,
+                blogUrl,
+                webappUrl,
+                utm,
+                created_by: `${formatName(variables.question.createdBy)} (${variables.question.createdBy.organization})`,
+                question: variables.question.question,
+                questionId: variables.question.id,
             },
             preserveRecipient,
         });
@@ -829,29 +906,6 @@ export default {
                 wwwUrl,
                 webappUrl,
                 utm,
-                blogUrl,
-            },
-            preserveRecipient,
-        });
-    },
-
-    /**
-     * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
-     * @param {Object} options
-     */
-    sendUserNewAnswerToQuestion: (recipient, options: MailOptions = {}) => {
-        const { variables, preserveRecipient = false } = options;
-        const utm = generateTrackingUTM(USER_CAMPAIGN, 'nouvelle-reponse');
-
-        return mailService.send('user_answer_to_question', {
-            recipient,
-            variables: {
-                questionId: variables.questionId,
-                authorName: formatName(variables.author),
-                authorOrganization: variables.author.organization.id,
-                webappUrl,
-                utm,
-                backUrl,
                 blogUrl,
             },
             preserveRecipient,

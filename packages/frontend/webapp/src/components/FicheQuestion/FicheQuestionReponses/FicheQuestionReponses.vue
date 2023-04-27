@@ -15,6 +15,10 @@
                         question.answers.length > 1 ? "s" : ""
                     }}
                 </h1>
+                <FicheQuestionSubscriptionButton
+                    :question="question"
+                    class="mt-2 mb-4"
+                />
                 <FicheQuestionListeDesReponses
                     v-if="question.answers.length > 0"
                     :answers="question.answers"
@@ -30,6 +34,7 @@ import { defineProps, toRefs } from "vue";
 
 import FicheQuestionNouvelleReponse from "./FicheQuestionNouvelleReponse/FicheQuestionNouvelleReponse.vue";
 import FicheQuestionListeDesReponses from "./FicheQuestionListeDesReponses.vue";
+import FicheQuestionSubscriptionButton from "../FicheQuestionSubscriptionButton/FicheQuestionSubscriptionButton.vue";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 

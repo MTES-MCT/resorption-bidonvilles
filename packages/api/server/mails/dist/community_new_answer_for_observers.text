@@ -1,9 +1,10 @@
-Une nouvelle réponse vous attend dans l'espace d'entraide !
+La communauté a répondu !
 Bonjour,
-Vous avez posé une question sur l'espace d'entraide de la plateforme
+Vous êtes abonné(e) à la question « {{var:question}} » sur l'espace d'entraide
+[{{var:webappUrl}}/communaute?{{var:utm}}] de la plateforme
 Résorption-bidonvilles [{{var:webappUrl}}?{{var:utm}}].
 {{var:authorName}}
-[{{var:webappUrl}}/structure/{{var:authorOrganization}}?{{var:utm}}] vous a
+[{{var:webappUrl}}/structure/{{var:authorOrganization}}?{{var:utm}}] y a
 répondu.
 
 Consulter la réponse

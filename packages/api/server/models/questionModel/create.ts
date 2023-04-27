@@ -1,8 +1,9 @@
 import { sequelize } from '#db/sequelize';
+import { Transaction } from 'sequelize';
 import QuestionInput from './QuestionInput.d';
 
-export default async (data: QuestionInput): Promise<number> => {
-    const transaction = await sequelize.transaction();
+export default async (data: QuestionInput, argTransaction?: Transaction): Promise<number> => {
+    const transaction = argTransaction !== undefined ? argTransaction : await sequelize.transaction();
 
     const questionResponse = await sequelize.query(
         `INSERT INTO questions(
@@ -47,7 +48,9 @@ export default async (data: QuestionInput): Promise<number> => {
         },
     )));
 
-    await transaction.commit();
+    if (argTransaction === undefined) {
+        await transaction.commit();
+    }
 
     return rows[0].question_id;
 };

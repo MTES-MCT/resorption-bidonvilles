@@ -12,17 +12,19 @@
 
 <script setup>
 // utils
-import { ref, defineProps, toRefs, computed } from "vue";
-import { useForm } from "vee-validate";
+import { ref, toRefs, computed, onMounted } from "vue";
+import { useForm, useFieldValue } from "vee-validate";
 import { useUserStore } from "@/stores/user.store.js";
 import { useNotificationStore } from "@/stores/notification.store.js";
 import schema from "./FormAbonnements.schema";
 import { edit as editSelf } from "@/api/me.api";
 import { edit } from "@/api/users.api";
+import subscriptions from "@/utils/email_subscriptions";
 
 // components
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
 import FormAbonnementsInputAbonnements from "./inputs/FormAbonnementsInputAbonnements.vue";
+import router from "@/helpers/router";
 
 // data
 const props = defineProps({
@@ -46,17 +48,18 @@ const self = computed(() => {
     const userStore = useUserStore();
     return user.value.id === userStore.user?.id;
 });
+const emailSubscriptionValue = useFieldValue("email_subscriptions");
 
-const onSubmit = handleSubmit(async (values) => {
+const onSubmit = handleSubmit(async (updatedValues) => {
     error.value = null;
 
     try {
         if (self.value === true) {
-            const newValues = await editSelf(values);
+            const newValues = await editSelf(updatedValues);
             const userStore = useUserStore();
             Object.assign(userStore.user, newValues);
         } else {
-            await edit(user.value.id, values);
+            await edit(user.value.id, updatedValues);
         }
 
         const notificationStore = useNotificationStore();
@@ -69,6 +72,41 @@ const onSubmit = handleSubmit(async (values) => {
         if (e?.fields) {
             setErrors(e.fields);
         }
+    }
+});
+
+onMounted(async () => {
+    const allowedSubscriptions = Object.keys(subscriptions);
+    const { abonnements, desabonnements } = router.currentRoute.value.query;
+    let subscriptionsChanged = false;
+
+    // on abonne l'utilisateur automatiquement
+    if (abonnements) {
+        abonnements.split(",").forEach((abonnement) => {
+            if (
+                allowedSubscriptions.includes(abonnement) &&
+                !user.value.email_subscriptions.includes(abonnement)
+            ) {
+                emailSubscriptionValue.value.push(abonnement);
+                subscriptionsChanged = true;
+            }
+        });
+    }
+
+    // on désabonne l'utilisateur automatiquement
+    if (desabonnements) {
+        desabonnements.split(",").forEach((abonnement) => {
+            const index = user.value.email_subscriptions.indexOf(abonnement);
+            if (allowedSubscriptions.includes(abonnement) && index >= 0) {
+                emailSubscriptionValue.value.splice(index, 1);
+                subscriptionsChanged = true;
+            }
+        });
+    }
+
+    if (subscriptionsChanged === true) {
+        await onSubmit();
+        router.replace("/mon-compte/abonnements");
     }
 });
 </script>

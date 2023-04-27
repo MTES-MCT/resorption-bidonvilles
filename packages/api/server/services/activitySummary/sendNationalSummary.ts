@@ -3,7 +3,7 @@ import { QuestionNationalSummary } from '#server/models/activityModel/types/Ques
 import mailsUtils from '#server/mails/mails';
 import moment from 'moment';
 import PromisePool from '@supercharge/promise-pool';
-import { SerializedUser } from '#server/models/userModel/_common/serializeUser';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 
 const { sendActivitySummary } = mailsUtils;
 

@@ -19,6 +19,8 @@ import getAdminsFor from './getAdminsFor';
 import getDirectory from './getDirectory';
 import getHistory from './getHistory';
 import getLocationWatchers from './getLocationWatchers';
+import getQuestionSubscribers from './getQuestionSubscribers';
+import getQuestionWatchers from './getQuestionWatchers';
 import getNationalAdmins from './_common/getNationalAdmins';
 import getShantytownWatchers from './getShantytownWatchers';
 import getActionObservers from './getActionObservers';
@@ -52,6 +54,8 @@ export default {
     getDirectory,
     getHistory,
     getLocationWatchers,
+    getQuestionSubscribers,
+    getQuestionWatchers,
     getNationalAdmins,
     getShantytownWatchers,
     getActionObservers,
