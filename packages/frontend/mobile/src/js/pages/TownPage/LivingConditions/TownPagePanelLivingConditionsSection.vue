@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-6">
+    <div class="py-2">
         <div :class="[colorClass, 'flex items-center']">
             <Icon :class="['mr-1', 'font-bold']" :icon="icon" />
             <div>

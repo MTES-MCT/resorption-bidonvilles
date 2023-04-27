@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="flex text-center py-4">
+        <div class="flex text-center mb-2">
             <div
                 v-for="item in items"
                 :key="item.id"
