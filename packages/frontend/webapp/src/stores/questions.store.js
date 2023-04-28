@@ -20,10 +20,12 @@ export const useQuestionsStore = defineStore("questions", () => {
     const isLoading = ref(null);
     const error = ref(null);
     const subscriptions = ref({});
-    const filters = ref([]);
+    const filters = {
+        tags: ref([]),
+    };
 
     const filteredQuestions = computed(() => {
-        return filterQuestions(questions.value, filters.value);
+        return filterQuestions(questions.value, { tags: filters.tags.value });
     });
 
     const currentPage = {
@@ -59,6 +61,10 @@ export const useQuestionsStore = defineStore("questions", () => {
     watch(resetPagination);
     watch(resetPagination, { deep: true });
 
+    function resetFilters() {
+        filters.tags.value = [];
+    }
+
     function resetPagination() {
         if (filteredQuestions.value.length === 0) {
             currentPage.index.value = -1;
@@ -74,6 +80,7 @@ export const useQuestionsStore = defineStore("questions", () => {
         isLoading.value = false;
         error.value = null;
         resetPagination();
+        resetFilters();
     }
 
     const { bus } = useEventBus();

@@ -2,14 +2,12 @@
     <section class="flex items-end flex-wrap space-x-4">
         <article>
             <p>Filtrer par</p>
-            <div class="flex space-x-2">
-                <Filter
-                    :key="filter.id"
-                    :title="filter.label"
-                    :options="filter.options"
-                    v-model="questionsStore.filters"
-                />
-            </div>
+            <Filter
+                :key="filter.id"
+                :title="filter.label"
+                :options="filter.options"
+                v-model="questionsStore.filters[filter.id]"
+            />
         </article>
     </section>
 </template>
@@ -27,9 +25,9 @@ const questionsStore = useQuestionsStore();
 const filter = computed(() => {
     return {
         label: "Thématique",
-        id: "topic",
+        id: "tags",
         options: [
-            ...configStore.config.topics.map(({ uid, name }) => ({
+            ...configStore.config.question_tags.map(({ uid, name }) => ({
                 value: uid,
                 label: name,
             })),
