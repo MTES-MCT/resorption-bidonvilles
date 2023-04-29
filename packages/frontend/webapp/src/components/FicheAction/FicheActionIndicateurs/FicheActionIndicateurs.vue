@@ -74,6 +74,8 @@
                             :key="date"
                             class="text-center font-bold"
                             >Année scolaire
+                            {{ parseInt(formatDate(date / 1000, "y"), 10) - 1 }}
+                            -
                             {{
                                 formatDate(date / 1000, "y")
                             }}</IndicateursTableRowCell
