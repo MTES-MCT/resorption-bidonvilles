@@ -36,6 +36,14 @@ const icon = computed(() => {
         return "user";
     }
 
+    if (activity.value.entity === "question") {
+        return "question";
+    }
+
+    if (activity.value.entity === "answer") {
+        return "comments";
+    }
+
     // commentaires
     if (activity.value.comment?.covid) {
         return "exclamation";
