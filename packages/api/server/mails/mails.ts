@@ -728,6 +728,7 @@ export default {
             variables: {
                 recipientName: formatName(recipient),
                 backUrl,
+                blogUrl,
                 webappUrl,
                 utm,
                 wwwUrl: `${wwwUrl}?${utm}`,
