@@ -11,6 +11,8 @@ export function list(
     const activityTypeFilter =
         activityFilter.activityType.length === 0
             ? [
+                  "question",
+                  "answer",
                   "shantytownCreation",
                   "shantytownClosing",
                   "shantytownUpdate",
