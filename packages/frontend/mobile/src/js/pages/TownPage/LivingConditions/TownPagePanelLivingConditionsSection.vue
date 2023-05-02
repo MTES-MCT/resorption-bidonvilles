@@ -1,30 +1,31 @@
 <template>
-    <div class="py-2">
-        <div :class="[colorClass, 'flex items-center']">
-            <Icon :class="['mr-1', 'font-bold']" :icon="icon" />
-            <div>
-                <div class="flex items-center">
-                    <div :class="[colorClass, 'font-bold', 'mr-1']">
-                        {{ title }}<span v-if="showStatus"> :</span>
-                    </div>
-                    <div v-if="showStatus">
+    <div>
+        <div :class="[colorClass, 'border-t border-b py-2']">
+            <Container class="flex items-center">
+                <Icon :class="['mr-2', 'font-bold']" :icon="icon" />
+                <p class="flex items-center">
+                    <span :class="[colorClass, 'font-bold', 'mr-1']">
+                        {{ title }}<template v-if="showStatus"> :</template>
+                    </span>
+                    <template v-if="showStatus">
                         {{ text }}
-                    </div>
-                </div>
-            </div>
+                    </template>
+                </p>
+            </Container>
         </div>
-        <div class="mt-6" v-if="answers.length">
+        <Container v-if="answers.length">
             <div v-for="answer in answers" :key="answer.label">
                 <TownPageInfo :title="answer.label">
                     <p>{{ answer.content }}</p>
                 </TownPageInfo>
             </div>
-        </div>
+        </Container>
         <TownPageLivingConditionsDetails :status="status" />
     </div>
 </template>
 
 <script>
+import Container from "#src/js/components/Container.vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 import TownPageInfo from "../TownPageInfo.vue";
 import TownPageLivingConditionsDetails from "./TownPageLivingConditionsDetails.vue";
@@ -78,6 +79,7 @@ export default {
     },
     components: {
         Icon,
+        Container,
         TownPageLivingConditionsDetails,
         TownPageInfo,
     },
