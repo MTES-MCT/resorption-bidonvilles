@@ -146,6 +146,10 @@ const title = computed(() => {
 
         case "water-closing":
             return "Accès à l'eau perdu";
+        case "question-creation":
+            return "Nouvelle question";
+        case "answer-creation":
+            return "Nouvelle réponse";
 
         default:
             return "Événement inconnu";
@@ -179,6 +183,10 @@ const subtitle = computed(() => {
             }
 
             return "";
+        case "question-creation":
+            return "dans l'espace d'entraide";
+        case "answer-creation":
+            return "dans l'espace d'entraide";
 
         default:
             return "";
@@ -194,12 +202,20 @@ const resorptionTarget = computed(() => {
 });
 
 const description = computed(() => {
-    if (activity.value.entity !== "comment") {
-        return null;
+    if (activity.value.entity == "comment") {
+        return (activity.value.highCovidComment || activity.value.comment)
+            .description;
     }
 
-    return (activity.value.highCovidComment || activity.value.comment)
-        .description;
+    if (activity.value.entity == "question") {
+        return activity.value.question.question;
+    }
+
+    if (activity.value.entity == "answer") {
+        return activity.value.answer.description;
+    }
+
+    return null;
 });
 
 const icon = computed(() => {
@@ -228,6 +244,14 @@ const icon = computed(() => {
 
     if (activity.value.entity === "water") {
         return "tint";
+    }
+
+    if (activity.value.entity === "question") {
+        return "question";
+    }
+
+    if (activity.value.entity === "answer") {
+        return "comments";
     }
 
     return "question";
@@ -298,6 +322,13 @@ function routeToDetails() {
         return router.push("/communaute");
     }
 
+    if (activity.value.entity === "question") {
+        return router.push(`/question/${activity.value.question.id}`);
+    }
+
+    if (activity.value.entity === "answer") {
+        return router.push(`/question/${activity.value.question.id}#reponses`);
+    }
     if (activity.value.shantytown) {
         return router.push(`/site/${activity.value.shantytown.id}`);
     }
