@@ -1,12 +1,12 @@
 <template>
-    <div>
-        <div class="flex text-center py-4">
+    <Container>
+        <div class="flex text-center mb-2">
             <div
                 v-for="item in items"
                 :key="item.id"
                 @click="changeFilter(item.id)"
                 :class="[
-                    'p-2 mt-2',
+                    'py-2',
                     select === item.id
                         ? 'text-primary border-b border-b-blue'
                         : '',
@@ -27,7 +27,7 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </Container>
 </template>
 
 <style scoped>
@@ -37,6 +37,7 @@
 </style>
 
 <script>
+import Container from "#src/js/components/Container.vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 export default {
@@ -60,6 +61,7 @@ export default {
     },
     components: {
         Icon,
+        Container,
     },
     mounted() {
         this.initTab();
