@@ -10,6 +10,7 @@ import {
 } from "@/api/questions.api";
 import { subscribe, unsubscribe } from "@/api/questions.api";
 import { useConfigStore } from "./config.store";
+import filterQuestions from "@/utils/filterQuestions";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -19,6 +20,13 @@ export const useQuestionsStore = defineStore("questions", () => {
     const isLoading = ref(null);
     const error = ref(null);
     const subscriptions = ref({});
+    const filters = {
+        tags: ref([]),
+    };
+
+    const filteredQuestions = computed(() => {
+        return filterQuestions(questions.value, { tags: filters.tags.value });
+    });
 
     const currentPage = {
         index: ref(-1), // index = 1 pour la première page
@@ -35,7 +43,7 @@ export const useQuestionsStore = defineStore("questions", () => {
             }
 
             return Math.min(
-                questions.value.length,
+                filteredQuestions.value.length,
                 currentPage.index.value * ITEMS_PER_PAGE
             );
         }),
@@ -44,7 +52,7 @@ export const useQuestionsStore = defineStore("questions", () => {
                 return [];
             }
 
-            return questions.value.slice(
+            return filteredQuestions.value.slice(
                 (currentPage.index.value - 1) * ITEMS_PER_PAGE,
                 currentPage.index.value * ITEMS_PER_PAGE
             );
@@ -53,8 +61,12 @@ export const useQuestionsStore = defineStore("questions", () => {
     watch(resetPagination);
     watch(resetPagination, { deep: true });
 
+    function resetFilters() {
+        filters.tags.value = [];
+    }
+
     function resetPagination() {
-        if (questions.value.length === 0) {
+        if (filteredQuestions.value.length === 0) {
             currentPage.index.value = -1;
         } else {
             currentPage.index.value = 1;
@@ -68,6 +80,7 @@ export const useQuestionsStore = defineStore("questions", () => {
         isLoading.value = false;
         error.value = null;
         resetPagination();
+        resetFilters();
     }
 
     const { bus } = useEventBus();
@@ -138,17 +151,19 @@ export const useQuestionsStore = defineStore("questions", () => {
 
     return {
         questions,
+        filteredQuestions,
         isLoading,
         error,
         currentPage,
+        filters,
         numberOfPages: computed(() => {
-            if (questions.value.length === 0) {
+            if (filteredQuestions.value.length === 0) {
                 return 0;
             }
 
-            return Math.ceil(questions.value.length / ITEMS_PER_PAGE);
+            return Math.ceil(filteredQuestions.value.length / ITEMS_PER_PAGE);
         }),
-        total: computed(() => questions.value.length),
+        total: computed(() => filteredQuestions.value.length),
         fetchQuestions,
         fetchQuestion,
         create,
