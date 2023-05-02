@@ -50,12 +50,14 @@
                     />
 
                     <TownPagePanelPeople id="people" :town="town" />
+                </Container>
 
-                    <TownPagePanelLivingConditions
-                        id="living_conditions"
-                        :town="town"
-                    />
+                <TownPagePanelLivingConditions
+                    id="living_conditions"
+                    :town="town"
+                />
 
+                <Container>
                     <TownPagePanelJudicial
                         v-if="hasJusticePermission"
                         id="judicial"
