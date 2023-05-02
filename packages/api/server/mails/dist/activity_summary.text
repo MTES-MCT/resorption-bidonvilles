@@ -1,14 +1,29 @@
 Semaine du {{ var:from }} au {{ var:to }}
-Questions à la communauté
-{% if var:has_question_summary %}{% for question in var:questions %}
+{% if var:show_question_summary %}
+Actus de l'espace d'entraide
+{% if var:questions_with_answers_length > 1 %}
+{{ var:questions_with_answers_length }} questions ont reçu des réponses la
+semaine passée :
+{% elseif var:questions_with_answers_length > 0 %}
+Une question a reçu des réponses la semaine passée :
+{% endif %}{% for question in var:questions_with_answers %}
 - {{ question.question }}
 [{{var:webappUrl}}/question/{{question.id}}?{{var:utm}}] par
-{{question.created_by}}
-{% endfor%}{% else %}
-Aucune question n'a été posée cette semaine à la communauté
-{% endif %}
+{{question.created_by}} {% if question.is_new %}Nouvelle question{% endif %}
+{% endfor %}{% if var:questions_without_answers_length > 1 %}
+{{var:questions_without_answers_length}} {% if var:questions_with_answers_length
+> 0 %}autres {% endif %}questions vous attendent dans l'espace d'entraide
+[{{var:webappUrl}}/communaute?{{var:utm}}] :
+{% elseif var:questions_without_answers_length > 0 %}
+Une {% if var:questions_with_answers_length > 0 %}autre {% endif %}question vous
+attend dans l'espace d'entraide [{{var:webappUrl}}/communaute?{{var:utm}}] :
+{% endif %}{% for question in var:questions_without_answers %}
+- {{ question.question }}
+[{{var:webappUrl}}/question/{{question.id}}?{{var:utm}}] par
+{{question.created_by}} {% if question.is_new %}Nouvelle question{% endif %}
+{% endfor %}
 
-{% for summary in var:summaries %}
+{% endif %}{% for summary in var:summaries %}
 {{ summary.code }} – {{ summary.name }}
 {% if var:showDetails %}{% if summary.new_shantytowns_length > 1 %}
 {{ summary.new_shantytowns_length }} nouveaux sites

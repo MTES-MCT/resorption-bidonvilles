@@ -1,5 +1,5 @@
 import { ActivityNationalSummary } from '#server/models/activityModel/types/ActivityNationalSummary';
-import { QuestionNationalSummary } from '#server/models/activityModel/types/QuestionNationalSummary';
+import { QuestionSummary } from '#server/models/activityModel/types/QuestionNationalSummary';
 import mailsUtils from '#server/mails/mails';
 import moment from 'moment';
 import PromisePool from '@supercharge/promise-pool';
@@ -7,7 +7,7 @@ import { SerializedUser } from '#server/models/userModel/_common/types/Serialize
 
 const { sendActivitySummary } = mailsUtils;
 
-export default async (argFrom: Date, argTo: Date, questionSummary: QuestionNationalSummary, argSummaries: ActivityNationalSummary, subscribers: Array<SerializedUser>): Promise<any> => {
+export default async (argFrom: Date, argTo: Date, questionSummary: QuestionSummary[], argSummaries: ActivityNationalSummary, subscribers: Array<SerializedUser>): Promise<any> => {
     const from = moment(argFrom);
     const to = moment(argTo);
 

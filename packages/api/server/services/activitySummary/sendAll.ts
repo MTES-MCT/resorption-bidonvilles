@@ -42,12 +42,11 @@ export default async (day: number, month: number, year: number): Promise<void> =
         userModel.findDepartementSummarySubscribers(),
     ];
     const [questions, summary, subscribers] = await Promise.all(promises);
-    const questionSummary = { questions, has_question_summary: questions.length > 0 };
 
     // send the summaries
     await Promise.all([
-        sendNationalSummary(monday, sunday, questionSummary, summary, subscribers.nation),
-        sendRegionalSummary(monday, sunday, questionSummary, summary, subscribers.region),
-        sendDepartementalSummary(monday, sunday, questionSummary, summary, subscribers.departement),
+        sendNationalSummary(monday, sunday, questions, summary, subscribers.nation),
+        sendRegionalSummary(monday, sunday, questions, summary, subscribers.region),
+        sendDepartementalSummary(monday, sunday, questions, summary, subscribers.departement),
     ]);
 };

@@ -13,7 +13,9 @@
                     Semaine du {{ var:from }} au {{ var:to }}
                 </mj-text>
 
+                <mj-raw>{% if var:show_question_summary %}</mj-raw>
                 <mj-include path='common/question_summary.mjml' />
+                <mj-raw>{% endif %}</mj-raw>
 
                 <mj-raw>{% for summary in var:summaries %}</mj-raw>
                 <mj-include path='common/summary.mjml' />
