@@ -2,7 +2,8 @@ import shantytownModel from '#server/models/shantytownModel';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import userModel from '#server/models/userModel';
 import actionModel from '#server/models/actionModel';
-
+import questionModel from '../questionModel';
+import answerModel from '../answerModel';
 /**
  * @param {Object} userLocation Location to be used for 'local' permissions
  * @param {HistoryPermissions} permissions See above
@@ -33,6 +34,14 @@ export default async (user, location, activityTypeFilter, resorbedFilter, myTown
     }
     if (activityTypeFilter.includes('actionComment')) {
         promises.push(actionModel.getCommentHistory(user, location, numberOfActivities, lastDate, maxDate));
+    }
+
+    if (activityTypeFilter.includes('question')) {
+        promises.push(questionModel.getHistory(numberOfActivities, lastDate, maxDate));
+    }
+
+    if (activityTypeFilter.includes('answer')) {
+        promises.push(answerModel.getHistory(numberOfActivities, lastDate, maxDate));
     }
     const activities = await Promise.all(promises);
     const sortedActivities = activities.flat().sort((a, b) => (a.date > b.date ? -1 : 1));
