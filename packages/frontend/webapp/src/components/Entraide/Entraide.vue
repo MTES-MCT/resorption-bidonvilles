@@ -9,7 +9,9 @@
 
         <template v-else>
             <ListeDesQuestionsFiltres class="-mt-5 mb-4" />
-            <ListeDesQuestions v-if="questionsStore.questions.length > 0" />
+            <ListeDesQuestions
+                v-if="questionsStore.filteredQuestions.length > 0"
+            />
             <ListeDesQuestionsVide v-else />
         </template>
     </ContentWrapper>
