@@ -1,0 +1,9 @@
+<mj-raw>{% if var:questions_with_answers_length > 1 %}</mj-raw>
+<mj-text mj-class='pt-2 font-bold'>{{ var:questions_with_answers_length }} questions ont reçu des réponses la semaine passée :</mj-text>
+<mj-raw>{% elseif var:questions_with_answers_length > 0 %}</mj-raw>
+<mj-text mj-class='pt-2 font-bold'>Une question a reçu des réponses la semaine passée :</mj-text>
+<mj-raw>{% endif %}</mj-raw>
+
+<mj-raw>{% for question in var:questions_with_answers %}</mj-raw>
+<mj-include path='question.mjml' />
+<mj-raw>{% endfor %}</mj-raw>

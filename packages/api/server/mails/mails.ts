@@ -3,6 +3,7 @@ import userModel from '#server/models/userModel';
 import mailService from '#server/services/mailService';
 import config from '#server/config';
 
+import { QuestionSummary } from '#server/models/activityModel/types/QuestionNationalSummary';
 import generateTrackingUTM from './generateTrackingUTM';
 
 const { formatName } = userModel;
@@ -728,6 +729,7 @@ export default {
             variables: {
                 recipientName: formatName(recipient),
                 backUrl,
+                blogUrl,
                 webappUrl,
                 utm,
                 wwwUrl: `${wwwUrl}?${utm}`,
@@ -888,6 +890,23 @@ export default {
 
     sendActivitySummary(recipient, options: MailOptions = {}) {
         const { variables, preserveRecipient = false } = options;
+        interface SortedQuestions {
+            questions_without_answers: QuestionSummary[],
+            questions_with_answers: QuestionSummary[],
+        }
+
+        const sortedQuestions: SortedQuestions = (variables?.questionSummary || []).reduce((acc, question: QuestionSummary) => {
+            if (question.number_of_recent_answers > 0) {
+                acc.questions_with_answers.push(question);
+            } else {
+                acc.questions_without_answers.push(question);
+            }
+
+            return acc;
+        }, {
+            questions_without_answers: [],
+            questions_with_answers: [],
+        } as SortedQuestions);
 
         const utm = generateTrackingUTM(SUMMARY_CAMPAIGN, variables.campaign);
         return mailService.send('activity_summary', {
@@ -899,9 +918,12 @@ export default {
                 recipientName: formatName(recipient),
                 connexionUrl: `${connexionUrl}?${utm}`,
                 showDetails: variables.showDetails || false,
-                questions: variables?.questionSummary?.questions || [],
-                has_question_summary: variables?.questionSummary?.has_question_summary || false,
                 summaries: variables.summaries,
+                show_question_summary: sortedQuestions.questions_with_answers.length > 0 || sortedQuestions.questions_without_answers.length > 0,
+                questions_with_answers_length: sortedQuestions.questions_with_answers.length,
+                questions_with_answers: sortedQuestions.questions_with_answers,
+                questions_without_answers_length: sortedQuestions.questions_without_answers.length,
+                questions_without_answers: sortedQuestions.questions_without_answers,
                 backUrl,
                 wwwUrl,
                 webappUrl,
