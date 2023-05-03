@@ -1,7 +1,0 @@
-<mj-section>
-    <mj-column>
-        <mj-text mj-class='text-primary text-display pb-4'>
-        Nouveau : la plateforme dans votre poche !
-        </mj-text>
-    </mj-column>
-</mj-section>

@@ -1,0 +1,1 @@
+<mj-text>- <a href="{{var:webappUrl}}/question/{{question.id}}?{{var:utm}}" class="link" target="_blank" rel="noopener noreferrer"> {{ question.question }} </a> par {{question.created_by}} <mj-raw>{% if question.is_new %}</mj-raw><sup class='text-new'>Nouvelle question</sup><mj-raw>{% endif %}</mj-raw></mj-text>

@@ -1,0 +1,9 @@
+<mj-raw>{% if var:questions_without_answers_length > 1 %}</mj-raw>
+<mj-text mj-class='pt-4 font-bold'>{{var:questions_without_answers_length}} <mj-raw>{% if var:questions_with_answers_length > 0 %}</mj-raw>autres <mj-raw>{% endif %}</mj-raw>questions vous attendent dans <a href="{{var:webappUrl}}/communaute?{{var:utm}}" class="link" target="_blank" rel="noopener noreferrer">l'espace d'entraide</a> :</mj-text>
+<mj-raw>{% elseif var:questions_without_answers_length > 0 %}</mj-raw>
+<mj-text mj-class='pt-4 font-bold'>Une <mj-raw>{% if var:questions_with_answers_length > 0 %}</mj-raw>autre <mj-raw>{% endif %}</mj-raw>question vous attend dans <a href="{{var:webappUrl}}/communaute?{{var:utm}}" class="link" target="_blank" rel="noopener noreferrer">l'espace d'entraide</a> :</mj-text>
+<mj-raw>{% endif %}</mj-raw>
+
+<mj-raw>{% for question in var:questions_without_answers %}</mj-raw>
+<mj-include path='question.mjml' />
+<mj-raw>{% endfor %}</mj-raw>
