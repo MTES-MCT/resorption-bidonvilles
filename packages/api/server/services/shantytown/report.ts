@@ -1,9 +1,10 @@
 import userModel from '#server/models/userModel';
 import mails from '#server/mails/mails';
 import ServiceError from '#server/errors/ServiceError';
-import serializeReport from './_common/serializeReport';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import serializeReport, { TownInput } from './_common/serializeReport';
 
-export default async (townData, user) => {
+export default async (townData: TownInput, user: SerializedUser): Promise<void> => {
     const reporting = await serializeReport(townData);
 
     // Send a notification to all national admins
