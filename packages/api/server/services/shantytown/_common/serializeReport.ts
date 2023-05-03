@@ -5,7 +5,7 @@ import waterAccessTypes from '#server/models/_common/waterAccessTypes';
 const census_statuses = {
     done: 'Réalisé',
     scheduled: 'Prévu',
-    non: 'Non Prévu',
+    none: 'Non Prévu',
 };
 
 const police_statuses = {
