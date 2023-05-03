@@ -10,16 +10,16 @@ export default async (townData: TownInput, user: SerializedUser): Promise<void> 
     // Send a notification to all national admins
     try {
         const admins = await userModel.getNationalAdmins();
-        admins.forEach((admin) => {
-            mails.sendAdminTownReporting(admin, {
+        await Promise.all(
+            admins.map(admin => mails.sendAdminTownReporting(admin, {
                 variables: {
                     town: reporting,
                     creator: user,
                 },
                 preserveRecipient: false,
 
-            });
-        });
+            })),
+        );
     } catch (error) {
         throw new ServiceError('sent_failed', error);
     }
