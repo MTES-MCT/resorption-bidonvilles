@@ -22,9 +22,7 @@ export default async (req: ReportTownRequest, res: Response, next: NextFunction)
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({
-            error: {
-                user_message: message,
-            },
+            user_message: message,
         });
         next(error.nativeError || error);
     }
