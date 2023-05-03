@@ -1,5 +1,5 @@
 import moment from 'moment';
-import userActivityModel from '#server/models/userActivityModel';
+import getHistory from '#server/services/userActivity/getHistory';
 
 export default async (req, res, next) => {
     const {
@@ -7,7 +7,7 @@ export default async (req, res, next) => {
     } = req.query;
     try {
         return res.status(200).send(
-            await userActivityModel.getHistory(
+            await getHistory(
                 req.user,
                 req.body.location,
                 activityTypeFilter,

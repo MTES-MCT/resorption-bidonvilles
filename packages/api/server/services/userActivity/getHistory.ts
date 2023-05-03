@@ -2,14 +2,9 @@ import shantytownModel from '#server/models/shantytownModel';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import userModel from '#server/models/userModel';
 import actionModel from '#server/models/actionModel';
-import questionModel from '../questionModel';
-import answerModel from '../answerModel';
-/**
- * @param {Object} userLocation Location to be used for 'local' permissions
- * @param {HistoryPermissions} permissions See above
- * @param {Object} location Location to be queried
- * @param {Array.<String>} activityTypeFilter List of activityTypeFilter to be included
- */
+import questionModel from '#server/models/questionModel';
+import answerModel from '#server/models/answerModel';
+
 export default async (user, location, activityTypeFilter, resorbedFilter, myTownsFilter, numberOfActivities, lastDate, maxDate) => {
     const promises = [];
     const shantytownFilter = [];
