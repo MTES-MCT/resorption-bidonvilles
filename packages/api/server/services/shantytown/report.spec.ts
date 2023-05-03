@@ -18,6 +18,10 @@ describe('services/shantytown', () => {
         const townData = {
             address: 'Adresse test',
             name: 'Appellation test',
+            declared_at: new Date(2023, 4, 1),
+            census_status: 'non',
+            police_status: 'none',
+            water_access_type: 'inconnu',
             field_type_full: { id: 'unknown', label: 'Inconnu' },
             owner_type_full: { id: 'unknown', label: 'Inconnu' },
             social_origins_full: [],
