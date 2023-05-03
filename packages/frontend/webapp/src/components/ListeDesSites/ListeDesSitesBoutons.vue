@@ -30,7 +30,7 @@
             Déclarer un nouveau site
         </Button>
         <Button
-            v-if="!userStore.hasPermission('shantytown.create')"
+            v-else
             href="/site/signalement"
             icon="plus"
             iconPosition="left"
