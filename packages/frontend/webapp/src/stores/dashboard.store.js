@@ -66,7 +66,7 @@ export const useDashboardStore = defineStore("dashboard", () => {
         filter: ref("comment_creation"),
     };
 
-    const formattedAcvities = computed(() => {
+    const formattedActivities = computed(() => {
         return activitiesStore.activities.reduce((acc, argActivity) => {
             const activity = { ...argActivity };
             if (activity.user) {
@@ -180,7 +180,7 @@ export const useDashboardStore = defineStore("dashboard", () => {
         }),
         towns,
         activities,
-        formattedAcvities,
+        formattedActivities,
         async fetchStats() {
             if (stats.isLoading.value === true) {
                 return;
