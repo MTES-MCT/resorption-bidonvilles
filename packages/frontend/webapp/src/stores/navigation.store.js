@@ -93,7 +93,10 @@ export const useNavigationStore = defineStore("navigation", {
                 { label: "Communauté", route: "/communaute" },
                 { label: "Carte", route: "/cartographie" },
                 { label: "Dernières activités", route: "/activites" },
-                { label: "Statistiques", route: "/statistiques" },
+                {
+                    label: "Données statistiques et cartographiques",
+                    route: "/donnees-statistiques",
+                },
                 { label: "Administration", route: "/acces" },
             ];
 

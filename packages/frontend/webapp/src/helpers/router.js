@@ -72,6 +72,15 @@ const router = createRouter({
             },
         },
         {
+            path: "/donnees-statistiques",
+            component: () =>
+                import("@/views/DonneesStatistiquesRegionsView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "metrics",
+            },
+        },
+        {
             path: "/acces",
             component: () => import("@/views/ListeAccesView.vue"),
             meta: {
