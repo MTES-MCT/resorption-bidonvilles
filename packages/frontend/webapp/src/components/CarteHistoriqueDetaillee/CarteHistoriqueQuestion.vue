@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 
 import { Icon } from "@resorptionbidonvilles/ui";
 import QuestionTag from "../QuestionTag/QuestionTag.vue";
