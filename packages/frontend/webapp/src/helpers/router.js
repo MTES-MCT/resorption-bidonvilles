@@ -111,6 +111,7 @@ const router = createRouter({
             meta: {
                 authRequirement: "signedIn",
                 navTab: "actions",
+                permissions: ["action.create"],
             },
         },
         {
@@ -328,6 +329,15 @@ const router = createRouter({
         {
             path: "/site/nouveau",
             component: () => import("@/views/DeclarationDeSiteView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "sites",
+                permissions: ["shantytown.create"],
+            },
+        },
+        {
+            path: "/site/signalement",
+            component: () => import("@/views/SignalementDeSiteView.vue"),
             meta: {
                 authRequirement: "signedIn",
                 navTab: "sites",

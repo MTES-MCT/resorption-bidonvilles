@@ -1,15 +1,15 @@
 <template>
     <LayoutForm size="large">
-        <template v-slot:title>Déclaration d'un site</template>
+        <template v-slot:title>Signalement d'un site</template>
         <template v-slot:buttons>
             <Button variant="primaryOutline" type="button" @click="back"
                 >Annuler</Button
             >
-            <Button @click="submit">Déclarer le site</Button>
+            <Button @click="submit">Signaler le site</Button>
         </template>
 
         <ContentWrapper size="large">
-            <FormDeclarationDeSite ref="form" mode="create" />
+            <FormDeclarationDeSite ref="form" mode="report" />
         </ContentWrapper>
     </LayoutForm>
 </template>

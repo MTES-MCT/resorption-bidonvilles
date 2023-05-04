@@ -1,0 +1,30 @@
+{{ var:creatorName }} ({{var:creatorOrganization}})
+[{{var:webappUrl}}/access/{{var:creatorId}}] a signalé un site sur la
+plateforme.
+Vous trouverez ci-dessous les informations qui ont été renseignées sur le site
+signalé.
+Pour contacter l'utilisateur, il suffit de répondre au présent email ou de lui
+écrire à l'adresse suivante : {{var:creatorEmail}} [{{var:creatorEmail}}]
+
+Créer le site sur la plateforme [{{var:townFormUrl}}]
+
+{% for section in var:town %}
+{{section.title}}
+{% for field in section.fields %}
+{{field.label}} {{field.value}}
+{% endfor%}{% endfor%}
+
+Cordialement,
+L'équipe Résorption-bidonvilles
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact@resorption-bidonvilles.beta.gouv.fr
+[contact@resorption-bidonvilles.beta.gouv.fr]
+Suivez toute l'actualité de la résorption des bidonvilles et retrouvez tous vos
+outils méthodologiques sur votre blog [{{var:blogUrl}}]
+Abonnez-vous à la lettre d'info
+[https://email.developpement-durable.gouv.fr/users/subscribe/js_id/5n4i/id/3]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]

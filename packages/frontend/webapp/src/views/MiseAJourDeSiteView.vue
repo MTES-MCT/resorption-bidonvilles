@@ -36,7 +36,7 @@
         </template>
 
         <ContentWrapper size="large">
-            <FormDeclarationDeSite ref="form" :town="town" />
+            <FormDeclarationDeSite ref="form" :town="town" mode="edit" />
         </ContentWrapper>
     </LayoutForm>
 </template>

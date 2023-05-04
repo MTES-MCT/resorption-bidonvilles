@@ -933,4 +933,28 @@ export default {
             preserveRecipient,
         });
     },
+    sendAdminTownReporting: (recipient, options: MailOptions = {}) => {
+        const { variables, preserveRecipient = false } = options;
+
+        return mailService.send('admin_shantytown_reporting', {
+            recipient,
+            variables: {
+                town: variables.town,
+                creatorName: formatName(variables.creator),
+                creatorOrganization: variables.creator.organization.name,
+                creatorEmail: variables.creator.email,
+                creatorId: variables.creator.id,
+                townFormUrl: `${webappUrl}/site/nouveau`,
+                webappUrl,
+                backUrl,
+                blogUrl,
+            },
+            preserveRecipient,
+            replyTo: {
+                email: variables.creator.email,
+                first_name: variables.creator.first_name,
+                last_name: variables.creator.last_name,
+            },
+        });
+    },
 };

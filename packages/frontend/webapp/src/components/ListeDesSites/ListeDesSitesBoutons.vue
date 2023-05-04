@@ -29,6 +29,16 @@
         >
             Déclarer un nouveau site
         </Button>
+        <Button
+            v-else
+            href="/site/signalement"
+            icon="plus"
+            iconPosition="left"
+            variant="secondary"
+            size="sm"
+        >
+            Signaler un nouveau site
+        </Button>
     </p>
 
     <ListeDesSitesExport ref="modalExport" />
