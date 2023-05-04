@@ -14,17 +14,17 @@ const police_statuses = {
     granted: 'Obtenu',
 };
 
-function boolToStr(bool: boolean): string {
+function boolToStr(bool: boolean, ifTrue: string = 'Oui', ifFalse:string = 'Non'): string {
     if (bool === undefined) {
         return undefined;
     }
 
     if (bool === true) {
-        return 'Oui';
+        return ifTrue;
     }
 
     if (bool === false) {
-        return 'Non';
+        return ifFalse;
     }
 
     return 'Inconnu';
@@ -152,8 +152,8 @@ export default async (town: TownInput) => [
             { label: 'Est-ce un point d\'eau sur la voie publique ?', value: boolToStr(town.water_access_is_public) },
             { label: 'L\'accès est-il continu ?', value: boolToStr(town.water_access_is_continuous) },
             { label: 'Précisions sur l\'accès continu', value: town.water_access_is_continuous_details },
-            { label: 'Où se situe l\'accès ?', value: town.water_access_is_local ? 'Sur site' : 'A l\'extérieur du site' },
-            { label: 'Quelle est la distance entre le point d\'eau et l\'habitation la plus éloignée ?', value: town.water_access_is_close ? 'Moins de 200m' : 'Plus de 200m' },
+            { label: 'Où se situe l\'accès ?', value: boolToStr(town.water_access_is_local, 'Sur site', 'A l\'extérieur du site') },
+            { label: 'Quelle est la distance entre le point d\'eau et l\'habitation la plus éloignée ?', value: boolToStr(town.water_access_is_close, 'Moins de 200m', 'Plus de 200m') },
             { label: 'Des inégalités d\'accès ont-elles été constatées ?', value: boolToStr(town.water_access_is_unequal) },
             { label: 'Précisions sur les inégalités d\'accès', value: town.water_access_is_unequal_details },
             { label: 'Existe-t-il des eaux stagnantes autour du point de distribution ?', value: boolToStr(town.water_access_has_stagnant_water) },
