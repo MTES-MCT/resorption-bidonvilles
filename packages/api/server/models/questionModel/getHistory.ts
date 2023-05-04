@@ -5,16 +5,16 @@ import { QueryTypes } from 'sequelize';
 import userModel from '../userModel';
 
 export default async (numberOfActivities, lastDate, maxDate): Promise<any[]> => {
-    const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
-
-    const where = [];
-
     const replacements: any = {
+        lastDate,
         maxDate,
+        numberOfActivities,
     };
 
+    const limit = numberOfActivities !== -1 ? 'limit :numberOfActivities' : '';
 
-    where.push(`questions.created_at < '${lastDate}'`);
+    const where = [];
+    where.push('questions.created_at < :lastDate');
     if (maxDate) {
         where.push('questions.created_at >= :maxDate');
     }
