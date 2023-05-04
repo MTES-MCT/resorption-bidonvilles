@@ -202,16 +202,16 @@ const resorptionTarget = computed(() => {
 });
 
 const description = computed(() => {
-    if (activity.value.entity == "comment") {
+    if (activity.value.entity === "comment") {
         return (activity.value.highCovidComment || activity.value.comment)
             .description;
     }
 
-    if (activity.value.entity == "question") {
+    if (activity.value.entity === "question") {
         return activity.value.question.question;
     }
 
-    if (activity.value.entity == "answer") {
+    if (activity.value.entity === "answer") {
         return activity.value.answer.description;
     }
 
