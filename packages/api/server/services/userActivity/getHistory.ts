@@ -4,6 +4,7 @@ import userModel from '#server/models/userModel';
 import actionModel from '#server/models/actionModel';
 import questionModel from '#server/models/questionModel';
 import answerModel from '#server/models/answerModel';
+import ServiceError from '#server/errors/ServiceError';
 
 export default async (user, location, activityTypeFilter, resorbedFilter, myTownsFilter, numberOfActivities, lastDate, maxDate) => {
     const promises = [];
@@ -38,7 +39,13 @@ export default async (user, location, activityTypeFilter, resorbedFilter, myTown
     if (activityTypeFilter.includes('answer')) {
         promises.push(answerModel.getHistory(numberOfActivities, lastDate, maxDate));
     }
-    const activities = await Promise.all(promises);
+
+    let activities;
+    try {
+        activities = await Promise.all(promises);
+    } catch (error) {
+        throw new ServiceError('fetch_failed', error);
+    }
     const sortedActivities = activities.flat().sort((a, b) => (a.date > b.date ? -1 : 1));
 
     if (numberOfActivities !== -1) {
