@@ -41,10 +41,5 @@ export default function (
     if (maxActivityDate) {
         query.push({ name: "maxActivityDate", value: maxActivityDate });
     }
-
-    const queryString = query
-        .map(({ name, value }) => `${name}=${encodeURIComponent(value)}`)
-        .join("&");
-
-    return queryString;
+    return query;
 }
