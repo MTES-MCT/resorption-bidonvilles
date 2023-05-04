@@ -4,9 +4,9 @@
         <span class="font-bold">Les données ne seront pas enregistrées</span
         ><br />
 
-        A la validation de ce formulaire, les données renseignées ne seront pas
+        À la validation de ce formulaire, les données renseignées ne seront pas
         enregistrées sur la plateforme mais transmises aux administrateurs de la
-        plateforme pour validation
+        plateforme pour validation.
     </p>
 
     <PanelInfo icon="flag" defaultStatus="open">

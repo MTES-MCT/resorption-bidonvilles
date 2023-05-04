@@ -26,7 +26,7 @@ export default computed(() => {
                     },
                     {
                         value: "toImprove",
-                        label: "A améliorer",
+                        label: "À améliorer",
                         checked: true,
                         icon: { id: "tint", color: "ff6f4c" },
                     },
