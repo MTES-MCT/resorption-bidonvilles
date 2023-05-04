@@ -7,7 +7,7 @@ import FontAwesomeIcon from "./helpers/font-awesome";
 import Datepicker from "./helpers/datepicker";
 import { useMatomo } from "./helpers/matomo";
 import { useSentry } from "./helpers/sentry";
-import "./helpers/yup";
+import "@common/helpers/yup";
 
 import "./assets/main.css";
 

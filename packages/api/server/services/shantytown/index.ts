@@ -10,6 +10,7 @@ import deleteComment from './deleteComment';
 import exportTown from './exportTown';
 import fixClosedStatus from './fixClosedStatus';
 import setHeatwaveStatus from './setHeatwaveStatus';
+import report from './report';
 
 export default {
     create,
@@ -24,4 +25,5 @@ export default {
     exportTown,
     fixClosedStatus,
     setHeatwaveStatus,
+    report,
 };

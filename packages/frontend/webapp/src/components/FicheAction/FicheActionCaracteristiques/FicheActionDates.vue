@@ -31,8 +31,8 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
-import formatDate from "@/utils/formatDate";
+import { toRefs } from "vue";
+import formatDate from "@common/utils/formatDate.js";
 import formatDateSince from "@/utils/formatDateSince";
 
 import FicheGrille from "@/components/FicheRubrique/FicheGrille.vue";

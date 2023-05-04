@@ -1,4 +1,4 @@
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
 
 export default [

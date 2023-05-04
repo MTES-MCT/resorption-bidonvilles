@@ -19,6 +19,7 @@ import getRelations from './getRelations';
 import findJusticeReaders from './findJusticeReaders';
 import findNearbyTowns from './findNearbyTowns';
 import findUserTowns from './findUserTowns';
+import report from './report';
 
 export default {
     list,
@@ -42,4 +43,5 @@ export default {
     findJusticeReaders,
     findNearbyTowns,
     findUserTowns,
+    report,
 };

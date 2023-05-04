@@ -2,7 +2,7 @@
     <ArrangementLeftMenu :tabs="tabs" autonav>
         <template v-slot:menuTitle>Rubriques</template>
 
-        <FormDeclarationDeSiteInfo v-if="town === null" />
+        <FormDeclarationDeSiteInfo v-if="town === null" :mode="mode" />
         <FormDeclarationDeSiteDateDeMaj
             v-else-if="canSetUpdatedAt"
             :minDate="minUpdatedAt"
@@ -55,12 +55,13 @@ import { useUserStore } from "@/stores/user.store";
 import { useTownsStore } from "@/stores/towns.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import * as locationsApi from "@/api/locations.api";
+import { report } from "@/api/towns.api";
 import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
 import isDeepEqual from "@/utils/isDeepEqual";
 import backOrReplace from "@/utils/backOrReplace";
-import formatFormTown from "@/utils/formatFormTown";
-import formatFormDate from "@/utils/formatFormDate";
+import formatFormTown from "@common/utils/formatFormTown";
+import formatFormDate from "@common/utils/formatFormDate";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
@@ -80,8 +81,12 @@ const props = defineProps({
         required: false,
         default: null,
     },
+    mode: {
+        type: String,
+        required: true,
+    },
 });
-const { town } = toRefs(props);
+const { mode, town } = toRefs(props);
 
 const initialValues = {
     update_to_date: 1,
@@ -90,9 +95,6 @@ const initialValues = {
     ...formatFormTown(town.value || {}),
 };
 
-const mode = computed(() => {
-    return town.value === null ? "create" : "edit";
-});
 const canSetUpdatedAt = computed(() => {
     if (!town.value) {
         return false;
@@ -219,6 +221,16 @@ const config = {
                 "Le site a été déclaré, et les acteurs concernés ont été prévenus par mail",
         },
     },
+    report: {
+        async submit(values) {
+            await report(values);
+        },
+        notification: {
+            title: "Signalement réussi",
+            content:
+                "Les données renseignées ont été transmises par mail aux administrateurs nationaux",
+        },
+    },
     edit: {
         async submit(values, id) {
             const town = await townsStore.edit(id, values);
@@ -298,7 +310,11 @@ defineExpose({
             const respondedTown = await submit(formattedValues, town.value?.id);
 
             notificationStore.success(notification.title, notification.content);
-            backOrReplace(`/site/${respondedTown.id}`);
+            if (mode.value === "report") {
+                backOrReplace("/liste-des-sites");
+            } else {
+                backOrReplace(`/site/${respondedTown.id}`);
+            }
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             if (e?.fields) {

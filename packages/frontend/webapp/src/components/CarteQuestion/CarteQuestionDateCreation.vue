@@ -6,7 +6,7 @@
 
 <script setup>
 import { toRefs } from "vue";
-import formatDate from "@/utils/formatDate";
+import formatDate from "@common/utils/formatDate.js";
 
 const props = defineProps({
     question: {

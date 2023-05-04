@@ -40,7 +40,7 @@
 
 <script setup>
 import { ref, toRefs, computed, watch } from "vue";
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus";
 
 import { useUserStore } from "@/stores/user.store";
 import menu from "./FicheAction.menu";

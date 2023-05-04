@@ -19,8 +19,8 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
-import formatDate from "@/utils/formatDate";
+import { toRefs } from "vue";
+import formatDate from "@common/utils/formatDate.js";
 import isSolved from "@/utils/isShantytownSolved";
 import isClosed from "@/utils/isShantytownClosed";
 

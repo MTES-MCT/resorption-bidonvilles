@@ -27,7 +27,7 @@
 
 <script setup>
 import { ref, toRefs, watch } from "vue";
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus";
 
 import FormSection from "@/components/FormSection/FormSection.vue";
 import FormDeclarationActionInputFinances from "../inputs/FormDeclarationActionInputFinances.vue";

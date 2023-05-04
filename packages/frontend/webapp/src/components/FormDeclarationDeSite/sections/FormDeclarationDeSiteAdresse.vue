@@ -53,9 +53,8 @@ import { defineProps, toRefs, ref, watch } from "vue";
 import { useFieldValue, useFormValues } from "vee-validate";
 import { findNearby } from "@/api/towns.api";
 
-import { Link } from "@resorptionbidonvilles/ui";
+import { FormParagraph, Link } from "@resorptionbidonvilles/ui";
 import FormSection from "@/components/FormSection/FormSection.vue";
-import FormParagraph from "@/components/FormParagraph/FormParagraph.vue";
 import InputAddress from "../inputs/FormDeclarationDeSiteInputAddress.vue";
 import InputCoordinates from "../inputs/FormDeclarationDeSiteInputCoordinates.vue";
 import InputName from "../inputs/FormDeclarationDeSiteInputName.vue";

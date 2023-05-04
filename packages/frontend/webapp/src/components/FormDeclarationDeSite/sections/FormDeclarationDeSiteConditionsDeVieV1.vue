@@ -81,11 +81,11 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs } from "vue";
-import formatIntToStr from "@/utils/formatIntToStr";
+import { computed, toRefs } from "vue";
+import formatIntToStr from "@common/utils/formatIntToStr";
 
+import { FormParagraph } from "@resorptionbidonvilles/ui";
 import FormSection from "@/components/FormSection/FormSection.vue";
-import FormParagraph from "@/components/FormParagraph/FormParagraph.vue";
 import InputAccessToWater from "../oldInputs/OldInputAccessToWater.vue";
 import InputWaterPotable from "../oldInputs/OldInputWaterPotable.vue";
 import InputWaterContinuousAccess from "../oldInputs/OldInputWaterContinuousAccess.vue";

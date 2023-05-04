@@ -34,7 +34,7 @@ import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
 import { trackEvent } from "@/helpers/matomo";
-import formatDate from "@/utils/formatDate";
+import formatDate from "@common/utils/formatDate";
 import downloadBlob from "@/utils/downloadBlob";
 import { exportList } from "@/api/towns.api";
 

@@ -90,8 +90,8 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
-import formatDate from "@/utils/formatDate";
+import { toRefs, computed } from "vue";
+import formatDate from "@common/utils/formatDate";
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import IndicateursGrid from "@/components/IndicateursGrid/IndicateursGrid.vue";
 import IndicateursRow from "@/components/IndicateursTable/IndicateursRow.vue";

@@ -16,6 +16,10 @@ export function create(data) {
     return axios.post("/towns", data);
 }
 
+export function report(data) {
+    return axios.post("/towns/report", data);
+}
+
 export function deleteComment(townId, commentId, message) {
     return axios.delete(
         `/towns/${encodeURI(townId)}/comments/${encodeURI(commentId)}`,
