@@ -51,6 +51,10 @@ const { section, town } = toRefs(props);
 const validationSchema = schemaFn(section.value);
 const initialValues = formatFormTown(town.value);
 
+if (section.value === "conditions-de-vie") {
+    initialValues.version = 2;
+}
+
 const formError = ref(null);
 
 const { values, errors, setErrors } = useForm({
@@ -77,7 +81,7 @@ function formatValuesForApi(v) {
     return {
         ...v,
         ...{
-            living_conditions_version: v.living_conditions_version || 2,
+            living_conditions_version: v.version || 2,
             built_at: formatFormDate(v.built_at),
             declared_at: formatFormDate(v.declared_at),
             updated_at: v.updated_at || new Date(),
