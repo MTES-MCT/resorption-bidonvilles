@@ -1,5 +1,5 @@
 import { object, string, number, array, ref } from "yup";
-import labels from "./MiseAjourDeSite.labels";
+import labels from "./MiseAJourDeSite.labels";
 
 function emptyStringToNull(value, originalValue) {
     if (typeof originalValue === "string" && originalValue === "") {

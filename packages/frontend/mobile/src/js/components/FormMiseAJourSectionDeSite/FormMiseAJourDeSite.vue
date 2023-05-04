@@ -28,7 +28,7 @@ import { editTown } from "../../helpers/town";
 import enrichShantytown from "#frontend/common/helpers/town/enrichShantytown";
 import isDeepEqual from "@resorptionbidonvilles/ui/src/utils/isDeepEqual";
 import formatFormDate from "#frontend/common/utils/formatFormDate";
-import schemaFn from "./MiseAjourDeSite.schema";
+import schemaFn from "./MiseAJourDeSite.schema";
 import formatFormTown from "#frontend/common/utils/formatFormTown";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
