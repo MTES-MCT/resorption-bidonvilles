@@ -32,6 +32,8 @@ function boolToStr(bool: boolean, ifTrue: string = 'Oui', ifFalse:string = 'Non'
 
 export type TownInput = {
     address: string,
+    latitude: number,
+    longitude: number,
     name?: string,
     built_at?: Date,
     declared_at: Date,
@@ -63,7 +65,7 @@ export type TownInput = {
     social_origins_full: { label: string }[],
     census_status: string,
     census_conducted_at?: Date,
-    reinstallation_incoming_towns_full: { address: string }[],
+    reinstallation_incoming_towns_full: { id: number, address: string }[],
     water_access_type: string,
     water_access_type_details?: string,
     water_access_is_public?: boolean,
@@ -109,12 +111,14 @@ export default async (town: TownInput) => [
         title: 'Adresse et Caractéristiques',
         fields: [
             { label: 'Adresse', value: town.address },
+            { label: 'Latitude', value: town.latitude },
+            { label: 'Longitude', value: town.longitude },
             { label: 'Appellation du site', value: town.name },
             { label: 'Date d\'installation', value: town.built_at?.toLocaleDateString('fr') },
             { label: 'Date de signalement', value: town.declared_at?.toLocaleDateString('fr') },
             { label: 'Type de site', value: town.field_type_full.label },
             { label: 'Informations d\'accès', value: town.detailed_address },
-            { label: 'quel est le propriétaire ?', value: town.owner_type_full.label },
+            { label: 'Quel est le propriétaire ?', value: town.owner_type_full.label },
             { label: 'Nom du propriétaire', value: town.owner },
         ],
     },
@@ -141,7 +145,7 @@ export default async (town: TownInput) => [
             { label: 'Intervenant en charge du diagnostic', value: town.census_conducted_by },
             { label: 'Tout ou partie des habitants viennent-ils d\'un ou plusieurs sites du territoire ', value: boolToStr(town.is_reinstallation) },
             { label: 'Précisions sur la réinstallation', value: town.reinstallation_comments },
-            { label: 'Sites d\'origine des habitants', value: town.reinstallation_incoming_towns_full.map(incoming_town => incoming_town.address).join(' / ') },
+            { label: 'Sites d\'origine des habitants', value: town.reinstallation_incoming_towns_full.map(incoming_town => `id: ${incoming_town.id} — ${incoming_town.address}`).join(' / ') },
         ],
     },
     {

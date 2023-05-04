@@ -10,7 +10,8 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class="pb-4">
-                <span class="font-bold">{{ var:creatorName }} ({{var:creatorOrganization}}) </span> a signalé un site sur la plateforme. 
+                <span class="font-bold">
+                <a class="link" href="{{var:webappUrl}}/access/{{var:creatorId}}" rel="noopener noreferrer">{{ var:creatorName }} ({{var:creatorOrganization}})</a> </span> a signalé un site sur la plateforme. 
                 </mj-text>
                  <mj-text mj-class="pb-4">
                  Vous trouverez ci-dessous les informations qui ont été renseignées sur le site signalé. <br />

@@ -943,6 +943,7 @@ export default {
                 creatorName: formatName(variables.creator),
                 creatorOrganization: variables.creator.organization.name,
                 creatorEmail: variables.creator.email,
+                creatorId: variables.creator.id,
                 townFormUrl: `${webappUrl}/site/nouveau`,
                 webappUrl,
                 backUrl,

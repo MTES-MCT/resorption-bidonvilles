@@ -1,4 +1,5 @@
-{{ var:creatorName }} ({{var:creatorOrganization}}) a signalé un site sur la
+{{ var:creatorName }} ({{var:creatorOrganization}})
+[{{var:webappUrl}}/access/{{var:creatorId}}] a signalé un site sur la
 plateforme.
 Vous trouverez ci-dessous les informations qui ont été renseignées sur le site
 signalé.

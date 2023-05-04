@@ -17,6 +17,8 @@ describe('services/shantytown', () => {
         const admins = [fakeUser(), fakeUser(), fakeUser()];
         const townData = {
             address: 'Adresse test',
+            latitude: 47.202436,
+            longitude: -1.580545,
             name: 'Appellation test',
             declared_at: new Date(2023, 4, 1),
             census_status: 'non',
