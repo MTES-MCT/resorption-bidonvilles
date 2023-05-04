@@ -1,0 +1,11 @@
+.grid-template {
+    grid-template-columns: minmax(300px, auto) 200px 210px 180px 125px 165px;
+}
+
+.grid-template-secondary {
+    grid-template-columns: minmax(300px, auto) 200px 210px 180px 125px 149px;
+}
+
+.grid-template-tertiary {
+    grid-template-columns: minmax(300px, auto) 200px 210px 180px 125px 133px;
+}

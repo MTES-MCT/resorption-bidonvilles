@@ -31,10 +31,12 @@ import {
     faComments,
     faCopy,
     faCutlery,
+    faEarthEurope,
     faEnvelope,
     faEuroSign,
     faExclamation,
     faExclamationCircle,
+    faFaucetDrip,
     faFile,
     faFileExcel,
     faFilePdf,
@@ -47,6 +49,7 @@ import {
     faHouseCircleXmark,
     faHouseUser,
     faKey,
+    faListUl,
     faLock,
     faMagnifyingGlass,
     faMale,
@@ -54,6 +57,7 @@ import {
     faMapMarkerAlt,
     faMinus,
     faNotesMedical,
+    faPaperclip,
     faPaperPlane,
     faPen,
     faPencilAlt,
@@ -68,6 +72,7 @@ import {
     faSchool,
     faScroll,
     faSpinner,
+    faStar,
     faTent,
     faTimes,
     faTint,
@@ -90,6 +95,7 @@ import {
     faEye,
     faEyeSlash,
     faNewspaper,
+    faStar as faStarEmpty,
     faSun,
     faTrashAlt,
     faUser,
@@ -132,6 +138,7 @@ library.add(faComment);
 library.add(faComments);
 library.add(faCopy);
 library.add(faCutlery);
+library.add(faEarthEurope);
 library.add(faEnvelope);
 library.add(faEuroSign);
 library.add(faExclamation);
@@ -139,6 +146,7 @@ library.add(faExclamationCircle);
 library.add(faEye);
 library.add(faEyeSlash);
 library.add(faFacebook);
+library.add(faFaucetDrip);
 library.add(faFile);
 library.add(faFileExcel);
 library.add(faFilePdf);
@@ -151,8 +159,9 @@ library.add(faHome);
 library.add(faHouseCircleXmark);
 library.add(faHouseUser);
 library.add(faKey);
-library.add(faLock);
 library.add(faLinkedin);
+library.add(faListUl);
+library.add(faLock);
 library.add(faMagnifyingGlass);
 library.add(faMale);
 library.add(faMapPin);
@@ -160,6 +169,7 @@ library.add(faMapMarkerAlt);
 library.add(faMinus);
 library.add(faNewspaper);
 library.add(faNotesMedical);
+library.add(faPaperclip);
 library.add(faPaperPlane);
 library.add(faPen);
 library.add(faPencilAlt);
@@ -174,6 +184,8 @@ library.add(faRotateRight);
 library.add(faSchool);
 library.add(faScroll);
 library.add(faSpinner);
+library.add(faStar);
+library.add(faStarEmpty);
 library.add(faSun);
 library.add(faTent);
 library.add(faTimes);

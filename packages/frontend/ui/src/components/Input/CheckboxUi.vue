@@ -3,8 +3,7 @@
         :disabled="isSubmitting || disabled">
         <template v-if="variant === 'checkbox'">
             <p class="flex">
-                <span class="inline-block w-6 h-6 rounded border-2 align-middle mr-2 text-center"
-                    :class="checkboxStyle">
+                <span class="inline-block w-6 h-6 rounded border-2 align-middle mr-2 text-center" :class="checkboxStyle">
                     <Icon icon="check" class="inline-block" :class="checked ? 'text-white' : 'text-transparent'" />
                 </span>
                 <span class="flex-1">
@@ -14,6 +13,20 @@
         </template>
         <template v-else-if="variant === 'invisible'">
             <slot :checked="checked">{{ label }}</slot>
+        </template>
+        <template v-else-if="variant === 'toggle'">
+            <div class="flex space-x-2 items-center shrink-0">
+                <p class="rounded-2xl w-11 h-6 flex shrink-0 items-center px-px border border-primary"
+                    :class="checked ? 'justify-end bg-primary' : 'justify-start'">
+                    <span class="absolute rounded-full bg-white inline-block text-center text-sm text-primary"
+                        :class="checked ? 'h-5 w-5' : '-ml-1 h-6 w-6 border border-primary'">
+                        <Icon icon="check" />
+                    </span>
+                </p>
+                <p>
+                    <slot>{{ label }}</slot>
+                </p>
+            </div>
         </template>
         <template v-else><span class="inline-block px-4 py-1 border border-blue200" :class="[
             checked
