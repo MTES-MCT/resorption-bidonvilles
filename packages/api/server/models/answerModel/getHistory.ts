@@ -22,6 +22,7 @@ export default async (numberOfActivities, lastDate, maxDate): Promise<any[]> => 
     const activities = await sequelize.query(
         `
         SELECT 
+            answers.answer_id,
             answers.description,
             answers.fk_question AS question_id,
             answers.created_at AS "date",
@@ -72,6 +73,7 @@ export default async (numberOfActivities, lastDate, maxDate): Promise<any[]> => 
                     organization: activity.answer_author_organization,
                 },
                 answer: {
+                    id: activity.answer_id,
                     description: activity.description,
                 },
             };

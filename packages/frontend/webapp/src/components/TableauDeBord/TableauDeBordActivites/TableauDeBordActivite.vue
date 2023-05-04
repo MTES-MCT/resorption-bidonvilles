@@ -327,7 +327,9 @@ function routeToDetails() {
     }
 
     if (activity.value.entity === "answer") {
-        return router.push(`/question/${activity.value.question.id}#reponses`);
+        return router.push(
+            `/question/${activity.value.question.id}#reponse${activity.value.answer.id}`
+        );
     }
     if (activity.value.shantytown) {
         return router.push(`/site/${activity.value.shantytown.id}`);

@@ -250,7 +250,7 @@ const link = computed(() => {
     }
 
     if (activity.value.entity === "answer") {
-        return `/question/${activity.value.question.id}#reponses`;
+        return `/question/${activity.value.question.id}#reponse${activity.value.answer.id}`;
     }
 
     return `/site/${activity.value.shantytown.id}`;
