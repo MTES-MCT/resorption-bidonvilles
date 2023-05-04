@@ -68,7 +68,7 @@
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
 import formatInt from "@/utils/formatInt";
-import formatDate from "@/utils/formatDate";
+import formatDate from "@common/utils/formatDate.js";
 
 import { Icon } from "@resorptionbidonvilles/ui";
 

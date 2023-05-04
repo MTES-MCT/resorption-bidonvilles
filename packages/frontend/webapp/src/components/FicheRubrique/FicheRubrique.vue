@@ -41,7 +41,7 @@
 
 <script setup>
 import { toRefs } from "vue";
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus.js";
 
 import { Button } from "@resorptionbidonvilles/ui";
 

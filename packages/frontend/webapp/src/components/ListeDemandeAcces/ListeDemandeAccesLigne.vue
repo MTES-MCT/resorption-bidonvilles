@@ -55,7 +55,7 @@ import { defineProps, toRefs, ref, computed } from "vue";
 import { RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
 import accessStatuses from "@/utils/access_statuses";
-import formatDate from "@/utils/formatDate";
+import formatDate from "@common/utils/formatDate.js";
 
 import { Icon, Link } from "@resorptionbidonvilles/ui";
 

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed, watch } from "vue";
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
 import { get } from "@/api/directory.api";
 import computeOrganizationLocation from "@/utils/computeOrganizationLocation";

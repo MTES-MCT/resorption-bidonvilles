@@ -1,4 +1,4 @@
-import { getApi } from "#src/js/api";
+import { getApi, postApi } from "#src/js/api";
 
 /**
  * GET /users/:id/towns
@@ -19,4 +19,8 @@ export function findNearby(latitude, longitude) {
     return getApi(
         `/towns/findNearby?latitude=${latitude}&longitude=${longitude}`
     );
+}
+
+export function editTown(id, data) {
+    return postApi(`/towns/${encodeURI(id)}`, data);
 }

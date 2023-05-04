@@ -29,7 +29,7 @@ import { defineProps, toRefs, ref, defineExpose } from "vue";
 import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import { useNotificationStore } from "@/stores/notification.store";
 import { trackEvent } from "@/helpers/matomo";
-import formatDate from "@/utils/formatDate";
+import formatDate from "@common/utils/formatDate";
 import downloadBlob from "@/utils/downloadBlob";
 import normalizeTownName from "@/utils/normalizeTownName";
 import { exportSingle } from "@/api/towns.api";

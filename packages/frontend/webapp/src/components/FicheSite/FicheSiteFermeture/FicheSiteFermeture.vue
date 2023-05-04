@@ -74,7 +74,7 @@
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
 import { useConfigStore } from "@/stores/config.store";
-import formatDate from "@/utils/formatDate";
+import formatDate from "@common/utils/formatDate.js";
 
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";

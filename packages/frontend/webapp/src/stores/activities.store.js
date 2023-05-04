@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
 import { list } from "@/api/activities.api";

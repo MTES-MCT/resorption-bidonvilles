@@ -197,9 +197,17 @@ export default mode => ([
      * Date de signalement du site
      ********************************************************************************************* */
     body('declared_at')
+        .customSanitizer((value) => {
+            if (!value) {
+                return null;
+            }
+            return value;
+        })
+        .if(() => mode !== 'update')
         .exists({ checkNull: true }).bail().withMessage('Le champ "Date de signalement du site" est obligatoire')
         .isDate().bail().withMessage('Le champ "Date de signalement du site" est invalide')
         .toDate()
+        .if((value, { req }) => mode !== 'update' || !req.town || value.getTime() / 1000 !== req.town.declaredAt)
         .customSanitizer((value) => {
             value.setHours(0, 0, 0, 0);
             return value;

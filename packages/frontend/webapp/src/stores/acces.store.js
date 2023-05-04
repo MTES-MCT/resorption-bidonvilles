@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed, watch } from "vue";
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus";
 import { get, list } from "@/api/users.api";
 import enrichUserWithAccessStatus from "@/utils/enrichUserWithAccessStatus";
 import enrichUserWithLocationName from "@/utils/enrichUserWithLocationName";

@@ -23,8 +23,8 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
-import formatDate from "@/utils/formatDate";
+import { toRefs, computed } from "vue";
+import formatDate from "@common/utils/formatDate.js";
 
 const props = defineProps({
     action: Object,

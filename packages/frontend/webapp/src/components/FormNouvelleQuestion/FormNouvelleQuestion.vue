@@ -35,8 +35,7 @@ import { useNotificationStore } from "@/stores/notification.store";
 import { useQuestionsStore } from "@/stores/questions.store";
 import router from "@/helpers/router";
 
-import { ErrorSummary } from "@resorptionbidonvilles/ui";
-import FormParagraph from "@/components/FormParagraph/FormParagraph.vue";
+import { ErrorSummary, FormParagraph } from "@resorptionbidonvilles/ui";
 import FormNouvelleQuestionInputQuestion from "./inputs/FormNouvelleQuestionInputQuestion.vue";
 import FormNouvelleQuestionInputPeopleAffected from "./inputs/FormNouvelleQuestionInputPeopleAffected.vue";
 import FormNouvelleQuestionInputDetails from "./inputs/FormNouvelleQuestionInputDetails.vue";

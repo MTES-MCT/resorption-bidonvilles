@@ -18,7 +18,7 @@
 import { defineProps, toRefs } from "vue";
 import { useFormValues } from "vee-validate";
 import FormSection from "@/components/FormSection/FormSection.vue";
-import FormParagraph from "@/components/FormParagraph/FormParagraph.vue";
+import { FormParagraph } from "@resorptionbidonvilles/ui";
 import labels from "../FormDeclarationAction.labels";
 
 import InputLocationType from "../inputs/FormDeclarationActionInputLocationType.vue";

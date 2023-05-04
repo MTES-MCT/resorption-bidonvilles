@@ -53,7 +53,7 @@
 
 <script setup>
 import { defineProps, toRefs, computed, watch, ref } from "vue";
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
 import { useTownsStore } from "@/stores/towns.store";
 import menu from "./FicheSite.menu";

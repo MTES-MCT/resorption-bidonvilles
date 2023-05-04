@@ -36,10 +36,9 @@
 <script setup>
 import { defineProps, toRefs } from "vue";
 import { useFormValues } from "vee-validate";
-import { Icon } from "@resorptionbidonvilles/ui";
+import { Icon, FormParagraph } from "@resorptionbidonvilles/ui";
 
 import FormSection from "@/components/FormSection/FormSection.vue";
-import FormParagraph from "@/components/FormParagraph/FormParagraph.vue";
 import InputLivingConditionsVersion from "../inputs/FormDeclarationDeSiteInputLivingConditionsVersion.vue";
 import InputShowOldLivingConditions from "../inputs/FormDeclarationDeSiteInputShowOldLivingConditions.vue";
 import FormDeclarationDeSiteConditionsDeVieV2 from "./FormDeclarationDeSiteConditionsDeVieV2.vue";

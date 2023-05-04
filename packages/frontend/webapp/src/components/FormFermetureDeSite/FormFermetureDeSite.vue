@@ -38,7 +38,7 @@ import { useForm, useFormValues, useFormErrors } from "vee-validate";
 import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
-import formatDate from "@/utils/formatDate";
+import formatDate from "@common/utils/formatDate";
 import backOrReplace from "@/utils/backOrReplace";
 import { close, setClosedWithSolutions } from "@/api/towns.api";
 import { trackEvent } from "@/helpers/matomo";

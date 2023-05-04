@@ -13,8 +13,8 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
-import formatDate from "@/utils/formatDate";
+import { toRefs, computed } from "vue";
+import formatDate from "@common/utils/formatDate.js";
 
 import { Icon } from "@resorptionbidonvilles/ui";
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";

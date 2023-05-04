@@ -79,7 +79,7 @@ import { defineProps, defineEmits, toRefs, ref, computed } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 import { useUserStore } from "@/stores/user.store";
 import covidTagsList from "@/utils/covid_tags";
-import formatDate from "@/utils/formatDate";
+import formatDate from "@common/utils/formatDate.js";
 
 import { Icon, LinkOrganization, Tag } from "@resorptionbidonvilles/ui";
 import TagCommentaireStandard from "@/components/TagCommentaireStandard/TagCommentaireStandard.vue";
