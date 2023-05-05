@@ -1,10 +1,12 @@
 <template>
     <TableauDeBordSection title="Activité" id="activites">
-        <Spinner v-if="activitiesStore.isLoading" />
+        <Spinner v-if="dashboardActivitiesStore.isLoading" />
 
-        <ViewErrorInline v-else-if="activitiesStore.error">
+        <ViewErrorInline v-else-if="dashboardActivitiesStore.error">
             <template v-slot:title>Activités indisponibles</template>
-            <template v-slot:code>{{ activitiesStore.error }}</template>
+            <template v-slot:code>{{
+                dashboardActivitiesStore.error
+            }}</template>
             <template v-slot:content
                 >Une erreur est survenue lors de la collecte des données. Vous
                 pouvez essayer de rafraîchir la page ou réessayer un peu plus
@@ -33,7 +35,7 @@
 
 <script setup>
 import { onMounted } from "vue";
-import { useActivitiesStore } from "@/stores/activities.store";
+import { useDashboardActivitiesStore } from "@/stores/dashboard.activities.store";
 import { useDashboardStore } from "@/stores/dashboard.store";
 import compareLocations from "@/utils/compareLocations";
 
@@ -44,7 +46,7 @@ import TableauDeBordSection from "../TableauDeBordSection.vue";
 import TableauDeBordFiltres from "./TableauDeBordFiltres.vue";
 import TableauDeBordActivitesListe from "./TableauDeBordActivitesListe.vue";
 
-const activitiesStore = useActivitiesStore();
+const dashboardActivitiesStore = useDashboardActivitiesStore();
 const dashboardStore = useDashboardStore();
 const aMonthAgo = new Date();
 aMonthAgo.setDate(aMonthAgo.getDate() - 30);
@@ -54,7 +56,7 @@ aMonthAgo.setSeconds(0);
 aMonthAgo.setMilliseconds(0);
 
 function load() {
-    const loaded = activitiesStore.loaded;
+    const loaded = dashboardActivitiesStore.loaded;
     const loadedLocation = {
         search: "",
         data: {
@@ -68,9 +70,9 @@ function load() {
             search: "",
             data: dashboardStore.filters.location,
         }) ||
-        activitiesStore.endOfActivities !== true
+        dashboardActivitiesStore.endOfActivities !== true
     ) {
-        activitiesStore.fetch({
+        dashboardActivitiesStore.fetch({
             location: {
                 locationType:
                     dashboardStore.filters.location?.typeUid || "nation",

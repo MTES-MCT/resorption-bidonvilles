@@ -3,7 +3,7 @@ import { ref, watch, computed } from "vue";
 import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
 import { useTownsStore } from "@/stores/towns.store";
-import { useActivitiesStore } from "./activities.store";
+import { useDashboardActivitiesStore } from "./dashboard.activities.store";
 import { getDashboard as getDashboardStats } from "@/api/stats.api";
 import formatGlobalStats from "@/utils/formatGlobalStats";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
@@ -13,7 +13,7 @@ import computeLocationSearchTitle from "@/utils/computeLocationSearchTitle";
 
 export const useDashboardStore = defineStore("dashboard", () => {
     const townsStore = useTownsStore();
-    const activitiesStore = useActivitiesStore();
+    const dashboardActivitiesStore = useDashboardActivitiesStore();
     const filters = {
         search: ref(""),
         location: ref(null),
@@ -67,74 +67,77 @@ export const useDashboardStore = defineStore("dashboard", () => {
     };
 
     const formattedActivities = computed(() => {
-        return activitiesStore.activities.reduce((acc, argActivity) => {
-            const activity = { ...argActivity };
-            if (activity.user) {
-                const lastActivity = acc.slice(-1)[0];
-                if (lastActivity && lastActivity.users) {
-                    const newAcc = [...acc];
-                    newAcc[newAcc.length - 1].users.push(activity.user);
-                    return newAcc;
-                }
-
-                activity.users = [activity.user];
-                delete activity.user;
-            }
-
-            if (
-                activity.entity === "shantytown" &&
-                activity.action === "update"
-            ) {
-                const updates = activity.diff.reduce((diffAcc, diff) => {
-                    if (
-                        ![
-                            "livingConditions.water.access_is_local",
-                            "livingConditions.electricity.access",
-                        ].includes(diff.fieldKey)
-                    ) {
-                        return diffAcc;
+        return dashboardActivitiesStore.activities.reduce(
+            (acc, argActivity) => {
+                const activity = { ...argActivity };
+                if (activity.user) {
+                    const lastActivity = acc.slice(-1)[0];
+                    if (lastActivity && lastActivity.users) {
+                        const newAcc = [...acc];
+                        newAcc[newAcc.length - 1].users.push(activity.user);
+                        return newAcc;
                     }
 
-                    const oldValue = diff.oldValue
-                        ? diff.oldValue.toLowerCase()
-                        : diff.oldValue;
-                    const newValue = diff.newValue
-                        ? diff.newValue.toLowerCase()
-                        : diff.newValue;
-                    let action = null;
-
-                    if (oldValue !== "oui" && newValue === "oui") {
-                        action = "creation";
-                    } else if (oldValue === "oui" && newValue !== "oui") {
-                        action = "closing";
-                    } else {
-                        return diffAcc;
-                    }
-
-                    return [
-                        ...diffAcc,
-                        {
-                            entity:
-                                diff.fieldKey ===
-                                "livingConditions.electricity.access"
-                                    ? "electricity"
-                                    : "water",
-                            action,
-                            date: activity.date,
-                            shantytown: activity.shantytown,
-                        },
-                    ];
-                }, []);
-
-                if (updates.length === 0) {
-                    return acc;
+                    activity.users = [activity.user];
+                    delete activity.user;
                 }
 
-                return [...acc, ...updates];
-            }
+                if (
+                    activity.entity === "shantytown" &&
+                    activity.action === "update"
+                ) {
+                    const updates = activity.diff.reduce((diffAcc, diff) => {
+                        if (
+                            ![
+                                "livingConditions.water.access_is_local",
+                                "livingConditions.electricity.access",
+                            ].includes(diff.fieldKey)
+                        ) {
+                            return diffAcc;
+                        }
 
-            return [...acc, activity];
-        }, []);
+                        const oldValue = diff.oldValue
+                            ? diff.oldValue.toLowerCase()
+                            : diff.oldValue;
+                        const newValue = diff.newValue
+                            ? diff.newValue.toLowerCase()
+                            : diff.newValue;
+                        let action = null;
+
+                        if (oldValue !== "oui" && newValue === "oui") {
+                            action = "creation";
+                        } else if (oldValue === "oui" && newValue !== "oui") {
+                            action = "closing";
+                        } else {
+                            return diffAcc;
+                        }
+
+                        return [
+                            ...diffAcc,
+                            {
+                                entity:
+                                    diff.fieldKey ===
+                                    "livingConditions.electricity.access"
+                                        ? "electricity"
+                                        : "water",
+                                action,
+                                date: activity.date,
+                                shantytown: activity.shantytown,
+                            },
+                        ];
+                    }, []);
+
+                    if (updates.length === 0) {
+                        return acc;
+                    }
+
+                    return [...acc, ...updates];
+                }
+
+                return [...acc, activity];
+            },
+            []
+        );
     });
     const userStore = useUserStore();
     const defaultLocationFilter = computed(() => {

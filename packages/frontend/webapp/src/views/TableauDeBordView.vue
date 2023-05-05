@@ -12,7 +12,7 @@
 <script setup>
 import { onMounted, computed, onBeforeUnmount } from "vue";
 import { useDashboardStore } from "@/stores/dashboard.store";
-import { useActivitiesStore } from "@/stores/activities.store";
+import { useDashboardActivitiesStore } from "@/stores/dashboard.activities.store";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import TableauDeBord from "@/components/TableauDeBord/TableauDeBord.vue";
 
@@ -24,7 +24,8 @@ aMonthAgo.setSeconds(0);
 aMonthAgo.setMilliseconds(0);
 
 const dashboardStore = useDashboardStore();
-const activitiesStore = useActivitiesStore();
+const dashboardActivitiesStore = useDashboardActivitiesStore();
+
 const location = computed({
     get() {
         return {
@@ -52,12 +53,12 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-    activitiesStore.resetPage();
+    dashboardActivitiesStore.resetPage();
 });
 
 function fetch() {
     dashboardStore.fetchStats();
-    activitiesStore.fetch({
+    dashboardActivitiesStore.fetch({
         location: {
             locationType: dashboardStore.filters.location?.typeUid || "nation",
             locationCode: dashboardStore.filters.location?.code,
