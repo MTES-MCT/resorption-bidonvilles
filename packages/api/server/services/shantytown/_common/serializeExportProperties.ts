@@ -54,6 +54,13 @@ export default (closingSolutions) => {
             align: 'left',
             width: COLUMN_WIDTHS.SMALL,
         },
+        epci: {
+            title: 'EPCI',
+            data: ({ epci }) => epci.name,
+            bold: true,
+            align: 'left',
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
         address: {
             title: 'Adresse',
             data: ({ addressSimple }) => addressSimple,
