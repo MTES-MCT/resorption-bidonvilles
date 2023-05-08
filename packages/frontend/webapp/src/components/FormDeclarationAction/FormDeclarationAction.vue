@@ -2,7 +2,7 @@
     <ArrangementLeftMenu :tabs="tabs" autonav>
         <template v-slot:menuTitle>Rubriques</template>
 
-        <FormDeclarationActionCaracteristiques class="mt-6" />
+        <FormDeclarationActionCaracteristiques class="mt-6" :mode="mode" />
         <FormDeclarationActionLocalisation
             :disableDepartement="mode === 'edit' && !canAccessFinances"
             class="mt-6"

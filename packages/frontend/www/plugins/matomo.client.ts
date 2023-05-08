@@ -1,11 +1,12 @@
 import VueMatomo from 'vue-matomo';
 
 export default defineNuxtPlugin((nuxtApp) => {
+    const { DOMAIN } = useRuntimeConfig();
     nuxtApp.vueApp.use(VueMatomo, {
         host: "https://stats.data.gouv.fr",
         siteId: 86,
-        domains: "*.resorption-bidonvilles.beta.gouv.fr",
-        cookieDomain: "*.resorption-bidonvilles.beta.gouv.fr",
+        domains: `*.${DOMAIN}`,
+        cookieDomain: `*.${DOMAIN}`,
         router: nuxtApp.$router,
         trackerScriptUrl: '/matomo.js'
     });
