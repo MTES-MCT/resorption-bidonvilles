@@ -10,6 +10,7 @@ export default async (user, data, properties, closedTowns, closingSolutions) => 
             properties.departement,
             properties.city,
             properties.citycode,
+            properties.epci,
             properties.address,
             properties.name,
         ],
