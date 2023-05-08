@@ -137,9 +137,19 @@ function checkOrigin(shantytown, filters) {
 }
 
 function checkSearch(shantytown, search) {
+    const locations = [
+        shantytown.region?.name,
+        shantytown.departement?.name,
+        shantytown.epci?.name,
+        shantytown.city?.name,
+    ]
+        .filter((val) => val !== undefined)
+        .join(" ");
+
     return (
         !!shantytown.name?.match(new RegExp(search, "ig")) ||
-        !!shantytown.address?.match(new RegExp(search, "ig"))
+        !!shantytown.address?.match(new RegExp(search, "ig")) ||
+        !!locations.match(new RegExp(search, "ig"))
     );
 }
 
