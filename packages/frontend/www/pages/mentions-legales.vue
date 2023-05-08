@@ -49,7 +49,7 @@
             <h3 class="text-display-md font-bold mt-8">
                 Prestataire d’hébergement
             </h3>
-            <div class=" mt-4">
+            <div class="mt-4">
                 <p>
                     Le site
                     <Link to="/">resorption-bidonvilles.beta.gouv.fr</Link>
@@ -61,13 +61,38 @@
                     Siège social : 2 rue Kellermann, 59100 Roubaix, France
                 </p>
             </div>
+            <h3 class="text-display-md font-bold mt-8">
+                Partage des données
+            </h3>
+            <div class="mt-4">
+                <p>
+                    Si vous disposez d’un accès à la plateforme, des données anonymisées sont stockées pour mieux comprendre
+                    comment vous naviguez et utilisez les dernières fonctionnalités mises à votre disposition.</p>
+
+                <p class="mt-3">Ces données sont utilisées exclusivement à des fins d’amélioration de l’impact et de
+                    l’utilité de la
+                    plateforme et ne sont en aucun cas communiquées à des tiers.</p>
+
+                <p class="mt-3">Vous pouvez néanmoins désactiver ce partage des données ci-dessous.</p>
+
+                <p v-if="isOptedOut === null">
+                    <Spinner />
+                </p>
+                <p v-else-if="isOptedOut"><Button @click="forgetOptOut" type="button">Autoriser le partage de mes
+                        données</Button></p>
+                <p v-else><Button @click="optOut" type="button">Ne pas autoriser le partage de mes données</Button></p>
+            </div>
         </div>
     </Container>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import Container from "~/components/Layout/Container/Container.vue";
-import { Link } from "@resorptionbidonvilles/ui";
+import { Button, Link, Spinner } from "@resorptionbidonvilles/ui";
+
+const piwik = ref(null);
+const isOptedOut = ref(null);
 
 useHead({
     title: "Mentions légales — Résorption-bidonvilles"
@@ -76,4 +101,23 @@ useHead({
 definePageMeta({
     layout: "default"
 });
+
+onMounted(() => {
+    piwik.value = window.Piwik?.getTracker();
+    refreshIsOptedOut();
+});
+
+function optOut() {
+    piwik.value.optUserOut();
+    refreshIsOptedOut();
+}
+
+function forgetOptOut() {
+    piwik.value.forgetUserOptOut();
+    refreshIsOptedOut();
+}
+
+function refreshIsOptedOut() {
+    isOptedOut.value = piwik.value.isUserOptedOut();
+}
 </script> 
