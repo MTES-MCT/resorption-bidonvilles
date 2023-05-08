@@ -455,7 +455,7 @@ export default (mode: 'create' | 'update') => [
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de personnes ayant eu un accompagnement vers la santé" ne peut pas être inférieur à 0')
         .custom((value, { req, path }) => {
             const key = path.match(/indicateurs\[(.+)\]/)[1];
-            if (Number.isInteger(req.body.indicatuers[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
+            if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
                 throw new Error('Le nombre de personnes ayant eu un accompagnement vers la santé ne peut être supérieur au nombre de personnes concernées par l\'action');
             }
 
