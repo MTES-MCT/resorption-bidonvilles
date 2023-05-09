@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import dataReportService from '#server/services/dataReport';
 
 const ERROR_RESPONSES = {
@@ -6,9 +6,16 @@ const ERROR_RESPONSES = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
-export default async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+interface ExportTownsReportRequest {
+    query: {
+        from: Date,
+        to: Date,
+    },
+}
+
+export default async (req: ExportTownsReportRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        res.end(await dataReportService.exportTownsReport());
+        res.end(await dataReportService.exportTownsReport(req.query.from, req.query.to));
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({

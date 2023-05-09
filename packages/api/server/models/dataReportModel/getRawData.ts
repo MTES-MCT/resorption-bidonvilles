@@ -1,5 +1,6 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import moment from 'moment';
 
 type DataReportOrigins = 'european' | 'french' | 'other' | 'mixed' | null;
 
@@ -50,6 +51,7 @@ export default async (from: Date, to: Date): Promise<DataReportRawData[]> => seq
                     + shantytowns.population_minors_16_18 AS population_minors,
                 shantytowns.minors_in_school,
                 CASE
+                    WHEN shantytown_agg_origins.origin_uids IS NULL THEN NULL
                     WHEN cardinality(shantytown_agg_origins.origin_uids) = 0 THEN NULL
                     WHEN cardinality(shantytown_agg_origins.origin_uids) = 1 THEN
                         CASE
@@ -97,6 +99,7 @@ export default async (from: Date, to: Date): Promise<DataReportRawData[]> => seq
                     + "ShantytownHistories".population_minors_16_18 AS population_minors,
                 "ShantytownHistories".minors_in_school,
                 CASE
+                    WHEN shantytown_history_agg_origins.origin_uids IS NULL THEN NULL
                     WHEN cardinality(shantytown_history_agg_origins.origin_uids) = 0 THEN NULL
                     WHEN cardinality(shantytown_history_agg_origins.origin_uids) = 1 THEN
                         CASE
@@ -121,8 +124,8 @@ export default async (from: Date, to: Date): Promise<DataReportRawData[]> => seq
     {
         type: QueryTypes.SELECT,
         replacements: {
-            from: from.toISOString().slice(0, 10),
-            to: to.toISOString().slice(0, 10),
+            from: moment(from).format('YYYY-MM-DD'),
+            to: moment(to).format('YYYY-MM-DD'),
         },
     },
 );

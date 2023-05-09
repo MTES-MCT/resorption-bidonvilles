@@ -309,13 +309,19 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 1,
                 input_date: new Date(2022, 0, 15),
+                population_total: 5,
+            }),
+            fakeData({
+                shantytown_id: 2,
+                input_date: new Date(2022, 0, 15),
                 population_total: 10,
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.number_of_people.all).to.be.eql(10);
+        expect(response[0].all.number_of_people.all).to.be.eql(15);
+        expect(response[0].big_towns_only.number_of_people.all).to.be.eql(10);
     });
 
     it('les sites avec nombre de personnes inconnu comptent pour 0 personnes', async () => {
@@ -383,6 +389,12 @@ describe('dataReportService.getTownsReport()', () => {
                 input_date: new Date(2023, 0, 1),
                 population_total: 5,
                 is_oversea: true,
+            }),
+            fakeData({
+                shantytown_id: 3,
+                input_date: new Date(2023, 0, 1),
+                population_total: 5,
+                is_oversea: false,
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
@@ -508,6 +520,25 @@ describe('dataReportService.getTownsReport()', () => {
         expect(response[0].all.number_of_people.minors_in_school).to.be.eql(2);
         expect(response[0].big_towns_only.number_of_people.minors).to.be.eql(2);
         expect(response[0].big_towns_only.number_of_people.minors_in_school).to.be.eql(1);
+    });
+
+    it('le nombre de mineurs est ignoré pour les outre-mers', async () => {
+        const from = new Date(2023, 0, 1);
+        const to = new Date(2023, 0, 1);
+        const rows: DataReportRawData[] = [
+            fakeData({
+                shantytown_id: 1,
+                input_date: new Date(2023, 0, 1),
+                population_minors: 2,
+                minors_in_school: 1,
+                is_oversea: true,
+            }),
+        ];
+        dataReportModel.getRawData.resolves(rows);
+
+        const response: TownReport[] = await getTownsReport(from, to);
+        expect(response[0].all.number_of_people.minors).to.be.eql(0);
+        expect(response[0].all.number_of_people.minors_in_school).to.be.eql(0);
     });
 
     it('si le modèle retourne une saisie > to, celle-ci est ignorée', async () => {

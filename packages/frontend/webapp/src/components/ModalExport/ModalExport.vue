@@ -17,6 +17,7 @@
                             :label="exportItem.label"
                             :filename="exportItem.filename"
                             :downloadFn="exportItem.downloadFn"
+                            :format="exportItem.format"
                         />
                     </li>
                 </ul>
@@ -42,6 +43,7 @@
                             :label="exportItem.label"
                             :filename="exportItem.filename"
                             :downloadFn="() => exportItem.downloadFn(from, to)"
+                            :format="exportItem.format"
                         />
                     </li>
                 </ul>

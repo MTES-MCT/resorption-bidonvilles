@@ -41,6 +41,7 @@ const exportList = {
         filename: "bilan",
         downloadFn: exportTownsReport,
         withDateRange: true,
+        format: "xlsx",
     },
 };
 

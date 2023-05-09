@@ -1,19 +1,33 @@
 import fs from 'fs';
 import path from 'path';
-import Excel from 'exceljs';
+import Excel, { Color, Worksheet } from 'exceljs';
 import config from '#server/config';
 
 const { assetsSrc } = config;
 
-/**
- * @typedef {Object} CellContent
- * @property {String|Number} [text]         Either text or formula must be provided
- * @property {String}        [formula]      Either text or formula must be provided
- * @property {Number}        [size=DEFAULT] Font size
- * @property {Number}        [bold=false]
- * @property {Number}        [italic=false]
- * @property {Number}        [color=BLACK]
- */
+enum FONT_SIZES {
+    DEFAULT = 10,
+    BIG = 14,
+}
+
+type CellContent = {
+    text?: string | number,
+    link?: string,
+    formula?: string,
+    size?: FONT_SIZES,
+    bold?: boolean,
+    italic?: boolean,
+    color?: Partial<Color>,
+};
+
+type CellMultipart = {
+    text: string,
+    size?: FONT_SIZES,
+    bold?: boolean,
+    italic?: boolean,
+    color?: Partial<Color>,
+};
+type MultipartCellContent = CellMultipart[];
 
 /**
  * @callback DataCallback
@@ -53,16 +67,6 @@ const { assetsSrc } = config;
 const LAST_FROZEN_ROW = 7;
 
 /**
- * Font sizes
- *
- * @enum {Number}
- */
-const SIZES = {
-    DEFAULT: 10,
-    BIG: 14,
-};
-
-/**
  * Colors used for fonts and backgrounds
  *
  * @enum {Color}
@@ -84,14 +88,7 @@ const COLORS = {
  */
 const FONT_NAME = 'Arial';
 
-/**
- * Writes the given content to a cell
- *
- * @param {Sheet}                           sheet
- * @param {String}                          cellReference
- * @param {Array.<CellContent>|CellContent} content
- */
-function writeTo(sheet, cellReference, content) {
+export function writeTo(sheet: Worksheet, cellReference: string, content: CellContent | MultipartCellContent) {
     const cell = sheet.getCell(cellReference);
 
     if (Array.isArray(content)) {
@@ -100,7 +97,7 @@ function writeTo(sheet, cellReference, content) {
                 size, bold, italic, color, text,
             }) => ({
                 font: {
-                    size: size || SIZES.DEFAULT,
+                    size: size || FONT_SIZES.DEFAULT,
                     bold,
                     italic,
                     color: color || COLORS.BLACK,
@@ -113,10 +110,11 @@ function writeTo(sheet, cellReference, content) {
         if (content.formula) {
             cell.value = {
                 formula: content.formula,
+                date1904: true,
             };
         } else if (content.link) {
             cell.value = {
-                text: content.text,
+                text: content.text.toString(),
                 hyperlink: content.link,
             };
         } else {
@@ -124,7 +122,7 @@ function writeTo(sheet, cellReference, content) {
         }
 
         cell.font = {
-            size: content.size || SIZES.DEFAULT,
+            size: content.size || FONT_SIZES.DEFAULT,
             bold: content.bold,
             italic: content.italic,
             color: content.color || COLORS.BLACK,
@@ -145,7 +143,7 @@ function writeTo(sheet, cellReference, content) {
  * @param {String} cellReference
  * @param {Color}  color
  */
-function fill(sheet, cellReference, color) {
+export function fill(sheet: Worksheet, cellReference: string, color: Partial<Color>) {
     const cell = sheet.getCell(cellReference);
     cell.fill = {
         type: 'pattern',
@@ -173,26 +171,12 @@ function setBorder(sheet, cellReference, positions) {
     });
 }
 
-/**
- * Sets the alignment configuration of a specific cell
- *
- * @param {Sheet}     sheet
- * @param {String}    cellReference
- * @param {Alignment} alignment     Please @see exceljs for details
- */
-function align(sheet, cellReference, alignment) {
+export function align(sheet: Worksheet, cellReference: string, alignment: Partial<Excel.Alignment>): void {
     const cell = sheet.getCell(cellReference);
     cell.alignment = alignment;
 }
 
-/**
- * Converts a numeric column index to an alphabetical index
- *
- * @param {Number} i The column index, starting from 1
- *
- * @returns {String}
- */
-function column(i) {
+export function column(i: number): string {
     if (i <= 26) {
         return String.fromCharCode(((i - 1) % 26) + 65);
     }
@@ -223,7 +207,7 @@ function writeHeader(workbook, sheet, lastFrozenColumn, locationName, title, dat
     // other rows
     writeTo(sheet, 'A2', {
         bold: true,
-        size: SIZES.BIG,
+        size: FONT_SIZES.BIG,
         text: locationName,
     });
 
@@ -387,7 +371,7 @@ function writeSectionTitle(sheet, rowIndex, colIndex, sectionLength, sectionType
         writeTo(sheet, firstCellRef, {
             bold: true,
             color: COLORS.WHITE,
-            size: sectionType === 'section' ? SIZES.BIG : SIZES.DEFAULT,
+            size: sectionType === 'section' ? FONT_SIZES.BIG : FONT_SIZES.DEFAULT,
             text: title.toUpperCase(),
         });
         align(sheet, firstCellRef, {

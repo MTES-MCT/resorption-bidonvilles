@@ -73,12 +73,15 @@ export default async (argFrom: Date, argTo: Date): Promise<TownReport[]> => {
         const lastReportIndex = isNew ? reports.length : previousIndex - 1;
         for (let i = reportIndex; i < lastReportIndex; i += 1) {
             reports[i].all.number_of_people.all += row.population_total;
+            reports[i].big_towns_only.number_of_people.all += row.population_total >= 10 ? row.population_total : 0;
 
             // mineurs
-            reports[i].all.number_of_people.minors += row.population_minors;
-            reports[i].big_towns_only.number_of_people.minors += row.population_total >= 10 ? row.population_minors : 0;
-            reports[i].all.number_of_people.minors_in_school += row.minors_in_school;
-            reports[i].big_towns_only.number_of_people.minors_in_school += row.population_total >= 10 ? row.minors_in_school : 0;
+            if (!row.is_oversea) {
+                reports[i].all.number_of_people.minors += row.population_minors;
+                reports[i].big_towns_only.number_of_people.minors += row.population_total >= 10 ? row.population_minors : 0;
+                reports[i].all.number_of_people.minors_in_school += row.minors_in_school;
+                reports[i].big_towns_only.number_of_people.minors_in_school += row.population_total >= 10 ? row.minors_in_school : 0;
+            }
 
             // origines
             reports[i].all.number_of_towns[ORIGIN_KEYS[row.origins]] += 1;
@@ -87,8 +90,10 @@ export default async (argFrom: Date, argTo: Date): Promise<TownReport[]> => {
             reports[i].big_towns_only.number_of_people[`origins_${row.origins}`] += row.population_total >= 10 ? row.population_total : 0;
 
             // outremers
-            reports[i].all.number_of_people.overseas += row.population_total;
-            reports[i].big_towns_only.number_of_people.overseas += row.population_total >= 10 ? row.population_total : 0;
+            if (row.is_oversea) {
+                reports[i].all.number_of_people.overseas += row.population_total;
+                reports[i].big_towns_only.number_of_people.overseas += row.population_total >= 10 ? row.population_total : 0;
+            }
         }
 
         previousIndex = reportIndex;
