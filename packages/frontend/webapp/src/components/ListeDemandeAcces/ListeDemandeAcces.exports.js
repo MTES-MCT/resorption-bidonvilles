@@ -1,13 +1,14 @@
 import { computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 
-import { exportList as exportUsers } from "@/api/users.api";
 import { exportList as exportActors } from "@/api/actors.api";
 import { exportList as exportReferrals } from "@/api/contact_form_referrals.api";
+import { exportTownsReport } from "@/api/data_reports.api";
 import {
     exportMobileSessions,
     exportWebappSessions,
 } from "@/api/navigation_logs.api";
+import { exportList as exportUsers } from "@/api/users.api";
 
 const exportList = {
     users: {
@@ -35,6 +36,12 @@ const exportList = {
         filename: "sessions_navigateur",
         downloadFn: exportWebappSessions,
     },
+    townsReport: {
+        label: "🌈 Bilan de situation",
+        filename: "bilan",
+        downloadFn: exportTownsReport,
+        withDateRange: true,
+    },
 };
 
 export default computed(() => {
@@ -48,6 +55,7 @@ export default computed(() => {
     if (userStore.user?.is_superuser) {
         filteredExportList.push(exportList.mobileSessions);
         filteredExportList.push(exportList.webappSessions);
+        filteredExportList.push(exportList.townsReport);
     }
 
     if (userStore.hasPermission("shantytown_actor.export")) {
