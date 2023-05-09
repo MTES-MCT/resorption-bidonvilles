@@ -11,11 +11,11 @@ export type TownReportFigures = {
     number_of_people: {
         all: number,
         overseas: number,
-        eu: number,
-        french: number,
-        extra_eu: number,
-        mixed_origins: number,
-        unknown_origins: number,
+        origins_european: number,
+        origins_french: number,
+        origins_other: number,
+        origins_mixed: number,
+        origins_null: number,
         minors: number,
         minors_in_school: number
     }

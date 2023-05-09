@@ -1,15 +1,18 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-type DataReportRawData = {
+type DataReportOrigins = 'european' | 'french' | 'other' | 'mixed' | null;
+
+export type DataReportRawData = {
     shantytown_id: number,
-    date: Date,
+    input_date: Date,
     known_since: Date,
     closed_at: Date,
     population_total: number,
     population_minors: number,
     minors_in_school: number,
-    origins: 'european' | 'french' | 'other' | 'mixed' | null
+    origins: DataReportOrigins,
+    is_oversea: boolean,
 };
 
 export default async (from: Date, to: Date): Promise<DataReportRawData[]> => sequelize.query(
@@ -18,10 +21,13 @@ export default async (from: Date, to: Date): Promise<DataReportRawData[]> => seq
         FROM (
             (WITH shantytowns_today AS (
                 SELECT
-                    shantytown_id,
-                    COALESCE(built_at, declared_at, created_at) AS known_since,
-                    closed_at
+                    shantytowns.shantytown_id,
+                    LEAST(shantytowns.built_at, shantytowns.declared_at, shantytowns.created_at) AS known_since,
+                    shantytowns.closed_at,
+                    departements.fk_region IN ('01', '02', '03', '04', '06') AS is_oversea
                 FROM shantytowns
+                LEFT JOIN cities ON shantytowns.fk_city = cities.code
+                LEFT JOIN departements ON cities.fk_departement = departements.code
             ),
             shantytown_agg_origins AS (
                 SELECT
@@ -33,7 +39,7 @@ export default async (from: Date, to: Date): Promise<DataReportRawData[]> => seq
             )
             SELECT
                 shantytowns.shantytown_id,
-                COALESCE(shantytowns.updated_at, shantytowns.created_at) AS date,
+                COALESCE(shantytowns.updated_at, shantytowns.created_at) AS input_date,
                 shantytowns_today.known_since,
                 shantytowns_today.closed_at,
                 shantytowns.population_total,
@@ -52,7 +58,8 @@ export default async (from: Date, to: Date): Promise<DataReportRawData[]> => seq
                             ELSE 'other'
                         END
                     ELSE 'mixed'
-                END AS origins
+                END AS origins,
+                shantytowns_today.is_oversea
             FROM shantytowns
             LEFT JOIN shantytowns_today ON shantytowns_today.shantytown_id = shantytowns.shantytown_id
             LEFT JOIN shantytown_agg_origins ON shantytown_agg_origins.shantytown_id = shantytowns.shantytown_id)
@@ -61,10 +68,13 @@ export default async (from: Date, to: Date): Promise<DataReportRawData[]> => seq
 
             (WITH shantytowns_today AS (
                 SELECT
-                    shantytown_id,
-                    COALESCE(built_at, declared_at, created_at) AS known_since,
-                    closed_at
+                    shantytowns.shantytown_id,
+                    LEAST(shantytowns.built_at, shantytowns.declared_at, shantytowns.created_at) AS known_since,
+                    shantytowns.closed_at,
+                    departements.fk_region IN ('01', '02', '03', '04', '06') AS is_oversea
                 FROM shantytowns
+                LEFT JOIN cities ON shantytowns.fk_city = cities.code
+                LEFT JOIN departements ON cities.fk_departement = departements.code
             ),
             shantytown_history_agg_origins AS (
                 SELECT
@@ -76,7 +86,7 @@ export default async (from: Date, to: Date): Promise<DataReportRawData[]> => seq
             )
             SELECT
                 "ShantytownHistories".shantytown_id,
-                COALESCE("ShantytownHistories".updated_at, "ShantytownHistories".created_at) AS date,
+                COALESCE("ShantytownHistories".updated_at, "ShantytownHistories".created_at) AS input_date,
                 shantytowns_today.known_since,
                 shantytowns_today.closed_at,
                 "ShantytownHistories".population_total,
@@ -95,13 +105,19 @@ export default async (from: Date, to: Date): Promise<DataReportRawData[]> => seq
                             ELSE 'other'
                         END
                     ELSE 'mixed'
-                END AS origins
+                END AS origins,
+                shantytowns_today.is_oversea
             FROM "ShantytownHistories"
             LEFT JOIN shantytowns_today ON shantytowns_today.shantytown_id = "ShantytownHistories".shantytown_id
             LEFT JOIN shantytown_history_agg_origins ON shantytown_history_agg_origins.hid = "ShantytownHistories".hid)
         ) t
-        WHERE t.date >= :from AND t.date <= :to
-        ORDER BY t.shantytown_id ASC, t.date DESC`,
+        WHERE
+            (t.known_since <= :to AND t.input_date <= :to)
+            AND
+            (t.input_date >= t.known_since)
+            AND
+            (t.closed_at IS NULL OR (t.closed_at > :from AND t.input_date < t.closed_at))
+        ORDER BY t.shantytown_id ASC, t.input_date DESC`,
     {
         type: QueryTypes.SELECT,
         replacements: {

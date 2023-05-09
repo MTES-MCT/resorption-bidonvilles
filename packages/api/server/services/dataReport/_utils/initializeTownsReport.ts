@@ -1,5 +1,7 @@
+import moment from 'moment';
 import { TownReport } from '../types/TownReport.d';
 import { TownReportFigures } from '../types/TownReportFigures.d';
+import getMonthDiff from './getMonthDiff';
 
 function getEmptyTownFigures(): TownReportFigures {
     return {
@@ -15,11 +17,11 @@ function getEmptyTownFigures(): TownReportFigures {
         number_of_people: {
             all: 0,
             overseas: 0,
-            eu: 0,
-            french: 0,
-            extra_eu: 0,
-            mixed_origins: 0,
-            unknown_origins: 0,
+            origins_european: 0,
+            origins_french: 0,
+            origins_other: 0,
+            origins_mixed: 0,
+            origins_null: 0,
             minors: 0,
             minors_in_school: 0,
         },
@@ -35,13 +37,15 @@ function getEmptyTownReport(date: Date): TownReport {
 }
 
 export default (argFrom: Date, argTo: Date): TownReport[] => {
-    const from = new Date(argFrom);
-    from.setHours(0, 0, 0, 0);
+    const from = moment(argFrom).set({
+        hour: 0, minute: 0, second: 0, millisecond: 0,
+    });
 
-    const to = new Date(argTo);
-    to.setHours(0, 0, 0, 0);
+    const to = moment(argTo).set({
+        hour: 0, minute: 0, second: 0, millisecond: 0,
+    });
 
-    const monthDiff = (to.getMonth() - from.getMonth()) + ((to.getFullYear() - from.getFullYear()) * 12);
+    const monthDiff = getMonthDiff(argFrom, argTo);
 
     // ensure dates are valid to avoid infinite loop below
     if (to < from) {
@@ -49,18 +53,18 @@ export default (argFrom: Date, argTo: Date): TownReport[] => {
     }
 
     // there is a special case for when from and to are the exact same day
-    if (from.getTime() === to.getTime()) {
-        return [getEmptyTownReport(from)];
+    if (from.unix() === to.unix()) {
+        return [getEmptyTownReport(from.toDate())];
     }
 
     // initialize reports for each dates between the two given boundaries
     const reports: TownReport[] = [
-        getEmptyTownReport(from),
-        getEmptyTownReport(to),
+        getEmptyTownReport(from.toDate()),
+        getEmptyTownReport(to.toDate()),
     ];
 
-    for (let i = 1, d = new Date(from.getFullYear(), from.getMonth() + 1, 1); i < monthDiff; i += 1, d.setMonth(d.getMonth() + 1)) {
-        reports.splice(reports.length - 1, 0, getEmptyTownReport(d));
+    for (let i = 1, d = moment(from).date(1).add(1, 'months'); i < monthDiff; i += 1, d.add(1, 'months')) {
+        reports.splice(reports.length - 1, 0, getEmptyTownReport(d.toDate()));
     }
 
     return reports;
