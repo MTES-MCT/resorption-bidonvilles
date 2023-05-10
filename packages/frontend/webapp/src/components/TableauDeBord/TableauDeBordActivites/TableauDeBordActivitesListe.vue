@@ -58,7 +58,7 @@ aMonthAgo.setMilliseconds(0);
 const splitActivities = computed(() => {
     const filter = dashboardStore.activities.filter;
 
-    return dashboardStore.formattedAcvities.reduce(
+    return dashboardStore.formattedActivities.reduce(
         (acc, activity) => {
             let signature = `${activity.entity}_${activity.action}`;
 
