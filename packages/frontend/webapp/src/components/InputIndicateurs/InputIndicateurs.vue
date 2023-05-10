@@ -115,7 +115,7 @@ initializeYears(value.value);
 
 const errors = useFormErrors();
 
-const focusedYear = ref(new Date().getFullYear());
+const focusedYear = ref(Math.min(new Date().getFullYear(), maxYear.value));
 const focusedYearData = computed(() => {
     return value.value?.[focusedYear.value] || {};
 });
@@ -164,7 +164,7 @@ function initializeYears(obj) {
         if (obj[year] === undefined) {
             obj[year] = {};
         }
-    } while (++year <= Math.max(maxYear.value, new Date().getFullYear()));
+    } while (++year <= Math.min(maxYear.value, new Date().getFullYear()));
 
     return obj;
 }
