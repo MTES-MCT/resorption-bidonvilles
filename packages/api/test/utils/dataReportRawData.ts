@@ -8,7 +8,6 @@ export function row(override: Partial<DataReportRawData> = {}): DataReportRawDat
         closed_at: null,
         population_total: null,
         population_minors: null,
-        minors_in_school: null,
         origins: null,
         is_oversea: false,
     };
