@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { TownReport } from '../types/TownReport.d';
+import { TownReport, TownReportPopulationFigures } from '../types/TownReport.d';
 import { TownReportFigures } from '../types/TownReportFigures.d';
 import getMonthDiff from './getMonthDiff';
 
@@ -56,11 +56,25 @@ function getEmptyTownFigures(): TownReportFigures {
     };
 }
 
+function getEmptyPopulationFigures(): TownReportPopulationFigures {
+    return {
+        all_ids: [],
+        all: 0,
+        european: 0,
+    };
+}
+
 function getEmptyTownReport(date: Date): TownReport {
     return {
         date: new Date(date),
         all: getEmptyTownFigures(),
         big_towns_only: getEmptyTownFigures(),
+        population_10_50: getEmptyPopulationFigures(),
+        population_51_100: getEmptyPopulationFigures(),
+        population_101_150: getEmptyPopulationFigures(),
+        population_151_200: getEmptyPopulationFigures(),
+        population_201_250: getEmptyPopulationFigures(),
+        population_250_or_more: getEmptyPopulationFigures(),
     };
 }
 
