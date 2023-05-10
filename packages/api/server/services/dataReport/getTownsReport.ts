@@ -43,6 +43,7 @@ export default async (argFrom: Date, argTo: Date): Promise<TownReport[]> => {
     let previousIndex;
     data.forEach((row, index) => {
         const isNew = index === 0 || row.shantytown_id !== data[index - 1].shantytown_id;
+        const territoryKey = row.is_oversea ? 'overseas' : 'metropolitan';
         if (isNew) {
             previousIndex = undefined;
         }
@@ -60,16 +61,8 @@ export default async (argFrom: Date, argTo: Date): Promise<TownReport[]> => {
                 ? getReportIndex(argFrom, argTo, row.closed_at)
                 : reports.length;
             for (let i = reportIndex; i < lastReportIndex; i += 1) {
-                reports[i].all.all.number_of_towns.total += 1;
-
-                if (row.population_total >= BIG_TOWN_SIZE) {
-                    reports[i].big_towns_only.all.number_of_towns.total += 1;
-                }
-
-                if (row.is_oversea) {
-                    reports[i].all.overseas.number_of_towns.total += 1;
-                    reports[i].big_towns_only.overseas.number_of_towns.total += row.population_total >= BIG_TOWN_SIZE ? 1 : 0;
-                }
+                reports[i].all_sizes[territoryKey].number_of_towns.total += 1;
+                reports[i].big_towns_only[territoryKey].number_of_towns.total += row.population_total >= BIG_TOWN_SIZE ? 1 : 0;
             }
         }
 
@@ -83,8 +76,8 @@ export default async (argFrom: Date, argTo: Date): Promise<TownReport[]> => {
         // concernés par la saisie en cours de traitement
         const lastReportIndex = isNew ? reports.length : previousIndex - 1;
         for (let i = reportIndex; i < lastReportIndex; i += 1) {
-            reports[i].all.all.number_of_people.total += row.population_total;
-            reports[i].big_towns_only.all.number_of_people.total += row.population_total >= BIG_TOWN_SIZE ? row.population_total : 0;
+            reports[i].all_sizes[territoryKey].number_of_people.total += row.population_total;
+            reports[i].big_towns_only[territoryKey].number_of_people.total += row.population_total >= BIG_TOWN_SIZE ? row.population_total : 0;
 
             POPULATION_SEGMENTS.forEach(({ min, max }) => {
                 if (row.population_total >= min && row.population_total <= max) {
@@ -96,22 +89,16 @@ export default async (argFrom: Date, argTo: Date): Promise<TownReport[]> => {
             });
 
             // mineurs
-            reports[i].all.all.number_of_people.minors += row.population_minors;
-            reports[i].big_towns_only.all.number_of_people.minors += row.population_total >= BIG_TOWN_SIZE ? row.population_minors : 0;
-            reports[i].all.all.number_of_people[`origins_${row.origins}_minors`] += row.population_minors;
-            reports[i].big_towns_only.all.number_of_people[`origins_${row.origins}_minors`] += row.population_total >= BIG_TOWN_SIZE ? row.population_minors : 0;
+            reports[i].all_sizes[territoryKey].number_of_people.minors += row.population_minors;
+            reports[i].big_towns_only[territoryKey].number_of_people.minors += row.population_total >= BIG_TOWN_SIZE ? row.population_minors : 0;
+            reports[i].all_sizes[territoryKey].number_of_people[`origins_${row.origins}_minors`] += row.population_minors;
+            reports[i].big_towns_only[territoryKey].number_of_people[`origins_${row.origins}_minors`] += row.population_total >= BIG_TOWN_SIZE ? row.population_minors : 0;
 
             // origines
-            reports[i].all.all.number_of_towns[ORIGIN_KEYS[row.origins]] += 1;
-            reports[i].big_towns_only.all.number_of_towns[ORIGIN_KEYS[row.origins]] += row.population_total >= BIG_TOWN_SIZE ? 1 : 0;
-            reports[i].all.all.number_of_people[`origins_${row.origins}`] += row.population_total;
-            reports[i].big_towns_only.all.number_of_people[`origins_${row.origins}`] += row.population_total >= BIG_TOWN_SIZE ? row.population_total : 0;
-
-            // outremers
-            if (row.is_oversea) {
-                reports[i].all.overseas.number_of_people.total += row.population_total;
-                reports[i].big_towns_only.overseas.number_of_people.total += row.population_total >= BIG_TOWN_SIZE ? row.population_total : 0;
-            }
+            reports[i].all_sizes[territoryKey].number_of_towns[ORIGIN_KEYS[row.origins]] += 1;
+            reports[i].big_towns_only[territoryKey].number_of_towns[ORIGIN_KEYS[row.origins]] += row.population_total >= BIG_TOWN_SIZE ? 1 : 0;
+            reports[i].all_sizes[territoryKey].number_of_people[`origins_${row.origins}`] += row.population_total;
+            reports[i].big_towns_only[territoryKey].number_of_people[`origins_${row.origins}`] += row.population_total >= BIG_TOWN_SIZE ? row.population_total : 0;
         }
 
         previousIndex = reportIndex;

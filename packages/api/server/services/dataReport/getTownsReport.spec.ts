@@ -70,18 +70,30 @@ describe('dataReportService.getTownsReport()', () => {
 
     it('un site est correctement décompté dans le total des sites', async () => {
         const from = new Date(2023, 0, 1);
-        const to = new Date(2023, 0, 31);
+        const to = new Date(2023, 0, 1);
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2023, 0, 15),
+                input_date: new Date(2023, 0, 1),
+                is_oversea: false,
+            }),
+            fakeData({
+                shantytown_id: 2,
+                input_date: new Date(2023, 0, 1),
+                is_oversea: true,
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.all.number_of_towns.total).to.be.equal(0);
-        expect(response[1].all.all.number_of_towns.total).to.be.equal(1);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_towns.total,
+            'Le site métropolitain est correctement décompté',
+        ).to.be.equal(1);
+        expect(
+            response[0].all_sizes.overseas.number_of_towns.total,
+            'Le site ultramarin est correctement décompté',
+        ).to.be.equal(1);
     });
 
     it('un site est correctement décompté dans le total des sites même si son dernier état connu précède `from`', async () => {
@@ -90,13 +102,13 @@ describe('dataReportService.getTownsReport()', () => {
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2022, 0, 15),
+                input_date: new Date(1998, 6, 12),
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.all.number_of_towns.total).to.be.equal(1);
+        expect(response[0].all_sizes.metropolitan.number_of_towns.total).to.be.equal(1);
     });
 
     it('un site est correctement décompté dans le total des sites à chaque mois', async () => {
@@ -105,16 +117,16 @@ describe('dataReportService.getTownsReport()', () => {
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2022, 0, 15),
+                input_date: new Date(2023, 0, 1),
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
         expect([
-            response[0].all.all.number_of_towns.total,
-            response[1].all.all.number_of_towns.total,
-            response[2].all.all.number_of_towns.total,
+            response[0].all_sizes.metropolitan.number_of_towns.total,
+            response[1].all_sizes.metropolitan.number_of_towns.total,
+            response[2].all_sizes.metropolitan.number_of_towns.total,
         ]).to.be.deep.equal([1, 1, 1]);
     });
 
@@ -124,7 +136,7 @@ describe('dataReportService.getTownsReport()', () => {
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2022, 0, 15),
+                input_date: new Date(2023, 0, 1),
                 closed_at: new Date(2023, 1, 15),
             }),
         ];
@@ -132,9 +144,9 @@ describe('dataReportService.getTownsReport()', () => {
 
         const response: TownReport[] = await getTownsReport(from, to);
         expect([
-            response[0].all.all.number_of_towns.total,
-            response[1].all.all.number_of_towns.total,
-            response[2].all.all.number_of_towns.total,
+            response[0].all_sizes.metropolitan.number_of_towns.total,
+            response[1].all_sizes.metropolitan.number_of_towns.total,
+            response[2].all_sizes.metropolitan.number_of_towns.total,
         ]).to.be.deep.equal([1, 1, 0]);
     });
 
@@ -144,20 +156,20 @@ describe('dataReportService.getTownsReport()', () => {
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2022, 0, 16),
+                input_date: new Date(2023, 0, 1),
             }),
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2022, 0, 15),
+                input_date: new Date(2023, 0, 1),
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.all.number_of_towns.total).to.be.eql(1);
+        expect(response[0].all_sizes.metropolitan.number_of_towns.total).to.be.eql(1);
     });
 
-    it('quand la période demandée s\'étale sur plusieurs mois, une saisie à la date `to` est prise en compte', async () => {
+    it('une saisie faite à la date `to` est toujours prise en compte', async () => {
         const from = new Date(2023, 0, 1);
         const to = new Date(2023, 3, 30);
         const rows: DataReportRawData[] = [
@@ -169,11 +181,11 @@ describe('dataReportService.getTownsReport()', () => {
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.all.number_of_towns.total).to.be.eql(0);
-        expect(response[3].all.all.number_of_towns.total).to.be.eql(1);
+        expect(response[0].all_sizes.metropolitan.number_of_towns.total).to.be.eql(0);
+        expect(response[3].all_sizes.metropolitan.number_of_towns.total).to.be.eql(1);
     });
 
-    it('quand la période demandée s\'étale sur un seul mois, une saisie à la date `to` est prise en compte', async () => {
+    it('une saisie faite à la date `to` est prise en compte même quand `from` et `to` sont du même mois', async () => {
         const from = new Date(2023, 0, 1);
         const to = new Date(2023, 0, 31);
         const rows: DataReportRawData[] = [
@@ -185,159 +197,210 @@ describe('dataReportService.getTownsReport()', () => {
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.all.number_of_towns.total).to.be.eql(0);
-        expect(response[1].all.all.number_of_towns.total).to.be.eql(1);
+        expect(response[0].all_sizes.metropolitan.number_of_towns.total).to.be.eql(0);
+        expect(response[1].all_sizes.metropolitan.number_of_towns.total).to.be.eql(1);
     });
 
     it('les sites de 10 personnes ou plus sont bien décomptés séparément', async () => {
-        const from = new Date(2023, 0, 1);
-        const to = new Date(2023, 0, 31);
-        const rows: DataReportRawData[] = [
-            fakeData({
-                shantytown_id: 1,
-                input_date: new Date(2022, 0, 15),
-                population_total: 10,
-            }),
-            fakeData({
-                shantytown_id: 2,
-                input_date: new Date(2022, 0, 15),
-            }),
-        ];
-        dataReportModel.getRawData.resolves(rows);
-
-        const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.all.number_of_towns.total).to.be.eql(2);
-        expect(response[0].big_towns_only.all.number_of_towns.total).to.be.eql(1);
-    });
-
-    it('les sites outremers sont bien décomptés séparément', async () => {
-        const from = new Date(2023, 0, 1);
-        const to = new Date(2023, 0, 31);
-        const rows: DataReportRawData[] = [
-            fakeData({
-                shantytown_id: 1,
-                input_date: new Date(2022, 0, 15),
-                is_oversea: true,
-            }),
-            fakeData({
-                shantytown_id: 2,
-                input_date: new Date(2022, 0, 15),
-                is_oversea: true,
-                population_total: 10,
-            }),
-            fakeData({
-                shantytown_id: 3,
-                input_date: new Date(2022, 0, 15),
-            }),
-            fakeData({
-                shantytown_id: 4,
-                input_date: new Date(2022, 0, 15),
-                population_total: 10,
-            }),
-        ];
-        dataReportModel.getRawData.resolves(rows);
-
-        const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.all.number_of_towns.total).to.be.eql(4);
-        expect(response[0].all.overseas.number_of_towns.total).to.be.eql(2);
-        expect(response[0].big_towns_only.all.number_of_towns.total).to.be.eql(2);
-        expect(response[0].big_towns_only.overseas.number_of_towns.total).to.be.eql(1);
-    });
-
-    it('les sites avec différentes origines sont bien décomptées séparément', async () => {
         const from = new Date(2023, 0, 1);
         const to = new Date(2023, 0, 1);
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2022, 0, 15),
+                input_date: new Date(2023, 0, 1),
+                population_total: 10,
+                is_oversea: false,
+            }),
+            fakeData({
+                shantytown_id: 2,
+                input_date: new Date(2023, 0, 1),
+                is_oversea: false,
+            }),
+            fakeData({
+                shantytown_id: 3,
+                input_date: new Date(2023, 0, 1),
+                population_total: 10,
+                is_oversea: true,
+            }),
+            fakeData({
+                shantytown_id: 4,
+                input_date: new Date(2023, 0, 1),
+                is_oversea: true,
+            }),
+        ];
+        dataReportModel.getRawData.resolves(rows);
+
+        const response: TownReport[] = await getTownsReport(from, to);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_towns.total,
+            'Le nombre de sites métropolitains est bien décompté',
+        ).to.be.eql(2);
+        expect(
+            response[0].big_towns_only.metropolitan.number_of_towns.total,
+            'Le nombre de sites métropolitains de plus de 10 personnes est bien décompté',
+        ).to.be.eql(1);
+        expect(
+            response[0].all_sizes.overseas.number_of_towns.total,
+            'Le nombre de sites ultramarins est bien décompté',
+        ).to.be.eql(2);
+        expect(
+            response[0].big_towns_only.overseas.number_of_towns.total,
+            'Le nombre de sites ultramarins de plus de 10 personnes est bien décompté',
+        ).to.be.eql(1);
+    });
+
+    it('les différentes origines sont bien décomptées séparément', async () => {
+        const from = new Date(2023, 0, 1);
+        const to = new Date(2023, 0, 1);
+        const rows: DataReportRawData[] = [
+            fakeData({
+                shantytown_id: 1,
+                input_date: new Date(2023, 0, 1),
                 origins: 'european',
             }),
             fakeData({
                 shantytown_id: 2,
-                input_date: new Date(2022, 0, 15),
+                input_date: new Date(2023, 0, 1),
                 origins: 'french',
             }),
             fakeData({
                 shantytown_id: 3,
-                input_date: new Date(2022, 0, 15),
+                input_date: new Date(2023, 0, 1),
                 origins: 'other',
             }),
             fakeData({
                 shantytown_id: 4,
-                input_date: new Date(2022, 0, 15),
+                input_date: new Date(2023, 0, 1),
                 origins: 'mixed',
             }),
             fakeData({
                 shantytown_id: 5,
-                input_date: new Date(2022, 0, 15),
+                input_date: new Date(2023, 0, 1),
                 origins: null,
+            }),
+            fakeData({
+                shantytown_id: 6,
+                input_date: new Date(2023, 0, 1),
+                origins: 'european',
+                is_oversea: true,
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.all.number_of_towns.total).to.be.eql(5);
-        expect(response[0].all.all.number_of_towns.eu_only).to.be.eql(1);
-        expect(response[0].all.all.number_of_towns.french_only).to.be.eql(1);
-        expect(response[0].all.all.number_of_towns.extra_eu_only).to.be.eql(1);
-        expect(response[0].all.all.number_of_towns.mixed_origins).to.be.eql(1);
-        expect(response[0].all.all.number_of_towns.unknown_origins).to.be.eql(1);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_towns.total,
+            'Le nombre total de sites est correct',
+        ).to.be.eql(5);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_towns.eu_only,
+            'Le nombre total de sites intra-UE est correct',
+        ).to.be.eql(1);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_towns.french_only,
+            'Le nombre total de sites français est correct',
+        ).to.be.eql(1);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_towns.extra_eu_only,
+            'Le nombre total de sites extra-UE est correct',
+        ).to.be.eql(1);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_towns.mixed_origins,
+            'Le nombre total de sites aux origines diverses est correct',
+        ).to.be.eql(1);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_towns.unknown_origins,
+            'Le nombre total de sites aux origines inconnues est correct',
+        ).to.be.eql(1);
+        expect(
+            response[0].all_sizes.overseas.number_of_towns.eu_only,
+            'Le nombre total de sites aux origines intra-UE en outremer est correct',
+        ).to.be.eql(1);
     });
 
-    it('les différentes origines sont bien décomptées pour les sites `big_towns_only` aussi', async () => {
+    it('les différentes origines sont bien décomptées pour les sites de 10 habitants ou plus', async () => {
         const from = new Date(2023, 0, 1);
-        const to = new Date(2023, 0, 31);
+        const to = new Date(2023, 0, 1);
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2022, 0, 15),
+                input_date: new Date(2023, 0, 1),
                 origins: 'french',
                 population_total: 10,
+            }),
+            fakeData({
+                shantytown_id: 2,
+                input_date: new Date(2023, 0, 1),
+                origins: 'french',
+                population_total: 10,
+                is_oversea: true,
+            }),
+            fakeData({
+                shantytown_id: 3,
+                input_date: new Date(2023, 0, 1),
+                origins: 'french',
+                population_total: 5,
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].big_towns_only.all.number_of_towns.french_only).to.be.eql(1);
+        expect(
+            response[0].big_towns_only.metropolitan.number_of_towns.french_only,
+            'Les origines sont bien décomptées pour les sites de 10 habitants ou plus en métropole',
+        ).to.be.eql(1);
+        expect(
+            response[0].big_towns_only.overseas.number_of_towns.french_only,
+            'Les origines sont bien décomptées pour les sites de 10 habitants ou plus en outremer',
+        ).to.be.eql(1);
     });
 
     it('le nombre total de personnes est bien décompté', async () => {
         const from = new Date(2023, 0, 1);
-        const to = new Date(2023, 0, 31);
+        const to = new Date(2023, 0, 1);
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2022, 0, 15),
+                input_date: new Date(2023, 0, 1),
                 population_total: 5,
             }),
             fakeData({
                 shantytown_id: 2,
-                input_date: new Date(2022, 0, 15),
+                input_date: new Date(2023, 0, 1),
                 population_total: 10,
             }),
-        ];
-        dataReportModel.getRawData.resolves(rows);
-
-        const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.all.number_of_people.total).to.be.eql(15);
-        expect(response[0].big_towns_only.all.number_of_people.total).to.be.eql(10);
-    });
-
-    it('les sites avec nombre de personnes inconnu comptent pour 0 personnes', async () => {
-        const from = new Date(2023, 0, 1);
-        const to = new Date(2023, 0, 31);
-        const rows: DataReportRawData[] = [
             fakeData({
-                shantytown_id: 1,
-                input_date: new Date(2022, 0, 15),
-                population_total: null,
+                shantytown_id: 3,
+                input_date: new Date(2023, 0, 1),
+                population_total: 6,
+                is_oversea: true,
+            }),
+            fakeData({
+                shantytown_id: 4,
+                input_date: new Date(2023, 0, 1),
+                population_total: 11,
+                is_oversea: true,
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.all.number_of_people.total).to.be.eql(0);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_people.total,
+            'Le nombre total de personnes en métropole est correct',
+        ).to.be.eql(15);
+        expect(
+            response[0].big_towns_only.metropolitan.number_of_people.total,
+            'Le nombre total de personnes dans des sites de 10 personnes ou + en métropole est correct',
+        ).to.be.eql(10);
+        expect(
+            response[0].all_sizes.overseas.number_of_people.total,
+            'Le nombre total de personnes en outremer est correct',
+        ).to.be.eql(17);
+        expect(
+            response[0].big_towns_only.overseas.number_of_people.total,
+            'Le nombre total de personnes dans des sites de 10 personnes ou + en outremer est correct',
+        ).to.be.eql(11);
     });
 
     it('si un site a deux saisies au mois N et M, le nombre de personnes de ce site au mois N compte pour tous les mois jusqu\'à M - 1', async () => {
@@ -368,41 +431,22 @@ describe('dataReportService.getTownsReport()', () => {
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.all.number_of_people.total).to.be.eql(10);
-        expect(response[1].all.all.number_of_people.total).to.be.eql(10);
-        expect(response[2].all.all.number_of_people.total).to.be.eql(0);
-        expect(response[3].all.all.number_of_people.total).to.be.eql(30);
-    });
-
-    it('le nombre de personnes en outremer est bien décompté', async () => {
-        const from = new Date(2023, 0, 1);
-        const to = new Date(2023, 0, 1);
-        const rows: DataReportRawData[] = [
-            fakeData({
-                shantytown_id: 1,
-                input_date: new Date(2023, 0, 1),
-                population_total: 10,
-                is_oversea: true,
-            }),
-            fakeData({
-                shantytown_id: 2,
-                input_date: new Date(2023, 0, 1),
-                population_total: 5,
-                is_oversea: true,
-            }),
-            fakeData({
-                shantytown_id: 3,
-                input_date: new Date(2023, 0, 1),
-                population_total: 10,
-                is_oversea: false,
-            }),
-        ];
-        dataReportModel.getRawData.resolves(rows);
-
-        const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.all.number_of_people.total).to.be.eql(25);
-        expect(response[0].all.overseas.number_of_people.total).to.be.eql(15);
-        expect(response[0].big_towns_only.overseas.number_of_people.total).to.be.eql(10);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_people.total,
+            'Le nombre total de personnes est correct pour le mois de janvier',
+        ).to.be.eql(10);
+        expect(
+            response[1].all_sizes.metropolitan.number_of_people.total,
+            'Le nombre total de personnes est correct pour le mois de février',
+        ).to.be.eql(10);
+        expect(
+            response[2].all_sizes.metropolitan.number_of_people.total,
+            'Le nombre total de personnes est correct pour le mois de mars',
+        ).to.be.eql(0);
+        expect(
+            response[3].all_sizes.metropolitan.number_of_people.total,
+            'Le nombre total de personnes est correct pour le mois d\'avril',
+        ).to.be.eql(30);
     });
 
     it('le nombre de personnes par origines est bien décompté', async () => {
@@ -412,25 +456,25 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 1,
                 input_date: new Date(2023, 0, 1),
-                population_total: 5,
+                population_total: 1,
                 origins: 'european',
             }),
             fakeData({
                 shantytown_id: 2,
                 input_date: new Date(2023, 0, 1),
-                population_total: 5,
+                population_total: 2,
                 origins: 'french',
             }),
             fakeData({
                 shantytown_id: 3,
                 input_date: new Date(2023, 0, 1),
-                population_total: 5,
+                population_total: 3,
                 origins: 'other',
             }),
             fakeData({
                 shantytown_id: 4,
                 input_date: new Date(2023, 0, 1),
-                population_total: 5,
+                population_total: 4,
                 origins: 'mixed',
             }),
             fakeData({
@@ -439,18 +483,44 @@ describe('dataReportService.getTownsReport()', () => {
                 population_total: 5,
                 origins: null,
             }),
+            fakeData({
+                shantytown_id: 6,
+                input_date: new Date(2023, 0, 1),
+                population_total: 6,
+                origins: 'european',
+                is_oversea: true,
+            }),
         ];
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.all.number_of_people.origins_european).to.be.eql(5);
-        expect(response[0].all.all.number_of_people.origins_french).to.be.eql(5);
-        expect(response[0].all.all.number_of_people.origins_other).to.be.eql(5);
-        expect(response[0].all.all.number_of_people.origins_mixed).to.be.eql(5);
-        expect(response[0].all.all.number_of_people.origins_null).to.be.eql(5);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_people.origins_european,
+            'Le nombre de personnes intra-UE en métropole est correct',
+        ).to.be.eql(1);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_people.origins_french,
+            'Le nombre de personnes Françaises en métropole est correct',
+        ).to.be.eql(2);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_people.origins_other,
+            'Le nombre de personnes extra-UE en métropole est correct',
+        ).to.be.eql(3);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_people.origins_mixed,
+            'Le nombre de personnes d\'origines diverses en métropole est correct',
+        ).to.be.eql(4);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_people.origins_null,
+            'Le nombre de personnes d\'origines inconnues en métropole est correct',
+        ).to.be.eql(5);
+        expect(
+            response[0].all_sizes.overseas.number_of_people.origins_european,
+            'Le nombre de personnes intra-UE en outremer est correct',
+        ).to.be.eql(6);
     });
 
-    it('le nombre de personnes par origines est bien décompté pour les sites `big_towns` aussi', async () => {
+    it('le nombre de personnes par origines est bien décompté pour les sites de 10 personnes ou plus', async () => {
         const from = new Date(2023, 0, 1);
         const to = new Date(2023, 0, 1);
         const rows: DataReportRawData[] = [
@@ -463,36 +533,68 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 2,
                 input_date: new Date(2023, 0, 1),
-                population_total: 10,
+                population_total: 11,
                 origins: 'french',
             }),
             fakeData({
                 shantytown_id: 3,
                 input_date: new Date(2023, 0, 1),
-                population_total: 10,
+                population_total: 12,
                 origins: 'other',
             }),
             fakeData({
                 shantytown_id: 4,
                 input_date: new Date(2023, 0, 1),
-                population_total: 10,
+                population_total: 13,
                 origins: 'mixed',
             }),
             fakeData({
                 shantytown_id: 5,
                 input_date: new Date(2023, 0, 1),
-                population_total: 10,
+                population_total: 14,
                 origins: null,
+            }),
+            fakeData({
+                shantytown_id: 6,
+                input_date: new Date(2023, 0, 1),
+                population_total: 15,
+                origins: 'european',
+                is_oversea: true,
+            }),
+            fakeData({
+                shantytown_id: 7,
+                input_date: new Date(2023, 0, 1),
+                population_total: 5,
+                origins: 'european',
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].big_towns_only.all.number_of_people.origins_european).to.be.eql(10);
-        expect(response[0].big_towns_only.all.number_of_people.origins_french).to.be.eql(10);
-        expect(response[0].big_towns_only.all.number_of_people.origins_other).to.be.eql(10);
-        expect(response[0].big_towns_only.all.number_of_people.origins_mixed).to.be.eql(10);
-        expect(response[0].big_towns_only.all.number_of_people.origins_null).to.be.eql(10);
+        expect(
+            response[0].big_towns_only.metropolitan.number_of_people.origins_european,
+            'Le nombre de personnes intra-UE en métropole est correct',
+        ).to.be.eql(10);
+        expect(
+            response[0].big_towns_only.metropolitan.number_of_people.origins_french,
+            'Le nombre de personnes Françaises en métropole est correct',
+        ).to.be.eql(11);
+        expect(
+            response[0].big_towns_only.metropolitan.number_of_people.origins_other,
+            'Le nombre de personnes extra-UE en métropole est correct',
+        ).to.be.eql(12);
+        expect(
+            response[0].big_towns_only.metropolitan.number_of_people.origins_mixed,
+            'Le nombre de personnes d\'origines diverses en métropole est correct',
+        ).to.be.eql(13);
+        expect(
+            response[0].big_towns_only.metropolitan.number_of_people.origins_null,
+            'Le nombre de personnes d\'origines inconnues en métropole est correct',
+        ).to.be.eql(14);
+        expect(
+            response[0].big_towns_only.overseas.number_of_people.origins_european,
+            'Le nombre de personnes intra-UE en outremer est correct',
+        ).to.be.eql(15);
     });
 
     it('le nombre de mineurs est bien décompté', async () => {
@@ -534,18 +636,53 @@ describe('dataReportService.getTownsReport()', () => {
                 population_total: 5,
                 population_minors: 5,
             }),
+            fakeData({
+                shantytown_id: 6,
+                input_date: new Date(2023, 0, 1),
+                origins: 'french',
+                population_total: 6,
+                population_minors: 6,
+                is_oversea: true,
+            }),
         ];
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.all.number_of_people.origins_french_minors).to.be.eql(1);
-        expect(response[0].all.all.number_of_people.origins_european_minors).to.be.eql(2);
-        expect(response[0].all.all.number_of_people.origins_other_minors).to.be.eql(3);
-        expect(response[0].all.all.number_of_people.origins_mixed_minors).to.be.eql(4);
-        expect(response[0].all.all.number_of_people.origins_null_minors).to.be.eql(5);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_people.minors,
+            'Le nombre total de mineurs en métropole est correct',
+        ).to.be.eql(15);
+        expect(
+            response[0].all_sizes.overseas.number_of_people.minors,
+            'Le nombre total de mineurs en outremer est correct',
+        ).to.be.eql(6);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_people.origins_french_minors,
+            'Le nombre de mineurs Français en métropole est correct',
+        ).to.be.eql(1);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_people.origins_european_minors,
+            'Le nombre de mineurs intra-UE en métropole est correct',
+        ).to.be.eql(2);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_people.origins_other_minors,
+            'Le nombre de mineurs extra-UE en métropole est correct',
+        ).to.be.eql(3);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_people.origins_mixed_minors,
+            'Le nombre de mineurs d\'origines diverses en métropole est correct',
+        ).to.be.eql(4);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_people.origins_null_minors,
+            'Le nombre de mineurs d\'origines inconnues en métropole est correct',
+        ).to.be.eql(5);
+        expect(
+            response[0].all_sizes.overseas.number_of_people.origins_french_minors,
+            'Le nombre de mineurs Français en outremer est correct',
+        ).to.be.eql(6);
     });
 
-    it('le nombre de mineurs est bien décompté pour les `big_towns` aussi', async () => {
+    it('le nombre de mineurs est bien décompté pour les sites de 10 personnes ou plus', async () => {
         const from = new Date(2023, 0, 1);
         const to = new Date(2023, 0, 1);
         const rows: DataReportRawData[] = [
@@ -591,15 +728,42 @@ describe('dataReportService.getTownsReport()', () => {
                 population_total: 5,
                 population_minors: 5,
             }),
+            fakeData({
+                shantytown_id: 7,
+                input_date: new Date(2023, 0, 1),
+                origins: null,
+                population_total: 10,
+                population_minors: 5,
+                is_oversea: true,
+            }),
         ];
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].big_towns_only.all.number_of_people.origins_french_minors).to.be.eql(1);
-        expect(response[0].big_towns_only.all.number_of_people.origins_european_minors).to.be.eql(2);
-        expect(response[0].big_towns_only.all.number_of_people.origins_other_minors).to.be.eql(3);
-        expect(response[0].big_towns_only.all.number_of_people.origins_mixed_minors).to.be.eql(4);
-        expect(response[0].big_towns_only.all.number_of_people.origins_null_minors).to.be.eql(5);
+        expect(
+            response[0].big_towns_only.metropolitan.number_of_people.minors,
+            'Le nombre total de mineurs en métropole est correct',
+        ).to.be.eql(15);
+        expect(
+            response[0].big_towns_only.metropolitan.number_of_people.origins_french_minors,
+            'Le nombre de mineurs Français en métropole est correct',
+        ).to.be.eql(1);
+        expect(
+            response[0].big_towns_only.metropolitan.number_of_people.origins_european_minors,
+            'Le nombre de mineurs intra-UE en métropole est correct',
+        ).to.be.eql(2);
+        expect(
+            response[0].big_towns_only.metropolitan.number_of_people.origins_other_minors,
+            'Le nombre de mineurs extra-UE en métropole est correct',
+        ).to.be.eql(3);
+        expect(
+            response[0].big_towns_only.metropolitan.number_of_people.origins_mixed_minors,
+            'Le nombre de mineurs d\'origines diverses en métropole est correct',
+        ).to.be.eql(4);
+        expect(
+            response[0].big_towns_only.metropolitan.number_of_people.origins_null_minors,
+            'Le nombre de mineurs d\'origines inconnues en métropole est correct',
+        ).to.be.eql(5);
     });
 
     it('retourne les totaux pour les sites entre 10 et 50 habitants', async () => {
@@ -745,6 +909,7 @@ describe('dataReportService.getTownsReport()', () => {
     it('retourne les totaux pour les sites entre 201 et 250 habitants', async () => {
         const from = new Date(2023, 0, 1);
         const to = new Date(2023, 0, 1);
+
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
@@ -817,7 +982,7 @@ describe('dataReportService.getTownsReport()', () => {
         dataReportModel.getRawData.resolves(rows);
 
         const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.all.number_of_people.total).to.be.eql(10);
+        expect(response[0].all_sizes.metropolitan.number_of_people.total).to.be.eql(10);
     });
 
     it('une exception est lancée quand la lecture en base de données échoue', async () => {

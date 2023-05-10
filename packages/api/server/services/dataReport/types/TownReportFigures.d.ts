@@ -24,6 +24,6 @@ export type TownReportTerritoryFigures = {
 };
 
 export type TownReportFigures = {
-    all: TownReportTerritoryFigures,
+    metropolitan: TownReportTerritoryFigures,
     overseas: TownReportTerritoryFigures,
 };

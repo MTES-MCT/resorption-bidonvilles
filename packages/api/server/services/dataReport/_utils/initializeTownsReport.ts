@@ -5,7 +5,7 @@ import getMonthDiff from './getMonthDiff';
 
 function getEmptyTownFigures(): TownReportFigures {
     return {
-        all: {
+        metropolitan: {
             number_of_towns: {
                 total: 0,
                 eu_only: 0,
@@ -67,7 +67,7 @@ function getEmptyPopulationFigures(): TownReportPopulationFigures {
 function getEmptyTownReport(date: Date): TownReport {
     return {
         date: new Date(date),
-        all: getEmptyTownFigures(),
+        all_sizes: getEmptyTownFigures(),
         big_towns_only: getEmptyTownFigures(),
         population_10_50: getEmptyPopulationFigures(),
         population_51_100: getEmptyPopulationFigures(),

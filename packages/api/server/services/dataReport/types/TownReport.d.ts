@@ -8,7 +8,7 @@ export type TownReportPopulationFigures = {
 
 export type TownReport = {
     date: Date,
-    all: TownReportFigures,
+    all_sizes: TownReportFigures,
     big_towns_only: TownReportFigures,
     population_10_50: TownReportPopulationFigures,
     population_51_100: TownReportPopulationFigures,
