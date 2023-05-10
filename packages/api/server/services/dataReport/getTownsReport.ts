@@ -5,6 +5,8 @@ import { TownReport } from './types/TownReport.d';
 import initializeTownsReport from './_utils/initializeTownsReport';
 import getReportIndex from './_utils/getReportIndex';
 
+export const BIG_TOWN_SIZE = 10;
+
 const ORIGIN_KEYS: { [key: string]: string } = {
     european: 'eu_only',
     french: 'french_only',
@@ -51,13 +53,13 @@ export default async (argFrom: Date, argTo: Date): Promise<TownReport[]> => {
             for (let i = reportIndex; i < lastReportIndex; i += 1) {
                 reports[i].all.all.number_of_towns.total += 1;
 
-                if (row.population_total >= 10) {
+                if (row.population_total >= BIG_TOWN_SIZE) {
                     reports[i].big_towns_only.all.number_of_towns.total += 1;
                 }
 
                 if (row.is_oversea) {
                     reports[i].all.overseas.number_of_towns.total += 1;
-                    reports[i].big_towns_only.overseas.number_of_towns.total += row.population_total >= 10 ? 1 : 0;
+                    reports[i].big_towns_only.overseas.number_of_towns.total += row.population_total >= BIG_TOWN_SIZE ? 1 : 0;
                 }
             }
         }
@@ -73,26 +75,24 @@ export default async (argFrom: Date, argTo: Date): Promise<TownReport[]> => {
         const lastReportIndex = isNew ? reports.length : previousIndex - 1;
         for (let i = reportIndex; i < lastReportIndex; i += 1) {
             reports[i].all.all.number_of_people.total += row.population_total;
-            reports[i].big_towns_only.all.number_of_people.total += row.population_total >= 10 ? row.population_total : 0;
+            reports[i].big_towns_only.all.number_of_people.total += row.population_total >= BIG_TOWN_SIZE ? row.population_total : 0;
 
             // mineurs
-            if (!row.is_oversea) {
-                reports[i].all.all.number_of_people.minors += row.population_minors;
-                reports[i].big_towns_only.all.number_of_people.minors += row.population_total >= 10 ? row.population_minors : 0;
-                reports[i].all.all.number_of_people[`origins_${row.origins}_minors`] += row.population_minors;
-                reports[i].big_towns_only.all.number_of_people[`origins_${row.origins}_minors`] += row.population_total >= 10 ? row.population_minors : 0;
-            }
+            reports[i].all.all.number_of_people.minors += row.population_minors;
+            reports[i].big_towns_only.all.number_of_people.minors += row.population_total >= BIG_TOWN_SIZE ? row.population_minors : 0;
+            reports[i].all.all.number_of_people[`origins_${row.origins}_minors`] += row.population_minors;
+            reports[i].big_towns_only.all.number_of_people[`origins_${row.origins}_minors`] += row.population_total >= BIG_TOWN_SIZE ? row.population_minors : 0;
 
             // origines
             reports[i].all.all.number_of_towns[ORIGIN_KEYS[row.origins]] += 1;
-            reports[i].big_towns_only.all.number_of_towns[ORIGIN_KEYS[row.origins]] += row.population_total >= 10 ? 1 : 0;
+            reports[i].big_towns_only.all.number_of_towns[ORIGIN_KEYS[row.origins]] += row.population_total >= BIG_TOWN_SIZE ? 1 : 0;
             reports[i].all.all.number_of_people[`origins_${row.origins}`] += row.population_total;
-            reports[i].big_towns_only.all.number_of_people[`origins_${row.origins}`] += row.population_total >= 10 ? row.population_total : 0;
+            reports[i].big_towns_only.all.number_of_people[`origins_${row.origins}`] += row.population_total >= BIG_TOWN_SIZE ? row.population_total : 0;
 
             // outremers
             if (row.is_oversea) {
                 reports[i].all.overseas.number_of_people.total += row.population_total;
-                reports[i].big_towns_only.overseas.number_of_people.total += row.population_total >= 10 ? row.population_total : 0;
+                reports[i].big_towns_only.overseas.number_of_people.total += row.population_total >= BIG_TOWN_SIZE ? row.population_total : 0;
             }
         }
 

@@ -602,23 +602,6 @@ describe('dataReportService.getTownsReport()', () => {
         expect(response[0].big_towns_only.all.number_of_people.origins_null_minors).to.be.eql(5);
     });
 
-    it('le nombre de mineurs est ignoré pour les outre-mers', async () => {
-        const from = new Date(2023, 0, 1);
-        const to = new Date(2023, 0, 1);
-        const rows: DataReportRawData[] = [
-            fakeData({
-                shantytown_id: 1,
-                input_date: new Date(2023, 0, 1),
-                population_minors: 2,
-                is_oversea: true,
-            }),
-        ];
-        dataReportModel.getRawData.resolves(rows);
-
-        const response: TownReport[] = await getTownsReport(from, to);
-        expect(response[0].all.overseas.number_of_people.minors).to.be.eql(0);
-    });
-
     it('si le modèle retourne une saisie > to, celle-ci est ignorée', async () => {
         const from = new Date(2023, 0, 1);
         const to = new Date(2023, 0, 1);
