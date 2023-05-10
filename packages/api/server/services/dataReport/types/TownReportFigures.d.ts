@@ -1,22 +1,29 @@
-export type TownReportFigures = {
+export type TownReportTerritoryFigures = {
     number_of_towns: {
-        all: number,
-        overseas: number,
+        total: number,
         eu_only: number,
-        french_only: number,
         extra_eu_only: number,
         mixed_origins: number,
-        unknown_origins: number
+        unknown_origins: number,
+        french_only: number
     },
     number_of_people: {
-        all: number,
-        overseas: number,
-        origins_european: number,
-        origins_french: number,
-        origins_other: number,
-        origins_mixed: number,
-        origins_null: number,
+        total: number,
         minors: number,
-        minors_in_school: number
+        origins_french: number,
+        origins_french_minors: number,
+        origins_european: number,
+        origins_european_minors: number,
+        origins_other: number,
+        origins_other_minors: number,
+        origins_mixed: number,
+        origins_mixed_minors: number,
+        origins_null: number,
+        origins_null_minors: number,
     }
+};
+
+export type TownReportFigures = {
+    all: TownReportTerritoryFigures,
+    overseas: TownReportTerritoryFigures,
 };

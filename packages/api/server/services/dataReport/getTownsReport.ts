@@ -49,15 +49,15 @@ export default async (argFrom: Date, argTo: Date): Promise<TownReport[]> => {
                 ? getReportIndex(argFrom, argTo, row.closed_at)
                 : reports.length;
             for (let i = reportIndex; i < lastReportIndex; i += 1) {
-                reports[i].all.number_of_towns.all += 1;
+                reports[i].all.all.number_of_towns.total += 1;
 
                 if (row.population_total >= 10) {
-                    reports[i].big_towns_only.number_of_towns.all += 1;
+                    reports[i].big_towns_only.all.number_of_towns.total += 1;
                 }
 
                 if (row.is_oversea) {
-                    reports[i].all.number_of_towns.overseas += 1;
-                    reports[i].big_towns_only.number_of_towns.overseas += row.population_total >= 10 ? 1 : 0;
+                    reports[i].all.overseas.number_of_towns.total += 1;
+                    reports[i].big_towns_only.overseas.number_of_towns.total += row.population_total >= 10 ? 1 : 0;
                 }
             }
         }
@@ -72,27 +72,27 @@ export default async (argFrom: Date, argTo: Date): Promise<TownReport[]> => {
         // concernés par la saisie en cours de traitement
         const lastReportIndex = isNew ? reports.length : previousIndex - 1;
         for (let i = reportIndex; i < lastReportIndex; i += 1) {
-            reports[i].all.number_of_people.all += row.population_total;
-            reports[i].big_towns_only.number_of_people.all += row.population_total >= 10 ? row.population_total : 0;
+            reports[i].all.all.number_of_people.total += row.population_total;
+            reports[i].big_towns_only.all.number_of_people.total += row.population_total >= 10 ? row.population_total : 0;
 
             // mineurs
             if (!row.is_oversea) {
-                reports[i].all.number_of_people.minors += row.population_minors;
-                reports[i].big_towns_only.number_of_people.minors += row.population_total >= 10 ? row.population_minors : 0;
-                reports[i].all.number_of_people.minors_in_school += row.minors_in_school;
-                reports[i].big_towns_only.number_of_people.minors_in_school += row.population_total >= 10 ? row.minors_in_school : 0;
+                reports[i].all.all.number_of_people.minors += row.population_minors;
+                reports[i].big_towns_only.all.number_of_people.minors += row.population_total >= 10 ? row.population_minors : 0;
+                reports[i].all.all.number_of_people[`origins_${row.origins}_minors`] += row.population_minors;
+                reports[i].big_towns_only.all.number_of_people[`origins_${row.origins}_minors`] += row.population_total >= 10 ? row.population_minors : 0;
             }
 
             // origines
-            reports[i].all.number_of_towns[ORIGIN_KEYS[row.origins]] += 1;
-            reports[i].big_towns_only.number_of_towns[ORIGIN_KEYS[row.origins]] += row.population_total >= 10 ? 1 : 0;
-            reports[i].all.number_of_people[`origins_${row.origins}`] += row.population_total;
-            reports[i].big_towns_only.number_of_people[`origins_${row.origins}`] += row.population_total >= 10 ? row.population_total : 0;
+            reports[i].all.all.number_of_towns[ORIGIN_KEYS[row.origins]] += 1;
+            reports[i].big_towns_only.all.number_of_towns[ORIGIN_KEYS[row.origins]] += row.population_total >= 10 ? 1 : 0;
+            reports[i].all.all.number_of_people[`origins_${row.origins}`] += row.population_total;
+            reports[i].big_towns_only.all.number_of_people[`origins_${row.origins}`] += row.population_total >= 10 ? row.population_total : 0;
 
             // outremers
             if (row.is_oversea) {
-                reports[i].all.number_of_people.overseas += row.population_total;
-                reports[i].big_towns_only.number_of_people.overseas += row.population_total >= 10 ? row.population_total : 0;
+                reports[i].all.overseas.number_of_people.total += row.population_total;
+                reports[i].big_towns_only.overseas.number_of_people.total += row.population_total >= 10 ? row.population_total : 0;
             }
         }
 

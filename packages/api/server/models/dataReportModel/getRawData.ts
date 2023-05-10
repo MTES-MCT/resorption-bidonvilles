@@ -11,7 +11,6 @@ export type DataReportRawData = {
     closed_at: Date,
     population_total: number,
     population_minors: number,
-    minors_in_school: number,
     origins: DataReportOrigins,
     is_oversea: boolean,
 };
@@ -49,7 +48,6 @@ export default async (from: Date, to: Date): Promise<DataReportRawData[]> => seq
                     + shantytowns.population_minors_6_12
                     + shantytowns.population_minors_12_16
                     + shantytowns.population_minors_16_18 AS population_minors,
-                shantytowns.minors_in_school,
                 CASE
                     WHEN shantytown_agg_origins.origin_uids IS NULL THEN NULL
                     WHEN cardinality(shantytown_agg_origins.origin_uids) = 0 THEN NULL
@@ -97,7 +95,6 @@ export default async (from: Date, to: Date): Promise<DataReportRawData[]> => seq
                     + "ShantytownHistories".population_minors_6_12
                     + "ShantytownHistories".population_minors_12_16
                     + "ShantytownHistories".population_minors_16_18 AS population_minors,
-                "ShantytownHistories".minors_in_school,
                 CASE
                     WHEN shantytown_history_agg_origins.origin_uids IS NULL THEN NULL
                     WHEN cardinality(shantytown_history_agg_origins.origin_uids) = 0 THEN NULL

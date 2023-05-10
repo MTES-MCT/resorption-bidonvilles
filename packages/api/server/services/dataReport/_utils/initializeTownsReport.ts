@@ -5,25 +5,53 @@ import getMonthDiff from './getMonthDiff';
 
 function getEmptyTownFigures(): TownReportFigures {
     return {
-        number_of_towns: {
-            all: 0,
-            overseas: 0,
-            eu_only: 0,
-            french_only: 0,
-            extra_eu_only: 0,
-            mixed_origins: 0,
-            unknown_origins: 0,
+        all: {
+            number_of_towns: {
+                total: 0,
+                eu_only: 0,
+                extra_eu_only: 0,
+                mixed_origins: 0,
+                unknown_origins: 0,
+                french_only: 0,
+            },
+            number_of_people: {
+                total: 0,
+                minors: 0,
+                origins_french: 0,
+                origins_french_minors: 0,
+                origins_european: 0,
+                origins_european_minors: 0,
+                origins_other: 0,
+                origins_other_minors: 0,
+                origins_mixed: 0,
+                origins_mixed_minors: 0,
+                origins_null: 0,
+                origins_null_minors: 0,
+            },
         },
-        number_of_people: {
-            all: 0,
-            overseas: 0,
-            origins_european: 0,
-            origins_french: 0,
-            origins_other: 0,
-            origins_mixed: 0,
-            origins_null: 0,
-            minors: 0,
-            minors_in_school: 0,
+        overseas: {
+            number_of_towns: {
+                total: 0,
+                eu_only: 0,
+                extra_eu_only: 0,
+                mixed_origins: 0,
+                unknown_origins: 0,
+                french_only: 0,
+            },
+            number_of_people: {
+                total: 0,
+                minors: 0,
+                origins_french: 0,
+                origins_french_minors: 0,
+                origins_european: 0,
+                origins_european_minors: 0,
+                origins_other: 0,
+                origins_other_minors: 0,
+                origins_mixed: 0,
+                origins_mixed_minors: 0,
+                origins_null: 0,
+                origins_null_minors: 0,
+            },
         },
     };
 }
