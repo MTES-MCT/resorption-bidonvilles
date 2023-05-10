@@ -15,6 +15,15 @@ const ORIGIN_KEYS: { [key: string]: string } = {
     null: 'unknown_origins',
 };
 
+const POPULATION_SEGMENTS: { min: number, max: number }[] = [
+    { min: 10, max: 50 },
+    { min: 51, max: 100 },
+    { min: 101, max: 150 },
+    { min: 151, max: 200 },
+    { min: 201, max: 250 },
+    { min: 251, max: Infinity },
+];
+
 export default async (argFrom: Date, argTo: Date): Promise<TownReport[]> => {
     // on construit le rapport pour chaque date entre les deux dates fournies en paramètre
     // en initialisant avec des données à 0
@@ -76,6 +85,15 @@ export default async (argFrom: Date, argTo: Date): Promise<TownReport[]> => {
         for (let i = reportIndex; i < lastReportIndex; i += 1) {
             reports[i].all.all.number_of_people.total += row.population_total;
             reports[i].big_towns_only.all.number_of_people.total += row.population_total >= BIG_TOWN_SIZE ? row.population_total : 0;
+
+            POPULATION_SEGMENTS.forEach(({ min, max }) => {
+                if (row.population_total >= min && row.population_total <= max) {
+                    const ref = Number.isFinite(max) ? `population_${min}_${max}` : `population_${min}_or_more`;
+                    reports[i][ref].all_ids.push(row.shantytown_id);
+                    reports[i][ref].all += row.population_total;
+                    reports[i][ref].european += row.origins === 'european' ? row.population_total : 0;
+                }
+            });
 
             // mineurs
             reports[i].all.all.number_of_people.minors += row.population_minors;

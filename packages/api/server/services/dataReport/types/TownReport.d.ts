@@ -15,5 +15,5 @@ export type TownReport = {
     population_101_150: TownReportPopulationFigures,
     population_151_200: TownReportPopulationFigures,
     population_201_250: TownReportPopulationFigures,
-    population_250_or_more: TownReportPopulationFigures
+    population_251_or_more: TownReportPopulationFigures
 };

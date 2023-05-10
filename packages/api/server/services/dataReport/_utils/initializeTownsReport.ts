@@ -74,7 +74,7 @@ function getEmptyTownReport(date: Date): TownReport {
         population_101_150: getEmptyPopulationFigures(),
         population_151_200: getEmptyPopulationFigures(),
         population_201_250: getEmptyPopulationFigures(),
-        population_250_or_more: getEmptyPopulationFigures(),
+        population_251_or_more: getEmptyPopulationFigures(),
     };
 }
 

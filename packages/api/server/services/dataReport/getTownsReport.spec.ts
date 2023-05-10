@@ -602,6 +602,203 @@ describe('dataReportService.getTownsReport()', () => {
         expect(response[0].big_towns_only.all.number_of_people.origins_null_minors).to.be.eql(5);
     });
 
+    it('retourne les totaux pour les sites entre 10 et 50 habitants', async () => {
+        const from = new Date(2023, 0, 1);
+        const to = new Date(2023, 0, 1);
+        const rows: DataReportRawData[] = [
+            fakeData({
+                shantytown_id: 1,
+                input_date: new Date(2023, 0, 1),
+                population_total: 9,
+            }),
+            fakeData({
+                shantytown_id: 2,
+                input_date: new Date(2023, 0, 1),
+                population_total: 10,
+                origins: 'other',
+            }),
+            fakeData({
+                shantytown_id: 3,
+                input_date: new Date(2023, 0, 1),
+                population_total: 50,
+                origins: 'european',
+            }),
+            fakeData({
+                shantytown_id: 4,
+                input_date: new Date(2023, 0, 1),
+                population_total: 51,
+            }),
+        ];
+        dataReportModel.getRawData.resolves(rows);
+
+        const response: TownReport[] = await getTownsReport(from, to);
+        expect(response[0].population_10_50.all).to.be.eql(60);
+        expect(response[0].population_10_50.european).to.be.eql(50);
+        expect(response[0].population_10_50.all_ids).to.be.deep.equal([2, 3]);
+    });
+
+    it('retourne les totaux pour les sites entre 51 et 100 habitants', async () => {
+        const from = new Date(2023, 0, 1);
+        const to = new Date(2023, 0, 1);
+        const rows: DataReportRawData[] = [
+            fakeData({
+                shantytown_id: 1,
+                input_date: new Date(2023, 0, 1),
+                population_total: 50,
+            }),
+            fakeData({
+                shantytown_id: 2,
+                input_date: new Date(2023, 0, 1),
+                population_total: 51,
+                origins: 'other',
+            }),
+            fakeData({
+                shantytown_id: 3,
+                input_date: new Date(2023, 0, 1),
+                population_total: 100,
+                origins: 'european',
+            }),
+            fakeData({
+                shantytown_id: 4,
+                input_date: new Date(2023, 0, 1),
+                population_total: 101,
+            }),
+        ];
+        dataReportModel.getRawData.resolves(rows);
+
+        const response: TownReport[] = await getTownsReport(from, to);
+        expect(response[0].population_51_100.all).to.be.eql(151);
+        expect(response[0].population_51_100.european).to.be.eql(100);
+        expect(response[0].population_51_100.all_ids).to.be.deep.equal([2, 3]);
+    });
+
+    it('retourne les totaux pour les sites entre 101 et 150 habitants', async () => {
+        const from = new Date(2023, 0, 1);
+        const to = new Date(2023, 0, 1);
+        const rows: DataReportRawData[] = [
+            fakeData({
+                shantytown_id: 1,
+                input_date: new Date(2023, 0, 1),
+                population_total: 100,
+            }),
+            fakeData({
+                shantytown_id: 2,
+                input_date: new Date(2023, 0, 1),
+                population_total: 101,
+                origins: 'other',
+            }),
+            fakeData({
+                shantytown_id: 3,
+                input_date: new Date(2023, 0, 1),
+                population_total: 150,
+                origins: 'european',
+            }),
+            fakeData({
+                shantytown_id: 4,
+                input_date: new Date(2023, 0, 1),
+                population_total: 151,
+            }),
+        ];
+        dataReportModel.getRawData.resolves(rows);
+
+        const response: TownReport[] = await getTownsReport(from, to);
+        expect(response[0].population_101_150.all).to.be.eql(251);
+        expect(response[0].population_101_150.european).to.be.eql(150);
+        expect(response[0].population_101_150.all_ids).to.be.deep.equal([2, 3]);
+    });
+
+    it('retourne les totaux pour les sites entre 151 et 200 habitants', async () => {
+        const from = new Date(2023, 0, 1);
+        const to = new Date(2023, 0, 1);
+        const rows: DataReportRawData[] = [
+            fakeData({
+                shantytown_id: 1,
+                input_date: new Date(2023, 0, 1),
+                population_total: 150,
+            }),
+            fakeData({
+                shantytown_id: 2,
+                input_date: new Date(2023, 0, 1),
+                population_total: 151,
+                origins: 'other',
+            }),
+            fakeData({
+                shantytown_id: 3,
+                input_date: new Date(2023, 0, 1),
+                population_total: 200,
+                origins: 'european',
+            }),
+            fakeData({
+                shantytown_id: 4,
+                input_date: new Date(2023, 0, 1),
+                population_total: 201,
+            }),
+        ];
+        dataReportModel.getRawData.resolves(rows);
+
+        const response: TownReport[] = await getTownsReport(from, to);
+        expect(response[0].population_151_200.all).to.be.eql(351);
+        expect(response[0].population_151_200.european).to.be.eql(200);
+        expect(response[0].population_151_200.all_ids).to.be.deep.equal([2, 3]);
+    });
+
+    it('retourne les totaux pour les sites entre 201 et 250 habitants', async () => {
+        const from = new Date(2023, 0, 1);
+        const to = new Date(2023, 0, 1);
+        const rows: DataReportRawData[] = [
+            fakeData({
+                shantytown_id: 1,
+                input_date: new Date(2023, 0, 1),
+                population_total: 200,
+            }),
+            fakeData({
+                shantytown_id: 2,
+                input_date: new Date(2023, 0, 1),
+                population_total: 201,
+                origins: 'other',
+            }),
+            fakeData({
+                shantytown_id: 3,
+                input_date: new Date(2023, 0, 1),
+                population_total: 250,
+                origins: 'european',
+            }),
+            fakeData({
+                shantytown_id: 4,
+                input_date: new Date(2023, 0, 1),
+                population_total: 251,
+            }),
+        ];
+        dataReportModel.getRawData.resolves(rows);
+
+        const response: TownReport[] = await getTownsReport(from, to);
+        expect(response[0].population_201_250.all).to.be.eql(451);
+        expect(response[0].population_201_250.european).to.be.eql(250);
+        expect(response[0].population_201_250.all_ids).to.be.deep.equal([2, 3]);
+    });
+
+    it('retourne les totaux pour les sites de 250 habitants ou plus', async () => {
+        const from = new Date(2023, 0, 1);
+        const to = new Date(2023, 0, 1);
+        const rows: DataReportRawData[] = [
+            fakeData({
+                shantytown_id: 1,
+                input_date: new Date(2023, 0, 1),
+                population_total: 250,
+            }),
+            fakeData({
+                shantytown_id: 2,
+                input_date: new Date(2023, 0, 1),
+                population_total: 251,
+            }),
+        ];
+        dataReportModel.getRawData.resolves(rows);
+
+        const response: TownReport[] = await getTownsReport(from, to);
+        expect(response[0].population_251_or_more.all).to.be.eql(251);
+        expect(response[0].population_251_or_more.all_ids).to.be.deep.equal([2]);
+    });
+
     it('si le modèle retourne une saisie > to, celle-ci est ignorée', async () => {
         const from = new Date(2023, 0, 1);
         const to = new Date(2023, 0, 1);
