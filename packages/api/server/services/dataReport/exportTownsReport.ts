@@ -5,6 +5,7 @@ import {
 import moment from 'moment';
 import { TownReport } from './types/TownReport.d';
 import getTownsReport from './getTownsReport';
+import { TownReportFigures } from './types/TownReportFigures';
 
 const COLORS = {
     BLANC: { argb: 'FFFFFFFF' },
@@ -18,8 +19,8 @@ const COLORS = {
     CHIFFRES_MINEURS: { argb: 'FFD0E0E3' },
     SEPARATEUR: { argb: 'FF999999' },
 };
-type WriteCellFn = (sheet: Worksheet, ref: string, content: string) => void;
 
+type WriteCellFn = (sheet: Worksheet, ref: string, content: string) => void;
 const writeHeaderCell: WriteCellFn = (sheet, ref, content) => {
     fill(sheet, ref, COLORS.HEADER);
     align(sheet, ref, {
@@ -32,117 +33,189 @@ const writeHeaderCell: WriteCellFn = (sheet, ref, content) => {
     });
 };
 
-type PropertyDefinition = { label: string, bgColor: Partial<Excel.Color>, value: (report: TownReport, section: 'all' | 'big_towns_only') => number };
+type PropertyDefinition = {
+    label: string,
+    bgColor: Partial<Excel.Color>,
+    value: (report: TownReport, size?: keyof TownReport, territory?: keyof TownReportFigures) => number | string
+};
 const propertiesList: PropertyDefinition[] = [
     {
         label: 'Nombre de sites',
         bgColor: COLORS.CHIFFRES_GLOBAUX,
-        value: (report, section) => report[section].number_of_towns.all - report[section].number_of_towns.overseas,
-    },
-    {
-        label: 'Nombre de sites (Outre-Mer compris)',
-        bgColor: COLORS.CHIFFRES_GLOBAUX,
-        value: (report, section) => report[section].number_of_towns.all,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_towns.total,
     },
     {
         label: 'Nombre de personnes',
         bgColor: COLORS.CHIFFRES_GLOBAUX,
-        value: (report, section) => report[section].number_of_people.all - report[section].number_of_people.overseas,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_people.total,
     },
     {
-        label: 'Nombre de personnes (Outre-Mer compris)',
+        label: 'Nombre de mineurs',
         bgColor: COLORS.CHIFFRES_GLOBAUX,
-        value: (report, section) => report[section].number_of_people.all,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_people.minors,
     },
     {
-        label: 'Nombre de sites intra UE',
+        label: 'Nombre de sites avec exclusivement des intra UE',
         bgColor: COLORS.CHIFFRES_EUROPEENS,
-        value: (report, section) => report[section].number_of_towns.eu_only,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_towns.eu_only,
     },
     {
-        label: 'Nombre intra UE',
+        label: 'Nombre de personnes intra UE (sites exclusivement intra UE)',
         bgColor: COLORS.CHIFFRES_EUROPEENS,
-        value: (report, section) => report[section].number_of_people.origins_european,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_people.origins_european,
     },
     {
-        label: 'Nombre de sites extra UE',
+        label: 'Nombre de mineurs intra UE (sites exclusivement intra UE)',
+        bgColor: COLORS.CHIFFRES_EUROPEENS,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_people.origins_european_minors,
+    },
+    {
+        label: 'Nombre de sites exclusivement extra UE',
         bgColor: COLORS.CHIFFRES_EXTRA_UE,
-        value: (report, section) => report[section].number_of_towns.extra_eu_only,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_towns.extra_eu_only,
     },
     {
-        label: 'Nombre extra UE',
+        label: 'Nombre de personnes extra UE (sites exclusivement extra UE)',
         bgColor: COLORS.CHIFFRES_EXTRA_UE,
-        value: (report, section) => report[section].number_of_people.origins_other,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_people.origins_other,
     },
     {
-        label: 'Nombre de sites Français',
+        label: 'Nombre de mineurs extra UE (sites exclusivement extra UE)',
+        bgColor: COLORS.CHIFFRES_EXTRA_UE,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_people.origins_other_minors,
+    },
+    {
+        label: 'Nombre de sites exclusivement français',
         bgColor: COLORS.CHIFFRES_FR,
-        value: (report, section) => report[section].number_of_towns.french_only,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_towns.french_only,
     },
     {
-        label: 'Nombre de Français',
+        label: 'Nombre de personnes Françaises (sites exclusivement français)',
         bgColor: COLORS.CHIFFRES_FR,
-        value: (report, section) => report[section].number_of_people.origins_french,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_people.origins_french,
     },
     {
-        label: 'Nombre de sites mélangés',
+        label: 'Nombre de mineurs Français (sites exclusivement français)',
+        bgColor: COLORS.CHIFFRES_FR,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_people.origins_french_minors,
+    },
+    {
+        label: 'Nombre de sites mixtes (plus d\'une origine)',
         bgColor: COLORS.CHIFFRES_MELANGES,
-        value: (report, section) => report[section].number_of_towns.mixed_origins,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_towns.mixed_origins,
     },
     {
-        label: 'Nombre d\'habitants sites mélangés',
+        label: 'Nombre de personnes sur sites mixtes (plus d\'une origine)',
         bgColor: COLORS.CHIFFRES_MELANGES,
-        value: (report, section) => report[section].number_of_people.origins_mixed,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_people.origins_mixed,
     },
     {
-        label: 'Nombre de sites origines non renseignées',
+        label: 'Nombre de mineurs sur sites mixtes (plus d\'une origine)',
+        bgColor: COLORS.CHIFFRES_MELANGES,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_people.origins_mixed_minors,
+    },
+    {
+        label: 'Nombre de sites où l\'origine des personnes est non renseignée',
         bgColor: COLORS.CHIFFRES_INCONNUS,
-        value: (report, section) => report[section].number_of_towns.unknown_origins,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_towns.unknown_origins,
     },
     {
-        label: 'Nombre d\'habitants origines non renseignées',
+        label: 'Nombre de personnes dont l\'origine est non renseignée',
         bgColor: COLORS.CHIFFRES_INCONNUS,
-        value: (report, section) => report[section].number_of_people.origins_null,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_people.origins_null,
     },
     {
-        label: 'Nombre de mineurs (Outre-Mer non compris)',
-        bgColor: COLORS.CHIFFRES_MINEURS,
-        value: (report, section) => report[section].number_of_people.minors,
-    },
-    {
-        label: 'Nombre de mineurs scolarisés (Outre-Mer non compris)',
-        bgColor: COLORS.CHIFFRES_MINEURS,
-        value: (report, section) => report[section].number_of_people.minors_in_school,
+        label: 'Nombre de mineurs dont l\'origine est non renseignée',
+        bgColor: COLORS.CHIFFRES_INCONNUS,
+        value: (report, size, territory) => (<TownReportFigures>report[size])[territory].number_of_people.origins_null_minors,
     },
 ];
 
-type SectionDefinition = { label: string, key: 'all' | 'big_towns_only' };
+type SectionDefinition = { label: string, key: keyof TownReport };
 const sectionsList: SectionDefinition[] = [
-    { key: 'all', label: 'Sites de toutes tailles (dont NC)' },
-    { key: 'big_towns_only', label: 'Sites + 10 pers. NC non compris' },
+    { key: 'all_sizes', label: 'Sites de toutes tailles (dont NC)' },
+    { key: 'big_towns_only', label: 'Sites de 10 personnes ou plus (NC non compris)' },
+];
+
+const sidePropertiesList: PropertyDefinition[] = [
+    {
+        label: 'Nombre de sites exclusivement intra UE de 10 à 50 personnes',
+        value: report => report.population_10_50.european,
+        bgColor: COLORS.BLANC,
+    },
+    {
+        label: 'Nombre de sites exclusivement intra UE de 51 à 100 personnes',
+        value: report => report.population_51_100.european,
+        bgColor: COLORS.BLANC,
+    },
+    {
+        label: 'Nombre de sites exclusivement intra UE de 101 à 150 personnes',
+        value: report => report.population_101_150.european,
+        bgColor: COLORS.BLANC,
+    },
+    {
+        label: 'Nombre de sites exclusivement intra UE de 151 à 200 personnes',
+        value: report => report.population_151_200.european,
+        bgColor: COLORS.BLANC,
+    },
+    {
+        label: 'Nombre de sites exclusivement intra UE de 201 à 250 personnes',
+        value: report => report.population_201_250.european,
+        bgColor: COLORS.BLANC,
+    },
+    {
+        label: 'Nombre de sites exclusivement intra UE de plus de 250 personnes',
+        value: report => report.population_251_or_more.european,
+        bgColor: COLORS.BLANC,
+    },
+    {
+        label: 'Nombre de sites tous publics de 10 à 50 personnes',
+        value: report => report.population_10_50.all,
+        bgColor: COLORS.BLANC,
+    },
+    {
+        label: 'Nombre de sites tous publics de 51 à 100 personnes',
+        value: report => report.population_51_100.all,
+        bgColor: COLORS.BLANC,
+    },
+    {
+        label: 'Nombre de sites tous publics de 101 à 150 personnes',
+        value: report => report.population_101_150.all,
+        bgColor: COLORS.BLANC,
+    },
+    {
+        label: 'Nombre de sites tous publics de 151 à 200 personnes',
+        value: report => report.population_151_200.all,
+        bgColor: COLORS.BLANC,
+    },
+    {
+        label: 'Nombre de sites tous publics de 201 à 250 personnes',
+        value: report => report.population_201_250.all,
+        bgColor: COLORS.BLANC,
+    },
+    {
+        label: 'Nombre de sites tous publics de plus de 250 personnes',
+        value: report => report.population_251_or_more.all,
+        bgColor: COLORS.BLANC,
+    },
+    {
+        label: 'Liste des sites tous publics de plus de 200 personnes',
+        value: report => [...report.population_201_250.all_ids, ...report.population_251_or_more.all_ids].join(', '),
+        bgColor: COLORS.BLANC,
+    },
+];
+
+type TerritoryDefinition = { label: string, key: keyof TownReportFigures };
+const territories: TerritoryDefinition[] = [
+    { key: 'metropolitan', label: 'France métropolitaine' },
+    { key: 'overseas', label: 'Outre-mer' },
 ];
 
 function getFirstRowIndexOfASection(sectionIndex: number): number {
-    // pour chaque section il y a :
-    //  N lignes (1 pour chaque propriété)
-    // +1 ligne vide de séparation avec la section suivante
-    // = +1
-
-    // ensuite, globalement il y a :
     // +1 car les index des lignes sur Excel commencent à 1 et non pas 0
     // +1 car la première ligne est le header
     // = +2
-    return (sectionIndex * (propertiesList.length + 1)) + 2;
-}
-
-function createSeparationRowForSection(sheet: Worksheet, sectionIndex: number, column: string): void {
-    // no separation row for the last section
-    if (sectionIndex >= sectionsList.length - 1) {
-        return;
-    }
-
-    const rowIndex = getFirstRowIndexOfASection(sectionIndex + 1) - 1;
-    fill(sheet, `${column}${rowIndex}`, COLORS.SEPARATEUR);
+    return (sectionIndex * propertiesList.length * territories.length) + 2;
 }
 
 function createColumnTailleDuSite(sheet: Worksheet): void {
@@ -153,56 +226,101 @@ function createColumnTailleDuSite(sheet: Worksheet): void {
     // on crée le header
     writeHeaderCell(sheet, 'A1', 'Taille du site');
 
-    // on crée les entêtes pour les deux catégories "toutes tailles" et "nombre de sites"
+    // on crée les entêtes pour les deux catégories "toutes tailles" et "sites de 10 personnes et plus"
     sectionsList.forEach(({ label }, index) => {
         const rowIndex = getFirstRowIndexOfASection(index);
-        writeTo(sheet, `A${rowIndex}`, { text: label });
-        createSeparationRowForSection(sheet, index, 'A');
+        writeTo(sheet, `A${rowIndex}`, { text: label, bold: true });
+    });
+}
+
+function createColumnTerritoire(sheet: Worksheet): void {
+    // on définit la largeur de la colonne
+    const col = sheet.getColumn(2);
+    col.width = 30;
+
+    // on crée le header
+    writeHeaderCell(sheet, 'B1', 'Territoire');
+
+    // on crée les entêtes pour chaque territoire
+    sectionsList.forEach((section, sectionIndex) => {
+        const firstRowIndex = getFirstRowIndexOfASection(sectionIndex);
+        territories.forEach(({ label }, index) => {
+            const rowIndex = firstRowIndex + (index * propertiesList.length);
+            writeTo(sheet, `B${rowIndex}`, { text: label, bold: true });
+        });
     });
 }
 
 function createColumnOrigines(sheet: Worksheet): void {
     // on définit la largeur de la colonne
-    const col = sheet.getColumn(2);
-    col.width = 40;
+    const col = sheet.getColumn(3);
+    col.width = 55;
 
     // on crée le header
-    writeHeaderCell(sheet, 'B1', 'Origines');
+    writeHeaderCell(sheet, 'C1', 'Origines');
 
     // on crée les entêtes pour chaque propriété
-    sectionsList.forEach((section, index) => {
-        const rowIndex = getFirstRowIndexOfASection(index);
-        propertiesList.forEach((property, propertyIndex) => {
-            fill(sheet, `B${rowIndex + propertyIndex}`, property.bgColor);
-            writeTo(sheet, `B${rowIndex + propertyIndex}`, { text: property.label });
+    sectionsList.forEach((section, sectionIndex) => {
+        territories.forEach((territory, territoryIndex) => {
+            const firstRowIndex = getFirstRowIndexOfASection(sectionIndex) + (territoryIndex * propertiesList.length);
+            propertiesList.forEach((property, index) => {
+                fill(sheet, `C${firstRowIndex + index}`, property.bgColor);
+                writeTo(sheet, `C${firstRowIndex + index}`, { text: property.label });
+            });
         });
-        createSeparationRowForSection(sheet, index, 'B');
+    });
+
+    // on crée les entêtes pour chaque "propriétés bonus"
+    const firstRowIndex = getFirstRowIndexOfASection(sectionsList.length) + 1;
+    sidePropertiesList.forEach((property, index) => {
+        writeTo(sheet, `C${firstRowIndex + index}`, { text: property.label });
     });
 }
 
-function createColumnData(sheet: Worksheet, report: TownReport, index: number) {
+function createColumnData(sheet: Worksheet, report: TownReport, index: number): void {
+    const colIndex = index + 4;
+    const colAlpha = columnLetter(colIndex);
+    // +1 car les colonnes sur Excel commencent à 1 et non pas 0
+    // et +3 car les 3 premières colonnes sont réservées aux entêtes
+    // = +4
+
     // on définit la largeur de la colonne
-    const col = sheet.getColumn(index + 3);
+    const col = sheet.getColumn(colIndex);
     col.width = 16;
 
     // on crée le header
-    const colAlpha = columnLetter(index + 3);
     writeHeaderCell(sheet, `${colAlpha}1`, moment(report.date).format('DD/MM/YYYY'));
 
     // on injecte les valeurs pour chaque propriété
     sectionsList.forEach((section, sectionIndex) => {
-        const rowIndex = getFirstRowIndexOfASection(sectionIndex);
-        propertiesList.forEach((property, propertyIndex) => {
-            const ref = `${colAlpha}${rowIndex + propertyIndex}`;
-            fill(sheet, ref, property.bgColor);
-            writeTo(sheet, ref, { text: property.value(report, section.key) });
-            align(sheet, ref, {
-                horizontal: 'right',
-                vertical: 'middle',
+        territories.forEach((territory, territoryIndex) => {
+            const firstRowIndex = getFirstRowIndexOfASection(sectionIndex) + (territoryIndex * propertiesList.length);
+            propertiesList.forEach((property, propertyIndex) => {
+                const ref = `${colAlpha}${firstRowIndex + propertyIndex}`;
+                fill(sheet, ref, property.bgColor);
+                writeTo(sheet, ref, { text: property.value(report, section.key, territory.key) });
+                align(sheet, ref, {
+                    horizontal: 'right',
+                    vertical: 'middle',
+                });
             });
         });
-        createSeparationRowForSection(sheet, sectionIndex, colAlpha);
     });
+
+    // on injecte les valeurs pour chaque "propriétés bonus"
+    const firstRowIndex = getFirstRowIndexOfASection(sectionsList.length) + 1;
+    sidePropertiesList.forEach((property, propertyIndex) => {
+        writeTo(sheet, `${colAlpha}${firstRowIndex + propertyIndex}`, { text: property.value(report) });
+    });
+}
+
+function createSeparator(sheet: Worksheet, reportLength: number): void {
+    const rowIndex = getFirstRowIndexOfASection(sectionsList.length);
+    const colCount = 3 + reportLength;
+
+    for (let i = 0; i < colCount; i += 1) {
+        fill(sheet, `${columnLetter(i + 1)}${rowIndex}`, COLORS.SEPARATEUR);
+    }
 }
 
 export default async (from: Date, to: Date): Promise<Excel.Buffer> => {
@@ -214,15 +332,17 @@ export default async (from: Date, to: Date): Promise<Excel.Buffer> => {
         {
             views: [{
                 state: 'frozen',
-                xSplit: 1,
-                ySplit: 2,
+                xSplit: 3,
+                ySplit: 1,
             }],
         },
     );
 
     createColumnTailleDuSite(sheet);
+    createColumnTerritoire(sheet);
     createColumnOrigines(sheet);
     data.forEach((report, index) => createColumnData(sheet, report, index));
+    createSeparator(sheet, data.length);
 
     return workbook.xlsx.writeBuffer();
 };
