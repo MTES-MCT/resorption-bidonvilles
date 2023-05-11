@@ -14,6 +14,7 @@ export { default as FilePreviewList } from './components/FilePreview/FilePreview
 export { default as Filter } from './components/Filter.vue';
 export { default as FormParagraph } from './components/FormParagraph.vue';
 export { default as Icon } from './components/Icon.vue';
+export { default as InputFiles } from './components/Input/InputFiles.vue';
 export { default as InputGroup } from './components/Input/InputGroup.vue';
 export { default as InputError } from './components/Input/utils/InputError.vue';
 export { default as InputLabel } from './components/Input/utils/InputLabel.vue';
