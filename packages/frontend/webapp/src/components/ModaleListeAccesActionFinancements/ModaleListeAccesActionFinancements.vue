@@ -22,7 +22,7 @@ const wording = computed(() => {
             title: () =>
                 "Qui aura accès aux données sur les financements de l'action ?",
             emptyList: () =>
-                "Seuls les utilisateurs en préfecture, DDETS / DREETS et les services en charge (pilotes et opérateurs) auront accès aux données sur les financements de cette action.",
+                "Seuls les utilisateurs en préfecture, DDETS / DREETS et les services en charge de cette action auront accès aux données sur les financements.",
             fullList: (numberOfUsers) =>
                 `${
                     numberOfUsers > 1 ? "auront" : "aura"
@@ -34,7 +34,7 @@ const wording = computed(() => {
         title: () =>
             "Qui a accès aux données sur les financements de cette action ?",
         emptyList: () =>
-            "Seuls les utilisateurs en préfecture, DDETS / DREETS et les services en charge (pilotes et opérateurs) ont accès aux données sur les financements de cette action.",
+            "Seuls les utilisateurs en préfecture, DDETS / DREETS et les services en charge de cette action ont accès aux données sur les financements.",
         fullList: (numberOfUsers) =>
             `${
                 numberOfUsers > 1 ? "ont" : "a"
