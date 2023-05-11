@@ -1,5 +1,25 @@
-export default (actor) => {
-    const themes = [
+
+import { ActorRow } from './ActorRow';
+
+type Theme = {
+    id: string
+} | {
+    id: number,
+    value: string
+} ;
+
+export type Actor = {
+    id: number,
+    first_name: string,
+    last_name: string,
+    organization: {
+        id: number,
+        name: string,
+    },
+    themes: Theme[],
+};
+export default (actor: ActorRow):Actor => {
+    const themes: Theme[] = [
         ...actor.themes.map(id => ({
             id,
         })),
