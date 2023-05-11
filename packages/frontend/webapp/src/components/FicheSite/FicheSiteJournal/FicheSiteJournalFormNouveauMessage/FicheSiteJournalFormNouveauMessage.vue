@@ -8,6 +8,7 @@
                 class="transition-height h-0 overflow-hidden"
                 ref="formContainer"
             >
+                <FormNouveauMessageInputAttachments />
                 <FormNouveauMessageInputTags />
                 <FormNouveauMessageInputMode @click="onModeChange" />
                 <FormNouveauMessageInputTarget
@@ -63,6 +64,7 @@ import FormNouveauMessageInputMessage from "./inputs/FormNouveauMessageInputMess
 import FormNouveauMessageInputTags from "./inputs/FormNouveauMessageInputTags.vue";
 import FormNouveauMessageInputMode from "./inputs/FormNouveauMessageInputMode.vue";
 import FormNouveauMessageInputTarget from "./inputs/FormNouveauMessageInputTarget.vue";
+import FormNouveauMessageInputAttachments from "./inputs/FormNouveauMessageInputAttachments.vue";
 
 const props = defineProps({
     town: Object,
