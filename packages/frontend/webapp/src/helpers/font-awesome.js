@@ -37,6 +37,7 @@ import {
     faExclamationCircle,
     faFile,
     faFileExcel,
+    faFileImage,
     faFilePdf,
     faFileSignature,
     faFileWord,
@@ -54,6 +55,7 @@ import {
     faMapMarkerAlt,
     faMinus,
     faNotesMedical,
+    faPaperclip,
     faPaperPlane,
     faPen,
     faPencilAlt,
@@ -141,6 +143,7 @@ library.add(faEyeSlash);
 library.add(faFacebook);
 library.add(faFile);
 library.add(faFileExcel);
+library.add(faFileImage);
 library.add(faFilePdf);
 library.add(faFileSignature);
 library.add(faFileWord);
@@ -160,6 +163,7 @@ library.add(faMapMarkerAlt);
 library.add(faMinus);
 library.add(faNewspaper);
 library.add(faNotesMedical);
+library.add(faPaperclip);
 library.add(faPaperPlane);
 library.add(faPen);
 library.add(faPencilAlt);
