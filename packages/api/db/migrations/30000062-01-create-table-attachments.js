@@ -24,6 +24,14 @@ module.exports = {
                         type: Sequelize.STRING,
                         allowNull: false,
                     },
+                    mimetype: {
+                        type: Sequelize.STRING,
+                        allowNull: false,
+                    },
+                    size: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
                     created_by: {
                         type: Sequelize.INTEGER,
                         allowNull: false,
