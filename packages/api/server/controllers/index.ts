@@ -20,6 +20,8 @@ import configList from './configController/list';
 import contactContact from './contactController/contact';
 // contact form
 import contactFormReferralExport from './contactFormReferralController/export';
+// data report
+import dataReportExportTowns from './dataReportController/exportTownsReport';
 // directory
 import directoryList from './directoryController/list';
 // geo
@@ -119,6 +121,9 @@ export default () => ({
     },
     contactFormReferral: {
         export: contactFormReferralExport,
+    },
+    dataReport: {
+        exportTownsReport: dataReportExportTowns,
     },
     directory: {
         list: directoryList,

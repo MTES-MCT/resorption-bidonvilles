@@ -766,4 +766,13 @@ export default (app) => {
         middlewares.validation,
         controllers.community.unsubscribe,
     );
+
+    app.get(
+        '/data-reports/towns',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        validators.dataReport.exportTownsReport,
+        middlewares.validation,
+        controllers.dataReport.exportTownsReport,
+    );
 };

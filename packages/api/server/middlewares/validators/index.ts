@@ -1,4 +1,5 @@
 import closeTown from './closeTown';
+import dataReportExportTowns from './dataReport/exportTownsReport';
 import fixClosedStatus from './fixClosedStatus';
 import setHeatwaveStatus from './setHeatwaveStatus';
 import createContact from './createContact';
@@ -40,6 +41,9 @@ import organizationSearch from './organizations/search';
 
 export default {
     closeTown,
+    dataReport: {
+        exportTownsReport: dataReportExportTowns,
+    },
     fixClosedStatus,
     setHeatwaveStatus,
     createContact,

@@ -9,17 +9,23 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref } from "vue";
+import { toRefs, ref } from "vue";
 import { useNotificationStore } from "@/stores/notification.store";
 import downloadCsv from "@/utils/downloadCsv";
+import downloadBlob from "@/utils/downloadBlob";
 import { Icon, Link, Spinner, Warning } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     label: String,
     filename: String,
     downloadFn: Function,
+    format: {
+        type: String,
+        required: false,
+        default: "csv",
+    },
 });
-const { label, filename, downloadFn } = toRefs(props);
+const { label, filename, downloadFn, format } = toRefs(props);
 const notificationStore = useNotificationStore();
 
 const isLoading = ref(null);
@@ -33,8 +39,15 @@ async function download() {
     isLoading.value = true;
     error.value = null;
     try {
-        const { csv } = await downloadFn.value();
-        downloadCsv(csv, `${filename.value}.csv`);
+        const data = await downloadFn.value();
+
+        if (format.value === "xlsx") {
+            downloadBlob(new Blob([data]), `${filename.value}.xlsx`);
+        } else {
+            const { csv } = data;
+            downloadCsv(csv, `${filename.value}.csv`);
+        }
+
         notificationStore.success(
             label.value,
             "Le fichier a bien été téléchargé"
