@@ -1,16 +1,21 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
+import ShantytownComment from '#server/models/shantytownCommentModel/ShantytownComment.d';
+import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
+import { ShantytownCommentRow } from '../../shantytownCommentModel/ShantytownCommentRow.d';
 import serializeComment from './serializeComment';
 
-export default async (user, shantytownIds, covid = false) => {
+type CommentObject = { [key: number]: ShantytownComment };
+
+export default async (user, shantytownIds, covid = false): Promise<CommentObject> => {
     if (covid === false && !user.isAllowedTo('list', 'shantytown_comment')) {
         return {};
     }
 
     const filterPrivateComments = !user.isAllowedTo('listPrivate', 'shantytown_comment');
 
-    const rows = await sequelize.query(
+    const rows: ShantytownCommentRow[] = await sequelize.query(
         `WITH organization_comment_access AS (
             SELECT 
                 scot.fk_comment AS shantytown_comment_id,
@@ -92,14 +97,14 @@ export default async (user, shantytownIds, covid = false) => {
         },
     );
 
-    let commentTags = {};
+    let commentTags: CommentTagObject = {};
     if (rows.length > 0) {
         commentTags = await shantytownCommentTagModel.getTagsForComments(
-            rows.map(({ commentId }: any) => commentId),
+            rows.map(({ commentId }: ShantytownCommentRow) => commentId),
         );
     }
 
-    return rows.reduce((acc, row: any) => {
+    return rows.reduce((acc, row: ShantytownCommentRow) => {
         if (!acc[row.shantytownId]) {
             acc[row.shantytownId] = [];
         }
