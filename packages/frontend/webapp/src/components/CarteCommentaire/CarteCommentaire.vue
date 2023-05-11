@@ -69,6 +69,11 @@
                 :tag="tag"
             />
         </div>
+        <FilePreviewList
+            v-if="comment.attachments?.length > 0"
+            class="mb-2"
+            :files="comment.attachments"
+        />
         <div class="whitespace-pre-line break-words">
             {{ comment.description }}
         </div>
@@ -81,7 +86,12 @@ import { useUserStore } from "@/stores/user.store";
 import covidTagsList from "@/utils/covid_tags";
 import formatDate from "@common/utils/formatDate.js";
 
-import { Icon, LinkOrganization, Tag } from "@resorptionbidonvilles/ui";
+import {
+    FilePreviewList,
+    Icon,
+    LinkOrganization,
+    Tag,
+} from "@resorptionbidonvilles/ui";
 import TagCommentaireStandard from "@/components/TagCommentaireStandard/TagCommentaireStandard.vue";
 import TagCommentaireCovid from "@/components/TagCommentaireCovid/TagCommentaireCovid.vue";
 

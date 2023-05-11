@@ -20,7 +20,7 @@ const props = defineProps({
 const { file } = toRefs(props);
 
 const isImage = computed(() => {
-    return file.value.extension.match(/(jpe?g|png|gif|svg)/i);
+    return file.value.extension?.match(/(jpe?g|png|gif|svg)/i);
 });
 const icon = computed(() => {
     if (isImage.value) {
@@ -35,7 +35,8 @@ const icon = computed(() => {
         xls: 'file-excel',
         xlsx: 'file-excel',
         odf: 'file-excel',
+        null: 'file',
     };
-    return icons[file.value.extension.toLowerCase()] || 'file';
+    return icons[file.value.extension?.toLowerCase()] || 'file';
 });
 </script>
