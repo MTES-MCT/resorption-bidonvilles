@@ -1,15 +1,14 @@
 <template>
     <p v-if="mode === 'report'" class="bg-yellow-200 p-4 mb-6">
         <Icon icon="triangle-exclamation" class="mr-1" />
-        <span class="font-bold">Les données ne seront pas enregistrées</span
-        ><br />
+        <span class="font-bold">Les données ne seront pas enregistrées</span><br />
 
         À la validation de ce formulaire, les données renseignées ne seront pas
         enregistrées sur la plateforme mais transmises aux administrateurs de la
         plateforme pour validation.
     </p>
 
-    <PanelInfo icon="flag" defaultStatus="open">
+    <PanelInfo icon="flag">
         <template v-slot:title>Qu'est-ce qu'un site ?</template>
         <template v-slot:content>
             Un site est un bidonville ou squat occupé de manière informelle à
