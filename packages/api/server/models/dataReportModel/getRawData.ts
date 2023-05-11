@@ -116,7 +116,7 @@ export default async (from: Date, to: Date): Promise<DataReportRawData[]> => seq
             AND
             (t.input_date >= t.known_since)
             AND
-            (t.closed_at IS NULL OR (t.closed_at > :from AND t.input_date < t.closed_at))
+            (t.closed_at IS NULL OR t.closed_at > :from)
         ORDER BY t.shantytown_id ASC, t.input_date DESC`,
     {
         type: QueryTypes.SELECT,
