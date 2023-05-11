@@ -1,8 +1,7 @@
 <template>
     <p v-if="mode === 'report'" class="bg-yellow-200 p-4 mb-6">
         <Icon icon="triangle-exclamation" class="mr-1" />
-        <span class="font-bold">Les données ne seront pas enregistrées</span
-        ><br />
+        <span class="font-bold">Les données ne seront pas enregistrées</span><br />
 
         À la validation de ce formulaire, les données renseignées ne seront pas
         enregistrées sur la plateforme mais transmises aux administrateurs de la
@@ -15,7 +14,7 @@
             Un site est un bidonville ou squat occupé de manière informelle à
             des fins d'habitation par plusieurs familles ou personnes, les
             services de base (eau, électricité, gestion des déchets…) y sont
-            généralement absents. Tous les sites, quelque soit l'origine et le
+            généralement absents. Tous les sites, quels que soient l'origine et le
             nombre des personnes, peuvent être renseignés.
         </template>
     </PanelInfo>
