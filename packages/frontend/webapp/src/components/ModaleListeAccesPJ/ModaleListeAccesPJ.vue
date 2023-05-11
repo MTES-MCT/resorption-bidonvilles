@@ -22,7 +22,7 @@ const wording = computed(() => {
             title: () =>
                 "Qui aura accès aux données sur la procédure judiciaire ?",
             emptyList: () =>
-                "Seuls les utilisateurs en préfecture et DEETS / DREETS auront accès aux données judiciaires de ce site.",
+                "Seuls les utilisateurs en préfecture et DDETS / DREETS auront accès aux données judiciaires de ce site.",
             fullList: (numberOfUsers) =>
                 `${
                     numberOfUsers > 1 ? "auront" : "aura"
@@ -33,7 +33,7 @@ const wording = computed(() => {
     return {
         title: () => "Qui a accès aux données sur la procédure judiciaire ?",
         emptyList: () =>
-            "Seuls les utilisateurs en préfecture et DEETS / DREETS a accès aux données judiciaires de ce site.",
+            "Seuls les utilisateurs en préfecture et DDETS / DREETS a accès aux données judiciaires de ce site.",
         fullList: (numberOfUsers) =>
             `${
                 numberOfUsers > 1 ? "ont" : "a"
