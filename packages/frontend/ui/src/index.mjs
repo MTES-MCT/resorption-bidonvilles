@@ -13,6 +13,7 @@ export { default as Dropdown } from './components/Dropdown.vue';
 export { default as ErrorSummary } from './components/ErrorSummary.vue';
 export { default as Fieldset } from './components/Fieldset.vue';
 export { default as FilArianne } from './components/FilArianne.vue';
+export { default as FilePreviewList } from './components/FilePreview/FilePreviewList.vue';
 export { default as Filter } from './components/Filter.vue';
 export { default as FooterBar } from './components/FooterBar/FooterBar.vue';
 export { default as FormParagraph } from './components/FormParagraph.vue';
