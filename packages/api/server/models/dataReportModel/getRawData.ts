@@ -121,8 +121,8 @@ export default async (from: Date, to: Date): Promise<DataReportRawData[]> => seq
     {
         type: QueryTypes.SELECT,
         replacements: {
-            from: moment(from).format('YYYY-MM-DD'),
-            to: moment(to).format('YYYY-MM-DD'),
+            from: `${moment(from).format('YYYY-MM-DD')} 00:00:00`,
+            to: `${moment(to).format('YYYY-MM-DD')} 23:59:59`,
         },
     },
 );
