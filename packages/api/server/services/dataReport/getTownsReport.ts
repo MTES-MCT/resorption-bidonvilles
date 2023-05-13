@@ -82,9 +82,9 @@ export default async (argFrom: Date, argTo: Date): Promise<TownReport[]> => {
             POPULATION_SEGMENTS.forEach(({ min, max }) => {
                 if (row.population_total >= min && row.population_total <= max) {
                     const ref = Number.isFinite(max) ? `population_${min}_${max}` : `population_${min}_or_more`;
-                    reports[i][ref].all_ids.push(row.shantytown_id);
-                    reports[i][ref].all += row.population_total;
-                    reports[i][ref].european += row.origins === 'european' ? row.population_total : 0;
+                    reports[i][ref][territoryKey].all_ids.push(row.shantytown_id);
+                    reports[i][ref][territoryKey].all += 1;
+                    reports[i][ref][territoryKey].european += row.origins === 'european' ? 1 : 0;
                 }
             });
 
