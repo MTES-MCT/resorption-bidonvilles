@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { TownReport, TownReportPopulationFigures } from '../types/TownReport.d';
+import { TownReport, TownReportFiguresByPopulation } from '../types/TownReport.d';
 import { TownReportFigures } from '../types/TownReportFigures.d';
 import getMonthDiff from './getMonthDiff';
 
@@ -56,11 +56,18 @@ function getEmptyTownFigures(): TownReportFigures {
     };
 }
 
-function getEmptyPopulationFigures(): TownReportPopulationFigures {
+function getEmptyPopulationFigures(): TownReportFiguresByPopulation {
     return {
-        all_ids: [],
-        all: 0,
-        european: 0,
+        metropolitan: {
+            all_ids: [],
+            all: 0,
+            european: 0,
+        },
+        overseas: {
+            all_ids: [],
+            all: 0,
+            european: 0,
+        },
     };
 }
 
