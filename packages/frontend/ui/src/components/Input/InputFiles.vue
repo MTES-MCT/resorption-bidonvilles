@@ -1,28 +1,31 @@
 <template>
-    <InputWrapper :hasErrors="!!error" :withoutMargin="withoutMargin" :id="name">
-        <InputLabel :label="label" :info="info" :showMandatoryStar="showMandatoryStar" />
-        <FilePreviewList class="mb-3" v-if="previews.length > 0" :files="previews" :collapse="false" />
-        <input ref="fileInput" type="file" class="none"
-            accept=".jpg,.jpeg,.png,.gif,.svg,.pdf,.doc,.docx,.xls,.xlsx,.odt,.odf" :multiple="multiple"
-            @change="previewFiles" />
-        <InputError v-if="!!error">{{ error }}</InputError>
+    <InputWrapper :hasErrors="errors.length > 0" :withoutMargin="withoutMargin" :id="name">
+        <InputLabel :label="label"
+            :info="`Les images, les documents PDF, Word, et Excel sont autorisés. La taille maximale autorisée est de ${humanFileSize(MAX_FILE_SIZE)}.`"
+            :showMandatoryStar="showMandatoryStar" />
+        <FilePreviewGrid class="mb-3" v-if="previews.length > 0" :files="previews" @delete="onDelete" />
+        <input ref="fileInput" type="file" class="none" :accept="allowedFileExtensions.map(ext => `.${ext}`).join(',')"
+            :multiple="multiple" @change="onChange" @blur="handleBlur" />
+        <InputError v-if="errors.length > 0">{{ errors[0] }}</InputError>
     </InputWrapper>
 </template>
 
 <script setup>
 import { computed, ref, toRefs } from "vue";
 import { useField } from "vee-validate";
+import allowedFileExtensions from "@common/utils/allowed_file_extensions";
+import fromMimeToExtension from "@common/utils/fromMimeToExtension";
+import { MAX_FILE_SIZE } from "@common/utils/max_file_size";
+import humanFileSize from "../../utils/humanFileSize";
 
-import FilePreviewList from "../FilePreview/FilePreviewList.vue";
+import FilePreviewGrid from "../FilePreview/FilePreviewGrid.vue";
 import InputLabel from "./utils/InputLabel.vue";
 import InputWrapper from "./utils/InputWrapper.vue";
 import InputError from "./utils/InputError.vue";
-import fromMimeToExtension from "../../utils/fromMimeToExtension";
 
 const props = defineProps({
     name: String,
     label: String,
-    info: String,
     showMandatoryStar: {
         type: Boolean,
         default: false,
@@ -37,8 +40,8 @@ const props = defineProps({
     },
 });
 
-const { name, label, info, multiple, withoutMargin } = toRefs(props);
-const { error } = useField(name.value);
+const { name, label, multiple, withoutMargin } = toRefs(props);
+const { handleChange, handleBlur, errors } = useField(name.value);
 const fileInput = ref(null);
 
 const rawFiles = ref([]);
@@ -53,10 +56,11 @@ const previews = computed(() => {
             preview: rawFile.preview || null,
         },
         extension: fromMimeToExtension(rawFile.type),
+        created_by: null,
     }));
 });
 
-function previewFiles() {
+function onChange() {
     rawFiles.value = Array.from(fileInput.value.files).map(file => ({
         name: file.name,
         size: file.size,
@@ -64,12 +68,34 @@ function previewFiles() {
         preview: null,
     }));
 
+    handleChange(Array.from(fileInput.value.files));
+    previewFiles();
+}
+
+function onDelete(file, index) {
+    const dt = new DataTransfer();
+    const { files } = fileInput.value;
+
+    // on recrée un set de données en excluant le fichier à supprimer
+    for (let i = 0; i < files.length; i++) {
+        if (index !== i) {
+            dt.items.add(files[i]);
+        }
+    }
+
+    // on change la valeur de l'input avec le nouveau set de données
+    fileInput.value.files = dt.files;
+
+    // on génère un "change"
+    onChange();
+}
+
+function previewFiles() {
     for (let i = 0; i < fileInput.value.files.length; i += 1) {
         const file = fileInput.value.files[i];
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (event) => {
-            console.log('received preview');
             rawFiles.value[i] = { ...rawFiles.value[i], preview: event.target.result };
         };
     }
