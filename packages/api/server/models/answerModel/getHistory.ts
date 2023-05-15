@@ -4,8 +4,23 @@ import { QueryTypes } from 'sequelize';
 
 import userModel from '../userModel';
 
-export default async (numberOfActivities, lastDate, maxDate): Promise<any[]> => {
-    const replacements: any = {
+import { AnswerActivity } from '#root/types/resources/Activity.d';
+
+type AnswerHistoryRow = {
+    answer_id: number,
+    description : string,
+    question_id: number,
+    date: Date,
+    question: string,
+    answer_author_first_name: string,
+    answer_author_last_name: string,
+    answer_author_organization: number,
+    question_author_first_name: string,
+    question_author_last_name: string,
+    question_author_organization: number
+};
+export default async (numberOfActivities, lastDate, maxDate): Promise<AnswerActivity[]> => {
+    const replacements = {
         lastDate,
         maxDate,
         numberOfActivities,
@@ -49,8 +64,8 @@ export default async (numberOfActivities, lastDate, maxDate): Promise<any[]> => 
 
 
     return activities
-        .map((activity: any) => {
-            const o = {
+        .map((activity: AnswerHistoryRow) => {
+            const o: AnswerActivity = {
                 entity: 'answer',
                 action: 'creation',
                 date: activity.date.getTime() / 1000,

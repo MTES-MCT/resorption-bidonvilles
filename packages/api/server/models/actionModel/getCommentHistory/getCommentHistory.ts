@@ -4,9 +4,22 @@ import { QueryTypes } from 'sequelize';
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
 
+import { ActionCommentActivity } from '#root/types/resources/Activity.d';
+
 const { restrict } = permissionUtils;
 
-export default async (user, location, numberOfActivities, lastDate, maxDate) => {
+
+type ActionCommentHistoryRow = {
+    commentId: number,
+    date: Date,
+    author_first_name: string,
+    author_last_name: string,
+    author_organization: number,
+    description: string,
+    action_id: number,
+    action_name: string
+};
+export default async (user, location, numberOfActivities, lastDate, maxDate): Promise<ActionCommentActivity[]> => {
     // apply geographic level restrictions
     const where = [];
     const replacements: any = {
@@ -63,8 +76,8 @@ export default async (user, location, numberOfActivities, lastDate, maxDate) => 
     const actionComments = {};
 
     return activities
-        .map((activity: any) => {
-            const o = {
+        .map((activity: ActionCommentHistoryRow) => {
+            const o: ActionCommentActivity = {
                 entity: 'comment',
                 action: 'creation',
                 date: activity.date.getTime() / 1000,

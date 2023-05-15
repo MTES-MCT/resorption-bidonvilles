@@ -5,6 +5,7 @@ import actionModel from '#server/models/actionModel';
 import questionModel from '#server/models/questionModel';
 import answerModel from '#server/models/answerModel';
 import ServiceError from '#server/errors/ServiceError';
+import { ServiceActivity } from '#root/types/services/ActivityService.d';
 
 export default async (user, location, activityTypeFilter, resorbedFilter, myTownsFilter, numberOfActivities, lastDate, maxDate) => {
     const promises = [];
@@ -40,7 +41,7 @@ export default async (user, location, activityTypeFilter, resorbedFilter, myTown
         promises.push(answerModel.getHistory(numberOfActivities, lastDate, maxDate));
     }
 
-    let activities;
+    let activities: ServiceActivity[];
     try {
         activities = await Promise.all(promises);
     } catch (error) {

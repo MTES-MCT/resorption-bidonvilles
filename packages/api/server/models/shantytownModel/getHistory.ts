@@ -6,12 +6,24 @@ import permissionUtils from '#server/utils/permission';
 import getUsenameOf from './_common/getUsenameOf';
 import serializeShantytown from './_common/serializeShantytown';
 import getDiff from './_common/getDiff';
-import SQL from './_common/SQL';
+import SQL, { ShantytownRow } from './_common/SQL';
+
+import {
+    BaseShantytownActivity,
+    ShantytownActivity,
+} from '#root/types/resources/Activity.d';
 
 const { fromGeoLevelToTableName } = geoUtils;
 const { restrict } = permissionUtils;
 
-export default async (user, location, shantytownFilter, resorbedFilter, myTownsFilter, numberOfActivities, lastDate, maxDate) => {
+type ShantytownActivityRow = ShantytownRow & {
+    hid: number,
+    author_first_name: string,
+    author_last_name: string,
+    author_organization: number,
+};
+
+export default async (user, location, shantytownFilter, resorbedFilter, myTownsFilter, numberOfActivities, lastDate, maxDate):Promise<ShantytownActivity[]> => {
     // apply geographic level restrictions
     const where = [];
     const replacements: any = {
@@ -33,7 +45,7 @@ export default async (user, location, shantytownFilter, resorbedFilter, myTownsF
         replacements.shantytownLocationCode = restrictedLocation[restrictedLocation.type].code;
     }
 
-    const activities = await sequelize.query(
+    const activities: ShantytownActivityRow[] = await sequelize.query(
         `
             SELECT
                 activities.*,
@@ -67,13 +79,10 @@ export default async (user, location, shantytownFilter, resorbedFilter, myTownsF
 
                     SELECT
                         shantytowns.hid,
-                        shantytowns.closed_at,
-                        shantytowns.created_at,
-                        shantytowns.updated_at AS "date",
                         sco.origins AS "socialOrigins",
                         eat.electricity_access_types AS "electricityAccessTypes",
                         stt.toilet_types AS "toiletTypes",
-                        COALESCE(shantytowns.updated_by, shantytowns.created_by) AS author_id,
+                        COALESCE(shantytowns.updated_by, shantytowns.created_by) AS authorId,
                         ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(',')}
                     FROM "ShantytownHistories" shantytowns
                     LEFT JOIN shantytowns AS s ON shantytowns.shantytown_id = s.shantytown_id
@@ -121,13 +130,10 @@ export default async (user, location, shantytownFilter, resorbedFilter, myTownsF
 
                     SELECT
                         0 as hid,
-                        shantytowns.closed_at,
-                        shantytowns.created_at,
-                        shantytowns.updated_at AS "date",
                         sco.origins AS "socialOrigins",
                         eat.electricity_access_types AS "electricityAccessTypes",
                         stt.toilet_types AS "toiletTypes",
-                        COALESCE(shantytowns.updated_by, shantytowns.created_by) AS author_id,
+                        COALESCE(shantytowns.updated_by, shantytowns.created_by) AS authorId,
                         ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(', ')}
                     FROM shantytowns
                     LEFT JOIN shantytown_computed_origins sco ON sco.fk_shantytown = shantytowns.shantytown_id
@@ -147,9 +153,9 @@ export default async (user, location, shantytownFilter, resorbedFilter, myTownsF
                     ORDER BY shantytowns.updated_at DESC
                     ${limit}
                 )) activities
-            LEFT JOIN users author ON activities.author_id = author.user_id
-            WHERE activities.date < '${lastDate}'
-            ORDER BY activities.date DESC
+            LEFT JOIN users author ON activities.authorId = author.user_id
+            WHERE activities."updatedAt" < '${lastDate}'
+            ORDER BY activities."updatedAt" DESC
             ${limit}
             `,
         {
@@ -160,14 +166,14 @@ export default async (user, location, shantytownFilter, resorbedFilter, myTownsF
     const listOldestVersions = [];
     const listIdOldestVersions = [];
     // on récupère pour chaque bidonville la plus vieille version existante qui n'est pas une création
-    activities.reverse().forEach((activity: any) => {
-        if (!(listIdOldestVersions.includes(activity.id)) && (activity.date - activity.created_at > 10)) {
+    activities.reverse().forEach((activity: ShantytownActivityRow) => {
+        if (!(listIdOldestVersions.includes(activity.id)) && (activity.updatedAt.valueOf() - activity.createdAt.valueOf() > 10)) {
             listIdOldestVersions.push(activity.id);
         }
         listOldestVersions.push(`(${activity.id} , ${activity.hid})`);
     });
     // on récupère les précédentes versions des éléments de listIdOldestVersions afin de pouvoir appliquer getDiff
-    const queryPreviousVersions = listIdOldestVersions.length === 0 ? [] : await sequelize.query(
+    const queryPreviousVersions: ShantytownActivityRow[] = listIdOldestVersions.length === 0 ? [] : await sequelize.query(
         `
             WITH
             shantytown_computed_origins AS (SELECT
@@ -192,11 +198,10 @@ export default async (user, location, shantytownFilter, resorbedFilter, myTownsF
             LEFT JOIN shantytown_toilet_types_history stt ON stt.fk_shantytown = s.hid
             GROUP BY s.hid)
             SELECT
-                shantytowns.updated_at AS "date",
                 sco.origins AS "socialOrigins",
                 eat.electricity_access_types AS "electricityAccessTypes",
                 stt.toilet_types AS "toiletTypes",
-                COALESCE(shantytowns.updated_by, shantytowns.created_by) AS author_id,
+                COALESCE(shantytowns.updated_by, shantytowns.created_by) AS authorId,
                 ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(', ')}
             FROM
                 "ShantytownHistories"  AS shantytowns
@@ -226,17 +231,16 @@ export default async (user, location, shantytownFilter, resorbedFilter, myTownsF
     const previousVersions = {};
 
     // eslint-disable-next-line array-callback-return
-    queryPreviousVersions.map((activity: any) => {
+    queryPreviousVersions.map((activity: ShantytownActivityRow) => {
         const serializedShantytown = serializeShantytown(activity, user);
         previousVersions[activity.id] = serializedShantytown;
     });
 
     return activities
-        .map((activity: any) => {
-            const o: any = {
+        .map((activity: ShantytownActivityRow) => {
+            const base: BaseShantytownActivity = {
                 entity: 'shantytown',
-                action: null,
-                date: activity.date.getTime() / 1000,
+                date: activity.updatedAt.getTime() / 1000,
                 author: {
                     name: userModel.formatName({
                         first_name: activity.author_first_name,
@@ -272,14 +276,14 @@ export default async (user, location, shantytownFilter, resorbedFilter, myTownsF
             const previousVersion = previousVersions[activity.id] || null;
             const serializedShantytown = serializeShantytown(activity, user);
             previousVersions[activity.id] = serializedShantytown;
+            let o:ShantytownActivity;
 
             if (previousVersion === null) {
-                o.action = 'creation';
+                o = { ...base, action: 'creation' };
             } else if (previousVersion.closedAt === null && activity.closedAt !== null) {
-                o.action = 'closing';
-                o.shantytown.closedWithSolutions = activity.closedWithSolutions === 'yes';
+                o = { ...base, action: 'closing', shantytown: { ...base.shantytown, closedWithSolutions: activity.closedWithSolutions === 'yes' } };
             } else {
-                o.action = 'update';
+                o = { ...base, action: 'update', diff: [] };
                 // on utilise le nom du site dans la précédente version (au cas ou ce dernier aurait changé)
                 o.shantytown.usename = getUsenameOf(previousVersion);
 
