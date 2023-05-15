@@ -1,6 +1,7 @@
 <template>
     <InputFiles
         name="attachments"
+        id="attachments"
         :label="labels.attachments"
         :multiple="true"
     />
