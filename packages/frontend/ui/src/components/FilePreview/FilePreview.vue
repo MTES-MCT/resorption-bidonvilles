@@ -1,18 +1,23 @@
 <template>
-    <a class="inline-block border rounded p-1 flex space-x-2 items-center cursor-pointer hover:bg-blue100"
-        :title="file.name" :href="file.urls.original">
-        <FilePreviewIcon class="flex-shrink-0" :file="file" />
-        <div class="text-sm overflow-hidden">
-            <p class="truncate">{{ file.name }}</p>
-            <p class="text-G500"><span>{{ file.extension }}</span> {{ humanFileSize(file.size) }}</p>
+    <a class="inline-block border rounded p-1 flex items-center cursor-pointer hover:bg-blue100 justify-between"
+        @mousemove="isHovered = true" @mouseleave="isHovered = false" :title="file.name" :href="file.urls.original">
+        <div class="flex space-x-2 items-center">
+            <FilePreviewIcon class="flex-shrink-0" :file="file" />
+            <div class="text-sm overflow-hidden">
+                <p class="truncate">{{ file.name }}</p>
+                <p class="text-G500"><span>{{ file.extension?.toUpperCase() }}</span> {{ humanFileSize(file.size) }}</p>
+            </div>
         </div>
+        <Button :class="file.state === 'draft' || file.createdByCurrentUser || isHovered ? 'visible' : 'invisible'"
+            type="button" icon="trash-alt" size="sm" @click="$emit('delete')" variant="primaryOutlineAlt" />
     </a>
 </template>
 
 <script setup>
-import { toRefs } from 'vue';
+import { computed, ref, toRefs } from 'vue';
 import FilePreviewIcon from "./FilePreviewIcon.vue";
 import humanFileSize from '../../utils/humanFileSize';
+import Button from "../Button.vue";
 
 const props = defineProps({
     file: {
@@ -21,4 +26,6 @@ const props = defineProps({
     },
 });
 const { file } = toRefs(props);
+
+const isHovered = ref(false);
 </script>
