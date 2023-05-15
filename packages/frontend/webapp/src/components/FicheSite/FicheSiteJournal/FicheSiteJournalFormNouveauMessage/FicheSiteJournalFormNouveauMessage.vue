@@ -5,7 +5,7 @@
         <div class="bg-white p-6">
             <FormNouveauMessageInputMessage :rows="rows" ref="messageInput" />
             <div
-                class="transition-height h-0 overflow-hidden"
+                class="transition-height h-0 overflow-y-hidden px-4"
                 ref="formContainer"
             >
                 <FormNouveauMessageInputAttachments />
@@ -52,7 +52,7 @@
 
 <script setup>
 import { defineProps, defineExpose, toRefs, ref, computed, watch } from "vue";
-import { useForm } from "vee-validate";
+import { useForm, useFieldValue } from "vee-validate";
 import { useTownsStore } from "@/stores/towns.store";
 import schema from "./FicheSiteJournalFormNouveauMessage.schema";
 import router from "@/helpers/router";
@@ -79,6 +79,7 @@ const initialValues = {
         organizations: [],
         users: [],
     },
+    files: [],
 };
 const { handleSubmit, setErrors, resetForm, values } = useForm({
     validationSchema: schema,
@@ -126,6 +127,10 @@ function onBlur() {
 function onModeChange() {
     formContainer.value.style.height = `auto`;
 }
+
+watch(useFieldValue("attachments"), () => {
+    formContainer.value.style.height = `auto`;
+});
 
 watch(values, () => {
     if (!isFocused.value && isDeepEqual(values, initialValues)) {
