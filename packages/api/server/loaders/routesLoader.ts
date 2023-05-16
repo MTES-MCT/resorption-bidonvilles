@@ -7,6 +7,7 @@ import bodyParser from 'body-parser';
 import middlewares from '#server/middlewares';
 import controllersFn from '#server/controllers';
 import validators from '#server/middlewares/validators';
+import fileValidator from '#server/middlewares/validators/file';
 
 const controllers = controllersFn();
 const upload = multer({
@@ -595,6 +596,7 @@ export default (app) => {
         middlewares.charte.check,
         middlewares.appVersion.sync,
         upload.array('attachments'),
+        fileValidator,
         (req, res, next) => {
             req.body = JSON.parse(req.body.content);
             next();
