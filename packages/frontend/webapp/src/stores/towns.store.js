@@ -232,9 +232,13 @@ export const useTownsStore = defineStore("towns", () => {
             delete hash.value[townId];
             hash.value[townId] = undefined;
         },
-        async addComment(shantytownId, comment) {
+        async addComment(shantytownId, comment, attachments) {
             const notificationStore = useNotificationStore();
-            const { comments } = await addComment(shantytownId, comment);
+            const { comments } = await addComment(
+                shantytownId,
+                comment,
+                attachments
+            );
             updateShantytownComments(shantytownId, {
                 regular: comments.regular,
                 covid: comments.covid,
