@@ -10,5 +10,5 @@ export default [
     "xls",
     "xlsx",
     "odt",
-    "odf",
+    "ods",
 ];
