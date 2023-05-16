@@ -4,6 +4,7 @@ import routes from './routesLoader';
 
 import express from './expressLoader';
 import agenda from './agendaLoader';
+import s3 from './s3Loader';
 
 export default {
     express,
@@ -11,4 +12,5 @@ export default {
     agenda,
     agendaJobs,
     rateLimiter,
+    s3,
 };
