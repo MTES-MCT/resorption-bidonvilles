@@ -4,8 +4,21 @@ export function addActor(townId, actor) {
     return axios.post(`/towns/${encodeURI(townId)}/actors`, actor);
 }
 
-export function addComment(id, data) {
-    return axios.post(`/towns/${encodeURI(id)}/comments`, data);
+export function addComment(id, data, attachments) {
+    const formData = new FormData();
+    formData.append("content", JSON.stringify(data));
+
+    if (attachments?.length) {
+        for (let i = 0; i < attachments.length; i += 1) {
+            formData.append("attachments", attachments[i]);
+        }
+    }
+
+    return axios.post(`/towns/${encodeURI(id)}/comments`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
 }
 
 export function close(id, data) {
