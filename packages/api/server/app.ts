@@ -50,6 +50,13 @@ export default {
             console.log(`Server is now running on port ${port}! :)`);
         });
 
+        // s3 (initialisation de tous les buckets, si nécessaire)
+        try {
+            await loaders.s3();
+        } catch (error) {
+            console.log('Initialisation S3 échouée :(', error);
+        }
+
         // agenda
         const agenda = loaders.agenda();
         loaders.agendaJobs(agenda);
