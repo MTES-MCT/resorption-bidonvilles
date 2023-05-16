@@ -2,7 +2,7 @@ import rewiremock, { addPlugin, overrideEntryPoint } from 'rewiremock/node';
 import { plugins } from 'rewiremock';
 
 overrideEntryPoint(module);
-rewiremock.passBy(name => name.slice(-2) === '.d' || /\/ServiceError\.?/.test(name));
+rewiremock.passBy(name => name.slice(-2) === '.d' || /\/ServiceError\.?/.test(name) || /fromMimeToExtension/.test(name));
 rewiremock.isolation({
     noAutoPassBy: true,
 });
