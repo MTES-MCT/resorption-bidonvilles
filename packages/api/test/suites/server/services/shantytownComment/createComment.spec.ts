@@ -7,6 +7,7 @@ import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel';
 import shantytownModel from '#server/models/shantytownModel';
 import userModel from '#server/models/userModel';
+import attachment from '#server/services/attachment';
 import mattermostUtils from '#server/utils/mattermost';
 import mails from '#server/mails/mails';
 
@@ -14,6 +15,10 @@ import createComment from '#server/services/shantytownComment/createComment';
 
 import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeComment } from '#test/utils/shantytownComment';
+import { serialized as fakeShantytown } from '#test/utils/shantytown';
+
+import fakeFile from '#test/utils/file';
+import { Transaction } from 'sequelize';
 
 chai.use(sinonChai);
 
@@ -41,7 +46,7 @@ describe('services/shantytownComment', () => {
         dependencies.findOneComment = sinon.stub(shantytownCommentModel, 'findOne');
         dependencies.triggerNewComment = sinon.stub(mattermostUtils, 'triggerNewComment');
         dependencies.sendMail = sinon.stub(mails, 'sendUserNewComment');
-        dependencies.uploadFiles = sinon.stub();
+        dependencies.uploadFiles = sinon.stub(attachment, 'upload');
     });
     afterEach(() => {
         sinon.restore();
@@ -171,6 +176,18 @@ describe('services/shantytownComment', () => {
                     numberOfWatchers: output.watchers.length,
                 });
             });
+        });
+
+        it('les pièces sont bien uploadées', async () => {
+            const files = [fakeFile()];
+            dependencies.getComments.resolves({});
+            dependencies.getShantytownWatchers.resolves([]);
+            dependencies.createComment.resolves(1);
+            await createComment(fakeComment({
+                files,
+            }), fakeShantytown(), fakeUser({ id: 5 }));
+            expect(dependencies.uploadFiles).to.have.been.calledOnceWith('shantytown_comment', 1, 5, files);
+            expect(dependencies.uploadFiles.getCall(0).args[4]).to.be.instanceOf(Transaction);
         });
 
         describe('si l\'insertion de commentaires échoue', () => {
