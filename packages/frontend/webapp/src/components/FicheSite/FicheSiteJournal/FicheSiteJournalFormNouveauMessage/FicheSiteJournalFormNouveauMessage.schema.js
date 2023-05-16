@@ -27,6 +27,23 @@ export default object({
     attachments: mixed()
         .required()
         .test(
+            "is-valid-name",
+            "Un ou plusieurs fichiers ont un nom contenant un ou des caractères interdits (:, /, <, >, ...)",
+            (value) => {
+                if (!value || value?.length <= 0) {
+                    return true;
+                }
+
+                for (let i = 0; i < value.length; i++) {
+                    if (/[\\:/<>]/.test(value[i]?.name)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        )
+        .test(
             "is-valid-type",
             "Un ou plusieurs fichiers ont une extension non autorisée",
             (value) => {
