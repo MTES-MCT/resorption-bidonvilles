@@ -1,5 +1,7 @@
 import path from 'path';
 import express from 'express';
+import multer from 'multer';
+import bodyParser from 'body-parser';
 
 // controllers
 import middlewares from '#server/middlewares';
@@ -8,6 +10,9 @@ import validators from '#server/middlewares/validators';
 import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 
 const controllers = controllersFn();
+const upload = multer({
+    storage: multer.memoryStorage(),
+});
 
 export default (app) => {
     app.use('/assets', express.static(path.resolve(__dirname, '../../assets')));
@@ -18,6 +23,7 @@ export default (app) => {
     );
     app.post(
         '/signin',
+        bodyParser.json(),
         controllers.user.signin,
     );
     app.get(
@@ -34,6 +40,7 @@ export default (app) => {
     );
     app.post(
         '/changelog',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.appVersion.sync,
         controllers.user.setLastChangelog,
@@ -86,6 +93,7 @@ export default (app) => {
     );
     app.post(
         '/me',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,
@@ -95,6 +103,7 @@ export default (app) => {
     );
     app.post(
         '/me/navigationLogs',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,
@@ -104,6 +113,7 @@ export default (app) => {
     );
     app.post(
         '/questions',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,
@@ -127,6 +137,7 @@ export default (app) => {
     );
     app.post(
         '/questions/:id/answers',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,
@@ -144,6 +155,7 @@ export default (app) => {
     );
     app.put(
         '/users/:id',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
         middlewares.charte.check,
@@ -155,11 +167,13 @@ export default (app) => {
 
     app.put(
         '/users/:id/charte_engagement',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         controllers.user.acceptCharte,
     );
     app.post(
         '/users',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.create'], ...args),
         middlewares.charte.check,
@@ -170,18 +184,21 @@ export default (app) => {
     );
     app.post(
         '/contact',
+        bodyParser.json(),
         validators.createContact,
         middlewares.validation,
         controllers.contact.contact,
     );
     app.post(
         '/invite',
+        bodyParser.json(),
         validators.invite,
         middlewares.validation,
         controllers.invite.invite,
     );
     app.post(
         '/users/:id/sendActivationLink',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.activate'], ...args),
         middlewares.charte.check,
@@ -200,6 +217,7 @@ export default (app) => {
     );
     app.post(
         '/users/:id/denyAccess',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.activate'], ...args),
         middlewares.charte.check,
@@ -208,6 +226,7 @@ export default (app) => {
     );
     app.post(
         '/users/:id/activate',
+        bodyParser.json(),
         controllers.user.activate,
     );
     app.post(
@@ -222,12 +241,14 @@ export default (app) => {
     );
     app.post(
         '/users/:id/upgrade',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.appVersion.sync,
         controllers.user.upgrade,
     );
     app.post(
         '/users/:id/options',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.activate'], ...args),
         middlewares.appVersion.sync,
@@ -237,6 +258,7 @@ export default (app) => {
     );
     app.put(
         '/users/:id/admin_comments',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
         middlewares.charte.check,
@@ -251,6 +273,7 @@ export default (app) => {
     );
     app.delete(
         '/users/:id',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (req:express.Request & { user: SerializedUser }, res:express.Response, next: Function) => {
             if (req.user.id === parseInt(req.params.id, 10)) {
@@ -267,12 +290,14 @@ export default (app) => {
     );
     app.post(
         '/users/:id/local-admin',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
         controllers.user.updateLocalAdmin,
     );
     app.patch(
         '/users/:id/role_regular',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.auth.isAdmin,
         middlewares.charte.check,
@@ -283,6 +308,7 @@ export default (app) => {
     );
     app.post(
         '/users/new-password',
+        bodyParser.json(),
         controllers.user.requestNewPassword,
     );
     app.get(
@@ -291,12 +317,14 @@ export default (app) => {
     );
     app.post(
         '/users/:id/newPassword',
+        bodyParser.json(),
         controllers.user.setNewPassword,
     );
 
     // shantytown actors
     app.post(
         '/towns/:id/actors',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.shantytown.checkReadPermission,
         middlewares.charte.check,
@@ -307,6 +335,7 @@ export default (app) => {
     );
     app.put(
         '/towns/:id/actors/:user_id',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.shantytown.checkReadPermission,
         middlewares.charte.check,
@@ -317,6 +346,7 @@ export default (app) => {
     );
     app.delete(
         '/towns/:id/actors/:user_id/themes/:theme_id',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.shantytown.checkReadPermission,
         middlewares.charte.check,
@@ -327,6 +357,7 @@ export default (app) => {
     );
     app.put(
         '/towns/:id/invitations',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.shantytown.checkReadPermission,
         middlewares.charte.check,
@@ -337,6 +368,7 @@ export default (app) => {
     );
     app.delete(
         '/towns/:id/actors/:user_id',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.shantytown.checkReadPermission,
         middlewares.charte.check,
@@ -412,6 +444,7 @@ export default (app) => {
     );
     app.post(
         '/action-finances-readers',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.validation,
         controllers.action.findActionFinancesReadersByManagers,
@@ -419,6 +452,7 @@ export default (app) => {
 
     app.post(
         '/actions',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action.create'], ...args),
         validators.action.create,
@@ -427,6 +461,7 @@ export default (app) => {
     );
     app.patch(
         '/actions/:id',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action.update'], ...args),
         validators.action.update,
@@ -435,6 +470,7 @@ export default (app) => {
     );
     app.post(
         '/actions/:id/comments',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action_comment.create'], ...args),
         validators.action.createComment,
@@ -529,6 +565,7 @@ export default (app) => {
     );
     app.post(
         '/towns',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.create'], ...args),
         middlewares.charte.check,
@@ -539,6 +576,7 @@ export default (app) => {
     );
     app.post(
         '/towns/report',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.report'], ...args),
         middlewares.charte.check,
@@ -550,6 +588,7 @@ export default (app) => {
 
     app.post(
         '/towns/:id',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.update'], ...args),
         middlewares.charte.check,
@@ -560,6 +599,7 @@ export default (app) => {
     );
     app.post(
         '/towns/:id/close',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.close'], ...args),
         middlewares.charte.check,
@@ -570,6 +610,7 @@ export default (app) => {
     );
     app.put(
         '/towns/:id/closedWithSolutions',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.fix_status'], ...args),
         middlewares.charte.check,
@@ -580,6 +621,7 @@ export default (app) => {
     );
     app.put(
         '/towns/:id/heatwave',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,
@@ -589,6 +631,7 @@ export default (app) => {
     );
     app.delete(
         '/towns/:id',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.delete'], ...args),
         middlewares.charte.check,
@@ -601,12 +644,18 @@ export default (app) => {
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown_comment.create'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
+        upload.array('attachments'),
+        (req, res, next) => {
+            req.body = JSON.parse(req.body.content);
+            next();
+        },
         validators.shantytownComment.createShantytownComment,
         middlewares.validation,
         controllers.shantytownComment.create,
     );
     app.delete(
         '/towns/:id/comments/:commentId',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,
@@ -624,6 +673,7 @@ export default (app) => {
 
     app.patch(
         '/organizations/:id/being_funded',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
         validators.editOrganization,
@@ -734,6 +784,7 @@ export default (app) => {
 
     app.post(
         '/statistics/directory-views',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,
@@ -764,6 +815,7 @@ export default (app) => {
     // Notes (mobile)
     app.post(
         '/notes',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,
@@ -774,6 +826,7 @@ export default (app) => {
 
     app.patch(
         '/notes/:id/number_of_copies',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,
@@ -782,6 +835,7 @@ export default (app) => {
 
     app.post(
         '/notes/:id/publications',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,
@@ -792,6 +846,7 @@ export default (app) => {
 
     app.post(
         '/communaute/ad',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
         controllers.community.ad,
@@ -799,6 +854,7 @@ export default (app) => {
 
     app.put(
         '/questions/:id/subscription',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,
@@ -809,6 +865,7 @@ export default (app) => {
 
     app.delete(
         '/questions/:id/subscription',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,
