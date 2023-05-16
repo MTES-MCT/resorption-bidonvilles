@@ -31,6 +31,7 @@ describe('services/shantytownComment', () => {
         triggerNewComment: undefined,
         getShantytownWatchers: undefined,
         sendMail: undefined,
+        uploadFiles: undefined,
     };
     beforeEach(() => {
         dependencies.getComments = sinon.stub(shantytownModel, 'getComments');
@@ -40,6 +41,7 @@ describe('services/shantytownComment', () => {
         dependencies.findOneComment = sinon.stub(shantytownCommentModel, 'findOne');
         dependencies.triggerNewComment = sinon.stub(mattermostUtils, 'triggerNewComment');
         dependencies.sendMail = sinon.stub(mails, 'sendUserNewComment');
+        dependencies.uploadFiles = sinon.stub();
     });
     afterEach(() => {
         sinon.restore();
@@ -63,6 +65,7 @@ describe('services/shantytownComment', () => {
                             { uid: 'conditions_de_vie', label: 'Conditions de vie', type: 'ordinaire' },
                             { uid: 'passage_sur_site', label: 'Passage sur site', type: 'ordinaire' },
                         ],
+                        files: [],
                     },
                     shantytown: { id: 1 },
                     user: fakeUser(),
@@ -216,6 +219,7 @@ describe('services/shantytownComment', () => {
                 },
                 tags: ['conditions_de_vie'],
                 tagLabels: ['Conditions de vie'],
+                files: [],
             };
             const user = fakeUser();
             const nativeError = new Error('une erreur');
@@ -246,6 +250,7 @@ describe('services/shantytownComment', () => {
                 },
                 tags: ['conditions_de_vie'],
                 tagLabels: ['Conditions de vie'],
+                files: [],
             };
             const user = fakeUser();
             const nativeError = new Error('une erreur');
