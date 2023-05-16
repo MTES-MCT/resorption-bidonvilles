@@ -8,6 +8,7 @@ const EXTENSIONS = {
     'application/vnd.oasis.opendocument.spreadsheet': 'ods',
     'image/gif': 'gif',
     'image/png': 'png',
+    'image/jpg': 'jpg',
     'image/jpeg': 'jpg',
     'image/svg+xml': 'svg',
 };
