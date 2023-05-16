@@ -68,7 +68,7 @@ function onChange() {
         preview: null,
     }));
 
-    handleChange(Array.from(fileInput.value.files));
+    handleChange(fileInput.value.files);
     previewFiles();
 }
 
