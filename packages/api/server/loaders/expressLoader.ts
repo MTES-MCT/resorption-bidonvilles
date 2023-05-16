@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 
 /**
  * @param {Function} fn An express callback (hence it's supposed to receive req, res, and next)
@@ -47,7 +46,6 @@ function asyncExpress() {
 export default () => {
     const app = asyncExpress();
     app.use(cors());
-    app.use(bodyParser.json());
 
     return app;
 };
