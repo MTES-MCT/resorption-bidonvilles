@@ -16,7 +16,7 @@ export function addComment(id, data, attachments) {
 
     return axios.post(`/towns/${encodeURI(id)}/comments`, formData, {
         headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "multipart/form-data; charset=utf-8",
         },
     });
 }
