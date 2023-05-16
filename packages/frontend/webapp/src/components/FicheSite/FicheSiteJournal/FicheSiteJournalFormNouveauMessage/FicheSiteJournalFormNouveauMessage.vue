@@ -145,15 +145,18 @@ const submit = handleSubmit(async (values) => {
 
     try {
         const townsStore = useTownsStore();
-        await townsStore.addComment(town.value.id, {
-            comment: values.comment,
-            targets: {
-                mode: values.mode,
-                ...values.target,
+        await townsStore.addComment(
+            town.value.id,
+            {
+                comment: values.comment,
+                targets: {
+                    mode: values.mode,
+                    ...values.target,
+                },
+                tags: values.tags,
             },
-            tags: values.tags,
-        });
-
+            values.attachments
+        );
         resetForm();
 
         // on rafraîchit la page pour avoir le site mis à jour
