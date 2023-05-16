@@ -10,6 +10,7 @@
   },
   "license": "AGPL-3.0-or-later",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.32.0",
     "@sentry/node": "^7.21.1",
     "@sentry/tracing": "^7.21.1",
     "@supercharge/promise-pool": "^1.7.0",
@@ -39,6 +40,7 @@
     "mjml": "^4.9.3",
     "module-alias": "^2.2.0",
     "moment": "^2.29.4",
+    "multer": "^1.4.5-lts.1",
     "neat-csv": "^4.0.0",
     "node-fetch": "2",
     "node-mailjet": "^3.3.1",
