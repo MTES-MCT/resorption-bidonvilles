@@ -18,6 +18,11 @@ export function serialized(override = {}) {
             { uid: 'conditions_de_vie', label: 'Conditions de vie', type: 'ordinaire' },
             { uid: 'passage_sur_site', label: 'Passage sur site', type: 'ordinaire' },
         ],
+        files: [],
+        targets: {
+            users: [{ id: 1 }],
+            organizations: [],
+        },
     };
 
     return Object.assign(defaultObj, override);
