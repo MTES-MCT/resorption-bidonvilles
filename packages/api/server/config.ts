@@ -38,4 +38,11 @@ export default {
         delayBeforeAlert: '6 month',
         delayBeforeDeactivation: '1 month',
     },
+    S3: process.env.RB_API_S3_ACCESS_KEY ? {
+        endpoint: process.env.RB_API_S3_ENDPOINT || undefined,
+        accessKeyId: process.env.RB_API_S3_ACCESS_KEY,
+        secretAccessKey: process.env.RB_API_S3_SECRET_KEY,
+        region: process.env.RB_API_S3_REGION,
+        bucket: process.env.RB_API_S3_BUCKET,
+    } : null,
 };
