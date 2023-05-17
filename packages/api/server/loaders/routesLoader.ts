@@ -203,6 +203,8 @@ export default (app) => {
     );
     app.get(
         '/users/:id/activationLink',
+        bodyParser.json(),
+
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.activate'], ...args),
         middlewares.charte.check,
@@ -549,6 +551,7 @@ export default (app) => {
     );
     app.get(
         '/justice-readers/:locationType/:locationCode',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         validators.justiceReader.findByLocation,
         middlewares.validation,
@@ -757,6 +760,7 @@ export default (app) => {
 
     app.get(
         '/stats/getStats',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
         middlewares.charte.check,
@@ -810,6 +814,7 @@ export default (app) => {
     // user activities
     app.get(
         '/activities',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkOneOrMorePermissions(['shantytown.list', 'shantytown_comment.list', 'shantytown_comment.listPrivate'], ...args),
         middlewares.charte.check,
