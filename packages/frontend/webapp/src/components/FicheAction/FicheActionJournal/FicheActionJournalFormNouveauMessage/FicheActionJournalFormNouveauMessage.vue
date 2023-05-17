@@ -2,7 +2,7 @@
     <form>
         <h1 class="font-bold text-lg">Partager une info</h1>
 
-        <DragZone class="bg-white p-6" @drop="handleFileDrop">
+        <DragZone class="bg-white p-6" @drop="attachmentsInput?.addFiles">
             <FormNouveauMessageInputMessage />
             <FormNouveauMessageInputAttachments ref="attachmentsInput" />
 
@@ -36,10 +36,6 @@ const attachmentsInput = ref(null);
 const { handleSubmit, setErrors, resetForm } = useForm({
     validationSchema: schema,
 });
-
-function handleFileDrop(files) {
-    attachmentsInput.value.addFiles(files);
-}
 
 const error = ref(null);
 const submit = handleSubmit(async (values) => {
