@@ -20,5 +20,7 @@ const isFocused = computed(() => {
 
 defineExpose({
     isFocused,
+    addFiles: (...args) =>
+        input.value?.addFiles ? input.value.addFiles(...args) : null,
 });
 </script>
