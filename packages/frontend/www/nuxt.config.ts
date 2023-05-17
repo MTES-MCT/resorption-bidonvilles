@@ -2,6 +2,9 @@ import messages from "./assets/i18n/index.js";
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
+    alias: {
+        "@common": "/../common",
+    },
     modules: [
         "@nuxtjs/tailwindcss",
         ["@nuxtjs/i18n", {
