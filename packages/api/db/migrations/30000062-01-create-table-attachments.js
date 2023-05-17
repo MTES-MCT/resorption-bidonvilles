@@ -12,11 +12,11 @@ module.exports = {
                         primaryKey: true,
                         autoIncrement: true,
                     },
-                    url_original: {
+                    original_file_key: {
                         type: Sequelize.STRING,
                         allowNull: false,
                     },
-                    url_preview: {
+                    preview_file_key: {
                         type: Sequelize.STRING,
                         allowNull: false,
                     },
@@ -35,6 +35,11 @@ module.exports = {
                     created_by: {
                         type: Sequelize.INTEGER,
                         allowNull: false,
+                    },
+                    created_at: {
+                        type: Sequelize.DATE,
+                        allowNull: false,
+                        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
                     },
                 },
                 { transaction },
