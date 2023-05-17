@@ -1,12 +1,10 @@
 <template>
-    <a class="inline-block border rounded p-1 flex items-center cursor-pointer hover:bg-blue100 justify-between"
+    <a class="inline-block border rounded p-1 flex space-x-2 items-center cursor-pointer hover:bg-blue100"
         @mousemove="isHovered = true" @mouseleave="isHovered = false" :title="file.name" :href="file.urls.original">
-        <div class="flex space-x-2 items-center">
-            <FilePreviewIcon class="flex-shrink-0" :file="file" />
-            <div class="text-sm overflow-hidden">
-                <p class="truncate">{{ file.name }}</p>
-                <p class="text-G500"><span>{{ file.extension?.toUpperCase() }}</span> {{ humanFileSize(file.size) }}</p>
-            </div>
+        <FilePreviewIcon class="flex-shrink-0" :file="file" />
+        <div class="text-sm overflow-hidden flex-1">
+            <p class="truncate">{{ file.name }}</p>
+            <p class="text-G500"><span>{{ file.extension?.toUpperCase() }}</span> {{ humanFileSize(file.size) }}</p>
         </div>
         <Button :class="file.state === 'draft' || file.createdByCurrentUser || isHovered ? 'visible' : 'invisible'"
             type="button" icon="trash-alt" size="sm" @click="$emit('delete')" variant="primaryOutlineAlt" />
