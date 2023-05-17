@@ -34,8 +34,8 @@ export default async (user, shantytownIds, covid = false) => {
                 sca.fk_shantytown_comment,
                 array_remove(array_agg(
                     a.attachment_id || '@.;.@'
-                    || a.url_original || '@.;.@'
-                    || a.url_preview || '@.;.@'
+                    || a.original_file_key || '@.;.@'
+                    || a.preview_file_key || '@.;.@'
                     || a.original_name || '@.;.@'
                     || a.mimetype || '@.;.@'
                     || a.size || '@.;.@'
