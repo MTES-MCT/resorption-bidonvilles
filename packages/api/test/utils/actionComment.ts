@@ -14,6 +14,7 @@ export function row(override: Partial<ActionCommentRow> = {}): ActionCommentRow 
         creator_organization_name: 'Délégation Interministérielle à l\'Hébergement et à l\'Accès au Logement',
         creator_organization_abbreviation: 'DIHAL',
         creator_user_role: 'collaborator',
+        attachments: [],
     };
 
     return Object.assign(defaultObj, override);
@@ -34,6 +35,7 @@ export function serialized(override: Partial<Comment> = {}): Comment {
             organization_id: 2,
             organization: 'DIHAL',
         },
+        attachments: [],
     };
 
     return Object.assign(defaultObj, override);
