@@ -2,8 +2,13 @@
     <form>
         <p class="font-bold text-lg">Partager une info</p>
 
-        <div class="bg-white p-6">
-            <FormNouveauMessageInputMessage :rows="rows" ref="messageInput" />
+        <div class="bg-white py-6 px-2">
+            <div class="px-4">
+                <FormNouveauMessageInputMessage
+                    :rows="rows"
+                    ref="messageInput"
+                />
+            </div>
             <div
                 class="transition-height h-0 overflow-y-hidden px-4"
                 ref="formContainer"
