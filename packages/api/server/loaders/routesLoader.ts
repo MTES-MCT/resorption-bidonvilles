@@ -113,10 +113,15 @@ export default (app) => {
     );
     app.post(
         '/questions',
-        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,
+        upload.array('attachments'),
+        fileValidator,
+        (req, res, next) => {
+            req.body = JSON.parse(req.body.content);
+            next();
+        },
         validators.question.createQuestion,
         middlewares.validation,
         controllers.question.create,
@@ -141,6 +146,12 @@ export default (app) => {
         middlewares.auth.authenticate,
         middlewares.charte.check,
         middlewares.appVersion.sync,
+        upload.array('attachments'),
+        fileValidator,
+        (req, res, next) => {
+            req.body = JSON.parse(req.body.content);
+            next();
+        },
         validators.answer.createAnswer,
         middlewares.validation,
         controllers.answer.create,
