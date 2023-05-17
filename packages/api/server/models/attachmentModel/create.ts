@@ -3,7 +3,7 @@ import { QueryTypes, Transaction } from 'sequelize';
 
 export default async (key: string, name: string, mimetype: string, size: number, authorId: number, transaction?: Transaction): Promise<number> => {
     const data = await sequelize.query(
-        `INSERT INTO attachments(url_original, url_preview, original_name, mimetype, size, created_by)
+        `INSERT INTO attachments(original_file_key, preview_file_key, original_name, mimetype, size, created_by)
         VALUES (:key, :key, :name, :mimetype, :size, :authorId)
         RETURNING attachment_id`,
         {
