@@ -4,6 +4,7 @@
 
         <div class="bg-white p-6">
             <FormNouveauMessageInputMessage />
+            <FormNouveauMessageInputAttachments />
 
             <ErrorSummary v-if="error" :message="error" class="mt-2" />
             <p class="text-right">
@@ -23,6 +24,7 @@ import schema from "./FicheActionJournalFormNouveauMessage.schema";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
 import FormNouveauMessageInputMessage from "./inputs/FormNouveauMessageInputMessage.vue";
+import FormNouveauMessageInputAttachments from "./inputs/FormNouveauMessageInputAttachments.vue";
 
 const props = defineProps({
     action: Object,
@@ -39,9 +41,11 @@ const submit = handleSubmit(async (values) => {
 
     try {
         const actionsStore = useActionsStore();
-        await actionsStore.addComment(action.value.id, {
-            description: values.comment,
-        });
+        await actionsStore.addComment(
+            action.value.id,
+            { description: values.comment },
+            values.attachments
+        );
 
         resetForm();
     } catch (e) {
