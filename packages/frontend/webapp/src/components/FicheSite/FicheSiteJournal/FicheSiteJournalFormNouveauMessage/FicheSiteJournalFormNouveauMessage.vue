@@ -13,7 +13,7 @@
                 class="transition-height h-0 overflow-y-hidden px-4"
                 ref="formContainer"
             >
-                <FormNouveauMessageInputAttachments />
+                <FormNouveauMessageInputAttachments ref="attachmentsInput" />
                 <FormNouveauMessageInputTags />
                 <FormNouveauMessageInputMode @click="onModeChange" />
                 <FormNouveauMessageInputTarget
@@ -84,7 +84,7 @@ const initialValues = {
         organizations: [],
         users: [],
     },
-    files: [],
+    attachments: new DataTransfer().files,
 };
 const { handleSubmit, setErrors, resetForm, values } = useForm({
     validationSchema: schema,
@@ -94,16 +94,20 @@ const { handleSubmit, setErrors, resetForm, values } = useForm({
 const error = ref(null);
 const formContainer = ref(null);
 const messageInput = ref(null);
+const attachmentsInput = ref(null);
 const rows = ref(2);
-const isFocused = computed(() => messageInput.value?.isFocused);
+const isFocused = computed(
+    () => messageInput.value?.isFocused || attachmentsInput.value?.isFocused
+);
 let timeout;
 const RESET_FORM = true;
 
 watch(isFocused, () => {
     if (isFocused.value === true) {
+        clearTimeout(timeout);
         openForm();
     } else {
-        timeout = setTimeout(onBlur, 200);
+        timeout = setTimeout(onBlur, 300);
     }
 });
 
@@ -134,7 +138,9 @@ function onModeChange() {
 }
 
 watch(useFieldValue("attachments"), () => {
-    formContainer.value.style.height = `auto`;
+    if (values.attachments.length > 0) {
+        formContainer.value.style.height = `auto`;
+    }
 });
 
 watch(values, () => {
