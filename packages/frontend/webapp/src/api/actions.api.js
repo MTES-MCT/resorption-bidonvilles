@@ -1,7 +1,20 @@
 import { axios } from "@/helpers/axios";
 
-export function addComment(actionId, comment) {
-    return axios.post(`/actions/${encodeURI(actionId)}/comments`, comment);
+export function addComment(actionId, comment, attachments) {
+    const formData = new FormData();
+    formData.append("content", JSON.stringify(comment));
+
+    if (attachments?.length) {
+        for (let i = 0; i < attachments.length; i += 1) {
+            formData.append("attachments", attachments[i]);
+        }
+    }
+
+    return axios.post(`/actions/${encodeURI(actionId)}/comments`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data; charset=utf-8",
+        },
+    });
 }
 
 export function create(data) {
