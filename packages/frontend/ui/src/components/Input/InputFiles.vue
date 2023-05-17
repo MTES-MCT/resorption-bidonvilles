@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { computed, ref, toRefs } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
 import { useField } from "vee-validate";
 import allowedFileExtensions from "@common/utils/allowed_file_extensions";
 import fromMimeToExtension from "@common/utils/fromMimeToExtension";
@@ -41,7 +41,7 @@ const props = defineProps({
 });
 
 const { name, label, multiple, withoutMargin } = toRefs(props);
-const { handleChange, handleBlur, errors } = useField(name.value);
+const { handleChange, handleBlur, errors, value } = useField(name.value);
 const fileInput = ref(null);
 
 const rawFiles = ref([]);
@@ -100,4 +100,12 @@ function previewFiles() {
         };
     }
 }
+
+watch(value, () => {
+    if (value.value === undefined) {
+        const dt = new DataTransfer();
+        fileInput.value.files = dt.files;
+        rawFiles.value = [];
+    }
+});
 </script>
