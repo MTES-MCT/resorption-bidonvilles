@@ -1,7 +1,11 @@
 <template>
     <form>
-        <FicheQuestionNouvelleReponseInputReponse />
-        <FicheQuestionNouvelleReponseInputAttachments />
+        <DragZone @drop="attachmentsInput?.addFiles">
+            <FicheQuestionNouvelleReponseInputReponse />
+            <FicheQuestionNouvelleReponseInputAttachments
+                ref="attachmentsInput"
+            />
+        </DragZone>
 
         <ErrorSummary v-if="error" :message="error" class="mt-2" />
         <p class="text-right">
@@ -21,11 +25,13 @@ import { useQuestionsStore } from "@/stores/questions.store";
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
 import FicheQuestionNouvelleReponseInputReponse from "./inputs/FicheQuestionNouvelleReponseInputReponse.vue";
 import FicheQuestionNouvelleReponseInputAttachments from "./inputs/FicheQuestionNouvelleReponseInputAttachments.vue";
+import DragZone from "@/components/DragZone/DragZone.vue";
 
 const props = defineProps({
     question: Object,
 });
 const { question } = toRefs(props);
+const attachmentsInput = ref(null);
 
 const { handleSubmit, setErrors, resetForm } = useForm({
     validationSchema: schema,
