@@ -132,9 +132,9 @@ export const useQuestionsStore = defineStore("questions", () => {
         return hash.value[questionId];
     }
 
-    async function create(data) {
+    async function create(data, attachments) {
         const configStore = useConfigStore();
-        const newQuestion = await createQuestion(data);
+        const newQuestion = await createQuestion(data, attachments);
         hash.value[newQuestion.id] = newQuestion;
         questions.value.unshift(newQuestion);
         configStore.setQuestionSubscription(newQuestion.id, true);
