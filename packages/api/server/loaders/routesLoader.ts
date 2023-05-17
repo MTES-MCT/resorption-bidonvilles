@@ -454,9 +454,14 @@ export default (app) => {
     );
     app.post(
         '/actions/:id/comments',
-        bodyParser.json(),
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['action_comment.create'], ...args),
+        upload.array('attachments'),
+        fileValidator,
+        (req, res, next) => {
+            req.body = JSON.parse(req.body.content);
+            next();
+        },
         validators.action.createComment,
         middlewares.validation,
         controllers.action.createComment,
