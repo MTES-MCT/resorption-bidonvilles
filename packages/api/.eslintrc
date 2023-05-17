@@ -56,6 +56,10 @@
                     [
                         "#test",
                         "./test"
+                    ],
+                    [
+                        "#common",
+                        "../frontend/common"
                     ]
                 ],
                 "extensions": [
