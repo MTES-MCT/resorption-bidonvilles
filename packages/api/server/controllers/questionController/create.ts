@@ -7,6 +7,7 @@ export default async (req, res, next) => {
         question = await questionService.createQuestion(
             req.body,
             req.user,
+            req.files,
         );
     } catch (error) {
         let message;
