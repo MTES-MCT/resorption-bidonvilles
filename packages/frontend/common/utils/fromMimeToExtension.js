@@ -10,7 +10,6 @@ const EXTENSIONS = {
     'image/png': 'png',
     'image/jpg': 'jpg',
     'image/jpeg': 'jpg',
-    'image/svg+xml': 'svg',
 };
 
 export default function (mimeType) {
