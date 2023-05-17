@@ -5,4 +5,5 @@ export default {
     other_tag: "Veuillez préciser votre thématique",
     people_affected: "Combien d'habitants sont concernés par votre question ?",
     details: "Votre question, en détail",
+    attachments: "Pièces-jointes",
 };
