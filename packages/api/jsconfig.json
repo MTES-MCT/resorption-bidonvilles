@@ -14,6 +14,9 @@
             "#test/*": [
                 "./test/*"
             ],
+            "#common/*": [
+                "../frontend/common/*"
+            ],
             "#root/*": [
                 "./*"
             ]
