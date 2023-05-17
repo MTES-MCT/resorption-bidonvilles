@@ -141,12 +141,13 @@ export const useQuestionsStore = defineStore("questions", () => {
         return newQuestion;
     }
 
-    async function createAnswer(questionId, answer) {
+    async function createAnswer(questionId, answer, attachments) {
         const configStore = useConfigStore();
         const notificationStore = useNotificationStore();
         const { answer: newAnswer, subscribed } = await addAnswer(
             questionId,
-            answer
+            answer,
+            attachments
         );
         if (hash.value[questionId]) {
             hash.value[questionId].answers.unshift(newAnswer);
