@@ -7,6 +7,7 @@ import ServiceError from '#server/errors/ServiceError';
 import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeQuestion } from '#test/utils/question';
 import { serialized as fakeAnswer } from '#test/utils/answer';
+import fakeFile from '#test/utils/file';
 import { row as fakeQuestionSubscriber } from '#test/utils/questionSubscriber';
 import { fail } from 'assert';
 
@@ -29,14 +30,29 @@ const answerModel = {
 const userQuestionSubscriptionModel = {
     createSubscription: sandbox.stub(),
 };
+const attachmentService = {
+    upload: sandbox.stub(),
+};
+const sequelize = {
+    sequelize: {
+        transaction: sandbox.stub(),
+    },
+};
+const transaction = {
+    commit: sandbox.stub(),
+    rollback: sandbox.stub(),
+};
 rewiremock('#server/mails/mails').withDefault(mails);
 rewiremock('#server/models/userModel').withDefault(userModel);
 rewiremock('#server/models/answerModel').withDefault(answerModel);
 rewiremock('#server/models/userQuestionSubscriptionModel').withDefault(userQuestionSubscriptionModel);
+rewiremock('#server/services/attachment').withDefault(attachmentService);
+rewiremock('#db/sequelize').with(sequelize);
 
 describe('services/answer.createAnswer()', () => {
     let createAnswer;
     beforeEach(async () => {
+        sequelize.sequelize.transaction.resolves(transaction);
         rewiremock.enable();
         ({ default: createAnswer } = await rewiremock.module(() => import('./createAnswer')));
     });
@@ -50,13 +66,31 @@ describe('services/answer.createAnswer()', () => {
             { description: 'Une réponse' },
             fakeQuestion({ id: 1 }),
             fakeUser({ id: 2 }),
+            [],
         );
         expect(answerModel.create).to.have.been.calledOnce;
         expect(answerModel.create).to.have.been.calledWith({
             description: 'Une réponse',
             fk_question: 1,
             created_by: 2,
-        });
+        }, transaction);
+    });
+
+    it('commit la transaction si l\'insertion de la réponse réussit', async () => {
+        await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
+        expect(transaction.commit).to.have.been.calledOnce;
+    });
+
+    it('rollback la transaction si l\'insertion de la réponse échoue', async () => {
+        answerModel.create.rejects(new Error('Une erreur'));
+        try {
+            await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
+        } catch (error) {
+            // ignore
+        }
+
+        expect(transaction.commit, 'Le commit() a été appellé').to.not.have.been.called;
+        expect(transaction.rollback, 'Le rollback() n\'a pas été appellé').to.have.been.calledOnce;
     });
 
     it('lance une exception insert_failed si l\'insertion de la réponse échoue', async () => {
@@ -66,11 +100,38 @@ describe('services/answer.createAnswer()', () => {
                 { description: 'Une réponse' },
                 fakeQuestion({ id: 1 }),
                 fakeUser({ id: 2 }),
+                [],
             );
         } catch (error) {
             expect(error).to.be.instanceOf(ServiceError);
             expect(error.code).to.be.equal('insert_failed');
             expect(error.message).to.be.equal('Une erreur');
+            return;
+        }
+
+        expect.fail('Une exception était attendue');
+    });
+
+    it('rollback la transaction si le commit échoue', async () => {
+        transaction.commit.rejects(new Error('Une erreur'));
+        try {
+            await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
+        } catch (error) {
+            // ignore
+        }
+
+        expect(transaction.rollback, 'Le rollback() n\'a pas été appellé').to.have.been.calledOnce;
+    });
+
+    it('lance une exception commit_failed si le commit de la transaction échoue', async () => {
+        const originalError = new Error('Une erreur');
+        transaction.commit.rejects(originalError);
+        try {
+            await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
+        } catch (error) {
+            expect(error).to.be.instanceOf(ServiceError);
+            expect(error.code, 'Le code de l\'exception est incorrect').to.be.equal('commit_failed');
+            expect(error.nativeError, 'L\'erreur native est incorrecte').to.be.equal(originalError);
             return;
         }
 
@@ -83,6 +144,7 @@ describe('services/answer.createAnswer()', () => {
             { description: 'Une réponse' },
             fakeQuestion({ id: 1 }),
             fakeUser({ id: 2 }),
+            [],
         );
         expect(userQuestionSubscriptionModel.createSubscription).to.have.been.calledOnce;
         expect(userQuestionSubscriptionModel.createSubscription).to.have.been.calledWith(2, 1);
@@ -97,6 +159,7 @@ describe('services/answer.createAnswer()', () => {
             fakeQuestion({ id: 1 }),
             // l'utilisateur n'est plus abonné à la question mais l'a déjà été donc on ne le réabonne pas automatiquement
             fakeUser({ id: 2, question_subscriptions: { 1: false } }),
+            [],
         );
         expect(userQuestionSubscriptionModel.createSubscription).to.not.have.been.called;
 
@@ -112,6 +175,7 @@ describe('services/answer.createAnswer()', () => {
                 { description: 'Une réponse' },
                 fakeQuestion({ id: 1 }),
                 fakeUser({ id: 2 }),
+                [],
             );
         } catch (error) {
             fail('Une exception a été lancée');
@@ -127,6 +191,7 @@ describe('services/answer.createAnswer()', () => {
             { description: 'Une réponse' },
             fakeQuestion({ id: 1 }),
             answerAuthor,
+            [],
         );
         expect(mails.sendCommunityNewAnswerForAuthor).to.have.been.calledOnce;
 
@@ -154,6 +219,7 @@ describe('services/answer.createAnswer()', () => {
             { description: 'Une réponse' },
             fakeQuestion({ id: 1, question: 'Une question' }),
             answerAuthor,
+            [],
         );
         expect(mails.sendCommunityNewAnswerForObservers).to.have.callCount(3);
 
@@ -177,6 +243,7 @@ describe('services/answer.createAnswer()', () => {
             { description: 'Une réponse' },
             fakeQuestion({ id: 1 }),
             fakeUser({ id: 2 }),
+            [],
         );
         expect(mails.sendCommunityNewAnswerForAuthor).to.not.have.been.called;
         expect(mails.sendCommunityNewAnswerForObservers).to.not.have.been.called;
@@ -194,6 +261,7 @@ describe('services/answer.createAnswer()', () => {
                 { description: 'Une réponse' },
                 fakeQuestion({ id: 1 }),
                 answerAuthor,
+                [],
             );
         } catch (error) {
             fail('Une exception a été lancée');
@@ -208,6 +276,7 @@ describe('services/answer.createAnswer()', () => {
             { description: answer.description },
             fakeQuestion({ id: 1 }),
             fakeUser({ id: 2 }),
+            [],
         );
         expect(response.answer).to.be.eql(answer);
     });
@@ -221,6 +290,7 @@ describe('services/answer.createAnswer()', () => {
                 { description: 'Une description' },
                 fakeQuestion({ id: 1 }),
                 fakeUser({ id: 2 }),
+                [],
             );
         } catch (error) {
             expect(error).to.be.instanceOf(ServiceError);
@@ -230,5 +300,85 @@ describe('services/answer.createAnswer()', () => {
         }
 
         expect.fail('Une exception était attendue');
+    });
+
+    it('fait appel au service d\'upload', async () => {
+        const files = [fakeFile()];
+        await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
+        expect(attachmentService.upload).to.have.been.calledOnce;
+    });
+
+    it('enregistre chaque fichier en tant que pièce-jointe d\'une réponse', async () => {
+        const files = [fakeFile()];
+        await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
+        expect(attachmentService.upload.getCall(0).args[0]).to.be.eql('answer');
+    });
+
+    it('enregistre chaque fichier avec le bon identifiant de réponse', async () => {
+        const answerId = 42;
+        answerModel.create.resolves(answerId);
+
+        const files = [fakeFile()];
+        await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
+        expect(attachmentService.upload.getCall(0).args[1]).to.be.eql(42);
+    });
+
+    it('enregistre chaque fichier avec le bon identifiant utilisateur', async () => {
+        const files = [fakeFile()];
+        await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser({ id: 42 }), files);
+        expect(attachmentService.upload.getCall(0).args[2]).to.be.eql(42);
+    });
+
+    it('passe bien la liste de tous les fichiers au service d\'upload', async () => {
+        const files = [fakeFile(), fakeFile(), fakeFile()];
+        await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
+        expect(attachmentService.upload.getCall(0).args[3]).to.be.eql(files);
+    });
+
+    it('enregistre chaque fichier avec la bonne transaction', async () => {
+        const files = [fakeFile()];
+        await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
+        expect(attachmentService.upload.getCall(0).args[4]).to.be.eql(transaction);
+    });
+
+    it('n\'appelle pas le service d\'upload si aucun fichier n\'est fourni', async () => {
+        await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
+        expect(attachmentService.upload).to.not.have.been.called;
+    });
+
+    it('ne commit l\'enregistrement de la réponse qu\'une fois les fichiers uploadés', async () => {
+        const files = [fakeFile()];
+        await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
+        expect(transaction.commit).to.have.been.calledAfter(attachmentService.upload);
+    });
+
+    it('fait un rollback si l\'upload des fichiers échoue', async () => {
+        const files = [fakeFile()];
+        attachmentService.upload.rejects(new Error('une erreur'));
+        try {
+            await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
+        } catch (error) {
+            // ignore
+        }
+
+        expect(transaction.commit, 'Le commit() de la transaction a été appelé').to.not.have.been.called;
+        expect(transaction.rollback).to.have.been.calledOnce;
+    });
+
+    it('lance une exception upload_failed si l\'upload des fichiers échoue', async () => {
+        const files = [fakeFile()];
+        const originalError = new Error('une erreur');
+        attachmentService.upload.rejects(originalError);
+
+        try {
+            await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
+        } catch (error) {
+            expect(error).to.be.an.instanceof(ServiceError);
+            expect(error.code, 'Le code de l\'exception est incorrect').to.be.eql('upload_failed');
+            expect(error.nativeError, 'L\'erreur native associée à l\'exception incorrect').to.be.eql(originalError);
+            return;
+        }
+
+        expect.fail('Une exception aurait dû être lancée');
     });
 });
