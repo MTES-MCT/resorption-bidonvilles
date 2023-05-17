@@ -12,7 +12,7 @@ export default (entityType: AttachmentEntityType, entityId: number, createdBy: n
         const Key = `${entityType}_author${createdBy}_comment${entityId}_file${index + 1}.${fromMimeToExtension[f.mimetype]}`;
 
         return [
-            attachmentModel.createLinkedAttachment('shantytown_comment', entityId, Key, f.originalname, f.mimetype, f.size, createdBy, transaction),
+            attachmentModel.createLinkedAttachment(entityType, entityId, Key, f.originalname, f.mimetype, f.size, createdBy, transaction),
             S3.send(new PutObjectCommand({
                 Bucket: config.S3.bucket,
                 ACL: 'public-read',
