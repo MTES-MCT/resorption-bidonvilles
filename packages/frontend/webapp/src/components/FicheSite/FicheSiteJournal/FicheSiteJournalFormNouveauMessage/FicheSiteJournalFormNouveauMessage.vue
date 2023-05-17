@@ -2,7 +2,7 @@
     <form>
         <p class="font-bold text-lg">Partager une info</p>
 
-        <DragZone class="bg-white py-6 px-2" @drop="handleFileDrop">
+        <DragZone class="bg-white py-6 px-2" @drop="attachmentsInput?.addFiles">
             <div class="px-4">
                 <FormNouveauMessageInputMessage
                     :rows="rows"
@@ -136,10 +136,6 @@ function onBlur() {
 
 function onModeChange() {
     formContainer.value.style.height = `auto`;
-}
-
-function handleFileDrop(files) {
-    attachmentsInput.value.addFiles(files);
 }
 
 watch(useFieldValue("attachments"), () => {
