@@ -1,5 +1,5 @@
 <template>
-    <a class="inline-block border rounded p-1 flex space-x-2 items-center cursor-pointer hover:bg-blue100"
+    <a class="inline-block border rounded p-1 flex space-x-2 items-center cursor-pointer hover:bg-blue100 bg-white"
         @mousemove="isHovered = true" @mouseleave="isHovered = false" :title="file.name" :href="file.urls.original">
         <FilePreviewIcon class="flex-shrink-0" :file="file" />
         <div class="text-sm overflow-hidden flex-1">
