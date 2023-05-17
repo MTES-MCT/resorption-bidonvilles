@@ -3,7 +3,6 @@ export default [
     "jpeg",
     "png",
     "gif",
-    "svg",
     "pdf",
     "doc",
     "docx",

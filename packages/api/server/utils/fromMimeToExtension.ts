@@ -10,5 +10,4 @@ export default {
     'image/png': 'png',
     'image/jpg': 'jpg',
     'image/jpeg': 'jpg',
-    'image/svg+xml': 'svg',
 };
