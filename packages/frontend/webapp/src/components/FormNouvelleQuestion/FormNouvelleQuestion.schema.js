@@ -1,6 +1,7 @@
 import { object, string, number, array } from "yup";
 import { useConfigStore } from "@/stores/config.store";
 import labels from "./FormNouvelleQuestion.labels";
+import yup_attachment_schema from "@/utils/yup_attachment_schema";
 
 function emptyStringToNull(value, originalValue) {
     if (typeof originalValue === "string" && originalValue === "") {
@@ -30,4 +31,5 @@ export default object({
         .min(0)
         .label(labels.people_affected),
     details: string().required().label(labels.details),
+    attachments: yup_attachment_schema().label(labels.attachments),
 });
