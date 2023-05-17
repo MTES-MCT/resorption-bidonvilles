@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { Transaction } from 'sequelize';
 
 type AnswerInput = {
     description: string,
@@ -6,7 +7,7 @@ type AnswerInput = {
     created_by: number,
 };
 
-export default async (data: AnswerInput): Promise<number> => {
+export default async (data: AnswerInput, transaction?: Transaction): Promise<number> => {
     const answerResponse = await sequelize.query(
         `INSERT INTO answers(
             description,
@@ -21,6 +22,7 @@ export default async (data: AnswerInput): Promise<number> => {
         RETURNING answer_id`,
         {
             replacements: data,
+            transaction,
         },
     );
 

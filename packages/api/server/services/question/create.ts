@@ -6,6 +6,7 @@ import mails from '#server/mails/mails';
 import config from '#server/config';
 import { sequelize } from '#db/sequelize';
 import userQuestionSubscriptionModel from '#server/models/userQuestionSubscriptionModel';
+import attachmentService from '#server/services/attachment';
 import { Question } from '#root/types/resources/Question.d';
 
 type AuthorData = {
@@ -14,7 +15,7 @@ type AuthorData = {
 
 const { testEmail } = config;
 
-export default async (question: QuestionInput, author: AuthorData): Promise<Question> => {
+export default async (question: QuestionInput, author: AuthorData, files: Express.Multer.File[]): Promise<Question> => {
     const transaction = await sequelize.transaction();
 
     // on insère la question
@@ -31,6 +32,16 @@ export default async (question: QuestionInput, author: AuthorData): Promise<Ques
     } catch (error) {
         await transaction.rollback();
         throw new ServiceError('insert_failed', error);
+    }
+
+    // on sauvegarde les fichiers
+    if (files.length > 0) {
+        try {
+            await attachmentService.upload('question', questionId, author.id, files, transaction);
+        } catch (error) {
+            await transaction.rollback();
+            throw new ServiceError('upload_failed', error);
+        }
     }
 
     // on retourne la question
