@@ -1,6 +1,7 @@
 <template>
     <form>
         <FicheQuestionNouvelleReponseInputReponse />
+        <FicheQuestionNouvelleReponseInputAttachments />
 
         <ErrorSummary v-if="error" :message="error" class="mt-2" />
         <p class="text-right">
@@ -19,6 +20,7 @@ import { useQuestionsStore } from "@/stores/questions.store";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
 import FicheQuestionNouvelleReponseInputReponse from "./inputs/FicheQuestionNouvelleReponseInputReponse.vue";
+import FicheQuestionNouvelleReponseInputAttachments from "./inputs/FicheQuestionNouvelleReponseInputAttachments.vue";
 
 const props = defineProps({
     question: Object,
@@ -35,9 +37,13 @@ const submit = handleSubmit(async (values) => {
 
     try {
         const questionsStore = useQuestionsStore();
-        await questionsStore.createAnswer(question.value.id, {
-            description: values.answer,
-        });
+        await questionsStore.createAnswer(
+            question.value.id,
+            {
+                description: values.answer,
+            },
+            values.attachments
+        );
 
         resetForm();
     } catch (e) {
