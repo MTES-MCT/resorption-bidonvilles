@@ -6,4 +6,5 @@ moduleAlias.addAliases({
     '#fixtures': `${__dirname}/test/fixtures`,
     '#test': `${__dirname}/test`,
     '#root': __dirname,
+    '#types': `${__dirname}/types`,
 });

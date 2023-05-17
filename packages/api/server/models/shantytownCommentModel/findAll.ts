@@ -9,7 +9,7 @@ import { QueryTypes } from 'sequelize';
  *                                     a subset of "location" (for instance, you are not expected to
  *                                     give a departement as location, and a region as privateLocation)
  */
-export default (user, location = null, privateLocation = null) => {
+export default async (user, location = null, privateLocation = null) => {
     const additionalWhere = [];
     const replacements: any = {};
     if (location && location.type && location.code) {
@@ -74,6 +74,22 @@ export default (user, location = null, privateLocation = null) => {
             FROM shantytown_comment_tags sct
             LEFT JOIN comment_tags ct ON sct.fk_comment_tag = ct.uid
             GROUP BY sct.fk_shantytown_comment
+        ),
+        grouped_attachments AS (
+            SELECT
+                sca.fk_shantytown_comment,
+                array_remove(array_agg(
+                    a.attachment_id || '@.;.@'
+                    || a.url_original || '@.;.@'
+                    || a.url_preview || '@.;.@'
+                    || a.original_name || '@.;.@'
+                    || a.mimetype || '@.;.@'
+                    || a.size || '@.;.@'
+                    || a.created_by
+                ), null) AS attachments
+            FROM shantytown_comment_attachments sca
+            LEFT JOIN attachments a ON sca.fk_attachment = a.attachment_id
+            GROUP BY sca.fk_shantytown_comment
         )
 
         SELECT
@@ -94,7 +110,8 @@ export default (user, location = null, privateLocation = null) => {
             s.resorption_target AS "shantytownResorptionTarget",
             oca.organization_target_name,
             uca.user_target_name,
-            tags.tags AS "tags"
+            tags.tags AS "tags",
+            grouped_attachments.attachments AS "attachments"
         FROM shantytown_comments sc
         LEFT JOIN users u ON sc.created_by = u.user_id
         LEFT JOIN roles_regular rr ON u.fk_role_regular = rr.role_id
@@ -105,6 +122,7 @@ export default (user, location = null, privateLocation = null) => {
         LEFT JOIN organization_comment_access oca ON sc.shantytown_comment_id = oca.shantytown_comment_id
         LEFT JOIN user_comment_access uca ON sc.shantytown_comment_id = uca.shantytown_comment_id
         LEFT JOIN tags ON tags.fk_shantytown_comment = sc.shantytown_comment_id
+        LEFT JOIN grouped_attachments ON grouped_attachments.fk_shantytown_comment = sc.shantytown_comment_id
         ${additionalWhere.length > 0
         ? `WHERE ${additionalWhere.join(' OR ')}`
         : ''
