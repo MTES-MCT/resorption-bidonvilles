@@ -1,4 +1,3 @@
-import { Express } from 'express';
 import { S3 } from '#server/utils/s3';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import config from '#server/config';
