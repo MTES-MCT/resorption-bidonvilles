@@ -5,18 +5,19 @@
             :showMandatoryStar="showMandatoryStar" />
         <FilePreviewGrid class="mb-3" v-if="previews.length > 0" :files="previews" @delete="onDelete" />
         <input ref="fileInput" type="file" class="none" :accept="allowedFileExtensions.map(ext => `.${ext}`).join(',')"
-            :multiple="multiple" @change="onChange" @blur="handleBlur" />
+            :multiple="multiple" @change="onChange" @focus="onFocus" @blur="handleBlur" />
         <InputError v-if="errors.length > 0">{{ errors[0] }}</InputError>
     </InputWrapper>
 </template>
 
 <script setup>
-import { computed, ref, toRefs, watch } from "vue";
+import { computed, ref, toRefs, watch, onMounted, onUnmounted } from "vue";
 import { useField } from "vee-validate";
 import allowedFileExtensions from "@common/utils/allowed_file_extensions";
 import fromMimeToExtension from "@common/utils/fromMimeToExtension";
 import { MAX_FILE_SIZE } from "@common/utils/max_file_size";
 import humanFileSize from "../../utils/humanFileSize";
+import getRandomString from "../../utils/getRandomString";
 
 import FilePreviewGrid from "../FilePreview/FilePreviewGrid.vue";
 import InputLabel from "./utils/InputLabel.vue";
@@ -45,6 +46,7 @@ const { handleChange, handleBlur, errors, value } = useField(name.value);
 const fileInput = ref(null);
 
 const rawFiles = ref([]);
+const isFocused = ref(false);
 const previews = computed(() => {
     return rawFiles.value.map(rawFile => ({
         state: 'draft',
@@ -60,14 +62,17 @@ const previews = computed(() => {
     }));
 });
 
-function onChange() {
+function processRawFiles() {
     rawFiles.value = Array.from(fileInput.value.files).map(file => ({
         name: file.name,
         size: file.size,
         type: file.type,
         preview: null,
     }));
+}
 
+function onChange() {
+    processRawFiles();
     handleChange(fileInput.value.files);
     previewFiles();
 }
@@ -101,11 +106,53 @@ function previewFiles() {
     }
 }
 
-watch(value, () => {
-    if (value.value === undefined) {
-        const dt = new DataTransfer();
-        fileInput.value.files = dt.files;
-        rawFiles.value = [];
+function listenWindowFocus() {
+    if (window.focusedInputFile !== randomId) {
+        return;
     }
+
+    isFocused.value = false;
+
+    // un événement "focus" est triggered automatiquement à la fermeture de modale de sélection
+    // d'un fichier
+    // on ne souhaite pas que cet événement soit pris en compte donc deux choses :
+    // 1. on ignore le focus pendant 250ms
+    // 2. on blur l'input pour retirer l'état focused intégré par le browser
+    ignoreFocus = true;
+    setTimeout(() => {
+        ignoreFocus = false;
+        fileInput.value.blur();
+    }, 250);
+}
+
+let randomId = "";
+let ignoreFocus = false;
+onMounted(() => {
+    randomId = getRandomString(40);
+    ignoreFocus = false;
+    isFocused.value = false;
+
+    window.addEventListener('focus', listenWindowFocus);
+});
+onUnmounted(() => {
+    window.removeEventListener('focus', listenWindowFocus);
+});
+
+function onFocus() {
+    if (ignoreFocus === true) {
+        return;
+    }
+
+    window.focusedInputFile = randomId;
+    isFocused.value = true;
+}
+
+watch(value, () => {
+    fileInput.value.files = value.value instanceof FileList ? value.value : new DataTransfer().files;
+    processRawFiles();
+});
+
+defineExpose({
+    isFocused,
 });
 </script>
