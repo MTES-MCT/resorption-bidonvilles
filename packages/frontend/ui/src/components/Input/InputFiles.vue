@@ -106,6 +106,25 @@ function previewFiles() {
     }
 }
 
+function addFiles(newFiles) {
+    const dt = new DataTransfer();
+    const { files } = fileInput.value;
+
+    for (let i = 0; i < files.length; i += 1) {
+        dt.items.add(files[i]);
+    }
+
+    for (let i = 0; i < newFiles.length; i += 1) {
+        dt.items.add(newFiles[i]);
+    }
+
+    // on change la valeur de l'input avec le nouveau set de données
+    fileInput.value.files = dt.files;
+
+    // on génère un "change"
+    onChange();
+}
+
 function listenWindowFocus() {
     if (window.focusedInputFile !== randomId) {
         return;
@@ -154,5 +173,6 @@ watch(value, () => {
 
 defineExpose({
     isFocused,
+    addFiles,
 });
 </script>
