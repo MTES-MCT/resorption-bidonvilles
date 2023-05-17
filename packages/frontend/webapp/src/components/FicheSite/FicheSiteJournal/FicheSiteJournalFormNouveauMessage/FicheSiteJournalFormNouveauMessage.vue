@@ -2,7 +2,7 @@
     <form>
         <p class="font-bold text-lg">Partager une info</p>
 
-        <div class="bg-white py-6 px-2">
+        <DragZone class="bg-white py-6 px-2" @drop="handleFileDrop">
             <div class="px-4">
                 <FormNouveauMessageInputMessage
                     :rows="rows"
@@ -43,7 +43,7 @@
                     >
                 </p>
             </div>
-        </div>
+        </DragZone>
     </form>
 </template>
 
@@ -65,6 +65,7 @@ import getHiddenHeight from "@/utils/getHiddenHeight";
 import isDeepEqual from "@/utils/isDeepEqual";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
+import DragZone from "@/components/DragZone/DragZone.vue";
 import FormNouveauMessageInputMessage from "./inputs/FormNouveauMessageInputMessage.vue";
 import FormNouveauMessageInputTags from "./inputs/FormNouveauMessageInputTags.vue";
 import FormNouveauMessageInputMode from "./inputs/FormNouveauMessageInputMode.vue";
@@ -135,6 +136,10 @@ function onBlur() {
 
 function onModeChange() {
     formContainer.value.style.height = `auto`;
+}
+
+function handleFileDrop(files) {
+    attachmentsInput.value.addFiles(files);
 }
 
 watch(useFieldValue("attachments"), () => {
