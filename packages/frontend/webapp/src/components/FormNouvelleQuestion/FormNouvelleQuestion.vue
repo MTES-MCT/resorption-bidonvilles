@@ -15,6 +15,9 @@
         <FormParagraph :title="labels.details" showMandatoryStar>
             <FormNouvelleQuestionInputDetails />
         </FormParagraph>
+        <FormParagraph :title="labels.attachments">
+            <FormNouvelleQuestionInputAttachments />
+        </FormParagraph>
 
         <ErrorSummary
             id="erreurs"
@@ -41,12 +44,14 @@ import FormNouvelleQuestionInputPeopleAffected from "./inputs/FormNouvelleQuesti
 import FormNouvelleQuestionInputDetails from "./inputs/FormNouvelleQuestionInputDetails.vue";
 import FormNouvelleQuestionInputTags from "./inputs/FormNouvelleQuestionInputTags.vue";
 import FormNouvelleQuestionInputOtherTag from "./inputs/FormNouvelleQuestionInputOtherTag.vue";
+import FormNouvelleQuestionInputAttachments from "./inputs/FormNouvelleQuestionInputAttachments.vue";
 
 const { handleSubmit, setErrors, errors, isSubmitting } = useForm({
     validationSchema: schema,
     initialValues: {
         question: router.currentRoute.value.query?.resume || "",
         tags: [],
+        attachments: new DataTransfer().files,
     },
 });
 
@@ -72,8 +77,14 @@ defineExpose({
         error.value = null;
 
         try {
+            const valuesWithoutAttachments = { ...sentValues };
+            delete valuesWithoutAttachments.attachments;
+
             const questionsStore = useQuestionsStore();
-            const question = await questionsStore.create(sentValues);
+            const question = await questionsStore.create(
+                valuesWithoutAttachments,
+                sentValues.attachments
+            );
             const notificationStore = useNotificationStore();
             notificationStore.success(
                 "Question publiée",
