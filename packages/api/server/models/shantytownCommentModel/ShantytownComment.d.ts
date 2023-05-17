@@ -1,4 +1,5 @@
 import { CommentTag } from '../shantytownCommentTagModel/serializeCommentTag';
+import { File } from '#server/models/attachmentModel/File.d';
 
 type CommentAuthor = {
     id:number,
@@ -18,7 +19,8 @@ type ShantytownComment = {
     shantytown: number,
     tags: CommentTag[],
     createdBy: CommentAuthor
-    covid?: any
+    covid?: any,
+    attachments: File[]
 };
 
 export default ShantytownComment;
