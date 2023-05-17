@@ -180,9 +180,9 @@ export const useActionsStore = defineStore("actions", () => {
 
             return toRef(hash.value, actionId);
         },
-        async addComment(actionId, comment) {
+        async addComment(actionId, comment, attachments) {
             const notificationStore = useNotificationStore();
-            const response = await addComment(actionId, comment);
+            const response = await addComment(actionId, comment, attachments);
 
             if (hash.value[actionId]) {
                 hash.value[actionId].comments.unshift(response.comment);
