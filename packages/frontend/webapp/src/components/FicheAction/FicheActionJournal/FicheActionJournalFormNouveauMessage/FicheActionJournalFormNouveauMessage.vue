@@ -2,9 +2,9 @@
     <form>
         <h1 class="font-bold text-lg">Partager une info</h1>
 
-        <div class="bg-white p-6">
+        <DragZone class="bg-white p-6" @drop="handleFileDrop">
             <FormNouveauMessageInputMessage />
-            <FormNouveauMessageInputAttachments />
+            <FormNouveauMessageInputAttachments ref="attachmentsInput" />
 
             <ErrorSummary v-if="error" :message="error" class="mt-2" />
             <p class="text-right">
@@ -12,7 +12,7 @@
                     >Publier le message</Button
                 >
             </p>
-        </div>
+        </DragZone>
     </form>
 </template>
 
@@ -23,6 +23,7 @@ import { useActionsStore } from "@/stores/actions.store";
 import schema from "./FicheActionJournalFormNouveauMessage.schema";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
+import DragZone from "@/components/DragZone/DragZone.vue";
 import FormNouveauMessageInputMessage from "./inputs/FormNouveauMessageInputMessage.vue";
 import FormNouveauMessageInputAttachments from "./inputs/FormNouveauMessageInputAttachments.vue";
 
@@ -30,10 +31,15 @@ const props = defineProps({
     action: Object,
 });
 const { action } = toRefs(props);
+const attachmentsInput = ref(null);
 
 const { handleSubmit, setErrors, resetForm } = useForm({
     validationSchema: schema,
 });
+
+function handleFileDrop(files) {
+    attachmentsInput.value.addFiles(files);
+}
 
 const error = ref(null);
 const submit = handleSubmit(async (values) => {
