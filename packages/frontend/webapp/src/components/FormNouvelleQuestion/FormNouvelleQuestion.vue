@@ -1,23 +1,25 @@
 <template>
     <form>
-        <FormParagraph :title="labels.question" showMandatoryStar>
-            <FormNouvelleQuestionInputQuestion :question="question" />
-        </FormParagraph>
-        <FormParagraph :title="labels.tags" info="(optionnel)">
-            <FormNouvelleQuestionInputTags
-        /></FormParagraph>
-        <FormParagraph :title="labels.other_tag" v-if="showOtherTag">
-            <FormNouvelleQuestionInputOtherTag />
-        </FormParagraph>
-        <FormParagraph :title="labels.people_affected" info="(optionnel)">
-            <FormNouvelleQuestionInputPeopleAffected />
-        </FormParagraph>
-        <FormParagraph :title="labels.details" showMandatoryStar>
-            <FormNouvelleQuestionInputDetails />
-        </FormParagraph>
-        <FormParagraph :title="labels.attachments">
-            <FormNouvelleQuestionInputAttachments />
-        </FormParagraph>
+        <DragZone @drop="attachmentsInput?.addFiles">
+            <FormParagraph :title="labels.question" showMandatoryStar>
+                <FormNouvelleQuestionInputQuestion :question="question" />
+            </FormParagraph>
+            <FormParagraph :title="labels.tags" info="(optionnel)">
+                <FormNouvelleQuestionInputTags
+            /></FormParagraph>
+            <FormParagraph :title="labels.other_tag" v-if="showOtherTag">
+                <FormNouvelleQuestionInputOtherTag />
+            </FormParagraph>
+            <FormParagraph :title="labels.people_affected" info="(optionnel)">
+                <FormNouvelleQuestionInputPeopleAffected />
+            </FormParagraph>
+            <FormParagraph :title="labels.details" showMandatoryStar>
+                <FormNouvelleQuestionInputDetails />
+            </FormParagraph>
+            <FormParagraph :title="labels.attachments">
+                <FormNouvelleQuestionInputAttachments ref="attachmentsInput" />
+            </FormParagraph>
+        </DragZone>
 
         <ErrorSummary
             id="erreurs"
@@ -39,6 +41,7 @@ import { useQuestionsStore } from "@/stores/questions.store";
 import router from "@/helpers/router";
 
 import { ErrorSummary, FormParagraph } from "@resorptionbidonvilles/ui";
+import DragZone from "@/components/DragZone/DragZone.vue";
 import FormNouvelleQuestionInputQuestion from "./inputs/FormNouvelleQuestionInputQuestion.vue";
 import FormNouvelleQuestionInputPeopleAffected from "./inputs/FormNouvelleQuestionInputPeopleAffected.vue";
 import FormNouvelleQuestionInputDetails from "./inputs/FormNouvelleQuestionInputDetails.vue";
@@ -65,6 +68,7 @@ const props = defineProps({
 
 const { question } = toRefs(props);
 const tags = useFieldValue("tags");
+const attachmentsInput = ref(null);
 
 const showOtherTag = computed(() => {
     return tags.value && tags.value.includes("other");
