@@ -24,4 +24,5 @@ export type ShantytownCommentRow = {
     covidPersonnesOrientees?: boolean,
     covidPersonnesAvecSymptomes?: boolean,
     covidBesoinAction?: boolean,
+    attachments?: string[],
 };
