@@ -2,6 +2,8 @@ import mails from '#server/mails/mails';
 import userModel from '#server/models/userModel';
 import answerModel from '#server/models/answerModel';
 import userQuestionSubscriptionModel from '#server/models/userQuestionSubscriptionModel';
+import attachmentService from '#server/services/attachment';
+import { sequelize } from '#db/sequelize';
 
 // types
 import ServiceError from '#server/errors/ServiceError';
@@ -18,7 +20,10 @@ export type CreateAnswerServiceResponse = {
     subscribed: boolean,
 };
 
-export default async (answer: AnswerData, question: Question, author: SerializedUser): Promise<CreateAnswerServiceResponse> => {
+export default async (answer: AnswerData, question: Question, author: SerializedUser, files: Express.Multer.File[]): Promise<CreateAnswerServiceResponse> => {
+    // on démarre une transaction
+    const transaction = await sequelize.transaction();
+
     // on insère la réponse
     let answerId: number;
     try {
@@ -26,9 +31,26 @@ export default async (answer: AnswerData, question: Question, author: Serialized
             description: answer.description,
             fk_question: question.id,
             created_by: author.id,
-        });
+        }, transaction);
     } catch (error) {
+        await transaction.rollback();
         throw new ServiceError('insert_failed', error);
+    }
+
+    if (files.length > 0) {
+        try {
+            await attachmentService.upload('answer', answerId, author.id, files, transaction);
+        } catch (error) {
+            await transaction.rollback();
+            throw new ServiceError('upload_failed', error);
+        }
+    }
+
+    try {
+        await transaction.commit();
+    } catch (error) {
+        await transaction.rollback();
+        throw new ServiceError('commit_failed', error);
     }
 
     // On essaie d'envoyer un mail de notification à aux abonnés de la question

@@ -11,6 +11,7 @@ export default async (req, res, next) => {
             },
             req.body.question,
             req.user,
+            req.files,
         );
     } catch (error) {
         let message;
