@@ -18,7 +18,22 @@ export default async (questionIds: number[]): Promise<AnswerHash> => {
     }), {});
 
     const rows: AnswerRow[] = await sequelize.query(
-        `
+        `WITH grouped_attachments AS (
+            SELECT
+                aa.fk_answer,
+                array_remove(array_agg(
+                    a.attachment_id || '@.;.@'
+                    || a.original_file_key || '@.;.@'
+                    || a.preview_file_key || '@.;.@'
+                    || a.original_name || '@.;.@'
+                    || a.mimetype || '@.;.@'
+                    || a.size || '@.;.@'
+                    || a.created_by
+                ), null) AS attachments
+            FROM answer_attachments aa
+            LEFT JOIN attachments a ON aa.fk_attachment = a.attachment_id
+            GROUP BY aa.fk_answer
+        )
         SELECT
             answers.answer_id AS "answerId",
             answers.fk_question AS "questionId",
@@ -31,11 +46,13 @@ export default async (questionIds: number[]): Promise<AnswerHash> => {
             roles_regular.name AS "userRole",
             organizations.organization_id AS "organizationId",
             organizations.name AS "organizationName",
-            organizations.abbreviation AS "organizationAbbreviation"
+            organizations.abbreviation AS "organizationAbbreviation",
+            grouped_attachments.attachments AS "attachments"
         FROM answers
         LEFT JOIN users ON answers.created_by = users.user_id
         LEFT JOIN roles_regular ON users.fk_role_regular = roles_regular.role_id
         LEFT JOIN organizations ON users.fk_organization = organizations.organization_id
+        LEFT JOIN grouped_attachments ON grouped_attachments.fk_answer = answers.answer_id
         WHERE
             answers.fk_question IN (:ids) 
         ORDER BY answers.created_at DESC`,

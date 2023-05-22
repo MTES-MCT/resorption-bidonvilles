@@ -1,3 +1,5 @@
+import { File } from '#server/models/attachmentModel/File.d';
+
 export type Answer = {
     id: number,
     description: string,
@@ -12,4 +14,5 @@ export type Answer = {
         organization_id: number,
     },
     question: number,
+    attachments: File[],
 };
