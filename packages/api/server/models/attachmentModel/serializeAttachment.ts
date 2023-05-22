@@ -1,5 +1,6 @@
 import config from '#server/config';
 import { File } from '#types/resources/File.d';
+import fromMimeToExtension from '#server/utils/fromMimeToExtension';
 
 export default (attachment: string): File => {
     const [id, key, , original_name, mimetype, size, created_by] = attachment.split('@.;.@');
@@ -14,7 +15,7 @@ export default (attachment: string): File => {
             original: url,
             preview: url,
         },
-        extension: mimetype,
+        extension: fromMimeToExtension[mimetype] || 'inconnu',
         created_by: parseInt(created_by, 10),
     };
 };
