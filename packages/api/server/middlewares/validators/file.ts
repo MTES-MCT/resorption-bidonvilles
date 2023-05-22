@@ -40,10 +40,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
                     );
                 }
             });
+
         await fn(req, res, next);
     } else if (req.files === undefined || req.files === null) {
         req.files = [];
     }
-
-    next();
 };
