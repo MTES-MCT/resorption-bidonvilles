@@ -15,6 +15,7 @@ export function serialized(override: Partial<Answer> = {}): Answer {
             role: 'Acteur national',
         },
         question: 2,
+        attachments: [],
     };
 
     return Object.assign(defaultObj, override);
