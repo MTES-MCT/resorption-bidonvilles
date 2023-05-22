@@ -19,6 +19,22 @@ export default async (id: number, transaction?: Transaction): Promise<Question |
                 question_tags cqt ON cqt.uid = cqtt.fk_question_tag
             GROUP BY 
                 cq.question_id
+        ),
+        grouped_attachments AS (
+            SELECT
+                qa.fk_question,
+                array_remove(array_agg(
+                    a.attachment_id || '@.;.@'
+                    || a.original_file_key || '@.;.@'
+                    || a.preview_file_key || '@.;.@'
+                    || a.original_name || '@.;.@'
+                    || a.mimetype || '@.;.@'
+                    || a.size || '@.;.@'
+                    || a.created_by
+                ), null) AS attachments
+            FROM question_attachments qa
+            LEFT JOIN attachments a ON qa.fk_attachment = a.attachment_id
+            GROUP BY qa.fk_question
         )
         SELECT
             cq.question_id AS "questionId",
@@ -38,7 +54,8 @@ export default async (id: number, transaction?: Transaction): Promise<Question |
             rr.name AS "userRole",
             o.organization_id AS "organizationId",
             o.name AS "organizationName",
-            o.abbreviation AS "organizationAbbreviation"
+            o.abbreviation AS "organizationAbbreviation",
+            ga.attachments AS "attachments"
         FROM
             questions cq
         LEFT JOIN 
@@ -49,6 +66,8 @@ export default async (id: number, transaction?: Transaction): Promise<Question |
             organizations o ON u.fk_organization = o.organization_id
         LEFT JOIN
             roles_regular rr ON u.fk_role_regular = rr.role_id
+        LEFT JOIN
+            grouped_attachments ga ON ga.fk_question = cq.question_id
         WHERE
             cq.question_id = :id`,
         {

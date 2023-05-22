@@ -28,9 +28,14 @@ const props = defineProps({
             return [];
         },
     },
+    collapsedByDefault: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
-const { files } = toRefs(props);
-const isCollapsed = ref(false);
+const { files, collapsedByDefault } = toRefs(props);
+const isCollapsed = ref(collapsedByDefault.value);
 
 const title = computed(() => {
     if (files.value.length === 1) {
