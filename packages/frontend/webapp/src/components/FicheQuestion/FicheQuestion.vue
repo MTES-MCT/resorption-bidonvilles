@@ -3,7 +3,7 @@
         <FicheQuestionHeader :question="question" />
         <FicheQuestionDetails class="mb-4" :question="question" />
         <FicheQuestionAttachments
-            v-if="question.attachments"
+            v-if="question.attachments.length > 0"
             class="my-3"
             :attachments="question.attachments"
         />
