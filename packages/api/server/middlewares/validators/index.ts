@@ -1,3 +1,4 @@
+import attachmentDeleteAttachment from './attachment/deleteAttachment';
 import closeTown from './closeTown';
 import dataReportExportTowns from './dataReport/exportTownsReport';
 import fixClosedStatus from './fixClosedStatus';
@@ -40,6 +41,9 @@ import justiceReaderFindByLocation from './justiceReaders/findByLocation';
 import organizationSearch from './organizations/search';
 
 export default {
+    attachment: {
+        deleteAttachment: attachmentDeleteAttachment,
+    },
     closeTown,
     dataReport: {
         exportTownsReport: dataReportExportTowns,
