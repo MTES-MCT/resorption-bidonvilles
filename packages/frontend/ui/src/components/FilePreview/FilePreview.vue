@@ -6,13 +6,14 @@
             <p class="truncate">{{ file.name }}</p>
             <p class="text-G500"><span>{{ file.extension?.toUpperCase() }}</span> {{ humanFileSize(file.size) }}</p>
         </div>
-        <Button :class="file.state === 'draft' || file.createdByCurrentUser || isHovered ? 'visible' : 'invisible'"
-            type="button" icon="trash-alt" size="sm" @click="$emit('delete')" variant="primaryOutlineAlt" />
+        <Button
+            :class="(file.state === 'draft' || file.createdByCurrentUser || isHovered) && !disallowAttachmentsRemoval ? 'visible' : 'invisible'"
+            type="button" icon="trash-alt" size="sm" @click.prevent="$emit('delete')" variant="primaryOutlineAlt" />
     </a>
 </template>
 
 <script setup>
-import { computed, ref, toRefs } from 'vue';
+import { ref, toRefs } from 'vue';
 import FilePreviewIcon from "./FilePreviewIcon.vue";
 import humanFileSize from '../../utils/humanFileSize';
 import Button from "../Button.vue";
@@ -22,8 +23,13 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    disallowAttachmentsRemoval: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
-const { file } = toRefs(props);
+const { disallowAttachmentsRemoval, file } = toRefs(props);
 
 const isHovered = ref(false);
 </script>
