@@ -1,3 +1,4 @@
+import attachmentModel from '#server/models/attachmentModel';
 import AnswerRow from '../AnswerRow.d';
 import Answer from '../Answer.d';
 
@@ -15,4 +16,7 @@ export default (answer: AnswerRow): Answer => ({
         organization_id: answer.organizationId,
     },
     question: answer.questionId,
+    attachments: answer.attachments?.length
+        ? answer.attachments.map(attachmentModel.serializeAttachment)
+        : [],
 });
