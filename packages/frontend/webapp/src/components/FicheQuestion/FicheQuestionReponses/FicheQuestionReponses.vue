@@ -9,7 +9,7 @@
             </h1>
             <FicheQuestionNouvelleReponse :question="question" class="mb-2" />
 
-            <section class="mt-4 mb-4">
+            <section class="mt-6 mb-4">
                 <h1 class="text-lg font-bold">
                     {{ question.answers.length }} réponse{{
                         question.answers.length > 1 ? "s" : ""
@@ -17,7 +17,7 @@
                 </h1>
                 <FicheQuestionSubscriptionButton
                     :question="question"
-                    class="mt-2 mb-4"
+                    class="mt-2 mb-6"
                 />
                 <FicheQuestionListeDesReponses
                     v-if="question.answers.length > 0"
