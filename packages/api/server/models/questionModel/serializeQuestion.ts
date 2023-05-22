@@ -1,5 +1,6 @@
 import QuestionRow from './QuestionRow.d';
 import Question from './Question.d';
+import attachmentModel from '../attachmentModel';
 
 export default (question: QuestionRow): Question => ({
     id: question.questionId,
@@ -25,4 +26,7 @@ export default (question: QuestionRow): Question => ({
         organization_id: question.organizationId,
     },
     answers: [],
+    attachments: question.attachments?.length
+        ? question.attachments.map(attachmentModel.serializeAttachment)
+        : [],
 });
