@@ -3,8 +3,8 @@ import fromMimeToExtension from '#server/utils/fromMimeToExtension';
 import { File } from './File.d';
 
 export default (attachment: string): File => {
-    const [id, key, , original_name, mimetype, size, created_by] = attachment.split('@.;.@');
-    const url = `${config.S3.endpoint}/${config.S3.bucket}/${key}`;
+    const [id, key, previewKey, original_name, mimetype, size, created_by] = attachment.split('@.;.@');
+    const baseUrl = `${config.S3.endpoint}/${config.S3.bucket}`;
 
     return {
         state: 'uploaded',
@@ -12,8 +12,8 @@ export default (attachment: string): File => {
         name: original_name,
         size: parseInt(size, 10),
         urls: {
-            original: url,
-            preview: url,
+            original: `${baseUrl}/${key}`,
+            preview: previewKey ? `${baseUrl}/${previewKey}` : null,
         },
         extension: fromMimeToExtension[mimetype] || 'inconnu',
         created_by,
