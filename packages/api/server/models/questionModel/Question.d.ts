@@ -1,7 +1,8 @@
+import Answer from '#server/models/answerModel/Answer.d';
 import { File } from '#server/models/attachmentModel/File.d';
-import { Answer } from '#root/types/resources/Answer.d';
+import QuestionTag from './QuestionTag.d';
 
-export type Question = {
+type Question = {
     id: number,
     question: string,
     details: string,
@@ -23,7 +24,4 @@ export type Question = {
     attachments: File[],
 };
 
-export type QuestionTag = {
-    uid: string;
-    name: string;
-};
+export default Question;
