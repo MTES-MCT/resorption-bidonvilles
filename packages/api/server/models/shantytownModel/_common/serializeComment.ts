@@ -1,12 +1,12 @@
-import config from '#server/config';
 import ShantytownComment from '#server/models/shantytownCommentModel/ShantytownComment.d';
 import { CommentTag } from '#server/models/shantytownCommentTagModel/serializeCommentTag';
-import { FileAttachment } from '#root/types/resources/FileAttachment.d';
+import attachmentModel from '#server/models/attachmentModel';
 import { ShantytownCommentRow } from '../../shantytownCommentModel/ShantytownCommentRow.d';
 
 type shantytownCommentRowWithTags = ShantytownCommentRow & {
     tags: CommentTag[],
 };
+
 export default (comment: shantytownCommentRowWithTags): ShantytownComment => ({
     id: comment.commentId,
     description: comment.commentDescription,
@@ -42,22 +42,6 @@ export default (comment: shantytownCommentRowWithTags): ShantytownComment => ({
         }
         : {}),
     attachments: comment.attachments?.length
-        ? comment.attachments.map((attachment): FileAttachment => {
-            const [id, key, , original_name, mimetype, size, created_by] = attachment.split('@.;.@');
-            const url = `${config.S3.endpoint}/${config.S3.bucket}/${key}`;
-
-            return {
-                state: 'uploaded',
-                id: parseInt(id, 10),
-                name: original_name,
-                size: parseInt(size, 10),
-                urls: {
-                    original: url,
-                    preview: url,
-                },
-                extension: mimetype,
-                created_by: parseInt(created_by, 10),
-            };
-        })
+        ? comment.attachments.map(attachmentModel.serializeAttachment)
         : [],
 });

@@ -1,4 +1,4 @@
-import { FileAttachment } from '#types/resources/FileAttachment.d';
+import { File } from '#types/resources/File.d';
 import { CommentTag } from '../shantytownCommentTagModel/serializeCommentTag';
 
 type CommentAuthor = {
@@ -20,7 +20,7 @@ type ShantytownComment = {
     tags: CommentTag[],
     createdBy: CommentAuthor
     covid?: any,
-    attachments?: FileAttachment[]
+    attachments?: File[]
 };
 
 export default ShantytownComment;

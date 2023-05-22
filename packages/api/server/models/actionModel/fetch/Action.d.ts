@@ -1,4 +1,4 @@
-import { File } from '#server/models/attachmentModel/File.d';
+import { File } from '#types/resources/File.d';
 import ActionLocationType from './ActionLocationType.d';
 
 type ActionUser = {

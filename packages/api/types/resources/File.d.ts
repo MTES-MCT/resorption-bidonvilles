@@ -8,5 +8,5 @@ export type File = {
         preview: string,
     },
     extension: string,
-    created_by: string,
+    created_by: number,
 };
