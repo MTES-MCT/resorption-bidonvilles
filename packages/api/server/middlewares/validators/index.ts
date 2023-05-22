@@ -1,3 +1,4 @@
+import attachmentDeleteAttachment from './attachment/deleteAttachment';
 import closeTown from './closeTown';
 import fixClosedStatus from './fixClosedStatus';
 import setHeatwaveStatus from './setHeatwaveStatus';
@@ -39,6 +40,9 @@ import justiceReaderFindByLocation from './justiceReaders/findByLocation';
 import organizationSearch from './organizations/search';
 
 export default {
+    attachment: {
+        deleteAttachment: attachmentDeleteAttachment,
+    },
     closeTown,
     fixClosedStatus,
     setHeatwaveStatus,
