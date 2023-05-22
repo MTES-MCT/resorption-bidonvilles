@@ -11,6 +11,7 @@ type AnswerRow = {
     organizationId: number,
     organizationName: string,
     organizationAbbreviation: string | null,
+    attachments: string[],
 };
 
 export default AnswerRow;
