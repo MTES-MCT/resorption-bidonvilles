@@ -2,6 +2,11 @@
     <ContentWrapper>
         <FicheQuestionHeader :question="question" />
         <FicheQuestionDetails class="mb-4" :question="question" />
+        <FicheQuestionAttachments
+            v-if="question.attachments"
+            class="my-3"
+            :attachments="question.attachments"
+        />
         <FicheQuestionDate :question="question" />
     </ContentWrapper>
 
@@ -17,6 +22,7 @@ import FicheQuestionHeader from "./FicheQuestionHeader/FicheQuestionHeader.vue";
 import FicheQuestionDetails from "./FicheQuestionDetails/FicheQuestionDetails.vue";
 import FicheQuestionDate from "./FicheQuestionDate/FicheQuestionDate.vue";
 import FicheQuestionReponses from "./FicheQuestionReponses/FicheQuestionReponses.vue";
+import FicheQuestionAttachments from "./FicheQuestionAttachments/FicheQuestionAttachments.vue";
 import { useQuestionsStore } from "@/stores/questions.store";
 
 const props = defineProps({
