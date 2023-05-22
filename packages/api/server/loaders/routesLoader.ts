@@ -686,6 +686,16 @@ export default (app) => {
         middlewares.appVersion.sync,
         controllers.town.deleteComment,
     );
+    app.delete(
+        '/attachments/:id',
+        bodyParser.json(),
+        middlewares.auth.authenticate,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.attachment.deleteAttachment,
+        middlewares.validation,
+        controllers.attachment.deleteAttachment,
+    );
 
     app.get(
         '/comments',
