@@ -45,7 +45,9 @@ describe('services/action.createComment()', () => {
     afterEach(() => {
         sandbox.reset();
     });
-
+    after(() => {
+        sandbox.restore();
+    });
     it('crée le commentaire en base de données et le renvoie', async () => {
         stubs.createComment.resolves(newComment);
         const comment = { ...input, files: [] };
