@@ -1,4 +1,5 @@
 import config from '#server/config';
+import fromMimeToExtension from '#server/utils/fromMimeToExtension';
 import { File } from './File.d';
 
 export default (attachment: string): File => {
@@ -14,7 +15,7 @@ export default (attachment: string): File => {
             original: url,
             preview: url,
         },
-        extension: mimetype,
+        extension: fromMimeToExtension[mimetype] || 'inconnu',
         created_by,
     };
 };
