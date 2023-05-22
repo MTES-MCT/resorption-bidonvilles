@@ -11,7 +11,7 @@ import locationUtils from '#test/utils/location';
 import mattermostUtils from '#server/utils/mattermost';
 import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeAction } from '#test/utils/action';
-import { serialized as fakeActionComment } from '#test/utils/actionComment';
+import { serialized as fakeActionComment, row as fakeActionCommentRow } from '#test/utils/actionComment';
 import fakeFile from '#test/utils/file';
 import { Transaction } from 'sequelize';
 
@@ -24,6 +24,7 @@ chai.use(chaiSubset);
 const sandbox = sinon.createSandbox();
 const stubs = {
     createComment: sandbox.stub(actionModel, 'createComment'),
+    fetchComments: sandbox.stub(actionModel, 'fetchComments'),
     triggerNewActionComment: sandbox.stub(mattermostUtils, 'triggerNewActionComment'),
     sendMailNotifications: sandbox.stub(),
     uploadFiles: sandbox.stub(attachment, 'upload'),
@@ -41,6 +42,7 @@ describe('services/action.createComment()', () => {
     const action = fakeAction({ location: locationUtils.paris.departement() });
     const input = { description: 'ceci est un commentaire de test' };
     const newComment = fakeActionComment({ ...input, id: 1 });
+    const newCommentRow = fakeActionCommentRow({ ...input, id: 1 });
 
     afterEach(() => {
         sandbox.reset();
@@ -49,7 +51,8 @@ describe('services/action.createComment()', () => {
         sandbox.restore();
     });
     it('crée le commentaire en base de données et le renvoie', async () => {
-        stubs.createComment.resolves(newComment);
+        stubs.createComment.resolves(1);
+        stubs.fetchComments.withArgs(null, [1]).resolves([newCommentRow]);
         const comment = { ...input, files: [] };
 
         const response = await createComment(user.id, action, comment);
@@ -58,8 +61,10 @@ describe('services/action.createComment()', () => {
     });
     it('les pièces sont bien uploadées', async () => {
         const files = [fakeFile()];
-        stubs.createComment.resolves(newComment);
+        stubs.createComment.resolves(1);
+        stubs.fetchComments.resolves([newCommentRow]);
         const comment = { ...input, files };
+
         await createComment(user.id, action, { ...comment, files });
         expect(stubs.uploadFiles).to.have.been.calledOnceWith('action_comment', 1, 4, files);
         expect(stubs.uploadFiles.getCall(0).args[4]).to.be.instanceOf(Transaction);
@@ -67,20 +72,26 @@ describe('services/action.createComment()', () => {
 
     it('renvoie le nombre de personnes notifiées par mail', async () => {
         stubs.sendMailNotifications.resolves(3);
+        stubs.fetchComments.resolves([newCommentRow]);
         const comment = { ...input, files: [] };
+
         const response = await createComment(user.id, action, comment);
         expect(response).to.containSubset({ numberOfObservers: 3 });
     });
 
     it('envoie une notification mattermost', async () => {
-        stubs.createComment.resolves(newComment);
+        stubs.createComment.resolves(1);
+        stubs.fetchComments.resolves([newCommentRow]);
+
         const comment = { ...input, files: [] };
         await createComment(user.id, action, comment);
         expect(stubs.triggerNewActionComment).to.have.been.calledOnce;
     });
 
     it('envoie une notification mail aux personnes concernées', async () => {
-        stubs.createComment.resolves(newComment);
+        stubs.createComment.resolves(1);
+        stubs.fetchComments.resolves([newCommentRow]);
+
         const comment = { ...input, files: [] };
         await createComment(user.id, action, comment);
         expect(stubs.sendMailNotifications).to.have.been.calledOnce;
