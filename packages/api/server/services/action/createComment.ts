@@ -2,6 +2,7 @@ import actionModel from '#server/models/actionModel/index';
 import ServiceError from '#server/errors/ServiceError';
 import { sequelize } from '#db/sequelize';
 import attachmentService from '#server/services/attachment';
+import serializeComment from '#server/models/actionModel/fetchComments/serializeComment';
 import Action, { Comment } from '#root/types/resources/Action.d';
 import sendMattermostNotification from './createComment.sendMattermostNotification';
 import sendMailNotifications from './createComment.sendMailNotifications';
@@ -13,11 +14,12 @@ type ActionCommentInput = {
 
 export default async (authorId: number, action: Action, commentInput: ActionCommentInput): Promise<any> => {
     let comment: Comment;
+    let commentId: number;
     let transaction;
 
     try {
         transaction = await sequelize.transaction();
-        comment = await actionModel.createComment(action.id, {
+        commentId = await actionModel.createComment(action.id, {
             description: commentInput.description,
             created_by: authorId,
         });
@@ -31,7 +33,7 @@ export default async (authorId: number, action: Action, commentInput: ActionComm
         try {
             await attachmentService.upload(
                 'action_comment',
-                comment.id,
+                commentId,
                 authorId,
                 commentInput.files,
                 transaction,
@@ -44,6 +46,8 @@ export default async (authorId: number, action: Action, commentInput: ActionComm
 
     // on finalise
     try {
+        const [commentRow] = await actionModel.fetchComments(null, [commentId], {}, transaction);
+        comment = serializeComment(commentRow);
         await transaction.commit();
     } catch (error) {
         await transaction.rollback();

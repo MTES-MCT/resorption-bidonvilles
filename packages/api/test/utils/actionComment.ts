@@ -27,7 +27,7 @@ export function serialized(override: Partial<Comment> = {}): Comment {
         tags: [],
         user_target_name: [],
         organization_target_name: [],
-        createdAt: (new Date(2020, 0, 1, 0, 0, 0)).getTime(),
+        createdAt: (new Date(2020, 0, 1, 0, 0, 0)).getTime() / 1000,
         createdBy: {
             id: 2,
             first_name: 'Jean',
