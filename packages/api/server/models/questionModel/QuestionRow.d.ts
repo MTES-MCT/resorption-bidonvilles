@@ -17,6 +17,7 @@ type QuestionRow = {
     organizationId: number,
     organizationName: string,
     organizationAbbreviation: string,
+    attachments: string[],
 };
 
 export default QuestionRow;
