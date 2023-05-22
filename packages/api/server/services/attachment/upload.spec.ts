@@ -22,9 +22,13 @@ const config = {
 const attachmentModel = {
     createLinkedAttachment: sandbox.stub(),
 };
+const uuid = {
+    v4: sandbox.stub(),
+};
 rewiremock('#server/config').withDefault(config);
 rewiremock('#server/utils/s3').with({ S3 });
 rewiremock('sharp').with(sharp);
+rewiremock('uuid').with(uuid);
 rewiremock('#server/models/attachmentModel').with(attachmentModel);
 rewiremock.passBy('@aws-sdk/client-s3');
 
@@ -112,6 +116,10 @@ describe('services/attachment/upload', () => {
     });
 
     it('le nom de chaque fichier envoyé sur S3 est correct', async () => {
+        uuid.v4.onCall(0).returns('uuid1');
+        uuid.v4.onCall(1).returns('uuid2');
+        uuid.v4.onCall(2).returns('uuid3');
+
         await upload('shantytown_comment', 1, 1, [
             fakeFile({ mimetype: 'image/png' }),
             fakeFile({ mimetype: 'image/jpeg' }),
@@ -123,23 +131,23 @@ describe('services/attachment/upload', () => {
         expect(
             commands[0].args[0].input.Key,
             'Le nom du PNG original est incorrect',
-        ).to.be.eql('shantytown_comment_author1_comment1_file1.png');
+        ).to.be.eql('shantytown_comment_author1_comment1_file1_uuid1.png');
         expect(
             commands[1].args[0].input.Key,
             'Le nom de la miniature du PNG est incorrect',
-        ).to.be.eql('shantytown_comment_author1_comment1_file1_min.png');
+        ).to.be.eql('shantytown_comment_author1_comment1_file1_uuid1_min.png');
         expect(
             commands[2].args[0].input.Key,
             'Le nom du JPG original est incorrect',
-        ).to.be.eql('shantytown_comment_author1_comment1_file2.jpg');
+        ).to.be.eql('shantytown_comment_author1_comment1_file2_uuid2.jpg');
         expect(
             commands[3].args[0].input.Key,
             'Le nom de la miniature du JPG est incorrect',
-        ).to.be.eql('shantytown_comment_author1_comment1_file2_min.jpg');
+        ).to.be.eql('shantytown_comment_author1_comment1_file2_uuid2_min.jpg');
         expect(
             commands[4].args[0].input.Key,
             'Le nom du PDF est incorrect',
-        ).to.be.eql('shantytown_comment_author1_comment1_file3.pdf');
+        ).to.be.eql('shantytown_comment_author1_comment1_file3_uuid3.pdf');
     });
 
     it('enregistre chaque attachment en base de données', async () => {
@@ -148,6 +156,8 @@ describe('services/attachment/upload', () => {
     });
 
     it('les paramètres d\'appel au modèle sont corrects', async () => {
+        uuid.v4.returns('uuid');
+
         await upload('shantytown_comment', 42, 35, [fakeFile({
             originalname: 'je suis une image.png',
             mimetype: 'image/png',
@@ -158,10 +168,10 @@ describe('services/attachment/upload', () => {
         expect(args[0], 'Le nom de l\'entité est incorrect').to.be.eql('shantytown_comment');
         expect(args[1], 'L\'identifiant de l\'entité est incorrect').to.be.eql(42);
         expect(args[2], 'Le nom du fichier S3 est incorrect').to.be.eql(
-            'shantytown_comment_author35_comment42_file1.png',
+            'shantytown_comment_author35_comment42_file1_uuid.png',
         );
         expect(args[3], 'Le nom de la miniature S3 est incorrect').to.be.eql(
-            'shantytown_comment_author35_comment42_file1_min.png',
+            'shantytown_comment_author35_comment42_file1_uuid_min.png',
         );
         expect(args[4], 'Le nom original du fichier est incorrect').to.be.eql('je suis une image.png');
         expect(args[5], 'Le type MIME du fichier est incorrect').to.be.eql('image/png');
