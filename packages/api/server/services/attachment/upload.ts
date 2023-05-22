@@ -6,6 +6,7 @@ import attachmentModel from '#server/models/attachmentModel';
 import { AttachmentEntityType } from '#server/models/attachmentModel/createLinkedAttachment';
 import fromMimeToExtension from '#server/utils/fromMimeToExtension';
 import { Transaction } from 'sequelize';
+import uuid from 'uuid';
 
 export default async (entityType: AttachmentEntityType, entityId: number, createdBy: number, files: Express.Multer.File[], transaction?: Transaction): Promise<any[]> => {
     const previews: Buffer[] = await Promise.all(
@@ -20,7 +21,9 @@ export default async (entityType: AttachmentEntityType, entityId: number, create
 
     return Promise.all(
         files.map((f, index) => {
-            const Key = `${entityType}_author${createdBy}_comment${entityId}_file${index + 1}.${fromMimeToExtension[f.mimetype]}`;
+            const uid = uuid.v4();
+
+            const Key = `${entityType}_author${createdBy}_comment${entityId}_file${index + 1}_${uid}.${fromMimeToExtension[f.mimetype]}`;
             let PreviewKey = null;
             const promises: Promise<any>[] = [
                 S3.send(new PutObjectCommand({
@@ -32,7 +35,7 @@ export default async (entityType: AttachmentEntityType, entityId: number, create
             ];
 
             if (previews[index] !== null) {
-                PreviewKey = `${entityType}_author${createdBy}_comment${entityId}_file${index + 1}_min.${fromMimeToExtension[f.mimetype]}`;
+                PreviewKey = `${entityType}_author${createdBy}_comment${entityId}_file${index + 1}_${uid}_min.${fromMimeToExtension[f.mimetype]}`;
                 promises.push(
                     S3.send(new PutObjectCommand({
                         Bucket: config.S3.bucket,

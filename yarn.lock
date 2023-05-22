@@ -4520,6 +4520,7 @@ __metadata:
     ts-node-dev: ^2.0.0
     tsc-alias: ^1.4.0
     typescript: ^5.0.0
+    uuid: ^9.0.0
     validator: ^13.7.0
   languageName: unknown
   linkType: soft
