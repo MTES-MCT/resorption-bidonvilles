@@ -18,7 +18,7 @@ module.exports = {
                     },
                     preview_file_key: {
                         type: Sequelize.STRING,
-                        allowNull: false,
+                        allowNull: true,
                     },
                     original_name: {
                         type: Sequelize.STRING,

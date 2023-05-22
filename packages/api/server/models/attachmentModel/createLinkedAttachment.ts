@@ -4,11 +4,21 @@ import create from './create';
 
 export type AttachmentEntityType = 'shantytown_comment' | 'action_comment' | 'question' | 'answer';
 
-export default async (entityType: AttachmentEntityType, entityId: number, key: string, name: string, mimetype: string, size: number, authorId: number, argTransaction?: Transaction): Promise<void> => {
+export default async (
+    entityType: AttachmentEntityType,
+    entityId: number,
+    key: string,
+    previewKey: string,
+    name: string,
+    mimetype: string,
+    size: number,
+    authorId: number,
+    argTransaction?: Transaction,
+): Promise<void> => {
     const transaction = argTransaction || await sequelize.transaction();
 
     try {
-        const attachmentId = await create(key, name, mimetype, size, authorId, transaction);
+        const attachmentId = await create(key, previewKey, name, mimetype, size, authorId, transaction);
         await sequelize.query(
             `INSERT INTO ${entityType}_attachments(fk_${entityType}, fk_attachment) VALUES(:entityId, :attachmentId)`,
             {
