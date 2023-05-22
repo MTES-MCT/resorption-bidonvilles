@@ -21,7 +21,7 @@ const props = defineProps({
 const { file } = toRefs(props);
 
 const isImage = computed(() => {
-    return file.value.extension?.match(/(jpe?g|png|gif|svg)/i);
+    return file.value.extension?.match(/(jpe?g|png|gif)/i);
 });
 const icon = computed(() => {
     if (isImage.value) {
