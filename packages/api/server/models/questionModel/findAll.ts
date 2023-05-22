@@ -27,7 +27,7 @@ export default async (): Promise<Question[]> => {
                 array_remove(array_agg(
                     a.attachment_id || '@.;.@'
                     || a.original_file_key || '@.;.@'
-                    || a.preview_file_key || '@.;.@'
+                    || COALESCE(a.preview_file_key, '') || '@.;.@'
                     || a.original_name || '@.;.@'
                     || a.mimetype || '@.;.@'
                     || a.size || '@.;.@'
