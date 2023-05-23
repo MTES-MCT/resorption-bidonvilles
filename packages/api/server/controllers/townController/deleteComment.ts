@@ -4,6 +4,7 @@ import shantytownService from '#server/services/shantytown';
 const { deleteComment } = shantytownService;
 
 const ERROR_RESPONSES = {
+    commit_failed: { code: 500, message: 'La suppression du commentaire et/ou des pièces jointes a échoué.' },
     fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
     data_incomplete: { code: 400, message: 'Données manquantes' },
     permission_denied: { code: 403, message: 'Permission refusée' },

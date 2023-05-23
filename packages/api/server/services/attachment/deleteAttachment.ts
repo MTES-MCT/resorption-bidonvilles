@@ -4,10 +4,12 @@ import ServiceError from '#server/errors/ServiceError';
 import { S3 } from '#server/utils/s3';
 import config from '#server/config';
 import { DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { Transaction } from 'sequelize';
 
-export default async (keys: AttachmentKeys): Promise<void> => {
+
+export default async (keys: AttachmentKeys, transaction?: Transaction): Promise<void> => {
     try {
-        await attachmentModel.deleteAttachment(keys.attachment_id);
+        await attachmentModel.deleteAttachment(keys.attachment_id, transaction);
     } catch (e) {
         throw new ServiceError('delete_failed', e);
     }
