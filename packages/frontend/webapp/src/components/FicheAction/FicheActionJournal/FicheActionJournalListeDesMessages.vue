@@ -5,6 +5,7 @@
             :key="comment.id"
             :id="`message${comment.id}`"
             :comment="comment"
+            :onAttachmentDelete="onAttachmentDelete"
         />
     </section>
 </template>
@@ -17,4 +18,8 @@ const props = defineProps({
     comments: Array,
 });
 const { comments } = toRefs(props);
+
+function onAttachmentDelete() {
+    console.log("On supprime un attachment d'action");
+}
 </script>

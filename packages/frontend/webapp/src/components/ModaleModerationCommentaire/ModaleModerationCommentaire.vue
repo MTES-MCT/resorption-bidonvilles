@@ -8,7 +8,6 @@
             <CarteCommentaire
                 :comment="comment"
                 class="bg-G100 p-6 border-1 max-w-2xl"
-                disallowAttachmentsRemoval
             />
             <div class="mt-6" v-if="!isOwner">
                 <TextArea

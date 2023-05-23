@@ -16,6 +16,6 @@ export default (attachment: string): File => {
             preview: previewKey ? `${baseUrl}/${previewKey}` : null,
         },
         extension: fromMimeToExtension[mimetype] || 'inconnu',
-        created_by,
+        created_by: parseInt(created_by, 10),
     };
 };

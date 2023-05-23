@@ -6,9 +6,8 @@
             <p class="truncate">{{ file.name }}</p>
             <p class="text-G500"><span>{{ file.extension?.toUpperCase() }}</span> {{ humanFileSize(file.size) }}</p>
         </div>
-        <Button
-            :class="(file.state === 'draft' || file.createdByCurrentUser || isHovered) && !disallowAttachmentsRemoval ? 'visible' : 'invisible'"
-            type="button" icon="trash-alt" size="sm" @click.prevent="$emit('delete')" variant="primaryOutlineAlt" />
+        <Button v-if="onDelete" :class="(file.state === 'draft' || isHovered) ? 'visible' : 'invisible'" type="button"
+            icon="trash-alt" size="sm" @click.prevent="handleDelete" variant="primaryOutlineAlt" />
     </a>
 </template>
 
@@ -23,13 +22,32 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    disallowAttachmentsRemoval: {
-        type: Boolean,
+    onDelete: {
+        type: Function,
         required: false,
-        default: false,
     },
 });
-const { disallowAttachmentsRemoval, file } = toRefs(props);
+const { file, onDelete } = toRefs(props);
 
 const isHovered = ref(false);
+const deleteIsLoading = ref(false);
+
+async function handleDelete() {
+    if (deleteIsLoading.value === true) {
+        return;
+    }
+
+    if (!onDelete.value) {
+        return;
+    }
+
+    deleteIsLoading.value = true;
+    try {
+        await onDelete.value(file.value);
+    } catch (error) {
+        // ignore : la gestion d'erreur doit être faite par le composant qui fournit onDelete()
+    }
+
+    deleteIsLoading.value = false;
+}
 </script>

@@ -267,6 +267,9 @@ export const useTownsStore = defineStore("towns", () => {
             activitiesStore.removeComment(commentId);
             dashboardActivitiesStore.removeComment(commentId);
         },
+        async deleteCommentAttachment(shantytownId, commentId, attachmentId) {
+            console.log(shantytownId, commentId, attachmentId);
+        },
         heatwaveStatuses,
         async setHeatwaveStatus(id, status) {
             if (heatwaveStatuses.value[id]?.loading === true) {

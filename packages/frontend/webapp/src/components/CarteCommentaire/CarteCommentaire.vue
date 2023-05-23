@@ -73,8 +73,7 @@
             v-if="comment.attachments?.length > 0"
             class="mb-2"
             :files="comment.attachments"
-            @delete="handleDeleteAttachment"
-            :disallowAttachmentsRemoval="disallowAttachmentsRemoval"
+            :onDelete="canDeleteAttachment ? onAttachmentDelete : null"
         />
         <div class="whitespace-pre-line break-words">
             {{ comment.description }}
@@ -105,13 +104,16 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    disallowAttachmentsRemoval: Boolean,
+    onAttachmentDelete: {
+        type: Function,
+        required: false,
+    },
 });
 
-const emit = defineEmits(["moderate", "deleteAttachment"]);
+const emit = defineEmits(["moderate"]);
 
 const isHover = ref(false);
-const { comment, disallowAttachmentsRemoval, showActionIcons } = toRefs(props);
+const { comment, showActionIcons } = toRefs(props);
 
 const covidTags = computed(() => {
     if (!comment.value || !comment.value.covid) {
@@ -133,11 +135,12 @@ const canModerate = computed(() => {
     return userStore.hasPermission("shantytown_comment.moderate");
 });
 
+const canDeleteAttachment = computed(() => {
+    const userStore = useUserStore();
+    return userStore.canDeleteAttachment(comment.value.createdBy.id);
+});
+
 function deleteMessage() {
     emit("moderate");
-}
-
-function handleDeleteAttachment(file, index) {
-    emit("deleteAttachment", file, index);
 }
 </script>

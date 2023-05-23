@@ -5,6 +5,7 @@
             :key="answer.id"
             :id="`reponse${answer.id}`"
             :comment="answer"
+            :onAttachmentDelete="onAttachmentDelete"
         />
     </section>
 </template>
@@ -17,4 +18,8 @@ const props = defineProps({
     answers: Array,
 });
 const { answers } = toRefs(props);
+
+function onAttachmentDelete() {
+    console.log("On supprime un attachment de réponse");
+}
 </script>

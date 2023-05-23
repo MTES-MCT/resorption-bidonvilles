@@ -11,8 +11,7 @@
                 </Link>
             </template>
         </p>
-        <FilePreviewGrid v-if="isCollapsed" :files="files" @delete="handleDelete"
-            :disallowAttachmentsRemoval="disallowAttachmentsRemoval" />
+        <FilePreviewGrid v-if="isCollapsed" :files="files" :onDelete="onDelete" />
     </div>
 </template>
 
@@ -34,9 +33,12 @@ const props = defineProps({
         required: false,
         default: false,
     },
-    disallowAttachmentsRemoval: Boolean
+    onDelete: {
+        type: Function,
+        required: false,
+    },
 });
-const { files, collapsedByDefault, disallowAttachmentsRemoval } = toRefs(props);
+const { files, collapsedByDefault, onDelete } = toRefs(props);
 const isCollapsed = ref(collapsedByDefault.value);
 const emit = defineEmits(["delete"]);
 
@@ -50,9 +52,5 @@ const title = computed(() => {
 
 function toggle() {
     isCollapsed.value = !isCollapsed.value;
-}
-
-function handleDelete(file, index) {
-    emit('delete', file, index);
 }
 </script>

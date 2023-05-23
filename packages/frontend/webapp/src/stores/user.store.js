@@ -54,6 +54,10 @@ export const useUserStore = defineStore("user", {
             return (shantytown) =>
                 this.hasLocalizedPermission("shantytown.update", shantytown);
         },
+        canDeleteAttachment() {
+            return (createdBy) =>
+                this.user?.id === createdBy || this.user?.is_admin;
+        },
         hasAcceptedCharte() {
             return this.user?.charte_engagement_a_jour === true;
         },
