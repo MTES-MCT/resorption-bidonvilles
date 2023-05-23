@@ -10,6 +10,7 @@
                 name="solutions"
                 variant="checkbox"
                 v-bind="$attrs"
+                v-model="values.solutions"
             />
 
             <div

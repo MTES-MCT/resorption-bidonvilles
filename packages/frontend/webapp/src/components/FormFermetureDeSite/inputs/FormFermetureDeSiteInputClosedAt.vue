@@ -7,10 +7,14 @@
         :maxDate="new Date()"
         :clearable="false"
         v-bind="$attrs"
+        v-model="values.closed_at"
     />
 </template>
 
 <script setup>
+import { useFormValues } from "vee-validate";
 import labels from "../FormFermetureDeSite.labels";
 import { DatepickerInput } from "@resorptionbidonvilles/ui";
+
+const values = useFormValues();
 </script>

@@ -1,12 +1,11 @@
-import PasswordInput from "./PasswordInput.vue";
+import PasswordInput from './PasswordInput.vue';
 
 export default {
-    title: 'PasswordInput',
-    component: PasswordInput
+  title: 'PasswordInput',
+  component: PasswordInput,
 };
 
-
 export const RegularPasswordInput = () => ({
-    components: { PasswordInput },
-    template: '<PasswordInput  label="Saisie"/>'
+  components: { PasswordInput },
+  template: '<PasswordInput  label="Saisie"/>',
 });

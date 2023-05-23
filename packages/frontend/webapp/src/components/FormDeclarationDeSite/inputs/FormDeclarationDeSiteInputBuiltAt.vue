@@ -4,6 +4,7 @@
         id="built_at"
         :label="labels.built_at"
         :maxDate="values.declared_at || new Date()"
+        v-model="values.built_at"
     />
 </template>
 

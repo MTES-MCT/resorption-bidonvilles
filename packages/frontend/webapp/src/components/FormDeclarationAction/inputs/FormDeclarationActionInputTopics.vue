@@ -7,6 +7,7 @@
             :label="item.name"
             name="topics"
             v-bind="$attrs"
+            v-model="values.topics"
         />
     </CheckableGroup>
 </template>
@@ -16,9 +17,12 @@ import { computed } from "vue";
 import { CheckableGroup, Checkbox } from "@resorptionbidonvilles/ui";
 import { useConfigStore } from "@/stores/config.store";
 import labels from "../FormDeclarationAction.labels";
+import { useFormValues } from "vee-validate";
 
 const configStore = useConfigStore();
 const items = computed(() => {
     return configStore.config?.topics || [];
 });
+
+const values = useFormValues();
 </script>

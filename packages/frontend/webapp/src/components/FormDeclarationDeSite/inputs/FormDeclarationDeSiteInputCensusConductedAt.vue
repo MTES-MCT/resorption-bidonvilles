@@ -5,6 +5,7 @@
         :label="labels.census_conducted_at"
         :minDate="values.built_at || undefined"
         showMandatoryStar
+        v-model="values.census_conducted_at"
     />
 </template>
 

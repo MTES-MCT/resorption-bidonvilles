@@ -4,13 +4,13 @@ import Menu from './Menu/Menu.vue';
 import MenuItem from './Menu/MenuItem.vue';
 
 export default {
-    title: 'Dropdown',
-    component: Dropdown
+  title: 'Dropdown',
+  component: Dropdown,
 };
 
 export const SimpleDropdown = () => ({
-    components: { Dropdown, Button, Menu, MenuItem },
-    template: `
+  components: { Dropdown, Button, Menu, MenuItem },
+  template: `
     <Dropdown>
         <template v-slot:button>
             <Button icon="house-circle-check">Je suis un dropdown (clique moi)</Button>
@@ -24,5 +24,5 @@ export const SimpleDropdown = () => ({
             </Menu>
         </template>
     </Dropdown>
-    `
+    `,
 });
