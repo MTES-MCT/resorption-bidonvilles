@@ -2596,7 +2596,7 @@ __metadata:
     "@types/mocha": ^10.0.1
     "@types/node": "*"
     "@types/sinon-chai": ^3.2.9
-    "@types/superagent": ^4.1.13
+    "@types/superagent": ^4.1.18
     "@typescript-eslint/eslint-plugin": ^5.45.1
     "@typescript-eslint/parser": ^5.45.1
     agenda: ^3.1.0
@@ -6255,13 +6255,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/superagent@npm:^4.1.13":
-  version: 4.1.17
-  resolution: "@types/superagent@npm:4.1.17"
+"@types/superagent@npm:^4.1.18":
+  version: 4.1.18
+  resolution: "@types/superagent@npm:4.1.18"
   dependencies:
     "@types/cookiejar": "*"
     "@types/node": "*"
-  checksum: 076c3283d0fc71a26273e7fe88d4d6dad007c13631a09165714b4b1054362f51c57bb017d2cf62778fd35a1e2b4c8e1688f43bb1b3d6c4a9e4a3a7fbf85b70e6
+  checksum: 4e50cb41e6f0ac55917dddae4665e5251ce0ec086f89172c8b53432c0c3ee026b9243ba4c994aa2702720d7c288fd7ae77f241f9fb9fb15d2d7c4b6bc2ee7079
   languageName: node
   linkType: hard
 
