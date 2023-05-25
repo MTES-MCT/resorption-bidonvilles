@@ -2628,7 +2628,7 @@ __metadata:
     jsonwebtoken: ^9.0.0
     lint-staged: ^13.2.2
     lodash: ^4.17.21
-    mixin-deep: ^1.3.2
+    mixin-deep: ^2.0.1
     mjml: ^4.9.3
     mocha: ^10.2.0
     module-alias: ^2.2.0
@@ -16940,13 +16940,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mixin-deep@npm:^1.2.0, mixin-deep@npm:^1.3.2":
+"mixin-deep@npm:^1.2.0":
   version: 1.3.2
   resolution: "mixin-deep@npm:1.3.2"
   dependencies:
     for-in: ^1.0.2
     is-extendable: ^1.0.1
   checksum: 820d5a51fcb7479f2926b97f2c3bb223546bc915e6b3a3eb5d906dda871bba569863595424a76682f2b15718252954644f3891437cb7e3f220949bed54b1750d
+  languageName: node
+  linkType: hard
+
+"mixin-deep@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "mixin-deep@npm:2.0.1"
+  checksum: b6c404cc1e1df52304f010572c7573e6dde726b9a4e8e72b30658d992789c3487baf3727c9df544654a89c1c2005dc4ee725c89eb3b2f8a589187277499dfeb5
   languageName: node
   linkType: hard
 
