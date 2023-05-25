@@ -2607,7 +2607,7 @@ __metadata:
     chai-subset: ^1.6.0
     cors: ^2.8.5
     docx: ^8.0.4
-    dotenv: ^16.0.0
+    dotenv: ^16.0.3
     escape-html: ^1.0.3
     eslint: 8.22.0
     eslint-config-airbnb-base: ^13.1.0
