@@ -2614,7 +2614,7 @@ __metadata:
     eslint-config-airbnb-typescript: ^17.0.0
     eslint-import-resolver-alias: ^1.1.2
     eslint-plugin-import: ^2.16.0
-    eslint-utils: ^1.4.1
+    eslint-utils: ^3.0.0
     exceljs: ^4.2.1
     express: ^4.16.4
     express-rate-limit: ^6.3.0
@@ -11914,15 +11914,6 @@ __metadata:
     esrecurse: ^4.3.0
     estraverse: ^5.2.0
   checksum: 64591a2d8b244ade9c690b59ef238a11d5c721a98bcee9e9f445454f442d03d3e04eda88e95a4daec558220a99fa384309d9faae3d459bd40e7a81b4063980ae
-  languageName: node
-  linkType: hard
-
-"eslint-utils@npm:^1.4.1":
-  version: 1.4.3
-  resolution: "eslint-utils@npm:1.4.3"
-  dependencies:
-    eslint-visitor-keys: ^1.1.0
-  checksum: a20630e686034107138272f245c460f6d77705d1f4bb0628c1a1faf59fc800f441188916b3ec3b957394dc405aa200a3017dfa2b0fff0976e307a4e645a18d1e
   languageName: node
   linkType: hard
 
