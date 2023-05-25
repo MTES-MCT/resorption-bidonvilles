@@ -2590,7 +2590,7 @@ __metadata:
   dependencies:
     "@sentry/node": ^7.53.1
     "@sentry/tracing": ^7.53.1
-    "@supercharge/promise-pool": ^1.7.0
+    "@supercharge/promise-pool": ^2.4.0
     "@types/chai-as-promised": ^7.1.5
     "@types/chai-subset": ^1.3.3
     "@types/mocha": ^9.1.1
@@ -4249,10 +4249,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supercharge/promise-pool@npm:^1.7.0":
-  version: 1.9.0
-  resolution: "@supercharge/promise-pool@npm:1.9.0"
-  checksum: 24f1cc51cdd8a076a9bd296d0159b33f5dfcf6a31a9965229ad0b7a773b0c3804ea8838543255c08b651318d71282c8e8d0ea37b7b163557bdcbf1b8ec8ea19d
+"@supercharge/promise-pool@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "@supercharge/promise-pool@npm:2.4.0"
+  checksum: d21223256ba05c34a29742172e2b625627038e731f511de0b728c638531096ce12d1a4156fd04e3b34eec980ce8445a66a9d8d070fde7886c9b33a0d759ab2e9
   languageName: node
   linkType: hard
 
