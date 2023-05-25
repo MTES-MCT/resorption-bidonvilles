@@ -28,7 +28,7 @@
     "express": "^4.16.4",
     "express-rate-limit": "^6.3.0",
     "express-validator": "^6.6.1",
-    "html-to-text": "^8.0.0",
+    "html-to-text": "^9.0.5",
     "idb-keyval": "^6.2.0",
     "js-yaml": "^3.13.1",
     "jsdom": "^16.6.0",
