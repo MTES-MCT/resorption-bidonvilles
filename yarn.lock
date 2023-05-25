@@ -2606,7 +2606,7 @@ __metadata:
     chai-http: ^4.3.0
     chai-subset: ^1.6.0
     cors: ^2.8.5
-    docx: ^7.3.0
+    docx: ^8.0.4
     dotenv: ^16.0.0
     escape-html: ^1.0.3
     eslint: 8.22.0
@@ -10761,16 +10761,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"docx@npm:^7.3.0":
-  version: 7.8.2
-  resolution: "docx@npm:7.8.2"
+"docx@npm:^8.0.4":
+  version: 8.0.4
+  resolution: "docx@npm:8.0.4"
   dependencies:
     "@types/node": ^18.0.0
     jszip: ^3.1.5
-    nanoid: ^3.1.20
+    nanoid: ^3.3.4
     xml: ^1.0.1
     xml-js: ^1.6.8
-  checksum: 96159b48f13690a4dfde3f5e3f5edc7ec69397b0d63b4b08155a18d34ed5d2346c2c3bd3d4a0d89cbb2272a484e6828cb5d4fb6625ecc1f2fa949d82dc4f1bd4
+  checksum: feb310ec10c79c6da9ddae794a722a109d54c2c8345839b4bc1738ffead47f5d680d24d9f828671bce8086a0a3006957b3ef8ad376f3af3db4335f43281c337c
   languageName: node
   linkType: hard
 
@@ -17742,7 +17742,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.1.20, nanoid@npm:^3.3.1, nanoid@npm:^3.3.6":
+"nanoid@npm:^3.3.1, nanoid@npm:^3.3.4, nanoid@npm:^3.3.6":
   version: 3.3.6
   resolution: "nanoid@npm:3.3.6"
   bin:

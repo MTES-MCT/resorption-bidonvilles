@@ -18,7 +18,7 @@
     "agenda": "^3.1.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "docx": "^7.3.0",
+    "docx": "^8.0.4",
     "dotenv": "^16.0.0",
     "escape-html": "^1.0.3",
     "eslint-import-resolver-alias": "^1.1.2",
