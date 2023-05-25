@@ -2601,7 +2601,7 @@ __metadata:
     "@typescript-eslint/parser": ^5.59.7
     agenda: ^3.1.0
     body-parser: ^1.20.2
-    chai: ^4.2.0
+    chai: ^4.3.7
     chai-as-promised: ^7.1.1
     chai-http: ^4.2.1
     chai-subset: ^1.6.0
@@ -8727,7 +8727,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chai@npm:^4.2.0, chai@npm:^4.3.6":
+"chai@npm:^4.3.6, chai@npm:^4.3.7":
   version: 4.3.7
   resolution: "chai@npm:4.3.7"
   dependencies:
