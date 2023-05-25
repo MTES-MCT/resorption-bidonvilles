@@ -2622,7 +2622,7 @@ __metadata:
     html-to-text: ^9.0.5
     husky: ^8.0.3
     idb-keyval: ^6.2.0
-    js-yaml: ^3.13.1
+    js-yaml: ^4.1.0
     jsdom: ^16.6.0
     json2csv: ^5.0.6
     jsonwebtoken: ^9.0.0
