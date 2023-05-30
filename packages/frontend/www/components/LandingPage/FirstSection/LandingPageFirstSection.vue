@@ -8,7 +8,7 @@
                 <div class="text-display-lg">
                     {{ $t("landingPage.firstSection.context.title_part1") }}
                     <span class="italic">{{
-                            $t("landingPage.firstSection.context.title_part2")
+                        $t("landingPage.firstSection.context.title_part2")
                     }}</span>
                     : {{ $t("landingPage.firstSection.context.title_part3") }}
                 </div>
@@ -36,13 +36,13 @@
         <div>
             <div class="md:grid md:grid-cols-3 gap-16 mt-16">
                 <LandingPageFeatureBlock icon="map-marked-alt">{{
-                        $t("landingPage.firstSection.features.position")
+                    $t("landingPage.firstSection.features.position")
                 }}</LandingPageFeatureBlock>
                 <LandingPageFeatureBlock class="my-8 md:my-0" icon="chart-line">{{
-                        $t("landingPage.firstSection.features.actions")
+                    $t("landingPage.firstSection.features.actions")
                 }}</LandingPageFeatureBlock>
                 <LandingPageFeatureBlock icon="comments">{{
-                        $t("landingPage.firstSection.features.exchange")
+                    $t("landingPage.firstSection.features.exchange")
                 }}</LandingPageFeatureBlock>
             </div>
 
@@ -99,6 +99,7 @@ import LandingPageContextImage from "./LandingPageContextImage.vue";
 import LandingPageUserFeedback from "./UserFeedback/LandingPageUserFeedback.vue";
 import LandingCTABanner from "./LandingCTABanner.vue";
 import ctaPrendreEnMain from "~/assets/img/LandingPage/FirstSection/cta_prendre_en_main.jpg";
+import { useI18n } from 'vue-i18n';
 
 export default {
     components: {
@@ -106,6 +107,12 @@ export default {
         LandingPageFeatureBlock,
         LandingPageUserFeedback,
         LandingCTABanner,
+    },
+    setup() {
+        const i18n = useI18n();
+        return {
+            i18n
+        };
     },
     data() {
         return {

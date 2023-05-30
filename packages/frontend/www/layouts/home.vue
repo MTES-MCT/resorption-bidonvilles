@@ -14,4 +14,6 @@
 
 <script setup>
 import Layout from "~/components/Layout/Layout.vue";
+
+const i18n = useI18n();
 </script>
