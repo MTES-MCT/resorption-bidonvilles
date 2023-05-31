@@ -140,67 +140,67 @@ const sectionsList: SectionDefinition[] = [
 const sidePropertiesList: PropertyDefinition[] = [
     {
         label: 'Nombre de sites exclusivement intra UE de 10 à 50 personnes',
-        value: report => report.population_10_50.european,
+        value: (report, size, territory) => report.population_10_50[territory].european,
         bgColor: COLORS.BLANC,
     },
     {
         label: 'Nombre de sites exclusivement intra UE de 51 à 100 personnes',
-        value: report => report.population_51_100.european,
+        value: (report, size, territory) => report.population_51_100[territory].european,
         bgColor: COLORS.BLANC,
     },
     {
         label: 'Nombre de sites exclusivement intra UE de 101 à 150 personnes',
-        value: report => report.population_101_150.european,
+        value: (report, size, territory) => report.population_101_150[territory].european,
         bgColor: COLORS.BLANC,
     },
     {
         label: 'Nombre de sites exclusivement intra UE de 151 à 200 personnes',
-        value: report => report.population_151_200.european,
+        value: (report, size, territory) => report.population_151_200[territory].european,
         bgColor: COLORS.BLANC,
     },
     {
         label: 'Nombre de sites exclusivement intra UE de 201 à 250 personnes',
-        value: report => report.population_201_250.european,
+        value: (report, size, territory) => report.population_201_250[territory].european,
         bgColor: COLORS.BLANC,
     },
     {
         label: 'Nombre de sites exclusivement intra UE de plus de 250 personnes',
-        value: report => report.population_251_or_more.european,
+        value: (report, size, territory) => report.population_251_or_more[territory].european,
         bgColor: COLORS.BLANC,
     },
     {
         label: 'Nombre de sites tous publics de 10 à 50 personnes',
-        value: report => report.population_10_50.all,
+        value: (report, size, territory) => report.population_10_50[territory].all,
         bgColor: COLORS.BLANC,
     },
     {
         label: 'Nombre de sites tous publics de 51 à 100 personnes',
-        value: report => report.population_51_100.all,
+        value: (report, size, territory) => report.population_51_100[territory].all,
         bgColor: COLORS.BLANC,
     },
     {
         label: 'Nombre de sites tous publics de 101 à 150 personnes',
-        value: report => report.population_101_150.all,
+        value: (report, size, territory) => report.population_101_150[territory].all,
         bgColor: COLORS.BLANC,
     },
     {
         label: 'Nombre de sites tous publics de 151 à 200 personnes',
-        value: report => report.population_151_200.all,
+        value: (report, size, territory) => report.population_151_200[territory].all,
         bgColor: COLORS.BLANC,
     },
     {
         label: 'Nombre de sites tous publics de 201 à 250 personnes',
-        value: report => report.population_201_250.all,
+        value: (report, size, territory) => report.population_201_250[territory].all,
         bgColor: COLORS.BLANC,
     },
     {
         label: 'Nombre de sites tous publics de plus de 250 personnes',
-        value: report => report.population_251_or_more.all,
+        value: (report, size, territory) => report.population_251_or_more[territory].all,
         bgColor: COLORS.BLANC,
     },
     {
         label: 'Liste des sites tous publics de plus de 200 personnes',
-        value: report => [...report.population_201_250.all_ids, ...report.population_251_or_more.all_ids].join(', '),
+        value: (report, size, territory) => [...report.population_201_250[territory].all_ids, ...report.population_251_or_more[territory].all_ids].join(', '),
         bgColor: COLORS.BLANC,
     },
 ];
@@ -249,6 +249,12 @@ function createColumnTerritoire(sheet: Worksheet): void {
             writeTo(sheet, `B${rowIndex}`, { text: label, bold: true });
         });
     });
+
+    // on crée les entêtes pour la section "bonus"
+    territories.forEach(({ label }, territoryIndex) => {
+        const rowIndex = getFirstRowIndexOfASection(sectionsList.length) + 1 + (territoryIndex * sidePropertiesList.length);
+        writeTo(sheet, `B${rowIndex}`, { text: label, bold: true });
+    });
 }
 
 function createColumnOrigines(sheet: Worksheet): void {
@@ -271,9 +277,11 @@ function createColumnOrigines(sheet: Worksheet): void {
     });
 
     // on crée les entêtes pour chaque "propriétés bonus"
-    const firstRowIndex = getFirstRowIndexOfASection(sectionsList.length) + 1;
-    sidePropertiesList.forEach((property, index) => {
-        writeTo(sheet, `C${firstRowIndex + index}`, { text: property.label });
+    territories.forEach((territory, territoryIndex) => {
+        const firstRowIndex = getFirstRowIndexOfASection(sectionsList.length) + 1 + (territoryIndex * sidePropertiesList.length);
+        sidePropertiesList.forEach((property, index) => {
+            writeTo(sheet, `C${firstRowIndex + index}`, { text: property.label });
+        });
     });
 }
 
@@ -308,9 +316,11 @@ function createColumnData(sheet: Worksheet, report: TownReport, index: number): 
     });
 
     // on injecte les valeurs pour chaque "propriétés bonus"
-    const firstRowIndex = getFirstRowIndexOfASection(sectionsList.length) + 1;
-    sidePropertiesList.forEach((property, propertyIndex) => {
-        writeTo(sheet, `${colAlpha}${firstRowIndex + propertyIndex}`, { text: property.value(report) });
+    territories.forEach((territory, territoryIndex) => {
+        const firstRowIndex = getFirstRowIndexOfASection(sectionsList.length) + 1 + (territoryIndex * sidePropertiesList.length);
+        sidePropertiesList.forEach((property, propertyIndex) => {
+            writeTo(sheet, `${colAlpha}${firstRowIndex + propertyIndex}`, { text: property.value(report, undefined, territory.key) });
+        });
     });
 }
 

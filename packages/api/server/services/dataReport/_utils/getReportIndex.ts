@@ -37,5 +37,5 @@ export default (argFrom: Date, argTo: Date, argDate: Date): number => {
     // si la date donnée correspond au 1er du mois il s'agit du rapport N
     // si la date donnée correspond à un autre jour du mois, il s'agit du rapport N + 1
     const N = getMonthDiff(argFrom, argDate);
-    return date.day() === 1 ? N : N + 1;
+    return date.date() === 1 ? N : N + 1;
 };
