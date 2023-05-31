@@ -74,12 +74,12 @@ describe('dataReportService.getTownsReport()', () => {
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 is_oversea: false,
             }),
             fakeData({
                 shantytown_id: 2,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 is_oversea: true,
             }),
         ];
@@ -102,7 +102,7 @@ describe('dataReportService.getTownsReport()', () => {
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(1998, 6, 12),
+                known_since: new Date(1998, 6, 12),
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
@@ -111,13 +111,61 @@ describe('dataReportService.getTownsReport()', () => {
         expect(response[0].all_sizes.metropolitan.number_of_towns.total).to.be.equal(1);
     });
 
+    it('un site déclaré après la période demandée est quand meme compté si sa date d\'installation est dans la période demandée', async () => {
+        const from = new Date(2023, 1, 1);
+        const to = new Date(2023, 1, 1);
+        const rows: DataReportRawData[] = [
+            fakeData({
+                shantytown_id: 1,
+                known_since: new Date(2023, 0, 1),
+                input_date: new Date(2023, 1, 15),
+            }),
+        ];
+        dataReportModel.getRawData.resolves(rows);
+
+        const response: TownReport[] = await getTownsReport(from, to);
+        expect(response[0].all_sizes.metropolitan.number_of_towns.total).to.be.equal(1);
+    });
+
+    it('une saisie de fermeture est correctement ignorée dans le décompte de population', async () => {
+        const from = new Date(2023, 0, 10);
+        const to = new Date(2023, 0, 17);
+        const rows: DataReportRawData[] = [
+            fakeData({
+                shantytown_id: 1,
+                known_since: new Date(2023, 0, 1),
+                input_date: new Date(2023, 0, 15),
+                closed_at: new Date(2023, 0, 15),
+                population_total: 5,
+            }),
+            fakeData({
+                shantytown_id: 1,
+                known_since: new Date(2023, 0, 1),
+                input_date: new Date(2023, 0, 1),
+                closed_at: new Date(2023, 0, 15),
+                population_total: 5,
+            }),
+        ];
+        dataReportModel.getRawData.resolves(rows);
+
+        const response: TownReport[] = await getTownsReport(from, to);
+        expect(
+            response[0].all_sizes.metropolitan.number_of_people.total,
+            'Le nombre d\'habitants devrait être comptabilisé avant la fermeture',
+        ).to.be.equal(5);
+        expect(
+            response[1].all_sizes.metropolitan.number_of_people.total,
+            'Le nombre d\'habitants ne devrait pas être comptabilisé après la fermeture',
+        ).to.be.equal(0);
+    });
+
     it('un site est correctement décompté dans le total des sites à chaque mois', async () => {
         const from = new Date(2023, 0, 1);
         const to = new Date(2023, 2, 1);
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
@@ -136,7 +184,7 @@ describe('dataReportService.getTownsReport()', () => {
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 closed_at: new Date(2023, 1, 15),
             }),
         ];
@@ -156,11 +204,13 @@ describe('dataReportService.getTownsReport()', () => {
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
+                input_date: new Date(2023, 0, 1, 12, 0, 0),
             }),
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
+                input_date: new Date(2023, 0, 1, 11, 0, 0),
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
@@ -175,7 +225,7 @@ describe('dataReportService.getTownsReport()', () => {
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2023, 3, 30),
+                known_since: new Date(2023, 3, 30),
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
@@ -191,7 +241,7 @@ describe('dataReportService.getTownsReport()', () => {
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2023, 0, 31),
+                known_since: new Date(2023, 0, 31),
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
@@ -207,24 +257,24 @@ describe('dataReportService.getTownsReport()', () => {
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 10,
                 is_oversea: false,
             }),
             fakeData({
                 shantytown_id: 2,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 is_oversea: false,
             }),
             fakeData({
                 shantytown_id: 3,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 10,
                 is_oversea: true,
             }),
             fakeData({
                 shantytown_id: 4,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 is_oversea: true,
             }),
         ];
@@ -255,32 +305,32 @@ describe('dataReportService.getTownsReport()', () => {
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'european',
             }),
             fakeData({
                 shantytown_id: 2,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'french',
             }),
             fakeData({
                 shantytown_id: 3,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'other',
             }),
             fakeData({
                 shantytown_id: 4,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'mixed',
             }),
             fakeData({
                 shantytown_id: 5,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: null,
             }),
             fakeData({
                 shantytown_id: 6,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'european',
                 is_oversea: true,
             }),
@@ -324,20 +374,20 @@ describe('dataReportService.getTownsReport()', () => {
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'french',
                 population_total: 10,
             }),
             fakeData({
                 shantytown_id: 2,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'french',
                 population_total: 10,
                 is_oversea: true,
             }),
             fakeData({
                 shantytown_id: 3,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'french',
                 population_total: 5,
             }),
@@ -361,23 +411,23 @@ describe('dataReportService.getTownsReport()', () => {
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 5,
             }),
             fakeData({
                 shantytown_id: 2,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 10,
             }),
             fakeData({
                 shantytown_id: 3,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 6,
                 is_oversea: true,
             }),
             fakeData({
                 shantytown_id: 4,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 11,
                 is_oversea: true,
             }),
@@ -409,21 +459,25 @@ describe('dataReportService.getTownsReport()', () => {
         const rows: DataReportRawData[] = [
             fakeData({
                 shantytown_id: 1,
+                known_since: new Date(2022, 0, 1),
                 input_date: new Date(2023, 3, 30),
                 population_total: 30,
             }),
             fakeData({
                 shantytown_id: 1,
+                known_since: new Date(2022, 0, 1),
                 input_date: new Date(2023, 3, 15),
                 population_total: 15,
             }),
             fakeData({
                 shantytown_id: 1,
+                known_since: new Date(2022, 0, 1),
                 input_date: new Date(2023, 2, 1),
                 population_total: null,
             }),
             fakeData({
                 shantytown_id: 1,
+                known_since: new Date(2022, 0, 1),
                 input_date: new Date(2022, 0, 1),
                 population_total: 10,
             }),
@@ -456,36 +510,42 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 1,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 1,
                 origins: 'european',
             }),
             fakeData({
                 shantytown_id: 2,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 2,
                 origins: 'french',
             }),
             fakeData({
                 shantytown_id: 3,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 3,
                 origins: 'other',
             }),
             fakeData({
                 shantytown_id: 4,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 4,
                 origins: 'mixed',
             }),
             fakeData({
                 shantytown_id: 5,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 5,
                 origins: null,
             }),
             fakeData({
                 shantytown_id: 6,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 6,
                 origins: 'european',
                 is_oversea: true,
@@ -527,36 +587,42 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 1,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 10,
                 origins: 'european',
             }),
             fakeData({
                 shantytown_id: 2,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 11,
                 origins: 'french',
             }),
             fakeData({
                 shantytown_id: 3,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 12,
                 origins: 'other',
             }),
             fakeData({
                 shantytown_id: 4,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 13,
                 origins: 'mixed',
             }),
             fakeData({
                 shantytown_id: 5,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 14,
                 origins: null,
             }),
             fakeData({
                 shantytown_id: 6,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 15,
                 origins: 'european',
                 is_oversea: true,
@@ -564,6 +630,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 7,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 5,
                 origins: 'european',
             }),
@@ -604,6 +671,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 1,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'french',
                 population_total: 5,
                 population_minors: 1,
@@ -611,6 +679,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 2,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'european',
                 population_total: 5,
                 population_minors: 2,
@@ -618,6 +687,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 3,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'other',
                 population_total: 5,
                 population_minors: 3,
@@ -625,6 +695,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 4,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'mixed',
                 population_total: 5,
                 population_minors: 4,
@@ -632,6 +703,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 5,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: null,
                 population_total: 5,
                 population_minors: 5,
@@ -639,6 +711,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 6,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'french',
                 population_total: 6,
                 population_minors: 6,
@@ -689,6 +762,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 1,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'french',
                 population_total: 10,
                 population_minors: 1,
@@ -696,6 +770,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 2,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'european',
                 population_total: 10,
                 population_minors: 2,
@@ -703,6 +778,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 3,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'other',
                 population_total: 10,
                 population_minors: 3,
@@ -710,6 +786,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 4,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: 'mixed',
                 population_total: 10,
                 population_minors: 4,
@@ -717,6 +794,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 5,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: null,
                 population_total: 10,
                 population_minors: 5,
@@ -724,6 +802,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 6,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: null,
                 population_total: 5,
                 population_minors: 5,
@@ -731,6 +810,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 7,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 origins: null,
                 population_total: 10,
                 population_minors: 5,
@@ -773,37 +853,51 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 1,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 9,
             }),
             fakeData({
                 shantytown_id: 2,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 10,
                 origins: 'other',
             }),
             fakeData({
                 shantytown_id: 3,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 50,
                 origins: 'european',
             }),
             fakeData({
                 shantytown_id: 4,
                 input_date: new Date(2023, 0, 1),
-                population_total: 10,
-                origins: 'other',
-                is_oversea: true,
-            }),
-            fakeData({
-                shantytown_id: 5,
-                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 50,
                 origins: 'european',
                 is_oversea: true,
             }),
             fakeData({
+                shantytown_id: 5,
+                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
+                population_total: 10,
+                origins: 'other',
+                is_oversea: true,
+            }),
+            fakeData({
                 shantytown_id: 6,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
+                population_total: 51,
+                origins: 'european',
+                is_oversea: true,
+            }),
+            fakeData({
+                shantytown_id: 7,
+                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 51,
             }),
         ];
@@ -825,23 +919,27 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 1,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 50,
             }),
             fakeData({
                 shantytown_id: 2,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 51,
                 origins: 'other',
             }),
             fakeData({
                 shantytown_id: 3,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 100,
                 origins: 'european',
             }),
             fakeData({
                 shantytown_id: 4,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 51,
                 origins: 'other',
                 is_oversea: true,
@@ -849,6 +947,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 5,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 100,
                 origins: 'european',
                 is_oversea: true,
@@ -856,6 +955,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 6,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 101,
             }),
         ];
@@ -877,23 +977,27 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 1,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 100,
             }),
             fakeData({
                 shantytown_id: 2,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 101,
                 origins: 'other',
             }),
             fakeData({
                 shantytown_id: 3,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 150,
                 origins: 'european',
             }),
             fakeData({
                 shantytown_id: 4,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 101,
                 origins: 'other',
                 is_oversea: true,
@@ -901,6 +1005,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 5,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 150,
                 origins: 'european',
                 is_oversea: true,
@@ -908,7 +1013,9 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 6,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 151,
+                is_oversea: true,
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
@@ -929,23 +1036,27 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 1,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 150,
             }),
             fakeData({
                 shantytown_id: 2,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 151,
                 origins: 'other',
             }),
             fakeData({
                 shantytown_id: 3,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 200,
                 origins: 'european',
             }),
             fakeData({
                 shantytown_id: 4,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 151,
                 origins: 'other',
                 is_oversea: true,
@@ -953,6 +1064,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 5,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 200,
                 origins: 'european',
                 is_oversea: true,
@@ -960,7 +1072,9 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 6,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 201,
+                is_oversea: true,
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
@@ -982,38 +1096,52 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 1,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 200,
             }),
             fakeData({
                 shantytown_id: 2,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 201,
                 origins: 'other',
             }),
             fakeData({
                 shantytown_id: 3,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 250,
                 origins: 'european',
             }),
             fakeData({
                 shantytown_id: 4,
                 input_date: new Date(2023, 0, 1),
-                population_total: 201,
-                origins: 'other',
+                known_since: new Date(2023, 0, 1),
+                population_total: 250,
+                origins: 'european',
                 is_oversea: true,
             }),
             fakeData({
                 shantytown_id: 5,
                 input_date: new Date(2023, 0, 1),
-                population_total: 250,
-                origins: 'european',
+                known_since: new Date(2023, 0, 1),
+                population_total: 201,
+                origins: 'other',
                 is_oversea: true,
             }),
             fakeData({
                 shantytown_id: 6,
                 input_date: new Date(2023, 0, 1),
                 population_total: 251,
+                origins: 'european',
+                is_oversea: true,
+            }),
+            fakeData({
+                shantytown_id: 7,
+                input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
+                population_total: 251,
+                is_oversea: true,
             }),
         ];
         dataReportModel.getRawData.resolves(rows);
@@ -1034,18 +1162,21 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 1,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 251,
                 origins: 'other',
             }),
             fakeData({
                 shantytown_id: 2,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 252,
                 origins: 'european',
             }),
             fakeData({
                 shantytown_id: 3,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 251,
                 origins: 'other',
                 is_oversea: true,
@@ -1053,6 +1184,7 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 4,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 252,
                 origins: 'european',
                 is_oversea: true,
@@ -1076,11 +1208,13 @@ describe('dataReportService.getTownsReport()', () => {
             fakeData({
                 shantytown_id: 1,
                 input_date: new Date(2023, 0, 2),
+                known_since: new Date(2023, 0, 2),
                 population_total: 5,
             }),
             fakeData({
                 shantytown_id: 2,
                 input_date: new Date(2023, 0, 1),
+                known_since: new Date(2023, 0, 1),
                 population_total: 10,
             }),
         ];
