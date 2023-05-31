@@ -40,7 +40,7 @@ describe('services/attachment/deleteAttachment', () => {
 
     it('supprime l\'attachment de la base de données', async () => {
         await deleteAttachment(fakeKeys({ attachment_id: 1 }));
-        expect(attachmentModel.deleteAttachment).to.have.been.calledOnceWithExactly(1);
+        expect(attachmentModel.deleteAttachment).to.have.been.calledOnceWithExactly(1, undefined);
     });
 
     it('supprime le fichier original de S3', async () => {
@@ -78,6 +78,14 @@ describe('services/attachment/deleteAttachment', () => {
             expect.fail('L\'exception n\'aurait pas du être lancée');
         }
     });
+
+    it('si une transaction est passée en paramètre, elle est transférée au modèle', async () => {
+        await deleteAttachment(fakeKeys(), 'fake-transaction');
+
+        const { args } = attachmentModel.deleteAttachment.getCall(0);
+        expect(args[1], 'La transaction est manquante').to.be.eql('fake-transaction');
+    });
+
 
     it('lance une exception si le modèle échoue', async () => {
         const error = new Error('fake error');
