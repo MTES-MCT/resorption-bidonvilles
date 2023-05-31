@@ -112,16 +112,14 @@ export default async (from: Date, to: Date): Promise<DataReportRawData[]> => seq
             LEFT JOIN shantytown_history_agg_origins ON shantytown_history_agg_origins.hid = "ShantytownHistories".hid)
         ) t
         WHERE
-            (t.known_since <= :to AND t.input_date <= :to)
-            AND
-            (t.input_date >= t.known_since)
+            t.known_since <= :to
             AND
             (t.closed_at IS NULL OR t.closed_at > :from)
         ORDER BY t.shantytown_id ASC, t.input_date DESC`,
     {
         type: QueryTypes.SELECT,
         replacements: {
-            from: `${moment(from).format('YYYY-MM-DD')} 00:00:00`,
+            from: `${moment(from).format('YYYY-MM-DD')} 23:59:59`,
             to: `${moment(to).format('YYYY-MM-DD')} 23:59:59`,
         },
     },
