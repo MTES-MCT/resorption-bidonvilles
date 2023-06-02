@@ -77,7 +77,7 @@
 
             <!-- journal du site -->
             <p v-if="shantytown.comments.regular.length > 0" class="mt-6">
-                <Link :to="`/site/${shantytown.id}#newComment`"
+                <Link :to="`/site/${shantytown.id}#journal_du_site`"
                     >{{ shantytown.comments.regular.length }} message{{
                         shantytown.comments.regular.length !== 1 ? "s" : ""
                     }}
