@@ -160,8 +160,10 @@ export const useUserStore = defineStore("user", {
             this.setToken(token);
         },
         async refreshToken() {
-            const { token } = await refreshToken();
-            this.setToken(token);
+            const response = await refreshToken();
+            if (response) {
+                this.setToken(response.token);
+            }
         },
         signout() {
             const configStore = useConfigStore();
