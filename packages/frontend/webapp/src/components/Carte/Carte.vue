@@ -615,7 +615,7 @@ function createCircleMarker(
 
 function createPoiMarker(poi) {
     // Longitude/latitudes returned by soliguide are in the wrong order
-    const coordinates = poi.location.coordinates.reverse();
+    const coordinates = poi.position.location.coordinates.reverse();
 
     const marker = L.marker(coordinates, {
         title: poi.address,
