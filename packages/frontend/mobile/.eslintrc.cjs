@@ -25,6 +25,7 @@ module.exports = {
                 ],
             },
         ],
+        "vue/no-dupe-keys": 0,
     },
     parserOptions: {
         ecmaVersion: "latest",
