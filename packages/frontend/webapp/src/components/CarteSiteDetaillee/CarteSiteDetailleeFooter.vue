@@ -8,7 +8,7 @@
             type="button"
             size="sm"
             :loading="heatwaveRequestStatus?.loading === true"
-            @click="toggleHeatwave"
+            @click.prevent="toggleHeatwave"
         >
             <template v-if="heatwaveStatus === false">Alerte Canicule</template>
             <template v-else>Supprimer l'alerte Canicule</template>
@@ -62,8 +62,7 @@ const isOpen = computed(() => {
     return shantytown.value.status === "open";
 });
 
-async function toggleHeatwave(event) {
-    event.preventDefault(); // éviter que le clic ne redirige vers la fiche site
+async function toggleHeatwave() {
     await townsStore.setHeatwaveStatus(
         shantytown.value.id,
         !heatwaveStatus.value
