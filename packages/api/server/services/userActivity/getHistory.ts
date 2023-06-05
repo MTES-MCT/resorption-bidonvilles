@@ -2,13 +2,11 @@ import shantytownModel from '#server/models/shantytownModel';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import userModel from '#server/models/userModel';
 import actionModel from '#server/models/actionModel';
+import questionModel from '#server/models/questionModel';
+import answerModel from '#server/models/answerModel';
+import ServiceError from '#server/errors/ServiceError';
+import { ServiceActivity } from '#root/types/services/ActivityService.d';
 
-/**
- * @param {Object} userLocation Location to be used for 'local' permissions
- * @param {HistoryPermissions} permissions See above
- * @param {Object} location Location to be queried
- * @param {Array.<String>} activityTypeFilter List of activityTypeFilter to be included
- */
 export default async (user, location, activityTypeFilter, resorbedFilter, myTownsFilter, numberOfActivities, lastDate, maxDate) => {
     const promises = [];
     const shantytownFilter = [];
@@ -34,7 +32,21 @@ export default async (user, location, activityTypeFilter, resorbedFilter, myTown
     if (activityTypeFilter.includes('actionComment')) {
         promises.push(actionModel.getCommentHistory(user, location, numberOfActivities, lastDate, maxDate));
     }
-    const activities = await Promise.all(promises);
+
+    if (activityTypeFilter.includes('question')) {
+        promises.push(questionModel.getHistory(numberOfActivities, lastDate, maxDate));
+    }
+
+    if (activityTypeFilter.includes('answer')) {
+        promises.push(answerModel.getHistory(numberOfActivities, lastDate, maxDate));
+    }
+
+    let activities: ServiceActivity[];
+    try {
+        activities = await Promise.all(promises);
+    } catch (error) {
+        throw new ServiceError('fetch_failed', error);
+    }
     const sortedActivities = activities.flat().sort((a, b) => (a.date > b.date ? -1 : 1));
 
     if (numberOfActivities !== -1) {

@@ -2,13 +2,14 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import geoUtils from '#server/utils/geo';
 import permissionUtils from '#server/utils/permission';
-import serializeShantytown from '#server/models/shantytownModel/_common/serializeShantytown';
-import SQL from './_common/SQL';
+import serializeShantytown, { Shantytown } from '#server/models/shantytownModel/_common/serializeShantytown';
+import SQL, { ShantytownRow } from './_common/SQL';
 
 const { fromGeoLevelToTableName } = geoUtils;
 const { restrict } = permissionUtils;
 
-export default async (user, location, lastDate, closedTowns) => {
+type ShantytownObject = { [key: number]: ShantytownRow };
+export default async (user, location, lastDate, closedTowns): Promise<Shantytown[]> => {
     const where = [];
     const replacements: any = {
         userId: user.id,
@@ -24,7 +25,7 @@ export default async (user, location, lastDate, closedTowns) => {
         replacements.shantytownLocationCode = restrictedLocation[restrictedLocation.type].code;
     }
 
-    const rows:any = await sequelize.query(
+    const rows: ShantytownRow[] = await sequelize.query(
         `
             SELECT
                 shantytown_history.*
@@ -122,14 +123,14 @@ export default async (user, location, lastDate, closedTowns) => {
     );
 
 
-    const acc = {};
+    const acc: ShantytownObject = {};
     rows.forEach((row) => {
         if (!acc[row.id] || row.updatedAt > acc[row.id].updatedAt) {
             acc[row.id] = row;
         }
         return {};
     });
-    const shantytown_history = Object.values(acc).filter((el:any) => ((closedTowns && (el.closedAt !== null)) || (!closedTowns && (el.closedAt === null))));
+    const shantytown_history = Object.values(acc).filter((el:ShantytownRow) => ((closedTowns && (el.closedAt !== null)) || (!closedTowns && (el.closedAt === null))));
 
 
     return shantytown_history.map(town => serializeShantytown(town, user));

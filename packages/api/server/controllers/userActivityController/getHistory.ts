@@ -1,5 +1,10 @@
 import moment from 'moment';
-import userActivityModel from '#server/models/userActivityModel';
+import getHistory from '#server/services/userActivity/getHistory';
+
+const ERROR_RESPONSES = {
+    fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
+    undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
+};
 
 export default async (req, res, next) => {
     const {
@@ -7,7 +12,7 @@ export default async (req, res, next) => {
     } = req.query;
     try {
         return res.status(200).send(
-            await userActivityModel.getHistory(
+            await getHistory(
                 req.user,
                 req.body.location,
                 activityTypeFilter,
@@ -19,11 +24,12 @@ export default async (req, res, next) => {
             ),
         );
     } catch (error) {
-        res.status(500).send({
+        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
+        res.status(code).send({
             error: {
-                user_message: 'Une erreur est survenue dans la lecture en base de données - regular.ts',
+                user_message: message,
             },
         });
-        return next(error);
+        return next(error.nativeError || error);
     }
 };

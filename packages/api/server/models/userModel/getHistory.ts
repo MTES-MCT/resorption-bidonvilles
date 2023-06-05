@@ -1,8 +1,28 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import { LocationType } from '#server/models/geoModel/LocationType.d';
+import { UserActivity } from '#root/types/resources/Activity.d';
 import formatName from './_common/formatName';
 
-export default async (location, numberOfActivities, lastDate, maxDate) => {
+
+type UserActivityRow = {
+    date: Date,
+    first_name: string,
+    last_name: string,
+    organization_id: number,
+    location_type: LocationType,
+    region_code: string | null,
+    region_name: string | null,
+    departement_code: string | null,
+    departement_name: string | null,
+    epci_code: string | null,
+    epci_name: string | null,
+    city_code: string | null,
+    city_name: string | null,
+    city_main: string | null
+};
+
+export default async (location, numberOfActivities, lastDate, maxDate):Promise<UserActivity[]> => {
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
     const activities = await sequelize.query(
         `
@@ -44,7 +64,7 @@ export default async (location, numberOfActivities, lastDate, maxDate) => {
     );
 
     return activities
-        .map((activity: any) => ({
+        .map((activity: UserActivityRow): UserActivity => ({
             entity: 'user',
             action: 'creation',
             date: activity.date.getTime() / 1000,

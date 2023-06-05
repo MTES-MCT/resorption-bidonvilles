@@ -1,4 +1,11 @@
-export default comment => ({
+import ShantytownComment from '#server/models/shantytownCommentModel/ShantytownComment.d';
+import { CommentTag } from '#server/models/shantytownCommentTagModel/serializeCommentTag';
+import { ShantytownCommentRow } from '../../shantytownCommentModel/ShantytownCommentRow.d';
+
+type shantytownCommentRowWithTags = ShantytownCommentRow & {
+    tags: CommentTag[]
+};
+export default (comment: shantytownCommentRowWithTags):ShantytownComment => ({
     id: comment.commentId,
     description: comment.commentDescription,
     createdAt: comment.commentCreatedAt !== null ? (comment.commentCreatedAt.getTime() / 1000) : null,

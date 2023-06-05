@@ -71,6 +71,22 @@
                     'update-shantytown'
                 "
             />
+            <CarteHistoriqueQuestion
+                class="mt-4"
+                :activity="activity"
+                v-if="
+                    `${activity.action}-${activity.entity}` ===
+                    'creation-question'
+                "
+            />
+            <CarteHistoriqueReponse
+                class="mt-4"
+                :activity="activity"
+                v-if="
+                    `${activity.action}-${activity.entity}` ===
+                    'creation-answer'
+                "
+            />
 
             <footer class="flex justify-between pt-2">
                 <span class="text-G500">{{
@@ -111,6 +127,8 @@ import ModaleModerationCommentaire from "@/components/ModaleModerationCommentair
 import CarteHistoriqueIcone from "./CarteHistoriqueIcone.vue";
 import CarteHistoriqueCommentaire from "./CarteHistoriqueCommentaire.vue";
 import CarteHistoriqueSite from "./CarteHistoriqueSite.vue";
+import CarteHistoriqueQuestion from "./CarteHistoriqueQuestion.vue";
+import CarteHistoriqueReponse from "./CarteHistoriqueReponse.vue";
 
 const isHover = ref(false);
 const moderationModal = ref(null);
@@ -141,7 +159,10 @@ const title = computed(() => {
 
         case "creation-user":
             return "Nouvel utilisateur";
-
+        case "creation-question":
+            return "Nouvelle question";
+        case "creation-answer":
+            return "Nouvelle réponse";
         case "creation-comment":
             if (activity.value.comment?.covid) {
                 return "Nouveau message Covid-19";
@@ -184,8 +205,15 @@ const colors = computed(() => {
         };
     }
 
-    // création de commentaire
+    if (["question", "answer"].includes(activity.value.entity)) {
+        return {
+            text: "text-primary",
+            bg: "bg-primary",
+        };
+    }
+
     if (activity.value.comment?.covid) {
+        // création de commentaire
         return {
             text: "text-error",
             bg: "bg-error",
@@ -216,6 +244,13 @@ const link = computed(() => {
 
     if (activity.value.entity === "user") {
         return `/structure/${activity.value.user.organization}`;
+    }
+    if (activity.value.entity === "question") {
+        return `/question/${activity.value.question.id}`;
+    }
+
+    if (activity.value.entity === "answer") {
+        return `/question/${activity.value.question.id}#reponse${activity.value.answer.id}`;
     }
 
     return `/site/${activity.value.shantytown.id}`;
@@ -266,6 +301,14 @@ const seeMoreWording = computed(() => {
 
     if (activity.value.entity === "user") {
         return "Voir la fiche dans l'annuaire";
+    }
+
+    if (activity.value.entity === "question") {
+        return "Voir la question";
+    }
+
+    if (activity.value.entity === "answer") {
+        return "Voir la réponse";
     }
 
     return "Voir le message";

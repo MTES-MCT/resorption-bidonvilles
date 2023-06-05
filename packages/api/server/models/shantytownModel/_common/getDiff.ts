@@ -9,7 +9,13 @@ function getDeepProperty(obj, path) {
     return path.split('.').reduce((acc, curr) => acc && acc[curr], obj);
 }
 
-export default (oldVersion, newVersion) => {
+export type Diff = {
+    fieldKey: string,
+    field: string,
+    oldValue: string,
+    newValue: string
+};
+export default (oldVersion, newVersion): Diff[] => {
     const baseProcessors = {
         default(value) {
             if (value === null || value === '' || value === undefined) {

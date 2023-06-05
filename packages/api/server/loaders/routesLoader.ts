@@ -699,7 +699,7 @@ export default (app) => {
         middlewares.appVersion.sync,
         validators.activity.list,
         middlewares.validation,
-        controllers.userActivity.regular,
+        controllers.userActivity.getHistory,
     );
 
     app.get(

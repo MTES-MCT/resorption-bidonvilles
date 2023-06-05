@@ -7,13 +7,30 @@ import shantytownModel from '#server/models/shantytownModel';
 import permissionUtils from '#server/utils/permission';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
 import getAddressSimpleOf from '#server/models//shantytownModel/_common/getAddressSimpleOf';
+import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
+import { ShantytownCommentRow } from './ShantytownCommentRow.d';
+import { ShantytownCommentActivity } from '#root/types/resources/Activity.d';
 
 const { fromGeoLevelToTableName } = geoUtils;
 const { formatName } = userModel;
 const { getUsenameOf, serializeComment } = shantytownModel;
 const { restrict } = permissionUtils;
 
-export default async (user, location, numberOfActivities, lastDate, maxDate) => {
+
+export type ShantytownCommentHistoryRow = ShantytownCommentRow & {
+    shantytownId: number,
+    shantytownName: string,
+    address: string,
+    cityCode: string,
+    cityName: string,
+    epciCode: string,
+    epciName: string,
+    departementCode: string,
+    departementName: string,
+    regionCode: string,
+    regionName: string
+};
+export default async (user, location, numberOfActivities, lastDate, maxDate):Promise<ShantytownCommentActivity[]> => {
     // apply geographic level restrictions
     const where = [];
     const replacements: any = {
@@ -147,18 +164,6 @@ export default async (user, location, numberOfActivities, lastDate, maxDate) => 
                 shantytowns.shantytown_id AS "shantytownId",
                 shantytowns.name AS "shantytownName",
                 shantytowns.address,
-                covid_comments.date AS "covidCommentDate",
-                covid_comments.equipe_maraude AS "covidEquipeMaraude",
-                covid_comments.equipe_sanitaire AS "covidEquipeSanitaire",
-                covid_comments.equipe_accompagnement AS "covidEquipeAccompagnement",
-                covid_comments.distribution_alimentaire AS "covidDistributionAlimentaire",
-                covid_comments.action_mediation_sante AS "covidActionMediationSante",
-                covid_comments.sensibilisation_vaccination AS "covidSensibilisationVaccination",
-                covid_comments.equipe_mobile_depistage AS "covidEquipeMobileDepistage",
-                covid_comments.equipe_mobile_vaccination AS "covidEquipeMobileVaccination",
-                covid_comments.personnes_orientees AS "covidPersonnesOrientees",
-                covid_comments.personnes_avec_symptomes AS "covidPersonnesAvecSymptomes",
-                covid_comments.besoin_action AS "covidBesoinAction",
                 cities.code AS "cityCode",
                 cities.name AS "cityName",
                 epci.code AS "epciCode",
@@ -171,7 +176,6 @@ export default async (user, location, numberOfActivities, lastDate, maxDate) => 
             LEFT JOIN organization_comment_access oca ON comments.shantytown_comment_id = oca.shantytown_comment_id
             LEFT JOIN user_comment_access uca ON comments.shantytown_comment_id = uca.shantytown_comment_id
             LEFT JOIN shantytowns ON comments.fk_shantytown = shantytowns.shantytown_id
-            LEFT JOIN shantytown_covid_comments covid_comments ON covid_comments.fk_comment = comments.shantytown_comment_id
             LEFT JOIN users author ON comments.created_by = author.user_id
             LEFT JOIN organizations ON author.fk_organization = organizations.organization_id
             LEFT JOIN cities ON shantytowns.fk_city = cities.code
@@ -188,7 +192,7 @@ export default async (user, location, numberOfActivities, lastDate, maxDate) => 
         },
     );
 
-    let commentTags = {};
+    let commentTags: CommentTagObject = {};
     if (activities.length > 0) {
         commentTags = await shantytownCommentTagModel.getTagsForComments(
             activities.map(({ commentId }: any) => commentId),
@@ -196,7 +200,7 @@ export default async (user, location, numberOfActivities, lastDate, maxDate) => 
     }
 
     return activities
-        .map((activity: any) => ({
+        .map((activity: ShantytownCommentHistoryRow): ShantytownCommentActivity => ({
             entity: 'comment',
             action: 'creation',
             date: activity.commentCreatedAt.getTime() / 1000,
@@ -218,6 +222,7 @@ export default async (user, location, numberOfActivities, lastDate, maxDate) => 
                 city: {
                     code: activity.cityCode,
                     name: activity.cityName,
+                    main: null,
                 },
                 epci: {
                     code: activity.epciCode,

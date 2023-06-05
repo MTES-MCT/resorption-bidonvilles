@@ -87,7 +87,7 @@ import userUpdateLocalAdmin from './userController/updateLocalAdmin';
 import userUpgrade from './userController/upgrade';
 import userUpdatePermissionOptions from './userController/updatePermissionOptions';
 // user activity
-import userActivityRegular from './userActivityController/regular';
+import userActivityGetHistory from './userActivityController/getHistory';
 // user navigation logs
 import insertUserNavigationLogs from './userNavigationLogsController/insert';
 import exportMobileUserNavigationLogs from './userNavigationLogsController/exportMobileSessions';
@@ -200,7 +200,7 @@ export default () => ({
         upgrade: userUpgrade,
     },
     userActivity: {
-        regular: userActivityRegular,
+        getHistory: userActivityGetHistory,
     },
     userNavigationLogs: {
         insert: insertUserNavigationLogs,

@@ -4,6 +4,8 @@ import { QueryTypes } from 'sequelize';
 import shantytownModel from '#server/models/shantytownModel';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
 
+import { ShantytownCommentRow } from './ShantytownCommentRow';
+
 const { serializeComment } = shantytownModel;
 
 /**
@@ -11,7 +13,7 @@ const { serializeComment } = shantytownModel;
  */
 export default async (id) => {
     const [comments, commentTags] = await Promise.all([
-        sequelize.query(
+        <Promise<ShantytownCommentRow[]>>sequelize.query(
             `WITH organization_comment_access AS (
                 SELECT
                     scot.fk_comment AS shantytown_comment_id,
