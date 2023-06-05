@@ -63,10 +63,18 @@ const isOpen = computed(() => {
 });
 
 async function toggleHeatwave() {
-    await townsStore.setHeatwaveStatus(
-        shantytown.value.id,
-        !heatwaveStatus.value
-    );
+    try {
+        await townsStore.setHeatwaveStatus(
+            shantytown.value.id,
+            !heatwaveStatus.value
+        );
+    } catch (e) {
+        notificationStore.error(
+            "Risque canicule",
+            "Une erreur inconnue est survenue"
+        );
+        return;
+    }
 
     if (heatwaveRequestStatus.value?.error !== null) {
         notificationStore.error(
