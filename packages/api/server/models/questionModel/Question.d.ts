@@ -1,5 +1,5 @@
 import Answer from '#server/models/answerModel/Answer.d';
-import QuestionTag from './QuestionTag';
+import QuestionTag from './QuestionTag.d';
 
  type Question = {
      id: number,
