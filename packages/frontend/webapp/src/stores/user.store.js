@@ -4,6 +4,7 @@ import { get as refreshToken } from "@/api/refresh_token.api";
 import { useConfigStore } from "@/stores/config.store.js";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
 import compareLocations from "@/utils/compareLocations";
+import logout from "@/utils/logout";
 
 export const useUserStore = defineStore("user", {
     state: () => {
@@ -160,8 +161,12 @@ export const useUserStore = defineStore("user", {
             this.setToken(token);
         },
         async refreshToken() {
-            const { token } = await refreshToken();
-            this.setToken(token);
+            const response = await refreshToken();
+            if (response?.token) {
+                this.setToken(response.token);
+            } else {
+                logout("/connexion?reason=invalid_token");
+            }
         },
         signout() {
             const configStore = useConfigStore();

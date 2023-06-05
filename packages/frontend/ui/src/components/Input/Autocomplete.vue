@@ -115,6 +115,12 @@ async function onInput({ target }) {
         return;
     }
 
+    if(lastPromise.value !== null){
+        lastPromise.value.catch(() => {
+        // ignore
+        });
+    }
+   
     lastPromise.value = debouncedGetResults(value, callId);
 }
 
