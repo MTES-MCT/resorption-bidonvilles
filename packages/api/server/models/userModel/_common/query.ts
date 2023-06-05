@@ -15,9 +15,11 @@ type UserQueryFilters = {
     app?: boolean
 };
 
-export default async (where: Where = [], filters: UserQueryFilters = {}, user: string = null, feature: string = undefined, transaction: Transaction = undefined): Promise<SerializedUser[]> => {
+export default async (where: Where | String = [], filters: UserQueryFilters = {}, user: string = null, feature: string = undefined, transaction: Transaction = undefined): Promise<SerializedUser[]> => {
     const replacements = {};
 
+    const strWhere = typeof where === 'string' ? where : '';
+    const arrWhere = Array.isArray(where) ? where : [];
     if (user !== null) {
         const permissionClauseGroup = fWhere().can(user).do(feature, 'user');
         if (permissionClauseGroup === null) {
@@ -25,11 +27,11 @@ export default async (where: Where = [], filters: UserQueryFilters = {}, user: s
         }
 
         if (Object.keys(permissionClauseGroup).length > 0) {
-            where.push(permissionClauseGroup);
+            arrWhere.push(permissionClauseGroup);
         }
     }
 
-    const whereClause = where.map((clauses, index) => {
+    const finalArrWhere = arrWhere.map((clauses, index) => {
         const clauseGroup = Object.keys(clauses).map((column) => {
             replacements[`${column}${index}`] = clauses[column].value !== undefined ? clauses[column].value : clauses[column];
             if (clauses[column].anyOperator !== undefined) {
@@ -49,7 +51,12 @@ export default async (where: Where = [], filters: UserQueryFilters = {}, user: s
         }).join(' OR ');
 
         return `(${clauseGroup})`;
-    }).join(' AND ');
+    });
+    if (strWhere.length > 0) {
+        finalArrWhere.push(strWhere);
+    }
+
+    const whereClause = finalArrWhere.join(' AND ');
 
     const charte = await charteEngagementModel.getLatest();
     let latestCharte = null;
@@ -143,7 +150,7 @@ export default async (where: Where = [], filters: UserQueryFilters = {}, user: s
             email_unsubscriptions ON email_unsubscriptions.fk_user = users.user_id
         LEFT JOIN
             question_subscriptions ON question_subscriptions.fk_user = users.user_id
-        ${where.length > 0 ? `WHERE ${whereClause}` : ''}
+        ${whereClause.length > 0 ? `WHERE ${whereClause}` : ''}
         ORDER BY
             CASE
                 WHEN
