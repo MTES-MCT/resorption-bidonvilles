@@ -11,12 +11,14 @@
             :label="item.label"
             name="sanitary_toilet_types"
             v-bind="$attrs"
+            v-model="values.sanitary_toilet_types"
         />
     </CheckableGroup>
 </template>
 
 <script setup>
 import { computed } from "vue";
+import { useFormValues } from "vee-validate";
 import { CheckableGroup, Checkbox } from "@resorptionbidonvilles/ui";
 import toiletTypes from "@common/utils/toilet_types";
 import labels from "../FormDeclarationDeSite.labels";
@@ -27,4 +29,6 @@ const items = computed(() => {
         label: toiletTypes[id],
     }));
 });
+
+const values = useFormValues();
 </script>

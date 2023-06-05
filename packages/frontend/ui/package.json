@@ -3,16 +3,23 @@
   "packageManager": "yarn@3.2.0",
   "main": "./src/index.mjs",
   "devDependencies": {
-    "@storybook/addon-essentials": "^6.4.20",
-    "@storybook/addon-links": "^6.4.20",
-    "@storybook/addon-postcss": "^2.0.0",
-    "@storybook/vue3": "^6.4.20",
+    "@babel/preset-env": "^7.21.5",
+    "@babel/preset-typescript": "^7.21.5",
+    "@storybook/addon-essentials": "^7.0.12",
+    "@storybook/addon-links": "^7.0.12",
+    "@storybook/addon-styling": "^1.0.8",
+    "@storybook/vue3": "^7.0.12",
+    "@storybook/vue3-webpack5": "^7.0.12",
     "autoprefixer": "^10.4.4",
+    "postcss": "^8.4.23",
     "postcss-flexbugs-fixes": "^5.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "storybook": "^7.0.12",
     "tailwindcss": "^3.0.23"
   },
   "scripts": {
-    "storybook": "start-storybook -p 6006"
+    "storybook": "storybook dev -p 6006"
   },
   "dependencies": {
     "@fortawesome/free-regular-svg-icons": "^6.2.0",

@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, defineExpose, defineEmits, watch } from 'vue';
+import { toRefs, ref, watch } from 'vue';
 import Input from "./Input.vue";
 
 const props = defineProps({

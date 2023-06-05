@@ -1,14 +1,16 @@
 import RbLogo from './RbLogo.vue';
 
 export default {
-    title: 'RbLogo',
-    component: RbLogo,
-    argTypes: {}
+  title: 'RbLogo',
+  component: RbLogo,
+  argTypes: {},
 };
 
 const Template = () => ({
-    components: { RbLogo },
-    template: `<RbLogo />`
+  components: { RbLogo },
+  template: `<RbLogo />`,
 });
 
-export const DefaultRbLogo = Template.bind({});
+export const DefaultRbLogo = {
+  render: Template,
+};

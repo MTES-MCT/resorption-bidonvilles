@@ -15,9 +15,21 @@ module.exports = {
         },
     ],
     rules: {
-        "vue/multi-word-component-names": ["error", {
-            "ignores": ["Annuaire", "Carte", "Cartographie", "Layout", "Loading", "Notification", "Statistiques"]
-        }]
+        "vue/multi-word-component-names": [
+            "error",
+            {
+                ignores: [
+                    "Annuaire",
+                    "Carte",
+                    "Cartographie",
+                    "Layout",
+                    "Loading",
+                    "Notification",
+                    "Statistiques",
+                ],
+            },
+        ],
+        "vue/no-dupe-keys": 0,
     },
 
     globals: {

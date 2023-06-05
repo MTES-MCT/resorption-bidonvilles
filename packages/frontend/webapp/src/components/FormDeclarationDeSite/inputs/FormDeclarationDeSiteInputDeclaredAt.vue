@@ -6,6 +6,7 @@
         :minDate="values.built_at || undefined"
         :maxDate="new Date()"
         showMandatoryStar
+        v-model="values.declared_at"
     />
 </template>
 

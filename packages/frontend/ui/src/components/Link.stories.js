@@ -1,42 +1,51 @@
 import Link from './Link.vue';
 
 export default {
-    title: 'Link',
-    component: Link,
-    argTypes: {
-        to: {
-            control: 'text'
-        },
-        color: {
-            control: 'radio',
-            options: ['default', 'custom'],
-        }
-    }
+  title: 'Link',
+  component: Link,
+  argTypes: {
+    to: {
+      control: 'text',
+    },
+    color: {
+      control: 'radio',
+      options: ['default', 'custom'],
+    },
+  },
 };
 
 const Template = (args) => ({
-    components: { Link },
-    template: `<Link
+  components: { Link },
+  template: `<Link
         to="${args.to}"
         ${args.color !== 'default' ? `color="text-red400" hover-color="text-red700"` : ''}>
             Je suis un lien
-        </Link>`
+        </Link>`,
 });
 
-export const InternalLink = Template.bind({});
-InternalLink.args = {
+export const InternalLink = {
+  render: Template,
+
+  args: {
     to: '/',
-    color: 'default'
+    color: 'default',
+  },
 };
 
-export const ExternalLink = Template.bind({});
-ExternalLink.args = {
+export const ExternalLink = {
+  render: Template,
+
+  args: {
     to: 'https://resorption-bidonvilles.beta.gouv.fr',
-    color: 'default'
+    color: 'default',
+  },
 };
 
-export const CustomizedLink = Template.bind({});
-CustomizedLink.args = {
+export const CustomizedLink = {
+  render: Template,
+
+  args: {
     to: '/',
-    color: 'custom'
+    color: 'custom',
+  },
 };

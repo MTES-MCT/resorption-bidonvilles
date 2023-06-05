@@ -46,7 +46,6 @@
     "nodemon": "^2.0.7",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.2",
-    "request": "^2.88.0",
     "rimraf": "^3.0.2",
     "semver": "^6.3.0",
     "sequelize": "^6.29.0",
@@ -56,7 +55,7 @@
     "set-value": "^4.0.1",
     "ts-node": "^10.9.1",
     "tsc-alias": "^1.4.0",
-    "typescript": "^4.4.2",
+    "typescript": "^5.0.0",
     "validator": "^13.7.0"
   },
   "devDependencies": {

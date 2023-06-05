@@ -7,11 +7,13 @@
         :maxDate="yesterday"
         width="w-64"
         showMandatoryStar
+        v-model="values.updated_at"
     />
 </template>
 
 <script setup>
 import { defineProps, toRefs } from "vue";
+import { useFormValues } from "vee-validate";
 import { DatepickerInput } from "@resorptionbidonvilles/ui";
 import labels from "../FormDeclarationDeSite.labels";
 
@@ -25,4 +27,6 @@ const props = defineProps({
 const { minDate } = toRefs(props);
 const yesterday = new Date();
 yesterday.setDate(yesterday.getDate() - 1);
+
+const values = useFormValues();
 </script>
