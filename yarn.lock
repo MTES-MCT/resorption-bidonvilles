@@ -2692,7 +2692,7 @@ __metadata:
     register-service-worker: ^1.7.2
     tailwindcss: ^3.1.8
     vee-validate: ^4.7.3
-    vite: ^3.0.9
+    vite: ^3.2.7
     vite-plugin-pwa: ^0.13.3
     vue: ^3.2.38
     vue-router: ^4.1.5
@@ -2763,7 +2763,7 @@ __metadata:
     start-server-and-test: ^1.14.0
     tailwindcss: ^3.1.8
     vee-validate: ^4.7.3
-    vite: ^3.0.9
+    vite: ^3.2.7
     vite-plugin-rewrite-all: ^1.0.0
     vitest: ^0.23.0
     vue: ^3.2.38
@@ -25031,7 +25031,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^2.9.12 || ^3.0.0-0, vite@npm:^3.0.9":
+"vite@npm:^2.9.12 || ^3.0.0-0":
   version: 3.2.6
   resolution: "vite@npm:3.2.6"
   dependencies:
@@ -25103,6 +25103,44 @@ __metadata:
   bin:
     vite: bin/vite.js
   checksum: 454a7c0c1bd1fd5611c9df28c62e3adbe75f48e87fc787179c5af60c4ab9a87aa0eda44be446d898851a135766d36f65f8e7d56317556aa807d30e561de369c4
+  languageName: node
+  linkType: hard
+
+"vite@npm:^3.2.7":
+  version: 3.2.7
+  resolution: "vite@npm:3.2.7"
+  dependencies:
+    esbuild: ^0.15.9
+    fsevents: ~2.3.2
+    postcss: ^8.4.18
+    resolve: ^1.22.1
+    rollup: ^2.79.1
+  peerDependencies:
+    "@types/node": ">= 14"
+    less: "*"
+    sass: "*"
+    stylus: "*"
+    sugarss: "*"
+    terser: ^5.4.0
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
+    less:
+      optional: true
+    sass:
+      optional: true
+    stylus:
+      optional: true
+    sugarss:
+      optional: true
+    terser:
+      optional: true
+  bin:
+    vite: bin/vite.js
+  checksum: 4c5883b721b6ec406419e61d0b3fae8528e80f8c2eb20c087c7b1b76daec3665a0a49c83cd8ac7fdda6089625094b70c6a132daa5edc650c515ddc9f5eed44f0
   languageName: node
   linkType: hard
 
