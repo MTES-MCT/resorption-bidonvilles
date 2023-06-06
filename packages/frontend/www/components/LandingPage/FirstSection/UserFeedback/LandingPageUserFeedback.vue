@@ -7,39 +7,22 @@
                 }}</span>
             </h2>
             <div class="mt-8">
-                <LandingPageUserFeedbackSection
-                    :active="active === 1"
+                <LandingPageUserFeedbackSection :active="active === 1"
                     :text="$t('landingPage.firstSection.feedback.1.text')"
-                    :author="$t('landingPage.firstSection.feedback.1.author')"
-                />
-                <LandingPageUserFeedbackSection
-                    :active="active === 2"
+                    :author="$t('landingPage.firstSection.feedback.1.author')" />
+                <LandingPageUserFeedbackSection :active="active === 2"
                     :text="$t('landingPage.firstSection.feedback.2.text')"
-                    :author="$t('landingPage.firstSection.feedback.2.author')"
-                />
-                <LandingPageUserFeedbackSection
-                    :active="active === 3"
+                    :author="$t('landingPage.firstSection.feedback.2.author')" />
+                <LandingPageUserFeedbackSection :active="active === 3"
                     :text="$t('landingPage.firstSection.feedback.3.text')"
-                    :author="$t('landingPage.firstSection.feedback.3.author')"
-                />
+                    :author="$t('landingPage.firstSection.feedback.3.author')" />
             </div>
         </div>
         <div class="mt-2 text-center">
-            <LandingPageUserFeedbackBullet
-                alt="Premier témoignage"
-                :onClick="() => setSection(1)"
-                :active="active === 1"
-            />
-            <LandingPageUserFeedbackBullet
-                alt="Second témoignage"
-                :onClick="() => setSection(2)"
-                :active="active === 2"
-            />
-            <LandingPageUserFeedbackBullet
-                alt="Troisième témoignage"
-                :onClick="() => setSection(3)"
-                :active="active === 3"
-            />
+            <LandingPageUserFeedbackBullet alt="Premier témoignage" :onClick="() => setSection(1)" :active="active === 1" />
+            <LandingPageUserFeedbackBullet alt="Second témoignage" :onClick="() => setSection(2)" :active="active === 2" />
+            <LandingPageUserFeedbackBullet alt="Troisième témoignage" :onClick="() => setSection(3)"
+                :active="active === 3" />
             <LandingPageUserFeedbackVideos v-if="$i18n.locale === 'fr'" />
         </div>
     </div>
@@ -51,6 +34,12 @@ import LandingPageUserFeedbackSection from "./LandingPageUserFeedbackSection.vue
 import LandingPageUserFeedbackVideos from "./LandingPageUserFeedbackVideos.vue";
 
 export default {
+    setup() {
+        const i18n = useI18n();
+        return {
+            i18n
+        };
+    },
     data() {
         return {
             active: 1,

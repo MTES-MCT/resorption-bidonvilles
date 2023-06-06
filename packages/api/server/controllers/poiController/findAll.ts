@@ -1,5 +1,5 @@
-import nodeFetch from 'node-fetch';
 import regionModel from '#server/models/regionModel';
+import axios from 'axios';
 
 export default async (req, res, next) => {
     const authKey = process.env.RB_API_SOLIGUIDE_KEY;
@@ -11,25 +11,23 @@ export default async (req, res, next) => {
         const regions = await regionModel.findAll();
         // docs: https://apisolidarite.soliguide.fr
 
-        // request the data for each region and keep only successful requests
+        const headers = {
+            'Content-Type': 'application/json',
+            Authorization: authKey,
+        };
+
         const rawResponses = (await Promise.all(
-            regions.map(({ name }: any) => nodeFetch('https://api.soliguide.fr/new-search', {
-                method: 'POST',
-                body: JSON.stringify({
-                    location: { geoType: 'region', geoValue: name },
-                    categorie: 601,
-                    options: { limit: 1000 },
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: authKey,
-                },
-            })),
+            regions.map(({ name }: any) => axios.post('https://api.soliguide.fr/new-search', JSON.stringify({
+                location: { geoType: 'region', geoValue: name },
+                categorie: 601,
+                options: { limit: 1000 },
+            }),
+            { headers })),
         ))
-            .filter(response => !!response.ok);
+            .filter(response => response.statusText === 'OK');
 
         // parse the successul responses as json and merge all places into a single array
-        const parsedResponses = await Promise.all(rawResponses.map(response => response.json()));
+        const parsedResponses: any[] = await Promise.all(rawResponses.map(response => response.data));
         const mergedPlaces = parsedResponses.reduce((acc, { places }) => [...acc, ...places], []);
 
         return res.status(200).send(mergedPlaces || []);

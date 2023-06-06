@@ -125,4 +125,6 @@
 import LandingPageDataBlock from "./LandingPageDataBlock.vue";
 import LandingPageBilanBlock from "./LandingPageBilanBlock.vue";
 import { Button } from "@resorptionbidonvilles/ui";
+
+const i18n = useI18n();
 </script>

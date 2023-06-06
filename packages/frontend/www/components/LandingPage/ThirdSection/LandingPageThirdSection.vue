@@ -15,4 +15,6 @@
 import LandingPageFAQ from "./LandingPageFAQ.vue";
 import LandingPageNewsletter from "./LandingPageNewsletter.vue";
 import LandingPageContactForm from "../LandingPageContactForm.vue";
+
+const i18n = useI18n();
 </script>

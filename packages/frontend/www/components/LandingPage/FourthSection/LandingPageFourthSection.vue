@@ -39,97 +39,97 @@
                     <p v-else>
                         <span class="font-bold">
                             {{
-                                    $t(
-                                        "landingPage.thirdSection.firstParagraph.body.text1"
-                                    )
+                                $t(
+                                    "landingPage.thirdSection.firstParagraph.body.text1"
+                                )
                             }}
                             <span class="italic">{{
-                                    $t(
-                                        "landingPage.thirdSection.firstParagraph.body.text2"
-                                    )
+                                $t(
+                                    "landingPage.thirdSection.firstParagraph.body.text2"
+                                )
                             }}</span>
                             {{
-                                    $t(
-                                        "landingPage.thirdSection.firstParagraph.body.text3"
-                                    )
+                                $t(
+                                    "landingPage.thirdSection.firstParagraph.body.text3"
+                                )
                             }}
                         </span>
                         (<a class="link"
                             href="https://www.ecologie.gouv.fr/resorption-des-campements-illicites-et-des-bidonvilles">Dihal</a>).
                         {{
-                                $t(
-                                    "landingPage.thirdSection.firstParagraph.body.text4"
-                                )
+                            $t(
+                                "landingPage.thirdSection.firstParagraph.body.text4"
+                            )
                         }}.<br />
                         {{
-                                $t(
-                                    "landingPage.thirdSection.firstParagraph.body.text5"
-                                )
+                            $t(
+                                "landingPage.thirdSection.firstParagraph.body.text5"
+                            )
                         }}
                         <a class="link" href="https://beta.gouv.fr/startups/resorption-bidonvilles.html">{{
-                                $t(
-                                    "landingPage.thirdSection.firstParagraph.body.link1"
-                                )
+                            $t(
+                                "landingPage.thirdSection.firstParagraph.body.link1"
+                            )
                         }}.</a>
                     </p>
 
                     <div class="mt-4">
                         <div class="font-bold">
                             {{
-                                    $t(
-                                        "landingPage.thirdSection.firstParagraph.items.title"
-                                    )
+                                $t(
+                                    "landingPage.thirdSection.firstParagraph.items.title"
+                                )
                             }}
                         </div>
 
                         <ul class="list-disc ml-8">
                             <li>
                                 <a class="link" href="https://eig.etalab.gouv.fr/defis/resorption-bidonvilles/">{{
-                                        $t(
-                                            "landingPage.thirdSection.firstParagraph.items.1.link"
-                                        )
+                                    $t(
+                                        "landingPage.thirdSection.firstParagraph.items.1.link"
+                                    )
                                 }}</a>
                                 {{
-                                        $t(
-                                            "landingPage.thirdSection.firstParagraph.items.1.text"
-                                        )
+                                    $t(
+                                        "landingPage.thirdSection.firstParagraph.items.1.text"
+                                    )
                                 }}
                             </li>
                             <li>
                                 <a class="link"
                                     href="https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/how-to-participate/org-details/999999999/project/881989/program/31076817/details">{{
-                                            $t(
-                                                "landingPage.thirdSection.firstParagraph.items.2.link"
-                                            )
+                                        $t(
+                                            "landingPage.thirdSection.firstParagraph.items.2.link"
+                                        )
                                     }}</a>{{
-        $t(
-            "landingPage.thirdSection.firstParagraph.items.2.text"
-        )
+    $t(
+        "landingPage.thirdSection.firstParagraph.items.2.text"
+    )
 }}
                             </li>
                             <li>
                                 <a class="link" href="https://beta.gouv.fr/approche/fast/03-fast.html">{{
-                                        $t(
-                                            "landingPage.thirdSection.firstParagraph.items.3.link"
-                                        )
+                                    $t(
+                                        "landingPage.thirdSection.firstParagraph.items.3.link"
+                                    )
                                 }}</a>
                                 {{
-                                        $t(
-                                            "landingPage.thirdSection.firstParagraph.items.3.text"
-                                        )
+                                    $t(
+                                        "landingPage.thirdSection.firstParagraph.items.3.text"
+                                    )
                                 }}
                             </li>
                             <li>
                                 <a class="link"
                                     href="https://www.modernisation.gouv.fr/action-publique-2022/fonds-pour-la-transformation-de-laction-publique/ftap-112-millions-deuros-pour-les-19-projets-laureats">{{
-                                            $t(
-                                                "landingPage.thirdSection.firstParagraph.items.4.link"
-                                            )
+                                        $t(
+                                            "landingPage.thirdSection.firstParagraph.items.4.link"
+                                        )
                                     }}</a>
                                 {{
-        $t(
-            "landingPage.thirdSection.firstParagraph.items.4.text"
-        )
+                                    $t(
+                                        "landingPage.thirdSection.firstParagraph.items.4.text"
+                                    )
                                 }}
                             </li>
                         </ul>
@@ -175,10 +175,12 @@
                     alt="Logo de la Fabrique Numérique" /></a>
             <a class="pl-12" href="https://beta.gouv.fr/"><img width="160" height="80" class="h-auto m-2"
                     src="~/assets/img/LandingPage/FourthSection/logo_beta-gouv-fr.jpg" alt="Logo de beta.gouv" /></a>
-            <a class="pl-12" href="https://eig.etalab.gouv.fr/defis/resorption-bidonvilles/"><img width="330"
-                    height="72" class="h-auto m-2"
-                    src="~/assets/img/LandingPage/FourthSection/logo-entrepreneur-interet-general.png"
+            <a class="pl-12" href="https://eig.etalab.gouv.fr/defis/resorption-bidonvilles/"><img width="330" height="72"
+                    class="h-auto m-2" src="~/assets/img/LandingPage/FourthSection/logo-entrepreneur-interet-general.png"
                     alt="Logo des Entrepreneurs d'Intérêt Général" /></a>
         </div>
     </div>
 </template>
+<script setup>
+const i18n = useI18n();
+</script>
