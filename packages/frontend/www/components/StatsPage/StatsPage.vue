@@ -99,7 +99,7 @@ import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, ArcElement, Point
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, ArcElement, PointElement, LineElement, CategoryScale, LinearScale);
 
-const { API_URL } = useRuntimeConfig();
+const { API_URL } = useRuntimeConfig().public;
 
 const state = ref(null);
 const stats = ref(null);

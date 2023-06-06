@@ -41,7 +41,7 @@ import { useI18n } from 'vue-i18n';
 import LinkContact from "~/components/LinkContact/LinkContact.vue";
 import { Button, Link } from "@resorptionbidonvilles/ui";
 
-const { WEBAPP_URL } = useRuntimeConfig();
+const { WEBAPP_URL } = useRuntimeConfig().public;
 
 const i18n = useI18n();
 const props = defineProps({

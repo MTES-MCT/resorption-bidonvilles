@@ -2,7 +2,10 @@
 export default defineNuxtConfig({
     modules: [
         "@nuxtjs/tailwindcss",
-        "@nuxtjs/i18n"
+        ["@nuxtjs/i18n", {
+            locales: ["fr", "en", "bg", "ro"],
+            defaultLocale: "fr",
+        }]
     ],
     css: [
         "@fortawesome/fontawesome-svg-core/styles.css"

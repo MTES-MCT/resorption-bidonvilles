@@ -37,7 +37,7 @@ watch(language, () => {
     i18n.locale.value = language.value
 });
 
-const { WEBAPP_URL } = useRuntimeConfig();
+const { WEBAPP_URL } = useRuntimeConfig().public;
 
 const emit = defineEmits(["closeMenu"]);
 const navbarMobile = ref(null)

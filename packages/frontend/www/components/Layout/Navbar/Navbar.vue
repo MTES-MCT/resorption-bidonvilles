@@ -61,7 +61,7 @@ const props = defineProps({
 const i18n = useI18n();
 const { stickyHeader, displayLanguagePicker } = toRefs(props);
 
-const { WEBAPP_URL } = useRuntimeConfig();
+const { WEBAPP_URL } = useRuntimeConfig().public;
 const scrollTop = ref(0)
 const menuDisplayed = ref(false)
 const navbar = ref(null);
