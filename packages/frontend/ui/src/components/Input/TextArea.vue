@@ -11,46 +11,6 @@
                     @blur="onBlur" />
                 <InputIcon position="after" :icon="suffixIcon" v-if="suffixIcon" />
             </div>
-            <div class="-mt-3">
-                <div class="bg-G300 p-2">
-                    <Button icon="paperclip" iconPosition="left" size="sm" variant="primaryText">Joindre un
-                        document</Button>
-                </div>
-                <div class="mt-2 grid grid-cols-3 items-end">
-                    <div class="border p-2 rounded flex items-center space-x-2 text-sm mr-2">
-                        <div class="w-10 h-10 bg-G400 rounded"></div>
-                        <p class="flex-1 relative">
-                        <div class="absolute right-0"><Button icon="trash-alt" size="sm" /></div>
-                        Nom du fichier origi...<br />
-                        <span class="text-G500">PNG 206Ko</span>
-                        </p>
-                    </div>
-                    <div class="border p-2 rounded flex items-center space-x-2 text-sm mr-2">
-                        <div class="w-10 h-10 bg-G400 rounded"></div>
-                        <p class="flex-1 relative">
-                        <div class="absolute right-0"><Button icon="trash-alt" size="sm" /></div>
-                        Nom du fichier origi...<br />
-                        <span class="text-G500">PNG 206Ko</span>
-                        </p>
-                    </div>
-                    <div class="border p-2 rounded flex items-center space-x-2 text-sm mr-2">
-                        <div class="w-10 h-10 bg-G400 rounded"></div>
-                        <p class="flex-1 relative">
-                        <div class="absolute right-0"><Button icon="trash-alt" size="sm" /></div>
-                        Nom du fichier origi...<br />
-                        <span class="text-G500">PNG 206Ko</span>
-                        </p>
-                    </div>
-                    <div class="border p-2 rounded flex items-center space-x-2 text-sm mr-2 mt-2">
-                        <div class="w-10 h-10 bg-G400 rounded"></div>
-                        <p class="flex-1 relative">
-                        <div class="absolute right-0"><Button icon="trash-alt" size="sm" /></div>
-                        Nom du fichier origi...<br />
-                        <span class="text-G500">PNG 206Ko</span>
-                        </p>
-                    </div>
-                </div>
-            </div>
             <InputError>{{ errors[0] }}</InputError>
         </InputWrapper>
     </Field>
@@ -58,7 +18,6 @@
 
 <script>
 import { Field, useIsSubmitting } from "vee-validate";
-import { Button, Icon } from "@resorptionbidonvilles/ui";
 
 import filteredProps from "./mixins/filteredProps";
 import InputLabel from "./utils/InputLabel.vue";
@@ -166,9 +125,7 @@ export default {
         InputWrapper,
         InputError,
         InputIcon,
-        Field,
-        Icon,
-        Button
+        Field
     }
 };
 </script>
