@@ -23,7 +23,6 @@ USER node
 
 WORKDIR /home/node/app/
 
-COPY --from=development --chown=root:root /home/node/app/node_modules ./node_modules
 COPY . .
 
 RUN yarn build
