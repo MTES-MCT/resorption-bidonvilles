@@ -3160,6 +3160,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.59.7
     "@typescript-eslint/parser": ^5.59.7
     agenda: ^3.1.0
+    axios: ^1.4.0
     body-parser: ^1.20.2
     chai: ^4.3.7
     chai-as-promised: ^7.1.1
@@ -3194,7 +3195,6 @@ __metadata:
     module-alias: ^2.2.0
     moment: ^2.29.4
     neat-csv: ^7.0.0
-    node-fetch: 2
     node-mailjet: ^3.3.1
     node-mattermost: ^0.0.1
     node-mocks-http: ^1.12.1
@@ -8593,7 +8593,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.1.2":
+"axios@npm:^1.1.2, axios@npm:^1.4.0":
   version: 1.4.0
   resolution: "axios@npm:1.4.0"
   dependencies:
@@ -18432,7 +18432,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:2, node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.7":
+"node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.7":
   version: 2.6.11
   resolution: "node-fetch@npm:2.6.11"
   dependencies:
