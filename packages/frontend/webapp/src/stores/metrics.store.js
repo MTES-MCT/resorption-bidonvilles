@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
-import { useEventBus } from "@/helpers/event-bus";
+import { useEventBus } from "@common/helpers/event-bus";
 import { getNationMetrics } from "@/api/metrics.api";
 
 export const useMetricsStore = defineStore("metrics", () => {
