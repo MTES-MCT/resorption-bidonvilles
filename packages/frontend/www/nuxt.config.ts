@@ -1,5 +1,3 @@
-import messages from "./assets/i18n/index.js";
-
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
     modules: [
@@ -7,10 +5,6 @@ export default defineNuxtConfig({
         ["@nuxtjs/i18n", {
             locales: ["fr", "en", "bg", "ro"],
             defaultLocale: "fr",
-            vueI18n: {
-                fallbackLocale: "fr",
-                messages
-            }
         }]
     ],
     css: [

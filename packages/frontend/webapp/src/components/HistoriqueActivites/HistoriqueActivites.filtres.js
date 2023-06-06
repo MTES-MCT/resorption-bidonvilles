@@ -27,6 +27,14 @@ export default {
                 label: "Nouveaux utilisateurs",
                 value: "user",
             },
+            {
+                label: "Nouvelles questions",
+                value: "question",
+            },
+            {
+                label: "Nouvelles réponses",
+                value: "answer",
+            },
         ],
     },
     resorbed: {

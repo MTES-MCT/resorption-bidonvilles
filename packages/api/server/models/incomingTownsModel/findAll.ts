@@ -7,7 +7,35 @@ import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 
 const { where } = permissionUtils;
 
-export default async (user, shantytownIds) => {
+type IncomingTownRow = {
+    shantytownId: number,
+    incomingTownId: number,
+    name: string,
+    address: string,
+    usename: string,
+    cityCode: string,
+    cityName: string,
+    fieldTypeLabel: string,
+    fieldTypeColor: string
+};
+
+export type IncomingTown = {
+    shantytownId: number,
+    id: number,
+    name: string,
+    addressSimple: string,
+    usename: string,
+    city: {
+        code:string,
+        name: string,
+    },
+    fieldType: {
+        label: string,
+        color: string,
+    },
+};
+
+export default async (user, shantytownIds): Promise<IncomingTown[]> => {
     const clauseGroup = where().can(user).do('list', 'shantytown');
     if (clauseGroup === null) {
         return [];
@@ -19,7 +47,7 @@ export default async (user, shantytownIds) => {
         whereClauses.push(stringifyWhereClause('shantytowns', [clauseGroup], replacements));
     }
 
-    const raw = await sequelize.query(
+    const raw: IncomingTownRow[] = await sequelize.query(
         `SELECT
             incoming.fk_shantytown AS "shantytownId",
             incoming.fk_incoming_town AS "incomingTownId",
@@ -46,7 +74,7 @@ export default async (user, shantytownIds) => {
         },
     );
 
-    return raw.map((row: any) => ({
+    return raw.map((row: IncomingTownRow) => ({
         shantytownId: row.shantytownId,
         id: row.incomingTownId,
         name: row.name,

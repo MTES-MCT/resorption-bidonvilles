@@ -7,12 +7,14 @@
             :label="item.label"
             variant="checkbox"
             name="email_subscriptions"
+            v-model="values.email_subscriptions"
         />
     </CheckableGroup>
 </template>
 
 <script setup>
 import { computed } from "vue";
+import { useFormValues } from "vee-validate";
 import { CheckableGroup, Checkbox } from "@resorptionbidonvilles/ui";
 import labels from "../FormAbonnements.labels";
 import subscriptions from "@/utils/email_subscriptions";
@@ -24,4 +26,6 @@ const items = computed(() => {
         label: subscriptions[key],
     }));
 });
+
+const values = useFormValues();
 </script>

@@ -3,6 +3,7 @@ import { ref, watch } from "vue";
 import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
+import prepareActivityFilterForApi from "@/utils/prepareActivityFilterForApi";
 import { list } from "@/api/activities.api";
 
 export const useActivitiesStore = defineStore("activities", () => {
@@ -47,12 +48,14 @@ export const useActivitiesStore = defineStore("activities", () => {
 
         try {
             const rawActivities = await list(
-                lastActivityDate.value * 1000,
-                filters.properties.value,
-                target.numberOfActivities || 10,
-                loaded.locationType.value,
-                loaded.locationCode.value,
-                target.maxDate
+                prepareActivityFilterForApi(
+                    lastActivityDate.value * 1000,
+                    filters.properties.value,
+                    target.numberOfActivities || 10,
+                    loaded.locationType.value,
+                    loaded.locationCode.value,
+                    target.maxDate
+                )
             );
 
             if (rawActivities.length > 0) {

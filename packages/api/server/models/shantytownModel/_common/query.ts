@@ -7,12 +7,17 @@ import incomingTownsModel from '#server/models/incomingTownsModel';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 import permissionUtils from '#server/utils/permission';
 import getComments from './getComments';
-import serializeShantytown from './serializeShantytown';
+import serializeShantytown, { ClosingSolution, Shantytown } from './serializeShantytown';
 import getDiff from './getDiff';
-import SQL from './SQL';
+import SQL, { ShantytownRow } from './SQL';
 
 const { where: pWhere } = permissionUtils;
 
+
+type ShantytownObject = {
+    hash: { [key: number] : Shantytown },
+    ordered: Shantytown[],
+};
 function getBaseSql(table, whereClause = null, order = null, additionalSQL: any = {}) {
     const tables = {
         shantytowns: table === 'regular' ? 'shantytowns' : 'ShantytownHistories',
@@ -72,7 +77,7 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
     `;
 }
 
-export default async (user, feature, where = [], order = ['departements.code ASC', 'cities.name ASC'], includeChangelog = false, additionalSQL = {}, argReplacements = {}) => {
+export default async (user, feature, where = [], order = ['departements.code ASC', 'cities.name ASC'], includeChangelog = false, additionalSQL = {}, argReplacements = {}): Promise<Shantytown[]> => {
     const permissionsClauseGroup = pWhere().can(user).do(feature, 'shantytown');
     if (permissionsClauseGroup === null) {
         return [];
@@ -85,7 +90,7 @@ export default async (user, feature, where = [], order = ['departements.code ASC
     const replacements = { ...argReplacements, userId: user.id };
     const whereClause = stringifyWhereClause('shantytowns', where, replacements);
 
-    const towns = await sequelize.query(
+    const towns: ShantytownRow[] = await sequelize.query(
         getBaseSql(
             'regular',
             where.length > 0 ? whereClause : null,
@@ -102,7 +107,7 @@ export default async (user, feature, where = [], order = ['departements.code ASC
         return [];
     }
     const serializedTowns = towns.reduce(
-        (object: any, town: any) => {
+        (object: ShantytownObject, town: ShantytownRow) => {
             /* eslint-disable no-param-reassign */
             object.hash[town.id] = serializeShantytown(town, user);
             object.ordered.push(object.hash[town.id]);
@@ -115,65 +120,56 @@ export default async (user, feature, where = [], order = ['departements.code ASC
         },
     );
 
-    const promises = [];
+    let historyPromise: Promise<ShantytownRow[]>;
     if (includeChangelog === true) {
-        promises.push(
-            sequelize.query(
-                getBaseSql(
-                    'history',
-                    where.length > 0 ? whereClause : null,
-                    ['shantytowns.shantytown_id ASC', 'shantytowns."archivedAt" ASC'].join(', '),
-                    additionalSQL,
-                ),
-                {
-                    type: QueryTypes.SELECT,
-                    replacements,
-                },
+        historyPromise = sequelize.query(
+            getBaseSql(
+                'history',
+                where.length > 0 ? whereClause : null,
+                ['shantytowns.shantytown_id ASC', 'shantytowns."archivedAt" ASC'].join(', '),
+                additionalSQL,
             ),
+            {
+                type: QueryTypes.SELECT,
+                replacements,
+            },
         );
     } else {
-        promises.push(Promise.resolve(undefined));
+        historyPromise = Promise.resolve(undefined);
     }
 
-    promises.push(getComments(user, Object.keys(serializedTowns.hash), false));
-    promises.push(getComments(user, Object.keys(serializedTowns.hash), true));
 
-    promises.push(
-        sequelize.query(
-            `SELECT
+    const commentsPromise = getComments(user, Object.keys(serializedTowns.hash), false);
+    const covidCommentsPromise = getComments(user, Object.keys(serializedTowns.hash), true);
+
+    const closingSolutionsPromise: Promise<ClosingSolution[]> = sequelize.query(
+        `SELECT
                 shantytown_closing_solutions.fk_shantytown AS "shantytownId",
-                closing_solutions.closing_solution_id AS "closingSolutionId",
+                closing_solutions.closing_solution_id AS "id",
                 shantytown_closing_solutions.number_of_people_affected AS "peopleAffected",
                 shantytown_closing_solutions.number_of_households_affected AS "householdsAffected",
                 shantytown_closing_solutions.message AS "message"
             FROM shantytown_closing_solutions
             LEFT JOIN closing_solutions ON shantytown_closing_solutions.fk_closing_solution = closing_solutions.closing_solution_id
             WHERE shantytown_closing_solutions.fk_shantytown IN (:ids)`,
-            {
-                type: QueryTypes.SELECT,
-                replacements: { ids: Object.keys(serializedTowns.hash) },
-            },
-        ),
+        {
+            type: QueryTypes.SELECT,
+            replacements: { ids: Object.keys(serializedTowns.hash) },
+        },
+    );
+    const actorsPromise = shantytownActorModel.findAll(
+        Object.keys(serializedTowns.hash),
     );
 
-    promises.push(
-        shantytownActorModel.findAll(
-            Object.keys(serializedTowns.hash),
-        ),
+    const actionsPromise = actionModel.fetchByShantytown(
+        Object.keys(serializedTowns.hash).map(id => parseInt(id, 10)),
+        null,
     );
 
-    promises.push(
-        actionModel.fetchByShantytown(
-            Object.keys(serializedTowns.hash).map(id => parseInt(id, 10)),
-            null,
-        ),
-    );
+    const incomingTownsPromise = incomingTownsModel.findAll(user, Object.keys(serializedTowns.hash));
 
-    promises.push(
-        incomingTownsModel.findAll(user, Object.keys(serializedTowns.hash)),
-    );
+    const [history, comments, covidComments, closingSolutions, actors, actions, incomingTowns] = await Promise.all([historyPromise, commentsPromise, covidCommentsPromise, closingSolutionsPromise, actorsPromise, actionsPromise, incomingTownsPromise]);
 
-    const [history, comments, covidComments, closingSolutions, actors, actions, incomingTowns] = await Promise.all(promises);
 
     if (history !== undefined && history.length > 0) {
         const serializedHistory = history.map(h => serializeShantytown(h, user));
@@ -221,7 +217,7 @@ export default async (user, feature, where = [], order = ['departements.code ASC
     if (closingSolutions !== undefined) {
         closingSolutions.forEach((closingSolution) => {
             serializedTowns.hash[closingSolution.shantytownId].closingSolutions.push({
-                id: closingSolution.closingSolutionId,
+                id: closingSolution.id,
                 peopleAffected: closingSolution.peopleAffected,
                 householdsAffected: closingSolution.householdsAffected,
                 message: closingSolution.message,

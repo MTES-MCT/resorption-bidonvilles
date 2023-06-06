@@ -6,12 +6,14 @@
             :value="item.uid"
             :label="item.name"
             name="tags"
+            v-model="values.tags"
         />
     </CheckableGroup>
 </template>
 
 <script setup>
 import { computed } from "vue";
+import { useFormValues } from "vee-validate";
 import { useConfigStore } from "@/stores/config.store";
 import { CheckableGroup, Checkbox } from "@resorptionbidonvilles/ui";
 
@@ -24,4 +26,6 @@ const items = computed(() => {
         { uid: "other", name: "Autre" },
     ];
 });
+
+const values = useFormValues();
 </script>

@@ -6,6 +6,7 @@
             :label="labels.started_at"
             :maxDate="values.ended_at || null"
             showMandatoryStar
+            v-model="values.started_at"
         />
         <DatepickerInput
             v-if="mode === 'edit'"
@@ -15,6 +16,7 @@
             info="(optionnel)"
             inlineInfo
             :minDate="values.started_at"
+            v-model="values.ended_at"
         />
     </p>
 </template>

@@ -1,10 +1,14 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import serializeCommentTag from './serializeCommentTag';
+import serializeCommentTag, { CommentTag } from './serializeCommentTag';
+import { CommentTagRow } from './CommentTagRow';
 
-export default async (commentIds) => {
+
+export type CommentTagObject = { [key: number]: CommentTag[] };
+
+export default async (commentIds): Promise<CommentTagObject> => {
     // fetch all tags
-    const rows = await sequelize.query(
+    const rows: CommentTagRow[] = await sequelize.query(
         `SELECT
             sct.fk_shantytown_comment AS "commentId",
             ct.uid,
@@ -21,7 +25,7 @@ export default async (commentIds) => {
 
     // group tags by comment (empty array is the default for each comment)
 
-    return rows.reduce((argAcc, tag: any) => {
+    return rows.reduce((argAcc, tag: CommentTagRow) => {
         const acc = { ...argAcc };
         if (!acc[tag.commentId]) {
             acc[tag.commentId] = [];

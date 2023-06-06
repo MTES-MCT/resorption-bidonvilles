@@ -5,7 +5,7 @@
         </li>
         <li v-if="$i18n.locale === 'fr'">
             <a href="/conditions-d-utilisation.pdf" class="text-white" download>{{
-                    $t("footer.cgus")
+                $t("footer.cgus")
             }}</a>
         </li>
         <li>
@@ -33,6 +33,12 @@
 import { Link, Icon } from "@resorptionbidonvilles/ui";
 
 export default {
+    setup() {
+        const i18n = useI18n();
+        return {
+            i18n
+        };
+    },
     components: {
         Icon,
         Link

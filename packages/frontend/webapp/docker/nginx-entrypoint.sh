@@ -1,6 +1,6 @@
 #!/bin/sh
 
-find /usr/share/nginx/html/assets/ -iname 'index.*.js' -print0 | while read -d $'\0' file
+find /usr/share/nginx/html/assets/ -iname 'index*.js' -print0 | while read -d $'\0' file
 do
     TEMPLATE="$file.template"
     if [ ! -f "$TEMPLATE" ]

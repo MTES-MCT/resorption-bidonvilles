@@ -42,7 +42,6 @@ WORKDIR /home/node/app/
 COPY --chown=node:node package.json ./
 COPY --chown=node:node packages/api/package.json ./packages/api/
 COPY --from=build --chown=node:node /home/node/app/node_modules ./node_modules
-COPY --from=build --chown=node:node /home/node/app/packages/api/node_modules ./packages/api/node_modules
 COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./packages/api/dist
 
 WORKDIR /home/node/app/packages/api

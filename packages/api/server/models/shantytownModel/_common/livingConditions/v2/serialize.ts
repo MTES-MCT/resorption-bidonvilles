@@ -1,7 +1,9 @@
 import getLivingConditionsStatuses from './statuses/main';
 
-export default (town) => {
-    const livingConditions = {
+import { LivingConditionsV2 } from '../LivingConditions.d';
+
+export default (town): LivingConditionsV2 => {
+    const livingConditions: LivingConditionsV2 = {
         version: town.livingConditionsVersion,
         electricity: {
             status: {

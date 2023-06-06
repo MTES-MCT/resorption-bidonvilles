@@ -22,7 +22,7 @@ definePageMeta({
 
 if (!process.server) {
     const route = useRoute();
-    const { WEBAPP_URL } = useRuntimeConfig();
+    const { WEBAPP_URL } = useRuntimeConfig().public;
 
     window.location.replace(`${WEBAPP_URL}${route.path}`);
 }

@@ -10,12 +10,14 @@
             :label="item.label"
             name="electricity_access_types"
             v-bind="$attrs"
+            v-model="values.electricity_access_types"
         />
     </CheckableGroup>
 </template>
 
 <script setup>
 import { computed } from "vue";
+import { useFormValues } from "vee-validate";
 import { CheckableGroup, Checkbox } from "@resorptionbidonvilles/ui";
 import accessTypes from "@common/utils/electricity_access_types";
 import labels from "../FormDeclarationDeSite.labels";
@@ -26,4 +28,6 @@ const items = computed(() => {
         label: accessTypes[id],
     }));
 });
+
+const values = useFormValues();
 </script>

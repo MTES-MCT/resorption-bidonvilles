@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineExpose, toRefs, ref, computed, onMounted, onBeforeUnmount, defineEmits, watch } from "vue";
+import { toRefs, ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
 import { useIsSubmitting, useField } from "vee-validate";
 import InputWrapper from "./utils/InputWrapper.vue";
 import InputError from "./utils/InputError.vue";
@@ -115,6 +115,12 @@ async function onInput({ target }) {
         return;
     }
 
+    if(lastPromise.value !== null){
+        lastPromise.value.catch(() => {
+        // ignore
+        });
+    }
+   
     lastPromise.value = debouncedGetResults(value, callId);
 }
 

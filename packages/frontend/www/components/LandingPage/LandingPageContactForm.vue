@@ -16,11 +16,5 @@ export default {
     components: {
         ButtonContact
     },
-    data() {
-        const { WEBAPP_URL } = useRuntimeConfig();
-        return {
-            WEBAPP_URL
-        };
-    }
 };
 </script>

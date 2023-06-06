@@ -24,14 +24,11 @@
 
 <script setup>
 import {
-    defineProps,
-    defineExpose,
     toRefs,
     ref,
     watch,
     onMounted,
     onBeforeUnmount,
-    defineEmits,
 } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 

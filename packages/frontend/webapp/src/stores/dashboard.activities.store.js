@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { list } from "@/api/activities.api";
+import prepareActivityFilterForApi from "@/utils/prepareActivityFilterForApi";
 
 export const useDashboardActivitiesStore = defineStore(
     "dashboardActivities",
@@ -41,15 +42,16 @@ export const useDashboardActivitiesStore = defineStore(
                 isLoading.value = false;
                 return;
             }
-
             try {
                 const rawActivities = await list(
-                    lastActivityDate.value * 1000,
-                    filters.properties.value,
-                    target.numberOfActivities || 10,
-                    loaded.locationType.value,
-                    loaded.locationCode.value,
-                    target.maxDate
+                    prepareActivityFilterForApi(
+                        lastActivityDate.value * 1000,
+                        filters.properties.value,
+                        target.numberOfActivities || 10,
+                        loaded.locationType.value,
+                        loaded.locationCode.value,
+                        target.maxDate
+                    )
                 );
 
                 if (rawActivities.length > 0) {

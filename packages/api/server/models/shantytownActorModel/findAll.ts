@@ -1,7 +1,8 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import { ActorRow } from './ActorRow';
 
-export default (shantytownIds, transaction = undefined) => {
+export default (shantytownIds, transaction = undefined): Promise<ActorRow[]> => {
     const ids = Array.isArray(shantytownIds) ? shantytownIds : [shantytownIds];
 
     return sequelize.query(

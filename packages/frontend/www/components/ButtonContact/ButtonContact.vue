@@ -19,7 +19,7 @@ const props = defineProps({
 });
 const { isDemandeAcces } = toRefs(props);
 
-const { WEBAPP_URL } = useRuntimeConfig();
+const { WEBAPP_URL } = useRuntimeConfig().public;
 const href = computed(() => {
     const url = `${WEBAPP_URL}/contact?language=${i18n.locale.value}`;
     if (!isDemandeAcces.value || i18n.locale.value !== "fr") {

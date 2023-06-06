@@ -6,6 +6,7 @@
         :minDate="values.police_requested_at"
         :maxDate="new Date()"
         showMandatoryStar
+        v-model="values.police_granted_at"
     />
 </template>
 

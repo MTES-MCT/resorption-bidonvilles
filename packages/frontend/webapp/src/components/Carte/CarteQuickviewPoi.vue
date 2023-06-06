@@ -82,7 +82,7 @@ const sections = {
 
         rows.push({
             label: "Adresse",
-            value: poi.value.address || "Inconnue",
+            value: poi.value.position.adresse || "Inconnue",
         });
 
         if (poi.value.entity?.phones?.length > 0) {
