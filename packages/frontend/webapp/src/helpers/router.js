@@ -81,6 +81,15 @@ const router = createRouter({
             },
         },
         {
+            path: "/donnees-statistiques/departement/:code",
+            component: () =>
+                import("@/views/DonneesStatistiquesDepartementsView.vue"),
+            meta: {
+                authRequirement: "signedIn",
+                navTab: "metrics",
+            },
+        },
+        {
             path: "/acces",
             component: () => import("@/views/ListeAccesView.vue"),
             meta: {
