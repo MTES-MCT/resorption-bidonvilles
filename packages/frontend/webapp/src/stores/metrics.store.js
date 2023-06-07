@@ -1,18 +1,20 @@
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 import { useEventBus } from "@common/helpers/event-bus";
-import { getNationMetrics } from "@/api/metrics.api";
+import { getNationMetrics, getDepartementMetrics } from "@/api/metrics.api";
 
 export const useMetricsStore = defineStore("metrics", () => {
     const isLoading = ref(null);
     const error = ref(null);
     const metrics = ref([]);
+    const departementMetrics = ref({});
     const selection = ref([]);
 
     function reset() {
         isLoading.value = null;
         error.value = null;
         metrics.value = [];
+        departementMetrics.value = {};
         selection.value = [];
     }
 
@@ -24,6 +26,7 @@ export const useMetricsStore = defineStore("metrics", () => {
         isLoading,
         error,
         metrics,
+        departementMetrics,
         selection,
         async load(from, to) {
             if (isLoading.value === true) {
@@ -42,6 +45,11 @@ export const useMetricsStore = defineStore("metrics", () => {
                 isLoading.value = false;
                 return null;
             }
+        },
+        async fetchDepartement(departementCode) {
+            const metrics = await getDepartementMetrics(departementCode);
+            departementMetrics.value[departementCode] = metrics;
+            return metrics;
         },
     };
 });

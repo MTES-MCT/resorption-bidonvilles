@@ -7,3 +7,7 @@ export function getNationMetrics(from, to) {
         )}&to=${encodeURIComponent(to.toISOString().slice(0, 10))}`
     );
 }
+
+export function getDepartementMetrics() {
+    return new Promise((r) => setTimeout(() => r({}), 500));
+}
