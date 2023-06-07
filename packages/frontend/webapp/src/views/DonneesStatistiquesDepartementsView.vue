@@ -1,5 +1,30 @@
 <template>
-    <Layout>{{ JSON.stringify(metrics) }}</Layout>
+    <LayoutLoading v-if="isLoading !== false" />
+
+    <LayoutError v-else-if="error !== null">
+        <template v-slot:title>Statistiques inaccessibles</template>
+        <template v-slot:code>{{ error }}</template>
+        <template v-slot:content
+            >Vous souhaitiez consulter les données statistiques d'un
+            département, mais nous ne parvenons pas à collecter les informations
+            nécessaires. Vous pouvez réessayer un peu plus tard ou nous
+            contacter en cas d'urgence.</template
+        >
+        <template v-slot:actions>
+            <Button
+                icon="rotate-right"
+                iconPosition="left"
+                type="button"
+                @click="load"
+                >Réessayer</Button
+            >
+            <ButtonContact />
+        </template>
+    </LayoutError>
+
+    <Layout v-else>
+        <ContentWrapper>{{ JSON.stringify(metrics) }}</ContentWrapper>
+    </Layout>
 </template>
 
 <script setup>
@@ -7,7 +32,12 @@ import { onMounted, ref, computed, watch } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store.js";
 import router from "@/helpers/router";
 
+import { Button } from "@resorptionbidonvilles/ui";
+import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 import Layout from "@/components/Layout/Layout.vue";
+import LayoutError from "@/components/LayoutError/LayoutError.vue";
+import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
+import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 
 const metricsStore = useMetricsStore();
 const isLoading = ref(null);
