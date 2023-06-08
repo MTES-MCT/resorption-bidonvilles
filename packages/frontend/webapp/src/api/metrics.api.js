@@ -8,6 +8,26 @@ export function getNationMetrics(from, to) {
     );
 }
 
-export function getDepartementMetrics() {
-    return new Promise((r) => setTimeout(() => r({}), 500));
+export function getCityMetrics() {
+    return new Promise((r) =>
+        setTimeout(
+            () =>
+                r({
+                    city: {
+                        name: "Verneuil-sur-Seine",
+                        code: "78642",
+                        departement: {
+                            name: "Yvelines",
+                            code: "78",
+                        },
+                        region: {
+                            name: "Île-de-France",
+                            code: "11",
+                        },
+                    },
+                    metrics: {},
+                }),
+            500
+        )
+    );
 }

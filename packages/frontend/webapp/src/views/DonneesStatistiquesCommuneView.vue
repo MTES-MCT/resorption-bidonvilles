@@ -5,10 +5,10 @@
         <template v-slot:title>Statistiques inaccessibles</template>
         <template v-slot:code>{{ error }}</template>
         <template v-slot:content
-            >Vous souhaitiez consulter les données statistiques d'un
-            département, mais nous ne parvenons pas à collecter les informations
-            nécessaires. Vous pouvez réessayer un peu plus tard ou nous
-            contacter en cas d'urgence.</template
+            >Vous souhaitiez consulter les données statistiques d'une commune,
+            mais nous ne parvenons pas à collecter les informations nécessaires.
+            Vous pouvez réessayer un peu plus tard ou nous contacter en cas
+            d'urgence.</template
         >
         <template v-slot:actions>
             <Button
@@ -24,10 +24,7 @@
 
     <Layout v-else>
         <ContentWrapper>
-            <DonneesStatistiquesDepartement
-                :departement="departement"
-                :metrics="metrics"
-            />
+            <DonneesStatistiquesCommune :city="city" :metrics="metrics" />
         </ContentWrapper>
     </Layout>
 </template>
@@ -43,30 +40,24 @@ import Layout from "@/components/Layout/Layout.vue";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
 import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
-import DonneesStatistiquesDepartement from "@/components/DonneesStatistiquesDepartement/DonneesStatistiquesDepartement.vue";
-import { useConfigStore } from "@/stores/config.store";
+import DonneesStatistiquesCommune from "@/components/DonneesStatistiquesCommune/DonneesStatistiquesCommune.vue";
 
 const metricsStore = useMetricsStore();
 const isLoading = ref(null);
 const error = ref(null);
 
-const departementCode = computed(() => {
+const cityCode = computed(() => {
     return router.currentRoute.value.params.code;
 });
-const departement = computed(() => {
-    const configStore = useConfigStore();
-    return (
-        configStore.config.departements.find(
-            ({ code }) => code === departementCode.value
-        ) || null
-    );
+const city = computed(() => {
+    return metricsStore.metricsByCity[cityCode.value]?.city || null;
 });
 const metrics = computed(() => {
-    return metricsStore.departementMetrics[departementCode.value] || null;
+    return metricsStore.metricsByCity[cityCode.value]?.metrics || null;
 });
 
 onMounted(load);
-watch(departementCode, load);
+watch(cityCode, load);
 
 async function load() {
     if (isLoading.value === true) {
@@ -76,7 +67,7 @@ async function load() {
     isLoading.value = true;
     error.value = null;
     try {
-        await metricsStore.fetchDepartement(departementCode.value);
+        await metricsStore.fetchCity(cityCode.value);
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
     }

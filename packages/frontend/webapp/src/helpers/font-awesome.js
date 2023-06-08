@@ -36,6 +36,8 @@ import {
     faEuroSign,
     faExclamation,
     faExclamationCircle,
+    faFaceFrown,
+    faFaceSmile,
     faFaucetDrip,
     faFile,
     faFileExcel,
@@ -146,6 +148,8 @@ library.add(faExclamationCircle);
 library.add(faEye);
 library.add(faEyeSlash);
 library.add(faFacebook);
+library.add(faFaceFrown);
+library.add(faFaceSmile);
 library.add(faFaucetDrip);
 library.add(faFile);
 library.add(faFileExcel);

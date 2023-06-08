@@ -81,9 +81,9 @@ const router = createRouter({
             },
         },
         {
-            path: "/donnees-statistiques/departement/:code",
+            path: "/donnees-statistiques/commune/:code",
             component: () =>
-                import("@/views/DonneesStatistiquesDepartementsView.vue"),
+                import("@/views/DonneesStatistiquesCommuneView.vue"),
             meta: {
                 authRequirement: "signedIn",
                 navTab: "metrics",
