@@ -17,6 +17,7 @@
     "prepare": "husky install",
     "lint:all": "yarn workspaces foreach --verbose run lint:all",
     "lint:staged": "yarn workspaces foreach --verbose run lint-staged",
-    "test:unit": "yarn workspaces foreach --verbose run test:unit"
+    "test:unit": "yarn workspaces foreach --verbose run test:unit",
+    "checkout": "./scripts/checkout.sh"
   }
 }
