@@ -23,7 +23,12 @@
     </LayoutError>
 
     <Layout v-else>
-        <ContentWrapper>{{ JSON.stringify(metrics) }}</ContentWrapper>
+        <ContentWrapper>
+            <DonneesStatistiquesDepartement
+                :departement="departement"
+                :metrics="metrics"
+            />
+        </ContentWrapper>
     </Layout>
 </template>
 
@@ -38,6 +43,8 @@ import Layout from "@/components/Layout/Layout.vue";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
 import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import DonneesStatistiquesDepartement from "@/components/DonneesStatistiquesDepartement/DonneesStatistiquesDepartement.vue";
+import { useConfigStore } from "@/stores/config.store";
 
 const metricsStore = useMetricsStore();
 const isLoading = ref(null);
@@ -45,6 +52,14 @@ const error = ref(null);
 
 const departementCode = computed(() => {
     return router.currentRoute.value.params.code;
+});
+const departement = computed(() => {
+    const configStore = useConfigStore();
+    return (
+        configStore.config.departements.find(
+            ({ code }) => code === departementCode.value
+        ) || null
+    );
 });
 const metrics = computed(() => {
     return metricsStore.departementMetrics[departementCode.value] || null;
