@@ -53,7 +53,7 @@ export default async (numberOfActivities, lastDate, maxDate): Promise<AnswerActi
         LEFT JOIN users answer_author ON answer_author.user_id = answers.created_by
         LEFT JOIN users question_author ON question_author.user_id = questions.created_by
         ${where.length > 0 ? `WHERE (${where.join(') AND (')})` : ''}
-        ORDER BY answers.created_at
+        ORDER BY answers.created_at DESC
         ${limit}
         `,
         {
