@@ -1,6 +1,6 @@
 <template>
     <FilArianne />
-    <Title class="mt-6">{{ city.name }} ({{ city.departement.code }})</Title>
+    <Title class="mt-6">{{ departement.name }} ({{ departement.code }})</Title>
     <Header class="mt-4" />
 
     <section class="mt-6 bg-G100 border border-G300 rounded py-4 px-6">
@@ -199,7 +199,7 @@ import { Icon } from "@resorptionbidonvilles/ui";
 import Carte from "@/components/Carte/Carte.vue";
 
 const props = defineProps({
-    city: {
+    departement: {
         type: Object,
         required: true,
     },
@@ -208,5 +208,5 @@ const props = defineProps({
         required: true,
     },
 });
-const { city, metrics } = toRefs(props);
+const { departement, metrics } = toRefs(props);
 </script>
