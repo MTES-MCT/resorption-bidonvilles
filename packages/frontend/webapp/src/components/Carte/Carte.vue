@@ -224,6 +224,11 @@ const props = defineProps({
         required: false,
         default: false,
     },
+    mapOptions: {
+        type: Object,
+        required: false,
+        default: () => ({}),
+    },
 });
 const {
     isLoading,
@@ -240,6 +245,7 @@ const {
     withInput,
     modelValue,
     disabled,
+    mapOptions,
 } = toRefs(props);
 const configStore = useConfigStore();
 const notificationStore = useNotificationStore();
@@ -379,6 +385,7 @@ function createMap() {
     map.value = L.map("map", {
         layers: [defaultLayer.value], // fond de carte à afficher
         scrollWheelZoom: false, // interdire le zoom via la molette de la souris
+        ...mapOptions.value,
     });
     map.value.on("zoomend", onZoomEnd);
     map.value.on("move", onMove);
