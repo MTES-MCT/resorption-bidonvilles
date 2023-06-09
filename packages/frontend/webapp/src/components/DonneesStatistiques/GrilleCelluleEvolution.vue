@@ -5,8 +5,10 @@
             :class="separator ? 'border-r' : ''"
         >
             <div>
-                <div class="bg-red200 h-6 w-20"></div>
-                <p class="text-lg"><slot /></p>
+                <div class="h-6 w-20 text-center">
+                    <slot name="evolution" />
+                </div>
+                <p class="text-lg"><slot name="figure" /></p>
             </div>
         </div>
     </div>

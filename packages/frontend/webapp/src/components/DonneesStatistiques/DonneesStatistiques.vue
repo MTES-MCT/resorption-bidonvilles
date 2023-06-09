@@ -17,7 +17,6 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store";
 
 import FilArianne from "./FilArianne.vue";
@@ -29,5 +28,4 @@ import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import Loading from "@/components/Loading/Loading.vue";
 
 const metricsStore = useMetricsStore();
-onMounted(metricsStore.load);
 </script>

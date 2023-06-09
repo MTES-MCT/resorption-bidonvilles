@@ -2,12 +2,10 @@
     <section>
         <div class="grid grid-template text-sm">
             <GrilleHeader :separator="false" />
-            <GrilleHeader>Intervenants déclarés</GrilleHeader>
             <GrilleHeader
                 >Sites avec accès à l'eau<br />(nbre hab.
                 couverts)</GrilleHeader
             >
-            <GrilleHeader>Sites exlusivement<br />intra-européens</GrilleHeader>
             <GrilleHeader>Habitants</GrilleHeader>
             <GrilleHeader :separator="false">Nombre de sites</GrilleHeader>
         </div>

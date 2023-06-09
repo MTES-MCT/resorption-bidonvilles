@@ -49,32 +49,40 @@
                     {{ metrics.name }}</GrilleCelluleHeader
                 >
                 <GrilleCellule
-                    ><Icon icon="handshake-angle" />
-                    {{ metrics.metrics.number_of_actors.to }}</GrilleCellule
-                >
-                <GrilleCellule
                     ><Icon icon="faucet-drip" />
-                    {{ metrics.metrics.number_of_towns_with_water.to }} ({{
-                        metrics.metrics.number_of_persons_with_water.to
+                    {{ metrics.metrics.number_of_towns_with_water }} ({{
+                        metrics.metrics.number_of_persons_with_water
                     }})</GrilleCellule
                 >
-                <GrilleCellule
-                    ><Icon icon="earth-europe" />
-                    {{ metrics.metrics.number_of_towns_with_eu_only.to }}
-                    ({{
-                        Math.round(
-                            (metrics.metrics.number_of_towns_with_eu_only.to /
-                                metrics.metrics.number_of_towns.to) *
-                                100
-                        )
-                    }}%)</GrilleCellule
-                >
-                <GrilleCelluleEvolution>{{
-                    metrics.metrics.number_of_persons.to
-                }}</GrilleCelluleEvolution>
-                <GrilleCelluleEvolution :separator="false">{{
-                    metrics.metrics.number_of_towns.to
-                }}</GrilleCelluleEvolution>
+                <GrilleCelluleEvolution>
+                    <template v-slot:evolution>
+                        <div :class="populationEvolutionColor">
+                            <Icon
+                                :class="populationEvolutionIconRotation"
+                                icon="arrow-alt-circle-right"
+                            />
+                            {{ populationEvolutionWording }}
+                        </div>
+                    </template>
+                    <template v-slot:figure>
+                        {{ metrics.metrics.number_of_persons.to }}
+                    </template>
+                </GrilleCelluleEvolution>
+                <GrilleCelluleEvolution :separator="false">
+                    <template v-slot:evolution>
+                        <div :class="townEvolutionColor">
+                            <Icon
+                                :class="townEvolutionIconRotation"
+                                icon="arrow-alt-circle-right"
+                            />
+                            {{ townEvolutionWording }}
+                        </div>
+                    </template>
+
+                    <template v-slot:figure>
+                        {{ metrics.metrics.number_of_towns.to }}
+                    </template>
+                </GrilleCelluleEvolution>
             </div>
         </article>
 
@@ -97,7 +105,7 @@
 <style scoped lang="scss" src="./grid.scss" />
 
 <script setup>
-import { ref, toRefs } from "vue";
+import { computed, ref, toRefs } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store";
 
 import GrilleCellule from "./GrilleCellule.vue";
@@ -123,4 +131,101 @@ const metricsStore = useMetricsStore();
 function toggle() {
     showChildren.value = !showChildren.value;
 }
+
+// on setup l'affichage des variations de population
+
+const populationEvolution = computed(() => {
+    if (metrics.value.metrics.number_of_persons.from === 0) {
+        return null;
+    }
+    return Math.round(
+        ((metrics.value.metrics.number_of_persons.to -
+            metrics.value.metrics.number_of_persons.from) *
+            100) /
+            metrics.value.metrics.number_of_persons.from
+    );
+});
+
+const populationEvolutionWording = computed(() => {
+    if (populationEvolution.value === null) {
+        return "-";
+    }
+
+    return `${populationEvolution.value >= 0 ? "+" : "-"}${Math.abs(
+        populationEvolution.value
+    )}%`;
+});
+
+const populationEvolutionColor = computed(() => {
+    if (populationEvolution.value === null || populationEvolution.value === 0) {
+        return "bg-G200";
+    } else if (populationEvolution.value > 0) {
+        return "bg-red200 text-red600";
+    } else {
+        return "bg-green200 text-green600";
+    }
+});
+
+const populationEvolutionIconRotation = computed(() => {
+    if (populationEvolution.value === null || populationEvolution.value === 0) {
+        return "";
+    } else if (populationEvolution.value > 0) {
+        return "up";
+    } else {
+        return "down";
+    }
+});
+
+// on setup l'affichage des variations de nombre de sites
+
+const townEvolution = computed(() => {
+    if (metrics.value.metrics.number_of_towns.from === 0) {
+        return null;
+    }
+    return Math.round(
+        ((metrics.value.metrics.number_of_towns.to -
+            metrics.value.metrics.number_of_towns.from) *
+            100) /
+            metrics.value.metrics.number_of_towns.from
+    );
+});
+
+const townEvolutionWording = computed(() => {
+    if (townEvolution.value === null) {
+        return "-";
+    }
+
+    return `${townEvolution.value >= 0 ? "+" : "-"}${Math.abs(
+        townEvolution.value
+    )}%`;
+});
+
+const townEvolutionColor = computed(() => {
+    if (townEvolution.value === null || townEvolution.value === 0) {
+        return "bg-G200";
+    } else if (townEvolution.value > 0) {
+        return "bg-red200 text-red600";
+    } else {
+        return "bg-green200 text-green600";
+    }
+});
+
+const townEvolutionIconRotation = computed(() => {
+    if (townEvolution.value === null || townEvolution.value === 0) {
+        return "";
+    } else if (townEvolution.value > 0) {
+        return "up";
+    } else {
+        return "down";
+    }
+});
 </script>
+
+<style scoped>
+.down {
+    transform: rotate(45deg);
+}
+.up {
+    transform: rotate(-45deg);
+}
+</style>
