@@ -27,7 +27,7 @@ import FormNouvelleQuestion from "@/components/FormNouvelleQuestion/FormNouvelle
 const form = ref(null);
 
 const question = computed(() => {
-    return router.currentRoute.value.params.question;
+    return router.currentRoute.value.query.resume;
 });
 
 function submit(...args) {
