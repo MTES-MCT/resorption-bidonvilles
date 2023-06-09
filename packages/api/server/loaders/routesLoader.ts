@@ -450,6 +450,16 @@ export default (app) => {
         controllers.town.list,
     );
     app.get(
+        '/towns/metrics',
+        middlewares.auth.authenticate,
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.metrics.getNationMetrics,
+        middlewares.validation,
+        controllers.metrics.getNationMetrics,
+    );
+    app.get(
         '/towns/:id',
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.read'], ...args),
@@ -498,6 +508,7 @@ export default (app) => {
         middlewares.validation,
         controllers.town.report,
     );
+
     app.post(
         '/towns/:id',
         middlewares.auth.authenticate,
