@@ -25,6 +25,7 @@
     <Layout v-else>
         <ContentWrapper>
             <DonneesStatistiquesDepartement
+                v-if="departement"
                 :departement="departement"
                 :metrics="metrics"
             />
