@@ -224,11 +224,6 @@ const props = defineProps({
         required: false,
         default: false,
     },
-    mapOptions: {
-        type: Object,
-        required: false,
-        default: () => ({}),
-    },
 });
 const {
     isLoading,
@@ -245,7 +240,6 @@ const {
     withInput,
     modelValue,
     disabled,
-    mapOptions,
 } = toRefs(props);
 const configStore = useConfigStore();
 const notificationStore = useNotificationStore();
@@ -341,6 +335,7 @@ const markersGroup = {
             onEachFeature: handleParcelle,
         })
     ),
+    geojson: ref(L.geoJSON([], {})),
 };
 
 const emit = defineEmits([
@@ -385,11 +380,11 @@ function createMap() {
     map.value = L.map("map", {
         layers: [defaultLayer.value], // fond de carte à afficher
         scrollWheelZoom: false, // interdire le zoom via la molette de la souris
-        ...mapOptions.value,
     });
     map.value.on("zoomend", onZoomEnd);
     map.value.on("move", onMove);
     map.value.addLayer(markersGroup.search.value);
+    map.value.addLayer(markersGroup.geojson.value);
 
     if (withInput.value === true) {
         inputMarker.addTo(map.value);
@@ -810,6 +805,18 @@ defineExpose({
     },
     setView(view) {
         map.value.setView(view.center, view.zoom || map.value.getZoom());
+    },
+    setBounds(geojson, style = {}) {
+        markersGroup.geojson.value.clearLayers();
+        markersGroup.geojson.value.addData(geojson);
+
+        if (style) {
+            markersGroup.geojson.value.setStyle(style);
+        }
+
+        const bounds = L.geoJSON(geojson).getBounds();
+        map.value.setMaxBounds(bounds);
+        return map.value.fitBounds(bounds);
     },
 });
 </script>

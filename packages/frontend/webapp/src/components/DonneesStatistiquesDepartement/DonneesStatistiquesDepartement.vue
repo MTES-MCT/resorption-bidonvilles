@@ -141,7 +141,11 @@
                 </div>
             </div>
             <div class="flex-1 h-128">
-                <Carte :mapOptions="{ dragging: false }" />
+                <Carte
+                    ref="carte"
+                    defaultLayer="Light"
+                    :isLoading="isLoading"
+                />
             </div>
         </div>
     </main>
@@ -185,13 +189,14 @@
 </style>
 
 <script setup>
-import { toRefs } from "vue";
+import { onMounted, toRefs, ref, watch } from "vue";
 import FilArianne from "../DonneesStatistiques/FilArianne.vue";
 import Title from "../DonneesStatistiques/Title.vue";
 import Header from "../DonneesStatistiques/Header.vue";
 import Vues from "../DonneesStatistiques/Vues.vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 import Carte from "@/components/Carte/Carte.vue";
+import { useGeojsonStore } from "@/stores/geojson.store";
 
 const props = defineProps({
     departement: {
@@ -204,4 +209,31 @@ const props = defineProps({
     },
 });
 const { departement, metrics } = toRefs(props);
+const carte = ref(null);
+const isLoading = ref(true);
+
+async function loadGeojson() {
+    isLoading.value = true;
+
+    const geojsonStore = useGeojsonStore();
+    try {
+        const geojson = await geojsonStore.getDepartement(
+            departement.value.code
+        );
+        carte.value.setBounds(geojson, {
+            color: "#00006D",
+            weight: "1",
+            fill: true,
+            fillColor: "#00006D",
+            fillOpacity: 0.05,
+        });
+    } catch (error) {
+        console.error(error);
+    }
+
+    isLoading.value = false;
+}
+
+watch(departement, loadGeojson);
+onMounted(loadGeojson);
 </script>
