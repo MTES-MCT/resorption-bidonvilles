@@ -1,11 +1,20 @@
 <template>
     <section>
-        <article
-            class="rounded border py-2 hover:border-primary bg-white"
+        <component
+            :is="metrics.level === 'departement' ? 'router-link' : 'article'"
+            v-bind="
+                metrics.level === 'departement'
+                    ? {
+                          to: `/donnees-statistiques/departement/${metrics.uid}`,
+                      }
+                    : {}
+            "
+            class="cursor-pointer block rounded border py-2 hover:border-primary bg-white"
             :class="{
                 'ml-4 mr-4': variant === 'secondary',
                 'ml-10 mr-8': variant === 'tertiary',
             }"
+            @click="toggle"
         >
             <div
                 class="grid text-right"
@@ -29,7 +38,6 @@
                         ><Icon
                             :icon="showChildren ? 'chevron-up' : 'chevron-down'"
                             class="cursor-pointer"
-                            @click="toggle"
                             :class="
                                 metrics.children?.length > 0 ? '' : 'invisible'
                             "
@@ -84,7 +92,7 @@
                     </template>
                 </GrilleCelluleEvolution>
             </div>
-        </article>
+        </component>
 
         <div
             class="bg-G100"
