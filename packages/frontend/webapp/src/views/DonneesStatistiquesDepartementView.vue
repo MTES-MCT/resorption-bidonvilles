@@ -35,7 +35,7 @@
 
 <script setup>
 import { onMounted, ref, computed, watch } from "vue";
-import { useMetricsStore } from "@/stores/metrics.store.js";
+import { useDepartementMetricsStore } from "@/stores/metrics.departement.store.js";
 import router from "@/helpers/router";
 
 import { Button } from "@resorptionbidonvilles/ui";
@@ -47,7 +47,7 @@ import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import DonneesStatistiquesDepartement from "@/components/DonneesStatistiquesDepartement/DonneesStatistiquesDepartement.vue";
 import { useConfigStore } from "@/stores/config.store";
 
-const metricsStore = useMetricsStore();
+const departementMetricsStore = useDepartementMetricsStore();
 const isLoading = ref(null);
 const error = ref(null);
 
@@ -67,7 +67,7 @@ const departement = computed(() => {
     );
 });
 const metrics = computed(() => {
-    return metricsStore.metricsByDepartement[departementCode.value] || null;
+    return departementMetricsStore.metrics[departementCode.value] || null;
 });
 
 onMounted(load);
@@ -81,7 +81,7 @@ async function load() {
     isLoading.value = true;
     error.value = null;
     try {
-        await metricsStore.fetchDepartement(departementCode.value);
+        await departementMetricsStore.fetchDepartement(departementCode.value);
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
     }
