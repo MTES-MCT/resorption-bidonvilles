@@ -36,7 +36,7 @@ export function getDepartementMetrics() {
                             towns: [
                                 {
                                     id: 1,
-                                    address: "209 boulevard Maxime Gorki",
+                                    usename: "209 boulevard Maxime Gorki",
                                     field_type: "Immeuble bâti",
                                     number_of_persons: 53,
                                     access_to_water: true,
@@ -44,7 +44,15 @@ export function getDepartementMetrics() {
                                 },
                                 {
                                     id: 2,
-                                    address: "Adresse inconnue",
+                                    usename: "Adresse inconnue",
+                                    field_type: "Type de terrain autre",
+                                    number_of_persons: 24,
+                                    access_to_water: false,
+                                    origins: "eu",
+                                },
+                                {
+                                    id: 3,
+                                    usename: "Adresse inconnue",
                                     field_type: "Type de terrain autre",
                                     number_of_persons: 24,
                                     access_to_water: false,
@@ -61,8 +69,8 @@ export function getDepartementMetrics() {
                             },
                             towns: [
                                 {
-                                    id: 3,
-                                    address: "1 grande rue",
+                                    id: 4,
+                                    usename: "1 grande rue",
                                     field_type: "Terrain",
                                     number_of_persons: null,
                                     access_to_water: true,

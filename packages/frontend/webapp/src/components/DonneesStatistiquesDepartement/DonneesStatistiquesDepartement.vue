@@ -166,50 +166,16 @@
                     </thead>
 
                     <tbody>
-                        <tr class="text-right data-table-header">
-                            <th class="text-left font-normal">
-                                <span class="font-bold">Stain</span><br /><span
-                                    class="text-sm"
-                                    >93072</span
-                                >
-                            </th>
-                            <th class="font-normal">1234<br />&nbsp;</th>
-                            <th class="font-normal">123<br />&nbsp;</th>
-                            <th class="font-normal">
-                                1112<br /><span class="text-sm">(56 %)</span>
-                            </th>
-                        </tr>
-                        <tr class="bg-G100 text-right">
-                            <td class="text-left">
-                                209 boulevard Maxime Gorki<br /><span
-                                    class="text-sm"
-                                    >Bâtiment public</span
-                                >
-                            </td>
-                            <td></td>
-                            <td>67<br />&nbsp;</td>
-                            <td class="text-lg text-success">
-                                <Icon icon="check" /><br />&nbsp;
-                            </td>
-                        </tr>
-                        <tr class="bg-G200 text-right">
-                            <td class="text-left">
-                                209 boulevard Maxime Gorki<br /><span
-                                    class="text-sm"
-                                    >Bâtiment public</span
-                                >
-                            </td>
-                            <td></td>
-                            <td>67<br />&nbsp;</td>
-                            <td class="text-lg text-error">
-                                <Icon icon="times" /><br />&nbsp;
-                            </td>
-                        </tr>
+                        <DonneesCommune
+                            v-for="city in metrics.cities"
+                            :key="city.code"
+                            :data="city"
+                        />
                         <tr class="bg-blue200 text-right">
                             <td class="text-left font-bold">Total</td>
-                            <td>1234</td>
-                            <td>123</td>
-                            <td>1112</td>
+                            <td>?</td>
+                            <td>?</td>
+                            <td>?</td>
                         </tr>
                     </tbody>
                 </table>
@@ -241,7 +207,7 @@
     </main>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .data-table thead th,
 .data-table tbody th,
 .data-table tbody td {
@@ -280,13 +246,15 @@
 
 <script setup>
 import { onMounted, toRefs, ref, watch } from "vue";
+import { useGeojsonStore } from "@/stores/geojson.store";
+
+import { Icon } from "@resorptionbidonvilles/ui";
 import FilArianne from "../DonneesStatistiques/FilArianne.vue";
 import Title from "../DonneesStatistiques/Title.vue";
 import Header from "../DonneesStatistiques/Header.vue";
 import Vues from "../DonneesStatistiques/Vues.vue";
-import { Icon } from "@resorptionbidonvilles/ui";
 import Carte from "@/components/Carte/Carte.vue";
-import { useGeojsonStore } from "@/stores/geojson.store";
+import DonneesCommune from "./DonneesCommune.vue";
 
 const props = defineProps({
     departement: {
