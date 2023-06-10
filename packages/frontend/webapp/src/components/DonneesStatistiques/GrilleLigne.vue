@@ -5,7 +5,7 @@
             v-bind="
                 metrics.level === 'departement'
                     ? {
-                          to: `/donnees-statistiques/departement/${metrics.uid}`,
+                          to: `/donnees-statistiques/departement/${metrics.uid}#donnees`,
                       }
                     : {}
             "
