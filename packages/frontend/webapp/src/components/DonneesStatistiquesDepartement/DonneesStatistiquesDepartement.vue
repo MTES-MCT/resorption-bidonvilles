@@ -133,52 +133,7 @@
 
         <div class="mt-6 flex justify-evenly items-stretch">
             <div class="flex-1 pr-6">
-                <table class="w-full data-table">
-                    <thead>
-                        <tr class="text-xl">
-                            <th class="text-left text-md">
-                                <div class="flex justify-between">
-                                    <span>Commune</span>
-                                    <span class="text-md text-G600"
-                                        ><Icon icon="chevron-down"
-                                    /></span>
-                                </div>
-                            </th>
-                            <th class="text-right">
-                                <Icon icon="map-pin" />
-                                <span class="ml-2 text-md text-G600"
-                                    ><Icon icon="chevron-down"
-                                /></span>
-                            </th>
-                            <th class="text-right">
-                                <Icon icon="person" />
-                                <span class="ml-2 text-md text-G600"
-                                    ><Icon icon="chevron-down"
-                                /></span>
-                            </th>
-                            <th class="text-right">
-                                <Icon icon="faucet-drip" />
-                                <span class="ml-2 text-md text-G600"
-                                    ><Icon icon="chevron-down"
-                                /></span>
-                            </th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <DonneesCommune
-                            v-for="city in metrics.cities"
-                            :key="city.code"
-                            :data="city"
-                        />
-                        <tr class="bg-blue200 text-right">
-                            <td class="text-left font-bold">Total</td>
-                            <td>?</td>
-                            <td>?</td>
-                            <td>?</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <SummaryTable :metrics="metrics" />
             </div>
             <div class="w-1 bg-blue300 relative">
                 <div
@@ -207,43 +162,6 @@
     </main>
 </template>
 
-<style lang="scss">
-.data-table thead th,
-.data-table tbody th,
-.data-table tbody td {
-    @apply px-2;
-}
-
-.data-table thead th:hover {
-    @apply bg-G200 cursor-pointer;
-}
-.data-table tbody tr:not(.data-table-header):hover {
-    @apply bg-G600 cursor-pointer text-white;
-}
-
-.data-table tbody th,
-.data-table tbody td {
-    @apply border-y border-G400;
-}
-
-.data-table tbody th:not(:last-child),
-.data-table tbody td:not(:last-child) {
-    @apply border-r;
-}
-
-.data-table thead th:not(:last-child) {
-    @apply border-r;
-}
-
-.data-table-header {
-    @apply bg-blue300;
-
-    th:not(:last-child) {
-        @apply border-x-blue400;
-    }
-}
-</style>
-
 <script setup>
 import { onMounted, toRefs, ref, watch } from "vue";
 import { useGeojsonStore } from "@/stores/geojson.store";
@@ -254,7 +172,7 @@ import Title from "../DonneesStatistiques/Title.vue";
 import Header from "../DonneesStatistiques/Header.vue";
 import Vues from "../DonneesStatistiques/Vues.vue";
 import Carte from "@/components/Carte/Carte.vue";
-import DonneesCommune from "./DonneesCommune.vue";
+import SummaryTable from "./tables/SummaryTable.vue";
 
 const props = defineProps({
     departement: {
