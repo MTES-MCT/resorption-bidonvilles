@@ -4,7 +4,7 @@ import { useEventBus } from "@common/helpers/event-bus";
 import { getNationMetrics, getDepartementMetrics } from "@/api/metrics.api";
 
 export const useMetricsStore = defineStore("metrics", () => {
-    const isLoading = ref(null);
+    const nationStatus = ref(null); // null: lancement, 'init': initialisation, 'loaded': chargé, 'refresh': màj
     const error = ref(null);
     const metrics = ref([]);
     const metricsByDepartement = ref({});
@@ -12,7 +12,7 @@ export const useMetricsStore = defineStore("metrics", () => {
     const collapsedStatuses = ref({});
 
     function reset() {
-        isLoading.value = null;
+        nationStatus.value = null;
         error.value = null;
         metrics.value = [];
         metricsByDepartement.value = {};
@@ -25,27 +25,31 @@ export const useMetricsStore = defineStore("metrics", () => {
     reset();
 
     return {
-        isLoading,
+        nationStatus,
         error,
         metrics,
         metricsByDepartement,
         collapsedStatuses,
         selection,
         async load(from, to) {
-            if (isLoading.value === true) {
+            if (
+                nationStatus.value === "init" ||
+                nationStatus.value === "refresh"
+            ) {
                 return null;
             }
 
-            isLoading.value = true;
+            nationStatus.value =
+                nationStatus.value === "loaded" ? "refresh" : "init";
             metrics.value = [];
             try {
                 metrics.value = await getNationMetrics(from, to);
-                isLoading.value = false;
+                nationStatus.value = "loaded";
                 return metrics.value;
             } catch (e) {
                 error.value =
                     e?.user_message || "Une erreur inconnue est survenue";
-                isLoading.value = false;
+                nationStatus.value = null;
                 return null;
             }
         },

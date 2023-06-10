@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store";
 
 import { Button, DatepickerInput } from "@resorptionbidonvilles/ui";
@@ -31,10 +31,6 @@ const to = ref(new Date());
 
 from.value.setDate(from.value.getDate() - 8);
 to.value.setDate(to.value.getDate() - 1);
-
-onMounted(() => {
-    metricsStore.load(from.value, to.value);
-});
 
 function update() {
     metricsStore.load(from.value, to.value);
