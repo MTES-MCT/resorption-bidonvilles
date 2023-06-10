@@ -1,14 +1,8 @@
 <template>
     <section>
         <component
-            :is="metrics.level === 'departement' ? 'router-link' : 'article'"
-            v-bind="
-                metrics.level === 'departement'
-                    ? {
-                          to: `/donnees-statistiques/departement/${metrics.uid}#donnees`,
-                      }
-                    : {}
-            "
+            :is="linkTo ? 'router-link' : 'article'"
+            v-bind="linkTo ? { to: linkTo } : {}"
             class="cursor-pointer block rounded border py-2 hover:border-primary bg-white"
             :class="{
                 'ml-4 mr-4': variant === 'secondary',
@@ -137,6 +131,14 @@ const metricsStore = useMetricsStore();
 const collapsed = computed(() => {
     const { uid, level } = metrics.value;
     return metricsStore.collapsedStatuses[`${level}-${uid}`] ?? false;
+});
+
+const linkTo = computed(() => {
+    if (metrics.value.level === "departement") {
+        return `/donnees-statistiques/departement/${metrics.value.uid}#donnees`;
+    }
+
+    return null;
 });
 
 function toggle() {
