@@ -9,6 +9,7 @@ export const useMetricsStore = defineStore("metrics", () => {
     const metrics = ref([]);
     const metricsByDepartement = ref({});
     const selection = ref([]);
+    const collapsedStatuses = ref({});
 
     function reset() {
         isLoading.value = null;
@@ -16,6 +17,7 @@ export const useMetricsStore = defineStore("metrics", () => {
         metrics.value = [];
         metricsByDepartement.value = {};
         selection.value = [];
+        collapsedStatuses.value = {};
     }
 
     const { bus } = useEventBus();
@@ -27,6 +29,7 @@ export const useMetricsStore = defineStore("metrics", () => {
         error,
         metrics,
         metricsByDepartement,
+        collapsedStatuses,
         selection,
         async load(from, to) {
             if (isLoading.value === true) {

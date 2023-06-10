@@ -36,7 +36,7 @@
                 >
                     <span class="mr-4" v-if="variant !== 'tertiary'"
                         ><Icon
-                            :icon="showChildren ? 'chevron-up' : 'chevron-down'"
+                            :icon="collapsed ? 'chevron-up' : 'chevron-down'"
                             class="cursor-pointer"
                             :class="
                                 metrics.children?.length > 0 ? '' : 'invisible'
@@ -97,7 +97,7 @@
         <div
             class="bg-G100"
             :class="variant === 'primary' ? 'py-3' : ''"
-            v-if="metrics.children?.length > 0 && showChildren"
+            v-if="metrics.children?.length > 0 && collapsed"
         >
             <GrilleLigne
                 v-for="m in metrics.children"
@@ -113,7 +113,7 @@
 <style scoped lang="scss" src="./grid.scss" />
 
 <script setup>
-import { computed, ref, toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store";
 
 import GrilleCellule from "./GrilleCellule.vue";
@@ -133,15 +133,18 @@ const props = defineProps({
 });
 const { metrics, variant } = toRefs(props);
 
-const showChildren = ref(false);
 const metricsStore = useMetricsStore();
+const collapsed = computed(() => {
+    const { uid, level } = metrics.value;
+    return metricsStore.collapsedStatuses[`${level}-${uid}`] ?? false;
+});
 
 function toggle() {
-    showChildren.value = !showChildren.value;
+    const { uid, level } = metrics.value;
+    metricsStore.collapsedStatuses[`${level}-${uid}`] = !collapsed.value;
 }
 
 // on setup l'affichage des variations de population
-
 const populationEvolution = computed(() => {
     if (metrics.value.metrics.number_of_persons.from === 0) {
         return null;
