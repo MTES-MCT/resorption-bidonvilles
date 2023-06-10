@@ -3401,6 +3401,7 @@ __metadata:
     eslint: ^8.22.0
     eslint-plugin-cypress: ^2.12.1
     eslint-plugin-vue: ^9.3.0
+    flag-icons: ^6.7.0
     fuse.js: ^6.6.2
     jsdom: ^22.0.0
     leaflet: ^1.9.3
@@ -13377,6 +13378,13 @@ __metadata:
     locate-path: ^5.0.0
     path-exists: ^4.0.0
   checksum: 4c172680e8f8c1f78839486e14a43ef82e9decd0e74145f40707cc42e7420506d5ec92d9a11c22bd2c48fb0c384ea05dd30e10dd152fefeec6f2f75282a8b844
+  languageName: node
+  linkType: hard
+
+"flag-icons@npm:^6.7.0":
+  version: 6.7.0
+  resolution: "flag-icons@npm:6.7.0"
+  checksum: 4c61421f4d88b327b79eb26137c9c5f625aead7755445068186f80ec4bc65c602622d338e8cb39eb84025b672c2e157c1eda8b40dcb5124cbb8d33f6068653b2
   languageName: node
   linkType: hard
 

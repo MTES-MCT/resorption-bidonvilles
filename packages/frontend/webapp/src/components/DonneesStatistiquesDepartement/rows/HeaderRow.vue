@@ -8,8 +8,8 @@
         </th>
         <th
             class="text-right w-20"
-            v-for="(col, index) in columns"
-            :key="index"
+            v-for="col in columns"
+            :key="col.uid"
             :title="col.title"
         >
             <Icon class="text-lg text-black" :icon="col.icon" />

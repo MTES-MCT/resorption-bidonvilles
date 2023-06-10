@@ -23,18 +23,21 @@ const { metrics } = toRefs(props);
 
 const columns = [
     {
+        uid: "number_of_towns",
         icon: "map-pin",
         title: "Nombre de sites",
         headComponent: TownsHead,
         bodyComponent: TownsBody,
     },
     {
+        uid: "number_of_persons",
         icon: "person",
         title: "Nombre de personnes",
         headComponent: PersonsHead,
         bodyComponent: PersonsBody,
     },
     {
+        uid: "number_of_towns_with_water",
         icon: "faucet-drip",
         title: "Nombre de sites avec accès à l'eau",
         headComponent: WaterHead,

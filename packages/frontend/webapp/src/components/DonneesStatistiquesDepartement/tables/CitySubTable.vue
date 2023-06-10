@@ -1,7 +1,8 @@
 <template>
     <CityRow :data="data" :columns="columns" />
     <TownRow
-        v-for="town in data.towns"
+        v-for="(town, index) in data.towns"
+        :even="index % 2 === 0"
         :key="town.id"
         :data="data"
         :columns="columns"

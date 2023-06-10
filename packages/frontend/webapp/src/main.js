@@ -8,6 +8,7 @@ import Datepicker from "./helpers/datepicker";
 import { useMatomo } from "./helpers/matomo";
 import { useSentry } from "./helpers/sentry";
 import "@common/helpers/yup";
+import "./helpers/flag-icons";
 
 import "./assets/main.css";
 

@@ -63,6 +63,7 @@ import {
     faPaperPlane,
     faPen,
     faPencilAlt,
+    faPeopleGroup,
     faPersonMilitaryPointing,
     faPhone,
     faPlus,
@@ -177,6 +178,7 @@ library.add(faPaperclip);
 library.add(faPaperPlane);
 library.add(faPen);
 library.add(faPencilAlt);
+library.add(faPeopleGroup);
 library.add(faPersonMilitaryPointing);
 library.add(faPhone);
 library.add(faPrint);

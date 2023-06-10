@@ -5,8 +5,8 @@
         </th>
         <th
             class="font-normal align-top max-w-4 py-1"
-            v-for="(col, index) in columns"
-            :key="index"
+            v-for="col in columns"
+            :key="col.uid"
         >
             <component :is="col.headComponent" :data="data" />
         </th>

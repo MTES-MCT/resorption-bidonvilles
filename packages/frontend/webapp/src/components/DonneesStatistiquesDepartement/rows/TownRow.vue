@@ -1,12 +1,12 @@
 <template>
-    <tr class="bg-G100 text-right">
+    <tr class="text-right" :class="even ? 'bg-G100' : 'bg-G200'">
         <td class="text-left py-1">
             <CommuneBodyCell :data="data" :town="town" />
         </td>
         <td
+            v-for="col in columns"
             class="font-normal align-top py-1"
-            v-for="(col, index) in columns"
-            :key="index"
+            :key="col.uid"
         >
             <component :is="col.bodyComponent" :data="data" :town="town" />
         </td>
@@ -30,6 +30,11 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    even: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
-const { data, columns, town } = toRefs(props);
+const { data, columns, town, even } = toRefs(props);
 </script>
