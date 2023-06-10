@@ -10,6 +10,7 @@
             class="text-right w-20"
             v-for="(col, index) in columns"
             :key="index"
+            :title="col.title"
         >
             <Icon class="text-lg text-black" :icon="col.icon" />
             <span class="ml-2 text-G600"><Icon icon="chevron-down" /></span>

@@ -22,9 +22,24 @@ const props = defineProps({
 const { metrics } = toRefs(props);
 
 const columns = [
-    { icon: "map-pin", headComponent: TownsHead, bodyComponent: TownsBody },
-    { icon: "person", headComponent: PersonsHead, bodyComponent: PersonsBody },
-    { icon: "faucet-drip", headComponent: WaterHead, bodyComponent: WaterBody },
+    {
+        icon: "map-pin",
+        title: "Nombre de sites",
+        headComponent: TownsHead,
+        bodyComponent: TownsBody,
+    },
+    {
+        icon: "person",
+        title: "Nombre de personnes",
+        headComponent: PersonsHead,
+        bodyComponent: PersonsBody,
+    },
+    {
+        icon: "faucet-drip",
+        title: "Nombre de sites avec accès à l'eau",
+        headComponent: WaterHead,
+        bodyComponent: WaterBody,
+    },
 ];
 
 const enrichedMetrics = computed(() => {
