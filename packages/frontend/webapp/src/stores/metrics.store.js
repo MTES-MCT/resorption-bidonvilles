@@ -51,8 +51,12 @@ export const useMetricsStore = defineStore("metrics", () => {
             }
 
             if (
-                loaded.value.from === from.value &&
-                loaded.value.to === to.value
+                loaded.value.from &&
+                loaded.value.from.toISOString().slice(0, 10) ===
+                    from.value.toISOString().slice(0, 10) &&
+                loaded.value.to &&
+                loaded.value.to.toISOString().slice(0, 10) ===
+                    to.value.toISOString().slice(0, 10)
             ) {
                 return null;
             }
