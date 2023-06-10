@@ -8,19 +8,37 @@
         />
 
         <main class="mt-6">
-            <template v-if="metricsStore.nationStatus === 'loaded'">
+            <ViewError v-if="metricsStore.error">
+                <template v-slot:title>Collecte des données échouée</template>
+                <template v-slot:content>{{ metricsStore.error }}</template>
+                <template v-slot:actions
+                    ><Button
+                        type="button"
+                        icon="rotate-right"
+                        iconPosition="left"
+                        @click="metricsStore.load"
+                        >Réessayer</Button
+                    >
+                    <ButtonContact
+                /></template>
+            </ViewError>
+            <Loading
+                class="mt-6"
+                v-else-if="metricsStore.nationStatus !== 'loaded'"
+            />
+            <template v-else>
                 <Vues />
                 <Grille class="mt-6" :metrics="metricsStore.metrics" />
             </template>
-            <Loading class="mt-6" v-else />
         </main>
     </ContentWrapper>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store";
 
+import { Button } from "@resorptionbidonvilles/ui";
 import FilArianne from "./FilArianne.vue";
 import Title from "./Title.vue";
 import Header from "./Header.vue";
@@ -28,12 +46,9 @@ import Vues from "./Vues.vue";
 import Grille from "./Grille.vue";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import Loading from "@/components/Loading/Loading.vue";
+import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
+import ViewError from "@/components/ViewError/ViewError.vue";
 
 const metricsStore = useMetricsStore();
-
-onMounted(() => {
-    const from = ref(new Date());
-    const to = ref(new Date());
-    metricsStore.load(from.value, to.value);
-});
+onMounted(metricsStore.load);
 </script>

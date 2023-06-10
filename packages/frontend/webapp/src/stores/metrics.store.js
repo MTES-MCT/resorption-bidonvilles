@@ -10,6 +10,12 @@ export const useMetricsStore = defineStore("metrics", () => {
     const metricsByDepartement = ref({});
     const selection = ref([]);
     const collapsedStatuses = ref({});
+    const from = ref(new Date());
+    const to = ref(new Date());
+    const loaded = ref({
+        from: null,
+        to: null,
+    });
 
     function reset() {
         nationStatus.value = null;
@@ -18,6 +24,11 @@ export const useMetricsStore = defineStore("metrics", () => {
         metricsByDepartement.value = {};
         selection.value = [];
         collapsedStatuses.value = {};
+        from.value.setTime(new Date());
+        to.value.setTime(new Date());
+
+        from.value.setDate(from.value.getDate() - 8);
+        to.value.setDate(to.value.getDate() - 1);
     }
 
     const { bus } = useEventBus();
@@ -27,14 +38,24 @@ export const useMetricsStore = defineStore("metrics", () => {
     return {
         nationStatus,
         error,
+        from,
+        to,
+        loadedDates: loaded,
         metrics,
         metricsByDepartement,
         collapsedStatuses,
         selection,
-        async load(from, to) {
+        async load() {
             if (
                 nationStatus.value === "init" ||
                 nationStatus.value === "refresh"
+            ) {
+                return null;
+            }
+
+            if (
+                loaded.value.from === from.value &&
+                loaded.value.to === to.value
             ) {
                 return null;
             }
@@ -43,8 +64,10 @@ export const useMetricsStore = defineStore("metrics", () => {
                 nationStatus.value === "loaded" ? "refresh" : "init";
             metrics.value = [];
             try {
-                metrics.value = await getNationMetrics(from, to);
+                metrics.value = await getNationMetrics(from.value, to.value);
                 nationStatus.value = "loaded";
+                loaded.value.from = new Date(from.value);
+                loaded.value.to = new Date(to.value);
                 return metrics.value;
             } catch (e) {
                 error.value =

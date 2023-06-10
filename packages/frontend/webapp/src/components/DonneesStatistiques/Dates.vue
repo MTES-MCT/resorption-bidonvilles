@@ -13,12 +13,18 @@
             label="Au"
             withoutMargin
         />
-        <Button @click="update" class="h-9">Valider</Button>
+        <Button
+            @click="update"
+            class="h-9"
+            :loading="['init', 'refresh'].includes(metricsStore.nationStatus)"
+            v-if="datesAreNotLoaded && from && to"
+            >Valider</Button
+        >
     </section>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store";
 
 import { Button, DatepickerInput } from "@resorptionbidonvilles/ui";
@@ -26,13 +32,26 @@ import { Button, DatepickerInput } from "@resorptionbidonvilles/ui";
 const metricsStore = useMetricsStore();
 
 const today = ref(new Date());
-const from = ref(new Date());
-const to = ref(new Date());
 
-from.value.setDate(from.value.getDate() - 8);
-to.value.setDate(to.value.getDate() - 1);
+const from = ref(new Date(metricsStore.from));
+const to = ref(new Date(metricsStore.to));
+
+const datesAreNotLoaded = computed(() => {
+    if (!metricsStore.loadedDates.from || !metricsStore.loadedDates.to) {
+        return true;
+    }
+
+    return (
+        from.value.toISOString().slice(0, 10) !==
+            metricsStore.loadedDates.from.toISOString().slice(0, 10) ||
+        to.value.toISOString().slice(0, 10) !==
+            metricsStore.loadedDates.to.toISOString().slice(0, 10)
+    );
+});
 
 function update() {
-    metricsStore.load(from.value, to.value);
+    metricsStore.from = from.value;
+    metricsStore.to = to.value;
+    metricsStore.load();
 }
 </script>
