@@ -6,12 +6,14 @@
             :value="item.uid"
             :label="item.label"
             name="tags"
+            v-model="values.tags"
         />
     </CheckableGroup>
 </template>
 
 <script setup>
 import { computed } from "vue";
+import { useFormValues } from "vee-validate";
 import { useConfigStore } from "@/stores/config.store";
 import labels from "../FicheSiteJournalFormNouveauMessage.labels";
 
@@ -21,4 +23,6 @@ const configStore = useConfigStore();
 const items = computed(() => {
     return configStore.config.regular_comment_tags;
 });
+
+const values = useFormValues();
 </script>
