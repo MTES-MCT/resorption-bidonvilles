@@ -174,9 +174,9 @@ import Title from "../DonneesStatistiques/Title.vue";
 import Header from "../DonneesStatistiques/Header.vue";
 import Vues from "../DonneesStatistiques/Vues.vue";
 import Carte from "@/components/Carte/Carte.vue";
-import SummaryTable from "./tables/SummaryTable.vue";
-import InhabitantsTable from "./tables/InhabitantsTable.vue";
-import LivingConditionsTable from "./tables/LivingConditionsTable.vue";
+import SummaryTable from "./components/tables/SummaryTable.vue";
+import InhabitantsTable from "./components/tables/InhabitantsTable.vue";
+import LivingConditionsTable from "./components/tables/LivingConditionsTable.vue";
 
 const props = defineProps({
     departement: {
