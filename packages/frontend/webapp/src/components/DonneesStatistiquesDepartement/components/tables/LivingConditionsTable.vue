@@ -16,8 +16,8 @@
 
 <script setup>
 import { toRefs } from "vue";
-import pick from "../../columns/utils/pick";
 import TemplateTable from "./TemplateTable.vue";
+import pick from "../../utils/pick";
 
 const props = defineProps({
     metrics: {

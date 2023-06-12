@@ -15,7 +15,7 @@
 
 <script setup>
 import { toRefs } from "vue";
-import CommuneHeadCell from "../cells/CommuneHead.vue";
+import CommuneHeadCell from "../cells/Commune/CommuneHead.vue";
 
 const props = defineProps({
     data: {
