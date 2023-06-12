@@ -12,7 +12,7 @@
                 :columns="columns"
             />
 
-            <TotalRow :columns="columns" />
+            <TotalRow :columns="columns" :metrics="enrichedMetrics" />
         </tbody>
     </table>
 </template>
