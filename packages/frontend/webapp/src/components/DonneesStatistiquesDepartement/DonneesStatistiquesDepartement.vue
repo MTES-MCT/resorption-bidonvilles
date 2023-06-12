@@ -136,6 +136,7 @@
                 <SummaryTable :metrics="metrics" />
                 <InhabitantsTable :metrics="metrics" />
                 <LivingConditionsTable :metrics="metrics" />
+                <JusticeTable :metrics="metrics" />
             </div>
             <div class="w-1 bg-blue300 relative">
                 <div
@@ -177,6 +178,7 @@ import Carte from "@/components/Carte/Carte.vue";
 import SummaryTable from "./components/tables/SummaryTable.vue";
 import InhabitantsTable from "./components/tables/InhabitantsTable.vue";
 import LivingConditionsTable from "./components/tables/LivingConditionsTable.vue";
+import JusticeTable from "./components/tables/JusticeTable.vue";
 
 const props = defineProps({
     departement: {
