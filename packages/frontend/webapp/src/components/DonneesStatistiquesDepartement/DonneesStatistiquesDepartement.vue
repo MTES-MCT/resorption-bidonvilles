@@ -135,6 +135,7 @@
             <div class="flex-1 pr-6">
                 <SummaryTable :metrics="metrics" />
                 <InhabitantsTable :metrics="metrics" />
+                <LivingConditionsTable :metrics="metrics" />
             </div>
             <div class="w-1 bg-blue300 relative">
                 <div
@@ -175,6 +176,7 @@ import Vues from "../DonneesStatistiques/Vues.vue";
 import Carte from "@/components/Carte/Carte.vue";
 import SummaryTable from "./tables/SummaryTable.vue";
 import InhabitantsTable from "./tables/InhabitantsTable.vue";
+import LivingConditionsTable from "./tables/LivingConditionsTable.vue";
 
 const props = defineProps({
     departement: {

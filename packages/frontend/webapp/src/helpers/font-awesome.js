@@ -44,6 +44,7 @@ import {
     faFilePdf,
     faFileSignature,
     faFileWord,
+    faFireExtinguisher,
     faFlag,
     faHandshakeAngle,
     faHistory,
@@ -79,6 +80,7 @@ import {
     faTent,
     faTimes,
     faTint,
+    faToilet,
     faTrashAlt as faTrashAltSolid,
     faTriangleExclamation,
     faUnlink,
@@ -157,6 +159,7 @@ library.add(faFileExcel);
 library.add(faFilePdf);
 library.add(faFileSignature);
 library.add(faFileWord);
+library.add(faFireExtinguisher);
 library.add(faFlag);
 library.add(faHandshakeAngle);
 library.add(faHistory);
@@ -196,6 +199,7 @@ library.add(faSun);
 library.add(faTent);
 library.add(faTimes);
 library.add(faTint);
+library.add(faToilet);
 library.add(faTrashAlt);
 library.add(faTrashAltSolid);
 library.add(faTriangleExclamation);

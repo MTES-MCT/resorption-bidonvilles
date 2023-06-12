@@ -1,7 +1,7 @@
 <template>
-    {{ data.summary.number_of_towns_with_water }}<br />
+    {{ data.summary.number_of_towns_with_fire_prevention }}<br />
     <span class="text-sm"
-        >({{ data.summary.percentage_of_towns_with_water }} %)</span
+        >({{ data.summary.percentage_of_towns_with_fire_prevention }} %)</span
     >
 </template>
 
