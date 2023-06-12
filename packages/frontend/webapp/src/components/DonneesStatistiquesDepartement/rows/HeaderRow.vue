@@ -6,21 +6,22 @@
                 <span class="text-G600"><Icon icon="chevron-down" /></span>
             </div>
         </th>
-        <th
+        <Title
+            tag="th"
+            :title="col.title"
             class="text-right w-20"
             v-for="col in columns"
             :key="col.uid"
-            :title="col.title"
         >
             <Icon class="text-lg text-black" :icon="col.icon" />
             <span class="ml-2 text-G600"><Icon icon="chevron-down" /></span>
-        </th>
+        </Title>
     </tr>
 </template>
 
 <script setup>
 import { toRefs } from "vue";
-import { Icon } from "@resorptionbidonvilles/ui";
+import { Icon, Title } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     columns: {
