@@ -38,6 +38,7 @@ import actionCreateComment from './actions/createComment';
 import actionUpdate from './actions/update';
 import justiceReaderFindByLocation from './justiceReaders/findByLocation';
 import organizationSearch from './organizations/search';
+import getDepartementMetrics from './metrics/getDepartementMetrics';
 import getNationMetrics from './metrics/getNationMetrics';
 
 export default {
@@ -90,6 +91,7 @@ export default {
         postNavigationLogs: mePostNavigationLogs,
     },
     metrics: {
+        getDepartementMetrics,
         getNationMetrics,
     },
     note: {

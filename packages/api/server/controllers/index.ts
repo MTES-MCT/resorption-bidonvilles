@@ -31,6 +31,7 @@ import geoSearch from './geoController/search';
 // invite
 import inviteInvite from './inviteController/invite';
 // metrics
+import getDepartementMetrics from './metricsController/getDepartementMetrics';
 import getNationMetrics from './metricsController/getNationMetrics';
 // note
 import noteAddPublication from './noteController/addPublication';
@@ -138,13 +139,14 @@ export default () => ({
     invite: {
         invite: inviteInvite,
     },
+    metrics: {
+        getDepartementMetrics,
+        getNationMetrics,
+    },
     note: {
         addPublication: noteAddPublication,
         create: noteCreate,
         addCopy: noteAddCopy,
-    },
-    metrics: {
-        getNationMetrics,
     },
     organization: {
         categories: organizationCategories,

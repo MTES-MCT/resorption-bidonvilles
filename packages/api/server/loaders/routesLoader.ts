@@ -450,7 +450,17 @@ export default (app) => {
         controllers.town.list,
     );
     app.get(
-        '/towns/metrics',
+        '/towns/metrics/departement',
+        middlewares.auth.authenticate,
+        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.metrics.getDepartementMetrics,
+        middlewares.validation,
+        controllers.metrics.getDepartementMetrics,
+    );
+    app.get(
+        '/towns/metrics/nation',
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.list'], ...args),
         middlewares.charte.check,
