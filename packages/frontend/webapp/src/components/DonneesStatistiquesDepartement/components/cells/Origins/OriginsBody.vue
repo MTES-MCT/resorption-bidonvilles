@@ -16,9 +16,9 @@ import { computed, toRefs } from "vue";
 const props = defineProps({ town: Object });
 const { town } = toRefs(props);
 const flagMap = {
-    fr: { icon: "fi-fr", title: "Français(e)s" },
-    eu: { icon: "fi-eu", title: "Intra-communautaires" },
-    foreign: { icon: "fi-un", title: "Extra-communautaires" },
+    french: { icon: "fi-fr", title: "Français(e)s" },
+    european: { icon: "fi-eu", title: "Intra-communautaires" },
+    other: { icon: "fi-un", title: "Extra-communautaires" },
 };
 
 const flags = computed(() => {
