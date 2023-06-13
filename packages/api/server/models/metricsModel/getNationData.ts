@@ -25,7 +25,6 @@ export type NationMetricsRawData = {
 export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[]> => {
     const permissionWhereClauseGroup:WhereClauseGroup = pWhere().can(user).do('list', 'shantytown');
     const replacements = {
-        userId: user.id,
         from: `${moment(from).format('YYYY-MM-DD')} 23:59:59`,
         to: `${moment(to).format('YYYY-MM-DD')} 23:59:59`,
     };
@@ -64,12 +63,12 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
                 CASE
                     WHEN 
                         (shantytowns.water_access_type = 'robinet_connecte_au_reseau' OR shantytowns.water_access_type = 'autre')
-                        AND ( water_access_is_unequal is null OR water_access_is_unequal = false)
+                        AND ( water_access_is_unequal IS NULL OR water_access_is_unequal = false)
                         AND water_access_is_public = false
                         AND water_access_is_local = true
-                        AND (water_access_is_continuous is null OR water_access_is_continuous = true)
-                        AND (water_access_is_close is null OR water_access_is_close = true)
-                        AND (water_access_has_stagnant_water is null OR water_access_has_stagnant_water  = false)
+                        AND (water_access_is_continuous IS NULL OR water_access_is_continuous = true)
+                        AND (water_access_is_close IS NULL OR water_access_is_close = true)
+                        AND (water_access_has_stagnant_water IS NULL OR water_access_has_stagnant_water  = false)
                     THEN true
                     ELSE false
                 END AS access_to_water
@@ -112,12 +111,12 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
                 CASE
                     WHEN 
                         (shantytowns.water_access_type = 'robinet_connecte_au_reseau' OR shantytowns.water_access_type = 'autre')
-                        AND ( water_access_is_unequal is null OR water_access_is_unequal = false)
+                        AND ( water_access_is_unequal IS NULL OR water_access_is_unequal = false)
                         AND water_access_is_public = false
                         AND water_access_is_local = true
-                        AND (water_access_is_continuous is null OR water_access_is_continuous = true)
-                        AND (water_access_is_close is null OR water_access_is_close = true)
-                        AND (water_access_has_stagnant_water is null OR water_access_has_stagnant_water  = false)
+                        AND (water_access_is_continuous IS NULL OR water_access_is_continuous = true)
+                        AND (water_access_is_close IS NULL OR water_access_is_close = true)
+                        AND (water_access_has_stagnant_water IS NULL OR water_access_has_stagnant_water  = false)
                     THEN true
                     ELSE false
                 END AS access_to_water
