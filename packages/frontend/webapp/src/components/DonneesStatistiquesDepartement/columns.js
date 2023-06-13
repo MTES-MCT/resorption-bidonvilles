@@ -10,6 +10,7 @@ import number_of_towns_with_fire_prevention from "./components/cells/Fire/number
 import number_of_towns_with_toilets from "./components/cells/Toilets/number_of_towns_with_toilets";
 import number_of_towns_with_trash_evacuation from "./components/cells/Trash/number_of_towns_with_trash_evacuation";
 import number_of_towns_with_water from "./components/cells/Water/number_of_towns_with_water";
+import number_of_towns_without_pest_animals from "./components/cells/PestAnimals/number_of_towns_without_pest_animals";
 import origins from "./components/cells/Origins/origins";
 
 export default {
@@ -25,5 +26,6 @@ export default {
     number_of_towns_with_toilets,
     number_of_towns_with_trash_evacuation,
     number_of_towns_with_water,
+    number_of_towns_without_pest_animals,
     origins,
 };

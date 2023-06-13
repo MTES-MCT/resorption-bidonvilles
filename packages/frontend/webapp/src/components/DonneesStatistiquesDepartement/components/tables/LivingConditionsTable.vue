@@ -8,6 +8,7 @@
                 'number_of_towns_with_trash_evacuation',
                 'number_of_towns_with_fire_prevention',
                 'number_of_towns_with_toilets',
+                'number_of_towns_without_pest_animals',
             ])
         "
         :metrics="metrics"

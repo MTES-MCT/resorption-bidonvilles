@@ -62,6 +62,7 @@ import {
     faNotesMedical,
     faPaperclip,
     faPaperPlane,
+    faPaw,
     faPen,
     faPencilAlt,
     faPeopleGroup,
@@ -179,6 +180,7 @@ library.add(faNewspaper);
 library.add(faNotesMedical);
 library.add(faPaperclip);
 library.add(faPaperPlane);
+library.add(faPaw);
 library.add(faPen);
 library.add(faPencilAlt);
 library.add(faPeopleGroup);
