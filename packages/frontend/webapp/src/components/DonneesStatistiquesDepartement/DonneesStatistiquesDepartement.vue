@@ -155,18 +155,14 @@
                 </div>
             </div>
             <div class="flex-1 h-128">
-                <Carte
-                    ref="carte"
-                    defaultLayer="Light"
-                    :isLoading="isLoading"
-                />
+                <Carto ref="carte" :isLoading="isLoading" :towns="towns" />
             </div>
         </div>
     </main>
 </template>
 
 <script setup>
-import { onMounted, toRefs, ref, watch } from "vue";
+import { computed, onMounted, toRefs, ref, watch } from "vue";
 import { useGeojsonStore } from "@/stores/geojson.store";
 
 import { Icon } from "@resorptionbidonvilles/ui";
@@ -174,7 +170,7 @@ import FilArianne from "../DonneesStatistiques/FilArianne.vue";
 import Title from "../DonneesStatistiques/Title.vue";
 import Header from "../DonneesStatistiques/Header.vue";
 import Vues from "../DonneesStatistiques/Vues.vue";
-import Carte from "@/components/Carte/Carte.vue";
+import Carto from "@/components/CartoDonneesStatistiques/CartoDonneesStatistiques.vue";
 import SummaryTable from "./components/tables/SummaryTable.vue";
 import InhabitantsTable from "./components/tables/InhabitantsTable.vue";
 import LivingConditionsTable from "./components/tables/LivingConditionsTable.vue";
@@ -193,6 +189,19 @@ const props = defineProps({
 const { departement, metrics } = toRefs(props);
 const carte = ref(null);
 const isLoading = ref(true);
+
+const towns = computed(() => {
+    return metrics.value.cities
+        .map(({ city, towns }) =>
+            towns.map((t) => ({
+                ...t,
+                city,
+                departement: metrics.value.departement,
+                region: metrics.value.region,
+            }))
+        )
+        .flat();
+});
 
 async function loadGeojson() {
     isLoading.value = true;

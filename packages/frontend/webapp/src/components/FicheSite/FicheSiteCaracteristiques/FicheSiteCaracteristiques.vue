@@ -13,7 +13,7 @@
                 />
             </div>
             <div class="w-1/2">
-                <Carte
+                <CartoFicheSite
                     :towns="[
                         town,
                         ...(town.nearbyTowns || []).map((t) => ({
@@ -23,7 +23,6 @@
                     ]"
                     :defaultView="mapCenter"
                     :cadastre="cadastre"
-                    defaultLayer="Satellite"
                     @townclick="onTownClick"
                 />
             </div>
@@ -38,7 +37,7 @@ import { getCadastre } from "@/api/ign.api";
 import generateSquare from "@/utils/generateSquare";
 import router from "@/helpers/router";
 
-import Carte from "@/components/Carte/Carte.vue";
+import CartoFicheSite from "@/components/CartoFicheSite/CartoFicheSite.vue";
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import FicheSiteDatesInstallation from "./FicheSiteDatesInstallation.vue";
 import FicheSiteTypeDeSite from "./FicheSiteTypeDeSite.vue";

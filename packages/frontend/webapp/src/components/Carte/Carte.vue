@@ -670,7 +670,6 @@ function syncTownMarkers() {
                         name: departement.name,
                         latitude: departement.latitude,
                         longitude: departement.longitude,
-                        chieftown: departement.chieftown,
                     };
                 }
 
@@ -680,7 +679,6 @@ function syncTownMarkers() {
                         name: region.name,
                         latitude: region.latitude,
                         longitude: region.longitude,
-                        chieftown: region.chieftown,
                     };
                 }
 

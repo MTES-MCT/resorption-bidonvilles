@@ -25,6 +25,26 @@ export function getDepartementMetrics() {
                             eu_only: 24,
                         },
                     },
+                    departement: {
+                        name: "Yvelines",
+                        code: "78",
+                        latitude: 48.8181,
+                        longitude: 1.8828,
+                        chieftown: {
+                            latitude: 48.8025669671,
+                            longitude: 2.11789297191,
+                        },
+                    },
+                    region: {
+                        name: "Île-de-France",
+                        code: "11",
+                        latitude: 48.7211,
+                        longitude: 2.5708,
+                        chieftown: {
+                            latitude: 48.853,
+                            longitude: 2.3499,
+                        },
+                    },
                     cities: [
                         {
                             city: {
@@ -50,6 +70,8 @@ export function getDepartementMetrics() {
                                     justice_procedure: true,
                                     police: true,
                                     origins: ["fr"],
+                                    latitude: 48.8963793,
+                                    longitude: 2.1295524,
                                 },
                                 {
                                     id: 2,
@@ -67,6 +89,8 @@ export function getDepartementMetrics() {
                                     justice_procedure: false,
                                     police: false,
                                     origins: [],
+                                    latitude: 48.8963793,
+                                    longitude: 2.1295524,
                                 },
                                 {
                                     id: 3,
@@ -84,6 +108,8 @@ export function getDepartementMetrics() {
                                     justice_procedure: null,
                                     police: null,
                                     origins: ["eu", "fr"],
+                                    latitude: 48.8963793,
+                                    longitude: 2.1295524,
                                 },
                             ],
                         },
@@ -111,6 +137,8 @@ export function getDepartementMetrics() {
                                     justice_procedure: null,
                                     police: false,
                                     origins: ["foreign"],
+                                    latitude: 48.9873963,
+                                    longitude: 1.9452898,
                                 },
                             ],
                         },
