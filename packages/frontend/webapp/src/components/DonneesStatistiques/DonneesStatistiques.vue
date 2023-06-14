@@ -27,7 +27,7 @@
                 v-else-if="metricsStore.nationStatus !== 'loaded'"
             />
             <template v-else>
-                <Vues />
+                <Onglets :tabs="tabs" :activeTab="activeTab" />
                 <Grille class="mt-6" :metrics="metricsStore.metrics" />
             </template>
         </main>
@@ -35,20 +35,32 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store";
 
 import { Button } from "@resorptionbidonvilles/ui";
 import FilArianne from "./FilArianne.vue";
 import Title from "./Title.vue";
 import Header from "./Header.vue";
-import Vues from "./Vues.vue";
+import Onglets from "./DonneesStatistiquesDepartementOnglets.vue";
 import Grille from "./Grille.vue";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import Loading from "@/components/Loading/Loading.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 import ViewError from "@/components/ViewError/ViewError.vue";
 
+const tabs = [
+    {
+        id: "tableau",
+        label: "Tableau",
+    },
+    {
+        id: "grpahiques",
+        label: "Graphiques",
+    },
+];
+
+const activeTab = ref("tableau");
 const metricsStore = useMetricsStore();
 onMounted(metricsStore.load);
 </script>
