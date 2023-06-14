@@ -1,3 +1,3 @@
-import { Metrics } from '../resources/Metrics';
+import { NationMetrics } from '../resources/NationMetrics';
 
-export type NationMetrics = Metrics[];
+export type NationMetricsList = NationMetrics[];

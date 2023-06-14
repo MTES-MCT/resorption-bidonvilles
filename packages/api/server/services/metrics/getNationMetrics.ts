@@ -2,11 +2,11 @@ import { NationMetricsRawData } from '#server/models/metricsModel/getNationData'
 import metricsModel from '#server/models/metricsModel';
 import ServiceError from '#server/errors/ServiceError';
 import moment from 'moment';
-import { Metrics } from '#root/types/resources/Metrics.d';
-import { NationMetrics } from '#root/types/services/MetricsService.d';
+import { NationMetrics } from '#root/types/resources/NationMetrics.d';
+import { NationMetricsList } from '#root/types/services/MetricsService.d';
 
-type MetricsObject = {
-    [key: string]: Metrics;
+type NationMetricsObject = {
+    [key: string]: NationMetrics;
 };
 
 type HashObject = {
@@ -14,8 +14,8 @@ type HashObject = {
 
 };
 
-export default async (user, argFrom: Date, argTo: Date):Promise<NationMetrics> => {
-    const franceData:Metrics = {
+export default async (user, argFrom: Date, argTo: Date):Promise<NationMetricsList> => {
+    const franceData:NationMetrics = {
         level: 'nation',
         uid: 'france',
         name: 'France entière',
@@ -27,7 +27,7 @@ export default async (user, argFrom: Date, argTo: Date):Promise<NationMetrics> =
         },
         children: [],
     };
-    const metropoleData:Metrics = {
+    const metropoleData:NationMetrics = {
         level: 'nation',
         uid: 'metropole',
         name: 'Métropole',
@@ -39,7 +39,7 @@ export default async (user, argFrom: Date, argTo: Date):Promise<NationMetrics> =
         },
         children: [],
     };
-    const outremerData:Metrics = {
+    const outremerData:NationMetrics = {
         level: 'nation',
         uid: 'outremer',
         name: 'Outremer',
@@ -52,7 +52,7 @@ export default async (user, argFrom: Date, argTo: Date):Promise<NationMetrics> =
         },
         children: [],
     };
-    const hashRegions:MetricsObject = {};
+    const hashRegions:NationMetricsObject = {};
     const hashDepartements:HashObject = {};
 
 
