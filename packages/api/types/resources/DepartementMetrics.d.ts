@@ -46,6 +46,19 @@ export type DepartementMetrics = {
             eu_only: number,
         },
     },
+    departement: {
+        name: string,
+        code: string,
+        latitude: number,
+        longitude: number,
+        chieftown: { latitude: number, longitude: number }
+    },
+    region: {
+        name: string,
+        code: string,
+        latitude: number,
+        longitude: number,
+        chieftown: { latitude: number, longitude: number }
+    },
     cities: CityMetrics[]
-
 };

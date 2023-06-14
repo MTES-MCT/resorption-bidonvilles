@@ -1,8 +1,12 @@
 import metricsModel from '#server/models/metricsModel';
+import departementModel from '#server/models/departementModel';
+import regionModel from '#server/models/regionModel';
 import ServiceError from '#server/errors/ServiceError';
 import { DepartementMetricsRawData } from '#server/models/metricsModel/getDepartementData';
 import getAddressSimpleOf from '#server/models/shantytownModel/_common/getAddressSimpleOf';
 import getUsenameOf from '#server/models/shantytownModel/_common/getUsenameOf';
+import { DepartementRawData } from '#server/models/departementModel/findOne';
+import { RegionRawData } from '#server/models/regionModel/findOne';
 import { CityMetrics, DepartementMetrics, ShantytownMetrics } from '#root/types/resources/DepartementMetrics.d';
 
 type CityMetricsObject = {
@@ -17,18 +21,40 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
         throw new ServiceError('fetch_failed', error);
     }
 
+    let departement: DepartementRawData;
+    let region: RegionRawData;
+    try {
+        departement = await departementModel.findOne(departementCode);
+        region = await regionModel.findOne(departement.region);
+    } catch (error) {
+        throw new ServiceError('fetch_failed', error);
+    }
     const metrics: DepartementMetrics = {
         summary: {
             number_of_towns: {
                 all: data.length,
                 eu_only: 0,
                 unknown_population: 0,
-                out_of_date: 0, // TODO
+                out_of_date: 0,
             },
             number_of_persons: {
                 all: 0,
                 eu_only: 0,
             },
+        },
+        departement: {
+            name: departement.name,
+            code: departement.code,
+            latitude: departement.latitude,
+            longitude: departement.longitude,
+            chieftown: { latitude: departement.chief_town_latitude, longitude: departement.chief_town_longitude },
+        },
+        region: {
+            name: region.name,
+            code: region.code,
+            latitude: region.latitude,
+            longitude: region.longitude,
+            chieftown: { latitude: region.chief_town_latitude, longitude: region.chief_town_longitude },
         },
         cities: [],
     };
