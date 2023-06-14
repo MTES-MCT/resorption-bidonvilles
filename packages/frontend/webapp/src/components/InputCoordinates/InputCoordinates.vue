@@ -1,23 +1,25 @@
 <template>
     <div class="relative h-full">
         <InputCoordinatesTooltip />
-        <Carte
-            withInput
-            v-model="modelValue"
+        <Carto
             :defaultView="{ center: view, zoom: DEFAULT_ZOOM }"
-            ref="map"
+            ref="carto"
+            :layers="['Dessin', 'Satellite']"
+            defaultLayer="Dessin"
+            :isLoading="isSubmitting"
         />
     </div>
 </template>
 
 <script setup>
 import { defineProps, toRefs, computed, watch, ref } from "vue";
-import { useField } from "vee-validate";
-import Carte from "@/components/Carte/Carte.vue";
+import { useField, useIsSubmitting } from "vee-validate";
+import Carto from "@/components/Carto/Carto.vue";
+import marqueurInput from "@/utils/marqueurInput";
 import InputCoordinatesTooltip from "./InputCoordinatesTooltip.vue";
 
 const DEFAULT_ZOOM = 14;
-const map = ref(null);
+const carto = ref(null);
 const props = defineProps({
     name: {
         type: String,
@@ -25,37 +27,56 @@ const props = defineProps({
     },
 });
 const { name } = toRefs(props);
+const isSubmitting = useIsSubmitting();
 const { value, handleChange } = useField(name.value);
 
-let changeComingFromMap = false;
-const modelValue = computed({
-    get() {
-        return value.value;
-    },
-    set(v) {
-        changeComingFromMap = true;
-        handleChange(v);
-    },
-});
-
 const view = computed(() => {
-    if (!modelValue.value) {
+    if (!value.value) {
         return;
     }
 
-    return modelValue.value;
+    return value.value;
 });
 
-watch(modelValue, () => {
-    if (!view.value) {
-        changeComingFromMap = false;
+const inputMarker = marqueurInput(value.value);
+let clickTimeout = null;
+
+function refreshInput(center, emitInput = true) {
+    if (isSubmitting.value === true) {
         return;
     }
 
-    map.value.setView({
-        center: view.value,
-        zoom: changeComingFromMap ? undefined : DEFAULT_ZOOM,
-    });
-    changeComingFromMap = false;
+    inputMarker.setLatLng(center);
+    carto.value.setView({ center });
+
+    if (emitInput === true) {
+        handleChange(center);
+    }
+}
+
+function handleClick({ latlng: { lat, lng } }) {
+    refreshInput([lat, lng]);
+    clearTimeout(clickTimeout);
+    clickTimeout = null;
+}
+
+watch(carto, () => {
+    if (carto.value) {
+        const { map } = carto.value;
+        inputMarker.addTo(map);
+        inputMarker.addEventListener("dragend", () => {
+            const { lat, lng } = inputMarker.getLatLng();
+            refreshInput([lat, lng]);
+        });
+
+        map.on("click", (event) => {
+            clearTimeout(clickTimeout);
+            clickTimeout = setTimeout(handleClick.bind(this, event), 200);
+        });
+        map.on("dblclick", () => {
+            clearTimeout(clickTimeout);
+            clickTimeout = null;
+        });
+    }
 });
 </script>

@@ -345,5 +345,8 @@ defineExpose({
             map.value.invalidateSize();
         }
     },
+    setView(view) {
+        map.value.setView(view.center, view.zoom || map.value.getZoom());
+    },
 });
 </script>
