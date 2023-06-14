@@ -42,6 +42,7 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/leaflet.markercluster";
 import mapLayers from "./Carte.layers";
 import mapControls from "./Carte.controls";
+import marqueurSiteDefault from "@/utils/marqueurSiteDefault";
 import downloadBlob from "@/utils/downloadBlob";
 import formatDate from "@common/utils/formatDate";
 
@@ -100,6 +101,13 @@ const props = defineProps({
         // le cluster 'cities' >= 12 et <= 13
         // et au-delà de 13, plus de clustering
     },
+    townMarkerFn: {
+        type: Function,
+        required: false,
+        default: (...args) => {
+            return marqueurSiteDefault(...args);
+        },
+    },
 });
 const {
     isLoading,
@@ -109,6 +117,7 @@ const {
     defaultView,
     towns,
     clusters,
+    townMarkerFn,
 } = toRefs(props);
 
 const map = ref(null);
@@ -122,6 +131,7 @@ const markersGroup = {
     departements: ref(L.layerGroup()),
     regions: ref(L.layerGroup()),
 };
+const emit = defineEmits(["townclick"]);
 
 onMounted(() => {
     createMap();
@@ -275,8 +285,9 @@ function syncTownMarkers() {
                 territoryData[key][location.code].total += 1;
             });
 
-            console.log("created");
-            return createTownMarker(town);
+            const marker = townMarkerFn.value(town);
+            marker.on("click", () => emit("townclick", town));
+            return marker;
         })
     );
 
@@ -286,10 +297,6 @@ function syncTownMarkers() {
             createLocationMarker(key, data);
         });
     });
-}
-
-function createTownMarker(town) {
-    return L.marker([town.latitude, town.longitude]);
 }
 
 function createLocationMarker(level, location) {

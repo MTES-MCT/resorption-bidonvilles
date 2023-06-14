@@ -4,6 +4,7 @@
         :layers="['Dessin', 'Satellite']"
         defaultLayer="Satellite"
         :defaultView="defaultView"
+        :townMarkerFn="marqueurSiteEau"
     >
         <div
             ref="cadastreToggler"
@@ -24,6 +25,7 @@ import L from "leaflet";
 import { useNotificationStore } from "@/stores/notification.store";
 import copyToClipboard from "@/utils/copyToClipboard";
 import Carto from "@/components/Carto/Carto.vue";
+import marqueurSiteEau from "@/utils/marqueurSiteEau";
 
 const props = defineProps({
     cadastre: {

@@ -18,7 +18,7 @@
                         town,
                         ...(town.nearbyTowns || []).map((t) => ({
                             ...t,
-                            style: `opacity: 0.6`,
+                            opacity: 0.6,
                         })),
                     ]"
                     :defaultView="mapCenter"
