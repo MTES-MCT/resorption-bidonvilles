@@ -43,6 +43,7 @@ import "leaflet.markercluster/dist/leaflet.markercluster";
 import mapLayers from "./Carte.layers";
 import mapControls from "./Carte.controls";
 import marqueurSiteDefault from "@/utils/marqueurSiteDefault";
+import marqueurLocationDefault from "@/utils/marqueurLocationDefault";
 import downloadBlob from "@/utils/downloadBlob";
 import formatDate from "@common/utils/formatDate";
 
@@ -108,6 +109,13 @@ const props = defineProps({
             return marqueurSiteDefault(...args);
         },
     },
+    locationMarkerFn: {
+        type: Function,
+        required: false,
+        default: (...args) => {
+            return marqueurLocationDefault(...args);
+        },
+    },
 });
 const {
     isLoading,
@@ -118,6 +126,7 @@ const {
     towns,
     clusters,
     townMarkerFn,
+    locationMarkerFn,
 } = toRefs(props);
 
 const map = ref(null);
@@ -131,7 +140,7 @@ const markersGroup = {
     departements: ref(L.layerGroup()),
     regions: ref(L.layerGroup()),
 };
-const emit = defineEmits(["townclick"]);
+const emit = defineEmits(["townclick", "zoomend"]);
 
 onMounted(() => {
     createMap();
@@ -150,7 +159,7 @@ function createMap() {
         layers: [mapLayers[defaultLayer.value || layers.value[0]]], // fond de carte à afficher
         scrollWheelZoom: false, // interdire le zoom via la molette de la souris
     });
-    map.value.on("zoomend", cluster);
+    map.value.on("zoomend", onZoomEnd);
 
     // on initialize les contrôles
     addControl("zoom", mapControls.zoom(map.value));
@@ -172,6 +181,11 @@ function createMap() {
 function addControl(name, control) {
     controls[name] = control;
     map.value.addControl(controls[name]);
+}
+
+function onZoomEnd(...args) {
+    emit("zoomend", ...args);
+    cluster();
 }
 
 function cluster() {
@@ -300,24 +314,23 @@ function syncTownMarkers() {
 }
 
 function createLocationMarker(level, location) {
-    const marker = L.marker([location.latitude, location.longitude], {
-        icon: L.divIcon({
-            className: "my-marker",
-            html: `<span class="opacity-75 bg-white text-black flex items-center justify-center text-center border-2 border-black">${location.name}</span>`,
-            iconSize: [90, 24],
-        }),
-    }).on("click", function () {
-        const zoomLevel = Object.keys(clusters.value).find(
-            (z) => clusters.value[z] === level
-        );
+    const marker = locationMarkerFn
+        .value(level, location)
+        .on("click", function () {
+            const zoomLevel = Object.keys(clusters.value).find(
+                (z) => clusters.value[z] === level
+            );
 
-        map.value.setView(
-            location.chieftown
-                ? [location.chieftown.latitude, location.chieftown.longitude]
-                : [location.latitude, location.longitude],
-            parseInt(zoomLevel, 10) + 1
-        );
-    });
+            map.value.setView(
+                location.chieftown
+                    ? [
+                          location.chieftown.latitude,
+                          location.chieftown.longitude,
+                      ]
+                    : [location.latitude, location.longitude],
+                parseInt(zoomLevel, 10) + 1
+            );
+        });
 
     marker.addTo(markersGroup[level].value);
 }
@@ -331,9 +344,6 @@ defineExpose({
         if (map.value) {
             map.value.invalidateSize();
         }
-    },
-    setView(view) {
-        map.value.setView(view.center, view.zoom || map.value.getZoom());
     },
 });
 </script>

@@ -167,7 +167,11 @@
                 </div>
             </div>
             <div class="flex-1 h-128">
-                <Carto ref="carte" :isLoading="isLoading" :towns="towns" />
+                <CartoDonneesStatistiques
+                    ref="carte"
+                    :isLoading="isLoading"
+                    :towns="towns"
+                />
             </div>
         </div>
     </main>
@@ -182,7 +186,7 @@ import FilArianne from "../DonneesStatistiques/FilArianne.vue";
 import Title from "../DonneesStatistiques/Title.vue";
 import Header from "../DonneesStatistiques/Header.vue";
 import Onglets from "../DonneesStatistiques/DonneesStatistiquesDepartementOnglets.vue";
-import Carto from "@/components/CartoDonneesStatistiques/CartoDonneesStatistiques.vue";
+import CartoDonneesStatistiques from "@/components/CartoDonneesStatistiques/CartoDonneesStatistiques.vue";
 import SummaryTable from "./components/tables/SummaryTable.vue";
 import InhabitantsTable from "./components/tables/InhabitantsTable.vue";
 import LivingConditionsTable from "./components/tables/LivingConditionsTable.vue";

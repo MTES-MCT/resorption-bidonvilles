@@ -1,0 +1,177 @@
+<template>
+    <Carto
+        ref="carto"
+        :layers="['Dessin', 'Satellite']"
+        defaultLayer="Dessin"
+        :townMarkerFn="marqueurSiteEau"
+        :clusters="{
+            7: 'regions',
+            11: 'departements',
+            13: 'cities',
+        }"
+        :class="showAddresses ? 'rb-showAddresses' : 'rb-hideAddresses'"
+        showPrinter
+        @zoomend="onZoomEnd"
+    >
+        <div class="absolute top-3 left-4 right-28 z-[1001] text-md font-sans">
+            <InputAddress
+                placeholder="Recherchez un lieu en saisissant une adresse"
+                v-model="searchAddress"
+            />
+        </div>
+
+        <div
+            ref="addressToggler"
+            class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden"
+        >
+            <label class="flex items-center space-x-2">
+                <input type="checkbox" v-model="showAddressesModel" />
+                <span>Voir les adresses des sites</span>
+            </label>
+        </div>
+    </Carto>
+</template>
+
+<style>
+.rb-map-address {
+    display: none;
+}
+
+.rb-showAddresses .rb-map-address {
+    display: block;
+}
+</style>
+
+<script setup>
+import { computed, ref, toRefs, watch } from "vue";
+import L from "leaflet";
+import Carto from "@/components/Carto/Carto.vue";
+import marqueurSiteEau from "@/utils/marqueurSiteEau";
+import marqueurPoi from "@/utils/marqueurPoi";
+import marqueurRecherche from "@/utils/marqueurRecherche";
+import { trackEvent } from "@/helpers/matomo";
+import InputAddress from "@/components/InputAddress/InputAddress.vue";
+
+const props = defineProps({
+    pois: {
+        type: Array,
+        required: false,
+        default() {
+            return [];
+        },
+    },
+    showAddresses: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+});
+const { pois, showAddresses } = toRefs(props);
+const emit = defineEmits(["poiclick", "viewchange"]);
+const carto = ref(null);
+const addressToggler = ref(null);
+const showAddressesModel = computed({
+    get() {
+        return showAddresses.value;
+    },
+    set(value) {
+        emit("update:showAddresses", value);
+    },
+});
+const searchAddress = ref(null);
+
+const POI_ZOOM_LEVEL = 13;
+const markersGroup = {
+    pois: L.markerClusterGroup({
+        disableClusteringAtZoom: POI_ZOOM_LEVEL,
+    }),
+    search: L.layerGroup(),
+};
+const searchMarker = marqueurRecherche();
+
+function createAddressTogglerControl() {
+    const AddressToggler = L.Control.extend({
+        options: {
+            position: "bottomleft",
+        },
+
+        onAdd() {
+            return addressToggler.value;
+        },
+    });
+
+    return new AddressToggler();
+}
+
+function onZoomEnd() {
+    const { map } = carto.value;
+    const zoomLevel = map.getZoom();
+
+    if (zoomLevel > POI_ZOOM_LEVEL) {
+        const poiIsVisible = map.hasLayer(markersGroup.pois);
+        if (!poiIsVisible) {
+            map.addLayer(markersGroup.pois);
+        }
+    } else if (map.hasLayer(markersGroup.pois)) {
+        map.removeLayer(markersGroup.pois);
+    }
+
+    carto.value.addControl("addressToggler", createAddressTogglerControl());
+}
+
+function createPoiMarker(poi) {
+    const marker = marqueurPoi(poi);
+    marker.on("click", () => {
+        emit("poiclick", poi);
+    });
+
+    marker.addTo(markersGroup.pois);
+}
+
+function syncPoiMarkers() {
+    markersGroup.pois.clearLayers();
+
+    // sans le timeout, les nouveaux marqueurs n'apparaissent jamais :/
+    setTimeout(() => {
+        pois.value.forEach(createPoiMarker);
+    }, 1000);
+}
+
+function onMove() {
+    const { map } = carto.value;
+    const { lat: latitude, lng: longitude } = map.getCenter();
+    emit("viewchange", {
+        center: [latitude, longitude],
+        zoom: map.getZoom(),
+    });
+}
+
+watch(searchAddress, () => {
+    markersGroup.search.clearLayers();
+
+    if (searchAddress.value?.data?.coordinates) {
+        searchMarker.addTo(markersGroup.search);
+        searchMarker.setLatLng(searchAddress.value.data.coordinates);
+        carto.value.map.setView(searchAddress.value.data.coordinates, 20);
+        trackEvent("Cartographie", "Recherche");
+    }
+});
+
+watch(pois, syncPoiMarkers);
+watch(carto, () => {
+    if (carto.value) {
+        carto.value.map.on("move", onMove);
+        carto.value.map.addLayer(markersGroup.search);
+    }
+});
+
+defineExpose({
+    resize(...args) {
+        if (carto.value) {
+            return carto.value.resize(...args);
+        }
+
+        return null;
+    },
+});
+</script>
