@@ -129,14 +129,26 @@
     </section>
 
     <main class="mt-6">
-        <Vues />
+        <Onglets @switch="switchTab" :tabs="tabs" :activeTab="activeTab" />
 
         <div class="mt-6 flex justify-evenly items-stretch">
             <div class="flex-1 pr-6">
-                <SummaryTable :metrics="metrics" />
-                <InhabitantsTable :metrics="metrics" />
-                <LivingConditionsTable :metrics="metrics" />
-                <JusticeTable :metrics="metrics" />
+                <SummaryTable
+                    v-if="activeTab === 'synthese'"
+                    :metrics="metrics"
+                />
+                <InhabitantsTable
+                    v-if="activeTab === 'habitants'"
+                    :metrics="metrics"
+                />
+                <LivingConditionsTable
+                    v-if="activeTab === 'conditions_de_vie'"
+                    :metrics="metrics"
+                />
+                <JusticeTable
+                    v-if="activeTab === 'juridique'"
+                    :metrics="metrics"
+                />
             </div>
             <div class="w-1 bg-blue300 relative">
                 <div
@@ -169,7 +181,7 @@ import { Icon } from "@resorptionbidonvilles/ui";
 import FilArianne from "../DonneesStatistiques/FilArianne.vue";
 import Title from "../DonneesStatistiques/Title.vue";
 import Header from "../DonneesStatistiques/Header.vue";
-import Vues from "../DonneesStatistiques/Vues.vue";
+import Onglets from "../DonneesStatistiques/DonneesStatistiquesDepartementOnglets.vue";
 import Carto from "@/components/CartoDonneesStatistiques/CartoDonneesStatistiques.vue";
 import SummaryTable from "./components/tables/SummaryTable.vue";
 import InhabitantsTable from "./components/tables/InhabitantsTable.vue";
@@ -186,6 +198,27 @@ const props = defineProps({
         required: true,
     },
 });
+
+const tabs = [
+    {
+        id: "synthese",
+        label: "Synthèse",
+    },
+    {
+        id: "habitants",
+        label: "Habitants",
+    },
+    {
+        id: "conditions_de_vie",
+        label: "Conditions de vie",
+    },
+    {
+        id: "juridique",
+        label: "Juridique",
+    },
+];
+
+const activeTab = ref("synthese");
 const { departement, metrics } = toRefs(props);
 const carte = ref(null);
 const isLoading = ref(true);
@@ -223,6 +256,10 @@ async function loadGeojson() {
     }
 
     isLoading.value = false;
+}
+
+function switchTab(value) {
+    activeTab.value = value;
 }
 
 watch(departement, loadGeojson);
