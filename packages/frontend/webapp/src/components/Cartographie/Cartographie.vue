@@ -23,13 +23,13 @@
                 @viewchange="onViewChange"
                 v-model:showAddresses="mapStore.showAddresses"
             />
-            <CarteQuickviewTown
+            <CartographieQuickviewTown
                 ref="quickviewTown"
                 :open="mapStore.quickview.town?.open || false"
                 :town="mapStore.quickview.town?.data"
                 @close="onQuickviewTownClose"
             />
-            <CarteQuickviewPoi
+            <CartographieQuickviewPoi
                 ref="quickviewPoi"
                 :open="mapStore.quickview.poi?.open || false"
                 :poi="mapStore.quickview.poi?.data"
@@ -47,8 +47,8 @@ import { useUserStore } from "@/stores/user.store";
 import { trackEvent } from "@/helpers/matomo";
 
 import CartoNationale from "@/components/CartoNationale/CartoNationale.vue";
-import CarteQuickviewTown from "@/components/Carte/CarteQuickviewTown.vue";
-import CarteQuickviewPoi from "@/components/Carte/CarteQuickviewPoi.vue";
+import CartographieQuickviewTown from "./CartographieQuickviewTown.vue";
+import CartographieQuickviewPoi from "./CartographieQuickviewPoi.vue";
 import CartographieFiltres from "./CartographieFiltres.vue";
 import waitForElement from "@/utils/waitForElement";
 

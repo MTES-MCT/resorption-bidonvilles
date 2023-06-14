@@ -1,19 +1,13 @@
 <template>
     <p>{{ action.eti.address }}</p>
     <div class="h-128">
-        <Carte
-            defaultLayer="Satellite"
-            :defaultView="center"
-            :towns="[action.eti]"
-            @townclick="onTownClick"
-        />
+        <CartoFicheAction :defaultView="center" :towns="[action.eti]" />
     </div>
 </template>
 
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
-import router from "@/helpers/router";
-import Carte from "@/components/Carte/Carte.vue";
+import CartoFicheAction from "@/components/CartoFicheAction/CartoFicheAction.vue";
 
 const props = defineProps({
     action: Object,
@@ -26,8 +20,4 @@ const center = computed(() => {
         zoom: 15,
     };
 });
-
-function onTownClick(town) {
-    router.push(`/site/${town.id}`);
-}
 </script>
