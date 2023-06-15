@@ -143,24 +143,12 @@
                     'w-0 h-0 overflow-hidden': mapSize === 'full',
                 }"
             >
-                <SummaryTable
-                    v-if="activeTab === 'synthese'"
+                <component
+                    :is="currentTable"
                     :metrics="metrics"
                     @highlightTown="onMouseEnter"
                     @unhighlightTown="onMouseLeave"
                     @townClick="onTownRowClick"
-                />
-                <InhabitantsTable
-                    v-if="activeTab === 'habitants'"
-                    :metrics="metrics"
-                />
-                <LivingConditionsTable
-                    v-if="activeTab === 'conditions_de_vie'"
-                    :metrics="metrics"
-                />
-                <JusticeTable
-                    v-if="activeTab === 'juridique'"
-                    :metrics="metrics"
                 />
             </div>
             <div class="w-1 bg-blue300 relative">
@@ -281,6 +269,16 @@ const { departement, metrics } = toRefs(props);
 const carte = ref(null);
 const isLoading = ref(true);
 const mapSize = ref("half");
+const tables = {
+    synthese: SummaryTable,
+    habitants: InhabitantsTable,
+    conditions_de_vie: LivingConditionsTable,
+    juridique: JusticeTable,
+};
+
+const currentTable = computed(() => {
+    return tables[activeTab.value];
+});
 
 const towns = computed(() => {
     return metrics.value.cities
