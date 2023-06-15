@@ -9,7 +9,7 @@ export default {
     bodyComponent: ToiletsBody,
     default: 0,
     primaryMetric(summary, town) {
-        summary.number_of_towns_with_toilets += town.toilets ? 1 : 0;
+        summary.number_of_towns_with_toilets += town.working_toilets ? 1 : 0;
     },
     secondaryMetric(summary, city) {
         setPercentageOf("number_of_towns_with_toilets", summary, city);

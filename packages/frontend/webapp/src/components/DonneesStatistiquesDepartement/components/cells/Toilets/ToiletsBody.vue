@@ -1,5 +1,5 @@
 <template>
-    <BoolCell :value="town.toilets" />
+    <BoolCell :value="town.working_toilets" />
 </template>
 
 <script setup>

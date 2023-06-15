@@ -100,7 +100,7 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
             access_to_electricity: row.access_to_electricity,
             trash_evacuation: row.trash_evacuation,
             fire_prevention: row.fire_prevention,
-            toilets: row.toilets,
+            working_toilets: row.toilets,
             absence_of_pest_animals: row.absence_of_pest_animals,
             owner_complaint: row.owner_complaint,
             justice_procedure: row.justice_procedure,
