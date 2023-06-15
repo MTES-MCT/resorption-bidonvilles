@@ -9,7 +9,8 @@ export default {
     bodyComponent: WaterBody,
     default: null,
     primaryMetric(summary, town) {
-        summary.number_of_towns_with_water += town.access_to_water ? 1 : 0;
+        summary.number_of_towns_with_water +=
+            town.access_to_water === "good" ? 1 : 0;
     },
     secondaryMetric(summary, city) {
         setPercentageOf("number_of_towns_with_water", summary, city);

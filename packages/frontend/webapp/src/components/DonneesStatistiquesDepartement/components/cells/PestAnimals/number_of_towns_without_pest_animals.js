@@ -10,7 +10,7 @@ export default {
     default: 0,
     primaryMetric(summary, town) {
         summary.number_of_towns_without_pest_animals +=
-            town.absence_of_pest_animals ? 1 : 0;
+            town.absence_of_pest_animals === "good" ? 1 : 0;
     },
     secondaryMetric(summary, city) {
         setPercentageOf("number_of_towns_without_pest_animals", summary, city);

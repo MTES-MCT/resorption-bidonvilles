@@ -1,5 +1,5 @@
 <template>
-    <BoolCell :value="town.access_to_water" />
+    <BoolCell :value="town.access_to_water === 'good'" />
 </template>
 
 <script setup>

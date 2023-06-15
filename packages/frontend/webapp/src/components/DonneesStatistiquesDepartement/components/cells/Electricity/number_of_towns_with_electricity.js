@@ -9,9 +9,8 @@ export default {
     bodyComponent: ElectricityBody,
     default: 0,
     primaryMetric(summary, town) {
-        summary.number_of_towns_with_electricity += town.access_to_electricity
-            ? 1
-            : 0;
+        summary.number_of_towns_with_electricity +=
+            town.access_to_electricity === "good" ? 1 : 0;
     },
     secondaryMetric(summary, city) {
         setPercentageOf("number_of_towns_with_electricity", summary, city);
