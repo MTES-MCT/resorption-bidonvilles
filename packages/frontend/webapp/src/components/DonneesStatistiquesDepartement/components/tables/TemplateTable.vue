@@ -1,7 +1,7 @@
 <template>
     <table class="w-full data-table table-fixed leading-5">
         <thead>
-            <HeaderRow :columns="columns" />
+            <HeaderRow :columns="columns" class="sticky top-0" />
         </thead>
 
         <tbody>
