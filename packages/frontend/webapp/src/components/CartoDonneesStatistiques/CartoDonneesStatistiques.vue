@@ -4,7 +4,7 @@
         :layers="['Light']"
         :clusters="{
             7: 'departements',
-            13: 'cities',
+            10: 'cities',
         }"
         :townMarkerFn="marqueurSiteStats"
         :locationMarkerFn="marqueurLocationStats"
