@@ -8,7 +8,7 @@ export default [
     },
     {
         id: "departements_less_than_50",
-        label: "Masquer les départements avec moins de 50 habitants en bindonville",
+        label: "Masquer les départements avec moins de 50 habitants en bidonville",
         filterMetrics: function (metrics) {
             return metrics.map((metric) => {
                 const nationCopyMetric = { ...metric };
