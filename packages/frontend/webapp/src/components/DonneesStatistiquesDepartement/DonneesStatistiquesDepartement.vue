@@ -137,7 +137,12 @@
         <Onglets @switch="switchTab" :tabs="tabs" :activeTab="activeTab" />
 
         <div class="mt-6 flex justify-evenly items-stretch">
-            <div class="flex-1 pr-6">
+            <div
+                :class="{
+                    'flex-1 pr-6': mapSize !== 'full',
+                    'w-0 overflow-hidden': mapSize === 'full',
+                }"
+            >
                 <SummaryTable
                     v-if="activeTab === 'synthese'"
                     :metrics="metrics"
@@ -157,21 +162,41 @@
             </div>
             <div class="w-1 bg-blue300 relative">
                 <div
-                    class="absolute top-0 left-0 w-4 -ml-2 z-[3000] text-primary font-bold text-center"
+                    class="absolute top-0 left-0 w-4 -ml-2 z-[3000] text-primary font-bold text-center text-xs bg-blue300 rounded-lg"
                 >
                     <div
-                        class="bg-blue300 rounded-t cursor-pointer hover:bg-blue200"
+                        class="rounded-t-lg py-2"
+                        :class="
+                            mapSize !== 'full'
+                                ? 'cursor-pointer hover:bg-blue200'
+                                : 'text-blue400'
+                        "
+                        @click="increaseMapSize"
                     >
-                        &lt;
+                        <Icon icon="chevron-left" />
                     </div>
+                    <div class="h-px bg-primary w-3 mx-auto"></div>
                     <div
-                        class="bg-blue300 rounded-b cursor-pointer hover:bg-blue200"
+                        class="rounded-b-lg py-2"
+                        :class="
+                            mapSize !== 'hidden'
+                                ? 'cursor-pointer hover:bg-blue200'
+                                : 'text-blue400'
+                        "
+                        @click="decreaseMapSize"
                     >
-                        &gt;
+                        <Icon icon="chevron-right" />
                     </div>
                 </div>
             </div>
-            <div class="flex-1 h-128">
+            <div
+                :class="{
+                    'w-0 overflow-hidden': mapSize === 'hidden',
+                    'flex-1': mapSize !== 'hidden',
+                    'h-128': mapSize === 'half',
+                    'h-[45rem]': mapSize === 'full',
+                }"
+            >
                 <CartoDonneesStatistiques
                     ref="carte"
                     :isLoading="isLoading"
@@ -183,7 +208,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, toRefs, ref, watch } from "vue";
+import { computed, nextTick, onMounted, toRefs, ref, watch } from "vue";
 import { useGeojsonStore } from "@/stores/geojson.store";
 import formatDate from "@common/utils/formatDate";
 
@@ -231,6 +256,7 @@ const activeTab = ref("synthese");
 const { departement, metrics } = toRefs(props);
 const carte = ref(null);
 const isLoading = ref(true);
+const mapSize = ref("half");
 
 const towns = computed(() => {
     return metrics.value.cities
@@ -269,6 +295,26 @@ async function loadGeojson() {
 
 function switchTab(value) {
     activeTab.value = value;
+}
+
+function increaseMapSize() {
+    if (mapSize.value === "hidden") {
+        mapSize.value = "half";
+    } else if (mapSize.value === "half") {
+        mapSize.value = "full";
+    }
+
+    nextTick(carte.value.resize);
+}
+
+function decreaseMapSize() {
+    if (mapSize.value === "full") {
+        mapSize.value = "half";
+    } else if (mapSize.value === "half") {
+        mapSize.value = "hidden";
+    }
+
+    nextTick(carte.value.resize);
 }
 
 watch(departement, loadGeojson);

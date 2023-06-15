@@ -28,6 +28,13 @@ watch(carto, () => {
 });
 
 defineExpose({
+    resize(...args) {
+        if (carto.value) {
+            return carto.value.resize(...args);
+        }
+
+        return null;
+    },
     setBounds(geojson, style = {}) {
         markersGroup.value.clearLayers();
         markersGroup.value.addData(geojson);
