@@ -27,7 +27,9 @@ export default (town) => {
     return L.marker([town.latitude, town.longitude], {
         icon: L.divIcon({
             className: "my-marker",
-            html: `<span class="border-2 border-primary rounded bg-white px-2 py-1 whitespace-nowrap">
+            html: `<span id="marqueur-site-stats-${
+                town.id
+            }" class="border-2 border-primary rounded bg-white px-2 py-1 whitespace-nowrap">
                 ${town.number_of_persons || "0"} ${livingConditionsHTML}
             </span>`,
         }),

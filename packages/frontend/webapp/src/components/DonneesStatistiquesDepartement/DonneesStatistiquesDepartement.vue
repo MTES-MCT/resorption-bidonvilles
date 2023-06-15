@@ -146,6 +146,8 @@
                 <SummaryTable
                     v-if="activeTab === 'synthese'"
                     :metrics="metrics"
+                    @highlightTown="onMouseEnter"
+                    @unhighlightTown="onMouseLeave"
                 />
                 <InhabitantsTable
                     v-if="activeTab === 'habitants'"
@@ -206,6 +208,24 @@
         </div>
     </main>
 </template>
+
+<style lang="scss">
+.marqueur-site-highlighted {
+    z-index: 1000;
+}
+
+.marqueur-site-highlighted span {
+    @apply border-secondary;
+}
+
+.marqueur-location-highlighted {
+    z-index: 1000;
+}
+
+.marqueur-location-highlighted span {
+    @apply bg-secondary;
+}
+</style>
 
 <script setup>
 import { computed, nextTick, onMounted, toRefs, ref, watch } from "vue";
@@ -315,6 +335,45 @@ function decreaseMapSize() {
     }
 
     nextTick(carte.value.resize);
+}
+
+let highlightedEl = {
+    dom: null,
+    originalZIndex: null,
+};
+function onMouseEnter(townId, cityCode) {
+    // on essaie de récupérer le marqueur site
+    let highlightClass = "marqueur-site-highlighted";
+    highlightedEl.dom = document.getElementById(
+        `marqueur-site-stats-${townId}`
+    )?.parentNode;
+    if (!highlightedEl.dom) {
+        highlightClass = "marqueur-location-highlighted";
+        highlightedEl.dom = document.getElementById(
+            `marqueur-cities-stats-${cityCode}`
+        )?.parentNode;
+    }
+
+    if (!highlightedEl.dom) {
+        return;
+    }
+
+    highlightedEl.originalZIndex = highlightedEl.dom.style.zIndex;
+    highlightedEl.dom.classList.add(highlightClass);
+    highlightedEl.dom.style.removeProperty("z-index");
+}
+
+function onMouseLeave() {
+    if (!highlightedEl.dom) {
+        return;
+    }
+
+    highlightedEl.dom.classList.remove(
+        "marqueur-site-highlighted",
+        "marqueur-location-highlighted"
+    );
+    highlightedEl.dom.style.zIndex = highlightedEl.originalZIndex;
+    highlightedEl.dom = null;
 }
 
 watch(departement, loadGeojson);

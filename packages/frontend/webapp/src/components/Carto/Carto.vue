@@ -295,6 +295,7 @@ function syncTownMarkers() {
                 if (!territoryData[key][location.code]) {
                     territoryData[key][location.code] = {
                         total: 0,
+                        code: location.code,
                         name: location.name,
                         latitude: location.latitude,
                         longitude: location.longitude,

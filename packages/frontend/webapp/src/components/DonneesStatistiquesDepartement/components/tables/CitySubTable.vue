@@ -7,6 +7,8 @@
         :data="data"
         :columns="columns"
         :town="town"
+        @highlightTown="onHighlight"
+        @unhighlightTown="onUnhighlight"
     />
 </template>
 
@@ -26,4 +28,13 @@ const props = defineProps({
     },
 });
 const { data, columns } = toRefs(props);
+const emit = defineEmits(["highlightTown", "unhighlightTown"]);
+
+function onHighlight(...args) {
+    emit("highlightTown", ...args);
+}
+
+function onUnhighlight(...args) {
+    emit("unhighlightTown", ...args);
+}
 </script>

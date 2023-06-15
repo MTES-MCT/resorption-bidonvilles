@@ -10,6 +10,8 @@
                 :key="city.code"
                 :data="city"
                 :columns="columns"
+                @highlightTown="onHighlight"
+                @unhighlightTown="onUnhighlight"
             />
 
             <TotalRow :columns="columns" :metrics="enrichedMetrics" />
@@ -65,6 +67,15 @@ const props = defineProps({
     },
 });
 const { columns, metrics } = toRefs(props);
+const emit = defineEmits(["highlightTown", "unhighlightTown"]);
+
+function onHighlight(...args) {
+    emit("highlightTown", ...args);
+}
+
+function onUnhighlight(...args) {
+    emit("unhighlightTown", ...args);
+}
 
 const enrichedMetrics = computed(() => {
     const base = columns.value.reduce(

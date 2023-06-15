@@ -1,5 +1,10 @@
 <template>
-    <tr class="text-right" :class="even ? 'bg-G100' : 'bg-G200'">
+    <tr
+        class="text-right hover:bg-blue200 cursor-pointer"
+        :class="even ? 'bg-G100' : 'bg-G200'"
+        @mouseenter="onMouseEnter"
+        @mouseleave="onMouseLeave"
+    >
         <td class="text-left py-1">
             <CommuneBodyCell :data="data" :town="town" />
         </td>
@@ -37,4 +42,13 @@ const props = defineProps({
     },
 });
 const { data, columns, town, even } = toRefs(props);
+const emit = defineEmits(["highlightTown", "unhighlightTown"]);
+
+function onMouseEnter() {
+    emit("highlightTown", town.value.id, data.value.city.code);
+}
+
+function onMouseLeave() {
+    emit("unhighlightTown", town.value.id, data.value.city.code);
+}
 </script>
