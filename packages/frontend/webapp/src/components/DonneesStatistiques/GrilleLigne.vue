@@ -36,18 +36,6 @@
                                 metrics.children?.length > 0 ? '' : 'invisible'
                             "
                     /></span>
-                    <span class="mr-2"
-                        ><CheckboxUi
-                            variant="checkbox"
-                            name="metrics-selection"
-                            :value="`${metrics.level}-${metrics.code}-${metrics.uid}`"
-                            v-model="metricsStore.selection"
-                    /></span>
-                    <span class="mr-3"
-                        ><Icon
-                            class="text-primary cursor-pointer"
-                            icon="fa-star fa-regular"
-                    /></span>
                     {{ metrics.name }}</GrilleCelluleHeader
                 >
                 <GrilleCellule
@@ -113,7 +101,7 @@ import { useMetricsStore } from "@/stores/metrics.store";
 import GrilleCellule from "./GrilleCellule.vue";
 import GrilleCelluleHeader from "./GrilleCelluleHeader.vue";
 import GrilleCelluleEvolution from "./GrilleCelluleEvolution.vue";
-import { CheckboxUi, Icon } from "@resorptionbidonvilles/ui";
+import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     metrics: {
