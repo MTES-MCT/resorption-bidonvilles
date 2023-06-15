@@ -140,7 +140,7 @@
             <div
                 :class="{
                     'flex-1 pr-6': mapSize !== 'full',
-                    'w-0 overflow-hidden': mapSize === 'full',
+                    'w-0 h-0 overflow-hidden': mapSize === 'full',
                 }"
             >
                 <SummaryTable
@@ -192,6 +192,7 @@
                 </div>
             </div>
             <div
+                class="sticky top-0"
                 :class="{
                     'w-0 overflow-hidden': mapSize === 'hidden',
                     'flex-1': mapSize !== 'hidden',
