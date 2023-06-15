@@ -1,3 +1,4 @@
+import { StatusEnum } from '#server/models/shantytownModel/_common/livingConditions/LivingConditions.d';
 
 export type Origin = 'french' | 'european' | 'other';
 
@@ -11,12 +12,12 @@ export type ShantytownMetrics = {
     number_of_persons: number | null,
     number_of_households: number | null,
     number_of_minors: number | null,
-    access_to_water: boolean,
-    access_to_electricity: boolean,
-    trash_evacuation: boolean,
-    fire_prevention: boolean,
-    toilets: boolean,
-    absence_of_pest_animals: boolean,
+    access_to_water: StatusEnum,
+    access_to_electricity: StatusEnum,
+    trash_evacuation: StatusEnum,
+    fire_prevention: StatusEnum,
+    working_toilets: StatusEnum,
+    absence_of_pest_animals: StatusEnum,
     owner_complaint: boolean | null,
     justice_procedure: boolean | null,
     police: boolean | null,

@@ -59,7 +59,13 @@ export default async (user, departementCode: string): Promise<DepartementMetrics
         FROM shantytowns s
         LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = s.shantytown_id
         GROUP BY s.shantytown_id
-        )
+        ),
+        computed_electricity_types AS (SELECT
+            s.shantytown_id AS fk_shantytown,
+            array_remove(array_agg(eat.electricity_access_type::text), NULL) AS electricity_access_types
+        FROM shantytowns s
+        LEFT JOIN electricity_access_types eat ON eat.fk_shantytown = s.shantytown_id
+        GROUP BY s.shantytown_id)
         SELECT
             shantytowns.shantytown_id,
             shantytowns.name,
@@ -78,67 +84,34 @@ export default async (user, departementCode: string): Promise<DepartementMetrics
             shantytowns.police_status,
             field_types.label AS field_type,
             shantytown_computed_origins.origins,
-            CASE
-            WHEN 
-                COALESCE(shantytowns.updated_at, shantytowns.created_at) < (CURRENT_DATE - INTERVAL '6 month')
-                THEN true
-                ELSE false
-            END AS out_of_date,
-            CASE
-            WHEN 
-                (shantytowns.water_access_type = 'robinet_connecte_au_reseau' OR shantytowns.water_access_type = 'autre')
-                AND (water_access_is_unequal IS NULL OR water_access_is_unequal = false)
-                AND water_access_is_public = false
-                AND water_access_is_local = true
-                AND (water_access_is_continuous IS NULL OR water_access_is_continuous = true)
-                AND (water_access_is_close IS NULL OR water_access_is_close = true)
-                AND (water_access_has_stagnant_water IS NULL OR water_access_has_stagnant_water  = false)
-                THEN true
-                ELSE false
-            END AS access_to_water,
-            CASE
-                WHEN 
-                shantytowns.electricity_access = true
-                AND (shantytowns.electricity_access_is_unequal IS NULL OR shantytowns.electricity_access_is_unequal = false)
-                THEN true
-                ELSE false
-            END AS access_to_electricity,
-            CASE
-                WHEN
-                shantytowns.sanitary_access_working_toilets = true
-                AND (shantytowns.sanitary_access_open_air_defecation IS NULL OR shantytowns.sanitary_access_open_air_defecation = false)
-                AND CARDINALITY(computed_toilet_types.toilet_types) != 0
-                AND  ('latrines' = ANY(computed_toilet_types.toilet_types)) = false
-                AND shantytowns.sanitary_access_toilets_are_inside = true
-                AND (shantytowns.sanitary_access_toilets_are_lighted IS NULL OR shantytowns.sanitary_access_toilets_are_lighted = true)
-                AND (shantytowns.sanitary_access_hand_washing IS NULL OR shantytowns.sanitary_access_hand_washing = true)
-                THEN true
-                ELSE false
-            END AS toilets,
-            CASE
-                WHEN
-                shantytowns.trash_evacuation_is_close = true
-                AND (shantytowns.trash_is_piling IS NULL OR shantytowns.trash_is_piling = false)
-                AND (shantytowns.trash_bulky_is_piling IS NULL OR shantytowns.trash_bulky_is_piling = false)
-                AND (shantytowns.trash_evacuation_is_regular IS NULL OR shantytowns.trash_evacuation_is_regular = true)
-                AND (shantytowns.trash_evacuation_is_safe IS NULL OR shantytowns.trash_evacuation_is_safe = true)
-                THEN true
-                ELSE false
-            END AS trash_evacuation,
-            CASE 
-                WHEN shantytowns.fire_prevention = true
-                THEN true
-                ELSE false
-            END AS fire_prevention,
-            CASE 
-                WHEN shantytowns.pest_animals = false
-                THEN true
-                ELSE false
-            END AS absence_of_pest_animals
+            shantytowns.water_access_type::text AS "waterAccessType",
+            shantytowns.water_access_is_public AS "waterAccessIsPublic",
+            shantytowns.water_access_is_continuous AS "waterAccessIsContinuous",
+            shantytowns.water_access_is_local AS "waterAccessIsLocal",
+            shantytowns.water_access_is_close AS "waterAccessIsClose",
+            shantytowns.water_access_is_unequal AS "waterAccessIsUnequal",
+            shantytowns.water_access_has_stagnant_water AS "waterAccessHasStagnantWater",
+            computed_toilet_types.toilet_types AS "toiletTypes",
+            shantytowns.sanitary_access_open_air_defecation AS "sanitaryAccessOpenAirDefecation",
+            shantytowns.sanitary_access_working_toilets AS "sanitaryAccessWorkingToilets",
+            shantytowns.sanitary_access_toilets_are_inside AS "sanitaryAccessToiletsAreInside",
+            shantytowns.sanitary_access_toilets_are_lighted AS "sanitaryAccessToiletsAreLighted",
+            shantytowns.sanitary_access_hand_washing AS "sanitaryAccessHandWashing",
+            shantytowns.electricity_access AS "electricityAccess",
+            computed_electricity_types.electricity_access_types AS "electricityAccessTypes",
+            shantytowns.electricity_access_is_unequal AS "electricityAccessIsUnequal",
+            shantytowns.trash_is_piling AS "trashIsPiling",
+            shantytowns.trash_evacuation_is_close AS "trashEvacuationIsClose",
+            shantytowns.trash_evacuation_is_safe AS "trashEvacuationIsSafe",
+            shantytowns.trash_evacuation_is_regular AS "trashEvacuationIsRegular",
+            shantytowns.trash_bulky_is_piling AS "trashBulkyIsPiling",
+            shantytowns.pest_animals AS "pestAnimals",
+            shantytowns.fire_prevention AS "firePrevention"
         FROM shantytowns
         LEFT JOIN field_types ON shantytowns.fk_field_type = field_types.field_type_id
         LEFT JOIN shantytown_computed_origins ON shantytown_computed_origins.fk_shantytown = shantytowns.shantytown_id
         LEFT JOIN computed_toilet_types ON computed_toilet_types.fk_shantytown = shantytowns.shantytown_id
+        LEFT JOIN computed_electricity_types ON computed_electricity_types.fk_shantytown = shantytowns.shantytown_id
         LEFT JOIN cities ON cities.code = shantytowns.fk_city
         LEFT JOIN departements ON departements.code = cities.fk_departement
         WHERE closed_at IS NULL

@@ -8,6 +8,7 @@ import getUsenameOf from '#server/models/shantytownModel/_common/getUsenameOf';
 import { DepartementRawData } from '#server/models/departementModel/findOne';
 import { RegionRawData } from '#server/models/regionModel/findOne';
 import { CityMetrics, DepartementMetrics, ShantytownMetrics } from '#root/types/resources/DepartementMetrics.d';
+import getLivingConditionsStatuses from '../../models/shantytownModel/_common/livingConditions/v2/statuses/main';
 
 type CityMetricsObject = {
     [key: string]: CityMetrics;
@@ -86,6 +87,9 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
         if (row.out_of_date) {
             metrics.summary.number_of_towns.out_of_date += 1;
         }
+
+        const livingConditionsStatuses = getLivingConditionsStatuses(row);
+
         // on ajoute la donée du site
         const town:ShantytownMetrics = {
             latitude: row.latitude,
@@ -96,12 +100,12 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
             number_of_persons: row.population_total,
             number_of_households: row.population_couples,
             number_of_minors: row.population_minors,
-            access_to_water: row.access_to_water,
-            access_to_electricity: row.access_to_electricity,
-            trash_evacuation: row.trash_evacuation,
-            fire_prevention: row.fire_prevention,
-            working_toilets: row.toilets,
-            absence_of_pest_animals: row.absence_of_pest_animals,
+            access_to_water: livingConditionsStatuses.water.status,
+            access_to_electricity: livingConditionsStatuses.electricity.status,
+            trash_evacuation: livingConditionsStatuses.trash.status,
+            fire_prevention: livingConditionsStatuses.fire_prevention.status,
+            working_toilets: livingConditionsStatuses.sanitary.status,
+            absence_of_pest_animals: livingConditionsStatuses.pest_animals.status,
             owner_complaint: row.owner_complaint,
             justice_procedure: row.justice_procedure,
             police: row.police_status,
