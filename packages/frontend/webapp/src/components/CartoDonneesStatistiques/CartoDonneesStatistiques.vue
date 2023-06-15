@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import L from "leaflet";
 import Carto from "@/components/Carto/Carto.vue";
 import marqueurSiteStats from "@/utils/marqueurSiteStats";
@@ -29,6 +29,9 @@ watch(carto, () => {
 });
 
 defineExpose({
+    currentMarkerGroup: computed(() => {
+        return carto.value?.currentMarkerGroup;
+    }),
     resize(...args) {
         if (carto.value) {
             return carto.value.resize(...args);

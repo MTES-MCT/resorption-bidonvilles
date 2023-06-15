@@ -148,6 +148,7 @@
                     :metrics="metrics"
                     @highlightTown="onMouseEnter"
                     @unhighlightTown="onMouseLeave"
+                    @townClick="onTownRowClick"
                 />
                 <InhabitantsTable
                     v-if="activeTab === 'habitants'"
@@ -204,6 +205,7 @@
                     ref="carte"
                     :isLoading="isLoading"
                     :towns="towns"
+                    @townclick="onTownClick"
                 />
             </div>
         </div>
@@ -232,6 +234,7 @@
 import { computed, nextTick, onMounted, toRefs, ref, watch } from "vue";
 import { useGeojsonStore } from "@/stores/geojson.store";
 import formatDate from "@common/utils/formatDate";
+import router from "@/helpers/router";
 
 import { Icon } from "@resorptionbidonvilles/ui";
 import FilArianne from "../DonneesStatistiques/FilArianne.vue";
@@ -375,6 +378,22 @@ function onMouseLeave() {
     );
     highlightedEl.dom.style.zIndex = highlightedEl.originalZIndex;
     highlightedEl.dom = null;
+}
+
+function onTownRowClick(town, city) {
+    if (carte.value.currentMarkerGroup === "towns") {
+        router.push(`/site/${town.id}`);
+        return;
+    }
+
+    const el = document.getElementById(`marqueur-cities-stats-${city.code}`);
+    if (el) {
+        el.click();
+    }
+}
+
+function onTownClick(town) {
+    router.push(`/site/${town.id}`);
 }
 
 watch(departement, loadGeojson);

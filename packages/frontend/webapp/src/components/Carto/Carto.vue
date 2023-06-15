@@ -346,6 +346,7 @@ watch(towns, syncTownMarkers);
 
 defineExpose({
     addControl,
+    currentMarkerGroup,
     map,
     resize() {
         if (map.value) {

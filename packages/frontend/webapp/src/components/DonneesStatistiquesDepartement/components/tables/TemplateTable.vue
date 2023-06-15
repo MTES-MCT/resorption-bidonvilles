@@ -12,6 +12,7 @@
                 :columns="columns"
                 @highlightTown="onHighlight"
                 @unhighlightTown="onUnhighlight"
+                @townClick="onTownClick"
             />
 
             <TotalRow :columns="columns" :metrics="enrichedMetrics" />
@@ -67,7 +68,7 @@ const props = defineProps({
     },
 });
 const { columns, metrics } = toRefs(props);
-const emit = defineEmits(["highlightTown", "unhighlightTown"]);
+const emit = defineEmits(["highlightTown", "townClick", "unhighlightTown"]);
 
 function onHighlight(...args) {
     emit("highlightTown", ...args);
@@ -75,6 +76,10 @@ function onHighlight(...args) {
 
 function onUnhighlight(...args) {
     emit("unhighlightTown", ...args);
+}
+
+function onTownClick(...args) {
+    emit("townClick", ...args);
 }
 
 const enrichedMetrics = computed(() => {
