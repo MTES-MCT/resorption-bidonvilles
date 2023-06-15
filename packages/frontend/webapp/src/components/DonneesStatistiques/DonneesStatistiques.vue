@@ -54,10 +54,6 @@ const tabs = [
         id: "tableau",
         label: "Tableau",
     },
-    {
-        id: "grpahiques",
-        label: "Graphiques",
-    },
 ];
 
 const activeTab = ref("tableau");
