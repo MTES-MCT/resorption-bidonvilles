@@ -6,7 +6,8 @@
             7: 'departements',
             13: 'cities',
         }"
-        showPrinter
+        :townMarkerFn="marqueurSiteStats"
+        :locationMarkerFn="marqueurLocationStats"
     />
 </template>
 
@@ -14,6 +15,8 @@
 import { ref, watch } from "vue";
 import L from "leaflet";
 import Carto from "@/components/Carto/Carto.vue";
+import marqueurSiteStats from "@/utils/marqueurSiteStats";
+import marqueurLocationStats from "@/utils/marqueurLocationStats";
 
 const carto = ref(null);
 const markersGroup = ref(L.geoJSON([], {}));
