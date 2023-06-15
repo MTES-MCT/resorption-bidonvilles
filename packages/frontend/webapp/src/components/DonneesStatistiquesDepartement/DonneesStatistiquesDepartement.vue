@@ -1,9 +1,14 @@
 <template>
     <FilArianne />
     <Title class="mt-6">{{ departement.name }} ({{ departement.code }})</Title>
-    <Header class="mt-4" />
 
     <section id="donnees" class="pt-6">
+        <h1 class="text-lg font-bold mb-2">
+            <Icon icon="table-list" /> Situation au
+            <span class="text-primary">{{
+                formatDate(new Date().getTime() / 1000)
+            }}</span>
+        </h1>
         <div
             class="bg-G100 border border-G300 rounded py-4 px-6 flex items-stretch"
         >
@@ -180,11 +185,11 @@
 <script setup>
 import { computed, onMounted, toRefs, ref, watch } from "vue";
 import { useGeojsonStore } from "@/stores/geojson.store";
+import formatDate from "@common/utils/formatDate";
 
 import { Icon } from "@resorptionbidonvilles/ui";
 import FilArianne from "../DonneesStatistiques/FilArianne.vue";
 import Title from "../DonneesStatistiques/Title.vue";
-import Header from "../DonneesStatistiques/Header.vue";
 import Onglets from "../DonneesStatistiques/DonneesStatistiquesDepartementOnglets.vue";
 import CartoDonneesStatistiques from "@/components/CartoDonneesStatistiques/CartoDonneesStatistiques.vue";
 import SummaryTable from "./components/tables/SummaryTable.vue";

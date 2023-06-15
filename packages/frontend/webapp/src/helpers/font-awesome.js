@@ -78,6 +78,7 @@ import {
     faScroll,
     faSpinner,
     faStar,
+    faTableList,
     faTent,
     faTimes,
     faTint,
@@ -198,6 +199,7 @@ library.add(faSpinner);
 library.add(faStar);
 library.add(faStarEmpty);
 library.add(faSun);
+library.add(faTableList);
 library.add(faTent);
 library.add(faTimes);
 library.add(faTint);
