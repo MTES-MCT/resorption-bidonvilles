@@ -72,7 +72,7 @@ const router = createRouter({
             },
         },
         {
-            path: "/donnees-statistiques",
+            path: "/visualisation-donnees",
             component: () =>
                 import("@/views/DonneesStatistiquesRegionsView.vue"),
             meta: {
@@ -81,7 +81,7 @@ const router = createRouter({
             },
         },
         {
-            path: "/donnees-statistiques/departement/:code",
+            path: "/visualisation-donnees/departement/:code",
             component: () =>
                 import("@/views/DonneesStatistiquesDepartementView.vue"),
             meta: {

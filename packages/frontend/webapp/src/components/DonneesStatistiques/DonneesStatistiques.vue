@@ -1,7 +1,7 @@
 <template>
     <ContentWrapper>
         <FilArianne />
-        <Title class="mt-6">Données statistiques et cartographiques</Title>
+        <Title class="mt-6">Visualisation des données</Title>
         <Header
             class="mt-4"
             v-if="['loaded', 'refresh'].includes(metricsStore.nationStatus)"

@@ -123,7 +123,7 @@ const collapsed = computed(() => {
 
 const linkTo = computed(() => {
     if (metrics.value.level === "departement") {
-        return `/donnees-statistiques/departement/${metrics.value.uid}#donnees`;
+        return `/visualisation-donnees/departement/${metrics.value.uid}#donnees`;
     }
 
     return null;

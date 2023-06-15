@@ -94,8 +94,8 @@ export const useNavigationStore = defineStore("navigation", {
                 { label: "Carte", route: "/cartographie" },
                 { label: "Dernières activités", route: "/activites" },
                 {
-                    label: "Données statistiques et cartographiques",
-                    route: "/donnees-statistiques",
+                    label: "Visualisation des données",
+                    route: "/visualisation-donnees",
                 },
                 { label: "Administration", route: "/acces" },
             ];
