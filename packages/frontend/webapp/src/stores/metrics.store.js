@@ -1,7 +1,9 @@
 import { defineStore } from "pinia";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useEventBus } from "@common/helpers/event-bus";
 import { getNationMetrics } from "@/api/metrics.api";
+import filterMetrics from "@/utils/filterMetrics";
+import parametres from "../components/DonneesStatistiques/DonneesStatistiques.parametres";
 
 export const useMetricsStore = defineStore("metrics", () => {
     const nationStatus = ref(null); // null: lancement, 'init': initialisation, 'loaded': chargé, 'refresh': màj
@@ -14,6 +16,16 @@ export const useMetricsStore = defineStore("metrics", () => {
     const loaded = ref({
         from: null,
         to: null,
+    });
+    const parametresDeVue = ref([]);
+
+    const filteredMetrics = computed(() => {
+        return filterMetrics(
+            metrics.value,
+            parametres.filter((parametre) =>
+                parametresDeVue.value.includes(parametre.id)
+            )
+        );
     });
 
     function reset() {
@@ -39,9 +51,11 @@ export const useMetricsStore = defineStore("metrics", () => {
         from,
         to,
         loadedDates: loaded,
+        filteredMetrics,
         metrics,
         collapsedStatuses,
         selection,
+        parametresDeVue,
         async load() {
             if (
                 nationStatus.value === "init" ||

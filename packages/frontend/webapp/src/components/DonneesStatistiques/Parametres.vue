@@ -10,16 +10,14 @@
                 Paramètres de la vue
             </p>
             <p class="mt-2 flex flex-col md:flex-row md:space-x-4">
-                <Checkbox label="Afficher les régions" variant="toggle" />
                 <Checkbox
-                    class="mt-2 md:mt-0"
-                    label="Masquer les départements avec < 50 habitants"
+                    class="mt-0 md:mt-2"
+                    v-for="parametre in parametres"
+                    :key="parametre.id"
+                    :label="parametre.label"
+                    :value="parametre.id"
                     variant="toggle"
-                />
-                <Checkbox
-                    class="mt-2 md:mt-0"
-                    label="Masquer la ligne si moins d'un site"
-                    variant="toggle"
+                    v-model="metricsStore.parametresDeVue"
                 />
             </p>
         </div>
@@ -30,5 +28,10 @@
 </template>
 
 <script setup>
+import { useMetricsStore } from "@/stores/metrics.store";
+import parametres from "./DonneesStatistiques.parametres";
+
 import { Button, Checkbox, Icon } from "@resorptionbidonvilles/ui";
+
+const metricsStore = useMetricsStore();
 </script>
