@@ -3,7 +3,7 @@ import PestAnimalsBody from "./PestAnimalsBody.vue";
 import PestAnimalsHead from "./PestAnimalsHead.vue";
 
 export default {
-    icon: "paw",
+    icon: "bug",
     title: "Nombre de sites sans nuisibles",
     headComponent: PestAnimalsHead,
     bodyComponent: PestAnimalsBody,

@@ -13,6 +13,7 @@ import {
     faBars,
     faBolt,
     faBook,
+    faBug,
     faBuilding,
     faBullseye,
     faCalendar,
@@ -62,7 +63,6 @@ import {
     faNotesMedical,
     faPaperclip,
     faPaperPlane,
-    faPaw,
     faPen,
     faPencilAlt,
     faPeopleGroup,
@@ -124,6 +124,7 @@ library.add(faBars);
 library.add(faBell);
 library.add(faBolt);
 library.add(faBook);
+library.add(faBug);
 library.add(faBuilding);
 library.add(faBullseye);
 library.add(faCalendar);
@@ -180,7 +181,6 @@ library.add(faNewspaper);
 library.add(faNotesMedical);
 library.add(faPaperclip);
 library.add(faPaperPlane);
-library.add(faPaw);
 library.add(faPen);
 library.add(faPencilAlt);
 library.add(faPeopleGroup);
