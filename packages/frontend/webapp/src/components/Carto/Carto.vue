@@ -102,6 +102,11 @@ const props = defineProps({
         // le cluster 'cities' >= 12 et <= 13
         // et au-delà de 13, plus de clustering
     },
+    townClusteringOptions: {
+        type: Object,
+        required: false,
+        default: () => ({}),
+    },
     townMarkerFn: {
         type: Function,
         required: false,
@@ -125,6 +130,7 @@ const {
     defaultView,
     towns,
     clusters,
+    townClusteringOptions,
     townMarkerFn,
     locationMarkerFn,
 } = toRefs(props);
@@ -135,7 +141,7 @@ const currentMarkerGroup = ref(null);
 
 const controls = {};
 const markersGroup = {
-    towns: ref(L.markerClusterGroup({})),
+    towns: ref(L.markerClusterGroup(townClusteringOptions.value)),
     cities: ref(L.layerGroup()),
     departements: ref(L.layerGroup()),
     regions: ref(L.layerGroup()),

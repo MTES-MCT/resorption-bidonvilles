@@ -8,6 +8,7 @@
         }"
         :townMarkerFn="marqueurSiteStats"
         :locationMarkerFn="marqueurLocationStats"
+        :townClusteringOptions="{ maxClusterRadius: 15 }"
     />
 </template>
 
