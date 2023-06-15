@@ -1,6 +1,6 @@
 <template>
     <section>
-        <div class="grid grid-template text-sm">
+        <div class="grid grid-template text-sm bg-white sticky top-0">
             <GrilleHeader :separator="false" />
             <GrilleHeader
                 >Sites avec accès à l'eau<br />(nbre hab.
