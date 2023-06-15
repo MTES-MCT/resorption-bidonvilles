@@ -17,6 +17,7 @@ export const useMetricsStore = defineStore("metrics", () => {
         from: null,
         to: null,
     });
+    const showParametres = ref(false);
     const parametresDeVue = ref([]);
 
     const filteredMetrics = computed(() => {
@@ -55,6 +56,7 @@ export const useMetricsStore = defineStore("metrics", () => {
         metrics,
         collapsedStatuses,
         selection,
+        showParametres,
         parametresDeVue,
         async load() {
             if (

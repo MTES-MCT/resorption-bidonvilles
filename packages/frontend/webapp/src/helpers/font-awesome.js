@@ -46,6 +46,8 @@ import {
     faFilePdf,
     faFileSignature,
     faFileWord,
+    faFilter,
+    faFilterCircleXmark,
     faFireExtinguisher,
     faFlag,
     faHandshakeAngle,
@@ -163,6 +165,8 @@ library.add(faFileExcel);
 library.add(faFilePdf);
 library.add(faFileSignature);
 library.add(faFileWord);
+library.add(faFilter);
+library.add(faFilterCircleXmark);
 library.add(faFireExtinguisher);
 library.add(faFlag);
 library.add(faHandshakeAngle);

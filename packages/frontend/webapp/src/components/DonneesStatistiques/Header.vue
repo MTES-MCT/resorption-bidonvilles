@@ -11,8 +11,9 @@
         </div>
 
         <Parametres
-            class="mt-4"
+            class="mt-4 overflow-hidden relative"
             v-if="metricsStore.nationStatus === 'loaded'"
+            :class="metricsStore.showParametres ? 'h-auto' : 'h-0'"
         />
     </header>
 </template>
