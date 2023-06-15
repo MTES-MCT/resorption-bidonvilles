@@ -3,7 +3,7 @@ import { createPinia } from "pinia";
 
 import App from "./App.vue";
 import router from "./helpers/router";
-import FontAwesomeIcon from "./helpers/font-awesome";
+import FontAwesomeIcon, { useFontAwesome } from "./helpers/font-awesome";
 import Datepicker from "./helpers/datepicker";
 import { useMatomo } from "./helpers/matomo";
 import { useSentry } from "./helpers/sentry";
@@ -14,6 +14,7 @@ import "./assets/main.css";
 
 const app = createApp(App);
 useSentry(app);
+useFontAwesome();
 
 app.use(createPinia());
 app.use(router);
