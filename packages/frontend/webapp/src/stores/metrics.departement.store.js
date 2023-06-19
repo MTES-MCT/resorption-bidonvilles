@@ -52,7 +52,15 @@ export const useDepartementMetricsStore = defineStore(
         });
 
         function reset() {
+            departement.value = null;
+            activeTab.value = "summary";
             error.value = null;
+            sort.value = {
+                summary: { id: "city_name", order: "asc" },
+                inhabitants: { id: "city_name", order: "asc" },
+                livingConditions: { id: "city_name", order: "asc" },
+                justice: { id: "city_name", order: "asc" },
+            };
             metrics.value = {};
             currentFormat.value = "table";
         }
