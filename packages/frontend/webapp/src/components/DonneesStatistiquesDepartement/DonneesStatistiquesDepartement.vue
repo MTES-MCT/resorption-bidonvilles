@@ -270,7 +270,7 @@ import SummaryTable from "./components/tables/SummaryTable.vue";
 import InhabitantsTable from "./components/tables/InhabitantsTable.vue";
 import LivingConditionsTable from "./components/tables/LivingConditionsTable.vue";
 import JusticeTable from "./components/tables/JusticeTable.vue";
-import EvolutionCharts from "./components/charts/EvolutionCharts.vue";
+import EvolutionCharts from "./components/chartTabs/EvolutionCharts.vue";
 
 const props = defineProps({
     departement: {

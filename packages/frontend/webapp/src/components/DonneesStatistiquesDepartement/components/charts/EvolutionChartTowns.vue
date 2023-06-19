@@ -1,58 +1,4 @@
 <template>
-    <header class="flex flex-col xl:flex-row lg:space-x-4 justify-between">
-        <div class="flex space-x-4 items-end">
-            <div>
-                <p>Du</p>
-                <DatepickerInput withoutMargin />
-            </div>
-
-            <div>
-                <p>Au</p>
-                <DatepickerInput withoutMargin />
-            </div>
-
-            <Button>Valider</Button>
-        </div>
-        <div class="hidden xl:block">
-            <p>&nbsp;</p>
-            <p class="flex space-x-4 items-center">
-                <Button variant="primaryOutline">L'année dernière</Button>
-                <Button variant="primaryOutline">Le mois dernier</Button>
-                <Button variant="primaryOutline">La semaine dernière</Button>
-            </p>
-        </div>
-    </header>
-
-    <section class="mt-6">
-        <h1 class="font-bold text-primary text-lg">
-            Évolution du nombre d'habitants
-        </h1>
-        <p class="mt-2">
-            Description du graphique dans un texte qui peut faire un paragraphe
-            ou plus...
-        </p>
-
-        <div class="flex mt-4 space-x-6">
-            <ChartBigFigure icon="people-group" :figure="3"
-                >Nombre total d'habitants</ChartBigFigure
-            >
-
-            <ChartBigFigure icon="people-group" :figure="123"
-                >Estimation du nombre d'habitants intra-UE</ChartBigFigure
-            >
-
-            <ChartBigFigure icon="people-group" :figure="-12"
-                >Estimation du nombre d'habitants extra-UE</ChartBigFigure
-            >
-        </div>
-
-        <LineChart
-            class="mt-6"
-            :chartOptions="chartOptions"
-            :chartData="chartData"
-        />
-    </section>
-
     <section class="mt-6">
         <h1 class="font-bold text-primary text-lg">
             Évolution du nombre de sites
@@ -88,18 +34,8 @@
     </section>
 </template>
 
-<style scoped>
-.down {
-    transform: rotate(45deg);
-}
-.up {
-    transform: rotate(-45deg);
-}
-</style>
-
 <script setup>
 import { LineChart } from "@/helpers/chart";
-import { Button, DatepickerInput } from "@resorptionbidonvilles/ui";
 import ChartBigFigure from "./ChartBigFigure.vue";
 
 const chartData = {
