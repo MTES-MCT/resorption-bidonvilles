@@ -1,5 +1,5 @@
 <template>
-    <section class="mt-6">
+    <section>
         <h1 class="font-bold text-primary text-lg">
             Évolution du nombre de sites
         </h1>
@@ -42,22 +42,28 @@ const chartData = {
     labels: ["January", "February", "March"],
     datasets: [
         {
-            label: "Nombre total d'habitants",
+            label: "Nombre total de sites",
             backgroundColor: ["rgba(242, 242, 249, 0.7)"],
             fill: true,
             data: [40, 20, 12],
         },
         {
-            label: "Nombre d'habitants intra-UE",
+            label: "Nombre de sites de moins de 10 habitants",
             backgroundColor: ["rgba(253, 242, 243, 0.7)"],
             fill: true,
             data: [35, 2, 150],
         },
         {
-            label: "Nombre d'habitants extra-UE",
+            label: "Nombre de sites de moins de 100 habitants",
             backgroundColor: ["rgba(233, 246, 238, 0.7)"],
             fill: true,
             data: [123, 92, 96],
+        },
+        {
+            label: "Nombre de sites de plus de 100 habitants",
+            backgroundColor: ["rgba(0, 0, 145, 0.7)"],
+            fill: true,
+            data: [312, 523, 356],
         },
     ],
 };
