@@ -226,8 +226,16 @@ export default async (user, argFrom: Date, argTo: Date):Promise<NationMetricsLis
     });
 
     const regionData = Object.values(hashRegions);
-    franceData.children = regionData;
+
+    franceData.children = regionData.map((regionMetric) => {
+        if (['01', '02', '03', '04', '06'].includes(regionMetric.uid)) {
+            // on supprime le niveau régional pour les départements outremer
+            return regionMetric.children[0];
+        }
+        return regionMetric;
+    });
     metropoleData.children = regionData.filter(el => !['01', '02', '03', '04', '06'].includes(el.uid));
-    outremerData.children = regionData.filter(el => ['01', '02', '03', '04', '06'].includes(el.uid));
+    // on supprime le niveau régional pour les départements outremer
+    outremerData.children = regionData.filter(el => ['01', '02', '03', '04', '06'].includes(el.uid)).map(regionMetric => regionMetric.children[0]);
     return [franceData, metropoleData, outremerData];
 };
