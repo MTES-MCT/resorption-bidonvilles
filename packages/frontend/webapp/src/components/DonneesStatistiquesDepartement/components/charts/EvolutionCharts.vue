@@ -33,35 +33,51 @@
         </p>
 
         <div class="flex mt-4 space-x-6">
-            <article>
-                <div
-                    class="bg-red100 p-1 flex items-center justify-center space-x-2 w-48"
-                >
-                    <Icon class="text-xl" icon="people-group" />
-                    <span class="font-bold text-red text-3xl">+3%</span>
-                </div>
-                <label class="text-sm">Nombre total d'habitants</label>
-            </article>
+            <ChartBigFigure icon="people-group" :figure="3"
+                >Nombre total d'habitants</ChartBigFigure
+            >
 
-            <article>
-                <div
-                    class="bg-green100 p-1 flex items-center justify-center space-x-2 w-48"
-                >
-                    <Icon class="text-xl" icon="map-pin" />
-                    <span class="font-bold text-green text-3xl">-3%</span>
-                </div>
-                <label class="text-sm">Nombre d'habitants intra-UE</label>
-            </article>
+            <ChartBigFigure icon="people-group" :figure="123"
+                >Estimation du nombre d'habitants intra-UE</ChartBigFigure
+            >
 
-            <article>
-                <div
-                    class="bg-green100 p-1 flex items-center justify-center space-x-2 w-48"
-                >
-                    <Icon class="text-xl" icon="map-pin" />
-                    <span class="font-bold text-green text-3xl">-3%</span>
-                </div>
-                <label class="text-sm">Nombre d'habitants extra-UE</label>
-            </article>
+            <ChartBigFigure icon="people-group" :figure="-12"
+                >Estimation du nombre d'habitants extra-UE</ChartBigFigure
+            >
+        </div>
+
+        <LineChart
+            class="mt-6"
+            :chartOptions="chartOptions"
+            :chartData="chartData"
+        />
+    </section>
+
+    <section class="mt-6">
+        <h1 class="font-bold text-primary text-lg">
+            Évolution du nombre de sites
+        </h1>
+        <p class="mt-2">
+            Description du graphique dans un texte qui peut faire un paragraphe
+            ou plus...
+        </p>
+
+        <div class="flex mt-4 space-x-6">
+            <ChartBigFigure icon="people-group" :figure="3"
+                >Nombre total de sites</ChartBigFigure
+            >
+
+            <ChartBigFigure icon="people-group" :figure="123"
+                >Nombre de sites de moins de 10 habitants</ChartBigFigure
+            >
+
+            <ChartBigFigure icon="people-group" :figure="-12"
+                >Nombre de sites de moins de 100 habitants</ChartBigFigure
+            >
+
+            <ChartBigFigure icon="people-group" :figure="51"
+                >Nombre de sites de plus de 100 habitants</ChartBigFigure
+            >
         </div>
 
         <LineChart
@@ -83,7 +99,8 @@
 
 <script setup>
 import { LineChart } from "@/helpers/chart";
-import { Button, DatepickerInput, Icon } from "@resorptionbidonvilles/ui";
+import { Button, DatepickerInput } from "@resorptionbidonvilles/ui";
+import ChartBigFigure from "./ChartBigFigure.vue";
 
 const chartData = {
     labels: ["January", "February", "March"],
