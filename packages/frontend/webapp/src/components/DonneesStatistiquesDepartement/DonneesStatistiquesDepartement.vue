@@ -140,7 +140,7 @@
             :activeTab="departementMetricsStore.activeTab"
         />
 
-        <div class="mt-3 px-6 py-1 bg-blue100 text-sm">
+        <div class="mt-3 px-6 py-2 bg-blue100 text-sm">
             <Link
                 withStyle
                 class="mr-3"
@@ -165,9 +165,12 @@
             >
         </div>
 
-        <EvolutionCharts
+        <section
+            class="mt-4"
             v-if="departementMetricsStore.currentFormat === 'chart'"
-        />
+        >
+            <EvolutionCharts />
+        </section>
         <div v-else class="mt-6 flex justify-evenly items-stretch">
             <div
                 :class="{
