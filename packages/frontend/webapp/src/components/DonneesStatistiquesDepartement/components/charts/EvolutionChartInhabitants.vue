@@ -9,15 +9,15 @@
         </p>
 
         <div class="flex mt-4 space-x-6">
-            <ChartBigFigure icon="people-group" :figure="3"
+            <ChartBigFigure icon="people-group" :figure="1768" :evolution="3"
                 >Nombre total d'habitants</ChartBigFigure
             >
 
-            <ChartBigFigure icon="people-group" :figure="123"
+            <ChartBigFigure icon="people-group" :figure="1256" :evolution="123"
                 >Estimation du nombre d'habitants intra-UE</ChartBigFigure
             >
 
-            <ChartBigFigure icon="people-group" :figure="-12"
+            <ChartBigFigure icon="people-group" :figure="512" :evolution="-12"
                 >Estimation du nombre d'habitants extra-UE</ChartBigFigure
             >
         </div>

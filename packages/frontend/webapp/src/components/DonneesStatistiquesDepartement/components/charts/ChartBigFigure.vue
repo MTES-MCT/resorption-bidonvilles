@@ -1,12 +1,14 @@
 <template>
     <article>
         <div
-            class="p-1 flex items-center justify-center space-x-2 w-48"
+            class="px-2 py-3 flex items-center justify-center space-x-2"
             :class="background"
         >
             <Icon class="text-xl" :icon="icon" />
-            <span class="font-bold text-3xl" :class="color"
-                ><template v-if="figure >= 0">+</template>{{ figure }} %</span
+            <span class="font-bold text-3xl">{{ figure }}</span>
+            <span class="font-bold text-lg" :class="color"
+                >(<template v-if="evolution >= 0">+</template
+                >{{ evolution }} %)</span
             >
         </div>
         <label class="text-sm"><slot /></label>
@@ -26,8 +28,12 @@ const props = defineProps({
         type: Number,
         required: true,
     },
+    evolution: {
+        type: Number,
+        required: true,
+    },
 });
-const { icon, figure } = toRefs(props);
+const { icon, figure, evolution } = toRefs(props);
 
 const colors = {
     positive: {
@@ -41,9 +47,9 @@ const colors = {
 };
 
 const background = computed(() => {
-    return (figure.value < 0 ? colors.positive : colors.negative).background;
+    return (evolution.value < 0 ? colors.positive : colors.negative).background;
 });
 const color = computed(() => {
-    return (figure.value < 0 ? colors.positive : colors.negative).color;
+    return (evolution.value < 0 ? colors.positive : colors.negative).color;
 });
 </script>
