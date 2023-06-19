@@ -16,6 +16,7 @@ export const useDepartementMetricsStore = defineStore(
             justice: { id: "city_name", order: "asc" },
         });
         const metrics = ref({});
+        const currentFormat = ref("table");
 
         const filteredMetrics = computed(() => {
             if (
@@ -53,6 +54,7 @@ export const useDepartementMetricsStore = defineStore(
         function reset() {
             error.value = null;
             metrics.value = {};
+            currentFormat.value = "table";
         }
 
         const { bus } = useEventBus();
@@ -66,6 +68,7 @@ export const useDepartementMetricsStore = defineStore(
             filteredMetrics,
             sort,
             metrics,
+            currentFormat,
             async fetchDepartement(departementCode) {
                 departement.value = departementCode;
                 const response = await getDepartementMetrics(departementCode);

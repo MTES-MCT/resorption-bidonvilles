@@ -134,9 +134,41 @@
     </section>
 
     <main class="mt-6">
-        <Onglets :tabs="tabs" />
+        <Onglets
+            @switch="switchTab"
+            :tabs="tabs"
+            :activeTab="departementMetricsStore.activeTab"
+        />
 
-        <div class="mt-6 flex justify-evenly items-stretch">
+        <div class="mt-3 px-6 py-1 bg-blue100 text-sm">
+            <Link
+                withStyle
+                class="mr-3"
+                :class="
+                    departementMetricsStore.currentFormat === 'table'
+                        ? 'font-bold'
+                        : ''
+                "
+                @click="() => setFormat('table')"
+                ><Icon icon="table-list" /> Situation au
+                {{ formatDate(new Date().getTime() / 1000) }}</Link
+            >
+            <Link
+                withStyle
+                :class="
+                    departementMetricsStore.currentFormat === 'chart'
+                        ? 'font-bold'
+                        : ''
+                "
+                @click="() => setFormat('chart')"
+                ><Icon icon="chart-simple" /> Évolution</Link
+            >
+        </div>
+
+        <EvolutionCharts
+            v-if="departementMetricsStore.currentFormat === 'chart'"
+        />
+        <div v-else class="mt-6 flex justify-evenly items-stretch">
             <div
                 :class="{
                     'flex-1 pr-6': mapSize !== 'full',
@@ -221,12 +253,12 @@
 <script setup>
 import { computed, nextTick, onMounted, toRefs, ref, watch } from "vue";
 import { useGeojsonStore } from "@/stores/geojson.store";
+import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import formatDate from "@common/utils/formatDate";
 import router from "@/helpers/router";
 import tabs from "./DonneesStatistiquesDepartement.tabs";
-import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 
-import { Icon } from "@resorptionbidonvilles/ui";
+import { Icon, Link } from "@resorptionbidonvilles/ui";
 import FilArianne from "../DonneesStatistiques/FilArianne.vue";
 import Title from "../DonneesStatistiques/Title.vue";
 import Onglets from "../DonneesStatistiques/DonneesStatistiquesDepartementOnglets.vue";
@@ -235,6 +267,7 @@ import SummaryTable from "./components/tables/SummaryTable.vue";
 import InhabitantsTable from "./components/tables/InhabitantsTable.vue";
 import LivingConditionsTable from "./components/tables/LivingConditionsTable.vue";
 import JusticeTable from "./components/tables/JusticeTable.vue";
+import EvolutionCharts from "./components/charts/EvolutionCharts.vue";
 
 const props = defineProps({
     departement: {
@@ -246,7 +279,6 @@ const props = defineProps({
         required: true,
     },
 });
-
 const { departement, metrics } = toRefs(props);
 const departementMetricsStore = useDepartementMetricsStore();
 
@@ -372,6 +404,10 @@ function onTownRowClick(town, city) {
 
 function onTownClick(town) {
     router.push(`/site/${town.id}`);
+}
+
+function setFormat(format) {
+    departementMetricsStore.currentFormat = format;
 }
 
 watch(departement, loadGeojson);
