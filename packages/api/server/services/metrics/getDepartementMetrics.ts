@@ -65,6 +65,22 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
         // on crée la donnée commune si elle n'existe pas
         if (!hashCities[row.city_code]) {
             hashCities[row.city_code] = {
+                summary: {
+                    number_of_towns: 0,
+                    number_of_persons: null,
+                    number_of_households: null,
+                    number_of_minors: null,
+                    number_of_towns_with_water: 0,
+                    number_of_towns_with_electricity: 0,
+                    number_of_towns_with_trash_evacuation: 0,
+                    number_of_towns_with_fire_prevention: 0,
+                    number_of_towns_with_working_toilets: 0,
+                    number_of_towns_with_absence_of_pest_animals: 0,
+                    number_of_towns_with_owner_complaint: 0,
+                    number_of_towns_with_justice_procedure: 0,
+                    number_of_towns_with_police: 0,
+
+                },
                 city: {
                     name: row.city_name,
                     code: row.city_code,
@@ -89,6 +105,48 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
         }
 
         const livingConditionsStatuses = getLivingConditionsStatuses(row);
+
+
+        // on incrémente la donnée commune
+        hashCities[row.city_code].summary.number_of_towns += 1;
+        if (row.population_total !== null) {
+            hashCities[row.city_code].summary.number_of_persons += row.population_total;
+        }
+        if (row.population_couples !== null) {
+            hashCities[row.city_code].summary.number_of_households += row.population_couples;
+        }
+        if (row.population_minors !== null) {
+            hashCities[row.city_code].summary.number_of_minors += row.population_minors;
+        }
+        if (livingConditionsStatuses.water.status === 'good') {
+            hashCities[row.city_code].summary.number_of_towns_with_water += 1;
+        }
+
+        if (livingConditionsStatuses.electricity.status === 'good') {
+            hashCities[row.city_code].summary.number_of_towns_with_electricity += 1;
+        }
+        if (livingConditionsStatuses.trash.status === 'good') {
+            hashCities[row.city_code].summary.number_of_towns_with_trash_evacuation += 1;
+        }
+        if (livingConditionsStatuses.fire_prevention.status === 'good') {
+            hashCities[row.city_code].summary.number_of_towns_with_fire_prevention += 1;
+        }
+        if (livingConditionsStatuses.sanitary.status === 'good') {
+            hashCities[row.city_code].summary.number_of_towns_with_working_toilets += 1;
+        }
+        if (livingConditionsStatuses.pest_animals.status === 'good') {
+            hashCities[row.city_code].summary.number_of_towns_with_absence_of_pest_animals += 1;
+        }
+
+        if (row.owner_complaint === true) {
+            hashCities[row.city_code].summary.number_of_towns_with_owner_complaint += 1;
+        }
+        if (row.justice_procedure === true) {
+            hashCities[row.city_code].summary.number_of_towns_with_justice_procedure += 1;
+        }
+        if (row.police_status === true) {
+            hashCities[row.city_code].summary.number_of_towns_with_police += 1;
+        }
 
         // on ajoute la donée du site
         const town:ShantytownMetrics = {

@@ -134,7 +134,7 @@
     </section>
 
     <main class="mt-6">
-        <Onglets @switch="switchTab" :tabs="tabs" :activeTab="activeTab" />
+        <Onglets :tabs="tabs" />
 
         <div class="mt-6 flex justify-evenly items-stretch">
             <div
@@ -223,6 +223,8 @@ import { computed, nextTick, onMounted, toRefs, ref, watch } from "vue";
 import { useGeojsonStore } from "@/stores/geojson.store";
 import formatDate from "@common/utils/formatDate";
 import router from "@/helpers/router";
+import tabs from "./DonneesStatistiquesDepartement.tabs";
+import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 
 import { Icon } from "@resorptionbidonvilles/ui";
 import FilArianne from "../DonneesStatistiques/FilArianne.vue";
@@ -245,39 +247,21 @@ const props = defineProps({
     },
 });
 
-const tabs = [
-    {
-        id: "synthese",
-        label: "Synthèse",
-    },
-    {
-        id: "habitants",
-        label: "Habitants",
-    },
-    {
-        id: "conditions_de_vie",
-        label: "Conditions de vie",
-    },
-    {
-        id: "juridique",
-        label: "Juridique",
-    },
-];
-
-const activeTab = ref("synthese");
 const { departement, metrics } = toRefs(props);
+const departementMetricsStore = useDepartementMetricsStore();
+
 const carte = ref(null);
 const isLoading = ref(true);
 const mapSize = ref("half");
 const tables = {
-    synthese: SummaryTable,
-    habitants: InhabitantsTable,
-    conditions_de_vie: LivingConditionsTable,
-    juridique: JusticeTable,
+    summary: SummaryTable,
+    inhabitants: InhabitantsTable,
+    livingConditions: LivingConditionsTable,
+    justice: JusticeTable,
 };
 
 const currentTable = computed(() => {
-    return tables[activeTab.value];
+    return tables[departementMetricsStore.activeTab];
 });
 
 const towns = computed(() => {
@@ -313,10 +297,6 @@ async function loadGeojson() {
     }
 
     isLoading.value = false;
-}
-
-function switchTab(value) {
-    activeTab.value = value;
 }
 
 function increaseMapSize() {

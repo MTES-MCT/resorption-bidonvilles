@@ -25,9 +25,12 @@
     <Layout v-else>
         <ContentWrapper>
             <DonneesStatistiquesDepartement
-                v-if="departement"
+                v-if="
+                    departement &&
+                    departementMetricsStore.filteredMetrics !== null
+                "
                 :departement="departement"
-                :metrics="metrics"
+                :metrics="departementMetricsStore.filteredMetrics"
             />
         </ContentWrapper>
     </Layout>
@@ -65,9 +68,6 @@ const departement = computed(() => {
             (d) => d.code === departementCode.value
         ) || null
     );
-});
-const metrics = computed(() => {
-    return departementMetricsStore.metrics[departementCode.value] || null;
 });
 
 onMounted(load);

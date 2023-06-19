@@ -4,7 +4,7 @@
             @click="switchTab(tab.id)"
             v-for="tab in tabs"
             :key="tab.id"
-            :active="tab.id === activeTab"
+            :active="tab.id === departementMetricsStore.activeTab"
         >
             {{ tab.label }}</Tab
         >
@@ -13,6 +13,7 @@
 
 <script setup>
 import { toRefs } from "vue";
+import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 
 import Tab from "./Tab.vue";
 
@@ -21,17 +22,13 @@ const props = defineProps({
         type: Array,
         required: true,
     },
-    activeTab: {
-        type: String,
-        required: true,
-    },
 });
 
-const { tabs, activeTab } = toRefs(props);
+const { tabs } = toRefs(props);
 
-const emit = defineEmits(["switch"]);
+const departementMetricsStore = useDepartementMetricsStore();
 
-function switchTab(tabId) {
-    emit("switch", tabId);
+function switchTab(value) {
+    departementMetricsStore.activeTab = value;
 }
 </script>

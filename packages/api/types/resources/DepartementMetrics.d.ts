@@ -25,6 +25,22 @@ export type ShantytownMetrics = {
 };
 
 export type CityMetrics = {
+    summary: {
+        number_of_towns: number,
+        number_of_persons: number | null,
+        number_of_households: number | null,
+        number_of_minors: number | null,
+        number_of_towns_with_water: number,
+        number_of_towns_with_electricity: number,
+        number_of_towns_with_trash_evacuation: number,
+        number_of_towns_with_fire_prevention: number,
+        number_of_towns_with_working_toilets: number,
+        number_of_towns_with_absence_of_pest_animals: number,
+        number_of_towns_with_owner_complaint: number,
+        number_of_towns_with_justice_procedure: number,
+        number_of_towns_with_police: number,
+
+    }
     city: {
         name: string,
         code: string,
