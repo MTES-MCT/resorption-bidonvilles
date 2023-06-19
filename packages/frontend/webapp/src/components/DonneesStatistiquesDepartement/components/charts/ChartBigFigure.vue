@@ -32,8 +32,13 @@ const props = defineProps({
         type: Number,
         required: true,
     },
+    invert: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
-const { icon, figure, evolution } = toRefs(props);
+const { icon, figure, evolution, invert } = toRefs(props);
 
 const colors = {
     positive: {
@@ -44,12 +49,24 @@ const colors = {
         background: "bg-red100",
         color: "text-red",
     },
+    neutral: {
+        background: "bg-G200",
+        color: "text-G500",
+    },
 };
 
 const background = computed(() => {
+    if (invert.value) {
+        return colors.neutral.background;
+    }
+
     return (evolution.value < 0 ? colors.positive : colors.negative).background;
 });
 const color = computed(() => {
+    if (invert.value) {
+        return colors.neutral.color;
+    }
+
     return (evolution.value < 0 ? colors.positive : colors.negative).color;
 });
 </script>
