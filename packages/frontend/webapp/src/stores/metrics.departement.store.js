@@ -27,13 +27,26 @@ export const useDepartementMetricsStore = defineStore(
             }
             return {
                 ...metrics.value[departement.value],
-                cities: metrics.value[departement.value].cities.sort((a, b) =>
-                    sortFn[activeTab.value][sort.value[activeTab.value].id](
-                        a,
-                        b,
-                        sort.value[activeTab.value].order
+                cities: metrics.value[departement.value].cities
+                    .sort((a, b) =>
+                        sortFn[activeTab.value][
+                            sort.value[activeTab.value].id
+                        ].city_level(a, b, sort.value[activeTab.value].order)
                     )
-                ),
+                    .map((city) => {
+                        return {
+                            ...city,
+                            town: city.towns.sort((a, b) =>
+                                sortFn[activeTab.value][
+                                    sort.value[activeTab.value].id
+                                ].town_level(
+                                    a,
+                                    b,
+                                    sort.value[activeTab.value].order
+                                )
+                            ),
+                        };
+                    }),
             };
         });
 

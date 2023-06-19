@@ -78,7 +78,7 @@ function changeSort(value) {
     ) {
         departementMetricsStore.sort[departementMetricsStore.activeTab] = {
             id: value,
-            order: "desc",
+            order: "asc",
         };
     } else {
         departementMetricsStore.sort[departementMetricsStore.activeTab].order =
