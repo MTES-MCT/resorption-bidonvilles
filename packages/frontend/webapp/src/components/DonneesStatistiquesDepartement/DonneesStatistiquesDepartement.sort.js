@@ -52,21 +52,23 @@ export default {
             "number_of_towns_with_fire_prevention"
         ),
         number_of_towns_with_toilets: sortBySummaryKey(
-            "number_of_towns_with_working_toilets"
+            "number_of_towns_with_toilets"
         ),
         number_of_towns_without_pest_animals: sortBySummaryKey(
-            "number_of_towns_with_absence_of_pest_animals"
+            "number_of_towns_without_pest_animals"
         ),
     },
     justice: {
         city_name: sortByCityName,
-        number_of_complaints: sortBySummaryKey(
+        number_of_towns_with_owner_complaint: sortBySummaryKey(
             "number_of_towns_with_owner_complaint"
         ),
 
-        number_of_justice_procedure: sortBySummaryKey(
+        number_of_towns_with_justice_procedure: sortBySummaryKey(
             "number_of_towns_with_justice_procedure"
         ),
-        number_of_police: sortBySummaryKey("number_of_towns_with_police"),
+        number_of_towns_with_police: sortBySummaryKey(
+            "number_of_towns_with_police"
+        ),
     },
 };

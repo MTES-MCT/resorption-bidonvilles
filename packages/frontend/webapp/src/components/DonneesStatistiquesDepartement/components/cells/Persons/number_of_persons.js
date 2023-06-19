@@ -7,9 +7,4 @@ export default {
     headComponent: PersonsHead,
     bodyComponent: PersonsBody,
     default: null,
-    primaryMetric(summary, town) {
-        if (Number.isFinite(town.number_of_persons)) {
-            summary.number_of_persons += town.number_of_persons;
-        }
-    },
 };

@@ -1,4 +1,3 @@
-import setPercentageOf from "../../../utils/setPercentageOf";
 import PoliceBody from "./PoliceBody.vue";
 import PoliceHead from "./PoliceHead.vue";
 
@@ -8,10 +7,4 @@ export default {
     headComponent: PoliceBody,
     bodyComponent: PoliceHead,
     default: 0,
-    primaryMetric(summary, town) {
-        summary.number_of_police += town.police ? 1 : 0;
-    },
-    secondaryMetric(summary, city) {
-        setPercentageOf("number_of_police", summary, city);
-    },
 };

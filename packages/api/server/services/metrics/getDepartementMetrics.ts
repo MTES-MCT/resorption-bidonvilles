@@ -42,6 +42,17 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
                 all: 0,
                 eu_only: 0,
             },
+            number_of_households: null,
+            number_of_minors: null,
+            number_of_towns_with_water: 0,
+            number_of_towns_with_electricity: 0,
+            number_of_towns_with_trash_evacuation: 0,
+            number_of_towns_with_fire_prevention: 0,
+            number_of_towns_with_toilets: 0,
+            number_of_towns_without_pest_animals: 0,
+            number_of_towns_with_owner_complaint: 0,
+            number_of_towns_with_justice_procedure: 0,
+            number_of_towns_with_police: 0,
         },
         departement: {
             name: departement.name,
@@ -74,11 +85,20 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
                     number_of_towns_with_electricity: 0,
                     number_of_towns_with_trash_evacuation: 0,
                     number_of_towns_with_fire_prevention: 0,
-                    number_of_towns_with_working_toilets: 0,
-                    number_of_towns_with_absence_of_pest_animals: 0,
+                    number_of_towns_with_toilets: 0,
+                    number_of_towns_without_pest_animals: 0,
                     number_of_towns_with_owner_complaint: 0,
                     number_of_towns_with_justice_procedure: 0,
                     number_of_towns_with_police: 0,
+                    percentage_of_towns_with_water: 0,
+                    percentage_of_towns_with_electricity: 0,
+                    percentage_of_towns_with_trash_evacuation: 0,
+                    percentage_of_towns_with_fire_prevention: 0,
+                    percentage_of_towns_with_toilets: 0,
+                    percentage_of_towns_without_pest_animals: 0,
+                    percentage_of_towns_with_owner_complaint: 0,
+                    percentage_of_towns_with_justice_procedure: 0,
+                    percentage_of_towns_with_police: 0,
 
                 },
                 city: {
@@ -114,41 +134,52 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
         }
         if (row.population_couples !== null) {
             hashCities[row.city_code].summary.number_of_households += row.population_couples;
+            metrics.summary.number_of_households += row.population_couples;
         }
         if (row.population_minors !== null) {
             hashCities[row.city_code].summary.number_of_minors += row.population_minors;
+            metrics.summary.number_of_minors += row.population_minors;
         }
         if (livingConditionsStatuses.water.status === 'good') {
             hashCities[row.city_code].summary.number_of_towns_with_water += 1;
+            metrics.summary.number_of_towns_with_water += 1;
         }
 
         if (livingConditionsStatuses.electricity.status === 'good') {
             hashCities[row.city_code].summary.number_of_towns_with_electricity += 1;
+            metrics.summary.number_of_towns_with_electricity += 1;
         }
         if (livingConditionsStatuses.trash.status === 'good') {
             hashCities[row.city_code].summary.number_of_towns_with_trash_evacuation += 1;
+            metrics.summary.number_of_towns_with_trash_evacuation += 1;
         }
         if (livingConditionsStatuses.fire_prevention.status === 'good') {
             hashCities[row.city_code].summary.number_of_towns_with_fire_prevention += 1;
+            metrics.summary.number_of_towns_with_fire_prevention += 1;
         }
         if (livingConditionsStatuses.sanitary.status === 'good') {
-            hashCities[row.city_code].summary.number_of_towns_with_working_toilets += 1;
+            hashCities[row.city_code].summary.number_of_towns_with_toilets += 1;
+            metrics.summary.number_of_towns_with_toilets += 1;
         }
         if (livingConditionsStatuses.pest_animals.status === 'good') {
-            hashCities[row.city_code].summary.number_of_towns_with_absence_of_pest_animals += 1;
+            hashCities[row.city_code].summary.number_of_towns_without_pest_animals += 1;
+            metrics.summary.number_of_towns_without_pest_animals += 1;
         }
 
         if (row.owner_complaint === true) {
             hashCities[row.city_code].summary.number_of_towns_with_owner_complaint += 1;
+            metrics.summary.number_of_towns_with_owner_complaint += 1;
         }
         if (row.justice_procedure === true) {
             hashCities[row.city_code].summary.number_of_towns_with_justice_procedure += 1;
+            metrics.summary.number_of_towns_with_justice_procedure += 1;
         }
-        if (row.police_status === true) {
+        if (row.police_status === 'granted') {
             hashCities[row.city_code].summary.number_of_towns_with_police += 1;
+            metrics.summary.number_of_towns_with_police += 1;
         }
 
-        // on ajoute la donée du site
+        // on ajoute la donnée du site
         const town:ShantytownMetrics = {
             latitude: row.latitude,
             longitude: row.longitude,
@@ -166,13 +197,37 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
             absence_of_pest_animals: livingConditionsStatuses.pest_animals.status,
             owner_complaint: row.owner_complaint,
             justice_procedure: row.justice_procedure,
-            police: row.police_status,
+            police: null,
             origins: row.origins,
         };
+
+        if (row.police_status === 'granted') {
+            town.police = true;
+        } else if (row.police_status === null) {
+            town.police = null;
+        } else {
+            town.police = false;
+        }
 
         hashCities[row.city_code].towns.push(town);
     });
 
-    metrics.cities = Object.values(hashCities);
+
+    metrics.cities = Object.values(hashCities).map(cityMetric => ({
+        ...cityMetric,
+        summary: {
+            ...cityMetric.summary,
+            percentage_of_towns_with_water: Math.round((cityMetric.summary.number_of_towns_with_water * 100) / cityMetric.summary.number_of_towns),
+            percentage_of_towns_with_electricity: Math.round((cityMetric.summary.number_of_towns_with_electricity * 100) / cityMetric.summary.number_of_towns),
+            percentage_of_towns_with_trash_evacuation: Math.round((cityMetric.summary.number_of_towns_with_trash_evacuation * 100) / cityMetric.summary.number_of_towns),
+            percentage_of_towns_with_fire_prevention: Math.round((cityMetric.summary.number_of_towns_with_fire_prevention * 100) / cityMetric.summary.number_of_towns),
+            percentage_of_towns_with_toilets: Math.round((cityMetric.summary.number_of_towns_with_toilets * 100) / cityMetric.summary.number_of_towns),
+            percentage_of_towns_without_pest_animals: Math.round((cityMetric.summary.number_of_towns_without_pest_animals * 100) / cityMetric.summary.number_of_towns),
+            percentage_of_towns_with_owner_complaint: Math.round((cityMetric.summary.number_of_towns_with_owner_complaint * 100) / cityMetric.summary.number_of_towns),
+            percentage_of_towns_with_justice_procedure: Math.round((cityMetric.summary.number_of_towns_with_justice_procedure * 100) / cityMetric.summary.number_of_towns),
+            percentage_of_towns_with_police: Math.round((cityMetric.summary.number_of_towns_with_police * 100) / cityMetric.summary.number_of_towns),
+        },
+
+    }));
     return metrics;
 };

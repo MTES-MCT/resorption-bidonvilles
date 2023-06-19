@@ -6,7 +6,7 @@
 
         <tbody>
             <CitySubTable
-                v-for="city in enrichedMetrics"
+                v-for="city in metrics.cities"
                 :key="city.code"
                 :data="city"
                 :columns="columns"
@@ -15,7 +15,7 @@
                 @townClick="onTownClick"
             />
 
-            <TotalRow :columns="columns" :metrics="enrichedMetrics" />
+            <TotalRow :columns="columns" :metrics="metrics" />
         </tbody>
     </table>
 </template>
@@ -51,7 +51,7 @@
 </style>
 
 <script setup>
-import { computed, toRefs } from "vue";
+import { toRefs } from "vue";
 
 import CitySubTable from "./CitySubTable.vue";
 import HeaderRow from "../rows/HeaderRow.vue";
@@ -81,43 +81,4 @@ function onUnhighlight(...args) {
 function onTownClick(...args) {
     emit("townClick", ...args);
 }
-
-const enrichedMetrics = computed(() => {
-    const base = columns.value.reduce(
-        (acc, { uid, default: defaultValue }) => ({
-            ...acc,
-            [uid]: defaultValue,
-        }),
-        {}
-    );
-    const [primaryFns, secondaryFns] = columns.value.reduce(
-        (acc, { primaryMetric, secondaryMetric }) => {
-            if (primaryMetric) {
-                acc[0].push(primaryMetric);
-            }
-            if (secondaryMetric) {
-                acc[1].push(secondaryMetric);
-            }
-
-            return acc;
-        },
-        [[], []]
-    );
-
-    return metrics.value.cities.map((city) => {
-        const m = {
-            ...city,
-            summary: city.towns.reduce(
-                (acc, town) => {
-                    primaryFns.forEach((fn) => fn(acc, town, city));
-                    return acc;
-                },
-                { ...base }
-            ),
-        };
-
-        secondaryFns.forEach((fn) => fn(m.summary, city));
-        return m;
-    });
-});
 </script>

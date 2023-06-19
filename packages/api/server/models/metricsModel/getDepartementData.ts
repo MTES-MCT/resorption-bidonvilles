@@ -23,7 +23,7 @@ export type DepartementMetricsRawData = {
     population_minors: number | null,
     owner_complaint: boolean | null,
     justice_procedure: boolean | null,
-    police_status: boolean | null,
+    police_status: string,
     field_type: string,
     origins: Origin[],
     out_of_date: boolean,

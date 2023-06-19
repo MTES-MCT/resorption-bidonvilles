@@ -7,7 +7,4 @@ export default {
     headComponent: TownsHead,
     bodyComponent: TownsBody,
     default: null,
-    primaryMetric(summary, town, city) {
-        summary.number_of_towns = city.towns.length;
-    },
 };

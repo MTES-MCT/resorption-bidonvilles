@@ -1,7 +1,7 @@
 <template>
-    {{ data.summary.number_of_justice_procedure }}<br />
+    {{ data.summary.number_of_towns_with_justice_procedure }}<br />
     <span class="text-sm"
-        >({{ data.summary.percentage_of_justice_procedure }} %)</span
+        >({{ data.summary.percentage_of_towns_with_justice_procedure }} %)</span
     >
 </template>
 

@@ -1,6 +1,8 @@
 <template>
-    {{ data.summary.number_of_complaints }}<br />
-    <span class="text-sm">({{ data.summary.percentage_of_complaints }} %)</span>
+    {{ data.summary.number_of_towns_with_owner_complaint }}<br />
+    <span class="text-sm"
+        >({{ data.summary.percentage_of_towns_with_owner_complaint }} %)</span
+    >
 </template>
 
 <script setup>

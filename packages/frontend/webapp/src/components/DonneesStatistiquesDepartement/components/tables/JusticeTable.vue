@@ -2,9 +2,9 @@
     <TemplateTable
         :columns="
             pick([
-                'number_of_complaints',
-                'number_of_justice_procedure',
-                'number_of_police',
+                'number_of_towns_with_owner_complaint',
+                'number_of_towns_with_justice_procedure',
+                'number_of_towns_with_police',
             ])
         "
         :metrics="metrics"

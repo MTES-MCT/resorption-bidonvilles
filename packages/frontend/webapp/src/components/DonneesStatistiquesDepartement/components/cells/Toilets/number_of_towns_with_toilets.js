@@ -1,4 +1,3 @@
-import setPercentageOf from "../../../utils/setPercentageOf";
 import ToiletsBody from "./ToiletsBody.vue";
 import ToiletsHead from "./ToiletsHead.vue";
 
@@ -8,11 +7,4 @@ export default {
     headComponent: ToiletsHead,
     bodyComponent: ToiletsBody,
     default: 0,
-    primaryMetric(summary, town) {
-        summary.number_of_towns_with_toilets +=
-            town.working_toilets === "good" ? 1 : 0;
-    },
-    secondaryMetric(summary, city) {
-        setPercentageOf("number_of_towns_with_toilets", summary, city);
-    },
 };

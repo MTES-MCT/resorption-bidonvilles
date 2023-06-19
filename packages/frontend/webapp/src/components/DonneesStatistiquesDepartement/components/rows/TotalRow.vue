@@ -2,8 +2,10 @@
     <tr class="bg-blue100 text-right">
         <td class="text-left font-bold py-1">Total</td>
         <td v-for="col in columns" :key="col.uid">
-            <template v-if="col.primaryMetric">{{ totals[col.uid] }}</template>
-            <template v-else>&nbsp;</template>
+            <div v-if="totals[col.uid] !== undefined">
+                {{ totals[col.uid] }}
+            </div>
+            <div v-else>&nbsp;</div>
         </td>
     </tr>
 </template>
@@ -26,13 +28,16 @@ const { columns, metrics } = toRefs(props);
 const totals = computed(() => {
     const totals = {};
     columns.value.forEach((col) => {
-        totals[col.uid] = 0;
-    });
-
-    metrics.value.forEach(({ summary }) => {
-        columns.value.forEach((col) => {
-            totals[col.uid] += summary[col.uid] || 0;
-        });
+        if (metrics.value.summary[col.uid] === undefined) {
+            return;
+        }
+        if (metrics.value.summary[col.uid] === null) {
+            totals[col.uid] = 0;
+        } else if (metrics.value.summary[col.uid].all !== undefined) {
+            totals[col.uid] = metrics.value.summary[col.uid].all;
+        } else {
+            totals[col.uid] = metrics.value.summary[col.uid];
+        }
     });
 
     return totals;
