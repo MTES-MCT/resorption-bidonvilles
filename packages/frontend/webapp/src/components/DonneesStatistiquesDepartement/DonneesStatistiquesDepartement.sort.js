@@ -1,9 +1,9 @@
 function sortByCityName(a, b, order) {
     if (order === "asc") {
         return a.city.name >= b.city.name ? 1 : -1;
-    } else {
-        return a.city.name <= b.city.name ? 1 : -1;
     }
+
+    return a.city.name <= b.city.name ? 1 : -1;
 }
 
 function sortBySummaryKey(key) {
@@ -11,24 +11,30 @@ function sortBySummaryKey(key) {
         if (a.summary[key] === b.summary[key]) {
             return sortByCityName(a, b, "asc");
         }
+
         if (order === "asc") {
             return a.summary[key] > b.summary[key] ? 1 : -1;
-        } else {
-            return a.summary[key] < b.summary[key] ? 1 : -1;
         }
+
+        return a.summary[key] < b.summary[key] ? 1 : -1;
     };
 }
 
 function sortByKeyName(key) {
     return (a, b, order) => {
         if (a[key] === b[key]) {
+            if (key === "usename") {
+                return 0;
+            }
+
             return sortByKeyName("usename")(a, b, "asc");
         }
+
         if (order === "asc") {
             return a[key] > b[key] ? 1 : -1;
-        } else {
-            return a[key] < b[key] ? 1 : -1;
         }
+
+        return a[key] < b[key] ? 1 : -1;
     };
 }
 
@@ -40,19 +46,20 @@ function sortLivingConditionByKeyName(key) {
         ) {
             return sortByKeyName("usename")(a, b, "asc");
         }
+
         if (order === "asc") {
             if (a[key] === "good") {
                 return 1;
             }
 
             return -1;
-        } else {
-            if (a[key] === "good") {
-                return -1;
-            }
-
-            return 1;
         }
+
+        if (a[key] === "good") {
+            return -1;
+        }
+
+        return 1;
     };
 }
 
