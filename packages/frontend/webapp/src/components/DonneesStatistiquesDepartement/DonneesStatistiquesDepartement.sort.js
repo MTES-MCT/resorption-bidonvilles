@@ -1,8 +1,8 @@
 function sortByCityName(a, b, order) {
     if (order === "asc") {
-        return a.city.name >= b.city.name;
+        return a.city.name >= b.city.name ? 1 : -1;
     } else {
-        return a.city.name <= b.city.name;
+        return a.city.name <= b.city.name ? 1 : -1;
     }
 }
 
@@ -12,9 +12,9 @@ function sortBySummaryKey(key) {
             return sortByCityName(a, b, "asc");
         }
         if (order === "asc") {
-            return a.summary[key] > b.summary[key];
+            return a.summary[key] > b.summary[key] ? 1 : -1;
         } else {
-            return a.summary[key] < b.summary[key];
+            return a.summary[key] < b.summary[key] ? 1 : -1;
         }
     };
 }
@@ -25,9 +25,9 @@ function sortByKeyName(key) {
             return sortByKeyName("usename")(a, b, "asc");
         }
         if (order === "asc") {
-            return a[key] > b[key];
+            return a[key] > b[key] ? 1 : -1;
         } else {
-            return a[key] < b[key];
+            return a[key] < b[key] ? 1 : -1;
         }
     };
 }
@@ -42,14 +42,16 @@ function sortLivingConditionByKeyName(key) {
         }
         if (order === "asc") {
             if (a[key] === "good") {
-                return true;
+                return 1;
             }
-            return false;
+
+            return -1;
         } else {
             if (a[key] === "good") {
-                return false;
+                return -1;
             }
-            return true;
+
+            return 1;
         }
     };
 }
@@ -61,18 +63,19 @@ function sortJusticeByKeyName(key) {
         }
         if (order === "asc") {
             if (a[key] === true) {
-                return true;
+                return 1;
             } else if (a[key] === false && b[key] === null) {
-                return true;
+                return 1;
             }
-            return false;
+
+            return -1;
         } else {
             if (a[key] === true) {
-                return false;
+                return -1;
             } else if (a[key] === false && b[key] === null) {
-                return false;
+                return -1;
             }
-            return true;
+            return 1;
         }
     };
 }
