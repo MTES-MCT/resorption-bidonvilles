@@ -41,6 +41,10 @@ const datesAreNotLoaded = computed(() => {
         return true;
     }
 
+    if (!from.value || !to.value) {
+        return false;
+    }
+
     return (
         from.value.toISOString().slice(0, 10) !==
             metricsStore.loadedDates.from.toISOString().slice(0, 10) ||
