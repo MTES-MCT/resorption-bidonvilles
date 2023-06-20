@@ -70,19 +70,21 @@ export default async (user, departementCode: string): Promise<DepartementMetrics
             LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
             GROUP BY s.shantytown_id),
         computed_toilet_types AS (
-        SELECT
-            s.shantytown_id AS fk_shantytown,
-            string_to_array(array_to_string(array_agg(stt.toilet_type), ','), ',') AS toilet_types
-        FROM shantytowns s
-        LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = s.shantytown_id
-        GROUP BY s.shantytown_id
+            SELECT
+                s.shantytown_id AS fk_shantytown,
+                string_to_array(array_to_string(array_agg(stt.toilet_type), ','), ',') AS toilet_types
+            FROM shantytowns s
+            LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = s.shantytown_id
+            GROUP BY s.shantytown_id
         ),
-        computed_electricity_types AS (SELECT
-            s.shantytown_id AS fk_shantytown,
-            array_remove(array_agg(eat.electricity_access_type::text), NULL) AS electricity_access_types
-        FROM shantytowns s
-        LEFT JOIN electricity_access_types eat ON eat.fk_shantytown = s.shantytown_id
-        GROUP BY s.shantytown_id)
+        computed_electricity_types AS (
+            SELECT
+                s.shantytown_id AS fk_shantytown,
+                array_remove(array_agg(eat.electricity_access_type::text), NULL) AS electricity_access_types
+            FROM shantytowns s
+            LEFT JOIN electricity_access_types eat ON eat.fk_shantytown = s.shantytown_id
+            GROUP BY s.shantytown_id
+        )
         SELECT
             shantytowns.shantytown_id,
             shantytowns.name,
