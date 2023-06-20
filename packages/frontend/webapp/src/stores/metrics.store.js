@@ -37,6 +37,10 @@ export const useMetricsStore = defineStore("metrics", () => {
         collapsedStatuses.value = {};
         from.value.setTime(new Date());
         to.value.setTime(new Date());
+        loaded.value = {
+            from: null,
+            to: null,
+        };
 
         from.value.setDate(from.value.getDate() - 8);
         to.value.setDate(to.value.getDate() - 1);
