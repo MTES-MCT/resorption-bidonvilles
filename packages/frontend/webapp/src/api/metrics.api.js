@@ -10,6 +10,8 @@ export function getNationMetrics(from, to) {
 
 export function getDepartementMetrics(departementCode) {
     return axios.get(
-        `/towns/metrics/departement?departement_code=${departementCode}`
+        `/towns/metrics/departement?departement_code=${encodeURIComponent(
+            departementCode
+        )}`
     );
 }
