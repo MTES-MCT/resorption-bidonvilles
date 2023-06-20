@@ -38,16 +38,19 @@
                 <Button
                     variant="primaryOutline"
                     :disabled="departementMetricsStore.evolution.isLoading"
+                    @click="setLastYear"
                     >L'année dernière</Button
                 >
                 <Button
                     variant="primaryOutline"
                     :disabled="departementMetricsStore.evolution.isLoading"
+                    @click="setLastMonth"
                     >Le mois dernier</Button
                 >
                 <Button
                     variant="primaryOutline"
                     :disabled="departementMetricsStore.evolution.isLoading"
+                    @click="setLastWeek"
                     >La semaine dernière</Button
                 >
             </p>
@@ -127,6 +130,44 @@ const datesAreNotLoaded = computed(() => {
                 .slice(0, 10)
     );
 });
+
+function setLastYear() {
+    const newTo = new Date();
+    newTo.setDate(new Date().getDate() - 1);
+
+    const newFrom = new Date();
+    newFrom.setDate(new Date().getDate() - 1);
+    newFrom.setFullYear(new Date().getFullYear() - 1);
+
+    from.value = newFrom;
+    to.value = newTo;
+    update();
+}
+
+function setLastMonth() {
+    const newTo = new Date();
+    newTo.setDate(new Date().getDate() - 1);
+
+    const newFrom = new Date();
+    newFrom.setDate(new Date().getDate() - 1);
+    newFrom.setMonth(new Date().getMonth() - 1);
+
+    from.value = newFrom;
+    to.value = newTo;
+    update();
+}
+
+function setLastWeek() {
+    const newTo = new Date();
+    newTo.setDate(new Date().getDate() - 1);
+
+    const newFrom = new Date();
+    newFrom.setDate(new Date().getDate() - 8);
+
+    from.value = newFrom;
+    to.value = newTo;
+    update();
+}
 
 function update() {
     departementMetricsStore.evolution.from = from.value;
