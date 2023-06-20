@@ -9,15 +9,24 @@
         </p>
 
         <div class="flex mt-4 space-x-6">
-            <ChartBigFigure icon="people-group" :figure="1768" :evolution="3"
+            <ChartBigFigure
+                icon="people-group"
+                :figure="data.figures.total.value"
+                :evolution="data.figures.total.evolution * 100"
                 >Nombre total d'habitants</ChartBigFigure
             >
 
-            <ChartBigFigure icon="people-group" :figure="1256" :evolution="123"
+            <ChartBigFigure
+                icon="people-group"
+                :figure="data.figures.european.value"
+                :evolution="data.figures.european.evolution * 100"
                 >Estimation du nombre d'habitants intra-UE</ChartBigFigure
             >
 
-            <ChartBigFigure icon="people-group" :figure="512" :evolution="-12"
+            <ChartBigFigure
+                icon="people-group"
+                :figure="data.figures.foreign.value"
+                :evolution="data.figures.foreign.evolution * 100"
                 >Estimation du nombre d'habitants extra-UE</ChartBigFigure
             >
         </div>
@@ -31,32 +40,37 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
+import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { LineChart } from "@/helpers/chart";
 import ChartBigFigure from "./ChartBigFigure.vue";
 
-const chartData = {
-    labels: ["January", "February", "March"],
+const departementMetricsStore = useDepartementMetricsStore();
+const data = departementMetricsStore.evolution.data.inhabitants.inhabitants;
+
+const chartData = computed(() => ({
+    labels: data.charts.labels,
     datasets: [
         {
             label: "Nombre total d'habitants",
             backgroundColor: ["rgba(242, 242, 249, 0.7)"],
             fill: true,
-            data: [40, 20, 12],
+            data: data.charts.total,
         },
         {
             label: "Nombre d'habitants intra-UE",
             backgroundColor: ["rgba(253, 242, 243, 0.7)"],
             fill: true,
-            data: [35, 2, 150],
+            data: data.charts.european,
         },
         {
             label: "Nombre d'habitants extra-UE",
             backgroundColor: ["rgba(233, 246, 238, 0.7)"],
             fill: true,
-            data: [123, 92, 96],
+            data: data.charts.foreign,
         },
     ],
-};
+}));
 const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,

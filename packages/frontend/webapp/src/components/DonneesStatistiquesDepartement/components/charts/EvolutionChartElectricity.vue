@@ -7,15 +7,25 @@
         </p>
 
         <div class="flex mt-4 space-x-6">
-            <ChartBigFigure icon="map-pin" :figure="15" :evolution="3"
+            <ChartBigFigure
+                icon="map-pin"
+                :figure="data.figures.towns_total.value"
+                :evolution="data.figures.towns_total.evolution * 100"
                 >Nombre total de sites</ChartBigFigure
             >
 
-            <ChartBigFigure icon="people-group" :figure="123" :evolution="-2"
+            <ChartBigFigure
+                icon="people-group"
+                :figure="data.figures.inhabitants_total.value"
+                :evolution="data.figures.inhabitants_total.evolution * 100"
                 >Nombre total de personnes</ChartBigFigure
             >
 
-            <ChartBigFigure icon="bolt" :figure="12" :evolution="0" invert
+            <ChartBigFigure
+                icon="bolt"
+                :figure="data.figures.access_to_electricity.value"
+                :evolution="data.figures.access_to_electricity.evolution * 100"
+                invert
                 >Nombre de personnes avec accès à l'électricité</ChartBigFigure
             >
         </div>
@@ -29,26 +39,32 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
+import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { LineChart } from "@/helpers/chart";
 import ChartBigFigure from "./ChartBigFigure.vue";
 
-const chartData = {
-    labels: ["January", "February", "March"],
+const departementMetricsStore = useDepartementMetricsStore();
+const data =
+    departementMetricsStore.evolution.data.livingConditions.electricity;
+
+const chartData = computed(() => ({
+    labels: data.charts.labels,
     datasets: [
         {
             label: "Nombre total de personnes",
             backgroundColor: ["rgba(0, 0, 145, 0.3)"],
             fill: true,
-            data: [125, 115, 123],
+            data: data.charts.inhabitants_total,
         },
         {
             label: "Nombre de personnes avec accès à l'électricité",
             backgroundColor: ["#FFB7A5"],
             fill: true,
-            data: [0, 10, 12],
+            data: data.charts.access_to_electricity,
         },
     ],
-};
+}));
 const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
