@@ -15,3 +15,17 @@ export function getDepartementMetrics(departementCode) {
         )}`
     );
 }
+
+export function getDepartementMetricsEvolution(departementCode, from, to) {
+    return new Promise((success) => {
+        setTimeout(() => success({}), 2000);
+    });
+
+    // return axios.get(
+    //     `/towns/metrics/departement/${encodeURI(
+    //         departementCode
+    //     )}/evolution?from=${encodeURIComponent(
+    //         from.toISOString().slice(0, 10)
+    //     )}&to=${encodeURIComponent(to.toISOString().slice(0, 10))}`
+    // );
+}

@@ -410,6 +410,12 @@ function onTownClick(town) {
 }
 
 function setFormat(format) {
+    if (format === "chart") {
+        departementMetricsStore.fetchEvolution(
+            departementMetricsStore.departement
+        );
+    }
+
     departementMetricsStore.currentFormat = format;
 }
 

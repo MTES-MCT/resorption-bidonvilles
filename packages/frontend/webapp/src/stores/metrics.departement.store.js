@@ -1,7 +1,10 @@
 import { defineStore } from "pinia";
 import { computed, ref, watch } from "vue";
 import { useEventBus } from "@common/helpers/event-bus";
-import { getDepartementMetrics } from "@/api/metrics.api";
+import {
+    getDepartementMetrics,
+    getDepartementMetricsEvolution,
+} from "@/api/metrics.api";
 import sortFn from "@/components/DonneesStatistiquesDepartement/DonneesStatistiquesDepartement.sort";
 export const useDepartementMetricsStore = defineStore(
     "departementMetrics",
@@ -17,6 +20,17 @@ export const useDepartementMetricsStore = defineStore(
         });
         const metrics = ref({});
         const currentFormat = ref("table");
+        const evolution = {
+            from: ref(new Date()),
+            to: ref(new Date()),
+            loaded: ref({
+                from: null,
+                to: null,
+            }),
+            isLoading: ref(null),
+            error: ref(null),
+            data: ref(null),
+        };
 
         const filteredMetrics = computed(() => {
             if (
@@ -63,6 +77,18 @@ export const useDepartementMetricsStore = defineStore(
             };
             metrics.value = {};
             currentFormat.value = "table";
+            evolution.from.value.setTime(new Date());
+            evolution.to.value.setTime(new Date());
+            evolution.loaded.value = {
+                from: null,
+                to: null,
+            };
+            evolution.isLoading.value = null;
+            evolution.error.value = null;
+            evolution.data.value = null;
+
+            evolution.from.value.setDate(evolution.from.value.getDate() - 8);
+            evolution.to.value.setDate(evolution.to.value.getDate() - 1);
         }
 
         const { bus } = useEventBus();
@@ -77,6 +103,50 @@ export const useDepartementMetricsStore = defineStore(
             sort,
             metrics,
             currentFormat,
+            evolution,
+            async fetchEvolution(departementCode) {
+                if (evolution.isLoading.value === true) {
+                    return;
+                }
+
+                if (
+                    evolution.loaded.value.from &&
+                    evolution.loaded.value.from.toISOString().slice(0, 10) ===
+                        evolution.from.value.toISOString().slice(0, 10) &&
+                    evolution.loaded.value.to &&
+                    evolution.loaded.value.to.toISOString().slice(0, 10) ===
+                        evolution.to.value.toISOString().slice(0, 10)
+                ) {
+                    return;
+                }
+
+                evolution.isLoading.value = true;
+                evolution.error.value = null;
+                evolution.data.value = null;
+                evolution.loaded.value = {
+                    from: null,
+                    to: null,
+                };
+
+                try {
+                    evolution.data.value = await getDepartementMetricsEvolution(
+                        departementCode,
+                        evolution.from.value,
+                        evolution.to.value
+                    );
+
+                    evolution.loaded.value.from = new Date(
+                        evolution.from.value
+                    );
+                    evolution.loaded.value.to = new Date(evolution.to.value);
+                } catch (error) {
+                    evolution.error.value =
+                        error?.user_message ||
+                        "Une erreur inconnue est survenue";
+                }
+
+                evolution.isLoading.value = false;
+            },
             async fetchDepartement(departementCode) {
                 departement.value = departementCode;
                 const response = await getDepartementMetrics(departementCode);
