@@ -42,7 +42,7 @@
 import { defineProps, toRefs, computed } from "vue";
 import StatistiquesSection from "../StatistiquesSection.vue";
 import StatistiquesSubSection from "../StatistiquesSubSection.vue";
-import { Bar, Line } from "@/helpers/chart.js";
+import { BarChart as Bar, LineChart as Line } from "@/helpers/chart.js";
 
 const props = defineProps({
     stats: {
