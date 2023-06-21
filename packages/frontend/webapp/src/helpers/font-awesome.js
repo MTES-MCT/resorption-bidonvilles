@@ -14,7 +14,7 @@ import {
     faBars,
     faBolt,
     faBook,
-    faBug,
+    faBugSlash,
     faBuilding,
     faBullseye,
     faCalendar,
@@ -128,7 +128,7 @@ library.add(faBars);
 library.add(faBell);
 library.add(faBolt);
 library.add(faBook);
-library.add(faBug);
+library.add(faBugSlash);
 library.add(faBuilding);
 library.add(faBullseye);
 library.add(faCalendar);

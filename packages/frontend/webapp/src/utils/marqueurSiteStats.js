@@ -6,7 +6,7 @@ const iconMap = {
     trash_evacuation: "trash-can",
     fire_prevention: "fire-extinguisher",
     working_toilets: "toilet",
-    absence_of_pest_animals: "bug",
+    absence_of_pest_animals: "bug-slash",
 };
 
 export default (town) => {
