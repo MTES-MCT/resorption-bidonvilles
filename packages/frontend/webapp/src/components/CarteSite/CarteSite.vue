@@ -77,7 +77,7 @@
 
             <!-- journal du site -->
             <p v-if="numberOfComments > 0" class="mt-6">
-                <Link :to="`/site/${shantytown.id}#journal_du_site`"
+                <Link @click.stop="routeToJournalDuSite"
                     >{{ numberOfComments }} message{{
                         numberOfComments !== 1 ? "s" : ""
                     }}
@@ -86,7 +86,7 @@
         </main>
 
         <footer class="mt-auto">
-            <Link :to="`/site/${shantytown.id}`" @click="routeToDetailsPage"
+            <Link @click="routeToDetailsPage"
                 >Voir la fiche du site <Icon icon="arrow-right"
             /></Link>
         </footer>
@@ -125,5 +125,9 @@ const numberOfComments = computed(
 
 function routeToDetailsPage() {
     router.push(`/site/${shantytown.value.id}`);
+}
+
+function routeToJournalDuSite() {
+    router.push(`/site/${shantytown.value.id}#journal_du_site`);
 }
 </script>
