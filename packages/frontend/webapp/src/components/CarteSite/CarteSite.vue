@@ -76,17 +76,17 @@
             </p>
 
             <!-- journal du site -->
-            <p v-if="shantytown.comments.regular.length > 0" class="mt-6">
-                <Link :to="`/site/${shantytown.id}#journal_du_site`"
-                    >{{ shantytown.comments.regular.length }} message{{
-                        shantytown.comments.regular.length !== 1 ? "s" : ""
+            <p v-if="numberOfComments > 0" class="mt-6">
+                <Link @click.stop="routeToJournalDuSite"
+                    >{{ numberOfComments }} message{{
+                        numberOfComments !== 1 ? "s" : ""
                     }}
                 </Link>
             </p>
         </main>
 
         <footer class="mt-auto">
-            <Link :to="`/site/${shantytown.id}`" @click="routeToDetailsPage"
+            <Link @click="routeToDetailsPage"
                 >Voir la fiche du site <Icon icon="arrow-right"
             /></Link>
         </footer>
@@ -117,7 +117,17 @@ const pinVariant = computed(() => {
     return months >= 3 ? "pin_red" : "pin";
 });
 
+const numberOfComments = computed(
+    () =>
+        shantytown.value.comments.regular.length +
+        shantytown.value.comments.covid.length
+);
+
 function routeToDetailsPage() {
     router.push(`/site/${shantytown.value.id}`);
+}
+
+function routeToJournalDuSite() {
+    router.push(`/site/${shantytown.value.id}#journal_du_site`);
 }
 </script>

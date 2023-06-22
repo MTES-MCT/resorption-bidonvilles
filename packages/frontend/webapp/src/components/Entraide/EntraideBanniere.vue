@@ -25,9 +25,10 @@
                 @submit="redirectToNewQuestion"
             >
                 <TextInput
-                    class="mb-0 flex-1"
+                    class="flex-1"
                     placeholder="Votre question ... "
                     v-model="question"
+                    withoutMargin="true"
                 />
                 <Button size="sm">Demander</Button>
             </form>

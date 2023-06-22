@@ -63,7 +63,7 @@ export default async (numberOfActivities, lastDate, maxDate): Promise<QuestionAc
         LEFT JOIN users authors ON authors.user_id = questions.created_by
         LEFT JOIN aggregate_question_tags  ON aggregate_question_tags.id = questions.question_id
         ${where.length > 0 ? `WHERE (${where.join(') AND (')})` : ''}
-        ORDER BY questions.created_at
+        ORDER BY questions.created_at DESC
         ${limit}
         `,
         {

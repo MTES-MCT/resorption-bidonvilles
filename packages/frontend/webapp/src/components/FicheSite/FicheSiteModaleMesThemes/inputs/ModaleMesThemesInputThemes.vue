@@ -6,12 +6,14 @@
             :value="themeId"
             :label="themes[themeId]"
             name="themes"
+            v-model="values.themes"
         />
     </CheckableGroup>
 </template>
 
 <script setup>
 import { computed } from "vue";
+import { useFormValues } from "vee-validate";
 import { useConfigStore } from "@/stores/config.store";
 import labels from "../FicheSiteModaleMesThemes.labels";
 
@@ -25,4 +27,6 @@ const themes = computed(() => {
 const themeIds = computed(() => {
     return Object.keys(themes.value).filter((id) => id !== "autre");
 });
+
+const values = useFormValues();
 </script>
