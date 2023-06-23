@@ -7,8 +7,8 @@ import getAddressSimpleOf from '#server/models/shantytownModel/_common/getAddres
 import getUsenameOf from '#server/models/shantytownModel/_common/getUsenameOf';
 import { DepartementRawData } from '#server/models/departementModel/findOne';
 import { RegionRawData } from '#server/models/regionModel/findOne';
+import getLivingConditionsStatuses from '#server/models/shantytownModel/_common/livingConditions/v2/statuses/main';
 import { CityMetrics, DepartementMetrics, ShantytownMetrics } from '#root/types/resources/DepartementMetrics.d';
-import getLivingConditionsStatuses from '../../models/shantytownModel/_common/livingConditions/v2/statuses/main';
 
 type CityMetricsObject = {
     [key: string]: CityMetrics;

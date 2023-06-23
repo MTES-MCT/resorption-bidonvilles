@@ -39,6 +39,7 @@ import actionUpdate from './actions/update';
 import justiceReaderFindByLocation from './justiceReaders/findByLocation';
 import organizationSearch from './organizations/search';
 import getDepartementMetrics from './metrics/getDepartementMetrics';
+import getDepartementEvolutionMetrics from './metrics/getDepartementEvolutionMetrics';
 import getNationMetrics from './metrics/getNationMetrics';
 
 export default {
@@ -92,6 +93,7 @@ export default {
     },
     metrics: {
         getDepartementMetrics,
+        getDepartementEvolutionMetrics,
         getNationMetrics,
     },
     note: {
