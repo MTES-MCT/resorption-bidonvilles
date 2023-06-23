@@ -12,21 +12,21 @@
             <ChartBigFigure
                 icon="people-group"
                 :figure="data.figures.total.value"
-                :evolution="data.figures.total.evolution * 100"
+                :evolution="data.figures.total.evolution"
                 >Nombre total d'habitants</ChartBigFigure
             >
 
             <ChartBigFigure
                 icon="people-group"
                 :figure="data.figures.european.value"
-                :evolution="data.figures.european.evolution * 100"
+                :evolution="data.figures.european.evolution"
                 >Estimation du nombre d'habitants intra-UE</ChartBigFigure
             >
 
             <ChartBigFigure
                 icon="people-group"
                 :figure="data.figures.foreign.value"
-                :evolution="data.figures.foreign.evolution * 100"
+                :evolution="data.figures.foreign.evolution"
                 >Estimation du nombre d'habitants extra-UE</ChartBigFigure
             >
         </div>

@@ -9,7 +9,7 @@ export default [
     },
     {
         id: "livingConditions",
-        label: "Conditions de vie",
+        label: "Conditions de vie (par habitants)",
     },
     {
         id: "justice",

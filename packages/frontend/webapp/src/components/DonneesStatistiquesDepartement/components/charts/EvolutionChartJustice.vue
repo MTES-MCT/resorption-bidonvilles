@@ -12,21 +12,21 @@
             <ChartBigFigure
                 icon="person-military-pointing"
                 :figure="data.figures.police.value"
-                :evolution="data.figures.police.evolution * 100"
+                :evolution="data.figures.police.evolution"
                 >Nombre total de CFP</ChartBigFigure
             >
 
             <ChartBigFigure
                 icon="scroll"
                 :figure="data.figures.complaints.value"
-                :evolution="data.figures.complaints.evolution * 100"
+                :evolution="data.figures.complaints.evolution"
                 >Nombre total de plaintes</ChartBigFigure
             >
 
             <ChartBigFigure
                 icon="balance-scale"
                 :figure="data.figures.closed_towns.value"
-                :evolution="data.figures.closed_towns.evolution * 100"
+                :evolution="data.figures.closed_towns.evolution"
                 >Nombre de sites fermés suite à une procédure
                 judiciaire</ChartBigFigure
             >

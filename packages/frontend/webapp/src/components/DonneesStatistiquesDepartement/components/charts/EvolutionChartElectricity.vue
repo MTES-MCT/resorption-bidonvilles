@@ -10,21 +10,21 @@
             <ChartBigFigure
                 icon="map-pin"
                 :figure="data.figures.towns_total.value"
-                :evolution="data.figures.towns_total.evolution * 100"
+                :evolution="data.figures.towns_total.evolution"
                 >Nombre total de sites</ChartBigFigure
             >
 
             <ChartBigFigure
                 icon="people-group"
                 :figure="data.figures.inhabitants_total.value"
-                :evolution="data.figures.inhabitants_total.evolution * 100"
+                :evolution="data.figures.inhabitants_total.evolution"
                 >Nombre total de personnes</ChartBigFigure
             >
 
             <ChartBigFigure
                 icon="bolt"
                 :figure="data.figures.access_to_electricity.value"
-                :evolution="data.figures.access_to_electricity.evolution * 100"
+                :evolution="data.figures.access_to_electricity.evolution"
                 invert
                 >Nombre de personnes avec accès à l'électricité</ChartBigFigure
             >
