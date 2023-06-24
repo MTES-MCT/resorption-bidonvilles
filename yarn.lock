@@ -3295,7 +3295,7 @@ __metadata:
     proxyquire: ^2.1.0
     rewiremock: ^3.13.9
     rimraf: ^3.0.2
-    semver: ^7.5.1
+    semver: ^7.5.2
     sequelize: ^6.29.0
     sequelize-cli: ^6.5.0
     sequelize-mock: ^0.10.2
@@ -22486,6 +22486,17 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: d16dbedad53c65b086f79524b9ef766bf38670b2395bdad5c957f824dcc566b624988013564f4812bcace3f9d405355c3635e2007396a39d1bffc71cfec4a2fc
+  languageName: node
+  linkType: hard
+
+"semver@npm:^7.5.2":
+  version: 7.5.3
+  resolution: "semver@npm:7.5.3"
+  dependencies:
+    lru-cache: ^6.0.0
+  bin:
+    semver: bin/semver.js
+  checksum: 9d58db16525e9f749ad0a696a1f27deabaa51f66e91d2fa2b0db3de3e9644e8677de3b7d7a03f4c15bc81521e0c3916d7369e0572dbde250d9bedf5194e2a8a7
   languageName: node
   linkType: hard
 
