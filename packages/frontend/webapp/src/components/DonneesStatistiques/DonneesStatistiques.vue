@@ -1,6 +1,6 @@
 <template>
     <ContentWrapper>
-        <FilArianne />
+        <FilArianne :items="ariane" />
         <Title class="mt-6">Visualisation des données</Title>
         <Header
             class="mt-4"
@@ -53,6 +53,10 @@ const tabs = [
         id: "tableau",
         label: "Tableau",
     },
+];
+const ariane = [
+    { label: "Accueil", to: "/" },
+    { label: "Visualisation des données", to: "/visualisation-donnees" },
 ];
 
 const activeTab = ref("tableau");

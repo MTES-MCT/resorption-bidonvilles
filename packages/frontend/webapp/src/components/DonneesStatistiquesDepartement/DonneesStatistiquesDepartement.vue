@@ -1,5 +1,5 @@
 <template>
-    <FilArianne />
+    <FilArianne :items="ariane" />
     <Title class="mt-6">{{ departement.name }} ({{ departement.code }})</Title>
 
     <section id="donnees" class="pt-6">
@@ -293,6 +293,11 @@ const tables = {
     livingConditions: LivingConditionsTable,
     justice: JusticeTable,
 };
+const ariane = [
+    { label: "Accueil", to: "/" },
+    { label: "Visualisation des données", to: "/visualisation-donnees" },
+    { label: `${departement.value.name} (${departement.value.code})` },
+];
 
 const currentTable = computed(() => {
     return tables[departementMetricsStore.activeTab];
