@@ -10,6 +10,7 @@ export { default as CheckboxUi } from './components/Input/CheckboxUi.vue';
 export { default as DatepickerInput } from './components/Input/DatepickerInput.vue';
 export { default as Dropdown } from './components/Dropdown.vue';
 export { default as ErrorSummary } from './components/ErrorSummary.vue';
+export { default as FilArianne } from './components/FilArianne.vue';
 export { default as Filter } from './components/Filter.vue';
 export { default as FormParagraph} from './components/FormParagraph.vue';
 export { default as Icon } from './components/Icon.vue';

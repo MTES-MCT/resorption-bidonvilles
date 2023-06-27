@@ -38,8 +38,7 @@
 import { onMounted, ref } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store";
 
-import { Button } from "@resorptionbidonvilles/ui";
-import FilArianne from "./FilArianne.vue";
+import { Button, FilArianne } from "@resorptionbidonvilles/ui";
 import Title from "./Title.vue";
 import Header from "./Header.vue";
 import Onglets from "./DonneesStatistiquesDepartementOnglets.vue";

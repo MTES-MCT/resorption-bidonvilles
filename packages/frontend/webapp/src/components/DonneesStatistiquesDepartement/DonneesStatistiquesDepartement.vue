@@ -261,8 +261,7 @@ import formatDate from "@common/utils/formatDate";
 import router from "@/helpers/router";
 import tabs from "./DonneesStatistiquesDepartement.tabs";
 
-import { Icon, Link } from "@resorptionbidonvilles/ui";
-import FilArianne from "../DonneesStatistiques/FilArianne.vue";
+import { FilArianne, Icon, Link } from "@resorptionbidonvilles/ui";
 import Title from "../DonneesStatistiques/Title.vue";
 import Onglets from "../DonneesStatistiques/DonneesStatistiquesDepartementOnglets.vue";
 import CartoDonneesStatistiques from "@/components/CartoDonneesStatistiques/CartoDonneesStatistiques.vue";

@@ -7,5 +7,5 @@
 </template>
 
 <script setup>
-import { Link } from "@resorptionbidonvilles/ui";
+import Link from "./Link.vue";
 </script>
