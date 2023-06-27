@@ -23,7 +23,12 @@
             </template>
         </ViewError>
 
-        <FicheQuestion v-else :question="question" />
+        <template v-else>
+            <ContentWrapper>
+                <FilArianne :items="ariane" class="mb-8" />
+            </ContentWrapper>
+            <FicheQuestion :question="question" />
+        </template>
     </LayoutCommunaute>
 </template>
 
@@ -32,7 +37,8 @@ import { onMounted, ref, computed, watch } from "vue";
 import { useQuestionsStore } from "@/stores/questions.store.js";
 import router from "@/helpers/router";
 
-import { Button } from "@resorptionbidonvilles/ui";
+import { Button, FilArianne } from "@resorptionbidonvilles/ui";
+import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import ViewError from "@/components/ViewError/ViewError.vue";
 import Loading from "@/components/Loading/Loading.vue";
 import LayoutCommunaute from "@/components/LayoutCommunaute/LayoutCommunaute.vue";
@@ -43,6 +49,11 @@ const questionsStore = useQuestionsStore();
 const isLoading = ref(null);
 const error = ref(null);
 const question = ref(null);
+const ariane = computed(() => [
+    { label: "Accueil", to: "/" },
+    { label: "Communauté", to: "/communaute" },
+    { label: question.value.question || "..." },
+]);
 
 const questionId = computed(() => {
     return parseInt(router.currentRoute.value.params.id, 10);

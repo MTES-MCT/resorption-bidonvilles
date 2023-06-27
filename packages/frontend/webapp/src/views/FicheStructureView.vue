@@ -26,7 +26,12 @@
             </template>
         </ViewError>
 
-        <FicheStructure v-else :organization="organization" />
+        <template v-else>
+            <ContentWrapper>
+                <FilArianne :items="ariane" class="mb-8" />
+            </ContentWrapper>
+            <FicheStructure :organization="organization" />
+        </template>
     </LayoutCommunaute>
 </template>
 
@@ -36,7 +41,8 @@ import { useDirectoryStore } from "@/stores/directory.store";
 import router from "@/helpers/router";
 import { registerDirectoryView } from "@/api/statistics.api";
 
-import { Button } from "@resorptionbidonvilles/ui";
+import { Button, FilArianne } from "@resorptionbidonvilles/ui";
+import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import ViewError from "@/components/ViewError/ViewError.vue";
 import Loading from "@/components/Loading/Loading.vue";
 import FicheStructure from "@/components/FicheStructure/FicheStructure.vue";
@@ -54,6 +60,12 @@ const organization = computed(() => {
         ) || null
     );
 });
+const ariane = computed(() => [
+    { label: "Accueil", to: "/" },
+    { label: "Communauté", to: "/communaute" },
+    { label: "Annuaire", to: "/annuaire" },
+    { label: organization.value?.name || "..." },
+]);
 watch(organization, () => {
     if (organization.value !== null) {
         registerView();

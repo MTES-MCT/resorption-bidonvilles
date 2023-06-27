@@ -1,6 +1,9 @@
 <template>
     <LayoutCommunaute :paddingTop="false">
-        <Entraide />
+        <ContentWrapper>
+            <FilArianne :items="ariane" class="my-8" />
+            <Entraide />
+        </ContentWrapper>
     </LayoutCommunaute>
 </template>
 
@@ -9,10 +12,13 @@ import { onMounted } from "vue";
 import { useQuestionsStore } from "@/stores/questions.store";
 import { useDirectoryStore } from "@/stores/directory.store";
 
+import { FilArianne } from "@resorptionbidonvilles/ui";
+import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import LayoutCommunaute from "@/components/LayoutCommunaute/LayoutCommunaute.vue";
 import Entraide from "@/components/Entraide/Entraide.vue";
 
 const questionsStore = useQuestionsStore();
+const ariane = [{ label: "Accueil", to: "/" }, { label: "Communauté" }];
 
 onMounted(() => {
     if (questionsStore.questions.length === 0) {

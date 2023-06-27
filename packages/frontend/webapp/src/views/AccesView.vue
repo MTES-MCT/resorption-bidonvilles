@@ -26,6 +26,7 @@
 
     <Layout v-else>
         <ContentWrapper>
+            <FilArianne :items="ariane" class="mb-8" />
             <FicheAcces :user="enrichedUser" />
         </ContentWrapper>
     </Layout>
@@ -37,7 +38,7 @@ import { useAccesStore } from "@/stores/acces.store.js";
 import router from "@/helpers/router";
 import enrichUserWithLocationName from "@/utils/enrichUserWithLocationName";
 
-import { Button } from "@resorptionbidonvilles/ui";
+import { Button, FilArianne } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
 import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
@@ -45,6 +46,11 @@ import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import FicheAcces from "@/components/FicheAcces/FicheAcces.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 
+const ariane = [
+    { label: "Accueil", to: "/" },
+    { label: "Administration", to: "/acces" },
+    { label: "Fiche utilisateur" },
+];
 const accesStore = useAccesStore();
 const isLoading = ref(null);
 const error = ref(null);
