@@ -47,7 +47,7 @@ export default async (authorId: number, action: Action, commentInput: ActionComm
     // on finalise
     try {
         const [commentRow] = await actionModel.fetchComments(null, [commentId], {}, transaction);
-        comment = serializeComment(commentRow);
+        comment = await serializeComment(commentRow);
         await transaction.commit();
     } catch (error) {
         await transaction.rollback();

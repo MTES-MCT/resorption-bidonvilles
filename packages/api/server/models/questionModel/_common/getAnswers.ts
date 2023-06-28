@@ -64,9 +64,9 @@ export default async (questionIds: number[]): Promise<AnswerHash> => {
         },
     );
 
-    rows.forEach((answer) => {
+    rows.forEach(async (answer) => {
         answers[answer.questionId].push(
-            answerModel.serializeAnswer(answer),
+            await answerModel.serializeAnswer(answer),
         );
     }, {});
 
