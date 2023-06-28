@@ -22,6 +22,16 @@ const config = {
 const attachmentModel = {
     deleteAttachment: sandbox.stub(),
 };
+
+const sequelize = {
+    sequelize: {
+        transaction: sandbox.stub(),
+    },
+};
+const transaction = {
+    commit: sandbox.stub(),
+    rollback: sandbox.stub(),
+};
 rewiremock('#server/config').withDefault(config);
 rewiremock('#server/utils/s3').with({ S3 });
 rewiremock('#server/models/attachmentModel').with(attachmentModel);
@@ -33,21 +43,22 @@ describe('services/attachment/deleteAttachment', () => {
         rewiremock.enable();
         ({ default: deleteAttachment } = await rewiremock.module(() => import('./deleteAttachment')));
     });
+    sequelize.sequelize.transaction.resolves(transaction);
     afterEach(() => {
         rewiremock.disable();
         sandbox.reset();
     });
 
     it('supprime l\'attachment de la base de données', async () => {
-        await deleteAttachment(fakeKeys({ attachment_id: 1 }));
-        expect(attachmentModel.deleteAttachment).to.have.been.calledOnceWithExactly(1);
+        await deleteAttachment(fakeKeys({ attachment_id: 1 }), transaction);
+        expect(attachmentModel.deleteAttachment).to.have.been.calledOnceWithExactly(1, transaction);
     });
 
     it('supprime le fichier original de S3', async () => {
         await deleteAttachment(fakeKeys({
             original_file_key: 'fake-key',
             preview_file_key: null,
-        }));
+        }), transaction);
         expect(S3.send, 'La demande de suppression de fichier n\'a pas été faite').to.have.been.calledOnce;
 
         const { args } = S3.send.getCall(0);
@@ -60,7 +71,7 @@ describe('services/attachment/deleteAttachment', () => {
         await deleteAttachment(fakeKeys({
             original_file_key: 'fake-key',
             preview_file_key: 'fake-preview-key',
-        }));
+        }), transaction);
         expect(S3.send, 'La demande de suppression de fichier n\'a pas été faite').to.have.been.calledTwice;
 
         const { args } = S3.send.getCall(1);
@@ -73,7 +84,7 @@ describe('services/attachment/deleteAttachment', () => {
         S3.send.throws(new Error('fake error'));
 
         try {
-            await deleteAttachment(fakeKeys());
+            await deleteAttachment(fakeKeys(), transaction);
         } catch (error) {
             expect.fail('L\'exception n\'aurait pas du être lancée');
         }
@@ -84,7 +95,7 @@ describe('services/attachment/deleteAttachment', () => {
         attachmentModel.deleteAttachment.rejects(error);
 
         try {
-            await deleteAttachment(fakeKeys());
+            await deleteAttachment(fakeKeys(), transaction);
         } catch (e) {
             expect(e).to.be.an.instanceOf(ServiceError);
             expect(e.code).to.equal('delete_failed');
