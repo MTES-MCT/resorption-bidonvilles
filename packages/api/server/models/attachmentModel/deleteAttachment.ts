@@ -1,10 +1,11 @@
 import { sequelize } from '#db/sequelize';
-import { QueryTypes } from 'sequelize';
+import { QueryTypes, Transaction } from 'sequelize';
 
-export default (attachmentId: number): Promise<void> => sequelize.query(
+export default (attachmentId: number, transaction: Transaction = undefined): Promise<void> => sequelize.query(
     'DELETE FROM attachments WHERE attachment_id = :attachmentId',
     {
         type: QueryTypes.DELETE,
         replacements: { attachmentId },
+        transaction,
     },
 );
