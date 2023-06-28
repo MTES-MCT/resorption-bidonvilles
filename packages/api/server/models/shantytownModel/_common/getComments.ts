@@ -8,6 +8,31 @@ import serializeComment from './serializeComment';
 
 type CommentObject = { [key: number]: ShantytownComment };
 
+async function serializeRows(rows: any[], commentTags: any) {
+    const serializedRows = await rows.reduce(async (accPromise, row: any) => {
+        const acc = await accPromise;
+
+        if (!acc[row.shantytownId]) {
+            acc[row.shantytownId] = [];
+        }
+
+        const serializedComment = await serializeComment({
+            ...row,
+            tags: commentTags[row.commentId] || [],
+        });
+
+        // Si serializeComment retourne plusieurs promesses, utilise Promise.all pour les résoudre
+        if (Array.isArray(serializedComment)) {
+            acc[row.shantytownId].push(...await Promise.all(serializedComment));
+        } else {
+            acc[row.shantytownId].push(serializedComment);
+        }
+
+        return acc;
+    }, Promise.resolve({}));
+
+    return serializedRows;
+}
 export default async (user, shantytownIds, covid = false): Promise<CommentObject> => {
     if (covid === false && !user.isAllowedTo('list', 'shantytown_comment')) {
         return {};
@@ -122,15 +147,5 @@ export default async (user, shantytownIds, covid = false): Promise<CommentObject
         );
     }
 
-    return rows.reduce((acc, row: ShantytownCommentRow) => {
-        if (!acc[row.shantytownId]) {
-            acc[row.shantytownId] = [];
-        }
-
-        acc[row.shantytownId].push(serializeComment({
-            ...row,
-            tags: commentTags[row.commentId] || [],
-        }));
-        return acc;
-    }, {});
+    return serializeRows(rows, commentTags);
 };
