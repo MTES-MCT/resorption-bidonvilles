@@ -53,5 +53,5 @@ export default async (): Promise<Answer[]> => {
         },
     );
 
-    return rows.map(serializeAnswer);
+    return Promise.all(rows.map(serializeAnswer));
 };

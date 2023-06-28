@@ -75,5 +75,5 @@ export default async (): Promise<Question[]> => {
         },
     );
 
-    return rows.map(question => serializeQuestion(question));
+    return Promise.all(rows.map(question => serializeQuestion(question)));
 };
