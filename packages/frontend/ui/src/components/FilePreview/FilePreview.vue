@@ -6,8 +6,8 @@
             <p class="truncate">{{ file.name }}</p>
             <p class="text-G500"><span>{{ file.extension?.toUpperCase() }}</span> {{ humanFileSize(file.size) }}</p>
         </div>
-        <Button v-if="onDelete" :class="(file.state === 'draft' || isHovered) ? 'visible' : 'invisible'" type="button"
-            icon="trash-alt" size="sm" @click.prevent="handleDelete" variant="primaryOutlineAlt" />
+        <!-- <Button v-if="onDelete" :class="(file.state === 'draft' || isHovered) ? 'visible' : 'invisible'" type="button"
+            icon="trash-alt" size="sm" @click.prevent="handleDelete" variant="primaryOutlineAlt" /> -->
     </a>
 </template>
 
