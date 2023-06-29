@@ -24,6 +24,9 @@
 
     <Layout v-else>
         <ContentWrapper>
+            <FilArianne :items="ariane" />
+        </ContentWrapper>
+        <ContentWrapper>
             <DonneesStatistiquesDepartement
                 v-if="
                     departement &&
@@ -41,7 +44,7 @@ import { onMounted, ref, computed, watch } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store.js";
 import router from "@/helpers/router";
 
-import { Button } from "@resorptionbidonvilles/ui";
+import { Button, FilArianne } from "@resorptionbidonvilles/ui";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 import Layout from "@/components/Layout/Layout.vue";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
@@ -49,10 +52,27 @@ import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
 import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import DonneesStatistiquesDepartement from "@/components/DonneesStatistiquesDepartement/DonneesStatistiquesDepartement.vue";
 import { useConfigStore } from "@/stores/config.store";
+import { useUserStore } from "@/stores/user.store";
 
 const departementMetricsStore = useDepartementMetricsStore();
+const userStore = useUserStore();
 const isLoading = ref(null);
 const error = ref(null);
+const ariane = computed(() => {
+    const arr = [
+        { label: "Visualisation des données" },
+        { label: `${departement.value.name} (${departement.value.code})` },
+    ];
+
+    if (userStore.hasMoreThanOneDepartementForMetrics) {
+        arr.splice(1, 0, {
+            label: "Départements",
+            to: "/visualisation-donnees",
+        });
+    }
+
+    return arr;
+});
 
 const departementCode = computed(() => {
     return router.currentRoute.value.params.code;

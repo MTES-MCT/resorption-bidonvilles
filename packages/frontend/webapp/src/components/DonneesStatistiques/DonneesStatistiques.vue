@@ -1,6 +1,5 @@
 <template>
     <ContentWrapper>
-        <FilArianne :items="ariane" />
         <Title class="mt-6">Visualisation des données</Title>
         <Header
             class="mt-4"
@@ -38,7 +37,7 @@
 import { onMounted, ref } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store";
 
-import { Button, FilArianne } from "@resorptionbidonvilles/ui";
+import { Button } from "@resorptionbidonvilles/ui";
 import Title from "./Title.vue";
 import Header from "./Header.vue";
 import Onglets from "./DonneesStatistiquesDepartementOnglets.vue";
@@ -53,10 +52,6 @@ const tabs = [
         id: "tableau",
         label: "Tableau",
     },
-];
-const ariane = [
-    { label: "Accueil", to: "/" },
-    { label: "Visualisation des données", to: "/visualisation-donnees" },
 ];
 
 const activeTab = ref("tableau");

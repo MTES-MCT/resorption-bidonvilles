@@ -1,5 +1,4 @@
 <template>
-    <FilArianne :items="ariane" />
     <Title class="mt-6">{{ departement.name }} ({{ departement.code }})</Title>
 
     <section id="donnees" class="pt-6">
@@ -261,7 +260,7 @@ import formatDate from "@common/utils/formatDate";
 import router from "@/helpers/router";
 import tabs from "./DonneesStatistiquesDepartement.tabs";
 
-import { FilArianne, Icon, Link } from "@resorptionbidonvilles/ui";
+import { Icon, Link } from "@resorptionbidonvilles/ui";
 import Title from "../DonneesStatistiques/Title.vue";
 import Onglets from "../DonneesStatistiques/DonneesStatistiquesDepartementOnglets.vue";
 import CartoDonneesStatistiques from "@/components/CartoDonneesStatistiques/CartoDonneesStatistiques.vue";
@@ -295,11 +294,6 @@ const tables = {
     livingConditionsByTown: LivingConditionsByTownTable,
     justice: JusticeTable,
 };
-const ariane = [
-    { label: "Accueil", to: "/" },
-    { label: "Visualisation des données", to: "/visualisation-donnees" },
-    { label: `${departement.value.name} (${departement.value.code})` },
-];
 
 const currentTable = computed(() => {
     return tables[departementMetricsStore.activeTab];
