@@ -9,6 +9,7 @@
         :townMarkerFn="marqueurSiteStats"
         :locationMarkerFn="marqueurLocationStats"
         :townClusteringOptions="{ maxClusterRadius: 0 }"
+        :defaultView="departementMetricsStore.lastMapView || undefined"
     />
 </template>
 
@@ -18,15 +19,27 @@ import L from "leaflet";
 import Carto from "@/components/Carto/Carto.vue";
 import marqueurSiteStats from "@/utils/marqueurSiteStats";
 import marqueurLocationStats from "@/utils/marqueurLocationStats";
+import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 
+const departementMetricsStore = useDepartementMetricsStore();
 const carto = ref(null);
 const markersGroup = ref(L.geoJSON([], {}));
 
 watch(carto, () => {
     if (carto.value) {
         carto.value.map.addLayer(markersGroup.value);
+        carto.value.map.on("move", onMove);
     }
 });
+
+function onMove() {
+    const { map } = carto.value;
+    const { lat: latitude, lng: longitude } = map.getCenter();
+    departementMetricsStore.lastMapView = {
+        center: [latitude, longitude],
+        zoom: map.getZoom(),
+    };
+}
 
 defineExpose({
     currentMarkerGroup: computed(() => {
@@ -48,8 +61,9 @@ defineExpose({
         }
 
         const bounds = L.geoJSON(geojson).getBounds();
-        carto.value.map.setMaxBounds(bounds);
-        return carto.value.map.fitBounds(bounds);
+        if (!departementMetricsStore.lastMapView) {
+            carto.value.map.fitBounds(bounds);
+        }
     },
 });
 </script>

@@ -8,6 +8,13 @@ import { createNavigationLog } from "@/api/me.api";
 import logout from "@/utils/logout";
 import waitForElement from "@/utils/waitForElement";
 
+let currentRouteIsBacked = false;
+window.popStateDetected = false;
+window.addEventListener("popstate", () => {
+    currentRouteIsBacked = true;
+    window.popStateDetected = true;
+});
+
 // au chargement d'une page, on scroll automatiquement vers l'élément indiqué par le hash
 // dans certains cas cela pose problème : par exemple dans le cas de la fiche site, quand on scrolle
 // manuellement pour passer de sections en sections le hash est changé manuellement. Cela revient,
@@ -425,6 +432,9 @@ router.setHashWithoutScroll = (hash) => {
 };
 
 router.beforeEach((to) => {
+    currentRouteIsBacked = window.popStateDetected === true;
+    window.popStateDetected = false;
+
     const userStore = useUserStore();
 
     // compute default requirements
@@ -494,3 +504,6 @@ router.beforeEach((to) => {
 });
 
 export default router;
+export function isCurrentRouteBack() {
+    return currentRouteIsBacked;
+}

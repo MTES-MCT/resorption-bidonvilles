@@ -42,7 +42,7 @@
 <script setup>
 import { onMounted, ref, computed, watch } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store.js";
-import router from "@/helpers/router";
+import router, { isCurrentRouteBack } from "@/helpers/router";
 
 import { Button, FilArianne } from "@resorptionbidonvilles/ui";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
@@ -94,6 +94,17 @@ onMounted(load);
 watch(departementCode, load);
 
 async function load() {
+    if (
+        isCurrentRouteBack() &&
+        departementMetricsStore.filteredMetrics !== null
+    ) {
+        isLoading.value = false;
+        return;
+    }
+
+    // reset state
+    departementMetricsStore.reset();
+
     if (isLoading.value === true) {
         return;
     }

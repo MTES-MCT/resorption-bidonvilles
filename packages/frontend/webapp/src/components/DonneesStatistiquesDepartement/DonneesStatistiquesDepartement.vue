@@ -320,13 +320,16 @@ async function loadGeojson() {
         const geojson = await geojsonStore.getDepartement(
             departement.value.code
         );
-        carte.value.setBounds(geojson, {
-            color: "#00006D",
-            weight: "1",
-            fill: true,
-            fillColor: "#00006D",
-            fillOpacity: 0.05,
-        });
+
+        if (currentFormat.value === "table") {
+            carte.value.setBounds(geojson, {
+                color: "#00006D",
+                weight: "1",
+                fill: true,
+                fillColor: "#00006D",
+                fillOpacity: 0.05,
+            });
+        }
     } catch (error) {
         console.error(error);
     }
@@ -418,6 +421,11 @@ function setFormat(format) {
 
     departementMetricsStore.currentFormat = format;
 }
+
+const { currentFormat } = toRefs(departementMetricsStore);
+watch(currentFormat, () => {
+    loadGeojson();
+});
 
 watch(departement, loadGeojson);
 onMounted(loadGeojson);

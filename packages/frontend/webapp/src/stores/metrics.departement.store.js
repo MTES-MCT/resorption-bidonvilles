@@ -32,6 +32,7 @@ export const useDepartementMetricsStore = defineStore(
             error: ref(null),
             data: ref(null),
         };
+        const lastMapView = ref(null);
 
         const filteredMetrics = computed(() => {
             if (
@@ -88,6 +89,7 @@ export const useDepartementMetricsStore = defineStore(
             evolution.isLoading.value = null;
             evolution.error.value = null;
             evolution.data.value = null;
+            lastMapView.value = null;
 
             evolution.from.value.setDate(evolution.from.value.getDate() - 8);
             evolution.to.value.setDate(evolution.to.value.getDate() - 1);
@@ -98,6 +100,7 @@ export const useDepartementMetricsStore = defineStore(
         reset();
 
         return {
+            reset,
             departement,
             activeTab,
             error,
@@ -106,6 +109,7 @@ export const useDepartementMetricsStore = defineStore(
             metrics,
             currentFormat,
             evolution,
+            lastMapView,
             async fetchEvolution(departementCode) {
                 if (evolution.isLoading.value === true) {
                     return;
