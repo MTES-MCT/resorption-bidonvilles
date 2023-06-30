@@ -1,13 +1,14 @@
 import ShantytownComment from '#server/models/shantytownCommentModel/ShantytownComment.d';
 import { CommentTag } from '#server/models/shantytownCommentTagModel/serializeCommentTag';
-import config from '#server/config';
 import attachmentModel from '#server/models/attachmentModel';
 import { ShantytownCommentRow } from '../../shantytownCommentModel/ShantytownCommentRow.d';
 
 type shantytownCommentRowWithTags = ShantytownCommentRow & {
     tags: CommentTag[]
 };
-export default async (comment: shantytownCommentRowWithTags):ShantytownComment => {
+
+
+export default async (comment: shantytownCommentRowWithTags): Promise<ShantytownComment> => {
     const attachments = await Promise.all(
         comment.attachments?.length
             ? comment.attachments.map(attachmentModel.serializeAttachment)

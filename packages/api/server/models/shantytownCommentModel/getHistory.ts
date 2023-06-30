@@ -199,8 +199,8 @@ export default async (user, location, numberOfActivities, lastDate, maxDate):Pro
         );
     }
 
-    return activities
-        .map((activity: ShantytownCommentHistoryRow): ShantytownCommentActivity => ({
+    return Promise.all(activities
+        .map(async (activity: ShantytownCommentHistoryRow): Promise<ShantytownCommentActivity> => ({
             entity: 'comment',
             action: 'creation',
             date: activity.commentCreatedAt.getTime() / 1000,
@@ -238,9 +238,10 @@ export default async (user, location, numberOfActivities, lastDate, maxDate):Pro
                 },
             },
 
-            comment: serializeComment({
+            comment: await serializeComment({
                 ...activity,
+                attachments: [],
                 tags: commentTags[activity.commentId] || [],
             }),
-        }));
+        })));
 };
