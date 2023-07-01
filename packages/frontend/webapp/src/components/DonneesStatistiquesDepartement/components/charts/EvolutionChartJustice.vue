@@ -3,10 +3,6 @@
         <h1 class="font-bold text-primary text-lg">
             Évolution des procédures judiciaires
         </h1>
-        <p class="mt-2">
-            Description du graphique dans un texte qui peut faire un paragraphe
-            ou plus...
-        </p>
 
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure
@@ -63,6 +59,12 @@ const chartData = computed(() => ({
             backgroundColor: ["rgba(233, 246, 238, 0.7)"],
             fill: true,
             data: data.charts.closed_towns,
+        },
+        {
+            label: "Nombre de plaintes",
+            backgroundColor: ["rgba(233, 246, 238, 0.7)"],
+            fill: true,
+            data: data.charts.complaints,
         },
     ],
 }));

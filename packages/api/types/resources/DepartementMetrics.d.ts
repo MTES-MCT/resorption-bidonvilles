@@ -48,6 +48,18 @@ export type CityMetrics = {
         percentage_of_towns_with_owner_complaint: number,
         percentage_of_towns_with_justice_procedure: number,
         percentage_of_towns_with_police: number,
+        number_of_inhabitants_with_water: number,
+        number_of_inhabitants_with_electricity: number,
+        number_of_inhabitants_with_trash_evacuation: number,
+        number_of_inhabitants_with_fire_prevention: number,
+        number_of_inhabitants_with_toilets: number,
+        number_of_inhabitants_without_pest_animals: number,
+        percentage_of_inhabitants_with_water: number,
+        percentage_of_inhabitants_with_electricity: number,
+        percentage_of_inhabitants_with_trash_evacuation: number,
+        percentage_of_inhabitants_with_fire_prevention: number,
+        percentage_of_inhabitants_with_toilets: number,
+        percentage_of_inhabitants_without_pest_animals: number,
 
     }
     city: {

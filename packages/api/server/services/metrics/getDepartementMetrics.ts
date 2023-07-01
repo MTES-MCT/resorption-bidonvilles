@@ -99,6 +99,18 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
                     percentage_of_towns_with_owner_complaint: 0,
                     percentage_of_towns_with_justice_procedure: 0,
                     percentage_of_towns_with_police: 0,
+                    number_of_inhabitants_with_water: 0,
+                    number_of_inhabitants_with_electricity: 0,
+                    number_of_inhabitants_with_trash_evacuation: 0,
+                    number_of_inhabitants_with_fire_prevention: 0,
+                    number_of_inhabitants_with_toilets: 0,
+                    number_of_inhabitants_without_pest_animals: 0,
+                    percentage_of_inhabitants_with_water: 0,
+                    percentage_of_inhabitants_with_electricity: 0,
+                    percentage_of_inhabitants_with_trash_evacuation: 0,
+                    percentage_of_inhabitants_with_fire_prevention: 0,
+                    percentage_of_inhabitants_with_toilets: 0,
+                    percentage_of_inhabitants_without_pest_animals: 0,
 
                 },
                 city: {
@@ -142,27 +154,33 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
         }
         if (livingConditionsStatuses.water.status === 'good') {
             hashCities[row.city_code].summary.number_of_towns_with_water += 1;
+            hashCities[row.city_code].summary.number_of_inhabitants_with_water += row.population_total;
             metrics.summary.number_of_towns_with_water += 1;
         }
 
         if (livingConditionsStatuses.electricity.status === 'good') {
             hashCities[row.city_code].summary.number_of_towns_with_electricity += 1;
+            hashCities[row.city_code].summary.number_of_inhabitants_with_electricity += row.population_total;
             metrics.summary.number_of_towns_with_electricity += 1;
         }
         if (livingConditionsStatuses.trash.status === 'good') {
             hashCities[row.city_code].summary.number_of_towns_with_trash_evacuation += 1;
+            hashCities[row.city_code].summary.number_of_inhabitants_with_trash_evacuation += row.population_total;
             metrics.summary.number_of_towns_with_trash_evacuation += 1;
         }
         if (livingConditionsStatuses.fire_prevention.status === 'good') {
             hashCities[row.city_code].summary.number_of_towns_with_fire_prevention += 1;
+            hashCities[row.city_code].summary.number_of_inhabitants_with_fire_prevention += row.population_total;
             metrics.summary.number_of_towns_with_fire_prevention += 1;
         }
         if (livingConditionsStatuses.sanitary.status === 'good') {
             hashCities[row.city_code].summary.number_of_towns_with_toilets += 1;
+            hashCities[row.city_code].summary.number_of_inhabitants_with_toilets += row.population_total;
             metrics.summary.number_of_towns_with_toilets += 1;
         }
         if (livingConditionsStatuses.pest_animals.status === 'good') {
             hashCities[row.city_code].summary.number_of_towns_without_pest_animals += 1;
+            hashCities[row.city_code].summary.number_of_inhabitants_without_pest_animals += row.population_total;
             metrics.summary.number_of_towns_without_pest_animals += 1;
         }
 
@@ -226,6 +244,12 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
             percentage_of_towns_with_owner_complaint: Math.round((cityMetric.summary.number_of_towns_with_owner_complaint * 100) / cityMetric.summary.number_of_towns),
             percentage_of_towns_with_justice_procedure: Math.round((cityMetric.summary.number_of_towns_with_justice_procedure * 100) / cityMetric.summary.number_of_towns),
             percentage_of_towns_with_police: Math.round((cityMetric.summary.number_of_towns_with_police * 100) / cityMetric.summary.number_of_towns),
+            percentage_of_inhabitants_with_water: Math.round((cityMetric.summary.number_of_inhabitants_with_water * 100) / cityMetric.summary.number_of_persons),
+            percentage_of_inhabitants_with_electricity: Math.round((cityMetric.summary.number_of_inhabitants_with_electricity * 100) / cityMetric.summary.number_of_persons),
+            percentage_of_inhabitants_with_trash_evacuation: Math.round((cityMetric.summary.number_of_inhabitants_with_trash_evacuation * 100) / cityMetric.summary.number_of_persons),
+            percentage_of_inhabitants_with_fire_prevention: Math.round((cityMetric.summary.number_of_inhabitants_with_fire_prevention * 100) / cityMetric.summary.number_of_persons),
+            percentage_of_inhabitants_with_toilets: Math.round((cityMetric.summary.number_of_inhabitants_with_toilets * 100) / cityMetric.summary.number_of_persons),
+            percentage_of_inhabitants_without_pest_animals: Math.round((cityMetric.summary.number_of_inhabitants_without_pest_animals * 100) / cityMetric.summary.number_of_persons),
         },
 
     }));

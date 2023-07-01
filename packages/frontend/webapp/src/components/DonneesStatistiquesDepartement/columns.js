@@ -6,11 +6,17 @@ import number_of_persons from "./components/cells/Persons/number_of_persons";
 import number_of_towns_with_police from "./components/cells/Police/number_of_towns_with_police";
 import number_of_towns from "./components/cells/Towns/number_of_towns";
 import number_of_towns_with_electricity from "./components/cells/Electricity/number_of_towns_with_electricity";
+import number_of_inhabitants_with_electricity from "./components/cells/Electricity/number_of_inhabitants_with_electricity";
 import number_of_towns_with_fire_prevention from "./components/cells/Fire/number_of_towns_with_fire_prevention";
+import number_of_inhabitants_with_fire_prevention from "./components/cells/Fire/number_of_inhabitants_with_fire_prevention";
 import number_of_towns_with_toilets from "./components/cells/Toilets/number_of_towns_with_toilets";
+import number_of_inhabitants_with_toilets from "./components/cells/Toilets/number_of_inhabitants_with_toilets";
 import number_of_towns_with_trash_evacuation from "./components/cells/Trash/number_of_towns_with_trash_evacuation";
+import number_of_inhabitants_with_trash_evacuation from "./components/cells/Trash/number_of_inhabitants_with_trash_evacuation";
 import number_of_towns_with_water from "./components/cells/Water/number_of_towns_with_water";
+import number_of_inhabitants_with_water from "./components/cells/Water/number_of_inhabitants_with_water";
 import number_of_towns_without_pest_animals from "./components/cells/PestAnimals/number_of_towns_without_pest_animals";
+import number_of_inhabitants_without_pest_animals from "./components/cells/PestAnimals/number_of_inhabitants_without_pest_animals";
 import origins from "./components/cells/Origins/origins";
 
 export default {
@@ -22,10 +28,16 @@ export default {
     number_of_towns_with_police,
     number_of_towns,
     number_of_towns_with_electricity,
+    number_of_inhabitants_with_electricity,
     number_of_towns_with_fire_prevention,
+    number_of_inhabitants_with_fire_prevention,
     number_of_towns_with_toilets,
+    number_of_inhabitants_with_toilets,
     number_of_towns_with_trash_evacuation,
+    number_of_inhabitants_with_trash_evacuation,
     number_of_towns_with_water,
+    number_of_inhabitants_with_water,
     number_of_towns_without_pest_animals,
+    number_of_inhabitants_without_pest_animals,
     origins,
 };

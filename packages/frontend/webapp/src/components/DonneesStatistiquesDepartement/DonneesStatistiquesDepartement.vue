@@ -267,7 +267,8 @@ import Onglets from "../DonneesStatistiques/DonneesStatistiquesDepartementOnglet
 import CartoDonneesStatistiques from "@/components/CartoDonneesStatistiques/CartoDonneesStatistiques.vue";
 import SummaryTable from "./components/tables/SummaryTable.vue";
 import InhabitantsTable from "./components/tables/InhabitantsTable.vue";
-import LivingConditionsTable from "./components/tables/LivingConditionsTable.vue";
+import LivingConditionsByInhabitantTable from "./components/tables/LivingConditionsByInhabitantTable.vue";
+import LivingConditionsByTownTable from "./components/tables/LivingConditionsByTownTable.vue";
 import JusticeTable from "./components/tables/JusticeTable.vue";
 import EvolutionCharts from "./components/chartTabs/EvolutionCharts.vue";
 
@@ -290,7 +291,8 @@ const mapSize = ref("half");
 const tables = {
     summary: SummaryTable,
     inhabitants: InhabitantsTable,
-    livingConditions: LivingConditionsTable,
+    livingConditionsByInhabitant: LivingConditionsByInhabitantTable,
+    livingConditionsByTown: LivingConditionsByTownTable,
     justice: JusticeTable,
 };
 const ariane = [

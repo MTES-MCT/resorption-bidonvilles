@@ -133,7 +133,12 @@ export type DepartementMetricsEvolution = {
                     value: number,
                     evolution: number,
                 },
-                access_to_water: {
+                inhabitants_with_access_to_water: {
+                    value: number,
+                    evolution: number,
+                },
+                towns_with_access_to_water:
+                {
                     value: number,
                     evolution: number,
                 },
@@ -141,7 +146,9 @@ export type DepartementMetricsEvolution = {
             charts: {
                 labels: string[],
                 inhabitants_total: number[],
-                access_to_water: number[],
+                inhabitants_with_access_to_water: number[],
+                towns_total: number[],
+                towns_with_access_to_water: number[],
             },
         },
         electricity: {
@@ -154,15 +161,21 @@ export type DepartementMetricsEvolution = {
                     value: number,
                     evolution: number,
                 },
-                access_to_electricity: {
+                inhabitants_with_access_to_electricity: {
                     value: number,
                     evolution: number,
                 },
+                towns_with_access_to_electricity:{
+                    value: number,
+                    evolution: number,
+                }
             },
             charts: {
                 labels: string[],
                 inhabitants_total: number[],
-                access_to_electricity: number[],
+                inhabitants_with_access_to_electricity: number[],
+                towns_total: number[],
+                towns_with_access_to_electricity: number[],
             },
         },
         toilets: {
@@ -175,15 +188,21 @@ export type DepartementMetricsEvolution = {
                     value: number,
                     evolution: number,
                 },
-                access_to_toilets: {
+                inhabitants_with_access_to_toilets: {
                     value: number,
                     evolution: number,
                 },
+                towns_with_access_to_toilets: {
+                    value: number,
+                    evolution: number,
+                }
             },
             charts: {
                 labels: string[],
                 inhabitants_total: number[],
-                access_to_toilets: number[],
+                inhabitants_with_access_to_toilets: number[],
+                towns_total: number[],
+                towns_with_access_to_toilets: number[],
             },
         },
         fire_prevention: {
@@ -196,15 +215,21 @@ export type DepartementMetricsEvolution = {
                     value: number,
                     evolution: number,
                 },
-                access_to_fire_prevention: {
+                inhabitants_with_access_to_fire_prevention: {
                     value: number,
                     evolution: number,
                 },
+                towns_with_access_to_fire_prevention: {
+                    value: number,
+                    evolution: number,
+                }
             },
             charts: {
                 labels: string[],
                 inhabitants_total: number[],
-                access_to_fire_prevention: number[],
+                inhabitants_with_access_to_fire_prevention: number[],
+                towns_total: number[],
+                towns_with_access_to_fire_prevention: number[],
             },
         },
         trash_evacuation: {
@@ -217,15 +242,21 @@ export type DepartementMetricsEvolution = {
                     value: number,
                     evolution: number,
                 },
-                access_to_trash_evacuation: {
+                inhabitants_with_access_to_trash_evacuation: {
                     value: number,
                     evolution: number,
                 },
+                towns_with_access_to_trash_evacuation: {
+                    value: number,
+                    evolution: number,
+                }
             },
             charts: {
                 labels: string[],
                 inhabitants_total: number[],
-                access_to_trash_evacuation: number[],
+                inhabitants_with_access_to_trash_evacuation: number[],
+                towns_total: number[],
+                towns_with_access_to_trash_evacuation: number[],
             },
         },
         pest_animals: {
@@ -238,15 +269,21 @@ export type DepartementMetricsEvolution = {
                     value: number,
                     evolution: number,
                 },
-                absence_of_pest_animals: {
+                inhabitants_with_absence_of_pest_animals: {
                     value: number,
                     evolution: number,
                 },
+                towns_with_absence_of_pest_animals: {
+                    value: number,
+                    evolution: number,
+                }
             },
             charts: {
                 labels: string[],
                 inhabitants_total: number[],
-                absence_of_pest_animals: number[],
+                inhabitants_with_absence_of_pest_animals: number[],
+                towns_total: number[],
+                towns_with_absence_of_pest_animals: number[],
             },
         }
     },
@@ -269,6 +306,7 @@ export type DepartementMetricsEvolution = {
             charts: {
                 labels: string[],
                 police: number[],
+                complaints: number[],
                 closed_towns: number[],
             },
         },

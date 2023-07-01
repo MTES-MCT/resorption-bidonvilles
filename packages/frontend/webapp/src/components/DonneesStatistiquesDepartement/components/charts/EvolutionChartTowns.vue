@@ -3,10 +3,6 @@
         <h1 class="font-bold text-primary text-lg">
             Évolution du nombre de sites
         </h1>
-        <p class="mt-2">
-            Description du graphique dans un texte qui peut faire un paragraphe
-            ou plus...
-        </p>
 
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure

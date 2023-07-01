@@ -1,12 +1,8 @@
 <template>
     <section>
-        <h1 class="font-bold text-primary text-lg">Accès à l'électricité</h1>
-        <p class="mt-2">
-            Description du graphique dans un texte qui peut faire un paragraphe
-            ou plus...
-        </p>
+        <h1 class="font-bold text-primary text-lg"><slot name="title" /></h1>
 
-        <div class="flex mt-4 space-x-6">
+        <div v-if="data !== undefined" class="flex mt-4 space-x-6">
             <ChartBigFigure
                 icon="map-pin"
                 :figure="data.figures.towns_total.value"
@@ -23,10 +19,10 @@
 
             <ChartBigFigure
                 icon="bolt"
-                :figure="data.figures.access_to_electricity.value"
-                :evolution="data.figures.access_to_electricity.evolution"
+                :figure="data.figures[livingConditionType].value"
+                :evolution="data.figures[livingConditionType].evolution"
                 invert
-                >Nombre de personnes avec accès à l'électricité</ChartBigFigure
+                >{{ chartLabel }}</ChartBigFigure
             >
         </div>
 
@@ -39,29 +35,48 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
+import { computed, toRefs } from "vue";
 import { LineChart } from "@/helpers/chart";
 import ChartBigFigure from "./ChartBigFigure.vue";
 
-const departementMetricsStore = useDepartementMetricsStore();
-const data =
-    departementMetricsStore.evolution.data.livingConditions.electricity;
+const props = defineProps({
+    chartLabel: {
+        type: String,
+        required: true,
+    },
+    data: {
+        type: Object,
+    },
+    livingConditionType: {
+        type: String,
+        required: true,
+    },
+    chartType: {
+        type: String,
+    },
+});
+const { chartLabel, data, livingConditionType, chartType } = toRefs(props);
 
 const chartData = computed(() => ({
-    labels: data.charts.labels,
+    labels: data.value.charts.labels,
     datasets: [
         {
-            label: "Nombre total de personnes",
+            label: `Nombre total de ${
+                chartType.value === "towns" ? "sites" : "personnes"
+            }`,
             backgroundColor: ["rgba(0, 0, 145, 0.3)"],
             fill: true,
-            data: data.charts.inhabitants_total,
+            data: data.value.charts[
+                chartType.value === "towns"
+                    ? "towns_total"
+                    : "inhabitants_total"
+            ],
         },
         {
-            label: "Nombre de personnes avec accès à l'électricité",
+            label: chartLabel.value,
             backgroundColor: ["#FFB7A5"],
             fill: true,
-            data: data.charts.access_to_electricity,
+            data: data.value.charts[livingConditionType.value],
         },
     ],
 }));

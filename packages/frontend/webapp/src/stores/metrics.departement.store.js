@@ -15,7 +15,8 @@ export const useDepartementMetricsStore = defineStore(
         const sort = ref({
             summary: { id: "city_name", order: "asc" },
             inhabitants: { id: "city_name", order: "asc" },
-            livingConditions: { id: "city_name", order: "asc" },
+            livingConditionsByInhabitant: { id: "city_name", order: "asc" },
+            livingConditionsByTown: { id: "city_name", order: "asc" },
             justice: { id: "city_name", order: "asc" },
         });
         const metrics = ref({});
@@ -72,7 +73,8 @@ export const useDepartementMetricsStore = defineStore(
             sort.value = {
                 summary: { id: "city_name", order: "asc" },
                 inhabitants: { id: "city_name", order: "asc" },
-                livingConditions: { id: "city_name", order: "asc" },
+                livingConditionsByInhabitant: { id: "city_name", order: "asc" },
+                livingConditionsByTown: { id: "city_name", order: "asc" },
                 justice: { id: "city_name", order: "asc" },
             };
             metrics.value = {};

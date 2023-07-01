@@ -1,5 +1,6 @@
 import moment from 'moment';
 import getMonthDiff from '../../dataReport/_utils/getMonthDiff';
+import getWeekDiff from './getWeekDiff';
 
 
 export default (argFrom: Date, argTo: Date): any[] => {
@@ -11,9 +12,18 @@ export default (argFrom: Date, argTo: Date): any[] => {
         hour: 0, minute: 0, second: 0, millisecond: 0,
     });
 
-    const monthDiff = getMonthDiff(argFrom, argTo);
+    let diff = getMonthDiff(argFrom, argTo);
+    let step = 'months';
+    let format = 'MMMM';
 
-    const listOfDates = [{ date: from.toDate(), label: from.format('MMMM') }];
+
+    if (diff < 3) {
+        diff = getWeekDiff(argFrom, argTo);
+        step = 'weeks';
+        format = 'DD MM YYYY';
+    }
+
+    const listOfDates = [{ date: from.toDate(), label: from.format(format) }];
 
 
     // there is a special case for when from and to are the exact same day
@@ -22,12 +32,13 @@ export default (argFrom: Date, argTo: Date): any[] => {
     }
 
 
-    for (let i = 1, d = moment(from).date(1).add(1, 'months'); i < monthDiff; i += 1, d.add(1, 'months')) {
-        listOfDates.push({ date: d.toDate(), label: d.format('MMMM') });
+    for (let i = 1, d = moment(from).add(1, step === 'weeks' ? 'weeks' : 'months'); i < (step === 'months' ? diff : (diff + 1)); i += 1, d.add(1, step === 'weeks' ? 'weeks' : 'months')) {
+        if (!moment(to).isSame(d)) {
+            listOfDates.push({ date: d.toDate(), label: d.format(format) });
+        }
     }
 
-    listOfDates.push({ date: to.toDate(), label: moment(argTo).format('MMMM') });
-
+    listOfDates.push({ date: to.toDate(), label: moment(argTo).format(format) });
 
     return listOfDates;
 };

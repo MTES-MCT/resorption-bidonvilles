@@ -131,7 +131,50 @@ export default {
             town_level: sortByKeyName("number_of_minors"),
         },
     },
-    livingConditions: {
+    livingConditionsByInhabitant: {
+        city_name: {
+            city_level: sortByCityName,
+            town_level: sortByKeyName("usename"),
+        },
+        number_of_persons: {
+            city_level: sortBySummaryKey("number_of_persons"),
+            town_level: sortByKeyName("number_of_persons"),
+        },
+
+        number_of_inhabitants_with_water: {
+            city_level: sortBySummaryKey("number_of_inhabitants_with_water"),
+            town_level: sortLivingConditionByKeyName("access_to_water"),
+        },
+        number_of_inhabitants_with_electricity: {
+            city_level: sortBySummaryKey(
+                "number_of_inhabitants_with_electricity"
+            ),
+            town_level: sortLivingConditionByKeyName("access_to_electricity"),
+        },
+        number_of_inhabitants_with_trash_evacuation: {
+            city_level: sortBySummaryKey(
+                "number_of_inhabitants_with_trash_evacuation"
+            ),
+            town_level: sortLivingConditionByKeyName("trash_evacuation"),
+        },
+        number_of_inhabitants_with_fire_prevention: {
+            city_level: sortBySummaryKey(
+                "number_of_inhabitants_with_fire_prevention"
+            ),
+            town_level: sortLivingConditionByKeyName("fire_prevention"),
+        },
+        number_of_inhabitants_with_toilets: {
+            city_level: sortBySummaryKey("number_of_inhabitants_with_toilets"),
+            town_level: sortLivingConditionByKeyName("working_toilets"),
+        },
+        number_of_inhabitants_without_pest_animals: {
+            city_level: sortBySummaryKey(
+                "number_of_inhabitants_without_pest_animals"
+            ),
+            town_level: sortLivingConditionByKeyName("absence_of_pest_animals"),
+        },
+    },
+    livingConditionsByTown: {
         city_name: {
             city_level: sortByCityName,
             town_level: sortByKeyName("usename"),

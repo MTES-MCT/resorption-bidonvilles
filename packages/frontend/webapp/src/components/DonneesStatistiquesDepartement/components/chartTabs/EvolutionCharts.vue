@@ -86,7 +86,8 @@ import { Button, DatepickerInput, Spinner } from "@resorptionbidonvilles/ui";
 import ViewErrorInline from "@/components/ViewErrorInline/ViewErrorInline.vue";
 import EvolutionChartTabSummary from "./EvolutionChartTabSummary.vue";
 import EvolutionChartTabInhabitants from "./EvolutionChartTabInhabitants.vue";
-import EvolutionChartTabLivingConditions from "./EvolutionChartTabLivingConditions.vue";
+import EvolutionChartTabLivingConditionsByInhabitant from "./EvolutionChartTabLivingConditionsByInhabitant.vue";
+import EvolutionChartTabLivingConditionsByTown from "./EvolutionChartTabLivingConditionsByTown.vue";
 import EvolutionChartTabJustice from "./EvolutionChartTabJustice.vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 
@@ -94,7 +95,8 @@ const departementMetricsStore = useDepartementMetricsStore();
 const tabs = {
     summary: EvolutionChartTabSummary,
     inhabitants: EvolutionChartTabInhabitants,
-    livingConditions: EvolutionChartTabLivingConditions,
+    livingConditionsByInhabitant: EvolutionChartTabLivingConditionsByInhabitant,
+    livingConditionsByTown: EvolutionChartTabLivingConditionsByTown,
     justice: EvolutionChartTabJustice,
 };
 

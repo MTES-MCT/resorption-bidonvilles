@@ -10,35 +10,38 @@ const { where: pWhere } = permissionUtils;
 
 
 export type DepartementEvolutionMetricsRawData = {
-    shantytown_id: number;
-    population_total: number;
-    input_date: Date;
-    known_since: Date;
-    closed_at: Date;
-    origins: Origin[];
-    waterAccessType: string;
-    waterAccessIsPublic: boolean | null;
-    waterAccessIsContinuous: boolean | null;
-    waterAccessIsLocal: boolean | null;
-    waterAccessIsClose: boolean | null;
-    waterAccessIsUnequal: boolean | null;
-    waterAccessHasStagnantWater: boolean | null;
-    toiletTypes: string[];
-    sanitaryAccessOpenAirDefecation: boolean | null;
-    sanitaryAccessWorkingToilets: boolean | null;
-    sanitaryAccessToiletsAreInside: boolean | null;
-    sanitaryAccessToiletsAreLighted: boolean | null;
-    sanitaryAccessHandWashing: boolean | null;
-    electricityAccess: boolean | null;
-    electricityAccessTypes: string[];
-    electricityAccessIsUnequal: boolean | null;
-    trashIsPiling: boolean | null;
-    trashEvacuationIsClose: boolean | null;
-    trashEvacuationIsSafe: boolean | null;
-    trashEvacuationIsRegular: boolean | null;
-    trashBulkyIsPiling: boolean | null;
-    pestAnimals: boolean | null;
-    firePrevention: boolean | null;
+    shantytown_id: number,
+    population_total: number,
+    input_date: Date,
+    known_since: Date,
+    closed_at: Date,
+    origins: Origin[],
+    waterAccessType: string,
+    waterAccessIsPublic: boolean | null,
+    waterAccessIsContinuous: boolean | null,
+    waterAccessIsLocal: boolean | null,
+    waterAccessIsClose: boolean | null,
+    waterAccessIsUnequal: boolean | null,
+    waterAccessHasStagnantWater: boolean | null,
+    toiletTypes: string[],
+    sanitaryAccessOpenAirDefecation: boolean | null,
+    sanitaryAccessWorkingToilets: boolean | null,
+    sanitaryAccessToiletsAreInside: boolean | null,
+    sanitaryAccessToiletsAreLighted: boolean | null,
+    sanitaryAccessHandWashing: boolean | null,
+    electricityAccess: boolean | null,
+    electricityAccessTypes: string[],
+    electricityAccessIsUnequal: boolean | null,
+    trashIsPiling: boolean | null,
+    trashEvacuationIsClose: boolean | null,
+    trashEvacuationIsSafe: boolean | null,
+    trashEvacuationIsRegular: boolean | null,
+    trashBulkyIsPiling: boolean | null,
+    pestAnimals: boolean | null,
+    firePrevention: boolean | null,
+    owner_complaint: boolean | null,
+    justice_procedure: boolean | null,
+    police_status: string,
 };
 
 export default async (user, departementCode, from: Date, to: Date): Promise<DepartementEvolutionMetricsRawData[]> => {
@@ -122,7 +125,10 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
                 shantytowns.trash_evacuation_is_regular AS "trashEvacuationIsRegular",
                 shantytowns.trash_bulky_is_piling AS "trashBulkyIsPiling",
                 shantytowns.pest_animals AS "pestAnimals",
-                shantytowns.fire_prevention AS "firePrevention"
+                shantytowns.fire_prevention AS "firePrevention",
+                shantytowns.owner_complaint,
+                shantytowns.justice_procedure,
+                shantytowns.police_status::text
             FROM shantytowns
             LEFT JOIN shantytowns_today ON shantytowns_today.shantytown_id = shantytowns.shantytown_id
             LEFT JOIN shantytown_computed_origins ON shantytown_computed_origins.fk_shantytown = shantytowns.shantytown_id
@@ -208,7 +214,10 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
                 shantytowns.trash_evacuation_is_regular AS "trashEvacuationIsRegular",
                 shantytowns.trash_bulky_is_piling AS "trashBulkyIsPiling",
                 shantytowns.pest_animals AS "pestAnimals",
-                shantytowns.fire_prevention AS "firePrevention"
+                shantytowns.fire_prevention AS "firePrevention",
+                shantytowns.owner_complaint,
+                shantytowns.justice_procedure,
+                shantytowns.police_status::text
             FROM "ShantytownHistories" shantytowns
             LEFT JOIN shantytowns_today ON shantytowns_today.shantytown_id = shantytowns.shantytown_id
             LEFT JOIN shantytown_computed_origins ON shantytown_computed_origins.fk_shantytown = shantytowns.hid
