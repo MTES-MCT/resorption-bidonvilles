@@ -25,7 +25,13 @@
             v-for="col in columns"
             :key="col.uid"
         >
-            <Icon class="text-lg text-black" :icon="col.icon" />
+            <Icon
+                v-if="!Object.keys(flagMap).includes(col.icon)"
+                class="text-lg text-black"
+                :icon="col.icon"
+            />
+
+            <img v-else :src="flagMap[col.icon].icon" class="w-6 ml-auto" />
             <span
                 v-if="
                     departementMetricsStore.sort[
@@ -45,6 +51,10 @@ import { computed, toRefs } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { Icon, Title } from "@resorptionbidonvilles/ui";
 
+import flagFR from "@/assets/img/flags/fr.png";
+import flagEU from "@/assets/img/flags/eu.png";
+import flagExtraCommunautaires from "@/assets/img/flags/extra-communautaires.png";
+
 const props = defineProps({
     columns: {
         type: Array,
@@ -52,6 +62,12 @@ const props = defineProps({
     },
 });
 const { columns } = toRefs(props);
+
+const flagMap = {
+    french: { icon: flagFR },
+    european: { icon: flagEU },
+    other: { icon: flagExtraCommunautaires },
+};
 
 const departementMetricsStore = useDepartementMetricsStore();
 

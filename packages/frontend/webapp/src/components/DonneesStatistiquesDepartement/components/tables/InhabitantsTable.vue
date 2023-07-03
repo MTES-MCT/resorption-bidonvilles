@@ -6,7 +6,9 @@
                 'number_of_persons',
                 'number_of_households',
                 'number_of_minors',
-                'origins',
+                'origins_european',
+                'origins_extra',
+                'origins_french',
             ])
         "
         :metrics="metrics"
