@@ -82,6 +82,7 @@ async function load() {
     error.value = null;
     try {
         await departementMetricsStore.fetchDepartement(departementCode.value);
+        await departementMetricsStore.fetchEvolution(departementCode.value);
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
     }

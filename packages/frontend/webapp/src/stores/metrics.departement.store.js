@@ -111,17 +111,6 @@ export const useDepartementMetricsStore = defineStore(
                     return;
                 }
 
-                if (
-                    evolution.loaded.value.from &&
-                    evolution.loaded.value.from.toISOString().slice(0, 10) ===
-                        evolution.from.value.toISOString().slice(0, 10) &&
-                    evolution.loaded.value.to &&
-                    evolution.loaded.value.to.toISOString().slice(0, 10) ===
-                        evolution.to.value.toISOString().slice(0, 10)
-                ) {
-                    return;
-                }
-
                 evolution.isLoading.value = true;
                 evolution.error.value = null;
                 evolution.data.value = null;
