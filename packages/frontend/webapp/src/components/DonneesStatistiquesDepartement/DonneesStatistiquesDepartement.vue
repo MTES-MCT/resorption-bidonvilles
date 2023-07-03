@@ -186,32 +186,34 @@
                     @townZoom="onTownRowZoom"
                 />
             </div>
-            <div class="w-1 bg-blue300 relative">
-                <div
-                    class="absolute top-0 left-0 w-4 -ml-2 z-[3000] text-primary font-bold text-center text-xs bg-blue300 rounded-lg"
-                >
+            <div class="w-1 bg-blue300">
+                <div class="sticky top-0 z-[1001]">
                     <div
-                        class="rounded-t-lg py-2"
-                        :class="
-                            mapSize !== 'full'
-                                ? 'cursor-pointer hover:bg-blue200'
-                                : 'text-blue400'
-                        "
-                        @click="increaseMapSize"
+                        class="absolute top-0 left-0 w-4 -ml-2 z-[3000] text-primary font-bold text-center text-xs bg-blue300 rounded-lg"
                     >
-                        <Icon icon="chevron-left" />
-                    </div>
-                    <div class="h-px bg-primary w-3 mx-auto"></div>
-                    <div
-                        class="rounded-b-lg py-2"
-                        :class="
-                            mapSize !== 'hidden'
-                                ? 'cursor-pointer hover:bg-blue200'
-                                : 'text-blue400'
-                        "
-                        @click="decreaseMapSize"
-                    >
-                        <Icon icon="chevron-right" />
+                        <div
+                            class="rounded-t-lg py-2"
+                            :class="
+                                mapSize !== 'full'
+                                    ? 'cursor-pointer hover:bg-blue200'
+                                    : 'text-blue400'
+                            "
+                            @click="increaseMapSize"
+                        >
+                            <Icon icon="chevron-left" />
+                        </div>
+                        <div class="h-px bg-primary w-3 mx-auto"></div>
+                        <div
+                            class="rounded-b-lg py-2"
+                            :class="
+                                mapSize !== 'hidden'
+                                    ? 'cursor-pointer hover:bg-blue200'
+                                    : 'text-blue400'
+                            "
+                            @click="decreaseMapSize"
+                        >
+                            <Icon icon="chevron-right" />
+                        </div>
                     </div>
                 </div>
             </div>

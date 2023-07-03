@@ -36,7 +36,7 @@
                 ><Icon :icon="chevronState"
             /></span>
         </Title>
-        <th class="w-8"></th>
+        <th class="w-8 bg-white"></th>
     </tr>
 </template>
 
