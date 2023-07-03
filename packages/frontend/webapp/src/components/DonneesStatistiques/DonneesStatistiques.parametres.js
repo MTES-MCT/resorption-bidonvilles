@@ -1,12 +1,5 @@
 export default [
     {
-        id: "regions",
-        label: "Afficher les regions",
-        filterMetrics: function (metrics) {
-            return metrics;
-        },
-    },
-    {
         id: "departements_less_than_50",
         label: "Masquer les départements avec moins de 50 habitants en bidonville",
         filterMetrics: function (metrics) {
@@ -26,13 +19,6 @@ export default [
                 nationCopyMetric.children = filteredChildren;
                 return nationCopyMetric;
             });
-        },
-    },
-    {
-        id: "departements_without_town",
-        label: "Masquer les départements sans sites",
-        filterMetrics: function (metrics) {
-            return metrics;
         },
     },
 ];
