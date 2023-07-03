@@ -18,14 +18,6 @@
                 :evolution="data.figures.complaints.evolution"
                 >Nombre total de plaintes</ChartBigFigure
             >
-
-            <ChartBigFigure
-                icon="balance-scale"
-                :figure="data.figures.closed_towns.value"
-                :evolution="data.figures.closed_towns.evolution"
-                >Nombre de sites fermés suite à une procédure
-                judiciaire</ChartBigFigure
-            >
         </div>
 
         <LineChart
@@ -53,12 +45,6 @@ const chartData = computed(() => ({
             backgroundColor: ["rgba(0, 0, 145, 0.3)"],
             fill: true,
             data: data.charts.police,
-        },
-        {
-            label: "Nombre de sites fermés suite à une procédure judiciaire",
-            backgroundColor: ["rgba(233, 246, 238, 0.7)"],
-            fill: true,
-            data: data.charts.closed_towns,
         },
         {
             label: "Nombre de plaintes",

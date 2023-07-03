@@ -298,16 +298,11 @@ export type DepartementMetricsEvolution = {
                     value: number,
                     evolution: number,
                 },
-                closed_towns: {
-                    value: number,
-                    evolution: number,
-                },
             },
             charts: {
                 labels: string[],
                 police: number[],
                 complaints: number[],
-                closed_towns: number[],
             },
         },
     },

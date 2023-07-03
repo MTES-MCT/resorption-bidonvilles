@@ -319,16 +319,11 @@ export default async (user, departementCode, argFrom: Date, argTo: Date):Promise
                         value: 0,
                         evolution: 0,
                     },
-                    closed_towns: {
-                        value: 0,
-                        evolution: 0,
-                    },
                 },
                 charts: {
                     labels: listOfDates.map(date => date.label),
                     police: Array(listOfDates.length).fill(0),
                     complaints: Array(listOfDates.length).fill(0),
-                    closed_towns: Array(listOfDates.length).fill(0),
                 },
             },
         },

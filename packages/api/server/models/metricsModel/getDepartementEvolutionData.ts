@@ -40,7 +40,6 @@ export type DepartementEvolutionMetricsRawData = {
     pestAnimals: boolean | null,
     firePrevention: boolean | null,
     owner_complaint: boolean | null,
-    justice_procedure: boolean | null,
     police_status: string,
 };
 
@@ -127,7 +126,6 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
                 shantytowns.pest_animals AS "pestAnimals",
                 shantytowns.fire_prevention AS "firePrevention",
                 shantytowns.owner_complaint,
-                shantytowns.justice_procedure,
                 shantytowns.police_status::text
             FROM shantytowns
             LEFT JOIN shantytowns_today ON shantytowns_today.shantytown_id = shantytowns.shantytown_id
@@ -216,7 +214,6 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
                 shantytowns.pest_animals AS "pestAnimals",
                 shantytowns.fire_prevention AS "firePrevention",
                 shantytowns.owner_complaint,
-                shantytowns.justice_procedure,
                 shantytowns.police_status::text
             FROM "ShantytownHistories" shantytowns
             LEFT JOIN shantytowns_today ON shantytowns_today.shantytown_id = shantytowns.shantytown_id
