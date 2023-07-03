@@ -2,6 +2,7 @@ import metricsModel from '#server/models/metricsModel';
 import departementModel from '#server/models/departementModel';
 import regionModel from '#server/models/regionModel';
 import ServiceError from '#server/errors/ServiceError';
+import permissionUtils from '#server/utils/permission';
 import { DepartementMetricsRawData } from '#server/models/metricsModel/getDepartementData';
 import getAddressSimpleOf from '#server/models/shantytownModel/_common/getAddressSimpleOf';
 import getUsenameOf from '#server/models/shantytownModel/_common/getUsenameOf';
@@ -14,6 +15,8 @@ type CityMetricsObject = {
     [key: string]: CityMetrics;
 };
 export default async (user, departementCode):Promise<DepartementMetrics> => {
+    const hasJusticePermission = permissionUtils.can(user).do('access', 'shantytown_justice').on({ type: 'departement', departement: { code: departementCode } });
+
     let data:DepartementMetricsRawData[];
 
     try {
@@ -184,17 +187,19 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
             metrics.summary.number_of_towns_without_pest_animals += 1;
         }
 
-        if (row.owner_complaint === true) {
-            hashCities[row.city_code].summary.number_of_towns_with_owner_complaint += 1;
-            metrics.summary.number_of_towns_with_owner_complaint += 1;
-        }
-        if (row.justice_procedure === true) {
-            hashCities[row.city_code].summary.number_of_towns_with_justice_procedure += 1;
-            metrics.summary.number_of_towns_with_justice_procedure += 1;
-        }
-        if (row.police_status === 'granted') {
-            hashCities[row.city_code].summary.number_of_towns_with_police += 1;
-            metrics.summary.number_of_towns_with_police += 1;
+        if (hasJusticePermission) {
+            if (row.owner_complaint === true) {
+                hashCities[row.city_code].summary.number_of_towns_with_owner_complaint += 1;
+                metrics.summary.number_of_towns_with_owner_complaint += 1;
+            }
+            if (row.justice_procedure === true) {
+                hashCities[row.city_code].summary.number_of_towns_with_justice_procedure += 1;
+                metrics.summary.number_of_towns_with_justice_procedure += 1;
+            }
+            if (row.police_status === 'granted') {
+                hashCities[row.city_code].summary.number_of_towns_with_police += 1;
+                metrics.summary.number_of_towns_with_police += 1;
+            }
         }
 
         // on ajoute la donnée du site
@@ -213,18 +218,22 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
             fire_prevention: livingConditionsStatuses.fire_prevention.status,
             working_toilets: livingConditionsStatuses.sanitary.status,
             absence_of_pest_animals: livingConditionsStatuses.pest_animals.status,
-            owner_complaint: row.owner_complaint,
-            justice_procedure: row.justice_procedure,
+            owner_complaint: null,
+            justice_procedure: null,
             police: null,
             origins: row.origins,
         };
 
-        if (row.police_status === 'granted') {
-            town.police = true;
-        } else if (row.police_status === null) {
-            town.police = null;
-        } else {
-            town.police = false;
+        if (hasJusticePermission) {
+            town.justice_procedure = row.justice_procedure;
+            town.owner_complaint = row.owner_complaint;
+            if (row.police_status === 'granted') {
+                town.police = true;
+            } else if (row.police_status === null) {
+                town.police = null;
+            } else {
+                town.police = false;
+            }
         }
 
         hashCities[row.city_code].towns.push(town);

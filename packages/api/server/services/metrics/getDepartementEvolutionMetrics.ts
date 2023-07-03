@@ -1,3 +1,4 @@
+import permissionUtils from '#server/utils/permission';
 import { DepartementEvolutionMetricsRawData } from '#server/models/metricsModel/getDepartementEvolutionData';
 import metricsModel from '#server/models/metricsModel';
 import ServiceError from '#server/errors/ServiceError';
@@ -10,6 +11,7 @@ import getReportIndex from '../dataReport/_utils/getReportIndex';
 import getIndex from './_utils/getIndex';
 
 export default async (user, departementCode, argFrom: Date, argTo: Date):Promise<DepartementMetricsEvolution> => {
+    const hasJusticePermission = permissionUtils.can(user).do('access', 'shantytown_justice').on({ type: 'departement', departement: { code: departementCode } });
     let data:DepartementEvolutionMetricsRawData[];
     try {
         data = await metricsModel.getDepartementEvolutionData(user, departementCode, argFrom, argTo);
@@ -437,14 +439,15 @@ export default async (user, departementCode, argFrom: Date, argTo: Date):Promise
 
             // on remplit les chiffres de la justice
 
-            if (row.police_status === 'granted') {
-                metrics.justice.justice.charts.police[i] += 1;
-            }
+            if (hasJusticePermission) {
+                if (row.police_status === 'granted') {
+                    metrics.justice.justice.charts.police[i] += 1;
+                }
 
-            if (row.owner_complaint === true) {
-                metrics.justice.justice.charts.complaints[i] += 1;
+                if (row.owner_complaint === true) {
+                    metrics.justice.justice.charts.complaints[i] += 1;
+                }
             }
-
 
             previousIndex = reportIndex;
         }
@@ -549,9 +552,12 @@ export default async (user, departementCode, argFrom: Date, argTo: Date):Promise
     metrics.livingConditions.pest_animals.figures.towns_with_absence_of_pest_animals.evolution = getEvolution(metrics.livingConditions.pest_animals.charts.towns_with_absence_of_pest_animals[listOfDates.length - 1] - metrics.livingConditions.pest_animals.charts.towns_with_absence_of_pest_animals[0], metrics.livingConditions.pest_animals.charts.towns_with_absence_of_pest_animals[listOfDates.length - 1]);
 
     // pour la justice
-    metrics.justice.justice.figures.police.value = metrics.justice.justice.charts.police[listOfDates.length - 1];
-    metrics.justice.justice.figures.police.evolution = getEvolution(metrics.justice.justice.charts.police[listOfDates.length - 1] - metrics.justice.justice.charts.police[0], metrics.justice.justice.charts.police[listOfDates.length - 1]);
-    metrics.justice.justice.figures.complaints.value = metrics.justice.justice.charts.complaints[listOfDates.length - 1];
-    metrics.justice.justice.figures.complaints.evolution = getEvolution(metrics.justice.justice.charts.complaints[listOfDates.length - 1] - metrics.justice.justice.charts.complaints[0], metrics.justice.justice.charts.complaints[listOfDates.length - 1]);
+    if (hasJusticePermission) {
+        metrics.justice.justice.figures.police.value = metrics.justice.justice.charts.police[listOfDates.length - 1];
+        metrics.justice.justice.figures.police.evolution = getEvolution(metrics.justice.justice.charts.police[listOfDates.length - 1] - metrics.justice.justice.charts.police[0], metrics.justice.justice.charts.police[listOfDates.length - 1]);
+        metrics.justice.justice.figures.complaints.value = metrics.justice.justice.charts.complaints[listOfDates.length - 1];
+        metrics.justice.justice.figures.complaints.evolution = getEvolution(metrics.justice.justice.charts.complaints[listOfDates.length - 1] - metrics.justice.justice.charts.complaints[0], metrics.justice.justice.charts.complaints[listOfDates.length - 1]);
+    }
+
     return metrics;
 };

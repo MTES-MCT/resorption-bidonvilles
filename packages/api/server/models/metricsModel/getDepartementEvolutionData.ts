@@ -61,14 +61,11 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
                     shantytowns.shantytown_id,
                     LEAST(shantytowns.built_at, shantytowns.declared_at, shantytowns.created_at) AS known_since,
                     shantytowns.closed_at,
-                    regions.code AS region_code,
-                    regions.name AS region_name,
                     departements.code AS departement_code,
                     departements.name AS departement_name
                 FROM shantytowns
                 LEFT JOIN cities ON shantytowns.fk_city = cities.code
                 LEFT JOIN departements ON cities.fk_departement = departements.code
-                LEFT JOIN regions ON departements.fk_region = regions.code
             ),
             shantytown_computed_origins AS (
                         SELECT
@@ -132,7 +129,7 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
             LEFT JOIN shantytown_computed_origins ON shantytown_computed_origins.fk_shantytown = shantytowns.shantytown_id
             LEFT JOIN computed_toilet_types ON computed_toilet_types.fk_shantytown = shantytowns.shantytown_id
             LEFT JOIN computed_electricity_types ON computed_electricity_types.fk_shantytown = shantytowns.shantytown_id
-            LEFT JOIN regions ON regions.code = shantytowns_today.region_code
+            LEFT JOIN departements ON departements.code = shantytowns_today.departement_code
             WHERE
                 shantytowns_today.departement_code = :departementCode
             AND
@@ -149,14 +146,11 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
                     shantytowns.shantytown_id,
                     LEAST(shantytowns.built_at, shantytowns.declared_at, shantytowns.created_at) AS known_since,
                     shantytowns.closed_at,
-                    regions.code AS region_code,
-                    regions.name AS region_name,
                     departements.code AS departement_code,
                     departements.name AS departement_name
                 FROM shantytowns
                 LEFT JOIN cities ON shantytowns.fk_city = cities.code
                 LEFT JOIN departements ON cities.fk_departement = departements.code
-                LEFT JOIN regions ON departements.fk_region = regions.code
             ), 
             shantytown_computed_origins AS (
                         SELECT
@@ -220,7 +214,7 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
             LEFT JOIN shantytown_computed_origins ON shantytown_computed_origins.fk_shantytown = shantytowns.hid
             LEFT JOIN computed_toilet_types ON computed_toilet_types.fk_shantytown = shantytowns.hid
             LEFT JOIN computed_electricity_types ON computed_electricity_types.fk_shantytown = shantytowns.hid
-            LEFT JOIN regions ON regions.code = shantytowns_today.region_code
+            LEFT JOIN departements ON departements.code = shantytowns_today.departement_code
             WHERE
                 shantytowns_today.departement_code = :departementCode
             AND
