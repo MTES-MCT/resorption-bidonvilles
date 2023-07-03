@@ -52,8 +52,27 @@ export default {
 
         // s3 (initialisation de tous les buckets, si nécessaire)
         try {
-            await loaders.s3();
+            const response = await loaders.s3();
+            let message: string = '================================\n';
+            message += 'Connexion au bucket S3 réussie !\n';
+
+            if (response.Buckets?.length > 0) {
+                message += response.Buckets?.length > 1
+                    ? 'Liste des buckets disponibles:\n'
+                    : 'Bucket disponible:\n';
+                response.Buckets.forEach((bucket) => {
+                    // eslint-disable-next-line no-console
+                    message += `- ${bucket.Name}\n`;
+                });
+            } else {
+                message += 'Aucun bucket n\'est accessible !';
+            }
+            message += '===============================';
+
+            // eslint-disable-next-line no-console
+            console.log(message);
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.log('Initialisation S3 échouée :(', error);
         }
 
