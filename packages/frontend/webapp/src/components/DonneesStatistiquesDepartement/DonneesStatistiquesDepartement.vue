@@ -220,8 +220,7 @@
                 :class="{
                     'w-0 overflow-hidden': mapSize === 'hidden',
                     'flex-1': mapSize !== 'hidden',
-                    'h-128': mapSize === 'half',
-                    'h-[45rem]': mapSize === 'full',
+                    'h-screen': mapSize === 'half' || mapSize === 'full',
                 }"
             >
                 <CartoDonneesStatistiques
