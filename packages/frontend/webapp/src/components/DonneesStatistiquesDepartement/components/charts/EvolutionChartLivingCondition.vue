@@ -83,8 +83,10 @@ const chartData = computed(() => ({
 const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    y: {
-        beginAtZero: true,
+    scales: {
+        y: {
+            beginAtZero: true,
+        },
     },
 };
 </script>

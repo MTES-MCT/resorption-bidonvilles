@@ -48,25 +48,25 @@ const chartData = computed(() => ({
     labels: data.charts.labels,
     datasets: [
         {
-            label: "Nombre total d'habitants",
-            backgroundColor: ["rgba(127, 127, 200, 0.7)"],
-            fill: true,
-            data: data.charts.total,
-            stack: "Stack 1",
-        },
-        {
             label: "Nombre d'habitants intra-UE",
-            backgroundColor: ["rgba(240, 127, 135, 0.7)"],
+            backgroundColor: ["rgba(240, 127, 135, 1)"],
             fill: true,
             data: data.charts.european,
             stack: "Stack 0",
         },
         {
             label: "Nombre d'habitants extra-UE",
-            backgroundColor: ["rgba(134, 239, 172, 0.7)"],
+            backgroundColor: ["rgba(134, 239, 172, 1)"],
             fill: true,
             data: data.charts.foreign,
             stack: "Stack 0",
+        },
+        {
+            label: "Nombre total d'habitants",
+            backgroundColor: ["rgba(127, 127, 200, 0.5)"],
+            fill: true,
+            data: data.charts.total,
+            stack: "Stack 1",
         },
     ],
 }));
