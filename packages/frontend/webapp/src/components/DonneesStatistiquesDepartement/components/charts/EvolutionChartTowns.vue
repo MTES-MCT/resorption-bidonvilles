@@ -70,7 +70,7 @@ const chartData = computed(() => ({
         },
         {
             label: "Nombre de sites de plus de 100 habitants",
-            backgroundColor: ["rgba(255, 183, 165, 0.7)"],
+            backgroundColor: ["rgba(127, 127, 200, 0.7)"],
             fill: true,
             data: data.charts.more_than_99,
             Stack: "Stack 0",
