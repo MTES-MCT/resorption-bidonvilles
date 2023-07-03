@@ -7,6 +7,7 @@
             </div>
             <div v-else>&nbsp;</div>
         </td>
+        <td></td>
     </tr>
 </template>
 
