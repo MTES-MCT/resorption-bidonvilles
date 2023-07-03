@@ -9,6 +9,7 @@
         :town="town"
         @highlightTown="onHighlight"
         @click="$emit('townClick', town, data.city)"
+        @townZoom="$emit('townZoom', town, data.city)"
         @unhighlightTown="onUnhighlight"
     />
 </template>
@@ -29,7 +30,12 @@ const props = defineProps({
     },
 });
 const { data, columns } = toRefs(props);
-const emit = defineEmits(["highlightTown", "townClick", "unhighlightTown"]);
+const emit = defineEmits([
+    "highlightTown",
+    "townZoom",
+    "townClick",
+    "unhighlightTown",
+]);
 
 function onHighlight(...args) {
     emit("highlightTown", ...args);

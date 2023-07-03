@@ -15,11 +15,18 @@
         >
             <component :is="col.bodyComponent" :data="data" :town="town" />
         </td>
+        <td
+            class="align-top py-1 text-center text-blue400 hover:text-primary"
+            @click.stop="$emit('townZoom', town, data.city)"
+        >
+            <Icon icon="magnifying-glass-plus" />
+        </td>
     </tr>
 </template>
 
 <script setup>
 import { toRefs } from "vue";
+import { Icon } from "@resorptionbidonvilles/ui";
 import CommuneBodyCell from "../cells/Commune/CommuneBody.vue";
 
 const props = defineProps({
@@ -42,7 +49,7 @@ const props = defineProps({
     },
 });
 const { data, columns, town, even } = toRefs(props);
-const emit = defineEmits(["highlightTown", "unhighlightTown"]);
+const emit = defineEmits(["townZoom", "highlightTown", "unhighlightTown"]);
 
 function onMouseEnter() {
     emit("highlightTown", town.value.id, data.value.city.code);

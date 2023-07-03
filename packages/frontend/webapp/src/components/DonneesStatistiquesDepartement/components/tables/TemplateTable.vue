@@ -13,6 +13,7 @@
                 @highlightTown="onHighlight"
                 @unhighlightTown="onUnhighlight"
                 @townClick="onTownClick"
+                @townZoom="onTownZoom"
             />
 
             <TotalRow :columns="columns" :metrics="metrics" />
@@ -68,7 +69,12 @@ const props = defineProps({
     },
 });
 const { columns, metrics } = toRefs(props);
-const emit = defineEmits(["highlightTown", "townClick", "unhighlightTown"]);
+const emit = defineEmits([
+    "highlightTown",
+    "townClick",
+    "townZoom",
+    "unhighlightTown",
+]);
 
 function onHighlight(...args) {
     emit("highlightTown", ...args);
@@ -80,5 +86,9 @@ function onUnhighlight(...args) {
 
 function onTownClick(...args) {
     emit("townClick", ...args);
+}
+
+function onTownZoom(...args) {
+    emit("townZoom", ...args);
 }
 </script>

@@ -59,6 +59,7 @@ import {
     faListUl,
     faLock,
     faMagnifyingGlass,
+    faMagnifyingGlassPlus,
     faMale,
     faMapPin,
     faMapMarkerAlt,
@@ -179,6 +180,7 @@ library.add(faLinkedin);
 library.add(faListUl);
 library.add(faLock);
 library.add(faMagnifyingGlass);
+library.add(faMagnifyingGlassPlus);
 library.add(faMale);
 library.add(faMapPin);
 library.add(faMapMarkerAlt);

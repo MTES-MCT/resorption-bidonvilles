@@ -10,6 +10,7 @@
         >
             <component :is="col.headComponent" :data="data" />
         </th>
+        <th></th>
     </tr>
 </template>
 

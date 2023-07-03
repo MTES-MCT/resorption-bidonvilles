@@ -183,6 +183,7 @@
                     @highlightTown="onMouseEnter"
                     @unhighlightTown="onMouseLeave"
                     @townClick="onTownRowClick"
+                    @townZoom="onTownRowZoom"
                 />
             </div>
             <div class="w-1 bg-blue300 relative">
@@ -396,16 +397,15 @@ function onMouseLeave() {
     highlightedEl.dom = null;
 }
 
-function onTownRowClick(town, city) {
-    if (carte.value.currentMarkerGroup === "towns") {
-        router.push(`/site/${town.id}`);
-        return;
-    }
+function onTownRowClick(town) {
+    router.push(`/site/${town.id}`);
+}
 
-    const el = document.getElementById(`marqueur-cities-stats-${city.code}`);
-    if (el) {
-        el.click();
-    }
+function onTownRowZoom(town) {
+    carte.value.setView({
+        center: [town.latitude, town.longitude],
+        zoom: 13,
+    });
 }
 
 function onTownClick(town) {

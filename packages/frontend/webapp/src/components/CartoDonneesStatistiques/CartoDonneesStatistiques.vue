@@ -45,6 +45,13 @@ defineExpose({
     currentMarkerGroup: computed(() => {
         return carto.value?.currentMarkerGroup;
     }),
+    setView(...args) {
+        if (carto.value) {
+            return carto.value.setView(...args);
+        }
+
+        return null;
+    },
     resize(...args) {
         if (carto.value) {
             return carto.value.resize(...args);
