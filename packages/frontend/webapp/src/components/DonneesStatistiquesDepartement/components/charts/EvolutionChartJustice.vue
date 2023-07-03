@@ -50,7 +50,7 @@ const chartData = computed(() => ({
     datasets: [
         {
             label: "Nombre de CFP",
-            backgroundColor: ["rgba(242, 242, 249, 0.7)"],
+            backgroundColor: ["rgba(0, 0, 145, 0.3)"],
             fill: true,
             data: data.charts.police,
         },
@@ -62,7 +62,7 @@ const chartData = computed(() => ({
         },
         {
             label: "Nombre de plaintes",
-            backgroundColor: ["rgba(233, 246, 238, 0.7)"],
+            backgroundColor: ["rgba(134, 239, 172, 0.7)"],
             fill: true,
             data: data.charts.complaints,
         },
