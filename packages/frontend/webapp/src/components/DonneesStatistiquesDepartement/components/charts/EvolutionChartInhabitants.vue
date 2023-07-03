@@ -49,26 +49,35 @@ const chartData = computed(() => ({
     datasets: [
         {
             label: "Nombre total d'habitants",
-            backgroundColor: ["rgba(242, 242, 249, 0.7)"],
+            backgroundColor: ["rgba(127, 127, 200, 0.7)"],
             fill: true,
             data: data.charts.total,
+            stack: "Stack 1",
         },
         {
             label: "Nombre d'habitants intra-UE",
-            backgroundColor: ["rgba(253, 242, 243, 0.7)"],
+            backgroundColor: ["rgba(240, 127, 135, 0.7)"],
             fill: true,
             data: data.charts.european,
+            stack: "Stack 0",
         },
         {
             label: "Nombre d'habitants extra-UE",
-            backgroundColor: ["rgba(233, 246, 238, 0.7)"],
+            backgroundColor: ["rgba(134, 239, 172, 0.7)"],
             fill: true,
             data: data.charts.foreign,
+            stack: "Stack 0",
         },
     ],
 }));
 const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    scales: {
+        y: {
+            stacked: true,
+            beginAtZero: true,
+        },
+    },
 };
 </script>

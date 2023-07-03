@@ -55,33 +55,36 @@ const chartData = computed(() => ({
     labels: data.charts.labels,
     datasets: [
         {
-            label: "Nombre total de sites",
-            backgroundColor: ["rgba(242, 242, 249, 0.7)"],
-            fill: true,
-            data: data.charts.total,
-        },
-        {
             label: "Nombre de sites de moins de 10 habitants",
-            backgroundColor: ["rgba(253, 242, 243, 0.7)"],
+            backgroundColor: ["rgba(240, 127, 135, 0.7)"],
             fill: true,
             data: data.charts.less_than_10,
+            Stack: "Stack 0",
         },
         {
             label: "Nombre de sites de moins de 100 habitants",
-            backgroundColor: ["rgba(233, 246, 238, 0.7)"],
+            backgroundColor: ["rgba(134, 239, 172, 0.7)"],
             fill: true,
             data: data.charts.between_10_and_99,
+            Stack: "Stack 0",
         },
         {
             label: "Nombre de sites de plus de 100 habitants",
-            backgroundColor: ["rgba(0, 0, 145, 0.7)"],
+            backgroundColor: ["rgba(255, 183, 165, 0.7)"],
             fill: true,
             data: data.charts.more_than_99,
+            Stack: "Stack 0",
         },
     ],
 }));
 const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    scales: {
+        y: {
+            stacked: true,
+            beginAtZero: true,
+        },
+    },
 };
 </script>
