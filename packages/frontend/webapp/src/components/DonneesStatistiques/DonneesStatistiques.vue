@@ -1,5 +1,5 @@
 <template>
-    <ContentWrapper>
+    <ContentWrapper id="printable-content">
         <Title class="mt-6">Visualisation des données</Title>
         <Header
             class="mt-4"
