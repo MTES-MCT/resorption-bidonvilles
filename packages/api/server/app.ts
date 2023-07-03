@@ -50,7 +50,7 @@ export default {
             console.log(`Server is now running on port ${port}! :)`);
         });
 
-        // s3 (initialisation de tous les buckets, si nécessaire)
+        // s3 (teste si un bucket au moins est accessible)
         try {
             const response = await loaders.s3();
             let message: string = '================================\n';
@@ -61,7 +61,6 @@ export default {
                     ? 'Liste des buckets disponibles:\n'
                     : 'Bucket disponible:\n';
                 response.Buckets.forEach((bucket) => {
-                    // eslint-disable-next-line no-console
                     message += `- ${bucket.Name}\n`;
                 });
             } else {
