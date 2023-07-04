@@ -1,10 +1,14 @@
 <template>
-    <BoolCell :value="town.heatwave === true" />
+    <Icon
+        class="text-red600"
+        icon="fa-regular fa-sun"
+        v-if="town.heatwave === true"
+    />
 </template>
 
 <script setup>
 import { toRefs } from "vue";
-import BoolCell from "../BoolCell.vue";
+import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({ town: Object });
 const { town } = toRefs(props);
