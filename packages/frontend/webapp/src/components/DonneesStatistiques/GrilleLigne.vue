@@ -30,7 +30,7 @@
                 >
                     <span class="mr-4" v-if="variant !== 'tertiary'"
                         ><Icon
-                            :icon="collapsed ? 'chevron-up' : 'chevron-down'"
+                            :icon="collapsed ? 'chevron-down' : 'chevron-right'"
                             class="cursor-pointer"
                             :class="
                                 metrics.children?.length > 0 ? '' : 'invisible'
