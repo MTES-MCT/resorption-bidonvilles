@@ -135,6 +135,8 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
             AND
                 shantytowns_today.known_since <= :to
             AND
+                (shantytowns.updated_at  <= :to OR shantytowns.updated_at = shantytowns.created_at)
+            AND
                 (shantytowns_today.closed_at IS NULL OR shantytowns_today.closed_at > :from)
             ${permissionWhereClause !== '()' ? `AND ${permissionWhereClause}` : ''}
             )
@@ -219,6 +221,8 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
                 shantytowns_today.departement_code = :departementCode
             AND
                 shantytowns_today.known_since <= :to
+            AND
+                (shantytowns.updated_at  <= :to OR shantytowns.updated_at = shantytowns.created_at)
             AND
                 (shantytowns_today.closed_at IS NULL OR shantytowns_today.closed_at > :from)
             ${permissionWhereClause !== '()' ? `AND ${permissionWhereClause}` : ''}

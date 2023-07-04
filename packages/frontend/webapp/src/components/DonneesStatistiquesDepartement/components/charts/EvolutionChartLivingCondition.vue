@@ -4,6 +4,7 @@
 
         <div v-if="data !== undefined" class="flex mt-4 space-x-6">
             <ChartBigFigure
+                v-if="chartType === 'towns'"
                 icon="map-pin"
                 :figure="data.figures.towns_total.value"
                 :evolution="data.figures.towns_total.evolution"
@@ -11,6 +12,7 @@
             >
 
             <ChartBigFigure
+                v-if="chartType === 'inhabitants'"
                 icon="people-group"
                 :figure="data.figures.inhabitants_total.value"
                 :evolution="data.figures.inhabitants_total.evolution"

@@ -5,10 +5,12 @@ import ServiceError from '#server/errors/ServiceError';
 import getLivingConditionsStatuses from '#server/models/shantytownModel/_common/livingConditions/v2/statuses/main';
 import { DepartementMetricsEvolution } from '#root/types/resources/DepartementMetricsEvolution.d';
 import initializeListOfDates from './_utils/initializeListOfDates';
+import initializeDepartementEvolutionMetrics from './_utils/initializeDepartementEvolutionMetrics';
 import getEvolution from './_utils/getEvolution';
 
-import getReportIndex from '../dataReport/_utils/getReportIndex';
 import getIndex from './_utils/getIndex';
+
+const livingConditionsKeys = ['water', 'electricity', 'toilets', 'fire_prevention', 'trash_evacuation', 'pest_animals'];
 
 export default async (user, departementCode, argFrom: Date, argTo: Date):Promise<DepartementMetricsEvolution> => {
     const hasJusticePermission = permissionUtils.can(user).do('access', 'shantytown_justice').on({ type: 'departement', departement: { code: departementCode } });
@@ -22,314 +24,7 @@ export default async (user, departementCode, argFrom: Date, argTo: Date):Promise
     const listOfDates = initializeListOfDates(argFrom, argTo);
 
 
-    const metrics:DepartementMetricsEvolution = {
-        summary: {
-            towns: {
-                figures: {
-                    total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    less_than_10: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    between_10_and_99: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    more_than_99: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                },
-                charts: {
-                    labels: listOfDates.map(date => date.label),
-                    total: Array(listOfDates.length).fill(0),
-                    less_than_10: Array(listOfDates.length).fill(0),
-                    between_10_and_99: Array(listOfDates.length).fill(0),
-                    more_than_99: Array(listOfDates.length).fill(0),
-                },
-            },
-            inhabitants: {
-                figures: {
-                    total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    european: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    foreign: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                },
-                charts: {
-                    labels: listOfDates.map(date => date.label),
-                    total: Array(listOfDates.length).fill(0),
-                    european: Array(listOfDates.length).fill(0),
-                    foreign: Array(listOfDates.length).fill(0),
-                },
-            },
-            water: {
-                figures: {
-                    towns_total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    inhabitants_total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    access_to_water: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                },
-                charts: {
-                    labels: listOfDates.map(date => date.label),
-                    inhabitants_total: Array(listOfDates.length).fill(0),
-                    access_to_water: Array(listOfDates.length).fill(0),
-                },
-            },
-        },
-        inhabitants: {
-            towns: {
-                figures: {
-                    total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    less_than_10: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    between_10_and_99: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    more_than_99: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                },
-                charts: {
-                    labels: listOfDates.map(date => date.label),
-                    total: Array(listOfDates.length).fill(0),
-                    less_than_10: Array(listOfDates.length).fill(0),
-                    between_10_and_99: Array(listOfDates.length).fill(0),
-                    more_than_99: Array(listOfDates.length).fill(0),
-                },
-            },
-            inhabitants: {
-                figures: {
-                    total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    european: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    foreign: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                },
-                charts: {
-                    labels: listOfDates.map(date => date.label),
-                    total: Array(listOfDates.length).fill(0),
-                    european: Array(listOfDates.length).fill(0),
-                    foreign: Array(listOfDates.length).fill(0),
-                },
-            },
-        },
-        livingConditions: {
-            water: {
-                figures: {
-                    towns_total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    inhabitants_total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    inhabitants_with_access_to_water: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    towns_with_access_to_water: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                },
-                charts: {
-                    labels: listOfDates.map(date => date.label),
-                    inhabitants_total: Array(listOfDates.length).fill(0),
-                    inhabitants_with_access_to_water: Array(listOfDates.length).fill(0),
-                    towns_total: Array(listOfDates.length).fill(0),
-                    towns_with_access_to_water: Array(listOfDates.length).fill(0),
-                },
-            },
-            electricity: {
-                figures: {
-                    towns_total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    inhabitants_total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    inhabitants_with_access_to_electricity: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    towns_with_access_to_electricity: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                },
-                charts: {
-                    labels: listOfDates.map(date => date.label),
-                    inhabitants_total: Array(listOfDates.length).fill(0),
-                    inhabitants_with_access_to_electricity: Array(listOfDates.length).fill(0),
-                    towns_total: Array(listOfDates.length).fill(0),
-                    towns_with_access_to_electricity: Array(listOfDates.length).fill(0),
-                },
-            },
-            toilets: {
-                figures: {
-                    towns_total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    inhabitants_total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    inhabitants_with_access_to_toilets: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    towns_with_access_to_toilets: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                },
-                charts: {
-                    labels: listOfDates.map(date => date.label),
-                    inhabitants_total: Array(listOfDates.length).fill(0),
-                    inhabitants_with_access_to_toilets: Array(listOfDates.length).fill(0),
-                    towns_total: Array(listOfDates.length).fill(0),
-                    towns_with_access_to_toilets: Array(listOfDates.length).fill(0),
-                },
-            },
-            fire_prevention: {
-                figures: {
-                    towns_total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    inhabitants_total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    inhabitants_with_access_to_fire_prevention: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    towns_with_access_to_fire_prevention: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                },
-                charts: {
-                    labels: listOfDates.map(date => date.label),
-                    inhabitants_total: Array(listOfDates.length).fill(0),
-                    inhabitants_with_access_to_fire_prevention: Array(listOfDates.length).fill(0),
-                    towns_total: Array(listOfDates.length).fill(0),
-                    towns_with_access_to_fire_prevention: Array(listOfDates.length).fill(0),
-                },
-            },
-            trash_evacuation: {
-                figures: {
-                    towns_total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    inhabitants_total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    inhabitants_with_access_to_trash_evacuation: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    towns_with_access_to_trash_evacuation: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                },
-                charts: {
-                    labels: listOfDates.map(date => date.label),
-                    inhabitants_total: Array(listOfDates.length).fill(0),
-                    inhabitants_with_access_to_trash_evacuation: Array(listOfDates.length).fill(0),
-                    towns_total: Array(listOfDates.length).fill(0),
-                    towns_with_access_to_trash_evacuation: Array(listOfDates.length).fill(0),
-                },
-            },
-            pest_animals: {
-                figures: {
-                    towns_total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    inhabitants_total: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    inhabitants_with_absence_of_pest_animals: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    towns_with_absence_of_pest_animals: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                },
-                charts: {
-                    labels: listOfDates.map(date => date.label),
-                    inhabitants_total: Array(listOfDates.length).fill(0),
-                    inhabitants_with_absence_of_pest_animals: Array(listOfDates.length).fill(0),
-                    towns_total: Array(listOfDates.length).fill(0),
-                    towns_with_absence_of_pest_animals: Array(listOfDates.length).fill(0),
-                },
-            },
-        },
-        justice: {
-            justice: {
-                figures: {
-                    police: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                    complaints: {
-                        value: 0,
-                        evolution: 0,
-                    },
-                },
-                charts: {
-                    labels: listOfDates.map(date => date.label),
-                    police: Array(listOfDates.length).fill(0),
-                    complaints: Array(listOfDates.length).fill(0),
-                },
-            },
-        },
-    };
+    const metrics:DepartementMetricsEvolution = initializeDepartementEvolutionMetrics(listOfDates.map(({ label }) => label));
 
     let previousIndex;
     data.forEach((row, index) => {
@@ -342,13 +37,8 @@ export default async (user, departementCode, argFrom: Date, argTo: Date):Promise
             previousIndex = undefined;
         }
 
+        const reportIndex = getIndex(listOfDates.map(({ date }) => date), isLast ? row.known_since : row.input_date);
 
-        // on récupère l'index de la première date dans notre rapport concernée par la saisie
-        // (le Math.max permet de gérer le cas où la date de saisie est < from, ie. un index négatif)
-        const reportIndex = Math.max(
-            0,
-            getIndex(listOfDates.map(({ date }) => date), isLast ? row.known_since : row.input_date),
-        );
 
         // on impacte les totaux des sites existants pour tous les rapports existants entre la date
         // de création du site et sa date de fermeture
@@ -358,7 +48,7 @@ export default async (user, departementCode, argFrom: Date, argTo: Date):Promise
         let maxReportIndex;
         if (previousIndex === undefined) {
             maxReportIndex = row.closed_at
-                ? getReportIndex(argFrom, argTo, row.closed_at)
+                ? getIndex(listOfDates.map(({ date }) => date), row.closed_at)
                 : listOfDates.length;
         } else {
             maxReportIndex = previousIndex;
@@ -372,47 +62,33 @@ export default async (user, departementCode, argFrom: Date, argTo: Date):Promise
 
         for (let i = reportIndex; i < maxReportIndex; i += 1) {
             // on remplit les chiffres des sites et habitants
-            metrics.summary.towns.charts.total[i] += 1;
             metrics.inhabitants.towns.charts.total[i] += 1;
-            metrics.summary.inhabitants.charts.total[i] += row.population_total;
             metrics.inhabitants.inhabitants.charts.total[i] += row.population_total;
-            metrics.summary.water.charts.inhabitants_total[i] += row.population_total;
-            metrics.livingConditions.water.charts.inhabitants_total[i] += row.population_total;
-            metrics.livingConditions.water.charts.towns_total[i] += 1;
-            metrics.livingConditions.electricity.charts.inhabitants_total[i] += row.population_total;
-            metrics.livingConditions.electricity.charts.towns_total[i] += 1;
-            metrics.livingConditions.toilets.charts.inhabitants_total[i] += row.population_total;
-            metrics.livingConditions.toilets.charts.towns_total[i] += 1;
-            metrics.livingConditions.fire_prevention.charts.inhabitants_total[i] += row.population_total;
-            metrics.livingConditions.fire_prevention.charts.towns_total[i] += 1;
-            metrics.livingConditions.trash_evacuation.charts.inhabitants_total[i] += row.population_total;
-            metrics.livingConditions.trash_evacuation.charts.towns_total[i] += 1;
-            metrics.livingConditions.pest_animals.charts.inhabitants_total[i] += row.population_total;
-            metrics.livingConditions.pest_animals.charts.towns_total[i] += 1;
+            livingConditionsKeys.forEach((key) => {
+                metrics.livingConditions[key].charts.inhabitants_total[i] += row.population_total;
+                metrics.livingConditions[key].charts.towns_total[i] += 1;
+            });
+
             if (row.population_total < 10) {
-                metrics.summary.towns.charts.less_than_10[i] += 1;
                 metrics.inhabitants.towns.charts.less_than_10[i] += 1;
             }
             if (row.population_total >= 10 && row.population_total <= 99) {
-                metrics.summary.towns.charts.between_10_and_99[i] += 1;
                 metrics.inhabitants.towns.charts.between_10_and_99[i] += 1;
             }
             if (row.population_total >= 100) {
-                metrics.summary.towns.charts.more_than_99[i] += 1;
                 metrics.inhabitants.towns.charts.more_than_99[i] += 1;
             }
             if (row.origins.length === 1 && row.origins[0] === 'european') {
-                metrics.summary.inhabitants.charts.european[i] += row.population_total;
                 metrics.inhabitants.inhabitants.charts.european[i] += row.population_total;
             }
             if (row.origins.length === 1 && row.origins[0] === 'other') {
-                metrics.summary.inhabitants.charts.foreign[i] += row.population_total;
                 metrics.inhabitants.inhabitants.charts.foreign[i] += row.population_total;
             }
 
             // on remplit les chiffres des conditions de vie
+
+
             if (livingConditionsStatuses.water.status === 'good') {
-                metrics.summary.water.charts.access_to_water[i] += row.population_total;
                 metrics.livingConditions.water.charts.inhabitants_with_access_to_water[i] += row.population_total;
                 metrics.livingConditions.water.charts.towns_with_access_to_water[i] += 1;
             }
@@ -455,101 +131,27 @@ export default async (user, departementCode, argFrom: Date, argTo: Date):Promise
 
     // on calcule les totaux et évolutions
 
-    // pour la synthèse
-    metrics.summary.towns.figures.total.value = metrics.summary.towns.charts.total[listOfDates.length - 1];
-    metrics.summary.towns.figures.total.evolution = getEvolution(metrics.summary.towns.charts.total[listOfDates.length - 1] - metrics.summary.towns.charts.total[0], metrics.summary.towns.charts.total[0]);
-    metrics.summary.towns.figures.less_than_10.value = metrics.summary.towns.charts.less_than_10[listOfDates.length - 1];
-    metrics.summary.towns.figures.less_than_10.evolution = getEvolution(metrics.summary.towns.charts.less_than_10[listOfDates.length - 1] - metrics.summary.towns.charts.less_than_10[0], metrics.summary.towns.charts.less_than_10[0]);
-    metrics.summary.towns.figures.between_10_and_99.value = metrics.summary.towns.charts.between_10_and_99[listOfDates.length - 1];
-    metrics.summary.towns.figures.between_10_and_99.evolution = getEvolution(metrics.summary.towns.charts.between_10_and_99[listOfDates.length - 1] - metrics.summary.towns.charts.between_10_and_99[0], metrics.summary.towns.charts.between_10_and_99[listOfDates.length - 1]);
-    metrics.summary.towns.figures.more_than_99.value = metrics.summary.towns.charts.more_than_99[listOfDates.length - 1];
-    metrics.summary.towns.figures.more_than_99.evolution = getEvolution(metrics.summary.towns.charts.more_than_99[listOfDates.length - 1] - metrics.summary.towns.charts.more_than_99[0], metrics.summary.towns.charts.more_than_99[listOfDates.length - 1]);
-
-    metrics.summary.inhabitants.figures.total.value = metrics.summary.inhabitants.charts.total[listOfDates.length - 1];
-    metrics.summary.inhabitants.figures.total.evolution = getEvolution(metrics.summary.inhabitants.charts.total[listOfDates.length - 1] - metrics.summary.inhabitants.charts.total[0], metrics.summary.inhabitants.charts.total[listOfDates.length - 1]);
-    metrics.summary.inhabitants.figures.european.value = metrics.summary.inhabitants.charts.european[listOfDates.length - 1];
-    metrics.summary.inhabitants.figures.european.evolution = getEvolution(metrics.summary.inhabitants.charts.european[listOfDates.length - 1] - metrics.summary.inhabitants.charts.european[0], metrics.summary.inhabitants.charts.european[listOfDates.length - 1]);
-    metrics.summary.inhabitants.figures.foreign.value = metrics.summary.inhabitants.charts.foreign[listOfDates.length - 1];
-    metrics.summary.inhabitants.figures.foreign.evolution = getEvolution(metrics.summary.inhabitants.charts.foreign[listOfDates.length - 1] - metrics.summary.inhabitants.charts.foreign[0], metrics.summary.inhabitants.charts.foreign[listOfDates.length - 1]);
-
-    metrics.summary.water.figures.towns_total.value = metrics.summary.water.charts.inhabitants_total[listOfDates.length - 1];
-    metrics.summary.water.figures.towns_total.evolution = getEvolution(metrics.summary.water.charts.inhabitants_total[listOfDates.length - 1] - metrics.summary.water.charts.inhabitants_total[0], metrics.summary.water.charts.inhabitants_total[listOfDates.length - 1]);
-    metrics.summary.water.figures.inhabitants_total.value = metrics.summary.water.charts.inhabitants_total[listOfDates.length - 1];
-    metrics.summary.water.figures.inhabitants_total.evolution = getEvolution(metrics.summary.water.charts.inhabitants_total[listOfDates.length - 1] - metrics.summary.water.charts.inhabitants_total[0], metrics.summary.water.charts.inhabitants_total[listOfDates.length - 1]);
-    metrics.summary.water.figures.access_to_water.value = metrics.summary.water.charts.access_to_water[listOfDates.length - 1];
-    metrics.summary.water.figures.access_to_water.evolution = getEvolution(metrics.summary.water.charts.access_to_water[listOfDates.length - 1] - metrics.summary.water.charts.access_to_water[0], metrics.summary.water.charts.access_to_water[listOfDates.length - 1]);
 
     // pour les habitants
-    metrics.inhabitants.towns.figures.total.value = metrics.inhabitants.towns.charts.total[listOfDates.length - 1];
-    metrics.inhabitants.towns.figures.total.evolution = getEvolution(metrics.inhabitants.towns.charts.total[listOfDates.length - 1] - metrics.inhabitants.towns.charts.total[0], metrics.inhabitants.towns.charts.total[0]);
-    metrics.inhabitants.towns.figures.less_than_10.value = metrics.inhabitants.towns.charts.less_than_10[listOfDates.length - 1];
-    metrics.inhabitants.towns.figures.less_than_10.evolution = getEvolution(metrics.inhabitants.towns.charts.less_than_10[listOfDates.length - 1] - metrics.inhabitants.towns.charts.less_than_10[0], metrics.inhabitants.towns.charts.less_than_10[0]);
-    metrics.inhabitants.towns.figures.between_10_and_99.value = metrics.inhabitants.towns.charts.between_10_and_99[listOfDates.length - 1];
-    metrics.inhabitants.towns.figures.between_10_and_99.evolution = getEvolution(metrics.inhabitants.towns.charts.between_10_and_99[listOfDates.length - 1] - metrics.inhabitants.towns.charts.between_10_and_99[0], metrics.inhabitants.towns.charts.between_10_and_99[0]);
-    metrics.inhabitants.towns.figures.more_than_99.value = metrics.inhabitants.towns.charts.more_than_99[listOfDates.length - 1];
-    metrics.inhabitants.towns.figures.more_than_99.evolution = getEvolution(metrics.inhabitants.towns.charts.more_than_99[listOfDates.length - 1] - metrics.inhabitants.towns.charts.more_than_99[0], metrics.inhabitants.towns.charts.more_than_99[0]);
+    Object.keys(metrics.inhabitants.towns.figures).forEach((key) => {
+        metrics.inhabitants.towns.figures[key].value = metrics.inhabitants.towns.charts[key][listOfDates.length - 1];
+        metrics.inhabitants.towns.figures[key].evolution = getEvolution(metrics.inhabitants.towns.charts[key][0], metrics.inhabitants.towns.charts[key][listOfDates.length - 1]);
+    });
 
-    metrics.inhabitants.inhabitants.figures.total.value = metrics.inhabitants.inhabitants.charts.total[listOfDates.length - 1];
-    metrics.inhabitants.inhabitants.figures.total.evolution = getEvolution(metrics.inhabitants.inhabitants.charts.total[listOfDates.length - 1] - metrics.inhabitants.inhabitants.charts.total[0], metrics.inhabitants.inhabitants.charts.total[0]);
-    metrics.inhabitants.inhabitants.figures.european.value = metrics.inhabitants.inhabitants.charts.european[listOfDates.length - 1];
-    metrics.inhabitants.inhabitants.figures.european.evolution = getEvolution(metrics.inhabitants.inhabitants.charts.european[listOfDates.length - 1] - metrics.inhabitants.inhabitants.charts.european[0], metrics.inhabitants.inhabitants.charts.european[0]);
-    metrics.inhabitants.inhabitants.figures.foreign.value = metrics.inhabitants.inhabitants.charts.foreign[listOfDates.length - 1];
-    metrics.inhabitants.inhabitants.figures.foreign.evolution = getEvolution(metrics.inhabitants.inhabitants.charts.foreign[listOfDates.length - 1] - metrics.inhabitants.inhabitants.charts.foreign[0], metrics.inhabitants.inhabitants.charts.foreign[0]);
+    Object.keys(metrics.inhabitants.inhabitants.figures).forEach((key) => {
+        metrics.inhabitants.inhabitants.figures[key].value = metrics.inhabitants.inhabitants.charts[key][listOfDates.length - 1];
+        metrics.inhabitants.inhabitants.figures[key].evolution = getEvolution(metrics.inhabitants.inhabitants.charts[key][0], metrics.inhabitants.inhabitants.charts[key][listOfDates.length - 1]);
+    });
+
 
     // pour les conditions de vie
-    metrics.livingConditions.water.figures.towns_total.value = metrics.summary.towns.figures.total.value;
-    metrics.livingConditions.water.figures.towns_total.evolution = metrics.summary.towns.figures.total.evolution;
-    metrics.livingConditions.water.figures.inhabitants_total.value = metrics.livingConditions.water.charts.inhabitants_total[listOfDates.length - 1];
-    metrics.livingConditions.water.figures.inhabitants_total.evolution = getEvolution(metrics.livingConditions.water.charts.inhabitants_total[listOfDates.length - 1] - metrics.livingConditions.water.charts.inhabitants_total[0], metrics.livingConditions.water.charts.inhabitants_total[listOfDates.length - 1]);
-    metrics.livingConditions.water.figures.inhabitants_with_access_to_water.value = metrics.livingConditions.water.charts.inhabitants_with_access_to_water[listOfDates.length - 1];
-    metrics.livingConditions.water.figures.inhabitants_with_access_to_water.evolution = getEvolution(metrics.livingConditions.water.charts.inhabitants_with_access_to_water[listOfDates.length - 1] - metrics.livingConditions.water.charts.inhabitants_with_access_to_water[0], metrics.livingConditions.water.charts.inhabitants_with_access_to_water[listOfDates.length - 1]);
-    metrics.livingConditions.water.figures.towns_with_access_to_water.value = metrics.livingConditions.water.charts.towns_with_access_to_water[listOfDates.length - 1];
-    metrics.livingConditions.water.figures.towns_with_access_to_water.evolution = getEvolution(metrics.livingConditions.water.charts.towns_with_access_to_water[listOfDates.length - 1] - metrics.livingConditions.water.charts.towns_with_access_to_water[0], metrics.livingConditions.water.charts.towns_with_access_to_water[listOfDates.length - 1]);
+    livingConditionsKeys.forEach((key) => {
+        Object.keys(metrics.livingConditions[key].figures).forEach((figureKey) => {
+            metrics.livingConditions[key].figures[figureKey].value = metrics.livingConditions[key].charts[figureKey][listOfDates.length - 1];
+            metrics.livingConditions[key].figures[figureKey].evolution = getEvolution(metrics.livingConditions[key].charts[figureKey][0], metrics.livingConditions[key].charts[figureKey][listOfDates.length - 1]);
+        });
+    });
 
-    metrics.livingConditions.electricity.figures.towns_total.value = metrics.summary.towns.figures.total.value;
-    metrics.livingConditions.electricity.figures.towns_total.evolution = metrics.summary.towns.figures.total.evolution;
-    metrics.livingConditions.electricity.figures.inhabitants_total.value = metrics.livingConditions.electricity.charts.inhabitants_total[listOfDates.length - 1];
-    metrics.livingConditions.electricity.figures.inhabitants_total.evolution = getEvolution(metrics.livingConditions.electricity.charts.inhabitants_total[listOfDates.length - 1] - metrics.livingConditions.electricity.charts.inhabitants_total[0], metrics.livingConditions.electricity.charts.inhabitants_total[listOfDates.length - 1]);
-    metrics.livingConditions.electricity.figures.inhabitants_with_access_to_electricity.value = metrics.livingConditions.electricity.charts.inhabitants_with_access_to_electricity[listOfDates.length - 1];
-    metrics.livingConditions.electricity.figures.inhabitants_with_access_to_electricity.evolution = getEvolution(metrics.livingConditions.electricity.charts.inhabitants_with_access_to_electricity[listOfDates.length - 1] - metrics.livingConditions.electricity.charts.inhabitants_with_access_to_electricity[0], metrics.livingConditions.electricity.charts.inhabitants_with_access_to_electricity[listOfDates.length - 1]);
-    metrics.livingConditions.electricity.figures.towns_with_access_to_electricity.value = metrics.livingConditions.electricity.charts.towns_with_access_to_electricity[listOfDates.length - 1];
-    metrics.livingConditions.electricity.figures.towns_with_access_to_electricity.evolution = getEvolution(metrics.livingConditions.electricity.charts.towns_with_access_to_electricity[listOfDates.length - 1] - metrics.livingConditions.electricity.charts.towns_with_access_to_electricity[0], metrics.livingConditions.electricity.charts.towns_with_access_to_electricity[listOfDates.length - 1]);
-
-    metrics.livingConditions.toilets.figures.towns_total.value = metrics.summary.towns.figures.total.value;
-    metrics.livingConditions.toilets.figures.towns_total.evolution = metrics.summary.towns.figures.total.evolution;
-    metrics.livingConditions.toilets.figures.inhabitants_total.value = metrics.livingConditions.toilets.charts.inhabitants_total[listOfDates.length - 1];
-    metrics.livingConditions.toilets.figures.inhabitants_total.evolution = getEvolution(metrics.livingConditions.toilets.charts.inhabitants_total[listOfDates.length - 1] - metrics.livingConditions.toilets.charts.inhabitants_total[0], metrics.livingConditions.toilets.charts.inhabitants_total[listOfDates.length - 1]);
-    metrics.livingConditions.toilets.figures.inhabitants_with_access_to_toilets.value = metrics.livingConditions.toilets.charts.inhabitants_with_access_to_toilets[listOfDates.length - 1];
-    metrics.livingConditions.toilets.figures.inhabitants_with_access_to_toilets.evolution = getEvolution(metrics.livingConditions.toilets.charts.inhabitants_with_access_to_toilets[listOfDates.length - 1] - metrics.livingConditions.toilets.charts.inhabitants_with_access_to_toilets[0], metrics.livingConditions.toilets.charts.inhabitants_with_access_to_toilets[listOfDates.length - 1]);
-    metrics.livingConditions.toilets.figures.towns_with_access_to_toilets.value = metrics.livingConditions.toilets.charts.towns_with_access_to_toilets[listOfDates.length - 1];
-    metrics.livingConditions.toilets.figures.towns_with_access_to_toilets.evolution = getEvolution(metrics.livingConditions.toilets.charts.towns_with_access_to_toilets[listOfDates.length - 1] - metrics.livingConditions.toilets.charts.towns_with_access_to_toilets[0], metrics.livingConditions.toilets.charts.towns_with_access_to_toilets[listOfDates.length - 1]);
-
-    metrics.livingConditions.fire_prevention.figures.towns_total.value = metrics.summary.towns.figures.total.value;
-    metrics.livingConditions.fire_prevention.figures.towns_total.evolution = metrics.summary.towns.figures.total.evolution;
-    metrics.livingConditions.fire_prevention.figures.inhabitants_total.value = metrics.livingConditions.fire_prevention.charts.inhabitants_total[listOfDates.length - 1];
-    metrics.livingConditions.fire_prevention.figures.inhabitants_total.evolution = getEvolution(metrics.livingConditions.fire_prevention.charts.inhabitants_total[listOfDates.length - 1] - metrics.livingConditions.fire_prevention.charts.inhabitants_total[0], metrics.livingConditions.fire_prevention.charts.inhabitants_total[listOfDates.length - 1]);
-    metrics.livingConditions.fire_prevention.figures.inhabitants_with_access_to_fire_prevention.value = metrics.livingConditions.fire_prevention.charts.inhabitants_with_access_to_fire_prevention[listOfDates.length - 1];
-    metrics.livingConditions.fire_prevention.figures.inhabitants_with_access_to_fire_prevention.evolution = getEvolution(metrics.livingConditions.fire_prevention.charts.inhabitants_with_access_to_fire_prevention[listOfDates.length - 1] - metrics.livingConditions.fire_prevention.charts.inhabitants_with_access_to_fire_prevention[0], metrics.livingConditions.fire_prevention.charts.inhabitants_with_access_to_fire_prevention[listOfDates.length - 1]);
-    metrics.livingConditions.fire_prevention.figures.towns_with_access_to_fire_prevention.value = metrics.livingConditions.fire_prevention.charts.towns_with_access_to_fire_prevention[listOfDates.length - 1];
-    metrics.livingConditions.fire_prevention.figures.towns_with_access_to_fire_prevention.evolution = getEvolution(metrics.livingConditions.fire_prevention.charts.towns_with_access_to_fire_prevention[listOfDates.length - 1] - metrics.livingConditions.fire_prevention.charts.towns_with_access_to_fire_prevention[0], metrics.livingConditions.fire_prevention.charts.towns_with_access_to_fire_prevention[listOfDates.length - 1]);
-
-    metrics.livingConditions.trash_evacuation.figures.towns_total.value = metrics.summary.towns.figures.total.value;
-    metrics.livingConditions.trash_evacuation.figures.towns_total.evolution = metrics.summary.towns.figures.total.evolution;
-    metrics.livingConditions.trash_evacuation.figures.inhabitants_total.value = metrics.livingConditions.trash_evacuation.charts.inhabitants_total[listOfDates.length - 1];
-    metrics.livingConditions.trash_evacuation.figures.inhabitants_total.evolution = getEvolution(metrics.livingConditions.trash_evacuation.charts.inhabitants_total[listOfDates.length - 1] - metrics.livingConditions.trash_evacuation.charts.inhabitants_total[0], metrics.livingConditions.trash_evacuation.charts.inhabitants_total[listOfDates.length - 1]);
-    metrics.livingConditions.trash_evacuation.figures.inhabitants_with_access_to_trash_evacuation.value = metrics.livingConditions.trash_evacuation.charts.inhabitants_with_access_to_trash_evacuation[listOfDates.length - 1];
-    metrics.livingConditions.trash_evacuation.figures.inhabitants_with_access_to_trash_evacuation.evolution = getEvolution(metrics.livingConditions.trash_evacuation.charts.inhabitants_with_access_to_trash_evacuation[listOfDates.length - 1] - metrics.livingConditions.trash_evacuation.charts.inhabitants_with_access_to_trash_evacuation[0], metrics.livingConditions.trash_evacuation.charts.inhabitants_with_access_to_trash_evacuation[listOfDates.length - 1]);
-    metrics.livingConditions.trash_evacuation.figures.towns_with_access_to_trash_evacuation.value = metrics.livingConditions.trash_evacuation.charts.towns_with_access_to_trash_evacuation[listOfDates.length - 1];
-    metrics.livingConditions.trash_evacuation.figures.towns_with_access_to_trash_evacuation.evolution = getEvolution(metrics.livingConditions.trash_evacuation.charts.towns_with_access_to_trash_evacuation[listOfDates.length - 1] - metrics.livingConditions.trash_evacuation.charts.towns_with_access_to_trash_evacuation[0], metrics.livingConditions.trash_evacuation.charts.towns_with_access_to_trash_evacuation[listOfDates.length - 1]);
-
-    metrics.livingConditions.pest_animals.figures.towns_total.value = metrics.summary.towns.figures.total.value;
-    metrics.livingConditions.pest_animals.figures.towns_total.evolution = metrics.summary.towns.figures.total.evolution;
-    metrics.livingConditions.pest_animals.figures.inhabitants_total.value = metrics.livingConditions.pest_animals.charts.inhabitants_total[listOfDates.length - 1];
-    metrics.livingConditions.pest_animals.figures.inhabitants_total.evolution = getEvolution(metrics.livingConditions.pest_animals.charts.inhabitants_total[listOfDates.length - 1] - metrics.livingConditions.pest_animals.charts.inhabitants_total[0], metrics.livingConditions.pest_animals.charts.inhabitants_total[listOfDates.length - 1]);
-    metrics.livingConditions.pest_animals.figures.inhabitants_with_absence_of_pest_animals.value = metrics.livingConditions.pest_animals.charts.inhabitants_with_absence_of_pest_animals[listOfDates.length - 1];
-    metrics.livingConditions.pest_animals.figures.inhabitants_with_absence_of_pest_animals.evolution = getEvolution(metrics.livingConditions.pest_animals.charts.inhabitants_with_absence_of_pest_animals[listOfDates.length - 1] - metrics.livingConditions.pest_animals.charts.inhabitants_with_absence_of_pest_animals[0], metrics.livingConditions.pest_animals.charts.inhabitants_with_absence_of_pest_animals[listOfDates.length - 1]);
-    metrics.livingConditions.pest_animals.figures.towns_with_absence_of_pest_animals.value = metrics.livingConditions.pest_animals.charts.towns_with_absence_of_pest_animals[listOfDates.length - 1];
-    metrics.livingConditions.pest_animals.figures.towns_with_absence_of_pest_animals.evolution = getEvolution(metrics.livingConditions.pest_animals.charts.towns_with_absence_of_pest_animals[listOfDates.length - 1] - metrics.livingConditions.pest_animals.charts.towns_with_absence_of_pest_animals[0], metrics.livingConditions.pest_animals.charts.towns_with_absence_of_pest_animals[listOfDates.length - 1]);
 
     // pour la justice
     if (hasJusticePermission) {

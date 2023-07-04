@@ -2,8 +2,13 @@ import moment from 'moment';
 import getMonthDiff from '../../dataReport/_utils/getMonthDiff';
 import getWeekDiff from './getWeekDiff';
 
+export type DateObject = {
+    date: Date;
+    label: string;
+};
 
-export default (argFrom: Date, argTo: Date): any[] => {
+// Si au moins 3 mois de différence entre argFrom et argTo, ajoute un label pour chaque mois, sinon, ajoute un label pour chaque semaine
+export default (argFrom: Date, argTo: Date): DateObject[] => {
     const from = moment(argFrom).set({
         hour: 0, minute: 0, second: 0, millisecond: 0,
     });
