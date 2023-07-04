@@ -49,7 +49,8 @@ export type DepartementMetricsRawData = {
     trashEvacuationIsRegular: boolean | null,
     trashBulkyIsPiling: boolean | null,
     pestAnimals: boolean | null,
-    firePrevention: boolean | null
+    firePrevention: boolean | null,
+    heatwave_status: boolean,
 };
 
 export default async (user, departementCode: string): Promise<DepartementMetricsRawData[]> => {
@@ -125,7 +126,8 @@ export default async (user, departementCode: string): Promise<DepartementMetrics
             shantytowns.trash_evacuation_is_regular AS "trashEvacuationIsRegular",
             shantytowns.trash_bulky_is_piling AS "trashBulkyIsPiling",
             shantytowns.pest_animals AS "pestAnimals",
-            shantytowns.fire_prevention AS "firePrevention"
+            shantytowns.fire_prevention AS "firePrevention",
+            shantytowns.heatwave_status
         FROM shantytowns
         LEFT JOIN field_types ON shantytowns.fk_field_type = field_types.field_type_id
         LEFT JOIN shantytown_computed_origins ON shantytown_computed_origins.fk_shantytown = shantytowns.shantytown_id

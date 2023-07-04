@@ -17,6 +17,8 @@ import number_of_towns_with_water from "./components/cells/Water/number_of_towns
 import number_of_inhabitants_with_water from "./components/cells/Water/number_of_inhabitants_with_water";
 import number_of_towns_without_pest_animals from "./components/cells/PestAnimals/number_of_towns_without_pest_animals";
 import number_of_inhabitants_without_pest_animals from "./components/cells/PestAnimals/number_of_inhabitants_without_pest_animals";
+import number_of_towns_with_heatwave from "./components/cells/Heatwave/number_of_towns_with_heatwave";
+import number_of_inhabitants_with_heatwave from "./components/cells/Heatwave/number_of_inhabitants_with_heatwave";
 import origins_european from "./components/cells/Origins/european/origins_european";
 import origins_extra from "./components/cells/Origins/extra/origins_extra";
 import origins_french from "./components/cells/Origins/french/origins_french";
@@ -41,6 +43,8 @@ export default {
     number_of_inhabitants_with_water,
     number_of_towns_without_pest_animals,
     number_of_inhabitants_without_pest_animals,
+    number_of_towns_with_heatwave,
+    number_of_inhabitants_with_heatwave,
     origins_european,
     origins_extra,
     origins_french,

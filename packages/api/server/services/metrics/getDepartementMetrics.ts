@@ -53,6 +53,7 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
             number_of_towns_with_fire_prevention: 0,
             number_of_towns_with_toilets: 0,
             number_of_towns_without_pest_animals: 0,
+            number_of_towns_with_heatwave: 0,
             number_of_towns_with_owner_complaint: 0,
             number_of_towns_with_justice_procedure: 0,
             number_of_towns_with_police: 0,
@@ -90,6 +91,7 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
                     number_of_towns_with_fire_prevention: 0,
                     number_of_towns_with_toilets: 0,
                     number_of_towns_without_pest_animals: 0,
+                    number_of_towns_with_heatwave: 0,
                     number_of_towns_with_owner_complaint: 0,
                     number_of_towns_with_justice_procedure: 0,
                     number_of_towns_with_police: 0,
@@ -99,6 +101,7 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
                     percentage_of_towns_with_fire_prevention: 0,
                     percentage_of_towns_with_toilets: 0,
                     percentage_of_towns_without_pest_animals: 0,
+                    percentage_of_towns_with_heatwave: 0,
                     percentage_of_towns_with_owner_complaint: 0,
                     percentage_of_towns_with_justice_procedure: 0,
                     percentage_of_towns_with_police: 0,
@@ -108,12 +111,14 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
                     number_of_inhabitants_with_fire_prevention: 0,
                     number_of_inhabitants_with_toilets: 0,
                     number_of_inhabitants_without_pest_animals: 0,
+                    number_of_inhabitants_with_heatwave: 0,
                     percentage_of_inhabitants_with_water: 0,
                     percentage_of_inhabitants_with_electricity: 0,
                     percentage_of_inhabitants_with_trash_evacuation: 0,
                     percentage_of_inhabitants_with_fire_prevention: 0,
                     percentage_of_inhabitants_with_toilets: 0,
                     percentage_of_inhabitants_without_pest_animals: 0,
+                    percentage_of_inhabitants_with_heatwave: 0,
 
                 },
                 city: {
@@ -187,6 +192,13 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
             metrics.summary.number_of_towns_without_pest_animals += 1;
         }
 
+        if (row.heatwave_status === true) {
+            hashCities[row.city_code].summary.number_of_towns_with_heatwave += 1;
+            hashCities[row.city_code].summary.number_of_inhabitants_with_heatwave += row.population_total;
+            metrics.summary.number_of_towns_with_heatwave += 1;
+        }
+
+
         if (hasJusticePermission) {
             if (row.owner_complaint === true) {
                 hashCities[row.city_code].summary.number_of_towns_with_owner_complaint += 1;
@@ -218,6 +230,7 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
             fire_prevention: livingConditionsStatuses.fire_prevention.status,
             working_toilets: livingConditionsStatuses.sanitary.status,
             absence_of_pest_animals: livingConditionsStatuses.pest_animals.status,
+            heatwave: row.heatwave_status,
             owner_complaint: null,
             justice_procedure: null,
             police: null,
@@ -250,6 +263,7 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
             percentage_of_towns_with_fire_prevention: Math.round((cityMetric.summary.number_of_towns_with_fire_prevention * 100) / cityMetric.summary.number_of_towns),
             percentage_of_towns_with_toilets: Math.round((cityMetric.summary.number_of_towns_with_toilets * 100) / cityMetric.summary.number_of_towns),
             percentage_of_towns_without_pest_animals: Math.round((cityMetric.summary.number_of_towns_without_pest_animals * 100) / cityMetric.summary.number_of_towns),
+            percentage_of_towns_with_heatwave: Math.round((cityMetric.summary.number_of_towns_with_heatwave * 100) / cityMetric.summary.number_of_towns),
             percentage_of_towns_with_owner_complaint: Math.round((cityMetric.summary.number_of_towns_with_owner_complaint * 100) / cityMetric.summary.number_of_towns),
             percentage_of_towns_with_justice_procedure: Math.round((cityMetric.summary.number_of_towns_with_justice_procedure * 100) / cityMetric.summary.number_of_towns),
             percentage_of_towns_with_police: Math.round((cityMetric.summary.number_of_towns_with_police * 100) / cityMetric.summary.number_of_towns),
@@ -259,6 +273,7 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
             percentage_of_inhabitants_with_fire_prevention: Math.round((cityMetric.summary.number_of_inhabitants_with_fire_prevention * 100) / cityMetric.summary.number_of_persons),
             percentage_of_inhabitants_with_toilets: Math.round((cityMetric.summary.number_of_inhabitants_with_toilets * 100) / cityMetric.summary.number_of_persons),
             percentage_of_inhabitants_without_pest_animals: Math.round((cityMetric.summary.number_of_inhabitants_without_pest_animals * 100) / cityMetric.summary.number_of_persons),
+            percentage_of_inhabitants_with_heatwave: Math.round((cityMetric.summary.number_of_inhabitants_with_heatwave * 100) / cityMetric.summary.number_of_persons),
         },
 
     }));

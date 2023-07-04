@@ -63,7 +63,7 @@ function sortLivingConditionByKeyName(key) {
     };
 }
 
-function sortJusticeByKeyName(key) {
+function sortBooleanByKeyName(key) {
     return (a, b, order) => {
         if (a[key] === b[key]) {
             return sortByKeyName("usename")(a, b, "asc");
@@ -173,6 +173,10 @@ export default {
             ),
             town_level: sortLivingConditionByKeyName("absence_of_pest_animals"),
         },
+        number_of_inhabitants_with_heatwave: {
+            city_level: sortBySummaryKey("number_of_inhabitants_with_heatwave"),
+            town_level: sortBooleanByKeyName("heatwave"),
+        },
     },
     livingConditionsByTown: {
         city_name: {
@@ -214,6 +218,10 @@ export default {
             ),
             town_level: sortLivingConditionByKeyName("absence_of_pest_animals"),
         },
+        number_of_towns_with_heatwave: {
+            city_level: sortBySummaryKey("number_of_towns_with_heatwave"),
+            town_level: sortBooleanByKeyName("heatwave"),
+        },
     },
     justice: {
         city_name: {
@@ -224,18 +232,18 @@ export default {
             city_level: sortBySummaryKey(
                 "number_of_towns_with_owner_complaint"
             ),
-            town_level: sortJusticeByKeyName("owner_complaint"),
+            town_level: sortBooleanByKeyName("owner_complaint"),
         },
 
         number_of_towns_with_justice_procedure: {
             city_level: sortBySummaryKey(
                 "number_of_towns_with_justice_procedure"
             ),
-            town_level: sortJusticeByKeyName("justice_procedure"),
+            town_level: sortBooleanByKeyName("justice_procedure"),
         },
         number_of_towns_with_police: {
             city_level: sortBySummaryKey("number_of_towns_with_police"),
-            town_level: sortJusticeByKeyName("police"),
+            town_level: sortBooleanByKeyName("police"),
         },
     },
 };
