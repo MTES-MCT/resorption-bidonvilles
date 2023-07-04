@@ -38,6 +38,9 @@ import actionCreateComment from './actions/createComment';
 import actionUpdate from './actions/update';
 import justiceReaderFindByLocation from './justiceReaders/findByLocation';
 import organizationSearch from './organizations/search';
+import getDepartementMetrics from './metrics/getDepartementMetrics';
+import getDepartementEvolutionMetrics from './metrics/getDepartementEvolutionMetrics';
+import getNationMetrics from './metrics/getNationMetrics';
 
 export default {
     closeTown,
@@ -87,6 +90,11 @@ export default {
     },
     me: {
         postNavigationLogs: mePostNavigationLogs,
+    },
+    metrics: {
+        getDepartementMetrics,
+        getDepartementEvolutionMetrics,
+        getNationMetrics,
     },
     note: {
         createNote,

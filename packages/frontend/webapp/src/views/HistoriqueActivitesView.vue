@@ -5,6 +5,9 @@
         searchPlaceholder="Nom d'une commune, d'un département, d'une région..."
         v-model:location="location"
     >
+        <ContentWrapper>
+            <FilArianne :items="ariane" class="mb-8" />
+        </ContentWrapper>
         <HistoriqueActivites />
     </LayoutSearch>
 </template>
@@ -12,10 +15,16 @@
 <script setup>
 import { onMounted, onBeforeUnmount, computed } from "vue";
 import { useActivitiesStore } from "@/stores/activities.store";
+import { FilArianne } from "@resorptionbidonvilles/ui";
+import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import HistoriqueActivites from "@/components/HistoriqueActivites/HistoriqueActivites.vue";
 
 const activitiesStore = useActivitiesStore();
+const ariane = [
+    { label: "Accueil", to: "/" },
+    { label: "Dernières activités" },
+];
 
 const location = computed({
     get() {

@@ -86,6 +86,10 @@ export const useNavigationStore = defineStore("navigation", {
                 return [];
             }
 
+            const metricsItem = {
+                label: "Visualisation des données",
+                route: "/visualisation-donnees",
+            };
             const items = [
                 { label: "Accueil", route: "/" },
                 { label: "Sites", route: "/liste-des-sites" },
@@ -93,11 +97,16 @@ export const useNavigationStore = defineStore("navigation", {
                 { label: "Communauté", route: "/communaute" },
                 { label: "Carte", route: "/cartographie" },
                 { label: "Dernières activités", route: "/activites" },
-                { label: "Statistiques", route: "/statistiques" },
+                metricsItem,
                 { label: "Administration", route: "/acces" },
             ];
 
             const userStore = useUserStore();
+            const { departement } = userStore.user.organization.location;
+            if (departement !== null) {
+                metricsItem.route = `/visualisation-donnees/departement/${departement.code}`;
+            }
+
             const itemsFilteredByPermission = items.filter((item) => {
                 const { permissions } = router.resolve(item.route).meta;
                 if (!permissions) {

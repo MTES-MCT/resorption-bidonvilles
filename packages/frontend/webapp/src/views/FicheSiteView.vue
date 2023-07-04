@@ -23,6 +23,9 @@
     </LayoutError>
 
     <Layout :paddingBottom="false" v-else>
+        <ContentWrapper>
+            <FilArianne :items="ariane" class="mb-8" />
+        </ContentWrapper>
         <FicheSite :town="town" v-if="town" />
     </Layout>
 </template>
@@ -33,7 +36,8 @@ import { useTownsStore } from "@/stores/towns.store.js";
 import router from "@/helpers/router";
 import { trackEvent } from "@/helpers/matomo";
 
-import { Button } from "@resorptionbidonvilles/ui";
+import { Button, FilArianne } from "@resorptionbidonvilles/ui";
+import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import Layout from "@/components/Layout/Layout.vue";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
 import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
@@ -43,6 +47,11 @@ import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 const townsStore = useTownsStore();
 const isLoading = ref(null);
 const error = ref(null);
+const ariane = computed(() => [
+    { label: "Accueil", to: "/" },
+    { label: "Sites", to: "/liste-des-sites" },
+    { label: town.value.usename || "..." },
+]);
 
 const townId = computed(() => {
     return parseInt(router.currentRoute.value.params.id, 10);

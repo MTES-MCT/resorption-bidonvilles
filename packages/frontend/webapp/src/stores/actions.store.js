@@ -145,6 +145,7 @@ export const useActionsStore = defineStore("actions", () => {
         filters,
         filteredActions,
         currentPage,
+        hash,
         numberOfPages: computed(() => {
             if (filteredActions.value.length === 0) {
                 return 0;

@@ -1,5 +1,7 @@
+export type StatusEnum = 'good' | 'bad' | 'toImprove' | 'unknown';
+
 type Status = {
-    status: 'good' | 'bad' | 'toImprove' | 'unknown'
+    status: StatusEnum
     positive: string[],
     negative: string[],
     unknown: string[]

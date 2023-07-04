@@ -7,9 +7,10 @@ import {
 import { setup } from '@storybook/vue3'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHouseCircleCheck, faSpinner, faTimes, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faHouseCircleCheck, faSpinner, faTimes, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import '../src/css/styles.css';
 
+library.add(faHome);
 library.add(faHouseCircleCheck);
 library.add(faSpinner);
 library.add(faTimes);

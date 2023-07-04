@@ -5,6 +5,9 @@
         searchPlaceholder="Nom d'une commune, d'un département..."
         v-model:location="location"
     >
+        <ContentWrapper>
+            <FilArianne :items="ariane" class="mb-8" />
+        </ContentWrapper>
         <TableauDeBord />
     </LayoutSearch>
 </template>
@@ -13,9 +16,12 @@
 import { onMounted, computed, onBeforeUnmount } from "vue";
 import { useDashboardStore } from "@/stores/dashboard.store";
 import { useDashboardActivitiesStore } from "@/stores/dashboard.activities.store";
+import { FilArianne } from "@resorptionbidonvilles/ui";
+import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import TableauDeBord from "@/components/TableauDeBord/TableauDeBord.vue";
 
+const ariane = [{ label: "Accueil", to: "/" }];
 const aMonthAgo = new Date();
 aMonthAgo.setDate(aMonthAgo.getDate() - 30);
 aMonthAgo.setHours(0);

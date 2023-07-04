@@ -6,6 +6,9 @@
         showNationalWording="Voir tous les sites de France"
         v-model:location="location"
     >
+        <ContentWrapper>
+            <FilArianne :items="ariane" class="mb-8" />
+        </ContentWrapper>
         <BandeauPromotionEspaceEntraide />
         <ListeDesSites />
     </LayoutSearch>
@@ -16,10 +19,13 @@ import { computed, onMounted } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { trackEvent } from "@/helpers/matomo";
 
+import { FilArianne } from "@resorptionbidonvilles/ui";
+import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import ListeDesSites from "@/components/ListeDesSites/ListeDesSites.vue";
 import BandeauPromotionEspaceEntraide from "@/components/BandeauPromotionEspaceEntraide/BandeauPromotionEspaceEntraide.vue";
 
+const ariane = [{ label: "Accueil", to: "/" }, { label: "Sites" }];
 const townsStore = useTownsStore();
 const location = computed({
     get() {
