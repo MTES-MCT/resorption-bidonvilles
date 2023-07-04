@@ -155,10 +155,10 @@ export default async (user, departementCode, argFrom: Date, argTo: Date):Promise
 
     // pour la justice
     if (hasJusticePermission) {
-        metrics.justice.justice.figures.police.value = metrics.justice.justice.charts.police[listOfDates.length - 1];
-        metrics.justice.justice.figures.police.evolution = getEvolution(metrics.justice.justice.charts.police[listOfDates.length - 1] - metrics.justice.justice.charts.police[0], metrics.justice.justice.charts.police[listOfDates.length - 1]);
-        metrics.justice.justice.figures.complaints.value = metrics.justice.justice.charts.complaints[listOfDates.length - 1];
-        metrics.justice.justice.figures.complaints.evolution = getEvolution(metrics.justice.justice.charts.complaints[listOfDates.length - 1] - metrics.justice.justice.charts.complaints[0], metrics.justice.justice.charts.complaints[listOfDates.length - 1]);
+        Object.keys(metrics.justice.justice.figures).forEach((figureKey) => {
+            metrics.justice.justice.figures[figureKey].value = metrics.justice.justice.charts[figureKey][listOfDates.length - 1];
+            metrics.justice.justice.figures[figureKey].evolution = getEvolution(metrics.justice.justice.charts[figureKey][0], metrics.justice.justice.charts[figureKey][listOfDates.length - 1]);
+        });
     }
 
     return metrics;
