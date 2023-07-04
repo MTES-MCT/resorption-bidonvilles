@@ -135,7 +135,7 @@
     <main class="mt-6">
         <Onglets
             @switch="switchTab"
-            :tabs="tabs"
+            :tabs="userTabs"
             :activeTab="departementMetricsStore.activeTab"
         />
 
@@ -258,6 +258,7 @@
 import { computed, nextTick, onMounted, toRefs, ref, watch } from "vue";
 import { useGeojsonStore } from "@/stores/geojson.store";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
+import { useUserStore } from "@/stores/user.store";
 import formatDate from "@common/utils/formatDate";
 import router from "@/helpers/router";
 import tabs from "./DonneesStatistiquesDepartement.tabs";
@@ -285,6 +286,7 @@ const props = defineProps({
 });
 const { departement, metrics } = toRefs(props);
 const departementMetricsStore = useDepartementMetricsStore();
+const userStore = useUserStore();
 
 const carte = ref(null);
 const isLoading = ref(true);
@@ -296,6 +298,13 @@ const tables = {
     livingConditionsByTown: LivingConditionsByTownTable,
     justice: JusticeTable,
 };
+
+const userTabs = computed(() => {
+    if (!userStore.hasJusticePermission) {
+        return tabs.filter((t) => t.id !== "justice");
+    }
+    return tabs;
+});
 
 const currentTable = computed(() => {
     return tables[departementMetricsStore.activeTab];
