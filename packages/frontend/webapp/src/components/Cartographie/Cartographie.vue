@@ -2,39 +2,34 @@
     <div class="flex">
         <div
             class="bg-white border-t print:hidden relative"
-            :class="mapStore.filtersAreOpen ? 'w-72' : ''"
+            :class="filtersAreOpen ? 'w-72' : ''"
         >
             <CartographieFiltres
-                @open="mapStore.filtersAreOpen = true"
-                @close="mapStore.filtersAreOpen = false"
-                :isOpen="mapStore.filtersAreOpen"
+                @open="filtersAreOpen = true"
+                @close="filtersAreOpen = false"
+                :isOpen="filtersAreOpen"
             />
         </div>
         <div class="flex-1" style="height: 100vh">
-            <Carte
+            <CartoNationale
                 id="carte"
                 ref="carte"
-                :towns="towns"
-                :pois="pois"
                 :isLoading="!timedOut"
                 :defaultView="defaultView"
-                showPrinter
-                showAddressToggler
-                v-model:showAddresses="mapStore.showAddresses"
-                showTerritories
-                showSearchbar
-                @viewchange="onViewChange"
+                :towns="towns"
+                :pois="pois"
                 @townclick="onTownClick"
                 @poiclick="onPoiClick"
+                @viewchange="onViewChange"
+                v-model:showAddresses="mapStore.showAddresses"
             />
-
-            <CarteQuickviewTown
+            <CartographieQuickviewTown
                 ref="quickviewTown"
                 :open="mapStore.quickview.town?.open || false"
                 :town="mapStore.quickview.town?.data"
                 @close="onQuickviewTownClose"
             />
-            <CarteQuickviewPoi
+            <CartographieQuickviewPoi
                 ref="quickviewPoi"
                 :open="mapStore.quickview.poi?.open || false"
                 :poi="mapStore.quickview.poi?.data"
@@ -46,17 +41,19 @@
 
 <script setup>
 import { onMounted, ref, computed, watch, nextTick } from "vue";
+import { storeToRefs } from "pinia";
 import { useMapStore } from "@/stores/map.store";
 import { useUserStore } from "@/stores/user.store";
 import { trackEvent } from "@/helpers/matomo";
 
-import Carte from "@/components/Carte/Carte.vue";
-import CarteQuickviewTown from "@/components/Carte/CarteQuickviewTown.vue";
-import CarteQuickviewPoi from "@/components/Carte/CarteQuickviewPoi.vue";
+import CartoNationale from "@/components/CartoNationale/CartoNationale.vue";
+import CartographieQuickviewTown from "./CartographieQuickviewTown.vue";
+import CartographieQuickviewPoi from "./CartographieQuickviewPoi.vue";
 import CartographieFiltres from "./CartographieFiltres.vue";
 import waitForElement from "@/utils/waitForElement";
 
 const mapStore = useMapStore();
+const { filtersAreOpen } = storeToRefs(mapStore);
 const carte = ref(null);
 const quickviewTown = ref(null);
 const quickviewPoi = ref(null);
@@ -116,11 +113,15 @@ onMounted(() => {
     });
 });
 
-watch(mapStore.filtersAreOpen, () => {
+watch(filtersAreOpen, () => {
     nextTick(carte.value.resize);
 });
 
 function onTownClick(town) {
+    if (!town.id) {
+        return;
+    }
+
     mapStore.quickview.poi = null;
     mapStore.quickview.town = {
         open: true,

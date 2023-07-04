@@ -6,6 +6,9 @@
         showNationalWording="Voir toutes les actions de France"
         v-model:location="location"
     >
+        <ContentWrapper>
+            <FilArianne :items="ariane" class="mb-8" />
+        </ContentWrapper>
         <BandeauPromotionEspaceEntraide />
         <ListeDesActions />
     </LayoutSearch>
@@ -15,10 +18,14 @@
 import { computed, onMounted } from "vue";
 import { useActionsStore } from "@/stores/actions.store";
 
+import { FilArianne } from "@resorptionbidonvilles/ui";
+import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import ListeDesActions from "@/components/ListeDesActions/ListeDesActions.vue";
 
 import BandeauPromotionEspaceEntraide from "@/components/BandeauPromotionEspaceEntraide/BandeauPromotionEspaceEntraide.vue";
+
+const ariane = [{ label: "Accueil", to: "/" }, { label: "Actions" }];
 
 const actionsStore = useActionsStore();
 const location = computed({

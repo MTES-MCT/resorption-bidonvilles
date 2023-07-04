@@ -23,6 +23,9 @@
     </LayoutError>
 
     <Layout :paddingBottom="false" v-else>
+        <ContentWrapper>
+            <FilArianne :items="ariane" class="mb-8" />
+        </ContentWrapper>
         <FicheAction :action="action" v-if="action" />
     </Layout>
 </template>
@@ -32,7 +35,8 @@ import { onMounted, ref, computed, watch } from "vue";
 import { useActionsStore } from "@/stores/actions.store.js";
 import router from "@/helpers/router";
 
-import { Button } from "@resorptionbidonvilles/ui";
+import { Button, FilArianne } from "@resorptionbidonvilles/ui";
+import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import Layout from "@/components/Layout/Layout.vue";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
 import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
@@ -42,7 +46,15 @@ import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 const actionsStore = useActionsStore();
 const isLoading = ref(null);
 const error = ref(null);
-const action = ref(null);
+const action = computed(() => {
+    return actionsStore.hash[actionId.value] || null;
+});
+
+const ariane = computed(() => [
+    { label: "Accueil", to: "/" },
+    { label: "Actions", to: "/liste-des-actions" },
+    { label: action.value.name || "..." },
+]);
 
 const actionId = computed(() => {
     return parseInt(router.currentRoute.value.params.id, 10);
@@ -59,7 +71,7 @@ async function load() {
     isLoading.value = true;
     error.value = null;
     try {
-        action.value = await actionsStore.fetchAction(actionId.value);
+        await actionsStore.fetchAction(actionId.value);
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
     }

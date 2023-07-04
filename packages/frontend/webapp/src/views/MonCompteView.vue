@@ -1,5 +1,8 @@
 <template>
     <Layout>
+        <ContentWrapper>
+            <FilArianne :items="ariane" class="mb-8" />
+        </ContentWrapper>
         <ProfilUtilisateur
             :user="userStore.user"
             :buildTabRoute="(tabId) => `/mon-compte/${tabId}`"
@@ -15,8 +18,11 @@
 <script setup>
 import { useUserStore } from "@/stores/user.store.js";
 
+import { FilArianne } from "@resorptionbidonvilles/ui";
+import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import Layout from "@/components/Layout/Layout.vue";
 import ProfilUtilisateur from "@/components/ProfilUtilisateur/ProfilUtilisateur.vue";
 
+const ariane = [{ label: "Accueil", to: "/" }, { label: "Mon compte" }];
 const userStore = useUserStore();
 </script>

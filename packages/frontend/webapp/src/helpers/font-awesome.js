@@ -1,3 +1,4 @@
+import { dom } from "@fortawesome/fontawesome-svg-core";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
@@ -13,6 +14,7 @@ import {
     faBars,
     faBolt,
     faBook,
+    faBugSlash,
     faBuilding,
     faBullseye,
     faCalendar,
@@ -31,15 +33,22 @@ import {
     faComments,
     faCopy,
     faCutlery,
+    faEarthEurope,
     faEnvelope,
     faEuroSign,
     faExclamation,
     faExclamationCircle,
+    faFaceFrown,
+    faFaceSmile,
+    faFaucetDrip,
     faFile,
     faFileExcel,
     faFilePdf,
     faFileSignature,
     faFileWord,
+    faFilter,
+    faFilterCircleXmark,
+    faFireExtinguisher,
     faFlag,
     faHandshakeAngle,
     faHistory,
@@ -47,16 +56,20 @@ import {
     faHouseCircleXmark,
     faHouseUser,
     faKey,
+    faListUl,
     faLock,
     faMagnifyingGlass,
+    faMagnifyingGlassPlus,
     faMale,
     faMapPin,
     faMapMarkerAlt,
     faMinus,
     faNotesMedical,
+    faPaperclip,
     faPaperPlane,
     faPen,
     faPencilAlt,
+    faPeopleGroup,
     faPersonMilitaryPointing,
     faPhone,
     faPlus,
@@ -68,9 +81,12 @@ import {
     faSchool,
     faScroll,
     faSpinner,
+    faStar,
+    faTableList,
     faTent,
     faTimes,
     faTint,
+    faToilet,
     faTrashAlt as faTrashAltSolid,
     faTriangleExclamation,
     faUnlink,
@@ -90,6 +106,7 @@ import {
     faEye,
     faEyeSlash,
     faNewspaper,
+    faStar as faStarEmpty,
     faSun,
     faTrashAlt,
     faUser,
@@ -112,6 +129,7 @@ library.add(faBars);
 library.add(faBell);
 library.add(faBolt);
 library.add(faBook);
+library.add(faBugSlash);
 library.add(faBuilding);
 library.add(faBullseye);
 library.add(faCalendar);
@@ -132,6 +150,7 @@ library.add(faComment);
 library.add(faComments);
 library.add(faCopy);
 library.add(faCutlery);
+library.add(faEarthEurope);
 library.add(faEnvelope);
 library.add(faEuroSign);
 library.add(faExclamation);
@@ -139,11 +158,17 @@ library.add(faExclamationCircle);
 library.add(faEye);
 library.add(faEyeSlash);
 library.add(faFacebook);
+library.add(faFaceFrown);
+library.add(faFaceSmile);
+library.add(faFaucetDrip);
 library.add(faFile);
 library.add(faFileExcel);
 library.add(faFilePdf);
 library.add(faFileSignature);
 library.add(faFileWord);
+library.add(faFilter);
+library.add(faFilterCircleXmark);
+library.add(faFireExtinguisher);
 library.add(faFlag);
 library.add(faHandshakeAngle);
 library.add(faHistory);
@@ -151,18 +176,22 @@ library.add(faHome);
 library.add(faHouseCircleXmark);
 library.add(faHouseUser);
 library.add(faKey);
-library.add(faLock);
 library.add(faLinkedin);
+library.add(faListUl);
+library.add(faLock);
 library.add(faMagnifyingGlass);
+library.add(faMagnifyingGlassPlus);
 library.add(faMale);
 library.add(faMapPin);
 library.add(faMapMarkerAlt);
 library.add(faMinus);
 library.add(faNewspaper);
 library.add(faNotesMedical);
+library.add(faPaperclip);
 library.add(faPaperPlane);
 library.add(faPen);
 library.add(faPencilAlt);
+library.add(faPeopleGroup);
 library.add(faPersonMilitaryPointing);
 library.add(faPhone);
 library.add(faPrint);
@@ -174,10 +203,14 @@ library.add(faRotateRight);
 library.add(faSchool);
 library.add(faScroll);
 library.add(faSpinner);
+library.add(faStar);
+library.add(faStarEmpty);
 library.add(faSun);
+library.add(faTableList);
 library.add(faTent);
 library.add(faTimes);
 library.add(faTint);
+library.add(faToilet);
 library.add(faTrashAlt);
 library.add(faTrashAltSolid);
 library.add(faTriangleExclamation);
@@ -193,5 +226,9 @@ library.add(faUsers);
 library.add(faUserShield);
 library.add(faUserSlash);
 library.add(faUserSolid);
+
+export function useFontAwesome() {
+    dom.watch();
+}
 
 export default FontAwesomeIcon;

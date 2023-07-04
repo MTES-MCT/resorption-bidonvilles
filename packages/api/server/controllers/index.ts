@@ -30,6 +30,10 @@ import geoListDepartements from './geoController/listDepartements';
 import geoSearch from './geoController/search';
 // invite
 import inviteInvite from './inviteController/invite';
+// metrics
+import getDepartementMetrics from './metricsController/getDepartementMetrics';
+import getDepartementEvolutionMetrics from './metricsController/getDepartementEvolutionMetrics';
+import getNationMetrics from './metricsController/getNationMetrics';
 // note
 import noteAddPublication from './noteController/addPublication';
 import noteCreate from './noteController/create';
@@ -135,6 +139,11 @@ export default () => ({
     },
     invite: {
         invite: inviteInvite,
+    },
+    metrics: {
+        getDepartementMetrics,
+        getDepartementEvolutionMetrics,
+        getNationMetrics,
     },
     note: {
         addPublication: noteAddPublication,

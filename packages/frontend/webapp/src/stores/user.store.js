@@ -71,6 +71,21 @@ export const useUserStore = defineStore("user", {
                     permission.allowed_on.regions?.includes(region)
             );
         },
+        hasMoreThanOneDepartementForMetrics() {
+            const permission = this.user.permissions.shantytown.list;
+            if (permission.allowed === false) {
+                return false;
+            }
+
+            if (permission.allow_all === true) {
+                return true;
+            }
+
+            return (
+                permission.allowed_on.departements.length > 1 ||
+                permission.allowed_on.regions.length > 0
+            );
+        },
     },
     actions: {
         getPermission(permissionName) {

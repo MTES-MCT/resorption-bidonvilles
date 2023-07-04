@@ -1,26 +1,21 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <ContentWrapper>
-        <EntraideBanniere class="mb-8" />
-        <EntraideHeader />
+    <EntraideBanniere class="mb-8" />
+    <EntraideHeader />
 
-        <Loading v-if="questionsStore.isLoading !== false" />
-        <EntraideErreur v-else-if="questionsStore.error" />
+    <Loading v-if="questionsStore.isLoading !== false" />
+    <EntraideErreur v-else-if="questionsStore.error" />
 
-        <template v-else>
-            <ListeDesQuestionsFiltres class="-mt-5 mb-4" />
-            <ListeDesQuestions
-                v-if="questionsStore.filteredQuestions.length > 0"
-            />
-            <ListeDesQuestionsVide v-else />
-        </template>
-    </ContentWrapper>
+    <template v-else>
+        <ListeDesQuestionsFiltres class="-mt-5 mb-4" />
+        <ListeDesQuestions v-if="questionsStore.filteredQuestions.length > 0" />
+        <ListeDesQuestionsVide v-else />
+    </template>
 </template>
 
 <script setup>
 import { useQuestionsStore } from "@/stores/questions.store";
 
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import Loading from "@/components/Loading/Loading.vue";
 import EntraideBanniere from "./EntraideBanniere.vue";
 import EntraideHeader from "./EntraideHeader.vue";

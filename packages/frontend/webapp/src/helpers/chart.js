@@ -1,25 +1,33 @@
 import {
     Chart as ChartJS,
+    ArcElement,
     BarElement,
     CategoryScale,
     Filler,
     Legend,
-    LinearScale,
     LineElement,
+    LinearScale,
     PointElement,
     Title,
     Tooltip,
 } from "chart.js";
-import { Bar, Line } from "vue-chartjs";
+import {
+    Bar as BarChart,
+    Line as LineChart,
+    Pie as PieChart,
+} from "vue-chartjs";
 
-ChartJS.register(BarElement);
-ChartJS.register(CategoryScale);
-ChartJS.register(Filler);
-ChartJS.register(Legend);
-ChartJS.register(LinearScale);
-ChartJS.register(LineElement);
-ChartJS.register(PointElement);
-ChartJS.register(Title);
-ChartJS.register(Tooltip);
+ChartJS.register(
+    ArcElement,
+    BarElement,
+    CategoryScale,
+    Filler,
+    Legend,
+    LineElement,
+    LinearScale,
+    PointElement,
+    Title,
+    Tooltip
+);
 
-export { Bar, Line };
+export { BarChart, LineChart, PieChart };

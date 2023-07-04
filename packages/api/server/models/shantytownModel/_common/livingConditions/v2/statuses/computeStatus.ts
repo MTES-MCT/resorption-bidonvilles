@@ -1,4 +1,6 @@
-const STATUS_PRIORITY = ['bad', 'unknown', 'toImprove'];
+import { StatusEnum } from '../../LivingConditions.d';
+
+const STATUS_PRIORITY: StatusEnum[] = ['bad', 'unknown', 'toImprove'];
 
 export default (town, items) => {
     const {
