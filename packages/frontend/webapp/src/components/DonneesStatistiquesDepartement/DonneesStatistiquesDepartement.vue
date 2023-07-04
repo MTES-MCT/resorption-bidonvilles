@@ -221,7 +221,8 @@
                 class="sticky top-0"
                 :class="{
                     'w-0 overflow-hidden': mapSize === 'hidden',
-                    'flex-1': mapSize !== 'hidden',
+                    'w-1/3 2xl:w-auto 2xl:flex-1': mapSize === 'half',
+                    'flex-1': mapSize === 'full',
                     'h-screen': mapSize === 'half' || mapSize === 'full',
                 }"
             >
