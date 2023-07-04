@@ -16,6 +16,12 @@
     </section>
 </template>
 
+<script>
+export default {
+    name: "RbParametres",
+};
+</script>
+
 <script setup>
 import { useMetricsStore } from "@/stores/metrics.store";
 import parametres from "./DonneesStatistiques.parametres";

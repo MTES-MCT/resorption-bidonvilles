@@ -17,6 +17,12 @@
     </section>
 </template>
 
+<script>
+export default {
+    name: "RbActions",
+};
+</script>
+
 <script setup>
 import domtoimage from "dom-to-image-more";
 import downloadBlob from "@/utils/downloadBlob";

@@ -33,6 +33,12 @@
 @import "https://unpkg.com/leaflet@1.3.4/dist/leaflet.css";
 </style>
 
+<script>
+export default {
+    name: "RbCarto",
+};
+</script>
+
 <script setup>
 import { ref, toRefs, onMounted, onBeforeUnmount, watch } from "vue";
 import L from "leaflet";

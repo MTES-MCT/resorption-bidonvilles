@@ -23,6 +23,12 @@
     </section>
 </template>
 
+<script>
+export default {
+    name: "RbDates",
+};
+</script>
+
 <script setup>
 import { ref, computed } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store";

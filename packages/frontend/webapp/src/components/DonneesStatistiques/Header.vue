@@ -18,6 +18,12 @@
     </header>
 </template>
 
+<script>
+export default {
+    name: "RbHeader",
+};
+</script>
+
 <script setup>
 import { useMetricsStore } from "@/stores/metrics.store";
 import Actions from "./Actions.vue";

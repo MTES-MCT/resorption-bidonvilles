@@ -22,6 +22,12 @@
 
 <style scoped lang="scss" src="./grid.scss" />
 
+<script>
+export default {
+    name: "RbGrille",
+};
+</script>
+
 <script setup>
 import { toRefs } from "vue";
 import GrilleHeader from "./GrilleHeader.vue";
