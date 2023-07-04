@@ -32,6 +32,7 @@ export const useDepartementMetricsStore = defineStore(
             error: ref(null),
             data: ref(null),
         };
+        const collapsedCities = ref({});
         const lastMapView = ref(null);
 
         const filteredMetrics = computed(() => {
@@ -80,6 +81,7 @@ export const useDepartementMetricsStore = defineStore(
             };
             metrics.value = {};
             currentFormat.value = "table";
+            collapsedCities.value = {};
             evolution.from.value.setTime(new Date());
             evolution.to.value.setTime(new Date());
             evolution.loaded.value = {
@@ -110,6 +112,7 @@ export const useDepartementMetricsStore = defineStore(
             currentFormat,
             evolution,
             lastMapView,
+            collapsedCities,
             async fetchEvolution(departementCode) {
                 if (evolution.isLoading.value === true) {
                     return;
@@ -146,6 +149,7 @@ export const useDepartementMetricsStore = defineStore(
                 departement.value = departementCode;
                 const response = await getDepartementMetrics(departementCode);
                 metrics.value[departementCode] = response;
+                collapsedCities.value = {};
                 return response;
             },
         };

@@ -1,17 +1,19 @@
 <template>
     <CityRow :data="data" :columns="columns" />
-    <TownRow
-        v-for="(town, index) in data.towns"
-        :even="index % 2 === 0"
-        :key="town.id"
-        :data="data"
-        :columns="columns"
-        :town="town"
-        @highlightTown="onHighlight"
-        @click="$emit('townClick', town, data.city)"
-        @townZoom="$emit('townZoom', town, data.city)"
-        @unhighlightTown="onUnhighlight"
-    />
+    <template v-if="showTowns">
+        <TownRow
+            v-for="(town, index) in data.towns"
+            :even="index % 2 === 0"
+            :key="town.id"
+            :data="data"
+            :columns="columns"
+            :town="town"
+            @highlightTown="onHighlight"
+            @click="$emit('townClick', town, data.city)"
+            @townZoom="$emit('townZoom', town, data.city)"
+            @unhighlightTown="onUnhighlight"
+        />
+    </template>
 </template>
 
 <script setup>
@@ -28,8 +30,12 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    showTowns: {
+        type: Boolean,
+        required: true,
+    },
 });
-const { data, columns } = toRefs(props);
+const { data, columns, showTowns } = toRefs(props);
 const emit = defineEmits([
     "highlightTown",
     "townZoom",

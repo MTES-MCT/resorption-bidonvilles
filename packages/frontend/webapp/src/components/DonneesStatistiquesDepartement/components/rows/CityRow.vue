@@ -1,5 +1,9 @@
 <template>
-    <tr class="text-right data-table-header">
+    <tr
+        class="text-right data-table-header hover:bg-blue300 cursor-pointer"
+        @click="toggleCollapse"
+    >
+        <th><Icon :icon="collapseIcon" /></th>
         <th class="text-left font-normal py-1">
             <CommuneHeadCell :data="data" />
         </th>
@@ -15,7 +19,9 @@
 </template>
 
 <script setup>
-import { toRefs } from "vue";
+import { computed, toRefs } from "vue";
+import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
+import { Icon } from "@resorptionbidonvilles/ui";
 import CommuneHeadCell from "../cells/Commune/CommuneHead.vue";
 
 const props = defineProps({
@@ -29,4 +35,24 @@ const props = defineProps({
     },
 });
 const { data, columns } = toRefs(props);
+
+const departementMetricsStore = useDepartementMetricsStore();
+function toggleCollapse() {
+    if (
+        departementMetricsStore.collapsedCities[data.value.city.code] ===
+        undefined
+    ) {
+        departementMetricsStore.collapsedCities[data.value.city.code] = false;
+    } else {
+        departementMetricsStore.collapsedCities[data.value.city.code] =
+            !departementMetricsStore.collapsedCities[data.value.city.code];
+    }
+}
+
+const collapseIcon = computed(() => {
+    return departementMetricsStore.collapsedCities[data.value.city.code] !==
+        false
+        ? "chevron-down"
+        : "chevron-right";
+});
 </script>

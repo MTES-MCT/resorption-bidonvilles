@@ -5,6 +5,7 @@
         @mouseenter="onMouseEnter"
         @mouseleave="onMouseLeave"
     >
+        <td></td>
         <td class="text-left py-1">
             <CommuneBodyCell :data="data" :town="town" />
         </td>

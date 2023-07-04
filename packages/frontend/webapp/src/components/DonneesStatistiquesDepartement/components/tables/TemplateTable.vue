@@ -6,10 +6,14 @@
 
         <tbody>
             <CitySubTable
-                v-for="city in metrics.cities"
-                :key="city.code"
-                :data="city"
+                v-for="data in metrics.cities"
+                :key="data.city.code"
+                :data="data"
                 :columns="columns"
+                :showTowns="
+                    departementMetricsStore.collapsedCities[data.city.code] !==
+                    false
+                "
                 @highlightTown="onHighlight"
                 @unhighlightTown="onUnhighlight"
                 @townClick="onTownClick"
@@ -53,6 +57,7 @@
 
 <script setup>
 import { toRefs } from "vue";
+import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 
 import CitySubTable from "./CitySubTable.vue";
 import HeaderRow from "../rows/HeaderRow.vue";
@@ -69,6 +74,7 @@ const props = defineProps({
     },
 });
 const { columns, metrics } = toRefs(props);
+const departementMetricsStore = useDepartementMetricsStore();
 const emit = defineEmits([
     "highlightTown",
     "townClick",

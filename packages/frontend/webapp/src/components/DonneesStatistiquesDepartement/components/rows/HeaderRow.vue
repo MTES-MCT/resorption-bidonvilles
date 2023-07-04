@@ -1,5 +1,13 @@
 <template>
     <tr>
+        <Title
+            tag="th"
+            class="w-8 bg-white hover:bg-G200 cursor-pointer"
+            :title="collapseTitle"
+            @click="toggleCollapse"
+        >
+            <Icon :icon="collapsedIcon" />
+        </Title>
         <th
             @click="changeSort('city_name')"
             class="text-left py-2 cursor-pointer bg-clip-padding bg-white hover:bg-G200"
@@ -77,6 +85,52 @@ const chevronState = computed(() => {
         ? "chevron-up"
         : "chevron-down";
 });
+
+const globalCollapseStatus = computed(() => {
+    const values = Object.values(departementMetricsStore.collapsedCities);
+    const isFull =
+        values.length === departementMetricsStore.filteredMetrics.cities.length;
+    const hasFalse = Object.values(
+        departementMetricsStore.collapsedCities
+    ).some((city) => city === false);
+    const hasTrue =
+        Object.values(departementMetricsStore.collapsedCities).some(
+            (city) => city === true
+        ) || !isFull;
+
+    if (hasFalse && hasTrue) {
+        return "mixed";
+    }
+
+    return hasFalse ? false : true;
+});
+
+const collapseTitle = computed(() => {
+    if (["mixed", false].includes(globalCollapseStatus.value)) {
+        return "Afficher tout";
+    }
+
+    return "Masquer tout";
+});
+
+const collapsedIcon = computed(() => {
+    if (globalCollapseStatus.value === "mixed") {
+        return "minus";
+    }
+
+    return globalCollapseStatus.value ? "chevron-down" : "chevron-right";
+});
+
+function toggleCollapse() {
+    let target = true;
+    if (globalCollapseStatus.value === true) {
+        target = false;
+    }
+
+    departementMetricsStore.filteredMetrics.cities.forEach((data) => {
+        departementMetricsStore.collapsedCities[data.city.code] = target;
+    });
+}
 
 function switchOrder(value) {
     if (value === "desc") {
