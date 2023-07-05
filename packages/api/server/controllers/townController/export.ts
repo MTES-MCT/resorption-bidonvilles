@@ -4,7 +4,7 @@ const { exportTown } = shantytownService;
 
 const ERROR_RESPONSES = {
     fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
-    access_denied: { code: 403, message: 'Accès refusé' },
+    permission_denied: { code: 403, message: 'Accès refusé' },
     write_failed: { code: 500, message: 'Une écriture en base de données a échoué' },
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };

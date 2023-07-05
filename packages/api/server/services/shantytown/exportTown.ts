@@ -32,9 +32,6 @@ export default async (user, data) => {
 
     const today = new Date();
 
-    if (user.is_superuser === false && moment(data.date).format('YYYY-MM-DD') !== moment(today).format('YYYY-MM-DD')) {
-        throw new ServiceError('permission_denied', new Error('Vous n\'êtes pas autorisé(e) à exporter des données passées'));
-    }
     const closedTowns = parseInt(data.closedTowns, 10) === 1;
     const filters = [
         {
