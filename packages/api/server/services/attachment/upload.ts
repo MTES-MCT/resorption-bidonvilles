@@ -6,7 +6,7 @@ import attachmentModel from '#server/models/attachmentModel';
 import { AttachmentEntityType } from '#server/models/attachmentModel/createLinkedAttachment';
 import fromMimeToExtension from '#server/utils/fromMimeToExtension';
 import { Transaction } from 'sequelize';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 export default async (entityType: AttachmentEntityType, entityId: number, createdBy: number, files: Express.Multer.File[], transaction?: Transaction): Promise<any[]> => {
     const previews: Buffer[] = await Promise.all(
@@ -21,7 +21,7 @@ export default async (entityType: AttachmentEntityType, entityId: number, create
 
     return Promise.all(
         files.map((f, index) => {
-            const uid = uuid.v4();
+            const uid = uuidv4();
 
             const Key = `${entityType}_author${createdBy}_comment${entityId}_file${index + 1}_${uid}.${fromMimeToExtension[f.mimetype]}`;
             let PreviewKey = null;
