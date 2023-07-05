@@ -11,6 +11,7 @@ RUN apk update && apk add --no-cache python3 make g++ libc6-compat
 RUN mkdir -p \
     /home/node/app/ \
     /home/node/app/packages/api \
+    /home/node/app/packages/frontend/common \
     && chown -R node:node /home/node/app/
 USER node
 
@@ -22,6 +23,7 @@ COPY --chown=node:node .yarn ./.yarn/
 RUN yarn install --silent && yarn cache clean
 
 ADD ./packages/api ./packages/api/
+ADD --chown=node:node ./packages/frontend/common ./packages/frontend/common/
 
 WORKDIR /home/node/app/packages/api/
 RUN yarn build
@@ -34,15 +36,14 @@ ENV NODE_ENV production
 
 RUN mkdir -p \
     /home/node/app/ \
-    /home/node/app/packages/api/ \
     && chown -R node:node /home/node/app/
 USER node
 
 WORKDIR /home/node/app/
 COPY --chown=node:node package.json ./
-COPY --chown=node:node packages/api/package.json ./packages/api/
 COPY --from=build --chown=node:node /home/node/app/node_modules ./node_modules
-COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./packages/api/dist
+COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./packages/
+COPY --chown=node:node packages/api/package.json ./packages/api/
 
 WORKDIR /home/node/app/packages/api
 ENTRYPOINT ["yarn", "start"]

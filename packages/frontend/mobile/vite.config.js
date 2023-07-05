@@ -45,6 +45,7 @@ export default defineConfig({
                 new URL("./src/js/helpers", import.meta.url)
             ),
             "#frontend": fileURLToPath(new URL("..", import.meta.url)),
+            "@common": fileURLToPath(new URL("../common", import.meta.url)),
         },
     },
 });
