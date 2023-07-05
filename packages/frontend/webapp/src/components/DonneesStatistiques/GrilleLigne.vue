@@ -40,8 +40,11 @@
                 >
                 <GrilleCellule
                     ><Icon icon="faucet-drip" />
-                    {{ metrics.metrics.number_of_towns_with_water }} ({{
-                        metrics.metrics.number_of_persons_with_water
+                    {{ formatStat(metrics.metrics.number_of_towns_with_water) }}
+                    ({{
+                        formatStat(
+                            metrics.metrics.number_of_persons_with_water
+                        )
                     }})</GrilleCellule
                 >
                 <GrilleCelluleEvolution>
@@ -55,7 +58,7 @@
                         </div>
                     </template>
                     <template v-slot:figure>
-                        {{ metrics.metrics.number_of_persons.to }}
+                        {{ formatStat(metrics.metrics.number_of_persons.to) }}
                     </template>
                 </GrilleCelluleEvolution>
                 <GrilleCelluleEvolution :separator="false">
@@ -70,7 +73,7 @@
                     </template>
 
                     <template v-slot:figure>
-                        {{ metrics.metrics.number_of_towns.to }}
+                        {{ formatStat(metrics.metrics.number_of_towns.to) }}
                     </template>
                 </GrilleCelluleEvolution>
             </div>
@@ -97,6 +100,7 @@
 <script setup>
 import { computed, toRefs } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store";
+import formatStat from "@/utils/formatStat";
 
 import GrilleCellule from "./GrilleCellule.vue";
 import GrilleCelluleHeader from "./GrilleCelluleHeader.vue";

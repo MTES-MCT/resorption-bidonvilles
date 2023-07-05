@@ -6,6 +6,38 @@ import {
     getDepartementMetricsEvolution,
 } from "@/api/metrics.api";
 import sortFn from "@/components/DonneesStatistiquesDepartement/DonneesStatistiquesDepartement.sort";
+import formatStat from "@/utils/formatStat";
+
+const formatDepartementMetrics = (obj) => {
+    if (obj === null || obj === undefined) return;
+    Object.keys(obj).forEach((key) => {
+        if (
+            typeof obj[key] === "number" &&
+            !["latitude", "longitude", "id"].includes(key)
+        ) {
+            // eslint-disable-next-line no-param-reassign
+            obj[key] = formatStat(obj[key]);
+        } else if (typeof obj[key] === "object") {
+            formatDepartementMetrics(obj[key]);
+        }
+    });
+};
+
+const formatDepartementEvolutionMetrics = (obj) => {
+    if (obj === null || obj === undefined) return;
+    Object.keys(obj).forEach((key) => {
+        if (
+            typeof obj[key] === "number" &&
+            ["value", "evolution"].includes(key)
+        ) {
+            // eslint-disable-next-line no-param-reassign
+            obj[key] = formatStat(obj[key]);
+        } else if (typeof obj[key] === "object") {
+            formatDepartementEvolutionMetrics(obj[key]);
+        }
+    });
+};
+
 export const useDepartementMetricsStore = defineStore(
     "departementMetrics",
     () => {
@@ -132,6 +164,7 @@ export const useDepartementMetricsStore = defineStore(
                         evolution.from.value,
                         evolution.to.value
                     );
+                    formatDepartementEvolutionMetrics(evolution.data.value);
 
                     evolution.loaded.value.from = new Date(
                         evolution.from.value
@@ -148,6 +181,7 @@ export const useDepartementMetricsStore = defineStore(
             async fetchDepartement(departementCode) {
                 departement.value = departementCode;
                 const response = await getDepartementMetrics(departementCode);
+                formatDepartementMetrics(response);
                 metrics.value[departementCode] = response;
                 collapsedCities.value = {};
                 return response;
