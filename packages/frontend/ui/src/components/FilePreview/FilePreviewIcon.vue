@@ -1,7 +1,7 @@
 <template>
     <div class="w-12 h-12 rounded-lg overflow-hidden relative flex items-center justify-center"
         :class="color ? `bg-${color.bg}` : 'bg-G300'">
-        <img v-if="isImage" class="object-cover w-12 h-12 max-w-none absolute" :src="file.urls.preview" />
+        <img v-if="isImage" class="object-cover w-12 h-12 max-w-none absolute bg-white" :src="file.urls.preview" />
         <span class="text-xl" :class="color ? `text-${color.text}` : 'text-G600'">
             <Icon :icon="icon" />
         </span>

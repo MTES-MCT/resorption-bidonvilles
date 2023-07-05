@@ -7,6 +7,7 @@
                 <FormNouveauMessageInputMessage
                     :rows="rows"
                     ref="messageInput"
+                    @paste="onPaste"
                 />
             </div>
             <div
@@ -63,6 +64,7 @@ import schema from "./FicheSiteJournalFormNouveauMessage.schema";
 import router from "@/helpers/router";
 import getHiddenHeight from "@/utils/getHiddenHeight";
 import isDeepEqual from "@/utils/isDeepEqual";
+import getFileFromPasteEvent from "@/utils/getFileFromPasteEvent";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
 import DragZone from "@/components/DragZone/DragZone.vue";
@@ -136,6 +138,13 @@ function onBlur() {
 
 function onModeChange() {
     formContainer.value.style.height = `auto`;
+}
+
+function onPaste(event) {
+    const file = getFileFromPasteEvent(event);
+    if (file) {
+        attachmentsInput.value.addFiles([file]);
+    }
 }
 
 watch(useFieldValue("attachments"), () => {

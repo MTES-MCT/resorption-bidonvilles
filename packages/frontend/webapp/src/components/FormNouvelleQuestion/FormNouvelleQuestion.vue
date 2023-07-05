@@ -14,7 +14,7 @@
                 <FormNouvelleQuestionInputPeopleAffected />
             </FormParagraph>
             <FormParagraph :title="labels.details" showMandatoryStar>
-                <FormNouvelleQuestionInputDetails />
+                <FormNouvelleQuestionInputDetails @paste="onPaste" />
             </FormParagraph>
             <FormParagraph :title="labels.attachments">
                 <FormNouvelleQuestionInputAttachments ref="attachmentsInput" />
@@ -39,6 +39,7 @@ import labels from "./FormNouvelleQuestion.labels";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useQuestionsStore } from "@/stores/questions.store";
 import router from "@/helpers/router";
+import getFileFromPasteEvent from "@/utils/getFileFromPasteEvent";
 
 import { ErrorSummary, FormParagraph } from "@resorptionbidonvilles/ui";
 import DragZone from "@/components/DragZone/DragZone.vue";
@@ -73,6 +74,13 @@ const attachmentsInput = ref(null);
 const showOtherTag = computed(() => {
     return tags.value && tags.value.includes("other");
 });
+
+function onPaste(event) {
+    const file = getFileFromPasteEvent(event);
+    if (file) {
+        attachmentsInput.value.addFiles([file]);
+    }
+}
 
 const error = ref(null);
 

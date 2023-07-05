@@ -1,7 +1,7 @@
 <template>
     <form>
         <DragZone @drop="attachmentsInput?.addFiles">
-            <FicheQuestionNouvelleReponseInputReponse />
+            <FicheQuestionNouvelleReponseInputReponse @paste="onPaste" />
             <FicheQuestionNouvelleReponseInputAttachments
                 ref="attachmentsInput"
             />
@@ -21,6 +21,7 @@ import { defineProps, toRefs, ref } from "vue";
 import { useForm } from "vee-validate";
 import schema from "./FicheQuestionNouvelleReponse.schema";
 import { useQuestionsStore } from "@/stores/questions.store";
+import getFileFromPasteEvent from "@/utils/getFileFromPasteEvent";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
 import FicheQuestionNouvelleReponseInputReponse from "./inputs/FicheQuestionNouvelleReponseInputReponse.vue";
@@ -32,6 +33,13 @@ const props = defineProps({
 });
 const { question } = toRefs(props);
 const attachmentsInput = ref(null);
+
+function onPaste(event) {
+    const file = getFileFromPasteEvent(event);
+    if (file) {
+        attachmentsInput.value.addFiles([file]);
+    }
+}
 
 const { handleSubmit, setErrors, resetForm } = useForm({
     validationSchema: schema,
