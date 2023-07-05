@@ -3,7 +3,7 @@
         <h1 class="font-bold text-lg">Partager une info</h1>
 
         <DragZone class="bg-white p-6" @drop="attachmentsInput?.addFiles">
-            <FormNouveauMessageInputMessage />
+            <FormNouveauMessageInputMessage @paste="onPaste" />
             <FormNouveauMessageInputAttachments ref="attachmentsInput" />
 
             <ErrorSummary v-if="error" :message="error" class="mt-2" />
@@ -21,6 +21,7 @@ import { defineProps, toRefs, ref } from "vue";
 import { useForm } from "vee-validate";
 import { useActionsStore } from "@/stores/actions.store";
 import schema from "./FicheActionJournalFormNouveauMessage.schema";
+import getFileFromPasteEvent from "@/utils/getFileFromPasteEvent";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
 import DragZone from "@/components/DragZone/DragZone.vue";
@@ -36,6 +37,13 @@ const attachmentsInput = ref(null);
 const { handleSubmit, setErrors, resetForm } = useForm({
     validationSchema: schema,
 });
+
+function onPaste(event) {
+    const file = getFileFromPasteEvent(event);
+    if (file) {
+        attachmentsInput.value.addFiles([file]);
+    }
+}
 
 const error = ref(null);
 const submit = handleSubmit(async (values) => {
