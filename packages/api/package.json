@@ -104,8 +104,8 @@
   "scripts": {
     "db:create": "sequelize db:migrate && sequelize db:seed:all",
     "dev": "ts-node-dev ./server/index.ts --watch server/**/*.d.ts",
-    "build": "tsc -p tsconfig.production.json && tsc-alias && cp -r server/mails/dist dist/server/mails && cp -r assets dist && cp .sequelizerc dist && cp -r db/data dist/db/data",
-    "start": "nodemon dist/server/index.js",
+    "build": "rm -rf dist && tsc -p tsconfig.production.json && tsc-alias && cp -r server/mails/dist dist/api/server/mails && cp -r assets dist/api && cp .sequelizerc dist/api && cp -r db/data dist/api//db/data",
+    "start": "nodemon server/index.js",
     "test": "yarn mocha -r ts-node/register --require ./test/bootstrap.ts --bail",
     "test:watch": "TS_NODE_TRANSPILE_ONLY=true yarn mocha -r ts-node/register --require ./test/bootstrap.ts --bail --watch --watch-extensions ts --watch-files server,test",
     "test:unit": "yarn mocha -r ts-node/register --require ./test/bootstrap.ts './**/!(*.int.spec.ts|!(*.spec.ts))' --bail --exit",
