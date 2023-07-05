@@ -1,6 +1,6 @@
 <template>
     <template v-if="Number.isFinite(value)">{{ value }}</template>
-    <span v-else class="text-G500">n/c</span>
+    <span v-else class="text-G500">?</span>
 </template>
 
 <script setup>
