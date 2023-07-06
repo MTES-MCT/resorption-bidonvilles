@@ -1,7 +1,7 @@
 export default [
     {
         value: "answer_date",
-        label: "Date de réponse",
+        label: "Date de dernière réponse",
         sortFn: (questions) => {
             // on part du principe que les réponses sont triées par ordre décroissant
             return questions.sort((a, b) => {
