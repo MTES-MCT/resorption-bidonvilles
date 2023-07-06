@@ -7,8 +7,23 @@ export default function (questions, filters) {
 
     return questions.filter((question) => {
         if (
-            filters.tags.length > 0 &&
-            !question.tags.some(({ uid }) => filters.tags.includes(uid))
+            Object.keys(filters).some((key) => {
+                if (
+                    filters[key].length === 1 &&
+                    filters[key][0] === "yes" &&
+                    !question.tags.map(({ uid }) => uid).includes(key)
+                ) {
+                    return true;
+                }
+                if (
+                    filters[key].length === 1 &&
+                    filters[key][0] === "no" &&
+                    question.tags.map(({ uid }) => uid).includes(key)
+                ) {
+                    return true;
+                }
+                return false;
+            })
         ) {
             return false;
         }
