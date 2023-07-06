@@ -106,10 +106,20 @@ describe('services/shantytown', () => {
                 } catch (error) {
                     // ignore
                 }
-                expect(stubs.can).to.have.been.calledOnceWith(user);
-                expect(stubs.do).to.have.been.calledOnceWith('export', 'shantytown');
-                expect(stubs.on).to.have.been.calledOnceWith(location);
+                expect(stubs.can).to.have.been.calledWith(user);
+                expect(stubs.do).to.have.been.calledWith('export', 'shantytown');
+                expect(stubs.on).to.have.been.calledWith(location);
             });
+            it('vérifie que l\'utilisateur a le droit d\'exporter les sites à une date passée', async () => {
+                try {
+                    await exportTownService(user, data);
+                } catch (error) {
+                    // ignore
+                }
+                expect(stubs.can).to.have.been.calledWith(user);
+                expect(stubs.do).to.have.been.calledWith('export', 'shantytown_history');
+            });
+
             it('renvoie une exception ServiceError \'permission_denied\' si l\'utilisateur n\'a pas la permission', async () => {
                 stubs.on.returns(false);
                 let responseError;
