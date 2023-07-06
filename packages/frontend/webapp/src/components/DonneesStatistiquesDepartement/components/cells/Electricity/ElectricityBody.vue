@@ -1,10 +1,10 @@
 <template>
-    <BoolCell :value="town.access_to_electricity === 'good'" />
+    <LivingConditionCell :value="town.access_to_electricity" />
 </template>
 
 <script setup>
 import { toRefs } from "vue";
-import BoolCell from "../BoolCell.vue";
+import LivingConditionCell from "../LivingConditionCell.vue";
 
 const props = defineProps({ town: Object });
 const { town } = toRefs(props);
