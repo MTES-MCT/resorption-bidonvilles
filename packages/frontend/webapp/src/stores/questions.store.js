@@ -23,6 +23,7 @@ export const useQuestionsStore = defineStore("questions", () => {
     const filters = {
         tags: ref([]),
     };
+    const search = ref("");
 
     const filteredQuestions = computed(() => {
         return filterQuestions(questions.value, { tags: filters.tags.value });
@@ -156,6 +157,7 @@ export const useQuestionsStore = defineStore("questions", () => {
         error,
         currentPage,
         filters,
+        search,
         numberOfPages: computed(() => {
             if (filteredQuestions.value.length === 0) {
                 return 0;

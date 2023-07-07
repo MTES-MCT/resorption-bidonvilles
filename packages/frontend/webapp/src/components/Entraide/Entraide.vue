@@ -8,6 +8,7 @@
 
     <template v-else>
         <ListeDesQuestionsFiltres class="-mt-5 mb-4" />
+        <EntraideRecherche />
         <ListeDesQuestions v-if="questionsStore.filteredQuestions.length > 0" />
         <ListeDesQuestionsVide v-else />
     </template>
@@ -18,6 +19,7 @@ import { useQuestionsStore } from "@/stores/questions.store";
 
 import Loading from "@/components/Loading/Loading.vue";
 import EntraideBanniere from "./EntraideBanniere.vue";
+import EntraideRecherche from "./EntraideRecherche.vue";
 import EntraideHeader from "./EntraideHeader.vue";
 import ListeDesQuestionsFiltres from "./ListeDesQuestionsFiltres.vue";
 import ListeDesQuestions from "./ListeDesQuestions.vue";
