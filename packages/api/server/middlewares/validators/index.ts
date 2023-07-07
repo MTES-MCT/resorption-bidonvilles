@@ -32,6 +32,7 @@ import publishNote from './note/publish';
 import createQuestion from './question/create';
 import subscribeQuestion from './question/subcribe';
 import createAnswer from './answer/create';
+import questionSearch from './question/search';
 
 import actionCreate from './actions/create';
 import actionCreateComment from './actions/createComment';
@@ -105,6 +106,7 @@ export default {
     },
     question: {
         createQuestion,
+        search: questionSearch,
         subscribeQuestion,
     },
     answer: {

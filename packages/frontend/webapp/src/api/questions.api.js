@@ -4,6 +4,10 @@ export function addAnswer(questionId, answer) {
     return axios.post(`/questions/${encodeURI(questionId)}/answers`, answer);
 }
 
+export function autocomplete(str) {
+    return axios.get(`/questions/search?query=${str}`);
+}
+
 export function createQuestion(question) {
     return axios.post(`/questions`, question);
 }

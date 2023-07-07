@@ -111,6 +111,13 @@ export default (app) => {
         controllers.question.create,
     );
     app.get(
+        '/questions/search',
+        middlewares.auth.authenticate,
+        validators.question.search,
+        middlewares.validation,
+        controllers.question.search,
+    );
+    app.get(
         '/questions',
         middlewares.auth.authenticate,
         middlewares.charte.check,
