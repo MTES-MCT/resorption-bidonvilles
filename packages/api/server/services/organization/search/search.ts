@@ -2,27 +2,23 @@ import ServiceError from '#server/errors/ServiceError';
 import userModel from '#server/models/userModel/index';
 import organizationModel from '#server/models/organizationModel/index';
 import formatName from '#server/models/userModel/_common/formatName';
+import { AutocompleteResult } from '#root/types/resources/Autocomplete.d';
 
-interface AutocompleteResult {
-    id: number,
-    label: string,
-    similarity: number,
-}
 
-interface UserAutocompleteResult extends AutocompleteResult {
+type UserAutocompleteResult = AutocompleteResult & {
     organization: number,
     type: {
         id: 'user',
         label: 'Acteurs'
     }
-}
+};
 
-interface OrganizationAutocompleteResult extends AutocompleteResult {
+type OrganizationAutocompleteResult = AutocompleteResult & {
     type: {
         id: 'organization',
         label: 'Structures'
     }
-}
+};
 type SearchResponseItem = UserAutocompleteResult | OrganizationAutocompleteResult;
 
 export default async (search: string, departementCode: string = null, usersOnly: boolean = false): Promise<SearchResponseItem[]> => {
