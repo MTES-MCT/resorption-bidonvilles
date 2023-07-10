@@ -377,7 +377,7 @@ export default (closingSolutions) => {
             width: COLUMN_WIDTHS.MEDIUM,
         },
         waterAccessIsLocal: {
-            title: "Où se situe l'accès à l'eau ?",
+            title: "Accès à l'eau sur site ?",
             data: (shantytown) => {
                 const data = shantytown.livingConditions.water.access_is_local;
                 if (data === true) {
@@ -475,7 +475,7 @@ export default (closingSolutions) => {
             width: COLUMN_WIDTHS.MEDIUM,
         },
         sanitaryWorkingToilets: {
-            title: 'Présence de toilettes fonctionnelles et utilisées ?',
+            title: 'Présence de toilettes fonctionnelles ?',
             data: (shantytown) => {
                 const data = shantytown.livingConditions.sanitary.working_toilets;
                 if (data === true) {
