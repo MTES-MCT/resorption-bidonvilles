@@ -7,22 +7,22 @@
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure
                 icon="people-group"
-                :figure="data.figures.total.value"
-                :evolution="data.figures.total.evolution"
+                :figure="formatStat(data.figures.total.value)"
+                :evolution="formatStat(data.figures.total.evolution)"
                 >Nombre total d'habitants</ChartBigFigure
             >
 
             <ChartBigFigure
                 icon="people-group"
-                :figure="data.figures.european.value"
-                :evolution="data.figures.european.evolution"
+                :figure="formatStat(data.figures.european.value)"
+                :evolution="formatStat(data.figures.european.evolution)"
                 >Estimation du nombre d'habitants intra-UE</ChartBigFigure
             >
 
             <ChartBigFigure
                 icon="people-group"
-                :figure="data.figures.foreign.value"
-                :evolution="data.figures.foreign.evolution"
+                :figure="formatStat(data.figures.foreign.value)"
+                :evolution="formatStat(data.figures.foreign.evolution)"
                 >Estimation du nombre d'habitants extra-UE</ChartBigFigure
             >
         </div>
@@ -36,6 +36,7 @@
 </template>
 
 <script setup>
+import formatStat from "@/utils/formatStat";
 import { computed } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { LineChart } from "@/helpers/chart";
