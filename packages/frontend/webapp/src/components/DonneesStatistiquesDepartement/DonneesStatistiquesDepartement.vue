@@ -134,7 +134,6 @@
 
     <main class="mt-6">
         <Onglets
-            @switch="switchTab"
             :tabs="userTabs"
             :activeTab="departementMetricsStore.activeTab"
         />
