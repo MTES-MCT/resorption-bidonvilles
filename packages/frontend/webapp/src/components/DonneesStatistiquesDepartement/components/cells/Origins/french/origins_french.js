@@ -3,7 +3,7 @@ import OriginsHead from "../OriginsHead.vue";
 
 export default {
     icon: "french",
-    title: "Françai(e)s",
+    title: "Française",
     headComponent: OriginsHead,
     bodyComponent: OriginsBody,
     default: null,
