@@ -833,7 +833,7 @@ export default (closingSolutions) => {
             width: COLUMN_WIDTHS.SMALL,
         },
         actors: {
-            title: 'Intervenants',
+            title: 'Intervenants (à la date de l\'export)',
             data: ({ actors }) => actors.map((actor) => {
                 const name = `${userModel.formatName(actor)}, ${actor.organization.name}`;
                 const themes = actor.themes.map(({ id, value }) => value || shantytownActorThemes[id]).join(', ');
