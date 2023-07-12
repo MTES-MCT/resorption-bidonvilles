@@ -17,20 +17,25 @@
     <ul class="list-none">
         <li v-for="option in availableOptions" :key="option.id" class="pt-1">
             <Checkbox
-                v-model="checkedOptions"
                 :value="option.id"
                 :label="option.label"
                 name="options"
                 variant="checkbox"
                 direction="col"
-                :disabled="disabled"
+                :disabled="
+                    disabled &&
+                    option.id !== 'living_conditions' &&
+                    option.id !== 'actors'
+                "
+                :checked="selectedOptions.includes(option.id)"
+                @change="toggleOption(option.id)"
             />
         </li>
     </ul>
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs } from "vue";
+import { computed, defineProps, ref, toRefs, watch } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
 import options from "./options";
@@ -49,14 +54,21 @@ const { disabled } = toRefs(props);
 const townsStore = useTownsStore();
 const userStore = useUserStore();
 
-const checkedOptions = computed({
-    get() {
-        return townsStore.exportOptions;
-    },
-    set(newValue) {
-        townsStore.exportOptions = newValue;
-    },
+const selectedOptions = ref(townsStore.exportOptions);
+
+const toggleOption = (optionId) => {
+    const index = selectedOptions.value.indexOf(optionId);
+    if (index > -1) {
+        selectedOptions.value.splice(index, 1);
+    } else {
+        selectedOptions.value.push(optionId);
+    }
+};
+
+watch(selectedOptions, (newValue) => {
+    townsStore.exportOptions = newValue;
 });
+
 const availableOptions = computed(() => {
     return options.filter(({ closedTowns, permission }) => {
         const isClosed = townsStore.filters.status === "close";
