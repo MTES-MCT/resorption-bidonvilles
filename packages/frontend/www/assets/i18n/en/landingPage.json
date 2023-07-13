@@ -45,7 +45,8 @@
   },
   "firstBanner": {
     "text": "Involved Stakeholders in slum clearance, please share and highlight your projects",
-    "cta": "Request access"
+    "cta": "Request access",
+    "ctaContact": "Contact us"
   },
   "secondSection": {
     "title": "What is the slum resorption policy?",

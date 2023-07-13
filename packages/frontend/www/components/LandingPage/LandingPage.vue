@@ -7,10 +7,13 @@
                 <LandingPageFirstSection />
             </div>
         </Container>
-
-        <LandingPageBanner :cta="$t('landingPage.firstBanner.cta')">
+        <LandingPageBanner v-if="i18n.locale.value === 'fr'" :cta="$t('landingPage.firstBanner.cta')">
             {{ $t("landingPage.firstBanner.text") }}
         </LandingPageBanner>
+        <LandingPageBanner v-else :cta="$t('landingPage.firstBanner.ctaContact')">
+            {{ $t("landingPage.firstBanner.text") }}
+        </LandingPageBanner>
+
         <CreditWrapper credit="© Diego Inglez de Souza">
             <img width="1440" class="h-128 w-full object-cover object-center"
                 src="~/assets/img/LandingPage/resorption-bidonvilles-1.jpg" alt="Photo d'un bidonville" />
@@ -69,4 +72,7 @@ import LandingPageThirdSection from "./ThirdSection/LandingPageThirdSection.vue"
 import LandingPageFourthSection from "./FourthSection/LandingPageFourthSection.vue";
 import CreditWrapper from "./CreditWrapper.vue";
 import LandingPageBanner from "./LandingPageBanner.vue";
+import { useI18n } from 'vue-i18n';
+
+const i18n = useI18n();
 </script>
