@@ -30,6 +30,7 @@ import { Button } from "@resorptionbidonvilles/ui";
 import { useMetricsStore } from "@/stores/metrics.store";
 import formatDate from "@common/utils/formatDate";
 import { computed } from "vue";
+import { trackEvent } from "@/helpers/matomo";
 
 const metricsStore = useMetricsStore();
 const parametresIcon = computed(() => {
@@ -96,6 +97,7 @@ async function print() {
         });
         const ts = Date.now() / 1000;
         downloadBlob(blob, `export-donnees-${formatDate(ts, "y-m-d")}.png`);
+        trackEvent("Visualisation des données nationales", "Export");
     } catch (error) {
         console.log("Failed printing the data");
     }

@@ -262,6 +262,7 @@ import { useUserStore } from "@/stores/user.store";
 import formatDate from "@common/utils/formatDate";
 import router from "@/helpers/router";
 import tabs from "./DonneesStatistiquesDepartement.tabs";
+import { trackEvent } from "@/helpers/matomo";
 
 import { Icon, Link } from "@resorptionbidonvilles/ui";
 import Title from "../DonneesStatistiques/Title.vue";
@@ -423,6 +424,11 @@ function onTownClick(town) {
 }
 
 function setFormat(format) {
+    trackEvent(
+        "Visualisation des données départementales",
+        "Changement de format",
+        format
+    );
     if (format === "chart") {
         departementMetricsStore.fetchEvolution(
             departementMetricsStore.departement

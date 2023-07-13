@@ -81,6 +81,7 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import { trackEvent } from "@/helpers/matomo";
 
 import { Button, DatepickerInput, Spinner } from "@resorptionbidonvilles/ui";
 import ViewErrorInline from "@/components/ViewErrorInline/ViewErrorInline.vue";
@@ -143,6 +144,11 @@ function setLastYear() {
 
     from.value = newFrom;
     to.value = newTo;
+    trackEvent(
+        "Visualisation des données départementales",
+        "Changement dates",
+        "L'année dernière"
+    );
     update();
 }
 
@@ -156,6 +162,11 @@ function setLastMonth() {
 
     from.value = newFrom;
     to.value = newTo;
+    trackEvent(
+        "Visualisation des données départementales",
+        "Changement dates",
+        "Le mois dernier"
+    );
     update();
 }
 
@@ -168,12 +179,22 @@ function setLastWeek() {
 
     from.value = newFrom;
     to.value = newTo;
+    trackEvent(
+        "Visualisation des données départementales",
+        "Changement dates",
+        "La semaine dernière"
+    );
     update();
 }
 
 function update() {
     departementMetricsStore.evolution.from = from.value;
     departementMetricsStore.evolution.to = to.value;
+    trackEvent(
+        "Visualisation des données départementales",
+        "Changement dates",
+        `${from.value.toLocaleDateString()} - ${to.value.toLocaleDateString()}`
+    );
     departementMetricsStore.fetchEvolution(departementMetricsStore.departement);
 }
 </script>
