@@ -38,8 +38,7 @@
     </ContentWrapper>
 </template>
 <script setup>
-import { Link } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper, Link } from "@resorptionbidonvilles/ui";
 import TagNouveau from "@/components/TagNouveau/TagNouveau.vue";
 import imagePromotionEspaceEntraide from "@/assets/img/illustrations/communaute.svg";
 

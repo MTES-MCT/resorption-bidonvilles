@@ -26,7 +26,12 @@
 
         <slot />
     </main>
-    <FooterBar class="print:hidden" :class="paddingBottom ? 'mt-16' : ''" />
+    <FooterBar
+        class="print:hidden"
+        :class="paddingBottom ? 'mt-16' : ''"
+        :WWW_URL="WWW_URL"
+        :CONTACT_EMAIL="CONTACT_EMAIL"
+    />
 </template>
 
 <style scoped>
@@ -38,11 +43,12 @@
 </style>
 
 <script setup>
+import ENV from "@/helpers/env.js";
 import { defineProps, toRefs } from "vue";
 import NavBar from "@/components/NavBar/NavBar.vue";
-import FooterBar from "@/components/FooterBar/FooterBar.vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper, FooterBar } from "@resorptionbidonvilles/ui";
 
+const { WWW_URL, CONTACT_EMAIL } = ENV;
 const props = defineProps({
     hero: {
         type: Boolean,

@@ -17,7 +17,7 @@
 <script setup>
 import { defineProps, toRefs } from "vue";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import FicheActionHeaderName from "./FicheActionHeaderName.vue";
 import FicheActionHeaderStatus from "./FicheActionHeaderStatus.vue";
 import FicheActionHeaderBoutons from "./FicheActionHeaderBoutons.vue";

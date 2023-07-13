@@ -25,7 +25,7 @@
 
 <script setup>
 import { defineProps, toRefs } from "vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import CarteUtilisateur from "@/components/CarteUtilisateur/CarteUtilisateur.vue";
 import FicheStructureInfos from "./FicheStructureInfos.vue";

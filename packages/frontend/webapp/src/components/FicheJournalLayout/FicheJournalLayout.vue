@@ -6,5 +6,5 @@
 </template>
 
 <script setup>
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 </script>

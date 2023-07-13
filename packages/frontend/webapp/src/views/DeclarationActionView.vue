@@ -18,9 +18,8 @@
 import { ref } from "vue";
 import router from "@/helpers/router";
 
-import { Button } from "@resorptionbidonvilles/ui";
+import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
 import LayoutForm from "@/components/LayoutForm/LayoutForm.vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import FormDeclarationAction from "@/components/FormDeclarationAction/FormDeclarationAction.vue";
 
 const form = ref(null);

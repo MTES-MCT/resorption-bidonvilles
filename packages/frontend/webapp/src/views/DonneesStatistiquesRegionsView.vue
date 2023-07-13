@@ -8,8 +8,7 @@
 </template>
 
 <script setup>
-import { FilArianne } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
 import DonneesStatistiques from "@/components/DonneesStatistiques/DonneesStatistiques.vue";
 

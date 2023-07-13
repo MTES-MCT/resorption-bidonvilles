@@ -38,9 +38,8 @@
 <script setup>
 import { computed } from "vue";
 import router from "@/helpers/router";
-import { LinkBlock } from "@resorptionbidonvilles/ui";
+import { ContentWrapper, LinkBlock } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 
 const currentTab = computed(() => {
     const { meta } = router.currentRoute.value;

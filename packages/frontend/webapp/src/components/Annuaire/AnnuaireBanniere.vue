@@ -31,9 +31,8 @@ import { toRefs, computed, defineEmits } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { useDirectoryStore } from "@/stores/directory.store";
 
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import InputCommunauteSearch from "../InputCommunauteSearch/InputCommunauteSearch.vue";
-import { Button, Icon, Link } from "@resorptionbidonvilles/ui";
+import { Button, ContentWrapper, Icon, Link } from "@resorptionbidonvilles/ui";
 
 const directoryStore = useDirectoryStore();
 const userStore = useUserStore();

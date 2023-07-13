@@ -45,8 +45,8 @@ import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
 import menu from "./FicheAction.menu";
 
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import FicheActionHeader from "./FicheActionHeader/FicheActionHeader.vue";
 import FicheActionCaracteristiques from "./FicheActionCaracteristiques/FicheActionCaracteristiques.vue";
 import FicheActionLocalisation from "./FicheActionLocalisation.vue/FicheActionLocalisation.vue";

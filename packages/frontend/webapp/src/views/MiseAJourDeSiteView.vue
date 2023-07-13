@@ -47,12 +47,11 @@ import { useTownsStore } from "@/stores/towns.store.js";
 import router from "@/helpers/router";
 import backOrReplace from "@/utils/backOrReplace";
 
-import { Button } from "@resorptionbidonvilles/ui";
+import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
 import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
 import LayoutForm from "@/components/LayoutForm/LayoutForm.vue";
 import FormDeclarationDeSite from "@/components/FormDeclarationDeSite/FormDeclarationDeSite.vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 
 const townsStore = useTownsStore();

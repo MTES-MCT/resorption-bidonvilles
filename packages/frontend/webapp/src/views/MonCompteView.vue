@@ -18,8 +18,7 @@
 <script setup>
 import { useUserStore } from "@/stores/user.store.js";
 
-import { FilArianne } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
 import ProfilUtilisateur from "@/components/ProfilUtilisateur/ProfilUtilisateur.vue";
 

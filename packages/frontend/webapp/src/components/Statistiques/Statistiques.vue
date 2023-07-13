@@ -83,8 +83,7 @@ import downloadCsv from "@/utils/downloadCsv";
 import formatDate from "@common/utils/formatDate";
 
 // components
-import { Button } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import ViewError from "@/components/ViewError/ViewError.vue";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";

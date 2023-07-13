@@ -16,21 +16,16 @@
       </template>
     </NavBar>
     <slot />
-    <Footer />
+    <FooterBar :WWW_URL="WWW_URL" :CONTACT_EMAIL="CONTACT_EMAIL" />
   </div>
 </template>
 
-<script>
-import Footer from "~/components/Layout/Footer/Footer.vue";
+<script setup>
+import { toRefs } from "vue";
+import { FooterBar } from "@resorptionbidonvilles/ui";
 import NavBar from "~/components/Layout/Navbar/Navbar.vue";
 
-export default {
-  components: {
-    NavBar,
-    Footer
-  },
-
-  props: {
+const props = defineProps({
     stickyHeader: {
       type: Boolean,
       default: true
@@ -39,6 +34,7 @@ export default {
       type: Boolean,
       default: true
     }
-  }
-};
+});
+const { stickyHeader, displayLanguagePicker } = toRefs(props);
+const { WWW_URL, CONTACT_EMAIL } = useRuntimeConfig().public;
 </script>

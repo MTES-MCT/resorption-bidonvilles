@@ -16,5 +16,5 @@
 </template>
 
 <script setup>
-import { Button } from "@resorptionbidonvilles/ui";
+import Button from "../Button.vue";
 </script>

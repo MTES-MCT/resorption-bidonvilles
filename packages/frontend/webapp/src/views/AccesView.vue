@@ -38,11 +38,10 @@ import { useAccesStore } from "@/stores/acces.store.js";
 import router from "@/helpers/router";
 import enrichUserWithLocationName from "@/utils/enrichUserWithLocationName";
 
-import { Button, FilArianne } from "@resorptionbidonvilles/ui";
+import { Button, ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
 import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import FicheAcces from "@/components/FicheAcces/FicheAcces.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 

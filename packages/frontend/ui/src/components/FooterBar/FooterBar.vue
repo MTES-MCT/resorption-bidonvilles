@@ -5,7 +5,7 @@
                 class="flex flex-col lg:flex-row md:justify-between"
             >
                 <FooterBarNewsletter />
-                <FooterBarHotline />
+                <FooterBarHotline :CONTACT_EMAIL="CONTACT_EMAIL" />
                 <FooterBarSocialMedia />
             </ContentWrapper>
         </section>
@@ -26,6 +26,10 @@
                 </div>
             </div>
             <div class="border-t mt-4 pt-4 pb-8 flex space-x-6 items-center">
+                <FooterBarFootLink to="https://github.com/MTES-MCT/resorption-bidonvilles"
+                    ><Icon :icon="['fab', 'github']" /> Code source</FooterBarFootLink
+                >
+                <span class="w-px bg-G300 mx-3 h-4"></span>
                 <FooterBarFootLink :to="`${WWW_URL}/mentions-legales`"
                     >Mentions légales</FooterBarFootLink
                 >
@@ -39,14 +43,19 @@
 </template>
 
 <script setup>
-import ENV from "@/helpers/env.js";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
-import IdentiteVisuelle from "@/components/IdentiteVisuelle/IdentiteVisuelle.vue";
+import { toRefs } from "vue";
+import Icon from "../Icon.vue";
+import ContentWrapper from "../ContentWrapper.vue";
+import IdentiteVisuelle from "../IdentiteVisuelle/IdentiteVisuelle.vue";
 import FooterBarNewsletter from "./FooterBarNewsletter.vue";
 import FooterBarHotline from "./FooterBarHotline.vue";
 import FooterBarSocialMedia from "./FooterBarSocialMedia.vue";
 import FooterBarFootLink from "./FooterBarFootLink.vue";
 import FooterBarPartnerLink from "./FooterBarPartnerLink.vue";
 
-const { WWW_URL } = ENV;
+const props = defineProps({
+    CONTACT_EMAIL: String,
+    WWW_URL: String,
+});
+const { CONTACT_EMAIL, WWW_URL } = toRefs(props);
 </script>

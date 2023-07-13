@@ -55,8 +55,11 @@
 import { defineProps, defineExpose, toRefs, ref } from "vue";
 import { Form } from "vee-validate";
 
-import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import {
+    Button,
+    ContentWrapper,
+    ErrorSummary,
+} from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     schema: Object,
