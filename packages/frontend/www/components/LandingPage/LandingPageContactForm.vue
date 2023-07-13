@@ -3,9 +3,6 @@
         <ButtonContact variant="primary" class="ml-1" isDemandeAcces>{{
             $t("landingPage.contactForm.ctaSignup")
         }}</ButtonContact>
-        <ButtonContact variant="secondary" class="ml-1">{{
-            $t("landingPage.contactForm.ctaContact")
-        }}</ButtonContact>
     </div>
 </template>
 
