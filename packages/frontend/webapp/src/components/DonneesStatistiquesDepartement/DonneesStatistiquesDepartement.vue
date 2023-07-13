@@ -355,6 +355,10 @@ function increaseMapSize() {
     } else if (mapSize.value === "half") {
         mapSize.value = "full";
     }
+    trackEvent(
+        "Visualisation des données départementales",
+        "Agrandissement carte"
+    );
 
     nextTick(carte.value.resize);
 }
@@ -365,6 +369,7 @@ function decreaseMapSize() {
     } else if (mapSize.value === "half") {
         mapSize.value = "hidden";
     }
+    trackEvent("Visualisation des données départementales", "Réduction carte");
 
     nextTick(carte.value.resize);
 }
