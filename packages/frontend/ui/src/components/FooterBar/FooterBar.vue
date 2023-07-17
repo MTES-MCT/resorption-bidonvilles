@@ -4,7 +4,7 @@
             <ContentWrapper
                 class="flex flex-col lg:flex-row md:justify-between"
             >
-                <FooterBarNewsletter />
+                <FooterBarNewsletter v-if="$i18n.locale === 'fr'" />
                 <FooterBarHotline :CONTACT_EMAIL="CONTACT_EMAIL" />
                 <FooterBarSocialMedia />
             </ContentWrapper>
@@ -25,17 +25,25 @@
                     >
                 </div>
             </div>
-            <div class="border-t mt-4 pt-4 pb-8 flex space-x-6 items-center">
+            <div class="border-t mt-4 pt-4 pb-8 flex space-x-4 items-center">
                 <FooterBarFootLink to="https://github.com/MTES-MCT/resorption-bidonvilles"
-                    ><Icon :icon="['fab', 'github']" /> Code source</FooterBarFootLink
+                    ><Icon :icon="['fab', 'github']" class="mr-1" />{{ $t('footer.sourceCode') }}</FooterBarFootLink
+                >
+                <span class="w-px bg-G300 mx-3 h-4"></span>
+                <FooterBarFootLink :to="`${WWW_URL}/stats`"
+                    >{{ $t('footer.statistics') }}</FooterBarFootLink
                 >
                 <span class="w-px bg-G300 mx-3 h-4"></span>
                 <FooterBarFootLink :to="`${WWW_URL}/mentions-legales`"
-                    >Mentions légales</FooterBarFootLink
+                    >{{ $t('footer.legal') }}</FooterBarFootLink
+                >
+                <span class="w-px bg-G300 mx-3 h-4"></span>
+                <FooterBarFootLink :to="`${WWW_URL}/conditions-d-utilisation.pdf`"
+                    >{{ $t('footer.cgus') }}</FooterBarFootLink
                 >
                 <span class="w-px bg-G300 mx-3 h-4"></span>
                 <FooterBarFootLink
-                    >Accessibilité : non conforme</FooterBarFootLink
+                    >{{ $t('footer.RGAA') }}</FooterBarFootLink
                 >
             </div>
         </ContentWrapper>
