@@ -22,10 +22,14 @@ export const useQuestionsStore = defineStore("questions", () => {
     const subscriptions = ref({});
     const filters = {
         tags: ref([]),
+        search: ref(""),
     };
 
     const filteredQuestions = computed(() => {
-        return filterQuestions(questions.value, { tags: filters.tags.value });
+        return filterQuestions(questions.value, {
+            tags: filters.tags.value,
+            search: filters.search.value,
+        });
     });
 
     const currentPage = {
@@ -63,6 +67,7 @@ export const useQuestionsStore = defineStore("questions", () => {
 
     function resetFilters() {
         filters.tags.value = [];
+        filters.search.value = "";
     }
 
     function resetPagination() {
