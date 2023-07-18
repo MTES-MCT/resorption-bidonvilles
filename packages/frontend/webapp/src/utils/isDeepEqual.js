@@ -2,7 +2,9 @@ function isDeepEqual(object1, object2) {
     const objKeys1 = Object.keys(object1);
     const objKeys2 = Object.keys(object2);
 
-    if (objKeys1.length !== objKeys2.length) return false;
+    if (objKeys1.length !== objKeys2.length) {
+        return false;
+    }
 
     for (var key of objKeys1) {
         const value1 = object1[key];

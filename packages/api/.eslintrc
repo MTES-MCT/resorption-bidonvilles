@@ -31,7 +31,11 @@
         "import/no-extraneous-dependencies": 2,
         "prefer-promise-reject-errors": 0,
         "max-len": "off",
-        "camelcase": "off"
+        "camelcase": "off",
+        "curly": [
+            "error",
+            "all"
+        ]
     },
     "settings": {
         "import/resolver": {
