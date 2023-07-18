@@ -1,5 +1,6 @@
 <template>
-    {{ data.summary.number_of_inhabitants_without_pest_animals }}<br />
+    {{ formatStat(data.summary.number_of_inhabitants_without_pest_animals)
+    }}<br />
     <span class="text-sm"
         >({{
             data.summary.percentage_of_inhabitants_without_pest_animals
@@ -9,6 +10,7 @@
 </template>
 
 <script setup>
+import formatStat from "@/utils/formatStat";
 import { toRefs } from "vue";
 
 const props = defineProps({ data: Object });

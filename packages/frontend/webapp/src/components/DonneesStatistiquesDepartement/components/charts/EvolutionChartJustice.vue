@@ -7,15 +7,15 @@
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure
                 icon="person-military-pointing"
-                :figure="data.figures.police.value"
-                :evolution="data.figures.police.evolution"
+                :figure="formatStat(data.figures.police.value)"
+                :evolution="formatStat(data.figures.police.evolution)"
                 >Nombre total de CFP</ChartBigFigure
             >
 
             <ChartBigFigure
                 icon="scroll"
-                :figure="data.figures.complaints.value"
-                :evolution="data.figures.complaints.evolution"
+                :figure="formatStat(data.figures.complaints.value)"
+                :evolution="formatStat(data.figures.complaints.evolution)"
                 >Nombre total de plaintes</ChartBigFigure
             >
         </div>
@@ -29,6 +29,7 @@
 </template>
 
 <script setup>
+import formatStat from "@/utils/formatStat";
 import { computed } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { LineChart } from "@/helpers/chart";

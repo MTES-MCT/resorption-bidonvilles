@@ -1,8 +1,9 @@
 <template>
-    <IntCell :value="data.summary.number_of_towns" />
+    <IntCell :value="formatStat(data.summary.number_of_towns)" />
 </template>
 
 <script setup>
+import formatStat from "@/utils/formatStat";
 import { toRefs } from "vue";
 import IntCell from "../IntCell.vue";
 

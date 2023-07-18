@@ -1,11 +1,12 @@
 <template>
-    {{ data.summary.number_of_towns_with_heatwave }}<br />
+    {{ formatStat(data.summary.number_of_towns_with_heatwave) }}<br />
     <span class="text-sm"
         >({{ data.summary.percentage_of_towns_with_heatwave }} %)</span
     >
 </template>
 
 <script setup>
+import formatStat from "@/utils/formatStat";
 import { toRefs } from "vue";
 
 const props = defineProps({ data: Object });
