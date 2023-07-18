@@ -29,11 +29,11 @@
 </style>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 
-import marianne from "@/assets/img/dsfr/marianne.svg";
-import devise from "@/assets/img/dsfr/devise.svg";
-import logo from "@/assets/img/logo/logo.svg";
+import marianne from "./assets/marianne.svg";
+import devise from "./assets/devise.svg";
+import logo from "./assets/logo.svg";
 
 const props = defineProps({
     keepLogo: {

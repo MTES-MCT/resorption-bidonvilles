@@ -23,10 +23,16 @@
     </section>
 </template>
 
+<script>
+export default {
+    name: "RbDates",
+};
+</script>
+
 <script setup>
 import { ref, computed } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store";
-
+import { trackEvent } from "@/helpers/matomo";
 import { Button, DatepickerInput } from "@resorptionbidonvilles/ui";
 
 const metricsStore = useMetricsStore();
@@ -54,6 +60,11 @@ const datesAreNotLoaded = computed(() => {
 });
 
 function update() {
+    trackEvent(
+        "Visualisation des données nationales",
+        "Changement dates",
+        `${from.value.toLocaleDateString()} - ${to.value.toLocaleDateString()}`
+    );
     metricsStore.from = from.value;
     metricsStore.to = to.value;
     metricsStore.load();

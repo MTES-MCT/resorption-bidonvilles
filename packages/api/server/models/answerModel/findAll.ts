@@ -29,6 +29,7 @@ export default async (): Promise<Answer[]> => {
             roles_regular rr ON u.fk_role_regular = rr.role_id
         LEFT JOIN
             organizations o ON u.fk_organization = o.organization_id
+        ORDER BY ca.created_at DESC
         `,
         {
             type: QueryTypes.SELECT,

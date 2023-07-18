@@ -1,7 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { config, library } from "@fortawesome/fontawesome-svg-core";
 import {
-    faGithub
+    faFacebook,
+    faGithub,
+    faLinkedin,
+    faTwitter
 } from "@fortawesome/free-brands-svg-icons";
 import {
     faAddressBook,
@@ -40,16 +43,19 @@ export default defineNuxtPlugin((nuxtApp) => {
         faComment,
         faComments,
         faEnvelope,
+        faFacebook,
         faFileDownload,
         faFileSignature,
         faFlag,
         faGithub,
         faHandHoldingMedical,
+        faLinkedin,
         faMapMarkedAlt,
         faMapMarkerAlt,
         faSchool,
         faSpinner,
         faSync,
+        faTwitter,
         faUserPlus,
         faUsers,
         faUserShield,

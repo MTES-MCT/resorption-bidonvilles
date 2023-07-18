@@ -37,12 +37,11 @@
 import { onMounted, ref } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store";
 
-import { Button } from "@resorptionbidonvilles/ui";
+import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
 import Title from "./Title.vue";
 import Header from "./Header.vue";
 import Onglets from "./DonneesStatistiquesDepartementOnglets.vue";
 import Grille from "./Grille.vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import Loading from "@/components/Loading/Loading.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 import ViewError from "@/components/ViewError/ViewError.vue";

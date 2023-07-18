@@ -36,8 +36,7 @@ import { useTownsStore } from "@/stores/towns.store.js";
 import router from "@/helpers/router";
 import { trackEvent } from "@/helpers/matomo";
 
-import { Button, FilArianne } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { Button, ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
 import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";

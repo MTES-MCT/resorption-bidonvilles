@@ -30,6 +30,7 @@ module.exports = {
             },
         ],
         "vue/no-dupe-keys": 0,
+        curly: ["error", "all"],
     },
 
     globals: {

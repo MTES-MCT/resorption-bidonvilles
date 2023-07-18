@@ -17,8 +17,7 @@
 import { ref } from "vue";
 
 // components
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
-import IdentiteVisuelle from "@/components/IdentiteVisuelle/IdentiteVisuelle.vue";
+import { ContentWrapper, IdentiteVisuelle } from "@resorptionbidonvilles/ui";
 import NavBarMainMenu from "./NavBarMainMenu.vue";
 import NavBarMobile from "./NavBarMobile.vue";
 import NavBarTopMenu from "./NavBarTopMenu.vue";

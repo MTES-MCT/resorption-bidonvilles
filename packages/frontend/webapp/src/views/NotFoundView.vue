@@ -43,8 +43,7 @@
 <script setup>
 import ENV from "@/helpers/env.js";
 import Layout from "@/components/Layout/Layout.vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
-import { Link } from "@resorptionbidonvilles/ui";
+import { ContentWrapper, Link } from "@resorptionbidonvilles/ui";
 
 const { WWW_URL, CONTACT_EMAIL } = ENV;
 </script>

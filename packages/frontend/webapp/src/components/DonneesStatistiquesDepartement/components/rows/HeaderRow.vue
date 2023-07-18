@@ -57,11 +57,13 @@
 <script setup>
 import { computed, toRefs } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
-import { Icon, Title } from "@resorptionbidonvilles/ui";
+import { trackEvent } from "@/helpers/matomo";
 
 import flagFR from "@/assets/img/flags/fr.png";
 import flagEU from "@/assets/img/flags/eu.png";
 import flagExtraCommunautaires from "@/assets/img/flags/extra-communautaires.png";
+
+import { Icon, Title } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     columns: {
@@ -143,6 +145,11 @@ function changeSort(value) {
     if (value === "origins") {
         return;
     }
+    trackEvent(
+        "Visualisation des données départementales",
+        "Changement de tri",
+        value
+    );
     if (
         value !==
         departementMetricsStore.sort[departementMetricsStore.activeTab].id

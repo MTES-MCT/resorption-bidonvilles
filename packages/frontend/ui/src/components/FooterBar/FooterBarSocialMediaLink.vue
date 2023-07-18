@@ -5,8 +5,8 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
-import { Icon } from "@resorptionbidonvilles/ui";
+import { toRefs } from "vue";
+import Icon from "../Icon.vue";
 
 const props = defineProps({
     href: String,

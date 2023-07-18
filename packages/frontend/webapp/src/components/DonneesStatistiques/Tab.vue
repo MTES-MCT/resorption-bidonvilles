@@ -11,6 +11,12 @@
     </div>
 </template>
 
+<script>
+export default {
+    name: "RbTab",
+};
+</script>
+
 <script setup>
 import { toRefs } from "vue";
 const props = defineProps({

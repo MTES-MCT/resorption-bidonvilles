@@ -16,8 +16,7 @@
 import { onMounted, computed, onBeforeUnmount } from "vue";
 import { useDashboardStore } from "@/stores/dashboard.store";
 import { useDashboardActivitiesStore } from "@/stores/dashboard.activities.store";
-import { FilArianne } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import TableauDeBord from "@/components/TableauDeBord/TableauDeBord.vue";
 

@@ -6,6 +6,7 @@ import {
     getDepartementMetricsEvolution,
 } from "@/api/metrics.api";
 import sortFn from "@/components/DonneesStatistiquesDepartement/DonneesStatistiquesDepartement.sort";
+
 export const useDepartementMetricsStore = defineStore(
     "departementMetrics",
     () => {

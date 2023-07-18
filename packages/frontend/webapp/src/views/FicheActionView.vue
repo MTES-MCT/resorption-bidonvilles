@@ -35,8 +35,7 @@ import { onMounted, ref, computed, watch } from "vue";
 import { useActionsStore } from "@/stores/actions.store.js";
 import router from "@/helpers/router";
 
-import { Button, FilArianne } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { Button, ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
 import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";

@@ -7,12 +7,14 @@ import FontAwesomeIcon, { useFontAwesome } from "./helpers/font-awesome";
 import Datepicker from "./helpers/datepicker";
 import { useMatomo } from "./helpers/matomo";
 import { useSentry } from "./helpers/sentry";
+import { useI18n } from "./helpers/i18n";
 import "@common/helpers/yup";
 
 import "./assets/main.css";
 
 const app = createApp(App);
 useSentry(app);
+useI18n(app);
 useFontAwesome();
 
 app.use(createPinia());

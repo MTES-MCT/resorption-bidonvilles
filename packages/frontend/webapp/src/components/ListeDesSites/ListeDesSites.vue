@@ -22,8 +22,7 @@
 import { computed, watch } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 
-import { TabList } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper, TabList } from "@resorptionbidonvilles/ui";
 import Loading from "@/components/Loading/Loading.vue";
 import ListeDesSitesHeader from "./ListeDesSitesHeader.vue";
 import ListeDesSitesStatistiques from "./ListeDesSitesStatistiques.vue";

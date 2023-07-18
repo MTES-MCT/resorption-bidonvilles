@@ -1,3 +1,5 @@
+import { fileURLToPath } from "url";
+
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
     modules: [
@@ -32,7 +34,11 @@ export default defineNuxtConfig({
         public: {
             API_URL: process.env.NUXT_API_URL || "${NUXT_API_URL}",
             WEBAPP_URL: process.env.NUXT_WEBAPP_URL || "${NUXT_WEBAPP_URL}",
-            DOMAIN: process.env.NUXT_DOMAIN || "${NUXT_DOMAIN}",
+            WWW_URL: process.env.NUXT_WWW_URL || "${NUXT_WWW_URL}",
+            CONTACT_EMAIL: process.env.NUXT_CONTACT_EMAIL || "${NUXT_CONTACT_EMAIL}",
         }
+    },
+    alias: {
+        "@common": fileURLToPath(new URL("../common/", import.meta.url))
     }
 });

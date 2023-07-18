@@ -37,8 +37,7 @@ import { onMounted, ref, computed, watch } from "vue";
 import { useQuestionsStore } from "@/stores/questions.store.js";
 import router from "@/helpers/router";
 
-import { Button, FilArianne } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { Button, ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import ViewError from "@/components/ViewError/ViewError.vue";
 import Loading from "@/components/Loading/Loading.vue";
 import LayoutCommunaute from "@/components/LayoutCommunaute/LayoutCommunaute.vue";

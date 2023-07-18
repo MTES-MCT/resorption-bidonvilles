@@ -11,8 +11,7 @@
 import { onMounted } from "vue";
 import { useDirectoryStore } from "@/stores/directory.store";
 
-import { FilArianne } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import LayoutCommunaute from "@/components/LayoutCommunaute/LayoutCommunaute.vue";
 import Annuaire from "@/components/Annuaire/Annuaire.vue";
 

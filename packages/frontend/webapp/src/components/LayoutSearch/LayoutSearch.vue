@@ -42,9 +42,9 @@ import { defineProps, toRefs, computed, defineEmits } from "vue";
 import { useUserStore } from "@/stores/user.store";
 
 import Layout from "@/components/Layout/Layout.vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import {} from "@resorptionbidonvilles/ui";
 import InputLocation from "@/components/InputLocation/InputLocation.vue";
-import { Button, Icon, Link } from "@resorptionbidonvilles/ui";
+import { Button, ContentWrapper, Icon, Link } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     searchTitle: {

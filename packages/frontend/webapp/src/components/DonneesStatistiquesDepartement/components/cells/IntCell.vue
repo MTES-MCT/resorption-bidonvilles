@@ -1,10 +1,12 @@
 <template>
-    <template v-if="Number.isFinite(value)">{{ value }}</template>
-    <span v-else class="text-G500">n/c</span>
+    <span v-if="typeof value === 'string' && value.length > 0">{{
+        value
+    }}</span>
+    <span v-else class="text-G500">?</span>
 </template>
 
 <script setup>
 import { toRefs } from "vue";
-const props = defineProps({ value: Number });
+const props = defineProps({ value: String });
 const { value } = toRefs(props);
 </script>

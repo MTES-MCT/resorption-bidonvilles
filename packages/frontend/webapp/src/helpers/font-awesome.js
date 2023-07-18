@@ -113,6 +113,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import {
     faFacebook,
+    faGithub,
     faLinkedin,
     faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
@@ -170,6 +171,7 @@ library.add(faFilter);
 library.add(faFilterCircleXmark);
 library.add(faFireExtinguisher);
 library.add(faFlag);
+library.add(faGithub);
 library.add(faHandshakeAngle);
 library.add(faHistory);
 library.add(faHome);

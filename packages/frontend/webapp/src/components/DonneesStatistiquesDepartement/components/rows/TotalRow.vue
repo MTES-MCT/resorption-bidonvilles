@@ -13,6 +13,7 @@
 
 <script setup>
 import { computed, toRefs } from "vue";
+import formatStat from "@/utils/formatStat";
 
 const props = defineProps({
     columns: {
@@ -35,9 +36,9 @@ const totals = computed(() => {
         if (metrics.value.summary[col.uid] === null) {
             totals[col.uid] = 0;
         } else if (metrics.value.summary[col.uid].all !== undefined) {
-            totals[col.uid] = metrics.value.summary[col.uid].all;
+            totals[col.uid] = formatStat(metrics.value.summary[col.uid].all);
         } else {
-            totals[col.uid] = metrics.value.summary[col.uid];
+            totals[col.uid] = formatStat(metrics.value.summary[col.uid]);
         }
     });
 

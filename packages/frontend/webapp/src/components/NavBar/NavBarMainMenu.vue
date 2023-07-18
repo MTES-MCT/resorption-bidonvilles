@@ -27,7 +27,7 @@
 
 <script setup>
 import { useNavigationStore } from "@/stores/navigation.store.js";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import NavBarMainMenuItem from "./NavBarMainMenuItem.vue";
 
 const navigationStore = useNavigationStore();

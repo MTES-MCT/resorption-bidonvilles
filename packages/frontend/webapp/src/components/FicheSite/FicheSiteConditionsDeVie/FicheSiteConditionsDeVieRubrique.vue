@@ -54,8 +54,8 @@
                                 (status.negative.length ||
                                     status.positive.length)
                             "
-                            >et</span
-                        >
+                            >et
+                        </span>
                         <span v-if="status.unknown.length">
                             {{ status.unknown.length }} information{{
                                 status.unknown.length > 1 ? "s" : ""
