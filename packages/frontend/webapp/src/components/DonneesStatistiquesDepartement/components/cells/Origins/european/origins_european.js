@@ -3,7 +3,7 @@ import OriginsHead from "../OriginsHead.vue";
 
 export default {
     icon: "european",
-    title: "Intra-communautaires",
+    title: "Intra-communautaire",
     headComponent: OriginsHead,
     bodyComponent: OriginsBody,
     default: null,
