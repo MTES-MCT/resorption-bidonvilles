@@ -104,6 +104,13 @@
                     />
                 </template>
 
+                <!-- Autres -->
+                <template v-if="values.organization_category === 'other'">
+                    <FormUtilisateurInputOrganizationOther
+                        :label="labels.organization_other"
+                    />
+                </template>
+
                 <FormUtilisateurInputPosition
                     v-if="values.organization_category"
                     :label="labels.position"
@@ -162,6 +169,7 @@ import FormUtilisateurInputNewAssociationName from "./inputs/FormUtilisateurInpu
 import FormUtilisateurInputNewAssociationAbbreviation from "./inputs/FormUtilisateurInputNewAssociationAbbreviation.vue";
 import FormUtilisateurInputDepartement from "./inputs/FormUtilisateurInputDepartement.vue";
 import FormUtilisateurInputOrganizationAdministration from "./inputs/FormUtilisateurInputOrganizationAdministration.vue";
+import FormUtilisateurInputOrganizationOther from "./inputs/FormUtilisateurInputOrganizationOther.vue";
 import FormUtilisateurInputPosition from "./inputs/FormUtilisateurInputPosition.vue";
 import FormUtilisateurInputMessage from "./inputs/FormUtilisateurInputMessage.vue";
 import FormUtilisateurInputReferral from "./inputs/FormUtilisateurInputReferral.vue";
