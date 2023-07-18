@@ -1,3 +1,5 @@
+import { Request, Response } from 'express';
+
 import dateUtils from '#server/utils/date';
 
 import userService from '#server/services/userService';
@@ -11,6 +13,16 @@ import { SerializedUser } from '#server/models/userModel/_common/types/Serialize
 
 const { toString: dateToString } = dateUtils;
 const { sendAdminContactMessage, sendContactNewsletterRegistration } = mailsUtils;
+
+// Interface pour les données de l'email
+interface EmailData {
+    email: string;
+    phone: string;
+    last_name: string;
+    first_name: string;
+    access_request_message: string;
+    objet: string;
+}
 
 async function sendEmailNewContactMessageToAdmins(message) {
     const admins = await userModel.getNationalAdmins();
@@ -47,11 +59,25 @@ function getObjetForContactMessage(requestType) {
     return requestType.map(type => types[type]).join(' - ');
 }
 
-export default async (req, res, next) => {
+// Fonction pour traiter la requête
+export default async (req: Request, res: Response, next): Promise<Response<any, Record<string, any>>> => {
     const {
         request_type, is_actor, referral, referral_other, referral_word_of_mouth,
-        last_name, first_name, email, phone, access_request_message,
+        last_name, first_name, email, phone, access_request_message, organization_category,
     } = req.body;
+
+    // Prepare data to send mails
+    const emailData: EmailData = {
+        email: req.body.email,
+        phone: req.body.phone,
+        last_name: req.body.last_name,
+        first_name: req.body.first_name,
+        access_request_message:
+            (request_type === 'access_request' && is_actor && organization_category === 'other')
+                ? `${req.body.access_request_message}\n\nNom de la structure à créer: ${req.body.organization_other}`
+                : req.body.access_request_message,
+        objet: getObjetForContactMessage(request_type),
+    };
 
     // send mail to sales@ if a newsletter registration was asked
     if (request_type.includes('register-newsletter')) {
@@ -71,65 +97,55 @@ export default async (req, res, next) => {
                 },
             );
         } catch (error) {
-            // @todo: call sentry to register this error
+        // @todo: call sentry to register this error
         }
     }
 
-    // user creation
     if (request_type.includes('access-request') && is_actor) {
-        // create the user
-        let result: SerializedUser;
-        try {
-            result = await userService.create({
-                last_name,
-                first_name,
-                email,
-                phone,
-                organization: req.body.organization_full
-                    ? req.body.organization_full.id
-                    : null,
-                new_association: req.body.new_association === true,
-                new_association_name: req.body.new_association_name || null,
-                new_association_abbreviation:
-                    req.body.new_association_abbreviation || null,
-                departement: req.body.departement || null,
-                position: req.body.position,
-                access_request_message,
-            });
-        } catch (error) {
-            return res.status(500).send('Une erreur est survenue lors de l\'écriture en base de données');
-        }
-
-        try {
-            const user = await userModel.findOne(result.id, { extended: true });
-            await accessRequestService.handleNewAccessRequest(user);
-
-            if (referral !== null) {
-                await contactFormReferralModel.create({
-                    reason: referral,
-                    reason_other: referral_other,
-                    reason_word_of_mouth: referral_word_of_mouth,
-                    fk_user: user.id,
+        if (organization_category !== 'other') {
+            // create the user
+            let result: SerializedUser;
+            try {
+                result = await userService.create({
+                    last_name,
+                    first_name,
+                    email,
+                    phone,
+                    organization: req.body.organization_full
+                        ? req.body.organization_full.id
+                        : null,
+                    new_association: req.body.new_association === true,
+                    new_association_name: req.body.new_association_name || null,
+                    new_association_abbreviation:
+                        req.body.new_association_abbreviation || null,
+                    departement: req.body.departement || null,
+                    position: req.body.position,
+                    access_request_message,
                 });
+            } catch (error) {
+                return res.status(500).send('Une erreur est survenue lors de l\'écriture en base de données');
             }
-        } catch (err) {
-            next(err);
-        }
+            try {
+                const user = await userModel.findOne(result.id, { extended: true });
+                await accessRequestService.handleNewAccessRequest(user);
 
-        return res.status(200).send(result);
+                if (referral !== null) {
+                    await contactFormReferralModel.create({
+                        reason: referral,
+                        reason_other: referral_other,
+                        reason_word_of_mouth: referral_word_of_mouth,
+                        fk_user: user.id,
+                    });
+                }
+            } catch (err) {
+                next(err);
+            }
+            return res.status(200).send(result);
+        }
     }
 
-    // contact request
     try {
-        await sendEmailNewContactMessageToAdmins({
-            email,
-            phone,
-            last_name,
-            first_name,
-            access_request_message,
-            objet: getObjetForContactMessage(request_type),
-        });
-
+        await sendEmailNewContactMessageToAdmins(emailData);
         if (referral !== null) {
             await contactFormReferralModel.create({
                 reason: referral,
@@ -140,6 +156,5 @@ export default async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-
     return res.status(200).send();
 };
