@@ -134,7 +134,6 @@
 
     <main class="mt-6">
         <Onglets
-            @switch="switchTab"
             :tabs="userTabs"
             :activeTab="departementMetricsStore.activeTab"
         />
@@ -263,6 +262,7 @@ import { useUserStore } from "@/stores/user.store";
 import formatDate from "@common/utils/formatDate";
 import router from "@/helpers/router";
 import tabs from "./DonneesStatistiquesDepartement.tabs";
+import { trackEvent } from "@/helpers/matomo";
 
 import { Icon, Link } from "@resorptionbidonvilles/ui";
 import Title from "../DonneesStatistiques/Title.vue";
@@ -355,6 +355,10 @@ function increaseMapSize() {
     } else if (mapSize.value === "half") {
         mapSize.value = "full";
     }
+    trackEvent(
+        "Visualisation des données départementales",
+        "Agrandissement carte"
+    );
 
     nextTick(carte.value.resize);
 }
@@ -365,6 +369,7 @@ function decreaseMapSize() {
     } else if (mapSize.value === "half") {
         mapSize.value = "hidden";
     }
+    trackEvent("Visualisation des données départementales", "Réduction carte");
 
     nextTick(carte.value.resize);
 }
@@ -424,6 +429,11 @@ function onTownClick(town) {
 }
 
 function setFormat(format) {
+    trackEvent(
+        "Visualisation des données départementales",
+        "Changement de format",
+        format
+    );
     if (format === "chart") {
         departementMetricsStore.fetchEvolution(
             departementMetricsStore.departement

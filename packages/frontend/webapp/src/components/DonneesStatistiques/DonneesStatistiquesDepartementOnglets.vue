@@ -14,6 +14,7 @@
 <script setup>
 import { toRefs } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
+import { trackEvent } from "@/helpers/matomo";
 
 import Tab from "./Tab.vue";
 
@@ -29,6 +30,11 @@ const { tabs } = toRefs(props);
 const departementMetricsStore = useDepartementMetricsStore();
 
 function switchTab(value) {
+    trackEvent(
+        "Visualisation des données départementales",
+        "Changement d'onglet",
+        value
+    );
     departementMetricsStore.activeTab = value;
 }
 </script>

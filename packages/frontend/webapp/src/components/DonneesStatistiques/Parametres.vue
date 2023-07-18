@@ -8,6 +8,7 @@
                     :key="parametre.id"
                     :label="parametre.label"
                     :value="parametre.id"
+                    @click="trackMatomoEvent(parametre.id)"
                     variant="toggle"
                     v-model="metricsStore.parametresDeVue"
                 />
@@ -25,8 +26,17 @@ export default {
 <script setup>
 import { useMetricsStore } from "@/stores/metrics.store";
 import parametres from "./DonneesStatistiques.parametres";
+import { trackEvent } from "@/helpers/matomo";
 
 import { Checkbox } from "@resorptionbidonvilles/ui";
 
 const metricsStore = useMetricsStore();
+
+function trackMatomoEvent(value) {
+    trackEvent(
+        "Visualisation des données nationales",
+        "Paramètre de vue",
+        value
+    );
+}
 </script>
