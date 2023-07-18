@@ -29,7 +29,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
-import { create as createContact } from "@/api/contact.api.js";
+import { requestCreation } from "@/api/contact.api.js";
 import { trackEvent } from "@/helpers/matomo.js";
 import router from "@/helpers/router.js";
 import { useNotificationStore } from "@/stores/notification.store.js";
@@ -47,7 +47,10 @@ const demandeAccesOnly = computed(() => {
 });
 
 async function submit(values) {
-    await createContact(values);
+    console.log("values:");
+    console.log(values);
+
+    await requestCreation(values);
 
     // tracking
     const isAccessRequest =
