@@ -186,6 +186,12 @@ export default (variant, language) => {
             then: (schema) => schema.required(),
         })
         .label(labels.organization_administration);
+    schema.organization_other = string()
+        .when("organization_category", {
+            is: "other",
+            then: (schema) => schema.required(),
+        })
+        .label(labels.organization_other);
 
     const position = string().label(labels.position);
     function makePositionRequired(schema) {
