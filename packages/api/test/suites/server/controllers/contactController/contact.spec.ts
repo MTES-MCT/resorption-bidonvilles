@@ -2,12 +2,11 @@
  * TOOLS
  * *********************************************************************************************** */
 
-import chai from 'chai';
+import chai, { expect } from 'chai';
 import sinon from 'sinon';
-import sinonChai from "sinon-chai";
+import sinonChai from 'sinon-chai';
 import rewiremock from 'rewiremock/node';
 
-import { expect } from 'chai';
 import { mockRes } from 'sinon-express-mock';
 
 import userModel from '#server/models/userModel';
@@ -97,7 +96,7 @@ describe('contactController.contact()', () => {
 
 
     describe('Success cases', () => {
-        it('Should a simple message', async () => {
+        it('Should send a simple message', async () => {
             const { default: contact } = await rewiremock.module(() => import('#server/controllers/contactController/contact'), mockModels);
 
             req.body = {
@@ -194,8 +193,8 @@ describe('contactController.contact()', () => {
                 last_name: 'John',
                 first_name: 'Doe',
                 email: 'john.doe@gmail.com',
-                organization: 92,
                 phone: '0102030405',
+                organization: 92,
                 new_association: false,
                 new_association_name: null,
                 new_association_abbreviation: null,
