@@ -79,18 +79,24 @@ export default (
                 throw new Error('Vous devez préciser la structure');
             }
 
-            let organizationCategory;
-            try {
-                organizationCategory = await organizationCategoryModel.findOneById(value);
-            } catch (error) {
-                throw new Error('Une erreur est survenue lors de la vérification de la structure');
+            if (value !== 'other') {
+                let organizationCategory;
+                try {
+                    organizationCategory = await organizationCategoryModel.findOneById(value);
+                } catch (error) {
+                    throw new Error('Une erreur est survenue lors de la vérification de la structure');
+                }
+
+                if (organizationCategory === null) {
+                    throw new Error('La structure que vous avez sélectionnée n\'existe pas en base de données');
+                }
+
+                req.body.organization_category_full = organizationCategory;
+            // Si organization_category est égal à "other", vérifie la présence de organization_other
+            } else if (!req.body.organization_other || req.body.organization_other.trim() === '') {
+                throw new Error('Le champ organization_other est requis lorsque organization_category est égal à "other".');
             }
 
-            if (organizationCategory === null) {
-                throw new Error('La structure que vous avez sélectionnée n\'existe pas en base de données');
-            }
-
-            req.body.organization_category_full = organizationCategory;
             return true;
         }),
 
