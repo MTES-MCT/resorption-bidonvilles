@@ -12,7 +12,7 @@
             <div class="flex space-x-5 self-center flex-1">
                 <p>
                     <span class="font-bold text-3xl">{{
-                        metrics.summary.number_of_towns.all
+                        formatStat(metrics.summary.number_of_towns.all)
                     }}</span
                     ><br />site<template
                         v-if="metrics.summary.number_of_towns.all > 1"
@@ -21,7 +21,7 @@
                 </p>
                 <p>
                     <span class="font-bold text-3xl">{{
-                        metrics.summary.number_of_persons.all
+                        formatStat(metrics.summary.number_of_persons.all)
                     }}</span
                     ><br />personne<template
                         v-if="metrics.summary.number_of_persons.all > 1"
@@ -35,7 +35,7 @@
                 <div class="flex space-x-5">
                     <p>
                         <span class="font-bold text-lg">{{
-                            metrics.summary.number_of_towns.eu_only
+                            formatStat(metrics.summary.number_of_towns.eu_only)
                         }}</span
                         ><br />site<template
                             v-if="metrics.summary.number_of_towns.eu_only > 1"
@@ -44,7 +44,9 @@
                     </p>
                     <p>
                         <span class="font-bold text-lg">{{
-                            metrics.summary.number_of_persons.eu_only
+                            formatStat(
+                                metrics.summary.number_of_persons.eu_only
+                            )
                         }}</span
                         ><br />personne<template
                             v-if="metrics.summary.number_of_persons.eu_only > 1"
@@ -133,6 +135,7 @@
 
 <script setup>
 import { toRefs } from "vue";
+import formatStat from "@/utils/formatStat";
 import formatDate from "@common/utils/formatDate";
 
 import { Icon } from "@resorptionbidonvilles/ui";
