@@ -9,4 +9,5 @@ export default [
         label: "Association",
     },
     { value: "administration", label: "Administration centrale" },
+    { value: "other", label: "Autre" },
 ];
