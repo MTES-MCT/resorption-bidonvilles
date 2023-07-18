@@ -38,8 +38,7 @@ import { computed, defineProps, toRefs } from "vue";
 import router from "@/helpers/router";
 import tabsDefinition from "./ProfilUtilisateur.tabs.js";
 
-import { Button } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import { useUserStore } from "@/stores/user.store";

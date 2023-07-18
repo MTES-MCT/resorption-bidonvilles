@@ -15,10 +15,9 @@
 </template>
 
 <script setup>
-import { FilArianne } from "@resorptionbidonvilles/ui";
+import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import FormCreerUtilisateur from "@/components/FormCreerUtilisateur/FormCreerUtilisateur.vue";
 
 const ariane = [

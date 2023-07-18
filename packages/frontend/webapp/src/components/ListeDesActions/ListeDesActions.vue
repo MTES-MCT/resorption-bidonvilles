@@ -22,8 +22,7 @@
 <script setup>
 import { computed } from "vue";
 import { useActionsStore } from "@/stores/actions.store";
-import { TabList } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper, TabList } from "@resorptionbidonvilles/ui";
 import Loading from "@/components/Loading/Loading.vue";
 import ListeDesActionsHeader from "./ListeDesActionsHeader.vue";
 import ListeDesActionsErreur from "./ListeDesActionsErreur.vue";

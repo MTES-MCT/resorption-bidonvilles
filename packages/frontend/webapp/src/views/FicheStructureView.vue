@@ -41,8 +41,7 @@ import { useDirectoryStore } from "@/stores/directory.store";
 import router from "@/helpers/router";
 import { registerDirectoryView } from "@/api/statistics.api";
 
-import { Button, FilArianne } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { Button, ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import ViewError from "@/components/ViewError/ViewError.vue";
 import Loading from "@/components/Loading/Loading.vue";
 import FicheStructure from "@/components/FicheStructure/FicheStructure.vue";

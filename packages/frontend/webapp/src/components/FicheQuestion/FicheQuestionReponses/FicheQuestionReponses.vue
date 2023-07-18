@@ -35,8 +35,8 @@ import { defineProps, toRefs } from "vue";
 import FicheQuestionNouvelleReponse from "./FicheQuestionNouvelleReponse/FicheQuestionNouvelleReponse.vue";
 import FicheQuestionListeDesReponses from "./FicheQuestionListeDesReponses.vue";
 import FicheQuestionSubscriptionButton from "../FicheQuestionSubscriptionButton/FicheQuestionSubscriptionButton.vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
-import { Icon } from "@resorptionbidonvilles/ui";
+import {} from "@resorptionbidonvilles/ui";
+import { ContentWrapper, Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     question: Object,

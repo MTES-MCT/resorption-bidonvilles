@@ -46,8 +46,7 @@ import router from "@/helpers/router.js";
 import { trackEvent } from "@/helpers/matomo.js";
 
 // components
-import { Button, Link, Icon } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { Button, ContentWrapper, Link, Icon } from "@resorptionbidonvilles/ui";
 import FormPublic from "@/components/FormPublic/FormPublic.vue";
 import FormConnexionInputEmail from "./inputs/FormConnexionInputEmail.vue";
 import FormConnexionInputPassword from "./inputs/FormConnexionInputPassword.vue";

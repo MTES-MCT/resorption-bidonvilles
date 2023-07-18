@@ -97,8 +97,7 @@ import { useNotificationStore } from "@/stores/notification.store";
 import { create } from "@/api/invite.api.js";
 
 // components
-import { Button } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
 import FormPublic from "@/components/FormPublic/FormPublic.vue";
 import FormInvitationInputEmail from "./inputs/FormInvitationInputEmail.vue";
 import FormInvitationInputFirstName from "./inputs/FormInvitationInputFirstName.vue";

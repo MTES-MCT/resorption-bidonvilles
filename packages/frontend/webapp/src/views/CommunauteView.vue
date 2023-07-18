@@ -12,8 +12,7 @@ import { onMounted } from "vue";
 import { useQuestionsStore } from "@/stores/questions.store";
 import { useDirectoryStore } from "@/stores/directory.store";
 
-import { FilArianne } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import LayoutCommunaute from "@/components/LayoutCommunaute/LayoutCommunaute.vue";
 import Entraide from "@/components/Entraide/Entraide.vue";
 

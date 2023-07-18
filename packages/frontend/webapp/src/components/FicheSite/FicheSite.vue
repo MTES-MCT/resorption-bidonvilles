@@ -58,7 +58,7 @@ import { useUserStore } from "@/stores/user.store";
 import { useTownsStore } from "@/stores/towns.store";
 import menu from "./FicheSite.menu";
 
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
 import FicheSiteHeader from "./FicheSiteHeader/FicheSiteHeader.vue";
 import FicheSiteCaracteristiques from "./FicheSiteCaracteristiques/FicheSiteCaracteristiques.vue";

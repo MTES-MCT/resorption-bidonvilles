@@ -18,8 +18,7 @@
 import { computed, onMounted } from "vue";
 import { useActionsStore } from "@/stores/actions.store";
 
-import { FilArianne } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import ListeDesActions from "@/components/ListeDesActions/ListeDesActions.vue";
 

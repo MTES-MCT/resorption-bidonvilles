@@ -12,7 +12,7 @@
 import { defineProps, onMounted, toRefs } from "vue";
 import router from "@/helpers/router";
 
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import FicheQuestionHeader from "./FicheQuestionHeader/FicheQuestionHeader.vue";
 import FicheQuestionDetails from "./FicheQuestionDetails/FicheQuestionDetails.vue";
 import FicheQuestionDate from "./FicheQuestionDate/FicheQuestionDate.vue";

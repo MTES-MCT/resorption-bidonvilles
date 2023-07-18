@@ -19,8 +19,7 @@ import { computed, onMounted } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { trackEvent } from "@/helpers/matomo";
 
-import { FilArianne } from "@resorptionbidonvilles/ui";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import ListeDesSites from "@/components/ListeDesSites/ListeDesSites.vue";
 import BandeauPromotionEspaceEntraide from "@/components/BandeauPromotionEspaceEntraide/BandeauPromotionEspaceEntraide.vue";

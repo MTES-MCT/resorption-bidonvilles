@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import Loading from "@/components/Loading/Loading.vue";
 import HistoriqueActivitesStatistiques from "./HistoriqueActivitesStatistiques.vue";
 import HistoriqueActivitesErreur from "./HistoriqueActivitesErreur.vue";

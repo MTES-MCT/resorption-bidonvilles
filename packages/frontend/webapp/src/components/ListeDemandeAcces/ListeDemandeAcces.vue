@@ -39,9 +39,8 @@
 import { ref, onMounted } from "vue";
 import { useAccesStore } from "@/stores/acces.store";
 
-import { Button } from "@resorptionbidonvilles/ui";
+import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
-import ContentWrapper from "@/components/ContentWrapper/ContentWrapper.vue";
 import Loading from "@/components/Loading/Loading.vue";
 import ListeDemandeAccesHeader from "./ListeDemandeAccesHeader.vue";
 import ListeDemandeAccesFiltres from "./ListeDemandeAccesFiltres.vue";
