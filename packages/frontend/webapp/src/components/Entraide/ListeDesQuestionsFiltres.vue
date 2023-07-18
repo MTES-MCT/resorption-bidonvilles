@@ -3,14 +3,18 @@
         <section>
             <article>
                 <p>Filtrer par</p>
-                <div class="flex space-x-2">
-                    <Filter
+                <div class="flex space-x-4">
+                    <div
+                        class="border-b border-b-transparent hover:border-b-primary"
                         v-for="filter in filters"
                         :key="filter.id"
-                        :title="filter.label"
-                        :options="filter.options"
-                        v-model="questionsStore.filters.tags[filter.id]"
-                    />
+                    >
+                        <Checkbox
+                            :label="filter.label"
+                            variant="toggle"
+                            v-model="questionsStore.filters.tags[filter.id]"
+                        />
+                    </div>
                 </div>
             </article>
         </section>
@@ -33,7 +37,7 @@ import { useConfigStore } from "@/stores/config.store";
 import { useQuestionsStore } from "@/stores/questions.store";
 import sort from "./ListeDesQuestions.sort";
 
-import { Filter, Sort } from "@resorptionbidonvilles/ui";
+import { CheckboxUi as Checkbox, Sort } from "@resorptionbidonvilles/ui";
 
 const configStore = useConfigStore();
 const questionsStore = useQuestionsStore();

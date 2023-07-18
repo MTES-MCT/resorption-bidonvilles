@@ -21,16 +21,16 @@ export const useQuestionsStore = defineStore("questions", () => {
     const isLoading = ref(null);
     const error = ref(null);
     const subscriptions = ref({});
-    const filters = {
-        tags: ref([]),
-        search: ref(""),
-    };
+    const filters = ref({
+        tags: {},
+        search: "",
+    });
     const sort = ref("answer_date");
 
     const filteredQuestions = computed(() => {
         return filterQuestions(questions.value, {
-            tags: filters.tags.value,
-            search: filters.search.value,
+            tags: filters.value.tags,
+            search: filters.value.search,
         });
     });
     const sortedQuestions = computed(() => {
@@ -73,8 +73,8 @@ export const useQuestionsStore = defineStore("questions", () => {
     watch(resetPagination, { deep: true });
 
     function resetFilters() {
-        filters.tags.value = [];
-        filters.search.value = "";
+        filters.value.tags = {};
+        filters.value.search = "";
     }
 
     function resetPagination() {
