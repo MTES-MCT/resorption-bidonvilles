@@ -11,6 +11,7 @@ import {
 import { subscribe, unsubscribe } from "@/api/questions.api";
 import { useConfigStore } from "./config.store";
 import filterQuestions from "@/utils/filterQuestions";
+import sortList from "@/components/Entraide/ListeDesQuestions.sort";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -20,16 +21,22 @@ export const useQuestionsStore = defineStore("questions", () => {
     const isLoading = ref(null);
     const error = ref(null);
     const subscriptions = ref({});
-    const filters = {
-        tags: ref([]),
-        search: ref(""),
-    };
+    const filters = ref({
+        tags: {},
+        search: "",
+    });
+    const sort = ref("answer_date");
 
     const filteredQuestions = computed(() => {
         return filterQuestions(questions.value, {
-            tags: filters.tags.value,
-            search: filters.search.value,
+            tags: filters.value.tags,
+            search: filters.value.search,
         });
+    });
+    const sortedQuestions = computed(() => {
+        return sortList
+            .find((item) => item.value === sort.value)
+            .sortFn(filteredQuestions.value);
     });
 
     const currentPage = {
@@ -47,7 +54,7 @@ export const useQuestionsStore = defineStore("questions", () => {
             }
 
             return Math.min(
-                filteredQuestions.value.length,
+                sortedQuestions.value.length,
                 currentPage.index.value * ITEMS_PER_PAGE
             );
         }),
@@ -56,7 +63,7 @@ export const useQuestionsStore = defineStore("questions", () => {
                 return [];
             }
 
-            return filteredQuestions.value.slice(
+            return sortedQuestions.value.slice(
                 (currentPage.index.value - 1) * ITEMS_PER_PAGE,
                 currentPage.index.value * ITEMS_PER_PAGE
             );
@@ -66,12 +73,12 @@ export const useQuestionsStore = defineStore("questions", () => {
     watch(resetPagination, { deep: true });
 
     function resetFilters() {
-        filters.tags.value = [];
-        filters.search.value = "";
+        filters.value.tags = {};
+        filters.value.search = "";
     }
 
     function resetPagination() {
-        if (filteredQuestions.value.length === 0) {
+        if (sortedQuestions.value.length === 0) {
             currentPage.index.value = -1;
         } else {
             currentPage.index.value = 1;
@@ -157,18 +164,20 @@ export const useQuestionsStore = defineStore("questions", () => {
     return {
         questions,
         filteredQuestions,
+        sortedQuestions,
         isLoading,
         error,
         currentPage,
         filters,
+        sort,
         numberOfPages: computed(() => {
-            if (filteredQuestions.value.length === 0) {
+            if (sortedQuestions.value.length === 0) {
                 return 0;
             }
 
-            return Math.ceil(filteredQuestions.value.length / ITEMS_PER_PAGE);
+            return Math.ceil(sortedQuestions.value.length / ITEMS_PER_PAGE);
         }),
-        total: computed(() => filteredQuestions.value.length),
+        total: computed(() => sortedQuestions.value.length),
         fetchQuestions,
         fetchQuestion,
         create,

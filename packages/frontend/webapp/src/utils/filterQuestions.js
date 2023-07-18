@@ -4,11 +4,17 @@ export default function (questions, filters) {
         .replace(/^\s*|\s*$/g, "")
         .replace(/\s+/g, " ");
     const searchKeywords = trimmedSearch !== "" ? trimmedSearch.split(" ") : [];
-
+    console.log(filters.tags);
     return questions.filter((question) => {
+        const tags = Object.keys(filters.tags).filter(
+            (key) => filters.tags[key] === true
+        );
+
         if (
-            filters.tags.length > 0 &&
-            !question.tags.some(({ uid }) => filters.tags.includes(uid))
+            tags.length > 0 &&
+            tags.every((key) => {
+                return !question.tags.map(({ uid }) => uid).includes(key);
+            })
         ) {
             return false;
         }

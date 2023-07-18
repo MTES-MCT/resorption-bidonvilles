@@ -81,7 +81,7 @@ const props = defineProps({
         default: false,
     },
 });
-const emit = defineEmits(['update:modelValue', 'checkedFilter']);
+const emit = defineEmits(['update:modelValue', 'checkedItem']);
 
 const { title, options, modelValue, disabled } = toRefs(props);
 const checked = ref(computeChecked());

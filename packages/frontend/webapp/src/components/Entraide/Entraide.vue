@@ -9,7 +9,7 @@
     <template v-else>
         <ListeDesQuestionsFiltres class="-mt-5 mb-4" />
         <ListeDesQuestionsRecherche class="mb-4" />
-        <ListeDesQuestions v-if="questionsStore.filteredQuestions.length > 0" />
+        <ListeDesQuestions v-if="questionsStore.sortedQuestions.length > 0" />
         <ListeDesQuestionsVide v-else />
     </template>
 </template>
