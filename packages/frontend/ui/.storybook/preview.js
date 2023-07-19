@@ -5,20 +5,12 @@ import {
 } from "vue-router";
 import { createI18n } from "vue-i18n";
 
-// import { app } from '@storybook/vue3';
 import { setup } from '@storybook/vue3'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHome, faHouseCircleCheck, faSpinner, faTimes, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import '../src/css/styles.css';
 
-library.add(faGithub);
-library.add(faHome);
-library.add(faHouseCircleCheck);
-library.add(faSpinner);
-library.add(faTimes);
-library.add(faArrowUpRightFromSquare);
+import '../src/css/styles.css';
+import '../../common/fontawesome/css/fontawesome.css';
+import '../../common/fontawesome/css/brands.css';
+import '../../common/fontawesome/css/solid.css';
 
 const i18n = createI18n({
     locale: 'fr',
@@ -64,7 +56,6 @@ const preview = {
 
 
 setup((app) => {
-    app.component('font-awesome-icon', FontAwesomeIcon);
     app.component('ValidationProvider', {
         template: '<div><slot :errors="{}" /></div>'
     });
