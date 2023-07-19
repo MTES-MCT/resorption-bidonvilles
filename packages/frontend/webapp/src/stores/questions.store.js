@@ -25,7 +25,7 @@ export const useQuestionsStore = defineStore("questions", () => {
         tags: {},
         search: "",
     });
-    const sort = ref("answer_date");
+    const sort = ref("last_activity");
 
     const filteredQuestions = computed(() => {
         return filterQuestions(questions.value, {
@@ -91,6 +91,7 @@ export const useQuestionsStore = defineStore("questions", () => {
         subscriptions.value = {};
         isLoading.value = false;
         error.value = null;
+        sort.value = "last_activity";
         resetPagination();
         resetFilters();
     }
