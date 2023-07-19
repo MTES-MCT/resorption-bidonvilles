@@ -22,6 +22,8 @@ interface EmailData {
     first_name: string;
     access_request_message: string;
     objet: string;
+    is_organization_other: boolean;
+    organization_other?: string;
 }
 
 async function sendEmailNewContactMessageToAdmins(message) {
@@ -49,6 +51,7 @@ async function sendEmailNewContactMessageToAdmins(message) {
 // ie: [help, report] becomes "Aider - Signaler"
 function getObjetForContactMessage(requestType) {
     const types = {
+        'access-request': 'Demande de création de compte',
         help: 'Aider',
         report: 'Signaler',
         'help-request': "Demander de l'aide",
@@ -72,11 +75,12 @@ export default async (req: Request, res: Response, next): Promise<Response<any, 
         phone: req.body.phone,
         last_name: req.body.last_name,
         first_name: req.body.first_name,
-        access_request_message:
-            (request_type === 'access_request' && is_actor && organization_category === 'other')
-                ? `${req.body.access_request_message}\n\nNom de la structure à créer: ${req.body.organization_other}`
-                : req.body.access_request_message,
+        access_request_message: req.body.access_request_message,
         objet: getObjetForContactMessage(request_type),
+        is_organization_other: !!((request_type.includes('access-request') && is_actor && organization_category === 'other')),
+        organization_other: (request_type.includes('access-request') && is_actor && organization_category === 'other')
+            ? req.body.organization_other
+            : '',
     };
 
     // send mail to sales@ if a newsletter registration was asked
