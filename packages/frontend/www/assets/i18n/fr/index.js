@@ -7,5 +7,6 @@ export default {
     landingPage,
     contactPage,
     invitationPage,
-    footer
+    footer,
+    aboutUs: "Qui sommes-nous ?"
 };
