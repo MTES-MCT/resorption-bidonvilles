@@ -32,53 +32,46 @@ const shantytownExportPermissionsRequest = `
     AND
         rp3.role_permission_id IS NULL`;
 
-function isEmpty(str) {
-    return (!str || str.length === 0);
-}
-
-
 module.exports = {
     async up(queryInterface) {
         const transaction = await queryInterface.sequelize.transaction();
-        const shantytownExportPermissions = await queryInterface.sequelize.query(
-            shantytownExportPermissionsRequest,
-            {
-                type: queryInterface.sequelize.QueryTypes.SELECT,
-                transaction,
-            },
-        );
+        try {
+            const shantytownExportPermissions = await queryInterface.sequelize.query(
+                shantytownExportPermissionsRequest,
+                {
+                    type: queryInterface.sequelize.QueryTypes.SELECT,
+                    transaction,
+                },
+            );
 
-        await Promise.all(shantytownExportPermissions.reduce((acc, permission) => {
-            if (!isEmpty(permission.role_regular)) {
-                acc.push(queryInterface.sequelize.query(`
+            await Promise.all(shantytownExportPermissions.reduce((acc, permission) => {
+                const regularKey = permission.role_regular !== null ? 'fkRoleRegular' : 'fkRoleAdmin';
+
+                const query = `
                     INSERT INTO role_permissions (fk_role_regular, fk_role_admin, fk_feature, fk_entity, allowed, allow_all)
-                    VALUES (:fkRoleRegular, NULL, :fkFeature, 'shantytown_history', :allowed, :allowAll)`, {
+                    VALUES (${permission.role_regular !== null ? ':fkRoleRegular' : 'NULL'}, ${permission.role_regular !== null ? 'NULL' : ':fkRoleAdmin'}, :fkFeature, 'shantytown_history', :allowed, :allowAll)
+                `;
+
+                const replacements = {
+                    [regularKey]: permission.role_regular !== null ? permission.role_regular : permission.role_admin,
+                    fkFeature: permission.feature,
+                    fkEntity: permission.entity,
+                    allowed: permission.allowed,
+                    allowAll: permission.allow_all,
+                };
+
+                acc.push(queryInterface.sequelize.query(query, {
                     transaction,
-                    replacements: {
-                        fkRoleRegular: permission.role_regular,
-                        fkFeature: permission.feature,
-                        fkEntity: permission.entity,
-                        allowed: permission.allowed,
-                        allowAll: permission.allow_all,
-                    },
+                    replacements,
                 }));
-            } else if (!isEmpty(permission.role_admin)) {
-                acc.push(queryInterface.sequelize.query(`
-                    INSERT INTO role_permissions (fk_role_regular, fk_role_admin, fk_feature, fk_entity, allowed, allow_all)
-                    VALUES (NULL, :fkRoleAdmin, :fkFeature, 'shantytown_history', :allowed, :allowAll)`, {
-                    transaction,
-                    replacements: {
-                        fkRoleAdmin: permission.role_admin,
-                        fkFeature: permission.feature,
-                        fkEntity: permission.entity,
-                        allowed: permission.allowed,
-                        allowAll: permission.allow_all,
-                    },
-                }));
-            }
-            return acc;
-        }, []));
-        return transaction.commit();
+
+                return acc;
+            }, []));
+            return transaction.commit();
+        } catch (error) {
+            await transaction.rollback();
+            throw error;
+        }
     },
 
     down: queryInterface => queryInterface.sequelize.query(
