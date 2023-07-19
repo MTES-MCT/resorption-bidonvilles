@@ -2,7 +2,7 @@ import PestAnimalsBody from "./PestAnimalsBody.vue";
 import PestAnimalsHead from "./PestAnimalsHeadByTown.vue";
 
 export default {
-    icon: "bug-slash",
+    icon: "mouse-field",
     title: "Nombre de sites sans nuisibles",
     headComponent: PestAnimalsHead,
     bodyComponent: PestAnimalsBody,

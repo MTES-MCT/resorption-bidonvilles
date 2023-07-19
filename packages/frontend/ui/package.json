@@ -23,8 +23,6 @@
     "storybook": "storybook dev -p 6006"
   },
   "dependencies": {
-    "@fortawesome/free-brands-svg-icons": "^6.4.0",
-    "@fortawesome/free-regular-svg-icons": "^6.2.0",
     "vee-validate": "^4.7.0"
   }
 }

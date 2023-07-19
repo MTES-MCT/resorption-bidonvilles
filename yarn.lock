@@ -2390,30 +2390,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-svg-core@npm:^6.1.1, @fortawesome/fontawesome-svg-core@npm:^6.2.0":
-  version: 6.4.0
-  resolution: "@fortawesome/fontawesome-svg-core@npm:6.4.0"
-  dependencies:
-    "@fortawesome/fontawesome-common-types": 6.4.0
-  checksum: 5d4e6c15f814f5ce29053b666d0c7d194dc8ba173d128a38cc5856403a09d4e817e54956d30ed8d48d621f2f5ebcc71756f4e8fe5c5a091c636fc728fcb2362b
-  languageName: node
-  linkType: hard
-
-"@fortawesome/free-brands-svg-icons@npm:^6.1.1, @fortawesome/free-brands-svg-icons@npm:^6.2.0, @fortawesome/free-brands-svg-icons@npm:^6.4.0":
+"@fortawesome/free-brands-svg-icons@npm:^6.1.1":
   version: 6.4.0
   resolution: "@fortawesome/free-brands-svg-icons@npm:6.4.0"
   dependencies:
     "@fortawesome/fontawesome-common-types": 6.4.0
   checksum: 110b22ec366793bc2daa10d0016dfcdf0a0341ced0d8d5c4f68c86e7ffb5e58d3a0b32062e0daaf38af010f85147a9d33e7fd7a8fde79309af7a05254eadbf31
-  languageName: node
-  linkType: hard
-
-"@fortawesome/free-regular-svg-icons@npm:^6.2.0":
-  version: 6.4.0
-  resolution: "@fortawesome/free-regular-svg-icons@npm:6.4.0"
-  dependencies:
-    "@fortawesome/fontawesome-common-types": 6.4.0
-  checksum: a52689349b858a73b179532a207f98d9ee0f28b31e22eaffa6ce23cf3bfec8cc52bcd35770a0943a2dd1328bafbfdea6809231abee7a8601796bc0fb9759d25f
   languageName: node
   linkType: hard
 
@@ -2423,16 +2405,6 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-common-types": 6.4.0
   checksum: efdd1688620be3d52aacaeac36c955571962e174ae981fc697b6e92fb0996b00166d02e7729a59ea93713a514e2c8d564ab1aa79c9653b4cfed0263e4874d070
-  languageName: node
-  linkType: hard
-
-"@fortawesome/vue-fontawesome@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "@fortawesome/vue-fontawesome@npm:3.0.3"
-  peerDependencies:
-    "@fortawesome/fontawesome-svg-core": ~1 || ~6
-    vue: ">= 3.0.0 < 4"
-  checksum: a3ec4db7c849c8378eb25c35a8e7905a37df9d3263d5284d0ce8bd9cff1d79bc7015ec68e7a2d29aedb521408f2d47bfb90a8756262394e8e2cb6e9bc73a3b41
   languageName: node
   linkType: hard
 
@@ -3327,11 +3299,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@resorptionbidonvilles/mobile@workspace:packages/frontend/mobile"
   dependencies:
-    "@fortawesome/fontawesome-svg-core": ^6.2.0
-    "@fortawesome/free-brands-svg-icons": ^6.2.0
-    "@fortawesome/free-regular-svg-icons": ^6.2.0
     "@fortawesome/free-solid-svg-icons": ^6.2.0
-    "@fortawesome/vue-fontawesome": ^3.0.3
     "@vitejs/plugin-vue": ^4.2.3
     "@vue/eslint-config-prettier": ^7.0.0
     autoprefixer: ^10.4.12
@@ -3359,8 +3327,6 @@ __metadata:
   dependencies:
     "@babel/preset-env": ^7.22.4
     "@babel/preset-typescript": ^7.21.5
-    "@fortawesome/free-brands-svg-icons": ^6.4.0
-    "@fortawesome/free-regular-svg-icons": ^6.2.0
     "@storybook/addon-essentials": ^7.0.18
     "@storybook/addon-links": ^7.0.18
     "@storybook/addon-styling": ^1.0.8
@@ -3382,11 +3348,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@resorptionbidonvilles/webapp3@workspace:packages/frontend/webapp"
   dependencies:
-    "@fortawesome/fontawesome-svg-core": ^6.2.0
-    "@fortawesome/free-brands-svg-icons": ^6.2.0
-    "@fortawesome/free-regular-svg-icons": ^6.2.0
-    "@fortawesome/free-solid-svg-icons": ^6.2.0
-    "@fortawesome/vue-fontawesome": ^3.0.3
     "@rushstack/eslint-patch": ^1.1.4
     "@sentry/vue": ^7.54.0
     "@turf/turf": ^6.5.0
@@ -3433,10 +3394,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@resorptionbidonvilles/www@workspace:packages/frontend/www"
   dependencies:
-    "@fortawesome/fontawesome-svg-core": ^6.1.1
     "@fortawesome/free-brands-svg-icons": ^6.1.1
     "@fortawesome/free-solid-svg-icons": ^6.1.1
-    "@fortawesome/vue-fontawesome": ^3.0.3
     "@nuxtjs/i18n": ^8.0.0-beta.3
     "@nuxtjs/tailwindcss": ^6.1.3
     chart.js: ^3.7.1

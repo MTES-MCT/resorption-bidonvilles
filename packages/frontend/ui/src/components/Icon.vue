@@ -1,5 +1,5 @@
 <template>
-    <font-awesome-icon :icon="icon" :spin="spin" />
+    <i :class="classes"></i>
 </template>
 
 <script>
@@ -14,6 +14,15 @@ export default {
         spin: {
             type: Boolean
         }
-    }
+    },
+
+    computed: {
+        iconFull() {
+            return this.icon.includes("fa-") ? this.icon : `fa-solid fa-${this.icon}`;
+        },
+        classes() {
+            return this.iconFull + (this.spin ? " fa-spin" : "");
+        }
+    } 
 };
 </script>
