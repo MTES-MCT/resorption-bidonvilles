@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2 class="text-center text-display-lg font-bold text-primary mb-10">
-            {{ $t("footer.aboutUs") }}
+            {{ $t("aboutUs") }}
         </h2>
 
         <div class="max-w-screen-lg">
