@@ -1,7 +1,5 @@
 <template>
-    <div
-        class="flex justify-between h-14 items-center mr-4 space-x-4 print:hidden"
-    >
+    <div class="flex justify-between h-14 items-center space-x-4 print:hidden">
         <CarteQuestiondateCreation :question="question" />
         <template v-if="questionHasAtLeastOneAnswer">
             <div class="flex justify-end items-center space-x-4">

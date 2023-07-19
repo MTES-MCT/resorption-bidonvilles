@@ -3,7 +3,9 @@
         <section>
             <article>
                 <p>Filtrer par</p>
-                <div class="flex space-x-4">
+                <div
+                    class="grid grid-cols-3 gap-2 lg:flex lg:space-x-4 items-center"
+                >
                     <div
                         class="border-b border-b-transparent hover:border-b-primary"
                         v-for="filter in filters"
