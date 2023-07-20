@@ -22,7 +22,7 @@
             >
 
             <ChartBigFigure
-                icon="bolt"
+                :icon="icon"
                 :figure="formatStat(data.figures[livingConditionType].value)"
                 :evolution="
                     formatStat(data.figures[livingConditionType].evolution)
@@ -61,8 +61,12 @@ const props = defineProps({
     chartType: {
         type: String,
     },
+    icon: {
+        type: String,
+    },
 });
-const { chartLabel, data, livingConditionType, chartType } = toRefs(props);
+const { chartLabel, data, livingConditionType, chartType, icon } =
+    toRefs(props);
 
 const chartData = computed(() => ({
     labels: data.value.charts.labels,
