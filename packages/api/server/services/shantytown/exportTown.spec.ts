@@ -12,6 +12,7 @@ import shantytownModel from '#server/models/shantytownModel';
 import closingSolutionModel from '#server/models/closingSolutionModel';
 import excelUtils from '#server/utils/excel';
 import statsExportsModel from '#server/models/statsExportsModel';
+import moment from 'moment';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -118,6 +119,30 @@ describe('services/shantytown', () => {
                 }
                 expect(stubs.can).to.have.been.calledWith(user);
                 expect(stubs.do).to.have.been.calledWith('export', 'shantytown_history');
+            });
+
+            it('vérifie que si "can" retourne false, on obtient bien un ServiceError', async () => {
+                const pastDate = moment().subtract(1, 'days').format('YYYY-MM-DD'); // Date d'hier
+                const dataWithPastDate = { ...data, date: pastDate };
+
+                // 1. On simuler le succès du premier test de permission (retourne true dès le premier appel à can())
+                stubs.can.returns({ do: sinon.stub().returns({ on: sinon.stub().returns(true) }) });
+
+                // 2. On simule l'échec du deuxième test de permission en retournant false dès le deuxième appel à can()
+                const doStub = sinon.stub();
+                doStub.onFirstCall().returns({ on: sinon.stub().returns(true) });
+                doStub.onSecondCall().returns({ on: sinon.stub().returns(false) });
+                stubs.can.returns({ do: doStub });
+
+                let responseError;
+                try {
+                    await exportTownService(user, dataWithPastDate);
+                } catch (error) {
+                    responseError = error;
+                }
+                expect(responseError).to.be.instanceOf(ServiceError);
+                expect(responseError.code).to.be.eql('permission_denied');
+                expect(responseError.message.trim()).to.be.eql('Vous n\'êtes pas autorisé(e) à exporter des données passées');
             });
 
             it('renvoie une exception ServiceError \'permission_denied\' si l\'utilisateur n\'a pas la permission', async () => {
