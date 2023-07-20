@@ -9,11 +9,11 @@ export default [
     },
     {
         id: "livingConditionsByInhabitant",
-        label: "Conditions de vie (par habitants)",
+        label: "Conditions de vie (habitants)",
     },
     {
         id: "livingConditionsByTown",
-        label: "Conditions de vie (par sites)",
+        label: "Conditions de vie (sites)",
     },
     {
         id: "justice",
