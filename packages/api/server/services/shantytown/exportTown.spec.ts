@@ -125,10 +125,7 @@ describe('services/shantytown', () => {
                 const pastDate = moment().subtract(1, 'days').format('YYYY-MM-DD'); // Date d'hier
                 const dataWithPastDate = { ...data, date: pastDate };
 
-                // 1. On simuler le succès du premier test de permission (retourne true dès le premier appel à can())
-                stubs.can.returns({ do: sinon.stub().returns({ on: sinon.stub().returns(true) }) });
-
-                // 2. On simule l'échec du deuxième test de permission en retournant false dès le deuxième appel à can()
+                // On simule l'échec du deuxième test de permission en retournant false dès le deuxième appel à can()
                 const doStub = sinon.stub();
                 doStub.onFirstCall().returns({ on: sinon.stub().returns(true) });
                 doStub.onSecondCall().returns({ on: sinon.stub().returns(false) });
