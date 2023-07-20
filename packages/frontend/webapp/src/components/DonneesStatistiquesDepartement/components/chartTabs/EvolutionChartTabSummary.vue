@@ -6,6 +6,7 @@
         chartLabel="Nombre de sites avec accès à l'eau"
         :data="data.water"
         chartType="towns"
+        icon="faucet-drip"
         livingConditionType="towns_with_access_to_water"
         ><template v-slot:title> Accès à l'eau </template>
     </EvolutionChartLivingCondition>

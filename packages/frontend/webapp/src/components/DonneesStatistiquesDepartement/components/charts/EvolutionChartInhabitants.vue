@@ -13,14 +13,16 @@
             >
 
             <ChartBigFigure
-                icon="people-group"
+                :img="flagEU"
+                alt="Estimation du nombre d'habitants intra-UE"
                 :figure="formatStat(data.figures.european.value)"
                 :evolution="formatStat(data.figures.european.evolution)"
                 >Estimation du nombre d'habitants intra-UE</ChartBigFigure
             >
 
             <ChartBigFigure
-                icon="people-group"
+                :img="flagExtraCommunautaires"
+                alt="Estimation du nombre d'habitants extra-UE"
                 :figure="formatStat(data.figures.foreign.value)"
                 :evolution="formatStat(data.figures.foreign.evolution)"
                 >Estimation du nombre d'habitants extra-UE</ChartBigFigure
@@ -41,6 +43,8 @@ import { computed } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { LineChart } from "@/helpers/chart";
 import ChartBigFigure from "./ChartBigFigure.vue";
+import flagEU from "@/assets/img/flags/eu.png";
+import flagExtraCommunautaires from "@/assets/img/flags/extra-communautaires.png";
 
 const departementMetricsStore = useDepartementMetricsStore();
 const data = departementMetricsStore.evolution.data.inhabitants.inhabitants;
