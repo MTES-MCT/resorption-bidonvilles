@@ -17,28 +17,22 @@
                 }}
             </div>
         </div>
-        <CarteQuestionQuestion :question="question.question" />
-        <section class="flex-1">
-            <div class="text-primary font-bold mb-3">
-                Par
-                <LinkOrganization
-                    :to="`/structure/${question.createdBy.organization_id}`"
-                >
-                    {{ question.createdBy.first_name }}
-                    {{ question.createdBy.last_name }} -
-                    {{ question.createdBy.organization }}
-                </LinkOrganization>
-            </div>
-            <div>
-                <QuestionTag
-                    v-for="tag in question.tags"
-                    :key="tag.uid"
-                    :tag="tag"
-                >
-                    {{ tag.name }}
-                </QuestionTag>
-            </div>
-        </section>
+        <CarteQuestionQuestion class="pt-4" :question="question.question" />
+        <div class="text-primary font-bold mb-3">
+            Par
+            <LinkOrganization
+                :to="`/structure/${question.createdBy.organization_id}`"
+            >
+                {{ question.createdBy.first_name }}
+                {{ question.createdBy.last_name }} -
+                {{ question.createdBy.organization }}
+            </LinkOrganization>
+        </div>
+        <div>
+            <QuestionTag v-for="tag in question.tags" :key="tag.uid" :tag="tag">
+                {{ tag.name }}
+            </QuestionTag>
+        </div>
         <CarteQuestionFooter :question="question" />
     </section>
 </template>

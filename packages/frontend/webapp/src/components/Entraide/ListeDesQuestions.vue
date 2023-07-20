@@ -1,6 +1,6 @@
 <template>
     <section>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+        <div class="flex flex-col gap-2">
             <CarteQuestion
                 v-for="question in questionsStore.currentPage.content"
                 :key="question.id"

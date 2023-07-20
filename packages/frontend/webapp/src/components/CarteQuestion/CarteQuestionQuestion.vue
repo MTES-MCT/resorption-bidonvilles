@@ -1,5 +1,5 @@
 <template>
-    <p class="text-primary text-xl font-bold pt-4 pb-2 break-words">
+    <p class="text-primary text-xl font-bold break-words">
         {{ question }}
     </p>
 </template>
