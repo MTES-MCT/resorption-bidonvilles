@@ -5,6 +5,7 @@
         :data="data.water"
         chartType="towns"
         livingConditionType="towns_with_access_to_water"
+        icon="faucet-drip"
         ><template v-slot:title> Accès à l'eau </template>
     </EvolutionChartLivingCondition>
 
@@ -14,6 +15,7 @@
         :data="data.electricity"
         chartType="towns"
         livingConditionType="towns_with_access_to_electricity"
+        icon="bolt"
         ><template v-slot:title> Accès à l'électricité </template>
     </EvolutionChartLivingCondition>
 
@@ -23,6 +25,7 @@
         :data="data.toilets"
         chartType="towns"
         livingConditionType="towns_with_access_to_toilets"
+        icon="toilet"
         ><template v-slot:title> Accès à des toilettes </template>
     </EvolutionChartLivingCondition>
 
@@ -32,6 +35,7 @@
         :data="data.trash_evacuation"
         chartType="towns"
         livingConditionType="towns_with_access_to_trash_evacuation"
+        icon="trash-alt"
         ><template v-slot:title> Accès à une évacuation des déchets </template>
     </EvolutionChartLivingCondition>
 
@@ -41,6 +45,7 @@
         :data="data.fire_prevention"
         chartType="towns"
         livingConditionType="towns_with_access_to_fire_prevention"
+        icon="fire-extinguisher"
         ><template v-slot:title> Accès à une prévention incendie </template>
     </EvolutionChartLivingCondition>
 
@@ -50,6 +55,7 @@
         :data="data.pest_animals"
         chartType="towns"
         livingConditionType="towns_with_absence_of_pest_animals"
+        icon="mouse-field"
         ><template v-slot:title> Absence de nuisibles</template>
     </EvolutionChartLivingCondition>
 </template>

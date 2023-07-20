@@ -3,7 +3,7 @@
         <Button
             v-if="isHover"
             variant="primaryOutline"
-            icon="fa-regular fa-sun"
+            icon="sun-bright"
             iconPosition="left"
             type="button"
             size="sm"

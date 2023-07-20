@@ -1,9 +1,5 @@
 <template>
-    <Icon
-        class="text-red600"
-        icon="fa-regular fa-sun"
-        v-if="town.heatwave === true"
-    />
+    <Icon class="text-red600" icon="sun-bright" v-if="town.heatwave === true" />
 </template>
 
 <script setup>

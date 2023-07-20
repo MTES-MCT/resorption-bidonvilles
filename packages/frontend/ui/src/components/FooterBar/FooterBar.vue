@@ -27,7 +27,7 @@
             </div>
             <div class="border-t mt-4 pt-4 pb-8 flex space-x-4 items-center">
                 <FooterBarFootLink to="https://github.com/MTES-MCT/resorption-bidonvilles"
-                    ><Icon :icon="['fab', 'github']" class="mr-1" />{{ $t('footer.sourceCode') }}</FooterBarFootLink
+                    ><Icon icon="fa-brands fa-github" class="mr-1" />{{ $t('footer.sourceCode') }}</FooterBarFootLink
                 >
                 <span class="w-px bg-G300 mx-3 h-4"></span>
                 <FooterBarFootLink :to="`${WWW_URL}/stats`"

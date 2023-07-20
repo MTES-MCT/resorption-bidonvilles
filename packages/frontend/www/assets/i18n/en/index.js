@@ -5,5 +5,6 @@ import footer from "@common/i18n/en/footer.json";
 export default {
     landingPage,
     contactPage,
-    footer
+    footer,
+    aboutUs: "About us"
 };

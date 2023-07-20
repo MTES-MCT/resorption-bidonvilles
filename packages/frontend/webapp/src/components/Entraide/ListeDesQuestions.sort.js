@@ -1,5 +1,19 @@
 export default [
     {
+        value: "last_activity",
+        label: "Activité récente",
+        sortFn: (questions) => {
+            return questions.sort((a, b) => {
+                const dateA =
+                    a.answers.length > 0 ? a.answers[0].createdAt : a.createdAt;
+                const dateB =
+                    b.answers.length > 0 ? b.answers[0].createdAt : b.createdAt;
+
+                return dateA < dateB ? 1 : -1;
+            });
+        },
+    },
+    {
         value: "answer_date",
         label: "Date de dernière réponse",
         sortFn: (questions) => {
