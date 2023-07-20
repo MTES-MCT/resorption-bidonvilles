@@ -1,8 +1,6 @@
 <template>
     <section>
-        <h1 class="font-bold text-primary text-lg">
-            Évolution des procédures judiciaires
-        </h1>
+        <h1 class="font-bold text-primary text-lg">Procédures judiciaires</h1>
 
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure

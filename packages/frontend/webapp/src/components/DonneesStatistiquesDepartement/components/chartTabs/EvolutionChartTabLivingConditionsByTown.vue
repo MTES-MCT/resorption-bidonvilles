@@ -1,7 +1,7 @@
 <template>
     <EvolutionChartLivingCondition
         class="mt-6"
-        chartLabel="Nombre de sites avec accès à l'eau"
+        chartLabel="Sites avec accès à l'eau"
         :data="data.water"
         chartType="towns"
         livingConditionType="towns_with_access_to_water"
@@ -11,7 +11,7 @@
 
     <EvolutionChartLivingCondition
         class="mt-6"
-        chartLabel="Nombre de sites avec accès à l'électricité"
+        chartLabel="Sites avec accès à l'électricité"
         :data="data.electricity"
         chartType="towns"
         livingConditionType="towns_with_access_to_electricity"
@@ -21,7 +21,7 @@
 
     <EvolutionChartLivingCondition
         class="mt-6"
-        chartLabel="Nombre de sites avec accès à des toilettes"
+        chartLabel="Sites avec accès à des toilettes"
         :data="data.toilets"
         chartType="towns"
         livingConditionType="towns_with_access_to_toilets"
@@ -31,7 +31,7 @@
 
     <EvolutionChartLivingCondition
         class="mt-6"
-        chartLabel="Nombre de sites avec accès à une évacuation des déchets"
+        chartLabel="Sites avec accès à une évacuation des déchets"
         :data="data.trash_evacuation"
         chartType="towns"
         livingConditionType="towns_with_access_to_trash_evacuation"
@@ -41,7 +41,7 @@
 
     <EvolutionChartLivingCondition
         class="mt-6"
-        chartLabel="Nombre de sites avec accès à une prévention incendie"
+        chartLabel="Sites avec accès à une prévention incendie"
         :data="data.fire_prevention"
         chartType="towns"
         livingConditionType="towns_with_access_to_fire_prevention"
@@ -51,7 +51,7 @@
 
     <EvolutionChartLivingCondition
         class="mt-6"
-        chartLabel="Nombre de sites sur un site sans nuisibles"
+        chartLabel="Sites sur un site sans nuisibles"
         :data="data.pest_animals"
         chartType="towns"
         livingConditionType="towns_with_absence_of_pest_animals"

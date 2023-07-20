@@ -1,7 +1,7 @@
 <template>
     <EvolutionChartLivingCondition
         class="mt-6"
-        chartLabel="Nombre de personnes avec accès à l'eau"
+        chartLabel="Personnes avec accès à l'eau"
         :data="data.water"
         livingConditionType="inhabitants_with_access_to_water"
         chartType="inhabitants"
@@ -11,7 +11,7 @@
 
     <EvolutionChartLivingCondition
         class="mt-6"
-        chartLabel="Nombre de personnes avec accès à l'électricité"
+        chartLabel="Personnes avec accès à l'électricité"
         :data="data.electricity"
         chartType="inhabitants"
         livingConditionType="inhabitants_with_access_to_electricity"
@@ -21,7 +21,7 @@
 
     <EvolutionChartLivingCondition
         class="mt-6"
-        chartLabel="Nombre de personnes avec accès à des toilettes"
+        chartLabel="Personnes avec accès à des toilettes"
         :data="data.toilets"
         chartType="inhabitants"
         livingConditionType="inhabitants_with_access_to_toilets"
@@ -31,7 +31,7 @@
 
     <EvolutionChartLivingCondition
         class="mt-6"
-        chartLabel="Nombre de personnes avec accès à une évacuation des déchets"
+        chartLabel="Personnes avec accès à une évacuation des déchets"
         :data="data.trash_evacuation"
         chartType="inhabitants"
         livingConditionType="inhabitants_with_access_to_trash_evacuation"
@@ -41,7 +41,7 @@
 
     <EvolutionChartLivingCondition
         class="mt-6"
-        chartLabel="Nombre de personnes avec accès à une prévention incendie"
+        chartLabel="Personnes avec accès à une prévention incendie"
         :data="data.fire_prevention"
         chartType="inhabitants"
         livingConditionType="inhabitants_with_access_to_fire_prevention"
@@ -51,7 +51,7 @@
 
     <EvolutionChartLivingCondition
         class="mt-6"
-        chartLabel="Nombre de personnes sur un site sans nuisibles"
+        chartLabel="Personnes sur un site sans nuisibles"
         :data="data.pest_animals"
         chartType="inhabitants"
         livingConditionType="inhabitants_with_absence_of_pest_animals"

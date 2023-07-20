@@ -1,22 +1,20 @@
 <template>
     <section>
-        <h1 class="font-bold text-primary text-lg">
-            Évolution du nombre de sites
-        </h1>
+        <h1 class="font-bold text-primary text-lg">Nombre de sites</h1>
 
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure
                 icon="map-pin"
                 :figure="formatStat(data.figures.total.value)"
                 :evolution="formatStat(data.figures.total.evolution)"
-                >Nombre total de sites</ChartBigFigure
+                >Tous sites</ChartBigFigure
             >
 
             <ChartBigFigure
                 icon="map-pin"
                 :figure="formatStat(data.figures.less_than_10.value)"
                 :evolution="formatStat(data.figures.less_than_10.evolution)"
-                >Nombre de sites de moins de 10 habitants</ChartBigFigure
+                >Sites de moins de 10 habitants</ChartBigFigure
             >
 
             <ChartBigFigure
@@ -25,14 +23,14 @@
                 :evolution="
                     formatStat(data.figures.between_10_and_99.evolution)
                 "
-                >Nombre de sites de moins de 100 habitants</ChartBigFigure
+                >Sites de moins de 100 habitants</ChartBigFigure
             >
 
             <ChartBigFigure
                 icon="map-pin"
                 :figure="formatStat(data.figures.more_than_99.value)"
                 :evolution="formatStat(data.figures.more_than_99.evolution)"
-                >Nombre de sites de plus de 100 habitants</ChartBigFigure
+                >Sites de plus de 100 habitants</ChartBigFigure
             >
         </div>
 
@@ -58,21 +56,21 @@ const chartData = computed(() => ({
     labels: data.charts.labels,
     datasets: [
         {
-            label: "Nombre de sites de moins de 10 habitants",
+            label: "Sites de moins de 10 habitants",
             backgroundColor: ["rgba(240, 127, 135, 0.7)"],
             fill: true,
             data: data.charts.less_than_10,
             Stack: "Stack 0",
         },
         {
-            label: "Nombre de sites de moins de 100 habitants",
+            label: "Sites de moins de 100 habitants",
             backgroundColor: ["rgba(134, 239, 172, 0.7)"],
             fill: true,
             data: data.charts.between_10_and_99,
             Stack: "Stack 0",
         },
         {
-            label: "Nombre de sites de plus de 100 habitants",
+            label: "Sites de plus de 100 habitants",
             backgroundColor: ["rgba(127, 127, 200, 0.7)"],
             fill: true,
             data: data.charts.more_than_99,
