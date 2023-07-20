@@ -25,7 +25,7 @@ export default (argFrom: Date, argTo: Date): DateObject[] => {
     if (diff < 3) {
         diff = getWeekDiff(argFrom, argTo);
         step = 'weeks';
-        format = 'DD MM YYYY';
+        format = 'DD/MM/YYYY';
     }
 
     const listOfDates = [{ date: from.toDate(), label: from.format(format) }];
