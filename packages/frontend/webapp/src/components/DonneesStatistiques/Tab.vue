@@ -4,7 +4,7 @@
         :class="
             active
                 ? 'py-2 text-primary border-primary border-x-1 border-x-G300'
-                : 'pt-2 pb-1 border-blue200 bg-dsfrTab hover:bg-dsfrTabHover'
+                : 'pt-2 pb-1 bg-dsfrTab border-t-dsfrTab hover:bg-dsfrTabHover hover:border-t-dsfrTabHover'
         "
     >
         <slot />
