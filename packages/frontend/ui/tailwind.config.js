@@ -97,7 +97,7 @@ module.exports = {
             colors: {
                 // Design System de l'Etat
                 dsfrTab: "#E3E3FD",
-                dsfrTabHover: "#B7B7FA",
+                dsfrTabHover: "#C1C1FB",
 
                 // Primary palette
                 blue700: "#00006D",
