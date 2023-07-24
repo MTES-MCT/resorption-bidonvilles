@@ -2,6 +2,8 @@ const MATOMO = {
     HOST: import.meta.env.VITE_MATOMO_HOST || "${VITE_MATOMO_HOST}",
     SITE_ID: import.meta.env.VITE_MATOMO_SITE_ID || "${VITE_MATOMO_SITE_ID}",
     DOMAIN: import.meta.env.VITE_MATOMO_DOMAIN || "${VITE_MATOMO_DOMAIN}",
+    TRACKER_FILENAME:
+        import.meta.env.VITE_MATOMO_DOMAIN || "${VITE_MATOMO_TRACKER_FILENAME}",
 };
 
 const SENTRY = {

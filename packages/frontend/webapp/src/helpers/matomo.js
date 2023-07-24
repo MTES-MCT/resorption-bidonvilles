@@ -19,6 +19,7 @@ export function useMatomo(app, router) {
         trackInitialView: false,
         cookieDomain: `*.${MATOMO.DOMAIN}`,
         domains: `*.${MATOMO.DOMAIN}`,
+        trackerFileName: MATOMO.TRACKER_FILENAME,
     });
 }
 
