@@ -7,7 +7,7 @@ const $piwik = computed(() => {
     return typeof window !== "undefined" ? window.Piwik?.getTracker() : null;
 });
 
-export function useMatomo(app, router) {
+export function useMatomo(app) {
     if (!MATOMO) {
         return;
     }
@@ -15,7 +15,14 @@ export function useMatomo(app, router) {
     app.use(VueMatomo, {
         host: MATOMO.HOST,
         siteId: MATOMO.SITE_ID,
-        router,
+        router: {
+            // Créez un intercepteur pour modifier l'URL avant l'envoi à Matomo
+            // Le séparateur original "/" sera remplacé par ": :"
+            beforeTrack(to) {
+                const modifiedPath = to.fullPath.replace(/\//g, "::");
+                return { ...to, fullPath: modifiedPath };
+            },
+        },
         trackInitialView: false,
         cookieDomain: `*.${MATOMO.DOMAIN}`,
         domains: `*.${MATOMO.DOMAIN}`,
