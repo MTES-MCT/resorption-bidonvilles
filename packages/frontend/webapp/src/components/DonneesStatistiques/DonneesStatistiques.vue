@@ -45,6 +45,7 @@ import Grille from "./Grille.vue";
 import Loading from "@/components/Loading/Loading.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 import ViewError from "@/components/ViewError/ViewError.vue";
+import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 
 const tabs = [
     {
@@ -54,6 +55,8 @@ const tabs = [
 ];
 
 const activeTab = ref("tableau");
+const departementMetricsStore = useDepartementMetricsStore();
+departementMetricsStore.activeTab = activeTab;
 const metricsStore = useMetricsStore();
 onMounted(metricsStore.load);
 </script>
