@@ -117,6 +117,7 @@ async function load() {
         error.value = e?.code || "Erreur inconnue";
     }
 
+    departementMetricsStore.activeTab = "summary";
     isLoading.value = false;
 }
 </script>
