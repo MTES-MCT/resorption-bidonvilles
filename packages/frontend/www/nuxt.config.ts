@@ -1,4 +1,5 @@
 import { fileURLToPath } from "url";
+import { Request, Response } from 'express';
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
@@ -12,6 +13,14 @@ export default defineNuxtConfig({
             defaultLocale: "fr",
             parallelPlugin: false,
         }]
+    ],
+    serverMiddleware: [
+        (req: Request, res: Response) => {
+            const cspValue = process.env.NUXT_CSP || "";
+            if (cspValue !== "") {
+                res.setHeader('Content-Security-Policy', cspValue);
+            }
+        }
     ],
     css: [
         "@common/fontawesome/css/fontawesome.css",
