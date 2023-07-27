@@ -10,7 +10,21 @@
         :locationMarkerFn="marqueurLocationStats"
         :townClusteringOptions="{ maxClusterRadius: 0 }"
         :defaultView="departementMetricsStore.lastMapView || undefined"
-    />
+    >
+        <div
+            ref="legendeConditionsDeVie"
+            class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded"
+        >
+            <label class="flex items-center space-x-2">
+                <Icon class="text-success mx-2" icon="faucet-drip" />
+                Accès satisfaisant
+            </label>
+            <label class="flex items-center space-x-2">
+                <Icon class="text-error mx-2" icon="faucet-drip" />
+                Accès à améliorer
+            </label>
+        </div></Carto
+    >
 </template>
 
 <script setup>
@@ -21,14 +35,17 @@ import marqueurSiteStats from "@/utils/marqueurSiteStats";
 import marqueurLocationStats from "@/utils/marqueurLocationStats";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 
+import { Icon } from "@resorptionbidonvilles/ui";
 const departementMetricsStore = useDepartementMetricsStore();
 const carto = ref(null);
 const markersGroup = ref(L.geoJSON([], {}));
+const legendeConditionsDeVie = ref(null);
 
 watch(carto, () => {
     if (carto.value) {
         carto.value.map.addLayer(markersGroup.value);
         carto.value.map.on("move", onMove);
+        carto.value.addControl("legendeConditionsDeVie", createLegende());
     }
 });
 
@@ -39,6 +56,20 @@ function onMove() {
         center: [latitude, longitude],
         zoom: map.getZoom(),
     };
+}
+
+function createLegende() {
+    const Legende = L.Control.extend({
+        options: {
+            position: "bottomleft",
+        },
+
+        onAdd() {
+            return legendeConditionsDeVie.value;
+        },
+    });
+
+    return new Legende();
 }
 
 defineExpose({
