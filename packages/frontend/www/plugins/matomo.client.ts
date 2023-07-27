@@ -1,39 +1,37 @@
 import VueMatomo, { TrackerCustomizer } from 'vue-matomo';
-const {
-    MATOMO_HOST,
-    MATOMO_SITE_ID,
-    MATOMO_DOMAIN,
-    MATOMO_TRACKER_FILENAME,
-    MATOMO_DESCRIPTION_PAGE_SEPARATOR,
-} = useRuntimeConfig().public;
 
 // Fonction pour remplacer le séparateur original "/" par "::"
 const replaceSeparator = (url: string) => {
     return url.replace(/\//g, '::');
 };
 
-const shouldUseCustomizer = (): boolean => {
+const shouldUseCustomizer = (separator: string): boolean => {
     return (
-        MATOMO_DESCRIPTION_PAGE_SEPARATOR !== "undefined" &&
-        MATOMO_DESCRIPTION_PAGE_SEPARATOR !== "/"
+        separator !== "undefined" &&
+        separator !== "/"
     );
 };
-
 export default defineNuxtPlugin((nuxtApp) => {
-    const { DOMAIN } = useRuntimeConfig().public;
+    const {
+        MATOMO_HOST,
+        MATOMO_SITE_ID,
+        MATOMO_DOMAIN,
+        MATOMO_TRACKER_FILENAME,
+        MATOMO_DESCRIPTION_PAGE_SEPARATOR,
+    } = useRuntimeConfig().public;
+
     nuxtApp.vueApp.use(VueMatomo, {
         host: MATOMO_HOST,
         siteId: MATOMO_SITE_ID,
         domains: `*.${MATOMO_DOMAIN}`,
         cookieDomain: `*.${MATOMO_DOMAIN}`,
-        router: nuxtApp.$router,
-        trackerScriptUrl: `'/'${MATOMO_TRACKER_FILENAME}`,
-        // Modifier l'URL avant de la suivre
-        trackPageViewCustomizer: shouldUseCustomizer()
+        trackPageViewCustomizer: shouldUseCustomizer(MATOMO_DESCRIPTION_PAGE_SEPARATOR)
             ? (data: TrackerCustomizer) => {
                 data.url = replaceSeparator(data.url);
                 return data;
             }
             : undefined,
+        trackerFileName: MATOMO_TRACKER_FILENAME,
+        trackerScriptUrl: `/${MATOMO_TRACKER_FILENAME}.js`,
     });
 });
