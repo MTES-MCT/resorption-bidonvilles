@@ -1,10 +1,12 @@
 <template>
-    <section class="flex flex-col space-y-4">
-        <CarteQuestion
-            v-for="question in questionsStore.currentPage.content"
-            :key="question.id"
-            :question="question"
-        />
+    <section>
+        <div class="flex flex-col gap-2">
+            <CarteQuestion
+                v-for="question in questionsStore.currentPage.content"
+                :key="question.id"
+                :question="question"
+            />
+        </div>
         <BottomPagination
             :from="questionsStore.currentPage.from"
             :to="questionsStore.currentPage.to"

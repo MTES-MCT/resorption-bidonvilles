@@ -3,7 +3,7 @@
     <EvolutionChartTowns class="mt-6" />
     <EvolutionChartLivingCondition
         class="mt-6"
-        chartLabel="Nombre de sites avec accès à l'eau"
+        chartLabel="Sites avec accès à l'eau"
         :data="data.water"
         chartType="towns"
         icon="faucet-drip"

@@ -29,7 +29,7 @@
             tag="th"
             :title="col.title"
             @click="changeSort(col.uid)"
-            class="text-right w-20 cursor-pointer bg-clip-padding bg-white hover:bg-G200"
+            class="text-right w-16 cursor-pointer bg-clip-padding bg-white hover:bg-G200"
             v-for="col in columns"
             :key="col.uid"
         >

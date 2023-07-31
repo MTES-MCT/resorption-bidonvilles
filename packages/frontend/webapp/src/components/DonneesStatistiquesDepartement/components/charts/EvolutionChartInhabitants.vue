@@ -1,15 +1,13 @@
 <template>
     <section>
-        <h1 class="font-bold text-primary text-lg">
-            Évolution du nombre d'habitants
-        </h1>
+        <h1 class="font-bold text-primary text-lg">Nombre d'habitants</h1>
 
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure
                 icon="people-group"
                 :figure="formatStat(data.figures.total.value)"
                 :evolution="formatStat(data.figures.total.evolution)"
-                >Nombre total d'habitants</ChartBigFigure
+                >Tous sites</ChartBigFigure
             >
 
             <ChartBigFigure
@@ -17,7 +15,7 @@
                 alt="Estimation du nombre d'habitants intra-UE"
                 :figure="formatStat(data.figures.european.value)"
                 :evolution="formatStat(data.figures.european.evolution)"
-                >Estimation du nombre d'habitants intra-UE</ChartBigFigure
+                >Sites exclusivement intra-UE</ChartBigFigure
             >
 
             <ChartBigFigure
@@ -25,7 +23,7 @@
                 alt="Estimation du nombre d'habitants extra-UE"
                 :figure="formatStat(data.figures.foreign.value)"
                 :evolution="formatStat(data.figures.foreign.evolution)"
-                >Estimation du nombre d'habitants extra-UE</ChartBigFigure
+                >Sites exclusivement extra-UE</ChartBigFigure
             >
         </div>
 
