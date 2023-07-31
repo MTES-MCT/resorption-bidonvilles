@@ -8,10 +8,10 @@
             :activeTab="departementMetricsStore.activeTab"
         />
 
-        <div class="mt-3 px-6 py-2 bg-blue100 text-sm">
+        <div class="mt-3 px-6 py-4 bg-blue100 text-sm">
             <Link
                 withStyle
-                class="mr-3"
+                class="mr-6"
                 :class="
                     departementMetricsStore.currentFormat === 'table'
                         ? 'font-bold'
