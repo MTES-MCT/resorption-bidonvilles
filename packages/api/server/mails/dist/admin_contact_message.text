@@ -10,7 +10,7 @@ Objet : {{var:message.objet}}
 Message :
 {{var:message.access_request_message}}
 {% if var:message.is_organization_other %}
-Nom de la structure à créer:
+Nom de la structure à créer :
 {{var:message.organization_other}}
 {% endif %}
 
