@@ -1,6 +1,6 @@
 <template>
     <div class="flex justify-start text-G600">
-        {{ formatDate(question.createdAt, "d M y à h:i") }}
+        Le {{ formatDate(question.createdAt, "d M y à h:i") }}
     </div>
 </template>
 

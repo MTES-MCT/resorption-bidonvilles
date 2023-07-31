@@ -1,37 +1,25 @@
 <template>
-    <div
-        class="flex justify-between h-14 items-center mr-4 space-x-4 print:hidden"
-    >
+    <div class="flex justify-between h-14 items-center space-x-4 print:hidden">
         <CarteQuestiondateCreation :question="question" />
-        <template v-if="questionHasAtLeastOneAnswer">
-            <div class="flex justify-end items-center space-x-4">
-                <Button
-                    variant="primary"
-                    size="sm"
-                    icon="rectangle-list"
-                    iconPosition="left"
-                    :href="`/question/${question.id}#reponses`"
-                    >Répondre</Button
-                >
-                <Button
-                    variant="primary"
-                    size="sm"
-                    icon="fa-regular fa-eye"
-                    iconPosition="left"
-                    :href="`/question/${question.id}#reponses`"
-                    >{{ seeAnswerWording }}</Button
-                >
-            </div>
-        </template>
-        <Button
-            v-else
-            variant="primary"
-            size="sm"
-            icon="rectangle-list"
-            iconPosition="left"
-            :href="`/question/${question.id}#reponses`"
-            >Soyez le premier à répondre</Button
-        >
+        <div class="flex justify-end items-center space-x-4">
+            <Button
+                variant="primary"
+                size="sm"
+                icon="rectangle-list"
+                iconPosition="left"
+                :href="`/question/${question.id}#reponses`"
+                >Voir la question</Button
+            >
+            <Button
+                v-if="questionHasAtLeastOneAnswer"
+                variant="primary"
+                size="sm"
+                icon="fa-regular fa-eye"
+                iconPosition="left"
+                :href="`/question/${question.id}#reponses`"
+                >{{ seeAnswerWording }}</Button
+            >
+        </div>
     </div>
 </template>
 
@@ -58,7 +46,7 @@ const questionHasAtLeastOneAnswer = computed(() => {
 
 const seeAnswerWording = computed(() => {
     return question.value.answers.length > 1
-        ? `Voir les ${question.value.answers.length} réponses`
-        : "Voir la réponse";
+        ? `${question.value.answers.length} réponses`
+        : `${question.value.answers.length} réponse`;
 });
 </script>
