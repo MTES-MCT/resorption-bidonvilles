@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-blue100 pt-4 px-6">
+    <div class="pt-4 px-4 mb-6 border-b-1 border-b-g300">
         <Tab
             @click="switchTab(tab.id)"
             v-for="tab in tabs"
