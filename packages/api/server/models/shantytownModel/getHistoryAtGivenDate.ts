@@ -1,8 +1,11 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import shantytownActorModel from '#server/models/shantytownActorModel';
 import geoUtils from '#server/utils/geo';
 import permissionUtils from '#server/utils/permission';
 import serializeShantytown, { Shantytown } from '#server/models/shantytownModel/_common/serializeShantytown';
+import { ActorRow } from '#server/models/shantytownActorModel/ActorRow.d';
+import serializeActor from '#server/models/shantytownActorModel/serializeActor';
 import SQL, { ShantytownRow } from './_common/SQL';
 
 const { fromGeoLevelToTableName } = geoUtils;
@@ -132,6 +135,14 @@ export default async (user, location, lastDate, closedTowns): Promise<Shantytown
     });
     const shantytown_history = Object.values(acc).filter((el:ShantytownRow) => ((closedTowns && (el.closedAt !== null)) || (!closedTowns && (el.closedAt === null))));
 
+    // On récupère les intervenants
+    const actorRows: ActorRow[] = await shantytownActorModel.findAll(rows.map(row => row.id));
 
-    return shantytown_history.map(town => serializeShantytown(town, user));
+    return shantytown_history.map(town => serializeShantytown(town, user)).map((element) => {
+        const matchingElements = actorRows.filter(item => item.shantytownId === element.id).map(actor => serializeActor(actor));
+        return {
+            ...element,
+            actors: matchingElements,
+        };
+    });
 };
