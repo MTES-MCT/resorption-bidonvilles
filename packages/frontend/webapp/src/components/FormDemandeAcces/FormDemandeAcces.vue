@@ -47,9 +47,6 @@ const demandeAccesOnly = computed(() => {
 });
 
 async function submit(values) {
-    console.log("values:");
-    console.log(values);
-
     await requestCreation(values);
 
     // tracking
