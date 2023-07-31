@@ -63,7 +63,7 @@ function getObjetForContactMessage(requestType) {
 }
 
 // Fonction pour traiter la requête
-export default async (req: Request, res: Response, next): Promise<Response<any, Record<string, any>>> => {
+export default async (req: Request, res: Response, next): Promise<void> => {
     const {
         request_type, is_actor, referral, referral_other, referral_word_of_mouth,
         last_name, first_name, email, phone, access_request_message, organization_category,
@@ -127,8 +127,10 @@ export default async (req: Request, res: Response, next): Promise<Response<any, 
                     access_request_message,
                 });
             } catch (error) {
-                return res.status(500).send('Une erreur est survenue lors de l\'écriture en base de données');
+                res.status(500).send('Une erreur est survenue lors de l\'écriture en base de données');
+                return;
             }
+
             try {
                 const user = await userModel.findOne(result.id, { extended: true });
                 await accessRequestService.handleNewAccessRequest(user);
@@ -144,7 +146,9 @@ export default async (req: Request, res: Response, next): Promise<Response<any, 
             } catch (err) {
                 next(err);
             }
-            return res.status(200).send(result);
+
+            res.status(200).send(result);
+            return;
         }
     }
 
@@ -160,5 +164,6 @@ export default async (req: Request, res: Response, next): Promise<Response<any, 
     } catch (err) {
         next(err);
     }
-    return res.status(200).send();
+
+    res.status(200).send();
 };
