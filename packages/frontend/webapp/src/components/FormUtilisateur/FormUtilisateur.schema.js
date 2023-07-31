@@ -13,7 +13,7 @@ import { fr } from "yup-locales";
 import labelsFn from "./FormUtilisateur.labels.js";
 
 import requestTypes from "@/utils/access_request_types";
-import organizationCategories from "@/utils/organization_categories";
+import organizationCategoriesFn from "@/utils/organization_categories";
 import referrals from "@/utils/contact_referrals";
 
 const locales = {
@@ -70,7 +70,7 @@ addMethod(object, "territorialCollectivity", function (schema) {
     );
 });
 
-export default (variant, language) => {
+export default (variant, allowNewOrganization, language) => {
     const schema = {};
     const labels = labelsFn(variant)[language];
 
@@ -112,6 +112,8 @@ export default (variant, language) => {
 
     // organization category
     const organizationCategory = string().label(labels.organization_category);
+    const organizationCategories =
+        organizationCategoriesFn(allowNewOrganization);
     function makeOrganizationCategoryRequired(schema) {
         return schema
             .required()

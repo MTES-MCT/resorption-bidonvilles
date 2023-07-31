@@ -47,6 +47,7 @@
                 <FormUtilisateurInputOrganizationCategory
                     :showMandatoryStar="variant === 'creer-utilisateur'"
                     :label="labels.organization_category"
+                    :allowNewOrganization="allowNewOrganization"
                 />
 
                 <!-- Services de l'état -->
@@ -198,9 +199,12 @@ const props = defineProps({
 
 const form = ref(null);
 const { variant, submit, language } = toRefs(props);
+const allowNewOrganization = computed(() => {
+    return variant.value === "demande-acces";
+});
 
 const schema = computed(() => {
-    return schemaFn(variant.value, language.value);
+    return schemaFn(variant.value, allowNewOrganization.value, language.value);
 });
 const labels = computed(() => {
     return labelsFn(variant.value)[language.value];
