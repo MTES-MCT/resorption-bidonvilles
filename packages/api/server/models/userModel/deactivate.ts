@@ -1,6 +1,6 @@
 import { sequelize } from '#db/sequelize';
 
-export default (ids: number[]) => sequelize.query(
+export default (ids: number[], transaction = undefined) => sequelize.query(
     `UPDATE
         users
     SET
@@ -9,6 +9,7 @@ export default (ids: number[]) => sequelize.query(
         user_id IN (:ids)
     `,
     {
+        transaction,
         replacements: {
             ids,
         },
