@@ -6,8 +6,10 @@
             de la connaissance.
         </p>
 
-        <div class="overflow-x-auto w-200 mt-4">
-            <FicheSiteHabitantsTableau :town="town" />
+        <div class="grid">
+            <div class="overflow-x-auto mt-4">
+                <FicheSiteHabitantsTableau :town="town" />
+            </div>
         </div>
         <FicheSiteHabitantsOrigines :border="false" :town="town" />
         <FicheSiteHabitantsDiagnosticSocial :town="town" />

@@ -1,9 +1,9 @@
 <template>
-    <div class="flex space-x-8 justify-center">
+    <div class="flex space-x-8">
         <ArrangementLeftMenuColumn
             :tabs="tabs"
             :activeTab="computedActiveTab"
-            class="print:hidden mb-12"
+            class="print:hidden mb-12 shrink-0"
             :class="columnWidthClass"
         >
             <template v-slot:title v-if="$slots.menuTitle"
