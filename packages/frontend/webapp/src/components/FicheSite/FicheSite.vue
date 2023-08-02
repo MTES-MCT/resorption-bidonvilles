@@ -6,7 +6,7 @@
     />
 
     <ContentWrapper>
-        <ArrangementLeftMenu columnWidthClass="w-96" :tabs="tabs" autonav>
+        <ArrangementLeftMenu columnWidthClass="w-90" :tabs="tabs" autonav>
             <FicheSiteCaracteristiques
                 :town="town"
                 id="caracteristiques"
