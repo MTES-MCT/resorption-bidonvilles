@@ -1,6 +1,6 @@
 <template>
     <li
-        class="inline-block align-top pl-4 cursor-pointer"
+        class="pl-4 cursor-pointer"
         :class="
             active ? 'font-bold text-primary' : 'underline hover:no-underline'
         "

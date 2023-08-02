@@ -15,8 +15,8 @@
             >Aucune information sur les procédures judiciaires</template
         >
     </div>
-    <div v-else>
-        <div
+    <ul v-else>
+        <li
             class="flex"
             v-for="status in shantytown.justiceStatuses"
             :key="status.label"
@@ -30,8 +30,8 @@
                     {{ formatDate(status.date, "d/m/y") }}</span
                 >
             </div>
-        </div>
-    </div>
+        </li>
+    </ul>
 </template>
 
 <script setup>

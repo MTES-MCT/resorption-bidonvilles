@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center">
+    <li class="flex items-center">
         <span
             :class="[
                 'flex rounded-full text-xs border-2 mr-3 mb-1 h-6 w-6 items-center justify-center',
@@ -10,7 +10,7 @@
             <Icon :icon="icon" />
         </span>
         <slot />
-    </div>
+    </li>
 </template>
 
 <script setup>
