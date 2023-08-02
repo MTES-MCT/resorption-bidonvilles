@@ -1,14 +1,14 @@
 <template>
-    <div
+    <blockquote
         :class="
             active
                 ? 'transition duration-500 block opacity-100 visible'
                 : 'invisible opacity-0 absolute'
         "
     >
-        <div class="relative text-xl feedbackText">{{ text }}</div>
-        <div class="text-lg font-light">{{ author }}</div>
-    </div>
+        <p class="relative text-xl feedbackText">{{ text }}</p>
+        <footer class="text-lg font-light">{{ author }}</footer>
+    </blockquote>
 </template>
 
 <script>
