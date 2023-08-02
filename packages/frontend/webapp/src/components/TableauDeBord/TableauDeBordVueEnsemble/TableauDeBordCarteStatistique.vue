@@ -1,6 +1,6 @@
 <template>
     <div
-        class="border-1 border-cardBorder rounded-lg bg-blue100 py-1 w-64 mr-10"
+        class="border-1 border-cardBorder rounded-lg bg-blue100 py-1 w-56 2xl:w-64"
     >
         <div class="flex px-4 customHeight mb-2">
             <div class="text-primary text-xl mr-4" style="opacity: 0.4">
@@ -99,7 +99,7 @@ import formatStat from "@/utils/formatStat";
 import TableauDeBordValeurStatistique from "./TableauDeBordValeurStatistique.vue";
 import TableauDeBordBarreHistogramme from "./TableauDeBordBarreHistogramme.vue";
 
-const MAX_HEIGHT = 50;
+const MAX_HEIGHT = 3;
 const props = defineProps({
     icon: {
         type: String,
@@ -170,7 +170,7 @@ function setColumns() {
 
 <style scoped>
 .customHeight {
-    height: 107px;
+    height: 7rem;
 }
 .down {
     transform: rotate(45deg);
