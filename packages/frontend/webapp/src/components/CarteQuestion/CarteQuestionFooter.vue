@@ -30,10 +30,6 @@ import CarteQuestiondateCreation from "./CarteQuestionDateCreation.vue";
 
 const props = defineProps({
     question: Object,
-    isHover: {
-        type: Boolean,
-        default: false,
-    },
 });
 const { question } = toRefs(props);
 
