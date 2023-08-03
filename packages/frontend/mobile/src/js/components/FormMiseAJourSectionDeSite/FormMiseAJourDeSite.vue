@@ -30,6 +30,7 @@ import isDeepEqual from "@resorptionbidonvilles/ui/src/utils/isDeepEqual";
 import formatFormDate from "#frontend/common/utils/formatFormDate";
 import schemaFn from "./MiseAJourDeSite.schema";
 import formatFormTown from "#frontend/common/utils/formatFormTown";
+import { trackEvent } from "#src/js/helpers/matomo";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
 import FormMiseAJourDeSiteSectionHabitants from "./FormMiseAJourDeSiteSectionHabitants.vue";
@@ -123,6 +124,7 @@ async function submit() {
             respondedTown,
             store.state.config.configuration.field_types
         );
+        trackEvent("Mise a jour de site sur mobile", section.value);
         router.push(`/site/${town.value.id}`);
     } catch (error) {
         formError.value =

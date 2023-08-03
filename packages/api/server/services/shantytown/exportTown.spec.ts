@@ -12,6 +12,7 @@ import shantytownModel from '#server/models/shantytownModel';
 import closingSolutionModel from '#server/models/closingSolutionModel';
 import excelUtils from '#server/utils/excel';
 import statsExportsModel from '#server/models/statsExportsModel';
+import moment from 'moment';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -106,10 +107,41 @@ describe('services/shantytown', () => {
                 } catch (error) {
                     // ignore
                 }
-                expect(stubs.can).to.have.been.calledOnceWith(user);
-                expect(stubs.do).to.have.been.calledOnceWith('export', 'shantytown');
-                expect(stubs.on).to.have.been.calledOnceWith(location);
+                expect(stubs.can).to.have.been.calledWith(user);
+                expect(stubs.do).to.have.been.calledWith('export', 'shantytown');
+                expect(stubs.on).to.have.been.calledWith(location);
             });
+            it('vérifie que l\'utilisateur a le droit d\'exporter les sites à une date passée', async () => {
+                try {
+                    await exportTownService(user, data);
+                } catch (error) {
+                    // ignore
+                }
+                expect(stubs.can).to.have.been.calledWith(user);
+                expect(stubs.do).to.have.been.calledWith('export', 'shantytown_history');
+            });
+
+            it('vérifie que si "can" retourne false, on obtient bien un ServiceError', async () => {
+                const pastDate = moment().subtract(1, 'days').format('YYYY-MM-DD'); // Date d'hier
+                const dataWithPastDate = { ...data, date: pastDate };
+
+                // On simule l'échec du deuxième test de permission en retournant false dès le deuxième appel à can()
+                const doStub = sinon.stub();
+                doStub.onFirstCall().returns({ on: sinon.stub().returns(true) });
+                doStub.onSecondCall().returns({ on: sinon.stub().returns(false) });
+                stubs.can.returns({ do: doStub });
+
+                let responseError;
+                try {
+                    await exportTownService(user, dataWithPastDate);
+                } catch (error) {
+                    responseError = error;
+                }
+                expect(responseError).to.be.instanceOf(ServiceError);
+                expect(responseError.code).to.be.eql('permission_denied');
+                expect(responseError.message.trim()).to.be.eql('Vous n\'êtes pas autorisé(e) à exporter des données passées');
+            });
+
             it('renvoie une exception ServiceError \'permission_denied\' si l\'utilisateur n\'a pas la permission', async () => {
                 stubs.on.returns(false);
                 let responseError;

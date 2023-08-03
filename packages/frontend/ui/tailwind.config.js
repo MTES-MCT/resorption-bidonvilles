@@ -95,6 +95,10 @@ module.exports = {
                 256: "64rem"
             },
             colors: {
+                // Design System de l'Etat
+                dsfrTab: "#E3E3FD",
+                dsfrTabHover: "#C1C1FB",
+
                 // Primary palette
                 blue700: "#00006D",
                 primary: "#000091",
@@ -161,7 +165,7 @@ module.exports = {
                 secondaryDark: "#fe542a",
                 tertiaryDark: "#008068",
                 corail: "#FF6F4C"
-            }
+            },
         }
     },
     variants: {
