@@ -1,5 +1,5 @@
 <template>
-    <span class="border-b border-b-G400 hover:border-b-2 hover:border-b-primary">
+    <span class="border-b border-b-G600 hover:border-b-2 hover:border-b-primary">
         <span v-if="!to" :class="withStyle ? linkClasses : 'cursor-pointer'">
             <slot />
         </span>

@@ -9,7 +9,7 @@
             class="mt-2 pl-5 list-disc"
         >
             <li v-for="error in summaryErrors" :key="error.key">
-                <a :href="`#${error.key}`">{{ error.message }}</a>
+                <Link :to="`#${error.key}`">{{ error.message }}</Link>
             </li>
         </ul>
     </div>
@@ -17,6 +17,7 @@
 
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
+import Link from "./Link.vue";
 
 const props = defineProps({
     message: {
