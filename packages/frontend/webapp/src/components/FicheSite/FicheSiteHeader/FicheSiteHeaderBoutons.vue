@@ -19,6 +19,14 @@
             >
         </RouterLink>
         <Button
+            size="sm"
+            icon="file-word"
+            iconPosition="left"
+            variant="primaryOutline"
+            @click="modalExport.open()"
+            >Exporter</Button
+        >
+        <Button
             v-if="
                 userStore.hasLocalizedPermission('shantytown.close', town) &&
                 town.status === 'open'
@@ -30,14 +38,7 @@
             :href="`/site/${town.id}/fermeture`"
             >Fermer le site</Button
         >
-        <Button
-            size="sm"
-            icon="file-word"
-            iconPosition="left"
-            variant="primary"
-            @click="modalExport.open()"
-            >Exporter</Button
-        >
+
         <Button
             v-if="
                 userStore.hasLocalizedPermission(
@@ -67,7 +68,7 @@
         <Button
             v-if="userStore.hasLocalizedPermission('shantytown.delete', town)"
             size="sm"
-            variant="secondary"
+            variant="primary"
             icon="fa-regular fa-trash-alt"
             iconPosition="left"
             @click="deleteTown"

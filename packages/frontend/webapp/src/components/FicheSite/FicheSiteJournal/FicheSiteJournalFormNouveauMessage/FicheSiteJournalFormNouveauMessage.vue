@@ -25,7 +25,7 @@
                         type="button"
                         icon="rotate-left"
                         iconPosition="left"
-                        variant="secondary"
+                        variant="primaryOutline"
                         @click="resetForm"
                         >Annuler</Button
                     >

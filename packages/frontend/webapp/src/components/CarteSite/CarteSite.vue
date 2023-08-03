@@ -56,7 +56,7 @@
             >
                 <li v-for="(condition, index) in stableConditions" :key="index">
                     <span
-                        class="inline-block text-xs rounded-full border-2 border-green500 text-green500 mr-1 mb-1"
+                        class="inline-block text-xs rounded-full border-2 border-green600 text-green600 mr-1 mb-1"
                         style="padding: 0.2em"
                         ><Icon icon="check"
                     /></span>

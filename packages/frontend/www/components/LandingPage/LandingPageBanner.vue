@@ -1,8 +1,8 @@
 <template>
-    <div class="bg-corail text-white full-width text-center py-8">
+    <div class="bg-orange300 text-secondary full-width text-center py-8">
         <Container>
             <div class="max-w-screen-md mx-auto">
-                <h2 class="text-display-lg text-white font-bold">
+                <h2 class="text-display-lg text-secondary font-bold">
                     <slot />
                 </h2>
                 <div class="pt-4">

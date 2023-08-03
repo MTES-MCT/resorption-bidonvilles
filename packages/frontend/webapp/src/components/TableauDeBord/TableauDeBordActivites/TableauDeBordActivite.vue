@@ -37,12 +37,10 @@
                 :target="resorptionTarget"
             />
             <p class="text-G500">{{ formatActivityDate(activity.date) }}</p>
-            <p
-                v-if="description"
-                class="mt-3 border-l-4 border-primary py-1 pl-2 italic whitespace-pre-line"
-            >
-                “{{ description }}“
-            </p>
+            <!-- eslint-disable prettier/prettier -->
+            <blockquote v-if="description" class="mt-3 border-l-4 border-primary py-1 pl-2 italic whitespace-pre-line">
+                “{{ description }}“</blockquote>
+            <!-- eslint-enable prettier/prettier -->
         </section>
     </article>
 </template>

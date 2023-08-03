@@ -115,8 +115,8 @@ const isEvolutionPositive = computed(() => cardStats.value.evolution >= 0);
 const columns = ref([]);
 const evolutionColor = computed(() => {
     return cardStats.value.color === "red"
-        ? "bg-red200 text-red600"
-        : "bg-green200 text-green600";
+        ? "bg-red200 text-red700"
+        : "bg-green200 text-green700";
 });
 const maxNumber = computed(() => {
     return Math.max(...cardStats.value.data.map((stat) => stat.figure));

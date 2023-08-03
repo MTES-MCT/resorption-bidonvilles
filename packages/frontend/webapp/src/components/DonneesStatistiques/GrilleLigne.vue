@@ -165,9 +165,9 @@ const populationEvolutionColor = computed(() => {
     if (populationEvolution.value === null || populationEvolution.value === 0) {
         return "bg-G200";
     } else if (populationEvolution.value > 0) {
-        return "bg-red200 text-red600";
+        return "bg-red200 text-red700";
     } else {
-        return "bg-green200 text-green600";
+        return "bg-green200 text-green700";
     }
 });
 
@@ -209,9 +209,9 @@ const townEvolutionColor = computed(() => {
     if (townEvolution.value === null || townEvolution.value === 0) {
         return "bg-G200";
     } else if (townEvolution.value > 0) {
-        return "bg-red200 text-red600";
+        return "bg-red200 text-red700";
     } else {
-        return "bg-green200 text-green600";
+        return "bg-green200 text-green700";
     }
 });
 

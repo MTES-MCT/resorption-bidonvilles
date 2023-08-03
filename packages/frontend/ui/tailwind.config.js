@@ -120,7 +120,7 @@ module.exports = {
                 // Corail / Secondary palette
                 orange700: "#BF5339",
                 orange600: "#FF6F4c",
-                secondary: "#FF6F4c",
+                secondary: "#BF5339",
                 orange500: "#CB634B",
                 orange400: "#FFB7A5",
                 orange300: "#FFDBD2",
@@ -129,6 +129,7 @@ module.exports = {
 
                 // Green / Tertiary palette
                 tertiary: "#00AC8C",
+                green700: "#1E7D3B",
                 green600: "#1f8d49",
                 green500: "#27A658",
                 green400: "#86EFAC",
@@ -154,8 +155,8 @@ module.exports = {
                 G800: "#1E1E1E",
                 G750: "#2A2A2A",
                 G700: "#383838",
-                G600: "#6A6A6A",
-                G500: "#9C9C9C",
+                G600: "#5C5C5C",
+                G500: "#929292",
                 G400: "#CECECE",
                 G300: "#E7E7E7",
                 G200: "#F0F0F0",
@@ -167,7 +168,6 @@ module.exports = {
                 cardBorder: "rgba(0,0,145,0.2)",
 
                 // Deprecated values : TO DELETE
-                inputHover: "#D9D9E6",
                 primaryDark: "#00006c",
                 blueFrance: "#000091",
                 secondaryDark: "#fe542a",
