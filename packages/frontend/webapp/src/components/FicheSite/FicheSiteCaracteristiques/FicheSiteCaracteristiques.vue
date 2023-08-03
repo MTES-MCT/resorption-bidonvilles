@@ -1,7 +1,7 @@
 <template>
     <FicheRubrique title="Caractéristiques du site" category="caracteristics">
-        <section class="flex">
-            <div class="w-1/2">
+        <section class="flex flex-col-reverse xl:flex-row">
+            <div class="xl:w-1/2">
                 <FicheSiteDatesInstallation :town="town" />
                 <FicheSiteTypeDeSite :town="town" />
                 <FicheSiteInfosAcces v-if="town.addressDetails" :town="town" />
@@ -12,7 +12,7 @@
                     :towns="town.nearbyTowns"
                 />
             </div>
-            <div class="w-1/2">
+            <div class="h-80 xl:h-auto xl:w-1/2">
                 <CartoFicheSite
                     :towns="[
                         town,
