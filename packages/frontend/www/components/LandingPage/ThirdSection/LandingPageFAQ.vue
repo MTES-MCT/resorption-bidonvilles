@@ -283,6 +283,12 @@
                                 src="~/assets/video/temoignage_utilisateur_1.mp4"
                                 type="video/mp4"
                             />
+                            <track
+                                label="French"
+                                kind="subtitles"
+                                srclang="fr"
+                                src="/Temoignage-Leduc-BD_mars2021.vtt"
+                            />
                             Votre navigateur ne supporte pas la balise video.
                         </video>
                     </p>

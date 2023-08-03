@@ -6,6 +6,12 @@
                     src="~/assets/video/Temoignage-Leduc-BD_mars2021.mp4"
                     type="video/mp4"
                 />
+                <track
+                    label="French"
+                    kind="subtitles"
+                    srclang="fr"
+                    src="/Temoignage-Leduc-BD_mars2021.vtt"
+                />
                 Votre navigateur ne supporte pas la balise video.
             </video> 
         </div>
@@ -14,6 +20,12 @@
                 <source
                     src="~/assets/video/Temoignage-LeMinor-BD_mars2021.mp4"
                     type="video/mp4"
+                />
+                <track
+                    label="French"
+                    kind="subtitles"
+                    srclang="fr"
+                    src="/Temoignage-LeMinor-BD_mars2021.vtt"
                 />
                 Votre navigateur ne supporte pas la balise video.
             </video>

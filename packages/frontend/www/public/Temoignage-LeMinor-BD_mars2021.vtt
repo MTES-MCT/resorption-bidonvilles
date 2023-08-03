@@ -1,0 +1,95 @@
+WEBVTT
+
+STYLE
+::cue {
+    background: rgba(#000, 0.56);
+    text-shadow: #000 0 0 7px;
+    color: #fff;
+    font-family: Arial;
+    font-weight: bold;
+}
+::cue(v[voice="Speaker1"]) { color: #fff; }
+::cue(v[voice="Speaker2"]) { color: #009FDA; }
+::cue(v[voice="Speaker3"]) { color: #00DAFF; }
+::cue(v[voice="Speaker4"]) { color: #0DFF00; }
+::cue(v[voice="Speaker5"]) { color: #EEDC00; }
+::cue(v[voice="Speaker6"]) { color: #FFBA00; }
+::cue(v[voice="Speaker7"]) { color: #D60080; }
+
+1
+00:00:01.133 --> 00:00:04.433 align:center line:90% position:50%
+Effectivement, voilà
+une centralisation de l'information.
+
+2
+00:00:04.833 --> 00:00:06.633 align:center line:90% position:50%
+On a un seul outil partagé.
+
+3
+00:00:06.633 --> 00:00:09.667 align:center line:90% position:50%
+On avait avant chacun des tableaux Excel
+qu'on se partageait,
+
+4
+00:00:09.767 --> 00:00:10.467 align:center line:90% position:50%
+qu'on se partageait pas,
+
+5
+00:00:10.533 --> 00:00:12.833 align:center line:90% position:50%
+qu'on savait plus si c'était
+la dernière version ou pas
+
+6
+00:00:12.900 --> 00:00:13.767 align:center line:90% position:50%
+et quelle était la dernière
+
+7
+00:00:13.833 --> 00:00:14.267 align:center line:90% position:50%
+version.
+
+8
+00:00:14.633 --> 00:00:17.800 align:center line:90% position:50%
+Chacun y ajoutait des choses
+par rapport à sa problématique.
+
+9
+00:00:18.267 --> 00:00:21.467 align:center line:90% position:50%
+Là au moins, on a tous les éléments
+sur un même
+
+10
+00:00:21.500 --> 00:00:23.467 align:center line:90% position:50%
+Voilà sur une,
+même sur une même plateforme
+
+11
+00:00:23.533 --> 00:00:24.767 align:center line:90% position:50%
+alors je vais pas vous cacher qu'au départ
+
+12
+00:00:24.833 --> 00:00:27.067 align:center line:90% position:50%
+je me dis bon ben super, ça va être
+le truc de la DIHAL,
+
+13
+00:00:27.133 --> 00:00:28.633 align:center line:90% position:50%
+ça m'évite moi de faire des propres
+
+14
+00:00:28.700 --> 00:00:30.233 align:center line:90% position:50%
+tableaux pour rendre compte
+
+15
+00:00:30.500 --> 00:00:32.367 align:center line:90% position:50%
+De notre activité mais maintenant,
+
+16
+00:00:32.433 --> 00:00:35.633 align:center line:90% position:50%
+c'est vraiment un outil qui est partagé
+avec les principaux
+
+17
+00:00:35.700 --> 00:00:38.500 align:center line:90% position:50%
+contributeurs et acteurs
+de la stratégie locale.
+

@@ -1,0 +1,146 @@
+WEBVTT
+
+STYLE
+::cue {
+    background: rgba(#000, 0.56);
+    text-shadow: #000 0 0 7px;
+    color: #fff;
+    font-family: Arial;
+    font-weight: bold;
+}
+::cue(v[voice="Speaker1"]) { color: #fff; }
+::cue(v[voice="Speaker2"]) { color: #009FDA; }
+::cue(v[voice="Speaker3"]) { color: #00DAFF; }
+::cue(v[voice="Speaker4"]) { color: #0DFF00; }
+::cue(v[voice="Speaker5"]) { color: #EEDC00; }
+::cue(v[voice="Speaker6"]) { color: #FFBA00; }
+::cue(v[voice="Speaker7"]) { color: #D60080; }
+
+1
+00:00:00.400 --> 00:00:04.667 align:center line:90% position:50%
+Sur la question d'un outil
+qui puisse être utile sur le terrain,
+
+2
+00:00:05.167 --> 00:00:08.933 align:center line:90% position:50%
+C'est vrai que dès sa mise en place,
+on a été en contact avec Madame Dubuc
+
+3
+00:00:09.767 --> 00:00:11.167 align:center line:90% position:50%
+Et on a perçu  
+
+4
+00:00:12.567 --> 00:00:15.167 align:center line:90% position:50%
+2 opportunités majeures
+la première,
+
+5
+00:00:15.233 --> 00:00:17.367 align:center line:90% position:50%
+qui était de pouvoir faire remonter
+à nos tutelles
+
+6
+00:00:17.467 --> 00:00:20.467 align:center line:90% position:50%
+les résultats des actions déployées
+en Haute-Savoie et dans l'action sociale.
+
+7
+00:00:20.967 --> 00:00:25.200 align:center line:90% position:50%
+On sait bien qu'on a besoin
+de travailler notre efficience
+
+8
+00:00:25.267 --> 00:00:26.133 align:center line:90% position:50%
+autour de ça
+
+9
+00:00:26.633 --> 00:00:30.733 align:center line:90% position:50%
+et par contre l'autre aspect
+qui pour nous était vraiment intéressant
+
+10
+00:00:30.800 --> 00:00:31.433 align:center line:90% position:50%
+et dont on a voulu
+
+11
+00:00:31.500 --> 00:00:32.767 align:center line:90% position:50%
+se saisir tout de suite,
+
+12
+00:00:32.900 --> 00:00:35.333 align:center line:90% position:50%
+c'était d'améliorer les outils
+de reporting du service.
+
+13
+00:00:36.233 --> 00:00:38.700 align:center line:90% position:50%
+Les améliorer à la fois
+pour diminuer la marge d'erreur.
+
+14
+00:00:38.967 --> 00:00:42.167 align:center line:90% position:50%
+Les tableaux Excel évoqués
+tout à l'heure par Mme Le Minor
+
+15
+00:00:42.233 --> 00:00:44.067 align:center line:90% position:50%
+on connaît et on sait bien
+
+16
+00:00:44.133 --> 00:00:47.033 align:center line:90% position:50%
+que voilà
+on passe d'un tableau à l'autre
+
+17
+00:00:47.267 --> 00:00:49.467 align:center line:90% position:50%
+et puis au bout du 10e, on arrive
+
+18
+00:00:49.533 --> 00:00:51.767 align:center line:90% position:50%
+plus à trouver pourquoi
+on a plus les mêmes chiffres
+
+19
+00:00:52.133 --> 00:00:54.867 align:center line:90% position:50%
+mais aussi que cet outil soit
+
+20
+00:00:54.933 --> 00:00:57.567 align:center line:90% position:50%
+un outil de reporting fluide,
+simplifié par rapport à ça.
+
+21
+00:00:57.667 --> 00:00:58.667 align:center line:90% position:50%
+Je tenais à le souligner.
+
+22
+00:00:59.900 --> 00:01:00.333 align:center line:90% position:50%
+évoqué tout à l'heure,
+
+23
+00:01:01.167 --> 00:01:02.467 align:center line:90% position:50%
+Beau visuel de la plateforme.
+
+24
+00:01:03.233 --> 00:01:06.867 align:center line:90% position:50%
+Pour nous en tout cas,
+il y a une vraie simplicité d'utilisation,
+
+25
+00:01:07.300 --> 00:01:09.633 align:center line:90% position:50%
+mais avec des informations
+
+26
+00:01:10.167 --> 00:01:11.967 align:center line:90% position:50%
+qui apparaissent qui
+sont dans tous les cas
+
+27
+00:01:12.067 --> 00:01:15.633 align:center line:90% position:50%
+les informations de base
+dont on a tous besoin.
+
+28
+00:01:16.067 --> 00:01:17.733 align:center line:90% position:50%
+qu'on peut ensuite partager.
+

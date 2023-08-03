@@ -64,6 +64,12 @@
                 <video preload="none" poster="~/assets/img/LandingPage/SecondSection/poster_rb_connaitre_partager_agir.png"
                     controls>
                     <source src="~/assets/video/rb_connaitre_partager_agir_720.mp4" type="video/mp4" />
+                    <track
+                        label="French"
+                        kind="subtitles"
+                        srclang="fr"
+                        src="/rb_connaitre_partager_agir_720.vtt"
+                    />
                     Votre navigateur ne supporte pas la balise video.
                 </video>
             </div>
