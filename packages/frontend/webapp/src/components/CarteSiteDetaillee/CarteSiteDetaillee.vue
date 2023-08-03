@@ -8,7 +8,10 @@
         @mouseenter="isHover = true"
         @mouseleave="isHover = false"
     >
-        <RouterLink :to="`/site/${shantytown.id}`">
+        <RouterLink
+            :to="`/site/${shantytown.id}`"
+            class="focus:outline-2 outline-info outline-offset-2"
+        >
             <div class="-mt-1 print:mt-0">
                 <CarteSiteDetailleeHeader
                     class="mb-4"

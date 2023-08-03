@@ -1,10 +1,10 @@
 <template>
     <span class="hover:bg-G100 p-3 text-primary" :class="!to ? 'inline-block cursor-pointer' : ''">
         <Icon v-if="icon" :icon="icon" class="mr-2 w-4" />
-        <router-link v-if="internalLink" :to="to">
+        <router-link v-if="internalLink" :to="to" :class="focusClasses">
             <slot></slot>
         </router-link>
-        <a v-else-if="to" :href="to" :target="!toRB && !isMailto ? '_blank' : ''">
+        <a v-else-if="to" :href="to" :target="!toRB && !isMailto ? '_blank' : ''" :class="focusClasses" tabindex="0">
             <slot></slot>
             <Icon v-if="!toRB && !isMailto" icon="arrow-up-right-from-square" class="text-xs text-blue300 ml-1" />
         </a>
@@ -34,6 +34,12 @@ export default {
             required: false,
             default: null
         }
+    },
+
+    data() {
+        return {
+            focusClasses: "focus:outline-none focus:ring-2 ring-offset-2 ring-info",
+        };
     },
 
     computed: {

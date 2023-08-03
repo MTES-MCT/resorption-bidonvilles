@@ -1,12 +1,12 @@
 <template>
-    <router-link v-if="internalLink" :to="to" :class="`block hover:bg-G100 p-3 ${textColor}`">
+    <router-link v-if="internalLink" :to="to" :class="`block hover:bg-G100 p-3 ${focusClasses} ${textColor}`">
         <span v-bind:class="active ? 'border-l-3 border-l-primary pl-2' : ''">
             <Icon v-if="icon" :icon="icon" class="mr-2" />
             <slot />
         </span>
     </router-link>
 
-    <a v-else :href="to" :class="`block hover:bg-G100 p-3 ${textColor}`">
+    <a v-else :href="to" :class="`block hover:bg-G100 p-3 ${focusClasses} ${textColor}`">
         <span v-bind:class="active ? 'border-l-3 border-l-primary pl-2' : ''">
             <Icon v-if="icon" :icon="icon" class="mr-2" />
             <slot />
@@ -41,6 +41,11 @@ export default {
             required: false,
             default: false
         }
+    },
+    data() {
+        return {
+            focusClasses: "focus:outline-none focus:ring-2 ring-offset-2 ring-info",
+        };
     },
     computed: {
         textColor() {

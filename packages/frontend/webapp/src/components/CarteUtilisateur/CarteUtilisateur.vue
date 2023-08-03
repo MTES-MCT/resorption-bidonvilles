@@ -2,7 +2,7 @@
     <CarteUtilisateurWrapper
         :user="user"
         :linkToUser="linkToUser"
-        class="hover:bg-blue200 border p-4 grid grid-cols-2 gap-8"
+        class="hover:bg-blue200 border p-4 grid grid-cols-2 gap-8 focus:outline-none focus:ring-2 ring-offset-2 ring-info"
         :class="{
             'bg-blue100': user.is_admin,
         }"

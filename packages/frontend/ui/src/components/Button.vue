@@ -1,11 +1,12 @@
 <template>
     <component :class="[
-        'inline-flex relative items-center',
+        'inline-flex relative items-center focus:ring-2 ring-offset-2 ring-info',
         sizeClasses,
         variantClasses,
         disabled && 'opacity-50 cursor-not-allowed'
     ]" :disabled="disabled || isLoading" :to="isLink && isInternalLink && !disabled ? href : null" :href="href"
         :is="isLink ? (isInternalLink && !disabled ? 'router-link' : 'a') : 'button'" :type="isLink ? null : type"
+        tabindex="0"
         @click="onClick">
         <div :class="[
             'flex',
@@ -95,19 +96,19 @@ export default {
         variantClasses() {
             return {
                 primary:
-                    "rounded-sm border-2 border-primary bg-primary text-white hover:bg-primaryDark focus:outline-none",
+                    "border-2 border-primary bg-primary text-white hover:bg-primaryDark focus:outline-none",
                 secondary:
-                    "rounded-sm border-2 border-secondary bg-secondary text-white hover:bg-secondaryDark focus:outline-none",
+                    "border-2 border-secondary bg-secondary text-white hover:bg-secondaryDark focus:outline-none",
                 tertiary:
-                    "rounded-sm border-2 border-tertiary bg-tertiary text-white hover:bg-tertiaryDark hover:border-tertiaryDark focus:outline-none",
+                    "border-2 border-tertiary bg-tertiary text-white hover:bg-tertiaryDark hover:border-tertiaryDark focus:outline-none",
                 specialEvent:
-                    "rounded-sm bg-yellow-200 text-black hover:bg-yellow-400 focus:outline-none",
+                    "bg-yellow-200 text-black hover:bg-yellow-400 focus:outline-none",
                 primaryOutline:
-                    "rounded-sm border-2 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none",
+                    "border-2 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none",
                 secondaryOutline:
-                    "rounded-sm border-2  border-secondary text-secondary hover:bg-secondary hover:text-white focus:outline-none",
+                    "border-2  border-secondary text-secondary hover:bg-secondary hover:text-white focus:outline-none",
                 primaryOutlineAlt:
-                    "bg-white rounded-sm border-1 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none",
+                    "bg-white border-1 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none",
                 primaryText:
                     "text-primary hover:text-primaryDark focus:outline-none hover:bg-G200",
                 secondaryText:

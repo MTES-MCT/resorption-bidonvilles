@@ -5,6 +5,7 @@
         <div :class="width">
             <DatePicker v-model="date" locale="fr" :format-locale="fr" format="dd LLLL yyyy"
                 :disabled="isSubmitting || disabled" autoApply :enableTimePicker="false"
+                input-class-name="focus:outline-none focus:ring-2 ring-offset-2 ring-info"
                 :preventMinMaxNavigation="$attrs.maxDate || $attrs.minDate" v-bind="$attrs">
             </DatePicker>
         </div>
