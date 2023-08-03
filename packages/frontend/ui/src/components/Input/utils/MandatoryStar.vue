@@ -1,3 +1,3 @@
 <template>
-    <span class="text-red text-md">*</span>
+    <span class="text-red500 text-md">*</span>
 </template>

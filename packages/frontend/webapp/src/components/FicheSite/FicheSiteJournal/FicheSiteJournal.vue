@@ -2,7 +2,7 @@
     <div id="journal_du_site" class="bg-orange200 py-10">
         <FicheJournalLayout>
             <template v-slot:body>
-                <h1 class="text-3xl text-corail mb-8">
+                <h1 class="text-3xl text-secondary mb-8">
                     <Icon icon="comment" /> Journal du site
                     <span
                         >— {{ comments.length }} message{{

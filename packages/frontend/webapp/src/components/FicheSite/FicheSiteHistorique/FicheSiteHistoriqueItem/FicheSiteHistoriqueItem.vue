@@ -10,13 +10,13 @@
         </p>
 
         <div class="my-2 flex flex-col space-y-2">
-            <p v-if="$slots.default" class="text-green500"><slot /></p>
+            <p v-if="$slots.default" class="text-green700"><slot /></p>
 
             <article v-else v-for="item in diff" :key="item.field">
-                <p class="text-green500">{{ item.field }}</p>
+                <p class="text-green700">{{ item.field }}</p>
                 <p class="break-words whitespace-pre-wrap">
                     <span> {{ item.newValue || "non renseigné" }}, </span>
-                    <span class="line-through text-G400 hover:text-G700">{{
+                    <span class="line-through text-G600 hover:text-G700">{{
                         item.oldValue || "non renseigné"
                     }}</span>
                 </p>
