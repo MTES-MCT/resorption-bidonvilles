@@ -2,7 +2,7 @@
     <article class="cursor-pointer border-1 hover:border-blue400">
         <RouterLink
             :to="`/structure/${organization.id}`"
-            class="inline-block p-4 h-full flex flex-col"
+            class="inline-block p-4 h-full flex flex-col focus:outline-none focus:ring-2 ring-offset-2 ring-info"
         >
             <header>
                 <h1 class="text-lg font-bold">{{ name }}</h1>

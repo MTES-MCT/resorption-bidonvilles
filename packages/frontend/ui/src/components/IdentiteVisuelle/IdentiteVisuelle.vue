@@ -1,5 +1,5 @@
 <template>
-    <router-link to="/" class="flex items-center space-x-8 hover:bg-G100 p-3">
+    <router-link to="/" class="flex items-center space-x-8 hover:bg-G100 p-3 focus:outline-none focus:ring-2 ring-offset-2 ring-info">
         <div class="flex flex-col items-start space-y-1">
             <img :src="marianne" :class="sizeClass.marianneH" />
             <p class="uppercase font-bold" :class="sizeClass.textSize">

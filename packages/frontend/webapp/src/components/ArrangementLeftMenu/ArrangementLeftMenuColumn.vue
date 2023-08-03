@@ -17,7 +17,7 @@
             <RouterLink
                 v-else
                 :to="tab.route"
-                class="border-l-4 pl-2 cursor-pointer"
+                class="border-l-4 pl-2 cursor-pointer focus:outline-none focus:ring-2 ring-offset-2 ring-info"
                 :class="[
                     tab.id === activeTab
                         ? activeClasses[tab.variant]

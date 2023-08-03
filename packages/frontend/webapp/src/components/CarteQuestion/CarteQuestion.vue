@@ -1,6 +1,6 @@
 <template>
-    <section
-        class="rounded border-1 border-blue300 px-4 pb-4 cursor-pointer hover:bg-blue200 flex flex-col relative"
+    <router-link
+        class="rounded border-1 border-blue300 px-4 pb-4 cursor-pointer hover:bg-blue200 flex flex-col relative focus:outline-none focus:ring-2 ring-offset-2 ring-info"
         :to="`/question/${question.id}`"
     >
         <div class="absolute right-4 bg-secondary text-white px-2">
@@ -34,7 +34,7 @@
             </QuestionTag>
         </div>
         <CarteQuestionFooter :question="question" />
-    </section>
+    </router-link>
 </template>
 
 <script setup>

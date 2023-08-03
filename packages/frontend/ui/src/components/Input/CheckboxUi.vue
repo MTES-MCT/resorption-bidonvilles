@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="text-left" :class="direction === 'col' ? 'w-full' : ''" @click="onChange(value)"
+    <button type="button" class="text-left focus:ring-2 ring-offset-2 ring-info" :class="direction === 'col' ? 'w-full' : ''" @click="onChange(value)"
         :disabled="isSubmitting || disabled">
         <template v-if="variant === 'checkbox'">
             <p class="flex">

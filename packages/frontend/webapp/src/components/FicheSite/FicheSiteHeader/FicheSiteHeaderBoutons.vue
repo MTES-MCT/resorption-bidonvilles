@@ -14,6 +14,7 @@
                 variant="primaryOutline"
                 icon="comment"
                 iconPosition="left"
+                tabindex="-1"
                 >Journal du site</Button
             >
         </RouterLink>

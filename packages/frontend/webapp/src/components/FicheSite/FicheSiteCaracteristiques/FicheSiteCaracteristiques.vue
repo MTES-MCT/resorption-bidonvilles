@@ -14,6 +14,7 @@
             </div>
             <div class="h-80 xl:h-auto xl:w-1/2">
                 <CartoFicheSite
+                    inert
                     :towns="[
                         town,
                         ...(town.nearbyTowns || []).map((t) => ({
