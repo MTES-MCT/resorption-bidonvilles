@@ -1,23 +1,39 @@
 <template>
     <table class="table-fixed text-center">
+        <caption class="mb-4">
+            Récapitulatif des habitants et des habitats sur le site
+            <span class="sr-only">
+                Le tableau ci-dessous présente un récapitulatif des habitants et
+                des habitats sur le site. Les colonnes correspondent aux dates
+                de saisie par un contributeur de la plateforme. La première
+                ligne indique le nombre de personnes sur site, la deuxième le
+                nombre de ménages, la troisième le nombre de mineurs. Les 5
+                lignes suivantes indiquent le nombre de mineurs par tranche
+                d'âge (0-3 ans, 3-6 ans, 6-12 ans, 12-16 ans, 16-18 ans).
+                Ensuite vient le nombre de mineurs inscrits en établissement
+                scolaire. Enfin, les 5 dernières lignes indiquent le nombre
+                d'habitats par type (caravanes, habitats autoconstruits, tentes,
+                voitures dortoir, matelas).
+            </span>
+        </caption>
         <thead>
             <tr>
                 <!-- icon -->
-                <td></td>
+                <th></th>
                 <!-- label -->
-                <td class="border-b-1"></td>
+                <th class="border-b-1"></th>
                 <!-- data (une colonne par date) -->
-                <td
+                <th
                     v-for="(col, colIndex) in populationHistory"
                     :key="colIndex"
-                    class="w-24 py-2 border-b-1"
+                    class="w-24 py-2 border-b-1 font-normal"
                     :class="{
                         'font-bold': colIndex === 0,
                         'bg-blue200': colIndex === 0,
                     }"
                 >
                     {{ col.date }}<br />{{ col.year }}
-                </td>
+                </th>
             </tr>
         </thead>
 
@@ -28,29 +44,50 @@
                 :class="section.css"
             >
                 <!-- icon -->
-                <td class="align-top pr-2 text-xl">
-                    <span v-if="section.icon === 'people'">
-                        <Icon icon="male" class="mr-1" />
-                        <Icon icon="male" />
+                <th
+                    rowspan="9"
+                    v-if="section.icon === 'people'"
+                    class="align-top pr-2 text-xl"
+                    id="section_people"
+                >
+                    <span>
+                        <Icon
+                            title="type de personne"
+                            icon="male"
+                            class="mr-1"
+                        />
+                        <Icon title="type de personne" icon="male" />
                     </span>
-                    <span v-else-if="section.icon === 'housing'">
-                        <Icon icon="home" />
+                </th>
+                <th
+                    rowspan="5"
+                    v-else-if="section.icon === 'housing'"
+                    class="align-top pr-2 text-xl"
+                    id="section_housing"
+                >
+                    <span>
+                        <Icon title="type d'habitat" icon="home" />
                     </span>
-                </td>
+                </th>
                 <!-- label -->
-                <td
+                <th
                     class="text-left pr-4 border-b-1"
                     :class="{
                         'border-black': sections[index + 1]?.icon !== undefined,
                     }"
+                    :id="'raw_' + section.data"
+                    :headers="'section_' + section.section"
                 >
                     {{ section.title }}
-                </td>
+                </th>
                 <!-- data (une colonne par date) -->
                 <td
                     v-for="(col, colIndex) in populationHistory"
                     :key="colIndex"
                     class="py-1 border-b-1"
+                    :headers="
+                        ' section_' + section.section + ' raw_' + section.data
+                    "
                     :class="{
                         'border-r': colIndex > 0,
                         'border-b border-b-black':
@@ -82,42 +119,81 @@ const sections = [
         css: "font-bold",
         data: "populationTotal",
         icon: "people",
+        section: "people",
     },
     {
         title: "Ménages",
         css: "font-bold",
         data: "populationCouples",
+        section: "people",
     },
-    { title: "Mineurs", data: "populationMinors" },
-    { title: "0 - 3 ans", data: "populationMinors0To3" },
-    { title: "3 - 6 ans", data: "populationMinors3To6" },
-    { title: "6 - 12 ans", data: "populationMinors6To12" },
-    { title: "12 - 16 ans", data: "populationMinors12To16" },
-    { title: "16 - 18 ans", data: "populationMinors16To18" },
+    {
+        title: "Mineurs",
+        css: "font-normal",
+        data: "populationMinors",
+        section: "people",
+    },
+    {
+        title: "0 - 3 ans",
+        css: "font-normal",
+        data: "populationMinors0To3",
+        section: "people",
+    },
+    {
+        title: "3 - 6 ans",
+        css: "font-normal",
+        data: "populationMinors3To6",
+        section: "people",
+    },
+    {
+        title: "6 - 12 ans",
+        css: "font-normal",
+        data: "populationMinors6To12",
+        section: "people",
+    },
+    {
+        title: "12 - 16 ans",
+        css: "font-normal",
+        data: "populationMinors12To16",
+        section: "people",
+    },
+    {
+        title: "16 - 18 ans",
+        css: "font-normal",
+        data: "populationMinors16To18",
+        section: "people",
+    },
     {
         title: "Inscrits en établissement scolaire",
+        css: "font-normal",
         data: "minorsInSchool",
+        section: "people",
     },
     {
         title: "Caravanes",
         data: "caravans",
         icon: "housing",
+        section: "housing",
     },
     {
         title: "Habitats autoconstruits",
         data: "huts",
+        section: "housing",
     },
     {
         title: "Tentes",
         data: "tents",
+        section: "housing",
     },
     {
         title: "Voitures dortoir",
         data: "cars",
+        section: "housing",
     },
     {
         title: "Matelas",
         data: "mattresses",
+        section: "housing",
     },
 ];
 
