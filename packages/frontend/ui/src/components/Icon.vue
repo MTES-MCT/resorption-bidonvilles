@@ -1,5 +1,9 @@
 <template>
-    <i :class="classes"></i>
+    <span class="inline-block">
+        <i :class="classes" :title="title" :aria-hidden="!!title"></i>
+        <span v-if="!!title" class="sr-only"> {{ title }}</span>
+    </span>
+    
 </template>
 
 <script>
@@ -13,6 +17,10 @@ export default {
         },
         spin: {
             type: Boolean
+        },
+        title: {
+            type: String,
+            required: false
         }
     },
 
