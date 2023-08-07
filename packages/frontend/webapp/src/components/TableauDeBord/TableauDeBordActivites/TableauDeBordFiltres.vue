@@ -1,11 +1,11 @@
 <template>
-    <nav class="flex flex-col">
+    <div class="flex flex-col">
         <TableauDeBordFiltre
             v-for="section in sections"
             :key="section.id"
             v-bind="section"
         />
-    </nav>
+    </div>
 </template>
 
 <script setup>

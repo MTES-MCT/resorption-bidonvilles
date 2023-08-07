@@ -17,7 +17,7 @@
                 <span class="text-G500 text-sm">Rôle sur la plateforme :</span
                 ><br />
                 <span :class="user.is_admin ? 'text-info' : ''"
-                    ><Icon icon="user-shield" v-if="user.is_admin" />
+                    ><IconeAdministrateur v-if="user.is_admin" />
                     {{ user.role }}</span
                 >
             </p>
@@ -38,9 +38,10 @@
 <script setup>
 import { defineProps, toRefs } from "vue";
 import { trackEvent } from "@/helpers/matomo";
-import { Icon, Link } from "@resorptionbidonvilles/ui";
+import { Link } from "@resorptionbidonvilles/ui";
 import CarteUtilisateurWrapper from "./CarteUtilisateurWrapper.vue";
 import CarteUtilisateurDetailsIcon from "./CarteUtilisateurDetailsIcon.vue";
+import IconeAdministrateur from "@/components/IconeAdministrateur/IconeAdministrateur.vue";
 
 const props = defineProps({
     user: {

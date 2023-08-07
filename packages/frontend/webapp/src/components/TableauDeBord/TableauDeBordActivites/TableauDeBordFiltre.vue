@@ -1,15 +1,16 @@
 <template>
-    <span
+    <button
         :class="[
-            'mb-4 cursor-pointer',
+            'mb-4 cursor-pointer focus:outline-none focus:ring-2 ring-offset-2 ring-info text-left',
             isActive
                 ? 'text-primary border-l-4 pl-2 border-primary font-bold'
                 : 'hover:underline',
         ]"
+        :aria-labelledby="isActive ? `Filtre actif : ${label}` : label"
         @click="setFilter"
     >
         {{ label }}
-    </span>
+    </button>
 </template>
 
 <script setup>

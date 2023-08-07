@@ -34,7 +34,8 @@
                     :key="user.id"
                     :class="user.is_admin ? 'text-info' : ''"
                 >
-                    <Icon :icon="user.is_admin ? 'user-shield' : 'user'" />
+                    <IconeAdministrateur v-if="user.is_admin" />
+                    <Icon v-else icon="user" title="Pictogramme utilisateur" />
                     {{ user.last_name.toUpperCase() }}
                     {{ user.first_name }}
                 </li>
@@ -57,6 +58,7 @@ import { defineProps, toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { RouterLink } from "vue-router";
 import { Icon, Link } from "@resorptionbidonvilles/ui";
+import IconeAdministrateur from "@/components/IconeAdministrateur/IconeAdministrateur.vue";
 
 const props = defineProps({
     organization: Object,
