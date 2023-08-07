@@ -1,5 +1,10 @@
 <template>
-    <TextInput name="last_name" :label="labels.last_name" :value="value" />
+    <TextInput
+        name="last_name"
+        :label="labels.last_name"
+        :value="value"
+        autocomplete="family-name"
+    />
 </template>
 
 <script setup>

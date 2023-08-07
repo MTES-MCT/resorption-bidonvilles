@@ -1,6 +1,6 @@
 <template>
     <InputWrapper :hasErrors="!!errors.length" :withoutMargin="withoutMargin">
-        <InputLabel :label="label" :info="info" :showMandatoryStar="showMandatoryStar" />
+        <InputLabel :label="label" :info="info" :showMandatoryStar="showMandatoryStar" :for="id" />
 
         <div class="relative" :class="width">
             <InputIcon position="before" :icon="prefixIcon" v-if="prefixIcon" />
