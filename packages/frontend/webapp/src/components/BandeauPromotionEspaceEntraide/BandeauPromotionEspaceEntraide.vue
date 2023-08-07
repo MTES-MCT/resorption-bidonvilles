@@ -1,40 +1,35 @@
 <template>
     <ContentWrapper>
-        <div
-            class="full-width mx-auto mb-8 bg-yellow-200 rounded-lg overflow-hidden"
+        <article
+            class="full-width mx-auto mb-8 bg-yellow-200 rounded-lg overflow-hidden px-1 py-3"
         >
-            <div class="lg:flex">
-                <div class="lg:flex-shrink-0 justify-center self-center">
-                    <img
-                        height="20"
-                        class="ml-4 h-20"
-                        :src="EspaceEntraideImage.img"
-                        :alt="EspaceEntraideImage.text"
-                    />
-                </div>
+            <header class="flex items-center">
+                <img
+                    height="20"
+                    class="ml-4 h-20"
+                    :src="EspaceEntraideImage.img"
+                    :alt="EspaceEntraideImage.text"
+                />
                 <div
-                    class="flex-shrink-0 lg:flex-shrink py-2 lg:py-4 px-4 lg:px-8"
+                    class="tracking-wide text-display-md font-bold text-primary"
                 >
-                    <div
-                        class="tracking-wide text-display-md font-bold text-primary"
-                    >
-                        <TagNouveau />
-                        Tout ce que vous voulez savoir sur les bidonvilles !
-                    </div>
-                    <p class="text-md">
-                        Vous pouvez désormais poser toutes les questions que
-                        vous souhaitez à la communauté des plus de 1 400
-                        utilisateurs de la plateforme grâce à
-                        <Link to="/communaute"
-                            >un nouvel espace d'entraide</Link
-                        >
-                        !<br /><Link to="/communaute"
-                            >Rendez-vous dans l’onglet communauté !</Link
-                        >
-                    </p>
+                    <TagNouveau />
+                    <br />Tout ce que vous voulez savoir sur les bidonvilles !
                 </div>
+            </header>
+
+            <div class="shrink-0 lg:shrink py-2 lg:py-4 px-4 lg:px-8">
+                <p class="text-md">
+                    Vous pouvez désormais poser toutes les questions que vous
+                    souhaitez à la communauté des plus de 1 400 utilisateurs de
+                    la plateforme grâce à
+                    <Link to="/communaute">un nouvel espace d'entraide</Link>
+                    !<br /><Link to="/communaute"
+                        >Rendez-vous dans l’onglet communauté !</Link
+                    >
+                </p>
             </div>
-        </div>
+        </article>
     </ContentWrapper>
 </template>
 <script setup>

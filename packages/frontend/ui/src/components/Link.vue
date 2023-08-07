@@ -1,15 +1,15 @@
 <template>
-    <span class="border-b border-b-G400 hover:border-b-2 hover:border-b-primary">
-        <span v-if="!to" :class="withStyle ? linkClasses : 'cursor-pointer'">
+    <span class="border-b border-b-G600 hover:border-b-2 hover:border-b-primary">
+        <button v-if="!to" :class="`${withStyle ? linkClasses : 'cursor-pointer'} ${focusClasses}`">
             <slot />
-        </span>
+        </button>
         <template v-else>
             <Icon icon="arrow-up-right-from-square" v-if="!internalLink && !toRB && !isMailto"
                 :class="`mr-1 ${linkClasses}`" />
-            <router-link v-if="internalLink" :to="to" :class="linkClasses">
+            <router-link v-if="internalLink" :to="to" :class="`${linkClasses} ${focusClasses}`">
                 <slot />
             </router-link>
-            <a v-else :href="to" :class="linkClasses">
+            <a v-else :href="to" :class="`${linkClasses} ${focusClasses}`">
                 <slot />
             </a>
         </template>
@@ -57,7 +57,8 @@ export default {
 
     data() {
         return {
-            linkClasses: `${this.color} hover:${this.hoverColor} ${this.classes} cursor-pointer`
+            linkClasses: `${this.color} hover:${this.hoverColor} ${this.classes} cursor-pointer`,
+            focusClasses: "focus:outline-none focus:ring-2 ring-offset-2 ring-info",
         };
     },
 

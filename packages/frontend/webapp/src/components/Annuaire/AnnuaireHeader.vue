@@ -21,10 +21,10 @@
             </header>
             <p>
                 Ce pictogramme
-                <Icon icon="user-shield" class="text-info" /> identifie les
-                administrateurs locaux, qui gèrent les accès des utilisateurs de
-                leur territoire et sont sollicités pour toute question sur la
-                plate-forme.
+                <IconeAdministrateur />
+                identifie les administrateurs locaux, qui gèrent les accès des
+                utilisateurs de leur territoire et sont sollicités pour toute
+                question sur la plate-forme.
             </p>
         </div>
     </div>
@@ -36,6 +36,7 @@ import { useDirectoryStore } from "@/stores/directory.store";
 import computeLocationSearchTitle from "@/utils/computeLocationSearchTitle";
 import MiniCarte from "@/components/MiniCarte/MiniCarte.vue";
 import { Icon } from "@resorptionbidonvilles/ui";
+import IconeAdministrateur from "@/components/IconeAdministrateur/IconeAdministrateur.vue";
 
 const props = defineProps({
     location: {

@@ -5,7 +5,7 @@
             :class="$slots.actions ? classes.title.value : ''"
         >
             <div
-                class="rounded-full bg-primary w-16 h-16 flex justify-center items-center text-2xl text-white"
+                class="rounded-full bg-primary w-16 h-16 flex justify-center items-center text-2xl text-white shrink-0"
             >
                 <Icon :icon="icon" />
             </div>

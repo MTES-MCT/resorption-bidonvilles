@@ -7,7 +7,10 @@
         @mouseenter="isHover = true"
         @mouseleave="isHover = false"
     >
-        <RouterLink :to="`/action/${action.id}`">
+        <RouterLink
+            :to="`/action/${action.id}`"
+            class="focus:outline-2 outline-info outline-offset-2"
+        >
             <div class="-mt-1">
                 <div class="mb-4 px-6">
                     <Tag

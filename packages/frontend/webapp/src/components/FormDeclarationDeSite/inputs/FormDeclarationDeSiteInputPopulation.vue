@@ -6,7 +6,7 @@
             l'amélioration de la connaissance.
         </p>
 
-        <p class="mt-3 flex space-x-5">
+        <p class="mt-3 flex flex-wrap gap-x-5">
             <TextInput
                 width="w-32"
                 id="population_total"
@@ -27,7 +27,7 @@
             />
         </p>
 
-        <p class="flex space-x-5">
+        <p class="flex flex-wrap gap-x-5">
             <TextInput
                 width="w-32"
                 id="population_minors_0_3"

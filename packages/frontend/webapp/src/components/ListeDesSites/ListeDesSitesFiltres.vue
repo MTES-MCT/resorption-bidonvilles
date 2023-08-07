@@ -1,35 +1,40 @@
 <template>
-    <div class="flex justify-between print:hidden">
-        <section class="flex items-end flex-wrap space-x-4">
-            <article>
-                <p>Filtrer par</p>
-                <div class="flex space-x-2">
-                    <Filter
-                        v-for="filter in currentFilters.default"
-                        :key="filter.id"
-                        :title="filter.label"
-                        :options="filter.options"
-                        v-model="townsStore.filters.properties[filter.id]"
-                        @checkedItem="trackFilter(filter.label, $event)"
-                    >
-                        <template
-                            v-if="filter.id === 'conditions'"
-                            v-slot:default="{ label }"
-                        >
-                            <div class="text-red flex items-center">
-                                <div class="mr-2">
-                                    <Icon icon="times" />/
-                                    <Icon icon="question" class="text-xs" />
-                                </div>
-                                {{ label }}
-                            </div>
-                        </template>
-                    </Filter>
-                </div>
-                <div
-                    class="mt-2 flex space-x-2"
-                    v-if="displayOptionalFilters === true"
+    <section
+        class="flex flex-col sm:flex-row gap-4 items-start justify-between print:hidden"
+    >
+        <article>
+            <p>Filtrer par</p>
+            <div class="flex flex-col flex-wrap sm:flex-row gap-2 items-start">
+                <Filter
+                    v-for="filter in currentFilters.default"
+                    :key="filter.id"
+                    :title="filter.label"
+                    :options="filter.options"
+                    v-model="townsStore.filters.properties[filter.id]"
+                    @checkedItem="trackFilter(filter.label, $event)"
                 >
+                    <template
+                        v-if="filter.id === 'conditions'"
+                        v-slot:default="{ label }"
+                    >
+                        <div class="text-red flex items-center">
+                            <div class="mr-2">
+                                <Icon icon="times" />/
+                                <Icon icon="question" class="text-xs" />
+                            </div>
+                            {{ label }}
+                        </div>
+                    </template>
+                </Filter>
+
+                <Link
+                    class="sm:self-end"
+                    v-if="displayOptionalFilters === false"
+                    @click="showOptional"
+                >
+                    Voir plus de filtres
+                </Link>
+                <template v-else>
                     <Filter
                         v-for="filter in currentFilters.optional"
                         :key="filter.id"
@@ -38,24 +43,19 @@
                         v-model="townsStore.filters.properties[filter.id]"
                         @checkedItem="trackFilter(filter.label, $event)"
                     />
-                </div>
-            </article>
-            <Link v-if="displayOptionalFilters === false" @click="showOptional">
-                Voir plus de filtres
-            </Link>
-        </section>
+                </template>
+            </div>
+        </article>
 
-        <section>
-            <article>
-                <p>Trier par</p>
-            </article>
+        <article class="shrink-0">
+            <p>Trier par</p>
             <Sort
                 v-model="townsStore.sort"
                 name="towns_list_sort"
                 :options="groupedSorts[townsStore.filters.status]"
             />
-        </section>
-    </div>
+        </article>
+    </section>
 </template>
 
 <script setup>

@@ -12,17 +12,17 @@
                         >
                         c’est-à-dire :
                     </p>
-                    <p class="mt-6">
-                        - les acteurs publics impliqués dans le pilotage et les
+                    <ul class="mt-6 list-disc">
+                        <li>les acteurs publics impliqués dans le pilotage et les
                         actions dans les territoires (en matière d’éducation,
                         santé, emploi et logement, agents de l’État, des
-                        collectivités territoriales…)<br />
-                        - les acteurs de terrain qui interviennent auprès des
-                        habitants (associations, opérateurs, collectifs)<br />
-                        - les acteurs nationaux chargés du suivi et de la mise
+                        collectivités territoriales…)</li>
+                        <li>les acteurs de terrain qui interviennent auprès des
+                        habitants (associations, opérateurs, collectifs)</li>
+                        <li>les acteurs nationaux chargés du suivi et de la mise
                         en œuvre de cette politique publique (Dihal, Ministères,
-                        associations nationales…)
-                    </p>
+                        associations nationales…)</li>
+                    </ul>
                     <p class="mt-6">
                         Les accès sont ouverts en fonction du territoire
                         d’intervention de l’utilisateur. cf. question suivante

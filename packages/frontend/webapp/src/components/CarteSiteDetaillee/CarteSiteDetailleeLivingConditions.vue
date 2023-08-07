@@ -1,5 +1,5 @@
 <template>
-    <div v-if="shantytown.livingConditions.version === 2">
+    <ul v-if="shantytown.livingConditions.version === 2">
         <CarteSiteDetailleeLivingConditionIcon
             :status="shantytown.livingConditions.water.status.status"
             >eau</CarteSiteDetailleeLivingConditionIcon
@@ -30,7 +30,7 @@
             :status="shantytown.livingConditions[fireKey].status.status"
             >prev. incendie</CarteSiteDetailleeLivingConditionIcon
         >
-    </div>
+    </ul>
     <div v-else>
         <Tag variant="pin_red"
             >Les conditions de vie évoluent : mettez les à jour !</Tag

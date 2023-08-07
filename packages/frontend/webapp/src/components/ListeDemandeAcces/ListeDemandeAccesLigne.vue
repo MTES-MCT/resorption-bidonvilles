@@ -1,7 +1,7 @@
 <template>
     <RouterLink
         as="div"
-        class="cursor-pointer hover:bg-blue100"
+        class="cursor-pointer hover:bg-blue100 focus:outline-none focus:ring-2 ring-offset-2 ring-info"
         :class="bgColor"
         :to="`/acces/${user.id}`"
         @mouseenter="hovered = true"
