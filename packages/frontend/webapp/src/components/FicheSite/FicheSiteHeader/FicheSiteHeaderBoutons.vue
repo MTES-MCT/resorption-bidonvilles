@@ -1,5 +1,5 @@
 <template>
-    <p class="flex space-x-2">
+    <p class="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
         <RouterLink
             to="#journal_du_site"
             v-if="

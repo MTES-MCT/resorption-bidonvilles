@@ -1,5 +1,7 @@
 <template>
-    <nav class="pr-8 border-r flex flex-col space-y-2 sticky top-4 self-start">
+    <nav
+        class="bg-white sticky top-0 pb-8 self-start z-10 border-b-2 flex flex-col w-full items-start sm:w-auto sm:border-b-0 sm:border-r-1 sm:pr-8 gap-2"
+    >
         <h1 class="pl-3 font-bold" v-if="$slots.title">
             <slot name="title" />
         </h1>

@@ -1,6 +1,7 @@
 <template>
     <AsyncSelect
         name="association"
+        id="association"
         :label="label"
         :options="options"
         :loader="contactStore.fetchAssociations"

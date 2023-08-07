@@ -1,19 +1,17 @@
 <template>
     <FicheSousRubrique>
-        <div class="grid grid-template items-center">
-            <p v-if="icon" class="text-center"><Icon :icon="icon" /></p>
-            <p v-else></p>
-            <p class="font-bold">{{ label }}</p>
-            <p><slot /></p>
+        <div class="flex items-start">
+            <div class="w-8">
+                <p v-if="icon" class="text-center"><Icon :icon="icon" /></p>
+                <p v-else></p>
+            </div>
+            <div>
+                <p class="font-bold">{{ label }}</p>
+                <p><slot /></p>
+            </div>
         </div>
     </FicheSousRubrique>
 </template>
-
-<style scoped>
-.grid-template {
-    grid-template-columns: 30px min(300px, 60%) auto;
-}
-</style>
 
 <script setup>
 import { defineProps, toRefs } from "vue";

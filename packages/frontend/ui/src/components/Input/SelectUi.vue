@@ -1,10 +1,10 @@
 <template>
     <InputWrapper :hasErrors="!!error" :withoutMargin="withoutMargin" :id="name">
-        <InputLabel :label="label" :info="info" :showMandatoryStar="showMandatoryStar" />
+        <InputLabel :label="label" :info="info" :showMandatoryStar="showMandatoryStar" :for="id" />
 
         <div class="relative">
             <InputIcon position="before" :icon="icon" />
-            <select :class="classes" :value="modelValue" :disabled="disabled || isLoading" @change="onChange">
+            <select :class="classes" :value="modelValue" :disabled="disabled || isLoading" @change="onChange" :id="id">
                 <slot />
             </select>
             <InputIcon class="absolute pointer-events-none" position="after" :icon="isLoading ? 'spinner' : 'chevron-down'"
@@ -23,6 +23,7 @@ import InputIcon from "./utils/InputIcon.vue";
 import getInputClasses from "./utils/getInputClasses";
 
 const props = defineProps({
+    id: String,
     name: String,
     label: String,
     info: String,
@@ -50,7 +51,7 @@ const props = defineProps({
     modelValue: [String, Number, Boolean],
 });
 
-const { name, variant, withoutMargin, disabled, isLoading, icon, info, error, label, showMandatoryStar, modelValue } = toRefs(props);
+const { id, name, variant, withoutMargin, disabled, isLoading, icon, info, error, label, showMandatoryStar, modelValue } = toRefs(props);
 const emit = defineEmits(['update:modelValue']);
 
 const classes = computed(() => {
