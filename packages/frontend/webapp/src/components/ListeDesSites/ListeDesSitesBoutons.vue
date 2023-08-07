@@ -1,5 +1,5 @@
 <template>
-    <p class="flex space-x-2">
+    <p class="flex flex-col gap-2 items-start xs:flex-row">
         <Button
             icon="print"
             iconPosition="left"

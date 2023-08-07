@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row items-center">
+    <div class="flex flex-col xs:flex-row items-center">
         <Button icon="chevron-left" iconPosition="left" variant="custom" size="custom"
             class="hover:bg-G200 rounded-full px-4 py-1 mx-2 focus:outline-none" :disabled="currentPage === 1"
             @click="onPrevious" type="button">Précédent</Button>
