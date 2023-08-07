@@ -11,7 +11,7 @@
                     v-if="exportList.length > 0"
                     icon="file-excel"
                     iconPosition="left"
-                    variant="primary"
+                    variant="primaryOutline"
                     @click="openModalExport"
                     size="md"
                     >Exporter</Button
@@ -22,7 +22,7 @@
                     href="/action/nouveau"
                     icon="plus"
                     iconPosition="left"
-                    variant="secondary"
+                    variant="primary"
                     size="md"
                 >
                     Déclarer une nouvelle action

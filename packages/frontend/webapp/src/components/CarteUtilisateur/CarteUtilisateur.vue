@@ -14,7 +14,7 @@
             </h1>
             <p>{{ user.position }}</p>
             <p class="mt-2">
-                <span class="text-G500 text-sm">Rôle sur la plateforme :</span
+                <span class="text-G600 text-sm">Rôle sur la plateforme :</span
                 ><br />
                 <span :class="user.is_admin ? 'text-info' : ''"
                     ><IconeAdministrateur v-if="user.is_admin" />

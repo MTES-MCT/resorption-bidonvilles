@@ -15,14 +15,14 @@
                 >
                     {{ organization.name }}
                 </h2>
-                <h2 class="text-G500">{{ organization.type.name }}</h2>
+                <h2 class="text-G600">{{ organization.type.name }}</h2>
                 <p v-if="displayBeingFunded" class="text-info">
                     <Icon icon="euro-sign" /> Structure financée
                 </p>
                 -
             </header>
 
-            <p class="my-2 text-sm text-G500">
+            <p class="my-2 text-sm text-G600">
                 {{ organization.users.length }} membre{{ plural ? "s" : "" }}
                 <template v-if="showWording"
                     >inscrit{{ plural ? "s" : "" }} sur la plateforme</template

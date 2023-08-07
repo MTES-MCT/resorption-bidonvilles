@@ -20,7 +20,7 @@
                     @click="openModalExport"
                     icon="file-excel"
                     iconPosition="left"
-                    variant="primary"
+                    variant="primaryOutline"
                     size="sm"
                 >
                     Exporter</Button
@@ -29,7 +29,7 @@
                     href="/nouvel-utilisateur"
                     icon="user-plus"
                     iconPosition="left"
-                    variant="secondary"
+                    variant="primary"
                     size="sm"
                 >
                     Ajouter un utilisateur</Button

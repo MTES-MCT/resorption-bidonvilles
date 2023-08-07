@@ -3,7 +3,7 @@
         class="rounded border-1 border-blue300 px-4 pb-4 cursor-pointer hover:bg-blue200 flex flex-col relative focus:outline-none focus:ring-2 ring-offset-2 ring-info"
         :to="`/question/${question.id}`"
     >
-        <div class="absolute right-4 bg-secondary text-white px-2">
+        <div class="absolute right-4 text-secondary px-2">
             <div
                 class="text-sm font-bold"
                 v-if="question.peopleAffected && question.peopleAffected > 0"
