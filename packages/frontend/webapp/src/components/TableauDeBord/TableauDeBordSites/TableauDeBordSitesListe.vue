@@ -41,31 +41,31 @@
                 Aucune donnée à afficher
             </p>
 
-            <section class="-ml-16 -mr-16 flex justify-between" v-else>
-                <div class="w-12 mr-4">
-                    <TableauDeBordSitesPaginationButton
-                        icon="arrow-left"
-                        :disabled="currentPage === 1"
-                        @click="onChangePage(currentPage - 1)"
-                    />
-                </div>
-                <div class="grid grid-cols-3 gap-x-8 gap-y-6 flex-1">
-                    <CarteSite
-                        v-for="shantytown in pageContent"
-                        :key="shantytown.id"
-                        :shantytown="shantytown"
-                    />
-                </div>
-                <div class="w-12 ml-4">
-                    <TableauDeBordSitesPaginationButton
-                        icon="arrow-right"
-                        :disabled="currentPage === numberOfPages"
-                        @click="onChangePage(currentPage + 1)"
-                    />
-                </div>
+            <section class="grid grid-cols-3 gap-x-8 gap-y-6" v-else>
+                <CarteSite
+                    v-for="shantytown in pageContent"
+                    :key="shantytown.id"
+                    :shantytown="shantytown"
+                />
             </section>
 
             <footer class="mt-10 text-center">
+                <template v-if="numberOfPages > 1">
+                    <div class="flex justify-center gap-4 mb-4">
+                        <TableauDeBordSitesPaginationButton
+                            icon="arrow-left"
+                            :disabled="currentPage === 1"
+                            title="Page précédente"
+                            @click="onChangePage(currentPage - 1)"
+                        />
+                        <TableauDeBordSitesPaginationButton
+                            icon="arrow-right"
+                            :disabled="currentPage === numberOfPages"
+                            title="Page suivante"
+                            @click="onChangePage(currentPage + 1)"
+                        />
+                    </div>
+                </template>
                 <Link to="/liste-des-sites">Voir tous les sites</Link>
             </footer>
         </section>

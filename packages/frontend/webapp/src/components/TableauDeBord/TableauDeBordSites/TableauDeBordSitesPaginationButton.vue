@@ -1,12 +1,13 @@
 <template>
-    <div
+    <button
         :class="[
-            'w-12 h-12 items-center flex flex-col justify-center rounded-full border-1 cursor-pointer border-primary text-primary hover:bg-blue100',
+            'w-12 h-12 items-center flex flex-col justify-center rounded-full border-1 cursor-pointer border-primary text-primary hover:bg-blue100 focus:outline-none focus:ring-2 ring-offset-2 ring-info',
             additionalClasses,
         ]"
+        :disabled="disabled"
     >
         <Icon :icon="icon" />
-    </div>
+    </button>
 </template>
 
 <script setup>
