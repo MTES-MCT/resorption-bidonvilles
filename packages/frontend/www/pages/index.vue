@@ -6,7 +6,7 @@
 import LandingPage from "~/components/LandingPage/LandingPage.vue";
 
 useHead({
-    title: "Résorption-bidonvilles – Agir pour résorber les bidonvilles"
+    title: "Accueil - Résorption-bidonvilles"
 });
 
 definePageMeta({
