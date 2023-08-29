@@ -95,7 +95,7 @@ const piwik = ref(null);
 const isOptedOut = ref(null);
 
 useHead({
-    title: "Mentions légales — Résorption-bidonvilles"
+    title: "Mentions légales - Résorption-bidonvilles"
 });
 
 definePageMeta({
