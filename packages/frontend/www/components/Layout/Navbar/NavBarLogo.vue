@@ -2,7 +2,8 @@
   <div>
     <router-link to="/">
       <div class="flex flex-row align-items">
-        <img width="66" height="24" class="marianne" src="~/assets/img/Navbar/Marianne.svg" alt="Marianne" />
+        <img width="66" height="24" class="marianne" src="~/assets/img/Navbar/Marianne.svg"
+          alt="Retourner à la page d'accueil en mode déconnecté" />
         <div class="ml-2 text-display-xs md:text-display-sm md:font-bold text-black">
           Résorption-bidonvilles
         </div>

@@ -1,18 +1,16 @@
 <template>
-    <router-link to="/" class="flex items-center space-x-8 hover:bg-G100 p-3 focus:outline-none focus:ring-2 ring-offset-2 ring-info">
+    <router-link to="/"
+        class="flex items-center space-x-8 hover:bg-G100 p-3 focus:outline-none focus:ring-2 ring-offset-2 ring-info">
         <div class="flex flex-col items-start space-y-1">
-            <img :src="marianne" :class="sizeClass.marianneH" />
-            <p class="uppercase font-bold" :class="sizeClass.textSize">
+            <img :src="marianne" :class="sizeClass.marianneH"
+                alt="Retourner à la page d'accueil en mode connecté, sinon, au formulaire de connexion" />
+            <p class="uppercase font-bold" :class="sizeClass.textSize" aria-hidden="true">
                 République<br />Française
             </p>
             <img :src="devise" :class="sizeClass.deviseH" />
         </div>
-        <img
-            :src="logo"
-            :class="`${sizeClass.logoH} ${
-                keepLogo !== true ? 'hidden lg:inline' : ''
-            }`"
-        />
+        <img :src="logo" :class="`${sizeClass.logoH} ${keepLogo !== true ? 'hidden lg:inline' : ''
+            }`" />
     </router-link>
 </template>
 
