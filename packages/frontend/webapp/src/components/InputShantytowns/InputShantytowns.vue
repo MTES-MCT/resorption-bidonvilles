@@ -58,7 +58,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, onMounted, computed } from "vue";
+import { defineProps, toRefs, ref, onMounted, computed, nextTick } from "vue";
 import { useField, useFieldValue } from "vee-validate";
 import { useTownsStore } from "@/stores/towns.store";
 import formatDate from "@common/utils/formatDate.js";
@@ -99,9 +99,7 @@ const { name, label, filter, columns, showMandatoryStar, defaultTab } =
 
 const currentTab = ref(defaultTab.value);
 const search = useFieldValue(`${name.value}_search`);
-const { value, handleChange } = useField(name, undefined, {
-    type: "checkbox",
-});
+const { value, handleChange } = useField(name);
 
 const checked = ref(
     (value.value || []).reduce((acc, id) => {
@@ -184,8 +182,14 @@ const currentTabData = computed(() => {
         });
 });
 
-function onCheckChange(id) {
-    handleChange(id);
+function onCheckChange() {
+    nextTick(() => {
+        handleChange(
+            Object.keys(checked.value).filter(
+                (id) => checked.value[id] === true
+            )
+        );
+    });
 }
 
 function preventSubmit(event) {
