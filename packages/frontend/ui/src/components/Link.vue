@@ -6,10 +6,10 @@
         <template v-else>
             <Icon icon="arrow-up-right-from-square" v-if="!internalLink && !toRB && !isMailto"
                 :class="`mr-1 ${linkClasses}`" />
-            <router-link v-if="internalLink" :to="to" :class="`${linkClasses} ${focusClasses}`">
+            <router-link v-if="internalLink" :to="to" :class="`${linkClasses} ${focusClasses}`" :aria-label="ariaLabel">
                 <slot />
             </router-link>
-            <a v-else :href="to" :class="`${linkClasses} ${focusClasses}`">
+            <a v-else :href="to" :class="`${linkClasses} ${focusClasses}`" :aria-label="ariaLabel">
                 <slot />
             </a>
         </template>
@@ -28,6 +28,10 @@ export default {
 
     props: {
         to: {
+            type: String,
+            required: false
+        },
+        ariaLabel: {
             type: String,
             required: false
         },

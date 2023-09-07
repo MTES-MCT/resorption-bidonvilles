@@ -1,7 +1,8 @@
 <template>
-    <Link :to="to"
-        ><Icon icon="address-book" /> <slot /></Link
-    >
+    <Link :to="to" :ariaLabel="ariaLabel">
+    <Icon icon="address-book" />
+    <slot />
+    </Link>
 </template>
 
 <script setup>
@@ -10,7 +11,8 @@ import Link from "./Link.vue";
 import Icon from "./Icon.vue";
 
 const props = defineProps({
-    to: String
+    to: String,
+    ariaLabel: String
 });
-const { to } = toRefs(props);
+const { to, ariaLabel } = toRefs(props);
 </script>
