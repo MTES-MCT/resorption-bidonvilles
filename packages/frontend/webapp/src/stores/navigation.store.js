@@ -23,7 +23,7 @@ const topItems = [
         authRequirement: "none",
     },
     {
-        icon: "fa-book",
+        icon: "fa-book fa-regular",
         label: "Ressources",
         route: "https://www.blog-resorption-bidonvilles.fr/accueil/categories/ressources",
         authRequirement: "none",
