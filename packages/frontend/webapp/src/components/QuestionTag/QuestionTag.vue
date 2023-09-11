@@ -1,7 +1,10 @@
 <template>
-    <Tag :variant="tag.uid === 'other' ? 'outline' : 'primary'">{{
-        tag.name
-    }}</Tag>
+    <Tag
+        tabindex="0"
+        :aria-label="`Etiquette ${tag.name}`"
+        :variant="tag.uid === 'other' ? 'outline' : 'primary'"
+        >{{ tag.name }}</Tag
+    >
 </template>
 
 <script setup>
