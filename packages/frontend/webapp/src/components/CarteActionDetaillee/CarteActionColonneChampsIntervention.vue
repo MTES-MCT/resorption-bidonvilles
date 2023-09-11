@@ -1,6 +1,16 @@
 <template>
-    <div class="items-center">
-        <Tag variant="primary" v-for="topic in topics" v-bind:key="topic.name">
+    <div
+        class="items-center"
+        tabindex="0"
+        aria-label="Liste des étiquettes caractérisant l'action"
+    >
+        <Tag
+            variant="primary"
+            v-for="topic in topics"
+            v-bind:key="topic.name"
+            tabindex="0"
+            :aria-label="`Etiquette ${topic.name}`"
+        >
             {{ topic.name }}
         </Tag>
     </div>
