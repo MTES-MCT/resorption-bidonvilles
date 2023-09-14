@@ -255,7 +255,7 @@ export default (app) => {
     app.patch(
         '/users/:id/role_regular',
         middlewares.auth.authenticate,
-        middlewares.auth.isSuperAdmin,
+        middlewares.auth.isAdmin,
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.user.setRoleRegular,
