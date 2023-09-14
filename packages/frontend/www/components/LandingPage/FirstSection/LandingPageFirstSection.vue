@@ -76,7 +76,7 @@
         <div class="pt-24" v-if="$i18n.locale === 'fr'">
             <div class="max-w-screen-lg mx-auto">
                 <LandingCTABanner :img="ctaPrendreEnMain" alt="Illustration du wébinaire prise en main"
-                    href="https://app.evalandgo.com/s/index.php?id=JTk5aSU5M2slOTklQUI%3D&a=JTk2cCU5N2slOUElQjA%3D">
+                    href="https://www.evalandgo.com/f/72933/4pFjfpH19VHD2AZhU2ccYx">
                     <template v-slot:title>
                         Webinaire prise en main de
                         <span class="italic">Résorption-bidonvilles</span>
