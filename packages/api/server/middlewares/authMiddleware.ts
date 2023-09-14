@@ -129,6 +129,17 @@ function myCheckPermissions(mode, permissions, req, res, next, respond) {
     }
 }
 
+export function isAdmin(req, res, next) {
+    const { user }: { user: SerializedUser } = req;
+    if (user.is_admin !== true) {
+        return res.status(400).send({
+            user_message: 'Vous n\'avez pas les permissions pour accéder à cette route',
+        });
+    }
+
+    return next();
+}
+
 export function isSuperAdmin(req, res, next) {
     if (req.user.role_id !== 'national_admin') {
         return res.status(400).send({
@@ -169,6 +180,7 @@ export function checkOneOrMorePermissions(permissions, req, res, next, respond =
 }
 
 export default {
+    isAdmin,
     isSuperAdmin,
     authenticate,
     checkPermissions,

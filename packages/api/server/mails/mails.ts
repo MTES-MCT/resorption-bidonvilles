@@ -11,7 +11,7 @@ const {
     wwwUrl, webappUrl, backUrl, blogUrl,
 } = config;
 
-const formationUrl = 'https://app.evalandgo.com/s/index.php?id=JTk5aSU5M2slOTklQUI%3D&a=JTk2cCU5N2slOUElQjA%3D';
+const formationUrl = 'https://www.evalandgo.com/f/72933/4pFjfpH19VHD2AZhU2ccYx';
 const connexionUrl = `${webappUrl}/connexion`;
 const contactUrl = `${webappUrl}/contact`;
 const adminGuideUrl = `${backUrl}/assets/guide_utilisateur/guide_admin_2020_06.pdf`;
