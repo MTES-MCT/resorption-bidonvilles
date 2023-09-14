@@ -65,7 +65,7 @@
                     controls>
                     <source src="~/assets/video/rb_connaitre_partager_agir_720.mp4" type="video/mp4" />
                     <track
-                        label="French"
+                        :label="$t('french')"
                         kind="subtitles"
                         srclang="fr"
                         src="/rb_connaitre_partager_agir_720.vtt"

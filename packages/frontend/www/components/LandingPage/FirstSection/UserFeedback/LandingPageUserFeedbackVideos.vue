@@ -7,7 +7,7 @@
                     type="video/mp4"
                 />
                 <track
-                    label="French"
+                    :label="$t('french')"
                     kind="subtitles"
                     srclang="fr"
                     src="/Temoignage-Leduc-BD_mars2021.vtt"
@@ -22,7 +22,7 @@
                     type="video/mp4"
                 />
                 <track
-                    label="French"
+                    :label="$t('french')"
                     kind="subtitles"
                     srclang="fr"
                     src="/Temoignage-LeMinor-BD_mars2021.vtt"
