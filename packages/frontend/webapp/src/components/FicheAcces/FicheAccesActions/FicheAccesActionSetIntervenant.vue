@@ -1,10 +1,6 @@
 <template>
     <Button
-        v-if="
-            userStore.user?.is_superuser &&
-            !user.is_admin &&
-            user.role_id !== 'intervener'
-        "
+        v-if="!user.is_admin && user.role_id !== 'intervener'"
         variant="primaryOutline"
         :loading="isLoading"
         :disabled="disabled"
@@ -14,7 +10,6 @@
 
 <script setup>
 import { defineProps, toRefs } from "vue";
-import { useUserStore } from "@/stores/user.store";
 import { Button } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
@@ -23,5 +18,4 @@ const props = defineProps({
     disabled: Boolean,
 });
 const { user, isLoading, disabled } = toRefs(props);
-const userStore = useUserStore();
 </script>
