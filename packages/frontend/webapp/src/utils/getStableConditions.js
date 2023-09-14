@@ -14,7 +14,7 @@ export default function (shantytownRef) {
             sanitary: "toilettes",
             electricity: "électricité",
             trash: "évacuation des déchets",
-            [verminKey]: "prévention des nuisibles",
+            [verminKey]: "absence de nuisibles",
             [fireKey]: "prévention incendie",
         };
 
