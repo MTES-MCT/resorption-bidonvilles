@@ -24,16 +24,7 @@
                 <div v-for="option in options" :key="option.id"
                     class="flex items-center whitespace-nowrap text-sm menuWidth">
                     <Checkbox :disabled="disabled" v-model="checked[option.value]" variant="invisible"
-                        v-slot="{ checked }" direction="col">
-                        <div class="flex items-center justify-between w-full hover:bg-blue200 py-2 px-3 text-primary">
-                            <slot :label="option.label">
-                                <div class="flex-1">{{ option.label }}</div>
-                            </slot>
-
-                            <div class="ml-4" v-if="checked">
-                                <Icon icon="check" />
-                            </div>
-                        </div>
+                        :label="option.label" direction="col">
                     </Checkbox>
                 </div>
 
