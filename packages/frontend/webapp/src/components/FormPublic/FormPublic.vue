@@ -4,6 +4,7 @@
         @submit="formSubmit"
         ref="form"
         v-slot="{ values, errors }"
+        :lang="language"
     >
         <!-- form header (title and description) -->
         <header class="text-center mb-8">
@@ -72,11 +73,15 @@ const props = defineProps({
         type: Boolean,
         default: true,
     },
+    language: {
+        type: String,
+        default: "fr",
+    },
 });
 
 const form = ref(null);
 const error = ref(null);
-const { schema, submit, size, showErrorSummary } = toRefs(props);
+const { schema, submit, size, showErrorSummary, language } = toRefs(props);
 
 async function formSubmit(...args) {
     error.value = null;
