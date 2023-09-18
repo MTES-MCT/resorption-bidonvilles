@@ -2,10 +2,10 @@
     <div>
         <LandingPageFAQ v-if="$i18n.locale === 'fr'" />
         <LandingPageNewsletter :class="$i18n.locale === 'fr' ? 'mt-20' : ''" />
-        <div v-if="$i18n.locale === 'fr'" class="text-center mt-20">
-            <h2 class="text-display-lg font-bold text-secondary">
+        <div class="text-center mt-20">
+            <p v-if="$i18n.locale === 'fr'" class="text-display-lg font-bold text-secondary">
                 {{ $t("landingPage.hero.subtitle") }}
-            </h2>
+            </p>
             <LandingPageContactForm class="mx-auto" />
         </div>
     </div>

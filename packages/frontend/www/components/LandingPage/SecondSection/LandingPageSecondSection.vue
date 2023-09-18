@@ -13,11 +13,11 @@
         </div>
 
         <div class="max-w-screen-sm mx-auto ">
-            <h2 class="mt-16">
+            <p class="mt-16">
                 <span class="text-display-lg font-normal">{{
                     $t("landingPage.secondSection.title")
                 }}</span>
-            </h2>
+            </p>
 
             <div class="mt-8">
                 <span class="font-bold">{{
@@ -79,9 +79,9 @@
         </div>
 
         <div class="mt-20 max-w-screen-sm mx-auto">
-            <h2 class="text-display-lg font-bold">
+            <p class="text-display-lg font-bold">
                 {{ $t("landingPage.secondSection.bilan.title") }}
-            </h2>
+            </p>
             <div class=" mt-8">
                 <span class="font-bold">{{
                     $t("landingPage.secondSection.bilan.firstParagraph.bold")
