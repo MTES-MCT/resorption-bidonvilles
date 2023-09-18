@@ -1,5 +1,10 @@
 <template>
-    <FormPublic :schema="schema" :submit="intermediateSubmit" ref="form">
+    <FormPublic
+        :schema="schema"
+        :submit="intermediateSubmit"
+        :language="language"
+        ref="form"
+    >
         <template v-slot:subtitle><slot name="subtitle" /></template>
         <template v-slot:title><slot name="title" /></template>
 
