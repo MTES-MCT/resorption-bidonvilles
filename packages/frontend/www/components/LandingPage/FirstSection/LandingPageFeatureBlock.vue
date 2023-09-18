@@ -1,7 +1,9 @@
 <template>
     <div>
         <Icon :icon="icon" size="3x" height="48"></Icon>
-        <h3 class="text-display-lg mt-2"><slot /></h3>
+        <p class="text-display-lg mt-2">
+            <slot />
+        </p>
     </div>
 </template>
 
