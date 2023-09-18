@@ -3,14 +3,14 @@
     class="focus:ring-2 ring-offset-2 ring-info bg-white text-lg border-2 border-primary text-primary focus:outline-none p-2"
     name="language" label="Langue" :disabled="disabled">
     <option class="hover:bg-primary" v-for="lang in languages" :key="lang.key" :alt="lang.alt" :value="lang.key"
-      @change="pickLang(lang.key)">
+      :lang="lang.key" @change="pickLang(lang.key)">
       {{ lang.flag }} {{ lang.label }}
     </option>
   </select>
 </template>
 
 <script setup>
-import { computed, toRefs, defineProps, defineEmits, watch } from 'vue';
+import { toRefs, defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
   language: {
@@ -32,16 +32,12 @@ function getFlagEmoji(countryCode) {
   switch (countryCode) {
     case 'fr':
       return "🇫🇷";
-      break;
     case 'en':
       return "🇬🇧";
-      break;
     case 'ro':
       return "🇷🇴";
-      break;
     case 'bg':
       return "🇧🇬";
-      break;
     default:
       return "🇫🇷";
   }
