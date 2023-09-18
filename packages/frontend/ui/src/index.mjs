@@ -14,7 +14,7 @@ export { default as ErrorSummary } from './components/ErrorSummary.vue';
 export { default as FilArianne } from './components/FilArianne.vue';
 export { default as Filter } from './components/Filter.vue';
 export { default as FooterBar } from './components/FooterBar/FooterBar.vue';
-export { default as FormParagraph} from './components/FormParagraph.vue';
+export { default as FormParagraph } from './components/FormParagraph.vue';
 export { default as Icon } from './components/Icon.vue';
 export { default as IdentiteVisuelle } from './components/IdentiteVisuelle/IdentiteVisuelle.vue';
 export { default as InputGroup } from './components/Input/InputGroup.vue';
