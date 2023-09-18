@@ -164,20 +164,36 @@
         </div>
 
         <div class="flex flex-row flex-wrap items-center justify-center mt-8 lg:flex-nowrap lg:justify-between">
-            <a href="https://solidarites-sante.gouv.fr/"><img width="200" height="118" class="h-auto m-2"
+            <a href="https://www.gouvernement.fr/" hreflang="fr"
+                aria-label="Lien vers le site du gouvernement de l'État Francais,">
+                <img width="200" height="118" class="h-auto m-2"
                     src="~/assets/img/LandingPage/FourthSection/logo-gouvernement.jpg"
-                    alt="Marque de l'État Francais" /></a>
-            <a href="https://ec.europa.eu/info/index_en"><img width="460" height="111" class="h-auto m-2"
+                    alt="Logo du site du gouvernement Francais" />
+            </a>
+            <a href="https://ec.europa.eu/info/index_fr" hreflang="fr"
+                aria-label="Lien vers le site de la Commission Européenne">
+                <img width="460" height="111" class="h-auto m-2"
                     src="~/assets/img/LandingPage/FourthSection/logo-commission-europenne.png"
-                    alt="Logo de la Commission Européenne" /></a>
-            <a href="https://beta.gouv.fr/communaute/#/incubators/mtes"><img width="96" height="96" class="h-auto m-2"
+                    alt="Logo de la Commission Européenne" />
+            </a>
+            <a href="https://beta.gouv.fr/communaute/#/incubators/mtes" hreflang="fr"
+                aria-label="Lien vers le site de la Fabrique Numérique">
+                <img width="96" height="96" class="h-auto m-2"
                     src="~/assets/img/LandingPage/FourthSection/logo-fabrique-numerique.png"
-                    alt="Logo de la Fabrique Numérique" /></a>
-            <a class="pl-12" href="https://beta.gouv.fr/"><img width="160" height="80" class="h-auto m-2"
-                    src="~/assets/img/LandingPage/FourthSection/logo_beta-gouv-fr.jpg" alt="Logo de beta.gouv" /></a>
-            <a class="pl-12" href="https://eig.etalab.gouv.fr/defis/resorption-bidonvilles/"><img width="330" height="72"
-                    class="h-auto m-2" src="~/assets/img/LandingPage/FourthSection/logo-entrepreneur-interet-general.png"
-                    alt="Logo des Entrepreneurs d'Intérêt Général" /></a>
+                    alt="Logo de la Fabrique Numérique" />
+            </a>
+            <a class="pl-12" href="https://beta.gouv.fr/" hreflang="fr"
+                aria-label="Lien vers le site de l'incubateur de services publiques numériques - beta.gouv">
+                <img width="160" height="80" class="h-auto m-2"
+                    src="~/assets/img/LandingPage/FourthSection/logo_beta-gouv-fr.jpg"
+                    alt="Logo de l'incubateur de services publiques numériques" />
+            </a>
+            <a class="pl-12" href="https://eig.etalab.gouv.fr/defis/resorption-bidonvilles/" hreflang="fr"
+                aria-label="Lien vers le site des Entrepreneurs d'Intérêt Général">
+                <img width="330" height="72" class="h-auto m-2"
+                    src="~/assets/img/LandingPage/FourthSection/logo-entrepreneur-interet-general.png"
+                    alt="Logo des Entrepreneurs d'Intérêt Général" />
+            </a>
         </div>
     </div>
 </template>
