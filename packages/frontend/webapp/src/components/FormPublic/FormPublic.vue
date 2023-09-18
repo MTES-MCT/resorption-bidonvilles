@@ -7,12 +7,12 @@
     >
         <!-- form header (title and description) -->
         <header class="text-center mb-8">
-            <h2
+            <p
                 class="text-lg sm:text-xl font-bold text-secondary"
                 v-if="$slots.subtitle"
             >
                 <slot name="subtitle"></slot>
-            </h2>
+            </p>
             <h1 class="text-2xl sm:text-3xl font-bold">
                 <slot name="title"></slot>
             </h1>
