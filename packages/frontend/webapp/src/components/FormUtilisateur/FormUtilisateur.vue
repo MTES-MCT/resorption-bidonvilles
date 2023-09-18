@@ -41,9 +41,9 @@
                     values.is_actor === true || variant === 'creer-utilisateur'
                 "
             >
-                <h1 class="font-bold text-xl">
+                <p class="font-bold text-xl">
                     <slot name="structureTitle" />
-                </h1>
+                </p>
                 <FormUtilisateurInputOrganizationCategory
                     :showMandatoryStar="variant === 'creer-utilisateur'"
                     :label="labels.organization_category"
