@@ -5,13 +5,13 @@
             alt="Illustration dessinée d'un bidonville et de ses habitant(e)s" />
         <div class="pt-24">
             <div class="max-w-screen-sm mx-auto">
-                <div class="text-display-lg">
+                <h2 class="text-display-lg">
                     {{ $t("landingPage.firstSection.context.title_part1") }}
                     <span class="italic">{{
                         $t("landingPage.firstSection.context.title_part2")
                     }}</span>
                     : {{ $t("landingPage.firstSection.context.title_part3") }}
-                </div>
+                </h2>
                 <div class="mt-4">
                     <p>{{ $t("landingPage.firstSection.context.text_1") }}</p>
                     <p>{{ $t("landingPage.firstSection.context.text_2") }}</p>
