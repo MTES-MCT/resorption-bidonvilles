@@ -8,8 +8,8 @@
                 {{ formatLastUpdatedAt(shantytown) }}
             </Tag>
 
-            <h1 class="font-bold text-lg">{{ shantytown.usename }}</h1>
-            <h2 class="text-lg">{{ shantytown.city.name }}</h2>
+            <h2 class="font-bold text-lg">{{ shantytown.usename }}</h2>
+            <p class="text-lg">{{ shantytown.city.name }}</p>
 
             <p class="m-0">
                 <TagObjectifResorption
