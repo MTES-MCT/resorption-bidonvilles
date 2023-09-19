@@ -5,7 +5,7 @@
                 <MiniCarte :location="mapLocation" />
             </p>
             <div>
-                <h1 class="text-3xl text-info font-bold">{{ title }}</h1>
+                <p class="text-3xl text-info font-bold">{{ title }}</p>
                 <p>
                     {{ populationTotal }} personne<template
                         v-if="populationTotal > 1"
