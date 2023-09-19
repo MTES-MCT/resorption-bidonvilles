@@ -54,11 +54,11 @@
                 </div></template
             >
             <template v-slot:body>
-                <h1 class="text-lg font-bold mr-4">
+                <h3 class="text-lg font-bold mr-4">
                     {{ comments.length }} message{{
                         comments.length > 1 ? "s" : ""
                     }}
-                </h1>
+                </h3>
                 <FicheSiteJournalListeDesMessages
                     :comments="comments"
                     v-if="comments.length > 0"
