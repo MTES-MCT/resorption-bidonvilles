@@ -14,7 +14,7 @@
             :activity="activity"
         />
 
-        <h1 class="font-bold text-lg mt-8">Sur les 30 derniers jours</h1>
+        <h3 class="font-bold text-lg mt-8">Sur les 30 derniers jours</h3>
         <p
             v-if="splitActivities.previousMonth.length === 0"
             class="text-G600 italic"
