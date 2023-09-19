@@ -11,9 +11,9 @@
                     <slot name="header">
                         <div class="pt-10 px-10 pb-4">
                             <div class="flex justify-between items-center border-b-1 border-G400">
-                                <div class="text-display-md font-bold text-primary">
+                                <h1 class="text-display-md font-bold text-primary">
                                     <slot name="title" />
-                                </div>
+                                </h1>
                                 <div>
                                     <Button v-if="allowClose" variant="primaryText" icon="times" size="lg" type="button"
                                         @click="$emit('close')" />
