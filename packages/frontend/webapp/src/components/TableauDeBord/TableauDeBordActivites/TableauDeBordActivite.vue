@@ -14,12 +14,12 @@
         </aside>
 
         <section>
-            <h1 class="font-bold text-primary">
+            <p class="font-bold text-primary">
                 {{ title
                 }}<span v-if="subtitle" class="ml-1 font-normal text-G700">{{
                     subtitle
                 }}</span>
-            </h1>
+            </p>
             <p class="mt-1" v-if="activity.shantytown">
                 <span class="font-bold">{{ activity.shantytown.usename }}</span>
                 <span class="ml-1 italic"
