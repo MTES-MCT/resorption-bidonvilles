@@ -1,6 +1,6 @@
 <template>
     <form>
-        <p class="font-bold text-lg">Partager une info</p>
+        <h3 class="font-bold text-lg">Partager une info</h3>
 
         <div class="bg-white p-6">
             <FormNouveauMessageInputMessage :rows="rows" ref="messageInput" />
