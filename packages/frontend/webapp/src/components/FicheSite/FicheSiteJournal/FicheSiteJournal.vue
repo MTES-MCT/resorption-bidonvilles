@@ -2,14 +2,14 @@
     <div id="journal_du_site" class="bg-orange200 py-10">
         <FicheJournalLayout>
             <template v-slot:body>
-                <h1 class="text-3xl text-secondary mb-8">
+                <h2 class="text-3xl text-secondary mb-8">
                     <Icon icon="comment" /> Journal du site
                     <span
                         >— {{ comments.length }} message{{
                             comments.length > 1 ? "s" : ""
                         }}</span
                     >
-                </h1>
+                </h2>
             </template>
         </FicheJournalLayout>
 
