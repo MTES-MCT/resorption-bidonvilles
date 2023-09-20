@@ -3,7 +3,7 @@
         <template v-slot:title>Localisation</template>
         <div class="flex flex-col lg:flex-row">
             <section class="flex-1">
-                <FormParagraph title="Adresse" showMandatoryStar>
+                <FormParagraph title="Adresse" showMandatoryStar id="address">
                     <InputAddress />
                 </FormParagraph>
 
@@ -37,7 +37,7 @@
                     </ul>
                 </div>
 
-                <FormParagraph title="Appellation du site">
+                <FormParagraph title="Appellation du site" id="name">
                     <InputName />
                 </FormParagraph>
             </section>
