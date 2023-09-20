@@ -2,9 +2,9 @@
     <nav
         class="bg-white sticky top-0 pb-8 self-start z-10 border-b-2 flex flex-col w-full items-start sm:w-auto sm:border-b-0 sm:border-r-1 sm:pr-8 gap-2"
     >
-        <h1 class="pl-3 font-bold" v-if="$slots.title">
+        <p class="pl-3 font-bold" v-if="$slots.title">
             <slot name="title" />
-        </h1>
+        </p>
 
         <template v-for="tab in tabs" :key="tab.id">
             <Button
