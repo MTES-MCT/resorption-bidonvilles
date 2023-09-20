@@ -6,9 +6,9 @@
         }"
     >
         <div class="flex justify-between border-b pb-3 mb-6">
-            <h1 v-if="$slots.title" class="text-2xl text-primary">
+            <h2 v-if="$slots.title" class="text-2xl text-primary">
                 <slot name="title" />
-            </h1>
+            </h2>
 
             <div v-if="$slots.detail" class="flex flex-col items-end">
                 <slot name="detail" />
