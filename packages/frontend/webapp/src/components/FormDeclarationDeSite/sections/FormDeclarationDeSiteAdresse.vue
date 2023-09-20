@@ -1,7 +1,8 @@
 <template>
-    <FormSection id="adresse" variant="blue" :padding="false">
+    <FormSection id="adresse" variant="blue">
+        <template v-slot:title>Localisation</template>
         <div class="flex flex-col lg:flex-row">
-            <section class="flex-1 p-6">
+            <section class="flex-1">
                 <FormParagraph title="Adresse" showMandatoryStar>
                     <InputAddress />
                 </FormParagraph>
