@@ -5,9 +5,9 @@
                 class="pt-6 text-center print:hidden"
                 :class="showReset ? 'pb-4' : 'pb-10'"
             >
-                <h1 class="text-lg xl:text-xl font-bold">{{ searchTitle }}</h1>
+                <p class="text-lg xl:text-xl font-bold">{{ searchTitle }}</p>
                 <ContentWrapper class="mt-3" size="medium">
-                    <div class="flex items-center space-x-2">
+                    <div role="search" class="flex items-center space-x-2">
                         <InputLocation
                             class="flex-1"
                             name="territorial_collectivity"
