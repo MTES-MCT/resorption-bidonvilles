@@ -1,6 +1,6 @@
 <template>
-    <FormParagraph
-        title="Comment les habitants ont-ils accès à l'eau ?"
+    <Fieldset
+        legend="Comment les habitants ont-ils accès à l'eau ?"
         showMandatoryStar
     >
         <InputWaterAccessType />
@@ -72,10 +72,10 @@
         <div class="mt-6">
             <InputWaterAccessComments />
         </div>
-    </FormParagraph>
+    </Fieldset>
 
-    <FormParagraph
-        title="Les habitants ont-ils accès à des toilettes fonctionnelles ?"
+    <Fieldset
+        legend="Les habitants ont-ils accès à des toilettes fonctionnelles ?"
         showMandatoryStar
     >
         <InputSanitaryWorkingToilets />
@@ -93,10 +93,10 @@
                 <InputSanitaryHandWashing />
             </template>
         </div>
-    </FormParagraph>
+    </Fieldset>
 
-    <FormParagraph
-        title="Les habitants ont-ils accès à l'électricité ?"
+    <Fieldset
+        legend="Les habitants ont-ils accès à l'électricité ?"
         showMandatoryStar
     >
         <InputElectricityAccess />
@@ -107,9 +107,9 @@
                 v-if="values.electricity_access_types?.length > 0"
             />
         </div>
-    </FormParagraph>
+    </Fieldset>
 
-    <FormParagraph title="Le ramassage des déchets est-il organisé ?">
+    <Fieldset legend="Le ramassage des déchets est-il organisé ?">
         <InputTrashIsPiling />
         <InputTrashEvacuationIsClose />
 
@@ -118,28 +118,28 @@
             <InputTrashEvacuationIsRegular />
             <InputTrashBulkyIsPiling />
         </div>
-    </FormParagraph>
+    </Fieldset>
 
-    <FormParagraph
-        title="Y a-t-il des nuisibles sur le site ou à proximité ?"
+    <Fieldset
+        legend="Y a-t-il des nuisibles sur le site ou à proximité ?"
         showMandatoryStar
     >
         <InputPestAnimals />
         <InputPestAnimalsComments />
-    </FormParagraph>
+    </Fieldset>
 
-    <FormParagraph
-        title="Un diagnostic prévention incendie a-t-il été réalisé par le SDIS (Service départemental d'incendie et de secours) ?"
+    <Fieldset
+        legend="Un diagnostic prévention incendie a-t-il été réalisé par le SDIS (Service départemental d'incendie et de secours) ?"
         showMandatoryStar
     >
         <InputFirePrevention />
-    </FormParagraph>
+    </Fieldset>
 </template>
 
 <script setup>
 import { computed } from "vue";
 import { useFieldValue, useFormValues } from "vee-validate";
-import { FormParagraph } from "@resorptionbidonvilles/ui";
+import { Fieldset } from "@resorptionbidonvilles/ui";
 import InputWaterAccessType from "../inputs/FormDeclarationDeSiteInputWaterAccessType.vue";
 import InputWaterAccessTypeDetails from "../inputs/FormDeclarationDeSiteInputWaterAccessTypeDetails.vue";
 import InputWaterAccessIsPublic from "../inputs/FormDeclarationDeSiteInputWaterAccessIsPublic.vue";

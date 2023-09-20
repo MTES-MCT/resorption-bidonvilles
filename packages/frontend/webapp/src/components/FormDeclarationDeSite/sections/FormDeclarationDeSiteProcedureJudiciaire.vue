@@ -17,15 +17,15 @@
                 </div>
             </div>
         </template>
-        <FormParagraph
-            title="Une plainte a-t-elle été déposée par le propriétaire ?"
+        <Fieldset
+            legend="Une plainte a-t-elle été déposée par le propriétaire ?"
             showMandatoryStar
         >
             <InputOwnerComplaint />
-        </FormParagraph>
+        </Fieldset>
 
-        <FormParagraph
-            title="Une procédure judiciaire est-elle en cours ?"
+        <Fieldset
+            legend="Une procédure judiciaire est-elle en cours ?"
             showMandatoryStar
         >
             <InputJusticeProcedure />
@@ -40,7 +40,7 @@
             <InputPoliceRequestedAt v-if="policeWasRequested" width="w-64" />
             <InputPoliceGrantedAt v-if="policeWasGranted" width="w-64" />
             <InputBailiff />
-        </FormParagraph>
+        </Fieldset>
     </FormSection>
     <ModaleListeAccesPJ
         ref="modaleListeAccesPJ"
@@ -53,7 +53,7 @@
 import { computed, ref, toRefs } from "vue";
 import { useFormValues } from "vee-validate";
 import FormSection from "@/components/FormSection/FormSection.vue";
-import { Button, FormParagraph } from "@resorptionbidonvilles/ui";
+import { Button, Fieldset } from "@resorptionbidonvilles/ui";
 
 import InputOwnerComplaint from "../inputs/FormDeclarationDeSiteInputOwnerComplaint.vue";
 import InputJusticeProcedure from "../inputs/FormDeclarationDeSiteInputJusticeProcedure.vue";
