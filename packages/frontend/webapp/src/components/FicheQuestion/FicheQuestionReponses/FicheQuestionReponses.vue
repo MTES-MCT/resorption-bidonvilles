@@ -1,12 +1,12 @@
 <template>
     <div class="bg-blue200 py-6">
         <ContentWrapper>
-            <h1 class="text-xl font-bold mb-4" id="reponses">
+            <h2 class="text-xl font-bold mb-4" id="reponses">
                 <Icon icon="comment" /> Section des réponses —
                 {{ question.answers.length }} réponse{{
                     question.answers.length > 1 ? "s" : ""
                 }}
-            </h1>
+            </h2>
             <FicheQuestionNouvelleReponse :question="question" class="mb-2" />
 
             <section class="mt-4 mb-4">
