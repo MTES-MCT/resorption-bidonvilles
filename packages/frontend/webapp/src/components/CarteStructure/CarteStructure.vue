@@ -6,7 +6,7 @@
         >
             <header>
                 <h3 class="text-lg font-bold">{{ name }}</h3>
-                <h2
+                <p
                     v-if="
                         organization.abbreviation &&
                         !organization.name.startsWith(organization.type.name)
@@ -14,8 +14,8 @@
                     class="text-sm"
                 >
                     {{ organization.name }}
-                </h2>
-                <h2 class="text-G600">{{ organization.type.name }}</h2>
+                </p>
+                <p class="text-G600">{{ organization.type.name }}</p>
                 <p v-if="displayBeingFunded" class="text-info">
                     <Icon icon="euro-sign" /> Structure financée
                 </p>
