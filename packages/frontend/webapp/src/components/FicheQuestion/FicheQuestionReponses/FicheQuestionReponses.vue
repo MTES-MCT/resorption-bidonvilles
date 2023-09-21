@@ -10,11 +10,11 @@
             <FicheQuestionNouvelleReponse :question="question" class="mb-2" />
 
             <section class="mt-4 mb-4">
-                <h1 class="text-lg font-bold">
+                <p class="text-lg font-bold">
                     {{ question.answers.length }} réponse{{
                         question.answers.length > 1 ? "s" : ""
                     }}
-                </h1>
+                </p>
                 <FicheQuestionSubscriptionButton
                     :question="question"
                     class="mt-2 mb-4"
