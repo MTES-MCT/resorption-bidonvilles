@@ -10,23 +10,27 @@ import mailsUtils from '#server/mails/mails';
 import userModel from '#server/models/userModel';
 import contactFormReferralModel from '#server/models/contactFormReferralModel';
 import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { SerializedOrganization } from '#server/models/userModel/getDirectory';
+
+import { OrganizationCategory } from '#root/types/resources/OrganizationCategory.d';
+import { ContactRequestType } from '#root/types/resources/ContactRequestType.d';
+import { ContactReferral } from '#root/types/resources/ContactReferral.d';
 
 const { toString: dateToString } = dateUtils;
 const { sendAdminContactMessage, sendContactNewsletterRegistration } = mailsUtils;
 
-// Interface pour les données de l'email
-interface EmailData {
-    email: string;
-    phone: string;
-    last_name: string;
-    first_name: string;
-    access_request_message: string;
-    objet: string;
-    is_organization_other: boolean;
-    organization_other?: string;
+interface MessageData {
+    email: string,
+    phone: string,
+    last_name: string,
+    first_name: string,
+    access_request_message: string,
+    objet: string,
+    is_organization_other: boolean,
+    organization_other: string,
 }
 
-async function sendEmailNewContactMessageToAdmins(message) {
+async function sendEmailNewContactMessageToAdmins(message: MessageData): Promise<void> {
     const admins = await userModel.getNationalAdmins();
 
     for (let i = 0; i < admins.length; i += 1) {
@@ -47,10 +51,8 @@ async function sendEmailNewContactMessageToAdmins(message) {
     }
 }
 
-// Convert request-type to a message objet for the contact mail
-// ie: [help, report] becomes "Aider - Signaler"
-function getObjetForContactMessage(requestType) {
-    const types = {
+function getObjetForContactMessage(requestType: ContactRequestType[]): string {
+    const types: { [key in ContactRequestType]: string } = {
         'access-request': 'Demande de création de compte',
         help: 'Aider',
         report: 'Signaler',
@@ -62,26 +64,35 @@ function getObjetForContactMessage(requestType) {
     return requestType.map(type => types[type]).join(' - ');
 }
 
+interface ContactRequest extends Request {
+    body: {
+        request_type: ContactRequestType[],
+        is_actor: boolean,
+        referral: ContactReferral,
+        referral_other: string,
+        referral_word_of_mouth?: string,
+        last_name: string,
+        first_name: string,
+        email: string,
+        phone: string,
+        position: string,
+        access_request_message: string,
+        organization_category: OrganizationCategory,
+        organization_full: SerializedOrganization,
+        new_association: boolean,
+        new_association_name: string,
+        new_association_abbreviation: string,
+        departement: string,
+        organization_other: string,
+    }
+}
+
 // Fonction pour traiter la requête
-export default async (req: Request, res: Response, next): Promise<void> => {
+export default async (req: ContactRequest, res: Response, next): Promise<void> => {
     const {
         request_type, is_actor, referral, referral_other, referral_word_of_mouth,
         last_name, first_name, email, phone, access_request_message, organization_category,
     } = req.body;
-
-    // Prepare data to send mails
-    const emailData: EmailData = {
-        email: req.body.email,
-        phone: req.body.phone,
-        last_name: req.body.last_name,
-        first_name: req.body.first_name,
-        access_request_message: req.body.access_request_message,
-        objet: getObjetForContactMessage(request_type),
-        is_organization_other: !!((request_type.includes('access-request') && is_actor && organization_category === 'other')),
-        organization_other: (request_type.includes('access-request') && is_actor && organization_category === 'other')
-            ? req.body.organization_other
-            : '',
-    };
 
     // send mail to sales@ if a newsletter registration was asked
     if (request_type.includes('register-newsletter')) {
