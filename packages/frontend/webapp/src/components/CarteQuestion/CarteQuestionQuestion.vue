@@ -1,7 +1,7 @@
 <template>
-    <p class="text-primary text-xl font-bold break-words">
+    <h2 class="text-primary text-xl font-bold break-words">
         {{ question }}
-    </p>
+    </h2>
 </template>
 
 <script setup>
