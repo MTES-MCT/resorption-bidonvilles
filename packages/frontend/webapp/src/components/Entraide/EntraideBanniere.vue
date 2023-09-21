@@ -17,9 +17,6 @@
                 une question pratique que vous vous posez dans le cadre de votre
                 résorption.
             </p>
-            <h3 class="mt-2">
-                En une phrase, comment résumeriez-vous votre question ?
-            </h3>
             <form
                 class="flex items-center mt-2 space-x-2"
                 @submit="redirectToNewQuestion"
@@ -29,6 +26,7 @@
                     placeholder="Votre question ... "
                     v-model="question"
                     withoutMargin="true"
+                    label="En une phrase, comment résumeriez-vous votre question ?"
                 />
                 <Button size="sm">Demander</Button>
             </form>
