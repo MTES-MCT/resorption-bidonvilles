@@ -5,7 +5,7 @@
             class="inline-block p-4 h-full flex flex-col focus:outline-none focus:ring-2 ring-offset-2 ring-info"
         >
             <header>
-                <h1 class="text-lg font-bold">{{ name }}</h1>
+                <h3 class="text-lg font-bold">{{ name }}</h3>
                 <h2
                     v-if="
                         organization.abbreviation &&
