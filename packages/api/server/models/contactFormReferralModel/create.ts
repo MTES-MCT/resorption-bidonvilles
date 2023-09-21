@@ -1,12 +1,20 @@
+import { Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
+
+type ContactReferralCreateInput = {
+    reason: string,
+    reason_other?: string | null,
+    reason_word_of_mouth?: string | null,
+    fk_user?: number | null,
+};
 
 export default async ({
     reason,
     reason_other = null,
     reason_word_of_mouth = null,
     fk_user = null,
-}, transaction = undefined) => {
-    const result: any = await sequelize.query(
+}: ContactReferralCreateInput, transaction: Transaction = undefined): Promise<number> => {
+    const result = await sequelize.query(
         `INSERT INTO contact_form_referrals(
             reason,
             reason_other,
@@ -28,5 +36,8 @@ export default async ({
         },
     );
 
-    return result[0][0].id;
+    type ReturnValue = { id: number };
+    const rows: ReturnValue[] = (result[0] as unknown) as ReturnValue[];
+
+    return rows[0].id;
 };
