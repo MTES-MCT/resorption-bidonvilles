@@ -105,60 +105,68 @@ export default async (req: Request, res: Response, next): Promise<void> => {
         }
     }
 
-    if (request_type.includes('access-request') && is_actor) {
-        if (organization_category !== 'other') {
-            // create the user
-            let result: SerializedUser;
-            try {
-                result = await userService.create({
-                    last_name,
-                    first_name,
-                    email,
-                    phone,
-                    organization: req.body.organization_full
-                        ? req.body.organization_full.id
-                        : null,
-                    new_association: req.body.new_association === true,
-                    new_association_name: req.body.new_association_name || null,
-                    new_association_abbreviation:
-                        req.body.new_association_abbreviation || null,
-                    departement: req.body.departement || null,
-                    position: req.body.position,
-                    access_request_message,
-                });
-            } catch (error) {
-                res.status(500).send('Une erreur est survenue lors de l\'écriture en base de données');
-                return;
-            }
-
-            try {
-                const user = await userModel.findOne(result.id, { extended: true });
-                await accessRequestService.handleNewAccessRequest(user);
-
-                if (referral !== null) {
-                    await contactFormReferralModel.create({
-                        reason: referral,
-                        reason_other: referral_other,
-                        reason_word_of_mouth: referral_word_of_mouth,
-                        fk_user: user.id,
-                    });
-                }
-            } catch (err) {
-                next(err);
-            }
-
-            res.status(200).send(result);
+    if (request_type.includes('access-request') && is_actor && organization_category !== 'other') {
+        // create the user
+        let result: SerializedUser;
+        try {
+            result = await userService.create({
+                last_name,
+                first_name,
+                email,
+                phone,
+                organization: req.body.organization_full
+                    ? req.body.organization_full.id
+                    : null,
+                new_association: req.body.new_association === true,
+                new_association_name: req.body.new_association_name || null,
+                new_association_abbreviation:
+                    req.body.new_association_abbreviation || null,
+                departement: req.body.departement || null,
+                position: req.body.position,
+                access_request_message,
+            });
+        } catch (error) {
+            res.status(500).send('Une erreur est survenue lors de l\'écriture en base de données');
             return;
         }
+
+        try {
+            const user = await userModel.findOne(result.id, { extended: true });
+            await accessRequestService.handleNewAccessRequest(user);
+
+            if (referral !== null) {
+                await contactFormReferralModel.create({
+                    reason: referral,
+                    reason_other: referral_other,
+                    reason_word_of_mouth: referral_word_of_mouth,
+                    fk_user: user.id,
+                });
+            }
+        } catch (err) {
+            next(err);
+        }
+
+        res.status(200).send(result);
+        return;
     }
 
     try {
-        await sendEmailNewContactMessageToAdmins(emailData);
-        if (referral !== null) {
+        const isNewOrganization:boolean = request_type.includes('access-request') && is_actor && organization_category === 'other';
+        await sendEmailNewContactMessageToAdmins({
+            email: req.body.email,
+            phone: req.body.phone,
+            last_name: req.body.last_name,
+            first_name: req.body.first_name,
+            access_request_message: req.body.access_request_message,
+            objet: getObjetForContactMessage(request_type),
+            is_organization_other: isNewOrganization,
+            organization_other: isNewOrganization ? req.body.organization_other : '',
+        });
+        if (req.body.referral !== null) {
             await contactFormReferralModel.create({
-                reason: referral,
-                reason_other: referral_other,
-                reason_word_of_mouth: referral_word_of_mouth,
+                reason: req.body.referral,
+                reason_other: req.body.referral_other,
+                reason_word_of_mouth: req.body.referral_word_of_mouth,
             });
         }
     } catch (err) {

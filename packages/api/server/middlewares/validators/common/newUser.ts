@@ -99,7 +99,6 @@ export default (
         }),
 
     body('organization_other')
-        .if(isAUserCreationCallback)
         .trim()
         .custom((value, { req }) => {
             if (req.body.organization_category !== 'other') {
