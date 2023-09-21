@@ -6,27 +6,26 @@
         disabled && 'opacity-50 cursor-not-allowed'
     ]" :disabled="disabled || isLoading" :to="isLink && isInternalLink && !disabled ? href : null" :href="href"
         :is="isLink ? (isInternalLink && !disabled ? 'router-link' : 'a') : 'button'" :type="isLink ? null : type"
-        tabindex="0"
-        @click="onClick">
-        <div :class="[
+        tabindex="0" @click="onClick">
+        <span :class="[
             'flex',
             'items-center',
             iconPosition === 'right' ? 'flex-row-reverse' : 'flex-row',
             isLoading && 'invisible'
         ]">
-            <div v-if="icon || $slots.icon">
+            <span v-if="icon || $slots.icon">
                 <slot name="icon">
                     <Icon :icon="icon" />
                 </slot>
-            </div>
+            </span>
 
-            <div v-if="$slots.default" :class="`${iconPositionClasses} ${truncate ? 'truncate' : ''}`">
+            <span v-if="$slots.default" :class="`${iconPositionClasses} ${truncate ? 'truncate' : ''}`">
                 <slot></slot>
-            </div>
-        </div>
-        <div v-if="isLoading" class="absolute inset-0 flex justify-center items-center">
+            </span>
+        </span>
+        <span v-if="isLoading" class="absolute inset-0 flex justify-center items-center">
             <Icon icon="spinner" spin />
-        </div>
+        </span>
     </component>
 </template>
 
