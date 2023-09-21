@@ -1,8 +1,7 @@
 <template>
     <div id="plateforme">
         <img width="1024" height="322" class="full-width mx-auto"
-            src="~/assets/img/LandingPage/FirstSection/resorption-bidonvilles-dessin.jpg"
-            alt="Illustration dessinée d'un bidonville et de ses habitant(e)s" />
+            src="~/assets/img/LandingPage/FirstSection/resorption-bidonvilles-dessin.jpg" alt="" />
         <div class="pt-24">
             <div class="max-w-screen-sm mx-auto">
                 <h2 class="text-display-lg">
