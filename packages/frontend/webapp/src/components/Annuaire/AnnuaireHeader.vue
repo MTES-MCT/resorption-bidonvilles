@@ -3,7 +3,7 @@
         <section class="flex space-x-6 flex-1">
             <p><MiniCarte :location="mapLocation" /></p>
             <div>
-                <h1 class="text-3xl text-info font-bold">{{ title }}</h1>
+                <p class="text-3xl text-info font-bold">{{ title }}</p>
                 <p class="mt-2">
                     {{ directoryStore.total }} structure{{
                         directoryStore.total > 1 ? "s" : ""
