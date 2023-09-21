@@ -1,8 +1,8 @@
 <template>
     <div class="m-auto w-1/2 pb-10 text-center print:hidden">
-        <h1 class="text-lg xl:text-xl font-bold text-primary">
+        <h2 class="text-lg xl:text-xl font-bold text-primary">
             Rechercher un contact, un acteur, une structure...
-        </h1>
+        </h2>
         <ContentWrapper class="mt-3" size="medium">
             <div class="flex items-center space-x-2">
                 <InputCommunauteSearch
