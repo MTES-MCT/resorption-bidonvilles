@@ -41,7 +41,13 @@
       }
     },
     "video": {
-      "text": "Descoperiți Résorption-bidonvilles în 1 min"
+      "text": "Descoperiți Résorption-bidonvilles în 1 minut",
+      "transcription_title": "Arată transcrierea video",
+      "notranscription_title": "Ascunde transcrierea video",
+      "transcription1": "Platforma \"Résorption-Bidonvilles\" dispune de o hartă interactivă, care vă permite să căutați un sit după adresă.",
+      "transcription2": "Fișa sitului oferă acces la informații practice și actualizate, cum ar fi locația, caracteristicile, locuitorii, condițiile de viață și de mediu, procedurile judiciare și o listă a părților interesate.",
+      "transcription3": "Acest instrument de colaborare permite monitorizarea acțiunilor.",
+      "transcription4": "Instrumentul oferă, de asemenea, o zonă de resurse și un repertoriu al celor implicați în curățarea cartierelor sărace."
     }
   },
   "firstBanner": {

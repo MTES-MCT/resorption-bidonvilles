@@ -41,7 +41,13 @@
       }
     },
     "video": {
-      "text": "Get a preview of Résorption-bidonvilles in 1 min"
+      "text": "Get a preview of Résorption-bidonvilles in 1 minute",
+      "transcription_title": "Show video transcript",
+      "notranscription_title": "Hide video transcript",
+      "transcription1": "\"Resorption-Bidonvilles\" features an interactive map, enabling a site to be searched by address.",
+      "transcription2": "The site description gives access to practical, up-to-date information such as location, characteristics, inhabitants, living conditions and environment, legal proceedings, list of stakeholders.",
+      "transcription3": "This collaborative tool enables actions to be monitored.",
+      "transcription4": "It also offers a resource area and a directory of those involved in slum clearance."
     }
   },
   "firstBanner": {

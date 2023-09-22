@@ -21,16 +21,29 @@
             <div class="block md:hidden mb-4 text-display-lg font-bold">
                 {{ $t("landingPage.firstSection.video.text") }}
             </div>
-            <div class="md:w-1/2 md:mr-16 bg-gray-500">
-                <video preload="none" poster="~/assets/img/LandingPage/FirstSection/poster_video_landing.png" controls>
+            <div class="md:w-1/2 md:mr-16">
+                <video :aria-label="getAriaLabel($t('landingPage.firstSection.video.text'))" preload="none"
+                    poster="~/assets/img/LandingPage/FirstSection/poster_video_landing.png" controls>
                     <source src="~/assets/video/video_landing_720_no_sound.mp4" type="video/mp4" />
                     Votre navigateur ne supporte pas la balise video.
                 </video>
+                <button @click="toggleTranscription" class="mt-2 text-primary hover:underline cursor-pointer"
+                    aria-label="Afficher la transcription audio">
+                    <span v-if="!showTranscription">{{ $t("landingPage.firstSection.video.transcription_title") }}</span>
+                    <span v-if="showTranscription">{{ $t("landingPage.firstSection.video.notranscription_title") }}</span>
+                </button>
             </div>
-            <div class="hidden md:block w-1/2 text-display-lg font-bold">
+            <p class="hidden md:block w-1/2 text-display-lg font-bold">
                 {{ $t("landingPage.firstSection.video.text") }}
-            </div>
+            </p>
         </div>
+        <ul v-if="showTranscription" class="mt-4">
+            <li>{{ $t("landingPage.firstSection.video.transcription1") }}</li>
+            <li>{{ $t("landingPage.firstSection.video.transcription2") }}</li>
+            <li>{{ $t("landingPage.firstSection.video.transcription3") }}</li>
+            <li>{{ $t("landingPage.firstSection.video.transcription4") }}</li>
+        </ul>
+
 
         <div>
             <div class="md:grid md:grid-cols-3 gap-16 mt-16">
@@ -116,7 +129,16 @@ export default {
     data() {
         return {
             ctaPrendreEnMain,
+            showTranscription: false,
         };
     },
+    methods: {
+        toggleTranscription() {
+            this.showTranscription = !this.showTranscription;
+        },
+        getAriaLabel(label) {
+            return label + ",";
+        }
+    }
 };
 </script>
