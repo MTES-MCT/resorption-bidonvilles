@@ -41,7 +41,13 @@
       }
     },
     "video": {
-      "text": "Découvrir la plateforme Résorption-bidonvilles en 1 min"
+      "text": "Découvrir la plateforme Résorption-bidonvilles en une minute",
+      "transcription_title": "Afficher la transcription de la vidéo",
+      "notranscription_title": "Masquer la transcription de la vidéo",
+      "transcription1": "La plateforme Résorption-Bidonvilles propose une carte interactive, permettant une recherche de site par adresse.",
+      "transcription2": "La fiche du site donne accès à des données pratiques et actualisées: situation, caractéristiques, habitants, conditions de vie et environnement, procédures judiciaires, liste des intervenants.",
+      "transcription3": "Cet outil collaboratif permet de gérer les actions.",
+      "transcription4": "L'outil offre également un espace de ressources et un annuaire des acteurs de la résorption des bidonvilles."
     }
   },
   "firstBanner": {
