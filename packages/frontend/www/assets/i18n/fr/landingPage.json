@@ -96,6 +96,17 @@
       "bold": "Qu'est-ce qu'une résorption ?",
       "normal": "Un site est considéré comme résorbé si une solution pérenne en logement ou hébergement est mise en place pour 66 % des habitants du site."
     },
+    "map": {
+      "transcription_title": "Afficher la transcription de l'image",
+      "notranscription_title": "Masquer la transcription de l'image",
+      "title": "Carte de la répartition des bidonvilles en France métropolitaine,",
+      "subtitle": "Des bidonvilles sur 20 départements en France métropolitaine avec des ressortissants européens,",
+      "nord": "Départment du Nord, plus de 700 personnes,",
+      "ileDeFrance": "Région île de france, plus de 4700 personnes,",
+      "loireAtlantique": "Département de la Loire Atlantique, plus de 2500 personnes,",
+      "gironde": "Département de la Gironde, plus de 1200 personnes,",
+      "boucheDuRhone": "Département des Bouches-du-Rhône, plus de 1200 personnes,"
+    },
     "video": {
       "text": "Comprendre la résorption des bidonvilles en 2 minutes",
       "transcription_part1": "Aujourd'hui en France métropolitaine, plus de 16000 personnes, dont environ 5000 mineurs, pour la plupart ressortissants de l'Union européenne, vivent dans plus de 400 bidonvilles et campements.",

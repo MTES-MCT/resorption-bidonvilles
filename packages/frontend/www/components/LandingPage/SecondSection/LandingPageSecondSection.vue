@@ -44,16 +44,23 @@
                 }}</span><br />
                 {{ $t("landingPage.secondSection.thirdParagraph.normal") }}
             </p>
-
-            <img width="640" height="445" v-if="$i18n.locale === 'fr'" class="mt-20 w-full"
-                src="~/assets/img/LandingPage/SecondSection/map-fr.jpg"
-                alt="Illustration de la répartition des bidonvilles en France Métropolitaine" />
-            <img width="640" height="445" v-if="$i18n.locale === 'en'" class="mt-20 w-full"
-                src="~/assets/img/LandingPage/SecondSection/map-en.jpg" alt="Drawn illustration" />
-            <img width="640" height="445" v-if="$i18n.locale === 'bg'" class="mt-20 w-full"
-                src="~/assets/img/LandingPage/SecondSection/map-bg.jpg" alt="Drawn illustration" />
-            <img width="640" height="445" v-if="$i18n.locale === 'ro'" class="mt-20 w-full"
-                src="~/assets/img/LandingPage/SecondSection/map-ro.jpg" alt="Drawn illustration" />
+            <img width="640" height="445" class="mt-20 w-full" :src="slumMapImageName"
+                :alt="$t('landingPage.secondSection.map.title')" />
+            <button @click="toggleMapTranscription()" class="mt-2 text-primary hover:underline cursor-pointer"
+                :aria-label="`${showMapTranscription ? $t('landingPage.notranscription_title') : $t('landingPage.transcription_title')},`">
+                <span v-if="!showMapTranscription">{{ $t("landingPage.secondSection.map.transcription_title") }}</span>
+                <span v-if="showMapTranscription">{{ $t("landingPage.secondSection.map.notranscription_title")
+                }}</span>
+            </button>
+            <div v-if="showMapTranscription" class="mt-4 text-left">
+                <p class="font-bold mb-2">{{ $t("landingPage.secondSection.map.title") }}</p>
+                <p>{{ $t("landingPage.secondSection.map.subtitle") }}</p>
+                <p>{{ $t("landingPage.secondSection.map.nord") }}</p>
+                <p>{{ $t("landingPage.secondSection.map.ileDefrance") }}</p>
+                <p>{{ $t("landingPage.secondSection.map.loireAtlantique") }}</p>
+                <p>{{ $t("landingPage.secondSection.map.gironde") }}</p>
+                <p>{{ $t("landingPage.secondSection.map.boucheDuRhone") }}</p>
+            </div>
         </div>
         <div class="mt-20 md:flex md:flex-row items-center">
             <div class="block md:hidden mb-4 text-display-lg font-bold">
@@ -148,11 +155,27 @@ import { ref } from "vue";
 import LandingPageDataBlock from "./LandingPageDataBlock.vue";
 import LandingPageBilanBlock from "./LandingPageBilanBlock.vue";
 import { Button } from "@resorptionbidonvilles/ui";
+import { filename } from 'pathe/utils';
 
 const i18n = useI18n();
 const showTranscription = ref(false);
+const showMapTranscription = ref(false);
+
+const glob = import.meta.glob('~/assets/img/LandingPage/SecondSection/*.jpg', { eager: true })
+const images = Object.fromEntries(
+    Object.entries(glob).map(([key, value]) => [filename(key), value.default])
+)
 
 function toggleTranscription() {
     this.showTranscription = !this.showTranscription;
 }
+
+function toggleMapTranscription() {
+    this.showMapTranscription = !this.showMapTranscription;
+}
+
+const slumMapImageName = computed(() => {
+    return images[`map-${i18n.locale.value}`];
+});
+
 </script>
