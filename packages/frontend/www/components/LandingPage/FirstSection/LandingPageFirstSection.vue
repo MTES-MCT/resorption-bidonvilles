@@ -87,7 +87,7 @@
         </div>
         <div class="pt-24" v-if="$i18n.locale === 'fr'">
             <div class="max-w-screen-lg mx-auto">
-                <LandingCTABanner :img="ctaPrendreEnMain" alt="Illustration du wébinaire prise en main"
+                <LandingCTABanner :img="ctaPrendreEnMain" alt="Wébinaire prise en main, durée 45mn,"
                     href="https://www.evalandgo.com/f/72933/4pFjfpH19VHD2AZhU2ccYx">
                     <template v-slot:title>
                         Webinaire prise en main de
