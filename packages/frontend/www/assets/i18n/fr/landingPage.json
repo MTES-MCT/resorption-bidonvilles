@@ -38,16 +38,26 @@
       "3": {
         "text": "J’ai pu orienter la famille d’une personne que j’accompagne vers une maison des solidarités à partir de la localisation de leur bidonville.",
         "author": "Travailleur social au sein d'une association à Toulouse"
+      },
+      "videos": {
+        "1": {
+          "transcription_part1": "Il est question d'un outil qui puisse être utile sur le terrain. C'est vrai que dès sa mise en place, on a été en contact avec Madame Dubuc et on a perçu deux opportunités majeures:",
+          "transcription_part2": "- La première était de pouvoir faire remonter à nos tutelles les résultats des actions déployées en Haute-Savoie dans l'action sociale. On sait bien qu'on a besoin de travailler notre efficience autour de ça.",
+          "transcription_part3": "- L'autre aspect qui, pour nous, était vraiment intéressant et dont on a voulu saisir tout de suite, c'était d'améliorer les outils de reporting du service. Les améliorer à la fois pour diminuer la marge d'erreur: les tableaux Excel évoqués tout à l'heure par Madame LE MINOR, on connaît et on sait bien qu' on passe d'un tableau à l'autre et puis, au bout du dixième, on n'arrive plus à trouver pourquoi on n'a plus les mêmes chiffres. Cet outil est un outil de reporting fluide et simplifié, je tenais à le souligner. Comme je le disais tout à l'heure, au niveau visuel de la plateforme, il y a une vraie simplicité d'utilisation, avec des informations qui sont dans tous les cas des informations de base dont on a tous besoin et qu'on peut ensuite partager."
+        },
+        "2": {
+          "transcription_part1": "[C'est] effectivement une centralisation de l'information. On a un seul outil partagé. On avait, avant, chacun un tableau Excel qu'on se partageait, qu'on ne partageait pas, dont on ne savait plus si c'était la dernière version ou pas, et quelle était la dernière version. Chacun y ajoutait des choses par rapport à sa problématique.",
+          "transcription_part2": "Là, au moins, on a tous les éléments sur une même plateforme. Je ne vais pas vous cacher qu'au départ, je me disais, \"Bon bein, super, ça va être le truc de la DIHAL\".",
+          "transcription_part3": "Ca m'évite, moi, de faire mes propres tableaux pour rendre compte de notre activité. Mais maintenant c'est vraiment un outil qui est partagé avec les principaux contributeurs et acteurs de la stratégie locale."
+        }
       }
     },
     "video": {
       "text": "Découvrir la plateforme Résorption-bidonvilles en une minute",
-      "transcription_title": "Afficher la transcription de la vidéo",
-      "notranscription_title": "Masquer la transcription de la vidéo",
-      "transcription1": "La plateforme Résorption-Bidonvilles propose une carte interactive, permettant une recherche de site par adresse.",
-      "transcription2": "La fiche du site donne accès à des données pratiques et actualisées: situation, caractéristiques, habitants, conditions de vie et environnement, procédures judiciaires, liste des intervenants.",
-      "transcription3": "Cet outil collaboratif permet de gérer les actions.",
-      "transcription4": "L'outil offre également un espace de ressources et un annuaire des acteurs de la résorption des bidonvilles."
+      "transcription_part1": "La plateforme Résorption-Bidonvilles propose une carte interactive, permettant une recherche de site par adresse.",
+      "transcription_part2": "La fiche du site donne accès à des données pratiques et actualisées: situation, caractéristiques, habitants, conditions de vie et environnement, procédures judiciaires, liste des intervenants.",
+      "transcription_part3": "Cet outil collaboratif permet de gérer les actions.",
+      "transcription_part4": "L'outil offre également un espace de ressources et un annuaire des acteurs de la résorption des bidonvilles."
     }
   },
   "firstBanner": {
@@ -88,7 +98,22 @@
       "normal": "Un site est considéré comme résorbé si une solution pérenne en logement ou hébergement est mise en place pour 66 % des habitants du site."
     },
     "video": {
-      "text": "Comprendre la résorption des bidonvilles en 2 minutes"
+      "text": "Comprendre la résorption des bidonvilles en 2 minutes",
+      "transcription_part1": "Aujourd'hui en France métropolitaine, plus de 16000 personnes, dont environ 5000 mineurs, pour la plupart ressortissants de l'Union européenne, vivent dans plus de 400 bidonvilles et campements.",
+      "transcription_part2": "Pour parvenir à une résorption durable des bidonvilles, des solutions existent:",
+      "transcription_part3": "- des actions partenariales à l'échelle d'un territoire, entre l'état, les collectivités locales et les associations,",
+      "transcription_part4": "- des interventions dès l'implantation des sites et jusqu'à leur disparition, ou encore",
+      "transcription_part5": "- l'accompagnement vers l'insertion des habitants par l'accession au logement, à l'emploi, à l'éducation ou à la santé, ",
+      "transcription_part6": "dans un cadre contractuel et dans le respect des lois de la république.",
+      "transcription_part7": "En janvier 2018, le gouvernement a donné une nouvelle impulsion à cette politique en fixant un cadre d'action renouvelé, avec un objectif clair de résorption des bidonvilles. Plusieurs millions par an sont consacrés au soutien des stratégies territoriales et deux millions d'euros par an sont alloués à des actions en matière de respect des droits des enfants.",
+      "transcription_part8": "Pour renforcer cette impulsion et appuyer les territoires dans leur objectif de résorption, le gouvernement a décidé de lancer la plateforme \"Résorption-Bidonvilles\". Cette nouvelle plateforme permet aux préfectures en charge du pilotage local des stratégies de disposer d'une cartographie des implantations et de suivre leurs évolutions, de suivre de manière simple et rapide le travail de tous les opérateurs intervenant auprès des habitants, de valoriser les actions conduites sur un site et de partager les bonnes pratiques.",
+      "transcription_part9": "Alors que vous soyez un agent de l'état, une collectivité territoriale ou une association, participez et faites connaître vos actions pour que tous ensemble, nous accompagnons efficacement les habitants des bidonvilles et atteignons l'objectif de résorption.",
+      "transcription_part10": "Affichage des logos:",
+      "transcription_part11": "- du ministère des solidarités et la santé,",
+      "transcription_part12": "- de la fabrique numérique,",
+      "transcription_part13": "- de la délégation interministérielle à l'hébe,rgement et à l'accès au logement,",
+      "transcription_part14": "- de la stratégie de prévention et de lutte contre la pauvreté.",
+      "transcription_part15": "Affichage du logo \"Résorption-Bidonvilles\": lien vers https://www.resorption-bidonvilles.beta.gouv.fr"
     },
     "bilan": {
       "title": "Les actions en chiffres",
@@ -166,5 +191,7 @@
     "cta": "Je m'abonne",
     "link": "Voir la lettre",
     "viewAll": "Voir toutes les lettres d'information"
-  }
+  },
+  "transcription_title": "Afficher la transcription de la vidéo",
+  "notranscription_title": "Masquer la transcription de la vidéo"
 }

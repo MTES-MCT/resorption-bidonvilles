@@ -22,26 +22,26 @@
                 {{ $t("landingPage.firstSection.video.text") }}
             </div>
             <div class="md:w-1/2 md:mr-16">
-                <video :aria-label="getAriaLabel($t('landingPage.firstSection.video.text'))" preload="none"
+                <video :aria-label="`${$t('landingPage.firstSection.video.text')},`" preload="none"
                     poster="~/assets/img/LandingPage/FirstSection/poster_video_landing.png" controls>
                     <source src="~/assets/video/video_landing_720_no_sound.mp4" type="video/mp4" />
                     Votre navigateur ne supporte pas la balise video.
                 </video>
                 <button @click="toggleTranscription" class="mt-2 text-primary hover:underline cursor-pointer"
-                    aria-label="Afficher la transcription audio">
-                    <span v-if="!showTranscription">{{ $t("landingPage.firstSection.video.transcription_title") }}</span>
-                    <span v-if="showTranscription">{{ $t("landingPage.firstSection.video.notranscription_title") }}</span>
+                    :aria-label="`${showTranscription ? $t('landingPage.notranscription_title') : $t('landingPage.transcription_title')},`">
+                    <span v-if="!showTranscription">{{ $t("landingPage.transcription_title") }}</span>
+                    <span v-if="showTranscription">{{ $t("landingPage.notranscription_title") }}</span>
                 </button>
             </div>
             <p class="hidden md:block w-1/2 text-display-lg font-bold">
                 {{ $t("landingPage.firstSection.video.text") }}
             </p>
         </div>
-        <ul v-if="showTranscription" class="mt-4">
-            <li>{{ $t("landingPage.firstSection.video.transcription1") }}</li>
-            <li>{{ $t("landingPage.firstSection.video.transcription2") }}</li>
-            <li>{{ $t("landingPage.firstSection.video.transcription3") }}</li>
-            <li>{{ $t("landingPage.firstSection.video.transcription4") }}</li>
+        <ul v-if="showTranscription" tabindex="0" class="mt-4">
+            <li>{{ $t("landingPage.firstSection.video.transcription_part1") }}</li>
+            <li>{{ $t("landingPage.firstSection.video.transcription_part2") }}</li>
+            <li>{{ $t("landingPage.firstSection.video.transcription_part3") }}</li>
+            <li>{{ $t("landingPage.firstSection.video.transcription_part4") }}</li>
         </ul>
 
 
@@ -136,9 +136,6 @@ export default {
         toggleTranscription() {
             this.showTranscription = !this.showTranscription;
         },
-        getAriaLabel(label) {
-            return label + ",";
-        }
     }
 };
 </script>

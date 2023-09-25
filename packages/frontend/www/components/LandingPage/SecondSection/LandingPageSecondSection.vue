@@ -60,9 +60,9 @@
             <div class="block md:hidden mb-4 text-display-lg font-bold">
                 {{ $t("landingPage.secondSection.video.text") }}
             </div>
-            <div class="md:w-1/2 md:mr-16 bg-gray-500">
-                <video preload="none" poster="~/assets/img/LandingPage/SecondSection/poster_rb_connaitre_partager_agir.png"
-                    controls>
+            <div class="md:w-1/2 md:mr-16">
+                <video :aria-label="`${$t('landingPage.secondSection.video.text')},`" preload="none"
+                    poster="~/assets/img/LandingPage/SecondSection/poster_rb_connaitre_partager_agir.png" controls>
                     <source src="~/assets/video/rb_connaitre_partager_agir_720.mp4" type="video/mp4" />
                     <track
                         :label="$t('french')"
@@ -72,10 +72,33 @@
                     />
                     Votre navigateur ne supporte pas la balise video.
                 </video>
+                <button @click="toggleTranscription()" class="mt-2 text-primary hover:underline cursor-pointer"
+                    :aria-label="`${showTranscription ? $t('landingPage.notranscription_title') : $t('landingPage.transcription_title')},`">
+                    <span v-if="!showTranscription">{{ $t("landingPage.transcription_title") }}</span>
+                    <span v-if="showTranscription">{{ $t("landingPage.notranscription_title")
+                    }}</span>
+                </button>
+                <div v-if="showTranscription" class="mt-4 text-left">
+                    <p>{{ $t("landingPage.secondSection.video.transcription_part1") }}</p>
+                    <p>{{ $t("landingPage.secondSection.video.transcription_part2") }}</p>
+                    <p>{{ $t("landingPage.secondSection.video.transcription_part3") }}</p>
+                    <p>{{ $t("landingPage.secondSection.video.transcription_part4") }}</p>
+                    <p>{{ $t("landingPage.secondSection.video.transcription_part5") }}</p>
+                    <p>{{ $t("landingPage.secondSection.video.transcription_part6") }}</p>
+                    <p>{{ $t("landingPage.secondSection.video.transcription_part7") }}</p>
+                    <p>{{ $t("landingPage.secondSection.video.transcription_part8") }}</p>
+                    <p>{{ $t("landingPage.secondSection.video.transcription_part9") }}</p>
+                    <p>{{ $t("landingPage.secondSection.video.transcription_part10") }}</p>
+                    <p>{{ $t("landingPage.secondSection.video.transcription_part11") }}</p>
+                    <p>{{ $t("landingPage.secondSection.video.transcription_part12") }}</p>
+                    <p>{{ $t("landingPage.secondSection.video.transcription_part13") }}</p>
+                    <p>{{ $t("landingPage.secondSection.video.transcription_part14") }}</p>
+                    <p>{{ $t("landingPage.secondSection.video.transcription_part15") }}</p>
+                </div>
             </div>
-            <div class="hidden md:block w-1/2 text-display-lg font-bold">
+            <p class="hidden md:block w-1/2 text-display-lg font-bold">
                 {{ $t("landingPage.secondSection.video.text") }}
-            </div>
+            </p>
         </div>
 
         <div class="mt-20 max-w-screen-sm mx-auto">
@@ -128,9 +151,15 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import LandingPageDataBlock from "./LandingPageDataBlock.vue";
 import LandingPageBilanBlock from "./LandingPageBilanBlock.vue";
 import { Button } from "@resorptionbidonvilles/ui";
 
 const i18n = useI18n();
+const showTranscription = ref(false);
+
+function toggleTranscription() {
+    this.showTranscription = !this.showTranscription;
+}
 </script>
