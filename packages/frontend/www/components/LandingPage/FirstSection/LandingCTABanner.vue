@@ -5,9 +5,9 @@
                 <img width="260" height="146" class="m-4" :src="img" :alt="alt" />
             </div>
             <div class="flex-shrink-0 lg:flex-shrink px-8 py-2 lg:py-4 lg:px-4">
-                <div class="tracking-wide text-display-md font-bold text-primary">
+                <p class="tracking-wide text-display-md font-bold text-primary">
                     <slot name="title"></slot>
-                </div>
+                </p>
                 <p class="mt-2 text-md">
                     <slot name="content"></slot>
                 </p>
