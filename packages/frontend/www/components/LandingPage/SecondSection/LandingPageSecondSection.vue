@@ -19,32 +19,31 @@
                 }}</span>
             </p>
 
-            <div class="mt-8">
+            <p class="mt-8">
                 <span class="font-bold">{{
                     $t("landingPage.secondSection.firstParagraph.bold")
                 }}</span>
                 {{ $t("landingPage.secondSection.firstParagraph.normal") }}
-            </div>
-            <div>
+                <br />
                 <a class="link"
                     href="https://www.ecologie.gouv.fr/resorption-des-campements-illicites-et-des-bidonvilles">{{
                         $t("landingPage.secondSection.firstParagraph.link")
                     }}</a>
-            </div>
+            </p>
 
-            <div class="mt-8">
+            <p class="mt-8">
                 <span class="font-bold">{{
                     $t("landingPage.secondSection.secondParagraph.bold")
                 }}</span><br />
                 {{ $t("landingPage.secondSection.secondParagraph.normal") }}
-            </div>
+            </p>
 
-            <div class="mt-8" v-if="$t('landingPage.secondSection.thirdParagraph')">
+            <p class="mt-8" v-if="$t('landingPage.secondSection.thirdParagraph')">
                 <span class="font-bold">{{
                     $t("landingPage.secondSection.thirdParagraph.bold")
                 }}</span><br />
                 {{ $t("landingPage.secondSection.thirdParagraph.normal") }}
-            </div>
+            </p>
 
             <img width="640" height="445" v-if="$i18n.locale === 'fr'" class="mt-20 w-full"
                 src="~/assets/img/LandingPage/SecondSection/map-fr.jpg"
