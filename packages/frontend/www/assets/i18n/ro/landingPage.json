@@ -42,12 +42,10 @@
     },
     "video": {
       "text": "Descoperiți Résorption-bidonvilles în 1 minut",
-      "transcription_title": "Arată transcrierea video",
-      "notranscription_title": "Ascunde transcrierea video",
-      "transcription1": "Platforma \"Résorption-Bidonvilles\" dispune de o hartă interactivă, care vă permite să căutați un sit după adresă.",
-      "transcription2": "Fișa sitului oferă acces la informații practice și actualizate, cum ar fi locația, caracteristicile, locuitorii, condițiile de viață și de mediu, procedurile judiciare și o listă a părților interesate.",
-      "transcription3": "Acest instrument de colaborare permite monitorizarea acțiunilor.",
-      "transcription4": "Instrumentul oferă, de asemenea, o zonă de resurse și un repertoriu al celor implicați în curățarea cartierelor sărace."
+      "transcription_part1": "Platforma \"Résorption-Bidonvilles\" dispune de o hartă interactivă, care vă permite să căutați un sit după adresă.",
+      "transcription_part2": "Fișa sitului oferă acces la informații practice și actualizate, cum ar fi locația, caracteristicile, locuitorii, condițiile de viață și de mediu, procedurile judiciare și o listă a părților interesate.",
+      "transcription_part3": "Acest instrument de colaborare permite monitorizarea acțiunilor.",
+      "transcription_part4": "Instrumentul oferă, de asemenea, o zonă de resurse și un repertoriu al celor implicați în curățarea cartierelor sărace."
     }
   },
   "firstBanner": {
@@ -84,7 +82,22 @@
     },
     "thirdParagraph": "",
     "video": {
-      "text": "Înțelegerea resorbției de bidonville în 2 minute"
+      "text": "Înțelegerea resorbției de bidonville în 2 minute",
+      "transcription_part1": "În prezent, în Franța metropolitană, peste 16.000 de persoane, dintre care aproximativ 5.000 de minori, majoritatea cetățeni ai Uniunii Europene, trăiesc în peste 400 de barăci și tabere",
+      "transcription_part2": "Există soluții pentru reducerea durabilă a barăcilor:",
+      "transcription_part3": "- acțiuni de parteneriat la nivel local, între stat, autorități locale și asociații,",
+      "transcription_part4": "- acțiuni din momentul în care se înființează siturile până la dispariția lor, sau",
+      "transcription_part5": "- sprijin pentru integrarea rezidenților prin accesul la locuințe, locuri de muncă, educație sau sănătate,",
+      "transcription_part6": "într-un cadru contractual și în conformitate cu legile Republicii",
+      "transcription_part7": "În ianuarie 2018, guvernul a dat un nou impuls acestei politici prin stabilirea unui cadru de acțiune reînnoit, cu obiectivul clar de a reduce numărul de barăci. Mai multe milioane de euro pe an sunt dedicate susținerii strategiilor teritoriale și două milioane de euro pe an sunt alocate acțiunilor privind respectarea drepturilor copiilor.",
+      "transcription_part8": "Pentru a consolida acest impuls și pentru a sprijini autoritățile locale în eforturile lor de reducere a numărului de barăci, guvernul a decis să lanseze platforma \"Resorption-Bidonvilles\". Această nouă platformă va permite prefecturilor însărcinate cu pilotarea strategiilor locale să dispună de o hartă a așezărilor și să monitorizeze evoluția acestora, să urmărească rapid și ușor activitatea tuturor operatorilor care lucrează cu locuitorii, să prezinte acțiunile desfășurate pe un sit și să facă schimb de bune practici",
+      "transcription_part9": "Așadar, fie că sunteți un funcționar public, o autoritate locală sau o asociație, implicați-vă și faceți publice acțiunile dumneavoastră pentru ca împreună să putem oferi un sprijin eficient locuitorilor din cartierele de barăci și să atingem obiectivul de eliminare a barăcilor",
+      "transcription_part10": "Afișarea logo-urilor:",
+      "transcription_part11": "- din partea Ministerului Solidarității și Sănătății,",
+      "transcription_part12": "- de la fabrica digitală",
+      "transcription_part13": "- de la Delegația interministerială pentru locuințe și acces la locuințe",
+      "transcription_part14": "- de la strategia de prevenire și combatere a sărăciei",
+      "transcription_part15": "afișarea logo-ului \"Résorption-Bidonvilles\": link către https://www.resorption-bidonvilles.beta.gouv.fr"
     },
     "bilan": {
       "title": "Acţiunile desfăşurate in cifre",
@@ -162,5 +175,7 @@
     "cta": "Mă abonez",
     "link": "",
     "viewAll": ""
-  }
+  },
+  "transcription_title": "Arată transcrierea video",
+  "notranscription_title": "Ascunde transcrierea video"
 }
