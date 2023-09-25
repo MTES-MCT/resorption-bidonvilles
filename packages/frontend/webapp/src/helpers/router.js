@@ -479,7 +479,7 @@ router.beforeEach((to) => {
     // changelog requirement
     if (
         configStore.config?.changelog?.length > 0 &&
-        to.path !== "/nouvelle-version"
+        !["/nouvelle-version", "/signature-charte-engagement"].includes(to.path)
     ) {
         const navigationStore = useNavigationStore();
         navigationStore.entrypoint = to.fullPath;
