@@ -82,6 +82,17 @@
       "normal": "A slum is an area that usually lacks basic services (water, electricity, waste management) and is illegally occupied by several families."
     },
     "thirdParagraph": "",
+    "map": {
+      "transcription_title": "Show image transcription",
+      "notranscription_title": "Hide image transcription",
+      "title": "Map of shanty towns in mainland France,",
+      "subtitle": "Slums in 20 departments in mainland France with european union people,",
+      "nord": "Nord, more than 700 people,",
+      "ileDeFrance": "île de france, more than 4700 people,",
+      "loireAtlantique": "Loire Atlantique, more than 2500 people,",
+      "gironde": "Gironde, more than 1200 people,",
+      "boucheDuRhone": "Bouches-du-Rhône, more than 1200 people,"
+    },
     "video": {
       "text": "Understanding slum clearance in 2 minutes",
       "transcription_part1": "Today in mainland France, more than 16,000 people, including around 5,000 minors, most of them European Union nationals, live in more than 400 shanty towns and camps",
