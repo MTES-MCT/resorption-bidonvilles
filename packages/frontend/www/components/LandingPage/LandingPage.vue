@@ -27,8 +27,7 @@
         </LandingPageBanner>
         <CreditWrapper credit="© Ville de Strasbourg">
             <img width="1440" class="h-128 w-full object-cover object-top"
-                src="~/assets/img/LandingPage/resorption-bidonvilles-2.jpg"
-                alt="Photo d'un espace temporaire d'accompagnement" />
+                src="~/assets/img/LandingPage/resorption-bidonvilles-2.jpg" alt="" />
         </CreditWrapper>
 
         <!-- third section -->
