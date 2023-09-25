@@ -81,6 +81,17 @@
       "normal": "Un bidonville este un teren, un maidan sau o clădire construită care în general e lipsită de servicii de bază (apă, electricitate, gestionarea deșeurilor) și ocupată ilegal de mai multe familii. Un bidonville mai est denumit si „plaț” în limbaj familiar."
     },
     "thirdParagraph": "",
+    "map": {
+      "transcription_title": "Vezi transcrierea imaginii",
+      "notranscription_title": "Ascundeți transcrierea imaginii",
+      "title": "Hartă a mahalalelor din Franța continentală,",
+      "subtitle": "Platzurilor în 20 de departamente in Franța metropolitană,",
+      "nord": "Nord, peste 700 persoane,",
+      "ileDeFrance": "île de france, peste 4700 persoane,",
+      "loireAtlantique": "Loire Atlantique, peste 2500 persoane,",
+      "gironde": "Gironde, peste 1200 persoane,",
+      "boucheDuRhone": "Bouches-du-Rhône, peste 1200 persoane,"
+    },
     "video": {
       "text": "Înțelegerea resorbției de bidonville în 2 minute",
       "transcription_part1": "În prezent, în Franța metropolitană, peste 16.000 de persoane, dintre care aproximativ 5.000 de minori, majoritatea cetățeni ai Uniunii Europene, trăiesc în peste 400 de barăci și tabere",
