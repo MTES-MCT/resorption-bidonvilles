@@ -18,9 +18,9 @@
             </div>
         </div>
         <div class="mt-20 md:flex md:flex-row items-center">
-            <div class="block md:hidden mb-4 text-display-lg font-bold">
+            <p class="block md:hidden mb-4 text-display-lg font-bold">
                 {{ $t("landingPage.firstSection.video.text") }}
-            </div>
+            </p>
             <div class="md:w-1/2 md:mr-16">
                 <video :aria-label="`${$t('landingPage.firstSection.video.text')},`" preload="none"
                     poster="~/assets/img/LandingPage/FirstSection/poster_video_landing.png" controls>
