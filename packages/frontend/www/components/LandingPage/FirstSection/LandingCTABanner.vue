@@ -14,7 +14,7 @@
             </div>
             <div class="lg:mt-6 flex-shrink-0 px-8 py-2 lg:p-8">
                 <a :href="href" target="_blank">
-                    <Button class="my-2" variant="primary">Je m'inscris</Button>
+                    <Button :aria-label="`${alt} - Je m'inscris,`" class="my-2" variant="primary">Je m'inscris</Button>
                 </a>
             </div>
         </div>
