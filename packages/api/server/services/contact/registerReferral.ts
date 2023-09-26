@@ -1,5 +1,5 @@
 import contactFormReferralModel from '#server/models/contactFormReferralModel';
-import { ContactServiceReferralData } from '#root/types/services/contactService.d';
+import { ContactServiceReferralData } from '#root/types/services/ContactService.d';
 
 export default (data: ContactServiceReferralData): Promise<number> => contactFormReferralModel.create({
     reason: data.referral,
