@@ -1,5 +1,5 @@
 import actionService from '#server/services/action/actionService';
-import userService from '#server/services/userService';
+import userService from '#server/services/user/index';
 
 const ERRORS = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },

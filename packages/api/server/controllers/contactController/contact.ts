@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import userService from '#server/services/userService';
+import userService from '#server/services/user/index';
 import contactService from '#server/services/contact/index';
 import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import { ContactBody } from '#root/types/inputs/ContactBody.d';

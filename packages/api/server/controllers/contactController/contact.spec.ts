@@ -18,7 +18,7 @@ const contactService = {
     registerReferral: sandbox.stub(),
 };
 
-rewiremock('#server/services/userService').with(userService);
+rewiremock('#server/services/user/index').with(userService);
 rewiremock('#server/services/contact').with(contactService);
 
 rewiremock.enable();
