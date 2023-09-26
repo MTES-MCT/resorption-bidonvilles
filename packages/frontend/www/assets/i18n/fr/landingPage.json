@@ -17,6 +17,8 @@
       "exchange": "Des échanges facilités entre les acteurs"
     },
     "before": "Avant",
+    "beforeImageTranscription": "Ici, s'affiche la transcription de l'image \"Avant\"",
+    "afterImageTranscription": "Ici, s'affiche la transcription de l'image \"Après\"",
     "after": "Après",
     "context": {
       "title_part1": "La plateforme numérique",
@@ -204,5 +206,7 @@
     "viewAll": "Voir toutes les lettres d'information"
   },
   "transcription_title": "Afficher la transcription de la vidéo",
-  "notranscription_title": "Masquer la transcription de la vidéo"
+  "notranscription_title": "Masquer la transcription de la vidéo",
+  "img_transcription_title": "Afficher la transcription de l'image",
+  "img_notranscription_title": "Masquer la transcription de l'image"
 }

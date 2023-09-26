@@ -25,6 +25,8 @@
     },
     "before": "Înainte",
     "after": "După",
+    "beforeImageTranscription": "Aceasta este transcrierea imaginii \"Înainte\"",
+    "afterImageTranscription": "Aceasta este transcrierea imaginii \"După\"",
     "feedback": {
       "title": "Mărturii ale utilizatorilor",
       "1": {
@@ -189,5 +191,7 @@
     "viewAll": ""
   },
   "transcription_title": "Arată transcrierea video",
-  "notranscription_title": "Ascunde transcrierea video"
+  "notranscription_title": "Ascunde transcrierea video",
+  "img_transcription_title": "Arată transcrierea imaginii",
+  "img_notranscription_title": "Ascundeți transcrierea imaginii"
 }
