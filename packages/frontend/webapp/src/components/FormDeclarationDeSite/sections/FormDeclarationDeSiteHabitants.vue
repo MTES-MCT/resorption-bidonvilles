@@ -55,8 +55,7 @@
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
 import { useFormValues } from "vee-validate";
-import { Fieldset } from "@resorptionbidonvilles/ui";
-import { InputLabel } from "@resorptionbidonvilles/ui";
+import { Fieldset, InputLabel } from "@resorptionbidonvilles/ui";
 import FormSection from "@/components/FormSection/FormSection.vue";
 import InputPopulation from "../inputs/FormDeclarationDeSiteInputPopulation.vue";
 import InputSocialOrigins from "../inputs/FormDeclarationDeSiteInputSocialOrigins.vue";
