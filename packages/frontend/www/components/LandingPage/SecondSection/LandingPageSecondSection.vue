@@ -164,13 +164,13 @@ import { Button } from "@resorptionbidonvilles/ui";
 import { filename } from 'pathe/utils';
 
 const i18n = useI18n();
-const showTranscription = ref(false);
-const showMapTranscription = ref(false);
+let showTranscription = ref(false);
+let showMapTranscription = ref(false);
 
 const glob = import.meta.glob('~/assets/img/LandingPage/SecondSection/*.jpg', { eager: true })
 const images = Object.fromEntries(
     Object.entries(glob).map(([key, value]) => [filename(key), value.default])
-)
+);
 
 function toggleTranscription() {
     this.showTranscription = !this.showTranscription;
