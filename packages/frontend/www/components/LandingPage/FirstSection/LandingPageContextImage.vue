@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="text-secondary text-display-md font-bold">{{ label }}</div>
+        <p class="text-secondary text-display-md font-bold">{{ label }}</p>
         <slot />
     </div>
 </template>
