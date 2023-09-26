@@ -25,6 +25,8 @@
     },
     "before": "Преди",
     "after": "След ",
+    "beforeImageTranscription": "Това е транскрипцията на изображението \"Преди\"",
+    "afterImageTranscription": "Това е транскрипцията на изображението \"След\"",
     "feedback": {
       "title": "Препоръки на потребителите",
       "1": {
@@ -188,5 +190,7 @@
     "viewAll": ""
   },
   "transcription_title": "Показване на видео транскрипция",
-  "notranscription_title": "Скриване на видеозаписа"
+  "notranscription_title": "Скриване на видеозаписа",
+  "img_transcription_title": "Покажи транскрипцията на изображението",
+  "img_notranscription_title": "Скриване на транскрипцията на изображението"
 }

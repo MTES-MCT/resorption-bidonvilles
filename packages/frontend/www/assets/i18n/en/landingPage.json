@@ -18,6 +18,8 @@
     },
     "before": "Before",
     "after": "After",
+    "beforeImageTranscription": "This is the transcript of the \"Before\" image",
+    "afterImageTranscription": "This is the transcript of the \"After\" image",
     "context": {
       "title_part1": "",
       "title_part2": "Résorption-bidonvilles",
@@ -188,5 +190,7 @@
     "viewAll": ""
   },
   "transcription_title": "Show video transcript",
-  "notranscription_title": "Hide video transcript"
+  "notranscription_title": "Hide video transcript",
+  "img_transcription_title": "Show image transcript",
+  "img_notranscription_title": "Hide image transcript"
 }
