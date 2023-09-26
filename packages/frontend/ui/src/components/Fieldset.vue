@@ -8,7 +8,6 @@
     </fieldset>
 </template>
 <script setup>
-import { toRefs } from "vue";
 import { MandatoryStar } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
