@@ -1,4 +1,4 @@
-import permissionModel from '#server/models/permissionModel';
+import permissionModel from '#server/models/permissionModel/index';
 import { Permissions } from '#server/models/permissionModel/types/Permissions.d';
 
 export default async (userId: number): Promise<Permissions> => {
