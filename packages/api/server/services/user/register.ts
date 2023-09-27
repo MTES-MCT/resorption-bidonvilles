@@ -1,6 +1,6 @@
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import ServiceError from '#server/errors/ServiceError';
 import accessRequestService from '#server/services/accessRequest/accessRequestService';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import { ContactBody } from '#root/types/inputs/ContactBody.d';
 import create from './create';
 
@@ -28,6 +28,7 @@ export default async (data: ContactBody): Promise<SerializedUser> => {
         await accessRequestService.handleNewAccessRequest(user);
     } catch (error) {
         // @todo register this error to Sentry
+        // @todo: générer une transaction et conditionner le commit de la transaction à la réussite de handleNewAccessRequest
     }
 
     return user;
