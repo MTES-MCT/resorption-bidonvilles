@@ -102,7 +102,7 @@ const router = createRouter({
             path: "/acces",
             component: () => import("@/views/ListeAccesView.vue"),
             meta: {
-                title: "Afficher la liste des comptes",
+                title: "Consulter la liste des comptes",
                 authRequirement: "signedIn",
                 navTab: "administration",
                 permissions: ["user.list"],
@@ -175,7 +175,7 @@ const router = createRouter({
             path: "/chargement",
             component: () => import("@/views/ChargementView.vue"),
             meta: {
-                title: "Chargement de la page en cours",
+                title: "Chargement de la plateforme en cours",
                 analyticsIgnore: true,
                 authRequirement: "signedIn",
                 configRequired: false,
@@ -186,7 +186,7 @@ const router = createRouter({
             path: "/annuaire",
             component: () => import("@/views/AnnuaireView.vue"),
             meta: {
-                title: "Visualiser la liste des structures",
+                title: "Consulter l'annuaire",
                 authRequirement: "signedIn",
                 navTab: "communaute",
                 communauteTab: "annuaire",
@@ -468,7 +468,7 @@ router.setHashWithoutScroll = (hash) => {
     });
 };
 
-router.beforeEach((to) => {
+router.beforeEach((to, from) => {
     currentRouteIsBacked = window.popStateDetected === true;
     window.popStateDetected = false;
 
@@ -540,7 +540,11 @@ router.beforeEach((to) => {
     }
 
     // Update html title element
-    setDocumentTitle(to.meta.title);
+    // avoid re-setting the title if only the hash changed (sometimes the view customizes the title, we don't want
+    // to override that by re-setting the title when scrolling through the page)
+    if (from.path !== to.path) {
+        setDocumentTitle(to.meta.title);
+    }
 });
 
 export function setDocumentTitle(title) {
