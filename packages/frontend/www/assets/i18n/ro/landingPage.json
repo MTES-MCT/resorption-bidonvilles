@@ -5,7 +5,7 @@
   },
   "hero": {
     "title": "Acționăm pentru resorbția de bidonville",
-    "subtitle": "Puneți o întrebare sau solicitați accesul",
+    "subtitle": "Puneți o întrebare",
     "review": "platz resorbite în",
     "moreThan": "Peste",
     "people": "de persoane relocate"
@@ -46,7 +46,8 @@
   },
   "firstBanner": {
     "text": "Actori ai resorbției de bidonville, partajați și faceţi cunoscute acțiunile voastre",
-    "cta": "Solicitaţi accesul"
+    "cta": "Solicitaţi accesul",
+    "ctaContact": "Contactaţi-ne"
   },
   "secondSection": {
     "title": "Care este politica de modernizare a mahalalelor?",

@@ -9,6 +9,10 @@ Objet : {{var:message.objet}}
 {{var:message.phone}}
 Message :
 {{var:message.access_request_message}}
+{% if var:message.is_organization_other %}
+Nom de la structure à créer :
+{{var:message.organization_other}}
+{% endif %}
 
 Cordialement,
 L'équipe Résorption-bidonvilles

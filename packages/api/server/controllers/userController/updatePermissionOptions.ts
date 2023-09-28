@@ -1,4 +1,4 @@
-import userService from '#server/services/user';
+import userService from '#server/services/user/index';
 
 const ERROR_RESPONSES = {
     insert_failed: 'Les options n\'ont pas pu être enregistrées',

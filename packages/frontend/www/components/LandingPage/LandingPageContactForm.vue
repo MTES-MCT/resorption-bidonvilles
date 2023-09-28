@@ -1,9 +1,9 @@
 <template>
     <div class="flex flex-row justify-center mt-4 w-full max-w-md">
-        <ButtonContact variant="primary" class="ml-1" isDemandeAcces>{{
+        <ButtonContact v-if="i18n.locale.value === 'fr'" variant="primary" class="ml-1" isDemandeAcces>{{
             $t("landingPage.contactForm.ctaSignup")
         }}</ButtonContact>
-        <ButtonContact variant="secondary" class="ml-1">{{
+        <ButtonContact v-else variant="primary" class="ml-1">{{
             $t("landingPage.contactForm.ctaContact")
         }}</ButtonContact>
     </div>
@@ -11,10 +11,17 @@
 
 <script>
 import ButtonContact from "~~/components/ButtonContact/ButtonContact.vue";
+import { useI18n } from 'vue-i18n';
 
 export default {
     components: {
         ButtonContact
+    },
+    setup() {
+        const i18n = useI18n();
+        return {
+            i18n
+        };
     },
 };
 </script>

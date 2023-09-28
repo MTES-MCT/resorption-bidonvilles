@@ -19,7 +19,7 @@
                     </LinkContact>
 
                     <Link :to="`${WEBAPP_URL}/connexion`" class="inline-block">
-                    <Button variant="primary">{{
+                    <Button variant="secondary">{{
                         $t("landingPage.header.connect")
                     }}</Button>
                     </Link>

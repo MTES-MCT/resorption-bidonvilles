@@ -5,7 +5,7 @@
   },
   "hero": {
     "title": "Taking action for slum clearance",
-    "subtitle": "Ask a question or request an access",
+    "subtitle": "Ask a question",
     "review": "slums cleared in",
     "moreThan": "More than",
     "people": "people re-housed"
@@ -46,7 +46,8 @@
   },
   "firstBanner": {
     "text": "Involved Stakeholders in slum clearance, please share and highlight your projects",
-    "cta": "Request access"
+    "cta": "Request access",
+    "ctaContact": "Contact us"
   },
   "secondSection": {
     "title": "What is the slum resorption policy?",

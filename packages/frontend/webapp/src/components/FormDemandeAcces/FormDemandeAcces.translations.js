@@ -1,7 +1,7 @@
 export default {
     fr: {
         subtitle:
-            "Voisin, citoyen, habitant d’un bidonville… Une info ? Une question ? Une alerte ?",
+            "Acteur de terrain, médiateur, association, service de l'État, collectivité... Demandez un accès à votre outil collaboratif.",
         title: "Contactez-nous !",
         structure: "Votre structure",
         submit: "Envoyer ma demande",

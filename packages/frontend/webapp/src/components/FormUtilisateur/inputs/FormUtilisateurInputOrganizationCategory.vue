@@ -11,12 +11,18 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { CheckableGroup, Radio } from "@resorptionbidonvilles/ui";
-import items from "@/utils/organization_categories.js";
+import itemsFn from "@/utils/organization_categories.js";
 import { defineProps, toRefs } from "vue";
 
 const props = defineProps({
     label: String,
+    allowNewOrganization: Boolean,
 });
-const { label } = toRefs(props);
+const { label, allowNewOrganization } = toRefs(props);
+
+const items = computed(() => {
+    return itemsFn(allowNewOrganization.value);
+});
 </script>

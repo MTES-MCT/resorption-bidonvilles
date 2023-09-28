@@ -27,7 +27,7 @@ rewiremock('#server/models/userModel').with(userModel);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
-import createUser from './createUser';
+import createUser from './create';
 rewiremock.disable();
 
 describe('userService.createUser()', () => {
