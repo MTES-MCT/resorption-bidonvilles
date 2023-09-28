@@ -35,7 +35,7 @@
 <script setup>
 import { onMounted, ref, computed } from "vue";
 import { useAccesStore } from "@/stores/acces.store.js";
-import router from "@/helpers/router";
+import router, { setDocumentTitle } from "@/helpers/router";
 import enrichUserWithLocationName from "@/utils/enrichUserWithLocationName";
 
 import { Button, ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
@@ -75,6 +75,9 @@ async function load() {
     error.value = null;
     try {
         userRef = await accesStore.fetchUser(userId.value, true);
+        setDocumentTitle(
+            `${router.currentRoute.value.meta.title} — ${userRef.value.last_name} ${userRef.value.first_name}`
+        );
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
     }
