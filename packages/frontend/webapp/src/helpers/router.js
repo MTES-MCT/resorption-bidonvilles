@@ -8,9 +8,6 @@ import { createNavigationLog } from "@/api/me.api";
 import logout from "@/utils/logout";
 import waitForElement from "@/utils/waitForElement";
 const defaultTitle = "Résorption Bidonvilles"; // Titre par défaut
-function createTitle(title) {
-    return title ? `${title} - ${defaultTitle}` : title;
-}
 let currentRouteIsBacked = false;
 window.popStateDetected = false;
 window.addEventListener("popstate", () => {
@@ -86,7 +83,7 @@ const router = createRouter({
             component: () =>
                 import("@/views/DonneesStatistiquesRegionsView.vue"),
             meta: {
-                title: createTitle("Visualiser les données"),
+                title: "Visualiser les données",
                 authRequirement: "signedIn",
                 navTab: "metrics",
             },
@@ -96,7 +93,7 @@ const router = createRouter({
             component: () =>
                 import("@/views/DonneesStatistiquesDepartementView.vue"),
             meta: {
-                title: createTitle("Visualiser les données départementales"),
+                title: "Visualiser les données départementales",
                 authRequirement: "signedIn",
                 navTab: "metrics",
             },
@@ -105,7 +102,7 @@ const router = createRouter({
             path: "/acces",
             component: () => import("@/views/ListeAccesView.vue"),
             meta: {
-                title: createTitle("Afficher la liste des comptes"),
+                title: "Afficher la liste des comptes",
                 authRequirement: "signedIn",
                 navTab: "administration",
                 permissions: ["user.list"],
@@ -115,7 +112,7 @@ const router = createRouter({
             path: "/acces/:id",
             component: () => import("@/views/AccesView.vue"),
             meta: {
-                title: createTitle("Gérer les accès d'un utilisateur"),
+                title: "Gérer les accès d'un utilisateur",
                 authRequirement: "signedIn",
                 navTab: "administration",
                 permissions: ["user.activate"],
@@ -125,7 +122,7 @@ const router = createRouter({
             path: "/action/:id",
             component: () => import("@/views/FicheActionView.vue"),
             meta: {
-                title: createTitle("Consulter une fiche action"),
+                title: "Consulter une fiche action",
                 authRequirement: "signedIn",
                 navTab: "actions",
             },
@@ -134,7 +131,7 @@ const router = createRouter({
             path: "/action/:id/mise-a-jour",
             component: () => import("@/views/MiseAJourActionView.vue"),
             meta: {
-                title: createTitle("Mettre à jour une fiche action"),
+                title: "Mettre à jour une fiche action",
                 authRequirement: "signedIn",
                 navTab: "actions",
             },
@@ -143,7 +140,7 @@ const router = createRouter({
             path: "/action/nouveau",
             component: () => import("@/views/DeclarationActionView.vue"),
             meta: {
-                title: createTitle("Créer une fiche action"),
+                title: "Créer une fiche action",
                 authRequirement: "signedIn",
                 navTab: "actions",
                 permissions: ["action.create"],
@@ -153,7 +150,7 @@ const router = createRouter({
             path: "/activites",
             component: () => import("@/views/HistoriqueActivitesView.vue"),
             meta: {
-                title: createTitle("Visualiser l'historique des activités"),
+                title: "Visualiser l'historique des activités",
                 authRequirement: "signedIn",
                 navTab: "activites",
                 permissions: ["shantytown.list"],
@@ -169,7 +166,7 @@ const router = createRouter({
             path: "/cartographie",
             component: () => import("@/views/CartographieView.vue"),
             meta: {
-                title: createTitle("Visualiser la carte des bidonvilles"),
+                title: "Visualiser la carte des bidonvilles",
                 authRequirement: "signedIn",
                 navTab: "cartographie",
             },
@@ -178,7 +175,7 @@ const router = createRouter({
             path: "/chargement",
             component: () => import("@/views/ChargementView.vue"),
             meta: {
-                title: createTitle("Chargement de la page en cours"),
+                title: "Chargement de la page en cours",
                 analyticsIgnore: true,
                 authRequirement: "signedIn",
                 configRequired: false,
@@ -189,7 +186,7 @@ const router = createRouter({
             path: "/annuaire",
             component: () => import("@/views/AnnuaireView.vue"),
             meta: {
-                title: createTitle("Visualiser la liste des structures"),
+                title: "Visualiser la liste des structures",
                 authRequirement: "signedIn",
                 navTab: "communaute",
                 communauteTab: "annuaire",
@@ -200,7 +197,7 @@ const router = createRouter({
             path: "/communaute",
             component: () => import("@/views/CommunauteView.vue"),
             meta: {
-                title: createTitle("Demander de l'aide à la communauté"),
+                title: "Demander de l'aide à la communauté",
                 authRequirement: "signedIn",
                 navTab: "communaute",
                 communauteTab: "communaute",
@@ -211,7 +208,7 @@ const router = createRouter({
             component: () =>
                 import("@/views/NouvelleQuestionCommunauteView.vue"),
             meta: {
-                title: createTitle("Poser une question à la communauté"),
+                title: "Poser une question à la communauté",
                 authRequirement: "signedIn",
                 navTab: "communaute",
             },
@@ -220,9 +217,7 @@ const router = createRouter({
             path: "/question/:id",
             component: () => import("@/views/FicheQuestionView.vue"),
             meta: {
-                title: createTitle(
-                    "Consulter, répondre à une question posée à la communauté"
-                ),
+                title: "Consulter, répondre à une question posée à la communauté",
                 authRequirement: "signedIn",
                 navTab: "communaute",
                 communauteTab: "communaute",
@@ -232,7 +227,7 @@ const router = createRouter({
             path: "/connexion",
             component: () => import("@/views/ConnexionView.vue"),
             meta: {
-                title: createTitle("S'identifier sur la plateforme"),
+                title: "S'identifier sur la plateforme",
                 authRequirement: "signedOut",
             },
         },
@@ -240,7 +235,7 @@ const router = createRouter({
             path: "/contact",
             component: () => import("@/views/DemandeAccesView.vue"),
             meta: {
-                title: createTitle("Contacter l'équipe"),
+                title: "Contacter l'équipe",
                 authRequirement: "signedOut",
             },
         },
@@ -260,7 +255,7 @@ const router = createRouter({
             path: "/invitation",
             component: () => import("@/views/InvitationView.vue"),
             meta: {
-                title: createTitle("Inviter vos contacts sur la plateforme"),
+                title: "Inviter vos contacts sur la plateforme",
                 authRequirement: "none",
             },
         },
@@ -268,7 +263,7 @@ const router = createRouter({
             path: "/liste-des-sites",
             component: () => import("@/views/ListeDesSitesView.vue"),
             meta: {
-                title: createTitle("Afficher la liste des sites"),
+                title: "Afficher la liste des sites",
                 authRequirement: "signedIn",
                 navTab: "sites",
             },
@@ -277,7 +272,7 @@ const router = createRouter({
             path: "/liste-des-actions",
             component: () => import("@/views/ListeDesActionsView.vue"),
             meta: {
-                title: createTitle("Afficher la liste des actions"),
+                title: "Afficher la liste des actions",
                 authRequirement: "signedIn",
                 navTab: "actions",
             },
@@ -290,9 +285,7 @@ const router = createRouter({
             path: "/mon-compte/:tab(informations-personnelles|identifiants|abonnements)",
             component: () => import("@/views/MonCompteView.vue"),
             meta: {
-                title: createTitle(
-                    "Modifier les informations liées à mon compte"
-                ),
+                title: "Modifier les informations liées à mon compte",
                 authRequirement: "signedIn",
             },
         },
@@ -300,7 +293,7 @@ const router = createRouter({
             path: "/nouvel-utilisateur",
             component: () => import("@/views/CreerUtilisateurView.vue"),
             meta: {
-                title: createTitle("Ajouter un nouvel utilisateur"),
+                title: "Ajouter un nouvel utilisateur",
                 authRequirement: "signedIn",
                 navTab: "administration",
                 permissions: ["user.create"],
@@ -316,9 +309,7 @@ const router = createRouter({
             path: "/nouvelle-version",
             component: () => import("@/views/NouveautesView.vue"),
             meta: {
-                title: createTitle(
-                    "Voir les nouveautés disponibles sur la plateforme"
-                ),
+                title: "Voir les nouveautés disponibles sur la plateforme",
                 authRequirement: "signedIn",
             },
         },
@@ -326,7 +317,7 @@ const router = createRouter({
             path: "/signature-charte-engagement",
             component: () => import("@/views/CharteEngagementView.vue"),
             meta: {
-                title: createTitle("Accepter la charte d'engagement"),
+                title: "Accepter la charte d'engagement",
                 authRequirement: "signedIn",
                 charteRequirement: false,
             },
@@ -335,7 +326,7 @@ const router = createRouter({
             path: "/nouveau-mot-de-passe",
             component: () => import("@/views/MotDePasseOublieView.vue"),
             meta: {
-                title: createTitle("Demander un nouveau mot de passe"),
+                title: "Demander un nouveau mot de passe",
                 authRequirement: "signedOut",
             },
         },
@@ -343,7 +334,7 @@ const router = createRouter({
             path: "/page-interdite",
             component: () => import("@/views/PageInterditeView.vue"),
             meta: {
-                title: createTitle("Accès refusé à la page demandée"),
+                title: "Accès refusé à la page demandée",
                 authRequirement: "none",
             },
         },
@@ -351,7 +342,7 @@ const router = createRouter({
             path: "/renouveler-mot-de-passe/:token",
             component: () => import("@/views/ChangementMotDePasseView.vue"),
             meta: {
-                title: createTitle("Renouveler mon mot de passe"),
+                title: "Renouveler mon mot de passe",
                 authRequirement: "signedOut",
             },
         },
@@ -359,7 +350,7 @@ const router = createRouter({
             path: "/activer-mon-compte/:token",
             component: () => import("@/views/ActivationCompteView.vue"),
             meta: {
-                title: createTitle("Activer mon compte"),
+                title: "Activer mon compte",
                 authRequirement: "signedOut",
             },
         },
@@ -367,7 +358,7 @@ const router = createRouter({
             path: "/site/:id",
             component: () => import("@/views/FicheSiteView.vue"),
             meta: {
-                title: createTitle("Visualiser les données d'un site"),
+                title: "Visualiser les données d'un site",
                 authRequirement: "signedIn",
                 navTab: "sites",
             },
@@ -376,7 +367,7 @@ const router = createRouter({
             path: "/site/:id/fermeture",
             component: () => import("@/views/FermetureDeSiteView.vue"),
             meta: {
-                title: createTitle("Déclarer la fermeture d'un site"),
+                title: "Déclarer la fermeture d'un site",
                 authRequirement: "signedIn",
                 navTab: "sites",
             },
@@ -385,7 +376,7 @@ const router = createRouter({
             path: "/site/:id/mise-a-jour",
             component: () => import("@/views/MiseAJourDeSiteView.vue"),
             meta: {
-                title: createTitle("Mettre à jour les données d'un site"),
+                title: "Mettre à jour les données d'un site",
                 authRequirement: "signedIn",
                 navTab: "sites",
             },
@@ -394,7 +385,7 @@ const router = createRouter({
             path: "/site/nouveau",
             component: () => import("@/views/DeclarationDeSiteView.vue"),
             meta: {
-                title: createTitle("Déclarer un site"),
+                title: "Déclarer un site",
                 authRequirement: "signedIn",
                 navTab: "sites",
                 permissions: ["shantytown.create"],
@@ -404,7 +395,7 @@ const router = createRouter({
             path: "/site/signalement",
             component: () => import("@/views/SignalementDeSiteView.vue"),
             meta: {
-                title: createTitle("Signaler un site"),
+                title: "Signaler un site",
                 authRequirement: "signedIn",
                 navTab: "sites",
             },
@@ -413,9 +404,7 @@ const router = createRouter({
             path: "/statistiques/:code?",
             component: () => import("@/views/StatistiquesView.vue"),
             meta: {
-                title: createTitle(
-                    "Consulter les statistiques dans un département"
-                ),
+                title: "Consulter les statistiques dans un département",
                 authRequirement: "signedIn",
                 navTab: "statistiques",
                 permissions: ["stats.read"],
@@ -425,7 +414,7 @@ const router = createRouter({
             path: "/structure/:id",
             component: () => import("@/views/FicheStructureView.vue"),
             meta: {
-                title: createTitle("Consulter la fiche d'une structure"),
+                title: "Consulter la fiche d'une structure",
                 authRequirement: "signedIn",
                 navTab: "communaute",
                 communauteTab: "annuaire",
@@ -435,7 +424,7 @@ const router = createRouter({
             path: "/tableau-de-bord",
             component: TableauDeBordView,
             meta: {
-                title: createTitle("Consulter le tableau de bord"),
+                title: "Consulter le tableau de bord",
                 navTab: "tableau-de-bord",
                 authRequirement: "signedIn",
             },
@@ -450,7 +439,7 @@ const router = createRouter({
             path: "/utilisateur/:id/:tab(informations-personnelles|identifiants|abonnements)",
             component: () => import("@/views/ProfilUtilisateurView.vue"),
             meta: {
-                title: createTitle("Consulter, modifier un compte utilisateur"),
+                title: "Consulter, modifier un compte utilisateur",
                 authRequirement: "signedIn",
                 navTab: "administration",
             },
@@ -465,7 +454,7 @@ const router = createRouter({
             path: "/404",
             component: () => import("@/views/NotFoundView.vue"),
             meta: {
-                title: createTitle("Page inexistante"),
+                title: "Page inexistante",
                 authRequirement: "none",
             },
         },
@@ -551,8 +540,12 @@ router.beforeEach((to) => {
     }
 
     // Update html title element
-    document.title = to.meta.title || defaultTitle;
+    setDocumentTitle(to.meta.title);
 });
+
+export function setDocumentTitle(title) {
+    document.title = title ? `${title} — ${defaultTitle}` : defaultTitle;
+}
 
 export default router;
 export function isCurrentRouteBack() {
