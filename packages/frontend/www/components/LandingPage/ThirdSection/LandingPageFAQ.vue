@@ -241,11 +241,26 @@
                             href="mailto:contact@resorption-bidonvilles.beta.gouv.fr">contact@resorption-bidonvilles.beta.gouv.fr</a>
                     </p>
                     <p class="mt-6">
-                        <video preload="none" poster="~/assets/img/LandingPage/ThirdSection/temoignage_utilisateur_1.png"
-                            controls>
-                            <source src="~/assets/video/temoignage_utilisateur_1.mp4" type="video/mp4" />
+                        <video :aria-label="`Témoignage utilisateur:  ${$t('landingPage.firstSection.feedback.1.author')},`"
+                            class="inline-block" preload="none" controls
+                            poster="~/assets/img/LandingPage/ThirdSection/temoignage_utilisateur_1.png">
+                            <source src="~/assets/video/Temoignage-Leduc-BD_mars2021.mp4" type="video/mp4"
+                                :aria-label="``" />
                             Votre navigateur ne supporte pas la balise video.
                         </video>
+                        <button @click="toggleTranscription()" class="mt-2 text-primary hover:underline cursor-pointer"
+                            :aria-label="`${showTranscription ? $t('landingPage.notranscription_title') : $t('landingPage.transcription_title')},`">
+                            <span v-if="!showTranscription">{{ $t("landingPage.transcription_title") }}</span>
+                            <span v-if="showTranscription">{{ $t("landingPage.notranscription_title") }}</span>
+                        </button>
+                        <template v-if="showTranscription" tabindex="0" class="m-4 text-left">
+                            <p class="font-bold mb-2">Témoignage utilisateur - {{
+                                $t("landingPage.firstSection.feedback.1.author") }}
+                            </p>
+                            <p>{{ $t("landingPage.firstSection.feedback.videos.1.transcription_part1") }}</p>
+                            <p>{{ $t("landingPage.firstSection.feedback.videos.1.transcription_part2") }}</p>
+                            <p>{{ $t("landingPage.firstSection.feedback.videos.1.transcription_part3") }}</p>
+                        </template>
                     </p>
                 </template>
             </AccordionItem>
@@ -254,5 +269,12 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { Accordion, AccordionItem, Icon } from '@resorptionbidonvilles/ui';
+
+let showTranscription = ref(false);
+
+function toggleTranscription() {
+    this.showTranscription = !this.showTranscription;
+}
 </script>
