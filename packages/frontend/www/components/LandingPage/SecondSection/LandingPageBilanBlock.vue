@@ -1,17 +1,12 @@
 <template>
     <div class="flex flex-row">
-        <div>
-            <Icon
-                :icon="icon"
-                size="2x"
-                height="32"
-                class="text-secondary"
-            ></Icon>
-        </div>
-        <div class="ml-2">
+        <p>
+            <Icon :icon="icon" size="2x" height="32" class="text-secondary"></Icon>
+        </p>
+        <p class="ml-2">
             <span class="font-bold text-display-md">{{ text }}</span>
             <span class="pl-1">{{ info }}</span>
-        </div>
+        </p>
     </div>
 </template>
 
