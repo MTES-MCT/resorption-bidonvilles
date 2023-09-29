@@ -10,7 +10,7 @@
 <script setup>
 const props = defineProps({
     alt: {
-        type: String,
+        type: [String, Array],
         required: true
     },
     active: {
