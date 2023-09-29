@@ -57,28 +57,16 @@
         </div>
     </div>
 </template>
-<script>
+<script setup>
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-export default {
-    setup() {
-        const i18n = useI18n();
-        return {
-            i18n
-        };
-    },
-    data() {
-        return {
-            showTranscription: {
-                1: false,
-                2: false,
-            }
-        };
-    },
-    methods: {
-        toggleTranscription(index) {
-            this.showTranscription[index] = !this.showTranscription[index];
-        },
-    }
+const i18n = useI18n();
+const showTranscription = ref({
+    1: false,
+    2: false,
+});
+function toggleTranscription(index) {
+    showTranscription.value[index] = !showTranscription.value[index];
 }
 </script>
