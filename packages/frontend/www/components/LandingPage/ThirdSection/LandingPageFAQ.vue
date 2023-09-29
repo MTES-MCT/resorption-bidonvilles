@@ -2,7 +2,7 @@
     <div>
         <h2 class="text-display-lg font-bold">FAQ : questions fréquentes</h2>
         <Accordion class="ml-16 mt-6">
-            <AccordionItem>
+            <AccordionItem id="1">
                 <template v-slot:title>Qui a accès à la plateforme ?</template>
                 <template v-slot:content>
                     <p>
@@ -36,7 +36,7 @@
                 </template>
             </AccordionItem>
 
-            <AccordionItem>
+            <AccordionItem id="2">
                 <template v-slot:title>Qui peut faire quoi ? Qui peut voir les données que je
                     partage ?
                 </template>
@@ -63,7 +63,7 @@
                 </template>
             </AccordionItem>
 
-            <AccordionItem>
+            <AccordionItem id="3">
                 <template v-slot:title>Qui valide ma demande d’accès à la plateforme ?</template>
                 <template v-slot:content>
                     <p>
@@ -87,7 +87,7 @@
                 </template>
             </AccordionItem>
 
-            <AccordionItem>
+            <AccordionItem id="4">
                 <template v-slot:title>À quoi vont servir les informations renseignées sur la
                     plateforme ?</template>
                 <template v-slot:content>
@@ -132,7 +132,7 @@
                 </template>
             </AccordionItem>
 
-            <AccordionItem>
+            <AccordionItem id="5">
                 <template v-slot:title>Quelles données sont partagées sur la plateforme
                     ?</template>
                 <template v-slot:content>
@@ -194,7 +194,7 @@
                 </template>
             </AccordionItem>
 
-            <AccordionItem>
+            <AccordionItem id="6">
                 <template v-slot:title>J’ai déjà des outils de travail : la plateforme est-t-elle
                     un doublon avec mes outils ?</template>
                 <template v-slot:content>
