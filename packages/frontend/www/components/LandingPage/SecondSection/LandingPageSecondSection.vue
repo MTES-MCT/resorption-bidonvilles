@@ -111,14 +111,14 @@
             <p class="text-display-lg font-bold">
                 {{ $t("landingPage.secondSection.bilan.title") }}
             </p>
-            <div class=" mt-8">
+            <p class=" mt-8">
                 <span class="font-bold">{{
                     $t("landingPage.secondSection.bilan.firstParagraph.bold")
                 }}</span>
                 {{
                     $t("landingPage.secondSection.bilan.firstParagraph.normal")
                 }}
-            </div>
+            </p>
 
             <div class="flex flex-row items-center my-8">
                 <div class="bg-gray-500 h-px flex-1" />
