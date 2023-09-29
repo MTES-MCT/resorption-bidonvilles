@@ -1,11 +1,11 @@
 <template>
     <div>
         <div class="max-w-screen-sm mx-auto relative mt-16">
-            <h2>
+            <p>
                 <span class="text-display-lg">{{
                     $t("landingPage.firstSection.feedback.title")
                 }}</span>
-            </h2>
+            </p>
             <div class="mt-8">
                 <LandingPageUserFeedbackSection :active="active === 1"
                     :text="$t('landingPage.firstSection.feedback.1.text')"

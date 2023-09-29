@@ -1,8 +1,8 @@
 <template>
     <div>
-        <h2 class="text-center text-display-lg font-bold text-primary mb-10">
+        <p class="text-center text-display-lg font-bold text-primary mb-10">
             {{ $t("aboutUs") }}
-        </h2>
+        </p>
 
         <div class="max-w-screen-lg">
             <div class="mx-auto flex flex-col lg:flex-row">

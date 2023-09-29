@@ -1,7 +1,7 @@
 <template>
     <section class="shadow-lg p-6">
         <div class="xl:flex xl:justify-between mb-2">
-            <h1 class="text-2xl xl:text-3xl text-primary">{{ title }}</h1>
+            <h2 class="text-2xl xl:text-3xl text-primary">{{ title }}</h2>
             <div class="flex flex-col">
                 <Button
                     v-if="category === 'justice'"

@@ -8,10 +8,10 @@
         }"
     >
         <div>
-            <h1 class="font-bold" :class="user.is_admin ? 'text-info' : ''">
+            <h2 class="font-bold" :class="user.is_admin ? 'text-info' : ''">
                 {{ user.last_name.toUpperCase() }}
                 {{ user.first_name }}
-            </h1>
+            </h2>
             <p>{{ user.position }}</p>
             <p class="mt-2">
                 <span class="text-G600 text-sm">Rôle sur la plateforme :</span

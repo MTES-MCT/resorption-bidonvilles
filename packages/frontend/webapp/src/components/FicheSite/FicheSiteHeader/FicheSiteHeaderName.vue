@@ -1,10 +1,8 @@
 <template>
-    <span class="text-sm font-normal"
-        >{{ town.city.name }}, {{ town.epci.name }} ({{
-            town.departement.name
-        }})</span
-    ><br />
-    <span>{{ town.addressSimple }}</span>
+    <p class="text-sm font-normal">
+        {{ town.city.name }}, {{ town.epci.name }} ({{ town.departement.name }})
+    </p>
+    <h1>{{ town.addressSimple }}</h1>
     <span v-if="town.name" class="text-md">&nbsp; « {{ town.name }} »</span>
 </template>
 

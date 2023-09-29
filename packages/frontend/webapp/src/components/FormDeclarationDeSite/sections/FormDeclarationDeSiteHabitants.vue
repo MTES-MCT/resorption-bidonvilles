@@ -2,22 +2,22 @@
     <FormSection id="habitants">
         <template v-slot:title>Habitants</template>
 
-        <FormParagraph title="Combien d'habitants vivent sur le site ?">
+        <Fieldset legend="Combien d'habitants vivent sur le site ?">
             <InputPopulation />
-        </FormParagraph>
+        </Fieldset>
 
-        <FormParagraph title="Quelle est l'origine des habitants ?">
+        <Fieldset legend="Quelle est l'origine des habitants ?">
             <InputSocialOrigins />
-        </FormParagraph>
+        </Fieldset>
 
-        <FormParagraph
-            title="Combien y a-t-il de caravanes, d'habitats autoconstruits, de tentes, de voitures dortoir et de matelas sur le site ?"
+        <Fieldset
+            legend="Combien y a-t-il de caravanes, d'habitats autoconstruits, de tentes, de voitures dortoir et de matelas sur le site ?"
         >
             <InputCaravans />
-        </FormParagraph>
+        </Fieldset>
 
-        <FormParagraph
-            title="Quel est le statut du diagnostic social ?"
+        <Fieldset
+            legend="Quel est le statut du diagnostic social ?"
             showMandatoryStar
         >
             <InputCensusStatus />
@@ -25,10 +25,10 @@
                 <InputCensusConductedAt width="w-64" />
                 <InputCensusConductedBy />
             </template>
-        </FormParagraph>
+        </Fieldset>
 
-        <FormParagraph
-            title="Tout ou partie des habitants viennent-ils d'un ou plusieurs sites du territoire ?"
+        <Fieldset
+            legend="Tout ou partie des habitants viennent-ils d'un ou plusieurs sites du territoire ?"
             showMandatoryStar
         >
             <InputIsReinstallation />
@@ -48,14 +48,14 @@
                     />
                 </p>
             </div>
-        </FormParagraph>
+        </Fieldset>
     </FormSection>
 </template>
 
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
 import { useFormValues } from "vee-validate";
-import { FormParagraph, InputLabel } from "@resorptionbidonvilles/ui";
+import { Fieldset, InputLabel } from "@resorptionbidonvilles/ui";
 import FormSection from "@/components/FormSection/FormSection.vue";
 import InputPopulation from "../inputs/FormDeclarationDeSiteInputPopulation.vue";
 import InputSocialOrigins from "../inputs/FormDeclarationDeSiteInputSocialOrigins.vue";
