@@ -1,7 +1,7 @@
 <template>
     <div>
         <div tabindex="0" class="max-w-screen-sm mx-auto relative mt-16" role="region"
-            :aria-label="`,${$t('landingPage.firstSection.feedback.title')}`">
+            :aria-label="`,${$t('landingPage.firstSection.feedback.title')}`" @focus="setCarouselOff" @blur="setCarouselOn">
             <p>
                 <span class="text-display-lg">{{
                     $t("landingPage.firstSection.feedback.title")
