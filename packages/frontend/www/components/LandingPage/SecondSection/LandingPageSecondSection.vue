@@ -47,7 +47,7 @@
             <img width="640" height="445" class="mt-20 w-full" :src="slumMapImageName"
                 :alt="$t('landingPage.secondSection.map.title')" />
             <button @click="toggleMapTranscription()" class="mt-2 text-primary hover:underline cursor-pointer"
-                :aria-label="`${showMapTranscription ? $t('landingPage.notranscription_title') : $t('landingPage.transcription_title')},`">
+                :aria-label="`${showMapTranscription ? $t('landingPage.secondSection.map.notranscription_title') : $t('landingPage.secondSection.map.transcription_title')},`">
                 <span v-if="!showMapTranscription">{{ $t("landingPage.secondSection.map.transcription_title") }}</span>
                 <span v-if="showMapTranscription">{{ $t("landingPage.secondSection.map.notranscription_title")
                 }}</span>
@@ -55,11 +55,13 @@
             <div v-if="showMapTranscription" class="mt-4 text-left">
                 <p class="font-bold mb-2">{{ $t("landingPage.secondSection.map.title") }}</p>
                 <p>{{ $t("landingPage.secondSection.map.subtitle") }}</p>
-                <p>{{ $t("landingPage.secondSection.map.nord") }}</p>
-                <p>{{ $t("landingPage.secondSection.map.ileDefrance") }}</p>
-                <p>{{ $t("landingPage.secondSection.map.loireAtlantique") }}</p>
-                <p>{{ $t("landingPage.secondSection.map.gironde") }}</p>
-                <p>{{ $t("landingPage.secondSection.map.boucheDuRhone") }}</p>
+                <ul>
+                    <li>{{ $t("landingPage.secondSection.map.nord") }}</li>
+                    <li>{{ $t("landingPage.secondSection.map.ileDeFrance") }}</li>
+                    <li>{{ $t("landingPage.secondSection.map.loireAtlantique") }}</li>
+                    <li>{{ $t("landingPage.secondSection.map.gironde") }}</li>
+                    <li>{{ $t("landingPage.secondSection.map.boucheDuRhone") }}</li>
+                </ul>
             </div>
         </div>
         <div class="mt-20 md:flex md:flex-row items-center">
