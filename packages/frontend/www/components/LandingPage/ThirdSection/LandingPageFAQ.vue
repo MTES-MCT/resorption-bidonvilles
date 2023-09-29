@@ -81,7 +81,7 @@
                         L’administrateur local de votre territoire est
                         identifiable sur l’annuaire par un picto bleu
                         <span class="text-info">
-                            <Icon icon="user-shield" width="20" height="16" />
+                            <Icon icon="user-shield" width="20" height="16" title="Administrateur local" />
                         </span>
                     </p>
                 </template>
