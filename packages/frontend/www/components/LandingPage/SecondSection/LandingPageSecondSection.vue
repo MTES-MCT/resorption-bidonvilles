@@ -117,11 +117,11 @@
             </p>
 
             <div class="flex flex-row items-center my-8">
-                <div class="bg-gray-500 h-px flex-1" />
-                <div class="inline-block bg-black text-white text-display-md font-bold px-4">
+                <p class="bg-gray-500 h-px flex-1" />
+                <p class="inline-block bg-black text-white text-display-md font-bold px-4">
                     2020
-                </div>
-                <div class="bg-gray-500 h-px flex-1" />
+                </p>
+                <p class="bg-gray-500 h-px flex-1" />
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 md:gap-x-16">
