@@ -33,7 +33,7 @@
 <script setup>
 import { onMounted, ref, computed, watch } from "vue";
 import { useActionsStore } from "@/stores/actions.store.js";
-import router from "@/helpers/router";
+import router, { setDocumentTitle } from "@/helpers/router";
 
 import { Button, ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
@@ -71,6 +71,9 @@ async function load() {
     error.value = null;
     try {
         await actionsStore.fetchAction(actionId.value);
+        setDocumentTitle(
+            `${router.currentRoute.value.meta.title} — ${action.value.name}`
+        );
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
     }

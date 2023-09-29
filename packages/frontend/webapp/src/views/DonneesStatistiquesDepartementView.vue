@@ -42,7 +42,7 @@
 <script setup>
 import { onMounted, ref, computed, watch } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store.js";
-import router, { isCurrentRouteBack } from "@/helpers/router";
+import router, { isCurrentRouteBack, setDocumentTitle } from "@/helpers/router";
 
 import { Button, ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
@@ -112,6 +112,9 @@ async function load() {
     error.value = null;
     try {
         await departementMetricsStore.fetchDepartement(departementCode.value);
+        setDocumentTitle(
+            `${router.currentRoute.value.meta.title} — ${departement.value.name}`
+        );
         await departementMetricsStore.fetchEvolution(departementCode.value);
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";

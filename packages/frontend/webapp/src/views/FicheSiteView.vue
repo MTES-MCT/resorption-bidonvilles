@@ -33,7 +33,7 @@
 <script setup>
 import { onMounted, ref, computed, watch } from "vue";
 import { useTownsStore } from "@/stores/towns.store.js";
-import router from "@/helpers/router";
+import router, { setDocumentTitle } from "@/helpers/router";
 import { trackEvent } from "@/helpers/matomo";
 
 import { Button, ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
@@ -76,6 +76,9 @@ async function load() {
     error.value = null;
     try {
         await townsStore.fetchTown(townId.value);
+        setDocumentTitle(
+            `${router.currentRoute.value.meta.title} — ${town.value.usename}`
+        );
         townsStore.townCategoryFilter = [];
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";

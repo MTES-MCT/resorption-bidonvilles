@@ -35,7 +35,7 @@
 <script setup>
 import { onMounted, ref, computed, watch } from "vue";
 import { useQuestionsStore } from "@/stores/questions.store.js";
-import router from "@/helpers/router";
+import router, { setDocumentTitle } from "@/helpers/router";
 
 import { Button, ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import ViewError from "@/components/ViewError/ViewError.vue";
@@ -71,6 +71,9 @@ async function load() {
 
     try {
         question.value = await questionsStore.fetchQuestion(questionId.value);
+        setDocumentTitle(
+            `${router.currentRoute.value.meta.title} — ${question.value.question}`
+        );
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
     }
