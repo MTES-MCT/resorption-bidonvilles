@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div class="max-w-screen-sm mx-auto relative mt-16">
+        <div tabindex="0" class="max-w-screen-sm mx-auto relative mt-16" role="region"
+            :aria-label="`,${$t('landingPage.firstSection.feedback.title')}`">
             <p>
                 <span class="text-display-lg">{{
                     $t("landingPage.firstSection.feedback.title")
