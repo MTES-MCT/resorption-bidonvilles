@@ -16,7 +16,7 @@
 
         <CreditWrapper credit="© Diego Inglez de Souza">
             <img width="1440" class="h-128 w-full object-cover object-center"
-                src="~/assets/img/LandingPage/resorption-bidonvilles-1.jpg" alt="Photo d'un bidonville" />
+                src="~/assets/img/LandingPage/resorption-bidonvilles-1.jpg" alt="" />
         </CreditWrapper>
 
         <!-- second section -->
