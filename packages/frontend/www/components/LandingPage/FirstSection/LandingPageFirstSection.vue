@@ -141,6 +141,6 @@ let showTranscription = ref({
 });
 
 function toggleTranscription(index) {
-    this.showTranscription[index] = !this.showTranscription[index];
+    showTranscription.value[index] = !showTranscription.value[index];
 }
 </script>
