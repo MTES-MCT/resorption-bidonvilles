@@ -74,13 +74,13 @@
                     </p>
 
                     <div class="mt-4">
-                        <div class="font-bold">
+                        <p class="font-bold">
                             {{
                                 $t(
                                     "landingPage.thirdSection.firstParagraph.items.title"
                                 )
                             }}
-                        </div>
+                        </p>
 
                         <ul class="list-disc ml-8">
                             <li>
