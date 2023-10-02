@@ -72,12 +72,7 @@
                 <video :aria-label="`${$t('landingPage.secondSection.video.text')},`" preload="none"
                     poster="~/assets/img/LandingPage/SecondSection/poster_rb_connaitre_partager_agir.png" controls>
                     <source src="~/assets/video/rb_connaitre_partager_agir_720.mp4" type="video/mp4" />
-                    <track
-                        :label="$t('french')"
-                        kind="subtitles"
-                        srclang="fr"
-                        src="/rb_connaitre_partager_agir_720.vtt"
-                    />
+                    <track :label="$t('french')" kind="subtitles" srclang="fr" src="/rb_connaitre_partager_agir_720.vtt" />
                     Votre navigateur ne supporte pas la balise video.
                 </video>
                 <button @click="toggleTranscription()" class="mt-2 text-primary hover:underline cursor-pointer"
@@ -175,11 +170,11 @@ const images = Object.fromEntries(
 );
 
 function toggleTranscription() {
-    this.showTranscription = !this.showTranscription;
+    showTranscription.value = !showTranscription.value;
 }
 
 function toggleMapTranscription() {
-    this.showMapTranscription = !this.showMapTranscription;
+    showMapTranscription.value = !showMapTranscription.value;
 }
 
 const slumMapImageName = computed(() => {
