@@ -9,7 +9,7 @@
                 :poster="posterLink1"
                 :source="sourceLink1"
                 :trackLabel="$t('french')"
-                :trackSrc="sttLink1" />
+                :trackSrc="'/Temoignage-Leduc-BD_mars2021.vtt'" />
         </div>
         <div class="flex-1 mt-8 lg:mt-0">
             <VideoFeedbackUser
@@ -20,7 +20,7 @@
                 :poster="posterLink2"
                 :source="sourceLink2"
                 :trackLabel="$t('french')"
-                :trackSrc="sttLink2" />
+                :trackSrc="'/Temoignage-LeMinor-BD_mars2021.vtt'" />
         </div>
     </div>
 </template>
@@ -30,6 +30,4 @@ import posterLink1 from '~/assets/img/LandingPage/FirstSection/poster_temoignage
 import sourceLink1 from '~/assets/video/Temoignage-Leduc-BD_mars2021.mp4';
 import posterLink2 from '~/assets/img/LandingPage/FirstSection/poster_temoignage_leminor.jpg';
 import sourceLink2 from '~/assets/video/Temoignage-LeMinor-BD_mars2021.mp4';
-import sttLink1 from '/Temoignage-Leduc-BD_mars2021.vtt';
-import sttLink2 from '/Temoignage-LeMinor-BD_mars2021.vtt';
 </script>

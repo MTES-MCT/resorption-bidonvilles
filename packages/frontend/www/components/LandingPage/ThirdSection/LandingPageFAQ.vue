@@ -249,7 +249,7 @@
                             :poster="posterLink1"
                             :source="sourceLink1"
                             :trackLabel="$t('french')"
-                            :trackSrc="sttLink1" />
+                            :trackSrc="'/Temoignage-Leduc-BD_mars2021.vtt'" />
                     </p>
                 </template>
             </AccordionItem>
@@ -261,7 +261,6 @@
 import { ref } from 'vue';
 import { Accordion, AccordionItem, Icon } from '@resorptionbidonvilles/ui';
 import VideoFeedbackUser from '../FirstSection/UserFeedback/LandingPageUserFeedbackVideo.vue';
-import sttLink1 from '/Temoignage-Leduc-BD_mars2021.vtt';
 
 let showTranscription = ref(false);
 import posterLink1 from '~/assets/img/LandingPage/ThirdSection/temoignage_utilisateur_1.png';
