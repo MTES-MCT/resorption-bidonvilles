@@ -138,7 +138,7 @@
 
                 <div class="mt-10 lg:w-6/12 lg:mt-0 lg:pl-6">
                     <img width="688" height="392" class="h-auto" src="~/assets/img/LandingPage/FourthSection/team.jpg"
-                        alt="Photo des membres de l'équipe de la plateforme" />
+                        alt="Membres de l'équipe de la plateforme: Christophe Benard , Laure Dubuc, Anis Safine, Jean-Paul Domalain, Grégoire Thomazeau et Manuel Demougeot" />
                     <ul class="mt-4">
                         <li>
                             <span class="font-bold">Manuel Demougeot</span> :
