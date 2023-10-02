@@ -1,5 +1,10 @@
 <template>
-    <Modal :isOpen="isOpen" closeWhenClickOutside @close="close">
+    <Modal
+        v-show="isOpen"
+        :isOpen="isOpen"
+        closeWhenClickOutside
+        @close="close"
+    >
         <template v-slot:title>Règles de modération d'un message</template>
         <template v-slot:body>
             <p class="font-bold">

@@ -38,7 +38,7 @@
 <script setup>
 import { onMounted, computed, watch } from "vue";
 import { useDirectoryStore } from "@/stores/directory.store";
-import router from "@/helpers/router";
+import router, { setDocumentTitle } from "@/helpers/router";
 import { registerDirectoryView } from "@/api/statistics.api";
 
 import { Button, ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
@@ -71,9 +71,15 @@ watch(organization, () => {
     }
 });
 
-onMounted(() => {
+onMounted(async () => {
     if (!directoryStore.isLoaded) {
-        load();
+        await load();
+    }
+
+    if (organization.value) {
+        setDocumentTitle(
+            `${router.currentRoute.value.meta.title} — ${organization.value.name}`
+        );
     }
 
     if (organization.value !== null) {
@@ -82,7 +88,7 @@ onMounted(() => {
 });
 
 function load() {
-    directoryStore.fetchDirectory();
+    return directoryStore.fetchDirectory();
 }
 
 function registerView() {

@@ -3,7 +3,7 @@
         <section class="flex space-x-6 flex-1">
             <p><MiniCarte :location="mapLocation" /></p>
             <div>
-                <h1 class="text-3xl text-info font-bold">{{ title }}</h1>
+                <p class="text-3xl text-info font-bold">{{ title }}</p>
                 <p class="mt-2">
                     {{ directoryStore.total }} structure{{
                         directoryStore.total > 1 ? "s" : ""
@@ -21,10 +21,10 @@
             </header>
             <p>
                 Ce pictogramme
-                <Icon icon="user-shield" class="text-info" /> identifie les
-                administrateurs locaux, qui gèrent les accès des utilisateurs de
-                leur territoire et sont sollicités pour toute question sur la
-                plate-forme.
+                <IconeAdministrateur />
+                identifie les administrateurs locaux, qui gèrent les accès des
+                utilisateurs de leur territoire et sont sollicités pour toute
+                question sur la plate-forme.
             </p>
         </div>
     </div>
@@ -36,6 +36,7 @@ import { useDirectoryStore } from "@/stores/directory.store";
 import computeLocationSearchTitle from "@/utils/computeLocationSearchTitle";
 import MiniCarte from "@/components/MiniCarte/MiniCarte.vue";
 import { Icon } from "@resorptionbidonvilles/ui";
+import IconeAdministrateur from "@/components/IconeAdministrateur/IconeAdministrateur.vue";
 
 const props = defineProps({
     location: {

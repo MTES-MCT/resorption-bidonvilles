@@ -1,75 +1,77 @@
 <template>
-    <div
-        :class="[
-            'rounded-sm cursor-pointer border-1 border-cardBorder',
-            isHover ? 'bg-blue200 border-transparent' : '',
-        ]"
-        @mouseenter="isHover = true"
-        @mouseleave="isHover = false"
+    <RouterLink
+        custom
+        v-slot="{ navigate }"
+        :to="`/action/${action.id}`"
+        class="focus:outline-2 outline-info outline-offset-2"
     >
-        <RouterLink :to="`/action/${action.id}`">
-            <div class="-mt-1">
-                <div class="mb-4 px-6">
-                    <Tag
-                        :class="[
-                            'text-xs uppercase text-primary',
-                            isHover ? 'shadow-md' : '',
-                        ]"
+        <div
+            :class="[
+                'rounded-sm cursor-pointer border-1 border-cardBorder',
+                isHover ? 'bg-blue200 border-transparent' : '',
+            ]"
+            :aria-label="`Fiche action ${action.name}`"
+            tabindex="0"
+            @click="navigate"
+            @mouseenter="isHover = true"
+            @mouseleave="isHover = false"
+        >
+            <div class="mb-4 px-6">
+                <Tag
+                    tabindex="0"
+                    :aria-label="actionPeriod"
+                    :class="[
+                        'text-xs uppercase text-primary',
+                        isHover ? 'shadow-md' : '',
+                    ]"
+                >
+                    <span aria-hidden="true" v-if="action.ended_at"
+                        >du
+                        {{ formatDate(action.started_at / 1000, "d/m/y") }}
+                        au
+                        {{ formatDate(action.ended_at / 1000, "d/m/y") }}</span
                     >
-                        <span v-if="action.ended_at"
-                            >du
-                            {{ formatDate(action.started_at / 1000, "d/m/y") }}
-                            au
-                            {{
-                                formatDate(action.ended_at / 1000, "d/m/y")
-                            }}</span
-                        >
-                        <span v-else>
-                            depuis le
-                            {{ formatDate(action.started_at / 1000, "d/m/y") }}
-                        </span>
-                    </Tag>
-                </div>
+                    <span aria-hidden="true" v-else>
+                        depuis le
+                        {{ formatDate(action.started_at / 1000, "d/m/y") }}
+                    </span>
+                </Tag>
+            </div>
 
-                <div class="text-md px-6">
-                    <div class="text-display-md">
-                        <span class="font-bold">
-                            {{ action.name }}
-                        </span>
-                    </div>
-                </div>
+            <div class="px-6 text-primary text-display-md font-bold">
+                {{ action.name }}
+            </div>
 
-                <div class="md:grid cardGridTemplateColumns gap-10 px-6 py-4">
-                    <CarteActionColonneChampsIntervention
-                        :topics="action.topics"
-                    />
-                    <CarteActionDetailleeColonneDepartement
-                        :departement="action.location.departement"
-                    />
-                    <CarteActionDetailleeColonneLocalisation :action="action" />
-                    <CarteActionDetailleeColonnePilote
-                        :managers="action.managers"
-                    />
-                    <CarteActionDetailleeColonneOperateur
-                        :operators="action.operators"
-                    />
-                </div>
+            <div class="md:grid cardGridTemplateColumns gap-10 px-6 py-4">
+                <CarteActionColonneChampsIntervention :topics="action.topics" />
+                <CarteActionDetailleeColonneDepartement
+                    :departement="action.location.departement"
+                />
+                <CarteActionDetailleeColonneLocalisation :action="action" />
+                <CarteActionDetailleeColonnePilote
+                    :managers="action.managers"
+                />
+                <CarteActionDetailleeColonneOperateur
+                    :operators="action.operators"
+                />
+            </div>
 
-                <div class="flex justify-end px-4 py-4">
-                    <div>
-                        <Link :to="`/action/${action.id}`">
-                            <Icon icon="arrow-right" /> Voir la fiche de
-                            l'action
-                        </Link>
-                    </div>
+            <div class="flex justify-end px-4 py-4">
+                <div>
+                    <Link
+                        :to="`/action/${action.id}`"
+                        :aria-label="`Voir la fiche de l'action ${action.name}`"
+                    >
+                        <Icon icon="arrow-right" /> Voir la fiche de l'action
+                    </Link>
                 </div>
             </div>
-        </RouterLink>
-    </div>
+        </div>
+    </RouterLink>
 </template>
 
 <script setup>
-import { toRefs, ref } from "vue";
+import { computed, toRefs, ref } from "vue";
 import formatDate from "@common/utils/formatDate";
 
 import { RouterLink } from "vue-router";
@@ -89,6 +91,22 @@ const props = defineProps({
 const { action } = toRefs(props);
 
 const isHover = ref(false);
+
+const actionPeriod = computed(() => {
+    if (action.value.ended_at) {
+        return (
+            "Action réalisée du " +
+            formatDate(action.value.started_at / 1000, "d/m/y") +
+            " au " +
+            formatDate(action.value.ended_at / 1000, "d/m/y")
+        );
+    } else {
+        return (
+            "Action en cours depuis le " +
+            formatDate(action.value.started_at / 1000, "d/m/y")
+        );
+    }
+});
 </script>
 
 <style scoped lang="scss">

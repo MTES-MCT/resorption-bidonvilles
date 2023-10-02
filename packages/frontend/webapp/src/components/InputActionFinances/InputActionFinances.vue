@@ -67,7 +67,7 @@
                     type="button"
                     icon="trash-alt"
                     size="sm"
-                    variant="secondary"
+                    variant="primary"
                     @click="removeRow(row)"
                 />
             </template>

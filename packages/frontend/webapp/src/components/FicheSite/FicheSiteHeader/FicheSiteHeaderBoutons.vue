@@ -1,5 +1,5 @@
 <template>
-    <p class="flex space-x-2">
+    <p class="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
         <RouterLink
             to="#journal_du_site"
             v-if="
@@ -14,9 +14,18 @@
                 variant="primaryOutline"
                 icon="comment"
                 iconPosition="left"
+                tabindex="-1"
                 >Journal du site</Button
             >
         </RouterLink>
+        <Button
+            size="sm"
+            icon="file-word"
+            iconPosition="left"
+            variant="primaryOutline"
+            @click="modalExport.open()"
+            >Exporter</Button
+        >
         <Button
             v-if="
                 userStore.hasLocalizedPermission('shantytown.close', town) &&
@@ -29,14 +38,7 @@
             :href="`/site/${town.id}/fermeture`"
             >Fermer le site</Button
         >
-        <Button
-            size="sm"
-            icon="file-word"
-            iconPosition="left"
-            variant="primary"
-            @click="modalExport.open()"
-            >Exporter</Button
-        >
+
         <Button
             v-if="
                 userStore.hasLocalizedPermission(
@@ -66,7 +68,7 @@
         <Button
             v-if="userStore.hasLocalizedPermission('shantytown.delete', town)"
             size="sm"
-            variant="secondary"
+            variant="primary"
             icon="fa-regular fa-trash-alt"
             iconPosition="left"
             @click="deleteTown"

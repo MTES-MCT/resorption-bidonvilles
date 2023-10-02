@@ -1,10 +1,10 @@
 <template>
     <div>
-        <h1 :class="`font-bold text-${size}`">
+        <label :class="`font-bold text-${size}`" :for="id ? id : null">
             {{ title }}
             <MandatoryStar v-if="showMandatoryStar" />
             <span class="text-G600" v-if="info">{{ info }}</span>
-        </h1>
+        </label>
         <p class="mt-1 mb-4">
             <slot />
         </p>
@@ -16,6 +16,10 @@ import { defineProps, toRefs } from "vue";
 import { MandatoryStar } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
+    id: {
+        type: String,
+        required: true,
+    },
     title: {
         type: String,
         required: true,

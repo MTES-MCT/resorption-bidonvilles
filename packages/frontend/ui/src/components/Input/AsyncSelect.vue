@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, toRefs } from "vue";
+import { onMounted, ref, toRefs } from "vue";
 import Icon from "../Icon.vue";
 import Select from "./Select.vue";
 

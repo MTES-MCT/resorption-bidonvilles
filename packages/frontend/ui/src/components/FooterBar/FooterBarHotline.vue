@@ -1,6 +1,6 @@
 <template>
     <section class="max-w-md mt-8 lg:mt-0">
-        <h1 class="font-bold text-lg">{{ $t('footer.contactTitle') }}</h1>
+        <h2 class="font-bold text-lg">{{ $t('footer.contactTitle') }}</h2>
         <p class="text-sm">{{ $t('footer.contactBody1') }}</p>
         <p class="text-sm">
             {{ $t('footer.contactBody2') }}

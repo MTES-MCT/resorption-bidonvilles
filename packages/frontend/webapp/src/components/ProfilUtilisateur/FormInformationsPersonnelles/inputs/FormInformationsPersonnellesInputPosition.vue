@@ -1,5 +1,10 @@
 <template>
-    <TextInput name="position" :label="labels.position" :value="value" />
+    <TextInput
+        name="position"
+        :label="labels.position"
+        :value="value"
+        autocomplete="organization-title"
+    />
 </template>
 
 <script setup>

@@ -3,14 +3,16 @@
         <CarteQuestiondateCreation :question="question" />
         <div class="flex justify-end items-center space-x-4">
             <Button
+                :aria-label="`Voir la question ${question.question}`"
                 variant="primary"
                 size="sm"
                 icon="rectangle-list"
                 iconPosition="left"
-                :href="`/question/${question.id}#reponses`"
+                :href="`/question/${question.id}`"
                 >Voir la question</Button
             >
             <Button
+                :aria-label="`Voir les ${seeAnswerWording}`"
                 v-if="questionHasAtLeastOneAnswer"
                 variant="primary"
                 size="sm"
@@ -30,10 +32,6 @@ import CarteQuestiondateCreation from "./CarteQuestionDateCreation.vue";
 
 const props = defineProps({
     question: Object,
-    isHover: {
-        type: Boolean,
-        default: false,
-    },
 });
 const { question } = toRefs(props);
 

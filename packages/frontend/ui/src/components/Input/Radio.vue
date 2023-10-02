@@ -1,7 +1,7 @@
 <template>
-    <button type="button" :disabled="isSubmitting || disabled" :class="classes" :name="name" @click="onClick">
+    <button type="button" :disabled="isSubmitting || disabled" :class="classes" :name="name" @click="onClick" class="focus:outline-none focus:ring-2 ring-offset-2 ring-info">
         <span v-if="variant === 'radio'"
-            class="inline-flex items-center justify-center rounded-full border w-5 h-5 text-white"
+            class="inline-flex items-center justify-center rounded-full border w-5 h-5 text-white border-G500"
             :class="checked ? 'bg-primary border-primary' : ''">
             <Icon v-if="checked" icon="check" class="text-xs" />
         </span>

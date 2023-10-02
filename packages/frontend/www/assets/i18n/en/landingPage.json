@@ -18,6 +18,8 @@
     },
     "before": "Before",
     "after": "After",
+    "beforeImageTranscription": "This is the transcript of the \"Before\" image",
+    "afterImageTranscription": "This is the transcript of the \"After\" image",
     "context": {
       "title_part1": "",
       "title_part2": "Résorption-bidonvilles",
@@ -28,20 +30,29 @@
     "feedback": {
       "title": "User testimonials",
       "1": {
+        "label": "First testimonial",
         "text": "It's great because you have the info online, you're not faced with an excel spreadsheet with codes you don't understand.",
         "author": "Prefecture Seine-Saint-Denis"
       },
       "2": {
+        "label": "Second testimonial",
         "text": "The platform made the information more reliable because, before the Excel table was not shared. The more collaborative tools we have, the better it is.",
         "author": "City of Poitiers"
       },
       "3": {
+        "label": "Third testimonial",
         "text": "I was able to direct the family of a person I was accompanying to a solidarity house from the location of their slum.",
         "author": "Haute-Garonne Association"
-      }
+      },
+      "carousel_start": "Scroll through the testimonials",
+      "carousel_stop": "Pause scrolling"
     },
     "video": {
-      "text": "Get a preview of Résorption-bidonvilles in 1 min"
+      "text": "Get a preview of Résorption-bidonvilles in 1 minute",
+      "transcription_part1": "\"Resorption-Bidonvilles\" features an interactive map, enabling a site to be searched by address.",
+      "transcription_part2": "The site description gives access to practical, up-to-date information such as location, characteristics, inhabitants, living conditions and environment, legal proceedings, list of stakeholders.",
+      "transcription_part3": "This collaborative tool enables actions to be monitored.",
+      "transcription_part4": "It also offers a resource area and a directory of those involved in slum clearance."
     }
   },
   "firstBanner": {
@@ -78,8 +89,34 @@
       "normal": "A slum is an area that usually lacks basic services (water, electricity, waste management) and is illegally occupied by several families."
     },
     "thirdParagraph": "",
+    "map": {
+      "transcription_title": "Show image transcription",
+      "notranscription_title": "Hide image transcription",
+      "title": "Map of shanty towns in mainland France",
+      "subtitle": "Slums in 20 departments in mainland France with european union people",
+      "nord": "Nord, more than 700 people",
+      "ileDeFrance": "île de france, more than 4700 people",
+      "loireAtlantique": "Loire Atlantique, more than 2500 people",
+      "gironde": "Gironde, more than 1200 people",
+      "boucheDuRhone": "Bouches-du-Rhône, more than 1200 people"
+    },
     "video": {
-      "text": "Understanding slum clearance in 2 minutes"
+      "text": "Understanding slum clearance in 2 minutes",
+      "transcription_part1": "Today in mainland France, more than 16,000 people, including around 5,000 minors, most of them European Union nationals, live in more than 400 shanty towns and camps",
+      "transcription_part2": "There are solutions for achieving a sustainable reduction in shanty towns:",
+      "transcription_part3": "- partnership actions at local level, between the state, local authorities and associations,",
+      "transcription_part4": "- action from the moment the sites are set up until they disappear, or",
+      "transcription_part5": "- support for the integration of residents through access to housing, employment, education or health,",
+      "transcription_part6": "within a contractual framework and in compliance with the laws of the republic",
+      "transcription_part7": "In January 2018, the government gave new impetus to this policy by setting a renewed framework for action, with a clear objective of reducing shanty towns. Several million euros a year are dedicated to supporting territorial strategies and two million euros a year are allocated to actions on respect for children's rights.",
+      "transcription_part8": "To strengthen this impetus and support local authorities in their efforts to reduce the number of shantytowns, the government has decided to launch the \"Resorption-Bidonvilles\" platform. This new platform will enable the prefectures responsible for steering local strategies to map settlements and monitor changes in them, to monitor the work of all the operators working with residents quickly and easily, to promote the actions carried out on a site and to share best practice",
+      "transcription_part9": "So, whether you're a civil servant, a local authority or an association, get involved and make your actions known so that, together, we can provide effective support for shantytown dwellers and achieve the goal of eliminating shantytowns",
+      "transcription_part10": "Displaying the logos:",
+      "transcription_part11": "- from the Ministry of Solidarity and Health,",
+      "transcription_part12": "- from the digital factory",
+      "transcription_part13": "- the interministerial delegation for housing and access to housing",
+      "transcription_part14": "- the strategy to prevent and combat poverty",
+      "transcription_part15": "Display of the \"Resorption-Bidonvilles\" logo: link to https://www.resorption-bidonvilles.beta.gouv.fr"
     },
     "bilan": {
       "title": "Actions in figures",
@@ -157,5 +194,9 @@
     "cta": "I subscribe",
     "link": "",
     "viewAll": ""
-  }
+  },
+  "transcription_title": "Show video transcript",
+  "notranscription_title": "Hide video transcript",
+  "img_transcription_title": "Show image transcript",
+  "img_notranscription_title": "Hide image transcript"
 }

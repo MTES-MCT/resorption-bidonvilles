@@ -1,11 +1,12 @@
 <template>
-    <router-link to="/" class="flex items-center space-x-8 hover:bg-G100 p-3">
+    <router-link to="/" aria-label="Retourner à la page d'accueil en mode connecté, sinon, au formulaire de connexion"
+        class="flex items-center space-x-8 hover:bg-G100 p-3 focus:outline-none focus:ring-2 ring-offset-2 ring-info">
         <div class="flex flex-col items-start space-y-1">
-            <img :src="marianne" :class="sizeClass.marianneH" />
-            <p class="uppercase font-bold" :class="sizeClass.textSize">
-                République<br />Française
+            <img :src="marianne" :class="sizeClass.marianneH" alt="Bloc marque de l'état" />
+            <p class="uppercase font-bold" :class="sizeClass.textSize" aria-hidden="true">
+                République<br />Française<br />
             </p>
-            <img :src="devise" :class="sizeClass.deviseH" />
+            <img :src="devise" :class="sizeClass.deviseH" alt="Logo de la plateforme Résorption-Bidonvilles" />
         </div>
         <img
             :src="logo"

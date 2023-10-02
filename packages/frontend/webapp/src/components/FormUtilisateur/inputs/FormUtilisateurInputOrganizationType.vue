@@ -1,6 +1,7 @@
 <template>
     <AsyncSelect
         name="organization_type"
+        id="organization_type"
         :label="label"
         :options="options"
         :loader="contactStore.fetchPublicEstablishmentTypes"

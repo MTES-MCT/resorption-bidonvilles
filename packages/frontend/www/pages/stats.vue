@@ -6,7 +6,7 @@
 import StatsPage from "~/components/StatsPage/StatsPage.vue";
 
 useHead({
-    title: "Statistiques publiques — Résorption-bidonvilles"
+    title: "Statistiques publiques - Résorption-bidonvilles"
 });
 
 definePageMeta({

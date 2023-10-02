@@ -1,6 +1,7 @@
 <template>
     <AsyncSelect
         name="departement"
+        id="departement"
         :label="label"
         :options="options"
         :loader="contactStore.fetchDepartements"

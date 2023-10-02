@@ -1,11 +1,12 @@
 <template>
     <InputWrapper :hasErrors="!!errors.length" :withoutMargin="withoutMargin">
-        <InputLabel :label="label" :info="info" :inlineInfo="inlineInfo" :showMandatoryStar="showMandatoryStar" />
+        <InputLabel :label="label" :info="info" :inlineInfo="inlineInfo" :showMandatoryStar="showMandatoryStar" :for="`dp-input-${id}`" />
 
         <div :class="width">
             <DatePicker v-model="date" locale="fr" :format-locale="fr" format="dd LLLL yyyy"
                 :disabled="isSubmitting || disabled" autoApply :enableTimePicker="false"
-                :preventMinMaxNavigation="$attrs.maxDate || $attrs.minDate" v-bind="$attrs">
+                input-class-name="focus:outline-none focus:ring-2 ring-offset-2 ring-info"
+                :preventMinMaxNavigation="$attrs.maxDate || $attrs.minDate" v-bind="$attrs" :uid="id">
             </DatePicker>
         </div>
         <InputError v-if="errors.length">{{ errors[0] }}</InputError>
@@ -22,6 +23,7 @@ import InputLabel from "./utils/InputLabel.vue";
 import InputError from "./utils/InputError.vue";
 
 const props = defineProps({
+    id: String,
     name: String,
     label: String,
     info: String,
@@ -57,7 +59,7 @@ const props = defineProps({
     },
 });
 
-const { name, label, info, inlineInfo, showMandatoryStar, rules, disabled, modelValue, width, withoutMargin } = toRefs(props);
+const { id, name, label, info, inlineInfo, showMandatoryStar, rules, disabled, modelValue, width, withoutMargin } = toRefs(props);
 const isSubmitting = useIsSubmitting();
 const { handleChange, errors, value } = useField(name.value, rules.value, {
     initialValue: modelValue.value

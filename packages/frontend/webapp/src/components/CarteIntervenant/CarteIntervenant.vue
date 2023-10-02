@@ -5,9 +5,9 @@
     >
         <Icon class="mt-1" icon="user" />
         <div class="flex-1">
-            <p class="font-bold">
+            <h3 class="font-bold">
                 {{ actor.first_name }} {{ actor.last_name.toUpperCase() }}
-            </p>
+            </h3>
             <p>{{ actor.organization.name }}</p>
             <div v-if="actor.themes.length > 0" class="mt-2">
                 <Tag

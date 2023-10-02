@@ -1,10 +1,10 @@
 import landingPage from "./landingPage.json";
 import contactPage from "./contactPage.json";
-import footer from "@common/i18n/bg/footer.json";
+import common from "@common/i18n/bg/index";
 
 export default {
     landingPage,
     contactPage,
-    footer,
-    aboutUs: "За нас"
+    aboutUs: "За нас",
+    ...common,
 };
