@@ -1,7 +1,7 @@
 <template>
   <select @change="pickLang($event.target.value)"
     class="focus:ring-2 ring-offset-2 ring-info bg-white text-lg border-2 border-primary text-primary focus:outline-none p-2"
-    name="language" label="Langue" :disabled="disabled">
+    name="language" :label="language === 'fr' ? 'Change language' : 'Changer la langue'" :disabled="disabled">
     <option class="hover:bg-primary" v-for="lang in languages" :key="lang.key" :alt="lang.alt" :value="lang.key"
       :lang="lang.key" @change="pickLang(lang.key)">
       {{ lang.flag }} {{ lang.label }}
