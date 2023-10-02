@@ -258,15 +258,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import { Accordion, AccordionItem, Icon } from '@resorptionbidonvilles/ui';
 import VideoFeedbackUser from '../FirstSection/UserFeedback/LandingPageUserFeedbackVideo.vue';
 
-let showTranscription = ref(false);
 import posterLink1 from '~/assets/img/LandingPage/ThirdSection/temoignage_utilisateur_1.png';
 import sourceLink1 from '~/assets/video/Temoignage-Leduc-BD_mars2021.mp4';
-
-function toggleTranscription() {
-    this.showTranscription = !this.showTranscription;
-}
 </script>
