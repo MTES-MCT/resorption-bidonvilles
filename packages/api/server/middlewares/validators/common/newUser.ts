@@ -79,6 +79,10 @@ export default (
                 throw new Error('Vous devez préciser la structure');
             }
 
+            if (value === 'other') {
+                return true;
+            }
+
             let organizationCategory;
             try {
                 organizationCategory = await organizationCategoryModel.findOneById(value);
@@ -91,6 +95,20 @@ export default (
             }
 
             req.body.organization_category_full = organizationCategory;
+            return true;
+        }),
+
+    body('organization_other')
+        .trim()
+        .custom((value, { req }) => {
+            if (req.body.organization_category !== 'other') {
+                return true;
+            }
+
+            if (!req.body.organization_other) {
+                throw new Error('Le champ "Précisez le nom de la structure" est obligatoire');
+            }
+
             return true;
         }),
 

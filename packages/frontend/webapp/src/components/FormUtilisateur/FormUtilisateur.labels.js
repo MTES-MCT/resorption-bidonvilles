@@ -20,6 +20,7 @@ export default (variant) => ({
         new_association_abbreviation: "Précisez l'acronyme, si applicable",
         departement: "Département de rattachement",
         organization_administration: "Nom de la structure",
+        organization_other: "Précisez le nom de la structure",
         position:
             variant === "demande-acces"
                 ? "Votre fonction"

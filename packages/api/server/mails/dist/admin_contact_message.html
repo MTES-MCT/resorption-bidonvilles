@@ -1,9 +1,7 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
   <head>
-    <title>
-      [Résorption-bidonvilles] - Vous avez reçu un nouveau message de contact
-    </title>
+    <title>[Résorption-bidonvilles] - Vous avez reçu un nouveau message de contact</title>
     <!--[if !mso]><!-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!--<![endif]-->
@@ -55,7 +53,7 @@
     
     
 
-    @media only screen and (max-width:480px) {
+    @media only screen and (max-width:479px) {
       table.mj-full-width-mobile { width: 100% !important; }
       td.mj-full-width-mobile { width: auto !important; }
     }
@@ -202,7 +200,23 @@
     
                 </td>
               </tr>
+            {% if var:message.is_organization_other %}
+              <tr>
+                <td align="left" style="font-size:0px;padding:0;word-break:break-word;">
+                  
+      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;">Nom de la structure à créer :</div>
+    
+                </td>
+              </tr>
             
+              <tr>
+                <td align="left" style="font-size:0px;padding:0;word-break:break-word;">
+                  
+      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;">{{var:message.organization_other}}</div>
+    
+                </td>
+              </tr>
+            {% endif %}
         </tbody>
       </table>
     
@@ -262,7 +276,7 @@
           <tr>
             <td style="width:40px;">
               
-      <img height="15" src="{{var:backUrl}}/assets/mails/marianne.png" style="border:0;display:block;outline:none;text-decoration:none;height:15;width:100%;font-size:16px;" width="40">
+      <img src="{{var:backUrl}}/assets/mails/marianne.png" style="border:0;display:block;outline:none;text-decoration:none;height:15;width:100%;font-size:16px;" width="40" height="15">
     
             </td>
           </tr>

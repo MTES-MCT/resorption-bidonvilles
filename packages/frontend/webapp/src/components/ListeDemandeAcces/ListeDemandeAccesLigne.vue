@@ -1,51 +1,59 @@
 <template>
     <RouterLink
-        as="div"
-        class="cursor-pointer hover:bg-blue100"
-        :class="bgColor"
+        custom
+        v-slot="{ navigate }"
         :to="`/acces/${user.id}`"
         @mouseenter="hovered = true"
         @mouseleave="hovered = false"
     >
-        <div class="flex items-start">
-            <p :class="accessStatus.textColor">
-                <Icon :icon="accessStatus.icon" class="mr-1" />
-            </p>
-            <p>
-                <span class="font-bold" :class="accessStatus.textColor">{{
-                    accessStatus.label
-                }}</span
-                ><br />
-                <span class="text-sm" v-if="accessStatus.date"
-                    >le {{ formatDate(accessStatus.date, "d M y") }}</span
+        <div
+            @click="navigate"
+            class="flex cursor-pointer hover:bg-blue100 focus:outline-none focus:ring-2 ring-offset-2 ring-info"
+            :class="bgColor"
+        >
+            <div class="flex-1 p-3">
+                <p :class="accessStatus.textColor">
+                    <Icon :icon="accessStatus.icon" class="mr-1" />
+                </p>
+                <p>
+                    <span class="font-bold" :class="accessStatus.textColor">{{
+                        accessStatus.label
+                    }}</span
+                    ><br />
+                    <span class="text-sm" v-if="accessStatus.date"
+                        >le {{ formatDate(accessStatus.date, "d M y") }}</span
+                    >
+                </p>
+            </div>
+            <div class="flex-1 p-3">
+                <p>{{ user.last_name.toUpperCase() }} {{ user.first_name }}</p>
+                <p class="text-sm">{{ user.position }}</p>
+                <p
+                    class="text-sm text-G600"
+                    v-if="user.last_access && userStore.user?.is_superuser"
                 >
-            </p>
-        </div>
-        <div>
-            <p>{{ user.last_name.toUpperCase() }} {{ user.first_name }}</p>
-            <p class="text-sm">{{ user.position }}</p>
-            <p
-                class="text-sm text-G600"
-                v-if="user.last_access && userStore.user?.is_superuser"
-            >
-                Dernière connexion: {{ formatDate(user.last_access, "d M y") }}
-            </p>
-        </div>
-        <div>
-            <p>
-                {{ user.organization.abbreviation || user.organization.name }}
-            </p>
-        </div>
-        <div>{{ user.location_name }}</div>
-        <div>
-            <p>{{ user.role }}</p>
-            <br />
-            <p class="text-right text-primary">
-                <Link v-if="hovered" :to="`/acces/${user.id}`"
-                    >Voir la demande d'accès</Link
-                >
-                <Icon icon="arrow-right" class="ml-2" />
-            </p>
+                    Dernière connexion:
+                    {{ formatDate(user.last_access, "d M y") }}
+                </p>
+            </div>
+            <div class="flex-1 p-3">
+                <p>
+                    {{
+                        user.organization.abbreviation || user.organization.name
+                    }}
+                </p>
+            </div>
+            <div class="flex-1 p-3">{{ user.location_name }}</div>
+            <div class="flex-1 p-3">
+                <p>{{ user.role }}</p>
+                <br />
+                <p class="text-right text-primary">
+                    <Link v-if="hovered" :to="`/acces/${user.id}`"
+                        >Voir la demande d'accès</Link
+                    >
+                    <Icon icon="arrow-right" class="ml-2" />
+                </p>
+            </div>
         </div>
     </RouterLink>
 </template>

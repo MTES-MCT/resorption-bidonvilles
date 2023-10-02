@@ -23,7 +23,18 @@
             >Mettre à jour</Button
         >
         <Link :to="`/site/${shantytown.id}`">
-            <Icon icon="arrow-right" /> Voir la fiche du site</Link
+            <Icon
+                :aria-label="`Voir la fiche du site ${
+                    shantytown.addressSimple
+                } ${shantytown.name ? shantytown.name : ''} ${
+                    shantytown.city.name
+                }
+                }`"
+                icon="arrow-right"
+            />
+            <span class="ml-2" aria-hidden="true"
+                >Voir la fiche du site</span
+            ></Link
         >
     </div>
 </template>

@@ -2,11 +2,11 @@
     <article class="cursor-pointer border-1 hover:border-blue400">
         <RouterLink
             :to="`/structure/${organization.id}`"
-            class="inline-block p-4 h-full flex flex-col"
+            class="inline-block p-4 h-full flex flex-col focus:outline-none focus:ring-2 ring-offset-2 ring-info"
         >
             <header>
-                <h1 class="text-lg font-bold">{{ name }}</h1>
-                <h2
+                <h3 class="text-lg font-bold">{{ name }}</h3>
+                <p
                     v-if="
                         organization.abbreviation &&
                         !organization.name.startsWith(organization.type.name)
@@ -14,15 +14,15 @@
                     class="text-sm"
                 >
                     {{ organization.name }}
-                </h2>
-                <h2 class="text-G500">{{ organization.type.name }}</h2>
+                </p>
+                <p class="text-G600">{{ organization.type.name }}</p>
                 <p v-if="displayBeingFunded" class="text-info">
                     <Icon icon="euro-sign" /> Structure financée
                 </p>
                 -
             </header>
 
-            <p class="my-2 text-sm text-G500">
+            <p class="my-2 text-sm text-G600">
                 {{ organization.users.length }} membre{{ plural ? "s" : "" }}
                 <template v-if="showWording"
                     >inscrit{{ plural ? "s" : "" }} sur la plateforme</template
@@ -34,7 +34,8 @@
                     :key="user.id"
                     :class="user.is_admin ? 'text-info' : ''"
                 >
-                    <Icon :icon="user.is_admin ? 'user-shield' : 'user'" />
+                    <IconeAdministrateur v-if="user.is_admin" />
+                    <Icon v-else icon="user" title="Pictogramme utilisateur" />
                     {{ user.last_name.toUpperCase() }}
                     {{ user.first_name }}
                 </li>
@@ -57,6 +58,7 @@ import { defineProps, toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { RouterLink } from "vue-router";
 import { Icon, Link } from "@resorptionbidonvilles/ui";
+import IconeAdministrateur from "@/components/IconeAdministrateur/IconeAdministrateur.vue";
 
 const props = defineProps({
     organization: Object,

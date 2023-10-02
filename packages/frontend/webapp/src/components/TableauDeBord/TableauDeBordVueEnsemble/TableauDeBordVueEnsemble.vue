@@ -30,7 +30,7 @@
         </p>
 
         <section v-else>
-            <div class="flex">
+            <div class="flex flex-wrap gap-5">
                 <TableauDeBordCarteStatistique
                     v-for="stat in dashboardStore.stats.data"
                     :key="stat.label"

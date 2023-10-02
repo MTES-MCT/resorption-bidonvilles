@@ -2,22 +2,22 @@
     <CarteUtilisateurWrapper
         :user="user"
         :linkToUser="linkToUser"
-        class="hover:bg-blue200 border p-4 grid grid-cols-2 gap-8"
+        class="hover:bg-blue200 border p-4 grid grid-cols-2 gap-8 focus:outline-none focus:ring-2 ring-offset-2 ring-info"
         :class="{
             'bg-blue100': user.is_admin,
         }"
     >
         <div>
-            <h1 class="font-bold" :class="user.is_admin ? 'text-info' : ''">
+            <h2 class="font-bold" :class="user.is_admin ? 'text-info' : ''">
                 {{ user.last_name.toUpperCase() }}
                 {{ user.first_name }}
-            </h1>
+            </h2>
             <p>{{ user.position }}</p>
             <p class="mt-2">
-                <span class="text-G500 text-sm">Rôle sur la plateforme :</span
+                <span class="text-G600 text-sm">Rôle sur la plateforme :</span
                 ><br />
                 <span :class="user.is_admin ? 'text-info' : ''"
-                    ><Icon icon="user-shield" v-if="user.is_admin" />
+                    ><IconeAdministrateur v-if="user.is_admin" />
                     {{ user.role }}</span
                 >
             </p>
@@ -38,9 +38,10 @@
 <script setup>
 import { defineProps, toRefs } from "vue";
 import { trackEvent } from "@/helpers/matomo";
-import { Icon, Link } from "@resorptionbidonvilles/ui";
+import { Link } from "@resorptionbidonvilles/ui";
 import CarteUtilisateurWrapper from "./CarteUtilisateurWrapper.vue";
 import CarteUtilisateurDetailsIcon from "./CarteUtilisateurDetailsIcon.vue";
+import IconeAdministrateur from "@/components/IconeAdministrateur/IconeAdministrateur.vue";
 
 const props = defineProps({
     user: {

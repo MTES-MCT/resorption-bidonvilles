@@ -27,10 +27,10 @@
                     <li>Par téléphone : +33 (0) 1 40 81 95 39</li>
                     <li>
                         Par mail :
-                        <h4>
+                        <p>
                             <Link class="underline" to="mailto:contact@resorption-bidonvilles.beta.gouv.fr">
                             contact@resorption-bidonvilles.beta.gouv.fr</Link>
-                        </h4>
+                        </p>
                     </li>
                 </ul>
             </div>
@@ -95,7 +95,7 @@ const piwik = ref(null);
 const isOptedOut = ref(null);
 
 useHead({
-    title: "Mentions légales — Résorption-bidonvilles"
+    title: "Mentions légales - Résorption-bidonvilles"
 });
 
 definePageMeta({

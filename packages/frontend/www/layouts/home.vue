@@ -1,11 +1,12 @@
 <template>
     <Layout>
         <template v-slot:anchors v-if="$i18n.locale === 'fr'">
-            <a href="#plateforme">La plateforme</a>
-            <a href="#strategie">La stratégie de résorption</a>
-            <a href="#faq">FAQ</a>
-            <a href="#equipe">{{ $t("aboutUs") }}</a>
-            <a href="https://www.blog-resorption-bidonvilles.fr" target="_blank">Blog</a>
+            <a href="#plateforme" aria-label="Accéder au paragraphe présentant la plateforme">La plateforme</a>
+            <a href="#strategie" aria-label="Accéder au paragraphe présentant la stratégie de résorption">La stratégie de
+                résorption</a>
+            <a href="#faq" aria-label="Accéder à la foire aux questions">FAQ</a>
+            <a href="#equipe" aria-label="Accéder au paragraphe présentant l'équipe'">{{ $t("aboutUs") }}</a>
+            <a href="https://www.blog-resorption-bidonvilles.fr" target="_blank" aria-label="Accéder au blog">Blog</a>
         </template>
 
         <slot />

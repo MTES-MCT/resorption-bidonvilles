@@ -1,28 +1,26 @@
 <template>
     <div>
-        <h1 class="text-display-lg font-bold">FAQ : questions fréquentes</h1>
+        <h2 class="text-display-lg font-bold">FAQ : questions fréquentes</h2>
         <Accordion class="ml-16 mt-6">
-            <AccordionItem>
+            <AccordionItem id="1">
                 <template v-slot:title>Qui a accès à la plateforme ?</template>
                 <template v-slot:content>
                     <p>
                         L’accès à la plateforme est
-                        <span class="font-bold"
-                            >ouvert aux acteurs de la résorption,</span
-                        >
+                        <span class="font-bold">ouvert aux acteurs de la résorption,</span>
                         c’est-à-dire :
                     </p>
-                    <p class="mt-6">
-                        - les acteurs publics impliqués dans le pilotage et les
-                        actions dans les territoires (en matière d’éducation,
-                        santé, emploi et logement, agents de l’État, des
-                        collectivités territoriales…)<br />
-                        - les acteurs de terrain qui interviennent auprès des
-                        habitants (associations, opérateurs, collectifs)<br />
-                        - les acteurs nationaux chargés du suivi et de la mise
-                        en œuvre de cette politique publique (Dihal, Ministères,
-                        associations nationales…)
-                    </p>
+                    <ul class="mt-6 list-disc">
+                        <li>les acteurs publics impliqués dans le pilotage et les
+                            actions dans les territoires (en matière d’éducation,
+                            santé, emploi et logement, agents de l’État, des
+                            collectivités territoriales…)</li>
+                        <li>les acteurs de terrain qui interviennent auprès des
+                            habitants (associations, opérateurs, collectifs)</li>
+                        <li>les acteurs nationaux chargés du suivi et de la mise
+                            en œuvre de cette politique publique (Dihal, Ministères,
+                            associations nationales…)</li>
+                    </ul>
                     <p class="mt-6">
                         Les accès sont ouverts en fonction du territoire
                         d’intervention de l’utilisateur. cf. question suivante
@@ -38,9 +36,8 @@
                 </template>
             </AccordionItem>
 
-            <AccordionItem>
-                <template v-slot:title
-                    >Qui peut faire quoi ? Qui peut voir les données que je
+            <AccordionItem id="2">
+                <template v-slot:title>Qui peut faire quoi ? Qui peut voir les données que je
                     partage ?
                 </template>
                 <template v-slot:content>
@@ -66,17 +63,13 @@
                 </template>
             </AccordionItem>
 
-            <AccordionItem>
-                <template v-slot:title
-                    >Qui valide ma demande d’accès à la plateforme ?</template
-                >
-                <template v-slot:content
-                    ><p>
+            <AccordionItem id="3">
+                <template v-slot:title>Qui valide ma demande d’accès à la plateforme ?</template>
+                <template v-slot:content>
+                    <p>
                         Les demandes d’accès à la plateforme sont validées par
-                        <span class="font-bold"
-                            >des administrateurs locaux, désignés par la
-                            DIHAL</span
-                        >. Ils sont en Préfecture et/ou dans une Direction
+                        <span class="font-bold">des administrateurs locaux, désignés par la
+                            DIHAL</span>. Ils sont en Préfecture et/ou dans une Direction
                         départementale de l’emploi, du travail et des
                         solidarités. Ces demandes sont évaluées au cas par cas,
                         puis validées ou non en fonction du champ
@@ -87,30 +80,25 @@
                         <span class="font-bold">Le saviez-vous ?</span>
                         L’administrateur local de votre territoire est
                         identifiable sur l’annuaire par un picto bleu
-                        <span class="text-info"
-                            ><Icon icon="user-shield" width="20" height="16"
-                        /></span></p
-                ></template>
+                        <span class="text-info">
+                            <Icon icon="user-shield" width="20" height="16" title="Administrateur local" />
+                        </span>
+                    </p>
+                </template>
             </AccordionItem>
 
-            <AccordionItem>
-                <template v-slot:title
-                    >À quoi vont servir les informations renseignées sur la
-                    plateforme ?</template
-                >
+            <AccordionItem id="4">
+                <template v-slot:title>À quoi vont servir les informations renseignées sur la
+                    plateforme ?</template>
                 <template v-slot:content>
                     <p>
                         L’instruction du 25 janvier 2018 a donné une nouvelle
                         impulsion à la résorption des bidonvilles. Elle vise à
-                        <span class="font-bold"
-                            >dépasser une approche de court terme centrée
-                            auparavant sur les évacuations</span
-                        >
+                        <span class="font-bold">dépasser une approche de court terme centrée
+                            auparavant sur les évacuations</span>
                         dans l’objectif de
-                        <span class="font-bold"
-                            >réduire durablement le nombre de personnes vivant
-                            dans les bidonvilles</span
-                        >. Les informations partagées sur la plateforme
+                        <span class="font-bold">réduire durablement le nombre de personnes vivant
+                            dans les bidonvilles</span>. Les informations partagées sur la plateforme
                         contribuent à cet objectif.
                     </p>
                     <p class="mt-6">
@@ -123,40 +111,30 @@
                             situation des habitants
                         </li>
                         <li>
-                            <span class="font-bold"
-                                >renforcer le pouvoir d’agir</span
-                            >
+                            <span class="font-bold">renforcer le pouvoir d’agir</span>
                             de chaque acteur sur le terrain
                         </li>
                         <li>
-                            <span class="font-bold"
-                                >préparer les plans d’actions et
-                                interventions</span
-                            >
+                            <span class="font-bold">préparer les plans d’actions et
+                                interventions</span>
                             (diagnostic social, accompagnement social, accès au
                             logement, amélioration des conditions de vie…)
                         </li>
                         <li>
-                            <span class="font-bold"
-                                >faciliter la coordination et le dialogue</span
-                            >
+                            <span class="font-bold">faciliter la coordination et le dialogue</span>
                             entre les acteurs
                         </li>
                         <li>
-                            <span class="font-bold"
-                                >mesurer et valoriser les résultats</span
-                            >
+                            <span class="font-bold">mesurer et valoriser les résultats</span>
                             des actions de résorption menées sur le terrain
                         </li>
                     </ul>
                 </template>
             </AccordionItem>
 
-            <AccordionItem>
-                <template v-slot:title
-                    >Quelles données sont partagées sur la plateforme
-                    ?</template
-                >
+            <AccordionItem id="5">
+                <template v-slot:title>Quelles données sont partagées sur la plateforme
+                    ?</template>
                 <template v-slot:content>
                     <p>
                         La plateforme
@@ -171,9 +149,7 @@
                         </li>
                         <li>
                             les
-                            <span class="font-bold"
-                                >conditions de vie et d’environnement</span
-                            >
+                            <span class="font-bold">conditions de vie et d’environnement</span>
                             des habitants sur le site : accès à l’eau, accès aux
                             toilettes, accès à l’électricité, évacuation des
                             déchets, présence de nuisibles, prévention incendie
@@ -191,9 +167,7 @@
                         </li>
                         <li>
                             les
-                            <span class="font-bold"
-                                >constats et situation du site</span
-                            >
+                            <span class="font-bold">constats et situation du site</span>
                             à travers le journal du site
                         </li>
                     </ul>
@@ -220,11 +194,9 @@
                 </template>
             </AccordionItem>
 
-            <AccordionItem>
-                <template v-slot:title
-                    >J’ai déjà des outils de travail : la plateforme est-t-elle
-                    un doublon avec mes outils ?</template
-                >
+            <AccordionItem id="6">
+                <template v-slot:title>J’ai déjà des outils de travail : la plateforme est-t-elle
+                    un doublon avec mes outils ?</template>
                 <template v-slot:content>
                     <p>
                         Le caractère centralisé de la plateforme distingue cette
@@ -242,9 +214,7 @@
                     <ul class="list-disc pl-4">
                         <li>
                             une meilleure
-                            <span class="font-bold"
-                                >visibilité en temps réel</span
-                            >
+                            <span class="font-bold">visibilité en temps réel</span>
                             des situations
                         </li>
                         <li>
@@ -267,30 +237,19 @@
                         Dans une volonté de faire évoluer continuellement la
                         plateforme, notre équipe se tient à votre disposition
                         pour toute suggestion d’amélioration de l’outil :
-                        <a
-                            class="link"
-                            href="mailto:contact@resorption-bidonvilles.beta.gouv.fr"
-                            >contact@resorption-bidonvilles.beta.gouv.fr</a
-                        >
+                        <a class="link"
+                            href="mailto:contact@resorption-bidonvilles.beta.gouv.fr">contact@resorption-bidonvilles.beta.gouv.fr</a>
                     </p>
                     <p class="mt-6">
-                        <video
-                            preload="none"
-                            poster="~/assets/img/LandingPage/ThirdSection/temoignage_utilisateur_1.png"
-                            controls
-                        >
-                            <source
-                                src="~/assets/video/temoignage_utilisateur_1.mp4"
-                                type="video/mp4"
-                            />
-                            <track
-                                :label="$t('french')"
-                                kind="subtitles"
-                                srclang="fr"
-                                src="/Temoignage-Leduc-BD_mars2021.vtt"
-                            />
-                            Votre navigateur ne supporte pas la balise video.
-                        </video>
+                        <VideoFeedbackUser
+                            :author="$t('landingPage.firstSection.feedback.1.author')"
+                            :part1="$t('landingPage.firstSection.feedback.videos.1.transcription_part1')"
+                            :part2="$t('landingPage.firstSection.feedback.videos.1.transcription_part2')"
+                            :part3="$t('landingPage.firstSection.feedback.videos.1.transcription_part3')"
+                            :poster="posterLink1"
+                            :source="sourceLink1"
+                            :trackLabel="$t('french')"
+                            :trackSrc="'/Temoignage-Leduc-BD_mars2021.vtt'" />
                     </p>
                 </template>
             </AccordionItem>
@@ -300,4 +259,8 @@
 
 <script setup>
 import { Accordion, AccordionItem, Icon } from '@resorptionbidonvilles/ui';
+import VideoFeedbackUser from '../FirstSection/UserFeedback/LandingPageUserFeedbackVideo.vue';
+
+import posterLink1 from '~/assets/img/LandingPage/ThirdSection/temoignage_utilisateur_1.png';
+import sourceLink1 from '~/assets/video/Temoignage-Leduc-BD_mars2021.mp4';
 </script>

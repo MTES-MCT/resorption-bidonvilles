@@ -13,7 +13,7 @@
 import Container from "~/components/Layout/Container/Container.vue";
 
 useHead({
-    title: "Résorption-bidonvilles"
+    title: "Page introuvable - Résorption-bidonvilles"
 });
 
 definePageMeta({

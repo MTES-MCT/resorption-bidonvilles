@@ -1,17 +1,16 @@
 <template>
     <div id="plateforme">
         <img width="1024" height="322" class="full-width mx-auto"
-            src="~/assets/img/LandingPage/FirstSection/resorption-bidonvilles-dessin.jpg"
-            alt="Illustration dessinée d'un bidonville et de ses habitant(e)s" />
+            src="~/assets/img/LandingPage/FirstSection/resorption-bidonvilles-dessin.jpg" alt="" />
         <div class="pt-24">
             <div class="max-w-screen-sm mx-auto">
-                <div class="text-display-lg">
+                <h2 class="text-display-lg">
                     {{ $t("landingPage.firstSection.context.title_part1") }}
                     <span class="italic">{{
                         $t("landingPage.firstSection.context.title_part2")
                     }}</span>
                     : {{ $t("landingPage.firstSection.context.title_part3") }}
-                </div>
+                </h2>
                 <div class="mt-4">
                     <p>{{ $t("landingPage.firstSection.context.text_1") }}</p>
                     <p>{{ $t("landingPage.firstSection.context.text_2") }}</p>
@@ -19,19 +18,32 @@
             </div>
         </div>
         <div class="mt-20 md:flex md:flex-row items-center">
-            <div class="block md:hidden mb-4 text-display-lg font-bold">
+            <p class="block md:hidden mb-4 text-display-lg font-bold">
                 {{ $t("landingPage.firstSection.video.text") }}
-            </div>
-            <div class="md:w-1/2 md:mr-16 bg-gray-500">
-                <video preload="none" poster="~/assets/img/LandingPage/FirstSection/poster_video_landing.png" controls>
+            </p>
+            <div class="md:w-1/2 md:mr-16">
+                <video :aria-label="`${$t('landingPage.firstSection.video.text')},`" preload="none"
+                    poster="~/assets/img/LandingPage/FirstSection/poster_video_landing.png" controls>
                     <source src="~/assets/video/video_landing_720_no_sound.mp4" type="video/mp4" />
                     Votre navigateur ne supporte pas la balise video.
                 </video>
+                <button @click="toggleTranscription(1)" class="mt-2 text-primary hover:underline cursor-pointer"
+                    :aria-label="`${showTranscription[1] ? $t('landingPage.notranscription_title') : $t('landingPage.transcription_title')},`">
+                    <span v-if="!showTranscription[1]">{{ $t("landingPage.transcription_title") }}</span>
+                    <span v-if="showTranscription[1]">{{ $t("landingPage.notranscription_title") }}</span>
+                </button>
             </div>
-            <div class="hidden md:block w-1/2 text-display-lg font-bold">
+            <p class="hidden md:block w-1/2 text-display-lg font-bold">
                 {{ $t("landingPage.firstSection.video.text") }}
-            </div>
+            </p>
         </div>
+        <ul v-if="showTranscription[1]" tabindex="0" class="mt-4">
+            <li>{{ $t("landingPage.firstSection.video.transcription_part1") }}</li>
+            <li>{{ $t("landingPage.firstSection.video.transcription_part2") }}</li>
+            <li>{{ $t("landingPage.firstSection.video.transcription_part3") }}</li>
+            <li>{{ $t("landingPage.firstSection.video.transcription_part4") }}</li>
+        </ul>
+
 
         <div>
             <div class="md:grid md:grid-cols-3 gap-16 mt-16">
@@ -47,35 +59,53 @@
             </div>
 
             <div class="md:flex md:flex-row mt-16">
-                <LandingPageContextImage :label="$t('landingPage.firstSection.before')">
+                <LandingPageContextImage :label="$t('landingPage.firstSection.before')" tabindex="0"
+                    aria-label="Organisation de la politique de résorption sans la plateforme (consulter la description détaillée adjacente à l’image),">
                     <img width="430" height="319" v-if="$i18n.locale === 'fr'"
                         src="~/assets/img/LandingPage/FirstSection/fr/before-fr.jpg"
-                        alt="Illustration dessinée de l'organisation de la politique de résorption sans la plateforme" />
+                        alt="Organisation de la politique de résorption sans la plateforme (consulter la description détaillée adjacente à l’image)," />
                     <img width="430" height="319" v-if="$i18n.locale === 'en'"
                         src="~/assets/img/LandingPage/FirstSection/en/before-en.png" alt="Drawn illustration" />
                     <img width="430" height="319" v-if="$i18n.locale === 'bg'"
                         src="~/assets/img/LandingPage/FirstSection/bg/before-bg.png" alt="Drawn illustration" />
                     <img width="430" height="319" v-if="$i18n.locale === 'ro'"
                         src="~/assets/img/LandingPage/FirstSection/ro/before-ro.png" alt="Drawn illustration" />
+                    <button @click="toggleTranscription(2)" class="mt-2 text-primary hover:underline cursor-pointer"
+                        :aria-label="`${showTranscription[2] ? $t('landingPage.img_notranscription_title') : $t('landingPage.img_transcription_title')},`">
+                        <span v-if="!showTranscription[2]">{{ $t("landingPage.img_transcription_title") }}</span>
+                        <span v-if="showTranscription[2]">{{ $t("landingPage.img_notranscription_title")
+                        }}</span>
+                    </button>
+                    <p v-if="showTranscription[2]" class="mt-4 text-left">
+                        {{ $t("landingPage.firstSection.beforeImageTranscription") }}</p>
                 </LandingPageContextImage>
                 <div class="hidden md:block border-solid border-r-2 border-gray-200 m-20" />
-                <LandingPageContextImage :label="$t('landingPage.firstSection.after')">
+                <LandingPageContextImage :label="$t('landingPage.firstSection.after')" tabindex="0"
+                    aria-label="Organisation de la politique de résorption avec la plateforme (consulter la description détaillée adjacente à l’image),">
                     <img width="430" height="319" v-if="$i18n.locale === 'fr'"
                         src="~/assets/img/LandingPage/FirstSection/fr/after-fr.jpg"
-                        alt="Illustration dessinée de l'organisation de la politique de résorption avec la plateforme" />
+                        alt="Organisation de la politique de résorption avec la plateforme (consulter la description détaillée adjacente à l’image)" />
                     <img width="430" height="319" v-if="$i18n.locale === 'en'"
                         src="~/assets/img/LandingPage/FirstSection/en/after-en.png" alt="Drawn illustration" />
                     <img width="430" height="319" v-if="$i18n.locale === 'bg'"
                         src="~/assets/img/LandingPage/FirstSection/bg/after-bg.png" alt="Drawn illustration" />
                     <img width="430" height="319" v-if="$i18n.locale === 'ro'"
                         src="~/assets/img/LandingPage/FirstSection/ro/after-ro.png" alt="Drawn illustration" />
+                    <button @click="toggleTranscription(3)" class="mt-2 text-primary hover:underline cursor-pointer"
+                        :aria-label="`${showTranscription[3] ? $t('landingPage.img_notranscription_title') : $t('landingPage.img_transcription_title')},`">
+                        <span v-if="!showTranscription[3]">{{ $t("landingPage.img_transcription_title") }}</span>
+                        <span v-if="showTranscription[3]">{{ $t("landingPage.img_notranscription_title")
+                        }}</span>
+                    </button>
+                    <p v-if="showTranscription[3]" class="mt-4 text-left">{{
+                        $t("landingPage.firstSection.afterImageTranscription") }}</p>
                 </LandingPageContextImage>
             </div>
             <LandingPageUserFeedback class="mt-32" />
         </div>
         <div class="pt-24" v-if="$i18n.locale === 'fr'">
             <div class="max-w-screen-lg mx-auto">
-                <LandingCTABanner :img="ctaPrendreEnMain" alt="Illustration du wébinaire prise en main"
+                <LandingCTABanner :img="ctaPrendreEnMain" alt="Wébinaire prise en main, durée 45mn,"
                     href="https://www.evalandgo.com/f/72933/4pFjfpH19VHD2AZhU2ccYx">
                     <template v-slot:title>
                         Webinaire prise en main de
@@ -93,7 +123,8 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
 import LandingPageFeatureBlock from "./LandingPageFeatureBlock.vue";
 import LandingPageContextImage from "./LandingPageContextImage.vue";
 import LandingPageUserFeedback from "./UserFeedback/LandingPageUserFeedback.vue";
@@ -101,23 +132,15 @@ import LandingCTABanner from "./LandingCTABanner.vue";
 import ctaPrendreEnMain from "~/assets/img/LandingPage/FirstSection/cta_prendre_en_main.jpg";
 import { useI18n } from 'vue-i18n';
 
-export default {
-    components: {
-        LandingPageContextImage,
-        LandingPageFeatureBlock,
-        LandingPageUserFeedback,
-        LandingCTABanner,
-    },
-    setup() {
-        const i18n = useI18n();
-        return {
-            i18n
-        };
-    },
-    data() {
-        return {
-            ctaPrendreEnMain,
-        };
-    },
-};
+const i18n = useI18n();
+
+let showTranscription = ref({
+    1: false,
+    2: false,
+    3: false
+});
+
+function toggleTranscription(index) {
+    this.showTranscription[index] = !this.showTranscription[index];
+}
 </script>

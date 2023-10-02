@@ -1,5 +1,5 @@
 import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
-import userService from '#server/services/userService';
+import userService from '#server/services/user/index';
 
 export default async (req, res) => {
     // create the user

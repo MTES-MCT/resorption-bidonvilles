@@ -8,8 +8,17 @@
         @mouseenter="isHover = true"
         @mouseleave="isHover = false"
     >
-        <RouterLink :to="`/site/${shantytown.id}`">
-            <div class="-mt-1 print:mt-0">
+        <RouterLink
+            :to="`/site/${shantytown.id}`"
+            class="focus:outline-2 outline-info outline-offset-2"
+        >
+            <div
+                class="-mt-1 print:mt-0"
+                :aria-label="`Fiche site ${shantytown.addressSimple}${
+                    shantytown.name ? shantytown.name : ''
+                } ${shantytown.city.name}
+                }`"
+            >
                 <CarteSiteDetailleeHeader
                     class="mb-4"
                     :shantytown="shantytown"
@@ -48,7 +57,6 @@
 
 <script setup>
 import { defineProps, toRefs, computed, ref } from "vue";
-import { RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
 
 import CarteSiteDetailleeHeader from "./CarteSiteDetailleeHeader.vue";

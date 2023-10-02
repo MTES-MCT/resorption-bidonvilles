@@ -1,26 +1,38 @@
 <template>
-    <ul class="list-none ml-4">
-        <TableauDeBordSiteFiltre
+    <ul class="list-none ml-4 tbd-sites-filtres">
+        <TableauDeBordSiteFiltreItem
             v-for="item in items"
             :key="item.id"
-            :item="item"
+            class="inline-flex items-start"
+            v-bind="item"
             @click="setFilter(item.id)"
-            >{{ item.label }} ({{ dashboardStore.towns.data[item.id].length }})
-            <template v-if="item.sublabel"
-                ><br /><span
-                    class="inline-block w-full font-normal text-center"
-                    :class="item.active ? 'visible' : 'invisible'"
-                    >{{ item.sublabel }}</span
-                ></template
+            ><span
+                >{{ item.label }} ({{
+                    dashboardStore.towns.data[item.id].length
+                }})
+                <template v-if="item.sublabel"
+                    ><br /><span
+                        class="inline-block w-full font-normal text-center"
+                        :class="item.active ? 'visible' : 'invisible'"
+                        >{{ item.sublabel }}</span
+                    ></template
+                ></span
             >
-        </TableauDeBordSiteFiltre>
+        </TableauDeBordSiteFiltreItem>
     </ul>
 </template>
+
+<style scoped lang="scss">
+.tbd-sites-filtres li:not(:last-child)::after {
+    content: "";
+    @apply inline-block w-px h-4 mt-1 pl-4 border-r border-gray-400;
+}
+</style>
 
 <script setup>
 import { computed } from "vue";
 import { useDashboardStore } from "@/stores/dashboard.store";
-import TableauDeBordSiteFiltre from "./TableauDeBordSiteFiltre/TableauDeBordSiteFiltre.vue";
+import TableauDeBordSiteFiltreItem from "./TableauDeBordSiteFiltre/TableauDeBordSiteFiltreItem.vue";
 import { trackEvent } from "@/helpers/matomo";
 
 const dashboardStore = useDashboardStore();
@@ -32,7 +44,6 @@ const items = computed(() => {
             label: "Mes sites",
             track_id: "Mes sites",
         },
-        { type: "separator", label: "", id: "separator_1" },
         {
             id: "new_shantytowns",
             type: "link",
@@ -40,14 +51,12 @@ const items = computed(() => {
             sublabel: "Sur les 30 derniers jours",
             track_id: "Nouveaux sites",
         },
-        { type: "separator", label: "", id: "separator_2" },
         {
             id: "shantytowns_with_target",
             type: "link",
             label: "Objectifs de résorption",
             track_id: "Objectifs de résorption",
         },
-        { type: "separator", label: "", id: "separator_3" },
         {
             id: "my_territory",
             type: "link",

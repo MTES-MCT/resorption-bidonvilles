@@ -1,5 +1,5 @@
 <template>
-    <p class="flex space-x-2">
+    <p class="flex flex-col gap-2 items-start xs:flex-row">
         <Button
             icon="print"
             iconPosition="left"
@@ -13,7 +13,7 @@
             v-if="userStore.hasPermission('shantytown.export')"
             icon="file-excel"
             iconPosition="left"
-            variant="primary"
+            variant="primaryOutline"
             :disabled="townsStore.filteredTowns.length === 0"
             @click="showExport"
             size="sm"
@@ -24,7 +24,7 @@
             href="/site/nouveau"
             icon="plus"
             iconPosition="left"
-            variant="secondary"
+            variant="primary"
             size="sm"
         >
             Déclarer un nouveau site
@@ -34,7 +34,7 @@
             href="/site/signalement"
             icon="plus"
             iconPosition="left"
-            variant="secondary"
+            variant="primary"
             size="sm"
         >
             Signaler un nouveau site

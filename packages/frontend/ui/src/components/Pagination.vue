@@ -1,22 +1,22 @@
 <template>
-    <div class="flex flex-row items-center">
+    <div class="flex flex-col xs:flex-row items-center">
         <Button icon="chevron-left" iconPosition="left" variant="custom" size="custom"
             class="hover:bg-G200 rounded-full px-4 py-1 mx-2 focus:outline-none" :disabled="currentPage === 1"
             @click="onPrevious" type="button">Précédent</Button>
 
-        <div class="h-8 w-8 flex justify-center items-center rounded-full"
+        <component :is="currentPage > 1 ? 'button' : 'div'" class="h-8 w-8 flex justify-center items-center rounded-full "
             :class="currentPage > 1 ? 'hover:bg-G200 cursor-pointer' : ''" @click="setPage(1)">
             <span v-if="currentPage > 1">1</span>
             <span class="text-G300" v-else>—</span>
-        </div>
+        </component>
         <div class="h-8 w-8 bg-primary text-white flex justify-center items-center rounded-full mx-4">
             {{ currentPage }}
         </div>
-        <div class="h-8 w-8 flex justify-center items-center rounded-full"
+        <component :is="currentPage !== nbPages ? 'button' : 'div'" class="h-8 w-8 flex justify-center items-center rounded-full"
             :class="currentPage !== nbPages ? 'hover:bg-G200 cursor-pointer' : ''" @click="setPage(nbPages)">
             <span v-if="currentPage !== nbPages">{{ nbPages }}</span>
             <span class="text-G300" v-else>—</span>
-        </div>
+        </component>
 
         <Button icon="chevron-right" iconPosition="right" variant="custom" size="custom"
             :disabled="currentPage === nbPages" class="hover:bg-G200 rounded-full px-4 py-1 mx-2 focus:outline-none"

@@ -1,145 +1,69 @@
-import dateUtils from '#server/utils/date';
+import { Request, Response } from 'express';
 
-import userService from '#server/services/userService';
-import accessRequestService from '#server/services/accessRequest/accessRequestService';
-
-import mailsUtils from '#server/mails/mails';
-
-import userModel from '#server/models/userModel';
-import contactFormReferralModel from '#server/models/contactFormReferralModel';
+import userService from '#server/services/user/index';
+import contactService from '#server/services/contact/index';
 import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { ContactBody } from '#root/types/inputs/ContactBody.d';
 
-const { toString: dateToString } = dateUtils;
-const { sendAdminContactMessage, sendContactNewsletterRegistration } = mailsUtils;
-
-async function sendEmailNewContactMessageToAdmins(message) {
-    const admins = await userModel.getNationalAdmins();
-
-    for (let i = 0; i < admins.length; i += 1) {
-        sendAdminContactMessage(admins[i], {
-            variables: {
-                message: {
-                    created_at: dateToString(new Date()),
-                    ...message,
-                },
-            },
-            preserveRecipient: false,
-            replyTo: {
-                email: message.email,
-                last_name: message.last_name,
-                first_name: message.first_name,
-            },
-        });
-    }
+interface ContactRequest extends Request {
+    body: ContactBody,
 }
 
-// Convert request-type to a message objet for the contact mail
-// ie: [help, report] becomes "Aider - Signaler"
-function getObjetForContactMessage(requestType) {
-    const types = {
-        help: 'Aider',
-        report: 'Signaler',
-        'help-request': "Demander de l'aide",
-        'info-request': 'Demander des infos',
-        'register-newsletter': 'Vous abonner à la lettre d\'info',
-        'submit-blog-post': 'Proposer un article pour le blog',
-    };
-    return requestType.map(type => types[type]).join(' - ');
-}
+const ERRORS = {
+    undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
+    insert_failed: { code: 500, message: 'Une erreur est survenue lors de l\'enregistrement de votre demande en base de données' },
+};
 
-export default async (req, res, next) => {
-    const {
-        request_type, is_actor, referral, referral_other, referral_word_of_mouth,
-        last_name, first_name, email, phone, access_request_message,
-    } = req.body;
-
-    // send mail to sales@ if a newsletter registration was asked
-    if (request_type.includes('register-newsletter')) {
+async function registerNewsletter(data: ContactBody): Promise<void> {
+    if (data.request_type.includes('register-newsletter')) {
         try {
-            await sendContactNewsletterRegistration(
-                { email: 'sales@resorption-bidonvilles.beta.gouv.fr', first_name: 'Équipe Sales', last_name: 'Résorption Bidonvilles' },
-                {
-                    variables: {
-                        email,
-                    },
-                    preserveRecipient: true,
-                    replyTo: {
-                        email,
-                        last_name,
-                        first_name,
-                    },
-                },
-            );
+            await contactService.notifyNewsletterRegistration(data);
         } catch (error) {
-            // @todo: call sentry to register this error
+            // @todo: register error to Sentry
         }
     }
+}
 
-    // user creation
-    if (request_type.includes('access-request') && is_actor) {
-        // create the user
-        let result: SerializedUser;
+async function registerReferral(data: ContactBody, userId: number): Promise<void> {
+    if (data.referral !== null) {
         try {
-            result = await userService.create({
-                last_name,
-                first_name,
-                email,
-                phone,
-                organization: req.body.organization_full
-                    ? req.body.organization_full.id
-                    : null,
-                new_association: req.body.new_association === true,
-                new_association_name: req.body.new_association_name || null,
-                new_association_abbreviation:
-                    req.body.new_association_abbreviation || null,
-                departement: req.body.departement || null,
-                position: req.body.position,
-                access_request_message,
+            await contactService.registerReferral({
+                ...data,
+                user_id: userId,
             });
         } catch (error) {
-            return res.status(500).send('Une erreur est survenue lors de l\'écriture en base de données');
+            // @todo register error to Sentry
         }
+    }
+}
 
-        try {
-            const user = await userModel.findOne(result.id, { extended: true });
-            await accessRequestService.handleNewAccessRequest(user);
-
-            if (referral !== null) {
-                await contactFormReferralModel.create({
-                    reason: referral,
-                    reason_other: referral_other,
-                    reason_word_of_mouth: referral_word_of_mouth,
-                    fk_user: user.id,
-                });
-            }
-        } catch (err) {
-            next(err);
-        }
-
-        return res.status(200).send(result);
+async function processRequest(data: ContactBody): Promise<SerializedUser | null> {
+    if (data.request_type.includes('access-request') && data.is_actor && data.organization_category !== 'other') {
+        return userService.register(data);
     }
 
-    // contact request
+    await contactService.notifyContact({
+        ...data,
+        is_new_organization: data.request_type.includes('access-request') && data.is_actor && data.organization_category === 'other',
+    });
+    return null;
+}
+
+export default async (req: ContactRequest, res: Response, next): Promise<void> => {
+    let createdUser: SerializedUser = null;
+
+    await registerNewsletter(req.body);
+
     try {
-        await sendEmailNewContactMessageToAdmins({
-            email,
-            phone,
-            last_name,
-            first_name,
-            access_request_message,
-            objet: getObjetForContactMessage(request_type),
-        });
-
-        if (referral !== null) {
-            await contactFormReferralModel.create({
-                reason: referral,
-                reason_other: referral_other,
-                reason_word_of_mouth: referral_word_of_mouth,
-            });
-        }
-    } catch (err) {
-        next(err);
+        createdUser = await processRequest(req.body);
+    } catch (error) {
+        const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
+        res.status(code).send({ user_message: message });
+        next(error?.nativeError || error);
+        return;
     }
 
-    return res.status(200).send();
+    await registerReferral(req.body, createdUser?.id);
+
+    res.status(createdUser !== null ? 201 : 200).send(createdUser);
 };

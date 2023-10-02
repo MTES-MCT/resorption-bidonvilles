@@ -28,6 +28,7 @@ const bar = ref(null);
 
 onMounted(() => {
     // Si un chiffre est égal à 0 on affiche quand même une barre à 2 px de hauteur
-    bar.value.style.height = height.value !== 0 ? `${height.value}px` : "2px";
+    bar.value.style.height =
+        height.value !== 0 ? `${height.value}rem` : "0.1rem";
 });
 </script>

@@ -5,7 +5,7 @@
             <h1 class="text-xl text-primary font-bold">
                 Demander de l'aide à la communauté
             </h1>
-            <h2 class="mt-2">
+            <p class="mt-2">
                 Sollicitez l'expérience des
                 <span class="text-secondary"
                     ><template v-if="directoryStore.isLoading"
@@ -16,10 +16,7 @@
                 de notre communauté pour vous aider à résoudre un problème ou
                 une question pratique que vous vous posez dans le cadre de votre
                 résorption.
-            </h2>
-            <h3 class="mt-2">
-                En une phrase, comment résumeriez-vous votre question ?
-            </h3>
+            </p>
             <form
                 class="flex items-center mt-2 space-x-2"
                 @submit="redirectToNewQuestion"
@@ -29,6 +26,7 @@
                     placeholder="Votre question ... "
                     v-model="question"
                     withoutMargin="true"
+                    label="En une phrase, comment résumeriez-vous votre question ?"
                 />
                 <Button size="sm">Demander</Button>
             </form>

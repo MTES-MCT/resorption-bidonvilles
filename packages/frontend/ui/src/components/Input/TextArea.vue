@@ -1,14 +1,14 @@
 <template>
     <Field :id="id" :name="id" v-slot="{ field, errors }">
         <InputWrapper :hasErrors="!!errors.length">
-            <InputLabel :label="label" :info="info" :showMandatoryStar="showMandatoryStar" />
+            <InputLabel :label="label" :info="info" :showMandatoryStar="showMandatoryStar" :for="`rb-select-${id}`" />
 
             <div class="relative">
                 <InputIcon position="before" :icon="prefixIcon" v-if="prefixIcon" />
                 <textarea ref="textarea" @input="$emit('input', $event.target.value)"
                     v-bind="{ ...field, ...filteredProps }" :class="classes" :data-cy-field="cypressName"
                     :disabled="isSubmitting || disabled" :readonly="isSubmitting || disabled" @focus="onFocus"
-                    @blur="onBlur" />
+                    @blur="onBlur" :id="`rb-select-${id}`" />
                 <InputIcon position="after" :icon="suffixIcon" v-if="suffixIcon" />
             </div>
             <InputError>{{ errors[0] }}</InputError>

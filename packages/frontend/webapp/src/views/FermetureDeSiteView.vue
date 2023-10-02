@@ -45,7 +45,7 @@
 import { onMounted, ref, computed } from "vue";
 import { useTownsStore } from "@/stores/towns.store.js";
 import { useUserStore } from "@/stores/user.store";
-import router from "@/helpers/router";
+import router, { setDocumentTitle } from "@/helpers/router";
 
 import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
@@ -84,6 +84,9 @@ async function load() {
     try {
         const userStore = useUserStore();
         await townsStore.fetchTown(townId.value);
+        setDocumentTitle(
+            `${router.currentRoute.value.meta.title} — ${town.value.usename}`
+        );
 
         if (town.value.status === "open") {
             if (

@@ -21,8 +21,9 @@
                         </div>
 
                         <div>
-                            <Link :to="`${WEBAPP_URL}/connexion`" class="ml-2">
-                            <Button variant="primary">{{
+                            <Link :to="`${WEBAPP_URL}/connexion`" class="ml-2" role="button"
+                                :aria-label="$t('landingPage.header.connect')">
+                            <Button variant="primary" tabindex="-1">{{
                                 $t("landingPage.header.connect")
                             }}</Button>
                             </Link>

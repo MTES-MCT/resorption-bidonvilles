@@ -1,5 +1,5 @@
 <template>
-    <Link :to="to"
+    <Link :to="to" :ariaLabel="ariaLabel"
         ><Icon icon="address-book" /> <slot /></Link
     >
 </template>

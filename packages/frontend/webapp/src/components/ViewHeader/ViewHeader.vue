@@ -5,15 +5,15 @@
             :class="$slots.actions ? classes.title.value : ''"
         >
             <div
-                class="rounded-full bg-primary w-16 h-16 flex justify-center items-center text-2xl text-white"
+                class="rounded-full bg-primary w-16 h-16 flex justify-center items-center text-2xl text-white shrink-0"
             >
                 <Icon :icon="icon" />
             </div>
             <div>
-                <h1 class="text-[1.5rem] font-bold leading-[1.8rem] break-all">
+                <p class="text-[1.5rem] font-bold leading-[1.8rem] break-all">
                     <slot name="title" />
-                </h1>
-                <p class="text-G500">
+                </p>
+                <p class="text-G600">
                     <slot name="description" />
                 </p>
             </div>

@@ -5,7 +5,7 @@
   },
   "hero": {
     "title": "Acționăm pentru resorbția de bidonville",
-    "subtitle": "Puneți o întrebare sau solicitați accesul",
+    "subtitle": "Puneți o întrebare",
     "review": "platz resorbite în",
     "moreThan": "Peste",
     "people": "de persoane relocate"
@@ -25,28 +25,40 @@
     },
     "before": "Înainte",
     "after": "După",
+    "beforeImageTranscription": "Aceasta este transcrierea imaginii \"Înainte\"",
+    "afterImageTranscription": "Aceasta este transcrierea imaginii \"După\"",
     "feedback": {
       "title": "Mărturii ale utilizatorilor",
       "1": {
+        "label": "Prima recomandare",
         "text": "Este foarte bine pentru că aveți informațiile online, nu vă confruntați cu un tabel Excel cu coduri pe care nu le înțelegeți.",
         "author": "Prefectura Seine-Saint-Denis"
       },
       "2": {
+        "label": "A doua recomandare",
         "text": "Platforma a făcut informațiile mai accesibile, deoarece tabelul Excelnu era partajat. Cu cât avem mai multeinstrumente de colaborare, cu atât mai bine.",
         "author": "Orașul Poitiers"
       },
       "3": {
+        "label": "A treia recomandare ",
         "text": "Am fost în măsură să direcționez familia unei persoane pe care o acomapaniez la o casă de solidaritate de la locația lor situata într-un bidonville.",
         "author": "Asociația din Haute-Garonne"
-      }
+      },
+      "carousel_start": "Derulați prin mărturii",
+      "carousel_stop": "Întrerupeți derularea"
     },
     "video": {
-      "text": "Descoperiți Résorption-bidonvilles în 1 min"
+      "text": "Descoperiți Résorption-bidonvilles în 1 minut",
+      "transcription_part1": "Platforma \"Résorption-Bidonvilles\" dispune de o hartă interactivă, care vă permite să căutați un sit după adresă.",
+      "transcription_part2": "Fișa sitului oferă acces la informații practice și actualizate, cum ar fi locația, caracteristicile, locuitorii, condițiile de viață și de mediu, procedurile judiciare și o listă a părților interesate.",
+      "transcription_part3": "Acest instrument de colaborare permite monitorizarea acțiunilor.",
+      "transcription_part4": "Instrumentul oferă, de asemenea, o zonă de resurse și un repertoriu al celor implicați în curățarea cartierelor sărace."
     }
   },
   "firstBanner": {
     "text": "Actori ai resorbției de bidonville, partajați și faceţi cunoscute acțiunile voastre",
-    "cta": "Solicitaţi accesul"
+    "cta": "Solicitaţi accesul",
+    "ctaContact": "Contactaţi-ne"
   },
   "secondSection": {
     "title": "Care este politica de modernizare a mahalalelor?",
@@ -77,8 +89,34 @@
       "normal": "Un bidonville este un teren, un maidan sau o clădire construită care în general e lipsită de servicii de bază (apă, electricitate, gestionarea deșeurilor) și ocupată ilegal de mai multe familii. Un bidonville mai est denumit si „plaț” în limbaj familiar."
     },
     "thirdParagraph": "",
+    "map": {
+      "transcription_title": "Vezi transcrierea imaginii",
+      "notranscription_title": "Ascundeți transcrierea imaginii",
+      "title": "Hartă a mahalalelor din Franța continentală",
+      "subtitle": "Platzurilor în 20 de departamente in Franța metropolitană",
+      "nord": "Nord, peste 700 persoane",
+      "ileDeFrance": "île de france, peste 4700 persoane",
+      "loireAtlantique": "Loire Atlantique, peste 2500 persoane",
+      "gironde": "Gironde, peste 1200 persoane",
+      "boucheDuRhone": "Bouches-du-Rhône, peste 1200 persoane"
+    },
     "video": {
-      "text": "Înțelegerea resorbției de bidonville în 2 minute"
+      "text": "Înțelegerea resorbției de bidonville în 2 minute",
+      "transcription_part1": "În prezent, în Franța metropolitană, peste 16.000 de persoane, dintre care aproximativ 5.000 de minori, majoritatea cetățeni ai Uniunii Europene, trăiesc în peste 400 de barăci și tabere",
+      "transcription_part2": "Există soluții pentru reducerea durabilă a barăcilor:",
+      "transcription_part3": "- acțiuni de parteneriat la nivel local, între stat, autorități locale și asociații,",
+      "transcription_part4": "- acțiuni din momentul în care se înființează siturile până la dispariția lor, sau",
+      "transcription_part5": "- sprijin pentru integrarea rezidenților prin accesul la locuințe, locuri de muncă, educație sau sănătate,",
+      "transcription_part6": "într-un cadru contractual și în conformitate cu legile Republicii",
+      "transcription_part7": "În ianuarie 2018, guvernul a dat un nou impuls acestei politici prin stabilirea unui cadru de acțiune reînnoit, cu obiectivul clar de a reduce numărul de barăci. Mai multe milioane de euro pe an sunt dedicate susținerii strategiilor teritoriale și două milioane de euro pe an sunt alocate acțiunilor privind respectarea drepturilor copiilor.",
+      "transcription_part8": "Pentru a consolida acest impuls și pentru a sprijini autoritățile locale în eforturile lor de reducere a numărului de barăci, guvernul a decis să lanseze platforma \"Resorption-Bidonvilles\". Această nouă platformă va permite prefecturilor însărcinate cu pilotarea strategiilor locale să dispună de o hartă a așezărilor și să monitorizeze evoluția acestora, să urmărească rapid și ușor activitatea tuturor operatorilor care lucrează cu locuitorii, să prezinte acțiunile desfășurate pe un sit și să facă schimb de bune practici",
+      "transcription_part9": "Așadar, fie că sunteți un funcționar public, o autoritate locală sau o asociație, implicați-vă și faceți publice acțiunile dumneavoastră pentru ca împreună să putem oferi un sprijin eficient locuitorilor din cartierele de barăci și să atingem obiectivul de eliminare a barăcilor",
+      "transcription_part10": "Afișarea logo-urilor:",
+      "transcription_part11": "- din partea Ministerului Solidarității și Sănătății,",
+      "transcription_part12": "- de la fabrica digitală",
+      "transcription_part13": "- de la Delegația interministerială pentru locuințe și acces la locuințe",
+      "transcription_part14": "- de la strategia de prevenire și combatere a sărăciei",
+      "transcription_part15": "afișarea logo-ului \"Résorption-Bidonvilles\": link către https://www.resorption-bidonvilles.beta.gouv.fr"
     },
     "bilan": {
       "title": "Acţiunile desfăşurate in cifre",
@@ -156,5 +194,9 @@
     "cta": "Mă abonez",
     "link": "",
     "viewAll": ""
-  }
+  },
+  "transcription_title": "Arată transcrierea video",
+  "notranscription_title": "Ascunde transcrierea video",
+  "img_transcription_title": "Arată transcrierea imaginii",
+  "img_notranscription_title": "Ascundeți transcrierea imaginii"
 }

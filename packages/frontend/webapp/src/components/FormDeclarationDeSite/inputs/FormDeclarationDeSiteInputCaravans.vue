@@ -1,5 +1,5 @@
 <template>
-    <div class="flex space-x-5">
+    <div class="flex gap-x-5 flex-wrap">
         <TextInput
             id="caravans"
             name="caravans"

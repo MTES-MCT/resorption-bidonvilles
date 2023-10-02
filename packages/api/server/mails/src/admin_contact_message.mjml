@@ -27,6 +27,10 @@
                 <mj-text mj-class="pb-4">{{var:message.phone}}</mj-text>
                 <mj-text>Message :</mj-text>
                 <mj-text>{{var:message.access_request_message}}</mj-text>
+                <mj-raw>{% if var:message.is_organization_other %}</mj-raw>
+                <mj-text>Nom de la structure à créer :</mj-text>
+                <mj-text>{{var:message.organization_other}}</mj-text>
+                <mj-raw>{% endif %}</mj-raw>
             </mj-column>
         </mj-section>
         <mj-include path='common/footer.mjml' />

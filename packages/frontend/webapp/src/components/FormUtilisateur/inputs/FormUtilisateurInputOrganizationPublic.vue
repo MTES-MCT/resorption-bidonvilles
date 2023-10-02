@@ -1,6 +1,7 @@
 <template>
     <AsyncSelect
         name="organization_public"
+        id="organization_public"
         :label="label"
         :options="options"
         :loader="refreshOptions"

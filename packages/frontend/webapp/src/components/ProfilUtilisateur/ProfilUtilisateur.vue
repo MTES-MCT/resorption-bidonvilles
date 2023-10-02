@@ -26,6 +26,7 @@
             class="mt-10"
             :tabs="tabs"
             :activeTab="currentTabId"
+            :autohide="false"
             maxWClass="max-w-2xl"
         >
             <component :is="currentTabComponent" :user="user" />

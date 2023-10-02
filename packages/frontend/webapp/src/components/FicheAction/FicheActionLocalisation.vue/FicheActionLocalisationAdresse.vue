@@ -1,7 +1,7 @@
 <template>
     <p>{{ action.eti.address }}</p>
     <div class="h-128">
-        <CartoFicheAction :defaultView="center" :towns="[action.eti]" />
+        <CartoFicheAction inert :defaultView="center" :towns="[action.eti]" />
     </div>
 </template>
 

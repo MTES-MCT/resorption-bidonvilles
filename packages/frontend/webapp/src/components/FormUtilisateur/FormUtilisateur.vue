@@ -1,5 +1,10 @@
 <template>
-    <FormPublic :schema="schema" :submit="intermediateSubmit" ref="form">
+    <FormPublic
+        :schema="schema"
+        :submit="intermediateSubmit"
+        :language="language"
+        ref="form"
+    >
         <template v-slot:subtitle><slot name="subtitle" /></template>
         <template v-slot:title><slot name="title" /></template>
 
@@ -41,12 +46,13 @@
                     values.is_actor === true || variant === 'creer-utilisateur'
                 "
             >
-                <h1 class="font-bold text-xl">
+                <p class="font-bold text-xl">
                     <slot name="structureTitle" />
-                </h1>
+                </p>
                 <FormUtilisateurInputOrganizationCategory
                     :showMandatoryStar="variant === 'creer-utilisateur'"
                     :label="labels.organization_category"
+                    :allowNewOrganization="allowNewOrganization"
                 />
 
                 <!-- Services de l'état -->
@@ -101,6 +107,13 @@
                 >
                     <FormUtilisateurInputOrganizationAdministration
                         :label="labels.organization_administration"
+                    />
+                </template>
+
+                <!-- Autres -->
+                <template v-if="values.organization_category === 'other'">
+                    <FormUtilisateurInputOrganizationOther
+                        :label="labels.organization_other"
                     />
                 </template>
 
@@ -162,6 +175,7 @@ import FormUtilisateurInputNewAssociationName from "./inputs/FormUtilisateurInpu
 import FormUtilisateurInputNewAssociationAbbreviation from "./inputs/FormUtilisateurInputNewAssociationAbbreviation.vue";
 import FormUtilisateurInputDepartement from "./inputs/FormUtilisateurInputDepartement.vue";
 import FormUtilisateurInputOrganizationAdministration from "./inputs/FormUtilisateurInputOrganizationAdministration.vue";
+import FormUtilisateurInputOrganizationOther from "./inputs/FormUtilisateurInputOrganizationOther.vue";
 import FormUtilisateurInputPosition from "./inputs/FormUtilisateurInputPosition.vue";
 import FormUtilisateurInputMessage from "./inputs/FormUtilisateurInputMessage.vue";
 import FormUtilisateurInputReferral from "./inputs/FormUtilisateurInputReferral.vue";
@@ -190,9 +204,12 @@ const props = defineProps({
 
 const form = ref(null);
 const { variant, submit, language } = toRefs(props);
+const allowNewOrganization = computed(() => {
+    return variant.value === "demande-acces";
+});
 
 const schema = computed(() => {
-    return schemaFn(variant.value, language.value);
+    return schemaFn(variant.value, allowNewOrganization.value, language.value);
 });
 const labels = computed(() => {
     return labelsFn(variant.value)[language.value];

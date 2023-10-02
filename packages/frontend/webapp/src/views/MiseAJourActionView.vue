@@ -43,7 +43,7 @@
 <script setup>
 import { onMounted, ref, computed } from "vue";
 import { useActionsStore } from "@/stores/actions.store.js";
-import router from "@/helpers/router";
+import router, { setDocumentTitle } from "@/helpers/router";
 import backOrReplace from "@/utils/backOrReplace";
 
 import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
@@ -73,7 +73,10 @@ async function load() {
     isLoading.value = true;
     error.value = null;
     try {
-        action.value = await actionsStore.fetchAction(actionId.value);
+        action.value = (await actionsStore.fetchAction(actionId.value)).value;
+        setDocumentTitle(
+            `${router.currentRoute.value.meta.title} — ${action.value.name}`
+        );
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
     }

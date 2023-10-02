@@ -8,18 +8,18 @@
                     <slot name="anchors"></slot>
 
                     <LinkContact v-if="i18n.locale.value === 'fr'" class="mr-2 inline-block" isDemandeAcces>
-                        <Button variant="primary">{{
+                        <Button variant="primary" tabindex="-1">{{
                             $t("landingPage.contactForm.ctaSignup")
                         }}</Button>
                     </LinkContact>
                     <LinkContact v-else class="mr-2 inline-block">
-                        <Button variant="primary">{{
+                        <Button variant="primary" tabindex="-1">{{
                             $t("landingPage.contactForm.ctaContact")
                         }}</Button>
                     </LinkContact>
 
                     <Link :to="`${WEBAPP_URL}/connexion`" class="inline-block">
-                    <Button variant="primary">{{
+                    <Button variant="secondary"  tabindex="-1">{{
                         $t("landingPage.header.connect")
                     }}</Button>
                     </Link>

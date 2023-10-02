@@ -4,6 +4,7 @@
         :label="labels.phone"
         :value="value"
         info="Affiché dans l'annuaire, il facilite la mise en relation entre acteurs"
+        autocomplete="tel"
     />
 </template>
 
