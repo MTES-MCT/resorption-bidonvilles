@@ -6,6 +6,7 @@ import common from "@common/i18n/fr/index";
 export default {
     landingPage,
     contactPage,
+    aboutUs: "Qui sommes-nous ?",
     invitationPage,
     ...common,
 };
