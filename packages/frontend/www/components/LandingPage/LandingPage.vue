@@ -40,13 +40,11 @@
         <CreditWrapper credit="© Ville de Strasbourg">
             <div class="grid grid-cols-3 w-full gap-0">
                 <img width="600" class="h-64 w-full object-cover object-top"
-                    src="~/assets/img/LandingPage/resorption-bidonvilles-3.jpg"
-                    alt="Photo d'une habitante d'un bidonville" />
+                    src="~/assets/img/LandingPage/resorption-bidonvilles-3.jpg" alt="" />
                 <img width="600" class="h-64 w-full object-cover object-top"
-                    src="~/assets/img/LandingPage/resorption-bidonvilles-4.jpg" alt="Photo d'un bidonville" />
+                    src="~/assets/img/LandingPage/resorption-bidonvilles-4.jpg" alt="" />
                 <img width="600" class="h-64 w-full object-cover object-top"
-                    src="~/assets/img/LandingPage/resorption-bidonvilles-5.jpg"
-                    alt="Photo d'enfants habitants d'un bidonville" />
+                    src="~/assets/img/LandingPage/resorption-bidonvilles-5.jpg" alt="" />
             </div>
         </CreditWrapper>
 
