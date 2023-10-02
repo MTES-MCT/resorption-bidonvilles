@@ -29,7 +29,7 @@
 </style>
 
 <script setup>
-import { ref, toRef } from 'vue';
+import { ref } from 'vue';
 
 const props = defineProps({
     id: {
