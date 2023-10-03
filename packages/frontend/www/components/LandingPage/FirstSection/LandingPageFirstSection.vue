@@ -76,8 +76,12 @@
                         <span v-if="showTranscription[2]">{{ $t("landingPage.img_notranscription_title")
                         }}</span>
                     </button>
-                    <p v-if="showTranscription[2]" class="mt-4 text-left">
-                        {{ $t("landingPage.firstSection.beforeImageTranscription") }}</p>
+                    <template v-if="showTranscription[2]">
+                        <p class="mt-4 text-left">
+                            {{ $t("landingPage.firstSection.beforeImageTranscription1") }}</p>
+                        <p class="mt-4 text-left">
+                            {{ $t("landingPage.firstSection.beforeImageTranscription2") }}</p>
+                    </template>
                 </LandingPageContextImage>
                 <div class="hidden md:block border-solid border-r-2 border-gray-200 m-20" />
                 <LandingPageContextImage :label="$t('landingPage.firstSection.after')" tabindex="0"
