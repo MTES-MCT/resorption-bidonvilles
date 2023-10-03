@@ -37,7 +37,7 @@
             variant="primary"
             size="sm"
         >
-            Signaler un nouveau site
+            Informer d'un nouveau site
         </Button>
     </p>
 

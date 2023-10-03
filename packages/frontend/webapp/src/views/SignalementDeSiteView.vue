@@ -1,11 +1,11 @@
 <template>
     <LayoutForm size="large">
-        <template v-slot:title>Signalement d'un site</template>
+        <template v-slot:title>Informer d'un nouveau site</template>
         <template v-slot:buttons>
             <Button variant="primaryOutline" type="button" @click="back"
                 >Annuler</Button
             >
-            <Button @click="submit">Signaler le site</Button>
+            <Button @click="submit">Envoyer l'information</Button>
         </template>
 
         <ContentWrapper size="large">

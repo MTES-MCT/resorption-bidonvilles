@@ -94,18 +94,18 @@ export default mode => ([
                 let wording;
                 switch (mode) {
                     case 'create':
-                        wording = 'déclarer';
+                        wording = 'de déclarer un';
                         break;
                     case 'edit':
-                        wording = 'modifier';
+                        wording = 'de modifier un';
                         break;
                     case 'report':
-                        wording = 'signaler';
+                        wording = 'd\'informer d\'un nouveau';
                         break;
                     default:
                         break;
                 }
-                throw new Error(`Vous n'avez pas le droit de ${wording} un site sur ce territoire`);
+                throw new Error(`Vous n'avez pas le droit ${wording} site sur ce territoire`);
             }
 
             return true;
