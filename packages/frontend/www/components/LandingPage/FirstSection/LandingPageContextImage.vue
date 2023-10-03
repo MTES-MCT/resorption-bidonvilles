@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="basis-5/12">
         <p class="text-secondary text-display-md font-bold">{{ label }}</p>
         <slot />
     </div>
