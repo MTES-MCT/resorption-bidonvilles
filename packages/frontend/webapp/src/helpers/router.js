@@ -395,7 +395,7 @@ const router = createRouter({
             path: "/site/signalement",
             component: () => import("@/views/SignalementDeSiteView.vue"),
             meta: {
-                title: "Signaler un site",
+                title: "Informer d'un nouveau site",
                 authRequirement: "signedIn",
                 navTab: "sites",
             },
