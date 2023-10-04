@@ -199,6 +199,15 @@
       }
     }
   },
+  "fourthSection": {
+    "team": {
+      "imageAltText": "Membres de l'équipe de la plateforme: Christophe Benard , Laure Dubuc, Anis Safine, Jean-Paul Domalain, Grégoire Thomazeau and Manuel Demougeot",
+      "actorRole1": "directeur de cabinet et du pôle résorption bidonvilles, co-intrapreneur",
+      "actorRole2": "cheffe de projet et co-intrapreneur",
+      "actorRole3": "chef de produit",
+      "developers": "développeurs"
+    }
+  },
   "contactForm": {
     "email": "Votre email",
     "ctaContact": "Nous contacter",

@@ -184,6 +184,15 @@
       }
     }
   },
+  "fourthSection": {
+    "team": {
+      "imageAltText": "Membri ai echipei platformei: Christophe Benard , Laure Dubuc, Anis Safine, Jean-Paul Domalain, Grégoire Thomazeau și Manuel Demougeot",
+      "actorRole1": "director de cabinet și director al unității de curățare a mahalalelor, co-intraprenor",
+      "actorRole2": "manager de proiect și co-intraprenor",
+      "actorRole3": "manager de produs",
+      "developers": "dezvoltatori"
+    }
+  },
   "contactForm": {
     "email": "E-mailul dumneavoastră",
     "ctaContact": "Contactaţi-ne",
