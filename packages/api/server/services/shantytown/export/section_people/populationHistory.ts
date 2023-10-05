@@ -1,3 +1,4 @@
+import { Shantytown } from '#server/models/shantytownModel/_common/serializeShantytown';
 import formatDate from '../../_common/formatDate';
 
 const intToStr = (int, nullValue = 'NC') => {
@@ -7,7 +8,26 @@ const intToStr = (int, nullValue = 'NC') => {
 
     return int;
 };
-export default (town) => {
+
+type TownExportPopulationHistoryRow = {
+    date: string,
+    populationTotal: number,
+    populationCouples: number,
+    populationMinors: number,
+    populationMinors0To3: number,
+    populationMinors3To6: number,
+    populationMinors6To12: number,
+    populationMinors12To16: number,
+    populationMinors16To18: number,
+    minorsInSchool: number,
+    caravans: number,
+    huts: number,
+    tents: number,
+    cars: number,
+    mattresses: number,
+};
+
+export default (town: Shantytown): TownExportPopulationHistoryRow[] => {
     // valeurs présentes
     const ref = {
         populationTotal: intToStr(town.populationTotal, '-'),
