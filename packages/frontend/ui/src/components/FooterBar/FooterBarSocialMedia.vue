@@ -8,7 +8,7 @@
                 :socialVerb="$t('footer.socialTitle1')" :socialOn="$t('footer.socialOn')"
                 :socialName="$t('footer.twitter')" />
             <FooterBarSocialMediaLink href="https://www.facebook.com/DIHAL.delegation.interministerielle/"
-                icon="fa-facebook" :socialVerb="$t('footer.socialTitle1')" :socialOn="getSocialOnFacebook()"
+                icon="fa-facebook" :socialVerb="$t('footer.socialTitle1')" :socialOn="$i18n.locale === 'bg' ? $t('footer.socialOnFacebook') : $t('footer.socialOn')"
                 :socialName="$t('footer.facebook')" />
             <FooterBarSocialMediaLink href="https://fr.linkedin.com/company/dihal" icon="fa-linkedin"
                 :socialVerb="$t('footer.socialTitle1')" :socialOn="$t('footer.socialOn')"
@@ -19,12 +19,4 @@
 
 <script setup>
 import FooterBarSocialMediaLink from "./FooterBarSocialMediaLink.vue";
-import { useI18n } from 'vue-i18n';
-
-const { t, locale } = useI18n();
-
-// PEtite subtilité pour la traduction en bulgare lorsqu'il s'agit de Facebook
-function getSocialOnFacebook() {
-    return locale.value === 'bg' ? t('footer.socialOnFacebook') : t('footer.socialOn');
-}
 </script>
