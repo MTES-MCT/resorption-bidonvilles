@@ -5,7 +5,9 @@
             <Button variant="primaryOutline" type="button" @click="back"
                 >Annuler</Button
             >
-            <Button @click="submit">Envoyer l'information</Button>
+            <Button @click="submit"
+                >Envoyer l'information aux administrateurs</Button
+            >
         </template>
 
         <ContentWrapper size="large">

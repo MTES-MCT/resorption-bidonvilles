@@ -3,10 +3,9 @@
         <Icon icon="triangle-exclamation" class="mr-1" />
         <span class="font-bold">Les données ne seront pas enregistrées</span
         ><br />
-
-        À la validation de ce formulaire, les données renseignées ne seront pas
-        enregistrées sur la plateforme mais transmises aux administrateurs de la
-        plateforme pour validation.
+        Vous avez connaissance d'un site qui n'est pas recensé sur la
+        plateforme. Vous pouvez informer les administrateurs locaux via ce
+        formulaire afin que ce site soit déclaré.
     </p>
 
     <PanelInfo icon="flag">

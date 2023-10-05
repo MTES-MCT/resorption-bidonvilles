@@ -385,7 +385,7 @@ const router = createRouter({
             path: "/site/nouveau",
             component: () => import("@/views/DeclarationDeSiteView.vue"),
             meta: {
-                title: "Déclarer un site",
+                title: "Déclarer un nouveau site",
                 authRequirement: "signedIn",
                 navTab: "sites",
                 permissions: ["shantytown.create"],
