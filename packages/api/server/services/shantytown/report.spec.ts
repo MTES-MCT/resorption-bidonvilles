@@ -16,6 +16,7 @@ const userModel = {
 };
 const mails = {
     sendAdminTownReporting: sandbox.stub(),
+    sendConfirmationOfTownReporting: sandbox.stub(),
 };
 
 rewiremock('#server/models/userModel/index').with(userModel);
@@ -53,6 +54,24 @@ describe('shantytownService.report()', () => {
         await reportService(townData, fakeUser());
 
         expect(mails.sendAdminTownReporting).to.have.been.calledThrice;
+    });
+
+    it('envoie une notification mail à l\'utilisateur à l\'origine du signalement', async () => {
+        const user = fakeUser();
+        userModel.getNationalAdmins.resolves([]);
+        await reportService(townData, user);
+
+        expect(mails.sendConfirmationOfTownReporting).to.have.been.calledOnceWith(user);
+    });
+
+    it('ne lève pas d\'exception si l\'accusé de réception du signalement n\'a pas pu être envoyé', async () => {
+        userModel.getNationalAdmins.resolves([]);
+        mails.sendConfirmationOfTownReporting.rejects(new Error());
+        try {
+            await reportService(townData, fakeUser());
+        } catch (error) {
+            expect.fail('should not have thrown an error');
+        }
     });
 
     it('renvoie une exception ServiceError \'sent_failed\' si le  service échoue à collecter les admins nationaux', async () => {

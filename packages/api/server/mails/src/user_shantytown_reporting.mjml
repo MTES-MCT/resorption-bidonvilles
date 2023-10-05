@@ -1,0 +1,21 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Merci d'avoir informé d'un nouveau site</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class="pb-4">Bonjour,</mj-text>
+                <mj-text mj-class="pb-4">Merci d'avoir informé les administrateurs de l'existence d'un nouveau site et de contribuer ainsi à une meilleure connaissance de la situation de votre territoire.</mj-text>
+                <mj-text mj-class="pb-4">Les données que vous venez de saisir ont été transmises pour vérification aux administrateurs locaux de la plateforme qui vous contacteront au besoin et le déclareront sur la plateforme.</mj-text>
+                <mj-text>Nous restons bien sûr à votre disposition et à votre écoute.</mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>
