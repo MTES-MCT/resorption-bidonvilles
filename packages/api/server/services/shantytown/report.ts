@@ -1,4 +1,4 @@
-import userModel from '#server/models/userModel';
+import userModel from '#server/models/userModel/index';
 import mails from '#server/mails/mails';
 import ServiceError from '#server/errors/ServiceError';
 import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
