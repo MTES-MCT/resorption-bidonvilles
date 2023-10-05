@@ -933,6 +933,19 @@ export default {
             preserveRecipient,
         });
     },
+    sendConfirmationOfTownReporting: (recipient, options: MailOptions = {}) => {
+        const { preserveRecipient = false } = options;
+
+        return mailService.send('user_shantytown_reporting', {
+            recipient,
+            variables: {
+                webappUrl,
+                backUrl,
+                blogUrl,
+            },
+            preserveRecipient,
+        });
+    },
     sendAdminTownReporting: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient = false } = options;
 
