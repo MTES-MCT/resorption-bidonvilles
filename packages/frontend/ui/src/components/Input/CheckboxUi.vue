@@ -108,7 +108,6 @@ input[type=checkbox] {
 
 #variant-checkbox,
 #variant-invisible[type=checkbox] {
-    outline: none;
     content: none;
     width: 24px;
     height: 24px;
