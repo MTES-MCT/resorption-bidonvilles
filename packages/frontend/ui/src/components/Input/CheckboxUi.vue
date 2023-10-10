@@ -28,7 +28,7 @@
     </template>
 
     <template v-else>
-        <label class="inline-block px-4 py-1 border border-blue200 " :class="[
+        <label class="inline-block px-4 py-1 border border-2 border-blue200 " :class="[
             checked
                 ? 'bg-blue500 text-white border-blue500'
                 : 'bg-blue200 text-primary',
@@ -36,7 +36,8 @@
         ]">
             <input @click="onChange(value)" class="inline-block rounded mr-2 text-center cursor-pointer" type="checkbox"
                 :checked="checked" />
-            <Icon class="mr-1" :icon="checked ? 'fa-solid fa-check' : 'fas fa-times'" />
+            <Icon class="mr-2 custom-checkbox-icon text-white border-G800 hover:border-G600"
+                :icon="checked ? 'fa-solid fa-square-check' : 'fa-solid fa-square'" />
             {{ label }}
         </label>
     </template>
@@ -113,10 +114,7 @@ input[type=checkbox] {
     height: 24px;
     font-size: 15px;
     display: block;
-}
-
-#variant-checkbox[type=checkbox] {
-    border: 2px solid;
+    color: black;
 }
 
 #variant-checkbox,
@@ -126,20 +124,19 @@ input[type=checkbox] {
     color: transparent !important;
 }
 
+
 #variant-checkbox[type=checkbox]:checked:before {
-    color: white !important;
+    font-family: "Font Awesome 5 Pro";
+    content: "\f00c";
+    color: #000091 !important;
 }
 
 #variant-invisible[type=checkbox]:checked:before {
     color: #000091 !important;
 }
 
-#variant-checkbox[type=checkbox]:checked {
-    @apply bg-primary border-primary hover:border-primary;
-}
-
 #variant-checkbox[type=checkbox] {
-    @apply border-G200 bg-white hover:border-G400 cursor-pointer
+    @apply border-2 border-G400 hover:border-primary cursor-pointer
 }
 
 
