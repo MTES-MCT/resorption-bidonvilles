@@ -17,10 +17,12 @@
       "exchange": "Des échanges facilités entre les acteurs"
     },
     "before": "Avant",
-    "beforeImageTranscription1": "Avant l'existence de la plateforme \"Résorption-Bidonvilles\", l'opérateur·trice échangeait avec un·une interlocuteur·trice en DDCS tous les mois. Ce·tte dernier·ère rendait ensuite compte au·à la correspondant·e.",
-    "beforeImageTranscription2": "Avant l'existence de la plateforme \"Résorption-Bidonvilles\", les collectivités échangeaient avec la préfecture toutes les semaines. Les préfectures rendaient ensuite compte au·à la correspondant·e.",
-    "afterImageTranscription": "Avec la plateforme \"Résorption-Bidonvilles\", tous les acteurs·trices (opérateur·trice, préfecture, collectivités locales, correspondant·e, DDCS échangent directement et en temps réel avec les acteurs·trices concernés·es par les échanges.",
     "after": "Après",
+    "beforeImageTitle": "Avant l'existence de la plateforme \"Résorption-Bidonvilles\",",
+    "beforeImageTranscription1": "l'opérateur·trice échangeait avec un·une interlocuteur·trice en DDCS tous les mois. Ce·tte dernier·ère rendait ensuite compte au·à la correspondant·e.",
+    "beforeImageTranscription2": "Avant l'existence de la plateforme \"Résorption-Bidonvilles\", les collectivités échangeaient avec la préfecture toutes les semaines. Les préfectures rendaient ensuite compte au·à la correspondant·e.",
+    "afterImageTitle": "Avec la plateforme \"Résorption-Bidonvilles\",",
+    "afterImageTranscription": "tous les acteurs·trices (opérateur·trice, préfecture, collectivités locales, correspondant·e, DDCS échangent directement et en temps réel avec les acteurs·trices concernés·es par les échanges.",
     "context": {
       "title_part1": "La plateforme numérique",
       "title_part2": "Résorption-bidonvilles",

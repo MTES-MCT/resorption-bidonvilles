@@ -47,7 +47,7 @@
             <img width="640" height="445" class="mt-20 w-full" :src="slumMapImageName"
                 :alt="$t('landingPage.secondSection.map.title')" />
             <button @click="toggleMapTranscription()" class="mt-2 text-primary hover:underline cursor-pointer"
-                :aria-label="`${showMapTranscription ? $t('landingPage.secondSection.map.notranscription_title') : $t('landingPage.secondSection.map.transcription_title')},`">
+                :aria-label="showMapTranscription ? $t('landingPage.secondSection.map.notranscription_title') + ', ' + $t('landingPage.secondSection.map.title') + ',' : $t('landingPage.secondSection.map.transcription_title') + ', ' + $t('landingPage.secondSection.map.title') + ','">
                 <span v-if="!showMapTranscription">{{ $t("landingPage.secondSection.map.transcription_title") }}</span>
                 <span v-if="showMapTranscription">{{ $t("landingPage.secondSection.map.notranscription_title")
                 }}</span>
@@ -76,7 +76,7 @@
                     Votre navigateur ne supporte pas la balise video.
                 </video>
                 <button @click="toggleTranscription()" class="mt-2 text-primary hover:underline cursor-pointer"
-                    :aria-label="`${showTranscription ? $t('landingPage.notranscription_title') : $t('landingPage.transcription_title')},`">
+                    :aria-label="showTranscription ? $t('landingPage.notranscription_title') + ', ' + $t('landingPage.secondSection.video.text') : $t('landingPage.transcription_title') + ', ' + $t('landingPage.secondSection.video.text') + ','">
                     <span v-if="!showTranscription">{{ $t("landingPage.transcription_title") }}</span>
                     <span v-if="showTranscription">{{ $t("landingPage.notranscription_title")
                     }}</span>
