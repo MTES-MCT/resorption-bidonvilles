@@ -11,7 +11,7 @@
         <span v-if="!showTranscription">{{ $t("landingPage.transcription_title") }}</span>
         <span v-if="showTranscription">{{ $t("landingPage.notranscription_title") }}</span>
     </button>
-    <div v-if="showTranscription" tabindex="0" class="m-4 text-left">
+    <div v-if="showTranscription" class="m-4 text-left">
         <p class="font-bold mb-2">
             Témoignage utilisateur - {{ author }}
         </p>

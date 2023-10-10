@@ -37,7 +37,7 @@
                 {{ $t("landingPage.firstSection.video.text") }}
             </p>
         </div>
-        <ul v-if="showTranscription[1]" tabindex="0" class="mt-4">
+        <ul v-if="showTranscription[1]" class="mt-4">
             <li>{{ $t("landingPage.firstSection.video.transcription_part1") }}</li>
             <li>{{ $t("landingPage.firstSection.video.transcription_part2") }}</li>
             <li>{{ $t("landingPage.firstSection.video.transcription_part3") }}</li>
