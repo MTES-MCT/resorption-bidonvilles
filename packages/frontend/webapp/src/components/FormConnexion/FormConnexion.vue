@@ -11,18 +11,26 @@
         size="small"
         :showErrorSummary="false"
     >
-        <template v-slot:title
-            >Connectez-vous à<br />Résorption-bidonvilles</template
-        >
+        <template v-slot:title>
+            Connectez-vous à<br />Résorption-bidonvilles
+        </template>
 
         <template v-slot:body>
-            <FormConnexionInputEmail />
-            <FormConnexionInputPassword />
+            <FormConnexionInputEmail
+                aria-label="Veuillez saisir l'adresse de messagerie correspondant à votre identifiant sur la plateforme"
+            />
+            <FormConnexionInputPassword
+                aria-label="Veuillez saisir votre mot de passe"
+            />
         </template>
 
         <template v-slot:button>
             <p class="text-center">
-                <Button type="submit">Me connecter</Button>
+                <Button
+                    type="submit"
+                    aria-label="Valider les informations saisies,"
+                    >Me connecter</Button
+                >
             </p>
         </template>
 

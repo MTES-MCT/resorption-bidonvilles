@@ -1,5 +1,5 @@
 <template>
-    <PasswordInput id="password" :label="label" />
+    <PasswordInput id="password" :label="label" autocomplete="password" />
 </template>
 
 <script setup>

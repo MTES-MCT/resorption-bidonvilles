@@ -3,6 +3,7 @@
         id="email"
         :label="label"
         placeholder="marcel.dupont@exemple.fr"
+        autocomplete="username"
     />
 </template>
 
