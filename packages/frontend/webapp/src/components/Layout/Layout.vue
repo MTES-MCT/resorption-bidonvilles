@@ -29,6 +29,7 @@
         :class="paddingBottom ? 'mt-16' : ''"
         :WWW_URL="WWW_URL"
         :CONTACT_EMAIL="CONTACT_EMAIL"
+        showSiteMapLink="true"
     />
 </template>
 

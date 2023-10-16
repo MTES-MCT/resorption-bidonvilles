@@ -347,6 +347,14 @@ const router = createRouter({
             },
         },
         {
+            path: "/plan-du-site",
+            component: () => import("@/views/PlanDuSiteView.vue"),
+            meta: {
+                title: "Plan du site",
+                authRequirement: "signedIn",
+            },
+        },
+        {
             path: "/renouveler-mot-de-passe/:token",
             component: () => import("@/views/ChangementMotDePasseView.vue"),
             meta: {
