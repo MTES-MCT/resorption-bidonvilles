@@ -241,14 +241,12 @@
                             href="mailto:contact@resorption-bidonvilles.beta.gouv.fr">contact@resorption-bidonvilles.beta.gouv.fr</a>
                     </p>
                     <p class="mt-6">
-                        <VideoFeedbackUser
+                        <VideoFeedbackUser :authorLabel="$t('landingPage.firstSection.feedback.1.label')"
                             :author="$t('landingPage.firstSection.feedback.1.author')"
                             :part1="$t('landingPage.firstSection.feedback.videos.1.transcription_part1')"
                             :part2="$t('landingPage.firstSection.feedback.videos.1.transcription_part2')"
                             :part3="$t('landingPage.firstSection.feedback.videos.1.transcription_part3')"
-                            :poster="posterLink1"
-                            :source="sourceLink1"
-                            :trackLabel="$t('french')"
+                            :poster="posterLink1" :source="sourceLink1" :trackLabel="$t('french')"
                             :trackSrc="'/Temoignage-Leduc-BD_mars2021.vtt'" />
                     </p>
                 </template>

@@ -18,9 +18,11 @@
     },
     "before": "Before",
     "after": "After",
-    "beforeImageTranscription1": "Before the existence of the \"Resorption-Bidonvilles\" platform, the operator spoke to a contact at the DDCS every month. The operator then reported back to the correspondent.",
+    "beforeImageTitle": "Before the existence of the \"Resorption-Bidonvilles\" platform, ",
+    "beforeImageTranscription1": "the operator spoke to a contact at the DDCS every month. The operator then reported back to the correspondent.",
     "beforeImageTranscription2": "Before the existence of the \"Resorption-Bidonvilles\" platform, local authorities exchanged information with the prefecture every week.",
-    "afterImageTranscription": "With the \"Résorption-Bidonvilles\" platform, all the players (operator, prefecture, local authorities, correspondent, DDCS) exchange information directly and in real time with the players concerned by the exchanges.",
+    "afterImageTitle": "With the \"Résorption-Bidonvilles\" platform, ",
+    "afterImageTranscription": "all the players (operator, prefecture, local authorities, correspondent, DDCS) exchange information directly and in real time with the players concerned by the exchanges.",
     "context": {
       "title_part1": "",
       "title_part2": "Résorption-bidonvilles",
