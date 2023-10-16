@@ -1,16 +1,10 @@
 <template>
     <div class="relative">
-        <TextInput
-            :type="this.hidden ? 'password' : 'text'"
-            v-bind="$attrs"
-            @input="$emit('input', $event)"
-        >
+        <TextInput :type="this.hidden ? 'password' : 'text'" v-bind="$attrs" @input="$emit('input', $event)">
             <template v-slot:suffix>
-                <Icon
-                    class="absolute right-8 cursor-pointer"
-                    :icon="hidden ? 'fa-eye-slash fa-regular' : 'fa-eye fa-regular'"
-                    @click="toggleHidden"
-                />
+                <Icon class="absolute right-8 cursor-pointer"
+                    :icon="hidden ? 'fa-eye-slash fa-regular' : 'fa-eye fa-regular'" tabindex="0" :aria-label="hidden ? 'Valider pour afficher le mot de passe'
+                        : 'Valider pour masquer le mot de passe'" @click="toggleHidden" @keyup.enter="toggleHidden" />
             </template>
         </TextInput>
     </div>

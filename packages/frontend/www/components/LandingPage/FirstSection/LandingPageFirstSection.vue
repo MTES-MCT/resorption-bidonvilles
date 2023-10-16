@@ -28,7 +28,7 @@
                     Votre navigateur ne supporte pas la balise video.
                 </video>
                 <button @click="toggleTranscription(1)" class="mt-2 text-primary hover:underline cursor-pointer"
-                    :aria-label="`${showTranscription[1] ? $t('landingPage.notranscription_title') : $t('landingPage.transcription_title')},`">
+                    :aria-label="showTranscription[1] ? $t('landingPage.notranscription_title') + ', ' + $t('landingPage.firstSection.video.text') : $t('landingPage.transcription_title') + ', ' + $t('landingPage.firstSection.video.text') + ','">
                     <span v-if="!showTranscription[1]">{{ $t("landingPage.transcription_title") }}</span>
                     <span v-if="showTranscription[1]">{{ $t("landingPage.notranscription_title") }}</span>
                 </button>
@@ -37,7 +37,7 @@
                 {{ $t("landingPage.firstSection.video.text") }}
             </p>
         </div>
-        <ul v-if="showTranscription[1]" tabindex="0" class="mt-4">
+        <ul v-if="showTranscription[1]" class="mt-4">
             <li>{{ $t("landingPage.firstSection.video.transcription_part1") }}</li>
             <li>{{ $t("landingPage.firstSection.video.transcription_part2") }}</li>
             <li>{{ $t("landingPage.firstSection.video.transcription_part3") }}</li>
@@ -59,7 +59,7 @@
             </div>
 
             <div class="md:flex md:flex-row mt-16">
-                <LandingPageContextImage :label="$t('landingPage.firstSection.before')" tabindex="0"
+                <LandingPageContextImage :label="$t('landingPage.firstSection.before')"
                     aria-label="Organisation de la politique de résorption sans la plateforme (consulter la description détaillée adjacente à l’image),">
                     <img width="430" height="319" v-if="$i18n.locale === 'fr'"
                         src="~/assets/img/LandingPage/FirstSection/fr/before-fr.jpg"
@@ -71,20 +71,21 @@
                     <img width="430" height="319" v-if="$i18n.locale === 'ro'"
                         src="~/assets/img/LandingPage/FirstSection/ro/before-ro.png" alt="Drawn illustration" />
                     <button @click="toggleTranscription(2)" class="mt-2 text-primary hover:underline cursor-pointer"
-                        :aria-label="`${showTranscription[2] ? $t('landingPage.img_notranscription_title') : $t('landingPage.img_transcription_title')},`">
+                        :aria-label="showTranscription[2] ? $t('landingPage.img_notranscription_title') + ', ' + $t('landingPage.firstSection.beforeImageTitle') : $t('landingPage.img_transcription_title') + ', ' + $t('landingPage.firstSection.beforeImageTitle')">
                         <span v-if="!showTranscription[2]">{{ $t("landingPage.img_transcription_title") }}</span>
                         <span v-if="showTranscription[2]">{{ $t("landingPage.img_notranscription_title")
                         }}</span>
                     </button>
                     <template v-if="showTranscription[2]">
                         <p class="mt-4 text-left">
+                            {{ $t("landingPage.firstSection.beforeImageTitle") }}
                             {{ $t("landingPage.firstSection.beforeImageTranscription1") }}</p>
                         <p class="mt-4 text-left">
                             {{ $t("landingPage.firstSection.beforeImageTranscription2") }}</p>
                     </template>
                 </LandingPageContextImage>
                 <div class="hidden md:block border-solid border-r-2 border-gray-200 m-20" />
-                <LandingPageContextImage :label="$t('landingPage.firstSection.after')" tabindex="0"
+                <LandingPageContextImage :label="$t('landingPage.firstSection.after')"
                     aria-label="Organisation de la politique de résorption avec la plateforme (consulter la description détaillée adjacente à l’image),">
                     <img width="430" height="319" v-if="$i18n.locale === 'fr'"
                         src="~/assets/img/LandingPage/FirstSection/fr/after-fr.jpg"
@@ -96,13 +97,14 @@
                     <img width="430" height="319" v-if="$i18n.locale === 'ro'"
                         src="~/assets/img/LandingPage/FirstSection/ro/after-ro.png" alt="Drawn illustration" />
                     <button @click="toggleTranscription(3)" class="mt-2 text-primary hover:underline cursor-pointer"
-                        :aria-label="`${showTranscription[3] ? $t('landingPage.img_notranscription_title') : $t('landingPage.img_transcription_title')},`">
+                        :aria-label="showTranscription[3] ? $t('landingPage.img_notranscription_title') + ', ' + $t('landingPage.firstSection.afterImageTitle') : $t('landingPage.img_transcription_title') + ', ' + $t('landingPage.firstSection.afterImageTitle')">
                         <span v-if="!showTranscription[3]">{{ $t("landingPage.img_transcription_title") }}</span>
                         <span v-if="showTranscription[3]">{{ $t("landingPage.img_notranscription_title")
                         }}</span>
                     </button>
-                    <p v-if="showTranscription[3]" class="mt-4 text-left">{{
-                        $t("landingPage.firstSection.afterImageTranscription") }}</p>
+                    <p v-if="showTranscription[3]" class="mt-4 text-left">
+                        {{ $t("landingPage.firstSection.afterImageTitle") }}
+                        {{ $t("landingPage.firstSection.afterImageTranscription") }}</p>
                 </LandingPageContextImage>
             </div>
             <LandingPageUserFeedback class="mt-32" />
@@ -134,9 +136,6 @@ import LandingPageContextImage from "./LandingPageContextImage.vue";
 import LandingPageUserFeedback from "./UserFeedback/LandingPageUserFeedback.vue";
 import LandingCTABanner from "./LandingCTABanner.vue";
 import ctaPrendreEnMain from "~/assets/img/LandingPage/FirstSection/cta_prendre_en_main.jpg";
-import { useI18n } from 'vue-i18n';
-
-const i18n = useI18n();
 
 let showTranscription = ref({
     1: false,

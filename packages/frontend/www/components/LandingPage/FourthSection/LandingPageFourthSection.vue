@@ -138,25 +138,24 @@
 
                 <div class="mt-10 lg:w-6/12 lg:mt-0 lg:pl-6">
                     <img width="688" height="392" class="h-auto" src="~/assets/img/LandingPage/FourthSection/team.jpg"
-                        alt="Membres de l'équipe de la plateforme: Christophe Benard , Laure Dubuc, Anis Safine, Jean-Paul Domalain, Grégoire Thomazeau et Manuel Demougeot" />
+                        :alt="$t('landingPage.fourthSection.team.imageAltText')" />
                     <ul class="mt-4">
                         <li>
                             <span class="font-bold">Manuel Demougeot</span> :
-                            directeur de cabinet et du pôle résorption
-                            bidonvilles, co-intrapreneur
+                            {{ $t('landingPage.fourthSection.team.actorRole1') }}
                         </li>
                         <li>
-                            <span class="font-bold">Laure Dubuc</span> : cheffe
-                            de projet et co-intrapreneur
+                            <span class="font-bold">Laure Dubuc</span> :
+                            {{ $t('landingPage.fourthSection.team.actorRole2') }}
                         </li>
                         <li>
                             <span class="font-bold">Jean-Paul Domalain</span> :
-                            chef de produit
+                            {{ $t('landingPage.fourthSection.team.actorRole3') }}
                         </li>
                         <li>
-                            <span class="font-bold">Christophe Benard, Anis Safine et Grégoire
+                            <span class="font-bold">Christophe Bénard, Anis Safine et Grégoire
                                 Thomazeau</span>
-                            : développeurs
+                            : {{ $t('landingPage.fourthSection.team.developers') }}
                         </li>
                     </ul>
                 </div>

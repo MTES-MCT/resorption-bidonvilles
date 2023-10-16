@@ -17,10 +17,12 @@
       "exchange": "Des échanges facilités entre les acteurs"
     },
     "before": "Avant",
-    "beforeImageTranscription1": "Avant l'existence de la plateforme \"Résorption-Bidonvilles\", l'opérateur·trice échangeait avec un·une interlocuteur·trice en DDCS tous les mois. Ce·tte dernier·ère rendait ensuite compte au·à la correspondant·e.",
-    "beforeImageTranscription2": "Avant l'existence de la plateforme \"Résorption-Bidonvilles\", les collectivités échangeaient avec la préfecture toutes les semaines. Les préfectures rendaient ensuite compte au·à la correspondant·e.",
-    "afterImageTranscription": "Avec la plateforme \"Résorption-Bidonvilles\", tous les acteurs·trices (opérateur·trice, préfecture, collectivités locales, correspondant·e, DDCS échangent directement et en temps réel avec les acteurs·trices concernés·es par les échanges.",
     "after": "Après",
+    "beforeImageTitle": "Avant l'existence de la plateforme \"Résorption-Bidonvilles\",",
+    "beforeImageTranscription1": "l'opérateur·trice échangeait avec un·une interlocuteur·trice en DDCS tous les mois. Ce·tte dernier·ère rendait ensuite compte au·à la correspondant·e.",
+    "beforeImageTranscription2": "Avant l'existence de la plateforme \"Résorption-Bidonvilles\", les collectivités échangeaient avec la préfecture toutes les semaines. Les préfectures rendaient ensuite compte au·à la correspondant·e.",
+    "afterImageTitle": "Avec la plateforme \"Résorption-Bidonvilles\",",
+    "afterImageTranscription": "tous les acteurs·trices (opérateur·trice, préfecture, collectivités locales, correspondant·e, DDCS échangent directement et en temps réel avec les acteurs·trices concernés·es par les échanges.",
     "context": {
       "title_part1": "La plateforme numérique",
       "title_part2": "Résorption-bidonvilles",
@@ -49,9 +51,9 @@
       "carousel_stop": "Mettre en pause le défilement",
       "videos": {
         "1": {
-          "transcription_part1": "Sur la question d'un outil qui puisse être utile sur le terrain, c'est vrai que dès sa mise en place, on a été en contact avec Madame Dubuc et on a perçu deux opportunités majeures:",
-          "transcription_part2": "- La première était de pouvoir faire remonter à nos tutelles les résultats des actions déployées en Haute-Savoie dans l'action sociale. On sait bien qu'on a besoin de travailler notre efficience autour de ça.",
-          "transcription_part3": "- L'autre aspect qui, pour nous, était vraiment intéressant et dont on a voulu saisir tout de suite, c'était d'améliorer les outils de reporting du service. Les améliorer à la fois pour diminuer la marge d'erreur: les tableaux Excel évoqués tout à l'heure par Madame LE MINOR, on connaît et on sait bien qu' on passe d'un tableau à l'autre et puis, au bout du dixième, on n'arrive plus à trouver pourquoi on n'a plus les mêmes chiffres. Et aussi que cet outil soit un outil de reporting fluide et simplifié, et par rapport à ça, je tenais à le souligner, j'ai évoqué tout à l'heure le beau visuel de la plateforme. Pour nous, en tous cas, il y a une vraie simplicité d'utilisation, avec des informations qui apparaissent, qui sont dans tous les cas des informations de base dont on a tous besoin et qu'on peut ensuite partager."
+          "transcription_part1": "Sur la question d'un outil qui puisse être utile sur le terrain, c'est vrai que dès sa mise en place, on a été en contact avec Madame Dubuc et on a perçu deux opportunités majeures.",
+          "transcription_part2": "La première était de pouvoir faire remonter à nos tutelles les résultats des actions déployées en Haute-Savoie dans l'action sociale. On sait bien qu'on a besoin de travailler notre efficience autour de ça.",
+          "transcription_part3": "L'autre aspect qui, pour nous, était vraiment intéressant et dont on a voulu saisir tout de suite, c'était d'améliorer les outils de reporting du service. Les améliorer à la fois pour diminuer la marge d'erreur: les tableaux Excel évoqués tout à l'heure par Madame LE MINOR, on connaît et on sait bien qu' on passe d'un tableau à l'autre et puis, au bout du dixième, on n'arrive plus à trouver pourquoi on n'a plus les mêmes chiffres. Et aussi que cet outil soit un outil de reporting fluide et simplifié, et par rapport à ça, je tenais à le souligner, j'ai évoqué tout à l'heure le beau visuel de la plateforme. Pour nous, en tous cas, il y a une vraie simplicité d'utilisation, avec des informations qui apparaissent, qui sont dans tous les cas des informations de base dont on a tous besoin et qu'on peut ensuite partager."
         },
         "2": {
           "transcription_part1": "[C'est] effectivement une centralisation de l'information. On a un seul outil partagé. On avait, avant, chacun un tableau Excel qu'on se partageait, qu'on ne partageait pas, dont on ne savait plus si c'était la dernière version ou pas, et quelle était la dernière version. Chacun y ajoutait des choses par rapport à sa problématique.",
@@ -197,6 +199,15 @@
           "text": "de la DITP en octobre 2020"
         }
       }
+    }
+  },
+  "fourthSection": {
+    "team": {
+      "imageAltText": "Membres de l'équipe de la plateforme: Christophe Benard , Laure Dubuc, Anis Safine, Jean-Paul Domalain, Grégoire Thomazeau and Manuel Demougeot",
+      "actorRole1": "directeur de cabinet et du pôle résorption bidonvilles, co-intrapreneur",
+      "actorRole2": "cheffe de projet et co-intrapreneur",
+      "actorRole3": "chef de produit",
+      "developers": "développeurs"
     }
   },
   "contactForm": {

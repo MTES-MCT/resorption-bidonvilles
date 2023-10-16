@@ -25,9 +25,11 @@
     },
     "before": "Înainte",
     "after": "După",
-    "beforeImageTranscription1": "Înainte de existența platformei \"Résorption-Bidonvilles\", operatorul vorbea în fiecare lună cu o persoană de contact din cadrul DDCS. Aceasta din urmă îi raporta apoi corespondentului.",
+    "beforeImageTitle": "Înainte de existența platformei \"Résorption-Bidonvilles\", ",
+    "beforeImageTranscription1": "operatorul vorbea în fiecare lună cu o persoană de contact din cadrul DDCS. Aceasta din urmă îi raporta apoi corespondentului.",
     "beforeImageTranscription2": "Înainte de existența platformei \"Resorption-Bidonvilles\", autoritățile locale vorbeau cu prefectura în fiecare săptămână. Prefecții raportau apoi corespondentului.",
-    "afterImageTranscription": "Cu ajutorul platformei \"Résorption-Bidonvilles\", toți actorii (operator, prefectură, autorități locale, corespondent, DDCS) fac schimb de informații direct și în timp real cu actorii implicați în schimburi.",
+    "beforeImageTitle": "Cu ajutorul platformei \"Résorption-Bidonvilles\", ",
+    "afterImageTranscription": "toți actorii (operator, prefectură, autorități locale, corespondent, DDCS) fac schimb de informații direct și în timp real cu actorii implicați în schimburi.",
     "feedback": {
       "title": "Mărturii ale utilizatorilor",
       "1": {
@@ -182,6 +184,15 @@
           "text": "de la DITP în octombrie 2020"
         }
       }
+    }
+  },
+  "fourthSection": {
+    "team": {
+      "imageAltText": "Membri ai echipei platformei: Christophe Benard , Laure Dubuc, Anis Safine, Jean-Paul Domalain, Grégoire Thomazeau și Manuel Demougeot",
+      "actorRole1": "director de cabinet și director al unității de curățare a mahalalelor, co-intraprenor",
+      "actorRole2": "manager de proiect și co-intraprenor",
+      "actorRole3": "manager de produs",
+      "developers": "dezvoltatori"
     }
   },
   "contactForm": {
