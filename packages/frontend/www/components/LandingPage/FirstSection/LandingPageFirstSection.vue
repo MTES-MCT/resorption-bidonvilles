@@ -136,9 +136,6 @@ import LandingPageContextImage from "./LandingPageContextImage.vue";
 import LandingPageUserFeedback from "./UserFeedback/LandingPageUserFeedback.vue";
 import LandingCTABanner from "./LandingCTABanner.vue";
 import ctaPrendreEnMain from "~/assets/img/LandingPage/FirstSection/cta_prendre_en_main.jpg";
-import { useI18n } from 'vue-i18n';
-
-const { t, i18n } = useI18n();
 
 let showTranscription = ref({
     1: false,
