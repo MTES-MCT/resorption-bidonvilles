@@ -15,6 +15,7 @@
                 :showMandatoryStar="variant === 'creer-utilisateur'"
                 :label="labels.email"
                 aria-label="Veuillez saisir l'adresse de messagerie correspondant à votre identifiant sur la plateforme"
+                autocomplete="email"
             />
             <FormUtilisateurInputEmailConfirmation
                 v-if="variant === 'demande-acces'"
@@ -23,12 +24,17 @@
             <FormUtilisateurInputFirstName
                 :showMandatoryStar="variant === 'creer-utilisateur'"
                 :label="labels.first_name"
+                autocomplete="given-name"
             />
             <FormUtilisateurInputLastName
                 :showMandatoryStar="variant === 'creer-utilisateur'"
                 :label="labels.last_name"
+                autocomplete="family-name"
             />
-            <FormUtilisateurInputPhone :label="labels.phone" />
+            <FormUtilisateurInputPhone
+                :label="labels.phone"
+                autocomplete="tel"
+            />
             <FormUtilisateurInputRequestType
                 v-if="variant === 'demande-acces'"
                 :class="{ hidden: demandeAccesOnly }"
