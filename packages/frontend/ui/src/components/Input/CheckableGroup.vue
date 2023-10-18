@@ -1,23 +1,25 @@
 <template>
     <InputWrapper :withoutMargin="withoutMargin" :hasErrors="errors[id] && errors[id].length > 0" :id="id">
-        <div class="flex items-center space-x-1">
-            <Icon :icon="icon" v-if="icon" />
-            <div>
-                <InputLabel :label="label" :info="info" :showMandatoryStar="showMandatoryStar" />
+        <fieldset>
+            <div class="flex items-center space-x-1">
+                <Icon :icon="icon" v-if="icon" />
+                <legend>
+                    <InputLabel :label="label" :info="info" :showMandatoryStar="showMandatoryStar" />
+                </legend>
             </div>
-        </div>
 
-        <div class="checkableGroup" :class="[
-            'flex',
-            direction === 'vertical'
-                ? 'flex-col checkableGroup--verticalLayout items-start vertical'
-                : 'flex-row flex-wrap checkableGroup--horizontalLayout horizontal'
-        ]">
-            <slot />
-        </div>
-        <InputError v-if="(errors[id] && errors[id].length > 0)">
-            <ErrorMessage :name="id" />
-        </InputError>
+            <div class="checkableGroup" :class="[
+                'flex',
+                direction === 'vertical'
+                    ? 'flex-col checkableGroup--verticalLayout items-start vertical'
+                    : 'flex-row flex-wrap checkableGroup--horizontalLayout horizontal'
+            ]">
+                <slot />
+            </div>
+            <InputError v-if="(errors[id] && errors[id].length > 0)">
+                <ErrorMessage :name="id" />
+            </InputError>
+        </fieldset>
     </InputWrapper>
 </template>
 
