@@ -7,6 +7,7 @@
     >
         <template v-slot:subtitle><slot name="subtitle" /></template>
         <template v-slot:title><slot name="title" /></template>
+        <template v-slot:alert><slot name="alert" /></template>
 
         <template v-slot:body="{ values }">
             <FormUtilisateurInputEmail
