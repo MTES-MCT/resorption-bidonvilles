@@ -267,7 +267,6 @@ export default (closingSolutions: ClosingSolution[]) => {
             data: (shantytown: Shantytown) => {
                 const data = electricityAccessStatusLabels[shantytown.livingConditions.electricity.status.status] || 'Aucune information concernant l\'accès à l\'électricité';
                 return data;
-                return data;
             },
             width: COLUMN_WIDTHS.MEDIUM,
         },
