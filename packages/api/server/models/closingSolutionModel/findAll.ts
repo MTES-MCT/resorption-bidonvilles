@@ -1,7 +1,8 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
 
-export default () => sequelize.query(
+export default (): Promise<ClosingSolution[]> => sequelize.query(
     `SELECT
         closing_solutions.closing_solution_id AS id,
         closing_solutions.label AS label

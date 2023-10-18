@@ -12,6 +12,7 @@ import statsExportsModel from '#server/models/statsExportsModel';
 
 import serializeExportProperties from './_common/serializeExportProperties';
 import createExportSections from './_common/createExportSections';
+import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
 
 export default async (user, data) => {
     if (!Object.prototype.hasOwnProperty.call(data, 'locationType')
@@ -88,7 +89,7 @@ export default async (user, data) => {
         throw new ServiceError('fetch_failed', new Error('Il n\'y a aucun site à exporter pour le périmètre géographique demandé'));
     }
 
-    let closingSolutions;
+    let closingSolutions: ClosingSolution[];
     try {
         closingSolutions = await closingSolutionModel.findAll();
     } catch (error) {
