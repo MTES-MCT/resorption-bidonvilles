@@ -5,7 +5,6 @@
             <li v-for="lien in liensAutorises" :key="lien.to" class="mb-2">
                 <Link
                     :to="lien.to"
-                    class="mr-1"
                     color="text-black"
                     hoverColor="text-black"
                     >{{ lien.linkLabel }}</Link
