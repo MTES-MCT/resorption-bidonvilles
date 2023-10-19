@@ -1,20 +1,18 @@
 <template>
     <h1 class="text-3xl lg:text-5xl font-bold mb-4 lg:mb-16">Plan du site</h1>
-    <div class="ml-5">
-        <ContentWrapper>
-            <ul class="list-disc">
-                <li v-for="lien in liensAutorises" :key="lien.to" class="mb-2">
-                    <Link
-                        :to="lien.to"
-                        class="mr-1"
-                        color="text-black"
-                        hoverColor="text-black"
-                        >{{ lien.linkLabel }}</Link
-                    >
-                </li>
-            </ul>
-        </ContentWrapper>
-    </div>
+    <ContentWrapper>
+        <ul class="list-disc ml-5">
+            <li v-for="lien in liensAutorises" :key="lien.to" class="mb-2">
+                <Link
+                    :to="lien.to"
+                    class="mr-1"
+                    color="text-black"
+                    hoverColor="text-black"
+                    >{{ lien.linkLabel }}</Link
+                >
+            </li>
+        </ul>
+    </ContentWrapper>
 </template>
 <script setup>
 import { computed } from "vue";
