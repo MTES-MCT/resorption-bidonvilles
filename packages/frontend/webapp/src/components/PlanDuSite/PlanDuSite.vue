@@ -3,12 +3,9 @@
     <ContentWrapper>
         <ul class="list-disc ml-5">
             <li v-for="lien in liensAutorises" :key="lien.to" class="mb-2">
-                <Link
-                    :to="lien.to"
-                    color="text-black"
-                    hoverColor="text-black"
-                    >{{ lien.label }}</Link
-                >
+                <Link :to="lien.to" hoverColor="text-black">{{
+                    lien.label
+                }}</Link>
             </li>
         </ul>
     </ContentWrapper>
