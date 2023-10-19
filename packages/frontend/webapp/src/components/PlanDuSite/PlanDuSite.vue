@@ -66,9 +66,7 @@ const liensAutorises = computed(() => {
                 }
 
                 if (
-                    userPermissions.value[entity] &&
-                    userPermissions.value[entity][feature] &&
-                    userPermissions.value[entity][feature].allowed === true
+                    userPermissions.value?.[entity]?.[feature]?.allowed === true
                 ) {
                     return {
                         ...lien, // Inclure l'objet d'origine
