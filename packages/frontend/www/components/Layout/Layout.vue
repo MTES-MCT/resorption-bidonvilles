@@ -18,7 +18,7 @@
       </template>
     </NavBar>
     <slot />
-    <FooterBar id="pied-de-page" :WWW_URL="WWW_URL" :CONTACT_EMAIL="CONTACT_EMAIL" />
+    <FooterBar id="pied-de-page" :URL="WEBAPP_URL" :CONTACT_EMAIL="CONTACT_EMAIL" />
   </div>
 </template>
 
@@ -38,5 +38,5 @@ const props = defineProps({
   }
 });
 const { stickyHeader, displayLanguagePicker } = toRefs(props);
-const { WWW_URL, CONTACT_EMAIL } = useRuntimeConfig().public;
+const { WEBAPP_URL, CONTACT_EMAIL } = useRuntimeConfig().public;
 </script>
