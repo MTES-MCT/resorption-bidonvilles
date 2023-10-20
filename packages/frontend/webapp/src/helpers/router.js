@@ -444,6 +444,14 @@ const router = createRouter({
                 navTab: "administration",
             },
         },
+        {
+            path: "/statistiques-publiques",
+            component: () => import("@/views/StatistiquesPubliques.vue"),
+            meta: {
+                title: "Statistiques publiques",
+                authRequirement: "none",
+            },
+        },
 
         // special
         {
