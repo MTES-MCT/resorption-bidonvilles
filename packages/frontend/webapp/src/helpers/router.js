@@ -452,6 +452,14 @@ const router = createRouter({
                 authRequirement: "none",
             },
         },
+        {
+            path: "/mentions-legales",
+            component: () => import("@/views/MentionsLegales.vue"),
+            meta: {
+                title: "Mentions légales",
+                authRequirement: "none",
+            },
+        },
 
         // special
         {
