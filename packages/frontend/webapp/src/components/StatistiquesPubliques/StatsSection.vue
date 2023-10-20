@@ -13,8 +13,8 @@ export default {
     props: {
         title: {
             required: true,
-            type: String
-        }
-    }
+            type: String,
+        },
+    },
 };
 </script>

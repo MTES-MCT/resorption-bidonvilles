@@ -1,6 +1,6 @@
 <template>
     <section>
-        <Container class="py-16">
+        <ContentWrapper>
             <div>
                 <h1 class="text-display-xl font-bold">Statistiques</h1>
                 <div>
@@ -13,27 +13,40 @@
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 mt-4">
                 <div>
-                    <PieChart class="mb-16 md:mb-0 md:mr-16" :height="250" :chartData="organizationRepartitionData"
+                    <PieChart
+                        class="mb-16 md:mb-0 md:mr-16"
+                        :height="250"
+                        :chartData="organizationRepartitionData"
                         :chartOptions="{
                             plugins: {
                                 legend: {
                                     position: 'right',
                                     align: 'start',
                                     labels: {
-                                        generateLabels
-                                    }
+                                        generateLabels,
+                                    },
                                 },
                             },
-                            maintainAspectRatio: false
-                        }" v-if="numberOfPublicEstablishmentUsers !== '...'" />
+                            maintainAspectRatio: false,
+                        }"
+                        v-if="numberOfPublicEstablishmentUsers !== '...'"
+                    />
                     <span class="text-display-lg font-bold" v-else>...</span>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-                    <StatsBlock :title="numberOfDepartements" icon="flag" subtitle="départements" />
-                    <StatsBlock :title="numberOfNewUsers.total" icon="user-plus" :subtitle="
-                        'nouveaux utilisateurs en ' +
-                        numberOfNewUsers.month.toLowerCase()
-                    " />
+                    <StatsBlock
+                        :title="numberOfDepartements"
+                        icon="flag"
+                        subtitle="départements"
+                    />
+                    <StatsBlock
+                        :title="numberOfNewUsers.total"
+                        icon="user-plus"
+                        :subtitle="
+                            'nouveaux utilisateurs en ' +
+                            numberOfNewUsers.month.toLowerCase()
+                        "
+                    />
                 </div>
             </div>
 
@@ -42,8 +55,12 @@
                     Nombre d'utilisateurs
                 </h2>
                 <div class="chartWrapper">
-                    <LineChart v-if="numberOfNewUsersPerMonth !== null" :chartData="usersEvolutionData"
-                        :chartOptions="{ maintainAspectRatio: false }" :height="250" />
+                    <LineChart
+                        v-if="numberOfNewUsersPerMonth !== null"
+                        :chartData="usersEvolutionData"
+                        :chartOptions="{ maintainAspectRatio: false }"
+                        :height="250"
+                    />
                     <span class="text-display-lg font-bold" v-else>...</span>
                 </div>
             </div>
@@ -53,53 +70,101 @@
                     Nombre d'utilisateurs par semaine
                 </h2>
                 <div class="chartWrapper">
-                    <LineChart v-if="wauData !== null" :chartData="wauData"
-                        :chartOptions="{ maintainAspectRatio: false }" :height="250" />
+                    <LineChart
+                        v-if="wauData !== null"
+                        :chartData="wauData"
+                        :chartOptions="{ maintainAspectRatio: false }"
+                        :height="250"
+                    />
                     <span class="text-display-lg font-bold" v-else>...</span>
                 </div>
             </div>
 
             <StatsSection title="Usage" class="mt-16">
-                <StatsBlock :title="numberOfExports" icon="file-download" subtitle="extractions de données réalisées"
-                    info="Les exports Excel permettent aux acteurs locaux d'utiliser et d'analyser les données afin de suivre, communiquer et optimiser les actions de résorption depuis le 15/11/2019." />
-                <StatsBlock :title="numberOfComments" icon="comment" subtitle="commentaires créés"
-                    info="Au delà du suivi des chiffrés, les commentaires permettent de suivre et de partager des informations qualitative utiles dans une action multi-partenariale." />
-                <StatsBlock :title="numberOfDirectoryViews" icon="address-book" subtitle="fiches contact consultées"
-                    info="L'annuaire permet d'accéder aux coordonnées de tous les utilisateurs de la plateforme. Son utilisation participe à la mise en réseau partenaires locaux ou des pairs depuis le 15/11/2019" />
+                <StatsBlock
+                    :title="numberOfExports"
+                    icon="file-download"
+                    subtitle="extractions de données réalisées"
+                    info="Les exports Excel permettent aux acteurs locaux d'utiliser et d'analyser les données afin de suivre, communiquer et optimiser les actions de résorption depuis le 15/11/2019."
+                />
+                <StatsBlock
+                    :title="numberOfComments"
+                    icon="comment"
+                    subtitle="commentaires créés"
+                    info="Au delà du suivi des chiffrés, les commentaires permettent de suivre et de partager des informations qualitative utiles dans une action multi-partenariale."
+                />
+                <StatsBlock
+                    :title="numberOfDirectoryViews"
+                    icon="address-book"
+                    subtitle="fiches contact consultées"
+                    info="L'annuaire permet d'accéder aux coordonnées de tous les utilisateurs de la plateforme. Son utilisation participe à la mise en réseau partenaires locaux ou des pairs depuis le 15/11/2019"
+                />
             </StatsSection>
 
             <StatsSection title="Fréquence de mise à jour" class="mt-16">
-                <template v-slot:info><span class="text-secondary">
+                <template v-slot:info
+                    ><span class="text-secondary">
                         <Icon icon="sync" width="16" height="16" />
                     </span>
                     La mise à jour régulière des données garantissent des
-                    informations justes à tous les acteurs.</template>
+                    informations justes à tous les acteurs.</template
+                >
                 <template v-slot:default>
-                    <StatsBlock :title="medianTimeBeforeCreationDeclaration"
+                    <StatsBlock
+                        :title="medianTimeBeforeCreationDeclaration"
                         subtitle="jours entre l'installation d'un bidonville ou squat et sa déclaration"
-                        info="Médiane depuis le 01/09/2019." />
-                    <StatsBlock :title="medianTimeBeforeClosingDeclaration"
+                        info="Médiane depuis le 01/09/2019."
+                    />
+                    <StatsBlock
+                        :title="medianTimeBeforeClosingDeclaration"
                         subtitle="jours entre la fermeture du site et sa déclaration"
-                        info="Médiane depuis le 01/09/2019." />
-                    <StatsBlock :title="numberOfShantytownOperations" subtitle="mises à jour de bidonvilles et squats"
-                        info="Toutes opérations confondues : création, modification, fermeture" />
+                        info="Médiane depuis le 01/09/2019."
+                    />
+                    <StatsBlock
+                        :title="numberOfShantytownOperations"
+                        subtitle="mises à jour de bidonvilles et squats"
+                        info="Toutes opérations confondues : création, modification, fermeture"
+                    />
                 </template>
             </StatsSection>
-        </Container>
+        </ContentWrapper>
     </section>
 </template>
 
 <script setup>
-import Container from "~/components/Layout/Container/Container.vue";
+import { ref, computed, onMounted } from "vue";
+import ENV from "@/helpers/env.js";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import StatsBlock from "./StatsBlock.vue";
 import StatsSection from "./StatsSection.vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 import { Line as LineChart, Pie as PieChart } from "vue-chartjs";
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, ArcElement, PointElement, LineElement, CategoryScale, LinearScale } from 'chart.js';
+import {
+    Chart as ChartJS,
+    Title,
+    Tooltip,
+    Legend,
+    BarElement,
+    ArcElement,
+    PointElement,
+    LineElement,
+    CategoryScale,
+    LinearScale,
+} from "chart.js";
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, ArcElement, PointElement, LineElement, CategoryScale, LinearScale);
+ChartJS.register(
+    Title,
+    Tooltip,
+    Legend,
+    BarElement,
+    ArcElement,
+    PointElement,
+    LineElement,
+    CategoryScale,
+    LinearScale
+);
 
-const { API_URL } = useRuntimeConfig().public;
+const { API_URL } = ENV;
 
 const state = ref(null);
 const stats = ref(null);
@@ -117,7 +182,7 @@ function load() {
         .then((response) => response.json())
         .then((response) => {
             stats.value = response.response.statistics;
-            stats.state = "loaded";
+            stats.value.state = "loaded";
         });
 }
 
@@ -128,28 +193,27 @@ const numberOfDepartements = computed(() => {
 const numberOfTerritorialCollectivitieUsers = computed(() => {
     return stats.value
         ? stats.value.numberOfCollaboratorAndAssociationUsers
-            .territorial_collectivity || 0
+              .territorial_collectivity || 0
         : "...";
 });
 
 const numberOfAssociationUsers = computed(() => {
     return stats.value
-        ? stats.value.numberOfCollaboratorAndAssociationUsers
-            .association || 0
+        ? stats.value.numberOfCollaboratorAndAssociationUsers.association || 0
         : "...";
 });
 
 const numberOfPublicEstablishmentUsers = computed(() => {
     return stats.value
         ? stats.value.numberOfCollaboratorAndAssociationUsers
-            .public_establishment || 0
+              .public_establishment || 0
         : "...";
 });
 
 const numberOfAdministrationUsers = computed(() => {
     return stats.value
-        ? stats.value.numberOfCollaboratorAndAssociationUsers
-            .administration || 0
+        ? stats.value.numberOfCollaboratorAndAssociationUsers.administration ||
+              0
         : "...";
 });
 
@@ -177,10 +241,7 @@ const usersEvolutionData = computed(() => {
         return [];
     }
 
-    const initialValue = parseInt(
-        stats.value.numberOfUsersOnJune2020,
-        10
-    );
+    const initialValue = parseInt(stats.value.numberOfUsersOnJune2020, 10);
 
     const cumulativeData = numberOfNewUsersPerMonth.value.reduce(
         (acc, { total }, index) =>
@@ -192,11 +253,13 @@ const usersEvolutionData = computed(() => {
 
     return {
         labels: numberOfNewUsersPerMonth.value.map(({ month }) => month),
-        datasets: [{
-            label: "Nombre d'utilisateurs",
-            data: cumulativeData,
-            fill: true
-        }],
+        datasets: [
+            {
+                label: "Nombre d'utilisateurs",
+                data: cumulativeData,
+                fill: true,
+            },
+        ],
     };
 });
 
@@ -206,25 +269,20 @@ const organizationRepartitionData = computed(() => {
             "services de l'État",
             "collectivités territoriales",
             "associations",
-            "administration"
+            "administration",
         ],
         datasets: [
             {
-                backgroundColor: [
-                    "#169B62",
-                    "#5770BE",
-                    "#FF8D7E",
-                    "#6A6A6A"
-                ],
+                backgroundColor: ["#169B62", "#5770BE", "#FF8D7E", "#6A6A6A"],
                 data: [
                     numberOfPublicEstablishmentUsers.value,
                     numberOfTerritorialCollectivitieUsers.value,
                     numberOfAssociationUsers.value,
-                    numberOfAdministrationUsers.value
+                    numberOfAdministrationUsers.value,
                 ],
-                label: "utilisateurs institutionnels et associatifs"
-            }
-        ]
+                label: "utilisateurs institutionnels et associatifs",
+            },
+        ],
     };
 });
 
@@ -236,17 +294,14 @@ const numberOfNewUsers = computed(() => {
 
 const medianTimeBeforeCreationDeclaration = computed(() => {
     return stats.value
-        ? Math.round(
-            stats.value.meanTimeBeforeCreationDeclaration.median
-        ) || "?"
+        ? Math.round(stats.value.meanTimeBeforeCreationDeclaration.median) ||
+              "?"
         : "...";
 });
 
 const medianTimeBeforeClosingDeclaration = computed(() => {
     return stats.value
-        ? Math.round(
-            stats.value.meanTimeBeforeClosingDeclaration.median
-        ) || "?"
+        ? Math.round(stats.value.meanTimeBeforeClosingDeclaration.median) || "?"
         : "...";
 });
 
@@ -262,17 +317,17 @@ const wauData = computed(() => {
     return {
         scales: {
             y: {
-                min: 0
-            }
+                min: 0,
+            },
         },
         labels: stats.value.wau.map(({ monday }) => `Semaine du ${monday}`),
         datasets: [
             {
                 backgroundColor: "#E5E5F4",
                 data: stats.value.wau.map(({ wau }) => wau),
-                label: "Nombre d'utilisateurs sur la semaine"
-            }
-        ]
+                label: "Nombre d'utilisateurs sur la semaine",
+            },
+        ],
     };
 });
 
@@ -282,13 +337,12 @@ function generateLabels(chart) {
         return data.labels.map(function (label, i) {
             // We get the value of the current label
             const value = chart.config.data.datasets[0].data[i];
-            const background =
-                chart.config.data.datasets[0].backgroundColor[i];
+            const background = chart.config.data.datasets[0].backgroundColor[i];
 
             return {
                 text: label + " : " + value,
                 index: i,
-                fillStyle: background
+                fillStyle: background,
             };
         });
     } else {
