@@ -16,7 +16,7 @@
       </template>
     </NavBar>
     <slot />
-    <FooterBar :WWW_URL="WWW_URL" :CONTACT_EMAIL="CONTACT_EMAIL" />
+    <FooterBar :URL="WEBAPP_URL" :CONTACT_EMAIL="CONTACT_EMAIL" />
   </div>
 </template>
 
@@ -26,15 +26,15 @@ import { FooterBar } from "@resorptionbidonvilles/ui";
 import NavBar from "~/components/Layout/Navbar/Navbar.vue";
 
 const props = defineProps({
-    stickyHeader: {
-      type: Boolean,
-      default: true
-    },
-    displayLanguagePicker: {
-      type: Boolean,
-      default: true
-    }
+  stickyHeader: {
+    type: Boolean,
+    default: true
+  },
+  displayLanguagePicker: {
+    type: Boolean,
+    default: true
+  }
 });
 const { stickyHeader, displayLanguagePicker } = toRefs(props);
-const { WWW_URL, CONTACT_EMAIL } = useRuntimeConfig().public;
+const { WEBAPP_URL, CONTACT_EMAIL } = useRuntimeConfig().public;
 </script>
