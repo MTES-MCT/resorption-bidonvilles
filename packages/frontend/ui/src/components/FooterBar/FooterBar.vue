@@ -25,18 +25,19 @@
                 </FooterBarFootLink>
                 <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
 
-                <FooterBarFootLink :to="`${WWW_URL}/stats`" title="Afficher les statistiques publiques de la plateforme">
+                <FooterBarFootLink :to="`${URL}/statistiques-publiques`"
+                    title="Afficher les statistiques publiques de la plateforme">
                     {{ $t('footer.statistics') }}
                 </FooterBarFootLink>
                 <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
 
-                <FooterBarFootLink :to="`${WWW_URL}/mentions-legales`"
+                <FooterBarFootLink :to="`${URL}/mentions-legales`"
                     title="Afficher les mentions légales relatives à l'utilisation de la plateforme">
                     {{ $t('footer.legal') }}
                 </FooterBarFootLink>
                 <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
 
-                <FooterBarFootLink :to="`${WWW_URL}/conditions-d-utilisation.pdf`"
+                <FooterBarFootLink :to="`${URL}/doc/conditions-d-utilisation.pdf`"
                     title="Afficher les conditions générales d'utilisation de la plateforme">
                     {{ $t('footer.cgus') }}
                 </FooterBarFootLink>
@@ -71,7 +72,7 @@ import FooterBarPartnerLink from "./FooterBarPartnerLink.vue";
 
 const props = defineProps({
     CONTACT_EMAIL: String,
-    WWW_URL: String,
+    URL: String,
     showSiteMapLink: {
         type: Boolean,
         required: false,
