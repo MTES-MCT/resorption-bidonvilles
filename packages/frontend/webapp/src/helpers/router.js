@@ -499,6 +499,14 @@ const router = createRouter({
                 displayOrderOnSiteMap: 0,
             },
         },
+        {
+            path: "/statistiques-publiques",
+            component: () => import("@/views/StatistiquesPubliques.vue"),
+            meta: {
+                title: "Statistiques publiques",
+                authRequirement: "none",
+            },
+        },
 
         // special
         {
