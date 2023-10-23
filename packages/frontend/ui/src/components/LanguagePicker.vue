@@ -1,16 +1,17 @@
 <template>
   <select @change="pickLang($event.target.value)"
-    class="focus:ring-2 ring-offset-2 ring-info bg-white text-lg border-2 border-primary text-primary focus:outline-none p-2"
-    name="language" :label="language === 'fr' ? 'Changer la langue' : 'Change language'" :disabled="disabled">
-    <option class="hover:bg-primary" v-for="lang in languages" :key="lang.key" :alt="lang.alt" :value="lang.key"
+    :style="`background-image: url('assets/images/flags/${language.toUpperCase()}.svg'); background-position: 0.5rem center`"
+    class="bg-[length:1.9rem] bg-no-repeat focus:ring-2 ring-offset-2 ring-info bg-white text-lg border-2 border-primary text-primary focus:outline-none p-2 pl-12"
+    name="language" label="Change language" :disabled="disabled">
+    <option class="hover:bg-primary" v-for="lang in languages" :key="lang.key" :alt="lang.alt" :value="lang.key" :selected="lang.key === language.toLowerCase()"
       :lang="lang.key" @change="pickLang(lang.key)">
-      {{ lang.flag }} {{ lang.label }}
+      {{ lang.label }}
     </option>
   </select>
 </template>
 
 <script setup>
-import { toRefs, defineProps, defineEmits } from 'vue';
+import { toRefs } from 'vue';
 
 const props = defineProps({
   language: {
@@ -18,33 +19,16 @@ const props = defineProps({
   },
 });
 const { language } = toRefs(props);
+
 const languages = [
-  { key: 'fr', label: 'Français', alt: 'Version Française', flag: getFlagEmoji("fr") },
-  { key: 'en', label: 'English', alt: 'English Version', flag: getFlagEmoji("en") },
-  { key: 'ro', label: 'Românesc', alt: 'Versiunea în limba română', flag: getFlagEmoji("ro") },
-  { key: 'bg', label: 'Български', alt: 'Българска версия', flag: getFlagEmoji("bg") },
+  { "key": "fr", "label": "Français", "alt": "Version Française", },
+  { "key": "en", "label": "English", "alt": "English Version", },
+  { "key": "ro", "label": "Românesc", "alt": "Versiunea în limba română", },
+  { "key": "bg", "label": "Български", "alt": "Българска версия", },
 ];
 const emit = defineEmits(['update:modelValue']);
+
 function pickLang(lang) {
   emit('update:modelValue', lang)
 }
-function getFlagEmoji(countryCode) {
-  switch (countryCode) {
-    case 'fr':
-      return "🇫🇷";
-    case 'en':
-      return "🇬🇧";
-    case 'ro':
-      return "🇷🇴";
-    case 'bg':
-      return "🇧🇬";
-    default:
-      return "🇫🇷";
-  }
-}
 </script>
-<style scoped>
-select.decorated option:hover {
-  box-shadow: 0 0 10px 100px #1882A8 inset;
-}
-</style>
