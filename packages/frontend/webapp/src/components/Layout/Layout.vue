@@ -9,11 +9,9 @@
             <div
                 class="bg-G800 bg-opacity-50 h-full font-bold flex items-center drop-shadow-lg"
             >
-                <ContentWrapper class="drop-shadow-lg"
-                    ><slot name="hero"
-                        >Agir, pour résorber les bidonvilles</slot
-                    ></ContentWrapper
-                >
+                <ContentWrapper class="drop-shadow-lg">
+                    <slot name="hero">Agir, pour résorber les bidonvilles</slot>
+                </ContentWrapper>
             </div>
         </div>
         <div

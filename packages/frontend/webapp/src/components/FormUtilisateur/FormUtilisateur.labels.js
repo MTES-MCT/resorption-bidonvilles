@@ -1,6 +1,8 @@
 export default (variant) => ({
     fr: {
         email: variant === "demande-acces" ? "Votre courriel" : "Courriel",
+        aria_email:
+            "Veuillez saisir l'adresse de messagerie à laquelle vous recontacter et qui vous servira d'identifiant",
         verif_email: "Confirmation de votre courriel",
         first_name: "Prénom",
         last_name: "Nom de famille",
@@ -38,6 +40,8 @@ export default (variant) => ({
     },
     en: {
         email: "Your email",
+        aria_email:
+            "Please enter the email address at which you can be contacted",
         verif_email: "Confirm your email",
         first_name: "First name",
         last_name: "Last Name",
@@ -52,6 +56,8 @@ export default (variant) => ({
     },
     ro: {
         email: "E-mailul dumneavoastră",
+        aria_email:
+            "Vă rugăm să introduceți adresa de e-mail pentru a vă contacta și care va servi drept identificator",
         verif_email: "confirmati emailul dumneavoastra",
         first_name: "Prenume",
         last_name: "Nume",
@@ -65,6 +71,8 @@ export default (variant) => ({
     },
     bg: {
         email: "твоят имейл",
+        aria_email:
+            "Моля, въведете имейл адреса за връзка с вас и който ще служи като ваш идентификатор",
         verif_email: "потвърдете своя имейл",
         first_name: "Име",
         last_name: "Фамилия",

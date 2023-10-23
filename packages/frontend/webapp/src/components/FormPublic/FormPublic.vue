@@ -20,6 +20,13 @@
             <p class="px-3" :class="$slots.description ? 'mt-6' : ''">
                 <slot name="description"></slot>
             </p>
+            <p
+                class="px-3 text-error"
+                :class="$slots.alert ? 'mt-6' : ''"
+                role="alert"
+            >
+                <slot name="alert"></slot>
+            </p>
         </header>
 
         <!-- form body -->
