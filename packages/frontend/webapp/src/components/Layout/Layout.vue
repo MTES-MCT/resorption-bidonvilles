@@ -9,9 +9,9 @@
             <div
                 class="bg-G800 bg-opacity-50 h-full font-bold flex items-center drop-shadow-lg"
             >
-                <p class="drop-shadow-lg mx-auto px-4 lg:px-6">
+                <ContentWrapper class="drop-shadow-lg">
                     <slot name="hero">Agir, pour résorber les bidonvilles</slot>
-                </p>
+                </ContentWrapper>
             </div>
         </div>
         <div
@@ -44,7 +44,7 @@
 import ENV from "@/helpers/env.js";
 import { defineProps, toRefs } from "vue";
 import NavBar from "@/components/NavBar/NavBar.vue";
-import { FooterBar } from "@resorptionbidonvilles/ui";
+import { ContentWrapper, FooterBar } from "@resorptionbidonvilles/ui";
 
 const { WWW_URL, CONTACT_EMAIL } = ENV;
 const props = defineProps({

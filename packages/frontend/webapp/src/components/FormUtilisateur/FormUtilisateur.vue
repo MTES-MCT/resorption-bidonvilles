@@ -14,7 +14,7 @@
                 :value="$route.query.email"
                 :showMandatoryStar="variant === 'creer-utilisateur'"
                 :label="labels.email"
-                aria-label="Veuillez saisir l'adresse de messagerie correspondant à votre identifiant sur la plateforme"
+                :aria-label="labels.aria_email"
                 autocomplete="email"
             />
             <FormUtilisateurInputEmailConfirmation
