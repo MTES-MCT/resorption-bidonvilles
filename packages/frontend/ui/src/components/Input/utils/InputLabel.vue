@@ -1,10 +1,10 @@
 <template>
-    <label v-if="label" class="font-bold" :class="info && inlineInfo ? 'inline' : ''" :for="for">{{ label }}
-        <MandatoryStar class="ml-1" v-if="showMandatoryStar" />
+    <label v-if="label" class="font-bold" :class=" info && inlineInfo ? 'inline' : '' " :for="for">{{ label }}
+        <MandatoryStar class="ml-1" v-if=" showMandatoryStar " />
     </label>
-    <div v-if="info" class="mb-3 text-G600" :class="inlineInfo ? 'inline' : ''">{{ info }}
-        <MandatoryStar class="ml-1" v-if="(showMandatoryStar && !label)" />
-    </div>
+    <p v-if=" info " class="mb-3 text-G600" :class=" inlineInfo ? 'inline' : '' ">{{ info }}
+        <MandatoryStar class="ml-1" v-if=" (showMandatoryStar && !label) " />
+    </p>
 </template>
 
 <script>

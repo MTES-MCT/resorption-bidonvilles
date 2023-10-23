@@ -1,13 +1,8 @@
 <template>
-    <div
-        class="mb-6 bg-red200 px-4 py-3 relative"
-    >
+    <div class="mb-6 bg-red200 px-4 py-3 relative" role="alert">
         <span class="absolute -left-4 bg-error w-1 h-full top-0"></span>
         <span class="font-bold">{{ message }}</span>
-        <ul
-            v-if="summaryErrors.length > 0"
-            class="mt-2 pl-5 list-disc"
-        >
+        <ul v-if="summaryErrors.length > 0" class="mt-2 pl-5 list-disc">
             <li v-for="error in summaryErrors" :key="error.key">
                 <Link :to="`#${error.key}`">{{ error.message }}</Link>
             </li>

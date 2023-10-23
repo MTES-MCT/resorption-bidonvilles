@@ -7,12 +7,15 @@
     >
         <template v-slot:subtitle><slot name="subtitle" /></template>
         <template v-slot:title><slot name="title" /></template>
+        <template v-slot:alert><slot name="alert" /></template>
 
         <template v-slot:body="{ values }">
             <FormUtilisateurInputEmail
                 :value="$route.query.email"
                 :showMandatoryStar="variant === 'creer-utilisateur'"
                 :label="labels.email"
+                :aria-label="labels.aria_email"
+                autocomplete="email"
             />
             <FormUtilisateurInputEmailConfirmation
                 v-if="variant === 'demande-acces'"
@@ -21,12 +24,17 @@
             <FormUtilisateurInputFirstName
                 :showMandatoryStar="variant === 'creer-utilisateur'"
                 :label="labels.first_name"
+                autocomplete="given-name"
             />
             <FormUtilisateurInputLastName
                 :showMandatoryStar="variant === 'creer-utilisateur'"
                 :label="labels.last_name"
+                autocomplete="family-name"
             />
-            <FormUtilisateurInputPhone :label="labels.phone" />
+            <FormUtilisateurInputPhone
+                :label="labels.phone"
+                autocomplete="tel"
+            />
             <FormUtilisateurInputRequestType
                 v-if="variant === 'demande-acces'"
                 :class="{ hidden: demandeAccesOnly }"

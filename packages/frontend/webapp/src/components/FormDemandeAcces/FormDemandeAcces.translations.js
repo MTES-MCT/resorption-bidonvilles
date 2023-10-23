@@ -3,6 +3,7 @@ export default {
         subtitle:
             "Acteur de terrain, médiateur, association, service de l'État, collectivité... Demandez un accès à votre outil collaboratif.",
         title: "Contactez-nous !",
+        alert: "(Tous les champs du formulaire doivent être renseignés)",
         structure: "Votre structure",
         submit: "Envoyer ma demande",
         notification_title_access_request:
@@ -16,6 +17,7 @@ export default {
         subtitle:
             "Neighbour, citizen, slum dweller... Any news? A question ? An alert?",
         title: "Contact us !",
+        alert: "(All form fields must be completed)",
         structure: "",
         submit: "Send my request",
         notification_title_contact_others: "Your message has been sent",
@@ -25,6 +27,7 @@ export default {
         subtitle:
             "Vecin, cetățean, rezident pe un platz... O informaţie? O întrebare? O alertă?",
         title: "Contactaţi-ne",
+        alert: "(Toate câmpurile din formular trebuie să fie completate)",
         structure: "",
         submit: "Trimite",
         notification_title_contact_others: "Mesajul tau a fost trimis",
@@ -34,6 +37,7 @@ export default {
         subtitle:
             "Съсед, гражданин, обитател на бидонвил... Информация? Въпрос? Сигнал?",
         title: "Свържете се с нас",
+        alert: "(Всички полета във формуляра трябва да бъдат попълнени)",
         structure: "",
         submit: "Изпрати",
         notification_title_contact_others: "Вашето съобщение е изпратено",

@@ -16,6 +16,7 @@
                 translations[language].subtitle
             }}</template>
             <template v-slot:title>{{ translations[language].title }}</template>
+            <template v-slot:alert>{{ translations[language].alert }}</template>
             <template v-slot:structureTitle>{{
                 translations[language].structure
             }}</template>
