@@ -1022,6 +1022,17 @@ export default (closingSolutions: ClosingSolution[]) => {
             data: ({ comments }: Shantytown) => comments.regular.slice(0, 5).map(comment => `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${userModel.formatName(comment.createdBy)}\n${comment.description}`).join('\n----\n'),
             width: COLUMN_WIDTHS.LARGE,
         },
+        last_comment_date: {
+            title: 'Date du dernier message',
+            data: ({ comments }: Shantytown) => {
+                if (comments.regular.length === 0) {
+                    return '';
+                }
+
+                return tsToString(comments.regular[0].createdAt, 'd/m/Y');
+            },
+            width: COLUMN_WIDTHS.LARGE,
+        },
 
 
         hasAction: {

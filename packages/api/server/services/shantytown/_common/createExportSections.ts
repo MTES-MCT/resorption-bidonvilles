@@ -190,6 +190,7 @@ export default async (user, data, properties, closedTowns, closingSolutions) => 
     const commentProps = [];
     if (options.indexOf('comments') !== -1 && user.isAllowedTo('list', 'shantytown_comment')) {
         commentProps.push(properties.comments);
+        commentProps.push(properties.last_comment_date);
     }
 
     if (commentProps.length > 0) {
