@@ -68,6 +68,9 @@ const self = computed(() => {
 const tabs = computed(() => {
     return tabsDefinition
         .filter(({ selfOnly }) => selfOnly !== true || self.value === true)
+        .filter(({ conditionFn }) =>
+            conditionFn ? conditionFn(user.value) : true
+        )
         .map((tab) => {
             tab.active = tab.id === currentTabId.value;
             tab.route = buildTabRoute.value(tab.id);

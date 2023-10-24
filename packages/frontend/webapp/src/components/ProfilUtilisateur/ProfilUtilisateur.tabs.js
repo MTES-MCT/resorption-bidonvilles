@@ -29,5 +29,8 @@ export default [
         component: FormDesactiverCompte,
         icon: "trash-alt",
         variant: "red",
+        conditionFn(user) {
+            return user.status === "active";
+        },
     },
 ];
