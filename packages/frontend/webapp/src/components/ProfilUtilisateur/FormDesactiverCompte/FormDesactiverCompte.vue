@@ -22,6 +22,7 @@
             variant="primary"
             icon="fa-regular fa-trash-alt"
             iconPosition="left"
+            @click="confirmDeactivation"
             >{{
                 self ? "Désactiver mon compte" : "Désactiver ce compte"
             }}</Button
@@ -47,4 +48,13 @@ const self = computed(() => {
     const userStore = useUserStore();
     return user.value.id === userStore.user?.id;
 });
+
+function confirmDeactivation() {
+    const wording = ["Êtes-vous sûr de vouloir désactiver le compte ?"];
+    if (self.value === true) {
+        wording.push("Vous serez automatiquement déconnecté(e).");
+    }
+
+    confirm(wording.join(" "));
+}
 </script>
