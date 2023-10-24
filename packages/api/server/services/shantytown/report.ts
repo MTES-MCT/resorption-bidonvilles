@@ -1,4 +1,4 @@
-import userModel from '#server/models/userModel';
+import userModel from '#server/models/userModel/index';
 import mails from '#server/mails/mails';
 import ServiceError from '#server/errors/ServiceError';
 import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
@@ -22,5 +22,11 @@ export default async (townData: TownInput, user: SerializedUser): Promise<void> 
         );
     } catch (error) {
         throw new ServiceError('sent_failed', error);
+    }
+
+    try {
+        await mails.sendConfirmationOfTownReporting(user);
+    } catch (error) {
+        // ignore this error, maybe log it to Sentry
     }
 };

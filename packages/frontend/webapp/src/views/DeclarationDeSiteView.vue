@@ -1,6 +1,6 @@
 <template>
     <LayoutForm size="large">
-        <template v-slot:title>Déclaration d'un site</template>
+        <template v-slot:title>Déclarer un nouveau site</template>
         <template v-slot:buttons>
             <Button variant="primaryOutline" type="button" @click="back"
                 >Annuler</Button
