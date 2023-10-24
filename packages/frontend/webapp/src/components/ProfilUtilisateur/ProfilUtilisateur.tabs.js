@@ -27,5 +27,7 @@ export default [
         label: "Désactiver",
         selfOnly: false,
         component: FormDesactiverCompte,
+        icon: "trash-alt",
+        variant: "red",
     },
 ];

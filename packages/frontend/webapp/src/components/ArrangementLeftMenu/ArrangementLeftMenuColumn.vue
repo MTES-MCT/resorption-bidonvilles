@@ -55,12 +55,14 @@ const classes = {
     primary: "text-primary",
     secondary: "text-secondary",
     tertiary: "text-tertiary",
+    red: "text-red",
 };
 
 const activeClasses = {
     primary: "border-l-primary",
     secondary: "border-l-secondary",
     tertiary: "border-l-tertiary",
+    red: "border-l-red",
     [undefined]: "border-l-primary text-primary",
 };
 </script>
