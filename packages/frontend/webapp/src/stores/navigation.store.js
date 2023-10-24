@@ -30,7 +30,7 @@ const topItems = [
     },
     {
         icon: "fa-user fa-regular",
-        label: "Mon compte",
+        label: "Mon profil",
         route: "/mon-compte",
         authRequirement: "signedIn",
         configRequired: true,
