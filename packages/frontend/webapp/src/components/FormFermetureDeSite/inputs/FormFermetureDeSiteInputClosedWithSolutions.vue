@@ -51,8 +51,8 @@ const info = computed(() => {
     return `D'après les informations renseignées, environ 
         ${peopleWithSolutions.value}%
         des habitants du site ont été
-        orientées vers une solution d’hébergement, de
-        logement adapté longue durée avec accompagnement,
-        dont espace temporaire d'accompagnement, ou logement`;
+        orientées vers une solution longue durée d’hébergement ou de
+        logement adapté avec accompagnement,
+        dont espace temporaire d'accompagnement`;
 });
 </script>
