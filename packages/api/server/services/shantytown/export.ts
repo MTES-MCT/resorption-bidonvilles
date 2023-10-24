@@ -1,4 +1,6 @@
 import { Document, Packer } from 'docx';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { Shantytown } from '#server/models/shantytownModel/_common/serializeShantytown';
 import logos from './export/section_logos';
 import context from './export/1_section_context';
 import people from './export/section_people';
@@ -9,7 +11,7 @@ import justiceProcedure from './export/option_justice_procedure';
 import comments from './export/option_section_comments';
 import changelog from './export/option_section_changelog';
 
-export default (user, shantytown, options) => {
+export default (user: SerializedUser, shantytown: Shantytown, options) => {
     const sections = [
         logos(),
         context(user, shantytown),

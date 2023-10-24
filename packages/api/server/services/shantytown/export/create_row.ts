@@ -17,7 +17,7 @@ export default cells => new TableRow({
                     },
                     children: [
                         new TextRun({
-                            text: cell || '-',
+                            text: cell ? cell.toString() : '-',
                             size: 22,
                             font: 'Arial',
                         }),
