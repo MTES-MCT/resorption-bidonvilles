@@ -282,7 +282,7 @@ const router = createRouter({
             redirect: "/mon-compte/informations-personnelles",
         },
         {
-            path: "/mon-compte/:tab(informations-personnelles|identifiants|abonnements)",
+            path: "/mon-compte/:tab(informations-personnelles|identifiants|abonnements|desactiver-compte)",
             component: () => import("@/views/MonCompteView.vue"),
             meta: {
                 title: "Modifier les informations liées à mon compte",
@@ -436,7 +436,7 @@ const router = createRouter({
             },
         },
         {
-            path: "/utilisateur/:id/:tab(informations-personnelles|identifiants|abonnements)",
+            path: "/utilisateur/:id/:tab(informations-personnelles|identifiants|abonnements|desactiver-compte)",
             component: () => import("@/views/ProfilUtilisateurView.vue"),
             meta: {
                 title: "Consulter, modifier un compte utilisateur",
