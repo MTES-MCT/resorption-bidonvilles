@@ -94,10 +94,10 @@ export const useNavigationStore = defineStore("navigation", {
                 { label: "Accueil", route: "/" },
                 { label: "Sites", route: "/liste-des-sites" },
                 { label: "Actions", route: "/liste-des-actions" },
-                { label: "Communauté", route: "/communaute" },
+                metricsItem,
+                { label: "Entraide", route: "/communaute" },
                 { label: "Carte", route: "/cartographie" },
                 { label: "Dernières activités", route: "/activites" },
-                metricsItem,
                 { label: "Administration", route: "/acces" },
             ];
 

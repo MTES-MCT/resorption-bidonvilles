@@ -17,7 +17,7 @@ import LayoutCommunaute from "@/components/LayoutCommunaute/LayoutCommunaute.vue
 import Entraide from "@/components/Entraide/Entraide.vue";
 
 const questionsStore = useQuestionsStore();
-const ariane = [{ label: "Accueil", to: "/" }, { label: "Communauté" }];
+const ariane = [{ label: "Accueil", to: "/" }, { label: "Entraide" }];
 
 onMounted(() => {
     if (questionsStore.questions.length === 0) {

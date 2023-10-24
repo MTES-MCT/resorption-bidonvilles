@@ -18,7 +18,7 @@ import Annuaire from "@/components/Annuaire/Annuaire.vue";
 const directoryStore = useDirectoryStore();
 const ariane = [
     { label: "Accueil", to: "/" },
-    { label: "Communauté", to: "/communaute" },
+    { label: "Entraide", to: "/communaute" },
     { label: "Annuaire" },
 ];
 
