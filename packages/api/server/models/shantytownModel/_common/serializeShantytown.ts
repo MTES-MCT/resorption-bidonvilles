@@ -116,7 +116,7 @@ type BaseShantytown =
     cars: number | null,
     mattresses: number | null,
     livingConditions: LivingConditions,
-    censusStatus: 'done' | 'scheduled' | null,
+    censusStatus: 'none' | 'done' | 'scheduled' | null,
     censusConductedBy: string | null,
     censusConductedAt: number | null,
     fieldType: {
