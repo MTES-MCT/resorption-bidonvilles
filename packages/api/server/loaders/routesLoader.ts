@@ -5,6 +5,7 @@ import express from 'express';
 import middlewares from '#server/middlewares';
 import controllersFn from '#server/controllers';
 import validators from '#server/middlewares/validators';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 
 const controllers = controllersFn();
 
@@ -241,9 +242,17 @@ export default (app) => {
     app.delete(
         '/users/:id',
         middlewares.auth.authenticate,
-        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.deactivate'], ...args),
+        (req:express.Request & { user: SerializedUser }, res:express.Response, next: Function) => {
+            if (req.user.id === parseInt(req.params.id, 10)) {
+                return next();
+            }
+
+            return middlewares.auth.checkPermissions(['user.deactivate'], req, res, next);
+        },
         middlewares.charte.check,
         middlewares.appVersion.sync,
+        validators.user.deactivate,
+        middlewares.validation,
         controllers.user.remove,
     );
     app.post(
