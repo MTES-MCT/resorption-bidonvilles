@@ -214,6 +214,14 @@ const router = createRouter({
             },
         },
         {
+            path: "/compte-desactive",
+            component: () => import("@/views/CompteDesactiveView.vue"),
+            meta: {
+                title: "Votre compte a été désactivé",
+                authRequirement: "none",
+            },
+        },
+        {
             path: "/question/:id",
             component: () => import("@/views/FicheQuestionView.vue"),
             meta: {
