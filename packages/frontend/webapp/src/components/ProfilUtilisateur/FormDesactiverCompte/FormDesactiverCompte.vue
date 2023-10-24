@@ -19,22 +19,28 @@
 
     <p class="mt-6">
         <Button
+            type="button"
             variant="primary"
             icon="fa-regular fa-trash-alt"
             iconPosition="left"
+            :loading="isLoading"
             @click="confirmDeactivation"
             >{{
                 self ? "Désactiver mon compte" : "Désactiver ce compte"
             }}</Button
         >
     </p>
+    <ErrorSummary v-if="error" class="mt-6" :message="error" />
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { defineProps, ref, toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
+import { useNotificationStore } from "@/stores/notification.store";
+import { deactivateUser } from "@/api/users.api";
+import router from "@/helpers/router";
 
-import { Button } from "@resorptionbidonvilles/ui";
+import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     user: {
@@ -44,8 +50,10 @@ const props = defineProps({
 });
 const { user } = toRefs(props);
 
+const isLoading = ref(false);
+let error = ref(null);
+const userStore = useUserStore();
 const self = computed(() => {
-    const userStore = useUserStore();
     return user.value.id === userStore.user?.id;
 });
 
@@ -55,6 +63,40 @@ function confirmDeactivation() {
         wording.push("Vous serez automatiquement déconnecté(e).");
     }
 
-    confirm(wording.join(" "));
+    if (confirm(wording.join(" "))) {
+        deactivate();
+    }
+}
+
+async function deactivate() {
+    if (isLoading.value === true) {
+        return;
+    }
+
+    isLoading.value = true;
+    error.value = null;
+    try {
+        const notificationStore = useNotificationStore();
+        await deactivateUser(user.value.id);
+
+        if (self.value === true) {
+            userStore.signout();
+            notificationStore.info(
+                "Désactivation réussie",
+                "Votre compte a bien été désactivé"
+            );
+            router.push("/compte-desactive");
+        } else {
+            notificationStore.info(
+                "Désactivation réussie",
+                "Le compte a bien été désactivé"
+            );
+            router.push(`/acces/${encodeURI(user.value.id)}`);
+        }
+    } catch (e) {
+        error.value = e?.user_message || "Une erreur inconnue est survenue.";
+    }
+
+    isLoading.value = false;
 }
 </script>
