@@ -1,6 +1,6 @@
 <template>
     <p class="font-bold">
-        Désactiver un compte
+        Désactiver mon compte
         <span class="font-italic">Résorption-bidonvilles</span>
     </p>
     <p>
@@ -10,7 +10,7 @@
     </p>
     <p class="mt-2">
         Vous n'aurez plus accès à la plateforme ni ne serez sollicité(e) par
-        courriel.
+        courriel mais les données que vous avez saisies seront conservées.
     </p>
     <p class="mt-2 underline">
         Cette action est réversible uniquement sur demande à votre
@@ -25,16 +25,14 @@
             iconPosition="left"
             :loading="isLoading"
             @click="confirmDeactivation"
-            >{{
-                self ? "Désactiver mon compte" : "Désactiver ce compte"
-            }}</Button
+            >Désactiver mon compte</Button
         >
     </p>
     <ErrorSummary v-if="error" class="mt-6" :message="error" />
 </template>
 
 <script setup>
-import { defineProps, ref, toRefs, computed } from "vue";
+import { defineProps, ref, toRefs } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { deactivateUser } from "@/api/users.api";
@@ -52,18 +50,13 @@ const { user } = toRefs(props);
 
 const isLoading = ref(false);
 let error = ref(null);
-const userStore = useUserStore();
-const self = computed(() => {
-    return user.value.id === userStore.user?.id;
-});
 
 function confirmDeactivation() {
-    const wording = ["Êtes-vous sûr de vouloir désactiver le compte ?"];
-    if (self.value === true) {
-        wording.push("Vous serez automatiquement déconnecté(e).");
-    }
-
-    if (confirm(wording.join(" "))) {
+    if (
+        confirm(
+            "Êtes-vous sûr(e) de vouloir désactiver le compte ? Vous serez automatiquement déconnecté(e)."
+        )
+    ) {
         deactivate();
     }
 }
@@ -77,22 +70,16 @@ async function deactivate() {
     error.value = null;
     try {
         const notificationStore = useNotificationStore();
+        const userStore = useUserStore();
+
         await deactivateUser(user.value.id);
 
-        if (self.value === true) {
-            userStore.signout();
-            notificationStore.info(
-                "Désactivation réussie",
-                "Votre compte a bien été désactivé"
-            );
-            router.push("/compte-desactive");
-        } else {
-            notificationStore.info(
-                "Désactivation réussie",
-                "Le compte a bien été désactivé"
-            );
-            router.push(`/acces/${encodeURI(user.value.id)}`);
-        }
+        userStore.signout();
+        notificationStore.info(
+            "Désactivation réussie",
+            "Votre compte a bien été désactivé"
+        );
+        router.push("/compte-desactive");
     } catch (e) {
         error.value = e?.user_message || "Une erreur inconnue est survenue.";
     }

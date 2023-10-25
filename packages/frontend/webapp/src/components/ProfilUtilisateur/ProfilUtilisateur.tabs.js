@@ -25,12 +25,9 @@ export default [
     {
         id: "desactiver-compte",
         label: "Désactiver",
-        selfOnly: false,
+        selfOnly: true,
         component: FormDesactiverCompte,
         icon: "trash-alt",
         variant: "red",
-        conditionFn(user) {
-            return user.status === "active";
-        },
     },
 ];

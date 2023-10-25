@@ -444,7 +444,7 @@ const router = createRouter({
             },
         },
         {
-            path: "/utilisateur/:id/:tab(informations-personnelles|identifiants|abonnements|desactiver-compte)",
+            path: "/utilisateur/:id/:tab(informations-personnelles|identifiants|abonnements)",
             component: () => import("@/views/ProfilUtilisateurView.vue"),
             meta: {
                 title: "Consulter, modifier un compte utilisateur",
