@@ -24,7 +24,6 @@ import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import setIntervenant from "./actions/setIntervenant.action";
 import setAdminLocal from "./actions/setAdminLocal.action";
 import copyActivationLink from "./actions/copyActivationLink.action";
-import deactivate from "./actions/deactivate.action";
 import denyAccess from "./actions/denyAccess.action";
 import grantAccess from "./actions/grantAccess.action";
 import modifyOptions from "./actions/modifyOptions.action";
@@ -35,7 +34,6 @@ import FicheAccesActionSetIntervenant from "./FicheAccesActionSetIntervenant.vue
 import FicheAccesActionUpgradeAdminLocal from "./FicheAccesActionUpgradeAdminLocal.vue";
 import FicheAccesActionDowngradeAdminLocal from "./FicheAccesActionDowngradeAdminLocal.vue";
 import FicheAccesActionCopyActivationLink from "./FicheAccesActionCopyActivationLink.vue";
-import FicheAccesActionDeactivate from "./FicheAccesActionDeactivate.vue";
 import FicheAccesActionDenyAccess from "./FicheAccesActionDenyAccess.vue";
 import FicheAccesActionGrantAccess from "./FicheAccesActionGrantAccess.vue";
 import FicheAccesActionModifyOptions from "./FicheAccesActionModifyOptions.vue";
@@ -76,11 +74,6 @@ const actions = [
         id: "copy_activation_link",
         component: FicheAccesActionCopyActivationLink,
         action: copyActivationLink,
-    },
-    {
-        id: "deactivate",
-        component: FicheAccesActionDeactivate,
-        action: deactivate,
     },
     {
         id: "deny_access",

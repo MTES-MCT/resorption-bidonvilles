@@ -18,6 +18,8 @@ interface UserDeactivateRequest extends Request {
 
 export default async (req: UserDeactivateRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
+        res.status(200).send(req.body.user);
+        return;
         const updatedUser = await userService.deactivate(req.body.user.id, req.user.id === req.body.user.id);
         res.status(200).send(updatedUser);
     } catch (error) {

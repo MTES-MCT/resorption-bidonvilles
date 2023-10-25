@@ -3,18 +3,39 @@
         <FicheAccesBodyMessage :user="user" />
         <FicheAccesBodyRole :user="user" />
         <FicheAccesBodyOptions :user="user" v-model:options="checkedOptions" />
-        <FicheAccesBodyAdminComments :user="user" />
+        <FicheAccesBodyAdminComments
+            v-if="userStore.user?.is_superuser"
+            :user="user"
+        />
         <FicheAccesBodyWarning v-if="user.status === 'new'" />
+
+        <div class="mt-8" v-if="user.status !== 'inactive'">
+            <FicheAccesActions :user="user" :options="options" />
+        </div>
+
+        <FicheAccesBodyDeactivate
+            v-if="
+                userStore.hasPermission('user.deactivate') &&
+                user.id !== userStore.user?.id &&
+                (isExpired || user.status === 'active')
+            "
+            :user="user"
+        />
     </section>
 </template>
 
 <script setup>
 import { defineProps, toRefs, computed, defineEmits } from "vue";
+import { useUserStore } from "@/stores/user.store";
+import isUserAccessExpired from "@/utils/isUserAccessExpired";
+
 import FicheAccesBodyMessage from "./FicheAccesBodyMessage.vue";
 import FicheAccesBodyRole from "./FicheAccesBodyRole.vue";
 import FicheAccesBodyOptions from "./FicheAccesBodyOptions.vue";
 import FicheAccesBodyAdminComments from "./FicheAccesBodyAdminComments.vue";
+import FicheAccesBodyDeactivate from "./FicheAccesBodyDeactivate.vue";
 import FicheAccesBodyWarning from "./FicheAccesBodyWarning.vue";
+import FicheAccesActions from "../FicheAccesActions/FicheAccesActions.vue";
 
 const props = defineProps({
     user: {
@@ -35,5 +56,10 @@ const checkedOptions = computed({
     set(newValue) {
         emit("update:options", newValue);
     },
+});
+const userStore = useUserStore();
+
+const isExpired = computed(() => {
+    return isUserAccessExpired(user.value);
 });
 </script>
