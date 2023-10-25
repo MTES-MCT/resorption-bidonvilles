@@ -9,13 +9,13 @@ const ERRORS = {
     transaction_failure: { code: 500, message: 'Une erreur est survenue lors de la validation de la désactivation' },
 };
 
-interface UserRemoveRequest extends Request {
+interface UserDeactivateRequest extends Request {
     body: {
         user: SerializedUser;
     };
 }
 
-export default async (req: UserRemoveRequest, res: Response, next: NextFunction): Promise<void> => {
+export default async (req: UserDeactivateRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const updatedUser = await userService.deactivate(req.body.user.id);
         res.status(200).send(updatedUser);

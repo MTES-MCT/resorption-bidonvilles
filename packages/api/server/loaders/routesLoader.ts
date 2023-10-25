@@ -253,7 +253,7 @@ export default (app) => {
         middlewares.appVersion.sync,
         validators.user.deactivate,
         middlewares.validation,
-        controllers.user.remove,
+        controllers.user.deactivate,
     );
     app.post(
         '/users/:id/local-admin',

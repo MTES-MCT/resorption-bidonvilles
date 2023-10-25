@@ -17,7 +17,7 @@ rewiremock('#server/services/user/index').with(userService);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
-import removeController from './remove';
+import deactivateController from './deactivate';
 rewiremock.disable();
 
 describe('contactController.contact()', () => {
@@ -32,7 +32,7 @@ describe('contactController.contact()', () => {
         const req = mockReq({ body });
         const res = mockRes();
 
-        await removeController(req, res, () => {});
+        await deactivateController(req, res, () => {});
         expect(userService.deactivate).to.have.been.calledOnce;
         expect(userService.deactivate).to.have.been.calledWith(42);
     });
@@ -49,7 +49,7 @@ describe('contactController.contact()', () => {
 
         userService.deactivate.withArgs(42).resolves(updatedUser);
 
-        await removeController(req, res, () => {});
+        await deactivateController(req, res, () => {});
         expect(res.status).to.have.been.calledOnceWith(200);
         expect(res.send).to.have.been.calledOnceWith(updatedUser);
     });
@@ -65,7 +65,7 @@ describe('contactController.contact()', () => {
         const error = new Error();
         userService.deactivate.rejects(error);
 
-        await removeController(req, res, next);
+        await deactivateController(req, res, next);
         expect(res.status).to.have.been.calledWith(500);
         expect(res.send).to.have.been.calledWith({
             user_message: 'Une erreur inconnue est survenue',

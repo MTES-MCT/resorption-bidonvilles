@@ -77,7 +77,7 @@ import userGetLatestActivationLink from './userController/getLatestActivationLin
 import userList from './userController/list';
 import userListExport from './userController/listExport';
 import userMe from './userController/me';
-import userRemove from './userController/remove';
+import userDeactivate from './userController/deactivate';
 import userRenewToken from './userController/renewToken';
 import userRequestNewPassword from './userController/requestNewPassword';
 import userSendActivationLink from './userController/sendActivationLink';
@@ -195,7 +195,7 @@ export default () => ({
         listExport: userListExport,
         me: userMe,
         updatePermissionOptions: userUpdatePermissionOptions,
-        remove: userRemove,
+        deactivate: userDeactivate,
         renewToken: userRenewToken,
         requestNewPassword: userRequestNewPassword,
         sendActivationLink: userSendActivationLink,
