@@ -20,13 +20,15 @@
 
             <div class="shrink-0 lg:shrink py-2 lg:py-4 px-4 lg:px-8">
                 <p class="text-md">
-                    Vous pouvez désormais poser toutes les questions que vous
-                    souhaitez à la communauté des plus de 1 400 utilisateurs de
-                    la plateforme grâce à
-                    <Link to="/communaute">un nouvel espace d'entraide</Link>
-                    !<br /><Link to="/communaute"
-                        >Rendez-vous dans l’onglet entraide !</Link
-                    >
+                    Vous pouvez désormais analyser la situation de votre
+                    territoire et les tendances clés, les évolutions, sous la
+                    forme de tableaux, graphiques et carte.
+                </p>
+                <p>
+                    Rendez-vous dans l’onglet
+                    <Link :to="navigationStore.metricsItem.route"
+                        >Visualisation des données</Link
+                    >.
                 </p>
             </div>
         </article>
@@ -35,8 +37,10 @@
 <script setup>
 import { ContentWrapper, Link } from "@resorptionbidonvilles/ui";
 import TagNouveau from "@/components/TagNouveau/TagNouveau.vue";
+import { useNavigationStore } from "@/stores/navigation.store";
 import imagePromotionEspaceEntraide from "@/assets/img/illustrations/communaute.svg";
 
+const navigationStore = useNavigationStore();
 const EspaceEntraideImage = {
     img: imagePromotionEspaceEntraide,
     text: "Espace Entraide Résorption-Bidonvilles",
