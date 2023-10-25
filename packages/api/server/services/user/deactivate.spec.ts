@@ -22,10 +22,14 @@ const userModel = {
 const mails = {
     sendUserDeactivationConfirmation: sandbox.stub(),
 };
+const mattermost = {
+    triggerNotifyNewUserSelfDeactivation: sandbox.stub(),
+};
 
 rewiremock('#db/sequelize').with({ sequelize });
 rewiremock('#server/models/userModel/index').with(userModel);
 rewiremock('#server/mails/mails').with(mails);
+rewiremock('#server/utils/mattermost').with(mattermost);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -76,12 +80,45 @@ describe('userService.deactivate()', () => {
         expect(mails.sendUserDeactivationConfirmation).to.have.been.calledWith(user);
     });
 
+    it('s\'il s\'agit d\'une auto-désactivation, envoie une notification mattermost', async () => {
+        const user = fakeUser();
+        userModel.findOne.withArgs(42).resolves(user);
+
+        await deactivateUser(42, true);
+        expect(mattermost.triggerNotifyNewUserSelfDeactivation).to.have.been.calledOnce;
+        expect(mattermost.triggerNotifyNewUserSelfDeactivation).to.have.been.calledWith(user);
+    });
+
+    it('ignore les erreurs de l\'envoi du mail de confirmation', async () => {
+        const user = fakeUser();
+        userModel.findOne.withArgs(42).resolves(user);
+        mails.sendUserDeactivationConfirmation.rejects(new Error('test'));
+
+        await deactivateUser(42, true);
+    });
+
     it('s\'il ne s\'agit PAS d\'une auto-désactivation, n\'envoie pas un mail de confirmation', async () => {
         const user = fakeUser();
         userModel.findOne.withArgs(42).resolves(user);
 
         await deactivateUser(42, false);
         expect(mails.sendUserDeactivationConfirmation).to.not.have.been.called;
+    });
+
+    it('s\'il ne s\'agit PAS d\'une auto-désactivation, n\'envoie pas de notification mattermost', async () => {
+        const user = fakeUser();
+        userModel.findOne.withArgs(42).resolves(user);
+
+        await deactivateUser(42, false);
+        expect(mattermost.triggerNotifyNewUserSelfDeactivation).to.not.have.been.called;
+    });
+
+    it('ignore les erreurs de l\'envoi de la notification mattermost', async () => {
+        const user = fakeUser();
+        userModel.findOne.withArgs(42).resolves(user);
+        mattermost.triggerNotifyNewUserSelfDeactivation.rejects(new Error('test'));
+
+        await deactivateUser(42, true);
     });
 
     it('en cas d\'erreur de la modification de l\'utilisateur, lance une ServiceError', async () => {

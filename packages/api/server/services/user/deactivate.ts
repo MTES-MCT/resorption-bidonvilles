@@ -3,6 +3,7 @@ import userModel from '#server/models/userModel/index';
 import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
+import mattermost from '#server/utils/mattermost';
 
 export default async (id: number, selfDeactivation: boolean): Promise<SerializedUser> => {
     const transaction = await sequelize.transaction();
@@ -30,7 +31,14 @@ export default async (id: number, selfDeactivation: boolean): Promise<Serialized
     }
 
     if (selfDeactivation) {
-        await mails.sendUserDeactivationConfirmation(user);
+        try {
+            await Promise.all([
+                mails.sendUserDeactivationConfirmation(user),
+                mattermost.triggerNotifyNewUserSelfDeactivation(user),
+            ]);
+        } catch (error) {
+            // ignore
+        }
     }
 
     return user;
