@@ -2,9 +2,7 @@
     <div class="w-2/3 px-6 mx-auto flex items-center md:flex-row md:space-x-8">
         <img :src="img" class="h-48" />
         <div class="mt-10 mb-10">
-            <h1 class="text-xl text-primary font-bold">
-                Demander de l'aide à la communauté
-            </h1>
+            <h1 class="text-xl text-primary font-bold">Demander de l'aide</h1>
             <p class="mt-2">
                 Sollicitez l'expérience des
                 <span class="text-secondary"
@@ -13,9 +11,8 @@
                     ><template v-else>{{ numberOfUsers }}</template>
                     utilisateurs</span
                 >
-                de notre communauté pour vous aider à résoudre un problème ou
-                une question pratique que vous vous posez dans le cadre de votre
-                résorption.
+                pour vous aider à résoudre un problème ou une question pratique
+                que vous vous posez dans le cadre de votre résorption.
             </p>
             <form
                 class="flex items-center mt-2 space-x-2"

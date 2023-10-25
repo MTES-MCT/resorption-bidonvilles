@@ -25,7 +25,7 @@
                     la plateforme grâce à
                     <Link to="/communaute">un nouvel espace d'entraide</Link>
                     !<br /><Link to="/communaute"
-                        >Rendez-vous dans l’onglet communauté !</Link
+                        >Rendez-vous dans l’onglet entraide !</Link
                     >
                 </p>
             </div>

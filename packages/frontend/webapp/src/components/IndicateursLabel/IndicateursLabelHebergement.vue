@@ -1,8 +1,8 @@
 <template>
     <IndicateursLabel
-        >accès à un
-        <span class="text-tertiary">hébergement ou logement adapté</span>
-        longue durée avec accompagnement, dont espace temporaire
+        >accès à une solution longue durée
+        <span class="text-tertiary">en hébergement ou logement adapté</span>
+        avec accompagnement, dont espace temporaire
         d'accompagnement</IndicateursLabel
     >
 </template>

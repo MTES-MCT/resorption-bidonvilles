@@ -61,7 +61,7 @@ const organization = computed(() => {
 });
 const ariane = computed(() => [
     { label: "Accueil", to: "/" },
-    { label: "Communauté", to: "/communaute" },
+    { label: "Entraide", to: "/communaute" },
     { label: "Annuaire", to: "/annuaire" },
     { label: organization.value?.name || "..." },
 ]);

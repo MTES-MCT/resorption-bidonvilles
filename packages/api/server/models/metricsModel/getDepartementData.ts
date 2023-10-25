@@ -85,7 +85,16 @@ export default async (user, departementCode: string): Promise<DepartementMetrics
             FROM shantytowns s
             LEFT JOIN electricity_access_types eat ON eat.fk_shantytown = s.shantytown_id
             GROUP BY s.shantytown_id
+        ),
+        last_comments AS (
+            SELECT
+                s.shantytown_id AS fk_shantytown,
+                MAX(sc.created_at) AS last_comment_at
+            FROM shantytowns s
+            LEFT JOIN shantytown_comments sc ON sc.fk_shantytown = s.shantytown_id
+            GROUP BY s.shantytown_id
         )
+
         SELECT
             shantytowns.shantytown_id,
             shantytowns.name,
@@ -104,6 +113,11 @@ export default async (user, departementCode: string): Promise<DepartementMetrics
             shantytowns.police_status,
             field_types.label AS field_type,
             shantytown_computed_origins.origins,
+            CASE
+                WHEN last_comments.last_comment_at IS NOT NULL AND last_comments.last_comment_at > COALESCE(shantytowns.updated_at, shantytowns.created_at)
+                    THEN COALESCE(shantytowns.updated_at, shantytowns.created_at)
+                ELSE COALESCE(shantytowns.updated_at, shantytowns.created_at)
+            END < (CURRENT_DATE - INTERVAL '6 month') AS out_of_date,
             shantytowns.water_access_type::text AS "waterAccessType",
             shantytowns.water_access_is_public AS "waterAccessIsPublic",
             shantytowns.water_access_is_continuous AS "waterAccessIsContinuous",
@@ -135,6 +149,7 @@ export default async (user, departementCode: string): Promise<DepartementMetrics
         LEFT JOIN computed_electricity_types ON computed_electricity_types.fk_shantytown = shantytowns.shantytown_id
         LEFT JOIN cities ON cities.code = shantytowns.fk_city
         LEFT JOIN departements ON departements.code = cities.fk_departement
+        LEFT JOIN last_comments ON last_comments.fk_shantytown = shantytowns.shantytown_id
         WHERE closed_at IS NULL
         AND departements.code = :departementCode
         ${permissionWhereClause !== '()' ? `AND ${permissionWhereClause}` : ''}
