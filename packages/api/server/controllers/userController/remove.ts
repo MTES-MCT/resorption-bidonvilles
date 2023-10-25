@@ -1,15 +1,30 @@
-import userModel from '#server/models/userModel';
+import userService from '#server/services/user/index';
+import { Request, NextFunction, Response } from 'express';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 
-export default async (req, res, next) => {
+const ERRORS = {
+    undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
+    deactivation_failure: { code: 500, message: 'Une erreur est survenue lors de la désactivation du compte' },
+    refresh_failure: { code: 500, message: 'Une erreur est survenue lors de la lecture des données en base de données' },
+    transaction_failure: { code: 500, message: 'Une erreur est survenue lors de la validation de la désactivation' },
+};
+
+interface UserRemoveRequest extends Request {
+    body: {
+        user: SerializedUser;
+    };
+}
+
+export default async (req: UserRemoveRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        await userModel.deactivate([req.body.user.id]);
-        return res.status(200).send(await userModel.findOne(req.body.user.id));
+        const updatedUser = await userService.deactivate(req.body.user.id);
+        res.status(200).send(updatedUser);
     } catch (error) {
-        res.status(500).send({
-            error: {
-                user_message: 'Une erreur est survenue lors de la mise à jour du compte',
-            },
+        const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
+        res.status(code).send({
+            user_message: message,
         });
-        return next(error);
+
+        next(error?.nativeError || error);
     }
 };
