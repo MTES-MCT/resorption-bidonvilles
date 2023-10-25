@@ -19,9 +19,13 @@ const userModel = {
     deactivate: sandbox.stub(),
     findOne: sandbox.stub(),
 };
+const mails = {
+    sendUserDeactivationConfirmation: sandbox.stub(),
+};
 
 rewiremock('#db/sequelize').with({ sequelize });
 rewiremock('#server/models/userModel/index').with(userModel);
+rewiremock('#server/mails/mails').with(mails);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -43,7 +47,7 @@ describe('userService.deactivate()', () => {
     });
 
     it('change le statut du compte à inactif en base de données', async () => {
-        await deactivateUser(42);
+        await deactivateUser(42, true);
         expect(userModel.deactivate).to.have.been.calledOnce;
         expect(userModel.deactivate).to.have.been.calledWith([42]);
     });
@@ -52,15 +56,32 @@ describe('userService.deactivate()', () => {
         const user = fakeUser({ id: 42, status: 'inactive' });
         userModel.findOne.withArgs(42).resolves(user);
 
-        const response = await deactivateUser(42);
+        const response = await deactivateUser(42, true);
         expect(response).to.be.eql(user);
     });
 
     it('exécute l\'ensemble des requêtes dans une transaction', async () => {
-        await deactivateUser(42);
+        await deactivateUser(42, true);
         expect(userModel.deactivate).to.have.been.calledWith([42], transaction);
         expect(userModel.findOne).to.have.been.calledWith(42, {}, null, 'deactivate', transaction);
         expect(transaction.commit).to.have.been.calledOnce;
+    });
+
+    it('s\'il s\'agit d\'une auto-désactivation, envoie un mail de confirmation', async () => {
+        const user = fakeUser();
+        userModel.findOne.withArgs(42).resolves(user);
+
+        await deactivateUser(42, true);
+        expect(mails.sendUserDeactivationConfirmation).to.have.been.calledOnce;
+        expect(mails.sendUserDeactivationConfirmation).to.have.been.calledWith(user);
+    });
+
+    it('s\'il ne s\'agit PAS d\'une auto-désactivation, n\'envoie pas un mail de confirmation', async () => {
+        const user = fakeUser();
+        userModel.findOne.withArgs(42).resolves(user);
+
+        await deactivateUser(42, false);
+        expect(mails.sendUserDeactivationConfirmation).to.not.have.been.called;
     });
 
     it('en cas d\'erreur de la modification de l\'utilisateur, lance une ServiceError', async () => {
@@ -68,7 +89,7 @@ describe('userService.deactivate()', () => {
         userModel.deactivate.rejects(error);
 
         try {
-            await deactivateUser(42);
+            await deactivateUser(42, true);
         } catch (e) {
             expect(e).to.be.an.instanceof(ServiceError);
             expect(e.code).to.be.equal('deactivation_failure');
@@ -84,7 +105,7 @@ describe('userService.deactivate()', () => {
         userModel.deactivate.rejects(error);
 
         try {
-            await deactivateUser(42);
+            await deactivateUser(42, true);
         } catch (e) {
             expect(transaction.rollback).to.have.been.called;
             return;
@@ -98,7 +119,7 @@ describe('userService.deactivate()', () => {
         userModel.findOne.rejects(error);
 
         try {
-            await deactivateUser(42);
+            await deactivateUser(42, true);
         } catch (e) {
             expect(e).to.be.an.instanceof(ServiceError);
             expect(e.code).to.be.equal('refresh_failure');
@@ -114,7 +135,7 @@ describe('userService.deactivate()', () => {
         userModel.findOne.rejects(error);
 
         try {
-            await deactivateUser(42);
+            await deactivateUser(42, true);
         } catch (e) {
             expect(transaction.rollback).to.have.been.called;
             return;
@@ -128,7 +149,7 @@ describe('userService.deactivate()', () => {
         transaction.commit.rejects(error);
 
         try {
-            await deactivateUser(42);
+            await deactivateUser(42, true);
         } catch (e) {
             expect(e).to.be.an.instanceof(ServiceError);
             expect(e.code).to.be.equal('transaction_failure');
@@ -144,7 +165,7 @@ describe('userService.deactivate()', () => {
         transaction.commit.rejects(error);
 
         try {
-            await deactivateUser(42);
+            await deactivateUser(42, true);
         } catch (e) {
             expect(transaction.rollback).to.have.been.called;
             return;

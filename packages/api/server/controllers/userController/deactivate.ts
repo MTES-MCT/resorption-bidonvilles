@@ -10,6 +10,7 @@ const ERRORS = {
 };
 
 interface UserDeactivateRequest extends Request {
+    user: SerializedUser,
     body: {
         user: SerializedUser;
     };
@@ -17,7 +18,7 @@ interface UserDeactivateRequest extends Request {
 
 export default async (req: UserDeactivateRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const updatedUser = await userService.deactivate(req.body.user.id);
+        const updatedUser = await userService.deactivate(req.body.user.id, req.user.id === req.body.user.id);
         res.status(200).send(updatedUser);
     } catch (error) {
         const { code, message } = ERRORS[error?.code] || ERRORS.undefined;

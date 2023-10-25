@@ -2,8 +2,9 @@ import { sequelize } from '#db/sequelize';
 import userModel from '#server/models/userModel/index';
 import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import ServiceError from '#server/errors/ServiceError';
+import mails from '#server/mails/mails';
 
-export default async (id: number): Promise<SerializedUser> => {
+export default async (id: number, selfDeactivation: boolean): Promise<SerializedUser> => {
     const transaction = await sequelize.transaction();
 
     try {
@@ -26,6 +27,10 @@ export default async (id: number): Promise<SerializedUser> => {
     } catch (error) {
         await transaction.rollback();
         throw new ServiceError('transaction_failure', error);
+    }
+
+    if (selfDeactivation) {
+        await mails.sendUserDeactivationConfirmation(user);
     }
 
     return user;

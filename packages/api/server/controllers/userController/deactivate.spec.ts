@@ -26,10 +26,12 @@ describe('contactController.contact()', () => {
     });
 
     it('demande la désactivation du compte', async () => {
-        const body = {
-            user: fakeUser({ id: 42 }),
-        };
-        const req = mockReq({ body });
+        const req = mockReq({
+            user: fakeUser(),
+            body: {
+                user: fakeUser({ id: 42 }),
+            },
+        });
         const res = mockRes();
 
         await deactivateController(req, res, () => {});
@@ -37,14 +39,42 @@ describe('contactController.contact()', () => {
         expect(userService.deactivate).to.have.been.calledWith(42);
     });
 
+    it('indique bien au service si la demande de désactivation est faite par l\'utilisateur lui-même', async () => {
+        const req = mockReq({
+            user: fakeUser({ id: 42 }),
+            body: {
+                user: fakeUser({ id: 42 }),
+            },
+        });
+        const res = mockRes();
+
+        await deactivateController(req, res, () => {});
+        expect(userService.deactivate).to.have.been.calledWith(42, true);
+    });
+
+    it('indique bien au service si la demande de désactivation n\'est PAS faite par l\'utilisateur lui-même', async () => {
+        const req = mockReq({
+            user: fakeUser({ id: 1 }),
+            body: {
+                user: fakeUser({ id: 42 }),
+            },
+        });
+        const res = mockRes();
+
+        await deactivateController(req, res, () => {});
+        expect(userService.deactivate).to.have.been.calledWith(42, false);
+    });
+
     it('répond avec un code 200 et l\'utilisateur mis à jour', async () => {
         const originalUser = fakeUser({ id: 42, status: 'active' });
         const updatedUser = fakeUser({ id: 42, status: 'inactive' });
 
-        const body = {
-            user: originalUser,
-        };
-        const req = mockReq({ body });
+        const req = mockReq({
+            user: fakeUser(),
+            body: {
+                user: originalUser,
+            },
+        });
         const res = mockRes();
 
         userService.deactivate.withArgs(42).resolves(updatedUser);
@@ -55,10 +85,12 @@ describe('contactController.contact()', () => {
     });
 
     it('en cas d\'erreur, répond avec un code 500 et un détail de l\'erreur', async () => {
-        const body = {
+        const req = mockReq({
             user: fakeUser(),
-        };
-        const req = mockReq({ body });
+            body: {
+                user: fakeUser(),
+            },
+        });
         const res = mockRes();
         const next = sandbox.stub();
 
