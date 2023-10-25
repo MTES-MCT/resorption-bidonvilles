@@ -20,7 +20,7 @@ rewiremock.enable();
 import deactivateController from './deactivate';
 rewiremock.disable();
 
-describe('contactController.contact()', () => {
+describe('userController.deactivate()', () => {
     afterEach(() => {
         sandbox.reset();
     });
@@ -30,6 +30,7 @@ describe('contactController.contact()', () => {
             user: fakeUser(),
             body: {
                 user: fakeUser({ id: 42 }),
+                reason: null,
             },
         });
         const res = mockRes();
@@ -63,6 +64,20 @@ describe('contactController.contact()', () => {
 
         await deactivateController(req, res, () => {});
         expect(userService.deactivate).to.have.been.calledWith(42, false);
+    });
+
+    it('indique bien au service la raison de la désactivation', async () => {
+        const req = mockReq({
+            user: fakeUser({ id: 1 }),
+            body: {
+                user: fakeUser({ id: 42 }),
+                reason: 'test',
+            },
+        });
+        const res = mockRes();
+
+        await deactivateController(req, res, () => {});
+        expect(userService.deactivate).to.have.been.calledWith(42, false, 'test');
     });
 
     it('répond avec un code 200 et l\'utilisateur mis à jour', async () => {

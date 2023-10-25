@@ -1,5 +1,5 @@
 /* eslint-disable newline-per-chained-call */
-import { param } from 'express-validator';
+import { body, param } from 'express-validator';
 import userModel from '#server/models/userModel';
 
 export default [
@@ -26,4 +26,10 @@ export default [
             req.body.user = user;
             return true;
         }),
+
+    body('reason')
+        .if((value, { req }) => req.body?.user?.id !== undefined && req.body.user.id !== req.user.id)
+        .isString().withMessage('La raison doit être une chaîne de caractères')
+        .trim()
+        .notEmpty().withMessage('La raison est obligatoire'),
 ];

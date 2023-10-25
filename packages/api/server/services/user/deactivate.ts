@@ -5,7 +5,7 @@ import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
 import mattermost from '#server/utils/mattermost';
 
-export default async (id: number, selfDeactivation: boolean): Promise<SerializedUser> => {
+export default async (id: number, selfDeactivation: boolean, reason: string = null): Promise<SerializedUser> => {
     const transaction = await sequelize.transaction();
 
     try {
@@ -36,6 +36,16 @@ export default async (id: number, selfDeactivation: boolean): Promise<Serialized
                 mails.sendUserDeactivationConfirmation(user),
                 mattermost.triggerNotifyNewUserSelfDeactivation(user),
             ]);
+        } catch (error) {
+            // ignore
+        }
+    } else {
+        try {
+            await mails.sendUserDeactivationByAdminAlert(user, {
+                variables: {
+                    reason: reason || 'Aucune raison mentionnée',
+                },
+            });
         } catch (error) {
             // ignore
         }

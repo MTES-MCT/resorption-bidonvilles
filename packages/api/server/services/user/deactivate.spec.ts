@@ -21,6 +21,7 @@ const userModel = {
 };
 const mails = {
     sendUserDeactivationConfirmation: sandbox.stub(),
+    sendUserDeactivationByAdminAlert: sandbox.stub(),
 };
 const mattermost = {
     triggerNotifyNewUserSelfDeactivation: sandbox.stub(),
@@ -80,6 +81,14 @@ describe('userService.deactivate()', () => {
         expect(mails.sendUserDeactivationConfirmation).to.have.been.calledWith(user);
     });
 
+    it('s\'il s\'agit d\'une auto-désactivation, n\'envoie pas un mail d\'alerte', async () => {
+        const user = fakeUser();
+        userModel.findOne.withArgs(42).resolves(user);
+
+        await deactivateUser(42, true);
+        expect(mails.sendUserDeactivationByAdminAlert).to.not.have.been.called;
+    });
+
     it('s\'il s\'agit d\'une auto-désactivation, envoie une notification mattermost', async () => {
         const user = fakeUser();
         userModel.findOne.withArgs(42).resolves(user);
@@ -89,19 +98,37 @@ describe('userService.deactivate()', () => {
         expect(mattermost.triggerNotifyNewUserSelfDeactivation).to.have.been.calledWith(user);
     });
 
-    it('ignore les erreurs de l\'envoi du mail de confirmation', async () => {
+    it('s\'il ne s\'agit PAS d\'une auto-désactivation, envoie un mail avec la raison de la désactivation', async () => {
         const user = fakeUser();
         userModel.findOne.withArgs(42).resolves(user);
-        mails.sendUserDeactivationConfirmation.rejects(new Error('test'));
 
-        await deactivateUser(42, true);
+        await deactivateUser(42, false, 'raison de désactivation');
+        expect(mails.sendUserDeactivationByAdminAlert).to.have.been.calledOnce;
+        expect(mails.sendUserDeactivationByAdminAlert).to.have.been.calledWith(user, {
+            variables: {
+                reason: 'raison de désactivation',
+            },
+        });
+    });
+
+    it('envoie le mail d\'alerte de désactivation avec une raison par défaut si la raison est manquante', async () => {
+        const user = fakeUser();
+        userModel.findOne.withArgs(42).resolves(user);
+
+        await deactivateUser(42, false);
+        expect(mails.sendUserDeactivationByAdminAlert).to.have.been.calledOnce;
+        expect(mails.sendUserDeactivationByAdminAlert).to.have.been.calledWith(user, {
+            variables: {
+                reason: 'Aucune raison mentionnée',
+            },
+        });
     });
 
     it('s\'il ne s\'agit PAS d\'une auto-désactivation, n\'envoie pas un mail de confirmation', async () => {
         const user = fakeUser();
         userModel.findOne.withArgs(42).resolves(user);
 
-        await deactivateUser(42, false);
+        await deactivateUser(42, false, 'raison de désactivation');
         expect(mails.sendUserDeactivationConfirmation).to.not.have.been.called;
     });
 
@@ -113,12 +140,28 @@ describe('userService.deactivate()', () => {
         expect(mattermost.triggerNotifyNewUserSelfDeactivation).to.not.have.been.called;
     });
 
+    it('ignore les erreurs de l\'envoi du mail de confirmation', async () => {
+        const user = fakeUser();
+        userModel.findOne.withArgs(42).resolves(user);
+        mails.sendUserDeactivationConfirmation.rejects(new Error('test'));
+
+        await deactivateUser(42, true);
+    });
+
     it('ignore les erreurs de l\'envoi de la notification mattermost', async () => {
         const user = fakeUser();
         userModel.findOne.withArgs(42).resolves(user);
         mattermost.triggerNotifyNewUserSelfDeactivation.rejects(new Error('test'));
 
         await deactivateUser(42, true);
+    });
+
+    it('ignore les erreurs de l\'envoi du mail d\'alerte', async () => {
+        const user = fakeUser();
+        userModel.findOne.withArgs(42).resolves(user);
+        mails.sendUserDeactivationByAdminAlert.rejects(new Error('test'));
+
+        await deactivateUser(42, false);
     });
 
     it('en cas d\'erreur de la modification de l\'utilisateur, lance une ServiceError', async () => {
