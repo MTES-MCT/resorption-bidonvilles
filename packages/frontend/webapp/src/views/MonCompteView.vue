@@ -22,6 +22,6 @@ import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
 import ProfilUtilisateur from "@/components/ProfilUtilisateur/ProfilUtilisateur.vue";
 
-const ariane = [{ label: "Accueil", to: "/" }, { label: "Mon compte" }];
+const ariane = [{ label: "Accueil", to: "/" }, { label: "Mon profil" }];
 const userStore = useUserStore();
 </script>
