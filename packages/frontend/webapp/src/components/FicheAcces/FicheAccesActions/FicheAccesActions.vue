@@ -1,6 +1,6 @@
 <template>
     <ErrorSummary v-if="error" :message="error" />
-    <div class="flex justify-end space-x-4">
+    <div class="flex justify-end gap-4 flex-wrap">
         <component
             v-for="(action, index) in actions"
             :key="action.id"
