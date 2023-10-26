@@ -9,7 +9,7 @@
         />
         <FicheAccesBodyWarning v-if="user.status === 'new'" />
 
-        <div class="mt-8" v-if="user.status !== 'inactive'">
+        <div class="mt-8">
             <FicheAccesActions :user="user" :options="options" />
         </div>
 

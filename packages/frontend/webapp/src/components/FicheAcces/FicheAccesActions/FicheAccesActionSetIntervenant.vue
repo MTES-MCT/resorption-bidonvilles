@@ -1,6 +1,10 @@
 <template>
     <Button
-        v-if="!user.is_admin && user.role_id !== 'intervener'"
+        v-if="
+            !user.is_admin &&
+            user.role_id !== 'intervener' &&
+            user.status !== 'inactive'
+        "
         variant="primaryOutline"
         :loading="isLoading"
         :disabled="disabled"
