@@ -214,6 +214,14 @@ const router = createRouter({
             },
         },
         {
+            path: "/compte-desactive",
+            component: () => import("@/views/CompteDesactiveView.vue"),
+            meta: {
+                title: "Votre compte a été désactivé",
+                authRequirement: "none",
+            },
+        },
+        {
             path: "/question/:id",
             component: () => import("@/views/FicheQuestionView.vue"),
             meta: {
@@ -282,7 +290,7 @@ const router = createRouter({
             redirect: "/mon-compte/informations-personnelles",
         },
         {
-            path: "/mon-compte/:tab(informations-personnelles|identifiants|abonnements)",
+            path: "/mon-compte/:tab(informations-personnelles|identifiants|abonnements|desactiver-compte)",
             component: () => import("@/views/MonCompteView.vue"),
             meta: {
                 title: "Modifier les informations liées à mon compte",

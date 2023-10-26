@@ -1,6 +1,6 @@
 <template>
     <ErrorSummary v-if="error" :message="error" />
-    <div class="flex justify-end space-x-4">
+    <div class="flex justify-end gap-4 flex-wrap">
         <component
             v-for="(action, index) in actions"
             :key="action.id"
@@ -24,7 +24,7 @@ import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import setIntervenant from "./actions/setIntervenant.action";
 import setAdminLocal from "./actions/setAdminLocal.action";
 import copyActivationLink from "./actions/copyActivationLink.action";
-import deactivate from "./actions/deactivate.action";
+import reactivate from "./actions/reactivate.action";
 import denyAccess from "./actions/denyAccess.action";
 import grantAccess from "./actions/grantAccess.action";
 import modifyOptions from "./actions/modifyOptions.action";
@@ -35,7 +35,7 @@ import FicheAccesActionSetIntervenant from "./FicheAccesActionSetIntervenant.vue
 import FicheAccesActionUpgradeAdminLocal from "./FicheAccesActionUpgradeAdminLocal.vue";
 import FicheAccesActionDowngradeAdminLocal from "./FicheAccesActionDowngradeAdminLocal.vue";
 import FicheAccesActionCopyActivationLink from "./FicheAccesActionCopyActivationLink.vue";
-import FicheAccesActionDeactivate from "./FicheAccesActionDeactivate.vue";
+import FicheAccesActionReactivate from "./FicheAccesActionReactivate.vue";
 import FicheAccesActionDenyAccess from "./FicheAccesActionDenyAccess.vue";
 import FicheAccesActionGrantAccess from "./FicheAccesActionGrantAccess.vue";
 import FicheAccesActionModifyOptions from "./FicheAccesActionModifyOptions.vue";
@@ -78,9 +78,9 @@ const actions = [
         action: copyActivationLink,
     },
     {
-        id: "deactivate",
-        component: FicheAccesActionDeactivate,
-        action: deactivate,
+        id: "reactivate",
+        component: FicheAccesActionReactivate,
+        action: reactivate,
     },
     {
         id: "deny_access",

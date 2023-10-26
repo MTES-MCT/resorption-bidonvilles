@@ -5,6 +5,7 @@ import express from 'express';
 import middlewares from '#server/middlewares';
 import controllersFn from '#server/controllers';
 import validators from '#server/middlewares/validators';
+import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 
 const controllers = controllersFn();
 
@@ -210,6 +211,16 @@ export default (app) => {
         controllers.user.activate,
     );
     app.post(
+        '/users/:id/reactivate',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.user.reactivate,
+        middlewares.validation,
+        controllers.user.reactivate,
+    );
+    app.post(
         '/users/:id/upgrade',
         middlewares.auth.authenticate,
         middlewares.appVersion.sync,
@@ -241,10 +252,18 @@ export default (app) => {
     app.delete(
         '/users/:id',
         middlewares.auth.authenticate,
-        (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.deactivate'], ...args),
+        (req:express.Request & { user: SerializedUser }, res:express.Response, next: Function) => {
+            if (req.user.id === parseInt(req.params.id, 10)) {
+                return next();
+            }
+
+            return middlewares.auth.checkPermissions(['user.deactivate'], req, res, next);
+        },
         middlewares.charte.check,
         middlewares.appVersion.sync,
-        controllers.user.remove,
+        validators.user.deactivate,
+        middlewares.validation,
+        controllers.user.deactivate,
     );
     app.post(
         '/users/:id/local-admin',

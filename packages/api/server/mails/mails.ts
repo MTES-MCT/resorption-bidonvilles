@@ -649,6 +649,58 @@ export default {
         });
     },
 
+    sendUserDeactivationConfirmation: (recipient, options: MailOptions = {}) => {
+        const { preserveRecipient = false } = options;
+        const utm = generateTrackingUTM(USER_CAMPAIGN, 'auto-desactivation');
+
+        return mailService.send('user_deactivation_confirmation', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient),
+                connexionUrl: `${connexionUrl}?${utm}`,
+                backUrl,
+                blogUrl,
+                webappUrl: `${webappUrl}?${utm}`,
+            },
+            preserveRecipient,
+        });
+    },
+
+    sendUserDeactivationByAdminAlert: (recipient, options: MailOptions = {}) => {
+        const { variables, preserveRecipient = false } = options;
+        const utm = generateTrackingUTM(USER_CAMPAIGN, 'desactivation-par-admin');
+
+        return mailService.send('user_deactivation_by_admin_alert', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient),
+                reason: variables.reason,
+                connexionUrl: `${connexionUrl}?${utm}`,
+                backUrl,
+                blogUrl,
+                webappUrl: `${webappUrl}?${utm}`,
+            },
+            preserveRecipient,
+        });
+    },
+
+    sendUserReactivationAlert: (recipient, options: MailOptions = {}) => {
+        const { preserveRecipient = false } = options;
+        const utm = generateTrackingUTM(USER_CAMPAIGN, 'reactivation-par-admin');
+
+        return mailService.send('user_reactivation_alert', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient),
+                connexionUrl: `${connexionUrl}?${utm}`,
+                backUrl,
+                blogUrl,
+                webappUrl: `${webappUrl}?${utm}`,
+            },
+            preserveRecipient,
+        });
+    },
+
     /**
    * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
    * @param {Object} options
