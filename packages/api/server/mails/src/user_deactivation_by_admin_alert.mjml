@@ -1,0 +1,34 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Votre accès a été désactivé</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class="pb-4">Bonjour,</mj-text>
+                <mj-text mj-class="pb-4">À la demande d'un administrateur de la plateforme votre accès vient d'être désactivé : vous ne pourrez donc plus vous y connecter mais les données que vous y avez saisies ont été conservées.</mj-text>
+                <mj-text mj-class="pb-4">La raison évoquée par l'administrateur est la suivante :</mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-section>
+            <mj-column padding="1rem" background-color="#dddddd">
+                <mj-text mj-class="pb-4">
+                    "{{var:reason}}".
+                </mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class="pb-4">Si vous souhaitez contester cette décision et faire réactiver votre compte, vous pouvez nous contacter à l'adresse <a class="link" href="mailto:contact@resorption-bidonvilles.beta.gouv.fr">contact@resorption-bidonvilles.beta.gouv.fr</a></mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

@@ -1,0 +1,20 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Votre accès a été réactivé</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class="pb-4">Bonjour,</mj-text>
+                <mj-text mj-class="pb-4">À la demande d'un administrateur de la plateforme <span class="font-italic">Résorption-bidonvilles</span> votre accès vient d'être réactivé : vous pouvez dès à présent vous reconnecter à <a href="{{var:webappUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> en utilisant votre mot de passe habituel.</mj-text>
+                <mj-text mj-class="pb-4">Si vous avez perdu votre mot de passe, n'hésitez pas à le réinitialiser depuis <a href="{{var:webappUrl}}/nouveau-mot-de-passe" class="link" target="_blank" rel="noopener noreferrer">le formulaire "Mot de passe perdu"</a></mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

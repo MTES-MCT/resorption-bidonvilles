@@ -384,6 +384,25 @@ async function triggerNotifyNewUserFromRectorat(user) {
     await webhook.send(mattermostMessage);
 }
 
+async function triggerNotifyNewUserSelfDeactivation(user) {
+    if (!mattermost) {
+        return;
+    }
+
+    const webhook = new IncomingWebhook(mattermost);
+    const username = formatUsername(user);
+
+    const mattermostMessage = {
+        channel: '#notif-auto-desactivations',
+        username: 'Alerte Résorption Bidonvilles',
+        icon_emoji: ':robot:',
+        text: `:rotating_light: L'utilisateur(ice) ${username} vient de désactiver son accès à la plateforme`,
+        fields: [],
+    };
+
+    await webhook.send(mattermostMessage);
+}
+
 export default {
     triggerShantytownCloseAlert,
     triggerShantytownCreationAlert,
@@ -396,4 +415,5 @@ export default {
     triggerInvitedActor,
     triggerRemoveDeclaredActor,
     triggerNotifyNewUserFromRectorat,
+    triggerNotifyNewUserSelfDeactivation,
 };

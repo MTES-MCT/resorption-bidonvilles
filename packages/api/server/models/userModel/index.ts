@@ -26,6 +26,7 @@ import getShantytownWatchers from './getShantytownWatchers';
 import getActionObservers from './getActionObservers';
 import isTracked from './isTracked';
 import listExport from './listExport';
+import reactivate from './reactivate';
 import resetInactivityAlertSentAt from './resetInactivityAlertSentAt';
 import setInactivityAlertSentAt from './setInactivityAlertSentAt';
 import setPermissionOptions from './setPermissionOptions';
@@ -61,6 +62,7 @@ export default {
     getActionObservers,
     isTracked,
     listExport,
+    reactivate,
     resetInactivityAlertSentAt,
     setInactivityAlertSentAt,
     setPermissionOptions,

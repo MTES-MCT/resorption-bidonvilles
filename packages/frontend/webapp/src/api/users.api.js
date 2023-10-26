@@ -21,8 +21,8 @@ export function create(user) {
     return axios.post("/users", user);
 }
 
-export function deactivateUser(userId) {
-    return axios.delete(`/users/${encodeURI(userId)}`);
+export function deactivateUser(userId, reason = null) {
+    return axios.delete(`/users/${encodeURI(userId)}`, { data: { reason } });
 }
 
 export function denyAccess(userId) {
@@ -58,6 +58,10 @@ export function newPassword(email) {
     return axios.post("/users/new-password", {
         email,
     });
+}
+
+export function reactivateUser(userId) {
+    return axios.post(`/users/${encodeURI(userId)}/reactivate`);
 }
 
 export function sendActivationLink(userId, data) {

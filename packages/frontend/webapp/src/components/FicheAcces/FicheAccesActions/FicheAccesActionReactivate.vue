@@ -1,18 +1,17 @@
 <template>
     <Button
-        v-if="isExpired || user.status === 'active'"
+        v-if="user.status === 'inactive'"
         variant="primary"
-        icon="user-slash"
+        icon="user-check"
         iconPosition="left"
         :loading="isLoading"
         :disabled="disabled"
-        >{{ isExpired ? "Supprimer l'accès" : "Désactiver l'accès" }}</Button
+        >Réactiver l'accès</Button
     >
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
-import isUserAccessExpired from "@/utils/isUserAccessExpired";
+import { defineProps, toRefs } from "vue";
 import { Button } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
@@ -21,8 +20,4 @@ const props = defineProps({
     disabled: Boolean,
 });
 const { user, isLoading, disabled } = toRefs(props);
-
-const isExpired = computed(() => {
-    return isUserAccessExpired(user.value);
-});
 </script>

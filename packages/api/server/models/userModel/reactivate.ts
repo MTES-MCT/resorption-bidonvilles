@@ -1,18 +1,21 @@
 import { sequelize } from '#db/sequelize';
 import { Transaction } from 'sequelize';
 
-export default async (ids: number[], transaction: Transaction = undefined): Promise<void> => {
+export default async (id: number, transaction: Transaction = undefined): Promise<void> => {
     await sequelize.query(
         `UPDATE
             users
         SET
-            fk_status = 'inactive'
+            fk_status = CASE
+                WHEN users.password IS NULL THEN 'new'
+                ELSE 'active'
+            END
         WHERE
-            user_id IN (:ids)
+            user_id = :id
         `,
         {
             replacements: {
-                ids,
+                id,
             },
             transaction,
         },
