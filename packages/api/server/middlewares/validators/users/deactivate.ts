@@ -23,6 +23,10 @@ export default [
                 throw new Error('L\'utilisateur n\'existe pas ou vous n\'avez pas les droits suffisants pour le désactiver');
             }
 
+            if (user.status === 'inactive') {
+                throw new Error('L\'accès de cet utilisateur est déjà désactivé');
+            }
+
             req.body.user = user;
             return true;
         }),
