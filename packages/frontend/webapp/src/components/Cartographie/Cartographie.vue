@@ -7,6 +7,7 @@
             <CartographieFiltres
                 @open="filtersAreOpen = true"
                 @close="filtersAreOpen = false"
+                @filterUse="onFilterUse"
                 :isOpen="filtersAreOpen"
             />
         </div>
@@ -21,6 +22,8 @@
                 @townclick="onTownClick"
                 @poiclick="onPoiClick"
                 @viewchange="onViewChange"
+                @addressVisibilityChange="onAddressVisibilityChange"
+                @zoomend="onZoomChange"
                 v-model:showAddresses="mapStore.showAddresses"
             />
             <CartographieQuickviewTown
@@ -40,7 +43,14 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed, watch, nextTick } from "vue";
+import {
+    onMounted,
+    ref,
+    computed,
+    watch,
+    nextTick,
+    onBeforeUnmount,
+} from "vue";
 import { storeToRefs } from "pinia";
 import { useMapStore } from "@/stores/map.store";
 import { useUserStore } from "@/stores/user.store";
@@ -58,6 +68,13 @@ const carte = ref(null);
 const quickviewTown = ref(null);
 const quickviewPoi = ref(null);
 const timedOut = ref(false);
+
+const stats = ref({
+    filters: [],
+    numberOfZooms: 0,
+    numberOfClickedTowns: 0,
+    addressVisibilityChanges: 0,
+});
 
 // l'initialisation de la carte a tendance à faire freezer le navigateur
 // pour éviter cet effet, on délaie l'injection des sites et POIs d'une demi-seconde, ce qui laisse
@@ -108,10 +125,63 @@ const defaultView = computed(() => {
 });
 
 onMounted(() => {
+    stats.value.filters = [];
+    stats.value.numberOfZooms = 0;
+    stats.value.numberOfClickedTowns = 0;
+    stats.value.addressVisibilityChanges = 0;
+
     waitForElement("#carte", (el) => {
         setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 100);
     });
 });
+
+onBeforeUnmount(() => {
+    if (stats.value.filters.length > 0) {
+        trackEvent(
+            "Cartographie",
+            "Filtres sur une session",
+            stats.value.filters.join(", ")
+        );
+    }
+
+    if (stats.value.numberOfZooms > 0) {
+        trackEvent(
+            "Cartographie",
+            "Zooms sur une session",
+            stats.value.numberOfZooms
+        );
+    }
+
+    if (stats.value.numberOfClickedTowns > 0) {
+        trackEvent(
+            "Cartographie",
+            "Clics sur un site sur une session",
+            stats.value.numberOfClickedTowns
+        );
+    }
+
+    if (stats.value.addressVisibilityChanges > 0) {
+        trackEvent(
+            "Cartographie",
+            "Visibilité de l'adresse sur une session",
+            stats.value.addressVisibilityChanges
+        );
+    }
+});
+
+function onFilterUse(id) {
+    if (!stats.value.filters.includes(id)) {
+        stats.value.filters.push(id);
+    }
+}
+
+function onZoomChange() {
+    stats.value.numberOfZooms += 1;
+}
+
+function onAddressVisibilityChange() {
+    stats.value.addressVisibilityChanges += 1;
+}
 
 watch(filtersAreOpen, () => {
     nextTick(carte.value.resize);
@@ -128,6 +198,7 @@ function onTownClick(town) {
         data: town,
     };
     quickviewTown.value.open();
+    stats.value.numberOfClickedTowns += 1;
     trackEvent("Cartographie", "Click sur site", `S${town.id}`);
 }
 
