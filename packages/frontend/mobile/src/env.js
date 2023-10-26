@@ -21,4 +21,7 @@ export default {
     VITE_MOBILE_DOMAIN:
         import.meta.env.VITE_MOBILE_DOMAIN || "${VITE_MOBILE_DOMAIN}",
     VITE_WEBAPP_URL: import.meta.env.VITE_WEBAPP_URL || "${VITE_WEBAPP_URL}",
+    VITE_MOBILE_CONTACT_EMAIL:
+        import.meta.env.VITE_MOBILE_CONTACT_EMAIL ||
+        "${VITE_MOBILE_CONTACT_EMAIL}",
 };
