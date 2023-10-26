@@ -684,6 +684,23 @@ export default {
         });
     },
 
+    sendUserReactivationAlert: (recipient, options: MailOptions = {}) => {
+        const { preserveRecipient = false } = options;
+        const utm = generateTrackingUTM(USER_CAMPAIGN, 'reactivation-par-admin');
+
+        return mailService.send('user_reactivation_alert', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient),
+                connexionUrl: `${connexionUrl}?${utm}`,
+                backUrl,
+                blogUrl,
+                webappUrl: `${webappUrl}?${utm}`,
+            },
+            preserveRecipient,
+        });
+    },
+
     /**
    * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
    * @param {Object} options

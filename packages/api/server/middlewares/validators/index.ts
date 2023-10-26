@@ -23,6 +23,7 @@ import exportTown from './exportTown';
 import setUserAdminComments from './setUserAdminComments';
 import editOrganization from './editOrganization';
 import userDeactivate from './users/deactivate';
+import userReactivate from './users/reactivate';
 import userUpdatePermissionOptions from './users/updatePermissionOptions';
 import userGetLatestActivationLink from './users/getLatestActivationLink';
 import userSetRoleRegular from './users/setRoleRegular';
@@ -87,6 +88,7 @@ export default {
     user: {
         deactivate: userDeactivate,
         getLatestActivationLink: userGetLatestActivationLink,
+        reactivate: userReactivate,
         setRoleRegular: userSetRoleRegular,
         updatePermissionOptions: userUpdatePermissionOptions,
     },

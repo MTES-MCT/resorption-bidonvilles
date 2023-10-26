@@ -211,6 +211,16 @@ export default (app) => {
         controllers.user.activate,
     );
     app.post(
+        '/users/:id/reactivate',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.user.reactivate,
+        middlewares.validation,
+        controllers.user.reactivate,
+    );
+    app.post(
         '/users/:id/upgrade',
         middlewares.auth.authenticate,
         middlewares.appVersion.sync,

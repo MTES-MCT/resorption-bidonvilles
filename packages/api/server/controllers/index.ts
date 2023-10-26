@@ -78,6 +78,7 @@ import userList from './userController/list';
 import userListExport from './userController/listExport';
 import userMe from './userController/me';
 import userDeactivate from './userController/deactivate';
+import userReactivate from './userController/reactivate';
 import userRenewToken from './userController/renewToken';
 import userRequestNewPassword from './userController/requestNewPassword';
 import userSendActivationLink from './userController/sendActivationLink';
@@ -187,6 +188,7 @@ export default () => ({
         checkActivationToken: userCheckActivationToken,
         checkPasswordToken: userCheckPasswordToken,
         create: userCreate,
+        deactivate: userDeactivate,
         denyAccess: userDenyAccess,
         edit: userEdit,
         get: userGet,
@@ -195,7 +197,7 @@ export default () => ({
         listExport: userListExport,
         me: userMe,
         updatePermissionOptions: userUpdatePermissionOptions,
-        deactivate: userDeactivate,
+        reactivate: userReactivate,
         renewToken: userRenewToken,
         requestNewPassword: userRequestNewPassword,
         sendActivationLink: userSendActivationLink,
