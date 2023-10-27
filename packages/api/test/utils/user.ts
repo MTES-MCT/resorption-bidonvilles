@@ -60,6 +60,10 @@ export function serialized(override: Partial<SerializedUser> = {}): AuthUser {
         role: 'Acteur national',
         role_id: 'national_establisment',
         is_superuser: false,
+        tags_chosen: true,
+        tags: [
+            { uid: 'health', name: 'Santé' },
+        ],
         access_request_message: 'Demande d\'accès pour tests automatisés',
         permissions: {
             shantytown: {
