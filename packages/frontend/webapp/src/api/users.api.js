@@ -68,6 +68,10 @@ export function reactivateUser(userId) {
     return axios.post(`/users/${encodeURI(userId)}/reactivate`);
 }
 
+export function selectTags(userId, tags) {
+    return axios.put(`/users/${encodeURI(userId)}/tags`, { tags });
+}
+
 export function sendActivationLink(userId, data) {
     return axios.post(`/users/${encodeURI(userId)}/sendActivationLink`, data);
 }
