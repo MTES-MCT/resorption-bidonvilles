@@ -203,7 +203,14 @@ const router = createRouter({
                 displayOrderOnSiteMap: 12,
             },
         },
-
+        {
+            path: "/choix-des-themes",
+            component: () => import("@/views/ChoixDesTags.vue"),
+            meta: {
+                title: "Choisir ses thèmes",
+                authRequirement: "signedIn",
+            },
+        },
         {
             path: "/communaute",
             component: () => import("@/views/CommunauteView.vue"),
@@ -603,6 +610,17 @@ router.beforeEach((to, from) => {
     // charte requirement
     if (charteRequirement === true && !userStore.hasAcceptedCharte) {
         return "/signature-charte-engagement";
+    }
+
+    // tags selection requirement
+    if (
+        userStore.user &&
+        userStore.user.tags_chosen !== true &&
+        !["/choix-des-themes", "/signature-charte-engagement"].includes(to.path)
+    ) {
+        const navigationStore = useNavigationStore();
+        navigationStore.entrypoint = to.fullPath;
+        return "/choix-des-themes";
     }
 
     // changelog requirement
