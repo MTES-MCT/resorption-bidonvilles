@@ -1,5 +1,6 @@
 import { PermissionOption } from '#server/models/permissionModel/types/PermissionOption.d';
 import { Permissions } from '#server/models/permissionModel/types/Permissions.d';
+import QuestionTag from '#server/models/questionModel/QuestionTag.d';
 
 type UserStatus = 'new' | 'active' | 'inactive';
 type UserLocationType = 'nation' | 'region' | 'departement' | 'epci' | 'city';
@@ -84,6 +85,8 @@ export type SerializedUser = {
     role: string,
     role_id: string,
     is_superuser: boolean,
+    tags_chosen: boolean,
+    tags: QuestionTag[],
 
     // filter: auth
     password?: string,

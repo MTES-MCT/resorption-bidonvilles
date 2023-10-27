@@ -73,6 +73,9 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
         ),
         question_subscriptions AS (
             SELECT fk_user, ARRAY_AGG(fk_question::text || ',' || active::text) AS subscriptions FROM user_question_subscriptions GROUP BY fk_user
+        ),
+        user_tags AS (
+            SELECT user_to_tags.fk_user, ARRAY_AGG(question_tags.uid || ',' || question_tags.name) AS tags FROM user_to_tags LEFT JOIN question_tags ON user_to_tags.fk_question_tag = question_tags.uid GROUP BY user_to_tags.fk_user
         )
 
         SELECT
@@ -90,6 +93,8 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
             users.last_version,
             users.last_changelog,
             users.charte_engagement_signee,
+            users.tags_chosen,
+            COALESCE(user_tags.tags, array[]::text[]),
             COALESCE(email_unsubscriptions.unsubscriptions, array[]::enum_user_email_subscriptions_email_subscription[]) AS email_unsubscriptions,
             COALESCE(question_subscriptions.subscriptions, array[]::text[]) AS question_subscriptions,
             users.last_access,
@@ -150,6 +155,8 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
             email_unsubscriptions ON email_unsubscriptions.fk_user = users.user_id
         LEFT JOIN
             question_subscriptions ON question_subscriptions.fk_user = users.user_id
+        LEFT JOIN
+            user_tags ON user_tags.fk_user = users.user_id
         ${whereClause.length > 0 ? `WHERE ${whereClause}` : ''}
         ORDER BY
             CASE
