@@ -74,7 +74,10 @@ export default (user, latestCharte, filters, permissionMap): SerializedUser => {
         role_id: user.user_role_admin || user.user_role_regular,
         is_superuser: user.user_role_admin === 'national_admin',
         tags_chosen: user.tags_chosen,
-        tags: [],
+        tags: user.tags.map((tag: string) => {
+            const [uid, name]: string[] = tag.split(',');
+            return { uid, name };
+        }),
     };
 
     if (filters.auth === true) {

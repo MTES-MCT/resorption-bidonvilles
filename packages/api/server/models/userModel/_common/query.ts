@@ -94,7 +94,7 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
             users.last_changelog,
             users.charte_engagement_signee,
             users.tags_chosen,
-            COALESCE(user_tags.tags, array[]::text[]),
+            COALESCE(user_tags.tags, array[]::text[]) AS tags,
             COALESCE(email_unsubscriptions.unsubscriptions, array[]::enum_user_email_subscriptions_email_subscription[]) AS email_unsubscriptions,
             COALESCE(question_subscriptions.subscriptions, array[]::text[]) AS question_subscriptions,
             users.last_access,
