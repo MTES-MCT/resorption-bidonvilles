@@ -4,7 +4,7 @@ export default function (questions, filters) {
         .replace(/^\s*|\s*$/g, "")
         .replace(/\s+/g, " ");
     const searchKeywords = trimmedSearch !== "" ? trimmedSearch.split(" ") : [];
-    console.log(filters.tags);
+
     return questions.filter((question) => {
         const tags = Object.keys(filters.tags).filter(
             (key) => filters.tags[key] === true
