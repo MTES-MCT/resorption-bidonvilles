@@ -7,7 +7,7 @@
             :user="userStore.user"
             :buildTabRoute="(tabId) => `/mon-compte/${tabId}`"
         >
-            <template v-slot:title>Mon compte</template>
+            <template v-slot:title>Mon profil</template>
             <template v-slot:description
                 >Mettez à jour les informations liées à votre compte</template
             >
