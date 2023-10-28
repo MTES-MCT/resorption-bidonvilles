@@ -30,6 +30,7 @@ import reactivate from './reactivate';
 import resetInactivityAlertSentAt from './resetInactivityAlertSentAt';
 import setInactivityAlertSentAt from './setInactivityAlertSentAt';
 import setPermissionOptions from './setPermissionOptions';
+import setTags from './setTags';
 import update from './update';
 import upgradeLocalAdmin from './upgradeLocalAdmin';
 
@@ -66,6 +67,7 @@ export default {
     resetInactivityAlertSentAt,
     setInactivityAlertSentAt,
     setPermissionOptions,
+    setTags,
     update,
     upgradeLocalAdmin,
 };

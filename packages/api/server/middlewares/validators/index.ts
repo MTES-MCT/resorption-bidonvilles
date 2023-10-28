@@ -27,6 +27,7 @@ import userReactivate from './users/reactivate';
 import userUpdatePermissionOptions from './users/updatePermissionOptions';
 import userGetLatestActivationLink from './users/getLatestActivationLink';
 import userSetRoleRegular from './users/setRoleRegular';
+import userSetTags from './users/setTags';
 import mePostNavigationLogs from './me/post.navigationLogs';
 import findUserTowns from './findUserTowns';
 import createNote from './note/create';
@@ -90,6 +91,7 @@ export default {
         getLatestActivationLink: userGetLatestActivationLink,
         reactivate: userReactivate,
         setRoleRegular: userSetRoleRegular,
+        setTags: userSetTags,
         updatePermissionOptions: userUpdatePermissionOptions,
     },
     me: {
