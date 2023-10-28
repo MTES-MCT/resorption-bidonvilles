@@ -1,5 +1,23 @@
 <template>
     <form>
+        <div class="bg-blue100 p-4 flex items-start space-x-2 mb-4">
+            <p><Icon icon="circle-info" class="text-primary" /></p>
+            <div>
+                <p>
+                    En sélectionnant vos sujets d'intérêts ci-dessous, la
+                    plateforme évoluera afin de vous offrir une interface, des
+                    outils, et du contenu plus personnalisés et donc adaptés à
+                    vos besoins.
+                </p>
+                <p class="mt-2">
+                    Cette sélection est parfaitement
+                    <span class="font-bold">optionnelle</span>, peut être
+                    modifiée à tout moment et n'a pour but que d'améliorer votre
+                    expérience sur la plateforme.
+                </p>
+            </div>
+        </div>
+
         <FormSujetsInputSujets />
 
         <ErrorSummary
@@ -22,7 +40,7 @@ import schema from "./FormSujets.schema";
 import { selectTags } from "@/api/users.api";
 
 // components
-import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
+import { Button, ErrorSummary, Icon } from "@resorptionbidonvilles/ui";
 import FormSujetsInputSujets from "./inputs/FormSujetsInputSujets.vue";
 
 // data
