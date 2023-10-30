@@ -1,0 +1,30 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Trouver en un clic un sujet ou des réponses dans l'espace d'entraide</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class='text-primary text-display pb-4'>
+                    Nous sommes heureux de vous compter parmi les utilisateurs·rices de la plateforme <a href="{{var:webappUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>
+                </mj-text>
+                <mj-include path='common/hello.mjml' />
+                <mj-text mj-class="pb-4">
+                    Un espace d'entraide sur des thèmes aussi variés que <span class="font-bold">l'accès au logement, à la santé, à la scolarisation ainsi que la sécurisation des conditions de vie</span> d'un site est disponible sur <a href="{{var:webappUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">la plate-forme</a>.
+                </mj-text>
+                <mj-text mj-class="pb-4">
+                    Connectez-vous pour poser vos questions à la communauté des <span class="font-bold">1000 utilisateurs</span> et pour trouver la réponse à vos questions !
+                </mj-text>
+                <mj-button mj-class="button-primary" href="{{var:entraideUrl}}" rel="noopener noreferrer">
+                    Accéder à l'espace d'entraide
+                </mj-button>
+            </mj-column>
+        </mj-section>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

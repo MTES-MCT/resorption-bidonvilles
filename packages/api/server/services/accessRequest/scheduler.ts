@@ -32,7 +32,7 @@ export default {
             await agenda.schedule('in 7 days', 'demo_invitation', {
                 user,
             });
-            await agenda.schedule('in 14 days', 'idealco_invitation', {
+            await agenda.schedule('in 14 days', 'entraide_invitation', {
                 user,
             });
             await agenda.schedule('in 30 days', 'user_features', {

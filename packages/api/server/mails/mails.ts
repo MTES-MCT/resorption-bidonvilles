@@ -723,6 +723,24 @@ export default {
         });
     },
 
+    sendUserEntraideInvitation: (recipient, options: MailOptions = {}) => {
+        const { preserveRecipient } = options;
+
+        const utm = generateTrackingUTM(USER_CAMPAIGN, '3S-entraide');
+
+        return mailService.send('user_entraide_invitation', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient),
+                entraideUrl: `${webappUrl}?${utm}`,
+                backUrl,
+                blogUrl,
+                webappUrl: `${webappUrl}?${utm}`,
+            },
+            preserveRecipient,
+        });
+    },
+
     /**
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
