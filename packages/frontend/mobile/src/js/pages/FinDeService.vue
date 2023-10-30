@@ -8,13 +8,12 @@
 
             <div class="max-w-256 mx-auto">
                 <p>
-                    Du fait d'un manque d'intérêt de nos utilisateurs pour
-                    l'application mobile nous avons pris la décision d'en
-                    arrêter la maintenance.
+                    L'application mobile n'ayant pas obtenu les résultats
+                    escomptés, sa maintenance est arrêtée.
                 </p>
                 <p class="mt-4">
-                    Vous pouvez toujours accéder à la plateforme habituelle
-                    depuis votre téléphone :
+                    Vous pouvez toujours accéder à la version "navigateur"
+                    plateforme depuis votre mobile.
                 </p>
                 <p class="text-center py-6">
                     <span class="inline-block border border-primary rounded p-4"
@@ -24,8 +23,8 @@
                     >
                 </p>
                 <p>
-                    Si vous avez des retours sur cette expérience mobile, vous
-                    pouvez nous écrire à
+                    Si des fonctionnalités qu'offraient la version mobile vous
+                    manquent, vous pouvez nous en faire part à
                     <Link :to="`mailto:${VITE_MOBILE_CONTACT_EMAIL}`">{{
                         VITE_MOBILE_CONTACT_EMAIL
                     }}</Link>
