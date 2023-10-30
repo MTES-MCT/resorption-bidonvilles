@@ -19,6 +19,7 @@
                 variant="checkbox"
                 direction="col"
                 v-model="mapStore.filters[id].checked"
+                @change="$emit('change')"
             />
         </main>
     </article>
@@ -39,6 +40,7 @@ const props = defineProps({
 });
 const { id } = toRefs(props);
 
+defineEmits(["change"]);
 const definition = mapFilters.value.definition[id.value];
 const mapStore = useMapStore();
 

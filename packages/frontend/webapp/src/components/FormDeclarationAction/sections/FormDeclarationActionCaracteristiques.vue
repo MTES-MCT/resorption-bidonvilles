@@ -13,7 +13,7 @@
             <p v-if="mode === 'edit'" class="-mt-4 mb-6 italic">
                 L'action sera considérée comme terminée et apparaîtra
                 automatiquement dans l'onglet 'Actions terminées' à compter de
-                la de fin renseignée ci-dessus
+                la date de fin renseignée ci-dessus
             </p>
             <InputTopics />
             <InputGoals />

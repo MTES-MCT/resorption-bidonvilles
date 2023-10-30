@@ -54,6 +54,7 @@ import downloadBlob from "@/utils/downloadBlob";
 import formatDate from "@common/utils/formatDate";
 
 import { Icon, Spinner } from "@resorptionbidonvilles/ui";
+import { trackEvent } from "@/helpers/matomo";
 
 const props = defineProps({
     isLoading: {
@@ -187,6 +188,7 @@ function createMap() {
 
     // on configure la vue de la carte (centre, zoom, clustering, etc.)
     map.value.setView(defaultView.value.center, defaultView.value.zoom);
+    map.value.on("baselayerchange", onLayerChange);
     cluster();
 }
 
@@ -198,6 +200,10 @@ function addControl(name, control) {
 function onZoomEnd(...args) {
     emit("zoomend", ...args);
     cluster();
+}
+
+function onLayerChange(...args) {
+    trackEvent("Cartographie", "Changement de fond de carte", args[0].name);
 }
 
 function cluster() {
@@ -266,6 +272,8 @@ async function printMapScreenshot() {
             blob,
             `${formatDate(ts, "y-m-d")}-carte-des-bidonvilles.png`
         );
+
+        trackEvent("Cartographie", "Impression");
     } catch (error) {
         console.log("Failed printing the map");
     }

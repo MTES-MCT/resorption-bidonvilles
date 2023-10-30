@@ -25,7 +25,11 @@
             class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden"
         >
             <label class="flex items-center space-x-2">
-                <input type="checkbox" v-model="showAddressesModel" />
+                <input
+                    type="checkbox"
+                    v-model="showAddressesModel"
+                    @change="emit('addressVisibilityChange')"
+                />
                 <span>Voir les adresses des sites</span>
             </label>
         </div>
@@ -67,7 +71,12 @@ const props = defineProps({
     },
 });
 const { pois, showAddresses } = toRefs(props);
-const emit = defineEmits(["poiclick", "viewchange"]);
+const emit = defineEmits([
+    "poiclick",
+    "viewchange",
+    "zoomend",
+    "addressVisibilityChange",
+]);
 const carto = ref(null);
 const addressToggler = ref(null);
 const showAddressesModel = computed({
@@ -117,6 +126,7 @@ function onZoomEnd() {
     }
 
     carto.value.addControl("addressToggler", createAddressTogglerControl());
+    emit("zoomend");
 }
 
 function createPoiMarker(poi) {
