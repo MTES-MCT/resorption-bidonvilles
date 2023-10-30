@@ -9,7 +9,10 @@
             <h1>Filtrer les sites par</h1>
         </header>
         <div v-for="filterId in mapFilters.order" :key="filterId">
-            <CartographieFiltre :id="filterId" />
+            <CartographieFiltre
+                :id="filterId"
+                @change="emit('filterUse', filterId)"
+            />
         </div>
     </section>
 
@@ -30,7 +33,7 @@ import { trackEvent } from "@/helpers/matomo";
 import { Icon, Link } from "@resorptionbidonvilles/ui";
 import CartographieFiltre from "./CartographieFiltre.vue";
 
-const emit = defineEmits(["open", "close"]);
+const emit = defineEmits(["open", "close", "filterUse"]);
 const props = defineProps({
     isOpen: {
         type: Boolean,
