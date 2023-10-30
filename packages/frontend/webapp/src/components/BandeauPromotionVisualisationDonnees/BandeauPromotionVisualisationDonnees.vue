@@ -1,14 +1,14 @@
 <template>
     <ContentWrapper>
         <article
-            class="full-width mx-auto mb-8 bg-yellow-200 rounded-lg overflow-hidden px-1 py-3"
+            class="full-width mx-auto mb-8 bg-blue200 rounded-lg overflow-hidden px-1 py-3"
         >
             <header class="flex items-center">
                 <img
                     height="20"
-                    class="ml-4 h-20"
-                    :src="EspaceEntraideImage.img"
-                    :alt="EspaceEntraideImage.text"
+                    class="ml-8 mr-5 mt-3 h-20"
+                    :src="VisualisationImage.img"
+                    :alt="VisualisationImage.text"
                 />
                 <div
                     class="tracking-wide text-display-md font-bold text-primary"
@@ -38,11 +38,11 @@
 import { ContentWrapper, Link } from "@resorptionbidonvilles/ui";
 import TagNouveau from "@/components/TagNouveau/TagNouveau.vue";
 import { useNavigationStore } from "@/stores/navigation.store";
-import imagePromotionEspaceEntraide from "@/assets/img/illustrations/communaute.svg";
+import imagePromotionVisualisation from "@/assets/img/illustrations/visualisation.svg";
 
 const navigationStore = useNavigationStore();
-const EspaceEntraideImage = {
-    img: imagePromotionEspaceEntraide,
-    text: "Espace Entraide Résorption-Bidonvilles",
+const VisualisationImage = {
+    img: imagePromotionVisualisation,
+    text: "Visualisation des données Résorption-Bidonvilles",
 };
 </script>
