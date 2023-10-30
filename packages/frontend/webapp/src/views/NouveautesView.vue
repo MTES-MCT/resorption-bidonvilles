@@ -78,7 +78,7 @@
     min-height: 50vh;
     max-height: 60vh;
     @apply max-w-2xl;
-    overflow: hidden;
+    overflow: auto;
 }
 </style>
 
