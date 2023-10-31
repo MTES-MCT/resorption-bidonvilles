@@ -1,7 +1,7 @@
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.addColumn(
         'users',
-        'tags_chosen',
+        'expertise_topics_chosen',
         {
             type: Sequelize.BOOLEAN,
             allowNull: false,
@@ -11,6 +11,6 @@ module.exports = {
 
     down: queryInterface => queryInterface.removeColumn(
         'users',
-        'tags_chosen',
+        'expertise_topics_chosen',
     ),
 };
