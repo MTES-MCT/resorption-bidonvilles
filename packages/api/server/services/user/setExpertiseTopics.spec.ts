@@ -44,9 +44,9 @@ describe('userService.setExpertiseTopics()', () => {
     });
 
     it('marque en base de données que l\'utilisateur a sélectionné ses sujets de compétence', async () => {
-        await setExpertiseTopics(42, [], []);
+        await setExpertiseTopics(42, [], [], 'test');
         expect(userModel.update).to.have.been.calledOnce;
-        expect(userModel.update).to.have.been.calledWith(42, { expertise_topics_chosen: true });
+        expect(userModel.update).to.have.been.calledWith(42, { expertise_topics_chosen: true, expertise_comment: 'test' });
     });
 
     it('enregistre les topics de l\'utilisateur en base de données', async () => {
@@ -64,7 +64,7 @@ describe('userService.setExpertiseTopics()', () => {
 
     it('exécute l\'ensemble des requêtes dans une transaction', async () => {
         await setExpertiseTopics(42, [], []);
-        expect(userModel.update).to.have.been.calledWith(42, { expertise_topics_chosen: true }, transaction);
+        expect(userModel.update).to.have.been.calledWith(42, { expertise_topics_chosen: true, expertise_comment: undefined }, transaction);
         expect(userModel.setExpertiseTopics).to.have.been.calledWith(42, [], [], transaction);
         expect(userModel.findOne).to.have.been.calledWith(42, {}, null, 'read', transaction);
         expect(transaction.commit).to.have.been.calledOnce;

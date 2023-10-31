@@ -78,10 +78,16 @@ export function setAdminComments(userId, comment) {
     });
 }
 
-export function setExpertiseTopics(userId, expertiseTopics, interestTopics) {
+export function setExpertiseTopics(
+    userId,
+    expertiseTopics,
+    interestTopics,
+    comment
+) {
     return axios.put(`/users/${encodeURI(userId)}/expertise_topics`, {
         expertise_topics: expertiseTopics,
         interest_topics: interestTopics,
+        expertise_comment: comment,
     });
 }
 

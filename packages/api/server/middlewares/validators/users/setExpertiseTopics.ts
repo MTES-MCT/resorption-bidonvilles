@@ -77,4 +77,12 @@ export default [
 
             return true;
         }),
+
+    body('expertise_comment')
+        .optional({ nullable: true })
+        .isString().bail().withMessage('Le champ "Vous souhaitez partager d\'autres informations ?" est invalide')
+        .trim(),
+
+    body('expertise_comment')
+        .customSanitizer(value => value || null),
 ];

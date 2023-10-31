@@ -31,13 +31,14 @@ describe('userController.setExpertiseTopics()', () => {
                 user: fakeUser({ id: 42 }),
                 expertise_topics: ['a', 'b'],
                 interest_topics: ['c'],
+                expertise_comment: 'd',
             },
         });
         const res = mockRes();
 
         await setExpertiseTopics(req, res, () => {});
         expect(userService.setExpertiseTopics).to.have.been.calledOnce;
-        expect(userService.setExpertiseTopics).to.have.been.calledWith(42, ['a', 'b'], ['c']);
+        expect(userService.setExpertiseTopics).to.have.been.calledWith(42, ['a', 'b'], ['c'], 'd');
     });
 
     it('répond avec un code 200 et l\'utilisateur mis à jour', async () => {
@@ -49,11 +50,12 @@ describe('userController.setExpertiseTopics()', () => {
                 user: originalUser,
                 expertise_topics: [],
                 interest_topics: ['a'],
+                expertise_comment: null,
             },
         });
         const res = mockRes();
 
-        userService.setExpertiseTopics.withArgs(42, [], ['a']).resolves(updatedUser);
+        userService.setExpertiseTopics.withArgs(42, [], ['a'], null).resolves(updatedUser);
 
         await setExpertiseTopics(req, res, () => {});
         expect(res.status).to.have.been.calledOnceWith(200);
