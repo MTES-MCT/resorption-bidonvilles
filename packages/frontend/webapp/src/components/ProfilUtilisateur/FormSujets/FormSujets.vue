@@ -10,15 +10,14 @@
                     vos besoins.
                 </p>
                 <p class="mt-2">
-                    Cette sélection est parfaitement
-                    <span class="font-bold">optionnelle</span>, peut être
-                    modifiée à tout moment et n'a pour but que d'améliorer votre
-                    expérience sur la plateforme.
+                    Cette sélection peut être modifiée à tout moment et n'a pour
+                    but que d'améliorer votre expérience sur la plateforme.
                 </p>
             </div>
         </div>
 
-        <FormSujetsInputSujets />
+        <FormSujetsInputSujetsExpertise />
+        <FormSujetsInputSujetsInteret />
 
         <ErrorSummary
             v-if="error || Object.keys(errors).length > 0"
@@ -37,11 +36,12 @@ import { useUserStore } from "@/stores/user.store";
 import { useAccesStore } from "@/stores/acces.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import schema from "./FormSujets.schema";
-import { selectTags } from "@/api/users.api";
+import { setExpertiseTopics } from "@/api/users.api";
 
 // components
 import { Button, ErrorSummary, Icon } from "@resorptionbidonvilles/ui";
-import FormSujetsInputSujets from "./inputs/FormSujetsInputSujets.vue";
+import FormSujetsInputSujetsExpertise from "./inputs/FormSujetsInputSujetsExpertise.vue";
+import FormSujetsInputSujetsInteret from "./inputs/FormSujetsInputSujetsInteret.vue";
 
 // data
 const props = defineProps({
@@ -56,7 +56,12 @@ const error = ref(null);
 const { handleSubmit, setErrors, errors } = useForm({
     validationSchema: schema,
     initialValues: {
-        tags: user.value.tags.map((tag) => tag.uid),
+        expertise_topics: user.value.expertise_topics
+            .filter((topic) => topic.type === "expertise")
+            .map((topic) => topic.uid),
+        interest_topics: user.value.expertise_topics
+            .filter((topic) => topic.type === "interest")
+            .map((topic) => topic.uid),
     },
 });
 const self = computed(() => {
@@ -69,20 +74,24 @@ const onSubmit = handleSubmit(async (values) => {
 
     try {
         const accesStore = useAccesStore();
-        const newValues = await selectTags(user.value.id, values.tags);
+        const newValues = await setExpertiseTopics(
+            user.value.id,
+            values.expertise_topics,
+            values.interest_topics
+        );
 
         if (self.value === true) {
             const userStore = useUserStore();
             Object.assign(userStore.user, {
-                tags_chosen: newValues.tags_chosen,
-                tags: newValues.tags,
+                expertise_topics_chosen: newValues.expertise_topics_chosen,
+                expertise_topics: newValues.expertise_topics,
             });
         } else {
             accesStore.updateUser(
                 user.value.id,
                 Object.assign(user.value, {
-                    tags_chosen: newValues.tags_chosen,
-                    tags: newValues.tags,
+                    expertise_topics_chosen: newValues.expertise_topics_chosen,
+                    expertise_topics: newValues.expertise_topics,
                 })
             );
         }

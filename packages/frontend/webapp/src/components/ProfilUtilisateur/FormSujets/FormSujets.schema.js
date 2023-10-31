@@ -2,5 +2,6 @@ import { object, array } from "yup";
 import labels from "./FormSujets.labels";
 
 export default object({
-    tags: array().required().label(labels.tags),
+    expertise_topics: array().required().label(labels.expertise_topics),
+    interest_topics: array().required().label(labels.interest_topics),
 });

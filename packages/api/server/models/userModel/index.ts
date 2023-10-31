@@ -28,9 +28,9 @@ import isTracked from './isTracked';
 import listExport from './listExport';
 import reactivate from './reactivate';
 import resetInactivityAlertSentAt from './resetInactivityAlertSentAt';
+import setExpertiseTopics from './setExpertiseTopics';
 import setInactivityAlertSentAt from './setInactivityAlertSentAt';
 import setPermissionOptions from './setPermissionOptions';
-import setTags from './setTags';
 import update from './update';
 import upgradeLocalAdmin from './upgradeLocalAdmin';
 
@@ -65,9 +65,9 @@ export default {
     listExport,
     reactivate,
     resetInactivityAlertSentAt,
+    setExpertiseTopics,
     setInactivityAlertSentAt,
     setPermissionOptions,
-    setTags,
     update,
     upgradeLocalAdmin,
 };

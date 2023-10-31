@@ -5,7 +5,7 @@ import { User } from '#root/types/resources/User.d';
 const ERRORS = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
     user_update_failure: { code: 500, message: 'Une erreur est survenue lors de la mise à jour du compte' },
-    tags_save_failure: { code: 500, message: 'Une erreur est survenue lors de l\'enregistrement des sujets en base de données' },
+    topics_save_failure: { code: 500, message: 'Une erreur est survenue lors de l\'enregistrement des sujets en base de données' },
     user_search_failure: { code: 500, message: 'Une erreur est survenue lors de la recherche de l\'utilisateur en base de données' },
     transaction_failure: { code: 500, message: 'Une erreur est survenue lors de la validation de la mise à jour' },
 };
@@ -13,13 +13,14 @@ const ERRORS = {
 interface UserSetTagsRequest extends Request {
     body: {
         user: User;
-        tags: string[];
+        expertise_topics: string[];
+        interest_topics: string[];
     };
 }
 
 export default async (req: UserSetTagsRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const user = await userService.setTags(req.body.user.id, req.body.tags);
+        const user = await userService.setExpertiseTopics(req.body.user.id, req.body.expertise_topics, req.body.interest_topics);
         res.status(200).send(user);
     } catch (error) {
         const { code, message } = ERRORS[error?.code] || ERRORS.undefined;

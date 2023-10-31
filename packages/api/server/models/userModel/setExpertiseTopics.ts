@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { Transaction } from 'sequelize';
 
-export default async (userId: number, tags: string[], argTransaction: Transaction = undefined): Promise<void> => {
+export default async (userId: number, expertiseTopics: string[], interestTopics: string[], argTransaction: Transaction = undefined): Promise<void> => {
     let transaction = argTransaction;
     let commitTransaction = false;
     if (!transaction) {
@@ -10,20 +10,24 @@ export default async (userId: number, tags: string[], argTransaction: Transactio
     }
 
     try {
-        await sequelize.query('DELETE FROM user_to_tags WHERE fk_user = :userId', {
+        await sequelize.query('DELETE FROM user_to_expertise_topics WHERE fk_user = :userId', {
             transaction,
             replacements: {
                 userId,
             },
         });
 
-        if (tags.length > 0) {
+        const topics = [
+            ...expertiseTopics.map(topic => ({ uid: topic, type: 'expertise' })),
+            ...interestTopics.map(topic => ({ uid: topic, type: 'interest' })),
+        ];
+        if (topics.length > 0) {
             await sequelize.query(
-                `INSERT INTO user_to_tags(fk_user, fk_question_tag)
-                VALUES ${tags.map(() => '(?, ?)').join(', ')}`,
+                `INSERT INTO user_to_expertise_topics(fk_user, fk_expertise_topic, type)
+                VALUES ${topics.map(() => '(?, ?, ?)').join(', ')}`,
                 {
                     transaction,
-                    replacements: tags.map(tag => [userId, tag]).flat(),
+                    replacements: topics.map(topic => [userId, topic.uid, topic.type]).flat(),
                 },
             );
         }
