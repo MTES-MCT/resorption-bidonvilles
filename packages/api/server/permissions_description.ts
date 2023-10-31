@@ -1,4 +1,26 @@
-export default {
+type PermissionDescriptionLine = {
+    type: 'view' | 'edit' | 'deny';
+    label: string;
+    comments: string | null;
+    option?: string;
+};
+type OptionDescriptionLine = {
+    id: string;
+    label: string;
+};
+
+type RolePermissionSummary = {
+    description: string;
+    national_permissions: PermissionDescriptionLine[][];
+    local_permissions: PermissionDescriptionLine[][];
+    options: OptionDescriptionLine[];
+};
+
+export type RolePermissionDescriptions = {
+    [key: string]: RolePermissionSummary;
+};
+
+const descriptions: RolePermissionDescriptions = {
     national_establisment: {
         description: 'L\'acteur national est en charge de la mise en oeuvre du cadre national. Pour cela, il suit et évalue les actions. Il peut, le cas échéant, apporter un soutien financier ou un appui technique.',
         national_permissions: [
@@ -112,3 +134,5 @@ export default {
         options: [],
     },
 };
+
+export default descriptions;

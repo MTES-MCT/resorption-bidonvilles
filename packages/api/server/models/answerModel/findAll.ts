@@ -1,6 +1,6 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import Answer from './Answer.d';
+import { Answer } from '#root/types/resources/Answer.d';
 import AnswerRow from './AnswerRow.d';
 
 import serializeAnswer from './_common/serializeAnswer';

@@ -1,7 +1,7 @@
 import questionModel from '#server/models/questionModel';
 import ServiceError from '#server/errors/ServiceError';
-import Question from '#server/models/questionModel/Question.d';
-import Answer from '#server/models/answerModel/Answer.d';
+import { Answer } from '#root/types/resources/Answer.d';
+import { Question } from '#root/types/resources/Question.d';
 
 export default async (questionId: number): Promise<Question> => {
     let question: Question;

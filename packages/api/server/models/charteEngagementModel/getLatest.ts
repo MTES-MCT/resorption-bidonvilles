@@ -1,11 +1,11 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import config from '#server/config';
-import { RawCharteEngagement } from './getLatest.d';
+import { CharteEngagement } from '#root/types/resources/CharteEngagement.d';
 
 const { backUrl } = config;
-export default async (): Promise<RawCharteEngagement> => {
-    const rows: RawCharteEngagement[] = await sequelize.query(
+export default async (): Promise<CharteEngagement> => {
+    const rows: CharteEngagement[] = await sequelize.query(
         `SELECT
             version,
             fichier

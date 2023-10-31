@@ -1,5 +1,5 @@
 import QuestionRow from './QuestionRow.d';
-import Question from './Question.d';
+import { Question } from '#root/types/resources/Question.d';
 
 export default (question: QuestionRow): Question => ({
     id: question.questionId,

@@ -1,4 +1,4 @@
-export type RawCharteEngagement = {
+export type CharteEngagement = {
     version: number,
     fichier: string
 };

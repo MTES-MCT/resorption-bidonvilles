@@ -5,8 +5,8 @@ import userQuestionSubscriptionModel from '#server/models/userQuestionSubscripti
 
 // types
 import ServiceError from '#server/errors/ServiceError';
-import Answer from '#server/models/answerModel/Answer.d';
-import Question from '#server/models/questionModel/Question.d';
+import { Answer } from '#root/types/resources/Answer.d';
+import { Question } from '#root/types/resources/Question.d';
 import { User } from '#root/types/resources/User.d';
 
 type AnswerData = {
