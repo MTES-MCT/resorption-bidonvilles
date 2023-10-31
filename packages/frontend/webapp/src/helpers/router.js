@@ -204,10 +204,10 @@ const router = createRouter({
             },
         },
         {
-            path: "/choix-des-themes",
-            component: () => import("@/views/ChoixDesTags.vue"),
+            path: "/choix-des-sujets",
+            component: () => import("@/views/ChoixDesSujetsExpertise.vue"),
             meta: {
-                title: "Choisir ses thèmes",
+                title: "Choisir ses sujets d'expertise et intérêt",
                 authRequirement: "signedIn",
             },
         },
@@ -612,15 +612,15 @@ router.beforeEach((to, from) => {
         return "/signature-charte-engagement";
     }
 
-    // tags selection requirement
+    // expertise topics selection requirement
     if (
         userStore.user &&
         userStore.user.expertise_topics_chosen !== true &&
-        !["/choix-des-themes", "/signature-charte-engagement"].includes(to.path)
+        !["/choix-des-sujets", "/signature-charte-engagement"].includes(to.path)
     ) {
         const navigationStore = useNavigationStore();
         navigationStore.entrypoint = to.fullPath;
-        return "/choix-des-themes";
+        return "/choix-des-sujets";
     }
 
     // changelog requirement
