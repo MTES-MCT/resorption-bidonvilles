@@ -9,7 +9,7 @@
         <ContentWrapper>
             <FilArianne :items="ariane" class="mb-8" />
         </ContentWrapper>
-        <BandeauPromotionEspaceEntraide />
+        <BandeauPromotionVisualisationDonnees />
         <ListeDesActions />
     </LayoutSearch>
 </template>
@@ -22,7 +22,7 @@ import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import ListeDesActions from "@/components/ListeDesActions/ListeDesActions.vue";
 
-import BandeauPromotionEspaceEntraide from "@/components/BandeauPromotionEspaceEntraide/BandeauPromotionEspaceEntraide.vue";
+import BandeauPromotionVisualisationDonnees from "@/components/BandeauPromotionVisualisationDonnees/BandeauPromotionVisualisationDonnees.vue";
 
 const ariane = [{ label: "Accueil", to: "/" }, { label: "Actions" }];
 

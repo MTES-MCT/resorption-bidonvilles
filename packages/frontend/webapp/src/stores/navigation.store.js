@@ -80,26 +80,11 @@ export const useNavigationStore = defineStore("navigation", {
                 });
             });
         },
-        mainItems: () => {
-            const configStore = useConfigStore();
-            if (!configStore.isLoaded) {
-                return [];
-            }
-
+        metricsItem: () => {
             const metricsItem = {
                 label: "Visualisation des données",
                 route: "/visualisation-donnees",
             };
-            const items = [
-                { label: "Accueil", route: "/" },
-                { label: "Sites", route: "/liste-des-sites" },
-                { label: "Actions", route: "/liste-des-actions" },
-                metricsItem,
-                { label: "Entraide", route: "/communaute" },
-                { label: "Carte", route: "/cartographie" },
-                { label: "Dernières activités", route: "/activites" },
-                { label: "Administration", route: "/acces" },
-            ];
 
             const userStore = useUserStore();
             const { departement } = userStore.user.organization.location;
@@ -107,6 +92,26 @@ export const useNavigationStore = defineStore("navigation", {
                 metricsItem.route = `/visualisation-donnees/departement/${departement.code}`;
             }
 
+            return metricsItem;
+        },
+        mainItems() {
+            const configStore = useConfigStore();
+            if (!configStore.isLoaded) {
+                return [];
+            }
+
+            const items = [
+                { label: "Accueil", route: "/" },
+                { label: "Sites", route: "/liste-des-sites" },
+                { label: "Actions", route: "/liste-des-actions" },
+                { label: "Communauté", route: "/communaute" },
+                { label: "Carte", route: "/cartographie" },
+                { label: "Dernières activités", route: "/activites" },
+                this.metricsItem,
+                { label: "Administration", route: "/acces" },
+            ];
+
+            const userStore = useUserStore();
             const itemsFilteredByPermission = items.filter((item) => {
                 const { permissions } = router.resolve(item.route).meta;
                 if (!permissions) {
