@@ -148,7 +148,9 @@ export default async (user, departementCode: string): Promise<DepartementMetrics
         LEFT JOIN computed_toilet_types ON computed_toilet_types.fk_shantytown = shantytowns.shantytown_id
         LEFT JOIN computed_electricity_types ON computed_electricity_types.fk_shantytown = shantytowns.shantytown_id
         LEFT JOIN cities ON cities.code = shantytowns.fk_city
+        LEFT JOIN epci ON epci.code = cities.fk_epci
         LEFT JOIN departements ON departements.code = cities.fk_departement
+        LEFT JOIN regions ON regions.code = departements.fk_region
         LEFT JOIN last_comments ON last_comments.fk_shantytown = shantytowns.shantytown_id
         WHERE closed_at IS NULL
         AND departements.code = :departementCode
