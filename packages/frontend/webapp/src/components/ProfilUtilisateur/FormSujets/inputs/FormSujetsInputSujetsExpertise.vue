@@ -1,13 +1,12 @@
 <template>
-    <CheckableGroup id="tags" :label="labels.tags">
+    <CheckableGroup id="expertise_topics" :label="labels.expertise_topics">
         <Checkbox
             v-for="item in items"
             :key="item.value"
             :value="item.value"
             :label="item.label"
-            variant="checkbox"
-            name="tags"
-            v-model="values.tags"
+            name="expertise_topics"
+            v-model="values.expertise_topics"
         />
     </CheckableGroup>
 </template>
@@ -21,9 +20,9 @@ import { useConfigStore } from "@/stores/config.store";
 
 const configStore = useConfigStore();
 const items = computed(() => {
-    return configStore.config.question_tags.map((tag) => ({
-        value: tag.uid,
-        label: tag.name,
+    return configStore.config.expertise_topics.map((topic) => ({
+        value: topic.uid,
+        label: topic.label,
     }));
 });
 

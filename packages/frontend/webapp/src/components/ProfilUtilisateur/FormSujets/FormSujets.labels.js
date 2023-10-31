@@ -1,3 +1,4 @@
 export default {
-    tags: "Sujets",
+    expertise_topics: "Sujets de compétences",
+    interest_topics: "Sujets d'intérêt",
 };

@@ -68,10 +68,6 @@ export function reactivateUser(userId) {
     return axios.post(`/users/${encodeURI(userId)}/reactivate`);
 }
 
-export function selectTags(userId, tags) {
-    return axios.put(`/users/${encodeURI(userId)}/tags`, { tags });
-}
-
 export function sendActivationLink(userId, data) {
     return axios.post(`/users/${encodeURI(userId)}/sendActivationLink`, data);
 }
@@ -79,6 +75,13 @@ export function sendActivationLink(userId, data) {
 export function setAdminComments(userId, comment) {
     return axios.put(`/users/${encodeURI(userId)}/admin_comments`, {
         comment,
+    });
+}
+
+export function setExpertiseTopics(userId, expertiseTopics, interestTopics) {
+    return axios.put(`/users/${encodeURI(userId)}/expertise_topics`, {
+        expertise_topics: expertiseTopics,
+        interest_topics: interestTopics,
     });
 }
 

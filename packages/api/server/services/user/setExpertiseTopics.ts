@@ -3,21 +3,21 @@ import userModel from '#server/models/userModel/index';
 import ServiceError from '#server/errors/ServiceError';
 import { User } from '#root/types/resources/User.d';
 
-export default async (id: number, tags: string[]): Promise<User> => {
+export default async (id: number, expertiseTopics: string[], interestTopics: string[]): Promise<User> => {
     const transaction = await sequelize.transaction();
 
     try {
-        await userModel.update(id, { tags_chosen: true }, transaction);
+        await userModel.update(id, { expertise_topics_chosen: true }, transaction);
     } catch (error) {
         await transaction.rollback();
         throw new ServiceError('user_update_failure', error);
     }
 
     try {
-        await userModel.setTags(id, tags, transaction);
+        await userModel.setExpertiseTopics(id, expertiseTopics, interestTopics, transaction);
     } catch (error) {
         await transaction.rollback();
-        throw new ServiceError('tags_save_failure', error);
+        throw new ServiceError('topics_save_failure', error);
     }
 
     let user: User;

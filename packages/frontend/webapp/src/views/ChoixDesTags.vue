@@ -35,7 +35,6 @@
                         label="Sélectionnez vos sujets de compétences :"
                         id="expertise_topics"
                         class="mt-4"
-                        direction="horizontal"
                     >
                         <CheckboxUi
                             v-for="tag in configStore.config.expertise_topics"
@@ -48,7 +47,6 @@
                         label="Au delà de vos compétences, quels domaines vous intéressent ?"
                         id="interests_topics"
                         class="mt-4"
-                        direction="horizontal"
                     >
                         <CheckboxUi
                             v-for="tag in configStore.config.expertise_topics"
@@ -87,7 +85,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { selectTags } from "@/api/users.api";
+import { setExpertiseTopics } from "@/api/users.api";
 import { useConfigStore } from "@/stores/config.store";
 import { useUserStore } from "@/stores/user.store";
 
@@ -122,10 +120,13 @@ async function validate() {
     try {
         const userStore = useUserStore();
 
-        const updatedUser = await selectTags(
+        const updatedUser = await setExpertiseTopics(
             userStore.id,
             Object.keys(selectedExpertise.value).filter((tag) => {
                 return selectedExpertise.value[tag] === true;
+            }),
+            Object.keys(selectedInterests.value).filter((tag) => {
+                return selectedInterests.value[tag] === true;
             })
         );
         configStore.config.user.expertise_topics_chosen = true;

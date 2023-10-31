@@ -16,7 +16,7 @@ const sequelize = {
     transaction: sandbox.stub(),
 };
 const userModel = {
-    setTags: sandbox.stub(),
+    setExpertiseTopics: sandbox.stub(),
     update: sandbox.stub(),
     findOne: sandbox.stub(),
 };
@@ -26,10 +26,10 @@ rewiremock('#server/models/userModel/index').with(userModel);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
-import setTags from './setTags';
+import setExpertiseTopics from './setExpertiseTopics';
 rewiremock.disable();
 
-describe('userService.setTags()', () => {
+describe('userService.setExpertiseTopics()', () => {
     afterEach(() => {
         sandbox.reset();
     });
@@ -43,29 +43,29 @@ describe('userService.setTags()', () => {
         sequelize.transaction.withArgs().resolves(transaction);
     });
 
-    it('marque en base de données que l\'utilisateur a sélectionné ses tags', async () => {
-        await setTags(42, []);
+    it('marque en base de données que l\'utilisateur a sélectionné ses sujets de compétence', async () => {
+        await setExpertiseTopics(42, [], []);
         expect(userModel.update).to.have.been.calledOnce;
-        expect(userModel.update).to.have.been.calledWith(42, { tags_chosen: true });
+        expect(userModel.update).to.have.been.calledWith(42, { expertise_topics_chosen: true });
     });
 
-    it('enregistre les tags de l\'utilisateur en base de données', async () => {
-        await setTags(42, ['a', 'b']);
-        expect(userModel.setTags).to.have.been.calledOnce;
-        expect(userModel.setTags).to.have.been.calledWith(42, ['a', 'b']);
+    it('enregistre les topics de l\'utilisateur en base de données', async () => {
+        await setExpertiseTopics(42, ['a', 'b'], ['c']);
+        expect(userModel.setExpertiseTopics).to.have.been.calledOnce;
+        expect(userModel.setExpertiseTopics).to.have.been.calledWith(42, ['a', 'b'], ['c']);
     });
 
     it('retourne l\'utilisateur mis à jour', async () => {
         const user = fakeUser();
         userModel.findOne.resolves(user);
-        const result = await setTags(42, []);
+        const result = await setExpertiseTopics(42, [], []);
         expect(result).to.be.deep.equal(user);
     });
 
     it('exécute l\'ensemble des requêtes dans une transaction', async () => {
-        await setTags(42, []);
-        expect(userModel.update).to.have.been.calledWith(42, { tags_chosen: true }, transaction);
-        expect(userModel.setTags).to.have.been.calledWith(42, [], transaction);
+        await setExpertiseTopics(42, [], []);
+        expect(userModel.update).to.have.been.calledWith(42, { expertise_topics_chosen: true }, transaction);
+        expect(userModel.setExpertiseTopics).to.have.been.calledWith(42, [], [], transaction);
         expect(userModel.findOne).to.have.been.calledWith(42, {}, null, 'read', transaction);
         expect(transaction.commit).to.have.been.calledOnce;
     });
@@ -75,7 +75,7 @@ describe('userService.setTags()', () => {
         userModel.update.rejects(error);
 
         try {
-            await setTags(42, []);
+            await setExpertiseTopics(42, [], []);
         } catch (e) {
             expect(e).to.be.an.instanceof(ServiceError);
             expect(e.code).to.be.equal('user_update_failure');
@@ -91,7 +91,7 @@ describe('userService.setTags()', () => {
         userModel.update.rejects(error);
 
         try {
-            await setTags(42, []);
+            await setExpertiseTopics(42, [], []);
         } catch (e) {
             expect(transaction.rollback).to.have.been.called;
             return;
@@ -100,15 +100,15 @@ describe('userService.setTags()', () => {
         expect.fail('should have thrown an error');
     });
 
-    it('en cas d\'erreur dans l\'enregistrement des tags, lance une ServiceError', async () => {
+    it('en cas d\'erreur dans l\'enregistrement des topics, lance une ServiceError', async () => {
         const error = new Error('test');
-        userModel.setTags.rejects(error);
+        userModel.setExpertiseTopics.rejects(error);
 
         try {
-            await setTags(42, []);
+            await setExpertiseTopics(42, [], []);
         } catch (e) {
             expect(e).to.be.an.instanceof(ServiceError);
-            expect(e.code).to.be.equal('tags_save_failure');
+            expect(e.code).to.be.equal('topics_save_failure');
             expect(e.nativeError).to.be.equal(error);
             return;
         }
@@ -116,12 +116,12 @@ describe('userService.setTags()', () => {
         expect.fail('should have thrown an error');
     });
 
-    it('en cas d\'erreur dans l\'enregistrement des tags, rollback la transaction', async () => {
+    it('en cas d\'erreur dans l\'enregistrement des topics, rollback la transaction', async () => {
         const error = new Error('test');
-        userModel.setTags.rejects(error);
+        userModel.setExpertiseTopics.rejects(error);
 
         try {
-            await setTags(42, []);
+            await setExpertiseTopics(42, [], []);
         } catch (e) {
             expect(transaction.rollback).to.have.been.called;
             return;
@@ -135,7 +135,7 @@ describe('userService.setTags()', () => {
         userModel.findOne.rejects(error);
 
         try {
-            await setTags(42, []);
+            await setExpertiseTopics(42, [], []);
         } catch (e) {
             expect(e).to.be.an.instanceof(ServiceError);
             expect(e.code).to.be.equal('user_search_failure');
@@ -151,7 +151,7 @@ describe('userService.setTags()', () => {
         userModel.findOne.rejects(error);
 
         try {
-            await setTags(42, []);
+            await setExpertiseTopics(42, [], []);
         } catch (e) {
             expect(transaction.rollback).to.have.been.called;
             return;
@@ -165,7 +165,7 @@ describe('userService.setTags()', () => {
         transaction.commit.rejects(error);
 
         try {
-            await setTags(42, []);
+            await setExpertiseTopics(42, [], []);
         } catch (e) {
             expect(e).to.be.an.instanceof(ServiceError);
             expect(e.code).to.be.equal('transaction_failure');
@@ -181,7 +181,7 @@ describe('userService.setTags()', () => {
         transaction.commit.rejects(error);
 
         try {
-            await setTags(42, []);
+            await setExpertiseTopics(42, [], []);
         } catch (e) {
             expect(transaction.rollback).to.have.been.called;
             return;

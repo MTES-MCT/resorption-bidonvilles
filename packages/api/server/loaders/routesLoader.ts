@@ -236,7 +236,7 @@ export default (app) => {
         controllers.user.updatePermissionOptions,
     );
     app.put(
-        '/users/:id/tags',
+        '/users/:id/expertise_topics',
         middlewares.auth.authenticate,
         (req:express.Request & { user: User }, res:express.Response, next: Function) => {
             if (req.user.id === parseInt(req.params.id, 10)) {
@@ -246,9 +246,9 @@ export default (app) => {
             return middlewares.auth.checkPermissions(['user.edit'], req, res, next);
         },
         middlewares.appVersion.sync,
-        validators.user.setTags,
+        validators.user.setExpertiseTopics,
         middlewares.validation,
-        controllers.user.setTags,
+        controllers.user.setExpertiseTopics,
     );
     app.put(
         '/users/:id/admin_comments',
