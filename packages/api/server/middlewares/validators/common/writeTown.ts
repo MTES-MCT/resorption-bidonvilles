@@ -8,7 +8,7 @@ import fieldTypeModel from '#server/models/fieldTypeModel';
 import geoModel from '#server/models/geoModel';
 import ownerTypeModel from '#server/models/ownerTypeModel';
 import socialOriginModel from '#server/models/socialOriginModel';
-import { SocialOrigin } from '#root/types/resources/SocialOrigin';
+import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
 
 const { isLatLong, trim } = validator;
 const { can } = permissionUtils;

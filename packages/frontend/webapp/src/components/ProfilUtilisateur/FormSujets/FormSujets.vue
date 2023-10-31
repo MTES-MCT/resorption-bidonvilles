@@ -18,6 +18,7 @@
 
         <FormSujetsInputSujetsExpertise />
         <FormSujetsInputSujetsInteret />
+        <FormSujetsInputCommentaire />
 
         <ErrorSummary
             v-if="error || Object.keys(errors).length > 0"
@@ -42,6 +43,7 @@ import { setExpertiseTopics } from "@/api/users.api";
 import { Button, ErrorSummary, Icon } from "@resorptionbidonvilles/ui";
 import FormSujetsInputSujetsExpertise from "./inputs/FormSujetsInputSujetsExpertise.vue";
 import FormSujetsInputSujetsInteret from "./inputs/FormSujetsInputSujetsInteret.vue";
+import FormSujetsInputCommentaire from "./inputs/FormSujetsInputCommentaire.vue";
 
 // data
 const props = defineProps({
@@ -62,6 +64,7 @@ const { handleSubmit, setErrors, errors } = useForm({
         interest_topics: user.value.expertise_topics
             .filter((topic) => topic.type === "interest")
             .map((topic) => topic.uid),
+        expertise_comment: user.value.expertise_comment,
     },
 });
 const self = computed(() => {
@@ -77,7 +80,8 @@ const onSubmit = handleSubmit(async (values) => {
         const newValues = await setExpertiseTopics(
             user.value.id,
             values.expertise_topics,
-            values.interest_topics
+            values.interest_topics,
+            values.expertise_comment
         );
 
         if (self.value === true) {
@@ -85,6 +89,7 @@ const onSubmit = handleSubmit(async (values) => {
             Object.assign(userStore.user, {
                 expertise_topics_chosen: newValues.expertise_topics_chosen,
                 expertise_topics: newValues.expertise_topics,
+                expertise_comment: newValues.expertise_comment,
             });
         } else {
             accesStore.updateUser(
@@ -92,6 +97,7 @@ const onSubmit = handleSubmit(async (values) => {
                 Object.assign(user.value, {
                     expertise_topics_chosen: newValues.expertise_topics_chosen,
                     expertise_topics: newValues.expertise_topics,
+                    expertise_comment: newValues.expertise_comment,
                 })
             );
         }
