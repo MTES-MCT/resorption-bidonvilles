@@ -1,7 +1,7 @@
 /* eslint-disable newline-per-chained-call */
 import { param } from 'express-validator';
 import userModel from '#server/models/userModel';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { User } from '#root/types/resources/User.d';
 
 export default [
     param('id')
@@ -12,7 +12,7 @@ export default [
                 throw new Error('Vous ne pouvez pas réactiver votre propre accès');
             }
 
-            let user: SerializedUser;
+            let user: User;
             try {
                 user = await userModel.findOne(value);
             } catch (error) {

@@ -3,11 +3,11 @@ import { QuestionSummary } from '#server/models/activityModel/types/QuestionNati
 import mailsUtils from '#server/mails/mails';
 import moment from 'moment';
 import PromisePool from '@supercharge/promise-pool';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { User } from '#root/types/resources/User.d';
 
 const { sendActivitySummary } = mailsUtils;
 
-export default async (argFrom: Date, argTo: Date, questionSummary: QuestionSummary[], argSummaries: ActivityNationalSummary, subscribers: Array<SerializedUser>): Promise<any> => {
+export default async (argFrom: Date, argTo: Date, questionSummary: QuestionSummary[], argSummaries: ActivityNationalSummary, subscribers: Array<User>): Promise<any> => {
     const from = moment(argFrom);
     const to = moment(argTo);
 

@@ -1,6 +1,6 @@
 import userModel from '#server/models/userModel/index';
 import authUtils from '#server/utils/auth';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { User } from '#root/types/resources/User.d';
 import sendEmail from './mailer';
 import scheduler from './scheduler';
 
@@ -44,7 +44,7 @@ export default {
      *
      * @param {User} user
      */
-    async handleNewAccessRequest(user: SerializedUser): Promise<void> {
+    async handleNewAccessRequest(user: User): Promise<void> {
         const admins = await userModel.getAdminsFor(user);
 
         // notify user and admin

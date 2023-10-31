@@ -1,15 +1,15 @@
 import userService from '#server/services/user/index';
 import { Request, NextFunction, Response } from 'express';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { User } from '#root/types/resources/User.d';
 
 const ERRORS = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
 interface UserReactivateRequest extends Request {
-    user: SerializedUser,
+    user: User,
     body: {
-        user: SerializedUser;
+        user: User;
     };
 }
 

@@ -7,7 +7,7 @@ import userQuestionSubscriptionModel from '#server/models/userQuestionSubscripti
 import ServiceError from '#server/errors/ServiceError';
 import Answer from '#server/models/answerModel/Answer.d';
 import Question from '#server/models/questionModel/Question.d';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { User } from '#root/types/resources/User.d';
 
 type AnswerData = {
     description: string,
@@ -18,7 +18,7 @@ export type CreateAnswerServiceResponse = {
     subscribed: boolean,
 };
 
-export default async (answer: AnswerData, question: Question, author: SerializedUser): Promise<CreateAnswerServiceResponse> => {
+export default async (answer: AnswerData, question: Question, author: User): Promise<CreateAnswerServiceResponse> => {
     // on insère la réponse
     let answerId: number;
     try {

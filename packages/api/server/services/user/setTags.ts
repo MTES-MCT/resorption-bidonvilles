@@ -1,9 +1,9 @@
 import { sequelize } from '#db/sequelize';
 import userModel from '#server/models/userModel/index';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import ServiceError from '#server/errors/ServiceError';
+import { User } from '#root/types/resources/User.d';
 
-export default async (id: number, tags: string[]): Promise<SerializedUser> => {
+export default async (id: number, tags: string[]): Promise<User> => {
     const transaction = await sequelize.transaction();
 
     try {
@@ -20,7 +20,7 @@ export default async (id: number, tags: string[]): Promise<SerializedUser> => {
         throw new ServiceError('tags_save_failure', error);
     }
 
-    let user: SerializedUser;
+    let user: User;
     try {
         user = await userModel.findOne(id, {}, null, 'read', transaction);
     } catch (error) {
