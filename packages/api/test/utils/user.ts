@@ -1,7 +1,7 @@
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
+import { User } from '#root/types/resources/User.d';
 
-export function serialized(override: Partial<SerializedUser> = {}): AuthUser {
+export function serialized(override: Partial<User> = {}): AuthUser {
     const defaultUser: AuthUser = {
         id: 2,
         first_name: 'Jean',
@@ -60,9 +60,11 @@ export function serialized(override: Partial<SerializedUser> = {}): AuthUser {
         role: 'Acteur national',
         role_id: 'national_establisment',
         is_superuser: false,
-        tags_chosen: true,
-        tags: [
-            { uid: 'health', name: 'Santé' },
+        expertise_topics_chosen: true,
+        expertise_comment: null,
+        expertise_topics: [
+            { uid: 'sante', label: 'Santé', type: 'expertise' },
+            { uid: 'logement', label: 'Logement', type: 'interest' },
         ],
         access_request_message: 'Demande d\'accès pour tests automatisés',
         permissions: {

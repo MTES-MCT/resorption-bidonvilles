@@ -1,10 +1,10 @@
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import shantytownService from '#server/services/shantytown';
 import { TownInput } from '#server/services/shantytown/_common/serializeReport';
 import { Request, Response, NextFunction } from 'express';
+import { User } from '#root/types/resources/User.d';
 
 interface ReportTownRequest extends Request {
-    user: SerializedUser,
+    user: User,
     body: TownInput
 }
 

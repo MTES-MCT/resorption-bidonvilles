@@ -1,9 +1,9 @@
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import userService from '#server/services/user/index';
+import { User } from '#root/types/resources/User.d';
 
 export default async (req, res) => {
     // create the user
-    let result: SerializedUser;
+    let result: User;
     try {
         result = await userService.create(
             {

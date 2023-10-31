@@ -5,7 +5,7 @@ import express from 'express';
 import middlewares from '#server/middlewares';
 import controllersFn from '#server/controllers';
 import validators from '#server/middlewares/validators';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { User } from '#root/types/resources/User.d';
 
 const controllers = controllersFn();
 
@@ -238,7 +238,7 @@ export default (app) => {
     app.put(
         '/users/:id/tags',
         middlewares.auth.authenticate,
-        (req:express.Request & { user: SerializedUser }, res:express.Response, next: Function) => {
+        (req:express.Request & { user: User }, res:express.Response, next: Function) => {
             if (req.user.id === parseInt(req.params.id, 10)) {
                 return next();
             }
@@ -267,7 +267,7 @@ export default (app) => {
     app.delete(
         '/users/:id',
         middlewares.auth.authenticate,
-        (req:express.Request & { user: SerializedUser }, res:express.Response, next: Function) => {
+        (req:express.Request & { user: User }, res:express.Response, next: Function) => {
             if (req.user.id === parseInt(req.params.id, 10)) {
                 return next();
             }

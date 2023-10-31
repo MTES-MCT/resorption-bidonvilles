@@ -1,20 +1,11 @@
 import EMAIL_SUBSCRIPTIONS from '#server/config/email_subscriptions';
+import { PermissionHash } from '#server/models/permissionModel/find';
 import serializeUserAccess from './serializeUserAccess';
-import { SerializedUser, UserQuestionSubscriptions } from './types/SerializedUser';
+import { RawUser, UserQueryFilters } from './query.d';
+import { User, UserQuestionSubscriptions, UserExpertiseTopicType } from '#root/types/resources/User.d';
 
-/**
- * @typedef {Object} UserFilters
- * @property {Boolean} [extended=false] Whether extended data should be returned or not
- * @property {Boolean} [auth=false]     Whether auth data should be returned or not
- * @property {Boolean} [app=false]      Whether app version data should be returned or not
- *
- * Please find below the details about each filter:
- * - extended data is any data useful for the logged in user only. Typically, data that you
- *   would not need to display a user's profile page
- * - auth data is any private authentication material: password, salt...
- */
-export default (user, latestCharte, filters, permissionMap): SerializedUser => {
-    const serialized: SerializedUser = {
+export default (user: RawUser, latestCharte: number, filters: UserQueryFilters, permissionMap: PermissionHash): User => {
+    const serialized: User = {
         id: user.id,
         first_name: user.first_name,
         last_name: user.last_name,
@@ -73,10 +64,11 @@ export default (user, latestCharte, filters, permissionMap): SerializedUser => {
         role: user.user_role_admin_name || user.user_role_regular_name,
         role_id: user.user_role_admin || user.user_role_regular,
         is_superuser: user.user_role_admin === 'national_admin',
-        tags_chosen: user.tags_chosen,
-        tags: user.tags.map((tag: string) => {
-            const [uid, name]: string[] = tag.split(',');
-            return { uid, name };
+        expertise_topics_chosen: user.expertise_topics_chosen,
+        expertise_comment: user.expertise_comment,
+        expertise_topics: user.topics.map((topic) => {
+            const [uid, label, type] = topic.split(',');
+            return { uid, label, type: type as UserExpertiseTopicType };
         }),
     };
 
