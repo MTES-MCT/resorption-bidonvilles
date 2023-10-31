@@ -615,7 +615,7 @@ router.beforeEach((to, from) => {
     // tags selection requirement
     if (
         userStore.user &&
-        userStore.user.tags_chosen !== true &&
+        userStore.user.expertise_topics_chosen !== true &&
         !["/choix-des-themes", "/signature-charte-engagement"].includes(to.path)
     ) {
         const navigationStore = useNavigationStore();

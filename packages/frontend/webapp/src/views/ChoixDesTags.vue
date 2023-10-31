@@ -27,23 +27,34 @@
                             personnalisés et donc adaptés à vos besoins.
                         </p>
                         <p class="mt-2">
-                            Cette sélection est parfaitement
-                            <span class="font-bold">optionnelle</span>, peut
-                            être modifiée à tout moment depuis votre page "Mon
-                            profil", et n'a pour but que d'améliorer votre
-                            expérience sur la plateforme.
+                            Cette sélection peut être modifiée à tout moment
+                            depuis la page "Mon profil".
                         </p>
                     </div>
                     <CheckableGroup
-                        label="Sujets disponibles"
-                        id="tags"
+                        label="Sélectionnez vos sujets de compétences :"
+                        id="expertise_topics"
                         class="mt-4"
+                        direction="horizontal"
                     >
                         <CheckboxUi
-                            v-for="tag in configStore.config.question_tags"
-                            v-model="selectedTags[tag.uid]"
+                            v-for="tag in configStore.config.expertise_topics"
+                            v-model="selectedExpertise[tag.uid]"
                             :key="tag.uid"
-                            :label="tag.name"
+                            :label="tag.label"
+                        />
+                    </CheckableGroup>
+                    <CheckableGroup
+                        label="Au delà de vos compétences, quels domaines vous intéressent ?"
+                        id="interests_topics"
+                        class="mt-4"
+                        direction="horizontal"
+                    >
+                        <CheckboxUi
+                            v-for="tag in configStore.config.expertise_topics"
+                            v-model="selectedInterests[tag.uid]"
+                            :key="tag.uid"
+                            :label="tag.label"
                         />
                     </CheckableGroup>
                     <ErrorSummary
@@ -70,7 +81,7 @@
     min-height: 50vh;
     max-height: 60vh;
     @apply max-w-2xl;
-    overflow: hidden;
+    overflow: auto;
 }
 </style>
 
@@ -96,7 +107,8 @@ const configStore = useConfigStore();
 const pending = ref(false);
 const error = ref(null);
 const errorSummary = ref(null);
-const selectedTags = ref({});
+const selectedExpertise = ref({});
+const selectedInterests = ref({});
 
 async function validate() {
     if (pending.value === true) {
@@ -112,12 +124,12 @@ async function validate() {
 
         const updatedUser = await selectTags(
             userStore.id,
-            Object.keys(selectedTags.value).filter((tag) => {
-                return selectedTags.value[tag] === true;
+            Object.keys(selectedExpertise.value).filter((tag) => {
+                return selectedExpertise.value[tag] === true;
             })
         );
-        configStore.config.user.tags_chosen = true;
-        configStore.config.user.tags = updatedUser.tags;
+        configStore.config.user.expertise_topics_chosen = true;
+        configStore.config.user.expertise_topics = updatedUser.expertise_topics;
 
         router.replace("/");
     } catch (e) {
