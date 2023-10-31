@@ -1,12 +1,12 @@
 import ServiceError from '#server/errors/ServiceError';
 import questionModel from '#server/models/questionModel';
-import Question from '#server/models/questionModel/Question.d';
 import QuestionInput from '#server/models/questionModel/QuestionInput.d';
 import userModel from '#server/models/userModel';
 import mails from '#server/mails/mails';
 import config from '#server/config';
 import { sequelize } from '#db/sequelize';
 import userQuestionSubscriptionModel from '#server/models/userQuestionSubscriptionModel';
+import { Question } from '#root/types/resources/Question.d';
 
 type AuthorData = {
     id: number

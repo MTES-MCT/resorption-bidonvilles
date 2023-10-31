@@ -2,9 +2,9 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes, Transaction } from 'sequelize';
 import serializeQuestion from './serializeQuestion';
 import QuestionRow from './QuestionRow.d';
-import Question from './Question';
+import { Question } from '#root/types/resources/Question.d';
 
-export default async (id: number, transaction?: Transaction): Promise<Question | null> => {
+export default async (id: number, transaction?: Transaction): Promise<Question> => {
     const rows: QuestionRow[] = await sequelize.query(
         `
         WITH aggregate_question_tags AS (

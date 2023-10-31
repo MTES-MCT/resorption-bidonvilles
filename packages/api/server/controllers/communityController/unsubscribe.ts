@@ -1,7 +1,7 @@
 import questionService from '#server/services/question';
-import Question from '#server/models/questionModel/Question.d';
 import { Request, NextFunction, Response } from 'express';
 import { User } from '#root/types/resources/User.d';
+import { Question } from '#root/types/resources/Question.d';
 
 interface UnsubscribeQuestionRequest extends Request {
     params: {

@@ -1,12 +1,10 @@
 import ShantytownComment from '#server/models/shantytownCommentModel/ShantytownComment.d';
 import { LocationType } from '#server/models/geoModel/LocationType.d';
 import { Diff } from '#server/models/shantytownModel/_common/getDiff';
-import QuestionTag from '#server/models/questionModel/QuestionTag.d';
+import { QuestionTag } from '#root/types/resources/Question.d';
 import { LocationDetails, CityLocationDetails } from '../../server/models/locationModel/LocationDetails.d';
 
 // local types
-
-
 type ActivityShantytown = {
     id: number,
     usename: string,

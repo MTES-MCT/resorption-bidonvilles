@@ -1,27 +1,30 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import dateUtils from '#server/utils/date';
+import { RawChangelog } from './getChangelogFor.d';
+import { Changelog } from '#root/types/resources/Changelog.d';
+import { User } from '#root/types/resources/User.d';
 
 const { toFormat } = dateUtils;
 
-function serializeChangelog(changelogItem) {
+function serializeChangelog(changelogItem: RawChangelog): Changelog {
     const [year, month, date] = changelogItem.date.split('-');
 
     return {
         app_version: changelogItem.app_version,
-        date: toFormat(new Date(year, parseInt(month, 10) - 1, date), 'd M Y'),
+        date: toFormat(new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(date, 10)), 'd M Y'),
         title: changelogItem.title,
         description: changelogItem.description,
         image: changelogItem.image,
     };
 }
 
-export default async (user) => {
+export default async (user: User): Promise<Changelog[]> => {
     if (user.last_changelog === null || user.last_version === null) {
         return [];
     }
 
-    const changelog = await sequelize.query(
+    const changelog: RawChangelog[] = await sequelize.query(
         `SELECT
             changelogs.app_version,
             changelogs.date,
