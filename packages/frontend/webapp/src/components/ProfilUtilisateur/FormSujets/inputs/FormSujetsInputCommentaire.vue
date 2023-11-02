@@ -1,12 +1,8 @@
 <template>
-    <TextArea
-        id="expertise_comment"
-        :label="labels.expertise_comment"
-        :rows="8"
-    />
+    <TextInput id="expertise_comment" :label="labels.expertise_comment" />
 </template>
 
 <script setup>
-import { TextArea } from "@resorptionbidonvilles/ui";
+import { TextInput } from "@resorptionbidonvilles/ui";
 import labels from "../FormSujets.labels";
 </script>
