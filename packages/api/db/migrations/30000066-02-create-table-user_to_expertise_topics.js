@@ -19,6 +19,7 @@ module.exports = {
                     type: {
                         type: Sequelize.ENUM('expertise', 'interest'),
                         allowNull: false,
+                        primaryKey: true,
                     },
                     created_at: {
                         type: Sequelize.DATE,
