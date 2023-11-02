@@ -98,7 +98,7 @@ const peopleWithSolutions = computed(() => {
     return ((total / town.value.populationTotal) * 100).toFixed(0);
 });
 
-const { handleSubmit, setErrors } = useForm({
+const { handleSubmit, setErrors, isSubmitting } = useForm({
     validationSchema: schema,
     initialValues: {
         closed_at: town.value.closedAt
@@ -194,5 +194,6 @@ defineExpose({
             }
         }
     }),
+    isSubmitting,
 });
 </script>

@@ -5,7 +5,7 @@
             <Button variant="primaryOutline" type="button" @click="back"
                 >Annuler</Button
             >
-            <Button @click="submit"
+            <Button @click="submit" :loading="form?.isSubmitting"
                 >Envoyer l'information aux administrateurs</Button
             >
         </template>

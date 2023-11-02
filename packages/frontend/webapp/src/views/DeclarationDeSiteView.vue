@@ -5,7 +5,9 @@
             <Button variant="primaryOutline" type="button" @click="back"
                 >Annuler</Button
             >
-            <Button @click="submit">Déclarer le site</Button>
+            <Button @click="submit" :loading="form?.isSubmitting"
+                >Déclarer le site</Button
+            >
         </template>
 
         <ContentWrapper size="large">

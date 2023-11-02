@@ -42,7 +42,7 @@ import FormNouvelleQuestionInputDetails from "./inputs/FormNouvelleQuestionInput
 import FormNouvelleQuestionInputTags from "./inputs/FormNouvelleQuestionInputTags.vue";
 import FormNouvelleQuestionInputOtherTag from "./inputs/FormNouvelleQuestionInputOtherTag.vue";
 
-const { handleSubmit, setErrors, errors } = useForm({
+const { handleSubmit, setErrors, errors, isSubmitting } = useForm({
     validationSchema: schema,
     initialValues: {
         question: router.currentRoute.value.query?.resume || "",
@@ -87,5 +87,6 @@ defineExpose({
             }
         }
     }),
+    isSubmitting,
 });
 </script>

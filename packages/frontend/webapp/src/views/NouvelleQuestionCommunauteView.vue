@@ -6,7 +6,9 @@
             <Button variant="primaryOutline" type="button" @click="back"
                 >Annuler</Button
             >
-            <Button @click="submit">Publier</Button>
+            <Button @click="submit" :loading="form?.isSubmitting"
+                >Publier</Button
+            >
         </template>
 
         <ContentWrapper size="large">
