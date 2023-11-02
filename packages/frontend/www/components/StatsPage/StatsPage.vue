@@ -193,9 +193,15 @@ const usersEvolutionData = computed(() => {
     return {
         labels: numberOfNewUsersPerMonth.value.map(({ month }) => month),
         datasets: [{
-            label: "Nombre d'utilisateurs",
+            label: "Nombre d'utilisateurs inscrits",
             data: cumulativeData,
             fill: true
+        }, {
+            label: "Nombre d'utilisateurs actifs",
+            data: stats.value.numberOfActiveUsersPerMonth.map(({ total }) => total),
+            fill: true,
+            borderColor: '#BFBFE3',
+            backgroundColor: '#BFBFE3',
         }],
     };
 });

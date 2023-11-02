@@ -4,6 +4,7 @@ import getStats from './getStats';
 import meanTimeBeforeClosingDeclaration from './meanTimeBeforeClosingDeclaration';
 import meanTimeBeforeCreationDeclaration from './meanTimeBeforeCreationDeclaration';
 import numberOfActiveUsers from './numberOfActiveUsers';
+import numberOfActiveUsersPerMonth from './numberOfActiveUsersPerMonth';
 import numberOfClosedShantytownsPerMonth from './numberOfClosedShantytownsPerMonth';
 import numberOfCollaboratorAndAssociationOrganizations from './numberOfCollaboratorAndAssociationOrganizations';
 import numberOfCollaboratorAndAssociationUsers from './numberOfCollaboratorAndAssociationUsers';
@@ -36,6 +37,7 @@ export default {
     meanTimeBeforeClosingDeclaration,
     meanTimeBeforeCreationDeclaration,
     numberOfActiveUsers,
+    numberOfActiveUsersPerMonth,
     numberOfClosedShantytownsPerMonth,
     numberOfCollaboratorAndAssociationOrganizations,
     numberOfCollaboratorAndAssociationUsers,
