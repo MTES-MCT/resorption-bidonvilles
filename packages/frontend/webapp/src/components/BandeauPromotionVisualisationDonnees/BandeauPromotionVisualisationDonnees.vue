@@ -14,7 +14,7 @@
                     class="tracking-wide text-display-md font-bold text-primary"
                 >
                     <TagNouveau />
-                    <br />Tout ce que vous voulez savoir sur les bidonvilles !
+                    <br />Espace de visualisation des données
                 </div>
             </header>
 
