@@ -4,7 +4,7 @@ export default {
     emploi: 'Formation et emploi',
     logement: 'Logement',
     mediation_sociale: 'Médiation sociale',
-    securite: 'Stabilisation et sécurisation du site',
+    securite: 'Sécurisation des conditions de vie',
     humanitaire: 'Aides humanitaires',
     diagnostic: 'Diagnostic',
     pilotage: 'Pilotage et coordination',
