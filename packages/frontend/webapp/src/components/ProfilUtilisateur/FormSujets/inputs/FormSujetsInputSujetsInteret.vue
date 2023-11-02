@@ -7,6 +7,7 @@
             :label="item.label"
             name="interest_topics"
             v-model="values.interest_topics"
+            variant="checkbox"
         />
     </CheckableGroup>
 </template>

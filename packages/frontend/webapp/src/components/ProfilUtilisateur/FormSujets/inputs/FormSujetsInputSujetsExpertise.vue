@@ -7,6 +7,7 @@
             :label="item.label"
             name="expertise_topics"
             v-model="values.expertise_topics"
+            variant="checkbox"
         />
     </CheckableGroup>
 </template>
