@@ -8,7 +8,11 @@ export default async (startDateStr = '2020-06-01') => {
     const now = new Date();
     const limit = new Date(now.getFullYear(), now.getMonth() - 7, 1);
 
-    const rows = await sequelize.query(
+    const rows: {
+        year: string;
+        month: string;
+        total: string;
+    }[] = await sequelize.query(
         `SELECT
             EXTRACT(YEAR FROM ua.used_at) AS year,
             EXTRACT(MONTH FROM ua.used_at) AS month,
