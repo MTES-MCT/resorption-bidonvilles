@@ -1,13 +1,12 @@
 <template>
     <Dropdown>
         <template v-slot:button="{ isOpen }">
-            <Button variant="custom" size="sm" :icon="isOpen ? 'chevron-up' : 'chevron-down'" iconPosition="right"
-                :class="[
-                    'px-4 rounded focus:outline-none border-1 border-primary whitespace-nowrap',
-                    isOpen || checkedIds.length > 0
-                        ? 'bg-primary text-white hover:text-white focus:text-white'
-                        : 'hover:bg-blue200 hover:text-primary text-primary',
-                ]">
+            <Button variant="custom" size="sm" :icon="isOpen ? 'chevron-up' : 'chevron-down'" iconPosition="right" :class="[
+                'px-4 rounded focus:outline-none border-1 border-primary whitespace-nowrap',
+                isOpen || checkedIds.length > 0
+                    ? 'bg-primary text-white hover:text-white focus:text-white'
+                    : 'hover:bg-blue200 hover:text-primary text-primary',
+            ]">
                 <p class="flex items-center justify-between space-x-2">
                     <span class="block w-4 h-4 bg-white text-primary text-center leading-4 rounded-full"
                         v-if="checkedIds.length">{{
@@ -23,8 +22,8 @@
             <Menu containerClasses="py-0">
                 <div v-for="option in options" :key="option.id"
                     class="flex items-center whitespace-nowrap text-sm menuWidth">
-                    <Checkbox :disabled="disabled" v-model="checked[option.value]" variant="invisible"
-                        :label="option.label" direction="col">
+                    <Checkbox :disabled="disabled" v-model="checked[option.value]" variant="invisible" :label="option.label"
+                        direction="col">
                     </Checkbox>
                 </div>
 
@@ -49,7 +48,6 @@ import { defineProps, toRefs, computed, defineEmits, ref, watch } from "vue";
 import Button from "./Button.vue";
 import Checkbox from "./Input/CheckboxUi.vue";
 import Dropdown from "./Dropdown.vue";
-import Icon from "./Icon.vue";
 import Menu from "./Menu/Menu.vue";
 import isDeepEqual from "../utils/isDeepEqual";
 
