@@ -1,43 +1,72 @@
 <template>
     <template v-if="variant === 'checkbox'">
-        <label class="flex">
+        <label class="flex cursor-pointer">
             <input id="variant-checkbox" ref="checkbox" @click="onChange(value)"
                 class="inline-block rounded mr-2 text-center" type="checkbox" :checked="checked" />
             {{ label }}
         </label>
     </template>
-
     <template v-else-if="variant === 'invisible'">
-        <label class="flex items-center justify-between w-full hover:bg-blue200 py-2 px-3 text-primary cursor-pointer">
-            <div class="flex-2">
-                {{ label }}
-            </div>
-
-            <input id="variant-invisible" ref="checkbox" @click="onChange(value)"
-                class="inline-block rounded mr-2 text-center" type="checkbox" :checked="checked" />
-
-        </label>
+        <div class="flex items-center justify-between w-full hover:bg-blue200 px-3 text-primary">
+            <label class="flex items-center justify-between w-full hover:bg-blue200 py-2 pr-4 text-primary cursor-pointer">
+                <input id="variant-invisible" ref="checkbox" @click="onChange(value)" class="appearance-none"
+                    type="checkbox" :checked="checked" />
+                <div class="flex-1">
+                    {{ label }}
+                </div>
+                <div class="ml-4">
+                    <Icon v-if="checked" class="text-primary font-bold text-md" icon="fa-solid fa-check" />
+                </div>
+            </label>
+        </div>
     </template>
 
     <template v-else-if="variant === 'toggle'">
-        <label class="flex">
-            <input id="variant-toggle" @click="onChange(value)" class="inline-block rounded mr-2 text-center"
-                type="checkbox" :checked="checked" />
-            {{ label }}
-        </label>
+        <div role="button" class="mb-1">
+            <label v-if="checked" class="flex space-x-2 items-center shrink-0">
+                <p
+                    class="rounded-2xl w-11 h-6 flex shrink-0 items-center px-px border border-primary justify-end bg-primary">
+                    <input id="variant-toggle" @click="onChange(value)" class="appearance-none" type="checkbox"
+                        :checked="checked" />
+                    <span class="absolute rounded-full bg-white inline-block text-center text-sm text-primary h-5 w-5">
+                        <span class="inline-block">
+                            <i class="fa-solid fa-check" aria-hidden="false"></i>
+                        </span>
+                    </span>
+                </p>
+                <p>
+                    {{ label }}
+                </p>
+            </label>
+            <label v-else class="flex space-x-2 items-center shrink-0">
+                <p class="rounded-2xl w-11 h-6 flex shrink-0 items-center px-px border border-primary justify-start">
+                    <input id="variant-toggle" @click="onChange(value)" class="appearance-none" type="checkbox"
+                        :checked="checked" />
+                    <span
+                        class="absolute rounded-full bg-white inline-block text-center text-sm text-primary -ml-1 h-6 w-6 border border-primary">
+                        <span class="inline-block">
+                            <i class="fa-solid fa-check" aria-hidden="false"></i>
+                        </span>
+                    </span>
+                </p>
+                <p>
+                    {{ label }}
+                </p>
+            </label>
+
+        </div>
     </template>
 
     <template v-else>
-        <label class="inline-block px-4 py-1 border border-2 border-blue200 " :class="[
+        <label class="cursor-pointer inline-block px-2 py-1 border border-2 border-blue200" :class="[
             checked
                 ? 'bg-blue500 text-white border-blue500'
                 : 'bg-blue200 text-primary',
             isSubmitting ? 'opacity-50' : 'hover:border-blue500',
         ]">
-            <input @click="onChange(value)" class="inline-block rounded mr-2 text-center cursor-pointer" type="checkbox"
-                :checked="checked" />
-            <Icon class="mr-2 custom-checkbox-icon text-white border-G800 hover:border-G600"
-                :icon="checked ? 'fa-solid fa-square-check' : 'fa-solid fa-square'" />
+            <input @click="onChange(value)" class="appearance-none inline-block rounded mr-2 text-center cursor-pointer"
+                type="checkbox" :checked="checked" />
+            <Icon class="mr-2 text-white" :icon="checked ? 'fa-solid fa-square-check' : 'fa-solid fa-square'" />
             {{ label }}
         </label>
     </template>
@@ -98,68 +127,3 @@ const checkboxStyle = computed(() => {
     return 'bg-white hover:border-G400';
 });
 </script>
-
-<style scoped>
-input[type=checkbox] {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    -o-appearance: none;
-
-}
-
-#variant-checkbox,
-#variant-invisible[type=checkbox] {
-    content: none;
-    width: 24px;
-    height: 24px;
-    font-size: 15px;
-    display: block;
-    color: black;
-}
-
-#variant-checkbox,
-#variant-invisible[type=checkbox]:before {
-    font-family: "Font Awesome 5 Pro";
-    content: "\f00c";
-    color: transparent !important;
-}
-
-
-#variant-checkbox[type=checkbox]:checked:before {
-    font-family: "Font Awesome 5 Pro";
-    content: "\f00c";
-    color: #000091 !important;
-}
-
-#variant-invisible[type=checkbox]:checked:before {
-    color: #000091 !important;
-}
-
-#variant-checkbox[type=checkbox] {
-    @apply border-2 border-G400 hover:border-primary cursor-pointer
-}
-
-
-
-#variant-toggle[type=checkbox] {
-    @apply rounded-2xl w-11 h-6 flex shrink-0 items-center px-px border border-primary justify-start;
-}
-
-#variant-toggle[type=checkbox]:before {
-    font-family: "Font Awesome 5 Pro";
-    content: "\f00c";
-    @apply absolute h-6 w-6 rounded-full border border-primary inline-block text-center text-sm text-primary bg-white;
-}
-
-#variant-toggle[type=checkbox]:checked:before {
-    @apply h-5 w-5;
-}
-
-#variant-toggle[type=checkbox]:checked {
-    @apply bg-primary border-primary hover:border-primary justify-end;
-}
-
-#variant-toggle[type=checkbox] {
-    @apply bg-white cursor-pointer
-}
-</style>
