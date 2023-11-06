@@ -32,7 +32,9 @@
             <Button variant="primaryOutline" type="button" @click="back"
                 >Annuler</Button
             >
-            <Button @click="submit">Mettre à jour le site</Button>
+            <Button @click="submit" :loading="form?.isSubmitting"
+                >Mettre à jour le site</Button
+            >
         </template>
 
         <ContentWrapper size="large">

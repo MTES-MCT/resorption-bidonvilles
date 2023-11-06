@@ -8,7 +8,8 @@ export default async (organizationId, data) => {
                 organizations
             SET
                 being_funded = :being_funded,
-                being_funded_at = :being_funded_at
+                being_funded_at = :being_funded_at,
+                updated_at = NOW()
             WHERE
                 organizations.organization_id = ${organizationId}`,
             {

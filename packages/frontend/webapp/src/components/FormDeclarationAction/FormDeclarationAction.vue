@@ -67,7 +67,7 @@ const mode = computed(() => {
     return action.value === null ? "create" : "edit";
 });
 const validationSchema = schemaFn(mode.value);
-const { handleSubmit, values, errors, setErrors } = useForm({
+const { handleSubmit, values, errors, setErrors, isSubmitting } = useForm({
     validationSchema,
     initialValues: formatFormAction(
         action.value || {
@@ -237,5 +237,6 @@ defineExpose({
             }
         }
     }),
+    isSubmitting,
 });
 </script>
