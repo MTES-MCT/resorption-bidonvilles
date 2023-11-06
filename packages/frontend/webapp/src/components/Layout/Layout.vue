@@ -1,6 +1,10 @@
 <template>
+    <SkipToMainContentLink />
     <NavBar />
-    <main :class="!hero && !$slots.banner && paddingTop ? 'pt-12' : ''">
+    <main
+        id="main-content"
+        :class="!hero && !$slots.banner && paddingTop ? 'pt-12' : ''"
+    >
         <div
             v-if="hero"
             class="h-44 bg-G300 text-white text-3xl sm:text-4xl lg:text-5xl bg-illustration"
@@ -44,9 +48,14 @@
 <script setup>
 import ENV from "@/helpers/env.js";
 import { defineProps, toRefs } from "vue";
-import NavBar from "@/components/NavBar/NavBar.vue";
-import { ContentWrapper, FooterBar } from "@resorptionbidonvilles/ui";
 import { useUserStore } from "@/stores/user.store.js";
+
+import NavBar from "@/components/NavBar/NavBar.vue";
+import {
+    ContentWrapper,
+    FooterBar,
+    SkipToMainContentLink,
+} from "@resorptionbidonvilles/ui";
 
 const { WWW_URL, CONTACT_EMAIL } = ENV;
 const userStore = useUserStore();
