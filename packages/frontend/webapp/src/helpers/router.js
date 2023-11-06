@@ -207,7 +207,7 @@ const router = createRouter({
             path: "/choix-des-sujets",
             component: () => import("@/views/ChoixDesSujetsExpertise.vue"),
             meta: {
-                title: "Choisir ses sujets d'expertise et intérêt",
+                title: "Choisir ses domaines de compétence et sujets d'intérêt",
                 authRequirement: "signedIn",
             },
         },
@@ -318,7 +318,7 @@ const router = createRouter({
             redirect: "/mon-compte/informations-personnelles",
         },
         {
-            path: "/mon-compte/:tab(informations-personnelles|identifiants|abonnements|desactiver-compte|sujets-interets)",
+            path: "/mon-compte/:tab(informations-personnelles|identifiants|abonnements|desactiver-compte|domaines-competence)",
             component: () => import("@/views/MonCompteView.vue"),
             meta: {
                 title: "Modifier les informations liées à mon compte",
@@ -507,7 +507,7 @@ const router = createRouter({
             },
         },
         {
-            path: "/utilisateur/:id/:tab(informations-personnelles|identifiants|abonnements|sujets-interets)",
+            path: "/utilisateur/:id/:tab(informations-personnelles|identifiants|abonnements|domaines-competence)",
             component: () => import("@/views/ProfilUtilisateurView.vue"),
             meta: {
                 title: "Consulter, modifier un compte utilisateur",

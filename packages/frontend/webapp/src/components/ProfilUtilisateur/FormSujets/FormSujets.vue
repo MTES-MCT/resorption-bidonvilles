@@ -4,10 +4,10 @@
             <p><Icon icon="circle-info" class="text-primary" /></p>
             <div>
                 <p>
-                    En sélectionnant vos sujets d'intérêts ci-dessous, la
-                    plateforme évoluera afin de vous offrir une interface, des
-                    outils, et du contenu plus personnalisés et donc adaptés à
-                    vos besoins.
+                    En sélectionnant vos domaines de compétence et sujets
+                    d'intérêt ci-dessous, la plateforme évoluera afin de vous
+                    offrir une interface, des outils, et du contenu plus
+                    personnalisés et donc adaptés à vos besoins.
                 </p>
                 <p class="mt-2">
                     Cette sélection peut être modifiée à tout moment et n'a pour
@@ -104,8 +104,8 @@ const onSubmit = handleSubmit(async (values) => {
 
         const notificationStore = useNotificationStore();
         notificationStore.success(
-            "Sujets d'intérêts",
-            "Les sujets d'intérêts ont bien été modifiées"
+            "Domaines de compétence",
+            "Les domaines de compétence ont bien été modifiées"
         );
     } catch (e) {
         error.value = e?.user_message || "Une erreur inconnue est survenue";

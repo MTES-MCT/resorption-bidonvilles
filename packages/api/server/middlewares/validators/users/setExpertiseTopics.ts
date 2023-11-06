@@ -32,18 +32,18 @@ export default [
 
             return value;
         })
-        .isArray().bail().withMessage('Le champ "Sujets de compétences" doit être une liste')
+        .isArray().bail().withMessage('Le champ "Domaines de compétence" doit être une liste')
         .custom(async (value, { req }) => {
             if (value.length > 0) {
                 try {
                     req.fullTopics = await expertiseTopicsModel.findAll();
                 } catch (error) {
-                    throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Sujets de compétences"');
+                    throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Domaines de compétence"');
                 }
 
                 const topicUids:string[] = req.fullTopics.map((topic: ExpertiseTopic) => topic.uid);
                 if (!value.every((topic => topicUids.includes(topic)))) {
-                    throw new Error('Certains sujets de compétence sélectionnés n\'existent pas en base de données');
+                    throw new Error('Certains domaines de compétence sélectionnés n\'existent pas en base de données');
                 }
             }
 

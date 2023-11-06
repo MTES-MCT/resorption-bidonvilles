@@ -18,8 +18,8 @@ export default [
         component: FormIdentifiants,
     },
     {
-        id: "sujets-interets",
-        label: "Sujets d'intérêts",
+        id: "domaines-competence",
+        label: "Domaines de compétence",
         component: FormSujets,
     },
     {
