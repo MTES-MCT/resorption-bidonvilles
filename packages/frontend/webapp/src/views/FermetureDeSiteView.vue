@@ -32,7 +32,9 @@
             <Button variant="primaryOutline" type="button" @click="back"
                 >Annuler</Button
             >
-            <Button @click="submit">{{ submitWording }}</Button>
+            <Button @click="submit" :loading="form?.isSubmitting">{{
+                submitWording
+            }}</Button>
         </template>
 
         <ContentWrapper size="intermediate">
