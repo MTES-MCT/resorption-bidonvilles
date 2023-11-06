@@ -3,7 +3,7 @@
         <ContentWrapper>
             <h2 class="text-xl font-bold text-red">Nouveau !</h2>
             <h2 class="text-xl font-bold">
-                Quels sont vos sujets d'intérêt ou d'expertise ?
+                Quels sont vos domaines de compétence ou sujets d'intérêt ?
             </h2>
         </ContentWrapper>
 
