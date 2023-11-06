@@ -214,7 +214,7 @@ describe('configService.fetch()', () => {
             expect(e).to.be.an.instanceOf(ServiceError);
             expect(e.message).to.be.eql('whatever');
             expect(e.nativeError).to.be.eql(error);
-            return true;
+            return;
         }
 
         expect.fail('ServiceError non lancée');
