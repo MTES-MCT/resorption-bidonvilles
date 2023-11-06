@@ -9,7 +9,8 @@ export default async (id: number, transaction: Transaction = undefined): Promise
             fk_status = CASE
                 WHEN users.password IS NULL THEN 'new'
                 ELSE 'active'
-            END
+            END,
+            updated_at = NOW()
         WHERE
             user_id = :id
         `,

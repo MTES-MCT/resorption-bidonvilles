@@ -7,7 +7,7 @@ export default async (organizationId, argTransaction = undefined) => {
     }
 
     try {
-        const response = await sequelize.query('UPDATE organizations SET active = TRUE WHERE organization_id = :organizationId', {
+        const response = await sequelize.query('UPDATE organizations SET active = TRUE, updated_at = NOW() WHERE organization_id = :organizationId', {
             replacements: {
                 organizationId,
             },

@@ -39,7 +39,8 @@ export default async (userId, values, transaction = undefined) => {
             `UPDATE
                 users
             SET
-                ${setClauses.join(',')}
+                ${setClauses.join(',')},
+                updated_at = NOW()
             WHERE
                 users.user_id = :userId`,
             {
