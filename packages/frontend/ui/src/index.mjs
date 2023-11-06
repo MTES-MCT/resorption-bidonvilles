@@ -40,6 +40,7 @@ export { default as PanneauLateral } from './components/PanneauLateral.vue';
 export { default as PasswordInput } from './components/Input/PasswordInput.vue';
 export { default as Select } from './components/Input/Select.vue';
 export { default as SelectUi } from './components/Input/SelectUi.vue';
+export { default as SkipToMainContentLink } from './components/SkipToMainContentLink.vue';
 export { default as Sort } from './components/Sort.vue';
 export { default as SubQuestionWrapper } from "./components/Input/SubQuestionWrapper.vue";
 export { default as TabList } from './components/TabList/TabList.vue';
