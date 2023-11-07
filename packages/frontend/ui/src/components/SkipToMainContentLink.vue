@@ -1,36 +1,15 @@
 <template>
-    <div class="rb-skiplinks">
+    <div class="bg-G300 p-4 absolute top-0 -translate-y-full focus-within:relative focus-within:translate-y-0">
         <nav role="navigation" aria-label="Accès rapide">
             <ul>
                 <li>
-                    <a id="skiplink__contenu" href="#main-content" class="rb-link">Aller au contenu
+                    <a id="skiplink__contenu" href="#main-content"
+                        class="text-primary text-base leading-6 focus:outline-none">Aller au
+                        contenu
                         principal</a>
                 </li>
             </ul>
         </nav>
     </div>
 </template> 
-<style scoped>
-.rb-skiplinks {
-    background-color: #e7e7e7;
-    padding: 1em;
-    position: absolute;
-    top: 0;
-    transform: translateY(-100%)
-}
 
-.rb-skiplinks:focus-within {
-    position: relative;
-    transform: translateY(0)
-}
-
-.rb-link {
-    color: #000091;
-    font-size: 1rem;
-    line-height: 1.5rem;
-}
-
-.rb-link:focus {
-    outline: none;
-}
-</style>
