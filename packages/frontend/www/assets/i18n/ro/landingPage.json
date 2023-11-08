@@ -28,28 +28,8 @@
     "beforeImageTitle": "Înainte de existența platformei \"Résorption-Bidonvilles\", ",
     "beforeImageTranscription1": "operatorul vorbea în fiecare lună cu o persoană de contact din cadrul DDCS. Aceasta din urmă îi raporta apoi corespondentului.",
     "beforeImageTranscription2": "Înainte de existența platformei \"Resorption-Bidonvilles\", autoritățile locale vorbeau cu prefectura în fiecare săptămână. Prefecții raportau apoi corespondentului.",
-    "beforeImageTitle": "Cu ajutorul platformei \"Résorption-Bidonvilles\", ",
+    "afterImageTitle": "Cu ajutorul platformei \"Résorption-Bidonvilles\", ",
     "afterImageTranscription": "toți actorii (operator, prefectură, autorități locale, corespondent, DDCS) fac schimb de informații direct și în timp real cu actorii implicați în schimburi.",
-    "feedback": {
-      "title": "Mărturii ale utilizatorilor",
-      "1": {
-        "label": "Prima recomandare",
-        "text": "Este foarte bine pentru că aveți informațiile online, nu vă confruntați cu un tabel Excel cu coduri pe care nu le înțelegeți.",
-        "author": "Prefectura Seine-Saint-Denis"
-      },
-      "2": {
-        "label": "A doua recomandare",
-        "text": "Platforma a făcut informațiile mai accesibile, deoarece tabelul Excelnu era partajat. Cu cât avem mai multeinstrumente de colaborare, cu atât mai bine.",
-        "author": "Orașul Poitiers"
-      },
-      "3": {
-        "label": "A treia recomandare ",
-        "text": "Am fost în măsură să direcționez familia unei persoane pe care o acomapaniez la o casă de solidaritate de la locația lor situata într-un bidonville.",
-        "author": "Asociația din Haute-Garonne"
-      },
-      "carousel_start": "Derulați prin mărturii",
-      "carousel_stop": "Întrerupeți derularea"
-    },
     "video": {
       "text": "Descoperiți Résorption-bidonvilles în 1 minut",
       "transcription_part1": "Platforma \"Résorption-Bidonvilles\" dispune de o hartă interactivă, care vă permite să căutați un sit după adresă.",

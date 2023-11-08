@@ -107,7 +107,6 @@
                         {{ $t("landingPage.firstSection.afterImageTranscription") }}</p>
                 </LandingPageContextImage>
             </div>
-            <LandingPageUserFeedback class="mt-32" />
         </div>
         <div class="pt-24" v-if="$i18n.locale === 'fr'">
             <div class="max-w-screen-lg mx-auto">
@@ -133,7 +132,6 @@
 import { ref } from "vue";
 import LandingPageFeatureBlock from "./LandingPageFeatureBlock.vue";
 import LandingPageContextImage from "./LandingPageContextImage.vue";
-import LandingPageUserFeedback from "./UserFeedback/LandingPageUserFeedback.vue";
 import LandingCTABanner from "./LandingCTABanner.vue";
 import ctaPrendreEnMain from "~/assets/img/LandingPage/FirstSection/cta_prendre_en_main.jpg";
 

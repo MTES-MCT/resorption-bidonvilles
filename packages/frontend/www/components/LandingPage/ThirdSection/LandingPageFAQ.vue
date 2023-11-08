@@ -240,15 +240,6 @@
                         <a class="link"
                             href="mailto:contact@resorption-bidonvilles.beta.gouv.fr">contact@resorption-bidonvilles.beta.gouv.fr</a>
                     </p>
-                    <p class="mt-6">
-                        <VideoFeedbackUser :authorLabel="$t('landingPage.firstSection.feedback.1.label')"
-                            :author="$t('landingPage.firstSection.feedback.1.author')"
-                            :part1="$t('landingPage.firstSection.feedback.videos.1.transcription_part1')"
-                            :part2="$t('landingPage.firstSection.feedback.videos.1.transcription_part2')"
-                            :part3="$t('landingPage.firstSection.feedback.videos.1.transcription_part3')"
-                            :poster="posterLink1" :source="sourceLink1" :trackLabel="$t('french')"
-                            :trackSrc="'/Temoignage-Leduc-BD_mars2021.vtt'" />
-                    </p>
                 </template>
             </AccordionItem>
         </Accordion>
@@ -257,8 +248,4 @@
 
 <script setup>
 import { Accordion, AccordionItem, Icon } from '@resorptionbidonvilles/ui';
-import VideoFeedbackUser from '../FirstSection/UserFeedback/LandingPageUserFeedbackVideo.vue';
-
-import posterLink1 from '~/assets/img/LandingPage/ThirdSection/temoignage_utilisateur_1.png';
-import sourceLink1 from '~/assets/video/Temoignage-Leduc-BD_mars2021.mp4';
 </script>

@@ -30,26 +30,6 @@
       "text_1": "A tool for information, sharing and steering, the platform offers a high-performance and effective solution for slum clearance.",
       "text_2": "It enables the collaboration of all local stakeholders involved in the slum clearance policy."
     },
-    "feedback": {
-      "title": "User testimonials",
-      "1": {
-        "label": "First testimonial",
-        "text": "It's great because you have the info online, you're not faced with an excel spreadsheet with codes you don't understand.",
-        "author": "Prefecture Seine-Saint-Denis"
-      },
-      "2": {
-        "label": "Second testimonial",
-        "text": "The platform made the information more reliable because, before the Excel table was not shared. The more collaborative tools we have, the better it is.",
-        "author": "City of Poitiers"
-      },
-      "3": {
-        "label": "Third testimonial",
-        "text": "I was able to direct the family of a person I was accompanying to a solidarity house from the location of their slum.",
-        "author": "Haute-Garonne Association"
-      },
-      "carousel_start": "Scroll through the testimonials",
-      "carousel_stop": "Pause scrolling"
-    },
     "video": {
       "text": "Get a preview of Résorption-bidonvilles in 1 minute",
       "transcription_part1": "\"Resorption-Bidonvilles\" features an interactive map, enabling a site to be searched by address.",
