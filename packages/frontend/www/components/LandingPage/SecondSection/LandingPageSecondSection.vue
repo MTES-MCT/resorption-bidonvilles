@@ -31,19 +31,6 @@
                     }}</a>
             </p>
 
-            <p class="mt-8">
-                <span class="font-bold">{{
-                    $t("landingPage.secondSection.secondParagraph.bold")
-                }}</span><br />
-                {{ $t("landingPage.secondSection.secondParagraph.normal") }}
-            </p>
-
-            <p class="mt-8" v-if="$t('landingPage.secondSection.thirdParagraph')">
-                <span class="font-bold">{{
-                    $t("landingPage.secondSection.thirdParagraph.bold")
-                }}</span><br />
-                {{ $t("landingPage.secondSection.thirdParagraph.normal") }}
-            </p>
             <img width="640" height="445" class="mt-20 w-full" :src="slumMapImageName"
                 :alt="$t('landingPage.secondSection.map.title')" />
             <button @click="toggleMapTranscription()" class="mt-2 text-primary hover:underline cursor-pointer"
