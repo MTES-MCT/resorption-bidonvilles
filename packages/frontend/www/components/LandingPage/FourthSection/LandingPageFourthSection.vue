@@ -58,68 +58,6 @@
                             )
                         }}.</a>
                     </p>
-
-                    <div class="mt-4">
-                        <p class="font-bold">
-                            {{
-                                $t(
-                                    "landingPage.thirdSection.firstParagraph.items.title"
-                                )
-                            }}
-                        </p>
-
-                        <ul class="list-disc ml-8">
-                            <li>
-                                <a class="link" href="https://eig.etalab.gouv.fr/defis/resorption-bidonvilles/">{{
-                                    $t(
-                                        "landingPage.thirdSection.firstParagraph.items.1.link"
-                                    )
-                                }}</a>
-                                {{
-                                    $t(
-                                        "landingPage.thirdSection.firstParagraph.items.1.text"
-                                    )
-                                }}
-                            </li>
-                            <li>
-                                <a class="link"
-                                    href="https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/how-to-participate/org-details/999999999/project/881989/program/31076817/details">{{
-                                        $t(
-                                            "landingPage.thirdSection.firstParagraph.items.2.link"
-                                        )
-                                    }}</a>{{
-    $t(
-        "landingPage.thirdSection.firstParagraph.items.2.text"
-    )
-}}
-                            </li>
-                            <li>
-                                <a class="link" href="https://beta.gouv.fr/approche/fast/03-fast.html">{{
-                                    $t(
-                                        "landingPage.thirdSection.firstParagraph.items.3.link"
-                                    )
-                                }}</a>
-                                {{
-                                    $t(
-                                        "landingPage.thirdSection.firstParagraph.items.3.text"
-                                    )
-                                }}
-                            </li>
-                            <li>
-                                <a class="link"
-                                    href="https://www.modernisation.gouv.fr/action-publique-2022/fonds-pour-la-transformation-de-laction-publique/ftap-112-millions-deuros-pour-les-19-projets-laureats">{{
-                                        $t(
-                                            "landingPage.thirdSection.firstParagraph.items.4.link"
-                                        )
-                                    }}</a>
-                                {{
-                                    $t(
-                                        "landingPage.thirdSection.firstParagraph.items.4.text"
-                                    )
-                                }}
-                            </li>
-                        </ul>
-                    </div>
                 </div>
 
                 <div class="mt-10 lg:w-6/12 lg:mt-0 lg:pl-6">
