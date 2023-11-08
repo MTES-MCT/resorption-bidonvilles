@@ -21,20 +21,6 @@
                             s'inscrit dans un objectif de transformation de
                             <span class="font-bold">l’action publique</span>.
                         </p>
-
-                        <p class="mt-4">
-                            L’équipe conçoit le produit et ses développements en
-                            fonction de leurs impacts sur la politique de
-                            résorption et l’usage de l’outil.
-                            Résorption-bidonvilles est développée
-                            <span class="font-bold">de manière itérative</span>
-                            (méthode agile) afin d’adapter en permanence l’outil
-                            aux besoins des utilisateurs.
-                            <span class="font-bold">Aller à la rencontre des utilisateurs</span>
-                            est dans l’ADN des start-up d’État et se traduit par
-                            des déplacements terrain, des interviews, des phases
-                            d’expérimentation…
-                        </p>
                     </div>
                     <p v-else>
                         <span class="font-bold">
