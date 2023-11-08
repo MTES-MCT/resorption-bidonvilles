@@ -61,9 +61,7 @@
                 </div>
 
                 <div class="mt-10 lg:w-6/12 lg:mt-0 lg:pl-6">
-                    <img width="688" height="392" class="h-auto" src="~/assets/img/LandingPage/FourthSection/team.jpg"
-                        :alt="$t('landingPage.fourthSection.team.imageAltText')" />
-                    <ul class="mt-4">
+                    <ul>
                         <li>
                             <span class="font-bold">Manuel Demougeot</span> :
                             {{ $t('landingPage.fourthSection.team.actorRole1') }}
