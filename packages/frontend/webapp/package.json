@@ -15,7 +15,7 @@
     "@sentry/vue": "^7.54.0",
     "@turf/turf": "^6.5.0",
     "@vuepic/vue-datepicker": "^3.5.3",
-    "axios": "^1.1.2",
+    "axios": "^1.6.0",
     "chart.js": "^3.9.1",
     "date-fns": "^2.29.3",
     "dom-to-image-more": "^2.12.0",
