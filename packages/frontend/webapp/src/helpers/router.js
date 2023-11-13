@@ -232,6 +232,7 @@ const router = createRouter({
             meta: {
                 title: "Votre compte a été désactivé",
                 authRequirement: "none",
+                displayOrderOnSiteMap: 0,
             },
         },
         {

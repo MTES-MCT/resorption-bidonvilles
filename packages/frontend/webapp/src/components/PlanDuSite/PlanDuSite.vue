@@ -20,7 +20,11 @@ const userStore = useUserStore();
 const filteredAndSortedRoutes = router
     .getRoutes()
     .reduce((acc, route) => {
-        if (route.meta?.title && route.meta?.displayOrderOnSiteMap !== 0) {
+        if (
+            route.meta?.title &&
+            route.meta?.displayOrderOnSiteMap !== 0 &&
+            route.meta?.authRequirement !== "signedOut"
+        ) {
             const { path, meta } = route;
             const { title, displayOrderOnSiteMap, permissions } = meta;
             const permissionsInfo = permissions
