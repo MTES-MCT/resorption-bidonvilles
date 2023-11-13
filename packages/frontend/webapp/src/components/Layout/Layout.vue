@@ -29,6 +29,7 @@
         <slot />
     </main>
     <FooterBar
+        id="pied-de-page"
         class="print:hidden"
         :class="paddingBottom ? 'mt-16' : ''"
         :WWW_URL="WWW_URL"
