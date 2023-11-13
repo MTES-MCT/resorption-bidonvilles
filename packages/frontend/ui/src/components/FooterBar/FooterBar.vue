@@ -47,6 +47,12 @@
                     {{ $t('footer.RGAA') }}
                 </FooterBarFootLink>
                 <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
+
+                <router-link to="/plan-du-site" v-if="showSiteMapLink"
+                    class="text-xs border-b-2 border-transparent hover:border-G500 focus:outline-none focus:ring-2 ring-offset-2 ring-info">
+                    {{ $t('footer.siteMap') }}
+                </router-link>
+                <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
             </div>
         </ContentWrapper>
     </footer>
@@ -66,6 +72,11 @@ import FooterBarPartnerLink from "./FooterBarPartnerLink.vue";
 const props = defineProps({
     CONTACT_EMAIL: String,
     WWW_URL: String,
+    showSiteMapLink: {
+        type: Boolean,
+        required: false,
+        default: false
+    }
 });
-const { CONTACT_EMAIL, WWW_URL } = toRefs(props);
+const { CONTACT_EMAIL, WWW_URL, showSiteMapLink } = toRefs(props);
 </script>

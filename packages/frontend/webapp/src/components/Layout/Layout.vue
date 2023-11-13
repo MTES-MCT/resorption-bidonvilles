@@ -29,6 +29,7 @@
         :class="paddingBottom ? 'mt-16' : ''"
         :WWW_URL="WWW_URL"
         :CONTACT_EMAIL="CONTACT_EMAIL"
+        :showSiteMapLink="userStore.isLoggedIn"
     />
 </template>
 
@@ -45,8 +46,11 @@ import ENV from "@/helpers/env.js";
 import { defineProps, toRefs } from "vue";
 import NavBar from "@/components/NavBar/NavBar.vue";
 import { ContentWrapper, FooterBar } from "@resorptionbidonvilles/ui";
+import { useUserStore } from "@/stores/user.store.js";
 
 const { WWW_URL, CONTACT_EMAIL } = ENV;
+const userStore = useUserStore();
+
 const props = defineProps({
     hero: {
         type: Boolean,
