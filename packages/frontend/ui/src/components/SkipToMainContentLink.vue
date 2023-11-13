@@ -3,13 +3,15 @@
         <nav role="navigation" aria-label="Accès rapide">
             <ul>
                 <li>
-                    <a id="skiplink__contenu" href="#main-content"
-                        class="text-primary text-base leading-6 focus:outline-none">Aller au
+                    <Link id="skiplink__contenu" to="#main-content">Aller au
                         contenu
-                        principal</a>
+                        principal</Link>
                 </li>
             </ul>
         </nav>
     </div>
 </template> 
 
+<script setup>
+import { Link } from '@resorptionbidonvilles/ui';
+</script>
