@@ -86,6 +86,7 @@ const router = createRouter({
                 title: "Visualiser les données",
                 authRequirement: "signedIn",
                 navTab: "metrics",
+                displayOrderOnSiteMap: 15,
             },
         },
         {
@@ -96,6 +97,7 @@ const router = createRouter({
                 title: "Visualiser les données départementales",
                 authRequirement: "signedIn",
                 navTab: "metrics",
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -106,6 +108,7 @@ const router = createRouter({
                 authRequirement: "signedIn",
                 navTab: "administration",
                 permissions: ["user.list"],
+                displayOrderOnSiteMap: 16,
             },
         },
         {
@@ -116,6 +119,7 @@ const router = createRouter({
                 authRequirement: "signedIn",
                 navTab: "administration",
                 permissions: ["user.activate"],
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -125,6 +129,7 @@ const router = createRouter({
                 title: "Consulter une fiche action",
                 authRequirement: "signedIn",
                 navTab: "actions",
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -134,6 +139,7 @@ const router = createRouter({
                 title: "Mettre à jour une fiche action",
                 authRequirement: "signedIn",
                 navTab: "actions",
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -144,6 +150,7 @@ const router = createRouter({
                 authRequirement: "signedIn",
                 navTab: "actions",
                 permissions: ["action.create"],
+                displayOrderOnSiteMap: 9,
             },
         },
         {
@@ -154,6 +161,7 @@ const router = createRouter({
                 authRequirement: "signedIn",
                 navTab: "activites",
                 permissions: ["shantytown.list"],
+                displayOrderOnSiteMap: 14,
             },
         },
         {
@@ -169,6 +177,7 @@ const router = createRouter({
                 title: "Visualiser la carte des bidonvilles",
                 authRequirement: "signedIn",
                 navTab: "cartographie",
+                displayOrderOnSiteMap: 13,
             },
         },
         {
@@ -180,6 +189,7 @@ const router = createRouter({
                 authRequirement: "signedIn",
                 configRequired: false,
                 charteRequirement: false,
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -190,6 +200,7 @@ const router = createRouter({
                 authRequirement: "signedIn",
                 navTab: "communaute",
                 communauteTab: "annuaire",
+                displayOrderOnSiteMap: 12,
             },
         },
 
@@ -201,6 +212,7 @@ const router = createRouter({
                 authRequirement: "signedIn",
                 navTab: "communaute",
                 communauteTab: "communaute",
+                displayOrderOnSiteMap: 10,
             },
         },
         {
@@ -211,6 +223,7 @@ const router = createRouter({
                 title: "Poser une question à la communauté",
                 authRequirement: "signedIn",
                 navTab: "communaute",
+                displayOrderOnSiteMap: 11,
             },
         },
         {
@@ -229,6 +242,7 @@ const router = createRouter({
                 authRequirement: "signedIn",
                 navTab: "communaute",
                 communauteTab: "communaute",
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -237,6 +251,7 @@ const router = createRouter({
             meta: {
                 title: "S'identifier sur la plateforme",
                 authRequirement: "signedOut",
+                displayOrderOnSiteMap: 1,
             },
         },
         {
@@ -245,6 +260,7 @@ const router = createRouter({
             meta: {
                 title: "Contacter l'équipe",
                 authRequirement: "signedOut",
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -257,6 +273,7 @@ const router = createRouter({
             meta: {
                 authRequirement: "signedIn",
                 charteRequirement: false,
+                displayOrderOnSiteMap: 2,
             },
         },
         {
@@ -265,6 +282,7 @@ const router = createRouter({
             meta: {
                 title: "Inviter vos contacts sur la plateforme",
                 authRequirement: "none",
+                displayOrderOnSiteMap: 18,
             },
         },
         {
@@ -274,6 +292,7 @@ const router = createRouter({
                 title: "Afficher la liste des sites",
                 authRequirement: "signedIn",
                 navTab: "sites",
+                displayOrderOnSiteMap: 5,
             },
         },
         {
@@ -283,6 +302,7 @@ const router = createRouter({
                 title: "Afficher la liste des actions",
                 authRequirement: "signedIn",
                 navTab: "actions",
+                displayOrderOnSiteMap: 8,
             },
         },
         {
@@ -295,6 +315,7 @@ const router = createRouter({
             meta: {
                 title: "Modifier les informations liées à mon compte",
                 authRequirement: "signedIn",
+                displayOrderOnSiteMap: 3,
             },
         },
         {
@@ -305,6 +326,7 @@ const router = createRouter({
                 authRequirement: "signedIn",
                 navTab: "administration",
                 permissions: ["user.create"],
+                displayOrderOnSiteMap: 17,
             },
         },
         {
@@ -319,6 +341,7 @@ const router = createRouter({
             meta: {
                 title: "Voir les nouveautés disponibles sur la plateforme",
                 authRequirement: "signedIn",
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -328,6 +351,7 @@ const router = createRouter({
                 title: "Accepter la charte d'engagement",
                 authRequirement: "signedIn",
                 charteRequirement: false,
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -336,6 +360,7 @@ const router = createRouter({
             meta: {
                 title: "Demander un nouveau mot de passe",
                 authRequirement: "signedOut",
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -344,6 +369,16 @@ const router = createRouter({
             meta: {
                 title: "Accès refusé à la page demandée",
                 authRequirement: "none",
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
+            path: "/plan-du-site",
+            component: () => import("@/views/PlanDuSiteView.vue"),
+            meta: {
+                title: "Plan du site",
+                authRequirement: "signedIn",
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -352,6 +387,7 @@ const router = createRouter({
             meta: {
                 title: "Renouveler mon mot de passe",
                 authRequirement: "signedOut",
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -360,6 +396,7 @@ const router = createRouter({
             meta: {
                 title: "Activer mon compte",
                 authRequirement: "signedOut",
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -369,6 +406,7 @@ const router = createRouter({
                 title: "Visualiser les données d'un site",
                 authRequirement: "signedIn",
                 navTab: "sites",
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -378,6 +416,7 @@ const router = createRouter({
                 title: "Déclarer la fermeture d'un site",
                 authRequirement: "signedIn",
                 navTab: "sites",
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -387,6 +426,7 @@ const router = createRouter({
                 title: "Mettre à jour les données d'un site",
                 authRequirement: "signedIn",
                 navTab: "sites",
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -397,6 +437,7 @@ const router = createRouter({
                 authRequirement: "signedIn",
                 navTab: "sites",
                 permissions: ["shantytown.create"],
+                displayOrderOnSiteMap: 6,
             },
         },
         {
@@ -406,6 +447,7 @@ const router = createRouter({
                 title: "Informer d'un nouveau site",
                 authRequirement: "signedIn",
                 navTab: "sites",
+                displayOrderOnSiteMap: 7,
             },
         },
         {
@@ -416,6 +458,7 @@ const router = createRouter({
                 authRequirement: "signedIn",
                 navTab: "statistiques",
                 permissions: ["stats.read"],
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -426,6 +469,7 @@ const router = createRouter({
                 authRequirement: "signedIn",
                 navTab: "communaute",
                 communauteTab: "annuaire",
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -435,6 +479,7 @@ const router = createRouter({
                 title: "Consulter le tableau de bord",
                 navTab: "tableau-de-bord",
                 authRequirement: "signedIn",
+                displayOrderOnSiteMap: 4,
             },
         },
         {
@@ -450,6 +495,7 @@ const router = createRouter({
                 title: "Consulter, modifier un compte utilisateur",
                 authRequirement: "signedIn",
                 navTab: "administration",
+                displayOrderOnSiteMap: 0,
             },
         },
 
@@ -464,6 +510,7 @@ const router = createRouter({
             meta: {
                 title: "Page inexistante",
                 authRequirement: "none",
+                displayOrderOnSiteMap: 0,
             },
         },
     ],

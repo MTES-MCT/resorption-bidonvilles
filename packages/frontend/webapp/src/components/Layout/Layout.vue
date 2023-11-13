@@ -1,6 +1,10 @@
 <template>
+    <SkipToMainContentLink />
     <NavBar />
-    <main :class="!hero && !$slots.banner && paddingTop ? 'pt-12' : ''">
+    <main
+        id="contenu-principal"
+        :class="!hero && !$slots.banner && paddingTop ? 'pt-12' : ''"
+    >
         <div
             v-if="hero"
             class="h-44 bg-G300 text-white text-3xl sm:text-4xl lg:text-5xl bg-illustration"
@@ -25,10 +29,12 @@
         <slot />
     </main>
     <FooterBar
+        id="pied-de-page"
         class="print:hidden"
         :class="paddingBottom ? 'mt-16' : ''"
         :WWW_URL="WWW_URL"
         :CONTACT_EMAIL="CONTACT_EMAIL"
+        :showSiteMapLink="userStore.isLoggedIn"
     />
 </template>
 
@@ -43,10 +49,18 @@
 <script setup>
 import ENV from "@/helpers/env.js";
 import { defineProps, toRefs } from "vue";
+import { useUserStore } from "@/stores/user.store.js";
+
 import NavBar from "@/components/NavBar/NavBar.vue";
-import { ContentWrapper, FooterBar } from "@resorptionbidonvilles/ui";
+import {
+    ContentWrapper,
+    FooterBar,
+    SkipToMainContentLink,
+} from "@resorptionbidonvilles/ui";
 
 const { WWW_URL, CONTACT_EMAIL } = ENV;
+const userStore = useUserStore();
+
 const props = defineProps({
     hero: {
         type: Boolean,
