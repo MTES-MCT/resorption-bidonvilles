@@ -50,7 +50,7 @@ const error = ref(null);
 const question = ref(null);
 const ariane = computed(() => [
     { label: "Accueil", to: "/" },
-    { label: "Entraide", to: "/communaute" },
+    { label: "Communauté", to: "/communaute" },
     { label: question.value.question || "..." },
 ]);
 
