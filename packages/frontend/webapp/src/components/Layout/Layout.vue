@@ -2,7 +2,7 @@
     <SkipToMainContentLink />
     <NavBar />
     <main
-        id="main-content"
+        id="contenu-principal"
         :class="!hero && !$slots.banner && paddingTop ? 'pt-12' : ''"
     >
         <div

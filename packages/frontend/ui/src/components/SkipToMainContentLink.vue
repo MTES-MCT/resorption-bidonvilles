@@ -3,7 +3,7 @@
         <nav role="navigation" aria-label="Accès rapide">
             <ul>
                 <li>
-                    <Link id="skiplink__contenu" to="#main-content">Aller au
+                    <Link id="skiplink__contenu" to="#contenu-principal">Aller au
                         contenu
                         principal</Link>
                 </li>
