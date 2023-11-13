@@ -3,7 +3,7 @@
         <nav role="navigation" aria-label="Accès rapide">
             <ul>
                 <li>
-                    <Link to="#contenu-principal">Aller au
+                    <Link to="#contenu-principal" @click="resetFocus">Aller au
                         contenu
                         principal</Link>
                 </li>
@@ -13,5 +13,12 @@
 </template> 
 
 <script setup>
+import { nextTick } from 'vue';
 import { Link } from '@resorptionbidonvilles/ui';
+
+function resetFocus() {
+    nextTick(() => {
+        document.activeElement.blur();
+    });
+}
 </script>
