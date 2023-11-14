@@ -40,19 +40,16 @@
     "title": "Quelle est la politique de résorption des bidonvilles ?",
     "data": {
       "1": {
-        "line1": "Plus de",
-        "line2": "300 bidonvilles",
-        "line3": "en France métropolitaine"
+        "line1": "240 bidonvilles",
+        "line2": "en France métropolitaine"
       },
       "2": {
-        "line1": "Plus de",
-        "line2": "16 000 personnes",
-        "line3": "dont 5 000 mineurs"
+        "line1": "11 200 personnes",
+        "line2": "dont 5 000 mineurs"
       },
       "3": {
-        "line1": "Majoritairement",
-        "line2": "européens",
-        "line3": "Roumains et Bulgares"
+        "line1": "Majoritairement européens",
+        "line2": "Roumains et Bulgares"
       }
     },
     "firstParagraph": {
