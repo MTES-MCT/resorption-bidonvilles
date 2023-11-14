@@ -134,10 +134,9 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import ENV from "@/helpers/env.js";
-import { ContentWrapper } from "@resorptionbidonvilles/ui";
+import { ContentWrapper, Icon } from "@resorptionbidonvilles/ui";
 import StatsBlock from "./StatsBlock.vue";
 import StatsSection from "./StatsSection.vue";
-import { Icon } from "@resorptionbidonvilles/ui";
 import { LineChart, PieChart } from "@/helpers/chart.js";
 
 const { API_URL } = ENV;
