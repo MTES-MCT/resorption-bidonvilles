@@ -10,7 +10,6 @@ const SENTRY = {
 
 export default {
     WWW_URL: import.meta.env.VITE_WWW_URL || "${VITE_WWW_URL}",
-    WEBAPP_URL: import.meta.env.VITE_WEBAPP_URL || "${VITE_WEBAPP_URL}",
     API_URL: import.meta.env.VITE_API_URL || "${VITE_API_URL}",
     MOBILE_URL: import.meta.env.VITE_MOBILE_URL || "${VITE_MOBILE_URL}",
     WEBAPP_DOMAIN:

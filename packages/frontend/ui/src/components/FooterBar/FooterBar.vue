@@ -25,19 +25,19 @@
                 </FooterBarFootLink>
                 <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
 
-                <FooterBarFootLink :to="`${URL}/statistiques-publiques`"
+                <FooterBarFootLink :to="`${(URL || '')}/statistiques-publiques`"
                     title="Afficher les statistiques publiques de la plateforme">
                     {{ $t('footer.statistics') }}
                 </FooterBarFootLink>
                 <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
 
-                <FooterBarFootLink :to="`${URL}/mentions-legales`"
+                <FooterBarFootLink :to="`${(URL || '')}/mentions-legales`"
                     title="Afficher les mentions légales relatives à l'utilisation de la plateforme">
                     {{ $t('footer.legal') }}
                 </FooterBarFootLink>
                 <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
 
-                <FooterBarFootLink :to="`${URL}/doc/conditions-d-utilisation.pdf`"
+                <FooterBarFootLink :to="`${(URL || '')}/doc/conditions-d-utilisation.pdf`"
                     title="Afficher les conditions générales d'utilisation de la plateforme">
                     {{ $t('footer.cgus') }}
                 </FooterBarFootLink>
@@ -79,5 +79,5 @@ const props = defineProps({
         default: false
     }
 });
-const { CONTACT_EMAIL, WWW_URL, showSiteMapLink } = toRefs(props);
+const { CONTACT_EMAIL, URL, showSiteMapLink } = toRefs(props);
 </script>
