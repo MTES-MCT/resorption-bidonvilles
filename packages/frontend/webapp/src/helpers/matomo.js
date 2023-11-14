@@ -55,15 +55,24 @@ export function trackEvent(...args) {
 }
 
 export function optOut() {
-    return $piwik.value.optUserOut();
+    if ($piwik.value) {
+        return $piwik.value.optUserOut();
+    }
+    return null;
 }
 
 export function forgetOptOut() {
-    return $piwik.value.forgetUserOptOut();
+    if ($piwik.value) {
+        return $piwik.value.forgetUserOptOut();
+    }
+    return null;
 }
 
 export function isOptedOut() {
-    return $piwik.value.isUserOptedOut();
+    if ($piwik.value) {
+        return $piwik.value.isUserOptedOut();
+    }
+    return true;
 }
 
 function formatUserForTracking(user) {
