@@ -25,7 +25,7 @@
             <span class="text-white bg-black px-2 py-1 ml-1">8</span>
             {{ $t("landingPage.hero.review") }} 2019
         </p>
-        <p class="text-lg font-bold">{{ $t("landingPage.hero.moreThan") }} <span class="underline">3 000</span> {{
+        <p class="text-lg font-bold">{{ $t("landingPage.hero.moreThan") }} <span class="underline">4 000</span> {{
             $t("landingPage.hero.people") }}</p>
     </div>
 </template>
