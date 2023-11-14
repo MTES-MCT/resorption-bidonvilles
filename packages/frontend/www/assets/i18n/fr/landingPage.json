@@ -97,23 +97,24 @@
       },
       "figures": {
         "1": {
-          "text": "16 sites résorbés"
+          "text": "17 sites résorbés"
         },
         "2": {
           "text": "8600 bénéficiaires"
         },
         "3": {
-          "text": "1 464 personnes relogées"
+          "text": "1 256 personnes relogées"
         },
         "4": {
-          "text": "3 125 enfants scolarisés"
+          "text": "3 559 enfants scolarisés",
+          "info": "en 2022 - 2023"
         },
         "5": {
-          "text": "2 000 bénéficiaires",
+          "text": "4 386 bénéficiaires",
           "info": "d'un accompagnement santé"
         },
         "6": {
-          "text": "1078 contrats de travail signés"
+          "text": "1 025 contrats de travail signés"
         }
       }
     }

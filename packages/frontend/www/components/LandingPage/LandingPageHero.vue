@@ -6,6 +6,11 @@
         </p>
         <LandingPageContactForm class="mx-auto mb-8" />
         <p class="my-4 text-display-md font-bold">
+            <span class="text-white bg-black px-2 py-1">1</span>
+            <span class="text-white bg-black px-2 py-1 ml-1">7</span>
+            {{ $t("landingPage.hero.review") }} 2022
+        </p>
+        <p class="my-4 text-display-md font-bold">
             <span class="text-white bg-black px-2 py-1">2</span>
             <span class="text-white bg-black px-2 py-1 ml-1">8</span>
             {{ $t("landingPage.hero.review") }} 2021

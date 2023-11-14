@@ -107,7 +107,7 @@
             <div class="flex flex-row items-center my-8">
                 <p class="bg-gray-500 h-px flex-1" />
                 <p class="inline-block bg-black text-white text-display-md font-bold px-4">
-                    2020
+                    2022
                 </p>
                 <p class="bg-gray-500 h-px flex-1" />
             </div>
@@ -117,7 +117,8 @@
                 <LandingPageBilanBlock icon="users" :text="$t('landingPage.secondSection.bilan.figures.2.text')" />
                 <LandingPageBilanBlock icon="hand-holding-medical"
                     :text="$t('landingPage.secondSection.bilan.figures.3.text')" />
-                <LandingPageBilanBlock icon="school" :text="$t('landingPage.secondSection.bilan.figures.4.text')" />
+                <LandingPageBilanBlock icon="school" :text="$t('landingPage.secondSection.bilan.figures.4.text')"
+                    :info="$t('landingPage.secondSection.bilan.figures.4.info')" />
                 <LandingPageBilanBlock icon="file-signature" :text="$t('landingPage.secondSection.bilan.figures.6.text')" />
                 <LandingPageBilanBlock icon="book" :text="$t('landingPage.secondSection.bilan.figures.5.text')"
                     :info="$t('landingPage.secondSection.bilan.figures.5.info')" />
