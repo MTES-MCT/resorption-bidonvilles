@@ -81,7 +81,6 @@
 <script setup>
 import { ref } from "vue";
 import LandingPageFeatureBlock from "./LandingPageFeatureBlock.vue";
-import LandingPageContextImage from "./LandingPageContextImage.vue";
 import LandingCTABanner from "./LandingCTABanner.vue";
 import ctaPrendreEnMain from "~/assets/img/LandingPage/FirstSection/cta_prendre_en_main.jpg";
 
