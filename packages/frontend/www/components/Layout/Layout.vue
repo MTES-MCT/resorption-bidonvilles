@@ -18,7 +18,7 @@
       </template>
     </NavBar>
     <slot />
-    <FooterBar :WWW_URL="WWW_URL" :CONTACT_EMAIL="CONTACT_EMAIL" />
+    <FooterBar id="pied-de-page" :WWW_URL="WWW_URL" :CONTACT_EMAIL="CONTACT_EMAIL" />
   </div>
 </template>
 
