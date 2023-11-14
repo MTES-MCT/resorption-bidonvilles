@@ -77,7 +77,7 @@ defineExpose({
             const notificationStore = useNotificationStore();
             notificationStore.success(
                 "Question publiée",
-                "Votre question a été publiée, vous la retrouverez dans l'onglet Communauté"
+                "Votre question a été publiée, vous la retrouverez dans l'onglet Entraide"
             );
             router.push(`/question/${question.id}`);
         } catch (e) {
