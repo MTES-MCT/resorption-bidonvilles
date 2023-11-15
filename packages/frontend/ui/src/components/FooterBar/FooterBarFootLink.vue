@@ -1,12 +1,10 @@
 <template>
-    <a :href="to" :title="title"
-        class="text-xs border-b-2 border-transparent hover:border-G500 focus:outline-none focus:ring-2 ring-offset-2 ring-info">
-        <slot />
-    </a>
+    <router-link v-if="isLocalLink" :to="to" :title="title" :class="classes"><slot /></router-link>
+    <a v-else :href="to" :title="title" :class="classes"><slot /></a>
 </template>
 
 <script setup>
-import { toRefs } from "vue";
+import { computed, toRefs } from "vue";
 
 const props = defineProps({
     to: String,
@@ -17,4 +15,6 @@ const props = defineProps({
 });
 
 const { to, title } = toRefs(props);
+const isLocalLink = computed(() => to.value[0] === '/' && to.value.slice(-4) !== '.pdf');
+const classes = 'text-xs border-b-2 border-transparent hover:border-G500 focus:outline-none focus:ring-2 ring-offset-2 ring-info';
 </script>

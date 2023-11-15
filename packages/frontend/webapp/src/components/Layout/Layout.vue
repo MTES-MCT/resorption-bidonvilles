@@ -32,7 +32,6 @@
         id="pied-de-page"
         class="print:hidden"
         :class="paddingBottom ? 'mt-16' : ''"
-        :WWW_URL="WWW_URL"
         :CONTACT_EMAIL="CONTACT_EMAIL"
         :showSiteMapLink="userStore.isLoggedIn"
     />
@@ -58,7 +57,7 @@ import {
     SkipToMainContentLink,
 } from "@resorptionbidonvilles/ui";
 
-const { WWW_URL, CONTACT_EMAIL } = ENV;
+const { CONTACT_EMAIL } = ENV;
 const userStore = useUserStore();
 
 const props = defineProps({

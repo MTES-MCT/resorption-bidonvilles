@@ -10,31 +10,33 @@
 
     </Html>
 
+    <SkipToMainContentLink />
+
     <NavBar :stickyHeader="stickyHeader" :displayLanguagePicker="displayLanguagePicker">
       <template v-slot:anchors>
         <slot name="anchors"></slot>
       </template>
     </NavBar>
     <slot />
-    <FooterBar :WWW_URL="WWW_URL" :CONTACT_EMAIL="CONTACT_EMAIL" />
+    <FooterBar id="pied-de-page" :URL="WEBAPP_URL" :CONTACT_EMAIL="CONTACT_EMAIL" />
   </div>
 </template>
 
 <script setup>
 import { toRefs } from "vue";
-import { FooterBar } from "@resorptionbidonvilles/ui";
+import { SkipToMainContentLink, FooterBar } from "@resorptionbidonvilles/ui";
 import NavBar from "~/components/Layout/Navbar/Navbar.vue";
 
 const props = defineProps({
-    stickyHeader: {
-      type: Boolean,
-      default: true
-    },
-    displayLanguagePicker: {
-      type: Boolean,
-      default: true
-    }
+  stickyHeader: {
+    type: Boolean,
+    default: true
+  },
+  displayLanguagePicker: {
+    type: Boolean,
+    default: true
+  }
 });
 const { stickyHeader, displayLanguagePicker } = toRefs(props);
-const { WWW_URL, CONTACT_EMAIL } = useRuntimeConfig().public;
+const { WEBAPP_URL, CONTACT_EMAIL } = useRuntimeConfig().public;
 </script>

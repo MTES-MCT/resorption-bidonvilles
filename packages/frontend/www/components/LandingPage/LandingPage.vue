@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section id="main-content">
         <!-- first section -->
         <Container class="pt-4">
             <div class="max-w-screen-lg mx-auto py-20">

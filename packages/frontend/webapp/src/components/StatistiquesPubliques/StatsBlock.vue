@@ -18,24 +18,24 @@ export default {
     props: {
         title: {
             type: [String, Number],
-            required: true
+            required: true,
         },
         subtitle: {
             type: String,
-            required: true
+            required: true,
         },
         info: {
             type: String,
-            required: false
+            required: false,
         },
         icon: {
             type: String,
-            required: false
-        }
+            required: false,
+        },
     },
 
     components: {
-        Icon
-    }
+        Icon,
+    },
 };
 </script>

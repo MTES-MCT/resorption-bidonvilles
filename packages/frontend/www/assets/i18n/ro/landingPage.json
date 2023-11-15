@@ -23,33 +23,6 @@
       "text_1": "Un instrument de informare, partajare și ghidare , platforma oferă o soluție puternică și eficientă pentru resorbția de bidonville.",
       "text_2": "Acesta permite crearea unei dinamici reale de colaborare, într-un teritoriu si între actorii dedicați obiectivului de resorbția de bidonville."
     },
-    "before": "Înainte",
-    "after": "După",
-    "beforeImageTitle": "Înainte de existența platformei \"Résorption-Bidonvilles\", ",
-    "beforeImageTranscription1": "operatorul vorbea în fiecare lună cu o persoană de contact din cadrul DDCS. Aceasta din urmă îi raporta apoi corespondentului.",
-    "beforeImageTranscription2": "Înainte de existența platformei \"Resorption-Bidonvilles\", autoritățile locale vorbeau cu prefectura în fiecare săptămână. Prefecții raportau apoi corespondentului.",
-    "beforeImageTitle": "Cu ajutorul platformei \"Résorption-Bidonvilles\", ",
-    "afterImageTranscription": "toți actorii (operator, prefectură, autorități locale, corespondent, DDCS) fac schimb de informații direct și în timp real cu actorii implicați în schimburi.",
-    "feedback": {
-      "title": "Mărturii ale utilizatorilor",
-      "1": {
-        "label": "Prima recomandare",
-        "text": "Este foarte bine pentru că aveți informațiile online, nu vă confruntați cu un tabel Excel cu coduri pe care nu le înțelegeți.",
-        "author": "Prefectura Seine-Saint-Denis"
-      },
-      "2": {
-        "label": "A doua recomandare",
-        "text": "Platforma a făcut informațiile mai accesibile, deoarece tabelul Excelnu era partajat. Cu cât avem mai multeinstrumente de colaborare, cu atât mai bine.",
-        "author": "Orașul Poitiers"
-      },
-      "3": {
-        "label": "A treia recomandare ",
-        "text": "Am fost în măsură să direcționez familia unei persoane pe care o acomapaniez la o casă de solidaritate de la locația lor situata într-un bidonville.",
-        "author": "Asociația din Haute-Garonne"
-      },
-      "carousel_start": "Derulați prin mărturii",
-      "carousel_stop": "Întrerupeți derularea"
-    },
     "video": {
       "text": "Descoperiți Résorption-bidonvilles în 1 minut",
       "transcription_part1": "Platforma \"Résorption-Bidonvilles\" dispune de o hartă interactivă, care vă permite să căutați un sit după adresă.",
@@ -74,7 +47,7 @@
       "2": {
         "line1": "Peste",
         "line2": "16 000 de persoane",
-        "line3": "inclusiv 5.000 de minori"
+        "line3": "inclusiv 3.900 de minori"
       },
       "3": {
         "line1": "Majoritatea",
@@ -87,11 +60,6 @@
       "normal": "În toateteritoriile în cauză, trebuie instituite acțiuni eficiente, umane și pragmatice multi-parteneriale.",
       "link": "Aflați mai multe despre politica de resorbției de bidonville"
     },
-    "secondParagraph": {
-      "bold": "Ce este o bidonville?",
-      "normal": "Un bidonville este un teren, un maidan sau o clădire construită care în general e lipsită de servicii de bază (apă, electricitate, gestionarea deșeurilor) și ocupată ilegal de mai multe familii. Un bidonville mai est denumit si „plaț” în limbaj familiar."
-    },
-    "thirdParagraph": "",
     "map": {
       "transcription_title": "Vezi transcrierea imaginii",
       "notranscription_title": "Ascundeți transcrierea imaginii",
@@ -129,26 +97,25 @@
       },
       "figures": {
         "1": {
-          "text": "16 platz resorbite"
+          "text": "17 platz resorbite"
         },
         "2": {
           "text": "8 600 de beneficiari ai acestor actiuni"
         },
         "3": {
-          "text": "1 464 de persoane relocate"
+          "text": "1 256 de persoane relocate"
         },
         "4": {
-          "text": "3 125 elevi"
+          "text": "3 559 elevi"
         },
         "5": {
-          "text": "2 000 de beneficiari",
+          "text": "4 386 de beneficiari",
           "info": "de sprijin medical"
         },
         "6": {
-          "text": "1078 contracte de muncă semnate"
+          "text": "1025 contracte de muncă semnate"
         }
-      },
-      "cta": "Încarcaţi ultimul bilanţ"
+      }
     }
   },
   "secondBanner": {
@@ -164,25 +131,6 @@
         "text4": "Evoluțiile platformei continuă în strânsă colaborare cu utilizatorii săi",
         "text5": "Doriți să aflați mai multe despre crearea proiectului? Accesați fişa proiectulu",
         "link1": "pe site-ul oficial: Start-Up de stat"
-      },
-      "items": {
-        "title": "Proiectul a fost câștigătorul mai multor cereri de proiecte :",
-        "1": {
-          "link": "Antreprenor de interes general",
-          "text": "al Programului de investiții de viitor in2019"
-        },
-        "2": {
-          "link": "rogramul Comisiei Europene \"drepturi, cetățenie și egalitate\"",
-          "text": "în primul trimestru al anului 2020"
-        },
-        "3": {
-          "link": "Fonduri de Accelerare pentru Start-up de stat 3",
-          "text": "de la DINUM în aprilie 2020"
-        },
-        "4": {
-          "link": "Fondul de transformare a politicii franceze",
-          "text": "de la DITP în octombrie 2020"
-        }
       }
     }
   },

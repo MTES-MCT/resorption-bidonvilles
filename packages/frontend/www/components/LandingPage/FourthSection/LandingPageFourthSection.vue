@@ -21,20 +21,6 @@
                             s'inscrit dans un objectif de transformation de
                             <span class="font-bold">l’action publique</span>.
                         </p>
-
-                        <p class="mt-4">
-                            L’équipe conçoit le produit et ses développements en
-                            fonction de leurs impacts sur la politique de
-                            résorption et l’usage de l’outil.
-                            Résorption-bidonvilles est développée
-                            <span class="font-bold">de manière itérative</span>
-                            (méthode agile) afin d’adapter en permanence l’outil
-                            aux besoins des utilisateurs.
-                            <span class="font-bold">Aller à la rencontre des utilisateurs</span>
-                            est dans l’ADN des start-up d’État et se traduit par
-                            des déplacements terrain, des interviews, des phases
-                            d’expérimentation…
-                        </p>
                     </div>
                     <p v-else>
                         <span class="font-bold">
@@ -72,74 +58,10 @@
                             )
                         }}.</a>
                     </p>
-
-                    <div class="mt-4">
-                        <p class="font-bold">
-                            {{
-                                $t(
-                                    "landingPage.thirdSection.firstParagraph.items.title"
-                                )
-                            }}
-                        </p>
-
-                        <ul class="list-disc ml-8">
-                            <li>
-                                <a class="link" href="https://eig.etalab.gouv.fr/defis/resorption-bidonvilles/">{{
-                                    $t(
-                                        "landingPage.thirdSection.firstParagraph.items.1.link"
-                                    )
-                                }}</a>
-                                {{
-                                    $t(
-                                        "landingPage.thirdSection.firstParagraph.items.1.text"
-                                    )
-                                }}
-                            </li>
-                            <li>
-                                <a class="link"
-                                    href="https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/how-to-participate/org-details/999999999/project/881989/program/31076817/details">{{
-                                        $t(
-                                            "landingPage.thirdSection.firstParagraph.items.2.link"
-                                        )
-                                    }}</a>{{
-    $t(
-        "landingPage.thirdSection.firstParagraph.items.2.text"
-    )
-}}
-                            </li>
-                            <li>
-                                <a class="link" href="https://beta.gouv.fr/approche/fast/03-fast.html">{{
-                                    $t(
-                                        "landingPage.thirdSection.firstParagraph.items.3.link"
-                                    )
-                                }}</a>
-                                {{
-                                    $t(
-                                        "landingPage.thirdSection.firstParagraph.items.3.text"
-                                    )
-                                }}
-                            </li>
-                            <li>
-                                <a class="link"
-                                    href="https://www.modernisation.gouv.fr/action-publique-2022/fonds-pour-la-transformation-de-laction-publique/ftap-112-millions-deuros-pour-les-19-projets-laureats">{{
-                                        $t(
-                                            "landingPage.thirdSection.firstParagraph.items.4.link"
-                                        )
-                                    }}</a>
-                                {{
-                                    $t(
-                                        "landingPage.thirdSection.firstParagraph.items.4.text"
-                                    )
-                                }}
-                            </li>
-                        </ul>
-                    </div>
                 </div>
 
                 <div class="mt-10 lg:w-6/12 lg:mt-0 lg:pl-6">
-                    <img width="688" height="392" class="h-auto" src="~/assets/img/LandingPage/FourthSection/team.jpg"
-                        :alt="$t('landingPage.fourthSection.team.imageAltText')" />
-                    <ul class="mt-4">
+                    <ul>
                         <li>
                             <span class="font-bold">Manuel Demougeot</span> :
                             {{ $t('landingPage.fourthSection.team.actorRole1') }}
@@ -160,39 +82,6 @@
                     </ul>
                 </div>
             </div>
-        </div>
-
-        <div class="flex flex-row flex-wrap items-center justify-center mt-8 lg:flex-nowrap lg:justify-between">
-            <a href="https://www.gouvernement.fr/" hreflang="fr"
-                aria-label="Lien vers le site du gouvernement de l'État Francais,">
-                <img width="200" height="118" class="h-auto m-2"
-                    src="~/assets/img/LandingPage/FourthSection/logo-gouvernement.jpg"
-                    alt="Logo du site du gouvernement Francais" />
-            </a>
-            <a href="https://ec.europa.eu/info/index_fr" hreflang="fr"
-                aria-label="Lien vers le site de la Commission Européenne">
-                <img width="460" height="111" class="h-auto m-2"
-                    src="~/assets/img/LandingPage/FourthSection/logo-commission-europenne.png"
-                    alt="Logo de la Commission Européenne" />
-            </a>
-            <a href="https://beta.gouv.fr/communaute/#/incubators/mtes" hreflang="fr"
-                aria-label="Lien vers le site de la Fabrique Numérique">
-                <img width="96" height="96" class="h-auto m-2"
-                    src="~/assets/img/LandingPage/FourthSection/logo-fabrique-numerique.png"
-                    alt="Logo de la Fabrique Numérique" />
-            </a>
-            <a class="pl-12" href="https://beta.gouv.fr/" hreflang="fr"
-                aria-label="Lien vers le site de l'incubateur de services publiques numériques - beta.gouv">
-                <img width="160" height="80" class="h-auto m-2"
-                    src="~/assets/img/LandingPage/FourthSection/logo_beta-gouv-fr.jpg"
-                    alt="Logo de l'incubateur de services publiques numériques" />
-            </a>
-            <a class="pl-12" href="https://eig.etalab.gouv.fr/defis/resorption-bidonvilles/" hreflang="fr"
-                aria-label="Lien vers le site des Entrepreneurs d'Intérêt Général">
-                <img width="330" height="72" class="h-auto m-2"
-                    src="~/assets/img/LandingPage/FourthSection/logo-entrepreneur-interet-general.png"
-                    alt="Logo des Entrepreneurs d'Intérêt Général" />
-            </a>
         </div>
     </div>
 </template>

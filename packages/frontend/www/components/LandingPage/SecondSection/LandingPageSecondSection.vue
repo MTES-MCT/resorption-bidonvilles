@@ -2,14 +2,11 @@
     <div>
         <div class="md:grid md:grid-cols-3 md:gap-16">
             <LandingPageDataBlock :line1="$t('landingPage.secondSection.data.1.line1')"
-                :line2="$t('landingPage.secondSection.data.1.line2')"
-                :line3="$t('landingPage.secondSection.data.1.line3')" />
+                :line2="$t('landingPage.secondSection.data.1.line2')" />
             <LandingPageDataBlock class="my-4 md:my-0" :line1="$t('landingPage.secondSection.data.2.line1')"
-                :line2="$t('landingPage.secondSection.data.2.line2')"
-                :line3="$t('landingPage.secondSection.data.2.line3')" />
+                :line2="$t('landingPage.secondSection.data.2.line2')" />
             <LandingPageDataBlock :line1="$t('landingPage.secondSection.data.3.line1')"
-                :line2="$t('landingPage.secondSection.data.3.line2')"
-                :line3="$t('landingPage.secondSection.data.3.line3')" />
+                :line2="$t('landingPage.secondSection.data.3.line2')" />
         </div>
 
         <div class="max-w-screen-sm mx-auto ">
@@ -31,19 +28,6 @@
                     }}</a>
             </p>
 
-            <p class="mt-8">
-                <span class="font-bold">{{
-                    $t("landingPage.secondSection.secondParagraph.bold")
-                }}</span><br />
-                {{ $t("landingPage.secondSection.secondParagraph.normal") }}
-            </p>
-
-            <p class="mt-8" v-if="$t('landingPage.secondSection.thirdParagraph')">
-                <span class="font-bold">{{
-                    $t("landingPage.secondSection.thirdParagraph.bold")
-                }}</span><br />
-                {{ $t("landingPage.secondSection.thirdParagraph.normal") }}
-            </p>
             <img width="640" height="445" class="mt-20 w-full" :src="slumMapImageName"
                 :alt="$t('landingPage.secondSection.map.title')" />
             <button @click="toggleMapTranscription()" class="mt-2 text-primary hover:underline cursor-pointer"
@@ -120,7 +104,7 @@
             <div class="flex flex-row items-center my-8">
                 <p class="bg-gray-500 h-px flex-1" />
                 <p class="inline-block bg-black text-white text-display-md font-bold px-4">
-                    2020
+                    2022
                 </p>
                 <p class="bg-gray-500 h-px flex-1" />
             </div>
@@ -130,24 +114,11 @@
                 <LandingPageBilanBlock icon="users" :text="$t('landingPage.secondSection.bilan.figures.2.text')" />
                 <LandingPageBilanBlock icon="hand-holding-medical"
                     :text="$t('landingPage.secondSection.bilan.figures.3.text')" />
-                <LandingPageBilanBlock icon="school" :text="$t('landingPage.secondSection.bilan.figures.4.text')" />
+                <LandingPageBilanBlock icon="school" :text="$t('landingPage.secondSection.bilan.figures.4.text')"
+                    :info="$t('landingPage.secondSection.bilan.figures.4.info')" />
                 <LandingPageBilanBlock icon="file-signature" :text="$t('landingPage.secondSection.bilan.figures.6.text')" />
                 <LandingPageBilanBlock icon="book" :text="$t('landingPage.secondSection.bilan.figures.5.text')"
                     :info="$t('landingPage.secondSection.bilan.figures.5.info')" />
-            </div>
-            <div class="text-center mt-8">
-                <a target="_blank" v-if="$i18n.locale === 'fr'"
-                    href="https://www.gouvernement.fr/sites/default/files/contenu/piece-jointe/2021/10/point_detape_2019-2020_-_resorption_des_bidonvilles_vweb.pdf">
-                    <Button variant="primary">
-                        {{ $t("landingPage.secondSection.bilan.cta") }}
-                    </Button>
-                </a>
-                <a target="_blank" v-else
-                    href="https://www.gouvernement.fr/sites/default/files/contenu/piece-jointe/2022/01/eng_slum_clearance_-_progress_report_2021.pdf">
-                    <Button variant="primary">
-                        {{ $t("landingPage.secondSection.bilan.cta") }}
-                    </Button>
-                </a>
             </div>
         </div>
     </div>

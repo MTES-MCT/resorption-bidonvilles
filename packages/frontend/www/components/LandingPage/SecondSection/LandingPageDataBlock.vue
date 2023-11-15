@@ -1,8 +1,7 @@
 <template>
     <div>
-        <div class="text-md">{{ line1 }}</div>
-        <div class="text-display-xl font-bold leading-none">{{ line2 }}</div>
-        <div class="text-md">{{ line3 }}</div>
+        <div class="text-display-xl font-bold leading-none">{{ line1 }}</div>
+        <div class="text-md">{{ line2 }}</div>
     </div>
 </template>
 
