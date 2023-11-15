@@ -20,7 +20,9 @@
                     notre travail
                 </li>
                 <li>
-                    <Link :to="`${WWW_URL}/stats`">quelques statistiques</Link>
+                    <Link to="/statistiques-publiques"
+                        >quelques statistiques</Link
+                    >
                     sur notre mesure d'impact
                 </li>
             </ul>

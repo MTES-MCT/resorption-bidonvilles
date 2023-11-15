@@ -16,39 +16,12 @@
       "actions": "The projects carried out available at any time",
       "exchange": "Facilitating dialogue between parties involved"
     },
-    "before": "Before",
-    "after": "After",
-    "beforeImageTitle": "Before the existence of the \"Resorption-Bidonvilles\" platform, ",
-    "beforeImageTranscription1": "the operator spoke to a contact at the DDCS every month. The operator then reported back to the correspondent.",
-    "beforeImageTranscription2": "Before the existence of the \"Resorption-Bidonvilles\" platform, local authorities exchanged information with the prefecture every week.",
-    "afterImageTitle": "With the \"Résorption-Bidonvilles\" platform, ",
-    "afterImageTranscription": "all the players (operator, prefecture, local authorities, correspondent, DDCS) exchange information directly and in real time with the players concerned by the exchanges.",
     "context": {
       "title_part1": "",
       "title_part2": "Résorption-bidonvilles",
       "title_part3": "what and who is it for?",
       "text_1": "A tool for information, sharing and steering, the platform offers a high-performance and effective solution for slum clearance.",
       "text_2": "It enables the collaboration of all local stakeholders involved in the slum clearance policy."
-    },
-    "feedback": {
-      "title": "User testimonials",
-      "1": {
-        "label": "First testimonial",
-        "text": "It's great because you have the info online, you're not faced with an excel spreadsheet with codes you don't understand.",
-        "author": "Prefecture Seine-Saint-Denis"
-      },
-      "2": {
-        "label": "Second testimonial",
-        "text": "The platform made the information more reliable because, before the Excel table was not shared. The more collaborative tools we have, the better it is.",
-        "author": "City of Poitiers"
-      },
-      "3": {
-        "label": "Third testimonial",
-        "text": "I was able to direct the family of a person I was accompanying to a solidarity house from the location of their slum.",
-        "author": "Haute-Garonne Association"
-      },
-      "carousel_start": "Scroll through the testimonials",
-      "carousel_stop": "Pause scrolling"
     },
     "video": {
       "text": "Get a preview of Résorption-bidonvilles in 1 minute",
@@ -74,7 +47,7 @@
       "2": {
         "line1": "More than",
         "line2": "16 000 people",
-        "line3": "including 5,000 minors"
+        "line3": "including 3,900 minors"
       },
       "3": {
         "line1": "Mostly",
@@ -87,11 +60,6 @@
       "normal": "combining social inclusion, respect for public order and prevention of resettlement. In all the territories concerned, effective, humane and pragmatic multi-partner actions must be implemented.",
       "link": "More about the slum resorption policy"
     },
-    "secondParagraph": {
-      "bold": "What is a slum?",
-      "normal": "A slum is an area that usually lacks basic services (water, electricity, waste management) and is illegally occupied by several families."
-    },
-    "thirdParagraph": "",
     "map": {
       "transcription_title": "Show image transcription",
       "notranscription_title": "Hide image transcription",
@@ -129,26 +97,25 @@
       },
       "figures": {
         "1": {
-          "text": "16 slums cleared"
+          "text": "17 slums cleared"
         },
         "2": {
           "text": "8,600 beneficiaries of the actions"
         },
         "3": {
-          "text": "1,464 people re-housed"
+          "text": "1,256 people re-housed"
         },
         "4": {
-          "text": "3,125 children in school"
+          "text": "3,559 children in school"
         },
         "5": {
-          "text": "2,000 beneficiaries",
+          "text": "4,386 beneficiaries",
           "info": "of health support"
         },
         "6": {
-          "text": "1078 employment contracts signed"
+          "text": "1025 employment contracts signed"
         }
-      },
-      "cta": "Download the latest report"
+      }
     }
   },
   "secondBanner": {
@@ -164,25 +131,6 @@
         "text4": "The platform continues to be developed in close collaboration with its users",
         "text5": "To learn more about the beginning of the project, please visit",
         "link1": "the official website about Start-up d'Etat"
-      },
-      "items": {
-        "title": "The project was the winner of several calls for proposals:",
-        "1": {
-          "link": "General interest entrepreneur",
-          "text": "of the Future Investment Program in 2019"
-        },
-        "2": {
-          "link": "European Commission's \"rights, citizenship and equality\" program",
-          "text": "in 2020"
-        },
-        "3": {
-          "link": "State Start-up Acceleration Fund 3",
-          "text": "of DINUM in April 2020"
-        },
-        "4": {
-          "link": "French policy transformation fund",
-          "text": "of DITP in October 2020"
-        }
       }
     }
   },

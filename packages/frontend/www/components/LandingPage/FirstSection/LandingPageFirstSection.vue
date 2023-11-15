@@ -57,57 +57,6 @@
                     $t("landingPage.firstSection.features.exchange")
                 }}</LandingPageFeatureBlock>
             </div>
-
-            <div class="md:flex md:flex-row mt-16">
-                <LandingPageContextImage :label="$t('landingPage.firstSection.before')"
-                    aria-label="Organisation de la politique de résorption sans la plateforme (consulter la description détaillée adjacente à l’image),">
-                    <img width="430" height="319" v-if="$i18n.locale === 'fr'"
-                        src="~/assets/img/LandingPage/FirstSection/fr/before-fr.jpg"
-                        alt="Organisation de la politique de résorption sans la plateforme (consulter la description détaillée adjacente à l’image)," />
-                    <img width="430" height="319" v-if="$i18n.locale === 'en'"
-                        src="~/assets/img/LandingPage/FirstSection/en/before-en.png" alt="Drawn illustration" />
-                    <img width="430" height="319" v-if="$i18n.locale === 'bg'"
-                        src="~/assets/img/LandingPage/FirstSection/bg/before-bg.png" alt="Drawn illustration" />
-                    <img width="430" height="319" v-if="$i18n.locale === 'ro'"
-                        src="~/assets/img/LandingPage/FirstSection/ro/before-ro.png" alt="Drawn illustration" />
-                    <button @click="toggleTranscription(2)" class="mt-2 text-primary hover:underline cursor-pointer"
-                        :aria-label="showTranscription[2] ? $t('landingPage.img_notranscription_title') + ', ' + $t('landingPage.firstSection.beforeImageTitle') : $t('landingPage.img_transcription_title') + ', ' + $t('landingPage.firstSection.beforeImageTitle')">
-                        <span v-if="!showTranscription[2]">{{ $t("landingPage.img_transcription_title") }}</span>
-                        <span v-if="showTranscription[2]">{{ $t("landingPage.img_notranscription_title")
-                        }}</span>
-                    </button>
-                    <template v-if="showTranscription[2]">
-                        <p class="mt-4 text-left">
-                            {{ $t("landingPage.firstSection.beforeImageTitle") }}
-                            {{ $t("landingPage.firstSection.beforeImageTranscription1") }}</p>
-                        <p class="mt-4 text-left">
-                            {{ $t("landingPage.firstSection.beforeImageTranscription2") }}</p>
-                    </template>
-                </LandingPageContextImage>
-                <div class="hidden md:block border-solid border-r-2 border-gray-200 m-20" />
-                <LandingPageContextImage :label="$t('landingPage.firstSection.after')"
-                    aria-label="Organisation de la politique de résorption avec la plateforme (consulter la description détaillée adjacente à l’image),">
-                    <img width="430" height="319" v-if="$i18n.locale === 'fr'"
-                        src="~/assets/img/LandingPage/FirstSection/fr/after-fr.jpg"
-                        alt="Organisation de la politique de résorption avec la plateforme (consulter la description détaillée adjacente à l’image)" />
-                    <img width="430" height="319" v-if="$i18n.locale === 'en'"
-                        src="~/assets/img/LandingPage/FirstSection/en/after-en.png" alt="Drawn illustration" />
-                    <img width="430" height="319" v-if="$i18n.locale === 'bg'"
-                        src="~/assets/img/LandingPage/FirstSection/bg/after-bg.png" alt="Drawn illustration" />
-                    <img width="430" height="319" v-if="$i18n.locale === 'ro'"
-                        src="~/assets/img/LandingPage/FirstSection/ro/after-ro.png" alt="Drawn illustration" />
-                    <button @click="toggleTranscription(3)" class="mt-2 text-primary hover:underline cursor-pointer"
-                        :aria-label="showTranscription[3] ? $t('landingPage.img_notranscription_title') + ', ' + $t('landingPage.firstSection.afterImageTitle') : $t('landingPage.img_transcription_title') + ', ' + $t('landingPage.firstSection.afterImageTitle')">
-                        <span v-if="!showTranscription[3]">{{ $t("landingPage.img_transcription_title") }}</span>
-                        <span v-if="showTranscription[3]">{{ $t("landingPage.img_notranscription_title")
-                        }}</span>
-                    </button>
-                    <p v-if="showTranscription[3]" class="mt-4 text-left">
-                        {{ $t("landingPage.firstSection.afterImageTitle") }}
-                        {{ $t("landingPage.firstSection.afterImageTranscription") }}</p>
-                </LandingPageContextImage>
-            </div>
-            <LandingPageUserFeedback class="mt-32" />
         </div>
         <div class="pt-24" v-if="$i18n.locale === 'fr'">
             <div class="max-w-screen-lg mx-auto">
@@ -132,8 +81,6 @@
 <script setup>
 import { ref } from "vue";
 import LandingPageFeatureBlock from "./LandingPageFeatureBlock.vue";
-import LandingPageContextImage from "./LandingPageContextImage.vue";
-import LandingPageUserFeedback from "./UserFeedback/LandingPageUserFeedback.vue";
 import LandingCTABanner from "./LandingCTABanner.vue";
 import ctaPrendreEnMain from "~/assets/img/LandingPage/FirstSection/cta_prendre_en_main.jpg";
 

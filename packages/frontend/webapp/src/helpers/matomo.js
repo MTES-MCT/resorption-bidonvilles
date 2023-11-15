@@ -54,6 +54,27 @@ export function trackEvent(...args) {
     return $piwik.value.trackEvent(...args);
 }
 
+export function optOut() {
+    if ($piwik.value) {
+        return $piwik.value.optUserOut();
+    }
+    return null;
+}
+
+export function forgetOptOut() {
+    if ($piwik.value) {
+        return $piwik.value.forgetUserOptOut();
+    }
+    return null;
+}
+
+export function isOptedOut() {
+    if ($piwik.value) {
+        return $piwik.value.isUserOptedOut();
+    }
+    return true;
+}
+
 function formatUserForTracking(user) {
     const { organization } = user;
     const { type: orgType } = organization;
