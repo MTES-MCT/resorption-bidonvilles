@@ -3692,7 +3692,6 @@ __metadata:
     chart.js: ^3.7.1
     nuxt: ^3.5.3
     postcss-custom-properties: ^13.3.2
-    vue-chartjs: ^4.0.5
     vue-matomo: ^4.1.0
   languageName: unknown
   linkType: soft
@@ -26260,7 +26259,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-chartjs@npm:^4.0.5, vue-chartjs@npm:^4.1.2":
+"vue-chartjs@npm:^4.1.2":
   version: 4.1.2
   resolution: "vue-chartjs@npm:4.1.2"
   peerDependencies:
