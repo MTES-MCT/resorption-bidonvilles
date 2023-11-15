@@ -1,6 +1,6 @@
 <template>
     <router-link v-if="isLocalLink" :to="to" :title="title" :class="classes"><slot /></router-link>
-    <a v-else="to[0] === '/'" :href="to" :title="title" :class="classes"><slot /></a>
+    <a v-else :href="to" :title="title" :class="classes"><slot /></a>
 </template>
 
 <script setup>
