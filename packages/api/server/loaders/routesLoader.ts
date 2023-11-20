@@ -832,4 +832,11 @@ export default (app) => {
         middlewares.auth.isSuperAdmin,
         controllers.user.listWithPermissions,
     );
+
+    app.get(
+        '/permissions/roles',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        controllers.permission.list,
+    );
 };

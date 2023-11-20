@@ -322,6 +322,16 @@ const router = createRouter({
             },
         },
         {
+            path: "/permissions",
+            component: () => import("@/views/PermissionsParDefautView.vue"),
+            meta: {
+                title: "Permissions par défaut",
+                authRequirement: "signedIn",
+                navTab: "administration",
+                permissions: ["user.list"],
+            },
+        },
+        {
             path: "/signature-charte-engagement",
             component: () => import("@/views/CharteEngagementView.vue"),
             meta: {

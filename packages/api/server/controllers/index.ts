@@ -47,6 +47,8 @@ import organizationGetMembers from './organizationController/getMembers';
 import organizationSearch from './organizationController/search/search';
 import organizationTypes from './organizationController/types';
 import organizationUpdateBeingFunded from './organizationController/updateBeingFunded';
+// permission
+import permissionList from './permissionController/list';
 // poi
 import poiFindAll from './poiController/findAll';
 // questions
@@ -161,6 +163,9 @@ export default () => ({
         search: organizationSearch,
         types: organizationTypes,
         updateBeingFunded: organizationUpdateBeingFunded,
+    },
+    permission: {
+        list: permissionList,
     },
     poi: {
         findAll: poiFindAll,
