@@ -452,6 +452,16 @@ const router = createRouter({
                 navTab: "administration",
             },
         },
+        {
+            path: "/utilisateurs/permissions",
+            component: () => import("@/views/ExceptionsDePermissionView.vue"),
+            meta: {
+                title: "Utilisateurs et structures avec permissions exceptionnelles",
+                authRequirement: "signedIn",
+                navTab: "administration",
+                permissions: ["user.list"],
+            },
+        },
 
         // special
         {

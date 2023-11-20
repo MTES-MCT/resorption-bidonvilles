@@ -76,6 +76,7 @@ import userGet from './userController/get';
 import userGetLatestActivationLink from './userController/getLatestActivationLink';
 import userList from './userController/list';
 import userListExport from './userController/listExport';
+import userListWithPermissions from './userController/listWithPermissions';
 import userMe from './userController/me';
 import userDeactivate from './userController/deactivate';
 import userReactivate from './userController/reactivate';
@@ -195,6 +196,7 @@ export default () => ({
         getLatestActivationLink: userGetLatestActivationLink,
         list: userList,
         listExport: userListExport,
+        listWithPermissions: userListWithPermissions,
         me: userMe,
         updatePermissionOptions: userUpdatePermissionOptions,
         reactivate: userReactivate,
