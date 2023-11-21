@@ -1,4 +1,11 @@
 <template>
+    <a
+        href="#"
+        v-if="displaySkipMapLinks"
+        class="sr-only"
+        @click.prevent="skipMap(skipFocusNext, mapRef)"
+        >&Eacute;viter la carte</a
+    >
     <section class="h-full relative">
         <div id="map" class="h-full border">
             <div
@@ -27,6 +34,13 @@
             <slot />
         </div>
     </section>
+    <a
+        href="#"
+        v-if="displaySkipMapLinks"
+        class="sr-only"
+        @click="skipMap(skipFocusPrevious, mapRef)"
+        >&Eacute;viter la carte</a
+    >
 </template>
 
 <style>
@@ -40,7 +54,7 @@ export default {
 </script>
 
 <script setup>
-import { ref, toRefs, onMounted, onBeforeUnmount, watch } from "vue";
+import { ref, toRefs, onMounted, onBeforeUnmount, watch, computed } from "vue";
 import L from "leaflet";
 import domtoimage from "dom-to-image-more";
 import "leaflet.markercluster/dist/MarkerCluster.css";
@@ -55,6 +69,14 @@ import formatDate from "@common/utils/formatDate";
 
 import { Icon, Spinner } from "@resorptionbidonvilles/ui";
 import { trackEvent } from "@/helpers/matomo";
+
+import getAbsoluteOffsetTop from "@/utils/getAbsoluteOffsetTop";
+import skipFocusNext from "@/utils/skipFocusNext";
+import skipFocusPrevious from "@/utils/skipFocusPrevious";
+
+const mapRef = computed(() => {
+    return document.getElementById("map");
+});
 
 const props = defineProps({
     isLoading: {
@@ -127,6 +149,11 @@ const props = defineProps({
         default: (...args) => {
             return marqueurLocationDefault(...args);
         },
+    },
+    displaySkipMapLinks: {
+        type: Boolean,
+        required: false,
+        default: false,
     },
 });
 const {
@@ -354,6 +381,12 @@ function createLocationMarker(level, location) {
         });
 
     marker.addTo(markersGroup[level].value);
+}
+
+function skipMap(skipMapFunc, eltRef) {
+    if (skipMapFunc(eltRef)) {
+        window.scrollTo(0, getAbsoluteOffsetTop(document.activeElement));
+    }
 }
 
 watch(towns, syncTownMarkers);
