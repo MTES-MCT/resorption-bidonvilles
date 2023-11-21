@@ -37,7 +37,7 @@
             href="#"
             v-if="displaySkipMapLinks"
             class="sr-only"
-            @click="skipMap(skipFocusPrevious)"
+            @click.prevent="skipMap(skipFocusPrevious)"
             >&Eacute;viter la carte</a
         >
     </section>
