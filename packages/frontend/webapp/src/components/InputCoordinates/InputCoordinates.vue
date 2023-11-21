@@ -7,6 +7,7 @@
             :layers="['Dessin', 'Satellite']"
             defaultLayer="Dessin"
             :isLoading="isSubmitting"
+            displaySkipMapLinks="true"
         />
     </div>
 </template>
