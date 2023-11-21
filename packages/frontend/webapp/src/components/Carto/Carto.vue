@@ -3,7 +3,7 @@
         href="#"
         v-if="displaySkipMapLinks"
         class="sr-only"
-        @click.prevent="skipMap(skipFocusNext, mapRef)"
+        @click.prevent="skipMap(skipFocusNext)"
         >&Eacute;viter la carte</a
     >
     <section class="h-full relative">
@@ -38,7 +38,7 @@
         href="#"
         v-if="displaySkipMapLinks"
         class="sr-only"
-        @click="skipMap(skipFocusPrevious, mapRef)"
+        @click="skipMap(skipFocusPrevious)"
         >&Eacute;viter la carte</a
     >
 </template>
@@ -54,7 +54,7 @@ export default {
 </script>
 
 <script setup>
-import { ref, toRefs, onMounted, onBeforeUnmount, watch, computed } from "vue";
+import { ref, toRefs, onMounted, onBeforeUnmount, watch } from "vue";
 import L from "leaflet";
 import domtoimage from "dom-to-image-more";
 import "leaflet.markercluster/dist/MarkerCluster.css";
@@ -73,10 +73,6 @@ import { trackEvent } from "@/helpers/matomo";
 import getAbsoluteOffsetTop from "@/utils/getAbsoluteOffsetTop";
 import skipFocusNext from "@/utils/skipFocusNext";
 import skipFocusPrevious from "@/utils/skipFocusPrevious";
-
-const mapRef = computed(() => {
-    return document.getElementById("map");
-});
 
 const props = defineProps({
     isLoading: {
@@ -383,8 +379,9 @@ function createLocationMarker(level, location) {
     marker.addTo(markersGroup[level].value);
 }
 
-function skipMap(skipMapFunc, eltRef) {
-    if (skipMapFunc(eltRef)) {
+function skipMap(skipMapFunc) {
+    const map = document.getElementById("map");
+    if (map && skipMapFunc(map)) {
         window.scrollTo(0, getAbsoluteOffsetTop(document.activeElement));
     }
 }
