@@ -1,12 +1,12 @@
 <template>
-    <a
-        href="#"
-        v-if="displaySkipMapLinks"
-        class="sr-only"
-        @click.prevent="skipMap(skipFocusNext)"
-        >&Eacute;viter la carte</a
-    >
     <section class="h-full relative">
+        <a
+            href="#"
+            v-if="displaySkipMapLinks"
+            class="sr-only"
+            @click.prevent="skipMap(skipFocusNext)"
+            >&Eacute;viter la carte</a
+        >
         <div id="map" class="h-full border">
             <div
                 class="absolute w-full h-full top-0 left-0 z-[1001]"
@@ -33,14 +33,14 @@
 
             <slot />
         </div>
+        <a
+            href="#"
+            v-if="displaySkipMapLinks"
+            class="sr-only"
+            @click="skipMap(skipFocusPrevious)"
+            >&Eacute;viter la carte</a
+        >
     </section>
-    <a
-        href="#"
-        v-if="displaySkipMapLinks"
-        class="sr-only"
-        @click="skipMap(skipFocusPrevious)"
-        >&Eacute;viter la carte</a
-    >
 </template>
 
 <style>
