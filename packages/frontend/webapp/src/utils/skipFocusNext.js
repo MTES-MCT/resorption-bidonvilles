@@ -1,5 +1,5 @@
 import skipFocus from "./skipFocus";
 
-export function skipFocusNext(el) {
+export default function skipFocusNext(el) {
     return skipFocus(el.nextElementSibling || el.parentNode, "bottom", el);
 }

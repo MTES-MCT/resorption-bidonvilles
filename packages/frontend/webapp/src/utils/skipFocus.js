@@ -1,4 +1,4 @@
-export function skipFocus(el, direction, originNode, allowTop = true) {
+export default function skipFocus(el, direction, originNode, allowTop = true) {
     // soi-même
     if (tryFocus(el)) {
         return true;
@@ -40,7 +40,8 @@ function tryFocus(el) {
             el.tabIndex > -1) &&
         !el.disabled &&
         !el.hidden &&
-        el.focus
+        el.focus &&
+        !el.classList.contains("sr-only")
     ) {
         el.focus();
         return true;
