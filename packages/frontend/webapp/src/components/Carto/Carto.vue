@@ -4,7 +4,8 @@
             href="#"
             v-if="displaySkipMapLinks"
             class="sr-only"
-            @click.prevent="skipMap(skipFocusNext)"
+            @click.prevent="skipMap(skipFocusNext, skipPreviousLink)"
+            ref="skipNextLink"
             >&Eacute;viter la carte</a
         >
         <div id="map" class="h-full border">
@@ -37,7 +38,8 @@
             href="#"
             v-if="displaySkipMapLinks"
             class="sr-only"
-            @click.prevent="skipMap(skipFocusPrevious)"
+            @click.prevent="skipMap(skipFocusPrevious, skipNextLink)"
+            ref="skipPreviousLink"
             >&Eacute;viter la carte</a
         >
     </section>
@@ -167,6 +169,8 @@ const {
 } = toRefs(props);
 
 const map = ref(null);
+const skipNextLink = ref(null);
+const skipPreviousLink = ref(null);
 const printer = ref(null);
 const currentMarkerGroup = ref(null);
 
@@ -380,9 +384,8 @@ function createLocationMarker(level, location) {
     marker.addTo(markersGroup[level].value);
 }
 
-function skipMap(skipMapFunc) {
-    const map = document.getElementById("map");
-    if (map && skipMapFunc(map)) {
+function skipMap(skipMapFunc, el) {
+    if (el && skipMapFunc(el)) {
         window.scrollTo(0, getAbsoluteOffsetTop(document.activeElement));
     }
 }
