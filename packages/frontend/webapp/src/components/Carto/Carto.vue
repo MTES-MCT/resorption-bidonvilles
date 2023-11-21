@@ -163,6 +163,7 @@ const {
     townClusteringOptions,
     townMarkerFn,
     locationMarkerFn,
+    displaySkipMapLinks,
 } = toRefs(props);
 
 const map = ref(null);
