@@ -3,7 +3,7 @@
         ref="carto"
         :layers="['Dessin', 'Satellite']"
         defaultLayer="Satellite"
-        displaySkipMapLinks="true"
+        displaySkipMapLinks
     />
 </template>
 
