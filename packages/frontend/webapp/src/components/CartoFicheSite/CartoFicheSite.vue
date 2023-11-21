@@ -1,25 +1,23 @@
 <template>
-    <SkipMap>
-        <Carto
-            ref="carto"
-            :layers="['Dessin', 'Satellite']"
-            defaultLayer="Satellite"
-            :defaultView="defaultView"
-            :townMarkerFn="marqueurSiteEau"
-            displaySkipMapLinks="true"
+    <Carto
+        ref="carto"
+        :layers="['Dessin', 'Satellite']"
+        defaultLayer="Satellite"
+        :defaultView="defaultView"
+        :townMarkerFn="marqueurSiteEau"
+        displaySkipMapLinks="true"
+    >
+        <div
+            ref="cadastreToggler"
+            class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden"
+            v-show="cadastre"
         >
-            <div
-                ref="cadastreToggler"
-                class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden"
-                v-show="cadastre"
-            >
-                <label class="flex items-center space-x-2">
-                    <input type="checkbox" v-model="showCadastre" />
-                    <span>Voir le cadastre</span>
-                </label>
-            </div>
-        </Carto>
-    </SkipMap>
+            <label class="flex items-center space-x-2">
+                <input type="checkbox" v-model="showCadastre" />
+                <span>Voir le cadastre</span>
+            </label>
+        </div>
+    </Carto>
 </template>
 
 <script setup>
@@ -28,7 +26,6 @@ import L from "leaflet";
 import { useNotificationStore } from "@/stores/notification.store";
 import copyToClipboard from "@/utils/copyToClipboard";
 import Carto from "@/components/Carto/Carto.vue";
-import SkipMap from "@/components/SkipMap/SkipMap.vue";
 import marqueurSiteEau from "@/utils/marqueurSiteEau";
 
 const props = defineProps({
