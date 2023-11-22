@@ -825,4 +825,18 @@ export default (app) => {
         middlewares.validation,
         controllers.dataReport.exportTownsReport,
     );
+
+    app.get(
+        '/users-with-permissions',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        controllers.user.listWithPermissions,
+    );
+
+    app.get(
+        '/permissions/roles',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        controllers.permission.list,
+    );
 };

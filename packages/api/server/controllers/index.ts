@@ -47,6 +47,8 @@ import organizationGetMembers from './organizationController/getMembers';
 import organizationSearch from './organizationController/search/search';
 import organizationTypes from './organizationController/types';
 import organizationUpdateBeingFunded from './organizationController/updateBeingFunded';
+// permission
+import permissionList from './permissionController/list';
 // poi
 import poiFindAll from './poiController/findAll';
 // questions
@@ -76,6 +78,7 @@ import userGet from './userController/get';
 import userGetLatestActivationLink from './userController/getLatestActivationLink';
 import userList from './userController/list';
 import userListExport from './userController/listExport';
+import userListWithPermissions from './userController/listWithPermissions';
 import userMe from './userController/me';
 import userDeactivate from './userController/deactivate';
 import userReactivate from './userController/reactivate';
@@ -161,6 +164,9 @@ export default () => ({
         types: organizationTypes,
         updateBeingFunded: organizationUpdateBeingFunded,
     },
+    permission: {
+        list: permissionList,
+    },
     poi: {
         findAll: poiFindAll,
     },
@@ -195,6 +201,7 @@ export default () => ({
         getLatestActivationLink: userGetLatestActivationLink,
         list: userList,
         listExport: userListExport,
+        listWithPermissions: userListWithPermissions,
         me: userMe,
         updatePermissionOptions: userUpdatePermissionOptions,
         reactivate: userReactivate,

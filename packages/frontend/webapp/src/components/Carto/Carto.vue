@@ -1,5 +1,13 @@
 <template>
     <section class="h-full relative">
+        <a
+            href="#"
+            v-if="displaySkipMapLinks"
+            class="sr-only"
+            @click.prevent="skipMap(skipFocusNext, skipPreviousLink)"
+            ref="skipNextLink"
+            >&Eacute;viter la carte</a
+        >
         <div id="map" class="h-full border">
             <div
                 class="absolute w-full h-full top-0 left-0 z-[1001]"
@@ -26,6 +34,14 @@
 
             <slot />
         </div>
+        <a
+            href="#"
+            v-if="displaySkipMapLinks"
+            class="sr-only"
+            @click.prevent="skipMap(skipFocusPrevious, skipNextLink)"
+            ref="skipPreviousLink"
+            >&Eacute;viter la carte</a
+        >
     </section>
 </template>
 
@@ -55,6 +71,10 @@ import formatDate from "@common/utils/formatDate";
 
 import { Icon, Spinner } from "@resorptionbidonvilles/ui";
 import { trackEvent } from "@/helpers/matomo";
+
+import getAbsoluteOffsetTop from "@/utils/getAbsoluteOffsetTop";
+import skipFocusNext from "@/utils/skipFocusNext";
+import skipFocusPrevious from "@/utils/skipFocusPrevious";
 
 const props = defineProps({
     isLoading: {
@@ -128,6 +148,11 @@ const props = defineProps({
             return marqueurLocationDefault(...args);
         },
     },
+    displaySkipMapLinks: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 const {
     isLoading,
@@ -140,9 +165,12 @@ const {
     townClusteringOptions,
     townMarkerFn,
     locationMarkerFn,
+    displaySkipMapLinks,
 } = toRefs(props);
 
 const map = ref(null);
+const skipNextLink = ref(null);
+const skipPreviousLink = ref(null);
 const printer = ref(null);
 const currentMarkerGroup = ref(null);
 
@@ -354,6 +382,12 @@ function createLocationMarker(level, location) {
         });
 
     marker.addTo(markersGroup[level].value);
+}
+
+function skipMap(skipMapFunc, el) {
+    if (el && skipMapFunc(el)) {
+        window.scrollTo(0, getAbsoluteOffsetTop(document.activeElement));
+    }
 }
 
 watch(towns, syncTownMarkers);

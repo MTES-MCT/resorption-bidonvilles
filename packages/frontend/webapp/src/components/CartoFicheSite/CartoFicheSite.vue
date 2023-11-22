@@ -5,6 +5,7 @@
         defaultLayer="Satellite"
         :defaultView="defaultView"
         :townMarkerFn="marqueurSiteEau"
+        displaySkipMapLinks
     >
         <div
             ref="cadastreToggler"
