@@ -3,25 +3,35 @@
         <section class="flex items-end space-x-8">
             <article>
                 <p>Filtrer par</p>
-                <Filter
-                    v-model="organizationTypesFilter"
-                    title="Type de structure"
-                    :options="[
-                        {
-                            value: 'public_establishment',
-                            label: `Service de l'état, établissement ou organisme public`,
-                        },
-                        {
-                            value: 'administration',
-                            label: `Administration`,
-                        },
-                        {
-                            value: 'territorial_collectivity',
-                            label: 'Collectivité territoriale',
-                        },
-                        { value: 'association', label: 'Association' },
-                    ]"
-                />
+                <div
+                    class="flex flex-col flex-wrap sm:flex-row gap-2 items-start"
+                >
+                    <Filter
+                        v-model="organizationTypesFilter"
+                        title="Type de structure"
+                        :options="[
+                            {
+                                value: 'public_establishment',
+                                label: `Service de l'état, établissement ou organisme public`,
+                            },
+                            {
+                                value: 'administration',
+                                label: `Administration`,
+                            },
+                            {
+                                value: 'territorial_collectivity',
+                                label: 'Collectivité territoriale',
+                            },
+                            { value: 'association', label: 'Association' },
+                        ]"
+                    />
+                    <Filter
+                        v-model="ExpertiseTopicsFilter"
+                        v-if="expertiseTopicsItems.length > 0"
+                        title="Expertises ou sujets d'intérêts"
+                        :options="expertiseTopicsItems"
+                    />
+                </div>
             </article>
         </section>
         <AnnuairePagination
@@ -35,8 +45,11 @@ import { computed } from "vue";
 import { useDirectoryStore } from "@/stores/directory.store";
 import { Filter } from "@resorptionbidonvilles/ui";
 import AnnuairePagination from "./AnnuairePagination.vue";
+import { useConfigStore } from "@/stores/config.store";
 
+const configStore = useConfigStore();
 const directoryStore = useDirectoryStore();
+
 const organizationTypesFilter = computed({
     get() {
         return directoryStore.filters.organizationTypes;
@@ -44,5 +57,14 @@ const organizationTypesFilter = computed({
     set(newValue) {
         directoryStore.filters.organizationTypes = newValue;
     },
+});
+
+const expertiseTopicsItems = computed(() => {
+    return (
+        configStore.config?.expertise_topics.map((item) => ({
+            value: item.uid,
+            label: item.label,
+        })) || []
+    );
 });
 </script>
