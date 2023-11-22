@@ -346,6 +346,16 @@ const router = createRouter({
             },
         },
         {
+            path: "/permissions",
+            component: () => import("@/views/PermissionsParDefautView.vue"),
+            meta: {
+                title: "Permissions par défaut",
+                authRequirement: "signedIn",
+                navTab: "administration",
+                permissions: ["user.list"],
+            },
+        },
+        {
             path: "/signature-charte-engagement",
             component: () => import("@/views/CharteEngagementView.vue"),
             meta: {
@@ -513,6 +523,16 @@ const router = createRouter({
             meta: {
                 title: "Mentions légales",
                 authRequirement: "none",
+            },
+        },
+        {
+            path: "/utilisateurs/permissions",
+            component: () => import("@/views/ExceptionsDePermissionView.vue"),
+            meta: {
+                title: "Utilisateurs et structures avec permissions exceptionnelles",
+                authRequirement: "signedIn",
+                navTab: "administration",
+                permissions: ["user.list"],
             },
         },
 

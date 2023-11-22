@@ -49,6 +49,10 @@ export function list() {
     return axios.get("/users");
 }
 
+export function listWithPermissions() {
+    return axios.get("/users-with-permissions");
+}
+
 export function modifyOptions(userId, options) {
     return axios.post(`/users/${encodeURI(userId)}/options`, {
         options,
