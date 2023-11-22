@@ -40,8 +40,7 @@ function tryFocus(el) {
             el.tabIndex > -1) &&
         !el.disabled &&
         !el.hidden &&
-        el.focus &&
-        !el.classList.contains("sr-only")
+        el.focus
     ) {
         el.focus();
         return true;
