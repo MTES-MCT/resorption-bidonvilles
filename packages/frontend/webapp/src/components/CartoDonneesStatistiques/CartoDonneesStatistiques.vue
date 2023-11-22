@@ -10,6 +10,7 @@
         :locationMarkerFn="marqueurLocationStats"
         :townClusteringOptions="{ maxClusterRadius: 0 }"
         :defaultView="departementMetricsStore.lastMapView || undefined"
+        displaySkipMapLinks
     >
         <div
             ref="legendeConditionsDeVie"
