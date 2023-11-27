@@ -54,7 +54,9 @@ export default {
         try {
             await loaders.s3();
         } catch (error) {
-            console.log('Initialisation S3 échouée :(', error);
+            if (error.Code !== 'BucketAlreadyOwnedByYou') {
+                console.log('Initialisation S3 échouée :(', error);
+            }
         }
 
         // agenda
