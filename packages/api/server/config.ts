@@ -40,6 +40,7 @@ export default {
     },
     S3: process.env.RB_API_S3_ACCESS_KEY ? {
         endpoint: process.env.RB_API_S3_ENDPOINT || undefined,
+        publicEndpoint: process.env.RB_API_S3_PUBLIC_ENDPOINT || undefined,
         accessKeyId: process.env.RB_API_S3_ACCESS_KEY,
         secretAccessKey: process.env.RB_API_S3_SECRET_KEY,
         region: process.env.RB_API_S3_REGION,

@@ -31,6 +31,7 @@ export default async (entityType: AttachmentEntityType, entityId: number, create
                     ACL: 'public-read',
                     Key,
                     Body: f.buffer,
+                    ContentType: f.mimetype,
                 })),
             ];
 
@@ -42,6 +43,7 @@ export default async (entityType: AttachmentEntityType, entityId: number, create
                         ACL: 'public-read',
                         Key: PreviewKey,
                         Body: previews[index],
+                        ContentType: f.mimetype,
                     })),
                 );
             }

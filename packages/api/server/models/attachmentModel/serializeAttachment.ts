@@ -4,7 +4,7 @@ import { File } from './File.d';
 
 export default (attachment: string): File => {
     const [id, key, previewKey, original_name, mimetype, size, created_by] = attachment.split('@.;.@');
-    const baseUrl = `${config.S3.endpoint}/${config.S3.bucket}`;
+    const baseUrl = `${config.S3.publicEndpoint}/${config.S3.bucket}`;
 
     return {
         state: 'uploaded',
