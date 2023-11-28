@@ -2,7 +2,7 @@
     <CarteUtilisateurWrapper
         :user="user"
         :linkToUser="linkToUser"
-        class="hover:bg-blue200 border p-4 grid grid-cols-2 gap-8"
+        class="hover:bg-blue200 border p-4 grid grid-cols-2 gap-4"
         :class="{
             'bg-blue100': user.is_admin,
             [`${focusClasses.ring}`]: true,
@@ -33,6 +33,45 @@
                 user.phone
             }}</CarteUtilisateurDetailsIcon>
         </div>
+        <div
+            v-if="user.expertise_topics.length > 0"
+            class="col-span-2 grid grid-cols-2 gap-4"
+        >
+            <div v-if="getTopicsByLevel('expertise').length > 0" class="flex">
+                <Icon
+                    icon="arrow-turn-down-right"
+                    class="text-info mr-2"
+                    alt=""
+                />
+                <ul>
+                    <span class="text-info">Expert(e) en</span>
+                    <li
+                        v-for="topic in getTopicsByLevel('expertise')"
+                        :key="topic.id"
+                        class="text-G600 ml-2 text-sm"
+                    >
+                        - {{ topic.label }}
+                    </li>
+                </ul>
+            </div>
+            <div v-if="getTopicsByLevel('interest').length > 0" class="flex">
+                <Icon
+                    icon="arrow-turn-down-right"
+                    class="text-info mr-2"
+                    alt=""
+                />
+                <ul>
+                    <span class="text-info">Intéressé(e) par</span>
+                    <li
+                        v-for="topic in getTopicsByLevel('interest')"
+                        :key="topic.id"
+                        class="text-G600 ml-2 text-sm"
+                    >
+                        - {{ topic.label }}
+                    </li>
+                </ul>
+            </div>
+        </div>
     </CarteUtilisateurWrapper>
 </template>
 
@@ -45,6 +84,8 @@ import { Link } from "@resorptionbidonvilles/ui";
 import CarteUtilisateurWrapper from "./CarteUtilisateurWrapper.vue";
 import CarteUtilisateurDetailsIcon from "./CarteUtilisateurDetailsIcon.vue";
 import IconeAdministrateur from "@/components/IconeAdministrateur/IconeAdministrateur.vue";
+import { Icon } from "@resorptionbidonvilles/ui";
+import { useDirectoryStore } from "@/stores/directory.store";
 
 const props = defineProps({
     user: {
@@ -58,9 +99,19 @@ const props = defineProps({
     },
 });
 const { user, linkToUser } = toRefs(props);
+const directoryStore = useDirectoryStore();
 
 function trackEmail(event) {
     event.stopPropagation();
     trackEvent("Mail", "Envoi mail entre utilisateurs");
+}
+
+function getTopicsByLevel(level) {
+    return user.value.expertise_topics.filter((topic) => {
+        return (
+            directoryStore.filters.expertiseTopics.includes(topic.id) &&
+            topic.type == level
+        );
+    });
 }
 </script>
