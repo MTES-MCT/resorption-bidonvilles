@@ -15,6 +15,7 @@ export const useDirectoryStore = defineStore("directory", () => {
         search: ref(""),
         location: ref(null),
         organizationTypes: ref([]),
+        expertiseTopics: ref([]),
     };
     const fuse = computed(
         () =>
@@ -37,7 +38,9 @@ export const useDirectoryStore = defineStore("directory", () => {
             filtered = filterBySearch();
         }
 
-        return filterByOrganizationTypes(filtered);
+        filtered = filterByOrganizationTypes(filtered);
+        return filterByExpertiseTopics(filtered);
+        // return filtered;
     });
     const isLoading = ref(null);
     const error = ref(null);
@@ -74,6 +77,7 @@ export const useDirectoryStore = defineStore("directory", () => {
     watch(filters.search, resetPagination);
     watch(filters.location, resetPagination);
     watch(filters.organizationTypes, resetPagination);
+    watch(filters.expertiseTopics, resetPagination);
 
     function resetPagination() {
         if (filteredOrganizations.value.length === 0) {
@@ -91,6 +95,7 @@ export const useDirectoryStore = defineStore("directory", () => {
         filters.search.value = searchFilter;
         filters.location.value = locationFilter;
         filters.organizationTypes.value = [];
+        filters.expertiseTopics.value = [];
     }
 
     function filterByLocation(list) {
@@ -125,6 +130,65 @@ export const useDirectoryStore = defineStore("directory", () => {
                 organization.type.category
             );
         });
+    }
+
+    function filterUsersByExpertiseTopics(organization, expertiseTopicsIds) {
+        return organization.users.filter((user) => {
+            return (
+                user.expertise_topics &&
+                user.expertise_topics.some((topic) =>
+                    expertiseTopicsIds.includes(topic.id)
+                )
+            );
+        });
+    }
+
+    function filterByExpertiseTopics(list) {
+        // Vérifiez si le filtre contient (au moins) une valeur
+        if (filters.expertiseTopics.value.length === 0) {
+            // Pour chaque organisation, filtrer les utilisateurs en fonction du nouveau filtre
+            for (const organization of list) {
+                if (
+                    Object.prototype.hasOwnProperty.call(
+                        organization,
+                        "allUsers"
+                    )
+                ) {
+                    organization.users = organization.allUsers;
+                }
+            }
+
+            return list;
+        }
+
+        // Filtrer les organisations qui ont au moins un utilisateur avec l'un des expertiseTopicsIds donné
+        const filteredOrganizations = list.filter((organization) => {
+            // Vérifier si l'organisation a la propriété 'users'
+            if (!organization.users) {
+                // Sans users impossible de vérifier l'étendue des compétences de la structure
+                return [];
+            }
+
+            // Si organization.allUsers est null, c'est qu'on n'a pas encore filtré. On peut donc initialiser cette prop
+            if (!organization.allUsers) {
+                organization.allUsers = organization.users;
+            } else {
+                // Sinon, on réinitialise les organization.users avec la liste initiale
+                organization.users = organization.allUsers;
+            }
+
+            // Mise à jouir de la liste des utilisateurs
+            const filteredUsers = filterUsersByExpertiseTopics(
+                organization,
+                filters.expertiseTopics.value
+            );
+            organization.users = filteredUsers;
+
+            // Ne renvoyer que les organisations qui ont au moins un utilisateur correspondant au filtre
+            return filteredUsers.length > 0;
+        });
+
+        return filteredOrganizations;
     }
 
     const { bus } = useEventBus();
