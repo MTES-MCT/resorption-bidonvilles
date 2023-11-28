@@ -26,7 +26,7 @@
                         ]"
                     />
                     <Filter
-                        v-model="ExpertiseTopicsFilter"
+                        v-model="expertiseTopicsFilter"
                         v-if="expertiseTopicsItems.length > 0"
                         title="Expertises ou sujets d'intérêts"
                         :options="expertiseTopicsItems"
@@ -56,6 +56,15 @@ const organizationTypesFilter = computed({
     },
     set(newValue) {
         directoryStore.filters.organizationTypes = newValue;
+    },
+});
+
+const expertiseTopicsFilter = computed({
+    get() {
+        return directoryStore.filters.expertiseTopics;
+    },
+    set(newValue) {
+        directoryStore.filters.expertiseTopics = newValue;
     },
 });
 
