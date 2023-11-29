@@ -55,6 +55,7 @@ export default {
             await loaders.s3();
         } catch (error) {
             if (error.Code !== 'BucketAlreadyOwnedByYou') {
+                // eslint-disable-next-line no-console
                 console.log('Initialisation S3 échouée :(', error);
             }
         }
