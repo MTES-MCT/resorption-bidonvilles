@@ -133,11 +133,8 @@ export const useDirectoryStore = defineStore("directory", () => {
 
     function filterUsersByExpertiseTopics(organization, expertiseTopicsIds) {
         return organization.users.filter((user) => {
-            return (
-                user.expertise_topics &&
-                user.expertise_topics.some((topic) =>
-                    expertiseTopicsIds.includes(topic.id)
-                )
+            return user?.expertise_topics?.some((topic) =>
+                expertiseTopicsIds.includes(topic.id)
             );
         });
     }
@@ -147,12 +144,7 @@ export const useDirectoryStore = defineStore("directory", () => {
         if (filters.expertiseTopics.value.length === 0) {
             // Pour chaque organisation, filtrer les utilisateurs en fonction du nouveau filtre
             for (const organization of list) {
-                if (
-                    Object.prototype.hasOwnProperty.call(
-                        organization,
-                        "allUsers"
-                    )
-                ) {
+                if (Object.hasOwn(organization, "allUsers")) {
                     organization.users = organization.allUsers;
                 }
             }
