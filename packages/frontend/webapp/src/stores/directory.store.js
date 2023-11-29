@@ -40,7 +40,6 @@ export const useDirectoryStore = defineStore("directory", () => {
 
         filtered = filterByOrganizationTypes(filtered);
         return filterByExpertiseTopics(filtered);
-        // return filtered;
     });
     const isLoading = ref(null);
     const error = ref(null);
