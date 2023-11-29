@@ -11,7 +11,7 @@ import { UserQueryFilters, RawUserAccess, RawUser } from './query.d';
 
 const { where: fWhere } = permissionUtils;
 
-export default async (where: Where | String = [], filters: UserQueryFilters = {}, user: string = null, feature: string = undefined, transaction: Transaction = undefined): Promise<User[]> => {
+export default async (where: Where | string = [], filters: UserQueryFilters = {}, user: string = null, feature: string = undefined, transaction: Transaction = undefined): Promise<User[]> => {
     const replacements = {};
 
     const strWhere = typeof where === 'string' ? where : '';
