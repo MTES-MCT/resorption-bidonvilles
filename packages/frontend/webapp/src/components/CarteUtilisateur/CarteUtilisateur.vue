@@ -79,12 +79,10 @@
 import { defineProps, toRefs } from "vue";
 import { trackEvent } from "@/helpers/matomo";
 import focusClasses from "@common/utils/focus_classes";
-
-import { Link } from "@resorptionbidonvilles/ui";
+import { Icon, Link } from "@resorptionbidonvilles/ui";
 import CarteUtilisateurWrapper from "./CarteUtilisateurWrapper.vue";
 import CarteUtilisateurDetailsIcon from "./CarteUtilisateurDetailsIcon.vue";
 import IconeAdministrateur from "@/components/IconeAdministrateur/IconeAdministrateur.vue";
-import { Icon } from "@resorptionbidonvilles/ui";
 import { useDirectoryStore } from "@/stores/directory.store";
 
 const props = defineProps({
