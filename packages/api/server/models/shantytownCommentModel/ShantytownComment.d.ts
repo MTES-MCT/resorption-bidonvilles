@@ -1,5 +1,5 @@
-import { CommentTag } from '../shantytownCommentTagModel/serializeCommentTag';
 import { File } from '#server/models/attachmentModel/File.d';
+import { CommentTag } from '../shantytownCommentTagModel/serializeCommentTag';
 
 type CommentAuthor = {
     id:number,
