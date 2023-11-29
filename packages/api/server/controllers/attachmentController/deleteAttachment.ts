@@ -8,6 +8,7 @@ const ERROR_RESPONSES = {
 export default async (req, res, next) => {
     try {
         await attachmentService.deleteAttachment(req.body.keys);
+        res.status(200).send({});
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({
