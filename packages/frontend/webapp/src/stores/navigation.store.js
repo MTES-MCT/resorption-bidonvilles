@@ -17,6 +17,12 @@ const topItems = [
         authRequirement: "signedOut",
     },
     {
+        icon: "fa-regular fa-user-plus",
+        label: "Inviter des utilisateurs",
+        route: "/invitation",
+        authRequirement: "signedIn",
+    },
+    {
         icon: "fa-newspaper fa-regular",
         label: "Blog",
         route: "https://www.blog-resorption-bidonvilles.fr",
