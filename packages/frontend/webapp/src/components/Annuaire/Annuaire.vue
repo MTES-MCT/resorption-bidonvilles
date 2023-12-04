@@ -14,6 +14,11 @@
                 Retrouvez ici les coordonnées des structures et personnes
                 inscrites sur la plateforme
             </template>
+            <template v-slot:actions>
+                <Link to="/invitation"
+                    ><Icon icon="user-plus" /> Inviter des utilisateurs</Link
+                >
+            </template>
         </ViewHeader>
 
         <AnnuaireHeader
@@ -32,6 +37,7 @@
 <script setup>
 import router from "@/helpers/router";
 import { computed } from "vue";
+import { Icon, Link } from "@resorptionbidonvilles/ui";
 import computeLocationSearchTitle from "@/utils/computeLocationSearchTitle";
 import { useDirectoryStore } from "@/stores/directory.store";
 
