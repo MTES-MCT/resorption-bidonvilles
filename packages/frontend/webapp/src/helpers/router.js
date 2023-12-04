@@ -577,7 +577,9 @@ router.beforeEach((to, from) => {
     }
 
     if (configRequired === undefined) {
-        configRequired = authRequirement === "signedIn";
+        configRequired =
+            authRequirement === "signedIn" ||
+            (authRequirement === "none" && userStore.isLoggedIn);
     }
 
     // signedOut requirement
