@@ -16,7 +16,7 @@
                 <Icon icon="times" />
             </button>
             <h1 class="text-md font-bold"><slot name="title" /></h1>
-            <p class="text-sm"><slot name="description" /></p>
+            <p class="text-sm" role="status"><slot name="description" /></p>
         </div>
     </div>
 </template>
