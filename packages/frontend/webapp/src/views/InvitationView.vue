@@ -1,6 +1,10 @@
 <template>
     <Layout hero v-if="greeter">
-        <FormInvitation :greeter="greeter" :from="from" />
+        <FormInvitation
+            :greeter="greeter"
+            :from="from"
+            :showSkip="!userStore.user"
+        />
     </Layout>
 
     <LayoutError hero v-else>
