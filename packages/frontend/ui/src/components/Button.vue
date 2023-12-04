@@ -1,6 +1,7 @@
 <template>
     <component :class="[
-        'inline-flex relative items-center focus:ring-2 ring-offset-2 ring-info',
+        'inline-flex relative items-center',
+        focusClasses.ring,
         sizeClasses,
         variantClasses,
         disabled && 'opacity-50 cursor-not-allowed'
@@ -32,6 +33,7 @@
 <script>
 import { useIsSubmitting } from "vee-validate";
 import Icon from "./Icon.vue";
+import focusClasses from "../../../common/utils/focus_classes";
 
 export default {
     name: "MyButton",
@@ -39,6 +41,7 @@ export default {
         const isSubmitting = useIsSubmitting();
         return {
             isSubmitting,
+            focusClasses,
         }
     },
     props: {
@@ -95,26 +98,25 @@ export default {
         variantClasses() {
             return {
                 primary:
-                    "border-2 border-primary bg-primary text-white hover:bg-primaryDark focus:outline-none",
+                    "border-2 border-primary bg-primary text-white hover:bg-primaryDark",
                 secondary:
-                    "border-2 border-secondary bg-secondary text-white hover:bg-secondaryDark focus:outline-none",
+                    "border-2 border-secondary bg-secondary text-white hover:bg-secondaryDark",
                 tertiary:
-                    "border-2 border-tertiary bg-tertiary text-white hover:bg-tertiaryDark hover:border-tertiaryDark focus:outline-none",
+                    "border-2 border-tertiary bg-tertiary text-white hover:bg-tertiaryDark hover:border-tertiaryDark",
                 specialEvent:
-                    "bg-yellow-200 text-black hover:bg-yellow-400 focus:outline-none",
+                    "bg-yellow-200 text-black hover:bg-yellow-400",
                 primaryOutline:
-                    "border-2 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none",
+                    "border-2 border-primary text-primary hover:bg-primary hover:text-white",
                 secondaryOutline:
-                    "border-2  border-secondary text-secondary hover:bg-secondary hover:text-white focus:outline-none",
+                    "border-2  border-secondary text-secondary hover:bg-secondary hover:text-white",
                 primaryOutlineAlt:
-                    "bg-white border-1 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none",
+                    "bg-white border-1 border-primary text-primary hover:bg-primary hover:text-white",
                 primaryText:
-                    "text-primary hover:text-primaryDark focus:outline-none hover:bg-G200",
+                    "text-primary hover:text-primaryDark hover:bg-G200",
                 secondaryText:
-                    "text-secondary hover:text-secondaryDark focus:outline-none",
-                text: "focus:outline-none",
+                    "text-secondary hover:text-secondaryDark",
                 filter:
-                    "rounded border-1 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none"
+                    "rounded border-1 border-primary text-primary hover:bg-primary hover:text-white"
             }[this.variant];
         },
         isLink() {

@@ -10,7 +10,7 @@
     >
         <RouterLink
             :to="`/site/${shantytown.id}`"
-            class="focus:outline-2 outline-info outline-offset-2"
+            :class="focusClasses.outline"
         >
             <div
                 class="-mt-1 print:mt-0"
@@ -58,6 +58,7 @@
 <script setup>
 import { defineProps, toRefs, computed, ref } from "vue";
 import { useUserStore } from "@/stores/user.store";
+import focusClasses from "@common/utils/focus_classes";
 
 import CarteSiteDetailleeHeader from "./CarteSiteDetailleeHeader.vue";
 import CarteSiteDetailleeName from "./CarteSiteDetailleeName.vue";

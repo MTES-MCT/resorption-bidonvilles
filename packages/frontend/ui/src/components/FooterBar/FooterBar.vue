@@ -50,7 +50,7 @@
                 <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
 
                 <router-link to="/plan-du-site" v-if="showSiteMapLink"
-                    class="text-xs border-b-2 border-transparent hover:border-G500 focus:outline-none focus:ring-2 ring-offset-2 ring-info">
+                    class="text-xs border-b-2 border-transparent hover:border-G500" :class="focusClasses.ring">
                     {{ $t('footer.siteMap') }}
                 </router-link>
                 <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
@@ -61,6 +61,7 @@
 
 <script setup>
 import { toRefs } from "vue";
+import focusClasses from '../../../../common/utils/focus_classes';
 import Icon from "../Icon.vue";
 import ContentWrapper from "../ContentWrapper.vue";
 import IdentiteVisuelle from "../IdentiteVisuelle/IdentiteVisuelle.vue";

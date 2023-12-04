@@ -16,6 +16,7 @@
 
 <script>
 import Icon from "./Icon.vue";
+import focusClasses from '../../../common/utils/focus_classes';
 
 export default {
     components: {
@@ -44,7 +45,7 @@ export default {
     },
     data() {
         return {
-            focusClasses: "focus:outline-none focus:ring-2 ring-offset-2 ring-info",
+            focusClasses: focusClasses.ring,
         };
     },
     computed: {
