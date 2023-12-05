@@ -10,6 +10,7 @@ export type ActionSelectRow = {
     departement_name: string,
     region_code: string,
     region_name: string,
+    ended_at: number | null,
 };
 
 export default (shantytownIds: number[], clauseGroup: object = {}): Promise<ActionSelectRow[]> => {
@@ -22,6 +23,7 @@ export default (shantytownIds: number[], clauseGroup: object = {}): Promise<Acti
         `SELECT
             actions.action_id AS id,
             actions.name,
+            actions.ended_at,
             array_agg(action_shantytowns.fk_shantytown) AS shantytowns,
             departements.code AS departement_code,
             departements.name AS departement_name,
