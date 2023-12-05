@@ -26,7 +26,6 @@ Les autres variables utilisés plus spécifiques:
 - siteUrl => https://resorption-bidonvilles.beta.gouv.fr/site/406
 - contactUrl => https://resorption-bidonvilles.beta.gouv.fr/contact  
 - formationUrl => https://app.evalandgo.com/s/index.php?a=JTk2cCU5N2slOUElQjA=&id=JTk4ayU5QW4lOTYlQUY=
-- idealcoUrl => https://www.idealco.fr/campagne/?utm_campaign=g-386-3036d540
 - adminUrl => https://resorption-bidonvilles.beta.gouv.fr/liste-des-utilisateurs
 
 ## Tracking 
