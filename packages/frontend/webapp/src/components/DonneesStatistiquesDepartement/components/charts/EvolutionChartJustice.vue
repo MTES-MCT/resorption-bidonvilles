@@ -32,6 +32,7 @@ import { computed } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { LineChart } from "@/helpers/chart";
 import ChartBigFigure from "./ChartBigFigure.vue";
+import setBackgroundColor from "../../utils/setBackgroundColor";
 
 const departementMetricsStore = useDepartementMetricsStore();
 const data = departementMetricsStore.evolution.data.justice.justice;
@@ -41,15 +42,22 @@ const chartData = computed(() => ({
     datasets: [
         {
             label: "Nombre de CFP",
-            backgroundColor: ["rgba(0, 0, 145, 0.3)"],
+            backgroundColor: ["#FFB7A5"],
             fill: true,
             data: data.charts.police,
+            tension: 0.5,
         },
         {
             label: "Nombre de plaintes",
-            backgroundColor: ["rgba(134, 239, 172, 0.7)"],
+            backgroundColor: (context) => {
+                return setBackgroundColor(context, [
+                    "rgba(0, 0, 255, 0.5)",
+                    "rgba(255, 255, 255, 0.3)",
+                ]);
+            },
             fill: true,
             data: data.charts.complaints,
+            tension: 0.5,
         },
     ],
 }));

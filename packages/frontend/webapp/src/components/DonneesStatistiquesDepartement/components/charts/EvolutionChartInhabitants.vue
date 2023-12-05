@@ -43,6 +43,7 @@ import { LineChart } from "@/helpers/chart";
 import ChartBigFigure from "./ChartBigFigure.vue";
 import flagEU from "@/assets/img/flags/eu.png";
 import flagExtraCommunautaires from "@/assets/img/flags/extra-communautaires.png";
+import setBackgroundColor from "../../utils/setBackgroundColor";
 
 const departementMetricsStore = useDepartementMetricsStore();
 const data = departementMetricsStore.evolution.data.inhabitants.inhabitants;
@@ -52,24 +53,42 @@ const chartData = computed(() => ({
     datasets: [
         {
             label: "Nombre d'habitants intra-UE",
-            backgroundColor: ["rgba(240, 127, 135, 1)"],
+            backgroundColor: (context) => {
+                return setBackgroundColor(context, [
+                    "rgba(255, 0, 0, 0.5)",
+                    "rgba(255, 255, 255, 0.75)",
+                ]);
+            },
             fill: true,
             data: data.charts.european,
             stack: "Stack 0",
+            tension: 0.5,
         },
         {
             label: "Nombre d'habitants extra-UE",
-            backgroundColor: ["rgba(134, 239, 172, 1)"],
+            backgroundColor: (context) => {
+                return setBackgroundColor(context, [
+                    "rgba(0, 255, 0, 0.5)",
+                    "rgba(255, 255, 255, 0.75)",
+                ]);
+            },
             fill: true,
             data: data.charts.foreign,
             stack: "Stack 0",
+            tension: 0.5,
         },
         {
             label: "Nombre total d'habitants",
-            backgroundColor: ["rgba(127, 127, 200, 0.5)"],
+            backgroundColor: (context) => {
+                return setBackgroundColor(context, [
+                    "rgba(0, 0, 255, 0.5)",
+                    "rgba(255, 255, 255, 0.75)",
+                ]);
+            },
             fill: true,
             data: data.charts.total,
             stack: "Stack 1",
+            tension: 0.5,
         },
     ],
 }));
