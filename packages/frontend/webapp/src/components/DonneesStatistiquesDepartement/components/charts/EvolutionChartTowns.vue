@@ -48,6 +48,7 @@ import { computed } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { LineChart } from "@/helpers/chart";
 import ChartBigFigure from "./ChartBigFigure.vue";
+import setBackgroundColor from "../../utils/setBackgroundColor";
 
 const departementMetricsStore = useDepartementMetricsStore();
 const data = departementMetricsStore.evolution.data.inhabitants.towns;
@@ -57,24 +58,42 @@ const chartData = computed(() => ({
     datasets: [
         {
             label: "Sites de moins de 10 habitants",
-            backgroundColor: ["rgba(240, 127, 135, 0.7)"],
+            backgroundColor: (context) => {
+                return setBackgroundColor(context, [
+                    "rgba(255, 0, 0, 0.5)",
+                    "rgba(255, 255, 255, 0.75)",
+                ]);
+            },
             fill: true,
             data: data.charts.less_than_10,
             Stack: "Stack 0",
+            tension: 0.5,
         },
         {
             label: "Sites de moins de 100 habitants",
-            backgroundColor: ["rgba(134, 239, 172, 0.7)"],
+            backgroundColor: (context) => {
+                return setBackgroundColor(context, [
+                    "rgba(0, 255, 0, 0.5)",
+                    "rgba(255, 255, 255, 0.75)",
+                ]);
+            },
             fill: true,
             data: data.charts.between_10_and_99,
             Stack: "Stack 0",
+            tension: 0.5,
         },
         {
             label: "Sites de plus de 100 habitants",
-            backgroundColor: ["rgba(127, 127, 200, 0.7)"],
+            backgroundColor: (context) => {
+                return setBackgroundColor(context, [
+                    "rgba(0, 0, 255, 0.5)",
+                    "rgba(255, 255, 255, 0.75)",
+                ]);
+            },
             fill: true,
             data: data.charts.more_than_99,
             Stack: "Stack 0",
+            tension: 0.5,
         },
     ],
 }));

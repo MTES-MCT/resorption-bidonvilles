@@ -45,6 +45,7 @@ import formatStat from "@/utils/formatStat";
 import { computed, toRefs } from "vue";
 import { LineChart } from "@/helpers/chart";
 import ChartBigFigure from "./ChartBigFigure.vue";
+import setBackgroundColor from "../../utils/setBackgroundColor";
 
 const props = defineProps({
     chartLabel: {
@@ -75,19 +76,26 @@ const chartData = computed(() => ({
             label: `Nombre total de ${
                 chartType.value === "towns" ? "sites" : "personnes"
             }`,
-            backgroundColor: ["rgba(0, 0, 145, 0.3)"],
+            backgroundColor: (context) => {
+                return setBackgroundColor(context, [
+                    "rgba(0, 0, 255, 0.5)",
+                    "rgba(255, 255, 255, 0.3)",
+                ]);
+            },
             fill: true,
             data: data.value.charts[
                 chartType.value === "towns"
                     ? "towns_total"
                     : "inhabitants_total"
             ],
+            tension: 0.5,
         },
         {
             label: chartLabel.value,
             backgroundColor: ["#FFB7A5"],
             fill: true,
             data: data.value.charts[livingConditionType.value],
+            tension: 0.5,
         },
     ],
 }));
