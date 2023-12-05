@@ -23,7 +23,7 @@ export default async (categoryUid, search = null) => {
                 ${search !== null ? ' AND (UNACCENT(organizations.name) ILIKE UNACCENT(:search) OR UNACCENT(organizations.abbreviation) ILIKE UNACCENT(:search))' : ''}
             ORDER BY
                 CASE organization_types.fk_category
-                    WHEN 'association' THEN LOWER(UNACCENT(organizations.name))
+                    WHEN 'association' THEN LOWER(UNACCENT(COALESCE(organizations.abbreviation, organizations.name)))
                     ELSE '' END
                 ASC,
                 departement_code ASC, UNACCENT(region_name) ASC, UNACCENT(epci_name) ASC, UNACCENT(city_name) ASC`,
