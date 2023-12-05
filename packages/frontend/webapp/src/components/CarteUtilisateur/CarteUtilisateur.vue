@@ -2,9 +2,10 @@
     <CarteUtilisateurWrapper
         :user="user"
         :linkToUser="linkToUser"
-        class="hover:bg-blue200 border p-4 grid grid-cols-2 gap-8 focus:outline-none focus:ring-2 ring-offset-2 ring-info"
+        class="hover:bg-blue200 border p-4 grid grid-cols-2 gap-8"
         :class="{
             'bg-blue100': user.is_admin,
+            [`${focusClasses.ring}`]: true,
         }"
     >
         <div>
@@ -38,6 +39,8 @@
 <script setup>
 import { defineProps, toRefs } from "vue";
 import { trackEvent } from "@/helpers/matomo";
+import focusClasses from "@common/utils/focus_classes";
+
 import { Link } from "@resorptionbidonvilles/ui";
 import CarteUtilisateurWrapper from "./CarteUtilisateurWrapper.vue";
 import CarteUtilisateurDetailsIcon from "./CarteUtilisateurDetailsIcon.vue";

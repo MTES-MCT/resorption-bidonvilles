@@ -1,6 +1,6 @@
 <template>
     <router-link to="/" aria-label="Retourner à la page d'accueil en mode connecté, sinon, au formulaire de connexion"
-        class="flex items-center space-x-8 hover:bg-G100 p-3 focus:outline-none focus:ring-2 ring-offset-2 ring-info">
+        class="flex items-center space-x-8 hover:bg-G100 p-3" :class="focusClasses.ring">
         <div class="flex flex-col items-start space-y-1">
             <img :src="marianne" :class="sizeClass.marianneH" alt="Bloc marque de l'état" />
             <p class="uppercase font-bold" :class="sizeClass.textSize" aria-hidden="true">
@@ -31,6 +31,7 @@
 
 <script setup>
 import { toRefs, computed } from "vue";
+import focusClasses from '../../../../common/utils/focus_classes';
 
 import marianne from "./assets/marianne.svg";
 import devise from "./assets/devise.svg";

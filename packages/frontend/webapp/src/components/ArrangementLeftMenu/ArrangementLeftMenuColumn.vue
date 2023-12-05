@@ -19,12 +19,13 @@
             <RouterLink
                 v-else
                 :to="tab.route"
-                class="border-l-4 pl-2 cursor-pointer focus:outline-none focus:ring-2 ring-offset-2 ring-info"
+                class="border-l-4 pl-2 cursor-pointer"
                 :class="[
                     tab.id === activeTab
                         ? activeClasses[tab.variant]
                         : 'border-l-transparent hover:underline',
                     classes[tab.variant],
+                    focusClasses.ring,
                 ]"
                 replace
                 ><Icon v-if="tab.icon" :icon="tab.icon" />
@@ -38,6 +39,7 @@
 import { defineProps, toRefs } from "vue";
 import { RouterLink } from "vue-router";
 import { Icon, Button } from "@resorptionbidonvilles/ui";
+import focusClasses from "@common/utils/focus_classes";
 
 const props = defineProps({
     tabs: {

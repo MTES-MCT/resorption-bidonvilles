@@ -7,9 +7,10 @@
         @mouseleave="hovered = false"
     >
         <div
+            tabindex="0"
             @click="navigate"
-            class="flex cursor-pointer hover:bg-blue100 focus:outline-none focus:ring-2 ring-offset-2 ring-info"
-            :class="bgColor"
+            class="flex cursor-pointer hover:bg-blue100"
+            :class="`${bgColor} ${focusClasses.ring}`"
         >
             <div class="flex-1 p-3">
                 <p :class="accessStatus.textColor">
@@ -64,6 +65,7 @@ import { RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
 import accessStatuses from "@/utils/access_statuses";
 import formatDate from "@common/utils/formatDate.js";
+import focusClasses from "@common/utils/focus_classes";
 
 import { Icon, Link } from "@resorptionbidonvilles/ui";
 

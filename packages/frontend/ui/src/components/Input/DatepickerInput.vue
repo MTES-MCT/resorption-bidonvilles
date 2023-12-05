@@ -5,7 +5,7 @@
         <div :class="width">
             <DatePicker v-model="date" locale="fr" :format-locale="fr" format="dd LLLL yyyy"
                 :disabled="isSubmitting || disabled" autoApply :enableTimePicker="false"
-                input-class-name="focus:outline-none focus:ring-2 ring-offset-2 ring-info"
+                :input-class-name="focusClasses.ring"
                 :preventMinMaxNavigation="$attrs.maxDate || $attrs.minDate" v-bind="$attrs" :uid="id">
             </DatePicker>
         </div>
@@ -17,6 +17,7 @@
 import { computed, defineProps, toRefs, defineEmits } from "vue";
 import { useField, useIsSubmitting } from "vee-validate";
 import { fr } from "date-fns/locale";
+import focusClasses from "../../../../common/utils/focus_classes";
 
 import InputWrapper from "./utils/InputWrapper.vue";
 import InputLabel from "./utils/InputLabel.vue";

@@ -1,8 +1,11 @@
 <template>
     <router-link
         :to="to"
-        class="py-3 px-6 hover:bg-G100 border-t-2 border-b-2 border-transparent focus:outline-none focus:ring-2 ring-offset-2 ring-info"
-        v-bind:class="active ? 'border-b-primary text-primary' : ''"
+        class="py-3 px-6 hover:bg-G100 border-t-2 border-b-2 border-transparent"
+        :class="[
+            active ? 'border-b-primary text-primary' : '',
+            focusClasses.ring,
+        ]"
         tabindex="0"
     >
         <slot />
@@ -11,6 +14,7 @@
 
 <script setup>
 import { defineProps, toRefs } from "vue";
+import focusClasses from "@common/utils/focus_classes";
 
 const props = defineProps({
     to: String,

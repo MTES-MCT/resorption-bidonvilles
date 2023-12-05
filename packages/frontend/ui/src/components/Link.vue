@@ -18,6 +18,7 @@
 
 <script>
 import Icon from "./Icon.vue";
+import focusClasses from '../../../common/utils/focus_classes';
 
 export default {
     name: "Link",
@@ -62,7 +63,7 @@ export default {
     data() {
         return {
             linkClasses: `${this.color} hover:${this.hoverColor} ${this.classes} cursor-pointer`,
-            focusClasses: "focus:outline-none focus:ring-2 ring-offset-2 ring-info",
+            focusClasses: focusClasses.ring,
         };
     },
 

@@ -1,10 +1,11 @@
 <template>
     <button
         :class="[
-            'mb-4 cursor-pointer focus:outline-none focus:ring-2 ring-offset-2 ring-info text-left',
+            'mb-4 cursor-pointer text-left',
             isActive
                 ? 'text-primary border-l-4 pl-2 border-primary font-bold'
                 : 'hover:underline',
+            focusClasses.ring,
         ]"
         :aria-labelledby="isActive ? `Filtre actif : ${label}` : label"
         @click="setFilter"
@@ -17,6 +18,7 @@
 import { useDashboardStore } from "@/stores/dashboard.store";
 import { defineProps, toRefs, computed } from "vue";
 import { trackEvent } from "@/helpers/matomo";
+import focusClasses from "@common/utils/focus_classes";
 
 const props = defineProps({
     id: {
