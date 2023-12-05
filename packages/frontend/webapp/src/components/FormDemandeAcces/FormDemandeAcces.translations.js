@@ -2,7 +2,7 @@ export default {
     fr: {
         subtitle:
             "Acteur de terrain, médiateur, association, service de l'État, collectivité... Demandez un accès à votre outil collaboratif.",
-        title: "Contactez-nous !",
+        title: "Demandez un accès",
         alert: "(Tous les champs du formulaire doivent être renseignés)",
         structure: "Votre structure",
         submit: "Envoyer ma demande",
