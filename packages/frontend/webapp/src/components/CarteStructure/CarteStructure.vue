@@ -2,7 +2,8 @@
     <article class="cursor-pointer border-1 hover:border-blue400">
         <RouterLink
             :to="`/structure/${organization.id}`"
-            class="inline-block p-4 h-full flex flex-col focus:outline-none focus:ring-2 ring-offset-2 ring-info"
+            class="inline-block p-4 h-full flex flex-col"
+            :class="focusClasses.ring"
         >
             <header>
                 <h3 class="text-lg font-bold">{{ name }}</h3>
@@ -57,6 +58,8 @@
 import { defineProps, toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { RouterLink } from "vue-router";
+import focusClasses from "@common/utils/focus_classes";
+
 import { Icon, Link } from "@resorptionbidonvilles/ui";
 import IconeAdministrateur from "@/components/IconeAdministrateur/IconeAdministrateur.vue";
 

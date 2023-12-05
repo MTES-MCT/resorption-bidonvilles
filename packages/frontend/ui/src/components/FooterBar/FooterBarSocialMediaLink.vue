@@ -1,5 +1,5 @@
 <template>
-    <a :href="href" class="inline-block p-2 hover:bg-blue200 focus:outline-none focus:ring-2 ring-offset-2 ring-info">
+    <a :href="href" class="inline-block p-2 hover:bg-blue200" :class="focusClasses.ring">
         <span class="sr-only">{{ socialVerb }} {{ socialOn }}</span>
         <span class="sr-only" lang="en">{{ socialName }}</span>
         <Icon :icon="`fa-brands ${icon}`" class="text-3xl text-primary" />
@@ -8,6 +8,7 @@
 
 <script setup>
 import Icon from "../Icon.vue";
+import focusClasses from '../../../../common/utils/focus_classes';
 
 const props = defineProps({
     href: String,

@@ -7,6 +7,7 @@ function switchBranch() {
     fi
 
     yarn install
+    git checkout .
 }
 
 # on récupère la liste des migrations faites actuellement
@@ -26,7 +27,7 @@ if [[ ! -z "$excess_migrations" ]]; then
 
     switchBranch $current_branch
     cd packages/api
-
+ 
     echo "$excess_migrations" | tail -r | while read -r line; do
         echo "Annulation de la migration $line"
         yarn sequelize db:migrate:undo --name $line

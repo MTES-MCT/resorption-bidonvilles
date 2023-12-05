@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col xs:flex-row items-center">
         <Button icon="chevron-left" iconPosition="left" variant="custom" size="custom"
-            class="hover:bg-G200 rounded-full px-4 py-1 mx-2 focus:outline-none" :disabled="currentPage === 1"
+            class="hover:bg-G200 rounded-full px-4 py-1 mx-2" :disabled="currentPage === 1"
             @click="onPrevious" type="button">Précédent</Button>
 
         <component :is="currentPage > 1 ? 'button' : 'div'" class="h-8 w-8 flex justify-center items-center rounded-full "
@@ -19,7 +19,7 @@
         </component>
 
         <Button icon="chevron-right" iconPosition="right" variant="custom" size="custom"
-            :disabled="currentPage === nbPages" class="hover:bg-G200 rounded-full px-4 py-1 mx-2 focus:outline-none"
+            :disabled="currentPage === nbPages" class="hover:bg-G200 rounded-full px-4 py-1 mx-2"
             @click="onNext" type="button">Suivant</Button>
     </div>
 </template>

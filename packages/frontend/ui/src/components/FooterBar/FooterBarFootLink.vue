@@ -5,6 +5,7 @@
 
 <script setup>
 import { computed, toRefs } from "vue";
+import focusClasses from '../../../../common/utils/focus_classes';
 
 const props = defineProps({
     to: String,
@@ -16,5 +17,8 @@ const props = defineProps({
 
 const { to, title } = toRefs(props);
 const isLocalLink = computed(() => to.value[0] === '/' && to.value.slice(-4) !== '.pdf');
-const classes = 'text-xs border-b-2 border-transparent hover:border-G500 focus:outline-none focus:ring-2 ring-offset-2 ring-info';
+const classes = [
+    'text-xs border-b-2 border-transparent hover:border-G500',
+    focusClasses.ring,
+].join(' ');
 </script>

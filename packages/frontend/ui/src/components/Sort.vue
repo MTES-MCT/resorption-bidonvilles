@@ -4,7 +4,7 @@
             <template v-slot:button="{ isOpen }">
                 <Button variant="custom" size="sm" :icon="isOpen ? 'chevron-up' : 'chevron-down'" iconPosition="right"
                     :class="[
-                        'px-4 rounded focus:outline-none border-1 border-primary whitespace-no-wrap ',
+                        'px-4 rounded border-1 border-primary whitespace-no-wrap ',
                         isOpen
                             ? 'bg-primary text-white hover:text-white focus:text-white'
                             : 'hover:bg-blue200 hover:text-primary text-primary'

@@ -8,7 +8,6 @@ import userService from '#server/services/user/index';
 
 const {
     sendUserDemoInvitation,
-    sendUserIdealcoInvitation,
     sendUserEntraideInvitation,
     sendUserFeatures,
     sendUserShare,
@@ -92,14 +91,6 @@ export default (agenda) => {
         (job) => {
             const { user } = job.attrs.data;
             sendUserDemoInvitation(user);
-        },
-    );
-
-    agenda.define(
-        'idealco_invitation',
-        (job) => {
-            const { user } = job.attrs.data;
-            sendUserIdealcoInvitation(user);
         },
     );
 

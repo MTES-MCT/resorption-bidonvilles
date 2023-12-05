@@ -1,8 +1,9 @@
 <template>
     <button
         :class="[
-            'w-12 h-12 items-center flex flex-col justify-center rounded-full border-1 cursor-pointer border-primary text-primary hover:bg-blue100 focus:outline-none focus:ring-2 ring-offset-2 ring-info',
+            'w-12 h-12 items-center flex flex-col justify-center rounded-full border-1 cursor-pointer border-primary text-primary hover:bg-blue100',
             additionalClasses,
+            focusClasses.ring,
         ]"
         :disabled="disabled"
     >
@@ -13,6 +14,7 @@
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
+import focusClasses from "@common/utils/focus_classes";
 
 const props = defineProps({
     icon: {

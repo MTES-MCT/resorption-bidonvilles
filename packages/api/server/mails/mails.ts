@@ -17,7 +17,6 @@ const contactUrl = `${webappUrl}/contact`;
 const adminGuideUrl = `${backUrl}/assets/guide_utilisateur/guide_admin_2020_06.pdf`;
 const userGuideUrl = `${backUrl}/assets/guide_utilisateur/guide_utilisateur_2021_02.pdf`;
 const invitationUrl = `${webappUrl}/invitation`;
-const idealcoUrl = 'https://www.idealco.fr/campagne/?utm_campaign=g-386-3036d540';
 const surveyUrl = 'https://app.evalandgo.com/s/index.php?id=JTk4ciU5MXAlOUUlQUU%3D&a=JTk2cCU5N2slOUElQjA%3D';
 
 const ACTION_CAMPAIGN = 'action-email';
@@ -693,28 +692,6 @@ export default {
             variables: {
                 recipientName: formatName(recipient),
                 connexionUrl: `${connexionUrl}?${utm}`,
-                backUrl,
-                blogUrl,
-                webappUrl: `${webappUrl}?${utm}`,
-            },
-            preserveRecipient,
-        });
-    },
-
-    /**
-   * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
-   * @param {Object} options
-   */
-    sendUserIdealcoInvitation: (recipient, options: MailOptions = {}) => {
-        const { preserveRecipient } = options;
-
-        const utm = generateTrackingUTM(USER_CAMPAIGN, '3S-idealco');
-
-        return mailService.send('user_idealco_invitation', {
-            recipient,
-            variables: {
-                recipientName: formatName(recipient),
-                idealcoUrl,
                 backUrl,
                 blogUrl,
                 webappUrl: `${webappUrl}?${utm}`,

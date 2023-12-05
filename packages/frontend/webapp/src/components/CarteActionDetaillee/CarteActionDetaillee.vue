@@ -1,14 +1,10 @@
 <template>
-    <RouterLink
-        custom
-        v-slot="{ navigate }"
-        :to="`/action/${action.id}`"
-        class="focus:outline-2 outline-info outline-offset-2"
-    >
+    <RouterLink custom v-slot="{ navigate }" :to="`/action/${action.id}`">
         <div
             :class="[
                 'rounded-sm cursor-pointer border-1 border-cardBorder',
                 isHover ? 'bg-blue200 border-transparent' : '',
+                focusClasses.ring,
             ]"
             :aria-label="`Fiche action ${action.name}`"
             tabindex="0"
@@ -73,6 +69,7 @@
 <script setup>
 import { computed, toRefs, ref } from "vue";
 import formatDate from "@common/utils/formatDate";
+import focusClasses from "@common/utils/focus_classes";
 
 import { RouterLink } from "vue-router";
 import { Icon, Link, Tag } from "@resorptionbidonvilles/ui";

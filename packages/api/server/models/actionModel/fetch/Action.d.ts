@@ -120,7 +120,8 @@ interface IAction {
 }
 
 export interface ShantytownAction extends IAction {
-    shantytowns: number[]
+    shantytowns: number[],
+    is_ended: boolean,
 }
 
 interface Action extends IAction {
