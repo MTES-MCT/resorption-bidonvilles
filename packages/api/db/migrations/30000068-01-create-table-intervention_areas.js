@@ -4,10 +4,23 @@ module.exports = {
 
         try {
             await queryInterface.createTable(
-                'organization_to_territory',
+                'intervention_areas',
                 {
                     fk_organization: {
                         type: Sequelize.INTEGER,
+                        allowNull: true,
+                    },
+                    fk_user: {
+                        type: Sequelize.INTEGER,
+                        allowNull: true,
+                    },
+                    is_main_area: {
+                        type: Sequelize.BOOLEAN,
+                        allowNull: false,
+                        defaultValue: false,
+                    },
+                    type: {
+                        type: Sequelize.ENUM('nation', 'region', 'departement', 'epci', 'city'),
                         allowNull: false,
                     },
                     fk_region: {
@@ -38,11 +51,12 @@ module.exports = {
             );
 
             await Promise.all([
+                // clés étrangères
                 queryInterface.addConstraint(
-                    'organization_to_territory', {
+                    'intervention_areas', {
                         fields: ['fk_organization'],
                         type: 'foreign key',
-                        name: 'fk_organization_to_territory__organization',
+                        name: 'fk__intervention_areas__organization',
                         references: {
                             table: 'organizations',
                             field: 'organization_id',
@@ -53,10 +67,24 @@ module.exports = {
                     },
                 ),
                 queryInterface.addConstraint(
-                    'organization_to_territory', {
+                    'intervention_areas', {
+                        fields: ['fk_user'],
+                        type: 'foreign key',
+                        name: 'fk__intervention_areas__user',
+                        references: {
+                            table: 'users',
+                            field: 'user_id',
+                        },
+                        onUpdate: 'cascade',
+                        onDelete: 'cascade',
+                        transaction,
+                    },
+                ),
+                queryInterface.addConstraint(
+                    'intervention_areas', {
                         fields: ['fk_region'],
                         type: 'foreign key',
-                        name: 'fk_organization_to_territory__region',
+                        name: 'fk__intervention_areas__region',
                         references: {
                             table: 'regions',
                             field: 'code',
@@ -67,10 +95,10 @@ module.exports = {
                     },
                 ),
                 queryInterface.addConstraint(
-                    'organization_to_territory', {
+                    'intervention_areas', {
                         fields: ['fk_departement'],
                         type: 'foreign key',
-                        name: 'fk_organization_to_territory__departement',
+                        name: 'fk__intervention_areas__departement',
                         references: {
                             table: 'departements',
                             field: 'code',
@@ -81,10 +109,10 @@ module.exports = {
                     },
                 ),
                 queryInterface.addConstraint(
-                    'organization_to_territory', {
+                    'intervention_areas', {
                         fields: ['fk_epci'],
                         type: 'foreign key',
-                        name: 'fk_organization_to_territory__epci',
+                        name: 'fk__intervention_areas__epci',
                         references: {
                             table: 'epci',
                             field: 'code',
@@ -95,10 +123,10 @@ module.exports = {
                     },
                 ),
                 queryInterface.addConstraint(
-                    'organization_to_territory', {
+                    'intervention_areas', {
                         fields: ['fk_city'],
                         type: 'foreign key',
-                        name: 'fk_organization_to_territory__city',
+                        name: 'fk__intervention_areas__city',
                         references: {
                             table: 'cities',
                             field: 'code',
@@ -108,47 +136,115 @@ module.exports = {
                         transaction,
                     },
                 ),
+                // contraintes d'unicité
                 queryInterface.addConstraint(
-                    'organization_to_territory', {
+                    'intervention_areas', {
                         fields: ['fk_organization', 'fk_region'],
                         type: 'unique',
-                        name: 'uk_region',
+                        name: 'uk__intervention_areas__no_duplicate_region_per_organization',
                         transaction,
                     },
                 ),
                 queryInterface.addConstraint(
-                    'organization_to_territory', {
+                    'intervention_areas', {
                         fields: ['fk_organization', 'fk_departement'],
                         type: 'unique',
-                        name: 'uk_departement',
+                        name: 'uk__intervention_areas__no_duplicate_departement_per_organization',
                         transaction,
                     },
                 ),
                 queryInterface.addConstraint(
-                    'organization_to_territory', {
+                    'intervention_areas', {
                         fields: ['fk_organization', 'fk_epci'],
                         type: 'unique',
-                        name: 'uk_epci',
+                        name: 'uk__intervention_areas__no_duplicate_epci_per_organization',
                         transaction,
                     },
                 ),
                 queryInterface.addConstraint(
-                    'organization_to_territory', {
+                    'intervention_areas', {
                         fields: ['fk_organization', 'fk_city'],
                         type: 'unique',
-                        name: 'uk_city',
+                        name: 'uk__intervention_areas__no_duplicate_city_per_organization',
                         transaction,
                     },
                 ),
                 queryInterface.addConstraint(
-                    'organization_to_territory', {
-                        fields: ['fk_region', 'fk_departement', 'fk_epci', 'fk_city'],
+                    'intervention_areas', {
+                        fields: ['fk_user', 'fk_region'],
+                        type: 'unique',
+                        name: 'uk__intervention_areas__no_duplicate_region_per_user',
+                        transaction,
+                    },
+                ),
+                queryInterface.addConstraint(
+                    'intervention_areas', {
+                        fields: ['fk_user', 'fk_departement'],
+                        type: 'unique',
+                        name: 'uk__intervention_areas__no_duplicate_departement_per_user',
+                        transaction,
+                    },
+                ),
+                queryInterface.addConstraint(
+                    'intervention_areas', {
+                        fields: ['fk_user', 'fk_epci'],
+                        type: 'unique',
+                        name: 'uk__intervention_areas__no_duplicate_epci_per_user',
+                        transaction,
+                    },
+                ),
+                queryInterface.addConstraint(
+                    'intervention_areas', {
+                        fields: ['fk_user', 'fk_city'],
+                        type: 'unique',
+                        name: 'uk__intervention_areas__no_duplicate_city_per_user',
+                        transaction,
+                    },
+                ),
+                // contraintes de cohérence
+                queryInterface.addConstraint(
+                    'intervention_areas', {
+                        fields: ['fk_organization', 'fk_user'],
+                        type: 'check',
+                        name: 'must_be_either_for_organization_or_user_not_both',
+                        where: {
+                            [Sequelize.Op.or]: [
+                                {
+                                    [Sequelize.Op.and]: {
+                                        fk_user: { [Sequelize.Op.eq]: null },
+                                        fk_organization: { [Sequelize.Op.ne]: null },
+                                    },
+                                },
+                                {
+                                    [Sequelize.Op.and]: {
+                                        fk_user: { [Sequelize.Op.ne]: null },
+                                        fk_organization: { [Sequelize.Op.eq]: null },
+                                    },
+                                },
+                            ],
+                        },
+                        transaction,
+                    },
+                ),
+                queryInterface.addConstraint(
+                    'intervention_areas', {
+                        fields: ['type', 'fk_region', 'fk_departement', 'fk_epci', 'fk_city'],
                         type: 'check',
                         name: 'must_have_one_and_only_one_territory',
                         where: {
                             [Sequelize.Op.or]: [
                                 {
                                     [Sequelize.Op.and]: {
+                                        type: 'nation',
+                                        fk_region: { [Sequelize.Op.eq]: null },
+                                        fk_departement: { [Sequelize.Op.eq]: null },
+                                        fk_epci: { [Sequelize.Op.eq]: null },
+                                        fk_city: { [Sequelize.Op.eq]: null },
+                                    },
+                                },
+                                {
+                                    [Sequelize.Op.and]: {
+                                        type: 'region',
                                         fk_region: { [Sequelize.Op.ne]: null },
                                         fk_departement: { [Sequelize.Op.eq]: null },
                                         fk_epci: { [Sequelize.Op.eq]: null },
@@ -157,6 +253,7 @@ module.exports = {
                                 },
                                 {
                                     [Sequelize.Op.and]: {
+                                        type: 'departement',
                                         fk_region: { [Sequelize.Op.eq]: null },
                                         fk_departement: { [Sequelize.Op.ne]: null },
                                         fk_epci: { [Sequelize.Op.eq]: null },
@@ -165,6 +262,7 @@ module.exports = {
                                 },
                                 {
                                     [Sequelize.Op.and]: {
+                                        type: 'epci',
                                         fk_region: { [Sequelize.Op.eq]: null },
                                         fk_departement: { [Sequelize.Op.eq]: null },
                                         fk_epci: { [Sequelize.Op.ne]: null },
@@ -173,6 +271,7 @@ module.exports = {
                                 },
                                 {
                                     [Sequelize.Op.and]: {
+                                        type: 'city',
                                         fk_region: { [Sequelize.Op.eq]: null },
                                         fk_departement: { [Sequelize.Op.eq]: null },
                                         fk_epci: { [Sequelize.Op.eq]: null },
@@ -199,77 +298,99 @@ module.exports = {
         try {
             await Promise.all([
                 queryInterface.removeConstraint(
-                    'organization_to_territory',
+                    'intervention_areas',
                     'must_have_one_and_only_one_territory',
                     {
                         transaction,
                     },
                 ),
                 queryInterface.removeConstraint(
-                    'organization_to_territory',
-                    'uk_city',
+                    'intervention_areas',
+                    'must_be_either_for_organization_or_user_not_both',
+                    { transaction },
+                ),
+                queryInterface.removeConstraint(
+                    'intervention_areas',
+                    'uk__intervention_areas__no_duplicate_region_per_user',
+                    { transaction },
+                ),
+                queryInterface.removeConstraint(
+                    'intervention_areas',
+                    'uk__intervention_areas__no_duplicate_departement_per_user',
+                    { transaction },
+                ),
+                queryInterface.removeConstraint(
+                    'intervention_areas',
+                    'uk__intervention_areas__no_duplicate_epci_per_user',
+                    { transaction },
+                ),
+                queryInterface.removeConstraint(
+                    'intervention_areas',
+                    'uk__intervention_areas__no_duplicate_city_per_user',
+                    { transaction },
+                ),
+                queryInterface.removeConstraint(
+                    'intervention_areas',
+                    'uk__intervention_areas__no_duplicate_city_per_organization',
+                    { transaction },
+                ),
+                queryInterface.removeConstraint(
+                    'intervention_areas',
+                    'uk__intervention_areas__no_duplicate_region_per_organization',
+                    { transaction },
+                ),
+                queryInterface.removeConstraint(
+                    'intervention_areas',
+                    'uk__intervention_areas__no_duplicate_departement_per_organization',
+                    { transaction },
+                ),
+                queryInterface.removeConstraint(
+                    'intervention_areas',
+                    'uk__intervention_areas__no_duplicate_epci_per_organization',
+                    { transaction },
+                ),
+                queryInterface.removeConstraint(
+                    'intervention_areas',
+                    'fk__intervention_areas__city',
                     {
                         transaction,
                     },
                 ),
                 queryInterface.removeConstraint(
-                    'organization_to_territory',
-                    'uk_epci',
+                    'intervention_areas',
+                    'fk__intervention_areas__epci',
                     {
                         transaction,
                     },
                 ),
                 queryInterface.removeConstraint(
-                    'organization_to_territory',
-                    'uk_departement',
+                    'intervention_areas',
+                    'fk__intervention_areas__departement',
                     {
                         transaction,
                     },
                 ),
                 queryInterface.removeConstraint(
-                    'organization_to_territory',
-                    'uk_region',
+                    'intervention_areas',
+                    'fk__intervention_areas__region',
                     {
                         transaction,
                     },
                 ),
                 queryInterface.removeConstraint(
-                    'organization_to_territory',
-                    'fk_organization_to_territory__city',
-                    {
-                        transaction,
-                    },
+                    'intervention_areas',
+                    'fk__intervention_areas__user',
+                    { transaction },
                 ),
                 queryInterface.removeConstraint(
-                    'organization_to_territory',
-                    'fk_organization_to_territory__epci',
-                    {
-                        transaction,
-                    },
-                ),
-                queryInterface.removeConstraint(
-                    'organization_to_territory',
-                    'fk_organization_to_territory__departement',
-                    {
-                        transaction,
-                    },
-                ),
-                queryInterface.removeConstraint(
-                    'organization_to_territory',
-                    'fk_organization_to_territory__region',
-                    {
-                        transaction,
-                    },
-                ),
-                queryInterface.removeConstraint(
-                    'organization_to_territory',
-                    'fk_organization_to_territory__organization',
+                    'intervention_areas',
+                    'fk__intervention_areas__organization',
                     {
                         transaction,
                     },
                 ),
             ]);
-            await queryInterface.dropTable('organization_to_territory', { transaction });
+            await queryInterface.dropTable('intervention_areas', { transaction });
 
             return transaction.commit();
         } catch (error) {
