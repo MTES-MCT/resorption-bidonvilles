@@ -24,15 +24,15 @@ export default function (shantytowns, filters) {
         }
 
         if (
-            filters.fieldType.length > 0 &&
-            !checkFieldType(shantytown, filters.fieldType)
+            filters.population.length > 0 &&
+            !checkPopulation(shantytown, filters.population)
         ) {
             return false;
         }
 
         if (
-            filters.population.length > 0 &&
-            !checkPopulation(shantytown, filters.population)
+            filters.fieldType.length > 0 &&
+            !checkFieldType(shantytown, filters.fieldType)
         ) {
             return false;
         }
@@ -52,6 +52,15 @@ export default function (shantytowns, filters) {
         }
 
         if (
+            filters.target.length > 0 &&
+            !checkTarget(shantytown, filters.target)
+        ) {
+            return false;
+        }
+
+        // Filtres spécifiques aux sites ouverts
+        if (
+            filters.status === "open" &&
             filters.conditions.length > 0 &&
             !checkConditions(shantytown, filters.conditions)
         ) {
@@ -59,20 +68,7 @@ export default function (shantytowns, filters) {
         }
 
         if (
-            filters.closingReason.length > 0 &&
-            !checkClosingReason(shantytown, filters.closingReason)
-        ) {
-            return false;
-        }
-
-        if (
-            filters.solvedOrClosed.length > 0 &&
-            !checkSolvedOrClosed(shantytown, filters.solvedOrClosed)
-        ) {
-            return false;
-        }
-
-        if (
+            filters.status === "open" &&
             filters.actors.length > 0 &&
             !checkActors(shantytown, filters.actors)
         ) {
@@ -80,19 +76,29 @@ export default function (shantytowns, filters) {
         }
 
         if (
-            filters.target.length > 0 &&
-            !checkTarget(shantytown, filters.target)
-        ) {
-            return false;
-        }
-
-        if (
+            filters.status === "open" &&
             filters.heatwave.length > 0 &&
             !checkHeatwave(shantytown, filters.heatwave)
         ) {
             return false;
         }
 
+        // Filtres spécifiques aux sites fermés
+        if (
+            filters.status === "close" &&
+            filters.closingReason.length > 0 &&
+            !checkClosingReason(shantytown, filters.closingReason)
+        ) {
+            return false;
+        }
+
+        if (
+            filters.status === "close" &&
+            filters.solvedOrClosed.length > 0 &&
+            !checkSolvedOrClosed(shantytown, filters.solvedOrClosed)
+        ) {
+            return false;
+        }
         return true;
     });
 }
