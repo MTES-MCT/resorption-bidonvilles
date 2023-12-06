@@ -232,7 +232,8 @@ export default async (where: Where | string = [], filters: UserQueryFilters = {}
     }
 
     return users.map(row => serializeUser(
-        { ...row, user_accesses: hashedUserAccesses[row.id] || [] },
+        { ...row },
+        hashedUserAccesses[row.id] || [],
         latestCharte,
         filters,
         permissionMap,

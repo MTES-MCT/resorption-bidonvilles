@@ -1,10 +1,10 @@
 import EMAIL_SUBSCRIPTIONS from '#server/config/email_subscriptions';
 import { PermissionHash } from '#server/models/permissionModel/find';
 import serializeUserAccess from './serializeUserAccess';
-import { RawUser, UserQueryFilters } from './query.d';
+import { RawUser, RawUserAccess, UserQueryFilters } from './query.d';
 import { User, UserQuestionSubscriptions, UserExpertiseTopicType } from '#root/types/resources/User.d';
 
-export default (user: RawUser, latestCharte: number, filters: UserQueryFilters, permissionMap: PermissionHash): User => {
+export default (user: RawUser, userAccesses: RawUserAccess[], latestCharte: number, filters: UserQueryFilters, permissionMap: PermissionHash): User => {
     const serialized: User = {
         id: user.id,
         first_name: user.first_name,
@@ -14,7 +14,7 @@ export default (user: RawUser, latestCharte: number, filters: UserQueryFilters, 
         position: user.position,
         status: user.status,
         created_at: user.created_at.getTime() / 1000,
-        user_accesses: user.user_accesses.map(serializeUserAccess),
+        user_accesses: userAccesses.map(serializeUserAccess),
         organization: {
             id: user.organization_id,
             name: user.organization_name,
