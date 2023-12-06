@@ -214,8 +214,8 @@ export default async (where: Where | string = [], filters: UserQueryFilters = {}
             transaction,
         },
     );
-    const hashedUserAccesses = userAccesses.reduce((argAcc, row) => {
-        const acc = { ...argAcc };
+
+    const hashedUserAccesses = userAccesses.reduce((acc, row) => {
         if (acc[row.fk_user] === undefined) {
             acc[row.fk_user] = [];
         }
@@ -226,13 +226,30 @@ export default async (where: Where | string = [], filters: UserQueryFilters = {}
         [key: number]: RawUserAccess[]
     });
 
+    const hashInterventionAreas = interventionAreas.reduce((acc, row) => {
+        const key = row.fk_user !== null ? 'users' : 'organizations';
+        const id = row.fk_user !== null ? row.fk_user : row.fk_organization;
+        if (acc[key][id] === undefined) {
+            acc[key][id] = [];
+        }
+
+        acc[key][id].push(row);
+        return acc;
+    }, {
+        users: [],
+        organizations: [],
+    } as {
+        users: { [key: number]: RawInterventionArea[] },
+        organizations: { [key: number]: RawInterventionArea[] },
+    });
+
     let permissionMap: PermissionHash = null;
     if (filters.extended === true) {
         permissionMap = await permissionModel.find(users.map(({ id }) => id));
     }
 
     return users.map(row => serializeUser(
-        { ...row },
+        row,
         hashedUserAccesses[row.id] || [],
         latestCharte,
         filters,
