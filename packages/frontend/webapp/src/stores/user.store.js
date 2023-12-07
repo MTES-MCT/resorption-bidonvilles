@@ -23,6 +23,15 @@ export const useUserStore = defineStore("user", {
             const configStore = useConfigStore();
             return configStore.config?.user;
         },
+        firstMainArea() {
+            if (!this.user?.intervention_areas) {
+                return null;
+            }
+
+            return this.user.intervention_areas.areas.find(
+                (area) => area.is_main_area === true
+            );
+        },
         id() {
             return this.user?.id || null;
         },
@@ -36,12 +45,9 @@ export const useUserStore = defineStore("user", {
         },
         showDepartementCode() {
             return (code) => {
-                const userLocation = this.user?.organization.location;
-                if (["nation", "region"].includes(userLocation?.type)) {
-                    return true;
-                }
-
-                return userLocation.departement?.code !== code;
+                return !this.user.intervention_areas.areas.find(
+                    (area) => area.departement?.code === code
+                );
             };
         },
         hasJusticePermission() {

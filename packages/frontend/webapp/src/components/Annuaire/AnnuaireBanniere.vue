@@ -58,7 +58,7 @@ const showReset = computed(() => {
         return true;
     }
 
-    return userStore.user.organization.location.type !== "nation";
+    return !userStore.user.intervention_areas.is_national;
 });
 
 const isNotOnDefaultFilter = computed(() => {

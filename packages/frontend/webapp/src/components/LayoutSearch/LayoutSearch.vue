@@ -97,7 +97,7 @@ const showReset = computed(() => {
 
     return (
         showNationalWording.value &&
-        userStore.user.organization.location.type !== "nation"
+        !userStore.user.intervention_areas.is_national
     );
 });
 

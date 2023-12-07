@@ -15,7 +15,7 @@
     </p>
     <p class="mt-2">
         Territoire d'intervention :<br /><span class="font-bold">{{
-            user.location_name
+            interventionAreas?.main.join(", ")
         }}</span>
     </p>
     <p class="mt-2">
@@ -76,6 +76,28 @@ const phone = computed(() => {
 
     return user.value.phone;
 });
+const interventionAreas = computed(() => {
+    return user.value.intervention_areas.areas.reduce(
+        (acc, area) => {
+            acc[area.is_main_area ? "main" : "additionnal"].push(
+                computeAreaName(area)
+            );
+            return acc;
+        },
+        {
+            main: [],
+            additionnal: [],
+        }
+    );
+});
+
+function computeAreaName(area) {
+    if (area.type === "nation") {
+        return "National";
+    }
+
+    return area[area.type].name;
+}
 
 function trackEmail() {
     trackEvent("Mail", "Envoi mail entre utilisateurs");
