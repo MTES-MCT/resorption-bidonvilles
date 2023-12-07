@@ -18,17 +18,31 @@ export default async (argFrom: Date, argTo: Date, questionSummary: QuestionSumma
         .withConcurrency(10)
         .handleError(() => { }) // catch the error to avoid blocking other emails
         .process((subscriber) => {
-            const regionCode = subscriber.organization.location.region.code;
-            const s = summaries[regionCode];
+            let subScribedsummaries = [];
+            if (subscriber.intervention_areas.is_national) {
+                subScribedsummaries = Object.values(summaries).reduce((acc, departements) => {
+                    Object.keys(departements).sort().forEach((code) => {
+                        acc.push(departements[code]);
+                    });
+                    return acc;
+                }, []);
+            } else {
+                subscriber.intervention_areas.areas.forEach((area) => {
+                    if (area.type === 'region') {
+                        subScribedsummaries.push(...Object.values(summaries[area.region.code]));
+                    } else if (area.departement !== null) {
+                        subScribedsummaries.push(summaries[area.region.code][area.departement.code]);
+                    }
+                });
+            }
 
             return sendActivitySummary(subscriber, {
                 variables: {
-                    campaign: `r${regionCode}-${from.format('DD-MM-YYYY')}`,
-                    title: subscriber.organization.location.region.name,
+                    campaign: `${from.format('DD-MM-YYYY')}`,
                     from: from.format('DD'),
                     to: to.format('DD MMMM YYYY'),
                     questionSummary,
-                    summaries: Object.keys(s).sort().map(departementCode => s[departementCode]),
+                    summaries,
                     showDetails: true,
                 },
             });
