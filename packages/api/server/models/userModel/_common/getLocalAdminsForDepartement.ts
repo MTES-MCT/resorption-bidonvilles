@@ -1,6 +1,7 @@
+import { User } from '#root/types/resources/User.d';
 import query from './query';
 
-export default async (departementCode) => {
+export default async (departements: string[]): Promise<User[]> => {
     const baseQuery = [
         {
             fk_role: {
@@ -27,7 +28,7 @@ export default async (departementCode) => {
             {
                 departement: {
                     query: 'organizations.departement_code',
-                    value: [departementCode],
+                    value: departements,
                 },
             },
         ], {}),
@@ -43,7 +44,11 @@ export default async (departementCode) => {
     };
     /* eslint-enable quote-props */
 
-    if (exceptions[departementCode] !== undefined) {
+    departements.forEach((code) => {
+        if (exceptions[code] === undefined) {
+            return;
+        }
+
         promises.push(query([
             ...baseQuery,
             {
@@ -55,11 +60,11 @@ export default async (departementCode) => {
             {
                 region: {
                     query: 'organizations.region_code',
-                    value: exceptions[departementCode],
+                    value: exceptions[code],
                 },
             },
         ], {}));
-    }
+    });
 
     const users = await Promise.all(promises);
     return users.flat();
