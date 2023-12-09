@@ -18,6 +18,11 @@
             interventionAreas?.main.join(", ")
         }}</span>
     </p>
+    <p class="mt-2" v-if="interventionAreas?.additionnal.length > 0">
+        Territoire étendu :<br /><span class="font-bold">{{
+            interventionAreas?.additionnal.join(", ")
+        }}</span>
+    </p>
     <p class="mt-2">
         Fonction :<br /><span class="font-bold">{{ user.position }}</span>
     </p>
