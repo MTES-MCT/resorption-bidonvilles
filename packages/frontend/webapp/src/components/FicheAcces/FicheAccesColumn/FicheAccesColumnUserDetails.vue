@@ -14,7 +14,7 @@
         }}</LinkOrganization>
     </p>
     <p class="mt-2">
-        Territoire d'intervention :<br /><span class="font-bold">{{
+        Territoire(s) d'intervention :<br /><span class="font-bold">{{
             interventionAreas?.main.join(", ")
         }}</span>
     </p>
