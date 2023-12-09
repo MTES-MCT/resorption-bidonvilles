@@ -20,6 +20,17 @@
                 <p v-if="displayBeingFunded" class="text-info">
                     <Icon icon="euro-sign" /> Structure financée
                 </p>
+                <p
+                    class="mt-3 text-G600"
+                    v-if="organization.intervention_areas.areas.length > 1"
+                >
+                    <span class="font-bold">Territoires d'intervention :</span>
+                    {{
+                        organization.intervention_areas.areas
+                            .map((area) => area[area.type].name)
+                            .join(", ")
+                    }}
+                </p>
                 -
             </header>
 
