@@ -1,20 +1,23 @@
 import IncomingWebhook from 'node-mattermost';
 import config from '#server/config';
+import { Shantytown } from '#server/models/shantytownModel/_common/serializeShantytown';
+import Action, { CommentAuthor } from '#server/models/actionModel/fetch/Action.d';
+import { User } from '#root/types/resources/User.d';
 
 const { mattermost, webappUrl } = config;
-const formatAddress = town => `${town.address} ${town.name ? `« ${town.name} » ` : ''}`;
-const formatUsername = user => `[${user.first_name} ${user.last_name}](${webappUrl}/nouvel-utilisateur/${user.id}) `;
-const formatTownLink = (townID, text) => `[${text}](${webappUrl}/site/${townID})`;
-const formatActionLink = (actionID, text) => `[${text}](${webappUrl}/action/${actionID})`;
+const formatAddress = (town: Shantytown): string => `${town.address} ${town.name ? `« ${town.name} » ` : ''}`;
+const formatUsername = (user: { id: number, first_name: string, last_name: string }): string => `[${user.first_name} ${user.last_name}](${webappUrl}/nouvel-utilisateur/${user.id}) `;
+const formatTownLink = (townID: number, text: string): string => `[${text}](${webappUrl}/site/${townID})`;
+const formatActionLink = (actionID: number, text: string): string => `[${text}](${webappUrl}/action/${actionID})`;
 
-const formatDate = ((dateToFormat) => {
+const formatDate = ((dateToFormat: Date): string => {
     const day = dateToFormat.getDate();
     const month = dateToFormat.getMonth() + 1;
     const year = dateToFormat.getFullYear();
     return `${day}/${month}/${year}`;
 });
 
-async function triggerShantytownCloseAlert(town, user) {
+async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promise<void> {
     if (!mattermost) {
         return;
     }
@@ -75,7 +78,7 @@ async function triggerShantytownCloseAlert(town, user) {
     await shantytownCloseAlert.send(mattermostMessage);
 }
 
-async function triggerShantytownCreationAlert(town, user) {
+async function triggerShantytownCreationAlert(town: Shantytown, user: User): Promise<void> {
     const shantytownCreationAlert = new IncomingWebhook(mattermost);
 
     const address = formatAddress(town);
@@ -123,19 +126,20 @@ async function triggerShantytownCreationAlert(town, user) {
     await shantytownCreationAlert.send(mattermostMessage);
 }
 
-async function triggerNewUserAlert(user) {
+async function triggerNewUserAlert(user: User): Promise<void> {
     const newUserAlert = new IncomingWebhook(mattermost);
 
     const username = formatUsername(user);
     const usernameLink = `<${webappUrl}/nouvel-utilisateur/${user.id}|${username}>`;
 
-    const { location } = user.organization;
-
     let locationText = 'Inconnu';
-    if (location && location.type === 'nation') {
+    if (user.intervention_areas.is_national) {
         locationText = 'National';
-    } else if (location && location[location.type] !== null) {
-        locationText = location[location.type].name;
+    } else {
+        const area = user.intervention_areas.areas.find(a => a.is_main_area && a.type !== 'nation');
+        if (area !== undefined) {
+            locationText = area[area.type].name;
+        }
     }
 
     const mattermostMessage = {
@@ -167,7 +171,7 @@ async function triggerNewUserAlert(user) {
     await newUserAlert.send(mattermostMessage);
 }
 
-async function triggerActorInvitedAlert(town, host, invited) {
+async function triggerActorInvitedAlert(town: Shantytown, host: User, invited: string): Promise<void> {
     if (!mattermost) {
         return;
     }
@@ -198,7 +202,7 @@ async function triggerActorInvitedAlert(town, host, invited) {
     await actorInvitedAlert.send(mattermostMessage);
 }
 
-async function triggerNewComment(commentDescription, tagLabels, town, author) {
+async function triggerNewComment(commentDescription: string, tagLabels: string[], town: Shantytown, author: User): Promise<void> {
     if (!mattermost) {
         return;
     }
@@ -236,7 +240,7 @@ async function triggerNewComment(commentDescription, tagLabels, town, author) {
     await newCommentAlert.send(mattermostMessage);
 }
 
-async function triggerNewActionComment(comment, action, author) {
+async function triggerNewActionComment(comment: string, action: Action, author: CommentAuthor): Promise<void> {
     if (!mattermost) {
         return;
     }
@@ -267,7 +271,7 @@ async function triggerNewActionComment(comment, action, author) {
     await newCommentAlert.send(mattermostMessage);
 }
 
-async function triggerPeopleInvitedAlert(guest, greeter, msg) {
+async function triggerPeopleInvitedAlert(guest: User, greeter: User, msg: string): Promise<void> {
     if (!mattermost) {
         return;
     }
@@ -298,7 +302,7 @@ async function triggerPeopleInvitedAlert(guest, greeter, msg) {
     await peopleInvitedAlert.send(mattermostMessage);
 }
 
-async function triggerDeclaredActor(town, user) {
+async function triggerDeclaredActor(town: Shantytown, user: User): Promise<void> {
     if (!mattermost) {
         return;
     }
@@ -320,7 +324,7 @@ async function triggerDeclaredActor(town, user) {
     await declaredActor.send(mattermostMessage);
 }
 
-async function triggerInvitedActor(town, host, guest) {
+async function triggerInvitedActor(town: Shantytown, host: User, guest: User): Promise<void> {
     if (!mattermost) {
         return;
     }
@@ -343,7 +347,7 @@ async function triggerInvitedActor(town, host, guest) {
     await invitedActor.send(mattermostMessage);
 }
 
-async function triggerRemoveDeclaredActor(town, user) {
+async function triggerRemoveDeclaredActor(town: Shantytown, user: User): Promise<void> {
     if (!mattermost) {
         return;
     }
@@ -365,7 +369,7 @@ async function triggerRemoveDeclaredActor(town, user) {
     await removeDeclaredActor.send(mattermostMessage);
 }
 
-async function triggerNotifyNewUserFromRectorat(user) {
+async function triggerNotifyNewUserFromRectorat(user: User): Promise<void> {
     if (!mattermost) {
         return;
     }
@@ -384,7 +388,7 @@ async function triggerNotifyNewUserFromRectorat(user) {
     await webhook.send(mattermostMessage);
 }
 
-async function triggerNotifyNewUserSelfDeactivation(user) {
+async function triggerNotifyNewUserSelfDeactivation(user: User): Promise<void> {
     if (!mattermost) {
         return;
     }

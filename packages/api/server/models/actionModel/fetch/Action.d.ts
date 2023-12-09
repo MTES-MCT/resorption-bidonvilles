@@ -28,7 +28,7 @@ type ActionTopic = {
     uid: string,
     name: string
 };
-type CommentAuthor = {
+export type CommentAuthor = {
     id: number,
     first_name: string,
     last_name: string,
