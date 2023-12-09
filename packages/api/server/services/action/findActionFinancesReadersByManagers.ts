@@ -1,9 +1,9 @@
 
 import actionModel from '#server/models/actionModel';
 import ServiceError from '#server/errors/ServiceError';
-import { SerializedOrganization } from '#server/models/userModel/getDirectory';
+import { Organization } from '#root/types/resources/Organization.d';
 
-export default async (managers: number[]): Promise<SerializedOrganization[]> => {
+export default async (managers: number[]): Promise<Organization[]> => {
     try {
         return await actionModel.findActionFinancesReadersByManagers(managers);
     } catch (error) {

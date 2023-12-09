@@ -134,7 +134,7 @@ export const useDirectoryStore = defineStore("directory", () => {
     function filterUsersByExpertiseTopics(organization, expertiseTopicsIds) {
         return organization.users.filter((user) => {
             return user?.expertise_topics?.some((topic) =>
-                expertiseTopicsIds.includes(topic.id)
+                expertiseTopicsIds.includes(topic.uid)
             );
         });
     }

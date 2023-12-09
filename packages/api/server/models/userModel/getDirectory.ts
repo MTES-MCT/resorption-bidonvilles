@@ -1,6 +1,8 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import { LocationType } from '#server/models/geoModel/LocationType.d';
+import { Organization } from '#root/types/resources/Organization.d';
+import { UserExpertiseTopic, UserExpertiseTopicType } from '#root/types/resources/User.d';
 
 type OrganizationRow = {
     organization_id: number,
@@ -25,7 +27,7 @@ type OrganizationRow = {
     user_email: string,
     user_phone: string | null,
     user_position: string,
-    user_topics: (`${string};${string};${string}`)[],
+    user_topics: (`${string};${UserExpertiseTopicType};${string}`)[],
     user_role_regular: string,
     type_id: number,
     type_category: string,
@@ -33,60 +35,7 @@ type OrganizationRow = {
     type_abbreviation: string | null,
 };
 
-type SerializedUserExpertiseTopics = {
-    id: string,
-    type: string,
-    label: string,
-};
-
-type SerializedOrganizationUser = {
-    id: number,
-    is_admin: boolean,
-    role: string,
-    first_name: string,
-    last_name: string,
-    email: string,
-    phone: string | null,
-    position: string,
-    expertise_topics: SerializedUserExpertiseTopics[],
-};
-
-export type SerializedOrganization = {
-    id: number,
-    name: string,
-    abbreviation: string | null,
-    being_funded: boolean,
-    being_funded_at: Date,
-    location: {
-        type: LocationType,
-        region: {
-            code: string,
-            name: string,
-        } | null,
-        departement: {
-            code: string,
-            name: string,
-        } | null,
-        epci: {
-            code: string,
-            name: string,
-        } | null,
-        city: {
-            code: string,
-            name: string,
-            main: string | null,
-        } | null,
-    },
-    type: {
-        id: number,
-        category: string,
-        name: string,
-        abbreviation: string | null,
-    },
-    users: SerializedOrganizationUser[],
-};
-
-export default async (): Promise<SerializedOrganization[]> => {
+export default async (): Promise<Organization[]> => {
     const users: OrganizationRow[] = await sequelize.query(
         `
         WITH users_with_expertise_topics AS (
@@ -146,8 +95,8 @@ export default async (): Promise<SerializedOrganization[]> => {
         },
     );
 
-    const hash: { [key: number]: SerializedOrganization } = {};
-    const organizations: SerializedOrganization[] = [];
+    const hash: { [key: number]: Organization } = {};
+    const organizations: Organization[] = [];
     users.forEach((user: OrganizationRow) => {
         if (!Object.prototype.hasOwnProperty.call(hash, user.organization_id)) {
             hash[user.organization_id] = {
@@ -197,9 +146,9 @@ export default async (): Promise<SerializedOrganization[]> => {
                 email: user.user_email,
                 phone: user.user_phone,
                 position: user.user_position,
-                expertise_topics: user.user_topics.map((topic): SerializedUserExpertiseTopics => {
-                    const [id, type, label] = topic.split(';');
-                    return { id, type, label };
+                expertise_topics: user.user_topics.map((topic): UserExpertiseTopic => {
+                    const [uid, type, label] = topic.split(';') as [string, UserExpertiseTopicType, string];
+                    return { uid, type, label };
                 }),
             });
         }

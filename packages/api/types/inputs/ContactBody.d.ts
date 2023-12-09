@@ -1,4 +1,4 @@
-import { SerializedOrganization } from '#server/models/userModel/getDirectory';
+import { Organization } from '#root/types/resources/Organization.d';
 import { ContactRequestType } from '#root/types/resources/ContactRequestType.d';
 import { ContactReferral } from '#root/types/resources/ContactReferral.d';
 import { OrganizationCategory } from '#root/types/resources/OrganizationCategory.d';
@@ -13,7 +13,7 @@ type ContactBodyNewAssociation = {
 };
 
 type ContactBodyExistingOrganization = {
-    organization_full: SerializedOrganization,
+    organization_full: Organization,
     organization_other: null,
     new_association: false,
     new_association_name: null,

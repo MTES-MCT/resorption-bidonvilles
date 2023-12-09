@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import { Location } from '#server/models/geoModel/Location.d';
 import { LocationType } from '#server/models/geoModel/LocationType.d';
-import { SerializedOrganization } from '#server/models/userModel/getDirectory';
+import { Organization } from '#root/types/resources/Organization.d';
 
 export type JusticeReaderRow = {
     user_id: number,
@@ -34,7 +34,7 @@ export type JusticeReaderRow = {
     type_abbreviation: string | null
 };
 
-export default async (shantytownId?: number, location?: Location): Promise<SerializedOrganization[]> => {
+export default async (shantytownId?: number, location?: Location): Promise<Organization[]> => {
     const rows: JusticeReaderRow[] = await sequelize.query(
         `${shantytownId ? `
         WITH location AS (
@@ -162,8 +162,8 @@ export default async (shantytownId?: number, location?: Location): Promise<Seria
         },
     );
 
-    const hash: { [key: number]: SerializedOrganization } = {};
-    return rows.reduce((acc: SerializedOrganization[], row: JusticeReaderRow) => {
+    const hash: { [key: number]: Organization } = {};
+    return rows.reduce((acc: Organization[], row: JusticeReaderRow) => {
         if (hash[row.id] === undefined) {
             hash[row.id] = {
                 id: row.id,
@@ -215,5 +215,5 @@ export default async (shantytownId?: number, location?: Location): Promise<Seria
         });
 
         return acc;
-    }, [] as SerializedOrganization[]);
+    }, [] as Organization[]);
 };

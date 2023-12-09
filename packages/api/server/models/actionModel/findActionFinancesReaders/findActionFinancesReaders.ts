@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import { LocationType } from '#server/models/geoModel/LocationType.d';
-import { SerializedOrganization } from '#server/models/userModel/getDirectory';
+import { Organization } from '#root/types/resources/Organization.d';
 
 export type ActionFinancesReaderRow = {
     user_id: number,
@@ -33,7 +33,7 @@ export type ActionFinancesReaderRow = {
     type_abbreviation: string | null
 };
 
-export default async (actionId?: number, managers?: number[]): Promise<SerializedOrganization[]> => {
+export default async (actionId?: number, managers?: number[]): Promise<Organization[]> => {
     const rows: ActionFinancesReaderRow[] = await sequelize.query(
         `${actionId ? `
         WITH location AS (
@@ -119,8 +119,8 @@ export default async (actionId?: number, managers?: number[]): Promise<Serialize
         },
     );
 
-    const hash: { [key: number]: SerializedOrganization } = {};
-    return rows.reduce((acc: SerializedOrganization[], row: ActionFinancesReaderRow) => {
+    const hash: { [key: number]: Organization } = {};
+    return rows.reduce((acc: Organization[], row: ActionFinancesReaderRow) => {
         if (hash[row.id] === undefined) {
             hash[row.id] = {
                 id: row.id,
@@ -172,5 +172,5 @@ export default async (actionId?: number, managers?: number[]): Promise<Serialize
         });
 
         return acc;
-    }, [] as SerializedOrganization[]);
+    }, [] as Organization[]);
 };

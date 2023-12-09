@@ -84,7 +84,7 @@
                                             user,
                                             'expertise'
                                         )"
-                                        :key="topic.id"
+                                        :key="topic.uid"
                                     >
                                         - {{ topic.label }}
                                     </li>
@@ -107,7 +107,7 @@
                                             user,
                                             'interest'
                                         )"
-                                        :key="topic.id"
+                                        :key="topic.uid"
                                     >
                                         - {{ topic.label }}
                                     </li>
@@ -193,7 +193,7 @@ const plural = computed(() => {
 function getUserFilteredExpertiseTopics(user, topicLevel) {
     return (user.expertise_topics || []).filter((topic) => {
         return (
-            directoryStore.filters.expertiseTopics.includes(topic.id) &&
+            directoryStore.filters.expertiseTopics.includes(topic.uid) &&
             topic.type == topicLevel
         );
     });
