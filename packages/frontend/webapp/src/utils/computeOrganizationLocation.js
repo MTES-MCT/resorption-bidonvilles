@@ -1,21 +1,14 @@
 export default function (organization) {
-    if (organization.location.type === "nation") {
+    if (organization.intervention_areas.is_national) {
         return {
             name: "National",
             code: null,
         };
     }
 
-    const location = organization.location[organization.location.type];
-    if (["city", "departement"].includes(organization.location.type)) {
-        return {
-            name: location.name,
-            code: location.code,
-        };
-    }
-
+    const area = organization.intervention_areas.areas[0];
     return {
-        name: location.name,
-        code: null,
+        name: area[area.type].name,
+        code: area[area.type].code,
     };
 }

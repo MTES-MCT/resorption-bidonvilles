@@ -1,6 +1,8 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import { LocationType } from '#server/models/geoModel/LocationType.d';
+import interventionAreaModel from '#server/models/interventionAreaModel';
+import hashAreas from '#server/models/interventionAreaModel/hash';
 import { Organization } from '#root/types/resources/Organization.d';
 
 export type ActionFinancesReaderRow = {
@@ -56,16 +58,6 @@ export default async (actionId?: number, managers?: number[]): Promise<Organizat
             o.organization_id as id,
             o.name,
             o.abbreviation,
-            o.location_type,
-            o.region_code,
-            o.region_name,
-            o.departement_code,
-            o.departement_name,
-            o.epci_code,
-            o.epci_name,
-            o.city_code,
-            o.city_name,
-            o.city_main,
             o.fk_type AS "type_id",
             o.being_funded,
             o.being_funded_at,
@@ -77,7 +69,7 @@ export default async (actionId?: number, managers?: number[]): Promise<Organizat
         LEFT JOIN
             user_actual_permissions uap ON u.user_id = uap.user_id AND uap.entity = 'action_finances' AND  uap.feature = 'access'
         LEFT JOIN
-            localized_organizations o ON u.fk_organization = o.organization_id
+            organizations o ON u.fk_organization = o.organization_id
         LEFT JOIN
             organization_types ot ON o.fk_type = ot.organization_type_id
         WHERE
@@ -120,7 +112,7 @@ export default async (actionId?: number, managers?: number[]): Promise<Organizat
     );
 
     const hash: { [key: number]: Organization } = {};
-    return rows.reduce((acc: Organization[], row: ActionFinancesReaderRow) => {
+    const organizations = rows.reduce((acc: Organization[], row: ActionFinancesReaderRow) => {
         if (hash[row.id] === undefined) {
             hash[row.id] = {
                 id: row.id,
@@ -128,25 +120,9 @@ export default async (actionId?: number, managers?: number[]): Promise<Organizat
                 abbreviation: row.abbreviation,
                 being_funded: row.being_funded,
                 being_funded_at: row.being_funded_at,
-                location: {
-                    type: row.location_type,
-                    region: row.region_code !== null ? {
-                        code: row.region_code,
-                        name: row.region_name,
-                    } : null,
-                    departement: row.departement_code !== null ? {
-                        code: row.departement_code,
-                        name: row.departement_name,
-                    } : null,
-                    epci: row.epci_code !== null ? {
-                        code: row.epci_code,
-                        name: row.epci_name,
-                    } : null,
-                    city: row.city_code !== null ? {
-                        code: row.city_code,
-                        name: row.city_name,
-                        main: row.city_main,
-                    } : null,
+                intervention_areas: {
+                    is_national: false,
+                    areas: [],
                 },
                 type: {
                     id: row.type_id,
@@ -173,4 +149,12 @@ export default async (actionId?: number, managers?: number[]): Promise<Organizat
 
         return acc;
     }, [] as Organization[]);
+
+    const interventionAreas = await interventionAreaModel.list(
+        [],
+        Object.keys(hash).map(id => parseInt(id, 10)),
+    );
+    hashAreas(interventionAreas, hash);
+
+    return organizations;
 };

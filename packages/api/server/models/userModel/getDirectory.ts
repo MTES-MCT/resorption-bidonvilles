@@ -1,5 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import interventionAreaModel from '#server/models/interventionAreaModel/index';
+import hashAreas from '#server/models/interventionAreaModel/hash';
 import { LocationType } from '#server/models/geoModel/LocationType.d';
 import { Organization } from '#root/types/resources/Organization.d';
 import { UserExpertiseTopic, UserExpertiseTopicType } from '#root/types/resources/User.d';
@@ -51,16 +53,6 @@ export default async (): Promise<Organization[]> => {
             organizations.organization_id,
             organizations.name,
             organizations.abbreviation,
-            organizations.location_type,
-            organizations.region_code,
-            organizations.region_name,
-            organizations.departement_code,
-            organizations.departement_name,
-            organizations.epci_code,
-            organizations.epci_name,
-            organizations.city_code,
-            organizations.city_name,
-            organizations.city_main,
             organizations.being_funded,
             organizations.being_funded_at,
             users.user_id AS "user_id",
@@ -76,7 +68,7 @@ export default async (): Promise<Organization[]> => {
             organization_types.fk_category AS "type_category",
             organization_types.name_singular AS "type_name",
             organization_types.abbreviation AS "type_abbreviation"
-        FROM localized_organizations AS organizations
+        FROM organizations
         LEFT JOIN users ON users.fk_organization = organizations.organization_id
         LEFT JOIN organization_types ON organizations.fk_type = organization_types.organization_type_id
         LEFT JOIN roles_regular AS user_roles_regular ON users.fk_role_regular = user_roles_regular.role_id
@@ -98,32 +90,17 @@ export default async (): Promise<Organization[]> => {
     const hash: { [key: number]: Organization } = {};
     const organizations: Organization[] = [];
     users.forEach((user: OrganizationRow) => {
-        if (!Object.prototype.hasOwnProperty.call(hash, user.organization_id)) {
+        if (hash[user.organization_id] === undefined) {
             hash[user.organization_id] = {
                 id: user.organization_id,
                 name: user.name,
                 abbreviation: user.abbreviation,
                 being_funded: user.being_funded,
                 being_funded_at: user.being_funded_at,
-                location: {
-                    type: user.location_type,
-                    region: user.region_code !== null ? {
-                        code: user.region_code,
-                        name: user.region_name,
-                    } : null,
-                    departement: user.departement_code !== null ? {
-                        code: user.departement_code,
-                        name: user.departement_name,
-                    } : null,
-                    epci: user.epci_code !== null ? {
-                        code: user.epci_code,
-                        name: user.epci_name,
-                    } : null,
-                    city: user.city_code !== null ? {
-                        code: user.city_code,
-                        name: user.city_name,
-                        main: user.city_main,
-                    } : null,
+                // cette propriété est set avec les vraies données ci-dessous
+                intervention_areas: {
+                    is_national: false,
+                    areas: [],
                 },
                 type: {
                     id: user.type_id,
@@ -153,5 +130,12 @@ export default async (): Promise<Organization[]> => {
             });
         }
     });
+
+    const interventionAreas = await interventionAreaModel.list(
+        [],
+        Object.keys(hash).map(id => parseInt(id, 10)),
+    );
+    hashAreas(interventionAreas, hash);
+
     return organizations;
 };

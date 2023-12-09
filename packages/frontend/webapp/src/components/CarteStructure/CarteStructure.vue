@@ -177,7 +177,7 @@ const name = computed(() => {
         return `${title} – ${organization.value.location_name}`;
     }
 
-    if (organization.value.location.type === "nation") {
+    if (organization.value.intervention_areas.is_national) {
         return title;
     }
 
