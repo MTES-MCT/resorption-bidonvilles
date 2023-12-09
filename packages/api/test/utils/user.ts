@@ -45,15 +45,19 @@ export function serialized(override: Partial<User> = {}): AuthUser {
                 name_singular: 'Administration centrale',
                 name_plural: 'Administrations centrales',
             },
-            location: {
+        },
+        intervention_areas: {
+            is_national: false,
+            areas: [{
                 type: 'nation',
+                is_main_area: true,
                 latitude: 46.7755829,
                 longitude: 2.0497727,
                 region: null,
                 departement: null,
                 epci: null,
                 city: null,
-            },
+            }],
         },
         charte_engagement_a_jour: true,
         is_admin: false,
