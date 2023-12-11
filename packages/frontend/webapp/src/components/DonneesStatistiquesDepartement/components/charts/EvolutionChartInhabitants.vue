@@ -48,56 +48,72 @@ import setBackgroundColor from "../../utils/setBackgroundColor";
 const departementMetricsStore = useDepartementMetricsStore();
 const data = departementMetricsStore.evolution.data.inhabitants.inhabitants;
 
-const chartData = computed(() => ({
-    labels: data.charts.labels,
-    datasets: [
-        {
-            label: "Nombre d'habitants intra-UE",
-            backgroundColor: (context) => {
-                return setBackgroundColor(context, [
-                    "rgba(255, 0, 0, 0.5)",
-                    "rgba(255, 255, 255, 0.75)",
-                ]);
+const chartData = computed(() => {
+    const max = {
+        european: Math.max(...data.charts.european),
+        foreign: Math.max(...data.charts.foreign),
+        total: Math.max(...data.charts.total),
+    };
+    max.global = Math.max(max.european, max.foreign, max.total);
+
+    return {
+        labels: data.charts.labels,
+        datasets: [
+            {
+                label: "Nombre d'habitants intra-UE",
+                backgroundColor: (context) => {
+                    return setBackgroundColor(
+                        context,
+                        "rgba(255, 0, 0, 0.5)",
+                        max.european / max.global
+                    );
+                },
+                borderColor: "rgba(255, 0, 0, 0.5)",
+                pointRadius: 2,
+                borderWidth: 2,
+                fill: true,
+                data: data.charts.european,
+                stack: "Stack 0",
+                tension: 0.5,
             },
-            fill: true,
-            data: data.charts.european,
-            stack: "Stack 0",
-            tension: 0.5,
-        },
-        {
-            label: "Nombre d'habitants extra-UE",
-            backgroundColor: (context) => {
-                return setBackgroundColor(context, [
-                    "rgba(0, 255, 0, 0.5)",
-                    "rgba(255, 255, 255, 0.75)",
-                ]);
+            {
+                label: "Nombre d'habitants extra-UE",
+                backgroundColor: (context) => {
+                    return setBackgroundColor(
+                        context,
+                        "rgba(0, 255, 0, 0.75)",
+                        max.foreign / max.global
+                    );
+                },
+                fill: true,
+                data: data.charts.foreign,
+                stack: "Stack 0",
+                tension: 0.5,
             },
-            fill: true,
-            data: data.charts.foreign,
-            stack: "Stack 0",
-            tension: 0.5,
-        },
-        {
-            label: "Nombre total d'habitants",
-            backgroundColor: (context) => {
-                return setBackgroundColor(context, [
-                    "rgba(0, 0, 255, 0.5)",
-                    "rgba(255, 255, 255, 0.75)",
-                ]);
+            {
+                label: "Nombre total d'habitants",
+                backgroundColor: (context) => {
+                    return setBackgroundColor(
+                        context,
+                        "rgba(0, 0, 255, 0.5)",
+                        max.total / max.global
+                    );
+                },
+                fill: true,
+                data: data.charts.total,
+                stack: "Stack 1",
+                tension: 0.5,
             },
-            fill: true,
-            data: data.charts.total,
-            stack: "Stack 1",
-            tension: 0.5,
-        },
-    ],
-}));
+        ],
+    };
+});
+
 const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     scales: {
         y: {
-            stacked: true,
+            stacked: false,
             beginAtZero: true,
         },
     },
