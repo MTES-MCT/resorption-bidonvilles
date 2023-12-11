@@ -1,0 +1,10 @@
+<mj-section>
+    <mj-column>
+        <mj-text mj-class='text-primary font-bold'>
+          L'équipe "Résorption-Bidonvilles" souhaite faire évoluer la plateforme
+        </mj-text>
+        <mj-text>
+          et vous offrir une interface, des outils et du contenu plus personnalisés et adaptés à vos besoins. A cette fin, nous vous proposerons, dans les jours à venir, de renseigner vos sujets d'intérêts ou d'expertise via une fenêtre qui s'affichera au lancement de la plateforme. Cette sélection, parfaitement optionnelle, pourra être modifiée à tout moment depuis la page <a href="{{var:webappUrl}}/mon-compte/abonnements?{{var:utm}}" target="_blank" rel="noopener noreferrer" class="link">"Mon profil"</a> et n'a pour but que d'améliorer votre expérience sur la plateforme.
+        </mj-text>
+    </mj-column>
+</mj-section>
