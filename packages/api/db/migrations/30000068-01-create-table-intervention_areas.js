@@ -201,6 +201,30 @@ module.exports = {
                         transaction,
                     },
                 ),
+                queryInterface.addIndex('intervention_areas', {
+                    fields: ['fk_user'],
+                    transaction,
+                }),
+                queryInterface.addIndex('intervention_areas', {
+                    fields: ['fk_organization'],
+                    transaction,
+                }),
+                queryInterface.addIndex('intervention_areas', {
+                    fields: ['fk_region'],
+                    transaction,
+                }),
+                queryInterface.addIndex('intervention_areas', {
+                    fields: ['fk_departement'],
+                    transaction,
+                }),
+                queryInterface.addIndex('intervention_areas', {
+                    fields: ['fk_epci'],
+                    transaction,
+                }),
+                queryInterface.addIndex('intervention_areas', {
+                    fields: ['fk_city'],
+                    transaction,
+                }),
                 // contraintes de cohérence
                 queryInterface.addConstraint(
                     'intervention_areas', {
