@@ -113,7 +113,6 @@ const defaultView = computed(() => {
         return mapStore.lastView;
     }
 
-    // TODO 2019
     const location = userStore.firstMainArea;
     return {
         center: [location.latitude, location.longitude],
