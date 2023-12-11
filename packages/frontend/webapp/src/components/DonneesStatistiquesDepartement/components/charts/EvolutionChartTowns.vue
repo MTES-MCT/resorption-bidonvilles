@@ -59,10 +59,7 @@ const chartData = computed(() => ({
         {
             label: "Sites de moins de 10 habitants",
             backgroundColor: (context) => {
-                return setBackgroundColor(context, [
-                    "rgba(255, 0, 0, 0.5)",
-                    "rgba(255, 255, 255, 0.75)",
-                ]);
+                return setBackgroundColor(context, "rgba(255, 0, 0, 0.5)");
             },
             fill: true,
             data: data.charts.less_than_10,
@@ -72,10 +69,7 @@ const chartData = computed(() => ({
         {
             label: "Sites de moins de 100 habitants",
             backgroundColor: (context) => {
-                return setBackgroundColor(context, [
-                    "rgba(0, 255, 0, 0.5)",
-                    "rgba(255, 255, 255, 0.75)",
-                ]);
+                return setBackgroundColor(context, "rgba(0, 255, 0, 0.5)");
             },
             fill: true,
             data: data.charts.between_10_and_99,
@@ -85,10 +79,7 @@ const chartData = computed(() => ({
         {
             label: "Sites de plus de 100 habitants",
             backgroundColor: (context) => {
-                return setBackgroundColor(context, [
-                    "rgba(0, 0, 255, 0.5)",
-                    "rgba(255, 255, 255, 0.75)",
-                ]);
+                return setBackgroundColor(context, "rgba(0, 0, 255, 0.5)");
             },
             fill: true,
             data: data.charts.more_than_99,
@@ -102,7 +93,7 @@ const chartOptions = {
     maintainAspectRatio: false,
     scales: {
         y: {
-            stacked: true,
+            stacked: false,
             beginAtZero: true,
         },
     },

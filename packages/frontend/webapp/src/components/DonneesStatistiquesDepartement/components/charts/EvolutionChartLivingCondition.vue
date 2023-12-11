@@ -69,36 +69,57 @@ const props = defineProps({
 const { chartLabel, data, livingConditionType, chartType, icon } =
     toRefs(props);
 
-const chartData = computed(() => ({
-    labels: data.value.charts.labels,
-    datasets: [
-        {
-            label: `Nombre total de ${
-                chartType.value === "towns" ? "sites" : "personnes"
-            }`,
-            backgroundColor: (context) => {
-                return setBackgroundColor(context, [
-                    "rgba(0, 0, 255, 0.5)",
-                    "rgba(255, 255, 255, 0.3)",
-                ]);
-            },
-            fill: true,
-            data: data.value.charts[
+const chartData = computed(() => {
+    const max = {
+        total: Math.max(
+            ...data.value.charts[
                 chartType.value === "towns"
                     ? "towns_total"
                     : "inhabitants_total"
-            ],
-            tension: 0.5,
-        },
-        {
-            label: chartLabel.value,
-            backgroundColor: ["#FFB7A5"],
-            fill: true,
-            data: data.value.charts[livingConditionType.value],
-            tension: 0.5,
-        },
-    ],
-}));
+            ]
+        ),
+        value: Math.max(...data.value.charts[livingConditionType.value]),
+    };
+    max.global = Math.max(max.total, max.value);
+
+    return {
+        labels: data.value.charts.labels,
+        datasets: [
+            {
+                label: `Nombre total de ${
+                    chartType.value === "towns" ? "sites" : "personnes"
+                }`,
+                backgroundColor: (context) => {
+                    return setBackgroundColor(
+                        context,
+                        "rgba(0, 0, 255, 0.5)",
+                        max.total / max.global
+                    );
+                },
+                fill: true,
+                data: data.value.charts[
+                    chartType.value === "towns"
+                        ? "towns_total"
+                        : "inhabitants_total"
+                ],
+                tension: 0.5,
+            },
+            {
+                label: chartLabel.value,
+                backgroundColor: (context) => {
+                    return setBackgroundColor(
+                        context,
+                        "rgba(0, 255, 0, 0.5)",
+                        max.value / max.global
+                    );
+                },
+                fill: true,
+                data: data.value.charts[livingConditionType.value],
+                tension: 0.5,
+            },
+        ],
+    };
+});
 const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
