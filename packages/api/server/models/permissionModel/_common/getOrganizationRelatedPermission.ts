@@ -1,8 +1,23 @@
 import { sequelize } from '#db/sequelize';
-import { QueryTypes } from 'sequelize';
+import { QueryTypes, Transaction } from 'sequelize';
 
-export default async (feature, entity, organizationId, transaction = undefined) => {
-    const rows = await sequelize.query(
+type SimplePermission = {
+    allow_all: boolean,
+    allowed: boolean,
+};
+type SimpleUserPermission = SimplePermission & {
+    user_permission_id: number,
+};
+type OrganizationPermissionRow = {
+    user_permission_id: number,
+    allow_all: boolean,
+    allowed: boolean,
+    role_allow_all: boolean,
+    role_allowed: boolean,
+};
+
+export default async (feature: string, entity: string, organizationId: number, transaction: Transaction = undefined): Promise<[SimpleUserPermission, SimplePermission]> => {
+    const rows: OrganizationPermissionRow[] = await sequelize.query(
         `SELECT
             upo.user_permission_id,
             upo.allow_all AS allow_all,
@@ -31,9 +46,9 @@ export default async (feature, entity, organizationId, transaction = undefined) 
 
     const {
         user_permission_id, allow_all, allowed, role_allow_all, role_allowed,
-    }: any = rows[0];
+    } = rows[0];
 
-    let userPermission = null;
+    let userPermission: SimpleUserPermission = null;
     if (user_permission_id !== null) {
         userPermission = {
             user_permission_id,
@@ -42,7 +57,7 @@ export default async (feature, entity, organizationId, transaction = undefined) 
         };
     }
 
-    let defaultPermission = null;
+    let defaultPermission: SimplePermission = null;
     if (role_allowed !== null) {
         defaultPermission = {
             allowed: role_allowed,
