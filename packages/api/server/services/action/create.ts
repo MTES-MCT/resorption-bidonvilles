@@ -1,6 +1,6 @@
 import { sequelize } from '#db/sequelize';
 import ServiceError from '#server/errors/ServiceError';
-import Action from '#server/models/actionModel/fetch/Action.d';
+import Action from '#root/types/resources/Action.d';
 import create from '#server/models/actionModel/create/create';
 import { User } from '#root/types/resources/User.d';
 

@@ -2,17 +2,24 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import shantytownActorModel from '#server/models/shantytownActorModel';
 import actionModel from '#server/models/actionModel';
-import { ShantytownAction } from '#server/models/actionModel/fetch/Action.d';
 import incomingTownsModel from '#server/models/incomingTownsModel';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 import permissionUtils from '#server/utils/permission';
+import { ShantytownAction } from '#root/types/resources/Action.d';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
 import getComments from './getComments';
-import serializeShantytown, { ClosingSolution, Shantytown } from './serializeShantytown';
+import serializeShantytown from './serializeShantytown';
 import getDiff from './getDiff';
 import SQL, { ShantytownRow } from './SQL';
 
 const { where: pWhere } = permissionUtils;
-
+type ShantytownClosingSolutionRow = {
+    id: number,
+    peopleAffected: number,
+    householdsAffected: number,
+    message: string,
+    shantytownId?: number
+};
 
 type ShantytownObject = {
     hash: { [key: number] : Shantytown },
@@ -142,7 +149,7 @@ export default async (user, feature, where = [], order = ['departements.code ASC
     const commentsPromise = getComments(user, Object.keys(serializedTowns.hash), false);
     const covidCommentsPromise = getComments(user, Object.keys(serializedTowns.hash), true);
 
-    const closingSolutionsPromise: Promise<ClosingSolution[]> = sequelize.query(
+    const closingSolutionsPromise: Promise<ShantytownClosingSolutionRow[]> = sequelize.query(
         `SELECT
                 shantytown_closing_solutions.fk_shantytown AS "shantytownId",
                 closing_solutions.closing_solution_id AS "id",

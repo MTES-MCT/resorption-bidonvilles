@@ -1,6 +1,6 @@
 import { ActionHash } from './hashActions';
 import ActionUserRow from './ActionUserRow.d';
-import { ActionOrganizationMember } from './Action';
+import { ActionOrganizationMember } from '#root/types/resources/Action.d';
 
 export default function mergeOperators(hash: ActionHash, operators: ActionUserRow[]): void {
     operators.forEach((row) => {

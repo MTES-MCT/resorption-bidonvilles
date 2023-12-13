@@ -1,14 +1,10 @@
 import permissionUtils from '#server/utils/permission';
-import ShantytownComment from '#server/models/shantytownCommentModel/ShantytownComment.d';
-import { Actor } from '#server/models/shantytownActorModel/serializeActor';
-import { ShantytownAction } from '#server/models/actionModel/fetch/Action.d';
-import { IncomingTown } from '#server/models/incomingTownsModel/findAll';
+import { Location } from '#server/models/geoModel/Location.d';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { ShantytownRow } from './SQL';
-import { Diff } from './getDiff';
 import getAddressSimpleOf from './getAddressSimpleOf';
 import getUsenameOf from './getUsenameOf';
-import serializeLivingConditions, { LivingConditions } from './livingConditions/serializeLivingConditions';
-import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
+import serializeLivingConditions from './livingConditions/serializeLivingConditions';
 
 const { can } = permissionUtils;
 
@@ -321,7 +317,7 @@ export default (town: ShantytownRow, user): Shantytown => {
 
     serializedTown.completionRate = Math.floor((completionTotal / 12) * 100) / 100;
 
-    const location = {
+    const location: Location = {
         type: 'city',
         city: serializedTown.city,
         epci: serializedTown.epci,

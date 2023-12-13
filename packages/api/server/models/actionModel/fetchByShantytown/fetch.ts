@@ -1,6 +1,6 @@
 import { Permission } from '#server/models/permissionModel/types/Permission.d';
 import where from '#server/utils/permission/where';
-import { ShantytownAction } from '../fetch/Action';
+import { ShantytownAction } from '#root/types/resources/Action.d';
 
 import fetchActions from './fetchActions';
 import fetchTopics from './fetchTopics';

@@ -3,9 +3,10 @@ import { QueryTypes } from 'sequelize';
 import shantytownActorModel from '#server/models/shantytownActorModel';
 import geoUtils from '#server/utils/geo';
 import permissionUtils from '#server/utils/permission';
-import serializeShantytown, { Shantytown } from '#server/models/shantytownModel/_common/serializeShantytown';
+import serializeShantytown from '#server/models/shantytownModel/_common/serializeShantytown';
 import { ActorRow } from '#server/models/shantytownActorModel/ActorRow.d';
 import serializeActor from '#server/models/shantytownActorModel/serializeActor';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
 import SQL, { ShantytownRow } from './_common/SQL';
 
 const { fromGeoLevelToTableName } = geoUtils;

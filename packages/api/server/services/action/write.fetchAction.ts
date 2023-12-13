@@ -1,8 +1,8 @@
 import { Transaction } from 'sequelize';
 import ServiceError from '#server/errors/ServiceError';
-import Action from '#server/models/actionModel/fetch/Action.d';
-
 import actionModel from '#server/models/actionModel';
+import Action from '#root/types/resources/Action.d';
+
 
 const { fetch } = actionModel;
 

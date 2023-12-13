@@ -1,4 +1,4 @@
-import Action from '#server/models/actionModel/fetch/Action.d';
+import Action from '#root/types/resources/Action.d';
 
 export function serialized(override = {}): Action {
     const action: Action = {

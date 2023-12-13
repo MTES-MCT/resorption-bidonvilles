@@ -1,6 +1,6 @@
 import mails from '#server/mails/mails';
 import userModel from '#server/models/userModel/index';
-import Action, { Comment } from '#server/models/actionModel/fetch/Action.d';
+import Action, { Comment } from '#root/types/resources/Action.d';
 
 export default async (action: Action, comment: Comment): Promise<number> => {
     const observers = await userModel.getActionObservers(

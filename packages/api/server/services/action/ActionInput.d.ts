@@ -1,5 +1,5 @@
-import ActionLocationType from '#server/models/actionModel/fetch/ActionLocationType.d';
 import { Departement } from '#server/models/geoModel/Location.d';
+import ActionLocationType from '#root/types/resources/ActionLocationType.d';
 
 type ActionInputUser = {
     id: number,

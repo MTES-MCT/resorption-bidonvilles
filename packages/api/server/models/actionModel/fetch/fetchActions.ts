@@ -1,6 +1,6 @@
 import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
-import ActionLocationType from './ActionLocationType.d';
+import ActionLocationType from '#root/types/resources/ActionLocationType.d';
 import enrichWhere from './enrichWhere';
 
 export type ActionSelectRow = {

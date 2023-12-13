@@ -17,7 +17,7 @@ import mergeMetrics from './mergeMetrics';
 import mergeOperators from './mergeOperators';
 import mergeShantytowns from './mergeShantytowns';
 import mergeTopics from './mergeTopics';
-import Action from './Action';
+import Action from '#root/types/resources/Action.d';
 
 export default async (actionIds: number[] = null, permission: Permission = null, financePermission: Permission = null, transaction?: Transaction): Promise<Action[]> => {
     let clauseGroup = {};

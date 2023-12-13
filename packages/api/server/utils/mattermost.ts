@@ -1,7 +1,7 @@
 import IncomingWebhook from 'node-mattermost';
 import config from '#server/config';
-import { Shantytown } from '#server/models/shantytownModel/_common/serializeShantytown';
-import Action, { CommentAuthor } from '#server/models/actionModel/fetch/Action.d';
+import Action, { CommentAuthor } from '#root/types/resources/Action.d';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { User } from '#root/types/resources/User.d';
 
 const { mattermost, webappUrl } = config;

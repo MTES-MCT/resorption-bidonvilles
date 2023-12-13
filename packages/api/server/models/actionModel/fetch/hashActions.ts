@@ -1,5 +1,5 @@
 import { ActionSelectRow } from './fetchActions';
-import Action from './Action';
+import Action from '#root/types/resources/Action.d';
 
 export type ActionHash = { [key: number]: Action };
 

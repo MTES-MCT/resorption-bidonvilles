@@ -1,7 +1,7 @@
 import {
     Table, SectionType, Paragraph, TextRun,
 } from 'docx';
-import { Shantytown } from '#server/models/shantytownModel/_common/serializeShantytown';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
 import heading from './heading';
 import populationHistory from './section_people/populationHistory';
 import socialDiagnostic from './section_people/socialDiagnostic';

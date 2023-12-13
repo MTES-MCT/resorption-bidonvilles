@@ -1,5 +1,5 @@
 import { ActionHash } from './hashActions';
-import ActionFinanceRow from './ActionFinanceRow';
+import ActionFinanceRow from './ActionFinanceRow.d';
 
 export default function mergeManagers(hash: ActionHash, finances: ActionFinanceRow[]): void {
     finances.forEach((row) => {
