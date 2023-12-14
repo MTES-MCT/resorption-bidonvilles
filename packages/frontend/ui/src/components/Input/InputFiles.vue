@@ -46,9 +46,11 @@ const { handleChange, handleBlur, errors, value } = useField(name.value);
 const fileInput = ref(null);
 
 const rawFiles = ref([]);
+const filesList = ref([]);
+
 const isFocused = ref(false);
 const previews = computed(() => {
-    return rawFiles.value.map(rawFile => ({
+    return filesList.value.map(rawFile => ({
         state: 'draft',
         id: null,
         name: rawFile.name,
@@ -62,6 +64,13 @@ const previews = computed(() => {
     }));
 });
 
+async function onChange() {
+    processRawFiles();
+    handleChange(fileInput.value.files);
+    await previewFiles();
+    aggregateFiles();
+}
+
 function processRawFiles() {
     rawFiles.value = Array.from(fileInput.value.files).map(file => ({
         name: file.name,
@@ -71,10 +80,30 @@ function processRawFiles() {
     }));
 }
 
-function onChange() {
-    processRawFiles();
-    handleChange(fileInput.value.files);
-    previewFiles();
+async function previewFiles() {
+    for (let i = 0; i < fileInput.value.files.length; i += 1) {
+        const file = fileInput.value.files[i];
+        const reader = new FileReader();
+
+        // Utiliser une promesse pour attendre la fin de la lecture du fichier
+        await new Promise((resolve) => {
+            reader.onload = (event) => {
+                rawFiles.value[i] = { ...rawFiles.value[i], preview: event.target.result };
+                console.log(`Fichier ${rawFiles.value[i].name} traité !`);
+                resolve(); // Résoudre la promesse pour passer à la prochaine itération
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    console.log(`Nombre de fichiers dans rawFiles: ${rawFiles.value.length}`);
+}
+
+function aggregateFiles() {
+    filesList.value = [...filesList.value, ...rawFiles.value];
+    console.log(`Nombre de fichiers dans filesList: ${filesList.value.length}`);
+    rawFiles.value = [];
+    console.log(`Nombre de fichiers dans rawFiles: ${rawFiles.value.length}`);
 }
 
 function onDelete(file, index) {
@@ -95,17 +124,6 @@ function onDelete(file, index) {
     onChange();
 }
 
-function previewFiles() {
-    for (let i = 0; i < fileInput.value.files.length; i += 1) {
-        const file = fileInput.value.files[i];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (event) => {
-            rawFiles.value[i] = { ...rawFiles.value[i], preview: event.target.result };
-        };
-    }
-}
-
 function addFiles(newFiles) {
     const dt = new DataTransfer();
     const { files } = fileInput.value;
@@ -120,6 +138,8 @@ function addFiles(newFiles) {
 
     // on change la valeur de l'input avec le nouveau set de données
     fileInput.value.files = dt.files;
+
+    console.log(`contenu de fileInput: ${JSON.stringify(fileInput.value)}`)
 
     // on génère un "change"
     onChange();
