@@ -1,0 +1,16 @@
+<mj-section>
+  <mj-column>
+    <mj-text mj-class='text-display text-secondary pb-2'>
+      Nouveau !
+    </mj-text>
+    <mj-text mj-class='text-primary font-bold'>
+      Résorption-bidonvilles évolue pour offrir une expérience plus personnalisée.
+    </mj-text>
+    <mj-text>
+      Dans les prochains jours, vous serez invité à indiquer vos sujets d'intérêts et d'expertises sur la plateforme pour relier compétences et besoins ! 
+    </mj-text>
+    <mj-text mj-class="pt-2">
+      Merci à vous !
+    </mj-text>
+  </mj-column>
+</mj-section>
