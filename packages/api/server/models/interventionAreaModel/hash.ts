@@ -9,7 +9,7 @@ export default (areas: RawInterventionArea[], organizations: { [id: number]: Org
             return;
         }
 
-        if (area.type === 'nation') {
+        if (area.type === 'nation' && area.is_main_area) {
             organizations[area.fk_organization].intervention_areas.is_national = true;
         }
 
