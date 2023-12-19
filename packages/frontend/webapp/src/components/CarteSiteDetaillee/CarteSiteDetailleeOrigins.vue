@@ -18,7 +18,7 @@
                 v-else
                 :key="origin.id"
             >
-                <img :src="origin.img" class="w-6 h-4 mr-2 mt-1" />
+                <img :src="origin.img" class="w-6 h-4 mr-2 mt-1" alt="" />
                 <div>
                     <span class="sr-only">Origine de la population:</span
                     >{{ origin.label }}
