@@ -1,7 +1,7 @@
 <template>
     <div class="relative">
         <slot />
-        <div class="absolute bottom-0 right-0 mr-4 text-white">
+        <div class="absolute bottom-0 right-0 mr-4 text-white" aria-hidden="false">
             {{ credit }}
         </div>
     </div>
