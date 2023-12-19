@@ -1,25 +1,14 @@
 /* eslint-disable newline-per-chained-call */
-
-import { param } from 'express-validator';
+import { body } from 'express-validator';
 import geoModel from '#server/models/geoModel/index';
 
 export default [
-    param('locationType')
-        .exists({ checkNull: true }).bail().withMessage('Le type de localisation est obligatoire')
-        .custom((value) => {
-            if (!['region', 'departement', 'epci', 'city'].includes(value)) {
-                throw new Error('Le type de localisation n\'est pas reconnu');
-            }
-
-            return true;
-        }),
-
-    param('locationCode')
+    body('departement')
         .exists({ checkNull: true }).bail().withMessage('La localisation est obligatoire')
         .custom(async (value, { req }) => {
             let location;
             try {
-                location = await geoModel.getLocation(req.params.locationType, value);
+                location = await geoModel.getLocation('departement', value);
             } catch (e) {
                 throw new Error('Une erreur est survenue lors de la lecture en base de données');
             }
@@ -31,4 +20,10 @@ export default [
             req.body.location = location;
             return true;
         }),
+
+    body('managers')
+        .optional()
+        .isArray().withMessage('Les pilotes doivent être un tableau')
+        .custom(value => value.every(Number.isInteger))
+        .withMessage('La liste des pilotes est invalide'),
 ];

@@ -39,6 +39,7 @@ import createAnswer from './answer/create';
 import actionCreate from './actions/create';
 import actionCreateComment from './actions/createComment';
 import actionUpdate from './actions/update';
+import financeReaderFindByLocation from './financeReaders/findByLocation';
 import justiceReaderFindByLocation from './justiceReaders/findByLocation';
 import organizationSearch from './organizations/search';
 import getDepartementMetrics from './metrics/getDepartementMetrics';
@@ -82,6 +83,9 @@ export default {
     },
     dashboard: {
         location: dashboardLocation,
+    },
+    financeReaders: {
+        findByLocation: financeReaderFindByLocation,
     },
     justiceReader: {
         findByLocation: justiceReaderFindByLocation,

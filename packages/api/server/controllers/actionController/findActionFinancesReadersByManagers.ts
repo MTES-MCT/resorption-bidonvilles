@@ -1,9 +1,11 @@
+import { Departement } from '#server/models/geoModel/Location.d';
 import actionService from '#server/services/action/actionService';
 import { Request, NextFunction, Response } from 'express';
 
 interface FindActionFinancesReadersRequest extends Request {
     body: {
-        managers: Array<number>,
+        location: Departement,
+        managers: number[],
     }
 }
 
@@ -15,7 +17,7 @@ const ERROR_RESPONSES = {
 export default async (req: FindActionFinancesReadersRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         res.status(200).send(
-            await actionService.findActionFinancesReadersByManagers(req.body.managers),
+            await actionService.findActionFinancesReadersByManagers(req.body.location, req.body.managers),
         );
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;

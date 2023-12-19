@@ -428,6 +428,7 @@ export default (app) => {
     app.post(
         '/action-finances-readers',
         middlewares.auth.authenticate,
+        validators.financeReaders.findByLocation,
         middlewares.validation,
         controllers.action.findActionFinancesReadersByManagers,
     );
@@ -854,4 +855,8 @@ export default (app) => {
         middlewares.auth.isSuperAdmin,
         controllers.permission.list,
     );
+
+    app.use((err, req, res, next) => {
+        console.log(err);
+    });
 };
