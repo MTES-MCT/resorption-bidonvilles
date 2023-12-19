@@ -48,7 +48,7 @@ export default (user: User) => ({
                 };
 
                 return Object.keys(plural).some((type) => {
-                    if (geoLocation[type] === undefined) {
+                    if (!geoLocation[type]) {
                         return false;
                     }
 

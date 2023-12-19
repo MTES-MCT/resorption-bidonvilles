@@ -13,6 +13,8 @@ import closingSolutionModel from '#server/models/closingSolutionModel';
 import excelUtils from '#server/utils/excel';
 import statsExportsModel from '#server/models/statsExportsModel';
 import moment from 'moment';
+import { Region } from '#server/models/geoModel/Location.d';
+import { serialized as fakeUser } from '#test/utils/user';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -25,14 +27,14 @@ describe('services/shantytown', () => {
         let stubs;
         let createExportSectionsStub;
         let serializeExportPropertiesStub;
-        const user = { id: 0 };
+        const user = fakeUser({ id: 0 });
         const data = {
             locationType: 'city',
             locationCode: 0,
             closedTowns: '0',
         };
-        const location = {
-            type: 'region', region: { code: 0 }, departement: null, epci: null, city: null,
+        const location: Region = {
+            type: 'region', region: { code: '0', name: 'Région' }, departement: null, epci: null, city: null,
         };
         beforeEach(async () => {
             createExportSectionsStub = sinon.stub();
@@ -165,7 +167,7 @@ describe('services/shantytown', () => {
                     }
                     expect(stubs.shantytownModelFindAll).to.have.been.calledOnceWith(
                         user,
-                        [{ status: { not: false, value: 'open' } }, { location: { query: 'region.code', value: 0 } }],
+                        [{ status: { not: false, value: 'open' } }, { location: { query: 'region.code', value: '0' } }],
                         'export',
                     );
                 });
@@ -178,7 +180,7 @@ describe('services/shantytown', () => {
                     }
                     expect(stubs.shantytownModelFindAll).to.have.been.calledOnceWith(
                         user,
-                        [{ status: { not: true, value: 'open' } }, { location: { query: 'region.code', value: 0 } }],
+                        [{ status: { not: true, value: 'open' } }, { location: { query: 'region.code', value: '0' } }],
                         'export',
                     );
                 });

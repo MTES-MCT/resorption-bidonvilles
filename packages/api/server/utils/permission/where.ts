@@ -19,15 +19,17 @@ export default () => ({
                     if (permission.allowed_on[tableName]?.length > 0) {
                         const where = {
                             [tableName]: {
-                                query: `${tableName}.code`,
-                                value: permission.allowed_on[tableName],
+                                query: `${tableName}.${tableName === 'actions' ? 'action_id' : 'code'}`,
+                                value: tableName !== 'actions'
+                                    ? permission.allowed_on[tableName].map(location => location[location.type].code)
+                                    : permission.allowed_on[tableName],
                             },
                         };
 
                         if (tableName === 'cities') {
                             where[`${tableName}_arrondissement`] = {
                                 query: `${tableName}.fk_main`,
-                                value: permission.allowed_on[tableName],
+                                value: permission.allowed_on[tableName].map(location => location[location.type].code),
                             };
                         }
 

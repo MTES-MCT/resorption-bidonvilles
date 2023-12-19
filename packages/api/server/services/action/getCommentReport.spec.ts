@@ -47,7 +47,9 @@ describe('services/action.getActionReport()', () => {
         expect(stubs.can).to.have.been.calledOnceWith(user);
         expect(stubs.do).to.have.been.calledOnceWith('export', 'action_comment');
         // eslint-disable-next-line no-unused-expressions
-        expect(stubs.on).to.have.been.calledOnceWith({ type: 'nation' });
+        expect(stubs.on).to.have.been.calledOnceWith({
+            type: 'nation', region: null, departement: null, epci: null, city: null,
+        });
     });
 
     it('récupère les commentaires en bdd et les renvoie au formal CSV', async () => {

@@ -2,6 +2,7 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import rewiremock from 'rewiremock/node';
+import { Permissions } from '#server/models/permissionModel/types/Permissions.d';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -24,21 +25,20 @@ describe('userService/getPermissions', () => {
     });
 
     it('retourne la liste des permissions de l\'utilisateur', async () => {
-        permissionModel.find.withArgs([60]).resolves({
-            60: {
-                shantytown: {
-                    create: {
-                        allowed: true, allow_all: true, allowed_on: null, is_writing: true,
-                    },
+        const stubPermissions: Permissions = {
+            shantytown: {
+                create: {
+                    allowed: true, allowed_on_national: true, allowed_on: null,
                 },
             },
-        });
+        };
+        permissionModel.find.withArgs([60]).resolves({ 60: stubPermissions });
 
         const permissions = await getPermissions(60);
         expect(permissions).to.be.eql({
             shantytown: {
                 create: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: true,
+                    allowed: true, allowed_on_national: true, allowed_on: null,
                 },
             },
         });
