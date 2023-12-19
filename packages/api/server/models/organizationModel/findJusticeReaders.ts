@@ -37,7 +37,6 @@ export type JusticeReaderRow = {
 };
 
 export default async (shantytownId?: number, location?: Location): Promise<Organization[]> => {
-    // TODO 2019
     const rows: JusticeReaderRow[] = await sequelize.query(
         `WITH users_by_permissions AS (
             SELECT
