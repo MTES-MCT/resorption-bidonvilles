@@ -19,7 +19,10 @@
                 :key="origin.id"
             >
                 <img :src="origin.img" class="w-6 h-4 mr-2 mt-1" />
-                <div>{{ origin.label }}</div>
+                <div>
+                    <span class="sr-only">Origine de la population:</span
+                    >{{ origin.label }}
+                </div>
             </div>
         </div>
     </div>
