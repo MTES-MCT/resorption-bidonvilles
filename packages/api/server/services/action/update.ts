@@ -23,7 +23,7 @@ export default async (action: Action, author: User, data: ActionInput): Promise<
     }
 
     try {
-        const updatedAction = await fetchAction(action.id, canWriteFinances, transaction);
+        const updatedAction = await fetchAction(author, action.id, canWriteFinances, transaction);
         await transaction.commit();
 
         return updatedAction;

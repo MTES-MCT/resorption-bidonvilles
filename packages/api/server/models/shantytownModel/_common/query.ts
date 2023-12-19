@@ -169,8 +169,8 @@ export default async (user, feature, where = [], order = ['departements.code ASC
     );
 
     const actionsPromise = actionModel.fetchByShantytown(
+        user,
         Object.keys(serializedTowns.hash).map(id => parseInt(id, 10)),
-        null,
     );
 
     const incomingTownsPromise = incomingTownsModel.findAll(user, Object.keys(serializedTowns.hash));

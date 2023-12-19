@@ -3,6 +3,6 @@ export type RolePermissionList = {
         feature: string;
         entity: string;
         allowed: boolean;
-        allow_all: boolean;
+        allowed_on_national: boolean;
     }[]
 };

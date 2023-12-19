@@ -1,5 +1,6 @@
 /* eslint-disable newline-per-chained-call */
 import geoModel from '#server/models/geoModel';
+import { Location } from '#server/models/geoModel/Location.d';
 import shantytownModel from '#server/models/shantytownModel';
 import topicModel from '#server/models/topicModel';
 import userModel from '#server/models/userModel';
@@ -102,7 +103,7 @@ export default (mode: 'create' | 'update') => [
         })
         .exists({ checkNull: true }).bail().withMessage('Le champ "Département d\'intervention principal" est obligatoire')
         .custom(async (value, { req }) => {
-            let location;
+            let location: Location;
             try {
                 location = await geoModel.getLocation('departement', value);
             } catch (error) {
@@ -113,7 +114,6 @@ export default (mode: 'create' | 'update') => [
                 throw new Error('Le département sélectionné n\'existe pas en base de données');
             }
 
-            const permission = req.user.permissions?.action?.create;
             req.body.location = location;
 
             // si le département n'a pas changé, on ne vérifie pas les permissions
@@ -127,16 +127,7 @@ export default (mode: 'create' | 'update') => [
                 return true;
             }
 
-            if (!permission) {
-                throw new Error('Votre compte ne dispose pas des droits suffisants pour déclarer une action');
-            }
-
-            if (permission.allow_all === true) {
-                return true;
-            }
-
-            if (!permission.allowed_on.departements?.includes(location.departement.code)
-                    && !permission.allowed_on.regions?.includes(location.region.code)) {
+            if (!can(req.user).do('action', 'create').on(location)) {
                 throw new Error('Votre compte ne dispose pas des droits suffisants pour déclarer une action sur ce département');
             }
 

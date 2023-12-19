@@ -6,27 +6,38 @@ import permissionUtils from '#server/utils/permission';
 import serializeShantytown from '#server/models/shantytownModel/_common/serializeShantytown';
 import { ActorRow } from '#server/models/shantytownActorModel/ActorRow.d';
 import serializeActor from '#server/models/shantytownActorModel/serializeActor';
+import { Location } from '#server/models/geoModel/Location.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import SQL, { ShantytownRow } from './_common/SQL';
+import { User } from '#root/types/resources/User.d';
 
 const { fromGeoLevelToTableName } = geoUtils;
 const { restrict } = permissionUtils;
 
 type ShantytownObject = { [key: number]: ShantytownRow };
-export default async (user, location, lastDate, closedTowns): Promise<Shantytown[]> => {
+export default async (user: User, location: Location, lastDate: string, closedTowns: boolean): Promise<Shantytown[]> => {
     const where = [];
     const replacements: any = {
         userId: user.id,
     };
 
-    const restrictedLocation = restrict(location).for(user).askingTo('list', 'shantytown');
-    if (restrictedLocation === null) {
+    const restrictedLocations = restrict(location).for(user).askingTo('list', 'shantytown');
+    if (restrictedLocations.length === 0) {
         return [];
     }
 
-    if (restrictedLocation.type !== 'nation') {
-        where.push(`${fromGeoLevelToTableName(restrictedLocation.type)}.code = :shantytownLocationCode`);
-        replacements.shantytownLocationCode = restrictedLocation[restrictedLocation.type].code;
+    if (!restrictedLocations.some(l => l.type === 'nation')) {
+        where.push(
+            restrictedLocations.map((l, index) => {
+                replacements[`shantytownLocationCode${index}`] = l[l.type].code;
+                const arr = [`${fromGeoLevelToTableName(l.type)}.code = :shantytownLocationCode${index}`];
+                if (l.type === 'city') {
+                    arr.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :shantytownLocationCode${index}`);
+                }
+
+                return arr;
+            }).flat().join(' OR '),
+        );
     }
 
     const rows: ShantytownRow[] = await sequelize.query(

@@ -1,4 +1,3 @@
-import { Permission } from '#server/models/permissionModel/types/Permission.d';
 import where from '#server/utils/permission/where';
 import { ShantytownAction } from '#root/types/resources/Action.d';
 
@@ -8,15 +7,10 @@ import fetchOperators from './fetchOperators';
 import hashActions from './hashActions';
 import mergeTopics from './mergeTopics';
 import mergeOperators from './mergeOperators';
+import { User } from '#root/types/resources/User.d';
 
-export default async (shantytownIds: number[], permission: Permission): Promise<ShantytownAction[]> => {
-    let clauseGroup = {};
-    if (permission !== null) {
-        clauseGroup = where()
-            .can({ permissions: { action: { read: permission } } })
-            .do('read', 'action');
-    }
-
+export default async (user: User, shantytownIds: number[]): Promise<ShantytownAction[]> => {
+    const clauseGroup = where().can(user).do('read', 'action');
     const [actions, topics, operators] = await Promise.all([
         fetchActions(shantytownIds, clauseGroup),
         fetchTopics(shantytownIds, clauseGroup),

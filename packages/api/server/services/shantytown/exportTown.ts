@@ -13,8 +13,9 @@ import statsExportsModel from '#server/models/statsExportsModel';
 import serializeExportProperties from './_common/serializeExportProperties';
 import createExportSections from './_common/createExportSections';
 import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
+import { User } from '#root/types/resources/User.d';
 
-export default async (user, data) => {
+export default async (user: User, data) => {
     if (!Object.prototype.hasOwnProperty.call(data, 'locationType')
         || !Object.prototype.hasOwnProperty.call(data, 'locationCode')) {
         throw new ServiceError('data_incomplete', new Error('Le périmètre géographique à exporter est obligatoire'));

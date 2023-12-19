@@ -34,7 +34,7 @@ export default async (): Promise<RolePermissionList> => {
             feature: row.feature,
             entity: row.entity,
             allowed: row.allowed,
-            allow_all: row.allow_all,
+            allowed_on_national: row.allow_all,
         });
         return acc;
     }, {} as RolePermissionList);

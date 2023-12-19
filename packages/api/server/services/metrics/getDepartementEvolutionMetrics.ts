@@ -3,7 +3,9 @@ import { DepartementEvolutionMetricsRawData } from '#server/models/metricsModel/
 import metricsModel from '#server/models/metricsModel';
 import ServiceError from '#server/errors/ServiceError';
 import getLivingConditionsStatuses from '#server/models/shantytownModel/_common/livingConditions/v2/statuses/main';
+import { Departement } from '#server/models/geoModel/Location.d';
 import { DepartementMetricsEvolution } from '#root/types/resources/DepartementMetricsEvolution.d';
+import { User } from '#root/types/resources/User.d';
 import initializeListOfDates from './_utils/initializeListOfDates';
 import initializeDepartementEvolutionMetrics from './_utils/initializeDepartementEvolutionMetrics';
 import getEvolution from './_utils/getEvolution';
@@ -12,8 +14,8 @@ import getIndex from './_utils/getIndex';
 
 const livingConditionsKeys = ['water', 'electricity', 'toilets', 'fire_prevention', 'trash_evacuation', 'pest_animals'];
 
-export default async (user, departementCode, argFrom: Date, argTo: Date):Promise<DepartementMetricsEvolution> => {
-    const hasJusticePermission = permissionUtils.can(user).do('access', 'shantytown_justice').on({ type: 'departement', departement: { code: departementCode } });
+export default async (user: User, departementCode: string, argFrom: Date, argTo: Date):Promise<DepartementMetricsEvolution> => {
+    const hasJusticePermission = permissionUtils.can(user).do('access', 'shantytown_justice').on({ type: 'departement', departement: { code: departementCode } } as Departement);
     let data:DepartementEvolutionMetricsRawData[];
     try {
         data = await metricsModel.getDepartementEvolutionData(user, departementCode, argFrom, argTo);

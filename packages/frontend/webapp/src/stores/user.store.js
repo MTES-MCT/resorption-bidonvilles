@@ -68,13 +68,20 @@ export const useUserStore = defineStore("user", {
             const { departements } = configStore.config;
             const permission = this.user.permissions.action.create;
 
-            if (permission.allow_all === true) {
+            if (permission.allowed_on_national === true) {
                 return departements;
             }
+
+            const allowedDepartements = permission.allowed_on.departements.map(
+                (d) => d.departement.code
+            );
+            const allowedRegions = permission.allowed_on.regions.map(
+                (r) => r.region.code
+            );
             return departements.filter(
                 ({ code, region }) =>
-                    permission.allowed_on.departements?.includes(code) ||
-                    permission.allowed_on.regions?.includes(region)
+                    allowedDepartements.includes(code) ||
+                    allowedRegions.includes(region)
             );
         },
         hasMoreThanOneDepartementForMetrics() {
@@ -83,7 +90,7 @@ export const useUserStore = defineStore("user", {
                 return false;
             }
 
-            if (permission.allow_all === true) {
+            if (permission.allowed_on_national === true) {
                 return true;
             }
 
@@ -111,13 +118,10 @@ export const useUserStore = defineStore("user", {
             return permission;
         },
         hasPermission(permissionName) {
-            const [entity, feature, data] = permissionName.split(".");
+            const [entity, feature] = permissionName.split(".");
             const permission = this.getPermission(`${entity}.${feature}`);
 
-            return (
-                permission !== null &&
-                (data === undefined || permission[data] === true)
-            );
+            return permission !== null;
         },
         hasLocalizedPermission(permissionName, entity) {
             const permission = this.getPermission(permissionName);
@@ -125,27 +129,29 @@ export const useUserStore = defineStore("user", {
                 return false;
             }
 
-            if (permission.allow_all) {
+            if (permission.allowed_on_national === true) {
                 return true;
             }
 
             return (
                 (entity.region &&
-                    permission.allowed_on.regions.includes(
-                        entity.region.code
+                    permission.allowed_on.regions.some(
+                        (r) => r.region.code === entity.region.code
                     )) ||
                 (entity.departement &&
-                    permission.allowed_on.departements.includes(
-                        entity.departement.code
+                    permission.allowed_on.departements.some(
+                        (d) => d.departement.code === entity.departement.code
                     )) ||
                 (entity.epci &&
-                    permission.allowed_on.epci.includes(entity.epci.code)) ||
+                    permission.allowed_on.epci.some(
+                        (e) => e.epci.code === entity.epci.code
+                    )) ||
                 (entity.city &&
-                    (permission.allowed_on.cities.includes(entity.city.code) ||
-                        permission.allowed_on.cities.includes(
-                            entity.city.main
-                        ))) ||
-                permission.allowed_on.shantytowns.includes(entity.id)
+                    permission.allowed_on.cities.some(
+                        (c) =>
+                            c.city.code === entity.city.code ||
+                            c.city.main === entity.city.code
+                    ))
             );
         },
         hasActionPermission(permissionName, entity) {
@@ -154,18 +160,20 @@ export const useUserStore = defineStore("user", {
                 return false;
             }
 
-            if (permission.allow_all) {
+            if (permission.allowed_on_national === true) {
                 return true;
             }
 
             return (
                 (entity.location.region &&
-                    permission.allowed_on.regions.includes(
-                        entity.location.region.code
+                    permission.allowed_on.regions.some(
+                        (r) => r.region.code === entity.location.region.code
                     )) ||
                 (entity.location.departement &&
-                    permission.allowed_on.departements.includes(
-                        entity.location.departement.code
+                    permission.allowed_on.departements.some(
+                        (d) =>
+                            d.departement.code ===
+                            entity.location.departement.code
                     )) ||
                 permission.allowed_on.actions.includes(entity.id)
             );

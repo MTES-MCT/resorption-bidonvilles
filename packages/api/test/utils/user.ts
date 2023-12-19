@@ -74,45 +74,57 @@ export function serialized(override: Partial<User> = {}): AuthUser {
         permissions: {
             shantytown: {
                 create: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: true,
+                    allowed: true,
+                    allowed_on_national: true,
+                    allowed_on: null,
                 },
                 list: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                    allowed: true,
+                    allowed_on_national: true,
+                    allowed_on: null,
                 },
                 read: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                    allowed: true,
+                    allowed_on_national: true,
+                    allowed_on: null,
                 },
                 update: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: true,
+                    allowed: true,
+                    allowed_on_national: true,
+                    allowed_on: null,
                 },
                 close: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: true,
+                    allowed: true,
+                    allowed_on_national: true,
+                    allowed_on: null,
                 },
                 export: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                    allowed: true,
+                    allowed_on_national: true,
+                    allowed_on: null,
                 },
             },
             shantytown_justice: {
                 access: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                    allowed: true, allowed_on_national: true, allowed_on: null,
                 },
             },
             shantytown_comment: {
                 create: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: true,
+                    allowed: true, allowed_on_national: true, allowed_on: null,
                 },
                 list: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                    allowed: true, allowed_on_national: true, allowed_on: null,
                 },
                 listPrivate: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                    allowed: true, allowed_on_national: true, allowed_on: null,
                 },
             },
             user: {},
             stats: {},
             covid_comment: {
                 list: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                    allowed: true, allowed_on_national: true, allowed_on: null,
                 },
             },
         },

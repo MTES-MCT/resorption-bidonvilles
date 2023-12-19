@@ -6,6 +6,7 @@ import mails from '#server/mails/mails';
 import permissionUtils from '#server/utils/permission';
 import dateUtils from '#server/utils/date';
 import ServiceError from '#server/errors/ServiceError';
+import { Location } from '#server/models/geoModel/Location.d';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 
@@ -29,7 +30,7 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
-    const location = {
+    const location: Location = {
         type: 'city',
         region: town.region,
         departement: town.departement,

@@ -25,7 +25,7 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
             return [];
         }
 
-        if (permission.allow_all !== true) {
+        if (permission.allowed_on_national !== true) {
             const clauseGroup = {};
             ['regions', 'departements', 'epci', 'cities'].forEach((column) => {
                 if (permission.allowed_on[column]?.length <= 0) {
@@ -33,7 +33,7 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
                 }
 
                 clauseGroup[column] = {
-                    value: permission.allowed_on[column],
+                    value: permission.allowed_on[column].map(l => l[l.type].code),
                     query: `user_intervention_areas.${column}::text[]`,
                     arrayOperator: true,
                     operator: '&&',

@@ -1,10 +1,13 @@
+import { Location as GeoLocation } from '#server/models/geoModel/Location.d';
+import Action from '#root/types/resources/Action.d';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { User } from '#root/types/resources/User.d';
 import getPermission from './getPermission';
 
 export default (user: User) => ({
     do(feature: string, entity: string) {
         return {
-            on(location): boolean {
+            on(location: GeoLocation | Shantytown | Action): boolean {
                 // ensure the user has the permission (has it AND allowed is true)
                 const permission = getPermission(user, feature, entity);
                 if (!permission) {
@@ -12,17 +15,13 @@ export default (user: User) => ({
                 }
 
                 // if the permission is allowed everywhere: we can stop here
-                if (permission.allow_all === true) {
+                if (permission.allowed_on_national === true) {
                     return true;
                 }
 
-                // check shantytowns and actions
-                let geoLocation = location;
+                // compute the geo-location
+                let geoLocation: GeoLocation;
                 if (location.type === 'shantytown') {
-                    if (permission.allowed_on.shantytowns.includes(location.id)) {
-                        return true;
-                    }
-
                     geoLocation = {
                         type: 'city',
                         region: location.region,
@@ -30,34 +29,31 @@ export default (user: User) => ({
                         epci: location.epci,
                         city: location.city,
                     };
-                }
-
-                if (location.type === 'action') {
+                } else if (location.type === 'action') {
                     if (permission.allowed_on.actions.includes(location.id)) {
                         return true;
                     }
 
                     geoLocation = location.location;
+                } else {
+                    geoLocation = location;
                 }
 
                 // check locations
-                if (geoLocation.city && (permission.allowed_on.cities.includes(geoLocation.city.code) || permission.allowed_on.cities.includes(geoLocation.city.main))) {
-                    return true;
-                }
+                const plural = {
+                    city: 'cities',
+                    epci: 'epci',
+                    departement: 'departements',
+                    region: 'regions',
+                };
 
-                if (geoLocation.epci && permission.allowed_on.epci.includes(geoLocation.epci.code)) {
-                    return true;
-                }
+                return Object.keys(plural).some((type) => {
+                    if (geoLocation[type] === undefined) {
+                        return false;
+                    }
 
-                if (geoLocation.departement && permission.allowed_on.departements.includes(geoLocation.departement.code)) {
-                    return true;
-                }
-
-                if (geoLocation.region && permission.allowed_on.regions.includes(geoLocation.region.code)) {
-                    return true;
-                }
-
-                return false;
+                    return permission.allowed_on[plural[type]].some(l => l[type].code === geoLocation[type].code || l[type].code === geoLocation[type].main);
+                });
             },
         };
     },

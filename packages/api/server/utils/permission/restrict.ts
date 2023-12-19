@@ -1,43 +1,38 @@
+import { Location } from '#server/models/geoModel/Location.d';
 import getPermission from './getPermission';
 import can from './can';
+import { User } from '#root/types/resources/User.d';
 
-export default requestedLocation => ({
-    for(user) {
+export default (requestedLocation: Location) => ({
+    for(user: User) {
         return {
-            askingTo(feature, entity) {
+            askingTo(feature: string, entity: string): Location[] {
                 if (can(user).do(feature, entity).on(requestedLocation)) {
-                    return requestedLocation;
+                    return [requestedLocation];
                 }
 
                 const permission = getPermission(user, feature, entity);
                 if (permission === null) {
-                    return null;
+                    return [];
                 }
 
-                // local permissions
-                let level = user.organization.location.type;
-                if (permission.is_writing === false && ['city', 'epci'].includes(user.organization.location.type)) {
-                    level = 'departement';
-                }
+                // on retourne tous les territoires qui font partie de celui demandé
+                return [
+                    permission.allowed_on.regions,
+                    permission.allowed_on.departements,
+                    permission.allowed_on.epci,
+                    permission.allowed_on.cities,
+                ].flat(2).filter((location) => {
+                    if (requestedLocation.type === 'nation') {
+                        return true;
+                    }
 
-                if (!user.organization.location[level] || (requestedLocation[level] && user.organization.location[level].code !== requestedLocation[level].code)) {
-                    return null;
-                }
+                    if (!location[requestedLocation.type]) {
+                        return false;
+                    }
 
-                const hierarchy = {
-                    region: ['region'],
-                    departement: ['region', 'departement'],
-                    epci: ['region', 'departement', 'epci'],
-                    city: ['region', 'departement', 'epci', 'city'],
-                };
-
-                return {
-                    type: level,
-                    region: hierarchy[level].includes('region') ? user.organization.location.region || null : null,
-                    departement: hierarchy[level].includes('departement') ? user.organization.location.departement || null : null,
-                    epci: hierarchy[level].includes('epci') ? user.organization.location.epci || null : null,
-                    city: hierarchy[level].includes('city') ? user.organization.location.city || null : null,
-                };
+                    return location[requestedLocation.type].code === requestedLocation[requestedLocation.type].code;
+                });
             },
         };
     },
