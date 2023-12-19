@@ -5,7 +5,6 @@ import insertFinances from './insertFinances';
 import insertManagers from './insertManagers';
 import insertMetrics from './insertMetrics';
 import insertOperators from './insertOperators';
-import insertPermissions from './insertPermissions';
 import insertShantytowns from './insertShantytowns';
 import insertTopics from './insertTopics';
 
@@ -15,12 +14,6 @@ export default (actionId: number, authorId: number, data: ActionEnrichedInput, t
         insertManagers(actionId, data.managers.map(({ id }) => id), transaction),
         insertOperators(actionId, data.operators.map(({ id }) => id), transaction),
         insertMetrics(actionId, authorId, data, transaction),
-        insertPermissions(
-            actionId,
-            data.managers.map(({ organization_id }) => organization_id),
-            data.operators.map(({ organization_id }) => organization_id),
-            transaction,
-        ),
     ];
 
     if (data.location_shantytowns?.length > 0) {
