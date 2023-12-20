@@ -18,18 +18,32 @@
                         />
                         <Button size="sm" type="button">Rechercher</Button>
                     </div>
-                    <p
-                        class="mt-1 text-right text-sm font-bold"
-                        v-if="showReset"
-                    >
-                        <Link v-if="isNotOnDefaultFilter" @click="resetSearch">
-                            <Icon icon="rotate-left" /> Revenir à mon
-                            territoire</Link
-                        >
-                        <Link v-else @click="emptySearch">
-                            {{ showNationalWording }}</Link
-                        >
-                    </p>
+                    <div class="mt-2 text-left text-sm">
+                        <p class="font-bold">Mes territoires :</p>
+                        <p class="space-x-2">
+                            <Link
+                                v-for="(area, idx) in userStore.user
+                                    .intervention_areas.areas"
+                                :class="
+                                    ((inputLocation.data === null &&
+                                        area.type === 'nation') ||
+                                        inputLocation.data?.typeUid ===
+                                            area.type) &&
+                                    inputLocation.data?.code ===
+                                        area[area.type]?.code
+                                        ? 'text-primary font-bold '
+                                        : ''
+                                "
+                                @click="setSearch(area)"
+                                :key="idx"
+                                >{{
+                                    area.type === "nation"
+                                        ? "France entière"
+                                        : area[area.type].name
+                                }}</Link
+                            >
+                        </p>
+                    </div>
                 </ContentWrapper>
             </div>
         </template>
@@ -44,7 +58,7 @@ import { useUserStore } from "@/stores/user.store";
 import Layout from "@/components/Layout/Layout.vue";
 import {} from "@resorptionbidonvilles/ui";
 import InputLocation from "@/components/InputLocation/InputLocation.vue";
-import { Button, ContentWrapper, Icon, Link } from "@resorptionbidonvilles/ui";
+import { Button, ContentWrapper, Link } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     searchTitle: {
@@ -105,8 +119,20 @@ const isNotOnDefaultFilter = computed(() => {
     return !userStore.isMyLocation(inputLocation.value);
 });
 
-function resetSearch() {
-    inputLocation.value = userStore.defaultLocationFilter;
+function setSearch(area) {
+    if (area.type === "nation") {
+        return emptySearch();
+    }
+
+    inputLocation.value = {
+        search: area[area.type].name,
+        data: {
+            code: area[area.type].code,
+            departement: area.departement?.code || null,
+            typeUid: area.type,
+            typeName: "-",
+        },
+    };
 }
 
 function emptySearch() {
