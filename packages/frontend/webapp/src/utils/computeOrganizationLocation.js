@@ -6,7 +6,9 @@ export default function (organization) {
         };
     }
 
-    const area = organization.intervention_areas.areas[0];
+    const area = organization.intervention_areas.areas.find(
+        (area) => area.is_main_area === true
+    );
     return {
         name: area[area.type].name,
         code: area[area.type].code,
