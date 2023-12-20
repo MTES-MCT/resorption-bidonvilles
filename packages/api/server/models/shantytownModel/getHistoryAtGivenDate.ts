@@ -15,13 +15,13 @@ const { fromGeoLevelToTableName } = geoUtils;
 const { restrict } = permissionUtils;
 
 type ShantytownObject = { [key: number]: ShantytownRow };
-export default async (user: User, location: Location, lastDate: string, closedTowns: boolean): Promise<Shantytown[]> => {
+export default async (user: User, locations: Location[], lastDate: string, closedTowns: boolean): Promise<Shantytown[]> => {
     const where = [];
     const replacements: any = {
         userId: user.id,
     };
 
-    const restrictedLocations = restrict(location).for(user).askingTo('list', 'shantytown');
+    const restrictedLocations = locations.map(l => restrict(l).for(user).askingTo('list', 'shantytown')).flat();
     if (restrictedLocations.length === 0) {
         return [];
     }

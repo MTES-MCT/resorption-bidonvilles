@@ -10,6 +10,8 @@ import shantytownModel from '#server/models/shantytownModel';
 import closingSolutionModel from '#server/models/closingSolutionModel';
 import statsExportsModel from '#server/models/statsExportsModel';
 
+import { WhereClauseGroup } from '#server/models/_common/types/WhereClauseGroup';
+import { Where } from '#server/models/_common/types/Where';
 import serializeExportProperties from './_common/serializeExportProperties';
 import createExportSections from './_common/createExportSections';
 import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
@@ -28,18 +30,15 @@ export default async (user: User, data) => {
         throw new ServiceError('fetch_failed', error);
     }
 
-    if (!permissionUtils.can(user).do('export', 'shantytown').on(location)) {
+    const today = new Date();
+    const askedForHistory = moment(data.date).format('YYYY-MM-DD') !== moment(today).format('YYYY-MM-DD');
+    const allowedLocations = permissionUtils.restrict(location).for(user).askingTo('export', askedForHistory ? 'shantytown_history' : 'shantytown');
+    if (allowedLocations.length === 0) {
         throw new ServiceError('permission_denied', new Error('Vous n\'êtes pas autorisé(e) à exporter le périmètre géographique demandé'));
     }
 
-    const today = new Date();
-
-    if (!permissionUtils.can(user).do('export', 'shantytown_history').on(location) && moment(data.date).format('YYYY-MM-DD') !== moment(today).format('YYYY-MM-DD')) {
-        throw new ServiceError('permission_denied', new Error('Vous n\'êtes pas autorisé(e) à exporter des données passées'));
-    }
-
     const closedTowns = parseInt(data.closedTowns, 10) === 1;
-    const filters = [
+    const filters: Where = [
         {
             status: {
                 not: closedTowns === true,
@@ -47,28 +46,30 @@ export default async (user: User, data) => {
             },
         },
     ];
+    const isNationalExport = allowedLocations.some(l => l.type === 'nation');
+    if (!isNationalExport) {
+        filters.push(
+            allowedLocations.reduce((acc, l, index) => {
+                acc[`location_${index}`] = {
+                    query: `${geoUtils.fromGeoLevelToTableName(l.type)}.code`,
+                    value: l[l.type].code,
+                };
 
-    if (location.type !== 'nation') {
-        const locationFilters: any = {
-            location: {
-                query: `${geoUtils.fromGeoLevelToTableName(location.type)}.code`,
-                value: location[location.type].code,
-            },
-        };
+                if (l.type === 'city') {
+                    acc[`location_main_${index}`] = {
+                        query: 'cities.fk_main',
+                        value: l[l.type].code,
+                    };
+                }
 
-        if (location.type === 'city') {
-            locationFilters.location_main = {
-                query: `${geoUtils.fromGeoLevelToTableName(location.type)}.fk_main`,
-                value: location[location.type].code,
-            };
-        }
-
-        filters.push(locationFilters);
+                return acc;
+            }, {} as WhereClauseGroup),
+        );
     }
 
     let shantytowns;
     try {
-        if (moment(data.date).format('YYYY-MM-DD') === moment(today).format('YYYY-MM-DD')) {
+        if (!askedForHistory) {
             shantytowns = await shantytownModel.findAll(
                 user,
                 filters,
@@ -77,7 +78,7 @@ export default async (user: User, data) => {
         } else {
             shantytowns = await shantytownModel.getHistoryAtGivenDate(
                 user,
-                location,
+                allowedLocations,
                 moment(data.date).format('YYYY-MM-DD HH:mm:ss ZZ'),
                 closedTowns,
             );
@@ -99,17 +100,19 @@ export default async (user: User, data) => {
 
     const properties = serializeExportProperties(closingSolutions);
     const sections = await createExportSections(user, data, properties, closedTowns, closingSolutions);
+
     let locationName = '';
-
-
-    if (location.type === 'nation') {
+    if (isNationalExport) {
         locationName = 'France';
-    } else if (location.type === 'departement' || location.type === 'city') {
-        locationName = `${location.departement.code} - ${location[location.type].name}`;
     } else {
-        locationName = location[location.type].name;
-    }
+        locationName = allowedLocations.map((l) => {
+            if (l.type === 'departement' || l.type === 'city') {
+                return `${l[l.type].name} (${l.departement.code})`;
+            }
 
+            return l[l.type].name;
+        }).join(', ');
+    }
 
     const buffer = await excelUtils.createExport(
         closedTowns ? 'fermés' : 'existants',
@@ -118,23 +121,44 @@ export default async (user: User, data) => {
         shantytowns,
         moment(data.date).format('DD/MM/YYYY'),
     );
+
     // add that export to the stats
+    const stats: ({
+        fk_region: string | null,
+        fk_departement: string | null,
+        fk_epci: string | null,
+        fk_city: string | null,
+        closed_shantytowns: boolean,
+        exported_by: number,
+    })[] = [];
 
-    const stat = {
-        fk_region: null,
-        fk_departement: null,
-        fk_epci: null,
-        fk_city: null,
-        closed_shantytowns: closedTowns,
-        exported_by: user.id,
-    };
+    if (isNationalExport) {
+        stats.push({
+            fk_region: null,
+            fk_departement: null,
+            fk_epci: null,
+            fk_city: null,
+            closed_shantytowns: closedTowns,
+            exported_by: user.id,
+        });
+    } else {
+        allowedLocations.forEach((l) => {
+            const stat = {
+                fk_region: null,
+                fk_departement: null,
+                fk_epci: null,
+                fk_city: null,
+                closed_shantytowns: closedTowns,
+                exported_by: user.id,
+            };
+            stat[`fk_${l.type}`] = l[l.type].code;
 
-    if (location.type !== 'nation') {
-        stat[`fk_${location.type}`] = location[location.type].code;
+            stats.push(stat);
+        });
     }
 
     try {
-        await statsExportsModel.create(stat);
+        await Promise.all(stats.map(statsExportsModel.create));
     } catch (error) {
         throw new ServiceError('write_failed', error);
     }

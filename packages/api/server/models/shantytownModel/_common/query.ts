@@ -5,12 +5,14 @@ import actionModel from '#server/models/actionModel';
 import incomingTownsModel from '#server/models/incomingTownsModel';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 import permissionUtils from '#server/utils/permission';
+import { Where } from '#server/models/_common/types/Where';
 import { ShantytownAction } from '#root/types/resources/Action.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import getComments from './getComments';
 import serializeShantytown from './serializeShantytown';
 import getDiff from './getDiff';
 import SQL, { ShantytownRow } from './SQL';
+import { User } from '#root/types/resources/User.d';
 
 const { where: pWhere } = permissionUtils;
 type ShantytownClosingSolutionRow = {
@@ -84,7 +86,7 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
     `;
 }
 
-export default async (user, feature, where = [], order = ['departements.code ASC', 'cities.name ASC'], includeChangelog = false, additionalSQL = {}, argReplacements = {}): Promise<Shantytown[]> => {
+export default async (user: User, feature: string, where: Where = [], order = ['departements.code ASC', 'cities.name ASC'], includeChangelog = false, additionalSQL = {}, argReplacements = {}): Promise<Shantytown[]> => {
     const permissionsClauseGroup = pWhere().can(user).do(feature, 'shantytown');
     if (permissionsClauseGroup === null) {
         return [];

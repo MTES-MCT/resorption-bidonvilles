@@ -23,7 +23,7 @@ export default async (user) => {
         return [];
     }
     return findAll(user, [
-        { shantytown_id: ids.map(({ shantytown_id: id }) => id) },
+        { shantytown_id: { value: ids.map(({ shantytown_id: id }) => id) } },
         {
             closed_at: {
                 value: null,
