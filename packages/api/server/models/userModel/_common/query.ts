@@ -278,10 +278,27 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
         permissionMap = await permissionModel.find(users.map(({ id }) => id));
     }
 
+    // fonction qui fusionne les zones d'intervention d'un utilisateur et de sa structure en faisant en sorte que
+    // les éventuels doublons soient supprimés
+    function mergeAreas(userAreas: RawInterventionArea[], organizationAreas: RawInterventionArea[]): RawInterventionArea[] {
+        const arr = [];
+        [...userAreas, ...organizationAreas].forEach((area) => {
+            const duplicateArea = arr.find(a => `${a.type}${a[`${a.type}_code`]}` === `${area.type}${area[`${area.type}_code`]}`);
+            if (!duplicateArea) {
+                arr.push(area);
+            } else if (area.is_main_area === true) {
+                duplicateArea.is_main_area = true;
+            }
+        });
+
+        return arr;
+    }
+
     return users.map(row => serializeUser(
         row,
         hashedUserAccesses[row.id] || [],
-        (hashInterventionAreas.users[row.id] || []).concat(
+        mergeAreas(
+            hashInterventionAreas.users[row.id] || [],
             row.use_custom_intervention_area !== true ? hashInterventionAreas.organizations[row.organization_id] || [] : [],
         ),
         latestCharte,
