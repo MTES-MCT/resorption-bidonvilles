@@ -71,6 +71,7 @@ export type City = {
 
 export type Location = Nation | Region | Departement | EPCI | City;
 export type InterventionArea = Location & {
+    area_of: 'organization' | 'user';
     latitude: number;
     longitude: number;
     is_main_area: boolean;

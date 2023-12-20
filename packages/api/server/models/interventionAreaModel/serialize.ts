@@ -17,6 +17,7 @@ export default (area: RawInterventionArea): InterventionArea => {
         latitude,
         longitude,
     } = area;
+    const areaOf = area.fk_user !== null ? 'user' : 'organization';
     const region = regionCode ? { code: regionCode, name: regionName } : null;
     const departement = departementCode ? { code: departementCode, name: departementName } : null;
     const epci = epciCode ? { code: epciCode, name: epciName } : null;
@@ -25,6 +26,7 @@ export default (area: RawInterventionArea): InterventionArea => {
     if (type === 'nation') {
         return {
             type: 'nation',
+            area_of: areaOf,
             is_main_area: isMainArea,
             latitude: 46.7755829,
             longitude: 2.0497727,
@@ -38,6 +40,7 @@ export default (area: RawInterventionArea): InterventionArea => {
     if (type === 'region') {
         return {
             type: 'region',
+            area_of: areaOf,
             is_main_area: isMainArea,
             latitude,
             longitude,
@@ -51,6 +54,7 @@ export default (area: RawInterventionArea): InterventionArea => {
     if (type === 'departement') {
         return {
             type: 'departement',
+            area_of: areaOf,
             is_main_area: isMainArea,
             latitude,
             longitude,
@@ -64,6 +68,7 @@ export default (area: RawInterventionArea): InterventionArea => {
     if (type === 'epci') {
         return {
             type: 'epci',
+            area_of: areaOf,
             is_main_area: isMainArea,
             latitude,
             longitude,
@@ -76,6 +81,7 @@ export default (area: RawInterventionArea): InterventionArea => {
 
     return {
         type: 'city',
+        area_of: areaOf,
         is_main_area: isMainArea,
         latitude,
         longitude,

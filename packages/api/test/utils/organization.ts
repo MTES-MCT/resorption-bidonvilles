@@ -11,6 +11,7 @@ export function serialized(override: Partial<Organization> = {}): Organization {
             is_national: false,
             areas: [{
                 type: 'departement',
+                area_of: 'organization',
                 is_main_area: true,
                 latitude: 0,
                 longitude: 1,

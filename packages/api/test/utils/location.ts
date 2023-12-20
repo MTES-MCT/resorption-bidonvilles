@@ -1,5 +1,5 @@
 import {
- City, Departement, EPCI, Nation, Region 
+    City, Departement, EPCI, Nation, Region,
 } from '#server/models/geoModel/Location.d';
 
 export default {

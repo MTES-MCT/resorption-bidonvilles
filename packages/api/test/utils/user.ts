@@ -50,6 +50,7 @@ export function serialized(override: Partial<User> = {}): AuthUser {
             is_national: false,
             areas: [{
                 type: 'nation',
+                area_of: 'organization',
                 is_main_area: true,
                 latitude: 46.7755829,
                 longitude: 2.0497727,
