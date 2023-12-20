@@ -27,6 +27,7 @@
                     <span class="font-bold">Territoires d'intervention :</span>
                     {{
                         organization.intervention_areas.areas
+                            .filter((area) => area.is_main_area === true)
                             .map((area) => area[area.type].name)
                             .join(", ")
                     }}
