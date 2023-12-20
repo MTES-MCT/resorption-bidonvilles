@@ -474,7 +474,7 @@ export default (app) => {
         middlewares.charte.check,
         validators.exportTowns,
         middlewares.validation,
-        controllers.town.exportTown,
+        controllers.town.exportTowns,
     );
     app.get(
         '/towns',

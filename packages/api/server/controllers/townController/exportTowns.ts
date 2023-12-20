@@ -1,6 +1,9 @@
+import { type Request, Response, NextFunction } from 'express';
 import shantytownService from '#server/services/shantytown';
+import { Location } from '#server/models/geoModel/Location.d';
+import { User } from '#root/types/resources/User.d';
 
-const { exportTown } = shantytownService;
+const { exportTowns } = shantytownService;
 
 const ERROR_RESPONSES = {
     fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
@@ -9,10 +12,19 @@ const ERROR_RESPONSES = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
-export default async (req, res, next) => {
-    let buffer;
+interface ExportTownsRequest extends Request {
+    user: User,
+    body: {
+        date: Date,
+        closedTowns: boolean,
+        location: Location,
+    }
+}
+
+export default async (req: ExportTownsRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        buffer = await exportTown(req.user, req.query);
+        const buffer = await exportTowns(req.user, req.body.location, req.body.closedTowns, req.body.date);
+        res.end(buffer);
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({
@@ -20,8 +32,6 @@ export default async (req, res, next) => {
                 user_message: message,
             },
         });
-        return next(error.nativeError || error);
+        next(error.nativeError || error);
     }
-
-    return res.end(buffer);
 };
