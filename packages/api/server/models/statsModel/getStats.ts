@@ -1,17 +1,19 @@
 import { sequelize } from '#db/sequelize';
-import { QueryTypes } from 'sequelize';
+import { BindOrReplacements, QueryTypes } from 'sequelize';
 import permissionUtils from '#server/utils/permission';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 import { WhereClauseGroup } from '#server/models/_common/types/WhereClauseGroup';
+import { Location } from '#server/models/geoModel/Location.d';
 import decomposeForDiagramm from './_common/decomposeForDiagramm';
 import getArrayOfDates from './_common/getArrayOfDates';
+import { User } from '#root/types/resources/User.d';
 
 
 const { where: pWhere } = permissionUtils;
 
-export default async (user, location) => {
+export default async (user: User, location: Location) => {
     const permissionWhereClauseGroup:WhereClauseGroup = pWhere().can(user).do('list', 'shantytown');
-    const replacements = { userId: user.id };
+    const replacements: BindOrReplacements = { userId: user.id };
     const permissionWhereClause = stringifyWhereClause('shantytowns', [permissionWhereClauseGroup], replacements);
 
     let where = '';
@@ -21,20 +23,26 @@ export default async (user, location) => {
         case 'nation':
             break;
         case 'region':
-            where = `WHERE lo.region_code = '${location.region.code}'`;
-            shantytownWhere = `WHERE regions.code = '${location.region.code}'`;
+            replacements.regionCode = location.region.code;
+            where = 'WHERE :regionCode = ANY(user_intervention_areas.regions)';
+            shantytownWhere = 'WHERE regions.code = :regionCode';
             break;
         case 'departement':
-            where = `WHERE lo.departement_code = '${location.departement.code}'`;
-            shantytownWhere = `WHERE departements.code = '${location.departement.code}'`;
+            replacements.departementCode = location.departement.code;
+            where = 'WHERE :departementCode = ANY(user_intervention_areas.departements)';
+            shantytownWhere = 'WHERE departements.code = :departementCode';
             break;
         case 'epci':
-            where = `WHERE lo.departement_code = '${location.departement.code}'`;
-            shantytownWhere = `WHERE epci.code = '${location.epci.code}'`;
+            replacements.departementCode = location.epci.code;
+            replacements.epciCode = location.epci.code;
+            where = 'WHERE :departementCode = ANY(user_intervention_areas.departements)';
+            shantytownWhere = 'WHERE epci.code = :epciCode';
             break;
         case 'city':
-            where = `WHERE lo.departement_code = '${location.departement.code}'`;
-            shantytownWhere = `WHERE cities.code = '${location.city.code}'`;
+            replacements.departementCode = location.epci.code;
+            replacements.cityCode = location.city.code;
+            where = 'WHERE :departementCode = ANY(user_intervention_areas.departements)';
+            shantytownWhere = 'WHERE cities.code = :cityCode OR cities.fk_main = :cityCode';
             break;
         default:
             break;
@@ -94,6 +102,23 @@ export default async (user, location) => {
         // WAU
         sequelize.query(
             `
+            WITH user_intervention_areas AS (
+                SELECT
+                    users.user_id,
+                    COUNT(CASE WHEN intervention_areas.type = 'nation' THEN 1 ELSE null END) > 0 AS is_national,
+                    array_remove(array_agg(intervention_areas.fk_region), NULL) AS regions,
+                    array_remove(array_agg(intervention_areas.fk_departement), NULL) AS departements,
+                    array_remove(array_agg(intervention_areas.fk_epci), NULL) AS epci,
+                    array_remove(array_agg(intervention_areas.fk_city), NULL) AS cities
+                FROM users
+                LEFT JOIN intervention_areas ON (
+                    users.user_id = intervention_areas.fk_user
+                    OR (users.use_custom_intervention_area IS FALSE AND users.fk_organization = intervention_areas.fk_organization)
+                )
+                WHERE intervention_areas.is_main_area IS TRUE
+                GROUP BY users.user_id
+            )
+
             SELECT
                 COUNT(fk_user),
                 week,
@@ -122,13 +147,14 @@ export default async (user, location) => {
             ) t
             ${where !== null ? `
             LEFT JOIN users ON users.user_id = t.fk_user
-            LEFT JOIN localized_organizations lo ON users.fk_organization = lo.organization_id
+            LEFT JOIN user_intervention_areas ON users.user_id = user_intervention_areas.user_id
             ${where}` : ''}
             GROUP BY week
             ORDER BY week ASC
             LIMIT 13`,
             {
                 type: QueryTypes.SELECT,
+                replacements,
             },
         ),
     ]);
