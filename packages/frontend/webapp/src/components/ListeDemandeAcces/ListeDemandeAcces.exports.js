@@ -4,10 +4,7 @@ import { useUserStore } from "@/stores/user.store";
 import { exportList as exportActors } from "@/api/actors.api";
 import { exportList as exportReferrals } from "@/api/contact_form_referrals.api";
 import { exportTownsReport } from "@/api/data_reports.api";
-import {
-    exportMobileSessions,
-    exportWebappSessions,
-} from "@/api/navigation_logs.api";
+import { exportWebappSessions } from "@/api/navigation_logs.api";
 import { exportList as exportUsers } from "@/api/users.api";
 
 const exportList = {
@@ -25,11 +22,6 @@ const exportList = {
         label: 'Export des réponses à "Comment avez-vous connu la plateforme ?"',
         filename: "referrals",
         downloadFn: exportReferrals,
-    },
-    mobileSessions: {
-        label: "Export des sessions sur mobile",
-        filename: "sessions_mobile",
-        downloadFn: exportMobileSessions,
     },
     webappSessions: {
         label: "Export des sessions sur navigateur",
@@ -54,7 +46,6 @@ export default computed(() => {
     }
 
     if (userStore.user?.is_superuser) {
-        filteredExportList.push(exportList.mobileSessions);
         filteredExportList.push(exportList.webappSessions);
         filteredExportList.push(exportList.townsReport);
     }

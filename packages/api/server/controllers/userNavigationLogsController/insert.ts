@@ -4,12 +4,7 @@ export default async (req, res, next) => {
     let userNavigationLogsId = 0;
 
     try {
-        userNavigationLogsId = await userNavigationLogs.insert(
-            req.user.id,
-            req.body.page,
-            req.body.domain,
-            req.body.origin,
-        );
+        userNavigationLogsId = await userNavigationLogs.insert(req.user.id, req.body.page);
     } catch (error) {
         let message;
         switch (error && error.code) {

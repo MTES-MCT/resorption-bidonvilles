@@ -99,7 +99,6 @@ import userUpdatePermissionOptions from './userController/updatePermissionOption
 import userActivityGetHistory from './userActivityController/getHistory';
 // user navigation logs
 import insertUserNavigationLogs from './userNavigationLogsController/insert';
-import exportMobileUserNavigationLogs from './userNavigationLogsController/exportMobileSessions';
 import exportWebappUserNavigationLogs from './userNavigationLogsController/exportWebappSessions';
 
 export default () => ({
@@ -224,7 +223,6 @@ export default () => ({
     },
     userNavigationLogs: {
         insert: insertUserNavigationLogs,
-        exportForMobile: exportMobileUserNavigationLogs,
         exportForWebapp: exportWebappUserNavigationLogs,
     },
 });

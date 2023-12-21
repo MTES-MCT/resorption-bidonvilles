@@ -13,7 +13,6 @@ import findOneAssociation from './findOneAssociation';
 import findOneById from './findOneById';
 import findOneByLocation from './findOneByLocation';
 import findPrefAndDdets from './findPrefAndDdets';
-import getName from './getName';
 
 export default {
     activate,
@@ -31,5 +30,4 @@ export default {
     findOneById,
     findOneByLocation,
     findPrefAndDdets,
-    getName,
 };
