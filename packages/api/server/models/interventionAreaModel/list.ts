@@ -12,7 +12,7 @@ export default (userIds: number[], organizationIds: number[], transaction: Trans
     }
 
     return sequelize.query(
-        `SELECT
+        `SELECT DISTINCT
             intervention_areas.fk_user,
             intervention_areas.fk_organization,
             intervention_areas.type,
