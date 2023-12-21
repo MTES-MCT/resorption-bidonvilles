@@ -139,14 +139,15 @@ export default async (user: User, location: Location, numberOfActivities: number
         where.push('comments.created_at >= :maxDate');
     }
 
+    // TODO 2019
     const activities = await sequelize.query(
         `WITH organization_comment_access AS (
-           SELECT 
+           SELECT
                 scot.fk_comment AS shantytown_comment_id,
-                ARRAY_AGG(lo.name) AS organization_target_name,
-                ARRAY_AGG(lo.organization_id) AS organization_target_id
+                ARRAY_AGG(organizations.name) AS organization_target_name,
+                ARRAY_AGG(organizations.organization_id) AS organization_target_id
             FROM shantytown_comment_organization_targets scot 
-            LEFT JOIN localized_organizations lo ON lo.organization_id = scot.fk_organization
+            LEFT JOIN organizations ON organizations.organization_id = scot.fk_organization
             GROUP BY scot.fk_comment
         ),
         user_comment_access AS (

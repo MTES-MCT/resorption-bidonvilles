@@ -102,10 +102,10 @@ export default (user: User, geoFilter: Location[] = null, privateFilter: Locatio
         `WITH organization_comment_access AS (
             SELECT 
                 scot.fk_comment AS shantytown_comment_id,
-                ARRAY_AGG(lo.name) AS organization_target_names,
-                ARRAY_AGG(lo.organization_id) AS organization_target_ids
+                ARRAY_AGG(o.name) AS organization_target_names,
+                ARRAY_AGG(o.organization_id) AS organization_target_ids
             FROM shantytown_comment_organization_targets scot 
-            LEFT JOIN localized_organizations lo ON lo.organization_id = scot.fk_organization
+            LEFT JOIN organizations o ON o.organization_id = scot.fk_organization
             GROUP BY scot.fk_comment
         ),
         user_comment_access AS (
