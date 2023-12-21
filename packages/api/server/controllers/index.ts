@@ -93,7 +93,6 @@ import userSetNewPassword from './userController/setNewPassword';
 import userSetRoleRegular from './userController/setRoleRegular';
 import userSignin from './userController/signin';
 import userUpdateLocalAdmin from './userController/updateLocalAdmin';
-import userUpgrade from './userController/upgrade';
 import userUpdatePermissionOptions from './userController/updatePermissionOptions';
 // user activity
 import userActivityGetHistory from './userActivityController/getHistory';
@@ -216,7 +215,6 @@ export default () => ({
         setRoleRegular: userSetRoleRegular,
         signin: userSignin,
         updateLocalAdmin: userUpdateLocalAdmin,
-        upgrade: userUpgrade,
     },
     userActivity: {
         getHistory: userActivityGetHistory,
