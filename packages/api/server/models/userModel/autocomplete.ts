@@ -12,20 +12,54 @@ export type UserAutocompleteRow = {
 };
 
 export default async (search: string, departementCode: string = null): Promise<UserAutocompleteRow[]> => sequelize.query(
-    `SELECT
+    `
+    WITH user_regions AS (
+        SELECT
+            users.user_id,
+            COUNT(CASE intervention_areas.type WHEN 'nation' THEN 1 ELSE NULL END) > 0 AS is_national,
+            array_remove(array_agg(
+                COALESCE(
+                    intervention_areas.fk_region,
+                    d1.fk_region,
+                    d2.fk_region,
+                    d3.fk_region
+                )
+            ), null) AS regions
+        FROM users
+        LEFT JOIN intervention_areas ON intervention_areas.fk_user = users.user_id OR (users.use_custom_intervention_area IS FALSE AND intervention_areas.fk_organization = users.fk_organization)
+        
+        -- on doit récupérer le code de la région, ce qui se fait différement selon le niveau de l'area
+        -- cas d'une ville
+        LEFT JOIN cities ON intervention_areas.fk_city = cities.code
+        LEFT JOIN departements d1 ON intervention_areas.fk_departement = d1.code
+        -- cas d'un epci
+        LEFT JOIN epci_to_departement ON intervention_areas.fk_epci = epci_to_departement.fk_epci
+        LEFT JOIN departements d2 ON epci_to_departement.fk_departement = d2.code
+        -- cas d'un département
+        LEFT JOIN departements d3 ON intervention_areas.fk_departement = d3.code
+
+        WHERE intervention_areas.is_main_area IS TRUE
+        GROUP BY users.user_id
+    )
+
+    SELECT
         users.user_id AS id,
         users.first_name,
         users.last_name,
         users.fk_organization AS organization_id,
-        localized_organizations.name AS organization_name,
-        localized_organizations.abbreviation AS organization_abbreviation,
+        organizations.name AS organization_name,
+        organizations.abbreviation AS organization_abbreviation,
         GREATEST(
             word_similarity(unaccent(:search), unaccent(users.first_name)),
             word_similarity(unaccent(:search), unaccent(users.last_name))
         ) AS similarity
     FROM users
-    LEFT JOIN localized_organizations ON users.fk_organization = localized_organizations.organization_id
-    ${departementCode !== null ? 'LEFT JOIN departements ON departements.code = :departementCode' : ''}
+    LEFT JOIN organizations ON users.fk_organization = organizations.organization_id
+    ${departementCode !== null
+        ? `
+    LEFT JOIN departements ON departements.code = :departementCode
+    LEFT JOIN user_regions ON users.user_id = user_regions.user_id`
+        : ''}
     WHERE
         users.fk_status = 'active'
         AND
@@ -38,9 +72,9 @@ export default async (search: string, departementCode: string = null): Promise<U
         )
         ${departementCode !== null ? `
         AND
-        (localized_organizations.location_type = 'nation'
+        (user_regions.is_national IS TRUE
             OR
-        localized_organizations.region_code = departements.fk_region)` : ''}
+        departements.fk_region = ANY(user_regions.regions))` : ''}
     ORDER BY similarity DESC
     `,
     {
