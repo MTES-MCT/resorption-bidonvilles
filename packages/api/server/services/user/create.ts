@@ -9,6 +9,7 @@ import { User } from '#root/types/resources/User.d';
 
 const { generateSalt } = authUtils;
 
+// TODO 2019 (newUser)
 export default async (data, createdBy: number = null): Promise<User> => {
     try {
         const userId = await sequelize.transaction(async (t) => {
@@ -16,7 +17,7 @@ export default async (data, createdBy: number = null): Promise<User> => {
             if (data.new_association === true) {
                 const types: any = (await organizationTypeModel.findByCategory('association'));
                 const type = types[0].id;
-                const [[association]]: any = (await organizationModel.create(
+                const associationId = (await organizationModel.create(
                     type,
                     data.new_association_name,
                     data.new_association_abbreviation,
@@ -28,7 +29,7 @@ export default async (data, createdBy: number = null): Promise<User> => {
                     t,
                 ));
 
-                Object.assign(data, { organization: association.id });
+                Object.assign(data, { organization: associationId });
             }
 
             // get fk_type from organization_types to initialize fk_role_regular field
