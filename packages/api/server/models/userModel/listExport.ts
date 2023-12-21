@@ -1,33 +1,72 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import { WhereClauseGroup } from '#server/models/_common/types/WhereClauseGroup';
+import { Permission } from '#server/models/permissionModel/types/Permission.d';
 
-export default (clauseGroup?: WhereClauseGroup) => {
+type UserListExportRow = {
+    "Date de la demande d'accès": string;
+    Courriel: string;
+    Prénom: string;
+    'Nom de famille': string;
+    "Fonction de l'utilisateur": string;
+    Téléphone: string;
+    Statut: string;
+    "Date d'activation du compte": string;
+    "Rôle administrateur de l'acteur": string;
+    'Date de dernière connexion': string;
+    Organisation: string;
+    'Organisation abbr': string;
+    "Rôle de l'acteur": string;
+    "Régions d'intervention": string[];
+    "Départements d'intervention": string[];
+};
+
+export default async (permission?: Permission): Promise<UserListExportRow[]> => {
     const replacements = {};
 
     let where: string = null;
-    if (clauseGroup && Object.keys(clauseGroup).length > 0) {
-        where = Object.keys(clauseGroup).map((column, index) => {
-            replacements[`${column}${index}`] = clauseGroup[column].value !== undefined ? clauseGroup[column].value : clauseGroup[column];
-            if (clauseGroup[column].anyOperator !== undefined) {
-                const clause = `(:${column}${index}) ${clauseGroup[column].anyOperator} ANY(${clauseGroup[column].query || `u.${column}`})`;
-                if (clauseGroup[column].not === true) {
-                    return `NOT(${clause})`;
+    if (permission !== undefined) {
+        if (permission === null) {
+            return [];
+        }
+
+        if (permission.allowed_on_national !== true) {
+            const clauses = ['regions', 'departements', 'epci', 'cities'].reduce((acc, column) => {
+                if (permission.allowed_on[column]?.length <= 0) {
+                    return acc;
                 }
 
-                return clause;
+                replacements[column] = permission.allowed_on[column].map(l => l[l.type].code);
+                acc.push(`user_intervention_areas.${column}::text[] && ARRAY[:${column}]`);
+                return acc;
+            }, [] as string[]);
+
+            if (clauses.length === 0) {
+                return [];
             }
 
-            if (replacements[`${column}${index}`] === null) {
-                return `${clauseGroup[column].query || `u.${column}`} IS ${clauseGroup[column].not === true ? 'NOT ' : ''}NULL`;
-            }
-
-            return `${clauseGroup[column].query || `u.${column}`} ${clauseGroup[column].not === true ? 'NOT ' : ''}${clauseGroup[column].operator || 'IN'} (:${column}${index})`;
-        }).join(' OR ');
+            where = `(${clauses.join(') OR (')})`;
+        }
     }
 
     return sequelize.query(
-        `SELECT
+        `WITH user_intervention_areas AS (
+            SELECT
+                users.user_id,
+                COUNT(CASE WHEN intervention_areas.type = 'nation' THEN 1 ELSE null END) > 0 AS is_national,
+                array_remove(array_agg(intervention_areas.fk_region), NULL) AS regions,
+                array_remove(array_agg(intervention_areas.fk_departement), NULL) AS departements,
+                array_remove(array_agg(intervention_areas.fk_epci), NULL) AS epci,
+                array_remove(array_agg(intervention_areas.fk_city), NULL) AS cities
+            FROM users
+            LEFT JOIN intervention_areas ON (
+                users.user_id = intervention_areas.fk_user
+                OR (users.use_custom_intervention_area IS FALSE AND users.fk_organization = intervention_areas.fk_organization)
+            )
+            WHERE intervention_areas.is_main_area IS TRUE
+            GROUP BY users.user_id
+        )
+
+        SELECT
             TO_CHAR(u.created_at :: DATE, 'dd/mm/yyyy') AS "Date de la demande d'accès",
             email AS "Courriel",
             INITCAP(first_name) AS "Prénom",
@@ -49,28 +88,17 @@ export default (clauseGroup?: WhereClauseGroup) => {
             o.name AS "Organisation",
             o.abbreviation AS "Organisation abbr",
             rr.name AS "Rôle de l'acteur",
-            o.region_code AS "Code région",
-            o.region_name AS "Région",
-            o.departement_code AS "Code département",
-            o.departement_name AS "Département"
-        FROM
-            users u
-        LEFT JOIN
-            last_user_accesses lua ON lua.fk_user = u.user_id
-        LEFT JOIN
-            localized_organizations o ON o.organization_id = u.fk_organization
-        LEFT JOIN cities ON o.city_code = cities.code
-        LEFT JOIN departements ON o.departement_code = departements.code
-        LEFT JOIN epci ON o.epci_code = epci.code
-        LEFT JOIN regions ON o.region_code = regions.code
-        LEFT JOIN
-        roles_regular rr ON rr.role_id = u.fk_role_regular
+            user_intervention_areas.regions AS "Régions d'intervention",
+            user_intervention_areas.departements AS "Départements d'intervention"
+        FROM users u
+        LEFT JOIN organizations o ON u.fk_organization = o.organization_id
+        LEFT JOIN last_user_accesses lua ON lua.fk_user = u.user_id
+        LEFT JOIN user_intervention_areas ON user_intervention_areas.user_id = u.user_id
+        LEFT JOIN roles_regular rr ON rr.role_id = u.fk_role_regular
         WHERE
             u.fk_status <> 'inactive'
             ${where !== null ? `AND (${where})` : ''}
         ORDER BY
-            "Code région",
-            "Code département",
             used_at ASC,
             expires_at DESC;`,
         {
