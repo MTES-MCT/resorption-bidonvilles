@@ -40,9 +40,11 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
                 };
             });
 
-            if (Object.keys(clauseGroup).length > 0) {
-                arrWhere.push(clauseGroup);
+            if (Object.keys(clauseGroup).length === 0) {
+                return [];
             }
+
+            arrWhere.push(clauseGroup);
         }
     }
 
