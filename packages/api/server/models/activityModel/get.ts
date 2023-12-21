@@ -173,6 +173,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
                 WHERE  u.fk_status = 'active'
                    AND lua.used_at >= :from
                    AND lua.used_at <= :to
+                   AND ia.is_main_area IS TRUE
                    AND COALESCE(ia.fk_departement, cities.fk_departement, epci_to_departement.fk_departement) IS NOT NULL
                 )
             ) t),
