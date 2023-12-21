@@ -34,7 +34,7 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
 
                 clauseGroup[column] = {
                     value: permission.allowed_on[column].map(l => l[l.type].code),
-                    query: `user_intervention_areas.${column}::text[]`,
+                    query: `v_user_areas.${column}::text[]`,
                     arrayOperator: true,
                     operator: '&&',
                 };
@@ -98,22 +98,6 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
             FROM user_to_expertise_topics
             LEFT JOIN expertise_topics ON user_to_expertise_topics.fk_expertise_topic = expertise_topics.uid
             GROUP BY user_to_expertise_topics.fk_user
-        ),
-        user_intervention_areas AS (
-            SELECT
-                users.user_id,
-                COUNT(CASE WHEN intervention_areas.type = 'nation' THEN 1 ELSE null END) > 0 AS is_national,
-                array_remove(array_agg(intervention_areas.fk_region), NULL) AS regions,
-                array_remove(array_agg(intervention_areas.fk_departement), NULL) AS departements,
-                array_remove(array_agg(intervention_areas.fk_epci), NULL) AS epci,
-                array_remove(array_agg(intervention_areas.fk_city), NULL) AS cities
-            FROM users
-            LEFT JOIN intervention_areas ON (
-                users.user_id = intervention_areas.fk_user
-                OR (users.use_custom_intervention_area IS FALSE AND users.fk_organization = intervention_areas.fk_organization)
-            )
-            WHERE intervention_areas.is_main_area IS TRUE
-            GROUP BY users.user_id
         )
 
         SELECT
@@ -138,7 +122,7 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
             COALESCE(question_subscriptions.subscriptions, array[]::text[]) AS question_subscriptions,
             users.last_access,
             users.admin_comments,
-            user_intervention_areas.is_national,
+            v_user_areas.is_national,
             users.use_custom_intervention_area,
             CASE WHEN users.fk_role IS NULL THEN FALSE
                 ELSE TRUE
@@ -167,7 +151,7 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
         LEFT JOIN
             roles_admin ON users.fk_role = roles_admin.role_id
         LEFT JOIN organizations ON users.fk_organization = organizations.organization_id
-        LEFT JOIN user_intervention_areas ON users.user_id = user_intervention_areas.user_id
+        LEFT JOIN v_user_areas ON v_user_areas.user_id = users.user_id AND v_user_areas.is_main_area IS TRUE
         LEFT JOIN
             organization_types ON organizations.fk_type = organization_types.organization_type_id
         LEFT JOIN

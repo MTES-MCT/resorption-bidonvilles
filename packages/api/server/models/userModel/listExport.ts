@@ -36,7 +36,7 @@ export default async (permission?: Permission): Promise<UserListExportRow[]> => 
                 }
 
                 replacements[column] = permission.allowed_on[column].map(l => l[l.type].code);
-                acc.push(`user_intervention_areas.${column}::text[] && ARRAY[:${column}]`);
+                acc.push(`v_user_areas.${column}::text[] && ARRAY[:${column}]`);
                 return acc;
             }, [] as string[]);
 
@@ -49,23 +49,7 @@ export default async (permission?: Permission): Promise<UserListExportRow[]> => 
     }
 
     return sequelize.query(
-        `WITH user_intervention_areas AS (
-            SELECT
-                users.user_id,
-                COUNT(CASE WHEN intervention_areas.type = 'nation' THEN 1 ELSE null END) > 0 AS is_national,
-                array_remove(array_agg(intervention_areas.fk_region), NULL) AS regions,
-                array_remove(array_agg(intervention_areas.fk_departement), NULL) AS departements,
-                array_remove(array_agg(intervention_areas.fk_epci), NULL) AS epci,
-                array_remove(array_agg(intervention_areas.fk_city), NULL) AS cities
-            FROM users
-            LEFT JOIN intervention_areas ON (
-                users.user_id = intervention_areas.fk_user
-                OR (users.use_custom_intervention_area IS FALSE AND users.fk_organization = intervention_areas.fk_organization)
-            )
-            WHERE intervention_areas.is_main_area IS TRUE
-            GROUP BY users.user_id
-        )
-
+        `
         SELECT
             TO_CHAR(u.created_at :: DATE, 'dd/mm/yyyy') AS "Date de la demande d'accès",
             email AS "Courriel",
@@ -88,12 +72,12 @@ export default async (permission?: Permission): Promise<UserListExportRow[]> => 
             o.name AS "Organisation",
             o.abbreviation AS "Organisation abbr",
             rr.name AS "Rôle de l'acteur",
-            user_intervention_areas.regions AS "Régions d'intervention",
-            user_intervention_areas.departements AS "Départements d'intervention"
+            v_user_areas.regions AS "Régions d'intervention",
+            v_user_areas.departements AS "Départements d'intervention"
         FROM users u
         LEFT JOIN organizations o ON u.fk_organization = o.organization_id
         LEFT JOIN last_user_accesses lua ON lua.fk_user = u.user_id
-        LEFT JOIN user_intervention_areas ON user_intervention_areas.user_id = u.user_id
+        LEFT JOIN v_user_areas ON v_user_areas.user_id = u.user_id AND v_user_areas.is_main_area IS TRUE
         LEFT JOIN roles_regular rr ON rr.role_id = u.fk_role_regular
         WHERE
             u.fk_status <> 'inactive'

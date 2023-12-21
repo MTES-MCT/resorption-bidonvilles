@@ -23,23 +23,7 @@ type UserActivityRow = {
 export default async (location: Location, numberOfActivities: number, lastDate: Date, maxDate: Date):Promise<UserActivity[]> => {
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
     const activities: UserActivityRow[] = await sequelize.query(
-        `WITH user_intervention_areas AS (
-            SELECT
-                users.user_id,
-                COUNT(CASE WHEN intervention_areas.type = 'nation' THEN 1 ELSE null END) > 0 AS is_national,
-                array_remove(array_agg(intervention_areas.fk_region), NULL) AS regions,
-                array_remove(array_agg(intervention_areas.fk_departement), NULL) AS departements,
-                array_remove(array_agg(intervention_areas.fk_epci), NULL) AS epci,
-                array_remove(array_agg(intervention_areas.fk_city), NULL) AS cities
-            FROM users
-            LEFT JOIN intervention_areas ON (
-                users.user_id = intervention_areas.fk_user
-                OR (users.use_custom_intervention_area IS FALSE AND users.fk_organization = intervention_areas.fk_organization)
-            )
-            WHERE intervention_areas.is_main_area IS TRUE
-            GROUP BY users.user_id
-        )
-
+        `
         SELECT
             lua.used_at AS "date",
             users.user_id,
@@ -47,22 +31,22 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
             users.last_name,
             users.use_custom_intervention_area,
             users.fk_organization AS organization_id,
-            user_intervention_areas.is_national,
-            user_intervention_areas.regions,
-            user_intervention_areas.departements,
-            user_intervention_areas.epci,
-            user_intervention_areas.cities
+            v_user_areas.is_national,
+            v_user_areas.regions,
+            v_user_areas.departements,
+            v_user_areas.epci,
+            v_user_areas.cities
         FROM last_user_accesses lua
         LEFT JOIN users ON lua.fk_user = users.user_id
-        LEFT JOIN user_intervention_areas ON user_intervention_areas.user_id = users.user_id
+        LEFT JOIN v_user_areas ON v_user_areas.user_id = users.user_id AND v_user_areas.is_main_area IS TRUE
         WHERE
             lua.used_at IS NOT NULL
             AND lua.used_at < '${lastDate}'
             ${maxDate ? 'AND lua.used_at >= :maxDate' : ''}
-            ${location.type === 'city' ? 'AND :city = ANY(user_intervention_areas.cities)' : ''}
-            ${location.type === 'epci' ? 'AND :epci = ANY(user_intervention_areas.epci)' : ''}
-            ${location.type === 'departement' ? 'AND :departement = ANY(user_intervention_areas.departements)' : ''}
-            ${location.type === 'region' ? 'AND :region = ANY(user_intervention_areas.regions)' : ''}
+            ${location.type === 'city' ? 'AND :city = ANY(v_user_areas.cities)' : ''}
+            ${location.type === 'epci' ? 'AND :epci = ANY(v_user_areas.epci)' : ''}
+            ${location.type === 'departement' ? 'AND :departement = ANY(v_user_areas.departements)' : ''}
+            ${location.type === 'region' ? 'AND :region = ANY(v_user_areas.regions)' : ''}
         ORDER BY lua.used_at DESC
         ${limit}
         `,

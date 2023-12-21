@@ -6,11 +6,22 @@ export default async (departement: string): Promise<number> => {
         `
         SELECT COUNT(*) AS count
         FROM users
-        LEFT JOIN intervention_areas ON intervention_areas.fk_user = users.user_id OR (users.use_custom_intervention_area IS FALSE AND intervention_areas.fk_organization = users.fk_organization)
-        LEFT JOIN cities ON intervention_areas.fk_city = cities.code
-        LEFT JOIN epci_to_departement ON intervention_areas.fk_epci = epci_to_departement.fk_epci
-        WHERE users.fk_status = 'active' AND users.to_be_tracked IS TRUE AND intervention_areas.is_main_area IS TRUE
-        ${departement ? 'AND COALESCE(intervention_areas.fk_departement, cities.fk_departement, epci_to_departement.fk_departement) = :departement' : ''}
+        ${departement
+        ? `
+        LEFT JOIN departements ON departements.code = :departementCode
+        LEFT JOIN v_user_areas ON v_user_areas.user_id = users.user_id AND v_user_areas.is_main_area IS TRUE`
+        : ''}
+        WHERE
+            users.fk_status = 'active'
+            AND users.to_be_tracked IS TRUE
+        ${departement
+        ? `
+            AND (
+                :departement = ANY(v_user_areas.departements)
+                OR
+                departements.fk_region = ANY(v_user_areas.regions)
+            )`
+        : ''}
         `,
         {
             type: QueryTypes.SELECT,
