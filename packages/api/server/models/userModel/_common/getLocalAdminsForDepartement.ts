@@ -27,8 +27,10 @@ export default async (departements: string[]): Promise<User[]> => {
             ...baseQuery,
             {
                 departement: {
-                    query: 'organizations.departement_code',
                     value: departements,
+                    query: 'v_user_areas.departements::text[]',
+                    arrayOperator: true,
+                    operator: '&&',
                 },
             },
         ], {}),
@@ -52,15 +54,11 @@ export default async (departements: string[]): Promise<User[]> => {
         promises.push(query([
             ...baseQuery,
             {
-                level: {
-                    query: 'organizations.location_type',
-                    value: 'region',
-                },
-            },
-            {
                 region: {
-                    query: 'organizations.region_code',
-                    value: exceptions[code],
+                    value: [exceptions[code]],
+                    query: 'v_user_areas.regions',
+                    arrayOperator: true,
+                    operator: '&&',
                 },
             },
         ], {}));
