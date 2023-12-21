@@ -1,6 +1,5 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import { LocationType } from '#server/models/geoModel/LocationType.d';
 import interventionAreaModel from '#server/models/interventionAreaModel';
 import hashAreas from '#server/models/interventionAreaModel/hash';
 import { Departement } from '#server/models/geoModel/Location.d';
@@ -18,16 +17,6 @@ export type ActionFinancesReaderRow = {
     id: number,
     name: string,
     abbreviation: string | null,
-    location_type: LocationType,
-    region_code: string | null,
-    region_name: string | null,
-    departement_code: string | null,
-    departement_name: string | null,
-    epci_code: string | null,
-    epci_name: string | null,
-    city_code: string | null,
-    city_name: string | null,
-    city_main: string | null,
     type_id: number,
     being_funded: boolean,
     being_funded_at: Date,
