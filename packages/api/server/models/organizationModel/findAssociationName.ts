@@ -6,7 +6,7 @@ export default async (name) => {
         `SELECT
             organizations.name,
             organizations.abbreviation
-        FROM localized_organizations AS organizations
+        FROM organizations
         LEFT JOIN
             organization_types ON organizations.fk_type = organization_types.organization_type_id
         WHERE
