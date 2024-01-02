@@ -106,7 +106,7 @@ export default (
             }
 
             if (!req.body.organization_other) {
-                throw new Error('Le champ "Précisez le nom de la structure" est obligatoire');
+                throw new Error('Le champ "Précisez le nom et le territoire de votre structure" est obligatoire');
             }
 
             return true;
@@ -173,15 +173,15 @@ export default (
             try {
                 organization = await organizationModel.findOneById(value);
             } catch (error) {
-                throw new Error('Une erreur est survenue lors de la vérification du territoire de rattachement');
+                throw new Error('Une erreur est survenue lors de la vérification de l\'existence de la structure');
             }
 
             if (organization === null) {
-                throw new Error('Le territoire de rattachement que vous avez sélectionné n\'existe pas en base de données');
+                throw new Error('La structure que vous avez sélectionnée n\'existe pas en base de données');
             }
 
             if (organization.fk_category !== 'territorial_collectivity') {
-                throw new Error('Le territoire de rattachement que vous avez sélectionné est invalide');
+                throw new Error('La structure que vous avez sélectionnée est invalide');
             }
 
             req.body.organization_full = organization;
@@ -217,102 +217,22 @@ export default (
     body('association')
         .if((value, { req }) => req.body.organization_category_full.uid === 'association')
         .custom(async (value, { req }) => {
-            if (!value) {
-                throw new Error('Vous devez préciser le nom de la structure');
-            }
-
-            if (value === 'autre') {
-                return true;
-            }
-
             let organization;
             try {
-                organization = await organizationModel.findAssociationName(value);
+                organization = await organizationModel.findOneById(value);
             } catch (error) {
-                throw new Error('Une erreur est survenue lors de la vérification du nom de la structure');
+                throw new Error('Une erreur est survenue lors de la vérification de l\'existence de la structure');
             }
 
             if (organization === null) {
-                throw new Error('Le nom de structure que vous avez sélectionné n\'existe pas en base de données');
+                throw new Error('La structure que vous avez sélectionnée n\'existe pas en base de données');
             }
 
-            req.body.association_name = organization.name;
-            req.body.association_abbreviation = organization.abbreviation;
-
-            return true;
-        }),
-
-    body('new_association_name')
-        .if((value, { req }) => req.body.organization_category_full.uid === 'association' && req.body.association === 'autre')
-        .trim()
-        .custom(async (value) => {
-            if (!value) {
-                throw new Error('Vous devez préciser le nom complet de l\'association');
+            if (organization.fk_category !== 'association') {
+                throw new Error('La structure que vous avez sélectionnée est invalide');
             }
 
-            let organization;
-            try {
-                organization = await organizationModel.findAssociationName(value);
-            } catch (error) {
-                throw new Error('Une erreur est survenue lors de la vérification du nom de la structure');
-            }
-
-            if (organization !== null) {
-                throw new Error('Il existe déjà une association enregistrée sous ce nom');
-            }
-
-            return true;
-        }),
-
-    body('new_association_abbreviation')
-        .if((value, { req }) => req.body.organization_category_full.uid === 'association' && req.body.association === 'autre')
-        .trim(),
-
-    body('departement')
-        .if((value, { req }) => req.body.organization_category_full.uid === 'association')
-        .custom(async (value, { req }) => {
-            if (!value) {
-                throw new Error('Vous devez préciser le territoire de rattachement');
-            }
-
-            // check the departement
-            let departement;
-            try {
-                departement = await departementModel.findOne(value);
-            } catch (error) {
-                throw new Error('Une erreur est survenue lors de la vérification du département');
-            }
-
-            if (departement === null) {
-                throw new Error('Le territoire de rattachement que vous avez sélectionné n\'existe pas en base de données');
-            }
-
-            // case of an existing association
-            if (req.body.association !== 'autre') {
-                let association = null;
-                try {
-                    association = await organizationModel.findOneAssociation(
-                        req.body.association,
-                        value,
-                    );
-                } catch (error) {
-                    throw new Error('Une erreur est survenue lors de la vérification du territoire de rattachement');
-                }
-
-                if (association !== null) {
-                    req.body.new_association = false;
-                    req.body.organization_full = association;
-                } else {
-                    req.body.new_association = true;
-                    req.body.new_association_name = req.body.association_name;
-                    req.body.new_association_abbreviation = req.body.association_abbreviation;
-                }
-
-                return true;
-            }
-
-            // case of a brand new association
-            req.body.new_association = true;
+            req.body.organization_full = organization;
             return true;
         }),
 

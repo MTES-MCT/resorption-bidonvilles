@@ -1,16 +1,16 @@
 import ServiceError from '#server/errors/ServiceError';
-import organizationModel from '#server/models/organizationModel/index';
+import autocomplete from '#server/models/organizationModel/autocomplete';
 
 type OrganizationAutocompleteResult = {
     id: number,
     label: string
-    type: string,
+    name: string,
     similarity: number,
 };
 
 export default async (search: string): Promise<OrganizationAutocompleteResult[]> => {
     try {
-        const organizations = await organizationModel.autocomplete(search, null, 'territorial_collectivity');
+        const organizations = await autocomplete(search, null, 'association');
 
         return Object.values(
             organizations.reduce((acc, row) => {
@@ -18,13 +18,18 @@ export default async (search: string): Promise<OrganizationAutocompleteResult[]>
                     acc[row.type_name] = [];
                 }
 
-                if (acc[row.type_name].length < 5 && row.similarity >= 0.8) {
-                    const dep = row.departements_codes.length === 1 ? ` (${row.departements_codes.join(', ')})` : '';
+                if (row.similarity >= 0.85) {
+                    let territory;
+                    if (row.is_national === true) {
+                        territory = 'National';
+                    } else {
+                        territory = row.main_departements_names.concat(row.main_regions_names).join(', ');
+                    }
 
                     acc[row.type_name].push({
                         id: row.id,
-                        label: `${row.abbreviation || row.name}${dep}`,
-                        type: row.type_name,
+                        label: territory,
+                        name: row.abbreviation || row.name,
                         similarity: row.similarity,
                     });
                 }

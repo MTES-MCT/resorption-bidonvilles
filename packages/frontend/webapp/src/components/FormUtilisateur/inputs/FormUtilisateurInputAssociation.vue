@@ -1,54 +1,75 @@
 <template>
-    <AsyncSelect
+    <Autocomplete
         name="association"
-        id="association"
         :label="label"
-        :options="options"
-        :loader="contactStore.fetchAssociations"
-        mode="grouped"
+        placeholder="Nom ou acronyme de votre association"
+        :fn="autocompleteFn"
+        v-model="association"
+        showCategory
+        ref="autocompleteInput"
     />
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { AsyncSelect } from "@resorptionbidonvilles/ui";
-import { useContactStore } from "@/stores/contact.store.js";
-import { defineProps, toRefs } from "vue";
+import { defineProps, ref, toRefs, computed, defineEmits, watch } from "vue";
+import { useFieldValue } from "vee-validate";
+import { Autocomplete } from "@resorptionbidonvilles/ui";
+import { autocomplete } from "@/api/associations.api.js";
 
 const props = defineProps({
-    label: String,
+    modelValue: {
+        type: Object,
+        required: false,
+        default: () => {},
+    },
 });
-const { label } = toRefs(props);
+const { modelValue } = toRefs(props);
 
-const contactStore = useContactStore();
+const autocompleteInput = ref(null);
+const emit = defineEmits(["update:modelValue", "change"]);
+const association = computed({
+    get() {
+        return modelValue.value;
+    },
+    set(value) {
+        emit("update:modelValue", value);
+    },
+});
+const value = useFieldValue("association");
 
-const options = computed(() => {
-    if (contactStore.associations.length === 0) {
-        return [];
-    }
+// obligés d'émettre un événement différent de update:modelValue car ce dernier est émis
+// deux fois pour chaque changement de valeur
+// ici, "change" ne sera émis qu'une seule fois
+watch(value, (newValue) => {
+    emit("change", newValue);
+});
 
-    return [
-        {
-            label: "Autres",
-            options: [
-                {
-                    id: "autre",
-                    label: "Je ne trouve pas mon association dans cette liste",
-                },
-            ],
+async function autocompleteFn(value) {
+    const results = await autocomplete(value);
+
+    const mappedResults = results.map((org) => ({
+        id: org.id,
+        label: org.label,
+        selectedLabel: `${org.name} — ${org.label}`,
+        category: org.name,
+        data: {
+            id: org.id,
         },
-        {
-            label: "Associations référencées",
-            options: contactStore.associations.map(
-                ({ name, abbreviation }) => ({
-                    id: name,
-                    label:
-                        abbreviation !== null
-                            ? `${abbreviation} (${name})`
-                            : name,
-                })
-            ),
-        },
-    ];
+    }));
+    mappedResults.unshift({
+        id: "autre",
+        selectedLabel: "",
+        label: "Je ne trouve pas mon association ou mon territoire",
+        category: "",
+        data: null,
+    });
+
+    return mappedResults;
+}
+
+defineExpose({
+    clear() {
+        autocompleteInput.value.clear();
+    },
 });
 </script>

@@ -26,7 +26,6 @@ import dataReportExportTowns from './dataReportController/exportTownsReport';
 import directoryList from './directoryController/list';
 // geo
 import geoGet from './geoController/get';
-import geoListDepartements from './geoController/listDepartements';
 import geoSearch from './geoController/search';
 // invite
 import inviteInvite from './inviteController/invite';
@@ -45,6 +44,7 @@ import organizationGetByCategory from './organizationController/getByCategory';
 import organizationGetByType from './organizationController/getByType';
 import organizationGetMembers from './organizationController/getMembers';
 import organizationSearch from './organizationController/search/search';
+import organizationSearchAssociations from './organizationController/search/searchAssociations';
 import organizationSearchTerritorialCollectivities from './organizationController/search/searchTerritorialCollectivities';
 import organizationTypes from './organizationController/types';
 import organizationUpdateBeingFunded from './organizationController/updateBeingFunded';
@@ -138,7 +138,6 @@ export default () => ({
     },
     geo: {
         get: geoGet,
-        listDepartements: geoListDepartements,
         search: geoSearch,
     },
     invite: {
@@ -161,6 +160,7 @@ export default () => ({
         getByType: organizationGetByType,
         getMembers: organizationGetMembers,
         search: organizationSearch,
+        searchAssociations: organizationSearchAssociations,
         searchTerritorialCollectivities: organizationSearchTerritorialCollectivities,
         types: organizationTypes,
         updateBeingFunded: organizationUpdateBeingFunded,

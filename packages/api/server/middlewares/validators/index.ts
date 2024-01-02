@@ -42,6 +42,7 @@ import actionUpdate from './actions/update';
 import financeReaderFindByLocation from './financeReaders/findByLocation';
 import justiceReaderFindByLocation from './justiceReaders/findByLocation';
 import organizationSearch from './organizations/search';
+import organizationSearchAssociations from './organizations/searchAssociations';
 import organizationSearchTerritorialCollectivities from './organizations/searchTerritorialCollectivities';
 import getDepartementMetrics from './metrics/getDepartementMetrics';
 import getDepartementEvolutionMetrics from './metrics/getDepartementEvolutionMetrics';
@@ -113,6 +114,7 @@ export default {
     },
     organization: {
         search: organizationSearch,
+        searchAssociations: organizationSearchAssociations,
         searchTerritorialCollectivities: organizationSearchTerritorialCollectivities,
     },
     question: {

@@ -51,9 +51,9 @@ const locales = {
     },
 };
 
-addMethod(object, "territorialCollectivity", function (schema) {
+addMethod(object, "customSchema", function (schema) {
     return this.test(
-        "territorialCollectivity",
+        "customSchema",
         ({ label }) => `${label} est techniquement invalide`,
         async function (value) {
             if (value === undefined || value === null) {
@@ -147,7 +147,7 @@ export default (variant, allowNewOrganization, language) => {
         .when("organization_category", {
             is: "territorial_collectivity",
             then: (schema) =>
-                schema.required().territorialCollectivity(
+                schema.required().customSchema(
                     object({
                         data: object({
                             id: number().required(),
@@ -159,27 +159,16 @@ export default (variant, allowNewOrganization, language) => {
     schema.association = string()
         .when("organization_category", {
             is: "association",
-            then: (schema) => schema.required(),
+            then: (schema) =>
+                schema.required().customSchema(
+                    object({
+                        data: object({
+                            id: number().required(),
+                        }).required(),
+                    })
+                ),
         })
         .label(labels.association);
-    schema.new_association_name = string()
-        .when("association", {
-            is: "autre",
-            then: (schema) => schema.required(),
-        })
-        .label(labels.new_association_name);
-    schema.new_association_abbreviation = string()
-        .when("association", {
-            is: "autre",
-            then: (schema) => schema.required(),
-        })
-        .label(labels.new_association_abbreviation);
-    schema.departement = string()
-        .when("organization_category", {
-            is: "association",
-            then: (schema) => schema.required(),
-        })
-        .label(labels.departement);
     schema.organization_administration = string()
         .when("organization_category", {
             is: "administration",

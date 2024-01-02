@@ -45,10 +45,6 @@ describe('userService/register', () => {
             email: 'jean.dupont@beta.gouv.fr',
             phone: '0102030405',
             organization: 42,
-            new_association: false,
-            new_association_name: null,
-            new_association_abbreviation: null,
-            departement: null,
             position: 'Développeur',
             access_request_message: 'Message de test',
         });

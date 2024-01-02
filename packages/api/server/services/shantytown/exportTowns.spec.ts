@@ -44,7 +44,7 @@ describe('services/shantytown.exportTowns()', () => {
         sandbox.reset();
     });
 
-    it.only('identifie correctement un export de données actuelles', async () => {
+    it('identifie correctement un export de données actuelles', async () => {
         const date = new Date();
         await exportTowns(user, region, false, date);
 
@@ -52,7 +52,7 @@ describe('services/shantytown.exportTowns()', () => {
         expect(stubs.getAllowedLocations).to.be.calledWith(user, region, false);
     });
 
-    it.only('identifie correctement un export de données passées', async () => {
+    it('identifie correctement un export de données passées', async () => {
         const date = new Date(2023, 0, 1);
         await exportTowns(user, region, false, date);
 
@@ -60,7 +60,7 @@ describe('services/shantytown.exportTowns()', () => {
         expect(stubs.getAllowedLocations).to.be.calledWith(user, region, true);
     });
 
-    it.only('collecte bien les données uniquement sur les territoires autorisés', async () => {
+    it('collecte bien les données uniquement sur les territoires autorisés', async () => {
         const allowedLocations = [locations.paris.epci(), locations.paris.city()];
         stubs.getAllowedLocations.returns(allowedLocations);
 
@@ -69,19 +69,19 @@ describe('services/shantytown.exportTowns()', () => {
         expect(stubs.fetchData).to.be.calledWith(user, allowedLocations);
     });
 
-    it.only('collecte bien les données des sites ouverts uniquement', async () => {
+    it('collecte bien les données des sites ouverts uniquement', async () => {
         await exportTowns(user, region);
         expect(stubs.fetchData).to.be.calledOnce;
         expect(stubs.fetchData).to.be.calledWith(user, [region], false);
     });
 
-    it.only('collecte bien les données des sites fermés quand cela est demandé', async () => {
+    it('collecte bien les données des sites fermés quand cela est demandé', async () => {
         await exportTowns(user, region, true);
         expect(stubs.fetchData).to.be.calledOnce;
         expect(stubs.fetchData).to.be.calledWith(user, [region], true);
     });
 
-    it.only('génère bien le fichier excel avec les données collectées', async () => {
+    it('génère bien le fichier excel avec les données collectées', async () => {
         const shantytowns = [fakeShantytown(undefined, { shantytown_id: 1 }), fakeShantytown(undefined, { shantytown_id: 2 })];
         stubs.fetchData.resolves(shantytowns);
 
@@ -91,7 +91,7 @@ describe('services/shantytown.exportTowns()', () => {
         expect(stubs.generateExportFile).to.be.calledWith(user, shantytowns);
     });
 
-    it.only('retourne bien le buffer du fichier excel', async () => {
+    it('retourne bien le buffer du fichier excel', async () => {
         const buffer = Buffer.from('fake buffer');
         stubs.generateExportFile.resolves(buffer);
 
@@ -99,7 +99,7 @@ describe('services/shantytown.exportTowns()', () => {
         expect(response).to.be.eql(buffer);
     });
 
-    it.only('lance un service error, si l\'utilisateur n\'a pas les accès nécessaires', async () => {
+    it('lance un service error, si l\'utilisateur n\'a pas les accès nécessaires', async () => {
         stubs.getAllowedLocations.returns([]);
 
         let responseError;
@@ -114,7 +114,7 @@ describe('services/shantytown.exportTowns()', () => {
         expect(responseError.nativeError.message).to.be.eql('Vous n\'êtes pas autorisé(e) à exporter les données sur le périmètre géographique demandé');
     });
 
-    it.only('lance un service error, si la collecte des données échoue', async () => {
+    it('lance un service error, si la collecte des données échoue', async () => {
         stubs.fetchData.rejects(new Error('une erreur'));
 
         let responseError;
@@ -129,7 +129,7 @@ describe('services/shantytown.exportTowns()', () => {
         expect(responseError.nativeError).to.be.eql(new Error('une erreur'));
     });
 
-    it.only('lance un service error, s\'il n\'y a aucune donnée sur le(s) territoire(s) ciblé(s)', async () => {
+    it('lance un service error, s\'il n\'y a aucune donnée sur le(s) territoire(s) ciblé(s)', async () => {
         stubs.fetchData.resolves([]);
 
         let responseError;

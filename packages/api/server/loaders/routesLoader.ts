@@ -643,8 +643,14 @@ export default (app) => {
     );
 
     app.get(
+        '/associations/search',
+        validators.organization.searchAssociations,
+        middlewares.validation,
+        controllers.organization.searchAssociations,
+    );
+
+    app.get(
         '/territorial-collectivities/search',
-        middlewares.auth.authenticate,
         validators.organization.searchTerritorialCollectivities,
         middlewares.validation,
         controllers.organization.searchTerritorialCollectivities,
@@ -692,10 +698,6 @@ export default (app) => {
     app.get(
         '/locations/:type/:code?',
         controllers.geo.get,
-    );
-    app.get(
-        '/departements',
-        controllers.geo.listDepartements,
     );
 
     // dashboard

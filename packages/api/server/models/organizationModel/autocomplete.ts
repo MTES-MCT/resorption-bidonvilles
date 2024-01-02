@@ -5,18 +5,39 @@ export type OrganizationAutocompleteRow = {
     id: number,
     name: string,
     abbreviation: string | null,
-    departements: string[],
+    is_national: boolean,
+    main_regions_names: string[],
+    main_departements_names: string[],
+    departements_codes: string[],
     similarity: number,
     type_name: string,
 };
 
 export default async (search: string, departementCode: string = null, organizationCategoryUid: string = null): Promise<OrganizationAutocompleteRow[]> => sequelize.query(
-    `SELECT
+    `WITH main_territories AS (
+        SELECT
+            intervention_areas.fk_organization,
+            array_remove(array_agg(DISTINCT departements.name), null) AS departements_names,
+            array_remove(array_agg(DISTINCT regions.name), null) AS regions_names
+        FROM intervention_areas
+        LEFT JOIN regions ON intervention_areas.fk_region = regions.code
+        LEFT JOIN departements ON intervention_areas.fk_departement = departements.code
+        WHERE
+                intervention_areas.fk_organization IS NOT NULL
+            AND intervention_areas.is_main_area IS TRUE
+            AND (intervention_areas.fk_region IS NOT NULL OR intervention_areas.fk_departement IS NOT NULL)
+        GROUP BY intervention_areas.fk_organization
+    )
+
+    SELECT
         organizations.organization_id AS id,
         organizations.name,
         organizations.abbreviation,
         organization_types.name_singular AS type_name,
-        COALESCE(v_organization_areas.departements, ARRAY[]::varchar[]) AS departements,
+        v_organization_areas.is_national,
+        COALESCE(main_territories.regions_names, ARRAY[]::varchar[]) AS main_regions_names,
+        COALESCE(main_territories.departements_names, ARRAY[]::varchar[]) AS main_departements_names,
+        COALESCE(v_organization_areas.departements, ARRAY[]::varchar[]) AS departements_codes,
         GREATEST(
             word_similarity(unaccent(:search), unaccent(organizations.name)),
             word_similarity(unaccent(:search), unaccent(organizations.abbreviation))
@@ -24,6 +45,7 @@ export default async (search: string, departementCode: string = null, organizati
     FROM organizations
     LEFT JOIN organization_types ON organizations.fk_type = organization_types.organization_type_id
     LEFT JOIN v_organization_areas ON v_organization_areas.organization_id = organizations.organization_id AND v_organization_areas.is_main_area IS TRUE
+    LEFT JOIN main_territories ON main_territories.fk_organization = organizations.organization_id
     ${departementCode !== null
         ? `
     LEFT JOIN departements ON departements.code = :departementCode

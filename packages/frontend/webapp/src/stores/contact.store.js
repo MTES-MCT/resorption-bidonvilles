@@ -1,12 +1,10 @@
 import { defineStore } from "pinia";
 import { getTypes, getOrganizations } from "@/api/organization_categories.api";
-import { get as getDepartements } from "@/api/departements.api";
 
 export const useContactStore = defineStore("contact", {
     state: () => ({
         public_establishment_types: [],
         associations: [],
-        departements: [],
         administrations: [],
     }),
     actions: {
@@ -28,10 +26,6 @@ export const useContactStore = defineStore("contact", {
 
                 return false;
             });
-        },
-        async fetchDepartements() {
-            const response = await getDepartements();
-            this.departements = response.departements;
         },
         async fetchAdministrations() {
             const response = await getOrganizations("administration");
