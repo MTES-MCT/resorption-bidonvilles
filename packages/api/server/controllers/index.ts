@@ -45,6 +45,7 @@ import organizationGetByCategory from './organizationController/getByCategory';
 import organizationGetByType from './organizationController/getByType';
 import organizationGetMembers from './organizationController/getMembers';
 import organizationSearch from './organizationController/search/search';
+import organizationSearchTerritorialCollectivities from './organizationController/search/searchTerritorialCollectivities';
 import organizationTypes from './organizationController/types';
 import organizationUpdateBeingFunded from './organizationController/updateBeingFunded';
 // permission
@@ -160,6 +161,7 @@ export default () => ({
         getByType: organizationGetByType,
         getMembers: organizationGetMembers,
         search: organizationSearch,
+        searchTerritorialCollectivities: organizationSearchTerritorialCollectivities,
         types: organizationTypes,
         updateBeingFunded: organizationUpdateBeingFunded,
     },

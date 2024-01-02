@@ -150,9 +150,7 @@ export default (variant, allowNewOrganization, language) => {
                 schema.required().territorialCollectivity(
                     object({
                         data: object({
-                            code: string().required(),
-                            typeUid: string().required(),
-                            typeName: string().required(),
+                            id: number().required(),
                         }).required(),
                     })
                 ),

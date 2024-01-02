@@ -643,6 +643,14 @@ export default (app) => {
     );
 
     app.get(
+        '/territorial-collectivities/search',
+        middlewares.auth.authenticate,
+        validators.organization.searchTerritorialCollectivities,
+        middlewares.validation,
+        controllers.organization.searchTerritorialCollectivities,
+    );
+
+    app.get(
         '/organization-categories',
         controllers.organization.categories,
     );

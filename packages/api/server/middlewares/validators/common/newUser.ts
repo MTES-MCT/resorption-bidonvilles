@@ -169,27 +169,19 @@ export default (
     body('territorial_collectivity')
         .if((value, { req }) => req.body.organization_category_full.uid === 'territorial_collectivity')
         .custom(async (value, { req }) => {
-            if (!value) {
-                throw new Error('Vous devez préciser le nom de la structure');
-            }
-
             let organization;
             try {
-                organization = await organizationModel.findOneByLocation(
-                    value.typeName,
-                    value.typeUid,
-                    value.code,
-                );
+                organization = await organizationModel.findOneById(value);
             } catch (error) {
-                throw new Error('Une erreur est survenue lors de la vérification du nom de la structure');
+                throw new Error('Une erreur est survenue lors de la vérification du territoire de rattachement');
             }
 
             if (organization === null) {
-                throw new Error('Le nom de structure que vous avez sélectionné n\'existe pas en base de données');
+                throw new Error('Le territoire de rattachement que vous avez sélectionné n\'existe pas en base de données');
             }
 
             if (organization.fk_category !== 'territorial_collectivity') {
-                throw new Error('Le nom de structure que vous avez sélectionné est invalide');
+                throw new Error('Le territoire de rattachement que vous avez sélectionné est invalide');
             }
 
             req.body.organization_full = organization;

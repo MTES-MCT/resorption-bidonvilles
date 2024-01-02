@@ -236,8 +236,10 @@ onMounted(() => {
 
 function intermediateSubmit(values) {
     const formattedValues = { ...values };
-    formattedValues.territorial_collectivity =
-        formattedValues.territorial_collectivity?.data;
+    formattedValues.territorial_collectivity = formattedValues
+        .territorial_collectivity?.data
+        ? formattedValues.territorial_collectivity.data.id
+        : null;
     return submit.value(formattedValues);
 }
 </script>

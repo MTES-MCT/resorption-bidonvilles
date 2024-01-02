@@ -11,7 +11,6 @@ import findJusticeReadersByLocation from './findJusticeReadersByLocation';
 import findJusticeReadersByShantytown from './findJusticeReadersByShantytown';
 import findOneAssociation from './findOneAssociation';
 import findOneById from './findOneById';
-import findOneByLocation from './findOneByLocation';
 import findPrefAndDdets from './findPrefAndDdets';
 
 export default {
@@ -28,6 +27,5 @@ export default {
     findJusticeReadersByShantytown,
     findOneAssociation,
     findOneById,
-    findOneByLocation,
     findPrefAndDdets,
 };

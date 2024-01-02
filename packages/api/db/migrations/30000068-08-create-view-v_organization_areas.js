@@ -25,7 +25,6 @@ module.exports = {
         -- cas d'un département
         LEFT JOIN departements d3 ON intervention_areas.fk_departement = d3.code
 
-        WHERE organizations.active IS TRUE
         GROUP BY organizations.organization_id, intervention_areas.is_main_area`,
     ),
 
