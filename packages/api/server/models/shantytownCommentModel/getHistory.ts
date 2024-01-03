@@ -139,7 +139,6 @@ export default async (user: User, location: Location, numberOfActivities: number
         where.push('comments.created_at >= :maxDate');
     }
 
-    // TODO 2019
     const activities = await sequelize.query(
         `WITH organization_comment_access AS (
            SELECT

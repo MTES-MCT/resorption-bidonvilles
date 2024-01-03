@@ -103,7 +103,7 @@ describe('services/shantytownComment', () => {
 
                 // getShantytownWatchers() retourne une liste d'utilisateurs
                 dependencies.getShantytownWatchers
-                    .withArgs(input.shantytown.id, 1, true)
+                    .withArgs(input.shantytown.id)
                     .resolves(output.watchers);
 
                 sequelizeStub.$queueResult([[{ shantytown_comment_id: output.comment.id }]]);
