@@ -85,6 +85,9 @@ const chartData = computed(() => {
                         max.foreign / max.global
                     );
                 },
+                borderColor: "rgba(0, 255, 0, 0.5)",
+                pointRadius: 2,
+                borderWidth: 2,
                 fill: true,
                 data: data.charts.foreign,
                 stack: "Stack 0",
@@ -99,6 +102,9 @@ const chartData = computed(() => {
                         max.total / max.global
                     );
                 },
+                borderColor: "rgba(0, 0, 255, 0.5)",
+                pointRadius: 2,
+                borderWidth: 2,
                 fill: true,
                 data: data.charts.total,
                 stack: "Stack 1",

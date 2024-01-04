@@ -53,41 +53,76 @@ import setBackgroundColor from "../../utils/setBackgroundColor";
 const departementMetricsStore = useDepartementMetricsStore();
 const data = departementMetricsStore.evolution.data.inhabitants.towns;
 
-const chartData = computed(() => ({
-    labels: data.charts.labels,
-    datasets: [
-        {
-            label: "Sites de moins de 10 habitants",
-            backgroundColor: (context) => {
-                return setBackgroundColor(context, "rgba(255, 0, 0, 0.5)");
+const chartData = computed(() => {
+    const max = {
+        lessThan10: Math.max(...data.charts.less_than_10),
+        between10And99: Math.max(...data.charts.between_10_and_99),
+        moreThan99: Math.max(...data.charts.more_than_99),
+    };
+    max.global = Math.max(
+        max.lessThan10,
+        max.between10And99,
+        max.between10And99
+    );
+
+    return {
+        labels: data.charts.labels,
+        datasets: [
+            {
+                label: "Sites de moins de 10 habitants",
+                backgroundColor: (context) => {
+                    return setBackgroundColor(
+                        context,
+                        "rgba(255, 0, 0, 0.5)",
+                        max.lessThan10 / max.global
+                    );
+                },
+                borderColor: "rgba(255, 0, 0, 0.5)",
+                pointRadius: 2,
+                borderWidth: 2,
+                fill: true,
+                data: data.charts.less_than_10,
+                Stack: "Stack 0",
+                tension: 0.5,
             },
-            fill: true,
-            data: data.charts.less_than_10,
-            Stack: "Stack 0",
-            tension: 0.5,
-        },
-        {
-            label: "Sites de moins de 100 habitants",
-            backgroundColor: (context) => {
-                return setBackgroundColor(context, "rgba(0, 255, 0, 0.5)");
+            {
+                label: "Sites de moins de 100 habitants",
+                backgroundColor: (context) => {
+                    return setBackgroundColor(
+                        context,
+                        "rgba(0, 0, 255, 0.5)",
+                        max.between10And99 / max.global
+                    );
+                },
+                borderColor: "rgba(0, 0, 255, 0.5)",
+                pointRadius: 2,
+                borderWidth: 2,
+                fill: true,
+                data: data.charts.between_10_and_99,
+                Stack: "Stack 0",
+                tension: 0.5,
             },
-            fill: true,
-            data: data.charts.between_10_and_99,
-            Stack: "Stack 0",
-            tension: 0.5,
-        },
-        {
-            label: "Sites de plus de 100 habitants",
-            backgroundColor: (context) => {
-                return setBackgroundColor(context, "rgba(0, 0, 255, 0.5)");
+            {
+                label: "Sites de plus de 100 habitants",
+                backgroundColor: (context) => {
+                    return setBackgroundColor(
+                        context,
+                        "rgba(0, 255, 0, 0.5)",
+                        max.moreThan99 / max.global
+                    );
+                },
+                borderColor: "rgba(0, 255, 0, 0.5)",
+                pointRadius: 2,
+                borderWidth: 2,
+                fill: true,
+                data: data.charts.more_than_99,
+                Stack: "Stack 0",
+                tension: 0.5,
             },
-            fill: true,
-            data: data.charts.more_than_99,
-            Stack: "Stack 0",
-            tension: 0.5,
-        },
-    ],
-}));
+        ],
+    };
+});
+
 const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
