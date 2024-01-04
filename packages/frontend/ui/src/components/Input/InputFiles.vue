@@ -45,84 +45,129 @@ const { name, label, multiple, withoutMargin } = toRefs(props);
 const { handleChange, handleBlur, errors, value } = useField(name.value);
 const fileInput = ref(null);
 
-const rawFiles = ref([]);
+const enrichedFileList = ref([]);
 const isFocused = ref(false);
 const previews = computed(() => {
-    return rawFiles.value.map(rawFile => ({
+    return enrichedFileList.value.map((file) => ({
         state: 'draft',
         id: null,
-        name: rawFile.name,
-        size: rawFile.size,
+        name: file.raw.name,
+        size: file.raw.size,
         urls: {
             original: null,
-            preview: rawFile.preview || null,
+            preview: file.preview || null,
         },
-        extension: fromMimeToExtension(rawFile.type),
+        extension: fromMimeToExtension(file.raw.type),
         created_by: null,
     }));
 });
 
-function processRawFiles() {
-    rawFiles.value = Array.from(fileInput.value.files).map(file => ({
-        name: file.name,
-        size: file.size,
-        type: file.type,
-        preview: null,
-    }));
-}
+// les différents modes de mise à jour de la liste des fichiers
+// soit "native" (depuis l'input file)
+// soit "manual" (manuellement via un drag & drop par exemple)
+const CHANGE_TYPE = {
+    NATIVE: 0,
+    MANUAL: 1,
+};
 
 function onChange() {
-    processRawFiles();
-    handleChange(fileInput.value.files);
-    previewFiles();
+    processInputFileList(fileInput.value.files, CHANGE_TYPE.NATIVE);
+}
+
+async function processInputFileList(fileList, changeType) {
+    const enrichedFiles = await enrichFiles(fileList);
+    insertFilesIntoEnrichedFilelist(enrichedFiles);
+    handleChange(getActualFileList());
+
+    if (changeType === CHANGE_TYPE.MANUAL) {
+        fileInput.value.files = fileList;
+    }
+}
+
+function getActualFileList() {
+    const dt = new DataTransfer();
+    for (let i = 0; i < enrichedFileList.value.length; i++) {
+        dt.items.add(enrichedFileList.value[i].raw);
+    }
+
+    return dt.files;
+}
+
+async function enrichFiles(fileList) {
+    // on génère les previews
+    const previewPromises = [];
+    for (let i = 0; i < fileList.length; i += 1) {
+        previewPromises.push(new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(fileList[i]);
+            reader.onload = (event) => {
+                resolve(event.target.result);
+            };
+            reader.onerror = (error) => {
+                reject(error);
+            };
+            reader.onabort = () => {
+                reject('aborted');
+            };
+        }));
+    }
+
+    const previews = await Promise.all(previewPromises);
+
+    // on génère un tableau de fichiers enrichis
+    const enrichedFiles = [];
+    for (let i = 0; i < fileList.length; i += 1) {
+        enrichedFiles.push({
+            raw: fileList[i],
+            preview: previews[i],
+        });
+    }
+
+    return enrichedFiles;
+}
+
+function insertFilesIntoEnrichedFilelist(enrichedFiles) {
+    // on ajoute à filelist uniquement les fichiers qui n'y sont pas déjà
+    for (let i = 0; i < enrichedFiles.length; i++) {
+        if (fileExistsInEnrichedFilelist(enrichedFiles[i]) === true) {
+            continue;
+        }
+
+        enrichedFileList.value.push(enrichedFiles[i]);
+    }
+}
+
+function fileExistsInEnrichedFilelist(enrichedFile) {
+    return enrichedFileList.value.some((file) => enrichedFile.preview === file.preview);
 }
 
 function onDelete(file, index) {
     const dt = new DataTransfer();
-    const { files } = fileInput.value;
 
     // on recrée un set de données en excluant le fichier à supprimer
-    for (let i = 0; i < files.length; i++) {
+    for (let i = 0; i < enrichedFileList.value.length; i++) {
         if (index !== i) {
-            dt.items.add(files[i]);
+            dt.items.add(enrichedFileList.value[i].raw);
         }
     }
 
     // on change la valeur de l'input avec le nouveau set de données
     fileInput.value.files = dt.files;
 
-    // on génère un "change"
-    onChange();
-}
+    // on supprime l'item du tableau
+    enrichedFileList.value.splice(index, 1);
 
-function previewFiles() {
-    for (let i = 0; i < fileInput.value.files.length; i += 1) {
-        const file = fileInput.value.files[i];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (event) => {
-            rawFiles.value[i] = { ...rawFiles.value[i], preview: event.target.result };
-        };
-    }
+    // on update auprès de vee-validate
+    handleChange(getActualFileList());
 }
 
 function addFiles(newFiles) {
     const dt = new DataTransfer();
-    const { files } = fileInput.value;
-
-    for (let i = 0; i < files.length; i += 1) {
-        dt.items.add(files[i]);
-    }
-
     for (let i = 0; i < newFiles.length; i += 1) {
         dt.items.add(newFiles[i]);
     }
 
-    // on change la valeur de l'input avec le nouveau set de données
-    fileInput.value.files = dt.files;
-
-    // on génère un "change"
-    onChange();
+    processInputFileList(dt.files, CHANGE_TYPE.MANUAL);
 }
 
 function listenWindowFocus() {
@@ -165,11 +210,6 @@ function onFocus() {
     window.focusedInputFile = randomId;
     isFocused.value = true;
 }
-
-watch(value, () => {
-    fileInput.value.files = value.value instanceof FileList ? value.value : new DataTransfer().files;
-    processRawFiles();
-});
 
 defineExpose({
     isFocused,
