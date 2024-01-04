@@ -18,7 +18,7 @@ export default async (search: string): Promise<OrganizationAutocompleteResult[]>
                     acc[row.type_name] = [];
                 }
 
-                if (row.similarity >= 0.85) {
+                if (row.similarity >= 0.75) {
                     let territory;
                     if (row.is_national === true) {
                         territory = 'National';
