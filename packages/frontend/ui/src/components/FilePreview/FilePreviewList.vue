@@ -32,7 +32,7 @@ const props = defineProps({
     collapsedByDefault: {
         type: Boolean,
         required: false,
-        default: false,
+        default: true,
     },
     disallowAttachmentsRemoval: Boolean
 });
