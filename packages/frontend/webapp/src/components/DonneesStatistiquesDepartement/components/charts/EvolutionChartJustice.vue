@@ -37,33 +37,67 @@ import setBackgroundColor from "../../utils/setBackgroundColor";
 const departementMetricsStore = useDepartementMetricsStore();
 const data = departementMetricsStore.evolution.data.justice.justice;
 
-const chartData = computed(() => ({
-    labels: data.charts.labels,
-    datasets: [
-        {
-            label: "Nombre de CFP",
-            backgroundColor: ["#FFB7A5"],
-            fill: true,
-            data: data.charts.police,
-            tension: 0.5,
-        },
-        {
-            label: "Nombre de plaintes",
-            backgroundColor: (context) => {
-                return setBackgroundColor(context, "rgba(0, 0, 255, 0.5)");
+const POLICE_BAR_COLOUR = "rgba(0, 0, 255, 0.5)";
+const COMPLAINTS_BAR_COLOUR = "rgba(255, 0, 0, 0.5)";
+
+const chartData = computed(() => {
+    const max = {
+        police: Math.max(...data.charts.police),
+        complaints: Math.max(...data.charts.complaints),
+    };
+    max.global = Math.max(max.police, max.complaints);
+
+    return {
+        labels: data.charts.labels,
+        datasets: [
+            {
+                label: "Nombre de CFP",
+                backgroundColor: (context) => {
+                    return setBackgroundColor(
+                        context,
+                        POLICE_BAR_COLOUR,
+                        max.police / max.global
+                    );
+                },
+                borderColor: POLICE_BAR_COLOUR,
+                pointRadius: 2,
+                borderWidth: 2,
+                fill: true,
+                data: data.charts.police,
+                tension: 0.5,
             },
-            fill: true,
-            data: data.charts.complaints,
-            tension: 0.5,
-        },
-    ],
-}));
+            {
+                label: "Nombre de plaintes",
+                backgroundColor: (context) => {
+                    return setBackgroundColor(
+                        context,
+                        COMPLAINTS_BAR_COLOUR,
+                        max.complaints / max.global
+                    );
+                },
+                borderColor: COMPLAINTS_BAR_COLOUR,
+                pointRadius: 2,
+                borderWidth: 2,
+                fill: true,
+                data: data.charts.complaints,
+                tension: 0.5,
+            },
+        ],
+    };
+});
 const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     scales: {
         y: {
             beginAtZero: true,
+        },
+    },
+    plugins: {
+        legend: {
+            labels: {
+                boxWidth: 20,
+            },
         },
     },
 };

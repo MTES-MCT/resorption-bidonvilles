@@ -96,6 +96,9 @@ const chartData = computed(() => {
                         max.total / max.global
                     );
                 },
+                borderColor: "rgba(0, 0, 255, 0.5)",
+                pointRadius: 2,
+                borderWidth: 2,
                 fill: true,
                 data: data.value.charts[
                     chartType.value === "towns"
@@ -113,6 +116,9 @@ const chartData = computed(() => {
                         max.value / max.global
                     );
                 },
+                borderColor: "rgba(0, 255, 0, 0.5)",
+                pointRadius: 2,
+                borderWidth: 2,
                 fill: true,
                 data: data.value.charts[livingConditionType.value],
                 tension: 0.5,
