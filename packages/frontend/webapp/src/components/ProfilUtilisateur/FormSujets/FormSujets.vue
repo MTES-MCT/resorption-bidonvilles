@@ -55,6 +55,7 @@ const props = defineProps({
 const { user } = toRefs(props);
 
 const error = ref(null);
+const emit = defineEmits(["done"]);
 const { handleSubmit, setErrors, errors } = useForm({
     validationSchema: schema,
     initialValues: {
@@ -107,6 +108,8 @@ const onSubmit = handleSubmit(async (values) => {
             "Domaines de compétence",
             "Les domaines de compétence ont bien été modifiées"
         );
+
+        emit("done");
     } catch (e) {
         error.value = e?.user_message || "Une erreur inconnue est survenue";
         if (e?.fields) {
