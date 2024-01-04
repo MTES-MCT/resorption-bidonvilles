@@ -117,21 +117,22 @@ export const useTownsStore = defineStore("towns", () => {
         const userStore = useUserStore();
         const { search: searchFilter, data: locationFilter } =
             getDefaultLocationFilter(userStore.user);
-
+        // Filtres communs sites ouverts/sites fermés
         filters.search.value = searchFilter;
         filters.location.value = locationFilter;
         filters.status.value = "open";
-
         filters.properties.value.population = [];
         filters.properties.value.fieldType = [];
         filters.properties.value.justice = [];
         filters.properties.value.origin = [];
+        filters.properties.value.target = [];
+        // Filtres spécifiques aux sites ouverts
         filters.properties.value.conditions = [];
+        filters.properties.value.actors = [];
+        filters.properties.value.heatwave = [];
+        // Filtres spécifiques aux sites fermés
         filters.properties.value.closingReason = [];
         filters.properties.value.solvedOrClosed = [];
-        filters.properties.value.actors = [];
-        filters.properties.value.target = [];
-        filters.properties.value.heatwave = [];
     }
 
     function reset() {

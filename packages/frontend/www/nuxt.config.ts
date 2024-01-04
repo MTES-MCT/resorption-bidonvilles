@@ -7,6 +7,7 @@ export default defineNuxtConfig({
         ["@nuxtjs/i18n", {
             locales: ["fr", "en", "bg", "ro"],
             defaultLocale: "fr",
+            parallelPlugin: false,
         }]
     ],
     css: [

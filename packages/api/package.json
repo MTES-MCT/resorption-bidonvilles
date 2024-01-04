@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/api",
-  "version": "2.9.17",
+  "version": "2.9.18",
   "description": "API d'Action Bidonvilles",
   "main": "server/index.ts",
   "repository": "git+https://github.com/MTES-MCT/action-bidonvilles.git",
@@ -41,7 +41,7 @@
     "module-alias": "^2.2.0",
     "moment": "^2.29.4",
     "neat-csv": "^7.0.0",
-    "node-mailjet": "^3.3.1",
+    "node-mailjet": "^6.0.5",
     "node-mattermost": "^0.0.1",
     "nodemon": "^2.0.7",
     "pg": "^8.7.3",

@@ -1,10 +1,13 @@
-import nodeMailjet from 'node-mailjet';
+import Mailjet from 'node-mailjet';
 import config from '#server/config';
 import userModel from '#server/models/userModel';
 
 const { mail: mailConfig, wwwUrl } = config;
 const mailjet = mailConfig.publicKey
-    ? nodeMailjet.connect(mailConfig.publicKey, mailConfig.privateKey)
+    ? new Mailjet({
+        apiKey: mailConfig.publicKey,
+        apiSecret: mailConfig.privateKey,
+    })
     : null;
 
 export default {
@@ -23,7 +26,7 @@ export default {
 
     send(user, mailContent, replyTo = null, bcc = []) {
         if (mailjet === null) {
-            return Promise.resolve(true);
+            return null;
         }
 
         return mailjet
