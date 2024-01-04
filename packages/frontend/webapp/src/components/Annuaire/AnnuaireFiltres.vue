@@ -69,11 +69,9 @@ const expertiseTopicsFilter = computed({
 });
 
 const expertiseTopicsItems = computed(() => {
-    return (
-        configStore.config?.expertise_topics.map((item) => ({
-            value: item.uid,
-            label: item.label,
-        })) || []
-    );
+    return (configStore.config?.expertise_topics || []).map((item) => ({
+        value: item.uid,
+        label: item.label,
+    }));
 });
 </script>
