@@ -25,9 +25,7 @@ type OrganizationRow = {
     user_email: string,
     user_phone: string | null,
     user_position: string,
-    user_expertise_topic_id: string | null,
-    user_expertise_topic_type: string | null,
-    user_expertise_topic_label: string | null,
+    user_topics: (`${string};${string};${string}`)[],
     user_role_regular: string,
     type_id: number,
     type_category: string,
@@ -91,16 +89,15 @@ export type SerializedOrganization = {
 export default async (): Promise<SerializedOrganization[]> => {
     const users: OrganizationRow[] = await sequelize.query(
         `
-        WITH users_with_expertise_topics AS
-        (SELECT
-            utet.fk_user,
-            utet.fk_expertise_topic,
-            utet."type",
-            et."label"
-        FROM 
-            user_to_expertise_topics utet
-        LEFT JOIN
-            expertise_topics et ON et.uid = utet.fk_expertise_topic)
+        WITH users_with_expertise_topics AS (
+            SELECT
+                utet.fk_user,
+                array_agg(utet.fk_expertise_topic || ';' || utet."type" || ';' || et.label) AS topics
+            FROM user_to_expertise_topics utet
+            LEFT JOIN expertise_topics et ON et.uid = utet.fk_expertise_topic
+            GROUP BY utet.fk_user
+        )
+
         SELECT
             organizations.organization_id,
             organizations.name,
@@ -124,9 +121,7 @@ export default async (): Promise<SerializedOrganization[]> => {
             users.email AS "user_email",
             users.phone AS "user_phone",
             users.position AS "user_position",
-            user_expertise_topics.fk_expertise_topic AS "user_expertise_topic_id",
-            user_expertise_topics."type" AS "user_expertise_topic_type",
-            user_expertise_topics."label" AS "user_expertise_topic_label",
+            COALESCE(user_expertise_topics.topics, array[]::text[]) AS "user_topics",
             user_roles_regular.name AS user_role_regular,
             organizations.fk_type AS "type_id",
             organization_types.fk_category AS "type_category",
@@ -193,9 +188,7 @@ export default async (): Promise<SerializedOrganization[]> => {
         }
 
         if (user.user_id !== null) {
-            const existingUser = hash[user.organization_id].users.find(u => u.id === user.user_id);
-
-            const serializedUser: SerializedOrganizationUser = {
+            hash[user.organization_id].users.push({
                 id: user.user_id,
                 is_admin: user.user_role_admin !== null,
                 role: user.user_role_admin || user.user_role_regular,
@@ -204,27 +197,11 @@ export default async (): Promise<SerializedOrganization[]> => {
                 email: user.user_email,
                 phone: user.user_phone,
                 position: user.user_position,
-                expertise_topics: [],
-            };
-
-            if (user.user_expertise_topic_id !== null) {
-                serializedUser.expertise_topics.push({
-                    id: user.user_expertise_topic_id,
-                    type: user.user_expertise_topic_type,
-                    label: user.user_expertise_topic_label,
-                });
-            }
-
-            if (!existingUser) {
-                hash[user.organization_id].users.push(serializedUser);
-            } else if (user.user_expertise_topic_id !== null) {
-                // Si le user existe déjà, on merge expertise_topics
-                existingUser.expertise_topics.push({
-                    id: user.user_expertise_topic_id,
-                    type: user.user_expertise_topic_type,
-                    label: user.user_expertise_topic_label,
-                });
-            }
+                expertise_topics: user.user_topics.map((topic): SerializedUserExpertiseTopics => {
+                    const [id, type, label] = topic.split(';');
+                    return { id, type, label };
+                }),
+            });
         }
     });
     return organizations;
