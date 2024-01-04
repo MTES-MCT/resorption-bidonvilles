@@ -2,12 +2,11 @@ import { fileURLToPath, URL } from "node:url";
 
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import pluginRewriteAll from "vite-plugin-rewrite-all";
 import { version } from "./package.json";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [vue(), pluginRewriteAll()],
+    plugins: [vue()],
     server: {
         host: "0.0.0.0",
         port: 8092,
@@ -22,7 +21,7 @@ export default defineConfig({
         __APP_VERSION__: JSON.stringify(version),
     },
     optimizeDeps: {
-        include: ['@turf/turf']
+        include: ["@turf/turf"],
     },
     resolve: {
         alias: {
