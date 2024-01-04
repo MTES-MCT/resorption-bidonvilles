@@ -17,7 +17,7 @@
     "react-dom": "^18.2.0",
     "storybook": "^7.0.18",
     "tailwindcss": "^3.0.23",
-    "vue-i18n": "9.3.0-beta.17"
+    "vue-i18n": "^9.5.0"
   },
   "scripts": {
     "storybook": "storybook dev -p 6006"
