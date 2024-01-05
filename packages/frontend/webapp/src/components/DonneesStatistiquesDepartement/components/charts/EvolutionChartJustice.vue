@@ -2,6 +2,8 @@
     <section>
         <h1 class="font-bold text-primary text-lg">Procédures judiciaires</h1>
 
+        <div>{{ datasets }}</div>
+
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure
                 icon="person-military-pointing"
@@ -47,42 +49,24 @@ const chartData = computed(() => {
     };
     max.global = Math.max(max.police, max.complaints);
 
+    const datasets = [
+        generateDataset(
+            "Nombre de CFP",
+            POLICE_BAR_COLOUR,
+            data.charts.police,
+            max.global
+        ),
+        generateDataset(
+            "Nombre de plaintes",
+            COMPLAINTS_BAR_COLOUR,
+            data.charts.complaints,
+            max.global
+        ),
+    ];
+
     return {
         labels: data.charts.labels,
-        datasets: [
-            {
-                label: "Nombre de CFP",
-                backgroundColor: (context) => {
-                    return setBackgroundColor(
-                        context,
-                        POLICE_BAR_COLOUR,
-                        max.police / max.global
-                    );
-                },
-                borderColor: POLICE_BAR_COLOUR,
-                pointRadius: 2,
-                borderWidth: 2,
-                fill: true,
-                data: data.charts.police,
-                tension: 0.5,
-            },
-            {
-                label: "Nombre de plaintes",
-                backgroundColor: (context) => {
-                    return setBackgroundColor(
-                        context,
-                        COMPLAINTS_BAR_COLOUR,
-                        max.complaints / max.global
-                    );
-                },
-                borderColor: COMPLAINTS_BAR_COLOUR,
-                pointRadius: 2,
-                borderWidth: 2,
-                fill: true,
-                data: data.charts.complaints,
-                tension: 0.5,
-            },
-        ],
+        datasets,
     };
 });
 const chartOptions = {
@@ -101,4 +85,23 @@ const chartOptions = {
         },
     },
 };
+
+function generateDataset(label, color, data, maxGlobal) {
+    return {
+        label,
+        backgroundColor: (context) => {
+            return setBackgroundColor(
+                context,
+                color,
+                Math.max(...data) / maxGlobal
+            );
+        },
+        borderColor: color,
+        pointRadius: 2,
+        borderWidth: 2,
+        fill: true,
+        data,
+        tension: 0.5,
+    };
+}
 </script>
