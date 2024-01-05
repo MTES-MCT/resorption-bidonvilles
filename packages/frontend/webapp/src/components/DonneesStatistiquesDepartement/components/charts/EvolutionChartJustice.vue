@@ -2,8 +2,6 @@
     <section>
         <h1 class="font-bold text-primary text-lg">Procédures judiciaires</h1>
 
-        <div>{{ datasets }}</div>
-
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure
                 icon="person-military-pointing"
@@ -79,6 +77,16 @@ const chartOptions = {
     },
     plugins: {
         legend: {
+            // Empêche le clic sur la légende pour masquer la courbe correspondante
+            // Evite les problèmes d'affichage des dégradés quand une courbe est masquée
+            onClick: function (event) {
+                if (event.type === "legend-click") {
+                    const dataset = event.target.dataset;
+                    if (dataset) {
+                        return false;
+                    }
+                }
+            },
             labels: {
                 boxWidth: 20,
             },
