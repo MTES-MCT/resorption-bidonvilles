@@ -45,7 +45,8 @@ import formatStat from "@/utils/formatStat";
 import { computed, toRefs } from "vue";
 import { LineChart } from "@/helpers/chart";
 import ChartBigFigure from "./ChartBigFigure.vue";
-import setBackgroundColor from "../../utils/setBackgroundColor";
+import chartOptions from "../../utils/GraphiquesDonneesStatistiques/ChartOptions";
+import generateDataset from "../../utils/GraphiquesDonneesStatistiques/generateDataset";
 
 const props = defineProps({
     chartLabel: {
@@ -82,57 +83,30 @@ const chartData = computed(() => {
     };
     max.global = Math.max(max.total, max.value);
 
+    const datasets = [
+        generateDataset(
+            `Nombre total de ${
+                chartType.value === "towns" ? "sites" : "personnes"
+            }`,
+            "rgba(0, 0, 255, 0.5)",
+            data.value.charts[
+                chartType.value === "towns"
+                    ? "towns_total"
+                    : "inhabitants_total"
+            ],
+            max.global
+        ),
+        generateDataset(
+            chartLabel.value,
+            "rgba(0, 255, 0, 0.5)",
+            data.value.charts[livingConditionType.value],
+            max.global
+        ),
+    ];
+
     return {
         labels: data.value.charts.labels,
-        datasets: [
-            {
-                label: `Nombre total de ${
-                    chartType.value === "towns" ? "sites" : "personnes"
-                }`,
-                backgroundColor: (context) => {
-                    return setBackgroundColor(
-                        context,
-                        "rgba(0, 0, 255, 0.5)",
-                        max.total / max.global
-                    );
-                },
-                borderColor: "rgba(0, 0, 255, 0.5)",
-                pointRadius: 2,
-                borderWidth: 2,
-                fill: true,
-                data: data.value.charts[
-                    chartType.value === "towns"
-                        ? "towns_total"
-                        : "inhabitants_total"
-                ],
-                tension: 0.5,
-            },
-            {
-                label: chartLabel.value,
-                backgroundColor: (context) => {
-                    return setBackgroundColor(
-                        context,
-                        "rgba(0, 255, 0, 0.5)",
-                        max.value / max.global
-                    );
-                },
-                borderColor: "rgba(0, 255, 0, 0.5)",
-                pointRadius: 2,
-                borderWidth: 2,
-                fill: true,
-                data: data.value.charts[livingConditionType.value],
-                tension: 0.5,
-            },
-        ],
+        datasets,
     };
 });
-const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-        y: {
-            beginAtZero: true,
-        },
-    },
-};
 </script>
