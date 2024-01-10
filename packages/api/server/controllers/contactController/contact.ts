@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 
 import userService from '#server/services/user/index';
 import contactService from '#server/services/contact/index';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { User } from '#root/types/resources/User.d';
 import { ContactBody } from '#root/types/inputs/ContactBody.d';
 
 interface ContactRequest extends Request {
@@ -37,7 +37,7 @@ async function registerReferral(data: ContactBody, userId: number): Promise<void
     }
 }
 
-async function processRequest(data: ContactBody): Promise<SerializedUser | null> {
+async function processRequest(data: ContactBody): Promise<User | null> {
     if (data.request_type.includes('access-request') && data.is_actor && data.organization_category !== 'other') {
         return userService.register(data);
     }
@@ -50,7 +50,7 @@ async function processRequest(data: ContactBody): Promise<SerializedUser | null>
 }
 
 export default async (req: ContactRequest, res: Response, next): Promise<void> => {
-    let createdUser: SerializedUser = null;
+    let createdUser: User = null;
 
     await registerNewsletter(req.body);
 

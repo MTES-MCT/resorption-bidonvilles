@@ -6,9 +6,9 @@ import permissionUtils from '#server/utils/permission';
 import { DepartementMetricsRawData } from '#server/models/metricsModel/getDepartementData';
 import getAddressSimpleOf from '#server/models/shantytownModel/_common/getAddressSimpleOf';
 import getUsenameOf from '#server/models/shantytownModel/_common/getUsenameOf';
-import { DepartementRawData } from '#server/models/departementModel/findOne';
-import { RegionRawData } from '#server/models/regionModel/findOne';
 import getLivingConditionsStatuses from '#server/models/shantytownModel/_common/livingConditions/v2/statuses/main';
+import { RawDepartement } from '#server/models/departementModel/findOne.d';
+import { RawRegion } from '#server/models/regionModel/findOne.d';
 import { CityMetrics, DepartementMetrics, ShantytownMetrics } from '#root/types/resources/DepartementMetrics.d';
 
 type CityMetricsObject = {
@@ -25,8 +25,8 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
         throw new ServiceError('fetch_failed', error);
     }
 
-    let departement: DepartementRawData;
-    let region: RegionRawData;
+    let departement: RawDepartement;
+    let region: RawRegion;
     try {
         departement = await departementModel.findOne(departementCode);
         region = await regionModel.findOne(departement.region);
@@ -61,6 +61,7 @@ export default async (user, departementCode):Promise<DepartementMetrics> => {
         departement: {
             name: departement.name,
             code: departement.code,
+            region: departement.region,
             latitude: departement.latitude,
             longitude: departement.longitude,
             chieftown: { latitude: departement.chief_town_latitude, longitude: departement.chief_town_longitude },

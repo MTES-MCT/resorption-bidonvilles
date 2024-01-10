@@ -1,20 +1,7 @@
-import { SerializedUserAccess } from './types/SerializedUser.d';
+import { UserAccess } from '#root/types/resources/User.d';
+import { RawUserAccess } from './query.d';
 
-type RawUserAccess = {
-    user_access_id: number,
-    activator_id: number | null,
-    activator_email: string | null,
-    activator_first_name: string | null,
-    activator_last_name: string | null,
-    activator_position: string | null,
-    activator_organization_id: number | null,
-    activator_organization_name: string | null,
-    user_access_used_at: Date | null,
-    user_access_expires_at: Date,
-    user_access_created_at: Date,
-};
-
-export default (userAccess: RawUserAccess): SerializedUserAccess => ({
+export default (userAccess: RawUserAccess): UserAccess => ({
     id: userAccess.user_access_id,
     sent_by: userAccess.activator_id !== null ? {
         id: userAccess.activator_id,

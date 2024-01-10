@@ -1,7 +1,8 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import { OwnerType } from '#root/types/resources/OwnerType.d';
 
-export default () => sequelize.query(
+export default (): Promise<OwnerType[]> => sequelize.query(
     `SELECT
         owner_types.owner_type_id AS id,
         owner_types.label AS label,

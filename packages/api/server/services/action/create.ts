@@ -2,12 +2,12 @@ import { sequelize } from '#db/sequelize';
 import ServiceError from '#server/errors/ServiceError';
 import Action from '#server/models/actionModel/fetch/Action.d';
 import create from '#server/models/actionModel/create/create';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { User } from '#root/types/resources/User.d';
 
 import { ActionInput } from './ActionInput.d';
 import fetchAction from './write.fetchAction';
 
-export default async (user: SerializedUser, data: ActionInput): Promise<Action> => {
+export default async (user: User, data: ActionInput): Promise<Action> => {
     const transaction = await sequelize.transaction();
     let actionId;
     try {

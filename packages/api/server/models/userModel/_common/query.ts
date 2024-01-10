@@ -4,18 +4,14 @@ import charteEngagementModel from '#server/models/charteEngagementModel';
 import permissionModel from '#server/models/permissionModel';
 import permissionUtils from '#server/utils/permission';
 import { Where } from '#server/models/_common/types/Where';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { PermissionHash } from '#server/models/permissionModel/find';
 import serializeUser from './serializeUser';
+import { User } from '#root/types/resources/User.d';
+import { UserQueryFilters, RawUserAccess, RawUser } from './query.d';
 
 const { where: fWhere } = permissionUtils;
 
-type UserQueryFilters = {
-    auth?: boolean,
-    extended?: boolean,
-    app?: boolean
-};
-
-export default async (where: Where | String = [], filters: UserQueryFilters = {}, user: string = null, feature: string = undefined, transaction: Transaction = undefined): Promise<SerializedUser[]> => {
+export default async (where: Where | string = [], filters: UserQueryFilters = {}, user: string = null, feature: string = undefined, transaction: Transaction = undefined): Promise<User[]> => {
     const replacements = {};
 
     const strWhere = typeof where === 'string' ? where : '';
@@ -59,12 +55,12 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
     const whereClause = finalArrWhere.join(' AND ');
 
     const charte = await charteEngagementModel.getLatest();
-    let latestCharte = null;
+    let latestCharte: number = null;
     if (charte !== null) {
         latestCharte = charte.version;
     }
 
-    const users: any = await sequelize.query(
+    const users: RawUser[] = await sequelize.query(
         `WITH user_options AS (
             SELECT fk_user, ARRAY_AGG(fk_option) AS options FROM user_permission_options GROUP BY fk_user
         ),
@@ -73,6 +69,14 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
         ),
         question_subscriptions AS (
             SELECT fk_user, ARRAY_AGG(fk_question::text || ',' || active::text) AS subscriptions FROM user_question_subscriptions GROUP BY fk_user
+        ),
+        user_expertise_topics AS (
+            SELECT
+                user_to_expertise_topics.fk_user,
+                ARRAY_AGG(expertise_topics.uid || ',' || expertise_topics.label || ',' || user_to_expertise_topics.type) AS topics
+            FROM user_to_expertise_topics
+            LEFT JOIN expertise_topics ON user_to_expertise_topics.fk_expertise_topic = expertise_topics.uid
+            GROUP BY user_to_expertise_topics.fk_user
         )
 
         SELECT
@@ -90,6 +94,9 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
             users.last_version,
             users.last_changelog,
             users.charte_engagement_signee,
+            users.expertise_topics_chosen,
+            users.expertise_comment,
+            COALESCE(user_expertise_topics.topics, array[]::text[]) AS topics,
             COALESCE(email_unsubscriptions.unsubscriptions, array[]::enum_user_email_subscriptions_email_subscription[]) AS email_unsubscriptions,
             COALESCE(question_subscriptions.subscriptions, array[]::text[]) AS question_subscriptions,
             users.last_access,
@@ -150,6 +157,8 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
             email_unsubscriptions ON email_unsubscriptions.fk_user = users.user_id
         LEFT JOIN
             question_subscriptions ON question_subscriptions.fk_user = users.user_id
+        LEFT JOIN
+            user_expertise_topics ON user_expertise_topics.fk_user = users.user_id
         ${whereClause.length > 0 ? `WHERE ${whereClause}` : ''}
         ORDER BY
             CASE
@@ -176,7 +185,7 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
         return [];
     }
 
-    const userAccesses = await sequelize.query(
+    const userAccesses: RawUserAccess[] = await sequelize.query(
         `SELECT
             user_accesses.fk_user,
             user_accesses.user_access_id,
@@ -205,7 +214,7 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
             transaction,
         },
     );
-    const hashedUserAccesses = userAccesses.reduce((argAcc, row: any) => {
+    const hashedUserAccesses = userAccesses.reduce((argAcc, row) => {
         const acc = { ...argAcc };
         if (acc[row.fk_user] === undefined) {
             acc[row.fk_user] = [];
@@ -213,9 +222,11 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
 
         acc[row.fk_user].push(row);
         return acc;
-    }, {});
+    }, {} as {
+        [key: number]: RawUserAccess[]
+    });
 
-    let permissionMap = null;
+    let permissionMap: PermissionHash = null;
     if (filters.extended === true) {
         permissionMap = await permissionModel.find(users.map(({ id }) => id));
     }

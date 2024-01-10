@@ -211,6 +211,7 @@ export default async (shantytownId?: number, location?: Location): Promise<Seria
             email: row.email,
             phone: row.phone,
             position: row.position,
+            expertise_topics: [],
         });
 
         return acc;

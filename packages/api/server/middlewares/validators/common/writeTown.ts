@@ -8,6 +8,7 @@ import fieldTypeModel from '#server/models/fieldTypeModel';
 import geoModel from '#server/models/geoModel';
 import ownerTypeModel from '#server/models/ownerTypeModel';
 import socialOriginModel from '#server/models/socialOriginModel';
+import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
 
 const { isLatLong, trim } = validator;
 const { can } = permissionUtils;
@@ -612,7 +613,7 @@ export default mode => ([
         })
         .isArray().bail().withMessage('Le champ "Origines" est invalide')
         .custom(async (value, { req }) => {
-            let socialOrigins = [];
+            let socialOrigins: SocialOrigin[] = [];
             if (value.length > 0) {
                 try {
                     socialOrigins = await socialOriginModel.find(value);

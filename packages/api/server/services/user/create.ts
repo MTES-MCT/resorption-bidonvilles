@@ -4,12 +4,12 @@ import organizationModel from '#server/models/organizationModel';
 import organizationTypeModel from '#server/models/organizationTypeModel';
 import authUtils from '#server/utils/auth';
 import mattermostUtils from '#server/utils/mattermost';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import ServiceError from '#server/errors/ServiceError';
+import { User } from '#root/types/resources/User.d';
 
 const { generateSalt } = authUtils;
 
-export default async (data, createdBy: number = null): Promise<SerializedUser> => {
+export default async (data, createdBy: number = null): Promise<User> => {
     try {
         const userId = await sequelize.transaction(async (t) => {
         // create association if necessary

@@ -1,7 +1,7 @@
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { User } from '#root/types/resources/User.d';
 import getPermission from './getPermission';
 
-export default (user: SerializedUser) => ({
+export default (user: User) => ({
     do(feature: string, entity: string) {
         return {
             on(location): boolean {

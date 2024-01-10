@@ -3,7 +3,7 @@ import { QueryTypes } from 'sequelize';
 import serializeQuestion from './serializeQuestion';
 
 import QuestionRow from './QuestionRow';
-import Question from './Question';
+import { Question } from '#root/types/resources/Question.d';
 
 export default async (): Promise<Question[]> => {
     const rows:QuestionRow[] = await sequelize.query(

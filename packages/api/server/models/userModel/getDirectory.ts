@@ -25,11 +25,18 @@ type OrganizationRow = {
     user_email: string,
     user_phone: string | null,
     user_position: string,
+    user_topics: (`${string};${string};${string}`)[],
     user_role_regular: string,
     type_id: number,
     type_category: string,
     type_name: string,
     type_abbreviation: string | null,
+};
+
+type SerializedUserExpertiseTopics = {
+    id: string,
+    type: string,
+    label: string,
 };
 
 type SerializedOrganizationUser = {
@@ -41,6 +48,7 @@ type SerializedOrganizationUser = {
     email: string,
     phone: string | null,
     position: string,
+    expertise_topics: SerializedUserExpertiseTopics[],
 };
 
 export type SerializedOrganization = {
@@ -81,6 +89,15 @@ export type SerializedOrganization = {
 export default async (): Promise<SerializedOrganization[]> => {
     const users: OrganizationRow[] = await sequelize.query(
         `
+        WITH users_with_expertise_topics AS (
+            SELECT
+                utet.fk_user,
+                array_agg(utet.fk_expertise_topic || ';' || utet."type" || ';' || et.label) AS topics
+            FROM user_to_expertise_topics utet
+            LEFT JOIN expertise_topics et ON et.uid = utet.fk_expertise_topic
+            GROUP BY utet.fk_user
+        )
+
         SELECT
             organizations.organization_id,
             organizations.name,
@@ -104,6 +121,7 @@ export default async (): Promise<SerializedOrganization[]> => {
             users.email AS "user_email",
             users.phone AS "user_phone",
             users.position AS "user_position",
+            COALESCE(user_expertise_topics.topics, array[]::text[]) AS "user_topics",
             user_roles_regular.name AS user_role_regular,
             organizations.fk_type AS "type_id",
             organization_types.fk_category AS "type_category",
@@ -114,6 +132,7 @@ export default async (): Promise<SerializedOrganization[]> => {
         LEFT JOIN organization_types ON organizations.fk_type = organization_types.organization_type_id
         LEFT JOIN roles_regular AS user_roles_regular ON users.fk_role_regular = user_roles_regular.role_id
         LEFT JOIN roles_admin AS user_roles_admin ON users.fk_role = user_roles_admin.role_id
+        LEFT JOIN users_with_expertise_topics AS user_expertise_topics ON users.user_id = user_expertise_topics.fk_user
         WHERE
             organizations.active = TRUE
             AND
@@ -178,9 +197,12 @@ export default async (): Promise<SerializedOrganization[]> => {
                 email: user.user_email,
                 phone: user.user_phone,
                 position: user.user_position,
+                expertise_topics: user.user_topics.map((topic): SerializedUserExpertiseTopics => {
+                    const [id, type, label] = topic.split(';');
+                    return { id, type, label };
+                }),
             });
         }
     });
-
     return organizations;
 };

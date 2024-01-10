@@ -1,10 +1,10 @@
 import ServiceError from '#server/errors/ServiceError';
 import accessRequestService from '#server/services/accessRequest/accessRequestService';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { User } from '#root/types/resources/User.d';
 import { ContactBody } from '#root/types/inputs/ContactBody.d';
 import create from './create';
 
-export default async (data: ContactBody): Promise<SerializedUser> => {
+export default async (data: ContactBody): Promise<User> => {
     let user;
     try {
         user = await create({

@@ -1,11 +1,11 @@
 import { sequelize } from '#db/sequelize';
 import userModel from '#server/models/userModel/index';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
 import mattermost from '#server/utils/mattermost';
+import { User } from '#root/types/resources/User.d';
 
-export default async (id: number, selfDeactivation: boolean, reason: string = null): Promise<SerializedUser> => {
+export default async (id: number, selfDeactivation: boolean, reason: string = null): Promise<User> => {
     const transaction = await sequelize.transaction();
 
     try {
@@ -15,7 +15,7 @@ export default async (id: number, selfDeactivation: boolean, reason: string = nu
         throw new ServiceError('deactivation_failure', error);
     }
 
-    let user: SerializedUser;
+    let user: User;
     try {
         user = await userModel.findOne(id, {}, null, 'deactivate', transaction);
     } catch (error) {

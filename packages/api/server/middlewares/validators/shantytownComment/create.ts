@@ -124,7 +124,6 @@ export default [
                 try {
                     fullTags = await commentTagModel.find({
                         ids: value,
-                        types: ['regular'],
                     });
                 } catch (error) {
                     throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Tags"');

@@ -1,13 +1,13 @@
 import { LocationType } from '#server/models/geoModel/LocationType.d';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { User } from '#root/types/resources/User.d';
 import query from './_common/query';
 
 export type SummarySubscribers = {
-    [key in LocationType]: SerializedUser[]
+    [key in LocationType]: User[]
 };
 
 export default async (): Promise<SummarySubscribers> => {
-    const users: SerializedUser[] = await query(
+    const users: User[] = await query(
         [
             {
                 fk_status: {
