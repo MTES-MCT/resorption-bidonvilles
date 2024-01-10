@@ -25,24 +25,117 @@
 
             <p class="my-2 text-sm text-G600">
                 {{ organization.users.length }} membre{{ plural ? "s" : "" }}
-                <template v-if="showWording"
-                    >inscrit{{ plural ? "s" : "" }} sur la plateforme</template
-                >
+                <template v-if="showWording">
+                    inscrit{{ plural ? "s" : "" }} sur la plateforme
+                    <span
+                        class="text-primary"
+                        v-if="directoryStore.filters.expertiseTopics.length > 0"
+                    >
+                        correspondant aux critères de compétences</span
+                    >
+                </template>
             </p>
-            <ul class="flex-1">
-                <li
-                    v-for="user in organization.users.slice(0, 5)"
-                    :key="user.id"
-                    :class="user.is_admin ? 'text-info' : ''"
+            <ul
+                :class="
+                    directoryStore.filters.expertiseTopics.length > 0
+                        ? 'flex-1 mb-4'
+                        : 'flex-1'
+                "
+            >
+                <template
+                    v-if="directoryStore.filters.expertiseTopics.length > 0"
                 >
-                    <IconeAdministrateur v-if="user.is_admin" />
-                    <Icon v-else icon="user" title="Pictogramme utilisateur" />
-                    {{ user.last_name.toUpperCase() }}
-                    {{ user.first_name }}
-                </li>
-                <li v-if="organization.users.length > 5">
-                    et {{ organization.users.length - 5 }} autres personnes
-                </li>
+                    <li
+                        v-for="user in organization.users"
+                        :key="user.id"
+                        :class="user.is_admin ? 'text-info' : ''"
+                    >
+                        <IconeAdministrateur v-if="user.is_admin" />
+                        <Icon
+                            v-else
+                            icon="user"
+                            title="Pictogramme utilisateur"
+                        />&nbsp;
+                        <span class="font-bold">
+                            {{ user.last_name.toUpperCase() }}
+                            {{ user.first_name }}
+                        </span>
+                        <div class="ml-8 text-G600 flex w-full">
+                            <Icon
+                                icon="arrow-turn-down-right"
+                                class="text-info mr-2"
+                                title=""
+                            />
+
+                            <div
+                                class="flex-1 w-half"
+                                v-if="
+                                    getUserFilteredExpertiseTopics(
+                                        user,
+                                        'expertise'
+                                    ).length > 0
+                                "
+                            >
+                                <span class="text-info"> Expert(e) en </span>
+                                <ul>
+                                    <li
+                                        class="ml-2 text-sm"
+                                        v-for="topic in getUserFilteredExpertiseTopics(
+                                            user,
+                                            'expertise'
+                                        )"
+                                        :key="topic.id"
+                                    >
+                                        - {{ topic.label }}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div
+                                class="flex-1 w-half"
+                                v-if="
+                                    getUserFilteredExpertiseTopics(
+                                        user,
+                                        'interest'
+                                    ).length > 0
+                                "
+                            >
+                                <span class="text-info"> Intéressé(e) par</span>
+                                <ul>
+                                    <li
+                                        class="ml-2 text-sm"
+                                        v-for="topic in getUserFilteredExpertiseTopics(
+                                            user,
+                                            'interest'
+                                        )"
+                                        :key="topic.id"
+                                    >
+                                        - {{ topic.label }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </template>
+
+                <template v-else>
+                    <li
+                        v-for="user in organization.users.slice(0, 5)"
+                        :key="user.id"
+                        :class="user.is_admin ? 'text-info' : ''"
+                    >
+                        <IconeAdministrateur v-if="user.is_admin" />
+                        <Icon
+                            v-else
+                            icon="user"
+                            title="Pictogramme utilisateur"
+                        />
+                        {{ user.last_name.toUpperCase() }}
+                        {{ user.first_name }}
+                    </li>
+                    <li v-if="organization.users.length > 5">
+                        et {{ organization.users.length - 5 }} autres personnes
+                    </li>
+                </template>
             </ul>
             <div class="text-right">
                 <Link :to="`/structure/${organization.id}`">
@@ -62,6 +155,7 @@ import focusClasses from "@common/utils/focus_classes";
 
 import { Icon, Link } from "@resorptionbidonvilles/ui";
 import IconeAdministrateur from "@/components/IconeAdministrateur/IconeAdministrateur.vue";
+import { useDirectoryStore } from "@/stores/directory.store";
 
 const props = defineProps({
     organization: Object,
@@ -74,6 +168,8 @@ const props = defineProps({
 const { organization, showWording } = toRefs(props);
 
 const userStore = useUserStore();
+const directoryStore = useDirectoryStore();
+
 const name = computed(() => {
     const title = organization.value.abbreviation || organization.value.name;
     // Only display territory for associations
@@ -93,4 +189,14 @@ const displayBeingFunded = computed(() => {
 const plural = computed(() => {
     return organization.value.users.length > 1;
 });
+
+function getUserFilteredExpertiseTopics(user, topicLevel) {
+    return user.expertise_topics.filter((topic) => {
+        return (
+            directoryStore.filters.expertiseTopics.includes(topic.id) &&
+            topic.type == topicLevel
+        );
+    });
+}
 </script>
+-

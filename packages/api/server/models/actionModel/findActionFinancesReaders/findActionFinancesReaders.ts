@@ -168,6 +168,7 @@ export default async (actionId?: number, managers?: number[]): Promise<Serialize
             email: row.email,
             phone: row.phone,
             position: row.position,
+            expertise_topics: [],
         });
 
         return acc;

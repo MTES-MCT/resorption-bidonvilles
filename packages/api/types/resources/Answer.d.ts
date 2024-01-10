@@ -1,4 +1,4 @@
-type Answer = {
+export type Answer = {
     id: number,
     description: string,
     createdAt: number | null,
@@ -13,5 +13,3 @@ type Answer = {
     },
     question: number,
 };
-
-export default Answer;

@@ -1,7 +1,8 @@
 import { StatusEnum } from '#server/models/shantytownModel/_common/livingConditions/LivingConditions.d';
+import { DepartementWithCoordinates } from './Departement.d';
+import { RegionWithCoordinates } from './Region.d';
 
 export type Origin = 'french' | 'european' | 'other';
-
 
 export type ShantytownMetrics = {
     latitude: number,
@@ -102,19 +103,7 @@ export type DepartementMetrics = {
         number_of_towns_with_justice_procedure: number,
         number_of_towns_with_police: number,
     },
-    departement: {
-        name: string,
-        code: string,
-        latitude: number,
-        longitude: number,
-        chieftown: { latitude: number, longitude: number }
-    },
-    region: {
-        name: string,
-        code: string,
-        latitude: number,
-        longitude: number,
-        chieftown: { latitude: number, longitude: number }
-    },
+    departement: DepartementWithCoordinates,
+    region: RegionWithCoordinates,
     cities: CityMetrics[]
 };

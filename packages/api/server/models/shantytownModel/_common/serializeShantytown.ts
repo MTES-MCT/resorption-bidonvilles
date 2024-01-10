@@ -8,18 +8,13 @@ import { Diff } from './getDiff';
 import getAddressSimpleOf from './getAddressSimpleOf';
 import getUsenameOf from './getUsenameOf';
 import serializeLivingConditions, { LivingConditions } from './livingConditions/serializeLivingConditions';
+import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
 
 const { can } = permissionUtils;
 
 function fromDateToTimestamp(date) {
     return date !== null ? (new Date(`${date}T02:00:00`).getTime() / 1000) : null;
 }
-
-type SocialOrigin = {
-    id: number,
-    uid: string,
-    label: string
-};
 
 type UserShantytown = {
     id: number,

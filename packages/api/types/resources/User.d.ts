@@ -1,13 +1,15 @@
 import { PermissionOption } from '#server/models/permissionModel/types/PermissionOption.d';
 import { Permissions } from '#server/models/permissionModel/types/Permissions.d';
+import { LocationType } from '#server/models/geoModel/LocationType.d';
+import { ExpertiseTopic } from '#root/types/resources/ExpertiseTopic.d';
 
-type UserStatus = 'new' | 'active' | 'inactive';
-type UserLocationType = 'nation' | 'region' | 'departement' | 'epci' | 'city';
 export type UserQuestionSubscriptions = {
     [key: number]: boolean
 };
 
-export type SerializedUserAccess = {
+export type UserStatus = 'new' | 'active' | 'inactive';
+
+export type UserAccess = {
     id: number,
     sent_by: {
         id: number,
@@ -25,7 +27,12 @@ export type SerializedUserAccess = {
     created_at: number,
 };
 
-export type SerializedUser = {
+export type UserExpertiseTopicType = 'expertise' | 'interest';
+export type UserExpertiseTopic = ExpertiseTopic & {
+    type: UserExpertiseTopicType;
+};
+
+export type User = {
     id: number,
     first_name: string,
     last_name: string,
@@ -34,7 +41,7 @@ export type SerializedUser = {
     position: string | null,
     status: UserStatus,
     created_at: number,
-    user_accesses: SerializedUserAccess[],
+    user_accesses: UserAccess[],
     organization: {
         id: number,
         name: string,
@@ -53,7 +60,7 @@ export type SerializedUser = {
             name_plural: string,
         },
         location: {
-            type: UserLocationType,
+            type: LocationType,
             latitude: number,
             longitude: number,
             region: {
@@ -84,6 +91,9 @@ export type SerializedUser = {
     role: string,
     role_id: string,
     is_superuser: boolean,
+    expertise_topics_chosen: boolean,
+    expertise_comment: string,
+    expertise_topics: UserExpertiseTopic[],
 
     // filter: auth
     password?: string,

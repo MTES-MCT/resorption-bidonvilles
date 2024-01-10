@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/node';
 import config from '#server/config';
 import userModelUpdate from '#server/models/userModel/update';
 import userModelFindOne from '#server/models/userModel/findOne';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { User } from '#root/types/resources/User.d';
 
 const { auth: authConfig } = config;
 
@@ -12,7 +12,7 @@ type AuthenticateErrorDetails = {
     user_message: string,
 };
 
-export interface AuthUser extends SerializedUser {
+export interface AuthUser extends User {
     isAllowedTo: Function
 }
 
@@ -130,7 +130,7 @@ function myCheckPermissions(mode, permissions, req, res, next, respond) {
 }
 
 export function isAdmin(req, res, next) {
-    const { user }: { user: SerializedUser } = req;
+    const { user }: { user: User } = req;
     if (user.is_admin !== true) {
         return res.status(400).send({
             user_message: 'Vous n\'avez pas les permissions pour accéder à cette route',

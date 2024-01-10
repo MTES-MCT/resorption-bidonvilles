@@ -1,7 +1,8 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import { QuestionTag } from '#root/types/resources/Question.d';
 
-export default () => sequelize.query(
+export default (): Promise<QuestionTag[]> => sequelize.query(
     `SELECT
         uid,
         name

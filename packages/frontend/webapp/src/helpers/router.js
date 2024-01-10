@@ -203,7 +203,14 @@ const router = createRouter({
                 displayOrderOnSiteMap: 12,
             },
         },
-
+        {
+            path: "/choix-des-sujets",
+            component: () => import("@/views/ChoixDesSujetsExpertise.vue"),
+            meta: {
+                title: "Choisir ses domaines de compétence et sujets d'intérêt",
+                authRequirement: "signedIn",
+            },
+        },
         {
             path: "/communaute",
             component: () => import("@/views/CommunauteView.vue"),
@@ -311,7 +318,7 @@ const router = createRouter({
             redirect: "/mon-compte/informations-personnelles",
         },
         {
-            path: "/mon-compte/:tab(informations-personnelles|identifiants|abonnements|desactiver-compte)",
+            path: "/mon-compte/:tab(informations-personnelles|identifiants|abonnements|desactiver-compte|domaines-competence)",
             component: () => import("@/views/MonCompteView.vue"),
             meta: {
                 title: "Modifier les informations liées à mon compte",
@@ -500,7 +507,7 @@ const router = createRouter({
             },
         },
         {
-            path: "/utilisateur/:id/:tab(informations-personnelles|identifiants|abonnements)",
+            path: "/utilisateur/:id/:tab(informations-personnelles|identifiants|abonnements|domaines-competence)",
             component: () => import("@/views/ProfilUtilisateurView.vue"),
             meta: {
                 title: "Consulter, modifier un compte utilisateur",
@@ -603,6 +610,17 @@ router.beforeEach((to, from) => {
     // charte requirement
     if (charteRequirement === true && !userStore.hasAcceptedCharte) {
         return "/signature-charte-engagement";
+    }
+
+    // expertise topics selection requirement
+    if (
+        userStore.user &&
+        userStore.user.expertise_topics_chosen !== true &&
+        !["/choix-des-sujets", "/signature-charte-engagement"].includes(to.path)
+    ) {
+        const navigationStore = useNavigationStore();
+        navigationStore.entrypoint = to.fullPath;
+        return "/choix-des-sujets";
     }
 
     // changelog requirement

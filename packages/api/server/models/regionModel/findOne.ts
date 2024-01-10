@@ -1,17 +1,9 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import { RawRegion } from './findOne.d';
 
-
-export type RegionRawData = {
-    code: string,
-    name: string,
-    latitude: number,
-    longitude: number,
-    chief_town_latitude : number,
-    chief_town_longitude: number
-};
-export default async (code):Promise<RegionRawData> => {
-    const region: RegionRawData[] = await sequelize.query(
+export default async (code: string): Promise<RawRegion> => {
+    const region: RawRegion[] = await sequelize.query(
         `SELECT
             regions.code AS code,
             regions.name AS name,

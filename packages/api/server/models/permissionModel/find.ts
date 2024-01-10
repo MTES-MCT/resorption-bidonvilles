@@ -18,7 +18,7 @@ type PermissionRow = {
     actions: number[] | null
 };
 
-type PermissionHash = {
+export type PermissionHash = {
     [key: number]: Permissions
 };
 

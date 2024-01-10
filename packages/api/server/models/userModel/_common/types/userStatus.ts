@@ -1,1 +1,0 @@
-export type userStatus = 'new' | 'active' | 'inactive';

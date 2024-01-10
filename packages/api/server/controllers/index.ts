@@ -87,6 +87,7 @@ import userRequestNewPassword from './userController/requestNewPassword';
 import userSendActivationLink from './userController/sendActivationLink';
 import userSetAdminComments from './userController/setAdminComments';
 import userSetDefaultExport from './userController/setDefaultExport';
+import userSetExpertiseTopics from './userController/setExpertiseTopics';
 import userSetLastChangelog from './userController/setLastChangelog';
 import userSetNewPassword from './userController/setNewPassword';
 import userSetRoleRegular from './userController/setRoleRegular';
@@ -210,6 +211,7 @@ export default () => ({
         sendActivationLink: userSendActivationLink,
         setAdminComments: userSetAdminComments,
         setDefaultExport: userSetDefaultExport,
+        setExpertiseTopics: userSetExpertiseTopics,
         setLastChangelog: userSetLastChangelog,
         setNewPassword: userSetNewPassword,
         setRoleRegular: userSetRoleRegular,

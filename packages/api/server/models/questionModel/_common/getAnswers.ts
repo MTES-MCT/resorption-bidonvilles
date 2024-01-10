@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import answerModel from '#server/models/answerModel';
 import AnswerRow from '#server/models/answerModel/AnswerRow.d';
-import Answer from '#server/models/answerModel/Answer.d';
+import { Answer } from '#root/types/resources/Answer.d';
 
 type AnswerHash = {
     [key: number]: Answer[],

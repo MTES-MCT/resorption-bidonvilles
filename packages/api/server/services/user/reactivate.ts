@@ -1,10 +1,10 @@
 import { sequelize } from '#db/sequelize';
 import userModel from '#server/models/userModel/index';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
+import { User } from '#root/types/resources/User.d';
 
-export default async (id: number): Promise<SerializedUser> => {
+export default async (id: number): Promise<User> => {
     const transaction = await sequelize.transaction();
 
     try {
@@ -14,7 +14,7 @@ export default async (id: number): Promise<SerializedUser> => {
         throw new ServiceError('reactivation_failure', error);
     }
 
-    let user: SerializedUser;
+    let user: User;
     try {
         user = await userModel.findOne(id, {}, null, 'read', transaction);
     } catch (error) {

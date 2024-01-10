@@ -28,6 +28,7 @@ import isTracked from './isTracked';
 import listExport from './listExport';
 import reactivate from './reactivate';
 import resetInactivityAlertSentAt from './resetInactivityAlertSentAt';
+import setExpertiseTopics from './setExpertiseTopics';
 import setInactivityAlertSentAt from './setInactivityAlertSentAt';
 import setPermissionOptions from './setPermissionOptions';
 import update from './update';
@@ -64,6 +65,7 @@ export default {
     listExport,
     reactivate,
     resetInactivityAlertSentAt,
+    setExpertiseTopics,
     setInactivityAlertSentAt,
     setPermissionOptions,
     update,

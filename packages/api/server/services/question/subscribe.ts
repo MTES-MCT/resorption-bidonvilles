@@ -1,8 +1,8 @@
 import ServiceError from '#server/errors/ServiceError';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
 import userQuestionSubscriptionModel from '#server/models/userQuestionSubscriptionModel';
+import { User } from '#root/types/resources/User.d';
 
-export default async (user: SerializedUser, questionId: number): Promise<void> => {
+export default async (user: User, questionId: number): Promise<void> => {
     if (user.question_subscriptions[questionId] === true) {
         return;
     }

@@ -1,8 +1,8 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-export default async () => {
-    const changelogs: any = await sequelize.query(
+export default async (): Promise<string> => {
+    const changelogs: { app_version: string }[] = await sequelize.query(
         `SELECT
             changelogs.app_version
         FROM changelogs

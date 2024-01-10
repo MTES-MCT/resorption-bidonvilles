@@ -1,17 +1,9 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import { RawDepartement } from './findOne.d';
 
-export type DepartementRawData = {
-    code: string,
-    name: string,
-    latitude: number,
-    longitude: number,
-    region: string,
-    chief_town_latitude : number,
-    chief_town_longitude: number
-};
-export default async (code):Promise<DepartementRawData> => {
-    const departement: DepartementRawData[] = await sequelize.query(
+export default async (code: string): Promise<RawDepartement> => {
+    const departement: RawDepartement[] = await sequelize.query(
         `SELECT
             departements.code AS code,
             departements.name AS name,

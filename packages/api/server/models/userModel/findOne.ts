@@ -1,7 +1,7 @@
 import query from './_common/query';
-import { SerializedUser } from './_common/types/SerializedUser';
+import { User } from '#root/types/resources/User.d';
 
-export default async (userId, filters = {}, user = null, feature = 'read', transaction = undefined): Promise<SerializedUser> => {
+export default async (userId: number, filters = {}, user = null, feature = 'read', transaction = undefined): Promise<User> => {
     const users = await query(
         [{ user_id: { value: [userId] } }],
         filters,

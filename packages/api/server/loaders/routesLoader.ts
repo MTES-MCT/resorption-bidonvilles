@@ -5,7 +5,7 @@ import express from 'express';
 import middlewares from '#server/middlewares';
 import controllersFn from '#server/controllers';
 import validators from '#server/middlewares/validators';
-import { SerializedUser } from '#server/models/userModel/_common/types/SerializedUser.d';
+import { User } from '#root/types/resources/User.d';
 
 const controllers = controllersFn();
 
@@ -236,6 +236,21 @@ export default (app) => {
         controllers.user.updatePermissionOptions,
     );
     app.put(
+        '/users/:id/expertise_topics',
+        middlewares.auth.authenticate,
+        (req:express.Request & { user: User }, res:express.Response, next: Function) => {
+            if (req.user.id === parseInt(req.params.id, 10)) {
+                return next();
+            }
+
+            return middlewares.auth.checkPermissions(['user.edit'], req, res, next);
+        },
+        middlewares.appVersion.sync,
+        validators.user.setExpertiseTopics,
+        middlewares.validation,
+        controllers.user.setExpertiseTopics,
+    );
+    app.put(
         '/users/:id/admin_comments',
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
@@ -252,7 +267,7 @@ export default (app) => {
     app.delete(
         '/users/:id',
         middlewares.auth.authenticate,
-        (req:express.Request & { user: SerializedUser }, res:express.Response, next: Function) => {
+        (req:express.Request & { user: User }, res:express.Response, next: Function) => {
             if (req.user.id === parseInt(req.params.id, 10)) {
                 return next();
             }

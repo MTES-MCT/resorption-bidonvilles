@@ -1,4 +1,4 @@
-import Answer from '#server/models/answerModel/Answer.d';
+import { Answer } from '#root/types/resources/Answer.d';
 
 export function serialized(override: Partial<Answer> = {}): Answer {
     const defaultObj:Answer = {

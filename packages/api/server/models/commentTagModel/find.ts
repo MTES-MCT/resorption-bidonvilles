@@ -1,18 +1,16 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import { ShantytownCommentTag } from '#root/types/resources/ShantytownComment.d';
 
-export default (filters: any = {}) => {
-    const where = [];
-    const replacements: any = {};
+type CommentTagFilters = { ids?: number[] };
+
+export default (filters: CommentTagFilters = {}): Promise<ShantytownCommentTag[]> => {
+    const where: string[] = [];
+    const replacements: { [key: string]: any } = {};
 
     if (filters.ids) {
         where.push('comment_tags.uid IN (:ids)');
         replacements.ids = filters.ids;
-    }
-
-    if (filters.types) {
-        where.push('fk_comment_tag_type IN (:types)');
-        replacements.types = filters.types;
     }
 
     return sequelize.query(
