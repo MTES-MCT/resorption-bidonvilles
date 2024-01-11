@@ -36,7 +36,7 @@ module.exports = {
                 { transaction },
             );
             await queryInterface.sequelize.query(
-                'DROP VIEW attachment_locations',
+                'DROP VIEW IF EXISTS attachment_locations',
                 { transaction },
             );
             await queryInterface.sequelize.query(
