@@ -852,8 +852,4 @@ export default (app) => {
         middlewares.auth.isSuperAdmin,
         controllers.permission.list,
     );
-
-    app.use((err, req, res, next) => {
-        console.log(err);
-    });
 };
