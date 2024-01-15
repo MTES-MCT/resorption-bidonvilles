@@ -1,6 +1,10 @@
 <template>
     <Layout hero v-if="greeter">
-        <FormInvitation :greeter="greeter" :from="from" />
+        <FormInvitation
+            :greeter="greeter"
+            :from="from"
+            :showSkip="!userStore.user"
+        />
     </Layout>
 
     <LayoutError hero v-else>
@@ -25,12 +29,22 @@
 <script setup>
 import { computed } from "vue";
 import router from "@/helpers/router.js";
+import { useUserStore } from "@/stores/user.store";
 
 import Layout from "@/components/Layout/Layout.vue";
 import FormInvitation from "@/components/FormInvitation/FormInvitation.vue";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
 
+const userStore = useUserStore();
 const greeter = computed(() => {
+    if (userStore.user) {
+        return {
+            email: userStore.user.email,
+            first_name: userStore.user.first_name,
+            last_name: userStore.user.last_name,
+        };
+    }
+
     const { email, first_name, last_name } = router.currentRoute.value.query;
     if (
         email !== undefined &&
