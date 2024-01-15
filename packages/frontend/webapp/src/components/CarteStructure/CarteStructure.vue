@@ -191,7 +191,7 @@ const plural = computed(() => {
 });
 
 function getUserFilteredExpertiseTopics(user, topicLevel) {
-    return user.expertise_topics.filter((topic) => {
+    return (user.expertise_topics || []).filter((topic) => {
         return (
             directoryStore.filters.expertiseTopics.includes(topic.id) &&
             topic.type == topicLevel

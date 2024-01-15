@@ -56,7 +56,7 @@
                     type="button"
                     variant="primaryOutline"
                     class="ml-2"
-                    v-if="guests.length === 0"
+                    v-if="guests.length === 0 && showSkip"
                     @click="backHome"
                     >Ignorer cette étape</Button
                 >
@@ -113,9 +113,14 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    showSkip: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 
-const { greeter, from } = toRefs(props);
+const { greeter, from, showSkip } = toRefs(props);
 const guests = ref([]);
 const form = ref(null);
 const isLoading = ref(false);
