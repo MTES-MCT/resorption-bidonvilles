@@ -49,7 +49,7 @@ const userPermissions = computed(() => {
 });
 
 const shantytownCreateAllowed =
-    userPermissions.value["shantytown"]["create"].allowed;
+    userPermissions.value["shantytown"]?.["create"]?.allowed;
 
 const liensAutorises = computed(() => {
     return filteredAndSortedRoutes
