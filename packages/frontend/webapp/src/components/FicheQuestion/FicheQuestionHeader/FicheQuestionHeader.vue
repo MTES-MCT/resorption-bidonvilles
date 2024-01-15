@@ -29,10 +29,14 @@
                         class="mb-4"
                     />
                 </div>
-                <FicheQuestionSubscriptionButton
-                    :question="question"
-                    size="sm"
-                />
+                <div class="flex gap-2">
+                    <FicheQuestionDeleteButton :question="question" size="sm" />
+
+                    <FicheQuestionSubscriptionButton
+                        :question="question"
+                        size="sm"
+                    />
+                </div>
             </div>
         </template>
     </ViewHeader>
@@ -45,6 +49,7 @@ import { Icon, LinkOrganization } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import FicheQuestionTags from "../FicheQuestionTags/FicheQuestionTags.vue";
 import FicheQuestionSubscriptionButton from "../FicheQuestionSubscriptionButton/FicheQuestionSubscriptionButton.vue";
+import FicheQuestionDeleteButton from "../FicheQuestionDeleteButton/FicheQuestionDeleteButton.vue";
 
 const props = defineProps({
     question: Object,
