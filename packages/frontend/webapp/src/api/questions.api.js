@@ -8,6 +8,10 @@ export function createQuestion(question) {
     return axios.post(`/questions`, question);
 }
 
+export function deleteQuestion(questionId) {
+    return axios.delete(`/questions/${encodeURI(questionId)}`);
+}
+
 export function fetch(id) {
     return axios.get(`questions/${id}`);
 }
