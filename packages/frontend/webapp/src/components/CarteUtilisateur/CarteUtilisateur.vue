@@ -34,7 +34,7 @@
             }}</CarteUtilisateurDetailsIcon>
         </div>
         <div
-            v-if="user.expertise_topics.length > 0"
+            v-if="user.expertise_topics?.length > 0"
             class="col-span-2 grid grid-cols-2 gap-4"
         >
             <div v-if="getTopicsByLevel('expertise').length > 0" class="flex">
@@ -105,7 +105,7 @@ function trackEmail(event) {
 }
 
 function getTopicsByLevel(level) {
-    return user.value.expertise_topics.filter((topic) => {
+    return (user.value.expertise_topics || []).filter((topic) => {
         return (
             directoryStore.filters.expertiseTopics.includes(topic.id) &&
             topic.type == level
