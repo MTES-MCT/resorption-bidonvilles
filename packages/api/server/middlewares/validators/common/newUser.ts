@@ -4,7 +4,6 @@ import * as expressValidator from 'express-validator';
 import organizationCategoryModel from '#server/models/organizationCategoryModel';
 import organizationTypeModel from '#server/models/organizationTypeModel';
 import organizationModel from '#server/models/organizationModel';
-import departementModel from '#server/models/departementModel';
 import userModel from '#server/models/userModel';
 import { ValidationChain, CustomValidator } from 'express-validator';
 
