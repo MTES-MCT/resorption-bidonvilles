@@ -133,6 +133,10 @@ export const useUserStore = defineStore("user", {
                 return true;
             }
 
+            if (!entity) {
+                return false;
+            }
+
             return (
                 (entity.region &&
                     permission.allowed_on.regions.some(
