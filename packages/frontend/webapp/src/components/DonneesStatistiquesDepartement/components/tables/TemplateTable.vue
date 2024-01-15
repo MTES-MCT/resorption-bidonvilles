@@ -1,28 +1,31 @@
 <template>
-    <table class="w-full data-table table-fixed leading-5">
-        <thead>
-            <HeaderRow :columns="columns" class="sticky top-0" />
-        </thead>
+    <div class="h-screen overflow-y-auto">
+        <table class="w-full data-table table-fixed leading-5 max-h-full">
+            <thead>
+                <HeaderRow :columns="columns" class="sticky top-0" />
+            </thead>
 
-        <tbody>
-            <CitySubTable
-                v-for="data in metrics.cities"
-                :key="data.city.code"
-                :data="data"
-                :columns="columns"
-                :showTowns="
-                    departementMetricsStore.collapsedCities[data.city.code] !==
-                    false
-                "
-                @highlightTown="onHighlight"
-                @unhighlightTown="onUnhighlight"
-                @townClick="onTownClick"
-                @townZoom="onTownZoom"
-            />
+            <tbody>
+                <CitySubTable
+                    v-for="data in metrics.cities"
+                    :key="data.city.code"
+                    :data="data"
+                    :columns="columns"
+                    :showTowns="
+                        departementMetricsStore.collapsedCities[
+                            data.city.code
+                        ] !== false
+                    "
+                    @highlightTown="onHighlight"
+                    @unhighlightTown="onUnhighlight"
+                    @townClick="onTownClick"
+                    @townZoom="onTownZoom"
+                />
 
-            <TotalRow :columns="columns" :metrics="metrics" />
-        </tbody>
-    </table>
+                <TotalRow :columns="columns" :metrics="metrics" />
+            </tbody>
+        </table>
+    </div>
 </template>
 
 <style lang="scss">
