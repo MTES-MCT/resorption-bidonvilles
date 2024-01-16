@@ -28,7 +28,7 @@ export default function generateDataset(label, color, data, maxGlobal) {
             return setBackgroundColor(
                 context,
                 color,
-                Math.max(...data) / maxGlobal
+                maxGlobal > 0 ? Math.max(...data) / maxGlobal : 0
             );
         },
         borderColor: color,
