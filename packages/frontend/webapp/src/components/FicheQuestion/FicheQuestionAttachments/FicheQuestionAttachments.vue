@@ -19,21 +19,6 @@ const { entityId, attachments } = toRefs(props);
 const questionsStore = useQuestionsStore();
 
 async function handleDeleteAttachment(file) {
-    // emit("deleteAttachment", file, index);
-    console.log(
-        "handleDeleteAttachment" +
-            "\n entity_type: " +
-            "question" +
-            "\n entityId: " +
-            entityId.value +
-            "\n attachmentId: " +
-            file.id +
-            "\n" +
-            " from FicheQuestionAttachments.vue"
-    );
-    console.log(
-        "Appel de questionStore.deleteAttachment from FicheQuestionAttachments.vue"
-    );
     await questionsStore.deleteQuestionAttachment(entityId.value, file.id);
 }
 </script>
