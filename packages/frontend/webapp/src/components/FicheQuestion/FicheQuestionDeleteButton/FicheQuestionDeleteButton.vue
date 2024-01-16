@@ -7,12 +7,13 @@
         variant="primary"
         :loading="isLoading"
         @click="submit"
+        class="mb-2 mr-2"
         >Supprimer la question</Button
     >
 </template>
 
 <script setup>
-import { toRefs, ref } from "vue";
+import { toRefs, ref, defineEmits } from "vue";
 import { Button } from "@resorptionbidonvilles/ui";
 import { useUserStore } from "@/stores/user.store";
 import { useQuestionsStore } from "@/stores/questions.store";
@@ -28,8 +29,13 @@ const { question } = toRefs(props);
 const userStore = useUserStore();
 const questionStore = useQuestionsStore();
 const error = ref(null);
-const actionDelete = ref(null);
 const isLoading = ref(null);
+
+const emit = defineEmits(["showModale"]);
+
+async function deleteQuestion() {
+    return questionStore.deleteQuestion(question.value.id);
+}
 
 async function submit() {
     if (isLoading.value === true) {
@@ -40,9 +46,13 @@ async function submit() {
     error.value = null;
 
     try {
-        actionDelete.value = await questionStore.deleteQuestion(
-            question.value.id
-        );
+        if (question.value.answers.length == 0) {
+            console.log("On supprime la question");
+            await deleteQuestion();
+        } else {
+            console.log("On affiche la modale");
+            emit("showModale");
+        }
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
         alert(
