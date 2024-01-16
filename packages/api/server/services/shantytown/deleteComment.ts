@@ -5,6 +5,8 @@ import userModel from '#server/models/userModel';
 import mails from '#server/mails/mails';
 import permissionUtils from '#server/utils/permission';
 import dateUtils from '#server/utils/date';
+import findKeys, { AttachmentKeys } from '#server/models/attachmentModel/findKeys';
+import deleteAttachment from '#server/services/attachment/deleteAttachment';
 import ServiceError from '#server/errors/ServiceError';
 
 const { fromTsToFormat: tsToString } = dateUtils;
@@ -51,6 +53,13 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
     }
 
     try {
+        // Suppression des pièces-jointes
+        const promises = comment.attachments.map(async (attachment) => {
+            const keys: AttachmentKeys = await findKeys(attachment.id);
+            return deleteAttachment(keys);
+        });
+        await Promise.all(promises);
+        // Suppression du commentaire
         await shantytownCommentModel.deleteComment(commentId);
     } catch (error) {
         throw new ServiceError('delete_failed', error);
