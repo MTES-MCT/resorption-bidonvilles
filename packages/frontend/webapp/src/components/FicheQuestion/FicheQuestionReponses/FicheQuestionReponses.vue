@@ -21,6 +21,7 @@
                 />
                 <FicheQuestionListeDesReponses
                     v-if="question.answers.length > 0"
+                    :questionId="question.id"
                     :answers="question.answers"
                 />
                 <p v-else>Cette question n'a pas encore reçu de réponses.</p>
