@@ -5,6 +5,8 @@
             :key="answer.id"
             :id="`reponse${answer.id}`"
             :comment="answer"
+            :entityId="questionId"
+            entityType="answer"
         />
     </section>
 </template>
@@ -15,6 +17,7 @@ import CarteCommentaire from "@/components/CarteCommentaire/CarteCommentaire.vue
 
 const props = defineProps({
     answers: Array,
+    questionId: Number,
 });
-const { answers } = toRefs(props);
+const { answers, questionId } = toRefs(props);
 </script>

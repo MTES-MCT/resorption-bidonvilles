@@ -6,6 +6,8 @@
             v-if="question.attachments.length > 0"
             class="my-3"
             :attachments="question.attachments"
+            entityType="question"
+            :entityId="question.id"
         />
         <FicheQuestionDate :question="question" />
     </ContentWrapper>
