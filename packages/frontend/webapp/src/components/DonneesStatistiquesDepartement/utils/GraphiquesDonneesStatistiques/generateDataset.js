@@ -10,11 +10,14 @@ function setBackgroundColor(context, bgColor, start = 1) {
 
     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
     if (start < 1) {
-        gradientBg.addColorStop(1, "transparent");
-        gradientBg.addColorStop(1 - start - 0.01, "transparent");
+        gradientBg.addColorStop(1, "rgba(255, 255, 255, 0)");
+        gradientBg.addColorStop(1 - start - 0.01, "rgba(255, 255, 255, 0)");
     }
     gradientBg.addColorStop(1 - start, bgColor);
-    gradientBg.addColorStop(Math.min(1, 1 - start + 0.7), "transparent");
+    gradientBg.addColorStop(
+        Math.min(1, 1 - start + 0.7),
+        "rgba(255, 255, 255, 0)"
+    );
     return gradientBg;
 }
 
