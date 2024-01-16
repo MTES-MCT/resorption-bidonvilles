@@ -30,6 +30,6 @@ export default async (keys: AttachmentKeys): Promise<void> => {
 
         await Promise.all(promises);
     } catch (error) {
-        // ignore
+        throw new ServiceError('bucket_delete_failed', error);
     }
 };
