@@ -32,34 +32,37 @@ import { computed } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { LineChart } from "@/helpers/chart";
 import ChartBigFigure from "./ChartBigFigure.vue";
+import chartOptions from "../../utils/GraphiquesDonneesStatistiques/ChartOptions";
+import generateDataset from "../../utils/GraphiquesDonneesStatistiques/generateDataset";
 
 const departementMetricsStore = useDepartementMetricsStore();
 const data = departementMetricsStore.evolution.data.justice.justice;
 
-const chartData = computed(() => ({
-    labels: data.charts.labels,
-    datasets: [
-        {
-            label: "Nombre de CFP",
-            backgroundColor: ["rgba(0, 0, 145, 0.3)"],
-            fill: true,
-            data: data.charts.police,
-        },
-        {
-            label: "Nombre de plaintes",
-            backgroundColor: ["rgba(134, 239, 172, 0.7)"],
-            fill: true,
-            data: data.charts.complaints,
-        },
-    ],
-}));
-const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-        y: {
-            beginAtZero: true,
-        },
-    },
-};
+const chartData = computed(() => {
+    const max = {
+        police: Math.max(...data.charts.police),
+        complaints: Math.max(...data.charts.complaints),
+    };
+    max.global = Math.max(max.police, max.complaints);
+
+    const datasets = [
+        generateDataset(
+            "Nombre de CFP",
+            "rgba(0, 0, 255, 0.5)",
+            data.charts.police,
+            max.global
+        ),
+        generateDataset(
+            "Nombre de plaintes",
+            "rgba(255, 0, 0, 0.5)",
+            data.charts.complaints,
+            max.global
+        ),
+    ];
+
+    return {
+        labels: data.charts.labels,
+        datasets,
+    };
+});
 </script>

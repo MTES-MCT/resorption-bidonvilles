@@ -43,44 +43,44 @@ import { LineChart } from "@/helpers/chart";
 import ChartBigFigure from "./ChartBigFigure.vue";
 import flagEU from "@/assets/img/flags/eu.png";
 import flagExtraCommunautaires from "@/assets/img/flags/extra-communautaires.png";
+import chartOptions from "../../utils/GraphiquesDonneesStatistiques/ChartOptions";
+import generateDataset from "../../utils/GraphiquesDonneesStatistiques/generateDataset";
 
 const departementMetricsStore = useDepartementMetricsStore();
 const data = departementMetricsStore.evolution.data.inhabitants.inhabitants;
 
-const chartData = computed(() => ({
-    labels: data.charts.labels,
-    datasets: [
-        {
-            label: "Nombre d'habitants intra-UE",
-            backgroundColor: ["rgba(240, 127, 135, 1)"],
-            fill: true,
-            data: data.charts.european,
-            stack: "Stack 0",
-        },
-        {
-            label: "Nombre d'habitants extra-UE",
-            backgroundColor: ["rgba(134, 239, 172, 1)"],
-            fill: true,
-            data: data.charts.foreign,
-            stack: "Stack 0",
-        },
-        {
-            label: "Nombre total d'habitants",
-            backgroundColor: ["rgba(127, 127, 200, 0.5)"],
-            fill: true,
-            data: data.charts.total,
-            stack: "Stack 1",
-        },
-    ],
-}));
-const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-        y: {
-            stacked: true,
-            beginAtZero: true,
-        },
-    },
-};
+const chartData = computed(() => {
+    const max = {
+        european: Math.max(...data.charts.european),
+        foreign: Math.max(...data.charts.foreign),
+        total: Math.max(...data.charts.total),
+    };
+    max.global = Math.max(max.european, max.foreign, max.total);
+
+    const datasets = [
+        generateDataset(
+            "Nombre d'habitants intra-UE",
+            "rgba(255, 0, 0, 0.5)",
+            data.charts.european,
+            max.global
+        ),
+        generateDataset(
+            "Nombre d'habitants extra-UE",
+            "rgba(0, 255, 0, 0.5)",
+            data.charts.foreign,
+            max.global
+        ),
+        generateDataset(
+            "Nombre total d'habitants",
+            "rgba(0, 0, 255, 0.5)",
+            data.charts.total,
+            max.global
+        ),
+    ];
+
+    return {
+        labels: data.charts.labels,
+        datasets,
+    };
+});
 </script>

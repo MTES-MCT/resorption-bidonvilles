@@ -45,6 +45,8 @@ import formatStat from "@/utils/formatStat";
 import { computed, toRefs } from "vue";
 import { LineChart } from "@/helpers/chart";
 import ChartBigFigure from "./ChartBigFigure.vue";
+import chartOptions from "../../utils/GraphiquesDonneesStatistiques/ChartOptions";
+import generateDataset from "../../utils/GraphiquesDonneesStatistiques/generateDataset";
 
 const props = defineProps({
     chartLabel: {
@@ -68,36 +70,43 @@ const props = defineProps({
 const { chartLabel, data, livingConditionType, chartType, icon } =
     toRefs(props);
 
-const chartData = computed(() => ({
-    labels: data.value.charts.labels,
-    datasets: [
-        {
-            label: `Nombre total de ${
+const chartData = computed(() => {
+    const max = {
+        total: Math.max(
+            ...data.value.charts[
+                chartType.value === "towns"
+                    ? "towns_total"
+                    : "inhabitants_total"
+            ]
+        ),
+        value: Math.max(...data.value.charts[livingConditionType.value]),
+    };
+    max.global = Math.max(max.total, max.value);
+
+    const datasets = [
+        generateDataset(
+            `Nombre total de ${
                 chartType.value === "towns" ? "sites" : "personnes"
             }`,
-            backgroundColor: ["rgba(0, 0, 145, 0.3)"],
-            fill: true,
-            data: data.value.charts[
+            "rgba(0, 0, 255, 0.5)",
+            data.value.charts[
                 chartType.value === "towns"
                     ? "towns_total"
                     : "inhabitants_total"
             ],
-        },
-        {
-            label: chartLabel.value,
-            backgroundColor: ["#FFB7A5"],
-            fill: true,
-            data: data.value.charts[livingConditionType.value],
-        },
-    ],
-}));
-const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-        y: {
-            beginAtZero: true,
-        },
-    },
-};
+            max.global
+        ),
+        generateDataset(
+            chartLabel.value,
+            "rgba(0, 255, 0, 0.5)",
+            data.value.charts[livingConditionType.value],
+            max.global
+        ),
+    ];
+
+    return {
+        labels: data.value.charts.labels,
+        datasets,
+    };
+});
 </script>

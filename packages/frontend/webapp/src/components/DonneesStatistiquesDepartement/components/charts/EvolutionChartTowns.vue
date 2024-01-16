@@ -48,44 +48,44 @@ import { computed } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { LineChart } from "@/helpers/chart";
 import ChartBigFigure from "./ChartBigFigure.vue";
+import chartOptions from "../../utils/GraphiquesDonneesStatistiques/ChartOptions";
+import generateDataset from "../../utils/GraphiquesDonneesStatistiques/generateDataset";
 
 const departementMetricsStore = useDepartementMetricsStore();
 const data = departementMetricsStore.evolution.data.inhabitants.towns;
 
-const chartData = computed(() => ({
-    labels: data.charts.labels,
-    datasets: [
-        {
-            label: "Sites de moins de 10 habitants",
-            backgroundColor: ["rgba(240, 127, 135, 0.7)"],
-            fill: true,
-            data: data.charts.less_than_10,
-            Stack: "Stack 0",
-        },
-        {
-            label: "Sites de moins de 100 habitants",
-            backgroundColor: ["rgba(134, 239, 172, 0.7)"],
-            fill: true,
-            data: data.charts.between_10_and_99,
-            Stack: "Stack 0",
-        },
-        {
-            label: "Sites de plus de 100 habitants",
-            backgroundColor: ["rgba(127, 127, 200, 0.7)"],
-            fill: true,
-            data: data.charts.more_than_99,
-            Stack: "Stack 0",
-        },
-    ],
-}));
-const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-        y: {
-            stacked: true,
-            beginAtZero: true,
-        },
-    },
-};
+const chartData = computed(() => {
+    const max = {
+        lessThan10: Math.max(...data.charts.less_than_10),
+        between10And99: Math.max(...data.charts.between_10_and_99),
+        moreThan99: Math.max(...data.charts.more_than_99),
+    };
+    max.global = Math.max(max.lessThan10, max.between10And99, max.moreThan99);
+
+    const datasets = [
+        generateDataset(
+            "Sites de moins de 10 habitants",
+            "rgba(255, 0, 0, 0.5)",
+            data.charts.less_than_10,
+            max.global
+        ),
+        generateDataset(
+            "Sites de moins de 100 habitants",
+            "rgba(0, 0, 255, 0.5)",
+            data.charts.between_10_and_99,
+            max.global
+        ),
+        generateDataset(
+            "Sites de plus de 100 habitants",
+            "rgba(0, 255, 0, 0.5)",
+            data.charts.more_than_99,
+            max.global
+        ),
+    ];
+
+    return {
+        labels: data.charts.labels,
+        datasets,
+    };
+});
 </script>
