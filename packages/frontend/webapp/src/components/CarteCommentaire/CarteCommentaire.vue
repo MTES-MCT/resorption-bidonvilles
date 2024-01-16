@@ -87,6 +87,9 @@ import { useConfigStore } from "@/stores/config.store";
 import { useUserStore } from "@/stores/user.store";
 import covidTagsList from "@/utils/covid_tags";
 import formatDate from "@common/utils/formatDate.js";
+import { useTownsStore } from "@/stores/towns.store";
+import { useActionsStore } from "@/stores/actions.store";
+import { useQuestionsStore } from "@/stores/questions.store";
 
 import {
     FilePreviewList,
@@ -101,9 +104,15 @@ const props = defineProps({
     comment: {
         type: Object,
     },
+    entityId: {
+        type: Number,
+    },
     showActionIcons: {
         type: Boolean,
         default: false,
+    },
+    entityType: {
+        type: String,
     },
     disallowAttachmentsRemoval: Boolean,
 });
@@ -111,7 +120,17 @@ const props = defineProps({
 const emit = defineEmits(["moderate", "deleteAttachment"]);
 
 const isHover = ref(false);
-const { comment, disallowAttachmentsRemoval, showActionIcons } = toRefs(props);
+const {
+    comment,
+    entityId,
+    disallowAttachmentsRemoval,
+    showActionIcons,
+    entityType,
+} = toRefs(props);
+
+const townsStore = useTownsStore();
+const actionsStore = useActionsStore();
+const questionsStore = useQuestionsStore();
 
 const covidTags = computed(() => {
     if (!comment.value || !comment.value.covid) {
@@ -137,7 +156,34 @@ function deleteMessage() {
     emit("moderate");
 }
 
-function handleDeleteAttachment(file, index) {
-    emit("deleteAttachment", file, index);
+async function handleDeleteAttachment(file) {
+    // On teste si on est sur une fiche action, une fiche site, une fiche question ou une fiche réponse
+    // et on appelle le store correspondant
+
+    switch (entityType.value) {
+        case "shantytown_comment":
+            await townsStore.deleteAttachment(
+                entityId.value,
+                comment.value.id,
+                file.id
+            );
+            break;
+        case "action_comment":
+            await actionsStore.deleteAttachment(
+                entityId.value,
+                comment.value.id,
+                file.id
+            );
+            break;
+        case "answer":
+            await questionsStore.deleteAnswerAttachment(
+                entityId.value,
+                comment.value.id,
+                file.id
+            );
+            break;
+        default:
+        // Do nothing
+    }
 }
 </script>
