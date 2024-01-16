@@ -61,6 +61,7 @@
                 </h3>
                 <FicheSiteJournalListeDesMessages
                     :comments="comments"
+                    :townId="town.id"
                     v-if="comments.length > 0"
                 />
                 <template v-else

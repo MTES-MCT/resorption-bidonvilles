@@ -2,8 +2,10 @@
     <CarteCommentaire
         :id="`message${comment.id}`"
         :comment="comment"
+        :entityId="townId"
         :showActionIcons="true"
         @moderate="openModerationModal"
+        entityType="shantytown_comment"
     />
     <ModaleModerationCommentaire ref="moderationModal" :comment="comment" />
 </template>
@@ -15,10 +17,11 @@ import ModaleModerationCommentaire from "@/components/ModaleModerationCommentair
 
 const props = defineProps({
     comment: Object,
+    townId: Number,
 });
 const moderationModal = ref(null);
 
-const { comment } = toRefs(props);
+const { comment, townId } = toRefs(props);
 
 function openModerationModal() {
     moderationModal.value.open();
