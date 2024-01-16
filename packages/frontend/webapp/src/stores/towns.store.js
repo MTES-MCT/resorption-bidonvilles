@@ -23,8 +23,10 @@ import {
     setHeatwaveStatus,
     updateActorThemes,
 } from "@/api/towns.api";
+import { deleteAttachment } from "@/api/attachments_api.js";
 import enrichShantytown from "@/utils/enrichShantytown";
 import filterShantytowns from "@/utils/filterShantytowns";
+// import { deleteAttachment } from "@/api/attachments_api.js";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -253,6 +255,35 @@ export const useTownsStore = defineStore("towns", () => {
                         ? `aux ${comments.numberOfWatchers} acteurs concernés`
                         : `aux acteurs concernés`
                 } de votre département`
+            );
+        },
+        async deleteAttachment(shantytownId, commentId, attachmentId) {
+            const notificationStore = useNotificationStore();
+
+            const regularComments = hash.value[shantytownId].comments.regular;
+
+            try {
+                // Suppression de la pj de la bdd et du bucket S3
+                await deleteAttachment(attachmentId);
+            } catch (error) {
+                notificationStore.error(
+                    "Suppression d'une pièce jointe",
+                    "Une erreur est survenue lors de la suppression de la pièce jointe"
+                );
+            }
+
+            // On ne traite que les commentaires réguliers (pas COVID)
+            const comment = regularComments.find(
+                (comment) => comment.id === commentId
+            );
+            comment.attachments = comment.attachments.filter(
+                (attachment) => attachment.id !== attachmentId
+            );
+
+            // trackEvent("Site", "Suppression attchment commentaire", `S${shantytownId}`);
+            notificationStore.success(
+                "Suppression d'une pièce jointe",
+                "La pièce jointe a bien été supprimée"
             );
         },
         async deleteComment(shantytownId, commentId, reason = "") {

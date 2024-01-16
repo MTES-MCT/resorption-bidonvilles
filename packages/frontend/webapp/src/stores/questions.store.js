@@ -8,6 +8,7 @@ import {
     addAnswer,
     createQuestion,
 } from "@/api/questions.api";
+import { deleteAttachment } from "@/api/attachments_api.js";
 import { subscribe, unsubscribe } from "@/api/questions.api";
 import { useConfigStore } from "./config.store";
 import filterQuestions from "@/utils/filterQuestions";
@@ -163,6 +164,57 @@ export const useQuestionsStore = defineStore("questions", () => {
         );
     }
 
+    async function deleteQuestionAttachment(questionId, attachmentId) {
+        const notificationStore = useNotificationStore();
+
+        const question = hash.value[questionId];
+
+        try {
+            // Suppression de la pj de la bdd et du bucket S3
+            await deleteAttachment(attachmentId);
+        } catch (error) {
+            notificationStore.error(
+                "Suppression d'une pièce jointe",
+                "Une erreur est survenue lors de la suppression de la pièce jointe"
+            );
+        }
+
+        question.attachments = question.attachments.filter(
+            (attachment) => attachment.id !== attachmentId
+        );
+
+        // trackEvent("Site", "Suppression attchment question", `S${questionId}`);
+        notificationStore.success(
+            "Suppression d'une pièce jointe",
+            "La pièce jointe a bien été supprimée"
+        );
+    }
+
+    async function deleteAnswerAttachment(questionId, answerId, attachmentId) {
+        const notificationStore = useNotificationStore();
+        const answers = hash.value[questionId].answers;
+
+        try {
+            // Suppression de la pj de la bdd et du bucket S3
+            await deleteAttachment(attachmentId);
+        } catch (error) {
+            notificationStore.error(
+                "Suppression d'une pièce jointe",
+                "Une erreur est survenue lors de la suppression de la pièce jointe"
+            );
+        }
+
+        const answer = answers.find((answer) => answer.id === answerId);
+
+        answer.attachments = answer.attachments.filter(
+            (attachment) => attachment.id !== attachmentId
+        );
+        // trackEvent("Site", "Suppression attchment answer", `S${questionId}`);
+        notificationStore.success(
+            "Suppression d'une pièce jointe",
+            "La pièce jointe a bien été supprimée"
+        );
+    }
     return {
         questions,
         filteredQuestions,
@@ -184,6 +236,8 @@ export const useQuestionsStore = defineStore("questions", () => {
         fetchQuestion,
         create,
         createAnswer,
+        deleteQuestionAttachment,
+        deleteAnswerAttachment,
         subscriptions,
         async subscribe(questionId) {
             if (!subscriptions.value[questionId]) {

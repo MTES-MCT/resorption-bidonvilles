@@ -11,6 +11,7 @@ import {
     fetchOne,
     addComment,
 } from "@/api/actions.api";
+import { deleteAttachment } from "@/api/attachments_api.js";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
 import filterActions from "@/utils/filterActions";
 
@@ -192,6 +193,33 @@ export const useActionsStore = defineStore("actions", () => {
             notificationStore.success(
                 "Publication d'un message",
                 getCommentNotificationMessage(response.numberOfObservers)
+            );
+        },
+        async deleteAttachment(actionId, commentId, attachmentId) {
+            const notificationStore = useNotificationStore();
+            const comments = hash.value[actionId].comments;
+
+            try {
+                // Suppression de la pj de la bdd et du bucket S3
+                await deleteAttachment(attachmentId);
+            } catch (error) {
+                notificationStore.error(
+                    "Suppression d'une pièce jointe",
+                    "Une erreur est survenue lors de la suppression de la pièce jointe"
+                );
+            }
+
+            const comment = comments.find(
+                (comment) => comment.id === commentId
+            );
+            comment.attachments = comment.attachments.filter(
+                (attachment) => attachment.id !== attachmentId
+            );
+
+            // trackEvent("Site", "Suppression attchment commentaire", `S${shantytownId}`);
+            notificationStore.success(
+                "Suppression d'une pièce jointe",
+                "La pièce jointe a bien été supprimée"
             );
         },
     };
