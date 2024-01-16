@@ -69,14 +69,18 @@ describe('services/attachment/deleteAttachment', () => {
         expect(args[0].input.Key, 'La clé du fichier à supprimer est incorrect').to.be.eql('fake-preview-key');
     });
 
-    it('ignore les erreurs S3', async () => {
+    it('lève une exception en cas d\'erreur S3', async () => {
         S3.send.throws(new Error('fake error'));
 
         try {
             await deleteAttachment(fakeKeys());
         } catch (error) {
-            expect.fail('L\'exception n\'aurait pas du être lancée');
+            expect(error).to.be.an.instanceOf(ServiceError);
+            expect(error.code).to.equal('bucket_delete_failed');
+            expect(error.nativeError).to.be.an.instanceOf(Error);
+            return;
         }
+        expect.fail('L\'exception n\'aurait pas du être lancée');
     });
 
     it('lance une exception si le modèle échoue', async () => {
