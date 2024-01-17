@@ -61,7 +61,7 @@
         <div class="pt-24" v-if="$i18n.locale === 'fr'">
             <div class="max-w-screen-lg mx-auto">
                 <LandingCTABanner :img="ctaPrendreEnMain" alt="Wébinaire prise en main, durée 45mn,"
-                    href="https://www.evalandgo.com/f/72933/4pFjfpH19VHD2AZhU2ccYx">
+                    href="https://framaforms.org/sinscrire-a-une-session-de-prise-en-main-resorption-bidonvilles-1702635472">
                     <template v-slot:title>
                         Webinaire prise en main de
                         <span class="italic">Résorption-bidonvilles</span>
