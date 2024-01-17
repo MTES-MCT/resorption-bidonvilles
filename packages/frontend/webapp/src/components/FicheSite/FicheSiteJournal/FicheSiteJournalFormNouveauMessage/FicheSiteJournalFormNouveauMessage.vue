@@ -11,7 +11,7 @@
                 <FormNouveauMessageInputTags />
                 <FormNouveauMessageInputMode @click="onModeChange" />
                 <FormNouveauMessageInputTarget
-                    v-if="values.mode === 'custom'"
+                    v-show="values.mode === 'custom'"
                     :departement="town.departement.code"
                 />
                 <p class="text-sm mb-4">
