@@ -16,8 +16,8 @@
 
         <section v-if="actions.ended.length > 0" class="mt-6">
             <Button @click="toggleEndedActions"
-                >{{ showEndedActions ? "Masquer" : "Voir" }} les
-                {{ actions.ended.length }} actions terminées sur ce site</Button
+                >{{ showEndedActions ? "Masquer" : "Voir" }}
+                {{ actionEndedWording }}</Button
             >
             <div class="grid grid-cols-2 gap-4 mt-4" v-if="showEndedActions">
                 <CarteActionDeSite
@@ -55,6 +55,13 @@ const actions = computed(() => {
         },
         { onGoing: [], ended: [] }
     );
+});
+
+const actionEndedWording = computed(() => {
+    const total = actions.value.ended.length;
+    return total === 1
+        ? "la seule action terminée"
+        : `les ${total} actions terminées`;
 });
 
 function toggleEndedActions() {
