@@ -69,7 +69,7 @@ describe('userService/sendActivationLink', () => {
         const user = fakeUser({ id: 1 });
         const now = new Date();
         const expiresAt = new Date();
-        authUtils.getExpiracyDateForActivationTokenCreatedAt.withArgs(now).returns(expiresAt);
+        authUtils.getExpiracyDateForActivationTokenCreatedAt.returns(expiresAt);
 
         await sendActivationLink(activator, user);
         expect(createUserAccess).to.have.been.calledOnceWith({
