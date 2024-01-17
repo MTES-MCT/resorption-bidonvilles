@@ -13,7 +13,7 @@
                 v-if="showActionIcons && (isOwner || (canModerate && isHover))"
                 @click="deleteMessage"
                 >Supprimer {{ isOwner ? "mon" : "le" }} message
-                <Icon icon="fa-trash-alt" alt="Supprimer le message"
+                <Icon icon="trash-alt" alt="Supprimer le message"
             /></span>
         </div>
         <div class="text-G600 text-sm mb-1" v-if="comment.covid?.date">
