@@ -7,7 +7,7 @@
         variant="primary"
         :loading="isLoading"
         @click="submit"
-        class="mb-2 mr-2"
+        class="flex-shrink-0"
         >Supprimer la question</Button
     >
 </template>

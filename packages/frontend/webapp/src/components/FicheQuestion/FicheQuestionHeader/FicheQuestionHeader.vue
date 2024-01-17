@@ -21,7 +21,7 @@
             </template>
         </template>
         <template v-slot:actions>
-            <div class="flex justify-between items-start">
+            <div class="md:flex justify-between items-start">
                 <div>
                     <FicheQuestionTags
                         :question="question"
@@ -29,7 +29,7 @@
                         class="mb-4"
                     />
                 </div>
-                <div class="flex gap-2">
+                <div class="flex flex-col sm:flex-row items-start gap-2">
                     <FicheQuestionDeleteButton :question="question" size="sm" />
 
                     <FicheQuestionSubscriptionButton
