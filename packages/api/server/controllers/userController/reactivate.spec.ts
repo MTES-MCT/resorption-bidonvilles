@@ -27,6 +27,7 @@ describe('userController.reactivate()', () => {
 
     it('demande la réactivation du compte', async () => {
         const req = mockReq({
+            user: fakeUser(),
             body: {
                 user: fakeUser({ id: 42 }),
             },
@@ -35,7 +36,7 @@ describe('userController.reactivate()', () => {
 
         await reactivateController(req, res, () => {});
         expect(userService.reactivate).to.have.been.calledOnce;
-        expect(userService.reactivate).to.have.been.calledWith(42);
+        expect(userService.reactivate).to.have.been.calledWith(req.user, 42);
     });
 
     it('répond avec un code 200 et l\'utilisateur mis à jour', async () => {
@@ -43,13 +44,14 @@ describe('userController.reactivate()', () => {
         const updatedUser = fakeUser({ id: 42, status: 'active' });
 
         const req = mockReq({
+            user: fakeUser(),
             body: {
                 user: originalUser,
             },
         });
         const res = mockRes();
 
-        userService.reactivate.withArgs(42).resolves(updatedUser);
+        userService.reactivate.withArgs(req.user, 42).resolves(updatedUser);
 
         await reactivateController(req, res, () => {});
         expect(res.status).to.have.been.calledOnceWith(200);
