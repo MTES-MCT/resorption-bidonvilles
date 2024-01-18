@@ -159,10 +159,10 @@ watch(address, async () => {
 });
 
 const hasJusticePermission = computed(() => {
-    return userStore.hasLocalizedPermission("shantytown_justice.access", {
-        id: town.value?.id || null,
-        ...location.value,
-    });
+    return userStore.hasLocalizedPermission(
+        "shantytown_justice.access",
+        location.value
+    );
 });
 
 const tabs = computed(() => {

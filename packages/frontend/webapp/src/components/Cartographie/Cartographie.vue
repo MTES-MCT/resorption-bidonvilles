@@ -113,14 +113,10 @@ const defaultView = computed(() => {
         return mapStore.lastView;
     }
 
+    const location = userStore.firstMainArea;
     return {
-        center: [
-            userStore.user.organization.location.latitude,
-            userStore.user.organization.location.longitude,
-        ],
-        zoom:
-            DEFAULT_ZOOMS[userStore.user.organization.location.type] ||
-            DEFAULT_ZOOMS.default,
+        center: [location.latitude, location.longitude],
+        zoom: DEFAULT_ZOOMS[location.type] || DEFAULT_ZOOMS.default,
     };
 });
 

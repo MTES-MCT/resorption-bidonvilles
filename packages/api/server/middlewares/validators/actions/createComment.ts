@@ -7,7 +7,7 @@ export default [
         .custom(async (value, { req }) => {
             let actions;
             try {
-                actions = await actionModel.fetch([value], req.user.permissions.action_comment.create, null);
+                actions = await actionModel.fetch(req.user, [value]);
             } catch (error) {
                 throw new Error('Impossible de retrouver l\'action concernée en base de données');
             }

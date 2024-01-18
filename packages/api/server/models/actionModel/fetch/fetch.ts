@@ -1,4 +1,3 @@
-import { Permission } from '#server/models/permissionModel/types/Permission.d';
 import { Transaction } from 'sequelize';
 import where from '#server/utils/permission/where';
 import fetchActions from './fetchActions';
@@ -17,27 +16,16 @@ import mergeMetrics from './mergeMetrics';
 import mergeOperators from './mergeOperators';
 import mergeShantytowns from './mergeShantytowns';
 import mergeTopics from './mergeTopics';
-import Action from './Action';
+import Action from '#root/types/resources/Action.d';
+import { User } from '#root/types/resources/User.d';
 
-export default async (actionIds: number[] = null, permission: Permission = null, financePermission: Permission = null, transaction?: Transaction): Promise<Action[]> => {
-    let clauseGroup = {};
-    if (permission !== null) {
-        clauseGroup = where()
-            .can({ permissions: { action: { read: permission } } })
-            .do('read', 'action');
-
-        if (clauseGroup === null) {
-            return [];
-        }
+export default async (user: User, actionIds: number[] = null, transaction?: Transaction): Promise<Action[]> => {
+    const clauseGroup = where().can(user).do('read', 'action');
+    if (clauseGroup === null) {
+        return [];
     }
 
-    let financeClauseGroup = {};
-    if (financePermission !== null) {
-        financeClauseGroup = where()
-            .can({ permissions: { action_finances: { access: financePermission } } })
-            .do('access', 'action_finances');
-    }
-
+    const financeClauseGroup = where().can(user).do('access', 'action_finances');
     const [actions, topics, managers, operators, shantytowns, comments, metrics, finances] = await Promise.all([
         fetchActions(actionIds, clauseGroup, transaction),
         fetchTopics(actionIds, clauseGroup, transaction),

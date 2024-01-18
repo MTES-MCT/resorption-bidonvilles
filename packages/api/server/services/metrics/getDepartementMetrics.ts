@@ -9,13 +9,17 @@ import getUsenameOf from '#server/models/shantytownModel/_common/getUsenameOf';
 import getLivingConditionsStatuses from '#server/models/shantytownModel/_common/livingConditions/v2/statuses/main';
 import { RawDepartement } from '#server/models/departementModel/findOne.d';
 import { RawRegion } from '#server/models/regionModel/findOne.d';
+import { Departement } from '#server/models/geoModel/Location.d';
 import { CityMetrics, DepartementMetrics, ShantytownMetrics } from '#root/types/resources/DepartementMetrics.d';
+import { User } from '#root/types/resources/User.d';
 
 type CityMetricsObject = {
     [key: string]: CityMetrics;
 };
-export default async (user, departementCode):Promise<DepartementMetrics> => {
-    const hasJusticePermission = permissionUtils.can(user).do('access', 'shantytown_justice').on({ type: 'departement', departement: { code: departementCode } });
+export default async (user: User, departementCode: string):Promise<DepartementMetrics> => {
+    const hasJusticePermission = permissionUtils.can(user).do('access', 'shantytown_justice').on(
+        { type: 'departement', departement: { code: departementCode } } as Departement,
+    );
 
     let data:DepartementMetricsRawData[];
 

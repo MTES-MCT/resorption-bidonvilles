@@ -4,30 +4,32 @@ import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeShantytown } from '#test/utils/shantytown';
 import locationUtils from '#test/utils/location';
 import { serialized as fakeAction } from '#test/utils/action';
+import { User } from '#root/types/resources/User.d';
 
 const { where } = permissionUtils;
 const { paris, marseille } = locationUtils;
 
 describe('utils/permission.where()', () => {
-    let user;
+    let user: User;
     beforeEach(() => {
         user = fakeUser();
-        user.organization.location = paris.city();
     });
 
     it('retourne null si l\'utilisateur n\'a aucune permission sur l\'entité demandée', () => {
         expect(where().can(user).do('write', 'something')).to.be.null;
     });
 
-    it('retourne null si l\'utilisateur n\'a pas la permission demandée', () => {
+    it('retourne null si l\'utilisateur n\'a par défaut pas pas la permission demandée', () => {
         user.permissions.something = {};
         expect(where().can(user).do('write', 'something')).to.be.null;
     });
 
-    it('retourne null si l\'utilisateur a la permission demandée mais que allowed = false', () => {
+    it('retourne null si l\'utilisateur n\'a explicitement PAS la permission demandée', () => {
         user.permissions.something = {
             write: {
                 allowed: false,
+                allowed_on_national: false,
+                allowed_on: null,
             },
         };
         expect(where().can(user).do('write', 'something')).to.be.null;
@@ -37,39 +39,26 @@ describe('utils/permission.where()', () => {
         user.permissions.something = {
             write: {
                 allowed: true,
-                allow_all: true,
-                allowed_on: null,
-            },
-        };
-        user.organization.location = paris.city();
-        expect(where().can(user).do('write', 'something')).to.be.eql({});
-    });
-
-    it('retourne un objet vide si la permission est accordée sur tous les territoires', () => {
-        user.permissions.something = {
-            write: {
-                allowed: true,
-                allow_all: true,
+                allowed_on_national: true,
                 allowed_on: null,
             },
         };
         expect(where().can(user).do('write', 'something')).to.be.eql({});
     });
 
-    it('retourne un objet avec les conditions correspondent aux territoires listés dans allowed_on', () => {
+    it('retourne un objet avec les conditions correspondant aux territoires listés dans allowed_on', () => {
         const location = paris.district();
         const otherLocation = marseille.district();
 
         user.permissions.something = {
             write: {
                 allowed: true,
-                allow_all: false,
+                allowed_on_national: false,
                 allowed_on: {
-                    regions: [location.region.code, otherLocation.region.code],
-                    departements: [location.departement.code, otherLocation.departement.code],
-                    epci: [location.epci.code, otherLocation.epci.code],
-                    cities: [location.city.code, otherLocation.city.code],
-                    shantytowns: [fakeShantytown(paris.city()).id],
+                    regions: [paris.region(), marseille.region()],
+                    departements: [paris.departement(), marseille.departement()],
+                    epci: [paris.epci(), marseille.epci()],
+                    cities: [paris.district(), marseille.district()],
                     actions: [fakeAction({ location: paris.departement() }).id],
                 },
             },
@@ -94,10 +83,6 @@ describe('utils/permission.where()', () => {
             cities_arrondissement: {
                 query: 'cities.fk_main',
                 value: [location.city.code, otherLocation.city.code],
-            },
-            shantytowns: {
-                query: 'shantytowns.shantytown_id',
-                value: [1],
             },
             actions: {
                 query: 'actions.action_id',

@@ -16,6 +16,7 @@
             class="mt-6"
             v-if="canAccessFinances"
             :managers="managerIds"
+            :departement="departement"
         />
         <FormDeclarationActionIndicateurs class="mt-6" />
 

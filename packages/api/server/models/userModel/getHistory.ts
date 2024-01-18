@@ -1,95 +1,102 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import { LocationType } from '#server/models/geoModel/LocationType.d';
+import { Location } from '#server/models/geoModel/Location.d';
+import interventionAreaModel from '#server/models/interventionAreaModel';
+import { RawInterventionArea } from '#server/models/userModel/_common/query.d';
 import { UserActivity } from '#root/types/resources/Activity.d';
 import formatName from './_common/formatName';
 
-
 type UserActivityRow = {
     date: Date,
+    user_id: number,
     first_name: string,
     last_name: string,
+    use_custom_intervention_area: boolean,
     organization_id: number,
-    location_type: LocationType,
-    region_code: string | null,
-    region_name: string | null,
-    departement_code: string | null,
-    departement_name: string | null,
-    epci_code: string | null,
-    epci_name: string | null,
-    city_code: string | null,
-    city_name: string | null,
-    city_main: string | null
+    is_national: boolean,
+    regions: string[],
+    departements: string[],
+    epci: string[],
+    cities: string[],
 };
 
-export default async (location, numberOfActivities, lastDate, maxDate):Promise<UserActivity[]> => {
+export default async (location: Location, numberOfActivities: number, lastDate: Date, maxDate: Date):Promise<UserActivity[]> => {
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
-    const activities = await sequelize.query(
+    const activities: UserActivityRow[] = await sequelize.query(
         `
-            SELECT
-                lua.used_at AS "date",
-                users.first_name,
-                users.last_name,
-                organizations.organization_id,
-                organizations.location_type,
-                organizations.region_code,
-                organizations.region_name,
-                organizations.departement_code,
-                organizations.departement_name,
-                organizations.epci_code,
-                organizations.epci_name,
-                organizations.city_code,
-                organizations.city_name,
-                organizations.city_main
-            FROM last_user_accesses lua
-            LEFT JOIN users ON lua.fk_user = users.user_id
-            LEFT JOIN localized_organizations organizations ON users.fk_organization = organizations.organization_id
-            WHERE
-                lua.used_at IS NOT NULL
-                AND lua.used_at < '${lastDate}'
-                ${maxDate ? 'AND lua.used_at >= :maxDate' : ''}
-                ${location.type === 'city' ? `AND organizations.city_code = '${location.city.code}'` : ''}
-                ${location.type === 'epci' ? `AND organizations.epci_code = '${location.epci.code}'` : ''}
-                ${location.type === 'departement' ? `AND organizations.departement_code = '${location.departement.code}'` : ''}
-                ${location.type === 'region' ? `AND organizations.region_code = '${location.region.code}'` : ''}
-            ORDER BY lua.used_at DESC
-            ${limit}
-            `,
+        SELECT
+            lua.used_at AS "date",
+            users.user_id,
+            users.first_name,
+            users.last_name,
+            users.use_custom_intervention_area,
+            users.fk_organization AS organization_id,
+            v_user_areas.is_national,
+            v_user_areas.regions,
+            v_user_areas.departements,
+            v_user_areas.epci,
+            v_user_areas.cities
+        FROM last_user_accesses lua
+        LEFT JOIN users ON lua.fk_user = users.user_id
+        LEFT JOIN v_user_areas ON v_user_areas.user_id = users.user_id AND v_user_areas.is_main_area IS TRUE
+        WHERE
+            lua.used_at IS NOT NULL
+            AND lua.used_at < '${lastDate}'
+            ${maxDate ? 'AND lua.used_at >= :maxDate' : ''}
+            ${location.type === 'city' ? 'AND :city = ANY(v_user_areas.cities)' : ''}
+            ${location.type === 'epci' ? 'AND :epci = ANY(v_user_areas.epci)' : ''}
+            ${location.type === 'departement' ? 'AND :departement = ANY(v_user_areas.departements)' : ''}
+            ${location.type === 'region' ? 'AND :region = ANY(v_user_areas.regions)' : ''}
+        ORDER BY lua.used_at DESC
+        ${limit}
+        `,
         {
             type: QueryTypes.SELECT,
             replacements: {
                 maxDate,
+                city: location.city?.code || null,
+                epci: location.epci?.code || null,
+                departement: location.departement?.code || null,
+                region: location.region?.code || null,
             },
         },
     );
 
+    const interventionAreas = await interventionAreaModel.list(
+        activities.map(({ user_id }) => user_id),
+        activities.map(({ organization_id }) => organization_id),
+    );
+
+    const hashInterventionAreas = interventionAreas.reduce((acc, row) => {
+        const key = row.fk_user !== null ? 'users' : 'organizations';
+        const id = row.fk_user !== null ? row.fk_user : row.fk_organization;
+        if (acc[key][id] === undefined) {
+            acc[key][id] = [];
+        }
+
+        acc[key][id].push(row);
+        return acc;
+    }, {
+        users: [],
+        organizations: [],
+    } as {
+        users: { [key: number]: RawInterventionArea[] },
+        organizations: { [key: number]: RawInterventionArea[] },
+    });
+
     return activities
-        .map((activity: UserActivityRow): UserActivity => ({
+        .map((activity): UserActivity => ({
             entity: 'user',
             action: 'creation',
             date: activity.date.getTime() / 1000,
             user: {
                 name: formatName(activity),
                 organization: activity.organization_id,
-                location: {
-                    type: activity.location_type,
-                    region: activity.region_code !== null ? {
-                        code: activity.region_code,
-                        name: activity.region_name,
-                    } : null,
-                    departement: activity.departement_code !== null ? {
-                        code: activity.departement_code,
-                        name: activity.departement_name,
-                    } : null,
-                    epci: activity.epci_code !== null ? {
-                        code: activity.epci_code,
-                        name: activity.epci_name,
-                    } : null,
-                    city: activity.city_code !== null ? {
-                        code: activity.city_code,
-                        name: activity.city_name,
-                        main: activity.city_main,
-                    } : null,
+                intervention_areas: {
+                    is_national: activity.is_national,
+                    areas: (hashInterventionAreas.users[activity.user_id] || []).concat(
+                        activity.use_custom_intervention_area !== true ? hashInterventionAreas.organizations[activity.organization_id] || [] : [],
+                    ).map(interventionAreaModel.serialize),
                 },
             },
         }));

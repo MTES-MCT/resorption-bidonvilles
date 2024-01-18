@@ -209,6 +209,7 @@ const router = createRouter({
             meta: {
                 title: "Choisir ses domaines de compétence et sujets d'intérêt",
                 authRequirement: "signedIn",
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -360,6 +361,7 @@ const router = createRouter({
                 authRequirement: "signedIn",
                 navTab: "administration",
                 permissions: ["user.list"],
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -540,6 +542,7 @@ const router = createRouter({
                 authRequirement: "signedIn",
                 navTab: "administration",
                 permissions: ["user.list"],
+                displayOrderOnSiteMap: 0,
             },
         },
 

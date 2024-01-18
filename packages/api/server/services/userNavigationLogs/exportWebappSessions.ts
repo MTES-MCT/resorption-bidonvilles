@@ -6,11 +6,11 @@ import moment from 'moment';
 
 type SerializedWebappSession = {
     'Id de l\'utilisateur': number,
-    'Niveau géographique de l\'utilisateur': string,
-    'Nom de la région': string | null,
-    'Code de la région': string | null,
-    'Nom du département': string | null,
-    'Code du département': string | null,
+    'Utilisateur avec territoire national ?': string,
+    'Régions d\'intervention': string | null,
+    'Départements d\'intervention': string | null,
+    'EPCIs d\'intervention': string | null,
+    'Villes d\'intervention': string | null,
     'Catégorie de structure de l\'utilisateur': string,
     'Type de structure de l\'utilisateur': string,
     'Rôle de l\'utilisateur': string,
@@ -21,11 +21,11 @@ type SerializedWebappSession = {
 function serializeSession(user: number, session: WebappSessionRow, beginning: Date, duration: number): SerializedWebappSession {
     return {
         'Id de l\'utilisateur': user,
-        'Niveau géographique de l\'utilisateur': session.location_type,
-        'Nom de la région': session.region_name,
-        'Code de la région': session.region_code,
-        'Nom du département': session.departement_name,
-        'Code du département': session.departement_code,
+        'Utilisateur avec territoire national ?': session.is_national ? 'Oui' : 'Non',
+        'Régions d\'intervention': session.regions.join(', '),
+        'Départements d\'intervention': session.departements.join(', '),
+        'EPCIs d\'intervention': session.epci.join(', '),
+        'Villes d\'intervention': session.cities.join(', '),
         'Catégorie de structure de l\'utilisateur': session.organization_category,
         'Type de structure de l\'utilisateur': session.organization_type,
         'Rôle de l\'utilisateur': session.role,

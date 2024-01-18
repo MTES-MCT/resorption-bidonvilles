@@ -98,12 +98,29 @@ const title = computed(() => {
     switch (event.value) {
         case "user-creation": {
             const { users } = activity.value;
-            const names = users.map(({ name, location }) => {
-                if (!showDepartementCode.value || !location.departement) {
+            const names = users.map(({ name, intervention_areas }) => {
+                if (!showDepartementCode.value) {
                     return name;
                 }
 
-                return `${name} (${location.departement.code})`;
+                if (intervention_areas.is_national === true) {
+                    return name;
+                }
+
+                const areaNames = intervention_areas.areas
+                    .filter((area) => area.is_main_area)
+                    .map((area) => {
+                        if (area.type === "departement") {
+                            return area.departement.code;
+                        }
+
+                        return area[area.type].name;
+                    });
+                if (areaNames.length === 0) {
+                    return name;
+                }
+
+                return `${name} (${areaNames.join(", ")})`;
             });
             if (users.length === 1) {
                 return names[0];

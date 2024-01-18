@@ -40,8 +40,11 @@ import createAnswer from './answer/create';
 import actionCreate from './actions/create';
 import actionCreateComment from './actions/createComment';
 import actionUpdate from './actions/update';
+import financeReaderFindByLocation from './financeReaders/findByLocation';
 import justiceReaderFindByLocation from './justiceReaders/findByLocation';
 import organizationSearch from './organizations/search';
+import organizationSearchAssociations from './organizations/searchAssociations';
+import organizationSearchTerritorialCollectivities from './organizations/searchTerritorialCollectivities';
 import getDepartementMetrics from './metrics/getDepartementMetrics';
 import getDepartementEvolutionMetrics from './metrics/getDepartementEvolutionMetrics';
 import getNationMetrics from './metrics/getNationMetrics';
@@ -84,6 +87,9 @@ export default {
     dashboard: {
         location: dashboardLocation,
     },
+    financeReaders: {
+        findByLocation: financeReaderFindByLocation,
+    },
     justiceReader: {
         findByLocation: justiceReaderFindByLocation,
     },
@@ -110,6 +116,8 @@ export default {
     },
     organization: {
         search: organizationSearch,
+        searchAssociations: organizationSearchAssociations,
+        searchTerritorialCollectivities: organizationSearchTerritorialCollectivities,
     },
     question: {
         createQuestion,

@@ -27,7 +27,7 @@ export default async (req, res) => {
             ...actions.map((r: any) => ({ Département: r.fk_departement, 'Nombre d\'actions': r.total })),
             ...resorbedShantytowns.map((r: any) => ({ Département: r.fk_departement, 'Nombre de résorptions': r.total })),
             ...shantytowns.map((r: any) => ({ Département: r.fk_departement, 'Nombre de sites': r.total })),
-            ...users.filter((r: any) => r.fk_departement !== null).map((r: any) => ({ Département: r.fk_departement, "Nombre d'utilisateurs": r.count })),
+            ...users.filter(r => r.departement_code !== null).map(r => ({ Département: r.departement_code, "Nombre d'utilisateurs": r.count })),
         ], 'Département')).sort((a: any, b: any) => a.Département - b.Département);
 
         const csv = JSONToCSV.parse(result);

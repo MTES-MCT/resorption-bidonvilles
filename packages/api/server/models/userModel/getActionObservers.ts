@@ -1,11 +1,19 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-export default async (actionId, commentId) => sequelize.query(
-    `WITH operator_organization AS (
-        SELECT users.fk_organization AS organization_id, ao.fk_action
-        FROM action_operators ao
-        LEFT JOIN users ON ao.fk_user = users.user_id
+type ActionObserver = {
+    email: string;
+    first_name: string;
+    last_name: string;
+};
+
+export default async (actionId: number): Promise<ActionObserver[]> => sequelize.query(
+    `WITH constants(region) AS
+    (
+        SELECT departements.fk_region AS region
+        FROM actions
+        LEFT JOIN departements ON actions.fk_departement = departements.code
+        WHERE actions.action_id = :actionId
     ),
     email_unsubscriptions AS (
         SELECT fk_user, ARRAY_AGG(email_subscription) AS unsubscriptions FROM user_email_unsubscriptions GROUP BY fk_user
@@ -15,21 +23,39 @@ export default async (actionId, commentId) => sequelize.query(
         u.email,
         u.first_name,
         u.last_name
-    FROM users u
-    LEFT JOIN localized_organizations lo ON u.fk_organization = lo.organization_id
-    LEFT JOIN operator_organization op ON op.organization_id = lo.organization_id AND op.fk_action = :actionId
+    FROM users
+    LEFT JOIN constants ON TRUE
+    LEFT JOIN v_user_areas ON v_user_areas.user_id = users.user_id AND v_user_areas.is_main_area IS TRUE
+    LEFT JOIN action_operators ON action_operators.fk_organization = users.fk_organization AND action_operators.fk_action = :actionId
+    LEFT JOIN action_managers ON action_managers.fk_organization = users.fk_organization AND action_managers.fk_action = :actionId
     LEFT JOIN email_unsubscriptions ON email_unsubscriptions.fk_user = u.user_id
-    WHERE u.fk_status = 'active'
-        AND (lo.departement_code = (SELECT fk_departement FROM actions WHERE action_id = :actionId)
-            AND lo.active IS TRUE)
-        AND (email_unsubscriptions.unsubscriptions IS NULL OR NOT('action_comment_notification' = ANY(email_unsubscriptions.unsubscriptions)))
-        AND (u.fk_role_regular = 'direct_collaborator' OR op.fk_action IS NOT null)
+
+    WHERE 
+        users.fk_status = 'active'
+        AND (
+            -- soit l'utilisateur est un opérateur/pilote de l'action
+            (action_operators.fk_user IS NOT NULL OR action_managers.fk_user IS NOT NULL)
+            OR
+            -- soit l'utilisateur est un correspondant du département concerné, et abonné aux notifications
+            (
+                (email_unsubscriptions.unsubscriptions IS NULL OR NOT('action_comment_notification' = ANY(email_unsubscriptions.unsubscriptions)))
+                AND
+                users.fk_role_regular = 'direct_collaborator'
+                AND
+                (
+                    -- soit l'utilisateur est un correspondant national
+                    v_user_areas.is_national IS TRUE
+                    OR
+                    -- soit l'utilisateur est un correspondant du département concerné
+                    constants.region = ANY(v_user_areas.regions)
+                )
+            )
+        )
     `,
     {
         type: QueryTypes.SELECT,
         replacements: {
             actionId,
-            commentId,
         },
     },
 );

@@ -1,6 +1,6 @@
 import { ActionHash } from './hashActions';
 import ActionUserRow from '../fetch/ActionUserRow';
-import { ActionOrganizationMember } from '../fetch/Action';
+import { ActionOrganizationMember } from '#root/types/resources/Action.d';
 
 export default (hash: ActionHash, operators: ActionUserRow[]): void => {
     operators.forEach((row) => {

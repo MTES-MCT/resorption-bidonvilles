@@ -1,5 +1,5 @@
 import { Document, Packer } from 'docx';
-import { Shantytown } from '#server/models/shantytownModel/_common/serializeShantytown';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { User } from '#root/types/resources/User.d';
 import logos from './export/section_logos';
 import context from './export/1_section_context';

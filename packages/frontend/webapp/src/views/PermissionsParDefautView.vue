@@ -35,8 +35,18 @@
                                 :icon="permission.allowed ? 'check' : 'times'"
                             />
                         </td>
-                        <td :class="permission.allow_all ? 'bg-green200' : ''">
-                            {{ permission.allow_all ? "national" : "local" }}
+                        <td
+                            :class="
+                                permission.allowed_on_national
+                                    ? 'bg-green200'
+                                    : ''
+                            "
+                        >
+                            {{
+                                permission.allowed_on_national
+                                    ? "national"
+                                    : "local"
+                            }}
                         </td>
                     </tr>
                 </tbody>

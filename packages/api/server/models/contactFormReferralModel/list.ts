@@ -1,37 +1,60 @@
 import { sequelize } from '#db/sequelize';
-import { QueryTypes } from 'sequelize';
+import { Permission } from '#server/models/permissionModel/types/Permission.d';
+import { BindOrReplacements, QueryTypes } from 'sequelize';
 
-export default (where = []) => {
-    const replacements = {};
+type ContactFormReferralRow = {
+    first_name: string;
+    last_name: string;
+    email: string;
+    departements: string[];
+    organization_name: string;
+    reason: string;
+    reason_other: string;
+    reason_word_of_mouth: string;
+};
 
-    const whereClause = where.map((clauses, index) => {
-        const clauseGroup = Object.keys(clauses).map((column) => {
-            replacements[`${column}${index}`] = clauses[column].value || clauses[column];
-            return `${clauses[column].query || `users.${column}`} ${clauses[column].operator || 'IN'} (:${column}${index})`;
-        }).join(' OR ');
+export default async (permission: Permission): Promise<ContactFormReferralRow[]> => {
+    if (permission === null) {
+        return [];
+    }
 
-        return `(${clauseGroup})`;
-    }).join(' AND ');
+    let where: string = null;
+    const replacements: BindOrReplacements = {};
+    if (permission.allowed_on_national !== true) {
+        const clauses = ['regions', 'departements', 'epci', 'cities'].reduce((acc, column) => {
+            if (permission.allowed_on[column]?.length <= 0) {
+                return acc;
+            }
+
+            replacements[column] = permission.allowed_on[column].map(l => l[l.type].code);
+            acc.push(`v_user_areas.${column}::text[] && ARRAY[:${column}]`);
+            return acc;
+        }, [] as string[]);
+
+        if (clauses.length === 0) {
+            return [];
+        }
+
+        where = `(${clauses.join(') OR (')})`;
+    }
 
     return sequelize.query(
-        `SELECT 
-                INITCAP(users.first_name) AS first_name,
-                UPPER(users.last_name) AS last_name,
-                users.email,
-                departement_code,
-                localized_organizations.name AS organization_name,
-                cfr.reason,
-                cfr.reason_other,
-                cfr.reason_word_of_mouth
-            FROM
-                contact_form_referrals AS cfr
-            LEFT JOIN users ON fk_user = user_id
-            LEFT JOIN localized_organizations ON fk_organization = organization_id
-            LEFT JOIN regions ON localized_organizations.region_code = regions.code
-            LEFT JOIN departements ON localized_organizations.departement_code = departements.code
-            LEFT JOIN epci ON localized_organizations.epci_code = epci.code
-            LEFT JOIN cities ON localized_organizations.city_code = cities.code
-            ${whereClause ? `WHERE ${whereClause}` : ''}`,
+        `
+        SELECT 
+            INITCAP(users.first_name) AS first_name,
+            UPPER(users.last_name) AS last_name,
+            users.email,
+            v_user_areas.departements,
+            organizations.name AS organization_name,
+            cfr.reason,
+            cfr.reason_other,
+            cfr.reason_word_of_mouth
+        FROM
+            contact_form_referrals AS cfr
+        LEFT JOIN users ON fk_user = user_id
+        LEFT JOIN v_user_areas ON v_user_areas.user_id = users.user_id AND v_user_areas.is_main_area IS TRUE
+        LEFT JOIN organizations ON users.fk_organization = organizations.organization_id
+            ${where !== null ? `WHERE ${where}` : ''}`,
         {
             type: QueryTypes.SELECT,
             replacements,

@@ -28,12 +28,12 @@ describe('shantytownModel.update()', () => {
                 permissions: {
                     shantytown: {
                         update: {
-                            allowed: true, is_writing: true, allow_all: true, allowed_on: null,
+                            allowed: true, allowed_on_national: true, allowed_on: null,
                         },
                     },
                     shantytown_justice: {
                         access: {
-                            allowed: false, is_writing: false, allow_all: false, allowed_on: null,
+                            allowed: false, allowed_on_national: false, allowed_on: null,
                         },
                     },
                 },

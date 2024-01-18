@@ -1,49 +1,40 @@
 import { sequelize } from '#db/sequelize';
+import { type Transaction } from 'sequelize';
 
-export default async (type, name, abbreviation = null, region = null, departement = null, epci = null, city = null, active = false, argTransaction = undefined) => {
-    let transaction = argTransaction;
-    if (transaction === undefined) {
-        transaction = await sequelize.transaction();
-    }
-
-    try {
-        const response = await sequelize.query(
-            `INSERT INTO
+export default async (
+    type: string,
+    name: string,
+    abbreviation: string = null,
+    region: string = null,
+    departement: string = null,
+    epci: string = null,
+    city: string = null,
+    active: boolean = false,
+    transaction: Transaction = undefined,
+): Promise<number> => {
+    const data = await sequelize.query(
+        `INSERT INTO
             organizations(name, abbreviation, fk_type, fk_region, fk_departement, fk_epci, fk_city, active)
         VALUES
             (:name, :abbreviation, :type, :region, :departement, :epci, :city, :active)
         RETURNING organization_id AS id`,
-            {
-                replacements: {
-                    name,
-                    abbreviation,
-                    type,
-                    region,
-                    departement,
-                    epci,
-                    city,
-                    active,
-                },
-                transaction,
+        {
+            replacements: {
+                name,
+                abbreviation,
+                type,
+                region,
+                departement,
+                epci,
+                city,
+                active,
             },
-        );
-        await sequelize.query(
-            'REFRESH MATERIALIZED VIEW localized_organizations',
-            {
-                transaction,
-            },
-        );
+            transaction,
+        },
+    );
 
-        if (argTransaction === undefined) {
-            await transaction.commit();
-        }
+    type ReturnValue = { id: number };
+    const rows: ReturnValue[] = (data[0] as unknown) as ReturnValue[];
 
-        return response;
-    } catch (error) {
-        if (argTransaction === undefined) {
-            await transaction.rollback();
-        }
-
-        throw error;
-    }
+    return rows[0].id;
 };

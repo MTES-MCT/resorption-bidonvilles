@@ -1,6 +1,6 @@
 import actionModel from '#server/models/actionModel/index';
 import ServiceError from '#server/errors/ServiceError';
-import Action from '#server/models/actionModel/fetch/Action.d';
+import Action from '#root/types/resources/Action.d';
 import sendMattermostNotification from './createComment.sendMattermostNotification';
 import sendMailNotifications from './createComment.sendMailNotifications';
 

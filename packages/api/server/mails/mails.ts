@@ -959,7 +959,6 @@ export default {
         return mailService.send('activity_summary', {
             recipient,
             variables: {
-                title: variables.title ? `${variables.title}, ` : '',
                 from: variables.from,
                 to: variables.to,
                 recipientName: formatName(recipient),

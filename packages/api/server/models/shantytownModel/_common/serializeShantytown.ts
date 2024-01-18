@@ -1,166 +1,16 @@
 import permissionUtils from '#server/utils/permission';
-import ShantytownComment from '#server/models/shantytownCommentModel/ShantytownComment.d';
-import { Actor } from '#server/models/shantytownActorModel/serializeActor';
-import { ShantytownAction } from '#server/models/actionModel/fetch/Action.d';
-import { IncomingTown } from '#server/models/incomingTownsModel/findAll';
+import { Location } from '#server/models/geoModel/Location.d';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { ShantytownRow } from './SQL';
-import { Diff } from './getDiff';
 import getAddressSimpleOf from './getAddressSimpleOf';
 import getUsenameOf from './getUsenameOf';
-import serializeLivingConditions, { LivingConditions } from './livingConditions/serializeLivingConditions';
-import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
+import serializeLivingConditions from './livingConditions/serializeLivingConditions';
 
 const { can } = permissionUtils;
 
 function fromDateToTimestamp(date) {
     return date !== null ? (new Date(`${date}T02:00:00`).getTime() / 1000) : null;
 }
-
-type UserShantytown = {
-    id: number,
-    first_name: string,
-    last_name: string,
-    position: string,
-    organization: {
-        id: number,
-        name: string,
-        abbreviation: string | null,
-    },
-};
-
-type Changelog = {
-    author: UserShantytown,
-    date: number,
-    diff: Diff[]
-};
-
-export type ClosingSolution = {
-    id: number,
-    peopleAffected: number,
-    householdsAffected: number,
-    message: string,
-    shantytownId?: number
-};
-
-type BaseShantytown =
-{
-    type: 'shantytown',
-    id: number,
-    name: string | null,
-    status: 'open' | 'unknown' | 'closed_by_justice' | 'resorbed' | 'other',
-    closingContext: string | null,
-    latitude: number,
-    longitude: number,
-    city: {
-        code: string,
-        name: string,
-        main: string | null,
-        latitude: number,
-        longitude: number,
-    },
-    epci: {
-        code: string | null,
-        name: string | null,
-    },
-    departement: {
-        code: string,
-        name: string,
-        latitude: number,
-        longitude: number,
-        chieftown: {
-            code: string,
-            name: string,
-            latitude: number,
-            longitude: number,
-        },
-    },
-    region: {
-        code: string,
-        name: string,
-        latitude: number,
-        longitude: number,
-        chieftown: {
-            code: string,
-            name: string,
-            latitude: number,
-            longitude: number,
-        },
-    },
-    declaredAt: number | null,
-    builtAt: number | null,
-    isReinstallation: boolean | null,
-    reinstallationComments: string | null,
-    reinstallationIncomingTowns: IncomingTown[],
-    closedAt: number | null,
-    address: string,
-    addressDetails: string | null,
-    addressSimple: string,
-    usename: string,
-    populationTotal: number | null,
-    populationCouples: number | null,
-    populationMinors: number | null,
-    populationMinors0To3: number | null,
-    populationMinors3To6: number | null,
-    populationMinors6To12: number | null,
-    populationMinors12To16: number | null,
-    populationMinors16To18: number | null,
-    minorsInSchool: number | null,
-    caravans: number | null,
-    huts: number | null,
-    tents: number | null,
-    cars: number | null,
-    mattresses: number | null,
-    livingConditions: LivingConditions,
-    censusStatus: 'none' | 'done' | 'scheduled' | null,
-    censusConductedBy: string | null,
-    censusConductedAt: number | null,
-    fieldType: {
-        id: number,
-        label: string,
-    },
-    ownerType: {
-        id: number,
-        label: string,
-    },
-    socialOrigins: SocialOrigin[],
-    comments: {
-        regular: ShantytownComment[],
-        covid: any[],
-    },
-    actors: Actor[],
-    actions: ShantytownAction[],
-    closingSolutions: ClosingSolution[],
-    closedWithSolutions: 'no' | 'yes' | 'unknown' | null,
-    changelog: Changelog[],
-    createdAt: number,
-    updatedAt: number | null,
-    createdBy: UserShantytown,
-    updatedBy: UserShantytown,
-    heatwaveStatus: boolean,
-    resorptionTarget: number | null,
-    completionRate: number,
-    distance?: number | null
-};
-
-type ShantytownWithJustice = BaseShantytown & {
-    ownerComplaint: boolean | null,
-    justiceProcedure: boolean | null,
-    justiceRendered: boolean | null,
-    justiceRenderedAt: number | null,
-    justiceRenderedBy: string | null,
-    justiceChallenged: boolean | null,
-    policeStatus: 'requested' | 'granted' | 'none' | null,
-    policeRequestedAt: number | null,
-    policeGrantedAt: number | null,
-    bailiff: string | null,
-};
-
-type ShantytownWithOwner = BaseShantytown & {
-    owner: string | null
-};
-
-
-export type Shantytown = BaseShantytown | ShantytownWithJustice | ShantytownWithOwner | (ShantytownWithJustice & ShantytownWithOwner);
 
 export default (town: ShantytownRow, user): Shantytown => {
     let serializedTown: Shantytown = {
@@ -321,7 +171,7 @@ export default (town: ShantytownRow, user): Shantytown => {
 
     serializedTown.completionRate = Math.floor((completionTotal / 12) * 100) / 100;
 
-    const location = {
+    const location: Location = {
         type: 'city',
         city: serializedTown.city,
         epci: serializedTown.epci,

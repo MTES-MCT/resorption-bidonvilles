@@ -1,12 +1,22 @@
 <template>
-    <div class="grid grid-cols-3 mb-8">
+    <div
+        class="grid mb-8"
+        :class="
+            userStore.user?.is_admin && secondaryAreas
+                ? 'grid-cols-4'
+                : 'grid-cols-3'
+        "
+    >
         <div>
-            <div>Territoire :</div>
+            <div>Territoire(s) d'intervention :</div>
             <div class="text-lg">
-                {{ organization.location_name }}
-                <span v-if="organization.location_code"
-                    >({{ organization.location_code }})</span
-                >
+                {{ mainAreas }}
+            </div>
+        </div>
+        <div v-if="userStore.user?.is_admin && secondaryAreas">
+            <div>Autres territoires :</div>
+            <div class="text-lg">
+                {{ secondaryAreas }}
             </div>
         </div>
         <div v-if="userStore.user?.is_superuser">
@@ -43,5 +53,36 @@ const beingFundedDate = computed(() => {
         new Date(organization.value.being_funded_at).getTime() / 1000,
         "d/m/y"
     );
+});
+const mainAreas = computed(() => {
+    if (organization.value.intervention_areas.is_national) {
+        return "National";
+    }
+
+    return organization.value.intervention_areas.areas
+        .filter((area) => area.is_main_area && area.type !== "nation")
+        .map((area) => {
+            let name = area[area.type].name;
+            if (area.departement) {
+                name += ` (${area.departement.code})`;
+            }
+
+            return name;
+        })
+        .join(", ");
+});
+const secondaryAreas = computed(() => {
+    return organization.value.intervention_areas.areas
+        .filter((area) => !area.is_main_area)
+        .map((area) => {
+            let name =
+                area.type === "nation" ? "National" : area[area.type].name;
+            if (area.departement) {
+                name += ` (${area.departement.code})`;
+            }
+
+            return name;
+        })
+        .join(", ");
 });
 </script>

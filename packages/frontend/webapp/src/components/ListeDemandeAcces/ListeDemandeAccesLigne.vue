@@ -44,7 +44,9 @@
                     }}
                 </p>
             </div>
-            <div class="flex-1 p-3">{{ user.location_name }}</div>
+            <div class="flex-1 p-3">
+                {{ mainAreas.join(", ") }}
+            </div>
             <div class="flex-1 p-3">
                 <p>{{ user.role }}</p>
                 <br />
@@ -96,5 +98,14 @@ const bgColor = computed(() => {
     }
 
     return odd.value ? "bg-G100" : "";
+});
+const mainAreas = computed(() => {
+    if (user.value.intervention_areas.is_national === true) {
+        return ["National"];
+    }
+
+    return user.value.intervention_areas.areas
+        .filter((area) => area.is_main_area)
+        .map((area) => area[area.type].name);
 });
 </script>

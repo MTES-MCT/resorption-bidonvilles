@@ -7,7 +7,7 @@ export default async () => {
             organization_types.fk_category,
             COUNT(DISTINCT users.fk_organization) AS total
         FROM users
-        LEFT JOIN localized_organizations AS organizations ON users.fk_organization = organizations.organization_id
+        LEFT JOIN organizations ON users.fk_organization = organizations.organization_id
         LEFT JOIN organization_types ON organizations.fk_type = organization_types.organization_type_id
         WHERE
             users.fk_status='active'

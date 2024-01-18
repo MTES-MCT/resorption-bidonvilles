@@ -5,9 +5,12 @@ import permissionUtils from '#server/utils/permission';
 import actionModel from '#server/models/actionModel';
 import { ActionCommentRow } from '#server/models/actionModel/fetchComments/fetchComments';
 import { AuthUser } from '#server/middlewares/authMiddleware';
+import { Nation } from '#server/models/geoModel/Location.d';
 
 export default async (user: AuthUser): Promise<string> => {
-    const nationalLevel = { type: 'nation' };
+    const nationalLevel: Nation = {
+        type: 'nation', region: null, departement: null, epci: null, city: null,
+    };
 
     if (!permissionUtils.can(user).do('export', 'action_comment').on(nationalLevel)) {
         throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission d\'exporter les commentaires'));

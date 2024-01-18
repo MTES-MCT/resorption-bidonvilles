@@ -15,12 +15,11 @@ export default [
         }),
 
     param('locationCode')
-        .if((value, { req }) => ['region', 'departement', 'epci', 'city'].includes(req.body.locationType))
         .exists({ checkNull: true }).bail().withMessage('La localisation est obligatoire')
         .custom(async (value, { req }) => {
             let location;
             try {
-                location = await geoModel.getLocation(req.body.locationType, value);
+                location = await geoModel.getLocation(req.params.locationType, value);
             } catch (e) {
                 throw new Error('Une erreur est survenue lors de la lecture en base de données');
             }

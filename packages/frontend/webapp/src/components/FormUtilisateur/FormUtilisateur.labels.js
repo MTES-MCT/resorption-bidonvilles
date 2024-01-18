@@ -18,11 +18,9 @@ export default (variant) => ({
         organization_public: "Territoire de rattachement",
         territorial_collectivity: "Territoire de la collectivité",
         association: "Nom de l'association",
-        new_association_name: "Précisez le nom complet",
-        new_association_abbreviation: "Précisez l'acronyme, si applicable",
-        departement: "Département de rattachement",
         organization_administration: "Nom de la structure",
-        organization_other: "Précisez le nom de la structure",
+        organization_other:
+            "Précisez le nom et le territoire de votre structure",
         position:
             variant === "demande-acces"
                 ? "Votre fonction"

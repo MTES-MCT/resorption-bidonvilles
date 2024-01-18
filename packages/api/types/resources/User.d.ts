@@ -1,6 +1,6 @@
 import { PermissionOption } from '#server/models/permissionModel/types/PermissionOption.d';
 import { Permissions } from '#server/models/permissionModel/types/Permissions.d';
-import { LocationType } from '#server/models/geoModel/LocationType.d';
+import { InterventionArea } from '#server/models/geoModel/Location.d';
 import { ExpertiseTopic } from '#root/types/resources/ExpertiseTopic.d';
 
 export type UserQuestionSubscriptions = {
@@ -58,29 +58,11 @@ export type User = {
             uid: string,
             name_singular: string,
             name_plural: string,
-        },
-        location: {
-            type: LocationType,
-            latitude: number,
-            longitude: number,
-            region: {
-                code: string,
-                name: string,
-            } | null,
-            departement: {
-                code: string,
-                name: string,
-            } | null,
-            epci: {
-                code: string,
-                name: string,
-            } | null,
-            city: {
-                code: string,
-                name: string,
-                main: string | null
-            } | null,
-        },
+        }
+    },
+    intervention_areas: {
+        is_national: boolean,
+        areas: InterventionArea[],
     },
     charte_engagement_a_jour: boolean,
     email_subscriptions: string[],

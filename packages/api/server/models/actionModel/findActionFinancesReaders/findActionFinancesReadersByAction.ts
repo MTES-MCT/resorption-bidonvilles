@@ -1,4 +1,4 @@
-import { SerializedOrganization } from '#server/models/userModel/getDirectory';
+import { Organization } from '#root/types/resources/Organization.d';
 import findActionFinancesReaders from './findActionFinancesReaders';
 
-export default async (actionId: number): Promise<SerializedOrganization[]> => findActionFinancesReaders(actionId);
+export default async (actionId: number): Promise<Organization[]> => findActionFinancesReaders(actionId);

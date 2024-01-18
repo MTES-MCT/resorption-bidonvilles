@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import ServiceError from '#server/errors/ServiceError';
-import Action from '#server/models/actionModel/fetch/Action.d';
 import create from '#server/models/actionModel/create/create';
+import Action from '#root/types/resources/Action.d';
 import { User } from '#root/types/resources/User.d';
 
 import { ActionInput } from './ActionInput.d';
@@ -22,7 +22,7 @@ export default async (user: User, data: ActionInput): Promise<Action> => {
     }
 
     try {
-        const action = await fetchAction(actionId, true, transaction);
+        const action = await fetchAction(user, actionId, true, transaction);
         await transaction.commit();
 
         return action;

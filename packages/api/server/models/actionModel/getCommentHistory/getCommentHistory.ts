@@ -4,7 +4,9 @@ import { QueryTypes } from 'sequelize';
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
 
+import { Location } from '#server/models/geoModel/Location.d';
 import { ActionCommentActivity } from '#root/types/resources/Activity.d';
+import { User } from '#root/types/resources/User.d';
 
 const { restrict } = permissionUtils;
 
@@ -19,7 +21,7 @@ type ActionCommentHistoryRow = {
     action_id: number,
     action_name: string
 };
-export default async (user, location, numberOfActivities, lastDate, maxDate): Promise<ActionCommentActivity[]> => {
+export default async (user: User, location: Location, numberOfActivities: number, lastDate: Date, maxDate: Date): Promise<ActionCommentActivity[]> => {
     // apply geographic level restrictions
     const where = [];
     const replacements: any = {
@@ -27,17 +29,23 @@ export default async (user, location, numberOfActivities, lastDate, maxDate): Pr
     };
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
 
-    const restrictedLocation = restrict(location).for(user).askingTo('read', 'action_comment');
-    if (restrictedLocation === null) {
+    const restrictedLocations = restrict(location).for(user).askingTo('read', 'action_comment');
+    if (restrictedLocations.length === 0) {
         return [];
     }
 
-    if (restrictedLocation.type === 'region') {
-        where.push('departements.fk_region = :locationCode');
-        replacements.locationCode = restrictedLocation.region.code;
-    } else if (restrictedLocation.type !== 'nation') {
-        where.push('departements.code = :locationCode');
-        replacements.locationCode = restrictedLocation.departement.code;
+    if (!restrictedLocations.some(l => l.type === 'nation')) {
+        where.push(
+            restrictedLocations.map((l, index) => {
+                if (l.type === 'region') {
+                    replacements[`locationCode${index}`] = l.region.code;
+                    return `departements.fk_region = :locationCode${index}`;
+                }
+
+                replacements[`locationCode${index}`] = l.departement.code;
+                return `departements.code = :locationCode${index}`;
+            }).join(' OR '),
+        );
     }
 
     where.push(`comments.created_at < '${lastDate}'`);

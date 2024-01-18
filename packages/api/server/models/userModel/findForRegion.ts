@@ -5,13 +5,15 @@ export default async (regionCode, name = undefined) => {
     const where: Where = [
         {
             nationalUser: {
-                query: 'organizations.location_type',
-                value: 'nation',
+                query: 'v_user_areas.is_national',
+                value: true,
             },
             // or
             userInTheProperRegion: {
-                query: 'organizations.region_code',
-                value: regionCode,
+                value: [regionCode],
+                query: 'v_user_areas.regions::text[]',
+                arrayOperator: true,
+                operator: '&&',
             },
         },
         {
@@ -20,6 +22,7 @@ export default async (regionCode, name = undefined) => {
             },
         },
     ];
+
     if (name !== undefined) {
         where.push({
             firstName: {

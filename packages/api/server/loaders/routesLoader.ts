@@ -65,13 +65,6 @@ export default (app) => {
         controllers.user.listExport,
     );
     app.get(
-        '/navigationLogs/mobile/export',
-        middlewares.auth.authenticate,
-        middlewares.auth.isSuperAdmin,
-        controllers.userNavigationLogs.exportForMobile,
-
-    );
-    app.get(
         '/navigationLogs/webapp/export',
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
@@ -221,12 +214,6 @@ export default (app) => {
         validators.user.reactivate,
         middlewares.validation,
         controllers.user.reactivate,
-    );
-    app.post(
-        '/users/:id/upgrade',
-        middlewares.auth.authenticate,
-        middlewares.appVersion.sync,
-        controllers.user.upgrade,
     );
     app.post(
         '/users/:id/options',
@@ -430,6 +417,7 @@ export default (app) => {
     app.post(
         '/action-finances-readers',
         middlewares.auth.authenticate,
+        validators.financeReaders.findByLocation,
         middlewares.validation,
         controllers.action.findActionFinancesReadersByManagers,
     );
@@ -475,7 +463,7 @@ export default (app) => {
         middlewares.charte.check,
         validators.exportTowns,
         middlewares.validation,
-        controllers.town.exportTown,
+        controllers.town.exportTowns,
     );
     app.get(
         '/towns',
@@ -657,6 +645,20 @@ export default (app) => {
     );
 
     app.get(
+        '/associations/search',
+        validators.organization.searchAssociations,
+        middlewares.validation,
+        controllers.organization.searchAssociations,
+    );
+
+    app.get(
+        '/territorial-collectivities/search',
+        validators.organization.searchTerritorialCollectivities,
+        middlewares.validation,
+        controllers.organization.searchTerritorialCollectivities,
+    );
+
+    app.get(
         '/organization-categories',
         controllers.organization.categories,
     );
@@ -698,10 +700,6 @@ export default (app) => {
     app.get(
         '/locations/:type/:code?',
         controllers.geo.get,
-    );
-    app.get(
-        '/departements',
-        controllers.geo.listDepartements,
     );
 
     // dashboard

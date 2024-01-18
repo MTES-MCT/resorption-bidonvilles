@@ -1,14 +1,10 @@
 import activityModel from '#server/models/activityModel';
 import userModel from '#server/models/userModel';
-import { SummarySubscribers } from '#server/models/userModel/findDepartementSummarySubscribers';
 import { QuestionSummary } from '#server/models/activityModel/types/QuestionNationalSummary';
 import { ActivityNationalSummary } from '#server/models/activityModel/types/ActivityNationalSummary';
-import sendNationalSummary from './sendNationalSummary';
-import sendRegionalSummary from './sendRegionalSummary';
-import sendDepartementalSummary from './sendDepartementalSummary';
+import { User } from '#root/types/resources/User.d';
+import sendSummary from './sendSummary';
 
-
-// @todo: créer une fonction qui permet de générer facilement from et to
 export default async (day: number, month: number, year: number): Promise<void> => {
     // set date range
     const monday = new Date(year, month, day, 0, 0, 0, 0);
@@ -35,7 +31,7 @@ export default async (day: number, month: number, year: number): Promise<void> =
     const promises: [
         Promise<QuestionSummary[]>,
         Promise<ActivityNationalSummary>,
-        Promise<SummarySubscribers>,
+        Promise<User[]>,
     ] = [
         activityModel.getQuestions(monday, sunday),
         activityModel.get(monday, sunday),
@@ -44,9 +40,5 @@ export default async (day: number, month: number, year: number): Promise<void> =
     const [questions, summary, subscribers] = await Promise.all(promises);
 
     // send the summaries
-    await Promise.all([
-        sendNationalSummary(monday, sunday, questions, summary, subscribers.nation),
-        sendRegionalSummary(monday, sunday, questions, summary, subscribers.region),
-        sendDepartementalSummary(monday, sunday, questions, summary, subscribers.departement),
-    ]);
+    await sendSummary(monday, sunday, questions, summary, subscribers);
 };

@@ -103,17 +103,19 @@ export const useDirectoryStore = defineStore("directory", () => {
         }
 
         return list.filter((organization) => {
-            const l = organization.location[filters.location.value.typeUid];
+            return organization.intervention_areas.areas.some((area) => {
+                const a = area[filters.location.value.typeUid];
 
-            if (!l) {
-                return false;
-            }
+                if (!a) {
+                    return false;
+                }
 
-            if (l.code === `${filters.location.value.code}`) {
-                return true;
-            }
+                if (a.code === `${filters.location.value.code}`) {
+                    return true;
+                }
 
-            return l.main === `${filters.location.value.code}`;
+                return a.main === `${filters.location.value.code}`;
+            });
         });
     }
     function filterBySearch() {
@@ -134,7 +136,7 @@ export const useDirectoryStore = defineStore("directory", () => {
     function filterUsersByExpertiseTopics(organization, expertiseTopicsIds) {
         return organization.users.filter((user) => {
             return user?.expertise_topics?.some((topic) =>
-                expertiseTopicsIds.includes(topic.id)
+                expertiseTopicsIds.includes(topic.uid)
             );
         });
     }

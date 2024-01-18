@@ -43,9 +43,12 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
                     regions.name AS region_name,
                     regions.code IN ('01', '02', '03', '04', '06') AS is_oversea,
                     departements.code AS departement_code,
-                    departements.name AS departement_name
+                    departements.name AS departement_name,
+                    cities.code AS city_code,
+                    epci.code AS epci_code
                 FROM shantytowns
                 LEFT JOIN cities ON shantytowns.fk_city = cities.code
+                LEFT JOIN epci ON cities.fk_epci = epci.code
                 LEFT JOIN departements ON cities.fk_departement = departements.code
                 LEFT JOIN regions ON departements.fk_region = regions.code
             )
@@ -75,6 +78,9 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
             FROM shantytowns
             LEFT JOIN shantytowns_today ON shantytowns_today.shantytown_id = shantytowns.shantytown_id
             LEFT JOIN regions ON regions.code = shantytowns_today.region_code
+            LEFT JOIN departements ON departements.code = shantytowns_today.departement_code
+            LEFT JOIN epci ON epci.code = shantytowns_today.epci_code
+            LEFT JOIN cities ON cities.code = shantytowns_today.city_code
             WHERE
                 shantytowns_today.known_since <= :to
             AND
@@ -91,9 +97,12 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
                     regions.name AS region_name,
                     regions.code IN ('01', '02', '03', '04', '06') AS is_oversea,
                     departements.code AS departement_code,
-                    departements.name AS departement_name
+                    departements.name AS departement_name,
+                    cities.code AS city_code,
+                    epci.code AS epci_code
                 FROM shantytowns
                 LEFT JOIN cities ON shantytowns.fk_city = cities.code
+                LEFT JOIN epci ON cities.fk_epci = epci.code
                 LEFT JOIN departements ON cities.fk_departement = departements.code
                 LEFT JOIN regions ON departements.fk_region = regions.code
             )
@@ -123,6 +132,9 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
             FROM "ShantytownHistories" shantytowns
             LEFT JOIN shantytowns_today ON shantytowns_today.shantytown_id = shantytowns.shantytown_id
             LEFT JOIN regions ON regions.code = shantytowns_today.region_code
+            LEFT JOIN departements ON departements.code = shantytowns_today.departement_code
+            LEFT JOIN epci ON epci.code = shantytowns_today.epci_code
+            LEFT JOIN cities ON cities.code = shantytowns_today.city_code
             WHERE
                 shantytowns_today.known_since <= :to
             AND

@@ -22,7 +22,7 @@
                     { label: 'Département', value: 'departements' },
                     { label: 'EPCI', value: 'epci' },
                     { label: 'Commune', value: 'cities' },
-                    { label: 'Action', value: 'actions' },
+                    { label: 'Nationale', value: 'nation' },
                 ]"
                 v-model="attachmentFilter"
             />
@@ -98,36 +98,39 @@
                                         }}</span
                                     ><br />
                                     <span
+                                        v-if="exception.is_national"
                                         class="pl-4"
-                                        v-if="exception.regions?.length"
+                                        >National</span
                                     >
-                                        Régions : {{ exception.regions }}
-                                    </span>
-                                    <span
-                                        class="pl-4"
-                                        v-if="exception.departements?.length"
-                                    >
-                                        Départements :
-                                        {{ exception.departements }}
-                                    </span>
-                                    <span
-                                        class="pl-4"
-                                        v-if="exception.epci?.length"
-                                    >
-                                        EPCI : {{ exception.epci }}
-                                    </span>
-                                    <span
-                                        class="pl-4"
-                                        v-if="exception.cities?.length"
-                                    >
-                                        Villes : {{ exception.cities }}
-                                    </span>
-                                    <span
-                                        class="pl-4"
-                                        v-if="exception.actions?.length"
-                                    >
-                                        Actions : {{ exception.actions }}
-                                    </span>
+                                    <template v-else>
+                                        <span
+                                            class="pl-4"
+                                            v-if="exception.regions?.length"
+                                        >
+                                            Régions : {{ exception.regions }}
+                                        </span>
+                                        <span
+                                            class="pl-4"
+                                            v-if="
+                                                exception.departements?.length
+                                            "
+                                        >
+                                            Départements :
+                                            {{ exception.departements }}
+                                        </span>
+                                        <span
+                                            class="pl-4"
+                                            v-if="exception.epci?.length"
+                                        >
+                                            EPCI : {{ exception.epci }}
+                                        </span>
+                                        <span
+                                            class="pl-4"
+                                            v-if="exception.cities?.length"
+                                        >
+                                            Villes : {{ exception.cities }}
+                                        </span>
+                                    </template>
                                 </li>
                             </ul>
                         </td>
@@ -225,12 +228,6 @@
                                     >
                                         Villes : {{ exception.cities }}
                                     </span>
-                                    <span
-                                        class="pl-4"
-                                        v-if="exception.actions?.length"
-                                    >
-                                        Actions : {{ exception.actions }}
-                                    </span>
                                 </li>
                             </ul>
                         </td>
@@ -260,7 +257,13 @@ import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
 const data = ref(null);
 const statusFilter = ref(["active"]);
 const featureFilter = ref([]);
-const attachmentFilter = ref(["regions", "departements", "epci", "cities"]);
+const attachmentFilter = ref([
+    "regions",
+    "departements",
+    "epci",
+    "cities",
+    "nation",
+]);
 const typeFilter = ref(["true", "false"]);
 
 const featureFilterOptions = computed(() => {
@@ -338,8 +341,12 @@ function applyAttachmentFilter(row) {
         return false;
     }
 
+    if (attachmentFilter.value.includes("nation") && row.is_national === true) {
+        return true;
+    }
+
     return attachmentFilter.value.includes(
-        ["regions", "departements", "epci", "cities", "actions"].find((key) => {
+        ["regions", "departements", "epci", "cities"].find((key) => {
             return row[key]?.length > 0;
         })
     );
@@ -385,15 +392,14 @@ const parsedData = computed(() => {
             }
 
             acc[row.user_id].exceptions.push({
-                id: row.user_permission_id,
                 feature: row.fk_feature,
                 entity: row.fk_entity,
                 allowed: row.allowed,
+                is_national: row.is_national,
                 regions: row.regions,
                 departements: row.departements,
                 epci: row.epci,
                 cities: row.cities,
-                actions: row.actions,
             });
             return acc;
         }, {}),
@@ -418,15 +424,14 @@ const parsedData = computed(() => {
             }
 
             acc[row.organization_id].exceptions.push({
-                id: row.user_permission_id,
                 feature: row.fk_feature,
                 entity: row.fk_entity,
                 allowed: row.allowed,
+                is_national: row.is_national,
                 regions: row.regions,
                 departements: row.departements,
                 epci: row.epci,
                 cities: row.cities,
-                actions: row.actions,
             });
             return acc;
         }, {}),

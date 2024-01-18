@@ -4,7 +4,7 @@
             <p>Statut du compte</p>
             <p>NOM Prénom</p>
             <p>Structure</p>
-            <p>Territoire</p>
+            <p>Territoire(s)</p>
             <p>Type d'accès</p>
         </div>
         <ListeDemandeAccesLigne

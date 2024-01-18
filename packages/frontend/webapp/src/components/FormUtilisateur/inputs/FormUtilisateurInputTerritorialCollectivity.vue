@@ -1,17 +1,49 @@
 <template>
-    <InputLocation
+    <Autocomplete
         name="territorial_collectivity"
         :label="label"
         placeholder="Nom de la commune, epci, département, ou région"
+        :fn="autocompleteFn"
+        v-model="organization"
+        showCategory
     />
 </template>
 
 <script setup>
-import InputLocation from "@/components/InputLocation/InputLocation.vue";
-import { defineProps, toRefs } from "vue";
+import { defineProps, toRefs, computed, defineEmits } from "vue";
+import { Autocomplete } from "@resorptionbidonvilles/ui";
+import { autocomplete } from "@/api/territorial_collectivities.api.js";
 
 const props = defineProps({
-    label: String,
+    modelValue: {
+        type: Object,
+        required: false,
+        default: () => ({
+            search: "",
+            data: null,
+        }),
+    },
 });
-const { label } = toRefs(props);
+const { modelValue } = toRefs(props);
+const emit = defineEmits(["update:modelValue"]);
+const organization = computed({
+    get() {
+        return modelValue.value;
+    },
+    set(value) {
+        emit("update:modelValue", value);
+    },
+});
+
+async function autocompleteFn(value) {
+    const results = await autocomplete(value);
+    return results.map((org) => ({
+        id: org.id,
+        label: org.label,
+        category: org.type,
+        data: {
+            id: org.id,
+        },
+    }));
+}
 </script>
