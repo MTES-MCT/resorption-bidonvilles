@@ -9,6 +9,6 @@ export default async function (user) {
     accesStore.updateUser(user.id, updatedUser);
     notificationStore.success(
         "Réactivation de l'accès",
-        "L'accès de cet utilisateur a bien été rétabli."
+        "L'accès de cet utilisateur a bien été rétabli et ce dernier a été notifié par mail."
     );
 }

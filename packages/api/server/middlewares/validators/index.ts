@@ -26,6 +26,7 @@ import userDeactivate from './users/deactivate';
 import userReactivate from './users/reactivate';
 import userUpdatePermissionOptions from './users/updatePermissionOptions';
 import userGetLatestActivationLink from './users/getLatestActivationLink';
+import userSendActivationLink from './users/sendActivationLink';
 import userSetExpertiseTopics from './users/setExpertiseTopics';
 import userSetRoleRegular from './users/setRoleRegular';
 import mePostNavigationLogs from './me/post.navigationLogs';
@@ -90,6 +91,7 @@ export default {
         deactivate: userDeactivate,
         getLatestActivationLink: userGetLatestActivationLink,
         reactivate: userReactivate,
+        sendActivationLink: userSendActivationLink,
         setExpertiseTopics: userSetExpertiseTopics,
         setRoleRegular: userSetRoleRegular,
         updatePermissionOptions: userUpdatePermissionOptions,
