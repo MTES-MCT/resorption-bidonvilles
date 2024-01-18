@@ -11,7 +11,7 @@ const {
     wwwUrl, webappUrl, backUrl, blogUrl,
 } = config;
 
-const formationUrl = 'https://www.evalandgo.com/f/72933/4pFjfpH19VHD2AZhU2ccYx';
+const formationUrl = 'https://framaforms.org/sinscrire-a-une-session-de-prise-en-main-resorption-bidonvilles-1702635472';
 const connexionUrl = `${webappUrl}/connexion`;
 const contactUrl = `${webappUrl}/contact`;
 const adminGuideUrl = `${backUrl}/assets/guide_utilisateur/guide_admin_2020_06.pdf`;

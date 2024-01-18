@@ -42,13 +42,24 @@ export const useTownsStore = defineStore("towns", () => {
     const heatwaveStatuses = ref({});
     const exportOptions = ref([]);
     const sort = ref("updatedAt");
+    const prefilteredTowns = computed(() => {
+        return {
+            open: filterShantytowns(towns.value, {
+                status: "open",
+                search: filters.search.value,
+                location: filters.location.value,
+                ...filters.properties.value,
+            }),
+            close: filterShantytowns(towns.value, {
+                status: "close",
+                search: filters.search.value,
+                location: filters.location.value,
+                ...filters.properties.value,
+            }),
+        };
+    });
     const filteredTowns = computed(() => {
-        return filterShantytowns(towns.value, {
-            status: filters.status.value,
-            search: filters.search.value,
-            location: filters.location.value,
-            ...filters.properties.value,
-        }).sort(sortFn.value);
+        return prefilteredTowns.value[filters.status.value].sort(sortFn.value);
     });
     const townCategoryFilter = ref([]);
     const configStore = useConfigStore();
@@ -186,6 +197,7 @@ export const useTownsStore = defineStore("towns", () => {
 
             return Math.ceil(filteredTowns.value.length / ITEMS_PER_PAGE);
         }),
+        prefilteredTowns,
         filteredTowns,
         async fetchTowns() {
             if (isLoading.value === true) {

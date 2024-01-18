@@ -6,6 +6,9 @@
             ? 'text-primary font-bold border-primary'
             : 'cursor-pointer border-transparent'
     ]">
+        <span v-if="$slots.prefix" class="mr-1 rounded text-sm px-1 border" :class="[
+            active ? 'border-transparent text-white bg-primary' : 'border-primary text-primary',
+        ]"><slot name="prefix" /></span>
         <slot />
     </button>
 </template>

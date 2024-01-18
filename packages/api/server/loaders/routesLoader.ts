@@ -186,6 +186,8 @@ export default (app) => {
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.activate'], ...args),
         middlewares.charte.check,
         middlewares.appVersion.sync,
+        validators.user.sendActivationLink,
+        middlewares.validation,
         controllers.user.sendActivationLink,
     );
     app.get(

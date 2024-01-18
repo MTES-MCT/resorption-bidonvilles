@@ -9,34 +9,33 @@ const { expect } = chai;
 chai.use(sinonChai);
 
 const sandbox = sinon.createSandbox();
-const userService = {
-    reactivate: sandbox.stub(),
-};
+const sendActivationLinkService = sandbox.stub();
 
-rewiremock('#server/services/user/index').with(userService);
+rewiremock('#server/services/user/sendActivationLink').with(sendActivationLinkService);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
-import reactivateController from './reactivate';
+import sendActivationLinkController from './sendActivationLink';
 rewiremock.disable();
 
-describe('userController.reactivate()', () => {
+describe('userController.sendActivationLink()', () => {
     afterEach(() => {
         sandbox.reset();
     });
 
-    it('demande la réactivation du compte', async () => {
+    it('demande l\'envoi d\'un accès au compte', async () => {
         const req = mockReq({
-            user: fakeUser(),
+            userToBeActivated: fakeUser({ id: 42 }),
+            user: fakeUser({ id: 1 }),
             body: {
-                user: fakeUser({ id: 42 }),
+                options: ['option1', 'option2'],
             },
         });
         const res = mockRes();
 
-        await reactivateController(req, res, () => {});
-        expect(userService.reactivate).to.have.been.calledOnce;
-        expect(userService.reactivate).to.have.been.calledWith(req.user, 42);
+        await sendActivationLinkController(req, res, () => {});
+        expect(sendActivationLinkService).to.have.been.calledOnce;
+        expect(sendActivationLinkService).to.have.been.calledWith(req.user, req.userToBeActivated, ['option1', 'option2']);
     });
 
     it('répond avec un code 200 et l\'utilisateur mis à jour', async () => {
@@ -44,33 +43,36 @@ describe('userController.reactivate()', () => {
         const updatedUser = fakeUser({ id: 42, status: 'active' });
 
         const req = mockReq({
-            user: fakeUser(),
+            userToBeActivated: originalUser,
+            user: fakeUser({ id: 1 }),
             body: {
-                user: originalUser,
+                options: [],
             },
         });
         const res = mockRes();
 
-        userService.reactivate.withArgs(req.user, 42).resolves(updatedUser);
+        sendActivationLinkService.resolves(updatedUser);
 
-        await reactivateController(req, res, () => {});
+        await sendActivationLinkController(req, res, () => {});
         expect(res.status).to.have.been.calledOnceWith(200);
         expect(res.send).to.have.been.calledOnceWith(updatedUser);
     });
 
     it('en cas d\'erreur, répond avec un code 500 et un détail de l\'erreur', async () => {
         const req = mockReq({
+            userToBeActivated: fakeUser({ id: 42 }),
+            user: fakeUser({ id: 1 }),
             body: {
-                user: fakeUser(),
+                options: [],
             },
         });
         const res = mockRes();
         const next = sandbox.stub();
 
         const error = new Error();
-        userService.reactivate.rejects(error);
+        sendActivationLinkService.rejects(error);
 
-        await reactivateController(req, res, next);
+        await sendActivationLinkController(req, res, next);
         expect(res.status).to.have.been.calledWith(500);
         expect(res.send).to.have.been.calledWith({
             user_message: 'Une erreur inconnue est survenue',

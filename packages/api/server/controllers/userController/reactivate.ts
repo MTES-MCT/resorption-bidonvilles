@@ -15,7 +15,7 @@ interface UserReactivateRequest extends Request {
 
 export default async (req: UserReactivateRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const updatedUser = await userService.reactivate(req.body.user.id);
+        const updatedUser = await userService.reactivate(req.user, req.body.user.id);
         res.status(200).send(updatedUser);
     } catch (error) {
         const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
