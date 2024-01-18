@@ -83,7 +83,9 @@ export function isOptedOut() {
 
 function formatUserForTracking(user) {
     const { organization } = user;
-    const area = user.firstMainArea;
+    const area = user.intervention_areas.areas.find(
+        (area) => area.is_main_area === true
+    );
     const { type: orgType } = organization;
     const location = area[area.type];
 
