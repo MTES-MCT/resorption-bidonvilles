@@ -15,11 +15,7 @@ export function existingOrganization(override: Partial<ContactBody> = {}): Conta
         access_request_message: 'Je suis une demande d\'accès',
         organization_category: 'public_establishment',
         organization_full: fakeOrganization(),
-        new_association: false,
         organization_other: null,
-        new_association_name: null,
-        new_association_abbreviation: null,
-        departement: null,
     };
 
     return Object.assign(defaultObj, override);

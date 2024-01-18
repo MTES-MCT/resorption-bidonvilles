@@ -1,24 +1,30 @@
 import ServiceError from '#server/errors/ServiceError';
 import contactFormReferralModel from '#server/models/contactFormReferralModel';
-import permissionUtils from '#server/utils/permission';
+import getPermission from '#server/utils/permission/getPermission';
+import { User } from '#root/types/resources/User.d';
 
 const { list } = contactFormReferralModel;
-const { where: fWhere } = permissionUtils;
 
-export default async (user) => {
-    const permissionClauseGroup = fWhere().can(user).do('access', 'contact_form_referral');
-    if (permissionClauseGroup === null) {
+type ContactFormReferralExportRow = {
+    Prénom: string;
+    'Nom de famille': string;
+    Courriel: string;
+    'Départements d\'intervention': string;
+    Organisation: string;
+    Raison: string;
+    'Raison autre': string;
+    'Raison bouche à oreille': string;
+};
+
+export default async (user: User): Promise<ContactFormReferralExportRow[]> => {
+    const permission = getPermission(user, 'access', 'contact_form_referral');
+    if (permission === null) {
         return [];
     }
 
-    const where = [];
-    if (Object.keys(permissionClauseGroup).length > 0) {
-        where.push([permissionClauseGroup]);
-    }
-
-    let referrals;
+    let referrals: Awaited<ReturnType<typeof list>>;
     try {
-        referrals = await list(where);
+        referrals = await list(permission);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
@@ -27,7 +33,7 @@ export default async (user) => {
         Prénom: row.first_name,
         'Nom de famille': row.last_name,
         Courriel: row.email,
-        'Code département': row.departement_code,
+        'Départements d\'intervention': row.departements.join(', '),
         Organisation: row.organization_name,
         Raison: row.reason,
         'Raison autre': row.reason_other,

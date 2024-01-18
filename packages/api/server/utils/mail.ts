@@ -1,8 +1,7 @@
 import Mailjet from 'node-mailjet';
 import config from '#server/config';
-import userModel from '#server/models/userModel';
 
-const { mail: mailConfig, wwwUrl } = config;
+const { mail: mailConfig } = config;
 const mailjet = mailConfig.publicKey
     ? new Mailjet({
         apiKey: mailConfig.publicKey,
@@ -11,19 +10,6 @@ const mailjet = mailConfig.publicKey
     : null;
 
 export default {
-    generateUserSignature(user) {
-        const signature = [
-            `${userModel.formatName(user)}`,
-            `${user.position} - ${user.organization.type.abbreviation || user.organization.name}${user.organization.location.departement !== null ? ` - ${user.organization.location.departement.code}` : ''}`,
-            `${user.role} de resorption-bidonvilles.com`,
-        ];
-
-        return {
-            TextPart: signature.join('\n'),
-            HTMLPart: signature.join('<br/>').replace('resorption-bidonvilles.com', `<a href="${wwwUrl}">resorption-bidonvilles.com</a>`),
-        };
-    },
-
     send(user, mailContent, replyTo = null, bcc = []) {
         if (mailjet === null) {
             return null;

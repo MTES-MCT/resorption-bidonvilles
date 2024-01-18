@@ -1,6 +1,6 @@
 import getUsenameOf from '#server/models/shantytownModel/_common/getUsenameOf';
 import { ActionHash } from './hashActions';
-import { ActionShantytown } from './Action';
+import { ActionShantytown } from '#root/types/resources/Action.d';
 import { ActionShantytownRow } from './fetchShantytowns';
 
 export default function mergeShantytowns(hash: ActionHash, shantytowns: ActionShantytownRow[]): void {

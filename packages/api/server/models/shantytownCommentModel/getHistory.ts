@@ -8,8 +8,10 @@ import permissionUtils from '#server/utils/permission';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
 import getAddressSimpleOf from '#server/models//shantytownModel/_common/getAddressSimpleOf';
 import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
+import { Location } from '#server/models/geoModel/Location.d';
 import { ShantytownCommentRow } from './ShantytownCommentRow.d';
 import { ShantytownCommentActivity } from '#root/types/resources/Activity.d';
+import { User } from '#root/types/resources/User.d';
 
 const { fromGeoLevelToTableName } = geoUtils;
 const { formatName } = userModel;
@@ -30,7 +32,7 @@ export type ShantytownCommentHistoryRow = ShantytownCommentRow & {
     regionCode: string,
     regionName: string
 };
-export default async (user, location, numberOfActivities, lastDate, maxDate):Promise<ShantytownCommentActivity[]> => {
+export default async (user: User, location: Location, numberOfActivities: number, lastDate: Date, maxDate: Date):Promise<ShantytownCommentActivity[]> => {
     // apply geographic level restrictions
     const where = [];
     const replacements: any = {
@@ -42,7 +44,8 @@ export default async (user, location, numberOfActivities, lastDate, maxDate):Pro
         public: restrict(location).for(user).askingTo('list', 'shantytown_comment'),
         private: restrict(location).for(user).askingTo('listPrivate', 'shantytown_comment'),
     };
-    if (restrictedLocations.public === null && restrictedLocations.private === null) {
+
+    if (restrictedLocations.public.length === 0 && restrictedLocations.private.length === 0) {
         return [];
     }
 
@@ -58,31 +61,38 @@ export default async (user, location, numberOfActivities, lastDate, maxDate):Pro
     };
 
     // public comments
-    if (restrictedLocations.public === null) {
+    if (restrictedLocations.public.length === 0) {
         permissionWhere.publicComments.push('false');
-    } else if (restrictedLocations.public.type !== 'nation') {
+    } else if (!restrictedLocations.public.some(l => l.type === 'nation')) {
         // geo permission
-        const publicCommentLocationClause = [`${fromGeoLevelToTableName(restrictedLocations.public.type)}.code = :shantytownCommentLocationCode`];
-        if (restrictedLocations.public.type === 'city') {
-            publicCommentLocationClause.push(`${fromGeoLevelToTableName(restrictedLocations.public.type)}.fk_main = :shantytownCommentLocationCode`);
-        }
+        const publicCommentLocationClause = restrictedLocations.public.map((l, index) => {
+            const arr = [`${fromGeoLevelToTableName(l.type)}.code = :shantytownCommentLocationCode${index}`];
+            if (l.type === 'city') {
+                arr.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :shantytownCommentLocationCode${index}`);
+            }
+
+            replacements[`shantytownCommentLocationCode${index}`] = l[l.type].code;
+
+            return arr;
+        }).flat();
 
         permissionWhere.publicComments.push(`(${publicCommentLocationClause.join(' OR ')})`);
-        replacements.shantytownCommentLocationCode = restrictedLocations.public[restrictedLocations.public.type].code;
     }
 
     // private comments
     const privateCommentLocationClause = [];
-    if (restrictedLocations.private !== null) {
-        if (restrictedLocations.private.type !== 'nation') {
-            privateCommentLocationClause.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.code = :privateShantytownCommentLocationCode`);
-            if (restrictedLocations.public.type === 'city') {
-                privateCommentLocationClause.push(`${fromGeoLevelToTableName(restrictedLocations.private.type)}.fk_main = :privateShantytownCommentLocationCode`);
-            }
-
-            replacements.privateShantytownCommentLocationCode = restrictedLocations.private[restrictedLocations.private.type].code;
-        } else {
+    if (restrictedLocations.private.length > 0) {
+        if (restrictedLocations.private.some(l => l.type === 'nation')) {
             privateCommentLocationClause.push('true');
+        } else {
+            restrictedLocations.private.forEach((l, index) => {
+                privateCommentLocationClause.push(`${fromGeoLevelToTableName(l.type)}.code = :privateShantytownCommentLocationCode${index}`);
+                if (l.type === 'city') {
+                    privateCommentLocationClause.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :privateShantytownCommentLocationCode${index}`);
+                }
+
+                replacements[`privateShantytownCommentLocationCode${index}`] = l[l.type].code;
+            });
         }
     }
 
@@ -131,12 +141,12 @@ export default async (user, location, numberOfActivities, lastDate, maxDate):Pro
 
     const activities = await sequelize.query(
         `WITH organization_comment_access AS (
-           SELECT 
+           SELECT
                 scot.fk_comment AS shantytown_comment_id,
-                ARRAY_AGG(lo.name) AS organization_target_name,
-                ARRAY_AGG(lo.organization_id) AS organization_target_id
+                ARRAY_AGG(organizations.name) AS organization_target_name,
+                ARRAY_AGG(organizations.organization_id) AS organization_target_id
             FROM shantytown_comment_organization_targets scot 
-            LEFT JOIN localized_organizations lo ON lo.organization_id = scot.fk_organization
+            LEFT JOIN organizations ON organizations.organization_id = scot.fk_organization
             GROUP BY scot.fk_comment
         ),
         user_comment_access AS (

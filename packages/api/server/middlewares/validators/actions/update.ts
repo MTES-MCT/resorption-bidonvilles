@@ -8,7 +8,7 @@ export default [
         .custom(async (value, { req }) => {
             let action;
             try {
-                action = await actionModel.fetch([value], req.user.permissions.action.update, null);
+                action = await actionModel.fetch(req.user, [value]);
             } catch (error) {
                 throw new Error('Une erreur de lecture en base de données est survenue');
             }

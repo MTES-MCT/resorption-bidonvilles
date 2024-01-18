@@ -12,20 +12,25 @@ export type UserAutocompleteRow = {
 };
 
 export default async (search: string, departementCode: string = null): Promise<UserAutocompleteRow[]> => sequelize.query(
-    `SELECT
+    `
+    SELECT
         users.user_id AS id,
         users.first_name,
         users.last_name,
         users.fk_organization AS organization_id,
-        localized_organizations.name AS organization_name,
-        localized_organizations.abbreviation AS organization_abbreviation,
+        organizations.name AS organization_name,
+        organizations.abbreviation AS organization_abbreviation,
         GREATEST(
             word_similarity(unaccent(:search), unaccent(users.first_name)),
             word_similarity(unaccent(:search), unaccent(users.last_name))
         ) AS similarity
     FROM users
-    LEFT JOIN localized_organizations ON users.fk_organization = localized_organizations.organization_id
-    ${departementCode !== null ? 'LEFT JOIN departements ON departements.code = :departementCode' : ''}
+    LEFT JOIN organizations ON users.fk_organization = organizations.organization_id
+    ${departementCode !== null
+        ? `
+    LEFT JOIN departements ON departements.code = :departementCode
+    LEFT JOIN v_user_areas ON users.user_id = v_user_areas.user_id AND v_user_areas.is_main_area IS TRUE`
+        : ''}
     WHERE
         users.fk_status = 'active'
         AND
@@ -38,9 +43,9 @@ export default async (search: string, departementCode: string = null): Promise<U
         )
         ${departementCode !== null ? `
         AND
-        (localized_organizations.location_type = 'nation'
+        (v_user_areas.is_national IS TRUE
             OR
-        localized_organizations.region_code = departements.fk_region)` : ''}
+        departements.fk_region = ANY(v_user_areas.regions))` : ''}
     ORDER BY similarity DESC
     `,
     {

@@ -1,4 +1,4 @@
-import { ShantytownAction } from '../fetch/Action.d';
+import { ShantytownAction } from '#root/types/resources/Action.d';
 import { ActionSelectRow } from './fetchActions';
 
 export type ActionHash = {

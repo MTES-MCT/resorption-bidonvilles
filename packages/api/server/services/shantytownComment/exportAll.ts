@@ -2,21 +2,45 @@ import moment from 'moment';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import ServiceError from '#server/errors/ServiceError';
 import permissionUtils from '#server/utils/permission';
+import { Nation } from '#server/models/geoModel/Location.d';
+import { User } from '#root/types/resources/User.d';
 
 const { restrict } = permissionUtils;
+type ShantytownCommentExport = {
+    S: string,
+    'ID du commentaire': number,
+    'ID du site': number,
+    'Publié le': string,
+    Description: string,
+    'ID de l\'auteur(e)': number,
+    'Commentaire privé ?': 'Oui' | 'Non',
+    Prénom: string,
+    'Nom de famille': string,
+    Structure: string,
+    Département: string,
+    Role: string,
+    'Objectif de résorption': number,
+    Tags: string,
+};
 
-export default async (user) => {
-    const nationalLevel = { type: 'nation' };
+export default async (user: User): Promise<ShantytownCommentExport[]> => {
+    const nationalLevel: Nation = {
+        type: 'nation',
+        region: null,
+        departement: null,
+        epci: null,
+        city: null,
+    };
     const locations = {
         export: restrict(nationalLevel).for(user).askingTo('export', 'shantytown_comment'),
         comments: restrict(nationalLevel).for(user).askingTo('listPrivate', 'shantytown_comment'),
     };
 
-    if (locations.export === null) {
+    if (locations.export.length === 0) {
         return [];
     }
 
-    let comments;
+    let comments: Awaited<ReturnType<typeof shantytownCommentModel.findAll>>;
     try {
         comments = await shantytownCommentModel.findAll(user, locations.export, locations.comments);
     } catch (error) {
@@ -24,7 +48,7 @@ export default async (user) => {
     }
 
     // build excel file
-    return comments.map((raw) => {
+    return comments.map((raw): ShantytownCommentExport => {
         const createdAt = moment(raw.commentCreatedAt).utcOffset(2);
 
         // Replaces the problematic sharps characters in the csv file

@@ -26,7 +26,6 @@ import dataReportExportTowns from './dataReportController/exportTownsReport';
 import directoryList from './directoryController/list';
 // geo
 import geoGet from './geoController/get';
-import geoListDepartements from './geoController/listDepartements';
 import geoSearch from './geoController/search';
 // invite
 import inviteInvite from './inviteController/invite';
@@ -45,6 +44,8 @@ import organizationGetByCategory from './organizationController/getByCategory';
 import organizationGetByType from './organizationController/getByType';
 import organizationGetMembers from './organizationController/getMembers';
 import organizationSearch from './organizationController/search/search';
+import organizationSearchAssociations from './organizationController/search/searchAssociations';
+import organizationSearchTerritorialCollectivities from './organizationController/search/searchTerritorialCollectivities';
 import organizationTypes from './organizationController/types';
 import organizationUpdateBeingFunded from './organizationController/updateBeingFunded';
 // permission
@@ -93,13 +94,11 @@ import userSetNewPassword from './userController/setNewPassword';
 import userSetRoleRegular from './userController/setRoleRegular';
 import userSignin from './userController/signin';
 import userUpdateLocalAdmin from './userController/updateLocalAdmin';
-import userUpgrade from './userController/upgrade';
 import userUpdatePermissionOptions from './userController/updatePermissionOptions';
 // user activity
 import userActivityGetHistory from './userActivityController/getHistory';
 // user navigation logs
 import insertUserNavigationLogs from './userNavigationLogsController/insert';
-import exportMobileUserNavigationLogs from './userNavigationLogsController/exportMobileSessions';
 import exportWebappUserNavigationLogs from './userNavigationLogsController/exportWebappSessions';
 
 export default () => ({
@@ -139,7 +138,6 @@ export default () => ({
     },
     geo: {
         get: geoGet,
-        listDepartements: geoListDepartements,
         search: geoSearch,
     },
     invite: {
@@ -162,6 +160,8 @@ export default () => ({
         getByType: organizationGetByType,
         getMembers: organizationGetMembers,
         search: organizationSearch,
+        searchAssociations: organizationSearchAssociations,
+        searchTerritorialCollectivities: organizationSearchTerritorialCollectivities,
         types: organizationTypes,
         updateBeingFunded: organizationUpdateBeingFunded,
     },
@@ -217,14 +217,12 @@ export default () => ({
         setRoleRegular: userSetRoleRegular,
         signin: userSignin,
         updateLocalAdmin: userUpdateLocalAdmin,
-        upgrade: userUpgrade,
     },
     userActivity: {
         getHistory: userActivityGetHistory,
     },
     userNavigationLogs: {
         insert: insertUserNavigationLogs,
-        exportForMobile: exportMobileUserNavigationLogs,
         exportForWebapp: exportWebappUserNavigationLogs,
     },
 });

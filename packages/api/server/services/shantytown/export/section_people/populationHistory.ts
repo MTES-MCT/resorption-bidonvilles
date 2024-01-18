@@ -1,4 +1,4 @@
-import { Shantytown } from '#server/models/shantytownModel/_common/serializeShantytown';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
 import formatDate from '../../_common/formatDate';
 
 const intToStr = (int, nullValue = 'NC') => {

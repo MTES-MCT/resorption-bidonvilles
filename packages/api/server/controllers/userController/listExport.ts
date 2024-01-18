@@ -1,12 +1,10 @@
 import JSONToCSV from 'json2csv';
 import userModel from '#server/models/userModel';
-import permissionUtils from '#server/utils/permission';
-
-const { where } = permissionUtils;
+import getPermission from '#server/utils/permission/getPermission';
 
 export default async (req, res) => {
     try {
-        const users = await userModel.listExport(where().can(req.user).do('export', 'user'));
+        const users = await userModel.listExport(getPermission(req.user, 'export', 'user'));
         const csv = JSONToCSV.parse(users);
 
         // The frontend expect a JSON for every API calls, so we wrap the CSV in a json entry

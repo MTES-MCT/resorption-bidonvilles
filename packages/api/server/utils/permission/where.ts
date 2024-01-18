@@ -1,38 +1,35 @@
+import { WhereClauseGroup } from '#server/models/_common/types/WhereClauseGroup';
 import getPermission from './getPermission';
+import { User } from '#root/types/resources/User.d';
 
 export default () => ({
-    can(user) {
+    can(user: User) {
         return {
-            do(feature, entity) {
+            do(feature: string, entity: string): WhereClauseGroup {
                 const permission = getPermission(user, feature, entity);
                 if (permission === null) {
                     return null;
                 }
 
-                if (permission.allow_all === true) {
+                if (permission.allowed_on_national === true) {
                     return {};
                 }
 
                 const clauseGroup = Object.keys(permission.allowed_on).reduce((acc, tableName) => {
-                    if (permission.allowed_on[tableName] && permission.allowed_on[tableName].length > 0) {
-                        let primaryKey = 'code';
-                        if (tableName === 'shantytowns') {
-                            primaryKey = 'shantytown_id';
-                        } else if (tableName === 'actions') {
-                            primaryKey = 'action_id';
-                        }
-
+                    if (permission.allowed_on[tableName]?.length > 0) {
                         const where = {
                             [tableName]: {
-                                query: `${tableName}.${primaryKey}`,
-                                value: permission.allowed_on[tableName],
+                                query: `${tableName}.${tableName === 'actions' ? 'action_id' : 'code'}`,
+                                value: tableName !== 'actions'
+                                    ? permission.allowed_on[tableName].map(location => location[location.type].code)
+                                    : permission.allowed_on[tableName],
                             },
                         };
 
                         if (tableName === 'cities') {
                             where[`${tableName}_arrondissement`] = {
                                 query: `${tableName}.fk_main`,
-                                value: permission.allowed_on[tableName],
+                                value: permission.allowed_on[tableName].map(location => location[location.type].code),
                             };
                         }
 

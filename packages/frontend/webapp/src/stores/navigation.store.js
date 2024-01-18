@@ -93,9 +93,16 @@ export const useNavigationStore = defineStore("navigation", {
             };
 
             const userStore = useUserStore();
-            const { departement } = userStore.user.organization.location;
-            if (departement !== null) {
-                metricsItem.route = `/visualisation-donnees/departement/${departement.code}`;
+            let departementArea;
+            if (!userStore.user.intervention_areas.is_national) {
+                departementArea = userStore.user.intervention_areas.areas.find(
+                    (area) =>
+                        area.departement !== null && area.is_main_area === true
+                );
+            }
+
+            if (departementArea !== undefined) {
+                metricsItem.route = `/visualisation-donnees/departement/${departementArea.departement.code}`;
             }
 
             return metricsItem;

@@ -5,25 +5,46 @@ import permissionModel from '#server/models/permissionModel';
 import permissionUtils from '#server/utils/permission';
 import { Where } from '#server/models/_common/types/Where';
 import { PermissionHash } from '#server/models/permissionModel/find';
+import interventionAreaModel from '#server/models/interventionAreaModel/index';
 import serializeUser from './serializeUser';
 import { User } from '#root/types/resources/User.d';
-import { UserQueryFilters, RawUserAccess, RawUser } from './query.d';
+import {
+    UserQueryFilters, RawUserAccess, RawUser, RawInterventionArea,
+} from './query.d';
 
-const { where: fWhere } = permissionUtils;
+const { getPermission } = permissionUtils;
 
-export default async (where: Where | string = [], filters: UserQueryFilters = {}, user: string = null, feature: string = undefined, transaction: Transaction = undefined): Promise<User[]> => {
+export default async (where: Where | String = [], filters: UserQueryFilters = {}, user: User = null, feature: string = undefined, transaction: Transaction = undefined): Promise<User[]> => {
     const replacements = {};
 
     const strWhere = typeof where === 'string' ? where : '';
     const arrWhere = Array.isArray(where) ? where : [];
     if (user !== null) {
-        const permissionClauseGroup = fWhere().can(user).do(feature, 'user');
-        if (permissionClauseGroup === null) {
+        const permission = getPermission(user, feature, 'user');
+        if (permission === null) {
             return [];
         }
 
-        if (Object.keys(permissionClauseGroup).length > 0) {
-            arrWhere.push(permissionClauseGroup);
+        if (permission.allowed_on_national !== true) {
+            const clauseGroup = {};
+            ['regions', 'departements', 'epci', 'cities'].forEach((column) => {
+                if (permission.allowed_on[column]?.length <= 0) {
+                    return;
+                }
+
+                clauseGroup[column] = {
+                    value: permission.allowed_on[column].map(l => l[l.type].code),
+                    query: `v_user_areas.${column}::text[]`,
+                    arrayOperator: true,
+                    operator: '&&',
+                };
+            });
+
+            if (Object.keys(clauseGroup).length === 0) {
+                return [];
+            }
+
+            arrWhere.push(clauseGroup);
         }
     }
 
@@ -43,7 +64,7 @@ export default async (where: Where | string = [], filters: UserQueryFilters = {}
                 return `${clauses[column].query || `users.${column}`} IS ${clauses[column].not === true ? 'NOT ' : ''}NULL`;
             }
 
-            return `${clauses[column].query || `users.${column}`} ${clauses[column].not === true ? 'NOT ' : ''}${clauses[column].operator || 'IN'} (:${column}${index})`;
+            return `${clauses[column].query || `users.${column}`} ${clauses[column].not === true ? 'NOT ' : ''}${clauses[column].operator || 'IN'} ${clauses[column].arrayOperator ? `ARRAY[:${column}${index}]` : `(:${column}${index})`}`;
         }).join(' OR ');
 
         return `(${clauseGroup})`;
@@ -101,6 +122,8 @@ export default async (where: Where | string = [], filters: UserQueryFilters = {}
             COALESCE(question_subscriptions.subscriptions, array[]::text[]) AS question_subscriptions,
             users.last_access,
             users.admin_comments,
+            v_user_areas.is_national,
+            users.use_custom_intervention_area,
             CASE WHEN users.fk_role IS NULL THEN FALSE
                 ELSE TRUE
             END AS is_admin,
@@ -109,19 +132,7 @@ export default async (where: Where | string = [], filters: UserQueryFilters = {}
             organizations.organization_id,
             organizations.name AS organization_name,
             organizations.abbreviation AS organization_abbreviation,
-            organizations.location_type,
             organizations.active AS organization_active,
-            organizations.region_code,
-            organizations.region_name,
-            organizations.departement_code,
-            organizations.departement_name,
-            organizations.epci_code,
-            organizations.epci_name,
-            organizations.city_code,
-            organizations.city_name,
-            organizations.city_main,
-            organizations.latitude,
-            organizations.longitude,
             organization_types.organization_type_id,
             organization_types.uid AS organization_type_uid,
             organization_types.name_singular AS organization_type_name_singular,
@@ -139,12 +150,8 @@ export default async (where: Where | string = [], filters: UserQueryFilters = {}
             last_user_accesses ON last_user_accesses.fk_user = users.user_id
         LEFT JOIN
             roles_admin ON users.fk_role = roles_admin.role_id
-        LEFT JOIN
-            localized_organizations AS organizations ON users.fk_organization = organizations.organization_id
-        LEFT JOIN regions ON organizations.region_code = regions.code
-        LEFT JOIN departements ON organizations.departement_code = departements.code
-        LEFT JOIN epci ON organizations.epci_code = epci.code
-        LEFT JOIN cities ON organizations.city_code = cities.code
+        LEFT JOIN organizations ON users.fk_organization = organizations.organization_id
+        LEFT JOIN v_user_areas ON v_user_areas.user_id = users.user_id AND v_user_areas.is_main_area IS TRUE
         LEFT JOIN
             organization_types ON organizations.fk_type = organization_types.organization_type_id
         LEFT JOIN
@@ -185,7 +192,7 @@ export default async (where: Where | string = [], filters: UserQueryFilters = {}
         return [];
     }
 
-    const userAccesses: RawUserAccess[] = await sequelize.query(
+    const userAccessesPromise: Promise<RawUserAccess[]> = sequelize.query(
         `SELECT
             user_accesses.fk_user,
             user_accesses.user_access_id,
@@ -214,8 +221,17 @@ export default async (where: Where | string = [], filters: UserQueryFilters = {}
             transaction,
         },
     );
-    const hashedUserAccesses = userAccesses.reduce((argAcc, row) => {
-        const acc = { ...argAcc };
+
+    const [userAccesses, interventionAreas] = await Promise.all([
+        userAccessesPromise,
+        interventionAreaModel.list(
+            users.map(({ id }) => id),
+            users.map(({ organization_id }) => organization_id),
+            transaction,
+        ),
+    ]);
+
+    const hashedUserAccesses = userAccesses.reduce((acc, row) => {
         if (acc[row.fk_user] === undefined) {
             acc[row.fk_user] = [];
         }
@@ -226,13 +242,51 @@ export default async (where: Where | string = [], filters: UserQueryFilters = {}
         [key: number]: RawUserAccess[]
     });
 
+    const hashInterventionAreas = interventionAreas.reduce((acc, row) => {
+        const key = row.fk_user !== null ? 'users' : 'organizations';
+        const id = row.fk_user !== null ? row.fk_user : row.fk_organization;
+        if (acc[key][id] === undefined) {
+            acc[key][id] = [];
+        }
+
+        acc[key][id].push(row);
+        return acc;
+    }, {
+        users: [],
+        organizations: [],
+    } as {
+        users: { [key: number]: RawInterventionArea[] },
+        organizations: { [key: number]: RawInterventionArea[] },
+    });
+
     let permissionMap: PermissionHash = null;
     if (filters.extended === true) {
         permissionMap = await permissionModel.find(users.map(({ id }) => id));
     }
 
+    // fonction qui fusionne les zones d'intervention d'un utilisateur et de sa structure en faisant en sorte que
+    // les éventuels doublons soient supprimés
+    function mergeAreas(userAreas: RawInterventionArea[], organizationAreas: RawInterventionArea[]): RawInterventionArea[] {
+        const arr = [];
+        [...userAreas, ...organizationAreas].forEach((area) => {
+            const duplicateArea = arr.find(a => `${a.type}${a[`${a.type}_code`]}` === `${area.type}${area[`${area.type}_code`]}`);
+            if (!duplicateArea) {
+                arr.push(area);
+            } else if (area.is_main_area === true) {
+                duplicateArea.is_main_area = true;
+            }
+        });
+
+        return arr;
+    }
+
     return users.map(row => serializeUser(
-        { ...row, user_accesses: hashedUserAccesses[row.id] || [] },
+        row,
+        hashedUserAccesses[row.id] || [],
+        mergeAreas(
+            hashInterventionAreas.users[row.id] || [],
+            row.use_custom_intervention_area !== true ? hashInterventionAreas.organizations[row.organization_id] || [] : [],
+        ),
         latestCharte,
         filters,
         permissionMap,

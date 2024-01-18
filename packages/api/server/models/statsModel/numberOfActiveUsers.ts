@@ -6,7 +6,6 @@ export default async () => {
         `SELECT
             COUNT(*) AS total
         FROM users
-        LEFT JOIN localized_organizations AS organizations ON users.fk_organization = organizations.organization_id
         WHERE
             users.last_access IS NOT NULL
             AND

@@ -1,11 +1,12 @@
 
 import actionModel from '#server/models/actionModel';
 import ServiceError from '#server/errors/ServiceError';
-import { SerializedOrganization } from '#server/models/userModel/getDirectory';
+import { Departement } from '#server/models/geoModel/Location.d';
+import { Organization } from '#root/types/resources/Organization.d';
 
-export default async (managers: number[]): Promise<SerializedOrganization[]> => {
+export default async (departement: Departement, managers: number[]): Promise<Organization[]> => {
     try {
-        return await actionModel.findActionFinancesReadersByManagers(managers);
+        return await actionModel.findActionFinancesReadersByManagers(departement, managers);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }

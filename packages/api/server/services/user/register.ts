@@ -13,10 +13,6 @@ export default async (data: ContactBody): Promise<User> => {
             email: data.email,
             phone: data.phone,
             organization: data.organization_full?.id || null,
-            new_association: data.new_association,
-            new_association_name: data.new_association_name || null,
-            new_association_abbreviation: data.new_association_abbreviation || null,
-            departement: data.departement || null,
             position: data.position,
             access_request_message: data.access_request_message,
         });

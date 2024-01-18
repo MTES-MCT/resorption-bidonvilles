@@ -1,6 +1,7 @@
+import { User } from '#root/types/resources/User.d';
 import query from './query';
 
-export default async (departementCode) => {
+export default async (departements: string[]): Promise<User[]> => {
     const baseQuery = [
         {
             fk_role: {
@@ -26,8 +27,10 @@ export default async (departementCode) => {
             ...baseQuery,
             {
                 departement: {
-                    query: 'organizations.departement_code',
-                    value: [departementCode],
+                    value: departements,
+                    query: 'v_user_areas.departements::text[]',
+                    arrayOperator: true,
+                    operator: '&&',
                 },
             },
         ], {}),
@@ -43,23 +46,23 @@ export default async (departementCode) => {
     };
     /* eslint-enable quote-props */
 
-    if (exceptions[departementCode] !== undefined) {
+    departements.forEach((code) => {
+        if (exceptions[code] === undefined) {
+            return;
+        }
+
         promises.push(query([
             ...baseQuery,
             {
-                level: {
-                    query: 'organizations.location_type',
-                    value: 'region',
-                },
-            },
-            {
                 region: {
-                    query: 'organizations.region_code',
-                    value: exceptions[departementCode],
+                    value: [exceptions[code]],
+                    query: 'v_user_areas.regions',
+                    arrayOperator: true,
+                    operator: '&&',
                 },
             },
         ], {}));
-    }
+    });
 
     const users = await Promise.all(promises);
     return users.flat();

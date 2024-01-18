@@ -1,21 +1,14 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import { LocationType } from '#server/models/geoModel/LocationType.d';
+import interventionAreaModel from '#server/models/interventionAreaModel/index';
+import hashAreas from '#server/models/interventionAreaModel/hash';
+import { Organization } from '#root/types/resources/Organization.d';
+import { UserExpertiseTopic, UserExpertiseTopicType } from '#root/types/resources/User.d';
 
 type OrganizationRow = {
     organization_id: number,
     name: string,
     abbreviation: string | null,
-    location_type: LocationType,
-    region_code: string | null,
-    region_name: string | null,
-    departement_code: string | null,
-    departement_name: string | null,
-    epci_code: string | null,
-    epci_name: string | null,
-    city_code: string | null,
-    city_name: string | null,
-    city_main: string | null,
     being_funded: boolean,
     being_funded_at: Date,
     user_id: number,
@@ -25,7 +18,7 @@ type OrganizationRow = {
     user_email: string,
     user_phone: string | null,
     user_position: string,
-    user_topics: (`${string};${string};${string}`)[],
+    user_topics: (`${string};${UserExpertiseTopicType};${string}`)[],
     user_role_regular: string,
     type_id: number,
     type_category: string,
@@ -33,60 +26,7 @@ type OrganizationRow = {
     type_abbreviation: string | null,
 };
 
-type SerializedUserExpertiseTopics = {
-    id: string,
-    type: string,
-    label: string,
-};
-
-type SerializedOrganizationUser = {
-    id: number,
-    is_admin: boolean,
-    role: string,
-    first_name: string,
-    last_name: string,
-    email: string,
-    phone: string | null,
-    position: string,
-    expertise_topics: SerializedUserExpertiseTopics[],
-};
-
-export type SerializedOrganization = {
-    id: number,
-    name: string,
-    abbreviation: string | null,
-    being_funded: boolean,
-    being_funded_at: Date,
-    location: {
-        type: LocationType,
-        region: {
-            code: string,
-            name: string,
-        } | null,
-        departement: {
-            code: string,
-            name: string,
-        } | null,
-        epci: {
-            code: string,
-            name: string,
-        } | null,
-        city: {
-            code: string,
-            name: string,
-            main: string | null,
-        } | null,
-    },
-    type: {
-        id: number,
-        category: string,
-        name: string,
-        abbreviation: string | null,
-    },
-    users: SerializedOrganizationUser[],
-};
-
-export default async (): Promise<SerializedOrganization[]> => {
+export default async (): Promise<Organization[]> => {
     const users: OrganizationRow[] = await sequelize.query(
         `
         WITH users_with_expertise_topics AS (
@@ -102,16 +42,6 @@ export default async (): Promise<SerializedOrganization[]> => {
             organizations.organization_id,
             organizations.name,
             organizations.abbreviation,
-            organizations.location_type,
-            organizations.region_code,
-            organizations.region_name,
-            organizations.departement_code,
-            organizations.departement_name,
-            organizations.epci_code,
-            organizations.epci_name,
-            organizations.city_code,
-            organizations.city_name,
-            organizations.city_main,
             organizations.being_funded,
             organizations.being_funded_at,
             users.user_id AS "user_id",
@@ -127,7 +57,7 @@ export default async (): Promise<SerializedOrganization[]> => {
             organization_types.fk_category AS "type_category",
             organization_types.name_singular AS "type_name",
             organization_types.abbreviation AS "type_abbreviation"
-        FROM localized_organizations AS organizations
+        FROM organizations
         LEFT JOIN users ON users.fk_organization = organizations.organization_id
         LEFT JOIN organization_types ON organizations.fk_type = organization_types.organization_type_id
         LEFT JOIN roles_regular AS user_roles_regular ON users.fk_role_regular = user_roles_regular.role_id
@@ -146,35 +76,20 @@ export default async (): Promise<SerializedOrganization[]> => {
         },
     );
 
-    const hash: { [key: number]: SerializedOrganization } = {};
-    const organizations: SerializedOrganization[] = [];
+    const hash: { [key: number]: Organization } = {};
+    const organizations: Organization[] = [];
     users.forEach((user: OrganizationRow) => {
-        if (!Object.prototype.hasOwnProperty.call(hash, user.organization_id)) {
+        if (hash[user.organization_id] === undefined) {
             hash[user.organization_id] = {
                 id: user.organization_id,
                 name: user.name,
                 abbreviation: user.abbreviation,
                 being_funded: user.being_funded,
                 being_funded_at: user.being_funded_at,
-                location: {
-                    type: user.location_type,
-                    region: user.region_code !== null ? {
-                        code: user.region_code,
-                        name: user.region_name,
-                    } : null,
-                    departement: user.departement_code !== null ? {
-                        code: user.departement_code,
-                        name: user.departement_name,
-                    } : null,
-                    epci: user.epci_code !== null ? {
-                        code: user.epci_code,
-                        name: user.epci_name,
-                    } : null,
-                    city: user.city_code !== null ? {
-                        code: user.city_code,
-                        name: user.city_name,
-                        main: user.city_main,
-                    } : null,
+                // cette propriété est set avec les vraies données ci-dessous
+                intervention_areas: {
+                    is_national: false,
+                    areas: [],
                 },
                 type: {
                     id: user.type_id,
@@ -197,12 +112,19 @@ export default async (): Promise<SerializedOrganization[]> => {
                 email: user.user_email,
                 phone: user.user_phone,
                 position: user.user_position,
-                expertise_topics: user.user_topics.map((topic): SerializedUserExpertiseTopics => {
-                    const [id, type, label] = topic.split(';');
-                    return { id, type, label };
+                expertise_topics: user.user_topics.map((topic): UserExpertiseTopic => {
+                    const [uid, type, label] = topic.split(';') as [string, UserExpertiseTopicType, string];
+                    return { uid, type, label };
                 }),
             });
         }
     });
+
+    const interventionAreas = await interventionAreaModel.list(
+        [],
+        Object.keys(hash).map(id => parseInt(id, 10)),
+    );
+    hashAreas(interventionAreas, hash);
+
     return organizations;
 };

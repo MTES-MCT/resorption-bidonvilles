@@ -1,8 +1,8 @@
 import ShantytownComment from '#server/models/shantytownCommentModel/ShantytownComment.d';
-import { LocationType } from '#server/models/geoModel/LocationType.d';
 import { Diff } from '#server/models/shantytownModel/_common/getDiff';
+import { LocationDetails, CityLocationDetails } from '#server/models/locationModel/LocationDetails.d';
+import { InterventionArea } from '#server/models/geoModel/Location.d';
 import { QuestionTag } from '#root/types/resources/Question.d';
-import { LocationDetails, CityLocationDetails } from '../../server/models/locationModel/LocationDetails.d';
 
 // local types
 type ActivityShantytown = {
@@ -56,25 +56,9 @@ export type UserActivity = {
     user: {
         name: string,
         organization: number,
-        location: {
-            type: LocationType,
-            region: {
-                code: string,
-                name: string,
-            } | null,
-            departement: {
-                code: string,
-                name: string,
-            } | null,
-            epci: {
-                code: string,
-                name: string,
-            } | null,
-            city: {
-                code: string,
-                name: string,
-                main: string | null,
-            } | null,
+        intervention_areas: {
+            is_national: boolean,
+            areas: InterventionArea[],
         },
     }
 };

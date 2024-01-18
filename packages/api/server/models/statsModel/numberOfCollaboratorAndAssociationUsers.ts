@@ -7,7 +7,7 @@ export default async () => {
             organization_types.fk_category,
             COUNT(*) AS total
         FROM users
-        LEFT JOIN localized_organizations AS organizations ON users.fk_organization = organizations.organization_id
+        LEFT JOIN organizations ON users.fk_organization = organizations.organization_id
         LEFT JOIN organization_types ON organizations.fk_type = organization_types.organization_type_id
         WHERE
             users.fk_status='active'
@@ -15,7 +15,7 @@ export default async () => {
             organizations.active = TRUE
             AND
             organization_types.fk_category IN ('territorial_collectivity', 'association', 'public_establishment', 'administration')
-        GROUP BY organization_types.fk_category    
+        GROUP BY organization_types.fk_category
         `,
         {
             type: QueryTypes.SELECT,

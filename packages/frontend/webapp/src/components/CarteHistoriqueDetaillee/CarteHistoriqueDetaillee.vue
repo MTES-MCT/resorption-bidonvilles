@@ -270,27 +270,27 @@ const showModerationButton = computed(() => {
         return false;
     }
 
-    if (permission.allow_all) {
+    if (permission.allowed_on_national === true) {
         return true;
     }
 
     return (
-        permission.allowed_on.regions.includes(
-            activity.value.shantytown.region.code
+        permission.allowed_on.regions.some(
+            (r) => r.region.code === activity.value.shantytown.region.code
         ) ||
-        permission.allowed_on.departements.includes(
-            activity.value.shantytown.departement.code
+        permission.allowed_on.departements.some(
+            (d) =>
+                d.departement.code ===
+                activity.value.shantytown.departement.code
         ) ||
-        permission.allowed_on.epci.includes(
-            activity.value.shantytown.epci.code
+        permission.allowed_on.epci.some(
+            (e) => e.epci.code === activity.value.shantytown.epci.code
         ) ||
         permission.allowed_on.cities.includes(
-            activity.value.shantytown.city.code
-        ) ||
-        permission.allowed_on.cities.includes(
-            activity.value.shantytown.city.main
-        ) ||
-        permission.allowed_on.shantytowns.includes(activity.value.shantytown.id)
+            (c) =>
+                c.city.code === activity.value.shantytown.city.code ||
+                c.city.main === activity.value.shantytown.city.code
+        )
     );
 });
 

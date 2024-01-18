@@ -94,18 +94,8 @@
                 <template v-if="values.organization_category === 'association'">
                     <FormUtilisateurInputAssociation
                         :label="labels.association"
-                    />
-                    <template v-if="values.association === 'autre'">
-                        <FormUtilisateurInputNewAssociationName
-                            :label="labels.new_association_name"
-                        />
-                        <FormUtilisateurInputNewAssociationAbbreviation
-                            :label="labels.new_association_abbreviation"
-                        />
-                    </template>
-                    <FormUtilisateurInputDepartement
-                        v-if="values.association"
-                        :label="labels.departement"
+                        @change="onAssociationChange"
+                        ref="associationInput"
                     />
                 </template>
 
@@ -179,9 +169,6 @@ import FormUtilisateurInputOrganizationType from "./inputs/FormUtilisateurInputO
 import FormUtilisateurInputOrganizationPublic from "./inputs/FormUtilisateurInputOrganizationPublic.vue";
 import FormUtilisateurInputTerritorialCollectivity from "./inputs/FormUtilisateurInputTerritorialCollectivity.vue";
 import FormUtilisateurInputAssociation from "./inputs/FormUtilisateurInputAssociation.vue";
-import FormUtilisateurInputNewAssociationName from "./inputs/FormUtilisateurInputNewAssociationName.vue";
-import FormUtilisateurInputNewAssociationAbbreviation from "./inputs/FormUtilisateurInputNewAssociationAbbreviation.vue";
-import FormUtilisateurInputDepartement from "./inputs/FormUtilisateurInputDepartement.vue";
 import FormUtilisateurInputOrganizationAdministration from "./inputs/FormUtilisateurInputOrganizationAdministration.vue";
 import FormUtilisateurInputOrganizationOther from "./inputs/FormUtilisateurInputOrganizationOther.vue";
 import FormUtilisateurInputPosition from "./inputs/FormUtilisateurInputPosition.vue";
@@ -211,6 +198,7 @@ const props = defineProps({
 });
 
 const form = ref(null);
+const associationInput = ref(null);
 const { variant, submit, language } = toRefs(props);
 const allowNewOrganization = computed(() => {
     return variant.value === "demande-acces";
@@ -234,10 +222,26 @@ onMounted(() => {
     }
 });
 
+function onAssociationChange(value) {
+    if (value?.data === null) {
+        if (allowNewOrganization.value === true) {
+            form.value.setFieldValue("organization_category", "other");
+        } else {
+            alert(
+                "Vous devez créer une nouvelle structure ou en faire la demande aux administrateurs nationaux."
+            );
+        }
+
+        associationInput.value.clear();
+    }
+}
+
 function intermediateSubmit(values) {
     const formattedValues = { ...values };
-    formattedValues.territorial_collectivity =
-        formattedValues.territorial_collectivity?.data;
+    formattedValues.territorial_collectivity = formattedValues
+        .territorial_collectivity?.data
+        ? formattedValues.territorial_collectivity.data.id
+        : null;
     return submit.value(formattedValues);
 }
 </script>

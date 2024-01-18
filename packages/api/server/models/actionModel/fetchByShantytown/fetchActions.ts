@@ -37,9 +37,7 @@ export default (shantytownIds: number[], clauseGroup: object = {}): Promise<Acti
         GROUP BY actions.action_id, actions.name, departement_code, departement_name, region_code, region_name`,
         {
             type: QueryTypes.SELECT,
-            replacements: {
-                shantytownIds,
-            },
+            replacements,
         },
     );
 };

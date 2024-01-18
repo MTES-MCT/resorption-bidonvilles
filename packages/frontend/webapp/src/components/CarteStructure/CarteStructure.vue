@@ -20,6 +20,18 @@
                 <p v-if="displayBeingFunded" class="text-info">
                     <Icon icon="euro-sign" /> Structure financée
                 </p>
+                <p
+                    class="mt-3 text-G600"
+                    v-if="organization.intervention_areas.areas.length > 1"
+                >
+                    <span class="font-bold">Territoires d'intervention :</span>
+                    {{
+                        organization.intervention_areas.areas
+                            .filter((area) => area.is_main_area === true)
+                            .map((area) => area[area.type].name)
+                            .join(", ")
+                    }}
+                </p>
                 -
             </header>
 
@@ -84,7 +96,7 @@
                                             user,
                                             'expertise'
                                         )"
-                                        :key="topic.id"
+                                        :key="topic.uid"
                                     >
                                         - {{ topic.label }}
                                     </li>
@@ -107,7 +119,7 @@
                                             user,
                                             'interest'
                                         )"
-                                        :key="topic.id"
+                                        :key="topic.uid"
                                     >
                                         - {{ topic.label }}
                                     </li>
@@ -177,7 +189,7 @@ const name = computed(() => {
         return `${title} – ${organization.value.location_name}`;
     }
 
-    if (organization.value.location.type === "nation") {
+    if (organization.value.intervention_areas.is_national) {
         return title;
     }
 
@@ -193,7 +205,7 @@ const plural = computed(() => {
 function getUserFilteredExpertiseTopics(user, topicLevel) {
     return (user.expertise_topics || []).filter((topic) => {
         return (
-            directoryStore.filters.expertiseTopics.includes(topic.id) &&
+            directoryStore.filters.expertiseTopics.includes(topic.uid) &&
             topic.type == topicLevel
         );
     });

@@ -32,7 +32,13 @@ export function trackLogin(user) {
     $piwik.value.setCustomVariable(
         5,
         "departement_code",
-        user.organization.location?.departement?.code || null
+        user.intervention_areas.areas
+            .filter(
+                ({ is_main_area, departement }) =>
+                    departement?.code !== undefined && is_main_area === true
+            )
+            .map(({ departement }) => `;${departement.code};`)
+            .join("")
     );
 }
 
@@ -77,8 +83,9 @@ export function isOptedOut() {
 
 function formatUserForTracking(user) {
     const { organization } = user;
+    const area = user.firstMainArea;
     const { type: orgType } = organization;
-    const location = organization.location[organization.location.type];
+    const location = area[area.type];
 
     return JSON.stringify({
         superuser: user.is_superuser,
@@ -88,7 +95,7 @@ function formatUserForTracking(user) {
         org_name: organization.abbreviation || user.organization.name,
         org_type: orgType.abbreviation || orgType.name_singular,
         org_category: organization.category.uid,
-        org_location_type: organization.location.type,
+        org_location_type: area.type,
         org_location_name: location?.name,
         org_location_code: location?.code,
     }).replace(/["{}]/g, "");

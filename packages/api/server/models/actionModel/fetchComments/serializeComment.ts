@@ -1,5 +1,5 @@
 import { ActionCommentRow } from './fetchComments';
-import { Comment } from '../fetch/Action';
+import { Comment } from '#root/types/resources/Action.d';
 
 export default (row: ActionCommentRow): Comment => ({
     id: row.id,

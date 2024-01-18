@@ -6,5 +6,6 @@ export type WhereClause = {
     query?: string,
     operator?: string,
     anyOperator?: string,
+    arrayOperator?: boolean,
     not?: boolean
 };

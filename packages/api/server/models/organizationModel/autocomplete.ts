@@ -5,31 +5,65 @@ export type OrganizationAutocompleteRow = {
     id: number,
     name: string,
     abbreviation: string | null,
+    is_national: boolean,
+    main_regions_names: string[],
+    main_departements_names: string[],
+    departements_codes: string[],
     similarity: number,
+    type_name: string,
 };
 
-export default async (search: string, departementCode: string = null): Promise<OrganizationAutocompleteRow[]> => sequelize.query(
-    `SELECT
-        localized_organizations.organization_id AS id,
-        localized_organizations.name,
-        localized_organizations.abbreviation,
+export default async (search: string, departementCode: string = null, organizationCategoryUid: string = null): Promise<OrganizationAutocompleteRow[]> => sequelize.query(
+    `WITH main_territories AS (
+        SELECT
+            intervention_areas.fk_organization,
+            array_remove(array_agg(DISTINCT departements.name), null) AS departements_names,
+            array_remove(array_agg(DISTINCT regions.name), null) AS regions_names
+        FROM intervention_areas
+        LEFT JOIN regions ON intervention_areas.fk_region = regions.code
+        LEFT JOIN departements ON intervention_areas.fk_departement = departements.code
+        WHERE
+                intervention_areas.fk_organization IS NOT NULL
+            AND intervention_areas.is_main_area IS TRUE
+            AND (intervention_areas.fk_region IS NOT NULL OR intervention_areas.fk_departement IS NOT NULL)
+        GROUP BY intervention_areas.fk_organization
+    )
+
+    SELECT
+        organizations.organization_id AS id,
+        organizations.name,
+        organizations.abbreviation,
+        organization_types.name_singular AS type_name,
+        v_organization_areas.is_national,
+        COALESCE(main_territories.regions_names, ARRAY[]::varchar[]) AS main_regions_names,
+        COALESCE(main_territories.departements_names, ARRAY[]::varchar[]) AS main_departements_names,
+        COALESCE(v_organization_areas.departements, ARRAY[]::varchar[]) AS departements_codes,
         GREATEST(
-            word_similarity(unaccent(:search), unaccent(localized_organizations.name)),
-            word_similarity(unaccent(:search), unaccent(localized_organizations.abbreviation))
+            word_similarity(unaccent(:search), unaccent(organizations.name)),
+            word_similarity(unaccent(:search), unaccent(organizations.abbreviation))
         ) AS similarity
-    FROM localized_organizations
-    ${departementCode !== null ? 'LEFT JOIN departements ON departements.code = :departementCode' : ''}
+    FROM organizations
+    LEFT JOIN organization_types ON organizations.fk_type = organization_types.organization_type_id
+    LEFT JOIN v_organization_areas ON v_organization_areas.organization_id = organizations.organization_id AND v_organization_areas.is_main_area IS TRUE
+    LEFT JOIN main_territories ON main_territories.fk_organization = organizations.organization_id
+    ${departementCode !== null
+        ? `
+    LEFT JOIN departements ON departements.code = :departementCode
+    `
+        : ''
+}
     WHERE
         unaccent(:search) % ANY(
-            string_to_array(unaccent(localized_organizations.name), ' ')
+            string_to_array(unaccent(organizations.name), ' ')
             ||
-            string_to_array(unaccent(localized_organizations.abbreviation), ' ')
+            string_to_array(unaccent(organizations.abbreviation), ' ')
         )
+        ${organizationCategoryUid !== null ? 'AND organization_types.fk_category = :organizationCategoryUid' : ''}
         ${departementCode !== null ? `
         AND
-        (localized_organizations.location_type = 'nation'
+        (v_organization_areas.is_national IS TRUE
             OR
-        localized_organizations.region_code = departements.fk_region)` : ''}
+            departements.fk_region = ANY(v_organization_areas.regions))` : ''}
     ORDER BY similarity DESC
     `,
     {
@@ -37,6 +71,7 @@ export default async (search: string, departementCode: string = null): Promise<O
         replacements: {
             search,
             departementCode,
+            organizationCategoryUid,
         },
     },
 );

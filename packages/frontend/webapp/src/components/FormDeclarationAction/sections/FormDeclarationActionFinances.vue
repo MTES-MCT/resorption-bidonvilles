@@ -21,7 +21,8 @@
     <ModaleListeAccesActionFinancements
         ref="modaleListeAccesActionFinancements"
         :managers="managers"
-        :future="true"
+        :departement="departement"
+        future
     />
 </template>
 
@@ -38,8 +39,9 @@ const { emit, bus } = useEventBus();
 
 const props = defineProps({
     managers: Array,
+    departement: String,
 });
-const { managers } = toRefs(props);
+const { departement, managers } = toRefs(props);
 
 function openListAccesActionFinances() {
     emit("formdeclarationactionfinances:openListAccesActionFinancements");

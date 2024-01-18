@@ -1,8 +1,8 @@
 import organizationModel from '#server/models/organizationModel';
 import ServiceError from '#server/errors/ServiceError';
-import { SerializedOrganization } from '#server/models/userModel/getDirectory';
+import { Organization } from '#root/types/resources/Organization.d';
 
-export default async (shantytownId: number): Promise<SerializedOrganization[]> => {
+export default async (shantytownId: number): Promise<Organization[]> => {
     try {
         return await organizationModel.findJusticeReadersByShantytown(shantytownId);
     } catch (error) {

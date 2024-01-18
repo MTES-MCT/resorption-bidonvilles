@@ -1,6 +1,6 @@
 <mjml>
     <mj-head>
-        <mj-title>[Résorption-bidonvilles] - {{ var:title }}Que s'est-t-il passé cette semaine ?</mj-title>
+        <mj-title>[Résorption-bidonvilles] - Que s'est-t-il passé cette semaine ?</mj-title>
         <mj-include path='common/attributes.mjml' />
         <mj-include path='common/styles.mjml' />
     </mj-head>

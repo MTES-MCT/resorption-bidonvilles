@@ -193,7 +193,7 @@ function onBlur(event) {
             return;
         }
 
-        input.value.setValue(selectedItem.value.label);
+        input.value.setValue(selectedItem.value.selectedLabel || selectedItem.value.label);
     }, 250);
     validate();
 }
@@ -211,7 +211,7 @@ function selectItem(item) {
         search: item.label,
         data: item.data
     });
-    input.value.setValue(item.label);
+    input.value.setValue(item.selectedLabel || item.label);
 }
 
 function clear() {

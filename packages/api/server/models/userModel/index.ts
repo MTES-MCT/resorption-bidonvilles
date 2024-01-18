@@ -6,7 +6,6 @@ import downgradeLocalAdmin from './downgradeLocalAdmin';
 import findAll from './findAll';
 import findByIds from './findByIds';
 import findByOrganization from './findByOrganization';
-import findByOrganizationCategory from './findByOrganizationCategory';
 import findDepartementSummarySubscribers from './findDepartementSummarySubscribers';
 import findForRegion from './findForRegion';
 import findInactiveUsers from './findInactiveUsers';
@@ -43,7 +42,6 @@ export default {
     findAll,
     findByIds,
     findByOrganization,
-    findByOrganizationCategory,
     findDepartementSummarySubscribers,
     findForRegion,
     findInactiveUsers,

@@ -47,7 +47,7 @@
                     <span class="text-info">Expert(e) en</span>
                     <li
                         v-for="topic in getTopicsByLevel('expertise')"
-                        :key="topic.id"
+                        :key="topic.uid"
                         class="text-G600 ml-2 text-sm"
                     >
                         - {{ topic.label }}
@@ -64,7 +64,7 @@
                     <span class="text-info">Intéressé(e) par</span>
                     <li
                         v-for="topic in getTopicsByLevel('interest')"
-                        :key="topic.id"
+                        :key="topic.uid"
                         class="text-G600 ml-2 text-sm"
                     >
                         - {{ topic.label }}
@@ -107,7 +107,7 @@ function trackEmail(event) {
 function getTopicsByLevel(level) {
     return (user.value.expertise_topics || []).filter((topic) => {
         return (
-            directoryStore.filters.expertiseTopics.includes(topic.id) &&
+            directoryStore.filters.expertiseTopics.includes(topic.uid) &&
             topic.type == level
         );
     });

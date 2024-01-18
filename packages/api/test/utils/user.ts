@@ -45,15 +45,20 @@ export function serialized(override: Partial<User> = {}): AuthUser {
                 name_singular: 'Administration centrale',
                 name_plural: 'Administrations centrales',
             },
-            location: {
+        },
+        intervention_areas: {
+            is_national: false,
+            areas: [{
                 type: 'nation',
+                area_of: 'organization',
+                is_main_area: true,
                 latitude: 46.7755829,
                 longitude: 2.0497727,
                 region: null,
                 departement: null,
                 epci: null,
                 city: null,
-            },
+            }],
         },
         charte_engagement_a_jour: true,
         is_admin: false,
@@ -70,45 +75,57 @@ export function serialized(override: Partial<User> = {}): AuthUser {
         permissions: {
             shantytown: {
                 create: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: true,
+                    allowed: true,
+                    allowed_on_national: true,
+                    allowed_on: null,
                 },
                 list: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                    allowed: true,
+                    allowed_on_national: true,
+                    allowed_on: null,
                 },
                 read: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                    allowed: true,
+                    allowed_on_national: true,
+                    allowed_on: null,
                 },
                 update: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: true,
+                    allowed: true,
+                    allowed_on_national: true,
+                    allowed_on: null,
                 },
                 close: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: true,
+                    allowed: true,
+                    allowed_on_national: true,
+                    allowed_on: null,
                 },
                 export: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                    allowed: true,
+                    allowed_on_national: true,
+                    allowed_on: null,
                 },
             },
             shantytown_justice: {
                 access: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                    allowed: true, allowed_on_national: true, allowed_on: null,
                 },
             },
             shantytown_comment: {
                 create: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: true,
+                    allowed: true, allowed_on_national: true, allowed_on: null,
                 },
                 list: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                    allowed: true, allowed_on_national: true, allowed_on: null,
                 },
                 listPrivate: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                    allowed: true, allowed_on_national: true, allowed_on: null,
                 },
             },
             user: {},
             stats: {},
             covid_comment: {
                 list: {
-                    allowed: true, allow_all: true, allowed_on: null, is_writing: false,
+                    allowed: true, allowed_on_national: true, allowed_on: null,
                 },
             },
         },

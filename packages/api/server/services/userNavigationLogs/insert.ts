@@ -2,12 +2,7 @@ import userNavigationLogsModel from '#server/models/userNavigationLogsModel';
 import userModel from '#server/models/userModel';
 import ServiceError from '#server/errors/ServiceError';
 
-export default async (fk_user: number, page: string, domain: 'webapp' | 'mobile', origin?: string): Promise<number> => {
-    const models = {
-        mobile: userNavigationLogsModel.insertMobile,
-        webapp: userNavigationLogsModel.insertWebapp,
-    };
-
+export default async (fk_user: number, page: string): Promise<number> => {
     let toBeTracked: boolean;
     try {
         toBeTracked = await userModel.isTracked(fk_user);
@@ -22,15 +17,11 @@ export default async (fk_user: number, page: string, domain: 'webapp' | 'mobile'
     // on insère le log
     let logId: number;
     try {
-        logId = await models[domain](
-            fk_user,
-            page,
-            origin || null,
-        );
+        logId = await userNavigationLogsModel.insertWebapp(fk_user, page);
     } catch (error) {
         throw new ServiceError('insert_failed', error);
     }
 
-    // on retourne l'identifiant de la ligne insérée dans la table user_${domain}_navigation_logs
+    // on retourne l'identifiant de la ligne insérée dans la table user_webapp_navigation_logs
     return logId;
 };

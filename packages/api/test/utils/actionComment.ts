@@ -1,5 +1,5 @@
-import { Comment } from '#server/models/actionModel/fetch/Action.d';
 import { ActionCommentRow } from '#server/models/actionModel/fetchComments/fetchComments';
+import { Comment } from '#root/types/resources/Action.d';
 
 export function row(override: Partial<ActionCommentRow> = {}): ActionCommentRow {
     const defaultObj: ActionCommentRow = {

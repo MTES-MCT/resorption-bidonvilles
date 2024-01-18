@@ -2,7 +2,7 @@ import { QueryTypes } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 import fetchComments from '../fetchComments/fetchComments';
 
-import { Comment } from '../fetch/Action';
+import { Comment } from '#root/types/resources/Action.d';
 import serializeComment from '../fetchComments/serializeComment';
 
 export type ActionCommentInsertionRow = {

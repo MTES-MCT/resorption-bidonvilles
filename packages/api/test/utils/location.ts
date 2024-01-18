@@ -1,5 +1,9 @@
+import {
+    City, Departement, EPCI, Nation, Region,
+} from '#server/models/geoModel/Location.d';
+
 export default {
-    nation() {
+    nation(): Nation {
         return {
             type: 'nation',
             region: null,
@@ -9,7 +13,7 @@ export default {
         };
     },
     paris: {
-        region() {
+        region(): Region {
             return {
                 type: 'region',
                 region: {
@@ -21,7 +25,7 @@ export default {
                 city: null,
             };
         },
-        departement() {
+        departement(): Departement {
             return {
                 type: 'departement',
                 region: {
@@ -36,7 +40,7 @@ export default {
                 city: null,
             };
         },
-        epci() {
+        epci(): EPCI {
             return {
                 type: 'epci',
                 region: {
@@ -54,7 +58,7 @@ export default {
                 city: null,
             };
         },
-        city() {
+        city(): City {
             return {
                 type: 'city',
                 region: {
@@ -72,10 +76,11 @@ export default {
                 city: {
                     code: '75056',
                     name: 'Paris',
+                    main: null,
                 },
             };
         },
-        district() {
+        district(): City {
             return {
                 type: 'city',
                 region: {
@@ -99,7 +104,7 @@ export default {
         },
     },
     marseille: {
-        region() {
+        region(): Region {
             return {
                 type: 'region',
                 region: {
@@ -111,7 +116,7 @@ export default {
                 city: null,
             };
         },
-        departement() {
+        departement(): Departement {
             return {
                 type: 'departement',
                 region: {
@@ -126,7 +131,7 @@ export default {
                 city: null,
             };
         },
-        epci() {
+        epci(): EPCI {
             return {
                 type: 'epci',
                 region: {
@@ -144,7 +149,7 @@ export default {
                 city: null,
             };
         },
-        city() {
+        city(): City {
             return {
                 type: 'city',
                 region: {
@@ -162,10 +167,11 @@ export default {
                 city: {
                     code: '13201',
                     name: 'Marseille',
+                    main: null,
                 },
             };
         },
-        district() {
+        district(): City {
             return {
                 type: 'city',
                 region: {

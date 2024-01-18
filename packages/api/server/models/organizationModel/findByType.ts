@@ -1,39 +1,33 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-export default typeId => sequelize.query(
+type OrganizationMin = {
+    id: number,
+    name: string,
+    abbreviation: string | null,
+    organization_type_name: string,
+};
+
+export default (typeId: number): Promise<OrganizationMin[]> => sequelize.query(
     `SELECT
         organizations.organization_id AS id,
         organizations.name,
         organizations.abbreviation,
-        organizations.location_type,
-        organizations."region_code",
-        organizations."region_name",
-        organizations."departement_code",
-        organizations."departement_name",
-        organizations."epci_code",
-        organizations."epci_name",
-        organizations."city_code",
-        organizations."city_name",
-        organization_types."uid" AS organization_type_uid
-    FROM localized_organizations AS organizations
+        organization_types.name_singular AS organization_type_name
+    FROM organizations
     LEFT JOIN organization_types ON organizations.fk_type = organization_types.organization_type_id
     WHERE
-        organizations.fk_type = ?
+        organizations.fk_type = :typeId
     ORDER BY
-        CASE organization_types.fk_category
-            WHEN 'association' THEN organizations.name
-            ELSE '' END
-        ASC,
         CASE organization_types.uid
             WHEN 'rectorat' THEN SUBSTRING(organizations.name, '(?<=(?:d''|de la |de ))[A-Z].+')
             ELSE '' END
         ASC,
-        departement_code ASC, REPLACE(region_name, 'Î', 'I') ASC, epci_name ASC, city_name ASC`,
+        UNACCENT(organizations.name) ASC`,
     {
         type: QueryTypes.SELECT,
-        replacements: [
+        replacements: {
             typeId,
-        ],
+        },
     },
 );

@@ -4,7 +4,7 @@ import create from './create';
 import close from './close';
 import deleteTown from './deleteTown';
 import deleteComment from './deleteComment';
-import exportTown from './export';
+import exportTowns from './exportTowns';
 import exportOne from './exportOne';
 import fixClosedStatus from './fixClosedStatus';
 import setHeatwaveStatus from './setHeatwaveStatus';
@@ -28,7 +28,7 @@ export default {
     close,
     deleteTown,
     deleteComment,
-    exportTown,
+    exportTowns,
     exportOne,
     fixClosedStatus,
     setHeatwaveStatus,

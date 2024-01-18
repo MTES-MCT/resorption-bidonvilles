@@ -3,6 +3,7 @@ import { QueryTypes } from 'sequelize';
 import geoUtils from '#server/utils/geo';
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
+import { Location } from '#server/models/geoModel/Location.d';
 import getUsenameOf from './_common/getUsenameOf';
 import serializeShantytown from './_common/serializeShantytown';
 import getDiff from './_common/getDiff';
@@ -12,6 +13,7 @@ import {
     BaseShantytownActivity,
     ShantytownActivity,
 } from '#root/types/resources/Activity.d';
+import { User } from '#root/types/resources/User.d';
 
 const { fromGeoLevelToTableName } = geoUtils;
 const { restrict } = permissionUtils;
@@ -22,8 +24,11 @@ type ShantytownActivityRow = ShantytownRow & {
     author_last_name: string,
     author_organization: number,
 };
+type HistoryShantytownFilter = 'shantytownCreation' | 'shantytownClosing' | 'shantytownUpdate';
+type HistoryResorbedFilter = 'yes' | 'no';
+type HistoryMyTownsFilter = 'yes' | 'no';
 
-export default async (user, location, shantytownFilter, resorbedFilter, myTownsFilter, numberOfActivities, lastDate, maxDate):Promise<ShantytownActivity[]> => {
+export default async (user: User, location: Location, shantytownFilter: HistoryShantytownFilter[], resorbedFilter: HistoryResorbedFilter[], myTownsFilter: HistoryMyTownsFilter[], numberOfActivities: number, lastDate: Date, maxDate: Date):Promise<ShantytownActivity[]> => {
     // apply geographic level restrictions
     const where = [];
     const replacements: any = {
@@ -32,17 +37,23 @@ export default async (user, location, shantytownFilter, resorbedFilter, myTownsF
     };
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
 
-    const restrictedLocation = restrict(location).for(user).askingTo('list', 'shantytown');
-    if (restrictedLocation === null) {
+    const restrictedLocations = restrict(location).for(user).askingTo('list', 'shantytown');
+    if (restrictedLocations.length === 0) {
         return [];
     }
 
-    if (restrictedLocation.type !== 'nation') {
-        where.push(`${fromGeoLevelToTableName(restrictedLocation.type)}.code = :shantytownLocationCode`);
-        if (restrictedLocation.type === 'city') {
-            where.push(`${fromGeoLevelToTableName(restrictedLocation.type)}.fk_main = :shantytownLocationCode`);
-        }
-        replacements.shantytownLocationCode = restrictedLocation[restrictedLocation.type].code;
+    if (!restrictedLocations.some(l => l.type === 'nation')) {
+        where.push(
+            restrictedLocations.map((l, index) => {
+                replacements[`shantytownLocationCode${index}`] = l[l.type].code;
+                const arr = [`${fromGeoLevelToTableName(l.type)}.code = :shantytownLocationCode${index}`];
+                if (l.type === 'city') {
+                    arr.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :shantytownLocationCode${index}`);
+                }
+
+                return arr;
+            }).flat().join(' OR '),
+        );
     }
 
     const activities: ShantytownActivityRow[] = await sequelize.query(

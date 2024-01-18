@@ -20,8 +20,8 @@ describe('services/shantytown', () => {
         const user: any = fakeUser();
         user.permissions.shantytown.fix_status = {
             allowed: true,
-            allow_all: true,
-            allowed_on: [],
+            allowed_on_national: true,
+            allowed_on: null,
         };
 
         const data = {

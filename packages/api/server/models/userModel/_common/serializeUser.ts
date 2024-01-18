@@ -1,10 +1,13 @@
 import EMAIL_SUBSCRIPTIONS from '#server/config/email_subscriptions';
 import { PermissionHash } from '#server/models/permissionModel/find';
+import interventionAreaModel from '#server/models/interventionAreaModel/index';
 import serializeUserAccess from './serializeUserAccess';
-import { RawUser, UserQueryFilters } from './query.d';
+import {
+    RawInterventionArea, RawUser, RawUserAccess, UserQueryFilters,
+} from './query.d';
 import { User, UserQuestionSubscriptions, UserExpertiseTopicType } from '#root/types/resources/User.d';
 
-export default (user: RawUser, latestCharte: number, filters: UserQueryFilters, permissionMap: PermissionHash): User => {
+export default (user: RawUser, userAccesses: RawUserAccess[], interventionAreas: RawInterventionArea[], latestCharte: number, filters: UserQueryFilters, permissionMap: PermissionHash): User => {
     const serialized: User = {
         id: user.id,
         first_name: user.first_name,
@@ -14,7 +17,7 @@ export default (user: RawUser, latestCharte: number, filters: UserQueryFilters, 
         position: user.position,
         status: user.status,
         created_at: user.created_at.getTime() / 1000,
-        user_accesses: user.user_accesses.map(serializeUserAccess),
+        user_accesses: userAccesses.map(serializeUserAccess),
         organization: {
             id: user.organization_id,
             name: user.organization_name,
@@ -32,28 +35,10 @@ export default (user: RawUser, latestCharte: number, filters: UserQueryFilters, 
                 name_singular: user.organization_category_name_singular,
                 name_plural: user.organization_category_name_plural,
             },
-            location: {
-                type: user.location_type,
-                latitude: user.latitude || 46.7755829,
-                longitude: user.longitude || 2.0497727,
-                region: user.region_code !== null ? {
-                    code: user.region_code,
-                    name: user.region_name,
-                } : null,
-                departement: user.departement_code !== null ? {
-                    code: user.departement_code,
-                    name: user.departement_name,
-                } : null,
-                epci: user.epci_code !== null ? {
-                    code: user.epci_code,
-                    name: user.epci_name,
-                } : null,
-                city: user.city_code !== null ? {
-                    code: user.city_code,
-                    name: user.city_name,
-                    main: user.city_main,
-                } : null,
-            },
+        },
+        intervention_areas: {
+            is_national: user.is_national,
+            areas: interventionAreas.map(interventionAreaModel.serialize),
         },
         charte_engagement_a_jour: latestCharte === null || user.charte_engagement_signee === latestCharte,
         email_subscriptions: EMAIL_SUBSCRIPTIONS.filter(subscription => !user.email_unsubscriptions.includes(subscription)),

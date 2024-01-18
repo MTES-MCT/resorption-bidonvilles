@@ -11,9 +11,10 @@ import { getActionsFinancesdReaders } from "@/api/action_finances_readers.api";
 const props = defineProps({
     actionId: Number,
     managers: Array,
+    departement: String,
     future: Boolean,
 });
-const { actionId, managers, future } = toRefs(props);
+const { actionId, departement, managers, future } = toRefs(props);
 const modale = ref(null);
 
 const wording = computed(() => {
@@ -54,7 +55,10 @@ function fetch() {
         return getActionFinancementsReadersByAction(actionId.value);
     }
 
-    return getActionsFinancesdReaders({ managers: managers.value });
+    return getActionsFinancesdReaders({
+        departement: departement.value,
+        managers: managers.value,
+    });
 }
 
 defineExpose({

@@ -155,21 +155,26 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
                 SELECT
                     'new_users'         AS "activityType",
                     NULL::varchar       AS "city",
-                    lo.departement_code AS "departement",
+                    COALESCE(ia.fk_departement, cities.fk_departement, epci_to_departement.fk_departement)
+                                        AS "departement",
                     NULL::bigint        AS "shantytownId",
                     NULL::varchar       AS "shantytownName",
                     NULL::varchar       AS "shantytownAddress",
                     NULL::bigint        AS "shantytownCommentId",
                     u.first_name        AS "userFirstName",
                     u.last_name         AS "userLastName",
-                    lo.organization_id  AS "userOrganizationId"
+                    o.organization_id   AS "userOrganizationId"
                 FROM users u
-                LEFT JOIN localized_organizations lo ON u.fk_organization = lo.organization_id
+                LEFT JOIN organizations o ON u.fk_organization = o.organization_id
+                LEFT JOIN intervention_areas ia ON ia.fk_user = u.user_id OR (u.use_custom_intervention_area IS FALSE AND ia.fk_organization = u.fk_organization)
+                LEFT JOIN cities ON ia.fk_city = cities.code
+                LEFT JOIN epci_to_departement ON ia.fk_epci = epci_to_departement.fk_epci
                 LEFT JOIN last_user_accesses lua ON lua.fk_user = u.user_id
                 WHERE  u.fk_status = 'active'
                    AND lua.used_at >= :from
                    AND lua.used_at <= :to
-                   AND lo.departement_code IS NOT NULL
+                   AND ia.is_main_area IS TRUE
+                   AND COALESCE(ia.fk_departement, cities.fk_departement, epci_to_departement.fk_departement) IS NOT NULL
                 )
             ) t),
 
