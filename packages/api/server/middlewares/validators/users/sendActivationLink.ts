@@ -42,10 +42,10 @@ export default [
             }
 
             const availableOptions = permissionsDescription[req.user.role_id].options.map(({ id }) => id);
-            value.filter(id => !availableOptions.includes(id));
+            const forbiddenOptions = value.filter(id => !availableOptions.includes(id));
 
-            if (value.length > 0) {
-                throw new Error(`Certaines options ne sont pas disponibles pour l'utilisateur concerné : ${value.join(', ')}`);
+            if (forbiddenOptions.length > 0) {
+                throw new Error(`Certaines options ne sont pas disponibles pour l'utilisateur concerné : ${forbiddenOptions.join(', ')}`);
             }
         }),
 ];
