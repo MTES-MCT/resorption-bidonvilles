@@ -60,10 +60,15 @@ export default function (stats) {
             id: "connectedUsers",
             icon: "user",
             label:
+                stats.connectedUserStats.data.length > 0 &&
                 stats.connectedUserStats.data.slice(-1)[0].figure > 1
                     ? "utilisateurs connectés ces 7 derniers jours"
                     : "utilisateur connecté ces 7 derniers jours",
-            color: stats.connectedUserStats.evolution >= 0 ? "green" : "red",
+            color:
+                stats.connectedUserStats.data.length > 0 &&
+                stats.connectedUserStats.evolution >= 0
+                    ? "green"
+                    : "red",
         },
     ];
 }

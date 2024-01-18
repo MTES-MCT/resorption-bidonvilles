@@ -145,7 +145,7 @@ export default async (user: User, location: Location) => {
     if (shantytownStats.length === 0) {
         return null;
     }
-    const listOfDates = getArrayOfDates(otherDate, date);
 
+    const listOfDates = getArrayOfDates(otherDate, date);
     return decomposeForDiagramm(shantytownStats, connectedUsers, listOfDates);
 };

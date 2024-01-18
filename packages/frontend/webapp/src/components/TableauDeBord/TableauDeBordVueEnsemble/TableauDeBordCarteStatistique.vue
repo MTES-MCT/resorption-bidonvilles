@@ -14,7 +14,10 @@
             <div>
                 <div class="font-bold text-primary text-xl -mb-1">
                     <span>
-                        {{ formatStat(cardStats.data.slice(-1)[0].figure) }}
+                        <template v-if="cardStats.data.length > 0">{{
+                            formatStat(cardStats.data.slice(-1)[0].figure)
+                        }}</template>
+                        <template v-else>0</template>
                     </span>
                 </div>
                 <p class="leading-tight">
@@ -111,7 +114,9 @@ const props = defineProps({
 });
 const { icon, cardStats } = toRefs(props);
 
-const isEvolutionPositive = computed(() => cardStats.value.evolution >= 0);
+const isEvolutionPositive = computed(
+    () => cardStats.value.data.length > 0 && cardStats.value.evolution >= 0
+);
 const columns = ref([]);
 const evolutionColor = computed(() => {
     return cardStats.value.color === "red"
@@ -138,7 +143,7 @@ function onMouseLeave() {
 }
 
 function setColumns() {
-    if (maxNumber.value === 0) {
+    if (maxNumber.value === 0 || cardStats.value.data.length === 0) {
         return;
     }
 
