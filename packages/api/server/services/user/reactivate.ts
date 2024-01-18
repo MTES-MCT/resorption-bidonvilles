@@ -33,6 +33,7 @@ export default async (activator: User, id: number): Promise<User> => {
     } else {
         try {
             await sendActivationLink(activator, user, user.permission_options, transaction);
+            user = await findOneUser(id, { extended: true }, null, 'read', transaction);
         } catch (error) {
             await transaction.rollback();
             throw new ServiceError('send_access_failure', error);

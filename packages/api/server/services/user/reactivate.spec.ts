@@ -95,6 +95,16 @@ describe('userService.reactivate()', () => {
         );
     });
 
+    it('si l\'utilisateur est passé en statut \'new\', retourne l\'utilisateur mis à jour', async () => {
+        const activator = fakeUser({ id: 1 });
+        const user = fakeUser({ id: 42, status: 'new', permission_options: ['access_justice'] });
+        const updatedUser = fakeUser({ id: 423, status: 'new', permission_options: ['access_justice'] });
+        findOneUser.withArgs(42).onFirstCall().resolves(user);
+        findOneUser.withArgs(42).onSecondCall().resolves(updatedUser);
+
+        expect(await reactivateUser(activator, 42)).to.be.eql(updatedUser);
+    });
+
     it('ignore les erreurs de l\'envoi du mail d\'alerte', async () => {
         const user = fakeUser({ status: 'active' });
         findOneUser.withArgs(42).resolves(user);
