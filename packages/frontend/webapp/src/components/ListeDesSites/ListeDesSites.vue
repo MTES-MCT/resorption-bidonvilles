@@ -32,10 +32,24 @@ import ListeDesSitesListe from "./ListeDesSitesListe.vue";
 import ListeDesSitesVide from "./ListeDesSitesVide.vue";
 
 const townsStore = useTownsStore();
-const tabs = [
-    { id: "open", label: "Sites existants" },
-    { id: "close", label: "Sites fermés" },
-];
+const tabs = computed(() => [
+    {
+        id: "open",
+        label:
+            townsStore.prefilteredTowns.open.length <= 1
+                ? "Site existant"
+                : "Sites existants",
+        total: townsStore.prefilteredTowns.open.length,
+    },
+    {
+        id: "close",
+        label:
+            townsStore.prefilteredTowns.close.length <= 1
+                ? "Site fermé"
+                : "Sites fermés",
+        total: townsStore.prefilteredTowns.close.length,
+    },
+]);
 const currentTab = computed({
     get() {
         return townsStore.filters.status;
