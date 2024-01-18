@@ -97,7 +97,13 @@ export default (towns, connectedUsers, listOfDates) => {
     minors.evolution = Math.round(parseFloat((((minors.data.slice(-1)[0].figure - minors.data[0].figure) * 100) / minors.data[0].figure).toFixed(2)));
     closedShantytowns.evolution = Math.round(parseFloat((((closedShantytowns.data.slice(-1)[0].figure - closedShantytowns.data[0].figure) * 100) / closedShantytowns.data[0].figure).toFixed(2)));
     resorbedShantytowns.evolution = Math.round(parseFloat((((resorbedShantytowns.data.slice(-1)[0].figure - resorbedShantytowns.data[0].figure) * 100) / resorbedShantytowns.data[0].figure).toFixed(2)));
-    connectedUserStats.evolution = Math.round(parseFloat((((connectedUserStats.data.slice(-1)[0].figure - connectedUserStats.data[0].figure) * 100) / connectedUserStats.data[0].figure).toFixed(2)));
+    connectedUserStats.evolution = connectedUserStats.data.length > 0 ? Math.round(
+        parseFloat(
+            (
+                ((connectedUserStats.data.slice(-1)[0].figure - connectedUserStats.data[0].figure) * 100) / connectedUserStats.data[0].figure
+            ).toFixed(2),
+        ),
+    ) : 0;
 
     return {
         population, minors, closedShantytowns, resorbedShantytowns, connectedUserStats, openShantytowns, minorsInSchool,
