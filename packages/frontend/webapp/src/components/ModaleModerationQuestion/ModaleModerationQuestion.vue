@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed } from "vue";
+import { toRefs, ref, computed } from "vue";
 import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
