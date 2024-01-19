@@ -34,6 +34,7 @@ import findUserTowns from './findUserTowns';
 import createNote from './note/create';
 import publishNote from './note/publish';
 import createQuestion from './question/create';
+import deleteQuestion from './question/delete';
 import subscribeQuestion from './question/subcribe';
 import createAnswer from './answer/create';
 
@@ -121,6 +122,7 @@ export default {
     },
     question: {
         createQuestion,
+        deleteQuestion,
         subscribeQuestion,
     },
     answer: {
