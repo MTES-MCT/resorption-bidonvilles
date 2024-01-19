@@ -2,7 +2,7 @@
     <CarteCommentaire
         :id="`message${comment.id}`"
         :comment="comment"
-        showActionIcons
+        showModeration
         @moderate="openModerationModal"
     />
     <ModaleModerationCommentaire ref="moderationModal" :comment="comment" />

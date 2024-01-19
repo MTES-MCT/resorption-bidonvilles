@@ -10,7 +10,7 @@
             </div>
             <span
                 class="text-red font-bold cursor-pointer"
-                v-if="showActionIcons && (isOwner || (canModerate && isHover))"
+                v-if="showModeration && (isOwner || (canModerate && isHover))"
                 @click="deleteMessage"
                 >Supprimer {{ isOwner ? "mon" : "le" }} message
                 <Icon icon="trash-alt" alt="Supprimer le message"
@@ -101,7 +101,7 @@ const props = defineProps({
     comment: {
         type: Object,
     },
-    showActionIcons: {
+    showModeration: {
         type: Boolean,
         default: false,
     },
@@ -111,7 +111,7 @@ const props = defineProps({
 const emit = defineEmits(["moderate", "deleteAttachment"]);
 
 const isHover = ref(false);
-const { comment, disallowAttachmentsRemoval, showActionIcons } = toRefs(props);
+const { comment, disallowAttachmentsRemoval, showModeration } = toRefs(props);
 
 const covidTags = computed(() => {
     if (!comment.value || !comment.value.covid) {
