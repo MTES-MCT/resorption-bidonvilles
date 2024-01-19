@@ -17,6 +17,7 @@ import { toRefs, ref } from "vue";
 import { Button } from "@resorptionbidonvilles/ui";
 import { useUserStore } from "@/stores/user.store";
 import { useQuestionsStore } from "@/stores/questions.store";
+import { useNotificationStore } from "@/stores/notification.store";
 
 const props = defineProps({
     question: {
@@ -38,6 +39,7 @@ async function deleteQuestion() {
 }
 
 async function submit() {
+    const notificationStore = useNotificationStore();
     if (isLoading.value === true) {
         return;
     }
@@ -46,16 +48,11 @@ async function submit() {
     error.value = null;
 
     try {
-        if (question.value.answers.length == 0) {
-            console.log("On supprime la question");
-            await deleteQuestion();
-        } else {
-            console.log("On affiche la modale");
-            emit("showModale");
-        }
+        emit("showModale");
     } catch (e) {
         error.value = e?.code || "Erreur inconnue";
-        alert(
+        notificationStore.error(
+            "Suppression de la question échouée",
             `Une erreur a eu lieu lors de la suppression de la question:\r${error.value}`
         );
     }
