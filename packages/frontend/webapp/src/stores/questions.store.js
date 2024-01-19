@@ -164,12 +164,8 @@ export const useQuestionsStore = defineStore("questions", () => {
     }
 
     async function removeQuestion(questionId) {
-        try {
-            await deleteQuestion(questionId)
-            return true
-        } catch (error) {
-            throw error
-        }
+            await deleteQuestion(questionId);
+            return true;
     }
 
     return {

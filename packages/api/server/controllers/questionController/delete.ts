@@ -1,19 +1,16 @@
 import Question from '#server/models/questionModel/Question';
 import questionService from '#server/services/question';
-import { log } from 'console';
 import { NextFunction, Request, Response } from 'express';
-import { Result } from 'express-validator';
 
 interface QuestionDeleteRequest extends Request {
     question:Question
 }
 
 export default async (req:QuestionDeleteRequest, res:Response, next:NextFunction) => {
-
     try {
         await questionService.deleteQuestion(req.question.id);
         return res.status(204).send({});
     } catch (error) {
-        return next((error && error.nativeError) || error);
+        return next((error?.nativeError) || error);
     }
 };

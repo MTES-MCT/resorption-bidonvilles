@@ -23,10 +23,10 @@
         <template v-slot:actions>
             <div class="md:flex justify-between items-start">
                 <ModaleModerationQuestion
-                        :question="question"
-                        :author="author"
-                        ref="modale"
-                         />
+                    :question="question"
+                    :author="author"
+                    ref="modale"
+                />
                 <div>
                     <FicheQuestionTags
                         :question="question"
@@ -35,8 +35,11 @@
                     />
                 </div>
                 <div class="flex flex-col sm:flex-row items-start gap-2">
-                    <FicheQuestionDeleteButton :question="question" @showModale="() => modale.open()" size="sm" />
-
+                    <FicheQuestionDeleteButton 
+                        :question="question"
+                        @showModale="() => modale.open()"
+                        size="sm"
+                    />
                     <FicheQuestionSubscriptionButton
                         :question="question"
                         size="sm"

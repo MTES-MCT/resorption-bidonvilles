@@ -10,7 +10,8 @@
         </template>
 
         <template v-slot:footer>
-            <Button variant="primaryText" :loading="loading" @click="close">Annuler</Button>
+            <Button variant="primaryText" :loading="loading" @click="close"
+                >Annuler</Button>
             <Button class="ml-5" :loading="loading" @click="remove"
                 >Supprimer</Button
             >
@@ -70,19 +71,19 @@ async function remove() {
         if (await questionStore.removeQuestion(question.value.id)) {
             setTimeout(() => {
                 window.location.href = "/communaute";
-            }, 1000)
+            }, 1000);
         }
         notificationStore.success(
-                "Suppression de la question réussie",
-                "La question a bien été supprimée"
-            );
+            "Suppression de la question réussie",
+            "La question a bien été supprimée"
+        );
     } catch (e) {
         notificationStore.error(
             "Suppression de la question échouée",
-            error?.user_message || "Une erreur inconnue est survenue"
+            error.value?.user_message || "Une erreur inconnue est survenue" // AJOUT .VALUE
         );
-        error.value = e?.user_message || "Une erreur inconnue est survenue"; 
-        loading.value = false;  
+        error.value = e?.user_message || "Une erreur inconnue est survenue";
+        loading.value = false;
     }
 
     return true;

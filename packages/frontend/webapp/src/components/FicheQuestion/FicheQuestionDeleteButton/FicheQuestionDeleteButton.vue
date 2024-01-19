@@ -34,10 +34,6 @@ const isLoading = ref(null);
 
 const emit = defineEmits(["showModale"]);
 
-async function deleteQuestion() {
-    return questionStore.deleteQuestion(question.value.id);
-}
-
 async function submit() {
     const notificationStore = useNotificationStore();
     if (isLoading.value === true) {
