@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import Question from '#server/models/questionModel/Question';
 import questionService from '#server/services/question';
+// eslint-disable-next-line import/extensions
+import Question from '#server/models/questionModel/Question';
 
 interface QuestionDeleteRequest extends Request {
     question:Question
