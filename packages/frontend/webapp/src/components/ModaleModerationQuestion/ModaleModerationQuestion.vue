@@ -10,7 +10,7 @@
         </template>
 
         <template v-slot:footer>
-            <Button variant="primaryText" @click="close">Annuler</Button>
+            <Button variant="primaryText" :loading="loading" @click="close">Annuler</Button>
             <Button class="ml-5" :loading="loading" @click="remove"
                 >Supprimer</Button
             >
@@ -21,27 +21,31 @@
 <script setup>
 import { toRefs, ref, computed } from "vue";
 import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
+import { useNotificationStore } from "@/stores/notification.store";
+import { useQuestionsStore } from "@/stores/questions.store";
 
 const props = defineProps({
-    answersCount: {
-        type: Number,
-    },
     author: {
+        type: Object,
+    },
+    question: {
         type: Object,
     },
 });
 
-const { answersCount, author } = toRefs(props);
+const { author, question } = toRefs(props);
 const loading = ref(false);
 const error = ref(null);
 const isOpen = ref(false);
+const notificationStore = useNotificationStore();
+const questionStore = useQuestionsStore();
 
 const wording = computed(() => {
     const baseWording = `Confirmez-vous la suppression de la question de
             ${author.value.first_name} ${author.value.last_name}`;
-    return answersCount.value === 0
+    return question.value.answers.length === 0
         ? `${baseWording} ?`
-        : `${baseWording} ainsi que les ${answersCount.value} réponse(s) associée(s)?`;
+        : `${baseWording} ainsi que les ${question.value.answers.length} réponse(s) associée(s)?`;
 });
 
 function reset() {
@@ -61,6 +65,26 @@ async function remove() {
 
     loading.value = true;
     error.value = null;
+
+    try {
+        if (await questionStore.removeQuestion(question.value.id)) {
+            setTimeout(() => {
+                window.location.href = "/communaute";
+            }, 1000)
+        }
+        notificationStore.success(
+                "Suppression de la question réussie",
+                "La question a bien été supprimée"
+            );
+    } catch (e) {
+        notificationStore.error(
+            "Suppression de la question échouée",
+            error?.user_message || "Une erreur inconnue est survenue"
+        );
+        error.value = e?.user_message || "Une erreur inconnue est survenue"; 
+        loading.value = false;  
+    }
+
     return true;
 }
 
