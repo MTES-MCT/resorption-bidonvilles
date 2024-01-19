@@ -1,6 +1,6 @@
 <template>
     <div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-2 mt-1">
-        <FilePreview v-for="(file, index) in files" :key="file.id" :file="file" @delete="$emit('delete', file, index)"
+        <FilePreview v-for="(file, index) in files" :key="file.id" :file="file" @delete="emit('delete', file, index)"
             :disallowAttachmentsRemoval="disallowAttachmentsRemoval" />
     </div>
 </template>
@@ -19,4 +19,5 @@ const props = defineProps({
     disallowAttachmentsRemoval: Boolean,
 });
 const { disallowAttachmentsRemoval, files } = toRefs(props);
+const emit = defineEmits(["delete"]);
 </script>

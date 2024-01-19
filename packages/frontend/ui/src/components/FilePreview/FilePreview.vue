@@ -8,7 +8,7 @@
         </div>
         <Button
             :class="(file.state === 'draft' || file.createdByCurrentUser || isHovered) && !disallowAttachmentsRemoval ? 'visible' : 'invisible'"
-            type="button" icon="trash-alt" size="sm" @click.prevent="$emit('delete')" variant="primaryOutlineAlt" />
+            type="button" icon="trash-alt" size="sm" @click.prevent="emit('delete')" variant="primaryOutlineAlt" />
     </a>
 </template>
 
@@ -30,6 +30,7 @@ const props = defineProps({
     },
 });
 const { disallowAttachmentsRemoval, file } = toRefs(props);
+const emit = defineEmits(["delete"]);
 
 const isHovered = ref(false);
 </script>
