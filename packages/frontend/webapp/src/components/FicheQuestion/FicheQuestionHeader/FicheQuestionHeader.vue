@@ -25,7 +25,6 @@
                 <ModaleModerationQuestion
                         :question="question"
                         :author="author"
-                        v-if="question.answers.length > 0"
                         ref="modale"
                          />
                 <div>
