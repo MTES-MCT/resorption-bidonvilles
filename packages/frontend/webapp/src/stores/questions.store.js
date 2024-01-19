@@ -7,6 +7,7 @@ import {
     fetch,
     addAnswer,
     createQuestion,
+    deleteQuestion,
 } from "@/api/questions.api";
 import { subscribe, unsubscribe } from "@/api/questions.api";
 import { useConfigStore } from "./config.store";
@@ -162,6 +163,15 @@ export const useQuestionsStore = defineStore("questions", () => {
         );
     }
 
+    async function removeQuestion(questionId) {
+        try {
+            await deleteQuestion(questionId)
+            return true
+        } catch (error) {
+            throw error
+        }
+    }
+
     return {
         questions,
         filteredQuestions,
@@ -183,6 +193,7 @@ export const useQuestionsStore = defineStore("questions", () => {
         fetchQuestion,
         create,
         createAnswer,
+        removeQuestion,
         subscriptions,
         async subscribe(questionId) {
             if (!subscriptions.value[questionId]) {
