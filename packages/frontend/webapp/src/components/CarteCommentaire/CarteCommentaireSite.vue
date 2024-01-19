@@ -9,16 +9,18 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref } from "vue";
-import CarteCommentaire from "@/components/CarteCommentaire/CarteCommentaire.vue";
+import { ref, toRefs } from "vue";
+import CarteCommentaire from "./CarteCommentaire.vue";
 import ModaleModerationCommentaire from "@/components/ModaleModerationCommentaire/ModaleModerationCommentaire.vue";
 
 const props = defineProps({
-    comment: Object,
+    comment: {
+        type: Object,
+        required: true,
+    },
 });
-const moderationModal = ref(null);
-
 const { comment } = toRefs(props);
+const moderationModal = ref(null);
 
 function openModerationModal() {
     moderationModal.value.open();
