@@ -13,18 +13,10 @@
 </template>
 
 <script setup>
-import { toRefs, ref } from "vue";
+import { ref } from "vue";
 import { Button } from "@resorptionbidonvilles/ui";
 import { useUserStore } from "@/stores/user.store";
-import { useQuestionsStore } from "@/stores/questions.store";
 import { useNotificationStore } from "@/stores/notification.store";
-
-const props = defineProps({
-    question: {
-        type: Object,
-        required: true,
-    },
-});
 
 const userStore = useUserStore();
 const error = ref(null);
