@@ -839,7 +839,7 @@ export default (app) => {
         middlewares.appVersion.sync,
         validators.question.deleteQuestion,
         middlewares.validation,
-        controllers.community.deleteQuestion,
+        controllers.question.delete,
     );
 
     app.get(
