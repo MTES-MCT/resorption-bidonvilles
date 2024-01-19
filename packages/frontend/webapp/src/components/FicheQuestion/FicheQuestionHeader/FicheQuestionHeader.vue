@@ -23,7 +23,7 @@
         <template v-slot:actions>
             <div class="md:flex justify-between items-start">
                 <ModaleModerationQuestion
-                        :answersCount="question.answers.length"
+                        :question="question"
                         :author="author"
                         v-if="question.answers.length > 0"
                         ref="modale"
