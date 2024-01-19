@@ -1,6 +1,6 @@
+import { NextFunction, Request, Response } from 'express';
 import Question from '#server/models/questionModel/Question';
 import questionService from '#server/services/question';
-import { NextFunction, Request, Response } from 'express';
 
 interface QuestionDeleteRequest extends Request {
     question:Question

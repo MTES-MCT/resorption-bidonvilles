@@ -35,7 +35,7 @@
                     />
                 </div>
                 <div class="flex flex-col sm:flex-row items-start gap-2">
-                    <FicheQuestionDeleteButton 
+                    <FicheQuestionDeleteButton
                         :question="question"
                         @showModale="() => modale.open()"
                         size="sm"

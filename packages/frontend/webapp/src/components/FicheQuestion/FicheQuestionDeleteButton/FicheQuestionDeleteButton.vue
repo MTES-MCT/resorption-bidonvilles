@@ -26,9 +26,7 @@ const props = defineProps({
     },
 });
 
-const { question } = toRefs(props);
 const userStore = useUserStore();
-const questionStore = useQuestionsStore();
 const error = ref(null);
 const isLoading = ref(null);
 

@@ -11,7 +11,8 @@
 
         <template v-slot:footer>
             <Button variant="primaryText" :loading="loading" @click="close"
-                >Annuler</Button>
+                >Annuler</Button
+            >
             <Button class="ml-5" :loading="loading" @click="remove"
                 >Supprimer</Button
             >

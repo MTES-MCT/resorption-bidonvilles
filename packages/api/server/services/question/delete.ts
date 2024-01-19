@@ -1,8 +1,7 @@
 import ServiceError from '#server/errors/ServiceError';
 import deleteQuestion from '#server/models/questionModel/delete';
 
-export default async (id:number): Promise<void> => {    
-
+export default async (id:number): Promise<void> => {
     // on supprime la question
     try {
         await deleteQuestion(id);

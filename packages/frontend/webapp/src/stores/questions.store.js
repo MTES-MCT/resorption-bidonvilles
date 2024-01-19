@@ -164,8 +164,8 @@ export const useQuestionsStore = defineStore("questions", () => {
     }
 
     async function removeQuestion(questionId) {
-            await deleteQuestion(questionId);
-            return true;
+        await deleteQuestion(questionId);
+        return true;
     }
 
     return {
