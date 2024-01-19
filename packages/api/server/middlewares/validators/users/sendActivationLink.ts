@@ -47,5 +47,7 @@ export default [
             if (forbiddenOptions.length > 0) {
                 throw new Error(`Certaines options ne sont pas disponibles pour l'utilisateur concerné : ${forbiddenOptions.join(', ')}`);
             }
+
+            return true;
         }),
 ];
