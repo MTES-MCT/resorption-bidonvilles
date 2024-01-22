@@ -1,9 +1,7 @@
 /* eslint-disable newline-per-chained-call */
 import { Meta, param } from 'express-validator';
-// eslint-disable-next-line import/extensions
 import findOne from '#server/models/questionModel/findOne';
-// eslint-disable-next-line import/extensions
-import Question from '#server/models/questionModel/Question';
+import Question from '#server/models/questionModel/Question.d';
 
 
 export default [
