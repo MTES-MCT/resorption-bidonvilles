@@ -82,7 +82,7 @@ async function remove() {
     } catch (e) {
         notificationStore.error(
             "Suppression de la question échouée",
-            error.value?.user_message || "Une erreur inconnue est survenue" // AJOUT .VALUE
+            error.value?.user_message || "Une erreur inconnue est survenue"
         );
         error.value = e?.user_message || "Une erreur inconnue est survenue";
         loading.value = false;
