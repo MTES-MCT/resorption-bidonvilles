@@ -6,14 +6,14 @@
             <p class="truncate">{{ file.name }}</p>
             <p class="text-G500"><span>{{ file.extension?.toUpperCase() }}</span> {{ humanFileSize(file.size) }}</p>
         </div>
-        <Button
+        <Button v-if="!disallowAttachmentsRemoval"
             :class="(file.state === 'draft' || file.createdByCurrentUser || isHovered) && !disallowAttachmentsRemoval ? 'visible' : 'invisible'"
             type="button" icon="trash-alt" size="sm" @click.prevent="$emit('delete')" variant="primaryOutlineAlt" />
     </a>
 </template>
 
 <script setup>
-import { ref, toRefs } from 'vue';
+import { computed, ref, toRefs } from 'vue';
 import FilePreviewIcon from "./FilePreviewIcon.vue";
 import humanFileSize from '../../utils/humanFileSize';
 import Button from "../Button.vue";
