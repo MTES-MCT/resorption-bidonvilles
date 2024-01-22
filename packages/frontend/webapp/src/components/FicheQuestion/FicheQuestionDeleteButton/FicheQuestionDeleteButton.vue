@@ -1,6 +1,5 @@
 <template>
     <Button
-        v-if="userStore.user.is_superuser"
         icon="trash"
         iconPosition="left"
         type="button"
@@ -15,10 +14,8 @@
 <script setup>
 import { ref } from "vue";
 import { Button } from "@resorptionbidonvilles/ui";
-import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
 
-const userStore = useUserStore();
 const error = ref(null);
 const isLoading = ref(null);
 
