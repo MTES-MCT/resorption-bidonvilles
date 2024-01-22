@@ -6,11 +6,22 @@ interface QuestionDeleteRequest extends Request {
     question:Question
 }
 
-export default async (req:QuestionDeleteRequest, res:Response, next:NextFunction) => {
+const ERROR_RESPONSES = {
+    insert_failed: { code: 500, message: 'Une lecture en base de données a échoué' },
+    undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
+};
+
+export default async (req:QuestionDeleteRequest, res:Response, next:NextFunction): Promise<void> => {
     try {
         await questionService.deleteQuestion(req.question.id);
-        return res.status(204).send({});
+        res.status(204).send({});
     } catch (error) {
-        return next((error?.nativeError) || error);
+        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
+        res.status(code).send({
+            error: {
+                user_message: message,
+            },
+        });
+        next(error.nativeError || error);
     }
 };
