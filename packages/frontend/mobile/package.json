@@ -28,7 +28,7 @@
     "lint-staged": "^13.2.2",
     "postcss": "^8.4.31",
     "prettier": "^2.7.1",
-    "vite": "^4.3.9",
+    "vite": "^4.5.2",
     "vite-plugin-pwa": "^0.16.1"
   },
   "lint-staged": {
