@@ -835,6 +835,7 @@ export default (app) => {
     app.delete(
         '/questions/:id',
         middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
         middlewares.charte.check,
         middlewares.appVersion.sync,
         validators.question.deleteQuestion,
