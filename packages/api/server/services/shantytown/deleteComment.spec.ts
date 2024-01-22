@@ -7,6 +7,7 @@ import validator from 'validator';
 import shantytownModel from '#server/models/shantytownModel';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import userModel from '#server/models/userModel';
+import attachmentModel from '#server/models/attachmentModel';
 import mails from '#server/mails/mails';
 import permissionUtils from '#server/utils/permission';
 import ServiceError from '#server/errors/ServiceError';
@@ -25,7 +26,20 @@ describe('services/shantytown', () => {
         const author = { id: 1 };
         const shantytownId = 0;
         const commentId = 0;
-        const comment = { id: 0, createdBy: { id: 1 } };
+        const keys = {
+            attachment_id: 1,
+            original_file_key: 'fake-key',
+            preview_file_key: null,
+            created_by: 1,
+        };
+        const attachments = [{
+            state: 'uploaded',
+            attachment_id: 1,
+            original_file_key: 'fake-key',
+            preview_file_key: null,
+            created_by: 1,
+        }];
+        const comment = { id: 0, createdBy: { id: 1 }, attachments };
         const deletionMessage = 'deletionMessage';
         const town = {
             region: null,
@@ -42,6 +56,8 @@ describe('services/shantytown', () => {
                 shantytownModelfindOne: sinon.stub(shantytownModel, 'findOne'),
                 userModelFindOne: sinon.stub(userModel, 'findOne'),
                 userModelGetNationalAdmins: sinon.stub(userModel, 'getNationalAdmins'),
+                attachmentModelFindKeys: sinon.stub(attachmentModel, 'findKeys'),
+                attachmentModelDeleteAttachment: sinon.stub(attachmentModel, 'deleteAttachment'),
                 shantytownCommentModeldeleteComment: sinon.stub(shantytownCommentModel, 'deleteComment'),
                 can: sinon.stub(permissionUtils, 'can'),
                 do: sinon.stub(),
@@ -58,6 +74,8 @@ describe('services/shantytown', () => {
 
             stubs.shantytownModelfindOne.resolves(town);
             stubs.userModelFindOne.resolves(author);
+            stubs.attachmentModelFindKeys.resolves(keys);
+            stubs.attachmentModelDeleteAttachment.resolves();
         });
 
         afterEach(() => {
@@ -85,7 +103,6 @@ describe('services/shantytown', () => {
                 },
             });
         });
-
         it('renvoie une exception ServiceError \'fetch_failed\' si le site correspondant au commentaire n\'existe pas en bdd', async () => {
             stubs.shantytownModelfindOne.rejects(new Error());
             let responseError;
