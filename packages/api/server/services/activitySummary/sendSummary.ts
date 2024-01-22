@@ -42,7 +42,7 @@ export default async (argFrom: Date, argTo: Date, questionSummary: QuestionSumma
                     from: from.format('DD'),
                     to: to.format('DD MMMM YYYY'),
                     questionSummary,
-                    summaries,
+                    summaries: subScribedsummaries,
                     showDetails: true,
                 },
             });
