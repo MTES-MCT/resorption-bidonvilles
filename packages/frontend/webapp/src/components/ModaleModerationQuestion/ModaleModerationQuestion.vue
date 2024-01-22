@@ -38,11 +38,13 @@ const props = defineProps({
 });
 
 const { author, question } = toRefs(props);
-const loading = ref(false);
 const error = ref(null);
 const isOpen = ref(false);
 const notificationStore = useNotificationStore();
 const questionStore = useQuestionsStore();
+const loading = computed(() => {
+    return questionStore.pendingDeletions[question.value.id] === true;
+});
 
 const wording = computed(() => {
     const baseWording = `Confirmez-vous la suppression de la question de ${formatUserName(
@@ -55,7 +57,6 @@ const wording = computed(() => {
 });
 
 function reset() {
-    loading.value = false;
     error.value = null;
 }
 
@@ -69,7 +70,6 @@ async function remove() {
         return;
     }
 
-    loading.value = true;
     error.value = null;
 
     try {
@@ -87,7 +87,6 @@ async function remove() {
         error.value = e?.user_message || "Une erreur inconnue est survenue";
     }
 
-    loading.value = false;
     return true;
 }
 

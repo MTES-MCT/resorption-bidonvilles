@@ -27,6 +27,7 @@ export const useQuestionsStore = defineStore("questions", () => {
         search: "",
     });
     const sort = ref("last_activity");
+    const pendingDeletions = ref({});
 
     const filteredQuestions = computed(() => {
         return filterQuestions(questions.value, {
@@ -93,6 +94,7 @@ export const useQuestionsStore = defineStore("questions", () => {
         isLoading.value = false;
         error.value = null;
         sort.value = "last_activity";
+        pendingDeletions.value = {};
         resetPagination();
         resetFilters();
     }
@@ -184,8 +186,22 @@ export const useQuestionsStore = defineStore("questions", () => {
         fetchQuestion,
         create,
         createAnswer,
-        removeQuestion(id) {
-            return deleteQuestion(id);
+        pendingDeletions,
+        async removeQuestion(id) {
+            if (pendingDeletions.value[id] === true) {
+                return;
+            }
+
+            try {
+                pendingDeletions.value[id] = true;
+
+                const response = await deleteQuestion(id);
+                pendingDeletions.value[id] = false;
+                return response;
+            } catch (error) {
+                pendingDeletions.value[id] = false;
+                throw error;
+            }
         },
         subscriptions,
         async subscribe(questionId) {

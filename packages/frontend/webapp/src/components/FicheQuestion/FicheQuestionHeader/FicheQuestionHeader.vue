@@ -37,7 +37,7 @@
                 <div class="flex flex-col sm:flex-row items-start gap-2">
                     <FicheQuestionDeleteButton
                         v-if="userStore.user.is_superuser"
-                        :question="question"
+                        :questionId="question.id"
                         @showModale="() => modale.open()"
                         size="sm"
                     />
