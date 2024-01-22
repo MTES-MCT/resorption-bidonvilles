@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import questionService from '#server/services/question';
+import deleteQuestion from '#server/services/question/delete';
 import Question from '#server/models/questionModel/Question.d';
 
 interface QuestionDeleteRequest extends Request {
@@ -13,7 +13,7 @@ const ERROR_RESPONSES = {
 
 export default async (req:QuestionDeleteRequest, res:Response, next:NextFunction): Promise<void> => {
     try {
-        await questionService.deleteQuestion(req.question.id);
+        await deleteQuestion(req.question.id);
         res.status(204).send({});
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
