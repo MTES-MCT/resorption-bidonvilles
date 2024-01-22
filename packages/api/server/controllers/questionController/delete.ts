@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import deleteQuestion from '#server/services/question/delete';
-import Question from '#server/models/questionModel/Question.d';
+import { Question } from '#root/types/resources/Question.d';
 
 interface QuestionDeleteRequest extends Request {
-    question:Question
+    question: Question
 }
 
 const ERROR_RESPONSES = {
