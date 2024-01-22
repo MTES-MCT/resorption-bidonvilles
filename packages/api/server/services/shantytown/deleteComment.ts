@@ -5,9 +5,9 @@ import userModel from '#server/models/userModel';
 import mails from '#server/mails/mails';
 import permissionUtils from '#server/utils/permission';
 import dateUtils from '#server/utils/date';
-import findKeys, { AttachmentKeys } from '#server/models/attachmentModel/findKeys';
-import deleteAttachment from '#server/services/attachment/deleteAttachment';
+import deleteAttachmentsService from '#server/services/attachment/deleteAttachments';
 import ServiceError from '#server/errors/ServiceError';
+import { sequelize } from '#db/sequelize';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 
@@ -52,18 +52,17 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
         }
     }
 
+    const transaction = await sequelize.transaction();
     try {
-        // Suppression des pièces-jointes
-        const promises = comment.attachments.map(async (attachment) => {
-            const keys: AttachmentKeys = await findKeys(attachment.id);
-            return deleteAttachment(keys);
-        });
-        await Promise.all(promises);
+        // Suppression des pièces jointes
+        await deleteAttachmentsService(commentId, 'shantytown_comment', transaction);
         // Suppression du commentaire
-        await shantytownCommentModel.deleteComment(commentId);
+        await shantytownCommentModel.deleteComment(commentId, transaction);
     } catch (error) {
+        transaction.rollback();
         throw new ServiceError('delete_failed', error);
     }
+    transaction.commit();
 
     try {
         if (!isOwner) {
