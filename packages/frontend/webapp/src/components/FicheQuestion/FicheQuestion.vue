@@ -8,6 +8,7 @@
             :attachments="question.attachments"
             entityType="question"
             :entityId="question.id"
+            :disallowAttachmentsRemoval="!canUserDeleteQuestionAttachment"
         />
         <FicheQuestionDate :question="question" />
     </ContentWrapper>
@@ -16,7 +17,7 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted, toRefs } from "vue";
+import { computed, defineProps, onMounted, toRefs } from "vue";
 import router from "@/helpers/router";
 
 import { ContentWrapper } from "@resorptionbidonvilles/ui";
@@ -26,6 +27,7 @@ import FicheQuestionDate from "./FicheQuestionDate/FicheQuestionDate.vue";
 import FicheQuestionReponses from "./FicheQuestionReponses/FicheQuestionReponses.vue";
 import FicheQuestionAttachments from "./FicheQuestionAttachments/FicheQuestionAttachments.vue";
 import { useQuestionsStore } from "@/stores/questions.store";
+import { useUserStore } from "@/stores/user.store";
 
 const props = defineProps({
     question: Object,
@@ -37,5 +39,13 @@ onMounted(() => {
         const questionStore = useQuestionsStore();
         questionStore.subscribe(question.value.id);
     }
+});
+
+const canUserDeleteQuestionAttachment = computed(() => {
+    const userStore = useUserStore();
+    return (
+        userStore.user.is_superuser ||
+        userStore.user.id === question.value.createdBy.id
+    );
 });
 </script>
