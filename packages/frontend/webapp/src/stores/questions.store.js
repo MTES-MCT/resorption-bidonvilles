@@ -163,11 +163,6 @@ export const useQuestionsStore = defineStore("questions", () => {
         );
     }
 
-    async function removeQuestion(questionId) {
-        await deleteQuestion(questionId);
-        return true;
-    }
-
     return {
         questions,
         filteredQuestions,
@@ -189,7 +184,9 @@ export const useQuestionsStore = defineStore("questions", () => {
         fetchQuestion,
         create,
         createAnswer,
-        removeQuestion,
+        removeQuestion(id) {
+            return deleteQuestion(id);
+        },
         subscriptions,
         async subscribe(questionId) {
             if (!subscriptions.value[questionId]) {
