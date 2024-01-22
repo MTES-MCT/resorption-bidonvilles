@@ -4,42 +4,13 @@
         iconPosition="left"
         type="button"
         variant="primary"
-        :loading="isLoading"
-        @click="submit"
+        @click="emit('showModale')"
         class="flex-shrink-0"
         >Supprimer la question</Button
     >
 </template>
 
 <script setup>
-import { ref } from "vue";
 import { Button } from "@resorptionbidonvilles/ui";
-import { useNotificationStore } from "@/stores/notification.store";
-
-const error = ref(null);
-const isLoading = ref(null);
-
 const emit = defineEmits(["showModale"]);
-
-async function submit() {
-    const notificationStore = useNotificationStore();
-    if (isLoading.value === true) {
-        return;
-    }
-
-    isLoading.value = true;
-    error.value = null;
-
-    try {
-        emit("showModale");
-    } catch (e) {
-        error.value = e?.code || "Erreur inconnue";
-        notificationStore.error(
-            "Suppression de la question échouée",
-            `Une erreur a eu lieu lors de la suppression de la question:\r${error.value}`
-        );
-    }
-
-    isLoading.value = false;
-}
 </script>
