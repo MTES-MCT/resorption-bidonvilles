@@ -7,7 +7,7 @@ interface QuestionDeleteRequest extends Request {
 }
 
 const ERROR_RESPONSES = {
-    insert_failed: { code: 500, message: 'Une lecture en base de données a échoué' },
+    delete_failed: { code: 500, message: 'La suppression des données en base a échoué' },
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
