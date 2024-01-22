@@ -26,6 +26,7 @@ import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useQuestionsStore } from "@/stores/questions.store";
 import formatUserName from "@/utils/formatUserName";
+import router from "@/helpers/router";
 
 const props = defineProps({
     author: {
@@ -72,11 +73,8 @@ async function remove() {
     error.value = null;
 
     try {
-        if (await questionStore.removeQuestion(question.value.id)) {
-            setTimeout(() => {
-                window.location.href = "/communaute";
-            }, 1000);
-        }
+        await questionStore.removeQuestion(question.value.id);
+        router.replace("/communaute");
         notificationStore.success(
             "Suppression de la question réussie",
             "La question a bien été supprimée"
