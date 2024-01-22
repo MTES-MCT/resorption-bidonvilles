@@ -85,9 +85,9 @@ async function remove() {
             error.value?.user_message || "Une erreur inconnue est survenue"
         );
         error.value = e?.user_message || "Une erreur inconnue est survenue";
-        loading.value = false;
     }
 
+    loading.value = false;
     return true;
 }
 
