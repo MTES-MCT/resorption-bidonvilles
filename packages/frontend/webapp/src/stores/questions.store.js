@@ -187,19 +187,25 @@ export const useQuestionsStore = defineStore("questions", () => {
         create,
         createAnswer,
         pendingDeletions,
-        async removeQuestion(id) {
-            if (pendingDeletions.value[id] === true) {
+        async removeQuestion(questionId) {
+            if (pendingDeletions.value[questionId] === true) {
                 return;
             }
 
             try {
-                pendingDeletions.value[id] = true;
+                pendingDeletions.value[questionId] = true;
 
-                const response = await deleteQuestion(id);
-                pendingDeletions.value[id] = false;
+                const response = await deleteQuestion(questionId);
+                const index = questions.value.findIndex(
+                    ({ id }) => id === questionId
+                );
+                if (index >= 0) {
+                    questions.value.splice(index, 1);
+                }
+                pendingDeletions.value[questionId] = false;
                 return response;
             } catch (error) {
-                pendingDeletions.value[id] = false;
+                pendingDeletions.value[questionId] = false;
                 throw error;
             }
         },
