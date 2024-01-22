@@ -25,6 +25,7 @@ import { toRefs, ref, computed } from "vue";
 import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useQuestionsStore } from "@/stores/questions.store";
+import formatUserName from "@/utils/formatUserName";
 
 const props = defineProps({
     author: {
@@ -43,11 +44,13 @@ const notificationStore = useNotificationStore();
 const questionStore = useQuestionsStore();
 
 const wording = computed(() => {
-    const baseWording = `Confirmez-vous la suppression de la question de
-            ${author.value.first_name} ${author.value.last_name}`;
+    const baseWording = `Confirmez-vous la suppression de la question de ${formatUserName(
+        author.value,
+        false
+    )}`;
     return question.value.answers.length === 0
         ? `${baseWording} ?`
-        : `${baseWording} ainsi que les ${question.value.answers.length} réponse(s) associée(s)?`;
+        : `${baseWording} ainsi que les ${question.value.answers.length} réponse(s) associée(s) ?`;
 });
 
 function reset() {
