@@ -8,7 +8,12 @@ type AttachmentArchiveRow = {
 };
 
 export default (): Promise<AttachmentArchiveRow[]> => sequelize.query(
-    'SELECT attachment_id AS id, original_file_key AS key, preview_file_key AS "previewKey" FROM deleted_attachments',
+    `SELECT
+        attachment_id AS id,
+        original_file_key AS key,
+        preview_file_key AS "previewKey"
+    FROM deleted_attachments
+    WHERE deleted_at < NOW() - INTERVAL '72 hours'`,
     {
         type: QueryTypes.SELECT,
     },
