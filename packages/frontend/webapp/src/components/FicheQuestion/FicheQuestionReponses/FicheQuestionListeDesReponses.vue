@@ -1,17 +1,16 @@
 <template>
     <section>
-        <CarteCommentaire
+        <CarteCommentaireReponse
             v-for="answer in answers"
             :key="answer.id"
-            :id="`reponse${answer.id}`"
-            :comment="answer"
+            :answer="answer"
         />
     </section>
 </template>
 
 <script setup>
 import { defineProps, toRefs } from "vue";
-import CarteCommentaire from "@/components/CarteCommentaire/CarteCommentaire.vue";
+import CarteCommentaireReponse from "@/components/CarteCommentaire/CarteCommentaireReponse.vue";
 
 const props = defineProps({
     answers: Array,
