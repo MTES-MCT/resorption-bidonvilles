@@ -1,5 +1,6 @@
 /* eslint-disable newline-per-chained-call */
 import attachmentModel from '#server/models/attachmentModel';
+import { AttachmentKeys } from '#server/models/attachmentModel/findKeys';
 import { param } from 'express-validator';
 
 export default [
@@ -7,7 +8,7 @@ export default [
         .toInt()
         .isInt().bail().withMessage('L\'identifiant de la pièce-jointe est invalide')
         .custom(async (value, { req }) => {
-            let keys;
+            let keys: AttachmentKeys;
             try {
                 keys = await attachmentModel.findKeys(value);
             } catch (error) {
@@ -22,7 +23,7 @@ export default [
                 throw new Error('Vous n\'avez pas le droit de supprimer cette pièce-jointe');
             }
 
-            req.body.keys = keys;
+            req.keys = keys;
             return true;
         }),
 ];
