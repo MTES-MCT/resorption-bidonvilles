@@ -14,7 +14,7 @@ interface DeleteAttachmentRequest extends Request {
 export default async (req: DeleteAttachmentRequest, res: Response, next: NextFunction) => {
     try {
         await attachmentService.deleteAttachment(req.keys);
-        res.status(200).send({});
+        res.status(204).send({});
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({
