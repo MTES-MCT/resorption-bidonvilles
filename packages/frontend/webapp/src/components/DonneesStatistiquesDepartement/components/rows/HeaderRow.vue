@@ -1,13 +1,13 @@
 <template>
     <tr>
-        <Title
+        <RbTitle
             tag="th"
             class="w-8 bg-white hover:bg-G200 cursor-pointer"
             :title="collapseTitle"
             @click="toggleCollapse"
         >
             <Icon :icon="collapsedIcon" />
-        </Title>
+        </RbTitle>
         <th
             @click="changeSort('city_name')"
             class="text-left py-2 cursor-pointer bg-clip-padding bg-white hover:bg-G200"
@@ -25,7 +25,7 @@
                 /></span>
             </div>
         </th>
-        <Title
+        <RbTitle
             tag="th"
             :title="col.title"
             @click="changeSort(col.uid)"
@@ -49,7 +49,7 @@
                 class="ml-2 text-G600"
                 ><Icon :icon="chevronState"
             /></span>
-        </Title>
+        </RbTitle>
         <th class="w-8 bg-white"></th>
     </tr>
 </template>
@@ -63,7 +63,7 @@ import flagFR from "@/assets/img/flags/fr.png";
 import flagEU from "@/assets/img/flags/eu.png";
 import flagExtraCommunautaires from "@/assets/img/flags/extra-communautaires.png";
 
-import { Icon, Title } from "@resorptionbidonvilles/ui";
+import { Icon, Title as RbTitle } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     columns: {
