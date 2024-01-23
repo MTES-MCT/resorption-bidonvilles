@@ -90,6 +90,7 @@ export default {
         },
         sizeClasses() {
             return {
+                xs: `text-xs ${this.padding === true ? "py-1 px-1" : ""}`,
                 sm: `text-sm ${this.padding === true ? "py-1 px-2" : ""}`,
                 md: `text-md ${this.padding === true ? "py-2 px-4" : ""}`,
                 lg: `text-lg ${this.padding === true ? "py-2 px-4" : ""}`

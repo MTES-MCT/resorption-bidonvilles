@@ -1,16 +1,31 @@
 <template>
-    <a class="inline-block border rounded p-1 flex space-x-2 items-center cursor-pointer hover:bg-blue100 bg-white"
-        @mousemove="isHovered = true" @mouseleave="isHovered = false" :title="file.name" :href="file.urls.original">
-        <FilePreviewIcon class="flex-shrink-0" :file="file" />
-        <div class="text-sm overflow-hidden flex-1">
-            <p class="truncate">{{ file.name }}</p>
-            <p class="text-G500"><span>{{ file.extension?.toUpperCase() }}</span> {{ humanFileSize(file.size) }}</p>
-        </div>
+    <div @mousemove="isHovered = true" @mouseleave="isHovered = false">
+        <a class="flex border rounded p-1 space-x-2 items-center cursor-pointer hover:bg-blue100 bg-white"
+        :title="`Consulter la pièce jointe, ${file.name}`" :href="file.urls.original">
+            <FilePreviewIcon aria-hidden="true" class="flex-shrink-0" :file="file" />
+            <div class="text-sm overflow-hidden flex-1">
+                <p class="truncate" aria-hidden="true">{{ file.name }}</p>
+                <p class="text-G500">
+                    <span :aria-label="`Extension du fichier, ${file.extension?.toUpperCase()}`">{{ file.extension?.toUpperCase() }}</span>
+                    -
+                    <span :aria-label="`Taille du fichier, ${humanFileSize(file.size)}`">{{ humanFileSize(file.size) }}</span>
+                </p>
+            </div>
+        </a>
         <Button
             :loading="file.loading === true"
-            :class="allowDeletion && (file.state === 'draft' || isHovered || file.loading === true) ? 'visible' : 'invisible'"
-            type="button" icon="trash-alt" size="sm" @click.prevent="emit('delete')" variant="primaryOutlineAlt" />
-    </a>
+            class="align-right"
+            :class="allowDeletion && (file.state === 'draft' || isHovered || file.loading === true) ? '' : 'hidden'"
+            :title="`Supprimer la pièce jointe, ${file.name}`"
+            type="button"
+            icon="trash-alt"
+            iconPosition="left"
+            size="xs"
+            @click.prevent="emit('delete')"
+            variant="primaryOutlineAlt">
+            Supprimer ce fichier
+        </Button>
+    </div>
 </template>
 
 <script setup>
