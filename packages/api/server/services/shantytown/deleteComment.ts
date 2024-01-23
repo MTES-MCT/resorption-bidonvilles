@@ -39,7 +39,7 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
     };
 
     const isOwner = author.id === user.id;
-    if (!isOwner && !permissionUtils.can(user).do('moderate', 'shantytown_comment').on(location)) {
+    if (!isOwner && !permissionUtils.can(user).do('moderate', 'data').on(location)) {
         throw new ServiceError('permission_denied', new Error('Vous n\'avez pas accès à ces données'));
     }
 

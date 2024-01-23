@@ -2,6 +2,7 @@
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import shantytownModel from '#server/models/shantytownModel';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel';
+import attachmentService from '#server/services/attachment';
 import mattermostUtils from '#server/utils/mattermost';
 
 import userModel from '#server/models/userModel';
@@ -35,10 +36,33 @@ export default async (comment, shantytown, author) => {
             // Enregistrement des tags dans la table shantytown_comment_tags
             await shantytownCommentTagModel.create(commentId, tags.map(tag => tag.uid), transaction);
         }
-        await transaction.commit();
     } catch (error) {
         await transaction.rollback();
         throw new ServiceError('insert_failed', error);
+    }
+
+    // on tente d'enregistrer les fichiers joints
+    if (comment.files.length > 0) {
+        try {
+            await attachmentService.upload(
+                'shantytown_comment',
+                commentId,
+                author.id,
+                comment.files,
+                transaction,
+            );
+        } catch (error) {
+            await transaction.rollback();
+            throw new ServiceError('upload_failed', error);
+        }
+    }
+
+    // on finalise
+    try {
+        await transaction.commit();
+    } catch (error) {
+        await transaction.rollback();
+        throw new ServiceError('commit_failed', error);
     }
 
     // on tente d'envoyer une notification Mattermost

@@ -50,6 +50,16 @@ export default {
             console.log(`Server is now running on port ${port}! :)`);
         });
 
+        // s3 (initialisation de tous les buckets, si nécessaire)
+        try {
+            await loaders.s3();
+        } catch (error) {
+            if (error.Code !== 'BucketAlreadyOwnedByYou') {
+                // eslint-disable-next-line no-console
+                console.log('Initialisation S3 échouée :(', error);
+            }
+        }
+
         // agenda
         const agenda = loaders.agenda();
         loaders.agendaJobs(agenda);
@@ -69,6 +79,8 @@ export default {
                 await agenda.every('0 0 5 15 12 *', 'send_action_alert_preshot'); // tous les 15 décembre at 5AM
                 await agenda.every('0 0 5 20 1 *', 'send_action_alert_postshot'); // tous les 20 janvier at 5AM
             }
+
+            await agenda.every('0 0 4 * * *', 'clean_attachments_archives');
 
             // eslint-disable-next-line no-console
             console.log('Set scheduled jobs up');

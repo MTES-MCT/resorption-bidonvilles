@@ -79,6 +79,10 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
 }
 
 async function triggerShantytownCreationAlert(town: Shantytown, user: User): Promise<void> {
+    if (!mattermost) {
+        return;
+    }
+
     const shantytownCreationAlert = new IncomingWebhook(mattermost);
 
     const address = formatAddress(town);
@@ -127,6 +131,10 @@ async function triggerShantytownCreationAlert(town: Shantytown, user: User): Pro
 }
 
 async function triggerNewUserAlert(user: User): Promise<void> {
+    if (!mattermost) {
+        return;
+    }
+
     const newUserAlert = new IncomingWebhook(mattermost);
 
     const username = formatUsername(user);
@@ -407,11 +415,47 @@ async function triggerNotifyNewUserSelfDeactivation(user: User): Promise<void> {
     await webhook.send(mattermostMessage);
 }
 
+export async function triggerAttachmentArchiveCleanup(deleteRequestsCount: number, errorsCount: number): Promise<void> {
+    if (!mattermost) {
+        return;
+    }
+
+    const webhook = new IncomingWebhook(mattermost);
+    const mattermostMessage = {
+        channel: '#notif-nettoyage-piecesjointes',
+        username: 'Alerte Résorption Bidonvilles',
+        icon_emoji: ':robot:',
+        text: `:rotating_light: Un nettoyage automatique des fichiers vient d'être effectué pour un total de ${deleteRequestsCount} fichiers à supprimer et ${errorsCount} erreurs rencontrées`,
+        fields: [],
+    };
+
+    await webhook.send(mattermostMessage);
+}
+
+export async function triggerAttachmentArchiveCleanupError(): Promise<void> {
+    if (!mattermost) {
+        return;
+    }
+
+    const webhook = new IncomingWebhook(mattermost);
+    const mattermostMessage = {
+        channel: '#notif-nettoyage-piecesjointes',
+        username: 'Alerte Résorption Bidonvilles',
+        icon_emoji: ':robot:',
+        text: ':rotating_light: Une erreur est survenue lors du DELETE en base de données',
+        fields: [],
+    };
+
+    await webhook.send(mattermostMessage);
+}
+
 export default {
     triggerShantytownCloseAlert,
     triggerShantytownCreationAlert,
     triggerNewUserAlert,
     triggerActorInvitedAlert,
+    triggerAttachmentArchiveCleanup,
+    triggerAttachmentArchiveCleanupError,
     triggerPeopleInvitedAlert,
     triggerNewComment,
     triggerNewActionComment,

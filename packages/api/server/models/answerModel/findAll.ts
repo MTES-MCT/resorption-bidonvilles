@@ -7,7 +7,22 @@ import serializeAnswer from './_common/serializeAnswer';
 
 export default async (): Promise<Answer[]> => {
     const rows: AnswerRow[] = await sequelize.query(
-        `
+        `WITH grouped_attachments AS (
+            SELECT
+                aa.fk_answer,
+                array_remove(array_agg(
+                    a.attachment_id || '@.;.@'
+                    || a.original_file_key || '@.;.@'
+                    || COALESCE(a.preview_file_key, '') || '@.;.@'
+                    || a.original_name || '@.;.@'
+                    || a.mimetype || '@.;.@'
+                    || a.size || '@.;.@'
+                    || a.created_by
+                ), null) AS attachments
+            FROM answer_attachments aa
+            LEFT JOIN attachments a ON aa.fk_attachment = a.attachment_id
+            GROUP BY aa.fk_answer
+        )
         SELECT
             ca.answer_id AS "answerId",
             ca.fk_question AS "questionId",
@@ -20,7 +35,8 @@ export default async (): Promise<Answer[]> => {
             rr.name AS "userRole",
             o.organization_id AS "organizationId",
             o.name AS "organizationName",
-            o.abbreviation AS "organizationAbbreviation"
+            o.abbreviation AS "organizationAbbreviation",
+            ga.attachments AS "attachments"
         FROM
             answers ca
         LEFT JOIN
@@ -29,6 +45,8 @@ export default async (): Promise<Answer[]> => {
             roles_regular rr ON u.fk_role_regular = rr.role_id
         LEFT JOIN
             organizations o ON u.fk_organization = o.organization_id
+        LEFT JOIN
+            grouped_attachments ga ON ga.fk_answer = ca.answer_id
         ORDER BY ca.created_at DESC
         `,
         {

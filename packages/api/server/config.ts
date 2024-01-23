@@ -23,7 +23,7 @@ export default {
     agenda: {
         mongo_address: `mongodb://${process.env.RB_API_MONGO_USERNAME}:${process.env.RB_API_MONGO_PASSWORD}@${process.env.RB_API_MONGO_HOST}`,
     },
-    mattermost: process.env.RB_API_MATTERMOST_WEBHOOK || {},
+    mattermost: process.env.RB_API_MATTERMOST_WEBHOOK || false,
     sentry: {
         dsn: process.env.RB_API_SENTRY_DSN || '',
     },
@@ -38,4 +38,12 @@ export default {
         delayBeforeAlert: '6 month',
         delayBeforeDeactivation: '1 month',
     },
+    S3: process.env.RB_API_S3_ACCESS_KEY ? {
+        endpoint: process.env.RB_API_S3_ENDPOINT || undefined,
+        publicEndpoint: process.env.RB_API_S3_PUBLIC_ENDPOINT || undefined,
+        accessKeyId: process.env.RB_API_S3_ACCESS_KEY,
+        secretAccessKey: process.env.RB_API_S3_SECRET_KEY,
+        region: process.env.RB_API_S3_REGION,
+        bucket: process.env.RB_API_S3_BUCKET,
+    } : null,
 };

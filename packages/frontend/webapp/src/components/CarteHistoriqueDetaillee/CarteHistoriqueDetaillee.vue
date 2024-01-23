@@ -263,34 +263,9 @@ const showModerationButton = computed(() => {
     }
 
     const userStore = useUserStore();
-    const permission = userStore.getPermission("shantytown_comment.moderate");
-
-    // on vérifie que l'utilisateur a le droit de modérer
-    if (permission === null || !permission.allowed) {
-        return false;
-    }
-
-    if (permission.allowed_on_national === true) {
-        return true;
-    }
-
-    return (
-        permission.allowed_on.regions.some(
-            (r) => r.region.code === activity.value.shantytown.region.code
-        ) ||
-        permission.allowed_on.departements.some(
-            (d) =>
-                d.departement.code ===
-                activity.value.shantytown.departement.code
-        ) ||
-        permission.allowed_on.epci.some(
-            (e) => e.epci.code === activity.value.shantytown.epci.code
-        ) ||
-        permission.allowed_on.cities.includes(
-            (c) =>
-                c.city.code === activity.value.shantytown.city.code ||
-                c.city.main === activity.value.shantytown.city.code
-        )
+    return userStore.hasLocalizedPermission(
+        "data.moderate",
+        activity.value.shantytown
     );
 });
 

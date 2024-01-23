@@ -8,9 +8,7 @@
         <template v-slot:actions>
             <p class="flex space-x-2">
                 <Button
-                    v-if="
-                        userStore.hasPermission('shantytown_comment.moderate')
-                    "
+                    v-if="userStore.hasPermission('data.moderate')"
                     icon="info-circle"
                     iconPosition="left"
                     variant="secondaryOutline"

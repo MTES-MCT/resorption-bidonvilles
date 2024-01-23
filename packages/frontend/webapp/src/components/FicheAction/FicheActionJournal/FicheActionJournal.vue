@@ -37,6 +37,7 @@
                     }}
                 </h1>
                 <FicheActionJournalListeDesMessages
+                    :actionId="action.id"
                     :comments="action.comments"
                     v-if="action.comments.length > 0"
                 />

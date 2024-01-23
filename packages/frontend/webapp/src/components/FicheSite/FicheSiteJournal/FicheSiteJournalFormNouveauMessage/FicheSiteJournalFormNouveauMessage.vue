@@ -2,12 +2,19 @@
     <form>
         <h3 class="font-bold text-lg">Partager une info</h3>
 
-        <div class="bg-white p-6">
-            <FormNouveauMessageInputMessage :rows="rows" ref="messageInput" />
+        <DragZone class="bg-white py-6 px-2" @drop="attachmentsInput?.addFiles">
+            <div class="px-4">
+                <FormNouveauMessageInputMessage
+                    :rows="rows"
+                    ref="messageInput"
+                    @paste="onPaste"
+                />
+            </div>
             <div
-                class="transition-height h-0 overflow-hidden"
+                class="transition-height h-0 overflow-y-hidden px-4"
                 ref="formContainer"
             >
+                <FormNouveauMessageInputAttachments ref="attachmentsInput" />
                 <FormNouveauMessageInputTags />
                 <FormNouveauMessageInputMode @click="onModeChange" />
                 <FormNouveauMessageInputTarget
@@ -37,7 +44,7 @@
                     >
                 </p>
             </div>
-        </div>
+        </DragZone>
     </form>
 </template>
 
@@ -51,18 +58,21 @@
 
 <script setup>
 import { defineProps, defineExpose, toRefs, ref, computed, watch } from "vue";
-import { useForm } from "vee-validate";
+import { useForm, useFieldValue } from "vee-validate";
 import { useTownsStore } from "@/stores/towns.store";
 import schema from "./FicheSiteJournalFormNouveauMessage.schema";
 import router from "@/helpers/router";
 import getHiddenHeight from "@/utils/getHiddenHeight";
 import isDeepEqual from "@/utils/isDeepEqual";
+import getFileFromPasteEvent from "@/utils/getFileFromPasteEvent";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
+import DragZone from "@/components/DragZone/DragZone.vue";
 import FormNouveauMessageInputMessage from "./inputs/FormNouveauMessageInputMessage.vue";
 import FormNouveauMessageInputTags from "./inputs/FormNouveauMessageInputTags.vue";
 import FormNouveauMessageInputMode from "./inputs/FormNouveauMessageInputMode.vue";
 import FormNouveauMessageInputTarget from "./inputs/FormNouveauMessageInputTarget.vue";
+import FormNouveauMessageInputAttachments from "./inputs/FormNouveauMessageInputAttachments.vue";
 
 const props = defineProps({
     town: Object,
@@ -77,6 +87,7 @@ const initialValues = {
         organizations: [],
         users: [],
     },
+    attachments: new DataTransfer().files,
 };
 const { handleSubmit, setErrors, resetForm, values } = useForm({
     validationSchema: schema,
@@ -86,16 +97,20 @@ const { handleSubmit, setErrors, resetForm, values } = useForm({
 const error = ref(null);
 const formContainer = ref(null);
 const messageInput = ref(null);
+const attachmentsInput = ref(null);
 const rows = ref(2);
-const isFocused = computed(() => messageInput.value?.isFocused);
+const isFocused = computed(
+    () => messageInput.value?.isFocused || attachmentsInput.value?.isFocused
+);
 let timeout;
 const RESET_FORM = true;
 
 watch(isFocused, () => {
     if (isFocused.value === true) {
+        clearTimeout(timeout);
         openForm();
     } else {
-        timeout = setTimeout(onBlur, 200);
+        timeout = setTimeout(onBlur, 300);
     }
 });
 
@@ -125,6 +140,19 @@ function onModeChange() {
     formContainer.value.style.height = `auto`;
 }
 
+function onPaste(event) {
+    const file = getFileFromPasteEvent(event);
+    if (file) {
+        attachmentsInput.value.addFiles([file]);
+    }
+}
+
+watch(useFieldValue("attachments"), () => {
+    if (values.attachments.length > 0) {
+        formContainer.value.style.height = `auto`;
+    }
+});
+
 watch(values, () => {
     if (!isFocused.value && isDeepEqual(values, initialValues)) {
         closeForm(!RESET_FORM);
@@ -138,15 +166,18 @@ const submit = handleSubmit(async (values) => {
 
     try {
         const townsStore = useTownsStore();
-        await townsStore.addComment(town.value.id, {
-            comment: values.comment,
-            targets: {
-                mode: values.mode,
-                ...values.target,
+        await townsStore.addComment(
+            town.value.id,
+            {
+                comment: values.comment,
+                targets: {
+                    mode: values.mode,
+                    ...values.target,
+                },
+                tags: values.tags,
             },
-            tags: values.tags,
-        });
-
+            values.attachments
+        );
         resetForm();
 
         // on rafraîchit la page pour avoir le site mis à jour

@@ -17,11 +17,12 @@
                 </p>
                 <FicheQuestionSubscriptionButton
                     :question="question"
-                    class="mt-2 mb-4"
+                    class="mt-2 mb-6"
                 />
                 <FicheQuestionListeDesReponses
                     v-if="question.answers.length > 0"
                     :answers="question.answers"
+                    :questionId="question.id"
                 />
                 <p v-else>Cette question n'a pas encore reçu de réponses.</p>
             </section>

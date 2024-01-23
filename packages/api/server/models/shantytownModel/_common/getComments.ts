@@ -33,6 +33,22 @@ export default async (user, shantytownIds, covid = false): Promise<CommentObject
             FROM shantytown_comment_user_targets scut 
             LEFT JOIN users ON users.user_id = scut.fk_user
             GROUP BY scut.fk_comment
+        ),
+        grouped_attachments AS (
+            SELECT
+                sca.fk_shantytown_comment,
+                array_remove(array_agg(
+                    a.attachment_id || '@.;.@'
+                    || a.original_file_key || '@.;.@'
+                    || COALESCE(a.preview_file_key, '') || '@.;.@'
+                    || a.original_name || '@.;.@'
+                    || a.mimetype || '@.;.@'
+                    || a.size || '@.;.@'
+                    || a.created_by
+                ), null) AS attachments
+            FROM shantytown_comment_attachments sca
+            LEFT JOIN attachments a ON sca.fk_attachment = a.attachment_id
+            GROUP BY sca.fk_shantytown_comment
         )
 
         SELECT
@@ -62,13 +78,15 @@ export default async (user, shantytownIds, covid = false): Promise<CommentObject
             organizations.name AS "organizationName",
             organizations.abbreviation AS "organizationAbbreviation",
             organization_comment_access.organization_target_name,
-            user_comment_access.user_target_name
+            user_comment_access.user_target_name,
+            grouped_attachments.attachments AS "attachments"
         FROM shantytown_comments
         LEFT JOIN users ON shantytown_comments.created_by = users.user_id
         LEFT JOIN organizations ON users.fk_organization = organizations.organization_id
         ${covid === true ? 'INNER JOIN shantytown_covid_comments ON shantytown_covid_comments.fk_comment = shantytown_comments.shantytown_comment_id' : ''}
         LEFT JOIN organization_comment_access ON organization_comment_access.shantytown_comment_id = shantytown_comments.shantytown_comment_id
         LEFT JOIN user_comment_access ON user_comment_access.shantytown_comment_id = shantytown_comments.shantytown_comment_id
+        LEFT JOIN grouped_attachments ON grouped_attachments.fk_shantytown_comment = shantytown_comments.shantytown_comment_id
         WHERE
             shantytown_comments.fk_shantytown IN (:ids) 
             ${covid === false ? 'AND shantytown_comments.shantytown_comment_id NOT IN (SELECT fk_comment FROM shantytown_covid_comments)' : ''}
