@@ -1,9 +1,8 @@
 <template>
     <section>
-        <CarteCommentaire
+        <CarteCommentaireAction
             v-for="comment in comments"
             :key="comment.id"
-            :id="`message${comment.id}`"
             :comment="comment"
         />
     </section>
@@ -11,7 +10,7 @@
 
 <script setup>
 import { defineProps, toRefs } from "vue";
-import CarteCommentaire from "@/components/CarteCommentaire/CarteCommentaire.vue";
+import CarteCommentaireAction from "@/components/CarteCommentaire/CarteCommentaireAction.vue";
 
 const props = defineProps({
     comments: Array,
