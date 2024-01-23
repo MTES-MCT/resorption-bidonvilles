@@ -21,7 +21,7 @@
             icon="trash-alt"
             iconPosition="left"
             size="xs"
-            @click.prevent="emit('delete')"
+            @click.prevent="onDelete"
             variant="primaryOutlineAlt">
             Supprimer ce fichier
         </Button>
@@ -46,6 +46,11 @@ const props = defineProps({
 });
 const { file, allowDeletion } = toRefs(props);
 const emit = defineEmits(["delete"]);
+function onDelete() {
+    if (file.value.state === 'draft' || confirm('Êtes-vous sûr(e) de vouloir supprimer ce fichier ?')) {
+        emit('delete');
+    }
+}
 
 const isHovered = ref(false);
 </script>
