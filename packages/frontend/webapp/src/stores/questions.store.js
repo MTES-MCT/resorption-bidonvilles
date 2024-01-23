@@ -246,6 +246,22 @@ export const useQuestionsStore = defineStore("questions", () => {
             subscriptions.value[questionId] = false;
         },
 
+        async deleteQuestionAttachment(file, { questionId }) {
+            await deleteAttachment(file.id);
+            if (hash.value[questionId] === undefined) {
+                return;
+            }
+
+            const fileIndex = hash.value[questionId].attachments.findIndex(
+                ({ id }) => id === file.id
+            );
+            if (fileIndex === -1) {
+                return;
+            }
+
+            hash.value[questionId].attachments.splice(fileIndex, 1);
+        },
+
         async deleteAnswerAttachment(file, { questionId, answerId }) {
             await deleteAttachment(file.id);
             const answerIndex = hash.value[questionId].answers.findIndex(

@@ -5,6 +5,7 @@
         <FicheQuestionAttachments
             v-if="question.attachments.length > 0"
             class="my-3"
+            :questionId="question.id"
             :attachments="question.attachments"
         />
         <FicheQuestionDate :question="question" />

@@ -11,7 +11,7 @@ export const useAttachmentsStore = defineStore("attachments", () => {
     const deleteFns = {
         shantytownComment: townsStore.deleteCommentAttachment,
         actionComment: actionsStore.deleteCommentAttachment,
-        question: () => {},
+        question: questionsStore.deleteQuestionAttachment,
         answer: questionsStore.deleteAnswerAttachment,
     };
 
@@ -54,6 +54,9 @@ export const useAttachmentsStore = defineStore("attachments", () => {
         },
         deleteAnswerAttachment(file, data) {
             return deleteAttachment("answer", file, data);
+        },
+        deleteQuestionAttachment(file, data) {
+            return deleteAttachment("question", file, data);
         },
     };
 });
