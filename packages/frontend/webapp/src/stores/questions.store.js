@@ -12,6 +12,7 @@ import { subscribe, unsubscribe } from "@/api/questions.api";
 import { useConfigStore } from "./config.store";
 import filterQuestions from "@/utils/filterQuestions";
 import sortList from "@/components/Entraide/ListeDesQuestions.sort";
+import { deleteAttachment } from "@/api/attachments.api";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -243,6 +244,29 @@ export const useQuestionsStore = defineStore("questions", () => {
             }
 
             subscriptions.value[questionId] = false;
+        },
+
+        async deleteAnswerAttachment(file, { questionId, answerId }) {
+            await deleteAttachment(file.id);
+            const answerIndex = hash.value[questionId].answers.findIndex(
+                ({ id }) => id === answerId
+            );
+
+            if (answerIndex === -1) {
+                return;
+            }
+
+            const fileIndex = hash.value[questionId].answers[
+                answerIndex
+            ].attachments.findIndex(({ id }) => id === file.id);
+            if (fileIndex === -1) {
+                return;
+            }
+
+            hash.value[questionId].answers[answerIndex].attachments.splice(
+                fileIndex,
+                1
+            );
         },
     };
 });

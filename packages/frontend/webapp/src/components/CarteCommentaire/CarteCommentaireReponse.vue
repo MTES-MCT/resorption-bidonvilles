@@ -2,6 +2,7 @@
     <CarteCommentaire
         :id="`reponse${answer.id}`"
         :comment="answer"
+        allowAttachmentDeletion
         @deleteAttachment="onDeleteAttachment"
     />
 </template>
@@ -9,17 +10,25 @@
 <script setup>
 import { toRefs } from "vue";
 import CarteCommentaire from "./CarteCommentaire.vue";
+import { useAttachmentsStore } from "@/stores/attachments.store";
 
 const props = defineProps({
+    questionId: {
+        type: Number,
+        required: true,
+    },
     answer: {
         type: Object,
         required: true,
     },
 });
-const { answer } = toRefs(props);
+const { answer, questionId } = toRefs(props);
 
-// on définit la méthode pour supprimer un attachment
-function onDeleteAttachment(file, index) {
-    console.log("deleting from answer store", file, index);
+function onDeleteAttachment(file) {
+    const attachmentStore = useAttachmentsStore();
+    attachmentStore.deleteAnswerAttachment(file, {
+        questionId: questionId.value,
+        answerId: answer.value.id,
+    });
 }
 </script>

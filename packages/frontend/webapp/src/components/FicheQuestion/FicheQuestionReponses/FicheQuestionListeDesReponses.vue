@@ -4,6 +4,7 @@
             v-for="answer in answers"
             :key="answer.id"
             :answer="answer"
+            :questionId="questionId"
         />
     </section>
 </template>
@@ -14,6 +15,7 @@ import CarteCommentaireReponse from "@/components/CarteCommentaire/CarteCommenta
 
 const props = defineProps({
     answers: Array,
+    questionId: Number,
 });
-const { answers } = toRefs(props);
+const { answers, questionId } = toRefs(props);
 </script>

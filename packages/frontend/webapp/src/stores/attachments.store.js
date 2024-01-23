@@ -1,16 +1,18 @@
 import { useActionsStore } from "@/stores/actions.store";
 import { useNotificationStore } from "@/stores/notification.store";
+import { useQuestionsStore } from "@/stores/questions.store";
 import { useTownsStore } from "@/stores/towns.store";
 import { defineStore } from "pinia";
 
 export const useAttachmentsStore = defineStore("attachments", () => {
     const townsStore = useTownsStore();
     const actionsStore = useActionsStore();
+    const questionsStore = useQuestionsStore();
     const deleteFns = {
         shantytownComment: townsStore.deleteCommentAttachment,
         actionComment: actionsStore.deleteCommentAttachment,
         question: () => {},
-        answer: () => {},
+        answer: questionsStore.deleteAnswerAttachment,
     };
 
     async function deleteAttachment(type, file, data) {
@@ -49,6 +51,9 @@ export const useAttachmentsStore = defineStore("attachments", () => {
         },
         deleteActionCommentAttachment(file, data) {
             return deleteAttachment("actionComment", file, data);
+        },
+        deleteAnswerAttachment(file, data) {
+            return deleteAttachment("answer", file, data);
         },
     };
 });
