@@ -3,6 +3,7 @@
         <CarteCommentaireAction
             v-for="comment in comments"
             :key="comment.id"
+            :actionId="actionId"
             :comment="comment"
         />
     </section>
@@ -13,7 +14,8 @@ import { defineProps, toRefs } from "vue";
 import CarteCommentaireAction from "@/components/CarteCommentaire/CarteCommentaireAction.vue";
 
 const props = defineProps({
+    actionId: Number,
     comments: Array,
 });
-const { comments } = toRefs(props);
+const { actionId, comments } = toRefs(props);
 </script>

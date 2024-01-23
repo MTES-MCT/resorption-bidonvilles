@@ -3,6 +3,7 @@
         :id="`message${comment.id}`"
         :comment="comment"
         showModeration
+        allowAttachmentDeletion
         @moderate="openModerationModal"
         @deleteAttachment="onDeleteAttachment"
     />

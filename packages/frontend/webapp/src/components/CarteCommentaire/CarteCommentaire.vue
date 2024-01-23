@@ -73,7 +73,7 @@
             v-if="comment.attachments?.length > 0"
             class="mb-2"
             :files="comment.attachments"
-            :allowDeletion="showModeration && (isOwner || canModerate)"
+            :allowDeletion="allowAttachmentDeletion && (isOwner || canModerate)"
             @deleteFile="(file, index) => emit('deleteAttachment', file, index)"
         />
         <div class="whitespace-pre-line break-words">
@@ -100,6 +100,10 @@ import TagCommentaireCovid from "@/components/TagCommentaireCovid/TagCommentaire
 const props = defineProps({
     comment: {
         type: Object,
+    },
+    allowAttachmentDeletion: {
+        type: Boolean,
+        default: false,
     },
     showModeration: {
         type: Boolean,

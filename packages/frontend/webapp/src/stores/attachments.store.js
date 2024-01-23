@@ -1,12 +1,14 @@
+import { useActionsStore } from "@/stores/actions.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
 import { defineStore } from "pinia";
 
 export const useAttachmentsStore = defineStore("attachments", () => {
     const townsStore = useTownsStore();
+    const actionsStore = useActionsStore();
     const deleteFns = {
         shantytownComment: townsStore.deleteCommentAttachment,
-        actionComment: () => {},
+        actionComment: actionsStore.deleteCommentAttachment,
         question: () => {},
         answer: () => {},
     };
@@ -44,6 +46,9 @@ export const useAttachmentsStore = defineStore("attachments", () => {
     return {
         deleteShantytownCommentAttachment(file, data) {
             return deleteAttachment("shantytownComment", file, data);
+        },
+        deleteActionCommentAttachment(file, data) {
+            return deleteAttachment("actionComment", file, data);
         },
     };
 });
