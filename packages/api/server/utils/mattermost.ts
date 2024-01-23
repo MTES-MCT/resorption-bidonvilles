@@ -79,6 +79,10 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
 }
 
 async function triggerShantytownCreationAlert(town: Shantytown, user: User): Promise<void> {
+    if (!mattermost) {
+        return;
+    }
+
     const shantytownCreationAlert = new IncomingWebhook(mattermost);
 
     const address = formatAddress(town);
@@ -127,6 +131,10 @@ async function triggerShantytownCreationAlert(town: Shantytown, user: User): Pro
 }
 
 async function triggerNewUserAlert(user: User): Promise<void> {
+    if (!mattermost) {
+        return;
+    }
+
     const newUserAlert = new IncomingWebhook(mattermost);
 
     const username = formatUsername(user);

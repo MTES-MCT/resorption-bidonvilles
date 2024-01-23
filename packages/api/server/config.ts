@@ -23,7 +23,7 @@ export default {
     agenda: {
         mongo_address: `mongodb://${process.env.RB_API_MONGO_USERNAME}:${process.env.RB_API_MONGO_PASSWORD}@${process.env.RB_API_MONGO_HOST}`,
     },
-    mattermost: process.env.RB_API_MATTERMOST_WEBHOOK || {},
+    mattermost: process.env.RB_API_MATTERMOST_WEBHOOK || false,
     sentry: {
         dsn: process.env.RB_API_SENTRY_DSN || '',
     },
