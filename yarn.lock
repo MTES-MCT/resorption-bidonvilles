@@ -4566,7 +4566,7 @@ __metadata:
     register-service-worker: ^1.7.2
     tailwindcss: ^3.1.8
     vee-validate: ^4.7.3
-    vite: ^4.3.9
+    vite: ^5.0.0
     vite-plugin-pwa: ^0.16.1
     vue: ^3.2.38
     vue-router: ^4.1.5
@@ -4653,7 +4653,7 @@ __metadata:
     "@nuxtjs/i18n": ^8.0.0
     "@nuxtjs/tailwindcss": ^6.8.0
     chart.js: ^3.7.1
-    nuxt: ^3.5.3
+    nuxt: ^3.7.0
     postcss-custom-properties: ^13.3.2
     vue-i18n: ^9.5.0
     vue-matomo: ^4.1.0
@@ -21222,7 +21222,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nuxt@npm:^3.5.3":
+"nuxt@npm:^3.7.0":
   version: 3.9.3
   resolution: "nuxt@npm:3.9.3"
   dependencies:
