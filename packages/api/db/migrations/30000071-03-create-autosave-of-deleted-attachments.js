@@ -6,7 +6,7 @@ module.exports = {
             await queryInterface.sequelize.query(
                 `CREATE FUNCTION archive_deleted_attachment() RETURNS TRIGGER AS $$
                 BEGIN
-                    INSERT INTO deleted_attachments (
+                    INSERT INTO attachments_archives (
                         attachment_id,
                         original_file_key,
                         preview_file_key,

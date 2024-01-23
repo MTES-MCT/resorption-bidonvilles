@@ -1,6 +1,6 @@
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.createTable(
-        'deleted_attachments',
+        'attachments_archives',
         {
             attachment_id: {
                 type: Sequelize.INTEGER,
@@ -30,5 +30,5 @@ module.exports = {
         },
     ),
 
-    down: queryInterface => queryInterface.dropTable('deleted_attachments'),
+    down: queryInterface => queryInterface.dropTable('attachments_archives'),
 };
