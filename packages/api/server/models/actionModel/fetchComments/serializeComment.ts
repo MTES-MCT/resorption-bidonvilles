@@ -1,3 +1,4 @@
+import attachmentModel from '#server/models/attachmentModel';
 import { ActionCommentRow } from './fetchComments';
 import { Comment } from '#root/types/resources/Action.d';
 
@@ -15,4 +16,7 @@ export default (row: ActionCommentRow): Comment => ({
         organization_id: row.creator_organization_id,
         organization: row.creator_organization_abbreviation || row.creator_organization_name,
     },
+    attachments: row.attachments?.length
+        ? row.attachments.map(attachmentModel.serializeAttachment)
+        : [],
 });

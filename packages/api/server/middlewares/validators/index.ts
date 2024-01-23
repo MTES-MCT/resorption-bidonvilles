@@ -1,3 +1,4 @@
+import attachmentDeleteAttachment from './attachment/deleteAttachment';
 import closeTown from './closeTown';
 import dataReportExportTowns from './dataReport/exportTownsReport';
 import fixClosedStatus from './fixClosedStatus';
@@ -50,6 +51,9 @@ import getDepartementEvolutionMetrics from './metrics/getDepartementEvolutionMet
 import getNationMetrics from './metrics/getNationMetrics';
 
 export default {
+    attachment: {
+        deleteAttachment: attachmentDeleteAttachment,
+    },
     closeTown,
     dataReport: {
         exportTownsReport: dataReportExportTowns,

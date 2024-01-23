@@ -111,7 +111,6 @@ function onClick() {
     if (!checked.value) {
         handleChange(props.value);
     } else if (allowNull.value === true) {
-        console.log("Value chenged !");
         handleChange(nullValue.value);
     }
 }

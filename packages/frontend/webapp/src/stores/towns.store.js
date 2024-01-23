@@ -25,6 +25,7 @@ import {
 } from "@/api/towns.api";
 import enrichShantytown from "@/utils/enrichShantytown";
 import filterShantytowns from "@/utils/filterShantytowns";
+import { deleteAttachment } from "@/api/attachments.api";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -245,9 +246,13 @@ export const useTownsStore = defineStore("towns", () => {
             delete hash.value[townId];
             hash.value[townId] = undefined;
         },
-        async addComment(shantytownId, comment) {
+        async addComment(shantytownId, comment, attachments) {
             const notificationStore = useNotificationStore();
-            const { comments } = await addComment(shantytownId, comment);
+            const { comments } = await addComment(
+                shantytownId,
+                comment,
+                attachments
+            );
             updateShantytownComments(shantytownId, {
                 regular: comments.regular,
                 covid: comments.covid,
@@ -392,6 +397,28 @@ export const useTownsStore = defineStore("towns", () => {
             setTown(townId, town);
 
             return hash.value[town.id];
+        },
+
+        async deleteCommentAttachment(file, { townId, commentId }) {
+            await deleteAttachment(file.id);
+            const commentIndex = hash.value[townId].comments.regular.findIndex(
+                ({ id }) => id === commentId
+            );
+
+            if (commentIndex === -1) {
+                return;
+            }
+
+            const fileIndex = hash.value[townId].comments.regular[
+                commentIndex
+            ].attachments.findIndex(({ id }) => id === file.id);
+            if (fileIndex === -1) {
+                return;
+            }
+
+            hash.value[townId].comments.regular[
+                commentIndex
+            ].attachments.splice(fileIndex, 1);
         },
     };
 });

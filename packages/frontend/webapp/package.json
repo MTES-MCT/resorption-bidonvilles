@@ -26,13 +26,13 @@
     "pinia": "^2.0.21",
     "sass": "^1.55.0",
     "vee-validate": "^4.7.3",
-    "vue": "^3.2.38",
+    "vue": "~3.3.0",
     "vue-chartjs": "^4.1.2",
     "vue-i18n": "^9.5.0",
     "vue-matomo": "^4.2.0",
     "vue-router": "^4.1.5",
-    "yup": "^0.32.11",
-    "yup-locales": "^1.2.10"
+    "yup": "^1.2.0",
+    "yup-locales": "^1.2.20"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",
@@ -51,7 +51,6 @@
     "start-server-and-test": "^2.0.3",
     "tailwindcss": "^3.1.8",
     "vite": "^4.3.9",
-    "vite-plugin-rewrite-all": "^1.0.0",
     "vitest": "^0.31.4"
   },
   "lint-staged": {

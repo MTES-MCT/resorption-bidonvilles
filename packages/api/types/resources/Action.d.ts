@@ -1,3 +1,4 @@
+import { File } from '#server/models/attachmentModel/File.d';
 import ActionLocationType from './ActionLocationType.d';
 
 type ActionUser = {
@@ -43,6 +44,7 @@ export type Comment = {
     organization_target_name: [],
     createdAt: number,
     createdBy: CommentAuthor,
+    attachments: File[]
 };
 type ActionMetrics = {
     date: number,

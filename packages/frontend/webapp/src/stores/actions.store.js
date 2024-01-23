@@ -13,6 +13,7 @@ import {
 } from "@/api/actions.api";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
 import filterActions from "@/utils/filterActions";
+import { deleteAttachment } from "@/api/attachments.api";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -181,9 +182,9 @@ export const useActionsStore = defineStore("actions", () => {
 
             return toRef(hash.value, actionId);
         },
-        async addComment(actionId, comment) {
+        async addComment(actionId, comment, attachments) {
             const notificationStore = useNotificationStore();
-            const response = await addComment(actionId, comment);
+            const response = await addComment(actionId, comment, attachments);
 
             if (hash.value[actionId]) {
                 hash.value[actionId].comments.unshift(response.comment);
@@ -192,6 +193,28 @@ export const useActionsStore = defineStore("actions", () => {
             notificationStore.success(
                 "Publication d'un message",
                 getCommentNotificationMessage(response.numberOfObservers)
+            );
+        },
+        async deleteCommentAttachment(file, { actionId, commentId }) {
+            await deleteAttachment(file.id);
+            const commentIndex = hash.value[actionId].comments.findIndex(
+                ({ id }) => id === commentId
+            );
+
+            if (commentIndex === -1) {
+                return;
+            }
+
+            const fileIndex = hash.value[actionId].comments[
+                commentIndex
+            ].attachments.findIndex(({ id }) => id === file.id);
+            if (fileIndex === -1) {
+                return;
+            }
+
+            hash.value[actionId].comments[commentIndex].attachments.splice(
+                fileIndex,
+                1
             );
         },
     };

@@ -31,6 +31,22 @@ export default async (id) => {
                 FROM shantytown_comment_user_targets scut 
                 LEFT JOIN users ON users.user_id = scut.fk_user
                 GROUP BY scut.fk_comment
+            ),
+            grouped_attachments AS (
+                SELECT
+                    sca.fk_shantytown_comment,
+                    array_remove(array_agg(
+                        a.attachment_id || '@.;.@'
+                        || a.original_file_key || '@.;.@'
+                        || COALESCE(a.preview_file_key, '') || '@.;.@'
+                        || a.original_name || '@.;.@'
+                        || a.mimetype || '@.;.@'
+                        || a.size || '@.;.@'
+                        || a.created_by
+                    ), null) AS attachments
+                FROM shantytown_comment_attachments sca
+                LEFT JOIN attachments a ON sca.fk_attachment = a.attachment_id
+                GROUP BY sca.fk_shantytown_comment
             )
 
             SELECT
@@ -46,12 +62,14 @@ export default async (id) => {
                 o.name AS "organizationName",
                 o.organization_id AS "organizationId",
                 oca.organization_target_name,
-                uca.user_target_name
+                uca.user_target_name,
+                grouped_attachments.attachments AS "attachments"
             FROM shantytown_comments sc
             LEFT JOIN users u ON sc.created_by = u.user_id
             LEFT JOIN organizations o ON u.fk_organization = o.organization_id
             LEFT JOIN organization_comment_access oca ON sc.shantytown_comment_id = oca.shantytown_comment_id
             LEFT JOIN user_comment_access uca ON sc.shantytown_comment_id = uca.shantytown_comment_id
+            LEFT JOIN grouped_attachments ON grouped_attachments.fk_shantytown_comment = sc.shantytown_comment_id
             WHERE sc.shantytown_comment_id = :id`,
             {
                 type: QueryTypes.SELECT,

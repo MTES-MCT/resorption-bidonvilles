@@ -1,11 +1,13 @@
 import ShantytownComment from '#server/models/shantytownCommentModel/ShantytownComment.d';
 import { CommentTag } from '#server/models/shantytownCommentTagModel/serializeCommentTag';
+import attachmentModel from '#server/models/attachmentModel';
 import { ShantytownCommentRow } from '../../shantytownCommentModel/ShantytownCommentRow.d';
 
 type shantytownCommentRowWithTags = ShantytownCommentRow & {
     tags: CommentTag[]
 };
-export default (comment: shantytownCommentRowWithTags):ShantytownComment => ({
+
+export default (comment: shantytownCommentRowWithTags): ShantytownComment => ({
     id: comment.commentId,
     description: comment.commentDescription,
     createdAt: comment.commentCreatedAt !== null ? (comment.commentCreatedAt.getTime() / 1000) : null,
@@ -39,4 +41,7 @@ export default (comment: shantytownCommentRowWithTags):ShantytownComment => ({
             },
         }
         : {}),
+    attachments: comment.attachments?.length
+        ? comment.attachments.map(attachmentModel.serializeAttachment)
+        : [],
 });

@@ -12,6 +12,7 @@ import { subscribe, unsubscribe } from "@/api/questions.api";
 import { useConfigStore } from "./config.store";
 import filterQuestions from "@/utils/filterQuestions";
 import sortList from "@/components/Entraide/ListeDesQuestions.sort";
+import { deleteAttachment } from "@/api/attachments.api";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -132,21 +133,22 @@ export const useQuestionsStore = defineStore("questions", () => {
         return hash.value[questionId];
     }
 
-    async function create(data) {
+    async function create(data, attachments) {
         const configStore = useConfigStore();
-        const newQuestion = await createQuestion(data);
+        const newQuestion = await createQuestion(data, attachments);
         hash.value[newQuestion.id] = newQuestion;
         questions.value.unshift(newQuestion);
         configStore.setQuestionSubscription(newQuestion.id, true);
         return newQuestion;
     }
 
-    async function createAnswer(questionId, answer) {
+    async function createAnswer(questionId, answer, attachments) {
         const configStore = useConfigStore();
         const notificationStore = useNotificationStore();
         const { answer: newAnswer, subscribed } = await addAnswer(
             questionId,
-            answer
+            answer,
+            attachments
         );
         if (hash.value[questionId]) {
             hash.value[questionId].answers.unshift(newAnswer);
@@ -242,6 +244,45 @@ export const useQuestionsStore = defineStore("questions", () => {
             }
 
             subscriptions.value[questionId] = false;
+        },
+
+        async deleteQuestionAttachment(file, { questionId }) {
+            await deleteAttachment(file.id);
+            if (hash.value[questionId] === undefined) {
+                return;
+            }
+
+            const fileIndex = hash.value[questionId].attachments.findIndex(
+                ({ id }) => id === file.id
+            );
+            if (fileIndex === -1) {
+                return;
+            }
+
+            hash.value[questionId].attachments.splice(fileIndex, 1);
+        },
+
+        async deleteAnswerAttachment(file, { questionId, answerId }) {
+            await deleteAttachment(file.id);
+            const answerIndex = hash.value[questionId].answers.findIndex(
+                ({ id }) => id === answerId
+            );
+
+            if (answerIndex === -1) {
+                return;
+            }
+
+            const fileIndex = hash.value[questionId].answers[
+                answerIndex
+            ].attachments.findIndex(({ id }) => id === file.id);
+            if (fileIndex === -1) {
+                return;
+            }
+
+            hash.value[questionId].answers[answerIndex].attachments.splice(
+                fileIndex,
+                1
+            );
         },
     };
 });

@@ -5,6 +5,7 @@ import activitySummary from '#server/services/activitySummary';
 import sendActionAlert from '#server/services/action/sendAlert';
 import config from '#server/config';
 import userService from '#server/services/user/index';
+import cleanAttachmentArchives from '#server/services/attachment/cleanArchives';
 
 const {
     sendUserDemoInvitation,
@@ -123,6 +124,13 @@ export default (agenda) => {
         (job) => {
             const { user } = job.attrs.data;
             sendUserReview(user);
+        },
+    );
+
+    agenda.define(
+        'clean_attachments_archives',
+        async () => {
+            await cleanAttachmentArchives();
         },
     );
 };

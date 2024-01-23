@@ -1,8 +1,9 @@
 <template>
     <section>
-        <FicheSiteJournalGroupeCommentaire
+        <CarteCommentaireSite
             v-for="comment in comments"
             :key="comment.id"
+            :townId="townId"
             :comment="comment"
         />
     </section>
@@ -10,9 +11,11 @@
 
 <script setup>
 import { defineProps, toRefs } from "vue";
-import FicheSiteJournalGroupeCommentaire from "./FicheSiteJournalGroupeCommentaire.vue";
+import CarteCommentaireSite from "@/components/CarteCommentaire/CarteCommentaireSite.vue";
+
 const props = defineProps({
     comments: Array,
+    townId: Number,
 });
-const { comments } = toRefs(props);
+const { comments, townId } = toRefs(props);
 </script>

@@ -22,6 +22,7 @@ export function serialized(override: Partial<Question> = {}): Question {
             organization_id: 2,
         },
         answers: [],
+        attachments: [],
     };
 
     return Object.assign(defaultObj, override);

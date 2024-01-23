@@ -2,8 +2,9 @@
     <form>
         <h1 class="font-bold text-lg">Partager une info</h1>
 
-        <div class="bg-white p-6">
-            <FormNouveauMessageInputMessage />
+        <DragZone class="bg-white p-6" @drop="attachmentsInput?.addFiles">
+            <FormNouveauMessageInputMessage @paste="onPaste" />
+            <FormNouveauMessageInputAttachments ref="attachmentsInput" />
 
             <ErrorSummary v-if="error" :message="error" class="mt-2" />
             <p class="text-right">
@@ -11,7 +12,7 @@
                     >Publier le message</Button
                 >
             </p>
-        </div>
+        </DragZone>
     </form>
 </template>
 
@@ -20,18 +21,29 @@ import { defineProps, toRefs, ref } from "vue";
 import { useForm } from "vee-validate";
 import { useActionsStore } from "@/stores/actions.store";
 import schema from "./FicheActionJournalFormNouveauMessage.schema";
+import getFileFromPasteEvent from "@/utils/getFileFromPasteEvent";
 
 import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
+import DragZone from "@/components/DragZone/DragZone.vue";
 import FormNouveauMessageInputMessage from "./inputs/FormNouveauMessageInputMessage.vue";
+import FormNouveauMessageInputAttachments from "./inputs/FormNouveauMessageInputAttachments.vue";
 
 const props = defineProps({
     action: Object,
 });
 const { action } = toRefs(props);
+const attachmentsInput = ref(null);
 
 const { handleSubmit, setErrors, resetForm } = useForm({
     validationSchema: schema,
 });
+
+function onPaste(event) {
+    const file = getFileFromPasteEvent(event);
+    if (file) {
+        attachmentsInput.value.addFiles([file]);
+    }
+}
 
 const error = ref(null);
 const submit = handleSubmit(async (values) => {
@@ -39,9 +51,11 @@ const submit = handleSubmit(async (values) => {
 
     try {
         const actionsStore = useActionsStore();
-        await actionsStore.addComment(action.value.id, {
-            description: values.comment,
-        });
+        await actionsStore.addComment(
+            action.value.id,
+            { description: values.comment },
+            values.attachments
+        );
 
         resetForm();
     } catch (e) {

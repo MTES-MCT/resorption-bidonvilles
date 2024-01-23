@@ -5,6 +5,7 @@
         id="comment"
         :label="labels.comment"
         placeholder="Partagez votre passage sur le site, le contexte sanitaire, la situation des habitants, difficultés rencontrées lors de votre intervention…"
+        @paste="onPaste"
     />
 </template>
 
@@ -18,10 +19,15 @@ const props = defineProps({
 });
 const { rows } = toRefs(props);
 const textarea = ref(null);
+const emit = defineEmits(["paste"]);
 
 const isFocused = computed(() => {
     return textarea.value?.isFocused;
 });
+
+function onPaste(...args) {
+    emit("paste", ...args);
+}
 
 defineExpose({
     isFocused,

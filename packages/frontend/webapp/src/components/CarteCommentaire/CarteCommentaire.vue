@@ -10,7 +10,7 @@
             </div>
             <span
                 class="text-red font-bold cursor-pointer"
-                v-if="showActionIcons && (isOwner || (canModerate && isHover))"
+                v-if="showModeration && (isOwner || (canModerate && isHover))"
                 @click="deleteMessage"
                 >Supprimer {{ isOwner ? "mon" : "le" }} message
                 <Icon icon="trash-alt" alt="Supprimer le message"
@@ -69,6 +69,13 @@
                 :tag="tag"
             />
         </div>
+        <FilePreviewList
+            v-if="comment.attachments?.length > 0"
+            class="mb-2"
+            :files="comment.attachments"
+            :allowDeletion="allowAttachmentDeletion && (isOwner || canModerate)"
+            @deleteFile="(file, index) => emit('deleteAttachment', file, index)"
+        />
         <div class="whitespace-pre-line break-words">
             {{ comment.description }}
         </div>
@@ -81,7 +88,12 @@ import { useUserStore } from "@/stores/user.store";
 import covidTagsList from "@/utils/covid_tags";
 import formatDate from "@common/utils/formatDate.js";
 
-import { Icon, LinkOrganization, Tag } from "@resorptionbidonvilles/ui";
+import {
+    FilePreviewList,
+    Icon,
+    LinkOrganization,
+    Tag,
+} from "@resorptionbidonvilles/ui";
 import TagCommentaireStandard from "@/components/TagCommentaireStandard/TagCommentaireStandard.vue";
 import TagCommentaireCovid from "@/components/TagCommentaireCovid/TagCommentaireCovid.vue";
 
@@ -89,16 +101,20 @@ const props = defineProps({
     comment: {
         type: Object,
     },
-    showActionIcons: {
+    allowAttachmentDeletion: {
+        type: Boolean,
+        default: false,
+    },
+    showModeration: {
         type: Boolean,
         default: false,
     },
 });
 
-const emit = defineEmits(["moderate"]);
+const emit = defineEmits(["moderate", "deleteAttachment"]);
 
 const isHover = ref(false);
-const { comment, showActionIcons } = toRefs(props);
+const { comment, showModeration } = toRefs(props);
 
 const covidTags = computed(() => {
     if (!comment.value || !comment.value.covid) {
@@ -117,7 +133,7 @@ const isOwner = computed(() => {
 
 const canModerate = computed(() => {
     const userStore = useUserStore();
-    return userStore.hasPermission("shantytown_comment.moderate");
+    return userStore.hasPermission("data.moderate");
 });
 
 function deleteMessage() {

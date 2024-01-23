@@ -1,3 +1,4 @@
+import { File } from '#server/models/attachmentModel/File.d';
 import { Answer } from '#root/types/resources/Answer.d';
 
 export type Question = {
@@ -19,6 +20,7 @@ export type Question = {
         organization_id: number,
     },
     answers: Answer[],
+    attachments: File[],
 };
 
 export type QuestionTag = {
