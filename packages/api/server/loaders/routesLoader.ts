@@ -215,7 +215,6 @@ export default (app) => {
     app.get(
         '/users/:id/activationLink',
         bodyParser.json(),
-
         middlewares.auth.authenticate,
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['user.activate'], ...args),
         middlewares.charte.check,
@@ -240,6 +239,7 @@ export default (app) => {
     );
     app.post(
         '/users/:id/reactivate',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         middlewares.auth.isSuperAdmin,
         middlewares.charte.check,
@@ -260,6 +260,7 @@ export default (app) => {
     );
     app.put(
         '/users/:id/expertise_topics',
+        bodyParser.json(),
         middlewares.auth.authenticate,
         (req:express.Request & { user: User }, res:express.Response, next: Function) => {
             if (req.user.id === parseInt(req.params.id, 10)) {
