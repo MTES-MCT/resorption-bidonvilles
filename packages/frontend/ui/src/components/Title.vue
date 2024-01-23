@@ -8,6 +8,12 @@
     </component>
 </template>
 
+<script>
+export default {
+    name: "RbTitle",
+};
+</script>
+
 <script setup>
 import { ref, toRefs } from "vue";
 
