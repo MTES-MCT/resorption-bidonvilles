@@ -1,15 +1,16 @@
 <template>
     <FilePreviewList
         :files="attachments"
-        :allowDeletion="isOwnerOfQuestion"
+        :allowDeletion="isOwnerOfQuestion || canModerate"
         @deleteFile="onDeleteAttachment"
     />
 </template>
 
 <script setup>
-import { toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import { FilePreviewList } from "@resorptionbidonvilles/ui";
 import { useAttachmentsStore } from "@/stores/attachments.store";
+import { useUserStore } from "@/stores/user.store";
 
 const props = defineProps({
     questionId: Number,
@@ -17,6 +18,11 @@ const props = defineProps({
 });
 const { attachments, questionId } = toRefs(props);
 const isOwnerOfQuestion = false;
+
+const canModerate = computed(() => {
+    const userStore = useUserStore();
+    return userStore.hasPermission("data.moderate");
+});
 
 function onDeleteAttachment(file) {
     const attachmentStore = useAttachmentsStore();
