@@ -1,5 +1,5 @@
 import { AttachmentKeys } from '#server/models/attachmentModel/findKeys';
-import attachmentService from '#server/services/attachment';
+import archiveAttachment from '#server/services/attachment/archiveAttachment';
 import { NextFunction, Response } from 'express';
 
 const ERROR_RESPONSES = {
@@ -13,7 +13,7 @@ interface DeleteAttachmentRequest extends Request {
 
 export default async (req: DeleteAttachmentRequest, res: Response, next: NextFunction) => {
     try {
-        await attachmentService.deleteAttachment(req.keys);
+        await archiveAttachment(req.keys);
         res.status(204).send({});
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
