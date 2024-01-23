@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { computed, ref, toRefs, onMounted, onUnmounted } from "vue";
+import { computed, ref, toRefs, onMounted, onUnmounted, watch } from "vue";
 import { useField } from "vee-validate";
 import allowedFileExtensions from "@common/utils/allowed_file_extensions";
 import fromMimeToExtension from "@common/utils/fromMimeToExtension";
@@ -44,6 +44,43 @@ const props = defineProps({
 const { name, label, multiple, withoutMargin } = toRefs(props);
 const { handleChange, handleBlur, errors, value } = useField(name.value);
 const fileInput = ref(null);
+
+watch(value, () => {
+    syncEnrichedFileListWith(value.value);
+});
+
+// cette fonction met à jour enrichedFileList (qui est l'ancienne valeur du champ)
+// pour se synchroniser avec fileList (la nouvelle valeur du champ)
+async function syncEnrichedFileListWith(fileList) {
+    // on génére les previews, nécessaires pour comparer les fichiers entre eux
+    const enrichedFiles = await enrichFiles(fileList);
+
+    // on supprime de l'ancienne valeur tous les fichiers qui ne sont plus dans la nouvelle valeur
+    for (let i = 0; i < enrichedFileList.value.length; i += 1) {
+        let exists = false;
+        for (let j = 0; j < enrichedFiles.length; j += 1) {
+            if (enrichedFileList.value[i].preview === enrichedFiles[j].preview) {
+                exists = true;
+                break;
+            }
+        }
+
+        if (!exists) {
+            enrichedFileList.value.splice(i, 1);
+            i -= 1;
+        }
+    }
+
+    // on rajoute tous les nouveaux fichiers trouvés dans la nouvelle valeur
+    for (let i = 0; i < enrichedFiles.length; i += 1) {
+        if (!fileExistsInEnrichedFilelist(enrichedFiles[i])) {
+            enrichedFileList.value.push(enrichedFiles[i]);
+        }
+    }
+
+    // on met à jour l'input également
+    fileInput.value.files = fileList;
+}
 
 const enrichedFileList = ref([]);
 const isFocused = ref(false);
