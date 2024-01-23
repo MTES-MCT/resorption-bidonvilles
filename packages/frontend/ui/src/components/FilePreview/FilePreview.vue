@@ -7,7 +7,8 @@
             <p class="text-G500"><span>{{ file.extension?.toUpperCase() }}</span> {{ humanFileSize(file.size) }}</p>
         </div>
         <Button
-            :class="allowDeletion && (file.state === 'draft' || isHovered) ? 'visible' : 'invisible'"
+            :loading="file.loading === true"
+            :class="allowDeletion && (file.state === 'draft' || isHovered || file.loading === true) ? 'visible' : 'invisible'"
             type="button" icon="trash-alt" size="sm" @click.prevent="emit('delete')" variant="primaryOutlineAlt" />
     </a>
 </template>
