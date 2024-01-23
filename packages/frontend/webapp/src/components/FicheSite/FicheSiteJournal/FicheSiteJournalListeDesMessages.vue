@@ -3,6 +3,7 @@
         <CarteCommentaireSite
             v-for="comment in comments"
             :key="comment.id"
+            :townId="townId"
             :comment="comment"
         />
     </section>
@@ -14,6 +15,7 @@ import CarteCommentaireSite from "@/components/CarteCommentaire/CarteCommentaire
 
 const props = defineProps({
     comments: Array,
+    townId: Number,
 });
-const { comments } = toRefs(props);
+const { comments, townId } = toRefs(props);
 </script>
