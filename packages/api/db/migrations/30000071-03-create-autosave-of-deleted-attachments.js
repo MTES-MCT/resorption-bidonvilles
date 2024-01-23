@@ -10,6 +10,9 @@ module.exports = {
                         attachment_id,
                         original_file_key,
                         preview_file_key,
+                        original_name,
+                        mimetype,
+                        size,
                         created_by,
                         created_at
                     )
@@ -17,6 +20,9 @@ module.exports = {
                         OLD.attachment_id,
                         OLD.original_file_key,
                         OLD.preview_file_key,
+                        OLD.original_name,
+                        OLD.mimetype,
+                        OLD.size,
                         OLD.created_by,
                         OLD.created_at
                     );
