@@ -263,7 +263,7 @@ const showModerationButton = computed(() => {
     }
 
     const userStore = useUserStore();
-    const permission = userStore.getPermission("shantytown_comment.moderate");
+    const permission = userStore.getPermission("data.moderate");
 
     // on vérifie que l'utilisateur a le droit de modérer
     if (permission === null || !permission.allowed) {

@@ -133,7 +133,7 @@ const isOwner = computed(() => {
 
 const canModerate = computed(() => {
     const userStore = useUserStore();
-    return userStore.hasPermission("shantytown_comment.moderate");
+    return userStore.hasPermission("data.moderate");
 });
 
 function deleteMessage() {

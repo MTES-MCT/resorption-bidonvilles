@@ -70,7 +70,7 @@ describe('services/shantytown', () => {
                 // ignore
             }
             expect(stubs.can).to.have.been.calledOnceWith(user);
-            expect(stubs.do).to.have.been.calledOnceWith('moderate', 'shantytown_comment');
+            expect(stubs.do).to.have.been.calledOnceWith('moderate', 'data');
             // eslint-disable-next-line no-unused-expressions
             expect(stubs.on).to.have.been.calledOnce;
         });
