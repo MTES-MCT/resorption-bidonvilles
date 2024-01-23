@@ -54,7 +54,7 @@ module.exports = {
                     field: 'user_id',
                 },
                 onUpdate: 'cascade',
-                onDelete: 'restrict',
+                onDelete: 'cascade',
                 transaction,
             });
 
