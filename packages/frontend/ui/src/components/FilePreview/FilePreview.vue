@@ -7,7 +7,7 @@
             <p class="text-G500"><span>{{ file.extension?.toUpperCase() }}</span> {{ humanFileSize(file.size) }}</p>
         </div>
         <Button
-            :class="(file.state === 'draft' || isHovered) && !disallowAttachmentsRemoval ? 'visible' : 'invisible'"
+            :class="allowDeletion && (file.state === 'draft' || isHovered) ? 'visible' : 'invisible'"
             type="button" icon="trash-alt" size="sm" @click.prevent="emit('delete')" variant="primaryOutlineAlt" />
     </a>
 </template>
@@ -23,13 +23,12 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    disallowAttachmentsRemoval: {
+    allowDeletion: {
         type: Boolean,
-        required: false,
         default: false,
     },
 });
-const { disallowAttachmentsRemoval, file } = toRefs(props);
+const { file, allowDeletion } = toRefs(props);
 const emit = defineEmits(["delete"]);
 
 const isHovered = ref(false);

@@ -1,5 +1,9 @@
 <template>
-    <FilePreviewList :files="attachments" collapsedByDefault />
+    <FilePreviewList
+        :files="attachments"
+        :allowDeletion="isOwnerOfQuestion"
+        @deleteFile="onDeleteAttachment"
+    />
 </template>
 
 <script setup>
