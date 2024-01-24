@@ -13,6 +13,7 @@
             :class="`${sizeClass.logoH} ${
                 keepLogo !== true ? 'hidden lg:inline' : ''
             }`"
+            alt=""
         />
     </router-link>
 </template>
