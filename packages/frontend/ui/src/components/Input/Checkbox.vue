@@ -11,7 +11,11 @@ import { useField, useIsSubmitting } from 'vee-validate';
 const props = defineProps({
     name: String,
     value: [String, Number, Boolean],
-    modelValue: [Array, String, Number, Boolean],
+    modelValue: {
+        type: [Array, String, Number, Boolean],
+        required: false,
+        default: undefined,
+    },
 });
 const { name, value, modelValue } = toRefs(props);
 

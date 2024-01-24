@@ -12,7 +12,6 @@
             <Checkbox
                 v-for="option in optionList"
                 :key="option.id"
-                v-model="checkedOptions"
                 :value="option.id"
                 :label="option.label"
                 name="options"
@@ -25,9 +24,10 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, defineEmits } from "vue";
+import { defineProps, toRefs, computed, defineEmits, watch } from "vue";
 import { Checkbox, Warning } from "@resorptionbidonvilles/ui";
 import { useConfigStore } from "@/stores/config.store";
+import { useForm } from "vee-validate";
 
 const props = defineProps({
     user: {
@@ -40,20 +40,32 @@ const props = defineProps({
     },
 });
 const { user, options } = toRefs(props);
+
+const { values, setFieldValue } = useForm({
+    initialValues: {
+        options: options.value || [],
+    },
+});
 const emit = defineEmits(["update:options"]);
 const accessPermission = computed(() => {
     const configStore = useConfigStore();
     return configStore.config.permissions_description[user.value.role_id];
 });
 
-const checkedOptions = computed({
-    get() {
-        return options.value;
-    },
-    set(newValue) {
-        emit("update:options", newValue);
-    },
+watch(values, () => {
+    emit("update:options", values.options);
 });
+watch(options, () => {
+    if (
+        options.value.length === values.options.length &&
+        options.value.every((v) => values.options.includes(v))
+    ) {
+        return;
+    }
+
+    setFieldValue("options", options.value);
+});
+
 const optionList = computed(() => {
     return accessPermission.value?.options || [];
 });
