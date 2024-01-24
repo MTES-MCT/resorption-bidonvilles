@@ -30,19 +30,14 @@
         class="mt-4"
         v-if="userStore.hasActionPermission('action_comment.read', action)"
     />
-
-    <ModaleListeAccesActionFinancements
-        ref="modaleListeAccesActionFinancements"
-        :future="false"
-        :actionId="action.id"
-    />
 </template>
 
 <script setup>
-import { ref, toRefs, computed, watch } from "vue";
+import { toRefs, computed, watch } from "vue";
 import { useEventBus } from "@common/helpers/event-bus";
 
 import { useUserStore } from "@/stores/user.store";
+import { useModaleStore } from "@/stores/modale.store";
 import menu from "./FicheAction.menu";
 
 import { ContentWrapper } from "@resorptionbidonvilles/ui";
@@ -65,8 +60,6 @@ const props = defineProps({
 const { action } = toRefs(props);
 
 const userStore = useUserStore();
-
-const modaleListeAccesActionFinancements = ref(null);
 
 const tabs = computed(() => {
     return menu
@@ -91,7 +84,11 @@ watch(
             "ficheactionfinancements:openListAccesActionFinancements"
         ),
     () => {
-        modaleListeAccesActionFinancements.value.open();
+        const modaleStore = useModaleStore();
+        modaleStore.open(ModaleListeAccesActionFinancements, {
+            future: false,
+            actionId: action.value.id,
+        });
     }
 );
 </script>

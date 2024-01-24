@@ -1,38 +1,36 @@
 <template>
-    <form>
-        <Modal :isOpen="isOpen" closeWhenClickOutside @close="close">
-            <template v-slot:title>{{ title }}</template>
-            <template v-slot:subtitle>
-                <FicheSiteModaleSubtitle :town="town" />
-            </template>
-            <template v-slot:body>
-                <ModaleMesThemesInputThemes />
-                <ModaleMesThemesInputOtherTheme />
+    <Modal closeWhenClickOutside ref="modale">
+        <template v-slot:title>{{ title }}</template>
+        <template v-slot:subtitle>
+            <FicheSiteModaleSubtitle :town="town" />
+        </template>
+        <template v-slot:body>
+            <ModaleMesThemesInputThemes />
+            <ModaleMesThemesInputOtherTheme />
 
-                <ErrorSummary
-                    class="mt-4"
-                    v-if="error || Object.keys(errors).length > 0"
-                    :message="error"
-                    :summary="errors"
-                />
-            </template>
+            <ErrorSummary
+                class="mt-4"
+                v-if="error || Object.keys(errors).length > 0"
+                :message="error"
+                :summary="errors"
+            />
+        </template>
 
-            <template v-slot:footer>
-                <Button
-                    variant="primaryOutline"
-                    @click="close"
-                    class="mr-2"
-                    type="button"
-                    >Annuler</Button
-                >
-                <Button @click="submit" :loading="isSubmitting">Valider</Button>
-            </template>
-        </Modal>
-    </form>
+        <template v-slot:footer>
+            <Button
+                variant="primaryOutline"
+                @click="() => modale.close()"
+                class="mr-2"
+                type="button"
+                >Annuler</Button
+            >
+            <Button @click="submit" :loading="isSubmitting">Valider</Button>
+        </template>
+    </Modal>
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed, defineExpose } from "vue";
+import { defineProps, toRefs, ref, computed } from "vue";
 import { useForm } from "vee-validate";
 import { useUserStore } from "@/stores/user.store";
 import { useTownsStore } from "@/stores/towns.store";
@@ -47,15 +45,15 @@ import ModaleMesThemesInputOtherTheme from "./inputs/ModaleMesThemesInputOtherTh
 
 const props = defineProps({
     town: Object,
+    title: String,
 });
-const { town } = toRefs(props);
+const { town, title: customTitle } = toRefs(props);
 const userStore = useUserStore();
 
-const isOpen = ref(false);
+const modale = ref(null);
 const error = ref(null);
-const customTitle = ref(null);
 const title = computed(() => {
-    if (customTitle.value !== null) {
+    if (typeof customTitle.value === "string") {
         return customTitle.value;
     }
 
@@ -106,11 +104,6 @@ const { handleSubmit, isSubmitting, setErrors, errors } = useForm({
     initialValues: defaultValues.value,
 });
 
-function close() {
-    customTitle.value = null;
-    isOpen.value = false;
-}
-
 const submit = handleSubmit(async (values) => {
     error.value = null;
 
@@ -123,7 +116,7 @@ const submit = handleSubmit(async (values) => {
             "Votre intervention est déclarée",
             successWording
         );
-        close();
+        modale.value.close();
     } catch (e) {
         error.value = e?.user_message || "Une erreur inconnue est survenue";
         if (e?.fields) {
@@ -140,11 +133,4 @@ function dispatch(values) {
 
     return currentConfig.value.submit(themes);
 }
-
-defineExpose({
-    open(argTitle) {
-        customTitle.value = argTitle || null;
-        isOpen.value = true;
-    },
-});
 </script>

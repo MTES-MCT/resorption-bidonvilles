@@ -1,38 +1,36 @@
 <template>
-    <form>
-        <Modal :isOpen="isOpen" @close="close">
-            <template v-slot:title>Inviter un intervenant</template>
-            <template v-slot:subtitle>
-                <FicheSiteModaleSubtitle :town="town" />
-            </template>
-            <template v-slot:body>
-                <ModaleInviterIntervenantInputUser :townId="town.id" />
-                <ModaleInviterIntervenantInputEmail />
+    <Modal @close="onClose" ref="modale">
+        <template v-slot:title>Inviter un intervenant</template>
+        <template v-slot:subtitle>
+            <FicheSiteModaleSubtitle :town="town" />
+        </template>
+        <template v-slot:body>
+            <ModaleInviterIntervenantInputUser :townId="town.id" />
+            <ModaleInviterIntervenantInputEmail />
 
-                <ErrorSummary
-                    class="mt-4"
-                    v-if="error || Object.keys(errors).length > 0"
-                    :message="error"
-                    :summary="errors"
-                />
-            </template>
+            <ErrorSummary
+                class="mt-4"
+                v-if="error || Object.keys(errors).length > 0"
+                :message="error"
+                :summary="errors"
+            />
+        </template>
 
-            <template v-slot:footer>
-                <Button
-                    variant="primaryOutline"
-                    @click="close"
-                    class="mr-2"
-                    type="button"
-                    >Annuler</Button
-                >
-                <Button @click="submit" :loading="isSubmitting">Inviter</Button>
-            </template>
-        </Modal>
-    </form>
+        <template v-slot:footer>
+            <Button
+                variant="primaryOutline"
+                @click="() => modale.close()"
+                class="mr-2"
+                type="button"
+                >Annuler</Button
+            >
+            <Button @click="submit" :loading="isSubmitting">Inviter</Button>
+        </template>
+    </Modal>
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed, defineExpose } from "vue";
+import { defineProps, toRefs, ref, computed } from "vue";
 import { useForm } from "vee-validate";
 import { useTownsStore } from "@/stores/towns.store";
 import { useNotificationStore } from "@/stores/notification.store";
@@ -48,12 +46,12 @@ const props = defineProps({
     town: Object,
 });
 const { town } = toRefs(props);
+const modale = ref(null);
 
 const { handleSubmit, isSubmitting, setErrors, errors, resetForm, values } =
     useForm({
         validationSchema: schema,
     });
-const isOpen = ref(false);
 const error = ref(null);
 const mode = computed(() => {
     if (values.user?.data?.id !== undefined) {
@@ -92,9 +90,8 @@ const config = {
     },
 };
 
-function close() {
+function onClose() {
     resetForm();
-    isOpen.value = false;
 }
 
 const submit = handleSubmit(async (values) => {
@@ -105,18 +102,12 @@ const submit = handleSubmit(async (values) => {
     try {
         await submit(values);
         notificationStore.success("Inviter un intervenant", successWording);
-        close();
+        modale.value.close();
     } catch (e) {
         error.value = e?.user_message || "Une erreur inconnue est survenue";
         if (e?.fields) {
             setErrors(e.fields);
         }
     }
-});
-
-defineExpose({
-    open() {
-        isOpen.value = true;
-    },
 });
 </script>

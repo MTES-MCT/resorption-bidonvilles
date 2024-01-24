@@ -1,5 +1,5 @@
 <template>
-    <Modal :isOpen="isOpen" closeWhenClickOutside @close="close">
+    <Modal closeWhenClickOutside ref="modale">
         <template v-slot:title>{{ wording.title(numberOfUsers) }}</template>
         <template v-slot:body>
             <div class="pt-2">
@@ -51,7 +51,7 @@
                 @click="delayedLoad"
                 >Réessayer</Button
             >
-            <Button type="button" @click="close">
+            <Button type="button" @click="() => modale.close()">
                 <template v-if="loading !== false || error">Fermer</template>
                 <template v-else>J'ai compris</template>
             </Button>
@@ -66,6 +66,7 @@ import ViewErrorInline from "@/components/ViewErrorInline/ViewErrorInline.vue";
 import CarteStructure from "@/components/CarteStructure/CarteStructure.vue";
 import Loading from "@/components/Loading/Loading.vue";
 import computeOrganizationLocation from "@/utils/computeOrganizationLocation";
+import { onMounted } from "vue";
 
 const props = defineProps({
     wording: {
@@ -79,6 +80,7 @@ const props = defineProps({
 });
 const { wording, loadFn } = toRefs(props);
 
+const modale = ref(null);
 const organizationList = ref([]);
 const loading = ref(null);
 const error = ref(null);
@@ -117,30 +119,16 @@ function delayedLoad() {
     setTimeout(load, 100);
 }
 
-const isOpen = ref(false);
-
+onMounted(load);
 watch(wording, reset);
 watch(loadFn, reset);
-
-watch(isOpen, () => {
-    if (isOpen.value === true && loading.value === null) {
-        load();
-    }
-});
 
 function reset() {
     loading.value = null;
     organizationList.value = [];
 }
 
-function close() {
-    isOpen.value = false;
-}
-
 defineExpose({
-    open() {
-        isOpen.value = true;
-    },
     reset,
 });
 </script>

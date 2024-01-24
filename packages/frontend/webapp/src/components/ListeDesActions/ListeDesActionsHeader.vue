@@ -30,13 +30,12 @@
             </p>
         </template>
     </ViewHeader>
-
-    <ModalExport ref="modalExport" :exports="exportList" />
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
+import { useModaleStore } from "@/stores/modale.store";
 import { exportComments, exportActions } from "@/api/actions.api";
 
 import { Button } from "@resorptionbidonvilles/ui";
@@ -44,10 +43,12 @@ import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import ModalExport from "@/components/ModalExport/ModalExport.vue";
 
 const userStore = useUserStore();
-const modalExport = ref(null);
 
 function openModalExport() {
-    modalExport.value.open();
+    const modaleStore = useModaleStore();
+    modaleStore.open(ModalExport, {
+        exports: exportList,
+    });
 }
 
 const exportList = computed(() => {

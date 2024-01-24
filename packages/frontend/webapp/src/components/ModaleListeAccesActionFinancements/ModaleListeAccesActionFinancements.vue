@@ -60,10 +60,4 @@ function fetch() {
         managers: managers.value,
     });
 }
-
-defineExpose({
-    open() {
-        return modale.value.open();
-    },
-});
 </script>

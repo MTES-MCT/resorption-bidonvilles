@@ -4,8 +4,8 @@
         iconPosition="left"
         type="button"
         variant="primary"
-        :loading="questionStore.pendingDeletions[questionId] === true"
-        @click="emit('showModale')"
+        :loading="questionStore.pendingDeletions[question.id] === true"
+        @click="openModerationModale"
         class="flex-shrink-0"
         >Supprimer la question</Button
     >
@@ -15,16 +15,23 @@
 import { toRefs } from "vue";
 import { useQuestionsStore } from "@/stores/questions.store";
 import { Button } from "@resorptionbidonvilles/ui";
+import { useModaleStore } from "@/stores/modale.store";
+import ModaleModerationQuestion from "@/components/ModaleModerationQuestion/ModaleModerationQuestion.vue";
 
 const props = defineProps({
-    questionId: {
-        type: Number,
+    question: {
+        type: Object,
         required: true,
     },
 });
 
-const { questionId } = toRefs(props);
+const { question } = toRefs(props);
 const questionStore = useQuestionsStore();
 
-const emit = defineEmits(["showModale"]);
+function openModerationModale() {
+    const modaleStore = useModaleStore();
+    modaleStore.open(ModaleModerationQuestion, {
+        question: question.value,
+    });
+}
 </script>

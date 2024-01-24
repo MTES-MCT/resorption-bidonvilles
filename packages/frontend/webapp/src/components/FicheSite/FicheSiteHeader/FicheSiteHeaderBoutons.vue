@@ -23,7 +23,7 @@
             icon="file-word"
             iconPosition="left"
             variant="primaryOutline"
-            @click="modalExport.open()"
+            @click="openExportModal"
             >Exporter</Button
         >
         <Button
@@ -76,8 +76,6 @@
             >Supprimer le site</Button
         >
     </p>
-
-    <FicheSiteModaleExport :town="town" ref="modalExport" />
 </template>
 
 <script setup>
@@ -86,6 +84,7 @@ import { RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
+import { useModaleStore } from "@/stores/modale.store";
 import router from "@/helpers/router";
 
 import { Button } from "@resorptionbidonvilles/ui";
@@ -96,7 +95,11 @@ const props = defineProps({
 });
 const { town } = toRefs(props);
 const userStore = useUserStore();
-const modalExport = ref(null);
+
+function openExportModal() {
+    const modaleStore = useModaleStore();
+    modaleStore.open(FicheSiteModaleExport, { town: town.value });
+}
 
 const deleteIsLoading = ref(false);
 async function deleteTown() {

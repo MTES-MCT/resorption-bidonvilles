@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { defineExpose, ref, toRefs, watch, computed } from "vue";
+import { ref, toRefs, watch, computed } from "vue";
 import ModaleListeAcces from "@/components/ModaleListeAcces/ModaleListeAcces.vue";
 import { getJusticeReaders as getJusticeReadersByShantytown } from "@/api/towns.api";
 import { get as getJusticeReadersByLocation } from "@/api/justice_readers.api";
@@ -62,10 +62,4 @@ watch(location, reset);
 function reset() {
     modale.value.reset();
 }
-
-defineExpose({
-    open() {
-        return modale.value.open();
-    },
-});
 </script>

@@ -1,10 +1,5 @@
 <template>
-    <Modal
-        v-show="isOpen"
-        :isOpen="isOpen"
-        closeWhenClickOutside
-        @close="close"
-    >
+    <Modal closeWhenClickOutside @close="onClose" ref="modale">
         <template v-slot:title>Exporter la fiche du site</template>
         <template v-slot:subtitle
             ><FicheSiteModaleSubtitle :town="town"
@@ -15,7 +10,10 @@
         </template>
 
         <template v-slot:footer>
-            <Button variant="primaryOutline" @click="close" class="mr-2"
+            <Button
+                variant="primaryOutline"
+                @click="() => modale.close()"
+                class="mr-2"
                 >Annuler</Button
             >
             <Button
@@ -30,7 +28,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, defineExpose } from "vue";
+import { defineProps, toRefs, ref } from "vue";
 import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import { useNotificationStore } from "@/stores/notification.store";
 import { trackEvent } from "@/helpers/matomo";
@@ -53,15 +51,9 @@ const { values } = useForm({
         options: [],
     },
 });
-const isOpen = ref(false);
 const isLoading = ref(false);
 const error = ref(null);
-
-function close() {
-    isOpen.value = false;
-    isLoading.value = false;
-    error.value = null;
-}
+const modale = ref(null);
 
 async function download() {
     if (isLoading.value === true) {
@@ -84,21 +76,15 @@ async function download() {
             }
         );
         trackEvent("Export", "Export fiche site", `S${town.value.id}`);
-        close();
         notificationStore.success(
             "Export de la fiche site",
             "Le fichier d'export a bien été téléchargé"
         );
+        modale.value.close();
     } catch (e) {
         error.value = e?.user_message || "Une erreur inconnue est survenue";
     }
 
     isLoading.value = false;
 }
-
-defineExpose({
-    open() {
-        isOpen.value = true;
-    },
-});
 </script>

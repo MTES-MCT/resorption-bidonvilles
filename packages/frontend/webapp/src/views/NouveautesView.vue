@@ -1,6 +1,6 @@
 <template>
     <Layout>
-        <Modal :isOpen="true" :allowClose="false" v-if="currentItem">
+        <Modal isOpen :allowClose="false" v-if="currentItem">
             <template v-slot:header>
                 <div class="pt-10 px-10 pb-4">
                     <div class="border-b-1 border-G400 pb-2">
