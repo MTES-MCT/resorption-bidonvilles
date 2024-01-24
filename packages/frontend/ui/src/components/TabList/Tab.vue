@@ -1,5 +1,5 @@
 <template>
-    <button :class="[
+    <button type="button" :class="[
         'border-b-2 pb-1 inline-block mr-8',
         focusClasses.ring,
         active

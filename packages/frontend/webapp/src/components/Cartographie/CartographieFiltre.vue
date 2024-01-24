@@ -18,7 +18,6 @@
                 :value="option.value"
                 variant="checkbox"
                 direction="col"
-                v-model="mapStore.filters[id].checked"
                 @change="$emit('change')"
             />
         </main>
@@ -26,9 +25,10 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { defineProps, toRefs, computed, watch } from "vue";
 import { useMapStore } from "@/stores/map.store";
 import mapFilters from "@/utils/map_filters";
+import { useForm } from "vee-validate";
 
 import { Checkbox, Icon, LinkButton } from "@resorptionbidonvilles/ui";
 
@@ -43,6 +43,15 @@ const { id } = toRefs(props);
 defineEmits(["change"]);
 const definition = mapFilters.value.definition[id.value];
 const mapStore = useMapStore();
+const { values } = useForm({
+    initialValues: {
+        [id.value]: mapStore.filters[id.value].checked,
+    },
+});
+
+watch(values, () => {
+    mapStore.filters[id.value].checked = values[id.value];
+});
 
 const toggleIcon = computed(() => {
     return mapStore.filters[id.value].opened ? "minus" : "plus";

@@ -12,7 +12,6 @@
     <ul class="list-none">
         <li v-for="option in availableOptions" :key="option.id" class="pt-1">
             <Checkbox
-                v-model="model"
                 :value="option.id"
                 :label="option.label"
                 name="options"
@@ -25,33 +24,14 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs, defineEmits } from "vue";
+import { computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import options from "./FicheSiteModaleExport.options";
 
 import { Checkbox } from "@resorptionbidonvilles/ui";
 
-const props = defineProps({
-    checkedOptions: {
-        type: Array,
-        required: false,
-        default() {
-            return [];
-        },
-    },
-});
-const { checkedOptions } = toRefs(props);
 const userStore = useUserStore();
-const emit = defineEmits(["update:checkedOptions"]);
 
-const model = computed({
-    get() {
-        return checkedOptions.value;
-    },
-    set(value) {
-        emit("update:checkedOptions", value);
-    },
-});
 const availableOptions = computed(() => {
     return options.filter(({ permission }) => {
         // on filtre par permission

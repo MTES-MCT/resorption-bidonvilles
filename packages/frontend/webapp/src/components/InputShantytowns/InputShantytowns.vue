@@ -159,7 +159,10 @@ const currentTabData = computed(() => {
                 }
             } else {
                 // currentTab === "selected" here
-                if (!value.value?.includes || !value.value.includes(id)) {
+                if (
+                    !value.value?.includes ||
+                    !(value.value.includes(id) || value.value.includes(`${id}`))
+                ) {
                     return false;
                 }
             }
