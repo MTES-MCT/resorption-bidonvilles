@@ -36,6 +36,7 @@ import createQuestion from './question/create';
 import deleteQuestion from './question/delete';
 import subscribeQuestion from './question/subcribe';
 import createAnswer from './answer/create';
+import deleteAnswer from './answer/delete';
 
 import actionCreate from './actions/create';
 import actionCreateComment from './actions/createComment';
@@ -125,6 +126,7 @@ export default {
     },
     answer: {
         createAnswer,
+        deleteAnswer,
     },
     setUserAdminComments,
     editOrganization,

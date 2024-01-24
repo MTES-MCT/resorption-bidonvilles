@@ -10,6 +10,7 @@ import actionList from './actionController/list';
 import actionUpdate from './actionController/update';
 // answer
 import createAnswer from './answerController/create';
+import deleteAnswer from './answerController/delete';
 // attachment
 import attachmentDeleteAttachment from './attachmentController/deleteAttachment';
 // community
@@ -114,6 +115,7 @@ export default () => ({
     },
     answer: {
         create: createAnswer,
+        delete: deleteAnswer,
     },
     attachment: {
         deleteAttachment: attachmentDeleteAttachment,

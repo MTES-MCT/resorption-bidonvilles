@@ -4,6 +4,7 @@ type AnswerRow = {
     answerDescription: string,
     answerCreatedAt: Date,
     answerCreatedBy: number,
+    userEmail: string,
     userFirstName: string,
     userLastName: string,
     userPosition: string,
