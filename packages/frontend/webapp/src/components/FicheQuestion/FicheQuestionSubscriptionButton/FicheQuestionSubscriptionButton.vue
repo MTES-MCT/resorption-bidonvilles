@@ -5,6 +5,7 @@
         type="button"
         @click="submit"
         :loading="isLoading"
+        class="flex-shrink-0"
         >{{ wording }}</Button
     >
 </template>

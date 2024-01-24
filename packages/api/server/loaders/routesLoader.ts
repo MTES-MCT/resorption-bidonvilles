@@ -922,6 +922,17 @@ export default (app) => {
         controllers.community.unsubscribe,
     );
 
+    app.delete(
+        '/questions/:id',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.question.deleteQuestion,
+        middlewares.validation,
+        controllers.question.delete,
+    );
+
     app.get(
         '/data-reports/towns',
         middlewares.auth.authenticate,

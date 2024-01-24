@@ -58,6 +58,7 @@ import poiFindAll from './poiController/findAll';
 import questionFetch from './questionController/fetch';
 import questionList from './questionController/list';
 import createQuestion from './questionController/create';
+import deleteQuestion from './questionController/delete';
 // shantytown
 import townController from './townController';
 // shantytown comments
@@ -178,6 +179,7 @@ export default () => ({
     },
     question: {
         create: createQuestion,
+        delete: deleteQuestion,
         fetch: questionFetch,
         list: questionList,
 
