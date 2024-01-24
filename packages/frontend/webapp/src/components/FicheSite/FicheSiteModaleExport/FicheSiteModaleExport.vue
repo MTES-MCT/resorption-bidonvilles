@@ -10,7 +10,7 @@
             ><FicheSiteModaleSubtitle :town="town"
         /></template>
         <template v-slot:body>
-            <FicheSiteModaleExportOptions v-model:checkedOptions="options" />
+            <FicheSiteModaleExportOptions />
             <ErrorSummary class="mt-4" v-if="error" :message="error" />
         </template>
 
@@ -41,13 +41,18 @@ import { exportSingle } from "@/api/towns.api";
 
 import FicheSiteModaleExportOptions from "./FicheSiteModaleExportOptions.vue";
 import FicheSiteModaleSubtitle from "../FicheSiteModaleSubtitle/FicheSiteModaleSubtitle.vue";
+import { useForm } from "vee-validate";
 
 const props = defineProps({
     town: Object,
 });
 const { town } = toRefs(props);
 const notificationStore = useNotificationStore();
-const options = ref([]);
+const { values } = useForm({
+    initialValues: {
+        options: [],
+    },
+});
 const isOpen = ref(false);
 const isLoading = ref(false);
 const error = ref(null);
@@ -66,7 +71,7 @@ async function download() {
     isLoading.value = true;
     error.value = null;
     try {
-        const data = await exportSingle(town.value.id, options.value);
+        const data = await exportSingle(town.value.id, values.options);
 
         const ts = Date.now() / 1000;
         downloadBlob(

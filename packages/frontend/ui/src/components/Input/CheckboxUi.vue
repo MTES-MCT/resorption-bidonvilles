@@ -2,7 +2,7 @@
     <template v-if="variant === 'checkbox'">
         <label class="flex cursor-pointer">
             <input id="variant-checkbox" ref="checkbox" @click="onChange(value)"
-                class="inline-block rounded mr-2 text-center" type="checkbox" :checked="checked" />
+                class="inline-block rounded mr-2 text-center" type="checkbox" :checked="checked" :disabled="disabled" />
             {{ label }}
         </label>
     </template>
@@ -10,7 +10,7 @@
         <div class="flex items-center justify-between w-full hover:bg-blue200 px-3 text-primary">
             <label class="flex items-center justify-between w-full hover:bg-blue200 py-2 pr-4 text-primary cursor-pointer">
                 <input id="variant-invisible" ref="checkbox" @click="onChange(value)" class="appearance-none"
-                    type="checkbox" :checked="checked" />
+                    type="checkbox" :checked="checked" :disabled="disabled" />
                 <div class="flex-1">
                     {{ label }}
                 </div>
@@ -27,7 +27,7 @@
                 <p
                     class="rounded-2xl w-11 h-6 flex shrink-0 items-center px-px border border-primary justify-end bg-primary">
                     <input id="variant-toggle" @click="onChange(value)" class="appearance-none" type="checkbox"
-                        :checked="checked" />
+                        :checked="checked" :disabled="disabled" />
                     <span class="absolute rounded-full bg-white inline-block text-center text-sm text-primary h-5 w-5">
                         <span class="inline-block">
                             <i class="fa-solid fa-check" aria-hidden="false"></i>
@@ -41,7 +41,7 @@
             <label v-else class="flex space-x-2 items-center shrink-0">
                 <p class="rounded-2xl w-11 h-6 flex shrink-0 items-center px-px border border-primary justify-start">
                     <input id="variant-toggle" @click="onChange(value)" class="appearance-none" type="checkbox"
-                        :checked="checked" />
+                        :checked="checked" :disabled="disabled" />
                     <span
                         class="absolute rounded-full bg-white inline-block text-center text-sm text-primary -ml-1 h-6 w-6 border border-primary">
                         <span class="inline-block">
@@ -82,10 +82,6 @@ const props = defineProps({
         type: String,
         default: 'card' // soit "card", "checkbox", ou "invisible"
     },
-    direction: { // soit 'row', soit 'col'
-        type: String,
-        default: 'row'
-    },
     modelValue: {
         type: Boolean,
         required: false,
@@ -103,7 +99,7 @@ const props = defineProps({
     }
 });
 
-const { label, variant, direction, modelValue: checked, disabled, isSubmitting } = toRefs(props);
+const { label, variant, modelValue: checked, disabled, isSubmitting } = toRefs(props);
 const emit = defineEmits(['change', 'update:modelValue']);
 
 function onChange() {

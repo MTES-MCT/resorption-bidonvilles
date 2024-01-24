@@ -5,12 +5,12 @@
                 <Checkbox
                     class="mt-0 md:mt-2"
                     v-for="parametre in parametres"
+                    name="parametresDeVue"
                     :key="parametre.id"
                     :label="parametre.label"
                     :value="parametre.id"
                     @click="trackMatomoEvent(parametre.id)"
                     variant="toggle"
-                    v-model="metricsStore.parametresDeVue"
                 />
             </p>
         </div>
@@ -24,13 +24,23 @@ export default {
 </script>
 
 <script setup>
+import { watch } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store";
 import parametres from "./DonneesStatistiques.parametres";
 import { trackEvent } from "@/helpers/matomo";
+import { useForm } from "vee-validate";
 
 import { Checkbox } from "@resorptionbidonvilles/ui";
 
 const metricsStore = useMetricsStore();
+const { values } = useForm({
+    initialValues: {
+        parametresDeVue: metricsStore.parametresDeVue,
+    },
+});
+watch(values, () => {
+    metricsStore.parametresDeVue = values.parametresDeVue;
+});
 
 function trackMatomoEvent(value) {
     trackEvent(

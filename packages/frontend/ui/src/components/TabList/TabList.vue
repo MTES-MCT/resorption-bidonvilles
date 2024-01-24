@@ -1,7 +1,7 @@
 <template>
     <div>
         <Tab v-for="tab in tabs" :key="tab.id" :active="activeTab === tab.id" @click="onTabClick(tab.id)">
-            <template v-slot:prefix>{{ tab.total }}</template>
+            <template v-if="tab.total !== undefined" v-slot:prefix>{{ tab.total }}</template>
             {{ tab.label }}
         </Tab>
     </div>

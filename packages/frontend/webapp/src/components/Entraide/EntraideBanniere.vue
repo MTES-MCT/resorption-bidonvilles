@@ -15,7 +15,7 @@
                 que vous vous posez dans le cadre de votre résorption.
             </p>
             <form
-                class="flex items-center mt-2 space-x-2"
+                class="flex items-end mt-2 space-x-2"
                 @submit="redirectToNewQuestion"
             >
                 <TextInput
