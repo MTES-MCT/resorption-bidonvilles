@@ -82,10 +82,6 @@ const props = defineProps({
         type: String,
         default: 'card' // soit "card", "checkbox", ou "invisible"
     },
-    direction: { // soit 'row', soit 'col'
-        type: String,
-        default: 'row'
-    },
     modelValue: {
         type: Boolean,
         required: false,
@@ -103,7 +99,7 @@ const props = defineProps({
     }
 });
 
-const { label, variant, direction, modelValue: checked, disabled, isSubmitting } = toRefs(props);
+const { label, variant, modelValue: checked, disabled, isSubmitting } = toRefs(props);
 const emit = defineEmits(['change', 'update:modelValue']);
 
 function onChange() {
