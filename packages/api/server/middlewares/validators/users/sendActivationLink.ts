@@ -41,7 +41,7 @@ export default [
                 throw new Error('Impossible de valider les options car l\'utilisateur n\'a pas été trouvé');
             }
 
-            const availableOptions = permissionsDescription[req.user.role_id].options.map(({ id }) => id);
+            const availableOptions = permissionsDescription[req.userToBeActivated.role_id].options.map(({ id }) => id);
             const forbiddenOptions = value.filter(id => !availableOptions.includes(id));
 
             if (forbiddenOptions.length > 0) {
