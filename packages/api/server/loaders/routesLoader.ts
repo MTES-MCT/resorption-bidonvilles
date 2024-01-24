@@ -514,6 +514,7 @@ export default (app) => {
     app.get(
         '/towns/export',
         middlewares.auth.authenticate,
+        bodyParser.json(),
         (...args: [express.Request, express.Response, Function]) => middlewares.auth.checkPermissions(['shantytown.export'], ...args),
         middlewares.charte.check,
         validators.exportTowns,
