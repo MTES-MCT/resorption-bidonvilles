@@ -38,6 +38,9 @@ function onDeleteAttachment(file) {
 
 function showModerationModal() {
     const modaleStore = useModaleStore();
-    modaleStore.open(ModaleModerationReponse, { answer });
+    modaleStore.open(ModaleModerationReponse, {
+        questionId: questionId.value,
+        answer,
+    });
 }
 </script>

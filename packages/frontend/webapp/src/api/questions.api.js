@@ -34,6 +34,13 @@ export function createQuestion(question, attachments) {
     });
 }
 
+export function deleteAnswer(questionId, answerId, reason) {
+    return axios.delete(
+        `/questions/${encodeURI(questionId)}/answers/${encodeURI(answerId)}`,
+        { data: { reason } }
+    );
+}
+
 export function deleteQuestion(questionId) {
     return axios.delete(`/questions/${encodeURI(questionId)}`);
 }
