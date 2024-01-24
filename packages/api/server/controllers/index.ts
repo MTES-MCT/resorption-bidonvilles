@@ -35,10 +35,6 @@ import inviteInvite from './inviteController/invite';
 import getDepartementMetrics from './metricsController/getDepartementMetrics';
 import getDepartementEvolutionMetrics from './metricsController/getDepartementEvolutionMetrics';
 import getNationMetrics from './metricsController/getNationMetrics';
-// note
-import noteAddPublication from './noteController/addPublication';
-import noteCreate from './noteController/create';
-import noteAddCopy from './noteController/addCopy';
 // organization
 import organizationCategories from './organizationController/categories';
 import organizationFindJusticeReadersByLocation from './organizationController/findJusticeReadersByLocation';
@@ -153,11 +149,6 @@ export default () => ({
         getDepartementMetrics,
         getDepartementEvolutionMetrics,
         getNationMetrics,
-    },
-    note: {
-        addPublication: noteAddPublication,
-        create: noteCreate,
-        addCopy: noteAddCopy,
     },
     organization: {
         categories: organizationCategories,

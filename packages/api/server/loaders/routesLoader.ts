@@ -860,38 +860,6 @@ export default (app) => {
         controllers.contactFormReferral.export,
     );
 
-    // Notes (mobile)
-    app.post(
-        '/notes',
-        bodyParser.json(),
-        middlewares.auth.authenticate,
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        validators.note.createNote,
-        middlewares.validation,
-        controllers.note.create,
-    );
-
-    app.patch(
-        '/notes/:id/number_of_copies',
-        bodyParser.json(),
-        middlewares.auth.authenticate,
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        controllers.note.addCopy,
-    );
-
-    app.post(
-        '/notes/:id/publications',
-        bodyParser.json(),
-        middlewares.auth.authenticate,
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        validators.note.publishNote,
-        middlewares.validation,
-        controllers.note.addPublication,
-    );
-
     app.post(
         '/communaute/ad',
         bodyParser.json(),
