@@ -10,7 +10,16 @@ export default async (id: number, transaction: Transaction = undefined): Promise
                 WHEN users.password IS NULL THEN 'new'
                 ELSE 'active'
             END,
-            updated_at = NOW()
+            updated_at = NOW(),
+
+            -- les deux lignes suivantes sont nécessaires pour éviter
+            -- que l'utilisateur ne soit identifié comme utilisateur inactif
+            -- depuis trop longtemps et qu'il se retrouve automatiquement désactivé
+            last_access = CASE
+                WHEN users.password IS NULL THEN NULL
+                ELSE NOW()
+            END,
+            inactivity_alert_sent_at = NULL
         WHERE
             user_id = :id
         `,
