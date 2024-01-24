@@ -108,25 +108,12 @@ export default async (user: User, location: Location) => {
                 TO_CHAR((now()::date - INTERVAL '1 day' * ((week * 7) + 6)) - INTERVAL '1 day', 'DD/MM') AS date_debut,
                 TO_CHAR((now()::date - INTERVAL '1 day' * (week * 7)) - INTERVAL '1 day', 'DD/MM') AS date_fin
             FROM (
-                SELECT fk_user, week 
-                    FROM (
-                        (
-                            SELECT
-                                fk_user,
-                                (floor(((now() - INTERVAL '1 day')::date - datetime::date) / 7)) AS week
-                            FROM user_webapp_navigation_logs
-                            WHERE datetime::date < now()::date
-                        )
-                        UNION
-                        (
-                            SELECT
-                                fk_user,
-                                (floor(((now() - INTERVAL '1 day')::date - datetime::date) / 7)) AS week
-                            FROM user_mobile_navigation_logs
-                            WHERE datetime::date < now()::date
-                        )
-                    ) AS unl
-                    GROUP BY fk_user, week
+                SELECT
+                    fk_user,
+                    (floor(((now() - INTERVAL '1 day')::date - datetime::date) / 7)) AS week
+                FROM user_webapp_navigation_logs
+                WHERE datetime::date < now()::date
+                GROUP BY fk_user, week
             ) t
             ${where !== null ? `
             LEFT JOIN users ON users.user_id = t.fk_user

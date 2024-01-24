@@ -21,7 +21,12 @@
             </template>
         </template>
         <template v-slot:actions>
-            <div class="flex justify-between items-start">
+            <div class="md:flex justify-between items-start">
+                <ModaleModerationQuestion
+                    :question="question"
+                    :author="author"
+                    ref="modale"
+                />
                 <div>
                     <FicheQuestionTags
                         :question="question"
@@ -29,26 +34,39 @@
                         class="mb-4"
                     />
                 </div>
-                <FicheQuestionSubscriptionButton
-                    :question="question"
-                    size="sm"
-                />
+                <div class="flex flex-col sm:flex-row items-start gap-2">
+                    <FicheQuestionDeleteButton
+                        v-if="userStore.user.is_superuser"
+                        :questionId="question.id"
+                        @showModale="() => modale.open()"
+                        size="sm"
+                    />
+                    <FicheQuestionSubscriptionButton
+                        :question="question"
+                        size="sm"
+                    />
+                </div>
             </div>
         </template>
     </ViewHeader>
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { ref, toRefs } from "vue";
+import { useUserStore } from "@/stores/user.store";
 
 import { Icon, LinkOrganization } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import FicheQuestionTags from "../FicheQuestionTags/FicheQuestionTags.vue";
 import FicheQuestionSubscriptionButton from "../FicheQuestionSubscriptionButton/FicheQuestionSubscriptionButton.vue";
+import FicheQuestionDeleteButton from "../FicheQuestionDeleteButton/FicheQuestionDeleteButton.vue";
+import ModaleModerationQuestion from "@/components/ModaleModerationQuestion/ModaleModerationQuestion.vue";
 
 const props = defineProps({
     question: Object,
 });
 const { question } = toRefs(props);
+const modale = ref(null);
 const author = question.value.createdBy;
+const userStore = useUserStore();
 </script>

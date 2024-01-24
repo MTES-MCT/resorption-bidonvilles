@@ -860,38 +860,6 @@ export default (app) => {
         controllers.contactFormReferral.export,
     );
 
-    // Notes (mobile)
-    app.post(
-        '/notes',
-        bodyParser.json(),
-        middlewares.auth.authenticate,
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        validators.note.createNote,
-        middlewares.validation,
-        controllers.note.create,
-    );
-
-    app.patch(
-        '/notes/:id/number_of_copies',
-        bodyParser.json(),
-        middlewares.auth.authenticate,
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        controllers.note.addCopy,
-    );
-
-    app.post(
-        '/notes/:id/publications',
-        bodyParser.json(),
-        middlewares.auth.authenticate,
-        middlewares.charte.check,
-        middlewares.appVersion.sync,
-        validators.note.publishNote,
-        middlewares.validation,
-        controllers.note.addPublication,
-    );
-
     app.post(
         '/communaute/ad',
         bodyParser.json(),
@@ -920,6 +888,17 @@ export default (app) => {
         validators.question.subscribeQuestion,
         middlewares.validation,
         controllers.community.unsubscribe,
+    );
+
+    app.delete(
+        '/questions/:id',
+        middlewares.auth.authenticate,
+        middlewares.auth.isSuperAdmin,
+        middlewares.charte.check,
+        middlewares.appVersion.sync,
+        validators.question.deleteQuestion,
+        middlewares.validation,
+        controllers.question.delete,
     );
 
     app.get(

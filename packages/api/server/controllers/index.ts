@@ -35,10 +35,6 @@ import inviteInvite from './inviteController/invite';
 import getDepartementMetrics from './metricsController/getDepartementMetrics';
 import getDepartementEvolutionMetrics from './metricsController/getDepartementEvolutionMetrics';
 import getNationMetrics from './metricsController/getNationMetrics';
-// note
-import noteAddPublication from './noteController/addPublication';
-import noteCreate from './noteController/create';
-import noteAddCopy from './noteController/addCopy';
 // organization
 import organizationCategories from './organizationController/categories';
 import organizationFindJusticeReadersByLocation from './organizationController/findJusticeReadersByLocation';
@@ -58,6 +54,7 @@ import poiFindAll from './poiController/findAll';
 import questionFetch from './questionController/fetch';
 import questionList from './questionController/list';
 import createQuestion from './questionController/create';
+import deleteQuestion from './questionController/delete';
 // shantytown
 import townController from './townController';
 // shantytown comments
@@ -153,11 +150,6 @@ export default () => ({
         getDepartementEvolutionMetrics,
         getNationMetrics,
     },
-    note: {
-        addPublication: noteAddPublication,
-        create: noteCreate,
-        addCopy: noteAddCopy,
-    },
     organization: {
         categories: organizationCategories,
         findJusticeReadersByLocation: organizationFindJusticeReadersByLocation,
@@ -178,6 +170,7 @@ export default () => ({
     },
     question: {
         create: createQuestion,
+        delete: deleteQuestion,
         fetch: questionFetch,
         list: questionList,
 

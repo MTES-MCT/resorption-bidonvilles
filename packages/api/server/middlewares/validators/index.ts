@@ -32,9 +32,8 @@ import userSetExpertiseTopics from './users/setExpertiseTopics';
 import userSetRoleRegular from './users/setRoleRegular';
 import mePostNavigationLogs from './me/post.navigationLogs';
 import findUserTowns from './findUserTowns';
-import createNote from './note/create';
-import publishNote from './note/publish';
 import createQuestion from './question/create';
+import deleteQuestion from './question/delete';
 import subscribeQuestion from './question/subcribe';
 import createAnswer from './answer/create';
 
@@ -114,10 +113,6 @@ export default {
         getDepartementEvolutionMetrics,
         getNationMetrics,
     },
-    note: {
-        createNote,
-        publishNote,
-    },
     organization: {
         search: organizationSearch,
         searchAssociations: organizationSearchAssociations,
@@ -125,6 +120,7 @@ export default {
     },
     question: {
         createQuestion,
+        deleteQuestion,
         subscribeQuestion,
     },
     answer: {

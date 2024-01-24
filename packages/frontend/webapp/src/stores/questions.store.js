@@ -7,6 +7,7 @@ import {
     fetch,
     addAnswer,
     createQuestion,
+    deleteQuestion,
 } from "@/api/questions.api";
 import { subscribe, unsubscribe } from "@/api/questions.api";
 import { useConfigStore } from "./config.store";
@@ -27,6 +28,7 @@ export const useQuestionsStore = defineStore("questions", () => {
         search: "",
     });
     const sort = ref("last_activity");
+    const pendingDeletions = ref({});
 
     const filteredQuestions = computed(() => {
         return filterQuestions(questions.value, {
@@ -93,6 +95,7 @@ export const useQuestionsStore = defineStore("questions", () => {
         isLoading.value = false;
         error.value = null;
         sort.value = "last_activity";
+        pendingDeletions.value = {};
         resetPagination();
         resetFilters();
     }
@@ -185,6 +188,29 @@ export const useQuestionsStore = defineStore("questions", () => {
         fetchQuestion,
         create,
         createAnswer,
+        pendingDeletions,
+        async removeQuestion(questionId) {
+            if (pendingDeletions.value[questionId] === true) {
+                return;
+            }
+
+            try {
+                pendingDeletions.value[questionId] = true;
+
+                const response = await deleteQuestion(questionId);
+                const index = questions.value.findIndex(
+                    ({ id }) => id === questionId
+                );
+                if (index >= 0) {
+                    questions.value.splice(index, 1);
+                }
+                pendingDeletions.value[questionId] = false;
+                return response;
+            } catch (error) {
+                pendingDeletions.value[questionId] = false;
+                throw error;
+            }
+        },
         subscriptions,
         async subscribe(questionId) {
             if (!subscriptions.value[questionId]) {
