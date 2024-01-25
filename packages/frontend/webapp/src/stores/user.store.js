@@ -128,7 +128,7 @@ export const useUserStore = defineStore("user", {
             if (permission === null) {
                 return false;
             }
-
+            console.log(permission);
             if (permission.allowed_on_national === true) {
                 return true;
             }

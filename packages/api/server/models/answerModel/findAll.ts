@@ -29,6 +29,7 @@ export default async (): Promise<Answer[]> => {
             ca.description AS "answerDescription",
             ca.created_at AS "answerCreatedAt",
             ca.created_by "answerCreatedBy",
+            u.email AS "userEmail",
             u.first_name AS "userFirstName",
             u.last_name AS "userLastName",
             u.position AS "userPosition",

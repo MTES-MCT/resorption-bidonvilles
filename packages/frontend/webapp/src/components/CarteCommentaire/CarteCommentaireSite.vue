@@ -7,14 +7,14 @@
         @moderate="openModerationModal"
         @deleteAttachment="onDeleteAttachment"
     />
-    <ModaleModerationCommentaire ref="moderationModal" :comment="comment" />
 </template>
 
 <script setup>
-import { ref, toRefs } from "vue";
+import { toRefs } from "vue";
 import CarteCommentaire from "./CarteCommentaire.vue";
 import ModaleModerationCommentaire from "@/components/ModaleModerationCommentaire/ModaleModerationCommentaire.vue";
 import { useAttachmentsStore } from "@/stores/attachments.store";
+import { useModaleStore } from "@/stores/modale.store";
 
 const props = defineProps({
     townId: {
@@ -27,10 +27,10 @@ const props = defineProps({
     },
 });
 const { townId, comment } = toRefs(props);
-const moderationModal = ref(null);
 
 function openModerationModal() {
-    moderationModal.value.open();
+    const modaleStore = useModaleStore();
+    modaleStore.open(ModaleModerationCommentaire, { comment: comment.value });
 }
 
 function onDeleteAttachment(file) {

@@ -42,15 +42,10 @@
             <InputBailiff />
         </Fieldset>
     </FormSection>
-    <ModaleListeAccesPJ
-        ref="modaleListeAccesPJ"
-        :location="location"
-        :future="future"
-    />
 </template>
 
 <script setup>
-import { computed, ref, toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import { useFormValues } from "vee-validate";
 import FormSection from "@/components/FormSection/FormSection.vue";
 import { Button, Fieldset } from "@resorptionbidonvilles/ui";
@@ -67,6 +62,7 @@ import InputPoliceGrantedAt from "../inputs/FormDeclarationDeSiteInputPoliceGran
 import InputBailiff from "../inputs/FormDeclarationDeSiteInputBailiff.vue";
 
 import ModaleListeAccesPJ from "@/components/ModaleListeAccesPJ/ModaleListeAccesPJ.vue";
+import { useModaleStore } from "@/stores/modale.store";
 
 const props = defineProps({
     location: Object,
@@ -83,13 +79,15 @@ const policeWasGranted = computed(() => {
     return values.value.police_status === "granted";
 });
 
-const modaleListeAccesPJ = ref(null);
-
 const future = computed(() => {
     return mode.value !== "edit";
 });
 
 function openModaleListeAccesPJ() {
-    modaleListeAccesPJ.value.open();
+    const modaleStore = useModaleStore();
+    modaleStore.open(ModaleListeAccesPJ, {
+        location: location.value,
+        future: future.value,
+    });
 }
 </script>

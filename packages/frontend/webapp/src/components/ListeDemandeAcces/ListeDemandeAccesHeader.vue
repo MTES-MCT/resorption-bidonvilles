@@ -37,25 +37,24 @@
             </p>
         </template>
     </ViewHeader>
-
-    <ModalExport ref="modalExport" :exports="exportList" />
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { useModaleStore } from "@/stores/modale.store";
 import exportList from "./ListeDemandeAcces.exports";
 
 import { Button } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import ModalExport from "@/components/ModalExport/ModalExport.vue";
 
-const modalExport = ref(null);
-
 function downloadGuide() {
     window.location = "/doc/guide_de_l_administrateur.pdf";
 }
 
 function openModalExport() {
-    modalExport.value.open();
+    const modaleStore = useModaleStore();
+    modaleStore.open(ModalExport, {
+        exports: exportList,
+    });
 }
 </script>

@@ -1,12 +1,11 @@
 <template>
-    <Modal closeWhenClickOutside @close="onClose" ref="modale">
-        <template v-slot:title>
-            Confirmez-vous la suppression du message ?
-        </template>
-
+    <Modal closeWhenClickOutside ref="modale">
+        <template v-slot:title
+            >Confirmez-vous la suppression de ce message ?</template
+        >
         <template v-slot:body>
             <CarteCommentaire
-                :comment="comment"
+                :comment="answer"
                 class="bg-G100 p-6 border-1 max-w-2xl"
             />
             <div class="mt-6" v-if="!isOwner">
@@ -16,7 +15,12 @@
                     v-model="reason"
                 />
             </div>
-            <ErrorSummary v-if="error" :message="error" class="mb-0 mt-6" />
+            <ErrorSummary
+                v-if="error"
+                :message="error"
+                :summary="errorSummary"
+                class="mb-0 mt-6"
+            />
         </template>
 
         <template v-slot:footer>
@@ -31,45 +35,42 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed } from "vue";
-import { useUserStore } from "@/stores/user.store";
+import { computed, ref, toRefs } from "vue";
 import { useNotificationStore } from "@/stores/notification.store";
-import { useTownsStore } from "@/stores/towns.store";
+import { useQuestionsStore } from "@/stores/questions.store";
+import { useUserStore } from "@/stores/user.store";
+
 import {
+    Modal,
     Button,
     ErrorSummary,
-    Modal,
     TextArea,
 } from "@resorptionbidonvilles/ui";
-
 import CarteCommentaire from "@/components/CarteCommentaire/CarteCommentaire.vue";
 
 const props = defineProps({
-    comment: {
+    questionId: {
+        type: Number,
+        required: true,
+    },
+    answer: {
         type: Object,
+        required: true,
     },
 });
-const { comment } = toRefs(props);
+const { answer, questionId } = toRefs(props);
 
 const modale = ref(null);
+
 const loading = ref(false);
 const error = ref(null);
+const errorSummary = ref({});
 const reason = ref("");
 
 const isOwner = computed(() => {
     const userStore = useUserStore();
-    return comment.value.createdBy.id === userStore.user.id;
+    return answer.value.createdBy.id === userStore.user.id;
 });
-
-function reset() {
-    loading.value = false;
-    error.value = null;
-    reason.value = "";
-}
-
-function onClose() {
-    reset();
-}
 
 async function remove() {
     if (loading.value === true) {
@@ -78,12 +79,13 @@ async function remove() {
 
     loading.value = true;
     error.value = null;
+    errorSummary.value = {};
     try {
         const notificationStore = useNotificationStore();
-        const townsStore = useTownsStore();
-        await townsStore.deleteComment(
-            comment.value.shantytown,
-            comment.value.id,
+        const questionStore = useQuestionsStore();
+        await questionStore.deleteAnswer(
+            questionId.value,
+            answer.value.id,
             reason.value
         );
 
@@ -96,6 +98,15 @@ async function remove() {
         modale.value.close();
     } catch (e) {
         error.value = e?.user_message || "Une erreur inconnue est survenue";
+        if (e?.fields && Object.keys(e.fields).length > 0) {
+            errorSummary.value = Object.keys(e.fields).reduce(
+                (acc, key) => ({
+                    ...acc,
+                    [key]: e.fields[key][0],
+                }),
+                {}
+            );
+        }
     }
 
     loading.value = false;

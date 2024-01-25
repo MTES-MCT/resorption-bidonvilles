@@ -18,6 +18,7 @@ import {
     fetch,
     fetchList,
     findNearby,
+    inviteNewActor,
     removeActor,
     removeActorTheme,
     setHeatwaveStatus,
@@ -340,6 +341,10 @@ export const useTownsStore = defineStore("towns", () => {
             if (response?.actors && hash.value[townId]) {
                 hash.value[townId].actors = response.actors;
             }
+        },
+
+        inviteActor(townId, email) {
+            return inviteNewActor(townId, email);
         },
 
         async updateActor(townId, userId, themes) {

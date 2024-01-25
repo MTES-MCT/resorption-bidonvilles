@@ -902,6 +902,15 @@ export default (app) => {
         controllers.question.delete,
     );
 
+    app.delete(
+        '/questions/:id/answers/:answerId',
+        bodyParser.json(),
+        middlewares.auth.authenticate,
+        validators.answer.deleteAnswer,
+        middlewares.validation,
+        controllers.answer.delete,
+    );
+
     app.get(
         '/data-reports/towns',
         middlewares.auth.authenticate,

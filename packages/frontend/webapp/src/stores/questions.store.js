@@ -7,6 +7,7 @@ import {
     fetch,
     addAnswer,
     createQuestion,
+    deleteAnswer,
     deleteQuestion,
 } from "@/api/questions.api";
 import { subscribe, unsubscribe } from "@/api/questions.api";
@@ -189,6 +190,19 @@ export const useQuestionsStore = defineStore("questions", () => {
         create,
         createAnswer,
         pendingDeletions,
+        async deleteAnswer(questionId, answerId, reason) {
+            const response = await deleteAnswer(questionId, answerId, reason);
+            if (hash.value[questionId] !== undefined) {
+                const index = hash.value[questionId].answers.findIndex(
+                    ({ id }) => id === answerId
+                );
+                if (index >= 0) {
+                    hash.value[questionId].answers.splice(index, 1);
+                }
+            }
+
+            return response;
+        },
         async removeQuestion(questionId) {
             if (pendingDeletions.value[questionId] === true) {
                 return;

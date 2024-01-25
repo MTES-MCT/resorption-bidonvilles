@@ -1,10 +1,5 @@
 <template>
-    <Modal
-        v-show="isOpen"
-        :isOpen="isOpen"
-        closeWhenClickOutside
-        @close="close"
-    >
+    <Modal closeWhenClickOutside ref="modale">
         <template v-slot:title>Exports</template>
         <template v-slot:body>
             <p>
@@ -56,13 +51,13 @@
         </template>
 
         <template v-slot:footer>
-            <Button @click="close">Fermer</Button>
+            <Button @click="() => modale.close()">Fermer</Button>
         </template>
     </Modal>
 </template>
 
 <script setup>
-import { ref, computed, defineProps, toRefs, defineExpose } from "vue";
+import { ref, computed, defineProps, toRefs } from "vue";
 import { Button, DatepickerInput, Modal } from "@resorptionbidonvilles/ui";
 import ModalExportLien from "./ModalExportLien.vue";
 
@@ -70,6 +65,7 @@ const props = defineProps({
     exports: Array,
 });
 const { exports: exportList } = toRefs(props);
+const modale = ref(null);
 const from = ref(new Date());
 const to = ref(new Date());
 from.value.setDate(from.value.getDate() - 7);
@@ -80,16 +76,5 @@ const itemsWithoutDateRange = computed(() => {
 
 const itemsWithDateRange = computed(() => {
     return exportList.value.filter((item) => item.withDateRange);
-});
-
-const isOpen = ref(false);
-function close() {
-    isOpen.value = false;
-}
-
-defineExpose({
-    open() {
-        isOpen.value = true;
-    },
 });
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <Modal :isOpen="isOpen" closeWhenClickOutside @close="close">
+    <Modal closeWhenClickOutside @close="onClose" ref="modale">
         <template v-slot:title>
             Êtes-vous sûr de vouloir supprimer cette question ?
         </template>
@@ -10,7 +10,10 @@
         </template>
 
         <template v-slot:footer>
-            <Button variant="primaryText" :loading="loading" @click="close"
+            <Button
+                variant="primaryText"
+                :loading="loading"
+                @click="() => modale.close()"
                 >Annuler</Button
             >
             <Button class="ml-5" :loading="loading" @click="remove"
@@ -29,17 +32,14 @@ import formatUserName from "@/utils/formatUserName";
 import router from "@/helpers/router";
 
 const props = defineProps({
-    author: {
-        type: Object,
-    },
     question: {
         type: Object,
     },
 });
 
-const { author, question } = toRefs(props);
+const { question } = toRefs(props);
+const modale = ref(null);
 const error = ref(null);
-const isOpen = ref(false);
 const notificationStore = useNotificationStore();
 const questionStore = useQuestionsStore();
 const loading = computed(() => {
@@ -48,7 +48,7 @@ const loading = computed(() => {
 
 const wording = computed(() => {
     const baseWording = `Confirmez-vous la suppression de la question de ${formatUserName(
-        author.value,
+        question.value.createdBy,
         false
     )}`;
     return question.value.answers.length === 0
@@ -60,8 +60,7 @@ function reset() {
     error.value = null;
 }
 
-function close() {
-    isOpen.value = false;
+function onClose() {
     reset();
 }
 
@@ -89,10 +88,4 @@ async function remove() {
 
     return true;
 }
-
-defineExpose({
-    open() {
-        isOpen.value = true;
-    },
-});
 </script>

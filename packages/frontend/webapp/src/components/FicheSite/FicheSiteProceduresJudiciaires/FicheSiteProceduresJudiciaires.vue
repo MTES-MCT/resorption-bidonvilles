@@ -36,18 +36,14 @@
         >
             {{ town.bailiff || "non communiqué" }}
         </FicheSiteProceduresJudiciaireLigne>
-        <ModaleListeAccesPJ
-            ref="modaleListeAccesPJ"
-            :future="false"
-            :townId="town.id"
-        />
     </FicheRubrique>
 </template>
 
 <script setup>
-import { defineProps, ref, toRefs, computed, watch } from "vue";
+import { defineProps, toRefs, computed, watch } from "vue";
 import formatBool from "@/utils/formatBool";
 import formatDate from "@common/utils/formatDate";
+import { useModaleStore } from "@/stores/modale.store";
 
 import { useEventBus } from "@common/helpers/event-bus";
 
@@ -60,8 +56,6 @@ const props = defineProps({
 });
 const { town } = toRefs(props);
 const { bus } = useEventBus();
-
-const modaleListeAccesPJ = ref(null);
 
 const justiceRendered = computed(() => {
     if (town.value.justiceRendered === null) {
@@ -102,7 +96,11 @@ const policeStatus = computed(() => {
 watch(
     () => bus.value.get("fichesitepj:openListAccesPJ"),
     () => {
-        modaleListeAccesPJ.value.open();
+        const modaleStore = useModaleStore();
+        modaleStore.open(ModaleListeAccesPJ, {
+            future: false,
+            townId: town.value.id,
+        });
     }
 );
 </script>
