@@ -23,24 +23,6 @@ export default (comment: shantytownCommentRowWithTags): ShantytownComment => ({
     },
     shantytown: comment.shantytownId,
     tags: comment.tags,
-    ...(comment.covidCommentDate
-        ? {
-            covid: {
-                date: comment.covidCommentDate.getTime() / 1000,
-                equipe_maraude: comment.covidEquipeMaraude,
-                equipe_sanitaire: comment.covidEquipeSanitaire,
-                equipe_accompagnement: comment.covidEquipeAccompagnement,
-                distribution_alimentaire: comment.covidDistributionAlimentaire,
-                action_mediation_sante: comment.covidActionMediationSante,
-                sensibilisation_vaccination: comment.covidSensibilisationVaccination,
-                equipe_mobile_depistage: comment.covidEquipeMobileDepistage,
-                equipe_mobile_vaccination: comment.covidEquipeMobileVaccination,
-                personnes_orientees: comment.covidPersonnesOrientees,
-                personnes_avec_symptomes: comment.covidPersonnesAvecSymptomes,
-                besoin_action: comment.covidBesoinAction,
-            },
-        }
-        : {}),
     attachments: comment.attachments?.length
         ? comment.attachments.map(attachmentModel.serializeAttachment)
         : [],

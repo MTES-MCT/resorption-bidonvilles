@@ -6,7 +6,7 @@ import moment from 'moment';
 import heading from './heading';
 
 export default (shantytown) => {
-    const comments = [...shantytown.comments.regular, ...shantytown.comments.covid].sort((a, b) => (moment(a.createdAt).isBefore(b.createdAt) ? 1 : -1));
+    const comments = [...shantytown.comments].sort((a, b) => (moment(a.createdAt).isBefore(b.createdAt) ? 1 : -1));
 
     return {
         properties: {

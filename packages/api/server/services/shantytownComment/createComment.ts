@@ -73,13 +73,9 @@ export default async (comment, shantytown, author) => {
     }
 
     // on retourne la liste mise à jour des commentaires du site
-    let regularComments;
-    let covidComments;
+    let comments;
     try {
-        [regularComments, covidComments] = await Promise.all([
-            shantytownModel.getComments(author, [shantytown.id], false),
-            shantytownModel.getComments(author, [shantytown.id], true),
-        ]);
+        comments = await shantytownModel.getComments(author, [shantytown.id]);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
@@ -108,8 +104,7 @@ export default async (comment, shantytown, author) => {
     }
 
     return {
-        regular: regularComments[shantytown.id] || [],
-        covid: covidComments[shantytown.id] || [],
+        comments: comments[shantytown.id] || [],
         numberOfWatchers: watchers.length,
     };
 };

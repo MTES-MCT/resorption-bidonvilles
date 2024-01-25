@@ -95,9 +95,7 @@ const messageForm = ref(null);
 const isFocused = computed(() => messageForm.value?.isFocused);
 
 const comments = computed(() => {
-    return [...town.value.comments.regular, ...town.value.comments.covid].sort(
-        (a, b) => b.createdAt - a.createdAt
-    );
+    return [...town.value.comments].sort((a, b) => b.createdAt - a.createdAt);
 });
 
 watch(isFocused, () => {

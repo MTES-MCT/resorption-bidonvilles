@@ -159,10 +159,6 @@ const title = computed(() => {
         case "creation-answer":
             return "Nouvelle réponse";
         case "creation-comment":
-            if (activity.value.comment?.covid) {
-                return "Nouveau message Covid-19";
-            }
-
             if (activity.value.actionEntity) {
                 return "Nouveau message action";
             }
@@ -204,14 +200,6 @@ const colors = computed(() => {
         return {
             text: "text-primary",
             bg: "bg-primary",
-        };
-    }
-
-    if (activity.value.comment?.covid) {
-        // création de commentaire
-        return {
-            text: "text-error",
-            bg: "bg-error",
         };
     }
 

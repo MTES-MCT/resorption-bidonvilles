@@ -32,10 +32,7 @@ describe('services/shantytown', () => {
             departement: null,
             epci: null,
             city: 0,
-            comments: {
-                regular: [comment],
-                covid: [],
-            },
+            comments: [comment],
         };
         beforeEach(() => {
             stubs = {
@@ -79,10 +76,7 @@ describe('services/shantytown', () => {
             const commentsUpdated = await deleteCommentService(user, shantytownId, commentId, deletionMessage);
             expect(stubs.shantytownCommentModeldeleteComment).to.have.been.calledOnceWith(commentId);
             expect(commentsUpdated).to.eql({
-                comments: {
-                    regular: [],
-                    covid: [],
-                },
+                comments: [],
             });
         });
 

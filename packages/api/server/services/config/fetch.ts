@@ -71,7 +71,7 @@ export default async (user: User): Promise<ConfigServiceFetchResponse> => {
             permissions_description: permissionsDescription,
             question_tags: questionTags,
             regions,
-            regular_comment_tags: commentTags,
+            comment_tags: commentTags,
             social_origins: socialOrigins,
             topics,
             user: extendedUser,

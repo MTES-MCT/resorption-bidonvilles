@@ -18,8 +18,7 @@ type ShantytownComment = {
     user_target_name: string[],
     shantytown: number,
     tags: CommentTag[],
-    createdBy: CommentAuthor
-    covid?: any,
+    createdBy: CommentAuthor,
     attachments: File[]
 };
 
