@@ -31,7 +31,7 @@ export type ConfigServiceFetchResponse = {
     permissions_description: RolePermissionDescriptions,
     question_tags: QuestionTag[],
     regions: Region[],
-    regular_comment_tags: ShantytownCommentTag[],
+    comment_tags: ShantytownCommentTag[],
     social_origins: SocialOrigin[],
     topics: Topic[],
     user: User,

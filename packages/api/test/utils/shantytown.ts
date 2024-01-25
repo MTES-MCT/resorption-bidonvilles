@@ -186,10 +186,7 @@ export function serialized(location: City = defaultLocation, override = {}): Sha
             label: 'Inconnu',
         },
         socialOrigins: [],
-        comments: {
-            regular: [],
-            covid: [],
-        },
+        comments: [],
         actors: [],
         actions: [],
         closingSolutions: [],

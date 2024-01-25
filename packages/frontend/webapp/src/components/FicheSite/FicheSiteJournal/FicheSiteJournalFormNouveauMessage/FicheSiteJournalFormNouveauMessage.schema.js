@@ -8,9 +8,7 @@ const configStore = useConfigStore();
 
 export default object({
     tags: array().of(
-        string().oneOf(
-            configStore.config.regular_comment_tags.map(({ uid }) => uid)
-        )
+        string().oneOf(configStore.config.comment_tags.map(({ uid }) => uid))
     ),
     mode: string()
         .oneOf(commentModes.map(({ uid }) => uid))

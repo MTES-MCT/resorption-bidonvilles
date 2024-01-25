@@ -21,7 +21,7 @@ import { CheckableGroup, Checkbox } from "@resorptionbidonvilles/ui";
 
 const configStore = useConfigStore();
 const items = computed(() => {
-    return configStore.config.regular_comment_tags;
+    return configStore.config.comment_tags;
 });
 
 const values = useFormValues();

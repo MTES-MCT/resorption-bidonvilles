@@ -148,8 +148,7 @@ export default async (user: User, feature: string, where: Where = [], order = ['
     }
 
 
-    const commentsPromise = getComments(user, Object.keys(serializedTowns.hash), false);
-    const covidCommentsPromise = getComments(user, Object.keys(serializedTowns.hash), true);
+    const commentsPromise = getComments(user, Object.keys(serializedTowns.hash));
 
     const closingSolutionsPromise: Promise<ShantytownClosingSolutionRow[]> = sequelize.query(
         `SELECT
@@ -177,7 +176,7 @@ export default async (user: User, feature: string, where: Where = [], order = ['
 
     const incomingTownsPromise = incomingTownsModel.findAll(user, Object.keys(serializedTowns.hash));
 
-    const [history, comments, covidComments, closingSolutions, actors, actions, incomingTowns] = await Promise.all([historyPromise, commentsPromise, covidCommentsPromise, closingSolutionsPromise, actorsPromise, actionsPromise, incomingTownsPromise]);
+    const [history, comments, closingSolutions, actors, actions, incomingTowns] = await Promise.all([historyPromise, commentsPromise, closingSolutionsPromise, actorsPromise, actionsPromise, incomingTownsPromise]);
 
 
     if (history !== undefined && history.length > 0) {
@@ -219,8 +218,7 @@ export default async (user: User, feature: string, where: Where = [], order = ['
 
     // @todo: move the serialization of these entities to their own model component
     Object.keys(serializedTowns.hash).forEach((shantytownId) => {
-        serializedTowns.hash[shantytownId].comments.regular = comments[shantytownId] || [];
-        serializedTowns.hash[shantytownId].comments.covid = covidComments[shantytownId] || [];
+        serializedTowns.hash[shantytownId].comments = comments[shantytownId] || [];
     });
 
     if (closingSolutions !== undefined) {

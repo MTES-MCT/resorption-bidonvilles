@@ -67,7 +67,6 @@ export default [
             'shantytownClosing',
             'shantytownUpdate',
             'shantytownComment',
-            'highCovidComment',
             'user',
             'actionComment',
         ]),

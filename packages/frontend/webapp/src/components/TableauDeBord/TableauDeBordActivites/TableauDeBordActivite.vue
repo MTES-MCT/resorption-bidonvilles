@@ -144,12 +144,7 @@ const title = computed(() => {
             return "Site fermé";
 
         case "comment-creation": {
-            const title = "Nouveau message";
-            if (activity.value.highCovidComment) {
-                return `${title} COVID-19`;
-            }
-
-            return title;
+            return "Nouveau message";
         }
 
         case "electricity-creation":
@@ -181,10 +176,6 @@ const subtitle = computed(() => {
             } rejoint la plateforme`;
 
         case "comment-creation":
-            if (activity.value.highCovidComment) {
-                return "";
-            }
-
             if (activity.value.actionEntity) {
                 return "dans le journal de l'action";
             }
@@ -220,8 +211,7 @@ const resorptionTarget = computed(() => {
 
 const description = computed(() => {
     if (activity.value.entity === "comment") {
-        return (activity.value.highCovidComment || activity.value.comment)
-            .description;
+        return activity.value.comment.description;
     }
 
     if (activity.value.entity === "question") {
@@ -245,13 +235,6 @@ const icon = computed(() => {
     }
 
     if (activity.value.entity === "comment") {
-        if (
-            (activity.value.comment && activity.value.comment.covid) ||
-            activity.value.highCovidComment
-        ) {
-            return "exclamation";
-        }
-
         return "comment";
     }
 
@@ -280,13 +263,6 @@ const iconColor = computed(() => {
             return colors.orange;
 
         case "comment-creation":
-            if (
-                (activity.value.comment && activity.value.comment.covid) ||
-                activity.value.highCovidComment
-            ) {
-                return colors.red;
-            }
-
             if (activity.value.actionEntity) {
                 return colors.green;
             }
@@ -316,17 +292,15 @@ function routeToDetails() {
     trackEvent("TB", "Visite activité");
 
     if (activity.value.entity === "comment") {
-        if (activity.value.highCovidComment) {
-            return router.push("/covid-19");
-        } else if (activity.value.actionEntity) {
+        if (activity.value.actionEntity) {
             return router.push(
                 `/action/${activity.value.actionEntity.id}/#comment`
             );
-        } else {
-            return router.push(
-                `/site/${activity.value.shantytown.id}#message${activity.value.comment.id}`
-            );
         }
+
+        return router.push(
+            `/site/${activity.value.shantytown.id}#message${activity.value.comment.id}`
+        );
     }
 
     if (activity.value.entity === "user") {

@@ -100,10 +100,7 @@ export default (town: ShantytownRow, user): Shantytown => {
                 label,
             };
         }),
-        comments: {
-            regular: [],
-            covid: [],
-        },
+        comments: [],
         actors: [],
         actions: [],
         closingSolutions: [],

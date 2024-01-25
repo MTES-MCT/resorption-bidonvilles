@@ -76,10 +76,10 @@
             </p>
 
             <!-- journal du site -->
-            <p v-if="numberOfComments > 0" class="mt-6">
+            <p v-if="shantytown.comments.length > 0" class="mt-6">
                 <Link @click.stop="routeToJournalDuSite"
-                    >{{ numberOfComments }} message{{
-                        numberOfComments !== 1 ? "s" : ""
+                    >{{ shantytown.comments.length }} message{{
+                        shantytown.comments.length !== 1 ? "s" : ""
                     }}
                 </Link>
             </p>
@@ -116,12 +116,6 @@ const pinVariant = computed(() => {
     const { months } = getSince(shantytown.value.updatedAt);
     return months >= 3 ? "pin_red" : "pin";
 });
-
-const numberOfComments = computed(
-    () =>
-        shantytown.value.comments.regular.length +
-        shantytown.value.comments.covid.length
-);
 
 function routeToDetailsPage() {
     router.push(`/site/${shantytown.value.id}`);

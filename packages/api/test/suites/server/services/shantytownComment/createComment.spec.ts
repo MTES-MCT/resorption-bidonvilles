@@ -81,7 +81,6 @@ describe('services/shantytownComment', () => {
                     watchers: [fakeUser(), fakeUser({ id: 3 }), fakeUser({ id: 4 })],
                     comment: fakeComment(),
                     commentList: [],
-                    covidCommentList: [],
                 };
 
                 // createComment() retourne un id de commentaire
@@ -94,14 +93,9 @@ describe('services/shantytownComment', () => {
 
                 // getComments() retourne une liste de commentaires
                 dependencies.getComments
-                    .withArgs(input.user, [input.shantytown.id], false)
+                    .withArgs(input.user, [input.shantytown.id])
                     .resolves({
                         [input.shantytown.id]: output.commentList,
-                    });
-                dependencies.getComments
-                    .withArgs(input.user, [input.shantytown.id], true)
-                    .resolves({
-                        [input.shantytown.id]: output.covidCommentList,
                     });
 
                 // findOneComment() retourne un commentaire
@@ -171,8 +165,7 @@ describe('services/shantytownComment', () => {
 
             it('collecte et retourne la liste des commentaires actualisés', async () => {
                 expect(response).to.be.eql({
-                    regular: output.commentList,
-                    covid: output.covidCommentList,
+                    comments: output.commentList,
                     numberOfWatchers: output.watchers.length,
                 });
             });
@@ -273,7 +266,7 @@ describe('services/shantytownComment', () => {
             const nativeError = new Error('une erreur');
             beforeEach(() => {
                 dependencies.getComments
-                    .withArgs(user, [1], false)
+                    .withArgs(user, [1])
                     .rejects(nativeError);
 
                 dependencies.getShantytownWatchers.resolves([]);

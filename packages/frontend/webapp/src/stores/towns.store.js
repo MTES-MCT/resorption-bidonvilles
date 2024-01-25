@@ -253,10 +253,7 @@ export const useTownsStore = defineStore("towns", () => {
                 comment,
                 attachments
             );
-            updateShantytownComments(shantytownId, {
-                regular: comments.regular,
-                covid: comments.covid,
-            });
+            updateShantytownComments(shantytownId, comments.comments);
 
             trackEvent("Site", "Création commentaire", `S${shantytownId}`);
             notificationStore.success(
@@ -401,7 +398,7 @@ export const useTownsStore = defineStore("towns", () => {
 
         async deleteCommentAttachment(file, { townId, commentId }) {
             await deleteAttachment(file.id);
-            const commentIndex = hash.value[townId].comments.regular.findIndex(
+            const commentIndex = hash.value[townId].comments.findIndex(
                 ({ id }) => id === commentId
             );
 
@@ -409,16 +406,17 @@ export const useTownsStore = defineStore("towns", () => {
                 return;
             }
 
-            const fileIndex = hash.value[townId].comments.regular[
+            const fileIndex = hash.value[townId].comments[
                 commentIndex
             ].attachments.findIndex(({ id }) => id === file.id);
             if (fileIndex === -1) {
                 return;
             }
 
-            hash.value[townId].comments.regular[
-                commentIndex
-            ].attachments.splice(fileIndex, 1);
+            hash.value[townId].comments[commentIndex].attachments.splice(
+                fileIndex,
+                1
+            );
         },
     };
 });

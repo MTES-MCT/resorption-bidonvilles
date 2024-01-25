@@ -140,7 +140,7 @@ describe('configService.fetch()', () => {
     it('retourne la liste des tags de commentaires', async () => {
         commentTagModel.find.withArgs({}).resolves(['A', 'B']);
         const result = await fetch(fakeUser());
-        expect(result.regular_comment_tags).to.be.eql(['A', 'B']);
+        expect(result.comment_tags).to.be.eql(['A', 'B']);
     });
 
     it('retourne la liste des départements', async () => {

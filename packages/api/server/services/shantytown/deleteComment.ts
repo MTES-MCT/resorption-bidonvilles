@@ -17,10 +17,7 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
-    const comment = [
-        ...town.comments.regular,
-        ...town.comments.covid,
-    ].find(({ id }) => id === parseInt(commentId, 10));
+    const comment = town.comments.find(({ id }) => id === parseInt(commentId, 10));
     if (comment === undefined) {
         throw new ServiceError('fetch_failed', new Error('Le commentaire à supprimer n\'a pas été retrouvé en base de données'));
     }
@@ -82,9 +79,6 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
     }
 
     return {
-        comments: {
-            regular: town.comments.regular.filter(({ id }) => id !== parseInt(commentId, 10)),
-            covid: town.comments.covid.filter(({ id }) => id !== parseInt(commentId, 10)),
-        },
+        comments: town.comments.filter(({ id }) => id !== parseInt(commentId, 10)),
     };
 };

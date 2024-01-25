@@ -1019,17 +1019,17 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         comments: {
             title: 'Commentaires',
-            data: ({ comments }: Shantytown) => comments.regular.slice(0, 5).map(comment => `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${userModel.formatName(comment.createdBy)}\n${comment.description}`).join('\n----\n'),
+            data: ({ comments }: Shantytown) => comments.slice(0, 5).map(comment => `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${userModel.formatName(comment.createdBy)}\n${comment.description}`).join('\n----\n'),
             width: COLUMN_WIDTHS.LARGE,
         },
         last_comment_date: {
             title: 'Date du dernier message',
             data: ({ comments }: Shantytown) => {
-                if (comments.regular.length === 0) {
+                if (comments.length === 0) {
                     return '';
                 }
 
-                return tsToString(comments.regular[0].createdAt, 'd/m/Y');
+                return tsToString(comments[0].createdAt, 'd/m/Y');
             },
             width: COLUMN_WIDTHS.LARGE,
         },
