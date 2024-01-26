@@ -3,7 +3,7 @@
         v-if="!shantytown.justiceStatuses || !shantytown.justiceStatuses.length"
         class="text-G600"
     >
-        <Icon icon="ban" />&nbsp;
+        <Icon icon="ban" ariaHidden="true" />&nbsp;
         <template
             v-if="
                 shantytown.ownerComplaint === false &&
@@ -22,7 +22,12 @@
             :key="status.label"
         >
             <Icon v-if="status.icon" :icon="status.icon" />
-            <img class="w-5 h-4 mt-1" :src="status.img" v-if="status.img" />
+            <img
+                class="w-5 h-4 mt-1"
+                :src="status.img"
+                alt=""
+                v-if="status.img"
+            />
             <div class="ml-2">
                 <span class="font-bold">{{ status.label }}</span>
                 <span v-if="status.date" class="secondary">

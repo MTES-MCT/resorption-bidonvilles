@@ -7,7 +7,7 @@
             ]"
             style="padding: 0.2em"
         >
-            <Icon :icon="icon" />
+            <Icon :icon="icon" ariaHidden="true" />
         </span>
         <slot />
     </li>
