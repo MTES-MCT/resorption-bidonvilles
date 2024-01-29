@@ -30,7 +30,7 @@ export function create(data) {
 }
 
 export function report(data) {
-    return axios.post("/towns/report", data);
+    return axios.post("/town-report", data);
 }
 
 export function deleteComment(townId, commentId, message) {
@@ -47,7 +47,7 @@ export function destroy(townId) {
 }
 
 export function edit(id, data) {
-    return axios.post(`/towns/${encodeURI(id)}`, data);
+    return axios.patch(`/towns/${encodeURI(id)}`, data);
 }
 
 export function exportList(
@@ -69,11 +69,13 @@ export function exportList(
     const queryString = Object.keys(query)
         .map((key) => `${key}=${encodeURIComponent(query[key])}`)
         .join("&");
-    return axios.get(`/towns/export?${queryString}`, { responseType: "blob" });
+    return axios.get(`/towns/export/excel?${queryString}`, {
+        responseType: "blob",
+    });
 }
 
 export function exportSingle(townId, options = []) {
-    let url = `/towns/${encodeURI(townId)}/exports`;
+    let url = `/towns/${encodeURI(townId)}/export/word`;
     if (options.length > 0) {
         url += `?options=${encodeURIComponent(options.join(","))}`;
     }
@@ -91,7 +93,7 @@ export function fetchList() {
 
 export function findNearby(latitude, longitude) {
     return axios.get(
-        `/towns/findNearby?latitude=${encodeURIComponent(
+        `/towns/nearby?latitude=${encodeURIComponent(
             latitude
         )}&longitude=${encodeURIComponent(longitude)}`
     );
@@ -104,11 +106,13 @@ export function findRelations(townId, query) {
 }
 
 export function getJusticeReaders(townId) {
-    return axios.get(`/towns/${encodeURI(townId)}/justice_readers`);
+    return axios.get(`/towns/${encodeURI(townId)}/justice-readers`);
 }
 
 export function inviteNewActor(townId, email) {
-    return axios.put(`/towns/${encodeURI(townId)}/invitations`, { email });
+    return axios.post(`/towns/${encodeURI(townId)}/actor-invitations`, {
+        email,
+    });
 }
 
 export function removeActor(townId, userId) {
@@ -126,11 +130,11 @@ export function removeActorTheme(townId, userId, themeId) {
 }
 
 export function setClosedWithSolutions(townId, data) {
-    return axios.put(`/towns/${encodeURI(townId)}/closedWithSolutions`, data);
+    return axios.put(`/towns/${encodeURI(townId)}/closed-with-solutions`, data);
 }
 
 export function setHeatwaveStatus(id, status) {
-    return axios.put(`/towns/${encodeURI(id)}/heatwave`, {
+    return axios.put(`/towns/${encodeURI(id)}/heatwave-status`, {
         heatwave_status: status,
     });
 }

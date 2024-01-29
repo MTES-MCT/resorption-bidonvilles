@@ -28,24 +28,15 @@ axios.interceptors.request.use((config) => {
 
 axios.interceptors.response.use(
     (response) => {
-        if (response.data?.response) {
-            return response.data?.response;
-        }
-
         return response.data;
     },
     (originalError) => {
-        let error = {
-            user_message: "Une erreur inconnue est survenue",
-            error: originalError,
-        };
-
-        // @todo: côté API, normaliser la réponse des erreurs pour éviter la gestion des deux
-        // formats de réponse
-        if (originalError.response?.data?.error) {
-            error = originalError.response.data.error;
-        } else if (originalError.response?.data?.user_message) {
-            error = originalError.response.data;
+        let error = originalError.response.data;
+        if (!error?.user_message) {
+            error = {
+                user_message: "Une erreur inconnue est survenue",
+                error: originalError,
+            };
         }
 
         // erreurs génériques

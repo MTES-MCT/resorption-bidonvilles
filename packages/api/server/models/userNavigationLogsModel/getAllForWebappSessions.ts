@@ -34,7 +34,8 @@ export default (): Promise<WebappSessionRow[]> => sequelize.query(
     FROM user_webapp_navigation_logs navigation_logs
     LEFT JOIN users ON users.user_id = navigation_logs.fk_user
     LEFT JOIN v_user_areas ON v_user_areas.user_id = navigation_logs.fk_user
-    LEFT JOIN organization_types ot ON ot.organization_type_id = lo.fk_type
+    LEFT JOIN organizations o ON o.organization_id = users.fk_organization
+    LEFT JOIN organization_types ot ON ot.organization_type_id = o.fk_type
     LEFT JOIN organization_categories oc ON oc.uid = ot.fk_category
     ORDER BY navigation_logs.fk_user ASC, navigation_logs.datetime ASC`,
     {

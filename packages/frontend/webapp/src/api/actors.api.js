@@ -1,5 +1,5 @@
 import { axios } from "@/helpers/axios";
 
 export function exportList() {
-    return axios.get("/actors");
+    return axios.get("/actors/export/csv");
 }

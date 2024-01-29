@@ -1,9 +1,9 @@
 import query from './_common/query';
 
-export default async (user, shantytownId) => {
+export default async (user, shantytownId, feature = 'read') => {
     const towns = await query(
         user,
-        'read',
+        feature,
         [{ shantytown_id: shantytownId }],
         undefined,
         true, // include changelog

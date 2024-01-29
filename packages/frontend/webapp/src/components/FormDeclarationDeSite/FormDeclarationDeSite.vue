@@ -163,8 +163,6 @@ const hasJusticePermission = computed(() => {
         return userStore.hasJusticePermission;
     }
 
-    console.log(location.value);
-
     return userStore.hasLocalizedPermission(
         "shantytown_justice.access",
         location.value

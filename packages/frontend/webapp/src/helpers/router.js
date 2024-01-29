@@ -471,17 +471,6 @@ const router = createRouter({
             },
         },
         {
-            path: "/statistiques/:code?",
-            component: () => import("@/views/StatistiquesView.vue"),
-            meta: {
-                title: "Consulter les statistiques dans un département",
-                authRequirement: "signedIn",
-                navTab: "statistiques",
-                permissions: ["stats.read"],
-                displayOrderOnSiteMap: 0,
-            },
-        },
-        {
             path: "/structure/:id",
             component: () => import("@/views/FicheStructureView.vue"),
             meta: {

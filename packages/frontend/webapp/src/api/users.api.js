@@ -1,12 +1,11 @@
 import { axios } from "@/helpers/axios";
 
-export function acceptCharte(
-    userId,
+export function acceptCharter(
     charteVersion,
     charteAgreement,
     confidentialityAgreement
 ) {
-    return axios.put(`/users/${encodeURI(userId)}/charte_engagement`, {
+    return axios.put(`/me/charte_engagement`, {
         version_de_charte: charteVersion,
         charte_agreement: charteAgreement,
         confidentiality_agreement: confidentialityAgreement,
@@ -22,19 +21,21 @@ export function create(user) {
 }
 
 export function deactivateUser(userId, reason = null) {
-    return axios.delete(`/users/${encodeURI(userId)}`, { data: { reason } });
+    return axios.post(`/users/${encodeURI(userId)}/deactivate`, {
+        reason,
+    });
 }
 
 export function denyAccess(userId) {
-    return axios.post(`/users/${encodeURI(userId)}/denyAccess`);
+    return axios.post(`/users/${encodeURI(userId)}/deny-access`);
 }
 
 export function edit(userId, data) {
-    return axios.put(`/users/${encodeURI(userId)}`, data);
+    return axios.patch(`/users/${encodeURI(userId)}`, data);
 }
 
 export function exportList() {
-    return axios.get("/users/export");
+    return axios.get("/users/export/csv");
 }
 
 export function get(userId) {
@@ -42,24 +43,24 @@ export function get(userId) {
 }
 
 export function getLatestActivationLink(userId) {
-    return axios.get(`/users/${encodeURI(userId)}/activationLink`);
+    return axios.get(`/users/${encodeURI(userId)}/activation-links`);
 }
 
 export function list() {
     return axios.get("/users");
 }
 
-export function listWithPermissions() {
-    return axios.get("/users-with-permissions");
+export function listWithPrivilege() {
+    return axios.get("/users-with-privilege");
 }
 
 export function modifyOptions(userId, options) {
-    return axios.post(`/users/${encodeURI(userId)}/options`, {
+    return axios.put(`/users/${encodeURI(userId)}/options`, {
         options,
     });
 }
 export function newPassword(email) {
-    return axios.post("/users/new-password", {
+    return axios.post("/users/new-password-request", {
         email,
     });
 }
@@ -69,11 +70,11 @@ export function reactivateUser(userId) {
 }
 
 export function sendActivationLink(userId, data) {
-    return axios.post(`/users/${encodeURI(userId)}/sendActivationLink`, data);
+    return axios.post(`/users/${encodeURI(userId)}/activation-links`, data);
 }
 
 export function setAdminComments(userId, comment) {
-    return axios.put(`/users/${encodeURI(userId)}/admin_comments`, {
+    return axios.put(`/users/${encodeURI(userId)}/admin-comments`, {
         comment,
     });
 }
@@ -84,7 +85,7 @@ export function setExpertiseTopics(
     interestTopics,
     comment
 ) {
-    return axios.put(`/users/${encodeURI(userId)}/expertise_topics`, {
+    return axios.put(`/users/${encodeURI(userId)}/expertise-topics`, {
         expertise_topics: expertiseTopics,
         interest_topics: interestTopics,
         expertise_comment: comment,
@@ -92,15 +93,15 @@ export function setExpertiseTopics(
 }
 
 export function setLocalAdmin(userId, admin = true) {
-    return axios.post(`/users/${encodeURI(userId)}/local-admin`, { admin });
+    return axios.put(`/users/${encodeURI(userId)}/role-admin`, { admin });
 }
 
 export function setPassword(userId, data) {
-    return axios.post(`/users/${encodeURI(userId)}/newPassword`, data);
+    return axios.put(`/users/${encodeURI(userId)}/password`, data);
 }
 
 export function setRoleRegular(userId, roleId) {
-    return axios.patch(`/users/${encodeURI(userId)}/role_regular`, {
+    return axios.put(`/users/${encodeURI(userId)}/role-regular`, {
         role_id: roleId,
     });
 }

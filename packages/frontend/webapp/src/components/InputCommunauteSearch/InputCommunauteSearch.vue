@@ -37,6 +37,7 @@ const search = computed({
 async function autocompleteFn(value) {
     const locationResults = await autocompleteLocation(value);
     const userResults = await autocompleteUsers(value);
+
     return restrictLengthByCategory([
         ...locationResults.map((location) => ({
             id: location.code,
@@ -69,7 +70,7 @@ async function autocompleteFn(value) {
 function restrictLengthByCategory(list) {
     // on ne garde que les 3 premières entrées pour chaque catégorie
     const categories = {};
-    return list.filter((el) => {
+    const a = list.filter((el) => {
         if (!categories[el.category]) {
             categories[el.category] = 1;
             return true;
@@ -80,5 +81,7 @@ function restrictLengthByCategory(list) {
             return true;
         }
     });
+    console.log(a);
+    return a;
 }
 </script>

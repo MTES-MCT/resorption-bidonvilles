@@ -3,7 +3,7 @@ import { useUserStore } from "@/stores/user.store";
 
 import { exportList as exportActors } from "@/api/actors.api";
 import { exportList as exportReferrals } from "@/api/contact_form_referrals.api";
-import { exportTownsReport } from "@/api/data_reports.api";
+import { exportTownsReport } from "@/api/statistics.api";
 import { exportWebappSessions } from "@/api/navigation_logs.api";
 import { exportList as exportUsers } from "@/api/users.api";
 

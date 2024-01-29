@@ -57,7 +57,6 @@ watch(
 watch(
     () => bus.value.get("fichesite:openSelfThemes"),
     () => {
-        console.log("?");
         modaleStore.open(FicheSiteModaleMesThemes, {
             town: town.value,
         });

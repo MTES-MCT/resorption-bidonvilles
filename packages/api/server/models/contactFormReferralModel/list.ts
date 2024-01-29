@@ -6,7 +6,7 @@ type ContactFormReferralRow = {
     first_name: string;
     last_name: string;
     email: string;
-    departements: string[];
+    departements: string[] | null;
     organization_name: string;
     reason: string;
     reason_other: string;

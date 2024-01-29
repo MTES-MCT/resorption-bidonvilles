@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken';
 import * as Sentry from '@sentry/node';
 import config from '#server/config';
-import userModelUpdate from '#server/models/userModel/update';
-import userModelFindOne from '#server/models/userModel/findOne';
+import findOneUser from '#server/models/userModel/findOne';
 import { User } from '#root/types/resources/User.d';
 
 const { auth: authConfig } = config;
@@ -57,7 +56,7 @@ async function authenticateUser(req) {
         }
     }
 
-    const user = await userModelFindOne(decoded.userId, {
+    const user = await findOneUser(decoded.userId, {
         extended: true,
         app: true,
     });
@@ -76,12 +75,6 @@ async function authenticateUser(req) {
     }
 
     Sentry.setUser({ id: `${user.id}` });
-
-    const now = new Date();
-    await userModelUpdate(user.id, {
-        last_access: now,
-    });
-
     return user;
 }
 
@@ -96,10 +89,8 @@ function hasPermission(permissions, permission) {
 function myCheckPermissions(mode, permissions, req, res, next, respond) {
     if (!req.user || !req.user.permissions || !permissions) {
         res.status(500).send({
-            error: {
-                code: 4,
-                user_message: 'Vous n\'avez pas accès à ces données',
-            },
+            code: 4,
+            user_message: 'Vous n\'avez pas accès à ces données',
         });
 
         if (respond !== true) {
@@ -111,10 +102,8 @@ function myCheckPermissions(mode, permissions, req, res, next, respond) {
 
     if (!permissions[mode](permission => hasPermission(req.user.permissions, permission))) {
         res.status(400).send({
-            error: {
-                code: 5,
-                user_message: 'Vous n\'avez pas accès à ces données',
-            },
+            code: 5,
+            user_message: 'Vous n\'avez pas accès à ces données',
         });
 
         if (respond !== true) {
@@ -160,9 +149,7 @@ export async function authenticate(req, res, next, respond = true) {
             throw error;
         }
 
-        res.status(400).send({
-            error: error.details,
-        });
+        res.status(400).send(error.details);
         return;
     }
 

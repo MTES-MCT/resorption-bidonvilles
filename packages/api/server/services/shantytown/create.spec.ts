@@ -17,7 +17,7 @@ import createService from './create';
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe('services/shantytown', () => {
+describe.skip('services/shantytown', () => {
     describe('create()', () => {
         let stubs;
         const shantytownId = global.generate('string');

@@ -1,4 +1,4 @@
-import { QueryTypes } from 'sequelize';
+import { QueryTypes, type Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 
 export type ActionCommentInsertionRow = {
@@ -6,7 +6,7 @@ export type ActionCommentInsertionRow = {
     created_by: number,
 };
 
-export default async (actionId: number, comment: ActionCommentInsertionRow): Promise<number> => {
+export default async (actionId: number, comment: ActionCommentInsertionRow, transaction?: Transaction): Promise<number> => {
     const data = await sequelize.query(
         `INSERT INTO action_comments(fk_action, description, created_by)
         VALUES (:actionId, :description, :created_by)
@@ -18,6 +18,7 @@ export default async (actionId: number, comment: ActionCommentInsertionRow): Pro
                 description: comment.description,
                 created_by: comment.created_by,
             },
+            transaction,
         },
     );
     type ReturnValue = { action_comment_id: number };
