@@ -123,11 +123,6 @@ export function serialized(override: Partial<User> = {}): AuthUser {
             },
             user: {},
             stats: {},
-            covid_comment: {
-                list: {
-                    allowed: true, allowed_on_national: true, allowed_on: null,
-                },
-            },
         },
         admin_comments: null,
         email_subscriptions: [],

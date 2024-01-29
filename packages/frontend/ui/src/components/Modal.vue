@@ -46,6 +46,7 @@ import {
     onMounted,
     onBeforeUnmount,
     defineEmits,
+    defineExpose,
     watch
 } from "vue";
 import Button from "./Button.vue";
@@ -118,4 +119,10 @@ function checkEscape(event) {
         emit("close");
     }
 }
+
+defineExpose({
+    close() {
+        emit("close");
+    },
+});
 </script>

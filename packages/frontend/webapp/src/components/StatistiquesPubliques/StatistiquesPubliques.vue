@@ -153,10 +153,10 @@ function load() {
 
     state.value = "loading";
 
-    fetch(`${API_URL}/stats`)
+    fetch(`${API_URL}/statistics`)
         .then((response) => response.json())
         .then((response) => {
-            stats.value = response.response.statistics;
+            stats.value = response.statistics;
             stats.value.state = "loaded";
         });
 }

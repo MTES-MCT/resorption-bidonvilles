@@ -1,0 +1,53 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Une de vos réponses à une question a été supprimée</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class="pb-4">Bonjour,</mj-text>
+                <mj-text mj-class="pb-4">
+                    Votre message ci-dessous a été supprimé par un administrateur.
+                </mj-text>
+                <mj-text>
+                    La raison mentionnée par celui-ci est :
+                </mj-text>
+                <mj-text>
+                    "{{var:reason}}".
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section>
+            <mj-column padding="1rem" background-color="#dddddd">
+                <mj-text mj-class="pb-4">
+                    "{{var:message}}".
+                </mj-text>
+                <mj-text>Écrit le {{var:created_at}}, en réponse à la question : {{var:question}}</mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section>
+            <mj-column>
+                <mj-text>
+                    Pour rappel, conformément à la réglementation relative aux données à caractère personnel, un message doit :
+                </mj-text>
+                <mj-text>
+                    - être neutre et factuel ;
+                </mj-text>
+                <mj-text>
+                    - ne pas collecter des données personnelles (nom, condamnation judiciaire...) de personnes ou groupes, porter une attention particulière aux personnes habitant ou issues d'un bidonville ;
+                </mj-text>
+                <mj-text mj-class="pb-4">
+                    - ne doit pas être subjectif, insultant ou inapproprié
+                </mj-text>
+                <mj-text>
+                    Merci de votre compréhension,
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

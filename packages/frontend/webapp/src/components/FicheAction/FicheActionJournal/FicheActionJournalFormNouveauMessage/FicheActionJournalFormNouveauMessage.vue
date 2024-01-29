@@ -36,6 +36,9 @@ const attachmentsInput = ref(null);
 
 const { handleSubmit, setErrors, resetForm } = useForm({
     validationSchema: schema,
+    initialValues: {
+        attachments: new DataTransfer().files,
+    },
 });
 
 function onPaste(event) {

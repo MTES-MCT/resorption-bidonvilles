@@ -2,15 +2,19 @@
     <CarteCommentaire
         :id="`reponse${answer.id}`"
         :comment="answer"
+        showModeration
         allowAttachmentDeletion
         @deleteAttachment="onDeleteAttachment"
+        @moderate="showModerationModal"
     />
 </template>
 
 <script setup>
 import { toRefs } from "vue";
 import CarteCommentaire from "./CarteCommentaire.vue";
+import ModaleModerationReponse from "@/components/ModaleModerationReponse/ModaleModerationReponse.vue";
 import { useAttachmentsStore } from "@/stores/attachments.store";
+import { useModaleStore } from "@/stores/modale.store";
 
 const props = defineProps({
     questionId: {
@@ -29,6 +33,14 @@ function onDeleteAttachment(file) {
     attachmentStore.deleteAnswerAttachment(file, {
         questionId: questionId.value,
         answerId: answer.value.id,
+    });
+}
+
+function showModerationModal() {
+    const modaleStore = useModaleStore();
+    modaleStore.open(ModaleModerationReponse, {
+        questionId: questionId.value,
+        answer,
     });
 }
 </script>

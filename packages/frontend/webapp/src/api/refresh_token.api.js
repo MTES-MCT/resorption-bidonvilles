@@ -1,5 +1,5 @@
 import { axios } from "@/helpers/axios";
 
 export function get() {
-    return axios.get("/refreshToken");
+    return axios.get("/me/access-tokens");
 }

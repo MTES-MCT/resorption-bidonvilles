@@ -34,6 +34,13 @@ export function createQuestion(question, attachments) {
     });
 }
 
+export function deleteAnswer(questionId, answerId, reason) {
+    return axios.delete(
+        `/questions/${encodeURI(questionId)}/answers/${encodeURI(answerId)}`,
+        { data: { reason } }
+    );
+}
+
 export function deleteQuestion(questionId) {
     return axios.delete(`/questions/${encodeURI(questionId)}`);
 }
@@ -47,9 +54,9 @@ export function getQuestions() {
 }
 
 export function subscribe(questionId) {
-    return axios.put(`/questions/${encodeURI(questionId)}/subscription`);
+    return axios.post(`/questions/${encodeURI(questionId)}/subscription`);
 }
 
 export function unsubscribe(questionId) {
-    return axios.delete(`/questions/${encodeURI(questionId)}/subscription`);
+    return axios.post(`/questions/${encodeURI(questionId)}/unsubscription`);
 }

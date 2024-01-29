@@ -16,10 +16,6 @@
                 <Icon icon="trash-alt" alt="Supprimer le message"
             /></span>
         </div>
-        <div class="text-G600 text-sm mb-1" v-if="comment.covid?.date">
-            Date de l'intervention:
-            {{ formatDate(comment.covid.date, "d M y à h:i") }}
-        </div>
         <div
             v-if="
                 comment.user_target_name?.length > 0 ||
@@ -50,19 +46,7 @@
             </LinkOrganization>
         </div>
         <div class="mt-2 flex flex-wrap">
-            <Tag
-                v-if="!!comment.covid"
-                variant="withoutBackground"
-                class="inline-block bg-red text-white"
-                >Covid-19</Tag
-            >
-            <TagCommentaireCovid
-                v-for="tag in covidTags"
-                :key="tag.prop"
-                class="mr-2 mb-2"
-                :tag="tag"
-            />
-            <TagCommentaireStandard
+            <TagCommentaire
                 v-for="(tag, index) in comment.tags"
                 :key="index"
                 class="mr-2 mb-2"
@@ -85,17 +69,14 @@
 import { defineProps, defineEmits, toRefs, ref, computed } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 import { useUserStore } from "@/stores/user.store";
-import covidTagsList from "@/utils/covid_tags";
 import formatDate from "@common/utils/formatDate.js";
 
 import {
     FilePreviewList,
     Icon,
     LinkOrganization,
-    Tag,
 } from "@resorptionbidonvilles/ui";
-import TagCommentaireStandard from "@/components/TagCommentaireStandard/TagCommentaireStandard.vue";
-import TagCommentaireCovid from "@/components/TagCommentaireCovid/TagCommentaireCovid.vue";
+import TagCommentaire from "@/components/TagCommentaire/TagCommentaire.vue";
 
 const props = defineProps({
     comment: {
@@ -115,16 +96,6 @@ const emit = defineEmits(["moderate", "deleteAttachment"]);
 
 const isHover = ref(false);
 const { comment, showModeration } = toRefs(props);
-
-const covidTags = computed(() => {
-    if (!comment.value || !comment.value.covid) {
-        return [];
-    }
-
-    return covidTagsList.filter((t) => {
-        return !!comment.value.covid[t.prop];
-    });
-});
 
 const isOwner = computed(() => {
     const configStore = useConfigStore();

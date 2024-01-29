@@ -1,9 +1,9 @@
 import { axios } from "@/helpers/axios";
 
 export function createNavigationLog(page) {
-    return axios.post("/me/navigationLogs", { page, domain: "webapp" });
+    return axios.post("/navigation-logs", { page, domain: "webapp" });
 }
 
 export function edit(data) {
-    return axios.post("/me", data);
+    return axios.patch("/me", data);
 }

@@ -254,14 +254,17 @@ export default {
         });
     },
 
-    sendCommunityAd: (recipient, options: MailOptions = {}) => {
-        const { preserveRecipient = false } = options;
+    sendAnswerDeletionNotification(recipient, options: MailOptions = {}) {
+        const { variables, preserveRecipient = false } = options;
+        const utm = generateTrackingUTM(COMMUNITY_CAMPAIGN, 'reponse-moderee');
 
-        const utm = generateTrackingUTM(COMMUNITY_CAMPAIGN, 'publicite');
-
-        return mailService.send('community_ad', {
+        return mailService.send('answer_deletion_notification', {
             recipient,
             variables: {
+                message: variables.message,
+                created_at: variables.created_at,
+                question: variables.question,
+                reason: variables.reason,
                 utm,
                 webappUrl,
                 backUrl,

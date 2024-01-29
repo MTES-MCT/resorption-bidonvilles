@@ -50,8 +50,7 @@ export default [
     {
         id: "journal_du_site",
         label: (town) => {
-            const total =
-                town.comments.regular.length + town.comments.covid.length;
+            const total = town.comments.length;
             return `Journal du site (${total} message${total > 1 ? "s" : ""})`;
         },
         route: "#journal_du_site",

@@ -1,7 +1,5 @@
 import create from './create';
 import findAll from './findAll';
-import findAllByActor from './findAllByActor';
-import findByNavigationLog from './findByNavigationLog';
 import findNearby from './findNearby';
 import findOne from './findOne';
 import getComments from './_common/getComments';
@@ -17,8 +15,6 @@ import setHeatwaveStatus from './setHeatwaveStatus';
 export default {
     create,
     findAll,
-    findAllByActor,
-    findByNavigationLog,
     findNearby,
     findOne,
     getComments,

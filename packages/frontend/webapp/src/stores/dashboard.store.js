@@ -4,7 +4,7 @@ import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
 import { useTownsStore } from "@/stores/towns.store";
 import { useDashboardActivitiesStore } from "./dashboard.activities.store";
-import { getDashboard as getDashboardStats } from "@/api/stats.api";
+import { getDashboard as getDashboardStats } from "@/api/statistics.api";
 import formatGlobalStats from "@/utils/formatGlobalStats";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
 import getSince from "@/utils/getSince";

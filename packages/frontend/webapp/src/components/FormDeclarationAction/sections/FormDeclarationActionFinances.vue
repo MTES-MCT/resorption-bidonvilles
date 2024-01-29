@@ -17,18 +17,12 @@
         </template>
         <FormDeclarationActionInputFinances />
     </FormSection>
-
-    <ModaleListeAccesActionFinancements
-        ref="modaleListeAccesActionFinancements"
-        :managers="managers"
-        :departement="departement"
-        future
-    />
 </template>
 
 <script setup>
-import { ref, toRefs, watch } from "vue";
+import { toRefs, watch } from "vue";
 import { useEventBus } from "@common/helpers/event-bus";
+import { useModaleStore } from "@/stores/modale.store";
 
 import FormSection from "@/components/FormSection/FormSection.vue";
 import FormDeclarationActionInputFinances from "../inputs/FormDeclarationActionInputFinances.vue";
@@ -47,15 +41,18 @@ function openListAccesActionFinances() {
     emit("formdeclarationactionfinances:openListAccesActionFinancements");
 }
 
-const modaleListeAccesActionFinancements = ref(null);
-
 watch(
     () =>
         bus.value.get(
             "formdeclarationactionfinances:openListAccesActionFinancements"
         ),
     () => {
-        modaleListeAccesActionFinancements.value.open();
+        const modaleStore = useModaleStore();
+        modaleStore.open(ModaleListeAccesActionFinancements, {
+            managers: managers.value,
+            departement: departement.value,
+            future: true,
+        });
     }
 );
 </script>

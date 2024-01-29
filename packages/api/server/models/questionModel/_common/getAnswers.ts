@@ -40,6 +40,7 @@ export default async (questionIds: number[]): Promise<AnswerHash> => {
             answers.description AS "answerDescription",
             answers.created_at AS "answerCreatedAt",
             answers.created_by AS "answerCreatedBy",
+            users.email AS "userEmail",
             users.first_name AS "userFirstName",
             users.last_name AS "userLastName",
             users.position AS "userPosition",

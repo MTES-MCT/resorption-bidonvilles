@@ -19,8 +19,6 @@ function asyncHandler(fn) {
  *
  * Basically, we rewrite every express method (get, post, etc.) so that they support async callbacks.
  * That way, we can properly catch unhandled failing promises.
- * Please @see loggerLoader if you want to see the default behavior provided for these unhandled
- * promises.
  *
  * @returns {Express} An express app with enriched methods
  */

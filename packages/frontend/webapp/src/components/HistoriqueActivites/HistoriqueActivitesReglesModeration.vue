@@ -1,10 +1,5 @@
 <template>
-    <Modal
-        v-show="isOpen"
-        :isOpen="isOpen"
-        closeWhenClickOutside
-        @close="close"
-    >
+    <Modal closeWhenClickOutside>
         <template v-slot:title>Règles de modération d'un message</template>
         <template v-slot:body>
             <p class="font-bold">
@@ -39,25 +34,13 @@
 </template>
 
 <script setup>
-import { ref, defineExpose } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 import { Icon, Link, Modal } from "@resorptionbidonvilles/ui";
 
 const configStore = useConfigStore();
-const isOpen = ref(false);
-
-function close() {
-    isOpen.value = false;
-}
 
 function openGuide(event) {
     event.stopPropagation();
     window.location = "/doc/guide_de_l_administrateur.pdf";
 }
-
-defineExpose({
-    open() {
-        isOpen.value = true;
-    },
-});
 </script>

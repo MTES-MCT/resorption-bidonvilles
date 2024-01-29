@@ -7,6 +7,7 @@ export function serialized(override: Partial<Answer> = {}): Answer {
         createdAt: (new Date(2023, 0, 2, 1, 0, 0)).getTime() / 1000,
         createdBy: {
             id: 2,
+            email: 'jean.dupont@dihal.gouv.fr',
             first_name: 'Jean',
             last_name: 'Dupont',
             position: 'Mock',

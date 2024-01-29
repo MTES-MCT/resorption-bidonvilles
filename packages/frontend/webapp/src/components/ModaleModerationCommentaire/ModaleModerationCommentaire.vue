@@ -1,5 +1,5 @@
 <template>
-    <Modal :isOpen="isOpen" closeWhenClickOutside @close="close">
+    <Modal closeWhenClickOutside @close="onClose" ref="modale">
         <template v-slot:title>
             Confirmez-vous la suppression du message ?
         </template>
@@ -20,7 +20,7 @@
         </template>
 
         <template v-slot:footer>
-            <Button variant="primaryText" @click="isOpen = false"
+            <Button variant="primaryText" @click="() => modale.close()"
                 >Annuler</Button
             >
             <Button class="ml-5" :loading="loading" @click="remove"
@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed, defineExpose } from "vue";
+import { defineProps, toRefs, ref, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
@@ -51,7 +51,7 @@ const props = defineProps({
 });
 const { comment } = toRefs(props);
 
-const isOpen = ref(false);
+const modale = ref(null);
 const loading = ref(false);
 const error = ref(null);
 const reason = ref("");
@@ -67,8 +67,7 @@ function reset() {
     reason.value = "";
 }
 
-function close() {
-    isOpen.value = false;
+function onClose() {
     reset();
 }
 
@@ -94,17 +93,11 @@ async function remove() {
                 ? "L'auteur du message en a été notifié par mail"
                 : "Votre message a bien été supprimé"
         );
-        close();
+        modale.value.close();
     } catch (e) {
         error.value = e?.user_message || "Une erreur inconnue est survenue";
     }
 
     loading.value = false;
 }
-
-defineExpose({
-    open() {
-        isOpen.value = true;
-    },
-});
 </script>

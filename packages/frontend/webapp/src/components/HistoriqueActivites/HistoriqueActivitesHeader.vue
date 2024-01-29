@@ -28,8 +28,6 @@
                     >Exporter tous les commentaires</Button
                 >
             </p>
-
-            <HistoriqueActivitesReglesModeration ref="modaleModeration" />
         </template>
     </ViewHeader>
 </template>
@@ -37,17 +35,17 @@
 <script setup>
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user.store";
-import { getAll } from "@/api/comments.api";
+import { exportList } from "@/api/shantytown_comments.api";
 import downloadCsv from "@/utils/downloadCsv";
 import formatDate from "@common/utils/formatDate";
 
 import { Button } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import HistoriqueActivitesReglesModeration from "./HistoriqueActivitesReglesModeration.vue";
+import { useModaleStore } from "@/stores/modale.store";
 
 const userStore = useUserStore();
 const exportLoading = ref(false);
-const modaleModeration = ref(null);
 
 async function exportShantytownComments() {
     if (exportLoading.value === true) {
@@ -56,7 +54,7 @@ async function exportShantytownComments() {
 
     exportLoading.value = true;
     try {
-        const { csv } = await getAll();
+        const { csv } = await exportList();
         downloadCsv(
             csv,
             `${formatDate(Date.now() / 1000, "y_m_d")}_messages.csv`
@@ -69,6 +67,7 @@ async function exportShantytownComments() {
 }
 
 function showModeration() {
-    modaleModeration.value.open();
+    const modaleStore = useModaleStore();
+    modaleStore.open(HistoriqueActivitesReglesModeration);
 }
 </script>

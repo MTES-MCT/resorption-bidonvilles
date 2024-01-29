@@ -6,19 +6,12 @@
             class="my-4"
         />
         <FicheSiteIntervenantsListe v-else :town="town" class="my-4" />
-
         <FicheSiteIntervenantsCTA v-if="!self && !town.closedAt" />
-
-        <FicheSiteModaleMesThemes :town="town" ref="modaleMesThemes" />
-        <FicheSiteModaleInviterIntervenant
-            :town="town"
-            ref="modaleInviterIntervenant"
-        />
     </FicheRubrique>
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs, watch, ref, onMounted } from "vue";
+import { computed, defineProps, toRefs, watch, onMounted } from "vue";
 import router from "@/helpers/router";
 import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
@@ -29,6 +22,7 @@ import FicheSiteIntervenantsVide from "./FicheSiteIntervenantsVide.vue";
 import FicheSiteIntervenantsListe from "./FicheSiteIntervenantsListe.vue";
 import FicheSiteModaleMesThemes from "../FicheSiteModaleMesThemes/FicheSiteModaleMesThemes.vue";
 import FicheSiteModaleInviterIntervenant from "../FicheSiteModaleInviterIntervenant/FicheSiteModaleInviterIntervenant.vue";
+import { useModaleStore } from "@/stores/modale.store";
 
 const props = defineProps({
     town: Object,
@@ -36,8 +30,7 @@ const props = defineProps({
 const { town } = toRefs(props);
 const userStore = useUserStore();
 const { bus } = useEventBus();
-const modaleMesThemes = ref(null);
-const modaleInviterIntervenant = ref(null);
+const modaleStore = useModaleStore();
 
 const self = computed(() => {
     return town.value.actors.find(({ id }) => id === userStore.id);
@@ -45,21 +38,28 @@ const self = computed(() => {
 
 onMounted(() => {
     if (router.currentRoute.value.query.action === "new_actor") {
-        modaleMesThemes.value.open("Confirmez-vous intervenir sur ce site ?");
+        modaleStore.open(FicheSiteModaleMesThemes, {
+            town: town.value,
+            title: "Confirmez-vous intervenir sur ce site ?",
+        });
     }
 });
 
 watch(
     () => bus.value.get("fichesite:openInviteActorModal"),
     () => {
-        modaleInviterIntervenant.value.open();
+        modaleStore.open(FicheSiteModaleInviterIntervenant, {
+            town: town.value,
+        });
     }
 );
 
 watch(
     () => bus.value.get("fichesite:openSelfThemes"),
     () => {
-        modaleMesThemes.value.open();
+        modaleStore.open(FicheSiteModaleMesThemes, {
+            town: town.value,
+        });
     }
 );
 </script>

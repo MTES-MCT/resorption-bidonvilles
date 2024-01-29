@@ -1,0 +1,31 @@
+Bonjour,
+Votre message ci-dessous a été supprimé par un administrateur.
+La raison mentionnée par celui-ci est :
+"{{var:reason}}".
+
+"{{var:message}}".
+Écrit le {{var:created_at}}, en réponse à la question : {{var:question}}
+
+Pour rappel, conformément à la réglementation relative aux données à caractère
+personnel, un message doit :
+- être neutre et factuel ;
+- ne pas collecter des données personnelles (nom, condamnation judiciaire...) de
+personnes ou groupes, porter une attention particulière aux personnes habitant
+ou issues d'un bidonville ;
+- ne doit pas être subjectif, insultant ou inapproprié
+Merci de votre compréhension,
+
+Cordialement,
+L'équipe Résorption-bidonvilles
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact@resorption-bidonvilles.beta.gouv.fr
+[contact@resorption-bidonvilles.beta.gouv.fr]
+Suivez toute l'actualité de la résorption des bidonvilles et retrouvez tous vos
+outils méthodologiques sur votre blog [{{var:blogUrl}}]
+Abonnez-vous à la lettre d'info
+[https://email.developpement-durable.gouv.fr/users/subscribe/js_id/5n4i/id/3]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]

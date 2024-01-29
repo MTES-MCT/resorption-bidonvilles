@@ -113,10 +113,7 @@ type BaseShantytown =
         label: string,
     },
     socialOrigins: SocialOrigin[],
-    comments: {
-        regular: ShantytownComment[],
-        covid: any[],
-    },
+    comments: ShantytownComment[],
     actors: Actor[],
     actions: ShantytownAction[],
     closingSolutions: ShantytownClosingSolution[],

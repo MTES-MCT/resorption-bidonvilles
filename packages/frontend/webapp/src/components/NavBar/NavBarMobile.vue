@@ -63,7 +63,7 @@ onMounted(() => {
 // methods
 function showMobileMenu() {
     document.body.style.overflow = "hidden";
-    mobileMenu.value.style.zIndex = "10";
+    mobileMenu.value.style.zIndex = "11";
     mobileMenu.value.style.opacity = "1";
 }
 

@@ -4,11 +4,6 @@
         @mouseenter="isHover = true"
         @mouseleave="isHover = false"
     >
-        <ModaleModerationCommentaire
-            v-if="activity.comment && !activity.actionEntity"
-            ref="moderationModal"
-            :comment="activity.comment"
-        />
         <CarteHistoriqueIcone
             :color="colors.bg"
             :activity="activity"
@@ -115,6 +110,7 @@
 <script setup>
 import { defineProps, toRefs, ref, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
+import { useModaleStore } from "@/stores/modale.store";
 import {
     Icon,
     LinkOrganization,
@@ -131,7 +127,6 @@ import CarteHistoriqueQuestion from "./CarteHistoriqueQuestion.vue";
 import CarteHistoriqueReponse from "./CarteHistoriqueReponse.vue";
 
 const isHover = ref(false);
-const moderationModal = ref(null);
 const props = defineProps({
     activity: {
         type: Object,
@@ -164,10 +159,6 @@ const title = computed(() => {
         case "creation-answer":
             return "Nouvelle réponse";
         case "creation-comment":
-            if (activity.value.comment?.covid) {
-                return "Nouveau message Covid-19";
-            }
-
             if (activity.value.actionEntity) {
                 return "Nouveau message action";
             }
@@ -209,14 +200,6 @@ const colors = computed(() => {
         return {
             text: "text-primary",
             bg: "bg-primary",
-        };
-    }
-
-    if (activity.value.comment?.covid) {
-        // création de commentaire
-        return {
-            text: "text-error",
-            bg: "bg-error",
         };
     }
 
@@ -290,6 +273,9 @@ const seeMoreWording = computed(() => {
 });
 
 function openModerationModal() {
-    moderationModal.value.open();
+    const modaleStore = useModaleStore();
+    modaleStore.open(ModaleModerationCommentaire, {
+        comment: activity.value.comment,
+    });
 }
 </script>

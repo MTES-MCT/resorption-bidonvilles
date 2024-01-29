@@ -39,7 +39,7 @@
 import { onMounted, computed, watch } from "vue";
 import { useDirectoryStore } from "@/stores/directory.store";
 import router, { setDocumentTitle } from "@/helpers/router";
-import { registerDirectoryView } from "@/api/statistics.api";
+import { create as registerDirectoryView } from "@/api/directory_views.api";
 
 import { Button, ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import ViewError from "@/components/ViewError/ViewError.vue";

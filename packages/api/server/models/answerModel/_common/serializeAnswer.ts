@@ -8,6 +8,7 @@ export default (answer: AnswerRow): Answer => ({
     createdAt: answer.answerCreatedAt !== null ? (answer.answerCreatedAt.getTime() / 1000) : null,
     createdBy: {
         id: answer.answerCreatedBy,
+        email: answer.userEmail,
         first_name: answer.userFirstName,
         last_name: answer.userLastName,
         role: answer.userRole,

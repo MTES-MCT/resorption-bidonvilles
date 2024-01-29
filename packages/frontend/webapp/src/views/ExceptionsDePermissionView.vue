@@ -248,7 +248,7 @@
 
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
-import { listWithPermissions } from "@/api/users.api";
+import { listWithPrivilege } from "@/api/users.api";
 
 import { ContentWrapper, Filter, Icon, Link } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
@@ -307,7 +307,7 @@ watch(featureFilterOptions, () => {
 });
 
 onMounted(async () => {
-    data.value = await listWithPermissions();
+    data.value = await listWithPrivilege();
 });
 
 function applyStatusFilterToUser(row) {

@@ -159,6 +159,10 @@ watch(address, async () => {
 });
 
 const hasJusticePermission = computed(() => {
+    if (!location.value) {
+        return userStore.hasJusticePermission;
+    }
+
     return userStore.hasLocalizedPermission(
         "shantytown_justice.access",
         location.value

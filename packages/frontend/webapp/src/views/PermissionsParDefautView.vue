@@ -65,7 +65,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { listByRoles } from "@/api/permissions.api";
+import { list } from "@/api/role_permissions.api";
 
 import { ContentWrapper, Icon } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
@@ -75,7 +75,7 @@ const data = ref(null);
 const currentRole = ref(null);
 
 onMounted(async () => {
-    data.value = await listByRoles();
+    data.value = await list();
     currentRole.value = Object.keys(data.value)[0];
 });
 </script>

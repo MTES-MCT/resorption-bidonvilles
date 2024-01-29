@@ -33,7 +33,7 @@ export default async (user: User): Promise<ContactFormReferralExportRow[]> => {
         Prénom: row.first_name,
         'Nom de famille': row.last_name,
         Courriel: row.email,
-        'Départements d\'intervention': row.departements.join(', '),
+        'Départements d\'intervention': row.departements ? row.departements.join(', ') : 'utilisateur non départemental',
         Organisation: row.organization_name,
         Raison: row.reason,
         'Raison autre': row.reason_other,

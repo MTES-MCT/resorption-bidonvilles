@@ -29,7 +29,16 @@ describe('services/shantytown', () => {
             const town = fakeTown();
             stubs.findOne.resolves(town);
             try {
-                await deleteTownService(fakeUser(), 1);
+                await deleteTownService(
+                    fakeUser({
+                        permissions: {
+                            shantytown: {
+                                delete: { allowed: true, allowed_on_national: true, allowed_on: null },
+                            },
+                        },
+                    }),
+                    1,
+                );
             } catch (error) {
                 // ignore
             }

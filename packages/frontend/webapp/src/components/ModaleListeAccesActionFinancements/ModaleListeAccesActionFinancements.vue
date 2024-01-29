@@ -6,7 +6,7 @@
 import { ref, toRefs, watch, computed } from "vue";
 import ModaleListeAcces from "@/components/ModaleListeAcces/ModaleListeAcces.vue";
 import { getActionFinancementsReadersByAction } from "@/api/actions.api";
-import { getActionsFinancesdReaders } from "@/api/action_finances_readers.api";
+import { getActionFinanceReaders } from "@/api/action_finance_readers.api";
 
 const props = defineProps({
     actionId: Number,
@@ -55,15 +55,6 @@ function fetch() {
         return getActionFinancementsReadersByAction(actionId.value);
     }
 
-    return getActionsFinancesdReaders({
-        departement: departement.value,
-        managers: managers.value,
-    });
+    return getActionFinanceReaders(departement.value, managers.value);
 }
-
-defineExpose({
-    open() {
-        return modale.value.open();
-    },
-});
 </script>

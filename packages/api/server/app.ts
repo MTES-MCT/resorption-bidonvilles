@@ -36,12 +36,12 @@ const sentryErrorHandlers = (app) => {
 export default {
     async start() {
         // app
-        const app = loaders.express();
+        const app = loaders.customRouteMethods(loaders.express());
 
         sentryContextHandlers(app);
 
         loaders.rateLimiter(app);
-        loaders.routes(app);
+        await loaders.routes(app);
 
         sentryErrorHandlers(app);
 

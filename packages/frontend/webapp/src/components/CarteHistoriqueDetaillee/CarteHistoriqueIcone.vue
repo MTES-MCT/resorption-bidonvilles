@@ -45,10 +45,6 @@ const icon = computed(() => {
     }
 
     // commentaires
-    if (activity.value.comment?.covid) {
-        return "exclamation";
-    }
-
     return "comment";
 });
 </script>

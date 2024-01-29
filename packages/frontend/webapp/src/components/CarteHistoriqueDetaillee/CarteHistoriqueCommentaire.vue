@@ -1,13 +1,7 @@
 <template>
     <div>
-        <TagCommentaireCovid
-            v-for="tag in covidTags"
-            :key="tag.prop"
-            class="mr-2 mb-2"
-            :tag="tag"
-        />
-        <TagCommentaireStandard
-            v-for="(tag, index) in standardTags"
+        <TagCommentaire
+            v-for="(tag, index) in tags"
             :key="index"
             class="px-3 mr-2 mb-2 text-sm"
             :tag="tag"
@@ -43,11 +37,8 @@
 </template>
 
 <script setup>
-import covidTagsList from "@/utils/covid_tags";
-
 import { Icon } from "@resorptionbidonvilles/ui";
-import TagCommentaireStandard from "@/components/TagCommentaireStandard/TagCommentaireStandard.vue";
-import TagCommentaireCovid from "@/components/TagCommentaireCovid/TagCommentaireCovid.vue";
+import TagCommentaire from "@/components/TagCommentaire/TagCommentaire.vue";
 
 import { defineProps, toRefs, computed } from "vue";
 
@@ -58,17 +49,7 @@ const props = defineProps({
 });
 const { activity } = toRefs(props);
 
-const covidTags = computed(() => {
-    if (!activity.value.comment || !activity.value.comment.covid) {
-        return [];
-    }
-
-    return covidTagsList.filter((t) => {
-        return !!activity.value.comment.covid[t.prop];
-    });
-});
-
-const standardTags = computed(() => {
+const tags = computed(() => {
     if (!activity.value.comment) {
         return [];
     }
