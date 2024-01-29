@@ -1,5 +1,5 @@
 import userNavigationLogsModel from '#server/models/userNavigationLogsModel';
-import userModel from '#server/models/userModel';
+import userModel from '#server/models/userModel/index';
 import ServiceError from '#server/errors/ServiceError';
 
 export default async (fk_user: number, page: string): Promise<number> => {
@@ -17,7 +17,12 @@ export default async (fk_user: number, page: string): Promise<number> => {
     // on insère le log
     let logId: number;
     try {
-        logId = await userNavigationLogsModel.insertWebapp(fk_user, page);
+        [logId] = await Promise.all([
+            userNavigationLogsModel.insertWebapp(fk_user, page),
+            userModel.update(fk_user, {
+                last_access: new Date(),
+            }),
+        ]);
     } catch (error) {
         throw new ServiceError('insert_failed', error);
     }

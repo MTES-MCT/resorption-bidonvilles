@@ -1,12 +1,12 @@
 import { sequelize } from '#db/sequelize';
-import shantytownModel from '#server/models/shantytownModel';
-import socialOriginModel from '#server/models/socialOriginModel';
-import shantytownToiletTypesModel from '#server/models/shantytownToiletTypesModel';
-import electricityAccessTypesModel from '#server/models/electricityAccessTypesModel';
-import incomingTownsModel from '#server/models/incomingTownsModel';
-import config from '#server/config';
-import mattermostUtils from '#server/utils/mattermost';
-import userModel from '#server/models/userModel';
+import createShantytown from '#server/models/shantytownModel/create';
+import findOneShantytown from '#server/models/shantytownModel/findOne';
+import insertSocialOrigin from '#server/models/socialOriginModel/create';
+import insertToiletType from '#server/models/shantytownToiletTypesModel/create';
+import insertElectricityAccessType from '#server/models/electricityAccessTypesModel/create';
+import insertIncomingTown from '#server/models/incomingTownsModel/create';
+import getLocationWatchers from '#server/models/userModel/getLocationWatchers';
+import { triggerShantytownCreationAlert } from '#server/utils/mattermost';
 import mails from '#server/mails/mails';
 
 export default async (townData, user) => {
@@ -81,7 +81,7 @@ export default async (townData, user) => {
     const transaction = await sequelize.transaction();
     let shantytown_id;
     try {
-        shantytown_id = await shantytownModel.create(
+        shantytown_id = await createShantytown(
             Object.assign(
                 {},
                 baseTown,
@@ -110,11 +110,11 @@ export default async (townData, user) => {
 
         const promises = [];
         if (townData.social_origins.length > 0) {
-            promises.push(socialOriginModel.create(shantytown_id, townData.social_origins, transaction));
+            promises.push(insertSocialOrigin(shantytown_id, townData.social_origins, transaction));
         }
 
         if (townData.sanitary_toilet_types.length > 0) {
-            promises.push(shantytownToiletTypesModel.create(
+            promises.push(insertToiletType(
                 shantytown_id,
                 townData.sanitary_toilet_types,
                 transaction,
@@ -122,7 +122,7 @@ export default async (townData, user) => {
         }
 
         if (townData.electricity_access_types.length > 0) {
-            promises.push(electricityAccessTypesModel.create(
+            promises.push(insertElectricityAccessType(
                 shantytown_id,
                 townData.electricity_access_types,
                 transaction,
@@ -130,7 +130,7 @@ export default async (townData, user) => {
         }
 
         if (townData.reinstallation_incoming_towns_full.length > 0) {
-            promises.push(incomingTownsModel.create(
+            promises.push(insertIncomingTown(
                 shantytown_id,
                 townData.reinstallation_incoming_towns_full.map(({ id }) => id),
                 transaction,
@@ -144,13 +144,11 @@ export default async (townData, user) => {
         throw error;
     }
 
-    const town = await shantytownModel.findOne(user, shantytown_id);
+    const town = await findOneShantytown(user, shantytown_id);
 
     // Send a Mattermost alert, if it fails, do nothing
     try {
-        if (config.mattermost) {
-            await mattermostUtils.triggerShantytownCreationAlert(town, user);
-        }
+        await triggerShantytownCreationAlert(town, user);
     } catch (err) {
         // eslint-disable-next-line no-console
         console.log(`Error with shantytown creation Mattermost webhook : ${err.message}`);
@@ -158,7 +156,7 @@ export default async (townData, user) => {
 
     // Send a notification to all users of the related departement
     try {
-        const watchers = await userModel.getLocationWatchers(townData.city, 'shantytown_creation');
+        const watchers = await getLocationWatchers(townData.city, 'shantytown_creation');
         watchers
             .filter(({ user_id }: any) => user_id !== user.id) // do not send an email to the user who created the town
             .forEach((watcher) => {

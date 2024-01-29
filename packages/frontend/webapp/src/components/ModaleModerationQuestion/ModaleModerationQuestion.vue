@@ -28,6 +28,7 @@ import { toRefs, ref, computed } from "vue";
 import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useQuestionsStore } from "@/stores/questions.store";
+import { useModaleStore } from "@/stores/modale.store";
 import formatUserName from "@/utils/formatUserName";
 import router from "@/helpers/router";
 
@@ -72,12 +73,14 @@ async function remove() {
     error.value = null;
 
     try {
+        const modaleStore = useModaleStore();
         await questionStore.removeQuestion(question.value.id);
         router.replace("/communaute");
         notificationStore.success(
             "Suppression de la question réussie",
             "La question a bien été supprimée"
         );
+        modaleStore.close();
     } catch (e) {
         notificationStore.error(
             "Suppression de la question échouée",

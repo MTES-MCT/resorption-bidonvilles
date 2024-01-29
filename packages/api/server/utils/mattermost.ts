@@ -78,7 +78,7 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
     await shantytownCloseAlert.send(mattermostMessage);
 }
 
-async function triggerShantytownCreationAlert(town: Shantytown, user: User): Promise<void> {
+export async function triggerShantytownCreationAlert(town: Shantytown, user: User): Promise<void> {
     if (!mattermost) {
         return;
     }

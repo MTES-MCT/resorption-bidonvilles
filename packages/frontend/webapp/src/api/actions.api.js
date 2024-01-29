@@ -26,11 +26,11 @@ export function edit(id, data) {
 }
 
 export function exportActions() {
-    return axios.get("/actions/export");
+    return axios.get("/actions/export/csv");
 }
 
 export function exportComments() {
-    return axios.get("/actions/comments/export");
+    return axios.get("/action-comments/export/csv");
 }
 
 export function fetchList() {

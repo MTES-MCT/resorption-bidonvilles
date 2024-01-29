@@ -14,7 +14,7 @@
 import { defineProps, ref, toRefs, computed, defineEmits, watch } from "vue";
 import { useFieldValue } from "vee-validate";
 import { Autocomplete } from "@resorptionbidonvilles/ui";
-import { autocomplete } from "@/api/associations.api.js";
+import { autocompleteAssociation } from "@/api/organizations.api.js";
 
 const props = defineProps({
     modelValue: {
@@ -45,7 +45,7 @@ watch(value, (newValue) => {
 });
 
 async function autocompleteFn(value) {
-    const results = await autocomplete(value);
+    const results = await autocompleteAssociation(value);
 
     const mappedResults = results.map((org) => ({
         id: org.id,

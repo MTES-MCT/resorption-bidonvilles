@@ -1,11 +1,13 @@
-import actionModel from '#server/models/actionModel/index';
 import ServiceError from '#server/errors/ServiceError';
 import { sequelize } from '#db/sequelize';
-import attachmentService from '#server/services/attachment';
+import createComment from '#server/models/actionModel/createComment/createComment';
+import fetchComments from '#server/models/actionModel/fetchComments/fetchComments';
 import serializeComment from '#server/models/actionModel/fetchComments/serializeComment';
-import Action, { Comment } from '#root/types/resources/Action.d';
+import uploadAttachments from '#server/services/attachment/upload';
 import sendMattermostNotification from './createComment.sendMattermostNotification';
 import sendMailNotifications from './createComment.sendMailNotifications';
+
+import Action, { Comment } from '#root/types/resources/Action.d';
 
 type ActionCommentInput = {
     description: string,
@@ -19,19 +21,19 @@ export default async (authorId: number, action: Action, commentInput: ActionComm
 
     try {
         transaction = await sequelize.transaction();
-        commentId = await actionModel.createComment(action.id, {
+        commentId = await createComment(action.id, {
             description: commentInput.description,
             created_by: authorId,
-        });
+        }, transaction);
     } catch (error) {
         await transaction.rollback();
-        throw new ServiceError('write_fail', error);
+        throw new ServiceError('insert_failed', error);
     }
 
     // on tente d'enregistrer les fichiers joints
     if (commentInput.files.length > 0) {
         try {
-            await attachmentService.upload(
+            await uploadAttachments(
                 'action_comment',
                 commentId,
                 authorId,
@@ -46,7 +48,7 @@ export default async (authorId: number, action: Action, commentInput: ActionComm
 
     // on finalise
     try {
-        const [commentRow] = await actionModel.fetchComments(null, [commentId], {}, transaction);
+        const [commentRow] = await fetchComments(null, [commentId], {}, transaction);
         comment = serializeComment(commentRow);
         await transaction.commit();
     } catch (error) {

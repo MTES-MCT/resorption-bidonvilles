@@ -16,3 +16,21 @@ export function autocomplete(str, departementCode = null, usersOnly = "0") {
 
     return axios.get(`/organizations/search?${queryString}`);
 }
+
+export function autocompleteAssociation(str) {
+    return axios.get(
+        `/organizations/associations/search?query=${encodeURIComponent(str)}`
+    );
+}
+
+export function autocompleteTerritorialCollectivity(str) {
+    return axios.get(
+        `/organizations/territorial-collectivities/search?query=${encodeURIComponent(
+            str
+        )}`
+    );
+}
+
+export function list() {
+    return axios.get("/organizations");
+}

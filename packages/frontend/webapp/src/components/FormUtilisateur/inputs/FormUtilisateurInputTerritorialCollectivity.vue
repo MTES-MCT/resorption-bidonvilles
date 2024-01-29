@@ -12,7 +12,7 @@
 <script setup>
 import { defineProps, toRefs, computed, defineEmits } from "vue";
 import { Autocomplete } from "@resorptionbidonvilles/ui";
-import { autocomplete } from "@/api/territorial_collectivities.api.js";
+import { autocompleteTerritorialCollectivity } from "@/api/organizations.api.js";
 
 const props = defineProps({
     modelValue: {
@@ -36,7 +36,7 @@ const organization = computed({
 });
 
 async function autocompleteFn(value) {
-    const results = await autocomplete(value);
+    const results = await autocompleteTerritorialCollectivity(value);
     return results.map((org) => ({
         id: org.id,
         label: org.label,

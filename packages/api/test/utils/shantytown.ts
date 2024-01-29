@@ -5,6 +5,89 @@ import fakeUser from './user';
 
 const defaultLocation = locations.paris.city();
 
+export function creationInput() {
+    return {
+        name: global.generate('string'),
+        latitude: global.generate('string'),
+        longitude: global.generate('string'),
+        address: global.generate('string'),
+        detailed_address: global.generate('string'),
+        built_at: global.generate('string'),
+        population_total: global.generate('string'),
+        population_couples: global.generate('string'),
+        population_minors: global.generate('string'),
+        population_minors_0_3: global.generate('string'),
+        population_minors_3_6: global.generate('string'),
+        population_minors_6_12: global.generate('string'),
+        population_minors_12_16: global.generate('string'),
+        population_minors_16_18: global.generate('string'),
+        minors_in_school: global.generate('string'),
+        caravans: global.generate('string'),
+        huts: global.generate('string'),
+        tents: global.generate('string'),
+        cars: global.generate('string'),
+        mattresses: global.generate('string'),
+        field_type: global.generate('string'),
+        owner_type: global.generate('string'),
+        is_reinstallation: global.generate('string'),
+        reinstallation_comments: global.generate('string'),
+        reinstallation_incoming_towns_full: [{ id: 1 }, { id: 2 }, { id: 3 }],
+        citycode: global.generate('string'),
+        declared_at: global.generate('string'),
+        census_status: global.generate('string'),
+        census_conducted_at: global.generate('string'),
+        census_conducted_by: global.generate('string'),
+        social_origins: global.generate('string'),
+
+        owner_complaint: global.generate('string'),
+        owner: global.generate('string'),
+        justice_procedure: global.generate('string'),
+        justice_rendered: global.generate('string'),
+        justice_rendered_by: global.generate('string'),
+        justice_rendered_at: global.generate('string'),
+        justice_challenged: global.generate('string'),
+        police_status: global.generate('string'),
+        police_requested_at: global.generate('string'),
+        police_granted_at: global.generate('string'),
+        bailiff: global.generate('string'),
+
+        living_conditions_version: 2,
+        water_access_type: 'autre',
+        water_access_type_details: 'comment',
+        water_access_is_public: false,
+        water_access_is_continuous: false,
+        water_access_is_continuous_details: 'comment',
+        water_access_is_local: true,
+        water_access_is_close: true,
+        water_access_is_unequal: true,
+        water_access_is_unequal_details: 'comment',
+        water_access_has_stagnant_water: true,
+        water_access_comments: 'comment',
+
+        sanitary_open_air_defecation: true,
+        sanitary_toilet_types: ['latrines', 'toilettes_chimiques'],
+        sanitary_access_working_toilets: true,
+        sanitary_access_toilets_are_inside: true,
+        sanitary_access_toilets_are_lighted: true,
+        sanitary_access_hand_washing: true,
+
+        electricity_access: true,
+        electricity_access_is_unequal: true,
+        electricity_access_types: ['electrogene', 'reseau_urbain', 'installation_du_bati'],
+
+        trash_is_piling: true,
+        trash_evacuation_is_close: true,
+        trash_evacuation_is_safe: true,
+        trash_evacuation_is_regular: true,
+        trash_bulky_is_piling: true,
+
+        pest_animals: true,
+        pest_animals_details: 'comment',
+
+        fire_prevention: true,
+    };
+}
+
 export function serialized(location: City = defaultLocation, override = {}): Shantytown {
     const {
         city, epci, departement, region,

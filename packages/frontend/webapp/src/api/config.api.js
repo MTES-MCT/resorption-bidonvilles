@@ -1,7 +1,9 @@
 import { axios } from "@/helpers/axios";
 
 export function closeChangelog(version) {
-    return axios.post("/changelog", { version });
+    return axios.put(`/me/last_changelog`, {
+        version,
+    });
 }
 
 export function get() {

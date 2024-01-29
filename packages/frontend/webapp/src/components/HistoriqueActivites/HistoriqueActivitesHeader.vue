@@ -35,7 +35,7 @@
 <script setup>
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user.store";
-import { getAll } from "@/api/comments.api";
+import { exportList } from "@/api/shantytown_comments.api";
 import downloadCsv from "@/utils/downloadCsv";
 import formatDate from "@common/utils/formatDate";
 
@@ -54,7 +54,7 @@ async function exportShantytownComments() {
 
     exportLoading.value = true;
     try {
-        const { csv } = await getAll();
+        const { csv } = await exportList();
         downloadCsv(
             csv,
             `${formatDate(Date.now() / 1000, "y_m_d")}_messages.csv`

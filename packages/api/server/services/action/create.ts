@@ -3,13 +3,14 @@ import ServiceError from '#server/errors/ServiceError';
 import create from '#server/models/actionModel/create/create';
 import Action from '#root/types/resources/Action.d';
 import { User } from '#root/types/resources/User.d';
-
 import { ActionInput } from './ActionInput.d';
+
 import fetchAction from './write.fetchAction';
 
 export default async (user: User, data: ActionInput): Promise<Action> => {
     const transaction = await sequelize.transaction();
-    let actionId;
+
+    let actionId: number;
     try {
         actionId = await create({
             ...data,
@@ -18,21 +19,23 @@ export default async (user: User, data: ActionInput): Promise<Action> => {
         }, transaction);
     } catch (error) {
         await transaction.rollback();
-        throw new ServiceError('action_insert_error', error);
+        throw new ServiceError('insert_action_error', error);
+    }
+
+    let action: Action;
+    try {
+        action = await fetchAction(user, actionId, true, transaction);
+    } catch (error) {
+        await transaction.rollback();
+        throw new ServiceError('action_fetch_error', error);
     }
 
     try {
-        const action = await fetchAction(user, actionId, true, transaction);
         await transaction.commit();
-
-        return action;
     } catch (error) {
         await transaction.rollback();
-
-        if (error instanceof ServiceError) {
-            throw error;
-        }
-
-        throw new ServiceError('action_fetch_error', error);
+        throw new ServiceError('commit_failed', error);
     }
+
+    return action;
 };

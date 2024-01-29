@@ -16,6 +16,7 @@ describe('services/userNavigationLogs/insert()', () => {
         stubs = {
             insertWebapp: sinon.stub(userNavigationLogsModel, 'insertWebapp'),
             isTracked: sinon.stub(userModel, 'isTracked'),
+            update: sinon.stub(userModel, 'update'),
         };
     });
 
@@ -33,6 +34,14 @@ describe('services/userNavigationLogs/insert()', () => {
         stubs.isTracked.resolves(true);
         await insert(1, 'page');
         expect(stubs.insertWebapp).to.have.been.calledOnceWithExactly(1, 'page');
+    });
+
+    it('enregistre la date et l\'heure de cet accès dans la table users', async () => {
+        stubs.isTracked.resolves(true);
+        await insert(1, 'page');
+        expect(stubs.update).to.have.been.calledOnceWithExactly(1, {
+            last_access: new Date(),
+        });
     });
 
     it('retourne l\'identifiant du log nouvellement inséré', async () => {

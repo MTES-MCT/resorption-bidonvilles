@@ -1,19 +1,17 @@
-export default {
-    async check(req, res, next, respond = true) {
-        if (req.user.charte_engagement_a_jour === false) {
-            if (respond === true) {
-                res.status(400).send({
-                    user_message: 'La charte d\'engagement doit être signée',
-                });
-            } else {
-                throw new Error('La charte d\'engagement doit être signée');
-            }
+import { type NextFunction, Request, Response } from 'express';
+import { User } from '#root/types/resources/User.d';
 
-            return;
-        }
+interface AuthenticatedRequest extends Request {
+    user: User,
+}
 
-        if (respond === true) {
-            next();
-        }
-    },
+export default (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    if (req.user.charte_engagement_a_jour === false) {
+        res.status(400).send({
+            user_message: 'La charte d\'engagement doit être signée',
+        });
+        return;
+    }
+
+    next();
 };

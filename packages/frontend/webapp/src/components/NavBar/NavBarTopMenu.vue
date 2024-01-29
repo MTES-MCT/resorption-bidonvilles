@@ -6,6 +6,7 @@
         size="lg"
         class="mt-1 lg:hidden"
         :padding="false"
+        type="button"
         @click="$emit('showMobile', $event)"
     />
 

@@ -1,6 +1,5 @@
 import activate from './activate';
 import autocomplete from './autocomplete';
-import updateBeingFunded from './updateBeingFunded';
 import create from './create';
 import findByCategory from './findByCategory';
 import findByIds from './findByIds';
@@ -14,7 +13,6 @@ import findPrefAndDdets from './findPrefAndDdets';
 export default {
     activate,
     autocomplete,
-    updateBeingFunded,
     create,
     findByCategory,
     findByIds,

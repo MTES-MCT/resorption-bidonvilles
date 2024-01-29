@@ -21,7 +21,7 @@
 import router from "@/helpers/router";
 import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";
-import { acceptCharte } from "@/api/users.api.js";
+import { acceptCharter } from "@/api/users.api.js";
 import schema from "./CharteEngagement.schema";
 
 import { Button } from "@resorptionbidonvilles/ui";
@@ -31,16 +31,12 @@ import CharteEngagementInputConfidentialityAgreement from "./inputs/CharteEngage
 
 const configStore = useConfigStore();
 
-const {
-    user: { id: userId },
-    version_charte_engagement: charte,
-} = configStore.config;
+const { version_charte_engagement: charte } = configStore.config;
 
 async function submit({ charte_agreement, confidentiality_agreement }) {
     const notificationStore = useNotificationStore();
 
-    await acceptCharte(
-        userId,
+    await acceptCharter(
         charte.version,
         charte_agreement,
         confidentiality_agreement

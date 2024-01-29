@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref, computed, watch } from "vue";
 import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
-import { get } from "@/api/directory.api";
+import { list } from "@/api/organizations.api";
 import computeOrganizationLocation from "@/utils/computeOrganizationLocation";
 import Fuse from "fuse.js";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
@@ -214,7 +214,7 @@ export const useDirectoryStore = defineStore("directory", () => {
             isLoading.value = true;
             error.value = null;
             try {
-                const response = await get();
+                const response = await list();
                 organizations.value = response.organizations.map((org) => {
                     const location = computeOrganizationLocation(org);
                     org.location_name = location.name;

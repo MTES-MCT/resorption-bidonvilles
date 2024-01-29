@@ -83,7 +83,6 @@ export type User = {
 
     // filter: extended
     access_request_message?: string,
-    default_export?: Array<string>,
     permissions?: Permissions,
     permission_options?: Array<PermissionOption>,
 
