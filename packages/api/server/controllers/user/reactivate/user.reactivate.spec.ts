@@ -27,7 +27,7 @@ describe('userController.reactivate()', () => {
 
     it('demande la réactivation du compte', async () => {
         const req = mockReq({
-            user: fakeUser({ is_superuser: true }),
+            user: fakeUser({ is_admin: true }),
             body: {
                 user: fakeUser({ id: 42 }),
             },
@@ -44,7 +44,7 @@ describe('userController.reactivate()', () => {
         const updatedUser = fakeUser({ id: 42, status: 'active' });
 
         const req = mockReq({
-            user: fakeUser({ is_superuser: true }),
+            user: fakeUser({ is_admin: true }),
             body: {
                 user: originalUser,
             },
@@ -60,7 +60,7 @@ describe('userController.reactivate()', () => {
 
     it('en cas d\'erreur, répond avec un code 500 et un détail de l\'erreur', async () => {
         const req = mockReq({
-            user: fakeUser({ is_superuser: true }),
+            user: fakeUser({ is_admin: true }),
             body: {
                 user: fakeUser(),
             },

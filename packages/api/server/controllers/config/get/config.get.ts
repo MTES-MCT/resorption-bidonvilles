@@ -13,7 +13,6 @@ const ERRORS = {
 
 export default async (req: ConfigListRequest, res: Response, next: NextFunction) => {
     try {
-        // @todo 2100 : demander l'enregistrement de la dernière version pour l'utilisateur courant
         const config = await configService.fetch(req.user);
         res.status(200).send(config);
     } catch (error) {
