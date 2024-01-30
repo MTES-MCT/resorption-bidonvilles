@@ -31,7 +31,7 @@
             <TextInput
                 :withoutMargin="true"
                 prefixIcon="search"
-                v-model="searchFilter"
+                name="searchFilter"
                 variant="filter"
             />
         </article>
@@ -40,8 +40,11 @@
 
 <script setup>
 import { computed } from "vue";
+import { useForm } from "vee-validate";
 import { useAccesStore } from "@/stores/acces.store";
 import { Filter, TextInput } from "@resorptionbidonvilles/ui";
+import { watch } from "vue";
+import { toRef } from "vue";
 
 const accesStore = useAccesStore();
 const statusFilter = computed({
@@ -52,12 +55,14 @@ const statusFilter = computed({
         accesStore.filters.status = newValue;
     },
 });
-const searchFilter = computed({
-    get() {
-        return accesStore.filters.search;
+
+const { values } = useForm({
+    initialValues: {
+        searchFilter: accesStore.filters.search,
     },
-    set(newValue) {
-        accesStore.filters.search = newValue;
-    },
+});
+const searchFilter = toRef(values, "searchFilter");
+watch(searchFilter, () => {
+    accesStore.filters.search = searchFilter.value;
 });
 </script>
