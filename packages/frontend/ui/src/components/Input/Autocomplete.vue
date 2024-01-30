@@ -101,6 +101,8 @@ watch(value, () => {
     if (value.value === undefined) {
         clear();
     }
+
+    input.value.setValue(value.value?.search || "");
 });
 
 let timeout = null;
