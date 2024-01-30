@@ -81,7 +81,6 @@ function restrictLengthByCategory(list) {
             return true;
         }
     });
-    console.log(a);
     return a;
 }
 </script>

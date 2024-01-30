@@ -16,7 +16,7 @@
         <div class="absolute top-3 left-4 right-28 z-[1001] text-md font-sans">
             <InputAddress
                 placeholder="Recherchez un lieu en saisissant une adresse"
-                v-model="searchAddress"
+                name="searchAddress"
             />
         </div>
 
@@ -48,6 +48,7 @@
 
 <script setup>
 import { computed, ref, toRefs, watch } from "vue";
+import { useForm } from "vee-validate";
 import L from "leaflet";
 import Carto from "@/components/Carto/Carto.vue";
 import marqueurSiteEau from "@/utils/marqueurSiteEau";
@@ -55,6 +56,13 @@ import marqueurPoi from "@/utils/marqueurPoi";
 import marqueurRecherche from "@/utils/marqueurRecherche";
 import { trackEvent } from "@/helpers/matomo";
 import InputAddress from "@/components/InputAddress/InputAddress.vue";
+import { toRef } from "vue";
+
+const { values } = useForm({
+    initialValues: {
+        searchAddress: null,
+    },
+});
 
 const props = defineProps({
     pois: {
@@ -87,7 +95,6 @@ const showAddressesModel = computed({
         emit("update:showAddresses", value);
     },
 });
-const searchAddress = ref(null);
 
 const POI_ZOOM_LEVEL = 13;
 const markersGroup = {
@@ -156,6 +163,7 @@ function onMove() {
     });
 }
 
+const searchAddress = toRef(values, "searchAddress");
 watch(searchAddress, () => {
     markersGroup.search.clearLayers();
 

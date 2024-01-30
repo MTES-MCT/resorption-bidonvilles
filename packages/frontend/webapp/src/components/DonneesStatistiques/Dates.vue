@@ -1,13 +1,8 @@
 <template>
     <section class="flex space-x-3 items-end">
+        <DatepickerInput name="from" :maxDate="to" label="Du" withoutMargin />
         <DatepickerInput
-            v-model="from"
-            :maxDate="to"
-            label="Du"
-            withoutMargin
-        />
-        <DatepickerInput
-            v-model="to"
+            name="to"
             :minDate="from"
             :maxDate="today"
             label="Au"
@@ -31,16 +26,24 @@ export default {
 
 <script setup>
 import { ref, computed } from "vue";
+import { useForm } from "vee-validate";
 import { useMetricsStore } from "@/stores/metrics.store";
 import { trackEvent } from "@/helpers/matomo";
 import { Button, DatepickerInput } from "@resorptionbidonvilles/ui";
+import { toRef } from "vue";
 
 const metricsStore = useMetricsStore();
 
 const today = ref(new Date());
 
-const from = ref(new Date(metricsStore.from));
-const to = ref(new Date(metricsStore.to));
+const { values } = useForm({
+    initialValues: {
+        from: metricsStore.from,
+        to: metricsStore.to,
+    },
+});
+const from = toRef(values, "from");
+const to = toRef(values, "to");
 
 const datesAreNotLoaded = computed(() => {
     if (!metricsStore.loadedDates.from || !metricsStore.loadedDates.to) {

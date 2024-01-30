@@ -30,9 +30,9 @@
                 </p>
                 <p class="my-2 flex items-center space-x-3">
                     <span>Du</span>
-                    <DatepickerInput withoutMargin v-model="from" />
+                    <DatepickerInput withoutMargin name="from" />
                     <span>au</span>
-                    <DatepickerInput withoutMargin v-model="to" />
+                    <DatepickerInput withoutMargin name="to" />
                 </p>
                 <ul class="list-disc mt-3 ml-4">
                     <li
@@ -57,7 +57,8 @@
 </template>
 
 <script setup>
-import { ref, computed, defineProps, toRefs } from "vue";
+import { toRef, ref, computed, defineProps, toRefs } from "vue";
+import { useForm } from "vee-validate";
 import { Button, DatepickerInput, Modal } from "@resorptionbidonvilles/ui";
 import ModalExportLien from "./ModalExportLien.vue";
 
@@ -66,9 +67,17 @@ const props = defineProps({
 });
 const { exports: exportList } = toRefs(props);
 const modale = ref(null);
-const from = ref(new Date());
-const to = ref(new Date());
-from.value.setDate(from.value.getDate() - 7);
+
+const d = new Date();
+d.setDate(d.getDate() - 7);
+const { values } = useForm({
+    initialValues: {
+        from: d,
+        to: new Date(),
+    },
+});
+const from = toRef(values, "from");
+const to = toRef(values, "to");
 
 const itemsWithoutDateRange = computed(() => {
     return exportList.value.filter((item) => !item.withDateRange);
