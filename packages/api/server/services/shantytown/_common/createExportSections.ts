@@ -1,10 +1,26 @@
+import { AuthUser } from '#server/middlewares/authMiddleware';
 import organizationModel from '#server/models/organizationModel';
+import { ShantytownExportListProperty } from '#server/services/shantytown/_common/serializeExportProperties';
+import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
 
-export default async (user, data, properties, closedTowns, closingSolutions) => {
-    const options = data.options ? data.options.split(',') : [];
-    const sections = [];
+export type ShantytownExportListOption = 'address_details' | 'owner' | 'living_conditions' | 'demographics' | 'justice' | 'actors' | 'comments';
+type ShantytownExportSection = {
+    title: string,
+    properties?: ShantytownExportListProperty[],
+    lastFrozen?: boolean,
+    subsections?: ShantytownExportSection[],
+};
 
-    const localizationSection = {
+export default async (
+    user: AuthUser,
+    options: ShantytownExportListOption[],
+    properties: { [key: string]: ShantytownExportListProperty },
+    closedTowns: boolean,
+    closingSolutions: ClosingSolution[],
+): Promise<ShantytownExportSection[]> => {
+    const sections: ShantytownExportSection[] = [];
+
+    const localizationSection: ShantytownExportSection = {
         title: 'Localisation',
         properties: [
             properties.departement,
@@ -152,7 +168,7 @@ export default async (user, data, properties, closedTowns, closingSolutions) => 
     }
 
     if (options.indexOf('actors') !== -1) {
-        const allOrganizations = (await organizationModel.findByName(user.organization.name)).map((organization:any) => organization.id);
+        const allOrganizations = (await organizationModel.findByName(user.organization.name)).map(organization => organization.id);
 
         sections.push({
             title: 'Intervenants',
@@ -169,7 +185,7 @@ export default async (user, data, properties, closedTowns, closingSolutions) => 
     }
 
     if (closedTowns === true) {
-        const subSections = [];
+        const subSections: ShantytownExportSection[] = [];
         closingSolutions.forEach(({ id: solutionId, label }) => {
             subSections.push({
                 title: label.split(' (')[0],
@@ -187,7 +203,7 @@ export default async (user, data, properties, closedTowns, closingSolutions) => 
         });
     }
 
-    const commentProps = [];
+    const commentProps: ShantytownExportListProperty[] = [];
     if (options.indexOf('comments') !== -1 && user.isAllowedTo('list', 'shantytown_comment')) {
         commentProps.push(properties.comments);
         commentProps.push(properties.last_comment_date);
