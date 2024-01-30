@@ -46,7 +46,7 @@ describe('services/shantytown.exportTowns()', () => {
 
     it('identifie correctement un export de données actuelles', async () => {
         const date = new Date();
-        await exportTowns(user, region, false, date);
+        await exportTowns(user, region, [], false, date);
 
         expect(stubs.getAllowedLocations).to.be.calledOnce;
         expect(stubs.getAllowedLocations).to.be.calledWith(user, region, false);
@@ -54,7 +54,7 @@ describe('services/shantytown.exportTowns()', () => {
 
     it('identifie correctement un export de données passées', async () => {
         const date = new Date(2023, 0, 1);
-        await exportTowns(user, region, false, date);
+        await exportTowns(user, region, [], false, date);
 
         expect(stubs.getAllowedLocations).to.be.calledOnce;
         expect(stubs.getAllowedLocations).to.be.calledWith(user, region, true);
@@ -76,7 +76,7 @@ describe('services/shantytown.exportTowns()', () => {
     });
 
     it('collecte bien les données des sites fermés quand cela est demandé', async () => {
-        await exportTowns(user, region, true);
+        await exportTowns(user, region, [], true);
         expect(stubs.fetchData).to.be.calledOnce;
         expect(stubs.fetchData).to.be.calledWith(user, [region], true);
     });

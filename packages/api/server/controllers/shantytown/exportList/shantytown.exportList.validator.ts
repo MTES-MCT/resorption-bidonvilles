@@ -1,3 +1,4 @@
+/* eslint-disable newline-per-chained-call */
 import { query } from 'express-validator';
 import geoModel from '#server/models/geoModel';
 import { Location } from '#server/models/geoModel/Location.d';
@@ -73,4 +74,20 @@ export default [
 
             return true;
         }),
+
+    query('options')
+        .optional({ nullable: true })
+        .isString().bail().withMessage('Les options sont au mauvais format')
+        .trim()
+        .customSanitizer(value => (value ? value.split(',') : []))
+        .custom((value) => {
+            if (value.some(option => !['address_details', 'owner', 'living_conditions', 'demographics', 'justice', 'actors', 'comments'].includes(option))) {
+                throw new Error('Certaines options ne sont pas reconnues');
+            }
+
+            return true;
+        }),
+
+    query('options')
+        .customSanitizer(value => (Array.isArray(value) ? value : [])),
 ];
