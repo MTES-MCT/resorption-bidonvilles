@@ -41,6 +41,12 @@
             <template v-slot:aside
                 ><div
                     class="flex sticky justify-center top-8 py-2 mb-2 bg-orange200"
+                    v-if="
+                        userStore.hasLocalizedPermission(
+                            'shantytown_comment.create',
+                            town
+                        )
+                    "
                 >
                     <Button
                         variant="primary"

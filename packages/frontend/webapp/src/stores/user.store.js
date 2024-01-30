@@ -154,7 +154,9 @@ export const useUserStore = defineStore("user", {
                     permission.allowed_on.cities.some(
                         (c) =>
                             c.city.code === entity.city.code ||
-                            c.city.main === entity.city.code
+                            c.city.main === entity.city.code ||
+                            c.city.code === entity.city.main ||
+                            c.city.main === entity.city.main
                     ))
             );
         },
