@@ -14,7 +14,7 @@ interface UserReactivateRequest extends Request {
 }
 
 export default async (req: UserReactivateRequest, res: Response, next: NextFunction): Promise<void> => {
-    if (!req.user.is_superuser) {
+    if (!req.user.is_admin) {
         res.status(400).send({
             user_message: 'Vous n\'avez pas les permissions pour accéder à cette route',
         });
