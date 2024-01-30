@@ -94,7 +94,7 @@ import { defineProps, toRefs, ref } from "vue";
 import schema from "./FormInvitation.schema.js";
 import router from "@/helpers/router";
 import { useNotificationStore } from "@/stores/notification.store";
-import { create } from "@/api/invite.api.js";
+import { create } from "@/api/invitations.api.js";
 
 // components
 import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
