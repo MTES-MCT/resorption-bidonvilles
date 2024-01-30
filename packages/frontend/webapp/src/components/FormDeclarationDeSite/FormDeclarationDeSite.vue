@@ -120,16 +120,9 @@ const minUpdatedAt = computed(() => {
 
     return updatedAt;
 });
-const validationSchema = schemaFn(mode.value);
-const { handleSubmit, values, errors, setErrors, isSubmitting } = useForm({
-    validationSchema,
-    initialValues,
-});
 
-const originalValues = formatValuesForApi(values);
 const townsStore = useTownsStore();
 const userStore = useUserStore();
-const error = ref(null);
 const location = ref(
     town.value
         ? {
@@ -141,6 +134,39 @@ const location = ref(
           }
         : null
 );
+const hasJusticePermission = computed(() => {
+    if (!location.value) {
+        return false;
+    }
+
+    return userStore.hasLocalizedPermission(
+        "shantytown_justice.access",
+        location.value
+    );
+});
+const hasOwnerPermission = computed(() => {
+    if (!location.value) {
+        return false;
+    }
+
+    return userStore.hasLocalizedPermission(
+        "shantytown_owner.access",
+        location.value
+    );
+});
+
+const validationSchema = schemaFn(
+    hasJusticePermission,
+    hasOwnerPermission,
+    mode.value
+);
+const { handleSubmit, values, errors, setErrors, isSubmitting } = useForm({
+    validationSchema,
+    initialValues,
+});
+
+const originalValues = formatValuesForApi(values);
+const error = ref(null);
 const address = toRef(values, "address");
 
 watch(address, async () => {
@@ -156,17 +182,6 @@ watch(address, async () => {
             console.log("Failed fetching more information about the city");
         }
     }
-});
-
-const hasJusticePermission = computed(() => {
-    if (!location.value) {
-        return userStore.hasJusticePermission;
-    }
-
-    return userStore.hasLocalizedPermission(
-        "shantytown_justice.access",
-        location.value
-    );
 });
 
 const tabs = computed(() => {
@@ -256,7 +271,7 @@ function formatValuesForApi(v) {
     }
 
     return {
-        ...Object.keys(validationSchema.fields).reduce((acc, key) => {
+        ...Object.keys(validationSchema.value.fields).reduce((acc, key) => {
             acc[key] = v[key];
             return acc;
         }, {}),
