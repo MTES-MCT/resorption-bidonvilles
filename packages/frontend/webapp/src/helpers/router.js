@@ -281,6 +281,7 @@ const router = createRouter({
             component: () => null,
             meta: {
                 authRequirement: "signedIn",
+                configRequired: false,
                 charteRequirement: false,
                 displayOrderOnSiteMap: 2,
             },
