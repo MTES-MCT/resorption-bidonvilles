@@ -1,7 +1,6 @@
 <template>
     <span class="inline-block">
-        <i :class="classes" :title="title" :aria-hidden="ariaHidden || !!title"></i>
-        <span v-if="!!title" class="sr-only"> {{ title }}</span>
+        <i :class="classes" :title="title" aria-hidden="true"></i>
     </span>
     
 </template>
@@ -17,15 +16,6 @@ export default {
         },
         spin: {
             type: Boolean
-        },
-        title: {
-            type: String,
-            required: false
-        },
-        ariaHidden: {
-            type: Boolean,
-            required: false,
-            default: undefined,
         },
     },
 

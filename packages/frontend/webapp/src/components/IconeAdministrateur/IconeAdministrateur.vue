@@ -1,9 +1,6 @@
 <template>
-    <Icon
-        icon="user-shield"
-        class="text-info"
-        title="Pictogramme administrateur local"
-    />
+    <Icon icon="user-shield" class="text-info" />
+    <span class="sr-only">Administrateur ou administratrice local</span>
 </template>
 
 <script setup>

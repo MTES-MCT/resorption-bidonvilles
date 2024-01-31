@@ -13,8 +13,8 @@
                 v-if="showModeration && (isOwner || (canModerate && isHover))"
                 @click="deleteMessage"
                 >Supprimer {{ isOwner ? "mon" : "le" }} message
-                <Icon icon="trash-alt" alt="Supprimer le message"
-            /></span>
+                <Icon icon="trash-alt" />
+            </span>
         </div>
         <div
             v-if="

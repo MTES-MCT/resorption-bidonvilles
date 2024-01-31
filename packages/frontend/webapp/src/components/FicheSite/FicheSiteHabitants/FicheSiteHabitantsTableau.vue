@@ -51,12 +51,9 @@
                     id="section_people"
                 >
                     <span>
-                        <Icon
-                            title="type de personne"
-                            icon="male"
-                            class="mr-1"
-                        />
-                        <Icon title="type de personne" icon="male" />
+                        <Icon icon="male" class="mr-1" />
+                        <Icon icon="male" />
+                        <span class="sr-only">Type de personne</span>
                     </span>
                 </th>
                 <th
@@ -66,8 +63,9 @@
                     id="section_housing"
                 >
                     <span>
-                        <Icon title="type d'habitat" icon="home" />
+                        <Icon icon="home" />
                     </span>
+                    <span class="sr-only">Type d'habitat</span>
                 </th>
                 <!-- label -->
                 <th

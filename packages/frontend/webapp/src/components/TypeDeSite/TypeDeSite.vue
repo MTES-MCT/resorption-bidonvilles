@@ -4,7 +4,6 @@
             icon="map-marker-alt"
             class="text-lg"
             :style="`color: ${fieldType.color}`"
-            aria-hidden="true"
         />
         <span class="sr-only">Type de site</span>
         <div class="font-bold ml-2 whitespace-nowrap">

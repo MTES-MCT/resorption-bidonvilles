@@ -63,11 +63,7 @@
                         :class="user.is_admin ? 'text-info' : ''"
                     >
                         <IconeAdministrateur v-if="user.is_admin" />
-                        <Icon
-                            v-else
-                            icon="user"
-                            title="Pictogramme utilisateur"
-                        />&nbsp;
+                        <IconeSimpleUtilisateur v-else />&nbsp;
                         <span class="font-bold">
                             {{ user.last_name.toUpperCase() }}
                             {{ user.first_name }}
@@ -76,7 +72,6 @@
                             <Icon
                                 icon="arrow-turn-down-right"
                                 class="text-info mr-2"
-                                title=""
                             />
 
                             <div
@@ -136,11 +131,7 @@
                         :class="user.is_admin ? 'text-info' : ''"
                     >
                         <IconeAdministrateur v-if="user.is_admin" />
-                        <Icon
-                            v-else
-                            icon="user"
-                            title="Pictogramme utilisateur"
-                        />
+                        <IconeSimpleUtilisateur v-else />
                         {{ user.last_name.toUpperCase() }}
                         {{ user.first_name }}
                     </li>
@@ -167,6 +158,7 @@ import focusClasses from "@common/utils/focus_classes";
 
 import { Icon, Link } from "@resorptionbidonvilles/ui";
 import IconeAdministrateur from "@/components/IconeAdministrateur/IconeAdministrateur.vue";
+import IconeSimpleUtilisateur from "@/components/IconeSimpleUtilisateur/IconeSimpleUtilisateur.vue";
 import { useDirectoryStore } from "@/stores/directory.store";
 
 const props = defineProps({

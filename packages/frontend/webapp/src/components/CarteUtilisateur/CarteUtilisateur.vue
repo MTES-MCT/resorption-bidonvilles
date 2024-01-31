@@ -38,11 +38,7 @@
             class="col-span-2 grid grid-cols-2 gap-4"
         >
             <div v-if="getTopicsByLevel('expertise').length > 0" class="flex">
-                <Icon
-                    icon="arrow-turn-down-right"
-                    class="text-info mr-2"
-                    alt=""
-                />
+                <Icon icon="arrow-turn-down-right" class="text-info mr-2" />
                 <ul>
                     <span class="text-info">Expert(e) en</span>
                     <li
@@ -55,11 +51,7 @@
                 </ul>
             </div>
             <div v-if="getTopicsByLevel('interest').length > 0" class="flex">
-                <Icon
-                    icon="arrow-turn-down-right"
-                    class="text-info mr-2"
-                    alt=""
-                />
+                <Icon icon="arrow-turn-down-right" class="text-info mr-2" />
                 <ul>
                     <span class="text-info">Intéressé(e) par</span>
                     <li

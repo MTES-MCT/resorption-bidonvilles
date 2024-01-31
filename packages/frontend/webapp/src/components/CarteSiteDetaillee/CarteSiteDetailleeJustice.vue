@@ -3,7 +3,7 @@
         v-if="!shantytown.justiceStatuses || !shantytown.justiceStatuses.length"
         class="text-G600"
     >
-        <Icon icon="ban" ariaHidden="true" />&nbsp;
+        <Icon icon="ban" />&nbsp;
         <template
             v-if="
                 shantytown.ownerComplaint === false &&
