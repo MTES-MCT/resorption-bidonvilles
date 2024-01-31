@@ -110,6 +110,7 @@ function getLibelleAudio(key, status) {
         vermin: {
             good: "Absence de nuisibles",
             bad: "Présence de nuisibles",
+            unknown: "Pas d'information sur l'éventuelle présence de nuisibles",
         },
         firePrevention: {
             good: "Plan de prévention incendie existant",
