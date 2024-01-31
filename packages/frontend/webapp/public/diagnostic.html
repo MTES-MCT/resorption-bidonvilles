@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Résorption-bidonvilles — Diagnostic de débug</title>
+        <meta name="robots" content="noindex">
+        <meta name="googlebot" content="noindex">
+    </head>
+
+    <body>
+        <p style="background-color: #162fbaa7; color: white; padding: 10px">
+            <span style="font-weight: bold;">Vous voyez cette page à des fins de diagnostic, merci d'en communiquer le contenu à l'équipe technique.</span><br/>Si vous n'avez pas été redirigé(e) vers cette page par un membre de l'équipe technique, vous pouvez simplement fermer cette page.
+        </p>
+        <h1>Diagnostic de débug</h1>
+        <p>
+            <button type="button" onclick="download()">Télécharger ces informations</button>
+            <button type="button" onclick="copy()">Copier ces informations</button>
+        </p>
+
+        <h2>Informations système</h2>
+        <p>Système d'exploitation</p>
+        <fieldset id="os" style="word-break: break-all"></fieldset>
+        <p>Navigateur</p>
+        <fieldset id="browser" style="word-break: break-all"></fieldset>
+
+        <h2>Stockage local</h2>
+        <p>
+            Local storage
+        </p>
+        <fieldset id="local-storage" style="word-break: break-all"></fieldset>
+        <p>
+            Cookie
+        </p>
+        <fieldset id="cookie" style="word-break: break-all"></fieldset>
+
+        <script src="https://cdn.jsdelivr.net/npm/bowser@2.11.0/es5.min.js"></script>
+        <script>
+            var elements = {
+                os: document.getElementById('os'),
+                browser: document.getElementById('browser'),
+                localStorage: document.getElementById('local-storage'),
+                cookie: document.getElementById('cookie'),
+            };
+
+            window.onload = function() {
+                const browserInfo = bowser.getParser(window.navigator.userAgent);
+                elements.os.innerHTML = JSON.stringify(browserInfo.getOS());
+                elements.browser.innerHTML = JSON.stringify(browserInfo.getBrowser());
+                elements.localStorage.innerHTML = JSON.stringify(localStorage);
+                elements.cookie.innerHTML = JSON.stringify(document.cookie);
+            };
+
+            function copyToClipboard(value) {
+                const input = document.createElement("textarea");
+                input.value = value;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand("copy");
+                document.body.removeChild(input);
+            }
+
+            function download() {
+                const hiddenElement = document.createElement("a");
+                hiddenElement.href = "data:text/plain;charset=utf-8," + encodeURI(getContent());
+                hiddenElement.target = "_blank";
+                hiddenElement.download = "diagnostic_resorption_bidonvilles.txt";
+                hiddenElement.click();
+            }
+
+            function getContent() {
+                var keys = Object.keys(elements);
+                var content = '';
+                for (var i = 0; i < keys.length; i += 1) {
+                    content += keys[i] + '\n' + elements[keys[i]].innerHTML + '\n\n';
+                }
+
+                return content;
+            }
+
+            function copy() {
+                copyToClipboard(getContent());
+                alert('Diagnostic copié dans le presse-papier');
+            }
+        </script>
+    </body>
+</html>
