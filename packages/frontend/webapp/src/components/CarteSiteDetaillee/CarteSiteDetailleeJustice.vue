@@ -15,28 +15,31 @@
             >Aucune information sur les procédures judiciaires</template
         >
     </div>
-    <ul v-else>
-        <li
-            class="flex"
-            v-for="status in shantytown.justiceStatuses"
-            :key="status.label"
-        >
-            <Icon v-if="status.icon" :icon="status.icon" />
-            <img
-                class="w-5 h-4 mt-1"
-                :src="status.img"
-                alt=""
-                v-if="status.img"
-            />
-            <div class="ml-2">
-                <span class="font-bold">{{ status.label }}</span>
-                <span v-if="status.date" class="secondary">
-                    le
-                    {{ formatDate(status.date, "d/m/y") }}</span
-                >
-            </div>
-        </li>
-    </ul>
+    <template v-else>
+        <span class="sr-only">Statut des procédures judiciaires</span>
+        <ul>
+            <li
+                class="flex"
+                v-for="status in shantytown.justiceStatuses"
+                :key="status.label"
+            >
+                <Icon v-if="status.icon" :icon="status.icon" />
+                <img
+                    class="w-5 h-4 mt-1"
+                    :src="status.img"
+                    alt=""
+                    v-if="status.img"
+                />
+                <div class="ml-2">
+                    <span class="font-bold">{{ status.label }}</span>
+                    <span v-if="status.date" class="secondary">
+                        le
+                        {{ formatDate(status.date, "d/m/y") }}</span
+                    >
+                </div>
+            </li>
+        </ul>
+    </template>
 </template>
 
 <script setup>
