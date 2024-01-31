@@ -1,4 +1,5 @@
 <template>
+    <span class="sr-only">Liste des intervenants</span>
     <div class="flex">
         <div
             v-bind:class="{
