@@ -4,7 +4,7 @@
             <template v-slot:banner>
                 <section class="py-12">
                     <ContentWrapper
-                        class="flex justify-between items-center"
+                        class="flex flex-wrap justify-between items-center gap-2"
                         :size="size"
                     >
                         <div>
