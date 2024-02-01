@@ -4496,7 +4496,7 @@ __metadata:
     module-alias: ^2.2.0
     moment: ^2.29.4
     multer: ^1.4.5-lts.1
-    neat-csv: ^7.0.0
+    neat-csv: ^6.0.0
     node-fetch: 2
     node-mailjet: ^6.0.5
     node-mattermost: ^0.0.1
@@ -4574,6 +4574,7 @@ __metadata:
     autoprefixer: ^10.4.12
     axios: ^1.6.0
     chart.js: ^3.9.1
+    cross-env: ^7.0.3
     cypress: ^13.6.3
     date-fns: ^2.29.3
     dom-to-image-more: ^2.12.0
@@ -12397,6 +12398,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cross-env@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "cross-env@npm:7.0.3"
+  dependencies:
+    cross-spawn: ^7.0.1
+  bin:
+    cross-env: src/bin/cross-env.js
+    cross-env-shell: src/bin/cross-env-shell.js
+  checksum: 26f2f3ea2ab32617f57effb70d329c2070d2f5630adc800985d8b30b56e8bf7f5f439dd3a0358b79cee6f930afc23cf8e23515f17ccfb30092c6b62c6b630a79
+  languageName: node
+  linkType: hard
+
 "cross-spawn@npm:^6.0.0":
   version: 6.0.5
   resolution: "cross-spawn@npm:6.0.5"
@@ -12410,7 +12423,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-spawn@npm:^7.0.0, cross-spawn@npm:^7.0.2, cross-spawn@npm:^7.0.3":
+"cross-spawn@npm:^7.0.0, cross-spawn@npm:^7.0.1, cross-spawn@npm:^7.0.2, cross-spawn@npm:^7.0.3":
   version: 7.0.3
   resolution: "cross-spawn@npm:7.0.3"
   dependencies:
@@ -20347,13 +20360,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"neat-csv@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "neat-csv@npm:7.0.0"
+"neat-csv@npm:^6.0.0":
+  version: 6.0.1
+  resolution: "neat-csv@npm:6.0.1"
   dependencies:
     csv-parser: ^3.0.0
-    get-stream: ^6.0.1
-  checksum: 5ac76697442cdd019e251944eec8c69964a397d4f9fc9b1c9144ddedd13917865fbc423f7b0bf09d29abe0d7d4d015e4ea75907b3c3fe5e4d1a9ede22fb9bff2
+    get-stream: ^6.0.0
+    to-readable-stream: ^2.1.0
+  checksum: 19f6a13f8493f2faf262095800f196f30352fed65e3162d781d1855ca00769ca9192bb8bd78fbd10bf72da25165c77413fc25807d18b64ae15e45bd5b3adef5c
   languageName: node
   linkType: hard
 
@@ -26434,6 +26448,13 @@ __metadata:
   dependencies:
     kind-of: ^3.0.2
   checksum: 9425effee5b43e61d720940fa2b889623f77473d459c2ce3d4a580a4405df4403eec7be6b857455908070566352f9e2417304641ed158dda6f6a365fe3e66d70
+  languageName: node
+  linkType: hard
+
+"to-readable-stream@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "to-readable-stream@npm:2.1.0"
+  checksum: 42039fb968a56af99a7201fe01debb0bc55a585a2ab0b1746e322c339c50f91043b1269cedcc6350d2a5f81ceaa6cff7960704f748a59542d1f2c50aca5ea7b9
   languageName: node
   linkType: hard
 

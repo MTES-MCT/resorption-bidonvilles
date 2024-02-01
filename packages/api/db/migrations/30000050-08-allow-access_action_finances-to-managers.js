@@ -16,15 +16,17 @@ module.exports = {
                 },
             );
 
-            await queryInterface.bulkInsert(
-                'user_permissions',
-                organizations.map(organization => ({
-                    fk_organization: organization.fk_organization, fk_feature: 'access', fk_entity: 'action_finances', allowed: true, allow_all: false,
-                })),
-                {
-                    transaction,
-                },
-            );
+            if (organizations.length > 0) {
+                await queryInterface.bulkInsert(
+                    'user_permissions',
+                    organizations.map(organization => ({
+                        fk_organization: organization.fk_organization, fk_feature: 'access', fk_entity: 'action_finances', allowed: true, allow_all: false,
+                    })),
+                    {
+                        transaction,
+                    },
+                );
+            }
 
             const permission_ids = await queryInterface.sequelize.query(
                 'SELECT user_permission_id, fk_organization FROM user_permissions WHERE fk_feature = \'access\' AND fk_entity = \'action_finances\'',
@@ -39,15 +41,17 @@ module.exports = {
                 return acc;
             }, {});
 
-            await queryInterface.bulkInsert(
-                'user_permission_attachments',
-                organizations.map(organization => organization.actions.map(action => ({
-                    fk_user_permission: hash[organization.fk_organization], fk_action: action,
-                }))).flat(),
-                {
-                    transaction,
-                },
-            );
+            if (organizations.length > 0) {
+                await queryInterface.bulkInsert(
+                    'user_permission_attachments',
+                    organizations.map(organization => organization.actions.map(action => ({
+                        fk_user_permission: hash[organization.fk_organization], fk_action: action,
+                    }))).flat(),
+                    {
+                        transaction,
+                    },
+                );
+            }
 
             return transaction.commit();
         } catch (error) {

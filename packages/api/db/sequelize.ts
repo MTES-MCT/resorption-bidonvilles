@@ -2,7 +2,7 @@ import { Sequelize, Options } from 'sequelize';
 import config from './config/config';
 
 const typedConfig: Options = {
-    ...config,
+    ...config.default,
     dialect: 'postgres',
 };
 

@@ -65,21 +65,23 @@ module.exports = {
             },
         );
 
-        await queryInterface.bulkInsert(
-            'user_email_subscriptions',
-            users.map(({ user_id, subscribed_to_summary }) => {
-                const subscriptions = ['comment_notification', 'shantytown_closure', 'shantytown_creation'];
-                if (subscribed_to_summary === true) {
-                    subscriptions.push('weekly_summary');
-                }
+        if (users.length > 0) {
+            await queryInterface.bulkInsert(
+                'user_email_subscriptions',
+                users.map(({ user_id, subscribed_to_summary }) => {
+                    const subscriptions = ['comment_notification', 'shantytown_closure', 'shantytown_creation'];
+                    if (subscribed_to_summary === true) {
+                        subscriptions.push('weekly_summary');
+                    }
 
-                return subscriptions.map(sub => ({
-                    fk_user: user_id,
-                    email_subscription: sub,
-                }));
-            }).flat(),
-            { transaction },
-        );
+                    return subscriptions.map(sub => ({
+                        fk_user: user_id,
+                        email_subscription: sub,
+                    }));
+                }).flat(),
+                { transaction },
+            );
+        }
 
         await transaction.commit();
     },
