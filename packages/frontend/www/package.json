@@ -1,5 +1,6 @@
 {
-  "name": "@resorptionbidonvilles/www",  "private": true,
+  "name": "@resorptionbidonvilles/www",
+  "private": true,
   "scripts": {
     "dev": "nuxi dev . --host",
     "build": "nuxi build .",
@@ -18,5 +19,5 @@
     "postcss-custom-properties": "^13.3.2",
     "vue-matomo": "^4.1.0"
   },
-  "version": "2.12.8"
+  "version": "2.12.9"
 }
