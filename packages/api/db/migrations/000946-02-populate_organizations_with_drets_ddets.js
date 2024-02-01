@@ -1,10 +1,9 @@
 /* eslint-disable no-console */
-const sequelize = require('#db/sequelize');
 
 /**
  * Return regions
  */
-function getRegions() {
+function getRegions(sequelize) {
     return sequelize.query('SELECT code, name FROM regions ORDER BY code',
         {
             type: sequelize.QueryTypes.SELECT,
@@ -14,7 +13,7 @@ function getRegions() {
 /**
  * Return departements
  */
-function getDepts() {
+function getDepts(sequelize) {
     return sequelize.query('SELECT code, name FROM departements ORDER BY code',
         {
             type: sequelize.QueryTypes.SELECT,
@@ -24,7 +23,7 @@ function getDepts() {
 /**
  * Gets DRETS and DRETS organization type codes
  */
-async function getOrganizationTypeCodeFromAbbreviation(abbrev) {
+async function getOrganizationTypeCodeFromAbbreviation(sequelize, abbrev) {
     const mainTypes = await sequelize.query(
         `SELECT
             organization_type_id,
@@ -49,9 +48,9 @@ async function getOrganizationTypeCodeFromAbbreviation(abbrev) {
 
 module.exports = {
     up: queryInterface => Promise.all([
-        getRegions(),
-        getDepts(),
-        getOrganizationTypeCodeFromAbbreviation(['DDETS', 'DRETS']),
+        getRegions(queryInterface.sequelize),
+        getDepts(queryInterface.sequelize),
+        getOrganizationTypeCodeFromAbbreviation(queryInterface.sequelize, ['DDETS', 'DRETS']),
     ]).then(([regions, depts, orgaTypes]) => queryInterface.sequelize.transaction(
         transaction => Promise.all([
             regions.forEach((region) => {

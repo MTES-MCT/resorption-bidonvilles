@@ -26,4 +26,4 @@ WORKDIR /home/node/app/
 COPY . .
 
 RUN yarn build
-ENTRYPOINT ["yarn", "start"]
+ENTRYPOINT ["yarn", "serve"]

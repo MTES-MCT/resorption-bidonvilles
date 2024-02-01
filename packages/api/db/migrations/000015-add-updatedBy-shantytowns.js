@@ -1,5 +1,3 @@
-const sequelize = require('#db/sequelize');
-
 function addColumn(queryInterface, Sequelize, tableName) {
     return queryInterface.addColumn(
         tableName,
@@ -25,7 +23,7 @@ function addConstraint(queryInterface, tableName) {
     });
 }
 
-function updateRows(tableName) {
+function updateRows(sequelize, tableName) {
     return sequelize.query(`UPDATE "${tableName}" SET updated_by = 3 WHERE updated_at IS NOT NULL;`);
 }
 
@@ -37,8 +35,8 @@ module.exports = {
         addConstraint(queryInterface, 'shantytowns'),
         addConstraint(queryInterface, 'ShantytownHistories'),
     ])).then(() => Promise.all([
-        updateRows('shantytowns'),
-        updateRows('ShantytownHistories'),
+        updateRows(queryInterface.sequelize, 'shantytowns'),
+        updateRows(queryInterface.sequelize, 'ShantytownHistories'),
     ])),
 
     down: queryInterface => Promise.all([

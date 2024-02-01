@@ -91,14 +91,16 @@ module.exports = {
             },
         );
 
-        await queryInterface.bulkInsert(
-            'shantytown_comment_organization_targets',
-            targets.map(({ shantytown_comment_id, organizations }) => organizations.map(organization_id => ({
-                fk_organization: organization_id,
-                fk_comment: shantytown_comment_id,
-            }))).flat(),
-            { transaction },
-        );
+        if (targets.length > 0) {
+            await queryInterface.bulkInsert(
+                'shantytown_comment_organization_targets',
+                targets.map(({ shantytown_comment_id, organizations }) => organizations.map(organization_id => ({
+                    fk_organization: organization_id,
+                    fk_comment: shantytown_comment_id,
+                }))).flat(),
+                { transaction },
+            );
+        }
 
         await transaction.commit();
     },
