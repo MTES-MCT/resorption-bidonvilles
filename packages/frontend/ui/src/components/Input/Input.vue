@@ -2,7 +2,7 @@
     <InputWrapper :hasErrors="!!errors.length" :withoutMargin="withoutMargin">
         <InputLabel :label="label" :info="info" :showMandatoryStar="showMandatoryStar" :for="id" />
 
-        <div class="relative" :class="width">
+        <div class="relative" :class="width ">
             <InputIcon position="before" :icon="prefixIcon" v-if="prefixIcon" />
             <input :id="id" v-bind="filteredProps" :class="classes" :data-cy-field="cypressName" :step="step"
                 :disabled="disabled" ref="input" @blur="$emit('blur', $event)" @change="setValue($refs.input.value)" />
@@ -141,6 +141,7 @@ export default {
                 suffixIcon: this.suffixIcon,
                 clear: this.clear,
                 size: this.size,
+                disabled: this.disabled,
             };
 
             return {
