@@ -146,6 +146,13 @@ export const useQuestionsStore = defineStore("questions", () => {
         return newQuestion;
     }
 
+    async function edit(data) {
+        const { action } = await edit(data);
+        console.log(data);
+        setAction(actionId, action);
+        return hash.value[action.id];
+    }
+
     async function createAnswer(questionId, answer, attachments) {
         const configStore = useConfigStore();
         const notificationStore = useNotificationStore();
@@ -188,6 +195,7 @@ export const useQuestionsStore = defineStore("questions", () => {
         fetchQuestions,
         fetchQuestion,
         create,
+        edit,
         createAnswer,
         pendingDeletions,
         async deleteAnswer(questionId, answerId, reason) {
