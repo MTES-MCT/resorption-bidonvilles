@@ -40,7 +40,7 @@
                     shantytown.livingConditions.trash.status.status
                 )
             "
-            >évacuation des déchets</CarteSiteDetailleeLivingConditionIcon
+            >évac. des déchets</CarteSiteDetailleeLivingConditionIcon
         >
 
         <CarteSiteDetailleeLivingConditionIcon
@@ -53,8 +53,8 @@
             "
             >{{
                 shantytown.livingConditions[verminKey].status.status === "good"
-                    ? "absence de nuisibles"
-                    : "presence de nuisibles"
+                    ? "abs. de nuisibles"
+                    : "prés. de nuisibles"
             }}
         </CarteSiteDetailleeLivingConditionIcon>
         <CarteSiteDetailleeLivingConditionIcon
@@ -65,7 +65,7 @@
                     shantytown.livingConditions[fireKey].status.status
                 )
             "
-            >prévention incendie</CarteSiteDetailleeLivingConditionIcon
+            >prév. incendie</CarteSiteDetailleeLivingConditionIcon
         >
     </ul>
     <div v-else>
