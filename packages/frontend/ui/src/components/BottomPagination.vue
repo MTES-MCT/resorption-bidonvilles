@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p class="text-right text-sm text-G500 mt-1">
+        <p class="text-right text-base text-G700 mt-1">
             Vous consultez actuellement les lignes
             {{ from }} à
             {{ to }} sur
