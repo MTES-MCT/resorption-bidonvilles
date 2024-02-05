@@ -130,6 +130,7 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
             LEFT JOIN computed_toilet_types ON computed_toilet_types.fk_shantytown = shantytowns.shantytown_id
             LEFT JOIN computed_electricity_types ON computed_electricity_types.fk_shantytown = shantytowns.shantytown_id
             LEFT JOIN departements ON departements.code = shantytowns_today.departement_code
+            LEFT JOIN regions ON regions.code = departements.fk_region
             WHERE
                 shantytowns_today.departement_code = :departementCode
             AND
@@ -217,6 +218,7 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
             LEFT JOIN computed_toilet_types ON computed_toilet_types.fk_shantytown = shantytowns.hid
             LEFT JOIN computed_electricity_types ON computed_electricity_types.fk_shantytown = shantytowns.hid
             LEFT JOIN departements ON departements.code = shantytowns_today.departement_code
+            LEFT JOIN regions ON regions.code = departements.fk_region
             WHERE
                 shantytowns_today.departement_code = :departementCode
             AND
