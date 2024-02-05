@@ -39,4 +39,6 @@ export default defineNuxtPlugin((nuxtApp) => {
         trackerFileName: MATOMO_TRACKER_FILENAME,
         trackerScriptUrl: `/${MATOMO_TRACKER_FILENAME}.js`,
     });
+
+    window._paq.push(['trackPageView']);
 });
