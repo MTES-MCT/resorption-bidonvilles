@@ -12,6 +12,22 @@ export function useMatomo(app, router) {
         return;
     }
 
+    // Si on utilise le serveur matomo DNUM, il faut modifier l'URL
+    // avant l'envoi à Matomo pour rester compatible avec Xiti
+    // Le séparateur original "/" est remplacé par "::"
+    if (
+        typeof MATOMO.DESCRIPTION_PAGE_SEPARATOR !== "undefined" &&
+        MATOMO.DESCRIPTION_PAGE_SEPARATOR !== "/"
+    ) {
+        router.beforeTrack = (to) => {
+            const modifiedPath = to.fullPath.replace(
+                /\//g,
+                MATOMO.DESCRIPTION_PAGE_SEPARATOR
+            );
+            return { ...to, fullPath: modifiedPath };
+        };
+    }
+
     app.use(VueMatomo, {
         host: MATOMO.HOST,
         siteId: MATOMO.SITE_ID,
@@ -19,6 +35,7 @@ export function useMatomo(app, router) {
         trackInitialView: false,
         cookieDomain: `*.${MATOMO.DOMAIN}`,
         domains: `*.${MATOMO.DOMAIN}`,
+        trackerFileName: MATOMO.TRACKER_FILENAME,
     });
 }
 
