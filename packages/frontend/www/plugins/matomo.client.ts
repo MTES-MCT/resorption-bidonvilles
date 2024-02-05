@@ -13,6 +13,7 @@ const shouldUseCustomizer = (separator: string): boolean => {
 };
 export default defineNuxtPlugin((nuxtApp) => {
     const {
+        MATOMO_ENABLE,
         MATOMO_HOST,
         MATOMO_SITE_ID,
         MATOMO_DOMAIN,
@@ -20,12 +21,16 @@ export default defineNuxtPlugin((nuxtApp) => {
         MATOMO_DESCRIPTION_PAGE_SEPARATOR,
     } = useRuntimeConfig().public;
 
+    if (MATOMO_ENABLE !== "true") {
+        return;
+    }
+
     nuxtApp.vueApp.use(VueMatomo, {
         host: MATOMO_HOST,
         siteId: MATOMO_SITE_ID,
         domains: `*.${MATOMO_DOMAIN}`,
         cookieDomain: `*.${MATOMO_DOMAIN}`,
-        trackPageViewCustomizer: shouldUseCustomizer(MATOMO_DESCRIPTION_PAGE_SEPARATOR)
+        trackPageViewCustomizer: shouldUseCustomizer(MATOMO_DESCRIPTION_PAGE_SEPARATOR as string)
             ? (data: TrackerCustomizer) => {
                 data.url = replaceSeparator(data.url);
                 return data;
