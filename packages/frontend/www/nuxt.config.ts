@@ -34,10 +34,15 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
-            API_URL: process.env.NUXT_API_URL || "${NUXT_API_URL}",
+            DOMAIN: process.env.NUXT_DOMAIN || "${NUXT_DOMAIN}",
             WEBAPP_URL: process.env.NUXT_WEBAPP_URL || "${NUXT_WEBAPP_URL}",
-            WWW_URL: process.env.NUXT_WWW_URL || "${NUXT_WWW_URL}",
             CONTACT_EMAIL: process.env.NUXT_CONTACT_EMAIL || "${NUXT_CONTACT_EMAIL}",
+            MATOMO_ENABLE: process.env.NUXT_MATOMO_ENABLE || "${NUXT_MATOMO_ENABLE}",
+            MATOMO_HOST: process.env.NUXT_MATOMO_HOST || "${NUXT_MATOMO_HOST}",
+            MATOMO_SITE_ID: process.env.NUXT_MATOMO_SITE_ID || "${NUXT_MATOMO_SITE_ID}",
+            MATOMO_DOMAIN: process.env.NUXT_MATOMO_DOMAIN || "${NUXT_MATOMO_DOMAIN}",
+            MATOMO_TRACKER_FILENAME: process.env.NUXT_MATOMO_TRACKER_FILENAME || "${NUXT_MATOMO_TRACKER_FILENAME}",
+            MATOMO_DESCRIPTION_PAGE_SEPARATOR: process.env.NUXT_MATOMO_DESCRIPTION_PAGE_SEPARATOR || "${NUXT_MATOMO_DESCRIPTION_PAGE_SEPARATOR}",
         }
     },
     alias: {
