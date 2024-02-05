@@ -17,6 +17,10 @@ export default {
         spin: {
             type: Boolean
         },
+        title: {
+            type: String,
+            required: false
+        }
     },
 
     computed: {
