@@ -4,11 +4,12 @@
         :fn="autocompleteFn"
         v-model="location"
         showCategory
+        ref="input"
     />
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, defineEmits } from "vue";
+import { defineProps, toRefs, computed, defineEmits, ref } from "vue";
 import { Autocomplete } from "@resorptionbidonvilles/ui";
 import { autocomplete } from "@/api/locations.api.js";
 import formatLocationLabel from "@/utils/formatLocationLabel.js";
@@ -22,6 +23,7 @@ const props = defineProps({
 });
 const { modelValue } = toRefs(props);
 const emit = defineEmits(["update:modelValue"]);
+const input = ref(null);
 const location = computed({
     get() {
         return modelValue.value;
@@ -47,4 +49,10 @@ async function autocompleteFn(value) {
         },
     }));
 }
+
+defineExpose({
+    focus: () => {
+        input.value.focus();
+    },
+});
 </script>
