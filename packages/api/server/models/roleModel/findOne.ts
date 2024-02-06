@@ -1,8 +1,13 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-export default async (id, type = null) => {
-    const replacements: any = {
+type RoleRaw = {
+    id: string,
+    name: string,
+};
+
+export default async (id: string, type: 'regular' | 'admin' = null): Promise<RoleRaw | null> => {
+    const replacements: { role_id: string, type?: 'regular' | 'admin' } = {
         role_id: id,
     };
 
@@ -10,7 +15,7 @@ export default async (id, type = null) => {
         replacements.type = type;
     }
 
-    const role = await sequelize.query(
+    const role: RoleRaw[] = await sequelize.query(
         `SELECT
             roles.role_id AS id,
             roles.name AS name
