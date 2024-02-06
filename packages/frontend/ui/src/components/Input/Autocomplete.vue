@@ -60,6 +60,11 @@ const props = defineProps({
         required: false,
         default: false
     },
+    autoClear: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
     showCategory: {
         type: Boolean,
         required: false,
@@ -72,7 +77,7 @@ const props = defineProps({
     },
 });
 const emit = defineEmits(['update:modelValue']);
-const { fn, name, withoutMargin, allowFreeSearch, showCategory, modelValue, disabled } = toRefs(props);
+const { fn, name, withoutMargin, allowFreeSearch, showCategory, modelValue, disabled, autoClear } = toRefs(props);
 
 const rawResults = ref([]);
 const isLoading = ref(false);
@@ -213,15 +218,24 @@ function selectItem(item) {
         search: item.label,
         data: item.data
     });
-    input.value.setValue(item.selectedLabel || item.label);
+
+    if (autoClear.value === true) {
+        clear({ sendEvent: false });
+    } else {
+        input.value.setValue(item.selectedLabel || item.label);
+    }
 }
 
-function clear() {
+function clear(options = {}) {
     rawResults.value = [];
     selectedItem.value = null;
     abort();
-    handleChange(undefined);
-    sendEvent(undefined);
+
+    if (options.sendEvent !== false) {
+        handleChange(undefined);
+        sendEvent(undefined);
+    }
+
     input.value.setValue("");
 }
 
