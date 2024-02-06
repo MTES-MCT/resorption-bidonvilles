@@ -112,8 +112,9 @@ export default (variant, allowNewOrganization, language) => {
 
     // organization category
     const organizationCategory = string().label(labels.organization_category);
-    const organizationCategories =
-        organizationCategoriesFn(allowNewOrganization);
+    const organizationCategories = organizationCategoriesFn({
+        other: allowNewOrganization,
+    });
     function makeOrganizationCategoryRequired(schema) {
         return schema
             .required()
@@ -156,7 +157,7 @@ export default (variant, allowNewOrganization, language) => {
                 ),
         })
         .label(labels.territorial_collectivity);
-    schema.association = string()
+    schema.association = object()
         .when("organization_category", {
             is: "association",
             then: (schema) =>
