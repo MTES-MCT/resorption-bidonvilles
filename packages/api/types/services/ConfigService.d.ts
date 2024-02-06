@@ -1,4 +1,5 @@
 import { RolePermissionDescriptions } from '#server/permissions_description';
+import { Role } from '#root/types/resources/Role.d';
 import { ActionFinanceType } from '../resources/ActionFinance.d';
 import { Changelog } from '../resources/Changelog.d';
 import { CharteEngagement } from '../resources/CharteEngagement.d';
@@ -36,4 +37,5 @@ export type ConfigServiceFetchResponse = {
     topics: Topic[],
     user: User,
     version_charte_engagement: CharteEngagement,
+    roles: Role[],
 };
