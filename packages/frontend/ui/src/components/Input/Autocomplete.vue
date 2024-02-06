@@ -211,11 +211,11 @@ function selectItem(item) {
     lastPromise.value = null;
     selectedItem.value = item;
     handleChange({
-        search: item.label,
+        search: item.selectedLabel || item.label,
         data: item.data
     });
     sendEvent({
-        search: item.label,
+        search: item.selectedLabel || item.label,
         data: item.data
     });
 
