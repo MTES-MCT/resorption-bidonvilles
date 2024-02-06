@@ -1,4 +1,4 @@
-export default (withOther = false) => {
+export default (options = {}) => {
     const cats = [
         {
             value: "public_establishment",
@@ -15,8 +15,12 @@ export default (withOther = false) => {
         { value: "administration", label: "Administration centrale" },
     ];
 
-    if (withOther === true) {
+    if (options.other === true) {
         cats.push({ value: "other", label: "Autre" });
+    }
+
+    if (options.private_organization === true) {
+        cats.push({ value: "private_organization", label: "Organisme privé" });
     }
 
     return cats;
