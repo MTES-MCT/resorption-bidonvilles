@@ -16,12 +16,12 @@
                 >
                     {{ organization.name }}
                 </p>
-                <p class="text-G600">{{ organization.type.name }}</p>
+                <p class="text-G700">{{ organization.type.name }}</p>
                 <p v-if="displayBeingFunded" class="text-info">
                     <Icon icon="euro-sign" /> Structure financée
                 </p>
                 <p
-                    class="mt-3 text-G600"
+                    class="mt-3 text-G700"
                     v-if="organization.intervention_areas.areas.length > 1"
                 >
                     <span class="font-bold">Territoires d'intervention :</span>
@@ -35,7 +35,7 @@
                 -
             </header>
 
-            <p class="my-2 text-sm text-G600">
+            <p class="my-2 text-sm text-G700">
                 {{ organization.users.length }} membre{{ plural ? "s" : "" }}
                 <template v-if="showWording">
                     inscrit{{ plural ? "s" : "" }} sur la plateforme
@@ -68,7 +68,7 @@
                             {{ user.last_name.toUpperCase() }}
                             {{ user.first_name }}
                         </span>
-                        <div class="ml-8 text-G600 flex w-full">
+                        <div class="ml-8 text-G700 flex w-full">
                             <Icon
                                 icon="arrow-turn-down-right"
                                 class="text-info mr-2"

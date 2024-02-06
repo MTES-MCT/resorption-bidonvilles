@@ -20,7 +20,7 @@
                             departementMetricsStore.activeTab
                         ].id === 'city_name'
                     "
-                    class="text-G600"
+                    class="text-G700"
                     ><Icon :icon="chevronState"
                 /></span>
             </div>
@@ -46,7 +46,7 @@
                         departementMetricsStore.activeTab
                     ].id === col.uid
                 "
-                class="ml-2 text-G600"
+                class="ml-2 text-G700"
                 ><Icon :icon="chevronState"
             /></span>
         </RbTitle>

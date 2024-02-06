@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center">
-        <Icon :icon="icon" class="text-G600" />
+        <Icon :icon="icon" class="text-G700" />
         <div class="ml-2"><slot /></div>
     </div>
 </template>

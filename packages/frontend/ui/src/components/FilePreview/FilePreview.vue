@@ -5,7 +5,7 @@
             <FilePreviewIcon aria-hidden="true" class="flex-shrink-0" :file="file" />
             <div class="text-sm overflow-hidden flex-1">
                 <p class="truncate" aria-hidden="true">{{ file.name }}</p>
-                <p class="text-G500">
+                <p class="text-G700">
                     <span :aria-label="`Extension du fichier, ${file.extension?.toUpperCase()}`">{{ file.extension?.toUpperCase() }}</span>
                     -
                     <span :aria-label="`Taille du fichier, ${humanFileSize(file.size)}`">{{ humanFileSize(file.size) }}</span>

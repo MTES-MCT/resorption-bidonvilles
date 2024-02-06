@@ -1,7 +1,7 @@
 <template>
     <div
         v-if="!shantytown.justiceStatuses || !shantytown.justiceStatuses.length"
-        class="text-G600"
+        class="text-G700"
     >
         <Icon icon="ban" />&nbsp;
         <template

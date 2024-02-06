@@ -36,7 +36,7 @@
                 v-if="resorptionTarget"
                 :target="resorptionTarget"
             />
-            <p class="text-G500">{{ formatActivityDate(activity.date) }}</p>
+            <p class="text-G700">{{ formatActivityDate(activity.date) }}</p>
             <!-- eslint-disable prettier/prettier -->
             <blockquote v-if="description" class="mt-3 border-l-4 border-primary py-1 pl-2 italic whitespace-pre-line">
                 “{{ description }}“</blockquote>

@@ -24,7 +24,7 @@
 
         <p
             v-else-if="dashboardStore.stats.data.length === 0"
-            class="mt-6 text-G600 italic"
+            class="mt-6 text-G700 italic"
         >
             Aucune donnée à afficher
         </p>

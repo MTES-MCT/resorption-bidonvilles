@@ -8,7 +8,7 @@
             question.createdAt,
             'i'
         )}`"
-        class="flex justify-start text-G600"
+        class="flex justify-start text-G700"
     >
         Le {{ formatDate(question.createdAt, "d M y à h:i") }}
     </div>

@@ -5,7 +5,7 @@
                 <Icon icon="cutlery" class="mr-2" />
                 <span class="font-bold">Point de distribution alimentaire</span>
             </p>
-            <p class="text-sm text-G600">
+            <p class="text-sm text-G700">
                 source: <Link to="https://soliguide.fr">soliguide.fr</Link>
             </p>
         </template>

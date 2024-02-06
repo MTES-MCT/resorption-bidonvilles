@@ -9,7 +9,7 @@
             :population="shantytown.populationTotal"
         />
         <div>
-            <div v-if="!socialOrigins.length" class="text-G600">
+            <div v-if="!socialOrigins.length" class="text-G700">
                 Origine : inconnu
             </div>
             <div

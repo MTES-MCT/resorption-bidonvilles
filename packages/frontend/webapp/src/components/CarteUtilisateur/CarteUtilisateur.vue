@@ -15,7 +15,7 @@
             </h2>
             <p>{{ user.position }}</p>
             <p class="mt-2">
-                <span class="text-G600 text-sm">Rôle sur la plateforme :</span
+                <span class="text-G700 text-sm">Rôle sur la plateforme :</span
                 ><br />
                 <span :class="user.is_admin ? 'text-info' : ''"
                     ><IconeAdministrateur v-if="user.is_admin" />
@@ -44,7 +44,7 @@
                     <li
                         v-for="topic in getTopicsByLevel('expertise')"
                         :key="topic.uid"
-                        class="text-G600 ml-2 text-sm"
+                        class="text-G700 ml-2 text-sm"
                     >
                         - {{ topic.label }}
                     </li>
@@ -57,7 +57,7 @@
                     <li
                         v-for="topic in getTopicsByLevel('interest')"
                         :key="topic.uid"
-                        class="text-G600 ml-2 text-sm"
+                        class="text-G700 ml-2 text-sm"
                     >
                         - {{ topic.label }}
                     </li>

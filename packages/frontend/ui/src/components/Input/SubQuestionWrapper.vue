@@ -11,7 +11,7 @@
                 <slot />
             </div>
         </div>
-        <span v-if="info" class="inline-block text-G500 pb-1">{{ info }}</span>
+        <span v-if="info" class="inline-block text-G700 pb-1">{{ info }}</span>
     </div>
 </template>
 

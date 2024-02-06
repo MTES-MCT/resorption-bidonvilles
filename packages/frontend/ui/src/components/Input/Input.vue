@@ -9,7 +9,7 @@
             <InputIcon position="after" v-if="(clear && currentValue) || suffixIcon || $slots.suffix">
                 <slot name="suffix" v-if="$slots.suffix" />
                 <template v-else>
-                    <span v-if="clear" @click="$emit('clear')" class="cursor-pointer hover:text-G800 text-sm text-G500">
+                    <span v-if="clear" @click="$emit('clear')" class="cursor-pointer hover:text-G800 text-sm text-G700">
                         <Icon icon="fa-trash-alt fa-regular" />
                         Vider
                     </span>

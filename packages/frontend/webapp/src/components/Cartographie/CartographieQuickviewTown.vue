@@ -13,7 +13,7 @@
                     <span class="text-sm">({{ town?.city.name }})</span></Link
                 >
             </p>
-            <p class="text-sm text-G600">
+            <p class="text-sm text-G700">
                 <template v-if="town?.status === 'open'">
                     Dernière modification le
                     {{ town ? formatDate(town?.updatedAt) : "" }}

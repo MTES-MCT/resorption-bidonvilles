@@ -2,7 +2,7 @@
     <FicheGrille>
         <template v-slot:col1>
             <p class="font-bold">Sites à proximité</p>
-            <p class="text-sm text-G600">Dans un rayon de 500m</p>
+            <p class="text-sm text-G700">Dans un rayon de 500m</p>
         </template>
 
         <template v-slot:col2>

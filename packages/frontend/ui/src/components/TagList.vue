@@ -1,6 +1,6 @@
 <template>
     <div class="border rounded p-4 -mt-4 flex flex-wrap gap-2 mb-6">
-        <p v-if="tags.length === 0" class="text-G600 italic">
+        <p v-if="tags.length === 0" class="text-G700 italic">
             La liste est vide pour le moment
         </p>
         <template v-else>

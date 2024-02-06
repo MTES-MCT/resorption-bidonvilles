@@ -5,7 +5,7 @@
         @mouseleave="isHover = false"
     >
         <div class="flex justify-between">
-            <div class="text-G600 text-sm mb-1">
+            <div class="text-G700 text-sm mb-1">
                 {{ formatDate(comment.createdAt, "d M y à h:i") }}
             </div>
             <span

@@ -1,6 +1,6 @@
 <template>
     <Icon v-if="value !== 'unknown'" :icon="icon" :class="color" />
-    <span v-else class="text-G500">?</span>
+    <span v-else class="text-G700">?</span>
 </template>
 
 <script setup>
