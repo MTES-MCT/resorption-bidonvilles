@@ -7,7 +7,7 @@ import { type OrganizationRaw } from '#server/models/organizationModel/findByIds
 import ServiceError from '#server/errors/ServiceError';
 import { LocationType } from '#server/models/geoModel/LocationType.d';
 
-type OrganizationCreateInput = {
+export type OrganizationCreateInput = {
     name: string,
     abbreviation: string | null,
     intervention_areas: { type: LocationType, code: string | null }[],
