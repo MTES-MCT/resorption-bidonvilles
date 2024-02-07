@@ -4,13 +4,13 @@ import createOrganizationType from '#server/models/organizationTypeModel/create'
 import createOrganization from '#server/models/organizationModel/create';
 import findOrganizationById from '#server/models/organizationModel/findOneById';
 import ServiceError from '#server/errors/ServiceError';
-import { LocationType } from '#server/models/geoModel/LocationType.d';
 import { Organization } from '#root/types/resources/Organization.d';
+import { InputInterventionArea } from '#root/types/inputs/InterventionArea.d';
 
 export type OrganizationCreateInput = {
     name: string,
     abbreviation: string | null,
-    intervention_areas: { type: LocationType, code: string | null }[],
+    intervention_areas: InputInterventionArea[],
 } & ({
     type: number,
     new_type_category: null,
