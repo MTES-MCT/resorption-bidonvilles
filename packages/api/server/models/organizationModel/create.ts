@@ -1,11 +1,12 @@
 import { sequelize } from '#db/sequelize';
+import { LocationType } from '#server/models/geoModel/LocationType.d';
 import { type Transaction } from 'sequelize';
 
 type OrganizationCreateData = {
     type: number,
     name: string,
     abbreviation: string,
-    intervention_areas: { type: 'city' | 'epci' | 'departement' | 'region', code: string }[],
+    intervention_areas: { type: LocationType, code: string | null }[],
 };
 
 export default async (createdBy: number, data: OrganizationCreateData, argTransaction?: Transaction): Promise<number> => {

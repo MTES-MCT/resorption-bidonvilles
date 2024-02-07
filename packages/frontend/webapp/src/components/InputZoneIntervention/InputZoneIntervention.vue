@@ -1,14 +1,25 @@
 <template>
     <InputWrapper :hasErrors="error">
-        <InputLocation
-            v-bind="$attrs"
-            :name="`${name}_input`"
-            info="Commencez à saisir le nom d'une région, département, EPCI, ou commune, puis sélectionnez le territoire désiré dans la liste proposée"
-            placeholder="Exemples : Île-de-France, Bordeaux Métropole, Rennes, Hérault, ..."
-            autoClear
-            ref="inputTerritorialCollectivity"
-            v-model="autocomplete"
-        />
+        <div class="flex items-center gap-2">
+            <InputLocation
+                v-bind="$attrs"
+                :name="`${name}_input`"
+                info="Commencez à saisir le nom d'une région, département, EPCI, ou commune, puis sélectionnez le territoire désiré dans la liste proposée"
+                placeholder="Exemples : Île-de-France, Bordeaux Métropole, Rennes, Hérault, ..."
+                autoClear
+                ref="inputTerritorialCollectivity"
+                v-model="autocomplete"
+                class="flex-1"
+            />
+            <RbButton
+                class="mt-3"
+                size="sm"
+                type="button"
+                @click="addNation"
+                :disabled="hasNation"
+                >Ajouter la France entière</RbButton
+            >
+        </div>
         <InputZoneInterventionValeur
             :areas="value"
             @focusAutocomplete="() => inputTerritorialCollectivity.focus()"
@@ -20,9 +31,13 @@
 </template>
 
 <script setup>
-import { ref, toRefs, watch } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
 import { useField, useFieldError } from "vee-validate";
-import { InputError, InputWrapper } from "@resorptionbidonvilles/ui";
+import {
+    InputError,
+    InputWrapper,
+    Button as RbButton,
+} from "@resorptionbidonvilles/ui";
 import InputLocation from "@/components/InputLocation/InputLocation.vue";
 import InputZoneInterventionValeur from "./InputZoneInterventionValeur.vue";
 
@@ -45,6 +60,21 @@ function removeArea(area, index) {
         ...value.value.slice(index + 1),
     ]);
 }
+
+function addNation() {
+    if (hasNation.value === true) {
+        return;
+    }
+
+    handleChange([
+        ...value.value,
+        { type: "nation", code: null, name: "France entière" },
+    ]);
+}
+
+const hasNation = computed(() => {
+    return value.value.some(({ type }) => type === "nation");
+});
 
 watch(autocomplete, () => {
     if (!autocomplete.value?.data) {

@@ -5,11 +5,12 @@ import createOrganization from '#server/models/organizationModel/create';
 import findOrganizationById from '#server/models/organizationModel/findOneById';
 import { type OrganizationRaw } from '#server/models/organizationModel/findByIds';
 import ServiceError from '#server/errors/ServiceError';
+import { LocationType } from '#server/models/geoModel/LocationType.d';
 
 type OrganizationCreateInput = {
     name: string,
     abbreviation: string | null,
-    intervention_areas: { type: 'city' | 'epci' | 'departement' | 'region', code: string }[],
+    intervention_areas: { type: LocationType, code: string | null }[],
 } & ({
     type: number,
     new_type_category: null,
