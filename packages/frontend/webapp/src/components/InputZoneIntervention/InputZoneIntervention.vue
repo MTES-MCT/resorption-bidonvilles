@@ -3,7 +3,6 @@
         <InputLocation
             v-bind="$attrs"
             :name="`${name}_input`"
-            label="Ajouter des territoires"
             info="Commencez à saisir le nom d'une région, département, EPCI, ou commune, puis sélectionnez le territoire désiré dans la liste proposée"
             placeholder="Exemples : Île-de-France, Bordeaux Métropole, Rennes, Hérault, ..."
             autoClear
