@@ -1,21 +1,19 @@
-import createOrganization from '#server/services/organization/create';
+import { NextFunction, Request, Response } from 'express';
+import createOrganization, { type OrganizationCreateInput } from '#server/services/organization/create';
 import { OrganizationRaw } from '#server/models/organizationModel/findByIds';
+import { User } from '#root/types/resources/User.d';
 
-export default async (req, res, next) => {
+interface OrganizationCreateRequest extends Request {
+    user: User,
+    body: OrganizationCreateInput
+}
+
+export default async (req: OrganizationCreateRequest, res: Response, next: NextFunction) => {
     let organization: OrganizationRaw;
     try {
         organization = await createOrganization(
             req.user.id,
-            {
-                name: req.body.name,
-                abbreviation: req.body.abbreviation,
-                intervention_areas: req.body.intervention_areas,
-                type: req.body.type,
-                new_type_category: req.body.new_type_category,
-                new_type_name: req.body.new_type_name,
-                new_type_abbreviation: req.body.new_type_abbreviation,
-                new_type_default_role: req.body.new_type_default_role,
-            },
+            req.body,
         );
     } catch (error) {
         res.status(500).send({
