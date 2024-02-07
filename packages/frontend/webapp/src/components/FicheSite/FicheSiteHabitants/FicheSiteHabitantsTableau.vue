@@ -3,17 +3,9 @@
         <caption class="mb-4">
             Récapitulatif des habitants et des habitats sur le site
             <span class="sr-only">
-                Le tableau ci-dessous présente un récapitulatif des habitants et
-                des habitats sur le site. Les colonnes correspondent aux dates
-                de saisie par un contributeur de la plateforme. La première
-                ligne indique le nombre de personnes sur site, la deuxième le
-                nombre de ménages, la troisième le nombre de mineurs. Les 5
-                lignes suivantes indiquent le nombre de mineurs par tranche
-                d'âge (0-3 ans, 3-6 ans, 6-12 ans, 12-16 ans, 16-18 ans).
-                Ensuite vient le nombre de mineurs inscrits en établissement
-                scolaire. Enfin, les 5 dernières lignes indiquent le nombre
-                d'habitats par type (caravanes, habitats autoconstruits, tentes,
-                voitures dortoir, matelas).
+                Les caractéristiques des habitants et des habitats sont
+                présentées par ligne. Chaque colonne correspond à une date de
+                saisie.
             </span>
         </caption>
         <thead>
