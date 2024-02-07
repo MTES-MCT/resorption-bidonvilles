@@ -1,7 +1,7 @@
 import createOrganization from '#server/services/organization/create';
 import { OrganizationRaw } from '#server/models/organizationModel/findByIds';
 
-export default async (req, res) => {
+export default async (req, res, next) => {
     let organization: OrganizationRaw;
     try {
         organization = await createOrganization(
@@ -18,10 +18,12 @@ export default async (req, res) => {
             },
         );
     } catch (error) {
-        return res.status(500).send({
+        res.status(500).send({
             user_message: 'Une erreur est survenue lors de l\'écriture en base de données',
         });
+        next(error);
+        return;
     }
 
-    return res.status(200).send(organization);
+    res.status(200).send(organization);
 };
