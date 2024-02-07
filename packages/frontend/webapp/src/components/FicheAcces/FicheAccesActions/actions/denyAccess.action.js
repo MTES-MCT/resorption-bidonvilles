@@ -2,6 +2,7 @@ import { denyAccess } from "@/api/users.api";
 import { useAccesStore } from "@/stores/acces.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { trackEvent } from "@/helpers/matomo";
+import backOrReplace from "@/utils/backOrReplace";
 
 export default async function (user) {
     const accesStore = useAccesStore();
@@ -13,4 +14,5 @@ export default async function (user) {
         "L'utilisateur vient d'être notifié par mail et son compte supprimé"
     );
     trackEvent("Demande d'accès", "Refuser accès");
+    backOrReplace("/acces");
 }
