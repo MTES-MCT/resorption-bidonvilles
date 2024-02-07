@@ -9,6 +9,13 @@ interface OrganizationCreateRequest extends Request {
 }
 
 export default async (req: OrganizationCreateRequest, res: Response, next: NextFunction) => {
+    if (!req.user.is_admin) {
+        res.status(403).send({
+            user_message: 'Vous n\'avez pas les droits suffisants pour créer une structure',
+        });
+        return;
+    }
+
     let organization: OrganizationRaw;
     try {
         organization = await createOrganization(
