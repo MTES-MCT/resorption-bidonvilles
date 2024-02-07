@@ -36,6 +36,7 @@ const { area } = toRefs(props);
 const emit = defineEmits(["remove"]);
 
 const TYPE_LABELS = {
+    nation: "Territoire national",
     region: "Région",
     departement: "Département",
     epci: "EPCI",
