@@ -8,5 +8,5 @@ export default {
         "Acronyme, sigle, ou abréviation du type de structure",
     new_type_default_role:
         "Rôle sur la plateforme des utilisateurs appartenant à ce type de structure",
-    intervention_areas: "Zone(s) d'intervention de la structure",
+    intervention_areas: "Territoire(s) d'intervention de la structure",
 };
