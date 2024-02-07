@@ -10,6 +10,10 @@ export default [
         .toInt()
         .isInt().bail().withMessage('L\'identifiant de l\'utilisateur à modifier est invalide')
         .custom(async (value, { req }) => {
+            if (req.user.id === value) {
+                throw new Error('Vous ne pouvez pas modifier vos propre territoires d\'intervention');
+            }
+
             let user: User;
             try {
                 user = await findOneUser(value, undefined, req.user, 'activate');

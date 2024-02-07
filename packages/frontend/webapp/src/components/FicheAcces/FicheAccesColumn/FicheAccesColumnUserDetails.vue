@@ -44,6 +44,7 @@
         >Modifier ces informations</Button
     >
     <Button
+        v-if="userStore.user?.id !== user.id"
         class="mt-2"
         size="sm"
         icon="building-user"

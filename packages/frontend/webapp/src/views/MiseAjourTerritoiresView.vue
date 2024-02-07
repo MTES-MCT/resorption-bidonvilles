@@ -47,6 +47,7 @@
 <script setup>
 import { onMounted, ref, computed } from "vue";
 import { useAccesStore } from "@/stores/acces.store.js";
+import { useUserStore } from "@/stores/user.store";
 import router, { setDocumentTitle } from "@/helpers/router";
 import backOrReplace from "@/utils/backOrReplace";
 import formatUserName from "@/utils/formatUserName";
@@ -59,6 +60,7 @@ import FormMiseAjourTerritoires from "@/components/FormMiseAjourTerritoires/Form
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 
 const accesStore = useAccesStore();
+const userStore = useUserStore();
 const isLoading = ref(null);
 const error = ref(null);
 const form = ref(null);
@@ -78,6 +80,12 @@ async function load() {
     isLoading.value = true;
     error.value = null;
     try {
+        if (userId.value === userStore.user?.id) {
+            throw {
+                code: "Vous ne pouvez pas modifier vos propres territoires d'intervention",
+            };
+        }
+
         userRef = await accesStore.fetchUser(userId.value, true);
         setDocumentTitle(
             `${router.currentRoute.value.meta.title} — ${formatUserName(
