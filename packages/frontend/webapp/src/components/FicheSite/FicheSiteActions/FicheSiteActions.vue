@@ -1,32 +1,52 @@
 <template>
     <FicheRubrique title="Actions">
-        <section>
-            <template v-if="actions.onGoing.length > 0">
-                <p>Actions en cours</p>
-                <div class="grid grid-cols-2 gap-4">
+        <template v-if="town.closedAt === null">
+            <section>
+                <template v-if="actions.onGoing.length > 0">
+                    <p>Actions en cours</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <CarteActionDeSite
+                            v-for="action in actions.onGoing"
+                            :key="action.id"
+                            :action="action"
+                        />
+                    </div>
+                </template>
+                <p v-else>Il n'y a aucune action en cours sur ce site.</p>
+            </section>
+
+            <section v-if="actions.ended.length > 0" class="mt-6">
+                <Button @click="toggleEndedActions"
+                    >{{ showEndedActions ? "Masquer" : "Voir" }}
+                    {{ actionEndedWording }}</Button
+                >
+                <div
+                    class="grid grid-cols-2 gap-4 mt-4"
+                    v-if="showEndedActions"
+                >
                     <CarteActionDeSite
-                        v-for="action in actions.onGoing"
+                        v-for="action in actions.ended"
                         :key="action.id"
                         :action="action"
                     />
                 </div>
-            </template>
-            <p v-else>Il n'y a aucune action en cours sur ce site.</p>
-        </section>
+            </section>
+        </template>
 
-        <section v-if="actions.ended.length > 0" class="mt-6">
-            <Button @click="toggleEndedActions"
-                >{{ showEndedActions ? "Masquer" : "Voir" }}
-                {{ actionEndedWording }}</Button
-            >
-            <div class="grid grid-cols-2 gap-4 mt-4" v-if="showEndedActions">
-                <CarteActionDeSite
-                    v-for="action in actions.ended"
-                    :key="action.id"
-                    :action="action"
-                />
-            </div>
-        </section>
+        <template v-else>
+            <section>
+                <template v-if="town.actions.length > 0">
+                    <div class="grid grid-cols-2 gap-4">
+                        <CarteActionDeSite
+                            v-for="action in town.actions"
+                            :key="action.id"
+                            :action="action"
+                        />
+                    </div>
+                </template>
+                <p v-else>Ce site n'est lié à aucune action.</p>
+            </section>
+        </template>
     </FicheRubrique>
 </template>
 
