@@ -153,7 +153,7 @@ export default [
                 return acc;
             }, []);
             if (errors.length > 0) {
-                throw new Error(`Les territoires d'intervention suivantes n'ont pas été retrouvées en base de données : ${errors.join(', ')}`);
+                throw new Error(`Les territoires d'intervention suivants n'ont pas été retrouvés en base de données : ${errors.join(', ')}`);
             }
 
             req.interventionAreas = locations;
