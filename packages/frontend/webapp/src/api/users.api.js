@@ -92,6 +92,10 @@ export function setExpertiseTopics(
     });
 }
 
+export function setInterventionAreas(userId, data) {
+    return axios.put(`users/${encodeURI(userId)}/intervention-areas`, data);
+}
+
 export function setLocalAdmin(userId, admin = true) {
     return axios.put(`/users/${encodeURI(userId)}/role-admin`, { admin });
 }

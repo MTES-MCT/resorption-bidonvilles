@@ -45,7 +45,9 @@ import { useForm } from "vee-validate";
 import schema from "./FormMiseAjourTerritoires.schema";
 import labels from "./FormMiseAjourTerritoires.labels";
 import { useNotificationStore } from "@/stores/notification.store";
+import { useAccesStore } from "@/stores/acces.store";
 import router from "@/helpers/router";
+import { setInterventionAreas } from "@/api/users.api";
 
 import { ErrorSummary, FormParagraph, Icon } from "@resorptionbidonvilles/ui";
 import FormMiseAjourTerritoiresInputOrganizationAreas from "./inputs/FormMiseAjourTerritoiresInputOrganizationAreas.vue";
@@ -86,8 +88,25 @@ defineExpose({
         error.value = null;
 
         try {
-            console.log(sentValues);
-            await new Promise((res, rej) => setTimeout(rej, 1000));
+            const accesStore = useAccesStore();
+            const updatedUser = await setInterventionAreas(user.value.id, {
+                organization_areas: sentValues.organization_areas.map(
+                    ({ type, code, name }) => ({
+                        type,
+                        code,
+                        name,
+                    })
+                ),
+                user_areas: sentValues.user_areas.map(
+                    ({ type, code, name }) => ({
+                        type,
+                        code,
+                        name,
+                    })
+                ),
+            });
+
+            accesStore.updateUser(user.value.id, updatedUser);
 
             const notificationStore = useNotificationStore();
             notificationStore.success(
