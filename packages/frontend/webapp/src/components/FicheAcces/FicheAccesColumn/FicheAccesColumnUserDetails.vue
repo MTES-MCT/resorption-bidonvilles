@@ -46,7 +46,7 @@
     <Button
         class="mt-2"
         size="sm"
-        icon="user-pen"
+        icon="building-user"
         iconPosition="left"
         :href="`/utilisateur/${user.id}/territoires`"
         >Modifier le(s) territoire(s) d'intervention</Button
