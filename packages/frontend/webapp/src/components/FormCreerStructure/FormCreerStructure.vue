@@ -93,7 +93,7 @@ const error = ref(null);
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
         error.value = null;
-        console.log("sentValues", sentValues);
+
         try {
             await create({
                 name: sentValues.name,
