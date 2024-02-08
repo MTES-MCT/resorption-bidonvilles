@@ -90,6 +90,7 @@
                 class="mt-2"
                 :metrics="m"
                 :variant="variant === 'primary' ? 'secondary' : 'tertiary'"
+                :collapseByDefault="collapseByDefault"
             />
         </div>
     </section>
@@ -116,13 +117,21 @@ const props = defineProps({
         type: String,
         default: "primary",
     },
+    collapseByDefault: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
 });
-const { metrics, variant } = toRefs(props);
+const { metrics, variant, collapseByDefault } = toRefs(props);
 
 const metricsStore = useMetricsStore();
 const collapsed = computed(() => {
     const { uid, level } = metrics.value;
-    return metricsStore.collapsedStatuses[`${level}-${uid}`] ?? false;
+    return (
+        metricsStore.collapsedStatuses[`${level}-${uid}`] ??
+        collapseByDefault.value
+    );
 });
 
 const linkTo = computed(() => {
