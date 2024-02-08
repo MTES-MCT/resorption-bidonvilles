@@ -30,7 +30,7 @@
                 >
                     <span class="mr-4" v-if="variant !== 'tertiary'"
                         ><Icon
-                            :icon="collapsed ? 'chevron-down' : 'chevron-right'"
+                            :icon="collapsed ? 'chevron-right' : 'chevron-down'"
                             class="cursor-pointer"
                             :class="
                                 metrics.children?.length > 0 ? '' : 'invisible'
@@ -82,7 +82,7 @@
         <div
             class="bg-G100"
             :class="variant === 'primary' ? 'py-3' : ''"
-            v-if="metrics.children?.length > 0 && collapsed"
+            v-if="metrics.children?.length > 0 && !collapsed"
         >
             <GrilleLigne
                 v-for="m in metrics.children"

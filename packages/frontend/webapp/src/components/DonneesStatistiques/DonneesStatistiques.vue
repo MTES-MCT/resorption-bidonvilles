@@ -30,7 +30,7 @@
                 <Grille
                     class="mt-6"
                     :metrics="metricsStore.filteredMetrics"
-                    :collapseByDefault="metricsStore.metrics.length <= 1"
+                    :collapseByDefault="metricsStore.metrics.length > 1"
                 />
             </template>
         </main>
