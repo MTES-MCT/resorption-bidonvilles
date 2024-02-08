@@ -65,6 +65,7 @@ const ariane = computed(() => [
     { label: "Annuaire", to: "/annuaire" },
     { label: organization.value?.name || "..." },
 ]);
+
 watch(organization, () => {
     if (organization.value !== null) {
         registerView();

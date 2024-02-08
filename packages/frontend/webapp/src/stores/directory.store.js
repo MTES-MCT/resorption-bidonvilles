@@ -134,7 +134,7 @@ export const useDirectoryStore = defineStore("directory", () => {
     }
 
     function filterUsersByExpertiseTopics(organization, expertiseTopicsIds) {
-        return organization.users.filter((user) => {
+        return (organization?.users || []).filter((user) => {
             return user?.expertise_topics?.some((topic) =>
                 expertiseTopicsIds.includes(topic.uid)
             );
@@ -142,46 +142,24 @@ export const useDirectoryStore = defineStore("directory", () => {
     }
 
     function filterByExpertiseTopics(list) {
-        // Vérifiez si le filtre contient (au moins) une valeur
         if (filters.expertiseTopics.value.length === 0) {
-            // Pour chaque organisation, filtrer les utilisateurs en fonction du nouveau filtre
-            for (const organization of list) {
-                if (Object.hasOwn(organization, "allUsers")) {
-                    organization.users = organization.allUsers;
-                }
-            }
-
             return list;
         }
 
-        // Filtrer les organisations qui ont au moins un utilisateur avec l'un des expertiseTopicsIds donné
-        const filteredOrganizations = list.filter((organization) => {
-            // Vérifier si l'organisation a la propriété 'users'
-            if (!organization.users) {
-                // Sans users impossible de vérifier l'étendue des compétences de la structure
-                return [];
-            }
+        return (
+            list
+                // on clone tous les objets ici car on souhaite muter ces objets plus bas
+                // (précisément : modifier `users` pour les filtrer également par expertise topics)
+                .map((org) => ({ ...org }))
+                .filter((organization) => {
+                    organization.users = filterUsersByExpertiseTopics(
+                        organization,
+                        filters.expertiseTopics.value
+                    );
 
-            // Si organization.allUsers est null, c'est qu'on n'a pas encore filtré. On peut donc initialiser cette prop
-            if (!organization.allUsers) {
-                organization.allUsers = organization.users;
-            } else {
-                // Sinon, on réinitialise les organization.users avec la liste initiale
-                organization.users = organization.allUsers;
-            }
-
-            // Mise à jouir de la liste des utilisateurs
-            const filteredUsers = filterUsersByExpertiseTopics(
-                organization,
-                filters.expertiseTopics.value
-            );
-            organization.users = filteredUsers;
-
-            // Ne renvoyer que les organisations qui ont au moins un utilisateur correspondant au filtre
-            return filteredUsers.length > 0;
-        });
-
-        return filteredOrganizations;
+                    return organization.users.length > 0;
+                })
+        );
     }
 
     const { bus } = useEventBus();
