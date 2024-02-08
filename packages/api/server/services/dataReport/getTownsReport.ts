@@ -64,14 +64,19 @@ export default async (argFrom: Date, argTo: Date): Promise<TownReport[]> => {
             ? getReportIndex(argFrom, argTo, row.closed_at)
             : reports.length;
         if (isNew) {
-            for (let i = reportIndex; i < maxReportIndex; i += 1) {
+            const minReportIndex = Math.max(
+                0,
+                getReportIndex(argFrom, argTo, row.known_since),
+            );
+            for (let i = minReportIndex; i < maxReportIndex; i += 1) {
                 reports[i].all_sizes[territoryKey].number_of_towns.total += 1;
                 reports[i].big_towns_only[territoryKey].number_of_towns.total += row.population_total >= BIG_TOWN_SIZE ? 1 : 0;
             }
         }
 
         // on ignore les saisies intermédiaires entre deux dates
-        // (par exemple si la date est "15/01/2023" mais qu'on a déjà traité "16/01/2023", on peut l'ignorer)
+        // (par exemple si la date est "15/01/2023" mais qu'on a déjà traité "16/01/2023", on peut l'ignorer
+        // car il s'agit du même rapport)
         if (previousIndex === reportIndex) {
             return;
         }
