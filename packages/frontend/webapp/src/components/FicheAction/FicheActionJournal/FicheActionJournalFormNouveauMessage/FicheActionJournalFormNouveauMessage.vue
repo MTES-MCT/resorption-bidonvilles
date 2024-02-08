@@ -37,6 +37,7 @@ const attachmentsInput = ref(null);
 const { handleSubmit, setErrors, resetForm } = useForm({
     validationSchema: schema,
     initialValues: {
+        comment: "",
         attachments: new DataTransfer().files,
     },
 });
