@@ -28,7 +28,7 @@ export default (argFrom: Date, argTo: Date, argDate: Date): number => {
     }
 
     // si la date donnée correspond au même mois que la date de fin, il s'agit forcément du dernier "rapport"
-    if (date.month() === to.month() && date.year() === to.year()) {
+    if ((date.month() === to.month() && date.year() === to.year()) || date.unix() > to.unix()) {
         return from.month() === to.month() && from.year() === to.year()
             ? 1
             : getMonthDiff(argFrom, argTo);
