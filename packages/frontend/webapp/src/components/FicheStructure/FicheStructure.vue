@@ -13,45 +13,17 @@
 
         <FicheStructureInfos :organization="organization" />
         <FicheStructureFiltres v-model="expertiseTopicsFilter" class="mb-6" />
-        <div
+        <FicheStructureWarningFiltreActif
             v-if="
                 expertiseTopicsFilter.length > 0 &&
                 organization.users.length !== filteredUsers.length
             "
-            class="flex gap-4 bg-G200 border-l-4 border-blue400 px-4 py-6 mb-6"
-        >
-            <Icon icon="circle-info" />
-            <div class="pt-6">
-                <h3 class="font-bold text-xl">Filtre actif</h3>
-                <p>
-                    Attention, la liste des membres de cette structure est
-                    actuellement filtrée par sujets d'expertise.<br />
-                    <template
-                        v-if="
-                            organization.users.length - filteredUsers.length > 1
-                        "
-                    >
-                        <span class="font-bold"
-                            >{{
-                                organization.users.length - filteredUsers.length
-                            }}
-                            utilisateurs</span
-                        >
-                        sont actuellement masqués.
-                    </template>
-                    <template v-else>
-                        <span class="font-bold">1 utilisateur</span> est
-                        actuellement masqué.
-                    </template>
-                </p>
-                <RbButton
-                    size="sm"
-                    @click="expertiseTopicsFilter = []"
-                    class="mt-4"
-                    >Cliquez ici pour retirer ce filtre</RbButton
-                >
-            </div>
-        </div>
+            :numberOfHiddenUsers="
+                organization.users.length - filteredUsers.length
+            "
+            class="mb-6"
+            @resetFilters="() => (expertiseTopicsFilter = [])"
+        />
 
         <div
             class="grid grid-cols-1 lg:grid-cols-2 gap-4 auto-rows-fr"
@@ -81,15 +53,12 @@
 <script setup>
 import { computed, ref, toRefs } from "vue";
 import { useDirectoryStore } from "@/stores/directory.store";
-import {
-    ContentWrapper,
-    Icon,
-    Button as RbButton,
-} from "@resorptionbidonvilles/ui";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import CarteUtilisateur from "@/components/CarteUtilisateur/CarteUtilisateur.vue";
 import FicheStructureFiltres from "./FicheStructureFiltres.vue";
 import FicheStructureInfos from "./FicheStructureInfos.vue";
+import FicheStructureWarningFiltreActif from "./FicheStructureWarningFiltreActif.vue";
 import ViewError from "@/components/ViewError/ViewError.vue";
 
 const props = defineProps({
