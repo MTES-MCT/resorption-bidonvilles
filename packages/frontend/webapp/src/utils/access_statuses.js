@@ -16,7 +16,7 @@ export default {
     expired: {
         label: "Expiré",
         icon: "unlink",
-        textColor: "text-G600",
+        textColor: "text-G700",
     },
     activated: {
         label: "Activé",
