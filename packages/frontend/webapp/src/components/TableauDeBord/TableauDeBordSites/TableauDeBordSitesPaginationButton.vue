@@ -31,7 +31,7 @@ const { icon, disabled } = toRefs(props);
 
 const additionalClasses = computed(() => {
     if (disabled.value) {
-        return "opacity-50 cursor-not-allowed";
+        return "opacity-85 cursor-not-allowed";
     }
 
     return "";

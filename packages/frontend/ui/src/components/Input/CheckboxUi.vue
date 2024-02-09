@@ -110,14 +110,14 @@ function onChange() {
 const checkboxStyle = computed(() => {
     if (checked.value) {
         if (isSubmitting.value || disabled.value) {
-            return 'bg-blue300 border-blue300 opacity-50';
+            return 'bg-blue300 border-blue300 opacity-85';
         }
 
         return 'bg-primary border-primary';
     }
 
     if (isSubmitting.value || disabled.value) {
-        return 'bg-G200 hover:border-G400 opacity-50';
+        return 'bg-G200 hover:border-G400 opacity-85';
     }
 
     return 'hover:border-G400 hover:border-blue500'

@@ -1,7 +1,7 @@
 <template>
     <div :class="isVisible ? 'block' : 'hidden'">
         <div
-            class="absolute w-full h-full opacity-50 bg-black"
+            class="absolute w-full h-full opacity-85 bg-black"
             style="z-index: 1001"
         ></div>
         <div class="absolute w-full" style="z-index: 1002">
