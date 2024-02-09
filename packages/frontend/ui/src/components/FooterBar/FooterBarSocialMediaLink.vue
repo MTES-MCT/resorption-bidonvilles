@@ -1,7 +1,7 @@
 <template>
     <a :href="href" class="inline-block p-2 hover:bg-blue200" :class="focusClasses.ring">
-        <Icon :icon="`fa-brands ${icon}`" class="text-3xl text-primary"
-            :title="`${socialVerb} ${socialOn} ${socialName}`" />
+        <span class="sr-only">{{ socialVerb }} {{ socialOn }} {{ socialName }}</span>
+        <Icon :icon="`fa-brands ${icon}`" class="text-3xl text-primary" />
     </a>
 </template>
 
