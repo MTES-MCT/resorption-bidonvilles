@@ -3,10 +3,10 @@
         <Checkbox
             v-for="item in items"
             :key="item.uid"
-            :value="item.id"
+            :value="item.uid"
             :label="item.name"
             name="tags"
-            v-model="checkedTopics"
+            v-model="values.tags"
             v-bind="$attrs"
             :disabledCheckbox="disableTags"
         />
@@ -29,7 +29,6 @@ const { disableTags } = toRefs(props);
 const topics = ref([]);
 const checkedTopics = ref([]);
 const configStore = useConfigStore();
-// On intègre un ID au tableau des topics
 configStore.config.question_tags.map((item, index) => {
     topics.value.push({id: index+1, ...item})
 });
@@ -41,9 +40,10 @@ const items = computed(() => {
 });
 
 const values = useFormValues();
-// On boucle pour savoir quels sont les items cochés
+
 items.value.map((item, index) => {
     if (values.value.tags.some(el => el.uid === item.uid)) {
+
         checkedTopics.value.push(index+1)
     }
 });
