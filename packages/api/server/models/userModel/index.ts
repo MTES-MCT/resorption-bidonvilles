@@ -14,7 +14,6 @@ import findOneByEmail from './findOneByEmail';
 import findUsersToBeDeactivated from './findUsersToBeDeactivated';
 import formatName from './_common/formatName';
 import getAdminsFor from './getAdminsFor';
-import getDirectory from './getDirectory';
 import getHistory from './getHistory';
 import getLocationWatchers from './getLocationWatchers';
 import getQuestionSubscribers from './getQuestionSubscribers';
@@ -49,7 +48,6 @@ export default {
     findUsersToBeDeactivated,
     formatName,
     getAdminsFor,
-    getDirectory,
     getHistory,
     getLocationWatchers,
     getQuestionSubscribers,
