@@ -242,6 +242,9 @@ function intermediateSubmit(values) {
         .territorial_collectivity?.data
         ? formattedValues.territorial_collectivity.data.id
         : null;
+    formattedValues.association = formattedValues.association?.data
+        ? formattedValues.association.data.id
+        : null;
     return submit.value(formattedValues);
 }
 </script>

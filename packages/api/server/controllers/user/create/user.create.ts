@@ -1,7 +1,21 @@
 import userService from '#server/services/user/index';
+import { type Response, type Request } from 'express';
 import { User } from '#root/types/resources/User.d';
+import { Organization } from '#root/types/resources/Organization.d';
 
-export default async (req, res) => {
+interface UserCreateRequest extends Request {
+    user: User;
+    body: {
+        last_name: string;
+        first_name: string;
+        email: string;
+        phone: string | null;
+        organization_full: Organization;
+        position: string;
+    }
+}
+
+export default async (req: UserCreateRequest, res: Response) => {
     // create the user
     let result: User;
     try {

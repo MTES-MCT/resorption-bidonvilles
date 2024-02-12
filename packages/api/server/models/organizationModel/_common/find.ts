@@ -1,9 +1,10 @@
+import { QueryTypes, type Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
-import { QueryTypes } from 'sequelize';
-import interventionAreaModel from '#server/models/interventionAreaModel/index';
 import hashAreas from '#server/models/interventionAreaModel/hash';
-import { Organization } from '#root/types/resources/Organization.d';
+import listInterventionAreas from '#server/models/interventionAreaModel/list';
+
 import { UserExpertiseTopic, UserExpertiseTopicType } from '#root/types/resources/User.d';
+import { Organization } from '#root/types/resources/Organization.d';
 
 type OrganizationRow = {
     organization_id: number,
@@ -26,7 +27,29 @@ type OrganizationRow = {
     type_abbreviation: string | null,
 };
 
-export default async (): Promise<Organization[]> => {
+type OrganizationFindOptions = {
+    ids?: number[],
+    activeOnly?: boolean,
+};
+
+export default async (options: OrganizationFindOptions = {}, transaction?: Transaction): Promise<Organization[]> => {
+    const where = [];
+    const replacements: any = {};
+    if (options.ids !== undefined && options.ids?.length > 0) {
+        where.push('organizations.organization_id IN (:ids)');
+        replacements.ids = options.ids;
+    }
+
+    if (options.activeOnly === true) {
+        where.push(`
+            organizations.active = TRUE
+            AND
+            users.fk_status = 'active'
+            AND
+            users.to_be_tracked = TRUE
+        `);
+    }
+
     const users: OrganizationRow[] = await sequelize.query(
         `
         WITH users_with_expertise_topics AS (
@@ -63,16 +86,13 @@ export default async (): Promise<Organization[]> => {
         LEFT JOIN roles_regular AS user_roles_regular ON users.fk_role_regular = user_roles_regular.role_id
         LEFT JOIN roles_admin AS user_roles_admin ON users.fk_role = user_roles_admin.role_id
         LEFT JOIN users_with_expertise_topics AS user_expertise_topics ON users.user_id = user_expertise_topics.fk_user
-        WHERE
-            organizations.active = TRUE
-            AND
-            users.fk_status = 'active'
-            AND
-            users.to_be_tracked = TRUE
+        ${where.length > 0 ? `WHERE (${where.join(') (')})` : ''}
         ORDER BY organizations.name, users.last_name, users.first_name
         `,
         {
             type: QueryTypes.SELECT,
+            replacements,
+            transaction,
         },
     );
 
@@ -120,9 +140,10 @@ export default async (): Promise<Organization[]> => {
         }
     });
 
-    const interventionAreas = await interventionAreaModel.list(
+    const interventionAreas = await listInterventionAreas(
         [],
         Object.keys(hash).map(id => parseInt(id, 10)),
+        transaction,
     );
     hashAreas(interventionAreas, hash);
 
