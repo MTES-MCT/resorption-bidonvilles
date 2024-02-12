@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import createOrganization, { type OrganizationCreateInput } from '#server/services/organization/create';
-import { OrganizationRaw } from '#server/models/organizationModel/findByIds';
 import { User } from '#root/types/resources/User.d';
+import { Organization } from '#root/types/resources/Organization.d';
 
 interface OrganizationCreateRequest extends Request {
     user: User,
@@ -16,7 +16,7 @@ export default async (req: OrganizationCreateRequest, res: Response, next: NextF
         return;
     }
 
-    let organization: OrganizationRaw;
+    let organization: Organization;
     try {
         organization = await createOrganization(
             req.user.id,

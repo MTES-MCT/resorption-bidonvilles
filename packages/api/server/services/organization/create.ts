@@ -3,9 +3,9 @@ import { type Transaction } from 'sequelize';
 import createOrganizationType from '#server/models/organizationTypeModel/create';
 import createOrganization from '#server/models/organizationModel/create';
 import findOrganizationById from '#server/models/organizationModel/findOneById';
-import { type OrganizationRaw } from '#server/models/organizationModel/findByIds';
 import ServiceError from '#server/errors/ServiceError';
 import { LocationType } from '#server/models/geoModel/LocationType.d';
+import { Organization } from '#root/types/resources/Organization.d';
 
 export type OrganizationCreateInput = {
     name: string,
@@ -42,9 +42,9 @@ function createNewOrganizationType(createdBy: number, input: OrganizationCreateI
     );
 }
 
-export default async (createdBy: number, input: OrganizationCreateInput): Promise<OrganizationRaw> => {
+export default async (createdBy: number, input: OrganizationCreateInput): Promise<Organization> => {
     const transaction = await sequelize.transaction();
-    let organization: OrganizationRaw;
+    let organization: Organization;
 
     try {
         const typeId = await createNewOrganizationType(createdBy, input, transaction);
