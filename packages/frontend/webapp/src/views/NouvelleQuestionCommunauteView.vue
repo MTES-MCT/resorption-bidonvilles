@@ -12,7 +12,7 @@
         </template>
 
         <ContentWrapper size="large">
-            <FormNouvelleQuestion :question="question" ref="form" />
+            <FormNouvelleQuestion :resume="resume" ref="form" />
         </ContentWrapper>
     </LayoutForm>
 </template>
@@ -27,7 +27,7 @@ import FormNouvelleQuestion from "@/components/FormNouvelleQuestion/FormNouvelle
 
 const form = ref(null);
 
-const question = computed(() => {
+const resume = computed(() => {
     return router.currentRoute.value.query.resume;
 });
 
