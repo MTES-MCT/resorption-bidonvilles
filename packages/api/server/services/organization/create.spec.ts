@@ -3,6 +3,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import { rewiremock } from '#test/rewiremock';
 import ServiceError from '#server/errors/ServiceError';
+import { serialized as fakeOrganization } from '#test/utils/organization';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -90,8 +91,10 @@ describe('services/organization/create', () => {
     });
 
     it('retourne la structure nouvellement créée', async () => {
+        const org = fakeOrganization({ id: 78 });
+
         createOrganization.resolves(42);
-        findOrganizationById.withArgs(42, transaction).resolves({ id: 78 });
+        findOrganizationById.withArgs(42, transaction).resolves(org);
         const response = await create(42, {
             name: 'Test',
             abbreviation: 'TST',
@@ -105,7 +108,7 @@ describe('services/organization/create', () => {
             new_type_default_role: null,
         });
 
-        expect(response).to.be.eql({ id: 78 });
+        expect(response).to.be.eql(org);
     });
 
     it('exécute l\'ensemble des requêtes dans une transaction', async () => {
