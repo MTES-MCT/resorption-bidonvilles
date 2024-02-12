@@ -37,13 +37,19 @@
             />
         </div>
         <ViewError v-else variant="vide">
-            <template v-slot:title
-                >Aucun résultat pour cette recherche</template
-            >
-            <template v-slot:code>Filtres actifs</template>
+            <template v-slot:title>Aucun utilisateur</template>
+            <template v-slot:code>{{
+                expertiseTopicsFilter.length > 0
+                    ? "Aucun utilisateur pour les filtres choisis"
+                    : "Aucun utilisateur"
+            }}</template>
             <template v-slot:content
-                >Il semblerait qu'il n'existe aucun membre de cette structure
-                répondant à vos critères.</template
+                >Cette structure ne compte aucun utilisateur inscrit sur la
+                plateforme{{
+                    expertiseTopicsFilter.length > 0
+                        ? " avec les sujets d'expertise demandés"
+                        : ""
+                }}.</template
             >
             <template v-slot:actions>&nbsp;</template>
         </ViewError>
