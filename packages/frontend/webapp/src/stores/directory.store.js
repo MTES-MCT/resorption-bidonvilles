@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref, computed, watch } from "vue";
 import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
-import { list } from "@/api/organizations.api";
+import { list, get } from "@/api/organizations.api";
 import computeOrganizationLocation from "@/utils/computeOrganizationLocation";
 import Fuse from "fuse.js";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
@@ -166,6 +166,13 @@ export const useDirectoryStore = defineStore("directory", () => {
     watch(() => bus.value.get("new-user"), resetFilters);
     resetFilters();
 
+    function enrichOrganization(org) {
+        const location = computeOrganizationLocation(org);
+        org.location_name = location.name;
+        org.location_code = location.code;
+        return org;
+    }
+
     return {
         currentPage,
         numberOfPages: computed(() => {
@@ -184,6 +191,23 @@ export const useDirectoryStore = defineStore("directory", () => {
         organizations,
         filteredOrganizations,
         filters,
+        async get(requestedId) {
+            const index = organizations.value.findIndex(
+                ({ id }) => id === requestedId
+            );
+            if (index >= 0) {
+                return organizations.value[index];
+            }
+
+            try {
+                const response = await get(requestedId);
+                return enrichOrganization(response);
+            } catch (error) {
+                throw error.user_message
+                    ? error
+                    : new Error("Une erreur inconnue est survenue");
+            }
+        },
         async fetchDirectory() {
             if (isLoading.value === true) {
                 return;
@@ -193,12 +217,8 @@ export const useDirectoryStore = defineStore("directory", () => {
             error.value = null;
             try {
                 const response = await list();
-                organizations.value = response.organizations.map((org) => {
-                    const location = computeOrganizationLocation(org);
-                    org.location_name = location.name;
-                    org.location_code = location.code;
-                    return org;
-                });
+                organizations.value =
+                    response.organizations.map(enrichOrganization);
                 currentPage.index.value = 1;
             } catch (e) {
                 error.value = e?.code || "Erreur inconnue";
