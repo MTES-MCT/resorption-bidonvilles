@@ -235,6 +235,16 @@ const router = createRouter({
             },
         },
         {
+            path: "/communaute/modifier-une-question/:id",
+            component: () => import("@/views/MiseAJourDeQuestionView.vue"),
+            meta: {
+                title: "Modifier une question",
+                authRequirement: "signedIn",
+                navTab: "communaute",
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
             path: "/compte-desactive",
             component: () => import("@/views/CompteDesactiveView.vue"),
             meta: {
