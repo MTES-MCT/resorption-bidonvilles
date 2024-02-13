@@ -7,6 +7,7 @@ import {
     fetch,
     addAnswer,
     createQuestion,
+    updateQuestion,
     deleteAnswer,
     deleteQuestion,
 } from "@/api/questions.api";
@@ -146,11 +147,13 @@ export const useQuestionsStore = defineStore("questions", () => {
         return newQuestion;
     }
 
-    async function edit(data) {
-        const { action } = await edit(data);
-        console.log(data);
-        setAction(actionId, action);
-        return hash.value[action.id];
+    async function edit(data, value, userId) {
+        const updatedQuestion = await updateQuestion(data, value, userId);
+        hash.value[updatedQuestion.id] = {
+            ...hash.value[updatedQuestion.id],
+            ...updatedQuestion,
+        };
+        return updatedQuestion;
     }
 
     async function createAnswer(questionId, answer, attachments) {
