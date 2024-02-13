@@ -74,5 +74,4 @@ const author = computed(() => {
     return question.value.createdBy;
 });
 const userStore = useUserStore();
-console.log(question.value);
 </script>

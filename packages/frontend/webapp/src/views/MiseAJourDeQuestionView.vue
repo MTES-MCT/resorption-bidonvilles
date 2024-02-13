@@ -80,7 +80,6 @@ async function load() {
 }
 
 function submit(...args) {
-    console.log(...args);
     return form.value.submit(...args);
 }
 
