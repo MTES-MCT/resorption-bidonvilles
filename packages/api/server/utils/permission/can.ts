@@ -10,6 +10,7 @@ export default (user: User) => ({
             on(location: GeoLocation | Shantytown | Action): boolean {
                 // ensure the user has the permission (has it AND allowed is true)
                 const permission = getPermission(user, feature, entity);
+
                 if (!permission) {
                     return false;
                 }
@@ -33,7 +34,6 @@ export default (user: User) => ({
                     if (permission.allowed_on.actions.includes(location.id)) {
                         return true;
                     }
-
                     geoLocation = location.location;
                 } else {
                     geoLocation = location;
