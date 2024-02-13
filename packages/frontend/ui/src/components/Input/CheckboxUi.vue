@@ -120,6 +120,6 @@ const checkboxStyle = computed(() => {
         return 'bg-G200 hover:border-G400 opacity-50';
     }
 
-    return 'bg-white hover:border-G400';
+    return 'hover:border-G400 hover:border-blue500'
 });
 </script>

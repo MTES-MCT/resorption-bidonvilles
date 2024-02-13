@@ -52,6 +52,9 @@ export default {
         value: {
             type: String
         },
+        questionValue: {
+            type: String
+        },
         rules: {
             type: String
         },
@@ -100,7 +103,8 @@ export default {
             const inputOptions = {
                 // error: !!this.errors?.length,
                 prefixIcon: this.prefixIcon,
-                suffixIcon: this.suffixIcon
+                suffixIcon: this.suffixIcon,
+                disabled: this.disabled
             };
 
             return {
