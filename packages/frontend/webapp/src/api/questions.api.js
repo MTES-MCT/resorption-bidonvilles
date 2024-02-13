@@ -45,6 +45,10 @@ export function deleteQuestion(questionId) {
     return axios.delete(`/questions/${encodeURI(questionId)}`);
 }
 
+export function updateQuestion(questionId, question, userId) {
+    return axios.patch(`/question/${encodeURI(questionId)}`, question, userId);
+}
+
 export function fetch(id) {
     return axios.get(`questions/${id}`);
 }
