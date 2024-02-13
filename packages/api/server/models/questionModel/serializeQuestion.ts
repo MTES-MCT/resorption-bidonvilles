@@ -22,8 +22,23 @@ export default (question: QuestionRow): Question => ({
         last_name: question.userLastName,
         role: question.userRole,
         position: question.userPosition,
-        organization: question.organizationAbbreviation || question.organizationName,
-        organization_id: question.organizationId,
+        organization: {
+            id: question.organizationId,
+            name: question.organizationName,
+            abbreviation: question.organizationAbbreviation,
+        },
+    },
+    updatedBy: {
+        id: question.questionCreatedBy,
+        first_name: question.userFirstName,
+        last_name: question.userLastName,
+        role: question.userRole,
+        position: question.userPosition,
+        organization: {
+            id: question.organizationId,
+            name: question.organizationName,
+            abbreviation: question.organizationAbbreviation,
+        },
     },
     answers: [],
     attachments: question.attachments?.length
