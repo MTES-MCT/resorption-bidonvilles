@@ -6,7 +6,7 @@ import organizationTypeModel from '#server/models/organizationTypeModel';
 import organizationModel from '#server/models/organizationModel';
 import userModel from '#server/models/userModel';
 import { ValidationChain, CustomValidator } from 'express-validator';
-import { Organization } from '#root/types/resources/Organization';
+import { Organization } from '#root/types/resources/Organization.d';
 
 const { body } = expressValidator;
 
