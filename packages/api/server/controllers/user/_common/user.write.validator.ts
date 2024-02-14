@@ -6,6 +6,7 @@ import organizationTypeModel from '#server/models/organizationTypeModel';
 import organizationModel from '#server/models/organizationModel';
 import userModel from '#server/models/userModel';
 import { ValidationChain, CustomValidator } from 'express-validator';
+import { Organization } from '#root/types/resources/Organization.d';
 
 const { body } = expressValidator;
 
@@ -146,7 +147,7 @@ export default (
                 throw new Error('Vous devez préciser le territoire de rattachement de la structure');
             }
 
-            let organization;
+            let organization: Organization;
             try {
                 organization = await organizationModel.findOneById(value);
             } catch (error) {
@@ -157,7 +158,7 @@ export default (
                 throw new Error('Le territoire de rattachement que vous avez sélectionné n\'existe pas en base de données');
             }
 
-            if (organization.fk_type !== req.body.organization_type) {
+            if (organization.type.id !== req.body.organization_type) {
                 throw new Error('Le territoire de rattachement que vous avez sélectionné est invalide');
             }
 
@@ -168,7 +169,7 @@ export default (
     body('territorial_collectivity')
         .if((value, { req }) => req.body.organization_category_full.uid === 'territorial_collectivity')
         .custom(async (value, { req }) => {
-            let organization;
+            let organization: Organization;
             try {
                 organization = await organizationModel.findOneById(value);
             } catch (error) {
@@ -179,7 +180,7 @@ export default (
                 throw new Error('La structure que vous avez sélectionnée n\'existe pas en base de données');
             }
 
-            if (organization.fk_category !== 'territorial_collectivity') {
+            if (organization.type.category !== 'territorial_collectivity') {
                 throw new Error('La structure que vous avez sélectionnée est invalide');
             }
 
@@ -194,7 +195,7 @@ export default (
                 throw new Error('Vous devez préciser le nom de la structure');
             }
 
-            let organization;
+            let organization: Organization;
             try {
                 organization = await organizationModel.findOneById(value);
             } catch (error) {
@@ -205,7 +206,7 @@ export default (
                 throw new Error('Le nom de structure que vous avez sélectionné n\'existe pas en base de données');
             }
 
-            if (organization.fk_category !== 'administration') {
+            if (organization.type.category !== 'administration') {
                 throw new Error('Le nom de structure que vous avez sélectionné est invalide');
             }
 
@@ -216,7 +217,7 @@ export default (
     body('association')
         .if((value, { req }) => req.body.organization_category_full.uid === 'association')
         .custom(async (value, { req }) => {
-            let organization;
+            let organization: Organization;
             try {
                 organization = await organizationModel.findOneById(value);
             } catch (error) {
@@ -227,7 +228,7 @@ export default (
                 throw new Error('La structure que vous avez sélectionnée n\'existe pas en base de données');
             }
 
-            if (organization.fk_category !== 'association') {
+            if (organization.type.category !== 'association') {
                 throw new Error('La structure que vous avez sélectionnée est invalide');
             }
 
