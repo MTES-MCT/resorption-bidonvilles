@@ -33,7 +33,7 @@
         </template>
 
         <ContentWrapper size="large">
-            <FormNouvelleQuestion ref="form" :question="question" mode="edit" />
+            <FormNouvelleQuestion ref="form" :question="question" />
         </ContentWrapper>
     </LayoutForm>
 </template>
