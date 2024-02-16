@@ -8,7 +8,7 @@
             name="tags"
             v-model="values.tags"
             v-bind="$attrs"
-            :disabled="disableTags"
+            :disabled="disabled"
         />
     </CheckableGroup>
 </template>
@@ -22,10 +22,10 @@ import { CheckableGroup, Checkbox } from "@resorptionbidonvilles/ui";
 import labels from "../FormNouvelleQuestion.labels";
 
 const props = defineProps({
-    disableTags: Boolean,
+    disabled: Boolean,
 });
 
-const { disableTags } = toRefs(props);
+const { disabled } = toRefs(props);
 const topics = ref([]);
 const checkedTopics = ref([]);
 const configStore = useConfigStore();

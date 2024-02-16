@@ -3,16 +3,15 @@
         <DragZone @drop="attachmentsInput?.addFiles">
             <FormParagraph :title="labels.question" showMandatoryStar>
                 <FormNouvelleQuestionInputQuestion
-                    :disableTitre="mode === 'edit'"
+                    :disabled="mode === 'edit'"
                     :question="resume"
                 />
             </FormParagraph>
             <FormParagraph :title="labels.tags" info="(optionnel)">
-                <FormNouvelleQuestionInputTags :disableTags="mode === 'edit'"
+                <FormNouvelleQuestionInputTags :disabled="mode === 'edit'"
             /></FormParagraph>
             <FormParagraph :title="labels.other_tag" v-if="showOtherTag">
-                <FormNouvelleQuestionInputOtherTag
-                    :disableTags="mode === 'edit'"
+                <FormNouvelleQuestionInputOtherTag :disabled="mode === 'edit'"
             /></FormParagraph>
             <FormParagraph :title="labels.people_affected" info="(optionnel)">
                 <FormNouvelleQuestionInputPeopleAffected />

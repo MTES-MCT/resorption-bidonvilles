@@ -5,7 +5,7 @@
         :value="question.question"
         info="Résumez votre question à une courte phrase à destination de la communauté, vous pourrez détailler votre question plus bas."
         maxlength="255"
-        :disabled="disableTitre"
+        :disabled="disabled"
     />
 </template>
 
@@ -15,7 +15,7 @@ import { toRefs } from "vue";
 import { TextInput } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
-    disableTitre: Boolean,
+    disabled: Boolean,
     question: {
         type: String,
         required: false,
@@ -23,5 +23,5 @@ const props = defineProps({
     },
 });
 
-const { question, disableTitre } = toRefs(props);
+const { question, disabled } = toRefs(props);
 </script>
