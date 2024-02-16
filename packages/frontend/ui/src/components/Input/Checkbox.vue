@@ -1,5 +1,5 @@
 <template>
-    <CheckboxUi v-model="checkedModel" :isSubmitting="isSubmitting" :disabled="disabledCheckbox"/>
+    <CheckboxUi v-model="checkedModel" :isSubmitting="isSubmitting" :disabled="disabled"/>
 </template> 
 
 <script setup>
@@ -10,7 +10,7 @@ import { useField, useIsSubmitting } from 'vee-validate';
 
 const props = defineProps({
     name: String,
-    disabledCheckbox: Boolean,
+    disabled: Boolean,
     value: [String, Number, Boolean],
     modelValue: {
         type: [Array, String, Number, Boolean],
@@ -18,7 +18,7 @@ const props = defineProps({
         default: undefined,
     },
 });
-const { name, value, modelValue, disabledCheckbox } = toRefs(props);
+const { name, value, modelValue, disabled } = toRefs(props);
 const isSubmitting = useIsSubmitting();
 const { checked, handleChange } = useField(name.value, undefined, {
     type: 'checkbox',

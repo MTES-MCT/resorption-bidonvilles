@@ -1,5 +1,5 @@
 <template>
-    <CheckableGroup id="tags" :label="labels.tags_info" >
+    <CheckableGroup id="tags" :label="labels.tags_info">
         <Checkbox
             v-for="item in items"
             :key="item.uid"
@@ -8,7 +8,7 @@
             name="tags"
             v-model="values.tags"
             v-bind="$attrs"
-            :disabledCheckbox="disableTags"
+            :disabled="disableTags"
         />
     </CheckableGroup>
 </template>
@@ -30,21 +30,20 @@ const topics = ref([]);
 const checkedTopics = ref([]);
 const configStore = useConfigStore();
 configStore.config.question_tags.map((item, index) => {
-    topics.value.push({id: index+1, ...item})
+    topics.value.push({ id: index + 1, ...item });
 });
 const items = computed(() => {
     return [
         ...topics.value,
-        { id: topics.value.length+1 , uid: "other", name: "Autre" },
+        { id: topics.value.length + 1, uid: "other", name: "Autre" },
     ];
 });
 
 const values = useFormValues();
 
 items.value.map((item, index) => {
-    if (values.value.tags.some(el => el.uid === item.uid)) {
-
-        checkedTopics.value.push(index+1)
+    if (values.value.tags.some((el) => el.uid === item.uid)) {
+        checkedTopics.value.push(index + 1);
     }
 });
 </script>
