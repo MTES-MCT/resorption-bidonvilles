@@ -168,11 +168,6 @@ defineExpose({
                 question.value?.createdBy.id
             );
 
-            // const questionsStore = useQuestionsStore();
-            // const question = await questionsStore.create(
-            //     valuesWithoutAttachments,
-            //     sentValues.attachments
-            // );
             const notificationStore = useNotificationStore();
             notificationStore.success(notification.title, notification.content);
             backOrReplace(`/question/${respondedQuestion.id}`);
