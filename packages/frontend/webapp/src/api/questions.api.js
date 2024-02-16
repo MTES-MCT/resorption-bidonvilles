@@ -45,10 +45,6 @@ export function deleteQuestion(questionId) {
     return axios.delete(`/questions/${encodeURI(questionId)}`);
 }
 
-export function updateQuestion(questionId, question, userId) {
-    return axios.patch(`/question/${encodeURI(questionId)}`, question, userId);
-}
-
 export function fetch(id) {
     return axios.get(`questions/${id}`);
 }
@@ -59,6 +55,10 @@ export function getQuestions() {
 
 export function subscribe(questionId) {
     return axios.post(`/questions/${encodeURI(questionId)}/subscription`);
+}
+
+export function updateQuestion(questionId, question, userId) {
+    return axios.patch(`/questions/${encodeURI(questionId)}`, question, userId);
 }
 
 export function unsubscribe(questionId) {
