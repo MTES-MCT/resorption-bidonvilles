@@ -52,9 +52,6 @@ export default {
         value: {
             type: String
         },
-        questionValue: {
-            type: String
-        },
         rules: {
             type: String
         },
