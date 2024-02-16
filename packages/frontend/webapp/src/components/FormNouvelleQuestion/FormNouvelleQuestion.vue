@@ -76,7 +76,7 @@ const { question, resume } = toRefs(props);
 const mode = computed(() => {
     return question.value === null ? "create" : "edit";
 });
-const validationSchema = schemaFn(mode.value);
+const validationSchema = schemaFn;
 const questionsStore = useQuestionsStore();
 
 const { handleSubmit, setErrors, errors, isSubmitting, values } = useForm({

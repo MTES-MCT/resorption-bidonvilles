@@ -11,27 +11,25 @@ function emptyStringToNull(value, originalValue) {
     return value;
 }
 
-export default function () {
-    const configStore = useConfigStore();
-    const schema = {
-        question: string().required().label(labels.question),
-        tags: array()
-            .of(
-                string().oneOf([
-                    ...configStore.config.question_tags.map(({ uid }) => uid),
-                    "other",
-                ])
-            )
-            .label(labels.tags),
-        other_tag: string().label(labels.other_tag),
-        people_affected: number()
-            .typeError(`Nombre de personnes doit être un nombre`)
-            .nullable()
-            .transform(emptyStringToNull)
-            .min(0)
-            .label(labels.people_affected),
-        details: string().required().label(labels.details),
-        attachments: yup_attachment_schema().label(labels.attachments),
-    };
-    return object(schema);
-}
+const configStore = useConfigStore();
+
+export default object({
+    question: string().required().label(labels.question),
+    tags: array()
+        .of(
+            string().oneOf([
+                ...configStore.config.question_tags.map(({ uid }) => uid),
+                "other",
+            ])
+        )
+        .label(labels.tags),
+    other_tag: string().label(labels.other_tag),
+    people_affected: number()
+        .typeError(`Nombre de personnes doit être un nombre`)
+        .nullable()
+        .transform(emptyStringToNull)
+        .min(0)
+        .label(labels.people_affected),
+    details: string().required().label(labels.details),
+    attachments: yup_attachment_schema().label(labels.attachments),
+});
