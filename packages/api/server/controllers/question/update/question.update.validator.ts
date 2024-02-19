@@ -1,18 +1,31 @@
 /* eslint-disable newline-per-chained-call */
-import { body } from 'express-validator';
+import { body, param } from 'express-validator';
 import questionTagModel from '#server/models/questionTagModel';
-
+import questionModel from '#server/models/questionModel';
+import { QuestionTag } from '#root/types/resources/Question.d';
 
 export default [
+    param('id')
+        .toInt()
+        .custom(async (value, { req }) => {
+            let question;
+            try {
+                question = await questionModel.findOne(value);
+            } catch (error) {
+                throw new Error('Une erreur de lecture en base de données est survenue lors de la validation de l\'identifiant de la question');
+            }
+            req.question = question;
+        }),
+
     body('question')
-        .exists({ checkNull: true }).bail().withMessage('La question est obligatoire')
+        .optional({ nullable: true, checkFalsy: true })
         .isString().bail().withMessage('La question doit être une chaîne de caractères')
         .trim()
         .isLength({ min: 1 }).bail().withMessage('La question ne peut être vide')
         .isLength({ max: 255 }).bail().withMessage('La question ne doit pas excéder 255 caractères'),
 
     body('details')
-        .exists({ checkNull: true }).bail().withMessage('Le détail de la question est obligatoire')
+        .optional({ nullable: true, checkFalsy: true })
         .isString().bail().withMessage('Le détail de la question doit être une chaîne de caractères')
         .trim()
         .isLength({ min: 1 }).bail().withMessage('Le détail de la question ne peut être vide'),
@@ -47,7 +60,7 @@ export default [
         .isArray().bail().withMessage('Le champ "Thématiques" doit être une liste de thématiques')
         .custom(async (value) => {
             if (value.length > 0) {
-                let fullTags;
+                let fullTags: QuestionTag[];
                 try {
                     fullTags = await questionTagModel.findAll();
                 } catch (error) {
