@@ -4,6 +4,8 @@ import questionTagModel from '#server/models/questionTagModel';
 import questionModel from '#server/models/questionModel';
 import { QuestionTag } from '#root/types/resources/Question.d';
 
+const isOtherTagIncluded = (value, { req }) => req.body.tags.includes && req.body.tags.includes('other');
+
 export default [
     param('id')
         .toInt()
@@ -39,10 +41,10 @@ export default [
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('other_tag')
-        .if((value, { req }) => !req.body.tags.includes || !req.body.tags.includes('other'))
+        .if((value, { req }) => !isOtherTagIncluded(value, { req }))
         .customSanitizer(() => null),
     body('other_tag')
-        .if((value, { req }) => req.body.tags.includes && req.body.tags.includes('other'))
+        .if((value, { req }) => isOtherTagIncluded(value, { req }))
         .exists({ checkNull: true }).bail().withMessage('Le champ "Veuillez préciser votre thématique" est obligatoire')
         .isString().bail().withMessage('Le champ "Veuillez préciser votre thématique" doit être une chaîne de caractères')
         .trim()
