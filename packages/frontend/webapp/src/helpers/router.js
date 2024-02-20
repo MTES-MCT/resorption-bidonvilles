@@ -197,6 +197,15 @@ const router = createRouter({
             },
         },
         {
+            path: "/communaute/modifier-une-question/:id",
+            component: () => import("@/views/MiseAJourDeQuestionView.vue"),
+            meta: {
+                title: "Modifier une question",
+                navTab: "communaute",
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
             path: "/communaute/nouvelle-question",
             component: () =>
                 import("@/views/NouvelleQuestionCommunauteView.vue"),

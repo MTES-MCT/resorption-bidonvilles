@@ -16,9 +16,24 @@ export type Question = {
         last_name: string,
         role: string,
         position: string,
-        organization: string,
-        organization_id: number,
+        organization: {
+            id: number,
+            name: string,
+            abbreviation: string,
+        },
     },
+    updatedBy: {
+        id: number,
+        first_name: string,
+        last_name: string,
+        role: string | null,
+        position: string,
+        organization: {
+            id: number,
+            name: string,
+            abbreviation: string,
+        },
+    } | null,
     answers: Answer[],
     attachments: File[],
 };

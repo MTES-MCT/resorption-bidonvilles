@@ -2,21 +2,24 @@
     <form>
         <DragZone @drop="attachmentsInput?.addFiles">
             <FormParagraph :title="labels.question" showMandatoryStar>
-                <FormNouvelleQuestionInputQuestion :question="question" />
+                <FormNouvelleQuestionInputQuestion
+                    :disabled="mode === 'edit'"
+                    :question="resume"
+                />
             </FormParagraph>
             <FormParagraph :title="labels.tags" info="(optionnel)">
-                <FormNouvelleQuestionInputTags
+                <FormNouvelleQuestionInputTags :disabled="mode === 'edit'"
             /></FormParagraph>
             <FormParagraph :title="labels.other_tag" v-if="showOtherTag">
-                <FormNouvelleQuestionInputOtherTag />
-            </FormParagraph>
+                <FormNouvelleQuestionInputOtherTag :disabled="mode === 'edit'"
+            /></FormParagraph>
             <FormParagraph :title="labels.people_affected" info="(optionnel)">
                 <FormNouvelleQuestionInputPeopleAffected />
             </FormParagraph>
             <FormParagraph :title="labels.details" showMandatoryStar>
                 <FormNouvelleQuestionInputDetails @paste="onPaste" />
             </FormParagraph>
-            <FormParagraph :title="labels.attachments">
+            <FormParagraph :title="labels.attachments" v-show="mode !== 'edit'">
                 <FormNouvelleQuestionInputAttachments ref="attachmentsInput" />
             </FormParagraph>
         </DragZone>
@@ -40,6 +43,10 @@ import { useNotificationStore } from "@/stores/notification.store";
 import { useQuestionsStore } from "@/stores/questions.store";
 import router from "@/helpers/router";
 import getFileFromPasteEvent from "@/utils/getFileFromPasteEvent";
+import { trackEvent } from "@/helpers/matomo";
+// import formatFormDate from "@common/utils/formatFormDate";
+import backOrReplace from "@/utils/backOrReplace";
+import isDeepEqual from "@/utils/isDeepEqual";
 
 import { ErrorSummary, FormParagraph } from "@resorptionbidonvilles/ui";
 import DragZone from "@/components/DragZone/DragZone.vue";
@@ -49,25 +56,39 @@ import FormNouvelleQuestionInputDetails from "./inputs/FormNouvelleQuestionInput
 import FormNouvelleQuestionInputTags from "./inputs/FormNouvelleQuestionInputTags.vue";
 import FormNouvelleQuestionInputOtherTag from "./inputs/FormNouvelleQuestionInputOtherTag.vue";
 import FormNouvelleQuestionInputAttachments from "./inputs/FormNouvelleQuestionInputAttachments.vue";
-
-const { handleSubmit, setErrors, errors, isSubmitting } = useForm({
-    validationSchema: schema,
-    initialValues: {
-        question: router.currentRoute.value.query?.resume || "",
-        tags: [],
-        attachments: new DataTransfer().files,
-    },
-});
+import schemaFn from "./FormNouvelleQuestion.schema";
 
 const props = defineProps({
     question: {
+        type: Object,
+        required: false,
+        default: null,
+    },
+    resume: {
         type: String,
         required: false,
         default: "",
     },
 });
 
-const { question } = toRefs(props);
+const { question, resume } = toRefs(props);
+const mode = computed(() => {
+    return question.value === null ? "create" : "edit";
+});
+const validationSchema = schemaFn;
+const questionsStore = useQuestionsStore();
+
+const { handleSubmit, setErrors, errors, isSubmitting, values } = useForm({
+    validationSchema: schema,
+    initialValues: {
+        details: question.value?.details || "",
+        question: question.value?.question || resume.value || "",
+        tags: question.value?.tags.map(({ uid }) => uid) || [],
+        people_affected: question.value?.people_affected || "",
+        attachments: new DataTransfer().files,
+    },
+});
+const originalValues = formatValuesForApi(values);
 const tags = useFieldValue("tags");
 const attachmentsInput = ref(null);
 
@@ -84,25 +105,71 @@ function onPaste(event) {
 
 const error = ref(null);
 
+function formatValuesForApi(v) {
+    return {
+        ...Object.keys(validationSchema.fields).reduce((acc, key) => {
+            acc[key] = v[key] ? JSON.parse(JSON.stringify(v[key])) : v[key];
+            return acc;
+        }, {}),
+    };
+}
+
+const config = {
+    create: {
+        async submit(values) {
+            const addedQuestion = await questionsStore.create(values);
+            trackEvent("Action", "Création question", `${addedQuestion.id}`);
+            return addedQuestion;
+        },
+        notification: {
+            title: "Question publiée",
+            content:
+                "Votre question a été publiée, vous la retrouverez dans l'onglet Entraide",
+        },
+    },
+    edit: {
+        async submit(values, id) {
+            const updatedQuestion = await questionsStore.edit(id, values);
+            trackEvent("Action", "Mise à jour de la question", `${id}`);
+            return updatedQuestion;
+        },
+        notification: {
+            title: "Question modifiée",
+            content: "Votre question a bien été modifiée.",
+        },
+    },
+};
+
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
+        const formattedValues = formatValuesForApi(sentValues);
+
+        if (
+            mode.value === "edit" &&
+            isDeepEqual(originalValues, formattedValues)
+        ) {
+            router.replace("#erreurs");
+            error.value =
+                "Modification impossible : aucun champ n'a été modifié";
+            return;
+        }
+
         error.value = null;
 
         try {
             const valuesWithoutAttachments = { ...sentValues };
             delete valuesWithoutAttachments.attachments;
 
-            const questionsStore = useQuestionsStore();
-            const question = await questionsStore.create(
-                valuesWithoutAttachments,
-                sentValues.attachments
+            const { submit, notification } = config[mode.value];
+            const respondedQuestion = await submit(
+                sentValues,
+                question.value?.id,
+                question.value?.createdBy.id
             );
+
             const notificationStore = useNotificationStore();
-            notificationStore.success(
-                "Question publiée",
-                "Votre question a été publiée, vous la retrouverez dans l'onglet Entraide"
-            );
-            router.push(`/question/${question.id}`);
+            notificationStore.success(notification.title, notification.content);
+            backOrReplace(`/question/${respondedQuestion.id}`);
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             if (e?.fields) {

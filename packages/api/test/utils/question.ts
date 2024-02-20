@@ -1,3 +1,4 @@
+import QuestionInput from '#server/models/questionModel/QuestionInput.d';
 import { Question } from '#root/types/resources/Question.d';
 
 export function serialized(override: Partial<Question> = {}): Question {
@@ -18,14 +19,42 @@ export function serialized(override: Partial<Question> = {}): Question {
             last_name: 'Dupont',
             role: 'Acteur national',
             position: 'Mock',
-            organization: 'Délégation Interministérielle à l\'Hébergement et à l\'Accès au Logement',
-            organization_id: 2,
+            organization: {
+                id: 2,
+                name: 'Délégation Interministérielle à l\'Hébergement et à l\'Accès au Logement',
+                abbreviation: 'DIHAL',
+            },
+        },
+        updatedBy: {
+            id: 2,
+            first_name: 'Jean',
+            last_name: 'Dupont',
+            role: 'Acteur national',
+            position: 'Mock',
+            organization: {
+                id: 2,
+                name: 'Délégation Interministérielle à l\'Hébergement et à l\'Accès au Logement',
+                abbreviation: 'DIHAL',
+            },
         },
         answers: [],
         attachments: [],
     };
 
     return Object.assign(defaultObj, override);
+}
+
+export function input(override: Partial<QuestionInput> = {}): QuestionInput {
+    const questionUpdage:QuestionInput = {
+        question_id: 1,
+        question: 'Fake question',
+        details: 'Fake Question details',
+        people_affected: null,
+        tags: ['housing'],
+        other_tag: null,
+        updated_by: 1,
+    };
+    return Object.assign(questionUpdage, override);
 }
 
 export default serialized;

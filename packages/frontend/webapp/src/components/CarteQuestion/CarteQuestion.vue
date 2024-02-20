@@ -29,14 +29,10 @@
             <div class="text-primary font-bold mb-3">
                 Par
                 <LinkOrganization
-                    :to="`/structure/${question.createdBy.organization_id}`"
-                    :ariaLabel="`Afficher la fiche de la structure de l'auteur ${question.createdBy.first_name}
-                        ${question.createdBy.last_name} -
-                        ${question.createdBy.organization}`"
+                    :to="`/structure/${question.createdBy.organization.id}`"
+                    :ariaLabel="`Afficher la fiche de la structure de l'auteur ${formatUserName(question.createdBy)}`"
                 >
-                    {{ question.createdBy.first_name }}
-                    {{ question.createdBy.last_name }} -
-                    {{ question.createdBy.organization }}
+                {{ formatUserName(question.createdBy) }}
                 </LinkOrganization>
             </div>
             <div
@@ -64,6 +60,7 @@ import CarteQuestionQuestion from "./CarteQuestionQuestion.vue";
 import CarteQuestionFooter from "./CarteQuestionFooter.vue";
 import QuestionTag from "@/components/QuestionTag/QuestionTag.vue";
 import { Icon, LinkOrganization } from "@resorptionbidonvilles/ui";
+import formatUserName from "@/utils/formatUserName";
 
 const props = defineProps({
     question: {

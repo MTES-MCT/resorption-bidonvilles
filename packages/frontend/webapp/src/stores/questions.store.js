@@ -7,6 +7,7 @@ import {
     fetch,
     addAnswer,
     createQuestion,
+    updateQuestion,
     deleteAnswer,
     deleteQuestion,
 } from "@/api/questions.api";
@@ -76,67 +77,6 @@ export const useQuestionsStore = defineStore("questions", () => {
     watch(resetPagination);
     watch(resetPagination, { deep: true });
 
-    function resetFilters() {
-        filters.value.tags = {};
-        filters.value.search = "";
-    }
-
-    function resetPagination() {
-        if (sortedQuestions.value.length === 0) {
-            currentPage.index.value = -1;
-        } else {
-            currentPage.index.value = 1;
-        }
-    }
-
-    function reset() {
-        questions.value = [];
-        hash.value = {};
-        subscriptions.value = {};
-        isLoading.value = false;
-        error.value = null;
-        sort.value = "last_activity";
-        pendingDeletions.value = {};
-        resetPagination();
-        resetFilters();
-    }
-
-    const { bus } = useEventBus();
-    watch(() => bus.value.get("new-user"), reset);
-    reset();
-
-    async function fetchQuestions() {
-        if (isLoading.value === true) {
-            return;
-        }
-
-        isLoading.value = true;
-        error.value = null;
-        try {
-            const rawQuestions = await getQuestions();
-            questions.value = rawQuestions;
-            hash.value = questions.value.reduce((hash, question) => {
-                hash[question.id] = question;
-                return hash;
-            }, {});
-            currentPage.index.value = rawQuestions.length > 0 ? 1 : -1;
-        } catch (e) {
-            error.value =
-                e?.code ||
-                e?.user_message ||
-                "Une erreur inconnue est survenue";
-        }
-
-        isLoading.value = false;
-    }
-
-    async function fetchQuestion(questionId) {
-        if (!hash.value[questionId]) {
-            hash.value[questionId] = await fetch(questionId);
-        }
-        return hash.value[questionId];
-    }
-
     async function create(data, attachments) {
         const configStore = useConfigStore();
         const newQuestion = await createQuestion(data, attachments);
@@ -168,6 +108,73 @@ export const useQuestionsStore = defineStore("questions", () => {
         );
     }
 
+    async function edit(data, value, userId) {
+        const updatedQuestion = await updateQuestion(data, value, userId);
+        hash.value[updatedQuestion.id] = updatedQuestion;
+        return updatedQuestion;
+    }
+
+    async function fetchQuestion(questionId) {
+        if (!hash.value[questionId]) {
+            hash.value[questionId] = await fetch(questionId);
+        }
+        return hash.value[questionId];
+    }
+
+    async function fetchQuestions() {
+        if (isLoading.value === true) {
+            return;
+        }
+
+        isLoading.value = true;
+        error.value = null;
+        try {
+            const rawQuestions = await getQuestions();
+            questions.value = rawQuestions;
+            hash.value = questions.value.reduce((hash, question) => {
+                hash[question.id] = question;
+                return hash;
+            }, {});
+            currentPage.index.value = rawQuestions.length > 0 ? 1 : -1;
+        } catch (e) {
+            error.value =
+                e?.code ||
+                e?.user_message ||
+                "Une erreur inconnue est survenue";
+        }
+
+        isLoading.value = false;
+    }
+
+    function reset() {
+        questions.value = [];
+        hash.value = {};
+        subscriptions.value = {};
+        isLoading.value = false;
+        error.value = null;
+        sort.value = "last_activity";
+        pendingDeletions.value = {};
+        resetPagination();
+        resetFilters();
+    }
+
+    function resetFilters() {
+        filters.value.tags = {};
+        filters.value.search = "";
+    }
+
+    function resetPagination() {
+        if (sortedQuestions.value.length === 0) {
+            currentPage.index.value = -1;
+        } else {
+            currentPage.index.value = 1;
+        }
+    }
+
+    const { bus } = useEventBus();
+    watch(() => bus.value.get("new-user"), reset);
+    reset();
+
     return {
         questions,
         filteredQuestions,
@@ -188,6 +195,7 @@ export const useQuestionsStore = defineStore("questions", () => {
         fetchQuestions,
         fetchQuestion,
         create,
+        edit,
         createAnswer,
         pendingDeletions,
         async deleteAnswer(questionId, answerId, reason) {
