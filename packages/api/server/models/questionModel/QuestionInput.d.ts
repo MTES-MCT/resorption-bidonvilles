@@ -10,7 +10,7 @@ export type InsertQuestionInput = BaseQuestionInput & {
     created_by: number,
 };
 
-export type UpdateQuestionInput = BaseQuestionInput & {
+export type UpdateQuestionInput = Partial<BaseQuestionInput> & {
     question_id: number,
     updated_by: number,
 };
