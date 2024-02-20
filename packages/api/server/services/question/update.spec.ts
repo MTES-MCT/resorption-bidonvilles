@@ -2,7 +2,7 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import { rewiremock } from '#test/rewiremock';
-import { input as fakeQuestionInput } from '#test/utils/question';
+import { serialized as fakeQuestion, input as fakeQuestionInput } from '#test/utils/question';
 import { serialized as fakeUser } from '#test/utils/user';
 import ServiceError from '#server/errors/ServiceError';
 import { UpdateQuestionInput } from '#server/models/questionModel/QuestionInput.d';
@@ -13,6 +13,13 @@ chai.use(sinonChai);
 
 const sandbox = sinon.createSandbox();
 const updateQuestion = sandbox.stub();
+
+const expectedResult: Question = fakeQuestion({
+    id: 42,
+    details: 'Fake Question details',
+    updatedAt: Date.now(),
+    updatedBy: fakeUser({ id: 1 }),
+});
 
 rewiremock('#server/models/questionModel/update').with(updateQuestion);
 rewiremock.enable();
@@ -26,13 +33,6 @@ describe('services/question/update', () => {
     });
 
     it('update une question', async () => {
-        const expectedResult: Partial<Question> = {
-            id: 42,
-            details: 'Fake Question details',
-            updatedAt: Date.now(),
-            updatedBy: fakeUser({ id: 1 }),
-        };
-
         updateQuestion.resolves(expectedResult);
         const result = await updateService(42, fakeQuestionInput({ question_id: 42 }) as UpdateQuestionInput, 1);
 
@@ -45,9 +45,14 @@ describe('services/question/update', () => {
             people_affected: null,
             updated_by: 1,
         });
-        // console.log('Update Question:', result);
-        // console.log('Expected:', expectedResult);
 
+
+        expect(result).to.eql(expectedResult);
+    });
+
+    it('renvoi la question modifiée', async () => {
+        updateQuestion.resolves(expectedResult);
+        const result = await updateService(42, fakeQuestionInput({ question_id: 42 }) as UpdateQuestionInput, 1);
 
         expect(result).to.eql(expectedResult);
     });
