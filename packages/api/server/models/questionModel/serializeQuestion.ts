@@ -28,18 +28,18 @@ export default (question: QuestionRow): Question => ({
             abbreviation: question.organizationAbbreviation,
         },
     },
-    updatedBy: {
-        id: question.questionCreatedBy,
-        first_name: question.userFirstName,
-        last_name: question.userLastName,
-        role: question.userRole,
-        position: question.userPosition,
+    updatedBy: question.questionUpdatedBy !== null ? {
+        id: question.questionUpdatedBy,
+        first_name: question.userUpdateFirstName,
+        last_name: question.userUpdateLastName,
+        role: question.userUpdateRole,
+        position: question.userUpdatePosition,
         organization: {
-            id: question.organizationId,
-            name: question.organizationName,
-            abbreviation: question.organizationAbbreviation,
+            id: question.updateOrganizationId,
+            name: question.updateOrganizationName,
+            abbreviation: question.updateOrganizationAbbreviation,
         },
-    },
+    } : null,
     answers: [],
     attachments: question.attachments?.length
         ? question.attachments.map(attachmentModel.serializeAttachment)
