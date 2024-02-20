@@ -1,10 +1,10 @@
 import ServiceError from '#server/errors/ServiceError';
 import update from '#server/models/questionModel/update';
 import { UpdateQuestionInput } from '#server/models/questionModel/QuestionInput.d';
-import type { UpdatedQuestion } from '#root/types/resources/UpdatedQuestion.d';
+import type { Question } from '#root/types/resources/Question.d';
 
-export default async (questionId: number, question: UpdateQuestionInput, author: number): Promise<UpdatedQuestion> => {
-    let questionResult: UpdatedQuestion;
+export default async (questionId: number, question: UpdateQuestionInput, author: number): Promise<Question> => {
+    let questionResult: Question;
     try {
         questionResult = await update(
             {
