@@ -77,34 +77,49 @@ export const useQuestionsStore = defineStore("questions", () => {
     watch(resetPagination);
     watch(resetPagination, { deep: true });
 
-    function resetFilters() {
-        filters.value.tags = {};
-        filters.value.search = "";
+    async function create(data, attachments) {
+        const configStore = useConfigStore();
+        const newQuestion = await createQuestion(data, attachments);
+        hash.value[newQuestion.id] = newQuestion;
+        questions.value.unshift(newQuestion);
+        configStore.setQuestionSubscription(newQuestion.id, true);
+        return newQuestion;
     }
 
-    function resetPagination() {
-        if (sortedQuestions.value.length === 0) {
-            currentPage.index.value = -1;
-        } else {
-            currentPage.index.value = 1;
+    async function createAnswer(questionId, answer, attachments) {
+        const configStore = useConfigStore();
+        const notificationStore = useNotificationStore();
+        const { answer: newAnswer, subscribed } = await addAnswer(
+            questionId,
+            answer,
+            attachments
+        );
+        if (hash.value[questionId]) {
+            hash.value[questionId].answers.unshift(newAnswer);
         }
+
+        if (subscribed === true) {
+            configStore.setQuestionSubscription(questionId, true);
+        }
+
+        notificationStore.success(
+            "Publication d'une réponse",
+            "Votre réponse est bien enregistrée"
+        );
     }
 
-    function reset() {
-        questions.value = [];
-        hash.value = {};
-        subscriptions.value = {};
-        isLoading.value = false;
-        error.value = null;
-        sort.value = "last_activity";
-        pendingDeletions.value = {};
-        resetPagination();
-        resetFilters();
+    async function edit(data, value, userId) {
+        const updatedQuestion = await updateQuestion(data, value, userId);
+        hash.value[updatedQuestion.id] = updatedQuestion;
+        return updatedQuestion;
     }
 
-    const { bus } = useEventBus();
-    watch(() => bus.value.get("new-user"), reset);
-    reset();
+    async function fetchQuestion(questionId) {
+        if (!hash.value[questionId]) {
+            hash.value[questionId] = await fetch(questionId);
+        }
+        return hash.value[questionId];
+    }
 
     async function fetchQuestions() {
         if (isLoading.value === true) {
@@ -131,52 +146,34 @@ export const useQuestionsStore = defineStore("questions", () => {
         isLoading.value = false;
     }
 
-    async function fetchQuestion(questionId) {
-        if (!hash.value[questionId]) {
-            hash.value[questionId] = await fetch(questionId);
+    function reset() {
+        questions.value = [];
+        hash.value = {};
+        subscriptions.value = {};
+        isLoading.value = false;
+        error.value = null;
+        sort.value = "last_activity";
+        pendingDeletions.value = {};
+        resetPagination();
+        resetFilters();
+    }
+
+    function resetFilters() {
+        filters.value.tags = {};
+        filters.value.search = "";
+    }
+
+    function resetPagination() {
+        if (sortedQuestions.value.length === 0) {
+            currentPage.index.value = -1;
+        } else {
+            currentPage.index.value = 1;
         }
-        return hash.value[questionId];
     }
 
-    async function create(data, attachments) {
-        const configStore = useConfigStore();
-        const newQuestion = await createQuestion(data, attachments);
-        hash.value[newQuestion.id] = newQuestion;
-        questions.value.unshift(newQuestion);
-        configStore.setQuestionSubscription(newQuestion.id, true);
-        return newQuestion;
-    }
-
-    async function edit(data, value, userId) {
-        const updatedQuestion = await updateQuestion(data, value, userId);
-        hash.value[updatedQuestion.id] = {
-            ...hash.value[updatedQuestion.id],
-            ...updatedQuestion,
-        };
-        return updatedQuestion;
-    }
-
-    async function createAnswer(questionId, answer, attachments) {
-        const configStore = useConfigStore();
-        const notificationStore = useNotificationStore();
-        const { answer: newAnswer, subscribed } = await addAnswer(
-            questionId,
-            answer,
-            attachments
-        );
-        if (hash.value[questionId]) {
-            hash.value[questionId].answers.unshift(newAnswer);
-        }
-
-        if (subscribed === true) {
-            configStore.setQuestionSubscription(questionId, true);
-        }
-
-        notificationStore.success(
-            "Publication d'une réponse",
-            "Votre réponse est bien enregistrée"
-        );
-    }
+    const { bus } = useEventBus();
+    watch(() => bus.value.get("new-user"), reset);
+    reset();
 
     return {
         questions,
