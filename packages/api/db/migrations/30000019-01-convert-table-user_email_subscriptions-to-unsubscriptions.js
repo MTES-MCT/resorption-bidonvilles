@@ -5,7 +5,7 @@ module.exports = {
         // rename table and constraints
         await Promise.all([
             queryInterface.sequelize.query(
-                `     ALTER TABLE user_email_subscriptions
+                `ALTER TABLE user_email_subscriptions
                 RENAME CONSTRAINT uk_user_email_subscriptions_user_subscription
                                 TO uk_user_email_unsubscriptions_user_subscription`,
                 { transaction },
@@ -40,18 +40,20 @@ module.exports = {
             { transaction },
         );
 
-        await queryInterface.bulkInsert(
-            'user_email_unsubscriptions',
-            subscriptions.map(
-                ({ user_id, subs }) => ['weekly_summary', 'comment_notification', 'shantytown_closure', 'shantytown_creation']
-                    .filter(sub => !subs.includes(sub))
-                    .map(sub => ({
-                        fk_user: user_id,
-                        email_subscription: sub,
-                    })),
-            ).flat(),
-            { transaction },
-        );
+        if (subscriptions.length > 0) {
+            await queryInterface.bulkInsert(
+                'user_email_unsubscriptions',
+                subscriptions.map(
+                    ({ user_id, subs }) => ['weekly_summary', 'comment_notification', 'shantytown_closure', 'shantytown_creation']
+                        .filter(sub => !subs.includes(sub))
+                        .map(sub => ({
+                            fk_user: user_id,
+                            email_subscription: sub,
+                        })),
+                ).flat(),
+                { transaction },
+            );
+        }
 
         await transaction.commit();
     },

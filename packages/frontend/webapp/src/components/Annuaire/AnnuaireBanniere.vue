@@ -10,7 +10,7 @@
                     placeholder="Nom d'un territoire, d'une structure, d'un acteur..."
                     withoutMargin
                     :allowFreeSearch="true"
-                    v-model="inputSearch"
+                    name="search"
                 />
                 <Button size="sm" type="button">Rechercher</Button>
             </div>
@@ -28,11 +28,14 @@
 
 <script setup>
 import { toRefs, computed, defineEmits } from "vue";
+import { useForm } from "vee-validate";
 import { useUserStore } from "@/stores/user.store";
 import { useDirectoryStore } from "@/stores/directory.store";
 
 import InputCommunauteSearch from "../InputCommunauteSearch/InputCommunauteSearch.vue";
 import { Button, ContentWrapper, Icon, Link } from "@resorptionbidonvilles/ui";
+import { toRef } from "vue";
+import { watch } from "vue";
 
 const directoryStore = useDirectoryStore();
 const userStore = useUserStore();
@@ -40,17 +43,18 @@ const { location, search } = toRefs(directoryStore.filters);
 const showNationalWording = "Voir tous les acteurs de France";
 
 const emit = defineEmits(["update:search"]);
-
-const inputSearch = computed({
-    get() {
-        return {
+const { values, setFieldValue } = useForm({
+    initialValues: {
+        search: {
             search: search.value,
             data: location.value,
-        };
+        },
     },
-    set(newValue) {
-        emit("update:search", newValue);
-    },
+});
+
+const searchValue = toRef(values, "search");
+watch(searchValue, (value) => {
+    emit("update:search", value);
 });
 
 const showReset = computed(() => {
@@ -62,17 +66,17 @@ const showReset = computed(() => {
 });
 
 const isNotOnDefaultFilter = computed(() => {
-    return !userStore.isMyLocation(inputSearch.value);
+    return !userStore.isMyLocation(values.search);
 });
 
 function resetSearch() {
-    inputSearch.value = userStore.defaultLocationFilter;
+    setFieldValue("search", userStore.defaultLocationFilter);
 }
 
 function emptySearch() {
-    inputSearch.value = {
+    setFieldValue("search", {
         search: "",
         data: null,
-    };
+    });
 }
 </script>

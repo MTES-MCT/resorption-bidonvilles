@@ -1,12 +1,10 @@
 <template>
     <LayoutCommunaute :paddingTop="organization !== null">
-        <Loading v-if="directoryStore.isLoading !== false" class="mt-16" />
-        <ViewError
-            v-else-if="directoryStore.error !== null || organization === null"
-        >
+        <Loading v-if="isLoading !== false" class="mt-16" />
+        <ViewError v-else-if="error !== null || organization === null">
             <template v-slot:title>Fiche de structure inaccessible</template>
             <template v-slot:code>{{
-                directoryStore.error || "Structure introuvable"
+                error || "Structure introuvable"
             }}</template>
             <template v-slot:content
                 >Vous souhaitiez consulter la fiche d'une structure, mais nous
@@ -36,7 +34,7 @@
 </template>
 
 <script setup>
-import { onMounted, computed, watch } from "vue";
+import { onMounted, computed, watch, ref } from "vue";
 import { useDirectoryStore } from "@/stores/directory.store";
 import router, { setDocumentTitle } from "@/helpers/router";
 import { create as registerDirectoryView } from "@/api/directory_views.api";
@@ -52,43 +50,45 @@ const directoryStore = useDirectoryStore();
 const organizationId = computed(() => {
     return router.currentRoute.value.params.id;
 });
-const organization = computed(() => {
-    return (
-        directoryStore.organizations.find(
-            ({ id }) => id === parseInt(organizationId.value, 10)
-        ) || null
-    );
-});
+const isLoading = ref(false);
+const error = ref(null);
+const organization = ref(null);
 const ariane = computed(() => [
     { label: "Accueil", to: "/" },
     { label: "Entraide", to: "/communaute" },
     { label: "Annuaire", to: "/annuaire" },
     { label: organization.value?.name || "..." },
 ]);
+
 watch(organization, () => {
     if (organization.value !== null) {
         registerView();
     }
 });
 
-onMounted(async () => {
-    if (!directoryStore.isLoaded) {
-        await load();
+onMounted(load);
+
+async function load() {
+    if (isLoading.value === true) {
+        return;
     }
 
-    if (organization.value) {
-        setDocumentTitle(
-            `${router.currentRoute.value.meta.title} — ${organization.value.name}`
-        );
+    isLoading.value = true;
+    error.value = null;
+    try {
+        organization.value = await directoryStore.get(organizationId.value);
+
+        if (organization.value) {
+            setDocumentTitle(
+                `${router.currentRoute.value.meta.title} — ${organization.value.name}`
+            );
+            registerView();
+        }
+    } catch (error) {
+        error.value = error?.user_message || "Une erreur inconnue est survenue";
     }
 
-    if (organization.value !== null) {
-        registerView();
-    }
-});
-
-function load() {
-    return directoryStore.fetchDirectory();
+    isLoading.value = false;
 }
 
 function registerView() {

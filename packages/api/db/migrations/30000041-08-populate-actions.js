@@ -155,7 +155,7 @@ module.exports = {
             );
 
             // reset sequence of primary key
-            const [[{ max }], [{ maxHistory }]] = await Promise.all([
+            const [max, maxHistory] = await Promise.all([
                 queryInterface.sequelize.query(
                     'SELECT action_id AS max FROM actions ORDER BY action_id DESC LIMIT 1',
                     {
@@ -171,27 +171,28 @@ module.exports = {
                     },
                 ),
             ]);
-
-            await Promise.all([
-                queryInterface.sequelize.query(
-                    'ALTER SEQUENCE actions_action_id_seq RESTART WITH :max',
-                    {
-                        transaction,
-                        replacements: {
-                            max: parseInt(max, 10) + 1,
+            if (max.length > 0) {
+                await Promise.all([
+                    queryInterface.sequelize.query(
+                        'ALTER SEQUENCE actions_action_id_seq RESTART WITH :max',
+                        {
+                            transaction,
+                            replacements: {
+                                max: parseInt(max[0].max, 10) + 1,
+                            },
                         },
-                    },
-                ),
-                queryInterface.sequelize.query(
-                    'ALTER SEQUENCE actions_history_hid_seq RESTART WITH :max',
-                    {
-                        transaction,
-                        replacements: {
-                            max: parseInt(maxHistory, 10) + 1,
+                    ),
+                    queryInterface.sequelize.query(
+                        'ALTER SEQUENCE actions_history_hid_seq RESTART WITH :max',
+                        {
+                            transaction,
+                            replacements: {
+                                max: parseInt(maxHistory[0].maxHistory, 10) + 1,
+                            },
                         },
-                    },
-                ),
-            ]);
+                    ),
+                ]);
+            }
 
             return transaction.commit();
         } catch (error) {

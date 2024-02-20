@@ -5,6 +5,7 @@
         :label="label"
         :options="options"
         :loader="contactStore.fetchAdministrations"
+        showMandatoryStar
     />
 </template>
 

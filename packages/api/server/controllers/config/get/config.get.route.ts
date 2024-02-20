@@ -5,7 +5,6 @@ export default (app: ApplicationWithCustomRoutes): void => {
     app.customRoutes.get('/config', controller, undefined, {
         authenticate: true,
         multipart: false,
-        checkCharter: true,
         checkAppVersion: true,
     });
 };

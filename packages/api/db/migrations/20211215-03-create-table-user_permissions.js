@@ -193,34 +193,37 @@ module.exports = {
         ]);
 
         // on peuple la table sur la base de la table `permissions` (en ignorant les cas 'own')
-        await queryInterface.bulkInsert(
-            'user_permissions',
-            await queryInterface.sequelize.query(
-                `SELECT
-                    fk_user,
-                    fk_feature,
-                    fk_entity,
-                    allowed,
-                    CASE
-                        WHEN allowed IS FALSE THEN NULL
-                        WHEN fk_geographic_level = 'nation' THEN TRUE
-                        ELSE FALSE
-                    END AS allow_all,
-                    CASE
-                        WHEN allowed IS TRUE THEN TRUE
-                        ELSE NULL
-                    END AS is_cumulative
-                FROM permissions
-                WHERE   fk_user IS NOT NULL
-                    AND (fk_geographic_level IN ('local', 'nation') OR fk_geographic_level IS NULL)
-                ORDER BY fk_user ASC, fk_entity ASC, fk_feature ASC`,
-                {
-                    type: queryInterface.sequelize.QueryTypes.SELECT,
-                    transaction,
-                },
-            ),
-            { transaction },
+        const permissions = await queryInterface.sequelize.query(
+            `SELECT
+                fk_user,
+                fk_feature,
+                fk_entity,
+                allowed,
+                CASE
+                    WHEN allowed IS FALSE THEN NULL
+                    WHEN fk_geographic_level = 'nation' THEN TRUE
+                    ELSE FALSE
+                END AS allow_all,
+                CASE
+                    WHEN allowed IS TRUE THEN TRUE
+                    ELSE NULL
+                END AS is_cumulative
+            FROM permissions
+            WHERE   fk_user IS NOT NULL
+                AND (fk_geographic_level IN ('local', 'nation') OR fk_geographic_level IS NULL)
+            ORDER BY fk_user ASC, fk_entity ASC, fk_feature ASC`,
+            {
+                type: queryInterface.sequelize.QueryTypes.SELECT,
+                transaction,
+            },
         );
+        if (permissions.length > 0) {
+            await queryInterface.bulkInsert(
+                'user_permissions',
+                permissions,
+                { transaction },
+            );
+        }
 
         return transaction.commit();
     },

@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/webapp3",
-  "version": "2.12.3",
+  "version": "2.12.15",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -40,7 +40,7 @@
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/test-utils": "^2.0.2",
     "autoprefixer": "^10.4.12",
-    "cypress": "^12.13.0",
+    "cypress": "^13.6.3",
     "eslint": "^8.22.0",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-vue": "^9.3.0",

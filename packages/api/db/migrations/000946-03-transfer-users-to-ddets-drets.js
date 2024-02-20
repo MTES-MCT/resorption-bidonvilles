@@ -1,21 +1,20 @@
 /* eslint-disable no-console */
-const sequelize = require('#db/sequelize');
 
-function getRegions() {
+function getRegions(sequelize) {
     return sequelize.query('SELECT code, name FROM regions ORDER BY code',
         {
             type: sequelize.QueryTypes.SELECT,
         });
 }
 
-function getDepts() {
+function getDepts(sequelize) {
     return sequelize.query('SELECT code, name FROM departements ORDER BY code',
         {
             type: sequelize.QueryTypes.SELECT,
         });
 }
 
-async function getOrganizationTypeCodeFromAbbreviation(abbrev) {
+async function getOrganizationTypeCodeFromAbbreviation(sequelize, abbrev) {
     const mainTypes = await sequelize.query(
         `SELECT
                 organization_type_id,
@@ -38,7 +37,7 @@ async function getOrganizationTypeCodeFromAbbreviation(abbrev) {
     }), {});
 }
 
-async function getMatchBetweenDDCSAndDDETS(ddcsTypeId, ddetsTypeId) {
+async function getMatchBetweenDDCSAndDDETS(sequelize, ddcsTypeId, ddetsTypeId) {
     const matches = await sequelize.query(
         `SELECT
             ddcs.organization_id AS ddcs_id,
@@ -70,7 +69,7 @@ async function getMatchBetweenDDCSAndDDETS(ddcsTypeId, ddetsTypeId) {
     });
 }
 
-async function getMatchBetweenDireccteAndDRETS(direccteTypeId, dretsTypeId) {
+async function getMatchBetweenDireccteAndDRETS(sequelize, direccteTypeId, dretsTypeId) {
     const matches = await sequelize.query(
         `SELECT
             direccte.organization_id AS direccte_id,
@@ -102,14 +101,14 @@ async function getMatchBetweenDireccteAndDRETS(direccteTypeId, dretsTypeId) {
     });
 }
 
-function getData() {
-    return getOrganizationTypeCodeFromAbbreviation([
+function getData(sequelize) {
+    return getOrganizationTypeCodeFromAbbreviation(sequelize, [
         'DDETS', 'DRETS', 'DDCS / DDCSPP', 'Direccte',
     ])
         .then(orgaTypes => Promise.all([
             orgaTypes,
-            getMatchBetweenDDCSAndDDETS(orgaTypes['DDCS / DDCSPP'], orgaTypes.DDETS),
-            getMatchBetweenDireccteAndDRETS(orgaTypes.Direccte, orgaTypes.DRETS),
+            getMatchBetweenDDCSAndDDETS(sequelize, orgaTypes['DDCS / DDCSPP'], orgaTypes.DDETS),
+            getMatchBetweenDireccteAndDRETS(sequelize, orgaTypes.Direccte, orgaTypes.DRETS),
         ]));
 }
 
@@ -189,9 +188,9 @@ function createDDCSAndDireccte(queryInterface, transaction) {
         ],
     )
         .then(() => Promise.all([
-            getRegions(),
-            getDepts(),
-            getOrganizationTypeCodeFromAbbreviation(['DDCS / DDCSPP', 'Direccte']),
+            getRegions(queryInterface.sequelize),
+            getDepts(queryInterface.sequelize),
+            getOrganizationTypeCodeFromAbbreviation(queryInterface.sequelize, ['DDCS / DDCSPP', 'Direccte']),
         ]))
         .then(([regions, depts, orgaTypes]) => Promise.all([
             ...regions.map(region => queryInterface.sequelize.query(
@@ -228,7 +227,7 @@ function createDDCSAndDireccte(queryInterface, transaction) {
 }
 
 module.exports = {
-    up: queryInterface => getData()
+    up: queryInterface => getData(queryInterface.sequelize)
         .then(([orgaTypes, { ddcs_to_ddets }, { direccte_to_drets }]) => queryInterface.sequelize.transaction(
             transaction => Promise.all([
                 ...replace(ddcs_to_ddets, queryInterface, transaction),
@@ -242,10 +241,14 @@ module.exports = {
                 .then(() => queryInterface.sequelize.query('REFRESH MATERIALIZED VIEW localized_organizations', {
                     transaction,
                 })),
-        )),
+        ))
+        .catch((error) => {
+            console.log(error);
+            throw error;
+        }),
 
     down: queryInterface => createDDCSAndDireccte(queryInterface)
-        .then(() => getData())
+        .then(() => getData(queryInterface.sequelize))
         .then(([, { ddets_to_ddcs }, { drets_to_direccte }]) => queryInterface.sequelize.transaction(
             transaction => Promise.all([
                 ...replace(ddets_to_ddcs, queryInterface, transaction),

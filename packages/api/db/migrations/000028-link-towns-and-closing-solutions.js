@@ -1,5 +1,5 @@
 function addConstraint(queryInterface, table, constraint) {
-    return queryInterface.addConstraint(table, constraint.fields, constraint.options);
+    return queryInterface.addConstraint(table, constraint);
 }
 
 function createTable(queryInterface, Sequelize, name, additionalColumns = {}, additionalConstraints = []) {
@@ -70,10 +70,8 @@ module.exports = {
         createTable(queryInterface, Sequelize, 'shantytown_closing_solutions', {}, [
             {
                 fields: ['fk_shantytown', 'fk_closing_solution'],
-                options: {
-                    type: 'primary key',
-                    name: 'pk_shantytown_closing_solutions',
-                },
+                type: 'primary key',
+                name: 'pk_shantytown_closing_solutions',
             },
         ]),
         createTable(queryInterface, Sequelize, 'ShantytownClosingSolutionHistories', {

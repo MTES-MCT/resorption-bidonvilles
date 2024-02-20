@@ -119,24 +119,27 @@ module.exports = {
                 transaction,
             },
         );
-        await queryInterface.bulkInsert(
-            'plan_shantytowns_history',
-            data
-                .map(
-                    ({
-                        hids, fk_shantytown, created_by, created_at, updated_by, updated_at,
-                    }) => hids.map(hid => ({
-                        fk_plan: hid,
-                        fk_shantytown,
-                        created_by,
-                        created_at,
-                        updated_by,
-                        updated_at,
-                    })),
-                )
-                .flat(),
-            { transaction },
-        );
+
+        if (data.length > 0) {
+            await queryInterface.bulkInsert(
+                'plan_shantytowns_history',
+                data
+                    .map(
+                        ({
+                            hids, fk_shantytown, created_by, created_at, updated_by, updated_at,
+                        }) => hids.map(hid => ({
+                            fk_plan: hid,
+                            fk_shantytown,
+                            created_by,
+                            created_at,
+                            updated_by,
+                            updated_at,
+                        })),
+                    )
+                    .flat(),
+                { transaction },
+            );
+        }
 
         return transaction.commit();
     },

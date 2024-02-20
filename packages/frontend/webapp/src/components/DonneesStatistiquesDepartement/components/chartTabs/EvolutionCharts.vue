@@ -6,7 +6,7 @@
                 <DatepickerInput
                     withoutMargin
                     :maxDate="to"
-                    v-model="from"
+                    name="from"
                     :disabled="departementMetricsStore.evolution.isLoading"
                 />
             </div>
@@ -16,7 +16,7 @@
                     withoutMargin
                     :minDate="from"
                     :maxDate="today"
-                    v-model="to"
+                    name="to"
                     :disabled="departementMetricsStore.evolution.isLoading"
                 />
             </div>
@@ -25,8 +25,8 @@
                 v-if="
                     !departementMetricsStore.evolution.isLoading &&
                     datesAreNotLoaded &&
-                    from &&
-                    to
+                    values.from &&
+                    values.to
                 "
                 @click="update"
                 >Valider</Button
@@ -81,6 +81,7 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import { useForm } from "vee-validate";
 import { trackEvent } from "@/helpers/matomo";
 
 import { Button, DatepickerInput, Spinner } from "@resorptionbidonvilles/ui";
@@ -107,8 +108,12 @@ const currentTabComponent = computed(() => {
 
 const today = ref(new Date());
 
-const from = ref(new Date(departementMetricsStore.evolution.from));
-const to = ref(new Date(departementMetricsStore.evolution.to));
+const { values, setFieldValue } = useForm({
+    initialValues: {
+        from: new Date(departementMetricsStore.evolution.from),
+        to: new Date(departementMetricsStore.evolution.to),
+    },
+});
 
 const datesAreNotLoaded = computed(() => {
     if (
@@ -118,16 +123,16 @@ const datesAreNotLoaded = computed(() => {
         return true;
     }
 
-    if (!from.value || !to.value) {
+    if (!values.from || !values.to) {
         return false;
     }
 
     return (
-        from.value.toISOString().slice(0, 10) !==
+        values.from.toISOString().slice(0, 10) !==
             departementMetricsStore.evolution.loaded.from
                 .toISOString()
                 .slice(0, 10) ||
-        to.value.toISOString().slice(0, 10) !==
+        values.to.toISOString().slice(0, 10) !==
             departementMetricsStore.evolution.loaded.to
                 .toISOString()
                 .slice(0, 10)
@@ -142,8 +147,8 @@ function setLastYear() {
     newFrom.setDate(new Date().getDate() - 1);
     newFrom.setFullYear(new Date().getFullYear() - 1);
 
-    from.value = newFrom;
-    to.value = newTo;
+    setFieldValue("from", newFrom);
+    setFieldValue("to", newTo);
     trackEvent(
         "Visualisation des données départementales",
         "Changement dates",
@@ -160,8 +165,8 @@ function setLastMonth() {
     newFrom.setDate(new Date().getDate() - 1);
     newFrom.setMonth(new Date().getMonth() - 1);
 
-    from.value = newFrom;
-    to.value = newTo;
+    setFieldValue("from", newFrom);
+    setFieldValue("to", newTo);
     trackEvent(
         "Visualisation des données départementales",
         "Changement dates",
@@ -177,8 +182,8 @@ function setLastWeek() {
     const newFrom = new Date();
     newFrom.setDate(new Date().getDate() - 8);
 
-    from.value = newFrom;
-    to.value = newTo;
+    setFieldValue("from", newFrom);
+    setFieldValue("to", newTo);
     trackEvent(
         "Visualisation des données départementales",
         "Changement dates",
@@ -188,12 +193,12 @@ function setLastWeek() {
 }
 
 function update() {
-    departementMetricsStore.evolution.from = from.value;
-    departementMetricsStore.evolution.to = to.value;
+    departementMetricsStore.evolution.from = values.from;
+    departementMetricsStore.evolution.to = values.to;
     trackEvent(
         "Visualisation des données départementales",
         "Changement dates",
-        `${from.value.toLocaleDateString()} - ${to.value.toLocaleDateString()}`
+        `${values.from.toLocaleDateString()} - ${values.to.toLocaleDateString()}`
     );
     departementMetricsStore.fetchEvolution(departementMetricsStore.departement);
 }

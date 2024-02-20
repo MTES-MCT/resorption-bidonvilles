@@ -17,6 +17,16 @@ import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
 const { fromTsToFormat: tsToString } = dateUtils;
 const { webappUrl } = config;
 
+export type ShantytownExportListProperty = {
+    title: string,
+    data: (shantytown: Shantytown) => string | number | Date | null,
+    width: number,
+    align?: 'left' | 'center' | 'right',
+    bold?: boolean,
+    sum?: boolean,
+    link?: (shantytown: Shantytown) => string,
+};
+
 export default (closingSolutions: ClosingSolution[]) => {
     const COLUMN_WIDTHS = {
         XSMALL: 15,
@@ -34,8 +44,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         unknown: 'Raison inconnue',
     };
 
-
-    const properties = {
+    const properties: { [key: string]: ShantytownExportListProperty } = {
         departement: {
             title: 'Département',
             data: ({ departement }: Shantytown) => `${departement.code} - ${departement.name}`,

@@ -21,8 +21,8 @@
                 <TextInput
                     class="flex-1"
                     placeholder="Votre question ... "
-                    v-model="question"
                     withoutMargin="true"
+                    name="question"
                     label="En une phrase, comment résumeriez-vous votre question ?"
                 />
                 <Button size="sm">Demander</Button>
@@ -32,14 +32,19 @@
 </template>
 <script setup>
 import router from "@/helpers/router";
-import { ref, computed } from "vue";
+import { computed } from "vue";
+import { useForm } from "vee-validate";
 import img from "@/assets/img/illustrations/communaute.svg";
 import { useDirectoryStore } from "@/stores/directory.store";
 
 import { Button, Spinner, TextInput } from "@resorptionbidonvilles/ui";
 
-const question = ref("");
 const directoryStore = useDirectoryStore();
+const { values } = useForm({
+    initialValues: {
+        question: "",
+    },
+});
 
 const numberOfUsers = computed(() => {
     return directoryStore.organizations.reduce((total, organization) => {
@@ -52,7 +57,7 @@ function redirectToNewQuestion(event) {
 
     router.push(
         `/communaute/nouvelle-question?resume=${
-            question.value ? encodeURIComponent(question.value) : ""
+            values.question ? encodeURIComponent(values.question) : ""
         }`
     );
 }

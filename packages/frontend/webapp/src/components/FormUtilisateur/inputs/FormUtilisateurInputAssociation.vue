@@ -7,6 +7,7 @@
         v-model="association"
         showCategory
         ref="autocompleteInput"
+        showMandatoryStar
     />
 </template>
 

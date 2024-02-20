@@ -4,6 +4,7 @@ import ServiceError from '#server/errors/ServiceError';
 import moment from 'moment';
 import { NationMetrics } from '#root/types/resources/NationMetrics.d';
 import { NationMetricsList } from '#root/types/services/MetricsService.d';
+import { User } from '#root/types/resources/User.d';
 
 type NationMetricsObject = {
     [key: string]: NationMetrics;
@@ -14,7 +15,7 @@ type HashObject = {
 
 };
 
-export default async (user, argFrom: Date, argTo: Date):Promise<NationMetricsList> => {
+export default async (user: User, argFrom: Date, argTo: Date):Promise<NationMetricsList> => {
     const franceData:NationMetrics = {
         level: 'nation',
         uid: 'france',
@@ -54,7 +55,6 @@ export default async (user, argFrom: Date, argTo: Date):Promise<NationMetricsLis
     };
     const hashRegions:NationMetricsObject = {};
     const hashDepartements:HashObject = {};
-
 
     let data:NationMetricsRawData[];
     try {
@@ -237,5 +237,42 @@ export default async (user, argFrom: Date, argTo: Date):Promise<NationMetricsLis
     metropoleData.children = regionData.filter(el => !['01', '02', '03', '04', '06'].includes(el.uid));
     // on supprime le niveau régional pour les départements outremer
     outremerData.children = regionData.filter(el => ['01', '02', '03', '04', '06'].includes(el.uid)).map(regionMetric => regionMetric.children[0]);
-    return [franceData, metropoleData, outremerData];
+
+    // on fait le tri des lignes qu'il faut renvoyer à l'utilisateur, pour éviter de
+    // lui renvoyer des lignes vides juste parce qu'il n'a pas les permissions d'accès
+    // aux territoires considérés
+    // (typiquement, on ne veut pas renvoyer une ligne "Outremer" aux utilisateurs métropolitains, et
+    // inversement)
+    let hasMetropole = true;
+    let hasOutremer = true;
+    if (!user.permissions.shantytown.list.allowed_on_national) {
+        const regionCodes = Object.keys(user.permissions.shantytown.list.allowed_on)
+            .map(key => user.permissions.shantytown.list.allowed_on[key].reduce((acc, location) => {
+                if (!location.region?.code) {
+                    return acc;
+                }
+
+                acc.push(location.region.code);
+                return acc;
+            }, []))
+            .flat();
+
+        hasOutremer = regionCodes.some(code => ['01', '02', '03', '04', '06'].includes(code));
+        hasMetropole = regionCodes.some(code => !['01', '02', '03', '04', '06'].includes(code));
+    }
+
+    // on retourne le résultat, bien filtré
+    if (hasMetropole && hasOutremer) {
+        return [franceData, metropoleData, outremerData];
+    }
+
+    if (hasMetropole) {
+        return metropoleData.children;
+    }
+
+    if (hasOutremer) {
+        return outremerData.children;
+    }
+
+    return [];
 };

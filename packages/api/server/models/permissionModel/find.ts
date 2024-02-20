@@ -185,7 +185,7 @@ export default async (owners: number[]): Promise<PermissionHash> => {
                     type: row.type,
                     region: row.region_code ? { code: row.region_code, name: row.region_name } : null,
                     departement: row.departement_code ? { code: row.departement_code, name: row.departement_name } : null,
-                    ecpi: row.epci_code ? { code: row.epci_code, name: row.epci_name } : null,
+                    epci: row.epci_code ? { code: row.epci_code, name: row.epci_name } : null,
                     city: row.city_code ? { code: row.city_code, name: row.city_name, main: row.city_main } : null,
                 });
             }

@@ -43,7 +43,7 @@ async function authenticateUser(req) {
     }
 
     let decoded;
-    if (process.env.NODE_ENV === 'dev' && MAGIC_TOKENS[token] !== undefined) {
+    if (process.env.NODE_ENV === 'development' && MAGIC_TOKENS[token] !== undefined) {
         decoded = MAGIC_TOKENS[token];
     } else {
         try {

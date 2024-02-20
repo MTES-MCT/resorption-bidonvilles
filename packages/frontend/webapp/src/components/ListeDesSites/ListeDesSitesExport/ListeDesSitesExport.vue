@@ -3,10 +3,7 @@
         <template v-slot:title>Exporter les {{ title }}</template>
         <template v-slot:body>
             <ListeDesSitesExportSummary />
-            <ListeDesSitesExportDate
-                v-if="canExportHistory"
-                v-model:date="date"
-            />
+            <ListeDesSitesExportDate v-if="canExportHistory" />
             <ListeDesSitesExportOptions :disabled="!isExportToday" />
             <ErrorSummary class="mt-4" v-if="error" :message="error" />
         </template>
@@ -32,6 +29,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
+import { useForm } from "vee-validate";
 import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
@@ -45,13 +43,17 @@ import ListeDesSitesExportSummary from "./ListeDesSitesExportSummary.vue";
 import ListeDesSitesExportDate from "./ListeDesSitesExportDate.vue";
 import ListeDesSitesExportOptions from "./ListeDesSitesExportOptions.vue";
 
+const { values } = useForm({
+    initialValues: {
+        date: new Date(),
+    },
+});
 const notificationStore = useNotificationStore();
 const townsStore = useTownsStore();
 const userStore = useUserStore();
 const modale = ref(null);
 const isLoading = ref(false);
 const error = ref(null);
-const date = ref(new Date());
 const isClosed = computed(() => townsStore.filters.status === "close");
 const title = computed(() => {
     return isClosed.value ? "sites fermés" : "sites existants";
@@ -61,7 +63,7 @@ const canExportHistory = computed(() => {
 });
 const isExportToday = computed(() => {
     const today = formatDate(Date.now() / 1000, "d/m/y");
-    const exportDate = formatDate(date.value?.getTime() / 1000, "d/m/y");
+    const exportDate = formatDate(values.date?.getTime() / 1000, "d/m/y");
     return today === exportDate;
 });
 
@@ -85,11 +87,11 @@ async function download() {
             },
             isClosed.value,
             townsStore.exportOptions,
-            date.value
+            values.date
         );
         downloadBlob(
             new Blob([data]),
-            `${formatDate(date.value.getTime() / 1000, "y-m-d")}-sites-${
+            `${formatDate(values.date.getTime() / 1000, "y-m-d")}-sites-${
                 isClosed.value ? "fermés" : "existants"
             }-resorption-bidonvilles.xlsx`
         );

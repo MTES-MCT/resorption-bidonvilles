@@ -12,7 +12,7 @@ async function importAllRoutesInside(directory: string, app: ApplicationWithCust
 
         if (fs.statSync(fullPath).isDirectory()) {
             importAllRoutesInside(fullPath, app);
-        } else if (files[i].endsWith('.route.ts')) {
+        } else if (files[i].endsWith('.route.ts') || files[i].endsWith('.route.js')) {
             importPromises.push(import(fullPath));
         }
     }

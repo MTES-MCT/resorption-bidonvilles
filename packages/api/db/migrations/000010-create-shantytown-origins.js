@@ -1,9 +1,9 @@
 function addConstraint(queryInterface, table, constraint) {
-    return queryInterface.addConstraint(table, constraint.fields, constraint.options);
+    return queryInterface.addConstraint(table, constraint);
 }
 
-function createTable(queryInterface, Sequelize, name, additionalColumns = {}, additionalConstraints = []) {
-    return queryInterface.createTable(
+async function createTable(transaction, queryInterface, Sequelize, name, additionalColumns = {}, additionalConstraints = []) {
+    await queryInterface.createTable(
         name,
         Object.assign({
             fk_shantytown: {
@@ -26,7 +26,12 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}, ad
                 onUpdate: Sequelize.literal('CURRENT_TIMESTAMP'),
             },
         }, additionalColumns),
-    ).then(() => Promise.all(
+        {
+            transaction,
+        },
+    );
+
+    await Promise.all(
         [
             queryInterface.addConstraint(name, {
                 fields: ['fk_shantytown'],
@@ -38,6 +43,7 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}, ad
                 },
                 onUpdate: 'cascade',
                 onDelete: 'cascade',
+                transaction,
             }),
 
             queryInterface.addConstraint(name, {
@@ -50,37 +56,50 @@ function createTable(queryInterface, Sequelize, name, additionalColumns = {}, ad
                 },
                 onUpdate: 'cascade',
                 onDelete: 'cascade',
+                transaction,
             }),
         ].concat(
-            additionalConstraints.map(addConstraint.bind(this, queryInterface, name)),
+            additionalConstraints.map(constraint => addConstraint(queryInterface, name, {
+                ...constraint,
+                transaction,
+            })),
         ),
-    ));
+    );
 }
 
 module.exports = {
-    up: (queryInterface, Sequelize) => Promise.all([
-        createTable(queryInterface, Sequelize, 'shantytown_origins', {}, [
-            {
-                fields: ['fk_shantytown', 'fk_social_origin'],
-                options: {
-                    type: 'primary key',
-                    name: 'pk_shantytown_origins',
-                },
-            },
-        ]),
-        createTable(queryInterface, Sequelize, 'ShantytownOriginHistories', {
-            hid: {
-                type: Sequelize.INTEGER,
-                allowNull: false,
-                primaryKey: true,
-                autoIncrement: true,
-            },
-            archivedAt: {
-                type: Sequelize.DATE,
-                allowNull: false,
-            },
-        }),
-    ]),
+    async up(queryInterface, Sequelize) {
+        const transaction = await queryInterface.sequelize.transaction();
+
+        try {
+            await Promise.all([
+                createTable(transaction, queryInterface, Sequelize, 'shantytown_origins', {}, [
+                    {
+                        fields: ['fk_shantytown', 'fk_social_origin'],
+                        type: 'primary key',
+                        name: 'pk_shantytown_origins',
+                    },
+                ]),
+                createTable(transaction, queryInterface, Sequelize, 'ShantytownOriginHistories', {
+                    hid: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                        primaryKey: true,
+                        autoIncrement: true,
+                    },
+                    archivedAt: {
+                        type: Sequelize.DATE,
+                        allowNull: false,
+                    },
+                }),
+            ]);
+
+            return transaction.commit();
+        } catch (error) {
+            await transaction.rollback();
+            throw error;
+        }
+    },
 
     down: queryInterface => Promise.all([
         queryInterface.dropTable('shantytown_origins'),

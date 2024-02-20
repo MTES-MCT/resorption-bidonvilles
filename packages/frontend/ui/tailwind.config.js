@@ -163,7 +163,7 @@ module.exports = {
                 G100: "#F8F8F8",
                 black: "#1E1E1E",
 
-                green: "#169B62 ",
+                green: "#169B62",
                 red: "#D63626",
                 cardBorder: "rgba(0,0,145,0.2)",
 

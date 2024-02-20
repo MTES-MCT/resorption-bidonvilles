@@ -29,65 +29,69 @@ module.exports = {
                 return acc;
             }, {});
 
-            await queryInterface.bulkInsert(
-                'user_permissions',
-                Object.keys(hash).map(organizationId => [
-                    {
-                        fk_organization: organizationId,
-                        fk_feature: 'read',
-                        fk_entity: 'action',
-                        allowed: true,
-                        allow_all: false,
-                        is_cumulative: true,
-                    },
-                    {
-                        fk_organization: organizationId,
-                        fk_feature: 'update',
-                        fk_entity: 'action',
-                        allowed: true,
-                        allow_all: false,
-                        is_cumulative: true,
-                    },
-                    {
-                        fk_organization: organizationId,
-                        fk_feature: 'read',
-                        fk_entity: 'action_comment',
-                        allowed: true,
-                        allow_all: false,
-                        is_cumulative: true,
-                    },
-                    {
-                        fk_organization: organizationId,
-                        fk_feature: 'create',
-                        fk_entity: 'action_comment',
-                        allowed: true,
-                        allow_all: false,
-                        is_cumulative: true,
-                    },
-                ]).flat(),
-                { transaction },
-            );
+            if (Object.keys(hash).length > 0) {
+                await queryInterface.bulkInsert(
+                    'user_permissions',
+                    Object.keys(hash).map(organizationId => [
+                        {
+                            fk_organization: organizationId,
+                            fk_feature: 'read',
+                            fk_entity: 'action',
+                            allowed: true,
+                            allow_all: false,
+                            is_cumulative: true,
+                        },
+                        {
+                            fk_organization: organizationId,
+                            fk_feature: 'update',
+                            fk_entity: 'action',
+                            allowed: true,
+                            allow_all: false,
+                            is_cumulative: true,
+                        },
+                        {
+                            fk_organization: organizationId,
+                            fk_feature: 'read',
+                            fk_entity: 'action_comment',
+                            allowed: true,
+                            allow_all: false,
+                            is_cumulative: true,
+                        },
+                        {
+                            fk_organization: organizationId,
+                            fk_feature: 'create',
+                            fk_entity: 'action_comment',
+                            allowed: true,
+                            allow_all: false,
+                            is_cumulative: true,
+                        },
+                    ]).flat(),
+                    { transaction },
+                );
 
-            const permissionIds = await queryInterface.sequelize.query(
-                `SELECT
-                    user_permission_id,
-                    fk_organization
-                FROM user_permissions
-                WHERE fk_entity IN ('action', 'action_comment')`,
-                {
-                    type: queryInterface.sequelize.QueryTypes.SELECT,
-                    transaction,
-                },
-            );
+                const permissionIds = await queryInterface.sequelize.query(
+                    `SELECT
+                        user_permission_id,
+                        fk_organization
+                    FROM user_permissions
+                    WHERE fk_entity IN ('action', 'action_comment')`,
+                    {
+                        type: queryInterface.sequelize.QueryTypes.SELECT,
+                        transaction,
+                    },
+                );
 
-            await queryInterface.bulkInsert(
-                'user_permission_attachments',
-                permissionIds.map(({ user_permission_id, fk_organization }) => hash[fk_organization].map(action_id => ({
-                    fk_user_permission: user_permission_id,
-                    fk_action: action_id,
-                }))).flat(),
-                { transaction },
-            );
+                if (permissionIds.length > 0) {
+                    await queryInterface.bulkInsert(
+                        'user_permission_attachments',
+                        permissionIds.map(({ user_permission_id, fk_organization }) => hash[fk_organization].map(action_id => ({
+                            fk_user_permission: user_permission_id,
+                            fk_action: action_id,
+                        }))).flat(),
+                        { transaction },
+                    );
+                }
+            }
 
             return transaction.commit();
         } catch (error) {

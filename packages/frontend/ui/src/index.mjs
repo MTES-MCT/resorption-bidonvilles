@@ -4,6 +4,7 @@ export { default as AsyncSelect } from './components/Input/AsyncSelect.vue';
 export { default as Autocomplete } from './components/Input/Autocomplete.vue';
 export { default as BottomPagination } from './components/BottomPagination.vue';
 export { default as Button } from './components/Button.vue';
+export { default as Callout } from './components/Callout.vue';
 export { default as CheckableGroup } from './components/Input/CheckableGroup.vue';
 export { default as Checkbox } from './components/Input/Checkbox.vue';
 export { default as CheckboxUi } from './components/Input/CheckboxUi.vue';

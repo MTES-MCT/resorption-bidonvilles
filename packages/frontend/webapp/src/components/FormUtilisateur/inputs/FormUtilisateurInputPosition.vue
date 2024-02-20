@@ -1,5 +1,5 @@
 <template>
-    <TextInput id="position" :label="label" />
+    <TextInput id="position" :label="label" showMandatoryStar />
 </template>
 
 <script setup>

@@ -95,7 +95,7 @@ export default function () {
         indicateurs: lazy((value) => {
             return object()
                 .shape(
-                    Object.keys(value).reduce((acc, key) => {
+                    Object.keys(value || {}).reduce((acc, key) => {
                         acc[key] = object()
                             .required()
                             .shape({

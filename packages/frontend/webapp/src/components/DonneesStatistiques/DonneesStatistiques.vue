@@ -27,7 +27,11 @@
             />
             <template v-else>
                 <Onglets :tabs="tabs" :activeTab="activeTab" />
-                <Grille class="mt-6" :metrics="metricsStore.filteredMetrics" />
+                <Grille
+                    class="mt-6"
+                    :metrics="metricsStore.filteredMetrics"
+                    :collapseByDefault="metricsStore.metrics.length > 1"
+                />
             </template>
         </main>
     </ContentWrapper>

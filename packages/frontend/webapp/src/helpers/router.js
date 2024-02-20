@@ -24,12 +24,17 @@ window.addEventListener("popstate", () => {
 // pour pouvoir changer le hash de la page sans activer le scroll automatique
 let ignoreNextScroll = false;
 
-// les meta existantes sont
 // - navTab : indique à quel onglet de navigation la page appartient (sert à indiquer l'onglet actif)
-// - authRequirement : 'signedIn' (connecté), 'signedOut' (déconnecté), 'none' (peu importe) (default: 'signedIn')
-// - configRequired : est-ce que la config doit être chargée pour accéder à cette page (default: true)
 // - analyticsIgnore : est-ce que la page doit être trackée sur matomo ou non
+// - displayOrderOnSiteMap : ordre d'affichage de la page dans le plan du site (0 ou négatif pour exclure du plan du site)
 // - permissions : une liste de permissions (au format "entity.list") nécessaires pour accéder à la page
+// - requirements : contraintes d'accès à la page
+//   requirements.auth : 'signedIn' (connecté), 'signedOut' (déconnecté), 'none' (peu importe) (default: 'signedIn')
+//   requirements.configLoaded : est-ce que la config doit être chargée pour accéder à cette page (default: true)
+//   requirements.charterSigned : est-ce que la charte doit être signée pour accéder à cette page (default: true)
+//   requirements.topicsChosen: est-ce que l'utilisateur doit avoir choisi ses domaines de compétence pour accéder à cette page (default: true)
+//   requirements.changelogSeen: est-ce que l'utilisateur a vu les dernières nouveautés de la plateforme (default: true)
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
 
@@ -84,7 +89,6 @@ const router = createRouter({
                 import("@/views/DonneesStatistiquesRegionsView.vue"),
             meta: {
                 title: "Visualiser les données",
-                authRequirement: "signedIn",
                 navTab: "metrics",
                 displayOrderOnSiteMap: 15,
             },
@@ -95,7 +99,6 @@ const router = createRouter({
                 import("@/views/DonneesStatistiquesDepartementView.vue"),
             meta: {
                 title: "Visualiser les données départementales",
-                authRequirement: "signedIn",
                 navTab: "metrics",
                 displayOrderOnSiteMap: 0,
             },
@@ -105,7 +108,6 @@ const router = createRouter({
             component: () => import("@/views/ListeAccesView.vue"),
             meta: {
                 title: "Consulter la liste des comptes",
-                authRequirement: "signedIn",
                 navTab: "administration",
                 permissions: ["user.list"],
                 displayOrderOnSiteMap: 16,
@@ -116,7 +118,6 @@ const router = createRouter({
             component: () => import("@/views/AccesView.vue"),
             meta: {
                 title: "Gérer les accès d'un utilisateur",
-                authRequirement: "signedIn",
                 navTab: "administration",
                 permissions: ["user.activate"],
                 displayOrderOnSiteMap: 0,
@@ -127,7 +128,6 @@ const router = createRouter({
             component: () => import("@/views/FicheActionView.vue"),
             meta: {
                 title: "Consulter une fiche action",
-                authRequirement: "signedIn",
                 navTab: "actions",
                 displayOrderOnSiteMap: 0,
             },
@@ -137,7 +137,6 @@ const router = createRouter({
             component: () => import("@/views/MiseAJourActionView.vue"),
             meta: {
                 title: "Mettre à jour une fiche action",
-                authRequirement: "signedIn",
                 navTab: "actions",
                 displayOrderOnSiteMap: 0,
             },
@@ -147,7 +146,6 @@ const router = createRouter({
             component: () => import("@/views/DeclarationActionView.vue"),
             meta: {
                 title: "Créer une fiche action",
-                authRequirement: "signedIn",
                 navTab: "actions",
                 permissions: ["action.create"],
                 displayOrderOnSiteMap: 9,
@@ -158,7 +156,6 @@ const router = createRouter({
             component: () => import("@/views/HistoriqueActivitesView.vue"),
             meta: {
                 title: "Visualiser l'historique des activités",
-                authRequirement: "signedIn",
                 navTab: "activites",
                 permissions: ["shantytown.list"],
                 displayOrderOnSiteMap: 14,
@@ -175,21 +172,8 @@ const router = createRouter({
             component: () => import("@/views/CartographieView.vue"),
             meta: {
                 title: "Visualiser la carte des bidonvilles",
-                authRequirement: "signedIn",
                 navTab: "cartographie",
                 displayOrderOnSiteMap: 13,
-            },
-        },
-        {
-            path: "/chargement",
-            component: () => import("@/views/ChargementView.vue"),
-            meta: {
-                title: "Chargement de la plateforme en cours",
-                analyticsIgnore: true,
-                authRequirement: "signedIn",
-                configRequired: false,
-                charteRequirement: false,
-                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -197,19 +181,9 @@ const router = createRouter({
             component: () => import("@/views/AnnuaireView.vue"),
             meta: {
                 title: "Consulter l'annuaire",
-                authRequirement: "signedIn",
                 navTab: "communaute",
                 communauteTab: "annuaire",
                 displayOrderOnSiteMap: 12,
-            },
-        },
-        {
-            path: "/choix-des-sujets",
-            component: () => import("@/views/ChoixDesSujetsExpertise.vue"),
-            meta: {
-                title: "Choisir ses domaines de compétence et sujets d'intérêt",
-                authRequirement: "signedIn",
-                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -217,7 +191,6 @@ const router = createRouter({
             component: () => import("@/views/CommunauteView.vue"),
             meta: {
                 title: "Demander de l'aide à la communauté",
-                authRequirement: "signedIn",
                 navTab: "communaute",
                 communauteTab: "communaute",
                 displayOrderOnSiteMap: 10,
@@ -238,18 +211,8 @@ const router = createRouter({
                 import("@/views/NouvelleQuestionCommunauteView.vue"),
             meta: {
                 title: "Poser une question à la communauté",
-                authRequirement: "signedIn",
                 navTab: "communaute",
                 displayOrderOnSiteMap: 11,
-            },
-        },
-        {
-            path: "/compte-desactive",
-            component: () => import("@/views/CompteDesactiveView.vue"),
-            meta: {
-                title: "Votre compte a été désactivé",
-                authRequirement: "none",
-                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -257,50 +220,9 @@ const router = createRouter({
             component: () => import("@/views/FicheQuestionView.vue"),
             meta: {
                 title: "Consulter, répondre à une question posée à la communauté",
-                authRequirement: "signedIn",
                 navTab: "communaute",
                 communauteTab: "communaute",
                 displayOrderOnSiteMap: 0,
-            },
-        },
-        {
-            path: "/connexion",
-            component: () => import("@/views/ConnexionView.vue"),
-            meta: {
-                title: "S'identifier sur la plateforme",
-                authRequirement: "signedOut",
-                displayOrderOnSiteMap: 1,
-            },
-        },
-        {
-            path: "/contact",
-            component: () => import("@/views/DemandeAccesView.vue"),
-            meta: {
-                title: "Contacter l'équipe",
-                authRequirement: "signedOut",
-                displayOrderOnSiteMap: 0,
-            },
-        },
-        {
-            path: "/deconnexion",
-            beforeEnter: (to, from, next) => {
-                logout();
-                return next("/connexion");
-            },
-            component: () => null,
-            meta: {
-                authRequirement: "signedIn",
-                charteRequirement: false,
-                displayOrderOnSiteMap: 2,
-            },
-        },
-        {
-            path: "/invitation",
-            component: () => import("@/views/InvitationView.vue"),
-            meta: {
-                title: "Inviter vos contacts sur la plateforme",
-                authRequirement: "none",
-                displayOrderOnSiteMap: 18,
             },
         },
         {
@@ -308,7 +230,6 @@ const router = createRouter({
             component: () => import("@/views/ListeDesSitesView.vue"),
             meta: {
                 title: "Afficher la liste des sites",
-                authRequirement: "signedIn",
                 navTab: "sites",
                 displayOrderOnSiteMap: 5,
             },
@@ -318,7 +239,6 @@ const router = createRouter({
             component: () => import("@/views/ListeDesActionsView.vue"),
             meta: {
                 title: "Afficher la liste des actions",
-                authRequirement: "signedIn",
                 navTab: "actions",
                 displayOrderOnSiteMap: 8,
             },
@@ -332,7 +252,6 @@ const router = createRouter({
             component: () => import("@/views/MonCompteView.vue"),
             meta: {
                 title: "Modifier les informations liées à mon compte",
-                authRequirement: "signedIn",
                 displayOrderOnSiteMap: 3,
             },
         },
@@ -341,7 +260,6 @@ const router = createRouter({
             component: () => import("@/views/CreerUtilisateurView.vue"),
             meta: {
                 title: "Ajouter un nouvel utilisateur",
-                authRequirement: "signedIn",
                 navTab: "administration",
                 permissions: ["user.create"],
                 displayOrderOnSiteMap: 17,
@@ -354,50 +272,12 @@ const router = createRouter({
             },
         },
         {
-            path: "/nouvelle-version",
-            component: () => import("@/views/NouveautesView.vue"),
-            meta: {
-                title: "Voir les nouveautés disponibles sur la plateforme",
-                authRequirement: "signedIn",
-                displayOrderOnSiteMap: 0,
-            },
-        },
-        {
             path: "/permissions",
             component: () => import("@/views/PermissionsParDefautView.vue"),
             meta: {
                 title: "Permissions par défaut",
-                authRequirement: "signedIn",
                 navTab: "administration",
                 permissions: ["user.list"],
-                displayOrderOnSiteMap: 0,
-            },
-        },
-        {
-            path: "/signature-charte-engagement",
-            component: () => import("@/views/CharteEngagementView.vue"),
-            meta: {
-                title: "Accepter la charte d'engagement",
-                authRequirement: "signedIn",
-                charteRequirement: false,
-                displayOrderOnSiteMap: 0,
-            },
-        },
-        {
-            path: "/nouveau-mot-de-passe",
-            component: () => import("@/views/MotDePasseOublieView.vue"),
-            meta: {
-                title: "Demander un nouveau mot de passe",
-                authRequirement: "signedOut",
-                displayOrderOnSiteMap: 0,
-            },
-        },
-        {
-            path: "/page-interdite",
-            component: () => import("@/views/PageInterditeView.vue"),
-            meta: {
-                title: "Accès refusé à la page demandée",
-                authRequirement: "none",
                 displayOrderOnSiteMap: 0,
             },
         },
@@ -406,25 +286,6 @@ const router = createRouter({
             component: () => import("@/views/PlanDuSiteView.vue"),
             meta: {
                 title: "Plan du site",
-                authRequirement: "signedIn",
-                displayOrderOnSiteMap: 0,
-            },
-        },
-        {
-            path: "/renouveler-mot-de-passe/:token",
-            component: () => import("@/views/ChangementMotDePasseView.vue"),
-            meta: {
-                title: "Renouveler mon mot de passe",
-                authRequirement: "signedOut",
-                displayOrderOnSiteMap: 0,
-            },
-        },
-        {
-            path: "/activer-mon-compte/:token",
-            component: () => import("@/views/ActivationCompteView.vue"),
-            meta: {
-                title: "Activer mon compte",
-                authRequirement: "signedOut",
                 displayOrderOnSiteMap: 0,
             },
         },
@@ -433,7 +294,6 @@ const router = createRouter({
             component: () => import("@/views/FicheSiteView.vue"),
             meta: {
                 title: "Visualiser les données d'un site",
-                authRequirement: "signedIn",
                 navTab: "sites",
                 displayOrderOnSiteMap: 0,
             },
@@ -443,7 +303,6 @@ const router = createRouter({
             component: () => import("@/views/FermetureDeSiteView.vue"),
             meta: {
                 title: "Déclarer la fermeture d'un site",
-                authRequirement: "signedIn",
                 navTab: "sites",
                 displayOrderOnSiteMap: 0,
             },
@@ -453,7 +312,6 @@ const router = createRouter({
             component: () => import("@/views/MiseAJourDeSiteView.vue"),
             meta: {
                 title: "Mettre à jour les données d'un site",
-                authRequirement: "signedIn",
                 navTab: "sites",
                 displayOrderOnSiteMap: 0,
             },
@@ -463,7 +321,6 @@ const router = createRouter({
             component: () => import("@/views/DeclarationDeSiteView.vue"),
             meta: {
                 title: "Déclarer un nouveau site",
-                authRequirement: "signedIn",
                 navTab: "sites",
                 permissions: ["shantytown.create"],
                 displayOrderOnSiteMap: 6,
@@ -474,7 +331,6 @@ const router = createRouter({
             component: () => import("@/views/SignalementDeSiteView.vue"),
             meta: {
                 title: "Informer d'un nouveau site",
-                authRequirement: "signedIn",
                 navTab: "sites",
                 displayOrderOnSiteMap: 7,
             },
@@ -484,7 +340,6 @@ const router = createRouter({
             component: () => import("@/views/FicheStructureView.vue"),
             meta: {
                 title: "Consulter la fiche d'une structure",
-                authRequirement: "signedIn",
                 navTab: "communaute",
                 communauteTab: "annuaire",
                 displayOrderOnSiteMap: 0,
@@ -496,7 +351,6 @@ const router = createRouter({
             meta: {
                 title: "Consulter le tableau de bord",
                 navTab: "tableau-de-bord",
-                authRequirement: "signedIn",
                 displayOrderOnSiteMap: 4,
             },
         },
@@ -511,8 +365,235 @@ const router = createRouter({
             component: () => import("@/views/ProfilUtilisateurView.vue"),
             meta: {
                 title: "Consulter, modifier un compte utilisateur",
-                authRequirement: "signedIn",
                 navTab: "administration",
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
+            path: "/utilisateurs/permissions",
+            component: () => import("@/views/ExceptionsDePermissionView.vue"),
+            meta: {
+                title: "Utilisateurs et structures avec permissions exceptionnelles",
+                navTab: "administration",
+                permissions: ["user.list"],
+                displayOrderOnSiteMap: 0,
+            },
+        },
+
+        /********************************************************
+         * PAGES AVEC CONTRAINTES PARTICULIERES
+         * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         * Ci-dessous sont listées toutes les pages qui ne sont
+         * pas soumises aux contraintes d'accès habituelles
+         * (être connecté, avoir signé la charte d'engagement,
+         * etc.)
+         ********************************************************/
+        {
+            path: "/activer-mon-compte/:token",
+            component: () => import("@/views/ActivationCompteView.vue"),
+            meta: {
+                title: "Activer mon compte",
+                requirements: {
+                    auth: "signedOut",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
+            path: "/chargement",
+            component: () => import("@/views/ChargementView.vue"),
+            meta: {
+                title: "Chargement de la plateforme en cours",
+                requirements: {
+                    auth: "signedIn",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+                analyticsIgnore: true,
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
+            path: "/choix-des-sujets",
+            component: () => import("@/views/ChoixDesSujetsExpertise.vue"),
+            meta: {
+                title: "Choisir ses domaines de compétence et sujets d'intérêt",
+                requirements: {
+                    auth: "signedIn",
+                    configLoaded: true,
+                    charterSigned: true,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
+            path: "/compte-desactive",
+            component: () => import("@/views/CompteDesactiveView.vue"),
+            meta: {
+                title: "Votre compte a été désactivé",
+                requirements: {
+                    auth: "none",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
+            path: "/connexion",
+            component: () => import("@/views/ConnexionView.vue"),
+            meta: {
+                title: "S'identifier sur la plateforme",
+                requirements: {
+                    auth: "signedOut",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+                displayOrderOnSiteMap: 1,
+            },
+        },
+        {
+            path: "/contact",
+            component: () => import("@/views/DemandeAccesView.vue"),
+            meta: {
+                title: "Contacter l'équipe",
+                requirements: {
+                    auth: "signedOut",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
+            path: "/deconnexion",
+            beforeEnter: (to, from, next) => {
+                logout();
+                return next("/connexion");
+            },
+            component: () => null,
+            meta: {
+                requirements: {
+                    auth: "signedIn",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+                displayOrderOnSiteMap: 2,
+            },
+        },
+        {
+            path: "/invitation",
+            component: () => import("@/views/InvitationView.vue"),
+            meta: {
+                title: "Inviter vos contacts sur la plateforme",
+                requirements: {
+                    auth: "none",
+                },
+                displayOrderOnSiteMap: 18,
+            },
+        },
+        {
+            path: "/mentions-legales",
+            component: () => import("@/views/MentionsLegales.vue"),
+            meta: {
+                title: "Mentions légales",
+                requirements: {
+                    auth: "none",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+            },
+        },
+        {
+            path: "/nouveau-mot-de-passe",
+            component: () => import("@/views/MotDePasseOublieView.vue"),
+            meta: {
+                title: "Demander un nouveau mot de passe",
+                requirements: {
+                    auth: "signedOut",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
+            path: "/nouvelle-version",
+            component: () => import("@/views/NouveautesView.vue"),
+            meta: {
+                title: "Voir les nouveautés disponibles sur la plateforme",
+                requirements: {
+                    auth: "signedIn",
+                    configLoaded: true,
+                    charterSigned: true,
+                    topicsChosen: true,
+                    changelogSeen: false,
+                },
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
+            path: "/page-interdite",
+            component: () => import("@/views/PageInterditeView.vue"),
+            meta: {
+                title: "Accès refusé à la page demandée",
+                requirements: {
+                    auth: "none",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
+            path: "/renouveler-mot-de-passe/:token",
+            component: () => import("@/views/ChangementMotDePasseView.vue"),
+            meta: {
+                title: "Renouveler mon mot de passe",
+                requirements: {
+                    auth: "signedOut",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
+            path: "/signature-charte-engagement",
+            component: () => import("@/views/CharteEngagementView.vue"),
+            meta: {
+                title: "Accepter la charte d'engagement",
+                requirements: {
+                    auth: "signedIn",
+                    configLoaded: true,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
                 displayOrderOnSiteMap: 0,
             },
         },
@@ -521,26 +602,13 @@ const router = createRouter({
             component: () => import("@/views/StatistiquesPubliques.vue"),
             meta: {
                 title: "Statistiques publiques",
-                authRequirement: "none",
-            },
-        },
-        {
-            path: "/mentions-legales",
-            component: () => import("@/views/MentionsLegales.vue"),
-            meta: {
-                title: "Mentions légales",
-                authRequirement: "none",
-            },
-        },
-        {
-            path: "/utilisateurs/permissions",
-            component: () => import("@/views/ExceptionsDePermissionView.vue"),
-            meta: {
-                title: "Utilisateurs et structures avec permissions exceptionnelles",
-                authRequirement: "signedIn",
-                navTab: "administration",
-                permissions: ["user.list"],
-                displayOrderOnSiteMap: 0,
+                requirements: {
+                    auth: "none",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
             },
         },
 
@@ -554,7 +622,13 @@ const router = createRouter({
             component: () => import("@/views/NotFoundView.vue"),
             meta: {
                 title: "Page inexistante",
-                authRequirement: "none",
+                requirements: {
+                    auth: "none",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
                 displayOrderOnSiteMap: 0,
             },
         },
@@ -573,65 +647,62 @@ router.beforeEach((to, from) => {
     window.popStateDetected = false;
 
     const userStore = useUserStore();
-
-    // compute default requirements
-    let { authRequirement, configRequired, charteRequirement } = to.meta;
-    if (authRequirement === undefined) {
-        authRequirement = "signedIn";
+    let { requirements } = to.meta;
+    if (requirements === undefined) {
+        requirements = {
+            auth: "signedIn",
+            configLoaded: true,
+            charterSigned: true,
+            topicsChosen: true,
+            changelogSeen: true,
+        };
     }
 
-    if (charteRequirement === undefined) {
-        charteRequirement = authRequirement === "signedIn";
+    // cas particulier des pages en auth 'none'
+    // si l'utilisateur est connecté, on force les contraintes par défaut d'un utilisateur connecté
+    // sauf indication contraire
+    if (requirements.auth === "none" && userStore.isLoggedIn) {
+        requirements.auth = "signedIn";
+        requirements.configLoaded = requirements.configLoaded !== false;
+        requirements.charterSigned = requirements.configLoaded !== false;
+        requirements.topicsChosen = requirements.configLoaded !== false;
+        requirements.changelogSeen = requirements.configLoaded !== false;
     }
 
-    if (configRequired === undefined) {
-        configRequired =
-            authRequirement === "signedIn" ||
-            (authRequirement === "none" && userStore.isLoggedIn);
-    }
-
-    // signedOut requirement
-    if (authRequirement === "signedOut" && userStore.isLoggedIn) {
+    // c'est parti, on applique les contraintes !
+    if (requirements.auth === "signedOut" && userStore.isLoggedIn) {
         return "/";
     }
 
-    // signedIn requirement
-    if (authRequirement === "signedIn" && !userStore.isLoggedIn) {
-        const navigationStore = useNavigationStore();
+    const navigationStore = useNavigationStore();
+    if (requirements.auth === "signedIn" && !userStore.isLoggedIn) {
         navigationStore.entrypoint = to.fullPath;
-        return `/connexion`;
+        return "/connexion";
     }
 
-    // config requirement
     const configStore = useConfigStore();
-    if (configRequired === true && !configStore.isLoaded) {
-        const navigationStore = useNavigationStore();
+    if (requirements.configLoaded === true && !configStore.isLoaded) {
         navigationStore.entrypoint = to.fullPath;
         return "/chargement";
     }
 
-    // charte requirement
-    if (charteRequirement === true && !userStore.hasAcceptedCharte) {
+    if (requirements.charterSigned === true && !userStore.hasAcceptedCharte) {
         return "/signature-charte-engagement";
     }
 
-    // expertise topics selection requirement
     if (
-        userStore.user &&
-        userStore.user.expertise_topics_chosen !== true &&
-        !["/choix-des-sujets", "/signature-charte-engagement"].includes(to.path)
+        requirements.topicsChosen === true &&
+        userStore.user.expertise_topics_chosen !== true
     ) {
-        const navigationStore = useNavigationStore();
         navigationStore.entrypoint = to.fullPath;
         return "/choix-des-sujets";
     }
 
     // changelog requirement
     if (
-        configStore.config?.changelog?.length > 0 &&
-        !["/nouvelle-version", "/signature-charte-engagement"].includes(to.path)
+        requirements.changelogSeen === true &&
+        configStore.config?.changelog?.length > 0
     ) {
-        const navigationStore = useNavigationStore();
         navigationStore.entrypoint = to.fullPath;
         return "/nouvelle-version";
     }

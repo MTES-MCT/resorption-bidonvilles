@@ -46,7 +46,7 @@ const props = defineProps({
     modelValue: {
         type: [Date, String],
         required: false,
-        default: null
+        default: undefined
     },
     width: { // tailwind class (par exemple : w-32)
         type: String,

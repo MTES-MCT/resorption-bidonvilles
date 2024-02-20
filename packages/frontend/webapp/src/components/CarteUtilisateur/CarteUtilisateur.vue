@@ -83,7 +83,6 @@ import { Icon, Link } from "@resorptionbidonvilles/ui";
 import CarteUtilisateurWrapper from "./CarteUtilisateurWrapper.vue";
 import CarteUtilisateurDetailsIcon from "./CarteUtilisateurDetailsIcon.vue";
 import IconeAdministrateur from "@/components/IconeAdministrateur/IconeAdministrateur.vue";
-import { useDirectoryStore } from "@/stores/directory.store";
 
 const props = defineProps({
     user: {
@@ -97,7 +96,6 @@ const props = defineProps({
     },
 });
 const { user, linkToUser } = toRefs(props);
-const directoryStore = useDirectoryStore();
 
 function trackEmail(event) {
     event.stopPropagation();
@@ -105,11 +103,8 @@ function trackEmail(event) {
 }
 
 function getTopicsByLevel(level) {
-    return (user.value.expertise_topics || []).filter((topic) => {
-        return (
-            directoryStore.filters.expertiseTopics.includes(topic.uid) &&
-            topic.type == level
-        );
-    });
+    return (user.value.expertise_topics || []).filter(
+        (topic) => topic.type === level
+    );
 }
 </script>

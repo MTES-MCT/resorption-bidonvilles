@@ -16,6 +16,7 @@
             variant="primary"
             :class="index === 0 ? 'mt-4' : 'mt-2'"
             :metrics="m"
+            :collapseByDefault="collapseByDefault"
         />
     </section>
 </template>
@@ -38,6 +39,11 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    collapseByDefault: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
 });
-const { metrics } = toRefs(props);
+const { metrics, collapseByDefault } = toRefs(props);
 </script>

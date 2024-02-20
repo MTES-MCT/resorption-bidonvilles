@@ -46,4 +46,4 @@ COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./packages/
 COPY --chown=node:node packages/api/package.json ./packages/api/
 
 WORKDIR /home/node/app/packages/api
-ENTRYPOINT ["yarn", "start"]
+ENTRYPOINT ["yarn", "serve"]

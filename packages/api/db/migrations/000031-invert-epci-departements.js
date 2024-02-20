@@ -1,7 +1,6 @@
 const parser = require('neat-csv');
 const fs = require('fs');
 const path = require('path');
-const sequelize = require('#db/sequelize');
 
 /**
  * Adds a column fk_departement to cities
@@ -37,7 +36,7 @@ function addDepartementConstraintToCities(queryInterface) {
 /**
  * Sets a value for each city's fk_departement
  */
-function fillCitiesWithDepartements() {
+function fillCitiesWithDepartements(queryInterface) {
     return parser(
         fs.readFileSync(path.resolve(__dirname, '..', 'data/cities.csv'), { encoding: 'utf8' }),
         {
@@ -50,13 +49,13 @@ function fillCitiesWithDepartements() {
             for (let i = 0; i < cities.length; i += 100) {
                 /* eslint-disable no-await-in-loop */
                 await Promise.all(
-                    cities.slice(i, i + 100).map(city => sequelize.query(`UPDATE "cities" SET fk_departement = '${city.departementCode}' WHERE code = '${city.code}'`)),
+                    cities.slice(i, i + 100).map(city => queryInterface.sequelize.query(`UPDATE "cities" SET fk_departement = '${city.departementCode}' WHERE code = '${city.code}'`)),
                 );
             }
 
             return cities;
         })
-        .then(() => sequelize.query('UPDATE cities SET fk_departement = main.fk_departement FROM cities AS main WHERE cities.fk_main = main.code;'));
+        .then(() => queryInterface.sequelize.query('UPDATE cities SET fk_departement = main.fk_departement FROM cities AS main WHERE cities.fk_main = main.code;'));
 }
 
 /**
@@ -224,14 +223,14 @@ module.exports = {
         ))
         .then(cities => cities.slice(1).filter(city => city.POLE !== ''))
         .then(async (cities) => {
-            const mainCities = await sequelize.query(`
+            const mainCities = await queryInterface.sequelize.query(`
                 SELECT
                     code,
                     fk_departement,
                     fk_epci
                 FROM cities
                 WHERE code IN (:codes)`, {
-                type: sequelize.QueryTypes.SELECT,
+                type: queryInterface.sequelize.QueryTypes.SELECT,
                 replacements: {
                     codes: cities.map(city => city.POLE),
                 },

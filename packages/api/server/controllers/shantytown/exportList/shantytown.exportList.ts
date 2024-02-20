@@ -1,7 +1,8 @@
 import { type Request, Response, NextFunction } from 'express';
 import shantytownService from '#server/services/shantytown';
 import { Location } from '#server/models/geoModel/Location.d';
-import { User } from '#root/types/resources/User.d';
+import { AuthUser } from '#server/middlewares/authMiddleware';
+import { ShantytownExportListOption } from '#server/services/shantytown/_common/createExportSections';
 
 const { exportTowns } = shantytownService;
 
@@ -13,17 +14,26 @@ const ERROR_RESPONSES = {
 };
 
 interface ExportTownsRequest extends Request {
-    user: User,
+    user: AuthUser,
     body: {
         date: Date,
         closedTowns: boolean,
         location: Location,
-    }
+    },
+    query: {
+        options: ShantytownExportListOption[],
+    },
 }
 
 export default async (req: ExportTownsRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const buffer = await exportTowns(req.user, req.body.location, req.body.closedTowns, req.body.date);
+        const buffer = await exportTowns(
+            req.user,
+            req.body.location,
+            req.query.options,
+            req.body.closedTowns,
+            req.body.date,
+        );
         res.end(buffer);
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;

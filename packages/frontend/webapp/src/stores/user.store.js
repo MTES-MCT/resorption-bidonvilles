@@ -72,9 +72,13 @@ export const useUserStore = defineStore("user", {
                 return departements;
             }
 
-            const allowedDepartements = permission.allowed_on.departements.map(
-                (d) => d.departement.code
-            );
+            const allowedDepartements = [
+                ...permission.allowed_on.cities.map((c) => c.departement.code),
+                ...permission.allowed_on.epci.map((e) => e.departement.code),
+                ...permission.allowed_on.departements.map(
+                    (d) => d.departement.code
+                ),
+            ];
             const allowedRegions = permission.allowed_on.regions.map(
                 (r) => r.region.code
             );
@@ -154,7 +158,9 @@ export const useUserStore = defineStore("user", {
                     permission.allowed_on.cities.some(
                         (c) =>
                             c.city.code === entity.city.code ||
-                            c.city.main === entity.city.code
+                            c.city.main === entity.city.code ||
+                            c.city.code === entity.city.main ||
+                            c.city.main === entity.city.main
                     ))
             );
         },

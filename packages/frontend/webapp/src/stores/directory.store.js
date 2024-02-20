@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref, computed, watch } from "vue";
 import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
-import { list } from "@/api/organizations.api";
+import { list, get } from "@/api/organizations.api";
 import computeOrganizationLocation from "@/utils/computeOrganizationLocation";
 import Fuse from "fuse.js";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
@@ -134,7 +134,7 @@ export const useDirectoryStore = defineStore("directory", () => {
     }
 
     function filterUsersByExpertiseTopics(organization, expertiseTopicsIds) {
-        return organization.users.filter((user) => {
+        return (organization?.users || []).filter((user) => {
             return user?.expertise_topics?.some((topic) =>
                 expertiseTopicsIds.includes(topic.uid)
             );
@@ -142,51 +142,36 @@ export const useDirectoryStore = defineStore("directory", () => {
     }
 
     function filterByExpertiseTopics(list) {
-        // Vérifiez si le filtre contient (au moins) une valeur
         if (filters.expertiseTopics.value.length === 0) {
-            // Pour chaque organisation, filtrer les utilisateurs en fonction du nouveau filtre
-            for (const organization of list) {
-                if (Object.hasOwn(organization, "allUsers")) {
-                    organization.users = organization.allUsers;
-                }
-            }
-
             return list;
         }
 
-        // Filtrer les organisations qui ont au moins un utilisateur avec l'un des expertiseTopicsIds donné
-        const filteredOrganizations = list.filter((organization) => {
-            // Vérifier si l'organisation a la propriété 'users'
-            if (!organization.users) {
-                // Sans users impossible de vérifier l'étendue des compétences de la structure
-                return [];
-            }
+        return (
+            list
+                // on clone tous les objets ici car on souhaite muter ces objets plus bas
+                // (précisément : modifier `users` pour les filtrer également par expertise topics)
+                .map((org) => ({ ...org }))
+                .filter((organization) => {
+                    organization.users = filterUsersByExpertiseTopics(
+                        organization,
+                        filters.expertiseTopics.value
+                    );
 
-            // Si organization.allUsers est null, c'est qu'on n'a pas encore filtré. On peut donc initialiser cette prop
-            if (!organization.allUsers) {
-                organization.allUsers = organization.users;
-            } else {
-                // Sinon, on réinitialise les organization.users avec la liste initiale
-                organization.users = organization.allUsers;
-            }
-
-            // Mise à jouir de la liste des utilisateurs
-            const filteredUsers = filterUsersByExpertiseTopics(
-                organization,
-                filters.expertiseTopics.value
-            );
-            organization.users = filteredUsers;
-
-            // Ne renvoyer que les organisations qui ont au moins un utilisateur correspondant au filtre
-            return filteredUsers.length > 0;
-        });
-
-        return filteredOrganizations;
+                    return organization.users.length > 0;
+                })
+        );
     }
 
     const { bus } = useEventBus();
     watch(() => bus.value.get("new-user"), resetFilters);
     resetFilters();
+
+    function enrichOrganization(org) {
+        const location = computeOrganizationLocation(org);
+        org.location_name = location.name;
+        org.location_code = location.code;
+        return org;
+    }
 
     return {
         currentPage,
@@ -206,6 +191,23 @@ export const useDirectoryStore = defineStore("directory", () => {
         organizations,
         filteredOrganizations,
         filters,
+        async get(requestedId) {
+            const index = organizations.value.findIndex(
+                ({ id }) => id === requestedId
+            );
+            if (index >= 0) {
+                return organizations.value[index];
+            }
+
+            try {
+                const response = await get(requestedId);
+                return enrichOrganization(response);
+            } catch (error) {
+                throw error.user_message
+                    ? error
+                    : new Error("Une erreur inconnue est survenue");
+            }
+        },
         async fetchDirectory() {
             if (isLoading.value === true) {
                 return;
@@ -215,12 +217,8 @@ export const useDirectoryStore = defineStore("directory", () => {
             error.value = null;
             try {
                 const response = await list();
-                organizations.value = response.organizations.map((org) => {
-                    const location = computeOrganizationLocation(org);
-                    org.location_name = location.name;
-                    org.location_code = location.code;
-                    return org;
-                });
+                organizations.value =
+                    response.organizations.map(enrichOrganization);
                 currentPage.index.value = 1;
             } catch (e) {
                 error.value = e?.code || "Erreur inconnue";

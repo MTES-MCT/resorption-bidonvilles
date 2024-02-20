@@ -1,10 +1,4 @@
-const fs = require('fs');
-const path = require('path');
-
-const createFunction = fs.readFileSync(
-    path.resolve(__dirname, 'common/validate_user_permission_attachments/01_initial_function.sql'),
-    'utf8',
-);
+const createFunction = require('./common/validate_user_permission_attachments/01_initial_function');
 
 module.exports = {
     async up(queryInterface) {

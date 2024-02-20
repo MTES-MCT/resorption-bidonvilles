@@ -1,25 +1,25 @@
 <template>
     <template v-if="variant === 'radio'">
         <label class="inline-block px-2 py-2 flex items-center cursor-pointer">
-            <input type="radio" :name="name" @click="onClick" :class="classes" :checked="checked" />
+            <input :disabled="isSubmitting || disabled" type="radio" :name="name" @click="onClick" :class="classes" :checked="checked" />
             <span>{{ label }}</span>
         </label>
     </template>
 
     <!-- Variant "check" -->
     <template v-else-if="variant === 'check'">
-        <label :disabled="isSubmitting || disabled" :class="[classes,
-            isSubmitting ? 'opacity-50' : 'hover:border-blue500',
+        <label :class="[classes,
+            isSubmitting || disabled ? 'opacity-50' : 'hover:border-blue500',
         ]">
-            <input type="radio" :name="name" @click="onClick" class="appearance-none" :checked="checked" />
+            <input :disabled="isSubmitting || disabled" type="radio" :name="name" @click="onClick" class="appearance-none" :checked="checked" />
             <span>{{ label }}</span>
             <Icon v-if="checked" class="text-primary font-bold text-md" icon="fa-solid fa-check" />
         </label>
     </template>
 
     <template v-else>
-        <label :disabled="isSubmitting || disabled" class="inline-block border-2 cursor-pointer" :class="classes">
-            <input type="radio" :name="name" @click="onClick" class="inline-block rounded mr-2 text-center"
+        <label class="inline-block border-2 cursor-pointer" :class="classes">
+            <input :disabled="isSubmitting || disabled" type="radio" :name="name" @click="onClick" class="inline-block rounded mr-2 text-center"
                 :checked="checked" />
             {{ label }}
         </label>

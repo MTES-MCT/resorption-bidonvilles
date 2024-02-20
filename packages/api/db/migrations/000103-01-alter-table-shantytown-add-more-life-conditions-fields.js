@@ -116,8 +116,8 @@ const addPositiveConstraint = ({
     queryInterface, Sequelize, transaction, field,
 }) => queryInterface.addConstraint(
     'shantytowns',
-    [field],
     {
+        fields: [field],
         type: 'check',
         name: `${field}_positive_or_null`,
         where: {

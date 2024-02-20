@@ -1,12 +1,11 @@
 const parser = require('neat-csv');
 const fs = require('fs');
 const path = require('path');
-const sequelize = require('#db/sequelize');
 
 /**
  * Sets a value for each city's latitude and longitude
  */
-function fillCitiesWithLatitudelongitude() {
+function fillCitiesWithLatitudelongitude(queryInterface) {
     return parser(
         fs.readFileSync(path.resolve(__dirname, '..', 'data/cities-with-lat-and-lon.csv'), { encoding: 'utf8' }),
         {
@@ -15,7 +14,7 @@ function fillCitiesWithLatitudelongitude() {
         },
     )
         .then(cities => Promise.all(
-            cities.map(city => sequelize.query(`UPDATE "cities" SET latitude = ${city.latitude},  longitude = ${city.longitude} WHERE code = '${city.code}'`)),
+            cities.map(city => queryInterface.sequelize.query(`UPDATE "cities" SET latitude = ${city.latitude},  longitude = ${city.longitude} WHERE code = '${city.code}'`)),
         ));
 }
 

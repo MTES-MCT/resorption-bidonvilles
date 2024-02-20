@@ -6,6 +6,7 @@
         :fn="autocompleteFn"
         v-model="organization"
         showCategory
+        showMandatoryStar
     />
 </template>
 

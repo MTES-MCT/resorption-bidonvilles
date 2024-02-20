@@ -6,6 +6,7 @@
         :options="options"
         :loader="refreshOptions"
         ref="select"
+        showMandatoryStar
     />
 </template>
 

@@ -34,18 +34,21 @@ module.exports = {
             ))
             // On crée pour les utilisateurs listés plus haut l'option 'access_justice'
             .then(((rows) => {
-                queryInterface.bulkInsert(
-                    'user_permission_options',
-                    rows.map(({
-                        user_id,
-                    }) => ({
-                        fk_user: user_id,
-                        fk_option: 'access_justice',
-                    })),
-                    {
-                        transaction,
-                    },
-                );
+                if (rows.length > 0) {
+                    queryInterface.bulkInsert(
+                        'user_permission_options',
+                        rows.map(({
+                            user_id,
+                        }) => ({
+                            fk_user: user_id,
+                            fk_option: 'access_justice',
+                        })),
+                        {
+                            transaction,
+                        },
+                    );
+                }
+
                 const { Op } = Sequelize;
                 // On supprime les permissions accordées aux utilisateurs qui ont le droit d'accès aux procédures judiciaires par leur rôle
                 // car c'est l'option de permissions 'access_justice' qui permet l'ovtroi du droit d'accès aux PJ

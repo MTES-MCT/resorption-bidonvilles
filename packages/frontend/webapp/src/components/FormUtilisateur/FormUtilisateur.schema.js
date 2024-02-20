@@ -156,7 +156,7 @@ export default (variant, allowNewOrganization, language) => {
                 ),
         })
         .label(labels.territorial_collectivity);
-    schema.association = string()
+    schema.association = object()
         .when("organization_category", {
             is: "association",
             then: (schema) =>
