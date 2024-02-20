@@ -17,6 +17,14 @@ type QuestionRow = {
     organizationId: number,
     organizationName: string,
     organizationAbbreviation: string,
+    questionUpdatedBy: number,
+    userUpdateFirstName: string,
+    userUpdateLastName: string,
+    userUpdatePosition: string,
+    userUpdateRole: string,
+    updateOrganizationId: number,
+    updateOrganizationName: string,
+    updateOrganizationAbbreviation: string,
     attachments: string[],
 };
 
