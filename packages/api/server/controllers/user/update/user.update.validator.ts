@@ -1,9 +1,13 @@
 /* eslint-disable newline-per-chained-call */
-import { body } from 'express-validator';
+import { body, param } from 'express-validator';
 import checkPassword from '#server/utils/checkPassword';
 import EMAIL_SUBSCRIPTIONS from '#server/config/email_subscriptions';
 
 export default [
+    param('id')
+        .isInt().withMessage('L\'identifiant de l\'utilisateur est invalide')
+        .toInt(),
+
     body('last_name')
         .optional()
         .isString()
