@@ -43,7 +43,7 @@
                 </FooterBarFootLink>
                 <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
 
-                <FooterBarFootLink to="https://design.numerique.gouv.fr/accessibilite-numerique/RGAA/"
+                <FooterBarFootLink :to="`${(URL || '')}/accessibility-statement_2024-01-21.html`"
                     title="Afficher la définition du référentiel général d'amélioration de l'accessibilité">
                     {{ $t('footer.RGAA') }}
                 </FooterBarFootLink>
