@@ -43,7 +43,7 @@
                 </FooterBarFootLink>
                 <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
 
-                <FooterBarFootLink :to="`${(URL || '')}/accessibility-statement_2024-01-21.html`"
+                <FooterBarFootLink :to="`${(URL || '')}/accessibilite`"
                     title="Afficher la définition du référentiel général d'amélioration de l'accessibilité">
                     {{ $t('footer.RGAA') }}
                 </FooterBarFootLink>
