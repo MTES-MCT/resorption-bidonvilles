@@ -47,6 +47,7 @@ export default async (id: number, transaction?: Transaction): Promise<Question> 
             cq.updated_at AS "questionUpdatedAt",
             cq.solved_at AS "questionSolvedAt",
             cq.created_by "questionCreatedBy",
+            cq.updated_by "questionUpdatedBy",
             u.user_id AS "userId",
             u.first_name AS "userFirstName",
             u.last_name AS "userLastName",
@@ -55,6 +56,20 @@ export default async (id: number, transaction?: Transaction): Promise<Question> 
             o.organization_id AS "organizationId",
             o.name AS "organizationName",
             o.abbreviation AS "organizationAbbreviation",
+            rr.name AS "userRole",
+            o.organization_id AS "organizationId",
+            o.name AS "organizationName",
+            o.abbreviation AS "organizationAbbreviation",
+            uu.first_name AS "userUpdateFirstName",
+            uu.last_name AS "userUpdateLastName",
+            uu.position AS "userUpdatePosition",
+            rru.name AS "userUpdateRole",
+            ou.organization_id AS "updateOrganizationId",
+            ou.name AS "organizationName",
+            ou.abbreviation AS "updateOrganizationAbbreviation",
+            ou.organization_id AS "updateOrganizationId",
+            ou.name AS "updateOrganizationName",
+            ou.abbreviation AS "updateOrganizationAbbreviation",
             ga.attachments AS "attachments"
         FROM
             questions cq
@@ -63,13 +78,19 @@ export default async (id: number, transaction?: Transaction): Promise<Question> 
         LEFT JOIN
             users u ON cq.created_by = u.user_id
         LEFT JOIN
+            users uu ON cq.updated_by = uu.user_id
+        LEFT JOIN
             organizations o ON u.fk_organization = o.organization_id
+        LEFT JOIN
+            organizations ou ON uu.fk_organization = ou.organization_id
         LEFT JOIN
             roles_regular rr ON u.fk_role_regular = rr.role_id
         LEFT JOIN
+            roles_regular rru ON uu.fk_role_regular = rru.role_id
+        LEFT JOIN
             grouped_attachments ga ON ga.fk_question = cq.question_id
         WHERE
-            cq.question_id = :id`,
+            cq.question_id =  :id`,
         {
             type: QueryTypes.SELECT,
             replacements: {

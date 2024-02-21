@@ -57,6 +57,10 @@ export function subscribe(questionId) {
     return axios.post(`/questions/${encodeURI(questionId)}/subscription`);
 }
 
+export function updateQuestion(questionId, question, userId) {
+    return axios.patch(`/questions/${encodeURI(questionId)}`, question, userId);
+}
+
 export function unsubscribe(questionId) {
     return axios.post(`/questions/${encodeURI(questionId)}/unsubscription`);
 }

@@ -41,10 +41,10 @@
             </div>
             <p class="text-center mt-6">
                 <Link
-                    to="/statistiques"
+                    to="/visualisation-donnees"
                     v-if="userStore.hasPermission('stats.read')"
                 >
-                    Voir plus de statistiques
+                    Visualiser toutes les données
                 </Link>
             </p>
         </section>

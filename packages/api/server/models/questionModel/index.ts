@@ -1,15 +1,17 @@
 import create from './create';
-import findOne from './findOne';
 import findAll from './findAll';
-import serializeQuestion from './serializeQuestion';
+import findOne from './findOne';
 import getAnswers from './_common/getAnswers';
 import getHistory from './getHistory';
+import serializeQuestion from './serializeQuestion';
+import update from './update';
 
 export default {
     create,
-    findOne,
     findAll,
-    serializeQuestion,
+    findOne,
     getAnswers,
     getHistory,
+    serializeQuestion,
+    update,
 };

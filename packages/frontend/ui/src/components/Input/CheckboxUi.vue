@@ -62,10 +62,10 @@
             checked
                 ? 'bg-blue500 text-white border-blue500'
                 : 'bg-blue200 text-primary',
-            isSubmitting ? 'opacity-50' : 'hover:border-blue500',
+                checkboxStyle,
         ]">
             <input @click="onChange(value)" class="appearance-none inline-block rounded mr-2 text-center cursor-pointer"
-                type="checkbox" :checked="checked" />
+                type="checkbox" :checked="checked" :disabled="disabled" />
             <Icon class="mr-2 text-white" :icon="checked ? 'fa-solid fa-square-check' : 'fa-solid fa-square'" />
             {{ label }}
         </label>
@@ -110,16 +110,16 @@ function onChange() {
 const checkboxStyle = computed(() => {
     if (checked.value) {
         if (isSubmitting.value || disabled.value) {
-            return 'bg-blue300 border-blue300';
+            return 'bg-blue300 border-blue300 opacity-50';
         }
 
         return 'bg-primary border-primary';
     }
 
     if (isSubmitting.value || disabled.value) {
-        return 'bg-G200 hover:border-G400';
+        return 'bg-G200 hover:border-G400 opacity-50';
     }
 
-    return 'bg-white hover:border-G400';
+    return 'hover:border-G400 hover:border-blue500'
 });
 </script>
