@@ -124,7 +124,7 @@ function getLibelleAudio(key, status) {
             toImprove: "Conditions d'accès à améliorer",
         },
     };
-    return Object.prototype.hasOwn(audio, key)
+    return Object.hasOwn(audio, key)
         ? titles[key] + " " + audio[key][status]
         : titles[key] + ", " + audio.default[status];
 }
