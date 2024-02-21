@@ -4,6 +4,12 @@ import authUtils from '#server/utils/auth';
 const { hashPassword } = authUtils;
 
 export default async (req, res, next) => {
+    if (req.user.role_id !== 'national_admin' && req.params?.id !== req.user.id) {
+        return res.status(403).send({
+            user_message: 'Vous n\'avez pas les droits suffisants pour modifier cet utilisateur',
+        });
+    }
+
     const { id: paramId } = req.params;
     const { id: connectedUserId } = req.user;
 
