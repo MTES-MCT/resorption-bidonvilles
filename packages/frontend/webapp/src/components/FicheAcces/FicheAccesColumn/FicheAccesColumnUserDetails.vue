@@ -43,6 +43,15 @@
         :href="`/utilisateur/${user.id}`"
         >Modifier ces informations</Button
     >
+    <Button
+        v-if="userStore.user?.id !== user.id"
+        class="mt-2"
+        size="sm"
+        icon="building-user"
+        iconPosition="left"
+        :href="`/utilisateur/${user.id}/territoires`"
+        >Modifier le(s) territoire(s) d'intervention</Button
+    >
 </template>
 
 <script setup>

@@ -380,6 +380,15 @@ const router = createRouter({
             },
         },
         {
+            path: "/utilisateur/:id/territoires",
+            component: () => import("@/views/MiseAjourTerritoiresView.vue"),
+            meta: {
+                title: "Modifier les territoires d'intervention d'un utilisateur",
+                navTab: "administration",
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
             path: "/utilisateurs/permissions",
             component: () => import("@/views/ExceptionsDePermissionView.vue"),
             meta: {
