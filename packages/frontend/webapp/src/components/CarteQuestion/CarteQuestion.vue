@@ -30,9 +30,11 @@
                 Par
                 <LinkOrganization
                     :to="`/structure/${question.createdBy.organization.id}`"
-                    :ariaLabel="`Afficher la fiche de la structure de l'auteur ${formatUserName(question.createdBy)}`"
+                    :ariaLabel="`Afficher la fiche de la structure de l'auteur ${formatUserName(
+                        question.createdBy
+                    )}`"
                 >
-                {{ formatUserName(question.createdBy) }}
+                    {{ formatUserName(question.createdBy) }}
                 </LinkOrganization>
             </div>
             <div
