@@ -11,7 +11,7 @@ export default [
         .isInt().bail().withMessage('L\'identifiant de l\'utilisateur à modifier est invalide')
         .custom(async (value, { req }) => {
             if (req.user.id === value) {
-                throw new Error('Vous ne pouvez pas modifier vos propre territoires d\'intervention');
+                throw new Error('Vous ne pouvez pas modifier vos propres territoires d\'intervention');
             }
 
             let user: User;
