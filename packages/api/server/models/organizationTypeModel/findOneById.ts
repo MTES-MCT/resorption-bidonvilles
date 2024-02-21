@@ -1,8 +1,16 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-export default async (id) => {
-    const result = await sequelize.query(
+type OrganizationTypeRaw = {
+    id: number;
+    name_singular: string;
+    name_plural: string;
+    abbreviation: string | null;
+    fk_category: string;
+};
+
+export default async (id: number): Promise<OrganizationTypeRaw | null> => {
+    const result: OrganizationTypeRaw[] = await sequelize.query(
         `SELECT
             organization_type_id AS id,
             name_singular,

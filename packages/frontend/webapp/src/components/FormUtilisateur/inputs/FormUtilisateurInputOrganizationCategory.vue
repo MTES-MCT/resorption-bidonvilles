@@ -23,6 +23,6 @@ const props = defineProps({
 const { label, allowNewOrganization } = toRefs(props);
 
 const items = computed(() => {
-    return itemsFn(allowNewOrganization.value);
+    return itemsFn({ other: allowNewOrganization.value });
 });
 </script>

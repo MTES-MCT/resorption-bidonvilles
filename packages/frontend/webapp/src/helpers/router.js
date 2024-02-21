@@ -272,6 +272,16 @@ const router = createRouter({
             },
         },
         {
+            path: "/nouvelle-structure",
+            component: () => import("@/views/CreerStructureView.vue"),
+            meta: {
+                title: "Créer une nouvelle structure",
+                navTab: "administration",
+                permissions: ["user.create"],
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
             path: "/permissions",
             component: () => import("@/views/PermissionsParDefautView.vue"),
             meta: {

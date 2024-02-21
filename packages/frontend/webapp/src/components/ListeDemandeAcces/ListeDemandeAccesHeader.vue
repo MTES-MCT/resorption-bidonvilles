@@ -34,6 +34,15 @@
                 >
                     Ajouter un utilisateur</Button
                 >
+                <Button
+                    href="/nouvelle-structure"
+                    icon="building"
+                    iconPosition="left"
+                    variant="primary"
+                    size="sm"
+                >
+                    Créer une structure</Button
+                >
             </p>
         </template>
     </ViewHeader>

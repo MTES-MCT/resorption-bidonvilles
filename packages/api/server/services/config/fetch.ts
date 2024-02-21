@@ -16,6 +16,7 @@ import regionModel from '#server/models/regionModel/index';
 import socialOriginsModel from '#server/models/socialOriginModel/index';
 import topicModel from '#server/models/topicModel/index';
 import userModel from '#server/models/userModel/index';
+import roleModel from '#server/models/roleModel/index';
 
 import ServiceError from '#server/errors/ServiceError';
 import { ConfigServiceFetchResponse } from '#root/types/services/ConfigService.d';
@@ -39,6 +40,7 @@ export default async (user: User): Promise<ConfigServiceFetchResponse> => {
             regions,
             socialOrigins,
             topics,
+            roles,
         ] = await Promise.all([
             actionFinanceTypeModel.findAll(),
             changelogModel.getChangelogFor(user),
@@ -55,6 +57,7 @@ export default async (user: User): Promise<ConfigServiceFetchResponse> => {
             regionModel.findAll(),
             socialOriginsModel.findAll(),
             topicModel.findAll(),
+            roleModel.findAll('regular'),
         ]);
 
         return {
@@ -72,6 +75,7 @@ export default async (user: User): Promise<ConfigServiceFetchResponse> => {
             question_tags: questionTags,
             regions,
             comment_tags: commentTags,
+            roles,
             social_origins: socialOrigins,
             topics,
             user: extendedUser,
