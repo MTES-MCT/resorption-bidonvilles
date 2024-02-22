@@ -408,6 +408,20 @@ const router = createRouter({
          * etc.)
          ********************************************************/
         {
+            path: "/accessibilite",
+            component: () => import("@/views/DeclarationAccessibilite.vue"),
+            meta: {
+                title: "Déclaration d'accessibilité",
+                requirements: {
+                    auth: "none",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+            },
+        },
+        {
             path: "/activer-mon-compte/:token",
             component: () => import("@/views/ActivationCompteView.vue"),
             meta: {

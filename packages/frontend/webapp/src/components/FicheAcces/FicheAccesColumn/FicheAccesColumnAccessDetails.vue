@@ -27,7 +27,7 @@
                 text="Expiré"
                 :date="userAccess.expires_at"
                 icon="unlink"
-                color="text-G600"
+                color="text-G700"
                 class="mb-2"
             />
         </div>
@@ -51,7 +51,7 @@
             text="Expiré"
             :date="user.user_accesses[0].expires_at"
             icon="unlink"
-            color="text-G600"
+            color="text-G700"
             class="mb-2"
         />
 

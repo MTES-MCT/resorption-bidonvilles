@@ -79,6 +79,9 @@
                         icon="arrow-alt-circle-right"
                     />
                     <Icon class="down" v-else icon="arrow-alt-circle-right" />
+                    <span class="sr-only"
+                        >{{ isEvolutionPositive ? "évolution" : "diminution" }}
+                    </span>
                     <span class="ml-2 align-top">
                         {{ isEvolutionPositive ? "+" : "-" }}
                         {{ Math.abs(cardStats.evolution) }} %
@@ -120,8 +123,8 @@ const isEvolutionPositive = computed(
 const columns = ref([]);
 const evolutionColor = computed(() => {
     return cardStats.value.color === "red"
-        ? "bg-red200 text-red700"
-        : "bg-green200 text-green700";
+        ? "bg-red200 text-black"
+        : "bg-green200 text-black";
 });
 const maxNumber = computed(() => {
     return Math.max(...cardStats.value.data.map((stat) => stat.figure));

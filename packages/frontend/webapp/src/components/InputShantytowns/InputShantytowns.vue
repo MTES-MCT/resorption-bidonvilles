@@ -1,7 +1,7 @@
 <template>
     <div>
         <InputLabel :label="label" :showMandatoryStar="showMandatoryStar" />
-        <div class="mb-6 text-G600" v-if="$slots.info">
+        <div class="mb-6 text-G700" v-if="$slots.info">
             <slot name="info" />
         </div>
 
@@ -42,7 +42,7 @@
                             class="justify-end"
                             :population="content"
                         />
-                        <span v-else class="text-G600 italic">N/C</span>
+                        <span v-else class="text-G700 italic">N/C</span>
                     </span>
                     <span
                         v-else-if="column === 'closedAt'"

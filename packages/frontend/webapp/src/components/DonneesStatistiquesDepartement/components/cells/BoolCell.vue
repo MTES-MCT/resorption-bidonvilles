@@ -1,6 +1,6 @@
 <template>
     <Icon v-if="typeof value === 'boolean'" :icon="icon" :class="color" />
-    <span v-else class="text-G500">?</span>
+    <span v-else class="text-G700">?</span>
 </template>
 
 <script setup>

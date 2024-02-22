@@ -1,5 +1,5 @@
 <template>
-    <img :src="locationImg" class="w-36" />
+    <img :src="locationImg" class="w-36" alt="" />
 </template>
 
 <script setup>

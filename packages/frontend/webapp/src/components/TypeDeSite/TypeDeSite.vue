@@ -5,6 +5,7 @@
             class="text-lg"
             :style="`color: ${fieldType.color}`"
         />
+        <span class="sr-only">Type de site</span>
         <div class="font-bold ml-2 whitespace-nowrap">
             {{ fieldType.label }}
         </div>

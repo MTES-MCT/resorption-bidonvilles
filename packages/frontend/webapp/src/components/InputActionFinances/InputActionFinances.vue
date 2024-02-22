@@ -1,7 +1,7 @@
 <template>
     <div>
         <InputLabel :label="label" :showMandatoryStar="showMandatoryStar" />
-        <div class="mb-6 text-G600" v-if="$slots.info">
+        <div class="mb-6 text-G700" v-if="$slots.info">
             <slot name="info" />
         </div>
 

@@ -15,7 +15,7 @@
             </h2>
             <p>{{ user.position }}</p>
             <p class="mt-2">
-                <span class="text-G600 text-sm">Rôle sur la plateforme :</span
+                <span class="text-G700 text-sm">Rôle sur la plateforme :</span
                 ><br />
                 <span :class="user.is_admin ? 'text-info' : ''"
                     ><IconeAdministrateur v-if="user.is_admin" />
@@ -38,34 +38,26 @@
             class="col-span-2 grid grid-cols-2 gap-4"
         >
             <div v-if="getTopicsByLevel('expertise').length > 0" class="flex">
-                <Icon
-                    icon="arrow-turn-down-right"
-                    class="text-info mr-2"
-                    alt=""
-                />
+                <Icon icon="arrow-turn-down-right" class="text-info mr-2" />
                 <ul>
                     <span class="text-info">Expert(e) en</span>
                     <li
                         v-for="topic in getTopicsByLevel('expertise')"
                         :key="topic.uid"
-                        class="text-G600 ml-2 text-sm"
+                        class="text-G700 ml-2 text-sm"
                     >
                         - {{ topic.label }}
                     </li>
                 </ul>
             </div>
             <div v-if="getTopicsByLevel('interest').length > 0" class="flex">
-                <Icon
-                    icon="arrow-turn-down-right"
-                    class="text-info mr-2"
-                    alt=""
-                />
+                <Icon icon="arrow-turn-down-right" class="text-info mr-2" />
                 <ul>
                     <span class="text-info">Intéressé(e) par</span>
                     <li
                         v-for="topic in getTopicsByLevel('interest')"
                         :key="topic.uid"
-                        class="text-G600 ml-2 text-sm"
+                        class="text-G700 ml-2 text-sm"
                     >
                         - {{ topic.label }}
                     </li>

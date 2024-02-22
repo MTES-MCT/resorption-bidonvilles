@@ -1,8 +1,9 @@
 <template>
+    <span class="sr-only">Liste des intervenants</span>
     <div class="flex">
         <div
             v-bind:class="{
-                'text-G600': shantytown.actors.length === 0,
+                'text-G700': shantytown.actors.length === 0,
                 'text-primary': shantytown.actors.length > 0,
                 'font-bold': shantytown.actors.length > 0,
             }"
@@ -12,7 +13,7 @@
             </span>
         </div>
         <div class="ml-2 flex-grow">
-            <span v-if="shantytown.actors.length === 0" class="text-G600">
+            <span v-if="shantytown.actors.length === 0" class="text-G700">
                 Aucun intervenant</span
             >
             <span v-else class="text-primary font-bold"

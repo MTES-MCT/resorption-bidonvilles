@@ -10,11 +10,13 @@
             </span>
         </p>
 
-        <ul class="flex">
-            <li class="pr-4" v-for="link in links" :key="link.id">
-                <Link :to="`#${link.id}`">{{ link.label }}</Link>
-            </li>
-        </ul>
+        <nav role="navigation" aria-label="Menu du tableau de bord">
+            <ul class="flex">
+                <li class="pr-4" v-for="link in links" :key="link.id">
+                    <Link :to="`#${link.id}`">{{ link.label }}</Link>
+                </li>
+            </ul>
+        </nav>
     </TableauDeBordSection>
 </template>
 

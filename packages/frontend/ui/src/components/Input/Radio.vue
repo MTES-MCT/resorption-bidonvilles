@@ -9,7 +9,7 @@
     <!-- Variant "check" -->
     <template v-else-if="variant === 'check'">
         <label :class="[classes,
-            isSubmitting || disabled ? 'opacity-50' : 'hover:border-blue500',
+            isSubmitting || disabled ? 'opacity-85' : 'hover:border-blue500',
         ]">
             <input :disabled="isSubmitting || disabled" type="radio" :name="name" @click="onClick" class="appearance-none" :checked="checked" />
             <span>{{ label }}</span>
@@ -70,7 +70,7 @@ const variants = {
             [false]: 'bg-blue200 text-primary'
         },
         disabled: {
-            [true]: 'opacity-50',
+            [true]: 'opacity-85',
             [false]: 'hover:border-blue500'
         }
     },
@@ -81,7 +81,7 @@ const variants = {
             [false]: ''
         },
         disabled: {
-            [true]: 'opacity-50 cursor-default',
+            [true]: 'opacity-85 cursor-default',
             [false]: ''
         }
     },
@@ -92,7 +92,7 @@ const variants = {
             [false]: 'bg-white border_G600'
         },
         disabled: {
-            [true]: 'opacity-50 cursor-default',
+            [true]: 'opacity-85 cursor-default',
             [false]: ''
         }
     }

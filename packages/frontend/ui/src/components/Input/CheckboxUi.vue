@@ -1,6 +1,6 @@
 <template>
     <template v-if="variant === 'checkbox'">
-        <label class="flex cursor-pointer">
+        <label :class="labelClass" class="flex cursor-pointer">
             <input id="variant-checkbox" ref="checkbox" @click="onChange(value)"
                 class="inline-block rounded mr-2 text-center" type="checkbox" :checked="checked" :disabled="disabled" />
             {{ label }}
@@ -96,6 +96,11 @@ const props = defineProps({
         type: Boolean,
         required: false,
         default: false
+    },
+    labelClass: {
+        type: String,
+        required: false,
+        default: ''        
     }
 });
 
@@ -110,14 +115,14 @@ function onChange() {
 const checkboxStyle = computed(() => {
     if (checked.value) {
         if (isSubmitting.value || disabled.value) {
-            return 'bg-blue300 border-blue300 opacity-50';
+            return 'bg-blue300 border-blue300 opacity-85';
         }
 
         return 'bg-primary border-primary';
     }
 
     if (isSubmitting.value || disabled.value) {
-        return 'bg-G200 hover:border-G400 opacity-50';
+        return 'bg-G200 hover:border-G400 opacity-85';
     }
 
     return 'hover:border-G400 hover:border-blue500'

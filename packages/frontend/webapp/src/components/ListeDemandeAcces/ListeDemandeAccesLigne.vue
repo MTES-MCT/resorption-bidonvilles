@@ -30,7 +30,7 @@
                 <p>{{ user.last_name.toUpperCase() }} {{ user.first_name }}</p>
                 <p class="text-sm">{{ user.position }}</p>
                 <p
-                    class="text-sm text-G600"
+                    class="text-sm text-G700"
                     v-if="user.last_access && userStore.user?.is_superuser"
                 >
                     Dernière connexion:

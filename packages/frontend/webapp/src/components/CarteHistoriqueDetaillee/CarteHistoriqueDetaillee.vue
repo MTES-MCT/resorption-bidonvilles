@@ -84,7 +84,7 @@
             />
 
             <footer class="flex justify-between pt-2">
-                <span class="text-G500">{{
+                <span class="text-G700">{{
                     formatActivityDate(activity.date)
                 }}</span>
                 <div class="h-10 flex space-x-4 items-center">
@@ -177,7 +177,7 @@ const colors = computed(() => {
             };
         } else if (activity.value.action === "closing") {
             return {
-                text: "text-G600",
+                text: "text-G700",
                 bg: "bg-G600",
             };
         }

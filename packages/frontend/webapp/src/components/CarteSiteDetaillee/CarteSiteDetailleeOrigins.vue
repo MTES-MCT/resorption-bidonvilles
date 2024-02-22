@@ -9,7 +9,7 @@
             :population="shantytown.populationTotal"
         />
         <div>
-            <div v-if="!socialOrigins.length" class="text-G600">
+            <div v-if="!socialOrigins.length" class="text-G700">
                 Origine : inconnu
             </div>
             <div
@@ -18,8 +18,11 @@
                 v-else
                 :key="origin.id"
             >
-                <img :src="origin.img" class="w-6 h-4 mr-2 mt-1" />
-                <div>{{ origin.label }}</div>
+                <img :src="origin.img" class="w-6 h-4 mr-2 mt-1" alt="" />
+                <div>
+                    <span class="sr-only">Origine de la population:</span
+                    >{{ origin.label }}
+                </div>
             </div>
         </div>
     </div>

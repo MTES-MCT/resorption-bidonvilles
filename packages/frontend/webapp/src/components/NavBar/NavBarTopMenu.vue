@@ -8,7 +8,8 @@
         :padding="false"
         type="button"
         @click="$emit('showMobile', $event)"
-    />
+        ><span class="sr-only">Afficher le menu</span></Button
+    >
 
     <!-- desktop -->
     <nav class="hidden lg:flex space-x-2 text-sm -mr-3">

@@ -6,7 +6,6 @@
             active ? 'border-b-primary text-primary' : '',
             focusClasses.ring,
         ]"
-        tabindex="0"
     >
         <slot />
     </router-link>

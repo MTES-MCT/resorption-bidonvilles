@@ -1,5 +1,5 @@
 <template>
-    {{ town.usename }}<br /><span class="text-sm text-G500">{{
+    {{ town.usename }}<br /><span class="text-sm text-G700">{{
         town.field_type
     }}</span>
 </template>

@@ -16,12 +16,12 @@
                 >
                     {{ organization.name }}
                 </p>
-                <p class="text-G600">{{ organization.type.name }}</p>
+                <p class="text-G700">{{ organization.type.name }}</p>
                 <p v-if="displayBeingFunded" class="text-info">
                     <Icon icon="euro-sign" /> Structure financée
                 </p>
                 <p
-                    class="mt-3 text-G600"
+                    class="mt-3 text-G700"
                     v-if="organization.intervention_areas.areas.length > 1"
                 >
                     <span class="font-bold">Territoires d'intervention :</span>
@@ -35,7 +35,7 @@
                 -
             </header>
 
-            <p class="my-2 text-sm text-G600">
+            <p class="my-2 text-sm text-G700">
                 {{ organization.users.length }} membre{{ plural ? "s" : "" }}
                 <template v-if="showWording">
                     inscrit{{ plural ? "s" : "" }} sur la plateforme
@@ -63,20 +63,15 @@
                         :class="user.is_admin ? 'text-info' : ''"
                     >
                         <IconeAdministrateur v-if="user.is_admin" />
-                        <Icon
-                            v-else
-                            icon="user"
-                            title="Pictogramme utilisateur"
-                        />&nbsp;
+                        <IconeSimpleUtilisateur v-else />&nbsp;
                         <span class="font-bold">
                             {{ user.last_name.toUpperCase() }}
                             {{ user.first_name }}
                         </span>
-                        <div class="ml-8 text-G600 flex w-full">
+                        <div class="ml-8 text-G700 flex w-full">
                             <Icon
                                 icon="arrow-turn-down-right"
                                 class="text-info mr-2"
-                                title=""
                             />
 
                             <div
@@ -136,11 +131,7 @@
                         :class="user.is_admin ? 'text-info' : ''"
                     >
                         <IconeAdministrateur v-if="user.is_admin" />
-                        <Icon
-                            v-else
-                            icon="user"
-                            title="Pictogramme utilisateur"
-                        />
+                        <IconeSimpleUtilisateur v-else />
                         {{ user.last_name.toUpperCase() }}
                         {{ user.first_name }}
                     </li>
@@ -167,6 +158,7 @@ import focusClasses from "@common/utils/focus_classes";
 
 import { Icon, Link } from "@resorptionbidonvilles/ui";
 import IconeAdministrateur from "@/components/IconeAdministrateur/IconeAdministrateur.vue";
+import IconeSimpleUtilisateur from "@/components/IconeSimpleUtilisateur/IconeSimpleUtilisateur.vue";
 import { useDirectoryStore } from "@/stores/directory.store";
 
 const props = defineProps({

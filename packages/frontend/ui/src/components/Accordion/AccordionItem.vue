@@ -9,7 +9,7 @@
             </div>
         </button>
         <transition name="fade">
-            <p tabindex="0" class="pl-4 pb-4" v-if="open" :id="id">
+            <p class="pl-4 pb-4" v-if="open" :id="id">
                 <slot name="content" />
             </p>
         </transition>

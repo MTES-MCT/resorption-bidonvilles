@@ -4,7 +4,7 @@
 
         <div class="relative" :class="width">
             <InputIcon position="before" :icon="icon" />
-            <select :class="classes" :value="modelValue" :disabled="disabled || isLoading" @change="onChange" :id="id">
+            <select :class="[focusClasses.ring, classes]" :value="modelValue" :disabled="disabled || isLoading" @change="onChange" :id="id">
                 <slot />
             </select>
             <InputIcon class="absolute pointer-events-none" position="after" :icon="isLoading ? 'spinner' : 'chevron-down'"
@@ -20,6 +20,7 @@ import InputLabel from "./utils/InputLabel.vue";
 import InputWrapper from "./utils/InputWrapper.vue";
 import InputError from "./utils/InputError.vue";
 import InputIcon from "./utils/InputIcon.vue";
+import focusClasses from "../../../../common/utils/focus_classes";
 import getInputClasses from "./utils/getInputClasses";
 
 const props = defineProps({

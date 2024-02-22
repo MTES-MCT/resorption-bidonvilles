@@ -63,7 +63,7 @@
                     {{ condition }}
                 </li>
             </ul>
-            <p v-else class="mt-4 text-red">
+            <p v-else class="mt-4 text-red700">
                 <span class="text-xl align-middle"
                     ><Icon icon="times" class="mr-1"
                 /></span>

@@ -3,7 +3,7 @@
         <h3 class="font-bold text-lg">Sur les 7 derniers jours</h3>
         <p
             v-if="splitActivities.currentWeek.length === 0"
-            class="text-G600 italic"
+            class="text-G700 italic"
         >
             Il n'y a eu aucune activité sur les 7 derniers jours
         </p>
@@ -17,7 +17,7 @@
         <h3 class="font-bold text-lg mt-8">Sur les 30 derniers jours</h3>
         <p
             v-if="splitActivities.previousMonth.length === 0"
-            class="text-G600 italic"
+            class="text-G700 italic"
         >
             Il n'y a eu aucune activité sur les 30 derniers jours
         </p>

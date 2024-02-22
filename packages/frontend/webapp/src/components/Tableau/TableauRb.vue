@@ -18,7 +18,7 @@
                 <!-- if no data provided -->
                 <tr v-if="isEmpty">
                     <td
-                        class="border-collapse text-center border-1 p-6 text-G600 italic"
+                        class="border-collapse text-center border-1 p-6 text-G700 italic"
                         :colspan="columns.length"
                     >
                         <slot name="empty">Aucune donnée à afficher</slot>

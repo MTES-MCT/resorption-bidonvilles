@@ -6,15 +6,19 @@
                 colorClass,
             ]"
             style="padding: 0.2em"
+            ariaHidden="true"
         >
             <Icon :icon="icon" />
         </span>
-        <slot />
+        <div aria-hidden="true">
+            <slot />
+        </div>
+        <span class="sr-only">{{ audio }}</span>
     </li>
 </template>
 
 <script setup>
-import { defineProps, computed } from "vue";
+import { toRefs, computed } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
@@ -23,7 +27,13 @@ const props = defineProps({
         validator: (value) =>
             ["unknown", "bad", "toImprove", "good"].includes(value),
     },
+    audio: {
+        type: String,
+        default: "",
+    },
 });
+
+const { audio } = toRefs(props);
 
 const colorClass = computed(() => {
     const colors = {

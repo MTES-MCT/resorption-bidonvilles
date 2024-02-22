@@ -1,7 +1,7 @@
 <template>
     <div class="flex items-center">
         <div class="mr-2">
-            {{ population }}
+            {{ population }} <span class="sr-only">personnes sur site</span>
         </div>
         <div>
             <Icon icon="male" />{{ " " }}

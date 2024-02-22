@@ -1,5 +1,5 @@
 <template>
-    <CheckboxUi v-model="checkedModel" :isSubmitting="isSubmitting" :disabled="disabled"/>
+    <CheckboxUi v-model="checkedModel" :isSubmitting="isSubmitting" :disabled="disabled" :labelClass="labelClass" />
 </template> 
 
 <script setup>
@@ -17,6 +17,11 @@ const props = defineProps({
         required: false,
         default: undefined,
     },
+    labelClass: {
+        type: String,
+        required: false,
+        default: ''
+    }
 });
 const { name, value, modelValue, disabled } = toRefs(props);
 const isSubmitting = useIsSubmitting();

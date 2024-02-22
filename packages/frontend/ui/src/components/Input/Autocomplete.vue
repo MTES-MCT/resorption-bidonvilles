@@ -5,7 +5,7 @@
             :disabled="isDisabled" @blur="onBlur" @keydown.stop="onKeydown" @clear="clear" ref="input">
         <div class="absolute top-10 w-full z-[2000] border-1 border-G300 bg-white" v-if="results.length > 0">
             <div v-if="showCategory" class="flex" v-for="section in results" :key="section.title">
-                <div class="w-40 px-3 py-2 text-right text-sm text-G600 border-r border-G200 border-b">
+                <div class="w-40 px-3 py-2 text-right text-sm text-G700 border-r border-G200 border-b">
                     {{ section.title }}
                 </div>
                 <div class="border-b border-G200 flex-1">

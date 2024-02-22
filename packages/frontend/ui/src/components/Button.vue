@@ -4,7 +4,7 @@
         focusClasses.ring,
         sizeClasses,
         variantClasses,
-        disabled && 'opacity-50 cursor-not-allowed'
+        disabled && 'opacity-85 cursor-not-allowed'
     ]" :disabled="disabled || isLoading" :to="isLink && isInternalLink && !disabled ? href : null" :href="href"
         :is="isLink ? (isInternalLink && !disabled ? 'router-link' : 'a') : 'button'" :type="isLink ? null : type"
         tabindex="0" @click="onClick">

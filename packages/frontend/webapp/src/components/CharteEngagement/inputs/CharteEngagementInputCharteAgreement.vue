@@ -1,14 +1,12 @@
 <template>
-    <CharteEngagementInput name="charte_agreement">
-        Je m'engage à
-        <span class="font-bold">
-            respecter la charte d'engagement, à exploiter les informations
-            présentes sur la plateforme exclusivement pour les besoins propres
-            de mon organisation ; à ne pas communiquer
-        </span>
-        sous aucune forme (orale, écrite, copie) à un tiers.<br />
-        <br />
-        <Link :to="configStore.config.version_charte_engagement.fichier">
+    <CharteEngagementInput
+        name="charte_agreement"
+        label="Je m'engage à respecter la charte d'engagement, à exploiter les informations présentes sur la plateforme exclusivement pour les besoins propres de mon organisation ; à ne pas communiquer sous aucune forme (orale, écrite, copie) à un tiers."
+    >
+        <Link
+            :to="configStore.config.version_charte_engagement.fichier"
+            class="mt-4"
+        >
             Consulter la charte d'engagement
         </Link>
     </CharteEngagementInput>
