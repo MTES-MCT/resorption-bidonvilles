@@ -67,16 +67,11 @@
                             {{ $t('landingPage.fourthSection.team.actorRole1') }}
                         </li>
                         <li>
-                            <span class="font-bold">Laure Dubuc</span> :
-                            {{ $t('landingPage.fourthSection.team.actorRole2') }}
-                        </li>
-                        <li>
                             <span class="font-bold">Jean-Paul Domalain</span> :
                             {{ $t('landingPage.fourthSection.team.actorRole3') }}
                         </li>
                         <li>
-                            <span class="font-bold">Christophe Bénard, Anis Safine et Grégoire
-                                Thomazeau</span>
+                            <span class="font-bold">Christophe Bénard et Gilles Cognin</span>
                             : {{ $t('landingPage.fourthSection.team.developers') }}
                         </li>
                     </ul>
