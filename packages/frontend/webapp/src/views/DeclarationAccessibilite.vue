@@ -24,7 +24,7 @@
                     <span>
                         (<span>https://resorption-bidonvilles.beta.gouv.fr</span>)
                     </span>
-                    >.
+                    .
                 </p>
             </div>
             <h3 class="text-display-md font-bold mt-8">Etat de conformité</h3>
@@ -50,8 +50,8 @@
             </h3>
             <div class="mt-4">
                 <p>
-                    Si vous n'arrivez pas à accéder à un contenu ou à un pouvez
-                    pouvez contacter le responsable de
+                    Si vous n'arrivez pas à accéder à un contenu ou à un
+                    service, vous pouvez contacter le responsable de
                     <span>Résorption-bidonvilles</span>
                     pour être orienté vers une alternative accessible ou obtenir
                     le contenu sous une autre forme.
