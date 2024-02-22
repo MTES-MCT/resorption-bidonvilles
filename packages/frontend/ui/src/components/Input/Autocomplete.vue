@@ -5,7 +5,7 @@
             :disabled="isDisabled" @blur="onBlur" @keydown.stop="onKeydown" @clear="clear" ref="input">
         <div class="absolute top-10 w-full z-[2000] border-1 border-G300 bg-white" v-if="results.length > 0">
             <div v-if="showCategory" class="flex" v-for="section in results" :key="section.title">
-                <div class="w-40 px-3 py-2 text-right text-sm text-G600 border-r border-G200 border-b">
+                <div class="w-40 px-3 py-2 text-right text-sm text-G700 border-r border-G200 border-b">
                     {{ section.title }}
                 </div>
                 <div class="border-b border-G200 flex-1">
@@ -60,6 +60,11 @@ const props = defineProps({
         required: false,
         default: false
     },
+    autoClear: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
     showCategory: {
         type: Boolean,
         required: false,
@@ -72,7 +77,7 @@ const props = defineProps({
     },
 });
 const emit = defineEmits(['update:modelValue']);
-const { fn, name, withoutMargin, allowFreeSearch, showCategory, modelValue, disabled } = toRefs(props);
+const { fn, name, withoutMargin, allowFreeSearch, showCategory, modelValue, disabled, autoClear } = toRefs(props);
 
 const rawResults = ref([]);
 const isLoading = ref(false);
@@ -206,22 +211,31 @@ function selectItem(item) {
     lastPromise.value = null;
     selectedItem.value = item;
     handleChange({
-        search: item.label,
+        search: item.selectedLabel || item.label,
         data: item.data
     });
     sendEvent({
-        search: item.label,
+        search: item.selectedLabel || item.label,
         data: item.data
     });
-    input.value.setValue(item.selectedLabel || item.label);
+
+    if (autoClear.value === true) {
+        clear({ sendEvent: false });
+    } else {
+        input.value.setValue(item.selectedLabel || item.label);
+    }
 }
 
-function clear() {
+function clear(options = {}) {
     rawResults.value = [];
     selectedItem.value = null;
     abort();
-    handleChange(undefined);
-    sendEvent(undefined);
+
+    if (options.sendEvent !== false) {
+        handleChange(undefined);
+        sendEvent(undefined);
+    }
+
     input.value.setValue("");
 }
 

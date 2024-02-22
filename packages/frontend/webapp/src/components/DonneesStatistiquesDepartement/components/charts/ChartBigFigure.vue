@@ -62,7 +62,7 @@ const colors = {
     },
     neutral: {
         background: "bg-G200",
-        color: "text-G500",
+        color: "text-G700",
     },
 };
 

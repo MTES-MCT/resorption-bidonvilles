@@ -1,7 +1,7 @@
 <template>
     <FicheSousRubrique>
         <p class="font-bold">Origine</p>
-        <p v-if="origins.length === 0" class="text-G600">non communiqué</p>
+        <p v-if="origins.length === 0" class="text-G700">non communiqué</p>
         <template v-else>
             <p
                 v-for="origin in origins"

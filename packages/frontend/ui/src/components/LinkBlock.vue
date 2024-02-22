@@ -1,5 +1,5 @@
 <template>
-    <router-link v-if="internalLink" :to="to" :class="`block hover:bg-G100 p-3 ${focusClasses} ${textColor}`">
+    <router-link v-if="internalLink" :to="to" :class="`block hover:bg-G100 p-3 ${focusClasses} ${textColor}`" :tabindex="menuHidden ? -1 : null">
         <span v-bind:class="active ? 'border-l-3 border-l-primary pl-2' : ''">
             <Icon v-if="icon" :icon="icon" class="mr-2" />
             <slot />
@@ -58,6 +58,14 @@ export default {
         },
         internalLink() {
             return this.to && this.to[0] === "/";
+        },
+        menuHidden() {
+            return this.$refs.mobileMenu && this.$refs.mobileMenu.style.opacity === '0';
+        },
+        parentElement() {
+            return this.$refs.mobileMenu
+                ? this.$refs.mobileMenu
+                : null;
         }
     }
 }

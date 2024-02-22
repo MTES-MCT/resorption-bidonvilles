@@ -1,5 +1,9 @@
 <template>
-    <FicheRubrique title="Caractéristiques du site" category="caracteristics">
+    <FicheRubrique
+        title="Caractéristiques du site"
+        category="caracteristics"
+        class="pb-14"
+    >
         <section class="flex flex-col-reverse xl:flex-row">
             <div class="xl:w-1/2">
                 <FicheSiteDatesInstallation :town="town" />

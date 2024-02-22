@@ -3,9 +3,8 @@
         <template v-slot:title>{{ question.question }}</template>
         <template v-slot:description>
             Question posée par
-            <LinkOrganization :to="`/structure/${author.organization_id}`">
-                {{ author.first_name }}
-                {{ author.last_name }} - {{ author.organization }}
+            <LinkOrganization :to="`/structure/${author.organization.id}`">
+                {{ formatUserName(author) }}
             </LinkOrganization>
             <template v-if="question.peopleAffected">
                 —
@@ -29,7 +28,17 @@
                         class="mb-4"
                     />
                 </div>
-                <div class="flex flex-col sm:flex-row items-start gap-2">
+                <div
+                    class="flex flex-col shrink-0 sm:flex-row items-start gap-2"
+                >
+                    <FicheQuestionModificationButton
+                        v-if="
+                            userStore.user.is_superuser ||
+                            author.id === userStore.user.id
+                        "
+                        :question="question"
+                        size="sm"
+                    />
                     <FicheQuestionDeleteButton
                         v-if="userStore.user.is_superuser"
                         :question="question"
@@ -54,6 +63,8 @@ import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import FicheQuestionTags from "../FicheQuestionTags/FicheQuestionTags.vue";
 import FicheQuestionSubscriptionButton from "../FicheQuestionSubscriptionButton/FicheQuestionSubscriptionButton.vue";
 import FicheQuestionDeleteButton from "../FicheQuestionDeleteButton/FicheQuestionDeleteButton.vue";
+import FicheQuestionModificationButton from "../FicheQuestionModificationButton/FicheQuestionModificationButton.vue";
+import formatUserName from "@/utils/formatUserName";
 
 const props = defineProps({
     question: Object,

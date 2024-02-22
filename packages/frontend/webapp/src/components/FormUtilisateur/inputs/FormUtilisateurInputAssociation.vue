@@ -47,7 +47,6 @@ watch(value, (newValue) => {
 
 async function autocompleteFn(value) {
     const results = await autocompleteAssociation(value);
-
     const mappedResults = results.map((org) => ({
         id: org.id,
         label: org.label,

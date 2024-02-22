@@ -8,6 +8,8 @@ export type OrganizationAutocompleteRow = {
     is_national: boolean,
     main_regions_names: string[],
     main_departements_names: string[],
+    main_epci_names: string[],
+    main_cities_names: string[],
     departements_codes: string[],
     similarity: number,
     type_name: string,
@@ -17,15 +19,18 @@ export default async (search: string, departementCode: string = null, organizati
     `WITH main_territories AS (
         SELECT
             intervention_areas.fk_organization,
+            array_remove(array_agg(DISTINCT cities.name), null) AS cities_names,
+            array_remove(array_agg(DISTINCT epci.name), null) AS epci_names,
             array_remove(array_agg(DISTINCT departements.name), null) AS departements_names,
             array_remove(array_agg(DISTINCT regions.name), null) AS regions_names
         FROM intervention_areas
         LEFT JOIN regions ON intervention_areas.fk_region = regions.code
         LEFT JOIN departements ON intervention_areas.fk_departement = departements.code
+        LEFT JOIN epci ON intervention_areas.fk_epci = epci.code
+        LEFT JOIN cities ON intervention_areas.fk_city = cities.code
         WHERE
                 intervention_areas.fk_organization IS NOT NULL
             AND intervention_areas.is_main_area IS TRUE
-            AND (intervention_areas.fk_region IS NOT NULL OR intervention_areas.fk_departement IS NOT NULL)
         GROUP BY intervention_areas.fk_organization
     )
 
@@ -37,6 +42,8 @@ export default async (search: string, departementCode: string = null, organizati
         v_organization_areas.is_national,
         COALESCE(main_territories.regions_names, ARRAY[]::varchar[]) AS main_regions_names,
         COALESCE(main_territories.departements_names, ARRAY[]::varchar[]) AS main_departements_names,
+        COALESCE(main_territories.epci_names, ARRAY[]::varchar[]) AS main_epci_names,
+        COALESCE(main_territories.cities_names, ARRAY[]::varchar[]) AS main_cities_names,
         COALESCE(v_organization_areas.departements, ARRAY[]::varchar[]) AS departements_codes,
         GREATEST(
             word_similarity(unaccent(:search), unaccent(organizations.name)),

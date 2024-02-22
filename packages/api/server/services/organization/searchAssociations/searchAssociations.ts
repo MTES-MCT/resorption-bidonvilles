@@ -23,7 +23,11 @@ export default async (search: string): Promise<OrganizationAutocompleteResult[]>
                     if (row.is_national === true) {
                         territory = 'National';
                     } else {
-                        territory = row.main_departements_names.concat(row.main_regions_names).join(', ');
+                        territory = row.main_regions_names
+                            .concat(row.main_departements_names)
+                            .concat(row.main_epci_names)
+                            .concat(row.main_cities_names)
+                            .join(', ');
                     }
 
                     acc[row.type_name].push({

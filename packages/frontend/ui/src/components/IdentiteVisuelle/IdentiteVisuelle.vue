@@ -2,17 +2,19 @@
     <router-link to="/" aria-label="Retourner à la page d'accueil en mode connecté, sinon, au formulaire de connexion"
         class="flex items-center space-x-8 hover:bg-G100 p-3" :class="focusClasses.ring">
         <div class="flex flex-col items-start space-y-1">
-            <img :src="marianne" :class="sizeClass.marianneH" alt="Bloc marque de l'état" />
+            <img aria-hidden="true" :src="marianne" :class="sizeClass.marianneH" alt="" />
             <p class="uppercase font-bold" :class="sizeClass.textSize" aria-hidden="true">
                 République<br />Française<br />
             </p>
-            <img :src="devise" :class="sizeClass.deviseH" alt="Logo de la plateforme Résorption-Bidonvilles" />
+            <img :src="devise" :class="sizeClass.deviseH" alt="" />
         </div>
         <img
+            aria-hidden="true" 
             :src="logo"
             :class="`${sizeClass.logoH} ${
                 keepLogo !== true ? 'hidden lg:inline' : ''
             }`"
+            alt=""
         />
     </router-link>
 </template>

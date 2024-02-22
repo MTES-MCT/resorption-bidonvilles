@@ -1,7 +1,7 @@
 <template>
     <section class="border-b-2 border-G200 py-2">
         <p class="flex items-center">
-            <Icon class="mr-1 mb-1 font-bold text-G600" :icon="icons[type]" />
+            <Icon class="mr-1 mb-1 font-bold text-G700" :icon="icons[type]" />
             <span class="font-bold">
                 {{ wording[type] }}
             </span>

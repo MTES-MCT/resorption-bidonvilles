@@ -2,14 +2,14 @@
     <InputWrapper :hasErrors="!!errors.length" :withoutMargin="withoutMargin">
         <InputLabel :label="label" :info="info" :showMandatoryStar="showMandatoryStar" :for="id" />
 
-        <div class="relative" :class="width">
+        <div class="relative" :class="width ">
             <InputIcon position="before" :icon="prefixIcon" v-if="prefixIcon" />
             <input :id="id" v-bind="filteredProps" :class="classes" :data-cy-field="cypressName" :step="step"
                 :disabled="disabled" ref="input" @blur="$emit('blur', $event)" @change="setValue($refs.input.value)" />
             <InputIcon position="after" v-if="(clear && currentValue) || suffixIcon || $slots.suffix">
                 <slot name="suffix" v-if="$slots.suffix" />
                 <template v-else>
-                    <span v-if="clear" @click="$emit('clear')" class="cursor-pointer hover:text-G800 text-sm text-G500">
+                    <span v-if="clear" @click="$emit('clear')" class="cursor-pointer hover:text-G800 text-sm text-G700">
                         <Icon icon="fa-trash-alt fa-regular" />
                         Vider
                     </span>
@@ -141,6 +141,7 @@ export default {
                 suffixIcon: this.suffixIcon,
                 clear: this.clear,
                 size: this.size,
+                disabled: this.disabled,
             };
 
             return {

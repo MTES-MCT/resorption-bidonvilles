@@ -1,6 +1,11 @@
 <template>
     <FormPublic :schema="schema" :submit="submit" size="medium">
         <template v-slot:title>Chartes d'engagement</template>
+        <template v-slot:description
+            ><span class="font-md text-secondary"
+                >(Toutes les cases doivent être cochées)</span
+            ></template
+        >
 
         <template v-slot:body>
             <CharteEngagementInputCharteAgreement class="mb-6" />

@@ -23,11 +23,11 @@ const { label } = toRefs(props);
 const contactStore = useContactStore();
 
 const options = computed(() => {
-    return contactStore.public_establishment_types.map(
-        ({ id, abbreviation, name_singular }) => ({
+    return contactStore.public_establishment_types
+        .filter(({ numberOfOrganizations }) => numberOfOrganizations > 0)
+        .map(({ id, abbreviation, name_singular }) => ({
             id,
             label: abbreviation || name_singular,
-        })
-    );
+        }));
 });
 </script>

@@ -1,7 +1,6 @@
 <template>
     <span class="inline-block">
-        <i :class="classes" :title="title" :aria-hidden="!!title"></i>
-        <span v-if="!!title" class="sr-only"> {{ title }}</span>
+        <i :class="classes" :title="title" aria-hidden="true"></i>
     </span>
     
 </template>

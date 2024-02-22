@@ -13,7 +13,7 @@
                 <p class="text-[1.5rem] font-bold leading-[1.8rem] break-all">
                     <slot name="title" />
                 </p>
-                <p class="text-G600">
+                <p class="text-G700">
                     <slot name="description" />
                 </p>
             </div>

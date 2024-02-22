@@ -10,9 +10,7 @@ export const useContactStore = defineStore("contact", {
     actions: {
         async fetchPublicEstablishmentTypes() {
             const response = await getTypes("public_establishment");
-            this.public_establishment_types = response.types.filter(
-                ({ numberOfOrganizations }) => numberOfOrganizations > 0
-            );
+            this.public_establishment_types = response.types;
         },
         async fetchAssociations() {
             const response = await getOrganizations("association");

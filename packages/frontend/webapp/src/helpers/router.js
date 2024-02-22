@@ -197,6 +197,15 @@ const router = createRouter({
             },
         },
         {
+            path: "/communaute/modifier-une-question/:id",
+            component: () => import("@/views/MiseAJourDeQuestionView.vue"),
+            meta: {
+                title: "Modifier une question",
+                navTab: "communaute",
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
             path: "/communaute/nouvelle-question",
             component: () =>
                 import("@/views/NouvelleQuestionCommunauteView.vue"),
@@ -260,6 +269,16 @@ const router = createRouter({
             path: "/nouvel-utilisateur/:id",
             redirect(to) {
                 return `/acces/${to.params.id}`;
+            },
+        },
+        {
+            path: "/nouvelle-structure",
+            component: () => import("@/views/CreerStructureView.vue"),
+            meta: {
+                title: "Créer une nouvelle structure",
+                navTab: "administration",
+                permissions: ["user.create"],
+                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -361,6 +380,15 @@ const router = createRouter({
             },
         },
         {
+            path: "/utilisateur/:id/territoires",
+            component: () => import("@/views/MiseAjourTerritoiresView.vue"),
+            meta: {
+                title: "Modifier les territoires d'intervention d'un utilisateur",
+                navTab: "administration",
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
             path: "/utilisateurs/permissions",
             component: () => import("@/views/ExceptionsDePermissionView.vue"),
             meta: {
@@ -379,6 +407,20 @@ const router = createRouter({
          * (être connecté, avoir signé la charte d'engagement,
          * etc.)
          ********************************************************/
+        {
+            path: "/accessibilite",
+            component: () => import("@/views/DeclarationAccessibilite.vue"),
+            meta: {
+                title: "Déclaration d'accessibilité",
+                requirements: {
+                    auth: "none",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+            },
+        },
         {
             path: "/activer-mon-compte/:token",
             component: () => import("@/views/ActivationCompteView.vue"),

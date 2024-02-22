@@ -1,20 +1,22 @@
 <template>
     <section class="h-full relative">
-        <a
-            href="#"
-            v-if="displaySkipMapLinks"
-            class="sr-only"
-            @click.prevent="skipMap(skipFocusNext, skipPreviousLink)"
-            ref="skipNextLink"
-            >&Eacute;viter la carte</a
-        >
+        <div>
+            <a
+                class="text-primary text-sm hover:text-primaryDark cursor-pointer focus:ring-2 ring-offset-2 ring-info focus:outline-none"
+                href="#"
+                v-if="displaySkipMapLinks"
+                @click.prevent="skipMap(skipFocusNext, skipPreviousLink)"
+                ref="skipNextLink"
+                >&Eacute;viter la carte</a
+            >
+        </div>
         <div id="map" class="h-full border">
             <div
                 class="absolute w-full h-full top-0 left-0 z-[1001]"
                 v-if="isLoading"
             >
                 <div
-                    class="absolute w-full h-full top-0 left-0 bg-black opacity-50"
+                    class="absolute w-full h-full top-0 left-0 bg-black opacity-85"
                 ></div>
                 <div
                     class="flex w-full h-full items-center justify-center text-white text-3xl"
@@ -34,14 +36,16 @@
 
             <slot />
         </div>
-        <a
-            href="#"
-            v-if="displaySkipMapLinks"
-            class="sr-only"
-            @click.prevent="skipMap(skipFocusPrevious, skipNextLink)"
-            ref="skipPreviousLink"
-            >&Eacute;viter la carte</a
-        >
+        <div class="pt-1">
+            <a
+                class="text-primary text-sm hover:text-primaryDark cursor-pointer focus:ring-2 ring-offset-2 ring-info focus:outline-none"
+                href="#"
+                v-if="displaySkipMapLinks"
+                @click.prevent="skipMap(skipFocusPrevious, skipNextLink)"
+                ref="skipPreviousLink"
+                >&Eacute;viter la carte</a
+            >
+        </div>
     </section>
 </template>
 

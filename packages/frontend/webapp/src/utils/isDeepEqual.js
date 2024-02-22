@@ -10,6 +10,11 @@ function isDeepEqual(object1, object2) {
         const value1 = object1[key];
         const value2 = object2[key];
 
+        // Exclusion temporaire des attachements/fileLists
+        if (value1 instanceof FileList) {
+            continue;
+        }
+
         const isObjects = isObject(value1) && isObject(value2);
 
         if (

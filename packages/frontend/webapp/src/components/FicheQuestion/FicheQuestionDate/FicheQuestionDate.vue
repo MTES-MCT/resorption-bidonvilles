@@ -1,5 +1,5 @@
 <template>
-    <p class="text-G500">{{ formatActivityDate(question.createdAt) }}</p>
+    <p class="text-G700">{{ formatActivityDate(question.createdAt) }}</p>
 </template>
 
 <script setup>

@@ -3,7 +3,7 @@
         <label :class="`font-bold text-${size}`" :for="id ? id : null">
             {{ title }}
             <MandatoryStar v-if="showMandatoryStar" />
-            <span class="text-G600" v-if="info">{{ info }}</span>
+            <span class="text-G700" v-if="info">{{ info }}</span>
         </label>
         <p class="mt-1 mb-4">
             <slot />

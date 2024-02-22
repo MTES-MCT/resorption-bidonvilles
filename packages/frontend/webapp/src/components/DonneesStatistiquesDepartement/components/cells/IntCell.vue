@@ -2,7 +2,7 @@
     <span v-if="typeof value === 'string' && value.length > 0">{{
         value
     }}</span>
-    <span v-else class="text-G500">?</span>
+    <span v-else class="text-G700">?</span>
 </template>
 
 <script setup>

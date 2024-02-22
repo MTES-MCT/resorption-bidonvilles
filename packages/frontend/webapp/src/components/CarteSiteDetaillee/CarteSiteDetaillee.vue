@@ -14,10 +14,9 @@
         >
             <div
                 class="-mt-1 print:mt-0"
-                :aria-label="`Fiche site ${shantytown.addressSimple}${
+                :aria-label="`Fiche site ${shantytown.addressSimple} ${
                     shantytown.name ? shantytown.name : ''
-                } ${shantytown.city.name}
-                }`"
+                } ${shantytown.city.name}`"
             >
                 <CarteSiteDetailleeHeader
                     class="mb-4"

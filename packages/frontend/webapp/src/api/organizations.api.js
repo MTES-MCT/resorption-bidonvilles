@@ -31,6 +31,10 @@ export function autocompleteTerritorialCollectivity(str) {
     );
 }
 
+export function create(data) {
+    return axios.post("/organizations", data);
+}
+
 export function get(id) {
     return axios.get(`/organizations/${encodeURI(id)}`);
 }

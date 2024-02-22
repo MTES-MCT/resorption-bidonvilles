@@ -5,7 +5,7 @@
             {{ author.last_name }} -
             {{ author.organization.abbreviation || author.organization.name }}
         </LinkOrganization>
-        <p class="text-sm text-G600">
+        <p class="text-sm text-G700">
             le {{ formatDate(date, "d M y à h:i") }}
         </p>
 
@@ -16,7 +16,7 @@
                 <p class="text-green700">{{ item.field }}</p>
                 <p class="break-words whitespace-pre-wrap">
                     <span> {{ item.newValue || "non renseigné" }}, </span>
-                    <span class="line-through text-G600 hover:text-G700">{{
+                    <span class="line-through text-G700 hover:text-G700">{{
                         item.oldValue || "non renseigné"
                     }}</span>
                 </p>

@@ -11,7 +11,7 @@
             :class="!$slots.banner && paddingTop ? 'mb-12' : ''"
         >
             <div
-                class="bg-G800 bg-opacity-50 h-full font-bold flex items-center drop-shadow-lg"
+                class="bg-G800 bg-opacity-85 h-full font-bold flex items-center drop-shadow-lg"
             >
                 <ContentWrapper class="drop-shadow-lg">
                     <slot name="hero">Agir, pour résorber les bidonvilles</slot>

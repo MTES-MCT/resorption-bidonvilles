@@ -1,7 +1,9 @@
 <template>
-    <span class="border-b border-b-G600 hover:border-b-2 hover:border-b-primary">
+    <p>
         <button v-if="!to" :class="`${withStyle ? linkClasses : 'cursor-pointer'} ${focusClasses}`">
+            <span class="border-b border-b-G600 hover:border-b-2 hover:border-b-primary">
             <slot />
+            </span>
         </button>
         <template v-else>
             <Icon icon="arrow-up-right-from-square" v-if="!internalLink && !toRB && !isMailto"
@@ -13,7 +15,7 @@
                 <slot />
             </a>
         </template>
-    </span>
+    </p>
 </template>
 
 <script>

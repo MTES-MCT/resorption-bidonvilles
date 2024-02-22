@@ -5,7 +5,7 @@
         @mouseleave="isHover = false"
     >
         <div class="flex justify-between">
-            <div class="text-G600 text-sm mb-1">
+            <div class="text-G700 text-sm mb-1">
                 {{ formatDate(comment.createdAt, "d M y à h:i") }}
             </div>
             <span
@@ -13,8 +13,8 @@
                 v-if="showModeration && (isOwner || (canModerate && isHover))"
                 @click="deleteMessage"
                 >Supprimer {{ isOwner ? "mon" : "le" }} message
-                <Icon icon="trash-alt" alt="Supprimer le message"
-            /></span>
+                <Icon icon="trash-alt" />
+            </span>
         </div>
         <div
             v-if="
