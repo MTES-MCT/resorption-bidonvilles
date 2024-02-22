@@ -6,6 +6,12 @@
                 :class="showReset ? 'pb-4' : 'pb-10'"
             >
                 <p class="text-lg xl:text-xl font-bold">{{ searchTitle }}</p>
+                <span class="sr-only"
+                    >Saisissez une valeur dans le champ qui suit pour rechercher
+                    un site, une commune, un département, puis sélectionner
+                    l'item de votre choix dans la liste en vous déplaçant à
+                    l'aide les les flèches directionnelles</span
+                >
                 <ContentWrapper class="mt-3" size="medium">
                     <div role="search" class="flex items-center space-x-2">
                         <InputLocation
