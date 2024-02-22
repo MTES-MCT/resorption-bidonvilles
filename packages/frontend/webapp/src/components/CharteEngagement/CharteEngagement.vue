@@ -8,13 +8,19 @@
         >
 
         <template v-slot:body>
-            <CharteEngagementInputCharteAgreement class="mb-6" />
-            <CharteEngagementInputConfidentialityAgreement class="mb-6" />
+            <CharteEngagementInputCharteAgreement
+                class="mb-6"
+                v-on:input="updateInputValue"
+            />
+            <CharteEngagementInputConfidentialityAgreement
+                class="mb-6"
+                v-on:input="updateInputValue"
+            />
         </template>
 
         <template v-slot:button>
             <p class="text-center">
-                <Button type="submit"
+                <Button type="submit" :disabled="formValid !== 2"
                     >J'accepte et j'accède à la plateforme</Button
                 >
             </p>
@@ -23,6 +29,7 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import router from "@/helpers/router";
 import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";
@@ -35,8 +42,15 @@ import CharteEngagementInputCharteAgreement from "./inputs/CharteEngagementInput
 import CharteEngagementInputConfidentialityAgreement from "./inputs/CharteEngagementInputConfidentialityAgreement.vue";
 
 const configStore = useConfigStore();
+const formValid = ref(0);
 
 const { version_charte_engagement: charte } = configStore.config;
+
+const updateInputValue = (value) => {
+    formValid.value = value.target.checked
+        ? formValid.value + 1
+        : formValid.value - 1;
+};
 
 async function submit({ charte_agreement, confidentiality_agreement }) {
     const notificationStore = useNotificationStore();
