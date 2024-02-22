@@ -1,6 +1,6 @@
 <template>
     <template v-if="variant === 'checkbox'">
-        <label class="flex cursor-pointer">
+        <label :class="labelClass" class="flex cursor-pointer">
             <input id="variant-checkbox" ref="checkbox" @click="onChange(value)"
                 class="inline-block rounded mr-2 text-center" type="checkbox" :checked="checked" :disabled="disabled" />
             {{ label }}
@@ -96,6 +96,11 @@ const props = defineProps({
         type: Boolean,
         required: false,
         default: false
+    },
+    labelClass: {
+        type: String,
+        required: false,
+        default: ''        
     }
 });
 
