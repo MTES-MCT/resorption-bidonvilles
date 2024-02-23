@@ -55,13 +55,20 @@
                 v-if="displayFigure !== null"
                 :figure="displayFigure"
             />
+
             <div
                 class="flex justify-center items-end mt-2"
                 role="group"
-                aria-label="description de l'histogramme"
+                :aria-label="`${cardStats.label}`"
                 tabindex="0"
                 aria-describedby="description"
+                @focus="onFocus"
+                @blur="onBlur"
             >
+                <p v-show="displayDescription" class="sr-only" id="description">
+                    Utiliser les touches Flêche vers le haut ou flêche vers le
+                    bas pour vous déplacer dans l'histogramme
+                </p>
                 <div
                     v-for="(stat, index) in columns"
                     :key="index"
@@ -138,6 +145,8 @@ const maxNumber = computed(() => {
 });
 const displayFigure = ref(null);
 
+let displayDescription = ref(false);
+
 onMounted(setColumns);
 
 function onMouseOver(value) {
@@ -180,6 +189,14 @@ function setColumns() {
                 cardStats.value.color === "red" ? "bg-red400" : "bg-green400",
         },
     ];
+}
+
+function onFocus() {
+    displayDescription.value = true;
+}
+
+function onBlur() {
+    displayDescription.value = false;
 }
 </script>
 
