@@ -39,8 +39,9 @@ onMounted(() => {
 });
 
 const ariaLabel = computed(() => {
+    let message = "";
     if (dateFrom.value) {
-        return `${figure.value} du ${dateFrom.value.slice(
+        message = `${figure.value} du ${dateFrom.value.slice(
             0,
             2
         )} ${getAudibleMonth(dateFrom.value.slice(-2))} au ${date.value.slice(
@@ -48,10 +49,23 @@ const ariaLabel = computed(() => {
             2
         )} ${getAudibleMonth(date.value.slice(-2))}`;
     } else {
-        return `${figure.value} au ${date.value.slice(0, 2)} ${getAudibleMonth(
-            date.value.slice(-2)
-        )}`;
+        message = `${figure.value} au ${date.value.slice(
+            0,
+            2
+        )} ${getAudibleMonth(date.value.slice(-2))}`;
     }
+    if (color.value === "bg-red") {
+        message =
+            message.length > 0
+                ? message + " (En progression défavorable)"
+                : message + "En progression défavorable";
+    } else if (color.value === "bg-green500") {
+        message =
+            message.length > 0
+                ? message + " (En progression favorable)"
+                : message + "En progression favorable";
+    }
+    return message;
 });
 
 function getAudibleMonth(month) {
