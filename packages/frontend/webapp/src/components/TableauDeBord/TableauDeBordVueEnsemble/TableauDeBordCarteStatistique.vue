@@ -55,17 +55,20 @@
                 v-if="displayFigure !== null"
                 :figure="displayFigure"
             />
-
             <div
                 class="flex justify-center items-end mt-2"
                 role="group"
                 :aria-label="`${cardStats.label}`"
                 tabindex="0"
-                aria-describedby="description"
+                :aria-describedby="`description-${cardStats.id}`"
                 @focus="onFocus"
                 @blur="onBlur"
             >
-                <p v-show="displayDescription" class="sr-only" id="description">
+                <p
+                    v-show="displayDescription"
+                    class="sr-only"
+                    :id="`description-${cardStats.id}`"
+                >
                     Utiliser les touches Flêche vers le haut ou flêche vers le
                     bas pour vous déplacer dans l'histogramme
                 </p>
