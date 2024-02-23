@@ -41,9 +41,10 @@ export default {
             await agenda.schedule('in 60 days', 'user_share', {
                 user,
             });
-            await agenda.schedule('in 90 days', 'user_review', {
-                user,
-            });
+            // Désactivation temporaire liée au [#2060](https://trello.com/c/agkYaQcx/2086-le-sondage-post-3-mois-nexiste-plus)
+            // await agenda.schedule('in 90 days', 'user_review', {
+            //     user,
+            // });
         },
     },
 
