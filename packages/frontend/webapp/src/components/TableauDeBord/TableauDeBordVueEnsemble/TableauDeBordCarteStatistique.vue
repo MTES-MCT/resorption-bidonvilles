@@ -12,15 +12,13 @@
                 <Icon v-else :icon="icon" />
             </div>
             <div>
-                <div class="font-bold text-primary text-xl -mb-1">
-                    <span>
+                <p class="leading-tight">
+                    <span class="font-bold text-primary text-xl -mb-1">
                         <template v-if="cardStats.data.length > 0">{{
                             formatStat(cardStats.data.slice(-1)[0].figure)
                         }}</template>
                         <template v-else>0</template>
                     </span>
-                </div>
-                <p class="leading-tight">
                     {{ cardStats.label }}<br />
                     <span v-if="cardStats.figure_secondary">
                         <span
@@ -57,7 +55,13 @@
                 v-if="displayFigure !== null"
                 :figure="displayFigure"
             />
-            <div class="flex justify-center items-end mt-2">
+            <div
+                class="flex justify-center items-end mt-2"
+                role="group"
+                aria-label="description de l'histogramme"
+                tabindex="0"
+                aria-describedby="description"
+            >
                 <div
                     v-for="(stat, index) in columns"
                     :key="index"
@@ -68,6 +72,9 @@
                         :height="stat.height"
                         :color="stat.color"
                         :hoverColor="stat.hoverColor"
+                        :figure="stat.figure"
+                        :date="stat.date"
+                        :dateFrom="stat.dateFrom"
                     />
                 </div>
             </div>
