@@ -1,5 +1,5 @@
 function setBackgroundColor(context, bgColor, start = 1) {
-    if (!context.chart.chartArea) {
+    if (!context.chart?.chartArea) {
         return;
     }
 
@@ -9,18 +9,8 @@ function setBackgroundColor(context, bgColor, start = 1) {
     } = context.chart;
 
     const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
-    if (start < 1) {
-        gradientBg.addColorStop(1, "rgba(255, 255, 255, 0)");
-        gradientBg.addColorStop(
-            Math.max(0, 1 - start - 0.01),
-            "rgba(255, 255, 255, 0)"
-        );
-    }
-    gradientBg.addColorStop(1 - start, bgColor);
-    gradientBg.addColorStop(
-        Math.min(1, 1 - start + 0.7),
-        "rgba(255, 255, 255, 0)"
-    );
+    gradientBg.addColorStop(Math.max(0, 1 - start - 0.01), bgColor);
+    gradientBg.addColorStop(1, "rgba(255, 255, 255, 0)");
     return gradientBg;
 }
 
@@ -34,6 +24,7 @@ export default function generateDataset(label, color, data, maxGlobal) {
                 maxGlobal > 0 ? Math.max(...data) / maxGlobal : 0
             );
         },
+        strokeColor: "#ff6c23",
         borderColor: color,
         pointRadius: 2,
         borderWidth: 2,
