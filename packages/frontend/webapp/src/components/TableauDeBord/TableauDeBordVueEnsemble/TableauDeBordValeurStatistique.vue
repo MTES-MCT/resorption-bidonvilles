@@ -1,11 +1,11 @@
 <template>
-    <div class="text-xs text-center">
+    <p class="text-xs text-center">
         {{ formatStat(figure.figure) }}
         <span v-if="figure.dateFrom"
             >du {{ figure.dateFrom }} au {{ figure.date }}</span
         >
         <span v-else>au {{ figure.date }}</span>
-    </div>
+    </p>
 </template>
 
 <script setup>

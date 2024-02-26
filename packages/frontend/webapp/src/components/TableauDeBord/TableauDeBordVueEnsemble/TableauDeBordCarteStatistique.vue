@@ -89,7 +89,7 @@
                 </div>
             </div>
             <div class="text-center mt-4">
-                <div :class="evolutionColor">
+                <p :class="evolutionColor">
                     <Icon
                         class="up"
                         v-if="isEvolutionPositive"
@@ -109,7 +109,7 @@
                         >
                         <span v-else class="text-xs">en 3 mois</span>
                     </span>
-                </div>
+                </p>
             </div>
         </div>
     </div>
