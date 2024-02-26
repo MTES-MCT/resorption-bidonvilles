@@ -8,6 +8,9 @@ export default {
     },
     plugins: {
         legend: {
+            onHover: function (e) {
+                e.native.target.style.cursor = "pointer";
+            },
             onClick: function (event, legendItem, legend) {
                 const index = legendItem.datasetIndex;
                 const ci = legend.chart;
