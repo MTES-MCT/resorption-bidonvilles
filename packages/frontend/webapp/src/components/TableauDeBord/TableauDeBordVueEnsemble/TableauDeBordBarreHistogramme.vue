@@ -4,6 +4,7 @@
         ref="bar"
         class="rounded-sm w-2 mr-1 cursor-pointer"
         :class="hover ? hoverColor : color"
+        :style="styleObject"
         :aria-label="ariaLabel"
         tabindex="-1"
         @mouseover="hover = true"
@@ -83,4 +84,15 @@ function getAudibleMonth(month) {
         .replace("11", "novembre")
         .replace("12", "décembre");
 }
+const styleObject = computed(() => {
+    if (color.value === "bg-red" || color.value === "bg-green500") {
+        return {
+            "background-image":
+                "linear-gradient(45deg, rgb(255, 255,255) 12.5%, transparent 12.5%, transparent 37.5%, rgb(255, 255,255) 37.5%, rgb(255, 255,255) 62.5%, transparent 62.5%, transparent 87.5%, rgb(255, 255,255) 87.5%)",
+            "background-size": "10px 10px",
+            "background-position": "0px 0px",
+        };
+    }
+    return {};
+});
 </script>
