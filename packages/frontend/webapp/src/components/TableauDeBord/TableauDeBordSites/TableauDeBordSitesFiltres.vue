@@ -6,18 +6,29 @@
             class="inline-flex items-start"
             v-bind="item"
             @click="setFilter(item.id)"
-            ><span
-                >{{ item.label }} ({{
-                    dashboardStore.towns.data[item.id].length
-                }})
-                <template v-if="item.sublabel"
-                    ><br /><span
-                        class="inline-block w-full font-normal text-center"
-                        :class="item.active ? 'visible' : 'invisible'"
-                        >{{ item.sublabel }}</span
-                    ></template
-                ></span
+            @keyup.enter.exact="setFilter(item.id)"
+        >
+            <Button
+                type="button"
+                variant="text"
+                :id="`btn-${item.id}`"
+                role="tab"
+                :aria-selected="item.ariaSelected"
+                :aria-controls="`tabpanel-${item.id}`"
             >
+                <span
+                    >{{ item.label }} ({{
+                        dashboardStore.towns.data[item.id].length
+                    }})
+                    <template v-if="item.sublabel"
+                        ><br /><span
+                            class="inline-block w-full font-normal text-center"
+                            :class="item.active ? 'visible' : 'invisible'"
+                            >{{ item.sublabel }}</span
+                        ></template
+                    ></span
+                >
+            </Button>
         </TableauDeBordSiteFiltreItem>
     </ul>
 </template>
@@ -34,6 +45,7 @@ import { computed } from "vue";
 import { useDashboardStore } from "@/stores/dashboard.store";
 import TableauDeBordSiteFiltreItem from "./TableauDeBordSiteFiltre/TableauDeBordSiteFiltreItem.vue";
 import { trackEvent } from "@/helpers/matomo";
+import { Button } from "@resorptionbidonvilles/ui";
 
 const dashboardStore = useDashboardStore();
 const items = computed(() => {
@@ -71,6 +83,7 @@ const items = computed(() => {
         return {
             ...item,
             active: item.id === dashboardStore.towns.filter,
+            ariaSelected: item.id === dashboardStore.towns.filter,
         };
     });
 });
