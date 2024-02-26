@@ -8,14 +8,17 @@ export default {
     },
     plugins: {
         legend: {
-            // Empêche le clic sur la légende pour masquer la courbe correspondante
-            // Evite les problèmes d'affichage des dégradés quand une courbe est masquée
-            onClick: function (event) {
-                if (event.type === "legend-click") {
-                    const dataset = event.target.dataset;
-                    if (dataset) {
-                        return false;
-                    }
+            onClick: function (event, legendItem, legend) {
+                const index = legendItem.datasetIndex;
+                const ci = legend.chart;
+                ci.toggleDataVisibility(index);
+
+                if (ci.isDatasetVisible(index)) {
+                    ci.hide(index);
+                    legendItem.hidden = true;
+                } else {
+                    ci.show(index);
+                    legendItem.hidden = false;
                 }
             },
             labels: {
