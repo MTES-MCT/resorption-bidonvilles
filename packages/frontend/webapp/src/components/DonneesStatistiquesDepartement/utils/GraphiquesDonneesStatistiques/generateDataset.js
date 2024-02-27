@@ -24,7 +24,6 @@ export default function generateDataset(label, color, data, maxGlobal) {
                 maxGlobal > 0 ? Math.max(...data) / maxGlobal : 0
             );
         },
-        // strokeColor: "#ff6c23",
         borderColor: color,
         pointRadius: 2,
         borderWidth: 2,
