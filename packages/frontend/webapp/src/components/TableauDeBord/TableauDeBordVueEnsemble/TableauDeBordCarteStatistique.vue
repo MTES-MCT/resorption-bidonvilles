@@ -69,7 +69,7 @@
                     class="sr-only"
                     :id="`description-${cardStats.id}`"
                 >
-                    Utiliser les touches Flêche vers le haut ou flêche vers le
+                    Utiliser les touches Flèche vers le haut ou Flèche vers le
                     bas pour vous déplacer dans l'histogramme
                 </p>
                 <div
