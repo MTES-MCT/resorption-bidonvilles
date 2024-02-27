@@ -7,6 +7,13 @@ export default {
         },
     },
     plugins: {
+        tooltip: {
+            mode: "index",
+            position: "nearest",
+            usePointStyle: true,
+            intersect: false,
+            itemSort: (a, b) => b.parsed.y - a.parsed.y,
+        },
         legend: {
             onHover: function (e) {
                 e.native.target.style.cursor = "pointer";
