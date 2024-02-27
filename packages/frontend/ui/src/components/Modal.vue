@@ -7,7 +7,7 @@
         <div class="flex items-center justify-center h-full">
             <div role="dialog" ref="dialog" aria-modal="true" aria-labelledby="modal-headline"
                 class="opacity-100 z-50 shadow-xl max-h-[95vh] overflow-auto">
-                <div class="bg-white">
+                <div class="bg-white" ref="trapRef" role="dialog">
                     <slot name="header">
                         <div class="pt-10 px-10 pb-4">
                             <div class="flex justify-between items-center border-b-1 border-G400">
@@ -39,6 +39,7 @@
 </template>
 
 <script setup>
+import useFocusTrap from "../composables/useFocusTrap";
 import {
     defineProps,
     ref,
@@ -69,6 +70,7 @@ const { isOpen, closeWhenClickOutside, allowClose } = toRefs(props);
 const openedAt = ref(null);
 const dialog = ref(null);
 const emit = defineEmits(["close"]);
+const { trapRef } = useFocusTrap();
 
 watch(isOpen, () => {
     if (isOpen.value === true) {
