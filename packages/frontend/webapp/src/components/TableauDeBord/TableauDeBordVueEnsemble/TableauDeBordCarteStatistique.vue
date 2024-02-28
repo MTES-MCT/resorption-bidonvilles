@@ -12,15 +12,13 @@
                 <Icon v-else :icon="icon" />
             </div>
             <div>
-                <div class="font-bold text-primary text-xl -mb-1">
-                    <span>
+                <p class="leading-tight">
+                    <span class="font-bold text-primary text-xl -mb-1">
                         <template v-if="cardStats.data.length > 0">{{
                             formatStat(cardStats.data.slice(-1)[0].figure)
                         }}</template>
                         <template v-else>0</template>
                     </span>
-                </div>
-                <p class="leading-tight">
                     {{ cardStats.label }}<br />
                     <span v-if="cardStats.figure_secondary">
                         <span
@@ -57,7 +55,23 @@
                 v-if="displayFigure !== null"
                 :figure="displayFigure"
             />
-            <div class="flex justify-center items-end mt-2">
+            <div
+                class="flex justify-center items-end mt-2"
+                role="group"
+                :aria-label="`${cardStats.label}`"
+                tabindex="0"
+                :aria-describedby="`description-${cardStats.id}`"
+                @focus="onFocus"
+                @blur="onBlur"
+            >
+                <p
+                    v-show="displayDescription"
+                    class="sr-only"
+                    :id="`description-${cardStats.id}`"
+                >
+                    Utiliser les touches Flèche vers le haut ou Flèche vers le
+                    bas pour vous déplacer dans l'histogramme
+                </p>
                 <div
                     v-for="(stat, index) in columns"
                     :key="index"
@@ -68,11 +82,14 @@
                         :height="stat.height"
                         :color="stat.color"
                         :hoverColor="stat.hoverColor"
+                        :figure="stat.figure"
+                        :date="stat.date"
+                        :dateFrom="stat.dateFrom"
                     />
                 </div>
             </div>
             <div class="text-center mt-4">
-                <div :class="evolutionColor">
+                <p :class="evolutionColor">
                     <Icon
                         class="up"
                         v-if="isEvolutionPositive"
@@ -92,7 +109,7 @@
                         >
                         <span v-else class="text-xs">en 3 mois</span>
                     </span>
-                </div>
+                </p>
             </div>
         </div>
     </div>
@@ -130,6 +147,8 @@ const maxNumber = computed(() => {
     return Math.max(...cardStats.value.data.map((stat) => stat.figure));
 });
 const displayFigure = ref(null);
+
+let displayDescription = ref(false);
 
 onMounted(setColumns);
 
@@ -173,6 +192,14 @@ function setColumns() {
                 cardStats.value.color === "red" ? "bg-red400" : "bg-green400",
         },
     ];
+}
+
+function onFocus() {
+    displayDescription.value = true;
+}
+
+function onBlur() {
+    displayDescription.value = false;
 }
 </script>
 

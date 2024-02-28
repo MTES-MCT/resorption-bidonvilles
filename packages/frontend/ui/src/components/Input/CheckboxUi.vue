@@ -100,7 +100,7 @@ const props = defineProps({
     labelClass: {
         type: String,
         required: false,
-        default: ''        
+        default: ''
     }
 });
 
