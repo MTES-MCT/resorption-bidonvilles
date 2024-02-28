@@ -32,7 +32,7 @@
             </p>
         </header>
 
-        <main class="mb-4">
+        <div class="mb-4">
             <!-- population -->
             <NombreHabitants
                 v-if="
@@ -83,7 +83,7 @@
                     }}
                 </Link>
             </p>
-        </main>
+        </div>
 
         <footer class="mt-auto">
             <Link @click="routeToDetailsPage"

@@ -1,10 +1,10 @@
 <template>
-    <div :class="[display, variantClasses]">
+    <p :class="[display, variantClasses]">
         <slot />
         <span class="ml-2 cursor-pointer" @click="onDelete" v-if="onDelete">
             <Icon icon="times" />
         </span>
-    </div>
+    </p>
 </template>
 
 <script>
