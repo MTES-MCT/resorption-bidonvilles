@@ -34,11 +34,9 @@ const useFocusTrap = () => {
                 $lastFocusable.focus();
                 e.preventDefault();
             }
-        } else {
-            if (document.activeElement === $lastFocusable) {
+        } else if (document.activeElement === $lastFocusable) {
                 $firstFocusable.focus();
                 e.preventDefault();
-            }
         }
     }
 
