@@ -18,7 +18,6 @@ export default {
             },
             callbacks: {
                 title: (tooltipItem) => {
-                    console.log(tooltipItem);
                     return (
                         tooltipItem[0].label.charAt(0).toUpperCase() +
                         tooltipItem[0].label.slice(1)
