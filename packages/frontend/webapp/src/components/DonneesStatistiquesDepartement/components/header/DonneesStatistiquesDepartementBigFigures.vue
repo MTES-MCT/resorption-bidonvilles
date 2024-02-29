@@ -61,8 +61,8 @@
                     class="flex space-x-2"
                     :class="
                         metrics.summary.number_of_towns.unknown_population > 0
-                            ? 'text-red700'
-                            : 'text-green800'
+                            ? 'text-error'
+                            : 'text-success'
                     "
                 >
                     <p>
@@ -100,8 +100,8 @@
                     class="flex space-x-2"
                     :class="
                         metrics.summary.number_of_towns.out_of_date > 0
-                            ? 'text-red700'
-                            : 'text-green800'
+                            ? 'text-error'
+                            : 'text-success'
                     "
                 >
                     <p>

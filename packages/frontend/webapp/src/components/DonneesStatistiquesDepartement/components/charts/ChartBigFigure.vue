@@ -54,11 +54,11 @@ const { icon, img, alt, figure, evolution, invert } = toRefs(props);
 const colors = {
     positive: {
         background: "bg-green100",
-        color: "text-green700",
+        color: "text-green",
     },
     negative: {
         background: "bg-red100",
-        color: "text-red700",
+        color: "text-red",
     },
     neutral: {
         background: "bg-G200",
