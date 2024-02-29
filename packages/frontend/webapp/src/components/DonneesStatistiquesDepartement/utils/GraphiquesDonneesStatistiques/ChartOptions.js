@@ -11,8 +11,20 @@ export default {
             mode: "index",
             position: "nearest",
             usePointStyle: true,
-            intersect: false,
+            intersect: true,
             itemSort: (a, b) => b.parsed.y - a.parsed.y,
+            titleFont: {
+                size: 14,
+            },
+            callbacks: {
+                title: (tooltipItem) => {
+                    console.log(tooltipItem);
+                    return (
+                        tooltipItem[0].label.charAt(0).toUpperCase() +
+                        tooltipItem[0].label.slice(1)
+                    );
+                },
+            },
         },
         legend: {
             onHover: function (e) {
