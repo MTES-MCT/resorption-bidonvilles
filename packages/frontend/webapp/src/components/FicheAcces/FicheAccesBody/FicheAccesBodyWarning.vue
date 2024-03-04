@@ -3,21 +3,17 @@
         <Icon icon="triangle-exclamation" /> N'envoyez
         <span class="font-bold underline">jamais</span> un accès si vous avez un
         doute sur l'identité de la personne pour éviter tout risque d'usurpation
-        d'identité.
-        <Link
-            withStyle
-            @click="openGuide('/doc/guide_de_l_administrateur.pdf')"
+        d'identité. Consulter le
+        <a
+            href="/doc/guide_de_l_administrateur.pdf"
+            aria-label="Téléchargez le guide des accès et de l'administrateur au format PDF"
+            class="text-blue700 hover:underline underline-offset-4 decoration-2"
         >
-            <Icon icon="file-pdf" /> Consulter le guide des accès et de
-            l'administrateur
-        </Link>
+            guide des accès et de l'administrateur</a
+        >.
     </div>
 </template>
 
 <script setup>
-import { Icon, Link } from "@resorptionbidonvilles/ui";
-
-function openGuide(link) {
-    window.location = link;
-}
+import { Icon } from "@resorptionbidonvilles/ui";
 </script>
