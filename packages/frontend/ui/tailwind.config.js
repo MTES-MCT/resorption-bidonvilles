@@ -129,6 +129,7 @@ module.exports = {
 
                 // Green / Tertiary palette
                 tertiary: "#00AC8C",
+                green800: "#165F2C",
                 green700: "#1E7D3B",
                 green600: "#1f8d49",
                 green500: "#27A658",
