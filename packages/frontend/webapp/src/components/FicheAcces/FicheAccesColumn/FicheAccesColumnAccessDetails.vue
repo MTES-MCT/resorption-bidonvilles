@@ -4,7 +4,7 @@
             :text="user.access_request_message ? 'Demandé' : 'Créé'"
             :date="user.created_at"
             icon="flag"
-            color="text-secondary"
+            color="text-redA11Y"
             class="mb-2"
         />
 
@@ -62,7 +62,7 @@
             text="Activé"
             :date="user.user_accesses[0].used_at"
             icon="user-check"
-            color="text-tertiary"
+            color="text-tertiaryA11Y"
             class="mb-2"
         />
 
