@@ -1,7 +1,7 @@
 <template>
     <Button
         v-if="user.status === 'new'"
-        variant="tertiary"
+        variant="tertiaryA11Yalt"
         icon="paper-plane"
         iconPosition="left"
         :loading="isLoading"
