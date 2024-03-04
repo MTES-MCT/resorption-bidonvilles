@@ -2,12 +2,11 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import { Permission } from '#server/models/permissionModel/types/Permission.d';
 import config from '#server/config';
-import { isConstructorDeclaration } from 'typescript';
 
 type UserListExportRow = {
     Courriel: string;
     Prénom: string;
-    "Nom de famille": string;
+    'Nom de famille': string;
     "Fonction de l'utilisateur": string;
     Téléphone: string;
     "Date de la demande d'accès": string;
@@ -15,10 +14,10 @@ type UserListExportRow = {
     "Date de péremption du lien d'activation'": string;
     "Date d'activation du compte": string;
     "Date d'envoi de l'alerte de désactivation": string
-    "Date de dernière connexion": string;
-    "Statut calculé": string;
+    'Date de dernière connexion': string;
+    'Statut calculé': string;
     Organisation: string;
-    "Organisation abbr": string;
+    'Organisation abbr': string;
     "Rôle administrateur de l'acteur": string;
     "Rôle de l'acteur": string;
     "Régions d'intervention": string[];
@@ -26,7 +25,6 @@ type UserListExportRow = {
 };
 
 export default async (permission?: Permission): Promise<UserListExportRow[]> => {
-
     try {
         const replacements = {};
 
@@ -35,31 +33,31 @@ export default async (permission?: Permission): Promise<UserListExportRow[]> => 
             if (permission === null) {
                 return [];
             }
-    
+
             if (permission.allowed_on_national !== true) {
                 const clauses = ['regions', 'departements', 'epci', 'cities'].reduce((acc, column) => {
                     if (permission.allowed_on[column]?.length <= 0) {
                         return acc;
                     }
-    
+
                     replacements[column] = permission.allowed_on[column].map(l => l[l.type].code);
                     acc.push(`v_user_areas.${column}::text[] && ARRAY[:${column}]`);
                     return acc;
                 }, [] as string[]);
-    
+
                 if (clauses.length === 0) {
                     return [];
                 }
-    
+
                 where = `(${clauses.join(') OR (')})`;
             }
         }
-    
+
         const { inactivityAlert: { delayBeforeDeactivation } } = config;
         const suspendedAccountWhen = delayBeforeDeactivation ? `WHEN fk_status = 'inactive' AND inactivity_alert_sent_at IS NOT NULL 
-            AND inactivity_alert_sent_at + INTERVAL '${delayBeforeDeactivation}' < NOW() THEN 'Compte suspendu'` : "";
-   
-        return sequelize.query(
+            AND inactivity_alert_sent_at + INTERVAL '${delayBeforeDeactivation}' < NOW() THEN 'Compte suspendu'` : '';
+
+        return await sequelize.query(
             `
             SELECT
                 email AS "Courriel",
@@ -73,7 +71,7 @@ export default async (permission?: Permission): Promise<UserListExportRow[]> => 
                     CASE
                     WHEN lua.used_at IS NULL THEN 'N/A'
                     ELSE TO_CHAR(lua.used_at :: DATE, 'dd/mm/yyyy')
-                END AS "Date d'activation du compte",		
+                END AS "Date d'activation du compte",
                 TO_CHAR(u.inactivity_alert_sent_at :: DATE, 'dd/mm/yyyy') AS "Date d'envoi de l'alerte de désactivation",
                 TO_CHAR(u.last_access :: DATE, 'dd/mm/yyyy') AS "Date de dernière connexion",
                 CASE
@@ -111,7 +109,8 @@ export default async (permission?: Permission): Promise<UserListExportRow[]> => 
             },
         );
     } catch (error) {
+        // eslint-disable-next-line
         console.error(error);
         return [];
-    }   
+    }
 };
