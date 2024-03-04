@@ -132,6 +132,7 @@ module.exports = {
                 tertiaryA11Y: "#026452",
                 tertiaryA11Yalt: "#1b5f53",
                 tertiaryA11Ydark: "#206054",
+                green800: "#165F2C",
                 green700: "#1E7D3B",
                 green600: "#1f8d49",
                 green500: "#27A658",
