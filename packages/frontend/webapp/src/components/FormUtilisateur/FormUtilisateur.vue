@@ -61,6 +61,7 @@
                     :showMandatoryStar="variant === 'creer-utilisateur'"
                     :label="labels.organization_category"
                     :allowNewOrganization="allowNewOrganization"
+                    :allowPrivateOrganization="allowPrivateOrganization"
                 />
 
                 <!-- Services de l'état -->
@@ -105,6 +106,17 @@
                 >
                     <FormUtilisateurInputOrganizationAdministration
                         :label="labels.organization_administration"
+                    />
+                </template>
+
+                <!-- Organisme Privé -->
+                <template
+                    v-if="
+                        values.organization_category === 'private_organization'
+                    "
+                >
+                    <FormUtilisateurInputOrganizationPrivate
+                        :label="labels.private_organization"
                     />
                 </template>
 
@@ -167,6 +179,7 @@ import FormUtilisateurInputIsActor from "./inputs/FormUtilisateurInputIsActor.vu
 import FormUtilisateurInputOrganizationCategory from "./inputs/FormUtilisateurInputOrganizationCategory.vue";
 import FormUtilisateurInputOrganizationType from "./inputs/FormUtilisateurInputOrganizationType.vue";
 import FormUtilisateurInputOrganizationPublic from "./inputs/FormUtilisateurInputOrganizationPublic.vue";
+import FormUtilisateurInputOrganizationPrivate from "./inputs/FormUtilisateurInputOrganizationPrivate.vue";
 import FormUtilisateurInputTerritorialCollectivity from "./inputs/FormUtilisateurInputTerritorialCollectivity.vue";
 import FormUtilisateurInputAssociation from "./inputs/FormUtilisateurInputAssociation.vue";
 import FormUtilisateurInputOrganizationAdministration from "./inputs/FormUtilisateurInputOrganizationAdministration.vue";
@@ -203,9 +216,17 @@ const { variant, submit, language } = toRefs(props);
 const allowNewOrganization = computed(() => {
     return variant.value === "demande-acces";
 });
+const allowPrivateOrganization = computed(() => {
+    return variant.value === "creer-utilisateur";
+});
 
 const schema = computed(() => {
-    return schemaFn(variant.value, allowNewOrganization.value, language.value);
+    return schemaFn(
+        variant.value,
+        allowNewOrganization.value,
+        allowPrivateOrganization.value,
+        language.value
+    );
 });
 const labels = computed(() => {
     return labelsFn(variant.value)[language.value];
