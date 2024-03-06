@@ -56,13 +56,6 @@ async function autocompleteFn(value) {
             id: org.id,
         },
     }));
-    mappedResults.unshift({
-        id: "autre",
-        selectedLabel: "",
-        label: "Je ne trouve pas mon organisme privé",
-        category: "",
-        data: null,
-    });
 
     return mappedResults;
 }
