@@ -117,6 +117,8 @@
                 >
                     <FormUtilisateurInputOrganizationPrivate
                         :label="labels.private_organization"
+                        @change="onPrivateOrganizationChange"
+                        ref="privateOrganizationInput"
                     />
                 </template>
 
@@ -212,6 +214,7 @@ const props = defineProps({
 
 const form = ref(null);
 const associationInput = ref(null);
+const privateOrganizationInput = ref(null);
 const { variant, submit, language } = toRefs(props);
 const allowNewOrganization = computed(() => {
     return variant.value === "demande-acces";
@@ -257,6 +260,20 @@ function onAssociationChange(value) {
     }
 }
 
+function onPrivateOrganizationChange(value) {
+    if (value?.data === null) {
+        if (allowPrivateOrganization.value === true) {
+            form.value.setFieldValue("organization_category", "other");
+        } else {
+            alert(
+                "Vous devez créer une nouvelle structure ou en faire la demande aux administrateurs nationaux."
+            );
+        }
+
+        privateOrganizationInput.value.clear();
+    }
+}
+
 function intermediateSubmit(values) {
     const formattedValues = { ...values };
     formattedValues.territorial_collectivity = formattedValues
@@ -265,6 +282,10 @@ function intermediateSubmit(values) {
         : null;
     formattedValues.association = formattedValues.association?.data
         ? formattedValues.association.data.id
+        : null;
+    formattedValues.private_organization = formattedValues.private_organization
+        ?.data
+        ? formattedValues.private_organization.data.id
         : null;
     return submit.value(formattedValues);
 }
