@@ -61,7 +61,17 @@
                     :showMandatoryStar="variant === 'creer-utilisateur'"
                     :label="labels.organization_category"
                     :allowNewOrganization="allowNewOrganization"
+                    :allowPrivateOrganization="allowPrivateOrganization"
                 />
+
+                <!-- Administrations centrales -->
+                <template
+                    v-if="values.organization_category === 'administration'"
+                >
+                    <FormUtilisateurInputOrganizationAdministration
+                        :label="labels.organization_administration"
+                    />
+                </template>
 
                 <!-- Services de l'état -->
                 <template
@@ -99,12 +109,16 @@
                     />
                 </template>
 
-                <!-- Administrations centrales -->
+                <!-- Organisme Privé -->
                 <template
-                    v-if="values.organization_category === 'administration'"
+                    v-if="
+                        values.organization_category === 'private_organization'
+                    "
                 >
-                    <FormUtilisateurInputOrganizationAdministration
-                        :label="labels.organization_administration"
+                    <FormUtilisateurInputOrganizationPrivate
+                        :label="labels.private_organization"
+                        @change="onPrivateOrganizationChange"
+                        ref="privateOrganizationInput"
                     />
                 </template>
 
@@ -167,6 +181,7 @@ import FormUtilisateurInputIsActor from "./inputs/FormUtilisateurInputIsActor.vu
 import FormUtilisateurInputOrganizationCategory from "./inputs/FormUtilisateurInputOrganizationCategory.vue";
 import FormUtilisateurInputOrganizationType from "./inputs/FormUtilisateurInputOrganizationType.vue";
 import FormUtilisateurInputOrganizationPublic from "./inputs/FormUtilisateurInputOrganizationPublic.vue";
+import FormUtilisateurInputOrganizationPrivate from "./inputs/FormUtilisateurInputOrganizationPrivate.vue";
 import FormUtilisateurInputTerritorialCollectivity from "./inputs/FormUtilisateurInputTerritorialCollectivity.vue";
 import FormUtilisateurInputAssociation from "./inputs/FormUtilisateurInputAssociation.vue";
 import FormUtilisateurInputOrganizationAdministration from "./inputs/FormUtilisateurInputOrganizationAdministration.vue";
@@ -199,13 +214,22 @@ const props = defineProps({
 
 const form = ref(null);
 const associationInput = ref(null);
+const privateOrganizationInput = ref(null);
 const { variant, submit, language } = toRefs(props);
 const allowNewOrganization = computed(() => {
     return variant.value === "demande-acces";
 });
+const allowPrivateOrganization = computed(() => {
+    return variant.value === "creer-utilisateur";
+});
 
 const schema = computed(() => {
-    return schemaFn(variant.value, allowNewOrganization.value, language.value);
+    return schemaFn(
+        variant.value,
+        allowNewOrganization.value,
+        allowPrivateOrganization.value,
+        language.value
+    );
 });
 const labels = computed(() => {
     return labelsFn(variant.value)[language.value];
@@ -236,6 +260,20 @@ function onAssociationChange(value) {
     }
 }
 
+function onPrivateOrganizationChange(value) {
+    if (value?.data === null) {
+        if (allowPrivateOrganization.value === true) {
+            form.value.setFieldValue("organization_category", "other");
+        } else {
+            alert(
+                "Vous devez créer une nouvelle structure ou en faire la demande aux administrateurs nationaux."
+            );
+        }
+
+        privateOrganizationInput.value.clear();
+    }
+}
+
 function intermediateSubmit(values) {
     const formattedValues = { ...values };
     formattedValues.territorial_collectivity = formattedValues
@@ -244,6 +282,10 @@ function intermediateSubmit(values) {
         : null;
     formattedValues.association = formattedValues.association?.data
         ? formattedValues.association.data.id
+        : null;
+    formattedValues.private_organization = formattedValues.private_organization
+        ?.data
+        ? formattedValues.private_organization.data.id
         : null;
     return submit.value(formattedValues);
 }

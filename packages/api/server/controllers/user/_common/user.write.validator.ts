@@ -236,6 +236,28 @@ export default (
             return true;
         }),
 
+    body('private_organization')
+        .if((value, { req }) => req.body.organization_category_full.uid === 'private_organization')
+        .custom(async (value, { req }) => {
+            let organization: Organization;
+            try {
+                organization = await organizationModel.findOneById(value);
+            } catch (error) {
+                throw new Error('Une erreur est survenue lors de la vérification de l\'existence de la structure');
+            }
+
+            if (organization === null) {
+                throw new Error('La structure que vous avez sélectionnée n\'existe pas en base de données');
+            }
+
+            if (organization.type.category !== 'private_organization') {
+                throw new Error('La structure que vous avez sélectionnée est invalide');
+            }
+
+            req.body.organization_full = organization;
+            return true;
+        }),
+
     body('position')
         .if(isAUserCreationCallback)
         .trim()
