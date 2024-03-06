@@ -185,7 +185,6 @@ export default (
     schema.private_organization = object()
         .when("organization_category", {
             is: "private_organization",
-            // then: (schema) => schem.required(),
             then: (schema) =>
                 schema.required().customSchema(
                     object({
