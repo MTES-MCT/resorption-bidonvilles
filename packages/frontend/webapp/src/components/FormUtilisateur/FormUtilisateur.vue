@@ -64,6 +64,15 @@
                     :allowPrivateOrganization="allowPrivateOrganization"
                 />
 
+                <!-- Administrations centrales -->
+                <template
+                    v-if="values.organization_category === 'administration'"
+                >
+                    <FormUtilisateurInputOrganizationAdministration
+                        :label="labels.organization_administration"
+                    />
+                </template>
+
                 <!-- Services de l'état -->
                 <template
                     v-if="
@@ -97,15 +106,6 @@
                         :label="labels.association"
                         @change="onAssociationChange"
                         ref="associationInput"
-                    />
-                </template>
-
-                <!-- Administrations centrales -->
-                <template
-                    v-if="values.organization_category === 'administration'"
-                >
-                    <FormUtilisateurInputOrganizationAdministration
-                        :label="labels.organization_administration"
                     />
                 </template>
 
