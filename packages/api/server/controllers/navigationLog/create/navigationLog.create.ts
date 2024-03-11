@@ -14,9 +14,11 @@ export default async (req, res, next) => {
             case 'fetch_failed':
                 message = 'Impossible de trouver l\'utilisateur';
                 break;
-
+            case 'commit_failed':
+                message = 'Impossible de valider la transaction';
+                break;
             default:
-                message = 'Une erreur inconnue est survenue.';
+                message = 'La transaction d\'enregistrement du log n\'a pas pu être validée.';
         }
 
         res.status(500).send({
