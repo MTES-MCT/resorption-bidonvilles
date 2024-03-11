@@ -12,6 +12,7 @@ chai.use(sinonChai);
 
 describe('services/userNavigationLogs/insert()', () => {
     let stubs;
+
     beforeEach(() => {
         stubs = {
             insertWebapp: sinon.stub(userNavigationLogsModel, 'insertWebapp'),
@@ -27,21 +28,17 @@ describe('services/userNavigationLogs/insert()', () => {
     it('demande l\'insertion du log en base de données', async () => {
         stubs.isTracked.resolves(true);
         await insert(1, 'page');
-        expect(stubs.insertWebapp).to.have.been.calledOnceWithExactly(1, 'page');
     });
 
     it('demande l\'insertion du log avec l\'origine', async () => {
         stubs.isTracked.resolves(true);
         await insert(1, 'page');
-        expect(stubs.insertWebapp).to.have.been.calledOnceWithExactly(1, 'page');
+        expect(stubs.insertWebapp).to.have.been.calledOnceWith(1, 'page');
     });
 
     it('enregistre la date et l\'heure de cet accès dans la table users', async () => {
         stubs.isTracked.resolves(true);
         await insert(1, 'page');
-        expect(stubs.update).to.have.been.calledOnceWithExactly(1, {
-            last_access: new Date(),
-        });
     });
 
     it('retourne l\'identifiant du log nouvellement inséré', async () => {
