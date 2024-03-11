@@ -70,7 +70,12 @@ addMethod(object, "customSchema", function (schema) {
     );
 });
 
-export default (variant, allowNewOrganization, language) => {
+export default (
+    variant,
+    allowNewOrganization,
+    allowPrivateOrganization,
+    language
+) => {
     const schema = {};
     const labels = labelsFn(variant)[language];
 
@@ -113,6 +118,7 @@ export default (variant, allowNewOrganization, language) => {
     // organization category
     const organizationCategory = string().label(labels.organization_category);
     const organizationCategories = organizationCategoriesFn({
+        private_organization: allowPrivateOrganization,
         other: allowNewOrganization,
     });
     function makeOrganizationCategoryRequired(schema) {
@@ -176,6 +182,19 @@ export default (variant, allowNewOrganization, language) => {
             then: (schema) => schema.required(),
         })
         .label(labels.organization_administration);
+    schema.private_organization = object()
+        .when("organization_category", {
+            is: "private_organization",
+            then: (schema) =>
+                schema.required().customSchema(
+                    object({
+                        data: object({
+                            id: number().required(),
+                        }).required(),
+                    })
+                ),
+        })
+        .label(labels.private_organization);
     schema.organization_other = string()
         .when("organization_category", {
             is: "other",

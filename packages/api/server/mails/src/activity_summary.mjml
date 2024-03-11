@@ -6,7 +6,6 @@
     </mj-head>
     <mj-body mj-class='bg-white'>
         <mj-include path='common/hero.mjml' />
-        <mj-include path='interests_and_expertise_popup/interests_and_expertise_popup.mjml' />
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pt-4 pb-4'>

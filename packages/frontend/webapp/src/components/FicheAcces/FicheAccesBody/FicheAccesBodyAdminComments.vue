@@ -22,7 +22,7 @@
                 >Annuler mes changements</Button
             >
             <Button
-                variant="tertiary"
+                variant="tertiaryA11Yalt"
                 @click="updateAdminComments"
                 :disabled="!pendingAdminCommentsChanges"
                 :loading="isLoading"

@@ -7,15 +7,39 @@ export default {
         },
     },
     plugins: {
+        tooltip: {
+            mode: "index",
+            position: "nearest",
+            usePointStyle: true,
+            intersect: true,
+            itemSort: (a, b) => b.parsed.y - a.parsed.y,
+            titleFont: {
+                size: 14,
+            },
+            callbacks: {
+                title: (tooltipItem) => {
+                    return (
+                        tooltipItem[0].label.charAt(0).toUpperCase() +
+                        tooltipItem[0].label.slice(1)
+                    );
+                },
+            },
+        },
         legend: {
-            // Empêche le clic sur la légende pour masquer la courbe correspondante
-            // Evite les problèmes d'affichage des dégradés quand une courbe est masquée
-            onClick: function (event) {
-                if (event.type === "legend-click") {
-                    const dataset = event.target.dataset;
-                    if (dataset) {
-                        return false;
-                    }
+            onHover: function (e) {
+                e.native.target.style.cursor = "pointer";
+            },
+            onClick: function (event, legendItem, legend) {
+                const index = legendItem.datasetIndex;
+                const ci = legend.chart;
+                ci.toggleDataVisibility(index);
+
+                if (ci.isDatasetVisible(index)) {
+                    ci.hide(index);
+                    legendItem.hidden = true;
+                } else {
+                    ci.show(index);
+                    legendItem.hidden = false;
                 }
             },
             labels: {

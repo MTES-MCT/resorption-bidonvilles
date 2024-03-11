@@ -19,10 +19,14 @@ import { defineProps, toRefs } from "vue";
 const props = defineProps({
     label: String,
     allowNewOrganization: Boolean,
+    allowPrivateOrganization: Boolean,
 });
-const { label, allowNewOrganization } = toRefs(props);
+const { label, allowNewOrganization, allowPrivateOrganization } = toRefs(props);
 
 const items = computed(() => {
-    return itemsFn({ other: allowNewOrganization.value });
+    return itemsFn({
+        private_organization: allowPrivateOrganization.value || false,
+        other: allowNewOrganization.value,
+    });
 });
 </script>
