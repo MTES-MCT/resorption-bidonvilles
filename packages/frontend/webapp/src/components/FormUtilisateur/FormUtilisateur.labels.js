@@ -14,7 +14,7 @@ export default (variant) => ({
             variant === "demande-acces"
                 ? "Quelle structure ?"
                 : "Quelle est la structure de l'utilisateur ?",
-        organization_type: "Précisez le type de structure",
+        organization_type: "Précisez la structure",
         organization_public: "Territoire de rattachement",
         territorial_collectivity: "Territoire de la collectivité",
         association: "Nom de l'association",
