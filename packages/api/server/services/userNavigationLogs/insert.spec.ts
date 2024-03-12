@@ -19,18 +19,19 @@ const userModel = {
 
 const userNavigationLogsModel = {
     insertWebapp: sandbox.stub(),
-}
+};
 
 rewiremock('#db/sequelize').with({ sequelize });
 rewiremock('#server/models/userModel/index').with(userModel);
 rewiremock('#server/models/userNavigationLogsModel/index').with(userNavigationLogsModel);
 
 rewiremock.enable();
+// eslint-disable-next-line import/newline-after-import, import/first
 import insertNavigationLog from '#server/services/userNavigationLogs/insert';
+
 rewiremock.disable();
 
 describe('services/userNavigationLogs/insert()', () => {
-
     let transaction;
     beforeEach(() => {
         transaction = {
@@ -51,8 +52,6 @@ describe('services/userNavigationLogs/insert()', () => {
     });
 
     it('demande l\'insertion du log de navigation avec les paramètres attendus', async () => {
-        // userModel.isTracked.resolves(true);
-        // userNavigationLogsModel.insertWebapp.resolves(1);
         await insertNavigationLog(1, 'page');
         expect(userNavigationLogsModel.insertWebapp).to.have.been.calledOnceWith(1, 'page', transaction);
     });

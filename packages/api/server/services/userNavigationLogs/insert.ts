@@ -28,7 +28,7 @@ export default async (fk_user: number, page: string): Promise<number> => {
     try {
         await userModel.update(fk_user, {
             last_access: new Date(),
-            transaction
+            transaction,
         });
     } catch (error) {
         await transaction.rollback();
