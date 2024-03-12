@@ -5,6 +5,7 @@
         :label="label"
         :options="options"
         :loader="refreshOptions"
+        mode="grouped"
         ref="select"
         showMandatoryStar
     />
@@ -26,29 +27,31 @@ const select = ref(null);
 const organizationType = useFieldValue("organization_type");
 const { handleChange } = useField("organization_public");
 async function refreshOptions() {
+    const territoriesLabels = {
+        region: "Région",
+        departement: "Département",
+        city: "Commune",
+        nation: "National",
+    };
+
     options.value = [];
     const response = await getOrganizations(organizationType.value);
-    options.value = response.organizations.map((organization) => {
-        const regex = new RegExp(
-            `^${organization.organization_type_name} des?(?: la)? `,
-            "i"
-        );
-
-        let territoryLabel;
-        const nameWithoutType = organization.name.replace(regex, "");
-        if (
-            organization.name.toLowerCase() ===
-            organization.organization_type_name.toLowerCase()
-        ) {
-            territoryLabel = "France entière";
-        } else {
-            [, territoryLabel] = nameWithoutType.split(" - ");
-        }
-
-        return {
-            id: organization.id,
-            label: territoryLabel || nameWithoutType,
-        };
+    response.organizations.map((organization) => {
+        options.value.push({
+            label: territoriesLabels[organization.structureslist.type],
+            options: organization.structureslist.organizations.map(
+                (territory) => {
+                    return {
+                        id: territory.id,
+                        label:
+                            organization.structureslist
+                                .organization_type_name === "Sous-préfecture"
+                                ? `${territory.territory} - ${territory.name}`
+                                : territory.territory,
+                    };
+                }
+            ),
+        });
     });
 }
 
