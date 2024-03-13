@@ -12,7 +12,7 @@ export default async (req, res, next) => {
                 message = 'Le log n\'a pas pu être enregistré.';
                 break;
             case 'update_user_failed':
-                message = 'L\'utilisateur n\'a pas pu être mis à jour (dernière conexion).';
+                message = 'L\'utilisateur n\'a pas pu être mis à jour (dernière connexion).';
                 break;
             case 'fetch_failed':
                 message = 'Impossible de trouver l\'utilisateur';
