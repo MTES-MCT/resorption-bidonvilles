@@ -11,12 +11,17 @@ export default async (req, res, next) => {
             case 'insert_failed':
                 message = 'Le log n\'a pas pu être enregistré.';
                 break;
+            case 'update_user_failed':
+                message = 'L\'utilisateur n\'a pas pu être mis à jour (dernière connexion).';
+                break;
             case 'fetch_failed':
                 message = 'Impossible de trouver l\'utilisateur';
                 break;
-
+            case 'commit_failed':
+                message = 'Impossible de valider la transaction';
+                break;
             default:
-                message = 'Une erreur inconnue est survenue.';
+                message = 'La transaction d\'enregistrement du log n\'a pas pu être validée.';
         }
 
         res.status(500).send({
