@@ -51,6 +51,8 @@ export default (typeId: number): Promise<StructureList[]> => sequelize.query(
     LEFT JOIN epci ON intervention_areas.fk_epci = epci.code
     LEFT JOIN cities ON intervention_areas.fk_city = cities.code
     WHERE organizations.fk_type = :typeId
+    AND
+    organizations.active = true
     GROUP BY intervention_areas.type, organization_types.name_singular;`,
     {
         type: QueryTypes.SELECT,
