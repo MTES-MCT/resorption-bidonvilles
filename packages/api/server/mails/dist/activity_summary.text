@@ -1,9 +1,3 @@
-Nouveau !
-Résorption-bidonvilles évolue pour offrir une expérience plus personnalisée.
-Dans les prochains jours, vous serez invité à indiquer vos sujets d'intérêts et
-d'expertises sur la plateforme pour relier compétences et besoins !
-Merci à vous !
-
 Semaine du {{ var:from }} au {{ var:to }}
 {% if var:show_question_summary %}
 Actus de l'espace d'entraide
