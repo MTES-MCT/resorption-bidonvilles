@@ -22,7 +22,7 @@ export default async (req: UserSetInterventionAreasRequest, res: Response, next:
                 user_message: 'La modification des territoires d\'intervention est temporairement réservée aux administrateurs nationaux',
             });
             return;
-        }        
+        }
         const user = await setInterventionAreas(
             req.user,
             req.userToUpdate,
