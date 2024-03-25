@@ -16,11 +16,12 @@ export const useAccesStore = defineStore("acces", () => {
     // filtres
     const fuse = computed(() => {
         return new Fuse(sortedAcces.value, {
-            threshold: 0.1,
+            threshold: 0.2,
             shouldSort: false,
             keys: [
                 "first_name",
                 "last_name",
+                "email",
                 "organization.name",
                 "organization.abbreviation",
                 "location_name", // propriété "enriched"
