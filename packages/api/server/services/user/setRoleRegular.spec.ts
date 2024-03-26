@@ -13,11 +13,9 @@ const sandbox = sinon.createSandbox();
 
 const userModelUpdate = sandbox.stub();
 const findOneUser = sandbox.stub();
-const findOneRole = sandbox.stub();
 
 rewiremock('#server/models/userModel/update').withDefault(userModelUpdate);
 rewiremock('#server/models/userModel/findOne').withDefault(findOneUser);
-rewiremock('#server/models/roleModel/findOne').withDefault(findOneRole);
 
 rewiremock.enable();
 // eslint-disable-next-line import/first, import/newline-after-import
@@ -49,7 +47,7 @@ describe('services/user/setRoleRegular', () => {
     
     it('lève une erreur si l\'utilisateur n\'est pas "Administrateur local" et le rôle est "intervenant"', async () => {
         try {
-            await setRoleRegular(regularUser, 2, fakeIntervenerRole.name);
+            await setRoleRegular(regularUser, 2, fakeIntervenerRole.role_id);
             expect.fail('should have thrown an error');
         } catch (error) {
             expect(error).to.be.an.instanceOf(ServiceError);

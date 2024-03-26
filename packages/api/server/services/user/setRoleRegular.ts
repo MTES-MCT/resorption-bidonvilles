@@ -1,18 +1,10 @@
-import { sequelize } from '#db/sequelize';
 import userModelUpdate from '#server/models/userModel/update';
 import findOneUser from '#server/models/userModel/findOne';
-import findOneRole from '#server/models/roleModel/findOne';
 import ServiceError from '#server/errors/ServiceError';
 import { User } from '#root/types/resources/User.d';
-import can from '#server/utils/permission/can';
 
-type RoleRaw = {
-    id: string,
-    name: string,
-};
-
-function canUpdateRole(user: User, role: RoleRaw): void {
-    if (role && role.name !== 'intervener')
+function canUpdateRole(user: User, roleId: string): void {
+    if (roleId && roleId === 'intervener')
     {
         if (user.is_admin !== true) {
             throw new ServiceError('permission_denied', new Error('Vous devez être Administrateur Local pour pouvoir accorder ce rôle'));
@@ -26,14 +18,7 @@ function canUpdateRole(user: User, role: RoleRaw): void {
 
 export default async (currentUser: User, userToUpdateId: number, roleId: string): Promise<User> => {
 
-    let role: RoleRaw = undefined;
-    try {
-        role = await findOneRole(roleId, 'regular');
-    } catch {
-        throw new ServiceError('role_not_found', new Error('Le role n\'existe pas'));
-    }
-
-    canUpdateRole(currentUser, role);
+    canUpdateRole(currentUser, roleId);
 
     let updatedUser: User;
     try {
