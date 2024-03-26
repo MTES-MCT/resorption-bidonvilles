@@ -1,21 +1,22 @@
 import userModel from '#server/models/userModel';
+import setRoleRegularService from '#server/services/user/setRoleRegular';
+
+const ERROR_RESPONSES = {
+    permission_denied: { code: 403, message: 'Vous n\'avez pas les droits suffisants pour modifier le rôle d\'un utilisateur' },
+    update_role_regular_failure: { code: 500, message: 'Une erreur est survenue lors de la mise à jour du rôle de l\'utilisateur' },
+    undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
+};
 
 export default async (req, res, next) => {
-    if (req.user.is_admin !== true) {
-        return res.status(400).send({
-            user_message: 'Vous n\'avez pas les permissions pour accéder à cette route',
-        });
-    }
-
     try {
-        await userModel.update(req.body.user.id, {
-            fk_role_regular: req.body.role.id,
-        });
-        return res.status(200).send(await userModel.findOne(req.body.user.id));
+        const updatedUser = await setRoleRegularService(req.user, req.body.user.id, req.body.role.id);
+        return res.status(200).send(updatedUser);
     } catch (error) {
-        res.status(500).send({
-            user_message: 'Une erreur est survenue lors de la mise à jour du compte',
+        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
+        res.status(code).send({
+            user_message: message,
         });
-        return next(error);
+
+        next(error.nativeError || error);
     }
-};
+}
