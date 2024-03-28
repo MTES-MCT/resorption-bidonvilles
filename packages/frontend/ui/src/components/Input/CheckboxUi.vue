@@ -1,8 +1,11 @@
 <template>
     <template v-if="variant === 'checkbox'">
         <label :class="labelClass" class="flex cursor-pointer">
-            <input :id="`variant-checkbox-${randomId()}`" ref="checkbox" @click="onChange(value)"
+            <input v-if="active" :id="`variant-checkbox-${randomId()}`" ref="checkbox" @click="onChange(value)"
                 class="inline-block rounded mr-2 text-center" type="checkbox" :checked="checked" :disabled="disabled" />
+            <div v-else>
+                <Icon v-if="checked" class="text-tertiaryA11Y font-bold text-md" icon="fa-solid fa-check" />
+            </div>
             {{ label }}
         </label>
     </template>
@@ -78,6 +81,11 @@ import Icon from "../Icon.vue";
 
 const props = defineProps({
     label: String,
+    active: {
+        type: Boolean,
+        required: false,
+        default: true
+    },
     variant: {
         type: String,
         default: 'card' // soit "card", "checkbox", ou "invisible"
@@ -104,7 +112,7 @@ const props = defineProps({
     }
 });
 
-const { label, variant, modelValue: checked, disabled, isSubmitting } = toRefs(props);
+const { label, variant, modelValue: checked, disabled, isSubmitting, active } = toRefs(props);
 const emit = defineEmits(['change', 'update:modelValue']);
 
 function onChange() {

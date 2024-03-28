@@ -18,6 +18,7 @@
                 variant="checkbox"
                 direction="col"
                 :disabled="user.status === 'inactive'"
+                :active="user.status !== 'active'"
             />
         </p>
     </div>
