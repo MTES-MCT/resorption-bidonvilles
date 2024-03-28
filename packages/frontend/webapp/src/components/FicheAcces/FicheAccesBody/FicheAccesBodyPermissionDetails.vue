@@ -4,6 +4,12 @@
 
         <ul class="list-none">
             <li v-for="(item, index) in enrichedItems" :key="item.label">
+                <FicheAccesBodyOptions
+                    v-if="item.subsection && index > 0"
+                    :user="user"
+                    :options="options"
+                    @update:options="updateOptions"
+                />
                 <div
                     :class="[
                         'flex items-center',
@@ -43,6 +49,7 @@
 
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
+import FicheAccesBodyOptions from "./FicheAccesBodyOptions.vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 const TYPES_TO_ICONS = {
@@ -59,8 +66,17 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    user: {
+        type: Object,
+        required: true,
+    },
+    options: {
+        type: Array,
+        required: true,
+    },
 });
-const { title, items } = toRefs(props);
+const { title, items, options } = toRefs(props);
+
 const enrichedItems = computed(() => {
     return items.value.reduce((acc, arr) => {
         if (arr.length > 0) {

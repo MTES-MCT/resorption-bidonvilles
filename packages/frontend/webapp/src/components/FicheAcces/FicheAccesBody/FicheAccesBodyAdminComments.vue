@@ -26,7 +26,7 @@
                 @click="updateAdminComments"
                 :disabled="!pendingAdminCommentsChanges"
                 :loading="isLoading"
-                >Sauvegarder</Button
+                >Sauvegarder le commentaire</Button
             >
         </div>
     </FicheAccesBodySection>

@@ -1,5 +1,5 @@
 <template>
-    <div class="py-6 px-8 bg-G300" v-if="optionList.length > 0">
+    <div class="pt-2 pb-4 px-1 lg:px-4 bg-G300" v-if="optionList.length > 0">
         <p class="font-bold">
             Options
             <Warning v-if="user.status !== 'new'" class="font-normal text-sm"
@@ -18,17 +18,20 @@
                 variant="checkbox"
                 direction="col"
                 :disabled="user.status === 'inactive'"
+                :active="user.status !== 'active'"
             />
         </p>
     </div>
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, defineEmits, watch } from "vue";
+import { defineProps, toRefs, computed, watch } from "vue";
 import { Checkbox, Warning } from "@resorptionbidonvilles/ui";
 import { useConfigStore } from "@/stores/config.store";
+import { useInputsStore } from "@/stores/inputs.store";
 import { useForm } from "vee-validate";
 
+const inputStore = useInputsStore();
 const props = defineProps({
     user: {
         type: Object,
@@ -46,14 +49,14 @@ const { values, setFieldValue } = useForm({
         options: options.value || [],
     },
 });
-const emit = defineEmits(["update:options"]);
+
 const accessPermission = computed(() => {
     const configStore = useConfigStore();
     return configStore.config.permissions_description[user.value.role_id];
 });
 
 watch(values, () => {
-    emit("update:options", values.options);
+    inputStore.handleOptions(values.options);
 });
 watch(options, () => {
     if (
@@ -62,7 +65,6 @@ watch(options, () => {
     ) {
         return;
     }
-
     setFieldValue("options", options.value);
 });
 

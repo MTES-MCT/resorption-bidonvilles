@@ -1,8 +1,7 @@
 <template>
     <section>
         <FicheAccesBodyMessage :user="user" />
-        <FicheAccesBodyRole :user="user" />
-        <FicheAccesBodyOptions :user="user" v-model:options="checkedOptions" />
+        <FicheAccesBodyRole :user="user" :options="user.permission_options" />
         <FicheAccesBodyAdminComments
             v-if="userStore.user?.is_superuser"
             :user="user"
@@ -25,13 +24,13 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, defineEmits } from "vue";
+import { defineProps, toRefs, computed, onMounted } from "vue";
 import { useUserStore } from "@/stores/user.store";
+import { useInputsStore } from "@/stores/inputs.store";
 import isUserAccessExpired from "@/utils/isUserAccessExpired";
 
 import FicheAccesBodyMessage from "./FicheAccesBodyMessage.vue";
 import FicheAccesBodyRole from "./FicheAccesBodyRole.vue";
-import FicheAccesBodyOptions from "./FicheAccesBodyOptions.vue";
 import FicheAccesBodyAdminComments from "./FicheAccesBodyAdminComments.vue";
 import FicheAccesBodyDeactivate from "./FicheAccesBodyDeactivate.vue";
 import FicheAccesBodyWarning from "./FicheAccesBodyWarning.vue";
@@ -48,18 +47,15 @@ const props = defineProps({
     },
 });
 const { user, options } = toRefs(props);
-const emit = defineEmits(["update:options"]);
-const checkedOptions = computed({
-    get() {
-        return options.value;
-    },
-    set(newValue) {
-        emit("update:options", newValue);
-    },
-});
+
 const userStore = useUserStore();
 
 const isExpired = computed(() => {
     return isUserAccessExpired(user.value);
+});
+
+onMounted(() => {
+    const inputsStore = useInputsStore();
+    inputsStore.handleOptions(user.value.permission_options);
 });
 </script>
