@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { defineProps, toRefs, computed, onMounted } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { useInputsStore } from "@/stores/inputs.store";
 import isUserAccessExpired from "@/utils/isUserAccessExpired";
@@ -35,7 +35,6 @@ import FicheAccesBodyAdminComments from "./FicheAccesBodyAdminComments.vue";
 import FicheAccesBodyDeactivate from "./FicheAccesBodyDeactivate.vue";
 import FicheAccesBodyWarning from "./FicheAccesBodyWarning.vue";
 import FicheAccesActions from "../FicheAccesActions/FicheAccesActions.vue";
-import { onMounted } from "vue";
 
 const props = defineProps({
     user: {
