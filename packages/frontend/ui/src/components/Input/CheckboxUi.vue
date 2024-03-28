@@ -1,7 +1,7 @@
 <template>
     <template v-if="variant === 'checkbox'">
         <label :class="labelClass" class="flex cursor-pointer">
-            <input id="variant-checkbox" ref="checkbox" @click="onChange(value)"
+            <input :id="`variant-checkbox-${randomId()}`" ref="checkbox" @click="onChange(value)"
                 class="inline-block rounded mr-2 text-center" type="checkbox" :checked="checked" :disabled="disabled" />
             {{ label }}
         </label>
@@ -9,7 +9,7 @@
     <template v-else-if="variant === 'invisible'">
         <div class="flex items-center justify-between w-full hover:bg-blue200 px-3 text-primary">
             <label class="flex items-center justify-between w-full hover:bg-blue200 py-2 pr-4 text-primary cursor-pointer">
-                <input id="variant-invisible" ref="checkbox" @click="onChange(value)" class="appearance-none"
+                <input :id="`variant-invisible-${randomId()}`" ref="checkbox" @click="onChange(value)" class="appearance-none"
                     type="checkbox" :checked="checked" :disabled="disabled" />
                 <div class="flex-1">
                     {{ label }}
@@ -26,7 +26,7 @@
             <label v-if="checked" class="flex space-x-2 items-center shrink-0">
                 <p
                     class="rounded-2xl w-11 h-6 flex shrink-0 items-center px-px border border-primary justify-end bg-primary">
-                    <input id="variant-toggle" @click="onChange(value)" class="appearance-none" type="checkbox"
+                    <input :id="`variant-toggle-${randomId()}`" @click="onChange(value)" class="appearance-none" type="checkbox"
                         :checked="checked" :disabled="disabled" />
                     <span class="absolute rounded-full bg-white inline-block text-center text-sm text-primary h-5 w-5">
                         <span class="inline-block">
@@ -40,7 +40,7 @@
             </label>
             <label v-else class="flex space-x-2 items-center shrink-0">
                 <p class="rounded-2xl w-11 h-6 flex shrink-0 items-center px-px border border-primary justify-start">
-                    <input id="variant-toggle" @click="onChange(value)" class="appearance-none" type="checkbox"
+                    <input :id="`variant-toggle-${randomId()}`" @click="onChange(value)" class="appearance-none" type="checkbox"
                         :checked="checked" :disabled="disabled" />
                     <span
                         class="absolute rounded-full bg-white inline-block text-center text-sm text-primary -ml-1 h-6 w-6 border border-primary">
@@ -127,4 +127,8 @@ const checkboxStyle = computed(() => {
 
     return 'hover:border-G400 hover:border-blue500'
 });
+
+const randomId = () => {
+    return Math.floor(Math.random() * 50) + 1;
+}
 </script>
