@@ -67,8 +67,11 @@ const accessPermission = computed(() => {
 
 const updateOptions = async () => {
     isLoading.value = true;
-    await modifyOptions(user.value, options.value);
+    const changingUserOptions = await modifyOptions(user.value, options.value);
     isLoading.value = false;
+    if (changingUserOptions) {
+        user.value.permission_options = inputsStore.options;
+    }
 };
 
 watchEffect(() => {
