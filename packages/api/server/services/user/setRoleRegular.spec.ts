@@ -40,11 +40,10 @@ const fakeRegularRoles = [
 ];
 
 describe('services/user/setRoleRegular', () => {
-
     afterEach(() => {
         sandbox.reset();
     });
-    
+
     it('lève une erreur si l\'utilisateur n\'est pas "Administrateur local" et le rôle est "intervenant"', async () => {
         try {
             await setRoleRegular(regularUser, 2, fakeIntervenerRole.role_id);

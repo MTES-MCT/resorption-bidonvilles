@@ -16,6 +16,6 @@ export default async (req, res, next) => {
             user_message: message,
         });
 
-        next(error.nativeError || error);
+        return next(error.nativeError || error);
     }
-}
+};
