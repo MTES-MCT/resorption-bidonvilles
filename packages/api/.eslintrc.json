@@ -5,30 +5,27 @@
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "project": "./tsconfig.json"
+        "project": "./packages/api/tsconfig.json"
     },
     "env": {
         "mocha": true
     },
     "rules": {
-        "@typescript-eslint/indent": [
-            "error",
-            4
-        ],
+        "indent": "off",
+        "@typescript-eslint/indent": "error",
         "@typescript-eslint/naming-convention": [
             "off"
         ],
-        "indent": [
+        "@typescript-eslint/no-throw-literal": "off",
+        "import/no-extraneous-dependencies": 2,
+        "import/extensions": [
             "error",
-            4,
+            "ignorePackages",
             {
-                "SwitchCase": 1
+                "js": "never",
+                "ts": "never",
             }
         ],
-        "@typescript-eslint/no-throw-literal": [
-            "off"
-        ],
-        "import/no-extraneous-dependencies": 2,
         "prefer-promise-reject-errors": 0,
         "max-len": "off",
         "camelcase": "off",
@@ -39,6 +36,9 @@
     },
     "settings": {
         "import/resolver": {
+            "node": {
+                "extensions": [".js", ".ts"]
+            },
             "alias": {
                 "map": [
                     [
