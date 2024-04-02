@@ -13,7 +13,7 @@
                 title="À l’échelle nationale"
                 :items="accessPermission.national_permissions"
                 :options="options"
-            ></FicheAccesBodyPermissionDetails>
+            />
 
             <FicheAccesBodyPermissionDetails
                 v-if="accessPermission.local_permissions?.length > 0"
@@ -21,7 +21,7 @@
                 :items="accessPermission.local_permissions"
                 :user="user"
                 :options="options"
-            ></FicheAccesBodyPermissionDetails>
+            />
         </template>
         <div class="flex items-center justify-end">
             <Button
