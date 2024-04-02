@@ -11,21 +11,24 @@
         "mocha": true
     },
     "rules": {
-        "indent": "off",
-        "@typescript-eslint/indent": "error",
+        "@typescript-eslint/indent": [
+            "error",
+            4
+        ],
         "@typescript-eslint/naming-convention": [
             "off"
         ],
-        "@typescript-eslint/no-throw-literal": "off",
-        "import/no-extraneous-dependencies": 2,
-        "import/extensions": [
+        "indent": [
             "error",
-            "ignorePackages",
+            4,
             {
-                "js": "never",
-                "ts": "never",
+                "SwitchCase": 1
             }
         ],
+        "@typescript-eslint/no-throw-literal": 
+            "off"
+        ,
+        "import/no-extraneous-dependencies": 2,
         "prefer-promise-reject-errors": 0,
         "max-len": "off",
         "camelcase": "off",
@@ -36,9 +39,6 @@
     },
     "settings": {
         "import/resolver": {
-            "node": {
-                "extensions": [".js", ".ts"]
-            },
             "alias": {
                 "map": [
                     [
