@@ -5,6 +5,7 @@ import { get, list } from "@/api/users.api";
 import enrichUserWithAccessStatus from "@/utils/enrichUserWithAccessStatus";
 import enrichUserWithLocationName from "@/utils/enrichUserWithLocationName";
 import accessStatuses from "@/utils/access_statuses";
+import { setRoleRegular } from "@/api/users.api";
 import Fuse from "fuse.js";
 
 const ITEMS_PER_PAGE = 50;
@@ -123,6 +124,16 @@ export const useAccesStore = defineStore("acces", () => {
             return Math.ceil(filteredAcces.value.length / ITEMS_PER_PAGE);
         }),
         total: computed(() => filteredAcces.value.length),
+
+        async updateUserRole(userId, newRole, roles) {
+            const updatedUser = await setRoleRegular(userId, newRole);
+            if (updatedUser && hash.value[userId]) {
+                hash.value[userId].role = roles.find(
+                    (role) => role.id === newRole
+                ).name;
+                hash.value[userId].role_id = newRole;
+            }
+        },
 
         updateUser(userId, user) {
             if (hash.value[userId]) {
