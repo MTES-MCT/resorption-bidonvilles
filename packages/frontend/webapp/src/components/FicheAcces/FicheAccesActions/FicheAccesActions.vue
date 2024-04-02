@@ -37,7 +37,6 @@ import FicheAccesActionCopyActivationLink from "./FicheAccesActionCopyActivation
 import FicheAccesActionReactivate from "./FicheAccesActionReactivate.vue";
 import FicheAccesActionDenyAccess from "./FicheAccesActionDenyAccess.vue";
 import FicheAccesActionGrantAccess from "./FicheAccesActionGrantAccess.vue";
-import FicheAccesActionModifyOptions from "./FicheAccesActionModifyOptions.vue";
 import FicheAccesActionSetRole from "./FicheAccesActionSetRole.vue";
 
 const props = defineProps({
@@ -92,13 +91,6 @@ const actions = [
         component: FicheAccesActionGrantAccess,
         action: (...args) => {
             return grantAccess(...args, options.value);
-        },
-    },
-    {
-        id: "modify_options",
-        component: FicheAccesActionModifyOptions,
-        action: (...args) => {
-            return modifyOptions(...args, options.value);
         },
     },
     {
