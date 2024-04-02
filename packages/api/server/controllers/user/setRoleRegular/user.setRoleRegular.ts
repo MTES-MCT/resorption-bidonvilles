@@ -1,4 +1,3 @@
-import userModel from '#server/models/userModel';
 import setRoleRegularService from '#server/services/user/setRoleRegular';
 
 const ERROR_RESPONSES = {
