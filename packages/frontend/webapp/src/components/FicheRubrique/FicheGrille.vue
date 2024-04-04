@@ -1,6 +1,8 @@
 <template>
     <FicheSousRubrique>
-        <div class="grid grid-cols-2">
+        <div
+            class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4 md:justify-between"
+        >
             <div><slot name="col1" /></div>
             <div class="break-words"><slot name="col2" /></div>
         </div>

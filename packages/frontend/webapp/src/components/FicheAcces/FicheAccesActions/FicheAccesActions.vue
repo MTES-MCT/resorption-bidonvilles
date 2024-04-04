@@ -37,6 +37,7 @@ import FicheAccesActionCopyActivationLink from "./FicheAccesActionCopyActivation
 import FicheAccesActionReactivate from "./FicheAccesActionReactivate.vue";
 import FicheAccesActionDenyAccess from "./FicheAccesActionDenyAccess.vue";
 import FicheAccesActionGrantAccess from "./FicheAccesActionGrantAccess.vue";
+import FicheAccesActionSetRole from "./FicheAccesActionSetRole.vue";
 
 const props = defineProps({
     user: {
@@ -90,6 +91,13 @@ const actions = [
         component: FicheAccesActionGrantAccess,
         action: (...args) => {
             return grantAccess(...args, options.value);
+        },
+    },
+    {
+        id: "set_role",
+        component: FicheAccesActionSetRole,
+        action: () => {
+            return null;
         },
     },
 ];

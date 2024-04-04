@@ -1,5 +1,8 @@
 <template>
-    <div class="pt-2 pb-4 px-1 lg:px-4 bg-G300" v-if="optionList.length > 0">
+    <div
+        class="pt-2 pb-4 px-1 lg:px-4 bg-G300"
+        v-if="optionList && optionList.length > 0"
+    >
         <p class="font-bold">
             Options
             <Warning v-if="user.status !== 'new'" class="font-normal text-sm"
@@ -35,7 +38,7 @@ const inputStore = useInputsStore();
 const props = defineProps({
     user: {
         type: Object,
-        required: true,
+        required: false,
     },
     options: {
         type: Array,
@@ -52,7 +55,7 @@ const { values, setFieldValue } = useForm({
 
 const accessPermission = computed(() => {
     const configStore = useConfigStore();
-    return configStore.config.permissions_description[user.value.role_id];
+    return configStore.config.permissions_description[user.value?.role_id];
 });
 
 watch(values, () => {
