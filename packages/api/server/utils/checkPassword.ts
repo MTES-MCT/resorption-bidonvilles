@@ -1,11 +1,11 @@
-export default function checkPassword(str) {
+export default function checkPassword(str: string, isAdmin: string | boolean | null) {
     if (!str) {
         return ['Le mot de passe est obligatoire'];
     }
 
     const errors = [];
-    if (str.length < 12) {
-        errors.push('Le mot de passe doit comporter 12 caractères ou plus');
+    if ((isAdmin && str.length < 16) || str.length < 12) {
+        errors.push(`Le mot de passe doit comporter ${isAdmin ? 16 : 12} caractères ou plus`);
     }
 
     if (!(/[a-z]/g).test(str)) {
