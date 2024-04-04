@@ -33,6 +33,7 @@ export type RawUser = {
     phone: string | null,
     position: string | null,
     password: string | null,
+    password_conformity: boolean | null,
     salt: string,
     access_request_message: string | null,
     status: UserStatus,
@@ -66,8 +67,8 @@ export type RawUser = {
     organization_category_id: string,
     organization_category_name_singular: string,
     organization_category_name_plural: string,
-    permission_options: string[]
-    user_accesses: RawUserAccess[]
+    permission_options: string[],
+    user_accesses: RawUserAccess[],
 };
 
 export type RawInterventionArea = {
