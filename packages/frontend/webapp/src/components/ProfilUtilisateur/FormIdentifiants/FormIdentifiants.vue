@@ -37,6 +37,7 @@ import { useUserStore } from "@/stores/user.store.js";
 import { useNotificationStore } from "@/stores/notification.store.js";
 import schema from "./FormIdentifiants.schema";
 import { edit } from "@/api/me.api";
+import router from "@/helpers/router";
 
 // components
 import { Button, Icon, Warning } from "@resorptionbidonvilles/ui";
@@ -61,6 +62,8 @@ const onSubmit = handleSubmit(async (values) => {
             "Vos identifiants",
             "Votre mot de passe a bien été modifié"
         );
+        userStore.user.password_conformity = true;
+        router.push("/tableau-de-bord");
     } catch (e) {
         error.value = e?.user_message || "Une erreur inconnue est survenue";
         if (e?.fields) {
