@@ -1,8 +1,8 @@
 <template>
     <FicheGrille :border="false" :marginTop="false">
         <template v-slot:col1>
-            <p class="font-bold">Nom Prénom</p>
-            <p>{{ formattedFirstName }} {{ user.lastName.toUpperCase() }}</p>
+            <p class="font-bold">NOM Prénom</p>
+            <p>{{ user.lastName.toUpperCase() }} {{ formattedFirstName }}</p>
         </template>
 
         <template v-slot:col2>
