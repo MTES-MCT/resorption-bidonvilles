@@ -5,6 +5,7 @@
                 class="inline-block rounded mr-2 text-center" type="checkbox" :checked="checked" :disabled="disabled" />
             <div v-else>
                 <Icon v-if="checked" class="text-tertiaryA11Y font-bold text-md" icon="fa-solid fa-check" />
+                <Icon v-else class="text-redA11Y font-bold text-md" icon="fa-solid fa-xmark" />
             </div>
             {{ label }}
         </label>
