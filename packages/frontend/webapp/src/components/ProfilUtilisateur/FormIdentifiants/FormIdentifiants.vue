@@ -62,7 +62,7 @@ const onSubmit = handleSubmit(async (values) => {
             "Vos identifiants",
             "Votre mot de passe a bien été modifié"
         );
-        userStore.user.password_conformity = true;
+        userStore.setPasswordConformity(true);
         router.push("/tableau-de-bord");
     } catch (e) {
         error.value = e?.user_message || "Une erreur inconnue est survenue";
