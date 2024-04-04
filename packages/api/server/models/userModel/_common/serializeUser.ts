@@ -55,6 +55,7 @@ export default (user: RawUser, userAccesses: RawUserAccess[], interventionAreas:
             const [uid, label, type] = topic.split(',');
             return { uid, label, type: type as UserExpertiseTopicType };
         }),
+        password_conformity: user.password_conformity,
     };
 
     if (filters.auth === true) {
