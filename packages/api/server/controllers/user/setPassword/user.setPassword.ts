@@ -41,7 +41,7 @@ export default async (req, res, next) => {
         });
     }
 
-    const errors = checkPassword(req.body.password);
+    const errors = checkPassword(req.body.password, user.is_admin);
     if (errors.length > 0) {
         return res.status(400).send({
             user_message: 'Le mot de passe est invalide',
