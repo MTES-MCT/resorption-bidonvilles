@@ -54,6 +54,7 @@ export default async (req, res, next) => {
     try {
         await userModel.update(user.id, {
             password: hashPassword(req.body.password, user.salt),
+            password_conformity: (!!user.is_admin),
         });
     } catch (error) {
         res.status(500).send({
