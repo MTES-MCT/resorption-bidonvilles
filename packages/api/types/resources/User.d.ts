@@ -76,6 +76,7 @@ export type User = {
     expertise_topics_chosen: boolean,
     expertise_comment: string,
     expertise_topics: UserExpertiseTopic[],
+    password_conformity?: boolean | null,
 
     // filter: auth
     password?: string,
