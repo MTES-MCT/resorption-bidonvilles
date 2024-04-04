@@ -3,7 +3,7 @@
         <template v-slot:title>Activer mon compte </template>
         <template v-slot:body>
             <FormActivationCompteInputEmail v-model="email" />
-            <FormActivationCompteInputPassword />
+            <FormActivationCompteInputPassword :user="user" />
             <FormActivationCompteInputPasswordConfirm />
         </template>
 
