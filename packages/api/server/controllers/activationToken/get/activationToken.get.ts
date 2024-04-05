@@ -40,5 +40,6 @@ export default async (req, res) => {
     return res.status(200).send({
         id: user.id,
         email: user.email,
+        is_admin: user.is_admin,
     });
 };

@@ -4,6 +4,7 @@ import TableauDeBordView from "@/views/TableauDeBordView.vue";
 import { useUserStore } from "@/stores/user.store.js";
 import { useConfigStore } from "@/stores/config.store.js";
 import { useNavigationStore } from "@/stores/navigation.store";
+import { useNotificationStore } from "@/stores/notification.store";
 import { createNavigationLog } from "@/api/me.api";
 import logout from "@/utils/logout";
 import waitForElement from "@/utils/waitForElement";
@@ -705,6 +706,23 @@ router.beforeEach((to, from) => {
     // c'est parti, on applique les contraintes !
     if (requirements.auth === "signedOut" && userStore.isLoggedIn) {
         return "/";
+    }
+
+    if (userStore.user?.is_admin) {
+        if (!userStore.user.password_conformity) {
+            const authorizedPaths = [
+                "/mon-compte/identifiants",
+                "/deconnexion",
+            ];
+            if (!authorizedPaths.includes(to.path)) {
+                const notificationStore = useNotificationStore();
+                notificationStore.error(
+                    "Mot de passe non sécurisé",
+                    "Votre mot de passe n'est pas conforme. Veuillez le modifier"
+                );
+                return "/mon-compte/identifiants";
+            }
+        }
     }
 
     const navigationStore = useNavigationStore();

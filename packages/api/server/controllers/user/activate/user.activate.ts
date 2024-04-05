@@ -53,7 +53,8 @@ export default async (req, res, next) => {
         });
     }
 
-    const errors = checkPassword(req.body.password);
+    const errors = checkPassword(req.body.password, user.is_admin);
+
     if (errors.length > 0) {
         return res.status(400).send({
             user_message: 'Le mot de passe est invalide',
@@ -71,6 +72,7 @@ export default async (req, res, next) => {
             await userModel.update(user.id, {
                 password: hashPassword(req.body.password, user.salt),
                 fk_status: 'active',
+                password_conformity: (!!user.is_admin),
             }, transaction);
             await userAccessModel.update(decoded.id, {
                 used_at: now,

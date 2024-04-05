@@ -123,6 +123,7 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
             users.charte_engagement_signee,
             users.expertise_topics_chosen,
             users.expertise_comment,
+            users.password_conformity,
             COALESCE(user_expertise_topics.topics, array[]::text[]) AS topics,
             COALESCE(email_unsubscriptions.unsubscriptions, array[]::enum_user_email_subscriptions_email_subscription[]) AS email_unsubscriptions,
             COALESCE(question_subscriptions.subscriptions, array[]::text[]) AS question_subscriptions,

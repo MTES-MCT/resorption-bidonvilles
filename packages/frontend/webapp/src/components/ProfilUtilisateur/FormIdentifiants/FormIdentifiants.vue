@@ -21,7 +21,7 @@
 
         <!-- autres champs modifiables -->
         <div class="max-w-lg mt-5">
-            <FormIdentifiantsInputPassword />
+            <FormIdentifiantsInputPassword :user="user" />
         </div>
 
         <Button type="submit" @click="onSubmit">Sauvegarder</Button>
