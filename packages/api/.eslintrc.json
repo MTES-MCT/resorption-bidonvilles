@@ -25,9 +25,9 @@
                 "SwitchCase": 1
             }
         ],
-        "@typescript-eslint/no-throw-literal": [
+        "@typescript-eslint/no-throw-literal": 
             "off"
-        ],
+        ,
         "import/no-extraneous-dependencies": 2,
         "prefer-promise-reject-errors": 0,
         "max-len": "off",

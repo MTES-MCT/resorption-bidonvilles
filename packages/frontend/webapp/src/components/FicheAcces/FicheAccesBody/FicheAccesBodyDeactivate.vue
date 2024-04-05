@@ -26,7 +26,7 @@
                 >Annuler</Button
             >
             <Button
-                variant="tertiary"
+                variant="tertiaryA11Yalt"
                 @click="deactivate"
                 :disabled="deactivationReason.length === 0"
                 :loading="isLoading"

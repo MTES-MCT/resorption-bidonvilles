@@ -8,7 +8,7 @@ export default async (userId, values, transaction = undefined) => {
     const allowedProperties = [
         'first_name', 'last_name', 'position', 'phone', 'password', 'fk_status',
         'last_version', 'last_changelog', 'charte_engagement_signee', 'last_access',
-        'admin_comments', 'fk_role_regular', 'expertise_topics_chosen', 'expertise_comment',
+        'admin_comments', 'fk_role_regular', 'expertise_topics_chosen', 'expertise_comment', 'password_conformity',
     ];
     const propertiesToColumns = {
         first_name: 'first_name',
@@ -25,6 +25,7 @@ export default async (userId, values, transaction = undefined) => {
         fk_role_regular: 'fk_role_regular',
         expertise_topics_chosen: 'expertise_topics_chosen',
         expertise_comment: 'expertise_comment',
+        password_conformity: 'password_conformity',
     };
     const setClauses = [];
     const replacements = {};

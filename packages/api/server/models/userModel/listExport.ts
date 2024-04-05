@@ -59,6 +59,13 @@ export default async (permission?: Permission): Promise<UserListExportRow[]> => 
 
         return await sequelize.query(
             `
+            WITH user_last_connection AS (
+                SELECT
+                    uwnl.fk_user, MAX(uwnl.datetime) AS user_log_last_access
+                FROM user_webapp_navigation_logs uwnl
+                GROUP BY uwnl.fk_user
+            )
+
             SELECT
                 email AS "Courriel",
                 INITCAP(first_name) AS "Prénom",
@@ -73,7 +80,7 @@ export default async (permission?: Permission): Promise<UserListExportRow[]> => 
                     ELSE TO_CHAR(lua.used_at :: DATE, 'dd/mm/yyyy')
                 END AS "Date d'activation du compte",
                 TO_CHAR(u.inactivity_alert_sent_at :: DATE, 'dd/mm/yyyy') AS "Date d'envoi de l'alerte de désactivation",
-                TO_CHAR(u.last_access :: DATE, 'dd/mm/yyyy') AS "Date de dernière connexion",
+                TO_CHAR(user_log_last_access :: DATE, 'dd/mm/yyyy') AS "Date de dernière connexion",
                 CASE
                     WHEN fk_status = 'active' THEN 'Compte actif'
                     WHEN fk_status = 'new' AND lua.created_at IS NULL
@@ -98,6 +105,7 @@ export default async (permission?: Permission): Promise<UserListExportRow[]> => 
             LEFT JOIN last_user_accesses lua ON lua.fk_user = u.user_id
             LEFT JOIN v_user_areas ON v_user_areas.user_id = u.user_id AND v_user_areas.is_main_area IS TRUE
             LEFT JOIN roles_regular rr ON rr.role_id = u.fk_role_regular
+            LEFT JOIN user_last_connection ulc ON ulc.fk_user = u.user_id
             ${where !== null ? `WHERE (${where})` : ''}
             ORDER BY
                 "Statut calculé",

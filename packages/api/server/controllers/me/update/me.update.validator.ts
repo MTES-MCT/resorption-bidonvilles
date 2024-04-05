@@ -26,12 +26,12 @@ export default [
         .optional()
         .isString()
         .trim()
-        .custom((value) => {
+        .custom((value, { req }) => {
             if (!value) {
                 return true;
             }
 
-            const errors = checkPassword(value);
+            const errors = checkPassword(value, req.user.is_admin);
 
             if (errors.length) {
                 throw new Error(errors[0]);

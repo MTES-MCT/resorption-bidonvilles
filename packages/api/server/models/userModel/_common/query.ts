@@ -98,6 +98,12 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
             FROM user_to_expertise_topics
             LEFT JOIN expertise_topics ON user_to_expertise_topics.fk_expertise_topic = expertise_topics.uid
             GROUP BY user_to_expertise_topics.fk_user
+        ),
+        user_last_connection AS (
+            SELECT
+                uwnl.fk_user, MAX(uwnl.datetime) AS user_log_last_access
+            FROM user_webapp_navigation_logs uwnl
+            GROUP BY uwnl.fk_user
         )
 
         SELECT
@@ -117,10 +123,11 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
             users.charte_engagement_signee,
             users.expertise_topics_chosen,
             users.expertise_comment,
+            users.password_conformity,
             COALESCE(user_expertise_topics.topics, array[]::text[]) AS topics,
             COALESCE(email_unsubscriptions.unsubscriptions, array[]::enum_user_email_subscriptions_email_subscription[]) AS email_unsubscriptions,
             COALESCE(question_subscriptions.subscriptions, array[]::text[]) AS question_subscriptions,
-            users.last_access,
+            user_log_last_access AS last_access,
             users.admin_comments,
             v_user_areas.is_national,
             users.use_custom_intervention_area,
@@ -166,6 +173,8 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
             question_subscriptions ON question_subscriptions.fk_user = users.user_id
         LEFT JOIN
             user_expertise_topics ON user_expertise_topics.fk_user = users.user_id
+        LEFT JOIN
+            user_last_connection ON user_last_connection.fk_user = users.user_id
         ${whereClause.length > 0 ? `WHERE ${whereClause}` : ''}
         ORDER BY
             CASE
