@@ -717,8 +717,8 @@ router.beforeEach((to, from) => {
             if (!authorizedPaths.includes(to.path)) {
                 const notificationStore = useNotificationStore();
                 notificationStore.error(
-                    "Mot de passe non sécurisé",
-                    "Votre mot de passe n'est pas conforme. Veuillez le modifier"
+                    "Mot de passe expiré",
+                    "En raison du renforcement des règles de sécurité, vous devez modifier votre mot de passe."
                 );
                 return "/mon-compte/identifiants";
             }
