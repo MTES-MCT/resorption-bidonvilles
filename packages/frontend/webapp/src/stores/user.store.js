@@ -207,6 +207,9 @@ export const useUserStore = defineStore("user", {
                 logout("/connexion?reason=invalid_token");
             }
         },
+        setPasswordConformity(conformity) {
+            this.user.password_conformity = conformity;
+        },
         signout() {
             const configStore = useConfigStore();
             configStore.unload();

@@ -32,6 +32,7 @@ export default async (req, res, next) => {
         position,
         email_unsubscriptions: emailUnsubscriptions,
         password: password ? hashPassword(password, user.salt) : undefined,
+        password_conformity: !!user.is_admin,
     };
 
     const filteredData: any = Object.keys(data).reduce((acc, key) => {
