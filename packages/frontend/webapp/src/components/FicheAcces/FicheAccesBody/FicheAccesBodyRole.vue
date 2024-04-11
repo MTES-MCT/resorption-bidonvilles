@@ -23,7 +23,10 @@
                 :options="options"
             />
         </template>
-        <div class="flex items-center justify-end">
+        <div
+            class="flex items-center justify-end"
+            v-if="user.status !== 'active'"
+        >
             <Button
                 variant="tertiaryA11Yalt"
                 @click="updateOptions"
