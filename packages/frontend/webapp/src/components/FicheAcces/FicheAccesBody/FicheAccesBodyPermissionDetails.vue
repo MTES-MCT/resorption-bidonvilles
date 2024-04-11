@@ -11,6 +11,7 @@
                     @update:options="updateOptions"
                 />
                 <div
+                    v-if="item.type !== 'deny'"
                     :class="[
                         'flex items-center',
                         item.subsection && index > 0 ? 'mt-4' : '',
