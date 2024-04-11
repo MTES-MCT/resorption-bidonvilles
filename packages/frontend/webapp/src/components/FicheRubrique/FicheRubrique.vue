@@ -1,6 +1,6 @@
 <template>
     <section class="shadow-lg p-6">
-        <div class="xl:flex xl:justify-between mb-2">
+        <div class="xl:flex xl:justify-between mb-8 lg_mb-4">
             <h2 class="text-2xl xl:text-3xl text-primary">{{ title }}</h2>
             <div class="flex flex-col">
                 <Button
@@ -40,8 +40,8 @@
 </template>
 
 <script setup>
-import { toRefs } from "vue";
 import { useEventBus } from "@common/helpers/event-bus.js";
+import { toRefs } from "vue";
 
 import { Button } from "@resorptionbidonvilles/ui";
 
