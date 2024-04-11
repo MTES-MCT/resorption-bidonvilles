@@ -1,18 +1,16 @@
 <template>
     <ContentWrapper>
         <article
-            class="full-width mx-auto mb-8 bg-blue200 rounded-lg overflow-hidden px-1 py-3"
+            class="full-width mx-auto mb-8 bg-yellow-200 rounded-lg overflow-hidden px-1 py-3"
         >
             <header class="flex items-center">
                 <img
                     height="80"
-                    class="ml-4 mr-2 mt-3 h-20"
+                    class="ml-4 mr-4 mt-3 h-20"
                     :src="VisualisationImage.img"
                     :alt="VisualisationImage.text"
                 />
-                <div
-                    class="tracking-wide text-display-md font-bold text-primary"
-                >
+                <div class="tracking-wide text-display-md font-bold text-black">
                     <TagNouveau />
                     <br />{{ VisualisationImage.text }}
                 </div>
@@ -35,9 +33,9 @@
     </ContentWrapper>
 </template>
 <script setup>
-import { ContentWrapper, Link } from "@resorptionbidonvilles/ui";
-import TagNouveau from "@/components/TagNouveau/TagNouveau.vue";
 import imageChangementUrl from "@/assets/img/illustrations/undraw_travel_mode.svg";
+import TagNouveau from "@/components/TagNouveau/TagNouveau.vue";
+import { ContentWrapper, Link } from "@resorptionbidonvilles/ui";
 
 const VisualisationImage = {
     img: imageChangementUrl,
