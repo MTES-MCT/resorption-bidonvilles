@@ -5,7 +5,7 @@
                 Déclaration d'accessibilité
             </h2>
             <div class="mt-4">
-                <p>Établie le <span>21 février 2024</span>.</p>
+                <p>Établie le <span>8 avril 2024</span>.</p>
                 <p>
                     <Link
                         to="https://www.gouvernement.fr/delegation-interministerielle-a-l-hebergement-et-a-l-acces-au-logement"
@@ -40,7 +40,13 @@
                     title="Référentiel général d'amélioration de l'accessibilité"
                     >RGAA</abbr
                 >.
-                <span>Le site n'a encore pas été audité.</span>
+            </div>
+            <h3 class="text-display-md font-bold mt-8">Résultat des tests</h3>
+            <div class="mt-4">
+                <p>
+                    L’audit de conformité réalisé par évaluation externe révèle
+                    que 36.67% des critères sont respectés.
+                </p>
             </div>
             <h3 class="text-display-md font-bold mt-8">
                 Contenus non accessibles
