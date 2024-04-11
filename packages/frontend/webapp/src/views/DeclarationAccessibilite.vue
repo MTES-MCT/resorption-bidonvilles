@@ -41,7 +41,7 @@
                     >RGAA</abbr
                 >.
             </div>
-            <h3 class="text-display-md font-bold mt-8">Résultat des test</h3>
+            <h3 class="text-display-md font-bold mt-8">Résultat des tests</h3>
             <div class="mt-4">
                 <p>
                     L’audit de conformité réalisé par évaluation externe révèle
