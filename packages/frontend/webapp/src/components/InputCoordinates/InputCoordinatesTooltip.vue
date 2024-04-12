@@ -4,8 +4,8 @@
             class="absolute w-full h-full opacity-85 bg-black"
             style="z-index: 1001"
         ></div>
-        <div class="mt-6 absolute w-full" style="z-index: 1002">
-            <div class="mx-auto mt-6 w-8/12 text-sm bg-white p-3">
+        <div class="absolute w-full" style="z-index: 1002">
+            <div class="mx-auto mt-8 w-8/12 text-sm bg-white p-3">
                 <p>
                     Si besoin, préciser la localisation en déplaçant le pointeur
                     bleu sur la carte.
