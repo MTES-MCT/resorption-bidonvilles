@@ -1,6 +1,6 @@
 <template>
     <section class="shadow-lg p-6">
-        <div class="xl:flex xl:justify-between mb-8 lg_mb-4">
+        <div class="xl:flex xl:justify-between mb-8 lg:mb-4">
             <h2 class="text-2xl xl:text-3xl text-primary">{{ title }}</h2>
             <div class="flex flex-col">
                 <Button
@@ -24,6 +24,7 @@
                     Qui a accès aux données sur les financements ?
                 </Button>
                 <Button
+                    class="lg:mb-4 xl:mb-0"
                     v-if="category"
                     size="sm"
                     icon="history"
