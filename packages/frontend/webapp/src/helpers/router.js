@@ -772,6 +772,7 @@ router.beforeEach((to, from) => {
     // if logged, register navigation log
     if (userStore.isLoggedIn && router.currentRoute.value?.path !== to.path) {
         createNavigationLog(to.path);
+        userStore.refreshToken();
     }
 
     // Update html title element
