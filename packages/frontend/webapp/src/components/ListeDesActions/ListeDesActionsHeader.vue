@@ -58,6 +58,7 @@ const exportList = computed(() => {
         list.push({
             label: "Export des actions",
             filename: "actions",
+            format: "csv",
             downloadFn: exportActions,
         });
     }
@@ -65,7 +66,8 @@ const exportList = computed(() => {
     if (userStore.hasPermission("action_comment.export")) {
         list.push({
             label: "Export des commentaires",
-            filename: "messages",
+            filename: "commentaires",
+            format: "csv",
             downloadFn: exportComments,
         });
     }

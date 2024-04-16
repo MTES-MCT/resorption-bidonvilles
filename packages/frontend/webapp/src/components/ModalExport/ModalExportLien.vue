@@ -1,7 +1,7 @@
 <template>
     <p>
         <Link @click="download" :class="isLoading ? 'text-G300' : ''">
-            <Icon icon="file-pdf" class="mr-1" />
+            <Icon :icon="exportIcon" class="mr-1" />
             {{ label }} </Link
         ><Spinner class="ml-2" v-if="isLoading" /><br />
         <Warning v-if="error" :autohide="false">{{ error }}</Warning>
@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { toRefs, ref } from "vue";
+import { toRefs, ref, computed } from "vue";
 import { useNotificationStore } from "@/stores/notification.store";
 import downloadCsv from "@/utils/downloadCsv";
 import downloadBlob from "@/utils/downloadBlob";
@@ -30,6 +30,15 @@ const notificationStore = useNotificationStore();
 
 const isLoading = ref(null);
 const error = ref(null);
+
+const exportIcon = computed(() => {
+    const formatIcons = {
+        xlsx: "file-excel",
+        csv: "file-csv",
+        pdf: "file-pdf",
+    };
+    return formatIcons[format.value] || "file-csv";
+});
 
 async function download() {
     if (isLoading.value === true) {
