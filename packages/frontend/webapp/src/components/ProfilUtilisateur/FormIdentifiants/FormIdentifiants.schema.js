@@ -9,7 +9,7 @@ export default object({
     newPassword: string()
         .required()
         .min(userStore.user.is_admin ? 16 : 12)
-        .label(labels.password),
+        .label(labels.newPassword),
     retypeNewPassword: string()
         .required()
         .oneOf(
