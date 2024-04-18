@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { signin } from "@/api/signin.api";
+import { checkActualPassword } from "@/api/checkActualPassword.api";
 import { get as refreshToken } from "@/api/refresh_token.api";
 import { useConfigStore } from "@/stores/config.store.js";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
@@ -9,6 +10,7 @@ import logout from "@/utils/logout";
 export const useUserStore = defineStore("user", {
     state: () => {
         const tokenCreatedAt = localStorage.getItem("tokenCreatedAt");
+        // let antiSpamCounter = 0;
         return {
             accessToken: localStorage.getItem("token"),
             accessTokenCreatedAt:
@@ -16,52 +18,8 @@ export const useUserStore = defineStore("user", {
         };
     },
     getters: {
-        isLoggedIn() {
-            return this.accessToken !== null;
-        },
-        user() {
-            const configStore = useConfigStore();
-            return configStore.config?.user;
-        },
-        firstMainArea() {
-            if (!this.user?.intervention_areas) {
-                return null;
-            }
-
-            return this.user.intervention_areas.areas.find(
-                (area) => area.is_main_area === true
-            );
-        },
-        id() {
-            return this.user?.id || null;
-        },
         defaultLocationFilter() {
             return getDefaultLocationFilter(this.user);
-        },
-        isMyLocation() {
-            return (location) => {
-                return compareLocations(location, this.defaultLocationFilter);
-            };
-        },
-        showDepartementCode() {
-            return (code) => {
-                return !this.user.intervention_areas.areas.find(
-                    (area) => area.departement?.code === code
-                );
-            };
-        },
-        hasJusticePermission() {
-            return this.hasPermission("shantytown_justice.access");
-        },
-        hasOwnerPermission() {
-            return this.hasPermission("shantytown_owner.access");
-        },
-        hasUpdateShantytownPermission() {
-            return (shantytown) =>
-                this.hasLocalizedPermission("shantytown.update", shantytown);
-        },
-        hasAcceptedCharte() {
-            return this.user?.charte_engagement_a_jour === true;
         },
         departementsForActions() {
             const configStore = useConfigStore();
@@ -88,6 +46,21 @@ export const useUserStore = defineStore("user", {
                     allowedRegions.includes(region)
             );
         },
+        firstMainArea() {
+            if (!this.user?.intervention_areas) {
+                return null;
+            }
+
+            return this.user.intervention_areas.areas.find(
+                (area) => area.is_main_area === true
+            );
+        },
+        hasAcceptedCharte() {
+            return this.user?.charte_engagement_a_jour === true;
+        },
+        hasJusticePermission() {
+            return this.hasPermission("shantytown_justice.access");
+        },
         hasMoreThanOneDepartementForMetrics() {
             const permission = this.user.permissions.shantytown.list;
             if (permission.allowed === false) {
@@ -103,8 +76,41 @@ export const useUserStore = defineStore("user", {
                 permission.allowed_on.regions.length > 0
             );
         },
+        hasOwnerPermission() {
+            return this.hasPermission("shantytown_owner.access");
+        },
+        hasUpdateShantytownPermission() {
+            return (shantytown) =>
+                this.hasLocalizedPermission("shantytown.update", shantytown);
+        },
+        id() {
+            return this.user?.id || null;
+        },
+        isLoggedIn() {
+            return this.accessToken !== null;
+        },
+        isMyLocation() {
+            return (location) => {
+                return compareLocations(location, this.defaultLocationFilter);
+            };
+        },
+        user() {
+            const configStore = useConfigStore();
+            return configStore.config?.user;
+        },
+        showDepartementCode() {
+            return (code) => {
+                return !this.user.intervention_areas.areas.find(
+                    (area) => area.departement?.code === code
+                );
+            };
+        },
     },
     actions: {
+        async checkActualPassword(email, password) {
+            const response = await checkActualPassword(this.user.id, password);
+            return response;
+        },
         getPermission(permissionName) {
             const [entity, feature] = permissionName.split(".");
             if (
@@ -121,11 +127,29 @@ export const useUserStore = defineStore("user", {
 
             return permission;
         },
-        hasPermission(permissionName) {
-            const [entity, feature] = permissionName.split(".");
-            const permission = this.getPermission(`${entity}.${feature}`);
+        hasActionPermission(permissionName, entity) {
+            const permission = this.getPermission(permissionName);
+            if (permission === null) {
+                return false;
+            }
 
-            return permission !== null;
+            if (permission.allowed_on_national === true) {
+                return true;
+            }
+
+            return (
+                (entity.location.region &&
+                    permission.allowed_on.regions.some(
+                        (r) => r.region.code === entity.location.region.code
+                    )) ||
+                (entity.location.departement &&
+                    permission.allowed_on.departements.some(
+                        (d) =>
+                            d.departement.code ===
+                            entity.location.departement.code
+                    )) ||
+                permission.allowed_on.actions.includes(entity.id)
+            );
         },
         hasLocalizedPermission(permissionName, entity) {
             const permission = this.getPermission(permissionName);
@@ -164,40 +188,11 @@ export const useUserStore = defineStore("user", {
                     ))
             );
         },
-        hasActionPermission(permissionName, entity) {
-            const permission = this.getPermission(permissionName);
-            if (permission === null) {
-                return false;
-            }
+        hasPermission(permissionName) {
+            const [entity, feature] = permissionName.split(".");
+            const permission = this.getPermission(`${entity}.${feature}`);
 
-            if (permission.allowed_on_national === true) {
-                return true;
-            }
-
-            return (
-                (entity.location.region &&
-                    permission.allowed_on.regions.some(
-                        (r) => r.region.code === entity.location.region.code
-                    )) ||
-                (entity.location.departement &&
-                    permission.allowed_on.departements.some(
-                        (d) =>
-                            d.departement.code ===
-                            entity.location.departement.code
-                    )) ||
-                permission.allowed_on.actions.includes(entity.id)
-            );
-        },
-        setToken(token) {
-            const now = Date.now();
-            localStorage.setItem("token", token);
-            localStorage.setItem("tokenCreatedAt", now);
-            this.accessToken = token;
-            this.accessTokenCreatedAt = now;
-        },
-        async signin(email, password) {
-            const { token } = await signin(email, password);
-            this.setToken(token);
+            return permission !== null;
         },
         async refreshToken() {
             const response = await refreshToken();
@@ -209,6 +204,17 @@ export const useUserStore = defineStore("user", {
         },
         setPasswordConformity(conformity) {
             this.user.password_conformity = conformity;
+        },
+        setToken(token) {
+            const now = Date.now();
+            localStorage.setItem("token", token);
+            localStorage.setItem("tokenCreatedAt", now);
+            this.accessToken = token;
+            this.accessTokenCreatedAt = now;
+        },
+        async signin(email, password) {
+            const { token } = await signin(email, password);
+            this.setToken(token);
         },
         signout() {
             const configStore = useConfigStore();
