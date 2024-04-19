@@ -10,7 +10,6 @@ import logout from "@/utils/logout";
 export const useUserStore = defineStore("user", {
     state: () => {
         const tokenCreatedAt = localStorage.getItem("tokenCreatedAt");
-        // let antiSpamCounter = 0;
         return {
             accessToken: localStorage.getItem("token"),
             accessTokenCreatedAt:
