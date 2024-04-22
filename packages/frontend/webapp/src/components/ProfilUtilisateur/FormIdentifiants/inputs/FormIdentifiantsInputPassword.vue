@@ -12,9 +12,22 @@
         </span>
     </div>
     <PasswordInput
-        name="password"
-        :label="labels.password"
+        name="actualPassword"
+        :label="labels.actualPassword"
+        info=""
+        :disabled="disabled"
+    />
+    <PasswordInput
+        name="newPassword"
+        :label="labels.newPassword"
         :info="user.is_admin ? wording.passwordInfoAdmin : wording.passwordInfo"
+        :disabled="disabled"
+    />
+    <PasswordInput
+        name="retypeNewPassword"
+        :label="labels.retypeNewPassword"
+        info=""
+        :disabled="disabled"
     />
 </template>
 
@@ -27,6 +40,6 @@ import wording from "@/utils/wording.js";
 // components
 import { Icon, PasswordInput } from "@resorptionbidonvilles/ui";
 
-const props = defineProps(["user"]);
-const { user } = toRefs(props);
+const props = defineProps(["user", "disabled"]);
+const { user, disabled } = toRefs(props);
 </script>
