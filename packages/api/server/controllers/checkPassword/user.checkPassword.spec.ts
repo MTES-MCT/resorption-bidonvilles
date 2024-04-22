@@ -20,19 +20,14 @@ const authUtilsMock = {
     hashPassword: sandbox.stub(),
 };
 
-// const hashPasswordStub = sandbox.stub();
-
 rewiremock('#server/utils/auth').with(authUtilsMock);
 rewiremock('#server/models/userModel').withDefault(userModel);
-// rewiremock('#server/utils/auth').with({ hashPassword: hashPasswordStub });
-// rewiremock('#server/utils/auth').with(hashPassword);
 
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
 import controller from './user.checkPassword';
 const { hashPassword: hashPasswordStub } = authUtilsMock;
-// const hashPasswordStub = authUtilsMock.hashPassword;
 
 rewiremock.disable();
 
