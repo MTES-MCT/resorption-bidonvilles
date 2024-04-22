@@ -28,7 +28,7 @@ export default async (req, res, next) => {
         });
     } catch (error) {
         res.status(500).send({
-            user_message: 'Une erreur est survenue dans l\'écriture de vos informations en base de données.',
+            user_message: 'Une erreur est survenue lors de la vérification du mot de passe.',
         });
         return next(error);
     }
