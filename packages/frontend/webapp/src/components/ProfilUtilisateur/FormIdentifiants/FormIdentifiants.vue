@@ -69,7 +69,7 @@ const onSubmit = handleSubmit(async (values) => {
         if (diff < 300) {
             notificationStore.error(
                 "Changement de mot de passe bloqué",
-                "Vous avez renseigné trop de fois un mot de passe incorrect. Le changement de mot de passe est bloqué pendant 5 minutes."
+                "Vous avez renseigné un mot de passe incorrect à de trop nombreuses reprises. Le changement de mot de passe est bloqué pendant 5 minutes."
             );
             return;
         } else {
