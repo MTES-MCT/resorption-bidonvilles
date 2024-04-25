@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center">
-        <Dropdown>
+        <Dropdown right>
             <template v-slot:button="{ isOpen }">
                 <Button variant="custom" size="sm" :icon="isOpen ? 'chevron-up' : 'chevron-down'" iconPosition="right"
                     :class="[
