@@ -172,7 +172,8 @@ export default mode => ([
         .isLength({ max: 35 }).bail().withMessage('Le champ "Appellation du site" ne peut excéder 35 caractères'),
 
     body('name')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value || null)
+        .matches(/^[^<>]*$/, 'i').withMessage('Le champ "Appellation du site" n\'est pas correctement renseigné'),
 
     /* **********************************************************************************************
      * Information d'accès
