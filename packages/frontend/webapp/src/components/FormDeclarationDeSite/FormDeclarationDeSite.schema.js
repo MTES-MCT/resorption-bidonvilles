@@ -34,7 +34,10 @@ export default function (
     return computed(() => {
         const schema = {
             address: object().required().label(labels.address),
-            name: string().nullable().label(labels.name),
+            name: string()
+                .nullable()
+                .label(labels.name)
+                .matches(/^[^<>{}]*$/, "Le nom renseigné n'est pas valide"),
             built_at: date()
                 .nullable()
                 .typeError(`${labels.built_at} est invalide`)

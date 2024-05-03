@@ -56,7 +56,7 @@ export default [
     body('guests.*.last_name')
         .trim()
         .notEmpty().bail().withMessage('Vous devez préciser le nom de l\'invité(e)')
-        .matches(/^[^<>]*$/, 'i').withMessage('Le nom n\'est pas validé'),
+        .matches(/^[^<>]*$/, 'i').withMessage('Le nom n\'est pas valide'),
 
     body('guests.*.email')
         .trim()
