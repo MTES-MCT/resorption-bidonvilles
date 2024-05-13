@@ -206,7 +206,10 @@ export default function (
                           })
                           .label(labels.justice_challenged),
                       police_status: string()
-                          .required()
+                          .when("justice_procedure", {
+                              is: 1,
+                              then: (schema) => schema.required(),
+                          })
                           .label(labels.police_status),
                       police_requested_at: string()
                           .when("police_status", {
@@ -222,6 +225,70 @@ export default function (
                           })
                           .label(labels.police_granted_at),
                       bailiff: string().label(labels.bailiff),
+                      evacuation_under_time_limit: number()
+                          .required()
+                          .label(labels.evacuation_under_time_limit),
+                      administrative_order_decision_at: date().label(
+                          labels.administrative_order_decision_at
+                      ),
+                      administrative_order_decision_rendered_by: string().label(
+                          labels.administrative_order_decision_rendered_by
+                      ),
+                      administrative_order_evacuation_at: string().label(
+                          labels.administrative_order_evacuation_at
+                      ),
+                      evacuation_police_status: string()
+                          .when("evacuation_under_time_limit", {
+                              is: 1,
+                              then: (schema) => schema.required(),
+                          })
+                          .label(labels.police_status),
+                      evacuation_police_requested_at: string()
+                          .when("evacuation_police_status", {
+                              is: (value) =>
+                                  ["requested", "granted"].includes(value),
+                              then: (schema) => schema.required(),
+                          })
+                          .label(labels.police_requested_at),
+                      evacuation_police_granted_at: string()
+                          .when("evacuation_police_status", {
+                              is: "granted",
+                              then: (schema) => schema.required(),
+                          })
+                          .label(labels.police_granted_at),
+                      evacuation_bailiff: string().label(labels.bailiff),
+                      insalubrity_order: number()
+                          .required()
+                          .label(labels.insalubrity_order),
+                      insalubrity_order_displayed: number()
+                          .when("insalubrity_order", {
+                              is: 1,
+                              then: (schema) => schema.required(),
+                          })
+                          .label(labels.insalubrity_order_displayed),
+                      insalubrity_parcels: string().label(
+                          labels.insalubrity_parcels
+                      ),
+                      insalubrity_police_status: string()
+                          .when("insalubrity_order", {
+                              is: 1,
+                              then: (schema) => schema.required(),
+                          })
+                          .label(labels.police_status),
+                      insalubrity_police_requested_at: string()
+                          .when("insalubrity_police_status", {
+                              is: (value) =>
+                                  ["requested", "granted"].includes(value),
+                              then: (schema) => schema.required(),
+                          })
+                          .label(labels.police_requested_at),
+                      insalubrity_police_granted_at: string()
+                          .when("insalubrity_police_status", {
+                              is: "granted",
+                              then: (schema) => schema.required(),
+                          })
+                          .label(labels.police_granted_at),
+                      insalubrity_bailiff: string().label(labels.bailiff),
                   }
                 : {}),
         };
