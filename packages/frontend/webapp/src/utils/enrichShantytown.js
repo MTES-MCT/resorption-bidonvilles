@@ -84,6 +84,34 @@ export default function (shantytown, fieldTypes) {
             break;
     }
 
+    switch (shantytown.insalubrityOrderDisplayed) {
+        case "none":
+            justiceStatuses.push({
+                img: policeSiren,
+                label: "Arrêté d'insalubrité non pris",
+            });
+            break;
+
+        case "displayed":
+            justiceStatuses.push({
+                img: policeSiren,
+                label: "Evacuation sous délai prescrite",
+                date: shantytown.insalubrityOrderDisplayedAt,
+            });
+            break;
+
+        case "evacuated":
+            justiceStatuses.push({
+                img: policeSiren,
+                label: "Evacuation sous délai accordée",
+                date: shantytown.administrativeOrderEvacuationAt,
+            });
+            break;
+
+        case null:
+            break;
+    }
+
     // status
     let statusName;
     let statusDate;
