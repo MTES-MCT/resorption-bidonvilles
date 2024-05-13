@@ -50,6 +50,27 @@ export default async (req, res, next) => {
                 police_granted_at: req.body.police_granted_at,
                 bailiff: req.body.bailiff,
 
+                // Nouveaux champs procédure administrative
+                evacuation_under_time_limit: req.body.evacuation_under_time_limit,
+                administrative_order_decision_at: req.body.administrative_order_decision_at || null,
+                administrative_order_decision_rendered_by: req.body.administrative_order_decision_rendered_by,
+                administrative_order_evacuation_at: req.body.administrative_order_evacuation_at || null,
+                evacuation_police_status: req.body.evacuation_police_status,
+                evacuation_police_requested_at: req.body.evacuation_police_requested_at || null,
+                evacuation_police_granted_at: req.body.evacuation_police_granted_at || null,
+                evacuation_bailiff: req.body.evacuation_bailiff,
+                insalubrity_order: req.body.insalubrity_order,
+                insalubrity_order_displayed: req.body.insalubrity_order_displayed || null,
+                insalubrity_order_type: req.body.insalubrity_order_type || null,
+                insalubrity_order_by: req.body.insalubrity_order_by || null,
+                insalubrity_order_at: req.body.insalubrity_order_at || null,
+                insalubrity_parcels: req.body.insalubrity_parcels || null,
+                insalubrity_police_status: req.body.insalubrity_police_status || null,
+                insalubrity_police_requested_at: req.body.insalubrity_police_requested_at || null,
+                insalubrity_police_granted_at: req.body.insalubrity_police_granted_at || null,
+                insalubrity_bailiff: req.body.insalubrity_bailiff,
+                // Fin nouveaux champs procédure administrative
+
                 // si les conditions de vie sont en V2 on reset les anciennes et on engistre les
                 // nouvelles
                 // sinon, on garder les anciennes conditions de vie et on ne touche à rien

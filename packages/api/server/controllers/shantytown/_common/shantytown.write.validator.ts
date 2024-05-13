@@ -390,6 +390,10 @@ export default mode => ([
         .isDate().bail().withMessage('Le champ "Date du diagnostic" est invalide')
         .toDate()
         .if((value, { req }) => mode !== 'update' || !req.town || value.getTime() / 1000 !== req.town.censusConductedAt)
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
         .custom((value, { req }) => {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -714,6 +718,10 @@ export default mode => ([
         .exists({ checkNull: true }).bail().withMessage('Le champ "Date de la décision" est obligatoire')
         .isDate().bail().withMessage('Le champ "Date de la décision" est invalide')
         .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
         .custom((value, { req }) => {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -771,6 +779,10 @@ export default mode => ([
         .exists({ checkNull: true }).bail().withMessage('Le champ "Date de la demande du CFP" est obligatoire')
         .isDate().bail().withMessage('Le champ "Date de la demande du CFP" est invalide')
         .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
         .custom((value, { req }) => {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -801,6 +813,10 @@ export default mode => ([
         .exists({ checkNull: true }).bail().withMessage('Le champ "Date d\'octroi du CFP" est obligatoire')
         .isDate().bail().withMessage('Le champ "Date d\'octroi du CFP" est invalide')
         .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
         .custom((value, { req }) => {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -829,6 +845,371 @@ export default mode => ([
         .trim(),
 
     body('bailiff')
+        .customSanitizer(value => value || null),
+
+    /* **********************************************************************************************
+     * Nouveaux champs - procédure administrative
+     ********************************************************************************************* */
+    // Une procédure administrative prescrivant l'évacuation sous délai est-elle en cours ?
+    body('evacuation_under_time_limit').customSanitizer((value, { req }) => {
+        if (!req.user.isAllowedTo('access', 'shantytown_justice')) {
+            return null;
+        }
+
+        return value;
+    })
+        .optional({ nullable: true })
+        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_justice'))
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Une procédure administrative prescrivant l\'évacuation sous délai est-elle en cours ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    // Date de l'arrêté prescrivant l'évacuation sous délai
+    body('administrative_order_decision_at')
+        .optional({ nullable: true })
+        .customSanitizer((value, { req }) => {
+            if (req.body.evacuation_under_time_limit !== true) {
+                return null;
+            }
+
+            return value;
+        })
+        .isDate().bail().withMessage('Le champ "Date de l\'arrêté" est invalide')
+        .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
+        .custom((value, { req }) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (value > today) {
+                throw new Error('La date de l\'arrêté ne peut être future');
+            }
+
+            if (req.body.built_at && value < req.body.built_at) {
+                throw new Error('La date de l\'arrêté ne peut être antérieure à celle d\'installation');
+            }
+
+            return true;
+        }),
+
+    // Auteur de l'arrêté prescrivant l'évacuation sous délai
+    body('administrative_order_decision_rendered_by')
+        .optional({ nullable: true })
+        .customSanitizer((value, { req }) => {
+            if (req.body.evacuation_under_time_limit !== true) {
+                return null;
+            }
+
+            return value;
+        })
+        .isString().bail().withMessage('Le champ "Qui a pris l\'arrêté ?" est invalide')
+        .trim(),
+
+    body('administrative_order_decision_rendered_by')
+        .customSanitizer(value => value || null),
+
+
+    // Date de l'évacuation consécutive à l'arrêté prescrivant l'évacuation sous délai
+    body('administrative_order_evacuation_at')
+        .optional({ nullable: true })
+        .customSanitizer((value, { req }) => {
+            if (req.body.evacuation_under_time_limit !== true) {
+                return null;
+            }
+
+            return value;
+        })
+        .isDate().bail().withMessage('Le champ "Date de l\'évacuation" est invalide')
+        .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
+        .custom((value, { req }) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (value > today) {
+                throw new Error(`La date ${value} de l'évacuation ne peut être future (supérieure à ${today})`);
+            }
+
+            if (req.body.built_at && value < req.body.built_at) {
+                throw new Error('La date de l\'évacuation ne peut être antérieure à celle d\'installation');
+            }
+
+            return true;
+        }),
+
+    // Procédure administrative prescrivant l'évacuation sous délai - Concours de la force publique
+    body('evacuation_police_status')
+        .optional({ nullable: true })
+        .isIn(['unknown', 'none', 'requested', 'granted']).withMessage('Le champ "Concours de la force publique" est invalide'),
+
+    body('evacuation_police_status')
+        .customSanitizer(value => value || null),
+
+    // Procédure administrative prescrivant l'évacuation sous délai - Date de la demande du CFP
+    body('evacuation_police_requested_at')
+        .customSanitizer((value, { req }) => {
+            if (!['requested', 'granted'].includes(req.body.evacuation_police_status)) {
+                return null;
+            }
+
+            return value;
+        })
+        .if((value, { req }) => ['requested', 'granted'].includes(req.body.evacuation_police_status))
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de la demande du CFP" est obligatoire')
+        .isDate().bail().withMessage('Le champ "Date de la demande du CFP" est invalide')
+        .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
+        .custom((value, { req }) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (value > today) {
+                throw new Error('La date de la demande du CFP ne peut être future');
+            }
+
+            if (req.body.built_at && value < req.body.built_at) {
+                throw new Error('La date de la demande du CFP ne peut être antérieure à celle d\'installation');
+            }
+
+            return true;
+        }),
+
+    // Procédure administrative prescrivant l'évacuation sous délai - Date d'octroi du CFP
+    body('evacuation_police_granted_at')
+        .customSanitizer((value, { req }) => {
+            if (req.body.evacuation_police_status !== 'granted') {
+                return null;
+            }
+
+            return value;
+        })
+        .if((value, { req }) => req.body.evacuation_police_status === 'granted')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Date d\'octroi du CFP" est obligatoire')
+        .isDate().bail().withMessage('Le champ "Date d\'octroi du CFP" est invalide')
+        .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
+        .custom((value, { req }) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (value > today) {
+                throw new Error('La date d\'octroi du CFP ne peut être future');
+            }
+
+            if (req.body.built_at && value < req.body.built_at) {
+                throw new Error('La date d\'octroi du CFP ne peut être antérieure à celle d\'installation');
+            }
+
+            if (req.body.evacuation_police_requested_at && value < req.body.evacuation_police_requested_at) {
+                throw new Error('La date d\'octroi du CFP ne peut être antérieur à la date de demande');
+            }
+
+            return true;
+        }),
+
+    // Procédure administrative prescrivant l'évacuation sous délai - Nom de l'étude d'huissiers
+    body('evacuation_bailiff')
+        .optional({ nullable: true })
+        .isString().withMessage('Le champ "Nom de l\'étude d\'huissiers" est invalide')
+        .trim(),
+
+    body('evacuation_bailiff')
+        .customSanitizer(value => value || null),
+
+    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Un arrêté d'insalubrité dans le cadre d'une opération RHI bidonville est-il en cours ?
+    body('insalubrity_order').customSanitizer((value, { req }) => {
+        if (!req.user.isAllowedTo('access', 'shantytown_justice')) {
+            return null;
+        }
+
+        return value;
+    })
+        .optional({ nullable: true })
+        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_justice'))
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Un arrêté d\'insalubrité dans le cadre d\'une opération RHI bidonville est-il en cours ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Affichage de l'arrêté ou notification
+    body('insalubrity_order_displayed').customSanitizer((value, { req }) => {
+        if (!req.user.isAllowedTo('access', 'shantytown_justice')) {
+            return null;
+        }
+
+        return value;
+    })
+        .optional({ nullable: true })
+        .customSanitizer((value, { req }) => {
+            if (req.body.insalubrity_order !== true) {
+                return null;
+            }
+
+            return value;
+        })
+        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_justice'))
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Affichage de l\'arrêté ou notification" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville -  Type d'arrêté (arrêté de mise en sécurité...)
+    body('insalubrity_order_type')
+        .optional({ nullable: true })
+        .customSanitizer((value, { req }) => {
+            if (req.body.insalubrity_order_displayed !== true) {
+                return null;
+            }
+
+            return value;
+        })
+        .isString().withMessage('Le champ "Type d\'arrêté (arrêté de mise en sécurité...)" est invalide')
+        .trim(),
+
+    body('insalubrity_order_type')
+        .customSanitizer(value => value || null),
+
+    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Qui a pris l'arrêté ?
+    body('insalubrity_order_by')
+        .optional({ nullable: true })
+        .customSanitizer((value, { req }) => {
+            if (req.body.insalubrity_order_displayed !== true) {
+                return null;
+            }
+
+            return value;
+        })
+        .isString().withMessage('Le champ "Qui a pris \'arrêté ?" est invalide')
+        .trim(),
+
+    body('insalubrity_order_by')
+        .customSanitizer(value => value || null),
+
+    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Date de l'arrêté ?
+    body('insalubrity_order_at')
+        .optional({ nullable: true })
+        .customSanitizer((value, { req }) => {
+            if (req.body.insalubrity_order_displayed !== true) {
+                return null;
+            }
+
+            return value;
+        })
+        .isDate().bail().withMessage('Le champ "Date de l\'arrêté" est invalide')
+        .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
+        .custom((value, { req }) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (value > today) {
+                throw new Error('La date de l\'arrêté ne peut être future');
+            }
+
+            if (req.body.built_at && value < req.body.built_at) {
+                throw new Error('La date de l\'arrêté ne peut être antérieure à celle d\'installation');
+            }
+
+            return true;
+        }),
+
+    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Concours de la force publique
+    body('insalubrity_police_status')
+        .optional({ nullable: true })
+        .isIn(['none', 'requested', 'granted']).withMessage('Le champ "Concours de la force publique" est invalide'),
+
+    body('insalubrity_police_status')
+        .customSanitizer(value => value || null),
+
+
+    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Date de la demande du CFP
+    body('insalubrity_police_requested_at')
+        .customSanitizer((value, { req }) => {
+            if (!['requested', 'granted'].includes(req.body.insalubrity_police_status)) {
+                return null;
+            }
+
+            return value;
+        })
+        .if((value, { req }) => ['requested', 'granted'].includes(req.body.insalubrity_police_status))
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de la demande du CFP" est obligatoire')
+        .isDate().bail().withMessage('Le champ "Date de la demande du CFP" est invalide')
+        .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
+        .custom((value, { req }) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (value > today) {
+                throw new Error('La date de la demande du CFP ne peut être future');
+            }
+
+            if (req.body.built_at && value < req.body.built_at) {
+                throw new Error('La date de la demande du CFP ne peut être antérieure à celle d\'installation');
+            }
+
+            return true;
+        }),
+
+    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Date d'octroi du CFP
+    body('insalubrity_police_granted_at')
+        .customSanitizer((value, { req }) => {
+            if (req.body.insalubrity_police_status !== 'granted') {
+                return null;
+            }
+
+            return value;
+        })
+        .if((value, { req }) => req.body.insalubrity_police_status === 'granted')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Date d\'octroi du CFP" est obligatoire')
+        .isDate().bail().withMessage('Le champ "Date d\'octroi du CFP" est invalide')
+        .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
+        .custom((value, { req }) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (value > today) {
+                throw new Error('La date d\'octroi du CFP ne peut être future');
+            }
+
+            if (req.body.built_at && value < req.body.built_at) {
+                throw new Error('La date d\'octroi du CFP ne peut être antérieure à celle d\'installation');
+            }
+
+            if (req.body.insalubrity_police_requested_at && value < req.body.insalubrity_police_requested_at) {
+                throw new Error('La date d\'octroi du CFP ne peut être antérieur à la date de demande');
+            }
+
+            return true;
+        }),
+
+    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - nom de l'étude d'huissiers
+    body('insalubrity_bailiff')
+        .optional({ nullable: true })
+        .isString().withMessage('Le champ "Nom de l\'étude d\'huissiers" est invalide')
+        .trim(),
+
+    body('insalubrity_bailiff')
         .customSanitizer(value => value || null),
 
     /* *********************************************************************************************
