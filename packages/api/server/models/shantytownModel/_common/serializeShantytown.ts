@@ -189,6 +189,26 @@ export default (town: ShantytownRow, user): Shantytown => {
                 policeRequestedAt: fromDateToTimestamp(town.policeRequestedAt),
                 policeGrantedAt: fromDateToTimestamp(town.policeGrantedAt),
                 bailiff: town.bailiff,
+                // procédures administratives
+                evacuationUnderTimeLimit: town.evacuationUnderTimeLimit,
+                administrativeOrderDecisionAt: fromDateToTimestamp(town.administrativeOrderDecisionAt),
+                administrativeOrderDecisionRenderedBy: town.administrativeOrderDecisionRenderedBy,
+                administrativeOrderEvacuationAt: fromDateToTimestamp(town.administrativeOrderEvacuationAt),
+                evacuationPoliceStatus: town.evacuationPoliceStatus,
+                evacuationPoliceRequestedAt: fromDateToTimestamp(town.evacuationPoliceRequestedAt),
+                evacuationPoliceGrantedAt: fromDateToTimestamp(town.evacuationPoliceGrantedAt),
+                evacuationBailiff: town.evacuationBailiff,
+                insalubrityOrder: town.insalubrityOrder,
+                insalubrityOrderDisplayed: town.insalubrityOrderDisplayed,
+                insalubrityOrderType: town.insalubrityOrderType,
+                insalubrityOrderBy: town.insalubrityOrderBy,
+                insalubrityOrderAt: fromDateToTimestamp(town.insalubrityOrderAt),
+                insalubrityParcels: town.insalubrityParcels,
+                insalubrityPoliceStatus: town.insalubrityPoliceStatus,
+                insalubrityPoliceRequestedAt: fromDateToTimestamp(town.insalubrityPoliceRequestedAt),
+                insalubrityPoliceGrantedAt: fromDateToTimestamp(town.insalubrityPoliceGrantedAt),
+                insalubrityBailiff: town.insalubrityBailiff,
+                // fin procédures administratives
             },
         };
     }

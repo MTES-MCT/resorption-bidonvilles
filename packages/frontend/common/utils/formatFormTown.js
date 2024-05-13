@@ -152,6 +152,38 @@ export default function (data) {
             ? new Date(data.policeGrantedAt * 1000)
             : undefined,
         bailiff: data.bailiff || undefined,
+        evacuation_under_time_limit: formatBoolToInt(data.evacuationUnderTimeLimit),
+        administrative_order_decision_at: data.administrativeOrderDecisionAt
+            ? new Date(data.administrativeOrderDecisionAt * 1000)
+            : undefined,
+        administrative_order_decision_rendered_by: data.administrativeOrderDecisionRenderedBy || undefined,
+        administrative_order_evacuation_at: data.administrativeOrderEvacuationAt
+            ? new Date(data.administrativeOrderEvacuationAt * 1000)
+            : undefined,
+        evacuation_police_status: formatNullableStr(data.evacuationPoliceStatus),
+        evacuation_police_requested_at: data.evacuationPoliceRequestedAt
+            ? new Date(data.evacuationPoliceRequestedAt * 1000)
+            : undefined,
+        evacuation_police_granted_at: data.evacuationPoliceGrantedAt
+            ? new Date(data.evacuationPoliceRequestedAt * 1000)
+            : undefined,
+        evacuation_bailiff: data.evacuationBailiff || undefined,
+        insalubrity_order: formatBoolToInt(data.insalubrityOrder),
+        insalubrity_order_displayed: formatBoolToInt(data.insalubrityOrderDisplayed),
+        insalubrity_order_type: data.insalubrityOrderType || undefined,
+        insalubrity_order_by: data.insalubrityOrderBy || undefined,
+        insalubrity_order_at: data.insalubrityOrderAt
+            ? new Date(data.insalubrityOrderAt * 1000)
+            : undefined,
+        insalubrity_parcels: data.insalubrityParcels || undefined,
+        insalubrity_police_status: formatNullableStr(data.insalubrityPoliceStatus),
+        insalubrity_police_requested_at: data.insalubrityPoliceRequestedAt
+            ? new Date(data.insalubrityPoliceRequestedAt * 1000)
+            : undefined,
+        insalubrity_police_granted_at: data.insalubrityPoliceGrantedAt
+            ? new Date(data.insalubrityPoliceGrantedAt * 1000)
+            : undefined,
+        insalubrity_bailiff: data.insalubrityBailiff || undefined,
     };
 
     if (data.livingConditions?.version === 1) {

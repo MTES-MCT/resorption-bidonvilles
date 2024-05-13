@@ -140,6 +140,24 @@ type ShantytownWithJustice = BaseShantytown & {
     policeRequestedAt: number | null,
     policeGrantedAt: number | null,
     bailiff: string | null,
+    evacuationUnderTimeLimit: boolean | null,
+    administrativeOrderDecisionAt: number | null,
+    administrativeOrderDecisionRenderedBy: string | null,
+    administrativeOrderEvacuationAt: number | null,
+    evacuationPoliceStatus: 'requested' | 'granted' | 'none' | null,
+    evacuationPoliceRequestedAt: number | null,
+    evacuationPoliceGrantedAt: number | null,
+    evacuationBailiff: string | null,
+    insalubrityOrder: boolean | null,
+    insalubrityOrderDisplayed: boolean | null,
+    insalubrityOrderType: string | null,
+    insalubrityOrderBy: string | null,
+    insalubrityOrderAt: number | null,
+    insalubrityParcels: string | null,
+    insalubrityPoliceStatus: 'requested' | 'granted' | 'none' | null,
+    insalubrityPoliceRequestedAt: number | null,
+    insalubrityPoliceGrantedAt: number | null,
+    insalubrityBailiff: string | null
 };
 
 type ShantytownWithOwner = BaseShantytown & {
