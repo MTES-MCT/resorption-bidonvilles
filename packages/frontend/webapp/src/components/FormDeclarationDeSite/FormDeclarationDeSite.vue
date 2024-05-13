@@ -24,7 +24,7 @@
             :town="town"
             class="mt-6"
         />
-        <FormDeclarationDeSiteProcedureJudiciaire
+        <FormDeclarationDeSiteProcedure
             class="mt-6"
             v-if="hasJusticePermission"
             :location="location"
@@ -73,8 +73,8 @@ import FormDeclarationDeSiteCaracteristiques from "./sections/FormDeclarationDeS
 import FormDeclarationDeSiteHabitants from "./sections/FormDeclarationDeSiteHabitants.vue";
 import FormDeclarationDeSiteConditionsDeVie from "./sections/FormDeclarationDeSiteConditionsDeVie.vue";
 import FormDeclarationDeSiteConditionsDeVieV1 from "./sections/FormDeclarationDeSiteConditionsDeVieV1.vue";
-import FormDeclarationDeSiteProcedureJudiciaire from "./sections/FormDeclarationDeSiteProcedureJudiciaire.vue";
 import IndicationCaractereObligatoire from "@/components/IndicationCaractereObligatoire/IndicationCaractereObligatoire.vue";
+import FormDeclarationDeSiteProcedure from "./sections/FormDeclarationDeSiteProcedure.vue";
 import schemaFn from "./FormDeclarationDeSite.schema";
 
 const props = defineProps({
@@ -220,9 +220,9 @@ const tabs = computed(() => {
 
     if (hasJusticePermission.value) {
         arr.push({
-            id: "justice",
-            label: "Procédure judiciaire",
-            route: "#justice",
+            id: "procedure",
+            label: "Procédure",
+            route: "#procedure",
         });
     }
 
@@ -291,6 +291,58 @@ function formatValuesForApi(v) {
             citycode,
             address: label,
             coordinates: `${v.coordinates[0]},${v.coordinates[1]}`,
+            // Nouveaux champs
+            //evacuation_under_time_limit,
+            administrative_order:
+                v.administrative_order === null ? null : v.administrative_order,
+            administrative_order_decision_at:
+                v.administrative_order_decision_at === null
+                    ? null
+                    : formatFormDate(v.administrative_order_decision_at),
+            // administrative_order_decision_rendered_by,
+            administrative_order_evacuation_at:
+                v.administrative_order_evacuation_at === null
+                    ? null
+                    : formatFormDate(v.administrative_order_evacuation_at),
+            evacuation_police_status:
+                v.evacuation_police_status === "null"
+                    ? null
+                    : v.evacuation_police_status,
+            evacuation_police_requested_at:
+                v.evacuation_police_requested_at === null
+                    ? null
+                    : formatFormDate(v.evacuation_police_requested_at),
+            evacuation_police_granted_at:
+                v.evacuation_police_granted_at === null
+                    ? null
+                    : formatFormDate(v.evacuation_police_granted_at),
+            // evacuation_bailiff,
+            // insalubrity_order,
+            // insalubrity_order_displayed
+            insalubrity_order_type:
+                v.insalubrity_order_type === null
+                    ? null
+                    : v.insalubrity_order_type,
+            insalubrity_order_by:
+                v.insalubrity_order_by === null ? null : v.insalubrity_order_by,
+            insalubrity_order_at:
+                v.insalubrity_order_at === null
+                    ? null
+                    : formatFormDate(v.insalubrity_order_at),
+            // insalubrity_parcels,
+            insalubrity_police_status:
+                v.insalubrity_police_status === "null"
+                    ? null
+                    : v.insalubrity_police_status,
+            insalubrity_police_requested_at:
+                v.insalubrity_police_requested_at === null
+                    ? null
+                    : formatFormDate(v.insalubrity_police_requested_at),
+            insalubrity_police_granted_at:
+                v.insalubrity_police_granted_at === null
+                    ? null
+                    : formatFormDate(v.insalubrity_police_granted_at),
+            // insalubrity_bailiff,
         },
     };
 }

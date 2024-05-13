@@ -33,6 +33,7 @@ export default {
     reinstallation_comments: "Précisions sur la réinstallation",
     reinstallation_incoming_towns:
         "Sélectionnez les sites d'origine des habitants",
+    // Procédure judiciaire
     owner_complaint: "Une plainte a-t-elle été déposée par le propriétaire ?",
     justice_procedure: "Une procédure judiciaire est-elle en cours ?",
     justice_rendered: "Décision de justice rendue",
@@ -43,6 +44,22 @@ export default {
     police_requested_at: "Date de la demande du CFP",
     police_granted_at: "Date d'octroi du CFP",
     bailiff: "Nom de l'étude d'huissier",
+    // Procédure administrative
+    evacuation_under_time_limit:
+        "Une procédure administrative prescrivant l'évacuation sous délai est-elle en cours ?",
+    administrative_order_decision_at: "Date de l'arrêté",
+    administrative_order_decision_rendered_by: "Qui  a pris l'arrêté ?",
+    administrative_order_evacuation_at: "Date de l'évacuation",
+    // Arrêté d'insalubrité
+    insalubrity_order:
+        "Un arrêté d'insalubrité dans le cadre d'une opération RHI bidonville est-il en cours ?",
+    insalubrity_order_displayed: "Affichage de l'arrêté ou notification ?",
+    insalubrity_order_type:
+        "Type d'arrêté (arrêté de mise en sécurité, autre...)",
+    insalubrity_order_by: "Qui a pris l'arrêté ?",
+    insalubrity_order_at: "Date de l'arrêté",
+    insalubrity_parcels:
+        "Parcelles concernées par l'arrêté (numéros de parcelles)",
     living_conditions_version:
         "Souhaitez-vous remplir le nouveau formulaire des conditions de vie ?",
     show_old_living_conditions:
