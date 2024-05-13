@@ -33,7 +33,7 @@
             <FicheSiteProceduresJudiciaires
                 v-if="userStore.hasJusticePermission"
                 :town="town"
-                id="procedure_judiciaire"
+                id="procedure"
                 class="mb-8"
             />
             <FicheSiteIntervenants

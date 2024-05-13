@@ -4,14 +4,14 @@
             <h2 class="text-2xl xl:text-3xl text-primary">{{ title }}</h2>
             <div class="flex flex-col">
                 <Button
-                    v-if="category === 'justice'"
+                    v-if="category === 'procedure'"
                     size="sm"
                     icon="user-group"
                     iconPosition="left"
                     variant="primaryText"
                     @click="openListAccesPJ"
                 >
-                    Qui a accès aux données sur la procédure judiciaire ?
+                    Qui a accès aux données sur la procédure ?
                 </Button>
                 <Button
                     v-if="title === 'Financements'"
