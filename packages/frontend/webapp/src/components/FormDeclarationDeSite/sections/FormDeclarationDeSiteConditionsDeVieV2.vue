@@ -96,6 +96,7 @@
     </Fieldset>
 
     <Fieldset
+        class="mt-8"
         legend="Les habitants ont-ils accès à l'électricité ?"
         showMandatoryStar
     >
@@ -109,7 +110,7 @@
         </div>
     </Fieldset>
 
-    <Fieldset legend="Le ramassage des déchets est-il organisé ?">
+    <Fieldset class="mt-8" legend="Le ramassage des déchets est-il organisé ?">
         <InputTrashIsPiling />
         <InputTrashEvacuationIsClose />
 
@@ -121,6 +122,7 @@
     </Fieldset>
 
     <Fieldset
+        class="mt-8"
         legend="Y a-t-il des nuisibles sur le site ou à proximité ?"
         showMandatoryStar
     >
