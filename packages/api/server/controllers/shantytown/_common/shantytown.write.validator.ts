@@ -749,9 +749,9 @@ export default mode => ([
             return value;
         })
         .if((value, { req }) => req.body.justice_rendered === true)
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Contentieux relatif à la décision de justice" est obligatoire')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Y-a-t-il un appel en cours ?" est obligatoire')
         .toInt()
-        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Contentieux relatif à la décision de justice" est invalide')
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Y-a-t-il un appel en cours ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
 
     /* **********************************************************************************************
@@ -864,6 +864,19 @@ export default mode => ([
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Une procédure administrative prescrivant l\'évacuation sous délai est-elle en cours ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
 
+    body('existing_litigation').customSanitizer((value, { req }) => {
+        if (!req.user.isAllowedTo('access', 'shantytown_justice')) {
+            return null;
+        }
+
+        return value;
+    })
+        .optional({ nullable: true })
+        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_justice'))
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Existence d\'un contentieux" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
     // Date de l'arrêté prescrivant l'évacuation sous délai
     body('administrative_order_decision_at')
         .optional({ nullable: true })
@@ -938,82 +951,6 @@ export default mode => ([
 
             if (req.body.built_at && value < req.body.built_at) {
                 throw new Error('La date de l\'évacuation ne peut être antérieure à celle d\'installation');
-            }
-
-            return true;
-        }),
-
-    // Procédure administrative prescrivant l'évacuation sous délai - Concours de la force publique
-    body('evacuation_police_status')
-        .optional({ nullable: true })
-        .isIn(['unknown', 'none', 'requested', 'granted']).withMessage('Le champ "Concours de la force publique" est invalide'),
-
-    body('evacuation_police_status')
-        .customSanitizer(value => value || null),
-
-    // Procédure administrative prescrivant l'évacuation sous délai - Date de la demande du CFP
-    body('evacuation_police_requested_at')
-        .customSanitizer((value, { req }) => {
-            if (!['requested', 'granted'].includes(req.body.evacuation_police_status)) {
-                return null;
-            }
-
-            return value;
-        })
-        .if((value, { req }) => ['requested', 'granted'].includes(req.body.evacuation_police_status))
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de la demande du CFP" est obligatoire')
-        .isDate().bail().withMessage('Le champ "Date de la demande du CFP" est invalide')
-        .toDate()
-        .customSanitizer((value) => {
-            value.setHours(0, 0, 0, 0);
-            return value;
-        })
-        .custom((value, { req }) => {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            if (value > today) {
-                throw new Error('La date de la demande du CFP ne peut être future');
-            }
-
-            if (req.body.built_at && value < req.body.built_at) {
-                throw new Error('La date de la demande du CFP ne peut être antérieure à celle d\'installation');
-            }
-
-            return true;
-        }),
-
-    // Procédure administrative prescrivant l'évacuation sous délai - Date d'octroi du CFP
-    body('evacuation_police_granted_at')
-        .customSanitizer((value, { req }) => {
-            if (req.body.evacuation_police_status !== 'granted') {
-                return null;
-            }
-
-            return value;
-        })
-        .if((value, { req }) => req.body.evacuation_police_status === 'granted')
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Date d\'octroi du CFP" est obligatoire')
-        .isDate().bail().withMessage('Le champ "Date d\'octroi du CFP" est invalide')
-        .toDate()
-        .customSanitizer((value) => {
-            value.setHours(0, 0, 0, 0);
-            return value;
-        })
-        .custom((value, { req }) => {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            if (value > today) {
-                throw new Error('La date d\'octroi du CFP ne peut être future');
-            }
-
-            if (req.body.built_at && value < req.body.built_at) {
-                throw new Error('La date d\'octroi du CFP ne peut être antérieure à celle d\'installation');
-            }
-
-            if (req.body.evacuation_police_requested_at && value < req.body.evacuation_police_requested_at) {
-                throw new Error('La date d\'octroi du CFP ne peut être antérieur à la date de demande');
             }
 
             return true;
@@ -1125,92 +1062,6 @@ export default mode => ([
 
             return true;
         }),
-
-    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Concours de la force publique
-    body('insalubrity_police_status')
-        .optional({ nullable: true })
-        .isIn(['none', 'requested', 'granted']).withMessage('Le champ "Concours de la force publique" est invalide'),
-
-    body('insalubrity_police_status')
-        .customSanitizer(value => value || null),
-
-
-    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Date de la demande du CFP
-    body('insalubrity_police_requested_at')
-        .customSanitizer((value, { req }) => {
-            if (!['requested', 'granted'].includes(req.body.insalubrity_police_status)) {
-                return null;
-            }
-
-            return value;
-        })
-        .if((value, { req }) => ['requested', 'granted'].includes(req.body.insalubrity_police_status))
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de la demande du CFP" est obligatoire')
-        .isDate().bail().withMessage('Le champ "Date de la demande du CFP" est invalide')
-        .toDate()
-        .customSanitizer((value) => {
-            value.setHours(0, 0, 0, 0);
-            return value;
-        })
-        .custom((value, { req }) => {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            if (value > today) {
-                throw new Error('La date de la demande du CFP ne peut être future');
-            }
-
-            if (req.body.built_at && value < req.body.built_at) {
-                throw new Error('La date de la demande du CFP ne peut être antérieure à celle d\'installation');
-            }
-
-            return true;
-        }),
-
-    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Date d'octroi du CFP
-    body('insalubrity_police_granted_at')
-        .customSanitizer((value, { req }) => {
-            if (req.body.insalubrity_police_status !== 'granted') {
-                return null;
-            }
-
-            return value;
-        })
-        .if((value, { req }) => req.body.insalubrity_police_status === 'granted')
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Date d\'octroi du CFP" est obligatoire')
-        .isDate().bail().withMessage('Le champ "Date d\'octroi du CFP" est invalide')
-        .toDate()
-        .customSanitizer((value) => {
-            value.setHours(0, 0, 0, 0);
-            return value;
-        })
-        .custom((value, { req }) => {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            if (value > today) {
-                throw new Error('La date d\'octroi du CFP ne peut être future');
-            }
-
-            if (req.body.built_at && value < req.body.built_at) {
-                throw new Error('La date d\'octroi du CFP ne peut être antérieure à celle d\'installation');
-            }
-
-            if (req.body.insalubrity_police_requested_at && value < req.body.insalubrity_police_requested_at) {
-                throw new Error('La date d\'octroi du CFP ne peut être antérieur à la date de demande');
-            }
-
-            return true;
-        }),
-
-    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - nom de l'étude d'huissiers
-    body('insalubrity_bailiff')
-        .optional({ nullable: true })
-        .isString().withMessage('Le champ "Nom de l\'étude d\'huissiers" est invalide')
-        .trim(),
-
-    body('insalubrity_bailiff')
-        .customSanitizer(value => value || null),
 
     /* *********************************************************************************************
      * Conditions de vie
