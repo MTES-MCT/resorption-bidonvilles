@@ -47,7 +47,7 @@ export type ShantytownRow = {
     policeGrantedAt: Date | null,
     bailiff: string | null,
     // procédures administratives
-    existing_litigation: boolean | null,
+    existingLitigation: boolean | null,
     evacuationUnderTimeLimit: boolean | null,
     administrativeOrderDecisionAt: Date | null,
     administrativeOrderDecisionRenderedBy: string | null,
