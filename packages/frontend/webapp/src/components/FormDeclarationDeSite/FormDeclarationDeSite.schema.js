@@ -198,7 +198,11 @@ export default function (
                               is: 1,
                               then: (schema) => schema.required(),
                           })
-                          .label(labels.justice_rendered_by),
+                          .label(labels.justice_rendered_by)
+                          .matches(
+                              /^[^<>{}]*$/,
+                              'Le contenu du champ "Origine de la décision" n\'est pas valide'
+                          ),
                       justice_challenged: number()
                           .when("justice_rendered", {
                               is: 1,
@@ -225,15 +229,26 @@ export default function (
                           })
                           .label(labels.police_granted_at),
                       bailiff: string().label(labels.bailiff),
+                      existing_litigation: number()
+                          .when("evacuation_police_status", {
+                              is: "granted",
+                              then: (schema) => schema.required(),
+                          })
+                          .label(labels.evacuation_under_time_limit),
                       evacuation_under_time_limit: number()
                           .required()
                           .label(labels.evacuation_under_time_limit),
                       administrative_order_decision_at: date().label(
                           labels.administrative_order_decision_at
                       ),
-                      administrative_order_decision_rendered_by: string().label(
-                          labels.administrative_order_decision_rendered_by
-                      ),
+                      administrative_order_decision_rendered_by: string()
+                          .label(
+                              labels.administrative_order_decision_rendered_by
+                          )
+                          .matches(
+                              /^[^<>{}]*$/,
+                              "Le contenu du champ \"Qui a pris l'arrêté\" n'est pas valide"
+                          ),
                       administrative_order_evacuation_at: string().label(
                           labels.administrative_order_evacuation_at
                       ),

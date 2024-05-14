@@ -46,6 +46,7 @@ export default {
     police_granted_at: "Date d'octroi du CFP",
     bailiff: "Nom de l'étude d'huissier",
     // Procédure administrative
+    existing_litigation: "Existence d'un contentieux ?",
     evacuation_under_time_limit:
         "Une procédure administrative prescrivant l'évacuation sous délai est-elle en cours ?",
     administrative_order_decision_at: "Date de l'arrêté",
