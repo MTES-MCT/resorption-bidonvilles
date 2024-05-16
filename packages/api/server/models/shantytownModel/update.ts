@@ -343,6 +343,7 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
             'police_status',
             'police_requested_at',
             'police_granted_at',
+            'existing_litigation',
             'bailiff',
         ];
         const { commonData, justiceData, ownerData } = Object.keys(data).reduce(
