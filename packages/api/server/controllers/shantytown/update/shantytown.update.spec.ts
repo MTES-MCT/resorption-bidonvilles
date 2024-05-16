@@ -206,7 +206,7 @@ describe('townController.edit()', () => {
                     police_requested_at: input.body.police_requested_at,
                     police_granted_at: input.body.police_granted_at,
                     bailiff: input.body.bailiff,
-                    existing_litigation: input.body.existing_litigation || null,
+                    existing_litigation: input.body.existing_litigation,
 
                     evacuation_under_time_limit: input.body.evacuation_under_time_limit,
                     administrative_order_decision_at: input.body.administrative_order_decision_at || null,
