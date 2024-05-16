@@ -51,13 +51,13 @@ export default async (req, res, next) => {
                 bailiff: req.body.bailiff,
 
                 // Nouveaux champs procédure administrative
-                existing_litigation: req.body.existing_litigation || null,
+                existing_litigation: req.body.existing_litigation,
                 evacuation_under_time_limit: req.body.evacuation_under_time_limit,
                 administrative_order_decision_at: req.body.administrative_order_decision_at || null,
                 administrative_order_decision_rendered_by: req.body.administrative_order_decision_rendered_by,
                 administrative_order_evacuation_at: req.body.administrative_order_evacuation_at || null,
                 insalubrity_order: req.body.insalubrity_order,
-                insalubrity_order_displayed: req.body.insalubrity_order_displayed || null,
+                insalubrity_order_displayed: req.body.insalubrity_order_displayed,
                 insalubrity_order_type: req.body.insalubrity_order_type || null,
                 insalubrity_order_by: req.body.insalubrity_order_by || null,
                 insalubrity_order_at: req.body.insalubrity_order_at || null,
