@@ -271,7 +271,7 @@ export default function (
                                           `${labels.insalubrity_order_displayed} est obligatoire`
                                       ),
                           })
-                          .label(labels.justice_challenged),
+                          .label(labels.insalubrity_order_displayed),
                       insalubrity_order_type: string()
                           .nullable()
                           .label(labels.insalubrity_order_type)
