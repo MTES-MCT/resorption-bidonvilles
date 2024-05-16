@@ -37,7 +37,10 @@ export default function (
             name: string()
                 .nullable()
                 .label(labels.name)
-                .matches(/^[^<>{}]*$/, "Le nom renseigné n'est pas valide"),
+                .matches(
+                    /^[^<>{}]*$/,
+                    `Le contenu du champ "${labels.name}" n'est pas valide`
+                ),
             built_at: date()
                 .nullable()
                 .typeError(`${labels.built_at} est invalide`)
@@ -55,7 +58,13 @@ export default function (
                 .label(labels.detailed_address),
             owner_type: number().required().label(labels.owner_type),
             owner: hasOwnerPermission.value
-                ? string().nullable().label(labels.owner)
+                ? string()
+                      .nullable()
+                      .label(labels.owner)
+                      .matches(
+                          /^[^<>{}]*$/,
+                          `Le contenu du champ "${labels.owner}" n'est pas valide`
+                      )
                 : undefined,
             population_total: number()
                 .nullable()
@@ -148,7 +157,7 @@ export default function (
                         schema
                             .nullable()
                             .typeError(
-                                `${labels.census_conducted_at} est invalide`
+                                `Le contenu du champ "${labels.census_conducted_at}" n'est pas valide`
                             ),
                 })
                 .label(labels.census_conducted_at),
@@ -160,7 +169,10 @@ export default function (
                 })
                 .label(labels.census_conducted_by),
             is_reinstallation: number()
-                .oneOf([-1, 0, 1], "La valeur est invalide")
+                .oneOf(
+                    [-1, 0, 1],
+                    `Le contenu du champ "${labels.is_reinstallation}" n'est pas valide`
+                )
                 .required()
                 .label(labels.is_reinstallation),
             reinstallation_comments: string().label(
@@ -180,17 +192,25 @@ export default function (
                       justice_rendered: number()
                           .when("justice_procedure", {
                               is: 1,
-                              then: (schema) => schema.required(),
+                              then: (schema) =>
+                                  schema
+                                      .oneOf(
+                                          [0, 1],
+                                          `${labels.justice_rendered} doit être renseigné si une procédure judiciaire est en cours`
+                                      )
+                                      .required(
+                                          `${labels.justice_rendered} est obligatoire`
+                                      ),
                           })
                           .label(labels.justice_rendered),
                       justice_rendered_at: date()
+                          .nullable()
                           .when("justice_rendered", {
                               is: 1,
                               then: (schema) =>
-                                  schema.typeError(
-                                      `${labels.justice_rendered_at} est obligatoire`
+                                  schema.required(
+                                      `${labels.justice_rendered_at} est obligatoire si une décision de justice a été rendue`
                                   ),
-                              otherwise: (schema) => schema.nullable(),
                           })
                           .label(labels.justice_rendered_at),
                       justice_rendered_by: string()
@@ -204,37 +224,20 @@ export default function (
                               'Le contenu du champ "Origine de la décision" n\'est pas valide'
                           ),
                       justice_challenged: number()
+                          .nullable()
                           .when("justice_rendered", {
                               is: 1,
-                              then: (schema) => schema.required(),
+                              then: (schema) =>
+                                  schema
+                                      .oneOf(
+                                          [0, 1],
+                                          `"${labels.justice_challenged}" doit être renseigné si une décision de justice a été rendue`
+                                      )
+                                      .required(
+                                          `${labels.justice_challenged} est obligatoire`
+                                      ),
                           })
                           .label(labels.justice_challenged),
-                      police_status: string()
-                          .when("justice_procedure", {
-                              is: 1,
-                              then: (schema) => schema.required(),
-                          })
-                          .label(labels.police_status),
-                      police_requested_at: string()
-                          .when("police_status", {
-                              is: (value) =>
-                                  ["requested", "granted"].includes(value),
-                              then: (schema) => schema.required(),
-                          })
-                          .label(labels.police_requested_at),
-                      police_granted_at: string()
-                          .when("police_status", {
-                              is: "granted",
-                              then: (schema) => schema.required(),
-                          })
-                          .label(labels.police_granted_at),
-                      bailiff: string().label(labels.bailiff),
-                      existing_litigation: number()
-                          .when("evacuation_police_status", {
-                              is: "granted",
-                              then: (schema) => schema.required(),
-                          })
-                          .label(labels.evacuation_under_time_limit),
                       evacuation_under_time_limit: number()
                           .required()
                           .label(labels.evacuation_under_time_limit),
@@ -252,58 +255,106 @@ export default function (
                       administrative_order_evacuation_at: string().label(
                           labels.administrative_order_evacuation_at
                       ),
-                      evacuation_police_status: string()
-                          .when("evacuation_under_time_limit", {
-                              is: 1,
-                              then: (schema) => schema.required(),
-                          })
-                          .label(labels.police_status),
-                      evacuation_police_requested_at: string()
-                          .when("evacuation_police_status", {
-                              is: (value) =>
-                                  ["requested", "granted"].includes(value),
-                              then: (schema) => schema.required(),
-                          })
-                          .label(labels.police_requested_at),
-                      evacuation_police_granted_at: string()
-                          .when("evacuation_police_status", {
-                              is: "granted",
-                              then: (schema) => schema.required(),
-                          })
-                          .label(labels.police_granted_at),
-                      evacuation_bailiff: string().label(labels.bailiff),
                       insalubrity_order: number()
                           .required()
                           .label(labels.insalubrity_order),
                       insalubrity_order_displayed: number()
                           .when("insalubrity_order", {
                               is: 1,
-                              then: (schema) => schema.required(),
+                              then: (schema) =>
+                                  schema
+                                      .oneOf(
+                                          [0, 1],
+                                          `"${labels.insalubrity_order_displayed}" doit être renseigné si un arrêté d'insalubrité existe`
+                                      )
+                                      .required(
+                                          `${labels.insalubrity_order_displayed} est obligatoire`
+                                      ),
                           })
-                          .label(labels.insalubrity_order_displayed),
-                      insalubrity_parcels: string().label(
-                          labels.insalubrity_parcels
-                      ),
-                      insalubrity_police_status: string()
-                          .when("insalubrity_order", {
-                              is: 1,
-                              then: (schema) => schema.required(),
-                          })
+                          .label(labels.justice_challenged),
+                      insalubrity_order_type: string()
+                          .nullable()
+                          .label(labels.insalubrity_order_type)
+                          .matches(
+                              /^[^<>{}]*$/,
+                              `Le contenu du champ "${labels.insalubrity_order_type}" n'est pas valide`
+                          ),
+                      insalubrity_order_by: string()
+                          .nullable()
+                          .label(labels.insalubrity_order_by)
+                          .matches(
+                              /^[^<>{}]*$/,
+                              `Le contenu du champ "${labels.insalubrity_order_by}" n'est pas valide`
+                          ),
+                      insalubrity_parcels: string()
+                          .nullable()
+                          .label(labels.insalubrity_parcels)
+                          .matches(
+                              /^[^<>{}]*$/,
+                              `Le contenu du champ "${labels.insalubrity_parcels}" n'est pas valide`
+                          ),
+                      police_status: string()
+                          .when(
+                              [
+                                  "justice_procedure",
+                                  "evacuation_under_time_limit",
+                                  "insalubrity_order",
+                              ],
+                              {
+                                  is: (
+                                      justice_procedure,
+                                      evacuation_under_time_limit,
+                                      insalubrity_order
+                                  ) =>
+                                      justice_procedure === 1 ||
+                                      evacuation_under_time_limit === 1 ||
+                                      insalubrity_order === 1,
+                                  then: (schema) =>
+                                      schema
+                                          .oneOf(
+                                              ["none", "requested", "granted"],
+                                              'Le statut du concours de la force publique à  doit être "Non demandé", "Demandé" ou "Obtenu"'
+                                          )
+                                          .required(),
+                                  otherwise: (schema) => schema.optional(),
+                              }
+                          )
                           .label(labels.police_status),
-                      insalubrity_police_requested_at: string()
-                          .when("insalubrity_police_status", {
+                      police_requested_at: string()
+                          .when("police_status", {
                               is: (value) =>
                                   ["requested", "granted"].includes(value),
                               then: (schema) => schema.required(),
                           })
                           .label(labels.police_requested_at),
-                      insalubrity_police_granted_at: string()
-                          .when("insalubrity_police_status", {
+                      police_granted_at: string()
+                          .when("police_status", {
                               is: "granted",
                               then: (schema) => schema.required(),
                           })
                           .label(labels.police_granted_at),
-                      insalubrity_bailiff: string().label(labels.bailiff),
+                      bailiff: string()
+                          .label(labels.bailiff)
+                          .matches(
+                              /^[^<>{}]*$/,
+                              `Le contenu du champ "${labels.bailiff}" n'est pas valide`
+                          ),
+                      existing_litigation: number()
+                          .nullable()
+                          .when("police_status", {
+                              is: "granted",
+                              then: (schema) =>
+                                  schema
+                                      .oneOf(
+                                          [0, 1],
+                                          `"${labels.existing_litigation}" doit être renseigné si le concours de la force publique a été obtenu`
+                                      )
+                                      .required(
+                                          `${labels.existing_litigation} est obligatoire`
+                                      ),
+                              otherwise: (schema) => schema.optional(),
+                          })
+                          .label(labels.existing_litigation),
                   }
                 : {}),
         };
