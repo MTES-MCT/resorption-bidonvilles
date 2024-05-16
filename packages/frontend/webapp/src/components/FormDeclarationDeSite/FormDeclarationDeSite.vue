@@ -314,10 +314,8 @@ function formatValuesForApi(v) {
                 v.insalubrity_order_at === null
                     ? null
                     : formatFormDate(v.insalubrity_order_at),
-            existing_litigation_status:
-                v.existing_litigation_status === "null"
-                    ? null
-                    : v.existing_litigation_status,
+            existing_litigation:
+                v.existing_litigation === "null" ? null : v.existing_litigation,
             // insalubrity_parcels,
         },
     };
