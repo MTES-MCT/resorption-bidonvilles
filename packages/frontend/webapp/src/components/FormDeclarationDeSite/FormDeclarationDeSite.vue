@@ -272,52 +272,54 @@ function formatValuesForApi(v) {
         ({ citycode, label } = v.address.data);
     }
 
+    const formatDateFields = (fields, obj) => {
+        return fields.reduce((acc, field) => {
+            acc[field] =
+                obj[field] === null ? null : formatFormDate(obj[field]);
+            return acc;
+        }, {});
+    };
+
+    const handleNullFields = (fields, obj) => {
+        return fields.reduce((acc, field) => {
+            acc[field] = obj[field] === "null" ? null : obj[field];
+            return acc;
+        }, {});
+    };
+
+    const dateFields = [
+        "built_at",
+        "declared_at",
+        "census_conducted_at",
+        "justice_rendered_at",
+        "police_requested_at",
+        "police_granted_at",
+        "administrative_order_decision_at",
+        "administrative_order_evacuation_at",
+        "insalubrity_order_at",
+    ];
+
+    const nullFields = [
+        "census_status",
+        "police_status",
+        "administrative_order",
+        "existing_litigation",
+        "insalubrity_order_type",
+        "insalubrity_order_by",
+    ];
+
     return {
         ...Object.keys(validationSchema.value.fields).reduce((acc, key) => {
             acc[key] = v[key];
             return acc;
         }, {}),
-        ...{
-            living_conditions_version: v.living_conditions_version || 2,
-            built_at: formatFormDate(v.built_at),
-            declared_at: formatFormDate(v.declared_at),
-            updated_at: v.updated_at || new Date(),
-            census_conducted_at: formatFormDate(v.census_conducted_at),
-            justice_rendered_at: formatFormDate(v.justice_rendered_at),
-            police_requested_at: formatFormDate(v.police_requested_at),
-            police_granted_at: formatFormDate(v.police_granted_at),
-            census_status: v.census_status === "null" ? null : v.census_status,
-            police_status: v.police_status === "null" ? null : v.police_status,
-            citycode,
-            address: label,
-            coordinates: `${v.coordinates[0]},${v.coordinates[1]}`,
-            // Nouveaux champs
-            //evacuation_under_time_limit,
-            administrative_order:
-                v.administrative_order === null ? null : v.administrative_order,
-            administrative_order_decision_at:
-                v.administrative_order_decision_at === null
-                    ? null
-                    : formatFormDate(v.administrative_order_decision_at),
-            // administrative_order_decision_rendered_by,
-            administrative_order_evacuation_at:
-                v.administrative_order_evacuation_at === null
-                    ? null
-                    : formatFormDate(v.administrative_order_evacuation_at),
-            insalubrity_order_type:
-                v.insalubrity_order_type === null
-                    ? null
-                    : v.insalubrity_order_type,
-            insalubrity_order_by:
-                v.insalubrity_order_by === null ? null : v.insalubrity_order_by,
-            insalubrity_order_at:
-                v.insalubrity_order_at === null
-                    ? null
-                    : formatFormDate(v.insalubrity_order_at),
-            existing_litigation:
-                v.existing_litigation === "null" ? null : v.existing_litigation,
-            // insalubrity_parcels,
-        },
+        ...formatDateFields(dateFields, v),
+        ...handleNullFields(nullFields, v),
+        living_conditions_version: v.living_conditions_version || 2,
+        updated_at: v.updated_at || new Date(),
+        citycode,
+        address: label,
+        coordinates: `${v.coordinates[0]},${v.coordinates[1]}`,
     };
 }
 
