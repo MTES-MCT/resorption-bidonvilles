@@ -77,6 +77,7 @@ describe('townController.edit()', () => {
                     police_requested_at: new Date(),
                     police_granted_at: new Date(),
                     bailiff: 'Huissier',
+                    existing_litigation: false,
 
                     evacuation_under_time_limit: true,
                     administrative_order_decision_at: new Date(),
