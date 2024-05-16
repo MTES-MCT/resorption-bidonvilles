@@ -21,6 +21,10 @@ function fromIntToBoolSanitizer(value) {
     return value === 1;
 }
 
+function validateInteger(value: any): number | null {
+    return Number.isInteger(value) ? value : null;
+}
+
 export default mode => ([
     param('id')
         .if(() => mode === 'update')
@@ -440,7 +444,7 @@ export default mode => ([
         .isInt({ min: 1 }).withMessage('Le champ "Nombre de personnes" ne peut pas être inférieur à 1'),
 
     body('population_total')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+        .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre de caravanes
@@ -454,7 +458,7 @@ export default mode => ([
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de caravanes" ne peut pas être inférieur à 0'),
 
     body('caravans')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+        .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre de cabanes
@@ -468,7 +472,7 @@ export default mode => ([
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de cabanes" ne peut pas être inférieur à 0'),
 
     body('huts')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+        .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre de tentes
@@ -483,7 +487,7 @@ export default mode => ([
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de tentes" ne peut pas être inférieur à 0'),
 
     body('tents')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+        .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre de voitures dortoir
@@ -497,7 +501,7 @@ export default mode => ([
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de voitures dortoir" ne peut pas être inférieur à 0'),
 
     body('cars')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+        .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre de matelas
@@ -511,7 +515,7 @@ export default mode => ([
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de matelas" ne peut pas être inférieur à 0'),
 
     body('mattresses')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+        .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre de ménages
@@ -534,7 +538,7 @@ export default mode => ([
         }),
 
     body('population_couples')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+        .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre de mineurs
@@ -556,7 +560,7 @@ export default mode => ([
                 .isInt({ min: 0 }).withMessage(`Le champ "Nombre de mineurs entre ${min} et ${max} ans" ne peut pas être inférieur à 0`),
 
             body(`population_minors_${min}_${max}`)
-                .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+                .customSanitizer(validateInteger),
         ], []),
 
     // Total
@@ -579,7 +583,7 @@ export default mode => ([
         }),
 
     body('population_minors')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+        .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre d'enfants inscrits dans un établissement scolaire
@@ -603,7 +607,7 @@ export default mode => ([
         }),
 
     body('minors_in_school')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+        .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Origines
