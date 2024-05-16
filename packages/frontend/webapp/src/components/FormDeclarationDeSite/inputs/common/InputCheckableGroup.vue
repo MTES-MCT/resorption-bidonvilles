@@ -20,13 +20,11 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    items: {
+        type: Array,
+        required: true,
+    },
 });
 
-const { fieldName } = toRefs(props);
-
-const items = [
-    { value: 1, label: "Oui" },
-    { value: 0, label: "Non" },
-    { value: -1, label: "Inconnu" },
-];
+const { fieldName, items } = toRefs(props);
 </script>

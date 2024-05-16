@@ -2,8 +2,8 @@
     <DatepickerInput
         :name="fieldName"
         :id="fieldName"
-        :label="labels.police_granted_at"
-        :minDate="values.police_requested_at"
+        :label="labels.police_requested_at"
+        :minDate="values.built_at || undefined"
         :maxDate="new Date()"
         :showMandatoryStar
         :v-model="modelName"
@@ -14,7 +14,7 @@
 import { toRefs } from "vue";
 import { DatepickerInput } from "@resorptionbidonvilles/ui";
 import { useFormValues } from "vee-validate";
-import labels from "../../FormDeclarationDeSite.labels";
+import labels from "../FormDeclarationDeSite.labels";
 
 const props = defineProps({
     fieldName: {
@@ -27,7 +27,7 @@ const props = defineProps({
     },
     showMandatoryStar: {
         type: Boolean,
-        reaquried: false,
+        required: false,
         default: false,
     },
 });

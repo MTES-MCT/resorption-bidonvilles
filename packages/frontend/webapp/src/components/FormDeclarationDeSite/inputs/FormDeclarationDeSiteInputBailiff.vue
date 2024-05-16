@@ -5,7 +5,7 @@
 <script setup>
 import { toRefs } from "vue";
 import { TextInput } from "@resorptionbidonvilles/ui";
-import labels from "../../FormDeclarationDeSite.labels";
+import labels from "../FormDeclarationDeSite.labels";
 
 const props = defineProps({
     fieldName: {

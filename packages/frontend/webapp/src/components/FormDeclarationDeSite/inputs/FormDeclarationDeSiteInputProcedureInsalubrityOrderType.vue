@@ -3,7 +3,6 @@
         name="insalubrity_order_type"
         id="insalubrity_order_type"
         :label="labels.insalubrity_order_type"
-        showMandatoryStar
     />
 </template>
 
