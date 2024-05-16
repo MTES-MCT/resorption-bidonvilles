@@ -316,9 +316,10 @@ function formatValuesForApi(v) {
                 v.evacuation_police_granted_at === null
                     ? null
                     : formatFormDate(v.evacuation_police_granted_at),
-            // evacuation_bailiff,
-            // insalubrity_order,
-            // insalubrity_order_displayed
+            existing_litigation_status:
+                v.existing_litigation_status === "null"
+                    ? null
+                    : v.existing_litigation_status,
             insalubrity_order_type:
                 v.insalubrity_order_type === null
                     ? null
@@ -342,7 +343,6 @@ function formatValuesForApi(v) {
                 v.insalubrity_police_granted_at === null
                     ? null
                     : formatFormDate(v.insalubrity_police_granted_at),
-            // insalubrity_bailiff,
         },
     };
 }

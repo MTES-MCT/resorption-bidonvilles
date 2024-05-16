@@ -21,6 +21,7 @@
 
             <FicheSiteProceduresJudiciairesLigne
                 label="Décision de justice rendue"
+                icon="gavel"
                 v-if="town.justiceProcedure"
             >
                 {{ justiceRendered }}
@@ -28,25 +29,10 @@
 
             <FicheSiteProceduresJudiciairesLigne
                 label="Contentieux"
+                icon="handshake"
                 v-if="town.justiceRendered"
             >
                 {{ formatBool(town.justiceChallenged) }}
-            </FicheSiteProceduresJudiciairesLigne>
-
-            <FicheSiteProceduresJudiciairesLigne
-                v-if="town.justiceProcedure"
-                icon="person-military-pointing"
-                label="Concours de la force publique"
-            >
-                {{ policeStatus }}
-            </FicheSiteProceduresJudiciairesLigne>
-
-            <FicheSiteProceduresJudiciairesLigne
-                v-if="town.justiceProcedure"
-                icon="file"
-                label="Nom de l'étude d'huissier"
-            >
-                {{ town.bailiff || "non communiqué" }}
             </FicheSiteProceduresJudiciairesLigne>
         </FicheSiteProceduresJudiciairesRubrique>
 
@@ -65,23 +51,6 @@
                 >
                     Par : {{ town.administrativeOrderDecisionRenderedBy }}
                 </p>
-            </FicheSiteProceduresJudiciairesLigne>
-
-            <FicheSiteProceduresJudiciairesLigne
-                v-if="town.evacuationUnderTimeLimit"
-                icon="person-military-pointing"
-                label="Concours de la force
-                publique"
-            >
-                {{ evacuationPoliceStatus }}
-            </FicheSiteProceduresJudiciairesLigne>
-
-            <FicheSiteProceduresJudiciairesLigne
-                v-if="town.evacuationUnderTimeLimit"
-                icon="file"
-                label="Nom de l'étude d'huissier"
-            >
-                {{ town.evacuationBailiff || "non communiqué" }}
             </FicheSiteProceduresJudiciairesLigne>
         </FicheSiteProceduresJudiciairesRubrique>
 
@@ -115,22 +84,31 @@
             >
                 {{ town.insalubrityParcels || "non précisé" }}
             </FicheSiteProceduresJudiciairesLigne>
+        </FicheSiteProceduresJudiciairesRubrique>
 
+        <FicheSiteProceduresJudiciairesRubrique v-if="town.policeStatus">
             <FicheSiteProceduresJudiciairesLigne
-                v-if="town.insalubrityOrder"
                 icon="person-military-pointing"
-                label="Concours de la force
-                publique"
+                label="Concours de la force publique"
+                :border="false"
             >
-                {{ insalubrityPoliceStatus }}
+                {{ policeStatus }}
             </FicheSiteProceduresJudiciairesLigne>
 
             <FicheSiteProceduresJudiciairesLigne
-                v-if="town.insalubrityOrder"
-                icon="file"
+                v-if="town.policeStatus === 'granted'"
+                icon="book"
+                label="Existence d'un contentieux ?"
+            >
+                {{ existingLitigationStatus }}
+            </FicheSiteProceduresJudiciairesLigne>
+
+            <FicheSiteProceduresJudiciairesLigne
+                v-if="town.justiceProcedure"
+                icon="book-open-reader"
                 label="Nom de l'étude d'huissier"
             >
-                {{ town.insalubrityBailiff || "non communiqué" }}
+                {{ town.bailiff || "non communiqué" }}
             </FicheSiteProceduresJudiciairesLigne>
         </FicheSiteProceduresJudiciairesRubrique>
     </FicheRubrique>
@@ -196,20 +174,16 @@ const policeStatus = computed(() => {
     );
 });
 
-const insalubrityPoliceStatus = computed(() => {
-    return getPoliceStatus(
-        town.value.insalubrityPoliceStatus,
-        town.value.insalubrityPoliceRequestedAt,
-        town.value.insalubrityPoliceGrantedAt
-    );
-});
+const existingLitigationStatus = computed(() => {
+    if (town.value.existingLitigation === null) {
+        return "non communiqué";
+    }
 
-const evacuationPoliceStatus = computed(() => {
-    return getPoliceStatus(
-        town.value.evacuationPoliceStatus,
-        town.value.evacuationPoliceRequestedAt,
-        town.value.evacuationPoliceGrantedAt
-    );
+    if (town.value.existingLitigation !== true) {
+        return "non";
+    }
+
+    return "oui";
 });
 
 const administrativeOrderStatus = computed(() => {
