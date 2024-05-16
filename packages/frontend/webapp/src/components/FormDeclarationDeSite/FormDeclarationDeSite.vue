@@ -304,22 +304,6 @@ function formatValuesForApi(v) {
                 v.administrative_order_evacuation_at === null
                     ? null
                     : formatFormDate(v.administrative_order_evacuation_at),
-            evacuation_police_status:
-                v.evacuation_police_status === "null"
-                    ? null
-                    : v.evacuation_police_status,
-            evacuation_police_requested_at:
-                v.evacuation_police_requested_at === null
-                    ? null
-                    : formatFormDate(v.evacuation_police_requested_at),
-            evacuation_police_granted_at:
-                v.evacuation_police_granted_at === null
-                    ? null
-                    : formatFormDate(v.evacuation_police_granted_at),
-            existing_litigation_status:
-                v.existing_litigation_status === "null"
-                    ? null
-                    : v.existing_litigation_status,
             insalubrity_order_type:
                 v.insalubrity_order_type === null
                     ? null
@@ -330,19 +314,11 @@ function formatValuesForApi(v) {
                 v.insalubrity_order_at === null
                     ? null
                     : formatFormDate(v.insalubrity_order_at),
+            existing_litigation_status:
+                v.existing_litigation_status === "null"
+                    ? null
+                    : v.existing_litigation_status,
             // insalubrity_parcels,
-            insalubrity_police_status:
-                v.insalubrity_police_status === "null"
-                    ? null
-                    : v.insalubrity_police_status,
-            insalubrity_police_requested_at:
-                v.insalubrity_police_requested_at === null
-                    ? null
-                    : formatFormDate(v.insalubrity_police_requested_at),
-            insalubrity_police_granted_at:
-                v.insalubrity_police_granted_at === null
-                    ? null
-                    : formatFormDate(v.insalubrity_police_granted_at),
         },
     };
 }
