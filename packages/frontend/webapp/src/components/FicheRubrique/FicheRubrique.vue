@@ -11,7 +11,7 @@
                     variant="primaryText"
                     @click="openListAccesPJ"
                 >
-                    Qui a accès aux données sur la procédure ?
+                    Qui a accès aux procédures judiciaires ou administratives ?
                 </Button>
                 <Button
                     v-if="title === 'Financements'"

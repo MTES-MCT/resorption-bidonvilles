@@ -1,9 +1,9 @@
 <template>
     <FormSection id="procedure">
         <template v-slot:title>
-            <div class="flex justify-between">
+            <div class="xl:flex xl:justify-between mb-8 lg:mb-4">
                 <div>Procédure judiciaire ou administrative</div>
-                <div v-if="location?.type" class="text-sm">
+                <div v-if="location?.type" class="flex flex-col text-sm">
                     <Button
                         type="button"
                         size="sm"
@@ -12,7 +12,8 @@
                         variant="primaryText"
                         @click="openModaleListeAccesPJ"
                     >
-                        Qui aura accès aux données sur la procédure ?
+                        Qui aura accès aux procédures judiciaires ou
+                        administratives ?
                     </Button>
                 </div>
             </div>

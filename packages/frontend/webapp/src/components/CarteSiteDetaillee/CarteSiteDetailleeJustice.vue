@@ -9,14 +9,17 @@
                 shantytown.ownerComplaint === false &&
                 shantytown.justiceProcedure === false
             "
-            >Aucune procédure judiciaire en cours</template
+            >Aucune procédure judiciaire ou administrative en cours</template
         >
         <template v-else
-            >Aucune information sur les procédures judiciaires</template
+            >Aucune information sur les procédures judiciaires ou
+            administratives</template
         >
     </div>
     <template v-else>
-        <span class="sr-only">Statut des procédures judiciaires</span>
+        <span class="sr-only"
+            >Statut des procédures judiciaires ou administratives</span
+        >
         <ul>
             <li
                 class="flex"
