@@ -84,7 +84,7 @@ export default {
             }
 
             return {
-                left: "ml-2",
+                left: "ml-4 text-left",
                 right: "mr-2"
             }[this.iconPosition];
         },
