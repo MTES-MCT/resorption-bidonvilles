@@ -1,5 +1,5 @@
 <template>
-    <Modal closeWhenClickOutside ref="modale">
+    <Modal :title-class="titleClass" closeWhenClickOutside ref="modale">
         <template v-slot:title>{{ wording.title(numberOfUsers) }}</template>
         <template v-slot:body>
             <div class="pt-2">
@@ -76,6 +76,10 @@ const props = defineProps({
     loadFn: {
         type: Function,
         required: true,
+    },
+    titleClass: {
+        type: String,
+        required: false,
     },
 });
 const { wording, loadFn } = toRefs(props);
