@@ -1001,7 +1001,7 @@ export default mode => ([
             ) {
                 return value === null;
             }
-            return ['none', 'requested', 'granted'].includes(value);
+            return ['none', 'requested', 'granted', 'refused'].includes(value);
         })
         .withMessage('Le champ "Concours de la force publique" est invalide'),
 
@@ -1013,13 +1013,13 @@ export default mode => ([
      ********************************************************************************************* */
     body('police_requested_at')
         .customSanitizer((value, { req }) => {
-            if (!['requested', 'granted'].includes(req.body.police_status)) {
+            if (!['requested', 'granted', 'refused'].includes(req.body.police_status)) {
                 return null;
             }
 
             return value;
         })
-        .if((value, { req }) => ['requested', 'granted'].includes(req.body.police_status))
+        .if((value, { req }) => ['requested', 'granted', 'refused'].includes(req.body.police_status))
         .exists({ checkNull: true }).bail().withMessage('Le champ "Date de la demande du CFP" est obligatoire')
         .isDate().bail().withMessage('Le champ "Date de la demande du CFP" est invalide')
         .toDate()
