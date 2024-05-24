@@ -26,11 +26,11 @@ export default async (req, res, next) => {
                 population_minors_12_16: req.body.population_minors_12_16,
                 population_minors_16_18: req.body.population_minors_16_18,
                 minors_in_school: req.body.minors_in_school,
-                caravans: req.body.caravans,
-                huts: req.body.huts,
-                tents: req.body.tents,
-                cars: req.body.cars,
-                mattresses: req.body.mattresses,
+                caravans: req.body.caravans || null,
+                huts: req.body.huts || null,
+                tents: req.body.tents || null,
+                cars: req.body.cars || null,
+                mattresses: req.body.mattresses || null,
                 fk_field_type: req.body.field_type,
                 fk_owner_type: req.body.owner_type,
                 fk_city: req.body.citycode,
@@ -141,6 +141,7 @@ export default async (req, res, next) => {
         const updatedTown = await shantytownModel.findOne(req.user, req.params.id);
         return res.status(200).send(updatedTown);
     } catch (e) {
+        console.log(e);
         res.status(500).send({
             user_message: 'Une erreur est survenue dans l\'enregistrement du site en base de données',
         });
