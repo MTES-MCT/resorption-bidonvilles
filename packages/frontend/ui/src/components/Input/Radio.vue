@@ -11,9 +11,9 @@
         <label :class="[classes,
             isSubmitting || disabled ? 'opacity-85' : 'hover:border-blue500',
         ]">
-            <input :disabled="isSubmitting || disabled" type="radio" :name="name" @click="onClick" @update="testValue" class="appearance-none"  />
+             <input :disabled="isSubmitting || disabled" type="radio" :name="name" :value="value" v-model="props.modelValue" class="appearance-none" @click="onClick" />
             <span>{{ label }}</span>
-            <Icon v-if="checked" class="text-primary font-bold text-md" icon="fa-solid fa-check" />
+            <Icon v-if="value === props.modelValue" class="text-primary font-bold text-md" icon="fa-solid fa-check" />
         </label>
     </template>
 
@@ -62,8 +62,6 @@ const { checked, handleChange } = useField(name, undefined, {
     checkedValue: props.value,
     initialValue: props.modelValue
 });
-console.log("VALUE: ", props.value);
-console.log("INITIALE VALUE: ", props.modelValue);
 
 const variants = {
     default: {
@@ -110,22 +108,14 @@ const classes = computed(() => {
     return `${v.base} ${v.checked[checked.value === true]} ${v.disabled[(disabled.value || isSubmitting.value) === true]}`;
 });
 
-function onClick() {
-    console.log(props.value);
-    console.log(checked.value);
-    console.log(allowNull.value);
-    // if (!checked.value) {
-        handleChange(props.value);
+async function onClick() {
+    if (!checked.value) {
+        await handleChange(props.value);
         emit('update:modelValue', props.value);
-    // } else if (allowNull.value === true) {
-    if (allowNull.value === true) {
-        handleChange(nullValue.value);
+    } else if (allowNull.value === true) {
+        if (allowNull.value === true) {
+            handleChange(nullValue.value);
+        }
     }
 }
-
-// watch(checked, (newVal, oldVal) => {
-//     console.log("New value: ", newVal);
-//     console.log("Old value: ", oldVal);
-//     console.log(props.modelValue);
-// })
 </script>
