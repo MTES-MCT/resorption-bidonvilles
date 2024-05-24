@@ -79,7 +79,7 @@
                     :items="policeItems"
                 />
                 <InputPoliceRequestedAt
-                    v-if="policeRequested"
+                    v-if="policeRequested || policeRefused"
                     fieldName="police_requested_at"
                     modelName="values.police_requested_at"
                     width="w-64"
@@ -163,6 +163,10 @@ const policeRequested = computed(() => {
 
 const policeGranted = computed(() => {
     return values.value.police_status === "granted";
+});
+
+const policeRefused = computed(() => {
+    return ["refused"].includes(values.value.police_status);
 });
 
 const future = computed(() => {

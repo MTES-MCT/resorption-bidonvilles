@@ -159,6 +159,10 @@ function getPoliceStatus(policeStatus, policeRequestedAt, policeGrantedAt) {
         return `demandé le ${formatDate(policeRequestedAt, "d/m/y")}`;
     }
 
+    if (policeStatus === "refused") {
+        return "refusé";
+    }
+
     if (policeStatus === "granted") {
         return `accordé le ${formatDate(policeGrantedAt, "d/m/y")}`;
     }
