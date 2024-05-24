@@ -21,15 +21,19 @@ function fromIntToBoolSanitizer(value) {
     return value === 1;
 }
 
+function validateNull(value: any): number | null {
+    return value === '' ? null : value;
+}
+
 function validateInteger(value: any): number | null {
     return Number.isInteger(value) ? value : null;
 }
 
-function validateIntegerWithMinValue(fieldName: string, min: number, sanitizer: (value: any) => number | null, secondSanitizer: (value: any) => number | null) {
+function validateIntegerWithMinValue(fieldName: string, min: number, firstSanitizer: (value: any) => number | null, secondSanitizer: (value: any) => number | null) {
     return [
         body(fieldName)
-            .customSanitizer(sanitizer)
             .optional({ nullable: true })
+            .customSanitizer(firstSanitizer)
             .toInt()
             .isInt().bail().withMessage(`Le champ "${fieldName}" est invalide`)
             .isInt({ min }).withMessage(`Le champ "${fieldName}" ne peut pas être inférieur à ${min}`)
@@ -460,7 +464,7 @@ export default mode => ([
     /* **********************************************************************************************
      * Nombre de caravanes
      ********************************************************************************************* */
-    ...validateIntegerWithMinValue('caravans', 0, value => (value === '' ? null : value), validateInteger),
+    ...validateIntegerWithMinValue('caravans', 0, validateNull, validateInteger),
     // body('caravans')
     //     .customSanitizer(value => (value === '' ? null : value)),
     // body('caravans')
@@ -475,7 +479,7 @@ export default mode => ([
     /* **********************************************************************************************
      * Nombre de cabanes
      ********************************************************************************************* */
-    ...validateIntegerWithMinValue('huts', 0, value => (value === '' ? null : value), validateInteger),
+    ...validateIntegerWithMinValue('huts', 0, validateNull, validateInteger),
     // body('huts')
     //     .customSanitizer(value => (value === '' ? null : value)),
     // body('huts')
@@ -490,7 +494,7 @@ export default mode => ([
     /* **********************************************************************************************
      * Nombre de tentes
      ********************************************************************************************* */
-    ...validateIntegerWithMinValue('tents', 0, value => (value === '' ? null : value), validateInteger),
+    ...validateIntegerWithMinValue('tents', 0, validateNull, validateInteger),
     // body('tents')
     //     .customSanitizer(value => (value === '' ? null : value)),
 
@@ -506,7 +510,7 @@ export default mode => ([
     /* **********************************************************************************************
      * Nombre de voitures dortoir
      ********************************************************************************************* */
-    ...validateIntegerWithMinValue('cars', 0, value => (value === '' ? null : value), validateInteger),
+    ...validateIntegerWithMinValue('cars', 0, validateNull, validateInteger),
     // body('cars')
     //     .customSanitizer(value => (value === '' ? null : value)),
     // body('cars')
@@ -521,7 +525,7 @@ export default mode => ([
     /* **********************************************************************************************
      * Nombre de matelas
      ********************************************************************************************* */
-    ...validateIntegerWithMinValue('mattresses', 0, value => (value === '' ? null : value), validateInteger),
+    ...validateIntegerWithMinValue('mattresses', 0, validateNull, validateInteger),
     // body('mattresses')
     //     .customSanitizer(value => (value === '' ? null : value)),
     // body('mattresses')

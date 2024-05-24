@@ -192,25 +192,34 @@ export default function (
                       justice_rendered: number()
                           .when("justice_procedure", {
                               is: 1,
-                              then: (schema) =>
-                                  schema
-                                      .oneOf(
-                                          [0, 1],
-                                          `${labels.justice_rendered} doit être renseigné si une procédure judiciaire est en cours`
-                                      )
-                                      .required(
-                                          `${labels.justice_rendered} est obligatoire`
-                                      ),
+                              then: (schema) => schema.required(),
                           })
                           .label(labels.justice_rendered),
+                      // Ce qui précède ne fonctionne pas mais le code suivant fonctionne
+                      // Cependant, le code reste en place à la demande de l'équipe produit.
+                      // La correction reste également en cas de changement d'avis
+                      //   justice_rendered: number()
+                      //       .when("justice_procedure", {
+                      //           is: 1,
+                      //           then: (schema) =>
+                      //               schema
+                      //                   .oneOf(
+                      //                       [0, 1],
+                      //                       `${labels.justice_rendered} doit être renseigné si une procédure judiciaire est en cours`
+                      //                   )
+                      //                   .required(
+                      //                       `${labels.justice_rendered} est obligatoire`
+                      //                   ),
+                      //       })
+                      //       .label(labels.justice_rendered),
                       justice_rendered_at: date()
-                          .nullable()
                           .when("justice_rendered", {
                               is: 1,
                               then: (schema) =>
-                                  schema.required(
-                                      `${labels.justice_rendered_at} est obligatoire si une décision de justice a été rendue`
+                                  schema.typeError(
+                                      `${labels.justice_rendered_at} est obligatoire`
                                   ),
+                              otherwise: (schema) => schema.nullable(),
                           })
                           .label(labels.justice_rendered_at),
                       justice_rendered_by: string()
@@ -241,9 +250,9 @@ export default function (
                       evacuation_under_time_limit: number()
                           .required()
                           .label(labels.evacuation_under_time_limit),
-                      administrative_order_decision_at: date().label(
-                          labels.administrative_order_decision_at
-                      ),
+                      administrative_order_decision_at: date()
+                          .nullable()
+                          .label(labels.administrative_order_decision_at),
                       administrative_order_decision_rendered_by: string()
                           .label(
                               labels.administrative_order_decision_rendered_by
@@ -252,9 +261,9 @@ export default function (
                               /^[^<>{}]*$/,
                               "Le contenu du champ \"Qui a pris l'arrêté\" n'est pas valide"
                           ),
-                      administrative_order_evacuation_at: string().label(
-                          labels.administrative_order_evacuation_at
-                      ),
+                      administrative_order_evacuation_at: string()
+                          .nullable()
+                          .label(labels.administrative_order_evacuation_at),
                       insalubrity_order: number()
                           .required()
                           .label(labels.insalubrity_order),
