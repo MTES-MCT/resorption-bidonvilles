@@ -14,7 +14,7 @@
             <template v-slot:menu>
                 <Menu variant="withoutPadding">
                     <div class="flex flex-col text-sm menuWidth whitespace-nowrap">
-                        <Radio v-for="option in options" :key="option.id" :value="option.value" v-model="value" @update:modelValue="testValue"
+                       <Radio v-for="option in options" :key="option.id" :value="option.value" v-model="value" @update:modelValue="testValue"
                             :label="option.label" :name="name" variant="check" />
                     </div>
                 </Menu>
@@ -24,8 +24,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, defineEmits, computed, watch } from "vue";
-
+import { defineProps, toRefs, defineEmits, computed } from "vue";
 import Button from './Button.vue';
 import Dropdown from './Dropdown.vue';
 import Menu from './Menu/Menu.vue';
@@ -62,11 +61,6 @@ const value = computed({
     }
 });
 
-const testValue = (activeFilter) => {
-    console.log("VALUE: ", activeFilter);
-    value.value = activeFilter;
-    // emit('update:modelValue', value);
-};
 </script>
 
 <style scoped="true">
