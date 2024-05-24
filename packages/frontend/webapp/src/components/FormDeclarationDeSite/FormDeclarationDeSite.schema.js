@@ -267,20 +267,9 @@ export default function (
                       insalubrity_order: number()
                           .required()
                           .label(labels.insalubrity_order),
-                      insalubrity_order_displayed: number()
-                          .when("insalubrity_order", {
-                              is: 1,
-                              then: (schema) =>
-                                  schema
-                                      .oneOf(
-                                          [0, 1],
-                                          `"${labels.insalubrity_order_displayed}" doit être renseigné si un arrêté d'insalubrité existe`
-                                      )
-                                      .required(
-                                          `${labels.insalubrity_order_displayed} est obligatoire`
-                                      ),
-                          })
-                          .label(labels.insalubrity_order_displayed),
+                      insalubrity_order_displayed: number().label(
+                          labels.insalubrity_order_displayed
+                      ),
                       insalubrity_order_type: string()
                           .nullable()
                           .label(labels.insalubrity_order_type)
@@ -302,37 +291,13 @@ export default function (
                               /^[^<>{}]*$/,
                               `Le contenu du champ "${labels.insalubrity_parcels}" n'est pas valide`
                           ),
-                      police_status: string()
-                          .when(
-                              [
-                                  "justice_procedure",
-                                  "evacuation_under_time_limit",
-                                  "insalubrity_order",
-                              ],
-                              {
-                                  is: (
-                                      justice_procedure,
-                                      evacuation_under_time_limit,
-                                      insalubrity_order
-                                  ) =>
-                                      justice_procedure === 1 ||
-                                      evacuation_under_time_limit === 1 ||
-                                      insalubrity_order === 1,
-                                  then: (schema) =>
-                                      schema
-                                          .oneOf(
-                                              ["none", "requested", "granted"],
-                                              'Le statut du concours de la force publique à  doit être "Non demandé", "Demandé" ou "Obtenu"'
-                                          )
-                                          .required(),
-                                  otherwise: (schema) => schema.optional(),
-                              }
-                          )
-                          .label(labels.police_status),
+                      police_status: string().label(labels.police_status),
                       police_requested_at: string()
                           .when("police_status", {
                               is: (value) =>
-                                  ["requested", "granted"].includes(value),
+                                  ["requested", "granted", "refused"].includes(
+                                      value
+                                  ),
                               then: (schema) => schema.required(),
                           })
                           .label(labels.police_requested_at),
