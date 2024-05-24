@@ -51,7 +51,7 @@ export default async (req, res, next) => {
                 bailiff: req.body.bailiff,
 
                 // Nouveaux champs procédure administrative
-                existing_litigation: req.body.existing_litigation,
+                existing_litigation: req.body.existing_litigation || null,
                 evacuation_under_time_limit: req.body.evacuation_under_time_limit,
                 administrative_order_decision_at: req.body.administrative_order_decision_at || null,
                 administrative_order_decision_rendered_by: req.body.administrative_order_decision_rendered_by,
