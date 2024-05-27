@@ -141,7 +141,6 @@ export default async (req, res, next) => {
         const updatedTown = await shantytownModel.findOne(req.user, req.params.id);
         return res.status(200).send(updatedTown);
     } catch (e) {
-        console.log(e);
         res.status(500).send({
             user_message: 'Une erreur est survenue dans l\'enregistrement du site en base de données',
         });
