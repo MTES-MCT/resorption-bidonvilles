@@ -36,7 +36,7 @@ export const ExternalLink = {
   render: Template,
 
   args: {
-    to: 'https://resorption-bidonvilles.beta.gouv.fr',
+    to: 'https://resorption-bidonvilles.dihal.gouv.fr',
     color: 'default',
   },
 };
