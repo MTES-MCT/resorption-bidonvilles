@@ -1,11 +1,12 @@
 <template>
-    <div class="relative inline-block">
-        <div @click="toggleMenu">
+    <div ref="dropdownRef" class="relative inline-block dropdown">
+        <div ref="toggleButtonRef" @click="toggleMenu">
             <slot name="button" :isOpen="isOpen" />
         </div>
         <div
             :class="[
-                'origin-top-left-10 absolute z-10 left-0 mt-2 rounded-md shadow-md transform transition ease-in-out duration-200 border-G300 border',
+                'absolute z-10 mt-2 rounded-md shadow-md transform transition ease-in-out duration-200 border-G300 border',
+                right ? 'origin-top-right-10 right-0' : 'origin-top-left-10 left-0',
                 isOpen ? 'opacity-100' : 'opacity-0 hidden'
             ]"
         >
@@ -14,37 +15,46 @@
     </div>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            isOpen: false
-        };
+<script setup>
+import { ref, toRefs, watchEffect } from "vue";
+
+const props = defineProps({
+    right: {
+        type: Boolean,
+        default: false
     },
-    methods: {
-        checkOutsideClick(event) {
-            if (!this.$el.contains(event.target)) {
-                this.closeMenu();
-            }
-        },
-        openMenu() {
-            this.isOpen = true;
-        },
-        closeMenu() {
-            this.isOpen = false;
-        },
-        toggleMenu() {
-            this.isOpen = !this.isOpen;
-        }
-    },
-    mounted() {
-        // Delay listener, otherwise the check happens before the menu is rendered and close the menu immediately
-        setTimeout(() => {
-            document.addEventListener("click", this.checkOutsideClick);
-        }, 0);
-    },
-    destroyed() {
-        document.removeEventListener("click", this.checkOutsideClick);
+    closeWhenSorted: {
+        type: Boolean,
+        default: false
+    }
+});
+
+const { right, closeWhenSorted } = toRefs(props);
+const isOpen = ref(false);
+const dropdownRef = ref(null);
+const toggleButtonRef = ref(null);
+
+const checkOutsideClick = (event) => {
+    const isChildElement = dropdownRef.value?.contains(event.target);
+    const isToggleButton = toggleButtonRef.value?.contains(event.target);
+    if (isOpen.value && (!isChildElement || (isChildElement && closeWhenSorted.value)) && !isToggleButton) {
+        closeMenu();
     }
 };
+
+const closeMenu = () => {
+    isOpen.value = false;
+};
+
+const toggleMenu = () => {
+    isOpen.value = !isOpen.value;
+};
+
+watchEffect(() => {
+    if (isOpen.value) {
+        document.addEventListener("click", checkOutsideClick);
+    } else {
+        document.removeEventListener("click", checkOutsideClick);
+    }
+});
 </script>
