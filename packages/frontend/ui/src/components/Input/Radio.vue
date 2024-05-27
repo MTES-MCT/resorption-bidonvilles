@@ -109,13 +109,7 @@ const classes = computed(() => {
 });
 
 async function onClick() {
-    if (!checked.value) {
         await handleChange(props.value);
         emit('update:modelValue', props.value);
-    } else if (allowNull.value === true) {
-        if (allowNull.value === true) {
-            handleChange(nullValue.value);
-        }
-    }
 }
 </script>
