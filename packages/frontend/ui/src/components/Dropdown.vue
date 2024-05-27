@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref, toRefs, watchEffect, watch } from "vue";
+import { ref, toRefs, watchEffect } from "vue";
 
 const props = defineProps({
     right: {
@@ -36,7 +36,7 @@ const toggleButtonRef = ref(null);
 
 const checkOutsideClick = (event) => {
     const isChildElement = dropdownRef.value?.contains(event.target);
-    const isToggleButton = toggleButtonRef.value?.contains(event.target); // Nouveau
+    const isToggleButton = toggleButtonRef.value?.contains(event.target);
     if (isOpen.value && (!isChildElement || (isChildElement && closeWhenSorted.value)) && !isToggleButton) {
         closeMenu();
     }
@@ -57,10 +57,4 @@ watchEffect(() => {
         document.removeEventListener("click", checkOutsideClick);
     }
 });
-
-// watch(closeWhenSorted, (newValue) => {
-//     if (newValue && newValue === true) {
-//         closeMenu();
-//     }
-// });
 </script>
