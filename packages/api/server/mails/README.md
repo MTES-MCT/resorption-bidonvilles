@@ -2,7 +2,7 @@ Liste des mails: https://docs.google.com/spreadsheets/d/1nqbmtRR0tWBwZavK6hXffPo
 
 Les templates sont générés avec https://mjml.io/
 
-Pour les modifier, il faut modifier la source et utiliser la commande yarn emails:build pour regénerer les fichiers html
+Pour les modifier, il faut modifier la source et utiliser la commande `yarn emails:build` pour regénerer les fichiers html
 
 ## Variables
 
@@ -33,7 +33,7 @@ Les autres variables utilisés plus spécifiques:
 Tracking des activités proposées dans les mèls
 
 Règles d’écriture des Url pour matomo
-Beta.gouv utilise la version 3.13.5 de matimo.
+Beta.gouv utilise la version 3.13.5 de matomo.
 Cette version n’utilise que 2 champs pour effectuer des campagnes de tracking dédiées: pk_campaign et pk_kwd.
 
 ie: Me connecter: https://resorption-bidonvilles.dihal.gouv.fr/connexion?pk_campaign=recap-activite-email&pk_kwd=dep13-31-05-2021 (valeur à variabiliser) 
