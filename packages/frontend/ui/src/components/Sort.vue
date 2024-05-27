@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center">
-        <Dropdown right :closeWhenSorted="shouldClose">
+        <Dropdown right :closeWhenSorted="true">
             <template v-slot:button="{ isOpen }">
                 <Button variant="custom" size="sm" :icon="isOpen ? 'chevron-up' : 'chevron-down'" iconPosition="right"
                     :class="[
@@ -14,7 +14,7 @@
             <template v-slot:menu>
                 <Menu variant="withoutPadding">
                     <div class="flex flex-col text-sm menuWidth whitespace-nowrap">
-                       <Radio v-for="option in options" :key="option.id" :value="option.value" v-model="value" @update:modelValue="newSorting"
+                       <Radio v-for="option in options" :key="option.id" :value="option.value" v-model="value" 
                             :label="option.label" :name="name" variant="check" />
                     </div>
                 </Menu>
@@ -43,7 +43,6 @@ const props = defineProps({
     }
 });
 const { modelValue } = toRefs(props);
-const shouldClose = ref(true)
 const emit = defineEmits(['update:modelValue']);
 
 const title = computed(() => {
@@ -61,11 +60,6 @@ const value = computed({
         emit('update:modelValue', newValue);
     }
 });
-
-const newSorting = () => {
-    shouldClose.value = true;
-};
-
 </script>
 
 <style scoped="true">
