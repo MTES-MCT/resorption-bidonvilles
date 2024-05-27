@@ -233,18 +233,9 @@ export default function (
                               'Le contenu du champ "Origine de la décision" n\'est pas valide'
                           ),
                       justice_challenged: number()
-                          .nullable()
                           .when("justice_rendered", {
                               is: 1,
-                              then: (schema) =>
-                                  schema
-                                      .oneOf(
-                                          [0, 1],
-                                          `"${labels.justice_challenged}" doit être renseigné si une décision de justice a été rendue`
-                                      )
-                                      .required(
-                                          `${labels.justice_challenged} est obligatoire`
-                                      ),
+                              then: (schema) => schema.required(),
                           })
                           .label(labels.justice_challenged),
                       evacuation_under_time_limit: number()
