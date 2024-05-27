@@ -1,6 +1,6 @@
 <template>
     <div ref="dropdownRef" class="relative inline-block dropdown">
-        <div @click="toggleMenu">
+        <div ref="toggleButtonRef" @click="toggleMenu">
             <slot name="button" :isOpen="isOpen" />
         </div>
         <div
@@ -16,21 +16,28 @@
 </template>
 
 <script setup>
-import { ref, toRefs, watchEffect } from "vue";
+import { ref, toRefs, watchEffect, watch } from "vue";
 
 const props = defineProps({
     right: {
         type: Boolean,
         default: false
+    },
+    closeWhenSorted: {
+        type: Boolean,
+        default: false
     }
 });
 
-const { right } = toRefs(props);
+const { right, closeWhenSorted } = toRefs(props);
 const isOpen = ref(false);
 const dropdownRef = ref(null);
+const toggleButtonRef = ref(null);
 
 const checkOutsideClick = (event) => {
-    if (isOpen.value && !dropdownRef.value?.contains(event.target)) {
+    const isChildElement = dropdownRef.value?.contains(event.target);
+    const isToggleButton = toggleButtonRef.value?.contains(event.target); // Nouveau
+    if (isOpen.value && (!isChildElement || (isChildElement && closeWhenSorted.value)) && !isToggleButton) {
         closeMenu();
     }
 };
@@ -50,4 +57,10 @@ watchEffect(() => {
         document.removeEventListener("click", checkOutsideClick);
     }
 });
+
+// watch(closeWhenSorted, (newValue) => {
+//     if (newValue && newValue === true) {
+//         closeMenu();
+//     }
+// });
 </script>
