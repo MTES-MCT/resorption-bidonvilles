@@ -3,7 +3,7 @@ export default {
         { value: "caracteristics", label: "Caractéristiques" },
         { value: "people", label: "Habitants" },
         { value: "living_conditions", label: "Conditions de vie" },
-        { value: "justice", label: "Procédure judiciaire" },
+        { value: "procedure", label: "Procédures" },
     ],
     fields: {
         caracteristics: [
