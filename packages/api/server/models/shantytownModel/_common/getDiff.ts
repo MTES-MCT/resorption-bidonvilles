@@ -199,6 +199,7 @@ export default (oldVersion, newVersion): Diff[] => {
                     none: 'non demandé',
                     requested: 'demandé',
                     granted: 'obtenu',
+                    refused: 'refusé',
                 };
                 if (p === null) {
                     return 'inconnu';
@@ -217,6 +218,46 @@ export default (oldVersion, newVersion): Diff[] => {
         },
         bailiff: {
             label: "Nom de l'étude d'huissiers",
+        },
+        existingLitigation: {
+            label: "Existence d'un contentieux ?",
+            processor: baseProcessors.bool,
+        },
+        evacuationUnderTimeLimit: {
+            label: "Une procédure administrative prescrivant l'évacuation sous délai est-elle en cours ?",
+            processor: baseProcessors.bool,
+        },
+        administrativeOrderDecisionAt: {
+            label: "Date de l'arrêté de la procédure administrative",
+            processor: baseProcessors.date,
+        },
+        administrativeOrderDecisionRenderedBy: {
+            label: "Qui  a pris l'arrêté ?",
+        },
+        administrativeOrderEvacuationAt: {
+            label: "Date de l'évacuation",
+            processor: baseProcessors.date,
+        },
+        insalubrityOrder: {
+            label: "Un arrêté d'insalubrité dans le cadre d'une opération RHI bidonville est-il en cours ?",
+            processor: baseProcessors.bool,
+        },
+        insalubrityOrderDisplayed: {
+            label: "Affichage de l'arrêté ou notification ?",
+            processor: baseProcessors.bool,
+        },
+        insalubrityOrderType: {
+            label: "Type d'arrêté (arrêté de mise en sécurité, autre...)",
+        },
+        insalubrityOrderBy: {
+            label: "Qui a pris l'arrêté ?",
+        },
+        insalubrityOrderAt: {
+            label: "Date de l'arrêté d'insalubrité",
+            processor: baseProcessors.date,
+        },
+        insalubrityParcels: {
+            label: "Parcelles concernées par l'arrêté (numéros de parcelles)",
         },
     };
 
