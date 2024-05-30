@@ -1,4 +1,4 @@
-function addValueFromEnumSahntytownPoliceStatus(queryInterface, tableName, transaction) {
+function addValueFromEnumShantytownPoliceStatus(queryInterface, tableName, transaction) {
     return Promise.all([
         queryInterface.sequelize.query(
             `ALTER TYPE "enum_${tableName}_police_status" ADD VALUE 'refused' ;`,
@@ -10,7 +10,7 @@ function addValueFromEnumSahntytownPoliceStatus(queryInterface, tableName, trans
 }
 
 
-function removeValueFromEnumSahntytownPoliceStatus(queryInterface, tableName, transaction) {
+function removeValueFromEnumShantytownPoliceStatus(queryInterface, tableName, transaction) {
     return Promise.all([
         queryInterface.sequelize.query(
             `UPDATE "${tableName}" SET police_status = NULL WHERE police_status = 'refused' ;`,
@@ -71,8 +71,8 @@ module.exports = {
 
         try {
             await Promise.all([
-                addValueFromEnumSahntytownPoliceStatus(queryInterface, 'shantytowns', transaction),
-                addValueFromEnumSahntytownPoliceStatus(queryInterface, 'ShantytownHistories', transaction),
+                addValueFromEnumShantytownPoliceStatus(queryInterface, 'shantytowns', transaction),
+                addValueFromEnumShantytownPoliceStatus(queryInterface, 'ShantytownHistories', transaction),
             ]);
             await transaction.commit();
         } catch (error) {
@@ -86,8 +86,8 @@ module.exports = {
 
         try {
             await Promise.all([
-                removeValueFromEnumSahntytownPoliceStatus(queryInterface, 'shantytowns', transaction),
-                removeValueFromEnumSahntytownPoliceStatus(queryInterface, 'ShantytownHistories', transaction),
+                removeValueFromEnumShantytownPoliceStatus(queryInterface, 'shantytowns', transaction),
+                removeValueFromEnumShantytownPoliceStatus(queryInterface, 'ShantytownHistories', transaction),
             ]);
             await transaction.commit();
         } catch (error) {
