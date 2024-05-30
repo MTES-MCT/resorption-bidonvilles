@@ -11,9 +11,9 @@
         <label :class="[classes,
             isSubmitting || disabled ? 'opacity-85' : 'hover:border-blue500',
         ]">
-            <input :disabled="isSubmitting || disabled" type="radio" :name="name" @click="onClick" class="appearance-none" :checked="checked" />
+             <input :disabled="isSubmitting || disabled" type="radio" :name="name" :value="value" v-model="props.modelValue" class="appearance-none" @click="onClick" />
             <span>{{ label }}</span>
-            <Icon v-if="checked" class="text-primary font-bold text-md" icon="fa-solid fa-check" />
+            <Icon v-if="value === props.modelValue" class="text-primary font-bold text-md" icon="fa-solid fa-check" />
         </label>
     </template>
 
@@ -26,7 +26,7 @@
     </template>
 </template>
 <script setup>
-import { toRefs, computed } from 'vue';
+import { toRefs, computed, watch } from 'vue';
 import { useField, useIsSubmitting } from 'vee-validate';
 import Icon from "../Icon.vue";
 
@@ -35,7 +35,7 @@ const props = defineProps({
     label: String,
     value: [String, Boolean, Number],
     modelValue: String,
-    variant: String, // soit "default", soit "check", soit "radio"
+    variant: String, // soit "default", soit "checkbox", soit "radio"
     disabled: {
         type: Boolean,
         required: false,
@@ -55,6 +55,7 @@ const props = defineProps({
 
 const { name, variant, disabled, allowNull, nullValue } = toRefs(props);
 const isSubmitting = useIsSubmitting();
+const emit = defineEmits(['update:modelValue']);
 
 const { checked, handleChange } = useField(name, undefined, {
     type: 'radio',
@@ -107,11 +108,8 @@ const classes = computed(() => {
     return `${v.base} ${v.checked[checked.value === true]} ${v.disabled[(disabled.value || isSubmitting.value) === true]}`;
 });
 
-function onClick() {
-    if (!checked.value) {
-        handleChange(props.value);
-    } else if (allowNull.value === true) {
-        handleChange(nullValue.value);
-    }
+async function onClick() {
+        await handleChange(props.value);
+        emit('update:modelValue', props.value);
 }
 </script>
