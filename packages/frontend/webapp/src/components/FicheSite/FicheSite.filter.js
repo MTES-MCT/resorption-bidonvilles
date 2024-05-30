@@ -97,7 +97,7 @@ export default {
             "livingConditions.firePrevention.comments",
         ],
 
-        justice: [
+        procedure: [
             "ownerComplaint",
             "justiceChallenged",
             "justiceProcedure",
@@ -108,6 +108,17 @@ export default {
             "policeRequestedAt",
             "policeGrantedAt",
             "bailiff",
+            "existingLitigation",
+            "evacuationUnderTimeLimit",
+            "administrativeOrderDecisionAt",
+            "administrativeOrderDecisionRenderedBy",
+            "administrativeOrderEvacuationAt",
+            "insalubrityOrder",
+            "insalubrityOrderDisplayed",
+            "insalubrityOrderType",
+            "insalubrityOrderBy",
+            "insalubrityOrderAt",
+            "insalubrityParcels",
         ],
     },
 };
