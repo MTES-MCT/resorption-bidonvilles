@@ -3,41 +3,41 @@
         title="Procédure judiciaire ou administrative"
         category="procedure"
     >
-        <FicheSiteProceduresJudiciairesRubrique>
-            <FicheSiteProceduresJudiciairesLigne
+        <FicheSiteProceduresRubrique>
+            <FicheSiteProceduresLigne
                 icon="scroll"
                 label="Une plainte a-t-elle été déposée par le propriétaire ?"
                 :border="false"
             >
                 {{ formatBool(town.ownerComplaint) }}
-            </FicheSiteProceduresJudiciairesLigne>
+            </FicheSiteProceduresLigne>
 
-            <FicheSiteProceduresJudiciairesLigne
+            <FicheSiteProceduresLigne
                 icon="balance-scale"
                 label="Une procédure judiciaire a-t-elle été engagée ?"
             >
                 {{ formatBool(town.justiceProcedure) }}
-            </FicheSiteProceduresJudiciairesLigne>
+            </FicheSiteProceduresLigne>
 
-            <FicheSiteProceduresJudiciairesLigne
+            <FicheSiteProceduresLigne
                 label="Décision de justice rendue"
                 icon="gavel"
                 v-if="town.justiceProcedure"
             >
                 {{ justiceRendered }}
-            </FicheSiteProceduresJudiciairesLigne>
+            </FicheSiteProceduresLigne>
 
-            <FicheSiteProceduresJudiciairesLigne
+            <FicheSiteProceduresLigne
                 label="Contentieux"
                 icon="handshake"
                 v-if="town.justiceRendered"
             >
                 {{ formatBool(town.justiceChallenged) }}
-            </FicheSiteProceduresJudiciairesLigne>
-        </FicheSiteProceduresJudiciairesRubrique>
+            </FicheSiteProceduresLigne>
+        </FicheSiteProceduresRubrique>
 
-        <FicheSiteProceduresJudiciairesRubrique>
-            <FicheSiteProceduresJudiciairesLigne
+        <FicheSiteProceduresRubrique>
+            <FicheSiteProceduresLigne
                 :border="false"
                 icon="file-contract"
                 label="Une procédure administrative prescrivant l'évacuation sous délai est-elle en cours ?"
@@ -51,19 +51,19 @@
                 >
                     Par : {{ town.administrativeOrderDecisionRenderedBy }}
                 </p>
-            </FicheSiteProceduresJudiciairesLigne>
-        </FicheSiteProceduresJudiciairesRubrique>
+            </FicheSiteProceduresLigne>
+        </FicheSiteProceduresRubrique>
 
-        <FicheSiteProceduresJudiciairesRubrique>
-            <FicheSiteProceduresJudiciairesLigne
+        <FicheSiteProceduresRubrique>
+            <FicheSiteProceduresLigne
                 :border="false"
                 icon="right-from-bracket"
                 label="Un arrêté d'insalubrité dans le cadre d'une opération RHI bidonville est-il en cours ?"
             >
                 {{ formatBool(town.insalubrityOrder) }}
-            </FicheSiteProceduresJudiciairesLigne>
+            </FicheSiteProceduresLigne>
 
-            <FicheSiteProceduresJudiciairesLigne
+            <FicheSiteProceduresLigne
                 v-if="town.insalubrityOrder"
                 icon="signs-post"
                 label="Affichage de l'arrêté ou notification"
@@ -75,42 +75,42 @@
                 <p v-if="town.insalubrityOrderBy">
                     Pris par : {{ town.insalubrityOrderBy }}
                 </p>
-            </FicheSiteProceduresJudiciairesLigne>
+            </FicheSiteProceduresLigne>
 
-            <FicheSiteProceduresJudiciairesLigne
+            <FicheSiteProceduresLigne
                 v-if="town.insalubrityOrder"
                 icon="map-location-dot"
                 label="Quelles sont les parcelles concernées"
             >
                 {{ town.insalubrityParcels || "non précisé" }}
-            </FicheSiteProceduresJudiciairesLigne>
-        </FicheSiteProceduresJudiciairesRubrique>
+            </FicheSiteProceduresLigne>
+        </FicheSiteProceduresRubrique>
 
-        <FicheSiteProceduresJudiciairesRubrique v-if="town.policeStatus">
-            <FicheSiteProceduresJudiciairesLigne
+        <FicheSiteProceduresRubrique v-if="town.policeStatus">
+            <FicheSiteProceduresLigne
                 icon="person-military-pointing"
                 label="Concours de la force publique"
                 :border="false"
             >
                 {{ policeStatus }}
-            </FicheSiteProceduresJudiciairesLigne>
+            </FicheSiteProceduresLigne>
 
-            <FicheSiteProceduresJudiciairesLigne
+            <FicheSiteProceduresLigne
                 v-if="town.policeStatus === 'granted'"
                 icon="book"
                 label="Existence d'un contentieux ?"
             >
                 {{ existingLitigationStatus }}
-            </FicheSiteProceduresJudiciairesLigne>
+            </FicheSiteProceduresLigne>
 
-            <FicheSiteProceduresJudiciairesLigne
+            <FicheSiteProceduresLigne
                 v-if="town.justiceProcedure"
                 icon="book-open-reader"
                 label="Nom de l'étude d'huissier"
             >
                 {{ town.bailiff || "non communiqué" }}
-            </FicheSiteProceduresJudiciairesLigne>
-        </FicheSiteProceduresJudiciairesRubrique>
+            </FicheSiteProceduresLigne>
+        </FicheSiteProceduresRubrique>
     </FicheRubrique>
 </template>
 
@@ -123,8 +123,8 @@ import { useModaleStore } from "@/stores/modale.store";
 import { useEventBus } from "@common/helpers/event-bus";
 
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
-import FicheSiteProceduresJudiciairesRubrique from "./FicheSiteProceduresJudiciairesRubrique.vue";
-import FicheSiteProceduresJudiciairesLigne from "./FicheSiteProceduresJudiciairesLigne.vue";
+import FicheSiteProceduresRubrique from "./FicheSiteProceduresRubrique.vue";
+import FicheSiteProceduresLigne from "./FicheSiteProceduresLigne.vue";
 import ModaleListeAccesPJ from "@/components/ModaleListeAccesPJ/ModaleListeAccesPJ.vue";
 
 const props = defineProps({
