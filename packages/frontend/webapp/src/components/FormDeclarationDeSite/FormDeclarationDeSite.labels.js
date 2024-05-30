@@ -39,7 +39,6 @@ export default {
     justice_rendered: "Décision de justice rendue",
     justice_rendered_at: "Date de la décision",
     justice_rendered_by: "Origine de la décision",
-    // justice_challenged: "Existence d'un contentieux",
     justice_challenged: "Y-a-t-il un appel en cours ?",
     police_status: "Statut du concours de la force publique",
     police_requested_at: "Date de la demande du CFP",
