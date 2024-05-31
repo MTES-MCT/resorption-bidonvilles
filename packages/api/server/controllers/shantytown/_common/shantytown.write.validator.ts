@@ -465,77 +465,26 @@ export default mode => ([
      * Nombre de caravanes
      ********************************************************************************************* */
     ...validateIntegerWithMinValue('caravans', 0, validateNull, validateInteger),
-    // body('caravans')
-    //     .customSanitizer(value => (value === '' ? null : value)),
-    // body('caravans')
-    //     .optional({ nullable: true })
-    //     .toInt()
-    //     .isInt().bail().withMessage('Le champ "Nombre de caravanes" est invalide')
-    //     .isInt({ min: 0 }).withMessage('Le champ "Nombre de caravanes" ne peut pas être inférieur à 0'),
-
-    // body('caravans')
-    //     .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre de cabanes
      ********************************************************************************************* */
     ...validateIntegerWithMinValue('huts', 0, validateNull, validateInteger),
-    // body('huts')
-    //     .customSanitizer(value => (value === '' ? null : value)),
-    // body('huts')
-    //     .optional({ nullable: true })
-    //     .toInt()
-    //     .isInt().bail().withMessage('Le champ "Nombre de cabanes" est invalide')
-    //     .isInt({ min: 0 }).withMessage('Le champ "Nombre de cabanes" ne peut pas être inférieur à 0'),
-
-    // body('huts')
-    //     .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre de tentes
      ********************************************************************************************* */
     ...validateIntegerWithMinValue('tents', 0, validateNull, validateInteger),
-    // body('tents')
-    //     .customSanitizer(value => (value === '' ? null : value)),
-
-    // body('tents')
-    //     .optional({ nullable: true })
-    //     .toInt()
-    //     .isInt().bail().withMessage('Le champ "Nombre de tentes" est invalide')
-    //     .isInt({ min: 0 }).withMessage('Le champ "Nombre de tentes" ne peut pas être inférieur à 0'),
-
-    // body('tents')
-    //     .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre de voitures dortoir
      ********************************************************************************************* */
     ...validateIntegerWithMinValue('cars', 0, validateNull, validateInteger),
-    // body('cars')
-    //     .customSanitizer(value => (value === '' ? null : value)),
-    // body('cars')
-    //     .optional({ nullable: true })
-    //     .toInt()
-    //     .isInt().bail().withMessage('Le champ "Nombre de voitures dortoir" est invalide')
-    //     .isInt({ min: 0 }).withMessage('Le champ "Nombre de voitures dortoir" ne peut pas être inférieur à 0'),
-
-    // body('cars')
-    //     .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre de matelas
      ********************************************************************************************* */
     ...validateIntegerWithMinValue('mattresses', 0, validateNull, validateInteger),
-    // body('mattresses')
-    //     .customSanitizer(value => (value === '' ? null : value)),
-    // body('mattresses')
-    //     .optional({ nullable: true })
-    //     .toInt()
-    //     .isInt().bail().withMessage('Le champ "Nombre de matelas" est invalide')
-    //     .isInt({ min: 0 }).withMessage('Le champ "Nombre de matelas" ne peut pas être inférieur à 0'),
-
-    // body('mattresses')
-    //     .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre de ménages
