@@ -388,6 +388,14 @@ const router = createRouter({
                 navTab: "administration",
                 displayOrderOnSiteMap: 0,
             },
+            beforeEnter: (to, from, next) => {
+                const userStore = useUserStore();
+                if (userStore.isLoggedIn && userStore.user?.is_superuser) {
+                    next();
+                } else {
+                    next("/page-interdite");
+                }
+            },
         },
         {
             path: "/utilisateurs/permissions",
