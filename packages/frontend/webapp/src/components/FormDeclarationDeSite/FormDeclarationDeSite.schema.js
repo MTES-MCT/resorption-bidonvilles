@@ -195,23 +195,6 @@ export default function (
                               then: (schema) => schema.required(),
                           })
                           .label(labels.justice_rendered),
-                      // Ce qui précède ne fonctionne pas mais le code suivant fonctionne
-                      // Cependant, le code reste en place à la demande de l'équipe produit.
-                      // La correction reste également en cas de changement d'avis
-                      //   justice_rendered: number()
-                      //       .when("justice_procedure", {
-                      //           is: 1,
-                      //           then: (schema) =>
-                      //               schema
-                      //                   .oneOf(
-                      //                       [0, 1],
-                      //                       `${labels.justice_rendered} doit être renseigné si une procédure judiciaire est en cours`
-                      //                   )
-                      //                   .required(
-                      //                       `${labels.justice_rendered} est obligatoire`
-                      //                   ),
-                      //       })
-                      //       .label(labels.justice_rendered),
                       justice_rendered_at: date()
                           .when("justice_rendered", {
                               is: 1,
@@ -230,7 +213,7 @@ export default function (
                           .label(labels.justice_rendered_by)
                           .matches(
                               /^[^<>{}]*$/,
-                              'Le contenu du champ "Origine de la décision" n\'est pas valide'
+                              `Le contenu du champ ${labels.justice_rendered_by} n'est pas valide`
                           ),
                       justice_challenged: number()
                           .when("justice_rendered", {
@@ -250,7 +233,7 @@ export default function (
                           )
                           .matches(
                               /^[^<>{}]*$/,
-                              "Le contenu du champ \"Qui a pris l'arrêté\" n'est pas valide"
+                              `Le contenu du champ ${labels.administrative_order_decision_rendered_by} n'est pas valide`
                           ),
                       administrative_order_evacuation_at: string()
                           .nullable()
