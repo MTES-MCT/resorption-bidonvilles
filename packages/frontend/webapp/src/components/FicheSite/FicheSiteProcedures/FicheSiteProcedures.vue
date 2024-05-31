@@ -4,36 +4,6 @@
         category="procedure"
     >
         <FicheSiteProceduresRubrique>
-            <!-- <FicheSiteProceduresLigne
-                icon="scroll"
-                label="Une plainte a-t-elle été déposée par le propriétaire ?"
-                :border="false"
-            >
-                {{ formatBool(town.ownerComplaint) }}
-            </FicheSiteProceduresLigne>
-
-            <FicheSiteProceduresLigne
-                icon="balance-scale"
-                label="Une procédure judiciaire a-t-elle été engagée ?"
-            >
-                {{ formatBool(town.justiceProcedure) }}
-            </FicheSiteProceduresLigne>
-
-            <FicheSiteProceduresLigne
-                label="Décision de justice rendue"
-                icon="gavel"
-                v-if="town.justiceProcedure"
-            >
-                {{ justiceRendered }}
-            </FicheSiteProceduresLigne>
-
-            <FicheSiteProceduresLigne
-                label="Contentieux"
-                icon="handshake"
-                v-if="town.justiceRendered"
-            >
-                {{ formatBool(town.justiceChallenged) }}
-            </FicheSiteProceduresLigne> -->
             <FicheSiteProceduresLigne
                 v-for="(procedure, index) in filteredProcedureJudiciaire"
                 :key="index"
