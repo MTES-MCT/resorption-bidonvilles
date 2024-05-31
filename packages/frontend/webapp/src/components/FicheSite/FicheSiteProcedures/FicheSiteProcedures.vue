@@ -4,7 +4,7 @@
         category="procedure"
     >
         <FicheSiteProceduresRubrique>
-            <FicheSiteProceduresLigne
+            <!-- <FicheSiteProceduresLigne
                 icon="scroll"
                 label="Une plainte a-t-elle été déposée par le propriétaire ?"
                 :border="false"
@@ -33,6 +33,15 @@
                 v-if="town.justiceRendered"
             >
                 {{ formatBool(town.justiceChallenged) }}
+            </FicheSiteProceduresLigne> -->
+            <FicheSiteProceduresLigne
+                v-for="(procedure, index) in filteredProcedureJudiciaire"
+                :key="index"
+                :icon="procedure.icon"
+                :label="procedure.label"
+                :border="procedure.border || null"
+            >
+                {{ procedure.value }}
             </FicheSiteProceduresLigne>
         </FicheSiteProceduresRubrique>
 
@@ -237,6 +246,43 @@ const insalubrityOrderDisplayStatus = computed(() => {
 
     // Retourne null si les conditions de base ne sont pas remplies
     return null;
+});
+
+const ProcedureJudiciaire = computed(() => {
+    return [
+        {
+            icon: "scroll",
+            label: "Une plainte a-t-elle été déposée par le propriétaire ?",
+            border: false,
+            condition: true,
+            value: formatBool(town.value.ownerComplaint),
+        },
+        {
+            icon: "balance-scale",
+            label: "Une procédure judiciaire a-t-elle été engagée ?",
+            border: true,
+            condition: true,
+            value: formatBool(town.value.justiceProcedure),
+        },
+        {
+            icon: "gavel",
+            label: "Décision de justice rendue",
+            border: true,
+            condition: town.value.justiceProcedure,
+            value: justiceRendered.value,
+        },
+        {
+            icon: "handshake",
+            label: "Contentieux",
+            border: true,
+            condition: town.value.justiceRendered,
+            value: formatBool(town.value.justiceChallenged),
+        },
+    ];
+});
+
+const filteredProcedureJudiciaire = computed(() => {
+    return ProcedureJudiciaire.value.filter((procedure) => procedure.condition);
 });
 
 watch(
