@@ -19,7 +19,7 @@ export default async (req: UserSetInterventionAreasRequest, res: Response, next:
     try {
         if (req.user.is_superuser !== true) {
             res.status(403).send({
-                user_message: 'La modification des territoires d\'intervention est temporairement réservée aux administrateurs nationaux',
+                user_message: 'La modification des territoires d\'intervention est réservée aux administrateurs nationaux',
             });
             return;
         }
