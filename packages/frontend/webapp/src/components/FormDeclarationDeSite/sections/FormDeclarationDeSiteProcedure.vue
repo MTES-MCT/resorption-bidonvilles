@@ -25,9 +25,16 @@
         <Fieldset :legend="labels.justice_procedure" showMandatoryStar>
             <InputJusticeProcedure />
             <InputJusticeRendered v-if="values.justice_procedure === 1" />
-            <InputJusticeRenderedAt
+            <InputProcedureDatepicker
                 v-if="values.justice_rendered === 1"
                 width="w-64"
+                name="justice_rendered_at"
+                id="justice_rendered_at"
+                :label="labels.justice_rendered_at"
+                :minDate="values.built_at || undefined"
+                :maxDate="new Date()"
+                showMandatoryStar
+                v-model="values.justice_rendered_at"
             />
             <InputJusticeRenderedBy v-if="values.justice_rendered === 1" />
             <InputJusticeChallenged v-if="values.justice_rendered === 1" />
@@ -41,16 +48,28 @@
                 fieldName="evacuation_under_time_limit"
                 :items="yesNoItems"
             />
-            <InputAdministrativeOrderDecisionRenderedAt
+            <InputProcedureDatepicker
                 v-if="values.evacuation_under_time_limit === 1"
                 width="w-64"
+                name="administrative_order_decision_at"
+                id="administrative_order_decision_at"
+                :label="labels.administrative_order_decision_at"
+                :minDate="values.built_at || undefined"
+                :maxDate="new Date()"
+                v-model="values.administrative_order_decision_at"
             />
             <InputAdministrativeOrderDecisionRenderedBy
                 v-if="values.evacuation_under_time_limit === 1"
             />
-            <InputAdministrativeOrderEvacuationAt
+            <InputProcedureDatepicker
                 v-if="values.evacuation_under_time_limit === 1"
                 width="w-64"
+                name="administrative_order_evacuation_at"
+                id="administrative_order_evacuation_at"
+                :label="labels.administrative_order_evacuation_at"
+                :minDate="values.built_at || undefined"
+                :maxDate="new Date()"
+                v-model="values.administrative_order_evacuation_at"
             />
         </Fieldset>
 
@@ -65,9 +84,15 @@
             />
             <InputInsalubrityOrderType v-if="values.insalubrity_order === 1" />
             <InputInsalubrityOrderBy v-if="values.insalubrity_order === 1" />
-            <InputInsalubrityOrderAt
+            <InputProcedureDatepicker
                 v-if="values.insalubrity_order === 1"
                 width="w-64"
+                name="insalubrity_order_at"
+                id="insalubrity_order_at"
+                :label="labels.insalubrity_order_at"
+                :minDate="values.built_at || undefined"
+                :maxDate="new Date()"
+                v-model="values.insalubrity_order_at"
             />
             <InputInsalubrityParcels v-if="values.insalubrity_order === 1" />
         </Fieldset>
@@ -78,25 +103,33 @@
                     fieldName="police_status"
                     :items="policeItems"
                 />
-                <InputPoliceRequestedAt
+                <InputProcedureDatepicker
                     v-if="policeRequested || policeRefused"
-                    fieldName="police_requested_at"
-                    modelName="values.police_requested_at"
                     width="w-64"
+                    name="police_requested_at"
+                    id="police_requested_at"
+                    :label="labels.police_requested_at"
+                    :minDate="values.built_at || undefined"
+                    :maxDate="new Date()"
                     showMandatoryStar
+                    modelName="values.police_requested_at"
                 />
-                <InputPoliceGrantedAt
+                <InputProcedureDatepicker
                     v-if="policeGranted"
-                    fieldName="police_granted_at"
-                    modelName="values.police_granted_at"
                     width="w-64"
-                    show-mandatory-star
+                    name="police_granted_at"
+                    id="police_granted_at"
+                    :label="labels.police_granted_at"
+                    :minDate="values.police_requested_at"
+                    :maxDate="new Date()"
+                    showMandatoryStar
+                    modelName="values.police_granted_at"
                 />
                 <InputExistingLitigation
                     v-if="policeGranted"
                     showMandatoryStar
                 />
-                <InputBailiff fieldName="bailiff" />
+                <InputBailiff />
             </Fieldset>
         </template>
     </FormSection>
@@ -115,22 +148,16 @@ import InputOwnerComplaint from "../inputs/FormDeclarationDeSiteInputOwnerCompla
 
 import InputJusticeProcedure from "../inputs/FormDeclarationDeSiteInputJusticeProcedure.vue";
 import InputJusticeRendered from "../inputs/FormDeclarationDeSiteInputJusticeRendered.vue";
-import InputJusticeRenderedAt from "../inputs/FormDeclarationDeSiteInputJusticeRenderedAt.vue";
+import InputProcedureDatepicker from "../inputs/common/InputDeclarationDeSiteDatepickerInput.vue";
 import InputJusticeRenderedBy from "../inputs/FormDeclarationDeSiteInputJusticeRenderedBy.vue";
 import InputJusticeChallenged from "../inputs/FormDeclarationDeSiteInputJusticeChallenged.vue";
-
-import InputPoliceRequestedAt from "../inputs/FormDeclarationDeSiteInputPoliceRequestedAt.vue";
-import InputPoliceGrantedAt from "../inputs/FormDeclarationDeSiteInputPoliceGrantedAt.vue";
 
 import InputExistingLitigation from "../inputs/FormDeclarationDeSiteInputExistingLitigation.vue";
 
 import InputBailiff from "../inputs/FormDeclarationDeSiteInputBailiff.vue";
 
-import InputAdministrativeOrderDecisionRenderedAt from "../inputs/FormDeclarationDeSiteInputProcedureDecisionRenderedAt.vue";
 import InputAdministrativeOrderDecisionRenderedBy from "../inputs/FormDeclarationDeSiteInputProcedureDecisionRenderedBy.vue";
-import InputAdministrativeOrderEvacuationAt from "../inputs/FormDeclarationDeSiteInputProcedureEvacuationAt.vue";
 import InputInsalubrityOrderDisplayed from "../inputs/FormDeclarationDeSiteInputInsalubrityOrderDisplayed.vue";
-import InputInsalubrityOrderAt from "../inputs/FormDeclarationDeSiteInputProcedureInsalubrityOrderAt.vue";
 import InputInsalubrityOrderBy from "../inputs/FormDeclarationDeSiteInputProcedureInsalubrityOrderBy.vue";
 import InputInsalubrityOrderType from "../inputs/FormDeclarationDeSiteInputProcedureInsalubrityOrderType.vue";
 import InputInsalubrityParcels from "../inputs/FormDeclarationDeSiteInputInsalubrityParcels.vue";
