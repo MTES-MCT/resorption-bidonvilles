@@ -27,7 +27,7 @@ const props = defineProps({
     },
     showMandatoryStar: {
         type: Boolean,
-        reaquried: false,
+        required: false,
         default: false,
     },
 });
