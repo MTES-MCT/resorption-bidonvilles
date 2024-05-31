@@ -1,6 +1,6 @@
 <template>
     <ModaleListeAcces
-        title-class="md:whitespace-nowrap md:mr-8"
+        titleClass="md:whitespace-nowrap md:mr-8"
         ref="modale"
         :wording="wording"
         :loadFn="fetch"
@@ -37,12 +37,20 @@ const wording = computed(() => {
 
     return {
         title: () =>
-            "Qui a accès aux procédures judiciaires ou administratives ?",
+            `Qui ${
+                future.value ? "aura" : "a"
+            } accès aux procédures judiciaires ou administratives ?`,
         emptyList: () =>
-            "Seuls les utilisateurs en préfecture et DDETS / DREETS a accès aux données judiciaires ou administratives de ce site.",
+            "Seuls les utilisateurs en préfecture et DDETS / DREETS auront accès aux données judiciaires ou administratives de ce site.",
         fullList: (numberOfUsers) =>
             `${
-                numberOfUsers > 1 ? "ont" : "a"
+                numberOfUsers > 1
+                    ? future.value
+                        ? "auront"
+                        : "ont"
+                    : future.value
+                    ? "aura"
+                    : "a"
             } accès aux données judiciaires ou administratives de ce site`,
     };
 });
