@@ -27,7 +27,6 @@
             <InputJusticeRendered v-if="values.justice_procedure === 1" />
             <InputProcedureDatepicker
                 v-if="values.justice_rendered === 1"
-                width="w-64"
                 name="justice_rendered_at"
                 id="justice_rendered_at"
                 :label="labels.justice_rendered_at"
@@ -45,12 +44,12 @@
             showMandatoryStar
         >
             <InputCheckableGroup
-                fieldName="evacuation_under_time_limit"
+                name="evacuation_under_time_limit"
                 :items="yesNoItems"
+                model="values.evacuation_under_time_limit"
             />
             <InputProcedureDatepicker
                 v-if="values.evacuation_under_time_limit === 1"
-                width="w-64"
                 name="administrative_order_decision_at"
                 id="administrative_order_decision_at"
                 :label="labels.administrative_order_decision_at"
@@ -63,7 +62,6 @@
             />
             <InputProcedureDatepicker
                 v-if="values.evacuation_under_time_limit === 1"
-                width="w-64"
                 name="administrative_order_evacuation_at"
                 id="administrative_order_evacuation_at"
                 :label="labels.administrative_order_evacuation_at"
@@ -75,8 +73,9 @@
 
         <Fieldset :legend="labels.insalubrity_order" showMandatoryStar>
             <InputCheckableGroup
-                fieldName="insalubrity_order"
+                name="insalubrity_order"
                 :items="yesNoItems"
+                model="values.insalubrity_order"
             />
             <InputInsalubrityOrderDisplayed
                 v-if="values.insalubrity_order === 1"
@@ -86,7 +85,6 @@
             <InputInsalubrityOrderBy v-if="values.insalubrity_order === 1" />
             <InputProcedureDatepicker
                 v-if="values.insalubrity_order === 1"
-                width="w-64"
                 name="insalubrity_order_at"
                 id="insalubrity_order_at"
                 :label="labels.insalubrity_order_at"
@@ -100,12 +98,12 @@
         <template v-if="policeInformationRequested === true">
             <Fieldset :legend="labels.police_status" showMandatoryStar>
                 <InputCheckableGroup
-                    fieldName="police_status"
+                    name="police_status"
                     :items="policeItems"
+                    model="values.police_status"
                 />
                 <InputProcedureDatepicker
                     v-if="policeRequested || policeRefused"
-                    width="w-64"
                     name="police_requested_at"
                     id="police_requested_at"
                     :label="labels.police_requested_at"
@@ -116,7 +114,6 @@
                 />
                 <InputProcedureDatepicker
                     v-if="policeGranted"
-                    width="w-64"
                     name="police_granted_at"
                     id="police_granted_at"
                     :label="labels.police_granted_at"

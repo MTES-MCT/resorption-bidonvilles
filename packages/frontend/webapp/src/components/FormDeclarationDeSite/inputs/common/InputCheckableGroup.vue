@@ -5,8 +5,8 @@
             :key="item.value"
             :value="item.value"
             :label="item.label"
-            :name="fieldName"
-            v-bind="$attrs"
+            :name="name"
+            :v-model="modelName"
         />
     </CheckableGroup>
 </template>
@@ -16,12 +16,16 @@ import { toRefs } from "vue";
 import { CheckableGroup, Radio } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
-    fieldName: {
+    name: {
         type: String,
         required: true,
     },
     items: {
         type: Array,
+        required: true,
+    },
+    model: {
+        type: String,
         required: true,
     },
 });
