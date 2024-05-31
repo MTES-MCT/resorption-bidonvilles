@@ -1,5 +1,6 @@
 <template>
     <DatepickerInput
+        class="w-64"
         :name="name"
         :id="name"
         :label="label"
