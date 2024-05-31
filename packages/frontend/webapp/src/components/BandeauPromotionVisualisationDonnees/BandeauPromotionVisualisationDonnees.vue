@@ -31,7 +31,7 @@
                         classes="inline-block px-2 py-1 text-white bg-primary rounded hover:bg-white transition-colors"
                         :to="navigationStore.metricsItem.route"
                         >Visualisation des données</Link
-                    >.
+                    >
                 </p>
             </div>
         </article>
