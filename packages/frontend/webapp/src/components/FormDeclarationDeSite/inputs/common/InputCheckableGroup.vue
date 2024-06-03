@@ -6,7 +6,7 @@
             :value="item.value"
             :label="item.label"
             :name="name"
-            :v-model="modelName"
+            :v-model="model"
         />
     </CheckableGroup>
 </template>
