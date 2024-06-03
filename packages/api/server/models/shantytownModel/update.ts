@@ -343,8 +343,18 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
             'police_status',
             'police_requested_at',
             'police_granted_at',
-            'existing_litigation',
             'bailiff',
+            'existing_litigation',
+            'evacuation_under_time_limit',
+            'administrative_order_decision_at',
+            'administrative_order_decision_rendered_by',
+            'administrative_order_evacuation_at',
+            'insalubrity_order',
+            'insalubrity_order_displayed',
+            'insalubrity_order_type',
+            'insalubrity_order_by',
+            'insalubrity_order_at',
+            'insalubrity_parcels',
         ];
         const { commonData, justiceData, ownerData } = Object.keys(data).reduce(
             (acc, key) => {
@@ -363,7 +373,7 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
                         commonData: acc.commonData,
                         justiceData: {
                             ...acc.justiceData,
-                            [key]: data[key],
+                            ...(data[key] !== undefined ? { [key]: data[key] } : {}),
                         },
                         ownerData: acc.ownerData,
                     };
@@ -383,7 +393,7 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
                 return {
                     commonData: {
                         ...acc.commonData,
-                        [key]: data[key],
+                        ...(data[key] !== undefined ? { [key]: data[key] } : {}),
                     },
                     justiceData: acc.justiceData,
                     ownerData: acc.ownerData,
