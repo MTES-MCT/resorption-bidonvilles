@@ -523,7 +523,8 @@ export default mode => ([
         .reduce((acc, { min, max }) => [
             ...acc,
             body(`population_minors_${min}_${max}`)
-                .optional({ nullable: true })
+                .optional({ nullable: true, checkFalsy: true })
+                .trim()
                 .toInt()
                 .isInt().bail().withMessage(`Le champ "Nombre de mineurs entre ${min} et ${max} ans" est invalide`)
                 .isInt({ min: 0 }).withMessage(`Le champ "Nombre de mineurs entre ${min} et ${max} ans" ne peut pas être inférieur à 0`),

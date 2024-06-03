@@ -3,11 +3,18 @@ import { computed } from "vue";
 import labels from "./FormDeclarationDeSite.labels.js";
 
 function emptyStringToNull(value, originalValue) {
-    if (typeof originalValue === "string" && originalValue === "") {
-        return null;
+    if (originalValue !== null && originalValue !== "") {
+        const parsedValue = parseInt(originalValue, 10);
+        if (isNaN(parsedValue)) {
+            // Ajout d'une vérification pour les valeurs de type String non autorisées
+            if (typeof originalValue === "string" && originalValue !== "") {
+                return value;
+            }
+            return null;
+        }
+        return parsedValue;
     }
-
-    return value;
+    return null;
 }
 
 function makeNullableIfEdit(s, mode) {
@@ -241,9 +248,9 @@ export default function (
                       insalubrity_order: number()
                           .required()
                           .label(labels.insalubrity_order),
-                      insalubrity_order_displayed: number().label(
-                          labels.insalubrity_order_displayed
-                      ),
+                      insalubrity_order_displayed: number()
+                          .nullable()
+                          .label(labels.insalubrity_order_displayed),
                       insalubrity_order_type: string()
                           .nullable()
                           .label(labels.insalubrity_order_type)
