@@ -3,6 +3,7 @@
         id="existing_litigation"
         direction="horizontal"
         :label="labels.existing_litigation"
+        showMandatoryStar
     >
         <Radio
             v-for="item in items"

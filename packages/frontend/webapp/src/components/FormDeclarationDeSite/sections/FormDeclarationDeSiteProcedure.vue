@@ -122,10 +122,7 @@
                     showMandatoryStar
                     modelName="values.police_granted_at"
                 />
-                <InputExistingLitigation
-                    v-if="policeGranted"
-                    showMandatoryStar
-                />
+                <InputExistingLitigation v-if="policeGranted" />
                 <InputBailiff />
             </Fieldset>
         </template>
