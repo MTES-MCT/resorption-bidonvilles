@@ -1013,7 +1013,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         updatedAt: {
             title: 'Site mis à jour le',
-            data: ({ updatedAt }: Shantytown) => (updatedAt ? tsToString(updatedAt, 'd/m/Y') : ''),
+            data: ({ updatedAt }: Shantytown) => (updatedAt ? new Date(updatedAt * 1000) : ''),
             width: COLUMN_WIDTHS.SMALL,
         },
         actors: {
