@@ -134,7 +134,7 @@ import { computed, toRefs } from "vue";
 import { useFormValues } from "vee-validate";
 import FormSection from "@/components/FormSection/FormSection.vue";
 import { Button, Fieldset } from "@resorptionbidonvilles/ui";
-import labels from "../FormDeclarationDeSite.labels";
+import labels from "@/components/Common/FormEtFicheSite.labels";
 
 import InputCheckableGroup from "../inputs/common/InputCheckableGroup.vue";
 

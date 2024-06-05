@@ -1,6 +1,6 @@
 import { object, string, date, number, array, ref } from "yup";
 import { computed } from "vue";
-import labels from "./FormDeclarationDeSite.labels.js";
+import labels from "@/components/Common/FormEtFicheSite.labels";
 
 function emptyStringToNull(value, originalValue) {
     if (originalValue !== null && originalValue !== "") {

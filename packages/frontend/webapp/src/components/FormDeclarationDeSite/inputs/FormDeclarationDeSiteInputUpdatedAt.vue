@@ -15,7 +15,7 @@
 import { defineProps, toRefs } from "vue";
 import { useFormValues } from "vee-validate";
 import { DatepickerInput } from "@resorptionbidonvilles/ui";
-import labels from "../FormDeclarationDeSite.labels";
+import labels from "@/components/Common/FormEtFicheSite.labels";
 
 const props = defineProps({
     minDate: {

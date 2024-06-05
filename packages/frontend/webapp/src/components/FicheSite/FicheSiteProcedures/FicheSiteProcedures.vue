@@ -19,7 +19,7 @@
             <FicheSiteProceduresLigne
                 :border="false"
                 icon="file-contract"
-                label="Une procédure administrative prescrivant l'évacuation sous délai est-elle en cours ?"
+                :label="labels.evacuation_under_time_limit"
             >
                 <p>{{ administrativeOrderStatus }}</p>
                 <p
@@ -37,7 +37,7 @@
             <FicheSiteProceduresLigne
                 :border="false"
                 icon="right-from-bracket"
-                label="Un arrêté d'insalubrité dans le cadre d'une opération RHI bidonville est-il en cours ?"
+                :label="labels.insalubrity_order"
             >
                 {{ formatBool(town.insalubrityOrder) }}
             </FicheSiteProceduresLigne>
@@ -45,7 +45,7 @@
             <FicheSiteProceduresLigne
                 v-if="town.insalubrityOrder"
                 icon="signs-post"
-                label="Affichage de l'arrêté ou notification"
+                :label="labels.insalubrity_order_displayed"
             >
                 <p>{{ formatBool(town.insalubrityOrderDisplayed) }}</p>
                 <p>
@@ -59,16 +59,16 @@
             <FicheSiteProceduresLigne
                 v-if="town.insalubrityOrder"
                 icon="map-location-dot"
-                label="Quelles sont les parcelles concernées"
+                :label="labels.insalubrity_parcels"
             >
                 {{ town.insalubrityParcels || "non précisé" }}
             </FicheSiteProceduresLigne>
         </FicheSiteProceduresRubrique>
 
-        <FicheSiteProceduresRubrique v-if="town.policeStatus">
+        <FicheSiteProceduresRubrique>
             <FicheSiteProceduresLigne
                 icon="person-military-pointing"
-                label="Concours de la force publique"
+                :label="labels.police_status"
                 :border="false"
             >
                 {{ policeStatus }}
@@ -77,15 +77,19 @@
             <FicheSiteProceduresLigne
                 v-if="town.policeStatus === 'granted'"
                 icon="book"
-                label="Existence d'un contentieux ?"
+                :label="labels.existing_litigation"
             >
                 {{ existingLitigationStatus }}
             </FicheSiteProceduresLigne>
 
             <FicheSiteProceduresLigne
-                v-if="town.justiceProcedure"
+                v-if="
+                    town.justiceProcedure ||
+                    town.evacuation_under_time_limit ||
+                    town.insalubrityOrder
+                "
                 icon="book-open-reader"
-                label="Nom de l'étude d'huissier"
+                :label="labels.bailiff"
             >
                 {{ town.bailiff || "non communiqué" }}
             </FicheSiteProceduresLigne>
@@ -105,6 +109,7 @@ import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import FicheSiteProceduresRubrique from "./FicheSiteProceduresRubrique.vue";
 import FicheSiteProceduresLigne from "./FicheSiteProceduresLigne.vue";
 import ModaleListeAccesPJ from "@/components/ModaleListeAccesPJ/ModaleListeAccesPJ.vue";
+import labels from "@/components/Common/FormEtFicheSite.labels";
 
 const props = defineProps({
     town: Object,
@@ -222,28 +227,28 @@ const ProcedureJudiciaire = computed(() => {
     return [
         {
             icon: "scroll",
-            label: "Une plainte a-t-elle été déposée par le propriétaire ?",
+            label: labels.owner_complaint,
             border: false,
             condition: true,
             value: formatBool(town.value.ownerComplaint),
         },
         {
             icon: "balance-scale",
-            label: "Une procédure judiciaire a-t-elle été engagée ?",
+            label: labels.justice_procedure,
             border: true,
             condition: true,
             value: formatBool(town.value.justiceProcedure),
         },
         {
             icon: "gavel",
-            label: "Décision de justice rendue",
+            label: labels.justice_rendered,
             border: true,
             condition: town.value.justiceProcedure,
             value: justiceRendered.value,
         },
         {
             icon: "handshake",
-            label: "Contentieux",
+            label: labels.justice_challenged,
             border: true,
             condition: town.value.justiceRendered,
             value: formatBool(town.value.justiceChallenged),

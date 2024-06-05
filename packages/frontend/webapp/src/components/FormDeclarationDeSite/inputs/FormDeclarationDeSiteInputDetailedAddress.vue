@@ -10,5 +10,5 @@
 
 <script setup>
 import { TextArea } from "@resorptionbidonvilles/ui";
-import labels from "../FormDeclarationDeSite.labels";
+import labels from "@/components/Common/FormEtFicheSite.labels";
 </script>

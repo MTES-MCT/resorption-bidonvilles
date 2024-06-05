@@ -9,5 +9,5 @@
 
 <script setup>
 import { TextInput } from "@resorptionbidonvilles/ui";
-import labels from "../FormDeclarationDeSite.labels";
+import labels from "@/components/Common/FormEtFicheSite.labels";
 </script>
