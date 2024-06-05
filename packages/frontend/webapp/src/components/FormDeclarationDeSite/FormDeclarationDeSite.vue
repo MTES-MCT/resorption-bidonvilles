@@ -1,6 +1,7 @@
 <template>
     <ArrangementLeftMenu :tabs="tabs" autonav>
         <template v-slot:menuTitle>Rubriques</template>
+        <IndicationCaractereObligatoire />
 
         <FormDeclarationDeSiteInfo v-if="town === null" :mode="mode" />
         <FormDeclarationDeSiteDateDeMaj
@@ -73,6 +74,7 @@ import FormDeclarationDeSiteHabitants from "./sections/FormDeclarationDeSiteHabi
 import FormDeclarationDeSiteConditionsDeVie from "./sections/FormDeclarationDeSiteConditionsDeVie.vue";
 import FormDeclarationDeSiteConditionsDeVieV1 from "./sections/FormDeclarationDeSiteConditionsDeVieV1.vue";
 import FormDeclarationDeSiteProcedureJudiciaire from "./sections/FormDeclarationDeSiteProcedureJudiciaire.vue";
+import IndicationCaractereObligatoire from "@/components/IndicationCaractereObligatoire/IndicationCaractereObligatoire.vue";
 import schemaFn from "./FormDeclarationDeSite.schema";
 
 const props = defineProps({

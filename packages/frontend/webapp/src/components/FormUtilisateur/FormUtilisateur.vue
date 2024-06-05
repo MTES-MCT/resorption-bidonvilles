@@ -10,6 +10,9 @@
         <template v-slot:alert><slot name="alert" /></template>
 
         <template v-slot:body="{ values }">
+            <IndicationCaractereObligatoire
+                v-if="variant === 'creer-utilisateur'"
+            />
             <FormUtilisateurInputEmail
                 :value="$route.query.email"
                 :showMandatoryStar="variant === 'creer-utilisateur'"
@@ -192,6 +195,7 @@ import FormUtilisateurInputReferral from "./inputs/FormUtilisateurInputReferral.
 import FormUtilisateurInputReferralOther from "./inputs/FormUtilisateurInputReferralOther.vue";
 import FormUtilisateurInputReferralWordOfMouth from "./inputs/FormUtilisateurInputReferralWordOfMouth.vue";
 import FormUtilisateurInputLegal from "./inputs/FormUtilisateurInputLegal.vue";
+import IndicationCaractereObligatoire from "@/components/IndicationCaractereObligatoire/IndicationCaractereObligatoire.vue";
 
 // form
 import schemaFn from "./FormUtilisateur.schema";
