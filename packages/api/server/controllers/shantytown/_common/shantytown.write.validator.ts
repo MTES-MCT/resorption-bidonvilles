@@ -535,7 +535,7 @@ export default mode => ([
 
     // Total
     body('population_minors')
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de mineurs" est invalide')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs" ne peut pas être inférieur à 0')
@@ -560,7 +560,7 @@ export default mode => ([
      ********************************************************************************************* */
 
     body('minors_in_school')
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre d\'enfants inscrits dans un établissement scolaire" est invalide')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre d\'enfants inscrits dans un établissement scolaire" ne peut pas être inférieur à 0')

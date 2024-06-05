@@ -7,7 +7,7 @@ function emptyStringToNull(value, originalValue) {
         const parsedValue = parseInt(originalValue, 10);
         if (isNaN(parsedValue)) {
             // Ajout d'une vérification pour les valeurs de type String non autorisées
-            if (typeof originalValue === "string" && originalValue !== "") {
+            if (typeof originalValue === "string") {
                 return value;
             }
             return null;
