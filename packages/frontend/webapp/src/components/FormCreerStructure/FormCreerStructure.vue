@@ -1,5 +1,6 @@
 <template>
     <form>
+        <IndicationCaractereObligatoire />
         <FormParagraph :title="labels.name" showMandatoryStar>
             <FormCreerStructureInputName :question="question" />
         </FormParagraph>
@@ -71,6 +72,7 @@ import FormCreerStructureInputNewTypeName from "./inputs/FormCreerStructureInput
 import FormCreerStructureInputNewTypeAbbreviation from "./inputs/FormCreerStructureInputNewTypeAbbreviation.vue";
 import FormCreerStructureInputNewTypeDefaultRole from "./inputs/FormCreerStructureInputNewTypeDefaultRole.vue";
 import FormCreerStructureInputInterventionAreas from "./inputs/FormCreerStructureInputInterventionAreas.vue";
+import IndicationCaractereObligatoire from "@/components/IndicationCaractereObligatoire/IndicationCaractereObligatoire.vue";
 
 const { handleSubmit, setErrors, errors, isSubmitting } = useForm({
     validationSchema: schema,

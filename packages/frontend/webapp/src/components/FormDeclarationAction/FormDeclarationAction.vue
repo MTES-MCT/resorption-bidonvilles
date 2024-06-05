@@ -1,6 +1,7 @@
 <template>
     <ArrangementLeftMenu :tabs="tabs" autonav>
         <template v-slot:menuTitle>Rubriques</template>
+        <IndicationCaractereObligatoire class="mb-6" />
 
         <FormDeclarationActionCaracteristiques class="mt-6" :mode="mode" />
         <FormDeclarationActionLocalisation
@@ -51,6 +52,7 @@ import FormDeclarationActionLocalisation from "./sections/FormDeclarationActionL
 import FormDeclarationActionContacts from "./sections/FormDeclarationActionContacts.vue";
 import FormDeclarationActionFinances from "./sections/FormDeclarationActionFinances.vue";
 import FormDeclarationActionIndicateurs from "./sections/FormDeclarationActionIndicateurs.vue";
+import IndicationCaractereObligatoire from "@/components/IndicationCaractereObligatoire/IndicationCaractereObligatoire.vue";
 import schemaFn from "./FormDeclarationAction.schema";
 
 const props = defineProps({
