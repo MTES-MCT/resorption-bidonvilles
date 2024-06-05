@@ -182,14 +182,14 @@ export default (oldVersion, newVersion): Diff[] => {
             processor: baseProcessors.bool,
         },
         justiceRenderedAt: {
-            label: 'Date de la décision',
+            label: 'Date de la décision de justice',
             processor: baseProcessors.date,
         },
         justiceRenderedBy: {
-            label: 'Origine de la décision',
+            label: 'Origine de la décision de justice',
         },
         justiceChallenged: {
-            label: 'Contentieux relatif à la décision de justice',
+            label: 'Appel en cours',
             processor: baseProcessors.bool,
         },
         policeStatus: {
@@ -224,7 +224,7 @@ export default (oldVersion, newVersion): Diff[] => {
             processor: baseProcessors.bool,
         },
         evacuationUnderTimeLimit: {
-            label: "Une procédure administrative prescrivant l'évacuation sous délai est-elle en cours ?",
+            label: "Existence d'une procédure administrative",
             processor: baseProcessors.bool,
         },
         administrativeOrderDecisionAt: {
@@ -232,32 +232,32 @@ export default (oldVersion, newVersion): Diff[] => {
             processor: baseProcessors.date,
         },
         administrativeOrderDecisionRenderedBy: {
-            label: "Qui  a pris l'arrêté ?",
+            label: "Qui  a pris l'arrêté de la procédure administrative ?",
         },
         administrativeOrderEvacuationAt: {
             label: "Date de l'évacuation",
             processor: baseProcessors.date,
         },
         insalubrityOrder: {
-            label: "Un arrêté d'insalubrité dans le cadre d'une opération RHI bidonville est-il en cours ?",
+            label: "Existence d'un arrêté d'insalubrité",
             processor: baseProcessors.bool,
         },
         insalubrityOrderDisplayed: {
-            label: "Affichage de l'arrêté ou notification ?",
+            label: "Affichage de l'arrêté d'insalubrité ou notification ?",
             processor: baseProcessors.bool,
         },
         insalubrityOrderType: {
-            label: "Type d'arrêté (arrêté de mise en sécurité, autre...)",
+            label: "Type d'arrêté d'insalubrité (arrêté de mise en sécurité, autre...)",
         },
         insalubrityOrderBy: {
-            label: "Qui a pris l'arrêté ?",
+            label: "Qui a pris l'arrêté d'insalubrité ?",
         },
         insalubrityOrderAt: {
             label: "Date de l'arrêté d'insalubrité",
             processor: baseProcessors.date,
         },
         insalubrityParcels: {
-            label: "Parcelles concernées par l'arrêté (numéros de parcelles)",
+            label: "Parcelles concernées par l'arrêté d'insalubrité (numéros de parcelles)",
         },
     };
 
