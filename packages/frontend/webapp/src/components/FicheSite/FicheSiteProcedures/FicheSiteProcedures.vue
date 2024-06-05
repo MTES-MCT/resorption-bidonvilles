@@ -39,7 +39,16 @@
                 icon="right-from-bracket"
                 :label="labels.insalubrity_order"
             >
-                {{ formatBool(town.insalubrityOrder) }}
+                <p>{{ town.insalubrityOrder ? "Oui" : "" }}</p>
+                <p>{{ insalubrityOrderStatus }}</p>
+                <p
+                    v-if="
+                        town.insalubrityOrderBy !== null &&
+                        town.insalubrityOrder
+                    "
+                >
+                    Par : {{ town.insalubrityOrderBy }}
+                </p>
             </FicheSiteProceduresLigne>
 
             <FicheSiteProceduresLigne
@@ -47,13 +56,6 @@
                 icon="signs-post"
                 :label="labels.insalubrity_order_displayed"
             >
-                <p>{{ formatBool(town.insalubrityOrderDisplayed) }}</p>
-                <p>
-                    {{ insalubrityOrderDisplayStatus }}
-                </p>
-                <p v-if="town.insalubrityOrderBy">
-                    Pris par : {{ town.insalubrityOrderBy }}
-                </p>
             </FicheSiteProceduresLigne>
 
             <FicheSiteProceduresLigne
@@ -191,36 +193,26 @@ const administrativeOrderStatus = computed(() => {
     }`;
 });
 
-const insalubrityOrderDisplayStatus = computed(() => {
+const insalubrityOrderStatus = computed(() => {
     // Décomposition préliminaire pour améliorer la lisibilité
-    const {
-        insalubrityOrder,
-        insalubrityOrderDisplayed,
-        insalubrityOrderType,
-        insalubrityOrderAt,
-    } = town.value;
-
-    // Vérifie d'abord si les ordres d'insalubrité sont activés et affichés
-    if (insalubrityOrder && insalubrityOrderDisplayed) {
-        let displayStatus = "affiché";
-
-        // Si un type d'ordre est présent, ajoute ce type au statut d'affichage
-        if (insalubrityOrderType) {
-            displayStatus = `${insalubrityOrderType} affiché`;
-
-            // Si une date est également présente, l'ajoute au statut
-            if (insalubrityOrderAt) {
-                displayStatus += ` le ${formatDate(
-                    insalubrityOrderAt,
-                    "d/m/y"
-                )}`;
-            }
-        }
-        return displayStatus;
+    const { insalubrityOrder, insalubrityOrderType, insalubrityOrderAt } =
+        town.value;
+    if (insalubrityOrder === null) {
+        return "non communiqué";
     }
 
-    // Retourne null si les conditions de base ne sont pas remplies
-    return null;
+    if (insalubrityOrder !== true) {
+        return "non";
+    }
+
+    return `${
+        (insalubrityOrderType ? insalubrityOrderType : "") +
+        (insalubrityOrderAt
+            ? insalubrityOrderType
+                ? ", pris le " + formatDate(insalubrityOrderAt, "d/m/y")
+                : "Pris le " + formatDate(insalubrityOrderAt, "d/m/y")
+            : "")
+    }`;
 });
 
 const ProcedureJudiciaire = computed(() => {

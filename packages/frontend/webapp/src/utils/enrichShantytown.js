@@ -50,11 +50,44 @@ export default function (shantytown, fieldTypes) {
 
     if (shantytown.justiceProcedure && shantytown.justiceChallenged === true) {
         justiceStatuses.push({
-            icon: "balance-scale",
-            label: "Contentieux",
+            icon: "handshake",
+            label: "Appel en cours",
         });
     }
 
+    // Procédure administrative prescrivant l'évacuation sous délai
+    if (shantytown.evacuationUnderTimeLimit === true) {
+        if (shantytown.administrative_order_decision_at !== null) {
+            justiceStatuses.push({
+                icon: "file-contract",
+                label: "Procédure administrative arrêtée",
+                date: shantytown.administrativeOrderDecisionAt,
+            });
+        } else {
+            justiceStatuses.push({
+                icon: "file-contract",
+                label: "Procédure administrative en cours",
+            });
+        }
+    }
+
+    // Arrêté d'insalubritéalubrité dans le cadre d'une opération RHI bidonville
+    if (shantytown.insalubrityOrderDisplayed) {
+        if (shantytown.insalubrityOrderAt) {
+            justiceStatuses.push({
+                icon: "right-from-bracket",
+                label: "Arrêté d'insalubrité pris",
+                date: shantytown.insalubrityOrderAt,
+            });
+        } else {
+            justiceStatuses.push({
+                icon: "right-from-bracket",
+                label: "Arrêté d'insalubrité en cours",
+            });
+        }
+    }
+
+    // Concours de la force publique
     switch (shantytown.policeStatus) {
         case "none":
             justiceStatuses.push({
@@ -79,35 +112,15 @@ export default function (shantytown, fieldTypes) {
             });
             break;
 
+        case "refused":
+            justiceStatuses.push({
+                img: policeSiren,
+                label: "Concours de la force publique refusé",
+                date: shantytown.policeGrantedAt,
+            });
+            break;
+
         default:
-        case null:
-            break;
-    }
-
-    switch (shantytown.insalubrityOrderDisplayed) {
-        case "none":
-            justiceStatuses.push({
-                img: policeSiren,
-                label: "Arrêté d'insalubrité non pris",
-            });
-            break;
-
-        case "displayed":
-            justiceStatuses.push({
-                img: policeSiren,
-                label: "Evacuation sous délai prescrite",
-                date: shantytown.insalubrityOrderDisplayedAt,
-            });
-            break;
-
-        case "evacuated":
-            justiceStatuses.push({
-                img: policeSiren,
-                label: "Evacuation sous délai accordée",
-                date: shantytown.administrativeOrderEvacuationAt,
-            });
-            break;
-
         case null:
             break;
     }
