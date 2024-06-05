@@ -1,6 +1,8 @@
 <template>
     <form>
         <DragZone @drop="attachmentsInput?.addFiles">
+            <IndicationCaractereObligatoire />
+
             <FormParagraph :title="labels.question" showMandatoryStar>
                 <FormNouvelleQuestionInputQuestion
                     :disabled="mode === 'edit'"
@@ -50,6 +52,7 @@ import isDeepEqual from "@/utils/isDeepEqual";
 
 import { ErrorSummary, FormParagraph } from "@resorptionbidonvilles/ui";
 import DragZone from "@/components/DragZone/DragZone.vue";
+import IndicationCaractereObligatoire from "@/components/IndicationCaractereObligatoire/IndicationCaractereObligatoire.vue";
 import FormNouvelleQuestionInputQuestion from "./inputs/FormNouvelleQuestionInputQuestion.vue";
 import FormNouvelleQuestionInputPeopleAffected from "./inputs/FormNouvelleQuestionInputPeopleAffected.vue";
 import FormNouvelleQuestionInputDetails from "./inputs/FormNouvelleQuestionInputDetails.vue";
