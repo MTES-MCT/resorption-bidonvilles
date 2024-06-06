@@ -22,17 +22,20 @@
         >
         <ul>
             <li
-                class="flex"
+                class="flex items-center"
                 v-for="status in shantytown.justiceStatuses"
                 :key="status.label"
             >
-                <Icon v-if="status.icon" :icon="status.icon" />
-                <img
-                    class="w-5 h-4 mt-1"
-                    :src="status.img"
-                    alt=""
-                    v-if="status.img"
-                />
+                <span
+                    :class="[
+                        'flex rounded-full text-xs border-2 mr-1 mb-1 h-6 w-6 items-center justify-center',
+                        colorClass,
+                    ]"
+                    style="padding: 0.2em"
+                    ariaHidden="true"
+                >
+                    <Icon v-if="status.icon" :icon="status.icon" />
+                </span>
                 <div class="ml-2">
                     <span class="font-bold">{{ status.label }}</span>
                     <span v-if="status.date" class="secondary">

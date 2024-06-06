@@ -6,7 +6,6 @@
  * @returns {EnrichedShantytown}
  */
 
-import policeSiren from "@/assets/img/police_siren.svg";
 import formatDateSince from "./formatDateSince";
 import getLabelForLivingConditionDetail from "./getLabelForLivingConditionDetail";
 
@@ -91,14 +90,14 @@ export default function (shantytown, fieldTypes) {
     switch (shantytown.policeStatus) {
         case "none":
             justiceStatuses.push({
-                img: policeSiren,
+                icon: "user-police",
                 label: "Concours de la force publique non demandé",
             });
             break;
 
         case "requested":
             justiceStatuses.push({
-                img: policeSiren,
+                icon: "user-police",
                 label: "Concours de la force publique demandé",
                 date: shantytown.policeRequestedAt,
             });
@@ -106,7 +105,7 @@ export default function (shantytown, fieldTypes) {
 
         case "granted":
             justiceStatuses.push({
-                img: policeSiren,
+                icon: "user-police",
                 label: "Concours de la force publique accordé",
                 date: shantytown.policeGrantedAt,
             });
@@ -114,7 +113,7 @@ export default function (shantytown, fieldTypes) {
 
         case "refused":
             justiceStatuses.push({
-                img: policeSiren,
+                icon: "user-police",
                 label: "Concours de la force publique refusé",
                 date: shantytown.policeGrantedAt,
             });
