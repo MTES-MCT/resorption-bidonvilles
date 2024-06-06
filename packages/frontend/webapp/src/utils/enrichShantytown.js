@@ -35,7 +35,7 @@ export default function (shantytown, fieldTypes) {
     ) {
         justiceStatuses.push({
             icon: "balance-scale",
-            label: "Procédure en cours",
+            label: "Procédure judiciaire en cours",
         });
     }
 
