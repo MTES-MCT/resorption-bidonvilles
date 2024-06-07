@@ -138,7 +138,7 @@ const checkAttempt = () => {
         let counter = parseInt(localStorage.getItem("connexionCounter"));
         counter++;
         localStorage.setItem("connexionCounter", counter);
-        if (counter >= 5) {
+        if (counter >= 3) {
             const now = Date.now();
             const blockedTimer = now + 900000;
             localStorage.setItem("blockedTimer", blockedTimer);
