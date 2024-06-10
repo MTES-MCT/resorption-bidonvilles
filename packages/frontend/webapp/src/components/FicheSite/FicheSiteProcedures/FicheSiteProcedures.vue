@@ -52,7 +52,7 @@
             </FicheSiteProceduresLigne>
 
             <FicheSiteProceduresLigne
-                v-if="town.insalubrityOrder"
+                v-if="town.insalubrityOrder && town.insalubrityOrderDisplayed"
                 icon="signs-post"
                 :label="labels.insalubrity_order_displayed"
             >
