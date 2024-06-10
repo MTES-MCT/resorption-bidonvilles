@@ -60,7 +60,7 @@ export default function (shantytown, fieldTypes) {
             justiceStatuses.push({
                 icon: "file-contract",
                 label: "Évacuation",
-                date: shantytown.administrative_order_evacuation_at,
+                date: shantytown.administrativeOrderEvacuationAt,
             });
         } else if (shantytown.administrativeOrderDecisionAt !== null) {
             justiceStatuses.push({
@@ -71,7 +71,7 @@ export default function (shantytown, fieldTypes) {
         } else {
             justiceStatuses.push({
                 icon: "file-contract",
-                label: "Procédure administrative en cours",
+                label: "Arrêté d'évacuation en cours",
             });
         }
     }
