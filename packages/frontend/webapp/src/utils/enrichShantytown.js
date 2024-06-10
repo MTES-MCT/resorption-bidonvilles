@@ -42,7 +42,7 @@ export default function (shantytown, fieldTypes) {
     if (shantytown.justiceProcedure && shantytown.justiceRendered) {
         justiceStatuses.push({
             icon: "balance-scale",
-            label: "Décision rendue",
+            label: "Décision de justice rendue",
             date: shantytown.justiceRenderedAt,
         });
     }
@@ -50,16 +50,22 @@ export default function (shantytown, fieldTypes) {
     if (shantytown.justiceProcedure && shantytown.justiceChallenged === true) {
         justiceStatuses.push({
             icon: "handshake",
-            label: "Appel en cours",
+            label: "Appel à la décision de justice en cours",
         });
     }
 
     // Procédure administrative prescrivant l'évacuation sous délai
     if (shantytown.evacuationUnderTimeLimit === true) {
-        if (shantytown.administrative_order_decision_at !== null) {
+        if (shantytown.administrativeOrderEvacuationAt !== null) {
             justiceStatuses.push({
                 icon: "file-contract",
-                label: "Procédure administrative arrêtée",
+                label: "Évacuation",
+                date: shantytown.administrative_order_evacuation_at,
+            });
+        } else if (shantytown.administrativeOrderDecisionAt !== null) {
+            justiceStatuses.push({
+                icon: "file-contract",
+                label: "Arrêté d'évacuation pris",
                 date: shantytown.administrativeOrderDecisionAt,
             });
         } else {
