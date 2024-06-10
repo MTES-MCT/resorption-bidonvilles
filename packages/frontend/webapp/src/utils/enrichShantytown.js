@@ -77,13 +77,21 @@ export default function (shantytown, fieldTypes) {
     }
 
     // Arrêté d'insalubritéalubrité dans le cadre d'une opération RHI bidonville
-    if (shantytown.insalubrityOrderDisplayed) {
+    if (shantytown.insalubrityOrder) {
         if (shantytown.insalubrityOrderAt) {
-            justiceStatuses.push({
-                icon: "right-from-bracket",
-                label: "Arrêté d'insalubrité pris",
-                date: shantytown.insalubrityOrderAt,
-            });
+            if (shantytown.insalubrityOrderType) {
+                justiceStatuses.push({
+                    icon: "right-from-bracket",
+                    label: `${shantytown.insalubrityOrderType} pris`,
+                    date: shantytown.insalubrityOrderAt,
+                });
+            } else {
+                justiceStatuses.push({
+                    icon: "right-from-bracket",
+                    label: "Arrêté d'insalubrité pris",
+                    date: shantytown.insalubrityOrderAt,
+                });
+            }
         } else {
             justiceStatuses.push({
                 icon: "right-from-bracket",
