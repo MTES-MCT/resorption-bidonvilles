@@ -82,7 +82,7 @@ export default function (shantytown, fieldTypes) {
             if (shantytown.insalubrityOrderType) {
                 justiceStatuses.push({
                     icon: "right-from-bracket",
-                    label: `${shantytown.insalubrityOrderType} pris`,
+                    label: "Arrêté d'insalubrité pris",
                     date: shantytown.insalubrityOrderAt,
                 });
             } else {
