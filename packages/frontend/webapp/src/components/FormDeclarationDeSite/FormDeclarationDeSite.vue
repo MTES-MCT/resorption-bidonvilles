@@ -24,7 +24,7 @@
             :town="town"
             class="mt-6"
         />
-        <FormDeclarationDeSiteProcedureJudiciaire
+        <FormDeclarationDeSiteProcedure
             class="mt-6"
             v-if="hasJusticePermission"
             :location="location"
@@ -73,8 +73,8 @@ import FormDeclarationDeSiteCaracteristiques from "./sections/FormDeclarationDeS
 import FormDeclarationDeSiteHabitants from "./sections/FormDeclarationDeSiteHabitants.vue";
 import FormDeclarationDeSiteConditionsDeVie from "./sections/FormDeclarationDeSiteConditionsDeVie.vue";
 import FormDeclarationDeSiteConditionsDeVieV1 from "./sections/FormDeclarationDeSiteConditionsDeVieV1.vue";
-import FormDeclarationDeSiteProcedureJudiciaire from "./sections/FormDeclarationDeSiteProcedureJudiciaire.vue";
 import IndicationCaractereObligatoire from "@/components/IndicationCaractereObligatoire/IndicationCaractereObligatoire.vue";
+import FormDeclarationDeSiteProcedure from "./sections/FormDeclarationDeSiteProcedure.vue";
 import schemaFn from "./FormDeclarationDeSite.schema";
 
 const props = defineProps({
@@ -220,9 +220,9 @@ const tabs = computed(() => {
 
     if (hasJusticePermission.value) {
         arr.push({
-            id: "justice",
-            label: "Procédure judiciaire",
-            route: "#justice",
+            id: "procedure",
+            label: "Procédure",
+            route: "#procedure",
         });
     }
 
@@ -272,26 +272,54 @@ function formatValuesForApi(v) {
         ({ citycode, label } = v.address.data);
     }
 
+    const formatDateFields = (fields, obj) => {
+        return fields.reduce((acc, field) => {
+            acc[field] =
+                obj[field] === null ? null : formatFormDate(obj[field]);
+            return acc;
+        }, {});
+    };
+
+    const handleNullFields = (fields, obj) => {
+        return fields.reduce((acc, field) => {
+            acc[field] = obj[field] === "null" ? null : obj[field];
+            return acc;
+        }, {});
+    };
+
+    const dateFields = [
+        "built_at",
+        "declared_at",
+        "census_conducted_at",
+        "justice_rendered_at",
+        "police_requested_at",
+        "police_granted_at",
+        "administrative_order_decision_at",
+        "administrative_order_evacuation_at",
+        "insalubrity_order_at",
+    ];
+
+    const nullFields = [
+        "census_status",
+        "police_status",
+        "administrative_order",
+        "existing_litigation",
+        "insalubrity_order_type",
+        "insalubrity_order_by",
+    ];
+
     return {
         ...Object.keys(validationSchema.value.fields).reduce((acc, key) => {
             acc[key] = v[key];
             return acc;
         }, {}),
-        ...{
-            living_conditions_version: v.living_conditions_version || 2,
-            built_at: formatFormDate(v.built_at),
-            declared_at: formatFormDate(v.declared_at),
-            updated_at: v.updated_at || new Date(),
-            census_conducted_at: formatFormDate(v.census_conducted_at),
-            justice_rendered_at: formatFormDate(v.justice_rendered_at),
-            police_requested_at: formatFormDate(v.police_requested_at),
-            police_granted_at: formatFormDate(v.police_granted_at),
-            census_status: v.census_status === "null" ? null : v.census_status,
-            police_status: v.police_status === "null" ? null : v.police_status,
-            citycode,
-            address: label,
-            coordinates: `${v.coordinates[0]},${v.coordinates[1]}`,
-        },
+        ...formatDateFields(dateFields, v),
+        ...handleNullFields(nullFields, v),
+        living_conditions_version: v.living_conditions_version || 2,
+        updated_at: v.updated_at || new Date(),
+        citycode,
+        address: label,
+        coordinates: `${v.coordinates[0]},${v.coordinates[1]}`,
     };
 }
 

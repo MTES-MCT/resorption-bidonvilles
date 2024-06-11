@@ -1,8 +1,8 @@
 <template>
     <section class="h-full relative">
-        <div>
+        <div class="absolute top-2 -mt-8">
             <a
-                class="text-primary text-sm hover:text-primaryDark cursor-pointer focus:ring-2 ring-offset-2 ring-info focus:outline-none"
+                class="ml-2 text-primary text-sm hover:text-primaryDark cursor-pointer focus:ring-2 ring-offset-2 ring-info focus:outline-none"
                 href="#"
                 v-if="displaySkipMapLinks"
                 @click.prevent="skipMap(skipFocusNext, skipPreviousLink)"
@@ -38,7 +38,7 @@
         </div>
         <div class="pt-1">
             <a
-                class="text-primary text-sm hover:text-primaryDark cursor-pointer focus:ring-2 ring-offset-2 ring-info focus:outline-none"
+                class="ml-2 text-primary text-sm hover:text-primaryDark cursor-pointer focus:ring-2 ring-offset-2 ring-info focus:outline-none"
                 href="#"
                 v-if="displaySkipMapLinks"
                 @click.prevent="skipMap(skipFocusPrevious, skipNextLink)"
@@ -60,21 +60,21 @@ export default {
 </script>
 
 <script setup>
-import { ref, toRefs, onMounted, onBeforeUnmount, watch } from "vue";
-import L from "leaflet";
-import domtoimage from "dom-to-image-more";
-import "leaflet.markercluster/dist/MarkerCluster.css";
-import "leaflet.markercluster/dist/MarkerCluster.Default.css";
-import "leaflet.markercluster/dist/leaflet.markercluster";
-import mapLayers from "./Carte.layers";
-import mapControls from "./Carte.controls";
-import marqueurSiteDefault from "@/utils/marqueurSiteDefault";
-import marqueurLocationDefault from "@/utils/marqueurLocationDefault";
 import downloadBlob from "@/utils/downloadBlob";
+import marqueurLocationDefault from "@/utils/marqueurLocationDefault";
+import marqueurSiteDefault from "@/utils/marqueurSiteDefault";
 import formatDate from "@common/utils/formatDate";
+import domtoimage from "dom-to-image-more";
+import L from "leaflet";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/leaflet.markercluster";
+import { onBeforeUnmount, onMounted, ref, toRefs, watch } from "vue";
+import mapControls from "./Carte.controls";
+import mapLayers from "./Carte.layers";
 
-import { Icon, Spinner } from "@resorptionbidonvilles/ui";
 import { trackEvent } from "@/helpers/matomo";
+import { Icon, Spinner } from "@resorptionbidonvilles/ui";
 
 import getAbsoluteOffsetTop from "@/utils/getAbsoluteOffsetTop";
 import skipFocusNext from "@/utils/skipFocusNext";

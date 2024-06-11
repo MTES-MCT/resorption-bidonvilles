@@ -6,7 +6,6 @@
  * @returns {EnrichedShantytown}
  */
 
-import policeSiren from "@/assets/img/police_siren.svg";
 import formatDateSince from "./formatDateSince";
 import getLabelForLivingConditionDetail from "./getLabelForLivingConditionDetail";
 
@@ -36,36 +35,83 @@ export default function (shantytown, fieldTypes) {
     ) {
         justiceStatuses.push({
             icon: "balance-scale",
-            label: "Procédure en cours",
+            label: "Procédure judiciaire en cours",
         });
     }
 
     if (shantytown.justiceProcedure && shantytown.justiceRendered) {
         justiceStatuses.push({
             icon: "balance-scale",
-            label: "Décision rendue",
+            label: "Décision de justice rendue",
             date: shantytown.justiceRenderedAt,
         });
     }
 
     if (shantytown.justiceProcedure && shantytown.justiceChallenged === true) {
         justiceStatuses.push({
-            icon: "balance-scale",
-            label: "Contentieux",
+            icon: "handshake",
+            label: "Appel à la décision de justice en cours",
         });
     }
 
+    // Procédure administrative prescrivant l'évacuation sous délai
+    if (shantytown.evacuationUnderTimeLimit === true) {
+        if (shantytown.administrativeOrderEvacuationAt !== null) {
+            justiceStatuses.push({
+                icon: "file-contract",
+                label: "Évacuation",
+                date: shantytown.administrativeOrderEvacuationAt,
+            });
+        } else if (shantytown.administrativeOrderDecisionAt !== null) {
+            justiceStatuses.push({
+                icon: "file-contract",
+                label: "Arrêté d'évacuation pris",
+                date: shantytown.administrativeOrderDecisionAt,
+            });
+        } else {
+            justiceStatuses.push({
+                icon: "file-contract",
+                label: "Arrêté d'évacuation en cours",
+            });
+        }
+    }
+
+    // Arrêté d'insalubritéalubrité dans le cadre d'une opération RHI bidonville
+    if (shantytown.insalubrityOrder) {
+        if (shantytown.insalubrityOrderAt) {
+            if (shantytown.insalubrityOrderType) {
+                justiceStatuses.push({
+                    icon: "right-from-bracket",
+                    label: "Arrêté d'insalubrité pris",
+                    date: shantytown.insalubrityOrderAt,
+                });
+            } else {
+                justiceStatuses.push({
+                    icon: "right-from-bracket",
+                    label: "Arrêté d'insalubrité pris",
+                    date: shantytown.insalubrityOrderAt,
+                });
+            }
+        } else {
+            justiceStatuses.push({
+                icon: "right-from-bracket",
+                label: "Arrêté d'insalubrité en cours",
+            });
+        }
+    }
+
+    // Concours de la force publique
     switch (shantytown.policeStatus) {
         case "none":
             justiceStatuses.push({
-                img: policeSiren,
+                icon: "user-police",
                 label: "Concours de la force publique non demandé",
             });
             break;
 
         case "requested":
             justiceStatuses.push({
-                img: policeSiren,
+                icon: "user-police",
                 label: "Concours de la force publique demandé",
                 date: shantytown.policeRequestedAt,
             });
@@ -73,8 +119,16 @@ export default function (shantytown, fieldTypes) {
 
         case "granted":
             justiceStatuses.push({
-                img: policeSiren,
+                icon: "user-police",
                 label: "Concours de la force publique accordé",
+                date: shantytown.policeGrantedAt,
+            });
+            break;
+
+        case "refused":
+            justiceStatuses.push({
+                icon: "user-police",
+                label: "Concours de la force publique refusé",
                 date: shantytown.policeGrantedAt,
             });
             break;

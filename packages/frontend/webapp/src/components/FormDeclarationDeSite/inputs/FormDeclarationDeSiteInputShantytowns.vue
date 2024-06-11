@@ -19,7 +19,7 @@
 import { defineProps, toRefs } from "vue";
 import { useFieldValue } from "vee-validate";
 import InputShantytowns from "@/components/InputShantytowns/InputShantytowns.vue";
-import labels from "../FormDeclarationDeSite.labels";
+import labels from "@/components/Common/FormEtFicheSite.labels";
 
 const props = defineProps({
     departement: {

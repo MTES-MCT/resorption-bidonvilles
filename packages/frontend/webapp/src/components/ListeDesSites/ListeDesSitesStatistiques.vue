@@ -22,7 +22,7 @@
                     {{ justiceTotal }} site<template v-if="justiceTotal > 1"
                         >s</template
                     >
-                    avec une procédure judiciaire
+                    avec une procédure judiciaire ou administrative
                 </p>
             </div>
         </section>

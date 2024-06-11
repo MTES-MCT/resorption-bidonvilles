@@ -1,17 +1,17 @@
 <template>
     <section class="shadow-lg p-6">
-        <div class="xl:flex xl:justify-between mb-2">
+        <div class="xl:flex xl:justify-between mb-8 lg:mb-4">
             <h2 class="text-2xl xl:text-3xl text-primary">{{ title }}</h2>
             <div class="flex flex-col">
                 <Button
-                    v-if="category === 'justice'"
+                    v-if="category === 'procedure'"
                     size="sm"
                     icon="user-group"
                     iconPosition="left"
                     variant="primaryText"
                     @click="openListAccesPJ"
                 >
-                    Qui a accès aux données sur la procédure judiciaire ?
+                    Qui a accès aux procédures judiciaires ou administratives ?
                 </Button>
                 <Button
                     v-if="title === 'Financements'"
@@ -24,6 +24,7 @@
                     Qui a accès aux données sur les financements ?
                 </Button>
                 <Button
+                    class="lg:mb-4 xl:mb-0"
                     v-if="category"
                     size="sm"
                     icon="history"
@@ -40,8 +41,8 @@
 </template>
 
 <script setup>
-import { toRefs } from "vue";
 import { useEventBus } from "@common/helpers/event-bus.js";
+import { toRefs } from "vue";
 
 import { Button } from "@resorptionbidonvilles/ui";
 

@@ -42,7 +42,7 @@
                 </FormParagraph>
             </section>
 
-            <section class="h-96 bg-G500 lg:w-96" v-if="address">
+            <section class="h-96 bg-G500 lg:w-96 ml-4 my-3" v-if="address">
                 <InputCoordinates />
             </section>
         </div>
@@ -50,12 +50,12 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, watch } from "vue";
-import { useFieldValue, useFormValues } from "vee-validate";
 import { findNearby } from "@/api/towns.api";
+import { useFieldValue, useFormValues } from "vee-validate";
+import { defineProps, ref, toRefs, watch } from "vue";
 
-import { FormParagraph, Link } from "@resorptionbidonvilles/ui";
 import FormSection from "@/components/FormSection/FormSection.vue";
+import { FormParagraph, Link } from "@resorptionbidonvilles/ui";
 import InputAddress from "../inputs/FormDeclarationDeSiteInputAddress.vue";
 import InputCoordinates from "../inputs/FormDeclarationDeSiteInputCoordinates.vue";
 import InputName from "../inputs/FormDeclarationDeSiteInputName.vue";

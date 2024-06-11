@@ -21,7 +21,7 @@
 import { watch } from "vue";
 import { useFieldValue } from "vee-validate";
 import { CheckableGroup, Radio } from "@resorptionbidonvilles/ui";
-import labels from "../FormDeclarationDeSite.labels";
+import labels from "@/components/Common/FormEtFicheSite.labels";
 import waitForElement from "@/utils/waitForElement";
 
 const items = [

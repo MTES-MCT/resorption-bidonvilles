@@ -1,7 +1,8 @@
 <template>
     <CheckableGroup
-        id="police_status"
-        :label="labels.police_status"
+        id="existing_litigation"
+        direction="horizontal"
+        :label="labels.existing_litigation"
         showMandatoryStar
     >
         <Radio
@@ -9,7 +10,7 @@
             :key="item.value"
             :value="item.value"
             :label="item.label"
-            name="police_status"
+            name="existing_litigation"
             v-bind="$attrs"
         />
     </CheckableGroup>
@@ -17,6 +18,6 @@
 
 <script setup>
 import { CheckableGroup, Radio } from "@resorptionbidonvilles/ui";
-import labels from "../FormDeclarationDeSite.labels";
-import items from "@/utils/police_statuses";
+import labels from "@/components/Common/FormEtFicheSite.labels";
+import items from "@/utils/yesNoItems";
 </script>
