@@ -195,8 +195,7 @@ const administrativeOrderStatus = computed(() => {
 
 const insalubrityOrderStatus = computed(() => {
     // Décomposition préliminaire pour améliorer la lisibilité
-    const { insalubrityOrder, insalubrityOrderType, insalubrityOrderAt } =
-        town.value;
+    const { insalubrityOrder, insalubrityOrderAt } = town.value;
     if (insalubrityOrder === null) {
         return "non communiqué";
     }
@@ -206,12 +205,9 @@ const insalubrityOrderStatus = computed(() => {
     }
 
     return `${
-        (insalubrityOrderType ? insalubrityOrderType : "") +
-        (insalubrityOrderAt
-            ? insalubrityOrderType
-                ? ", pris le " + formatDate(insalubrityOrderAt, "d/m/y")
-                : "Pris le " + formatDate(insalubrityOrderAt, "d/m/y")
-            : "")
+        insalubrityOrderAt
+            ? "Pris le " + formatDate(insalubrityOrderAt, "d/m/y")
+            : ""
     }`;
 });
 
