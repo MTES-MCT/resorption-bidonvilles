@@ -723,9 +723,9 @@ export default mode => ([
             return value;
         })
         .if((value, { req }) => req.body.justice_rendered === true)
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Y-a-t-il un appel en cours ?" est obligatoire')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Y a-t-il un appel en cours ?" est obligatoire')
         .toInt()
-        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Y-a-t-il un appel en cours ?" est invalide')
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Y a-t-il un appel en cours ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
 
     /* **********************************************************************************************
@@ -885,7 +885,7 @@ export default mode => ([
 
             return value;
         })
-        .isString().withMessage('Le champ "Qui a pris \'arrêté ?" est invalide')
+        .isString().withMessage('Le champ "Qui a pris l\'arrêté ?" est invalide')
         .trim(),
 
     body('insalubrity_order_by')
