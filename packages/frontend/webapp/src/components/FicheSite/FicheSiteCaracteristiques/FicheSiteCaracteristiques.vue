@@ -5,7 +5,7 @@
         class="pb-14"
     >
         <section class="flex flex-col-reverse xl:flex-row">
-            <div class="xl:w-1/2">
+            <div class="my-8 xl:w-1/2 md:mr-8">
                 <FicheSiteDatesInstallation :town="town" />
                 <FicheSiteTypeDeSite :town="town" />
                 <FicheSiteInfosAcces v-if="town.addressDetails" :town="town" />
@@ -35,20 +35,20 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, onMounted, computed } from "vue";
-import { useTownsStore } from "@/stores/towns.store";
 import { getCadastre } from "@/api/ign.api";
-import generateSquare from "@/utils/generateSquare";
 import router from "@/helpers/router";
+import { useTownsStore } from "@/stores/towns.store";
+import generateSquare from "@/utils/generateSquare";
+import { computed, defineProps, onMounted, ref, toRefs } from "vue";
 
 import CartoFicheSite from "@/components/CartoFicheSite/CartoFicheSite.vue";
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import FicheSiteDatesInstallation from "./FicheSiteDatesInstallation.vue";
-import FicheSiteTypeDeSite from "./FicheSiteTypeDeSite.vue";
-import FicheSiteInfosAcces from "./FicheSiteInfosAcces.vue";
 import FicheSiteGPS from "./FicheSiteGPS.vue";
+import FicheSiteInfosAcces from "./FicheSiteInfosAcces.vue";
 import FicheSiteProprietaire from "./FicheSiteProprietaire.vue";
 import FicheSiteSitesAProximite from "./FicheSiteSitesAProximite.vue";
+import FicheSiteTypeDeSite from "./FicheSiteTypeDeSite.vue";
 
 const props = defineProps({
     town: Object,

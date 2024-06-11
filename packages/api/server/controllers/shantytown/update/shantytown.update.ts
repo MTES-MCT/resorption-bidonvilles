@@ -50,6 +50,20 @@ export default async (req, res, next) => {
                 police_granted_at: req.body.police_granted_at,
                 bailiff: req.body.bailiff,
 
+                // Nouveaux champs procédure administrative
+                existing_litigation: req.body.existing_litigation,
+                evacuation_under_time_limit: req.body.evacuation_under_time_limit,
+                administrative_order_decision_at: req.body.administrative_order_decision_at || null,
+                administrative_order_decision_rendered_by: req.body.administrative_order_decision_rendered_by,
+                administrative_order_evacuation_at: req.body.administrative_order_evacuation_at || null,
+                insalubrity_order: req.body.insalubrity_order,
+                insalubrity_order_displayed: req.body.insalubrity_order_displayed,
+                insalubrity_order_type: req.body.insalubrity_order_type || null,
+                insalubrity_order_by: req.body.insalubrity_order_by || null,
+                insalubrity_order_at: req.body.insalubrity_order_at || null,
+                insalubrity_parcels: req.body.insalubrity_parcels || null,
+                // Fin nouveaux champs procédure administrative
+
                 // si les conditions de vie sont en V2 on reset les anciennes et on engistre les
                 // nouvelles
                 // sinon, on garder les anciennes conditions de vie et on ne touche à rien

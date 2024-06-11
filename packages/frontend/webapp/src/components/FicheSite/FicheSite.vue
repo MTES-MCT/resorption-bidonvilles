@@ -30,10 +30,10 @@
                 id="conditions_de_vie"
                 class="mb-8"
             />
-            <FicheSiteProceduresJudiciaires
+            <FicheSiteProcedures
                 v-if="userStore.hasJusticePermission"
                 :town="town"
-                id="procedure_judiciaire"
+                id="procedure"
                 class="mb-8"
             />
             <FicheSiteIntervenants
@@ -66,7 +66,7 @@ import FicheSiteFermeture from "./FicheSiteFermeture/FicheSiteFermeture.vue";
 import FicheSiteActions from "./FicheSiteActions/FicheSiteActions.vue";
 import FicheSiteHabitants from "./FicheSiteHabitants/FicheSiteHabitants.vue";
 import FicheSiteConditionsDeVie from "./FicheSiteConditionsDeVie/FicheSiteConditionsDeVie.vue";
-import FicheSiteProceduresJudiciaires from "./FicheSiteProceduresJudiciaires/FicheSiteProceduresJudiciaires.vue";
+import FicheSiteProcedures from "./FicheSiteProcedures/FicheSiteProcedures.vue";
 import FicheSiteIntervenants from "./FicheSiteIntervenants/FicheSiteIntervenants.vue";
 import FicheSiteJournal from "./FicheSiteJournal/FicheSiteJournal.vue";
 import FicheSiteHistorique from "./FicheSiteHistorique/FicheSiteHistorique.vue";

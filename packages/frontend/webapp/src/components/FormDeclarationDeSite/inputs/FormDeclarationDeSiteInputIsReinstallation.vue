@@ -17,11 +17,6 @@
 
 <script setup>
 import { CheckableGroup, Radio } from "@resorptionbidonvilles/ui";
-import labels from "../FormDeclarationDeSite.labels";
-
-const items = [
-    { value: 1, label: "Oui" },
-    { value: 0, label: "Non" },
-    { value: -1, label: "Inconnu" },
-];
+import labels from "@/components/Common/FormEtFicheSite.labels";
+import items from "@/utils/yesNoItems";
 </script>

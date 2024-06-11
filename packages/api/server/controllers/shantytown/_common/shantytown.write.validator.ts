@@ -21,6 +21,25 @@ function fromIntToBoolSanitizer(value) {
     return value === 1;
 }
 
+function validateNull(value: any): number | null {
+    return value === '' ? null : value;
+}
+
+function validateInteger(value: any): number | null {
+    return Number.isInteger(value) ? value : null;
+}
+
+function validateIntegerWithMinValue(fieldName: string, min: number, firstSanitizer: (value: any) => number | null, secondSanitizer: (value: any) => number | null) {
+    return [
+        body(fieldName)
+            .optional({ nullable: true })
+            .customSanitizer(firstSanitizer)
+            .toInt()
+            .isInt().bail().withMessage(`Le champ "${fieldName}" est invalide`)
+            .isInt({ min }).withMessage(`Le champ "${fieldName}" ne peut pas être inférieur à ${min}`)
+            .customSanitizer(secondSanitizer),
+    ];
+}
 export default mode => ([
     param('id')
         .if(() => mode === 'update')
@@ -390,6 +409,10 @@ export default mode => ([
         .isDate().bail().withMessage('Le champ "Date du diagnostic" est invalide')
         .toDate()
         .if((value, { req }) => mode !== 'update' || !req.town || value.getTime() / 1000 !== req.town.censusConductedAt)
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
         .custom((value, { req }) => {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -436,78 +459,32 @@ export default mode => ([
         .isInt({ min: 1 }).withMessage('Le champ "Nombre de personnes" ne peut pas être inférieur à 1'),
 
     body('population_total')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+        .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre de caravanes
      ********************************************************************************************* */
-    body('caravans')
-        .customSanitizer(value => (value === '' ? null : value)),
-    body('caravans')
-        .optional({ nullable: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de caravanes" est invalide')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de caravanes" ne peut pas être inférieur à 0'),
-
-    body('caravans')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+    ...validateIntegerWithMinValue('caravans', 0, validateNull, validateInteger),
 
     /* **********************************************************************************************
      * Nombre de cabanes
      ********************************************************************************************* */
-    body('huts')
-        .customSanitizer(value => (value === '' ? null : value)),
-    body('huts')
-        .optional({ nullable: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de cabanes" est invalide')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de cabanes" ne peut pas être inférieur à 0'),
-
-    body('huts')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+    ...validateIntegerWithMinValue('huts', 0, validateNull, validateInteger),
 
     /* **********************************************************************************************
      * Nombre de tentes
      ********************************************************************************************* */
-    body('tents')
-        .customSanitizer(value => (value === '' ? null : value)),
-
-    body('tents')
-        .optional({ nullable: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de tentes" est invalide')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de tentes" ne peut pas être inférieur à 0'),
-
-    body('tents')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+    ...validateIntegerWithMinValue('tents', 0, validateNull, validateInteger),
 
     /* **********************************************************************************************
      * Nombre de voitures dortoir
      ********************************************************************************************* */
-    body('cars')
-        .customSanitizer(value => (value === '' ? null : value)),
-    body('cars')
-        .optional({ nullable: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de voitures dortoir" est invalide')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de voitures dortoir" ne peut pas être inférieur à 0'),
-
-    body('cars')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+    ...validateIntegerWithMinValue('cars', 0, validateNull, validateInteger),
 
     /* **********************************************************************************************
      * Nombre de matelas
      ********************************************************************************************* */
-    body('mattresses')
-        .customSanitizer(value => (value === '' ? null : value)),
-    body('mattresses')
-        .optional({ nullable: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de matelas" est invalide')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de matelas" ne peut pas être inférieur à 0'),
-
-    body('mattresses')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+    ...validateIntegerWithMinValue('mattresses', 0, validateNull, validateInteger),
 
     /* **********************************************************************************************
      * Nombre de ménages
@@ -530,7 +507,7 @@ export default mode => ([
         }),
 
     body('population_couples')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+        .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre de mineurs
@@ -546,18 +523,19 @@ export default mode => ([
         .reduce((acc, { min, max }) => [
             ...acc,
             body(`population_minors_${min}_${max}`)
-                .optional({ nullable: true })
+                .optional({ nullable: true, checkFalsy: true })
+                .trim()
                 .toInt()
                 .isInt().bail().withMessage(`Le champ "Nombre de mineurs entre ${min} et ${max} ans" est invalide`)
                 .isInt({ min: 0 }).withMessage(`Le champ "Nombre de mineurs entre ${min} et ${max} ans" ne peut pas être inférieur à 0`),
 
             body(`population_minors_${min}_${max}`)
-                .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+                .customSanitizer(validateInteger),
         ], []),
 
     // Total
     body('population_minors')
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de mineurs" est invalide')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs" ne peut pas être inférieur à 0')
@@ -575,14 +553,14 @@ export default mode => ([
         }),
 
     body('population_minors')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+        .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Nombre d'enfants inscrits dans un établissement scolaire
      ********************************************************************************************* */
 
     body('minors_in_school')
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre d\'enfants inscrits dans un établissement scolaire" est invalide')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre d\'enfants inscrits dans un établissement scolaire" ne peut pas être inférieur à 0')
@@ -599,7 +577,7 @@ export default mode => ([
         }),
 
     body('minors_in_school')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+        .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
      * Origines
@@ -714,6 +692,10 @@ export default mode => ([
         .exists({ checkNull: true }).bail().withMessage('Le champ "Date de la décision" est obligatoire')
         .isDate().bail().withMessage('Le champ "Date de la décision" est invalide')
         .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
         .custom((value, { req }) => {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -741,17 +723,237 @@ export default mode => ([
             return value;
         })
         .if((value, { req }) => req.body.justice_rendered === true)
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Contentieux relatif à la décision de justice" est obligatoire')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Y a-t-il un appel en cours ?" est obligatoire')
         .toInt()
-        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Contentieux relatif à la décision de justice" est invalide')
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Y a-t-il un appel en cours ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
+
+    /* **********************************************************************************************
+     * Nouveaux champs - procédure administrative
+     ********************************************************************************************* */
+    // Une procédure administrative prescrivant l'évacuation sous délai est-elle en cours ?
+    body('evacuation_under_time_limit').customSanitizer((value, { req }) => {
+        if (!req.user.isAllowedTo('access', 'shantytown_justice')) {
+            return null;
+        }
+
+        return value;
+    })
+        .optional({ nullable: true })
+        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_justice'))
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Une procédure administrative prescrivant l\'évacuation sous délai est-elle en cours ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    // Date de l'arrêté prescrivant l'évacuation sous délai
+    body('administrative_order_decision_at')
+        .optional({ nullable: true })
+        .customSanitizer((value, { req }) => {
+            if (req.body.evacuation_under_time_limit !== true) {
+                return null;
+            }
+
+            return value;
+        })
+        .isDate().bail().withMessage('Le champ "Date de l\'arrêté" est invalide')
+        .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
+        .custom((value, { req }) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (value > today) {
+                throw new Error('La date de l\'arrêté ne peut être future');
+            }
+
+            if (req.body.built_at && value < req.body.built_at) {
+                throw new Error('La date de l\'arrêté ne peut être antérieure à celle d\'installation');
+            }
+
+            return true;
+        }),
+
+    // Auteur de l'arrêté prescrivant l'évacuation sous délai
+    body('administrative_order_decision_rendered_by')
+        .optional({ nullable: true })
+        .customSanitizer((value, { req }) => {
+            if (req.body.evacuation_under_time_limit !== true) {
+                return null;
+            }
+
+            return value;
+        })
+        .isString().bail().withMessage('Le champ "Qui a pris l\'arrêté ?" est invalide')
+        .trim(),
+
+    body('administrative_order_decision_rendered_by')
+        .customSanitizer(value => value || null),
+
+
+    // Date de l'évacuation consécutive à l'arrêté prescrivant l'évacuation sous délai
+    body('administrative_order_evacuation_at')
+        .optional({ nullable: true })
+        .customSanitizer((value, { req }) => {
+            if (req.body.evacuation_under_time_limit !== true) {
+                return null;
+            }
+
+            return value;
+        })
+        .isDate().bail().withMessage('Le champ "Date de l\'évacuation" est invalide')
+        .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
+        .custom((value, { req }) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (value > today) {
+                throw new Error(`La date ${value} de l'évacuation ne peut être future (supérieure à ${today})`);
+            }
+
+            if (req.body.built_at && value < req.body.built_at) {
+                throw new Error('La date de l\'évacuation ne peut être antérieure à celle d\'installation');
+            }
+
+            return true;
+        }),
+
+    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Un arrêté d'insalubrité dans le cadre d'une opération RHI bidonville est-il en cours ?
+    body('insalubrity_order').customSanitizer((value, { req }) => {
+        if (!req.user.isAllowedTo('access', 'shantytown_justice')) {
+            return null;
+        }
+
+        return value;
+    })
+        .optional({ nullable: true })
+        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_justice'))
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Un arrêté d\'insalubrité dans le cadre d\'une opération RHI bidonville est-il en cours ?" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Affichage de l'arrêté ou notification
+    body('insalubrity_order_displayed').customSanitizer((value, { req }) => {
+        if (!req.user.isAllowedTo('access', 'shantytown_justice')) {
+            return null;
+        }
+
+        return value;
+    })
+        .optional({ nullable: true })
+        .customSanitizer((value, { req }) => {
+            if (req.body.insalubrity_order !== true) {
+                return null;
+            }
+
+            return value;
+        })
+        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_justice'))
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Affichage de l\'arrêté ou notification" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
+
+    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville -  Type d'arrêté (arrêté de mise en sécurité...)
+    body('insalubrity_order_type')
+        .optional({ nullable: true })
+        .customSanitizer((value, { req }) => {
+            if (req.body.insalubrity_order !== true) {
+                return null;
+            }
+
+            return value;
+        })
+        .isString().withMessage('Le champ "Type d\'arrêté (arrêté de mise en sécurité...)" est invalide')
+        .trim(),
+
+    body('insalubrity_order_type')
+        .customSanitizer(value => value || null),
+
+    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Qui a pris l'arrêté ?
+    body('insalubrity_order_by')
+        .optional({ nullable: true })
+        .customSanitizer((value, { req }) => {
+            if (req.body.insalubrity_order !== true) {
+                return null;
+            }
+
+            return value;
+        })
+        .isString().withMessage('Le champ "Qui a pris l\'arrêté ?" est invalide')
+        .trim(),
+
+    body('insalubrity_order_by')
+        .customSanitizer(value => value || null),
+
+    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Date de l'arrêté ?
+    body('insalubrity_order_at')
+        .optional({ nullable: true })
+        .customSanitizer((value, { req }) => {
+            if (req.body.insalubrity_order !== true) {
+                return null;
+            }
+
+            return value;
+        })
+        .isDate().bail().withMessage('Le champ "Date de l\'arrêté" est invalide')
+        .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
+        .custom((value, { req }) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (value > today) {
+                throw new Error('La date de l\'arrêté ne peut être future');
+            }
+
+            if (req.body.built_at && value < req.body.built_at) {
+                throw new Error('La date de l\'arrêté ne peut être antérieure à celle d\'installation');
+            }
+
+            return true;
+        }),
+
+    // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Parcelles concernées
+    body('insalubrity_parcels')
+        .optional({ nullable: true })
+        .customSanitizer((value, { req }) => {
+            if (req.body.insalubrity_order !== true) {
+                return null;
+            }
+
+            return value;
+        })
+        .isString().withMessage('Le champ "Parcelles concernées par l\'arrêté" est invalide')
+        .trim(),
+
+    body('insalubrity_parcels')
+        .customSanitizer(value => value || null),
 
     /* **********************************************************************************************
      * Concours de la force publique
      ********************************************************************************************* */
     body('police_status')
         .optional({ nullable: true })
-        .isIn(['none', 'requested', 'granted']).withMessage('Le champ "Concours de la force publique" est invalide'),
+        .custom((value, { req }) => {
+            if (
+                req.body.justice_procedure !== true
+                && req.body.evacuation_under_time_limit !== true
+                && req.body.insalubrity_order !== true
+            ) {
+                return value === null;
+            }
+            return ['none', 'requested', 'granted', 'refused'].includes(value);
+        })
+        .withMessage('Le champ "Concours de la force publique" est invalide'),
 
     body('police_status')
         .customSanitizer(value => value || null),
@@ -761,16 +963,20 @@ export default mode => ([
      ********************************************************************************************* */
     body('police_requested_at')
         .customSanitizer((value, { req }) => {
-            if (!['requested', 'granted'].includes(req.body.police_status)) {
+            if (!['requested', 'granted', 'refused'].includes(req.body.police_status)) {
                 return null;
             }
 
             return value;
         })
-        .if((value, { req }) => ['requested', 'granted'].includes(req.body.police_status))
+        .if((value, { req }) => ['requested', 'granted', 'refused'].includes(req.body.police_status))
         .exists({ checkNull: true }).bail().withMessage('Le champ "Date de la demande du CFP" est obligatoire')
         .isDate().bail().withMessage('Le champ "Date de la demande du CFP" est invalide')
         .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
         .custom((value, { req }) => {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -801,6 +1007,10 @@ export default mode => ([
         .exists({ checkNull: true }).bail().withMessage('Le champ "Date d\'octroi du CFP" est obligatoire')
         .isDate().bail().withMessage('Le champ "Date d\'octroi du CFP" est invalide')
         .toDate()
+        .customSanitizer((value) => {
+            value.setHours(0, 0, 0, 0);
+            return value;
+        })
         .custom((value, { req }) => {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -819,6 +1029,29 @@ export default mode => ([
 
             return true;
         }),
+
+    /* **********************************************************************************************
+     * Existence d'un contentieux ?
+     ********************************************************************************************* */
+    body('existing_litigation').customSanitizer((value, { req }) => {
+        if (!req.user.isAllowedTo('access', 'shantytown_justice')) {
+            return null;
+        }
+
+        return value;
+    })
+        .customSanitizer((value, { req }) => {
+            if (req.body.police_status !== 'granted') {
+                return null;
+            }
+
+            return value;
+        })
+        .optional({ nullable: true })
+        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_justice'))
+        .toInt()
+        .isInt({ min: -1, max: 1 }).withMessage('Le champ "Existence d\'un contentieux" est invalide')
+        .customSanitizer(fromIntToBoolSanitizer),
 
     /* **********************************************************************************************
      * Nom de l'étude d'huissiers

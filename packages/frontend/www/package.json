@@ -19,5 +19,5 @@
     "postcss-custom-properties": "^13.3.2",
     "vue-matomo": "^4.1.0"
   },
-  "version": "2.16.7"
+  "version": "2.17.0"
 }

@@ -34,9 +34,9 @@ export default [
         route: "#conditions_de_vie",
     },
     {
-        id: "procedure_judiciaire",
-        label: () => "Procédure judiciaire",
-        route: "#procedure_judiciaire",
+        id: "procedure",
+        label: () => "Procédure",
+        route: "#procedure",
         condition() {
             const userStore = useUserStore();
             return userStore.hasJusticePermission === true;

@@ -1,13 +1,20 @@
 import { object, string, date, number, array, ref } from "yup";
 import { computed } from "vue";
-import labels from "./FormDeclarationDeSite.labels.js";
+import labels from "@/components/Common/FormEtFicheSite.labels";
 
 function emptyStringToNull(value, originalValue) {
-    if (typeof originalValue === "string" && originalValue === "") {
-        return null;
+    if (originalValue !== null && originalValue !== "") {
+        const parsedValue = parseInt(originalValue, 10);
+        if (isNaN(parsedValue)) {
+            // Ajout d'une vérification pour les valeurs de type String non autorisées
+            if (typeof originalValue === "string") {
+                return value;
+            }
+            return null;
+        }
+        return parsedValue;
     }
-
-    return value;
+    return null;
 }
 
 function makeNullableIfEdit(s, mode) {
@@ -37,7 +44,10 @@ export default function (
             name: string()
                 .nullable()
                 .label(labels.name)
-                .matches(/^[^<>{}]*$/, "Le nom renseigné n'est pas valide"),
+                .matches(
+                    /^[^<>{}]*$/,
+                    `Le contenu du champ "${labels.name}" n'est pas valide`
+                ),
             built_at: date()
                 .nullable()
                 .typeError(`${labels.built_at} est invalide`)
@@ -55,7 +65,13 @@ export default function (
                 .label(labels.detailed_address),
             owner_type: number().required().label(labels.owner_type),
             owner: hasOwnerPermission.value
-                ? string().nullable().label(labels.owner)
+                ? string()
+                      .nullable()
+                      .label(labels.owner)
+                      .matches(
+                          /^[^<>{}]*$/,
+                          `Le contenu du champ "${labels.owner}" n'est pas valide`
+                      )
                 : undefined,
             population_total: number()
                 .nullable()
@@ -148,7 +164,7 @@ export default function (
                         schema
                             .nullable()
                             .typeError(
-                                `${labels.census_conducted_at} est invalide`
+                                `Le contenu du champ "${labels.census_conducted_at}" n'est pas valide`
                             ),
                 })
                 .label(labels.census_conducted_at),
@@ -160,7 +176,10 @@ export default function (
                 })
                 .label(labels.census_conducted_by),
             is_reinstallation: number()
-                .oneOf([-1, 0, 1], "La valeur est invalide")
+                .oneOf(
+                    [-1, 0, 1],
+                    `Le contenu du champ "${labels.is_reinstallation}" n'est pas valide`
+                )
                 .required()
                 .label(labels.is_reinstallation),
             reinstallation_comments: string().label(
@@ -198,20 +217,68 @@ export default function (
                               is: 1,
                               then: (schema) => schema.required(),
                           })
-                          .label(labels.justice_rendered_by),
+                          .label(labels.justice_rendered_by)
+                          .matches(
+                              /^[^<>{}]*$/,
+                              `Le contenu du champ ${labels.justice_rendered_by} n'est pas valide`
+                          ),
                       justice_challenged: number()
                           .when("justice_rendered", {
                               is: 1,
                               then: (schema) => schema.required(),
                           })
                           .label(labels.justice_challenged),
-                      police_status: string()
+                      evacuation_under_time_limit: number()
                           .required()
-                          .label(labels.police_status),
+                          .label(labels.evacuation_under_time_limit),
+                      administrative_order_decision_at: date()
+                          .nullable()
+                          .label(labels.administrative_order_decision_at),
+                      administrative_order_decision_rendered_by: string()
+                          .label(
+                              labels.administrative_order_decision_rendered_by
+                          )
+                          .matches(
+                              /^[^<>{}]*$/,
+                              `Le contenu du champ ${labels.administrative_order_decision_rendered_by} n'est pas valide`
+                          ),
+                      administrative_order_evacuation_at: string()
+                          .nullable()
+                          .label(labels.administrative_order_evacuation_at),
+                      insalubrity_order: number()
+                          .required()
+                          .label(labels.insalubrity_order),
+                      insalubrity_order_displayed: number()
+                          .nullable()
+                          .label(labels.insalubrity_order_displayed),
+                      insalubrity_order_type: string()
+                          .nullable()
+                          .label(labels.insalubrity_order_type)
+                          .matches(
+                              /^[^<>{}]*$/,
+                              `Le contenu du champ "${labels.insalubrity_order_type}" n'est pas valide`
+                          ),
+                      insalubrity_order_by: string()
+                          .nullable()
+                          .label(labels.insalubrity_order_by)
+                          .matches(
+                              /^[^<>{}]*$/,
+                              `Le contenu du champ "${labels.insalubrity_order_by}" n'est pas valide`
+                          ),
+                      insalubrity_parcels: string()
+                          .nullable()
+                          .label(labels.insalubrity_parcels)
+                          .matches(
+                              /^[^<>{}]*$/,
+                              `Le contenu du champ "${labels.insalubrity_parcels}" n'est pas valide`
+                          ),
+                      police_status: string().label(labels.police_status),
                       police_requested_at: string()
                           .when("police_status", {
                               is: (value) =>
-                                  ["requested", "granted"].includes(value),
+                                  ["requested", "granted", "refused"].includes(
+                                      value
+                                  ),
                               then: (schema) => schema.required(),
                           })
                           .label(labels.police_requested_at),
@@ -221,7 +288,28 @@ export default function (
                               then: (schema) => schema.required(),
                           })
                           .label(labels.police_granted_at),
-                      bailiff: string().label(labels.bailiff),
+                      bailiff: string()
+                          .label(labels.bailiff)
+                          .matches(
+                              /^[^<>{}]*$/,
+                              `Le contenu du champ "${labels.bailiff}" n'est pas valide`
+                          ),
+                      existing_litigation: number()
+                          .nullable()
+                          .when("police_status", {
+                              is: "granted",
+                              then: (schema) =>
+                                  schema
+                                      .oneOf(
+                                          [0, 1],
+                                          `"${labels.existing_litigation}" doit être renseigné si le concours de la force publique a été obtenu`
+                                      )
+                                      .required(
+                                          `${labels.existing_litigation} est obligatoire`
+                                      ),
+                              otherwise: (schema) => schema.optional(),
+                          })
+                          .label(labels.existing_litigation),
                   }
                 : {}),
         };

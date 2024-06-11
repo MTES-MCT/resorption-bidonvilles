@@ -16,10 +16,16 @@
         </template>
 
         <template v-slot:body>
+            <FormConnexionMessageAlerte
+                v-if="isFormDisabled"
+                :delayBeforeReactivation="delayBeforeReactivation"
+            />
             <FormConnexionInputEmail
+                :disabled="isFormDisabled"
                 aria-label="Veuillez saisir l'adresse de messagerie correspondant à votre identifiant sur la plateforme"
             />
             <FormConnexionInputPassword
+                :disabled="isFormDisabled"
                 aria-label="Veuillez saisir votre mot de passe"
             />
         </template>
@@ -29,6 +35,7 @@
                 <Button
                     type="submit"
                     aria-label="Valider les informations saisies,"
+                    :disabled="isFormDisabled"
                     >Me connecter</Button
                 >
             </p>
@@ -47,7 +54,7 @@
 
 <script setup>
 // vue
-import { computed, defineProps, toRefs } from "vue";
+import { computed, defineProps, toRefs, watch, ref, onMounted } from "vue";
 
 // utils
 import router from "@/helpers/router.js";
@@ -58,6 +65,7 @@ import { Button, ContentWrapper, Link, Icon } from "@resorptionbidonvilles/ui";
 import FormPublic from "@/components/FormPublic/FormPublic.vue";
 import FormConnexionInputEmail from "./inputs/FormConnexionInputEmail.vue";
 import FormConnexionInputPassword from "./inputs/FormConnexionInputPassword.vue";
+import FormConnexionMessageAlerte from "./FormConnexionMessageAlerte.vue";
 
 // form
 import schema from "./FormConnexion.schema.js";
@@ -78,10 +86,36 @@ const props = defineProps({
 });
 
 const { reason } = toRefs(props);
+const blockedTimer = ref(localStorage.getItem("blockedTimer"));
+const isFormDisabled = ref(false);
+const delayBeforeReactivation = ref(null);
+const timeoutReactivation = ref(null);
+
+watch(isFormDisabled, (newVal) => {
+    if (newVal === true) {
+        timerReactivation();
+    } else {
+        localStorage.removeItem("connexionCounter");
+        localStorage.removeItem("blockedTimer");
+        clearTimeout(timeoutReactivation.value);
+    }
+});
+
+const timerReactivation = () => {
+    timeoutReactivation.value = setTimeout(() => {
+        isFormDisabled.value = false;
+    }, delayBeforeReactivation.value);
+};
 
 // methods
 async function submit({ email, password }) {
-    await userStore.signin(email, password);
+    try {
+        await userStore.signin(email, password);
+    } catch (error) {
+        checkAttempt();
+        throw error;
+    }
+    resetConnexionAttempts();
     trackEvent("Login", "Connection");
     router.push("/chargement");
 }
@@ -95,5 +129,39 @@ const message = computed(() => {
         return "Veuillez vous connecter pour accéder à la page demandée";
     }
     return null;
+});
+
+const checkAttempt = () => {
+    if (!localStorage.getItem("connexionCounter")) {
+        localStorage.setItem("connexionCounter", 1);
+    } else {
+        let counter = parseInt(localStorage.getItem("connexionCounter"));
+        counter++;
+        localStorage.setItem("connexionCounter", counter);
+        if (counter >= 3) {
+            const now = Date.now();
+            const blockedTimer = now + 900000;
+            localStorage.setItem("blockedTimer", blockedTimer);
+            delayBeforeReactivation.value = parseInt(
+                localStorage.getItem("blockedTimer") - Date.now()
+            );
+            isFormDisabled.value = true;
+            return false;
+        }
+    }
+    return false;
+};
+
+const resetConnexionAttempts = () => {
+    isFormDisabled.value = false;
+};
+
+onMounted(() => {
+    if (blockedTimer.value > Date.now()) {
+        isFormDisabled.value = true;
+        delayBeforeReactivation.value =
+            parseInt(localStorage.getItem("blockedTimer")) - Date.now();
+        timerReactivation();
+    }
 });
 </script>
