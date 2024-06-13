@@ -1033,13 +1033,20 @@ export default mode => ([
     /* **********************************************************************************************
      * Existence d'un contentieux ?
      ********************************************************************************************* */
-    body('existing_litigation').customSanitizer((value, { req }) => {
-        if (!req.user.isAllowedTo('access', 'shantytown_justice')) {
-            return null;
-        }
+    body('existing_litigation')
+        .customSanitizer((value, { req }) => {
+            if (!req.user.isAllowedTo('access', 'shantytown_justice')) {
+                return null;
+            }
 
-        return value;
-    })
+            return value;
+        })
+        .custom((value, { req }) => {
+            if (req.body.police_status !== 'granted' && value !== -1) {
+                throw new Error('Un contentieux ne peut exister que si le recours à la force publique a été accordé');
+            }
+            return true;
+        })
         .customSanitizer((value, { req }) => {
             if (req.body.police_status !== 'granted') {
                 return null;
@@ -1048,7 +1055,6 @@ export default mode => ([
             return value;
         })
         .optional({ nullable: true })
-        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_justice'))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Existence d\'un contentieux" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
