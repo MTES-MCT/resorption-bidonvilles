@@ -302,7 +302,7 @@ export default function (
                                   schema
                                       .oneOf(
                                           [0, 1],
-                                          `"${labels.existing_litigation}" ne peut être "Inconnu" si le CFP a été obtenu`
+                                          `"${labels.existing_litigation}" ne peut être "Inconnu" si le concours de la force publique a été obtenu`
                                       )
                                       .required(
                                           `${labels.existing_litigation} est obligatoire`
@@ -314,7 +314,7 @@ export default function (
                               then: (schema) =>
                                   schema.oneOf(
                                       [-1],
-                                      `Un contentieux ne peut être différent de "Inconnu" que si le CFP a été obtenu (front)`
+                                      `Un contentieux ne peut être différent de "Inconnu" que si le concours de la force publique a été obtenu`
                                   ),
                           })
                           .label(labels.existing_litigation),
