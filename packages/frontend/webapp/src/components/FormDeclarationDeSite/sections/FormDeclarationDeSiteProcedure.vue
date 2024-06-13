@@ -205,7 +205,6 @@ function openModaleListeAccesPJ() {
 watchEffect(() => {
     if (values.value.police_status === "null") {
         values.value.existing_litigation = -1;
-        values.value.bailiff = "";
     }
 });
 </script>
