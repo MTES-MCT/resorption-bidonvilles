@@ -302,7 +302,7 @@ function formatValuesForApi(v) {
     const nullFields = [
         "census_status",
         "police_status",
-        "administrative_order",
+        "evacuation_under_time_limit",
         "existing_litigation",
         "insalubrity_order_type",
         "insalubrity_order_by",

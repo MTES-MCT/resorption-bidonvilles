@@ -165,15 +165,11 @@ const policeStatus = computed(() => {
 });
 
 const existingLitigationStatus = computed(() => {
-    if (town.value.existingLitigation === null) {
-        return "non communiqué";
-    }
-
-    if (town.value.existingLitigation !== true) {
-        return "non";
-    }
-
-    return "oui";
+    return town.value.existingLitigation === null
+        ? "non communiqué"
+        : town.value.existingLitigation
+        ? "oui"
+        : "non";
 });
 
 const administrativeOrderStatus = computed(() => {
