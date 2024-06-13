@@ -44,20 +44,56 @@ const policeStatusLabel = (town) => {
     return 'NC';
 };
 
+const administrativeOrderDecisionAt = (town) => {
+    if (town.administrativeOrderDecisionAt === null) {
+        return 'NC';
+    }
+    return town.administrativeOrderDecisionAt
+        ? `rendue le ${formatDate(
+            town.administrativeOrderDecisionAt,
+            'DD MMMM YYYY',
+        )}`
+        : 'non';
+};
+
+const evacuationAt = (town) => {
+    if (town.administrativeOrderEvacuationAt === null) {
+        return 'NC';
+    }
+    return town.administrativeOrderEvacuationAt
+        ? `${formatDate(
+            town.administrativeOrderEvacuationAt,
+            'DD MMMM YYYY',
+        )}`
+        : 'non';
+};
+
+const insalubrityOrder = (town) => {
+    if (town.insalubrityOrder === null) {
+        return 'NC';
+    }
+
+    return town.insalubrityOrder
+        ? `${`${town.insalubrityOrderType} `}rendue le ${formatDate(
+            town.insalubrityOrderAt,
+            'DD MMMM YYYY',
+        )}`
+        : 'non';
+};
+
 export default town => ({
     properties: {
         type: SectionType.CONTINUOUS,
     },
     children: [
-        heading('Procédure judiciaire'),
+        heading('Procédure judiciaire ou administrative'),
         new Paragraph({
             spacing: {
                 before: 300,
-                after: 100,
             },
             children: [
                 new TextRun({
-                    text: 'Dépôt de plainte : ',
+                    text: 'Dépôt de plainte par le propriétaire : ',
                     bold: true,
                     size: 22,
                     font: 'Arial',
@@ -68,6 +104,13 @@ export default town => ({
                     size: 22,
                     font: 'Arial',
                 }),
+            ],
+        }),
+        new Paragraph({
+            spacing: {
+                before: 100,
+            },
+            children: [
                 new TextRun({
                     text: 'Existence d\'une procédure judiciaire : ',
                     bold: true,
@@ -95,7 +138,20 @@ export default town => ({
                     font: 'Arial',
                 }),
                 new TextRun({
-                    text: 'Contentieux : ',
+                    text: 'Origine de la décision : ',
+                    bold: true,
+                    break: 1,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: `${town.justiceRenderedBy || 'NC'}`,
+                    bold: false,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: 'Appel en cours : ',
                     bold: true,
                     break: 1,
                     size: 22,
@@ -107,6 +163,119 @@ export default town => ({
                     size: 22,
                     font: 'Arial',
                 }),
+            ],
+        }),
+        new Paragraph({
+            spacing: {
+                before: 100,
+            },
+            children: [
+                new TextRun({
+                    text: 'Arrêté d\'évacuation en cours : ',
+                    bold: true,
+                    break: 1,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: `${town.evacuationUnderTimeLimit === true ? administrativeOrderDecisionAt(town) : boolToStr(town.evacuationUnderTimeLimit) || 'NC'}`,
+                    bold: false,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: 'Qui a pris l\'arrêté : ',
+                    bold: true,
+                    break: 1,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: `${town.administrativeOrderDecisionRenderedBy || 'NC'}`,
+                    bold: false,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: 'Date de l\'arrêté : ',
+                    bold: true,
+                    break: 1,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: `${evacuationAt(town.administrativeOrderEvacuationAt)}`,
+                    bold: false,
+                    size: 22,
+                    font: 'Arial',
+                }),
+            ],
+        }),
+        new Paragraph({
+            spacing: {
+                before: 100,
+            },
+            children: [
+                new TextRun({
+                    text: 'Arrêté d\'insalubrité RHI bidonville en cours : ',
+                    bold: true,
+                    break: 1,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: `${insalubrityOrder(town)}`,
+                    bold: false,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: 'Affichage de l\'arrêté d\'insalubrité : ',
+                    bold: true,
+                    break: 1,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: `${boolToStr(town.insalubrityOrderDisplayed)}`,
+                    bold: false,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: 'Qui a pris l\'arrêté d\'insalubrité : ',
+                    bold: true,
+                    break: 1,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: `${town.insalubrityOrderBy || 'NC'}`,
+                    bold: false,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: 'Parcelles concernées : ',
+                    bold: true,
+                    break: 1,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: `${town.insalubrityParcels || 'NC'}`,
+                    bold: false,
+                    size: 22,
+                    font: 'Arial',
+                }),
+            ],
+        }),
+        new Paragraph({
+            spacing: {
+                before: 100,
+                after: 100,
+            },
+            children: [
                 new TextRun({
                     text: 'Concours de la force publique : ',
                     bold: true,
@@ -120,8 +289,32 @@ export default town => ({
                     size: 22,
                     font: 'Arial',
                 }),
-
-
+                new TextRun({
+                    text: 'Nom de l\'étude d\'huissiers : ',
+                    bold: true,
+                    break: 1,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: `${town.bailiff || 'NC'}`,
+                    bold: false,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: 'Existence d\'un contentieux : ',
+                    bold: true,
+                    break: 1,
+                    size: 22,
+                    font: 'Arial',
+                }),
+                new TextRun({
+                    text: `${boolToStr(town.existingLitigation) || 'NC'}`,
+                    bold: false,
+                    size: 22,
+                    font: 'Arial',
+                }),
             ],
         }),
     ],
