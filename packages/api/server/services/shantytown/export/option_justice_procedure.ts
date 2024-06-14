@@ -204,7 +204,7 @@ export default town => ({
                     font: 'Arial',
                 }),
                 new TextRun({
-                    text: `${evacuationAt(town.administrativeOrderEvacuationAt)}`,
+                    text: `${evacuationAt(town)}`,
                     bold: false,
                     size: 22,
                     font: 'Arial',
