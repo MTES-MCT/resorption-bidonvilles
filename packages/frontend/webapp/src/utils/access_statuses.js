@@ -28,4 +28,9 @@ export default {
         icon: "flag",
         textColor: "text-black",
     },
+    refused: {
+        label: "Sans suite",
+        icon: "ban",
+        textColor: "text-G700",
+    },
 };
