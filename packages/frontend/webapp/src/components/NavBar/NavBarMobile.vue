@@ -65,23 +65,15 @@ onMounted(() => {
 
 // methods
 function showMobileMenu() {
-    console.log("Entrée dans showMobileMenu");
     isMobileMenuHidden.value = false;
-    console.log("isMobileMenuHidden initialisé...");
     document.body.style.overflow = "hidden";
-    console.log("document.body.style.overflow passé à hidden...");
-    console.log(`mobileMenu: ${mobileMenu.value}`);
     mobileMenu.value.style.zIndex = "11";
-    console.log("mobileMenu.value.style.zIndex passé à 11...");
     mobileMenu.value.style.opacity = "1";
-    console.log("mobileMenu.value.style.opacity passé à 1...");
-    console.log(`isMobileMenuHidden: ${isMobileMenuHidden.value}`);
 }
 
 function hideMobileMenu() {
     mobileMenu.value.style.opacity = "0";
     isMobileMenuHidden.value = true;
-    console.log(`isMobileMenuHidden: ${isMobileMenuHidden.value}`);
 }
 
 function onMobileMenuTransitionEnd() {
