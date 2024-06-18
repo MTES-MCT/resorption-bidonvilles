@@ -17,6 +17,10 @@
                         label: 'Activé',
                     },
                     {
+                        value: 'refused',
+                        label: 'Sans suite',
+                    },
+                    {
                         value: 'deactivated',
                         label: 'Désactivé',
                     },
