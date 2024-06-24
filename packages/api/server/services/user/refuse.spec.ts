@@ -63,7 +63,6 @@ describe('userService.refuse()', () => {
     });
 
     it('exécute l\'ensemble des requêtes dans une transaction', async () => {
-        // userModel.findOne.withArgs(42).resolves(fakeUser({ id: 42, status: 'new' }));
         await refuseUserAccess(42);
         expect(userModel.refuse).to.have.been.calledWith(42, transaction);
         expect(userModel.findOne).to.have.been.calledWith(42, {}, null, 'refuse', transaction);
@@ -102,7 +101,6 @@ describe('userService.refuse()', () => {
 
     it('en cas d\'erreur de la recherche de l\'utilisateur, lance une ServiceError', async () => {
         const error = new Error('refresh_failure');
-        // userModel.findOne.withArgs(42).resolves();
         userModel.findOne.rejects(error);
 
         try {
