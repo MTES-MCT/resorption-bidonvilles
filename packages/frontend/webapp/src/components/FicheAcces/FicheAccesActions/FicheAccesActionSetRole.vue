@@ -3,7 +3,8 @@
         v-if="
             userStore.user?.is_superuser &&
             !user.is_admin &&
-            user.status !== 'inactive'
+            user.status !== 'inactive' &&
+            user.status !== 'refused'
         "
         type="button"
         variant="primaryOutline"

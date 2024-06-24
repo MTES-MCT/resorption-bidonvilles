@@ -3,6 +3,7 @@ import deactivate from './deactivate';
 import deactivateInactiveUsers from './deactivateInactiveUsers';
 import getPermissions from './getPermissions';
 import reactivate from './reactivate';
+import refuse from './refuse';
 import register from './register';
 import setExpertiseTopics from './setExpertiseTopics';
 import sendInactiveUserAlerts from './sendInactiveUserAlerts';
@@ -14,6 +15,7 @@ export default {
     deactivateInactiveUsers,
     getPermissions,
     reactivate,
+    refuse,
     register,
     setExpertiseTopics,
     sendInactiveUserAlerts,

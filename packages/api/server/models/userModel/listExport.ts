@@ -89,6 +89,7 @@ export default async (permission?: Permission): Promise<UserListExportRow[]> => 
                         THEN 'En attente de l''activation par l''utilisateur'
                     WHEN fk_status = 'new' AND lua.created_at IS NOT NULL AND lua.used_at IS NULL AND lua.expires_at IS NOT NULL AND lua.expires_at < NOW()
                         THEN 'Lien d''activation expiré'
+                    WHEN fk_status = 'refused' THEN 'Classé sans suite'
                     WHEN fk_status = 'inactive' AND u.inactivity_alert_sent_at IS NULL
                         THEN 'Compte désactivé'
                     ${suspendedAccountWhen}

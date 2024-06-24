@@ -23,8 +23,18 @@ export default [
                 throw new Error('L\'utilisateur n\'existe pas ou vous n\'avez pas les droits suffisants pour le désactiver');
             }
             const inactiveStatus = ['inactive', 'refused'];
-            if (!inactiveStatus.includes(user.status)) {
-                throw new Error('L\'accès de cet utilisateur est déjà actif');
+            if (inactiveStatus.includes(user.status)) {
+                throw new Error('L\'accès de cet utilisateur ne peut pas être classé sans suite');
+            }
+
+            let requestingUser: User;
+            try {
+                requestingUser = await userModel.findOne(req.user.id);
+                if (!requestingUser.is_superuser && requestingUser.role_id !== 'national_admin') {
+                    throw new Error('Vous n\'avez pas le droit de classer cette demande sans suite');
+                }
+            } catch (error) {
+                throw new Error('Une erreur est survenue lors de la vérification de vos droits');
             }
 
             req.body.user = user;

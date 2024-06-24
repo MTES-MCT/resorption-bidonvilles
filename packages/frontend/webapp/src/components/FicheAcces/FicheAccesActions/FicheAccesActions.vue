@@ -26,6 +26,7 @@ import setAdminLocal from "./actions/setAdminLocal.action";
 import copyActivationLink from "./actions/copyActivationLink.action";
 import reactivate from "./actions/reactivate.action";
 import denyAccess from "./actions/denyAccess.action";
+import refuseAccess from "./actions/refuseAccess.action";
 import grantAccess from "./actions/grantAccess.action";
 import ACTION_DESCRIPTIONS from "./FicheAccesActions.descriptions";
 
@@ -36,6 +37,7 @@ import FicheAccesActionDowngradeAdminLocal from "./FicheAccesActionDowngradeAdmi
 import FicheAccesActionCopyActivationLink from "./FicheAccesActionCopyActivationLink.vue";
 import FicheAccesActionReactivate from "./FicheAccesActionReactivate.vue";
 import FicheAccesActionDenyAccess from "./FicheAccesActionDenyAccess.vue";
+import FicheAccesActionRefuseAccess from "./FicheAccesActionRefuseAccess.vue";
 import FicheAccesActionGrantAccess from "./FicheAccesActionGrantAccess.vue";
 import FicheAccesActionSetRole from "./FicheAccesActionSetRole.vue";
 
@@ -80,6 +82,11 @@ const actions = [
         id: "reactivate",
         component: FicheAccesActionReactivate,
         action: reactivate,
+    },
+    {
+        id: "refuse_access",
+        component: FicheAccesActionRefuseAccess,
+        action: refuseAccess,
     },
     {
         id: "deny_access",

@@ -69,6 +69,10 @@ export function reactivateUser(userId) {
     return axios.post(`/users/${encodeURI(userId)}/reactivate`);
 }
 
+export function refuseAccess(userId) {
+    return axios.post(`/users/${encodeURI(userId)}/refuse-access`);
+}
+
 export function sendActivationLink(userId, data) {
     return axios.post(`/users/${encodeURI(userId)}/activation-links`, data);
 }
