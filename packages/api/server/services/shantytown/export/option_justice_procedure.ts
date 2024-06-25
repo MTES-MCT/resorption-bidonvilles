@@ -73,8 +73,10 @@ const insalubrityOrder = (town) => {
         return 'NC';
     }
 
+    const orderType = town.insalubrityOrderType ? `${town.insalubrityOrderType} ` : '';
+
     return town.insalubrityOrder
-        ? `${`${town.insalubrityOrderType} `}pris le ${formatDate(
+        ? `${orderType}pris le ${formatDate(
             town.insalubrityOrderAt,
             'DD MMMM YYYY',
         )}`
