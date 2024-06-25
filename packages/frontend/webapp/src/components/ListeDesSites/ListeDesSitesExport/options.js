@@ -22,7 +22,7 @@ export default [
     },
     {
         id: "justice",
-        label: "Procédures judiciaires et administratives",
+        label: "Procédure judiciaire ou administrative",
         permission: {
             entity: "shantytown_justice",
             feature: "access",

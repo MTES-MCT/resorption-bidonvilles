@@ -49,7 +49,7 @@ const administrativeOrderDecisionAt = (town) => {
         return 'NC';
     }
     return town.administrativeOrderDecisionAt
-        ? `rendue le ${formatDate(
+        ? `pris le ${formatDate(
             town.administrativeOrderDecisionAt,
             'DD MMMM YYYY',
         )}`
@@ -73,8 +73,10 @@ const insalubrityOrder = (town) => {
         return 'NC';
     }
 
+    const orderType = town.insalubrityOrderType ? `${town.insalubrityOrderType} ` : '';
+
     return town.insalubrityOrder
-        ? `${`${town.insalubrityOrderType} `}rendue le ${formatDate(
+        ? `${orderType}pris le ${formatDate(
             town.insalubrityOrderAt,
             'DD MMMM YYYY',
         )}`
