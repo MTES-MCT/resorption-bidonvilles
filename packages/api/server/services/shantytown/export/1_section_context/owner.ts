@@ -12,13 +12,13 @@ export default (ownerType, owner) => new Paragraph({
             font: 'Arial',
         }),
         new TextRun({
-            text: `    -    ${ownerType}`,
+            text: `    -    Type : ${ownerType}`,
             size: 22,
             break: 1,
             font: 'Arial',
         }),
         new TextRun({
-            text: `    -    ${owner || 'non renseigné'}`,
+            text: `    -    Nom : ${owner || 'non renseigné'}`,
             size: 22,
             break: 1,
             font: 'Arial',
