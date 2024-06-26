@@ -21,6 +21,7 @@
         </ViewHeader>
 
         <InactiveUserWarning v-if="user.status === 'inactive'" class="mt-5" />
+        <RefusedUserAccount v-if="user.status === 'refused'" class="mt-5" />
 
         <ArrangementLeftMenu
             class="mt-10"
@@ -44,6 +45,7 @@ import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLef
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import { useUserStore } from "@/stores/user.store";
 import InactiveUserWarning from "@/components/InactiveUserWarning/InactiveUserWarning.vue";
+import RefusedUserAccount from "@/components/RefusedUserAccount/RefusedUserAccount.vue";
 import { useConfigStore } from "@/stores/config.store";
 
 const props = defineProps({

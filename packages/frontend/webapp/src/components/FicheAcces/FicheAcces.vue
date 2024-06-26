@@ -8,6 +8,7 @@
     </ViewHeader>
 
     <InactiveUserWarning v-if="user.status === 'inactive'" class="mb-8" />
+    <RefusedUserAccount v-if="user.status === 'refused'" class="mb-8" />
 
     <div class="flex space-x-8 justify-center">
         <FicheAccesColumn :user="user" />
@@ -21,6 +22,7 @@ import { useConfigStore } from "@/stores/config.store";
 
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import InactiveUserWarning from "@/components/InactiveUserWarning/InactiveUserWarning.vue";
+import RefusedUserAccount from "@/components/RefusedUserAccount/RefusedUserAccount.vue";
 import FicheAccesColumn from "./FicheAccesColumn/FicheAccesColumn.vue";
 import FicheAccesBody from "./FicheAccesBody/FicheAccesBody.vue";
 

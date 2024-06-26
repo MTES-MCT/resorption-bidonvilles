@@ -5,6 +5,9 @@ const statuses = {
     inactive() {
         return { status: "deactivated" };
     },
+    refused(user) {
+        return { status: "refused", date: user.user_accesses[0]?.refused_at };
+    },
     new(user) {
         const lastAccess = user.user_accesses[0] || null;
         if (lastAccess === null) {

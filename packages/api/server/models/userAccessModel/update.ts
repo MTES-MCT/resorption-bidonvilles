@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 
 export default (user_access_id, data, transaction = undefined) => {
-    const params = ['used_at', 'sent_by'];
+    const params = ['used_at', 'sent_by', 'refused'];
 
     const query = params
         // for each supported param, look if a new value is provided in object "data"
