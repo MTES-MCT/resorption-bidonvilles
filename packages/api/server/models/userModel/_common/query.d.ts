@@ -16,6 +16,7 @@ export type RawUserAccess = {
     user_access_used_at: Date | null,
     user_access_expires_at: Date,
     user_access_created_at: Date,
+    user_access_refused_at: Date | null,
     activator_id: number | null,
     activator_email: string | null,
     activator_first_name: string | null,

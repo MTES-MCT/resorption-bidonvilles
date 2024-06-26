@@ -13,7 +13,9 @@
                 name="options"
                 variant="checkbox"
                 direction="col"
-                :disabled="user.status === 'inactive'"
+                :disabled="
+                    user.status === 'inactive' || user.status === 'refused'
+                "
                 :active="user.status !== 'active'"
             />
         </p>
@@ -56,6 +58,7 @@ watch(values, () => {
 });
 watch(options, () => {
     if (
+        options.value &&
         options.value.length === values.options.length &&
         options.value.every((v) => values.options.includes(v))
     ) {

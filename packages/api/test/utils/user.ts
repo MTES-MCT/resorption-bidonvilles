@@ -27,6 +27,7 @@ export function serialized(override: Partial<User> = {}): AuthUser {
             created_at: (new Date(2020, 0, 1, 1, 0, 0)).getTime() / 1000,
             expires_at: (new Date(2020, 0, 8, 1, 0, 0)).getTime() / 1000,
             used_at: (new Date(2020, 0, 1, 2, 0, 0)).getTime() / 1000,
+            refused_at: null,
         }],
         organization: {
             id: 2,

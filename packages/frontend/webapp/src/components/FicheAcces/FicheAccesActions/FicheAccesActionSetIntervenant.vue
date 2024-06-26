@@ -5,7 +5,8 @@
             !userStore.user?.is_superuser &&
             !user.is_admin &&
             user.role_id !== 'intervener' &&
-            user.status !== 'inactive'
+            user.status !== 'inactive' &&
+            user.status !== 'refused'
         "
         variant="primaryOutline"
         :loading="isLoading"

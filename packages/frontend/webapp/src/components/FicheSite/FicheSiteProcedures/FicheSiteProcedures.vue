@@ -39,7 +39,7 @@
                 icon="right-from-bracket"
                 :label="labels.insalubrity_order"
             >
-                <p>{{ town.insalubrityOrder ? "Oui" : "" }}</p>
+                <p>{{ town.insalubrityOrder ? "oui" : "" }}</p>
                 <p>{{ insalubrityOrderStatus }}</p>
                 <p
                     v-if="
@@ -52,10 +52,17 @@
             </FicheSiteProceduresLigne>
 
             <FicheSiteProceduresLigne
-                v-if="town.insalubrityOrder && town.insalubrityOrderDisplayed"
+                v-if="town.insalubrityOrder"
                 icon="signs-post"
                 :label="labels.insalubrity_order_displayed"
             >
+                {{
+                    town.insalubrityOrderDisplayed === true
+                        ? "oui"
+                        : town.insalubrityOrderDisplayed === false
+                        ? "non"
+                        : "non communiqué"
+                }}
             </FicheSiteProceduresLigne>
 
             <FicheSiteProceduresLigne
@@ -63,7 +70,7 @@
                 icon="map-location-dot"
                 :label="labels.insalubrity_parcels"
             >
-                {{ town.insalubrityParcels || "non précisé" }}
+                {{ town.insalubrityParcels || "non communiqué" }}
             </FicheSiteProceduresLigne>
         </FicheSiteProceduresRubrique>
 
@@ -77,7 +84,6 @@
             </FicheSiteProceduresLigne>
 
             <FicheSiteProceduresLigne
-                v-if="town.policeStatus === 'granted'"
                 icon="book"
                 :label="labels.existing_litigation"
             >
@@ -165,15 +171,11 @@ const policeStatus = computed(() => {
 });
 
 const existingLitigationStatus = computed(() => {
-    if (town.value.existingLitigation === null) {
-        return "non communiqué";
-    }
-
-    if (town.value.existingLitigation !== true) {
-        return "non";
-    }
-
-    return "oui";
+    return town.value.existingLitigation === null
+        ? "non communiqué"
+        : town.value.existingLitigation
+        ? "oui"
+        : "non";
 });
 
 const administrativeOrderStatus = computed(() => {

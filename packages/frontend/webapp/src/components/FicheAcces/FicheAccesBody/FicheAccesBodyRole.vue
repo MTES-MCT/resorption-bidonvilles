@@ -25,7 +25,7 @@
         </template>
         <div
             class="flex items-center justify-end"
-            v-if="user.status !== 'active'"
+            v-if="user.status !== 'active' && user.status !== 'refused'"
         >
             <Button
                 variant="tertiaryA11Yalt"

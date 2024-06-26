@@ -122,7 +122,7 @@
                     showMandatoryStar
                     modelName="values.police_granted_at"
                 />
-                <InputExistingLitigation v-if="policeGranted" />
+                <InputExistingLitigation />
                 <InputBailiff />
             </Fieldset>
         </template>
@@ -130,7 +130,7 @@
 </template>
 
 <script setup>
-import { computed, toRefs } from "vue";
+import { computed, toRefs, watchEffect } from "vue";
 import { useFormValues } from "vee-validate";
 import FormSection from "@/components/FormSection/FormSection.vue";
 import { Button, Fieldset } from "@resorptionbidonvilles/ui";
@@ -201,4 +201,10 @@ function openModaleListeAccesPJ() {
         future: future.value,
     });
 }
+
+watchEffect(() => {
+    if (values.value.police_status === "null") {
+        values.value.existing_litigation = -1;
+    }
+});
 </script>
