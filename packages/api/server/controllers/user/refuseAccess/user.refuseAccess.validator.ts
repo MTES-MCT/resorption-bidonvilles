@@ -9,7 +9,7 @@ export default [
         .isInt().bail().withMessage('L\'identifiant de l\'utilisateur est invalide')
         .custom(async (value, { req }) => {
             if (req.user.id === value) {
-                throw new Error('Vous ne pouvez pas réactiver votre propre accès');
+                throw new Error('Vous ne pouvez pas classer sans suite votre propre accès');
             }
 
             let user: User;
@@ -20,7 +20,7 @@ export default [
             }
 
             if (user === null) {
-                throw new Error('L\'utilisateur n\'existe pas ou vous n\'avez pas les droits suffisants pour le désactiver');
+                throw new Error('L\'utilisateur n\'existe pas ou vous n\'avez pas les droits suffisants pour le classer sans suite');
             }
             const inactiveStatus = ['inactive', 'refused'];
             if (inactiveStatus.includes(user.status)) {
