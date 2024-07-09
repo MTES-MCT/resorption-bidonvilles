@@ -28,9 +28,7 @@ export default defineNuxtConfig({
         }
     },
     build: {
-        transpile: [
-            'chart.js'
-        ]
+        
     },
     runtimeConfig: {
         public: {
