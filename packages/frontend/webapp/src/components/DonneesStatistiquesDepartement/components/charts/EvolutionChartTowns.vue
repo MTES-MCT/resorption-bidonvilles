@@ -36,8 +36,9 @@
 
         <LineChart
             class="mt-6"
-            :chartOptions="chartOptions"
-            :chartData="chartData"
+            :chartOptions="options"
+            :chartData="chartData.datasets"
+            :graphId="`evolution-towns`"
         />
     </section>
 </template>
@@ -46,7 +47,7 @@
 import formatStat from "@/utils/formatStat";
 import { computed } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
-import { LineChart } from "@/helpers/chart";
+import LineChart from "@/components/Graphs/GraphBase.vue";
 import ChartBigFigure from "./ChartBigFigure.vue";
 import chartOptions from "../../utils/GraphiquesDonneesStatistiques/ChartOptions";
 import generateDataset from "../../utils/GraphiquesDonneesStatistiques/generateDataset";
@@ -55,37 +56,40 @@ const departementMetricsStore = useDepartementMetricsStore();
 const data = departementMetricsStore.evolution.data.inhabitants.towns;
 
 const chartData = computed(() => {
-    const max = {
-        lessThan10: Math.max(...data.charts.less_than_10),
-        between10And99: Math.max(...data.charts.between_10_and_99),
-        moreThan99: Math.max(...data.charts.more_than_99),
-    };
-    max.global = Math.max(max.lessThan10, max.between10And99, max.moreThan99);
-
     const datasets = [
         generateDataset(
             "Sites de moins de 10 habitants",
-            "rgba(255, 0, 0, 0.5)",
-            data.charts.less_than_10,
-            max.global
+            "255, 0, 0",
+            data.charts.less_than_10
         ),
         generateDataset(
             "Sites de moins de 100 habitants",
-            "rgba(0, 0, 255, 0.5)",
-            data.charts.between_10_and_99,
-            max.global
+            "0, 0, 255",
+            data.charts.between_10_and_99
         ),
         generateDataset(
             "Sites de plus de 100 habitants",
-            "rgba(0, 255, 0, 0.5)",
-            data.charts.more_than_99,
-            max.global
+            "0, 255, 0",
+            data.charts.more_than_99
         ),
     ];
 
     return {
         labels: data.charts.labels,
         datasets,
+    };
+});
+
+const options = computed(() => {
+    return {
+        ...chartOptions.line,
+        options: {
+            ...chartOptions.line.options,
+            xAxis: {
+                ...chartOptions.line.options.xAxis,
+                data: data.charts.labels,
+            },
+        },
     };
 });
 </script>

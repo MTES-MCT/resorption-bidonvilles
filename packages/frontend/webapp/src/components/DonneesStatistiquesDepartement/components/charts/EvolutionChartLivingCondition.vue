@@ -34,8 +34,9 @@
 
         <LineChart
             class="mt-6"
-            :chartOptions="chartOptions"
-            :chartData="chartData"
+            :chartOptions="options"
+            :chartData="chartData.datasets"
+            :graphId="`evolution-living-conditions`"
         />
     </section>
 </template>
@@ -43,7 +44,7 @@
 <script setup>
 import formatStat from "@/utils/formatStat";
 import { computed, toRefs } from "vue";
-import { LineChart } from "@/helpers/chart";
+import LineChart from "@/components/Graphs/GraphBase.vue";
 import ChartBigFigure from "./ChartBigFigure.vue";
 import chartOptions from "../../utils/GraphiquesDonneesStatistiques/ChartOptions";
 import generateDataset from "../../utils/GraphiquesDonneesStatistiques/generateDataset";
@@ -71,42 +72,41 @@ const { chartLabel, data, livingConditionType, chartType, icon } =
     toRefs(props);
 
 const chartData = computed(() => {
-    const max = {
-        total: Math.max(
-            ...data.value.charts[
-                chartType.value === "towns"
-                    ? "towns_total"
-                    : "inhabitants_total"
-            ]
-        ),
-        value: Math.max(...data.value.charts[livingConditionType.value]),
-    };
-    max.global = Math.max(max.total, max.value);
-
     const datasets = [
         generateDataset(
             `Nombre total de ${
                 chartType.value === "towns" ? "sites" : "personnes"
             }`,
-            "rgba(0, 0, 255, 0.5)",
+            "0, 0, 255",
             data.value.charts[
                 chartType.value === "towns"
                     ? "towns_total"
                     : "inhabitants_total"
-            ],
-            max.global
+            ]
         ),
         generateDataset(
             chartLabel.value,
-            "rgba(0, 255, 0, 0.5)",
-            data.value.charts[livingConditionType.value],
-            max.global
+            "0, 255, 0",
+            data.value.charts[livingConditionType.value]
         ),
     ];
 
     return {
         labels: data.value.charts.labels,
         datasets,
+    };
+});
+
+const options = computed(() => {
+    return {
+        ...chartOptions.line,
+        options: {
+            ...chartOptions.line.options,
+            xAxis: {
+                ...chartOptions.line.options.xAxis,
+                data: data.value.charts.labels,
+            },
+        },
     };
 });
 </script>

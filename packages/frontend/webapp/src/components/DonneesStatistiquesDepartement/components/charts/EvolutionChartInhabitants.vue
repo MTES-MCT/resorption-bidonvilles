@@ -29,8 +29,9 @@
 
         <LineChart
             class="mt-6"
-            :chartOptions="chartOptions"
-            :chartData="chartData"
+            :chartOptions="options"
+            :chartData="chartData.datasets"
+            :graphId="`evolution-inhabitants`"
         />
     </section>
 </template>
@@ -39,7 +40,7 @@
 import formatStat from "@/utils/formatStat";
 import { computed } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
-import { LineChart } from "@/helpers/chart";
+import LineChart from "@/components/Graphs/GraphBase.vue";
 import ChartBigFigure from "./ChartBigFigure.vue";
 import flagEU from "@/assets/img/flags/eu.png";
 import flagExtraCommunautaires from "@/assets/img/flags/extra-communautaires.png";
@@ -50,37 +51,40 @@ const departementMetricsStore = useDepartementMetricsStore();
 const data = departementMetricsStore.evolution.data.inhabitants.inhabitants;
 
 const chartData = computed(() => {
-    const max = {
-        european: Math.max(...data.charts.european),
-        foreign: Math.max(...data.charts.foreign),
-        total: Math.max(...data.charts.total),
-    };
-    max.global = Math.max(max.european, max.foreign, max.total);
-
     const datasets = [
         generateDataset(
             "Nombre d'habitants intra-UE",
-            "rgba(255, 0, 0, 0.5)",
-            data.charts.european,
-            max.global
+            "0, 0, 255",
+            data.charts.european
         ),
         generateDataset(
             "Nombre d'habitants extra-UE",
-            "rgba(0, 255, 0, 0.5)",
-            data.charts.foreign,
-            max.global
+            "255, 0, 0",
+            data.charts.foreign
         ),
         generateDataset(
             "Nombre total d'habitants",
-            "rgba(0, 0, 255, 0.5)",
-            data.charts.total,
-            max.global
+            "0, 255, 0",
+            data.charts.total
         ),
     ];
 
     return {
         labels: data.charts.labels,
         datasets,
+    };
+});
+
+const options = computed(() => {
+    return {
+        ...chartOptions.line,
+        options: {
+            ...chartOptions.line.options,
+            xAxis: {
+                ...chartOptions.line.options.xAxis,
+                data: data.charts.labels,
+            },
+        },
     };
 });
 </script>
