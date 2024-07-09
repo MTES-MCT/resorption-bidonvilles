@@ -1,7 +1,9 @@
 import { defineStore } from "pinia";
+import moment from "moment";
 import { computed, ref, watch } from "vue";
 import { useEventBus } from "@common/helpers/event-bus";
 import { getNationMetrics } from "@/api/metrics.api";
+import { getNationMetricsEvolution } from "@/api/metrics.api";
 import filterMetrics from "@/utils/filterMetrics";
 import parametres from "../components/DonneesStatistiques/DonneesStatistiques.parametres";
 
@@ -9,6 +11,23 @@ export const useMetricsStore = defineStore("metrics", () => {
     const nationStatus = ref(null); // null: lancement, 'init': initialisation, 'loaded': chargé, 'refresh': màj
     const error = ref(null);
     const metrics = ref([]);
+    const evolution = {
+        from: ref(
+            new Date(new Date().setFullYear(new Date().getFullYear() - 2))
+        ),
+        to: ref(
+            new Date(
+                moment().set({
+                    hour: 0,
+                    minute: 0,
+                    second: 0,
+                    millisecond: 0,
+                })
+            )
+        ),
+        data: ref({}),
+        isLoading: ref(true),
+    };
     const selection = ref([]);
     const collapsedStatuses = ref({});
     const from = ref(new Date());
@@ -58,6 +77,7 @@ export const useMetricsStore = defineStore("metrics", () => {
         loadedDates: loaded,
         filteredMetrics,
         metrics,
+        evolution,
         collapsedStatuses,
         selection,
         showParametres,
@@ -94,6 +114,28 @@ export const useMetricsStore = defineStore("metrics", () => {
                 error.value =
                     e?.user_message || "Une erreur inconnue est survenue";
                 nationStatus.value = null;
+                return null;
+            }
+        },
+        async fetchEvolution() {
+            evolution.isLoading.value = true;
+            evolution.data = {};
+            try {
+                evolution.data.value = await getNationMetricsEvolution(
+                    evolution.from.value,
+                    evolution.to.value
+                );
+                nationStatus.value = "loaded";
+                loaded.value.from = new Date(evolution.from.value);
+                loaded.value.to = new Date(evolution.to.value);
+
+                evolution.isLoading.value = false;
+                return evolution;
+            } catch (e) {
+                error.value =
+                    e?.user_message || "Une erreur inconnue est survenue";
+                nationStatus.value = null;
+                evolution.isLoading.value = false;
                 return null;
             }
         },
