@@ -4,6 +4,7 @@
             @click="switchTab(tab.id)"
             v-for="tab in tabs"
             :key="tab.id"
+            :id="tab.id"
             :active="tab.id === departementMetricsStore.activeTab"
         >
             {{ tab.label }}</Tab
