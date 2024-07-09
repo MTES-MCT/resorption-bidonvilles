@@ -3,7 +3,7 @@
         <InputLabel :label="label" :info="info" :inlineInfo="inlineInfo" :showMandatoryStar="showMandatoryStar" :for="`dp-input-${id}`" />
 
         <div :class="width">
-            <DatePicker v-model="date" locale="fr" :format-locale="fr" format="dd LLLL yyyy"
+            <DatePicker v-model="date" locale="fr" :format-locale="fr" :format="departementMetricsStore.activeTab === 'evolution' ? 'LLLL yyyy' : 'dd LLLL yyyy'"
                 :disabled="isSubmitting || disabled" autoApply :enableTimePicker="false"
                 :input-class-name="focusClasses.ring"
                 :preventMinMaxNavigation="$attrs.maxDate || $attrs.minDate" v-bind="$attrs" :uid="id">
@@ -22,6 +22,8 @@ import focusClasses from "../../../../common/utils/focus_classes";
 import InputWrapper from "./utils/InputWrapper.vue";
 import InputLabel from "./utils/InputLabel.vue";
 import InputError from "./utils/InputError.vue";
+
+import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 
 const props = defineProps({
     id: String,
@@ -66,6 +68,7 @@ const { handleChange, errors, value } = useField(name.value, rules.value, {
     initialValue: modelValue.value
 });
 const emit = defineEmits(["update:modelValue"]);
+const departementMetricsStore = useDepartementMetricsStore();
 
 const date = computed({
     get() {

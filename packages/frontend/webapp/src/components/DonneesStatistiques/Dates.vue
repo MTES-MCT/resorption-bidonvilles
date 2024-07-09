@@ -1,12 +1,23 @@
 <template>
     <section class="flex space-x-3 items-end">
-        <DatepickerInput name="from" :maxDate="to" label="Du" withoutMargin />
+        <DatepickerInput
+            name="from"
+            :maxDate="to"
+            :label="
+                departementMetricsStore.activeTab === 'evolution' ? 'De' : 'Du'
+            "
+            withoutMargin
+            @update:modelValue="(date) => updateDate('from', date)"
+        />
         <DatepickerInput
             name="to"
             :minDate="from"
             :maxDate="today"
-            label="Au"
+            :label="
+                departementMetricsStore.activeTab === 'evolution' ? 'À' : 'Au'
+            "
             withoutMargin
+            @update:modelValue="(date) => updateDate('to', date)"
         />
         <Button
             @click="update"
@@ -25,25 +36,39 @@ export default {
 </script>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watchEffect } from "vue";
 import { useForm } from "vee-validate";
 import { useMetricsStore } from "@/stores/metrics.store";
+import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { trackEvent } from "@/helpers/matomo";
 import { Button, DatepickerInput } from "@resorptionbidonvilles/ui";
-import { toRef } from "vue";
 
 const metricsStore = useMetricsStore();
-
+const departementMetricsStore = useDepartementMetricsStore();
 const today = ref(new Date());
 
-const { values } = useForm({
+const from = computed(() =>
+    departementMetricsStore.activeTab === "evolution"
+        ? metricsStore.evolution.from
+        : metricsStore.from
+);
+const to = computed(() =>
+    departementMetricsStore.activeTab === "evolution"
+        ? metricsStore.evolution.to
+        : metricsStore.to
+);
+
+const { setFieldValue } = useForm({
     initialValues: {
-        from: metricsStore.from,
-        to: metricsStore.to,
+        from: from.value,
+        to: to.value,
     },
 });
-const from = toRef(values, "from");
-const to = toRef(values, "to");
+
+watchEffect(() => {
+    setFieldValue("from", from.value);
+    setFieldValue("to", to.value);
+});
 
 const datesAreNotLoaded = computed(() => {
     if (!metricsStore.loadedDates.from || !metricsStore.loadedDates.to) {
@@ -62,14 +87,36 @@ const datesAreNotLoaded = computed(() => {
     );
 });
 
+const updateDate = (field, newDate) => {
+    if (field === "from") {
+        if (departementMetricsStore.activeTab === "evolution") {
+            metricsStore.evolution.from = newDate;
+        } else {
+            metricsStore.from = newDate;
+        }
+    } else {
+        if (departementMetricsStore.activeTab === "evolution") {
+            metricsStore.evolution.to = newDate;
+        } else {
+            metricsStore.to = newDate;
+        }
+    }
+};
+
 function update() {
     trackEvent(
         "Visualisation des données nationales",
         "Changement dates",
         `${from.value.toLocaleDateString()} - ${to.value.toLocaleDateString()}`
     );
-    metricsStore.from = from.value;
-    metricsStore.to = to.value;
-    metricsStore.load();
+    if (departementMetricsStore.activeTab === "evolution") {
+        metricsStore.evolution.from = from.value;
+        metricsStore.evolution.to = to.value;
+        metricsStore.fetchEvolution();
+    } else {
+        metricsStore.from = from.value;
+        metricsStore.to = to.value;
+        metricsStore.load();
+    }
 }
 </script>
