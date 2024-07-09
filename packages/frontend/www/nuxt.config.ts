@@ -2,9 +2,6 @@ import { fileURLToPath } from "url";
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
-    alias: {
-        "@common": "/../common",
-    },
     modules: [
         "@nuxtjs/tailwindcss",
         ["@nuxtjs/i18n", {
@@ -26,9 +23,6 @@ export default defineNuxtConfig({
                 host: "localhost"
             }
         }
-    },
-    build: {
-        
     },
     runtimeConfig: {
         public: {

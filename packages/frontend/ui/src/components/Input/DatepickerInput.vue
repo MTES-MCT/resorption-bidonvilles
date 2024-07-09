@@ -23,7 +23,7 @@ import InputWrapper from "./utils/InputWrapper.vue";
 import InputLabel from "./utils/InputLabel.vue";
 import InputError from "./utils/InputError.vue";
 
-import { useDepartementMetricsStore } from "../../../../webapp/src/stores/metrics.departement.store.js";
+import { useDepartementMetricsStore } from "@stores/metrics.departement.store";
 
 const props = defineProps({
     id: String,
