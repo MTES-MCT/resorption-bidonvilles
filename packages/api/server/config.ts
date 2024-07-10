@@ -42,5 +42,6 @@ export default {
         secretAccessKey: process.env.RB_API_S3_SECRET_KEY,
         region: process.env.RB_API_S3_REGION,
         bucket: process.env.RB_API_S3_BUCKET,
+        expirationTime: process.env.RB_API_S3_EXPIRATION_TIME || 3600, // 1 heure par défaut
     } : null,
 };
