@@ -39,6 +39,6 @@ export default defineNuxtConfig({
     },
     alias: {
         "@common": fileURLToPath(new URL("../common/", import.meta.url)),
-        "@stores": fileURLToPath(new URL("../webapp/src/stores/", import.meta.url))
+        "@stores": fileURLToPath(new URL("../webapp/src/stores", import.meta.url))
     }
 });
