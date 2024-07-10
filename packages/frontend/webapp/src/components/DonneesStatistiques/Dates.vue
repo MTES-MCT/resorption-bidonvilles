@@ -7,6 +7,7 @@
                 departementMetricsStore.activeTab === 'evolution' ? 'De' : 'Du'
             "
             withoutMargin
+            :section="departementMetricsStore.activeTab"
             @update:modelValue="(date) => updateDate('from', date)"
         />
         <DatepickerInput
@@ -17,6 +18,7 @@
                 departementMetricsStore.activeTab === 'evolution' ? 'À' : 'Au'
             "
             withoutMargin
+            :section="departementMetricsStore.activeTab"
             @update:modelValue="(date) => updateDate('to', date)"
         />
         <Button
