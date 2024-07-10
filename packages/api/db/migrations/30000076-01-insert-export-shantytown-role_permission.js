@@ -1,8 +1,7 @@
 module.exports = {
 
-    up: (queryInterface) => {
-        return queryInterface.sequelize.query(
-            `INSERT INTO role_permissions(fk_role_regular, fk_feature, fk_entity, allowed, allow_all) VALUES 
+    up: queryInterface => queryInterface.sequelize.query(
+        `INSERT INTO role_permissions(fk_role_regular, fk_feature, fk_entity, allowed, allow_all) VALUES 
                 (
                     'intervener',
                     'export',
@@ -10,8 +9,7 @@ module.exports = {
                     true,
                     false
                 )`,
-        );
-    },
+    ),
 
     down: queryInterface => queryInterface.sequelize.query(
         `DELETE FROM role_permissions 
@@ -20,5 +18,6 @@ module.exports = {
         AND
             fk_feature = 'export'
         AND
-            fk_entity = 'shantytown'`),
+            fk_entity = 'shantytown'`,
+    ),
 };
