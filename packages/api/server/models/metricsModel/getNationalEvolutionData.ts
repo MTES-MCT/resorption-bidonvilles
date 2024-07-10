@@ -22,19 +22,31 @@ export default async (user, from: Date, to: Date): Promise<NationalEvolutionMetr
     date_trunc('day', TIMESTAMP '${replacements.to}'),
     '1 month'::interval
   ) AS month
+), aggregated_origins AS (
+  SELECT
+    fk_shantytown,
+    SUM(CASE WHEN fk_social_origin = 2 THEN population_total ELSE 0 END) AS intra_eu_count,
+    SUM(CASE WHEN fk_social_origin = 3 THEN population_total ELSE 0 END) AS extra_eu_count
+  FROM
+    shantytown_origins
+  JOIN
+    shantytowns ON shantytowns.shantytown_id = shantytown_origins.fk_shantytown
+  GROUP BY
+    fk_shantytown
 )
 SELECT
   ms.month,
   COUNT(st.shantytown_id) AS open_shantytowns_count,
-  SUM(CASE WHEN so.fk_social_origin = 2 THEN st.population_total ELSE 0 END) AS intra_eu_count,
-  SUM(CASE WHEN so.fk_social_origin = 3 THEN st.population_total ELSE 0 END) AS extra_eu_count
+  SUM(ao.intra_eu_count) AS intra_eu_count,
+  SUM(ao.extra_eu_count) AS extra_eu_count
 FROM
   month_series ms
 LEFT JOIN shantytowns st ON
-  date_trunc('month', st.built_at) <= ms.month AND
-  (st.closed_at IS NULL OR date_trunc('month', st.closed_at) >= ms.month)
-LEFT JOIN shantytown_origins so ON
-  st.shantytown_id = so.fk_shantytown
+  (date_trunc('month', st.built_at) <= ms.month AND
+  (st.closed_at IS NULL OR date_trunc('month', st.closed_at) > ms.month)) OR
+  (st.built_at IS NULL AND st.status = 'open')
+LEFT JOIN aggregated_origins ao ON
+  st.shantytown_id = ao.fk_shantytown
 GROUP BY
   ms.month
 ORDER BY
