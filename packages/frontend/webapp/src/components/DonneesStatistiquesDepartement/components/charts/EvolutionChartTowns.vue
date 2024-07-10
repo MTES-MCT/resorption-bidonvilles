@@ -60,17 +60,32 @@ const chartData = computed(() => {
         generateDataset(
             "Sites de moins de 10 habitants",
             "255, 0, 0",
-            data.charts.less_than_10
+            data.charts.less_than_10,
+            {
+                lineStyle: { opacity: 1 },
+                area: true,
+                symbolSize: 1,
+            }
         ),
         generateDataset(
             "Sites de moins de 100 habitants",
             "0, 0, 255",
-            data.charts.between_10_and_99
+            data.charts.between_10_and_99,
+            {
+                lineStyle: { opacity: 1 },
+                area: true,
+                symbolSize: 1,
+            }
         ),
         generateDataset(
             "Sites de plus de 100 habitants",
             "0, 255, 0",
-            data.charts.more_than_99
+            data.charts.more_than_99,
+            {
+                lineStyle: { opacity: 1 },
+                area: true,
+                symbolSize: 1,
+            }
         ),
     ];
 

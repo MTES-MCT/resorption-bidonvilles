@@ -18,10 +18,16 @@
             >
         </div>
 
-        <LineChart
+        <!-- <LineChart
             class="mt-6"
             :chartOptions="chartOptions"
             :chartData="chartData"
+        /> -->
+        <LineChart
+            class="mt-6"
+            :chartOptions="options"
+            :chartData="chartData.datasets"
+            :graphId="`evolution-justice`"
         />
     </section>
 </template>
@@ -30,7 +36,7 @@
 import formatStat from "@/utils/formatStat";
 import { computed } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
-import { LineChart } from "@/helpers/chart";
+import LineChart from "@/components/Graphs/GraphBase.vue";
 import ChartBigFigure from "./ChartBigFigure.vue";
 import chartOptions from "../../utils/GraphiquesDonneesStatistiques/ChartOptions";
 import generateDataset from "../../utils/GraphiquesDonneesStatistiques/generateDataset";
@@ -46,23 +52,39 @@ const chartData = computed(() => {
     max.global = Math.max(max.police, max.complaints);
 
     const datasets = [
-        generateDataset(
-            "Nombre de CFP",
-            "rgba(0, 0, 255, 0.5)",
-            data.charts.police,
-            max.global
-        ),
+        generateDataset("Nombre de CFP", "0, 0, 255", data.charts.police, {
+            lineStyle: { opacity: 1 },
+            area: true,
+            symbolSize: 1,
+        }),
         generateDataset(
             "Nombre de plaintes",
-            "rgba(255, 0, 0, 0.5)",
+            "255, 0, 0",
             data.charts.complaints,
-            max.global
+            {
+                lineStyle: { opacity: 1 },
+                area: true,
+                symbolSize: 1,
+            }
         ),
     ];
 
     return {
         labels: data.charts.labels,
         datasets,
+    };
+});
+
+const options = computed(() => {
+    return {
+        ...chartOptions.line,
+        options: {
+            ...chartOptions.line.options,
+            xAxis: {
+                ...chartOptions.line.options.xAxis,
+                data: data.charts.labels,
+            },
+        },
     };
 });
 </script>

@@ -82,12 +82,22 @@ const chartData = computed(() => {
                 chartType.value === "towns"
                     ? "towns_total"
                     : "inhabitants_total"
-            ]
+            ],
+            {
+                lineStyle: { opacity: 1 },
+                area: true,
+                symbolSize: 1,
+            }
         ),
         generateDataset(
             chartLabel.value,
             "0, 255, 0",
-            data.value.charts[livingConditionType.value]
+            data.value.charts[livingConditionType.value],
+            {
+                lineStyle: { opacity: 1 },
+                area: true,
+                symbolSize: 1,
+            }
         ),
     ];
 
