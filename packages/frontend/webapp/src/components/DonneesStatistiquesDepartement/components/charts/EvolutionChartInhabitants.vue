@@ -55,17 +55,32 @@ const chartData = computed(() => {
         generateDataset(
             "Nombre d'habitants intra-UE",
             "0, 0, 255",
-            data.charts.european
+            data.charts.european,
+            {
+                lineStyle: { opacity: 1 },
+                area: true,
+                symbolSize: 1,
+            }
         ),
         generateDataset(
             "Nombre d'habitants extra-UE",
             "255, 0, 0",
-            data.charts.foreign
+            data.charts.foreign,
+            {
+                lineStyle: { opacity: 1 },
+                area: true,
+                symbolSize: 1,
+            }
         ),
         generateDataset(
             "Nombre total d'habitants",
             "0, 255, 0",
-            data.charts.total
+            data.charts.total,
+            {
+                lineStyle: { opacity: 1 },
+                area: true,
+                symbolSize: 1,
+            }
         ),
     ];
 
@@ -83,6 +98,11 @@ const options = computed(() => {
             xAxis: {
                 ...chartOptions.line.options.xAxis,
                 data: data.charts.labels,
+                axisTick: {
+                    show: true,
+                    alignWithLabel: false,
+                    interval: 0,
+                },
             },
         },
     };

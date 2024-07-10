@@ -83,7 +83,6 @@ import Carto from "@/components/Carto/Carto.vue";
 import marqueurSiteStats from "@/utils/marqueurSiteStats";
 import marqueurLocationStats from "@/utils/marqueurLocationStats";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
-
 import { Icon } from "@resorptionbidonvilles/ui";
 const departementMetricsStore = useDepartementMetricsStore();
 const carto = ref(null);

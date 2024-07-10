@@ -82,12 +82,22 @@ const chartData = computed(() => {
                 chartType.value === "towns"
                     ? "towns_total"
                     : "inhabitants_total"
-            ]
+            ],
+            {
+                lineStyle: { opacity: 1 },
+                area: true,
+                symbolSize: 1,
+            }
         ),
         generateDataset(
             chartLabel.value,
             "0, 255, 0",
-            data.value.charts[livingConditionType.value]
+            data.value.charts[livingConditionType.value],
+            {
+                lineStyle: { opacity: 1 },
+                area: true,
+                symbolSize: 1,
+            }
         ),
     ];
 
@@ -105,6 +115,11 @@ const options = computed(() => {
             xAxis: {
                 ...chartOptions.line.options.xAxis,
                 data: data.value.charts.labels,
+                axisTick: {
+                    show: true,
+                    alignWithLabel: false,
+                    interval: 0,
+                },
             },
         },
     };
