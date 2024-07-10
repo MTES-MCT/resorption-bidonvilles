@@ -53,7 +53,7 @@ const chartData = computed(() => {
 
     const datasets = [
         generateDataset("Nombre de CFP", "0, 0, 255", data.charts.police, {
-            lineStyle: { opacity: 1 },
+            lineStyle: { opacity: 1, width: 2, color: "rgba(0, 0, 255, 1)" },
             area: true,
             symbolSize: 1,
         }),
@@ -83,6 +83,11 @@ const options = computed(() => {
             xAxis: {
                 ...chartOptions.line.options.xAxis,
                 data: data.charts.labels,
+                axisTick: {
+                    show: true,
+                    alignWithLabel: false,
+                    interval: 0,
+                },
             },
         },
     };

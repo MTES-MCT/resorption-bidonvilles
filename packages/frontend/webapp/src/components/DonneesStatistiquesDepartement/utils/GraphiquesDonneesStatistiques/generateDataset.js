@@ -34,7 +34,7 @@ export default function generateDataset(label, color, data, options = {}) {
             focus: "none",
             scale: 10,
             itemStyle: {
-                color: "255, 0, 0",
+                color: `rgba(${color}, 1)`,
                 borderColor: "rgba(70, 249, 60, 1)",
             },
         },

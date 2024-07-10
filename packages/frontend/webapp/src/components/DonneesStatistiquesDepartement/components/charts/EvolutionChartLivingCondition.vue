@@ -115,6 +115,11 @@ const options = computed(() => {
             xAxis: {
                 ...chartOptions.line.options.xAxis,
                 data: data.value.charts.labels,
+                axisTick: {
+                    show: true,
+                    alignWithLabel: false,
+                    interval: 0,
+                },
             },
         },
     };
