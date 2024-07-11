@@ -3,11 +3,12 @@ import ServiceError from '#server/errors/ServiceError';
 import update from '#server/models/actionModel/update/update';
 import can from '#server/utils/permission/can';
 import Action from '#root/types/resources/Action.d';
+import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
 import { User } from '#root/types/resources/User.d';
 import fetchAction from './write.fetchAction';
 import { ActionInput } from './ActionInput.d';
 
-export default async (action: Action, author: User, data: ActionInput): Promise<Action> => {
+export default async (action: Action, author: User, data: ActionInput): Promise<EnrichedAction> => {
     const canWriteFinances = can(author).do('access', 'action_finances').on(action);
 
     const transaction = await sequelize.transaction();
