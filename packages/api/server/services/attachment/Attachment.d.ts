@@ -1,4 +1,4 @@
-export type File = {
+export type Attachment = {
     state: string,
     id: number,
     name: string,
