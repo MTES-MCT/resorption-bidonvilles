@@ -7,6 +7,7 @@ import permissionUtils from '#server/utils/permission';
 import dateUtils from '#server/utils/date';
 import ServiceError from '#server/errors/ServiceError';
 import { Location } from '#server/models/geoModel/Location.d';
+import enrichCommentsAttachments from './_common/enrichCommentsAttachments';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 
@@ -78,7 +79,17 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
         // ignore
     }
 
+    // on retourne la liste mise à jour des commentaires du site
+    let commentsWithEnrichedAttachments = [];
+    try {
+        // comments = await shantytownModel.getComments(author, [shantytown.id]);
+        const rawComments = town.comments.filter(({ id }) => id !== parseInt(commentId, 10));
+        commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => enrichCommentsAttachments(rawComment)));
+    } catch (error) {
+        // ignore
+    }
+
     return {
-        comments: town.comments.filter(({ id }) => id !== parseInt(commentId, 10)),
+        comments: commentsWithEnrichedAttachments,
     };
 };

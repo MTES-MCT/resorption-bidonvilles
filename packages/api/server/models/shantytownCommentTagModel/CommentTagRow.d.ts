@@ -1,5 +1,5 @@
-export type CommentTagRow = {
+import { ShantytownCommentTag } from '#root/types/resources/ShantytownCommentTag.d';
+
+export type CommentTagRow = ShantytownCommentTag & {
     commentId: number,
-    uid: string,
-    tag: string
 };
