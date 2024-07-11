@@ -1,13 +1,13 @@
 import { sequelize } from '#db/sequelize';
 import ServiceError from '#server/errors/ServiceError';
 import create from '#server/models/actionModel/create/create';
-import Action from '#root/types/resources/Action.d';
+import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
 import { User } from '#root/types/resources/User.d';
 import { ActionInput } from './ActionInput.d';
 
 import fetchAction from './write.fetchAction';
 
-export default async (user: User, data: ActionInput): Promise<Action> => {
+export default async (user: User, data: ActionInput): Promise<EnrichedAction> => {
     const transaction = await sequelize.transaction();
 
     let actionId: number;
@@ -22,7 +22,7 @@ export default async (user: User, data: ActionInput): Promise<Action> => {
         throw new ServiceError('insert_action_error', error);
     }
 
-    let action: Action;
+    let action: EnrichedAction;
     try {
         action = await fetchAction(user, actionId, true, transaction);
     } catch (error) {

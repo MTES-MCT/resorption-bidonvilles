@@ -1,5 +1,8 @@
-import { File } from '#server/models/attachmentModel/File.d';
+// import { Attachment } from '#server/services/attachment/Attachment.d';
+import { CommentAuthor } from '#root/types/resources/CommentAuthor.d';
 import ActionLocationType from './ActionLocationType.d';
+import { ActionRawComment } from './ActionCommentRaw.d';
+import { ActionEnrichedComment } from './ActionCommentEnriched.d';
 
 type ActionUser = {
     id: number,
@@ -29,22 +32,12 @@ type ActionTopic = {
     uid: string,
     name: string
 };
-export type CommentAuthor = {
-    id: number,
-    first_name: string,
-    last_name: string,
-    organization_id: number,
-    organization: string,
-};
 export type Comment = {
     id: number,
     description: string,
-    tags: [],
-    user_target_name: [],
-    organization_target_name: [],
     createdAt: number,
     createdBy: CommentAuthor,
-    attachments: File[]
+    attachments: string[]
 };
 type ActionMetrics = {
     date: number,
@@ -126,7 +119,7 @@ export interface ShantytownAction extends IAction {
     is_ended: boolean,
 }
 
-interface Action extends IAction {
+interface GenericAction extends IAction {
     type: 'action',
     started_at: number,
     ended_at: number | null,
@@ -143,11 +136,18 @@ interface Action extends IAction {
     managers: ActionOrganization[],
     metrics: ActionMetrics[],
     finances?: ActionFinances,
-    comments: Comment[],
     created_at: number,
     created_by: ActionUser,
     updated_at: number | null,
     updated_by: ActionUser | null,
+}
+
+interface Action extends GenericAction {
+    comments: ActionRawComment[],
+}
+
+export interface EnrichedAction extends GenericAction {
+    comments: ActionEnrichedComment[],
 }
 
 export default Action;

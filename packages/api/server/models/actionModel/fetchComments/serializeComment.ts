@@ -1,13 +1,9 @@
-import attachmentModel from '#server/models/attachmentModel';
-import { ActionCommentRow } from './fetchComments';
-import { Comment } from '#root/types/resources/Action.d';
+import { ActionRowComment } from './ActionCommentRow.d';
+import { ActionRawComment } from '#root/types/resources/ActionCommentRaw.d';
 
-export default (row: ActionCommentRow): Comment => ({
+export default (row: ActionRowComment): ActionRawComment => ({
     id: row.id,
     description: row.description,
-    tags: [],
-    user_target_name: [],
-    organization_target_name: [],
     createdAt: row.created_at.getTime() / 1000,
     createdBy: {
         id: row.creator_id,
@@ -17,6 +13,6 @@ export default (row: ActionCommentRow): Comment => ({
         organization: row.creator_organization_abbreviation || row.creator_organization_name,
     },
     attachments: row.attachments?.length
-        ? row.attachments.map(attachmentModel.serializeAttachment)
+        ? row.attachments
         : [],
 });
