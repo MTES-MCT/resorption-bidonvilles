@@ -3,11 +3,11 @@ import getNationalAdmins from '#server/models/userModel/_common/getNationalAdmin
 import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
 import dateUtils from '#server/utils/date';
-import { Answer } from '#root/types/resources/Answer.d';
-import { Question } from '#root/types/resources/Question.d';
+import { RawAnswer } from '#root/types/resources/AnswerRaw.d';
+import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 import { User } from '#root/types/resources/User.d';
 
-export default async (question: Question, answer: Answer, reason?: string): Promise<void> => {
+export default async (question: EnrichedQuestion, answer: RawAnswer, reason?: string): Promise<void> => {
     try {
         await deleteAnswer(answer.id);
     } catch (error) {
