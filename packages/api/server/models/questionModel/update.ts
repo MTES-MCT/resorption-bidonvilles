@@ -2,13 +2,13 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import ServiceError from '#server/errors/ServiceError';
 import { UpdateQuestionInput } from './QuestionInput.d';
-import type { Question } from '#root/types/resources/Question';
+import type { RawQuestion } from '#root/types/resources/QuestionRaw';
 import findOne from './findOne';
 
 
-export default async (data: UpdateQuestionInput): Promise<Question> => {
+export default async (data: UpdateQuestionInput): Promise<RawQuestion> => {
     const transaction = await sequelize.transaction();
-    let updatedQuestion: Question;
+    let updatedQuestion: RawQuestion;
     try {
         await sequelize.query(
             `UPDATE questions SET
