@@ -10,7 +10,11 @@ import Link from "./Link.vue";
 import Icon from "./Icon.vue";
 
 const props = defineProps({
-    to: String
+    to: String,
+    ariaLabel : {
+        type: String,
+        required: false,
+    },        
 });
 const { to } = toRefs(props);
 </script>

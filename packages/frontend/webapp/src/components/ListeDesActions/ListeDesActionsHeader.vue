@@ -13,7 +13,6 @@
                     iconPosition="left"
                     variant="primaryOutline"
                     @click="openModalExport"
-                    size="md"
                     >Exporter</Button
                 >
                 <Button
@@ -23,7 +22,6 @@
                     icon="plus"
                     iconPosition="left"
                     variant="primary"
-                    size="md"
                 >
                     Déclarer une nouvelle action
                 </Button>

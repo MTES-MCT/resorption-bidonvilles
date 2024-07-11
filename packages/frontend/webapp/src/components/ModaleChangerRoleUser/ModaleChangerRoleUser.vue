@@ -107,7 +107,6 @@ async function updateUserRole() {
         );
         modaleStore.close();
     } catch (e) {
-        console.log(e);
         notificationStore.error(
             "Le changement de rôle a échoué",
             error.value?.user_message || "Une erreur inconnue est survenue"
