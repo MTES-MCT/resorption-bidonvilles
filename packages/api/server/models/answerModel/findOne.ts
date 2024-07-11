@@ -1,10 +1,10 @@
 import { sequelize } from '#db/sequelize';
-import { QueryTypes } from 'sequelize';
-import { Answer } from '#root/types/resources/Answer.d';
+import { QueryTypes, Transaction } from 'sequelize';
+import { RawAnswer } from '#root/types/resources/AnswerRaw.d';
 import AnswerRow from './AnswerRow.d';
 import serializeAnswer from './_common/serializeAnswer';
 
-export default async (id: number): Promise<Answer | null> => {
+export default async (id: number, transaction?: Transaction): Promise<RawAnswer | null> => {
     const rows: AnswerRow[] = await sequelize.query(
         `WITH grouped_attachments AS (
             SELECT
@@ -51,6 +51,7 @@ export default async (id: number): Promise<Answer | null> => {
             ca.answer_id = :id`,
         {
             type: QueryTypes.SELECT,
+            transaction,
             replacements: {
                 id,
             },

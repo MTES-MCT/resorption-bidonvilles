@@ -1,26 +1,28 @@
 import mails from '#server/mails/mails';
 import userModel from '#server/models/userModel';
 import answerModel from '#server/models/answerModel';
+import serializeAttachment from '#server/services/attachment/serializeAttachment';
 import userQuestionSubscriptionModel from '#server/models/userQuestionSubscriptionModel';
-import attachmentService from '#server/services/attachment';
+import uploadAttachments from '#server/services/attachment/upload';
 import { sequelize } from '#db/sequelize';
 
 // types
 import ServiceError from '#server/errors/ServiceError';
-import { Answer } from '#root/types/resources/Answer.d';
-import { Question } from '#root/types/resources/Question.d';
+import { RawAnswer } from '#root/types/resources/AnswerRaw.d';
+import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 import { User } from '#root/types/resources/User.d';
+import { EnrichedAnswer } from '#root/types/resources/AnswerEnriched.d';
 
 type AnswerData = {
     description: string,
 };
 
 export type CreateAnswerServiceResponse = {
-    answer: Answer,
+    answer: EnrichedAnswer,
     subscribed: boolean,
 };
 
-export default async (answer: AnswerData, question: Question, author: User, files: Express.Multer.File[]): Promise<CreateAnswerServiceResponse> => {
+export default async (answer: AnswerData, question: EnrichedQuestion, author: User, files: Express.Multer.File[]): Promise<CreateAnswerServiceResponse> => {
     // on démarre une transaction
     const transaction = await sequelize.transaction();
 
@@ -39,11 +41,25 @@ export default async (answer: AnswerData, question: Question, author: User, file
 
     if (files.length > 0) {
         try {
-            await attachmentService.upload('answer', answerId, author.id, files, transaction);
+            await uploadAttachments('answer', answerId, author.id, files, transaction);
         } catch (error) {
             await transaction.rollback();
             throw new ServiceError('upload_failed', error);
         }
+    }
+
+    let serializedAnswer: RawAnswer;
+    let enrichedAnswer: EnrichedAnswer | null = null;
+    try {
+        serializedAnswer = await answerModel.findOne(answerId, transaction);
+        const { attachments: answerAttachments, ...answerWithoutAttachments } = serializedAnswer;
+        const enrichedAnswerAttachments = await Promise.all((answerAttachments || []).map(attachment => serializeAttachment(attachment)));
+        enrichedAnswer = {
+            ...answerWithoutAttachments,
+            attachments: enrichedAnswerAttachments,
+        };
+    } catch (error) {
+        throw new ServiceError('fetch_failed', error);
     }
 
     try {
@@ -97,16 +113,8 @@ export default async (answer: AnswerData, question: Question, author: User, file
         // ignore
     }
 
-    // on retourne la réponse
-    let serializedAnswer: Answer;
-    try {
-        serializedAnswer = await answerModel.findOne(answerId);
-    } catch (error) {
-        throw new ServiceError('fetch_failed', error);
-    }
-
     return {
-        answer: serializedAnswer,
+        answer: enrichedAnswer,
         subscribed,
     };
 };
