@@ -2,13 +2,13 @@
 import { body, param } from 'express-validator';
 import findQuestion from '#server/models/questionModel/findOne';
 import findAnswer from '#server/models/answerModel/findOne';
-import { Answer } from '#root/types/resources/Answer.d';
-import { Question } from '#root/types/resources/Question.d';
+import { RawAnswer } from '#root/types/resources/AnswerRaw.d';
+import { RawQuestion } from '#root/types/resources/QuestionRaw.d';
 
 export default [
     param('id')
         .custom(async (value, { req }) => {
-            let question: Question;
+            let question: RawQuestion;
             try {
                 question = await findQuestion(value);
             } catch (error) {
@@ -25,7 +25,7 @@ export default [
 
     param('answerId')
         .custom(async (value, { req }) => {
-            let answer: Answer;
+            let answer: RawAnswer;
             try {
                 answer = await findAnswer(value);
             } catch (error) {
