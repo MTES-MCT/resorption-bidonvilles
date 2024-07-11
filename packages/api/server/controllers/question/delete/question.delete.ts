@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import deleteQuestion from '#server/services/question/delete';
-import { Question } from '#root/types/resources/Question.d';
+import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 import { User } from '#root/types/resources/User.d';
 
 interface QuestionDeleteRequest extends Request {
     user: User,
-    question: Question
+    question: EnrichedQuestion
 }
 
 const ERROR_RESPONSES = {

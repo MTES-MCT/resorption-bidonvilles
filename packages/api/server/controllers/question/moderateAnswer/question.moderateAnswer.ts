@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import deleteAnswer from '#server/services/answer/deleteAnswer';
-import { Answer } from '#root/types/resources/Answer.d';
-import { Question } from '#root/types/resources/Question.d';
+import { RawAnswer } from '#root/types/resources/AnswerRaw.d';
+import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 
 interface DeleteAnswerRequest extends Request {
-    answer: Answer,
-    question: Question,
+    answer: RawAnswer,
+    question: EnrichedQuestion,
     body: {
         reason?: string,
     },

@@ -2,7 +2,7 @@
 import { body, param } from 'express-validator';
 import questionTagModel from '#server/models/questionTagModel';
 import questionModel from '#server/models/questionModel';
-import { QuestionTag } from '#root/types/resources/Question.d';
+import { QuestionTag } from '#root/types/resources/QuestionGeneric.d';
 
 const isOtherTagIncluded = (value, { req }) => req.body.tags.includes && req.body.tags.includes('other');
 

@@ -1,14 +1,14 @@
 import questionService from '#server/services/question';
 import { Request, NextFunction, Response } from 'express';
 import { User } from '#root/types/resources/User.d';
-import { Question } from '#root/types/resources/Question.d';
+import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 
 interface UnsubscribeQuestionRequest extends Request {
     params: {
         id: string,
     },
     user: User,
-    question: Question
+    question: EnrichedQuestion
 }
 
 const ERROR_RESPONSES = {
