@@ -1,10 +1,11 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import serializeCommentTag, { CommentTag } from './serializeCommentTag';
+import serializeCommentTag from './serializeCommentTag';
+import { ShantytownCommentTag } from '#root/types/resources/ShantytownCommentTag.d';
 import { CommentTagRow } from './CommentTagRow';
 
 
-export type CommentTagObject = { [key: number]: CommentTag[] };
+export type CommentTagObject = { [key: number]: ShantytownCommentTag[] };
 
 export default async (commentIds): Promise<CommentTagObject> => {
     // fetch all tags

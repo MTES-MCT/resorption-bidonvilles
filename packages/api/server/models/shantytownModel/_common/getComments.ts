@@ -1,12 +1,12 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
-import ShantytownComment from '#server/models/shantytownCommentModel/ShantytownComment.d';
 import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
+import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
 import { ShantytownCommentRow } from '../../shantytownCommentModel/ShantytownCommentRow.d';
 import serializeComment from './serializeComment';
 
-type CommentObject = { [key: number]: ShantytownComment };
+type CommentObject = { [key: number]: ShantytownRawComment[] };
 
 export default async (user, shantytownIds): Promise<CommentObject> => {
     if (!user.isAllowedTo('list', 'shantytown_comment')) {
