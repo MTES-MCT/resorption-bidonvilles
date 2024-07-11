@@ -5,7 +5,7 @@
         ref="mobileMenu"
     >
         <header @click="hideMobileMenu" class="mt-3 text-right">
-            <Button variant="primaryText" size="md" icon="times">Fermer</Button>
+            <Button variant="primaryText" icon="times">Fermer</Button>
         </header>
 
         <nav class="px-3">

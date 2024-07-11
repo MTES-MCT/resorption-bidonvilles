@@ -31,14 +31,15 @@
 </template>
 
 <script>
-import { useIsSubmitting } from "vee-validate";
+import { useForm, useIsSubmitting } from "vee-validate";
 import Icon from "./Icon.vue";
 import focusClasses from "../../../common/utils/focus_classes";
 
 export default {
     name: "MyButton",
     setup() {
-        const isSubmitting = useIsSubmitting();
+        const form = useForm();
+        const isSubmitting = form ? useIsSubmitting() : false;
         return {
             isSubmitting,
             focusClasses,
