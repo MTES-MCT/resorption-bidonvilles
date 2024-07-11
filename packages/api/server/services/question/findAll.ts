@@ -1,14 +1,21 @@
+import { Transaction } from 'sequelize';
 import questionModel from '#server/models/questionModel';
 import ServiceError from '#server/errors/ServiceError';
-import { Answer } from '#root/types/resources/Answer.d';
-import { Question } from '#root/types/resources/Question.d';
+import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
+import { RawQuestion } from '#root/types/resources/QuestionRaw.d';
+import enrichQuestion from './common/enrichQuestion';
 
-export default async (): Promise<Question[]> => {
-    let questions: Question[];
-    let answers: { [key: number]: Answer[] };
+export default async (transaction?: Transaction): Promise<EnrichedQuestion[]> => {
+    let questions: RawQuestion[];
+    let enrichedQuestions: EnrichedQuestion[] = [];
     try {
         questions = await questionModel.findAll();
-        answers = await questionModel.getAnswers(questions.map(({ id }: any) => id));
+        if (questions.length > 0) {
+            enrichedQuestions = await Promise.all(questions.map(async (question) => {
+                const enrichedQuestion = enrichQuestion(question.id, transaction);
+                return enrichedQuestion;
+            }));
+        }
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
@@ -17,12 +24,5 @@ export default async (): Promise<Question[]> => {
         return [];
     }
 
-    questions.forEach((question) => {
-        if (answers[question.id] !== undefined) {
-            // eslint-disable-next-line no-param-reassign
-            question.answers = answers[question.id];
-        }
-    });
-
-    return questions;
+    return enrichedQuestions;
 };

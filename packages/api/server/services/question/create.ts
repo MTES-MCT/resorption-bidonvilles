@@ -6,20 +6,20 @@ import mails from '#server/mails/mails';
 import config from '#server/config';
 import { sequelize } from '#db/sequelize';
 import userQuestionSubscriptionModel from '#server/models/userQuestionSubscriptionModel';
-import attachmentService from '#server/services/attachment';
-import { Question } from '#root/types/resources/Question.d';
+import uploadAttachments from '#server/services/attachment/upload';
+import enrichQuestion from '#server/services/question/common/enrichQuestion';
+import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 
 type AuthorData = {
-    id: number
+    id: number,
 };
 
 const { testEmail } = config;
 
-export default async (question: QuestionInput, author: AuthorData, files: Express.Multer.File[]): Promise<Question> => {
+export default async (question: QuestionInput, author: AuthorData, files: Express.Multer.File[]): Promise<EnrichedQuestion> => {
     const transaction = await sequelize.transaction();
-
-    // on insère la question
     let questionId: number;
+
     try {
         questionId = await questionModel.create({
             question: question.question,
@@ -37,7 +37,7 @@ export default async (question: QuestionInput, author: AuthorData, files: Expres
     // on sauvegarde les fichiers
     if (files.length > 0) {
         try {
-            await attachmentService.upload('question', questionId, author.id, files, transaction);
+            await uploadAttachments('question', questionId, author.id, files, transaction);
         } catch (error) {
             await transaction.rollback();
             throw new ServiceError('upload_failed', error);
@@ -45,9 +45,10 @@ export default async (question: QuestionInput, author: AuthorData, files: Expres
     }
 
     // on retourne la question
-    let serializedQuestion: Question;
+    let enrichedQuestion: EnrichedQuestion | null = null;
+
     try {
-        serializedQuestion = await questionModel.findOne(questionId, transaction);
+        enrichedQuestion = await enrichQuestion(questionId, transaction);
     } catch (error) {
         await transaction.rollback();
         throw new ServiceError('fetch_failed', error);
@@ -74,7 +75,7 @@ export default async (question: QuestionInput, author: AuthorData, files: Expres
             (testEmail ? watchers.slice(0, 1) : watchers).map(watcher => mails.sendCommunityNewQuestion(watcher, {
                 preserveRecipient: false,
                 variables: {
-                    question: serializedQuestion,
+                    question: enrichedQuestion,
                 },
             })),
         );
@@ -82,5 +83,5 @@ export default async (question: QuestionInput, author: AuthorData, files: Expres
         // ignore
     }
 
-    return serializedQuestion;
+    return enrichedQuestion;
 };

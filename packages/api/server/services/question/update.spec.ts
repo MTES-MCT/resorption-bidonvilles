@@ -6,7 +6,7 @@ import { serialized as fakeQuestion, input as fakeQuestionInput } from '#test/ut
 import { serialized as fakeUser } from '#test/utils/user';
 import ServiceError from '#server/errors/ServiceError';
 import { UpdateQuestionInput } from '#server/models/questionModel/QuestionInput.d';
-import type { Question } from '#root/types/resources/Question.d';
+import type { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -14,7 +14,7 @@ chai.use(sinonChai);
 const sandbox = sinon.createSandbox();
 const updateQuestion = sandbox.stub();
 
-const expectedResult: Question = fakeQuestion({
+const expectedResult: EnrichedQuestion = fakeQuestion({
     id: 42,
     details: 'Fake Question details',
     updatedAt: Date.now(),
