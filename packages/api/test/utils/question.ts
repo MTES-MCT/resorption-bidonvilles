@@ -1,8 +1,8 @@
 import QuestionInput from '#server/models/questionModel/QuestionInput.d';
-import { Question } from '#root/types/resources/Question.d';
+import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 
-export function serialized(override: Partial<Question> = {}): Question {
-    const defaultObj:Question = {
+export function serialized(override: Partial<EnrichedQuestion> = {}): EnrichedQuestion {
+    const defaultObj:EnrichedQuestion = {
         id: 1,
         question: 'Comment résorber les bidonvilles ?',
         details: 'J\'aimerais savoir comment accompagner les habitants vers un logement',
