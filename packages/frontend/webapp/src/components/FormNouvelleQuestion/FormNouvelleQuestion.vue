@@ -13,7 +13,9 @@
                 <FormNouvelleQuestionInputTags :disabled="mode === 'edit'"
             /></FormParagraph>
             <FormParagraph :title="labels.other_tag" v-if="showOtherTag">
-                <FormNouvelleQuestionInputOtherTag :disabled="mode === 'edit'"
+                <FormNouvelleQuestionInputOtherTag
+                    :tag="question.tags[0].name"
+                    :disabled="mode === 'edit'"
             /></FormParagraph>
             <FormParagraph :title="labels.people_affected" info="(optionnel)">
                 <FormNouvelleQuestionInputPeopleAffected />
@@ -87,6 +89,7 @@ const { handleSubmit, setErrors, errors, isSubmitting, values } = useForm({
         details: question.value?.details || "",
         question: question.value?.question || resume.value || "",
         tags: question.value?.tags.map(({ uid }) => uid) || [],
+        other_tags: question.value?.other_tags || "",
         people_affected: question.value?.people_affected || "",
         attachments: new DataTransfer().files,
     },
@@ -109,6 +112,9 @@ function onPaste(event) {
 const error = ref(null);
 
 function formatValuesForApi(v) {
+    console.log("===================");
+    console.log(JSON.stringify(v));
+    console.log("===================");
     return {
         ...Object.keys(validationSchema.fields).reduce((acc, key) => {
             acc[key] = v[key] ? JSON.parse(JSON.stringify(v[key])) : v[key];
@@ -119,8 +125,11 @@ function formatValuesForApi(v) {
 
 const config = {
     create: {
-        async submit(values) {
-            const addedQuestion = await questionsStore.create(values);
+        async submit(values, attachments) {
+            const addedQuestion = await questionsStore.create(
+                values,
+                attachments
+            );
             trackEvent("Action", "Création question", `${addedQuestion.id}`);
             return addedQuestion;
         },
@@ -160,19 +169,31 @@ defineExpose({
         error.value = null;
 
         try {
-            const valuesWithoutAttachments = { ...sentValues };
-            delete valuesWithoutAttachments.attachments;
-
+            const { attachments, ...valuesWithoutAttachments } = sentValues;
             const { submit, notification } = config[mode.value];
-            const respondedQuestion = await submit(
-                sentValues,
-                question.value?.id,
-                question.value?.createdBy.id
-            );
+            let addressedQuestion = null;
+
+            // On test si on est en mode création ou modification
+            if (mode.value === "create") {
+                // On envoie les valeurs du formulaire à la méthode submit de la store
+                addressedQuestion = await submit(
+                    valuesWithoutAttachments,
+                    attachments
+                );
+            } else {
+                // On supprime les attachments
+                valuesWithoutAttachments.attachments = {};
+                // On envoie les valeurs du formulaire à la méthode submit du store
+                addressedQuestion = await submit(
+                    valuesWithoutAttachments,
+                    question.value?.id,
+                    question.value?.createdBy.id
+                );
+            }
 
             const notificationStore = useNotificationStore();
             notificationStore.success(notification.title, notification.content);
-            backOrReplace(`/question/${respondedQuestion.id}`);
+            backOrReplace(`/question/${addressedQuestion.id}`);
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             if (e?.fields) {
