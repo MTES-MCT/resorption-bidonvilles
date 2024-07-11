@@ -1,6 +1,6 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import { ShantytownCommentTag } from '#root/types/resources/ShantytownComment.d';
+import { ShantytownCommentTag } from '#root/types/resources/ShantytownCommentTag.d';
 
 type CommentTagFilters = { ids?: number[] };
 
