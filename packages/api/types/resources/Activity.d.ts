@@ -1,8 +1,8 @@
-import ShantytownComment from '#server/models/shantytownCommentModel/ShantytownComment.d';
 import { Diff } from '#server/models/shantytownModel/_common/getDiff';
 import { LocationDetails, CityLocationDetails } from '#server/models/locationModel/LocationDetails.d';
 import { InterventionArea } from '#server/models/geoModel/Location.d';
-import { QuestionTag } from '#root/types/resources/Question.d';
+import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
+import { QuestionTag } from '#root/types/resources/QuestionGeneric.d';
 
 // local types
 type ActivityShantytown = {
@@ -85,7 +85,7 @@ export type ShantytownCommentActivity = {
     action : 'creation',
     date: number,
     author: ActivityAuthor,
-    comment: ShantytownComment
+    comment: ShantytownRawComment
     shantytown: ActivityShantytown
 };
 
