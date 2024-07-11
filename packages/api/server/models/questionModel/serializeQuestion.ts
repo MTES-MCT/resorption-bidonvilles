@@ -1,8 +1,7 @@
 import QuestionRow from './QuestionRow.d';
-import { Question } from '#root/types/resources/Question.d';
-import attachmentModel from '../attachmentModel';
+import { RawQuestion } from '#root/types/resources/QuestionRaw.d';
 
-export default (question: QuestionRow): Question => ({
+export default (question: QuestionRow): RawQuestion => ({
     id: question.questionId,
     question: question.question,
     details: question.details,
@@ -42,6 +41,5 @@ export default (question: QuestionRow): Question => ({
     } : null,
     answers: [],
     attachments: question.attachments?.length
-        ? question.attachments.map(attachmentModel.serializeAttachment)
-        : [],
+        ? question.attachments : [],
 });

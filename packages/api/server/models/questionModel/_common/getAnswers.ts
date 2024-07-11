@@ -2,10 +2,10 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import answerModel from '#server/models/answerModel';
 import AnswerRow from '#server/models/answerModel/AnswerRow.d';
-import { Answer } from '#root/types/resources/Answer.d';
+import { RawAnswer } from '#root/types/resources/AnswerRaw.d';
 
 type AnswerHash = {
-    [key: number]: Answer[],
+    [key: number]: RawAnswer[],
 };
 
 export default async (questionIds: number[]): Promise<AnswerHash> => {
