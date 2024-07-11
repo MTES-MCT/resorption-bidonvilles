@@ -1,6 +1,7 @@
 import IncomingWebhook from 'node-mattermost';
 import config from '#server/config';
-import Action, { CommentAuthor } from '#root/types/resources/Action.d';
+import Action from '#root/types/resources/Action.d';
+import { CommentAuthor } from '#root/types/resources/CommentAuthor.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { User } from '#root/types/resources/User.d';
 
