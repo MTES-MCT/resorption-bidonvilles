@@ -10,13 +10,14 @@ import sendMailNotifications from './createComment.sendMailNotifications';
 import { ActionRawComment } from '#root/types/resources/ActionCommentRaw.d';
 import Action from '#root/types/resources/Action.d';
 import enrichCommentsAttachments from './enrichCommentsAttachments';
+import { ActionEnrichedComment } from '#root/types/resources/ActionCommentEnriched.d';
 
 type ActionCommentInput = {
     description: string,
     files: any[]
 };
 
-export default async (authorId: number, action: Action, commentInput: ActionCommentInput): Promise<any> => {
+export default async (authorId: number, action: Action, commentInput: ActionCommentInput): Promise<{ comment: ActionEnrichedComment, numberOfObservers: number }> => {
     let comment: ActionRawComment;
     let commentId: number;
     let transaction: Transaction;
