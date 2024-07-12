@@ -28,6 +28,7 @@ const uploadAttachments = sandbox.stub();
 const serializeComment = sandbox.stub();
 const sendMattermostNotification = sandbox.stub();
 const sendMailNotifications = sandbox.stub();
+const enrichCommentsAttachments = sandbox.stub();
 
 rewiremock('#db/sequelize').with({ sequelize });
 rewiremock('#server/models/actionModel/createComment/createComment').with(createCommentModel);
@@ -36,6 +37,7 @@ rewiremock('#server/models/actionModel/fetchComments/serializeComment').with(ser
 rewiremock('#server/services/attachment/upload').with(uploadAttachments);
 rewiremock('./createComment.sendMattermostNotification').with(sendMattermostNotification);
 rewiremock('./createComment.sendMailNotifications').with(sendMailNotifications);
+rewiremock('./enrichCommentsAttachments').with(enrichCommentsAttachments);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -324,6 +326,7 @@ describe('services/action.createComment()', () => {
     it('retourne le commentaire fraîchement créé', async () => {
         const comment = fakeActionComment();
         serializeComment.returns(comment);
+        enrichCommentsAttachments.resolves(comment);
         fetchCommentsModel.resolves([fakeActionCommentRow()]);
 
         const response = await createComment(
@@ -335,6 +338,7 @@ describe('services/action.createComment()', () => {
             },
         );
 
+        expect(enrichCommentsAttachments).to.have.been.calledOnce;
         expect(response).to.be.an('object');
         expect(response).to.have.property('comment');
         expect(response.comment).to.be.eql(comment);

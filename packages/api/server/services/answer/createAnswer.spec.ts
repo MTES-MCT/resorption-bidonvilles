@@ -32,6 +32,7 @@ const userQuestionSubscriptionModel = {
 };
 const attachmentService = {
     upload: sandbox.stub(),
+    serializeAttachment: sandbox.stub(),
 };
 const sequelize = {
     sequelize: {
