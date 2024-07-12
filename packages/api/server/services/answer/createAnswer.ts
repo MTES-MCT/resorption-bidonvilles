@@ -53,12 +53,13 @@ export default async (answer: AnswerData, question: EnrichedQuestion, author: Us
     try {
         serializedAnswer = await answerModel.findOne(answerId, transaction);
         const { attachments: answerAttachments, ...answerWithoutAttachments } = serializedAnswer;
-        const enrichedAnswerAttachments = await Promise.all((answerAttachments || []).map(attachment => serializeAttachment(attachment)));
+        const enrichedAnswerAttachments = files.length > 0 ? await Promise.all((answerAttachments).map(attachment => serializeAttachment(attachment))) : [];
         enrichedAnswer = {
             ...answerWithoutAttachments,
             attachments: enrichedAnswerAttachments,
         };
     } catch (error) {
+        await transaction.rollback();
         throw new ServiceError('fetch_failed', error);
     }
 
