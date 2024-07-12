@@ -1,8 +1,8 @@
-import { ActionCommentRow } from '#server/models/actionModel/fetchComments/fetchComments';
+import { ActionRowComment } from '#server/models/actionModel/fetchComments/ActionCommentRow.d';
 import { Comment } from '#root/types/resources/Action.d';
 
-export function row(override: Partial<ActionCommentRow> = {}): ActionCommentRow {
-    const defaultObj: ActionCommentRow = {
+export function row(override: Partial<ActionRowComment> = {}): ActionRowComment {
+    const defaultObj: ActionRowComment = {
         action_id: 1,
         id: 1,
         description: 'Un commentaire',
@@ -24,9 +24,6 @@ export function serialized(override: Partial<Comment> = {}): Comment {
     const defaultObj: Comment = {
         id: 1,
         description: 'Un commentaire',
-        tags: [],
-        user_target_name: [],
-        organization_target_name: [],
         createdAt: (new Date(2020, 0, 1, 0, 0, 0)).getTime() / 1000,
         createdBy: {
             id: 2,
