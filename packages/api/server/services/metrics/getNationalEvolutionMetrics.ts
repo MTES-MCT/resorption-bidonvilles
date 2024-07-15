@@ -27,6 +27,7 @@ export default async (user: User, argFrom: Date, argTo: Date):Promise<NationalMe
         shantytowns: {
             labels: [],
             count: [],
+            onlyEUcount: [],
         },
         inhabitants: {
             labels: [],
@@ -41,6 +42,7 @@ export default async (user: User, argFrom: Date, argTo: Date):Promise<NationalMe
 
         metrics.shantytowns.labels.push(date[0].toUpperCase() + date.slice(1));
         metrics.shantytowns.count.push(safeParseInt(row.open_shantytowns_count));
+        metrics.shantytowns.onlyEUcount.push(safeParseInt(row.only_intra_eu_shantytowns_count));
 
         metrics.inhabitants.labels.push(date[0].toUpperCase() + date.slice(1));
         metrics.inhabitants.european.push(safeParseInt(row.intra_eu_count));

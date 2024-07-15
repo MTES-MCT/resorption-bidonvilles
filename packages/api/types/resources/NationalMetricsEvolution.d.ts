@@ -8,5 +8,6 @@ export type NationalMetricsEvolution = {
     shantytowns: {
         labels: string[],
         count: number[],
+        onlyEUcount: number[],
     }
 };

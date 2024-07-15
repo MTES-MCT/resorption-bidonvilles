@@ -7,6 +7,7 @@ export type NationalEvolutionMetricsRawData = {
     open_shantytowns_count: number,
     intra_eu_count: number,
     extra_eu_count: number,
+    only_intra_eu_shantytowns_count: number,
 };
 
 export default async (user, from: Date, to: Date): Promise<NationalEvolutionMetricsRawData[]> => {
@@ -38,7 +39,8 @@ SELECT
   ms.month,
   COUNT(st.shantytown_id) AS open_shantytowns_count,
   SUM(ao.intra_eu_count) AS intra_eu_count,
-  SUM(ao.extra_eu_count) AS extra_eu_count
+  SUM(ao.extra_eu_count) AS extra_eu_count,
+  COUNT(CASE WHEN ao.extra_eu_count = 0 THEN 1 END) AS only_intra_eu_shantytowns_count
 FROM
   month_series ms
 LEFT JOIN shantytowns st ON
