@@ -2,7 +2,7 @@
     <section class="flex space-x-3 items-end">
         <DatepickerInput
             name="from"
-            :maxDate="to"
+            :maxDate="to - 1"
             :label="
                 departementMetricsStore.activeTab === 'evolution' ? 'De' : 'Du'
             "
@@ -12,7 +12,7 @@
         />
         <DatepickerInput
             name="to"
-            :minDate="from"
+            :minDate="new Date(from).setDate(from.getDate() + 1)"
             :maxDate="today"
             :label="
                 departementMetricsStore.activeTab === 'evolution' ? 'À' : 'Au'
