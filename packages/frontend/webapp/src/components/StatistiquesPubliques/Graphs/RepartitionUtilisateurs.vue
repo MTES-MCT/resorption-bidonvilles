@@ -27,7 +27,8 @@ const chartData = computed(() => {
         data.value.datasets[0].label,
         data.value.datasets[0].backgroundColor,
         data.value.datasets[0].data,
-        data.value.labels
+        data.value.labels,
+        { name: null }
     );
 });
 
