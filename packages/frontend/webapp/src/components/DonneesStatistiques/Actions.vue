@@ -1,6 +1,7 @@
 <template>
     <section class="flex space-x-3">
         <Button
+            v-if="departementMetricsStore.activeTab === 'tableau'"
             variant="primaryOutline"
             :icon="parametresIcon"
             iconPosition="left"
@@ -28,11 +29,13 @@ import domtoimage from "dom-to-image-more";
 import downloadBlob from "@/utils/downloadBlob";
 import { Button } from "@resorptionbidonvilles/ui";
 import { useMetricsStore } from "@/stores/metrics.store";
+import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import formatDate from "@common/utils/formatDate";
 import { computed } from "vue";
 import { trackEvent } from "@/helpers/matomo";
 
 const metricsStore = useMetricsStore();
+const departementMetricsStore = useDepartementMetricsStore();
 const parametresIcon = computed(() => {
     return metricsStore.showParametres ? "filter-circle-xmark" : "filter";
 });

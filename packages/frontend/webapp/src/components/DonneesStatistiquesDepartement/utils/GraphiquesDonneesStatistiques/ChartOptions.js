@@ -65,10 +65,6 @@ export default {
                 valueFormatter: (value) => {
                     return value.toLocaleString();
                 },
-                axisPointer: {
-                    type: "cross",
-                    snap: true,
-                },
             },
             legend: {
                 textStyle: {
@@ -97,6 +93,20 @@ export default {
             yAxis: {
                 type: "value",
                 boundaryGap: [0, "2%"],
+                splitLine: {
+                    show: false,
+                },
+                axisTick: {
+                    show: true,
+                },
+                axisLine: {
+                    show: true,
+                },
+                axisLabel: {
+                    formatter: (value) => {
+                        return value.toLocaleString();
+                    },
+                },
             },
             colorBy: "series",
         },

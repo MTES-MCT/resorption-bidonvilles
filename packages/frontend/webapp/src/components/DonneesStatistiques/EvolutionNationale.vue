@@ -2,7 +2,7 @@
     <Spinner v-if="loading" class="text-3xl text-primary" />
     <section v-else>
         <section class="mb-8">
-            <h1 class="font-bold text-primary text-lg">Habitants intra-EU</h1>
+            <h1 class="font-bold text-primary text-lg">Habitants intra EU</h1>
             <LineChart
                 class="mt-6"
                 :chartOptions="options"
@@ -10,17 +10,10 @@
                 :graphId="`evolution-intraEU`"
             />
         </section>
-        <section class="mb-8">
-            <h1 class="font-bold text-primary text-lg">Habitants extra-EU</h1>
-            <LineChart
-                class="mt-6"
-                :chartOptions="options"
-                :chartData="chartData.datasets.extraEU"
-                :graphId="`evolution-extraEU`"
-            />
-        </section>
         <section>
-            <h1 class="font-bold text-primary text-lg">Cumul des habitants</h1>
+            <h1 class="font-bold text-primary text-lg">
+                Habitants toutes origines
+            </h1>
             <LineChart
                 class="mt-6"
                 :chartOptions="options"
@@ -61,7 +54,7 @@ const chartData = computed(() => {
             generateDataset(
                 "Nombre de sites",
                 "0, 0, 255",
-                data.value.shantytowns.count,
+                data.value.shantytowns.onlyEUcount,
                 {
                     yAxisIndex: 1,
                     lineStyle: { width: 2, color: "rgba(0, 0, 255, 1)" },
@@ -69,11 +62,11 @@ const chartData = computed(() => {
                 }
             ),
         ],
-        extraEU: [
+        total: [
             generateDataset(
-                "Habitants Extra EU",
+                "Habitants toutes origines",
                 "204, 135, 59",
-                data.value.inhabitants.foreign,
+                data.value.inhabitants.total,
                 {
                     lineStyle: { opacity: 1 },
                     area: true,
@@ -87,28 +80,6 @@ const chartData = computed(() => {
                 {
                     yAxisIndex: 1,
                     lineStyle: { width: 2, color: "rgba(156, 102, 82, 1)" },
-                    symbolSize: 1,
-                }
-            ),
-        ],
-        total: [
-            generateDataset(
-                "Cumul des habitants",
-                "245, 51, 138",
-                data.value.inhabitants.total,
-                {
-                    lineStyle: { opacity: 1 },
-                    area: true,
-                    symbolSize: 1,
-                }
-            ),
-            generateDataset(
-                "Nombre de sites",
-                "255, 0, 0",
-                data.value.shantytowns.count,
-                {
-                    yAxisIndex: 1,
-                    lineStyle: { width: 2, color: "rgba(255, 0, 0, 1)" },
                     symbolSize: 1,
                 }
             ),
@@ -140,11 +111,25 @@ const options = computed(() => {
                     type: "value",
                     name: "Habitants",
                     position: "left",
-                    alignTicks: false,
+                    alignTicks: true,
+                    axisLine: {
+                        show: true,
+                    },
+                    axisTick: {
+                        show: true,
+                    },
+                    axisLabel: {
+                        formatter: (value) => {
+                            return value.toLocaleString();
+                        },
+                    },
+                    splitLine: {
+                        show: false,
+                    },
                 },
                 {
                     type: "value",
-                    name: "Sites",
+                    name: "Sites intra EU",
                     position: "right",
                     alignTicks: false,
                     min: 0,
@@ -154,15 +139,21 @@ const options = computed(() => {
                     },
                     axisTick: {
                         show: true,
-                        inside: true,
+                    },
+                    axisLabel: {
+                        formatter: (value) => {
+                            return value.toLocaleString();
+                        },
+                    },
+                    splitLine: {
+                        show: false,
                     },
                 },
             ],
             legend: {
                 data: [
                     { name: "Habitants Intra EU", icon: "roundRect" },
-                    { name: "Habitants Extra EU", icon: "roundRect" },
-                    { name: "Cumul des habitants", icon: "roundRect" },
+                    { name: "Habitants toutes origines", icon: "roundRect" },
                     {
                         name: "Nombre de sites",
                         icon: "path://M 3 1 L 10 1 L 10 2 L 3 2 M 3 1 L 3 1",
