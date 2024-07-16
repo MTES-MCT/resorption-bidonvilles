@@ -27,13 +27,16 @@ export default async (user, from: Date, to: Date): Promise<NationalEvolutionMetr
   SELECT
     fk_shantytown,
     SUM(CASE WHEN fk_social_origin = 2 THEN population_total ELSE 0 END) AS intra_eu_count,
-    SUM(CASE WHEN fk_social_origin = 3 THEN population_total ELSE 0 END) AS extra_eu_count
+    SUM(CASE WHEN fk_social_origin = 3 THEN population_total ELSE 0 END) AS extra_eu_count,
+    SUM(population_total) AS total_population
   FROM
     shantytown_origins
   JOIN
     shantytowns ON shantytowns.shantytown_id = shantytown_origins.fk_shantytown
   GROUP BY
     fk_shantytown
+  HAVING
+    SUM(population_total) > 10
 )
 SELECT
   ms.month,
@@ -47,6 +50,7 @@ LEFT JOIN shantytowns st ON
   (date_trunc('month', st.built_at) <= ms.month AND
   (st.closed_at IS NULL OR date_trunc('month', st.closed_at) > ms.month)) OR
   (st.built_at IS NULL AND st.status = 'open')
+  AND st.shantytown_id IN (SELECT fk_shantytown FROM aggregated_origins)
 LEFT JOIN aggregated_origins ao ON
   st.shantytown_id = ao.fk_shantytown
 GROUP BY
