@@ -29,8 +29,6 @@ const chartData = computed(() => {
             data.value.datasets[0].data,
             {
                 lineStyle: {
-                    // width: 2,
-                    // color: "rgba(255, 0, 0, 1)",
                     opacity: 1,
                 },
                 area: true,
