@@ -4736,10 +4736,10 @@ __metadata:
     "@vuepic/vue-datepicker": ^3.5.3
     autoprefixer: ^10.4.12
     axios: ^1.6.0
-    chart.js: ^3.9.1
     cypress: ^13.6.3
     date-fns: ^2.29.3
     dom-to-image-more: ^2.12.0
+    echarts: ^5.5.0
     eslint: ^8.22.0
     eslint-plugin-cypress: ^2.12.1
     eslint-plugin-vue: ^9.3.0
@@ -4759,6 +4759,7 @@ __metadata:
     vite: ^5.0.13
     vitest: ^1.2.1
     vue: ^3.3.0
+    vue-echarts: ^6.7.3
     vue-i18n: ^9.5.0
     vue-matomo: ^4.2.0
     vue-router: ^4.1.5
@@ -4775,7 +4776,6 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": ^6.1.1
     "@nuxtjs/i18n": ^8.0.0
     "@nuxtjs/tailwindcss": ^6.8.0
-    chart.js: ^3.7.1
     nuxt: ^3.7.0
     postcss-custom-properties: ^13.3.2
     vue-i18n: ^9.5.0
@@ -11718,13 +11718,6 @@ __metadata:
   version: 1.0.1
   resolution: "charset@npm:1.0.1"
   checksum: adf747e7bc76c0e47dbfbb555ef376f5adb2e67cad35718f19a2d02e27589345ccaf3c6170c185d2cc82298241f8478cdcdcab8be8ec429bf56807885f3c5300
-  languageName: node
-  linkType: hard
-
-"chart.js@npm:^3.7.1, chart.js@npm:^3.9.1":
-  version: 3.9.1
-  resolution: "chart.js@npm:3.9.1"
-  checksum: 9ab0c0ac01215af0b3f020f2e313030fd6e347b48ed17d5484ee9c4e8ead45e78ae71bea16c397621c386b409ce0b14bf17f9f6c2492cd15b56c0f433efdfff6
   languageName: node
   linkType: hard
 
