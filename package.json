@@ -19,5 +19,9 @@
     "lint:staged": "yarn workspaces foreach --verbose run lint-staged",
     "test:unit": "yarn workspaces foreach --verbose run test:unit",
     "checkout": "./scripts/checkout.sh"
+  },
+  "dependencies": {
+    "echarts": "^5.5.0",
+    "vue-echarts": "^6.7.3"
   }
 }
