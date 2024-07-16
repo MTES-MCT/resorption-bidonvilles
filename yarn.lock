@@ -4759,7 +4759,6 @@ __metadata:
     vite: ^5.0.13
     vitest: ^1.2.1
     vue: ^3.3.0
-    vue-chartjs: ^4.1.2
     vue-i18n: ^9.5.0
     vue-matomo: ^4.2.0
     vue-router: ^4.1.5
@@ -28618,16 +28617,6 @@ __metadata:
   dependencies:
     ufo: ^1.2.0
   checksum: c02c673ac4922d361ed9f8cdfb819674ef52d87087d7f76f428dacf45822359dd3c4e7a1384e3c52a9cb8bb264921d001c4ad6ea268cf63493a9b832d7b95f5a
-  languageName: node
-  linkType: hard
-
-"vue-chartjs@npm:^4.1.2":
-  version: 4.1.2
-  resolution: "vue-chartjs@npm:4.1.2"
-  peerDependencies:
-    chart.js: ^3.7.0
-    vue: ^3.0.0-0 || ^2.6.0
-  checksum: 94d4c7c83f706101e3c531a9fdc4723b9a724a876ca20b2e41cbc92d158e81b04172308b0198093a734bbde41c7a7ad7082673dfb63841742b1fb646763dd6ca
   languageName: node
   linkType: hard
 
