@@ -2,7 +2,10 @@
     <Spinner v-if="loading" class="text-3xl text-primary" />
     <section v-else>
         <section class="mb-8">
-            <h1 class="font-bold text-primary text-lg">Habitants intra EU</h1>
+            <h1 class="font-bold text-primary text-lg">
+                Nombre de sites et d'habitants (exclusivement intra EU et + de
+                10 personnes)
+            </h1>
             <LineChart
                 class="mt-6"
                 :chartOptions="options"
@@ -12,7 +15,8 @@
         </section>
         <section>
             <h1 class="font-bold text-primary text-lg">
-                Habitants toutes origines
+                Nombre de sites et d'habitants (toutes origines et + de 10
+                personnes)
             </h1>
             <LineChart
                 class="mt-6"
@@ -52,7 +56,7 @@ const chartData = computed(() => {
                 }
             ),
             generateDataset(
-                "Nombre de sites",
+                "Sites exclusivement intra EU",
                 "0, 0, 255",
                 data.value.shantytowns.onlyEUcount,
                 {
@@ -74,7 +78,7 @@ const chartData = computed(() => {
                 }
             ),
             generateDataset(
-                "Nombre de sites",
+                "Sites",
                 "156, 102, 82",
                 data.value.shantytowns.count,
                 {
@@ -129,7 +133,7 @@ const options = computed(() => {
                 },
                 {
                     type: "value",
-                    name: "Sites intra EU",
+                    name: "Sites",
                     position: "right",
                     alignTicks: false,
                     min: 0,
@@ -155,7 +159,11 @@ const options = computed(() => {
                     { name: "Habitants Intra EU", icon: "roundRect" },
                     { name: "Habitants toutes origines", icon: "roundRect" },
                     {
-                        name: "Nombre de sites",
+                        name: "Sites exclusivement intra EU",
+                        icon: "path://M 3 1 L 10 1 L 10 2 L 3 2 M 3 1 L 3 1",
+                    },
+                    {
+                        name: "Sites",
                         icon: "path://M 3 1 L 10 1 L 10 2 L 3 2 M 3 1 L 3 1",
                     },
                 ],
