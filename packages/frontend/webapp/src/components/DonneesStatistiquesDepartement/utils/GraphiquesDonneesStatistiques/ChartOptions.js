@@ -115,8 +115,8 @@ export default {
         options: {
             legend: {
                 orient: "vertical",
-                left: "right",
                 top: "top",
+                right: 40,
             },
             tooltip: {
                 trigger: "item",
