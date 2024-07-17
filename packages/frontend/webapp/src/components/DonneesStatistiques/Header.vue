@@ -11,9 +11,12 @@
         </div>
 
         <Parametres
-            class="mt-4 overflow-hidden relative"
-            v-if="metricsStore.nationStatus === 'loaded'"
-            :class="metricsStore.showParametres ? 'h-auto' : 'h-0'"
+            class="overflow-hidden relative"
+            v-if="
+                metricsStore.nationStatus === 'loaded' &&
+                departementMetricsStore.activeTab === 'tableau'
+            "
+            :class="metricsStore.showParametres ? 'h-auto mt-4' : 'h-0'"
         />
     </header>
 </template>
@@ -26,9 +29,11 @@ export default {
 
 <script setup>
 import { useMetricsStore } from "@/stores/metrics.store";
+import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import Actions from "./Actions.vue";
 import Dates from "./Dates.vue";
 import Parametres from "./Parametres.vue";
 
 const metricsStore = useMetricsStore();
+const departementMetricsStore = useDepartementMetricsStore();
 </script>

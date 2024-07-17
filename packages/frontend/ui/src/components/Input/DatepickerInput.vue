@@ -3,7 +3,7 @@
         <InputLabel :label="label" :info="info" :inlineInfo="inlineInfo" :showMandatoryStar="showMandatoryStar" :for="`dp-input-${id}`" />
 
         <div :class="width">
-            <DatePicker v-model="date" locale="fr" :format-locale="fr" format="dd LLLL yyyy"
+            <DatePicker v-model="date" locale="fr" :format-locale="fr" :format="section === 'evolution' ? 'LLLL yyyy' : 'dd LLLL yyyy'"
                 :disabled="isSubmitting || disabled" autoApply :enableTimePicker="false"
                 :input-class-name="focusClasses.ring"
                 :preventMinMaxNavigation="$attrs.maxDate || $attrs.minDate" v-bind="$attrs" :uid="id">
@@ -58,9 +58,13 @@ const props = defineProps({
         required: false,
         default: false
     },
+    section: {
+        required: false,
+        type: String
+    }
 });
 
-const { id, name, label, info, inlineInfo, showMandatoryStar, rules, disabled, modelValue, width, withoutMargin } = toRefs(props);
+const { id, name, label, info, inlineInfo, showMandatoryStar, rules, disabled, modelValue, width, withoutMargin, section } = toRefs(props);
 const isSubmitting = useIsSubmitting();
 const { handleChange, errors, value } = useField(name.value, rules.value, {
     initialValue: modelValue.value

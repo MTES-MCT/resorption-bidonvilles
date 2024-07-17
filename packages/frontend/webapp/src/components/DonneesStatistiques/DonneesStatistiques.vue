@@ -26,12 +26,18 @@
                 v-else-if="metricsStore.nationStatus !== 'loaded'"
             />
             <template v-else>
-                <Onglets :tabs="tabs" :activeTab="activeTab" />
+                <Onglets
+                    :tabs="tabs"
+                    :activeTab="activeTab"
+                    @click="changeActiveTab"
+                />
                 <Grille
+                    v-if="activeTab === 'tableau'"
                     class="mt-6"
                     :metrics="metricsStore.filteredMetrics"
                     :collapseByDefault="metricsStore.metrics.length > 1"
                 />
+                <EvolutionNationale v-if="activeTab === 'evolution'" />
             </template>
         </main>
     </ContentWrapper>
@@ -39,17 +45,25 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
+import { useUserStore } from "@/stores/user.store";
 import { useMetricsStore } from "@/stores/metrics.store";
+import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 
 import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
 import Title from "./Title.vue";
 import Header from "./Header.vue";
 import Onglets from "./DonneesStatistiquesDepartementOnglets.vue";
 import Grille from "./Grille.vue";
+import EvolutionNationale from "./EvolutionNationale.vue";
 import Loading from "@/components/Loading/Loading.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 import ViewError from "@/components/ViewError/ViewError.vue";
-import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
+
+const activeTab = ref("tableau");
+const departementMetricsStore = useDepartementMetricsStore();
+departementMetricsStore.activeTab = activeTab;
+const metricsStore = useMetricsStore();
+const userStore = useUserStore();
 
 const tabs = [
     {
@@ -58,9 +72,20 @@ const tabs = [
     },
 ];
 
-const activeTab = ref("tableau");
-const departementMetricsStore = useDepartementMetricsStore();
-departementMetricsStore.activeTab = activeTab;
-const metricsStore = useMetricsStore();
-onMounted(metricsStore.load);
+if (userStore.user.intervention_areas.is_national) {
+    tabs.push({
+        id: "evolution",
+        label: "Évolution",
+    });
+}
+
+onMounted(() => {
+    metricsStore.load();
+});
+
+const changeActiveTab = (tab) => {
+    if (tab.target.id === "evolution") {
+        departementMetricsStore.activeTab = tab.target.id;
+    }
+};
 </script>

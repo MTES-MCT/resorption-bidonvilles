@@ -4693,8 +4693,10 @@ __metadata:
   resolution: "@resorptionbidonvilles/fullstack@workspace:."
   dependencies:
     "@vue/cli-service": ^5.0.8
+    echarts: ^5.5.0
     husky: ^8.0.3
     node-gyp: ^9.3.1
+    vue-echarts: ^6.7.3
   languageName: unknown
   linkType: soft
 
@@ -4734,10 +4736,10 @@ __metadata:
     "@vuepic/vue-datepicker": ^3.5.3
     autoprefixer: ^10.4.12
     axios: ^1.6.0
-    chart.js: ^3.9.1
     cypress: ^13.6.3
     date-fns: ^2.29.3
     dom-to-image-more: ^2.12.0
+    echarts: ^5.5.0
     eslint: ^8.22.0
     eslint-plugin-cypress: ^2.12.1
     eslint-plugin-vue: ^9.3.0
@@ -4757,7 +4759,7 @@ __metadata:
     vite: ^5.0.13
     vitest: ^1.2.1
     vue: ^3.3.0
-    vue-chartjs: ^4.1.2
+    vue-echarts: ^6.7.3
     vue-i18n: ^9.5.0
     vue-matomo: ^4.2.0
     vue-router: ^4.1.5
@@ -4774,7 +4776,6 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": ^6.1.1
     "@nuxtjs/i18n": ^8.0.0
     "@nuxtjs/tailwindcss": ^6.8.0
-    chart.js: ^3.7.1
     nuxt: ^3.7.0
     postcss-custom-properties: ^13.3.2
     vue-i18n: ^9.5.0
@@ -11720,13 +11721,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chart.js@npm:^3.7.1, chart.js@npm:^3.9.1":
-  version: 3.9.1
-  resolution: "chart.js@npm:3.9.1"
-  checksum: 9ab0c0ac01215af0b3f020f2e313030fd6e347b48ed17d5484ee9c4e8ead45e78ae71bea16c397621c386b409ce0b14bf17f9f6c2492cd15b56c0f433efdfff6
-  languageName: node
-  linkType: hard
-
 "check-error@npm:^1.0.2, check-error@npm:^1.0.3":
   version: 1.0.3
   resolution: "check-error@npm:1.0.3"
@@ -13964,6 +13958,16 @@ __metadata:
   dependencies:
     safe-buffer: ^5.0.1
   checksum: 207f9ab1c2669b8e65540bce29506134613dd5f122cccf1e6a560f4d63f2732d427d938f8481df175505aad94583bcb32c688737bb39a6df0625f903d6d93c03
+  languageName: node
+  linkType: hard
+
+"echarts@npm:^5.5.0":
+  version: 5.5.0
+  resolution: "echarts@npm:5.5.0"
+  dependencies:
+    tslib: 2.3.0
+    zrender: 5.5.0
+  checksum: 181600d21bc4ad6a877bac419800501345c4103ae49ef05a4db495c8dde91f0a5f7ff02eb94581190c59518526f7931e8410ce3fe5da1e0f1e60cd1aeec04a52
   languageName: node
   linkType: hard
 
@@ -24549,6 +24553,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"resize-detector@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "resize-detector@npm:0.3.0"
+  checksum: 06c5f321b9349e34b71020b945cbd90c5300ca49d3e204fbc236c0827ad133a2d0cd48b9943a8b50723e4e16b67c106d9b8e1eba6240a6e136d1926373bacb2e
+  languageName: node
+  linkType: hard
+
 "resolve-from@npm:^2.0.0":
   version: 2.0.0
   resolution: "resolve-from@npm:2.0.0"
@@ -27256,6 +27267,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tslib@npm:2.3.0":
+  version: 2.3.0
+  resolution: "tslib@npm:2.3.0"
+  checksum: 8869694c26e4a7b56d449662fd54a4f9ba872c889d991202c74462bd99f10e61d5bd63199566c4284c0f742277736292a969642cc7b590f98727a7cae9529122
+  languageName: node
+  linkType: hard
+
 "tslib@npm:^1.11.1, tslib@npm:^1.13.0, tslib@npm:^1.8.1":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
@@ -28595,16 +28613,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-chartjs@npm:^4.1.2":
-  version: 4.1.2
-  resolution: "vue-chartjs@npm:4.1.2"
-  peerDependencies:
-    chart.js: ^3.7.0
-    vue: ^3.0.0-0 || ^2.6.0
-  checksum: 94d4c7c83f706101e3c531a9fdc4723b9a724a876ca20b2e41cbc92d158e81b04172308b0198093a734bbde41c7a7ad7082673dfb63841742b1fb646763dd6ca
-  languageName: node
-  linkType: hard
-
 "vue-component-type-helpers@npm:^1.8.21, vue-component-type-helpers@npm:latest":
   version: 1.8.27
   resolution: "vue-component-type-helpers@npm:1.8.27"
@@ -28625,6 +28633,22 @@ __metadata:
     vue-demi-fix: bin/vue-demi-fix.js
     vue-demi-switch: bin/vue-demi-switch.js
   checksum: 424b1f340d5111fc4d4a0f8042c14ae836ba983bc968773a6d955d6846202d7e6f951993ac1525be8732b0cfe0c81d94ab88f427c97bfa86ead08db06491279b
+  languageName: node
+  linkType: hard
+
+"vue-demi@npm:^0.13.11":
+  version: 0.13.11
+  resolution: "vue-demi@npm:0.13.11"
+  peerDependencies:
+    "@vue/composition-api": ^1.0.0-rc.1
+    vue: ^3.0.0-0 || ^2.6.0
+  peerDependenciesMeta:
+    "@vue/composition-api":
+      optional: true
+  bin:
+    vue-demi-fix: bin/vue-demi-fix.js
+    vue-demi-switch: bin/vue-demi-switch.js
+  checksum: 0fbe9bf8ab7fe498ffa2bbd0cfc8f6f43a6bbaa5eda3e20ef1b70dca7c8b0ddb216a7ff2f632b694fe0735805638975abb441c621ec0bd2e6d4656353f316c15
   languageName: node
   linkType: hard
 
@@ -28668,6 +28692,26 @@ __metadata:
     vue-docgen-api: ">=3"
     webpack: ">=4"
   checksum: d99f485097c5d17292dc00a0d067cd72c534446f2910b64ba887a76e6ae3a213e3f336c76f636af920202b47eef192e78de00a574b0e8b9f51c690ea9558a4ca
+  languageName: node
+  linkType: hard
+
+"vue-echarts@npm:^6.7.3":
+  version: 6.7.3
+  resolution: "vue-echarts@npm:6.7.3"
+  dependencies:
+    resize-detector: ^0.3.0
+    vue-demi: ^0.13.11
+  peerDependencies:
+    "@vue/composition-api": ^1.0.5
+    "@vue/runtime-core": ^3.0.0
+    echarts: ^5.4.1
+    vue: ^2.6.12 || ^3.1.1
+  peerDependenciesMeta:
+    "@vue/composition-api":
+      optional: true
+    "@vue/runtime-core":
+      optional: true
+  checksum: 341ce3ad9313684aab62e7b54f8770d20ef3b902955d7f60530ad819dbc278c9bdf48c92844507064031f5a653c57b28c6cf2a928dc04da69835eda50fb48073
   languageName: node
   linkType: hard
 
@@ -29685,5 +29729,14 @@ __metadata:
     compress-commons: ^5.0.1
     readable-stream: ^3.6.0
   checksum: 116cee5a2c1ecce7aa440b665470653f58ef56670c6aafa1b5491c9f9335992352145502af5fa865ac82f46336905e37fb7cbc649c2be72e2152c6b91802995c
+  languageName: node
+  linkType: hard
+
+"zrender@npm:5.5.0":
+  version: 5.5.0
+  resolution: "zrender@npm:5.5.0"
+  dependencies:
+    tslib: 2.3.0
+  checksum: 89e4f9e95b586af66ebf5c0504d5f8da73678e18c5b888124943ca81ecea7cff12f23009d64048df91e4dc670e9c51fa66c357834d9347e367f3b5cc02a24d35
   languageName: node
   linkType: hard

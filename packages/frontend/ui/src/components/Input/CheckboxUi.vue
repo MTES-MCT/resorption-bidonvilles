@@ -29,7 +29,7 @@
         <div role="button" class="mb-1">
             <label v-if="checked" class="flex space-x-2 items-center shrink-0">
                 <p
-                    class="rounded-2xl w-11 h-6 flex shrink-0 items-center px-px border border-primary justify-end bg-primary">
+                    class="rounded-2xl w-11 h-6 flex shrink-0 items-center px-px border border-primary justify-end bg-primary cursor-pointer">
                     <input :id="`variant-toggle-${randomId()}`" @click="onChange(value)" class="appearance-none" type="checkbox"
                         :checked="checked" :disabled="disabled" />
                     <span class="absolute rounded-full bg-white inline-block text-center text-sm text-primary h-5 w-5">
@@ -43,7 +43,7 @@
                 </p>
             </label>
             <label v-else class="flex space-x-2 items-center shrink-0">
-                <p class="rounded-2xl w-11 h-6 flex shrink-0 items-center px-px border border-primary justify-start">
+                <p class="rounded-2xl w-11 h-6 flex shrink-0 items-center px-px border border-primary justify-start cursor-pointer">
                     <input :id="`variant-toggle-${randomId()}`" @click="onChange(value)" class="appearance-none" type="checkbox"
                         :checked="checked" :disabled="disabled" />
                     <span

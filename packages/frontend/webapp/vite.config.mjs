@@ -27,6 +27,7 @@ export default defineConfig({
         alias: {
             "@common": fileURLToPath(new URL("../common", import.meta.url)),
             "@": fileURLToPath(new URL("./src", import.meta.url)),
+            "@stores": fileURLToPath(new URL("./src/stores/", import.meta.url)),
         },
     },
 });
