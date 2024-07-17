@@ -3,7 +3,7 @@
     <section v-else>
         <section class="mb-8">
             <h1 class="font-bold text-primary text-lg">
-                Nombre de sites et d'habitants (exclusivement intra EU et + de
+                Nombre de sites et d'habitants (exclusivement intra UE et + de
                 10 personnes)
             </h1>
             <LineChart
@@ -46,7 +46,7 @@ const chartData = computed(() => {
     const datasets = {
         intraEU: [
             generateDataset(
-                "Habitants Intra EU",
+                "Habitants intra UE",
                 "81, 108, 157",
                 data.value.inhabitants.european,
                 {
@@ -56,7 +56,7 @@ const chartData = computed(() => {
                 }
             ),
             generateDataset(
-                "Sites exclusivement intra EU",
+                "Sites exclusivement intra UE",
                 "0, 0, 255",
                 data.value.shantytowns.onlyEUcount,
                 {
@@ -156,10 +156,10 @@ const options = computed(() => {
             ],
             legend: {
                 data: [
-                    { name: "Habitants Intra EU", icon: "roundRect" },
+                    { name: "Habitants intra UE", icon: "roundRect" },
                     { name: "Habitants toutes origines", icon: "roundRect" },
                     {
-                        name: "Sites exclusivement intra EU",
+                        name: "Sites exclusivement intra UE",
                         icon: "path://M 3 1 L 10 1 L 10 2 L 3 2 M 3 1 L 3 1",
                     },
                     {
