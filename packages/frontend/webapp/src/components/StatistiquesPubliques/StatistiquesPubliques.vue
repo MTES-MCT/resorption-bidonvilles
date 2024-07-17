@@ -13,23 +13,9 @@
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 mt-4">
                 <div>
-                    <PieChart
-                        class="mb-16 md:mb-0 md:mr-16"
-                        :height="250"
-                        :chartData="organizationRepartitionData"
-                        :chartOptions="{
-                            plugins: {
-                                legend: {
-                                    position: 'right',
-                                    align: 'start',
-                                    labels: {
-                                        generateLabels,
-                                    },
-                                },
-                            },
-                            maintainAspectRatio: false,
-                        }"
+                    <RepartitionUtilisateurs
                         v-if="numberOfPublicEstablishmentUsers !== '...'"
+                        :data="organizationRepartitionData"
                     />
                     <span class="text-display-lg font-bold" v-else>...</span>
                 </div>
@@ -55,11 +41,10 @@
                     Nombre d'utilisateurs
                 </h2>
                 <div class="chartWrapper">
-                    <LineChart
+                    <NombreUtilisateurs
+                        :data="usersEvolutionData"
                         v-if="numberOfNewUsersPerMonth !== null"
-                        :chartData="usersEvolutionData"
-                        :chartOptions="{ maintainAspectRatio: false }"
-                        :height="250"
+                        class="h-60 w-full"
                     />
                     <span class="text-display-lg font-bold" v-else>...</span>
                 </div>
@@ -70,11 +55,10 @@
                     Nombre d'utilisateurs par semaine
                 </h2>
                 <div class="chartWrapper">
-                    <LineChart
+                    <NombreUtilisateursParSemaine
+                        :data="wauData"
                         v-if="wauData !== null"
-                        :chartData="wauData"
-                        :chartOptions="{ maintainAspectRatio: false }"
-                        :height="250"
+                        class="h-60 w-full"
                     />
                     <span class="text-display-lg font-bold" v-else>...</span>
                 </div>
@@ -137,7 +121,9 @@ import ENV from "@/helpers/env.js";
 import { ContentWrapper, Icon } from "@resorptionbidonvilles/ui";
 import StatsBlock from "./StatsBlock.vue";
 import StatsSection from "./StatsSection.vue";
-import { LineChart, PieChart } from "@/helpers/chart.js";
+import RepartitionUtilisateurs from "./Graphs/RepartitionUtilisateurs.vue";
+import NombreUtilisateurs from "./Graphs/NombreUtilisateurs.vue";
+import NombreUtilisateursParSemaine from "./Graphs/NombreUtilisateursParSemaine.vue";
 
 const { API_URL } = ENV;
 
@@ -314,25 +300,6 @@ const wauData = computed(() => {
         ],
     };
 });
-
-function generateLabels(chart) {
-    const data = chart.data;
-    if (data.labels.length && data.datasets.length) {
-        return data.labels.map(function (label, i) {
-            // We get the value of the current label
-            const value = chart.config.data.datasets[0].data[i];
-            const background = chart.config.data.datasets[0].backgroundColor[i];
-
-            return {
-                text: label + " : " + value,
-                index: i,
-                fillStyle: background,
-            };
-        });
-    } else {
-        return [];
-    }
-}
 </script>
 
 <style scoped>
