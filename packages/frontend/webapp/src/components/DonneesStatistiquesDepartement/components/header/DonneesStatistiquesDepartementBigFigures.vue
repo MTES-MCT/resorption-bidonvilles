@@ -7,52 +7,145 @@
             }}</span>
         </h1>
         <div
-            class="bg-G100 border border-G300 rounded py-4 px-6 flex items-stretch"
+            class="bg-G100 border border-G300 rounded py-4 px-6 flex md:flex-row flex-col items-stretch"
         >
-            <div class="flex space-x-5 self-center flex-1">
-                <p>
-                    <span class="font-bold text-3xl">{{
-                        formatStat(metrics.summary.number_of_towns.all)
-                    }}</span
-                    ><br />site<template
-                        v-if="metrics.summary.number_of_towns.all > 1"
-                        >s</template
+            <div class="flex flex-col mb-2 md:mb-0">
+                <p class="font-bold w-full">Sites de + de 10 personnes</p>
+                <div class="flex flex-col xs:flex-row gap-2 xs:space-x-5">
+                    <div
+                        class="bg-G200 rounded-md p-2 flex flex-col flex-wrap items-center xl:items-start"
                     >
-                </p>
-                <p>
-                    <span class="font-bold text-3xl">{{
-                        formatStat(metrics.summary.number_of_persons.all)
-                    }}</span
-                    ><br />personne<template
-                        v-if="metrics.summary.number_of_persons.all > 1"
-                        >s</template
+                        <div
+                            class="flex flex-row flex-wrap items-end justify-center"
+                        >
+                            <div class="flex flex-row items-center">
+                                <img
+                                    :src="flagEU"
+                                    class="w-9 h-6 mr-1 ml-0"
+                                    alt=""
+                                />
+                                <span
+                                    class="text-3xl font-bold align-baseline leading-none"
+                                >
+                                    {{
+                                        formatStat(
+                                            metrics.summary.number_of_persons
+                                                .eu_only
+                                        )
+                                    }}
+                                </span>
+                            </div>
+                            <p class="text-sm ml-1 mr-0">
+                                habitant<template
+                                    v-if="
+                                        metrics.summary.number_of_persons
+                                            .eu_only > 1
+                                    "
+                                    >s</template
+                                >
+                            </p>
+                        </div>
+                        <p class="font-normal text-sm text-center">
+                            exclusivement européens
+                        </p>
+                    </div>
+                    <div
+                        class="bg-G200 rounded-md px-2 flex flex-row flex-row items-center justify-center"
                     >
-                </p>
+                        <div class="flex flex-row items-end gap-1">
+                            <div
+                                class="flex flex-row gap-1 items-end align-baseline leading-none"
+                            >
+                                <i class="fa-solid fa-location-dot text-2xl" />
+                                <span
+                                    class="font-bold text-3xl align-baseline leading-none"
+                                    >{{
+                                        formatStat(
+                                            metrics.summary.number_of_towns
+                                                .eu_only
+                                        )
+                                    }}</span
+                                >
+                            </div>
+                            <p class="text-sm">
+                                site<template
+                                    v-if="
+                                        metrics.summary.number_of_towns
+                                            .eu_only > 1
+                                    "
+                                    >s</template
+                                >
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="w-px bg-G300 mx-6"></div>
-            <div>
-                <p>Sites avec exclusivement des ressortissants européens</p>
-                <div class="flex space-x-5">
-                    <p>
-                        <span class="font-bold text-lg">{{
-                            formatStat(metrics.summary.number_of_towns.eu_only)
-                        }}</span
-                        ><br />site<template
-                            v-if="metrics.summary.number_of_towns.eu_only > 1"
-                            >s</template
+            <div class="flex flex-col mb-2 md:mb-0">
+                <p class="font-bold">Tous sites</p>
+                <div class="flex flex-col xs:flex-row gap-2 xs:space-x-5">
+                    <div
+                        class="bg-G200 rounded-md p-2 flex flex-col flex-wrap items-center xl:items-start"
+                    >
+                        <div
+                            class="flex flex-row flex-wrap items-end justify-center"
                         >
-                    </p>
-                    <p>
-                        <span class="font-bold text-lg">{{
-                            formatStat(
-                                metrics.summary.number_of_persons.eu_only
-                            )
-                        }}</span
-                        ><br />personne<template
-                            v-if="metrics.summary.number_of_persons.eu_only > 1"
-                            >s</template
+                            <div class="flex flex-row items-center gap-1">
+                                <i class="fa-solid fa-people-group text-2xl" />
+                                <span
+                                    class="text-3xl font-bold align-baseline leading-none"
+                                >
+                                    {{
+                                        formatStat(
+                                            metrics.summary.number_of_persons
+                                                .all
+                                        )
+                                    }}
+                                </span>
+                            </div>
+                            <p class="text-sm ml-1 mr-0">
+                                habitant<template
+                                    v-if="
+                                        metrics.summary.number_of_persons.all >
+                                        1
+                                    "
+                                    >s</template
+                                >
+                            </p>
+                        </div>
+                        <p
+                            class="font-normal text-sm text-center xl:text-start"
                         >
-                    </p>
+                            toutes origines
+                        </p>
+                    </div>
+                    <div
+                        class="bg-G200 rounded-md p-2 flex flex-row flex-row items-center justify-center"
+                    >
+                        <div class="flex flex-row items-end gap-1">
+                            <div
+                                class="flex flex-row gap-1 items-end align-baseline leading-none"
+                            >
+                                <i class="fa-solid fa-location-dot text-2xl" />
+                                <span
+                                    class="font-bold text-3xl align-baseline leading-none"
+                                    >{{
+                                        formatStat(
+                                            metrics.summary.number_of_towns.all
+                                        )
+                                    }}</span
+                                >
+                            </div>
+                            <p class="text-sm">
+                                site<template
+                                    v-if="
+                                        metrics.summary.number_of_towns.all > 1
+                                    "
+                                    >s</template
+                                >
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="w-px bg-G300 mx-6"></div>
@@ -89,7 +182,7 @@
                             "
                             >s</template
                         >
-                        sans nombre de personnes ou indications de l'origine
+                        sans nombre de personnes ou indication de l'origine
                     </p>
                     <p v-else>
                         Les nombres et origines des personnes sont renseignées
@@ -139,6 +232,7 @@ import formatStat from "@/utils/formatStat";
 import formatDate from "@common/utils/formatDate";
 
 import { Icon } from "@resorptionbidonvilles/ui";
+import flagEU from "@/assets/img/flags/eu.png";
 
 const props = defineProps({
     metrics: {
