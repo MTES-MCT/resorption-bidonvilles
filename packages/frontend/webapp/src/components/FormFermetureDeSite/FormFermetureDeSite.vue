@@ -16,7 +16,10 @@
         <FormFermetureDeSiteInputClosedAt :disabled="mode === 'fix'" />
         <FormFermetureDeSiteInputStatus :disabled="mode === 'fix'" />
         <FormFermetureDeSiteInputClosingContext :disabled="mode === 'fix'" />
-        <FormFermetureDeSiteInputSolutions :disabled="mode === 'fix'" />
+        <FormFermetureDeSiteInputSolutions
+            :disabled="mode === 'fix'"
+            @update:solutions="handleSolutions"
+        />
         <FormFermetureDeSiteInputClosedWithSolutions
             :peopleWithSolutions="peopleWithSolutions"
         />
@@ -34,8 +37,7 @@
 <script setup>
 import ENV from "@/helpers/env.js";
 import { defineProps, defineExpose, ref, toRefs, computed } from "vue";
-import { useForm, useFormValues, useFormErrors } from "vee-validate";
-import { useConfigStore } from "@/stores/config.store";
+import { useForm, useFormErrors } from "vee-validate";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
 import formatDate from "@common/utils/formatDate";
@@ -58,9 +60,9 @@ const props = defineProps({
     town: Object,
 });
 const { town } = toRefs(props);
-const values = useFormValues();
 const errors = useFormErrors();
 const error = ref(null);
+const peopleWithSolutions = ref(0);
 
 const mode = computed(() => {
     return town.value.closedAt !== null ? "fix" : "declare";
@@ -69,36 +71,7 @@ const schema = computed(() => {
     return schemaFn(mode.value);
 });
 
-const actualSolutionIds = computed(() => {
-    const actualSolutions = [
-        "Solution longue durée en hébergement ou logement adapté longue durée avec accompagnement, dont espace temporaire d'accompagnement",
-        "Logement",
-    ];
-
-    const configStore = useConfigStore();
-    return actualSolutions.map((label) => {
-        const s = configStore.config.closing_solutions.find(
-            ({ label: l }) => l === label
-        );
-        return s?.id || null;
-    });
-});
-
-const peopleWithSolutions = computed(() => {
-    if (!town.value.populationTotal) {
-        return null;
-    }
-
-    let total = actualSolutionIds.value.reduce((acc, solutionId) => {
-        return (
-            acc +
-            (values.solution_details?.[`${solutionId}`]?.peopleAffected || 0)
-        );
-    }, 0);
-    return ((total / town.value.populationTotal) * 100).toFixed(0);
-});
-
-const { handleSubmit, setErrors, isSubmitting } = useForm({
+const { setValues, handleSubmit, setErrors, isSubmitting } = useForm({
     validationSchema: schema,
     initialValues: {
         closed_at: town.value.closedAt
@@ -123,6 +96,34 @@ const { handleSubmit, setErrors, isSubmitting } = useForm({
             : undefined,
     },
 });
+
+const handleSolutions = (newValue) => {
+    const totalPeopleAffected = Object.values(newValue).reduce(
+        (acc, solution) => {
+            if (solution.peopleAffected) {
+                // if (
+                //     parseInt(acc) + parseInt(solution.peopleAffected) >
+                //     town.value.populationTotal
+                // ) {
+                //     error.value =
+                //         "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site";
+                //     return parseInt(acc);
+                // }
+                console.log("newValue", newValue);
+                return parseInt(acc) + parseInt(solution.peopleAffected);
+            } else {
+                return parseInt(acc);
+            }
+        },
+        0
+    );
+
+    setValues({ solution_details: newValue });
+    peopleWithSolutions.value = (
+        (totalPeopleAffected / town.value.populationTotal) *
+        100
+    ).toFixed(0);
+};
 
 const config = {
     declare: {
@@ -174,6 +175,11 @@ defineExpose({
                     "Modification impossible : aucun champ n'a été modifié";
                 return;
             }
+        }
+        if (peopleWithSolutions.value > 100) {
+            error.value =
+                "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site";
+            return;
         }
 
         const { submit, successTitle, successWording } = config[mode.value];
