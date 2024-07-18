@@ -3,7 +3,7 @@
         <Button
             v-if="isHover"
             variant="primaryOutline"
-            icon="sun-bright"
+            icon="temperature-high"
             iconPosition="left"
             type="button"
             size="sm"

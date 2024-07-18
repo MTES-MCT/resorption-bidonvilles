@@ -2,7 +2,7 @@
     <FicheRubrique title="Lieu" id="localisation">
         <FicheSousRubrique>
             <p>
-                <Icon icon="map-pin" class="mr-2" />
+                <Icon icon="location-dot" class="mr-2" />
                 <span class="font-bold">{{ label }}</span>
             </p>
 
