@@ -8,8 +8,7 @@
             <Icon v-else class="text-xl" :icon="icon" />
             <span class="font-bold text-3xl">{{ figure }}</span>
             <span class="font-bold text-lg" :class="color"
-                >(<template v-if="evolution >= 0">+</template
-                >{{ evolution }} %)</span
+                >({{ formatedEvolution }})</span
             >
         </div>
         <label class="text-sm"><slot /></label>
@@ -79,5 +78,11 @@ const color = computed(() => {
     }
 
     return (evolution.value < 0 ? colors.positive : colors.negative).color;
+});
+
+const formatedEvolution = computed(() => {
+    return `${evolution.value >= 0 ? "+ " : "- "}${Math.abs(
+        evolution.value
+    )} %`;
 });
 </script>
