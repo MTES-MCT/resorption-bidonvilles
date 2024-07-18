@@ -4,10 +4,6 @@ export default [
         label: "Synthèse",
     },
     {
-        id: "inhabitants",
-        label: "Habitants",
-    },
-    {
         id: "livingConditionsByInhabitant",
         label: "Conditions de vie (habitants)",
     },
@@ -15,8 +11,9 @@ export default [
         id: "livingConditionsByTown",
         label: "Conditions de vie (sites)",
     },
-    {
-        id: "justice",
-        label: "Juridique",
-    },
+    // désactivation temporaire de l'onglet "Justice" en attente de l'implémentation des procédures administratives
+    // {
+    //     id: "justice",
+    //     label: "Juridique",
+    // },
 ];
