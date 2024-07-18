@@ -101,14 +101,14 @@ const handleSolutions = (newValue) => {
     const totalPeopleAffected = Object.values(newValue).reduce(
         (acc, solution) => {
             if (solution.peopleAffected) {
-                // if (
-                //     parseInt(acc) + parseInt(solution.peopleAffected) >
-                //     town.value.populationTotal
-                // ) {
-                //     error.value =
-                //         "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site";
-                //     return parseInt(acc);
-                // }
+                if (
+                    parseInt(acc) + parseInt(solution.peopleAffected) >
+                    town.value.populationTotal
+                ) {
+                    error.value =
+                        "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site";
+                    return parseInt(acc) + parseInt(solution.peopleAffected);
+                }
                 console.log("newValue", newValue);
                 return parseInt(acc) + parseInt(solution.peopleAffected);
             } else {
