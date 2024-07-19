@@ -12,18 +12,18 @@
 
             <ChartBigFigure
                 :img="flagEU"
-                alt="Estimation du nombre d'habitants intra-UE"
+                alt="Estimation du nombre d'habitants intra UE"
                 :figure="formatStat(data.figures.european.value)"
                 :evolution="formatStat(data.figures.european.evolution)"
-                >Sites exclusivement intra-UE</ChartBigFigure
+                >Sites exclusivement intra UE</ChartBigFigure
             >
 
             <ChartBigFigure
                 :img="flagExtraCommunautaires"
-                alt="Estimation du nombre d'habitants extra-UE"
+                alt="Estimation du nombre d'habitants extra UE"
                 :figure="formatStat(data.figures.foreign.value)"
                 :evolution="formatStat(data.figures.foreign.evolution)"
-                >Sites exclusivement extra-UE</ChartBigFigure
+                >Sites exclusivement extra UE</ChartBigFigure
             >
         </div>
 
@@ -53,7 +53,7 @@ const data = departementMetricsStore.evolution.data.inhabitants.inhabitants;
 const chartData = computed(() => {
     const datasets = [
         generateDataset(
-            "Nombre d'habitants intra-UE",
+            "Nombre d'habitants intra UE",
             "0, 0, 255",
             data.charts.european,
             {
@@ -63,7 +63,7 @@ const chartData = computed(() => {
             }
         ),
         generateDataset(
-            "Nombre d'habitants extra-UE",
+            "Nombre d'habitants extra UE",
             "255, 0, 0",
             data.charts.foreign,
             {

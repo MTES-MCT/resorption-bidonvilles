@@ -344,7 +344,7 @@ describe('dataReportService.getTownsReport()', () => {
         ).to.be.eql(5);
         expect(
             response[0].all_sizes.metropolitan.number_of_towns.eu_only,
-            'Le nombre total de sites intra-UE est correct',
+            'Le nombre total de sites intra UE est correct',
         ).to.be.eql(1);
         expect(
             response[0].all_sizes.metropolitan.number_of_towns.french_only,
@@ -352,7 +352,7 @@ describe('dataReportService.getTownsReport()', () => {
         ).to.be.eql(1);
         expect(
             response[0].all_sizes.metropolitan.number_of_towns.extra_eu_only,
-            'Le nombre total de sites extra-UE est correct',
+            'Le nombre total de sites extra UE est correct',
         ).to.be.eql(1);
         expect(
             response[0].all_sizes.metropolitan.number_of_towns.mixed_origins,
@@ -364,7 +364,7 @@ describe('dataReportService.getTownsReport()', () => {
         ).to.be.eql(1);
         expect(
             response[0].all_sizes.overseas.number_of_towns.eu_only,
-            'Le nombre total de sites aux origines intra-UE en outremer est correct',
+            'Le nombre total de sites aux origines intra UE en outremer est correct',
         ).to.be.eql(1);
     });
 
@@ -556,7 +556,7 @@ describe('dataReportService.getTownsReport()', () => {
         const response: TownReport[] = await getTownsReport(from, to);
         expect(
             response[0].all_sizes.metropolitan.number_of_people.origins_european,
-            'Le nombre de personnes intra-UE en métropole est correct',
+            'Le nombre de personnes intra UE en métropole est correct',
         ).to.be.eql(1);
         expect(
             response[0].all_sizes.metropolitan.number_of_people.origins_french,
@@ -564,7 +564,7 @@ describe('dataReportService.getTownsReport()', () => {
         ).to.be.eql(2);
         expect(
             response[0].all_sizes.metropolitan.number_of_people.origins_other,
-            'Le nombre de personnes extra-UE en métropole est correct',
+            'Le nombre de personnes extra UE en métropole est correct',
         ).to.be.eql(3);
         expect(
             response[0].all_sizes.metropolitan.number_of_people.origins_mixed,
@@ -576,7 +576,7 @@ describe('dataReportService.getTownsReport()', () => {
         ).to.be.eql(5);
         expect(
             response[0].all_sizes.overseas.number_of_people.origins_european,
-            'Le nombre de personnes intra-UE en outremer est correct',
+            'Le nombre de personnes intra UE en outremer est correct',
         ).to.be.eql(6);
     });
 
@@ -640,7 +640,7 @@ describe('dataReportService.getTownsReport()', () => {
         const response: TownReport[] = await getTownsReport(from, to);
         expect(
             response[0].big_towns_only.metropolitan.number_of_people.origins_european,
-            'Le nombre de personnes intra-UE en métropole est correct',
+            'Le nombre de personnes intra UE en métropole est correct',
         ).to.be.eql(10);
         expect(
             response[0].big_towns_only.metropolitan.number_of_people.origins_french,
@@ -648,7 +648,7 @@ describe('dataReportService.getTownsReport()', () => {
         ).to.be.eql(11);
         expect(
             response[0].big_towns_only.metropolitan.number_of_people.origins_other,
-            'Le nombre de personnes extra-UE en métropole est correct',
+            'Le nombre de personnes extra UE en métropole est correct',
         ).to.be.eql(12);
         expect(
             response[0].big_towns_only.metropolitan.number_of_people.origins_mixed,
@@ -660,7 +660,7 @@ describe('dataReportService.getTownsReport()', () => {
         ).to.be.eql(14);
         expect(
             response[0].big_towns_only.overseas.number_of_people.origins_european,
-            'Le nombre de personnes intra-UE en outremer est correct',
+            'Le nombre de personnes intra UE en outremer est correct',
         ).to.be.eql(15);
     });
 
@@ -735,11 +735,11 @@ describe('dataReportService.getTownsReport()', () => {
         ).to.be.eql(1);
         expect(
             response[0].all_sizes.metropolitan.number_of_people.origins_european_minors,
-            'Le nombre de mineurs intra-UE en métropole est correct',
+            'Le nombre de mineurs intra UE en métropole est correct',
         ).to.be.eql(2);
         expect(
             response[0].all_sizes.metropolitan.number_of_people.origins_other_minors,
-            'Le nombre de mineurs extra-UE en métropole est correct',
+            'Le nombre de mineurs extra UE en métropole est correct',
         ).to.be.eql(3);
         expect(
             response[0].all_sizes.metropolitan.number_of_people.origins_mixed_minors,
@@ -830,11 +830,11 @@ describe('dataReportService.getTownsReport()', () => {
         ).to.be.eql(1);
         expect(
             response[0].big_towns_only.metropolitan.number_of_people.origins_european_minors,
-            'Le nombre de mineurs intra-UE en métropole est correct',
+            'Le nombre de mineurs intra UE en métropole est correct',
         ).to.be.eql(2);
         expect(
             response[0].big_towns_only.metropolitan.number_of_people.origins_other_minors,
-            'Le nombre de mineurs extra-UE en métropole est correct',
+            'Le nombre de mineurs extra UE en métropole est correct',
         ).to.be.eql(3);
         expect(
             response[0].big_towns_only.metropolitan.number_of_people.origins_mixed_minors,
