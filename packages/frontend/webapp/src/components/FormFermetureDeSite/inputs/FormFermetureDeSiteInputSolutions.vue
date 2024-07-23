@@ -3,6 +3,7 @@
         <div
             v-for="item in configStore.config.closing_solutions"
             :key="item.id"
+            class="flex flex-col flex-wrap w-full md:w-4/6"
         >
             <Checkbox
                 :value="item.id"
