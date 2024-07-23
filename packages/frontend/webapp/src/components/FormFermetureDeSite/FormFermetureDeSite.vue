@@ -63,6 +63,7 @@ const { town } = toRefs(props);
 const errors = useFormErrors();
 const error = ref(null);
 const peopleWithSolutions = ref(0);
+const totalPeopleAffected = ref(0);
 
 const mode = computed(() => {
     return town.value.closedAt !== null ? "fix" : "declare";
@@ -100,22 +101,29 @@ const { handleSubmit, setErrors, isSubmitting } = useForm({
 const handleSolutions = (newValue) => {
     const validOrientation = [8, 9];
     let tmpPeopleAffectedArray = [];
+    totalPeopleAffected.value = 0;
     for (const [key, value] of Object.entries(newValue)) {
+        totalPeopleAffected.value = value.peopleAffected
+            ? totalPeopleAffected.value + parseInt(value.peopleAffected)
+            : totalPeopleAffected.value;
+        if (
+            parseInt(totalPeopleAffected.value) >
+            parseInt(town.value.populationTotal)
+        ) {
+            error.value =
+                "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site";
+            return;
+        } else {
+            error.value = null;
+        }
         if (validOrientation.includes(parseInt(key))) {
             tmpPeopleAffectedArray.push(value);
         }
     }
-    const totalPeopleAffected = Object.values(tmpPeopleAffectedArray).reduce(
+
+    const actualPeopleAffected = Object.values(tmpPeopleAffectedArray).reduce(
         (acc, solution) => {
             if (solution.peopleAffected) {
-                if (
-                    parseInt(acc) + parseInt(solution.peopleAffected) >
-                    town.value.populationTotal
-                ) {
-                    error.value =
-                        "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site";
-                    return parseInt(acc) + parseInt(solution.peopleAffected);
-                }
                 return parseInt(acc) + parseInt(solution.peopleAffected);
             } else {
                 return parseInt(acc);
@@ -125,7 +133,7 @@ const handleSolutions = (newValue) => {
     );
 
     peopleWithSolutions.value = (
-        (totalPeopleAffected / town.value.populationTotal) *
+        (actualPeopleAffected / town.value.populationTotal) *
         100
     ).toFixed(0);
 };
@@ -181,7 +189,8 @@ defineExpose({
                 return;
             }
         }
-        if (peopleWithSolutions.value > 100) {
+        // if (peopleWithSolutions.value > 100) {
+        if (totalPeopleAffected.value > town.value.populationTotal) {
             error.value =
                 "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site";
             return;
