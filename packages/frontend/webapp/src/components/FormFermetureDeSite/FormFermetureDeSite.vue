@@ -71,7 +71,7 @@ const schema = computed(() => {
     return schemaFn(mode.value);
 });
 
-const { setValues, handleSubmit, setErrors, isSubmitting } = useForm({
+const { handleSubmit, setErrors, isSubmitting } = useForm({
     validationSchema: schema,
     initialValues: {
         closed_at: town.value.closedAt
@@ -98,7 +98,14 @@ const { setValues, handleSubmit, setErrors, isSubmitting } = useForm({
 });
 
 const handleSolutions = (newValue) => {
-    const totalPeopleAffected = Object.values(newValue).reduce(
+    const validOrientation = [8, 9];
+    let tmpPeopleAffectedArray = [];
+    for (const [key, value] of Object.entries(newValue)) {
+        if (validOrientation.includes(parseInt(key))) {
+            tmpPeopleAffectedArray.push(value);
+        }
+    }
+    const totalPeopleAffected = Object.values(tmpPeopleAffectedArray).reduce(
         (acc, solution) => {
             if (solution.peopleAffected) {
                 if (
@@ -109,7 +116,6 @@ const handleSolutions = (newValue) => {
                         "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site";
                     return parseInt(acc) + parseInt(solution.peopleAffected);
                 }
-                console.log("newValue", newValue);
                 return parseInt(acc) + parseInt(solution.peopleAffected);
             } else {
                 return parseInt(acc);
@@ -118,7 +124,6 @@ const handleSolutions = (newValue) => {
         0
     );
 
-    setValues({ solution_details: newValue });
     peopleWithSolutions.value = (
         (totalPeopleAffected / town.value.populationTotal) *
         100
