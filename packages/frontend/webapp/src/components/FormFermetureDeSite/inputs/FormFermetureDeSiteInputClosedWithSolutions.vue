@@ -7,7 +7,7 @@
     >
         <span class="mb-4"
             >Un site est considéré comme résorbé si une solution pérenne en
-            logement ou hébergement est mise en place pour 66% des habitants du
+            logement ou hébergement est mise en place pour 66 % des habitants du
             site.
         </span>
 
