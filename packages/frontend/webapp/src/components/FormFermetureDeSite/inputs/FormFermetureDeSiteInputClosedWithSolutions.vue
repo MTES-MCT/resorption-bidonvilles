@@ -49,7 +49,7 @@ const info = computed(() => {
     }
 
     return `D'après les informations renseignées, environ 
-        ${peopleWithSolutions.value}%
+        ${peopleWithSolutions.value} %
         des habitants du site ont été
         orientées vers une solution longue durée d’hébergement ou de
         logement adapté avec accompagnement,
