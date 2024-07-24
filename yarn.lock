@@ -4718,7 +4718,7 @@ __metadata:
     react-dom: ^18.2.0
     storybook: ^7.0.26
     tailwindcss: ^3.0.23
-    vee-validate: ^4.7.0
+    vee-validate: ^4.13.2
     vue-i18n: ^9.5.0
   languageName: unknown
   linkType: soft
@@ -4755,7 +4755,7 @@ __metadata:
     sass: ^1.55.0
     start-server-and-test: ^2.0.3
     tailwindcss: ^3.1.8
-    vee-validate: ^4.7.3
+    vee-validate: ^4.13.2
     vite: ^5.0.13
     vitest: ^1.2.1
     vue: ^3.3.0
@@ -9591,10 +9591,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/devtools-api@npm:^6.5.0, @vue/devtools-api@npm:^6.5.1":
+"@vue/devtools-api@npm:^6.5.0":
   version: 6.5.1
   resolution: "@vue/devtools-api@npm:6.5.1"
   checksum: 3de9ff5ec78890c84d22c59910e26bf53140413895ba85b0e2a276609c24d9dde007cf468d9f21ef18389eaef75605fe94e79a761beb30d3bbb7af1ef19bbd4e
+  languageName: node
+  linkType: hard
+
+"@vue/devtools-api@npm:^6.6.1":
+  version: 6.6.3
+  resolution: "@vue/devtools-api@npm:6.6.3"
+  checksum: 4dc7e980bc50557b128655ca447d2f10ccda896a88d0560eec2c391a8b97ddb63547d79d30d76a6e9e2ec5368ee73c4a66bc44367cc607c0262c328fe648de8a
   languageName: node
   linkType: hard
 
@@ -28228,15 +28235,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vee-validate@npm:^4.7.0, vee-validate@npm:^4.7.3":
-  version: 4.12.4
-  resolution: "vee-validate@npm:4.12.4"
+"vee-validate@npm:^4.13.2":
+  version: 4.13.2
+  resolution: "vee-validate@npm:4.13.2"
   dependencies:
-    "@vue/devtools-api": ^6.5.1
+    "@vue/devtools-api": ^6.6.1
     type-fest: ^4.8.3
   peerDependencies:
-    vue: ^3.3.11
-  checksum: fc758c84de3d6ace2a3e787b10f4748e8078bc9c4f315a5225335dbfda5af2e4ac2d946d9f8e015c6647d7bba50884d5be488b8f2e84c00fc1af449276a4aad7
+    vue: ^3.4.26
+  checksum: f484e528c8b8b7d07a0412bf02183197e96c8273821327877c8c3de7d70e43bcabe3e4fc2d6a1dad311cf8cd08456d83821f12f40da16aa4843002e5d77c3f9b
   languageName: node
   linkType: hard
 

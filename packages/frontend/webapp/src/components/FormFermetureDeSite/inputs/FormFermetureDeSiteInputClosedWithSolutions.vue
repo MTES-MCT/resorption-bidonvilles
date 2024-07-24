@@ -7,7 +7,7 @@
     >
         <span class="mb-4"
             >Un site est considéré comme résorbé si une solution pérenne en
-            logement ou hébergement est mise en place pour 66% des habitants du
+            logement ou hébergement est mise en place pour 66 % des habitants du
             site.
         </span>
 
@@ -49,7 +49,7 @@ const info = computed(() => {
     }
 
     return `D'après les informations renseignées, environ 
-        ${peopleWithSolutions.value}%
+        ${peopleWithSolutions.value} %
         des habitants du site ont été
         orientées vers une solution longue durée d’hébergement ou de
         logement adapté avec accompagnement,

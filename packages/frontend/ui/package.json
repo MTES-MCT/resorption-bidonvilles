@@ -23,6 +23,6 @@
     "storybook": "storybook dev -p 6006"
   },
   "dependencies": {
-    "vee-validate": "^4.7.0"
+    "vee-validate": "^4.13.2"
   }
 }
