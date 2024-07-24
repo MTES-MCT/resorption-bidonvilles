@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/webapp3",
-  "version": "2.19.4",
+  "version": "2.19.5",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -25,7 +25,7 @@
     "leaflet.markercluster": "^1.5.3",
     "pinia": "^2.0.21",
     "sass": "^1.55.0",
-    "vee-validate": "^4.7.3",
+    "vee-validate": "^4.13.2",
     "vue": "^3.3.0",
     "vue-echarts": "^6.7.3",
     "vue-i18n": "^9.5.0",
