@@ -3,8 +3,8 @@
     <section v-else>
         <section class="mb-8">
             <h1 class="font-bold text-primary text-lg">
-                Nombre de sites et d'habitants (exclusivement intra UE et + de
-                10 personnes)
+                Nombre de sites et d'habitants en France métropolitaine
+                (exclusivement intra UE et + de 10 personnes)
             </h1>
             <LineChart
                 class="mt-6"
@@ -15,8 +15,8 @@
         </section>
         <section>
             <h1 class="font-bold text-primary text-lg">
-                Nombre de sites et d'habitants (toutes origines et + de 10
-                personnes)
+                Nombre de sites et d'habitants en France métropolitaine (toutes
+                origines et + de 10 personnes)
             </h1>
             <LineChart
                 class="mt-6"
