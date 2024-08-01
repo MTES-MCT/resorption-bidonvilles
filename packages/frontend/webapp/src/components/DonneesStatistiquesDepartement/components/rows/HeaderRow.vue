@@ -81,7 +81,7 @@ const props = defineProps({
     },
 });
 const { columns } = toRefs(props);
-console.log("Columns", columns.value);
+
 const flagMap = {
     french: { icon: flagFR },
     european: { icon: flagEU },
