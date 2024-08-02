@@ -21,7 +21,7 @@ export const useDepartementMetricsStore = defineStore(
             justice: { id: "city_name", order: "asc" },
         });
         const metrics = ref({});
-        const currentFormat = ref("table");
+        const currentFormat = ref("summary");
         const evolution = {
             from: ref(new Date()),
             to: ref(new Date()),
@@ -72,6 +72,7 @@ export const useDepartementMetricsStore = defineStore(
         function reset() {
             departement.value = null;
             activeTab.value = "summary";
+            currentFormat.value = "summary";
             error.value = null;
             sort.value = {
                 summary: { id: "city_name", order: "asc" },
@@ -81,7 +82,6 @@ export const useDepartementMetricsStore = defineStore(
                 justice: { id: "city_name", order: "asc" },
             };
             metrics.value = {};
-            currentFormat.value = "table";
             collapsedCities.value = {};
             evolution.from.value.setTime(new Date());
             evolution.to.value.setTime(new Date());
@@ -93,8 +93,9 @@ export const useDepartementMetricsStore = defineStore(
             evolution.error.value = null;
             evolution.data.value = null;
             lastMapView.value = null;
-
-            evolution.from.value.setDate(evolution.from.value.getDate() - 8);
+            evolution.from.value.setFullYear(
+                evolution.from.value.getFullYear() - 2
+            );
             evolution.to.value.setDate(evolution.to.value.getDate() - 1);
         }
 
