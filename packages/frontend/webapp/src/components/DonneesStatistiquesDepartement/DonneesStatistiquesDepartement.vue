@@ -1,43 +1,19 @@
 <template>
     <Title class="mt-6">{{ departement.name }} ({{ departement.code }})</Title>
     <DonneesStatistiquesDepartementBigFigures :metrics="metrics" />
+    <FiltrageTemporel class="mt-5" v-model="dateRange" />
+    <PeriodePersonnalisee v-if="dateRange === 'periode-personnalisee'" />
 
-    <main class="mt-6">
+    <main class="mt-2">
         <Onglets
             :tabs="userTabs"
-            :activeTab="departementMetricsStore.activeTab"
+            :activeTab="departementMetricsStore.currentFormat"
         />
-
-        <div class="mt-3 px-6 py-4 bg-blue100 text-sm">
-            <Link
-                withStyle
-                class="mr-6"
-                :class="
-                    departementMetricsStore.currentFormat === 'table'
-                        ? 'font-bold'
-                        : ''
-                "
-                @click="() => setFormat('table')"
-                ><Icon icon="table-list" /> Situation au
-                {{ formatDate(new Date().getTime() / 1000) }}</Link
-            >
-            <Link
-                withStyle
-                :class="
-                    departementMetricsStore.currentFormat === 'chart'
-                        ? 'font-bold'
-                        : ''
-                "
-                @click="() => setFormat('chart')"
-                ><Icon icon="chart-simple" /> Évolution</Link
-            >
-        </div>
-
         <section
-            class="mt-4"
-            v-if="departementMetricsStore.currentFormat === 'chart'"
+            class="mt-0"
+            v-if="departementMetricsStore.currentFormat === 'summary'"
         >
-            <EvolutionCharts />
+            <EvolutionCharts :dateRange="dateRange" />
         </section>
         <div v-else class="mt-6 flex justify-evenly items-stretch">
             <div
@@ -129,12 +105,11 @@ import { computed, nextTick, onMounted, toRefs, ref, watch } from "vue";
 import { useGeojsonStore } from "@/stores/geojson.store";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { useUserStore } from "@/stores/user.store";
-import formatDate from "@common/utils/formatDate";
 import router from "@/helpers/router";
 import tabs from "./DonneesStatistiquesDepartement.tabs";
 import { trackEvent } from "@/helpers/matomo";
 
-import { Icon, Link } from "@resorptionbidonvilles/ui";
+import { Icon } from "@resorptionbidonvilles/ui";
 import Title from "../DonneesStatistiques/Title.vue";
 import Onglets from "../DonneesStatistiques/DonneesStatistiquesDepartementOnglets.vue";
 import CartoDonneesStatistiques from "@/components/CartoDonneesStatistiques/CartoDonneesStatistiques.vue";
@@ -145,6 +120,8 @@ import LivingConditionsByTownTable from "./components/tables/LivingConditionsByT
 import JusticeTable from "./components/tables/JusticeTable.vue";
 import EvolutionCharts from "./components/chartTabs/EvolutionCharts.vue";
 import DonneesStatistiquesDepartementBigFigures from "./components/header/DonneesStatistiquesDepartementBigFigures.vue";
+import FiltrageTemporel from "./components/header/FiltrageTemporel.vue";
+import PeriodePersonnalisee from "./components/header/PeriodePersonnalisee.vue";
 
 const props = defineProps({
     departement: {
@@ -163,6 +140,7 @@ const userStore = useUserStore();
 const carte = ref(null);
 const isLoading = ref(true);
 const mapSize = ref("half");
+const dateRange = ref("2-annees-ecoulees");
 const tables = {
     summary: SummaryTable,
     inhabitants: InhabitantsTable,
@@ -297,21 +275,6 @@ function onTownRowZoom(town) {
 
 function onTownClick(town) {
     router.push(`/site/${town.id}`);
-}
-
-function setFormat(format) {
-    trackEvent(
-        "Visualisation des données départementales",
-        "Changement de format",
-        format
-    );
-    if (format === "chart") {
-        departementMetricsStore.fetchEvolution(
-            departementMetricsStore.departement
-        );
-    }
-
-    departementMetricsStore.currentFormat = format;
 }
 
 const { currentFormat } = toRefs(departementMetricsStore);
