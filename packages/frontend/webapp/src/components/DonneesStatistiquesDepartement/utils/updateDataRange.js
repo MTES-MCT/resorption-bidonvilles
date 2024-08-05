@@ -4,9 +4,9 @@ import { trackEvent } from "@/helpers/matomo";
 const departementMetricsStore = useDepartementMetricsStore();
 
 export default (dateRange = null, from = null, to = null) => {
+    departementMetricsStore.currentFormat = "summary";
+    departementMetricsStore.activeTab = "summary";
     if (dateRange) {
-        departementMetricsStore.currentFormat = "summary";
-        departementMetricsStore.activeTab = "summary";
         if (dateRange === "2-annees-ecoulees") {
             from = new Date(
                 new Date().setFullYear(new Date().getFullYear() - 2)
