@@ -37,7 +37,10 @@
                     :metrics="metricsStore.filteredMetrics"
                     :collapseByDefault="metricsStore.metrics.length > 1"
                 />
-                <EvolutionNationale v-if="activeTab === 'evolution'" />
+                <EvolutionNationale
+                    v-if="activeTab === 'evolution'"
+                    class="pt-6"
+                />
             </template>
         </main>
     </ContentWrapper>

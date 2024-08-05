@@ -130,13 +130,18 @@ const options = computed(() => {
                     splitLine: {
                         show: false,
                     },
+                    min: function (value) {
+                        return value.min - value.min * 0.04;
+                    },
                 },
                 {
                     type: "value",
                     name: "Sites",
                     position: "right",
                     alignTicks: false,
-                    min: 0,
+                    min: function (value) {
+                        return value.min - value.min * 0.04;
+                    },
                     max: "dataMax",
                     axisLine: {
                         show: true,
