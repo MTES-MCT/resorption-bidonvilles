@@ -33,6 +33,12 @@ export default async (user, from: Date, to: Date): Promise<NationalEvolutionMetr
     shantytown_origins
   JOIN
     shantytowns ON shantytowns.shantytown_id = shantytown_origins.fk_shantytown
+  JOIN
+    cities AS c ON shantytowns.fk_city = c.code
+  JOIN
+    departements AS d ON c.fk_departement = d.code
+  WHERE
+    d.code NOT IN ('971', '972', '973', '974', '975', '976', '977', '978', '984', '986', '987', '988', '989')
   GROUP BY
     fk_shantytown
   HAVING
@@ -53,6 +59,12 @@ LEFT JOIN shantytowns st ON
   AND st.shantytown_id IN (SELECT fk_shantytown FROM aggregated_origins)
 LEFT JOIN aggregated_origins ao ON
   st.shantytown_id = ao.fk_shantytown
+JOIN
+  cities AS c ON st.fk_city = c.code
+JOIN
+  departements AS d ON c.fk_departement = d.code
+WHERE
+  d.code NOT IN ('971', '972', '973', '974', '975', '976', '977', '978', '984', '986', '987', '988', '989')
 GROUP BY
   ms.month
 ORDER BY
