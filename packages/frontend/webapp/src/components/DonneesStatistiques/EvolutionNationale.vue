@@ -124,14 +124,14 @@ const options = computed(() => {
                     },
                     axisLabel: {
                         formatter: (value) => {
-                            return value.toLocaleString();
+                            return Math.floor(value).toLocaleString();
                         },
                     },
                     splitLine: {
                         show: false,
                     },
                     min: function (value) {
-                        return value.min - value.min * 0.04;
+                        return Math.floor(value.min - value.min * 0.04);
                     },
                 },
                 {
@@ -140,7 +140,7 @@ const options = computed(() => {
                     position: "right",
                     alignTicks: false,
                     min: function (value) {
-                        return value.min - value.min * 0.04;
+                        return Math.floor(value.min - value.min * 0.04);
                     },
                     max: "dataMax",
                     axisLine: {
@@ -151,7 +151,7 @@ const options = computed(() => {
                     },
                     axisLabel: {
                         formatter: (value) => {
-                            return value.toLocaleString();
+                            return Math.floor(value).toLocaleString();
                         },
                     },
                     splitLine: {
