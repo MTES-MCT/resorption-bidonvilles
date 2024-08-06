@@ -7,7 +7,7 @@ import ServiceError from '#server/errors/ServiceError';
 import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeQuestion } from '#test/utils/question';
 import { serialized as fakeAnswer } from '#test/utils/answer';
-import fakeFile from '#test/utils/file';
+import { fakeFile } from '#test/utils/file';
 import { row as fakeQuestionSubscriber } from '#test/utils/questionSubscriber';
 import { fail } from 'assert';
 
@@ -17,8 +17,16 @@ chai.use(sinonChai);
 // mock all dependencies
 const sandbox = sinon.createSandbox();
 const mails = {
+    sendMail: sinon.stub(),
     sendCommunityNewAnswerForAuthor: sandbox.stub(),
     sendCommunityNewAnswerForObservers: sandbox.stub(),
+};
+const sequelize = {
+    transaction: sandbox.stub(),
+};
+const transaction = {
+    commit: sandbox.stub(),
+    rollback: sandbox.stub(),
 };
 const userModel = {
     getQuestionSubscribers: sandbox.stub(),
@@ -30,45 +38,52 @@ const answerModel = {
 const userQuestionSubscriptionModel = {
     createSubscription: sandbox.stub(),
 };
-const attachmentService = {
-    upload: sandbox.stub(),
-    serializeAttachment: sandbox.stub(),
-};
-const sequelize = {
-    sequelize: {
-        transaction: sandbox.stub(),
-    },
-};
-const transaction = {
-    commit: sandbox.stub(),
-    rollback: sandbox.stub(),
-};
+const uploadAttachments = sandbox.stub();
+const serializeAttachment = sandbox.stub();
+
 rewiremock('#server/mails/mails').withDefault(mails);
 rewiremock('#server/models/userModel').withDefault(userModel);
 rewiremock('#server/models/answerModel').withDefault(answerModel);
 rewiremock('#server/models/userQuestionSubscriptionModel').withDefault(userQuestionSubscriptionModel);
-rewiremock('#server/services/attachment').withDefault(attachmentService);
-rewiremock('#db/sequelize').with(sequelize);
+rewiremock('#db/sequelize').with({ sequelize });
+rewiremock('#server/services/attachment/upload').withDefault(uploadAttachments);
+rewiremock('#server/services/attachment/serializeAttachment').withDefault(serializeAttachment);
+rewiremock.enable();
+import createAnswer from './createAnswer';
+rewiremock.disable();
+
+const serializedAnswer = {
+    id: 1,
+    description: "Une réponse",
+    createdAt: null,
+    createdBy: fakeUser(),
+    question: fakeQuestion(),
+    attachments: [],
+};
 
 describe('services/answer.createAnswer()', () => {
-    let createAnswer;
     beforeEach(async () => {
-        sequelize.sequelize.transaction.resolves(transaction);
-        rewiremock.enable();
-        ({ default: createAnswer } = await rewiremock.module(() => import('./createAnswer')));
+        sequelize.transaction.resolves(transaction);
     });
     afterEach(() => {
-        rewiremock.disable();
         sandbox.reset();
     });
 
     it('insére la réponse en base de données', async () => {
-        await createAnswer(
-            { description: 'Une réponse' },
-            fakeQuestion({ id: 1 }),
-            fakeUser({ id: 2 }),
-            [],
-        );
+        const answerData = { description: 'Une réponse' };
+        const question =  fakeQuestion({ id: 1 });
+        const author = fakeUser({ id: 2 });
+        const files = [];
+
+        answerModel.create.resolves(1);
+        answerModel.findOne.resolves({
+            id: 1,
+            description: 'Une réponse',
+            attachments: [],
+        });
+
+        const result = await createAnswer(answerData, question, author, files);
+
         expect(answerModel.create).to.have.been.calledOnce;
         expect(answerModel.create).to.have.been.calledWith({
             description: 'Une réponse',
@@ -77,7 +92,9 @@ describe('services/answer.createAnswer()', () => {
         }, transaction);
     });
 
+
     it('commit la transaction si l\'insertion de la réponse réussit', async () => {
+        answerModel.findOne.resolves(serializedAnswer);
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
         expect(transaction.commit).to.have.been.calledOnce;
     });
@@ -125,6 +142,7 @@ describe('services/answer.createAnswer()', () => {
     });
 
     it('lance une exception commit_failed si le commit de la transaction échoue', async () => {
+        answerModel.findOne.resolves(serializedAnswer);
         const originalError = new Error('Une erreur');
         transaction.commit.rejects(originalError);
         try {
@@ -141,6 +159,7 @@ describe('services/answer.createAnswer()', () => {
 
     it('abonne l\'auteur de la réponse s\'il n\'est pas déjà abonné à la question et retourne cette information', async () => {
         answerModel.create.resolves(2);
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         const response = await createAnswer(
             { description: 'Une réponse' },
             fakeQuestion({ id: 1 }),
@@ -155,6 +174,7 @@ describe('services/answer.createAnswer()', () => {
 
     it('n\'abonne pas l\'auteur de la réponse si il est déjà abonné à la question et retourne cette information', async () => {
         answerModel.create.resolves(2);
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         const response = await createAnswer(
             { description: 'Une réponse' },
             fakeQuestion({ id: 1 }),
@@ -169,6 +189,7 @@ describe('services/answer.createAnswer()', () => {
 
     it('ignore une erreur d\'abonnement de l\'auteur de la réponse', async () => {
         answerModel.create.resolves(2);
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         userQuestionSubscriptionModel.createSubscription.rejects(new Error('une erreur'));
 
         try {
@@ -187,6 +208,7 @@ describe('services/answer.createAnswer()', () => {
         const subscriber = fakeQuestionSubscriber({ user_id: 1, is_author: true });
         const answerAuthor = fakeUser({ id: 2 });
         answerModel.create.resolves(2);
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         userModel.getQuestionSubscribers.withArgs(1).resolves([subscriber]);
         await createAnswer(
             { description: 'Une réponse' },
@@ -215,6 +237,7 @@ describe('services/answer.createAnswer()', () => {
         ];
         const answerAuthor = fakeUser({ id: 5 });
         answerModel.create.resolves(2);
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         userModel.getQuestionSubscribers.withArgs(1).resolves(subscribers);
         await createAnswer(
             { description: 'Une réponse' },
@@ -239,6 +262,7 @@ describe('services/answer.createAnswer()', () => {
     it('n\'envoie pas de notification mail à l\'auteur de la réponse', async () => {
         const subscriber = fakeQuestionSubscriber({ user_id: 2 });
         answerModel.create.resolves(2);
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         userModel.getQuestionSubscribers.withArgs(1).resolves([subscriber]);
         await createAnswer(
             { description: 'Une réponse' },
@@ -254,6 +278,7 @@ describe('services/answer.createAnswer()', () => {
         const subscriber = fakeQuestionSubscriber({ user_id: 1, is_author: true });
         const answerAuthor = fakeUser({ id: 2 });
         answerModel.create.resolves(2);
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         userModel.getQuestionSubscribers.withArgs(1).resolves([subscriber]);
         mails.sendCommunityNewAnswerForAuthor.rejects(new Error('Une erreur'));
 
@@ -272,6 +297,7 @@ describe('services/answer.createAnswer()', () => {
     it('retourne la réponse nouvelle créée', async () => {
         const answer = fakeAnswer({ id: 2 });
         answerModel.create.resolves(2);
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         answerModel.findOne.withArgs(2).resolves(answer);
         const response = await createAnswer(
             { description: answer.description },
@@ -284,6 +310,7 @@ describe('services/answer.createAnswer()', () => {
 
     it('lance une exception fetch_failed si la récupération de la réponse échoue', async () => {
         answerModel.create.resolves(2);
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         answerModel.findOne.rejects(new Error('Une erreur'));
 
         try {
@@ -305,14 +332,16 @@ describe('services/answer.createAnswer()', () => {
 
     it('fait appel au service d\'upload', async () => {
         const files = [fakeFile()];
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
-        expect(attachmentService.upload).to.have.been.calledOnce;
+        expect(uploadAttachments).to.have.been.calledOnce;
     });
 
     it('enregistre chaque fichier en tant que pièce-jointe d\'une réponse', async () => {
         const files = [fakeFile()];
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
-        expect(attachmentService.upload.getCall(0).args[0]).to.be.eql('answer');
+        expect(uploadAttachments.getCall(0).args[0]).to.be.eql('answer');
     });
 
     it('enregistre chaque fichier avec le bon identifiant de réponse', async () => {
@@ -320,43 +349,50 @@ describe('services/answer.createAnswer()', () => {
         answerModel.create.resolves(answerId);
 
         const files = [fakeFile()];
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
-        expect(attachmentService.upload.getCall(0).args[1]).to.be.eql(42);
+        expect(uploadAttachments.getCall(0).args[1]).to.be.eql(42);
     });
 
     it('enregistre chaque fichier avec le bon identifiant utilisateur', async () => {
         const files = [fakeFile()];
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser({ id: 42 }), files);
-        expect(attachmentService.upload.getCall(0).args[2]).to.be.eql(42);
+        expect(uploadAttachments.getCall(0).args[2]).to.be.eql(42);
     });
 
     it('passe bien la liste de tous les fichiers au service d\'upload', async () => {
         const files = [fakeFile(), fakeFile(), fakeFile()];
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
-        expect(attachmentService.upload.getCall(0).args[3]).to.be.eql(files);
+        expect(uploadAttachments.getCall(0).args[3]).to.be.eql(files);
     });
 
     it('enregistre chaque fichier avec la bonne transaction', async () => {
         const files = [fakeFile()];
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
-        expect(attachmentService.upload.getCall(0).args[4]).to.be.eql(transaction);
+        expect(uploadAttachments.getCall(0).args[4]).to.be.eql(transaction);
     });
 
     it('n\'appelle pas le service d\'upload si aucun fichier n\'est fourni', async () => {
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
-        expect(attachmentService.upload).to.not.have.been.called;
+        expect(uploadAttachments).to.not.have.been.called;
     });
 
     it('ne commit l\'enregistrement de la réponse qu\'une fois les fichiers uploadés', async () => {
         const files = [fakeFile()];
+        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
-        expect(transaction.commit).to.have.been.calledAfter(attachmentService.upload);
+        expect(transaction.commit).to.have.been.calledAfter(uploadAttachments);
     });
 
     it('fait un rollback si l\'upload des fichiers échoue', async () => {
         const files = [fakeFile()];
-        attachmentService.upload.rejects(new Error('une erreur'));
+        uploadAttachments.rejects(new Error('une erreur'));
         try {
+            answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
         } catch (error) {
             // ignore
@@ -369,9 +405,10 @@ describe('services/answer.createAnswer()', () => {
     it('lance une exception upload_failed si l\'upload des fichiers échoue', async () => {
         const files = [fakeFile()];
         const originalError = new Error('une erreur');
-        attachmentService.upload.rejects(originalError);
+        uploadAttachments.rejects(originalError);
 
         try {
+            answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
         } catch (error) {
             expect(error).to.be.an.instanceof(ServiceError);
