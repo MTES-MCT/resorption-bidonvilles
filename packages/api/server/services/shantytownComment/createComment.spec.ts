@@ -17,7 +17,7 @@ import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeComment } from '#test/utils/shantytownComment';
 import { serialized as fakeShantytown } from '#test/utils/shantytown';
 
-import fakeFile from '#test/utils/file';
+import {fakeFile } from '#test/utils/file';
 import { Transaction } from 'sequelize';
 
 chai.use(sinonChai);
