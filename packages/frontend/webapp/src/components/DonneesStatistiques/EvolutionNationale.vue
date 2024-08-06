@@ -133,6 +133,9 @@ const options = computed(() => {
                     min: function (value) {
                         return Math.floor(value.min - value.min * 0.04);
                     },
+                    max: function (value) {
+                        return Math.ceil(value.max + value.max * 0.02);
+                    },
                 },
                 {
                     type: "value",
@@ -142,7 +145,9 @@ const options = computed(() => {
                     min: function (value) {
                         return Math.floor(value.min - value.min * 0.04);
                     },
-                    max: "dataMax",
+                    max: function (value) {
+                        return Math.ceil(value.max + value.max * 0.04);
+                    },
                     axisLine: {
                         show: true,
                     },
