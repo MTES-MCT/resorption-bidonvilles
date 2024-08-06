@@ -134,7 +134,7 @@ const options = computed(() => {
                         return Math.floor(value.min - value.min * 0.04);
                     },
                     max: function (value) {
-                        return Math.ceil(value.max + value.max * 0.02);
+                        return Math.ceil(value.max + value.max * 0.04);
                     },
                 },
                 {
