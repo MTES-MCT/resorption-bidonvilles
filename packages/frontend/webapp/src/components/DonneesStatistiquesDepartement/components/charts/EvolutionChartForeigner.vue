@@ -11,7 +11,7 @@
                 :evolution="
                     formatStat(data.inhabitants.figures.total.evolution)
                 "
-                >Toutes origines</ChartBigFigure
+                >Habitants toutes origines</ChartBigFigure
             >
 
             <ChartBigFigure
@@ -26,7 +26,7 @@
             class="mt-6"
             :chartOptions="options"
             :chartData="chartData.datasets"
-            :graphId="`evolution-towns`"
+            :graphId="`evolution-foreigners`"
         />
     </section>
 </template>
@@ -42,7 +42,7 @@ import generateDataset from "../../utils/GraphiquesDonneesStatistiques/generateD
 
 const departementMetricsStore = useDepartementMetricsStore();
 const data = departementMetricsStore.evolution.data.inhabitants;
-console.log(data);
+
 const chartData = computed(() => {
     const datasets = [
         generateDataset(
@@ -55,9 +55,12 @@ const chartData = computed(() => {
                 symbolSize: 1,
             }
         ),
-        generateDataset("Sites", "156, 102, 82", data.towns.charts.total, {
+        generateDataset("Tous sites", "156, 102, 82", data.towns.charts.total, {
             yAxisIndex: 1,
-            lineStyle: { width: 2, color: "rgba(156, 102, 82, 1)" },
+            lineStyle: {
+                width: 2,
+                color: "rgba(156, 102, 82, 1)",
+            },
             symbolSize: 1,
         }),
     ];
@@ -68,23 +71,6 @@ const chartData = computed(() => {
     };
 });
 
-// const options = computed(() => {
-//     return {
-//         ...chartOptions.line,
-//         options: {
-//             ...chartOptions.line.options,
-//             xAxis: {
-//                 ...chartOptions.line.options.xAxis,
-//                 data: data.charts.labels,
-//                 axisTick: {
-//                     show: true,
-//                     alignWithLabel: false,
-//                     interval: 0,
-//                 },
-//             },
-//         },
-//     };
-// });
 const options = computed(() => {
     return {
         ...chartOptions.line,
@@ -155,14 +141,9 @@ const options = computed(() => {
             ],
             legend: {
                 data: [
-                    { name: "Habitants intra UE", icon: "roundRect" },
                     { name: "Habitants toutes origines", icon: "roundRect" },
                     {
-                        name: "Sites exclusivement intra UE",
-                        icon: "path://M 3 1 L 10 1 L 10 2 L 3 2 M 3 1 L 3 1",
-                    },
-                    {
-                        name: "Sites",
+                        name: "Tous sites",
                         icon: "path://M 3 1 L 10 1 L 10 2 L 3 2 M 3 1 L 3 1",
                     },
                 ],

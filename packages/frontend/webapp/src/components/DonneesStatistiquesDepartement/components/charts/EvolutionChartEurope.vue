@@ -12,14 +12,14 @@
                 :evolution="
                     formatStat(data.inhabitants.figures.european.evolution)
                 "
-                >Sites exclusivement intra UE</ChartBigFigure
+                >Habitants intra UE</ChartBigFigure
             >
 
             <ChartBigFigure
                 icon="location-dot"
-                :figure="formatStat(data.towns.figures.total.value)"
-                :evolution="formatStat(data.towns.figures.total.evolution)"
-                >Tous sites</ChartBigFigure
+                :figure="formatStat(data.towns.figures.european.value)"
+                :evolution="formatStat(data.towns.figures.european.evolution)"
+                >Sites exclusivement intra UE</ChartBigFigure
             >
         </div>
 
@@ -27,7 +27,7 @@
             class="mt-6"
             :chartOptions="options"
             :chartData="chartData.datasets"
-            :graphId="`evolution-inhabitants`"
+            :graphId="`evolution-europeans`"
         />
     </section>
 </template>
@@ -60,7 +60,7 @@ const chartData = computed(() => {
         generateDataset(
             "Sites exclusivement intra UE",
             "0, 0, 255",
-            data.towns.charts.total,
+            data.towns.charts.european,
             {
                 yAxisIndex: 1,
                 lineStyle: { width: 2, color: "rgba(0, 0, 255, 1)" },
@@ -74,24 +74,6 @@ const chartData = computed(() => {
         datasets,
     };
 });
-
-// const options = computed(() => {
-//     return {
-//         ...chartOptions.line,
-//         options: {
-//             ...chartOptions.line.options,
-//             xAxis: {
-//                 ...chartOptions.line.options.xAxis,
-//                 data: data.inhabitants.charts.labels,
-//                 axisTick: {
-//                     show: true,
-//                     alignWithLabel: false,
-//                     interval: 0,
-//                 },
-//             },
-//         },
-//     };
-// });
 
 const options = computed(() => {
     return {
@@ -164,13 +146,8 @@ const options = computed(() => {
             legend: {
                 data: [
                     { name: "Habitants intra UE", icon: "roundRect" },
-                    { name: "Habitants toutes origines", icon: "roundRect" },
                     {
                         name: "Sites exclusivement intra UE",
-                        icon: "path://M 3 1 L 10 1 L 10 2 L 3 2 M 3 1 L 3 1",
-                    },
-                    {
-                        name: "Sites",
                         icon: "path://M 3 1 L 10 1 L 10 2 L 3 2 M 3 1 L 3 1",
                     },
                 ],
