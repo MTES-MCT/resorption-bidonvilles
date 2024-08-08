@@ -82,9 +82,11 @@ export default async (user: User, departementCode: string, argFrom: Date, argTo:
             }
             if (row.origins.length === 1 && row.origins[0] === 'european') {
                 metrics.inhabitants.inhabitants.charts.european[i] += row.population_total;
+                metrics.inhabitants.towns.charts.european[i] += 1;
             }
             if (row.origins.length === 1 && row.origins[0] === 'other') {
                 metrics.inhabitants.inhabitants.charts.foreign[i] += row.population_total;
+                metrics.inhabitants.towns.charts.foreign[i] += 1;
             }
 
             // on remplit les chiffres des conditions de vie
