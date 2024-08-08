@@ -9,6 +9,14 @@ export default (listOfDateLabels: string[]):DepartementMetricsEvolution => {
         inhabitants: {
             towns: {
                 figures: {
+                    european: {
+                        value: 0,
+                        evolution: 0,
+                    },
+                    foreign: {
+                        value: 0,
+                        evolution: 0,
+                    },
                     total: {
                         value: 0,
                         evolution: 0,
@@ -28,6 +36,8 @@ export default (listOfDateLabels: string[]):DepartementMetricsEvolution => {
                 },
                 charts: {
                     labels: listOfDateLabels,
+                    european: zeros(n),
+                    foreign: zeros(n),
                     total: zeros(n),
                     less_than_10: zeros(n),
                     between_10_and_99: zeros(n),
