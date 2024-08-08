@@ -131,7 +131,7 @@ const options = computed(() => {
                         show: false,
                     },
                     min: function (value) {
-                        return Math.floor(value.min - value.min * 0.04);
+                        return Math.floor(value.min - value.min * 0.1);
                     },
                     max: function (value) {
                         return Math.ceil(value.max + value.max * 0.04);
@@ -143,7 +143,7 @@ const options = computed(() => {
                     position: "right",
                     alignTicks: false,
                     min: function (value) {
-                        return Math.floor(value.min - value.min * 0.04);
+                        return Math.floor(value.min - value.min * 0.1);
                     },
                     max: function (value) {
                         return Math.ceil(value.max + value.max * 0.04);

@@ -4,13 +4,6 @@
 
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure
-                icon="people-group"
-                :figure="formatStat(data.figures.total.value)"
-                :evolution="formatStat(data.figures.total.evolution)"
-                >Tous sites</ChartBigFigure
-            >
-
-            <ChartBigFigure
                 :img="flagEU"
                 alt="Estimation du nombre d'habitants intra UE"
                 :figure="formatStat(data.figures.european.value)"
@@ -19,11 +12,10 @@
             >
 
             <ChartBigFigure
-                :img="flagExtraCommunautaires"
-                alt="Estimation du nombre d'habitants extra UE"
-                :figure="formatStat(data.figures.foreign.value)"
-                :evolution="formatStat(data.figures.foreign.evolution)"
-                >Sites exclusivement extra UE</ChartBigFigure
+                icon="people-group"
+                :figure="formatStat(data.figures.total.value)"
+                :evolution="formatStat(data.figures.total.evolution)"
+                >Tous sites</ChartBigFigure
             >
         </div>
 
@@ -43,7 +35,6 @@ import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import LineChart from "@/components/Graphs/GraphBase.vue";
 import ChartBigFigure from "./ChartBigFigure.vue";
 import flagEU from "@/assets/img/flags/eu.png";
-import flagExtraCommunautaires from "@/assets/img/flags/extra-communautaires.png";
 import chartOptions from "../../utils/GraphiquesDonneesStatistiques/ChartOptions";
 import generateDataset from "../../utils/GraphiquesDonneesStatistiques/generateDataset";
 
