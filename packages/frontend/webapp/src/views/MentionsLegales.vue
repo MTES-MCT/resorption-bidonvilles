@@ -24,9 +24,9 @@
                         <p>
                             <Link
                                 class="underline"
-                                to="mailto:contact@resorption-bidonvilles.beta.gouv.fr"
+                                to="mailto:contact@resorption-bidonvilles.dihal.gouv.fr"
                             >
-                                contact@resorption-bidonvilles.beta.gouv.fr</Link
+                                contact@resorption-bidonvilles.dihal.gouv.fr</Link
                             >
                         </p>
                     </li>
@@ -50,7 +50,7 @@
             <div class="mt-4">
                 <p>
                     Le site
-                    <Link to="/">resorption-bidonvilles.beta.gouv.fr</Link>
+                    <Link to="/">resorption-bidonvilles.dihal.gouv.fr</Link>
                     est hébergé par la société OVH<br />Code APE 6202A<br />N°
                     TVA : FR 22 424 761 419<br />Inscrite au RCS Roubaix –
                     Tourcoing 424 761 419 00045

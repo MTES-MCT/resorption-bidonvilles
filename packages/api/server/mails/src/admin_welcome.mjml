@@ -27,7 +27,7 @@
                 </mj-button>
                 <mj-include path="common/connect_cta.mjml" />
                 <mj-text>
-                    Pour prendre en main rapidement la plateforme et vous guider dans ce rôle, merci de contacter l'équipe Résorption-bidonvilles <a href="mailto:contact@resorption-bidonvilles.beta.gouv.fr" class="link">contact@resorption-bidonvilles.beta.gouv.fr</a>.
+                    Pour prendre en main rapidement la plateforme et vous guider dans ce rôle, merci de contacter l'équipe Résorption-bidonvilles <a href="mailto:contact@resorption-bidonvilles.dihal.gouv.fr" class="link">contact@resorption-bidonvilles.dihal.gouv.fr</a>.
                 </mj-text>
                 <mj-text>N° de téléphone de la hotline : +33 1 40 81 95 39</mj-text>
             </mj-column>
