@@ -45,7 +45,7 @@ export function serialized(override: Partial<EnrichedQuestion> = {}): EnrichedQu
 }
 
 export function input(override: Partial<QuestionInput> = {}): QuestionInput {
-    const questionUpdage:QuestionInput = {
+    const questionUpdate:QuestionInput = {
         question_id: 1,
         question: 'Fake question',
         details: 'Fake Question details',
@@ -54,7 +54,7 @@ export function input(override: Partial<QuestionInput> = {}): QuestionInput {
         other_tag: null,
         updated_by: 1,
     };
-    return Object.assign(questionUpdage, override);
+    return Object.assign(questionUpdate, override);
 }
 
 export default serialized;
