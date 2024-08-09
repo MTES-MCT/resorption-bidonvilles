@@ -7,6 +7,7 @@ import ServiceError from '#server/errors/ServiceError';
 import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeQuestion } from '#test/utils/question';
 import { serialized as fakeAnswer } from '#test/utils/answer';
+import { serialized as serializedAnswer } from '#test/utils/answerSerialized'
 import { fakeFile } from '#test/utils/file';
 import { row as fakeQuestionSubscriber } from '#test/utils/questionSubscriber';
 import { fail } from 'assert';
@@ -52,15 +53,6 @@ rewiremock.enable();
 import createAnswer from './createAnswer';
 rewiremock.disable();
 
-const serializedAnswer = {
-    id: 1,
-    description: "Une réponse",
-    createdAt: null,
-    createdBy: fakeUser(),
-    question: fakeQuestion(),
-    attachments: [],
-};
-
 describe('services/answer.createAnswer()', () => {
     beforeEach(async () => {
         sequelize.transaction.resolves(transaction);
@@ -72,17 +64,14 @@ describe('services/answer.createAnswer()', () => {
     it('insére la réponse en base de données', async () => {
         const answerData = { description: 'Une réponse' };
         const question =  fakeQuestion({ id: 1 });
-        const author = fakeUser({ id: 2 });
+        const author = fakeUser();
         const files = [];
 
         answerModel.create.resolves(1);
-        answerModel.findOne.resolves({
-            id: 1,
-            description: 'Une réponse',
-            attachments: [],
-        });
+        answerModel.findOne.resolves(serializedAnswer);
 
         const result = await createAnswer(answerData, question, author, files);
+        console.log('result', result);
 
         expect(answerModel.create).to.have.been.calledOnce;
         expect(answerModel.create).to.have.been.calledWith({
