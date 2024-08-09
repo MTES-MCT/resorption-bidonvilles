@@ -52,12 +52,20 @@ export default async (answer: AnswerData, question: EnrichedQuestion, author: Us
     let enrichedAnswer: EnrichedAnswer | null = null;
     try {
         serializedAnswer = await answerModel.findOne(answerId, transaction);
-        const { attachments: answerAttachments, ...answerWithoutAttachments } = serializedAnswer;
-        const enrichedAnswerAttachments = files.length > 0 ? await Promise.all((answerAttachments).map(attachment => serializeAttachment(attachment))) : [];
-        enrichedAnswer = {
-            ...answerWithoutAttachments,
-            attachments: enrichedAnswerAttachments,
-        };
+
+        if (serializedAnswer.attachments && serializedAnswer.attachments.length > 0) {
+            const { attachments: answerAttachments, ...answerWithoutAttachments } = serializedAnswer;
+            const enrichedAnswerAttachments = files.length > 0 ? await Promise.all((answerAttachments).map(attachment => serializeAttachment(attachment))) : [];
+            enrichedAnswer = {
+                ...answerWithoutAttachments,
+                attachments: enrichedAnswerAttachments,
+            };
+        } else {
+            enrichedAnswer = {
+                ...serializedAnswer,
+                attachments: [],
+            };
+        }
     } catch (error) {
         await transaction.rollback();
         throw new ServiceError('fetch_failed', error);
