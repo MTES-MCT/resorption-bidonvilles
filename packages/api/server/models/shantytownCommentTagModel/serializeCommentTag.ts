@@ -7,5 +7,5 @@ export type CommentTag = {
 
 export default (tag: CommentTagRow): CommentTag => ({
     uid: tag.uid,
-    label: tag.tag,
+    label: tag.label,
 });
