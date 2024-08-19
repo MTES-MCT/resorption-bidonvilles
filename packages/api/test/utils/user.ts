@@ -20,7 +20,7 @@ export function serialized(override: Partial<User> = {}): AuthUser {
                 last_name: 'Untel',
                 position: 'Mock',
                 organization: {
-                    id: 1,
+                    id: 2,
                     name: 'Délégation Interministérielle à l\'Hébergement et à l\'Accès au Logement',
                 },
             },
