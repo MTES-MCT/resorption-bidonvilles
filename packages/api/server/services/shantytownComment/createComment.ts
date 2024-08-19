@@ -1,5 +1,4 @@
 import { sequelize } from '#db/sequelize';
-import { Transaction } from 'sequelize';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import shantytownModel from '#server/models/shantytownModel';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel';
@@ -19,9 +18,8 @@ import enrichCommentsAttachments from '../shantytown/_common/enrichCommentsAttac
 export default async (comment, shantytown, author): Promise<{ comments: ShantytownEnrichedComment[], numberOfWatchers: number } > => {
     // on insère le commentaire
     let commentId: number;
-    let transaction: Transaction;
+    const transaction = await sequelize.transaction();
     try {
-        transaction = await sequelize.transaction();
         // Insérer le commentaire dans la table shantytown_comments
         commentId = await shantytownCommentModel.create({
             description: comment.description,
@@ -100,10 +98,13 @@ export default async (comment, shantytown, author): Promise<{ comments: Shantyto
     let comments: { [key: number]: ShantytownRawComment[] } = [];
     try {
         comments = await shantytownModel.getComments(author, [shantytown.id]);
+        if (!comments[shantytown.id]) {
+            throw new ServiceError('fetch_failed', new Error('Impossible de retrouver les commentaires en base de données'));
+        }
         const rawComments = comments[shantytown.id];
-        commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => enrichCommentsAttachments(rawComment)));
+        commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => await enrichCommentsAttachments(rawComment)));
     } catch (error) {
-        // Ne rien faire
+        throw new ServiceError('fetch_failed', error);
     }
 
     return {
