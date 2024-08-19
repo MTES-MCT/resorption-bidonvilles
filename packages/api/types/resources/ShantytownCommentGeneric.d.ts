@@ -1,7 +1,7 @@
 import { ShantytownCommentTag } from '#root/types/resources/ShantytownCommentTag.d';
 import { CommentAuthor } from '#root/types/resources/CommentAuthor.d';
 
-type ShantytownComentAuthor = CommentAuthor & {
+export type ShantytownCommentAuthor = CommentAuthor & {
     position: string,
 };
 
@@ -11,7 +11,7 @@ export type ShantytownGenericComment = {
     createdAt: number | null,
     organization_target_name: string[],
     user_target_name: string[],
-    createdBy: ShantytownComentAuthor,
+    createdBy: ShantytownCommentAuthor,
     shantytown: number,
     tags: ShantytownCommentTag[],
 };
