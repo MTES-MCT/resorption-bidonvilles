@@ -1,4 +1,4 @@
 export type ShantytownCommentTag = {
     uid: string;
-    label: string;
+    tag: string;
 };
