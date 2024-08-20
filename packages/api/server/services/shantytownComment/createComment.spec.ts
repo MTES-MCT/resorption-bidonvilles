@@ -49,8 +49,8 @@ const fakeEnrichedComment = (): ShantytownEnrichedComment => ({
         "createdBy": fakeAuthor(),
         "shantytown":1,
         "tags": [
-          {"uid":"conditions_de_vie","label":"Conditions de vie"},
-          {"uid":"passage_sur_site","label":"Passage sur site"}
+          {"uid":"conditions_de_vie","tag":"Conditions de vie"},
+          {"uid":"passage_sur_site","tag":"Passage sur site"}
         ],
         "attachments": [
           {
