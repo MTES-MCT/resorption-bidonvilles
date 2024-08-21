@@ -431,6 +431,21 @@ const router = createRouter({
             },
         },
         {
+            path: "/schema-pluriannuel",
+            component: () =>
+                import("@/views/SchemaPluriannuelAccessibilite.vue"),
+            meta: {
+                title: "Schéma pluriannuel",
+                requirements: {
+                    auth: "none",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+            },
+        },
+        {
             path: "/activer-mon-compte/:token",
             component: () => import("@/views/ActivationCompteView.vue"),
             meta: {
