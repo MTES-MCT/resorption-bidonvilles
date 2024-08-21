@@ -1,6 +1,26 @@
 <template>
     <Layout>
-        <div class="mt-10 max-w-screen-lg mx-auto pb-16">
+        <div class="-mt-8 max-w-screen-lg mx-auto pb-16">
+            <div class="mt-4">
+                <p>
+                    <strong>Résorption-bidonvilles</strong> s'engage à rendre
+                    ses services numériques accessibles, conformément à
+                    l'article 47 de la loi n° 2005-102 du 11 février 2005.
+                </p>
+            </div>
+            <div class="mt-4">
+                <p>
+                    À cette fin, <span>Résorption-bidonvilles</span> met en
+                    œuvre la stratégie et les actions suivantes :
+                </p>
+            </div>
+            <div class="my-4">
+                <p class="ml-4">
+                    <Link class="underline" to="/schema-pluriannuel"
+                        >Schéma pluriannuel 2024-2026</Link
+                    >
+                </p>
+            </div>
             <h2 class="text-display-lg font-bold">
                 Déclaration d'accessibilité
             </h2>
@@ -44,7 +64,7 @@
             <h3 class="text-display-md font-bold mt-8">Résultat des tests</h3>
             <div class="mt-4">
                 <p>
-                    L’audit de conformité réalisé par évaluation externe révèle
+                    L'audit de conformité réalisé par évaluation externe révèle
                     que 36.67% des critères sont respectés.
                 </p>
             </div>
