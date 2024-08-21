@@ -256,10 +256,6 @@ describe.skip('services/shantytownComment.create', () => {
             });
 
             it('collecte et retourne la liste des commentaires actualisés', async () => {
-                console.log("====================================================")
-                console.log("RESPONSE", JSON.stringify(response));
-                console.log("====================================================")
-
                 expect(response).to.be.eql({
                     comments: [fakeEnrichedComment()],
                     numberOfWatchers: output.watchers.length,

@@ -112,9 +112,6 @@ function onPaste(event) {
 const error = ref(null);
 
 function formatValuesForApi(v) {
-    console.log("===================");
-    console.log(JSON.stringify(v));
-    console.log("===================");
     return {
         ...Object.keys(validationSchema.fields).reduce((acc, key) => {
             acc[key] = v[key] ? JSON.parse(JSON.stringify(v[key])) : v[key];

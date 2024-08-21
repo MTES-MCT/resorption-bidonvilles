@@ -70,8 +70,7 @@ describe('services/answer.createAnswer()', () => {
         answerModel.create.resolves(1);
         answerModel.findOne.resolves(serializedAnswer);
 
-        const result = await createAnswer(answerData, question, author, files);
-        console.log('result', result);
+        await createAnswer(answerData, question, author, files);
 
         expect(answerModel.create).to.have.been.calledOnce;
         expect(answerModel.create).to.have.been.calledWith({
