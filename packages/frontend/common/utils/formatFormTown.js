@@ -13,16 +13,16 @@ export default function (data) {
         },
         address: data.address
             ? {
-                  search: data.address || "",
-                  data: {
-                      citycode: data.city ? data.city.code : undefined,
-                      city: "",
-                      label: data.address ? data.address : undefined,
-                      coordinates: data.latitude
-                          ? [data.latitude, data.longitude]
-                          : [],
-                  },
-              }
+                search: data.address || "",
+                data: {
+                    citycode: data.city ? data.city.code : undefined,
+                    city: "",
+                    label: data.address ? data.address : undefined,
+                    coordinates: data.latitude
+                        ? [data.latitude, data.longitude]
+                        : [],
+                },
+            }
             : undefined,
         coordinates: data.latitude ? [data.latitude, data.longitude] : [],
         name: data.name || undefined,
