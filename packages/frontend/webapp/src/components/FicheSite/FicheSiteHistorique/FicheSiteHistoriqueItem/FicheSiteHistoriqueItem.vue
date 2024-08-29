@@ -14,7 +14,10 @@
 
             <article v-else v-for="item in diff" :key="item.field">
                 <p class="text-green700">{{ item.field }}</p>
-                <p class="break-words whitespace-pre-wrap">
+                <p
+                    v-if="item.fieldKey !== 'updatedWithoutAnyChange'"
+                    class="break-words whitespace-pre-wrap"
+                >
                     <span> {{ item.newValue || "non renseigné" }}, </span>
                     <span class="line-through text-G700 hover:text-G700">{{
                         item.oldValue || "non renseigné"
