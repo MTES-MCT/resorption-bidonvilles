@@ -13,6 +13,7 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
             `INSERT INTO
                     "ShantytownHistories"(
                         shantytown_id,
+                        updated_without_any_change,
                         status,
                         closing_context,
                         name,
@@ -133,6 +134,7 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
                     )
                 SELECT
                     shantytown_id,
+                    updated_without_any_change,
                     status,
                     closing_context,
                     name,
