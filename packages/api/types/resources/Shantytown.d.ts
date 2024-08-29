@@ -36,6 +36,7 @@ type BaseShantytown =
 {
     type: 'shantytown',
     id: number,
+    updatedWithoutAnyChange: boolean | null,
     name: string | null,
     status: 'open' | 'unknown' | 'closed_by_justice' | 'resorbed' | 'other',
     closingContext: string | null,
