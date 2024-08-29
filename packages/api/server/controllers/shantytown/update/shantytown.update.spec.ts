@@ -34,6 +34,7 @@ describe('townController.edit()', () => {
                 params: { id: 1 },
 
                 body: {
+                    updated_without_any_change: false,
                     name: 'Name',
                     latitude: 46.1390023,
                     longitude: -2.435937,
@@ -163,6 +164,7 @@ describe('townController.edit()', () => {
                 input.user,
                 1,
                 {
+                    updated_without_any_change: input.body.updated_without_any_change,
                     name: input.body.name,
                     latitude: input.body.latitude,
                     longitude: input.body.longitude,
