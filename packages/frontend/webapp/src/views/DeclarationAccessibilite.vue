@@ -10,7 +10,7 @@
             </div>
             <div class="mt-4">
                 <p>
-                    À cette fin, <span>Résorption-bidonvilles</span> met en
+                    À cette fin, <strong>Résorption-bidonvilles</strong> met en
                     œuvre la stratégie et les actions suivantes :
                 </p>
             </div>
@@ -65,7 +65,7 @@
             <div class="mt-4">
                 <p>
                     L'audit de conformité réalisé par évaluation externe révèle
-                    que 36.67% des critères sont respectés.
+                    que 36,67 % des critères sont respectés.
                 </p>
             </div>
             <h3 class="text-display-md font-bold mt-8">
@@ -78,7 +78,7 @@
                 <p>
                     Si vous n'arrivez pas à accéder à un contenu ou à un
                     service, vous pouvez contacter le responsable de
-                    <span>Résorption-bidonvilles</span>
+                    <strong>Résorption-bidonvilles</strong>
                     pour être orienté vers une alternative accessible ou obtenir
                     le contenu sous une autre forme.
                 </p>
