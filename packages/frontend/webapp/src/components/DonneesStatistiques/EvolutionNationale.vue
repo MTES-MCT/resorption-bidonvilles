@@ -3,8 +3,8 @@
     <section v-else>
         <section class="mb-8">
             <h1 class="font-bold text-primary text-lg">
-                Nombre de sites et d'habitants (exclusivement intra UE et + de
-                10 personnes)
+                Nombre de sites et d'habitants en France métropolitaine
+                (exclusivement intra UE et + de 10 personnes)
             </h1>
             <LineChart
                 class="mt-6"
@@ -15,8 +15,8 @@
         </section>
         <section>
             <h1 class="font-bold text-primary text-lg">
-                Nombre de sites et d'habitants (toutes origines et + de 10
-                personnes)
+                Nombre de sites et d'habitants en France métropolitaine (toutes
+                origines et + de 10 personnes)
             </h1>
             <LineChart
                 class="mt-6"
@@ -124,11 +124,17 @@ const options = computed(() => {
                     },
                     axisLabel: {
                         formatter: (value) => {
-                            return value.toLocaleString();
+                            return Math.floor(value).toLocaleString();
                         },
                     },
                     splitLine: {
                         show: false,
+                    },
+                    min: function (value) {
+                        return Math.floor(value.min - value.min * 0.1);
+                    },
+                    max: function (value) {
+                        return Math.ceil(value.max + value.max * 0.04);
                     },
                 },
                 {
@@ -136,8 +142,12 @@ const options = computed(() => {
                     name: "Sites",
                     position: "right",
                     alignTicks: false,
-                    min: 0,
-                    max: "dataMax",
+                    min: function (value) {
+                        return Math.floor(value.min - value.min * 0.1);
+                    },
+                    max: function (value) {
+                        return Math.ceil(value.max + value.max * 0.04);
+                    },
                     axisLine: {
                         show: true,
                     },
@@ -146,7 +156,7 @@ const options = computed(() => {
                     },
                     axisLabel: {
                         formatter: (value) => {
-                            return value.toLocaleString();
+                            return Math.floor(value).toLocaleString();
                         },
                     },
                     splitLine: {
