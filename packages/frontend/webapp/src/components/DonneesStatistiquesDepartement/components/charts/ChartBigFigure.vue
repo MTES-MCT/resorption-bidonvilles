@@ -1,21 +1,17 @@
 <template>
     <article>
         <div
-            class="p-2 flex justify-center rounded-md flex-col"
+            class="px-2 py-3 flex items-center justify-center space-x-2"
             :class="background"
         >
-            <div class="flex flex-col md:flex-row gap-2 items-center">
-                <div class="flex flex-row gap-2 items-center">
-                    <img v-if="img" :src="img" class="w-9 h-6" :alt="alt" />
-                    <Icon v-else class="text-xl" :icon="icon" />
-                    <span class="font-bold text-3xl">{{ figure }}</span>
-                </div>
-                <span class="font-bold text-lg" :class="color"
-                    >({{ formatedEvolution }})</span
-                >
-            </div>
-            <label class="text-sm text-center md:text-left"><slot /></label>
+            <img v-if="img" :src="img" width="40" :alt="alt" />
+            <Icon v-else class="text-xl" :icon="icon" />
+            <span class="font-bold text-3xl">{{ figure }}</span>
+            <span class="font-bold text-lg" :class="color"
+                >({{ formatedEvolution }})</span
+            >
         </div>
+        <label class="text-sm"><slot /></label>
     </article>
 </template>
 

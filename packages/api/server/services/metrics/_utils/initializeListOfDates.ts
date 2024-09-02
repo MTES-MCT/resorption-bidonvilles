@@ -19,7 +19,7 @@ export default (argFrom: Date, argTo: Date): DateObject[] => {
 
     let diff = getMonthDiff(argFrom, argTo);
     let step = 'months';
-    let format = 'MMMM YYYY';
+    let format = 'MMMM';
 
 
     if (diff < 3) {

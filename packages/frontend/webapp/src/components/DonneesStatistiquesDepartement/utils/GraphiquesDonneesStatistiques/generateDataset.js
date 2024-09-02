@@ -45,7 +45,6 @@ export default function generateDataset(label, color, data, options = {}) {
         itemStyle: {
             color: `rgba(${color}, .5)`,
         },
-        smooth: 0.2,
         ...options,
     };
 }
