@@ -21,35 +21,32 @@ function removeColumnsFrom(queryInterface, tableName, transaction) {
     ]);
 }
 
+async function addOrDeleteTableColumns(upOrDown, tableNames, queryInterface, Sequelize) {
+    const transaction = await queryInterface.sequelize.transaction();
+    try {
+        await Promise.all(
+            tableNames.map((tableName) => {
+                if (upOrDown === 'up') {
+                    return addColumnsTo(queryInterface, Sequelize, tableName, transaction);
+                } else if (upOrDown === 'down') {
+                    return removeColumnsFrom(queryInterface, tableName, transaction);
+                }
+            })
+        );
+        await transaction.commit();
+    } catch (error) {
+        await transaction.rollback();
+        throw error;
+    }
+}
+
 
 module.exports = {
     async up(queryInterface, Sequelize) {
-        const transaction = await queryInterface.sequelize.transaction();
-        try {
-            await Promise.all([
-                addColumnsTo(queryInterface, Sequelize, 'shantytowns', transaction),
-                addColumnsTo(queryInterface, Sequelize, 'ShantytownHistories', transaction),
-            ]);
-            await transaction.commit();
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
+        await addOrDeleteTableColumns('up', ['shantytowns', 'ShantytownHistories'], queryInterface, Sequelize);
     },
 
     async down(queryInterface) {
-        const transaction = await queryInterface.sequelize.transaction();
-
-        try {
-            await Promise.all([
-                removeColumnsFrom(queryInterface, 'shantytowns', transaction),
-                removeColumnsFrom(queryInterface, 'ShantytownHistories', transaction),
-            ]);
-
-            await transaction.commit();
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
+        await addOrDeleteTableColumns('down', ['shantytowns', 'ShantytownHistories'], queryInterface);
     },
 };
