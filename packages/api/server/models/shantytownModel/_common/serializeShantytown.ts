@@ -16,6 +16,7 @@ export default (town: ShantytownRow, user): Shantytown => {
     let serializedTown: Shantytown = {
         type: 'shantytown',
         id: town.id,
+        updatedWithoutAnyChange: town.updatedWithoutAnyChange,
         name: town.name,
         status: town.status,
         closingContext: town.closingContext,

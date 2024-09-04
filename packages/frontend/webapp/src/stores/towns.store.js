@@ -407,7 +407,7 @@ export const useTownsStore = defineStore("towns", () => {
             const town = await edit(townId, data);
             setTown(townId, town);
 
-            return hash.value[town.id];
+            return hash.value[townId];
         },
 
         async deleteCommentAttachment(file, { townId, commentId }) {

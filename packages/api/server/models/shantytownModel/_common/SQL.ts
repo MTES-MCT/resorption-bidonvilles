@@ -1,5 +1,6 @@
 export type ShantytownRow = {
     id: number,
+    updatedWithoutAnyChange: boolean,
     name: string | null,
     status: 'open' | 'unknown' | 'closed_by_justice' | 'resorbed' | 'other',
     closingContext: string | null
@@ -167,6 +168,7 @@ export type ShantytownRow = {
 export default {
     selection: {
         'shantytowns.shantytown_id': 'id',
+        'shantytowns.updated_without_any_change': 'updatedWithoutAnyChange',
         'shantytowns.name': 'name',
         'shantytowns.status': 'status',
         'shantytowns.closing_context': 'closingContext',

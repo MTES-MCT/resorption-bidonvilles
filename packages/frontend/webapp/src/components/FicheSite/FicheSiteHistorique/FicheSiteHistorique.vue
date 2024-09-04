@@ -80,10 +80,21 @@ function checkFilter(field) {
 }
 
 const filteredChangelog = computed(() => {
+    // On exclut au préalable les diffs mentionnant un passage de true à false sans autre changement
+    const preFilteredChangelog = town.value.changelog.map((change) => {
+        return {
+            ...change,
+            diff: removeUpdatedWithoutAnyChangeFromTrueToFalse(change.diff),
+        };
+    });
+
     if (townsStore.townCategoryFilter.length === 0) {
-        return town.value.changelog;
+        return preFilteredChangelog.filter(
+            (change) => change.diff.length !== 0
+        );
     }
-    return town.value.changelog
+
+    const returnValue = preFilteredChangelog
         .map((change) => {
             return {
                 ...change,
@@ -93,5 +104,18 @@ const filteredChangelog = computed(() => {
             };
         })
         .filter((change) => change.diff.length !== 0);
+    return returnValue;
 });
+
+function removeUpdatedWithoutAnyChangeFromTrueToFalse(diff) {
+    return diff.filter((item) => {
+        if (
+            item.fieldKey !== "updatedWithoutAnyChange" ||
+            (item.fieldKey === "updatedWithoutAnyChange" && item.newValue)
+        ) {
+            return item;
+        }
+        return;
+    });
+}
 </script>
