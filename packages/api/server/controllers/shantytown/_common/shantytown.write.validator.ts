@@ -54,8 +54,12 @@ function getStringOrNull(value: string | null | undefined): string | null {
     return value;
 }
 
-function getNumberOrNull(value: string | null | undefined): number | null {
-    return (value || value == '0') ? parseInt(value, 10) : null;
+function getNumberOrNull(value: string | number | null | undefined): number | null {
+    if (value === undefined || value === null) {
+        return null;
+    }
+    const stringValue = value.toString();
+    return stringValue !== '' ? parseInt(stringValue, 10) : null;
 }
 
 export default mode => ([
