@@ -1,8 +1,8 @@
-import ShantytownComment from '#server/models/shantytownCommentModel/ShantytownComment.d';
 import { Actor } from '#server/models/shantytownActorModel/serializeActor';
 import { IncomingTown } from '#server/models/incomingTownsModel/findAll';
 import { Diff } from '#server/models/shantytownModel/_common/getDiff';
 import { LivingConditions } from '#server/models/shantytownModel/_common/livingConditions/serializeLivingConditions';
+import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
 import { ShantytownAction } from '#root/types/resources/Action.d';
 import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
 
@@ -114,7 +114,7 @@ type BaseShantytown =
         label: string,
     },
     socialOrigins: SocialOrigin[],
-    comments: ShantytownComment[],
+    comments: ShantytownRawComment[],
     actors: Actor[],
     actions: ShantytownAction[],
     closingSolutions: ShantytownClosingSolution[],

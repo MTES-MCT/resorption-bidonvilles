@@ -1,28 +1,25 @@
-
+import { sequelize } from '#db/sequelize';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import shantytownModel from '#server/models/shantytownModel';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel';
 import attachmentService from '#server/services/attachment';
-import mattermostUtils from '#server/utils/mattermost';
-
 import userModel from '#server/models/userModel';
+
+
+import mattermostUtils from '#server/utils/mattermost';
 import mails from '#server/mails/mails';
 import ServiceError from '#server/errors/ServiceError';
-import { sequelize } from '#db/sequelize';
+import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
+import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
 
-/**
- * @param {Service_ShantytownComment_Create_CommentData} comment Commentaire
- * @param {Model_Shantytown} shantytown site rattaché au commentaire
- * @param {Model_User} author Auteur du commentaire
- *
- * @returns {Array.<Model_ShantytownComment>}
- */
-export default async (comment, shantytown, author) => {
+import { ShantytownCommentTag } from '#root/types/resources/ShantytownCommentTag.d';
+import enrichCommentsAttachments from '../shantytown/_common/enrichCommentsAttachments';
+
+export default async (comment, shantytown, author): Promise<{ comments: ShantytownEnrichedComment[], numberOfWatchers: number } > => {
     // on insère le commentaire
-    let commentId;
-    let transaction;
+    let commentId: number;
+    const transaction = await sequelize.transaction();
     try {
-        transaction = await sequelize.transaction();
         // Insérer le commentaire dans la table shantytown_comments
         commentId = await shantytownCommentModel.create({
             description: comment.description,
@@ -34,7 +31,7 @@ export default async (comment, shantytown, author) => {
         const { tags } = comment;
         if (tags.length > 0) {
             // Enregistrement des tags dans la table shantytown_comment_tags
-            await shantytownCommentTagModel.create(commentId, tags.map(tag => tag.uid), transaction);
+            await shantytownCommentTagModel.create(commentId, tags.map((tag: ShantytownCommentTag) => tag.uid), transaction);
         }
     } catch (error) {
         await transaction.rollback();
@@ -72,14 +69,6 @@ export default async (comment, shantytown, author) => {
         // ignore
     }
 
-    // on retourne la liste mise à jour des commentaires du site
-    let comments;
-    try {
-        comments = await shantytownModel.getComments(author, [shantytown.id]);
-    } catch (error) {
-        throw new ServiceError('fetch_failed', error);
-    }
-
     // on tente d'envoyer une notification mail à tous les intervenants du site
     let watchers;
     try {
@@ -103,8 +92,23 @@ export default async (comment, shantytown, author) => {
         // ignore
     }
 
+    let commentsWithEnrichedAttachments = [];
+
+    // on retourne la liste mise à jour des commentaires du site
+    let comments: { [key: number]: ShantytownRawComment[] } = [];
+    try {
+        comments = await shantytownModel.getComments(author, [shantytown.id]);
+        if (!comments[shantytown.id]) {
+            throw new ServiceError('fetch_failed', new Error('Impossible de retrouver les commentaires en base de données'));
+        }
+        const rawComments = comments[shantytown.id];
+        commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => await enrichCommentsAttachments(rawComment)));
+    } catch (error) {
+        throw new ServiceError('fetch_failed', error);
+    }
+
     return {
-        comments: comments[shantytown.id] || [],
+        comments: commentsWithEnrichedAttachments,
         numberOfWatchers: watchers.length,
     };
 };

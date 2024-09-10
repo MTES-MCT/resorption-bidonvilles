@@ -1,7 +1,8 @@
 import questionService from '#server/services/question';
+import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 
 export default async (req, res, next) => {
-    let question;
+    let question: EnrichedQuestion;
 
     try {
         question = await questionService.createQuestion(
@@ -10,7 +11,7 @@ export default async (req, res, next) => {
             req.files,
         );
     } catch (error) {
-        let message;
+        let message: string;
         switch (error && error.code) {
             case 'insert_failed':
                 message = 'Votre question n\'a pas pu être enregistrée.';

@@ -1,25 +1,20 @@
-import questionModel from '#server/models/questionModel';
+import { Transaction } from 'sequelize';
 import ServiceError from '#server/errors/ServiceError';
-import { Answer } from '#root/types/resources/Answer.d';
-import { Question } from '#root/types/resources/Question.d';
+import enrichQuestion from '#server/services/question/common/enrichQuestion';
+import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 
-export default async (questionId: number): Promise<Question> => {
-    let question: Question;
-    let answers: { [key: number]: Answer[] };
+export default async (questionId: number, transaction?: Transaction): Promise<EnrichedQuestion> => {
+    let enrichedQuestion: EnrichedQuestion | null = null;
+
     try {
-        question = await questionModel.findOne(questionId);
-        answers = await questionModel.getAnswers([questionId]);
+        enrichedQuestion = await enrichQuestion(questionId, transaction);
+
+        if (enrichedQuestion === null) {
+                throw new ServiceError('fetch_failed', new Error('Impossible de retrouver la question en base de données'));
+        }
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
 
-    if (question === null) {
-        throw new ServiceError('fetch_failed', new Error('Impossible de retrouver la question en base de données'));
-    }
-
-    if (answers[questionId] !== undefined) {
-        question.answers = answers[questionId];
-    }
-
-    return question;
+    return enrichedQuestion;
 };

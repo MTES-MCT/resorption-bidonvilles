@@ -1,7 +1,6 @@
-import { File } from '#server/models/attachmentModel/File.d';
-import { Answer } from '#root/types/resources/Answer.d';
+import { EnrichedAnswer } from '#root/types/resources/AnswerEnriched.d';
 
-export type Question = {
+export type GenericQuestion = {
     id: number,
     question: string,
     details: string,
@@ -34,8 +33,7 @@ export type Question = {
             abbreviation: string,
         },
     } | null,
-    answers: Answer[],
-    attachments: File[],
+    answers: EnrichedAnswer[],
 };
 
 export type QuestionTag = {

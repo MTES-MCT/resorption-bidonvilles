@@ -2,7 +2,7 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import { rewiremock } from '#test/rewiremock';
-import fakeFile from '#test/utils/file';
+import { fakeFile } from '#test/utils/file';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 
 const { expect } = chai;
@@ -34,6 +34,7 @@ rewiremock.passBy('@aws-sdk/client-s3');
 
 describe.skip('services/attachment/upload', () => {
     let upload;
+
     const sharpStubs = {
         resize: null,
         toBuffer: null,
@@ -199,7 +200,7 @@ describe.skip('services/attachment/upload', () => {
 
         const response = await upload('shantytown_comment', 1, 1, [fakeFile(), fakeFile()]);
         expect(response, 'La promesse retournée n\'était pas un Promise.all').to.be.an('array');
-        expect(response.length, 'Certaines promesses sont manquantes').to.be.eql(6);
-        expect(response, 'La réponse des promesses n\'est pas correcte').to.be.eql([true, true, false, true, true, false]);
+        expect(response.length, 'Certaines promesses sont manquantes').to.be.eql(4);
+        expect(response, 'La réponse des promesses n\'est pas correcte').to.be.eql([true, false, true, false]);
     });
 });

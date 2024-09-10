@@ -1,3 +1,5 @@
+import { fakeFile } from "./file";
+
 export function serialized(override = {}) {
     const defaultObj = {
         id: 1,
@@ -7,18 +9,18 @@ export function serialized(override = {}) {
         user_target_name: [],
         createdBy: {
             id: 2,
-            firstName: 'Jean',
-            lastName: 'Dupont',
+            first_name: 'Jean',
+            last_name: 'Dupont',
             position: 'Mock',
-            organization: 'DIHAL',
-            organizationId: 2,
+            organization: 'Délégation Interministérielle à l\'Hébergement et à l\'Accès au Logement',
+            organization_id: 2,
         },
         shantytown: 1,
         tags: [
-            { uid: 'conditions_de_vie', label: 'Conditions de vie', type: 'ordinaire' },
-            { uid: 'passage_sur_site', label: 'Passage sur site', type: 'ordinaire' },
+            { uid: 'conditions_de_vie', tag: 'Conditions de vie', type: 'ordinaire' },
+            { uid: 'passage_sur_site', tag: 'Passage sur site', type: 'ordinaire' },
         ],
-        files: [],
+        files: [fakeFile()],
         targets: {
             users: [{ id: 1 }],
             organizations: [],

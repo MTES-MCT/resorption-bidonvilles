@@ -1,10 +1,9 @@
-import config from '#server/config';
 import fromMimeToExtension from '#server/utils/fromMimeToExtension';
-import { File } from './File.d';
+import getSignedUrl from './getSignedUrl';
+import { Attachment } from './Attachment.d';
 
-export default (attachment: string): File => {
+export default async (attachment: string): Promise<Attachment> => {
     const [id, key, previewKey, original_name, mimetype, size, created_by] = attachment.split('@.;.@');
-    const baseUrl = `${config.S3.publicEndpoint}/${config.S3.bucket}`;
 
     return {
         state: 'uploaded',
@@ -12,8 +11,8 @@ export default (attachment: string): File => {
         name: original_name,
         size: parseInt(size, 10),
         urls: {
-            original: `${baseUrl}/${key}`,
-            preview: previewKey ? `${baseUrl}/${previewKey}` : null,
+            original: key ? await getSignedUrl(key) : null,
+            preview: previewKey ? await getSignedUrl(previewKey) : null,
         },
         extension: fromMimeToExtension[mimetype] || 'inconnu',
         created_by,

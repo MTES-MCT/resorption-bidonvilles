@@ -1,6 +1,4 @@
-import { File } from '#server/models/attachmentModel/File.d';
-
-export type Answer = {
+export type GenericAnswer = {
     id: number,
     description: string,
     createdAt: number | null,
@@ -15,5 +13,4 @@ export type Answer = {
         organization_id: number,
     },
     question: number,
-    attachments: File[],
 };

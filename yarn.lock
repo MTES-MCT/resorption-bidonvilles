@@ -681,6 +681,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@aws-sdk/util-format-url@npm:3.598.0":
+  version: 3.598.0
+  resolution: "@aws-sdk/util-format-url@npm:3.598.0"
+  dependencies:
+    "@aws-sdk/types": 3.598.0
+    "@smithy/querystring-builder": ^3.0.1
+    "@smithy/types": ^3.1.0
+    tslib: ^2.6.2
+  checksum: 2d9f34284ee0fc4af6fc8ae205968a97ab494b4e38c6e7a4b40a169776fa03bdb0f5d94682803b54fac2847a875e7bbd53cecfeca37228b8168b0f04114b04db
+  languageName: node
+  linkType: hard
+
 "@aws-sdk/util-locate-window@npm:^3.0.0":
   version: 3.568.0
   resolution: "@aws-sdk/util-locate-window@npm:3.568.0"
@@ -4867,6 +4879,7 @@ __metadata:
   resolution: "@resorptionbidonvilles/api@workspace:packages/api"
   dependencies:
     "@aws-sdk/client-s3": ^3.32.0
+    "@aws-sdk/s3-request-presigner": ^3.598.0
     "@sentry/node": ^7.54.0
     "@sentry/tracing": ^7.54.0
     "@supercharge/promise-pool": ^2.4.0
@@ -27623,6 +27636,13 @@ __metadata:
   version: 2.7.0
   resolution: "tslib@npm:2.7.0"
   checksum: 1606d5c89f88d466889def78653f3aab0f88692e80bb2066d090ca6112ae250ec1cfa9dbfaab0d17b60da15a4186e8ec4d893801c67896b277c17374e36e1d28
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.6.2":
+  version: 2.6.3
+  resolution: "tslib@npm:2.6.3"
+  checksum: 74fce0e100f1ebd95b8995fbbd0e6c91bdd8f4c35c00d4da62e285a3363aaa534de40a80db30ecfd388ed7c313c42d930ee0eaf108e8114214b180eec3dbe6f5
   languageName: node
   linkType: hard
 
