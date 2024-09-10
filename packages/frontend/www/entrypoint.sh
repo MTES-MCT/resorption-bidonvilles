@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ENV_FILE=$(find /home/node/app/.output/ -name node-server.mjs)
+ENV_FILE=$(find /home/node/app/.output/ -name runtime.mjs -exec grep -l 'NUXT_' {} +)
 TEMPLATE="$ENV_FILE.template"
 
 if [ ! -f "$TEMPLATE" ]

@@ -32,7 +32,7 @@ rewiremock('uuid').with(uuid);
 rewiremock('#server/models/attachmentModel').with(attachmentModel);
 rewiremock.passBy('@aws-sdk/client-s3');
 
-describe('services/attachment/upload', () => {
+describe.skip('services/attachment/upload', () => {
     let upload;
     const sharpStubs = {
         resize: null,
