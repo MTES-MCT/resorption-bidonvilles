@@ -11,6 +11,7 @@
                     withoutMargin
                     :allowFreeSearch="true"
                     name="search"
+                    @update:modelValue="handleEmit"
                 />
                 <Button size="sm" type="button">Rechercher</Button>
             </div>
@@ -68,6 +69,8 @@ const showReset = computed(() => {
 const isNotOnDefaultFilter = computed(() => {
     return !userStore.isMyLocation(values.search);
 });
+
+const handleEmit = (value) => setFieldValue("search", value);
 
 function resetSearch() {
     setFieldValue("search", userStore.defaultLocationFilter);
