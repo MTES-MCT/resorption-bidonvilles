@@ -43,8 +43,9 @@ export function create(data) {
     return axios.post("/organizations", data);
 }
 
-export function get(id) {
-    return axios.get(`/organizations/${encodeURI(id)}`);
+export function get(id, activeOnly) {
+    const query = activeOnly ? "?activeOnly=true" : "";
+    return axios.get(`/organizations/${encodeURI(id)}${query}`);
 }
 
 export function list() {

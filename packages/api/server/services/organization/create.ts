@@ -55,7 +55,7 @@ export default async (createdBy: number, input: OrganizationCreateInput): Promis
             intervention_areas: input.intervention_areas,
         }, transaction);
 
-        organization = await findOrganizationById(organizationId, transaction);
+        organization = await findOrganizationById(organizationId, false, transaction);
         await transaction.commit();
     } catch (error) {
         await transaction.rollback();

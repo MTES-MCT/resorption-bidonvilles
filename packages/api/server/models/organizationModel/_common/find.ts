@@ -86,7 +86,9 @@ export default async (options: OrganizationFindOptions = {}, transaction?: Trans
         LEFT JOIN roles_regular AS user_roles_regular ON users.fk_role_regular = user_roles_regular.role_id
         LEFT JOIN roles_admin AS user_roles_admin ON users.fk_role = user_roles_admin.role_id
         LEFT JOIN users_with_expertise_topics AS user_expertise_topics ON users.user_id = user_expertise_topics.fk_user
-        ${where.length > 0 ? `WHERE (${where.join(') (')})` : ''}
+        ${where.length > 0
+        ? `WHERE ${where.map((condition, index) => (index === 0 ? condition : `AND ${condition}`)).join(' ')}`
+        : ''}
         ORDER BY organizations.name, users.last_name, users.first_name
         `,
         {
