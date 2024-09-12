@@ -11,7 +11,7 @@ export default [
         .custom(async (value, { req }) => {
             let organization: Organization;
             try {
-                organization = await findOneById(value);
+                organization = await findOneById(value, req.query.activeOnly === 'true');
             } catch (error) {
                 throw new Error('Une erreur est survenue lors de la lecture en base de données');
             }

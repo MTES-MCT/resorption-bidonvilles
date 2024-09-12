@@ -58,7 +58,6 @@ import { useNotificationStore } from "@/stores/notification.store";
 import * as locationsApi from "@/api/locations.api";
 import { report } from "@/api/towns.api";
 import { trackEvent } from "@/helpers/matomo";
-import router from "@/helpers/router";
 import isDeepEqual from "@/utils/isDeepEqual";
 import backOrReplace from "@/utils/backOrReplace";
 import formatFormTown from "@common/utils/formatFormTown";
@@ -341,13 +340,13 @@ defineExpose({
         /* eslint-enable no-unused-vars */
 
         if (
+            // Cas où l'on souhaite indiquer qu'un site est à jour sans modifier de donnée
             mode.value === "edit" &&
             isDeepEqual(originalValuesRest, formattedValuesRest)
         ) {
-            router.replace("#erreurs");
-            error.value =
-                "Modification impossible : aucun champ n'a été modifié";
-            return;
+            formattedValues.updated_without_any_change = true;
+        } else {
+            formattedValues.updated_without_any_change = false;
         }
 
         error.value = null;

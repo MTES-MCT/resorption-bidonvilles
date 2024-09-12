@@ -41,6 +41,9 @@ export default (oldVersion, newVersion): Diff[] => {
     };
 
     let toDiff = {
+        updatedWithoutAnyChange: {
+            label: 'Site mis à jour sans modification',
+        },
         name: {
             label: 'Appellation du site',
         },

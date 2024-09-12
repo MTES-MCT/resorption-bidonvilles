@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 import actionModel from '#server/models/actionModel';
-import { ActionCommentRow } from '#server/models/actionModel/fetchComments/fetchComments';
+import { ActionRowComment } from '#server/models/actionModel/fetchComments/ActionCommentRow.d';
 
 import { row as fakeActionCommentRow } from '#test/utils/actionComment';
 import { serialized as fakeUser } from '#test/utils/user';
@@ -16,7 +16,7 @@ chai.use(sinonChai);
 
 describe('services/action.getActionReport()', () => {
     const user = fakeUser();
-    const actionCommentRow: ActionCommentRow = fakeActionCommentRow();
+    const actionCommentRow: ActionRowComment = fakeActionCommentRow();
     let stubs;
 
     beforeEach(() => {

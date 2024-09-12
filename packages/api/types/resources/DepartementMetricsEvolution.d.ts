@@ -2,14 +2,6 @@ export type DepartementMetricsEvolution = {
     inhabitants: {
         towns: {
             figures: {
-                european: {
-                    value: number,
-                    evolution: number,
-                },
-                foreign: {
-                    value: number,
-                    evolution: number,
-                },
                 total: {
                     value: number,
                     evolution: number,
@@ -29,8 +21,6 @@ export type DepartementMetricsEvolution = {
             },
             charts: {
                 labels: string[],
-                european: number[],
-                foreign: number[],
                 total: number[],
                 less_than_10: number[],
                 between_10_and_99: number[],

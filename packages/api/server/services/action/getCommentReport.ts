@@ -3,9 +3,9 @@ import JSONToCSV from 'json2csv';
 import ServiceError from '#server/errors/ServiceError';
 import permissionUtils from '#server/utils/permission';
 import actionModel from '#server/models/actionModel';
-import { ActionCommentRow } from '#server/models/actionModel/fetchComments/fetchComments';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Nation } from '#server/models/geoModel/Location.d';
+import { ActionRowComment } from '#server/models/actionModel/fetchComments/ActionCommentRow.d';
 
 export default async (user: AuthUser): Promise<string> => {
     const nationalLevel: Nation = {
@@ -16,7 +16,7 @@ export default async (user: AuthUser): Promise<string> => {
         throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission d\'exporter les commentaires'));
     }
 
-    let comments: ActionCommentRow[];
+    let comments: ActionRowComment[];
     try {
         comments = await actionModel.fetchComments();
     } catch (error) {

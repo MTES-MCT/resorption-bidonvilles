@@ -94,7 +94,7 @@ describe('services/organization/create', () => {
         const org = fakeOrganization({ id: 78 });
 
         createOrganization.resolves(42);
-        findOrganizationById.withArgs(42, transaction).resolves(org);
+        findOrganizationById.withArgs(42, false, transaction).resolves(org);
         const response = await create(42, {
             name: 'Test',
             abbreviation: 'TST',

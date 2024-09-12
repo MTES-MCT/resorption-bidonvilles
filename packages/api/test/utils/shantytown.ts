@@ -96,6 +96,7 @@ export function serialized(location: City = defaultLocation, override = {}): Sha
     const shantytown: Shantytown = {
         type: 'shantytown',
         id: 1,
+        updatedWithoutAnyChange: false,
         city: {
             ...city,
             latitude: 0,

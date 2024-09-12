@@ -6,6 +6,7 @@ export default async (req, res, next) => {
             req.user,
             req.params.id,
             {
+                updated_without_any_change: req.body.updated_without_any_change,
                 name: req.body.name,
                 latitude: req.body.latitude,
                 longitude: req.body.longitude,

@@ -3,6 +3,7 @@ import { sequelize } from '#db/sequelize';
 /**
  * @typedef {Object} Model_ShantytownComment_Data
  * @property {String}  description   Contenu du commentaire
+ * @property {Object}  targets       Cibles du commentaire
  * @property {Number}  fk_shantytown `shantytown_id` du site rattaché au commentaire
  * @property {Number}  created_by    `user_id` de l'auteur du commentaire
  */

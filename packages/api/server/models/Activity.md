@@ -20,7 +20,7 @@
     },
 
     // for all actions of entity 'comment' (not high covid only)
-    comment: ShantytownComment,
+    comment: ShantytownRawComment,
 
     // for all actions of entity 'comment' (high covid only)
     highCovidComment: {

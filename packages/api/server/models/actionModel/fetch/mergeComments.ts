@@ -1,9 +1,7 @@
 import { ActionHash } from './hashActions';
-import { ActionCommentRow } from '../fetchComments/fetchComments';
+import { ActionRowComment } from '../fetchComments/ActionCommentRow.d';
 import serializeComment from '../fetchComments/serializeComment';
 
-export default function mergeComments(hash: ActionHash, comments: ActionCommentRow[]): void {
-    comments.forEach((row) => {
-        hash[row.action_id].comments.push(serializeComment(row));
-    });
+export default function mergeComments(hash: ActionHash, comments: ActionRowComment[]): void {
+    comments.forEach(row => hash[row.action_id].comments.push(serializeComment(row)));
 }

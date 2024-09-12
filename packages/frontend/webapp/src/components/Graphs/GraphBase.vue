@@ -1,5 +1,5 @@
 <template>
-    <v-chart :option="options" :id="graphId" class="h-32 md:h-80 w-full" />
+    <v-chart :option="options" :id="graphId" class="h-80 w-full" />
 </template>
 
 <script setup>

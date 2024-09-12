@@ -1,12 +1,19 @@
-import { Express } from 'express';
+import { Readable } from 'stream';
 
-export default (override: Partial<Express.Multer.File> = {}) => {
+const fakeFile = (override: Partial<Express.Multer.File> = {}) => {
     const f = {
-        originalname: 'je suis une image.png',
-        mimetype: 'image/png',
-        size: 1024,
-        buffer: 'test',
-    };
+          fieldname: 'file1',
+          originalname: 'test1.txt',
+          encoding: '7bit',
+          mimetype: 'text/plain',
+          size: 1024,
+          stream: new Readable(),
+          destination: '/uploads',
+          filename: 'test1.txt',
+          path: '/uploads/test1.txt',
+          buffer: Buffer.from('This is a test file'),
+        }
+        return { ...f, ...override };
+    }
 
-    return { ...f, ...override };
-};
+export { fakeFile };

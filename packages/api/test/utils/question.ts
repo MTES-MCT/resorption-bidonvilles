@@ -1,8 +1,8 @@
 import QuestionInput from '#server/models/questionModel/QuestionInput.d';
-import { Question } from '#root/types/resources/Question.d';
+import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 
-export function serialized(override: Partial<Question> = {}): Question {
-    const defaultObj:Question = {
+export function serialized(override: Partial<EnrichedQuestion> = {}): EnrichedQuestion {
+    const defaultObj:EnrichedQuestion = {
         id: 1,
         question: 'Comment résorber les bidonvilles ?',
         details: 'J\'aimerais savoir comment accompagner les habitants vers un logement',
@@ -45,7 +45,7 @@ export function serialized(override: Partial<Question> = {}): Question {
 }
 
 export function input(override: Partial<QuestionInput> = {}): QuestionInput {
-    const questionUpdage:QuestionInput = {
+    const questionUpdate:QuestionInput = {
         question_id: 1,
         question: 'Fake question',
         details: 'Fake Question details',
@@ -54,7 +54,7 @@ export function input(override: Partial<QuestionInput> = {}): QuestionInput {
         other_tag: null,
         updated_by: 1,
     };
-    return Object.assign(questionUpdage, override);
+    return Object.assign(questionUpdate, override);
 }
 
 export default serialized;

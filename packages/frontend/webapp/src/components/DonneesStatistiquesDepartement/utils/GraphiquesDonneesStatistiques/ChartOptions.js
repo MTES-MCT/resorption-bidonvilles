@@ -79,6 +79,9 @@ export default {
                 bottom: "0",
                 containLabel: true,
             },
+            stroke: {
+                curve: "smooth",
+            },
             xAxis: {
                 type: "category",
                 axisLabel: {

@@ -1,3 +1,4 @@
+import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched';
 import shantytownCommentService from '#server/services/shantytownComment';
 import can from '#server/utils/permission/can';
 
@@ -8,6 +9,7 @@ const ERROR_RESPONSES = {
     fetch_failed: { code: 500, message: 'Votre commentaire a bien été enregistré mais la liste des commentaires n\'a pas pu être actualisée.' },
     undefined: { code: 500, message: 'Une erreur inconnue est survenue.' },
 };
+// TODO: typer req, res et next
 export default async (req, res, next) => {
     if (!can(req.user).do('create', 'shantytown_comment').on(req.body.shantytown)) {
         return res.status(403).send({
@@ -15,7 +17,7 @@ export default async (req, res, next) => {
         });
     }
 
-    let comments;
+    let comments: { comments: ShantytownEnrichedComment[], numberOfWatchers: number };
     try {
         comments = await shantytownCommentService.createComment(
             {
