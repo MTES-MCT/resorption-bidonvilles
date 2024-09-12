@@ -191,7 +191,7 @@ export const useDirectoryStore = defineStore("directory", () => {
         organizations,
         filteredOrganizations,
         filters,
-        async get(requestedId) {
+        async get(requestedId, activeOnly = false) {
             const index = organizations.value.findIndex(
                 ({ id }) => id === requestedId
             );
@@ -200,7 +200,9 @@ export const useDirectoryStore = defineStore("directory", () => {
             }
 
             try {
-                const response = await get(requestedId);
+                const response = activeOnly
+                    ? await get(requestedId, true)
+                    : await get(requestedId);
                 return enrichOrganization(response);
             } catch (error) {
                 throw error.user_message
