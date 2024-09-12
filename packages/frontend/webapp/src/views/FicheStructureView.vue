@@ -76,7 +76,10 @@ async function load() {
     isLoading.value = true;
     error.value = null;
     try {
-        organization.value = await directoryStore.get(organizationId.value);
+        organization.value = await directoryStore.get(
+            organizationId.value,
+            true
+        );
 
         if (organization.value) {
             setDocumentTitle(
