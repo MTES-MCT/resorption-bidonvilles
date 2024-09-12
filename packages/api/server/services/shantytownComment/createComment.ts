@@ -102,7 +102,9 @@ export default async (comment, shantytown, author): Promise<{ comments: Shantyto
             throw new ServiceError('fetch_failed', new Error('Impossible de retrouver les commentaires en base de données'));
         }
         const rawComments = comments[shantytown.id];
-        commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => await enrichCommentsAttachments(rawComment)));
+        commentsWithEnrichedAttachments = await Promise.all(
+            rawComments.map(rawComment => enrichCommentsAttachments(rawComment)),
+        );
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
