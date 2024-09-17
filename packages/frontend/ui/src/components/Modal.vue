@@ -11,7 +11,7 @@
                     <slot name="header">
                         <div class="pt-10 px-10 pb-4">
                             <div class="flex justify-between items-center border-b-1 border-G400">
-                                <h1 class="text-display-md font-bold text-primary">
+                                <h1 :class="`text-display-md font-bold text-primary ${titleClass}`" >
                                     <slot name="title" />
                                 </h1>
                                 <div>
@@ -63,6 +63,10 @@ const props = defineProps({
     closeWhenClickOutside: {
         type: Boolean,
         default: false,
+    },
+    titleClass: {
+        type: String,
+        required: false,
     },
 });
 

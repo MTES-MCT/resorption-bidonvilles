@@ -24,6 +24,7 @@ import getActionObservers from './getActionObservers';
 import isTracked from './isTracked';
 import listExport from './listExport';
 import reactivate from './reactivate';
+import refuse from './refuse';
 import resetInactivityAlertSentAt from './resetInactivityAlertSentAt';
 import setExpertiseTopics from './setExpertiseTopics';
 import setInactivityAlertSentAt from './setInactivityAlertSentAt';
@@ -33,6 +34,7 @@ import upgradeLocalAdmin from './upgradeLocalAdmin';
 
 export default {
     autocomplete,
+    refuse,
     create,
     deactivate,
     delete: deleteUser,

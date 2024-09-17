@@ -943,7 +943,7 @@ export default (closingSolutions: ClosingSolution[]) => {
             width: COLUMN_WIDTHS.MEDIUM,
         },
         justiceChallenged: {
-            title: 'Contentieux',
+            title: 'Appel en cours',
             data: (shantytown: Shantytown) => {
                 if (!('justiceChallenged' in shantytown)) {
                     return null;
@@ -960,6 +960,133 @@ export default (closingSolutions: ClosingSolution[]) => {
                 return null;
             },
             width: COLUMN_WIDTHS.SMALL,
+        },
+        evacuationUnderTimeLimit: {
+            title: 'Arrêté d\'évacuation en cours',
+            data: (shantytown: Shantytown) => {
+                if (!('evacuationUnderTimeLimit' in shantytown)) {
+                    return null;
+                }
+
+                if (shantytown.evacuationUnderTimeLimit === true) {
+                    return 'oui';
+                }
+
+                if (shantytown.evacuationUnderTimeLimit === false) {
+                    return 'non';
+                }
+
+                return shantytown.evacuationUnderTimeLimit;
+            },
+            width: COLUMN_WIDTHS.SMALL,
+        },
+        administrativeOrderEvacuationAt: {
+            title: 'Date d\'évacuation',
+            data: (shantytown: Shantytown) => {
+                if (!('administrativeOrderEvacuationAt' in shantytown)) {
+                    return null;
+                }
+                return (shantytown.administrativeOrderEvacuationAt ? new Date(shantytown.administrativeOrderEvacuationAt * 1000) : '');
+            },
+            width: COLUMN_WIDTHS.SMALL,
+        },
+        administrativeOrderDecisionRenderedBy: {
+            title: 'Qui a pris l\'arrêté',
+            data: (shantytown: Shantytown) => {
+                if (!('administrativeOrderDecisionRenderedBy' in shantytown)) {
+                    return null;
+                }
+                return shantytown.administrativeOrderDecisionRenderedBy;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        administrativeOrderDecisionAt: {
+            title: 'Date de l\'arrêté',
+            data: (shantytown: Shantytown) => {
+                if (!('administrativeOrderDecisionAt' in shantytown)) {
+                    return null;
+                }
+                return (shantytown.administrativeOrderDecisionAt ? new Date(shantytown.administrativeOrderDecisionAt * 1000) : '');
+            },
+            width: COLUMN_WIDTHS.SMALL,
+        },
+        insalubrityOrder: {
+            title: 'Arrêté d\'insalubrité RHI bidonville en cours',
+            data: (shantytown: Shantytown) => {
+                if (!('insalubrityOrder' in shantytown)) {
+                    return null;
+                }
+
+                if (shantytown.insalubrityOrder === true) {
+                    return 'oui';
+                }
+
+                if (shantytown.insalubrityOrder === false) {
+                    return 'non';
+                }
+
+                return shantytown.insalubrityOrder;
+            },
+            width: COLUMN_WIDTHS.SMALL,
+        },
+        insalubrityOrderDisplayed: {
+            title: 'Affichage de l\'arrêté d\'insalubrité',
+            data: (shantytown: Shantytown) => {
+                if (!('insalubrityOrderDisplayed' in shantytown)) {
+                    return null;
+                }
+
+                if (shantytown.insalubrityOrderDisplayed === true) {
+                    return 'oui';
+                }
+
+                if (shantytown.insalubrityOrderDisplayed === false) {
+                    return 'non';
+                }
+
+                return shantytown.insalubrityOrderDisplayed;
+            },
+            width: COLUMN_WIDTHS.SMALL,
+        },
+        insalubrityOrderType: {
+            title: 'Type d\'arrêté d\'insalubrité',
+            data: (shantytown: Shantytown) => {
+                if (!('insalubrityOrderType' in shantytown)) {
+                    return null;
+                }
+                return shantytown.insalubrityOrderType;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        insalubrityOrderBy: {
+            title: 'Qui a pris l\'arrêté d\'insalubrité',
+            data: (shantytown: Shantytown) => {
+                if (!('insalubrityOrderBy' in shantytown)) {
+                    return null;
+                }
+                return shantytown.insalubrityOrderBy;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
+        },
+        insalubrityOrderAt: {
+            title: 'Date d\'arrêté d\'insalubrité',
+            data: (shantytown: Shantytown) => {
+                if (!('insalubrityOrderAt' in shantytown)) {
+                    return null;
+                }
+                return (shantytown.insalubrityOrderAt ? new Date(shantytown.insalubrityOrderAt * 1000) : '');
+            },
+            width: COLUMN_WIDTHS.SMALL,
+        },
+        insalubrityParcels: {
+            title: 'Parcelles concernées',
+            data: (shantytown: Shantytown) => {
+                if (!('insalubrityParcels' in shantytown)) {
+                    return null;
+                }
+                return shantytown.insalubrityParcels;
+            },
+            width: COLUMN_WIDTHS.MEDIUM,
         },
         policeStatus: {
             title: 'Concours de la force publique',
@@ -1011,9 +1138,28 @@ export default (closingSolutions: ClosingSolution[]) => {
             },
             width: COLUMN_WIDTHS.MEDIUM,
         },
+        existingLitigation: {
+            title: 'Existence d\'un contentieux',
+            data: (shantytown: Shantytown) => {
+                if (!('existingLitigation' in shantytown)) {
+                    return null;
+                }
+
+                if (shantytown.existingLitigation === true) {
+                    return 'oui';
+                }
+
+                if (shantytown.existingLitigation === false) {
+                    return 'non';
+                }
+
+                return shantytown.existingLitigation;
+            },
+            width: COLUMN_WIDTHS.SMALL,
+        },
         updatedAt: {
             title: 'Site mis à jour le',
-            data: ({ updatedAt }: Shantytown) => (updatedAt ? tsToString(updatedAt, 'd/m/Y') : ''),
+            data: ({ updatedAt }: Shantytown) => (updatedAt ? new Date(updatedAt * 1000) : ''),
             width: COLUMN_WIDTHS.SMALL,
         },
         actors: {

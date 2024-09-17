@@ -13,10 +13,5 @@
 
 <script setup>
 import { CheckableGroup, Radio } from "@resorptionbidonvilles/ui";
-
-const items = [
-    { value: 1, label: "Oui" },
-    { value: 0, label: "Non" },
-    { value: -1, label: "Inconnu" },
-];
+import items from "@/utils/yesNoItems";
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div :class="['relative', withoutMargin ? '' : 'mb-6']">
-        <div v-if="hasErrors" class="absolute inputWrapper-error w-1 h-full bg-red600" />
+        <div v-if="hasErrors" class="absolute inputWrapper-error w-1 h-full bg-red600"></div>
         <slot />
     </div>
 </template>

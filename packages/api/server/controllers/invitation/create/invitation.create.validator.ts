@@ -50,11 +50,13 @@ export default [
 
     body('guests.*.first_name')
         .trim()
-        .notEmpty().bail().withMessage('Vous devez préciser le prénom de l\'invité(e)'),
+        .notEmpty().bail().withMessage('Vous devez préciser le prénom de l\'invité(e)')
+        .matches(/^[^<>]*$/, 'i').withMessage('Le prénom n\'est pas valide'),
 
     body('guests.*.last_name')
         .trim()
-        .notEmpty().bail().withMessage('Vous devez préciser le nom de l\'invité(e)'),
+        .notEmpty().bail().withMessage('Vous devez préciser le nom de l\'invité(e)')
+        .matches(/^[^<>]*$/, 'i').withMessage('Le nom n\'est pas valide'),
 
     body('guests.*.email')
         .trim()

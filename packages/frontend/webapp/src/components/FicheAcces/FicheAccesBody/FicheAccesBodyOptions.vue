@@ -3,14 +3,7 @@
         class="pt-2 pb-4 px-1 lg:px-4 bg-G300"
         v-if="optionList && optionList.length > 0"
     >
-        <p class="font-bold">
-            Options
-            <Warning v-if="user.status !== 'new'" class="font-normal text-sm"
-                >Les options de cet utilisateur ne peuvent pas être modifiées
-                car son accès est déjà actif. En cas de besoin, veuillez nous
-                contacter.</Warning
-            >
-        </p>
+        <p class="font-bold">Options</p>
         <p class="ml-8">
             <Checkbox
                 v-for="option in optionList"
@@ -20,7 +13,9 @@
                 name="options"
                 variant="checkbox"
                 direction="col"
-                :disabled="user.status === 'inactive'"
+                :disabled="
+                    user.status === 'inactive' || user.status === 'refused'
+                "
                 :active="user.status !== 'active'"
             />
         </p>
@@ -28,8 +23,8 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, watch } from "vue";
-import { Checkbox, Warning } from "@resorptionbidonvilles/ui";
+import { toRefs, computed, watch } from "vue";
+import { Checkbox } from "@resorptionbidonvilles/ui";
 import { useConfigStore } from "@/stores/config.store";
 import { useInputsStore } from "@/stores/inputs.store";
 import { useForm } from "vee-validate";
@@ -63,6 +58,7 @@ watch(values, () => {
 });
 watch(options, () => {
     if (
+        options.value &&
         options.value.length === values.options.length &&
         options.value.every((v) => values.options.includes(v))
     ) {

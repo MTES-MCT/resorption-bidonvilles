@@ -208,6 +208,7 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
             user_accesses.used_at AS user_access_used_at,
             user_accesses.expires_at AS user_access_expires_at,
             user_accesses.created_at AS user_access_created_at,
+            user_accesses.refused_at AS user_access_refused_at,
             activator.user_id AS activator_id,
             activator.email AS activator_email,
             activator.first_name AS activator_first_name,

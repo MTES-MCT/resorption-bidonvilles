@@ -14,16 +14,16 @@
             /></template>
         </ArrangementLeftMenuColumn>
 
-        <div class="flex-1" :class="maxWClass">
+        <div class="flex-1">
             <slot />
         </div>
     </div>
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs, onMounted, onBeforeUnmount } from "vue";
-import ArrangementLeftMenuColumn from "./ArrangementLeftMenuColumn.vue";
 import router from "@/helpers/router";
+import { computed, onBeforeUnmount, onMounted, toRefs } from "vue";
+import ArrangementLeftMenuColumn from "./ArrangementLeftMenuColumn.vue";
 
 const props = defineProps({
     tabs: {
@@ -51,11 +51,6 @@ const props = defineProps({
         required: false,
         default: true,
     },
-    maxWClass: {
-        type: String,
-        required: false,
-        default: null,
-    },
     columnWidthClass: {
         type: String,
         required: false,
@@ -63,7 +58,7 @@ const props = defineProps({
     },
 });
 
-const { tabs, activeTab, autonav, maxWClass } = toRefs(props);
+const { tabs, activeTab, autonav } = toRefs(props);
 
 onMounted(() => {
     window.addEventListener("scroll", handleMenuScroll);

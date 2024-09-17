@@ -1,34 +1,50 @@
-function setBackgroundColor(context, bgColor, start = 1) {
-    if (!context.chart?.chartArea) {
-        return;
+export default function generateDataset(label, color, data, options = {}) {
+    if (options?.area) {
+        options = {
+            areaStyle: {
+                color: {
+                    type: "linear",
+                    x: 0,
+                    y: 0,
+                    x2: 0,
+                    y2: 1,
+                    colorStops: [
+                        {
+                            offset: 0,
+                            color: `rgba(${color}, .5)`,
+                        },
+                        {
+                            offset: 1,
+                            color: `rgba(${color}, 0)`,
+                        },
+                    ],
+                    global: false,
+                },
+            },
+            ...options,
+        };
     }
-
-    const {
-        ctx,
-        chartArea: { top, bottom },
-    } = context.chart;
-
-    const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
-    gradientBg.addColorStop(Math.max(0, 1 - start - 0.01), bgColor);
-    gradientBg.addColorStop(1, "rgba(255, 255, 255, 0)");
-    return gradientBg;
-}
-
-export default function generateDataset(label, color, data, maxGlobal) {
     return {
-        label,
-        backgroundColor: (context) => {
-            return setBackgroundColor(
-                context,
-                color,
-                maxGlobal > 0 ? Math.max(...data) / maxGlobal : 0
-            );
+        type: "line",
+        name: label,
+        symbol: "circle",
+        symbolSize: 5,
+        emphasis: {
+            disabled: false,
+            focus: "none",
+            scale: 10,
+            itemStyle: {
+                color: `rgba(${color}, 1)`,
+                borderColor: "rgba(70, 249, 60, 1)",
+            },
         },
-        borderColor: color,
-        pointRadius: 2,
-        borderWidth: 2,
-        fill: true,
-        data,
-        tension: 0.5,
+        data: data,
+        lineStyle: {
+            color: `rgba(${color}, .5)`,
+        },
+        itemStyle: {
+            color: `rgba(${color}, .5)`,
+        },
+        ...options,
     };
 }

@@ -1,8 +1,8 @@
-import ShantytownComment from '#server/models/shantytownCommentModel/ShantytownComment.d';
 import { Actor } from '#server/models/shantytownActorModel/serializeActor';
 import { IncomingTown } from '#server/models/incomingTownsModel/findAll';
 import { Diff } from '#server/models/shantytownModel/_common/getDiff';
 import { LivingConditions } from '#server/models/shantytownModel/_common/livingConditions/serializeLivingConditions';
+import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
 import { ShantytownAction } from '#root/types/resources/Action.d';
 import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
 
@@ -36,6 +36,7 @@ type BaseShantytown =
 {
     type: 'shantytown',
     id: number,
+    updatedWithoutAnyChange: boolean | null,
     name: string | null,
     status: 'open' | 'unknown' | 'closed_by_justice' | 'resorbed' | 'other',
     closingContext: string | null,
@@ -113,7 +114,7 @@ type BaseShantytown =
         label: string,
     },
     socialOrigins: SocialOrigin[],
-    comments: ShantytownComment[],
+    comments: ShantytownRawComment[],
     actors: Actor[],
     actions: ShantytownAction[],
     closingSolutions: ShantytownClosingSolution[],
@@ -140,6 +141,17 @@ type ShantytownWithJustice = BaseShantytown & {
     policeRequestedAt: number | null,
     policeGrantedAt: number | null,
     bailiff: string | null,
+    existingLitigation: boolean | null,
+    evacuationUnderTimeLimit: boolean | null,
+    administrativeOrderDecisionAt: number | null,
+    administrativeOrderDecisionRenderedBy: string | null,
+    administrativeOrderEvacuationAt: number | null,
+    insalubrityOrder: boolean | null,
+    insalubrityOrderDisplayed: boolean | null,
+    insalubrityOrderType: string | null,
+    insalubrityOrderBy: string | null,
+    insalubrityOrderAt: number | null,
+    insalubrityParcels: string | null,
 };
 
 type ShantytownWithOwner = BaseShantytown & {

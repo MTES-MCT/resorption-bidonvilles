@@ -16,6 +16,7 @@ export default (town: ShantytownRow, user): Shantytown => {
     let serializedTown: Shantytown = {
         type: 'shantytown',
         id: town.id,
+        updatedWithoutAnyChange: town.updatedWithoutAnyChange,
         name: town.name,
         status: town.status,
         closingContext: town.closingContext,
@@ -189,6 +190,19 @@ export default (town: ShantytownRow, user): Shantytown => {
                 policeRequestedAt: fromDateToTimestamp(town.policeRequestedAt),
                 policeGrantedAt: fromDateToTimestamp(town.policeGrantedAt),
                 bailiff: town.bailiff,
+                // procédures administratives
+                existingLitigation: town.existingLitigation,
+                evacuationUnderTimeLimit: town.evacuationUnderTimeLimit,
+                administrativeOrderDecisionAt: fromDateToTimestamp(town.administrativeOrderDecisionAt),
+                administrativeOrderDecisionRenderedBy: town.administrativeOrderDecisionRenderedBy,
+                administrativeOrderEvacuationAt: fromDateToTimestamp(town.administrativeOrderEvacuationAt),
+                insalubrityOrder: town.insalubrityOrder,
+                insalubrityOrderDisplayed: town.insalubrityOrderDisplayed,
+                insalubrityOrderType: town.insalubrityOrderType,
+                insalubrityOrderBy: town.insalubrityOrderBy,
+                insalubrityOrderAt: fromDateToTimestamp(town.insalubrityOrderAt),
+                insalubrityParcels: town.insalubrityParcels,
+                // fin procédures administratives
             },
         };
     }

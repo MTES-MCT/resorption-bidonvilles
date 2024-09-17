@@ -33,7 +33,10 @@
         </div>
 
         <FicheAccesColumnAccessDate
-            v-if="user.user_accesses.length > 0"
+            v-if="
+                user.user_accesses.length > 0 &&
+                !user.user_accesses[0].refused_at
+            "
             text="Envoyé"
             :date="user.user_accesses[0].created_at"
             icon="paper-plane"
@@ -51,6 +54,18 @@
             text="Expiré"
             :date="user.user_accesses[0].expires_at"
             icon="unlink"
+            color="text-G700"
+            class="mb-2"
+        />
+
+        <FicheAccesColumnAccessDate
+            v-if="
+                user.user_accesses.length > 0 &&
+                user.user_accesses[0].refused_at
+            "
+            text="Classé sans suite"
+            :date="user.user_accesses[0].refused_at"
+            icon="ban"
             color="text-G700"
             class="mb-2"
         />

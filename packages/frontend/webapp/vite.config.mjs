@@ -17,6 +17,14 @@ export default defineConfig({
             path: "/socket",
         },
     },
+    build: {
+        sourcemap: true,
+        rollupOptions: {
+            output: {
+                sourcemap: true,
+            },
+        },
+    },
     define: {
         __APP_VERSION__: JSON.stringify(version),
     },
@@ -27,6 +35,7 @@ export default defineConfig({
         alias: {
             "@common": fileURLToPath(new URL("../common", import.meta.url)),
             "@": fileURLToPath(new URL("./src", import.meta.url)),
+            "@stores": fileURLToPath(new URL("./src/stores/", import.meta.url)),
         },
     },
 });

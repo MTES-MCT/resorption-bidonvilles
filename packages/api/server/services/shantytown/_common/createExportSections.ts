@@ -151,7 +151,7 @@ export default async (
 
     if (options.indexOf('justice') !== -1 && user.isAllowedTo('access', 'shantytown_justice')) {
         sections.push({
-            title: 'Procédure judiciaire',
+            title: 'Procédure judiciaire ou administrative',
             properties: [
                 properties.ownerComplaint,
                 properties.justiceProcedure,
@@ -160,9 +160,20 @@ export default async (
                 properties.justiceRenderedBy,
                 properties.justiceChallenged,
                 properties.policeStatus,
+                properties.evacuationUnderTimeLimit,
+                properties.administrativeOrderEvacuationAt,
+                properties.administrativeOrderDecisionRenderedBy,
+                properties.administrativeOrderDecisionAt,
+                properties.insalubrityOrder,
+                properties.insalubrityOrderDisplayed,
+                properties.insalubrityOrderType,
+                properties.insalubrityOrderBy,
+                properties.insalubrityOrderAt,
+                properties.insalubrityParcels,
                 properties.policeRequestedAt,
                 properties.policeGrantedAt,
                 properties.bailiff,
+                properties.existingLitigation,
             ],
         });
     }

@@ -11,13 +11,12 @@
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@nuxtjs/i18n": "^8.0.0",
     "@nuxtjs/tailwindcss": "^6.8.0",
-    "nuxt": "^3.7.0",
+    "nuxt": "^3.12.4",
     "vue-i18n": "^9.5.0"
   },
   "devDependencies": {
-    "chart.js": "^3.7.1",
     "postcss-custom-properties": "^13.3.2",
     "vue-matomo": "^4.1.0"
   },
-  "version": "2.14.1"
+  "version": "2.20.0"
 }

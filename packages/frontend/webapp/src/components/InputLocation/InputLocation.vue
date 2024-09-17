@@ -13,6 +13,7 @@ import { defineProps, toRefs, computed, defineEmits, ref } from "vue";
 import { Autocomplete } from "@resorptionbidonvilles/ui";
 import { autocomplete } from "@/api/locations.api.js";
 import formatLocationLabel from "@/utils/formatLocationLabel.js";
+import { trackEvent } from "@/helpers/matomo";
 
 const props = defineProps({
     modelValue: {
@@ -29,6 +30,13 @@ const location = computed({
         return modelValue.value;
     },
     set(value) {
+        if (value) {
+            trackEvent(
+                "Recherche autocomplete",
+                "Utilisation du module de recherche",
+                `${window.location.href.split("/").pop()}: ${value.search}`
+            );
+        }
         emit("update:modelValue", value);
     },
 });

@@ -14,7 +14,7 @@ export default async (req, res, next) => {
             req.files,
         );
     } catch (error) {
-        let message;
+        let message: string;
         switch (error && error.code) {
             case 'insert_failed':
                 message = 'Votre réponse n\'a pas pu être enregistrée.';

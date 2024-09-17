@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/api",
-  "version": "2.14.1",
+  "version": "2.20.0",
   "description": "API d'Action Bidonvilles",
   "main": "server/index.ts",
   "repository": "git+https://github.com/MTES-MCT/action-bidonvilles.git",
@@ -11,6 +11,7 @@
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.32.0",
+    "@aws-sdk/s3-request-presigner": "^3.598.0",
     "@sentry/node": "^7.54.0",
     "@sentry/tracing": "^7.54.0",
     "@supercharge/promise-pool": "^2.4.0",
@@ -18,7 +19,7 @@
     "@types/node": "*",
     "@types/superagent": "^4.1.18",
     "agenda": "^3.1.0",
-    "axios": "^1.6.0",
+    "axios": "^1.7.4",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "docx": "^8.0.4",

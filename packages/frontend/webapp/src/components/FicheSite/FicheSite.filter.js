@@ -3,7 +3,7 @@ export default {
         { value: "caracteristics", label: "Caractéristiques" },
         { value: "people", label: "Habitants" },
         { value: "living_conditions", label: "Conditions de vie" },
-        { value: "justice", label: "Procédure judiciaire" },
+        { value: "procedure", label: "Procédures" },
     ],
     fields: {
         caracteristics: [
@@ -97,7 +97,7 @@ export default {
             "livingConditions.firePrevention.comments",
         ],
 
-        justice: [
+        procedure: [
             "ownerComplaint",
             "justiceChallenged",
             "justiceProcedure",
@@ -108,6 +108,17 @@ export default {
             "policeRequestedAt",
             "policeGrantedAt",
             "bailiff",
+            "existingLitigation",
+            "evacuationUnderTimeLimit",
+            "administrativeOrderDecisionAt",
+            "administrativeOrderDecisionRenderedBy",
+            "administrativeOrderEvacuationAt",
+            "insalubrityOrder",
+            "insalubrityOrderDisplayed",
+            "insalubrityOrderType",
+            "insalubrityOrderBy",
+            "insalubrityOrderAt",
+            "insalubrityParcels",
         ],
     },
 };

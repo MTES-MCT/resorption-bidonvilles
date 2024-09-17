@@ -3,7 +3,8 @@
         v-if="
             userStore.user?.is_superuser &&
             user.role_id !== 'local_admin' &&
-            user.status !== 'inactive'
+            user.status !== 'inactive' &&
+            user.status !== 'refused'
         "
         variant="primaryOutline"
         :loading="isLoading"

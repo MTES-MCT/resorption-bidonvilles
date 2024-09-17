@@ -1,11 +1,12 @@
 import questionService from '#server/services/question';
 import { Request } from 'express';
+import enrichQuestion from '#server/services/question/common/enrichQuestion';
 import { User } from '#root/types/resources/User.d';
-import { Question } from '#root/types/resources/Question.d';
+import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 
 interface QuestionUpdateRequest extends Request {
     user: User;
-    question: Question;
+    question: EnrichedQuestion;
 }
 
 const ERRORS = {
@@ -20,13 +21,16 @@ export default async (req: QuestionUpdateRequest, res, next) => {
     }
 
     try {
-        const updateQuestion = await questionService.update(
+        const updatedQuestion = await questionService.update(
             req.question.id,
             req.body,
             req.user.id,
         );
 
-        return res.status(200).send(updateQuestion);
+        // Ajout des éventuelles pièces jointes
+        const enrichedQuestion = await enrichQuestion(updatedQuestion.id);
+
+        return res.status(200).send(enrichedQuestion);
     } catch (error) {
         const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
         res.status(code).send({

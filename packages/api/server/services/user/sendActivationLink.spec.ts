@@ -65,6 +65,8 @@ describe('userService/sendActivationLink', () => {
     });
 
     it('crée un nouvel accès pour l\'utilisateur', async () => {
+        const clock = sinon.useFakeTimers(new Date().getTime());
+
         const activator = fakeUser({ id: 42 });
         const user = fakeUser({ id: 1 });
         const now = new Date();
@@ -78,6 +80,7 @@ describe('userService/sendActivationLink', () => {
             created_at: now,
             expires_at: expiresAt,
         });
+        clock.restore();
     });
 
     it('met en place les mails de relances automatiques pour l\'utilisateur', async () => {

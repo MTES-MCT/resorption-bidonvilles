@@ -76,6 +76,14 @@ export const useQuestionsStore = defineStore("questions", () => {
     };
     watch(resetPagination);
     watch(resetPagination, { deep: true });
+    watch(
+        [() => sortedQuestions.value, () => sort.value],
+        () => {
+            currentPage.index.value++;
+            currentPage.index.value--;
+        },
+        { deep: true }
+    );
 
     async function create(data, attachments) {
         const configStore = useConfigStore();

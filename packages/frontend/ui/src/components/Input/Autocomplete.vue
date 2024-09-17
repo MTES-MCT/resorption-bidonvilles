@@ -35,7 +35,7 @@
 
 <script setup>
 import { toRefs, ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
-import { useIsSubmitting, useField } from "vee-validate";
+import { useForm, useIsSubmitting, useField } from "vee-validate";
 import InputWrapper from "./utils/InputWrapper.vue";
 import InputError from "./utils/InputError.vue";
 import Input from "./Input.vue";
@@ -82,7 +82,10 @@ const { fn, name, withoutMargin, allowFreeSearch, showCategory, modelValue, disa
 const rawResults = ref([]);
 const isLoading = ref(false);
 const lastPromise = ref(null);
-const isSubmitting = useIsSubmitting();
+// Vee-validate form context
+const form = useForm();
+const isSubmitting = form ? useIsSubmitting() : false;
+
 const { handleChange, errors, validate, value } = useField(name, undefined, {
     ...(modelValue.value ? { initialValue: modelValue } : {}),
 });

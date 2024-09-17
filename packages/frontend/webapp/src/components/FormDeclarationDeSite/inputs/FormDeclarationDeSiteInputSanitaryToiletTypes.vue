@@ -21,7 +21,7 @@ import { computed } from "vue";
 import { useFormValues } from "vee-validate";
 import { CheckableGroup, Checkbox } from "@resorptionbidonvilles/ui";
 import toiletTypes from "@common/utils/toilet_types";
-import labels from "../FormDeclarationDeSite.labels";
+import labels from "@/components/Common/FormEtFicheSite.labels";
 
 const items = computed(() => {
     return Object.keys(toiletTypes).map((id) => ({

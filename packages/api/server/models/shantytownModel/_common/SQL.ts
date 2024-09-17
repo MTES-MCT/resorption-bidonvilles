@@ -1,5 +1,6 @@
 export type ShantytownRow = {
     id: number,
+    updatedWithoutAnyChange: boolean,
     name: string | null,
     status: 'open' | 'unknown' | 'closed_by_justice' | 'resorbed' | 'other',
     closingContext: string | null
@@ -46,6 +47,19 @@ export type ShantytownRow = {
     policeRequestedAt: Date | null,
     policeGrantedAt: Date | null,
     bailiff: string | null,
+    // procédures administratives
+    existingLitigation: boolean | null,
+    evacuationUnderTimeLimit: boolean | null,
+    administrativeOrderDecisionAt: Date | null,
+    administrativeOrderDecisionRenderedBy: string | null,
+    administrativeOrderEvacuationAt: Date | null,
+    insalubrityOrder: boolean | null,
+    insalubrityOrderDisplayed: boolean | null,
+    insalubrityOrderType: string | null,
+    insalubrityOrderBy: string | null,
+    insalubrityOrderAt: Date | null,
+    insalubrityParcels: string | null,
+    // fin procédures administratives
     closedWithSolutions: 'yes' | 'no' | 'unknown' | null,
     createdAt: Date,
     updatedAt: Date,
@@ -154,6 +168,7 @@ export type ShantytownRow = {
 export default {
     selection: {
         'shantytowns.shantytown_id': 'id',
+        'shantytowns.updated_without_any_change': 'updatedWithoutAnyChange',
         'shantytowns.name': 'name',
         'shantytowns.status': 'status',
         'shantytowns.closing_context': 'closingContext',
@@ -200,6 +215,19 @@ export default {
         'shantytowns.police_requested_at': 'policeRequestedAt',
         'shantytowns.police_granted_at': 'policeGrantedAt',
         'shantytowns.bailiff': 'bailiff',
+        // procédures administratives
+        'shantytowns.existing_litigation': 'existingLitigation',
+        'shantytowns.evacuation_under_time_limit': 'evacuationUnderTimeLimit',
+        'shantytowns.administrative_order_decision_at': 'administrativeOrderDecisionAt',
+        'shantytowns.administrative_order_decision_rendered_by': 'administrativeOrderDecisionRenderedBy',
+        'shantytowns.administrative_order_evacuation_at': 'administrativeOrderEvacuationAt',
+        'shantytowns.insalubrity_order': 'insalubrityOrder',
+        'shantytowns.insalubrity_order_displayed': 'insalubrityOrderDisplayed',
+        'shantytowns.insalubrity_order_type': 'insalubrityOrderType',
+        'shantytowns.insalubrity_order_by': 'insalubrityOrderBy',
+        'shantytowns.insalubrity_order_at': 'insalubrityOrderAt',
+        'shantytowns.insalubrity_parcels': 'insalubrityParcels',
+        // fin procédures administratives
         'shantytowns.closed_with_solutions::text': 'closedWithSolutions',
         'shantytowns.created_at': 'createdAt',
         'shantytowns.updated_at': 'updatedAt',

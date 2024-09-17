@@ -41,6 +41,9 @@ export default (oldVersion, newVersion): Diff[] => {
     };
 
     let toDiff = {
+        updatedWithoutAnyChange: {
+            label: 'Site mis à jour sans modification',
+        },
         name: {
             label: 'Appellation du site',
         },
@@ -182,14 +185,14 @@ export default (oldVersion, newVersion): Diff[] => {
             processor: baseProcessors.bool,
         },
         justiceRenderedAt: {
-            label: 'Date de la décision',
+            label: 'Date de la décision de justice',
             processor: baseProcessors.date,
         },
         justiceRenderedBy: {
-            label: 'Origine de la décision',
+            label: 'Origine de la décision de justice',
         },
         justiceChallenged: {
-            label: 'Contentieux relatif à la décision de justice',
+            label: 'Appel en cours',
             processor: baseProcessors.bool,
         },
         policeStatus: {
@@ -199,6 +202,7 @@ export default (oldVersion, newVersion): Diff[] => {
                     none: 'non demandé',
                     requested: 'demandé',
                     granted: 'obtenu',
+                    refused: 'refusé',
                 };
                 if (p === null) {
                     return 'inconnu';
@@ -217,6 +221,46 @@ export default (oldVersion, newVersion): Diff[] => {
         },
         bailiff: {
             label: "Nom de l'étude d'huissiers",
+        },
+        existingLitigation: {
+            label: "Existence d'un contentieux ?",
+            processor: baseProcessors.bool,
+        },
+        evacuationUnderTimeLimit: {
+            label: "Existence d'une procédure administrative",
+            processor: baseProcessors.bool,
+        },
+        administrativeOrderDecisionAt: {
+            label: "Date de l'arrêté de la procédure administrative",
+            processor: baseProcessors.date,
+        },
+        administrativeOrderDecisionRenderedBy: {
+            label: "Qui  a pris l'arrêté de la procédure administrative ?",
+        },
+        administrativeOrderEvacuationAt: {
+            label: "Date de l'évacuation",
+            processor: baseProcessors.date,
+        },
+        insalubrityOrder: {
+            label: "Existence d'un arrêté d'insalubrité",
+            processor: baseProcessors.bool,
+        },
+        insalubrityOrderDisplayed: {
+            label: "Affichage de l'arrêté d'insalubrité ou notification ?",
+            processor: baseProcessors.bool,
+        },
+        insalubrityOrderType: {
+            label: "Type d'arrêté d'insalubrité (arrêté de mise en sécurité, autre...)",
+        },
+        insalubrityOrderBy: {
+            label: "Qui a pris l'arrêté d'insalubrité ?",
+        },
+        insalubrityOrderAt: {
+            label: "Date de l'arrêté d'insalubrité",
+            processor: baseProcessors.date,
+        },
+        insalubrityParcels: {
+            label: "Parcelles concernées par l'arrêté d'insalubrité (numéros de parcelles)",
         },
     };
 

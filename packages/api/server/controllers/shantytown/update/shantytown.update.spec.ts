@@ -34,6 +34,7 @@ describe('townController.edit()', () => {
                 params: { id: 1 },
 
                 body: {
+                    updated_without_any_change: false,
                     name: 'Name',
                     latitude: 46.1390023,
                     longitude: -2.435937,
@@ -77,6 +78,19 @@ describe('townController.edit()', () => {
                     police_requested_at: new Date(),
                     police_granted_at: new Date(),
                     bailiff: 'Huissier',
+                    existing_litigation: true,
+
+                    evacuation_under_time_limit: true,
+                    administrative_order_decision_at: new Date(),
+                    administrative_order_decision_rendered_by: 'Préfet',
+                    administrative_order_evacuation_at: new Date(),
+                    insalubrity_order: true,
+                    insalubrity_order_displayed: true,
+                    insalubrity_order_type: 'arrêté',
+                    insalubrity_order_by: 'Maire',
+                    insalubrity_order_at: new Date(),
+                    insalubrity_parcels: '00300, 00400',
+
                     living_conditions_version: 2,
 
                     water_access_type: 'autre',
@@ -150,6 +164,7 @@ describe('townController.edit()', () => {
                 input.user,
                 1,
                 {
+                    updated_without_any_change: input.body.updated_without_any_change,
                     name: input.body.name,
                     latitude: input.body.latitude,
                     longitude: input.body.longitude,
@@ -193,6 +208,19 @@ describe('townController.edit()', () => {
                     police_requested_at: input.body.police_requested_at,
                     police_granted_at: input.body.police_granted_at,
                     bailiff: input.body.bailiff,
+                    existing_litigation: input.body.existing_litigation,
+
+                    evacuation_under_time_limit: input.body.evacuation_under_time_limit,
+                    administrative_order_decision_at: input.body.administrative_order_decision_at,
+                    administrative_order_decision_rendered_by: input.body.administrative_order_decision_rendered_by,
+                    administrative_order_evacuation_at: input.body.administrative_order_evacuation_at,
+                    insalubrity_order: input.body.insalubrity_order,
+                    insalubrity_order_displayed: input.body.insalubrity_order_displayed,
+                    insalubrity_order_type: input.body.insalubrity_order_type,
+                    insalubrity_order_by: input.body.insalubrity_order_by,
+                    insalubrity_order_at: input.body.insalubrity_order_at,
+                    insalubrity_parcels: input.body.insalubrity_parcels,
+
                     fk_electricity_type: null,
                     electricity_comments: null,
                     access_to_sanitary: null,

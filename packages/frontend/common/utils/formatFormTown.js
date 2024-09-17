@@ -13,16 +13,16 @@ export default function (data) {
         },
         address: data.address
             ? {
-                  search: data.address || "",
-                  data: {
-                      citycode: data.city ? data.city.code : undefined,
-                      city: "",
-                      label: data.address ? data.address : undefined,
-                      coordinates: data.latitude
-                          ? [data.latitude, data.longitude]
-                          : [],
-                  },
-              }
+                search: data.address || "",
+                data: {
+                    citycode: data.city ? data.city.code : undefined,
+                    city: "",
+                    label: data.address ? data.address : undefined,
+                    coordinates: data.latitude
+                        ? [data.latitude, data.longitude]
+                        : [],
+                },
+            }
             : undefined,
         coordinates: data.latitude ? [data.latitude, data.longitude] : [],
         name: data.name || undefined,
@@ -152,6 +152,23 @@ export default function (data) {
             ? new Date(data.policeGrantedAt * 1000)
             : undefined,
         bailiff: data.bailiff || undefined,
+        existing_litigation: formatBoolToInt(data.existingLitigation),
+        evacuation_under_time_limit: formatBoolToInt(data.evacuationUnderTimeLimit),
+        administrative_order_decision_at: data.administrativeOrderDecisionAt
+            ? new Date(data.administrativeOrderDecisionAt * 1000)
+            : undefined,
+        administrative_order_decision_rendered_by: data.administrativeOrderDecisionRenderedBy || undefined,
+        administrative_order_evacuation_at: data.administrativeOrderEvacuationAt
+            ? new Date(data.administrativeOrderEvacuationAt * 1000)
+            : undefined,
+        insalubrity_order: formatBoolToInt(data.insalubrityOrder),
+        insalubrity_order_displayed: formatBoolToInt(data.insalubrityOrderDisplayed),
+        insalubrity_order_type: data.insalubrityOrderType || undefined,
+        insalubrity_order_by: data.insalubrityOrderBy || undefined,
+        insalubrity_order_at: data.insalubrityOrderAt
+            ? new Date(data.insalubrityOrderAt * 1000)
+            : undefined,
+        insalubrity_parcels: data.insalubrityParcels || undefined,
     };
 
     if (data.livingConditions?.version === 1) {

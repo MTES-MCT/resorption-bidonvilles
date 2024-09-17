@@ -25,6 +25,7 @@ export type UserAccess = {
     used_at: number | null,
     expires_at: number,
     created_at: number,
+    refused_at: number | null,
 };
 
 export type UserExpertiseTopicType = 'expertise' | 'interest';

@@ -388,6 +388,14 @@ const router = createRouter({
                 navTab: "administration",
                 displayOrderOnSiteMap: 0,
             },
+            beforeEnter: (to, from, next) => {
+                const userStore = useUserStore();
+                if (userStore.isLoggedIn && userStore.user?.is_superuser) {
+                    next();
+                } else {
+                    next("/page-interdite");
+                }
+            },
         },
         {
             path: "/utilisateurs/permissions",
@@ -413,6 +421,21 @@ const router = createRouter({
             component: () => import("@/views/DeclarationAccessibilite.vue"),
             meta: {
                 title: "Déclaration d'accessibilité",
+                requirements: {
+                    auth: "none",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+            },
+        },
+        {
+            path: "/schema-pluriannuel",
+            component: () =>
+                import("@/views/SchemaPluriannuelAccessibilite.vue"),
+            meta: {
+                title: "Schéma pluriannuel",
                 requirements: {
                     auth: "none",
                     configLoaded: false,
@@ -772,6 +795,7 @@ router.beforeEach((to, from) => {
     // if logged, register navigation log
     if (userStore.isLoggedIn && router.currentRoute.value?.path !== to.path) {
         createNavigationLog(to.path);
+        userStore.refreshToken();
     }
 
     // Update html title element

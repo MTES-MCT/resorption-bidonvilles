@@ -1,11 +1,11 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import { Answer } from '#root/types/resources/Answer.d';
+import { RawAnswer } from '#root/types/resources/AnswerRaw.d';
 import AnswerRow from './AnswerRow.d';
 
 import serializeAnswer from './_common/serializeAnswer';
 
-export default async (): Promise<Answer[]> => {
+export default async (): Promise<RawAnswer[]> => {
     const rows: AnswerRow[] = await sequelize.query(
         `WITH grouped_attachments AS (
             SELECT

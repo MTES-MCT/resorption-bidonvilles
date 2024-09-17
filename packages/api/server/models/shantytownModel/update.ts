@@ -13,6 +13,7 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
             `INSERT INTO
                     "ShantytownHistories"(
                         shantytown_id,
+                        updated_without_any_change,
                         status,
                         closing_context,
                         name,
@@ -112,6 +113,17 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
                         police_requested_at,
                         police_granted_at,
                         bailiff,
+                        existing_litigation,
+                        evacuation_under_time_limit,
+                        administrative_order_decision_at,
+                        administrative_order_decision_rendered_by,
+                        administrative_order_evacuation_at,
+                        insalubrity_order,
+                        insalubrity_order_displayed,
+                        insalubrity_order_type,
+                        insalubrity_order_by,
+                        insalubrity_order_at,
+                        insalubrity_parcels,
                         closed_with_solutions,
                         resorption_target,
                         created_at,
@@ -122,6 +134,7 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
                     )
                 SELECT
                     shantytown_id,
+                    updated_without_any_change,
                     status,
                     closing_context,
                     name,
@@ -221,6 +234,17 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
                     police_requested_at,
                     police_granted_at,
                     bailiff,
+                    existing_litigation,
+                    evacuation_under_time_limit,
+                    administrative_order_decision_at,
+                    administrative_order_decision_rendered_by,
+                    administrative_order_evacuation_at,
+                    insalubrity_order,
+                    insalubrity_order_displayed,
+                    insalubrity_order_type,
+                    insalubrity_order_by,
+                    insalubrity_order_at,
+                    insalubrity_parcels,
                     closed_with_solutions,
                     resorption_target,
                     created_at,
@@ -322,6 +346,17 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
             'police_requested_at',
             'police_granted_at',
             'bailiff',
+            'existing_litigation',
+            'evacuation_under_time_limit',
+            'administrative_order_decision_at',
+            'administrative_order_decision_rendered_by',
+            'administrative_order_evacuation_at',
+            'insalubrity_order',
+            'insalubrity_order_displayed',
+            'insalubrity_order_type',
+            'insalubrity_order_by',
+            'insalubrity_order_at',
+            'insalubrity_parcels',
         ];
         const { commonData, justiceData, ownerData } = Object.keys(data).reduce(
             (acc, key) => {
@@ -340,7 +375,7 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
                         commonData: acc.commonData,
                         justiceData: {
                             ...acc.justiceData,
-                            [key]: data[key],
+                            ...(data[key] !== undefined ? { [key]: data[key] } : {}),
                         },
                         ownerData: acc.ownerData,
                     };
@@ -360,7 +395,7 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
                 return {
                     commonData: {
                         ...acc.commonData,
-                        [key]: data[key],
+                        ...(data[key] !== undefined ? { [key]: data[key] } : {}),
                     },
                     justiceData: acc.justiceData,
                     ownerData: acc.ownerData,

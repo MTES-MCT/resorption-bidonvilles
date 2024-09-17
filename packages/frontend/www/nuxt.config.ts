@@ -2,9 +2,6 @@ import { fileURLToPath } from "url";
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
-    alias: {
-        "@common": "/../common",
-    },
     modules: [
         "@nuxtjs/tailwindcss",
         ["@nuxtjs/i18n", {
@@ -27,11 +24,6 @@ export default defineNuxtConfig({
             }
         }
     },
-    build: {
-        transpile: [
-            'chart.js'
-        ]
-    },
     runtimeConfig: {
         public: {
             DOMAIN: process.env.NUXT_DOMAIN || "${NUXT_DOMAIN}",
@@ -46,6 +38,8 @@ export default defineNuxtConfig({
         }
     },
     alias: {
-        "@common": fileURLToPath(new URL("../common/", import.meta.url))
-    }
+        "@common": fileURLToPath(new URL("../common/", import.meta.url)),
+        "@stores": fileURLToPath(new URL("../webapp/src/stores", import.meta.url))
+    },
+    compatibilityDate: "2024-08-30"
 });

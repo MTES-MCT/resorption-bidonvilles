@@ -19,7 +19,7 @@
 import { computed } from "vue";
 import { CheckableGroup, Radio } from "@resorptionbidonvilles/ui";
 import { useConfigStore } from "@/stores/config.store";
-import labels from "../FormDeclarationDeSite.labels";
+import labels from "@/components/Common/FormEtFicheSite.labels";
 
 const configStore = useConfigStore();
 const items = computed(() => {

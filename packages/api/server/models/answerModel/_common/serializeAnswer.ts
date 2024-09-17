@@ -1,8 +1,7 @@
-import attachmentModel from '#server/models/attachmentModel';
 import AnswerRow from '../AnswerRow.d';
-import { Answer } from '#root/types/resources/Answer.d';
+import { RawAnswer } from '#root/types/resources/AnswerRaw.d';
 
-export default (answer: AnswerRow): Answer => ({
+export default (answer: AnswerRow): RawAnswer => ({
     id: answer.answerId,
     description: answer.answerDescription,
     createdAt: answer.answerCreatedAt !== null ? (answer.answerCreatedAt.getTime() / 1000) : null,
@@ -18,6 +17,5 @@ export default (answer: AnswerRow): Answer => ({
     },
     question: answer.questionId,
     attachments: answer.attachments?.length
-        ? answer.attachments.map(attachmentModel.serializeAttachment)
-        : [],
+        ? answer.attachments : [],
 });

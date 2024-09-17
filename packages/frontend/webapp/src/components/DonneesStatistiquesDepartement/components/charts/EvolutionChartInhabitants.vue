@@ -12,25 +12,26 @@
 
             <ChartBigFigure
                 :img="flagEU"
-                alt="Estimation du nombre d'habitants intra-UE"
+                alt="Estimation du nombre d'habitants intra UE"
                 :figure="formatStat(data.figures.european.value)"
                 :evolution="formatStat(data.figures.european.evolution)"
-                >Sites exclusivement intra-UE</ChartBigFigure
+                >Sites exclusivement intra UE</ChartBigFigure
             >
 
             <ChartBigFigure
                 :img="flagExtraCommunautaires"
-                alt="Estimation du nombre d'habitants extra-UE"
+                alt="Estimation du nombre d'habitants extra UE"
                 :figure="formatStat(data.figures.foreign.value)"
                 :evolution="formatStat(data.figures.foreign.evolution)"
-                >Sites exclusivement extra-UE</ChartBigFigure
+                >Sites exclusivement extra UE</ChartBigFigure
             >
         </div>
 
         <LineChart
             class="mt-6"
-            :chartOptions="chartOptions"
-            :chartData="chartData"
+            :chartOptions="options"
+            :chartData="chartData.datasets"
+            :graphId="`evolution-inhabitants`"
         />
     </section>
 </template>
@@ -39,7 +40,7 @@
 import formatStat from "@/utils/formatStat";
 import { computed } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
-import { LineChart } from "@/helpers/chart";
+import LineChart from "@/components/Graphs/GraphBase.vue";
 import ChartBigFigure from "./ChartBigFigure.vue";
 import flagEU from "@/assets/img/flags/eu.png";
 import flagExtraCommunautaires from "@/assets/img/flags/extra-communautaires.png";
@@ -50,37 +51,60 @@ const departementMetricsStore = useDepartementMetricsStore();
 const data = departementMetricsStore.evolution.data.inhabitants.inhabitants;
 
 const chartData = computed(() => {
-    const max = {
-        european: Math.max(...data.charts.european),
-        foreign: Math.max(...data.charts.foreign),
-        total: Math.max(...data.charts.total),
-    };
-    max.global = Math.max(max.european, max.foreign, max.total);
-
     const datasets = [
         generateDataset(
-            "Nombre d'habitants intra-UE",
-            "rgba(255, 0, 0, 0.5)",
+            "Nombre d'habitants intra UE",
+            "0, 0, 255",
             data.charts.european,
-            max.global
+            {
+                lineStyle: { opacity: 1 },
+                area: true,
+                symbolSize: 1,
+            }
         ),
         generateDataset(
-            "Nombre d'habitants extra-UE",
-            "rgba(0, 255, 0, 0.5)",
+            "Nombre d'habitants extra UE",
+            "255, 0, 0",
             data.charts.foreign,
-            max.global
+            {
+                lineStyle: { opacity: 1 },
+                area: true,
+                symbolSize: 1,
+            }
         ),
         generateDataset(
             "Nombre total d'habitants",
-            "rgba(0, 0, 255, 0.5)",
+            "0, 255, 0",
             data.charts.total,
-            max.global
+            {
+                lineStyle: { opacity: 1 },
+                area: true,
+                symbolSize: 1,
+            }
         ),
     ];
 
     return {
         labels: data.charts.labels,
         datasets,
+    };
+});
+
+const options = computed(() => {
+    return {
+        ...chartOptions.line,
+        options: {
+            ...chartOptions.line.options,
+            xAxis: {
+                ...chartOptions.line.options.xAxis,
+                data: data.charts.labels,
+                axisTick: {
+                    show: true,
+                    alignWithLabel: false,
+                    interval: 0,
+                },
+            },
+        },
     };
 });
 </script>

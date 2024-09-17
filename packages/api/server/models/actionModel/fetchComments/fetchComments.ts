@@ -1,23 +1,9 @@
 import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 import enrichWhere from '../fetch/enrichWhere';
+import { ActionRowComment } from './ActionCommentRow.d';
 
-export type ActionCommentRow = {
-    action_id: number,
-    id: number,
-    description: string,
-    created_at: Date,
-    creator_id: number,
-    creator_first_name: string,
-    creator_last_name: string,
-    creator_organization_id: number,
-    creator_organization_name: string,
-    creator_organization_abbreviation: string | null,
-    creator_user_role: string,
-    attachments: string[]
-};
-
-export default function fetchComments(actionIds: number[] = null, commentIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionCommentRow[]> {
+export default function fetchComments(actionIds: number[] = null, commentIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionRowComment[]> {
     const where = [];
     const replacements = {
         actionIds,

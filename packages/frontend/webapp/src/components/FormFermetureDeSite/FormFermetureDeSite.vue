@@ -16,7 +16,10 @@
         <FormFermetureDeSiteInputClosedAt :disabled="mode === 'fix'" />
         <FormFermetureDeSiteInputStatus :disabled="mode === 'fix'" />
         <FormFermetureDeSiteInputClosingContext :disabled="mode === 'fix'" />
-        <FormFermetureDeSiteInputSolutions :disabled="mode === 'fix'" />
+        <FormFermetureDeSiteInputSolutions
+            :disabled="mode === 'fix'"
+            @update:solutions="handleSolutions"
+        />
         <FormFermetureDeSiteInputClosedWithSolutions
             :peopleWithSolutions="peopleWithSolutions"
         />
@@ -34,8 +37,7 @@
 <script setup>
 import ENV from "@/helpers/env.js";
 import { defineProps, defineExpose, ref, toRefs, computed } from "vue";
-import { useForm, useFormValues, useFormErrors } from "vee-validate";
-import { useConfigStore } from "@/stores/config.store";
+import { useForm, useFormErrors } from "vee-validate";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
 import formatDate from "@common/utils/formatDate";
@@ -58,44 +60,16 @@ const props = defineProps({
     town: Object,
 });
 const { town } = toRefs(props);
-const values = useFormValues();
 const errors = useFormErrors();
 const error = ref(null);
+const peopleWithSolutions = ref(0);
+const totalPeopleAffected = ref(0);
 
 const mode = computed(() => {
     return town.value.closedAt !== null ? "fix" : "declare";
 });
 const schema = computed(() => {
     return schemaFn(mode.value);
-});
-
-const actualSolutionIds = computed(() => {
-    const actualSolutions = [
-        "Solution longue durée en hébergement ou logement adapté longue durée avec accompagnement, dont espace temporaire d'accompagnement",
-        "Logement",
-    ];
-
-    const configStore = useConfigStore();
-    return actualSolutions.map((label) => {
-        const s = configStore.config.closing_solutions.find(
-            ({ label: l }) => l === label
-        );
-        return s?.id || null;
-    });
-});
-
-const peopleWithSolutions = computed(() => {
-    if (!town.value.populationTotal) {
-        return null;
-    }
-
-    let total = actualSolutionIds.value.reduce((acc, solutionId) => {
-        return (
-            acc +
-            (values.solution_details?.[`${solutionId}`]?.peopleAffected || 0)
-        );
-    }, 0);
-    return ((total / town.value.populationTotal) * 100).toFixed(0);
 });
 
 const { handleSubmit, setErrors, isSubmitting } = useForm({
@@ -123,6 +97,46 @@ const { handleSubmit, setErrors, isSubmitting } = useForm({
             : undefined,
     },
 });
+
+const handleSolutions = (newValue) => {
+    const validOrientation = [8, 9];
+    let tmpPeopleAffectedArray = [];
+    totalPeopleAffected.value = 0;
+    for (const [key, value] of Object.entries(newValue)) {
+        totalPeopleAffected.value = value.peopleAffected
+            ? totalPeopleAffected.value + parseInt(value.peopleAffected)
+            : totalPeopleAffected.value;
+        if (
+            parseInt(totalPeopleAffected.value) >
+            parseInt(town.value.populationTotal)
+        ) {
+            error.value =
+                "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site";
+            return;
+        } else {
+            error.value = null;
+        }
+        if (validOrientation.includes(parseInt(key))) {
+            tmpPeopleAffectedArray.push(value);
+        }
+    }
+
+    const actualPeopleAffected = Object.values(tmpPeopleAffectedArray).reduce(
+        (acc, solution) => {
+            if (solution.peopleAffected) {
+                return parseInt(acc) + parseInt(solution.peopleAffected);
+            } else {
+                return parseInt(acc);
+            }
+        },
+        0
+    );
+
+    peopleWithSolutions.value = (
+        (actualPeopleAffected / town.value.populationTotal) *
+        100
+    ).toFixed(0);
+};
 
 const config = {
     declare: {
@@ -174,6 +188,12 @@ defineExpose({
                     "Modification impossible : aucun champ n'a été modifié";
                 return;
             }
+        }
+        // if (peopleWithSolutions.value > 100) {
+        if (totalPeopleAffected.value > town.value.populationTotal) {
+            error.value =
+                "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site";
+            return;
         }
 
         const { submit, successTitle, successWording } = config[mode.value];

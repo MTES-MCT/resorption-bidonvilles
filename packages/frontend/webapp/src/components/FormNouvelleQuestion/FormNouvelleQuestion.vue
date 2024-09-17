@@ -1,6 +1,8 @@
 <template>
     <form>
         <DragZone @drop="attachmentsInput?.addFiles">
+            <IndicationCaractereObligatoire />
+
             <FormParagraph :title="labels.question" showMandatoryStar>
                 <FormNouvelleQuestionInputQuestion
                     :disabled="mode === 'edit'"
@@ -11,7 +13,9 @@
                 <FormNouvelleQuestionInputTags :disabled="mode === 'edit'"
             /></FormParagraph>
             <FormParagraph :title="labels.other_tag" v-if="showOtherTag">
-                <FormNouvelleQuestionInputOtherTag :disabled="mode === 'edit'"
+                <FormNouvelleQuestionInputOtherTag
+                    :tag="question.tags[0].name"
+                    :disabled="mode === 'edit'"
             /></FormParagraph>
             <FormParagraph :title="labels.people_affected" info="(optionnel)">
                 <FormNouvelleQuestionInputPeopleAffected />
@@ -50,6 +54,7 @@ import isDeepEqual from "@/utils/isDeepEqual";
 
 import { ErrorSummary, FormParagraph } from "@resorptionbidonvilles/ui";
 import DragZone from "@/components/DragZone/DragZone.vue";
+import IndicationCaractereObligatoire from "@/components/IndicationCaractereObligatoire/IndicationCaractereObligatoire.vue";
 import FormNouvelleQuestionInputQuestion from "./inputs/FormNouvelleQuestionInputQuestion.vue";
 import FormNouvelleQuestionInputPeopleAffected from "./inputs/FormNouvelleQuestionInputPeopleAffected.vue";
 import FormNouvelleQuestionInputDetails from "./inputs/FormNouvelleQuestionInputDetails.vue";
@@ -84,6 +89,7 @@ const { handleSubmit, setErrors, errors, isSubmitting, values } = useForm({
         details: question.value?.details || "",
         question: question.value?.question || resume.value || "",
         tags: question.value?.tags.map(({ uid }) => uid) || [],
+        other_tags: question.value?.other_tags || "",
         people_affected: question.value?.people_affected || "",
         attachments: new DataTransfer().files,
     },
@@ -116,8 +122,11 @@ function formatValuesForApi(v) {
 
 const config = {
     create: {
-        async submit(values) {
-            const addedQuestion = await questionsStore.create(values);
+        async submit(values, attachments) {
+            const addedQuestion = await questionsStore.create(
+                values,
+                attachments
+            );
             trackEvent("Action", "Création question", `${addedQuestion.id}`);
             return addedQuestion;
         },
@@ -157,19 +166,31 @@ defineExpose({
         error.value = null;
 
         try {
-            const valuesWithoutAttachments = { ...sentValues };
-            delete valuesWithoutAttachments.attachments;
-
+            const { attachments, ...valuesWithoutAttachments } = sentValues;
             const { submit, notification } = config[mode.value];
-            const respondedQuestion = await submit(
-                sentValues,
-                question.value?.id,
-                question.value?.createdBy.id
-            );
+            let addressedQuestion = null;
+
+            // On test si on est en mode création ou modification
+            if (mode.value === "create") {
+                // On envoie les valeurs du formulaire à la méthode submit de la store
+                addressedQuestion = await submit(
+                    valuesWithoutAttachments,
+                    attachments
+                );
+            } else {
+                // On supprime les attachments
+                valuesWithoutAttachments.attachments = {};
+                // On envoie les valeurs du formulaire à la méthode submit du store
+                addressedQuestion = await submit(
+                    valuesWithoutAttachments,
+                    question.value?.id,
+                    question.value?.createdBy.id
+                );
+            }
 
             const notificationStore = useNotificationStore();
             notificationStore.success(notification.title, notification.content);
-            backOrReplace(`/question/${respondedQuestion.id}`);
+            backOrReplace(`/question/${addressedQuestion.id}`);
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             if (e?.fields) {

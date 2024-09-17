@@ -22,8 +22,8 @@ export default [
             if (user === null) {
                 throw new Error('L\'utilisateur n\'existe pas ou vous n\'avez pas les droits suffisants pour le désactiver');
             }
-
-            if (user.status !== 'inactive') {
+            const inactiveStatus = ['inactive', 'refused'];
+            if (!inactiveStatus.includes(user.status)) {
                 throw new Error('L\'accès de cet utilisateur est déjà actif');
             }
 

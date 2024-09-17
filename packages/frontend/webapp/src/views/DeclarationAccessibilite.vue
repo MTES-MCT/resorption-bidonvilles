@@ -1,11 +1,31 @@
 <template>
     <Layout>
-        <div class="mt-10 max-w-screen-lg mx-auto pb-16">
+        <div class="-mt-8 max-w-screen-lg mx-auto pb-16">
+            <div class="mt-4">
+                <p>
+                    <strong>Résorption-bidonvilles</strong> s'engage à rendre
+                    ses services numériques accessibles, conformément à
+                    l'article 47 de la loi n° 2005-102 du 11 février 2005.
+                </p>
+            </div>
+            <div class="mt-4">
+                <p>
+                    À cette fin, <strong>Résorption-bidonvilles</strong> met en
+                    œuvre la stratégie et les actions suivantes :
+                </p>
+            </div>
+            <div class="my-4">
+                <p class="ml-4">
+                    <Link class="underline" to="/schema-pluriannuel"
+                        >Schéma pluriannuel 2024-2026</Link
+                    >
+                </p>
+            </div>
             <h2 class="text-display-lg font-bold">
                 Déclaration d'accessibilité
             </h2>
             <div class="mt-4">
-                <p>Établie le <span>21 février 2024</span>.</p>
+                <p>Établie le <span>8 avril 2024</span>.</p>
                 <p>
                     <Link
                         to="https://www.gouvernement.fr/delegation-interministerielle-a-l-hebergement-et-a-l-acces-au-logement"
@@ -40,7 +60,13 @@
                     title="Référentiel général d'amélioration de l'accessibilité"
                     >RGAA</abbr
                 >.
-                <span>Le site n'a encore pas été audité.</span>
+            </div>
+            <h3 class="text-display-md font-bold mt-8">Résultat des tests</h3>
+            <div class="mt-4">
+                <p>
+                    L'audit de conformité réalisé par évaluation externe révèle
+                    que 36,67 % des critères sont respectés.
+                </p>
             </div>
             <h3 class="text-display-md font-bold mt-8">
                 Contenus non accessibles
@@ -52,7 +78,7 @@
                 <p>
                     Si vous n'arrivez pas à accéder à un contenu ou à un
                     service, vous pouvez contacter le responsable de
-                    <span>Résorption-bidonvilles</span>
+                    <strong>Résorption-bidonvilles</strong>
                     pour être orienté vers une alternative accessible ou obtenir
                     le contenu sous une autre forme.
                 </p>

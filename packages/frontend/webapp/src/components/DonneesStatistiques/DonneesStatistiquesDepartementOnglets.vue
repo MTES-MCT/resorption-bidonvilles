@@ -1,9 +1,10 @@
 <template>
-    <div class="pt-4 px-4 mb-6 border-b-1 border-b-g300">
+    <div class="pt-4 px-4 mb-0 border-b-1 border-b-g300">
         <Tab
             @click="switchTab(tab.id)"
             v-for="tab in tabs"
             :key="tab.id"
+            :id="tab.id"
             :active="tab.id === departementMetricsStore.activeTab"
         >
             {{ tab.label }}</Tab
