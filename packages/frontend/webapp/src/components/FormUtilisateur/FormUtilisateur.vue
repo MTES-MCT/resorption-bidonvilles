@@ -168,7 +168,7 @@
 
 <script setup>
 // utils
-import { defineProps, toRefs, computed, ref, onMounted } from "vue";
+import { defineProps, toRefs, computed, ref, onMounted, watch } from "vue";
 import router from "@/helpers/router";
 
 // components
@@ -220,6 +220,12 @@ const form = ref(null);
 const associationInput = ref(null);
 const privateOrganizationInput = ref(null);
 const { variant, submit, language } = toRefs(props);
+const values = ref({
+    organization_category: "",
+    territorial_collectivity: "",
+    association: "",
+    private_organization: "",
+});
 const allowNewOrganization = computed(() => {
     return variant.value === "demande-acces";
 });
@@ -235,6 +241,7 @@ const schema = computed(() => {
         language.value
     );
 });
+
 const labels = computed(() => {
     return labelsFn(variant.value)[language.value];
 });
@@ -250,17 +257,29 @@ onMounted(() => {
     }
 });
 
+watch(values.value.association, (newAssociation) => {
+    onAssociationChange(newAssociation);
+});
 function onAssociationChange(value) {
+    console.log("Association change", value);
     if (value?.data === null) {
+        console.log("Association non trouvée");
+
         if (allowNewOrganization.value === true) {
             form.value.setFieldValue("organization_category", "other");
         } else {
+            console.log(
+                "Vous devez créer une nouvelle structure ou en faire la demande aux administrateurs nationaux."
+            );
+
             alert(
                 "Vous devez créer une nouvelle structure ou en faire la demande aux administrateurs nationaux."
             );
         }
 
         associationInput.value.clear();
+    } else {
+        console.log("Data de l'association:", value?.data);
     }
 }
 
