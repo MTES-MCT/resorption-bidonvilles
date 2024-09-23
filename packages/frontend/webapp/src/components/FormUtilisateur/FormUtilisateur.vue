@@ -261,25 +261,16 @@ watch(values.value.association, (newAssociation) => {
     onAssociationChange(newAssociation);
 });
 function onAssociationChange(value) {
-    console.log("Association change", value);
     if (value?.data === null) {
-        console.log("Association non trouvée");
-
         if (allowNewOrganization.value === true) {
             form.value.setFieldValue("organization_category", "other");
         } else {
-            console.log(
-                "Vous devez créer une nouvelle structure ou en faire la demande aux administrateurs nationaux."
-            );
-
             alert(
                 "Vous devez créer une nouvelle structure ou en faire la demande aux administrateurs nationaux."
             );
         }
 
         associationInput.value.clear();
-    } else {
-        console.log("Data de l'association:", value?.data);
     }
 }
 
