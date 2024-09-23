@@ -169,7 +169,6 @@ const { handleSubmit, values, errors, setErrors, isSubmitting } = useForm({
 const originalValues = formatValuesForApi(values);
 const error = ref(null);
 const address = toRef(values, "address");
-console.log("Address: ", address.value);
 
 watch(address, async () => {
     location.value = null;
