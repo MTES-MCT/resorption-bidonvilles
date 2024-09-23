@@ -31,6 +31,12 @@ const { name } = toRefs(props);
 const isSubmitting = useIsSubmitting();
 const { value, handleChange } = useField(name.value);
 
+watch(value, () => {
+    if (value.value) {
+        refreshInput(value.value, false);
+    }
+});
+
 const view = computed(() => {
     if (!value.value) {
         return;

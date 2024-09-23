@@ -1,16 +1,27 @@
 <template>
-    <Autocomplete
-        v-bind="$attrs"
-        :fn="autocompleteFn"
-        v-model="organization"
-        ref="autocomplete"
-    />
+    <InputWrapper :hasErrors="!!errors.length" :withoutMargin="withoutMargin">
+        <BasicAutocomplete
+            name="territorial_collectivity"
+            id="territorial_collectivity"
+            v-bind="$attrs"
+            :fn="autocompleteFn"
+            v-model="organization"
+            ref="autocomplete"
+            @update:modelValue="updateOrganization"
+        />
+        <InputError v-if="errors.length">{{ errors[0] }}</InputError>
+    </InputWrapper>
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, defineEmits, ref } from "vue";
-import { Autocomplete } from "@resorptionbidonvilles/ui";
+import { toRefs, computed, ref } from "vue";
+import {
+    BasicAutocomplete,
+    InputWrapper,
+    InputError,
+} from "@resorptionbidonvilles/ui";
 import { autocompleteTerritorialCollectivity } from "@/api/organizations.api.js";
+import { useField } from "vee-validate";
 
 const props = defineProps({
     modelValue: {
@@ -23,14 +34,16 @@ const props = defineProps({
     },
 });
 const { modelValue } = toRefs(props);
+const { handleChange, errors } = useField("territorial_collectivity");
 const autocomplete = ref(null);
-const emit = defineEmits(["update:modelValue"]);
+
 const organization = computed({
     get() {
+        handleChange(modelValue.value, modelValue.value.search !== "");
         return modelValue.value;
     },
     set(value) {
-        emit("update:modelValue", value);
+        handleChange(value, true);
     },
 });
 
@@ -47,6 +60,10 @@ async function autocompleteFn(value) {
         },
     }));
 }
+
+const updateOrganization = (value) => {
+    organization.value = value;
+};
 
 defineExpose({
     focus: () => {

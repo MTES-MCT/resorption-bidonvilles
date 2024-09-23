@@ -1,21 +1,30 @@
 <template>
-    <Autocomplete
-        name="association"
-        :label="label"
-        placeholder="Nom ou acronyme de votre association"
-        :fn="autocompleteFn"
-        v-model="association"
-        showCategory
-        ref="autocompleteInput"
-        showMandatoryStar
-    />
+    <InputWrapper :hasErrors="!!errors.length" :withoutMargin="withoutMargin">
+        <BasicAutocomplete
+            name="association"
+            id="association"
+            :label="label"
+            placeholder="Nom ou acronyme de votre association"
+            :fn="autocompleteFn"
+            v-model="association"
+            showCategory
+            ref="autocompleteInput"
+            showMandatoryStar
+            @update:modelValue="updateAssociation"
+        />
+        <InputError v-if="errors.length">{{ errors[0] }}</InputError>
+    </InputWrapper>
 </template>
 
 <script setup>
-import { defineProps, ref, toRefs, computed, defineEmits, watch } from "vue";
-import { useFieldValue } from "vee-validate";
-import { Autocomplete } from "@resorptionbidonvilles/ui";
+import { ref, toRefs, computed } from "vue";
+import {
+    BasicAutocomplete,
+    InputError,
+    InputWrapper,
+} from "@resorptionbidonvilles/ui";
 import { autocompleteAssociation } from "@/api/organizations.api.js";
+import { useField } from "vee-validate";
 
 const props = defineProps({
     modelValue: {
@@ -26,23 +35,18 @@ const props = defineProps({
 });
 const { modelValue } = toRefs(props);
 
+const { handleChange, errors } = useField("association");
+
 const autocompleteInput = ref(null);
 const emit = defineEmits(["update:modelValue", "change"]);
 const association = computed({
     get() {
+        handleChange(modelValue.value, false);
         return modelValue.value;
     },
     set(value) {
-        emit("update:modelValue", value);
+        handleChange(value, true);
     },
-});
-const value = useFieldValue("association");
-
-// obligés d'émettre un événement différent de update:modelValue car ce dernier est émis
-// deux fois pour chaque changement de valeur
-// ici, "change" ne sera émis qu'une seule fois
-watch(value, (newValue) => {
-    emit("change", newValue);
 });
 
 async function autocompleteFn(value) {
@@ -66,6 +70,11 @@ async function autocompleteFn(value) {
 
     return mappedResults;
 }
+
+const updateAssociation = (value) => {
+    association.value = value;
+    emit("change", value);
+};
 
 defineExpose({
     clear() {
