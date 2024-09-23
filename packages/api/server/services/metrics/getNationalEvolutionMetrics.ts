@@ -41,13 +41,13 @@ export default async (user: User, argFrom: Date, argTo: Date):Promise<NationalMe
         const date = moment(row.month).format(format);
 
         metrics.shantytowns.labels.push(date[0].toUpperCase() + date.slice(1));
-        metrics.shantytowns.count.push(safeParseInt(row.open_shantytowns_count));
+        metrics.shantytowns.count.push(safeParseInt(row.toutes_origin_shantytowns_count));
         metrics.shantytowns.onlyEUcount.push(safeParseInt(row.only_intra_eu_shantytowns_count));
 
         metrics.inhabitants.labels.push(date[0].toUpperCase() + date.slice(1));
         metrics.inhabitants.european.push(safeParseInt(row.intra_eu_count));
         metrics.inhabitants.foreign.push(safeParseInt(row.extra_eu_count));
-        metrics.inhabitants.total.push(safeParseInt(row.intra_eu_count) + safeParseInt(row.extra_eu_count));
+        metrics.inhabitants.total.push(safeParseInt(row.toutes_origin_count));
     });
 
     return metrics;

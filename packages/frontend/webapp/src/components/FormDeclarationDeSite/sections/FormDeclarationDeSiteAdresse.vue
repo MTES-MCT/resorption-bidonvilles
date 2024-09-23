@@ -3,8 +3,12 @@
         <template v-slot:title>Localisation</template>
         <div class="flex flex-col lg:flex-row">
             <section class="flex-1">
-                <FormParagraph title="Adresse" showMandatoryStar id="address">
-                    <InputAddress />
+                <FormParagraph
+                    title="Adresse"
+                    showMandatoryStar
+                    id="addressParagraph"
+                >
+                    <InputAddress v-model="values.address" />
                 </FormParagraph>
 
                 <div class="text-sm mb-4" v-if="nearbyShantytowns.length">
@@ -56,7 +60,7 @@ import { defineProps, ref, toRefs, watch } from "vue";
 
 import FormSection from "@/components/FormSection/FormSection.vue";
 import { FormParagraph, Link } from "@resorptionbidonvilles/ui";
-import InputAddress from "../inputs/FormDeclarationDeSiteInputAddress.vue";
+import InputAddress from "@/components/InputAddress/InputAddress.vue";
 import InputCoordinates from "../inputs/FormDeclarationDeSiteInputCoordinates.vue";
 import InputName from "../inputs/FormDeclarationDeSiteInputName.vue";
 
@@ -72,14 +76,16 @@ const values = useFormValues();
 const address = useFieldValue("address");
 const coordinates = useFieldValue("coordinates");
 const nearbyShantytowns = ref([]);
+
 watch(address, () => {
     nearbyShantytowns.value = [];
     if (!address.value?.data?.coordinates) {
         return;
     }
-
+    values.value.address = address.value;
     values.value.coordinates = address.value.data.coordinates;
 });
+
 watch(coordinates, async () => {
     nearbyShantytowns.value = [];
     if (!coordinates.value) {
