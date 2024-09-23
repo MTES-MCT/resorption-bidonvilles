@@ -3,9 +3,12 @@
         <template v-slot:title>Localisation</template>
         <div class="flex flex-col lg:flex-row">
             <section class="flex-1">
-                <FormParagraph title="Adresse" showMandatoryStar id="address">
+                <FormParagraph
+                    title="Adresse"
+                    showMandatoryStar
+                    id="addressParagraph"
+                >
                     <InputAddress v-model="values.address" />
-                    <!-- v-model="values.address" /> -->
                 </FormParagraph>
 
                 <div class="text-sm mb-4" v-if="nearbyShantytowns.length">
@@ -57,7 +60,6 @@ import { defineProps, ref, toRefs, watch } from "vue";
 
 import FormSection from "@/components/FormSection/FormSection.vue";
 import { FormParagraph, Link } from "@resorptionbidonvilles/ui";
-// import InputAddress from "../inputs/FormDeclarationDeSiteInputAddress.vue";
 import InputAddress from "@/components/InputAddress/InputAddress.vue";
 import InputCoordinates from "../inputs/FormDeclarationDeSiteInputCoordinates.vue";
 import InputName from "../inputs/FormDeclarationDeSiteInputName.vue";
@@ -72,40 +74,18 @@ const props = defineProps({
 const { townId } = toRefs(props);
 const values = useFormValues();
 const address = useFieldValue("address");
-// const address = ref(null);
-console.log("Address: ", address.value);
-
 const coordinates = useFieldValue("coordinates");
 const nearbyShantytowns = ref([]);
-watch(address, (val) => {
-    console.log(val);
-    console.log(address.value);
-    console.log(values.value);
 
+watch(address, () => {
     nearbyShantytowns.value = [];
     if (!address.value?.data?.coordinates) {
-        console.log("No coordinates");
-
         return;
     }
-    // return;
-    console.log("Check address", address.value);
-
-    console.log("Setting coordinates", values.value);
     values.value.address = address.value;
     values.value.coordinates = address.value.data.coordinates;
-    console.log("Nouvelles values: ", values.value);
 });
-// const handleAddress = (newAddress) => {
-//     console.log(newAddress);
 
-//     nearbyShantytowns.value = [];
-//     if (!newAddress?.data?.coordinates) {
-//         return;
-//     }
-
-//     values.value.coordinates = newAddress.data.coordinates;
-// };
 watch(coordinates, async () => {
     nearbyShantytowns.value = [];
     if (!coordinates.value) {
