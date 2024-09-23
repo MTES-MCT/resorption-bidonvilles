@@ -62,16 +62,12 @@ function refreshInput(center, emitInput = true) {
 }
 
 function handleClick({ latlng: { lat, lng } }) {
-    console.log("handleClick", lat, lng);
-
     refreshInput([lat, lng]);
     clearTimeout(clickTimeout);
     clickTimeout = null;
 }
 
 watch(carto, () => {
-    console.log("carto", carto.value);
-
     if (carto.value) {
         const { map } = carto.value;
         inputMarker.addTo(map);
