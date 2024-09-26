@@ -72,6 +72,12 @@
             >
                 {{ town.insalubrityParcels || "non communiqué" }}
             </FicheSiteProceduresLigne>
+            <FicheSiteProceduresLigne
+                icon="folder-open"
+                :label="labels.insalubrity_parcels"
+            >
+                {{ town.insalubrityParcels || "non communiqué" }}
+            </FicheSiteProceduresLigne>
         </FicheSiteProceduresRubrique>
 
         <FicheSiteProceduresRubrique>
