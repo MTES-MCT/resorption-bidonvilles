@@ -4,22 +4,16 @@ module.exports = {
         {
             shantytown_decree_id: {
                 type: Sequelize.INTEGER,
-                allowNull: false,
+                allowNull: true,
+                autoIncrement: true,
+                primaryKey: true,
             },
             fk_shantytown: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
             },
-            fk_attachement: {
+            fk_attachment: {
                 type: Sequelize.INTEGER,
-                allowNull: false,
-            },
-            created_by: {
-                type: Sequelize.INTEGER,
-                allowNull: false,
-            },
-            created_at: {
-                type: Sequelize.DATE,
                 allowNull: false,
             },
         },
