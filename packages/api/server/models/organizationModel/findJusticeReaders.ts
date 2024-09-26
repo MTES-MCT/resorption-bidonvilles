@@ -25,7 +25,7 @@ export type JusticeReaderRow = {
     type_abbreviation: string | null
 };
 
-export default async (shantytownId?: number, location?: Location): Promise<Organization[]> => {
+export default async (shantytownId?: number, location?: Location, userId?: number): Promise<Organization[]> => {
     const rows: JusticeReaderRow[] = await sequelize.query(
         `WITH users_by_permissions AS (
             SELECT
@@ -98,6 +98,7 @@ export default async (shantytownId?: number, location?: Location): Promise<Organ
                 OR  ${shantytownId ? 'shantytown_location.city' : ':city'} = ANY(users_by_permissions.cities)
                 ${shantytownId ? 'OR shantytown_location.cityMain = ANY(users_by_permissions.cities)' : ''} 
             )
+            AND ${userId ? 'users.user_id = :userId' : 'TRUE'}
         `,
         {
             replacements: {
@@ -107,6 +108,7 @@ export default async (shantytownId?: number, location?: Location): Promise<Organ
                 epci: location?.epci.code || null,
                 city: location?.city.code || null,
                 cityMain: location?.city.main || null,
+                userId: userId || null,
             },
             type: QueryTypes.SELECT,
         },

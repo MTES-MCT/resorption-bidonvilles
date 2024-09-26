@@ -7,6 +7,7 @@ import findByName from './findByName';
 import findByType from './findByType';
 import findJusticeReadersByLocation from './findJusticeReadersByLocation';
 import findJusticeReadersByShantytown from './findJusticeReadersByShantytown';
+import findJusticeReadersByUserId from './findJusticeReadersByUserId';
 import findOneById from './findOneById';
 import findPrefAndDdets from './findPrefAndDdets';
 
@@ -20,6 +21,7 @@ export default {
     findByType,
     findJusticeReadersByLocation,
     findJusticeReadersByShantytown,
+    findJusticeReadersByUserId,
     findOneById,
     findPrefAndDdets,
 };
