@@ -1,5 +1,6 @@
 import shantytownModel from '#server/models/shantytownModel';
 import ServiceError from '#server/errors/ServiceError';
+import findJusticeReadersByShantytown from '#server/models/organizationModel/findJusticeReadersByShantytown';
 import enrichCommentsAttachments from './_common/enrichCommentsAttachments';
 
 export default async (user, townId) => {
@@ -14,6 +15,8 @@ export default async (user, townId) => {
     }
     const { comments, ...townWithoutComments } = town;
     const commentsWithEnrichedAttachments = await Promise.all(comments.map(async comment => enrichCommentsAttachments(comment)));
+    // const decrees = await shantytownDecree.findAll(user, townId);
+    console.log(await findJusticeReadersByShantytown(townId));
     return {
         ...townWithoutComments,
         comments: commentsWithEnrichedAttachments,
