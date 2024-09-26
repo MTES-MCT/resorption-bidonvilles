@@ -1,0 +1,32 @@
+import { sequelize } from '#db/sequelize';
+import { QueryTypes } from 'sequelize';
+import { ShantytownDecree } from './shantytownDecrees.d';
+
+export default (shantytownIds: number, transaction = undefined): Promise<ShantytownDecree[]> => {
+    const ids = Array.isArray(shantytownIds) ? shantytownIds : [shantytownIds];
+
+    return sequelize.query(
+        `SELECT
+            sd.fk_shantytown AS "shantytownId",
+            sd.fk_attachment AS "attachmentId",
+            a.original_file_key AS "fileKey",
+            a.preview_file_key AS "previewFileKey",
+            a.original_name AS "originalName",
+            a.mimetype AS "type",
+            a.size AS "size",
+            a.created_by AS "createdBy",
+            a.created_at AS "createdAt"
+        FROM
+            shantytown_decrees sd
+        LEFT JOIN attachments a ON sd.fk_attachment = a.attachment_id
+        WHERE sd.fk_shantytown IN (:ids)
+        ORDER BY a.created_at DESC`,
+        {
+            type: QueryTypes.SELECT,
+            replacements: {
+                ids,
+            },
+            transaction,
+        },
+    );
+};
