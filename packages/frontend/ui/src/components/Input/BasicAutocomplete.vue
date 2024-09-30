@@ -229,7 +229,7 @@ function sendEvent(data) {
 }
 
 onMounted(() => {
-    input.value.setValue("");
+    input.value.setValue(modelValue.value?.search || "");
 });
 
 onBeforeUnmount(() => {
