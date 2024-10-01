@@ -4,6 +4,7 @@
             name="address"
             id="address"
             v-bind="$attrs"
+            v-model="address"
             :fn="searchAddress"
             ref="address"
         />
@@ -33,19 +34,8 @@ const props = defineProps({
     },
 });
 const { modelValue, withoutMargin } = toRefs(props);
-
-const { handleChange, errors } = useField("address");
-const address = computed({
-    get() {
-        if (modelValue.value) {
-            handleChange(modelValue.value, false);
-        }
-        return modelValue.value;
-    },
-    set(value) {
-        if (value?.data) {
-            handleChange(value, true);
-        }
-    },
+const { errors } = useField("address");
+const address = computed(() => {
+    return modelValue.value;
 });
 </script>

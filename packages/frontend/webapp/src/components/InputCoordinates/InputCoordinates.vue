@@ -54,7 +54,7 @@ function refreshInput(center, emitInput = true) {
     }
 
     inputMarker.setLatLng(center);
-    carto.value.setView({ center });
+    carto.value && carto.value.setView({ center });
 
     if (emitInput === true) {
         handleChange(center);
