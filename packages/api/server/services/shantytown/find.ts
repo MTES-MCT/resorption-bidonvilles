@@ -16,7 +16,7 @@ export default async (user, townId) => {
     const { comments, ...townWithoutComments } = town;
     const commentsWithEnrichedAttachments = await Promise.all(comments.map(async comment => enrichCommentsAttachments(comment)));
     // const decrees = await shantytownDecree.findAll(user, townId);
-    console.log(await findJusticeReadersByShantytown(townId));
+    console.log(await findJusticeReadersByShantytown(townId, null));
     return {
         ...townWithoutComments,
         comments: commentsWithEnrichedAttachments,
