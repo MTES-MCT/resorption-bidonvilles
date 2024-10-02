@@ -87,403 +87,405 @@ export default mode => ([
     body('updated_without_any_change')
         .isBoolean().withMessage('Le champ "updated_without_any_change" doit être un booléen')
         .custom((value, { req }) => {
-            const fieldsToCheck = [
-                {
-                    key: 'address',
-                    submitedValue: getStringOrNull(req.body.address),
-                    storedValue: getStringOrNull(req.town.address),
-                },
-                {
-                    key: 'name',
-                    submitedValue: getStringOrNull(req.body.name),
-                    storedValue: getStringOrNull(req.town.name),
-                },
-                // Mis en commentaire le temps de résoudre l'incohérence des coordonnées géographiques du site toujours initialisée à celle de la commune
-                // { key: 'coordinates', submitedValue: req.body['coordinates'], storedValue: `${req.town.city.latitude},${req.town.city.longitude}` },
-                {
-                    key: 'built_at',
-                    submitedValue: getStringOrNull(req.body.built_at),
-                    storedValue: req.town.builtAt ? formatDateToYYYYMMDD(new Date(req.town.builtAt * 1000)) : null,
-                },
-                {
-                    key: 'declared_at',
-                    submitedValue: getStringOrNull(req.body.declared_at),
-                    storedValue: req.town.declaredAt ? formatDateToYYYYMMDD(new Date(req.town.declaredAt * 1000)) : null,
-                },
-                {
-                    key: 'field_type',
-                    submitedValue: req.body.field_type,
-                    storedValue: req.town.fieldType.id,
-                },
-                {
-                    key: 'detailed_address',
-                    submitedValue: getStringOrNull(req.body.detailed_address),
-                    storedValue: getStringOrNull(req.town.addressDetails),
-                },
-                {
-                    key: 'owner_type',
-                    submitedValue: req.body.owner_type,
-                    storedValue: req.town.ownerType.id,
-                },
-                {
-                    key: 'owner',
-                    submitedValue: getStringOrNull(req.body.owner),
-                    storedValue: getStringOrNull(req.town.owner),
-                },
-                {
-                    key: 'population_total',
-                    submitedValue: getNumberOrNull(req.body.population_total),
-                    storedValue: getNumberOrNull(req.town.populationTotal),
-                },
-                {
-                    key: 'population_couples',
-                    submitedValue: getNumberOrNull(req.body.population_couples),
-                    storedValue: getNumberOrNull(req.town.populationCouples),
-                },
-                {
-                    key: 'population_minors',
-                    submitedValue: getNumberOrNull(req.body.population_minors),
-                    storedValue: getNumberOrNull(req.town.populationMinors),
-                },
-                {
-                    key: 'population_minors_0_3',
-                    submitedValue: getNumberOrNull(req.body.population_minors_0_3),
-                    storedValue: getNumberOrNull(req.town.populationMinors0To3),
-                },
-                {
-                    key: 'population_minors_3_6',
-                    submitedValue: getNumberOrNull(req.body.population_minors_3_6),
-                    storedValue: getNumberOrNull(req.town.populationMinors3To6),
-                },
-                {
-                    key: 'population_minors_6_12',
-                    submitedValue: getNumberOrNull(req.body.population_minors_6_12),
-                    storedValue: getNumberOrNull(req.town.populationMinors6To12),
-                },
-                {
-                    key: 'population_minors_12_16',
-                    submitedValue: getNumberOrNull(req.body.population_minors_12_16),
-                    storedValue: getNumberOrNull(req.town.populationMinors12To16),
-                },
-                {
-                    key: 'population_minors_16_18',
-                    submitedValue: getNumberOrNull(req.body.population_minors_16_18),
-                    storedValue: getNumberOrNull(req.town.populationMinors16To18),
-                },
-                {
-                    key: 'minors_in_school',
-                    submitedValue: getNumberOrNull(req.body.minors_in_school),
-                    storedValue: getNumberOrNull(req.town.minorsInSchool),
-                },
-                {
-                    key: 'social_origins',
-                    submitedValue: req.body.social_origins ? JSON.stringify(req.body.social_origins.sort()) : null,
-                    storedValue: req.town.socialOrigins ? JSON.stringify(req.town.socialOrigins.map((so: SocialOrigin) => so.id).sort()) : null,
-                },
-                {
-                    key: 'caravans',
-                    submitedValue: getNumberOrNull(req.body.caravans),
-                    storedValue: getNumberOrNull(req.town.caravans),
-                },
-                {
-                    key: 'huts',
-                    submitedValue: getNumberOrNull(req.body.huts),
-                    storedValue: getNumberOrNull(req.town.huts),
-                },
-                {
-                    key: 'tents',
-                    submitedValue: getNumberOrNull(req.body.tents),
-                    storedValue: getNumberOrNull(req.town.tents),
-                },
-                {
-                    key: 'cars',
-                    submitedValue: getNumberOrNull(req.body.cars),
-                    storedValue: getNumberOrNull(req.town.cars),
-                },
-                {
-                    key: 'mattresses',
-                    submitedValue: getNumberOrNull(req.body.mattresses),
-                    storedValue: getNumberOrNull(req.town.mattresses),
-                },
-                {
-                    key: 'census_status',
-                    submitedValue: req.body.census_status,
-                    storedValue: req.town.censusStatus,
-                },
-                {
-                    key: 'census_conducted_at',
-                    submitedValue: req.body.census_conducted_at ? req.body.census_conducted_at : null,
-                    storedValue: req.town.censusConductedAt ? formatDateToYYYYMMDD(new Date(req.town.censusConductedAt * 1000)) : null,
-                },
-                {
-                    key: 'census_conducted_by',
-                    submitedValue: req.body.census_conducted_by,
-                    storedValue: req.town.censusConductedBy,
-                },
-                {
-                    key: 'is_reinstallation',
-                    submitedValue: valueMap[parseInt(req.body.is_reinstallation, 10) + 1],
-                    storedValue: req.town.isReinstallation,
-                },
-                {
-                    key: 'reinstallation_comments',
-                    submitedValue: getStringOrNull(req.body.reinstallation_comments),
-                    storedValue: getStringOrNull(req.town.reinstallationComments),
-                },
-                {
-                    key: 'reinstallation_incoming_towns',
-                    submitedValue: req.body.reinstallation_incoming_towns ? JSON.stringify(req.body.reinstallation_incoming_towns.sort()) : null,
-                    storedValue: req.town.reinstallationIncomingTowns ? JSON.stringify(req.town.reinstallationIncomingTowns.map(rit => rit.id).sort()) : null,
-                },
-                {
-                    key: 'water_access_type',
-                    submitedValue: getStringOrNull(req.body.water_access_type),
-                    storedValue: getStringOrNull(req.town.livingConditions.water.access_type),
-                },
-                {
-                    key: 'water_access_type_details',
-                    submitedValue: getStringOrNull(req.body.water_access_type_details),
-                    storedValue: getStringOrNull(req.town.livingConditions.water.access_type_details),
-                },
-                {
-                    key: 'water_access_is_public',
-                    submitedValue: valueMap[parseInt(req.body.water_access_is_public, 10) + 1],
-                    storedValue: req.town.livingConditions.water.access_is_public,
-                },
-                {
-                    key: 'water_access_is_continuous',
-                    submitedValue: valueMap[parseInt(req.body.water_access_is_continuous, 10) + 1],
-                    storedValue: req.town.livingConditions.water.access_is_continuous,
-                },
-                {
-                    key: 'water_access_is_continuous_details',
-                    submitedValue: req.body.water_access_is_continuous_details,
-                    storedValue: req.town.livingConditions.water.access_is_continuous_details,
-                },
-                {
-                    key: 'water_access_is_local',
-                    submitedValue: valueMap[parseInt(req.body.water_access_is_local, 10) + 1],
-                    storedValue: req.town.livingConditions.water.access_is_local,
-                },
-                {
-                    key: 'water_access_is_close',
-                    submitedValue: valueMap[parseInt(req.body.water_access_is_close, 10) + 1],
-                    storedValue: req.town.livingConditions.water.access_is_close,
-                },
-                {
-                    key: 'water_access_is_unequal',
-                    submitedValue: valueMap[parseInt(req.body.water_access_is_unequal, 10) + 1],
-                    storedValue: req.town.livingConditions.water.access_is_unequal,
-                },
-                {
-                    key: 'water_access_is_unequal_details',
-                    submitedValue: req.body.water_access_is_unequal_details,
-                    storedValue: req.town.livingConditions.water.access_is_unequal_details,
-                },
-                {
-                    key: 'water_access_has_stagnant_water',
-                    submitedValue: valueMap[parseInt(req.body.water_access_has_stagnant_water, 10) + 1],
-                    storedValue: req.town.livingConditions.water.access_has_stagnant_water,
-                },
-                {
-                    key: 'water_access_comments',
-                    submitedValue: getStringOrNull(req.body.water_access_comments),
-                    storedValue: getStringOrNull(req.town.livingConditions.water.access_comments),
-                },
-                {
-                    key: 'sanitary_working_toilets',
-                    submitedValue: valueMap[parseInt(req.body.sanitary_working_toilets, 10) + 1],
-                    storedValue: req.town.livingConditions.sanitary.working_toilets,
-                },
-                {
-                    key: 'sanitary_open_air_defecation',
-                    submitedValue: valueMap[parseInt(req.body.sanitary_open_air_defecation, 10) + 1],
-                    storedValue: req.town.livingConditions.sanitary.open_air_defecation,
-                },
-                {
-                    key: 'sanitary_toilet_types',
-                    submitedValue: req.body.sanitary_toilet_types ? JSON.stringify(req.body.sanitary_toilet_types.sort()) : null,
-                    storedValue: req.town.livingConditions.sanitary.toilet_types ? JSON.stringify(req.town.livingConditions.sanitary.toilet_types.sort()) : null,
-                },
-                {
-                    key: 'sanitary_toilets_are_inside',
-                    submitedValue: valueMap[parseInt(req.body.sanitary_toilets_are_inside, 10) + 1],
-                    storedValue: req.town.livingConditions.sanitary.toilets_are_inside,
-                },
-                {
-                    key: 'sanitary_toilets_are_lighted',
-                    submitedValue: valueMap[parseInt(req.body.sanitary_toilets_are_lighted, 10) + 1],
-                    storedValue: req.town.livingConditions.sanitary.toilets_are_lighted,
-                },
-                {
-                    key: 'sanitary_hand_washing',
-                    submitedValue: valueMap[parseInt(req.body.sanitary_hand_washing, 10) + 1],
-                    storedValue: req.town.livingConditions.sanitary.hand_washing,
-                },
-                {
-                    key: 'electricity_access',
-                    submitedValue: valueMap[parseInt(req.body.electricity_access, 10) + 1],
-                    storedValue: req.town.livingConditions.electricity.access,
-                },
-                {
-                    key: 'electricity_access_types',
-                    submitedValue: req.body.electricity_access_types ? JSON.stringify(req.body.electricity_access_types.sort()) : null,
-                    storedValue: req.town.livingConditions.electricity.access_types ? JSON.stringify(req.town.livingConditions.electricity.access_types.sort()) : null,
-                },
-                {
-                    key: 'electricity_access_is_unequal',
-                    submitedValue: valueMap[parseInt(req.body.electricity_access_is_unequal, 10) + 1],
-                    storedValue: req.town.livingConditions.electricity.access_is_unequal,
-                },
-                {
-                    key: 'trash_is_piling',
-                    submitedValue: valueMap[parseInt(req.body.trash_is_piling, 10) + 1],
-                    storedValue: req.town.livingConditions.trash.is_piling,
-                },
-                {
-                    key: 'trash_evacuation_is_close',
-                    submitedValue: valueMap[parseInt(req.body.trash_evacuation_is_close, 10) + 1],
-                    storedValue: req.town.livingConditions.trash.evacuation_is_close,
-                },
-                {
-                    key: 'trash_evacuation_is_safe',
-                    submitedValue: valueMap[parseInt(req.body.trash_evacuation_is_safe, 10) + 1],
-                    storedValue: req.town.livingConditions.trash.evacuation_is_safe,
-                },
-                {
-                    key: 'trash_evacuation_is_regular',
-                    submitedValue: valueMap[parseInt(req.body.trash_evacuation_is_regular, 10) + 1],
-                    storedValue: req.town.livingConditions.trash.evacuation_is_regular,
-                },
-                {
-                    key: 'trash_bulky_is_piling',
-                    submitedValue: valueMap[parseInt(req.body.trash_bulky_is_piling, 10) + 1],
-                    storedValue: req.town.livingConditions.trash.bulky_is_piling,
-                },
-                {
-                    key: 'pest_animals_presence',
-                    submitedValue: valueMap[parseInt(req.body.pest_animals_presence, 10) + 1],
-                    storedValue: req.town.livingConditions.pest_animals.presence,
-                },
-                {
-                    key: 'pest_animals_details',
-                    submitedValue: getStringOrNull(req.body.pest_animals_details),
-                    storedValue: getStringOrNull(req.town.livingConditions.pest_animals.details),
-                },
-                {
-                    key: 'fire_prevention_diagnostic',
-                    submitedValue: valueMap[parseInt(req.body.fire_prevention_diagnostic, 10) + 1],
-                    storedValue: req.town.livingConditions.fire_prevention.diagnostic,
-                },
-                {
-                    key: 'owner_complaint',
-                    submitedValue: valueMap[parseInt(req.body.owner_complaint, 10) + 1],
-                    storedValue: req.town.ownerComplaint,
-                },
-                {
-                    key: 'justice_procedure',
-                    submitedValue: valueMap[parseInt(req.body.justice_procedure, 10) + 1],
-                    storedValue: req.town.justiceProcedure,
-                },
-                {
-                    key: 'justice_rendered',
-                    submitedValue: valueMap[parseInt(req.body.justice_rendered, 10) + 1],
-                    storedValue: req.town.justiceRendered,
-                },
-                {
-                    key: 'justice_rendered_by',
-                    submitedValue: getStringOrNull(req.body.justice_rendered_by),
-                    storedValue: getStringOrNull(req.town.justiceRenderedBy),
-                },
-                {
-                    key: 'justice_rendered_at',
-                    submitedValue: req.body.justice_rendered_at ? req.body.justice_rendered_at : null,
-                    storedValue: req.town.justiceRenderedAt ? formatDateToYYYYMMDD(new Date(req.town.justiceRenderedAt * 1000)) : null,
-                },
-                {
-                    key: 'justice_challenged',
-                    submitedValue: valueMap[parseInt(req.body.justice_challenged, 10) + 1],
-                    storedValue: req.town.justiceChallenged,
-                },
-                {
-                    key: 'evacuation_under_time_limit',
-                    submitedValue: valueMap[parseInt(req.body.evacuation_under_time_limit, 10) + 1],
-                    storedValue: req.town.evacuationUnderTimeLimit,
-                },
-                {
-                    key: 'administrative_order_decision_at',
-                    submitedValue: req.body.administrative_order_decision_at ? req.body.administrative_order_decision_at : null,
-                    storedValue: req.town.administrativeOrderDecisionAt ? formatDateToYYYYMMDD(new Date(req.town.administrativeOrderDecisionAt * 1000)) : null,
-                },
-                {
-                    key: 'administrative_order_decision_rendered_by',
-                    submitedValue: getStringOrNull(req.body.administrative_order_decision_rendered_by),
-                    storedValue: getStringOrNull(req.town.administrativeOrderDecisionRenderedBy),
-                },
-                {
-                    key: 'administrative_order_evacuation_at',
-                    submitedValue: req.body.administrative_order_evacuation_at ? req.body.administrative_order_evacuation_at : null,
-                    storedValue: req.town.administrativeOrderEvacuationAt ? formatDateToYYYYMMDD(new Date(req.town.administrativeOrderEvacuationAt)) : null,
-                },
-                {
-                    key: 'insalubrity_order',
-                    submitedValue: valueMap[parseInt(req.body.insalubrity_order, 10) + 1],
-                    storedValue: req.town.insalubrityOrder,
-                },
-                {
-                    key: 'insalubrity_order_displayed',
-                    submitedValue: valueMap[parseInt(req.body.insalubrity_order_displayed, 10) + 1],
-                    storedValue: req.town.insalubrityOrderDisplayed,
-                },
-                {
-                    key: 'insalubrity_order_type',
-                    submitedValue: getStringOrNull(req.body.insalubrity_order_type),
-                    storedValue: getStringOrNull(req.town.insalubrityOrderType),
-                },
-                {
-                    key: 'insalubrity_order_by',
-                    submitedValue: getStringOrNull(req.body.insalubrity_order_by),
-                    storedValue: getStringOrNull(req.town.insalubrityOrderBy),
-                },
-                {
-                    key: 'insalubrity_order_at',
-                    submitedValue: req.body.insalubrity_order_at ? req.body.insalubrity_order_at : null,
-                    storedValue: req.town.insalubrityOrderAt ? formatDateToYYYYMMDD(new Date(req.town.insalubrityOrderAt * 1000)) : null,
-                },
-                {
-                    key: 'insalubrity_parcels',
-                    submitedValue: getStringOrNull(req.body.insalubrity_parcels),
-                    storedValue: getStringOrNull(req.town.insalubrityParcels),
-                },
-                {
-                    key: 'police_status',
-                    submitedValue: req.body.police_status,
-                    storedValue: req.town.policeStatus,
-                },
-                {
-                    key: 'police_requested_at',
-                    submitedValue: req.body.police_requested_at ? req.body.police_requested_at : null,
-                    storedValue: req.town.policeRequestedAt ? formatDateToYYYYMMDD(new Date(req.town.policeRequestedAt * 1000)) : null,
-                },
-                {
-                    key: 'police_granted_at',
-                    submitedValue: req.body.police_granted_at ? req.body.police_granted_at : null,
-                    storedValue: req.town.policeGrantedAt ? formatDateToYYYYMMDD(new Date(req.town.policeGrantedAt * 1000)) : null,
-                },
-                {
-                    key: 'existing_litigation',
-                    submitedValue: valueMap[parseInt(req.body.existing_litigation, 10) + 1],
-                    storedValue: req.town.existingLitigation,
-                },
-                {
-                    key: 'bailiff',
-                    submitedValue: getStringOrNull(req.body.bailiff),
-                    storedValue: getStringOrNull(req.town.bailiff),
-                },
-            ];
-
-            // Y at'il des modifications des données dans les champs du formulaire ?
-            const hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
+            let hasChanges = false;
+            if (req.town) {
+                const fieldsToCheck = [
+                    {
+                        key: 'address',
+                        submitedValue: getStringOrNull(req.body.address),
+                        storedValue: getStringOrNull(req.town.address),
+                    },
+                    {
+                        key: 'name',
+                        submitedValue: getStringOrNull(req.body.name),
+                        storedValue: getStringOrNull(req.town.name),
+                    },
+                    // Mis en commentaire le temps de résoudre l'incohérence des coordonnées géographiques du site toujours initialisée à celle de la commune
+                    // { key: 'coordinates', submitedValue: req.body['coordinates'], storedValue: `${req.town.city.latitude},${req.town.city.longitude}` },
+                    {
+                        key: 'built_at',
+                        submitedValue: getStringOrNull(req.body.built_at),
+                        storedValue: req.town.builtAt ? formatDateToYYYYMMDD(new Date(req.town.builtAt * 1000)) : null,
+                    },
+                    {
+                        key: 'declared_at',
+                        submitedValue: getStringOrNull(req.body.declared_at),
+                        storedValue: req.town.declaredAt ? formatDateToYYYYMMDD(new Date(req.town.declaredAt * 1000)) : null,
+                    },
+                    {
+                        key: 'field_type',
+                        submitedValue: req.body.field_type,
+                        storedValue: req.town.fieldType.id,
+                    },
+                    {
+                        key: 'detailed_address',
+                        submitedValue: getStringOrNull(req.body.detailed_address),
+                        storedValue: getStringOrNull(req.town.addressDetails),
+                    },
+                    {
+                        key: 'owner_type',
+                        submitedValue: req.body.owner_type,
+                        storedValue: req.town.ownerType.id,
+                    },
+                    {
+                        key: 'owner',
+                        submitedValue: getStringOrNull(req.body.owner),
+                        storedValue: getStringOrNull(req.town.owner),
+                    },
+                    {
+                        key: 'population_total',
+                        submitedValue: getNumberOrNull(req.body.population_total),
+                        storedValue: getNumberOrNull(req.town.populationTotal),
+                    },
+                    {
+                        key: 'population_couples',
+                        submitedValue: getNumberOrNull(req.body.population_couples),
+                        storedValue: getNumberOrNull(req.town.populationCouples),
+                    },
+                    {
+                        key: 'population_minors',
+                        submitedValue: getNumberOrNull(req.body.population_minors),
+                        storedValue: getNumberOrNull(req.town.populationMinors),
+                    },
+                    {
+                        key: 'population_minors_0_3',
+                        submitedValue: getNumberOrNull(req.body.population_minors_0_3),
+                        storedValue: getNumberOrNull(req.town.populationMinors0To3),
+                    },
+                    {
+                        key: 'population_minors_3_6',
+                        submitedValue: getNumberOrNull(req.body.population_minors_3_6),
+                        storedValue: getNumberOrNull(req.town.populationMinors3To6),
+                    },
+                    {
+                        key: 'population_minors_6_12',
+                        submitedValue: getNumberOrNull(req.body.population_minors_6_12),
+                        storedValue: getNumberOrNull(req.town.populationMinors6To12),
+                    },
+                    {
+                        key: 'population_minors_12_16',
+                        submitedValue: getNumberOrNull(req.body.population_minors_12_16),
+                        storedValue: getNumberOrNull(req.town.populationMinors12To16),
+                    },
+                    {
+                        key: 'population_minors_16_18',
+                        submitedValue: getNumberOrNull(req.body.population_minors_16_18),
+                        storedValue: getNumberOrNull(req.town.populationMinors16To18),
+                    },
+                    {
+                        key: 'minors_in_school',
+                        submitedValue: getNumberOrNull(req.body.minors_in_school),
+                        storedValue: getNumberOrNull(req.town.minorsInSchool),
+                    },
+                    {
+                        key: 'social_origins',
+                        submitedValue: req.body.social_origins ? JSON.stringify(req.body.social_origins.sort()) : null,
+                        storedValue: req.town.socialOrigins ? JSON.stringify(req.town.socialOrigins.map((so: SocialOrigin) => so.id).sort()) : null,
+                    },
+                    {
+                        key: 'caravans',
+                        submitedValue: getNumberOrNull(req.body.caravans),
+                        storedValue: getNumberOrNull(req.town.caravans),
+                    },
+                    {
+                        key: 'huts',
+                        submitedValue: getNumberOrNull(req.body.huts),
+                        storedValue: getNumberOrNull(req.town.huts),
+                    },
+                    {
+                        key: 'tents',
+                        submitedValue: getNumberOrNull(req.body.tents),
+                        storedValue: getNumberOrNull(req.town.tents),
+                    },
+                    {
+                        key: 'cars',
+                        submitedValue: getNumberOrNull(req.body.cars),
+                        storedValue: getNumberOrNull(req.town.cars),
+                    },
+                    {
+                        key: 'mattresses',
+                        submitedValue: getNumberOrNull(req.body.mattresses),
+                        storedValue: getNumberOrNull(req.town.mattresses),
+                    },
+                    {
+                        key: 'census_status',
+                        submitedValue: req.body.census_status,
+                        storedValue: req.town.censusStatus,
+                    },
+                    {
+                        key: 'census_conducted_at',
+                        submitedValue: req.body.census_conducted_at ? req.body.census_conducted_at : null,
+                        storedValue: req.town.censusConductedAt ? formatDateToYYYYMMDD(new Date(req.town.censusConductedAt * 1000)) : null,
+                    },
+                    {
+                        key: 'census_conducted_by',
+                        submitedValue: req.body.census_conducted_by,
+                        storedValue: req.town.censusConductedBy,
+                    },
+                    {
+                        key: 'is_reinstallation',
+                        submitedValue: valueMap[parseInt(req.body.is_reinstallation, 10) + 1],
+                        storedValue: req.town.isReinstallation,
+                    },
+                    {
+                        key: 'reinstallation_comments',
+                        submitedValue: getStringOrNull(req.body.reinstallation_comments),
+                        storedValue: getStringOrNull(req.town.reinstallationComments),
+                    },
+                    {
+                        key: 'reinstallation_incoming_towns',
+                        submitedValue: req.body.reinstallation_incoming_towns ? JSON.stringify(req.body.reinstallation_incoming_towns.sort()) : null,
+                        storedValue: req.town.reinstallationIncomingTowns ? JSON.stringify(req.town.reinstallationIncomingTowns.map(rit => rit.id).sort()) : null,
+                    },
+                    {
+                        key: 'water_access_type',
+                        submitedValue: getStringOrNull(req.body.water_access_type),
+                        storedValue: getStringOrNull(req.town.livingConditions.water.access_type),
+                    },
+                    {
+                        key: 'water_access_type_details',
+                        submitedValue: getStringOrNull(req.body.water_access_type_details),
+                        storedValue: getStringOrNull(req.town.livingConditions.water.access_type_details),
+                    },
+                    {
+                        key: 'water_access_is_public',
+                        submitedValue: valueMap[parseInt(req.body.water_access_is_public, 10) + 1],
+                        storedValue: req.town.livingConditions.water.access_is_public,
+                    },
+                    {
+                        key: 'water_access_is_continuous',
+                        submitedValue: valueMap[parseInt(req.body.water_access_is_continuous, 10) + 1],
+                        storedValue: req.town.livingConditions.water.access_is_continuous,
+                    },
+                    {
+                        key: 'water_access_is_continuous_details',
+                        submitedValue: req.body.water_access_is_continuous_details,
+                        storedValue: req.town.livingConditions.water.access_is_continuous_details,
+                    },
+                    {
+                        key: 'water_access_is_local',
+                        submitedValue: valueMap[parseInt(req.body.water_access_is_local, 10) + 1],
+                        storedValue: req.town.livingConditions.water.access_is_local,
+                    },
+                    {
+                        key: 'water_access_is_close',
+                        submitedValue: valueMap[parseInt(req.body.water_access_is_close, 10) + 1],
+                        storedValue: req.town.livingConditions.water.access_is_close,
+                    },
+                    {
+                        key: 'water_access_is_unequal',
+                        submitedValue: valueMap[parseInt(req.body.water_access_is_unequal, 10) + 1],
+                        storedValue: req.town.livingConditions.water.access_is_unequal,
+                    },
+                    {
+                        key: 'water_access_is_unequal_details',
+                        submitedValue: req.body.water_access_is_unequal_details,
+                        storedValue: req.town.livingConditions.water.access_is_unequal_details,
+                    },
+                    {
+                        key: 'water_access_has_stagnant_water',
+                        submitedValue: valueMap[parseInt(req.body.water_access_has_stagnant_water, 10) + 1],
+                        storedValue: req.town.livingConditions.water.access_has_stagnant_water,
+                    },
+                    {
+                        key: 'water_access_comments',
+                        submitedValue: getStringOrNull(req.body.water_access_comments),
+                        storedValue: getStringOrNull(req.town.livingConditions.water.access_comments),
+                    },
+                    {
+                        key: 'sanitary_working_toilets',
+                        submitedValue: valueMap[parseInt(req.body.sanitary_working_toilets, 10) + 1],
+                        storedValue: req.town.livingConditions.sanitary.working_toilets,
+                    },
+                    {
+                        key: 'sanitary_open_air_defecation',
+                        submitedValue: valueMap[parseInt(req.body.sanitary_open_air_defecation, 10) + 1],
+                        storedValue: req.town.livingConditions.sanitary.open_air_defecation,
+                    },
+                    {
+                        key: 'sanitary_toilet_types',
+                        submitedValue: req.body.sanitary_toilet_types ? JSON.stringify(req.body.sanitary_toilet_types.sort()) : null,
+                        storedValue: req.town.livingConditions.sanitary.toilet_types ? JSON.stringify(req.town.livingConditions.sanitary.toilet_types.sort()) : null,
+                    },
+                    {
+                        key: 'sanitary_toilets_are_inside',
+                        submitedValue: valueMap[parseInt(req.body.sanitary_toilets_are_inside, 10) + 1],
+                        storedValue: req.town.livingConditions.sanitary.toilets_are_inside,
+                    },
+                    {
+                        key: 'sanitary_toilets_are_lighted',
+                        submitedValue: valueMap[parseInt(req.body.sanitary_toilets_are_lighted, 10) + 1],
+                        storedValue: req.town.livingConditions.sanitary.toilets_are_lighted,
+                    },
+                    {
+                        key: 'sanitary_hand_washing',
+                        submitedValue: valueMap[parseInt(req.body.sanitary_hand_washing, 10) + 1],
+                        storedValue: req.town.livingConditions.sanitary.hand_washing,
+                    },
+                    {
+                        key: 'electricity_access',
+                        submitedValue: valueMap[parseInt(req.body.electricity_access, 10) + 1],
+                        storedValue: req.town.livingConditions.electricity.access,
+                    },
+                    {
+                        key: 'electricity_access_types',
+                        submitedValue: req.body.electricity_access_types ? JSON.stringify(req.body.electricity_access_types.sort()) : null,
+                        storedValue: req.town.livingConditions.electricity.access_types ? JSON.stringify(req.town.livingConditions.electricity.access_types.sort()) : null,
+                    },
+                    {
+                        key: 'electricity_access_is_unequal',
+                        submitedValue: valueMap[parseInt(req.body.electricity_access_is_unequal, 10) + 1],
+                        storedValue: req.town.livingConditions.electricity.access_is_unequal,
+                    },
+                    {
+                        key: 'trash_is_piling',
+                        submitedValue: valueMap[parseInt(req.body.trash_is_piling, 10) + 1],
+                        storedValue: req.town.livingConditions.trash.is_piling,
+                    },
+                    {
+                        key: 'trash_evacuation_is_close',
+                        submitedValue: valueMap[parseInt(req.body.trash_evacuation_is_close, 10) + 1],
+                        storedValue: req.town.livingConditions.trash.evacuation_is_close,
+                    },
+                    {
+                        key: 'trash_evacuation_is_safe',
+                        submitedValue: valueMap[parseInt(req.body.trash_evacuation_is_safe, 10) + 1],
+                        storedValue: req.town.livingConditions.trash.evacuation_is_safe,
+                    },
+                    {
+                        key: 'trash_evacuation_is_regular',
+                        submitedValue: valueMap[parseInt(req.body.trash_evacuation_is_regular, 10) + 1],
+                        storedValue: req.town.livingConditions.trash.evacuation_is_regular,
+                    },
+                    {
+                        key: 'trash_bulky_is_piling',
+                        submitedValue: valueMap[parseInt(req.body.trash_bulky_is_piling, 10) + 1],
+                        storedValue: req.town.livingConditions.trash.bulky_is_piling,
+                    },
+                    {
+                        key: 'pest_animals_presence',
+                        submitedValue: valueMap[parseInt(req.body.pest_animals_presence, 10) + 1],
+                        storedValue: req.town.livingConditions.pest_animals.presence,
+                    },
+                    {
+                        key: 'pest_animals_details',
+                        submitedValue: getStringOrNull(req.body.pest_animals_details),
+                        storedValue: getStringOrNull(req.town.livingConditions.pest_animals.details),
+                    },
+                    {
+                        key: 'fire_prevention_diagnostic',
+                        submitedValue: valueMap[parseInt(req.body.fire_prevention_diagnostic, 10) + 1],
+                        storedValue: req.town.livingConditions.fire_prevention.diagnostic,
+                    },
+                    {
+                        key: 'owner_complaint',
+                        submitedValue: valueMap[parseInt(req.body.owner_complaint, 10) + 1],
+                        storedValue: req.town.ownerComplaint,
+                    },
+                    {
+                        key: 'justice_procedure',
+                        submitedValue: valueMap[parseInt(req.body.justice_procedure, 10) + 1],
+                        storedValue: req.town.justiceProcedure,
+                    },
+                    {
+                        key: 'justice_rendered',
+                        submitedValue: valueMap[parseInt(req.body.justice_rendered, 10) + 1],
+                        storedValue: req.town.justiceRendered,
+                    },
+                    {
+                        key: 'justice_rendered_by',
+                        submitedValue: getStringOrNull(req.body.justice_rendered_by),
+                        storedValue: getStringOrNull(req.town.justiceRenderedBy),
+                    },
+                    {
+                        key: 'justice_rendered_at',
+                        submitedValue: req.body.justice_rendered_at ? req.body.justice_rendered_at : null,
+                        storedValue: req.town.justiceRenderedAt ? formatDateToYYYYMMDD(new Date(req.town.justiceRenderedAt * 1000)) : null,
+                    },
+                    {
+                        key: 'justice_challenged',
+                        submitedValue: valueMap[parseInt(req.body.justice_challenged, 10) + 1],
+                        storedValue: req.town.justiceChallenged,
+                    },
+                    {
+                        key: 'evacuation_under_time_limit',
+                        submitedValue: valueMap[parseInt(req.body.evacuation_under_time_limit, 10) + 1],
+                        storedValue: req.town.evacuationUnderTimeLimit,
+                    },
+                    {
+                        key: 'administrative_order_decision_at',
+                        submitedValue: req.body.administrative_order_decision_at ? req.body.administrative_order_decision_at : null,
+                        storedValue: req.town.administrativeOrderDecisionAt ? formatDateToYYYYMMDD(new Date(req.town.administrativeOrderDecisionAt * 1000)) : null,
+                    },
+                    {
+                        key: 'administrative_order_decision_rendered_by',
+                        submitedValue: getStringOrNull(req.body.administrative_order_decision_rendered_by),
+                        storedValue: getStringOrNull(req.town.administrativeOrderDecisionRenderedBy),
+                    },
+                    {
+                        key: 'administrative_order_evacuation_at',
+                        submitedValue: req.body.administrative_order_evacuation_at ? req.body.administrative_order_evacuation_at : null,
+                        storedValue: req.town.administrativeOrderEvacuationAt ? formatDateToYYYYMMDD(new Date(req.town.administrativeOrderEvacuationAt)) : null,
+                    },
+                    {
+                        key: 'insalubrity_order',
+                        submitedValue: valueMap[parseInt(req.body.insalubrity_order, 10) + 1],
+                        storedValue: req.town.insalubrityOrder,
+                    },
+                    {
+                        key: 'insalubrity_order_displayed',
+                        submitedValue: valueMap[parseInt(req.body.insalubrity_order_displayed, 10) + 1],
+                        storedValue: req.town.insalubrityOrderDisplayed,
+                    },
+                    {
+                        key: 'insalubrity_order_type',
+                        submitedValue: getStringOrNull(req.body.insalubrity_order_type),
+                        storedValue: getStringOrNull(req.town.insalubrityOrderType),
+                    },
+                    {
+                        key: 'insalubrity_order_by',
+                        submitedValue: getStringOrNull(req.body.insalubrity_order_by),
+                        storedValue: getStringOrNull(req.town.insalubrityOrderBy),
+                    },
+                    {
+                        key: 'insalubrity_order_at',
+                        submitedValue: req.body.insalubrity_order_at ? req.body.insalubrity_order_at : null,
+                        storedValue: req.town.insalubrityOrderAt ? formatDateToYYYYMMDD(new Date(req.town.insalubrityOrderAt * 1000)) : null,
+                    },
+                    {
+                        key: 'insalubrity_parcels',
+                        submitedValue: getStringOrNull(req.body.insalubrity_parcels),
+                        storedValue: getStringOrNull(req.town.insalubrityParcels),
+                    },
+                    {
+                        key: 'police_status',
+                        submitedValue: req.body.police_status,
+                        storedValue: req.town.policeStatus,
+                    },
+                    {
+                        key: 'police_requested_at',
+                        submitedValue: req.body.police_requested_at ? req.body.police_requested_at : null,
+                        storedValue: req.town.policeRequestedAt ? formatDateToYYYYMMDD(new Date(req.town.policeRequestedAt * 1000)) : null,
+                    },
+                    {
+                        key: 'police_granted_at',
+                        submitedValue: req.body.police_granted_at ? req.body.police_granted_at : null,
+                        storedValue: req.town.policeGrantedAt ? formatDateToYYYYMMDD(new Date(req.town.policeGrantedAt * 1000)) : null,
+                    },
+                    {
+                        key: 'existing_litigation',
+                        submitedValue: valueMap[parseInt(req.body.existing_litigation, 10) + 1],
+                        storedValue: req.town.existingLitigation,
+                    },
+                    {
+                        key: 'bailiff',
+                        submitedValue: getStringOrNull(req.body.bailiff),
+                        storedValue: getStringOrNull(req.town.bailiff),
+                    },
+                ];
+                // Y at'il des modifications des données dans les champs du formulaire ?
+                hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
+            }
 
             // Si update_without_any_change est à true, alors aucun champ ne doit être modifié
             if (value) {
@@ -492,8 +494,8 @@ export default mode => ([
                     throw new Error('Aucun autre champ ne doit être modifié s\'il s\'agit d\'une mise à jour de site sans modification de données');
                 }
             // Si update_without_any_change est à false, alors au moins un champ doit être modifié
-            } else if (!hasChanges) {
-                throw new Error('Au moins un autre champ doit être modifié s\'il s\'agit d\'une mise à jour de site sans modification de données');
+            } else if (req.town && !hasChanges) {
+                throw new Error('Au moins un champ doit être modifié s\'il s\'agit d\'une mise à jour de site sans modification de données');
             }
             return true;
         }),
