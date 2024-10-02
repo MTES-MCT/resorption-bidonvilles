@@ -16,7 +16,9 @@ export default async (user, townId) => {
     const { comments, ...townWithoutComments } = town;
     const commentsWithEnrichedAttachments = await Promise.all(comments.map(async comment => enrichCommentsAttachments(comment)));
     // const decrees = await shantytownDecree.findAll(user, townId);
-    console.log(await findJusticeReadersByShantytown(townId, null));
+    if (user.role_id === 'national_admin' || (await findJusticeReadersByShantytown(townId, 2588)).length > 0) {
+        console.log("L'utilisateur a accès");
+    }
     return {
         ...townWithoutComments,
         comments: commentsWithEnrichedAttachments,
