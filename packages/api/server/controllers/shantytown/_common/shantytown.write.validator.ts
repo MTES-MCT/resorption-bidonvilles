@@ -365,17 +365,17 @@ export default mode => ([
                     {
                         key: 'pest_animals_presence',
                         submitedValue: valueMap[parseInt(req.body.pest_animals_presence, 10) + 1],
-                        storedValue: req.town.livingConditions.pest_animals.presence,
+                        storedValue: req.town.livingConditions.pest_animals ? req.town.livingConditions.pest_animals.presence : null,
                     },
                     {
                         key: 'pest_animals_details',
                         submitedValue: getStringOrNull(req.body.pest_animals_details),
-                        storedValue: getStringOrNull(req.town.livingConditions.pest_animals.details),
+                        storedValue: req.town.livingConditions.pest_animals ? getStringOrNull(req.town.livingConditions.pest_animals.details) : null,
                     },
                     {
                         key: 'fire_prevention_diagnostic',
                         submitedValue: valueMap[parseInt(req.body.fire_prevention_diagnostic, 10) + 1],
-                        storedValue: req.town.livingConditions.fire_prevention.diagnostic,
+                        storedValue: req.town.livingConditions.fire_prevention ? req.town.livingConditions.fire_prevention.diagnostic : null,
                     },
                     {
                         key: 'owner_complaint',
