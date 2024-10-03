@@ -26,7 +26,9 @@ export function edit(id, data) {
 }
 
 export function exportActions() {
-    return axios.get("/actions/export/csv");
+    return axios.get("/actions/export/excel", {
+        responseType: "blob",
+    });
 }
 
 export function exportComments() {
