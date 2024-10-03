@@ -8,7 +8,6 @@
         <ContentWrapper>
             <FilArianne :items="ariane" class="mb-8" />
         </ContentWrapper>
-        <BandeauChangementDomaine />
         <TableauDeBord />
     </LayoutSearch>
 </template>
@@ -20,7 +19,6 @@ import { useDashboardActivitiesStore } from "@/stores/dashboard.activities.store
 import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import TableauDeBord from "@/components/TableauDeBord/TableauDeBord.vue";
-import BandeauChangementDomaine from "@/components/BandeauChangementDomaine/BandeauChangementDomaine.vue";
 
 const ariane = [{ label: "Accueil", to: "/" }];
 const aMonthAgo = new Date();
