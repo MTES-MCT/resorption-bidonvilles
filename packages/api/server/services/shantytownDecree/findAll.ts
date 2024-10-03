@@ -10,11 +10,7 @@ export default async (user: User, townId: number) => {
         throw new ServiceError('fetch_failed', new Error('Impossible de retrouver le site en base de données'));
     }
 
-    console.log(shantytownDecreeModel, user.id, townId);
-
     const shantytownDecrees = await shantytownDecreeModel.findAll(townId);
-    console.log('ShantytownDecrees', shantytownDecrees);
 
     return shantytownDecrees;
-    // return await ();
 };
