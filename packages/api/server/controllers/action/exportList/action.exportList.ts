@@ -22,7 +22,6 @@ export default async (req: ExportActionsRequest, res: Response, next: NextFuncti
         // Terminer la réponse
         res.end(buffer);
     } catch (error) {
-        console.log('error', error);
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({
             user_message: message,
