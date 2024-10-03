@@ -13,6 +13,7 @@
     >
         <template v-slot:title>
             Connectez-vous à<br />Résorption-bidonvilles
+            <FormConnexionBandeauChangementAdresse />
         </template>
 
         <template v-slot:body>
@@ -66,6 +67,7 @@ import FormPublic from "@/components/FormPublic/FormPublic.vue";
 import FormConnexionInputEmail from "./inputs/FormConnexionInputEmail.vue";
 import FormConnexionInputPassword from "./inputs/FormConnexionInputPassword.vue";
 import FormConnexionMessageAlerte from "./FormConnexionMessageAlerte.vue";
+import FormConnexionBandeauChangementAdresse from "./FormConnexionBandeauChangementAdresse.vue";
 
 // form
 import schema from "./FormConnexion.schema.js";
