@@ -19,9 +19,10 @@
             <div class="shrink-0 lg:shrink py-2 lg:py-4 px-4 lg:px-8">
                 <p class="text-md mb-4">
                     L'adresse de la plateforme
-                    <span class="font-bold">RESORPTION-BIDONVILLES</span> a
-                    changé. Nous vous invitons à mettre à jour vos favoris et à
-                    vous connecter à la nouvelle adresse:
+                    <span class="font-bold">RESORPTION-BIDONVILLES</span> va
+                    changer. Nous vous invitons à mettre à jour vos favoris et à
+                    vous connecter, à compter du <b>16 Octobre 2024</b>, à cette
+                    nouvelle adresse:
                 </p>
                 <p>
                     <Link to="https://resorption-bidonvilles.dihal.gouv.fr"

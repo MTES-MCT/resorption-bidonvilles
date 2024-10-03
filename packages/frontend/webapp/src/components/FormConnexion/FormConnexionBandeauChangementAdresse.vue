@@ -5,9 +5,10 @@
                 <Icon icon="circle-info" class="text-primary mr-2" />
                 <p class="mb-4 font-normal text-primary text-md">
                     L'adresse de la plateforme
-                    <span class="font-bold">RESORPTION-BIDONVILLES </span>
-                    a changé. Nous vous invitons à mettre à jour vos favoris et
-                    à vous connecter à la nouvelle adresse:
+                    <span class="font-bold">RESORPTION-BIDONVILLES</span> va
+                    changer. Nous vous invitons à mettre à jour vos favoris et à
+                    vous connecter, à compter du <b>16 Octobre 2024</b>, à cette
+                    nouvelle adresse:
                 </p>
             </div>
             <p class="font-normal text-primary text-md">
