@@ -65,16 +65,19 @@ const exportList = computed(() => {
 
     if (userStore.hasPermission("action.export")) {
         list.push({
+            shape: "button",
+            displayedOn: "footer",
             label: "Export des actions",
             filename: "actions",
             downloadFn: exportActions,
             format: "xlsx",
-            year: years,
+            years: years,
         });
     }
 
     if (userStore.hasPermission("action_comment.export")) {
         list.push({
+            displayedOn: "body",
             label: "Export des commentaires",
             filename: "messages",
             downloadFn: exportComments,
