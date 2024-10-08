@@ -95,9 +95,7 @@ watch(isFormDisabled, (newVal) => {
     if (newVal === true) {
         timerReactivation();
     } else {
-        localStorage.removeItem("connexionCounter");
-        localStorage.removeItem("blockedTimer");
-        clearTimeout(timeoutReactivation.value);
+        resetConnexionAttempts();
     }
 });
 
@@ -153,7 +151,9 @@ const checkAttempt = () => {
 };
 
 const resetConnexionAttempts = () => {
-    isFormDisabled.value = false;
+    localStorage.removeItem("connexionCounter");
+    localStorage.removeItem("blockedTimer");
+    clearTimeout(timeoutReactivation.value);
 };
 
 onMounted(() => {
