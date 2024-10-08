@@ -61,6 +61,7 @@
                     </li>
                     <li>
                         <Button
+                            v-if="actionsExportIsSelected"
                             variant="primaryOutline"
                             size="md"
                             @click.stop="toggleActionsExportIsSelected"
