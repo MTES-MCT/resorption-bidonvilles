@@ -35,6 +35,7 @@
             <template v-else>
                 <ModalExportListeAnnee
                     :years="years"
+                    :selectedYear="selectedYear"
                     @year-selected="handleYearSelected"
                 />
             </template>
@@ -90,7 +91,7 @@ const props = defineProps({
 const { exports: exportList } = toRefs(props);
 const modale = ref(null);
 const actionsExportIsSelected = ref(false);
-const selectedYear = ref(null);
+const selectedYear = ref(new Date().getFullYear() - 1);
 
 const years = computed(() => {
     return exportList.value
@@ -121,9 +122,6 @@ const linksForFooter = computed(() => {
 function displayExportActionsBtn(label) {
     const returnValue =
         label === "actions" && actionsExportIsSelected.value === true;
-    console.log("label", label);
-    console.log("actionsExportIsSelected", actionsExportIsSelected.value);
-    console.log("returnValue", returnValue);
     return returnValue;
 }
 
