@@ -1,6 +1,6 @@
 <template>
     <Modal closeWhenClickOutside ref="modale">
-        <template v-slot:title>Exports</template>
+        <template v-slot:title>{{ title }}</template>
         <template v-slot:body>
             <template v-if="!actionsExportIsSelected">
                 <template v-if="exportList.length > 0">
@@ -126,4 +126,8 @@ function displayExportActionsBtn(label) {
     console.log("returnValue", returnValue);
     return returnValue;
 }
+
+const title = computed(() => {
+    return actionsExportIsSelected.value ? "Export des actions" : "Exports";
+});
 </script>
