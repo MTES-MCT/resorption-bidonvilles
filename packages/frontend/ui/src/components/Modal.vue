@@ -25,11 +25,11 @@
                             </div>
                         </div>
                     </slot>
-                    <div class="px-10 pb-10 max-w-3xl">
+                    <div class="px-10 pb-4 xs:pb-10 max-w-3xl">
                         <slot name="body" />
                     </div>
 
-                    <div v-if="$slots.footer" class="px-4 pb-8 sm:px-6 flex justify-end">
+                    <div v-if="$slots.footer" class="px-4 pb-8 sm:px-6 flex justify-start sm:justify-end">
                         <slot name="footer"></slot>
                     </div>
                 </div>
