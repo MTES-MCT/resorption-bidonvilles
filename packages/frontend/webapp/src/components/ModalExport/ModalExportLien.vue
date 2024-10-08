@@ -70,10 +70,6 @@ async function download() {
     isLoading.value = true;
     error.value = null;
     try {
-        if (year.value) {
-            console.log("Export des donées pour l'année", year.value);
-        }
-
         const data = await downloadFn.value(year.value);
 
         if (format.value === "xlsx") {
