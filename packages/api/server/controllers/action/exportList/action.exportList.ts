@@ -17,7 +17,7 @@ interface ExportActionsRequest extends Request {
 export default async (req: ExportActionsRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const buffer = await exportActions(
-            req.user,
+            req.user, req.params.year,
         );
         // Terminer la réponse
         res.end(buffer);
