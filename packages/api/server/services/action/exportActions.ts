@@ -4,10 +4,10 @@ import { AuthUser } from '#server/middlewares/authMiddleware';
 import actionModel from '#server/models/actionModel';
 import permissionUtils from '#server/utils/permission';
 import { Nation } from '#server/models/geoModel/Location.d';
-import generateExportFile from './exportAction.generateExportFile';
+import generateExportFile from './exportActions.generateExportFile';
 import { ActionReportRow } from '#root/types/resources/Action.d';
 
-export default async (user: AuthUser) => {
+export default async (user: AuthUser, year: string) => {
     const nationalLevel: Nation = {
         type: 'nation', region: null, departement: null, epci: null, city: null,
     };
@@ -19,8 +19,11 @@ export default async (user: AuthUser) => {
     // on collecte les données et on génère le fichier excel
     let data: ActionReportRow[];
 
-    // Calcul de l'année en cours
-    const fetchedYear = new Date().getFullYear() - 1;
+    // Si l'année n'est pas précisée, calcul de l'année en cours
+    let fetchedYear = new Date().getFullYear() - 1;
+    if (year) {
+        fetchedYear = parseInt(year, 10);
+    }
     try {
         // Récupération des données
         data = await actionModel.fetchReport(fetchedYear);
