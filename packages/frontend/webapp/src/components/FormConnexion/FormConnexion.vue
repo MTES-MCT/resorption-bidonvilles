@@ -21,11 +21,11 @@
                 :delayBeforeReactivation="delayBeforeReactivation"
             />
             <FormConnexionInputEmail
-                :disabled="isFormDisabled"
+                :disabled="isFormDisabled || isLoading"
                 aria-label="Veuillez saisir l'adresse de messagerie correspondant à votre identifiant sur la plateforme"
             />
             <FormConnexionInputPassword
-                :disabled="isFormDisabled"
+                :disabled="isFormDisabled || isLoading"
                 aria-label="Veuillez saisir votre mot de passe"
             />
         </template>
@@ -35,7 +35,7 @@
                 <Button
                     type="submit"
                     aria-label="Valider les informations saisies,"
-                    :disabled="isFormDisabled"
+                    :disabled="isFormDisabled || isLoading"
                     >Me connecter</Button
                 >
             </p>
@@ -88,6 +88,7 @@ const props = defineProps({
 const { reason } = toRefs(props);
 const blockedTimer = ref(localStorage.getItem("blockedTimer"));
 const isFormDisabled = ref(false);
+const isLoading = ref(false);
 const delayBeforeReactivation = ref(null);
 const timeoutReactivation = ref(null);
 
@@ -107,6 +108,7 @@ const timerReactivation = () => {
 
 // methods
 async function submit({ email, password }) {
+    isLoading.value = true;
     try {
         await userStore.signin(email, password);
     } catch (error) {
@@ -115,7 +117,9 @@ async function submit({ email, password }) {
     }
     resetConnexionAttempts();
     trackEvent("Login", "Connection");
-    router.push("/chargement");
+    setTimeout(() => {
+        router.push("/chargement");
+    }, 1000);
 }
 
 const message = computed(() => {
@@ -147,6 +151,7 @@ const checkAttempt = () => {
             return false;
         }
     }
+    isLoading.value = false;
     return false;
 };
 
