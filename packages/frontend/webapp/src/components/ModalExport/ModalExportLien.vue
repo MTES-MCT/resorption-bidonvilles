@@ -91,10 +91,10 @@ async function download() {
 
         notificationStore.success(
             label.value,
-            "Le fichier d'exporta bien été téléchargé"
+            "Le fichier d'export a bien été téléchargé"
         );
     } catch (e) {
-        error.value = "Le téléchargement a des données échoué";
+        error.value = "Le téléchargement des données a échoué";
         notificationStore.error(
             label.value,
             e?.user_message || "Une erreur inconnue est survenue"
