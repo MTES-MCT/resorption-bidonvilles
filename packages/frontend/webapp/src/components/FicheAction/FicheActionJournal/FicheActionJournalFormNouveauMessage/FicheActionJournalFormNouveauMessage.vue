@@ -8,7 +8,11 @@
 
             <ErrorSummary v-if="error" :message="error" class="mt-2" />
             <p class="text-right">
-                <Button icon="paper-plane" iconPosition="left" @click="submit"
+                <Button
+                    :loading="isLoading"
+                    icon="paper-plane"
+                    iconPosition="left"
+                    @click="submit"
                     >Publier le message</Button
                 >
             </p>
@@ -33,6 +37,7 @@ const props = defineProps({
 });
 const { action } = toRefs(props);
 const attachmentsInput = ref(null);
+const isLoading = ref(false);
 
 const { handleSubmit, setErrors, resetForm } = useForm({
     validationSchema: schema,
@@ -54,7 +59,9 @@ const submit = handleSubmit(async (values) => {
     error.value = null;
 
     try {
+        isLoading.value = true;
         const actionsStore = useActionsStore();
+
         await actionsStore.addComment(
             action.value.id,
             { description: values.comment },
@@ -62,7 +69,9 @@ const submit = handleSubmit(async (values) => {
         );
 
         resetForm();
+        isLoading.value = false;
     } catch (e) {
+        isLoading.value = false;
         error.value = e?.user_message || "Une erreur inconnue est survenue";
         if (e?.fields) {
             setErrors(e.fields);
