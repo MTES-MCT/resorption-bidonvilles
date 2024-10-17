@@ -3,6 +3,7 @@ import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import shantytownModel from '#server/models/shantytownModel';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel';
 import attachmentService from '#server/services/attachment';
+import scanAttachmentErrors from '#server/services/attachment/scanAttachmentErrors';
 import userModel from '#server/models/userModel';
 
 
@@ -50,7 +51,7 @@ export default async (comment, shantytown, author): Promise<{ comments: Shantyto
             );
         } catch (error) {
             await transaction.rollback();
-            throw new ServiceError('upload_failed', error);
+            throw new ServiceError(error?.message || '500', scanAttachmentErrors[error?.message].message || 'upload_failed');
         }
     }
 

@@ -4,6 +4,7 @@ import answerModel from '#server/models/answerModel';
 import serializeAttachment from '#server/services/attachment/serializeAttachment';
 import userQuestionSubscriptionModel from '#server/models/userQuestionSubscriptionModel';
 import uploadAttachments from '#server/services/attachment/upload';
+import scanAttachmentErrors from '#server/services/attachment/scanAttachmentErrors';
 import { sequelize } from '#db/sequelize';
 
 // types
@@ -44,7 +45,7 @@ export default async (answer: AnswerData, question: EnrichedQuestion, author: Us
             await uploadAttachments('answer', answerId, author.id, files, transaction);
         } catch (error) {
             await transaction.rollback();
-            throw new ServiceError('upload_failed', error);
+            throw new ServiceError(error?.message || '500', scanAttachmentErrors[error?.message].message || 'upload_failed');
         }
     }
 
