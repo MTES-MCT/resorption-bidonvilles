@@ -9,7 +9,11 @@
 
         <ErrorSummary v-if="error" :message="error" class="mt-2" />
         <p class="text-right">
-            <Button icon="paper-plane" iconPosition="left" @click="submit"
+            <Button
+                :loading="isLoading"
+                icon="paper-plane"
+                iconPosition="left"
+                @click="submit"
                 >Publier ma réponse</Button
             >
         </p>
@@ -33,6 +37,7 @@ const props = defineProps({
 });
 const { question } = toRefs(props);
 const attachmentsInput = ref(null);
+const isLoading = ref(false);
 
 function onPaste(event) {
     const file = getFileFromPasteEvent(event);
@@ -52,7 +57,7 @@ const { handleSubmit, setErrors, resetForm } = useForm({
 const error = ref(null);
 const submit = handleSubmit(async (values) => {
     error.value = null;
-
+    isLoading.value = true;
     try {
         const questionsStore = useQuestionsStore();
         await questionsStore.createAnswer(
@@ -64,7 +69,9 @@ const submit = handleSubmit(async (values) => {
         );
 
         resetForm();
+        isLoading.value = false;
     } catch (e) {
+        isLoading.value = false;
         error.value = e?.user_message || "Une erreur inconnue est survenue";
         if (e?.fields) {
             setErrors(e.fields);
