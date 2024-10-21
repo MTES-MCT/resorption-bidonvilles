@@ -40,7 +40,6 @@ import { exportComments, exportActions } from "@/api/actions.api";
 import { Button } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import ModalExport from "@/components/ListeDesActions/ListeDesActionsExport/ListeDesActionsExportModal.vue";
-// import ListeDesActionsHeaderExporterCommentaires from "./ListeDesActionsHeaderExporterCommentaires.vue";
 
 const userStore = useUserStore();
 

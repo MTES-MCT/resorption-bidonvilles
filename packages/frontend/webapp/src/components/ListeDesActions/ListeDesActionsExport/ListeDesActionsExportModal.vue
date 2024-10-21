@@ -12,7 +12,7 @@
                         <li>
                             <Link @click.stop="toggleActionsExportIsSelected">
                                 <Icon icon="file-excel" class="mr-1" />
-                                Exporter les actions
+                                Choisir l'année et exporter les actions
                             </Link>
                         </li>
                         <li

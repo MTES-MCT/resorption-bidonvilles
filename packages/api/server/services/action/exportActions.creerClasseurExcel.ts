@@ -43,7 +43,7 @@ const sectionTitles = [
     { name: 'SCOLARISATION', range: { from: 'V1', to: 'AB1' } },
     { name: 'FINANCEMENT', range: { from: 'AC1', to: 'AN1' } },
     { name: 'COMMENTAIRES', range: { from: 'AO1', to: 'AQ1' } },
-    { name: 'MISE A JOUR', range: { from: 'AR1', to: 'AR1' } },
+    { name: 'MISE À JOUR', range: { from: 'AR1', to: 'AR1' } },
 ];
 
 const headers = [
@@ -116,7 +116,6 @@ export default (data: ActionReportRow[]) => {
 
     // Obtenir les données regroupées et triées par département
     const donneesParDepartement = regrouperEtTrierParDepartement(data);
-    // console.log('donneesParDepartement', JSON.stringify(donneesParDepartement, null, 2));
 
     // Indices de colonnes de fin des sections pour mise en gras
     const columnNumbers = sectionTitles.map((section) => {

@@ -2,7 +2,7 @@
     <Select
         id="selected_year_for_actions_export"
         name="selected_year"
-        label="Choisissez l'année"
+        label="Choisissez l'année:"
         v-model="selectedYear"
         width="w-1/2 md:w-1/4"
         info="Sélectionnez l'année pour laquelle vous souhaitez exporter les actions"

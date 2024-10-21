@@ -154,7 +154,7 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
         TO_CHAR(started_at, 'DD/MM/YYYY') AS "started_at",
         TO_CHAR(ended_at, 'DD/MM/YYYY') AS "ended_at",
         CASE actions.location_type
-            WHEN 'eti' THEN 'Espace temporaire d''acompagnement'
+            WHEN 'eti' THEN 'Espace temporaire d''accompagnement'
             WHEN 'logement' THEN 'Dans le logement'
             WHEN 'sur_site' THEN 'Sur site'
             WHEN 'autre' THEN 'Autre (hébergement, permanence, rue)'
