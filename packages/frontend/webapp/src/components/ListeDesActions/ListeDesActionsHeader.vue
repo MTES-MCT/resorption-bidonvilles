@@ -5,6 +5,7 @@
             >Consultez et gérez la liste des actions au national ou sur votre
             territoire</template
         >
+
         <template v-slot:actions>
             <p class="flex space-x-2">
                 <Button
@@ -31,16 +32,25 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, toRefs } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { useModaleStore } from "@/stores/modale.store";
 import { exportComments, exportActions } from "@/api/actions.api";
 
 import { Button } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
-import ModalExport from "@/components/ModalExport/ModalExport.vue";
+import ModalExport from "@/components/ListeDesActions/ListeDesActionsExport/ListeDesActionsExportModal.vue";
 
 const userStore = useUserStore();
+
+const props = defineProps({
+    years: {
+        type: Array,
+        required: true,
+    },
+});
+
+const { years } = toRefs(props);
 
 function openModalExport() {
     const modaleStore = useModaleStore();
@@ -54,14 +64,19 @@ const exportList = computed(() => {
 
     if (userStore.hasPermission("action.export")) {
         list.push({
+            shape: "button",
+            displayedOn: "footer",
             label: "Export des actions",
             filename: "actions",
             downloadFn: exportActions,
+            format: "xlsx",
+            years: years,
         });
     }
 
     if (userStore.hasPermission("action_comment.export")) {
         list.push({
+            displayedOn: "body",
             label: "Export des commentaires",
             filename: "messages",
             downloadFn: exportComments,
