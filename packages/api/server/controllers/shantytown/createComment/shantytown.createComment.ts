@@ -1,6 +1,6 @@
-import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched';
 import shantytownCommentService from '#server/services/shantytownComment';
 import can from '#server/utils/permission/can';
+import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
 
 const ERROR_RESPONSES = {
     insert_failed: { code: 500, message: 'Votre commentaire n\'a pas pu être enregistré.' },
@@ -8,6 +8,10 @@ const ERROR_RESPONSES = {
     commit_failed: { code: 500, message: 'L\'enregistrement du commentaire et/ou des pièces jointes a échoué.' },
     fetch_failed: { code: 500, message: 'Votre commentaire a bien été enregistré mais la liste des commentaires n\'a pas pu être actualisée.' },
     undefined: { code: 500, message: 'Une erreur inconnue est survenue.' },
+    general_error: { code: 500, message: 'Une erreur inconnue est survenue.' },
+    infected_file_detected: { code: 500, message: 'Virus détecté ! Veuillez scanner vos fichiers avant de les téléverser.' },
+    unable_to_scan_file: { code: 500, message: 'L\'analyse d\'au moins un des fichiers a échouée' },
+    unknown_request: { code: 500, message: 'Requête inconnue' },
 };
 // TODO: typer req, res et next
 export default async (req, res, next) => {
@@ -30,9 +34,9 @@ export default async (req, res, next) => {
             req.user,
         );
     } catch (error) {
-        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
-        res.status(code).send({
-            user_message: message,
+        const { code, nativeError } = error;
+        res.status(typeof code === 'string' ? parseInt(code, 10) : code).send({
+            user_message: ERROR_RESPONSES[nativeError].message || ERROR_RESPONSES.undefined.message,
         });
         return next(error.nativeError || error);
     }

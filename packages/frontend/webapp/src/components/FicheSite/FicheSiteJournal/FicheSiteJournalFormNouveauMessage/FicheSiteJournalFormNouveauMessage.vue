@@ -37,6 +37,7 @@
                         >Annuler</Button
                     >
                     <Button
+                        :loading="isLoading"
                         icon="paper-plane"
                         iconPosition="left"
                         @click="submit"
@@ -94,6 +95,7 @@ const { handleSubmit, setErrors, resetForm, values } = useForm({
     initialValues,
 });
 
+const isLoading = ref(false);
 const error = ref(null);
 const formContainer = ref(null);
 const messageInput = ref(null);
@@ -163,7 +165,7 @@ watch(values, () => {
 
 const submit = handleSubmit(async (values) => {
     error.value = null;
-
+    isLoading.value = true;
     try {
         const townsStore = useTownsStore();
         await townsStore.addComment(
@@ -179,10 +181,12 @@ const submit = handleSubmit(async (values) => {
             values.attachments
         );
         resetForm();
+        isLoading.value = false;
 
         // on rafraîchit la page pour avoir le site mis à jour
         router.push(`/site/${town.value.id}/#journal_du_site`);
     } catch (e) {
+        isLoading.value = false;
         error.value = e?.user_message || "Une erreur inconnue est survenue";
         if (e?.fields) {
             setErrors(e.fields);
