@@ -9,10 +9,12 @@
             <Icon icon="file-excel" iconPosition="left" />
             {{ label }}</Button
         >
-        <Link v-else @click="download" :class="isLoading ? 'text-G300' : ''">
-            <Icon icon="file-excel" class="mr-1" />
-            {{ label }} </Link
-        ><Spinner class="ml-2" v-if="isLoading" /><br />
+        <template v-else>
+            <Link @click="download" :class="isLoading ? 'text-G300' : ''">
+                <Icon icon="file-excel" class="mr-1" />
+                {{ label }} </Link
+            ><Spinner class="ml-2" v-if="isLoading" /><br />
+        </template>
         <Warning v-if="error" :autohide="false">{{ error }}</Warning>
     </p>
 </template>
