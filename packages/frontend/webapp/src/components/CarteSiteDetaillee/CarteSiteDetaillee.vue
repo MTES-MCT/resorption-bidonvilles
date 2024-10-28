@@ -25,7 +25,15 @@
                 />
                 <CarteSiteDetailleeName :shantytown="shantytown" />
                 <div
-                    class="flex flex-col lg:flex-none lg:grid cardGridTemplateColumns print:grid lg:gap-10 px-6 py-4 items-start"
+                    :class="[
+                        'flex flex-col',
+                        `space-y-${nbCol}`,
+                        'lg:flex-none lg:grid',
+                        `cardGridTemplateColumns${
+                            nbCol === '5' ? 'Five' : 'Four'
+                        }`,
+                        'print:grid lg:gap-10 px-6 py-4',
+                    ]"
                 >
                     <CarteSiteDetailleeFieldType :shantytown="shantytown" />
                     <CarteSiteDetailleeOrigins
