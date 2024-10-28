@@ -284,6 +284,7 @@ export function serialized(location: City = defaultLocation, override = {}): Sha
         resorptionTarget: null,
         completionRate: 0.5,
         distance: null,
+        preparatoryPhasesTowardResorption: null,
     };
 
     return {
