@@ -50,9 +50,6 @@ rewiremock('#server/mails/mails').withDefault(mails);
 rewiremock('#server/config').withDefault(config);
 rewiremock('#db/sequelize').with(sequelize);
 
-rewiremock.enable();
-rewiremock.disable();
-
 describe('services/question/create', () => {
     beforeEach(async () => {
         sequelize.sequelize.transaction.resolves(transaction);

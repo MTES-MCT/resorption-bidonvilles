@@ -18,9 +18,6 @@ const enrichQuestion = sandbox.stub();
 
 rewiremock('#server/services/question/common/enrichQuestion').withDefault(enrichQuestion);
 
-rewiremock.enable();
-rewiremock.disable();
-
 const question = serializedQuestion({
     answers: [
         {
