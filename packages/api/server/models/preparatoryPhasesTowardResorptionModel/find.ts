@@ -5,6 +5,10 @@ import { PreparatoryPhasesTowardResorption, PreparatoryPhasesTowardResorptionRow
 import serializePreparatoryPhasesTowardResorption from './common/serializePreparatoryPhasesTowardResorption';
 
 export default async (user: AuthUser, ids: string[]): Promise<PreparatoryPhasesTowardResorption[]> => {
+    if (!user.isAllowedTo('list', 'shantytown')) {
+        return [];
+    }
+
     const rows: PreparatoryPhasesTowardResorptionRow[] = await sequelize.query(
         `SELECT
             spptr.fk_shantytown AS town_id,
