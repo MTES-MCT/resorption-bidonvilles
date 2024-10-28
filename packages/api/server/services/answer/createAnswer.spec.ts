@@ -7,10 +7,11 @@ import ServiceError from '#server/errors/ServiceError';
 import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeQuestion } from '#test/utils/question';
 import { serialized as fakeAnswer } from '#test/utils/answer';
-import { serialized as serializedAnswer } from '#test/utils/answerSerialized'
+import { serialized as serializedAnswer } from '#test/utils/answerSerialized';
 import { fakeFile } from '#test/utils/file';
 import { row as fakeQuestionSubscriber } from '#test/utils/questionSubscriber';
 import { fail } from 'assert';
+import createAnswer from './createAnswer';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -50,7 +51,6 @@ rewiremock('#db/sequelize').with({ sequelize });
 rewiremock('#server/services/attachment/upload').withDefault(uploadAttachments);
 rewiremock('#server/services/attachment/serializeAttachment').withDefault(serializeAttachment);
 rewiremock.enable();
-import createAnswer from './createAnswer';
 rewiremock.disable();
 
 describe('services/answer.createAnswer()', () => {
@@ -63,7 +63,7 @@ describe('services/answer.createAnswer()', () => {
 
     it('insére la réponse en base de données', async () => {
         const answerData = { description: 'Une réponse' };
-        const question =  fakeQuestion({ id: 1 });
+        const question = fakeQuestion({ id: 1 });
         const author = fakeUser();
         const files = [];
 
