@@ -3,16 +3,17 @@ import { QueryTypes } from 'sequelize';
 import shantytownActorModel from '#server/models/shantytownActorModel';
 import actionModel from '#server/models/actionModel';
 import incomingTownsModel from '#server/models/incomingTownsModel';
+import shantytownPreparatoryPhasesTowardResorptionModel from '#server/models/preparatoryPhasesTowardResorptionModel';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 import permissionUtils from '#server/utils/permission';
 import { Where } from '#server/models/_common/types/Where';
+import { AuthUser } from '#server/middlewares/authMiddleware';
 import { ShantytownAction } from '#root/types/resources/Action.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import getComments from './getComments';
 import serializeShantytown from './serializeShantytown';
 import getDiff from './getDiff';
 import SQL, { ShantytownRow } from './SQL';
-import { User } from '#root/types/resources/User.d';
 
 const { where: pWhere } = permissionUtils;
 type ShantytownClosingSolutionRow = {
@@ -86,7 +87,15 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
     `;
 }
 
-export default async (user: User, feature: string, where: Where = [], order = ['departements.code ASC', 'cities.name ASC'], includeChangelog = false, additionalSQL = {}, argReplacements = {}): Promise<Shantytown[]> => {
+export default async (
+    user: AuthUser,
+    feature: string,
+    where: Where = [],
+    order = ['departements.code ASC', 'cities.name ASC'],
+    includeChangelog = false,
+    additionalSQL = {},
+    argReplacements = {},
+): Promise<Shantytown[]> => {
     const permissionsClauseGroup = pWhere().can(user).do(feature, 'shantytown');
     if (permissionsClauseGroup === null) {
         return [];
@@ -176,8 +185,9 @@ export default async (user: User, feature: string, where: Where = [], order = ['
 
     const incomingTownsPromise = incomingTownsModel.findAll(user, Object.keys(serializedTowns.hash));
 
-    const [history, comments, closingSolutions, actors, actions, incomingTowns] = await Promise.all([historyPromise, commentsPromise, closingSolutionsPromise, actorsPromise, actionsPromise, incomingTownsPromise]);
+    const townsPhasesTowardResorptionPromise = shantytownPreparatoryPhasesTowardResorptionModel.find(user, Object.keys(serializedTowns.hash));
 
+    const [history, comments, closingSolutions, actors, actions, incomingTowns, townsPhasesTowardResorption] = await Promise.all([historyPromise, commentsPromise, closingSolutionsPromise, actorsPromise, actionsPromise, incomingTownsPromise, townsPhasesTowardResorptionPromise]);
 
     if (history !== undefined && history.length > 0) {
         const serializedHistory = history.map(h => serializeShantytown(h, user));
@@ -252,5 +262,13 @@ export default async (user: User, feature: string, where: Where = [], order = ['
         serializedTowns.hash[incomingTown.shantytownId].reinstallationIncomingTowns.push(incomingTown);
     });
 
+    townsPhasesTowardResorption.forEach((elt) => {
+        if (elt.preparatoryPhases.length > 0) {
+            serializedTowns.hash[elt.townId].preparatoryPhasesTowardResorption = [];
+            elt.preparatoryPhases.forEach((prepElt) => {
+                serializedTowns.hash[elt.townId].preparatoryPhasesTowardResorption.push(prepElt);
+            });
+        }
+    });
     return serializedTowns.ordered;
 };
