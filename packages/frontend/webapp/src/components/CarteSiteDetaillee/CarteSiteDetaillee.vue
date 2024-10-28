@@ -30,14 +30,22 @@
                 >
                     <CarteSiteDetailleeFieldType :shantytown="shantytown" />
                     <CarteSiteDetailleeOrigins :shantytown="shantytown" />
-                    <CarteSiteDetailleeLivingConditions
-                        v-if="isOpen"
-                        :shantytown="shantytown"
-                    />
-                    <CarteSiteDetailleeClosingSolutions
-                        v-else
-                        :shantytown="shantytown"
-                    />
+                    <template v-if="isDepartementInvolvoledInPhases">
+                        <CarteSiteDetailleePhasesPreparatoiresResorption
+                            v-if="isOpen"
+                            :shantytown="shantytown"
+                        />
+                    </template>
+                    <template v-else>
+                        <CarteSiteDetailleeLivingConditions
+                            v-if="isOpen"
+                            :shantytown="shantytown"
+                        />
+                        <CarteSiteDetailleeClosingSolutions
+                            v-else
+                            :shantytown="shantytown"
+                        />
+                    </template>
                     <CarteSiteDetailleeJustice
                         v-if="userStore.hasJusticePermission"
                         :shantytown="shantytown"
@@ -68,6 +76,8 @@ import CarteSiteDetailleeClosingSolutions from "./CarteSiteDetailleeClosingSolut
 import CarteSiteDetailleeJustice from "./CarteSiteDetailleeJustice.vue";
 import CarteSiteDetailleeActors from "./CarteSiteDetailleeActors.vue";
 import CarteSiteDetailleeFooter from "./CarteSiteDetailleeFooter.vue";
+import CarteSiteDetailleePhasesPreparatoiresResorption from "./CarteSiteDetailleePhasesPreparatoiresResorption.vue";
+import departementsInResoprtionPhases from "@/utils/departements_in_resorption_phases";
 
 const props = defineProps({
     shantytown: {
@@ -79,6 +89,11 @@ const { shantytown } = toRefs(props);
 const isHover = ref(false);
 const isOpen = computed(() => {
     return shantytown.value.status === "open";
+});
+const isDepartementInvolvoledInPhases = computed(() => {
+    return departementsInResoprtionPhases.includes(
+        parseInt(shantytown.value.departement.code, 10)
+    );
 });
 </script>
 
