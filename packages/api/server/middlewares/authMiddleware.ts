@@ -78,44 +78,12 @@ async function authenticateUser(req) {
     return user;
 }
 
-function hasPermission(permissions, permission) {
+function hasPermission(permissions, permission): Boolean {
     const [entity, feature] = permission.split('.');
 
     return Object.prototype.hasOwnProperty.call(permissions, entity)
         && Object.prototype.hasOwnProperty.call(permissions[entity], feature)
         && permissions[entity][feature].allowed === true;
-}
-
-function myCheckPermissions(mode, permissions, req, res, next, respond) {
-    if (!req.user || !req.user.permissions || !permissions) {
-        res.status(500).send({
-            code: 4,
-            user_message: 'Vous n\'avez pas accès à ces données',
-        });
-
-        if (respond !== true) {
-            throw new Error('');
-        }
-
-        return;
-    }
-
-    if (!permissions[mode](permission => hasPermission(req.user.permissions, permission))) {
-        res.status(400).send({
-            code: 5,
-            user_message: 'Vous n\'avez pas accès à ces données',
-        });
-
-        if (respond !== true) {
-            throw new Error('');
-        }
-
-        return;
-    }
-
-    if (respond === true) {
-        next();
-    }
 }
 
 export function isAdmin(req, res, next) {
@@ -143,7 +111,7 @@ export async function authenticate(req, res, next, respond = true) {
     try {
         const user = await authenticateUser(req);
         req.user = user;
-        req.user.isAllowedTo = (feature, entity) => hasPermission(user.permissions, `${entity}.${feature}`);
+        req.user.isAllowedTo = (feature: string, entity: string) => hasPermission(user.permissions, `${entity}.${feature}`);
     } catch (error) {
         if (respond !== true) {
             throw error;
@@ -158,18 +126,8 @@ export async function authenticate(req, res, next, respond = true) {
     }
 }
 
-export function checkPermissions(permissions, req, res, next, respond = true) {
-    return myCheckPermissions('every', permissions, req, res, next, respond);
-}
-
-export function checkOneOrMorePermissions(permissions, req, res, next, respond = true) {
-    return myCheckPermissions('some', permissions, req, res, next, respond);
-}
-
 export default {
     isAdmin,
     isSuperAdmin,
     authenticate,
-    checkPermissions,
-    checkOneOrMorePermissions,
 };
