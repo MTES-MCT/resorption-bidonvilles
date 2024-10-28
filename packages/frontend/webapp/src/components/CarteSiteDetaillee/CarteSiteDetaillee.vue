@@ -32,7 +32,7 @@
                         `cardGridTemplateColumns${
                             nbCol === '5' ? 'Five' : 'Four'
                         }`,
-                        'print:grid lg:gap-10 px-6 py-4',
+                        'print:grid lg:gap-10 px-6 py-4 items-start',
                     ]"
                 >
                     <CarteSiteDetailleeFieldType :shantytown="shantytown" />
