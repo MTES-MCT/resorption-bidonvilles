@@ -1,5 +1,5 @@
-import { serialized as authUser } from './user';
 import { AuthUser } from '#server/middlewares/authMiddleware';
+import { serialized as authUser } from './user';
 
 // Définir l'interface SimplifiedUser
 interface SimplifiedUser {
