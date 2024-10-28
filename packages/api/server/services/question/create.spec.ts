@@ -3,10 +3,10 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import { rewiremock } from '#test/rewiremock';
 import { fakeFile } from '#test/utils/file';
-import { input as fakeQuestionInput } from '#test/utils/question';
+import { serialized as serializedQuestion, input as fakeQuestionInput } from '#test/utils/question';
 import fakeUser from '#test/utils/user';
-import { serialized as serializedQuestion } from '#test/utils/question';
 import ServiceError from '#server/errors/ServiceError';
+import create from './create';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -51,7 +51,6 @@ rewiremock('#server/config').withDefault(config);
 rewiremock('#db/sequelize').with(sequelize);
 
 rewiremock.enable();
-import create from './create';
 rewiremock.disable();
 
 describe('services/question/create', () => {
