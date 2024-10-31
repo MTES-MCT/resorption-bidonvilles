@@ -7,8 +7,10 @@ import { AttachmentEntityType } from '#server/models/attachmentModel/createLinke
 import fromMimeToExtension from '#server/utils/fromMimeToExtension';
 import { Transaction } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
+import { ShantytownAttachmentObject } from '#root/types/resources/Shantytown.d';
 
-export default async (entityType: AttachmentEntityType, entityId: number, createdBy: number, files: Express.Multer.File[], transaction?: Transaction): Promise<any[]> => {
+
+export default async (entityType: AttachmentEntityType, entityId: number, createdBy: number, files: Express.Multer.File[], transaction?: Transaction, attachmentType?: ShantytownAttachmentObject[]): Promise<any[]> => {
     const previews: Buffer[] = await Promise.all(
         files.map((f) => {
             if (!f.mimetype.startsWith('image/')) {
@@ -59,6 +61,7 @@ export default async (entityType: AttachmentEntityType, entityId: number, create
                     f.size,
                     createdBy,
                     transaction,
+                    attachmentType[index],
                 ),
             );
 
