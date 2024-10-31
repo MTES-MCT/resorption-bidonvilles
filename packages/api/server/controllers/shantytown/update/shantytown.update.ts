@@ -17,7 +17,7 @@ export default async (req, res, next) => {
         });
     }
 
-    if (req.files.length > 0 && !can(req.user).do('access', 'shantytown_justice').on(req.body)) {
+    if (req.files?.length > 0 && !can(req.user).do('access', 'shantytown_justice').on(req.body)) {
         return res.status(403).send({
             user_message: 'Vous n\'avez pas les droits suffisants pour ajouter des arrêtés en pièces jointes de ce site.',
         });
