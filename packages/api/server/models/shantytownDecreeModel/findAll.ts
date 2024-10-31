@@ -9,6 +9,7 @@ export default (shantytownIds: number, transaction = undefined): Promise<Shantyt
         `SELECT
             sd.fk_shantytown AS "shantytownId",
             sd.fk_attachment AS "attachmentId",
+            sd.attachment_type AS "attachmentType",
             a.original_file_key AS "fileKey",
             a.preview_file_key AS "previewFileKey",
             a.original_name AS "originalName",
@@ -17,7 +18,7 @@ export default (shantytownIds: number, transaction = undefined): Promise<Shantyt
             a.created_by AS "createdBy",
             a.created_at AS "createdAt"
         FROM
-            shantytown_decrees sd
+            shantytown_decree_attachments sd
         LEFT JOIN attachments a ON sd.fk_attachment = a.attachment_id
         WHERE sd.fk_shantytown IN (:ids)
         ORDER BY a.created_at DESC`,

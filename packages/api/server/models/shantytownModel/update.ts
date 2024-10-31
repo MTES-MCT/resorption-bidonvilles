@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import incomingTownsModel from '#server/models/incomingTownsModel';
 
-export default async (editor, shantytownId, data, argTransaction = undefined) => {
+export default async (editor, shantytownId, data, argTransaction = undefined): Promise<void> => {
     let transaction = argTransaction;
     if (transaction === undefined) {
         transaction = await sequelize.transaction();
@@ -357,6 +357,7 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
             'insalubrity_order_by',
             'insalubrity_order_at',
             'insalubrity_parcels',
+            'attachments',
         ];
         const { commonData, justiceData, ownerData } = Object.keys(data).reduce(
             (acc, key) => {
