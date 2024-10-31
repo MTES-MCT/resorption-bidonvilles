@@ -5,6 +5,6 @@ import controller from './shantytown.update';
 export default (app: ApplicationWithCustomRoutes): void => {
     app.customRoutes.patch('/towns/:id', controller, validator, {
         authenticate: true,
-        multipart: false,
+        multipart: true,
     });
 };
