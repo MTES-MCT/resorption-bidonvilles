@@ -29,6 +29,7 @@
             v-if="hasJusticePermission"
             :location="location"
             :mode="mode"
+            :townId="town?.id"
         />
 
         <ErrorSummary
@@ -94,6 +95,7 @@ const initialValues = {
     living_conditions_version: town.value?.livingConditions?.version || 2,
     show_old_living_conditions: false,
     ...formatFormTown(town.value || {}),
+    attachments: town.value?.attachments || [],
 };
 
 const canSetUpdatedAt = computed(() => {
@@ -286,6 +288,13 @@ function formatValuesForApi(v) {
         }, {});
     };
 
+    const formatAttachments = (attachments, attachmentType) => {
+        return attachments.map((file) => ({
+            file: file,
+            type: attachmentType,
+        }));
+    };
+
     const dateFields = [
         "built_at",
         "declared_at",
@@ -307,6 +316,24 @@ function formatValuesForApi(v) {
         "insalubrity_order_by",
     ];
 
+    const completeAttachments = [];
+    if (v.insalubrity_attachments && v.insalubrity_attachments.length > 0) {
+        completeAttachments.push(
+            ...formatAttachments(
+                Array.from(v.insalubrity_attachments),
+                "insalubrity"
+            )
+        );
+    }
+    if (v.evacuation_attachments && v.evacuation_attachments.length > 0) {
+        completeAttachments.push(
+            ...formatAttachments(
+                Array.from(v.evacuation_attachments),
+                "evacuation"
+            )
+        );
+    }
+
     return {
         ...Object.keys(validationSchema.value.fields).reduce((acc, key) => {
             acc[key] = v[key];
@@ -319,6 +346,8 @@ function formatValuesForApi(v) {
         citycode,
         address: label,
         coordinates: `${v.coordinates[0]},${v.coordinates[1]}`,
+        attachments: Array.from(v.attachments),
+        newAttachments: completeAttachments,
     };
 }
 
@@ -355,6 +384,7 @@ defineExpose({
             const notificationStore = useNotificationStore();
 
             const { submit, notification } = config[mode.value];
+
             const respondedTown = await submit(formattedValues, town.value?.id);
 
             notificationStore.success(notification.title, notification.content);

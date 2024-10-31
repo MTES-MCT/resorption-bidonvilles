@@ -69,6 +69,13 @@
                 :maxDate="new Date()"
                 v-model="values.administrative_order_evacuation_at"
             />
+            <UploadArrete
+                type="evacuation"
+                v-if="values.evacuation_under_time_limit === 1"
+                v-model="values"
+                :townId="townId"
+                @update:attachments="updateAttachments"
+            />
         </Fieldset>
 
         <Fieldset :legend="labels.insalubrity_order" showMandatoryStar>
@@ -93,6 +100,13 @@
                 v-model="values.insalubrity_order_at"
             />
             <InputInsalubrityParcels v-if="values.insalubrity_order === 1" />
+            <UploadArrete
+                type="insalubrity"
+                v-if="values.insalubrity_order === 1"
+                v-model="values"
+                :townId="townId"
+                @update:attachments="updateAttachments"
+            />
         </Fieldset>
 
         <template v-if="policeInformationRequested === true">
@@ -145,6 +159,7 @@ import InputJusticeRendered from "../inputs/FormDeclarationDeSiteInputJusticeRen
 import InputProcedureDatepicker from "../inputs/common/InputDeclarationDeSiteDatepickerInput.vue";
 import InputJusticeRenderedBy from "../inputs/FormDeclarationDeSiteInputJusticeRenderedBy.vue";
 import InputJusticeChallenged from "../inputs/FormDeclarationDeSiteInputJusticeChallenged.vue";
+import UploadArrete from "../inputs/FormDeclarationDeSiteUploadArrete.vue";
 
 import InputExistingLitigation from "../inputs/FormDeclarationDeSiteInputExistingLitigation.vue";
 
@@ -165,10 +180,22 @@ import yesNoItems from "@/utils/yesNoItems";
 const props = defineProps({
     location: Object,
     mode: String,
+    townId: Number,
 });
-const { location, mode } = toRefs(props);
+const { location, mode, townId } = toRefs(props);
 
 const values = useFormValues();
+
+const updateAttachments = ({ type, files }) => {
+    const existingFiles = Array.from(values.value.attachments || []);
+
+    const newFiles = Array.from(files).map((file) => ({
+        file,
+        decreeType: type,
+    }));
+
+    values.value.attachments = existingFiles.concat(newFiles);
+};
 
 const policeInformationRequested = computed(() => {
     return (
