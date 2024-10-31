@@ -1,7 +1,7 @@
 <template>
     <ContentWrapper>
         <TabList :tabs="tabs" v-model="currentTab" class="mb-4" />
-        <ListeDesActionsHeader />
+        <ListeDesActionsHeader :years="years" />
 
         <Loading v-if="actionsStore.isLoading !== false" />
         <ListeDesActionsErreur v-else-if="actionsStore.error" />
@@ -45,4 +45,24 @@ const currentTab = computed({
         actionsStore.filters.status = newValue;
     },
 });
+
+// Fonction pour récupérer les années uniques depuis les dates de lancement et de fin d'action
+const getUniqueYears = (actionsData) => {
+    const allStartedAtYears = actionsData.map((action) =>
+        new Date(action.started_at).getFullYear()
+    );
+    const allEndedAtYears = actionsData.map((action) =>
+        action.ended_at ? new Date(action.ended_at).getFullYear() : null
+    );
+    return [
+        ...new Set(
+            [...allStartedAtYears, ...allEndedAtYears].filter(
+                (year) => year !== null
+            )
+        ),
+    ].sort((a, b) => a - b);
+};
+
+// Liste des années uniques extraites des dates de début et de fin d'action
+const years = computed(() => getUniqueYears(actionsStore.filteredActions));
 </script>

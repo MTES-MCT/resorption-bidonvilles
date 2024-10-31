@@ -25,8 +25,10 @@ export function edit(id, data) {
     return axios.patch(`/actions/${encodeURI(id)}`, data);
 }
 
-export function exportActions() {
-    return axios.get("/actions/export/csv");
+export function exportActions(year) {
+    return axios.get(`/actions/export/excel/${encodeURI(year)}`, {
+        responseType: "blob",
+    });
 }
 
 export function exportComments() {
