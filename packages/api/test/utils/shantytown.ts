@@ -139,6 +139,7 @@ export function serialized(location: City = defaultLocation, override = {}): Sha
         address: 'adresse',
         addressDetails: null,
         addressSimple: 'Adresse',
+        attachments: [],
         usename: 'Nom',
         populationTotal: null,
         populationCouples: null,
