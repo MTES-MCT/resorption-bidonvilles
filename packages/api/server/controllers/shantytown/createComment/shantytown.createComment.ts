@@ -1,6 +1,6 @@
-import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched';
 import shantytownCommentService from '#server/services/shantytownComment';
 import can from '#server/utils/permission/can';
+import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
 
 const ERROR_RESPONSES = {
     insert_failed: { code: 500, message: 'Votre commentaire n\'a pas pu être enregistré.' },
