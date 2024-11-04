@@ -304,7 +304,7 @@ export default mode => ([
                     },
                     {
                         key: 'sanitary_toilet_types',
-                        submitedValue: req.body.sanitary_toilet_types ? JSON.stringify(req.body.sanitary_toilet_types.sort()) : null,
+                        submitedValue: req.body.sanitary_toilet_types && req.body.sanitary_toilet_types?.lenght > 0 ? JSON.stringify(req.body.sanitary_toilet_types.sort()) : null,
                         storedValue: req.town.livingConditions.sanitary.toilet_types ? JSON.stringify(req.town.livingConditions.sanitary.toilet_types.sort()) : null,
                     },
                     {
@@ -329,7 +329,7 @@ export default mode => ([
                     },
                     {
                         key: 'electricity_access_types',
-                        submitedValue: req.body.electricity_access_types ? JSON.stringify(req.body.electricity_access_types.sort()) : null,
+                        submitedValue: req.body.electricity_access_types && req.body.electricity_access_types?.length > 0 ? JSON.stringify(req.body.electricity_access_types.sort()) : null,
                         storedValue: req.town.livingConditions.electricity.access_types ? JSON.stringify(req.town.livingConditions.electricity.access_types.sort()) : null,
                     },
                     {
@@ -364,7 +364,7 @@ export default mode => ([
                     },
                     {
                         key: 'pest_animals_presence',
-                        submitedValue: valueMap[parseInt(req.body.pest_animals_presence, 10) + 1],
+                        submitedValue: req.body.pest_animals_presence ? valueMap[parseInt(req.body.pest_animals_presence, 10) + 1] : null,
                         storedValue: req.town.livingConditions.pest_animals ? req.town.livingConditions.pest_animals.presence : null,
                     },
                     {
@@ -374,7 +374,7 @@ export default mode => ([
                     },
                     {
                         key: 'fire_prevention_diagnostic',
-                        submitedValue: valueMap[parseInt(req.body.fire_prevention_diagnostic, 10) + 1],
+                        submitedValue: req.body.fire_prevention_diagnostic ? valueMap[parseInt(req.body.fire_prevention_diagnostic, 10) + 1] : null,
                         storedValue: req.town.livingConditions.fire_prevention ? req.town.livingConditions.fire_prevention.diagnostic : null,
                     },
                     {
@@ -483,7 +483,7 @@ export default mode => ([
                         storedValue: getStringOrNull(req.town.bailiff),
                     },
                 ];
-                // Y at'il des modifications des données dans les champs du formulaire ?
+ // Y at'il des modifications des données dans les champs du formulaire ?
                 hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
             }
 
