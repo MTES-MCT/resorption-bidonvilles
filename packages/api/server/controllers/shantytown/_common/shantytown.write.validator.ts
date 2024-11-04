@@ -224,7 +224,7 @@ export default mode => ([
                     },
                     {
                         key: 'is_reinstallation',
-                        submitedValue: valueMap[parseInt(req.body.is_reinstallation, 10) + 1],
+                        submitedValue: req.body.is_reinstallation ? valueMap[parseInt(req.body.is_reinstallation, 10) + 1] : null,
                         storedValue: req.town.isReinstallation,
                     },
                     {
@@ -249,12 +249,12 @@ export default mode => ([
                     },
                     {
                         key: 'water_access_is_public',
-                        submitedValue: valueMap[parseInt(req.body.water_access_is_public, 10) + 1],
+                        submitedValue: req.body.water_access_is_public ? valueMap[parseInt(req.body.water_access_is_public, 10) + 1] : null,
                         storedValue: req.town.livingConditions.water.access_is_public,
                     },
                     {
                         key: 'water_access_is_continuous',
-                        submitedValue: valueMap[parseInt(req.body.water_access_is_continuous, 10) + 1],
+                        submitedValue: req.body.water_access_is_continuous ? valueMap[parseInt(req.body.water_access_is_continuous, 10) + 1] : null,
                         storedValue: req.town.livingConditions.water.access_is_continuous,
                     },
                     {
@@ -264,17 +264,17 @@ export default mode => ([
                     },
                     {
                         key: 'water_access_is_local',
-                        submitedValue: valueMap[parseInt(req.body.water_access_is_local, 10) + 1],
+                        submitedValue: req.body.water_access_is_local ? valueMap[parseInt(req.body.water_access_is_local, 10) + 1] : null,
                         storedValue: req.town.livingConditions.water.access_is_local,
                     },
                     {
                         key: 'water_access_is_close',
-                        submitedValue: valueMap[parseInt(req.body.water_access_is_close, 10) + 1],
+                        submitedValue: req.body.water_access_is_close ? valueMap[parseInt(req.body.water_access_is_close, 10) + 1] : null,
                         storedValue: req.town.livingConditions.water.access_is_close,
                     },
                     {
                         key: 'water_access_is_unequal',
-                        submitedValue: valueMap[parseInt(req.body.water_access_is_unequal, 10) + 1],
+                        submitedValue: req.body.water_access_is_unequal ? valueMap[parseInt(req.body.water_access_is_unequal, 10) + 1] : null,
                         storedValue: req.town.livingConditions.water.access_is_unequal,
                     },
                     {
@@ -284,7 +284,7 @@ export default mode => ([
                     },
                     {
                         key: 'water_access_has_stagnant_water',
-                        submitedValue: valueMap[parseInt(req.body.water_access_has_stagnant_water, 10) + 1],
+                        submitedValue: req.body.water_access_has_stagnant_water ? valueMap[parseInt(req.body.water_access_has_stagnant_water, 10) + 1] : null,
                         storedValue: req.town.livingConditions.water.access_has_stagnant_water,
                     },
                     {
@@ -294,12 +294,12 @@ export default mode => ([
                     },
                     {
                         key: 'sanitary_working_toilets',
-                        submitedValue: valueMap[parseInt(req.body.sanitary_working_toilets, 10) + 1],
+                        submitedValue: req.body.sanitary_working_toilets ? valueMap[parseInt(req.body.sanitary_working_toilets, 10) + 1] : null,
                         storedValue: req.town.livingConditions.sanitary.working_toilets,
                     },
                     {
                         key: 'sanitary_open_air_defecation',
-                        submitedValue: valueMap[parseInt(req.body.sanitary_open_air_defecation, 10) + 1],
+                        submitedValue: req.body.sanitary_open_air_defecation ? valueMap[parseInt(req.body.sanitary_open_air_defecation, 10) + 1] : null,
                         storedValue: req.town.livingConditions.sanitary.open_air_defecation,
                     },
                     {
@@ -309,22 +309,22 @@ export default mode => ([
                     },
                     {
                         key: 'sanitary_toilets_are_inside',
-                        submitedValue: valueMap[parseInt(req.body.sanitary_toilets_are_inside, 10) + 1],
+                        submitedValue: req.body.sanitary_toilets_are_inside ? valueMap[parseInt(req.body.sanitary_toilets_are_inside, 10) + 1] : null,
                         storedValue: req.town.livingConditions.sanitary.toilets_are_inside,
                     },
                     {
                         key: 'sanitary_toilets_are_lighted',
-                        submitedValue: valueMap[parseInt(req.body.sanitary_toilets_are_lighted, 10) + 1],
+                        submitedValue: req.body.sanitary_toilets_are_lighted ? valueMap[parseInt(req.body.sanitary_toilets_are_lighted, 10) + 1] : null,
                         storedValue: req.town.livingConditions.sanitary.toilets_are_lighted,
                     },
                     {
                         key: 'sanitary_hand_washing',
-                        submitedValue: valueMap[parseInt(req.body.sanitary_hand_washing, 10) + 1],
+                        submitedValue: req.body.sanitary_hand_washing ? valueMap[parseInt(req.body.sanitary_hand_washing, 10) + 1] : null,
                         storedValue: req.town.livingConditions.sanitary.hand_washing,
                     },
                     {
                         key: 'electricity_access',
-                        submitedValue: valueMap[parseInt(req.body.electricity_access, 10) + 1],
+                        submitedValue: req.body.electricity_access ? valueMap[parseInt(req.body.electricity_access, 10) + 1] : null,
                         storedValue: req.town.livingConditions.electricity.access,
                     },
                     {
@@ -334,32 +334,32 @@ export default mode => ([
                     },
                     {
                         key: 'electricity_access_is_unequal',
-                        submitedValue: valueMap[parseInt(req.body.electricity_access_is_unequal, 10) + 1],
+                        submitedValue: req.body.electricity_access_is_unequal ? valueMap[parseInt(req.body.electricity_access_is_unequal, 10) + 1] : null,
                         storedValue: req.town.livingConditions.electricity.access_is_unequal,
                     },
                     {
                         key: 'trash_is_piling',
-                        submitedValue: valueMap[parseInt(req.body.trash_is_piling, 10) + 1],
+                        submitedValue: req.body.trash_is_piling ? valueMap[parseInt(req.body.trash_is_piling, 10) + 1] : null,
                         storedValue: req.town.livingConditions.trash.is_piling,
                     },
                     {
                         key: 'trash_evacuation_is_close',
-                        submitedValue: valueMap[parseInt(req.body.trash_evacuation_is_close, 10) + 1],
+                        submitedValue: req.body.trash_evacuation_is_close ? valueMap[parseInt(req.body.trash_evacuation_is_close, 10) + 1] : null,
                         storedValue: req.town.livingConditions.trash.evacuation_is_close,
                     },
                     {
                         key: 'trash_evacuation_is_safe',
-                        submitedValue: valueMap[parseInt(req.body.trash_evacuation_is_safe, 10) + 1],
+                        submitedValue: req.body.trash_evacuation_is_safe ? valueMap[parseInt(req.body.trash_evacuation_is_safe, 10) + 1] : null,
                         storedValue: req.town.livingConditions.trash.evacuation_is_safe,
                     },
                     {
                         key: 'trash_evacuation_is_regular',
-                        submitedValue: valueMap[parseInt(req.body.trash_evacuation_is_regular, 10) + 1],
+                        submitedValue: req.body.trash_evacuation_is_regular ? valueMap[parseInt(req.body.trash_evacuation_is_regular, 10) + 1] : null,
                         storedValue: req.town.livingConditions.trash.evacuation_is_regular,
                     },
                     {
                         key: 'trash_bulky_is_piling',
-                        submitedValue: valueMap[parseInt(req.body.trash_bulky_is_piling, 10) + 1],
+                        submitedValue: req.body.trash_bulky_is_piling ? valueMap[parseInt(req.body.trash_bulky_is_piling, 10) + 1] : null,
                         storedValue: req.town.livingConditions.trash.bulky_is_piling,
                     },
                     {
@@ -379,17 +379,17 @@ export default mode => ([
                     },
                     {
                         key: 'owner_complaint',
-                        submitedValue: valueMap[parseInt(req.body.owner_complaint, 10) + 1],
+                        submitedValue: req.body.owner_complaint ? valueMap[parseInt(req.body.owner_complaint, 10) + 1] : null,
                         storedValue: req.town.ownerComplaint,
                     },
                     {
                         key: 'justice_procedure',
-                        submitedValue: valueMap[parseInt(req.body.justice_procedure, 10) + 1],
+                        submitedValue: req.body.justice_procedure ? valueMap[parseInt(req.body.justice_procedure, 10) + 1] : null,
                         storedValue: req.town.justiceProcedure,
                     },
                     {
                         key: 'justice_rendered',
-                        submitedValue: valueMap[parseInt(req.body.justice_rendered, 10) + 1],
+                        submitedValue: req.body.justice_rendered ? valueMap[parseInt(req.body.justice_rendered, 10) + 1] : null,
                         storedValue: req.town.justiceRendered,
                     },
                     {
@@ -404,12 +404,12 @@ export default mode => ([
                     },
                     {
                         key: 'justice_challenged',
-                        submitedValue: valueMap[parseInt(req.body.justice_challenged, 10) + 1],
+                        submitedValue: req.body.justice_challenged ? valueMap[parseInt(req.body.justice_challenged, 10) + 1] : null,
                         storedValue: req.town.justiceChallenged,
                     },
                     {
                         key: 'evacuation_under_time_limit',
-                        submitedValue: valueMap[parseInt(req.body.evacuation_under_time_limit, 10) + 1],
+                        submitedValue: req.body.evacuation_under_time_limit ? valueMap[parseInt(req.body.evacuation_under_time_limit, 10) + 1] : null,
                         storedValue: req.town.evacuationUnderTimeLimit,
                     },
                     {
@@ -429,12 +429,12 @@ export default mode => ([
                     },
                     {
                         key: 'insalubrity_order',
-                        submitedValue: valueMap[parseInt(req.body.insalubrity_order, 10) + 1],
+                        submitedValue: req.body.insalubrity_order ? valueMap[parseInt(req.body.insalubrity_order, 10) + 1] : null,
                         storedValue: req.town.insalubrityOrder,
                     },
                     {
                         key: 'insalubrity_order_displayed',
-                        submitedValue: valueMap[parseInt(req.body.insalubrity_order_displayed, 10) + 1],
+                        submitedValue: req.body.insalubrity_order_displayed ? valueMap[parseInt(req.body.insalubrity_order_displayed, 10) + 1] : null,
                         storedValue: req.town.insalubrityOrderDisplayed,
                     },
                     {
@@ -474,7 +474,7 @@ export default mode => ([
                     },
                     {
                         key: 'existing_litigation',
-                        submitedValue: valueMap[parseInt(req.body.existing_litigation, 10) + 1],
+                        submitedValue: req.body.existing_litigation ? valueMap[parseInt(req.body.existing_litigation, 10) + 1] : null,
                         storedValue: req.town.existingLitigation,
                     },
                     {
@@ -483,7 +483,7 @@ export default mode => ([
                         storedValue: getStringOrNull(req.town.bailiff),
                     },
                 ];
- // Y at'il des modifications des données dans les champs du formulaire ?
+                // Y at'il des modifications des données dans les champs du formulaire ?
                 hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
             }
 
