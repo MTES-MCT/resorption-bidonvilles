@@ -1,4 +1,5 @@
 /* eslint-disable newline-per-chained-call */
+import fs from 'fs';
 import { body, param } from 'express-validator';
 import validator from 'validator';
 import permissionUtils from '#server/utils/permission';
@@ -60,6 +61,10 @@ function getNumberOrNull(value: string | number | null | undefined): number | nu
     }
     const stringValue = value.toString();
     return stringValue !== '' ? parseInt(stringValue, 10) : null;
+}
+
+function logToFile(message: string) {
+    fs.appendFileSync('./log.txt', `${new Date().toISOString()} - ${message}\n`);
 }
 
 export default mode => ([
@@ -484,12 +489,12 @@ export default mode => ([
                     },
                 ];
 
-                console.log('fieldsToCheck', fieldsToCheck);
+                logToFile(`fieldsToCheck: ${  JSON.stringify(fieldsToCheck)}`);
                 fieldsToCheck.map((field) => {
-                    field.key === 'sanitary_toilet_types' && console.log(`SANITARY TRUC: ${typeof field.storedValue}`);
-                    field.submitedValue !== field.storedValue && console.log(`${field.key} => ${field.submitedValue !== field.storedValue}: Stored: ${field.storedValue} - Submited: ${field.submitedValue}`);
+                    field.key === 'sanitary_toilet_types' && logToFile(`SANITARY TRUC: ${typeof field.storedValue}`);
+                    field.submitedValue !== field.storedValue && logToFile(`${field.key} => ${field.submitedValue !== field.storedValue}: Stored: ${field.storedValue} - Submited: ${field.submitedValue}`);
                 });
-                console.log('req.town.livingConditions.sanitary.toilet_types', JSON.stringify(req.town.livingConditions.sanitary.toilet_types?.sort()) || []);
+                logToFile('req.town.livingConditions.sanitary.toilet_types', JSON.stringify(req.town.livingConditions.sanitary.toilet_types?.sort()) || []);
                 // Y at'il des modifications des données dans les champs du formulaire ?
                 hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
             }
