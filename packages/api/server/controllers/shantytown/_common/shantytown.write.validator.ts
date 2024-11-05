@@ -489,12 +489,13 @@ export default mode => ([
                     },
                 ];
 
-                logToFile(`fieldsToCheck: ${  JSON.stringify(fieldsToCheck)}`);
-                fieldsToCheck.map((field) => {
-                    field.key === 'sanitary_toilet_types' && logToFile(`SANITARY TRUC: ${typeof field.storedValue}`);
-                    field.submitedValue !== field.storedValue && logToFile(`${field.key} => ${field.submitedValue !== field.storedValue}: Stored: ${field.storedValue} - Submited: ${field.submitedValue}`);
+                logToFile(`fieldsToCheck: ${JSON.stringify(fieldsToCheck)}`);
+                fieldsToCheck.forEach((field) => {
+                    logToFile(`SANITARY TRUC: ${typeof field.storedValue}`);
+                    logToFile(`${field.key} => ${field.submitedValue !== field.storedValue}: Stored: ${field.storedValue} - Submited: ${field.submitedValue}`);
+                    return true;
                 });
-                logToFile('req.town.livingConditions.sanitary.toilet_types', JSON.stringify(req.town.livingConditions.sanitary.toilet_types?.sort()) || []);
+
                 // Y at'il des modifications des données dans les champs du formulaire ?
                 hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
             }
