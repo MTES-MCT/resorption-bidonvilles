@@ -72,6 +72,12 @@ export const useTownsStore = defineStore("towns", () => {
                 location: filters.location.value,
                 ...filters.properties.value,
             }),
+            inProgress: filterShantytowns(towns.value, {
+                status: "inProgress",
+                search: filters.search.value,
+                location: filters.location.value,
+                ...filters.properties.value,
+            }),
             close: filterShantytowns(towns.value, {
                 status: "close",
                 search: filters.search.value,
