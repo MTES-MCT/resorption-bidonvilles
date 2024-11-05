@@ -249,12 +249,12 @@ export default mode => ([
                     },
                     {
                         key: 'water_access_is_public',
-                        submitedValue: req.body.water_access_is_public ? valueMap[parseInt(req.body.water_access_is_public, 10) + 1] : null,
+                        submitedValue: req.body.water_access_is_public ? valueMap[parseInt(req.body.water_access_is_public, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.water.access_is_public,
                     },
                     {
                         key: 'water_access_is_continuous',
-                        submitedValue: req.body.water_access_is_continuous ? valueMap[parseInt(req.body.water_access_is_continuous, 10) + 1] : null,
+                        submitedValue: req.body.water_access_is_continuous ? valueMap[parseInt(req.body.water_access_is_continuous, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.water.access_is_continuous,
                     },
                     {
@@ -264,17 +264,17 @@ export default mode => ([
                     },
                     {
                         key: 'water_access_is_local',
-                        submitedValue: req.body.water_access_is_local ? valueMap[parseInt(req.body.water_access_is_local, 10) + 1] : null,
+                        submitedValue: req.body.water_access_is_local ? valueMap[parseInt(req.body.water_access_is_local, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.water.access_is_local,
                     },
                     {
                         key: 'water_access_is_close',
-                        submitedValue: req.body.water_access_is_close ? valueMap[parseInt(req.body.water_access_is_close, 10) + 1] : null,
+                        submitedValue: req.body.water_access_is_close ? valueMap[parseInt(req.body.water_access_is_close, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.water.access_is_close,
                     },
                     {
                         key: 'water_access_is_unequal',
-                        submitedValue: req.body.water_access_is_unequal ? valueMap[parseInt(req.body.water_access_is_unequal, 10) + 1] : null,
+                        submitedValue: req.body.water_access_is_unequal ? valueMap[parseInt(req.body.water_access_is_unequal, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.water.access_is_unequal,
                     },
                     {
@@ -284,7 +284,7 @@ export default mode => ([
                     },
                     {
                         key: 'water_access_has_stagnant_water',
-                        submitedValue: req.body.water_access_has_stagnant_water ? valueMap[parseInt(req.body.water_access_has_stagnant_water, 10) + 1] : null,
+                        submitedValue: req.body.water_access_has_stagnant_water ? valueMap[parseInt(req.body.water_access_has_stagnant_water, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.water.access_has_stagnant_water,
                     },
                     {
@@ -294,72 +294,72 @@ export default mode => ([
                     },
                     {
                         key: 'sanitary_working_toilets',
-                        submitedValue: req.body.sanitary_working_toilets ? valueMap[parseInt(req.body.sanitary_working_toilets, 10) + 1] : null,
+                        submitedValue: req.body.sanitary_working_toilets ? valueMap[parseInt(req.body.sanitary_working_toilets, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.sanitary.working_toilets,
                     },
                     {
                         key: 'sanitary_open_air_defecation',
-                        submitedValue: req.body.sanitary_open_air_defecation ? valueMap[parseInt(req.body.sanitary_open_air_defecation, 10) + 1] : null,
+                        submitedValue: req.body.sanitary_open_air_defecation ? valueMap[parseInt(req.body.sanitary_open_air_defecation, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.sanitary.open_air_defecation,
                     },
                     {
                         key: 'sanitary_toilet_types',
-                        submitedValue: req.body.sanitary_toilet_types && req.body.sanitary_toilet_types?.lenght > 0 ? JSON.stringify(req.body.sanitary_toilet_types.sort()) : null,
-                        storedValue: req.town.livingConditions.sanitary.toilet_types ? JSON.stringify(req.town.livingConditions.sanitary.toilet_types.sort()) : null,
+                        submitedValue: req.body.sanitary_toilet_types && req.body.sanitary_toilet_types.length > 0 ? JSON.stringify(req.body.sanitary_toilet_types.sort()) : '[]',
+                        storedValue: req.town.livingConditions.sanitary.toilet_types ? JSON.stringify(req.town.livingConditions.sanitary.toilet_types.sort()) : '[]',
                     },
                     {
                         key: 'sanitary_toilets_are_inside',
-                        submitedValue: req.body.sanitary_toilets_are_inside ? valueMap[parseInt(req.body.sanitary_toilets_are_inside, 10) + 1] : null,
+                        submitedValue: req.body.sanitary_toilets_are_inside ? valueMap[parseInt(req.body.sanitary_toilets_are_inside, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.sanitary.toilets_are_inside,
                     },
                     {
                         key: 'sanitary_toilets_are_lighted',
-                        submitedValue: req.body.sanitary_toilets_are_lighted ? valueMap[parseInt(req.body.sanitary_toilets_are_lighted, 10) + 1] : null,
+                        submitedValue: req.body.sanitary_toilets_are_lighted ? valueMap[parseInt(req.body.sanitary_toilets_are_lighted, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.sanitary.toilets_are_lighted,
                     },
                     {
                         key: 'sanitary_hand_washing',
-                        submitedValue: req.body.sanitary_hand_washing ? valueMap[parseInt(req.body.sanitary_hand_washing, 10) + 1] : null,
+                        submitedValue: req.body.sanitary_hand_washing ? valueMap[parseInt(req.body.sanitary_hand_washing, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.sanitary.hand_washing,
                     },
                     {
                         key: 'electricity_access',
-                        submitedValue: req.body.electricity_access ? valueMap[parseInt(req.body.electricity_access, 10) + 1] : null,
+                        submitedValue: req.body.electricity_access ? valueMap[parseInt(req.body.electricity_access, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.electricity.access,
                     },
                     {
                         key: 'electricity_access_types',
-                        submitedValue: req.body.electricity_access_types && req.body.electricity_access_types?.length > 0 ? JSON.stringify(req.body.electricity_access_types.sort()) : null,
-                        storedValue: req.town.livingConditions.electricity.access_types ? JSON.stringify(req.town.livingConditions.electricity.access_types.sort()) : null,
+                        submitedValue: req.body.electricity_access_types && req.body.electricity_access_types?.length > 0 ? JSON.stringify(req.body.electricity_access_types.sort()) : '[]',
+                        storedValue: req.town.livingConditions.electricity.access_types ? JSON.stringify(req.town.livingConditions.electricity.access_types.sort()) : '[]',
                     },
                     {
                         key: 'electricity_access_is_unequal',
-                        submitedValue: req.body.electricity_access_is_unequal ? valueMap[parseInt(req.body.electricity_access_is_unequal, 10) + 1] : null,
+                        submitedValue: req.body.electricity_access_is_unequal ? valueMap[parseInt(req.body.electricity_access_is_unequal, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.electricity.access_is_unequal,
                     },
                     {
                         key: 'trash_is_piling',
-                        submitedValue: req.body.trash_is_piling ? valueMap[parseInt(req.body.trash_is_piling, 10) + 1] : null,
+                        submitedValue: req.body.trash_is_piling ? valueMap[parseInt(req.body.trash_is_piling, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.trash.is_piling,
                     },
                     {
                         key: 'trash_evacuation_is_close',
-                        submitedValue: req.body.trash_evacuation_is_close ? valueMap[parseInt(req.body.trash_evacuation_is_close, 10) + 1] : null,
+                        submitedValue: req.body.trash_evacuation_is_close ? valueMap[parseInt(req.body.trash_evacuation_is_close, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.trash.evacuation_is_close,
                     },
                     {
                         key: 'trash_evacuation_is_safe',
-                        submitedValue: req.body.trash_evacuation_is_safe ? valueMap[parseInt(req.body.trash_evacuation_is_safe, 10) + 1] : null,
+                        submitedValue: req.body.trash_evacuation_is_safe ? valueMap[parseInt(req.body.trash_evacuation_is_safe, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.trash.evacuation_is_safe,
                     },
                     {
                         key: 'trash_evacuation_is_regular',
-                        submitedValue: req.body.trash_evacuation_is_regular ? valueMap[parseInt(req.body.trash_evacuation_is_regular, 10) + 1] : null,
+                        submitedValue: req.body.trash_evacuation_is_regular ? valueMap[parseInt(req.body.trash_evacuation_is_regular, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.trash.evacuation_is_regular,
                     },
                     {
                         key: 'trash_bulky_is_piling',
-                        submitedValue: req.body.trash_bulky_is_piling ? valueMap[parseInt(req.body.trash_bulky_is_piling, 10) + 1] : null,
+                        submitedValue: req.body.trash_bulky_is_piling ? valueMap[parseInt(req.body.trash_bulky_is_piling, 10) + 1] : undefined,
                         storedValue: req.town.livingConditions.trash.bulky_is_piling,
                     },
                     {
@@ -483,6 +483,7 @@ export default mode => ([
                         storedValue: getStringOrNull(req.town.bailiff),
                     },
                 ];
+
                 // Y at'il des modifications des données dans les champs du formulaire ?
                 hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
             }
