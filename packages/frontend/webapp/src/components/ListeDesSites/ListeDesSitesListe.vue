@@ -7,6 +7,7 @@
                     : townsStore.currentPage.content"
                 :key="shantytown.id"
                 :shantytown="shantytown"
+                :currentTab="currentTab"
             />
         </section>
         <BottomPagination
@@ -21,10 +22,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { defineProps, ref, onMounted } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { BottomPagination } from "@resorptionbidonvilles/ui";
 import CarteSiteDetaillee from "@/components/CarteSiteDetaillee/CarteSiteDetaillee.vue";
+
+// eslint-disable-next-line no-unused-vars
+const props = defineProps({
+    currentTab: {
+        type: String,
+    },
+});
 
 const townsStore = useTownsStore();
 const printMode = ref(false);

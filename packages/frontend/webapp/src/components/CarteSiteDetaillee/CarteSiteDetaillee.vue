@@ -37,7 +37,7 @@
                 >
                     <CarteSiteDetailleeFieldType :shantytown="shantytown" />
                     <CarteSiteDetailleeOrigins :shantytown="shantytown" />
-                    <template v-if="isDepartementInvolvoledInPhases">
+                    <template v-if="displayPhasesPreparatoiresResorption">
                         <CarteSiteDetailleePhasesPreparatoiresResorption
                             v-if="isOpen"
                             :shantytown="shantytown"
@@ -90,18 +90,25 @@ const props = defineProps({
     shantytown: {
         type: Object,
     },
+    currentTab: {
+        type: String,
+    },
 });
 const userStore = useUserStore();
-const { shantytown } = toRefs(props);
+const { shantytown, currentTab } = toRefs(props);
 const isHover = ref(false);
 const isOpen = computed(() => {
     return shantytown.value.status === "open";
 });
-const isDepartementInvolvoledInPhases = computed(() => {
-    return departementsInResoprtionPhases.includes(
-        parseInt(shantytown.value.departement.code, 10)
+
+const displayPhasesPreparatoiresResorption = computed(() => {
+    return (
+        departementsInResoprtionPhases.includes(
+            parseInt(shantytown.value.departement.code, 10)
+        ) && currentTab.value === "inProgress"
     );
 });
+
 // eslint-disable-next-line no-unused-vars
 const nbCol = computed(() => {
     return userStore.hasJusticePermission ? "5" : "4";
