@@ -484,6 +484,12 @@ export default mode => ([
                     },
                 ];
 
+                console.log('fieldsToCheck', fieldsToCheck);
+                fieldsToCheck.map((field) => {
+                    field.key === 'sanitary_toilet_types' && console.log(`SANITARY TRUC: ${typeof field.storedValue}`);
+                    field.submitedValue !== field.storedValue && console.log(`${field.key} => ${field.submitedValue !== field.storedValue}: Stored: ${field.storedValue} - Submited: ${field.submitedValue}`);
+                });
+                console.log('req.town.livingConditions.sanitary.toilet_types', JSON.stringify(req.town.livingConditions.sanitary.toilet_types?.sort()) || []);
                 // Y at'il des modifications des données dans les champs du formulaire ?
                 hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
             }
