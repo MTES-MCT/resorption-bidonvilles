@@ -103,6 +103,15 @@ const groupedFilters = {
             ...(userStore.hasJusticePermission ? [filters.justice] : []),
         ],
     },
+    inProgress: {
+        default: [filters.population, filters.fieldType, filters.origin],
+        optional: [
+            filters.target,
+            filters.actors,
+            filters.heatwave,
+            ...(userStore.hasJusticePermission ? [filters.justice] : []),
+        ],
+    },
     close: {
         default: [filters.solvedOrClosed],
         optional: [
