@@ -498,7 +498,7 @@ export default mode => ([
 
                 // console.log(`fieldsToCheck: ${JSON.stringify(fieldsToCheck)}`);
                 fieldsToCheck.forEach((field) => {
-                //     console.log(`SANITARY TRUC: ${typeof field.storedValue}`);
+                    logToFile(`${field.key}: ${field.storedValue} => ${field.submitedValue}`);
                     if (field.submitedValue !== field.storedValue) {
                         logToFile(`${field.key} => ${field.submitedValue !== field.storedValue}: Stored: ${field.storedValue} - Submited: ${field.submitedValue}`);
                     }
