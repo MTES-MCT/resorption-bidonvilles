@@ -71,6 +71,21 @@
             >Mettre à jour</Button
         >
         <Button
+            v-if="
+                userStore.hasLocalizedPermission(
+                    'shantytown_resorption.create',
+                    town
+                )
+            "
+            size="sm"
+            variant="primary"
+            icon="fa-regular fa-play"
+            iconPosition="left"
+            @click="startResorption"
+            :loading="deleteIsLoading"
+            >Démarrer la résorption</Button
+        >
+        <Button
             v-if="userStore.hasLocalizedPermission('shantytown.delete', town)"
             size="sm"
             variant="primary"
