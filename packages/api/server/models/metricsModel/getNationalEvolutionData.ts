@@ -85,7 +85,7 @@ export default async (user, from: Date, to: Date): Promise<NationalEvolutionMetr
         GROUP BY
         serie_ms.month
         ORDER BY
-        serie_ms.month DESC;`,
+        serie_ms.month ASC;`,
         {
             type: QueryTypes.SELECT,
             replacements,
