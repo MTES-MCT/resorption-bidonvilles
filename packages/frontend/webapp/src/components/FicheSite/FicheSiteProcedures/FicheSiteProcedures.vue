@@ -32,7 +32,7 @@
                 </p>
             </FicheSiteProceduresLigne>
             <FicheSiteProceduresLigne
-                icon="file-import"
+                icon="paperclip"
                 :label="labels.evacuation_decrees"
             >
                 <FilePreviewGrid
@@ -93,7 +93,7 @@
                     userPermissions.role_id === 'national_admin' ||
                     userPermissions.shantytown_justice.access.allowed
                 "
-                icon="file-import"
+                icon="paperclip"
                 :label="labels.insalubrity_decrees"
             >
                 <FilePreviewGrid
