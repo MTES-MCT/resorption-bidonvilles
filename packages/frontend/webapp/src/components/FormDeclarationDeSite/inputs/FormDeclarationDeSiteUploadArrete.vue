@@ -31,6 +31,8 @@ const props = defineProps({
     townId: Number,
 });
 
+const emit = defineEmits(["delete:OriginalAttachment"]);
+
 const { type, modelValue, townId } = toRefs(props);
 
 const filteredFiles = computed(() => {
@@ -49,6 +51,7 @@ const onDeleteFile = async (file) => {
             file,
             townId.value
         );
+        emit("delete:OriginalAttachment", modelValue.value.attachments);
         notificationStore.success(
             "Succès",
             "La pièce jointe a bien été supprimée"

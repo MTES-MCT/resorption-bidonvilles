@@ -75,6 +75,7 @@
                 v-model="values"
                 :townId="townId"
                 @update:attachments="updateAttachments"
+                @delete:OriginalAttachment="deleteOriginalAttachment"
             />
         </Fieldset>
 
@@ -106,6 +107,7 @@
                 v-model="values"
                 :townId="townId"
                 @update:attachments="updateAttachments"
+                @delete:OriginalAttachment="deleteOriginalAttachment"
             />
         </Fieldset>
 
@@ -184,6 +186,8 @@ const props = defineProps({
 });
 const { location, mode, townId } = toRefs(props);
 
+const emit = defineEmits(["delete:OriginalAttachment"]);
+
 const values = useFormValues();
 
 const updateAttachments = ({ type, files }) => {
@@ -195,6 +199,10 @@ const updateAttachments = ({ type, files }) => {
     }));
 
     values.value.attachments = existingFiles.concat(newFiles);
+};
+
+const deleteOriginalAttachment = (attachments) => {
+    emit("delete:OriginalAttachment", attachments);
 };
 
 const policeInformationRequested = computed(() => {
