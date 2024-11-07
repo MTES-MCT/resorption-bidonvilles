@@ -1,8 +1,8 @@
 /* eslint-disable newline-per-chained-call */
-import fs from 'fs';
 import { body, param } from 'express-validator';
 import validator from 'validator';
 import permissionUtils from '#server/utils/permission';
+import shantytownService from '#server/services/shantytown';
 // models
 import shantytownModel from '#server/models/shantytownModel';
 import fieldTypeModel from '#server/models/fieldTypeModel';
@@ -67,9 +67,12 @@ function checkForInValueMap(value: number | undefined) {
     return value !== undefined ? valueMap[value + 1] : undefined;
 }
 
-function logToFile(message: string) {
-    fs.appendFileSync('./log.txt', `${new Date().toISOString()} - ${message}\n`);
-}
+const excludeSignedUrls = (key, value) => {
+    if (key === 'urls') {
+        return undefined;
+    }
+    return value;
+};
 
 export default mode => ([
     param('id')
@@ -77,7 +80,7 @@ export default mode => ([
         .custom(async (value, { req }) => {
             let town;
             try {
-                town = await shantytownModel.findOne(req.user, value);
+                town = await shantytownService.find(req.user, value);
             } catch (error) {
                 throw new Error('Une erreur de lecture en base de données est survenue');
             }
@@ -98,9 +101,6 @@ export default mode => ([
         .custom((value, { req }) => {
             let hasChanges = false;
             if (req.town) {
-                console.log('insalubrity_order: ', req.body.insalubrity_order, valueMap[parseInt(req.body.insalubrity_order, 10) + 1]);
-                console.log('fire_prevention_diagnostic: ', req.body.fire_prevention_diagnostic, 'fire_prevention_diagnostic' in req.body ? valueMap[parseInt(req.body.fire_prevention_diagnostic, 10) + 1] : null);
-
                 const fieldsToCheck = [
                     {
                         key: 'address',
@@ -494,16 +494,17 @@ export default mode => ([
                         submitedValue: getStringOrNull(req.body.bailiff),
                         storedValue: getStringOrNull(req.town.bailiff),
                     },
+                    {
+                        key: 'newAttachments',
+                        submitedValue: req.body.newAttachments && req.body.newAttachments.length > 0 ? JSON.stringify(req.body.newAttachments) : null,
+                        storedValue: req.town.newAttachments ? JSON.stringify(req.town.newAttachments) : null,
+                    },
+                    {
+                        key: 'attachments',
+                        submitedValue: req.body.existingAttachments && req.body.existingAttachments.length > 0 ? JSON.stringify(req.body.existingAttachments, excludeSignedUrls) : null,
+                        storedValue: req.town.attachments ? JSON.stringify(req.town.attachments, excludeSignedUrls) : null,
+                    },
                 ];
-
-                // console.log(`fieldsToCheck: ${JSON.stringify(fieldsToCheck)}`);
-                fieldsToCheck.forEach((field) => {
-                    logToFile(`${field.key}: ${field.storedValue} => ${field.submitedValue}`);
-                    if (field.submitedValue !== field.storedValue) {
-                        logToFile(`${field.key} => ${field.submitedValue !== field.storedValue}: Stored: ${field.storedValue} - Submited: ${field.submitedValue}`);
-                    }
-                //     // return true;
-                });
 
                 // Y at'il des modifications des données dans les champs du formulaire ?
                 hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
@@ -517,7 +518,7 @@ export default mode => ([
                 }
             // Si update_without_any_change est à false, alors au moins un champ doit être modifié
             } else if (req.town && !hasChanges) {
-                throw new Error('Au moins un champ doit être modifié s\'il s\'agit d\'une mise à jour de site sans modification de données');
+                throw new Error('Au moins un champ doit être modifié s\'il ne s\'agit pas d\'une mise à jour de site sans modification de données');
             }
             return true;
         }),
