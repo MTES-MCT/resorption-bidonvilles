@@ -30,6 +30,7 @@
             :location="location"
             :mode="mode"
             :townId="town?.id"
+            @delete:OriginalAttachment="deleteOriginalAttachment"
         />
 
         <ErrorSummary
@@ -346,10 +347,14 @@ function formatValuesForApi(v) {
         citycode,
         address: label,
         coordinates: `${v.coordinates[0]},${v.coordinates[1]}`,
-        attachments: Array.from(v.attachments),
+        existingAttachments: Array.from(v.attachments),
         newAttachments: completeAttachments,
     };
 }
+
+const deleteOriginalAttachment = (attachments) => {
+    originalValues.existingAttachments = attachments;
+};
 
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
