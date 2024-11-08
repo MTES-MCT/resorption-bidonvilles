@@ -437,7 +437,7 @@ export default mode => ([
                     {
                         key: 'administrative_order_evacuation_at',
                         submitedValue: req.body.administrative_order_evacuation_at ? req.body.administrative_order_evacuation_at : null,
-                        storedValue: req.town.administrativeOrderEvacuationAt ? formatDateToYYYYMMDD(new Date(req.town.administrativeOrderEvacuationAt)) : null,
+                        storedValue: req.town.administrativeOrderEvacuationAt ? formatDateToYYYYMMDD(new Date(req.town.administrativeOrderEvacuationAt * 1000)) : null,
                     },
                     {
                         key: 'insalubrity_order',
