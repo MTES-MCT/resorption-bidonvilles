@@ -60,6 +60,7 @@ export function edit(id, data) {
             });
         }
     }
+
     formData.append(
         "content",
         JSON.stringify({ ...data, attachments: attachmentsTable })
