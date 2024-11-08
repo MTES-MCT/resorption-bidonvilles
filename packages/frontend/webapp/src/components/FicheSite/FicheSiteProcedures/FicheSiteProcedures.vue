@@ -32,12 +32,28 @@
                 </p>
             </FicheSiteProceduresLigne>
             <FicheSiteProceduresLigne
+                v-if="town.evacuationUnderTimeLimit"
+                icon="clock"
+                :label="labels.administrative_order_evacuation_at"
+            >
+                <p>
+                    {{
+                        town.administrativeOrderEvacuationAt
+                            ? formatDate(
+                                  town.administrativeOrderEvacuationAt,
+                                  "d/m/y"
+                              )
+                            : "non communiqué"
+                    }}
+                </p>
+            </FicheSiteProceduresLigne>
+            <FicheSiteProceduresLigne
+                v-if="filteredDecreesAttachments('evacuation').length > 0"
                 icon="paperclip"
                 :label="labels.evacuation_decrees"
             >
                 <FilePreviewGrid
                     class="mb-3"
-                    v-if="filteredDecreesAttachments('evacuation').length > 0"
                     :files="filteredDecreesAttachments('evacuation')"
                 />
             </FicheSiteProceduresLigne>
@@ -89,16 +105,12 @@
                 {{ town.insalubrityParcels || "non communiqué" }}
             </FicheSiteProceduresLigne>
             <FicheSiteProceduresLigne
-                v-if="
-                    userPermissions.role_id === 'national_admin' ||
-                    userPermissions.shantytown_justice.access.allowed
-                "
+                v-if="filteredDecreesAttachments('insalubrity').length > 0"
                 icon="paperclip"
                 :label="labels.insalubrity_decrees"
             >
                 <FilePreviewGrid
                     class="mb-3"
-                    v-if="filteredDecreesAttachments('insalubrity').length > 0"
                     :files="filteredDecreesAttachments('insalubrity')"
                 />
             </FicheSiteProceduresLigne>
@@ -140,7 +152,6 @@ import { defineProps, toRefs, computed, watch } from "vue";
 import formatBool from "@/utils/formatBool";
 import formatDate from "@common/utils/formatDate";
 import { useModaleStore } from "@/stores/modale.store";
-import { useUserStore } from "@/stores/user.store";
 
 import { useEventBus } from "@common/helpers/event-bus";
 
@@ -156,10 +167,6 @@ const props = defineProps({
 });
 const { town } = toRefs(props);
 const { bus } = useEventBus();
-const userStore = useUserStore();
-const userPermissions = computed(() => {
-    return { ...userStore.user.permissions, role_id: userStore.user.role_id };
-});
 
 const justiceRendered = computed(() => {
     if (town.value.justiceRendered === null) {
