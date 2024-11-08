@@ -501,8 +501,8 @@ export default mode => ([
                     },
                     {
                         key: 'attachments',
-                        submitedValue: req.body.existingAttachments && req.body.existingAttachments.length > 0 ? JSON.stringify(req.body.existingAttachments, excludeSignedUrls) : null,
-                        storedValue: req.town.attachments ? JSON.stringify(req.town.attachments, excludeSignedUrls) : null,
+                        submitedValue: req.body.existingAttachments && req.body.existingAttachments.length > 0 ? JSON.stringify(req.body.existingAttachments, excludeSignedUrls) : '[]',
+                        storedValue: req.town.attachments ? JSON.stringify(req.town.attachments, excludeSignedUrls) : '[]',
                     },
                 ];
 
