@@ -1,6 +1,7 @@
 <template>
     <div class="bg-blue-100 p-4">
         <InputFiles
+            icon="paperclip"
             :name="type + '_attachments'"
             :label="labels[type + '_upload']"
             :multiple="true"
