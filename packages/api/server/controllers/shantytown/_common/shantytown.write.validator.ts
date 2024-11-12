@@ -10,6 +10,7 @@ import geoModel from '#server/models/geoModel';
 import ownerTypeModel from '#server/models/ownerTypeModel';
 import socialOriginModel from '#server/models/socialOriginModel';
 import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
 
 const { isLatLong, trim } = validator;
 const { can } = permissionUtils;
@@ -78,7 +79,7 @@ export default mode => ([
     param('id')
         .if(() => mode === 'update')
         .custom(async (value, { req }) => {
-            let town;
+            let town: Shantytown;
             try {
                 town = await shantytownService.find(req.user, value);
             } catch (error) {
