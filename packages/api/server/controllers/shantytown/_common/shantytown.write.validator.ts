@@ -63,11 +63,11 @@ function getNumberOrNull(value: string | number | null | undefined): number | nu
     return stringValue !== '' ? parseInt(stringValue, 10) : null;
 }
 
-function checkForInValueMap(value: number | undefined) {
+function checkForInValueMap(value: number | undefined): boolean | undefined {
     return value !== undefined ? valueMap[value + 1] : undefined;
 }
 
-const excludeSignedUrls = (key, value) => {
+const excludeSignedUrls = (key: string, value: any): any => {
     if (key === 'urls') {
         return undefined;
     }
