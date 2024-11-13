@@ -1,5 +1,5 @@
-import find from './find';
+import getStartingPhases from './getStartingPhases';
 
 export default {
-    find,
+    getStartingPhases,
 };
