@@ -17,7 +17,7 @@ export default async (
     argTransaction?: Transaction,
     shantytownAttachment?: ShantytownAttachmentObject,
 ): Promise<void> => {
-    const transaction = argTransaction || await sequelize.transaction();
+    const transaction: Transaction = argTransaction || await sequelize.transaction();
 
     try {
         let query: string;
@@ -26,7 +26,8 @@ export default async (
         } else {
             query = `INSERT INTO ${entityType}_attachments (fk_${entityType}, fk_attachment) VALUES(:entityId, :attachmentId)`;
         }
-        const attachmentId = await create(key, previewKey, name, mimetype, size, authorId, transaction);
+        const attachmentId: number = await create(key, previewKey, name, mimetype, size, authorId, transaction);
+
         await sequelize.query(
             query,
             {
