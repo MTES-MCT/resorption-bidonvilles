@@ -3,7 +3,7 @@ import { QueryTypes } from 'sequelize';
 import shantytownActorModel from '#server/models/shantytownActorModel';
 import actionModel from '#server/models/actionModel';
 import incomingTownsModel from '#server/models/incomingTownsModel';
-import shantytownPreparatoryPhasesTowardResorptionModel from '#server/models/preparatoryPhasesTowardResorptionModel';
+import shantytownPreparatoryPhasesTowardResorptionModel from '#server/models/ShantytownPreparatoryPhasesTowardResorptionModel';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 import permissionUtils from '#server/utils/permission';
 import { Where } from '#server/models/_common/types/Where';
