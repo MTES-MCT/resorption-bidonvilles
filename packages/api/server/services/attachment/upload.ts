@@ -61,7 +61,7 @@ export default async (entityType: AttachmentEntityType, entityId: number, create
                     f.size,
                     createdBy,
                     transaction,
-                    attachmentType[index],
+                    attachmentType ? attachmentType[index] : null,
                 ),
             );
 
