@@ -6,7 +6,7 @@ import { Attachment } from '#server/services/attachment/Attachment.d';
 import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
 import { ShantytownAction } from '#root/types/resources/Action.d';
 import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
-import { PreparatoryPhaseTowardResorption } from '#root/types/resources/PreparatoryPhasesTowardResorption.d';
+import { ShantytownPreparatoryPhaseTowardResorption } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
 
 type ShantytownUser = {
     id: number,
@@ -132,7 +132,7 @@ type BaseShantytown =
     resorptionTarget: number | null,
     completionRate: number,
     distance?: number | null
-    preparatoryPhasesTowardResorption: PreparatoryPhaseTowardResorption[],
+    preparatoryPhasesTowardResorption: ShantytownPreparatoryPhaseTowardResorption[],
 };
 
 type ShantytownWithJustice = BaseShantytown & {
