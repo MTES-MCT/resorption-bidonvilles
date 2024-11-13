@@ -1,12 +1,12 @@
 import {
-    PreparatoryPhasesTowardResorptionRow,
-    PreparatoryPhaseTowardResorption,
-} from '#root/types/resources/PreparatoryPhasesTowardResorption.d';
+    ShantytownPreparatoryPhasesTowardResorptionRow,
+    ShantytownPreparatoryPhaseTowardResorption,
+} from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
 
-function serialize(data: PreparatoryPhasesTowardResorptionRow[]): { townId: number; preparatoryPhases: PreparatoryPhaseTowardResorption[] }[] {
+function serialize(data: ShantytownPreparatoryPhasesTowardResorptionRow[]): { townId: number; preparatoryPhases: ShantytownPreparatoryPhaseTowardResorption[] }[] {
     const returnValue = data.reduce((acc, row) => {
         const townId = row.town_id;
-        const preparatoryPhase: PreparatoryPhaseTowardResorption = {
+        const preparatoryPhase: ShantytownPreparatoryPhaseTowardResorption = {
             preparatoryPhaseId: row.preparatory_phase_id,
             preparatoryPhaseName: row.preparatory_phase_name,
             createdAt: row.created_at,
@@ -26,7 +26,7 @@ function serialize(data: PreparatoryPhasesTowardResorptionRow[]): { townId: numb
             acc.push({ townId, preparatoryPhases: [preparatoryPhase] });
         }
         return acc;
-    }, [] as { townId: number; preparatoryPhases: PreparatoryPhaseTowardResorption[] }[]);
+    }, [] as { townId: number; preparatoryPhases: ShantytownPreparatoryPhaseTowardResorption[] }[]);
     return returnValue;
 }
 
