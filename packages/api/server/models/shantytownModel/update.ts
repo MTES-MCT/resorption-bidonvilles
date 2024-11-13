@@ -1,8 +1,9 @@
 import { sequelize } from '#db/sequelize';
 import incomingTownsModel from '#server/models/incomingTownsModel';
+import { Transaction } from 'sequelize';
 
-export default async (editor, shantytownId, data, argTransaction = undefined): Promise<void> => {
-    let transaction = argTransaction;
+export default async (editor, shantytownId: number, data, argTransaction: Transaction = undefined): Promise<void> => {
+    let transaction: Transaction = argTransaction;
     if (transaction === undefined) {
         transaction = await sequelize.transaction();
     }
@@ -334,8 +335,8 @@ export default async (editor, shantytownId, data, argTransaction = undefined): P
         ]);
 
         // now, update the shantytown
-        const accessKeys = ['owner'];
-        const justiceKeys = [
+        const accessKeys: string[] = ['owner'];
+        const justiceKeys: string[] = [
             'owner_complaint',
             'justice_procedure',
             'justice_rendered',
@@ -405,18 +406,12 @@ export default async (editor, shantytownId, data, argTransaction = undefined): P
             { commonData: {}, justiceData: {}, ownerData: {} },
         );
 
-        const updatedTown = Object.assign(
-            commonData,
-            {
-                updated_by: editor.id,
-            },
-            editor.isAllowedTo('access', 'shantytown_justice')
-                ? justiceData
-                : {},
-            editor.isAllowedTo('access', 'shantytown_owner')
-                ? ownerData
-                : {},
-        );
+        const updatedTown = {
+            ...commonData,
+            updated_by: editor.id,
+            ...(editor.isAllowedTo('access', 'shantytown_justice') ? justiceData : {}),
+            ...(editor.isAllowedTo('access', 'shantytown_owner') ? ownerData : {}),
+        };
 
         await sequelize.query(
             `UPDATE shantytowns
