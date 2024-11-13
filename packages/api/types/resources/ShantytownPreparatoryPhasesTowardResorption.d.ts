@@ -1,4 +1,4 @@
-export type PreparatoryPhasesTowardResorptionRow = {
+export type ShantytownPreparatoryPhasesTowardResorptionRow = {
     town_id: number,
     preparatory_phase_id: string,
     created_at: Date,
@@ -10,7 +10,7 @@ export type PreparatoryPhasesTowardResorptionRow = {
     organization_name: string,
 };
 
-export type PreparatoryPhaseTowardResorption = {
+export type ShantytownPreparatoryPhaseTowardResorption = {
     preparatoryPhaseId: string,
     preparatoryPhaseName: string,
     createdAt: Date,
@@ -23,7 +23,7 @@ export type PreparatoryPhaseTowardResorption = {
     },
 };
 
-export type PreparatoryPhasesTowardResorption = {
+export type ShantytownPreparatoryPhasesTowardResorption = {
     townId: number,
-    preparatoryPhases: PreparatoryPhaseTowardResorption[],
+    preparatoryPhases: ShantytownPreparatoryPhaseTowardResorption[],
 };
