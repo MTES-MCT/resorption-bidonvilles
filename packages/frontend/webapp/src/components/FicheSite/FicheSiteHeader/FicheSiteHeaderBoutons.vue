@@ -75,14 +75,14 @@
                 userStore.hasLocalizedPermission(
                     'shantytown_resorption.create',
                     town
-                )
+                ) && !hasRequiredPreparatoryPhases
             "
             size="sm"
             variant="primary"
             icon="fa-regular fa-play"
             iconPosition="left"
             @click="startResorption"
-            :loading="deleteIsLoading"
+            :loading="startResorptionIsLoading"
             >Démarrer la résorption</Button
         >
         <Button
@@ -100,7 +100,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, nextTick } from "vue";
+import { computed, defineProps, toRefs, ref, nextTick } from "vue";
 import { RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
@@ -158,6 +158,61 @@ async function deleteTown() {
     }
 
     deleteIsLoading.value = false;
+}
+
+const startResorptionIsLoading = ref(false);
+
+const hasRequiredPreparatoryPhases = computed(() => {
+    if (!town.value.preparatoryPhasesTowardResorption) {
+        return false;
+    }
+
+    const requiredPhases = [
+        "political_validation",
+        "social_assessment",
+        "sociological_diagnosis",
+    ];
+
+    const phaseIds = new Set(
+        town.value.preparatoryPhasesTowardResorption.map(
+            (phase) => phase.preparatoryPhaseId
+        )
+    );
+
+    return requiredPhases.every((requiredPhase) => phaseIds.has(requiredPhase));
+});
+
+async function startResorption() {
+    if (startResorptionIsLoading.value === true) {
+        return;
+    }
+
+    if (
+        !confirm("Êtes-vous sûr(e) de vouloir démarrer la résorption ce site ?")
+    ) {
+        return;
+    }
+
+    startResorptionIsLoading.value = true;
+
+    const notificationStore = useNotificationStore();
+    const townsStore = useTownsStore();
+
+    nextTick(async () => {
+        try {
+            await townsStore.startResorption(town.value.id);
+            notificationStore.success(
+                "Démarrage de la résorption",
+                "La résorption du site a démarré"
+            );
+        } catch (err) {
+            notificationStore.error(
+                "Démarrage de la résorption",
+                "Erreur rencontrée. " + err?.user_message
+            );
+        }
+    });
+    startResorptionIsLoading.value = false;
 }
 </script>
 
