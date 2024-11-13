@@ -6,8 +6,9 @@ import serializeAttachment from '#server/services/attachment/serializeAttachment
 import enrichCommentsAttachments from './_common/enrichCommentsAttachments';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { Attachment } from '../attachment/Attachment';
+import { User } from '#root/types/resources/User.d';
 
-export default async (user, townId): Promise<Shantytown> => {
+export default async (user: User, townId: number): Promise<Shantytown> => {
     const town = await shantytownModel.findOne(user, townId);
 
     /*
