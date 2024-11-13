@@ -2,7 +2,6 @@ import { Actor } from '#server/models/shantytownActorModel/serializeActor';
 import { IncomingTown } from '#server/models/incomingTownsModel/findAll';
 import { Diff } from '#server/models/shantytownModel/_common/getDiff';
 import { LivingConditions } from '#server/models/shantytownModel/_common/livingConditions/serializeLivingConditions';
-import { ShantytownDecree } from '#server/models/shantytownDecreeModel/shantytownDecrees.d';
 import { Attachment } from '#server/services/attachment/Attachment.d';
 import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
 import { ShantytownAction } from '#root/types/resources/Action.d';
@@ -154,7 +153,6 @@ type ShantytownWithJustice = BaseShantytown & {
     insalubrityOrderBy: string | null,
     insalubrityOrderAt: number | null,
     insalubrityParcels: string | null,
-    decrees: ShantytownDecree[] | null,
     attachments: Attachment[] | null
 };
 
