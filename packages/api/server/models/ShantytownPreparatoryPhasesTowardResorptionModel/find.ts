@@ -1,15 +1,15 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import { AuthUser } from '#server/middlewares/authMiddleware';
-import { PreparatoryPhasesTowardResorption, PreparatoryPhasesTowardResorptionRow } from '#root/types/resources/PreparatoryPhasesTowardResorption.d';
-import serializePreparatoryPhasesTowardResorption from './common/serializePreparatoryPhasesTowardResorption';
+import { ShantytownPreparatoryPhasesTowardResorption, ShantytownPreparatoryPhasesTowardResorptionRow } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
+import serializePreparatoryPhasesTowardResorption from './common/serializeShantytownPreparatoryPhasesTowardResorption';
 
-export default async (user: AuthUser, ids: string[]): Promise<PreparatoryPhasesTowardResorption[]> => {
+export default async (user: AuthUser, ids: string[]): Promise<ShantytownPreparatoryPhasesTowardResorption[]> => {
     if (!user.isAllowedTo('list', 'shantytown')) {
         return [];
     }
 
-    const rows: PreparatoryPhasesTowardResorptionRow[] = await sequelize.query(
+    const rows: ShantytownPreparatoryPhasesTowardResorptionRow[] = await sequelize.query(
         `SELECT
             spptr.fk_shantytown AS town_id,
             pptr.uid AS preparatory_phase_id,
