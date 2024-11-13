@@ -31,6 +31,32 @@
                     Par : {{ town.administrativeOrderDecisionRenderedBy }}
                 </p>
             </FicheSiteProceduresLigne>
+            <FicheSiteProceduresLigne
+                v-if="town.evacuationUnderTimeLimit"
+                icon="clock"
+                :label="labels.administrative_order_evacuation_at"
+            >
+                <p>
+                    {{
+                        town.administrativeOrderEvacuationAt
+                            ? formatDate(
+                                  town.administrativeOrderEvacuationAt,
+                                  "d/m/y"
+                              )
+                            : "non communiqué"
+                    }}
+                </p>
+            </FicheSiteProceduresLigne>
+            <FicheSiteProceduresLigne
+                v-if="filteredDecreesAttachments('evacuation').length > 0"
+                icon="paperclip"
+                :label="labels.evacuation_decrees"
+            >
+                <FilePreviewGrid
+                    class="mb-3"
+                    :files="filteredDecreesAttachments('evacuation')"
+                />
+            </FicheSiteProceduresLigne>
         </FicheSiteProceduresRubrique>
 
         <FicheSiteProceduresRubrique>
@@ -71,6 +97,22 @@
                 :label="labels.insalubrity_parcels"
             >
                 {{ town.insalubrityParcels || "non communiqué" }}
+            </FicheSiteProceduresLigne>
+            <FicheSiteProceduresLigne
+                icon="folder-open"
+                :label="labels.insalubrity_parcels"
+            >
+                {{ town.insalubrityParcels || "non communiqué" }}
+            </FicheSiteProceduresLigne>
+            <FicheSiteProceduresLigne
+                v-if="filteredDecreesAttachments('insalubrity').length > 0"
+                icon="paperclip"
+                :label="labels.insalubrity_decrees"
+            >
+                <FilePreviewGrid
+                    class="mb-3"
+                    :files="filteredDecreesAttachments('insalubrity')"
+                />
             </FicheSiteProceduresLigne>
         </FicheSiteProceduresRubrique>
 
@@ -115,6 +157,7 @@ import { useEventBus } from "@common/helpers/event-bus";
 
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import FicheSiteProceduresRubrique from "./FicheSiteProceduresRubrique.vue";
+import FilePreviewGrid from "@resorptionbidonvilles/ui/src/components/FilePreview/FilePreviewGrid.vue";
 import FicheSiteProceduresLigne from "./FicheSiteProceduresLigne.vue";
 import ModaleListeAccesPJ from "@/components/ModaleListeAccesPJ/ModaleListeAccesPJ.vue";
 import labels from "@/components/Common/FormEtFicheSite.labels";
@@ -249,6 +292,10 @@ const ProcedureJudiciaire = computed(() => {
 const filteredProcedureJudiciaire = computed(() => {
     return ProcedureJudiciaire.value.filter((procedure) => procedure.condition);
 });
+
+const filteredDecreesAttachments = (type) => {
+    return town.value.attachments.filter((file) => file.type === type);
+};
 
 watch(
     () => bus.value.get("fichesitepj:openListAccesPJ"),

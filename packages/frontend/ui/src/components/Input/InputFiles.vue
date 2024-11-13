@@ -1,5 +1,6 @@
 <template>
     <InputWrapper :hasErrors="errors.length > 0" :withoutMargin="withoutMargin" :id="name">
+        <Icon v-if="icon" :icon="icon" class="mr-2" />
         <InputLabel :label="label"
             :info="`Les images, les documents PDF, Word, et Excel sont autorisés. La taille maximale autorisée est de ${humanFileSize(MAX_FILE_SIZE)}.`"
             :showMandatoryStar="showMandatoryStar" />
@@ -18,6 +19,7 @@ import fromMimeToExtension from "@common/utils/fromMimeToExtension";
 import { MAX_FILE_SIZE } from "@common/utils/max_file_size";
 import humanFileSize from "../../utils/humanFileSize";
 import getRandomString from "../../utils/getRandomString";
+import { Icon } from "@resorptionbidonvilles/ui";
 
 import FilePreviewGrid from "../FilePreview/FilePreviewGrid.vue";
 import InputLabel from "./utils/InputLabel.vue";
@@ -39,9 +41,14 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    icon: {
+        type: String,
+        default: null,
+        mandatory: false,
+    }
 });
 
-const { name, label, multiple, withoutMargin } = toRefs(props);
+const { name, label, multiple, withoutMargin, icon } = toRefs(props);
 const { handleChange, handleBlur, errors, value } = useField(name.value);
 const fileInput = ref(null);
 

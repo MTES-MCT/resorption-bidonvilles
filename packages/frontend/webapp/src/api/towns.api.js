@@ -47,7 +47,30 @@ export function destroy(townId) {
 }
 
 export function edit(id, data) {
-    return axios.patch(`/towns/${encodeURI(id)}`, data);
+    const formData = new FormData();
+    let attachmentsTable = [];
+    if (data.newAttachments?.length) {
+        for (let i = 0; i < data.newAttachments.length; i += 1) {
+            formData.append("attachments", data.newAttachments[i].file);
+            attachmentsTable.push({
+                file: data.newAttachments[i].file.name,
+                size: data.newAttachments[i].file.size,
+                lastModified: data.newAttachments[i].file.lastModified,
+                decreeType: data.newAttachments[i].type,
+            });
+        }
+    }
+
+    formData.append(
+        "content",
+        JSON.stringify({ ...data, attachments: attachmentsTable })
+    );
+
+    return axios.patch(`/towns/${encodeURI(id)}`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data; charset=utf-8",
+        },
+    });
 }
 
 export function exportList(

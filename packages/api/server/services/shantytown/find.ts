@@ -1,8 +1,14 @@
 import shantytownModel from '#server/models/shantytownModel';
 import ServiceError from '#server/errors/ServiceError';
+import findJusticeReaders from '#server/services/shantytown/findJusticeReaders';
+import shantytownDecree from '#server/services/shantytownDecree/findAll';
+import serializeAttachment from '#server/services/attachment/serializeAttachment';
 import enrichCommentsAttachments from './_common/enrichCommentsAttachments';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
+import { Attachment } from '../attachment/Attachment';
+import { User } from '#root/types/resources/User.d';
 
-export default async (user, townId) => {
+export default async (user: User, townId: number): Promise<Shantytown> => {
     const town = await shantytownModel.findOne(user, townId);
 
     /*
@@ -14,8 +20,20 @@ export default async (user, townId) => {
     }
     const { comments, ...townWithoutComments } = town;
     const commentsWithEnrichedAttachments = await Promise.all(comments.map(async comment => enrichCommentsAttachments(comment)));
+    let decrees = [];
+    let enrichedDecrees: Attachment[] = [];
+    if (user.role_id === 'national_admin' || (await findJusticeReaders(townId, user.id)).length > 0) {
+        decrees = await shantytownDecree(user, townId);
+        enrichedDecrees = await Promise.all((decrees || []).map(async (decree) => {
+            const decreeArray = [decree.attachmentId, decree.fileKey, decree.previewFileKey, decree.originalName, decree.type, decree.size, decree.createdBy].join('@.;.@');
+
+            return { ...await serializeAttachment(decreeArray), type: decree.attachmentType, mimetype: decree.type };
+        }));
+    }
+
     return {
         ...townWithoutComments,
         comments: commentsWithEnrichedAttachments,
+        attachments: enrichedDecrees,
     };
 };

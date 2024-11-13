@@ -51,6 +51,8 @@ export default {
     administrative_order_decision_at: "Date de l'arrêté",
     administrative_order_decision_rendered_by: "Qui a pris l'arrêté ?",
     administrative_order_evacuation_at: "Date de l'évacuation",
+    evacuation_upload: "Télécharger l'arrêté d'évacuation",
+    evacuation_decrees: "Arrêté d'évacuation",
     // Arrêté d'insalubrité
     insalubrity_order:
         "Un arrêté d'insalubrité dans le cadre d'une opération RHI bidonville est-il en cours ?",
@@ -61,6 +63,8 @@ export default {
     insalubrity_order_at: "Date de l'arrêté",
     insalubrity_parcels:
         "Parcelles concernées par l'arrêté (numéros de parcelles)",
+    insalubrity_upload: "Télécharger l'arrêté d'insalubrité",
+    insalubrity_decrees: "Arrêté d'insalubrité",
     living_conditions_version:
         "Souhaitez-vous remplir le nouveau formulaire des conditions de vie ?",
     show_old_living_conditions:

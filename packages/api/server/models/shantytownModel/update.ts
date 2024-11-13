@@ -1,8 +1,9 @@
 import { sequelize } from '#db/sequelize';
 import incomingTownsModel from '#server/models/incomingTownsModel';
+import { Transaction } from 'sequelize';
 
-export default async (editor, shantytownId, data, argTransaction = undefined) => {
-    let transaction = argTransaction;
+export default async (editor, shantytownId: number, data, argTransaction: Transaction = undefined): Promise<void> => {
+    let transaction: Transaction = argTransaction;
     if (transaction === undefined) {
         transaction = await sequelize.transaction();
     }
@@ -334,8 +335,8 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
         ]);
 
         // now, update the shantytown
-        const accessKeys = ['owner'];
-        const justiceKeys = [
+        const accessKeys: string[] = ['owner'];
+        const justiceKeys: string[] = [
             'owner_complaint',
             'justice_procedure',
             'justice_rendered',
@@ -357,6 +358,7 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
             'insalubrity_order_by',
             'insalubrity_order_at',
             'insalubrity_parcels',
+            'attachments',
         ];
         const { commonData, justiceData, ownerData } = Object.keys(data).reduce(
             (acc, key) => {
@@ -404,18 +406,12 @@ export default async (editor, shantytownId, data, argTransaction = undefined) =>
             { commonData: {}, justiceData: {}, ownerData: {} },
         );
 
-        const updatedTown = Object.assign(
-            commonData,
-            {
-                updated_by: editor.id,
-            },
-            editor.isAllowedTo('access', 'shantytown_justice')
-                ? justiceData
-                : {},
-            editor.isAllowedTo('access', 'shantytown_owner')
-                ? ownerData
-                : {},
-        );
+        const updatedTown = {
+            ...commonData,
+            updated_by: editor.id,
+            ...(editor.isAllowedTo('access', 'shantytown_justice') ? justiceData : {}),
+            ...(editor.isAllowedTo('access', 'shantytown_owner') ? ownerData : {}),
+        };
 
         await sequelize.query(
             `UPDATE shantytowns

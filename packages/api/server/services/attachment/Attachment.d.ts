@@ -9,4 +9,5 @@ export type Attachment = {
     },
     extension: string,
     created_by: string,
+    attachment_type?: string,
 };
