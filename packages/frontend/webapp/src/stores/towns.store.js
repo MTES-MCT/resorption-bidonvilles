@@ -27,6 +27,7 @@ import {
 import enrichShantytown from "@/utils/enrichShantytown";
 import filterShantytowns from "@/utils/filterShantytowns";
 import { deleteAttachment } from "@/api/attachments.api";
+import { startResorption } from "@/api/towns.api";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -437,6 +438,17 @@ export const useTownsStore = defineStore("towns", () => {
                 fileIndex,
                 1
             );
+        },
+        async startResorption(townId) {
+            const resorptionPhases = await startResorption(townId);
+            if (hash.value[townId]) {
+                hash.value[townId].preparatoryPhasesTowardResorption =
+                    resorptionPhases;
+            }
+            console.log("============================");
+            console.log(hash.value[townId]);
+            console.log("============================");
+            trackEvent("Site", "Démarrage de la résorption", `S${townId}`);
         },
     };
 });
