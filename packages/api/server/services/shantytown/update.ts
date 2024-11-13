@@ -193,7 +193,7 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
 
     // on retourne la liste mise à jour des commentaires du site
     try {
-        updatedShantytown = await find(user, [shantytown.id]);
+        updatedShantytown = await find(user, shantytown.id);
 
         if (!updatedShantytown) {
             throw new ServiceError('fetch_failed', new Error('Impossible de retrouver les commentaires en base de données'));
