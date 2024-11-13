@@ -1,6 +1,6 @@
 import shantytownCommentService from '#server/services/shantytownComment';
 import can from '#server/utils/permission/can';
-import { type Response, type Request, NextFunction } from 'express';
+import { type Response, type Request } from 'express';
 import { User } from '#root/types/resources/User.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
@@ -24,7 +24,7 @@ interface UserCreateCommentRequest extends Request {
     files: Express.Multer.File[];
 }
 
-export default async (req: UserCreateCommentRequest, res: Response, next: NextFunction) => {
+export default async (req: UserCreateCommentRequest, res: Response, next: void) => {
     if (!can(req.user).do('create', 'shantytown_comment').on(req.body.shantytown)) {
         return res.status(403).send({
             user_message: 'Vous n\'avez pas les droits suffisants pour ajouter un message dans le journal de ce site.',
