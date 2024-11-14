@@ -288,6 +288,19 @@ export const useTownsStore = defineStore("towns", () => {
             activitiesStore.removeComment(commentId);
             dashboardActivitiesStore.removeComment(commentId);
         },
+        async deleteDecree(shantytownId, commentId, reason = "") {
+            const activitiesStore = useActivitiesStore();
+            const dashboardActivitiesStore = useDashboardActivitiesStore();
+            const { comments } = await deleteComment(
+                shantytownId,
+                commentId,
+                reason
+            );
+
+            updateShantytownComments(shantytownId, comments);
+            activitiesStore.removeComment(commentId);
+            dashboardActivitiesStore.removeComment(commentId);
+        },
         heatwaveStatuses,
         async setHeatwaveStatus(id, status) {
             if (heatwaveStatuses.value[id]?.loading === true) {
@@ -405,6 +418,7 @@ export const useTownsStore = defineStore("towns", () => {
 
         async edit(townId, data) {
             const town = await edit(townId, data);
+
             setTown(townId, town);
 
             return hash.value[townId];
@@ -431,6 +445,29 @@ export const useTownsStore = defineStore("towns", () => {
                 fileIndex,
                 1
             );
+        },
+
+        async deleteDecreeAttachment(file, townId) {
+            try {
+                deleteAttachment(file.id);
+
+                const attachmentIndex = hash.value[
+                    townId
+                ].attachments.findIndex(({ id }) => id === file.id);
+
+                if (attachmentIndex === -1) {
+                    return;
+                }
+
+                hash.value[townId].attachments.splice(attachmentIndex, 1);
+
+                return hash.value[townId].attachments;
+            } catch (error) {
+                throw new Error(
+                    "Une erreur est survenue lors de la suppression de la pièce jointe: ",
+                    error
+                );
+            }
         },
     };
 });

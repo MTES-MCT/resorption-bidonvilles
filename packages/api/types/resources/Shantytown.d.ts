@@ -2,6 +2,7 @@ import { Actor } from '#server/models/shantytownActorModel/serializeActor';
 import { IncomingTown } from '#server/models/incomingTownsModel/findAll';
 import { Diff } from '#server/models/shantytownModel/_common/getDiff';
 import { LivingConditions } from '#server/models/shantytownModel/_common/livingConditions/serializeLivingConditions';
+import { Attachment } from '#server/services/attachment/Attachment.d';
 import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
 import { ShantytownAction } from '#root/types/resources/Action.d';
 import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
@@ -152,10 +153,18 @@ type ShantytownWithJustice = BaseShantytown & {
     insalubrityOrderBy: string | null,
     insalubrityOrderAt: number | null,
     insalubrityParcels: string | null,
+    attachments: Attachment[] | null
 };
 
 type ShantytownWithOwner = BaseShantytown & {
     owner: string | null
+};
+
+export type ShantytownAttachmentObject = {
+    file: string;
+    size: number;
+    lastModified: number;
+    decreeType: string;
 };
 
 export type Shantytown = BaseShantytown | ShantytownWithJustice | ShantytownWithOwner | (ShantytownWithJustice & ShantytownWithOwner);

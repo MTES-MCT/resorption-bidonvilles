@@ -2,6 +2,7 @@
 import { body, param } from 'express-validator';
 import validator from 'validator';
 import permissionUtils from '#server/utils/permission';
+import shantytownService from '#server/services/shantytown';
 // models
 import shantytownModel from '#server/models/shantytownModel';
 import fieldTypeModel from '#server/models/fieldTypeModel';
@@ -9,6 +10,7 @@ import geoModel from '#server/models/geoModel';
 import ownerTypeModel from '#server/models/ownerTypeModel';
 import socialOriginModel from '#server/models/socialOriginModel';
 import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
 
 const { isLatLong, trim } = validator;
 const { can } = permissionUtils;
@@ -62,13 +64,24 @@ function getNumberOrNull(value: string | number | null | undefined): number | nu
     return stringValue !== '' ? parseInt(stringValue, 10) : null;
 }
 
+function checkForInValueMap(value: number | undefined): boolean | undefined {
+    return value !== undefined ? valueMap[value + 1] : undefined;
+}
+
+const excludeSignedUrls = (key: string, value: any): any => {
+    if (key === 'urls') {
+        return undefined;
+    }
+    return value;
+};
+
 export default mode => ([
     param('id')
         .if(() => mode === 'update')
         .custom(async (value, { req }) => {
-            let town;
+            let town: Shantytown;
             try {
-                town = await shantytownModel.findOne(req.user, value);
+                town = await shantytownService.find(req.user, value);
             } catch (error) {
                 throw new Error('Une erreur de lecture en base de données est survenue');
             }
@@ -224,7 +237,7 @@ export default mode => ([
                     },
                     {
                         key: 'is_reinstallation',
-                        submitedValue: valueMap[parseInt(req.body.is_reinstallation, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.is_reinstallation),
                         storedValue: req.town.isReinstallation,
                     },
                     {
@@ -249,12 +262,12 @@ export default mode => ([
                     },
                     {
                         key: 'water_access_is_public',
-                        submitedValue: valueMap[parseInt(req.body.water_access_is_public, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.water_access_is_public),
                         storedValue: req.town.livingConditions.water.access_is_public,
                     },
                     {
                         key: 'water_access_is_continuous',
-                        submitedValue: valueMap[parseInt(req.body.water_access_is_continuous, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.water_access_is_continuous),
                         storedValue: req.town.livingConditions.water.access_is_continuous,
                     },
                     {
@@ -264,17 +277,17 @@ export default mode => ([
                     },
                     {
                         key: 'water_access_is_local',
-                        submitedValue: valueMap[parseInt(req.body.water_access_is_local, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.water_access_is_local),
                         storedValue: req.town.livingConditions.water.access_is_local,
                     },
                     {
                         key: 'water_access_is_close',
-                        submitedValue: valueMap[parseInt(req.body.water_access_is_close, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.water_access_is_close),
                         storedValue: req.town.livingConditions.water.access_is_close,
                     },
                     {
                         key: 'water_access_is_unequal',
-                        submitedValue: valueMap[parseInt(req.body.water_access_is_unequal, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.water_access_is_unequal),
                         storedValue: req.town.livingConditions.water.access_is_unequal,
                     },
                     {
@@ -284,7 +297,7 @@ export default mode => ([
                     },
                     {
                         key: 'water_access_has_stagnant_water',
-                        submitedValue: valueMap[parseInt(req.body.water_access_has_stagnant_water, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.water_access_has_stagnant_water),
                         storedValue: req.town.livingConditions.water.access_has_stagnant_water,
                     },
                     {
@@ -294,77 +307,77 @@ export default mode => ([
                     },
                     {
                         key: 'sanitary_working_toilets',
-                        submitedValue: valueMap[parseInt(req.body.sanitary_working_toilets, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.sanitary_working_toilets),
                         storedValue: req.town.livingConditions.sanitary.working_toilets,
                     },
                     {
                         key: 'sanitary_open_air_defecation',
-                        submitedValue: valueMap[parseInt(req.body.sanitary_open_air_defecation, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.sanitary_open_air_defecation),
                         storedValue: req.town.livingConditions.sanitary.open_air_defecation,
                     },
                     {
                         key: 'sanitary_toilet_types',
-                        submitedValue: req.body.sanitary_toilet_types ? JSON.stringify(req.body.sanitary_toilet_types.sort()) : null,
-                        storedValue: req.town.livingConditions.sanitary.toilet_types ? JSON.stringify(req.town.livingConditions.sanitary.toilet_types.sort()) : null,
+                        submitedValue: req.body.sanitary_toilet_types && req.body.sanitary_toilet_types.length > 0 ? JSON.stringify(req.body.sanitary_toilet_types.sort()) : '[]',
+                        storedValue: req.town.livingConditions.sanitary.toilet_types ? JSON.stringify(req.town.livingConditions.sanitary.toilet_types.sort()) : '[]',
                     },
                     {
                         key: 'sanitary_toilets_are_inside',
-                        submitedValue: valueMap[parseInt(req.body.sanitary_toilets_are_inside, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.sanitary_toilets_are_inside),
                         storedValue: req.town.livingConditions.sanitary.toilets_are_inside,
                     },
                     {
                         key: 'sanitary_toilets_are_lighted',
-                        submitedValue: valueMap[parseInt(req.body.sanitary_toilets_are_lighted, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.sanitary_toilets_are_lighted),
                         storedValue: req.town.livingConditions.sanitary.toilets_are_lighted,
                     },
                     {
                         key: 'sanitary_hand_washing',
-                        submitedValue: valueMap[parseInt(req.body.sanitary_hand_washing, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.sanitary_hand_washing),
                         storedValue: req.town.livingConditions.sanitary.hand_washing,
                     },
                     {
                         key: 'electricity_access',
-                        submitedValue: valueMap[parseInt(req.body.electricity_access, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.electricity_access),
                         storedValue: req.town.livingConditions.electricity.access,
                     },
                     {
                         key: 'electricity_access_types',
-                        submitedValue: req.body.electricity_access_types ? JSON.stringify(req.body.electricity_access_types.sort()) : null,
-                        storedValue: req.town.livingConditions.electricity.access_types ? JSON.stringify(req.town.livingConditions.electricity.access_types.sort()) : null,
+                        submitedValue: req.body.electricity_access_types && req.body.electricity_access_types?.length > 0 ? JSON.stringify(req.body.electricity_access_types.sort()) : '[]',
+                        storedValue: req.town.livingConditions.electricity.access_types ? JSON.stringify(req.town.livingConditions.electricity.access_types.sort()) : '[]',
                     },
                     {
                         key: 'electricity_access_is_unequal',
-                        submitedValue: valueMap[parseInt(req.body.electricity_access_is_unequal, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.electricity_access_is_unequal),
                         storedValue: req.town.livingConditions.electricity.access_is_unequal,
                     },
                     {
                         key: 'trash_is_piling',
-                        submitedValue: valueMap[parseInt(req.body.trash_is_piling, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.trash_is_piling),
                         storedValue: req.town.livingConditions.trash.is_piling,
                     },
                     {
                         key: 'trash_evacuation_is_close',
-                        submitedValue: valueMap[parseInt(req.body.trash_evacuation_is_close, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.trash_evacuation_is_close),
                         storedValue: req.town.livingConditions.trash.evacuation_is_close,
                     },
                     {
                         key: 'trash_evacuation_is_safe',
-                        submitedValue: valueMap[parseInt(req.body.trash_evacuation_is_safe, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.trash_evacuation_is_safe),
                         storedValue: req.town.livingConditions.trash.evacuation_is_safe,
                     },
                     {
                         key: 'trash_evacuation_is_regular',
-                        submitedValue: valueMap[parseInt(req.body.trash_evacuation_is_regular, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.trash_evacuation_is_regular),
                         storedValue: req.town.livingConditions.trash.evacuation_is_regular,
                     },
                     {
                         key: 'trash_bulky_is_piling',
-                        submitedValue: valueMap[parseInt(req.body.trash_bulky_is_piling, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.trash_bulky_is_piling),
                         storedValue: req.town.livingConditions.trash.bulky_is_piling,
                     },
                     {
                         key: 'pest_animals_presence',
-                        submitedValue: valueMap[parseInt(req.body.pest_animals_presence, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.pest_animals_presence),
                         storedValue: req.town.livingConditions.pest_animals ? req.town.livingConditions.pest_animals.presence : null,
                     },
                     {
@@ -374,22 +387,22 @@ export default mode => ([
                     },
                     {
                         key: 'fire_prevention_diagnostic',
-                        submitedValue: valueMap[parseInt(req.body.fire_prevention_diagnostic, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.fire_prevention_diagnostic),
                         storedValue: req.town.livingConditions.fire_prevention ? req.town.livingConditions.fire_prevention.diagnostic : null,
                     },
                     {
                         key: 'owner_complaint',
-                        submitedValue: valueMap[parseInt(req.body.owner_complaint, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.owner_complaint),
                         storedValue: req.town.ownerComplaint,
                     },
                     {
                         key: 'justice_procedure',
-                        submitedValue: valueMap[parseInt(req.body.justice_procedure, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.justice_procedure),
                         storedValue: req.town.justiceProcedure,
                     },
                     {
                         key: 'justice_rendered',
-                        submitedValue: valueMap[parseInt(req.body.justice_rendered, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.justice_rendered),
                         storedValue: req.town.justiceRendered,
                     },
                     {
@@ -404,12 +417,12 @@ export default mode => ([
                     },
                     {
                         key: 'justice_challenged',
-                        submitedValue: valueMap[parseInt(req.body.justice_challenged, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.justice_challenged),
                         storedValue: req.town.justiceChallenged,
                     },
                     {
                         key: 'evacuation_under_time_limit',
-                        submitedValue: valueMap[parseInt(req.body.evacuation_under_time_limit, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.evacuation_under_time_limit),
                         storedValue: req.town.evacuationUnderTimeLimit,
                     },
                     {
@@ -425,16 +438,16 @@ export default mode => ([
                     {
                         key: 'administrative_order_evacuation_at',
                         submitedValue: req.body.administrative_order_evacuation_at ? req.body.administrative_order_evacuation_at : null,
-                        storedValue: req.town.administrativeOrderEvacuationAt ? formatDateToYYYYMMDD(new Date(req.town.administrativeOrderEvacuationAt)) : null,
+                        storedValue: req.town.administrativeOrderEvacuationAt ? formatDateToYYYYMMDD(new Date(req.town.administrativeOrderEvacuationAt * 1000)) : null,
                     },
                     {
                         key: 'insalubrity_order',
-                        submitedValue: valueMap[parseInt(req.body.insalubrity_order, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.insalubrity_order),
                         storedValue: req.town.insalubrityOrder,
                     },
                     {
                         key: 'insalubrity_order_displayed',
-                        submitedValue: valueMap[parseInt(req.body.insalubrity_order_displayed, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.insalubrity_order_displayed),
                         storedValue: req.town.insalubrityOrderDisplayed,
                     },
                     {
@@ -474,7 +487,7 @@ export default mode => ([
                     },
                     {
                         key: 'existing_litigation',
-                        submitedValue: valueMap[parseInt(req.body.existing_litigation, 10) + 1],
+                        submitedValue: checkForInValueMap(req.body.existing_litigation),
                         storedValue: req.town.existingLitigation,
                     },
                     {
@@ -482,7 +495,18 @@ export default mode => ([
                         submitedValue: getStringOrNull(req.body.bailiff),
                         storedValue: getStringOrNull(req.town.bailiff),
                     },
+                    {
+                        key: 'newAttachments',
+                        submitedValue: req.body.newAttachments && req.body.newAttachments.length > 0 ? JSON.stringify(req.body.newAttachments) : null,
+                        storedValue: req.town.newAttachments ? JSON.stringify(req.town.newAttachments) : null,
+                    },
+                    {
+                        key: 'attachments',
+                        submitedValue: req.body.existingAttachments && req.body.existingAttachments.length > 0 ? JSON.stringify(req.body.existingAttachments, excludeSignedUrls) : '[]',
+                        storedValue: req.town.attachments ? JSON.stringify(req.town.attachments, excludeSignedUrls) : '[]',
+                    },
                 ];
+
                 // Y at'il des modifications des données dans les champs du formulaire ?
                 hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
             }
@@ -495,7 +519,7 @@ export default mode => ([
                 }
             // Si update_without_any_change est à false, alors au moins un champ doit être modifié
             } else if (req.town && !hasChanges) {
-                throw new Error('Au moins un champ doit être modifié s\'il s\'agit d\'une mise à jour de site sans modification de données');
+                throw new Error('Au moins un champ doit être modifié s\'il ne s\'agit pas d\'une mise à jour de site sans modification de données');
             }
             return true;
         }),

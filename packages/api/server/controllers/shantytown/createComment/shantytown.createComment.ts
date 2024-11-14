@@ -1,5 +1,8 @@
 import shantytownCommentService from '#server/services/shantytownComment';
 import can from '#server/utils/permission/can';
+import { type Response, type Request, NextFunction } from 'express';
+import { User } from '#root/types/resources/User.d';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
 
 const ERROR_RESPONSES = {
@@ -13,8 +16,19 @@ const ERROR_RESPONSES = {
     unable_to_scan_file: { code: 500, message: 'L\'analyse d\'au moins un des fichiers a échouée' },
     unknown_request: { code: 500, message: 'Requête inconnue' },
 };
-// TODO: typer req, res et next
-export default async (req, res, next) => {
+
+interface UserCreateCommentRequest extends Request {
+    user: User;
+    body: {
+        shantytown: Shantytown;
+        comment: string;
+        targets: string[];
+    };
+    tags: string[];
+    files: Express.Multer.File[];
+}
+
+export default async (req: UserCreateCommentRequest, res: Response, next: NextFunction) => {
     if (!can(req.user).do('create', 'shantytown_comment').on(req.body.shantytown)) {
         return res.status(403).send({
             user_message: 'Vous n\'avez pas les droits suffisants pour ajouter un message dans le journal de ce site.',

@@ -1,6 +1,6 @@
 import create from './create';
 import createComment from './createComment';
-import getActionReport from './getActionReport';
+import exportActions from './exportActions';
 import getCommentReport from './getCommentReport';
 import fetch from './fetch';
 import findActionFinancesReadersByAction from './findActionFinancesReadersByAction';
@@ -10,10 +10,10 @@ import update from './update';
 export default {
     create,
     createComment,
+    exportActions,
     getCommentReport,
     fetch,
     findActionFinancesReadersByAction,
     findActionFinancesReadersByManagers,
-    getActionReport,
     update,
 };

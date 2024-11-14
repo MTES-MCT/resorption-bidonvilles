@@ -1,22 +1,31 @@
+import { type Request, Response, NextFunction } from 'express';
 import actionService from '#server/services/action/actionService';
+import { AuthUser } from '#server/middlewares/authMiddleware';
 
-export default async (req, res, next) => {
-    if (!req.user.isAllowedTo('export', 'action')) {
-        res.status(400).send({
-            user_message: 'Vous n\'avez pas les droits suffisants pour exporter les actions',
-        });
-        return;
-    }
+const { exportActions } = actionService;
 
+const ERROR_RESPONSES = {
+    fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
+    permission_denied: { code: 403, message: 'Accès refusé' },
+    write_failed: { code: 500, message: 'Une écriture en base de données a échoué' },
+    undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
+};
+interface ExportActionsRequest extends Request {
+    user: AuthUser,
+}
+
+export default async (req: ExportActionsRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        // The frontend expects a JSON for every API calls, so we wrap the CSV in a json entry
-        res.status(200).send({
-            csv: await actionService.getActionReport(),
-        });
+        const buffer = await exportActions(
+            req.user, req.params.year,
+        );
+        // Terminer la réponse
+        res.end(buffer);
     } catch (error) {
-        res.status(500).send({
-            user_message: 'Une erreur est survenue lors de la récupération des données',
+        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
+        res.status(code).send({
+            user_message: message,
         });
-        next(error);
+        next(error.nativeError || error);
     }
 };
