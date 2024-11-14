@@ -7,6 +7,7 @@ import config from '#server/config';
 import { sequelize } from '#db/sequelize';
 import userQuestionSubscriptionModel from '#server/models/userQuestionSubscriptionModel';
 import uploadAttachments from '#server/services/attachment/upload';
+import scanAttachmentErrors from '#server/services/attachment/scanAttachmentErrors';
 import enrichQuestion from '#server/services/question/common/enrichQuestion';
 import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 
@@ -40,7 +41,7 @@ export default async (question: QuestionInput, author: AuthorData, files: Expres
             await uploadAttachments('question', questionId, author.id, files, transaction);
         } catch (error) {
             await transaction.rollback();
-            throw new ServiceError('upload_failed', error);
+            throw new ServiceError(error?.message || '500', scanAttachmentErrors[error?.message].message || 'upload_failed');
         }
     }
 

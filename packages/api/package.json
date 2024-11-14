@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/api",
-  "version": "2.22.0",
+  "version": "2.23.0",
   "description": "API d'Action Bidonvilles",
   "main": "server/index.ts",
   "repository": "git+https://github.com/MTES-MCT/action-bidonvilles.git",
@@ -33,6 +33,7 @@
     "express-rate-limit": "^6.3.0",
     "express-validator": "^6.6.1",
     "file-type": "16",
+    "form-data": "^4.0.1",
     "html-to-text": "^9.0.5",
     "idb-keyval": "^6.2.0",
     "js-yaml": "^4.1.0",

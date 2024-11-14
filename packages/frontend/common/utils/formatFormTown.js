@@ -187,5 +187,11 @@ export default function (data) {
             data.livingConditions.electricity.type.id;
     }
 
+    if (data.attachments) {
+        formatted.attachments = data.attachments
+    } else {
+        formatted.attachments = new DataTransfer().files
+    }
+
     return formatted;
 }

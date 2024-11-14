@@ -5,6 +5,7 @@ import createComment from '#server/models/actionModel/createComment/createCommen
 import fetchComments from '#server/models/actionModel/fetchComments/fetchComments';
 import serializeComment from '#server/models/actionModel/fetchComments/serializeComment';
 import uploadAttachments from '#server/services/attachment/upload';
+import scanAttachmentErrors from '#server/services/attachment/scanAttachmentErrors';
 import sendMattermostNotification from './createComment.sendMattermostNotification';
 import sendMailNotifications from './createComment.sendMailNotifications';
 import { ActionRawComment } from '#root/types/resources/ActionCommentRaw.d';
@@ -45,7 +46,7 @@ export default async (authorId: number, action: Action, commentInput: ActionComm
             );
         } catch (error) {
             await transaction.rollback();
-            throw new ServiceError('upload_failed', error);
+            throw new ServiceError(error?.message || '500', scanAttachmentErrors[error?.message].message || 'upload_failed');
         }
     }
 

@@ -2,13 +2,26 @@ import { S3 } from '#server/utils/s3';
 import sharp from 'sharp';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import config from '#server/config';
+import scanAttachment from '#server/services/attachment/scanAttachment';
 import attachmentModel from '#server/models/attachmentModel';
 import { AttachmentEntityType } from '#server/models/attachmentModel/createLinkedAttachment';
 import fromMimeToExtension from '#server/utils/fromMimeToExtension';
 import { Transaction } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
+import { ShantytownAttachmentObject } from '#root/types/resources/Shantytown.d';
 
-export default async (entityType: AttachmentEntityType, entityId: number, createdBy: number, files: Express.Multer.File[], transaction?: Transaction): Promise<any[]> => {
+export default async (entityType: AttachmentEntityType, entityId: number, createdBy: number, files: Express.Multer.File[], transaction?: Transaction, attachmentType?: ShantytownAttachmentObject[]): Promise<any[]> => {
+    // Scan les fichiers à la recherche d'un éventuelle virus
+    const results = await Promise.all(files.map(scanAttachment));
+
+    if (results.length > 0) {
+        for (let i = 0; i < results.length; i += 1) {
+            if (results[i].status !== 200) {
+                throw new Error(results[i].status.toString());
+            }
+        }
+    }
+  
     const previews: Buffer[] = await Promise.all(
         files.map((f) => {
             if (!f.mimetype.startsWith('image/')) {
@@ -59,6 +72,7 @@ export default async (entityType: AttachmentEntityType, entityId: number, create
                     f.size,
                     createdBy,
                     transaction,
+                    attachmentType ? attachmentType[index] : null,
                 ),
             );
 

@@ -44,4 +44,8 @@ export default {
         bucket: process.env.RB_API_S3_BUCKET,
         expirationTime: process.env.RB_API_S3_EXPIRATION_TIME || 3600, // 1 heure par défaut
     } : null,
+    clamav: {
+        port: process.env.RB_API_CLAMAV_PORT,
+        host: process.env.RB_API_CLAMAV_URL,
+    },
 };
