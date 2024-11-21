@@ -11,11 +11,12 @@ const ERROR_RESPONSES = {
 };
 
 export default async (req, res, next) => {
-    if (!can(req.user).do('update', 'shantytown').on(req.body)) {
+    // DESACTIVATION TEMPORAIRE DE LA VERIFICATION D'ACCES
+    /*if (!can(req.user).do('update', 'shantytown').on(req.body)) {
         return res.status(403).send({
             user_message: 'Vous n\'avez pas les droits suffisants pour mettre à jour les données du site.',
         });
-    }
+    }*/
 
     if (req.files?.length > 0 && !can(req.user).do('access', 'shantytown_justice').on(req.body)) {
         return res.status(403).send({
