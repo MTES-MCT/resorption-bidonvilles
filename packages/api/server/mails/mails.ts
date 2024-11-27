@@ -325,7 +325,7 @@ export default {
                 blogUrl,
                 webappUrl,
                 utm,
-                created_by: `${formatName(variables.question.createdBy)} (${variables.question.createdBy.organization})`,
+                created_by: `${formatName(variables.question.createdBy)} (${variables.question.createdBy.organization.name})`,
                 question: variables.question.question,
                 questionId: variables.question.id,
             },
