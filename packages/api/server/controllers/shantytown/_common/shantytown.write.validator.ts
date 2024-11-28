@@ -113,8 +113,11 @@ export default mode => ([
                         submitedValue: getStringOrNull(req.body.name),
                         storedValue: getStringOrNull(req.town.name),
                     },
-                    // Mis en commentaire le temps de résoudre l'incohérence des coordonnées géographiques du site toujours initialisée à celle de la commune
-                    // { key: 'coordinates', submitedValue: req.body['coordinates'], storedValue: `${req.town.city.latitude},${req.town.city.longitude}` },
+                    {
+                        key: 'coordinates',
+                        submitedValue: req.body.coordinates,
+                        storedValue: `${req.town.latitude},${req.town.longitude}`,
+                    },
                     {
                         key: 'built_at',
                         submitedValue: getStringOrNull(req.body.built_at),
