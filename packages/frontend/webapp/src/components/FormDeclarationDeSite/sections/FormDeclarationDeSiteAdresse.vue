@@ -8,7 +8,10 @@
                     showMandatoryStar
                     id="addressParagraph"
                 >
-                    <InputAddress v-model="values.address" />
+                    <InputAddress
+                        v-model="values.address"
+                        :disabled="isSubmitting"
+                    />
                 </FormParagraph>
 
                 <div class="text-sm mb-4" v-if="nearbyShantytowns.length">
@@ -44,6 +47,26 @@
                 <FormParagraph title="Appellation du site" id="name">
                     <InputName />
                 </FormParagraph>
+
+                <FormParagraph title="Coordonnées GPS" id="coordinates">
+                    <div class="flex flex-col gap-2">
+                        <ButtonGPS
+                            :town="{
+                                latitude: coordinates[0],
+                                longitude: coordinates[1],
+                            }"
+                        />
+                        <div
+                            v-if="initialCoordinates !== coordinates"
+                            class="text-redA11Y text-sm"
+                        >
+                            <Icon class="text-sm" icon="triangle-exclamation" />
+                            Vous avez déplacé le marqueur de l'emplacement du
+                            site. N'oubliez pas de cliquer sur "Mettre à jour"
+                            pour valider ce changement de localisation.
+                        </div>
+                    </div>
+                </FormParagraph>
             </section>
 
             <section class="h-96 bg-G500 lg:w-96 ml-4 my-3" v-if="address">
@@ -55,11 +78,12 @@
 
 <script setup>
 import { findNearby } from "@/api/towns.api";
-import { useFieldValue, useFormValues } from "vee-validate";
+import { useFieldValue, useFormValues, useIsSubmitting } from "vee-validate";
 import { defineProps, ref, toRefs, watch } from "vue";
 
 import FormSection from "@/components/FormSection/FormSection.vue";
-import { FormParagraph, Link } from "@resorptionbidonvilles/ui";
+import ButtonGPS from "@/components/ButtonGPS/ButtonGPS.vue";
+import { FormParagraph, Link, Icon } from "@resorptionbidonvilles/ui";
 import InputAddress from "@/components/InputAddress/InputAddress.vue";
 import InputCoordinates from "../inputs/FormDeclarationDeSiteInputCoordinates.vue";
 import InputName from "../inputs/FormDeclarationDeSiteInputName.vue";
@@ -76,6 +100,8 @@ const values = useFormValues();
 const address = useFieldValue("address");
 const coordinates = useFieldValue("coordinates");
 const nearbyShantytowns = ref([]);
+const initialCoordinates = ref(coordinates.value);
+const isSubmitting = useIsSubmitting();
 
 watch(address, () => {
     nearbyShantytowns.value = [];
