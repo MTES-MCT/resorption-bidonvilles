@@ -262,6 +262,12 @@ export default (oldVersion, newVersion): Diff[] => {
         insalubrityParcels: {
             label: "Parcelles concernées par l'arrêté d'insalubrité (numéros de parcelles)",
         },
+        latitude: {
+            label: 'Coordonnées GPS : Latitude',
+        },
+        longitude: {
+            label: 'Coordonnées GPS : Longitude',
+        },
     };
 
     const finalDiff = [];
