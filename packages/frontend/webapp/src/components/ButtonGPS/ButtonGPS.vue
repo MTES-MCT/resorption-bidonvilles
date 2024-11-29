@@ -1,5 +1,6 @@
 <template>
-    <p>Lat {{ town.latitude }}, Long {{ town.longitude }}</p>
+    <p>Latitude : {{ town.latitude }}</p>
+    <p>Longitude : {{ town.longitude }}</p>
     <ButtonCopy
         :value="`${town.latitude},${town.longitude}`"
         @copied="notifyCopy"
