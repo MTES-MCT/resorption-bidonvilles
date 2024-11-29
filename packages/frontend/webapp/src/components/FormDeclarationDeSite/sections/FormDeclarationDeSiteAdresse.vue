@@ -63,7 +63,7 @@
                             <Icon class="text-sm" icon="triangle-exclamation" />
                             Vous avez déplacé le marqueur de l'emplacement du
                             site. N'oubliez pas de cliquer sur "Mettre à jour"
-                            pour valider ce changement
+                            pour valider ce changement de localisation.
                         </div>
                     </div>
                 </FormParagraph>
