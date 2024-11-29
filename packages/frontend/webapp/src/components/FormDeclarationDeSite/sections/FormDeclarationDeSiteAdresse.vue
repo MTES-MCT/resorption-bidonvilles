@@ -50,10 +50,12 @@
 
                 <FormParagraph title="Coordonnées GPS" id="coordinates">
                     <div class="flex flex-col gap-2">
-                        <div>
-                            <p><b>Latitude</b>: {{ coordinates[0] }}</p>
-                            <p><b>Longitude</b>: {{ coordinates[1] }}</p>
-                        </div>
+                        <ButtonGPS
+                            :town="{
+                                latitude: coordinates[0],
+                                longitude: coordinates[1],
+                            }"
+                        />
                         <div
                             v-if="initialCoordinates !== coordinates"
                             class="text-redA11Y text-sm"
@@ -80,6 +82,7 @@ import { useFieldValue, useFormValues, useIsSubmitting } from "vee-validate";
 import { defineProps, ref, toRefs, watch } from "vue";
 
 import FormSection from "@/components/FormSection/FormSection.vue";
+import ButtonGPS from "@/components/ButtonGPS/ButtonGPS.vue";
 import { FormParagraph, Link, Icon } from "@resorptionbidonvilles/ui";
 import InputAddress from "@/components/InputAddress/InputAddress.vue";
 import InputCoordinates from "../inputs/FormDeclarationDeSiteInputCoordinates.vue";
