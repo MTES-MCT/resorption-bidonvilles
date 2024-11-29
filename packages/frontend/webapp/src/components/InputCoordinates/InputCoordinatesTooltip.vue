@@ -8,7 +8,7 @@
             <div class="mx-auto mt-8 w-8/12 text-sm bg-white p-3">
                 <p>
                     Si besoin, préciser la localisation en déplaçant le pointeur
-                    bleu sur la carte.
+                    marron sur la carte.
                 </p>
                 <p
                     class="font-bold text-right cursor-pointer text-primary"
