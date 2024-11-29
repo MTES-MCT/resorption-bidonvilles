@@ -1,12 +1,12 @@
 <template>
-    <div class="flex flex-col sm:flex-row space-x-8">
+    <div class="flex flex-col md:flex-row space-x-8">
         <ArrangementLeftMenuColumn
             :tabs="tabs"
             :activeTab="computedActiveTab"
             class="print:hidden mb-12 shrink-0"
             :class="{
                 columnWidthClass: true,
-                'hidden sm:flex': autohide === true,
+                'hidden md:flex': autohide === true,
             }"
         >
             <template v-slot:title v-if="$slots.menuTitle"
