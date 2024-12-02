@@ -5,7 +5,7 @@ module.exports = {
         try {
             await queryInterface.addColumn(
                 'shantytown_preparatory_phases_toward_resorption',
-                'completion_date',
+                'completed_at',
                 {
                     type: Sequelize.DATE,
                     allowNull: true,
@@ -26,7 +26,7 @@ module.exports = {
         try {
             await queryInterface.removeColumn(
                 'shantytown_preparatory_phases_toward_resorption',
-                'completion_date',
+                'completed_at',
                 { transaction },
             );
 
