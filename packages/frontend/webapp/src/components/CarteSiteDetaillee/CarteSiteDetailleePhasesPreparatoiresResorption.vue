@@ -9,12 +9,12 @@
             <!-- <span>{{ phase.preparatoryPhaseName }}</span> -->
             <span
                 :class="[
-                    'flex rounded-full text-xs border-2 mr-3 mb-1 h-6 w-6 items-center justify-center text-green500 border-green500',
+                    'flex rounded-full text-xs mr-1 h-6 w-6 items-center justify-center text-primary',
                 ]"
                 style="padding: 0.2em"
                 ariaHidden="true"
             >
-                <Icon icon="check" />
+                <Icon icon="fa-solid fa-hyphen" />
             </span>
             <div>
                 {{ phase.preparatoryPhaseName }}
