@@ -9,7 +9,9 @@ function serialize(data: ShantytownPreparatoryPhasesTowardResorptionRow[]): { to
         const preparatoryPhase: ShantytownPreparatoryPhaseTowardResorption = {
             preparatoryPhaseId: row.preparatory_phase_id,
             preparatoryPhaseName: row.preparatory_phase_name,
-            createdAt: row.created_at,
+            preparatoryPhaseDateLabel: row.preparatory_phase_date_label,
+            completedAt: row.completed_at !== null ? row.completed_at.getTime() / 1000 : null,
+            createdAt: row.created_at !== null ? row.created_at.getTime() / 1000 : null,
             createdBy: {
                 authorId: row.created_by,
                 authorFirstName: row.author_first_name,
