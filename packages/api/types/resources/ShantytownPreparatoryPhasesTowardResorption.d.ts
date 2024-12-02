@@ -4,6 +4,8 @@ export type ShantytownPreparatoryPhasesTowardResorptionRow = {
     created_at: Date,
     created_by: number,
     preparatory_phase_name: string,
+    preparatory_phase_date_label: string,
+    completed_at: Date,
     author_first_name: string,
     author_last_name: string,
     organization_id: number,
@@ -13,7 +15,9 @@ export type ShantytownPreparatoryPhasesTowardResorptionRow = {
 export type ShantytownPreparatoryPhaseTowardResorption = {
     preparatoryPhaseId: string,
     preparatoryPhaseName: string,
-    createdAt: Date,
+    preparatoryPhaseDateLabel: string,
+    completedAt: number | null,
+    createdAt: number,
     createdBy: {
         authorId: number,
         authorFirstName: string,
