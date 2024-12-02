@@ -7,10 +7,11 @@ const ERROR_RESPONSES = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue.' },
 };
 export default async (req, res, next) => {
+    const currentUser = req.user;
     let resorptionStartingPhases = [];
     try {
         const town = req.params;
-        const result = await shantytownResorptionService.start(town.id);
+        const result = await shantytownResorptionService.start(town.id, currentUser.id);
         resorptionStartingPhases = result.phases;
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
