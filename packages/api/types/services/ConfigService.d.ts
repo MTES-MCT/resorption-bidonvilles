@@ -15,6 +15,7 @@ import { ShantytownCommentTag } from '../resources/ShantytownCommentTag.d';
 import { SocialOrigin } from '../resources/SocialOrigin.d';
 import { Topic } from '../resources/Topic.d';
 import { User } from '../resources/User.d';
+import { PreparatoryPhaseTowardResorption } from '../resources/PreparatoryPhaseTowardResorption';
 
 export type ConfigServiceFetchResponse = {
     action_finance_types: ActionFinanceType[],
@@ -38,4 +39,5 @@ export type ConfigServiceFetchResponse = {
     user: User,
     version_charte_engagement: CharteEngagement,
     roles: Role[],
+    preparatory_phases_toward_resorption: PreparatoryPhaseTowardResorption[],
 };
