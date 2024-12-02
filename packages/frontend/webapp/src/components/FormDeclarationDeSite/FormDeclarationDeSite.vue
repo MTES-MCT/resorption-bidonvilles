@@ -1,5 +1,21 @@
 <template>
     <ArrangementLeftMenu :tabs="tabs" autonav>
+        <div class="font-sm font-bold mb-4">
+            values.preparatory_phases_toward_resorption dans
+            FormDeclarationDeSite:
+            <p class="font-normal">
+                {{ values.preparatory_phases_toward_resorption }}
+            </p>
+        </div>
+
+        <div class="font-sm font-bold mb-4">
+            values.active_preparatory_phases_toward_resorption dans
+            FormDeclarationDeSite:
+            <p class="font-normal">
+                {{ values.active_preparatory_phases_toward_resorption }}
+            </p>
+        </div>
+
         <template v-slot:menuTitle>Rubriques</template>
         <IndicationCaractereObligatoire />
 
@@ -8,6 +24,7 @@
             v-else-if="canSetUpdatedAt"
             :minDate="minUpdatedAt"
         />
+        <FormDeclarationDeSiteResorption class="mt-6" />
         <FormDeclarationDeSiteAdresse :townId="town?.id" class="mt-6" />
         <FormDeclarationDeSiteCaracteristiques class="mt-6" />
         <FormDeclarationDeSiteHabitants
@@ -70,6 +87,7 @@ import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
 import FormDeclarationDeSiteInfo from "./sections/FormDeclarationDeSiteInfo.vue";
 import FormDeclarationDeSiteDateDeMaj from "./sections/FormDeclarationDeSiteDateDeMaj.vue";
+import FormDeclarationDeSiteResorption from "./sections/FormDeclarationDeSiteResorption.vue";
 import FormDeclarationDeSiteAdresse from "./sections/FormDeclarationDeSiteAdresse.vue";
 import FormDeclarationDeSiteCaracteristiques from "./sections/FormDeclarationDeSiteCaracteristiques.vue";
 import FormDeclarationDeSiteHabitants from "./sections/FormDeclarationDeSiteHabitants.vue";
@@ -170,7 +188,7 @@ const { handleSubmit, values, errors, setErrors, isSubmitting } = useForm({
     initialValues,
 });
 
-const originalValues = formatValuesForApi(values);
+const originalValues = formatValuesForApi(values, "init");
 const error = ref(null);
 const address = toRef(values, "address");
 
@@ -268,7 +286,7 @@ const config = {
     },
 };
 
-function formatValuesForApi(v) {
+function formatValuesForApi(v, initOrEdit) {
     let citycode = null;
     let label = null;
     if (v.address?.data) {
@@ -348,6 +366,10 @@ function formatValuesForApi(v) {
         coordinates: `${v.coordinates[0]},${v.coordinates[1]}`,
         existingAttachments: Array.from(v.attachments),
         newAttachments: completeAttachments,
+        preparatory_phases_toward_resorption:
+            v.preparatory_phases_toward_resorption,
+        terminated_preparatory_phases_toward_resorption:
+            buildTerminatedPreparatoryPhases(initOrEdit),
     };
 }
 
@@ -369,9 +391,35 @@ const focusOnErrorSummary = async () => {
     }
 };
 
+function buildTerminatedPreparatoryPhases(initOrEdit) {
+    const terminatedPreparatoryPhases = {};
+    if (initOrEdit === "init") {
+        for (const phase of values.active_preparatory_phases_toward_resorption) {
+            if (phase.completedAt !== null) {
+                terminatedPreparatoryPhases[phase.preparatoryPhaseId] =
+                    phase.completedAt;
+            }
+        }
+    } else if (initOrEdit === "edit") {
+        for (const phase of values.preparatory_phases_toward_resorption) {
+            if (values[`phase_${phase}_completed_at`] !== null) {
+                terminatedPreparatoryPhases[phase] =
+                    values[`phase_${phase}_completed_at`];
+            } else {
+                if (phase.completedAt !== null) {
+                    terminatedPreparatoryPhases[phase.preparatoryPhaseId] =
+                        phase.completedAt;
+                }
+            }
+        }
+    }
+    return terminatedPreparatoryPhases;
+}
+
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
-        const formattedValues = formatValuesForApi(sentValues);
+        console.log("Appel de la fonction formatValuesForApi depuis submit");
+        const formattedValues = formatValuesForApi(sentValues, "edit");
 
         /* eslint-disable no-unused-vars */
         let {
@@ -385,6 +433,9 @@ defineExpose({
             ...formattedValuesRest
         } = formattedValues;
         /* eslint-enable no-unused-vars */
+
+        console.log("originalValuesRest", JSON.stringify(originalValuesRest));
+        console.log("formattedValuesRest", JSON.stringify(formattedValuesRest));
 
         if (
             // Cas où l'on souhaite indiquer qu'un site est à jour sans modifier de donnée
