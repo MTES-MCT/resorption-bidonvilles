@@ -28,7 +28,7 @@ module.exports = {
                 },
                 {
                     uid: 'social_assessment',
-                    name: 'Evaluation sociale',
+                    name: 'Évaluation sociale',
                 },
                 {
                     uid: 'political_validation',
