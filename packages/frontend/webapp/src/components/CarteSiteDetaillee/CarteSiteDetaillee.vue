@@ -120,7 +120,7 @@ const nbCol = computed(() => {
 
 <style scoped lang="scss">
 .cardGridTemplateColumnsFive {
-    grid-template-columns: 160px 208px 170px auto 200px;
+    grid-template-columns: 160px 208px 250px auto 200px;
 
     @media print {
         grid-template-columns: 160px 208px 164px 200px 236px;
