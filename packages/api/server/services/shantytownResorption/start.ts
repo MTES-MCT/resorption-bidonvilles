@@ -1,16 +1,15 @@
 import { sequelize } from '#db/sequelize';
 import ServiceError from '#server/errors/ServiceError';
-import ShantytownResorptionModel from '#server/models/preparatoryPhasesTowardResorptionModel';
-import { QueryTypes } from 'sequelize';
+import preparatoryPhasesTowardResorptionModel from '#server/models/preparatoryPhasesTowardResorptionModel';
+import shantytownPreparatoryPhasesTowardResorptionModel from '#server/models/shantytownPreparatoryPhasesTowardResorptionModel';
 import { PreparatoryPhaseTowardResorption } from '#root/types/resources/PreparatoryPhaseTowardResorption.d';
 
-
-export default async (townId: number): Promise<{ townId: number, phases: PreparatoryPhaseTowardResorption[] }> => {
+export default async (townId: number, userId: number): Promise<{ townId: number, phases: PreparatoryPhaseTowardResorption[] }> => {
     const transaction = await sequelize.transaction();
     let resorptionStartingPhases: PreparatoryPhaseTowardResorption[] = [];
 
     // Récupérer les phases préparatoires définissant le démarrage de la résorption
-    resorptionStartingPhases = await ShantytownResorptionModel.getStartingPhases();
+    resorptionStartingPhases = await preparatoryPhasesTowardResorptionModel.getAll(true);
     if (resorptionStartingPhases.length === 0) {
         throw new ServiceError('fetch_failed', new Error('Impossible de trouver les phases définissant le démarrage de la résorption'));
     }
@@ -18,18 +17,13 @@ export default async (townId: number): Promise<{ townId: number, phases: Prepara
     // Créer les phases préparatoires pour la résorption
     if (resorptionStartingPhases.length > 0) {
         try {
-            await Promise.all(resorptionStartingPhases.map(preparatoryPhase => sequelize.query(
-                `INSERT INTO shantytown_preparatory_phases_toward_resorption (fk_shantytown, fk_preparatory_phase, created_by)
-                    VALUES (:shantytownId, :preparatoryPhaseId, :createdBy)`,
+            await Promise.all(resorptionStartingPhases.map(preparatoryPhase => shantytownPreparatoryPhasesTowardResorptionModel.create(
                 {
-                    type: QueryTypes.INSERT,
-                    replacements: {
-                        shantytownId: townId,
-                        preparatoryPhaseId: preparatoryPhase.uid,
-                        createdBy: 1, // TODO: récupérer l'utilisateur connecté
-                    },
-                    transaction,
+                    fk_shantytown: townId,
+                    fk_preparatory_phase: preparatoryPhase.uid,
+                    created_by: userId,
                 },
+                transaction,
             )));
         } catch (error) {
             await transaction.rollback();
