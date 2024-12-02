@@ -11,11 +11,14 @@ export default async (user: AuthUser, ids: string[]): Promise<ShantytownPreparat
 
     const rows: ShantytownPreparatoryPhasesTowardResorptionRow[] = await sequelize.query(
         `SELECT
+            pptr.position AS position,
             spptr.fk_shantytown AS town_id,
             pptr.uid AS preparatory_phase_id,
             spptr.created_at AS created_at,
             spptr.created_by AS created_by,
             pptr.name AS preparatory_phase_name,
+            pptr.date_label AS preparatory_phase_date_label,
+            spptr.completed_at AS completed_at,
             us.first_name as author_first_name,
             us.last_name as author_last_name,
             us.fk_organization as organization_id,
@@ -29,7 +32,9 @@ export default async (user: AuthUser, ids: string[]): Promise<ShantytownPreparat
         LEFT JOIN
             organizations o ON o.organization_id = us.fk_organization
         WHERE 
-            spptr.fk_shantytown IN (:ids)`,
+            spptr.fk_shantytown IN (:ids)
+        ORDER BY
+            pptr.position ASC`,
         {
             type: QueryTypes.SELECT,
             replacements: {
