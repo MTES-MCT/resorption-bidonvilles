@@ -1,5 +1,7 @@
-import getStartingPhases from './getStartingPhases';
+import getAll from './getAll';
+import getSome from './getSome';
 
 export default {
-    getStartingPhases,
+    getAll,
+    getSome,
 };
