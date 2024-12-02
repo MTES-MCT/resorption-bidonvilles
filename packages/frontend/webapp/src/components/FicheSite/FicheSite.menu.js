@@ -1,7 +1,18 @@
 import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
+import departementsInResoprtionPhases from "@/utils/departements_in_resorption_phases";
 
 export default [
+    {
+        id: "resorption",
+        label: () => "Phases préparatoires à la résorption",
+        route: "#resorption",
+        condition(town) {
+            return departementsInResoprtionPhases.includes(
+                parseInt(town.departement.code, 10)
+            );
+        },
+    },
     {
         id: "caracteristiques",
         label: () => "Caractéristiques du site",
