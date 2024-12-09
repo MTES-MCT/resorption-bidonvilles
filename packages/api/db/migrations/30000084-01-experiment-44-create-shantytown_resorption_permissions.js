@@ -109,7 +109,7 @@ module.exports = {
             if (users.length > 0) {
                 await insertPermissions(queryInterface, users, transaction);
             }
-            return transaction.commit();
+            await transaction.commit();
         } catch (err) {
             await transaction.rollback();
             throw err;
@@ -125,7 +125,7 @@ module.exports = {
                 deleteFromTable(queryInterface, 'entities', 'name = \'shantytown_resorption\'', transaction),
             ]);
 
-            return transaction.commit();
+            await transaction.commit();
         } catch (error) {
             await transaction.rollback();
             throw error;
