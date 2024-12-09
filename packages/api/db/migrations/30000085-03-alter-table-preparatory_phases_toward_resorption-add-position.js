@@ -9,6 +9,16 @@ const values = [
     { uid: 'official_opening', position: 8 },
 ];
 
+
+async function updatePosition(queryInterface, Sequelize, uid, position, transaction) {
+    return queryInterface.bulkUpdate(
+        'preparatory_phases_toward_resorption',
+        { position },
+        { uid: { [Sequelize.Op.eq]: uid } },
+        { transaction }
+    );
+}
+
 module.exports = {
     async up(queryInterface, Sequelize) {
         const transaction = await queryInterface.sequelize.transaction();
@@ -25,21 +35,10 @@ module.exports = {
                 { transaction },
             );
 
-            const promises = values.map(({ uid, position }) => queryInterface.bulkUpdate(
-                'preparatory_phases_toward_resorption',
-                {
-                    position,
-                },
-                {
-                    uid: {
-                        [Sequelize.Op.eq]: uid,
-                    },
-                },
-                { transaction },
-            ));
-            await Promise.all(promises);
+            const promises = values.map(({ uid, position }) => updatePosition(queryInterface, Sequelize, uid, position, transaction));
 
-            return transaction.commit();
+            await Promise.all(promises);
+            await transaction.commit();
         } catch (error) {
             await transaction.rollback();
             throw error;
@@ -56,7 +55,7 @@ module.exports = {
                 { transaction },
             );
 
-            return transaction.commit();
+            await transaction.commit();
         } catch (error) {
             await transaction.rollback();
             throw error;

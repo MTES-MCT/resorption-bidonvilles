@@ -59,12 +59,12 @@ module.exports = {
                 transaction,
             },
         );
-        return transaction.commit();
+        await transaction.commit();
     },
 
     async down(queryInterface) {
         const transaction = await queryInterface.sequelize.transaction();
         await queryInterface.dropTable('preparatory_phases_toward_resorption', { transaction });
-        return transaction.commit();
+        await transaction.commit();
     },
 };
