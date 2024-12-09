@@ -1,4 +1,6 @@
+/* eslint-disable no-restricted-syntax */
 import { sequelize } from '#db/sequelize';
+import shantytownResorptionService from '#server/services/shantytownResorption';
 import shantytownModel from '#server/models/shantytownModel';
 import attachmentService from '#server/services/attachment';
 import ServiceError from '#server/errors/ServiceError';
@@ -183,12 +185,30 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
         }
     }
 
+    // on tente d'enregistrer les phases transitoires vers la résorption
+    if (shantytown.preparatory_phases_toward_resorption.length > 0) {
+        try {
+            if (user.isAllowedTo('update', 'shantytown_resorption')) {
+                await shantytownResorptionService.update(
+                    shantytown.id,
+                    shantytown.preparatory_phases_toward_resorption,
+                    shantytown.terminated_preparatory_phases_toward_resorption,
+                    user,
+                    transaction,
+                );
+            }
+        } catch (error) {
+            await transaction.rollback();
+            throw new ServiceError('update_failed', error);
+        }
+    }
+
     // on finalise
     try {
         await transaction.commit();
-    } catch (error) {
+    } catch (commitError) {
         await transaction.rollback();
-        throw new ServiceError('commit_failed', error);
+        throw new ServiceError('commit_failed', commitError);
     }
 
     let updatedShantytown: Shantytown = null;
