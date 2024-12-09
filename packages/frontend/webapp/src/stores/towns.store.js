@@ -451,11 +451,22 @@ export const useTownsStore = defineStore("towns", () => {
         },
 
         async edit(townId, data) {
-            const town = await edit(townId, data);
+            const notificationStore = useNotificationStore();
+            try {
+                const town = await edit(townId, data);
+                setTown(townId, town);
 
-            setTown(townId, town);
-
-            return hash.value[townId];
+                notificationStore.success(
+                    "Mise à jour réussie",
+                    "Le site a bien été mis à jour"
+                );
+                return hash.value[townId];
+            } catch (error) {
+                notificationStore.error(
+                    "Echec de la mise à jour du site",
+                    error?.user_message || "Une erreur inconnue est survenue"
+                );
+            }
         },
 
         async deleteCommentAttachment(file, { townId, commentId }) {
@@ -505,12 +516,21 @@ export const useTownsStore = defineStore("towns", () => {
         },
 
         async startResorption(townId) {
-            const resorptionPhases = await startResorption(townId);
-            if (hash.value[townId]) {
-                hash.value[townId].preparatoryPhasesTowardResorption =
-                    resorptionPhases;
+            try {
+                const resorptionPhases = await startResorption(townId);
+                if (hash.value[townId]) {
+                    hash.value[townId].preparatoryPhasesTowardResorption =
+                        resorptionPhases;
+                }
+                const town = await this.fetchTown(townId);
+                setTown(townId, town);
+                trackEvent("Site", "Démarrage de la résorption", `S${townId}`);
+            } catch (error) {
+                throw new Error(
+                    "Une erreur est survenue lors du démarrage de la résorption: ",
+                    error
+                );
             }
-            trackEvent("Site", "Démarrage de la résorption", `S${townId}`);
         },
     };
 });
