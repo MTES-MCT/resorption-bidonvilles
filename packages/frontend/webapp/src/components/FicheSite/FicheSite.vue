@@ -7,7 +7,9 @@
     <ContentWrapper>
         <ArrangementLeftMenu columnWidthClass="w-90" :tabs="tabs" autonav>
             <FicheSiteResorption
-                v-if="displayPhasesPreparatoiresResorption"
+                v-if="
+                    displayPhasesPreparatoiresResorption && hasPreparatoryPhases
+                "
                 :town="town"
                 id="resorption"
                 class="mb-8"
@@ -90,6 +92,10 @@ const historique = ref(null);
 const { displayPhasesPreparatoiresResorption } =
     usePhasesPreparatoiresResorption(town);
 
+const hasPreparatoryPhases = computed(() => {
+    return town.value?.preparatoryPhasesTowardResorption?.length > 0;
+});
+
 const tabs = computed(() => {
     return menu
         .filter((item) => {
@@ -107,6 +113,11 @@ const tabs = computed(() => {
         });
 });
 
+// const reloadData = () => {
+//     townsStore.fetchTown(town.value.id);
+//     // townsStore.fetchTowns();
+// };
+
 watch(
     () => bus.value.get("fichesite:openHistorique"),
     (data) => {
@@ -114,4 +125,13 @@ watch(
         historique.value.open();
     }
 );
+
+// watch(
+//     () => townsStore.hash[town.value.id]?.preparatoryPhasesTowardResorption,
+//     (newVal, oldVal) => {
+//         if (newVal !== oldVal) {
+//             reloadData();
+//         }
+//     }
+// );
 </script>
