@@ -50,11 +50,6 @@ rewiremock('#server/models/userQuestionSubscriptionModel').withDefault(userQuest
 rewiremock('#db/sequelize').with({ sequelize });
 rewiremock('#server/services/attachment/upload').withDefault(uploadAttachments);
 rewiremock('#server/services/attachment/serializeAttachment').withDefault(serializeAttachment);
-<<<<<<< HEAD
-=======
-rewiremock.enable();
-rewiremock.disable();
->>>>>>> 8e3c3db72 (fix: Corriger les erreurs relevées par eslint)
 
 describe('services/answer.createAnswer()', () => {
     beforeEach(async () => {
