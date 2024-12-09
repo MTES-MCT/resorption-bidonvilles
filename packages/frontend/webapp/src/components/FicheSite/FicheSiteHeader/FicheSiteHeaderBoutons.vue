@@ -70,7 +70,7 @@
                 userStore.hasLocalizedPermission(
                     'shantytown_resorption.create',
                     town
-                ) && !hasRequiredPreparatoryPhases
+                ) && !hasRequiredPhasesStartingResorption
             "
             size="sm"
             variant="primary"
@@ -104,6 +104,8 @@ import router from "@/helpers/router";
 
 import { Button } from "@resorptionbidonvilles/ui";
 import FicheSiteModaleExport from "../FicheSiteModaleExport/FicheSiteModaleExport.vue";
+
+import { useConfigStore } from "@/stores/config.store";
 
 const props = defineProps({
     town: Object,
@@ -156,24 +158,37 @@ async function deleteTown() {
 
 const startResorptionIsLoading = ref(false);
 
-const hasRequiredPreparatoryPhases = computed(() => {
+function hasAllPreparatoryPhases(preparatoryPhases, startingPhaseIds) {
+    return startingPhaseIds.every((phaseId) =>
+        preparatoryPhases.some((phase) => phase.preparatoryPhaseId === phaseId)
+    );
+}
+
+const hasRequiredPhasesStartingResorption = computed(() => {
     if (!town.value.preparatoryPhasesTowardResorption) {
         return false;
     }
 
-    const requiredPhases = [
-        "political_validation",
-        "social_assessment",
-        "sociological_diagnosis",
-    ];
+    if (!Array.isArray(town.value.preparatoryPhasesTowardResorption)) {
+        return false;
+    }
 
-    const phaseIds = new Set(
-        town.value.preparatoryPhasesTowardResorption.map(
-            (phase) => phase.preparatoryPhaseId
-        )
+    const configStore = useConfigStore();
+    const requiredPhases =
+        configStore.config?.preparatory_phases_toward_resorption.reduce(
+            (acc, item) => {
+                if (item.is_a_starting_phase) {
+                    acc.push(item.uid);
+                }
+                return acc;
+            },
+            []
+        );
+
+    return hasAllPreparatoryPhases(
+        town.value.preparatoryPhasesTowardResorption,
+        requiredPhases
     );
-
-    return requiredPhases.every((requiredPhase) => phaseIds.has(requiredPhase));
 });
 
 async function startResorption() {
