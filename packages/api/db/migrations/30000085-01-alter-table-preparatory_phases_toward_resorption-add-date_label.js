@@ -9,6 +9,16 @@ const values = [
     { uid: 'political_validation', name: 'Obtenue le' },
 ];
 
+
+async function updateDateLabel(queryInterface, Sequelize, uid, name, transaction) {
+    return queryInterface.bulkUpdate(
+        'preparatory_phases_toward_resorption',
+        { date_label: name },
+        { uid: { [Sequelize.Op.eq]: uid } },
+        { transaction },
+    );
+}
+
 module.exports = {
     async up(queryInterface, Sequelize) {
         const transaction = await queryInterface.sequelize.transaction();
@@ -25,27 +35,15 @@ module.exports = {
                 { transaction },
             );
 
-            const promises = values.map(({ uid, name }) => queryInterface.bulkUpdate(
-                'preparatory_phases_toward_resorption',
-                {
-                    date_label: name,
-                },
-                {
-                    uid: {
-                        [Sequelize.Op.eq]: uid,
-                    },
-                },
-                { transaction },
-            ));
-            await Promise.all(promises);
+            const promises = values.map(({ uid, name }) => updateDateLabel(queryInterface, Sequelize, uid, name, transaction));
 
-            return transaction.commit();
+            await Promise.all(promises);
+            await transaction.commit();
         } catch (error) {
             await transaction.rollback();
             throw error;
         }
     },
-
     async down(queryInterface) {
         const transaction = await queryInterface.sequelize.transaction();
 
@@ -56,7 +54,7 @@ module.exports = {
                 { transaction },
             );
 
-            return transaction.commit();
+            await transaction.commit();
         } catch (error) {
             await transaction.rollback();
             throw error;

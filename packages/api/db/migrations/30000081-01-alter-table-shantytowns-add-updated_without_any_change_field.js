@@ -28,10 +28,9 @@ async function addOrDeleteTableColumns(upOrDown, tableNames, queryInterface, Seq
             tableNames.map((tableName) => {
                 if (upOrDown === 'up') {
                     return addColumnsTo(queryInterface, Sequelize, tableName, transaction);
-                } else if (upOrDown === 'down') {
-                    return removeColumnsFrom(queryInterface, tableName, transaction);
                 }
-            })
+                return removeColumnsFrom(queryInterface, tableName, transaction);
+            }),
         );
         await transaction.commit();
     } catch (error) {
