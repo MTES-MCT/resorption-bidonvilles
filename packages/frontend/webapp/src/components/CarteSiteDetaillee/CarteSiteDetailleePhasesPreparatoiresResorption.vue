@@ -14,7 +14,14 @@
                 style="padding: 0.2em"
                 ariaHidden="true"
             >
-                <Icon icon="fa-solid fa-hyphen" />
+                <Icon
+                    v-if="phase.completedAt"
+                    icon="fa-sharp-duotone fa-solid fa-check"
+                />
+                <Icon
+                    v-else
+                    icon="fa-sharp-duotone fa-solid fa-hourglass-half"
+                />
             </span>
             <div>
                 {{ phase.preparatoryPhaseName }}
