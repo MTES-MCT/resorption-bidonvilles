@@ -1,21 +1,5 @@
 <template>
     <ArrangementLeftMenu :tabs="tabs" autonav>
-        <div class="font-sm font-bold mb-4">
-            values.preparatory_phases_toward_resorption dans
-            FormDeclarationDeSite:
-            <p class="font-normal">
-                {{ values.preparatory_phases_toward_resorption }}
-            </p>
-        </div>
-
-        <div class="font-sm font-bold mb-4">
-            values.active_preparatory_phases_toward_resorption dans
-            FormDeclarationDeSite:
-            <p class="font-normal">
-                {{ values.active_preparatory_phases_toward_resorption }}
-            </p>
-        </div>
-
         <template v-slot:menuTitle>Rubriques</template>
         <IndicationCaractereObligatoire />
 
@@ -24,7 +8,10 @@
             v-else-if="canSetUpdatedAt"
             :minDate="minUpdatedAt"
         />
-        <FormDeclarationDeSiteResorption class="mt-6" />
+        <FormDeclarationDeSiteResorption
+            v-if="town && hasPreparatoryPhases"
+            class="mt-6"
+        />
         <FormDeclarationDeSiteAdresse :townId="town?.id" class="mt-6" />
         <FormDeclarationDeSiteCaracteristiques class="mt-6" />
         <FormDeclarationDeSiteHabitants
@@ -279,10 +266,6 @@ const config = {
             trackEvent("Site", "Mise à jour site", `S${id}`);
             return town;
         },
-        notification: {
-            title: "Mise à jour réussie",
-            content: "Le site a bien été mis à jour",
-        },
     },
 };
 
@@ -416,9 +399,12 @@ function buildTerminatedPreparatoryPhases(initOrEdit) {
     return terminatedPreparatoryPhases;
 }
 
+const hasPreparatoryPhases = computed(() => {
+    return town.value?.preparatoryPhasesTowardResorption?.length > 0;
+});
+
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
-        console.log("Appel de la fonction formatValuesForApi depuis submit");
         const formattedValues = formatValuesForApi(sentValues, "edit");
 
         /* eslint-disable no-unused-vars */
@@ -434,9 +420,6 @@ defineExpose({
         } = formattedValues;
         /* eslint-enable no-unused-vars */
 
-        console.log("originalValuesRest", JSON.stringify(originalValuesRest));
-        console.log("formattedValuesRest", JSON.stringify(formattedValuesRest));
-
         if (
             // Cas où l'on souhaite indiquer qu'un site est à jour sans modifier de donnée
             mode.value === "edit" &&
@@ -451,11 +434,21 @@ defineExpose({
 
         const notificationStore = useNotificationStore();
         try {
-            const { submit, notification } = config[mode.value];
+            let respondedTown;
+            if (mode.value === "edit") {
+                const { submit } = config[mode.value];
+                respondedTown = await submit(formattedValues, town.value?.id);
+            } else {
+                const notificationStore = useNotificationStore();
+                const { submit, notification } = config[mode.value];
+                respondedTown = await submit(formattedValues, town.value?.id);
 
-            const respondedTown = await submit(formattedValues, town.value?.id);
+                notificationStore.success(
+                    notification.title,
+                    notification.content
+                );
+            }
 
-            notificationStore.success(notification.title, notification.content);
             if (mode.value === "report") {
                 backOrReplace("/liste-des-sites");
             } else {
