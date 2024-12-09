@@ -17,6 +17,7 @@ import socialOriginsModel from '#server/models/socialOriginModel/index';
 import topicModel from '#server/models/topicModel/index';
 import userModel from '#server/models/userModel/index';
 import roleModel from '#server/models/roleModel/index';
+import preparatoryPhasesTowardResorptionModel from '#server/models/preparatoryPhasesTowardResorptionModel/index';
 
 import ServiceError from '#server/errors/ServiceError';
 import { ConfigServiceFetchResponse } from '#root/types/services/ConfigService.d';
@@ -41,6 +42,7 @@ export default async (user: User): Promise<ConfigServiceFetchResponse> => {
             socialOrigins,
             topics,
             roles,
+            preparatoryPhasesTowardResorption,
         ] = await Promise.all([
             actionFinanceTypeModel.findAll(),
             changelogModel.getChangelogFor(user),
@@ -58,6 +60,7 @@ export default async (user: User): Promise<ConfigServiceFetchResponse> => {
             socialOriginsModel.findAll(),
             topicModel.findAll(),
             roleModel.findAll('regular'),
+            preparatoryPhasesTowardResorptionModel.getAll(),
         ]);
 
         return {
@@ -80,6 +83,7 @@ export default async (user: User): Promise<ConfigServiceFetchResponse> => {
             topics,
             user: extendedUser,
             version_charte_engagement: latestCharte,
+            preparatory_phases_toward_resorption: preparatoryPhasesTowardResorption,
         };
     } catch (error) {
         throw new ServiceError('fetch_failed', error);

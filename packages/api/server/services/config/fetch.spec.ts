@@ -57,6 +57,9 @@ const topicModel = {
 const userModel = {
     findOne: sandbox.stub(),
 };
+const preparatoryPhasesTowardResorptionModel = {
+    getAll: sandbox.stub(),
+};
 
 rewiremock('#server/config').withDefault({
     activationTokenExpiresIn: '1',
@@ -82,6 +85,7 @@ rewiremock('#server/models/regionModel/index').with(regionModel);
 rewiremock('#server/models/socialOriginModel/index').with(socialOriginModel);
 rewiremock('#server/models/topicModel/index').with(topicModel);
 rewiremock('#server/models/userModel/index').with(userModel);
+rewiremock('#server/models/preparatoryPhasesTowardResorptionModel/index').with(preparatoryPhasesTowardResorptionModel);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -202,6 +206,12 @@ describe('configService.fetch()', () => {
         userModel.findOne.withArgs(42, { extended: true }).resolves(user);
         const result = await fetch(user);
         expect(result.user).to.be.eql(user);
+    });
+
+    it('retourne la liste des phases transitoires vers la résorption', async () => {
+        preparatoryPhasesTowardResorptionModel.getAll.resolves(['A', 'B']);
+        const result = await fetch(fakeUser());
+        expect(result.preparatory_phases_toward_resorption).to.be.eql(['A', 'B']);
     });
 
     it('lance un ServiceError si une requête échoue', async () => {

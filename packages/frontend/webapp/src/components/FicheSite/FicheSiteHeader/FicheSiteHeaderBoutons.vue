@@ -66,6 +66,21 @@
             >Mettre à jour</Button
         >
         <Button
+            v-if="
+                userStore.hasLocalizedPermission(
+                    'shantytown_resorption.create',
+                    town
+                ) && !hasRequiredPhasesStartingResorption
+            "
+            size="sm"
+            variant="primary"
+            icon="fa-regular fa-play"
+            iconPosition="left"
+            @click="startResorption"
+            :loading="startResorptionIsLoading"
+            >Démarrer la résorption</Button
+        >
+        <Button
             v-if="userStore.hasLocalizedPermission('shantytown.delete', town)"
             size="sm"
             variant="primary"
@@ -79,7 +94,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, nextTick } from "vue";
+import { computed, defineProps, toRefs, ref, nextTick } from "vue";
 import { RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
@@ -89,6 +104,8 @@ import router from "@/helpers/router";
 
 import { Button } from "@resorptionbidonvilles/ui";
 import FicheSiteModaleExport from "../FicheSiteModaleExport/FicheSiteModaleExport.vue";
+
+import { useConfigStore } from "@/stores/config.store";
 
 const props = defineProps({
     town: Object,
@@ -137,5 +154,73 @@ async function deleteTown() {
     }
 
     deleteIsLoading.value = false;
+}
+
+const startResorptionIsLoading = ref(false);
+
+function hasAllPreparatoryPhases(preparatoryPhases, startingPhaseIds) {
+    return startingPhaseIds.every((phaseId) =>
+        preparatoryPhases.some((phase) => phase.preparatoryPhaseId === phaseId)
+    );
+}
+
+const hasRequiredPhasesStartingResorption = computed(() => {
+    if (!town.value.preparatoryPhasesTowardResorption) {
+        return false;
+    }
+
+    if (!Array.isArray(town.value.preparatoryPhasesTowardResorption)) {
+        return false;
+    }
+
+    const configStore = useConfigStore();
+    const requiredPhases =
+        configStore.config?.preparatory_phases_toward_resorption.reduce(
+            (acc, item) => {
+                if (item.is_a_starting_phase) {
+                    acc.push(item.uid);
+                }
+                return acc;
+            },
+            []
+        );
+
+    return hasAllPreparatoryPhases(
+        town.value.preparatoryPhasesTowardResorption,
+        requiredPhases
+    );
+});
+
+async function startResorption() {
+    if (startResorptionIsLoading.value === true) {
+        return;
+    }
+
+    if (
+        !confirm("Êtes-vous sûr(e) de vouloir démarrer la résorption ce site ?")
+    ) {
+        return;
+    }
+
+    startResorptionIsLoading.value = true;
+
+    const notificationStore = useNotificationStore();
+    const townsStore = useTownsStore();
+
+    nextTick(async () => {
+        try {
+            await townsStore.startResorption(town.value.id);
+            notificationStore.success(
+                "Démarrage de la résorption",
+                "La résorption du site a démarré"
+            );
+        } catch (err) {
+            notificationStore.error(
+                "Démarrage de la résorption",
+                "Erreur rencontrée. " + err?.user_message
+            );
+        }
+    });
+    startResorptionIsLoading.value = false;
 }
 </script>
