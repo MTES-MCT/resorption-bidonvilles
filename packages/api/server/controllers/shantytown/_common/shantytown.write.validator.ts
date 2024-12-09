@@ -15,6 +15,7 @@ import preparatoryPhasesTowardResorptionModel from '#server/models/preparatoryPh
 import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { PreparatoryPhaseTowardResorption } from '#root/types/resources/PreparatoryPhaseTowardResorption.d';
+import { SimplifiedPhase } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
 
 const { isLatLong, trim } = validator;
 const { can } = permissionUtils;
@@ -106,15 +107,20 @@ export default mode => ([
         .custom(async (value, { req }) => {
             let hasChanges = false;
 
-            const existingPreparatoryPhasesTowardResorption = req.town.preparatoryPhasesTowardResorption.map(phase => ({
-                preparatoryPhaseId: phase.preparatoryPhaseId,
-                completedAt: phase.completedAt,
-            }));
+            let existingPreparatoryPhasesTowardResorption = [];
+            let updatedPreparatoryPhasesTowardResorption = [];
+            if (mode !== 'create') {
+                existingPreparatoryPhasesTowardResorption = req.town.preparatoryPhasesTowardResorption.map((phase: SimplifiedPhase) => ({
+                    preparatoryPhaseId: phase.preparatoryPhaseId,
+                    completedAt: phase.completedAt,
+                }));
 
-            const updatedPreparatoryPhasesTowardResorption = req.body.preparatory_phases_toward_resorption.map(phase => ({
-                preparatoryPhaseId: phase,
-                completedAt: req.body.terminated_preparatory_phases_toward_resorption[phase] ? new Date(req.body.terminated_preparatory_phases_toward_resorption[phase]).getTime() / 1000 : null,
-            }));
+                updatedPreparatoryPhasesTowardResorption = req.body.preparatory_phases_toward_resorption.map(phase => ({
+                    preparatoryPhaseId: phase,
+                    completedAt: req.body.terminated_preparatory_phases_toward_resorption[phase] ? new Date(req.body.terminated_preparatory_phases_toward_resorption[phase]).getTime() / 1000 : null,
+                }));
+            }
+
 
             if (req.town) {
                 const fieldsToCheck = [
@@ -533,12 +539,15 @@ export default mode => ([
                         submitedValue: req.body.existingAttachments && req.body.existingAttachments.length > 0 ? JSON.stringify(req.body.existingAttachments, excludeSignedUrls) : '[]',
                         storedValue: req.town.attachments ? JSON.stringify(req.town.attachments, excludeSignedUrls) : '[]',
                     },
-                    {
+                ];
+
+                if (mode !== 'create') {
+                    fieldsToCheck.push({
                         key: 'preparatory_phases_toward_resorption',
                         submitedValue: updatedPreparatoryPhasesTowardResorption ? JSON.stringify(updatedPreparatoryPhasesTowardResorption.sort()) : null,
                         storedValue: existingPreparatoryPhasesTowardResorption ? JSON.stringify(existingPreparatoryPhasesTowardResorption.sort()) : null,
-                    },
-                ];
+                    });
+                }
 
                 // Y at'il des modifications des données dans les champs du formulaire ?
                 hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
@@ -2021,6 +2030,19 @@ export default mode => ([
                 }
             }
 
+            return true;
+        }),
+    body('active_preparatory_phases_toward_resorption')
+        .customSanitizer((value) => {
+            if (value === undefined || value === null) {
+                return [];
+            }
+
+            return value;
+        })
+        .isArray().bail().withMessage('Le champ "active_preparatory_phases_toward_resorption" est invalide')
+        .custom(async (value, { req }) => {
+            req.body.active_preparatory_phases_toward_resorption = value;
             return true;
         }),
 ]);
