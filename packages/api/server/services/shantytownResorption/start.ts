@@ -2,9 +2,11 @@ import { sequelize } from '#db/sequelize';
 import ServiceError from '#server/errors/ServiceError';
 import preparatoryPhasesTowardResorptionModel from '#server/models/preparatoryPhasesTowardResorptionModel';
 import shantytownPreparatoryPhasesTowardResorptionModel from '#server/models/shantytownPreparatoryPhasesTowardResorptionModel';
+import { AuthUser } from '#server/middlewares/authMiddleware';
+import { ShantytownPreparatoryPhasesTowardResorption } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
 import { PreparatoryPhaseTowardResorption } from '#root/types/resources/PreparatoryPhaseTowardResorption.d';
 
-export default async (townId: number, userId: number): Promise<{ townId: number, phases: PreparatoryPhaseTowardResorption[] }> => {
+export default async (townId: number, user: AuthUser): Promise<{ townId: number, phases: ShantytownPreparatoryPhasesTowardResorption[] }> => {
     const transaction = await sequelize.transaction();
     let resorptionStartingPhases: PreparatoryPhaseTowardResorption[] = [];
 
@@ -21,7 +23,8 @@ export default async (townId: number, userId: number): Promise<{ townId: number,
                 {
                     fk_shantytown: townId,
                     fk_preparatory_phase: preparatoryPhase.uid,
-                    created_by: userId,
+                    created_by: user.id,
+                    completed_at: new Date().toISOString(),
                 },
                 transaction,
             )));
@@ -38,5 +41,7 @@ export default async (townId: number, userId: number): Promise<{ townId: number,
         await transaction.rollback();
         throw new ServiceError('commit_failed', error);
     }
-    return { townId, phases: resorptionStartingPhases };
+    // Préparation de l'objet à retourner
+    const phases = await shantytownPreparatoryPhasesTowardResorptionModel.find(user, [townId.toString()]);
+    return { townId, phases };
 };
