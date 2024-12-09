@@ -31,3 +31,18 @@ export type ShantytownPreparatoryPhasesTowardResorption = {
     townId: number,
     preparatoryPhases: ShantytownPreparatoryPhaseTowardResorption[],
 };
+
+export type SimplifiedPhase = {
+    preparatoryPhaseId: string
+    completedAt: number | null,
+};
+
+export type Differences = {
+    addedPhases: SimplifiedPhase[],
+    removedPhases: SimplifiedPhase[],
+    modifiedPhases: {
+        preparatoryPhaseId: string,
+        oldCompletedAt: string,
+        newCompletedAt: string,
+    }[],
+};
