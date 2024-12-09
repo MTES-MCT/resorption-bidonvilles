@@ -1,15 +1,13 @@
 <template>
-    <!-- Phase active : {{ activePhases }} -->
-    <div class="p-2 border-1 border-primary rounded">
-        <!-- <div class="mb-4 text-xs">{{ phase }}</div> -->
+    <div class="p-2 px-4 border-1 border-primary rounded w-full">
         <div
-            class="bg-G200 mb-2 p-1 rounded text-sm"
+            class="bg-G200 p-2 rounded text-sm mt-2 mb-3"
             v-if="phase.is_a_starting_phase"
         >
             Phase initiale
         </div>
 
-        <div class="flex items-center gap-4">
+        <div class="grid grid-cols-2 gap-4 mt-2 mb-1 item-start">
             <Checkbox
                 :value="phase.uid"
                 :checked="isChecked"
@@ -26,6 +24,8 @@
                 :id="`phase_${phase.uid}_completed_at`"
                 :maxDate="new Date()"
                 v-model="completed_date"
+                class="!mb-0"
+                :disabled="!canUpdate"
             />
         </div>
     </div>
@@ -35,6 +35,7 @@
 import { computed, defineProps, ref } from "vue";
 // import ItemCheckbox from "./FormDeclarationDeSiteInputResorptionPhasesItemCheckbox.vue";
 import { Checkbox, DatepickerInput } from "@resorptionbidonvilles/ui";
+import { useUserStore } from "@/stores/user.store";
 
 const props = defineProps({
     phase: {
@@ -58,7 +59,9 @@ const props = defineProps({
 
 const { phase, modelValue, activePhases } = props;
 
-const isDisabled = computed(() => phase.is_a_starting_phase);
+const isDisabled = computed(
+    () => phase.is_a_starting_phase || canUpdate.value === false
+);
 
 const isChecked = ref(false);
 
@@ -98,4 +101,9 @@ const handleCheckboxChange = (checked) => {
         }
     }
 };
+
+const canUpdate = computed(() => {
+    const userStore = useUserStore();
+    return userStore.hasPermission("shantytown_resorption.update");
+});
 </script>
