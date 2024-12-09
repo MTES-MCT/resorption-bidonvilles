@@ -11,7 +11,7 @@ export default async (req, res, next) => {
     let resorptionStartingPhases = [];
     try {
         const town = req.params;
-        const result = await shantytownResorptionService.start(town.id, currentUser.id);
+        const result = await shantytownResorptionService.start(town.id, currentUser);
         resorptionStartingPhases = result.phases;
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
