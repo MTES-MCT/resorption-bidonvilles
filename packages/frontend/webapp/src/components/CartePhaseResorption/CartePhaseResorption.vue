@@ -1,23 +1,63 @@
 <template>
-    <article class="p-4 flex space-x-2 border">
-        <div class="flex-1">
-            <h3 class="font-bold">
-                {{ phase.preparatoryPhaseName }}
-            </h3>
-            <p v-if="phase.completedAt !== null">
-                {{ phase.preparatoryPhaseDateLabel }}:
-                {{ formatDate(phase.completedAt) }}
-            </p>
+    <div class="p-2 border-1 border-primary rounded w-full">
+        <div class="bg-G200 mb-2 p-1 rounded text-sm font-bold">
+            {{ phase.preparatoryPhaseName }}
         </div>
-    </article>
+        <div class="flex justify-between items-center text-sm">
+            <div class="flex items-center gap-1">
+                <i class="w-4 h-4 rounded-full" :class="`bg-${iconColor}`"></i>
+                {{ statusText }}
+                <span v-if="phase.completedAt">
+                    {{ formattedDate }}
+                </span>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
-import formatDate from "@common/utils/formatDate.js";
+import { computed, toRefs } from "vue";
 
+// Définition des props
 const props = defineProps({
-    phase: Object,
+    phase: {
+        type: Object,
+        required: true,
+    },
 });
+
 const { phase } = toRefs(props);
+
+const status = computed(() => {
+    return phase.value.completedAt ? "done" : "inprogress";
+});
+
+const statusText = computed(() => {
+    return status.value === "done"
+        ? props.phase.preparatoryPhaseDateLabel
+        : "En cours";
+});
+
+const formattedDate = computed(() => {
+    if (!phase.value.completedAt) {
+        return "";
+    }
+
+    return new Date(phase.value.completedAt * 1000).toLocaleDateString(
+        "fr-FR",
+        {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+        }
+    );
+});
+
+const iconColor = computed(() => {
+    return status.value === "done"
+        ? "green"
+        : status.value === "inprogress"
+        ? "orange600"
+        : "G500";
+});
 </script>
