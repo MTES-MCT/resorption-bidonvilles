@@ -171,7 +171,7 @@ export default function (data) {
             ? new Date(data.insalubrityOrderAt * 1000)
             : undefined,
         insalubrity_parcels: data.insalubrityParcels || undefined,
-        preparatory_phases_toward_resorption: data.preparatoryPhasesTowardResorption.map(phase => (phase.preparatoryPhaseId)) || [],
+        preparatory_phases_toward_resorption: data.preparatoryPhasesTowardResorption ? data.preparatoryPhasesTowardResorption.map(phase => (phase.preparatoryPhaseId)) : [],
         active_preparatory_phases_toward_resorption: data.preparatoryPhasesTowardResorption || [],
         terminated_preparatory_phases_toward_resorption: [],
     };
