@@ -1,15 +1,25 @@
 <template>
-    <div class="p-2 border-1 border-primary rounded w-full">
-        <div class="bg-G200 mb-2 p-1 rounded text-sm font-bold">
+    <div
+        class="p-2 border-1 border-primary/20 rounded w-full col-span-3 lg:col-span-1 bg-white"
+    >
+        <div
+            class="mb-2 p-1 rounded text-sm font-bold"
+            :class="is_initial_phase ? 'bg-blue200' : 'bg-G200'"
+        >
             {{ phase.preparatoryPhaseName }}
         </div>
-        <div class="flex justify-between items-center text-sm">
-            <div class="flex items-center gap-1">
-                <i class="w-4 h-4 rounded-full" :class="`bg-${iconColor}`"></i>
-                {{ statusText }}
-                <span v-if="phase.completedAt">
+        <div class="flex justify-start items-center text-sm">
+            <div class="flex flex-row flex-wrap md:flex-auto gap-1">
+                <div class="flex flex-row shrink-0 gap-1">
+                    <i
+                        class="w-4 h-4 rounded-full"
+                        :class="`bg-${iconColor}`"
+                    />
+                    {{ statusText }}
+                </div>
+                <div v-if="phase.completedAt" class="shrink-0">
                     {{ formattedDate }}
-                </span>
+                </div>
             </div>
         </div>
     </div>
@@ -24,9 +34,14 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    is_initial_phase: {
+        type: Boolean,
+        default: false,
+        required: false,
+    },
 });
 
-const { phase } = toRefs(props);
+const { phase, is_initial_phase } = toRefs(props);
 
 const status = computed(() => {
     return phase.value.completedAt ? "done" : "inprogress";
