@@ -55,9 +55,13 @@ async function insertPermissions(queryInterface, users, transaction) {
 }
 
 async function deleteFromTable(queryInterface, tableName, condition, transaction) {
+    const query = `DELETE FROM ${tableName} WHERE ${Object.keys(condition).map(key => `${key} = :${key}`).join(' AND ')}`;
     await queryInterface.sequelize.query(
-        `DELETE FROM ${tableName} WHERE ${condition}`,
-        { transaction },
+        query,
+        {
+            transaction,
+            replacements: condition,
+        },
     );
 }
 
@@ -120,13 +124,14 @@ module.exports = {
 
         try {
             await Promise.all([
-                deleteFromTable(queryInterface, 'permissions', 'fk_entity = \'shantytown_resorption\'', transaction),
-                deleteFromTable(queryInterface, 'features', 'fk_entity = \'shantytown_resorption\'', transaction),
-                deleteFromTable(queryInterface, 'entities', 'name = \'shantytown_resorption\'', transaction),
+                deleteFromTable(queryInterface, 'permissions', { fk_entity: 'shantytown_resorption' }, transaction),
+                deleteFromTable(queryInterface, 'features', { fk_entity: 'shantytown_resorption' }, transaction),
+                deleteFromTable(queryInterface, 'entities', { name: 'shantytown_resorption' }, transaction),
             ]);
 
             await transaction.commit();
         } catch (error) {
+            console.log(error);
             await transaction.rollback();
             throw error;
         }
