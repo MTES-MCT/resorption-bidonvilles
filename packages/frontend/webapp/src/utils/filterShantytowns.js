@@ -10,7 +10,8 @@ export default function (shantytowns, filters) {
         if (
             filters.status === "inProgress" &&
             (!shantytown.preparatoryPhasesTowardResorption ||
-                shantytown.preparatoryPhasesTowardResorption.length < 1)
+                shantytown.preparatoryPhasesTowardResorption.length < 1 ||
+                isShantytownClosed(shantytown))
         ) {
             return false;
         }
