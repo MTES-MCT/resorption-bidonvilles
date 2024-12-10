@@ -66,14 +66,7 @@
             >Mettre à jour</Button
         >
         <Button
-            v-if="
-                userStore.hasLocalizedPermission(
-                    'shantytown_resorption.create',
-                    town
-                ) &&
-                displayPhasesPreparatoiresResorption &&
-                !hasRequiredPhasesStartingResorption
-            "
+            v-if="displayStartResorptionButton"
             size="sm"
             variant="primary"
             icon="fa-regular fa-play"
@@ -170,6 +163,10 @@ function hasAllPreparatoryPhases(preparatoryPhases, startingPhaseIds) {
     );
 }
 
+const townIsClosed = computed(
+    () => town.value.closedAt !== null && town.value.closedAt !== undefined
+);
+
 const hasRequiredPhasesStartingResorption = computed(() => {
     if (!town.value.preparatoryPhasesTowardResorption) {
         return false;
@@ -229,4 +226,15 @@ async function startResorption() {
     });
     startResorptionIsLoading.value = false;
 }
+
+const displayStartResorptionButton = computed(
+    () =>
+        userStore.hasLocalizedPermission(
+            "shantytown_resorption.create",
+            town
+        ) &&
+        displayPhasesPreparatoiresResorption &&
+        !hasRequiredPhasesStartingResorption.value &&
+        !townIsClosed.value
+);
 </script>
