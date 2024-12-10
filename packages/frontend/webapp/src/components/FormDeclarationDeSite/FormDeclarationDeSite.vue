@@ -197,6 +197,11 @@ watch(address, async () => {
 const tabs = computed(() => {
     const arr = [
         {
+            id: "resorption",
+            label: "Phases préparatoires à la résorption",
+            route: "#resorption",
+        },
+        {
             id: "adresse",
             label: "Localisation",
             route: "#adresse",
@@ -234,7 +239,13 @@ const tabs = computed(() => {
         });
     }
 
-    return arr;
+    if (!town.value.preparatoryPhasesTowardResorption?.length) {
+        arr;
+    }
+
+    return town.value.preparatoryPhasesTowardResorption.length > 0
+        ? arr
+        : arr.filter((tab) => tab.id !== "resorption");
 });
 
 const config = {
