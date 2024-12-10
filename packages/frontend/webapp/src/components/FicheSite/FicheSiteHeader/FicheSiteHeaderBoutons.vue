@@ -75,7 +75,9 @@
                 userStore.hasLocalizedPermission(
                     'shantytown_resorption.create',
                     town
-                ) && !hasRequiredPhasesStartingResorption
+                ) &&
+                displayPhasesPreparatoiresResorption &&
+                !hasRequiredPhasesStartingResorption
             "
             size="sm"
             variant="primary"
@@ -112,12 +114,16 @@ import { Button } from "@resorptionbidonvilles/ui";
 import FicheSiteModaleExport from "../FicheSiteModaleExport/FicheSiteModaleExport.vue";
 
 import { useConfigStore } from "@/stores/config.store";
+import { usePhasesPreparatoiresResorption } from "@/utils/usePhasesPreparatoiresResorption";
 
 const props = defineProps({
     town: Object,
 });
 const { town } = toRefs(props);
 const userStore = useUserStore();
+
+const { displayPhasesPreparatoiresResorption } =
+    usePhasesPreparatoiresResorption(town);
 
 function openExportModal() {
     const modaleStore = useModaleStore();
