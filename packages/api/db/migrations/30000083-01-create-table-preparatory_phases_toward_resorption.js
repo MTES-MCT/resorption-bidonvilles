@@ -24,7 +24,7 @@ module.exports = {
             [
                 {
                     uid: 'sociological_diagnosis',
-                    name: 'Diagnostique sociologique',
+                    name: 'Diagnostic sociologique',
                 },
                 {
                     uid: 'social_assessment',
