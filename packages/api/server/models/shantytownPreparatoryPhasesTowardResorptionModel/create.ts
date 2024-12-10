@@ -13,21 +13,28 @@ export default async (data: ShantytownPreparatoryPhaseTowardResorptionParam, arg
     if (transaction === undefined) {
         transaction = await sequelize.transaction();
     }
+
     try {
-        const result = await sequelize.query(
-            `INSERT INTO shantytown_preparatory_phases_toward_resorption (fk_shantytown, fk_preparatory_phase, created_by ${data.completed_at ? ', completed_at' : ''})
-                VALUES (:shantytownId, :preparatoryPhaseId, :createdBy ${data.completed_at ? ', :completedAt' : ''}) RETURNING fk_shantytown`,
-            {
-                type: QueryTypes.INSERT,
-                replacements: {
-                    shantytownId: data.fk_shantytown,
-                    preparatoryPhaseId: data.fk_preparatory_phase,
-                    createdBy: data.created_by,
-                    completedAt: data.completed_at ? data.completed_at : null,
-                },
-                transaction,
-            },
-        );
+        const query = `
+        INSERT INTO shantytown_preparatory_phases_toward_resorption 
+        (fk_shantytown, fk_preparatory_phase, created_by ${data.completed_at ? ', completed_at' : ''})
+        VALUES (:shantytownId, :preparatoryPhaseId, :createdBy ${data.completed_at ? ', :completedAt' : ''})
+        RETURNING fk_shantytown
+        `;
+
+        const replacements = {
+            shantytownId: data.fk_shantytown,
+            preparatoryPhaseId: data.fk_preparatory_phase,
+            createdBy: data.created_by,
+            completedAt: data.completed_at ? data.completed_at : null,
+        };
+
+        const result = await sequelize.query(query, {
+            type: QueryTypes.INSERT,
+            replacements,
+            transaction,
+        });
+
         if (argTransaction === undefined) {
             await transaction.commit();
         }
