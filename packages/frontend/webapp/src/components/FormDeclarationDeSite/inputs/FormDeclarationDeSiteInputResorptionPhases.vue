@@ -19,8 +19,12 @@ import InputResorptionPhaseItem from "./FormDeclarationDeSiteInputResorptionPhas
 import { useConfigStore } from "@/stores/config.store";
 
 const configStore = useConfigStore();
+
 const preparatory_phases_toward_resorption =
-    configStore.config?.preparatory_phases_toward_resorption || [];
+    configStore.config?.preparatory_phases_toward_resorption.sort(
+        (a, b) => a.position - b.position
+    ) || [];
+
 const preparatory_phases_toward_resorption_value = useFieldValue(
     "preparatory_phases_toward_resorption"
 );
