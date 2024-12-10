@@ -15,7 +15,7 @@ async function updatePosition(queryInterface, Sequelize, uid, position, transact
         'preparatory_phases_toward_resorption',
         { position },
         { uid: { [Sequelize.Op.eq]: uid } },
-        { transaction }
+        { transaction },
     );
 }
 
