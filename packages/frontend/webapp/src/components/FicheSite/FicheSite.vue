@@ -7,7 +7,11 @@
     <ContentWrapper>
         <ArrangementLeftMenu columnWidthClass="w-90" :tabs="tabs" autonav>
             <FicheSiteResorption
-                v-if="displayPhasesPreparatoiresResorption"
+                v-if="
+                    displayPhasesPreparatoiresResorption &&
+                    (!townIsClosed ||
+                        town.preparatoryPhasesTowardResorption.length)
+                "
                 :town="town"
                 id="resorption"
                 class="mb-8"
@@ -106,6 +110,10 @@ const tabs = computed(() => {
             };
         });
 });
+
+const townIsClosed = computed(
+    () => town.value.closedAt !== null && town.value.closedAt !== undefined
+);
 
 watch(
     () => bus.value.get("fichesite:openHistorique"),
