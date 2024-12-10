@@ -21,7 +21,7 @@ export default async (entityType: AttachmentEntityType, entityId: number, create
             }
         }
     }
-  
+
     const previews: Buffer[] = await Promise.all(
         files.map((f) => {
             if (!f.mimetype.startsWith('image/')) {
