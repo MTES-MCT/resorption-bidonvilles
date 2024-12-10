@@ -8,8 +8,14 @@ export default [
         label: () => "Phases préparatoires à la résorption",
         route: "#resorption",
         condition(town) {
-            return departementsInResoprtionPhases.includes(
-                parseInt(town.departement.code, 10)
+            return (
+                departementsInResoprtionPhases.includes(
+                    parseInt(town.departement.code, 10)
+                ) &&
+                // eslint-disable-next-line prettier/prettier
+                (town.closedAt === null ||
+                    town.closedAt === undefined ||
+                    town.preparatoryPhasesTowardResorption.length > 0)
             );
         },
     },
