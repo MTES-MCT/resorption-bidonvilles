@@ -1,8 +1,8 @@
 <template>
     <FormSection id="resorption">
-        <template v-slot:title>Étapes de la résorption</template>
+        <template v-slot:title>Phases préparatoires à la résorption</template>
 
-        <Fieldset legend="Quelles sont les étapes réalisées ?">
+        <Fieldset legend="Quelles sont les phases réalisées ?">
             <InputPreparatoryPhaseTowardResorption />
         </Fieldset>
     </FormSection>
