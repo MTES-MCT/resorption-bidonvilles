@@ -40,6 +40,7 @@ export default {
     justice_rendered_at: "Date de la décision",
     justice_rendered_by: "Origine de la décision",
     justice_rendered_upload: "Téléverser la décision de justice",
+    justice_rendered_decrees: "Décision de justice",
     justice_challenged: "Y a-t-il un appel en cours ?",
     police_status: "Statut du concours de la force publique",
     police_requested_at: "Date de la demande du CFP",
