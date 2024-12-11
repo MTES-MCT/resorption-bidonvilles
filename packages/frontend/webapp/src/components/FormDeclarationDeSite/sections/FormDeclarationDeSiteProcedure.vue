@@ -36,6 +36,15 @@
                 v-model="values.justice_rendered_at"
             />
             <InputJusticeRenderedBy v-if="values.justice_rendered === 1" />
+            <UploadArrete
+                type="justice_rendered"
+                v-if="values.justice_rendered === 1"
+                v-model="values"
+                :townId="townId"
+                @update:attachments="updateAttachments"
+                @delete:OriginalAttachment="deleteOriginalAttachment"
+                class="mb-4"
+            />
             <InputJusticeChallenged v-if="values.justice_rendered === 1" />
         </Fieldset>
 
