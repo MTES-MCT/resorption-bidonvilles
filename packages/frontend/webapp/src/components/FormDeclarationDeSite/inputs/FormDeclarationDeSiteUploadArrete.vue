@@ -7,6 +7,7 @@
             :multiple="true"
             ref="input"
             @change="updateAttachments"
+            class="!mb-2"
         />
         <FilePreviewGrid
             class="mb-3"
