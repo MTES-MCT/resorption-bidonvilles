@@ -39,6 +39,7 @@ export default {
     justice_rendered: "Décision de justice rendue",
     justice_rendered_at: "Date de la décision",
     justice_rendered_by: "Origine de la décision",
+    justice_rendered_upload: "Téléverser la décision de justice",
     justice_challenged: "Y a-t-il un appel en cours ?",
     police_status: "Statut du concours de la force publique",
     police_requested_at: "Date de la demande du CFP",
@@ -51,7 +52,7 @@ export default {
     administrative_order_decision_at: "Date de l'arrêté",
     administrative_order_decision_rendered_by: "Qui a pris l'arrêté ?",
     administrative_order_evacuation_at: "Date de l'évacuation",
-    evacuation_upload: "Télécharger l'arrêté d'évacuation",
+    evacuation_upload: "Téléverser l'arrêté d'évacuation",
     evacuation_decrees: "Arrêté d'évacuation",
     // Arrêté d'insalubrité
     insalubrity_order:
@@ -63,7 +64,7 @@ export default {
     insalubrity_order_at: "Date de l'arrêté",
     insalubrity_parcels:
         "Parcelles concernées par l'arrêté (numéros de parcelles)",
-    insalubrity_upload: "Télécharger l'arrêté d'insalubrité",
+    insalubrity_upload: "Téléverser l'arrêté d'insalubrité",
     insalubrity_decrees: "Arrêté d'insalubrité",
     living_conditions_version:
         "Souhaitez-vous remplir le nouveau formulaire des conditions de vie ?",
