@@ -18,106 +18,118 @@
                 </div>
             </div>
         </template>
-        <Fieldset :legend="labels.owner_complaint" showMandatoryStar>
+        <Fieldset
+            :legend="labels.owner_complaint"
+            showMandatoryStar
+            class="mb-4"
+        >
             <InputOwnerComplaint />
         </Fieldset>
 
-        <Fieldset :legend="labels.justice_procedure" showMandatoryStar>
+        <Fieldset
+            :legend="labels.justice_procedure"
+            showMandatoryStar
+            class="mb-4"
+        >
             <InputJusticeProcedure />
-            <InputJusticeRendered v-if="values.justice_procedure === 1" />
-            <InputProcedureDatepicker
-                v-if="values.justice_rendered === 1"
-                name="justice_rendered_at"
-                id="justice_rendered_at"
-                :label="labels.justice_rendered_at"
-                :minDate="values.built_at || undefined"
-                :maxDate="new Date()"
-                showMandatoryStar
-                v-model="values.justice_rendered_at"
-            />
-            <InputJusticeRenderedBy v-if="values.justice_rendered === 1" />
-            <UploadArrete
-                type="justice_rendered"
-                v-if="values.justice_rendered === 1"
-                v-model="values"
-                :townId="townId"
-                @update:attachments="updateAttachments"
-                @delete:OriginalAttachment="deleteOriginalAttachment"
-                class="mb-4"
-            />
-            <InputJusticeChallenged v-if="values.justice_rendered === 1" />
+            <div class="ml-12">
+                <InputJusticeRendered v-if="values.justice_procedure === 1" />
+                <div class="ml-8" v-if="values.justice_rendered === 1">
+                    <InputProcedureDatepicker
+                        name="justice_rendered_at"
+                        id="justice_rendered_at"
+                        :label="labels.justice_rendered_at"
+                        :minDate="values.built_at || undefined"
+                        :maxDate="new Date()"
+                        showMandatoryStar
+                        v-model="values.justice_rendered_at"
+                    />
+                    <UploadArrete
+                        type="justice_rendered"
+                        v-if="values.justice_rendered === 1"
+                        v-model="values"
+                        :townId="townId"
+                        @update:attachments="updateAttachments"
+                        @delete:OriginalAttachment="deleteOriginalAttachment"
+                        class="mb-4"
+                    />
+                    <InputJusticeRenderedBy />
+                    <InputJusticeChallenged />
+                </div>
+            </div>
         </Fieldset>
 
         <Fieldset
             :legend="labels.evacuation_under_time_limit"
             showMandatoryStar
+            class="mb-12"
         >
             <InputCheckableGroup
                 name="evacuation_under_time_limit"
                 :items="yesNoItems"
                 model="values.evacuation_under_time_limit"
             />
-            <InputProcedureDatepicker
-                v-if="values.evacuation_under_time_limit === 1"
-                name="administrative_order_decision_at"
-                id="administrative_order_decision_at"
-                :label="labels.administrative_order_decision_at"
-                :minDate="values.built_at || undefined"
-                :maxDate="new Date()"
-                v-model="values.administrative_order_decision_at"
-            />
-            <InputAdministrativeOrderDecisionRenderedBy
-                v-if="values.evacuation_under_time_limit === 1"
-            />
-            <InputProcedureDatepicker
-                v-if="values.evacuation_under_time_limit === 1"
-                name="administrative_order_evacuation_at"
-                id="administrative_order_evacuation_at"
-                :label="labels.administrative_order_evacuation_at"
-                :minDate="values.built_at || undefined"
-                :maxDate="new Date()"
-                v-model="values.administrative_order_evacuation_at"
-            />
-            <UploadArrete
-                type="evacuation"
-                v-if="values.evacuation_under_time_limit === 1"
-                v-model="values"
-                :townId="townId"
-                @update:attachments="updateAttachments"
-                @delete:OriginalAttachment="deleteOriginalAttachment"
-            />
+            <div class="ml-12" v-if="values.evacuation_under_time_limit === 1">
+                <InputProcedureDatepicker
+                    name="administrative_order_decision_at"
+                    id="administrative_order_decision_at"
+                    :label="labels.administrative_order_decision_at"
+                    :minDate="values.built_at || undefined"
+                    :maxDate="new Date()"
+                    v-model="values.administrative_order_decision_at"
+                />
+                <InputAdministrativeOrderDecisionRenderedBy />
+                <InputProcedureDatepicker
+                    name="administrative_order_evacuation_at"
+                    id="administrative_order_evacuation_at"
+                    :label="labels.administrative_order_evacuation_at"
+                    :minDate="values.built_at || undefined"
+                    :maxDate="new Date()"
+                    v-model="values.administrative_order_evacuation_at"
+                />
+                <UploadArrete
+                    type="evacuation"
+                    v-model="values"
+                    :townId="townId"
+                    @update:attachments="updateAttachments"
+                    @delete:OriginalAttachment="deleteOriginalAttachment"
+                />
+            </div>
         </Fieldset>
 
-        <Fieldset :legend="labels.insalubrity_order" showMandatoryStar>
+        <Fieldset
+            :legend="labels.insalubrity_order"
+            showMandatoryStar
+            class="mb-12"
+        >
             <InputCheckableGroup
                 name="insalubrity_order"
                 :items="yesNoItems"
                 model="values.insalubrity_order"
             />
-            <InputInsalubrityOrderDisplayed
-                v-if="values.insalubrity_order === 1"
-                showMandatoryStar
-            />
-            <InputInsalubrityOrderType v-if="values.insalubrity_order === 1" />
-            <InputInsalubrityOrderBy v-if="values.insalubrity_order === 1" />
-            <InputProcedureDatepicker
-                v-if="values.insalubrity_order === 1"
-                name="insalubrity_order_at"
-                id="insalubrity_order_at"
-                :label="labels.insalubrity_order_at"
-                :minDate="values.built_at || undefined"
-                :maxDate="new Date()"
-                v-model="values.insalubrity_order_at"
-            />
-            <InputInsalubrityParcels v-if="values.insalubrity_order === 1" />
-            <UploadArrete
-                type="insalubrity"
-                v-if="values.insalubrity_order === 1"
-                v-model="values"
-                :townId="townId"
-                @update:attachments="updateAttachments"
-                @delete:OriginalAttachment="deleteOriginalAttachment"
-            />
+            <div v-if="values.insalubrity_order === 1" class="ml-12">
+                <InputInsalubrityOrderDisplayed showMandatoryStar />
+                <InputInsalubrityOrderType />
+                <InputInsalubrityOrderBy />
+                <InputProcedureDatepicker
+                    v-if="values.insalubrity_order === 1"
+                    name="insalubrity_order_at"
+                    id="insalubrity_order_at"
+                    :label="labels.insalubrity_order_at"
+                    :minDate="values.built_at || undefined"
+                    :maxDate="new Date()"
+                    v-model="values.insalubrity_order_at"
+                />
+                <InputInsalubrityParcels />
+                <UploadArrete
+                    type="insalubrity"
+                    v-if="values.insalubrity_order === 1"
+                    v-model="values"
+                    :townId="townId"
+                    @update:attachments="updateAttachments"
+                    @delete:OriginalAttachment="deleteOriginalAttachment"
+                />
+            </div>
         </Fieldset>
 
         <template v-if="policeInformationRequested === true">
@@ -127,27 +139,29 @@
                     :items="policeItems"
                     model="values.police_status"
                 />
-                <InputProcedureDatepicker
-                    v-if="policeRequested || policeRefused"
-                    name="police_requested_at"
-                    id="police_requested_at"
-                    :label="labels.police_requested_at"
-                    :minDate="values.built_at || undefined"
-                    :maxDate="new Date()"
-                    showMandatoryStar
-                    modelName="values.police_requested_at"
-                />
-                <InputProcedureDatepicker
-                    v-if="policeGranted"
-                    name="police_granted_at"
-                    id="police_granted_at"
-                    :label="labels.police_granted_at"
-                    :minDate="values.police_requested_at"
-                    :maxDate="new Date()"
-                    showMandatoryStar
-                    modelName="values.police_granted_at"
-                />
-                <InputExistingLitigation />
+                <div class="ml-12 mb-12">
+                    <InputProcedureDatepicker
+                        v-if="policeRequested || policeRefused"
+                        name="police_requested_at"
+                        id="police_requested_at"
+                        :label="labels.police_requested_at"
+                        :minDate="values.built_at || undefined"
+                        :maxDate="new Date()"
+                        showMandatoryStar
+                        modelName="values.police_requested_at"
+                    />
+                    <InputProcedureDatepicker
+                        v-if="policeGranted"
+                        name="police_granted_at"
+                        id="police_granted_at"
+                        :label="labels.police_granted_at"
+                        :minDate="values.police_requested_at"
+                        :maxDate="new Date()"
+                        showMandatoryStar
+                        modelName="values.police_granted_at"
+                    />
+                    <InputExistingLitigation />
+                </div>
                 <InputBailiff />
             </Fieldset>
         </template>
