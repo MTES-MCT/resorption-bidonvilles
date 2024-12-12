@@ -14,9 +14,9 @@
             /></FormParagraph>
             <FormParagraph :title="labels.other_tag" v-if="showOtherTag">
                 <FormNouvelleQuestionInputOtherTag
-                    :tag="question.tags[0].name"
                     :disabled="mode === 'edit'"
-            /></FormParagraph>
+                />
+            </FormParagraph>
             <FormParagraph :title="labels.people_affected" info="(optionnel)">
                 <FormNouvelleQuestionInputPeopleAffected />
             </FormParagraph>
