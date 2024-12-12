@@ -10,7 +10,7 @@ export default async (questionId: number, transaction?: Transaction): Promise<En
         enrichedQuestion = await enrichQuestion(questionId, transaction);
 
         if (enrichedQuestion === null) {
-                throw new ServiceError('fetch_failed', new Error('Impossible de retrouver la question en base de données'));
+            throw new ServiceError('fetch_failed', new Error('Impossible de retrouver la question en base de données'));
         }
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
