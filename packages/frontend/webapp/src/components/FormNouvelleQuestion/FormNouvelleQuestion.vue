@@ -14,11 +14,14 @@
             /></FormParagraph>
             <FormParagraph :title="labels.other_tag" v-if="showOtherTag">
                 <FormNouvelleQuestionInputOtherTag
+                    :tag="otherTag"
                     :disabled="mode === 'edit'"
                 />
             </FormParagraph>
             <FormParagraph :title="labels.people_affected" info="(optionnel)">
-                <FormNouvelleQuestionInputPeopleAffected />
+                <FormNouvelleQuestionInputPeopleAffected
+                    :peopleAffected="peopleAffected"
+                />
             </FormParagraph>
             <FormParagraph :title="labels.details" showMandatoryStar>
                 <FormNouvelleQuestionInputDetails @paste="onPaste" />
@@ -148,6 +151,16 @@ const config = {
         },
     },
 };
+
+const otherTag = computed(() => {
+    const otherTag = question.value?.tags.find((tag) => tag.uid === "other");
+    const otherTagName = otherTag ? otherTag.name : "";
+    return otherTagName;
+});
+
+const peopleAffected = computed(() => {
+    return question.value?.peopleAffected;
+});
 
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
