@@ -23,6 +23,7 @@ export default function (shantytown, fieldTypes) {
 
     if (shantytown.ownerComplaint === true) {
         justiceStatuses.push({
+            section: "ownerComplaint",
             icon: "scroll",
             label: "Plainte déposée",
         });
@@ -34,6 +35,7 @@ export default function (shantytown, fieldTypes) {
         !shantytown.justiceRendered
     ) {
         justiceStatuses.push({
+            section: "justiceProcedure",
             icon: "balance-scale",
             label: "Procédure judiciaire en cours",
         });
@@ -41,6 +43,7 @@ export default function (shantytown, fieldTypes) {
 
     if (shantytown.justiceProcedure && shantytown.justiceRendered) {
         justiceStatuses.push({
+            section: "justiceProcedure",
             icon: "balance-scale",
             label: "Décision de justice rendue",
             date: shantytown.justiceRenderedAt,
@@ -49,6 +52,7 @@ export default function (shantytown, fieldTypes) {
 
     if (shantytown.justiceProcedure && shantytown.justiceChallenged === true) {
         justiceStatuses.push({
+            section: "justiceProcedure",
             icon: "handshake",
             label: "Appel à la décision de justice en cours",
         });
@@ -58,18 +62,29 @@ export default function (shantytown, fieldTypes) {
     if (shantytown.evacuationUnderTimeLimit === true) {
         if (shantytown.administrativeOrderEvacuationAt !== null) {
             justiceStatuses.push({
+                section: "evacuationUnderTimeLimit",
                 icon: "file-contract",
-                label: "Évacuation",
+                label: "Évacuation effectuée",
                 date: shantytown.administrativeOrderEvacuationAt,
             });
-        } else if (shantytown.administrativeOrderDecisionAt !== null) {
+        }
+        if (
+            shantytown.administrativeOrderDecisionAt !== null &&
+            shantytown.administrativeOrderEvacuationAt === null
+        ) {
             justiceStatuses.push({
+                section: "evacuationUnderTimeLimit",
                 icon: "file-contract",
                 label: "Arrêté d'évacuation pris",
                 date: shantytown.administrativeOrderDecisionAt,
             });
-        } else {
+        }
+        if (
+            shantytown.administrativeOrderEvacuationAt === null &&
+            shantytown.administrativeOrderDecisionAt === null
+        ) {
             justiceStatuses.push({
+                section: "evacuationUnderTimeLimit",
                 icon: "file-contract",
                 label: "Arrêté d'évacuation en cours",
             });
@@ -81,12 +96,14 @@ export default function (shantytown, fieldTypes) {
         if (shantytown.insalubrityOrderAt) {
             if (shantytown.insalubrityOrderType) {
                 justiceStatuses.push({
+                    section: "insalubrityOrder",
                     icon: "right-from-bracket",
                     label: "Arrêté d'insalubrité pris",
                     date: shantytown.insalubrityOrderAt,
                 });
             } else {
                 justiceStatuses.push({
+                    section: "insalubrityOrder",
                     icon: "right-from-bracket",
                     label: "Arrêté d'insalubrité pris",
                     date: shantytown.insalubrityOrderAt,
@@ -94,6 +111,7 @@ export default function (shantytown, fieldTypes) {
             }
         } else {
             justiceStatuses.push({
+                section: "insalubrityOrder",
                 icon: "right-from-bracket",
                 label: "Arrêté d'insalubrité en cours",
             });
@@ -104,6 +122,7 @@ export default function (shantytown, fieldTypes) {
     switch (shantytown.policeStatus) {
         case "none":
             justiceStatuses.push({
+                section: "policeStatus",
                 icon: "user-police",
                 label: "Concours de la force publique non demandé",
             });
@@ -111,6 +130,7 @@ export default function (shantytown, fieldTypes) {
 
         case "requested":
             justiceStatuses.push({
+                section: "policeStatus",
                 icon: "user-police",
                 label: "Concours de la force publique demandé",
                 date: shantytown.policeRequestedAt,
@@ -119,6 +139,7 @@ export default function (shantytown, fieldTypes) {
 
         case "granted":
             justiceStatuses.push({
+                section: "policeStatus",
                 icon: "user-police",
                 label: "Concours de la force publique accordé",
                 date: shantytown.policeGrantedAt,
@@ -127,6 +148,7 @@ export default function (shantytown, fieldTypes) {
 
         case "refused":
             justiceStatuses.push({
+                section: "policeStatus",
                 icon: "user-police",
                 label: "Concours de la force publique refusé",
                 date: shantytown.policeGrantedAt,
