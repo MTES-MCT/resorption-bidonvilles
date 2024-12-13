@@ -3,7 +3,7 @@
         title="Procédure judiciaire ou administrative"
         category="procedure"
     >
-        <FicheSiteProceduresRubrique>
+        <FicheSiteProceduresRubrique title="Procédure judiciaire">
             <FicheSiteProceduresLigne
                 v-for="(procedure, index) in filteredProcedureJudiciaire"
                 :key="index"
@@ -15,7 +15,9 @@
             </FicheSiteProceduresLigne>
         </FicheSiteProceduresRubrique>
 
-        <FicheSiteProceduresRubrique>
+        <FicheSiteProceduresRubrique
+            title="Procédure administrative prescrivant l'évacuation sous délai"
+        >
             <FicheSiteProceduresLigne
                 :border="false"
                 icon="file-contract"
@@ -59,7 +61,10 @@
             </FicheSiteProceduresLigne>
         </FicheSiteProceduresRubrique>
 
-        <FicheSiteProceduresRubrique>
+        <FicheSiteProceduresRubrique
+            title="Arrêté d'insalubrité dans le cadre d'une opération RHI
+                bidonville"
+        >
             <FicheSiteProceduresLigne
                 :border="false"
                 icon="right-from-bracket"
@@ -116,7 +121,9 @@
             </FicheSiteProceduresLigne>
         </FicheSiteProceduresRubrique>
 
-        <FicheSiteProceduresRubrique>
+        <FicheSiteProceduresRubrique
+            title="Statut du concours de la force publique"
+        >
             <FicheSiteProceduresLigne
                 icon="person-military-pointing"
                 :label="labels.police_status"
