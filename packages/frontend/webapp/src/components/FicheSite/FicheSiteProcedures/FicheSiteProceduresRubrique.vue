@@ -2,7 +2,10 @@
     <FicheSousRubrique marginTop="false" border="false">
         <div class="ml-4">
             <div
-                class="border-1 border-cardBorder rounded px-8 mt-2 hover:bg-G100 cursor-pointer"
+                :class="[
+                    { 'pb-4': !collapsed },
+                    'border-1 border-cardBorder rounded px-8 mt-2 hover:bg-G100 cursor-pointer',
+                ]"
                 @click="toggleCollapse"
             >
                 <div
@@ -13,7 +16,7 @@
                 >
                     <div>
                         <span>
-                            {{ title }}
+                            {{ enrichedTitle }}
                         </span>
                     </div>
                     <Button
@@ -32,18 +35,26 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref } from "vue";
+import { computed, defineProps, toRefs, ref } from "vue";
 
 import { Button } from "@resorptionbidonvilles/ui";
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
 
 const props = defineProps({
     title: String,
+    titleSupplements: String,
 });
-const { title } = toRefs(props);
+const { title, titleSupplements } = toRefs(props);
 const collapsed = ref(true);
 
 function toggleCollapse() {
     collapsed.value = !collapsed.value;
 }
+
+const enrichedTitle = computed(() => {
+    if (titleSupplements.value !== "aucune information") {
+        return titleSupplements.value;
+    }
+    return title.value + " - " + titleSupplements.value;
+});
 </script>
