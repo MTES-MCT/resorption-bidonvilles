@@ -6,7 +6,7 @@
             <DatePicker v-model="date" locale="fr" :format-locale="fr" :format="section === 'evolution' ? 'LLLL yyyy' : 'dd LLLL yyyy'"
                 :disabled="isSubmitting || disabled" autoApply :enableTimePicker="false"
                 :input-class-name="focusClasses.ring"
-                :preventMinMaxNavigation="$attrs.maxDate || $attrs.minDate" v-bind="$attrs" :uid="id">
+                :preventMinMaxNavigation="!!$attrs.maxDate || !!$attrs.minDate" v-bind="$attrs" :uid="id">
             </DatePicker>
         </div>
         <InputError v-if="errors.length">{{ errors[0] }}</InputError>
