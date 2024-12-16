@@ -62,7 +62,7 @@
     </template>
 
     <template v-else>
-        <label class="cursor-pointer inline-block px-2 py-1 border border-2 border-blue200" :class="[
+        <label class="cursor-pointer inline-block px-4 py-1 border border-2 border-blue200" :class="[
             checked
                 ? 'bg-blue500 text-white border-blue500'
                 : 'bg-blue200 text-primary',

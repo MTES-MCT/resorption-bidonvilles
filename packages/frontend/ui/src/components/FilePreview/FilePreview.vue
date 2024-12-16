@@ -14,7 +14,7 @@
         </a>
         <Button
             :loading="file.loading === true"
-            class="align-right"
+            class="align-right rounded hover:!bg-primary px-2"
             :class="allowDeletion && (file.state === 'draft' || isHovered || file.loading === true) ? '' : 'hidden'"
             :title="`Supprimer la pièce jointe, ${file.name}`"
             type="button"

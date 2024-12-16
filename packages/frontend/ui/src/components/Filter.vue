@@ -2,13 +2,13 @@
     <Dropdown>
         <template v-slot:button="{ isOpen }">
             <Button variant="custom" size="sm" :icon="isOpen ? 'chevron-up' : 'chevron-down'" iconPosition="right" :class="[
-                'px-4 rounded border-1 border-primary whitespace-nowrap',
+                'px-4 rounded !border-1 !border-primary whitespace-nowrap',
                 isOpen || checkedIds.length > 0
                     ? 'bg-primary text-white hover:text-white focus:text-white'
                     : 'hover:bg-blue200 hover:text-primary text-primary',
                 focusClasses.ring,
             ]">
-                <p class="flex items-center justify-between space-x-2">
+                <p class="flex items-center justify-between space-x-2 text-sm">
                     <span class="block w-4 h-4 bg-white text-primary text-center leading-4 rounded-full"
                         v-if="checkedIds.length">{{
                             checkedIds.length
@@ -86,6 +86,7 @@ watch(checkedIds, () => {
 
 watch(modelValue, () => {
     const checkedTest = computeChecked();
+    
     if (!isDeepEqual(checkedTest, checked.value)) {
         checked.value = checkedTest;
     }
@@ -102,3 +103,9 @@ function computeChecked() {
     }, {});
 }
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>
