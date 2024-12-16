@@ -25,7 +25,11 @@
                     name="question"
                     label="En une phrase, comment résumeriez-vous votre question ?"
                 />
-                <Button size="sm">Demander</Button>
+                <Button
+                    size="sm"
+                    class="!border-2 !border-primary hover:!bg-primaryDark !py-1.5"
+                    >Demander</Button
+                >
             </form>
         </div>
     </div>
@@ -62,3 +66,9 @@ function redirectToNewQuestion(event) {
     );
 }
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

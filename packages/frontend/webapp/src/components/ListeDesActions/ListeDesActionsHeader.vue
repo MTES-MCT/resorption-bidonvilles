@@ -14,6 +14,8 @@
                     iconPosition="left"
                     variant="primaryOutline"
                     @click="openModalExport"
+                    size="sm"
+                    class="!border-2 !border-primary hover:!bg-primary"
                     >Exporter</Button
                 >
                 <Button
@@ -23,6 +25,8 @@
                     icon="plus"
                     iconPosition="left"
                     variant="primary"
+                    size="sm"
+                    class="!border-2 !border-primary hover:!bg-primaryDark"
                 >
                     Déclarer une nouvelle action
                 </Button>
@@ -86,3 +90,9 @@ const exportList = computed(() => {
     return list;
 });
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

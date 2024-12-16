@@ -28,6 +28,7 @@
                 v-model="questionsStore.sort"
                 name="questions_list_sort"
                 :options="sort"
+                class="border-1 !border-primary rounded hover:bg-blue200"
             />
         </section>
     </div>

@@ -12,6 +12,7 @@
                     :options="filter.options"
                     v-model="townsStore.filters.properties[filter.id]"
                     @checkedItem="trackFilter(filter.label, $event)"
+                    class="border-1 !border-primary rounded hover:bg-blue200 text-sm"
                 >
                     <template
                         v-if="filter.id === 'conditions'"
@@ -42,6 +43,7 @@
                         :options="filter.options"
                         v-model="townsStore.filters.properties[filter.id]"
                         @checkedItem="trackFilter(filter.label, $event)"
+                        class="border-1 !border-primary rounded hover:bg-blue200"
                     />
                 </template>
             </div>
@@ -53,6 +55,7 @@
                 v-model="townsStore.sort"
                 name="towns_list_sort"
                 :options="groupedSorts[townsStore.filters.status]"
+                class="border-1 !border-primary rounded hover:bg-blue200"
             />
         </article>
     </section>

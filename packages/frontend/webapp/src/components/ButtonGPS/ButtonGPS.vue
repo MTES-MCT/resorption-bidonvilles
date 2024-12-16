@@ -1,11 +1,15 @@
 <template>
-    <p>Latitude : {{ town.latitude }}</p>
-    <p>Longitude : {{ town.longitude }}</p>
-    <ButtonCopy
-        :value="`${town.latitude},${town.longitude}`"
-        @copied="notifyCopy"
-        >Copier</ButtonCopy
-    >
+    <div class="flex flex-col">
+        <p>Latitude : {{ town.latitude }}</p>
+        <p>Longitude : {{ town.longitude }}</p>
+    </div>
+    <div>
+        <ButtonCopy
+            :value="`${town.latitude},${town.longitude}`"
+            @copied="notifyCopy"
+            >Copier</ButtonCopy
+        >
+    </div>
 </template>
 
 <script setup>

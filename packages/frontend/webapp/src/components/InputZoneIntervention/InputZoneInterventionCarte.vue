@@ -16,6 +16,7 @@
                 variant="primaryText"
                 icon="trash-alt"
                 iconPosition="left"
+                class="hover:!bg-G200 rounded py-1 px-2"
                 @click="emit('remove')"
             />
         </p>

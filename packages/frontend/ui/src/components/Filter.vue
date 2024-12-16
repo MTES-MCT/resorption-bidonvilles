@@ -103,9 +103,3 @@ function computeChecked() {
     }, {});
 }
 </script>
-
-<style scoped>
-button {
-    border: inherit;
-}
-</style>

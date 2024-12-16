@@ -12,7 +12,7 @@
             @mouseenter="isHover = true"
             @mouseleave="isHover = false"
         >
-            <div class="mb-4 px-6">
+            <div class="mb-4 px-6 -mt-1 pt-px">
                 <Tag
                     tabindex="0"
                     :aria-label="actionPeriod"

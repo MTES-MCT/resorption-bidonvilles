@@ -5,7 +5,7 @@
             :info="`Les images, les documents PDF, Word, et Excel sont autorisés. La taille maximale autorisée est de ${humanFileSize(MAX_FILE_SIZE)}.`"
             :showMandatoryStar="showMandatoryStar" />
         <FilePreviewGrid class="mb-3" v-if="previews.length > 0" :files="previews" allowDeletion @deleteFile="onDeleteFile" />
-        <input ref="fileInput" type="file" class="none" :accept="allowedFileExtensions.map(ext => `.${ext}`).join(',')"
+        <input ref="fileInput" type="file" class="none border-0" :accept="allowedFileExtensions.map(ext => `.${ext}`).join(',')"
             :multiple="multiple" @change="onChange" @focus="onFocus" @blur="handleBlur" />
         <InputError v-if="errors.length > 0">{{ errors[0] }}</InputError>
     </InputWrapper>

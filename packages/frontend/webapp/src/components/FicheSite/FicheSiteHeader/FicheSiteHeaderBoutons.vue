@@ -15,6 +15,7 @@
                 icon="comment"
                 iconPosition="left"
                 tabindex="-1"
+                class="!border-2 !border-primary hover:!bg-primary"
                 >Journal du site</Button
             >
         </RouterLink>
@@ -24,6 +25,7 @@
             iconPosition="left"
             variant="primaryOutline"
             @click="openExportModal"
+            class="!border-2 !border-primary hover:!bg-primary"
             >Exporter</Button
         >
         <Button
@@ -36,6 +38,7 @@
             icon="house-circle-xmark"
             iconPosition="left"
             :href="`/site/${town.id}/fermeture`"
+            class="hover:!bg-primaryDark"
             >Fermer le site</Button
         >
 
@@ -51,6 +54,7 @@
             icon="house-circle-xmark"
             iconPosition="left"
             :href="`/site/${town.id}/fermeture`"
+            class="hover:!bg-primaryDark"
             >Corriger la fermeture du site</Button
         >
         <Button
@@ -63,6 +67,7 @@
                 town.status === 'open'
             "
             :href="`/site/${town.id}/mise-a-jour`"
+            class="hover:!bg-primaryDark"
             >Mettre à jour</Button
         >
         <Button
@@ -73,6 +78,7 @@
             iconPosition="left"
             @click="deleteTown"
             :loading="deleteIsLoading"
+            class="!border-2 !border-primary hover:!bg-primaryDark"
             >Supprimer le site</Button
         >
     </p>
@@ -139,3 +145,9 @@ async function deleteTown() {
     deleteIsLoading.value = false;
 }
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

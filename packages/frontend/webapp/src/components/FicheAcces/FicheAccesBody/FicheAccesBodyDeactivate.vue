@@ -15,6 +15,7 @@
             v-model="deactivationReason"
             placeholder="Raison pour laquelle vous désactivez cet accès..."
             :disabled="isLoading"
+            class="bg-white"
         />
         <ErrorSummary v-if="error" :message="error" :summary="errorSummary" />
         <div class="flex items-center justify-end">
@@ -23,6 +24,7 @@
                 variant="primaryText"
                 @click="cancelReason"
                 :disabled="isLoading"
+                class="hover:!bg-G200"
                 >Annuler</Button
             >
             <Button
@@ -30,6 +32,7 @@
                 @click="deactivate"
                 :disabled="deactivationReason.length === 0"
                 :loading="isLoading"
+                class="hover:!bg-tertiaryA11Yalt"
                 >{{ wording.button }}</Button
             >
         </div>

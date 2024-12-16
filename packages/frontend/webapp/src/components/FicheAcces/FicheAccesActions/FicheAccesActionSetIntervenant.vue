@@ -11,6 +11,7 @@
         variant="primaryOutline"
         :loading="isLoading"
         :disabled="disabled"
+        class="!border-2 !border-primary hover:!bg-primary"
         >Définir comme « Intervenant »
     </Button>
 </template>
@@ -28,3 +29,9 @@ const props = defineProps({
 const { user, isLoading, disabled } = toRefs(props);
 const userStore = useUserStore();
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

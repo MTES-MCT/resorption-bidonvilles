@@ -1,7 +1,7 @@
 <template>
     <router-link
         :to="to"
-        class="py-3 px-6 hover:bg-G100 border-t-2 border-b-2 border-transparent"
+        class="py-3 px-6 hover:!bg-G100 border-t-2 border-b-2 border-transparent"
         :class="[
             active ? 'border-b-primary text-primary' : '',
             focusClasses.ring,

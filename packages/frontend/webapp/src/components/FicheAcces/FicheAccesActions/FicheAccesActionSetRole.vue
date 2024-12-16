@@ -11,6 +11,7 @@
         :loading="isLoading"
         :disabled="disabled"
         @click="openChangeRoleModale"
+        class="!border-2 !border-primary hover:!bg-primary"
         >Changer le rôle</Button
     >
 </template>
@@ -48,3 +49,9 @@ function openChangeRoleModale() {
     });
 }
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

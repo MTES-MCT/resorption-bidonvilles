@@ -1,5 +1,5 @@
 <template>
-    <header class="shadow-md print:hidden">
+    <header class="shadow-md relative z-10 print:hidden">
         <ContentWrapper
             class="flex justify-between lg:py-3 items-start lg:items-center"
         >
