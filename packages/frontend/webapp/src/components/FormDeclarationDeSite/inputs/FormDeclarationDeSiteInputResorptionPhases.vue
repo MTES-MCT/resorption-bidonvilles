@@ -1,7 +1,35 @@
 <template>
+    <!-- <div>{{ phasesStartingResorption }}</div>
+    <div class="mt-4">{{ preparatory_phases_toward_resorption }}</div> -->
+
+    <template v-if="phasesStartingResorption.length > 0">
+        <div class="p-2 border-1 border-primary rounded text-sm mt-2 mb-4">
+            <div
+                class="bg-G200 p-2 rounded text-sm font-bold mt-2 mb-3"
+                v-if="phasesStartingResorption"
+            >
+                Phase initiale
+            </div>
+            <CheckableGroup
+                id="preparatory_phases_toward_resorption"
+                class="!mb-2"
+            >
+                <InputResorptionPhaseItem
+                    v-for="(item, index) in phasesStartingResorption"
+                    v-model="preparatory_phases_toward_resorption_value"
+                    :phase="item"
+                    :activePhases="activeValues"
+                    :index="index"
+                    :key="item.uid"
+                    :withBorder="false"
+                />
+            </CheckableGroup>
+        </div>
+    </template>
+
     <CheckableGroup id="preparatory_phases_toward_resorption">
         <InputResorptionPhaseItem
-            v-for="(item, index) in preparatory_phases_toward_resorption"
+            v-for="(item, index) in phasesNotStartingResorption"
             v-model="preparatory_phases_toward_resorption_value"
             :phase="item"
             :activePhases="activeValues"
@@ -13,6 +41,7 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { useFieldValue } from "vee-validate";
 import { CheckableGroup } from "@resorptionbidonvilles/ui";
 import InputResorptionPhaseItem from "./FormDeclarationDeSiteInputResorptionPhaseItem.vue";
@@ -28,7 +57,20 @@ const preparatory_phases_toward_resorption =
 const preparatory_phases_toward_resorption_value = useFieldValue(
     "preparatory_phases_toward_resorption"
 );
+
 const activeValues = useFieldValue(
     "active_preparatory_phases_toward_resorption"
+);
+
+const phasesStartingResorption = computed(() =>
+    preparatory_phases_toward_resorption.filter(
+        (phase) => phase.is_a_starting_phase
+    )
+);
+
+const phasesNotStartingResorption = computed(() =>
+    preparatory_phases_toward_resorption.filter(
+        (phase) => !phase.is_a_starting_phase
+    )
 );
 </script>

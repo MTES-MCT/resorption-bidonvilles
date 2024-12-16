@@ -1,13 +1,12 @@
 <template>
-    <div class="p-2 px-4 border-1 border-primary rounded w-full">
+    <div
+        class="p-2 px-4 w-full"
+        :class="{ 'border-1 border-primary rounded ': withBorder }"
+    >
         <div
-            class="bg-G200 p-2 rounded text-sm mt-2 mb-3"
-            v-if="phase.is_a_starting_phase"
+            class="grid grid-cols-2 gap-4 item-start"
+            :class="{ 'mt-2 mb-1': withBorder }"
         >
-            Phase initiale
-        </div>
-
-        <div class="grid grid-cols-2 gap-4 mt-2 mb-1 item-start">
             <Checkbox
                 :value="phase.uid"
                 :checked="isChecked"
@@ -55,9 +54,13 @@ const props = defineProps({
         required: true,
         default: undefined,
     },
+    withBorder: {
+        type: Boolean,
+        default: true,
+    },
 });
 
-const { phase, modelValue, activePhases } = props;
+const { phase, modelValue, activePhases, withBorder } = props;
 
 const isDisabled = computed(
     () => phase.is_a_starting_phase || canUpdate.value === false
