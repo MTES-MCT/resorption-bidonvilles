@@ -1,26 +1,19 @@
 <template>
-    <LayoutSearch
-        :allowFreeSearch="false"
-        searchTitle="Rechercher une commune, un département..."
-        searchPlaceholder="Nom d'une commune, d'un département..."
-        v-model:location="location"
-    >
-        <ContentWrapper>
-            <FilArianne :items="ariane" class="mb-8" />
+    <Layout :paddingTop="false">
+        <ContentWrapper class="pt-8">
+            <TableauDeBord />
         </ContentWrapper>
-        <TableauDeBord />
-    </LayoutSearch>
+    </Layout>
 </template>
 
 <script setup>
-import { onMounted, computed, onBeforeUnmount } from "vue";
+import { onMounted, onBeforeUnmount } from "vue";
 import { useDashboardStore } from "@/stores/dashboard.store";
 import { useDashboardActivitiesStore } from "@/stores/dashboard.activities.store";
-import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
-import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
+import Layout from "@/components/Layout/Layout.vue";
 import TableauDeBord from "@/components/TableauDeBord/TableauDeBord.vue";
 
-const ariane = [{ label: "Accueil", to: "/" }];
 const aMonthAgo = new Date();
 aMonthAgo.setDate(aMonthAgo.getDate() - 30);
 aMonthAgo.setHours(0);
@@ -30,26 +23,6 @@ aMonthAgo.setMilliseconds(0);
 
 const dashboardStore = useDashboardStore();
 const dashboardActivitiesStore = useDashboardActivitiesStore();
-
-const location = computed({
-    get() {
-        return {
-            search: dashboardStore.filters.search,
-            data: dashboardStore.filters.location,
-        };
-    },
-    set(newValue) {
-        if (!newValue) {
-            dashboardStore.filters.search = "";
-            dashboardStore.filters.location = null;
-        } else {
-            dashboardStore.filters.search = newValue?.search;
-            dashboardStore.filters.location = newValue?.data;
-        }
-
-        fetch();
-    },
-});
 
 onMounted(() => {
     if (dashboardStore.stats.data.length === 0) {

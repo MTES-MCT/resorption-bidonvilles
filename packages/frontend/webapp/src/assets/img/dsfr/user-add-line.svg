@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <style>
+		.fr-artwork-decorative {
+			fill: #ECECFF;
+		}
+		.fr-artwork-minor {
+			fill: #E1000F;
+		}
+		.fr-artwork-major {
+			fill: #000091;
+		}
+	</style>
+    <symbol id="artwork-minor">
+        <path d="m 35 35.6275 M 50 35 v 7.5 h 7.5 v 5 h -7.5 v 7.5 h -5 v -7.5 h -7.5 v -5 h 7.5 v -7.5 h 5 Z"/>
+    </symbol>
+    <symbol id="artwork-major">
+        <path d="M 35 35.6275 v 5.2275 A 15 15 90 0 0 15 55 l -5 -0.0025 a 20 20 90 0 1 25 -19.37 Z m -12.5 -33.1275 L 30 2.5 c 8.2875 0 15 6.7125 15 15 s -6.7125 15 -15 15 s -15 -6.7125 -15 -15 s 7.5 -15 15 -15 Z m 7.5 5 C 24.475 7.5 20 11.975 20 17.5 s 4.475 10 10 10 s 10 -4.475 10 -10 s -4.475 -10 -10 -10 Z"/>
+    </symbol>
+    <use class="fr-artwork-minor" href="#artwork-minor"/>
+  <use class="fr-artwork-major" href="#artwork-major"/>
+</svg>
