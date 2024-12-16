@@ -40,13 +40,6 @@ export default [
             return value;
         })
         .custom((value, { req }) => {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            if (value > today) {
-                throw new Error('La date de la fermeture du site ne peut pas être future');
-            }
-
             if (req.body.shantytown && req.body.shantytown.declaredAt) {
                 const declaredDate = new Date(req.body.shantytown.declaredAt * 1000);
                 declaredDate.setHours(0, 0, 0, 0);
