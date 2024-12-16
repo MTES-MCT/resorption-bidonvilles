@@ -7,6 +7,7 @@
                     v-for="filter in filterOptions"
                     :key="filter.id"
                     :title="filter.label"
+                    class="border-1 !border-primary rounded hover:bg-blue200"
                     :options="filter.options"
                     v-model="activitiesStore.filters.properties[filter.id]"
                 />
