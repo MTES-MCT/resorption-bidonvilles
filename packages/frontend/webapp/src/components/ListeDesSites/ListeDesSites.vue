@@ -48,8 +48,8 @@ const tabs = computed(() => {
             id: "inProgress",
             label:
                 townsStore.prefilteredTowns.inProgress.length <= 1
-                    ? "Site en cours de résorption"
-                    : "Sites en cours de résorption",
+                    ? "site en cours de résorption"
+                    : "sites en cours de résorption",
             total: townsStore.prefilteredTowns.inProgress.length,
         },
         {
