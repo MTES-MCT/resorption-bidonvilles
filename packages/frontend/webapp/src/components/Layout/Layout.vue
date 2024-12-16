@@ -20,7 +20,7 @@
         </div>
         <div
             v-if="$slots.banner"
-            class="bg-G200"
+            class="relative bg-G200"
             :class="paddingTop ? 'mb-12' : ''"
         >
             <slot name="banner" />
