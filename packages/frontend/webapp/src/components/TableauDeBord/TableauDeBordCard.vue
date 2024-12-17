@@ -1,13 +1,17 @@
 <template>
     <div
         :id="`card_${cardKey}`"
-        class="p-5 px-30 fr-card col-span-1 shadow-md rounded-sm"
+        class="p-5 !pt-16 fr-card row-span-2 shadow-md rounded-sm !gap-16"
+        :class="{ '!row-span-1': cardActions.length === 1 }"
     >
-        <div class="fr-card__body">
+        <div class="fr-card__body -mb-4">
             <div class="fr-card__content gap-2">
                 <DsfrTile
                     v-for="(action, index) in cardActions"
-                    :class="{ '!bg-blue100': action.mainAction }"
+                    :class="{
+                        '!bg-blue100': action.mainAction,
+                        'hover:!bg-blue200': action.mainAction,
+                    }"
                     :key="index"
                     :id="`card_${cardKey}`"
                     :icon="true"
@@ -35,7 +39,7 @@
             </div>
         </div>
         <div
-            class="flex flex-row gap-2 justify-left p-4 h-16 bg-slate-100 items-center"
+            class="flex flex-row gap-2 justify-left p-4 absolute !h-16 w-full bg-slate-100 items-center border-x border-t"
         >
             <Icon
                 :icon="cardIcon"

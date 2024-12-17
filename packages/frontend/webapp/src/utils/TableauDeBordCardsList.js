@@ -73,9 +73,10 @@ export default [
         ],
     },
     {
-        name: "Entraide",
-        icon: "comments",
+        name: "Annuaire",
+        icon: "users",
         permission: null,
+        options: { half: true },
         actions: [
             {
                 label: "Rechercher une personne ou une structure",
@@ -85,6 +86,14 @@ export default [
                 to: "/annuaire",
                 permission: null,
             },
+        ],
+    },
+    {
+        name: "Entraide",
+        icon: "comments",
+        permission: null,
+        options: { half: true },
+        actions: [
             {
                 label: "J'ai besoin d'aide",
                 description: "Je veux poser une question à la communauté.",
