@@ -19,7 +19,7 @@
                     :small="true"
                     :horizontal="true"
                     :title="action.label"
-                    :svgPath="action.icon"
+                    :imgSrc="action.icon"
                     :to="!action.clickMgmt ? action.to : ''"
                     :svgAttrs="svgAttrs"
                     @click.prevent="
