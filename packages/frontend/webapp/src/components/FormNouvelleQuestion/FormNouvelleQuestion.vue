@@ -153,8 +153,8 @@ const config = {
 };
 
 const otherTag = computed(() => {
-    const otherTag = question.value?.tags.find((tag) => tag.uid === "other");
-    const otherTagName = otherTag ? otherTag.name : "";
+    const tagFound = question.value?.tags.find((tag) => tag.uid === "other");
+    const otherTagName = tagFound ? tagFound.name : "";
     return otherTagName;
 });
 
