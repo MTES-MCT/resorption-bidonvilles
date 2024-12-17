@@ -6,9 +6,10 @@
   "hero": {
     "title": "Agir pour résorber les bidonvilles",
     "subtitle": "La plateforme numérique des acteurs de la résorption des bidonvilles en France",
-    "review": "sites résorbés en",
-    "moreThan": "Au total plus de",
-    "people": "personnes relogées"
+    "review": "sites résorbés",
+    "since2019": "depuis 2019",
+    "moreThan": "Plus de",
+    "people": "et 6500 personnes relogées"
   },
   "firstSection": {
     "features": {
