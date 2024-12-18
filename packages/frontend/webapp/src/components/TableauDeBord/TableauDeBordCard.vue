@@ -1,8 +1,8 @@
 <template>
     <div
         :id="`card_${cardKey}`"
-        class="p-5 !pt-16 fr-card row-span-2 shadow-md rounded-sm !gap-16"
-        :class="{ '!row-span-1': cardActions.length === 1 }"
+        class="p-5 !pt-16 fr-card shadow-md rounded-sm !gap-16"
+        :class="cardActions.length === 1 ? 'row-span-1' : 'row-span-2'"
     >
         <div class="fr-card__body -mb-4">
             <div class="fr-card__content gap-2">
