@@ -104,11 +104,16 @@ const handleSearchClick = (cardType) => {
 };
 
 const resetSearch = (to) => {
-    [useTownsStore, useActionsStore].map((store) => {
-        const activeStore = store();
+    let activeStore = null;
+    if (to === "/liste-des-sites") {
+        activeStore = useTownsStore();
+    } else if (to === "/liste-des-actions") {
+        activeStore = useActionsStore();
+    }
+    if (activeStore) {
         activeStore.filters.search = "";
         activeStore.filters.location = null;
-    });
+    }
 
     trackingMotomo(to);
 };
