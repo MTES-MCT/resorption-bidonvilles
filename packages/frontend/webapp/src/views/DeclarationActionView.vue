@@ -2,7 +2,11 @@
     <LayoutForm size="large">
         <template v-slot:title>Déclaration d'une action</template>
         <template v-slot:buttons>
-            <Button variant="primaryOutline" type="button" @click="back"
+            <Button
+                variant="primaryOutline"
+                type="button"
+                @click="back"
+                class="!border-2 !border-primary hover:!bg-primary"
                 >Annuler</Button
             >
             <Button @click="submit" :loading="form?.isSubmitting"
@@ -34,3 +38,9 @@ function submit(...args) {
     form.value.submit(...args);
 }
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>
