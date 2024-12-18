@@ -31,7 +31,7 @@
                             if (action.clickMgmt) {
                                 handleSearchClick(action.clickMgmt);
                             } else {
-                                trackingMotomo(action.to);
+                                resetSearch(action.to);
                             }
                         }
                     "
@@ -56,8 +56,11 @@
 import { toRefs } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 import TableauDeBordModale from "./TableauDeBordModale.vue";
-import { useModaleStore } from "@/stores/modale.store";
 import { trackEvent } from "@/helpers/matomo";
+
+import { useModaleStore } from "@/stores/modale.store";
+import { useTownsStore } from "@/stores/towns.store";
+import { useActionsStore } from "@/stores/actions.store";
 
 const props = defineProps({
     cardName: {
@@ -98,6 +101,16 @@ const handleSearchClick = (cardType) => {
         title: cardData.label,
         placeHolder: cardData.placeHolder,
     });
+};
+
+const resetSearch = (to) => {
+    [useTownsStore, useActionsStore].map((store) => {
+        const activeStore = store();
+        activeStore.filters.search = "";
+        activeStore.filters.location = null;
+    });
+
+    trackingMotomo(to);
 };
 
 const trackingMotomo = (to) => {
