@@ -112,13 +112,6 @@ const location = computed({
         };
     },
     set(newValue) {
-        console.log(
-            "Tracking even",
-            "Tableau de bord",
-            "Recherche",
-            `${type.value}: ${newValue.search}`
-        );
-
         trackEvent(
             "Tableau de bord",
             "Recherche",
