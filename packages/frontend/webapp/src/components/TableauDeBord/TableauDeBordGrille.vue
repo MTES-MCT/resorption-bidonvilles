@@ -8,7 +8,7 @@
             :cardActions="card.actions"
             :cardIcon="card.icon"
             :cardOptions="card.options || null"
-            class="grid grid-rows-subgrid grid-rows-1"
+            class="grid grid-rows-1"
         />
     </div>
 </template>
