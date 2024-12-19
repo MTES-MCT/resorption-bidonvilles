@@ -50,7 +50,7 @@
                         </p>
                     </div>
                     <div
-                        class="bg-G200 rounded-md px-2 flex flex-row flex-row items-center justify-center"
+                        class="bg-G200 rounded-md px-2 flex flex-row items-center justify-center"
                     >
                         <div class="flex flex-row items-end gap-1">
                             <div
@@ -120,7 +120,7 @@
                         </p>
                     </div>
                     <div
-                        class="bg-G200 rounded-md p-2 flex flex-row flex-row items-center justify-center"
+                        class="bg-G200 rounded-md p-2 flex flex-row items-center justify-center"
                     >
                         <div class="flex flex-row items-end gap-1">
                             <div

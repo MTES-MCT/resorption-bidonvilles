@@ -16,10 +16,6 @@ export default {
             type: String,
             required: true
         },
-        line3: {
-            type: String,
-            required: true
-        }
     }
 };
 </script>
