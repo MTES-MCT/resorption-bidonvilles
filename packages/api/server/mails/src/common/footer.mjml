@@ -15,7 +15,7 @@
             Agir pour résorber les bidonvilles
         </mj-text>
         <mj-text>
-            <a class="link" href="mailto:contact@resorption-bidonvilles.beta.gouv.fr">contact@resorption-bidonvilles.beta.gouv.fr</a>
+            <a class="link" href="mailto:contact@resorption-bidonvilles.dihal.gouv.fr">contact@resorption-bidonvilles.dihal.gouv.fr</a>
         </mj-text>
         <mj-text>
             Suivez toute l'actualité de la résorption des bidonvilles et retrouvez tous vos outils méthodologiques sur votre <a class="link" href="{{var:blogUrl}}">blog</a>
