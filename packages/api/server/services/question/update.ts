@@ -10,10 +10,10 @@ export default async (questionId: number, question: UpdateQuestionInput, author:
             {
                 question_id: questionId,
                 question: question.question,
+                details: question.details,
                 tags: question.tags,
                 other_tag: question.other_tag,
                 people_affected: question.people_affected,
-                details: question.details,
                 updated_by: author,
             },
         );

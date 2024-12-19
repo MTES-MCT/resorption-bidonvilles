@@ -1,5 +1,5 @@
 <template>
-    <TextInput name="other_tag" id="other_tag" :value="tag" maxlength="255" />
+    <TextInput name="other_tag" id="other_tag" :value="tag" maxlength="35" />
 </template>
 <script setup>
 import { TextInput } from "@resorptionbidonvilles/ui";

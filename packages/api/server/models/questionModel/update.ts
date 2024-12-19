@@ -13,6 +13,7 @@ export default async (data: UpdateQuestionInput): Promise<RawQuestion> => {
         await sequelize.query(
             `UPDATE questions SET
             details = :details,
+            people_affected = :people_affected,
             updated_at = NOW(),
             updated_by = :updated_by
         WHERE question_id = :question_id`,
@@ -22,6 +23,7 @@ export default async (data: UpdateQuestionInput): Promise<RawQuestion> => {
                 replacements: {
                     question_id: data.question_id,
                     details: data.details,
+                    people_affected: data.people_affected,
                     updated_by: data.updated_by,
                 },
             },
