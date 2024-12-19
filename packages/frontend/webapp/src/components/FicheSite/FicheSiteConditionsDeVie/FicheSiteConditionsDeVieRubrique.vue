@@ -33,7 +33,10 @@
                 @click="toggleCollapse"
             >
                 <div
-                    class="border-b-2 border-G200 py-2 font-bold text-primary flex items-center justify-between"
+                    :class="{
+                        'border-b-2 border-G200 ': !collapsed,
+                    }"
+                    class="py-2 font-bold text-primary flex items-center justify-between"
                 >
                     <div>
                         <span v-if="status.negative.length">
