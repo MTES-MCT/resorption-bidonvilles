@@ -1,7 +1,7 @@
 import shantytownResorptionService from '#server/services/shantytownResorption';
 
 const ERROR_RESPONSES = {
-    fetch_failed: { code: 500, message: 'Les étapes de lancement d\'une résoprtion n\'ont pas été trouvées...' },
+    fetch_failed: { code: 500, message: 'Les étapes de lancement d\'une résorption n\'ont pas été trouvées...' },
     insert_failed: { code: 500, message: 'Le lancement de la résorption du site n\'a pas pu être enregistré.' },
     commit_failed: { code: 500, message: 'Le lancement de la résorption du site a échoué.' },
     undefined: { code: 500, message: 'Une erreur inconnue est survenue.' },
