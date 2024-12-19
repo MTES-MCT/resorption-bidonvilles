@@ -318,22 +318,20 @@ function formatValuesForApi(v) {
     ];
 
     const completeAttachments = [];
-    if (v.insalubrity_attachments && v.insalubrity_attachments.length > 0) {
-        completeAttachments.push(
-            ...formatAttachments(
-                Array.from(v.insalubrity_attachments),
-                "insalubrity"
-            )
-        );
-    }
-    if (v.evacuation_attachments && v.evacuation_attachments.length > 0) {
-        completeAttachments.push(
-            ...formatAttachments(
-                Array.from(v.evacuation_attachments),
-                "evacuation"
-            )
-        );
-    }
+
+    const attachmentTypes = [
+        { key: "justice_rendered_attachments", type: "justice_rendered" },
+        { key: "insalubrity_attachments", type: "insalubrity" },
+        { key: "evacuation_attachments", type: "evacuation" },
+    ];
+
+    attachmentTypes.forEach(({ key, type }) => {
+        if (v[key] && v[key].length > 0) {
+            completeAttachments.push(
+                ...formatAttachments(Array.from(v[key]), type)
+            );
+        }
+    });
 
     return {
         ...Object.keys(validationSchema.value.fields).reduce((acc, key) => {

@@ -13,6 +13,16 @@
             >
                 {{ procedure.value }}
             </FicheSiteProceduresLigne>
+            <FicheSiteProceduresLigne
+                v-if="filteredDecreesAttachments('justice_rendered').length > 0"
+                icon="paperclip"
+                :label="labels.justice_rendered_decrees"
+            >
+                <FilePreviewGrid
+                    class="mb-3"
+                    :files="filteredDecreesAttachments('justice_rendered')"
+                />
+            </FicheSiteProceduresLigne>
         </FicheSiteProceduresRubrique>
 
         <FicheSiteProceduresRubrique>
