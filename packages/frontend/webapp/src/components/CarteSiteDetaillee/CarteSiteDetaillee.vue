@@ -24,20 +24,35 @@
                     :isHover="isHover"
                 />
                 <CarteSiteDetailleeName :shantytown="shantytown" />
-
                 <div
-                    class="flex flex-col space-y-5 lg:flex-none lg:grid cardGridTemplateColumns print:grid lg:gap-10 px-6 py-4"
+                    :class="[
+                        'flex flex-col',
+                        `space-y-${nbCol}`,
+                        'lg:flex-none lg:grid',
+                        `cardGridTemplateColumns${
+                            nbCol === '5' ? 'Five' : 'Four'
+                        }`,
+                        'print:grid lg:gap-10 px-6 py-4',
+                    ]"
                 >
                     <CarteSiteDetailleeFieldType :shantytown="shantytown" />
                     <CarteSiteDetailleeOrigins :shantytown="shantytown" />
-                    <CarteSiteDetailleeLivingConditions
-                        v-if="isOpen"
-                        :shantytown="shantytown"
-                    />
-                    <CarteSiteDetailleeClosingSolutions
-                        v-else
-                        :shantytown="shantytown"
-                    />
+                    <template v-if="displayPhasesPreparatoiresResorption">
+                        <CarteSiteDetailleePhasesPreparatoiresResorption
+                            v-if="isOpen"
+                            :shantytown="shantytown"
+                        />
+                    </template>
+                    <template v-else>
+                        <CarteSiteDetailleeLivingConditions
+                            v-if="isOpen"
+                            :shantytown="shantytown"
+                        />
+                        <CarteSiteDetailleeClosingSolutions
+                            v-else
+                            :shantytown="shantytown"
+                        />
+                    </template>
                     <CarteSiteDetailleeJustice
                         v-if="userStore.hasJusticePermission"
                         :shantytown="shantytown"
@@ -68,26 +83,52 @@ import CarteSiteDetailleeClosingSolutions from "./CarteSiteDetailleeClosingSolut
 import CarteSiteDetailleeJustice from "./CarteSiteDetailleeJustice.vue";
 import CarteSiteDetailleeActors from "./CarteSiteDetailleeActors.vue";
 import CarteSiteDetailleeFooter from "./CarteSiteDetailleeFooter.vue";
+import CarteSiteDetailleePhasesPreparatoiresResorption from "./CarteSiteDetailleePhasesPreparatoiresResorption.vue";
+import departementsInResoprtionPhases from "@/utils/departements_in_resorption_phases";
 
 const props = defineProps({
     shantytown: {
         type: Object,
     },
+    currentTab: {
+        type: String,
+    },
 });
 const userStore = useUserStore();
-const { shantytown } = toRefs(props);
+const { shantytown, currentTab } = toRefs(props);
 const isHover = ref(false);
 const isOpen = computed(() => {
     return shantytown.value.status === "open";
 });
+
+const displayPhasesPreparatoiresResorption = computed(() => {
+    return (
+        departementsInResoprtionPhases.includes(
+            parseInt(shantytown.value.departement.code, 10)
+        ) && currentTab.value === "inProgress"
+    );
+});
+
+// eslint-disable-next-line no-unused-vars
+const nbCol = computed(() => {
+    return userStore.hasJusticePermission ? "5" : "4";
+});
 </script>
 
 <style scoped lang="scss">
-.cardGridTemplateColumns {
-    grid-template-columns: 160px 208px 170px auto 200px;
+.cardGridTemplateColumnsFive {
+    grid-template-columns: 160px 208px 250px auto 200px;
 
     @media print {
         grid-template-columns: 160px 208px 164px 200px 236px;
+    }
+}
+
+.cardGridTemplateColumnsFour {
+    grid-template-columns: 160px 208px auto 200px;
+
+    @media print {
+        grid-template-columns: 160px 208px 164px 236px;
     }
 }
 

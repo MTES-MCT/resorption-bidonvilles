@@ -168,3 +168,7 @@ export function updateActorThemes(townId, userId, themes) {
         { themes }
     );
 }
+
+export function startResorption(townId) {
+    return axios.post(`/towns/${encodeURI(townId)}/resorption`);
+}
