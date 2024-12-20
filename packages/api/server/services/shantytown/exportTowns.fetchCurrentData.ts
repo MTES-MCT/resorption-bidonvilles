@@ -46,7 +46,7 @@ export default async (user: User, locations: Location[], closedTowns: boolean): 
 
     const towns = await shantytownModel.findAll(user, filters, 'export');
 
-    const clauseGroup = where().can(user).do('export', 'action');
+    const clauseGroup = where().can(user).do('read', 'action');
     const currentYear = moment(new Date()).format('YYYY');
     const townsWithFinancedActions = await actionModel.fetchFinancedActionsByYear(null, parseInt(currentYear, 10), clauseGroup);
     const transformedShantytowns = enrichShantytown(townsWithFinancedActions);
