@@ -52,6 +52,7 @@ export default async (
             properties.reinstallationComments,
             properties.hasAction,
             properties.resorptionTarget,
+            properties.hasAtLeastOneActionFinanced,
         ],
     };
 
