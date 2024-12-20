@@ -1196,7 +1196,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
 
         hasAtLeastOneActionFinanced: {
-            title: 'Le site fait-il l’objet d’une action financée l’année correspondant à la date d’extraction ?',
+            title: 'Le site fait-il l’objet d’une action financée l’année d’extraction ?',
             data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('hasAtLeastOneActionFinanced' in shantytown)) {
                     return 'non';
