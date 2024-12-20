@@ -16,7 +16,7 @@ export default async (user: User, locations: Location[], closedTowns: boolean, d
         closedTowns,
     );
 
-    const clauseGroup = where().can(user).do('export', 'action');
+    const clauseGroup = where().can(user).do('read', 'action');
     const passedYear = moment(date).format('YYYY');
     const townsWithFinancedActions = await actionModel.fetchFinancedActionsByYear(null, parseInt(passedYear, 10), clauseGroup);
     const transformedShantytowns = enrichShantytown(townsWithFinancedActions);
