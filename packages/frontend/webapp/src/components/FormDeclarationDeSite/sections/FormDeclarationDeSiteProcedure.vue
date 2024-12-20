@@ -62,7 +62,10 @@
         <Fieldset
             :legend="labels.evacuation_under_time_limit"
             showMandatoryStar
-            class="mb-12"
+            :class="[
+                { 'mb-4': values.evacuation_under_time_limit !== 1 },
+                { 'mb-12': values.evacuation_under_time_limit === 1 },
+            ]"
         >
             <InputCheckableGroup
                 name="evacuation_under_time_limit"
@@ -100,7 +103,10 @@
         <Fieldset
             :legend="labels.insalubrity_order"
             showMandatoryStar
-            class="mb-12"
+            :class="[
+                { 'mb-4': values.insalubrity_order !== 1 },
+                { 'mb-12': values.insalubrity_order === 1 },
+            ]"
         >
             <InputCheckableGroup
                 name="insalubrity_order"
