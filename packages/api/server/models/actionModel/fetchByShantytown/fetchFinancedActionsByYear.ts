@@ -23,6 +23,7 @@ export default (shantytownIds: number[] | null, annee_action: number, clauseGrou
         where.push('af."year" = :annee::integer');
     }
     where.push('af.amount > 0');
+    where.push('af.fk_action_finance_type = \'dedie\'');
 
     enrichWhere(where, replacements, clauseGroup);
 
