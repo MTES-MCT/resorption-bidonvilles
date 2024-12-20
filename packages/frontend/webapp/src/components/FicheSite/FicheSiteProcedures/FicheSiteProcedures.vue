@@ -329,8 +329,6 @@ const titleSupplements = computed(() => {
         {}
     );
 
-    console.log("proceduresStatuses : ", proceduresStatuses);
-
     const keysToCheck = [
         "ownerComplaint",
         "justiceProcedure",
