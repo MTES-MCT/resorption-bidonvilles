@@ -161,7 +161,7 @@ const realStatus = computed(() => {
     return s;
 });
 const colorClass = computed(() => {
-    return COLORS[realStatus.value] || "text-red";
+    return COLORS[realStatus.value] || "text-secondary";
 });
 const icon = computed(() => {
     return ICONS[realStatus.value] || "question";
