@@ -1,5 +1,5 @@
 <template>
-    <IndicateursLabel class="text-tertiary">Élémentaire</IndicateursLabel>
+    <IndicateursLabel class="text-tertiaryA11Y">Élémentaire</IndicateursLabel>
 </template>
 
 <script setup>

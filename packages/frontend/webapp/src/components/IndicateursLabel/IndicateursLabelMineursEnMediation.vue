@@ -1,7 +1,7 @@
 <template>
     <IndicateursLabel
         >Mineurs bénéficiant d'une<br />
-        <span class="text-tertiary">action de médiation</span>
+        <span class="text-tertiaryA11Y">action de médiation</span>
         (3 - 18 ans)</IndicateursLabel
     >
 </template>

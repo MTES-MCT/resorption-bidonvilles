@@ -56,7 +56,7 @@ const { tabs, activeTab } = toRefs(props);
 const classes = {
     primary: "text-primary",
     secondary: "text-secondary",
-    tertiary: "text-tertiary",
+    tertiary: "text-tertiaryA11Y",
     red: "text-red",
 };
 
