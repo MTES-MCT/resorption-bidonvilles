@@ -1,5 +1,5 @@
 <template>
-    <IndicateursLabel class="text-tertiary"
+    <IndicateursLabel class="text-tertiaryA11Y"
         >Lycée - formation professionnelle</IndicateursLabel
     >
 </template>
