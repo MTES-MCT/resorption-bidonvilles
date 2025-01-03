@@ -143,6 +143,21 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
                 topics ON topics.uid = action_topics.fk_topic
             GROUP BY
                 fk_action
+        ),
+        action_operators AS (
+            SELECT
+                fk_action,
+                array_agg(users.first_name || ' ' || 
+                        users.last_name|| ' [' || 
+                        organizations."name" || ']') AS operators
+            FROM
+                action_operators
+            LEFT JOIN
+                users ON users.user_id = action_operators.fk_user
+            LEFT JOIN
+                organizations ON organizations.organization_id = users.fk_organization
+            GROUP BY
+                fk_action
         )
     SELECT
         d.code AS "departement_code",
@@ -161,6 +176,7 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
             ELSE 'Non communiqué'
         END AS "location_type",
         topics,
+        operators,
         actions.goals,
         m.nombre_personnes,
         m.nombre_menages,
@@ -204,6 +220,8 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
         regions r ON r.code = d.fk_region 
     LEFT JOIN
         actiontopics at ON at.fk_action = actions.action_id
+    LEFT JOIN
+        action_operators ao ON ao.fk_action = actions.action_id
     LEFT JOIN
         metrics m ON m.action_id = actions.action_id 
     LEFT JOIN
