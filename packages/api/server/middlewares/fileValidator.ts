@@ -2,7 +2,6 @@
 /* eslint-disable no-param-reassign */
 import { NextFunction, Request, Response } from 'express';
 import { body } from 'express-validator';
-import fileType from 'file-type';
 import extensions from '#common/utils/allowed_file_extensions';
 import { MAX_FILE_SIZE } from '#common/utils/max_file_size';
 
@@ -15,9 +14,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
         const fn = body('attachments')
             .custom(async () => {
+                const { fileTypeFromBuffer } = await import('file-type');
                 // si un des fichiers a un type interdit : générer une erreur
                 const types = await Promise.all(
-                    files.map(f => fileType.fromBuffer(f.buffer)),
+                    files.map(f => fileTypeFromBuffer(f.buffer)),
                 );
 
                 const wrongTypeFiles = types
