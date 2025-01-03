@@ -11,7 +11,7 @@
             <mj-column>
                 <mj-text mj-class="pb-4">Bonjour,</mj-text>
                 <mj-text mj-class="pb-4">Suite à votre demande, votre accès à la plateforme vient d'être désactivé : vous ne pourrez donc plus vous y connecter mais les données que vous y avez saisies ont été conservées.</mj-text>
-                <mj-text mj-class="pb-4">Si vous n'êtes pas à l'origine de cette demande ou que vous souhaitez faire réactiver votre compte dans le futur, vous pouvez nous contacter à l'adresse <a class="link" href="mailto:contact@resorption-bidonvilles.beta.gouv.fr">contact@resorption-bidonvilles.beta.gouv.fr</a></mj-text>
+                <mj-text mj-class="pb-4">Si vous n'êtes pas à l'origine de cette demande ou que vous souhaitez faire réactiver votre compte dans le futur, vous pouvez nous contacter à l'adresse <a class="link" href="mailto:contact@resorption-bidonvilles.dihal.gouv.fr">contact@resorption-bidonvilles.dihal.gouv.fr</a></mj-text>
             </mj-column>
         </mj-section>
 
