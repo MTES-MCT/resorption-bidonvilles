@@ -36,14 +36,15 @@ function regrouperEtTrierParDepartement(data: ActionReportRow[]): DepartementObj
 
 const sectionTitles = [
     { name: 'ACTION', range: { from: 'A1', to: 'J1' } },
-    { name: 'INDICATEURS GÉNÉRAUX', range: { from: 'K1', to: 'N1' } },
-    { name: 'SANTÉ', range: { from: 'O1', to: 'O1' } },
-    { name: 'EMPLOI', range: { from: 'P1', to: 'Q1' } },
-    { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'R1', to: 'U1' } },
-    { name: 'SCOLARISATION', range: { from: 'V1', to: 'AB1' } },
-    { name: 'FINANCEMENT', range: { from: 'AC1', to: 'AN1' } },
-    { name: 'COMMENTAIRES', range: { from: 'AO1', to: 'AQ1' } },
-    { name: 'MISE À JOUR', range: { from: 'AR1', to: 'AR1' } },
+    { name: 'OPÉRATEURS', range: { from: 'K1', to: 'K1' } },
+    { name: 'INDICATEURS GÉNÉRAUX', range: { from: 'L1', to: 'O1' } },
+    { name: 'SANTÉ', range: { from: 'P1', to: 'P1' } },
+    { name: 'EMPLOI', range: { from: 'Q1', to: 'R1' } },
+    { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'S1', to: 'V1' } },
+    { name: 'SCOLARISATION', range: { from: 'W1', to: 'AC1' } },
+    { name: 'FINANCEMENT', range: { from: 'AD1', to: 'AO1' } },
+    { name: 'COMMENTAIRES', range: { from: 'AP1', to: 'AR1' } },
+    { name: 'MISE À JOUR', range: { from: 'AS1', to: 'AS1' } },
 ];
 
 const headers = [
@@ -57,6 +58,7 @@ const headers = [
     { label: 'Lieu', width: '4' },
     { label: 'Champs d\'intervention', width: '7' },
     { label: 'Objectifs de l\'action', width: '10' },
+    { label: 'Opérateurs', width: '7' },
     { label: 'Nombre total de personnes concernées par l\'action', width: '5' },
     { label: 'Nombre de ménages', width: '5' },
     { label: 'Nombre de femmes', width: '5' },
@@ -161,6 +163,7 @@ export default (data: ActionReportRow[]) => {
 
         // Ajouter les lignes de données
         donneeParDepartement.data.forEach((item: ActionItem) => {
+            // Traiter les opérateurs (nom, prénom, organisation)
             worksheet.addRow([
                 item.departement_name,
                 item.region_code,
@@ -172,6 +175,7 @@ export default (data: ActionReportRow[]) => {
                 item.location_type,
                 item.topics.join(', '),
                 item.goals,
+                item.operators.join('\n'),
                 item.nombre_personnes,
                 item.nombre_menages,
                 item.nombre_femmes,

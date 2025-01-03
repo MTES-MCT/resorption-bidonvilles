@@ -13,6 +13,7 @@ export type ActionItem = {
     ended_at: string | null,
     location_type: string,
     topics: string[],
+    operators: string[],
     goals: string,
     nombre_personnes: number | null,
     nombre_menages: number | null,
