@@ -35,6 +35,6 @@ export default async (user: AuthUser, year: string) => {
         throw new ServiceError('fetch_failed', new Error('Il n\'y a aucune action à exporter'));
     }
 
-    const buffer = await generateExportFile(user, data);
+    const buffer = await generateExportFile(data);
     return buffer;
 };
