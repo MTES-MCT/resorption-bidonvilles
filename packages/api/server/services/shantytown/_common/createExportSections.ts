@@ -51,7 +51,8 @@ export default async (
             properties.isReinstallation,
             properties.reinstallationComments,
             properties.hasAction,
-            properties.resorptionTarget,
+            properties.hasAtLeastOneActionFinanced,
+            user.isAllowedTo('read', 'action') ? properties.resorptionTarget : undefined,
         ],
     };
 

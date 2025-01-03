@@ -199,4 +199,9 @@ export interface EnrichedAction extends GenericAction {
     comments: ActionEnrichedComment[],
 }
 
+export type FinancedShantytownAction = {
+    shantytown_id: number,
+    hasAtLeastOneActionFinanced: boolean,
+};
+
 export default Action;

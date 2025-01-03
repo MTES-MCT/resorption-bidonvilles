@@ -167,4 +167,8 @@ export type ShantytownAttachmentObject = {
     decreeType: string;
 };
 
+export type ShantytownWithFinancedAction = Shantytown & {
+    hasAtLeastOneActionFinanced: boolean,
+};
+
 export type Shantytown = BaseShantytown | ShantytownWithJustice | ShantytownWithOwner | (ShantytownWithJustice & ShantytownWithOwner);
