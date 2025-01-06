@@ -2040,7 +2040,7 @@ export default mode => ([
 
             return value;
         })
-        .isArray().bail().withMessage('Le champ "active_preparatory_phases_toward_resorption" est invalide')
+        .isArray().bail().withMessage('La valeur des "Phases préparatoires à la résorption" est invalide')
         .custom(async (value, { req }) => {
             req.body.active_preparatory_phases_toward_resorption = value;
             return true;
