@@ -1,8 +1,8 @@
 <template>
-    <li class="flex items-center">
+    <li class="flex items-center mb-1">
         <span
             :class="[
-                'flex rounded-full text-xs border-2 mr-3 mb-1 h-6 w-6 items-center justify-center',
+                'flex rounded-full text-xs border-2 mr-3 mb-0 h-6 w-6 items-center justify-center',
                 colorClass,
             ]"
             style="padding: 0.2em"
