@@ -6,7 +6,6 @@
             :key="phase.preparatoryPhaseId"
             class="flex items-center"
         >
-            <!-- <span>{{ phase.preparatoryPhaseName }}</span> -->
             <span
                 :class="[
                     'flex rounded-full text-xs mr-1 h-6 w-6 items-center justify-center text-primary',
