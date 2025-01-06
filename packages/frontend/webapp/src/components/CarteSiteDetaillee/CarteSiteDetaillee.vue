@@ -45,10 +45,7 @@
                         v-if="userStore.hasJusticePermission"
                         :shantytown="shantytown"
                     />
-                    <CarteSiteDetailleeActors
-                        :shantytown="shantytown"
-                        class="border-2 border-red"
-                    />
+                    <CarteSiteDetailleeActors :shantytown="shantytown" />
                 </div>
 
                 <CarteSiteDetailleeFooter
