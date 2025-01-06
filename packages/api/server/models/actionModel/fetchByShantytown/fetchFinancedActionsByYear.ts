@@ -17,7 +17,7 @@ export default (shantytownIds: number[] | null, annee_action: number, clauseGrou
         annee: annee_action,
     };
     if (shantytownIds !== null) {
-        where.push('as2.fk_shantytown IN (:shantytownIds)');
+        where.push('ash.fk_shantytown IN (:shantytownIds)');
     }
     if (annee_action !== null) {
         where.push('af."year" = :annee::integer');
