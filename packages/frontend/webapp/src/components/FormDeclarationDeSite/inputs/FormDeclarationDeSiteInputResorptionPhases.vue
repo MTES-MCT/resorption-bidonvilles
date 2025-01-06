@@ -1,7 +1,4 @@
 <template>
-    <!-- <div>{{ phasesStartingResorption }}</div>
-    <div class="mt-4">{{ preparatory_phases_toward_resorption }}</div> -->
-
     <template v-if="phasesStartingResorption.length > 0">
         <div class="p-2 border-1 border-primary rounded text-sm mt-2 mb-4">
             <div
