@@ -1,9 +1,6 @@
 import { ActionSelectRow } from '#server/models/actionModel/fetchByShantytown/fetchFinancedActionsByYear';
+import { FinancedShantytownAction } from '#root/types/resources/Action.d';
 
-type FinancedShantytownAction = {
-    shantytown_id: number,
-    hasAtLeastOneActionFinanced: boolean,
-};
 
 export default (actions: ActionSelectRow[]): FinancedShantytownAction[] => {
     const shantytownMap = actions.reduce((acc, action) => {
