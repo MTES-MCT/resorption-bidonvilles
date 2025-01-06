@@ -146,6 +146,8 @@ export const useTownsStore = defineStore("towns", () => {
         filters.properties.value.population = [];
         filters.properties.value.fieldType = [];
         filters.properties.value.justice = [];
+        filters.properties.value.administrativeOrder = [];
+        filters.properties.value.rhi = [];
         filters.properties.value.origin = [];
         filters.properties.value.target = [];
         // Filtres spécifiques aux sites ouverts

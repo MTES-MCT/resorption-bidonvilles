@@ -151,4 +151,28 @@ export default {
             { value: "unknown", label: "Raison inconnue" },
         ],
     },
+    administrativeOrder: {
+        label: "Procédure administrative",
+        id: "administrativeOrder",
+        options: [
+            { value: "unknown", label: "Inconnu" },
+            { value: "none", label: "Aucune" },
+            {
+                value: "evacuationUnderTimeLimit",
+                label: "Procédure en cours",
+            },
+        ],
+    },
+    rhi: {
+        label: "Opération RHI",
+        id: "rhi",
+        options: [
+            { value: "unknown", label: "Inconnu" },
+            { value: "none", label: "Aucune" },
+            {
+                value: "insalubrityOrder",
+                label: "Procédure en cours",
+            },
+        ],
+    },
 };

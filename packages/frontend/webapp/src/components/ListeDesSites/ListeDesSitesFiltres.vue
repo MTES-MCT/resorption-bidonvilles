@@ -85,6 +85,10 @@ const groupedFilters = {
             filters.actors,
             filters.heatwave,
             ...(userStore.hasJusticePermission ? [filters.justice] : []),
+            ...(userStore.hasJusticePermission
+                ? [filters.administrativeOrder]
+                : []),
+            ...(userStore.hasJusticePermission ? [filters.rhi] : []),
         ],
     },
     close: {
@@ -94,6 +98,10 @@ const groupedFilters = {
             filters.origin,
             filters.closingReason,
             ...(userStore.hasJusticePermission ? [filters.justice] : []),
+            ...(userStore.hasJusticePermission
+                ? [filters.administrativeOrder]
+                : []),
+            ...(userStore.hasJusticePermission ? [filters.rhi] : []),
             filters.fieldType,
             filters.population,
         ],
