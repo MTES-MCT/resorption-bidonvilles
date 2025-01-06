@@ -200,7 +200,9 @@ async function startResorption() {
     }
 
     if (
-        !confirm("Êtes-vous sûr(e) de vouloir démarrer la résorption ce site ?")
+        !confirm(
+            "Êtes-vous sûr(e) de vouloir démarrer la résorption de ce site ?"
+        )
     ) {
         return;
     }
