@@ -3,7 +3,7 @@
         v-if="!shantytown.justiceStatuses || !shantytown.justiceStatuses.length"
         class="pl-5 text-G700"
     >
-        <div class="mb-0 font-bold -ml-5 whitespace-nowrap">Procédures</div>
+        <div class="mb-1 font-bold -ml-5 whitespace-nowrap">Procédures</div>
         <Icon icon="ban" />&nbsp;
         <template
             v-if="
@@ -22,7 +22,7 @@
             >Statut des procédures judiciaires ou administratives</span
         >
         <ul class="pl-5">
-            <div class="mb-0 font-bold -ml-5 whitespace-nowrap">Procédures</div>
+            <div class="mb-1 font-bold -ml-5 whitespace-nowrap">Procédures</div>
             <li
                 class="flex items-center"
                 v-for="status in shantytown.justiceStatuses"
