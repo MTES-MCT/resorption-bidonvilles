@@ -29,6 +29,10 @@ export default {
         id: "origin",
         options: [
             {
+                value: "0",
+                label: "Exclusivement UE",
+            },
+            {
                 value: "1",
                 label: "Français",
             },
