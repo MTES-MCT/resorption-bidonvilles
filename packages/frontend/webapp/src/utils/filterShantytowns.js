@@ -144,6 +144,14 @@ function checkOrigin(shantytown, filters) {
         return true;
     }
 
+    // Cas spécifique où le site n'est occupé que par des ressortissants européens
+    if (filters.includes("0")) {
+        return (
+            shantytown.socialOrigins.length === 1 &&
+            shantytown.socialOrigins[0].id.toString() === "2"
+        );
+    }
+
     const origins = shantytown.socialOrigins.map((origin) => origin.id);
 
     const filteredArray = origins.filter((value) =>
