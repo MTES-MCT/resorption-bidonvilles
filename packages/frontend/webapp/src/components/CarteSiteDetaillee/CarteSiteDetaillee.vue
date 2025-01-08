@@ -36,7 +36,7 @@
                     ]"
                 >
                     <CarteSiteDetailleeFieldType :shantytown="shantytown" />
-                    <CarteSiteDetailleeOrigins 
+                    <CarteSiteDetailleeOrigins
                         :shantytown="shantytown"
                         class="pl-5"
                     />
