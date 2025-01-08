@@ -21,8 +21,8 @@
         </template>
         <template v-slot:menu>
             <Menu containerClasses="py-0">
-                <div v-for="option in options" :key="option.id"
-                    class="flex items-center whitespace-nowrap text-sm menuWidth">
+                <div v-for="option in options" :key="option.value"
+                    :class="['flex', 'items-center', 'whitespace-nowrap', 'text-sm', 'menuWidth', { 'border-b-1': option.displayBottomBorder }]">
                     <Checkbox :disabled="disabled" v-model="checked[option.value]" variant="invisible" :label="option.label"
                         direction="col">
                     </Checkbox>
