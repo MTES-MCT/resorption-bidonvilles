@@ -31,6 +31,7 @@ export default {
             {
                 value: "0",
                 label: "Exclusivement UE",
+                displayBottomBorder: true,
             },
             {
                 value: "1",
