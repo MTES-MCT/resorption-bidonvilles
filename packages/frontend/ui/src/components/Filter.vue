@@ -28,8 +28,12 @@
                     </Checkbox>
                 </div>
 
-                <div class="px-1 py-1 border-t-1">
-                    <Button size="sm" variant="primaryText" @click="clear" class="hover:underline">
+                <div class="border-t-1">
+                    <Button 
+                        size="sm"
+                        variant="custom" 
+                        class="flex items-center whitespace-nowrap text-sm menuWidth hover:bg-blue200 hover:text-primary text-primary focusClasses.ring"
+                        @click="clear">
                         Effacer
                     </Button>
                 </div>
