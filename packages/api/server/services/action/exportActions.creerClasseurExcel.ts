@@ -2,9 +2,12 @@
 import ExcelJS from 'exceljs';
 import departementsOrdonnes from '#server/utils/departementsOrdonnes';
 import columnToNumber from '#server/utils/excelUtils';
-import { DepartementObject, ActionItem } from './exportActions.d';
-import { ActionReportRow } from '#root/types/resources/Action.d';
+import { ActionReportRow, ActionItem } from '#root/types/resources/Action.d';
 
+type DepartementObject = {
+    departement: string,
+    data: []
+};
 
 /**
  * Regroupe et trie les données par département
