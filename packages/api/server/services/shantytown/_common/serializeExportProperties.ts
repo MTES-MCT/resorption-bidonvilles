@@ -5,7 +5,7 @@ import config from '#server/config';
 import electricityAccessTypes from '#server/models/electricityAccessTypesModel/_common/electricityAccessTypes';
 import waterAccessTypes from '#server/models/_common/waterAccessTypes';
 import toiletTypes from '#server/models/shantytownToiletTypesModel/_common/toiletTypes';
-import { Shantytown } from '#root/types/resources/Shantytown.d';
+import { ShantytownWithFinancedAction } from '#root/types/resources/Shantytown.d';
 import electricityAccessStatusLabels from './livingConditionsStatusLabels/electricityAccessStatusLabels';
 import waterAccessStatusLabels from './livingConditionsStatusLabels/waterAccessStatusLabels';
 import sanitaryAccessStatusLabels from './livingConditionsStatusLabels/sanitaryAccessStatusLabels';
@@ -19,12 +19,12 @@ const { webappUrl } = config;
 
 export type ShantytownExportListProperty = {
     title: string,
-    data: (shantytown: Shantytown) => string | number | Date | null,
+    data: (shantytown: ShantytownWithFinancedAction) => string | number | Date | null,
     width: number,
     align?: 'left' | 'center' | 'right',
     bold?: boolean,
     sum?: boolean,
-    link?: (shantytown: Shantytown) => string,
+    link?: (shantytown: ShantytownWithFinancedAction) => string,
 };
 
 export default (closingSolutions: ClosingSolution[]) => {
@@ -47,34 +47,34 @@ export default (closingSolutions: ClosingSolution[]) => {
     const properties: { [key: string]: ShantytownExportListProperty } = {
         departement: {
             title: 'Département',
-            data: ({ departement }: Shantytown) => `${departement.code} - ${departement.name}`,
+            data: ({ departement }: ShantytownWithFinancedAction) => `${departement.code} - ${departement.name}`,
             align: 'left',
             width: COLUMN_WIDTHS.LARGE,
         },
         city: {
             title: 'Commune',
-            data: ({ city }: Shantytown) => city.name,
+            data: ({ city }: ShantytownWithFinancedAction) => city.name,
             bold: true,
             align: 'left',
             width: COLUMN_WIDTHS.MEDIUM,
         },
         citycode: {
             title: 'Code INSEE',
-            data: ({ city }: Shantytown) => city.code,
+            data: ({ city }: ShantytownWithFinancedAction) => city.code,
             bold: true,
             align: 'left',
             width: COLUMN_WIDTHS.SMALL,
         },
         epci: {
             title: 'EPCI',
-            data: ({ epci }: Shantytown) => epci.name,
+            data: ({ epci }: ShantytownWithFinancedAction) => epci.name,
             bold: true,
             align: 'left',
             width: COLUMN_WIDTHS.MEDIUM,
         },
         address: {
             title: 'Adresse',
-            data: ({ addressSimple }: Shantytown) => addressSimple,
+            data: ({ addressSimple }: ShantytownWithFinancedAction) => addressSimple,
             link({ id }) {
                 return `${webappUrl}/site/${id}`;
             },
@@ -84,72 +84,72 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         addressDetails: {
             title: 'Informations d\'accès',
-            data: ({ addressDetails }: Shantytown) => addressDetails,
+            data: ({ addressDetails }: ShantytownWithFinancedAction) => addressDetails,
             width: COLUMN_WIDTHS.LARGE,
         },
         latitude: {
             title: 'Latitude',
-            data: ({ latitude }: Shantytown) => `${latitude}`,
+            data: ({ latitude }: ShantytownWithFinancedAction) => `${latitude}`,
             width: COLUMN_WIDTHS.SMALL,
         },
         longitude: {
             title: 'Longitude',
-            data: ({ longitude }: Shantytown) => `${longitude}`,
+            data: ({ longitude }: ShantytownWithFinancedAction) => `${longitude}`,
             width: COLUMN_WIDTHS.SMALL,
         },
         name: {
             title: 'Appellation du site',
-            data: ({ name }: Shantytown) => name,
+            data: ({ name }: ShantytownWithFinancedAction) => name,
             width: COLUMN_WIDTHS.LARGE,
         },
         fieldType: {
             title: 'Type de site',
-            data: ({ fieldType }: Shantytown) => fieldType.label,
+            data: ({ fieldType }: ShantytownWithFinancedAction) => fieldType.label,
             width: COLUMN_WIDTHS.SMALL,
         },
         builtAt: {
             title: 'Date d\'installation',
-            data: ({ builtAt }: Shantytown) => (builtAt ? new Date(builtAt * 1000) : ''),
+            data: ({ builtAt }: ShantytownWithFinancedAction) => (builtAt ? new Date(builtAt * 1000) : ''),
             width: COLUMN_WIDTHS.SMALL,
         },
         declaredAt: {
             title: 'Date de signalement',
-            data: ({ declaredAt }: Shantytown) => (declaredAt ? new Date(declaredAt * 1000) : ''),
+            data: ({ declaredAt }: ShantytownWithFinancedAction) => (declaredAt ? new Date(declaredAt * 1000) : ''),
             width: COLUMN_WIDTHS.SMALL,
         },
         closedAt: {
             title: 'Date de fermeture',
-            data: ({ closedAt }: Shantytown) => (closedAt ? new Date(closedAt * 1000) : ''),
+            data: ({ closedAt }: ShantytownWithFinancedAction) => (closedAt ? new Date(closedAt * 1000) : ''),
             width: COLUMN_WIDTHS.SMALL,
         },
         closedWithSolutions: {
             title: 'Résorbé',
-            data: ({ closedWithSolutions }: Shantytown) => (closedWithSolutions === 'yes' ? 'Oui' : 'Non'),
+            data: ({ closedWithSolutions }: ShantytownWithFinancedAction) => (closedWithSolutions === 'yes' ? 'Oui' : 'Non'),
             width: COLUMN_WIDTHS.XSMALL,
         },
         status: {
             title: 'Cause de la fermeture',
-            data: ({ status }: Shantytown) => STATUS_DETAILS[status],
+            data: ({ status }: ShantytownWithFinancedAction) => STATUS_DETAILS[status],
             width: COLUMN_WIDTHS.SMALL,
         },
         closingContext: {
             title: 'Contexte de la fermeture',
-            data: ({ closingContext }: Shantytown) => closingContext,
+            data: ({ closingContext }: ShantytownWithFinancedAction) => closingContext,
             width: COLUMN_WIDTHS.SMALL,
         },
         ownerType: {
             title: 'Type de propriétaire',
-            data: ({ ownerType }: Shantytown) => ownerType.label,
+            data: ({ ownerType }: ShantytownWithFinancedAction) => ownerType.label,
             width: COLUMN_WIDTHS.SMALL,
         },
         owner: {
             title: 'Identité du propriétaire',
-            data: (shantytown: Shantytown) => ('owner' in shantytown ? shantytown.owner : null),
+            data: (shantytown: ShantytownWithFinancedAction) => ('owner' in shantytown ? shantytown.owner : null),
             width: COLUMN_WIDTHS.MEDIUM,
         },
         isReinstallation: {
             title: 'S\'agit-il d\'une réinstallation ?',
-            data: ({ isReinstallation }: Shantytown) => {
+            data: ({ isReinstallation }: ShantytownWithFinancedAction) => {
                 if (isReinstallation === true) {
                     return 'oui';
                 }
@@ -164,101 +164,101 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         reinstallationComments: {
             title: 'Précisions sur la réinstallation',
-            data: ({ reinstallationComments }: Shantytown) => reinstallationComments,
+            data: ({ reinstallationComments }: ShantytownWithFinancedAction) => reinstallationComments,
             width: COLUMN_WIDTHS.LARGE,
         },
         populationTotal: {
             title: 'Nombre de personnes',
-            data: ({ populationTotal }: Shantytown) => populationTotal,
+            data: ({ populationTotal }: ShantytownWithFinancedAction) => populationTotal,
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
         populationCouples: {
             title: 'Nombre de ménages',
-            data: ({ populationCouples }: Shantytown) => populationCouples,
+            data: ({ populationCouples }: ShantytownWithFinancedAction) => populationCouples,
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
         populationMinors: {
             title: 'Nombre de mineurs',
-            data: ({ populationMinors }: Shantytown) => populationMinors,
+            data: ({ populationMinors }: ShantytownWithFinancedAction) => populationMinors,
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
         populationMinors0To3: {
             title: '0 à 3 ans',
-            data: ({ populationMinors0To3 }: Shantytown) => populationMinors0To3,
+            data: ({ populationMinors0To3 }: ShantytownWithFinancedAction) => populationMinors0To3,
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
         populationMinors3To6: {
             title: '3 à 6 ans',
-            data: ({ populationMinors3To6 }: Shantytown) => populationMinors3To6,
+            data: ({ populationMinors3To6 }: ShantytownWithFinancedAction) => populationMinors3To6,
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
         populationMinors6To12: {
             title: '6 à 12 ans',
-            data: ({ populationMinors6To12 }: Shantytown) => populationMinors6To12,
+            data: ({ populationMinors6To12 }: ShantytownWithFinancedAction) => populationMinors6To12,
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
         populationMinors12To16: {
             title: '12 à 16 ans',
-            data: ({ populationMinors12To16 }: Shantytown) => populationMinors12To16,
+            data: ({ populationMinors12To16 }: ShantytownWithFinancedAction) => populationMinors12To16,
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
         populationMinors16To18: {
             title: '16 à 18 ans',
-            data: ({ populationMinors16To18 }: Shantytown) => populationMinors16To18,
+            data: ({ populationMinors16To18 }: ShantytownWithFinancedAction) => populationMinors16To18,
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
         minorsInSchool: {
             title: 'Enfants inscrits dans un établissement scolaire',
-            data: ({ minorsInSchool }: Shantytown) => minorsInSchool,
+            data: ({ minorsInSchool }: ShantytownWithFinancedAction) => minorsInSchool,
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
         caravans: {
             title: 'Nombre de caravanes',
-            data: ({ caravans }: Shantytown) => caravans,
+            data: ({ caravans }: ShantytownWithFinancedAction) => caravans,
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
         huts: {
             title: 'Nombre de cabanes',
-            data: ({ huts }: Shantytown) => huts,
+            data: ({ huts }: ShantytownWithFinancedAction) => huts,
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
         tents: {
             title: 'Nombre de tentes',
-            data: ({ tents }: Shantytown) => tents,
+            data: ({ tents }: ShantytownWithFinancedAction) => tents,
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
         cars: {
             title: 'Nombre de voitures dortoir',
-            data: ({ cars }: Shantytown) => cars,
+            data: ({ cars }: ShantytownWithFinancedAction) => cars,
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
         mattresses: {
             title: 'Nombre de matelas',
-            data: ({ mattresses }: Shantytown) => mattresses,
+            data: ({ mattresses }: ShantytownWithFinancedAction) => mattresses,
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
         socialOrigins: {
             title: 'Origines',
-            data: ({ socialOrigins }: Shantytown) => (socialOrigins.length > 0 ? socialOrigins.map(({ label }) => label).join(';') : null),
+            data: ({ socialOrigins }: ShantytownWithFinancedAction) => (socialOrigins.length > 0 ? socialOrigins.map(({ label }) => label).join(';') : null),
             width: COLUMN_WIDTHS.MEDIUM,
         },
         heatwaveStatus: {
             title: 'Alerte Canicule',
-            data: ({ heatwaveStatus }: Shantytown) => {
+            data: ({ heatwaveStatus }: ShantytownWithFinancedAction) => {
                 if (heatwaveStatus === true) {
                     return 'oui';
                 }
@@ -273,7 +273,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         electricityAccessStatus: {
             title: "Statut de l'accès à l'électricité",
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 const data = electricityAccessStatusLabels[shantytown.livingConditions.electricity.status.status] || 'inconnu';
                 return data;
             },
@@ -282,7 +282,7 @@ export default (closingSolutions: ClosingSolution[]) => {
 
         electricityAccess: {
             title: 'Y a-t-il présence d’une installation électrique ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -302,7 +302,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         electricityAccessTypes: {
             title: "Quelle est la source de l'accès à l'électricité ?",
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -318,7 +318,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         electricityAccessIsUnequal: {
             title: "Des inégalités d’accès à l'électricité ont-elles été constatées ?",
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -338,7 +338,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         waterAccessStatus: {
             title: "Statut de l'accès à l'eau",
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 const data = waterAccessStatusLabels[shantytown.livingConditions.water.status.status] || 'inconnu';
                 return data;
             },
@@ -346,7 +346,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         waterAccessType: {
             title: "Comment les habitants ont-ils accès à l'eau ?",
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -362,7 +362,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         waterAccessTypeDetails: {
             title: "Précisions concernant les modalités d'accès à l'eau",
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -373,7 +373,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         waterAccessIsPublic: {
             title: 'Est-ce un point d\'eau sur la voie publique ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -393,7 +393,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         waterAccessIsContinuous: {
             title: "L'accès à l'eau est-il continu ?",
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -413,7 +413,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         waterAccessIsContinuousDetails: {
             title: "Précisions concernant la discontinuité de l'accès à l'eau",
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -424,7 +424,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         waterAccessIsLocal: {
             title: "Accès à l'eau sur site ?",
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -444,7 +444,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         waterAccessIsClose: {
             title: 'Distance point d’eau / habitation la plus éloignée ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -464,7 +464,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         waterAccessIsUnequal: {
             title: 'Des inégalités d\'accès à l\'eau ont-elles été constatées ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -484,7 +484,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         waterAccessIsUnequalDetails: {
             title: 'Précisions concernant les inégalités d\'accès à l\'eau',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -495,7 +495,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         waterAccessHasStagnantWater: {
             title: 'Existe-t-il des eaux stagnantes autour du point de distribution ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -515,7 +515,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         waterAccessComments: {
             title: 'Informations complémentaires sur l\'accès à l\'eau',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -526,7 +526,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         sanitaryAccessStatus: {
             title: 'Statut de l\'accès aux sanitaires',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 const data = sanitaryAccessStatusLabels[shantytown.livingConditions.sanitary.status.status] || 'inconnu';
                 return data;
             },
@@ -534,7 +534,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         sanitaryOpenAirDefecation: {
             title: 'Constate-t-on des marques de défécation à l’air libre ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -554,7 +554,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         sanitaryWorkingToilets: {
             title: 'Présence de toilettes fonctionnelles ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -574,7 +574,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         sanitaryToiletTypes: {
             title: 'Quels sont les types de toilettes installées ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -590,7 +590,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         sanitaryToiletsAreInside: {
             title: 'Les toilettes sont-elles à l’intérieur du site ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -610,7 +610,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         sanitaryToiletsAreLighted: {
             title: 'Ces toilettes sont-elles éclairées et verrouillables de l’intérieur ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -630,7 +630,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         sanitaryHandWashing: {
             title: 'Y a-t-il un point de lavage des mains à proximité des toilettes ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -650,7 +650,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         trashEvacuationStatus: {
             title: 'Statut de l\'évacuation des déchets',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 const data = trashEvacuationStatusLabels[shantytown.livingConditions.trash.status.status] || 'inconnu';
                 return data;
             },
@@ -658,7 +658,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         trashIsPiling: {
             title: 'Constate-t-on une accumulation de déchets type ordures ménagères sur le site ou aux abords ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -678,7 +678,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         trashEvacuationIsClose: {
             title: 'Y a-t-il des dispositifs de ramassage des ordures ménagères à proximité immédiate ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -698,7 +698,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         trashEvacuationIsSafe: {
             title: 'Les dispositifs de ramassages des ordures sont-ils en bon état ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -718,7 +718,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         trashEvacuationIsRegular: {
             title: 'La collecte des poubelles est-elle réalisée de manière régulière ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -738,7 +738,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         trashBulkyIsPiling: {
             title: 'Constate-t-on une accumulation de déchets type encombrants ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -758,7 +758,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         pestAnimalsStatus: {
             title: 'Statut de la présence de nuisibles',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return 'inconnu';
                 }
@@ -770,7 +770,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         pestAnimalsPresence: {
             title: 'Y a-t-il des nuisibles à proximité ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -794,7 +794,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         pestAnimalsDetails: {
             title: 'Précision concernant les nuisibles',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -805,7 +805,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         firePreventionStatus: {
             title: 'Statut du diagnostic prévention incendie',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return 'inconnu';
                 }
@@ -818,7 +818,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         firePreventionDiagnostic: {
             title: 'Est-ce qu’un diagnostic prévention incendie par le SDIS a été réalisé ?',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (shantytown.livingConditions.version !== 2) {
                     return null;
                 }
@@ -842,7 +842,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         censusStatus: {
             title: 'Statut du diagnostic social',
-            data: ({ censusStatus }: Shantytown) => {
+            data: ({ censusStatus }: ShantytownWithFinancedAction) => {
                 switch (censusStatus) {
                     case null: return 'Inconnu';
                     case 'none': return 'Non prévu';
@@ -855,17 +855,17 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         censusConductedAt: {
             title: 'Date du diagnostic',
-            data: ({ censusConductedAt }: Shantytown) => tsToString(censusConductedAt, 'd/m/Y'),
+            data: ({ censusConductedAt }: ShantytownWithFinancedAction) => tsToString(censusConductedAt, 'd/m/Y'),
             width: COLUMN_WIDTHS.SMALL,
         },
         censusConductedBy: {
             title: 'Service en charge du diagnostic',
-            data: ({ censusConductedBy }: Shantytown) => censusConductedBy,
+            data: ({ censusConductedBy }: ShantytownWithFinancedAction) => censusConductedBy,
             width: COLUMN_WIDTHS.SMALL,
         },
         ownerComplaint: {
             title: 'Dépôt de plainte par le propriétaire',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('ownerComplaint' in shantytown)) {
                     return null;
                 }
@@ -884,7 +884,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         justiceProcedure: {
             title: 'Existence d\'une procédure judiciaire',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('justiceProcedure' in shantytown)) {
                     return null;
                 }
@@ -903,7 +903,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         justiceRendered: {
             title: 'Décision de justice rendue',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('justiceRendered' in shantytown)) {
                     return null;
                 }
@@ -922,7 +922,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         justiceRenderedAt: {
             title: 'Date de la décision',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('justiceRenderedAt' in shantytown)) {
                     return null;
                 }
@@ -933,7 +933,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         justiceRenderedBy: {
             title: 'Origine de la décision',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('justiceRenderedBy' in shantytown)) {
                     return null;
                 }
@@ -944,7 +944,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         justiceChallenged: {
             title: 'Appel en cours',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('justiceChallenged' in shantytown)) {
                     return null;
                 }
@@ -963,7 +963,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         evacuationUnderTimeLimit: {
             title: 'Arrêté d\'évacuation en cours',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('evacuationUnderTimeLimit' in shantytown)) {
                     return null;
                 }
@@ -982,7 +982,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         administrativeOrderEvacuationAt: {
             title: 'Date d\'évacuation',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('administrativeOrderEvacuationAt' in shantytown)) {
                     return null;
                 }
@@ -992,7 +992,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         administrativeOrderDecisionRenderedBy: {
             title: 'Qui a pris l\'arrêté',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('administrativeOrderDecisionRenderedBy' in shantytown)) {
                     return null;
                 }
@@ -1002,7 +1002,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         administrativeOrderDecisionAt: {
             title: 'Date de l\'arrêté',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('administrativeOrderDecisionAt' in shantytown)) {
                     return null;
                 }
@@ -1012,7 +1012,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         insalubrityOrder: {
             title: 'Arrêté d\'insalubrité RHI bidonville en cours',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('insalubrityOrder' in shantytown)) {
                     return null;
                 }
@@ -1031,7 +1031,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         insalubrityOrderDisplayed: {
             title: 'Affichage de l\'arrêté d\'insalubrité',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('insalubrityOrderDisplayed' in shantytown)) {
                     return null;
                 }
@@ -1050,7 +1050,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         insalubrityOrderType: {
             title: 'Type d\'arrêté d\'insalubrité',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('insalubrityOrderType' in shantytown)) {
                     return null;
                 }
@@ -1060,7 +1060,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         insalubrityOrderBy: {
             title: 'Qui a pris l\'arrêté d\'insalubrité',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('insalubrityOrderBy' in shantytown)) {
                     return null;
                 }
@@ -1070,7 +1070,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         insalubrityOrderAt: {
             title: 'Date d\'arrêté d\'insalubrité',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('insalubrityOrderAt' in shantytown)) {
                     return null;
                 }
@@ -1080,7 +1080,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         insalubrityParcels: {
             title: 'Parcelles concernées',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('insalubrityParcels' in shantytown)) {
                     return null;
                 }
@@ -1090,7 +1090,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         policeStatus: {
             title: 'Concours de la force publique',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('policeStatus' in shantytown)) {
                     return null;
                 }
@@ -1107,7 +1107,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         policeRequestedAt: {
             title: 'Date de la demande du CFP',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('policeRequestedAt' in shantytown)) {
                     return null;
                 }
@@ -1118,7 +1118,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         policeGrantedAt: {
             title: 'Date d\'octroi du CFP',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('policeGrantedAt' in shantytown)) {
                     return null;
                 }
@@ -1129,7 +1129,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         bailiff: {
             title: 'Nom de l\'étude d\'huissiers',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('bailiff' in shantytown)) {
                     return null;
                 }
@@ -1140,7 +1140,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         existingLitigation: {
             title: 'Existence d\'un contentieux',
-            data: (shantytown: Shantytown) => {
+            data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('existingLitigation' in shantytown)) {
                     return null;
                 }
@@ -1159,12 +1159,12 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         updatedAt: {
             title: 'Site mis à jour le',
-            data: ({ updatedAt }: Shantytown) => (updatedAt ? new Date(updatedAt * 1000) : ''),
+            data: ({ updatedAt }: ShantytownWithFinancedAction) => (updatedAt ? new Date(updatedAt * 1000) : ''),
             width: COLUMN_WIDTHS.SMALL,
         },
         actors: {
             title: 'Intervenants (à la date de l\'export)',
-            data: ({ actors }: Shantytown) => actors.map((actor) => {
+            data: ({ actors }: ShantytownWithFinancedAction) => actors.map((actor) => {
                 const name = `${userModel.formatName(actor)}, ${actor.organization.name}`;
                 const themes = actor.themes.map(theme => ('value' in theme ? theme.value : shantytownActorThemes[theme.id])).join(', ');
 
@@ -1174,12 +1174,12 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         comments: {
             title: 'Commentaires',
-            data: ({ comments }: Shantytown) => comments.slice(0, 5).map(comment => `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${userModel.formatName(comment.createdBy)}\n${comment.description}`).join('\n----\n'),
+            data: ({ comments }: ShantytownWithFinancedAction) => comments.slice(0, 5).map(comment => `${tsToString(comment.createdAt, 'd/m/Y à h:i')} - ${userModel.formatName(comment.createdBy)}\n${comment.description}`).join('\n----\n'),
             width: COLUMN_WIDTHS.LARGE,
         },
         last_comment_date: {
             title: 'Date du dernier message',
-            data: ({ comments }: Shantytown) => {
+            data: ({ comments }: ShantytownWithFinancedAction) => {
                 if (comments.length === 0) {
                     return '';
                 }
@@ -1189,16 +1189,35 @@ export default (closingSolutions: ClosingSolution[]) => {
             width: COLUMN_WIDTHS.LARGE,
         },
 
-
         hasAction: {
             title: 'Le site fait-il l’objet d’une action ?',
-            data: ({ actions }: Shantytown) => (actions.length > 0 ? 'oui' : 'non'),
+            data: ({ actions }: ShantytownWithFinancedAction) => (actions.length > 0 ? 'oui' : 'non'),
+            width: COLUMN_WIDTHS.SMALL,
+        },
+
+        hasAtLeastOneActionFinanced: {
+            title: 'Le site fait-il l’objet d’une action financée RB l’année d’extraction ?',
+            data: (shantytown: ShantytownWithFinancedAction) => {
+                if (!('hasAtLeastOneActionFinanced' in shantytown)) {
+                    return 'non';
+                }
+
+                if (shantytown.hasAtLeastOneActionFinanced === true) {
+                    return 'oui';
+                }
+
+                if (shantytown.hasAtLeastOneActionFinanced === false) {
+                    return 'non';
+                }
+
+                return shantytown.hasAtLeastOneActionFinanced;
+            },
             width: COLUMN_WIDTHS.SMALL,
         },
 
         resorptionTarget: {
             title: 'Site avec objectif de résorption ?',
-            data: ({ resorptionTarget }: Shantytown) => {
+            data: ({ resorptionTarget }: ShantytownWithFinancedAction) => {
                 if (resorptionTarget === null) {
                     return null;
                 }
@@ -1213,7 +1232,7 @@ export default (closingSolutions: ClosingSolution[]) => {
     closingSolutions.forEach(({ id: solutionId }) => {
         properties[`closingSolution${solutionId}_population`] = {
             title: 'Nombre de personnes',
-            data: ({ closingSolutions: solutions }: Shantytown) => {
+            data: ({ closingSolutions: solutions }: ShantytownWithFinancedAction) => {
                 const solution = solutions.find(({ id }) => id === solutionId);
                 if (solution === undefined) {
                     return '';
@@ -1226,7 +1245,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         };
         properties[`closingSolution${solutionId}_households`] = {
             title: 'Nombre de ménages',
-            data: ({ closingSolutions: solutions }: Shantytown) => {
+            data: ({ closingSolutions: solutions }: ShantytownWithFinancedAction) => {
                 const solution = solutions.find(({ id }) => id === solutionId);
                 if (solution === undefined) {
                     return '';
@@ -1239,7 +1258,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         };
         properties[`closingSolution${solutionId}_message`] = {
             title: 'Message',
-            data: ({ closingSolutions: solutions }: Shantytown) => {
+            data: ({ closingSolutions: solutions }: ShantytownWithFinancedAction) => {
                 const solution = solutions.find(({ id }) => id === solutionId);
                 if (solution === undefined) {
                     return '';
