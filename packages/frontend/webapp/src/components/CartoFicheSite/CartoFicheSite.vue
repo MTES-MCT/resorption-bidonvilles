@@ -9,20 +9,24 @@
     >
         <div
             ref="cadastreToggler"
-            class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded leaflet-control print:hidden"
+            class="bg-white ml-3 my-3 border-2 border-primary text-primary hover:bg-primary hover:text-white py-1 px-2 leaflet-control print:hidden"
             :class="{
                 'opacity-50': cadastreIsLoading,
-                'opacity-100 !bg-primary text-white border-primary':
-                    showCadastre,
             }"
             v-show="cadastre"
         >
             <label
-                class="flex items-center space-x-2 cursor-pointer"
+                class="flex gap-2 items-center space-x-2 cursor-pointer"
                 @click.prevent.stop="showCadastre = !showCadastre"
             >
                 <input type="checkbox" v-model="showCadastre" class="hidden" />
-                <span class="p-0 !ml-0">Voir le cadastre</span>
+                <Icon
+                    :icon="showCadastre ? 'eye' : 'eye-slash'"
+                    class="p-0 !ml-0"
+                />
+                <span class="p-0 !ml-0"
+                    >{{ showCadastre ? "Masquer" : "Voir" }} le cadastre</span
+                >
             </label>
         </div>
     </Carto>
@@ -31,6 +35,7 @@
 <script setup>
 import { ref, toRefs, watch } from "vue";
 import L from "leaflet";
+import { Icon } from "@resorptionbidonvilles/ui";
 import { useNotificationStore } from "@/stores/notification.store";
 import copyToClipboard from "@/utils/copyToClipboard";
 import Carto from "@/components/Carto/Carto.vue";
