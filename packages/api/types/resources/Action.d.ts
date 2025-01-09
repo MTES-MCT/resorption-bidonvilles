@@ -4,8 +4,7 @@ import ActionLocationType from './ActionLocationType.d';
 import { ActionRawComment } from './ActionCommentRaw.d';
 import { ActionEnrichedComment } from './ActionCommentEnriched.d';
 
-export type ActionReportRow = {
-    departement_code: string,
+export type ActionItem = {
     departement_name: string,
     region_code: string,
     region_name: string,
@@ -15,6 +14,7 @@ export type ActionReportRow = {
     ended_at: string | null,
     location_type: string,
     topics: string[],
+    operators: string[],
     goals: string,
     nombre_personnes: number | null,
     nombre_menages: number | null,
@@ -51,6 +51,10 @@ export type ActionReportRow = {
     last_comment_date: string | null,
     last_update: string | null,
 };
+
+export type ActionReportRow = {
+    departement_code: string,
+} & ActionItem;
 
 
 type ActionUser = {
