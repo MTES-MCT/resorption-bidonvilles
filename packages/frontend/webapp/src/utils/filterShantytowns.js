@@ -45,6 +45,17 @@ export default function (shantytowns, filters) {
         }
 
         if (
+            filters.administrativeOrder.length > 0 &&
+            !checkAdministrativeOrder(shantytown, filters.administrativeOrder)
+        ) {
+            return false;
+        }
+
+        if (filters.rhi.length > 0 && !checkRhi(shantytown, filters.rhi)) {
+            return false;
+        }
+
+        if (
             filters.origin.length > 0 &&
             !checkOrigin(shantytown, filters.origin)
         ) {
@@ -131,6 +142,14 @@ function checkOrigin(shantytown, filters) {
 
     if (!shantytown.socialOrigins.length && filters.includes("unknown")) {
         return true;
+    }
+
+    // Cas spécifique où le site n'est occupé que par des ressortissants européens
+    if (filters.includes("0")) {
+        return (
+            shantytown.socialOrigins.length === 1 &&
+            shantytown.socialOrigins[0].id.toString() === "2"
+        );
     }
 
     const origins = shantytown.socialOrigins.map((origin) => origin.id);
@@ -239,6 +258,34 @@ function checkJustice(shantytown, filters) {
             typeof shantytown.ownerComplaint !== "boolean" &&
             typeof shantytown.justiceProcedure !== "boolean"
         );
+    });
+}
+
+function checkAdministrativeOrder(shantytown, filters) {
+    return filters.some((value) => {
+        if (value === "evacuationUnderTimeLimit") {
+            return shantytown.evacuationUnderTimeLimit === true;
+        }
+
+        if (value === "none") {
+            return shantytown.evacuationUnderTimeLimit === false;
+        }
+
+        return typeof shantytown.evacuationUnderTimeLimit !== "boolean";
+    });
+}
+
+function checkRhi(shantytown, filters) {
+    return filters.some((value) => {
+        if (value === "insalubrityOrder") {
+            return shantytown.insalubrityOrder === true;
+        }
+
+        if (value === "none") {
+            return shantytown.insalubrityOrder === false;
+        }
+
+        return typeof shantytown.insalubrityOrder !== "boolean";
     });
 }
 

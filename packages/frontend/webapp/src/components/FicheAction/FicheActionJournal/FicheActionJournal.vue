@@ -2,7 +2,7 @@
     <div id="journal_de_l_action" class="bg-green100 py-10">
         <FicheJournalLayout>
             <template v-slot:body>
-                <h1 class="text-3xl text-green mb-8">
+                <h1 class="text-3xl text-tertiaryA11Y mb-8">
                     <Icon icon="comment" /> Journal de l'action
                     <span
                         >— {{ action.comments.length }} message{{

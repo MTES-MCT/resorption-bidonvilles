@@ -21,7 +21,7 @@
                     shantytown.actors.length > 1 ? "s" : ""
                 }}</span
             >
-            <ul v-if="shantytown.actors.length > 0" class="text-primary">
+            <ul v-if="shantytown.actors.length > 0" class="mt-1 text-primary">
                 <li v-for="actor in mergedActors" v-bind:key="actor.id">
                     <LinkOrganization
                         :to="`/structure/${actor.id}`"

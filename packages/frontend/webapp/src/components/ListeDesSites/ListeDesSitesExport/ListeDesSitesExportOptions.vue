@@ -3,6 +3,7 @@
     <ul class="pl-5 list-disc">
         <li>Localisation</li>
         <li>Caractéristiques du site</li>
+        <li>Le site est-il concerné par une action financée ?</li>
         <li>Habitants</li>
     </ul>
     <p class="mt-5 font-bold">

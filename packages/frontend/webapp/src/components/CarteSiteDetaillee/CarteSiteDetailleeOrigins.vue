@@ -1,5 +1,6 @@
 <template>
     <div>
+        <div class="mb-0 font-bold -ml-5 whitespace-nowrap">Habitants</div>
         <div v-if="shantytown.populationTotal === null" class="font-bold">
             Population : inconnu
         </div>

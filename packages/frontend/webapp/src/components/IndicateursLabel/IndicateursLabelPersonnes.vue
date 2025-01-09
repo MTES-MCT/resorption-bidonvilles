@@ -1,6 +1,6 @@
 <template>
     <IndicateursLabel
-        >Nombre total de <br /><span class="text-tertiary"
+        >Nombre total de <br /><span class="text-tertiaryA11Y"
             >personnes concernées</span
         ><br />par l'action</IndicateursLabel
     >

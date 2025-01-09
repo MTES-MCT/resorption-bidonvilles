@@ -21,15 +21,19 @@
         </template>
         <template v-slot:menu>
             <Menu containerClasses="py-0">
-                <div v-for="option in options" :key="option.id"
-                    class="flex items-center whitespace-nowrap text-sm menuWidth">
+                <div v-for="option in options" :key="option.value"
+                    :class="['flex', 'items-center', 'whitespace-nowrap', 'text-sm', 'menuWidth', { 'border-b-1': option.displayBottomBorder }]">
                     <Checkbox :disabled="disabled" v-model="checked[option.value]" variant="invisible" :label="option.label"
                         direction="col">
                     </Checkbox>
                 </div>
 
-                <div class="px-1 py-1 border-t-1">
-                    <Button size="sm" variant="primaryText" @click="clear" class="hover:underline">
+                <div class="border-t-1">
+                    <Button 
+                        size="sm"
+                        variant="custom" 
+                        class="flex items-center whitespace-nowrap text-sm menuWidth hover:bg-blue200 hover:text-primary text-primary focusClasses.ring"
+                        @click="clear">
                         Effacer
                     </Button>
                 </div>

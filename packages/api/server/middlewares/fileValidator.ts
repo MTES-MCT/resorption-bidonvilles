@@ -2,8 +2,8 @@
 /* eslint-disable no-param-reassign */
 import { NextFunction, Request, Response } from 'express';
 import { body } from 'express-validator';
-import fileType from 'file-type';
 import extensions from '#common/utils/allowed_file_extensions';
+import * as mime from 'mime-types';
 import { MAX_FILE_SIZE } from '#common/utils/max_file_size';
 
 export default async (req: Request, res: Response, next: NextFunction) => {
@@ -15,21 +15,15 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
         const fn = body('attachments')
             .custom(async () => {
-                // si un des fichiers a un type interdit : générer une erreur
-                const types = await Promise.all(
-                    files.map(f => fileType.fromBuffer(f.buffer)),
-                );
-
-                const wrongTypeFiles = types
-                    .map((type, index) => ({
-                        ...type,
-                        file: files[index].originalname,
+                const wrongTypeFiles = files
+                    .map(file => ({
+                        ext: mime.extension(file.mimetype) || '',
+                        file: file.originalname,
                     }))
                     .filter(type => !extensions.includes(type.ext));
+
                 if (wrongTypeFiles.length > 0) {
-                    throw new Error(
-                        `Un ou plusieurs fichiers sont d'un type non autorisé : ${wrongTypeFiles.map(f => f.file).join(', ')}`,
-                    );
+                    throw new Error(`Les fichiers suivants ont un type non autorisé : ${wrongTypeFiles.map(f => f.file).join(', ')}`);
                 }
 
                 // si un des fichiers est trop gros : générer une erreur
