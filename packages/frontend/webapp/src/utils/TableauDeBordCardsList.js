@@ -25,14 +25,15 @@ export default [
             },
             {
                 label: "Afficher les sites",
-                description: "Je veux voir tous les sites de mon territoire.",
+                description:
+                    "Je souhaite voir tous les sites de mon territoire.",
                 icon: svgListSites,
                 to: "/liste-des-sites",
                 permission: "shantytown.read",
             },
             {
                 label: "Déclarer un site",
-                description: "Je veux créer un nouveau site.",
+                description: "Je souhaite créer un nouveau site.",
                 icon: svgSiteAdd,
                 to: "/site/nouveau",
                 permission: "shantytown.create",
@@ -45,9 +46,9 @@ export default [
         permission: "action.read",
         actions: [
             {
-                label: "Rechercher une action",
+                label: "Mettre à jour une action",
                 description:
-                    "Je veux rechercher une action sur mon territoire.",
+                    "Je souhaite mettre à jour les indicateurs d'une action ou partager une info sur le journal de l'action.",
                 icon: svgSearch,
                 clickMgmt: "actions",
                 placeHolder: "Nom d'une action, commune, département, acteur.",
@@ -58,14 +59,14 @@ export default [
             {
                 label: "Voir toutes les actions",
                 description:
-                    "Je veux accéder à toutes les actions sur mon territoire.",
+                    "Je souhaite accéder à toutes les actions sur mon territoire.",
                 icon: svgAllActions,
                 to: "/liste-des-actions",
                 permission: "action.read",
             },
             {
-                label: "Saisir une action",
-                description: "Je veux renseigner une action.",
+                label: "Déclarer une action",
+                description: "Je souhaite renseigner une action.",
                 icon: svgAction,
                 to: "/action/nouveau",
                 permission: "action.create",
@@ -81,7 +82,7 @@ export default [
             {
                 label: "Rechercher une personne ou une structure",
                 description:
-                    "Je recherche une personne ou une structure en particulier.",
+                    "Je recherche une structure ou une personne inscrite sur la plateforme.",
                 icon: svgSearch,
                 to: "/annuaire",
                 permission: null,
@@ -96,7 +97,7 @@ export default [
         actions: [
             {
                 label: "J'ai besoin d'aide",
-                description: "Je veux poser une question à la communauté.",
+                description: "Je souhaite poser une question à la communauté.",
                 icon: svgCommunity,
                 to: "/communaute/nouvelle-question",
                 permission: null,
