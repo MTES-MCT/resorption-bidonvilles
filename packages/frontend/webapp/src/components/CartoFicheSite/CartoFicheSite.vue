@@ -9,12 +9,20 @@
     >
         <div
             ref="cadastreToggler"
-            class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden"
+            class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded leaflet-control print:hidden"
+            :class="{
+                'opacity-50': cadastreIsLoading,
+                'opacity-100 !bg-primary text-white border-primary':
+                    showCadastre,
+            }"
             v-show="cadastre"
         >
-            <label class="flex items-center space-x-2">
-                <input type="checkbox" v-model="showCadastre" />
-                <span>Voir le cadastre</span>
+            <label
+                class="flex items-center space-x-2 cursor-pointer"
+                @click.prevent.stop="showCadastre = !showCadastre"
+            >
+                <input type="checkbox" v-model="showCadastre" class="hidden" />
+                <span class="p-0 !ml-0">Voir le cadastre</span>
             </label>
         </div>
     </Carto>
