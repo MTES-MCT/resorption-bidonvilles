@@ -154,6 +154,11 @@ export default mode => ([
                         storedValue: getNumberOrNull(req.town.populationTotal),
                     },
                     {
+                        key: 'population_total_females',
+                        submitedValue: getNumberOrNull(req.body.population_total_females),
+                        storedValue: getNumberOrNull(req.town.populationTotalFemales),
+                    },
+                    {
                         key: 'population_couples',
                         submitedValue: getNumberOrNull(req.body.population_couples),
                         storedValue: getNumberOrNull(req.town.populationCouples),
@@ -162,6 +167,11 @@ export default mode => ([
                         key: 'population_minors',
                         submitedValue: getNumberOrNull(req.body.population_minors),
                         storedValue: getNumberOrNull(req.town.populationMinors),
+                    },
+                    {
+                        key: 'population_minors_girls',
+                        submitedValue: getNumberOrNull(req.body.population_minors_girls),
+                        storedValue: getNumberOrNull(req.town.populationMinorsGirls),
                     },
                     {
                         key: 'population_minors_0_3',
