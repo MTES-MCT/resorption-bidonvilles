@@ -6,27 +6,45 @@
             l'amélioration de la connaissance.
         </p>
 
-        <p class="mt-3 flex flex-wrap gap-x-5">
-            <TextInput
-                width="w-32"
-                id="population_total"
-                name="population_total"
-                :label="labels.population_total"
-            />
-            <TextInput
-                width="w-32"
-                id="population_couples"
-                name="population_couples"
-                :label="labels.population_couples"
-            />
+        <div class="mt-3 grid grid-cols-5">
+            <p class="grid grid-cols-subgrid gap-2 col-span-5">
+                <TextInput
+                    width="w-32"
+                    id="population_total"
+                    name="population_total"
+                    :label="labels.population_total"
+                />
+                <TextInput
+                    width="w-32"
+                    id="population_total_females"
+                    name="population_total_females"
+                    :label="labels.population_total_females"
+                    class="col-span-2"
+                />
+                <TextInput
+                    width="w-32"
+                    id="population_couples"
+                    name="population_couples"
+                    :label="labels.population_couples"
+                    class="col-start-4"
+                />
+            </p>
+        </div>
+        <p class="grid grid-cols-5 gap-4 col-span-5">
             <TextInput
                 width="w-32"
                 id="population_minors"
                 name="population_minors"
                 :label="labels.population_minors"
             />
+            <TextInput
+                width="w-32"
+                id="population_minors_girls"
+                name="population_minors_girls"
+                :label="labels.population_minors_girls"
+                class="col-span-2"
+            />
         </p>
-
         <p class="flex flex-wrap gap-x-5">
             <TextInput
                 width="w-32"
