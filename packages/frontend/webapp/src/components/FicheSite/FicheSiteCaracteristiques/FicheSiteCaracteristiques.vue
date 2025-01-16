@@ -2,10 +2,10 @@
     <FicheRubrique
         title="Caractéristiques du site"
         category="caracteristics"
-        class="pb-14"
+        class="pb-32"
     >
         <section class="flex flex-col-reverse xl:flex-row">
-            <div class="my-8 xl:w-1/2 md:mr-8">
+            <div class="my-24 xl:w-1/2 xl:my-8 md:mr-8">
                 <FicheSiteDatesInstallation :town="town" />
                 <FicheSiteTypeDeSite :town="town" />
                 <FicheSiteInfosAcces v-if="town.addressDetails" :town="town" />
@@ -29,6 +29,11 @@
                     :cadastre="cadastre"
                     @townclick="onTownClick"
                 />
+                <div>
+                    <Button class="mt-12" @click="displayOwner">
+                        Connaître le propriétaire
+                    </Button>
+                </div>
             </div>
         </section>
     </FicheRubrique>
@@ -40,6 +45,7 @@ import router from "@/helpers/router";
 import { useTownsStore } from "@/stores/towns.store";
 import generateSquare from "@/utils/generateSquare";
 import { computed, defineProps, onMounted, ref, toRefs } from "vue";
+import { Button } from "@resorptionbidonvilles/ui";
 
 import CartoFicheSite from "@/components/CartoFicheSite/CartoFicheSite.vue";
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
@@ -56,6 +62,7 @@ const props = defineProps({
 const { town } = toRefs(props);
 const cadastre = ref(null);
 const cadastreIsLoading = ref(null);
+const infos = ref(null);
 
 onMounted(() => {
     const townsStore = useTownsStore();
@@ -78,9 +85,17 @@ async function loadCadastre() {
 
     cadastreIsLoading.value = true;
     try {
+        console.log("Appel de loadCadastre()");
         const response = await getCadastre(
             generateSquare([town.value.longitude, town.value.latitude], 0.06)
         );
+
+        infos.value =
+            response.features[0].properties.code_insee +
+            "000" +
+            response.features[0].properties.section +
+            response.features[0].properties.numero;
+        console.log("parcelle cadastrale:", infos.value);
 
         if (
             Number.isInteger(response.totalFeatures) &&
@@ -101,5 +116,9 @@ function onTownClick(clickedTown) {
     }
 
     router.push(`/site/${clickedTown.id}`);
+}
+
+function displayOwner() {
+    alert(`Parcelle : ${infos.value}`);
 }
 </script>
