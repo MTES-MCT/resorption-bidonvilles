@@ -115,11 +115,17 @@ export default (oldVersion, newVersion): Diff[] => {
         populationTotal: {
             label: 'Nombre de personnes',
         },
+        populationTotalFemales: {
+            label: 'Nombre de personnes dont femmes et filles',
+        },
         populationCouples: {
             label: 'Nombre de ménages',
         },
         populationMinors: {
             label: 'Nombre de mineurs',
+        },
+        populationMinorsGirls: {
+            label: 'Nombre de mineurs dont filles',
         },
         populationMinors0To3: {
             label: 'Mineurs (0 à 3 ans)',
