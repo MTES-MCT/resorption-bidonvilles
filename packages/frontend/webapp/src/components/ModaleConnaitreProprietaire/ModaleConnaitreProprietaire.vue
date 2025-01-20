@@ -12,9 +12,9 @@
                     >.
                 </p>
                 <p class="mb-2">
-                    Si le site s'étale sur plusieurs parcelles, il convient de
-                    modifier manuellement le point de localisation et procéder à
-                    une nouvelle demande.
+                    Si le site est localisé sur plusieurs parcelles, il convient
+                    de modifier manuellement le point de localisation et
+                    procéder à une nouvelle demande pour chaque parcelle.
                 </p>
                 <p>Ces demandes sont tracées.</p>
             </div>
