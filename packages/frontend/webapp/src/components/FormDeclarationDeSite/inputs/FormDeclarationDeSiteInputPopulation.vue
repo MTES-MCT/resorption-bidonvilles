@@ -7,9 +7,6 @@
         </p>
 
         <div class="mt-3 grid col-span-3 md:col-span-5">
-            <!-- <p
-                class="grid grid-cols-subgrid gap-2 col-span-3 md:col-span-5 items-end justify-items-start"
-            > -->
             <p
                 class="grid grid-flow-row grid-cols-3 lg:grid-cols-5 gap-4 md:col-span-5 items-end justify-items-start"
             >
