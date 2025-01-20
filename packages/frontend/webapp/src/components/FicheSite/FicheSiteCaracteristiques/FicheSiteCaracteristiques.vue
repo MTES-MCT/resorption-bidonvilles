@@ -30,7 +30,7 @@
                     @townclick="onTownClick"
                 />
                 <div>
-                    <Button class="mt-12" @click="displayOwner">
+                    <Button class="mt-12" @click="showModal">
                         Connaître le propriétaire
                     </Button>
                 </div>
@@ -55,6 +55,9 @@ import FicheSiteInfosAcces from "./FicheSiteInfosAcces.vue";
 import FicheSiteProprietaire from "./FicheSiteProprietaire.vue";
 import FicheSiteSitesAProximite from "./FicheSiteSitesAProximite.vue";
 import FicheSiteTypeDeSite from "./FicheSiteTypeDeSite.vue";
+import ModaleConnaitreProprietaire from "@/components/ModaleConnaitreProprietaire/ModaleConnaitreProprietaire.vue";
+import { useModaleStore } from "@/stores/modale.store";
+
 
 const props = defineProps({
     town: Object,
@@ -118,7 +121,10 @@ function onTownClick(clickedTown) {
     router.push(`/site/${clickedTown.id}`);
 }
 
-function displayOwner() {
-    alert(`Parcelle : ${infos.value}`);
+function showModal() {
+    const modaleStore = useModaleStore();
+    modaleStore.open(ModaleConnaitreProprietaire, {
+        parcelle: infos.value,
+    });
 }
 </script>
