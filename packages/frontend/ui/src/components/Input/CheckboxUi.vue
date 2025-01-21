@@ -15,7 +15,7 @@
             <label class="flex items-center justify-between w-full hover:bg-blue200 py-2 pr-4 text-primary cursor-pointer">
                 <input :id="`variant-invisible-${randomId()}`" ref="checkbox" @click="onChange(value)" class="appearance-none"
                     type="checkbox" :checked="checked" :disabled="disabled" />
-                <div class="flex-1">
+                <div :class="['flex-1 ', lineOffset && 'pl-2']">
                     {{ label }}
                 </div>
                 <div class="ml-4">
@@ -62,7 +62,7 @@
     </template>
 
     <template v-else>
-        <label class="cursor-pointer inline-block px-2 py-1 border border-2 border-blue200" :class="[
+        <label class="cursor-pointer inline-block px-2 py-1 border-2 border-blue200" :class="[
             checked
                 ? 'bg-blue500 text-white border-blue500'
                 : 'bg-blue200 text-primary',
@@ -110,7 +110,12 @@ const props = defineProps({
         type: String,
         required: false,
         default: ''
-    }
+    },
+    lineOffset: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 
 const { label, variant, modelValue: checked, disabled, isSubmitting, active } = toRefs(props);
