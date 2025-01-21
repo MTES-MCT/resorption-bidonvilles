@@ -75,8 +75,10 @@ export default async (
         title: 'Habitants',
         properties: [
             properties.populationTotal,
+            properties.populationTotalFemales,
             properties.populationCouples,
             properties.populationMinors,
+            properties.populationMinorsGirls,
             properties.populationMinors0To3,
             properties.populationMinors3To6,
             properties.populationMinors6To12,

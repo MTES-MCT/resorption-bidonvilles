@@ -173,6 +173,12 @@ export default (closingSolutions: ClosingSolution[]) => {
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
+        populationTotalFemales: {
+            title: 'dont femmes et filles',
+            data: ({ populationTotalFemales }: ShantytownWithFinancedAction) => populationTotalFemales,
+            width: COLUMN_WIDTHS.SMALL,
+            sum: true,
+        },
         populationCouples: {
             title: 'Nombre de ménages',
             data: ({ populationCouples }: ShantytownWithFinancedAction) => populationCouples,
@@ -182,6 +188,12 @@ export default (closingSolutions: ClosingSolution[]) => {
         populationMinors: {
             title: 'Nombre de mineurs',
             data: ({ populationMinors }: ShantytownWithFinancedAction) => populationMinors,
+            width: COLUMN_WIDTHS.SMALL,
+            sum: true,
+        },
+        populationMinorsGirls: {
+            title: 'dont filles',
+            data: ({ populationMinorsGirls }: ShantytownWithFinancedAction) => populationMinorsGirls,
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
