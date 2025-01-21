@@ -154,10 +154,26 @@ watch(isUeOnly, (newValue) => {
 
 watch(
     () => townsStore.filters.properties.origin,
-    (newValue) => {
+    (newValue, oldValue) => {
         if (!isProcessing.value) {
             isProcessing.value = true;
-            isUeOnly.value = newValue[0] === "0";
+            const hasOtherValues = newValue.some((value) => value !== "0");
+            if (
+                hasOtherValues &&
+                newValue.includes("0") &&
+                oldValue.includes("0")
+            ) {
+                const currentFilters = { ...townsStore.filters.properties };
+                const filteredOrigin = currentFilters.origin.filter(
+                    (value) => value !== "0"
+                );
+                townsStore.filters.properties = {
+                    ...currentFilters,
+                    origin: filteredOrigin,
+                };
+            } else {
+                isUeOnly.value = newValue[0] === "0";
+            }
             isProcessing.value = false;
         }
     },
