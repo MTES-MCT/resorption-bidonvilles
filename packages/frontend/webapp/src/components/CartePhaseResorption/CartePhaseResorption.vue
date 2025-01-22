@@ -68,11 +68,13 @@ const formattedDate = computed(() => {
     );
 });
 
+const STATUS_COLORS = {
+    done: "green",
+    inprogress: "orange600",
+    default: "G500",
+};
+
 const iconColor = computed(() => {
-    return status.value === "done"
-        ? "green"
-        : status.value === "inprogress"
-        ? "orange600"
-        : "G500";
+    return STATUS_COLORS[status.value] || STATUS_COLORS.default;
 });
 </script>
