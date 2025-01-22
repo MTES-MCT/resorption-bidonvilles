@@ -4,7 +4,7 @@ import shantytownModel from '#server/models/shantytownModel';
 export default [
     param('id')
         .custom(async (value, { req }) => {
-            if (!req.user || !req.user.isAllowedTo('create', 'shantytown_resorption')) {
+            if (!req.user?.isAllowedTo('create', 'shantytown_resorption')) {
                 throw new Error('Vous n\'avez pas le droit de démarrer une résorption');
             }
 
