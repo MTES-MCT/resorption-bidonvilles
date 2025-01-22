@@ -78,7 +78,7 @@ async function authenticateUser(req) {
     return user;
 }
 
-function hasPermission(permissions, permission): Boolean {
+function hasPermission(permissions, permission): boolean {
     const [entity, feature] = permission.split('.');
 
     return Object.prototype.hasOwnProperty.call(permissions, entity)
