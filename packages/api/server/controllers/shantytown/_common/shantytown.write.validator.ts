@@ -542,10 +542,11 @@ export default mode => ([
                 ];
 
                 if (mode !== 'create') {
+                    console.log('shantytown.write.validator:', JSON.stringify(updatedPreparatoryPhasesTowardResorption));
                     fieldsToCheck.push({
                         key: 'preparatory_phases_toward_resorption',
-                        submitedValue: updatedPreparatoryPhasesTowardResorption ? JSON.stringify(updatedPreparatoryPhasesTowardResorption.sort()) : null,
-                        storedValue: existingPreparatoryPhasesTowardResorption ? JSON.stringify(existingPreparatoryPhasesTowardResorption.sort()) : null,
+                        submitedValue: updatedPreparatoryPhasesTowardResorption ? JSON.stringify(updatedPreparatoryPhasesTowardResorption) : null,
+                        storedValue: existingPreparatoryPhasesTowardResorption ? JSON.stringify(existingPreparatoryPhasesTowardResorption) : null,
                     });
                 }
 
