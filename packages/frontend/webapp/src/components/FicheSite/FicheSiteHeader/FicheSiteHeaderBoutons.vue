@@ -235,7 +235,7 @@ const displayStartResorptionButton = computed(
             "shantytown_resorption.create",
             town
         ) &&
-        displayPhasesPreparatoiresResorption &&
+        displayPhasesPreparatoiresResorption.value &&
         !hasRequiredPhasesStartingResorption.value &&
         !townIsClosed.value
 );
