@@ -384,11 +384,9 @@ function buildTerminatedPreparatoryPhases(initOrEdit) {
             if (values[`phase_${phase}_completed_at`] !== null) {
                 terminatedPreparatoryPhases[phase] =
                     values[`phase_${phase}_completed_at`];
-            } else {
-                if (phase.completedAt !== null) {
-                    terminatedPreparatoryPhases[phase.preparatoryPhaseId] =
-                        phase.completedAt;
-                }
+            } else if (phase.completedAt !== null) {
+                terminatedPreparatoryPhases[phase.preparatoryPhaseId] =
+                    phase.completedAt;
             }
         }
     }
