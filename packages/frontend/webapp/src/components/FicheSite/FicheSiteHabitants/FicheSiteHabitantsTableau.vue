@@ -231,8 +231,6 @@ const populationHistory = computed(() => {
 
     // on traite le changelog pour n'y conserver que les étapes qui contiennent au moins un
     // changement sur les champs de population
-    console.log("Changelog: ", town.value.changelog);
-
     const entries = town.value.changelog
         .map((entry) => {
             return {
