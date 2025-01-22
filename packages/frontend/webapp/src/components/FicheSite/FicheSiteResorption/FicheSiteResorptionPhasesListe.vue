@@ -1,7 +1,7 @@
 <template>
     <FicheSiteResorptionPhasesInitiales
         class="shadow-md rounded p-2 mb-4"
-        v-if="classified_phases.filteredPhases.length > 0"
+        v-if="classified_phases?.filteredPhases?.length > 0"
         :phases_initiales="classified_phases.filteredPhases"
     />
 
@@ -31,12 +31,12 @@ const props = defineProps({
 const { town } = toRefs(props);
 
 const classified_phases = computed(() => {
-    if (!town.value.preparatoryPhasesTowardResorption) {
-        return false;
+    if (!town.value?.preparatoryPhasesTowardResorption) {
+        return { filteredPhases: [], remainingPhases: [] };
     }
 
     if (!Array.isArray(town.value.preparatoryPhasesTowardResorption)) {
-        return false;
+        return { filteredPhases: [], remainingPhases: [] };
     }
 
     const configStore = useConfigStore();
