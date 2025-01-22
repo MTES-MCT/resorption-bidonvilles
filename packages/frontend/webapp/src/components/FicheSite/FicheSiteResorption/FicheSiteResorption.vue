@@ -1,7 +1,7 @@
 <template>
     <FicheRubrique title="Phases préparatoires à la résorption">
         <FicheSiteResorptionPhasesListeVide
-            v-if="town.preparatoryPhasesTowardResorption.length === 0"
+            v-if="town.preparatoryPhasesTowardResorption?.length === 0"
             :town="town"
             class="my-4"
         />
