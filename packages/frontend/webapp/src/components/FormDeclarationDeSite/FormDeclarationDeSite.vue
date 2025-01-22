@@ -239,10 +239,6 @@ const tabs = computed(() => {
         });
     }
 
-    if (!town.value?.preparatoryPhasesTowardResorption.length) {
-        arr;
-    }
-
     return town.value?.preparatoryPhasesTowardResorption.length > 0
         ? arr
         : arr.filter((tab) => tab.id !== "resorption");
