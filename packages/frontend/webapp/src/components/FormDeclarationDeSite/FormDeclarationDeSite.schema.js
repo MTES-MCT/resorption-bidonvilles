@@ -78,6 +78,15 @@ export default function (
                 .min(1)
                 .transform(emptyStringToNull)
                 .label(labels.population_total),
+            population_total_females: number()
+                .nullable()
+                .min(0)
+                .transform(emptyStringToNull)
+                .when("population_total", {
+                    is: (value) => value !== null && value !== undefined,
+                    then: (schema) => schema.max(ref("population_total")),
+                })
+                .label(labels.population_total_females),
             population_couples: number()
                 .nullable()
                 .min(0)
@@ -96,6 +105,19 @@ export default function (
                     then: (schema) => schema.max(ref("population_total")),
                 })
                 .label(labels.population_minors),
+            population_minors_girls: number()
+                .nullable()
+                .min(0)
+                .transform(emptyStringToNull)
+                .when("population_total", {
+                    is: (value) => value !== null && value !== undefined,
+                    then: (schema) => schema.max(ref("population_total")),
+                })
+                .when("population_minors", {
+                    is: (value) => value !== null && value !== undefined,
+                    then: (schema) => schema.max(ref("population_minors")),
+                })
+                .label(labels.population_minors_girls),
             population_minors_0_3: number()
                 .nullable()
                 .min(0)

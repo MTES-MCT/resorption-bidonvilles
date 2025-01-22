@@ -89,8 +89,10 @@ type BaseShantytown =
     addressSimple: string,
     usename: string,
     populationTotal: number | null,
+    populationTotalFemales: number | null,
     populationCouples: number | null,
     populationMinors: number | null,
+    populationMinorsGirls: number | null,
     populationMinors0To3: number | null,
     populationMinors3To6: number | null,
     populationMinors6To12: number | null,
@@ -165,6 +167,10 @@ export type ShantytownAttachmentObject = {
     size: number;
     lastModified: number;
     decreeType: string;
+};
+
+export type ShantytownWithFinancedAction = Shantytown & {
+    hasAtLeastOneActionFinanced: boolean,
 };
 
 export type Shantytown = BaseShantytown | ShantytownWithJustice | ShantytownWithOwner | (ShantytownWithJustice & ShantytownWithOwner);

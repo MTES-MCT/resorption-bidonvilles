@@ -1,7 +1,10 @@
 <template>
     <div>
-        <TypeDeSite :fieldType="shantytown.fieldType" />
-        <div class="ml-5">
+        <TypeDeSite
+            :fieldType="shantytown.fieldType"
+            class="-mt-1 pt-0.5 border-0 border-red"
+        />
+        <div class="ml-5 mt-0">
             <div>
                 {{ shantytown.statusName }} depuis <br />
                 <span class="font-bold">{{ shantytown.statusSince }}</span>

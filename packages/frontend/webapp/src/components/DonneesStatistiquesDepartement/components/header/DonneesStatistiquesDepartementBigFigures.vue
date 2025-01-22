@@ -10,7 +10,7 @@
             class="bg-G100 border border-G300 rounded py-4 px-6 flex md:flex-row flex-col items-stretch"
         >
             <div class="flex flex-col mb-2 md:mb-0">
-                <p class="font-bold w-full">Sites de + de 10 personnes</p>
+                <p class="font-bold w-full">Sites de 10 personnes ou plus</p>
                 <div class="flex flex-col xs:flex-row gap-2 xs:space-x-5">
                     <div
                         class="bg-G200 rounded-md p-2 flex flex-col flex-wrap items-center xl:items-start"
@@ -50,7 +50,7 @@
                         </p>
                     </div>
                     <div
-                        class="bg-G200 rounded-md px-2 flex flex-row flex-row items-center justify-center"
+                        class="bg-G200 rounded-md px-2 flex flex-row items-center justify-center"
                     >
                         <div class="flex flex-row items-end gap-1">
                             <div
@@ -120,7 +120,7 @@
                         </p>
                     </div>
                     <div
-                        class="bg-G200 rounded-md p-2 flex flex-row flex-row items-center justify-center"
+                        class="bg-G200 rounded-md p-2 flex flex-row items-center justify-center"
                     >
                         <div class="flex flex-row items-end gap-1">
                             <div

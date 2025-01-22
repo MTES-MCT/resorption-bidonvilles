@@ -1,7 +1,7 @@
 <template>
     <div @mousemove="isHovered = true" @mouseleave="isHovered = false">
         <a class="flex border rounded p-1 space-x-2 items-center cursor-pointer hover:bg-blue100 bg-white"
-        :title="`Consulter la pièce jointe, ${file.name}`" :href="file.urls.original">
+        :title="`Consulter la pièce jointe, ${file.name}`" :href="file.urls.original" target="_blank">
             <FilePreviewIcon aria-hidden="true" class="flex-shrink-0" :file="file" />
             <div class="text-sm overflow-hidden flex-1">
                 <p class="truncate" aria-hidden="true">{{ file.name }}</p>

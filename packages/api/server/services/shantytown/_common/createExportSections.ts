@@ -51,7 +51,8 @@ export default async (
             properties.isReinstallation,
             properties.reinstallationComments,
             properties.hasAction,
-            properties.resorptionTarget,
+            properties.hasAtLeastOneActionFinanced,
+            user.isAllowedTo('read', 'action') ? properties.resorptionTarget : undefined,
         ],
     };
 
@@ -74,8 +75,10 @@ export default async (
         title: 'Habitants',
         properties: [
             properties.populationTotal,
+            properties.populationTotalFemales,
             properties.populationCouples,
             properties.populationMinors,
+            properties.populationMinorsGirls,
             properties.populationMinors0To3,
             properties.populationMinors3To6,
             properties.populationMinors6To12,

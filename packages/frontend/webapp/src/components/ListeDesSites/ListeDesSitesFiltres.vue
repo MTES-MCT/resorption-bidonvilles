@@ -62,7 +62,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
 import { trackEvent } from "@/helpers/matomo";
@@ -88,6 +88,10 @@ const groupedFilters = {
             filters.actors,
             filters.heatwave,
             ...(userStore.hasJusticePermission ? [filters.justice] : []),
+            ...(userStore.hasJusticePermission
+                ? [filters.administrativeOrder]
+                : []),
+            ...(userStore.hasJusticePermission ? [filters.rhi] : []),
         ],
     },
     close: {
@@ -97,6 +101,10 @@ const groupedFilters = {
             filters.origin,
             filters.closingReason,
             ...(userStore.hasJusticePermission ? [filters.justice] : []),
+            ...(userStore.hasJusticePermission
+                ? [filters.administrativeOrder]
+                : []),
+            ...(userStore.hasJusticePermission ? [filters.rhi] : []),
             filters.fieldType,
             filters.population,
         ],
@@ -133,4 +141,45 @@ function trackFilter(eventAction, { label: eventName }) {
         eventName
     );
 }
+
+const isProcessing = ref(false);
+const isUeOnly = ref(false);
+
+watch(isUeOnly, (newValue) => {
+    if (newValue) {
+        const currentFilters = { ...townsStore.filters.properties };
+        townsStore.filters.properties = {
+            ...currentFilters,
+            origin: ["0"],
+        };
+    }
+});
+
+watch(
+    () => townsStore.filters.properties.origin,
+    (newValue, oldValue) => {
+        if (!isProcessing.value) {
+            isProcessing.value = true;
+            const hasOtherValues = newValue.some((value) => value !== "0");
+            if (
+                hasOtherValues &&
+                newValue.includes("0") &&
+                oldValue.includes("0")
+            ) {
+                const currentFilters = { ...townsStore.filters.properties };
+                const filteredOrigin = currentFilters.origin.filter(
+                    (value) => value !== "0"
+                );
+                townsStore.filters.properties = {
+                    ...currentFilters,
+                    origin: filteredOrigin,
+                };
+            } else {
+                isUeOnly.value = newValue[0] === "0";
+            }
+            isProcessing.value = false;
+        }
+    },
+    { immediate: true }
+);
 </script>

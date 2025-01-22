@@ -1,7 +1,7 @@
 <template>
     <IndicateursLabel
         >Scolarisés en...<br />
-        <span class="text-tertiary">Maternelle</span></IndicateursLabel
+        <span class="text-tertiaryA11Y">Maternelle</span></IndicateursLabel
     >
 </template>
 

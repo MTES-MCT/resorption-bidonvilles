@@ -1,6 +1,9 @@
 <template>
     <span class="sr-only">Statut des conditions de vie</span>
-    <ul v-if="shantytown.livingConditions.version === 2">
+    <ul v-if="shantytown.livingConditions.version === 2" class="pl-5">
+        <div class="mb-1 font-bold -ml-5 whitespace-nowrap">
+            Conditions de Vie
+        </div>
         <CarteSiteDetailleeLivingConditionIcon
             :status="shantytown.livingConditions.water.status.status"
             :audio="

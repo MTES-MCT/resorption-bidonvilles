@@ -21,15 +21,20 @@
         </template>
         <template v-slot:menu>
             <Menu containerClasses="py-0">
-                <div v-for="option in options" :key="option.id"
-                    class="flex items-center whitespace-nowrap text-sm menuWidth">
-                    <Checkbox :disabled="disabled" v-model="checked[option.value]" variant="invisible" :label="option.label"
+                <div v-for="option in options" :key="option.value"
+                    :class="['flex', 'items-center', 'whitespace-nowrap', 'text-sm', 'menuWidth', { 'border-b-1': option.displayBottomBorder }]">
+                    <span v-if="option.type === 'label'" class="text-sm font-bold w-full pt-2 pb-0 pl-3 bg-white text-G600 cursor-pointer disabled" style="font-weight: bold;">{{ option.label }}</span>
+                    <Checkbox v-else :disabled="disabled" v-model="checked[option.value]" variant="invisible" :lineOffset="option.lineOffset" :label="option.label"
                         direction="col">
                     </Checkbox>
                 </div>
 
-                <div class="px-1 py-1 border-t-1">
-                    <Button size="sm" variant="primaryText" @click="clear" class="hover:underline">
+                <div class="border-t-1">
+                    <Button 
+                        size="sm"
+                        variant="custom" 
+                        class="flex items-center whitespace-nowrap text-sm menuWidth pl-3 hover:bg-blue200 hover:text-primary text-primary focusClasses.ring"
+                        @click="clear">
                         Effacer
                     </Button>
                 </div>

@@ -33,7 +33,10 @@
                 @click="toggleCollapse"
             >
                 <div
-                    class="border-b-2 border-G200 py-2 font-bold text-primary flex items-center justify-between"
+                    :class="{
+                        'border-b-2 border-G200 ': !collapsed,
+                    }"
+                    class="py-2 font-bold text-primary flex items-center justify-between"
                 >
                     <div>
                         <span v-if="status.negative.length">
@@ -128,10 +131,10 @@ const { title, status, info, showStatus, answers, inverted } = toRefs(props);
 const collapsed = ref(true);
 
 const COLORS = {
-    good: "text-green500",
+    good: "text-tertiaryA11Y",
     toImprove: "text-secondary",
-    bad: "text-red",
-    unknown: "text-red",
+    bad: "text-secondary",
+    unknown: "text-secondary",
 };
 const ICONS = {
     good: "check",
@@ -158,7 +161,7 @@ const realStatus = computed(() => {
     return s;
 });
 const colorClass = computed(() => {
-    return COLORS[realStatus.value] || "text-red";
+    return COLORS[realStatus.value] || "text-secondary";
 });
 const icon = computed(() => {
     return ICONS[realStatus.value] || "question";

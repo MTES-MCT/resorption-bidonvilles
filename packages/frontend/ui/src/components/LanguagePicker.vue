@@ -19,6 +19,11 @@ const props = defineProps({
   language: {
     type: String,
   },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 });
 const { language } = toRefs(props);
 

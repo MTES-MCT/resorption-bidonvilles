@@ -12,8 +12,10 @@ const intToStr = (int, nullValue = 'NC') => {
 type TownExportPopulationHistoryRow = {
     date: string,
     populationTotal: number,
+    populationTotalFemales: number,
     populationCouples: number,
     populationMinors: number,
+    populationMinorsGirls: number,
     populationMinors0To3: number,
     populationMinors3To6: number,
     populationMinors6To12: number,
@@ -31,12 +33,17 @@ export default (town: Shantytown): TownExportPopulationHistoryRow[] => {
     // valeurs présentes
     const ref = {
         populationTotal: intToStr(town.populationTotal, '-'),
+        populationTotalFemales: intToStr(town.populationTotalFemales, '-'),
         populationCouples: intToStr(
             town.populationCouples,
             '-',
         ),
         populationMinors: intToStr(
             town.populationMinors,
+            '-',
+        ),
+        populationMinorsGirls: intToStr(
+            town.populationMinorsGirls,
             '-',
         ),
         populationMinors0To3: intToStr(

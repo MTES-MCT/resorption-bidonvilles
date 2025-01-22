@@ -4,7 +4,7 @@
         tabindex="0"
         aria-label="Localisations de l'action"
     >
-        <Icon icon="map-marker-alt" class="text-lg" style="color: blue" />
+        <Icon icon="map-marker-alt" class="text-lg" style="color: #000091" />
         <span class="text-dark font-bold"> Lieu </span>
         <div>
             <span v-if="action.location_type === 'sur_site'">

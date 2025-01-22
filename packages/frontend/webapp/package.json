@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/webapp3",
-  "version": "2.23.2",
+  "version": "2.25.4",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -12,7 +12,7 @@
     "lint:all": "eslint --no-error-on-unmatched-pattern --max-warnings=0 --ext .vue,.js,.jsx,.cjs,.mjs src cypress public"
   },
   "dependencies": {
-    "@gouvfr/dsfr": "1.12.1",
+    "@gouvfr/dsfr": "1.13.0",
     "@gouvminint/vue-dsfr": "^5.19.0",
     "@sentry/vue": "^7.54.0",
     "@turf/turf": "^6.5.0",
@@ -48,11 +48,11 @@
     "eslint-plugin-vue": "^9.3.0",
     "jsdom": "^22.0.0",
     "lint-staged": "^13.2.2",
-    "postcss": "^8.4.31",
+    "postcss": "^8.4.46",
     "prettier": "^2.7.1",
     "start-server-and-test": "^2.0.3",
     "tailwindcss": "^3.1.8",
-    "vite": "^5.0.13",
+    "vite": "^5.4.6",
     "vitest": "^1.2.1"
   },
   "lint-staged": {

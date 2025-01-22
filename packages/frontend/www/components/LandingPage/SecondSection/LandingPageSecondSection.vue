@@ -128,7 +128,6 @@
 import { ref } from "vue";
 import LandingPageDataBlock from "./LandingPageDataBlock.vue";
 import LandingPageBilanBlock from "./LandingPageBilanBlock.vue";
-import { Button } from "@resorptionbidonvilles/ui";
 import { filename } from 'pathe/utils';
 
 const i18n = useI18n();

@@ -26,10 +26,13 @@
                 <CarteSiteDetailleeName :shantytown="shantytown" />
 
                 <div
-                    class="flex flex-col space-y-5 lg:flex-none lg:grid cardGridTemplateColumns print:grid lg:gap-10 px-6 py-4"
+                    class="flex flex-col lg:flex-none lg:grid cardGridTemplateColumns print:grid lg:gap-10 px-6 py-4 items-start"
                 >
                     <CarteSiteDetailleeFieldType :shantytown="shantytown" />
-                    <CarteSiteDetailleeOrigins :shantytown="shantytown" />
+                    <CarteSiteDetailleeOrigins
+                        :shantytown="shantytown"
+                        class="pl-5"
+                    />
                     <CarteSiteDetailleeLivingConditions
                         v-if="isOpen"
                         :shantytown="shantytown"

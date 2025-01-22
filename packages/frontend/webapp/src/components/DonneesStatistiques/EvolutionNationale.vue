@@ -4,7 +4,7 @@
         <section class="mb-8">
             <h1 class="font-bold text-primary text-lg">
                 Nombre de sites et d'habitants en France métropolitaine
-                (exclusivement intra UE et + de 10 personnes)
+                (exclusivement intra UE et de 10 personnes ou plus)
             </h1>
             <LineChart
                 class="mt-6"
@@ -16,7 +16,7 @@
         <section>
             <h1 class="font-bold text-primary text-lg">
                 Nombre de sites et d'habitants en France métropolitaine (toutes
-                origines et + de 10 personnes)
+                origines et de 10 personnes ou plus)
             </h1>
             <LineChart
                 class="mt-6"

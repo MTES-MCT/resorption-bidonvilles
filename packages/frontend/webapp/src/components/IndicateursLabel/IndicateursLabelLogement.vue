@@ -1,7 +1,7 @@
 <template>
     <IndicateursLabel>
         <span>accès à un </span>
-        <span class="text-tertiary">logement</span>
+        <span class="text-tertiaryA11Y">logement</span>
     </IndicateursLabel>
 </template>
 
