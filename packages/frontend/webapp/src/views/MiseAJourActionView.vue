@@ -23,6 +23,9 @@
     </LayoutError>
 
     <LayoutForm v-else size="large">
+        <template v-slot:icon
+            ><img :src="svgSearch" alt="Mise à jour de l'action"
+        /></template>
         <template v-slot:title>Mise à jour de l'action</template>
         <template v-slot:subtitle>
             {{ action.name }}
@@ -58,6 +61,8 @@ import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
 import LayoutForm from "@/components/LayoutForm/LayoutForm.vue";
 import FormDeclarationAction from "@/components/FormDeclarationAction/FormDeclarationAction.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
+
+import svgSearch from "@/assets/img/dsfr/search.svg";
 
 const actionsStore = useActionsStore();
 const isLoading = ref(null);

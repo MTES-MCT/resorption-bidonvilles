@@ -23,6 +23,9 @@
     </LayoutError>
 
     <LayoutForm v-else size="large">
+        <template v-slot:icon
+            ><img :src="svgUpdate" alt="Mise à jour"
+        /></template>
         <template v-slot:title>Mise à jour du site</template>
         <template v-slot:subtitle>
             {{ town.addressSimple
@@ -59,6 +62,8 @@ import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
 import LayoutForm from "@/components/LayoutForm/LayoutForm.vue";
 import FormDeclarationDeSite from "@/components/FormDeclarationDeSite/FormDeclarationDeSite.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
+
+import svgUpdate from "@/assets/img/dsfr/update.svg";
 
 const townsStore = useTownsStore();
 const isLoading = ref(null);

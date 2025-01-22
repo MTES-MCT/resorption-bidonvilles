@@ -1,6 +1,10 @@
 <template>
     <LayoutForm size="large">
+        <template v-slot:icon
+            ><img :src="svgSiteAdd" alt="Déclarer un nouveau site"
+        /></template>
         <template v-slot:title>Déclarer un nouveau site</template>
+        <template v-slot:subtitle>Je souhaite créer un nouveau site.</template>
         <template v-slot:buttons>
             <Button
                 variant="primaryOutline"
@@ -27,6 +31,8 @@ import router from "@/helpers/router";
 import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
 import LayoutForm from "@/components/LayoutForm/LayoutForm.vue";
 import FormDeclarationDeSite from "@/components/FormDeclarationDeSite/FormDeclarationDeSite.vue";
+
+import svgSiteAdd from "@/assets/img/dsfr/site-add.svg";
 
 const form = ref(null);
 
