@@ -2,9 +2,12 @@
     <FicheSousRubrique>
         <p class="font-bold">Champs d'intervention</p>
         <p class="flex">
-            <Tag v-for="topic in action.topics" :key="topic.uid" class="mr-2">{{
-                topic.name
-            }}</Tag>
+            <Tag
+                v-for="topic in action.topics"
+                :key="topic.uid"
+                class="mr-2 rounded-lg !bg-blue100 text-primary"
+                >{{ topic.name }}</Tag
+            >
         </p>
     </FicheSousRubrique>
 </template>

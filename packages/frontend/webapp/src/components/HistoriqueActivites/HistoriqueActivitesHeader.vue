@@ -1,6 +1,6 @@
 <template>
     <ViewHeader icon="bell">
-        <template v-slot:title>Historique des activités</template>
+        <template v-slot:title>Dernières activités</template>
         <template v-slot:description
             >Consultez les dernières activités au national ou sur votre
             territoire</template
@@ -14,6 +14,7 @@
                     variant="secondaryOutline"
                     @click="showModeration"
                     size="sm"
+                    class="!border-2 !border-secondary hover:!bg-secondary"
                 >
                     Voir les règles de modération
                 </Button>
@@ -71,3 +72,9 @@ function showModeration() {
     modaleStore.open(HistoriqueActivitesReglesModeration);
 }
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

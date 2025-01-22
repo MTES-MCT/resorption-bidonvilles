@@ -1,5 +1,5 @@
 <template>
-    <TableauDeBordSection title="Activité" id="activites">
+    <div class="mt-0">
         <Spinner v-if="dashboardActivitiesStore.isLoading" />
 
         <ViewErrorInline v-else-if="dashboardActivitiesStore.error">
@@ -25,29 +25,28 @@
         </ViewErrorInline>
 
         <section v-else class="flex">
-            <TableauDeBordFiltres
-                class="w-48 pt-8 -mt-8 sticky top-0 self-start"
-            />
+            <div class="sticky self-start sticky top-28">
+                <TableauDeBordFiltres class="w-48 pt-0 -mt-0" />
+            </div>
             <TableauDeBordActivitesListe class="ml-24 -mt-1 flex-1" />
         </section>
-    </TableauDeBordSection>
+    </div>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, watch } from "vue";
 import { useDashboardActivitiesStore } from "@/stores/dashboard.activities.store";
-import { useDashboardStore } from "@/stores/dashboard.store";
+import { useActivitiesStore } from "@/stores/activities.store";
 import compareLocations from "@/utils/compareLocations";
 
 import { Button, Spinner } from "@resorptionbidonvilles/ui";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 import ViewErrorInline from "@/components/ViewErrorInline/ViewErrorInline.vue";
-import TableauDeBordSection from "../TableauDeBordSection.vue";
 import TableauDeBordFiltres from "./TableauDeBordFiltres.vue";
 import TableauDeBordActivitesListe from "./TableauDeBordActivitesListe.vue";
 
 const dashboardActivitiesStore = useDashboardActivitiesStore();
-const dashboardStore = useDashboardStore();
+const activitiesStore = useActivitiesStore();
 const aMonthAgo = new Date();
 aMonthAgo.setDate(aMonthAgo.getDate() - 30);
 aMonthAgo.setHours(0);
@@ -68,15 +67,15 @@ function load() {
     if (
         !compareLocations(loadedLocation, {
             search: "",
-            data: dashboardStore.filters.location,
+            data: activitiesStore.filters.location,
         }) ||
         dashboardActivitiesStore.endOfActivities !== true
     ) {
         dashboardActivitiesStore.fetch({
             location: {
                 locationType:
-                    dashboardStore.filters.location?.typeUid || "nation",
-                locationCode: dashboardStore.filters.location?.code,
+                    activitiesStore.filters.location?.typeUid || "nation",
+                locationCode: activitiesStore.filters.location?.code,
             },
             maxDate: aMonthAgo.getTime(),
             numberOfActivities: -1,
@@ -84,5 +83,11 @@ function load() {
     }
 }
 
+watch(
+    () => activitiesStore.filters.location,
+    () => {
+        load();
+    }
+);
 onMounted(load);
 </script>

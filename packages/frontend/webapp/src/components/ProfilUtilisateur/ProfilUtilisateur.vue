@@ -13,6 +13,7 @@
                     iconPosition="left"
                     variant="primaryOutline"
                     size="sm"
+                    class="hover:!bg-primary"
                     :href="configStore.config.version_charte_engagement.fichier"
                 >
                     Charte d'engagement de l'utilisateur</Button

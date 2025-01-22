@@ -97,3 +97,14 @@ function onChange(e) {
     emit('update:modelValue', e.srcElement.value);
 }
 </script>
+
+<style scoped>
+select {
+    border: inherit;
+}
+
+select#type, #organization_type, #organization_public, #organization_administration {
+    border: 2px solid !important;
+    border-color: rgb(146 146 146 / var(--tw-border-opacity)) !important;
+}
+</style>

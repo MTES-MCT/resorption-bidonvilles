@@ -6,7 +6,10 @@
         <div class="absolute w-full h-full bg-gray-500 opacity-75"></div>
         <div class="flex items-center justify-center h-full">
             <div role="dialog" ref="dialog" aria-modal="true" aria-labelledby="modal-headline"
-                class="opacity-100 z-50 shadow-xl max-h-[95vh] overflow-auto">
+                class="opacity-100 z-50 shadow-xl max-h-[95vh]"
+                :class="[
+                    resultsOverflow ? 'overflow-auto' : '',
+                ]">
                 <div class="bg-white" ref="trapRef" role="dialog">
                     <slot name="header">
                         <div class="pt-10 px-10 pb-4">
@@ -68,9 +71,14 @@ const props = defineProps({
         type: String,
         required: false,
     },
+    resultsOverflow: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
 });
 
-const { isOpen, closeWhenClickOutside, allowClose } = toRefs(props);
+const { isOpen, closeWhenClickOutside, allowClose, resultsOverflow } = toRefs(props);
 const openedAt = ref(null);
 const dialog = ref(null);
 const emit = defineEmits(["close"]);

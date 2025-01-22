@@ -3,6 +3,7 @@
         <Tag
             :variant="pinVariant"
             :class="['text-xs uppercase', isHover ? 'shadow-md' : '']"
+            class="mt-1"
         >
             {{ lastUpdate }}
         </Tag>

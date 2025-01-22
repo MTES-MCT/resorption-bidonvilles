@@ -1,16 +1,45 @@
 <template>
     <ContentWrapper>
-        <TableauDeBordHeader />
-        <TableauDeBordVueEnsemble class="mt-12" />
-        <TableauDeBordSites class="mt-12" />
-        <TableauDeBordActivites class="mt-12" />
+        <TableauDeBordGrille :cards="cards" />
     </ContentWrapper>
 </template>
 
 <script setup>
+import { ref, onMounted } from "vue";
 import { ContentWrapper } from "@resorptionbidonvilles/ui";
-import TableauDeBordHeader from "./TableauDeBordHeader.vue";
-import TableauDeBordVueEnsemble from "./TableauDeBordVueEnsemble/TableauDeBordVueEnsemble.vue";
-import TableauDeBordSites from "./TableauDeBordSites/TableauDeBordSites.vue";
-import TableauDeBordActivites from "./TableauDeBordActivites/TableauDeBordActivites.vue";
+import TableauDeBordGrille from "./TableauDeBordGrille.vue";
+import { useUserStore } from "@/stores/user.store";
+
+import { default as baseCards } from "@/utils/TableauDeBordCardsList";
+
+const userStore = useUserStore();
+
+const cards = ref([]);
+
+onMounted(() => {
+    baseCards.map((card) => {
+        let tmpCard = {
+            name: card.name,
+            icon: card.icon,
+            actions: [],
+            options: card.options,
+        };
+        if (
+            card.permission === null ||
+            userStore.hasPermission(card.permission) ||
+            userStore.user.is_superuser
+        ) {
+            card.actions.map((cardData) => {
+                if (
+                    cardData.permission === null ||
+                    userStore.hasPermission(cardData.permission) ||
+                    userStore.user.is_superuser
+                ) {
+                    tmpCard.actions.push(cardData);
+                }
+            });
+            cards.value.push(tmpCard);
+        }
+    });
+});
 </script>

@@ -11,6 +11,7 @@
             v-model="adminComments"
             placeholder="Votre commentaire..."
             :disabled="isLoading"
+            class="bg-white"
         />
         <ErrorSummary v-if="error" :message="error" />
         <div class="flex items-center justify-end">
@@ -19,6 +20,7 @@
                 variant="primaryText"
                 @click="cancelAdminComments"
                 :disabled="isLoading"
+                class="hover:!bg-G200"
                 >Annuler mes changements</Button
             >
             <Button
@@ -26,6 +28,7 @@
                 @click="updateAdminComments"
                 :disabled="!pendingAdminCommentsChanges"
                 :loading="isLoading"
+                class="hover:!bg-tertiaryA11Yalt"
                 >Sauvegarder le commentaire</Button
             >
         </div>

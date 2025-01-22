@@ -1,0 +1,22 @@
+<svg width="80px" height="80px" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        .fr-artwork-decorative {
+            fill: #ECECFF;
+        }
+        .fr-artwork-minor {
+            fill: #E1000F;
+            position: relative;
+            z-index: 1;
+        }
+        .fr-artwork-major {
+            fill: #000091;
+            position: relative;
+            z-index: -1;
+        }
+    </style>
+    <g id="artwork-minor">
+        <path d="M 21 24 A 12 12 90 1 0 21 0 a 12 12 90 1 0 0 24 z m -4.2844 4.5 C 7.4812 28.5 0 35.9812 0 45.2156 C 0 46.7531 1.2469 48 2.7844 48 l 36.4312 0 c 1.5375 0 2.7844 -1.2469 2.7844 -2.7844 C 42 35.9812 34.5187 28.5 25.2844 28.5 l -8.5687 0 z"/>
+    </g>
+    <use class="fr-artwork-minor" href="#artwork-minor"/>
+</svg>
+<!-- M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z -->

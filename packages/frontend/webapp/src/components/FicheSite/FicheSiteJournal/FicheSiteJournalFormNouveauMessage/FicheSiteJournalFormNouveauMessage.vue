@@ -34,6 +34,7 @@
                         iconPosition="left"
                         variant="primaryOutline"
                         @click="resetForm"
+                        class="!border-2 !border-primary hover:!bg-primary"
                         >Annuler</Button
                     >
                     <Button
@@ -41,6 +42,7 @@
                         icon="paper-plane"
                         iconPosition="left"
                         @click="submit"
+                        class="!border-2 !border-primary"
                         >Publier le message</Button
                     >
                 </p>
@@ -199,3 +201,9 @@ defineExpose({
     focus: (...args) => messageInput.value.focus(...args),
 });
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

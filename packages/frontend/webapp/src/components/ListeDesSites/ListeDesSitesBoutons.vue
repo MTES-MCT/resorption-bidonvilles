@@ -7,6 +7,7 @@
             :disabled="townsStore.filteredTowns.length === 0"
             @click="print"
             size="sm"
+            class="!border-2 !border-primary hover:!bg-primary"
             >Imprimer</Button
         >
         <Button
@@ -17,6 +18,7 @@
             :disabled="townsStore.filteredTowns.length === 0"
             @click="showExport"
             size="sm"
+            class="!border-2 !border-primary hover:!bg-primary"
             >Exporter</Button
         >
         <Button
@@ -26,6 +28,7 @@
             iconPosition="left"
             variant="primary"
             size="sm"
+            class="!border-2 !border-primary hover:!bg-primaryDark"
         >
             Déclarer un nouveau site
         </Button>
@@ -64,3 +67,9 @@ function showExport() {
     modaleStore.open(ListeDesSitesExport);
 }
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

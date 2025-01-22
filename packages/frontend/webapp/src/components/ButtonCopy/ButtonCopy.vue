@@ -6,6 +6,7 @@
         @click="copy"
         href="#"
         :padding="false"
+        class="-ml-2 py-1 px-2 rounded hover:!bg-G200"
         ><slot>Copier</slot></Button
     >
 </template>

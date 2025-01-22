@@ -4,7 +4,7 @@
 
         <div class="relative" :class="width ">
             <InputIcon position="before" :icon="prefixIcon" v-if="prefixIcon" />
-            <input :id="id" v-bind="filteredProps" :class="classes" :data-cy-field="cypressName" :step="step"
+            <input :id="id" v-bind="filteredProps" class="bg-white" :class="classes" :data-cy-field="cypressName" :step="step"
                 :disabled="disabled" ref="input" @blur="$emit('blur', $event)" @change="setValue($refs.input.value)" />
             <InputIcon position="after" v-if="(clear && currentValue) || suffixIcon || $slots.suffix">
                 <slot name="suffix" v-if="$slots.suffix" />
@@ -142,6 +142,7 @@ export default {
                 clear: this.clear,
                 size: this.size,
                 disabled: this.disabled,
+                currentValue: this.currentValue
             };
 
             return {

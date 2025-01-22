@@ -3,7 +3,9 @@
         <ViewHeader icon="building">
             <template v-slot:title
                 >Fiche structure —
-                <span class="text-info">{{ organization.name }}</span></template
+                <span class="text-primary">{{
+                    organization.name
+                }}</span></template
             >
             <template v-slot:description>
                 Consultez les informations sur cette structure et ses membres

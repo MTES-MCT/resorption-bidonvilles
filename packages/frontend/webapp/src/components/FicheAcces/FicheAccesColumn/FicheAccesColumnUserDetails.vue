@@ -35,7 +35,7 @@
         <Icon icon="phone" class="text-G400 mr-2" /> {{ phone }}
     </p>
     <Button
-        class="mt-2"
+        class="mt-2 !border-2 !border-primary hover:!bg-primaryDark"
         v-if="userStore.user?.is_superuser"
         size="sm"
         icon="user-pen"
@@ -45,7 +45,7 @@
     >
     <Button
         v-if="userStore.user?.is_superuser"
-        class="mt-2"
+        class="mt-2 !border-2 !border-primary hover:!bg-primaryDark"
         size="sm"
         icon="building-user"
         iconPosition="left"

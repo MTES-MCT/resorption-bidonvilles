@@ -4,11 +4,15 @@
         searchTitle="Rechercher une commune, un département, une région..."
         searchPlaceholder="Nom d'une commune, d'un département, d'une région..."
         v-model:location="location"
+        :paddingTop="false"
     >
-        <ContentWrapper>
+        <ContentWrapper class="pt-8">
             <FilArianne :items="ariane" class="mb-8" />
+            <HistoriqueActivitesHeader
+                class="sticky top-0 bg-white pt-2 pb-10 !mb-0"
+            />
+            <TableauDeBordActivites class="mt-8" />
         </ContentWrapper>
-        <HistoriqueActivites />
     </LayoutSearch>
 </template>
 
@@ -17,7 +21,8 @@ import { onMounted, onBeforeUnmount, computed } from "vue";
 import { useActivitiesStore } from "@/stores/activities.store";
 import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
-import HistoriqueActivites from "@/components/HistoriqueActivites/HistoriqueActivites.vue";
+import TableauDeBordActivites from "@/components/TableauDeBord/TableauDeBordActivites/TableauDeBordActivites.vue";
+import HistoriqueActivitesHeader from "@/components/HistoriqueActivites/HistoriqueActivitesHeader.vue";
 
 const activitiesStore = useActivitiesStore();
 const ariane = [

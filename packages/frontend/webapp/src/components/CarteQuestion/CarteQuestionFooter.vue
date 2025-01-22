@@ -9,6 +9,7 @@
                 icon="rectangle-list"
                 iconPosition="left"
                 :href="`/question/${question.id}`"
+                class="!border-2 !border-primary hover:!bg-primaryDark"
                 >Voir la question</Button
             >
             <Button
@@ -19,6 +20,7 @@
                 icon="fa-regular fa-eye"
                 iconPosition="left"
                 :href="`/question/${question.id}#reponses`"
+                class="!border-2 !border-primary hover:!bg-primaryDark"
                 >{{ seeAnswerWording }}</Button
             >
         </div>
@@ -48,3 +50,9 @@ const seeAnswerWording = computed(() => {
         : `${question.value.answers.length} réponse`;
 });
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

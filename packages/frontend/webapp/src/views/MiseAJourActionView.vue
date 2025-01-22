@@ -23,12 +23,19 @@
     </LayoutError>
 
     <LayoutForm v-else size="large">
+        <template v-slot:icon
+            ><img :src="svgSearch" alt="Mise à jour de l'action"
+        /></template>
         <template v-slot:title>Mise à jour de l'action</template>
         <template v-slot:subtitle>
             {{ action.name }}
         </template>
         <template v-slot:buttons>
-            <Button variant="primaryOutline" type="button" @click="back"
+            <Button
+                variant="primaryOutline"
+                type="button"
+                @click="back"
+                class="!border-2 !border-primary hover:!bg-primary"
                 >Annuler</Button
             >
             <Button @click="submit" :loading="form?.isSubmitting"
@@ -54,6 +61,8 @@ import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
 import LayoutForm from "@/components/LayoutForm/LayoutForm.vue";
 import FormDeclarationAction from "@/components/FormDeclarationAction/FormDeclarationAction.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
+
+import svgSearch from "@/assets/img/dsfr/search.svg";
 
 const actionsStore = useActionsStore();
 const isLoading = ref(null);
@@ -98,3 +107,9 @@ function back() {
     }
 }
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

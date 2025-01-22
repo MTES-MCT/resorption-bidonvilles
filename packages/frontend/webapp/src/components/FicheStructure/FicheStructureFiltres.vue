@@ -6,6 +6,7 @@
             v-if="expertiseTopicsItems.length > 0"
             title="Expertises ou sujets d'intérêts"
             :options="expertiseTopicsItems"
+            class="border-1 !border-primary rounded hover:bg-blue200"
         />
     </section>
 </template>
