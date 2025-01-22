@@ -37,7 +37,7 @@
             >
                 <!-- icon -->
                 <th
-                    rowspan="9"
+                    rowspan="11"
                     v-if="section.icon === 'people'"
                     class="align-top pr-2 text-xl"
                     id="section_people"
@@ -64,6 +64,7 @@
                     class="text-left pr-4 border-b-1"
                     :class="{
                         'border-black': sections[index + 1]?.icon !== undefined,
+                        [section.css]: section.css !== undefined,
                     }"
                     :id="'raw_' + section.data"
                     :headers="'section_' + section.section"
@@ -112,6 +113,12 @@ const sections = [
         section: "people",
     },
     {
+        title: "dont femmes et filles",
+        css: "font-normal pl-14",
+        data: "populationTotalFemales",
+        section: "people",
+    },
+    {
         title: "Ménages",
         css: "font-bold",
         data: "populationCouples",
@@ -119,43 +126,49 @@ const sections = [
     },
     {
         title: "Mineurs",
-        css: "font-normal",
+        css: "font-bold",
         data: "populationMinors",
         section: "people",
     },
     {
+        title: "dont filles",
+        css: "font-normal pl-14",
+        data: "populationMinorsGirls",
+        section: "people",
+    },
+    {
         title: "0 - 3 ans",
-        css: "font-normal",
+        css: "font-bold",
         data: "populationMinors0To3",
         section: "people",
     },
     {
         title: "3 - 6 ans",
-        css: "font-normal",
+        css: "font-bold",
         data: "populationMinors3To6",
         section: "people",
     },
     {
         title: "6 - 12 ans",
-        css: "font-normal",
+        css: "font-bold",
         data: "populationMinors6To12",
         section: "people",
     },
     {
         title: "12 - 16 ans",
-        css: "font-normal",
+        css: "font-bold",
         data: "populationMinors12To16",
         section: "people",
     },
     {
         title: "16 - 18 ans",
-        css: "font-normal",
+        css: "font-bold",
         data: "populationMinors16To18",
         section: "people",
     },
     {
         title: "Inscrits en établissement scolaire",
-        css: "font-normal",
+        css: "font-bold",
         data: "minorsInSchool",
         section: "people",
     },
@@ -190,8 +203,13 @@ const sections = [
 const populationHistory = computed(() => {
     let ref = {
         populationTotal: formatInt(town.value.populationTotal, "-"),
+        populationTotalFemales: formatInt(
+            town.value.populationTotalFemales,
+            "-"
+        ),
         populationCouples: formatInt(town.value.populationCouples, "-"),
         populationMinors: formatInt(town.value.populationMinors, "-"),
+        populationMinorsGirls: formatInt(town.value.populationMinorsGirls, "-"),
         populationMinors0To3: formatInt(town.value.populationMinors0To3, "-"),
         populationMinors3To6: formatInt(town.value.populationMinors3To6, "-"),
         populationMinors6To12: formatInt(town.value.populationMinors6To12, "-"),
