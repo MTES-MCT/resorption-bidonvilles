@@ -94,7 +94,7 @@ export default async (shantytownId: string, preparatoryPhasesTowardResorption, t
 
         const promises = [];
         if (differences.addedPhases.length > 0) {
-            differences.addedPhases.forEach(async (data) => {
+            differences.addedPhases.map(async (data) => {
                 promises.push(shantytownPreparatoryPhasesTowardResorptionModel.create(
                     {
                         fk_shantytown: parseInt(shantytownId, 10),
@@ -108,7 +108,7 @@ export default async (shantytownId: string, preparatoryPhasesTowardResorption, t
         }
 
         if (differences.removedPhases.length > 0) {
-            differences.removedPhases.forEach(async (data) => {
+            differences.removedPhases.map(async (data) => {
                 promises.push(shantytownPreparatoryPhasesTowardResorptionModel.delete(
                     {
                         fk_shantytown: parseInt(shantytownId, 10),
@@ -120,7 +120,7 @@ export default async (shantytownId: string, preparatoryPhasesTowardResorption, t
         }
 
         if (differences.modifiedPhases.length > 0) {
-            differences.modifiedPhases.forEach(async (data) => {
+            differences.modifiedPhases.map(async (data) => {
                 promises.push(shantytownPreparatoryPhasesTowardResorptionModel.update(
                     {
                         shantytownId: parseInt(shantytownId, 10),
