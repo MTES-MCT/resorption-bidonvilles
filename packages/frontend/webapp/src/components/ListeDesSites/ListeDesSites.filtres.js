@@ -34,20 +34,28 @@ export default {
                 displayBottomBorder: true,
             },
             {
+                type: "label",
+                label: "Incluant...",
+            },
+            {
                 value: "1",
                 label: "Français",
+                lineOffset: true,
             },
             {
                 value: "2",
                 label: "Union européenne",
+                lineOffset: true,
             },
             {
                 value: "3",
                 label: "Hors Union européenne",
+                lineOffset: true,
             },
             {
                 value: "unknown",
                 label: "Inconnu",
+                lineOffset: true,
             },
         ],
     },
