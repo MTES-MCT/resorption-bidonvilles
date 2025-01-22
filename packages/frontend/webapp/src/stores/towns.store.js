@@ -23,11 +23,11 @@ import {
     removeActorTheme,
     setHeatwaveStatus,
     updateActorThemes,
+    startResorption,
 } from "@/api/towns.api";
 import enrichShantytown from "@/utils/enrichShantytown";
 import filterShantytowns from "@/utils/filterShantytowns";
 import { deleteAttachment } from "@/api/attachments.api";
-import { startResorption } from "@/api/towns.api";
 
 const ITEMS_PER_PAGE = 20;
 
