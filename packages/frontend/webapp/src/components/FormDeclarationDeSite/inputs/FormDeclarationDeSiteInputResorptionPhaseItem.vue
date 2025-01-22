@@ -32,7 +32,6 @@
 
 <script setup>
 import { computed, defineProps, ref } from "vue";
-// import ItemCheckbox from "./FormDeclarationDeSiteInputResorptionPhasesItemCheckbox.vue";
 import { Checkbox, DatepickerInput } from "@resorptionbidonvilles/ui";
 import { useUserStore } from "@/stores/user.store";
 
