@@ -23,6 +23,13 @@ async function importAllRoutesInside(directory: string, app: ApplicationWithCust
 
 export default async (app: ApplicationWithCustomRoutes) => {
     app.use('/assets', express.static(path.resolve(__dirname, '../../assets')));
-    app.get('/', (req, res) => res.status(200).send('Bienvenue sur l\'API de Résorption Bidonvilles'));
+    app.get('/', (req, res) => {
+        const filePath = path.resolve(__dirname, '../../assets/permanently_moving.html');
+        res.status(200).sendFile(filePath, (err) => {
+            if (err) {
+                res.status(404).send('File not found');
+            }
+        });
+    });
     await importAllRoutesInside(path.resolve(__dirname, '../controllers'), app);
 };
