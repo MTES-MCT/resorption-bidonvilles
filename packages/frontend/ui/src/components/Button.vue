@@ -102,13 +102,13 @@ export default {
                 primary:
                     "border-2 border-primary bg-primary text-white hover:bg-primaryDark",
                 secondary:
-                    "border-2 border-secondary bg-secondary text-white hover:bg-secondaryDark",
+                    "!border-2 !border-secondary bg-secondary text-white hover:!bg-secondaryDark",
                 tertiary:
                     "border-2 border-tertiary bg-tertiary text-white hover:bg-tertiaryDark hover:border-tertiaryDark",
                 tertiaryA11Y:
                     "border-2 border-tertiaryA11Y bg-tertiaryA11Y text-white hover:bg-tertiaryA11Ydark hover:border-tertiaryA11Ydark",
                 tertiaryA11Yalt:
-                    "border-2 border-tertiaryA11Y bg-tertiaryA11Yalt text-white hover:bg-tertiaryA11Ydark hover:border-tertiaryA11Ydark",
+                    "border-2 border-tertiaryA11Y bg-tertiaryA11Yalt text-white hover:!bg-tertiaryA11Ydark hover:border-tertiaryA11Ydark",
                 
                 specialEvent:
                     "bg-yellow-200 text-black hover:bg-yellow-400",
