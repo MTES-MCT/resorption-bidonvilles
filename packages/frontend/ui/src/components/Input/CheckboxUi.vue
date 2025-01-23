@@ -2,7 +2,7 @@
     <template v-if="variant === 'checkbox'">
         <label :class="labelClass" class="flex cursor-pointer">
             <input v-if="active" :id="`variant-checkbox-${randomId()}`" ref="checkbox" @click="onChange(value)"
-                class="inline-block rounded mr-2 text-center" type="checkbox" :checked="checked" :disabled="disabled" />
+                class="!inline-block rounded mr-2 text-center" type="checkbox" :checked="checked" :disabled="disabled" />
             <div v-else>
                 <Icon v-if="checked" class="text-tertiaryA11Y font-bold text-md" icon="fa-solid fa-check" />
                 <Icon v-else class="text-redA11Y font-bold text-md" icon="fa-solid fa-xmark" />
