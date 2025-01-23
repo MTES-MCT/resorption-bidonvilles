@@ -1,7 +1,12 @@
 <template>
     <LayoutForm size="large">
+        <template v-slot:icon
+            ><img :src="svgCommunity" alt="Poser une question"
+        /></template>
         <template v-slot:title>Poser une question à la communauté</template>
-
+        <template v-slot:subtitle>
+            J'ai besoin de l'aide de la communauté.
+        </template>
         <template v-slot:buttons>
             <Button variant="primaryOutline" type="button" @click="back"
                 >Annuler</Button
@@ -24,6 +29,8 @@ import router from "@/helpers/router";
 import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
 import LayoutForm from "@/components/LayoutForm/LayoutForm.vue";
 import FormNouvelleQuestion from "@/components/FormNouvelleQuestion/FormNouvelleQuestion.vue";
+
+import svgCommunity from "@/assets/img/dsfr/community.svg";
 
 const form = ref(null);
 

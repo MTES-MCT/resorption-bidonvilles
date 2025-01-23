@@ -21,3 +21,9 @@ const props = defineProps({
 });
 const { user, isLoading, disabled } = toRefs(props);
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

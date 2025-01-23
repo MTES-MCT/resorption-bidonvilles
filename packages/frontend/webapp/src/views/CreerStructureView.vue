@@ -1,5 +1,8 @@
 <template>
     <LayoutForm size="large">
+        <template v-slot:icon
+            ><img :src="svgAddStructure" alt="Créer une nouvelle structure"
+        /></template>
         <template v-slot:title>Créer une nouvelle structure</template>
         <template v-slot:buttons>
             <Button
@@ -27,6 +30,8 @@ import router from "@/helpers/router";
 import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
 import LayoutForm from "@/components/LayoutForm/LayoutForm.vue";
 import FormCreerStructure from "@/components/FormCreerStructure/FormCreerStructure.vue";
+
+import svgAddStructure from "@/assets/img/dsfr/addStructure.svg";
 
 const form = ref(null);
 
