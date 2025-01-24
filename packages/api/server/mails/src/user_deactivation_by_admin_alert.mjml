@@ -25,7 +25,7 @@
 
         <mj-section>
             <mj-column>
-                <mj-text mj-class="pb-4">Si vous souhaitez contester cette décision et faire réactiver votre compte, vous pouvez nous contacter à l'adresse <a class="link" href="mailto:contact@resorption-bidonvilles.beta.gouv.fr">contact@resorption-bidonvilles.beta.gouv.fr</a></mj-text>
+                <mj-text mj-class="pb-4">Si vous souhaitez contester cette décision et faire réactiver votre compte, vous pouvez nous contacter à l'adresse <a class="link" href="mailto:contact@resorption-bidonvilles.dihal.gouv.fr">contact@resorption-bidonvilles.dihal.gouv.fr</a></mj-text>
             </mj-column>
         </mj-section>
 
