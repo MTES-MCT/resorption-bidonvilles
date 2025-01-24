@@ -61,12 +61,12 @@ export const RealLifeExample = function () {
                 Accueil
             </LinkButton>
             <LinkButton
-                to="https://blog-resorption-bidonvilles.beta.gouv.fr"
+                to="https://blog-resorption-bidonvilles.fr"
                 icon="house-circle-check">
                 Blog
             </LinkButton>
             <LinkButton
-                to="mailto:contact@resorption-bidonvilles.beta.gouv.fr"
+                to="mailto:contact@resorption-bidonvilles.dihal.gouv.fr"
                 icon="house-circle-check">
                 Aide
             </LinkButton>
