@@ -9,6 +9,7 @@
                     :title="filter.label"
                     :options="filter.options"
                     v-model="actionsStore.filters.properties[filter.id]"
+                    class="border-1 !border-primary rounded hover:bg-blue200"
                 />
             </div>
         </article>

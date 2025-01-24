@@ -12,6 +12,7 @@
                     variant="primaryOutline"
                     size="sm"
                     @click="downloadGuide"
+                    class="!border-2 !border-primary hover:!bg-primary"
                 >
                     Guide des accès</Button
                 >
@@ -22,6 +23,7 @@
                     iconPosition="left"
                     variant="primaryOutline"
                     size="sm"
+                    class="!border-2 !border-primary hover:!bg-primary"
                 >
                     Exporter</Button
                 >
@@ -31,6 +33,7 @@
                     iconPosition="left"
                     variant="primary"
                     size="sm"
+                    class="!border-2 !border-primary hover:!bg-primaryDark"
                 >
                     Ajouter un utilisateur</Button
                 >
@@ -40,6 +43,7 @@
                     iconPosition="left"
                     variant="primary"
                     size="sm"
+                    class="!border-2 !border-primary hover:!bg-primaryDark"
                 >
                     Créer une structure</Button
                 >
@@ -67,3 +71,9 @@ function openModalExport() {
     });
 }
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

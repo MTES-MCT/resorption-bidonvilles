@@ -11,3 +11,36 @@ body {
 #app {
     height: 100%;
 }
+
+/* CSS spécifique pour écraser le DSFR */
+:root {
+    --underline-img: none; 
+}
+
+input, textarea {
+    border: 2px solid #e5e7eb;
+}
+
+input[type=checkbox] {
+    display: none;
+
+}
+
+a {
+    text-decoration: none;
+    background: none;
+}
+
+button.bg-primary:hover {
+    background-color: rgb(0 0 108 / var(--tw-bg-opacity)) !important;
+}
+
+p {
+    font-size: inherit;
+}
+
+@media (hover:hover) {
+    a[href]:hover, button:not(:disabled):hover, input[type=button]:not(:disabled):hover, input[type=image]:not(:disabled):hover, input[type=reset]:not(:disabled):hover, input[type=submit]:not(:disabled):hover {
+        background: none;
+    }
+}

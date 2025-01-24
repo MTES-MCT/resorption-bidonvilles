@@ -11,8 +11,8 @@
         <label :class="[classes,
             isSubmitting || disabled ? 'opacity-85' : 'hover:border-blue500',
         ]">
-             <input :disabled="isSubmitting || disabled" type="radio" :name="name" :value="value" v-model="props.modelValue" class="appearance-none" @click="onClick" />
-            <span>{{ label }}</span>
+             <input :disabled="isSubmitting || disabled" type="radio" :name="name" :value="value" v-model="props.modelValue" class="hidden appearance-none" @click="onClick" />
+            <span class="!ml-3 pl-0">{{ label }}</span>
             <Icon v-if="value === props.modelValue" class="text-primary font-bold text-md" icon="fa-solid fa-check" />
         </label>
     </template>

@@ -6,6 +6,8 @@
             :icon="parametresIcon"
             iconPosition="left"
             @click="toggleParametres"
+            size="sm"
+            class="!border-2 !border-primary hover:!bg-primaryDark"
             >{{ parametresWording }}</Button
         >
         <Button
@@ -13,6 +15,8 @@
             icon="file-excel"
             iconPosition="left"
             @click="print"
+            size="sm"
+            class="!border-2 !border-primary hover:!bg-primaryDark"
             >Exporter</Button
         >
     </section>
@@ -106,3 +110,9 @@ async function print() {
     }
 }
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

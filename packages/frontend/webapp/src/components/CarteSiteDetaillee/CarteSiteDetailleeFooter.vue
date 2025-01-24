@@ -9,6 +9,7 @@
             size="sm"
             :loading="heatwaveRequestStatus?.loading === true"
             @click.prevent="toggleHeatwave"
+            class="!border-2 !border-primary hover:!bg-primary"
         >
             <template v-if="heatwaveStatus === false">Alerte Canicule</template>
             <template v-else>Supprimer l'alerte Canicule</template>
@@ -20,6 +21,7 @@
             icon="pencil-alt"
             iconPosition="left"
             :href="`/site/${shantytown.id}/mise-a-jour`"
+            class="!border-2 !border-primary hover:!bg-primary"
             >Mettre à jour</Button
         >
         <Link :to="`/site/${shantytown.id}`">
@@ -102,3 +104,9 @@ async function toggleHeatwave() {
     }
 }
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

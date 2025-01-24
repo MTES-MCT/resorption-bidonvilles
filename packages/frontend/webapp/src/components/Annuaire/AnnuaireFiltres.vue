@@ -9,6 +9,7 @@
                     <Filter
                         v-model="organizationTypesFilter"
                         title="Type de structure"
+                        class="border-1 !border-primary rounded hover:bg-blue200"
                         :options="[
                             {
                                 value: 'public_establishment',
@@ -30,6 +31,7 @@
                         v-if="expertiseTopicsItems.length > 0"
                         title="Expertises ou sujets d'intérêts"
                         :options="expertiseTopicsItems"
+                        class="border-1 !border-primary rounded hover:bg-blue200"
                     />
                 </div>
             </article>

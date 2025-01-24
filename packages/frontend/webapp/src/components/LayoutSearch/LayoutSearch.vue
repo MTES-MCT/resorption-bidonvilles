@@ -22,7 +22,9 @@
                             :allowFreeSearch="allowFreeSearch"
                             v-model="inputLocation"
                         />
-                        <Button size="sm" type="button">Rechercher</Button>
+                        <Button size="sm" type="button" class="py-1.5"
+                            >Rechercher</Button
+                        >
                     </div>
                     <div class="mt-2 text-left text-sm">
                         <p class="font-bold">Mes territoires :</p>
@@ -62,7 +64,6 @@ import { defineProps, toRefs, computed, defineEmits } from "vue";
 import { useUserStore } from "@/stores/user.store";
 
 import Layout from "@/components/Layout/Layout.vue";
-import {} from "@resorptionbidonvilles/ui";
 import InputLocation from "@/components/InputLocation/InputLocation.vue";
 import { Button, ContentWrapper, Link } from "@resorptionbidonvilles/ui";
 

@@ -1,7 +1,7 @@
 <template>
   <select @change="pickLang($event.target.value)"
     :style="`background-image: url('assets/images/flags/${language.toUpperCase()}.svg'); background-position: 0.5rem center`"
-    class="bg-[length:1.9rem] bg-no-repeat bg-white text-lg border-2 border-primary text-primary p-2 pl-12"
+    class="bg-[length:1.9rem] bg-no-repeat bg-white text-lg border-2 border-primary text-primary p-1 pl-12"
     :class="focusClasses.ring"
     name="language" label="Change language" :disabled="disabled">
     <option class="hover:bg-primary" v-for="lang in languages" :key="lang.key" :alt="lang.alt" :value="lang.key" :selected="lang.key === language.toLowerCase()"

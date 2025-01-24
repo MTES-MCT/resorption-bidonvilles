@@ -9,6 +9,7 @@
                 variant="primaryOutline"
                 icon="comment"
                 iconPosition="left"
+                class="!border-2 !border-primary hover:!bg-primary"
                 >Journal de l'action</Button
             >
         </RouterLink>
@@ -19,6 +20,7 @@
             icon="pencil"
             iconPosition="left"
             :href="`/action/${action.id}/mise-a-jour`"
+            class="hover:!bg-primaryDark"
             >Mettre à jour</Button
         >
     </p>
@@ -36,3 +38,9 @@ const props = defineProps({
 const { action } = toRefs(props);
 const userStore = useUserStore();
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

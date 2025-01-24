@@ -7,13 +7,16 @@
                         class="flex flex-wrap justify-between items-center gap-2"
                         :size="size"
                     >
-                        <div>
-                            <h1 class="text-2xl font-bold">
-                                <slot name="title" />
-                            </h1>
-                            <h2 v-if="$slots.subtitle">
-                                <slot name="subtitle" />
-                            </h2>
+                        <div class="flex items-center space-x-3">
+                            <slot name="icon" />
+                            <div>
+                                <h1 class="text-2xl font-bold">
+                                    <slot name="title" />
+                                </h1>
+                                <h2 v-if="$slots.subtitle">
+                                    <slot name="subtitle" />
+                                </h2>
+                            </div>
                         </div>
                         <div class="flex space-x-3">
                             <slot name="buttons" />

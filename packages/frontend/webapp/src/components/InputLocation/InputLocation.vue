@@ -5,6 +5,7 @@
         v-model="location"
         showCategory
         ref="input"
+        class="bg-white"
     />
 </template>
 

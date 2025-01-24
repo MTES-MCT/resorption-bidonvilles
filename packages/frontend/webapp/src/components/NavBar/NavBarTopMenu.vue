@@ -18,16 +18,28 @@
             :key="item.label"
             :to="item.route"
             :icon="item.icon"
-            >{{ item.label }}</LinkButton
+            >{{
+                item.label === "Mon profil" ? username : item.label
+            }}</LinkButton
         >
     </nav>
 </template>
 
 <script setup>
-import { defineEmits } from "vue";
+import { computed, defineEmits } from "vue";
 import { useNavigationStore } from "@/stores/navigation.store.js";
+import { useUserStore } from "@/stores/user.store";
 import { Button, LinkButton } from "@resorptionbidonvilles/ui";
 
 const navigationStore = useNavigationStore();
+const userStore = useUserStore();
+
+const username = computed(() => {
+    return `${userStore.user.first_name
+        .slice(0, 1)
+        .toUpperCase()}${userStore.user.first_name
+        .slice(1)
+        .toLowerCase()} ${userStore.user.last_name.slice(0, 1)}.`;
+});
 defineEmits(["showMobile"]);
 </script>

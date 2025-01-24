@@ -6,6 +6,7 @@
             v-model="townsStore.townCategoryFilter"
             title="Filtrer par rubrique"
             :options="filters.categories"
+            class="border-1 !border-primary rounded hover:bg-blue200"
         />
 
         <FicheSiteHistoriqueItem

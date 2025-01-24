@@ -55,7 +55,7 @@ export default (shantytown) => {
                     font: 'Arial',
                 }),
                 new TextRun({
-                    text: `https://app.resorption-bidonvilles.beta.gouv.fr/site/${shantytown.id}`,
+                    text: `https://app.resorption-bidonvilles.dihal.gouv.fr/site/${shantytown.id}`,
                     bold: false,
                     break: 1,
                     size: 20,

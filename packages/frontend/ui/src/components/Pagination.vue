@@ -12,14 +12,14 @@
         <div class="h-8 w-8 bg-primary text-white flex justify-center items-center rounded-full mx-4">
             {{ currentPage }}
         </div>
-        <component :is="currentPage !== nbPages ? 'button' : 'div'" class="h-8 w-8 flex justify-center items-center rounded-full"
+        <component :is="currentPage !== nbPages ? 'button' : 'div'" class="h-8 w-8 flex justify-center items-center rounded-full hover:!bg-G200"
             :class="currentPage !== nbPages ? 'hover:bg-G200 cursor-pointer' : ''" @click="setPage(nbPages)">
             <span v-if="currentPage !== nbPages">{{ nbPages }}</span>
             <span class="opacity-85" v-else>—</span>
         </component>
 
         <Button icon="chevron-right" iconPosition="right" variant="custom" size="custom"
-            :disabled="currentPage === nbPages" class="hover:bg-G200 rounded-full px-4 py-1 mx-2"
+            :disabled="currentPage === nbPages" class="hover:!bg-G200 rounded-full px-4 py-1 mx-2"
             @click="onNext" type="button">Suivant</Button>
     </div>
 </template>

@@ -12,7 +12,7 @@
                 class="flex-1"
             />
             <RbButton
-                class="mt-3"
+                class="mt-3 self-end mb-6 !p-2"
                 size="sm"
                 type="button"
                 @click="addNation"

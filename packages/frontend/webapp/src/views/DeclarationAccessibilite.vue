@@ -42,7 +42,7 @@
                     Cette déclaration d'accessibilité s'applique à
                     <strong>Résorption-bidonvilles</strong>
                     <span>
-                        (<span>https://resorption-bidonvilles.beta.gouv.fr</span>)
+                        (<span>https://resorption-bidonvilles.dihal.gouv.fr</span>)
                     </span>
                     .
                 </p>
@@ -89,17 +89,17 @@
                         <p>
                             <Link
                                 class="underline"
-                                to="mailto:contact@resorption-bidonvilles.beta.gouv.fr"
+                                to="mailto:contact@resorption-bidonvilles.dihal.gouv.fr"
                             >
-                                contact@resorption-bidonvilles.beta.gouv.fr</Link
+                                contact@resorption-bidonvilles.dihal.gouv.fr</Link
                             >
                         </p>
                     </li>
                     <li class="mb-2">
                         Formulaire de contact:
                         <Link
-                            to="https://app.resorption-bidonvilles.beta.gouv.fr/contact?language=fr"
-                            >https://app.resorption-bidonvilles.beta.gouv.fr/contact?language=fr</Link
+                            to="https://app.resorption-bidonvilles.dihal.gouv.fr/contact?language=fr"
+                            >https://app.resorption-bidonvilles.dihal.gouv.fr/contact?language=fr</Link
                         >
                     </li>
                     <li class="mb-2">
