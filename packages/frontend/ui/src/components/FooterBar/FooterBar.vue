@@ -15,7 +15,6 @@
                     <FooterBarPartnerLink
                         href="https://www.gouvernement.fr/delegation-interministerielle-a-l-hebergement-et-a-l-acces-au-logement">
                         DIHAL</FooterBarPartnerLink>
-                    <FooterBarPartnerLink href="https://beta.gouv.fr">beta.gouv.fr</FooterBarPartnerLink>
                 </div>
             </div>
             <div class="border-t mt-4 pt-4 pb-8 flex flex-wrap gap-4 items-center">
