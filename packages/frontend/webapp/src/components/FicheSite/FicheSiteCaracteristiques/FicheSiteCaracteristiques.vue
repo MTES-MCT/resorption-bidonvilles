@@ -58,7 +58,6 @@ import FicheSiteTypeDeSite from "./FicheSiteTypeDeSite.vue";
 import ModaleConnaitreProprietaire from "@/components/ModaleConnaitreProprietaire/ModaleConnaitreProprietaire.vue";
 import { useModaleStore } from "@/stores/modale.store";
 
-
 const props = defineProps({
     town: Object,
 });
