@@ -89,9 +89,9 @@
                         <p>
                             <Link
                                 class="underline"
-                                to="mailto:contact@resorption-bidonvilles.dihal.gouv.fr"
+                                to="mailto: contact-resorption-bidonvilles@dihal.gouv.fr"
                             >
-                                contact@resorption-bidonvilles.dihal.gouv.fr</Link
+                                 contact-resorption-bidonvilles@dihal.gouv.fr</Link
                             >
                         </p>
                     </li>

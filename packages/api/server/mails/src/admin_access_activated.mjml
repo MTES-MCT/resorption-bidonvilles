@@ -24,7 +24,7 @@
                 <mj-text mj-class="text-primary text-lg pb-4">
                     Vous souhaitez promouvoir l’outil auprès de vos partenaires ?
                 </mj-text>
-                <mj-text>Contactez l'équipe Résorption-bidonvilles : <a href="mailto:contact@resorption-bidonvilles.dihal.gouv.fr" class="link">contact@resorption-bidonvilles.dihal.gouv.fr</a></mj-text>
+                <mj-text>Contactez l'équipe Résorption-bidonvilles : <a href="mailto: contact-resorption-bidonvilles@dihal.gouv.fr" class="link"> contact-resorption-bidonvilles@dihal.gouv.fr</a></mj-text>
                 <mj-text>N° de téléphone de la hotline : +33 1 40 81 95 39</mj-text>
             </mj-column>
         </mj-section>
