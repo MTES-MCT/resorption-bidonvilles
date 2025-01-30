@@ -66,7 +66,7 @@ export const RealLifeExample = function () {
                 Blog
             </LinkButton>
             <LinkButton
-                to="mailto:contact@resorption-bidonvilles.dihal.gouv.fr"
+                to="mailto: contact-resorption-bidonvilles@dihal.gouv.fr"
                 icon="house-circle-check">
                 Aide
             </LinkButton>
