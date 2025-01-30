@@ -238,7 +238,7 @@
                         plateforme, notre équipe se tient à votre disposition
                         pour toute suggestion d’amélioration de l’outil :
                         <a class="link"
-                            href="mailto:contact@resorption-bidonvilles.dihal.gouv.fr">contact@resorption-bidonvilles.dihal.gouv.fr</a>
+                            href="mailto: contact-resorption-bidonvilles@dihal.gouv.fr"> contact-resorption-bidonvilles@dihal.gouv.fr</a>
                     </p>
                 </template>
             </AccordionItem>

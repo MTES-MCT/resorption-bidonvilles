@@ -24,7 +24,7 @@
         <p class="mt-6">
             Et si vous ne trouvez vraiment pas ce que vous cherchez, vous
             pouvez aussi
-            <Link to="mailto:contact@resorption-bidonvilles.dihal.gouv.fr">nous contacter</Link>
+            <Link to="mailto: contact-resorption-bidonvilles@dihal.gouv.fr">nous contacter</Link>
         </p>
         <p class="mt-8">
             <Link to="https://beta.gouv.fr/startups/resorption-bidonvilles.html#equipe">— L'équipe de
