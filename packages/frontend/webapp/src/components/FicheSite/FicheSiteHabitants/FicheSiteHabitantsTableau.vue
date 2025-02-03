@@ -22,6 +22,7 @@
                     :class="{
                         'font-bold': colIndex === 0,
                         'bg-blue200': colIndex === 0,
+                        'bg-sky-200': closestEntryDate === col.fullDate,
                     }"
                 >
                     {{ col.date }}<br />{{ col.year }}
@@ -84,6 +85,7 @@
                         'border-b border-b-black':
                             sections[index + 1]?.icon !== undefined,
                         'bg-blue100': colIndex === 0,
+                        'bg-sky-200': closestEntryDate === col.fullDate,
                     }"
                 >
                     {{ col[section.data] }}
@@ -94,7 +96,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { ref, defineProps, toRefs, computed } from "vue";
 import formatInt from "@/utils/formatInt";
 import formatDate from "@common/utils/formatDate.js";
 
@@ -199,6 +201,11 @@ const sections = [
         section: "housing",
     },
 ];
+const closestEntryDate = ref(null);
+
+const updateClosestEntryDate = (entries, entriesAboveOfficialOpening) => {
+    closestEntryDate.value = entries[entriesAboveOfficialOpening].date * 1000;
+};
 
 const populationHistory = computed(() => {
     let ref = {
@@ -227,6 +234,7 @@ const populationHistory = computed(() => {
         tents: formatInt(town.value.tents, "-"),
         cars: formatInt(town.value.cars, "-"),
         mattresses: formatInt(town.value.mattresses, "-"),
+        closestToOfficialOpening: false,
     };
 
     // on traite le changelog pour n'y conserver que les étapes qui contiennent au moins un
@@ -260,10 +268,34 @@ const populationHistory = computed(() => {
                 ...ref,
                 date: formatDate(town.value.createdAt, "d B"),
                 year: formatDate(town.value.createdAt, "y"),
+                fullDate: new Date(town.value.createdAt).setHours(0, 0, 0, 0),
             },
         ];
     }
 
+    let officialOpeningDate = null;
+    if (town.value.preparatoryPhasesTowardResorption?.length > 0) {
+        officialOpeningDate = town.value.preparatoryPhasesTowardResorption.find(
+            (phase) => phase.preparatoryPhaseId === "official_opening"
+        )?.completedAt;
+
+        if (officialOpeningDate) {
+            const entriesAboveOfficialOpening =
+                entries.filter((entry) => {
+                    return (
+                        new Date(entry.date * 1000).setHours(0, 0, 0, 0) >=
+                        new Date(officialOpeningDate * 1000).setHours(
+                            0,
+                            0,
+                            0,
+                            0
+                        )
+                    );
+                }).length - 1;
+
+            updateClosestEntryDate(entries, entriesAboveOfficialOpening);
+        }
+    }
     // s'il y a eu au moins une modification
     return [
         // la première entrée dans l'historique correspond aux valeurs présentes
@@ -272,6 +304,7 @@ const populationHistory = computed(() => {
             ...ref,
             date: formatDate(entries[0].date, "d B"),
             year: formatDate(entries[0].date, "y"),
+            fullDate: town.value.createdAt * 1000,
         },
 
         // puis on ajoute une entrée dans l'historique pour chaque entrée dans le changelog
@@ -293,6 +326,7 @@ const populationHistory = computed(() => {
                 ...ref,
                 date: formatDate(date, "d B"),
                 year: formatDate(date, "y"),
+                fullDate: date * 1000,
             };
         }),
     ];
