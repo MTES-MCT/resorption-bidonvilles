@@ -204,7 +204,8 @@ const sections = [
 const closestEntryDate = ref(null);
 
 const updateClosestEntryDate = (entries, entriesAboveOfficialOpening) => {
-    closestEntryDate.value = entries[entriesAboveOfficialOpening].date * 1000;
+    closestEntryDate.value =
+        entries[entriesAboveOfficialOpening]?.date * 1000 || null;
 };
 
 const populationHistory = computed(() => {
