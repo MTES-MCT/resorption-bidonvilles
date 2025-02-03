@@ -22,7 +22,7 @@
                     :class="{
                         'font-bold': colIndex === 0,
                         'bg-blue200': colIndex === 0,
-                        'bg-sky-300': closestEntryDate === col.fullDate,
+                        'bg-sky-200': closestEntryDate === col.fullDate,
                     }"
                 >
                     {{ col.date }}<br />{{ col.year }}
@@ -85,7 +85,7 @@
                         'border-b border-b-black':
                             sections[index + 1]?.icon !== undefined,
                         'bg-blue100': colIndex === 0,
-                        'bg-sky-300': closestEntryDate === col.fullDate,
+                        'bg-sky-200': closestEntryDate === col.fullDate,
                     }"
                 >
                     {{ col[section.data] }}
@@ -203,6 +203,10 @@ const sections = [
 ];
 const closestEntryDate = ref(null);
 
+const updateClosestEntryDate = (entries, entriesAboveOfficialOpening) => {
+    closestEntryDate.value = entries[entriesAboveOfficialOpening].date * 1000;
+};
+
 const populationHistory = computed(() => {
     let ref = {
         populationTotal: formatInt(town.value.populationTotal, "-"),
@@ -290,8 +294,7 @@ const populationHistory = computed(() => {
                     );
                 }).length - 1;
 
-            closestEntryDate.value =
-                entries[entriesAboveOfficialOpening].date * 1000;
+            updateClosestEntryDate(entries, entriesAboveOfficialOpening);
         }
     }
     // s'il y a eu au moins une modification
