@@ -274,7 +274,6 @@ const populationHistory = computed(() => {
     }
 
     let officialOpeningDate = null;
-    // let closestEntryDate = null;
     if (town.value.preparatoryPhasesTowardResorption?.length > 0) {
         officialOpeningDate = town.value.preparatoryPhasesTowardResorption.find(
             (phase) => phase.preparatoryPhaseId === "official_opening"
