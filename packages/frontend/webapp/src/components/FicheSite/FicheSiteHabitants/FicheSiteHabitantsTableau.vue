@@ -93,6 +93,10 @@
             </tr>
         </tbody>
     </table>
+    <div class="flex mt-2 gap-2" v-if="closestEntryDate">
+        <div class="relative w-5 h-5 bg-sky-200"></div>
+        Recensement de la population au démarrage de la résorption
+    </div>
 </template>
 
 <script setup>
