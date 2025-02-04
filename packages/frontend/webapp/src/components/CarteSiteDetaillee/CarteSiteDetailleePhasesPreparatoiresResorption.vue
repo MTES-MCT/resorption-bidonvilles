@@ -2,7 +2,7 @@
     <span class="sr-only">Phases préparatoires à la résorption du site</span>
     <ul v-if="shantytown.livingConditions.version === 2">
         <div class="mb-1 font-bold -ml-5 whitespace-nowrap">
-            Phases préparatoires
+            Démarche de résorption
         </div>
         <li
             v-for="phase in shantytown.preparatoryPhasesTowardResorption"
