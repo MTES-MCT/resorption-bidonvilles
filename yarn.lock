@@ -3558,13 +3558,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@intlify/core@npm:^9.8.0":
-  version: 9.14.0
-  resolution: "@intlify/core@npm:9.14.0"
+"@intlify/core-base@npm:9.14.2":
+  version: 9.14.2
+  resolution: "@intlify/core-base@npm:9.14.2"
   dependencies:
-    "@intlify/core-base": 9.14.0
-    "@intlify/shared": 9.14.0
-  checksum: f74376890b44fce8b449ba3497529f120b30c4ab15a4023f1bfa89119e8bb6ddc4aab60eacce7c32a85f07c3910de8715e59fa2c690e64ab48ba647f8a0340ab
+    "@intlify/message-compiler": 9.14.2
+    "@intlify/shared": 9.14.2
+  checksum: ec2f6414f60eac33950aa46df3f7f8a7c30c6a6690cf25e1cf597ac229c566649ba83a1bd3b74d8ba9486268bbbec383fc98fb1a348be568c05b65e1ecba00e6
+  languageName: node
+  linkType: hard
+
+"@intlify/core@npm:^9.8.0":
+  version: 9.14.2
+  resolution: "@intlify/core@npm:9.14.2"
+  dependencies:
+    "@intlify/core-base": 9.14.2
+    "@intlify/shared": 9.14.2
+  checksum: 86637fec7b04d9e6e5289837285034db30b735b21ac12c11b0d92dffb44042aa11d2a00c15272efe9b6249a01542edfc086e6538226f12380577bd9d3c5dedfa
   languageName: node
   linkType: hard
 
@@ -3588,10 +3598,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@intlify/message-compiler@npm:9.14.2":
+  version: 9.14.2
+  resolution: "@intlify/message-compiler@npm:9.14.2"
+  dependencies:
+    "@intlify/shared": 9.14.2
+    source-map-js: ^1.0.2
+  checksum: 00dfbe83f6d4e7cc538717f785c23f2afa07d0778927a9e1ec5e156e29580c03740ed43111d292a96e53b2db44785a2713794541f970d1d7a2ba3b377bd81e76
+  languageName: node
+  linkType: hard
+
 "@intlify/shared@npm:9.14.0, @intlify/shared@npm:^9.4.0, @intlify/shared@npm:^9.9.0":
   version: 9.14.0
   resolution: "@intlify/shared@npm:9.14.0"
   checksum: 29baa1b5ecfdb08b9a8b8c27bbb80133196c9db9a2822db1346b85fb54b5d152a7df90abd4b492c50ddc86f44baf47dd1e73d1c53fd55a3aef4babc9b4373b07
+  languageName: node
+  linkType: hard
+
+"@intlify/shared@npm:9.14.2":
+  version: 9.14.2
+  resolution: "@intlify/shared@npm:9.14.2"
+  checksum: 8befe0c605ed2b55fe3058d83c63a2d4831d6f9b786129ae04206009d9bd63111f0db3c645ebcd7addb9aa15296380be3f0f9daa37b5bae4b832c73fd41e2b39
   languageName: node
   linkType: hard
 
@@ -5196,7 +5223,7 @@ __metadata:
     proxyquire: ^2.1.0
     rewiremock: ^3.13.9
     rimraf: ^3.0.2
-    semver: ^7.5.2
+    semver: ^7.7.0
     sequelize: ^6.29.0
     sequelize-cli: ^6.5.0
     sequelize-mock: ^0.10.2
@@ -5240,14 +5267,14 @@ __metadata:
     "@storybook/vue3": ^7.0.18
     "@storybook/vue3-webpack5": ^7.0.18
     autoprefixer: ^10.4.4
-    postcss: ^8.4.46
+    postcss: ^8.5.0
     postcss-flexbugs-fixes: ^5.0.2
     react: ^18.2.0
     react-dom: ^18.2.0
     storybook: ^7.0.26
     tailwindcss: ^3.0.23
     vee-validate: ^4.13.2
-    vue-i18n: ^9.5.0
+    vue-i18n: ^9.14.2
   languageName: unknown
   linkType: soft
 
@@ -5280,17 +5307,17 @@ __metadata:
     leaflet.markercluster: ^1.5.3
     lint-staged: ^13.2.2
     pinia: ^2.0.21
-    postcss: ^8.4.46
+    postcss: ^8.5.0
     prettier: ^2.7.1
     sass: ^1.55.0
     start-server-and-test: ^2.0.3
     tailwindcss: ^3.1.8
     vee-validate: ^4.13.2
-    vite: ^5.4.6
+    vite: ^5.4.12
     vitest: ^1.2.1
     vue: ^3.3.0
     vue-echarts: ^6.7.3
-    vue-i18n: ^9.5.0
+    vue-i18n: ^9.14.2
     vue-matomo: ^4.2.0
     vue-router: ^4.1.5
     yup: ^1.2.0
@@ -5308,7 +5335,7 @@ __metadata:
     "@nuxtjs/tailwindcss": ^6.8.0
     nuxt: ^3.12.4
     postcss-custom-properties: ^13.3.2
-    vue-i18n: ^9.5.0
+    vue-i18n: ^9.14.2
     vue-matomo: ^4.1.0
   languageName: unknown
   linkType: soft
@@ -13423,15 +13450,15 @@ __metadata:
   linkType: hard
 
 "cross-spawn@npm:^6.0.0":
-  version: 6.0.5
-  resolution: "cross-spawn@npm:6.0.5"
+  version: 6.0.6
+  resolution: "cross-spawn@npm:6.0.6"
   dependencies:
     nice-try: ^1.0.4
     path-key: ^2.0.1
     semver: ^5.5.0
     shebang-command: ^1.2.0
     which: ^1.2.9
-  checksum: f893bb0d96cd3d5751d04e67145bdddf25f99449531a72e82dcbbd42796bbc8268c1076c6b3ea51d4d455839902804b94bc45dfb37ecbb32ea8e54a6741c3ab9
+  checksum: a6e2e5b04a0e0f806c1df45f92cd079b65f95fbe5a7650ee1ab60318c33a6c156a8a2f8b6898f57764f7363ec599a0625e9855dfa78d52d2d73dbd32eb11c25e
   languageName: node
   linkType: hard
 
@@ -21667,12 +21694,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.3.4, nanoid@npm:^3.3.7":
-  version: 3.3.7
-  resolution: "nanoid@npm:3.3.7"
+"nanoid@npm:^3.3.4, nanoid@npm:^3.3.7, nanoid@npm:^3.3.8":
+  version: 3.3.8
+  resolution: "nanoid@npm:3.3.8"
   bin:
     nanoid: bin/nanoid.cjs
-  checksum: d36c427e530713e4ac6567d488b489a36582ef89da1d6d4e3b87eded11eb10d7042a877958c6f104929809b2ab0bafa17652b076cdf84324aa75b30b722204f2
+  checksum: dfe0adbc0c77e9655b550c333075f51bb28cfc7568afbf3237249904f9c86c9aaaed1f113f0fddddba75673ee31c758c30c43d4414f014a52a7a626efc5958c9
   languageName: node
   linkType: hard
 
@@ -24268,14 +24295,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.46":
-  version: 8.4.49
-  resolution: "postcss@npm:8.4.49"
+"postcss@npm:^8.5.0":
+  version: 8.5.1
+  resolution: "postcss@npm:8.5.1"
   dependencies:
-    nanoid: ^3.3.7
+    nanoid: ^3.3.8
     picocolors: ^1.1.1
     source-map-js: ^1.2.1
-  checksum: eb5d6cbdca24f50399aafa5d2bea489e4caee4c563ea1edd5a2485bc5f84e9ceef3febf170272bc83a99c31d23a316ad179213e853f34c2a7a8ffa534559d63a
+  checksum: cfdcfcd019fca78160341080ba8986cf80cd6e9ca327ba61b86c03e95043e9bce56ad2e018851858039fd7264781797360bfba718dd216b17b3cd803a5134f2f
   languageName: node
   linkType: hard
 
@@ -25921,12 +25948,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.6, semver@npm:^7.3.7, semver@npm:^7.3.8, semver@npm:^7.5.2, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.2, semver@npm:^7.6.3":
+"semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.6, semver@npm:^7.3.7, semver@npm:^7.3.8, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.2, semver@npm:^7.6.3":
   version: 7.6.3
   resolution: "semver@npm:7.6.3"
   bin:
     semver: bin/semver.js
   checksum: 4110ec5d015c9438f322257b1c51fe30276e5f766a3f64c09edd1d7ea7118ecbc3f379f3b69032bacf13116dc7abc4ad8ce0d7e2bd642e26b0d271b56b61a7d8
+  languageName: node
+  linkType: hard
+
+"semver@npm:^7.7.0":
+  version: 7.7.1
+  resolution: "semver@npm:7.7.1"
+  bin:
+    semver: bin/semver.js
+  checksum: 586b825d36874007c9382d9e1ad8f93888d8670040add24a28e06a910aeebd673a2eb9e3bf169c6679d9245e66efb9057e0852e70d9daa6c27372aab1dda7104
   languageName: node
   linkType: hard
 
@@ -26918,9 +26954,9 @@ __metadata:
   linkType: hard
 
 "store2@npm:^2.14.2":
-  version: 2.14.3
-  resolution: "store2@npm:2.14.3"
-  checksum: 971a47aa479ff5491f89ee3fcbaf4ddafe0cfb55ac2f4cf4b4fc7b21d349fa3a761f79368d1573b9f65af08b3cf0f6973eed56a213b8bb4cb7e820ac048d1613
+  version: 2.14.4
+  resolution: "store2@npm:2.14.4"
+  checksum: b151d18f44a0cc9a8e2d943df29b90e59889eb3dc55adcd5db656ff7f900ca7d18bd6ee214f883d39c230297e8e2d269b8274e78556fb7c7953d39e8c18d624d
   languageName: node
   linkType: hard
 
@@ -28440,11 +28476,11 @@ __metadata:
   linkType: hard
 
 "undici@npm:^5.28.4":
-  version: 5.28.4
-  resolution: "undici@npm:5.28.4"
+  version: 5.28.5
+  resolution: "undici@npm:5.28.5"
   dependencies:
     "@fastify/busboy": ^2.0.0
-  checksum: a8193132d84540e4dc1895ecc8dbaa176e8a49d26084d6fbe48a292e28397cd19ec5d13bc13e604484e76f94f6e334b2bdc740d5f06a6e50c44072818d0c19f9
+  checksum: a402d699a602a8feee1c0f78267467c8ffcbd7682267fec7a1307fd11554a32976a2307bf1cc8bf6ef7a667654336592fbd66d675df20ce28357536fb55a3a7d
   languageName: node
   linkType: hard
 
@@ -29268,9 +29304,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^5.4.6":
-  version: 5.4.11
-  resolution: "vite@npm:5.4.11"
+"vite@npm:^5.4.12":
+  version: 5.4.14
+  resolution: "vite@npm:5.4.14"
   dependencies:
     esbuild: ^0.21.3
     fsevents: ~2.3.3
@@ -29307,7 +29343,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 8c5b31d17487b69c40a30419dc0ade9f33360eb6893dbfa33a90980271bd74d35ae550b5cbb2a9e640f0df41ea36fd1bb4f222c98f6d02e607080f20832e69e8
+  checksum: 7360661da0415809454ff8809b6666e868ffc3e5ccfbd5fc17425341546cdc3dd3d37c68fcd6ed7305252aaecd0d251ede3745b57aaebd00b8aececc30b6697b
   languageName: node
   linkType: hard
 
@@ -29587,7 +29623,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-i18n@npm:^9.5.0, vue-i18n@npm:^9.9.0":
+"vue-i18n@npm:^9.14.2":
+  version: 9.14.2
+  resolution: "vue-i18n@npm:9.14.2"
+  dependencies:
+    "@intlify/core-base": 9.14.2
+    "@intlify/shared": 9.14.2
+    "@vue/devtools-api": ^6.5.0
+  peerDependencies:
+    vue: ^3.0.0
+  checksum: d387ed57f1b3a6c7c730d6737d90d0932a036d8ad5016476f59474e7c978e9a8eef0c790b2ea402fcf71696a3c0589030d8ca76b7251b055943bd051b06f7f56
+  languageName: node
+  linkType: hard
+
+"vue-i18n@npm:^9.9.0":
   version: 9.14.0
   resolution: "vue-i18n@npm:9.14.0"
   dependencies:
