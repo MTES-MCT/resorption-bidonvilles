@@ -40,7 +40,7 @@ export default async (user, from: Date, to: Date): Promise<NationalEvolutionMetr
             LEFT JOIN "ShantytownHistories" sh ON st.shantytown_id=sh.shantytown_id AND date_trunc('month', sh.updated_at) <= ms.month
             GROUP BY st.shantytown_id, ms.month
             ORDER BY
-              ms.month DESC
+              ms.month ASC
         ), aggregated_origins AS (
           -- typologe de population
           SELECT
@@ -59,7 +59,7 @@ export default async (user, from: Date, to: Date): Promise<NationalEvolutionMetr
           LEFT JOIN "ShantytownHistories" sh ON serie_ms.archives_hid=sh.hid AND date_trunc('month', st.updated_at) > month
           LEFT JOIN "ShantytownOriginHistories" soh ON soh.fk_shantytown=sh.hid AND date_trunc('month', st.updated_at) > month
           GROUP BY month, st.shantytown_id
-        --  ORDER BY month DESC
+          -- ORDER BY month ASC
         )
         SELECT
           serie_ms.month
@@ -84,7 +84,7 @@ export default async (user, from: Date, to: Date): Promise<NationalEvolutionMetr
         GROUP BY
         serie_ms.month
         ORDER BY
-         serie_ms.month DESC`,
+         serie_ms.month ASC`,
         {
             type: QueryTypes.SELECT,
             replacements,
