@@ -2,10 +2,22 @@
     <FicheRubrique
         title="Caractéristiques du site"
         category="caracteristics"
-        :class="['pb-0', displayOwnerButton ? 'xl:pb-32' : 'xl:pb-14']"
+        :class="[
+            'pb-0',
+            hasAccessToLandRegistryOwners ? 'xl:pb-32' : 'xl:pb-14',
+        ]"
     >
         <section class="flex flex-col-reverse xl:flex-row">
-            <div class="my-24 xl:w-1/2 xl:my-8 md:mr-8">
+            <div
+                :class="[
+                    'xl:w-1/2',
+                    'md:mr-8',
+                    'mb-6',
+                    hasAccessToLandRegistryOwners
+                        ? 'mt-24 md:mb-6 xl:mt-32 xl:mb-4'
+                        : 'xl:mt-8',
+                ]"
+            >
                 <FicheSiteDatesInstallation :town="town" />
                 <FicheSiteTypeDeSite :town="town" />
                 <FicheSiteInfosAcces v-if="town.addressDetails" :town="town" />
@@ -29,7 +41,7 @@
                     :cadastre="cadastre"
                     @townclick="onTownClick"
                 />
-                <div v-if="displayOwnerButton">
+                <div v-if="hasAccessToLandRegistryOwners">
                     <Button class="mt-12" @click="showModal">
                         Connaître le propriétaire
                     </Button>
@@ -70,7 +82,7 @@ const { town } = toRefs(props);
 const cadastre = ref(null);
 const cadastreIsLoading = ref(null);
 const mainParcel = ref(null);
-const displayOwnerButton = ref(null);
+const hasAccessToLandRegistryOwners = ref(null);
 const userStore = useUserStore();
 
 onMounted(() => {
@@ -171,7 +183,7 @@ function onTownClick(clickedTown) {
 }
 
 async function showModal() {
-    if (!mainParcel.value) {
+    if (!mainParcel.value || !hasAccessToLandRegistryOwners.value) {
         return;
     }
     const modaleStore = useModaleStore();
@@ -182,6 +194,7 @@ async function showModal() {
             parcel: mainParcel.value,
             departement: town.value.departement.code,
             dataYear,
+            hasAccessToLandRegistryOwners: hasAccessToLandRegistryOwners.value,
         });
     } catch (error) {
         notificationStore.error(
@@ -202,7 +215,7 @@ watch(
             ) &&
             town.value.status === "open"
         ) {
-            displayOwnerButton.value = !!newValue;
+            hasAccessToLandRegistryOwners.value = !!newValue;
         }
     }
 );
