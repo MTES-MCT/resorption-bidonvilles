@@ -62,6 +62,10 @@ const { action } = toRefs(props);
 const userStore = useUserStore();
 
 const tabs = computed(() => {
+    const commentsAttachments = action.value.comments.reduce((sum, comment) => {
+        return sum + (comment.attachments ? comment.attachments.length : 0);
+    }, 0);
+
     return menu
         .filter((item) => {
             if (!item.condition) {
@@ -74,6 +78,10 @@ const tabs = computed(() => {
             return {
                 ...item,
                 label: item.label(action.value),
+                postIcon:
+                    item.id === "journal_de_l_action" && commentsAttachments > 0
+                        ? true
+                        : false,
             };
         });
 });
