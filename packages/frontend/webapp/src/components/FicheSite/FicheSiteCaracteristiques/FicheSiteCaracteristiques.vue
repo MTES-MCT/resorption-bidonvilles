@@ -57,6 +57,7 @@ import FicheSiteSitesAProximite from "./FicheSiteSitesAProximite.vue";
 import FicheSiteTypeDeSite from "./FicheSiteTypeDeSite.vue";
 import ModaleConnaitreProprietaire from "@/components/ModaleConnaitreProprietaire/ModaleConnaitreProprietaire.vue";
 import { useModaleStore } from "@/stores/modale.store";
+import { trackEvent } from "@/helpers/matomo";
 
 const props = defineProps({
     town: Object,
