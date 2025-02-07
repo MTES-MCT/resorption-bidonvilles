@@ -12,26 +12,46 @@
             @mouseenter="isHover = true"
             @mouseleave="isHover = false"
         >
-            <div class="mb-4 px-6 -mt-1 pt-px">
-                <Tag
-                    tabindex="0"
-                    :aria-label="actionPeriod"
-                    :class="[
-                        'text-xs uppercase text-primary',
-                        isHover ? 'shadow-md' : '',
-                    ]"
-                >
-                    <span aria-hidden="true" v-if="action.ended_at"
-                        >du
-                        {{ formatDate(action.started_at / 1000, "d/m/y") }}
-                        au
-                        {{ formatDate(action.ended_at / 1000, "d/m/y") }}</span
+            <div class="mb-4 px-6 -mt-1 pt-px flex gap-2">
+                <div>
+                    <Tag
+                        tabindex="0"
+                        :aria-label="actionPeriod"
+                        :class="[
+                            'text-xs uppercase text-primary',
+                            isHover ? 'shadow-md' : '',
+                        ]"
                     >
-                    <span aria-hidden="true" v-else>
-                        depuis le
-                        {{ formatDate(action.started_at / 1000, "d/m/y") }}
-                    </span>
-                </Tag>
+                        <span aria-hidden="true" v-if="action.ended_at"
+                            >du
+                            {{ formatDate(action.started_at / 1000, "d/m/y") }}
+                            au
+                            {{
+                                formatDate(action.ended_at / 1000, "d/m/y")
+                            }}</span
+                        >
+                        <span aria-hidden="true" v-else>
+                            depuis le
+                            {{ formatDate(action.started_at / 1000, "d/m/y") }}
+                        </span>
+                    </Tag>
+                </div>
+                <div
+                    class="flex sm:absolute sm:right-14 mt-[3px]"
+                    v-if="attachmentsLabel"
+                >
+                    <Tag
+                        tabindex="1"
+                        :aria-label="attachmentsLabel"
+                        variant="highlight"
+                        :class="[
+                            'text-xs uppercase text-primary justify-self-end items-center gap-2',
+                            isHover ? 'shadow-md' : '',
+                        ]"
+                        ><Icon icon="paperclip" class="text-xs md:text-md" />
+                        {{ attachmentsLabel }}</Tag
+                    >
+                </div>
             </div>
 
             <div class="px-6 text-primary text-display-md font-bold">
@@ -103,6 +123,18 @@ const actionPeriod = computed(() => {
             formatDate(action.value.started_at / 1000, "d/m/y")
         );
     }
+});
+
+const attachmentsLabel = computed(() => {
+    const commentsAttachments = action.value.comments.reduce((sum, comment) => {
+        return sum + (comment.attachments ? comment.attachments.length : 0);
+    }, 0);
+
+    return commentsAttachments > 1
+        ? `${commentsAttachments} Pièces jointes`
+        : commentsAttachments === 0
+        ? null
+        : `${commentsAttachments} Pièce jointe`;
 });
 </script>
 
