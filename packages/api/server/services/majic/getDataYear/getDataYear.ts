@@ -8,7 +8,7 @@ export default async (departementId: string, user: AuthUser) => {
     if (!permissionUtils.can(user).do('access', 'land_registry').on(
         { type: 'departement', departement: { code: departementId } } as Departement,
     )) {
-        throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission d\'accéder au registre foncier.'));
+        throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission de récupérer le millésime du registre foncier.'));
     }
 
     let majicYear: string;
