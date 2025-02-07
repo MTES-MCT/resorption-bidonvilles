@@ -87,7 +87,7 @@ async function loadCadastre() {
 
     cadastreIsLoading.value = true;
     try {
-        console.log("Appel de loadCadastre()");
+        trackEvent("Site", "Affichage couche cadastre", `S${town.value.id}`);
         const response = await getCadastre(
             generateSquare([town.value.longitude, town.value.latitude], 0.06)
         );
