@@ -1,68 +1,86 @@
 <template>
     <Modal closeWhenClickOutside ref="modale">
-        <template v-slot:title
-            >Confirmez-vous la demande d'information ?</template
-        >
+        <template v-slot:title>
+            <template v-if="hasAccessToLandRegistryOwners">
+                Confirmez-vous la demande d'information ?
+            </template>
+            <template v-else> Accès non autorisé </template>
+        </template>
         <template v-slot:body>
-            <div class="mt-6">
-                <p class="mb-2">
-                    Vous êtes sur le point de demander les coordonnées du
-                    propriétaire de la parcelle cadastrale
-                    <span class="font-bold text-primary">{{ parcel }}</span
-                    >.
-                </p>
-                <p class="mb-2">
-                    Ces données sont extraites des éléments du cadastre de
-                    l'année
-                    <span class="font-bold">{{ dataYear }}</span
-                    >.
-                </p>
-                <p class="mb-2">
-                    Si le site est localisé sur plusieurs parcelles, il convient
-                    de modifier manuellement le point de localisation et
-                    procéder à une nouvelle demande pour chaque parcelle.
-                </p>
-                <p class="font-bold pl-2">Ces demandes sont tracées:</p>
-            </div>
-            <div class="mt-4 p-4 text-sm bg-G300 rounded-md">
-                <p>
-                    Nous vous rappelons que
-                    <span class="font-bold"
-                        >les fichiers fonciers non anonymisés contiennent des
-                        données personnelles directes </span
-                    >(nom des propriétaires personnes physiques).
-                    <span class="font-bold"
-                        >Leur utilisation est donc soumise à une réglementation
-                        particulière et des obligations strictes.</span
-                    >
-                    Nous devons être en mesure de fournir, sur demande de la
-                    DGALN* ou de la DGFIP**, les nom, prénom, structure,
-                    territoires d'intervention du demandeur et référence de la
-                    parcelle cadastrale faisant l'objet de la demande.
-                    <span class="font-bold"
-                        >Ces informations sont donc enregistrées.</span
-                    >
-                </p>
-                <p class="pt-2 font-bold">
-                    En tant qu'utilisateur de la plateforme
-                    Résorption-Bidonvilles, vous vous engagez donc à ne demander
-                    que les informations strictement utiles dans le cadre de vos
-                    missions.
-                </p>
-                <p class="pt-2 italic">
-                    * Direction générale de l'aménagement, du logement et de la
-                    nature
-                </p>
-                <p class="pb-2 italic">
-                    ** Direction générale des Finances publiques
-                </p>
-            </div>
-            <ErrorSummary
-                v-if="error"
-                :message="error"
-                :summary="errorSummary"
-                class="mb-0 mt-6"
-            />
+            <template v-if="hasAccessToLandRegistryOwners">
+                <div class="mt-6">
+                    <p class="mb-2">
+                        Vous êtes sur le point de demander les coordonnées du
+                        propriétaire de la parcelle cadastrale
+                        <span class="font-bold text-primary">{{ parcel }}</span
+                        >.
+                    </p>
+                    <p class="mb-2">
+                        Ces données sont extraites des éléments du cadastre de
+                        l'année
+                        <span class="font-bold">{{ dataYear }}</span
+                        >.
+                    </p>
+                    <p class="mb-2">
+                        Si le site est localisé sur plusieurs parcelles, il
+                        convient de modifier manuellement le point de
+                        localisation et procéder à une nouvelle demande pour
+                        chaque parcelle.
+                    </p>
+                    <p class="font-bold pl-2">Ces demandes sont tracées:</p>
+                </div>
+                <div class="mt-4 p-4 text-sm bg-G300 rounded-md">
+                    <p>
+                        Nous vous rappelons que
+                        <span class="font-bold"
+                            >les fichiers fonciers non anonymisés contiennent
+                            des données personnelles directes </span
+                        >(nom des propriétaires personnes physiques).
+                        <span class="font-bold"
+                            >Leur utilisation est donc soumise à une
+                            réglementation particulière et des obligations
+                            strictes.</span
+                        >
+                        Nous devons être en mesure de fournir, sur demande de la
+                        DGALN* ou de la DGFIP**, les nom, prénom, structure,
+                        territoires d'intervention du demandeur et référence de
+                        la parcelle cadastrale faisant l'objet de la demande.
+                        <span class="font-bold"
+                            >Ces informations sont donc enregistrées.</span
+                        >
+                    </p>
+                    <p class="pt-2 font-bold">
+                        En tant qu'utilisateur de la plateforme
+                        Résorption-Bidonvilles, vous vous engagez donc à ne
+                        demander que les informations strictement utiles dans le
+                        cadre de vos missions.
+                    </p>
+                    <p class="pt-2 italic">
+                        * Direction générale de l'aménagement, du logement et de
+                        la nature
+                    </p>
+                    <p class="pb-2 italic">
+                        ** Direction générale des Finances publiques
+                    </p>
+                </div>
+                <ErrorSummary
+                    v-if="error"
+                    :message="error"
+                    :summary="errorSummary"
+                    class="mb-0 mt-6"
+                />
+            </template>
+            <template v-else>
+                <div>
+                    Il semblerait que ne disposiez pas des permissions
+                    nécessaires à l'utilisation de cette fonctionalité.
+                </div>
+                <div>
+                    Merci de bien vouloir vous rapprocher de votre
+                    administrateur-trice local-e pour vérifier vos permissions
+                    sur la plateforme.
+                </div>
+            </template>
         </template>
 
         <template v-slot:footer>
@@ -96,8 +114,13 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    hasAccessToLandRegistryOwners: {
+        type: Boolean,
+        required: true,
+    },
 });
-const { parcel, departement, dataYear } = toRefs(props);
+const { parcel, departement, dataYear, hasAccessToLandRegistryOwners } =
+    toRefs(props);
 
 const modale = ref(null);
 const loading = ref(false);
@@ -114,7 +137,6 @@ async function fetchParcelOwners() {
     errorSummary.value = {};
     const notificationStore = useNotificationStore();
     try {
-        console.log("getParcelOwners", parcel.value, departement.value);
         await getParcelOwners(parcel.value, departement.value);
         notificationStore.success(
             "Message envoyé !",
