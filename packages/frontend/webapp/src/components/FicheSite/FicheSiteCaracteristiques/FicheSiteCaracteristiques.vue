@@ -2,7 +2,7 @@
     <FicheRubrique
         title="Caractéristiques du site"
         category="caracteristics"
-        class="pb-32"
+        :class="['pb-0', displayOwnerButton ? 'xl:pb-32' : 'xl:pb-14']"
     >
         <section class="flex flex-col-reverse xl:flex-row">
             <div class="my-24 xl:w-1/2 xl:my-8 md:mr-8">
@@ -29,7 +29,7 @@
                     :cadastre="cadastre"
                     @townclick="onTownClick"
                 />
-                <div>
+                <div v-if="displayOwnerButton">
                     <Button class="mt-12" @click="showModal">
                         Connaître le propriétaire
                     </Button>
@@ -65,7 +65,8 @@ const props = defineProps({
 const { town } = toRefs(props);
 const cadastre = ref(null);
 const cadastreIsLoading = ref(null);
-const infos = ref(null);
+const displayOwnerButton = ref(null);
+const userStore = useUserStore();
 
 onMounted(() => {
     const townsStore = useTownsStore();
@@ -178,5 +179,18 @@ function onTownClick(clickedTown) {
     modaleStore.open(ModaleConnaitreProprietaire, {
         parcelle: infos.value,
     });
-}
+watch(
+    () => mainParcel.value,
+    (newValue) => {
+        if (
+            userStore.hasLocalizedPermission(
+                "land_registry.access",
+                town.value
+            ) &&
+            town.value.status === "open"
+        ) {
+            displayOwnerButton.value = !!newValue;
+        }
+    }
+);
 </script>
