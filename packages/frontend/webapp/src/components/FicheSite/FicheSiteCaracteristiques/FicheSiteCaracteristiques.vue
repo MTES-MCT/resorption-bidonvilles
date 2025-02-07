@@ -41,6 +41,7 @@
 
 <script setup>
 import { getCadastre } from "@/api/ign.api";
+import { getMajicYear } from "@/api/majic.api";
 import router from "@/helpers/router";
 import { useTownsStore } from "@/stores/towns.store";
 import generateSquare from "@/utils/generateSquare";
@@ -57,6 +58,9 @@ import FicheSiteSitesAProximite from "./FicheSiteSitesAProximite.vue";
 import FicheSiteTypeDeSite from "./FicheSiteTypeDeSite.vue";
 import ModaleConnaitreProprietaire from "@/components/ModaleConnaitreProprietaire/ModaleConnaitreProprietaire.vue";
 import { useModaleStore } from "@/stores/modale.store";
+import { useUserStore } from "@/stores/user.store";
+import { useNotificationStore } from "@/stores/notification.store";
+
 import { trackEvent } from "@/helpers/matomo";
 
 const props = defineProps({
@@ -65,6 +69,7 @@ const props = defineProps({
 const { town } = toRefs(props);
 const cadastre = ref(null);
 const cadastreIsLoading = ref(null);
+const mainParcel = ref(null);
 const displayOwnerButton = ref(null);
 const userStore = useUserStore();
 
@@ -130,13 +135,6 @@ async function loadCadastre() {
             generateSquare([town.value.longitude, town.value.latitude], 0.06)
         );
 
-        infos.value =
-            response.features[0].properties.code_insee +
-            "000" +
-            response.features[0].properties.section +
-            response.features[0].properties.numero;
-        console.log("parcelle cadastrale:", infos.value);
-
         if (
             Number.isInteger(response.totalFeatures) &&
             response.totalFeatures > 0
@@ -172,13 +170,28 @@ function onTownClick(clickedTown) {
     router.push(`/site/${clickedTown.id}`);
 }
 
+async function showModal() {
     if (!mainParcel.value) {
         return;
     }
     const modaleStore = useModaleStore();
-    modaleStore.open(ModaleConnaitreProprietaire, {
-        parcelle: infos.value,
-    });
+    const notificationStore = useNotificationStore();
+    try {
+        const dataYear = await getMajicYear(town.value.departement.code);
+        modaleStore.open(ModaleConnaitreProprietaire, {
+            parcel: mainParcel.value,
+            departement: town.value.departement.code,
+            dataYear,
+        });
+    } catch (error) {
+        notificationStore.error(
+            "Une erreur est survenue",
+            error?.user_message ||
+                `Erreur lors de la recherche du millésime des donénes foncières.`
+        );
+    }
+}
+
 watch(
     () => mainParcel.value,
     (newValue) => {
