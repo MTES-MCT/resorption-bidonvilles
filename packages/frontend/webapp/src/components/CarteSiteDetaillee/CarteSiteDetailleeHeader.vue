@@ -1,28 +1,44 @@
 <template>
-    <header class="px-6">
-        <Tag
-            :variant="pinVariant"
-            :class="['text-xs uppercase', isHover ? 'shadow-md' : '']"
-            class="mt-1"
-        >
-            {{ lastUpdate }}
-        </Tag>
-        <Tag
-            v-if="heatwaveStatus === true"
-            variant="highlight"
-            :class="[
-                'ml-4 text-xs uppercase text-primary',
-                isHover ? 'shadow-md' : '',
-            ]"
-        >
-            Risque Canicule
-        </Tag>
-        <ResorptionTargetTag
-            class="ml-4"
-            v-if="shantytown.resorptionTarget"
-            :target="shantytown.resorptionTarget"
-            :isHover="isHover"
-        />
+    <header class="px-6 flex flex-col lg:flex-row justify-between">
+        <div class="flex-col sm:flex-row">
+            <Tag
+                :variant="pinVariant"
+                :class="['text-xs uppercase', isHover ? 'shadow-md' : '']"
+                class="mt-1 items-center py-2 mr-2"
+            >
+                {{ lastUpdate }}
+            </Tag>
+            <Tag
+                v-if="heatwaveStatus === true"
+                variant="highlight"
+                :class="[
+                    'mt-1 text-xs uppercase text-primary items-center py-2 mr-2',
+                    isHover ? 'shadow-md' : '',
+                ]"
+            >
+                Risque Canicule
+            </Tag>
+
+            <ResorptionTargetTag
+                v-if="shantytown.resorptionTarget"
+                :target="shantytown.resorptionTarget"
+                :isHover="isHover"
+                class="mt-1 items-center py-2"
+            />
+        </div>
+        <div class="flex lg:absolute lg:right-14" v-if="attachmentsLabel">
+            <Tag
+                variant="highlight"
+                :class="[
+                    'text-xs lg:text-xs uppercase text-primary',
+                    isHover ? 'shadow-md' : '',
+                ]"
+                class="mt-1 gap-2 lg:place-self-end items-center py-0"
+            >
+                <Icon icon="paperclip" class="text-sm lg:text-md" />
+                {{ attachmentsLabel }}
+            </Tag>
+        </div>
     </header>
 </template>
 
@@ -31,7 +47,7 @@ import { defineProps, toRefs, computed } from "vue";
 import getSince from "@/utils/getSince";
 import formatLastUpdatedAt from "@/utils/formatLastUpdatedAt";
 
-import { Tag } from "@resorptionbidonvilles/ui";
+import { Tag, Icon } from "@resorptionbidonvilles/ui";
 import ResorptionTargetTag from "@/components/TagObjectifResorption/TagObjectifResorption.vue";
 
 const props = defineProps({
@@ -52,5 +68,19 @@ const lastUpdate = computed(() => {
 });
 const heatwaveStatus = computed(() => {
     return shantytown.value.heatwaveStatus;
+});
+const attachmentsLabel = computed(() => {
+    const commentsAttachments = shantytown.value.comments.reduce(
+        (sum, comment) => {
+            return sum + (comment.attachments ? comment.attachments.length : 0);
+        },
+        0
+    );
+
+    return commentsAttachments > 1
+        ? `${commentsAttachments} Pièces jointes`
+        : commentsAttachments === 0
+        ? null
+        : `${commentsAttachments} Pièce jointe`;
 });
 </script>
