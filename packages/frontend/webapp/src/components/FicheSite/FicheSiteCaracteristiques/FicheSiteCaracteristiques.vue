@@ -44,7 +44,7 @@ import { getCadastre } from "@/api/ign.api";
 import router from "@/helpers/router";
 import { useTownsStore } from "@/stores/towns.store";
 import generateSquare from "@/utils/generateSquare";
-import { computed, defineProps, onMounted, ref, toRefs } from "vue";
+import { computed, defineProps, onMounted, ref, toRefs, watch } from "vue";
 import { Button } from "@resorptionbidonvilles/ui";
 
 import CartoFicheSite from "@/components/CartoFicheSite/CartoFicheSite.vue";
@@ -81,6 +81,42 @@ const mapCenter = computed(() => {
     };
 });
 
+function getMainSiteParcel(point, features) {
+    let foundParcel = null;
+    for (const feature of features) {
+        if (isPointInPolygon(point, feature.geometry.coordinates)) {
+            foundParcel = feature;
+            break;
+        }
+    }
+    return foundParcel;
+}
+
+function isPointInPolygon(point, polygon) {
+    // Implementation de l'algorithme "ray-casting" pour déterminer si un point est à l'intérieur d'un polygone
+    let inside = false;
+
+    // Pour les parcelles multi-polygones, on teste chaque polygone
+    for (const polyCoords of polygon) {
+        for (const ring of polyCoords) {
+            for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+                const xi = ring[i][0];
+                const yi = ring[i][1];
+                const xj = ring[j][0];
+                const yj = ring[j][1];
+
+                const intersect =
+                    yi > point[1] !== yj > point[1] &&
+                    point[0] < ((xj - xi) * (point[1] - yi)) / (yj - yi) + xi;
+                if (intersect) {
+                    inside = !inside;
+                }
+            }
+        }
+    }
+    return inside;
+}
+
 async function loadCadastre() {
     if (cadastre.value !== null || cadastreIsLoading.value === true) {
         return;
@@ -106,6 +142,20 @@ async function loadCadastre() {
         ) {
             cadastre.value = response;
         }
+
+        // On récupère les infos de la parcelle cadastrale principale
+        const mainSiteParcel = getMainSiteParcel(
+            [town.value.longitude, town.value.latitude],
+            response.features
+        );
+
+        if (mainSiteParcel) {
+            mainParcel.value =
+                mainSiteParcel.properties.code_insee +
+                "000" +
+                mainSiteParcel.properties.section +
+                mainSiteParcel.properties.numero;
+        }
     } catch (error) {
         // ignore
     }
@@ -121,7 +171,9 @@ function onTownClick(clickedTown) {
     router.push(`/site/${clickedTown.id}`);
 }
 
-function showModal() {
+    if (!mainParcel.value) {
+        return;
+    }
     const modaleStore = useModaleStore();
     modaleStore.open(ModaleConnaitreProprietaire, {
         parcelle: infos.value,
