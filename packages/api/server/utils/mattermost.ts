@@ -519,6 +519,63 @@ export async function triggerNotifyOwnersAnonymizationError(message: string): Pr
     await webhook.send(mattermostMessage);
 }
 
+async function triggerLandRegistryRequest(user: User, parcel: string, dataYear: string): Promise<void> {
+    if (!mattermost) {
+        return;
+    }
+
+    const newLandRegistryEnquiryAlert = new IncomingWebhook(mattermost);
+
+    const username = formatUsername(user);
+    const usernameLink = `<${webappUrl}/nouvel-utilisateur/${user.id}|${username}>`;
+
+    let locationText = 'Inconnu';
+    if (user.intervention_areas.is_national) {
+        locationText = 'National';
+    } else {
+        const area = user.intervention_areas.areas.find(a => a.is_main_area && a.type !== 'nation');
+        if (area !== undefined) {
+            locationText = area[area.type].name;
+        }
+    }
+
+    const mattermostMessage = {
+        channel: '#notif-dev-test',
+        username: 'Alerte Résorption Bidonvilles',
+        icon_emoji: ':robot:',
+        text: `:world_map: Demande d'information cadastre de: ${usernameLink} <${user.email}>`,
+        attachments: [
+            {
+                color: '#f2c744',
+                fields: [
+                    {
+                        short: false,
+                        value: `*Territoire de rattachement*: ${locationText}`,
+                    },
+                    {
+                        short: false,
+                        value: `*Organisation*: ${user.organization.name}`,
+                    },
+                    {
+                        short: false,
+                        value: `*Fonction*: ${user.position}`,
+                    },
+                    {
+                        short: false,
+                        value: `*Parcelle concernée*: ${parcel}`,
+                    },
+                    {
+                        short: false,
+                        value: `*Millésime des données du cadastre*: ${dataYear}`,
+                    },
+                ],
+            },
+        ],
+    };
+
+    await newLandRegistryEnquiryAlert.send(mattermostMessage);
+}
+
 export default {
     triggerShantytownCloseAlert,
     triggerShantytownCreationAlert,
@@ -536,4 +593,6 @@ export default {
     triggerNotifyNewUserSelfDeactivation,
     triggerNotifyOwnersAnonymization,
     triggerNotifyOwnersAnonymizationError,
+    triggerLandRegistryRequest,
+
 };
