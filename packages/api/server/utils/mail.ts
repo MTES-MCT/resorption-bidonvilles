@@ -21,7 +21,7 @@ export default {
                 Messages: [
                     Object.assign({
                         From: {
-                            Email: ' contact-resorption-bidonvilles@dihal.gouv.fr',
+                            Email: ' ch.benard@gmail.com',
                             Name: 'Résorption Bidonvilles',
                         },
                         ReplyTo: replyTo !== null ? {
