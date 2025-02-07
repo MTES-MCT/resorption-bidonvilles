@@ -540,7 +540,7 @@ async function triggerLandRegistryRequest(user: User, parcel: string, dataYear: 
     }
 
     const mattermostMessage = {
-        channel: '#notif-dev-test',
+        channel: '#notif-requetes-cadastre',
         username: 'Alerte Résorption Bidonvilles',
         icon_emoji: ':robot:',
         text: `:world_map: Demande d'information cadastre de: ${usernameLink} <${user.email}>`,
