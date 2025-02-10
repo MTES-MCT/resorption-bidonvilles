@@ -7,6 +7,7 @@ import permissionUtils from '#server/utils/permission';
 import { Departement } from '#server/models/geoModel/Location.d';
 import mattermostUtils from '#server/utils/mattermost';
 import config from '#server/config';
+import { RawParcel } from '#server/models/majicModel/findParcel/RawParcel.d';
 
 export default async (parcelId: string, departementId: string, user: AuthUser) => {
     // TODO: vérifier les droits de l'utilisateur => access.land_registry
@@ -23,8 +24,10 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
 
     // Composition du nom des tables
     const schema = `ff${majicYear}_dep`;
-    const parcelTableName = `d${dept}_fftp_${majicYear}_pnb10_parcelle`;
-    const ownerTableName = `d${dept}_fftp_${majicYear}_proprietaire_droit_non_ano`;
+    const shortParcelTableName = 'pnb10_parcelle';
+    const shortOwnerTableName = 'proprietaire_droit_non_ano';
+    const parcelTableName = `d${dept}_fftp_${majicYear}_${shortParcelTableName}`;
+    const ownerTableName = `d${dept}_fftp_${majicYear}_${shortOwnerTableName}`;
 
     // Enregistrer la demande dans la table de logs
     try {
@@ -34,14 +37,25 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
     }
 
     // Récupérer le (la, les) propriétaire(s) de la parcelle
-    const parcel = await majicModel.findParcel(parcelId, schema, parcelTableName);
-    if (!parcel) {
-        throw new ServiceError('parcel_fetch_failed', new Error('Impossible de retrouver la parcelle en base de données.'));
+    let parcel: RawParcel;
+    try {
+        parcel = await majicModel.findParcel(parcelId, dept, schema, shortParcelTableName, parcelTableName);
+        if (!parcel) {
+            throw new ServiceError('parcel_fetch_failed', new Error('Impossible de retrouver la parcelle en base de données.'));
+        }
+    } catch (parcelError) {
+        throw new ServiceError('parcel_fetch_failed', new Error(`Une erreur s'est produite lors de la recherche de la parcelle ${parcelId}.`));
     }
-    const owners = await majicModel.findOwners(parcel.idcom, parcel.dnupro, schema, ownerTableName);
 
-    if (!owners) {
-        throw new ServiceError('owner_fetch_failed', new Error(`Propriétaire de la parcelle ${parcelId} introuvable.`));
+    // Récupérer la liste des propriétaires de la parcelle
+    let owners;
+    try {
+        owners = await majicModel.findOwners(parcel.idcom, parcel.dnupro, dept, schema, shortOwnerTableName, ownerTableName);
+        if (!owners) {
+            throw new ServiceError('owner_fetch_failed', new Error(`Propriétaire de la parcelle ${parcelId} introuvable.`));
+        }
+    } catch (ownersError) {
+        throw new ServiceError('owners_fetch_failed', new Error(`Une erreur s'est produite lors de la recherche des propiétaires de la parcelle ${parcelId}.`));
     }
 
     // Envoyer le mail
