@@ -2,6 +2,21 @@ module.exports = {
     async up(queryInterface, Sequelize) {
         const transaction = await queryInterface.sequelize.transaction();
 
+        async function addForeignKey(table, fields, refTable, refField, onUpdate, onDelete, pTransaction) {
+            return queryInterface.addConstraint(table, {
+                fields,
+                type: 'foreign key',
+                name: `fk__${table}__${refTable}`,
+                references: {
+                    table: `${refTable}`,
+                    field: `${refField}`,
+                },
+                onUpdate: `${onUpdate}`,
+                onDelete: `${onDelete}`,
+                transaction: pTransaction,
+            });
+        }
+
         try {
             await queryInterface.createTable(
                 'land_registry_enquiries',
@@ -32,43 +47,19 @@ module.exports = {
                 { transaction },
             );
 
-            await Promise.all([
-                queryInterface.addConstraint('land_registry_enquiries', {
-                    fields: ['fk_user'],
-                    type: 'foreign key',
-                    name: 'fk__land_registry_enquiry__user',
-                    references: {
-                        table: 'users',
-                        field: 'user_id',
-                    },
-                    onUpdate: 'cascade',
-                    onDelete: 'cascade',
-                    transaction,
-                }),
+            await addForeignKey('land_registry_enquiries', ['fk_user'], 'users', 'user_id', 'cascade', 'cascade', transaction);
+            await addForeignKey('land_registry_enquiries', ['fk_organization'], 'organizations', 'organization_id', 'cascade', 'cascade', transaction);
 
-                queryInterface.addConstraint('land_registry_enquiries', {
-                    fields: ['fk_organization'],
-                    type: 'foreign key',
-                    name: 'fk__user_question_subscriptions__organization',
-                    references: {
-                        table: 'organizations',
-                        field: 'organization_id',
-                    },
-                    onUpdate: 'cascade',
-                    onDelete: 'cascade',
+            await queryInterface.addIndex(
+                'land_registry_enquiries',
+                ['fk_parcel'],
+                {
+                    name: 'id__land_registry_enquiries__fk_parcel',
+                    using: 'BTREE',
+                    schema: 'public',
                     transaction,
-                }),
-                queryInterface.addIndex(
-                    'land_registry_enquiries',
-                    ['fk_parcel'],
-                    {
-                        name: 'id__land_registry_enquiries__fk_parcel',
-                        using: 'BTREE',
-                        schema: 'public',
-                        transaction,
-                    },
-                ),
-            ]);
+                },
+            );
             await transaction.commit();
         } catch (err) {
             await transaction.rollback();
@@ -79,23 +70,16 @@ module.exports = {
     async down(queryInterface) {
         const transaction = await queryInterface.sequelize.transaction();
 
+        function removeForeignKey(table, refTable) {
+            return queryInterface.removeConstraint(`${table}`, `fk__${table}__${refTable}`,
+                { transaction });
+        }
+
         try {
-            await Promise.all([
-                queryInterface.removeConstraint(
-                    'land_registry_enquiries',
-                    'fk__user_question_subscriptions__organization',
-                    { transaction },
-                ),
-                queryInterface.removeConstraint(
-                    'land_registry_enquiries',
-                    'fk__land_registry_enquiry__user',
-                    { transaction },
-                ),
-            ]);
-
+            await removeForeignKey('land_registry_enquiries', 'users');
+            await removeForeignKey('land_registry_enquiries', 'organizations');
             await queryInterface.dropTable('land_registry_enquiries', { transaction });
-
-            return transaction.commit();
+            await transaction.commit();
         } catch (error) {
             await transaction.rollback();
             throw error;
