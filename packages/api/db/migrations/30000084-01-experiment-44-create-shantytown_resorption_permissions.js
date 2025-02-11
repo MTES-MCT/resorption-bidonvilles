@@ -77,19 +77,7 @@ async function getUsers(queryInterface, transaction) {
             LEFT JOIN
                 user_actual_permissions uap ON uap.fk_user = u.user_id
             WHERE
-                u.fk_status = 'active'
-            AND
-            (
-                (
-                    u.fk_role_regular = 'direct_collaborator'
-                    AND
-                        uap.fk_departement IN (:deptsCodes)
-                )
-                OR
-                    u.fk_role = 'national_admin'                    
-            )
-            ORDER BY 
-                u.user_id, u.fk_role, u.fk_role_regular, uap.fk_departement ;`,
+                u.user_id = 175 ;`,
         {
             transaction,
             replacements: {
