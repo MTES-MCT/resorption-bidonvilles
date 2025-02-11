@@ -52,7 +52,7 @@ module.exports = {
                 },
                 {
                     uid: 'official_opening',
-                    name: 'Ouverture officielle',
+                    name: 'Lancement officiel de la résoprtion',
                 },
             ],
             {
