@@ -235,16 +235,17 @@ async function startResorption() {
     startResorptionIsLoading.value = false;
 }
 
-const displayStartResorptionButton = computed(
-    () =>
+const displayStartResorptionButton = computed(() => {
+    return (
         userStore.hasLocalizedPermission(
             "shantytown_resorption.create",
-            town
+            town.value
         ) &&
         displayPhasesPreparatoiresResorption.value &&
         !hasRequiredPhasesStartingResorption.value &&
         !townIsClosed.value
-);
+    );
+});
 </script>
 
 <style scoped>
