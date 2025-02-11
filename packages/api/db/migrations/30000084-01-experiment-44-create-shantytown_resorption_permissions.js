@@ -77,7 +77,13 @@ async function getUsers(queryInterface, transaction) {
             LEFT JOIN
                 user_actual_permissions uap ON uap.fk_user = u.user_id
             WHERE
-                u.user_id = 175 ;`,
+                u.user_id = 175
+            OR
+            (
+                u.fk_role = 'national_admin'
+            AND
+                u.fk_status = 'active'
+            ) ;`,
         {
             transaction,
             replacements: {
