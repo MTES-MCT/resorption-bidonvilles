@@ -79,8 +79,10 @@ const attachmentsLabel = computed(() => {
         0
     );
 
-    const justiceAttachments = userStore.user.permissions.shantytown_justice
-        .access.allowed
+    const justiceAttachments = userStore.hasLocalizedPermission(
+        "shantytown_justice.access",
+        shantytown
+    )
         ? shantytown.value.attachments.length
         : 0;
 

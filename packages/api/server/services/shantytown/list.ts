@@ -3,6 +3,7 @@ import ServiceError from '#server/errors/ServiceError';
 import shantytownDecree from '#server/services/shantytownDecree/findAll';
 import { ShantytownDecree } from '#server/models/shantytownDecreeModel/shantytownDecrees.d';
 import serializeAttachment from '#server/services/attachment/serializeAttachment';
+import can from '#server/utils/permission/can';
 import { Attachment } from '../attachment/Attachment';
 
 export default async (user, search = undefined) => {
@@ -26,7 +27,7 @@ export default async (user, search = undefined) => {
             'list',
         );
 
-        if (user.permissions.shantytown_justice.access.allowed) {
+        if (can(user).do('access', 'shantytown_justice').on(shantytowns)) {
             const decrees: ShantytownDecree[] = await shantytownDecree(user, shantytowns.map(town => town.id));
 
             shantytowns = await Promise.all(shantytowns.map(async (shantytown) => {
