@@ -49,6 +49,7 @@ import formatLastUpdatedAt from "@/utils/formatLastUpdatedAt";
 
 import { Tag, Icon } from "@resorptionbidonvilles/ui";
 import ResorptionTargetTag from "@/components/TagObjectifResorption/TagObjectifResorption.vue";
+import { useUserStore } from "@/stores/user.store";
 
 const props = defineProps({
     shantytown: Object,
@@ -58,6 +59,7 @@ const props = defineProps({
     },
 });
 const { shantytown, isHover } = toRefs(props);
+const userStore = useUserStore();
 
 const pinVariant = computed(() => {
     const { months } = getSince(shantytown.value.updatedAt);
@@ -77,10 +79,17 @@ const attachmentsLabel = computed(() => {
         0
     );
 
-    return commentsAttachments > 1
-        ? `${commentsAttachments} Pièces jointes`
-        : commentsAttachments === 0
+    const justiceAttachments = userStore.user.permissions.shantytown_justice
+        .access.allowed
+        ? shantytown.value.attachments.length
+        : 0;
+
+    const totalAttachments = commentsAttachments + justiceAttachments;
+
+    return totalAttachments > 1
+        ? `${totalAttachments} Pièces jointes`
+        : totalAttachments === 0
         ? null
-        : `${commentsAttachments} Pièce jointe`;
+        : `${totalAttachments} Pièce jointe`;
 });
 </script>
