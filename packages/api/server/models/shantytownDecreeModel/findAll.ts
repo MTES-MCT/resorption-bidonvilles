@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes, Transaction } from 'sequelize';
 import { ShantytownDecree } from './shantytownDecrees.d';
 
-export default (shantytownIds: number, transaction: Transaction = undefined): Promise<ShantytownDecree[]> => {
+export default (shantytownIds: number[], transaction: Transaction = undefined): Promise<ShantytownDecree[]> => {
     const ids: number[] = Array.isArray(shantytownIds) ? shantytownIds : [shantytownIds];
 
     return sequelize.query(
