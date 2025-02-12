@@ -131,10 +131,10 @@ const attachmentsLabel = computed(() => {
     }, 0);
 
     return commentsAttachments > 1
-        ? `${commentsAttachments} Pièces jointes`
+        ? `${commentsAttachments} Documents partagés`
         : commentsAttachments === 0
         ? null
-        : `${commentsAttachments} Pièce jointe`;
+        : `${commentsAttachments} Document partagé`;
 });
 </script>
 

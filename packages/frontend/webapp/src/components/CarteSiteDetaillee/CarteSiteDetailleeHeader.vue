@@ -87,9 +87,9 @@ const attachmentsLabel = computed(() => {
     const totalAttachments = commentsAttachments + justiceAttachments;
 
     return totalAttachments > 1
-        ? `${totalAttachments} Pièces jointes`
+        ? `${totalAttachments} Documents partagés`
         : totalAttachments === 0
         ? null
-        : `${totalAttachments} Pièce jointe`;
+        : `${totalAttachments} Document partagé`;
 });
 </script>
