@@ -25,7 +25,7 @@
         </ViewErrorInline>
 
         <section v-else class="flex">
-            <div class="sticky self-start sticky top-28">
+            <div class="sticky self-start top-28">
                 <TableauDeBordFiltres class="w-48 pt-0 -mt-0" />
             </div>
             <TableauDeBordActivitesListe class="ml-24 -mt-1 flex-1" />
