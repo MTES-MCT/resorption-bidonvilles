@@ -14,11 +14,18 @@
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
-                    Vous venez de rejoindre les utilisateurs et utilisatrices de la plateforme <a href="{{var:webappUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
+                    Vous venez de rejoindre les utilisateurs et utilisatrices de la plateforme
+                    <a href="{{var:webappUrl}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>.
                 </mj-text>
                 <mj-text>
-                    Pour vous accompagner dans son utilisation, nous proposons des sessions de formation personnalisée. <span class="font-bold">En 45 minutes, vous saurez prendre en main la plateforme et l’utiliser en fonction de vos besoins.</span> Nous profiterons également de ce temps d’échange pour répondre à toutes vos questions.
+                    Pour vous accompagner dans son utilisation, nous proposons des sessions de formation personnalisée. 
+                    <span class="font-bold">En 45 minutes, vous saurez prendre en main la plateforme et l’utiliser en fonction de vos besoins.</span>
+                    Nous profiterons également de ce temps d’échange pour répondre à toutes vos questions.
                 </mj-text>
+                <mj-text>
+                <span class="font-bold">Si vous êtes déjà inscrit(e) à la formation prise en main</span>, merci de ne pas tenir compte de ce courriel.
+                </mj-text>				
+
                 <mj-include path='common/formation_cta_me.mjml' />
                 <mj-include path='common/contact_interlocutor_user.mjml' />
             </mj-column>
