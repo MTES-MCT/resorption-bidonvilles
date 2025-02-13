@@ -125,7 +125,9 @@ export type ActionOrganizationMember = {
     role: string,
     is_admin: boolean,
     organization: {
-        id: number
+        id: number,
+        name: string,
+        abbreviation: string,
     }
 };
 type ActionOrganization = {

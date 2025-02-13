@@ -2,7 +2,7 @@
     <ContentWrapper>
         <ViewHeader icon="building">
             <template v-slot:title
-                >Fiche structure —
+                >Fiche structure -
                 <span class="text-primary">{{
                     organization.name
                 }}</span></template

@@ -7,6 +7,7 @@
             :key="user.id"
             :user="user"
             :linkToUser="false"
+            includeOrganization
         />
     </FicheSousRubrique>
 </template>

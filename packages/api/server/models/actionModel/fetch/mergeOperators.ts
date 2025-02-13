@@ -16,6 +16,8 @@ export default function mergeOperators(hash: ActionHash, operators: ActionUserRo
             is_admin: row.admin_role_name !== null,
             organization: {
                 id: row.organization_id,
+                name: row.organization_name,
+                abbreviation: row.organization_abbreviation,
             },
         };
 
