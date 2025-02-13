@@ -106,9 +106,7 @@ const title = computed(() => {
                     intervention_areas,
                 }) => {
                     name += ` - ${
-                        organizationAbbreviation
-                            ? organizationAbbreviation
-                            : organizationName
+                        organizationAbbreviation || organizationName
                     }`;
                     if (!showDepartementCode.value) {
                         return name;
