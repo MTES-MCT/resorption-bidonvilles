@@ -24,54 +24,49 @@ type UserActivityRow = {
 
 export default async (location: Location, numberOfActivities: number, lastDate: Date, maxDate: Date):Promise<UserActivity[]> => {
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
-    try {
-        const activitiess: UserActivityRow[] = await sequelize.query(
-            `
-            SELECT
-                lua.used_at AS "date",
-                users.user_id,
-                users.first_name,
-                users.last_name,
-                users.use_custom_intervention_area,
-                users.fk_organization AS organization_id,
-                organizations.name AS organization_name,
-                organizations.abbreviation AS organization_abbreviation,
-                v_user_areas.is_national,
-                v_user_areas.regions,
-                v_user_areas.departements,
-                v_user_areas.epci,
-                v_user_areas.cities
-            FROM last_user_accesses lua
-            LEFT JOIN users ON lua.fk_user = users.user_id
-            LEFT JOIN organizations ON organizations.organization_id = users.fk_organization 
-            LEFT JOIN v_user_areas ON v_user_areas.user_id = users.user_id AND v_user_areas.is_main_area IS TRUE
-            WHERE
-                lua.used_at IS NOT NULL
-                AND lua.used_at < '${lastDate}'
-                ${maxDate ? 'AND lua.used_at >= :maxDate' : ''}
-                ${location.type === 'city' ? 'AND :city = ANY(v_user_areas.cities)' : ''}
-                ${location.type === 'epci' ? 'AND :epci = ANY(v_user_areas.epci)' : ''}
-                ${location.type === 'departement' ? 'AND :departement = ANY(v_user_areas.departements)' : ''}
-                ${location.type === 'region' ? 'AND :region = ANY(v_user_areas.regions)' : ''}
-            ORDER BY lua.used_at DESC
-            ${limit}
-            `,
-            {
-                type: QueryTypes.SELECT,
-                replacements: {
-                    maxDate,
-                    city: location.city?.code || null,
-                    epci: location.epci?.code || null,
-                    departement: location.departement?.code || null,
-                    region: location.region?.code || null,
-                },
+    const activities: UserActivityRow[] = await sequelize.query(
+        `
+        SELECT
+            lua.used_at AS "date",
+            users.user_id,
+            users.first_name,
+            users.last_name,
+            users.use_custom_intervention_area,
+            users.fk_organization AS organization_id,
+            organizations.name AS organization_name,
+            organizations.abbreviation AS organization_abbreviation,
+            v_user_areas.is_national,
+            v_user_areas.regions,
+            v_user_areas.departements,
+            v_user_areas.epci,
+            v_user_areas.cities
+        FROM last_user_accesses lua
+        LEFT JOIN users ON lua.fk_user = users.user_id
+        LEFT JOIN organizations ON organizations.organization_id = users.fk_organization 
+        LEFT JOIN v_user_areas ON v_user_areas.user_id = users.user_id AND v_user_areas.is_main_area IS TRUE
+        WHERE
+            lua.used_at IS NOT NULL
+            AND lua.used_at < '${lastDate}'
+            ${maxDate ? 'AND lua.used_at >= :maxDate' : ''}
+            ${location.type === 'city' ? 'AND :city = ANY(v_user_areas.cities)' : ''}
+            ${location.type === 'epci' ? 'AND :epci = ANY(v_user_areas.epci)' : ''}
+            ${location.type === 'departement' ? 'AND :departement = ANY(v_user_areas.departements)' : ''}
+            ${location.type === 'region' ? 'AND :region = ANY(v_user_areas.regions)' : ''}
+        ORDER BY lua.used_at DESC
+        ${limit}
+        `,
+        {
+            type: QueryTypes.SELECT,
+            replacements: {
+                maxDate,
+                city: location.city?.code || null,
+                epci: location.epci?.code || null,
+                departement: location.departement?.code || null,
+                region: location.region?.code || null,
             },
-        );
-        console.log('activities', activitiess);
-    } catch (error) {
-        console.log(error);
-    }
-    const activities: UserActivityRow[] = [];
+        },
+    );
+
     const interventionAreas = await interventionAreaModel.list(
         activities.map(({ user_id }) => user_id),
         activities.map(({ organization_id }) => organization_id),
