@@ -1,6 +1,6 @@
 <mjml>
     <mj-head>
-        <mj-title>[Résorption-bidonvilles] - Participez à une session de formation personnalisée</mj-title>
+        <mj-title>[Résorption-bidonvilles] - Participez à une session de prise en main de la plateforme</mj-title>
         <mj-include path='common/attributes.mjml' />
         <mj-include path='common/styles.mjml' />
     </mj-head>
