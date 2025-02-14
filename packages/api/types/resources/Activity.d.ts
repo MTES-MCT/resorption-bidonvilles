@@ -56,6 +56,8 @@ export type UserActivity = {
     user: {
         name: string,
         organization: number,
+        organizationName: string,
+        organizationAbbreviation: string,
         intervention_areas: {
             is_national: boolean,
             areas: InterventionArea[],
