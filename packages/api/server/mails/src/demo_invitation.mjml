@@ -19,11 +19,11 @@
                 </mj-text>
                 <mj-text>
                     Pour vous accompagner dans son utilisation, nous proposons des sessions de formation personnalisée. 
-                    <span class="font-bold">En 45 minutes, vous saurez prendre en main la plateforme et l’utiliser en fonction de vos besoins.</span>
+                    <span class="font-bold">En 30 minutes, vous saurez prendre en main la plateforme et l’utiliser en fonction de vos besoins.</span>
                     Nous profiterons également de ce temps d’échange pour répondre à toutes vos questions.
                 </mj-text>
                 <mj-text>
-                <span class="font-bold">Si vous êtes déjà inscrit(e) à la formation prise en main</span>, merci de ne pas tenir compte de ce courriel.
+                <span class="font-bold">Si vous êtes déjà inscrit(e) à la session de prise en main</span>, merci de ne pas tenir compte de ce courriel.
                 </mj-text>				
 
                 <mj-include path='common/formation_cta_me.mjml' />
