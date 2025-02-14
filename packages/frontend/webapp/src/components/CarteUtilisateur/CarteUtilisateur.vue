@@ -10,8 +10,15 @@
     >
         <div>
             <h2 class="font-bold" :class="user.is_admin ? 'text-info' : ''">
-                {{ user.last_name.toUpperCase() }}
-                {{ user.first_name }}
+                <p>
+                    {{ user.last_name.toUpperCase() }}
+                    {{ user.first_name }}
+                </p>
+                <p v-if="includeOrganization" class="text-black">
+                    {{
+                        user.organization.abbreviation || user.organization.name
+                    }}
+                </p>
             </h2>
             <p>{{ user.position }}</p>
             <p class="mt-2">
@@ -85,6 +92,11 @@ const props = defineProps({
         type: Boolean,
         required: false,
         default: true,
+    },
+    includeOrganization: {
+        type: Boolean,
+        required: false,
+        default: false,
     },
 });
 const { user, linkToUser } = toRefs(props);
