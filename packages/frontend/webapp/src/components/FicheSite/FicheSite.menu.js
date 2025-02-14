@@ -34,8 +34,8 @@ export default [
         route: "#conditions_de_vie",
     },
     {
-        id: "procedure",
-        label: () => "Procédure",
+        id: "procedures",
+        label: () => "Procédures",
         route: "#procedure",
         condition() {
             const userStore = useUserStore();

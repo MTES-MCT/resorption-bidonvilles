@@ -28,9 +28,9 @@
                     focusClasses.ring,
                 ]"
                 replace
-                ><Icon v-if="tab.icon" :icon="tab.icon" />
-                {{ tab.label }}</RouterLink
-            >
+                ><Icon v-if="tab.icon" :icon="tab.icon" /> {{ tab.label }}
+                <Icon v-if="tab.postIcon" icon="paperclip"
+            /></RouterLink>
         </template>
     </nav>
 </template>
@@ -53,6 +53,7 @@ const props = defineProps({
 });
 
 const { tabs, activeTab } = toRefs(props);
+
 const classes = {
     primary: "text-primary",
     secondary: "text-secondary",
