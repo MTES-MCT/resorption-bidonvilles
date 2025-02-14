@@ -10,7 +10,7 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    Participez à une session de formation à la plateforme <span class="font-italic">Résorption-bidonvilles</span>
+                    Participez à une session de prise en main de la plateforme <span class="font-italic">Résorption-bidonvilles</span>
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
                 <mj-text mj-class="pb-4">
@@ -23,7 +23,7 @@
                     Nous profiterons également de ce temps d’échange pour répondre à toutes vos questions.
                 </mj-text>
                 <mj-text>
-                <span class="font-bold">Si vous êtes déjà inscrit(e) à la session de prise en main</span>, merci de ne pas tenir compte de ce courriel.
+                <span class="font-bold">Si vous êtes déjà inscrit(e) à une session de prise en main</span>, merci de ne pas tenir compte de ce courriel.
                 </mj-text>				
 
                 <mj-include path='common/formation_cta_me.mjml' />
