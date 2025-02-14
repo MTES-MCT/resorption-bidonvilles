@@ -4,9 +4,18 @@
         v-on:openCancel="openCancel"
         v-on:deleteTown="deleteTown"
     />
-
     <ContentWrapper>
         <ArrangementLeftMenu columnWidthClass="w-90" :tabs="tabs" autonav>
+            <FicheSiteResorption
+                v-if="
+                    displayPhasesPreparatoiresResorption &&
+                    (!townIsClosed ||
+                        town.preparatoryPhasesTowardResorption.length)
+                "
+                :town="town"
+                id="resorption"
+                class="mb-8"
+            />
             <FicheSiteCaracteristiques
                 :town="town"
                 id="caracteristiques"
@@ -60,6 +69,7 @@ import menu from "./FicheSite.menu";
 import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
 import FicheSiteHeader from "./FicheSiteHeader/FicheSiteHeader.vue";
+import FicheSiteResorption from "./FicheSiteResorption/FicheSiteResorption.vue";
 import FicheSiteCaracteristiques from "./FicheSiteCaracteristiques/FicheSiteCaracteristiques.vue";
 import FicheSiteFermeture from "./FicheSiteFermeture/FicheSiteFermeture.vue";
 import FicheSiteActions from "./FicheSiteActions/FicheSiteActions.vue";
@@ -69,6 +79,7 @@ import FicheSiteProcedures from "./FicheSiteProcedures/FicheSiteProcedures.vue";
 import FicheSiteIntervenants from "./FicheSiteIntervenants/FicheSiteIntervenants.vue";
 import FicheSiteJournal from "./FicheSiteJournal/FicheSiteJournal.vue";
 import FicheSiteHistorique from "./FicheSiteHistorique/FicheSiteHistorique.vue";
+import { usePhasesPreparatoiresResorption } from "@/utils/usePhasesPreparatoiresResorption";
 
 const props = defineProps({
     town: Object,
@@ -78,6 +89,9 @@ const userStore = useUserStore();
 const townsStore = useTownsStore();
 const { bus } = useEventBus();
 const historique = ref(null);
+
+const { displayPhasesPreparatoiresResorption } =
+    usePhasesPreparatoiresResorption(town);
 
 const tabs = computed(() => {
     const commentsAttachments = town.value.comments.reduce((sum, comment) => {
@@ -106,6 +120,10 @@ const tabs = computed(() => {
             };
         });
 });
+
+const townIsClosed = computed(
+    () => town.value.closedAt !== null && town.value.closedAt !== undefined
+);
 
 watch(
     () => bus.value.get("fichesite:openHistorique"),
