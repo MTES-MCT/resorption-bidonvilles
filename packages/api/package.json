@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/api",
-  "version": "2.26.8",
+  "version": "2.26.9",
   "description": "API d'Action Bidonvilles",
   "main": "server/index.ts",
   "repository": "git+https://github.com/MTES-MCT/action-bidonvilles.git",
@@ -55,7 +55,7 @@
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.2",
     "rimraf": "^3.0.2",
-    "semver": "^7.5.2",
+    "semver": "^7.7.0",
     "sequelize": "^6.29.0",
     "sequelize-cli": "^6.5.0",
     "sequelize-mock": "^0.10.2",

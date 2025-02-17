@@ -16,6 +16,8 @@ export default function mergeManagers(hash: ActionHash, managers: ActionUserRow[
             is_admin: row.admin_role_name !== null,
             organization: {
                 id: row.organization_id,
+                name: row.organization_name,
+                abbreviation: row.organization_abbreviation,
             },
         };
 

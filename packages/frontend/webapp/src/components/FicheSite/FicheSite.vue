@@ -43,7 +43,6 @@
             />
         </ArrangementLeftMenu>
     </ContentWrapper>
-
     <FicheSiteJournal
         :town="town"
         v-if="userStore.hasLocalizedPermission('shantytown_comment.list', town)"
@@ -81,6 +80,11 @@ const { bus } = useEventBus();
 const historique = ref(null);
 
 const tabs = computed(() => {
+    const commentsAttachments = town.value.comments.reduce((sum, comment) => {
+        return sum + (comment.attachments ? comment.attachments.length : 0);
+    }, 0);
+    const proceduresAttachments = town.value.attachments?.length;
+
     return menu
         .filter((item) => {
             if (!item.condition) {
@@ -93,6 +97,12 @@ const tabs = computed(() => {
             return {
                 ...item,
                 label: item.label(town.value),
+                postIcon:
+                    (item.id === "journal_du_site" &&
+                        commentsAttachments > 0) ||
+                    (item.id === "procedures" && proceduresAttachments > 0)
+                        ? true
+                        : false,
             };
         });
 });

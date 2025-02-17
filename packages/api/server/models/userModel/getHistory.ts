@@ -13,6 +13,8 @@ type UserActivityRow = {
     last_name: string,
     use_custom_intervention_area: boolean,
     organization_id: number,
+    organization_name: string,
+    organization_abbreviation: string,
     is_national: boolean,
     regions: string[],
     departements: string[],
@@ -31,6 +33,8 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
             users.last_name,
             users.use_custom_intervention_area,
             users.fk_organization AS organization_id,
+            organizations.name AS organization_name,
+            organizations.abbreviation AS organization_abbreviation,
             v_user_areas.is_national,
             v_user_areas.regions,
             v_user_areas.departements,
@@ -38,6 +42,7 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
             v_user_areas.cities
         FROM last_user_accesses lua
         LEFT JOIN users ON lua.fk_user = users.user_id
+        LEFT JOIN organizations ON organizations.organization_id = users.fk_organization 
         LEFT JOIN v_user_areas ON v_user_areas.user_id = users.user_id AND v_user_areas.is_main_area IS TRUE
         WHERE
             lua.used_at IS NOT NULL
@@ -92,6 +97,8 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
             user: {
                 name: formatName(activity),
                 organization: activity.organization_id,
+                organizationName: activity.organization_name,
+                organizationAbbreviation: activity.organization_abbreviation,
                 intervention_areas: {
                     is_national: activity.is_national,
                     areas: (hashInterventionAreas.users[activity.user_id] || []).concat(
