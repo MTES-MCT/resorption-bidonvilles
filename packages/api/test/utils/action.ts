@@ -43,6 +43,8 @@ export function serialized(override = {}): Action {
                         last_name: 'Dupont',
                         organization: {
                             id: 1,
+                            name: 'Structure',
+                            abbreviation: null,
                         },
                     },
                 ],
@@ -65,6 +67,8 @@ export function serialized(override = {}): Action {
                         last_name: 'Dupont',
                         organization: {
                             id: 2,
+                            name: 'Structure',
+                            abbreviation: null,
                         },
                     },
                 ],
