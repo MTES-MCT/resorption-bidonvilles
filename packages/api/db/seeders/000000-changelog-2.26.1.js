@@ -1,7 +1,7 @@
 const { backUrl } = require('./config/config');
 
 const changelog = {
-    app_version: '2.25.4',
+    app_version: '2.26.1',
     date: new Date(2025, 1, 24),
     items: [
         {
