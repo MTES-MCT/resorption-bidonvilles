@@ -26,5 +26,5 @@
     "@intlify/message-compiler": "^11.1.1",
     "@intlify/vue-i18n-core": "^11.1.1"
   },
-  "version": "2.26.21"
+  "version": "2.26.22"
 }
