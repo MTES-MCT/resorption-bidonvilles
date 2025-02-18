@@ -82,7 +82,7 @@ jobs:
           key: ${{ runner.os }}-www-buildx-v${{ needs['upgrade-version'].outputs.new_tag }}
           restore-keys: |
             ${{ runner.os }}-www-buildx
-          fail-on-cache-miss: true
+          fail-on-cache-miss: false
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
@@ -118,7 +118,7 @@ jobs:
           key: ${{ runner.os }}-webapp-buildx-v${{ needs['upgrade-version'].outputs.new_tag }}
           restore-keys: |
             ${{ runner.os }}-webapp-buildx
-          fail-on-cache-miss: true
+          fail-on-cache-miss: false
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
@@ -154,7 +154,7 @@ jobs:
           key: ${{ runner.os }}-api-buildx-v${{ needs['upgrade-version'].outputs.new_tag }}
           restore-keys: |
             ${{ runner.os }}-api-buildx
-          fail-on-cache-miss: true
+          fail-on-cache-miss: false
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
