@@ -2,7 +2,7 @@
 # BUILD STAGE
 ###
 FROM node:16-alpine AS build
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 # python3, make, and g++ are needed for building node-gyp (itself required by a bunch of our dependencies)
