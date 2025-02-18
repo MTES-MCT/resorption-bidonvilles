@@ -32,7 +32,10 @@
     "@intlify/core-base": "^11.1.1",
     "@intlify/shared": "^11.1.1",
     "@intlify/message-compiler": "^11.1.1",
-    "@intlify/vue-i18n-core": "^11.1.1"
+    "@intlify/vue-i18n-core": "^11.1.1",
+    "@intlify/message-resolver": "^9.1.10",
+    "@intlify/utils": "^0.13.0",
+    "@intlify/vue-devtools": "^9.14.1"
   },
   "version": "2.26.10"
 }
