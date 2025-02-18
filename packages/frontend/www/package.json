@@ -37,5 +37,5 @@
     "@intlify/utils": "^0.13.0",
     "@intlify/vue-devtools": "^9.14.1"
   },
-  "version": "2.26.25"
+  "version": "2.26.26"
 }
