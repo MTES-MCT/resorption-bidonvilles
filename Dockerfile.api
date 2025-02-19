@@ -31,7 +31,7 @@ RUN yarn build
 ###
 # PRODUCTION STAGE
 ###
-FROM node:20-alpine AS production
+FROM node:16-alpine AS production
 ENV NODE_ENV=production
 
 RUN mkdir -p \
@@ -46,5 +46,4 @@ COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./packages/
 COPY --chown=node:node packages/api/package.json ./packages/api/
 
 WORKDIR /home/node/app/packages/api
-RUN corepack enable
 ENTRYPOINT ["yarn", "serve"]
