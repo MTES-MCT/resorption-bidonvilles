@@ -46,4 +46,5 @@ COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./packages/
 COPY --chown=node:node packages/api/package.json ./packages/api/
 
 WORKDIR /home/node/app/packages/api
+RUN corepack enable yarn
 ENTRYPOINT ["yarn", "serve"]
