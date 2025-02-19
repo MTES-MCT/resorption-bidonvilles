@@ -39,7 +39,7 @@ RUN yarn build
 ###
 # PRODUCTION STAGE
 ###
-FROM node:18-alpine AS production
+FROM node:20-alpine AS production
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 
