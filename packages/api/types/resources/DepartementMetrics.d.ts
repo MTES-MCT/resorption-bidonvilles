@@ -13,6 +13,7 @@ export type ShantytownMetrics = {
     number_of_persons: number | null,
     number_of_households: number | null,
     number_of_minors: number | null,
+    number_of_schooled_minors: number | null,
     access_to_water: StatusEnum,
     access_to_electricity: StatusEnum,
     trash_evacuation: StatusEnum,
@@ -32,6 +33,7 @@ export type CityMetrics = {
         number_of_persons: number | null,
         number_of_households: number | null,
         number_of_minors: number | null,
+        number_of_schooled_minors: number | null,
         number_of_towns_with_water: number,
         number_of_towns_with_electricity: number,
         number_of_towns_with_trash_evacuation: number,
@@ -92,6 +94,7 @@ export type DepartementMetrics = {
 
         number_of_households: number | null,
         number_of_minors: number | null,
+        number_of_schooled_minors: number | null,
         number_of_towns_with_water: number,
         number_of_towns_with_electricity: number,
         number_of_towns_with_trash_evacuation: number,
