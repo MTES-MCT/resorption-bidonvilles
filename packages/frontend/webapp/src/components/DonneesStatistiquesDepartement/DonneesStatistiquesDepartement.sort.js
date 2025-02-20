@@ -126,14 +126,6 @@ export default {
             city_level: sortBySummaryKey("number_of_households"),
             town_level: sortByKeyName("number_of_households"),
         },
-        number_of_minors: {
-            city_level: sortBySummaryKey("number_of_minors"),
-            town_level: sortByKeyName("number_of_minors"),
-        },
-        number_of_schooled_minors: {
-            city_level: sortBySummaryKey("number_of_schooled_minors"),
-            town_level: sortByKeyName("number_of_schooled_minors"),
-        },
     },
     livingConditionsByInhabitant: {
         city_name: {
@@ -231,6 +223,14 @@ export default {
         city_name: {
             city_level: sortByCityName,
             town_level: sortByKeyName("usename"),
+        },
+        number_of_towns: {
+            city_level: sortBySummaryKey("number_of_towns"),
+            town_level: sortByKeyName("usename"),
+        },
+        number_of_minors: {
+            city_level: sortBySummaryKey("number_of_minors"),
+            town_level: sortByKeyName("number_of_minors"),
         },
         number_of_schooled_minors: {
             city_level: sortBySummaryKey("number_of_schooled_minors"),
