@@ -29,6 +29,7 @@ export default async (user: User, departementCode: string, argFrom: Date, argTo:
     const metrics:DepartementMetricsEvolution = initializeDepartementEvolutionMetrics(listOfDates.map(({ label }) => label));
 
     let previousIndex;
+
     data.forEach((row, index) => {
         const isLast = data[index + 1]?.shantytown_id !== row.shantytown_id;
         const isNew = index === 0 || row.shantytown_id !== data[index - 1].shantytown_id;
@@ -79,6 +80,9 @@ export default async (user: User, departementCode: string, argFrom: Date, argTo:
             }
             if (row.population_total >= 100) {
                 metrics.inhabitants.towns.charts.more_than_99[i] += 1;
+            }
+            if (row.minors_in_school !== null) {
+                metrics.inhabitants.towns.charts.minors_in_school[i] += row.minors_in_school;
             }
             if (row.origins.length === 1 && row.origins[0] === 'european') {
                 metrics.inhabitants.inhabitants.charts.european[i] += row.population_total;
