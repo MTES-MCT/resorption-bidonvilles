@@ -22,7 +22,7 @@ const i18n = createI18n({
                 "newsletterCta": "Je m'abonne",
 
                 "contactTitle": "Un problème, une question?",
-                "contactBody1": "Appelez nous au +33 1 40 81 95 39",
+                "contactBody1": "Appelez nous au +33 1 40 81 98 80",
                 "contactBody2": "Écrivez-nous à",
 
                 "socialTitle1": "Suivez-nous",
