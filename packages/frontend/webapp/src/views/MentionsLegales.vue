@@ -18,7 +18,7 @@
             <h3 class="text-display-md font-bold mt-8">Nous joindre</h3>
             <div class="mt-4">
                 <ul>
-                    <li>Par téléphone : +33 (0) 1 40 81 95 39</li>
+                    <li>Par téléphone : +33 (0) 1 40 81 98 80</li>
                     <li>
                         Par mail :
                         <p>
@@ -26,7 +26,7 @@
                                 class="underline"
                                 to="mailto: contact-resorption-bidonvilles@dihal.gouv.fr"
                             >
-                                 contact-resorption-bidonvilles@dihal.gouv.fr</Link
+                                contact-resorption-bidonvilles@dihal.gouv.fr</Link
                             >
                         </p>
                     </li>

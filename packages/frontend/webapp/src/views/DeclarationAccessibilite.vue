@@ -83,7 +83,7 @@
                     le contenu sous une autre forme.
                 </p>
                 <ul>
-                    <li class="my-2">Par téléphone : +33 (0) 1 40 81 95 39</li>
+                    <li class="my-2">Par téléphone : +33 (0) 1 40 81 98 80</li>
                     <li class="mb-2">
                         Par mail :
                         <p>
@@ -91,7 +91,7 @@
                                 class="underline"
                                 to="mailto: contact-resorption-bidonvilles@dihal.gouv.fr"
                             >
-                                 contact-resorption-bidonvilles@dihal.gouv.fr</Link
+                                contact-resorption-bidonvilles@dihal.gouv.fr</Link
                             >
                         </p>
                     </li>
