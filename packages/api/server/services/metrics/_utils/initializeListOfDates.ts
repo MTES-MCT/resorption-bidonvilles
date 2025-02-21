@@ -19,7 +19,7 @@ export default (argFrom: Date, argTo: Date): DateObject[] => {
 
     let diff = getMonthDiff(argFrom, argTo);
     let step = 'months';
-    let format = 'MMMM';
+    let format = 'MMMM YYYY';
 
 
     if (diff < 3) {
@@ -28,7 +28,7 @@ export default (argFrom: Date, argTo: Date): DateObject[] => {
         format = 'DD/MM/YYYY';
     }
 
-    const listOfDates = [{ date: from.toDate(), label: from.format(format) }];
+    const listOfDates = [{ date: from.toDate(), label: from.format(format).charAt(0).toUpperCase() + from.format(format).slice(1) }];
 
 
     // there is a special case for when from and to are the exact same day
@@ -39,11 +39,11 @@ export default (argFrom: Date, argTo: Date): DateObject[] => {
 
     for (let i = 1, d = moment(from).add(1, step === 'weeks' ? 'weeks' : 'months'); i < (step === 'months' ? diff : (diff + 1)); i += 1, d.add(1, step === 'weeks' ? 'weeks' : 'months')) {
         if (!moment(to).isSame(d)) {
-            listOfDates.push({ date: d.toDate(), label: d.format(format) });
+            listOfDates.push({ date: d.toDate(), label: d.format(format).charAt(0).toUpperCase() + d.format(format).slice(1) });
         }
     }
 
-    listOfDates.push({ date: to.toDate(), label: moment(argTo).format(format) });
+    listOfDates.push({ date: to.toDate(), label: moment(argTo).format(format).charAt(0).toUpperCase() + moment(argTo).format(format).slice(1) });
 
     return listOfDates;
 };
