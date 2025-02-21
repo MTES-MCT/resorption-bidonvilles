@@ -18,11 +18,6 @@
             >
         </div>
 
-        <!-- <LineChart
-            class="mt-6"
-            :chartOptions="chartOptions"
-            :chartData="chartData"
-        /> -->
         <LineChart
             class="mt-6"
             :chartOptions="options"
