@@ -18,6 +18,7 @@ export const useDepartementMetricsStore = defineStore(
             inhabitants: { id: "city_name", order: "asc" },
             livingConditionsByInhabitant: { id: "city_name", order: "asc" },
             livingConditionsByTown: { id: "city_name", order: "asc" },
+            schooling: { id: "city_name", order: "asc" },
             justice: { id: "city_name", order: "asc" },
         });
         const metrics = ref({});
@@ -44,6 +45,7 @@ export const useDepartementMetricsStore = defineStore(
             ) {
                 return null;
             }
+
             return {
                 ...metrics.value[departement.value],
                 cities: metrics.value[departement.value].cities
@@ -79,6 +81,7 @@ export const useDepartementMetricsStore = defineStore(
                 inhabitants: { id: "city_name", order: "asc" },
                 livingConditionsByInhabitant: { id: "city_name", order: "asc" },
                 livingConditionsByTown: { id: "city_name", order: "asc" },
+                schooling: { id: "city_name", order: "asc" },
                 justice: { id: "city_name", order: "asc" },
             };
             metrics.value = {};

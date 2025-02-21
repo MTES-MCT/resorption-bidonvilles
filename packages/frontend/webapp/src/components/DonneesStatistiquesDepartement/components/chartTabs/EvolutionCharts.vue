@@ -29,6 +29,7 @@ import EvolutionChartTabSummary from "./EvolutionChartTabSummary.vue";
 import EvolutionChartTabInhabitants from "./EvolutionChartTabInhabitants.vue";
 import EvolutionChartTabLivingConditionsByInhabitant from "./EvolutionChartTabLivingConditionsByInhabitant.vue";
 import EvolutionChartTabLivingConditionsByTown from "./EvolutionChartTabLivingConditionsByTown.vue";
+import EvolutionChartSchooling from "../charts/EvolutionChartSchooling.vue";
 import EvolutionChartTabJustice from "./EvolutionChartTabJustice.vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 
@@ -38,6 +39,7 @@ const tabs = {
     inhabitants: EvolutionChartTabInhabitants,
     livingConditionsByInhabitant: EvolutionChartTabLivingConditionsByInhabitant,
     livingConditionsByTown: EvolutionChartTabLivingConditionsByTown,
+    schooling: EvolutionChartSchooling,
     justice: EvolutionChartTabJustice,
 };
 
