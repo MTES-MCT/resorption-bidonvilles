@@ -54,7 +54,7 @@ export default {
         "Une procédure administrative prescrivant l'évacuation sous délai est-elle en cours ?",
     administrative_order_decision_at: "Date de l'arrêté",
     administrative_order_decision_rendered_by: "Qui a pris l'arrêté ?",
-    administrative_order_evacuation_at: "Date de l'évacuation",
+    administrative_order_evacuation_at: "Date prévue de l'évacuation",
     evacuation_upload: "Téléverser l'arrêté d'évacuation",
     evacuation_decrees: "Arrêté d'évacuation",
     // Arrêté d'insalubrité
