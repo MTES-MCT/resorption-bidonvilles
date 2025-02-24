@@ -79,11 +79,17 @@ const background = computed(() => {
     ).background;
 });
 const color = computed(() => {
-    if (invert.value) {
-        return colors.neutral.color;
-    }
-
-    return (evolution.value < 0 ? colors.positive : colors.negative).color;
+    return (
+        evolution.value == 0
+            ? colors.neutral
+            : evolution.value < 0
+            ? !invert.value
+                ? colors.positive
+                : colors.negative
+            : !invert.value
+            ? colors.negative
+            : colors.positive
+    ).color;
 });
 
 const formatedEvolution = computed(() => {
