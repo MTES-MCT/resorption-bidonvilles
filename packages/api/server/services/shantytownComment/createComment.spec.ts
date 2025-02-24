@@ -54,7 +54,7 @@ const fakeEnrichedComment = (): ShantytownEnrichedComment => ({
             name: 'test1.txt',
             size: 2048,
             urls: {
-                original: 'https://s3.gra.io.cloud.ovh.net/rb-attachments-preprod/shantytown_comment_author1_comment1_file1_4c3dba6a-2083-482e-bd43-125086876e7f.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=b4bbbcf0ffb84fbba630c535a349c69e%2F20240813%2Fgra%2Fs3%2Faws4_request&X-Amz-Date=20240813T093044Z&X-Amz-Expires=3600&X-Amz-Signature=92bf82e2119cbe8e074dbba28dc3f085d435ec9df26b62a3c66efaa52ec448f9&X-Amz-SignedHeaders=host&x-id=GetObject',
+                original: '',
                 preview: '',
             },
             extension: 'text/plain',
