@@ -1,4 +1,4 @@
-export function serialized(override = {}) {
+export default function serialized(override = {}) {
     const defaultObj = {
         user_id: 2,
         first_name: 'Jean',
