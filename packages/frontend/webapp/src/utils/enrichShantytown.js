@@ -64,7 +64,7 @@ export default function (shantytown, fieldTypes) {
             justiceStatuses.push({
                 section: "evacuationUnderTimeLimit",
                 icon: "file-contract",
-                label: "Évacuation effectuée",
+                label: "Évacuation planifiée",
                 date: shantytown.administrativeOrderEvacuationAt,
             });
         }
