@@ -6,6 +6,7 @@ import { rewiremock } from '#test/rewiremock';
 import { serialized as serializedQuestion } from '#test/utils/question';
 import { serialized as fakeUser } from '#test/utils/userSimplified';
 import ServiceError from '#server/errors/ServiceError';
+import findOne from './findOne';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -17,28 +18,26 @@ const enrichQuestion = sandbox.stub();
 
 rewiremock('#server/services/question/common/enrichQuestion').withDefault(enrichQuestion);
 
-rewiremock.enable();
-import findOne from './findOne';
-rewiremock.disable();
-
-const question = serializedQuestion({ answers: [
-    {
-        id: 1,
-        description: 'réponse test 1',
-        createdAt: null,
-        createdBy: fakeUser(),
-        question: 1,
-        attachments: [],
-    },
-    {
-        id: 2,
-        description: 'réponse test 2',
-        createdAt: null,
-        createdBy: fakeUser(),
-        question: 1,
-        attachments: [],
-    },
-]});
+const question = serializedQuestion({
+    answers: [
+        {
+            id: 1,
+            description: 'réponse test 1',
+            createdAt: null,
+            createdBy: fakeUser(),
+            question: 1,
+            attachments: [],
+        },
+        {
+            id: 2,
+            description: 'réponse test 2',
+            createdAt: null,
+            createdBy: fakeUser(),
+            question: 1,
+            attachments: [],
+        },
+    ],
+});
 const answers = [
     {
         id: 1,
@@ -58,7 +57,7 @@ describe('services/question', () => {
         });
 
         it('retourne la question', async () => {
-            enrichQuestion.resolves({ answers: answers, ...question });
+            enrichQuestion.resolves({ answers, ...question });
             const questionFound = await findOne(1);
 
             expect(questionFound).to.be.an('object');
