@@ -2,7 +2,7 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import { rewiremock } from '#test/rewiremock';
-import { fakeFile } from '#test/utils/file';
+import fakeFile from '#test/utils/file';
 import { serialized as serializedQuestion, input as fakeQuestionInput } from '#test/utils/question';
 import fakeUser from '#test/utils/user';
 import ServiceError from '#server/errors/ServiceError';
