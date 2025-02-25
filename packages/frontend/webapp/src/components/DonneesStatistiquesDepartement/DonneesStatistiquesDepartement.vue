@@ -117,6 +117,7 @@ import SummaryTable from "./components/tables/SummaryTable.vue";
 import InhabitantsTable from "./components/tables/InhabitantsTable.vue";
 import LivingConditionsByInhabitantTable from "./components/tables/LivingConditionsByInhabitantTable.vue";
 import LivingConditionsByTownTable from "./components/tables/LivingConditionsByTownTable.vue";
+import SchoolingTable from "./components/tables/SchoolingTable.vue";
 import JusticeTable from "./components/tables/JusticeTable.vue";
 import EvolutionCharts from "./components/chartTabs/EvolutionCharts.vue";
 import DonneesStatistiquesDepartementBigFigures from "./components/header/DonneesStatistiquesDepartementBigFigures.vue";
@@ -146,6 +147,7 @@ const tables = {
     inhabitants: InhabitantsTable,
     livingConditionsByInhabitant: LivingConditionsByInhabitantTable,
     livingConditionsByTown: LivingConditionsByTownTable,
+    schooling: SchoolingTable,
     justice: JusticeTable,
 };
 

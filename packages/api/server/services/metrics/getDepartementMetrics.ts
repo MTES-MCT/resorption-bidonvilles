@@ -51,6 +51,7 @@ export default async (user: User, departementCode: string):Promise<DepartementMe
             },
             number_of_households: null,
             number_of_minors: null,
+            number_of_schooled_minors: null,
             number_of_towns_with_water: 0,
             number_of_towns_with_electricity: 0,
             number_of_towns_with_trash_evacuation: 0,
@@ -90,6 +91,7 @@ export default async (user: User, departementCode: string):Promise<DepartementMe
                     number_of_persons: null,
                     number_of_households: null,
                     number_of_minors: null,
+                    number_of_schooled_minors: null,
                     number_of_towns_with_water: 0,
                     number_of_towns_with_electricity: 0,
                     number_of_towns_with_trash_evacuation: 0,
@@ -110,6 +112,7 @@ export default async (user: User, departementCode: string):Promise<DepartementMe
                     percentage_of_towns_with_owner_complaint: 0,
                     percentage_of_towns_with_justice_procedure: 0,
                     percentage_of_towns_with_police: 0,
+                    percentage_of_schooled_minors: 0,
                     number_of_inhabitants_with_water: 0,
                     number_of_inhabitants_with_electricity: 0,
                     number_of_inhabitants_with_trash_evacuation: 0,
@@ -164,6 +167,10 @@ export default async (user: User, departementCode: string):Promise<DepartementMe
         if (row.population_minors !== null) {
             hashCities[row.city_code].summary.number_of_minors += row.population_minors;
             metrics.summary.number_of_minors += row.population_minors;
+        }
+        if (row.minors_in_school !== null) {
+            hashCities[row.city_code].summary.number_of_schooled_minors += row.minors_in_school;
+            metrics.summary.number_of_schooled_minors += row.minors_in_school;
         }
         if (livingConditionsStatuses.water.status === 'good') {
             hashCities[row.city_code].summary.number_of_towns_with_water += 1;
@@ -229,6 +236,7 @@ export default async (user: User, departementCode: string):Promise<DepartementMe
             number_of_persons: row.population_total,
             number_of_households: row.population_couples,
             number_of_minors: row.population_minors,
+            number_of_schooled_minors: row.minors_in_school,
             access_to_water: livingConditionsStatuses.water.status,
             access_to_electricity: livingConditionsStatuses.electricity.status,
             trash_evacuation: livingConditionsStatuses.trash.status,
@@ -279,6 +287,7 @@ export default async (user: User, departementCode: string):Promise<DepartementMe
             percentage_of_inhabitants_with_toilets: Math.round((cityMetric.summary.number_of_inhabitants_with_toilets * 100) / cityMetric.summary.number_of_persons),
             percentage_of_inhabitants_without_pest_animals: Math.round((cityMetric.summary.number_of_inhabitants_without_pest_animals * 100) / cityMetric.summary.number_of_persons),
             percentage_of_inhabitants_with_heatwave: Math.round((cityMetric.summary.number_of_inhabitants_with_heatwave * 100) / cityMetric.summary.number_of_persons),
+            percentage_of_schooled_minors: Math.round((cityMetric.summary.number_of_schooled_minors * 100) / cityMetric.summary.number_of_minors),
         },
 
     }));
