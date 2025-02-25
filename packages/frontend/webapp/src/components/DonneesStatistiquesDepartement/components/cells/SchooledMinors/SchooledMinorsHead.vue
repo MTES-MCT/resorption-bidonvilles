@@ -1,5 +1,9 @@
 <template>
     <IntCell :value="formatStat(data.summary.number_of_schooled_minors)" />
+    <br />
+    <span class="text-sm"
+        >({{ data.summary.percentage_of_schooled_minors }} %)</span
+    >
 </template>
 
 <script setup>

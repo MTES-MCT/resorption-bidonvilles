@@ -54,6 +54,7 @@ export type CityMetrics = {
         percentage_of_towns_with_owner_complaint: number,
         percentage_of_towns_with_justice_procedure: number,
         percentage_of_towns_with_police: number,
+        percentage_of_schooled_minors: number,
         number_of_inhabitants_with_water: number,
         number_of_inhabitants_with_electricity: number,
         number_of_inhabitants_with_trash_evacuation: number,
