@@ -2,7 +2,7 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import { rewiremock } from '#test/rewiremock';
-import { fakeFile } from '#test/utils/file';
+import fakeFile from '#test/utils/file';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 
 const { expect } = chai;
