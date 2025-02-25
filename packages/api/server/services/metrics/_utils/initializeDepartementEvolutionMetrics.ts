@@ -25,6 +25,10 @@ export default (listOfDateLabels: string[]):DepartementMetricsEvolution => {
                         value: 0,
                         evolution: 0,
                     },
+                    minors_in_school: {
+                        value: 0,
+                        evolution: 0,
+                    },
                 },
                 charts: {
                     labels: listOfDateLabels,
@@ -32,6 +36,7 @@ export default (listOfDateLabels: string[]):DepartementMetricsEvolution => {
                     less_than_10: zeros(n),
                     between_10_and_99: zeros(n),
                     more_than_99: zeros(n),
+                    minors_in_school: zeros(n),
                 },
             },
             inhabitants: {

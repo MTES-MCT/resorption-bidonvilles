@@ -6,7 +6,7 @@ import chaiSubset from 'chai-subset';
 import { rewiremock } from '#test/rewiremock';
 import { serialized as fakeAction } from '#test/utils/action';
 import { serialized as fakeActionComment, row as fakeActionCommentRow } from '#test/utils/actionComment';
-import { fakeFile } from '#test/utils/file';
+import fakeFile from '#test/utils/file';
 import ServiceError from '#server/errors/ServiceError';
 
 const { expect } = chai;

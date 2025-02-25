@@ -1,20 +1,14 @@
 <template>
     <section>
-        <h1 class="font-bold text-primary text-lg">Procédures judiciaires</h1>
+        <h1 class="font-bold text-primary text-lg">Scolarisation</h1>
 
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure
-                icon="person-military-pointing"
-                :figure="formatStat(data.figures.police.value)"
-                :evolution="formatStat(data.figures.police.evolution)"
-                >Nombre total de CFP</ChartBigFigure
-            >
-
-            <ChartBigFigure
-                icon="scroll"
-                :figure="formatStat(data.figures.complaints.value)"
-                :evolution="formatStat(data.figures.complaints.evolution)"
-                >Nombre total de plaintes</ChartBigFigure
+                icon="school"
+                :figure="formatStat(data.figures.minors_in_school.value)"
+                :evolution="formatStat(data.figures.minors_in_school.evolution)"
+                :invert="true"
+                >Mineurs scolarisés</ChartBigFigure
             >
         </div>
 
@@ -22,7 +16,7 @@
             class="mt-6"
             :chartOptions="options"
             :chartData="chartData.datasets"
-            :graphId="`evolution-justice`"
+            :graphId="`evolution-inhabitants`"
         />
     </section>
 </template>
@@ -37,25 +31,14 @@ import chartOptions from "../../utils/GraphiquesDonneesStatistiques/ChartOptions
 import generateDataset from "../../utils/GraphiquesDonneesStatistiques/generateDataset";
 
 const departementMetricsStore = useDepartementMetricsStore();
-const data = departementMetricsStore.evolution.data.justice.justice;
+const data = departementMetricsStore.evolution.data.inhabitants.towns;
 
 const chartData = computed(() => {
-    const max = {
-        police: Math.max(...data.charts.police),
-        complaints: Math.max(...data.charts.complaints),
-    };
-    max.global = Math.max(max.police, max.complaints);
-
     const datasets = [
-        generateDataset("Nombre de CFP", "0, 0, 255", data.charts.police, {
-            lineStyle: { opacity: 1, width: 2, color: "rgba(0, 0, 255, 1)" },
-            area: true,
-            symbolSize: 1,
-        }),
         generateDataset(
-            "Nombre de plaintes",
-            "255, 0, 0",
-            data.charts.complaints,
+            "Nombre de mineurs scolarisés",
+            "0, 0, 255",
+            data.charts.minors_in_school,
             {
                 lineStyle: { opacity: 1 },
                 area: true,
