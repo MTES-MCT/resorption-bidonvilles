@@ -2,7 +2,6 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import SequelizeMock from 'sequelize-mock';
-import ServiceError from '#server/errors/ServiceError';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel';
 import shantytownModel from '#server/models/shantytownModel';
@@ -10,19 +9,15 @@ import userModel from '#server/models/userModel';
 import attachmentService from '#server/services/attachment';
 import mattermostUtils from '#server/utils/mattermost';
 import mails from '#server/mails/mails';
-
-import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched';
-
-import * as enrichCommentsAttachments from '../shantytown/_common/enrichCommentsAttachments';
 import createComment from '#server/services/shantytownComment/createComment';
-
 import { serialized as fakeUser } from '#test/utils/user';
-import { serialized as fakeCommentInput } from '#root/test/utils/shantytownCommentInput';
 import { serialized as fakeShantytown } from '#test/utils/shantytown';
-
-import { fakeFile } from '#test/utils/file';
-import { ShantytownCommentAuthor } from '#root/types/resources/ShantytownCommentGeneric';
+import fakeFile from '#test/utils/file';
 import { Transaction } from 'sequelize';
+import { serialized as fakeCommentInput } from '#test/utils/shantytownCommentInput';
+import { ShantytownCommentAuthor } from '#root/types/resources/ShantytownCommentGeneric.d';
+import * as enrichCommentsAttachments from '../shantytown/_common/enrichCommentsAttachments';
+import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
 
 chai.use(sinonChai);
 
@@ -41,32 +36,32 @@ const fakeAuthor = (): ShantytownCommentAuthor => ({
 });
 
 const fakeEnrichedComment = (): ShantytownEnrichedComment => ({
-        "id":1,
-        "description":"Un commentaire",
-        "createdAt":1723539551.172,
-        "organization_target_name":[],
-        "user_target_name":[],
-        "createdBy": fakeAuthor(),
-        "shantytown":1,
-        "tags": [
-          {"uid":"conditions_de_vie","tag":"Conditions de vie"},
-          {"uid":"passage_sur_site","tag":"Passage sur site"}
-        ],
-        "attachments": [
-          {
-            "state":"uploaded",
-            "id":1,
-            "name":"test1.txt",
-            "size":2048,
-            "urls": {
-              "original": "https://s3.gra.io.cloud.ovh.net/rb-attachments-preprod/shantytown_comment_author1_comment1_file1_4c3dba6a-2083-482e-bd43-125086876e7f.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=b4bbbcf0ffb84fbba630c535a349c69e%2F20240813%2Fgra%2Fs3%2Faws4_request&X-Amz-Date=20240813T093044Z&X-Amz-Expires=3600&X-Amz-Signature=92bf82e2119cbe8e074dbba28dc3f085d435ec9df26b62a3c66efaa52ec448f9&X-Amz-SignedHeaders=host&x-id=GetObject",
-              "preview": "",
+    id: 1,
+    description: 'Un commentaire',
+    createdAt: 1723539551.172,
+    organization_target_name: [],
+    user_target_name: [],
+    createdBy: fakeAuthor(),
+    shantytown: 1,
+    tags: [
+        { uid: 'conditions_de_vie', tag: 'Conditions de vie' },
+        { uid: 'passage_sur_site', tag: 'Passage sur site' },
+    ],
+    attachments: [
+        {
+            state: 'uploaded',
+            id: 1,
+            name: 'test1.txt',
+            size: 2048,
+            urls: {
+                original: '',
+                preview: '',
             },
-            "extension":"text/plain",
-            "created_by":"2"
-          }
-        ]
-      });
+            extension: 'text/plain',
+            created_by: '2',
+        },
+    ],
+});
 
 describe.skip('services/shantytownComment.create', () => {
     const dependencies = {
@@ -124,33 +119,29 @@ describe.skip('services/shantytownComment.create', () => {
                 // output data
                 output = {
                     returnedComment: {
-                        "1": 
+                        1:
                             [
                                 {
-                                    "id":1,
-                                    "description":"Un commentaire",
-                                    "createdAt":1723539551.172,
-                                    "organization_target_name":[
-                                        
+                                    id: 1,
+                                    description: 'Un commentaire',
+                                    createdAt: 1723539551.172,
+                                    organization_target_name: [],
+                                    user_target_name: [],
+                                    createdBy: fakeAuthor(),
+                                    shantytown: 1,
+                                    tags: [
+                                        {
+                                            uid: 'conditions_de_vie',
+                                            label: 'Conditions de vie',
+                                        },
+                                        {
+                                            uid: 'passage_sur_site',
+                                            label: 'Passage sur site',
+                                        },
                                     ],
-                                    "user_target_name":[
-                                        
+                                    attachments: [
+                                        '1@.;.@shantytown_comment_author1_comment1_file1_4c3dba6a-2083-482e-bd43-125086876e7f.txt@.;.@@.;.@test1.txt@.;.@text/plain@.;.@1024@.;.@2',
                                     ],
-                                    "createdBy": fakeAuthor(),
-                                    "shantytown":1,
-                                    "tags":[
-                                    {
-                                        "uid": 'conditions_de_vie', 
-                                        "label": 'Conditions de vie'
-                                    },
-                                    {
-                                        "uid":"passage_sur_site",
-                                        "label":"Passage sur site"
-                                        }
-                                    ],
-                                    "attachments":[
-                                        "1@.;.@shantytown_comment_author1_comment1_file1_4c3dba6a-2083-482e-bd43-125086876e7f.txt@.;.@@.;.@test1.txt@.;.@text/plain@.;.@1024@.;.@2",
-                                    ]
                                 },
                             ],
                     },
@@ -199,7 +190,7 @@ describe.skip('services/shantytownComment.create', () => {
                 //     "extension":"text/plain",
                 //     "created_by":"2"
                 // });
-    
+
                 sequelizeStub.$queueResult([[{ shantytown_comment_id: output.comment.id }]]);
                 response = await createComment(input.comment, input.shantytown, input.user);
             });
@@ -266,7 +257,7 @@ describe.skip('services/shantytownComment.create', () => {
         it('les pièces sont bien uploadées', async () => {
             const files = [fakeFile()];
             dependencies.getComments.resolves({
-                [1]: [fakeCommentInput()],
+                1: [fakeCommentInput()],
             });
             dependencies.getShantytownWatchers.resolves([]);
             dependencies.createComment.resolves(1);
@@ -376,7 +367,7 @@ describe.skip('services/shantytownComment.create', () => {
                 dependencies.getShantytownWatchers.resolves([]);
             });
 
-            
+
             it('lance une exception de type ServiceError', async () => {
                 let exception;
                 try {

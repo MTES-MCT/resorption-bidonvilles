@@ -1,4 +1,4 @@
-import { fakeFile } from "./file";
+import fakeFile from './file';
 
 export function serialized(override = {}) {
     const defaultObj = {
@@ -29,3 +29,5 @@ export function serialized(override = {}) {
 
     return Object.assign(defaultObj, override);
 }
+
+export default serialized;
