@@ -8,7 +8,7 @@ import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeQuestion } from '#test/utils/question';
 import { serialized as fakeAnswer } from '#test/utils/answer';
 import { serialized as serializedAnswer } from '#test/utils/answerSerialized';
-import { fakeFile } from '#test/utils/file';
+import fakeFile from '#test/utils/file';
 import { row as fakeQuestionSubscriber } from '#test/utils/questionSubscriber';
 import { fail } from 'assert';
 import createAnswer from './createAnswer';
