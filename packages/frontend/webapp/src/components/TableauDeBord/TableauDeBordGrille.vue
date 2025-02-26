@@ -1,5 +1,5 @@
 <template>
-    <div class="grid sm:grid-cols-3 grid-rows-2 gap-8 justify-around p-2">
+    <div class="grid lg:grid-cols-3 grid-rows-2 gap-8 justify-around p-2">
         <TableauDeBordCard
             v-for="(card, index) in cards"
             :key="index"
