@@ -8,23 +8,26 @@
         <template v-slot:title>{{ title }}</template>
         <template v-slot:subtitle>
             <form
-                class="flex flex-col-flow gap-2"
+                class="flex gap-2 flex-col sm:flex-row"
                 @submit="modale.value.close()"
             >
                 <InputLocation
-                    class="flex-1 w-96"
+                    class="flex-2 sm:flex-1 sm:w-96 col-span-2"
                     name="territorial_collectivity"
                     :placeholder="placeHolder"
                     withoutMargin
                     :allowFreeSearch="allowFreeSearch"
                     v-model="inputLocation"
                 />
-                <Button
-                    size="sm"
-                    type="button"
-                    @submit="handleSearchClick(inputLocation)"
-                    >Rechercher</Button
-                >
+                <div class="flex flex-row">
+                    <Button
+                        size="sm"
+                        type="button"
+                        class="basis-sm"
+                        @submit="handleSearchClick(inputLocation)"
+                        >Rechercher</Button
+                    >
+                </div>
                 <ErrorSummary class="mt-4" v-if="error" :message="error" />
             </form>
             <div class="mt-2 text-left text-sm">
