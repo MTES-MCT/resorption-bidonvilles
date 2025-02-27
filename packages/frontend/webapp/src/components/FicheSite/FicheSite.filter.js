@@ -4,6 +4,7 @@ export default {
         { value: "people", label: "Habitants" },
         { value: "living_conditions", label: "Conditions de vie" },
         { value: "procedure", label: "Procédures" },
+        { value: "localisation", label: "Localisation" },
     ],
     fields: {
         caracteristics: [
@@ -13,6 +14,7 @@ export default {
             "addressSimple",
             "fieldType",
             "owner_type",
+            "owner",
         ],
         people: [
             "isReinstallation",
@@ -122,5 +124,7 @@ export default {
             "insalubrityOrderAt",
             "insalubrityParcels",
         ],
+
+        localisation: ["latitude", "longitude"],
     },
 };
