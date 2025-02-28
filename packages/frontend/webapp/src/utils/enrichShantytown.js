@@ -8,7 +8,7 @@
 
 import formatDateSince from "./formatDateSince";
 import getLabelForLivingConditionDetail from "./getLabelForLivingConditionDetail";
-import setTownLastUpdatedAt from "@/utils/setTownLastUpdatedAt";
+import { getTownLastUpdatedAt } from "@/utils/townLastUpdateManager";
 
 export default function (shantytown, fieldTypes) {
     const fieldTypeColors = fieldTypes.reduce(
@@ -226,7 +226,7 @@ export default function (shantytown, fieldTypes) {
         );
     });
 
-    const lastUpdatedAt = setTownLastUpdatedAt(shantytown);
+    const lastUpdatedAt = getTownLastUpdatedAt(shantytown);
 
     return {
         ...shantytown,
