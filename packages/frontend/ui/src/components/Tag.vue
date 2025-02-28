@@ -46,7 +46,7 @@ export default {
                     } px-2 py-1 text-sm`,
                 pin: `px-2 py-1 bg-blue100 text-primary ${this.uppercase ? "uppercase" : ""
                     } text-xs`,
-                pin_green: `px-2 py-1 bg-green100 text-tertiaryA11Y ${this.uppercase ? "uppercase" : ""
+                pin_green: `px-2 py-1 bg-green100 text-black ${this.uppercase ? "uppercase" : ""
                     } text-xs`,
                 pin_orange: `px-2 py-1 bg-warningOrange text-black ${this.uppercase ? "uppercase" : ""
                     } text-xs`,
