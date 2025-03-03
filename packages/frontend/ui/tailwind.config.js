@@ -171,6 +171,7 @@ module.exports = {
                 green: "#169B62",
                 red: "#D63626",
                 cardBorder: "rgba(0,0,145,0.2)",
+                warningOrange: "#FCB316",
 
                 // Deprecated values : TO DELETE
                 primaryDark: "#00006c",

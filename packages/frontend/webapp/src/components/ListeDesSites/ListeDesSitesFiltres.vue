@@ -111,7 +111,12 @@ const groupedFilters = {
     },
 };
 const groupedSorts = {
-    open: [sorts.cityName, sorts.builtAt, sorts.updatedAt, sorts.declaredAt],
+    open: [
+        sorts.cityName,
+        sorts.builtAt,
+        sorts.lastUpdatedAt,
+        sorts.declaredAt,
+    ],
     close: [sorts.cityName, sorts.closedAt, sorts.updatedAt],
 };
 

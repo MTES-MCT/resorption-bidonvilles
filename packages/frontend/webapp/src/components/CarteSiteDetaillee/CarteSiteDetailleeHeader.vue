@@ -3,10 +3,14 @@
         <div class="flex-col sm:flex-row">
             <Tag
                 :variant="pinVariant"
-                :class="['text-xs uppercase', isHover ? 'shadow-md' : '']"
+                :class="[
+                    'text-xs uppercase',
+                    isHover ? 'shadow-md' : '',
+                    'lastUpdatedAtDotColor',
+                ]"
                 class="mt-1 items-center py-2 mr-2"
             >
-                {{ lastUpdate }}
+                {{ formatLastUpdatedAt(townForLastUpdate) }}
             </Tag>
             <Tag
                 v-if="heatwaveStatus === true"
@@ -51,6 +55,8 @@ import { Tag, Icon } from "@resorptionbidonvilles/ui";
 import ResorptionTargetTag from "@/components/TagObjectifResorption/TagObjectifResorption.vue";
 import { useUserStore } from "@/stores/user.store";
 
+import useLastUpdated from "@/composables/useLastUpdated";
+
 const props = defineProps({
     shantytown: Object,
     isHover: {
@@ -59,15 +65,21 @@ const props = defineProps({
     },
 });
 const { shantytown, isHover } = toRefs(props);
+
+const { townForLastUpdate } = useLastUpdated(shantytown);
+
 const userStore = useUserStore();
 
 const pinVariant = computed(() => {
-    const { months } = getSince(shantytown.value.updatedAt);
-    return months >= 3 ? "pin_red" : "pin";
+    const { months } = getSince(shantytown.value.lastUpdatedAt);
+    if (months > 6) {
+        return "pin_red";
+    } else if (months >= 3) {
+        return "pin_orange";
+    }
+    return "pin_green";
 });
-const lastUpdate = computed(() => {
-    return `${formatLastUpdatedAt(shantytown.value)}`;
-});
+
 const heatwaveStatus = computed(() => {
     return shantytown.value.heatwaveStatus;
 });
