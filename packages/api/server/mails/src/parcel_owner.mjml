@@ -1,0 +1,79 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Propriété de la parcelle {{var:parcel.idpar}}</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class="pb-4">Bonjour,</mj-text>
+                <mj-text>Vous avez demandé les informations relatives à la propriété de la parcelle:
+                <span class='font-bold'>{{var:parcel.idpar}}.</span>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-section mj-class="pb-4">
+            <mj-column padding="1rem" background-color="#dddddd">
+                <mj-text>Nous vous rappelons que <span class="font-bold">les fichiers fonciers non anonymisés contiennent des données personnelles directes</span> (nom des propriétaires personnes
+                physiques). <span class="font-bold">Leur utilisation est donc soumise à une réglementation particulière et des obligations strictes.</span> Nous devons être en mesure de fournir,
+                sur demande de la DGALN* ou de la DGFIP**, les nom, prénom, structure, territoires d’intervention du demandeur et référence de la parcelle cadastrale faisant l'objet de la demande.
+                <span class="font-bold">Ces informations sont donc enregistrées.</span></mj-text>
+                <mj-text mj-class="pt-4 font-bold">
+                    En tant qu'utilisateur de la plateforme Résorption-Bidonvilles, vous vous engagez donc à ne demander que les informations strictement utiles dans le cadre de vos missions.
+                </mj-text>
+                <mj-text mj-class="pt-4 font-italic">* Direction générale de l'aménagement, du logement et de la nature</mj-text>
+                <mj-text mj-class="font-italic">** Direction générale des Finances publiques</mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-section>
+            <mj-column>
+                <mj-text>Voici les informations relatives à la propriété de la parcelle <span class='font-bold'>{{var:parcel.idpar}}</span>.</mj-text>
+                <mj-text>Ces données sont extraites des éléments du cadastre de l'année <span class='font-bold'>{{var:majicYear}}</span>.</mj-text>
+                <mj-text mj-class="pt-2 font-bold">Adresse de la parcelle cadastrale:</mj-text>
+                <mj-text>{% if var:parcel.dnuvoi %}<span>{{ var:parcel.dnuvoi }},</span>{% endif %} {{ var:parcel.cconvo }} {{ var:parcel.dvoilib }}</mj-text>
+                <mj-text mj-class="font-bold">{{ var:parcel.idcomtxt }}</mj-text>
+           </mj-column>
+        </mj-section>
+ 
+        <mj-raw>{% if var:owners_length > 0 %}</mj-raw>
+            <mj-section>
+                <mj-column>
+                    <mj-text mj-class="pt-2 font-bold">{{ var:owners_length }} propriétaire<span class="font-normal">{% if var:owners_length > 1 %}s{% endif %}</span>:</mj-text>
+                </mj-column>
+            </mj-section>
+
+            <mj-raw>{% for owner in var:owners %}</mj-raw>
+                    <mj-section>
+                        <mj-column>
+                            {% if owner.dqualp || owner.dnomus || owner.dprnus %}
+                                <mj-text>
+                                    {% if owner.dqualp %}<span>{{ owner.dqualp }}</span>{% endif %}
+                                    {% if owner.dnomus %}<span>{{ owner.dnomus }}</span>{% endif %}
+                                    {% if owner.dprnus %}<span>{{ owner.dprnus }}</span>{% endif %}
+                                </mj-text>
+                            {% endif %}
+                            {% if owner.catpro2txt %}
+                                <mj-text>
+                                    <span class="font-bold">Classification de personne morale: </span><span>{{ owner.catpro2txt }}</span>
+                                </mj-text>
+                            {% endif %}
+                            {% if owner.dlign3 || owner.dlign4 || owner.dlign5 || owner.dlign6 %}
+                                {% if owner.dlign3 %}<mj-text>{{ owner.dlign3 }}</mj-text>{% endif %}
+                                {% if owner.dlign4 %}<mj-text>{{ owner.dlign4 }}</mj-text>{% endif %}
+                                {% if owner.dlign5 %}<mj-text>{{ owner.dlign5 }}</mj-text>{% endif %}
+                                {% if owner.dlign6 %}<mj-text>{{ owner.dlign6 }}</mj-text>{% endif %}
+                            {% endif %}
+                        </mj-column>
+                    </mj-section>
+
+            <mj-raw>{% endfor%}</mj-raw>
+        <mj-raw>{% endif %}</mj-raw>
+
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>
