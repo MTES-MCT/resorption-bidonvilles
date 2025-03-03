@@ -1,7 +1,7 @@
 <template>
     <div
         v-show="!isMobileMenuHidden"
-        class="mobileMenu-transition fixed top-0 left-0 h-full w-full bg-white opacity-0 -z-10"
+        class="mobileMenu-transition top-0 left-0 h-full w-full bg-white opacity-0 -z-10"
         ref="mobileMenu"
     >
         <header @click="hideMobileMenu" class="mt-3 text-right">
