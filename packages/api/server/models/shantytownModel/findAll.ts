@@ -1,5 +1,5 @@
 import { Where } from '#server/models/_common/types/Where';
-import { User } from '#root/types/resources/User.d';
+import { AuthUser } from '#server/middlewares/authMiddleware';
 import query from './_common/query';
 
-export default (user: User, filters: Where = [], feature: string = 'list', order = ['shantytowns.updated_at DESC']) => query(user, feature, filters, order);
+export default (user: AuthUser, filters: Where = [], feature: string = 'list', order = ['shantytowns.updated_at DESC']) => query(user, feature, filters, order);

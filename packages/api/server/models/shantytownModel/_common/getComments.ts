@@ -2,13 +2,14 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
 import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
+import { AuthUser } from '#server/middlewares/authMiddleware';
 import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
 import { ShantytownCommentRow } from '../../shantytownCommentModel/ShantytownCommentRow.d';
 import serializeComment from './serializeComment';
 
 type CommentObject = { [key: number]: ShantytownRawComment[] };
 
-export default async (user, shantytownIds): Promise<CommentObject> => {
+export default async (user: AuthUser, shantytownIds: string[]): Promise<CommentObject> => {
     if (!user.isAllowedTo('list', 'shantytown_comment')) {
         return {};
     }
