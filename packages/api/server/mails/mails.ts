@@ -858,7 +858,7 @@ export default {
             variables: {
                 recipientName: formatName(recipient),
                 departementName: variables.departement.name,
-                hour: moment(variables.shantytown.createdAt).utcOffset(2).format('HH:mm'),
+                hour: formatDate(variables.shantytown.createdAt, 'd M y à h:i'),
                 creatorName: formatName(variables.creator),
                 townAddress: variables.shantytown.address,
                 title: title(),
