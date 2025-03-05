@@ -4,6 +4,7 @@ import mailService from '#server/services/mailService';
 import config from '#server/config';
 
 import { QuestionSummary } from '#server/models/activityModel/types/QuestionNationalSummary';
+import formatDate from '#server/utils/formatDate';
 import generateTrackingUTM from './generateTrackingUTM';
 
 const { formatName } = userModel;
