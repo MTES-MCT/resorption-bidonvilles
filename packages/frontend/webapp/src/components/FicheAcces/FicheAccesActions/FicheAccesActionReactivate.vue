@@ -1,6 +1,6 @@
 <template>
     <Button
-        v-if="user.status === 'inactive'"
+        v-if="user.status === 'inactive' && !user.anonymized"
         variant="primary"
         icon="user-check"
         iconPosition="left"
