@@ -130,7 +130,7 @@ const config = {
                 values,
                 attachments
             );
-            trackEvent("Action", "Création question", `${addedQuestion.id}`);
+            trackEvent("Entraide", "Création question", `${addedQuestion.id}`);
             return addedQuestion;
         },
         notification: {
@@ -142,7 +142,7 @@ const config = {
     edit: {
         async submit(values, id) {
             const updatedQuestion = await questionsStore.edit(id, values);
-            trackEvent("Action", "Mise à jour de la question", `${id}`);
+            trackEvent("Entraide", "Mise à jour de la question", `${id}`);
             return updatedQuestion;
         },
         notification: {
