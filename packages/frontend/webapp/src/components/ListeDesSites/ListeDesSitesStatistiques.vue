@@ -22,7 +22,14 @@
                     {{ justiceTotal }} site<template v-if="justiceTotal > 1"
                         >s</template
                     >
-                    avec une procédure judiciaire ou administrative
+                    avec une procédure judiciaire
+                </p>
+                <p v-if="userStore.hasJusticePermission">
+                    {{ administrativeOrderTotal }} site<template
+                        v-if="administrativeOrderTotal > 1"
+                        >s</template
+                    >
+                    avec une procédure administrative
                 </p>
             </div>
         </section>
@@ -55,6 +62,13 @@ const populationTotal = computed(() => {
 const justiceTotal = computed(() => {
     return townsStore.filteredTowns.filter(
         ({ justiceProcedure }) => justiceProcedure === true
+    ).length;
+});
+
+const administrativeOrderTotal = computed(() => {
+    return townsStore.filteredTowns.filter(
+        ({ evacuationUnderTimeLimit, insalubrityOrder }) =>
+            evacuationUnderTimeLimit === true || insalubrityOrder === true
     ).length;
 });
 </script>
