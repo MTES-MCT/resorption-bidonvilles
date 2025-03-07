@@ -3,7 +3,7 @@ import { QueryTypes } from 'sequelize';
 
 export default async () => {
     const rows: any = await sequelize.query(
-        `SELECT COUNT(DISTINCT COALESCE(intervention_areas.fk_departement, cities.fk_departement, epci_to_departement.fk_departement))
+        `SELECT COUNT(DISTINCT COALESCE(intervention_areas.fk_departement, cities.fk_departement, epci_to_departement.fk_departement)) as total
         FROM users
         LEFT JOIN intervention_areas ON
           intervention_areas.fk_user = users.user_id OR (users.use_custom_intervention_area IS FALSE AND intervention_areas.fk_organization = users.fk_organization)
