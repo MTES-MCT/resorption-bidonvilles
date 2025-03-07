@@ -63,7 +63,7 @@ watch(currentTab, () => {
     if (currentTab.value === "close") {
         townsStore.sort = "closedAt";
     } else {
-        townsStore.sort = "updatedAt";
+        townsStore.sort = "lastUpdatedAt";
     }
 });
 </script>

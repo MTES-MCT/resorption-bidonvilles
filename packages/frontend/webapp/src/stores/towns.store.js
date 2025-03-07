@@ -27,6 +27,7 @@ import {
 import enrichShantytown from "@/utils/enrichShantytown";
 import filterShantytowns from "@/utils/filterShantytowns";
 import { deleteAttachment } from "@/api/attachments.api";
+import { getMostRecentComment } from "@/utils/townLastUpdateManager";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -43,7 +44,7 @@ export const useTownsStore = defineStore("towns", () => {
     };
     const heatwaveStatuses = ref({});
     const exportOptions = ref([]);
-    const sort = ref("updatedAt");
+    const sort = ref("lastUpdatedAt");
 
     const sortFn = computed(() => {
         if (sort.value === "cityName") {
@@ -165,7 +166,7 @@ export const useTownsStore = defineStore("towns", () => {
         isLoading.value = false;
         error.value = null;
         heatwaveStatuses.value = {};
-        sort.value = "updatedAt";
+        sort.value = "lastUpdatedAt";
         townCategoryFilter.value = [];
         resetPagination();
         resetFilters();
@@ -177,16 +178,31 @@ export const useTownsStore = defineStore("towns", () => {
         }
     }
 
+    function getLastCommentCreatedAt(comments) {
+        const lastComment = getMostRecentComment(comments);
+        return lastComment.createdAt;
+    }
+
+    function updateLastUpdatedAt(shantytownId, lastCommentDate) {
+        if (hash.value[shantytownId]) {
+            hash.value[shantytownId].lastUpdatedAt = lastCommentDate;
+        }
+    }
+
+    function setTowns(shantytownId) {
+        const index = towns.value.findIndex(({ id }) => id === shantytownId);
+        if (index !== -1) {
+            towns.value.splice(index, 1, hash.value[shantytownId]);
+        }
+    }
+
     function setTown(townId, town) {
         hash.value[townId] = enrichShantytown(
             town,
             configStore.config.field_types
         );
 
-        const index = towns.value.findIndex(({ id }) => id === townId);
-        if (index !== -1) {
-            towns.value.splice(index, 1, hash.value[townId]);
-        }
+        setTowns(townId);
     }
 
     const { bus } = useEventBus();
@@ -266,7 +282,9 @@ export const useTownsStore = defineStore("towns", () => {
                 attachments
             );
             updateShantytownComments(shantytownId, comments.comments);
-
+            setTowns(shantytownId);
+            const maxCreatedAt = getLastCommentCreatedAt(comments.comments);
+            updateLastUpdatedAt(shantytownId, maxCreatedAt);
             trackEvent("Site", "Création commentaire", `S${shantytownId}`);
             notificationStore.success(
                 "Publication d'un message",
@@ -285,8 +303,15 @@ export const useTownsStore = defineStore("towns", () => {
                 commentId,
                 reason
             );
-
             updateShantytownComments(shantytownId, comments);
+            setTowns(shantytownId);
+            const maxCreatedAt = getLastCommentCreatedAt(comments);
+            updateLastUpdatedAt(
+                shantytownId,
+                maxCreatedAt > hash.value[shantytownId].updatedAt
+                    ? maxCreatedAt
+                    : hash.value[shantytownId].updatedAt
+            );
             activitiesStore.removeComment(commentId);
             dashboardActivitiesStore.removeComment(commentId);
         },
