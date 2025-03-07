@@ -100,6 +100,7 @@ const departementsOrdonnes = new Map([
     ['973', 99],
     ['974', 100],
     ['976', 101],
+    ['Tous', Infinity],
 ]);
 
 export default departementsOrdonnes;
