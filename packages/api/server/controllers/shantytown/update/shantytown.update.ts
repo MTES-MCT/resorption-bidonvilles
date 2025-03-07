@@ -3,7 +3,8 @@ import can from '#server/utils/permission/can';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 
 const ERROR_RESPONSES = {
-    insert_failed: { code: 500, message: 'Votre mise à jour de site n\'a pas pu être enregistrée.' },
+    insert_failed: { code: 500, message: 'La mise à jour de site n\'a pas pu être enregistrée.' },
+    update_failed: { code: 500, message: 'La mise à jour de site n\'a pas pu être enregistrée.' },
     upload_failed: { code: 500, message: 'L\'enregistrement des pièces jointes a échoué.' },
     commit_failed: { code: 500, message: 'L\'enregistrement des modifications et/ou des pièces jointes a échoué.' },
     fetch_failed: { code: 500, message: 'Votre mise à jour a bien été enregistrée mais une erreur s\'est produite. Veuillez rafraichir la page.' },
