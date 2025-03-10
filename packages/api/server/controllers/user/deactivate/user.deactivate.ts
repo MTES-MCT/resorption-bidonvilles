@@ -14,12 +14,13 @@ interface UserDeactivateRequest extends Request {
     body: {
         user: User;
         reason: string | null;
+        anonymizationRequested: boolean | null;
     };
 }
 
 export default async (req: UserDeactivateRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const updatedUser = await userService.deactivate(req.body.user.id, req.user.id === req.body.user.id, req.body.reason);
+        const updatedUser = await userService.deactivate(req.body.user.id, req.user.id === req.body.user.id, req.body.reason, req.body.anonymizationRequested);
         res.status(200).send(updatedUser);
     } catch (error) {
         const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
