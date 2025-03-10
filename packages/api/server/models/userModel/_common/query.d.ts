@@ -70,6 +70,9 @@ export type RawUser = {
     organization_category_name_plural: string,
     permission_options: string[],
     user_accesses: RawUserAccess[],
+    anonymized: boolean | null,
+    anonymized_at: Date | null,
+    anonymization_requested: boolean | null,
 };
 
 export type RawInterventionArea = {
