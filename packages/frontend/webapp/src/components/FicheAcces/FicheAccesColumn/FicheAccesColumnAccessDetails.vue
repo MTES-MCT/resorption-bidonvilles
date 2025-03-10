@@ -89,6 +89,15 @@
             color="text-g600"
             class="mb-2"
         />
+
+        <FicheAccesColumnAccessDate
+            v-if="user.anonymized"
+            text="Anonymisé"
+            :date="user.anonymized_at"
+            icon="user-secret"
+            color="text-G700"
+            class="mb-2"
+        />
     </div>
 </template>
 
