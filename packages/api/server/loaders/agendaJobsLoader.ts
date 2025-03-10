@@ -6,6 +6,7 @@ import sendActionAlert from '#server/services/action/sendAlert';
 import config from '#server/config';
 import userService from '#server/services/user/index';
 import cleanAttachmentArchives from '#server/services/attachment/cleanArchives';
+import anonymizeUser from '#server/services/user/anonymizeUser';
 
 const {
     sendUserDemoInvitation,
@@ -131,6 +132,13 @@ export default (agenda) => {
         'clean_attachments_archives',
         async () => {
             await cleanAttachmentArchives();
+        },
+    );
+
+    agenda.define(
+        'anonymize_inactive_users',
+        async () => {
+            await anonymizeUser();
         },
     );
 };

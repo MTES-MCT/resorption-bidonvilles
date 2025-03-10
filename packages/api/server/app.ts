@@ -82,6 +82,8 @@ export default {
 
             await agenda.every('0 0 4 * * *', 'clean_attachments_archives');
 
+            await agenda.every('0 02 11 * * *', 'anonymize_inactive_users');
+
             // eslint-disable-next-line no-console
             console.log('Set scheduled jobs up');
         } catch (error) {
