@@ -11,13 +11,12 @@ export default (variant) => {
 
     if (variant === "declare") {
         const maxClosedAt = new Date();
-        maxClosedAt.setDate(maxClosedAt.getDate() + 1);
-        maxClosedAt.setHours(0, 0, 0, 0);
+        maxClosedAt.setHours(23, 59, 59, 999);
 
         schema.closed_at = date()
             .typeError(`${labels.closed_at} est obligatoire`)
             .required()
-            .max(new Date())
+            .max(maxClosedAt)
             .label(labels.closed_at);
         schema.status = string()
             .required()
