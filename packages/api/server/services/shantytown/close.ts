@@ -2,7 +2,11 @@ import shantytownModel from '#server/models/shantytownModel';
 import mattermostUtils from '#server/utils/mattermost';
 import sendMailForClosedTown from './_common/sendMailForClosedTown';
 
-export default async (user, data) => {
+    const shantytown = await shantytownModel.findOne(user, data.shantytown_id);
+
+    if (!can(user).do('close', 'shantytown').on(shantytown)) {
+        throw new ServiceError('closing_shantytown_not_allowed', new Error('Vous n\'êtes pas autorisé(e) à metttre à jour ce site'));
+    }
     // close the town
     await shantytownModel.update(
         user,

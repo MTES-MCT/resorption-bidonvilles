@@ -5,27 +5,9 @@ import closingSolutionModel from '#server/models/closingSolutionModel';
 
 export default [
     param('id')
-        .toInt()
-        .isInt().bail().withMessage('L\'identifiant du site est invalide')
-        .custom(async (value, { req }) => {
-            let shantytown;
-            try {
-                shantytown = await shantytownModel.findOne(req.user, value, 'close');
-            } catch (error) {
-                throw new Error('Une erreur est survenue lors de la recherche du site en base de données');
-            }
-
-            if (shantytown === null) {
-                throw new Error('Le site à fermer est introuvable en base de données');
-            }
-
-            if (shantytown.status !== 'open') {
-                throw new Error('Ce site est déjà marqué comme fermé');
-            }
-
-            req.body.shantytown = shantytown;
-            return true;
-        }),
+    (req, res, next) => {
+        req.body.shantytown_id = req.params.id;
+        next();
 
     body('closed_with_solutions')
         .isBoolean().bail().withMessage('Vous devez indiquer si le site a été résorbé définitivement')
