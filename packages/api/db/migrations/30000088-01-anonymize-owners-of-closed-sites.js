@@ -7,7 +7,7 @@ module.exports = {
                 queryInterface.sequelize.query(
                     `UPDATE shantytowns SET owner = NULL WHERE shantytown_id IN
                         (
-                            SELECT shantytown_id FROM shantytowns WHERE status  NOT LIKE 'open' AND owner IS NOT NULL
+                            SELECT shantytown_id FROM shantytowns WHERE status NOT LIKE 'open' AND fk_owner_type = 3 AND owner IS NOT NULL
                         ) ;`,
                     {
                         type: queryInterface.sequelize.QueryTypes.UPDATE,
@@ -20,7 +20,7 @@ module.exports = {
                     WHERE 
                         shantytown_id IN 
                             (
-                                SELECT shantytown_id FROM shantytowns WHERE status  NOT LIKE 'open' AND owner IS NOT NULL
+                                SELECT shantytown_id FROM shantytowns WHERE status NOT LIKE 'open' AND fk_owner_type = 3 AND owner IS NOT NULL
                             )
                         AND
                             owner IS NOT NULL ;`,
