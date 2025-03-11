@@ -1,5 +1,5 @@
 import { sequelize } from '#db/sequelize';
-import { Transaction } from 'sequelize';
+import { QueryTypes, Transaction } from 'sequelize';
 
 export default async (shantytownId: number, argTransaction: Transaction = undefined): Promise<void> => {
     let transaction: Transaction = argTransaction;
@@ -7,25 +7,22 @@ export default async (shantytownId: number, argTransaction: Transaction = undefi
         transaction = await sequelize.transaction();
     }
     try {
-        sequelize.query(`
-            UPDATE shantytowns SET owner = NULL WHERE shantytown_id WHERE fk_shantytown = :id
-        `,
+        sequelize.query(`UPDATE shantytowns SET owner = NULL 
+            WHERE shantytown_id = :id`,
         {
             replacements: {
                 id: shantytownId,
             },
+            type: QueryTypes.UPDATE,
             transaction,
         });
-        sequelize.query(`
-            UPDATE "ShantytownHistories" 
-                    SET owner = NULL
-                    WHERE 
-                        shantytown_id = :id
-        `,
+        sequelize.query(`UPDATE "ShantytownHistories"  SET owner = NULL
+            WHERE shantytown_id = :id`,
         {
             replacements: {
                 id: shantytownId,
             },
+            type: QueryTypes.UPDATE,
             transaction,
         });
         if (argTransaction === undefined) {
