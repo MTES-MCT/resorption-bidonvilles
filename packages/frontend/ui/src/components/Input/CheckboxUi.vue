@@ -68,9 +68,9 @@
                 : 'bg-blue200 text-primary',
                 checkboxStyle,
         ]">
-            <input @click="onChange(value)" class="appearance-none inline-block rounded mr-2 text-center cursor-pointer"
+            <input @click="onChange(value)" class="inline-block rounded mr-2 text-center cursor-pointer !border-0"
                 type="checkbox" :checked="checked" :disabled="disabled" />
-            <Icon class="mr-2 text-white" :icon="checked ? 'fa-solid fa-square-check' : 'fa-solid fa-square'" />
+            <Icon class="mr-2 text-white" @keypress.space.prevent="onChange" tabindex="0" :icon="checked ? 'fa-solid fa-square-check' : 'fa-solid fa-square'" />
             {{ label }}
         </label>
     </template>

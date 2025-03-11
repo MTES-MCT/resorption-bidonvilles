@@ -15,9 +15,11 @@
             placeholder="Raison pour laquelle vous désactivez cet accès..."
             :disabled="isLoading"
             class="bg-white"
+            tabindex="0"
         />
         <div
-            class="flex bg-blue200 items-center content-center p-1 mt-2 mb-6"
+            v-if="deactivationReason.length > 0"
+            class="flex bg-blue200 items-center content-center p-1 pt-2 mt-2 mb-6 h-10"
             :class="{ 'bg-blue300': anonymizationRequested }"
         >
             <DsfrCheckbox
@@ -30,11 +32,11 @@
                 tabindex="0"
                 small
                 inline
-                class="!mb-0 self-center"
+                class="!flex !mb-0 self-center items-center"
             />
         </div>
         <ErrorSummary v-if="error" :message="error" :summary="errorSummary" />
-        <div class="flex items-center justify-end">
+        <div class="flex items-center justify-end gap-2">
             <Button
                 v-if="deactivationReason.length > 0"
                 variant="primaryText"
