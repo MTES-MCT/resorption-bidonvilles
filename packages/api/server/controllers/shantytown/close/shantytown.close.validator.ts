@@ -1,13 +1,15 @@
 /* eslint-disable newline-per-chained-call */
 import { body, param } from 'express-validator';
-import shantytownModel from '#server/models/shantytownModel';
 import closingSolutionModel from '#server/models/closingSolutionModel';
 
 export default [
     param('id')
+        .isInt({ min: 1 }).bail().withMessage('L\'identifiant du site est invalide')
+        .toInt(),
     (req, res, next) => {
         req.body.shantytown_id = req.params.id;
         next();
+    },
 
     body('closed_with_solutions')
         .isBoolean().bail().withMessage('Vous devez indiquer si le site a été résorbé définitivement')
