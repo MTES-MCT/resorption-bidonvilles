@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/node';
 import loaders from '#server/loaders';
 import config from '#server/config';
+import PrometheusMetricsHandler from '#server/middlewares/prometheusMiddleware';
 
 const {
     port, sendActivitySummary, sendActionAlerts, checkInactiveUsers,
@@ -39,6 +40,8 @@ export default {
         const app = loaders.customRouteMethods(loaders.express());
 
         sentryContextHandlers(app);
+
+        app.use(PrometheusMetricsHandler);
 
         loaders.rateLimiter(app);
         await loaders.routes(app);
