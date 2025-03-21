@@ -34,16 +34,16 @@ const metricsHandler = (
     if (req.path !== '/prom_metrics') {
         requestsCounter.inc();
         activeConnectionsCounter.inc();
-        http_request_counter
-            .labels({
-                method: req.method,
-                route: req.originalUrl,
-                statusCode: res.statusCode,
-            })
-            .inc();
 
         // On décrémente la jauge lorsque la réponse est terminée
         res.on('finish', () => {
+            http_request_counter
+                .labels({
+                    method: req.method,
+                    route: req.originalUrl,
+                    statusCode: res.statusCode,
+                })
+                .inc();
             activeConnectionsCounter.dec();
         });
     }
