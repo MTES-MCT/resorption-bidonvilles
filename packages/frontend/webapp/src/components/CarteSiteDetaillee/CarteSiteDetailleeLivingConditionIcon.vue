@@ -38,7 +38,7 @@ const { audio } = toRefs(props);
 const colorClass = computed(() => {
     const colors = {
         good: "text-green500 border-green500",
-        toImprove: "text-secondary border-secondary",
+        toImprove: "text-orange border-orange",
         bad: "text-red border-red",
         unknown: "text-red border-red",
     };
