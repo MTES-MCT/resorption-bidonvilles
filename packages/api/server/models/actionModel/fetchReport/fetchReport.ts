@@ -147,9 +147,7 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
         action_operators AS (
             SELECT
                 fk_action,
-                array_agg(users.first_name || ' ' || 
-                        users.last_name|| ' [' || 
-                        organizations."name" || ']') AS operators
+                array_agg(DISTINCT organizations."name") AS operators
             FROM
                 action_operators
             LEFT JOIN

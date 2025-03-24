@@ -47,8 +47,13 @@ const props = defineProps({
         required: false,
         default: false,
     },
+    neutral: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
-const { icon, img, alt, figure, evolution, invert } = toRefs(props);
+const { icon, img, alt, figure, evolution, invert, neutral } = toRefs(props);
 
 const colors = {
     positive: {
@@ -67,7 +72,9 @@ const colors = {
 
 const background = computed(() => {
     return (
-        evolution.value == 0
+        neutral.value
+            ? colors.neutral
+            : evolution.value == 0
             ? colors.neutral
             : evolution.value < 0
             ? !invert.value
@@ -80,7 +87,9 @@ const background = computed(() => {
 });
 const color = computed(() => {
     return (
-        evolution.value == 0
+        neutral.value
+            ? colors.neutral
+            : evolution.value == 0
             ? colors.neutral
             : evolution.value < 0
             ? !invert.value

@@ -81,6 +81,9 @@ export default async (user: User, departementCode: string, argFrom: Date, argTo:
             if (row.population_total >= 100) {
                 metrics.inhabitants.towns.charts.more_than_99[i] += 1;
             }
+            if (row.population_minors !== null) {
+                metrics.inhabitants.towns.charts.minors[i] += row.population_minors;
+            }
             if (row.minors_in_school !== null) {
                 metrics.inhabitants.towns.charts.minors_in_school[i] += row.minors_in_school;
             }

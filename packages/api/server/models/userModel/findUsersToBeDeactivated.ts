@@ -15,5 +15,8 @@ export default () => query(
         {
             fk_status: { value: 'active' },
         },
+        {
+            to_be_tracked: { value: true },
+        },
     ],
 );

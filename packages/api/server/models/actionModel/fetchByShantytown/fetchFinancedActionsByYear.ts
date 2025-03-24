@@ -27,6 +27,12 @@ export default (shantytownIds: number[] | null, annee_action: number, clauseGrou
 
     enrichWhere(where, replacements, clauseGroup);
 
+    const leftJoins = `
+    LEFT JOIN
+        actions ON ash.fk_action = actions.action_id
+    LEFT JOIN
+        departements ON departements.code = actions.fk_departement`;
+
     return sequelize.query(
         `
         SELECT
@@ -48,6 +54,7 @@ export default (shantytownIds: number[] | null, annee_action: number, clauseGrou
             action_shantytowns ash
         LEFT JOIN
             action_finances as af ON af.fk_action = ash.fk_action
+        ${'departements' in clauseGroup ? leftJoins : ''}
         ${where.length > 0 ? `WHERE ${where.join(' AND ')}` : ''}
         GROUP BY 1, 2, 3
         ORDER BY 1, 2

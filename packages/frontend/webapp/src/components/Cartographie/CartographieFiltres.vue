@@ -18,7 +18,7 @@
 
     <section v-else class="w-5">
         <p
-            class="rounded-full border bg-G100 border border-G500 absolute top-20 left-1 z-[1002] w-8 h-8 flex items-center justify-center cursor-pointer hover:border-black"
+            class="rounded-full border bg-G100 border-G500 absolute top-20 left-1 z-[1002] w-8 h-8 flex items-center justify-center cursor-pointer hover:border-black"
             @click="emit('open')"
         >
             <Icon icon="arrow-right" />
