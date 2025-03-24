@@ -5,7 +5,7 @@
         <div v-if="data !== undefined" class="flex mt-4 space-x-6">
             <ChartBigFigure
                 v-if="chartType === 'towns'"
-                icon="location-dot"
+                icon="tent"
                 :figure="formatStat(data.figures.towns_total.value)"
                 :evolution="formatStat(data.figures.towns_total.evolution)"
                 >Nombre total de sites</ChartBigFigure
