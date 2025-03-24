@@ -4,6 +4,13 @@
 
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure
+                icon="children"
+                :figure="formatStat(data.figures.minors.value)"
+                :evolution="formatStat(data.figures.minors.evolution)"
+                neutral
+                >Mineurs</ChartBigFigure
+            >
+            <ChartBigFigure
                 icon="school"
                 :figure="formatStat(data.figures.minors_in_school.value)"
                 :evolution="formatStat(data.figures.minors_in_school.evolution)"
@@ -35,9 +42,14 @@ const data = departementMetricsStore.evolution.data.inhabitants.towns;
 
 const chartData = computed(() => {
     const datasets = [
+        generateDataset("Nombre de mineurs", "0, 0, 255", data.charts.minors, {
+            lineStyle: { opacity: 1 },
+            area: true,
+            symbolSize: 1,
+        }),
         generateDataset(
             "Nombre de mineurs scolarisés",
-            "0, 0, 255",
+            "0, 255, 0",
             data.charts.minors_in_school,
             {
                 lineStyle: { opacity: 1 },

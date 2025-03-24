@@ -18,6 +18,10 @@ export type DepartementMetricsEvolution = {
                     value: number,
                     evolution: number,
                 },
+                minors: {
+                    value: number,
+                    evolution: number,
+                },
                 minors_in_school: {
                     value: number,
                     evolution: number,
@@ -29,6 +33,7 @@ export type DepartementMetricsEvolution = {
                 less_than_10: number[],
                 between_10_and_99: number[],
                 more_than_99: number[],
+                minors: number[],
                 minors_in_school: number[],
             },
         },
