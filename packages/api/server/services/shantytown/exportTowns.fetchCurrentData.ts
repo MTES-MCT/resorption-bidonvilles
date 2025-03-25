@@ -6,14 +6,14 @@ import where from '#server/utils/permission/where';
 import { WhereClauseGroup } from '#server/models/_common/types/WhereClauseGroup';
 import { Where } from '#server/models/_common/types/Where';
 import { Location } from '#server/models/geoModel/Location.d';
+import { AuthUser } from '#server/middlewares/authMiddleware';
 import actionModel from '#server/models/actionModel';
 import enrichShantytown from '#server/services/shantytown/_common/enrichShantytownWithALeastOneActionFinanced';
-import { User } from '#root/types/resources/User.d';
 import { ShantytownWithFinancedAction } from '#root/types/resources/Shantytown.d';
 import { FinancedShantytownAction } from '#root/types/resources/Action.d';
 
 
-export default async (user: User, locations: Location[], closedTowns: boolean): Promise<ShantytownWithFinancedAction[]> => {
+export default async (user: AuthUser, locations: Location[], closedTowns: boolean): Promise<ShantytownWithFinancedAction[]> => {
     const isNationalExport = locations.some(l => l.type === 'nation');
     const filters: Where = [
         {

@@ -7,6 +7,15 @@ export default function (shantytowns, filters) {
             return false;
         }
 
+        if (
+            filters.status === "inProgress" &&
+            (!shantytown.preparatoryPhasesTowardResorption ||
+                shantytown.preparatoryPhasesTowardResorption.length < 1 ||
+                isShantytownClosed(shantytown))
+        ) {
+            return false;
+        }
+
         if (filters.status === "close" && shantytown.status === "open") {
             return false;
         }
