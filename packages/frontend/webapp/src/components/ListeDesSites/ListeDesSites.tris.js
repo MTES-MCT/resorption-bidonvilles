@@ -8,7 +8,11 @@ export default {
         label: "Date d'installation",
     },
     updatedAt: {
-        value: "updatedAt",
+        value: "lastUpdatedAt",
+        label: "Date d'actualisation",
+    },
+    lastUpdatedAt: {
+        value: "lastUpdatedAt",
         label: "Date d'actualisation",
     },
     declaredAt: {

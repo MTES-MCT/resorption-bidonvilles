@@ -56,7 +56,7 @@
                             <div
                                 class="flex flex-row gap-1 items-end align-baseline leading-none"
                             >
-                                <i class="fa-solid fa-location-dot text-2xl" />
+                                <i class="fa-solid fa-tent text-2xl" />
                                 <span
                                     class="font-bold text-3xl align-baseline leading-none"
                                     >{{
@@ -126,7 +126,7 @@
                             <div
                                 class="flex flex-row gap-1 items-end align-baseline leading-none"
                             >
-                                <i class="fa-solid fa-location-dot text-2xl" />
+                                <i class="fa-solid fa-tent text-2xl" />
                                 <span
                                     class="font-bold text-3xl align-baseline leading-none"
                                     >{{
