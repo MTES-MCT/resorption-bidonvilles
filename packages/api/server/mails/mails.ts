@@ -4,6 +4,7 @@ import mailService from '#server/services/mailService';
 import config from '#server/config';
 
 import { QuestionSummary } from '#server/models/activityModel/types/QuestionNationalSummary';
+import formatDate from '#server/utils/formatDate';
 import generateTrackingUTM from './generateTrackingUTM';
 
 const { formatName } = userModel;
@@ -850,14 +851,17 @@ export default {
             connexion: generateTrackingUTM(USER_CAMPAIGN, `dep${variables.departement.code}-nouveau-site-connexion`),
         };
 
+        const title = () => `${variables.shantytown.usename} ${variables.shantytown.city.name} (${variables.shantytown.departement.code})`;
+
         return mailService.send('user_shantytown_declared', {
             recipient,
             variables: {
                 recipientName: formatName(recipient),
                 departementName: variables.departement.name,
-                hour: moment(variables.shantytown.createdAt).utcOffset(2).format('HH:mm'),
+                hour: formatDate(variables.shantytown.createdAt, 'd M y à h:i'),
                 creatorName: formatName(variables.creator),
-                townFullAddress: variables.shantytown.address,
+                townAddress: variables.shantytown.address,
+                title: title(),
                 webappUrl,
                 utm: utm.regular,
                 connexionUrl: `${connexionUrl}?${utm.connexion}`,

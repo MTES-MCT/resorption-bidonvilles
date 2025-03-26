@@ -1,6 +1,6 @@
 <mjml>
     <mj-head>
-        <mj-title>[Résorption-bidonvilles] {{var:departementName}} - Un nouveau site a été déclaré</mj-title>
+        <mj-title>[Résorption-bidonvilles] Site déclaré - {{var:title}}</mj-title>
         <mj-include path='common/attributes.mjml' />
         <mj-include path='common/styles.mjml' />
     </mj-head>
@@ -10,16 +10,18 @@
         <mj-section>
             <mj-column>
                 <mj-text mj-class='text-primary text-display pb-4'>
-                    {{var:departementName}} - Un nouveau site a été déclaré
+                    Nouveau site déclaré - {{var:title}}
                 </mj-text>
                 <mj-include path='common/hello.mjml' />
-                <mj-text>
-                    Un nouveau site a été déclaré aujourd’hui à {{var:hour}} sur la plateforme <a href="{{var:webappUrl}}?{{var:utm}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a> par {{var:creatorName}} :
+                <mj-text mj-class="pb-4">
+                    Un nouveau site a été déclaré le {{var:hour}} sur la plateforme 
+                    <a href="{{var:webappUrl}}?{{var:utm}}" class="link font-italic" target="_blank" rel="noopener noreferrer">Résorption-bidonvilles</a>
+                    par {{var:creatorName}} à l'adresse suivante:
+                    <a href="{{var:townUrl}}" class="link" target="_blank" rel="noopener noreferrer">{{var:townAddress}}</a>
                 </mj-text>
-                <mj-text mj-class="pb-4"><a href="{{var:townUrl}}" class="link" target="_blank" rel="noopener noreferrer">{{var:townFullAddress}}</a></mj-text>
                 <mj-text mj-class="font-bold">Connaissez-vous ce site ? Avez-vous effectué des actions sur ce site ?</mj-text>
                 <mj-text mj-class="pb-4">Connectez-vous dès maintenant à la plateforme et participez à la résorption des bidonvilles en partageant les changements dont vous auriez eu connaissance.</mj-text>
-                <mj-button mj-class="button-primary" href="{{var:connexionUrl}}" rel="noopener noreferrer">
+                <mj-button mj-class="button-primary" href="{{var:townUrl}}?{{var:utm}}" rel="noopener noreferrer">
                     Me connecter et voir le site
                 </mj-button>
                 <mj-text mj-class="pb-4">Le partage d’information entre tous les partenaires est essentiel pour accélérer la résorption des bidonvilles.</mj-text>

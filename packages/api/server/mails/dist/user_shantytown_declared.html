@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="und" dir="auto" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
   <head>
-    <title>[Résorption-bidonvilles] {{var:departementName}} - Un nouveau site a été déclaré</title>
+    <title>[Résorption-bidonvilles] Site déclaré - {{var:title}}</title>
     <!--[if !mso]><!-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!--<![endif]-->
@@ -135,7 +135,7 @@
               <tr>
                 <td align="left" style="font-size:0px;padding:0;padding-bottom:1rem;word-break:break-word;">
                   
-      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:28px;font-weight:700;line-height:32px;text-align:left;color:#000091;">{{var:departementName}} - Un nouveau site a été déclaré</div>
+      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:28px;font-weight:700;line-height:32px;text-align:left;color:#000091;">Nouveau site déclaré - {{var:title}}</div>
     
                 </td>
               </tr>
@@ -149,17 +149,12 @@
               </tr>
             
               <tr>
-                <td align="left" style="font-size:0px;padding:0;word-break:break-word;">
-                  
-      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;">Un nouveau site a été déclaré aujourd’hui à {{var:hour}} sur la plateforme <a href="{{var:webappUrl}}?{{var:utm}}" class="link font-italic" target="_blank" rel="noopener noreferrer" style="color: #000091; text-decoration: none; font-style: italic;">Résorption-bidonvilles</a> par {{var:creatorName}} :</div>
-    
-                </td>
-              </tr>
-            
-              <tr>
                 <td align="left" style="font-size:0px;padding:0;padding-bottom:1rem;word-break:break-word;">
                   
-      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;"><a href="{{var:townUrl}}" class="link" target="_blank" rel="noopener noreferrer" style="color: #000091; text-decoration: none;">{{var:townFullAddress}}</a></div>
+      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;">Un nouveau site a été déclaré le {{var:hour}} sur la plateforme 
+                    <a href="{{var:webappUrl}}?{{var:utm}}" class="link font-italic" target="_blank" rel="noopener noreferrer" style="color: #000091; text-decoration: none; font-style: italic;">Résorption-bidonvilles</a>
+                    par {{var:creatorName}} à l'adresse suivante:
+                    <a href="{{var:townUrl}}" class="link" target="_blank" rel="noopener noreferrer" style="color: #000091; text-decoration: none;">{{var:townAddress}}</a></div>
     
                 </td>
               </tr>
@@ -187,7 +182,7 @@
         <tbody>
           <tr>
             <td align="center" bgcolor="#000091" role="presentation" style="border:none;border-radius:3px;cursor:auto;mso-padding-alt:10px 25px;background:#000091;" valign="middle">
-              <a href="{{var:connexionUrl}}" rel="noopener noreferrer" style="display:inline-block;background:#000091;color:#FFFFFF;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:3px;" target="_blank">
+              <a href="{{var:townUrl}}?{{var:utm}}" rel="noopener noreferrer" style="display:inline-block;background:#000091;color:#FFFFFF;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;margin:0;text-decoration:none;text-transform:none;padding:10px 25px;mso-padding-alt:0px;border-radius:3px;" target="_blank">
                 Me connecter et voir le site
               </a>
             </td>
