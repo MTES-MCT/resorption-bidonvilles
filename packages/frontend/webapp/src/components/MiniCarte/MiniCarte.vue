@@ -22,7 +22,7 @@ const locationImg = computed(() => {
     }
 
     // national
-    if (location.value.typeUid === "nation") {
+    if (["nation", "metropole"].includes(location.value.typeUid)) {
         return regionsImg.france;
     }
 
