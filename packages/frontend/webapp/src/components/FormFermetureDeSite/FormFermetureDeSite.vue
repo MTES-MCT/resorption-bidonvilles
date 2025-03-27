@@ -164,7 +164,7 @@ const config = {
         },
         successTitle: "Fermeture du site",
         successWording:
-            "Le site a bien été déclaré comme fermé. Les acteurs concernés ont été prévenus par mail",
+            "Le site a bien été déclaré fermé et les éventuelles données du propriétaire anonymisées. Les acteurs concernés ont été prévenus par mail",
     },
     fix: {
         submit(values) {
