@@ -28,29 +28,27 @@
                     </div>
                     <div class="mt-2 text-left text-sm">
                         <p class="font-bold">Mes territoires :</p>
-                        <p class="space-x-2">
-                            <Link
-                                v-for="(area, idx) in userStore.user
-                                    .intervention_areas.areas"
-                                :class="
-                                    ((inputLocation.data === null &&
-                                        area.type === 'nation') ||
-                                        inputLocation.data?.typeUid ===
-                                            area.type) &&
-                                    inputLocation.data?.code ===
-                                        area[area.type]?.code
-                                        ? 'text-primary font-bold '
-                                        : ''
-                                "
-                                @click="setSearch(area)"
-                                :key="idx"
-                                >{{
-                                    area.type === "nation"
-                                        ? "France entière"
-                                        : area[area.type].name
-                                }}</Link
-                            >
-                        </p>
+                        <Link
+                            v-for="(area, idx) in userStore.user
+                                .intervention_areas.areas"
+                            :class="
+                                ((inputLocation.data === null &&
+                                    area.type === 'nation') ||
+                                    inputLocation.data?.typeUid ===
+                                        area.type) &&
+                                inputLocation.data?.code ===
+                                    area[area.type]?.code
+                                    ? 'text-primary font-bold '
+                                    : ''
+                            "
+                            @click="setSearch(area)"
+                            :key="idx"
+                            >{{
+                                area.type === "nation"
+                                    ? "France entière"
+                                    : area[area.type].name
+                            }}</Link
+                        >
                     </div>
                 </ContentWrapper>
             </div>
