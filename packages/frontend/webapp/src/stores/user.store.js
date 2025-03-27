@@ -95,6 +95,28 @@ export const useUserStore = defineStore("user", {
         },
         user() {
             const configStore = useConfigStore();
+            // Ajouter "metropole" si l'utilisateur a un accès national
+            if (configStore.config?.user?.intervention_areas.is_national) {
+                return {
+                    ...configStore.config.user,
+                    intervention_areas: {
+                        ...configStore.config.user.intervention_areas,
+                        areas: [
+                            {
+                                is_main_area: true,
+                                type: "metropole",
+                                latitude: 46.7755829,
+                                longitude: 2.0497727,
+                                metropole: {
+                                    code: "metropole",
+                                    name: "Métropole",
+                                },
+                            },
+                            ...configStore.config.user.intervention_areas.areas,
+                        ],
+                    },
+                };
+            }
             return configStore.config?.user;
         },
         showDepartementCode() {
