@@ -98,6 +98,7 @@ const pois = computed(() => {
 });
 
 const DEFAULT_ZOOMS = {
+    metropole: 6,
     nation: 6,
     region: 6,
     departement: 10,
