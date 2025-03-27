@@ -4,23 +4,28 @@ import { User } from '#root/types/resources/User.d';
 
 const ERRORS = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
-    deactivation_failure: { code: 500, message: 'Une erreur est survenue lors de la désactivation du compte' },
+    anonymization_failure: { code: 500, message: 'Une erreur est survenue lors de l\'anonymisation de l\'utilisateur.' },
     refresh_failure: { code: 500, message: 'Une erreur est survenue lors de la lecture des données en base de données' },
-    transaction_failure: { code: 500, message: 'Une erreur est survenue lors de la validation de la désactivation' },
+    transaction_failure: { code: 500, message: 'Une erreur est survenue lors de la validation de l\'anonymisation' },
 };
 
-interface UserDeactivateRequest extends Request {
+interface UserAnonymizeRequest extends Request {
     user: User,
     body: {
-        user: User;
-        reason: string | null;
-        anonymizationRequested: boolean | null;
+        ids: number[];
     };
 }
 
-export default async (req: UserDeactivateRequest, res: Response, next: NextFunction): Promise<void> => {
+export default async (req: UserAnonymizeRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const updatedUser = await userService.deactivate(req.body.user.id, req.user.id === req.body.user.id, req.body.reason, req.body.anonymizationRequested);
+        if (!req.user.is_admin) {
+            res.status(400).send({
+                user_message: 'Vous n\'avez pas les permissions pour accéder à cette route',
+            });
+        }
+
+        const updatedUser = await userService.anonymizationRequest(req.body.ids);
+
         res.status(200).send(updatedUser);
     } catch (error) {
         const { code, message } = ERRORS[error?.code] || ERRORS.undefined;

@@ -27,6 +27,7 @@ import copyActivationLink from "./actions/copyActivationLink.action";
 import reactivate from "./actions/reactivate.action";
 import denyAccess from "./actions/denyAccess.action";
 import refuseAccess from "./actions/refuseAccess.action";
+import anonymizationRequest from "./actions/anonymizationRequest.action";
 import grantAccess from "./actions/grantAccess.action";
 import ACTION_DESCRIPTIONS from "./FicheAccesActions.descriptions";
 
@@ -36,6 +37,7 @@ import FicheAccesActionUpgradeAdminLocal from "./FicheAccesActionUpgradeAdminLoc
 import FicheAccesActionDowngradeAdminLocal from "./FicheAccesActionDowngradeAdminLocal.vue";
 import FicheAccesActionCopyActivationLink from "./FicheAccesActionCopyActivationLink.vue";
 import FicheAccesActionReactivate from "./FicheAccesActionReactivate.vue";
+import FicheAccesActionAnonymize from "./FicheAccesActionAnonymize.vue";
 import FicheAccesActionDenyAccess from "./FicheAccesActionDenyAccess.vue";
 import FicheAccesActionRefuseAccess from "./FicheAccesActionRefuseAccess.vue";
 import FicheAccesActionGrantAccess from "./FicheAccesActionGrantAccess.vue";
@@ -77,6 +79,11 @@ const actions = [
         id: "copy_activation_link",
         component: FicheAccesActionCopyActivationLink,
         action: copyActivationLink,
+    },
+    {
+        id: "anonymize",
+        component: FicheAccesActionAnonymize,
+        action: anonymizationRequest,
     },
     {
         id: "reactivate",
