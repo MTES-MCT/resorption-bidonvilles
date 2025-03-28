@@ -1,18 +1,10 @@
 import { sequelize } from '#db/majicSequelize';
 import { QueryTypes } from 'sequelize';
 import { RawOwner } from './RawOwner';
-import { getAllowedSchemas, getAllowedTables } from '../common/getWhiteLists';
+import getOwnersTableName from '../common/getFullTableName';
 
 export default async (idcom: string, dnupro: string, dept: string, schema: string, shortTableName: string, tableName: string): Promise<RawOwner[]> => {
-    const currentYear = new Date().getFullYear();
-    const ALLOWED_SCHEMAS = getAllowedSchemas(currentYear);
-    const ALLOWED_TABLES = getAllowedTables(currentYear, dept, shortTableName);
-
-    if (!ALLOWED_SCHEMAS.includes(schema) || !ALLOWED_TABLES.includes(tableName)) {
-        return null;
-    }
-
-    const fullTableName = `"${schema}"."${tableName}"`;
+    const fullTableName = getOwnersTableName(dept, schema, shortTableName, tableName);
 
     const owners: RawOwner[] = await sequelize.query(
         `SELECT fpdna.ccodrotxt, fpdna.ccodemtxt, fpdna.dqualp, 
