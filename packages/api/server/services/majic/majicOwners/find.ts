@@ -8,6 +8,7 @@ import { Departement } from '#server/models/geoModel/Location.d';
 import mattermostUtils from '#server/utils/mattermost';
 import config from '#server/config';
 import { RawParcel } from '#server/models/majicModel/findParcel/RawParcel.d';
+import { RawOwner } from '#server/models/majicModel/findOwners/RawOwner.d';
 
 export default async (parcelId: string, departementId: string, user: AuthUser) => {
     // TODO: vérifier les droits de l'utilisateur => access.land_registry
@@ -48,7 +49,7 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
     }
 
     // Récupérer la liste des propriétaires de la parcelle
-    let owners;
+    let owners: RawOwner[];
     try {
         owners = await majicModel.findOwners(parcel.idcom, parcel.dnupro, dept, schema, shortOwnerTableName, ownerTableName);
         if (!owners) {
