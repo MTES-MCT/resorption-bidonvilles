@@ -13,5 +13,5 @@ export default (dept: string, schema: string, shortTableName: string, tableName:
         return null;
     }
 
-    return `"${schema}"."${tableName}"`;
+    return `${schema}.${tableName}`;
 };
