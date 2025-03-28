@@ -1,18 +1,10 @@
 import { sequelize } from '#db/majicSequelize';
 import { QueryTypes } from 'sequelize';
 import { RawParcel } from './RawParcel.d';
-import { getAllowedSchemas, getAllowedTables } from '../common/getWhiteLists';
+import getParcelTableName from '../common/getFullTableName';
 
 export default async (id: string, dept: string, schema: string, shortTableName: string, tableName: string): Promise<RawParcel> => {
-    const currentYear = new Date().getFullYear();
-    const ALLOWED_SCHEMAS = getAllowedSchemas(currentYear);
-    const ALLOWED_TABLES = getAllowedTables(currentYear, dept, shortTableName);
-
-    if (!ALLOWED_SCHEMAS.includes(schema) || !ALLOWED_TABLES.includes(tableName)) {
-        return null;
-    }
-
-    const fullTableName = `"${schema}"."${tableName}"`;
+    const fullTableName = getParcelTableName(dept, schema, shortTableName, tableName);
 
     const parcelles: RawParcel[] = await sequelize.query(
         `SELECT idpar, idcom, dnupro, dnuvoi, cconvo, dvoilib, idcomtxt
