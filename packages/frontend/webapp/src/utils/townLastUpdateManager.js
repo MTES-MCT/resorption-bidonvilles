@@ -11,7 +11,7 @@ function getMostRecentUpdateOnTown(mostRecentComment, townUpdatedAt) {
 }
 
 function getTownLastUpdatedAt(town) {
-    if (!town.comments.length) {
+    if (!town.comments || town.comments.length === 0) {
         return town.updatedAt;
     }
     const mostRecentComment = getMostRecentComment(town.comments);
