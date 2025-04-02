@@ -36,7 +36,11 @@ export function useMatomo(app, router) {
         cookieDomain: `*.${MATOMO.DOMAIN}`,
         domains: `*.${MATOMO.DOMAIN}`,
         trackerFileName: MATOMO.TRACKER_FILENAME,
+
+        trackerScriptUrl: `/${MATOMO.TRACKER_FILENAME}.js`,
     });
+
+    window._paq.push(["trackPageView"]);
 }
 
 export function trackLogin(user) {
