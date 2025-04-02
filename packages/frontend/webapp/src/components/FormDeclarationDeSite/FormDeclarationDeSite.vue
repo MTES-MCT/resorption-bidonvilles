@@ -52,6 +52,7 @@ import {
     computed,
     defineExpose,
     defineProps,
+    nextTick,
     ref,
     toRef,
     toRefs,
@@ -393,6 +394,20 @@ const hasPreparatoryPhases = computed(() => {
     return town.value?.preparatoryPhasesTowardResorption?.length > 0;
 });
 
+// Méthode pour définir le focus sur le composant ErrorSummary en cas d'erreur remontée par le backend
+const focusOnErrorSummary = async () => {
+    await nextTick();
+
+    const errorSummary = document.getElementById("erreurs");
+
+    if (errorSummary) {
+        errorSummary.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        errorSummary.setAttribute("tabindex", "-1");
+        errorSummary.focus();
+    }
+};
+
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
         const formattedValues = formatValuesForApi(sentValues, "edit");
@@ -422,21 +437,15 @@ defineExpose({
 
         error.value = null;
 
+        const notificationStore = useNotificationStore();
         try {
-            let respondedTown;
-            if (mode.value === "edit") {
-                const { submit } = config[mode.value];
-                respondedTown = await submit(formattedValues, town.value?.id);
-            } else {
-                const notificationStore = useNotificationStore();
-                const { submit, notification } = config[mode.value];
-                respondedTown = await submit(formattedValues, town.value?.id);
+            const notificationStore = useNotificationStore();
 
-                notificationStore.success(
-                    notification.title,
-                    notification.content
-                );
-            }
+            const { submit, notification } = config[mode.value];
+
+            const respondedTown = await submit(formattedValues, town.value?.id);
+
+            notificationStore.success(notification.title, notification.content);
 
             if (mode.value === "report") {
                 backOrReplace("/liste-des-sites");
@@ -448,6 +457,12 @@ defineExpose({
             if (e?.fields) {
                 setErrors(e.fields);
             }
+            focusOnErrorSummary();
+
+            notificationStore.error(
+                "Echec de la création ou mise à jour du site",
+                e?.user_message
+            );
         }
     }),
     isSubmitting,
