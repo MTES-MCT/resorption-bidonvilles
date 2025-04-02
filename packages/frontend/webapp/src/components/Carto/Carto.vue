@@ -157,6 +157,11 @@ const props = defineProps({
         required: false,
         default: false,
     },
+    activeTab: {
+        type: String,
+        required: false,
+        default: "summary",
+    },
 });
 const {
     isLoading,
@@ -170,6 +175,7 @@ const {
     townMarkerFn,
     locationMarkerFn,
     displaySkipMapLinks,
+    activeTab,
 } = toRefs(props);
 
 const map = ref(null);
@@ -352,7 +358,11 @@ function syncTownMarkers() {
                 territoryData[key][location.code].total += 1;
             });
 
-            const marker = townMarkerFn.value(town);
+            const marker = townMarkerFn.value(town, activeTab.value);
+            marker.on("mouseover", () =>
+                emit("highlightTownLine", town.id, town.city.code)
+            );
+            marker.on("mouseout", () => emit("highlightTownLine", null, null));
             marker.on("click", () => emit("townclick", town));
             return marker;
         })

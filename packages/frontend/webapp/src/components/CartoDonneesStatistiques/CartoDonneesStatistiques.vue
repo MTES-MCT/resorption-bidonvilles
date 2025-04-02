@@ -10,10 +10,11 @@
         :locationMarkerFn="marqueurLocationStats"
         :townClusteringOptions="{ maxClusterRadius: 0 }"
         :defaultView="departementMetricsStore.lastMapView || undefined"
+        :activeTab="activeTab"
         displaySkipMapLinks
     >
         <div
-            ref="legendeConditionsDeVie"
+            ref="legende"
             class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded"
         >
             <div @click="changeLegendeStatus" class="mb-2 mx-2 cursor-pointer">
@@ -22,53 +23,48 @@
                         legendeStatus === true ? 'chevron-up' : 'chevron-down'
                     }`"
                 />
-                <label class="font-bold mx-2"> Légende </label>
+                <label class="font-bold mx-2">
+                    {{ displayedLegend[activeTab].title }}
+                </label>
             </div>
             <div v-if="legendeStatus === true" class="flex">
                 <div class="flex">
                     <div class="grid grid-cols-1">
-                        <label class="flex items-center space-x-2">
-                            <Icon class="mx-2" icon="faucet-drip" />
-                        </label>
-                        <label class="flex items-center space-x-2">
-                            <Icon class="mx-2" icon="bolt" />
-                        </label>
-                        <label class="flex items-center space-x-2">
-                            <Icon class="mx-2" icon="trash-alt" />
-                        </label>
-                        <label class="flex items-center space-x-2">
-                            <Icon class="mx-2" icon="fire-extinguisher" />
-                        </label>
-                        <label class="flex items-center space-x-2">
-                            <Icon class="mx-2" icon="toilet" />
-                        </label>
-                        <label class="flex items-center space-x-2">
-                            <Icon class="mx-2" icon="bug-slash" />
+                        <label
+                            class=""
+                            v-for="displayedLegendItem in displayedLegend[
+                                activeTab
+                            ].icons"
+                            :key="displayedLegendItem"
+                        >
+                            <Icon class="mx-2" :icon="displayedLegendItem" />
                         </label>
                     </div>
 
                     <div class="grid grid-cols-1">
-                        <label> Accès à l'eau </label>
-                        <label> Accès à l'électricité </label>
-                        <label> Evacuation des déchets </label>
-                        <label> Prévention incendie </label>
-                        <label> Accès aux toilettes </label>
-                        <label> Absence de nuisibles </label>
+                        <label
+                            v-for="displayedLegendLabel in displayedLegend[
+                                activeTab
+                            ].labels"
+                            :key="displayedLegendLabel"
+                        >
+                            {{ displayedLegendLabel }}
+                        </label>
                     </div>
                 </div>
                 <div class="flex flex-col ml-4">
-                    <div class="flex mb-2">
-                        <div class="bg-success w-10 border"></div>
-                        <label class="ml-2"> Satisfaisant </label>
+                    <div v-if="displayedLegend[activeTab].levelsTitle">
+                        <label class="font-bold">
+                            {{ displayedLegend[activeTab].levelsTitle }}
+                        </label>
                     </div>
-
-                    <div class="flex mb-2">
-                        <div class="bg-error w-10"></div>
-                        <label class="ml-2"> A améliorer </label>
-                    </div>
-                    <div class="flex">
-                        <div class="border w-10 crossed"></div>
-                        <label class="ml-2"> Inexistant </label>
+                    <div
+                        class="flex mb-2"
+                        v-for="level in displayedLegend[activeTab].levels"
+                        :key="level.label"
+                    >
+                        <div :class="`${level.style}`"></div>
+                        <label class="ml-2"> {{ level.label }} </label>
                     </div>
                 </div>
             </div>
@@ -77,26 +73,81 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
 import L from "leaflet";
 import Carto from "@/components/Carto/Carto.vue";
 import marqueurSiteStats from "@/utils/marqueurSiteStats";
 import marqueurLocationStats from "@/utils/marqueurLocationStats";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { Icon } from "@resorptionbidonvilles/ui";
+
+const props = defineProps({
+    activeTab: {
+        type: String,
+        default: "summary",
+        required: false,
+    },
+});
+const { activeTab } = toRefs(props);
+
 const departementMetricsStore = useDepartementMetricsStore();
 const carto = ref(null);
 const markersGroup = ref(L.geoJSON([], {}));
-const legendeConditionsDeVie = ref(null);
+const legende = ref(null);
 const legendeStatus = ref(false);
 
 watch(carto, () => {
     if (carto.value) {
         carto.value.map.addLayer(markersGroup.value);
         carto.value.map.on("move", onMove);
-        carto.value.addControl("legendeConditionsDeVie", createLegende());
+        carto.value.addControl("legende", createLegende());
     }
 });
+
+const displayedLegend = {
+    livingConditionsByTown: null,
+    livingConditionsByInhabitant: null,
+    summary: {
+        title: "Légende conditions de vie",
+        icons: [
+            "faucet-drip",
+            "bolt",
+            "trash-alt",
+            "fire-extinguisher",
+            "toilet",
+            "bug-slash",
+        ],
+        labels: [
+            "Accès à l'eau",
+            "Accès à l'électricité",
+            "Evacuation des déchets",
+            "Prévention incendie",
+            "Accès aux toilettes",
+            "Absence de nuisibles",
+        ],
+        levelsTitle: null,
+        levels: [
+            { style: "bg-success w-10 border", label: "Satisfaisant" },
+            { style: "bg-error w-10", label: "A améliorer" },
+            { style: "border w-10 crossed", label: "Inexistant" },
+        ],
+    },
+    schooling: {
+        title: "Légende scolarisation",
+        icons: ["child", "school"],
+        labels: ["Mineurs", "Mineurs scolarisés"],
+        levelsTitle: "Pourcentage de scolarisation",
+        levels: [
+            { style: "bg-success w-10 border", label: ">= 70 %" },
+            { style: "bg-warningOrange w-10", label: ">= 30 %" },
+            { style: "bg-error w-10", label: "< 30 %" },
+            { style: "bg-G400 w-10 border", label: "Pas de mineurs" },
+        ],
+    },
+};
+// Pas de différence entre summary et livingConditions (temporaire)
+displayedLegend.livingConditionsByTown = displayedLegend.summary;
+displayedLegend.livingConditionsByInhabitant = displayedLegend.summary;
 
 function onMove() {
     const { map } = carto.value;
@@ -114,7 +165,7 @@ function createLegende() {
         },
 
         onAdd() {
-            return legendeConditionsDeVie.value;
+            return legende.value;
         },
     });
 
