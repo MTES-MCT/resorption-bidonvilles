@@ -16,6 +16,7 @@
                             data.city.code
                         ] !== false
                     "
+                    :highlightedTown="highlightedTown"
                     @highlightTown="onHighlight"
                     @unhighlightTown="onUnhighlight"
                     @townClick="onTownClick"
@@ -75,8 +76,12 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    highlightedTown: {
+        type: Number,
+        required: false,
+    },
 });
-const { columns, metrics } = toRefs(props);
+const { columns, metrics, highlightedTown } = toRefs(props);
 const departementMetricsStore = useDepartementMetricsStore();
 const emit = defineEmits([
     "highlightTown",
