@@ -238,7 +238,8 @@ const policeInformationRequested = computed(() => {
     return (
         values.value.justice_procedure === 1 ||
         values.value.evacuation_under_time_limit == 1 ||
-        values.value.insalubrity_order == 1
+        values.value.insalubrity_order == 1 ||
+        ["requested", "granted"].includes(values.value.police_status)
     );
 });
 
