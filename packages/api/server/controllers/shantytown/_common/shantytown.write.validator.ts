@@ -1423,14 +1423,20 @@ export default mode => ([
      ********************************************************************************************* */
     body('police_status')
         .optional({ nullable: true })
-        .custom((value, { req }) => {
-            if (
-                req.body.justice_procedure !== true
-                && req.body.evacuation_under_time_limit !== true
-                && req.body.insalubrity_order !== true
-            ) {
-                return value === null;
+        // .custom((value, { req }) => {
+        .custom((value) => {
+            if (value === null || value === undefined) {
+                return true;
             }
+            // Désactiver car bloque les saisie pour lesquelles des CFP ont été saisie
+            // sans procédure judiciaire ou administrative en cours (avant la mise en place de ces champs)
+            // if (
+            //     req.body.justice_procedure !== true
+            //     && req.body.evacuation_under_time_limit !== true
+            //     && req.body.insalubrity_order !== true
+            // ) {
+            //     return value === null;
+            // }
             return ['none', 'requested', 'granted', 'refused'].includes(value);
         })
         .withMessage('Le champ "Concours de la force publique" est invalide'),
