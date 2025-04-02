@@ -1423,24 +1423,38 @@ export default mode => ([
      ********************************************************************************************* */
     body('police_status')
         .optional({ nullable: true })
-        // .custom((value, { req }) => {
-        .custom((value) => {
+        .custom((value, { req }) => {
+            // Si la valeur est null ou undefined, c'est toujours valide
             if (value === null || value === undefined) {
                 return true;
             }
-            // Désactiver car bloque les saisie pour lesquelles des CFP ont été saisie
-            // sans procédure judiciaire ou administrative en cours (avant la mise en place de ces champs)
-            // if (
-            //     req.body.justice_procedure !== true
-            //     && req.body.evacuation_under_time_limit !== true
-            //     && req.body.insalubrity_order !== true
-            // ) {
-            //     return value === null;
-            // }
-            return ['none', 'requested', 'granted', 'refused'].includes(value);
+            // Vérifie si aucune des procédures n'est activée
+            const noProcedureActive = (
+                req.body.justice_procedure !== true
+                && req.body.evacuation_under_time_limit !== true
+                && req.body.insalubrity_order !== true
+            );
+            // Si aucune procédure n'est active mais que police_status est renseigné
+            if (noProcedureActive) {
+                req.policeStatusErrorType = 'noProcedure'; // Stocker le type d'erreur
+                return false;
+            }
+            // Sinon, on vérifie que la valeur fait partie des valeurs autorisées
+            if (!['none', 'requested', 'granted', 'refused'].includes(value)) {
+                req.policeStatusErrorType = 'invalidValue'; // Stocker le type d'erreur
+                return false;
+            }
+            return true;
         })
-        .withMessage('Le champ "Concours de la force publique" est invalide'),
+        .withMessage((value, { req }) => {
+            // Message d'erreur conditionnel basé sur le type d'erreur
+            if (req.policeStatusErrorType === 'noProcedure') {
+                return 'Veuillez renseigner une procédure judiciaire ou administrative pour justifier du concours de la force publique';
+            }
+            return 'Le champ "Concours de la force publique" est invalide';
+        }),
 
+    // Sanitizer reste inchangé
     body('police_status')
         .customSanitizer(value => value || null),
 
