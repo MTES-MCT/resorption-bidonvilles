@@ -48,6 +48,7 @@ import {
     computed,
     defineExpose,
     defineProps,
+    nextTick,
     ref,
     toRef,
     toRefs,
@@ -354,6 +355,20 @@ const deleteOriginalAttachment = (attachments) => {
     originalValues.existingAttachments = attachments;
 };
 
+// Méthode pour définir le focus sur le composant ErrorSummary en cas d'erreur remontée par le backend
+const focusOnErrorSummary = async () => {
+    await nextTick();
+
+    const errorSummary = document.getElementById("erreurs");
+
+    if (errorSummary) {
+        errorSummary.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        errorSummary.setAttribute("tabindex", "-1");
+        errorSummary.focus();
+    }
+};
+
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
         const formattedValues = formatValuesForApi(sentValues);
@@ -383,9 +398,8 @@ defineExpose({
 
         error.value = null;
 
+        const notificationStore = useNotificationStore();
         try {
-            const notificationStore = useNotificationStore();
-
             const { submit, notification } = config[mode.value];
 
             const respondedTown = await submit(formattedValues, town.value?.id);
@@ -401,6 +415,12 @@ defineExpose({
             if (e?.fields) {
                 setErrors(e.fields);
             }
+            focusOnErrorSummary();
+
+            notificationStore.error(
+                "Echec de la création ou mise à jour du site",
+                e?.user_message
+            );
         }
     }),
     isSubmitting,
