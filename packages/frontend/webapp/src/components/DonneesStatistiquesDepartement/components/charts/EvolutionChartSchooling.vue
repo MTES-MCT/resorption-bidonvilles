@@ -5,15 +5,16 @@
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure
                 icon="children"
-                :figure="formatStat(data.figures.minors.value)"
-                :evolution="formatStat(data.figures.minors.evolution)"
+                :figure="data.figures.minors.value"
+                :evolution="data.figures.minors.evolution"
                 neutral
                 >Mineurs</ChartBigFigure
             >
+            {{ data.figures.minors_in_school.evolution }}
             <ChartBigFigure
                 icon="school"
-                :figure="formatStat(data.figures.minors_in_school.value)"
-                :evolution="formatStat(data.figures.minors_in_school.evolution)"
+                :figure="data.figures.minors_in_school.value"
+                :evolution="data.figures.minors_in_school.evolution"
                 :invert="true"
                 >Mineurs scolarisés</ChartBigFigure
             >
@@ -29,7 +30,6 @@
 </template>
 
 <script setup>
-import formatStat from "@/utils/formatStat";
 import { computed } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import LineChart from "@/components/Graphs/GraphBase.vue";
