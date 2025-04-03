@@ -23,6 +23,7 @@ import {
     removeActorTheme,
     setHeatwaveStatus,
     updateActorThemes,
+    startResorption,
 } from "@/api/towns.api";
 import enrichShantytown from "@/utils/enrichShantytown";
 import filterShantytowns from "@/utils/filterShantytowns";
@@ -68,6 +69,12 @@ export const useTownsStore = defineStore("towns", () => {
         return {
             open: filterShantytowns(towns.value, {
                 status: "open",
+                search: filters.search.value,
+                location: filters.location.value,
+                ...filters.properties.value,
+            }),
+            inProgress: filterShantytowns(towns.value, {
+                status: "inProgress",
                 search: filters.search.value,
                 location: filters.location.value,
                 ...filters.properties.value,
@@ -444,11 +451,22 @@ export const useTownsStore = defineStore("towns", () => {
         },
 
         async edit(townId, data) {
-            const town = await edit(townId, data);
+            const notificationStore = useNotificationStore();
+            try {
+                const town = await edit(townId, data);
+                setTown(townId, town);
 
-            setTown(townId, town);
-
-            return hash.value[townId];
+                notificationStore.success(
+                    "Mise à jour réussie",
+                    "Le site a bien été mis à jour"
+                );
+                return hash.value[townId];
+            } catch (error) {
+                notificationStore.error(
+                    "Echec de la mise à jour du site",
+                    error?.user_message || "Une erreur inconnue est survenue"
+                );
+            }
         },
 
         async deleteCommentAttachment(file, { townId, commentId }) {
@@ -492,6 +510,24 @@ export const useTownsStore = defineStore("towns", () => {
             } catch (error) {
                 throw new Error(
                     "Une erreur est survenue lors de la suppression de la pièce jointe: ",
+                    error
+                );
+            }
+        },
+
+        async startResorption(townId) {
+            try {
+                const resorptionPhases = await startResorption(townId);
+                if (hash.value[townId]) {
+                    hash.value[townId].preparatoryPhasesTowardResorption =
+                        resorptionPhases;
+                }
+                const town = await this.fetchTown(townId);
+                setTown(townId, town);
+                trackEvent("Site", "Démarrage de la résorption", `S${townId}`);
+            } catch (error) {
+                throw new Error(
+                    "Une erreur est survenue lors du démarrage de la résorption: ",
                     error
                 );
             }

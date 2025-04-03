@@ -94,6 +94,15 @@ const groupedFilters = {
             ...(userStore.hasJusticePermission ? [filters.rhi] : []),
         ],
     },
+    inProgress: {
+        default: [filters.population, filters.fieldType, filters.origin],
+        optional: [
+            filters.target,
+            filters.actors,
+            filters.heatwave,
+            ...(userStore.hasJusticePermission ? [filters.justice] : []),
+        ],
+    },
     close: {
         default: [filters.solvedOrClosed],
         optional: [
@@ -111,10 +120,11 @@ const groupedFilters = {
     },
 };
 const groupedSorts = {
-    open: [
+    open: [sorts.cityName, sorts.builtAt, sorts.updatedAt, sorts.declaredAt],
+    inProgress: [
         sorts.cityName,
         sorts.builtAt,
-        sorts.lastUpdatedAt,
+        sorts.updatedAt,
         sorts.declaredAt,
     ],
     close: [sorts.cityName, sorts.closedAt, sorts.updatedAt],
@@ -132,12 +142,19 @@ function trackFilter(eventAction, { label: eventName }) {
     let eventCategory;
     let eventActionPrefix;
 
-    if (townsStore.filters.status === "close") {
-        eventCategory = "Filtre des sites fermés";
-        eventActionPrefix = "FDSF";
-    } else {
-        eventCategory = "Filtre des sites ouverts";
-        eventActionPrefix = "FDSO";
+    switch (townsStore.filters.status) {
+        case "close":
+            eventCategory = "Filtre des sites fermés";
+            eventActionPrefix = "FDSF";
+            break;
+        case "open":
+            eventCategory = "Filtre des sites ouverts";
+            eventActionPrefix = "FDSO";
+            break;
+        case "inProgress":
+            eventCategory = "Filtre des sites en cours de résorption";
+            eventActionPrefix = "FDSECDR";
+            break;
     }
 
     trackEvent(
