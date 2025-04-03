@@ -10,7 +10,6 @@
                 neutral
                 >Mineurs</ChartBigFigure
             >
-            {{ data.figures.minors_in_school.evolution }}
             <ChartBigFigure
                 icon="school"
                 :figure="data.figures.minors_in_school.value"
