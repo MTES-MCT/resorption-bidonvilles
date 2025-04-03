@@ -85,6 +85,8 @@ export default {
 
             await agenda.every('0 0 4 * * *', 'clean_attachments_archives');
 
+            await agenda.every('0 0 1 * * 1', 'anonymize_owners'); // tous les lundi à 1:00
+
             // eslint-disable-next-line no-console
             console.log('Set scheduled jobs up');
         } catch (error) {
