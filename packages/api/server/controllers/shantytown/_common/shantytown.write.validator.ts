@@ -1427,14 +1427,11 @@ export default mode => ([
             if (value === null || value === undefined) {
                 return true;
             }
-            const noProcedureActive = (
-                req.body.justice_procedure !== true
+            // Si aucune procédure n'est active mais que police_status est renseigné
+            if (req.body.justice_procedure !== true
                 && req.body.evacuation_under_time_limit !== true
-                && req.body.insalubrity_order !== true
-            );
-            if (noProcedureActive) {
-                req.policeStatusErrorType = 'noProcedure'; // Stocker le type d'erreur
-                return false;
+                && req.body.insalubrity_order !== true) {
+                throw new Error('Veuillez renseigner une procédure judiciaire ou administrative pour justifier du recours à la force publique');
             }
             if (!['none', 'requested', 'granted', 'refused'].includes(value)) {
                 req.policeStatusErrorType = 'invalidValue'; // Stocker le type d'erreur
