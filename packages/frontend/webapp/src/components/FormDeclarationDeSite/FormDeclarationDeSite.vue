@@ -362,10 +362,10 @@ const focusOnErrorSummary = async () => {
     const errorSummary = document.getElementById("erreurs");
 
     if (errorSummary) {
-        errorSummary.scrollIntoView({ behavior: "smooth", block: "start" });
-
-        errorSummary.setAttribute("tabindex", "-1");
-        errorSummary.focus();
+        errorSummary
+            .scrollIntoView({ behavior: "smooth", block: "start" })
+            .setAttribute("tabindex", "-1")
+            .focus();
     }
 };
 
