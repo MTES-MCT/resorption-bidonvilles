@@ -17,18 +17,21 @@
             ref="legende"
             class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded"
         >
-            <div @click="changeLegendeStatus" class="mb-2 mx-2 cursor-pointer">
+            <div
+                @click="changeLegendeStatus"
+                class="flex mb-2 mx-2 cursor-pointer"
+            >
                 <Icon
                     :icon="`${
                         legendeStatus === true ? 'chevron-up' : 'chevron-down'
                     }`"
                 />
-                <label class="font-bold mx-2"> Légende </label>
+                <div class="font-bold mx-2">Légende</div>
             </div>
             <div v-if="legendeStatus === true" class="flex">
                 <div class="flex">
                     <div class="grid grid-cols-1 content-start">
-                        <label
+                        <div
                             class=""
                             v-for="displayedLegendItem in displayedLegend[
                                 activeTab
@@ -36,25 +39,25 @@
                             :key="displayedLegendItem"
                         >
                             <Icon class="mx-2" :icon="displayedLegendItem" />
-                        </label>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 content-start">
-                        <label
+                        <div
                             v-for="displayedLegendLabel in displayedLegend[
                                 activeTab
                             ].labels"
                             :key="displayedLegendLabel"
                         >
                             {{ displayedLegendLabel }}
-                        </label>
+                        </div>
                     </div>
                 </div>
                 <div class="flex flex-col ml-4">
                     <div v-if="displayedLegend[activeTab].levelsTitle">
-                        <label class="font-bold">
+                        <div class="font-bold">
                             {{ displayedLegend[activeTab].levelsTitle }}
-                        </label>
+                        </div>
                     </div>
                     <div
                         class="flex mb-2"
@@ -62,7 +65,7 @@
                         :key="level.label"
                     >
                         <div :class="`${level.style}`"></div>
-                        <label class="ml-2"> {{ level.label }} </label>
+                        <div class="ml-2">{{ level.label }}</div>
                     </div>
                 </div>
             </div>
