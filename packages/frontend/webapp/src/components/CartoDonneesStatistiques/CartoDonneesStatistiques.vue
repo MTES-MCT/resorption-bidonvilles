@@ -23,7 +23,7 @@
             >
                 <Icon
                     :icon="`${
-                        legendeStatus === true ? 'chevron-up' : 'chevron-down'
+                        legendeStatus === true ? 'chevron-down' : 'chevron-up'
                     }`"
                 />
                 <div class="font-bold mx-2">Légende</div>
