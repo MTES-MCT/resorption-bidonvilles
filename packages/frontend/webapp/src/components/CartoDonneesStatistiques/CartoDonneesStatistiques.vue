@@ -23,13 +23,11 @@
                         legendeStatus === true ? 'chevron-up' : 'chevron-down'
                     }`"
                 />
-                <label class="font-bold mx-2">
-                    {{ displayedLegend[activeTab].title }}
-                </label>
+                <label class="font-bold mx-2"> Légende </label>
             </div>
             <div v-if="legendeStatus === true" class="flex">
                 <div class="flex">
-                    <div class="grid grid-cols-1">
+                    <div class="grid grid-cols-1 content-start">
                         <label
                             class=""
                             v-for="displayedLegendItem in displayedLegend[
@@ -41,7 +39,7 @@
                         </label>
                     </div>
 
-                    <div class="grid grid-cols-1">
+                    <div class="grid grid-cols-1 content-start">
                         <label
                             v-for="displayedLegendLabel in displayedLegend[
                                 activeTab
@@ -108,7 +106,6 @@ const displayedLegend = {
     livingConditionsByTown: null,
     livingConditionsByInhabitant: null,
     summary: {
-        title: "Légende conditions de vie",
         icons: [
             "faucet-drip",
             "bolt",
@@ -133,7 +130,6 @@ const displayedLegend = {
         ],
     },
     schooling: {
-        title: "Légende scolarisation",
         icons: ["child", "school"],
         labels: ["Mineurs", "Mineurs scolarisés"],
         levelsTitle: "Pourcentage de scolarisation",
