@@ -315,7 +315,7 @@ async function printMapScreenshot() {
 
         trackEvent("Cartographie", "Impression");
     } catch (error) {
-        console.log("Failed printing the map");
+        console.log("Failed printing the map", error);
         notificationStore.error(
             "Erreur d'impression",
             "Erreur lors de l'impression de la carte"
