@@ -42,12 +42,11 @@ import { Link } from "@resorptionbidonvilles/ui";
 import TableauDeBordActivite from "./TableauDeBordActivite.vue";
 
 const dashboardStore = useDashboardStore();
-const monday = new Date();
-monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
-monday.setHours(0);
-monday.setMinutes(0);
-monday.setSeconds(0);
-monday.setMilliseconds(0);
+// Date d'il y a 7 jours à minuit
+const sevenDaysAgo = new Date();
+sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+sevenDaysAgo.setHours(0, 0, 0, 0);
+// date d'il y a exactement 30 jours à minuit
 const aMonthAgo = new Date();
 aMonthAgo.setDate(aMonthAgo.getDate() - 30);
 aMonthAgo.setHours(0);
@@ -74,7 +73,7 @@ const splitActivities = computed(() => {
                 return acc;
             }
 
-            if (activity.date >= monday.getTime() / 1000) {
+            if (activity.date >= sevenDaysAgo.getTime() / 1000) {
                 acc.currentWeek.push(activity);
             } else if (activity.date >= aMonthAgo.getTime() / 1000) {
                 acc.previousMonth.push(activity);

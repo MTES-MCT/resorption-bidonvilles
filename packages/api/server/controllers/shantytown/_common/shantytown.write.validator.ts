@@ -1424,17 +1424,29 @@ export default mode => ([
     body('police_status')
         .optional({ nullable: true })
         .custom((value, { req }) => {
-            if (
-                req.body.justice_procedure !== true
-                && req.body.evacuation_under_time_limit !== true
-                && req.body.insalubrity_order !== true
-            ) {
-                return value === null;
+            if (value === null || value === undefined) {
+                return true;
             }
-            return ['none', 'requested', 'granted', 'refused'].includes(value);
+            // Si aucune procédure n'est active mais que police_status est renseigné
+            if (req.body.justice_procedure !== true
+                && req.body.evacuation_under_time_limit !== true
+                && req.body.insalubrity_order !== true) {
+                throw new Error('Veuillez renseigner une procédure judiciaire ou administrative pour justifier du recours à la force publique');
+            }
+            if (!['none', 'requested', 'granted', 'refused'].includes(value)) {
+                req.policeStatusErrorType = 'invalidValue'; // Stocker le type d'erreur
+                return false;
+            }
+            return true;
         })
-        .withMessage('Le champ "Concours de la force publique" est invalide'),
+        .withMessage((value, { req }) => {
+            if (req.policeStatusErrorType === 'noProcedure') {
+                return 'Veuillez renseigner une procédure judiciaire ou administrative pour justifier du concours de la force publique';
+            }
+            return 'Le champ "Concours de la force publique" est invalide';
+        }),
 
+    // Sanitizer reste inchangé
     body('police_status')
         .customSanitizer(value => value || null),
 

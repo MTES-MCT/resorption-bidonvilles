@@ -5,24 +5,24 @@
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure
                 icon="people-group"
-                :figure="formatStat(data.figures.total.value)"
-                :evolution="formatStat(data.figures.total.evolution)"
+                :figure="data.figures.total.value"
+                :evolution="data.figures.total.evolution"
                 >Tous sites</ChartBigFigure
             >
 
             <ChartBigFigure
                 :img="flagEU"
                 alt="Estimation du nombre d'habitants intra UE"
-                :figure="formatStat(data.figures.european.value)"
-                :evolution="formatStat(data.figures.european.evolution)"
+                :figure="data.figures.european.value"
+                :evolution="data.figures.european.evolution"
                 >Sites exclusivement intra UE</ChartBigFigure
             >
 
             <ChartBigFigure
                 :img="flagExtraCommunautaires"
                 alt="Estimation du nombre d'habitants extra UE"
-                :figure="formatStat(data.figures.foreign.value)"
-                :evolution="formatStat(data.figures.foreign.evolution)"
+                :figure="data.figures.foreign.value"
+                :evolution="data.figures.foreign.evolution"
                 >Sites exclusivement extra UE</ChartBigFigure
             >
         </div>
@@ -37,7 +37,6 @@
 </template>
 
 <script setup>
-import formatStat from "@/utils/formatStat";
 import { computed } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import LineChart from "@/components/Graphs/GraphBase.vue";

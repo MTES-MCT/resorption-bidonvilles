@@ -27,7 +27,7 @@
 
             <div
                 ref="printer"
-                class="bg-white mr-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden cursor-pointer"
+                class="bg-white mr-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden !cursor-pointer"
                 @click="printMapScreenshot"
                 v-show="showPrinter"
             >
@@ -79,6 +79,7 @@ import { Icon, Spinner } from "@resorptionbidonvilles/ui";
 import getAbsoluteOffsetTop from "@/utils/getAbsoluteOffsetTop";
 import skipFocusNext from "@/utils/skipFocusNext";
 import skipFocusPrevious from "@/utils/skipFocusPrevious";
+import { useNotificationStore } from "@/stores/notification.store";
 
 const props = defineProps({
     isLoading: {
@@ -157,6 +158,11 @@ const props = defineProps({
         required: false,
         default: false,
     },
+    activeTab: {
+        type: String,
+        required: false,
+        default: "summary",
+    },
 });
 const {
     isLoading,
@@ -170,6 +176,7 @@ const {
     townMarkerFn,
     locationMarkerFn,
     displaySkipMapLinks,
+    activeTab,
 } = toRefs(props);
 
 const map = ref(null);
@@ -178,6 +185,7 @@ const skipPreviousLink = ref(null);
 const printer = ref(null);
 const currentMarkerGroup = ref(null);
 
+const notificationStore = useNotificationStore();
 const controls = {};
 const markersGroup = {
     towns: ref(L.markerClusterGroup(townClusteringOptions.value)),
@@ -307,7 +315,11 @@ async function printMapScreenshot() {
 
         trackEvent("Cartographie", "Impression");
     } catch (error) {
-        console.log("Failed printing the map");
+        console.log("Failed printing the map", error);
+        notificationStore.error(
+            "Erreur d'impression",
+            "Erreur lors de l'impression de la carte"
+        );
     }
 
     // on réaffiche les contrôles
@@ -352,7 +364,11 @@ function syncTownMarkers() {
                 territoryData[key][location.code].total += 1;
             });
 
-            const marker = townMarkerFn.value(town);
+            const marker = townMarkerFn.value(town, activeTab.value);
+            marker.on("mouseover", () =>
+                emit("highlightTownLine", town.id, town.city.code)
+            );
+            marker.on("mouseout", () => emit("highlightTownLine", null, null));
             marker.on("click", () => emit("townclick", town));
             return marker;
         })
