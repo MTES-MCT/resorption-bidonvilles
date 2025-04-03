@@ -1,3 +1,4 @@
+import anonymizeOwners from './anonymizeOwners';
 import create from './create';
 import list from './list';
 import find from './find';
@@ -12,6 +13,7 @@ import update from './update';
 import report from './report';
 
 export default {
+    anonymizeOwners,
     create,
     list,
     find,
