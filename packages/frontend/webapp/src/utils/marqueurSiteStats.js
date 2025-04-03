@@ -19,24 +19,33 @@ const iconMap = {
 iconMap.livingConditionsByInhabitant = iconMap.summary;
 iconMap.livingConditionsByTown = iconMap.summary;
 
+const colorizeSchooling = (minors, percentage) => {
+    if (minors === 0 || minors === null) {
+        return "text-G400";
+    }
+
+    if (percentage >= 70) {
+        return "text-green";
+    } else if (percentage >= 30) {
+        return "text-warningOrange";
+    }
+
+    return "text-red";
+};
+
 export default (town, activeTab) => {
     const livingConditionsHTML = Object.keys(iconMap[activeTab])
         .reduce((acc, key) => {
-            let color = "text-green";
+            let color;
             if (activeTab === "schooling") {
                 const schoolingPercentage = Math.round(
                     (town.number_of_schooled_minors / town.number_of_minors) *
                         100
                 );
-                color =
-                    town.number_of_minors === 0 ||
-                    town.number_of_minors === null
-                        ? "text-G400"
-                        : schoolingPercentage >= 70
-                        ? "text-green"
-                        : schoolingPercentage >= 30
-                        ? "text-warningOrange"
-                        : "text-red";
+                color = colorizeSchooling(
+                    town.number_of_minors,
+                    schoolingPercentage
+                );
             } else {
                 if (town[key] === "bad" || town[key] === "unknown") {
                     return acc;
