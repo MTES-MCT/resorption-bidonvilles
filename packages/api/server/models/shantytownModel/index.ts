@@ -1,3 +1,4 @@
+import anonymizeOwners from './anonymizeOwners';
 import create from './create';
 import findAll from './findAll';
 import findNearby from './findNearby';
@@ -13,6 +14,7 @@ import fixClosedStatus from './fixClosedStatus';
 import setHeatwaveStatus from './setHeatwaveStatus';
 
 export default {
+    anonymizeOwners,
     create,
     findAll,
     findNearby,
