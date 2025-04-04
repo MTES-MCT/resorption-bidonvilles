@@ -82,7 +82,7 @@ export default [
 
             let location;
             try {
-                location = await geoModel.getLocation(type, code);
+                location = await geoModel.getLocation(type === 'metropole' ? 'nation' : type, code);
             } catch (e) {
                 throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du périmètre géographique');
             }
