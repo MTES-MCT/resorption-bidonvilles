@@ -47,7 +47,7 @@ export const useActivitiesStore = defineStore("activities", () => {
         }
 
         try {
-            let rawActivities = await list(
+            const rawActivities = await list(
                 prepareActivityFilterForApi(
                     lastActivityDate.value * 1000,
                     filters.properties.value,
@@ -57,20 +57,6 @@ export const useActivitiesStore = defineStore("activities", () => {
                     target.maxDate
                 )
             );
-
-            const overseasRegions = ["01", "02", "03", "04", "06"];
-            rawActivities = rawActivities.filter((activity) => {
-                if (target.location?.locationType === "metropole") {
-                    return (
-                        (activity.entity === "shantytown" &&
-                            !overseasRegions.includes(
-                                activity.shantytown.region?.code
-                            )) ||
-                        activity.entity !== "shantytown"
-                    );
-                }
-                return activity;
-            });
 
             if (rawActivities.length > 0) {
                 lastActivityDate.value = rawActivities.slice(-1)[0].date;
