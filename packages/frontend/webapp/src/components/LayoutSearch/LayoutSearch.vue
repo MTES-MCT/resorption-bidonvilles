@@ -26,8 +26,7 @@
                     <div class="mt-2 text-left text-sm">
                         <p class="font-bold">Mes territoires :</p>
                         <Link
-                            v-for="(area, idx) in userStore.user
-                                .intervention_areas.areas"
+                            v-for="(area, idx) in searchAreas"
                             :class="
                                 ((inputLocation.data === null &&
                                     area.type === 'nation') ||
@@ -86,10 +85,20 @@ const props = defineProps({
         required: false,
         default: () => undefined,
     },
+    displayMetropole: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
 });
 
-const { searchTitle, allowFreeSearch, searchPlaceholder, location } =
-    toRefs(props);
+const {
+    searchTitle,
+    allowFreeSearch,
+    searchPlaceholder,
+    location,
+    displayMetropole,
+} = toRefs(props);
 const emit = defineEmits(["update:location"]);
 const userStore = useUserStore();
 
@@ -124,4 +133,15 @@ function emptySearch() {
         data: null,
     };
 }
+
+const searchAreas = computed(() => {
+    if (displayMetropole.value === false) {
+        const filtered = userStore.user.intervention_areas.areas.filter(
+            (area) => area.type !== "metropole"
+        );
+        return filtered;
+    } else {
+        return userStore.user.intervention_areas.areas;
+    }
+});
 </script>
