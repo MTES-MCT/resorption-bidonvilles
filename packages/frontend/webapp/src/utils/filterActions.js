@@ -60,6 +60,11 @@ function checkLocation(action, filters) {
         return true;
     }
 
+    const overseasRegions = ["01", "02", "03", "04", "06"];
+    if (filters.location.typeUid === "metropole") {
+        return !overseasRegions.includes(action.location.region.code);
+    }
+
     const l = action.location[filters.location.typeUid];
 
     if (!l) {
