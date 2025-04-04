@@ -468,7 +468,7 @@ async function triggerNotifyOwnersAnonymization(shantytownLines: number, shantyt
     const shantytownHistoryLinesMessage = createLinesMessage(shantytownHistoryLines);
 
     const mattermostMessage = {
-        channel: '#notif-dev-test',
+        channel: '#notif-anonymisation',
         username: 'Alerte Résorption Bidonvilles',
         icon_emoji: ':robot:',
         text: ':rotating_light: Une anonymisation automatique des propriétaires vient d\'être lancée:',
@@ -497,13 +497,9 @@ export async function triggerNotifyOwnersAnonymizationError(message: string): Pr
         return;
     }
 
-    if (!message) {
-        console.log('triggerNotifyOwnersAnonymizationError: message is empty');
-    }
-
     const webhook = new IncomingWebhook(mattermost);
     const mattermostMessage = {
-        channel: '#notif-dev-test',
+        channel: '#notif-anonymisation',
         username: 'Alerte Résorption Bidonvilles',
         icon_emoji: ':robot:',
         text: ':rotating_light: Une erreur est survenue lors de l\'anonymisation des propriétaires en base de données',
