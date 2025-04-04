@@ -12,19 +12,10 @@ export default async (): Promise<{ shantytownLines: number, shantytownHistoryLin
         result = await shantytownModel.anonymizeOwners();
         anonymizationSuccessful = true;
     } catch (error) {
-        try {
-            await mattermostUtils.triggerNotifyOwnersAnonymizationError(error.message);
-        } catch (mattermostNotificationKoErr) {
-            throw mattermostNotificationKoErr;
-        }
+        await mattermostUtils.triggerNotifyOwnersAnonymizationError(error.message);
     }
     if (anonymizationSuccessful) {
-        try {
-            await mattermostUtils.triggerNotifyOwnersAnonymization(result.shantytownLines, result.shantytownHistoryLines);
-        } catch (mattermostNotificationOkErr) {
-            throw mattermostNotificationOkErr;
-        }
-
+        await mattermostUtils.triggerNotifyOwnersAnonymization(result.shantytownLines, result.shantytownHistoryLines);
         return result;
     }
     return null;
