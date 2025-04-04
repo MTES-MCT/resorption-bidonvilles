@@ -450,6 +450,79 @@ export async function triggerAttachmentArchiveCleanupError(): Promise<void> {
     await webhook.send(mattermostMessage);
 }
 
+async function triggerNotifyOwnersAnonymization(shantytownLines: number, shantytownHistoryLines: number): Promise<void> {
+    if (!mattermost) {
+        return;
+    }
+
+    const webhook = new IncomingWebhook(mattermost);
+
+    const createLinesMessage = (count: number): string => {
+        if (count <= 0) {
+            return 'Aucune ligne';
+        }
+        return count === 1 ? `${count} ligne` : `${count} lignes`;
+    };
+
+    const shantytownLinesMessage = createLinesMessage(shantytownLines);
+    const shantytownHistoryLinesMessage = createLinesMessage(shantytownHistoryLines);
+
+    const mattermostMessage = {
+        channel: '#notif-dev-test',
+        username: 'Alerte Résorption Bidonvilles',
+        icon_emoji: ':robot:',
+        text: ':rotating_light: Une anonymisation automatique des propriétaires vient d\'être lancée:',
+        attachments: [
+            {
+                color: '#f2c744',
+                fields: [
+                    {
+                        short: false,
+                        value: `*${shantytownLinesMessage} ${shantytownLines > 1 ? ' traitées ' : ' traitée '} dans la table des sites`,
+                    },
+                    {
+                        short: false,
+                        value: `*${shantytownHistoryLinesMessage} ${shantytownHistoryLines > 1 ? ' traitées ' : ' traitée '} dans l'historique) des sites`,
+                    },
+                ],
+            },
+        ],
+    };
+
+    await webhook.send(mattermostMessage);
+}
+
+export async function triggerNotifyOwnersAnonymizationError(message: string): Promise<void> {
+    if (!mattermost) {
+        return;
+    }
+
+    if (!message) {
+        console.log('triggerNotifyOwnersAnonymizationError: message is empty');
+    }
+
+    const webhook = new IncomingWebhook(mattermost);
+    const mattermostMessage = {
+        channel: '#notif-dev-test',
+        username: 'Alerte Résorption Bidonvilles',
+        icon_emoji: ':robot:',
+        text: ':rotating_light: Une erreur est survenue lors de l\'anonymisation des propriétaires en base de données',
+        attachments: [
+            {
+                color: '#f2c744',
+                fields: [
+                    {
+                        short: false,
+                        value: `*Erreur: * ${message}`,
+                    },
+                ],
+            },
+        ],
+    };
+
+    await webhook.send(mattermostMessage);
+}
+
 export default {
     triggerShantytownCloseAlert,
     triggerShantytownCreationAlert,
@@ -465,4 +538,6 @@ export default {
     triggerRemoveDeclaredActor,
     triggerNotifyNewUserFromRectorat,
     triggerNotifyNewUserSelfDeactivation,
+    triggerNotifyOwnersAnonymization,
+    triggerNotifyOwnersAnonymizationError,
 };
