@@ -56,6 +56,9 @@ export default (user: RawUser, userAccesses: RawUserAccess[], interventionAreas:
             return { uid, label, type: type as UserExpertiseTopicType };
         }),
         password_conformity: user.password_conformity,
+        anonymized: !!user.anonymized_at,
+        anonymized_at: user.anonymized_at ? user.anonymized_at.getTime() / 1000 : null,
+        anonymization_requested: user.anonymization_requested,
     };
 
     if (filters.auth === true) {

@@ -36,4 +36,8 @@ export default [
         .isString().withMessage('La raison doit être une chaîne de caractères')
         .trim()
         .notEmpty().withMessage('La raison est obligatoire'),
+
+    body('anonymizationRequested')
+        .if((value, { req }) => req.body?.user?.id !== undefined && req.body.user.id !== req.user.id)
+        .isBoolean().withMessage('La demande d\'anonymisation n\'est pas valide'),
 ];

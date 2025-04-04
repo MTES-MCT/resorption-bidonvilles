@@ -5,11 +5,11 @@ import mails from '#server/mails/mails';
 import mattermost from '#server/utils/mattermost';
 import { User } from '#root/types/resources/User.d';
 
-export default async (id: number, selfDeactivation: boolean, reason: string = null): Promise<User> => {
+export default async (id: number, selfDeactivation: boolean, reason: string = null, anonymizationRequested: boolean = false): Promise<User> => {
     const transaction = await sequelize.transaction();
 
     try {
-        await userModel.deactivate([id], transaction);
+        await userModel.deactivate([id], 'admin', anonymizationRequested, transaction);
     } catch (error) {
         await transaction.rollback();
         throw new ServiceError('deactivation_failure', error);
