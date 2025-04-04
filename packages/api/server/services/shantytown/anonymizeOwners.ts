@@ -1,11 +1,31 @@
 import shantytownModel from '#server/models/shantytownModel';
-import ServiceError from '#server/errors/ServiceError';
+import mattermostUtils from '#server/utils/mattermost';
 
-export default async () => {
+export default async (): Promise<{ shantytownLines: number, shantytownHistoryLines: number }> | null => {
+    let result = {
+        shantytownLines: 0,
+        shantytownHistoryLines: 0,
+    };
+    let anonymizationSuccessful = false;
+
     try {
-        await shantytownModel.anonymizeOwners();
+        result = await shantytownModel.anonymizeOwners();
+        anonymizationSuccessful = true;
     } catch (error) {
-        throw new ServiceError('anonymization_failure', error);
+        try {
+            await mattermostUtils.triggerNotifyOwnersAnonymizationError(error.message);
+        } catch (mattermostNotificationKoErr) {
+            throw mattermostNotificationKoErr;
+        }
     }
-    return true;
+    if (anonymizationSuccessful) {
+        try {
+            await mattermostUtils.triggerNotifyOwnersAnonymization(result.shantytownLines, result.shantytownHistoryLines);
+        } catch (mattermostNotificationOkErr) {
+            throw mattermostNotificationOkErr;
+        }
+
+        return result;
+    }
+    return null;
 };
