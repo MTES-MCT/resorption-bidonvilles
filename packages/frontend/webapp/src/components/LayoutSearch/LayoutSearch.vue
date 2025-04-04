@@ -1,10 +1,7 @@
 <template>
     <Layout v-bind="$attrs">
         <template v-slot:banner>
-            <div
-                class="pt-6 text-center print:hidden"
-                :class="showReset ? 'pb-4' : 'pb-10'"
-            >
+            <div class="pt-6 text-center print:hidden pb-10">
                 <p class="text-lg xl:text-xl font-bold">{{ searchTitle }}</p>
                 <span class="sr-only"
                     >Saisissez une valeur dans le champ qui suit pour rechercher
@@ -91,13 +88,8 @@ const props = defineProps({
     },
 });
 
-const {
-    searchTitle,
-    allowFreeSearch,
-    searchPlaceholder,
-    showNationalWording,
-    location,
-} = toRefs(props);
+const { searchTitle, allowFreeSearch, searchPlaceholder, location } =
+    toRefs(props);
 const emit = defineEmits(["update:location"]);
 const userStore = useUserStore();
 
@@ -108,20 +100,6 @@ const inputLocation = computed({
     set(newValue) {
         emit("update:location", newValue);
     },
-});
-const showReset = computed(() => {
-    if (isNotOnDefaultFilter.value) {
-        return true;
-    }
-
-    return (
-        showNationalWording.value &&
-        !userStore.user.intervention_areas.is_national
-    );
-});
-
-const isNotOnDefaultFilter = computed(() => {
-    return !userStore.isMyLocation(inputLocation.value);
 });
 
 function setSearch(area) {
