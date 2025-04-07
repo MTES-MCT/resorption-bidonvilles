@@ -469,7 +469,7 @@ async function triggerNotifyOwnersAnonymization(shantytownLines: number, shantyt
 
     const mattermostMessage = {
         channel: '#notif-anonymisation',
-        username: 'Alerte Résorption Bidonvilles',
+        username: 'Information Résorption Bidonvilles',
         icon_emoji: ':robot:',
         text: ':rotating_light: Une anonymisation automatique des propriétaires vient d\'être lancée:',
         attachments: [
@@ -505,7 +505,7 @@ export async function triggerNotifyOwnersAnonymizationError(message: string): Pr
         text: ':rotating_light: Une erreur est survenue lors de l\'anonymisation des propriétaires en base de données',
         attachments: [
             {
-                color: '#f2c744',
+                color: '#d63232',
                 fields: [
                     {
                         short: false,
