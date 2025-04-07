@@ -16,13 +16,23 @@ export function activate(userId, data) {
     return axios.post(`/users/${encodeURI(userId)}/activate`, data);
 }
 
+export function anonymizeUser(userId) {
+    const anonymize = axios.post(`/users/anonymize`, { ids: [userId] });
+    return anonymize;
+}
+
 export function create(user) {
     return axios.post("/users", user);
 }
 
-export function deactivateUser(userId, reason = null) {
+export function deactivateUser(
+    userId,
+    reason = null,
+    anonymizationRequested = null
+) {
     return axios.post(`/users/${encodeURI(userId)}/deactivate`, {
         reason,
+        anonymizationRequested,
     });
 }
 
