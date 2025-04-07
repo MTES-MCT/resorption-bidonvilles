@@ -24,7 +24,7 @@ const { data } = toRefs(props);
 const chartData = computed(() => {
     const datasets = [
         generateDataset(
-            "Nombre d'utilisateurs inscrits",
+            "Nombre d'utilisateurs actifs",
             "255, 0, 0",
             data.value.datasets[0].data,
             {
