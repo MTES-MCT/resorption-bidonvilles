@@ -482,7 +482,7 @@ async function triggerNotifyOwnersAnonymization(shantytownLines: number, shantyt
                     },
                     {
                         short: false,
-                        value: `*${shantytownHistoryLinesMessage} ${shantytownHistoryLines > 1 ? ' traitées ' : ' traitée '} dans l'historique) des sites`,
+                        value: `*${shantytownHistoryLinesMessage} ${shantytownHistoryLines > 1 ? ' traitées ' : ' traitée '} dans l'historique des sites`,
                     },
                 ],
             },
