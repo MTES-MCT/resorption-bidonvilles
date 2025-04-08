@@ -70,18 +70,35 @@ export const useDashboardStore = defineStore("dashboard", () => {
         return dashboardActivitiesStore.activities.reduce(
             (acc, argActivity) => {
                 const activity = { ...argActivity };
+                if (activity.entity === "user") {
+                    const dateObj = new Date(activity.date * 1000);
+                    dateObj.setMinutes(0, 0, 0);
+
+                    activity.normalizedDate = dateObj.getTime() / 1000; // Reconvertir en secondes
+                }
+
                 if (activity.user) {
-                    const lastActivity = acc.slice(-1)[0];
-                    if (lastActivity && lastActivity.users) {
+                    const matchingActivityIndex = acc.findIndex(
+                        (prevActivity) =>
+                            prevActivity.users &&
+                            prevActivity.users.length > 0 &&
+                            prevActivity.users[0].organization ===
+                                activity.user.organization &&
+                            prevActivity.normalizedDate ===
+                                activity.normalizedDate
+                    );
+
+                    // Si une activité avec la même organisation et la même date normalisée existe déjà
+                    if (matchingActivityIndex !== -1) {
                         const newAcc = [...acc];
-                        newAcc[newAcc.length - 1].users.push(activity.user);
+                        newAcc[matchingActivityIndex].users.push(activity.user);
                         return newAcc;
                     }
 
+                    // Sinon, créer une nouvelle entrée avec users
                     activity.users = [activity.user];
                     delete activity.user;
                 }
-
                 if (
                     activity.entity === "shantytown" &&
                     activity.action === "update"
