@@ -46,8 +46,8 @@
                     : "Aucun utilisateur"
             }}</template>
             <template v-slot:content
-                >Cette structure ne compte aucun utilisateur inscrit sur la
-                plateforme{{
+                >Cette structure ne compte aucun utilisateur actif ou inscrit
+                sur la plateforme{{
                     expertiseTopicsFilter.length > 0
                         ? " avec les sujets d'expertise demandés"
                         : ""
