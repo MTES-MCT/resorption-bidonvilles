@@ -15,7 +15,9 @@ const {
     sendUserShare,
     sendUserReview,
 } = mailUtils;
-const { sendActivitySummary, sendActionAlerts, checkInactiveUsers } = config;
+const {
+    sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners: shouldAnonymizeOwners,
+} = config;
 
 export default (agenda) => {
     agenda.define(
@@ -131,14 +133,18 @@ export default (agenda) => {
     agenda.define(
         'clean_attachments_archives',
         async () => {
-            await cleanAttachmentArchives();
+            if (cleanAttachmentsArchives) {
+                await cleanAttachmentArchives();
+            }
         },
     );
 
     agenda.define(
         'anonymize_owners',
         async () => {
-            await anonymizeOwners();
+            if (shouldAnonymizeOwners) {
+                await anonymizeOwners();
+            }
         },
     );
 };
