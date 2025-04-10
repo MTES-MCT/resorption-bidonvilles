@@ -11,6 +11,12 @@ function addColumnsTo(queryInterface, Sequelize, tableName, transaction) {
                 transaction,
             },
         ),
+        queryInterface.sequelize.query(
+            `UPDATE "${tableName}" SET deactivated_at = updated_at, deactivation_type = 'auto' WHERE fk_status = 'inactive' AND deactivated_at IS NULL;`,
+            {
+                transaction,
+            },
+        ),
     ]);
 }
 
