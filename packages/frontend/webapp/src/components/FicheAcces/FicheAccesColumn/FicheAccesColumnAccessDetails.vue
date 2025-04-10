@@ -94,7 +94,7 @@
             v-if="user.deactivation_type"
             :text="`Désactivé ${
                 user.deactivation_type === 'admin'
-                    ? 'administrativement'
+                    ? 'manuellement'
                     : 'automatiquement'
             }`"
             :date="user.deactivated_at"
