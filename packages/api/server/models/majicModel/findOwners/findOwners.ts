@@ -21,10 +21,10 @@ export default async (idcom: string, dnupro: string, dept: string, schema: strin
             pgp_sym_decrypt(fpdna.dnomus::bytea, encryption_key) AS dnomus,
             pgp_sym_decrypt(fpdna.dprnus::bytea, encryption_key) AS dprnus,
             fpdna.catpro2txt,
-            pgp_sym_decrypt(fpdna.dlign3::bytea, encryption_key) AS dprnus,
-            pgp_sym_decrypt(fpdna.dlign4::bytea, encryption_key) AS dprnus,
-            pgp_sym_decrypt(fpdna.dlign5::bytea, encryption_key) AS dprnus,
-            pgp_sym_decrypt(fpdna.dlign6::bytea, encryption_key) AS dprnus
+            pgp_sym_decrypt(fpdna.dlign3::bytea, encryption_key) AS dlign3,
+            pgp_sym_decrypt(fpdna.dlign4::bytea, encryption_key) AS dlign4,
+            pgp_sym_decrypt(fpdna.dlign5::bytea, encryption_key) AS dlign5,
+            pgp_sym_decrypt(fpdna.dlign6::bytea, encryption_key) AS dlign6
         FROM
             ${fullTableName} fpdna,
             key_data
