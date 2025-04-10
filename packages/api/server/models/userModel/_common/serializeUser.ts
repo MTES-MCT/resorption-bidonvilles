@@ -59,6 +59,8 @@ export default (user: RawUser, userAccesses: RawUserAccess[], interventionAreas:
         anonymized: !!user.anonymized_at,
         anonymized_at: user.anonymized_at ? user.anonymized_at.getTime() / 1000 : null,
         anonymization_requested: user.anonymization_requested,
+        deactivated_at: user.deactivated_at ? user.deactivated_at.getTime() / 1000 : null,
+        deactivation_type: user.deactivation_type,
     };
 
     if (filters.auth === true) {

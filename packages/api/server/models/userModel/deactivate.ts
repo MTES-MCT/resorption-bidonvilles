@@ -9,7 +9,8 @@ export default async (ids: number[], deactivationType: string = 'auto', anonymiz
             fk_status = 'inactive',
             updated_at = NOW(),
             deactivation_type = :deactivationType,
-            anonymization_requested = :anonymizationRequested
+            anonymization_requested = :anonymizationRequested,
+            deactivated_at = NOW()
         WHERE
             user_id IN (:ids)
         `,
