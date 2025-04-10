@@ -22,15 +22,22 @@
 
         <div
             ref="addressToggler"
-            class="bg-white ml-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden"
+            class="bg-white text-primary ml-3 my-3 border-2 border-primary py-1 px-2 print:hidden !cursor-pointer hover:!bg-primary hover:text-white"
         >
-            <label class="flex items-center space-x-2">
+            <label class="flex items-center space-x-2 !cursor-pointer">
                 <input
                     type="checkbox"
                     v-model="showAddressesModel"
                     @change="emit('addressVisibilityChange')"
                 />
-                <span>Voir les adresses des sites</span>
+                <Icon
+                    :icon="showAddressesModel ? 'eye' : 'eye-slash'"
+                    class="p-0 !ml-0"
+                />
+                <span
+                    >{{ showAddressesModel ? "Masquer" : "Voir" }} les adresses
+                    des sites</span
+                >
             </label>
         </div>
     </Carto>
@@ -49,6 +56,7 @@
 <script setup>
 import { computed, ref, toRefs, watch } from "vue";
 import { useForm } from "vee-validate";
+import { Icon } from "@resorptionbidonvilles/ui";
 import L from "leaflet";
 import Carto from "@/components/Carto/Carto.vue";
 import marqueurSiteEau from "@/utils/marqueurSiteEau";
