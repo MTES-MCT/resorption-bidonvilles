@@ -96,4 +96,8 @@ export type User = {
     anonymized?: boolean | null,
     anonymized_at?: number | null,
     anonymization_requested: boolean | null,
+
+    // deactivation
+    deactivated_at?: number | null,
+    deactivation_type?: string | null,
 };

@@ -140,6 +140,8 @@ export function serialized(override: Partial<User> = {}): AuthUser {
         anonymization_requested: false,
         anonymized_at: null,
         anonymized: false,
+        deactivated_at: null,
+        deactivation_type: null,
     };
 
     return Object.assign(defaultUser, override);

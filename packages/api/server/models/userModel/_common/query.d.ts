@@ -73,6 +73,8 @@ export type RawUser = {
     anonymized: boolean | null,
     anonymized_at: Date | null,
     anonymization_requested: boolean | null,
+    deactivated_at: Date | null,
+    deactivation_type: string | null,
 };
 
 export type RawInterventionArea = {
