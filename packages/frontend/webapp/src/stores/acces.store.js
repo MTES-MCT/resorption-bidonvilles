@@ -94,7 +94,7 @@ export const useAccesStore = defineStore("acces", () => {
     }
 
     function resetFilters() {
-        const defaultFilters = ["deactivated", "refused"];
+        const defaultFilters = ["refused"];
         filters.search.value = "";
         filters.status.value = Object.keys(accessStatuses).filter(
             (status) => !defaultFilters.includes(status)
