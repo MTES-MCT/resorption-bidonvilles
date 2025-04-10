@@ -71,7 +71,7 @@
                         </mj-column>
                     </mj-section>
 
-            <mj-raw>{% endfor%}</mj-raw>
+            <mj-raw>{% endfor %}</mj-raw>
         <mj-raw>{% endif %}</mj-raw>
 
         <mj-include path='common/footer.mjml' />
