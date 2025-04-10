@@ -91,6 +91,19 @@
         />
 
         <FicheAccesColumnAccessDate
+            v-if="user.deactivation_type"
+            :text="`Désactivé ${
+                user.deactivation_type === 'admin'
+                    ? 'administrativement'
+                    : 'automatiquement'
+            }`"
+            :date="user.deactivated_at"
+            icon="lock"
+            color="text-G700"
+            class="mb-2"
+        />
+
+        <FicheAccesColumnAccessDate
             v-if="user.anonymized"
             text="Anonymisé"
             :date="user.anonymized_at"
