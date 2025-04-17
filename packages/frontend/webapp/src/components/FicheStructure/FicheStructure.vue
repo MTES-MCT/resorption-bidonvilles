@@ -14,7 +14,11 @@
         </ViewHeader>
 
         <FicheStructureInfos :organization="organization" />
-        <FicheStructureFiltres v-model="expertiseTopicsFilter" class="mb-6" />
+        <FicheStructureFiltres
+            v-if="filteredUsers.length > 0"
+            v-model="expertiseTopicsFilter"
+            class="mb-6"
+        />
         <FicheStructureWarningFiltreActif
             v-if="
                 expertiseTopicsFilter.length > 0 &&
