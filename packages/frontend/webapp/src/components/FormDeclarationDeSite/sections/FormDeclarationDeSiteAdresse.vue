@@ -48,7 +48,11 @@
                     <InputName />
                 </FormParagraph>
 
-                <FormParagraph title="Coordonnées GPS" id="coordinates">
+                <FormParagraph
+                    title="Coordonnées GPS"
+                    id="coordinates"
+                    v-if="address"
+                >
                     <div class="flex flex-col gap-2">
                         <ButtonGPS
                             :town="{
@@ -57,7 +61,10 @@
                             }"
                         />
                         <div
-                            v-if="initialCoordinates !== coordinates"
+                            v-if="
+                                initialCoordinates.length > 0 &&
+                                initialCoordinates !== coordinates
+                            "
                             class="text-redA11Y text-sm"
                         >
                             <Icon class="text-sm" icon="triangle-exclamation" />
@@ -106,6 +113,7 @@ const isSubmitting = useIsSubmitting();
 watch(address, () => {
     nearbyShantytowns.value = [];
     if (!address.value?.data?.coordinates) {
+        values.value.address = null;
         return;
     }
     values.value.address = address.value;
