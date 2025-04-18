@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { toRefs, ref, computed, onMounted } from "vue";
+import { toRefs, ref, computed, onMounted, watch } from "vue";
 import debounce from "../../utils/debounce";
 
 const props = defineProps({
@@ -180,5 +180,12 @@ const results = computed(() => {
         categories[category].items.push(item);
         return acc;
     }, []);
+});
+
+watch(searchString, (newValue) => {
+    if (newValue === "" || newValue === null) {
+        selectedItem.value = null;
+        sendEvent({ search: "", data: null });
+    }
 });
 </script>
