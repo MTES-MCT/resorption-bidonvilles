@@ -14,21 +14,13 @@
                 <div class="w-40 px-3 py-2 text-right text-sm text-G700 border-r border-G200 border-b">
                     {{ section.title }}
                 </div>
-                <div class="border-b border-G200 flex-1">
-                    <div v-for="item in section.items" class="hover:bg-blue100 cursor-pointer px-3 py-2"
+            </div>
+            <div class="border-b border-G200 flex-1">
+                    <div v-for="item in itemsToDisplay" class="hover:bg-blue100 cursor-pointer px-3 py-2"
                         :class="focusedItemId === item.id ? 'bg-blue100' : ''" :key="item.id" @click="selectItem(item)">
                         {{ item.label }}
                     </div>
                 </div>
-            </div>
-            <div v-else>
-                <div class="border-b border-G200 flex-1">
-                    <div v-for="item in rawResults" class="hover:bg-blue100 cursor-pointer px-3 py-2"
-                        :class="focusedItemId === item.id ? 'bg-blue100' : ''" :key="item.id" @click="selectItem(item)">
-                        {{ item.label }}
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </template>
@@ -77,11 +69,23 @@ const selectedItem = ref(null);
 const focusedItemIndex = ref(null);
 const error = ref(false);
 let callId = 0;
-let lastEvent = undefined;
+let lastEvent;
 
 const address = computed(() => {
     return modelValue.value?.search || "";
 })
+
+const itemsToDisplay = computed(() => {
+    if (rawResults.value.length === 0) {
+        return [];
+    }
+
+    if (showCategory.value === true) {
+        return sectionItems.value;
+    }
+
+    return rawResults.value;
+});
 
 onMounted(() => {
     searchString.value = modelValue.value?.search || "";
@@ -128,6 +132,7 @@ const getResults = async (value, originalCallId) => {
         }
     } catch (e) {
         error.value = true;
+        console.error(e);
     }
 
     isLoading.value = false;
