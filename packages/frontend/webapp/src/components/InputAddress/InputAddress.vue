@@ -1,11 +1,9 @@
 <template>
     <InputWrapper :hasErrors="!!errors.length" :withoutMargin="withoutMargin">
-        <BasicAutocomplete
-            name="address"
-            id="address"
-            v-bind="$attrs"
-            v-model="address"
+        <DsfrAutocomplete
             :fn="searchAddress"
+            v-bind="$attrs"
+            v-model="selectedItem"
             ref="address"
         />
         <InputError v-if="errors.length">{{ errors[0] }}</InputError>
@@ -13,9 +11,9 @@
 </template>
 
 <script setup>
-import { toRefs, computed } from "vue";
+import { ref, toRefs, computed, watch } from "vue";
 import {
-    BasicAutocomplete,
+    DsfrAutocomplete,
     InputWrapper,
     InputError,
 } from "@resorptionbidonvilles/ui";
@@ -33,9 +31,23 @@ const props = defineProps({
         default: false,
     },
 });
+const emit = defineEmits(["update:modelValue"]);
 const { modelValue, withoutMargin } = toRefs(props);
 const { errors } = useField("address");
-const address = computed(() => {
-    return modelValue.value;
+const address = ref(null);
+
+const selectedItem = computed({
+    set(value) {
+        emit("update:modelValue", value);
+    },
+    get() {
+        return modelValue.value;
+    },
+});
+
+watch(modelValue, (newValue) => {
+    if (newValue) {
+        address.value = newValue;
+    }
 });
 </script>

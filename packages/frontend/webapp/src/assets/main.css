@@ -12,6 +12,12 @@ body {
     height: 100%;
 }
 
+/* CSS spécifique aux cartes leaflet */
+.leaflet-control-layers, .leaflet-control-zoom {
+    border-color: rgb(0 0 145 ) !important;
+    border-radius: 0 !important;
+}
+
 /* CSS spécifique pour écraser le DSFR */
 :root {
     --underline-img: none; 
@@ -23,7 +29,6 @@ input, textarea {
 
 input[type=checkbox] {
     display: none;
-
 }
 
 a {
@@ -35,6 +40,10 @@ button.bg-primary:hover {
     background-color: rgb(0 0 108 / var(--tw-bg-opacity)) !important;
 }
 
+button.fr-btn:hover {
+    background-color: rgb(0 0 108) !important;
+}
+
 p {
     font-size: inherit;
 }
@@ -43,4 +52,8 @@ p {
     a[href]:hover, button:not(:disabled):hover, input[type=button]:not(:disabled):hover, input[type=image]:not(:disabled):hover, input[type=reset]:not(:disabled):hover, input[type=submit]:not(:disabled):hover {
         background: none;
     }
+}
+
+input[type=search] {
+    background-color: white;
 }

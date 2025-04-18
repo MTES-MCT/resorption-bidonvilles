@@ -17,6 +17,10 @@
             <InputAddress
                 placeholder="Recherchez un lieu en saisissant une adresse"
                 name="searchAddress"
+                ref="searchAddress"
+                id="searchAddress"
+                v-model="searchAddress"
+                @update:modelValue="updateAddress"
             />
         </div>
 
@@ -55,7 +59,6 @@
 
 <script setup>
 import { computed, ref, toRefs, watch } from "vue";
-import { useForm } from "vee-validate";
 import { Icon } from "@resorptionbidonvilles/ui";
 import L from "leaflet";
 import Carto from "@/components/Carto/Carto.vue";
@@ -64,11 +67,14 @@ import marqueurPoi from "@/utils/marqueurPoi";
 import marqueurRecherche from "@/utils/marqueurRecherche";
 import { trackEvent } from "@/helpers/matomo";
 import InputAddress from "@/components/InputAddress/InputAddress.vue";
-import { toRef } from "vue";
 
-const { values } = useForm({
-    initialValues: {
-        searchAddress: null,
+const searchAddressModel = ref(null);
+const searchAddress = computed({
+    set(value) {
+        searchAddressModel.value = value;
+    },
+    get() {
+        return searchAddressModel.value;
     },
 });
 
@@ -113,7 +119,7 @@ const markersGroup = {
 };
 const searchMarker = marqueurRecherche();
 
-function createAddressTogglerControl() {
+const createAddressTogglerControl = () => {
     const AddressToggler = L.Control.extend({
         options: {
             position: "bottomleft",
@@ -125,9 +131,9 @@ function createAddressTogglerControl() {
     });
 
     return new AddressToggler();
-}
+};
 
-function onZoomEnd() {
+const onZoomEnd = () => {
     const { map } = carto.value;
     const zoomLevel = map.getZoom();
 
@@ -142,37 +148,36 @@ function onZoomEnd() {
 
     carto.value.addControl("addressToggler", createAddressTogglerControl());
     emit("zoomend");
-}
+};
 
-function createPoiMarker(poi) {
+const createPoiMarker = (poi) => {
     const marker = marqueurPoi(poi);
     marker.on("click", () => {
         emit("poiclick", poi);
     });
 
     marker.addTo(markersGroup.pois);
-}
+};
 
-function syncPoiMarkers() {
+const syncPoiMarkers = () => {
     markersGroup.pois.clearLayers();
 
     // sans le timeout, les nouveaux marqueurs n'apparaissent jamais :/
     setTimeout(() => {
         pois.value.forEach(createPoiMarker);
     }, 1000);
-}
+};
 
-function onMove() {
+const onMove = () => {
     const { map } = carto.value;
     const { lat: latitude, lng: longitude } = map.getCenter();
     emit("viewchange", {
         center: [latitude, longitude],
         zoom: map.getZoom(),
     });
-}
+};
 
-const searchAddress = toRef(values, "searchAddress");
-watch(searchAddress, () => {
+const updateAddress = () => {
     markersGroup.search.clearLayers();
 
     if (searchAddress.value?.data?.coordinates) {
@@ -181,7 +186,7 @@ watch(searchAddress, () => {
         carto.value.map.setView(searchAddress.value.data.coordinates, 20);
         trackEvent("Cartographie", "Recherche");
     }
-});
+};
 
 watch(pois, syncPoiMarkers);
 watch(carto, () => {

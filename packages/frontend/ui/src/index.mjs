@@ -13,6 +13,7 @@ export { default as ContentWrapper } from './components/ContentWrapper.vue';
 export { default as DatepickerInput } from './components/Input/DatepickerInput.vue';
 export { default as Dropdown } from './components/Dropdown.vue';
 export { default as DsfrSegmentedSet } from './components/Dsfr/DsfrSegmentedSet.vue';
+export { default as DsfrAutocomplete } from './components/Dsfr/DsfrAutocomplete.vue';
 export { default as ErrorSummary } from './components/ErrorSummary.vue';
 export { default as Fieldset } from './components/Fieldset.vue';
 export { default as FilArianne } from './components/FilArianne.vue';
