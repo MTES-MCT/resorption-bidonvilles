@@ -27,11 +27,12 @@
 
             <div
                 ref="printer"
-                class="bg-white mr-3 my-3 border-2 border-G500 py-1 px-2 rounded print:hidden !cursor-pointer"
+                class="bg-white text-primary mr-3 my-3 border-2 border-primary py-1 px-2 print:hidden !cursor-pointer hover:!bg-primary hover:!text-white"
                 @click="printMapScreenshot"
                 v-show="showPrinter"
             >
-                <Icon icon="print" /> Imprimer la carte
+                <Icon icon="print" />
+                Imprimer la carte
             </div>
 
             <slot />
