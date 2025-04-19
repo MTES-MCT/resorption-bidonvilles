@@ -12,7 +12,7 @@
     "lint:all": "eslint --no-error-on-unmatched-pattern --max-warnings=0 --ext .vue,.js,.jsx,.cjs,.mjs src cypress public"
   },
   "dependencies": {
-    "@gouvfr/dsfr": "1.13.0",
+    "@gouvfr/dsfr": "1.13.1",
     "@gouvminint/vue-dsfr": "^5.19.0",
     "@sentry/vue": "^7.54.0",
     "@turf/turf": "^6.5.0",
