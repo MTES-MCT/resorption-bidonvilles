@@ -109,7 +109,7 @@ export const useUserStore = defineStore("user", {
                                 longitude: 2.0497727,
                                 metropole: {
                                     code: "metropole",
-                                    name: "Métropole",
+                                    name: "Hexagone",
                                 },
                             },
                             ...configStore.config.user.intervention_areas.areas,
