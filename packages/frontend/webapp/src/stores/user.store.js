@@ -112,6 +112,16 @@ export const useUserStore = defineStore("user", {
                                     name: "Métropole",
                                 },
                             },
+                            {
+                                is_main_area: true,
+                                type: "outremer",
+                                latitude: 46.7755829,
+                                longitude: 2.0497727,
+                                outremer: {
+                                    code: "outremer",
+                                    name: "Outremer",
+                                },
+                            },
                             ...configStore.config.user.intervention_areas.areas,
                         ],
                     },
