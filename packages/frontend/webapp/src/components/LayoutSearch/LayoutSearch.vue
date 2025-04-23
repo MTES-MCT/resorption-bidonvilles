@@ -85,7 +85,7 @@ const props = defineProps({
         required: false,
         default: () => undefined,
     },
-    displayMetropole: {
+    displayMetropoleOutremer: {
         type: Boolean,
         required: false,
         default: true,
@@ -97,7 +97,7 @@ const {
     allowFreeSearch,
     searchPlaceholder,
     location,
-    displayMetropole,
+    displayMetropoleOutremer,
 } = toRefs(props);
 const emit = defineEmits(["update:location"]);
 const userStore = useUserStore();
@@ -135,9 +135,9 @@ function emptySearch() {
 }
 
 const searchAreas = computed(() => {
-    if (displayMetropole.value === false) {
+    if (displayMetropoleOutremer.value === false) {
         const filtered = userStore.user.intervention_areas.areas.filter(
-            (area) => area.type !== "metropole"
+            (area) => !["metropole", "outremer"].includes(area.type)
         );
         return filtered;
     } else {
