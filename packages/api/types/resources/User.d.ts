@@ -93,7 +93,6 @@ export type User = {
     last_changelog?: string | null
 
     // anonymisation
-    anonymized?: boolean | null,
     anonymized_at?: number | null,
     anonymization_requested: boolean | null,
 
