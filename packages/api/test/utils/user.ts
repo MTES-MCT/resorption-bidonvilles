@@ -139,7 +139,6 @@ export function serialized(override: Partial<User> = {}): AuthUser {
         salt: '8201653e7391e7a80f749e6b2609956a',
         anonymization_requested: false,
         anonymized_at: null,
-        anonymized: false,
         deactivated_at: null,
         deactivation_type: null,
     };
