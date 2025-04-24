@@ -276,6 +276,7 @@ function checkAdministrativeOrder(shantytown, filters) {
             return shantytown.evacuationUnderTimeLimit === false;
         }
 
+        // value === null (inconnu)
         return typeof shantytown.evacuationUnderTimeLimit !== "boolean";
     });
 }
@@ -290,6 +291,7 @@ function checkRhi(shantytown, filters) {
             return shantytown.insalubrityOrder === false;
         }
 
+        // value === null (inconnu)
         return typeof shantytown.insalubrityOrder !== "boolean";
     });
 }
