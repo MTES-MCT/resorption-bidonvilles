@@ -42,7 +42,7 @@
                 variant="primaryText"
                 @click="cancelReason"
                 :disabled="isLoading"
-                class="hover:!bg-G200"
+                class="hover:!bg-primary hover:!text-white"
                 >Annuler</Button
             >
             <Button
