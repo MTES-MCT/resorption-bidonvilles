@@ -14,9 +14,9 @@ export default async (transaction: Transaction = undefined): Promise<void> => {
             salt = '',
             phone = NULL,
             fk_status = 'inactive',
-            anonymization_requested = false
+            anonymization_requested = null
         WHERE
-            (fk_status = 'inactive' AND last_access < (NOW() - INTERVAL '6 months'))
+            (fk_status = 'inactive' AND deactivated_at < (NOW() - INTERVAL '6 months'))
             OR
             anonymization_requested = true
         `,
