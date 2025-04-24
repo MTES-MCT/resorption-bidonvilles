@@ -5,7 +5,7 @@ import { User } from '#root/types/resources/User.d';
 const ERRORS = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
     deactivation_failure: { code: 500, message: 'Une erreur est survenue lors de la désactivation du compte' },
-    refresh_failure: { code: 500, message: 'Une erreur est survenue lors de la lecture des données en base de données' },
+    refresh_failure: { code: 500, message: 'Une erreur est survenue lors de la lecture des données en base' },
     transaction_failure: { code: 500, message: 'Une erreur est survenue lors de la validation de la désactivation' },
 };
 

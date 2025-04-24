@@ -5,7 +5,7 @@ import { User } from '#root/types/resources/User.d';
 const ERRORS = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
     anonymization_failure: { code: 500, message: 'Une erreur est survenue lors de l\'anonymisation de l\'utilisateur.' },
-    refresh_failure: { code: 500, message: 'Une erreur est survenue lors de la lecture des données en base de données' },
+    refresh_failure: { code: 500, message: 'Une erreur est survenue lors de la lecture des données en base' },
     transaction_failure: { code: 500, message: 'Une erreur est survenue lors de la validation de l\'anonymisation' },
 };
 
