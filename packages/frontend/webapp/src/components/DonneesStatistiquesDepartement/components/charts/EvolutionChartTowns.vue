@@ -4,32 +4,30 @@
 
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure
-                icon="location-dot"
-                :figure="formatStat(data.figures.total.value)"
-                :evolution="formatStat(data.figures.total.evolution)"
+                icon="tent"
+                :figure="data.figures.total.value"
+                :evolution="data.figures.total.evolution"
                 >Tous sites</ChartBigFigure
             >
 
             <ChartBigFigure
-                icon="location-dot"
-                :figure="formatStat(data.figures.less_than_10.value)"
-                :evolution="formatStat(data.figures.less_than_10.evolution)"
+                icon="tent"
+                :figure="data.figures.less_than_10.value"
+                :evolution="data.figures.less_than_10.evolution"
                 >Sites de moins de 10 habitants</ChartBigFigure
             >
 
             <ChartBigFigure
-                icon="location-dot"
-                :figure="formatStat(data.figures.between_10_and_99.value)"
-                :evolution="
-                    formatStat(data.figures.between_10_and_99.evolution)
-                "
+                icon="tent"
+                :figure="data.figures.between_10_and_99.value"
+                :evolution="data.figures.between_10_and_99.evolution"
                 >Sites de moins de 100 habitants</ChartBigFigure
             >
 
             <ChartBigFigure
-                icon="location-dot"
-                :figure="formatStat(data.figures.more_than_99.value)"
-                :evolution="formatStat(data.figures.more_than_99.evolution)"
+                icon="tent"
+                :figure="data.figures.more_than_99.value"
+                :evolution="data.figures.more_than_99.evolution"
                 >Sites de plus de 100 habitants</ChartBigFigure
             >
         </div>
@@ -44,7 +42,6 @@
 </template>
 
 <script setup>
-import formatStat from "@/utils/formatStat";
 import { computed } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import LineChart from "@/components/Graphs/GraphBase.vue";

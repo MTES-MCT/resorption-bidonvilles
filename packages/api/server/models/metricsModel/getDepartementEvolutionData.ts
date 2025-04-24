@@ -12,6 +12,7 @@ const { where: pWhere } = permissionUtils;
 export type DepartementEvolutionMetricsRawData = {
     shantytown_id: number,
     population_total: number,
+    population_minors: number,
     minors_in_school: number | null,
     input_date: Date,
     known_since: Date,
@@ -96,6 +97,7 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
                     0 as hid,
                 shantytowns.shantytown_id,
                 shantytowns.population_total,
+                shantytowns.population_minors,
                 shantytowns.minors_in_school,
                 COALESCE(shantytowns.updated_at, shantytowns.created_at) AS input_date,
                 shantytowns_today.known_since,
@@ -185,6 +187,7 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
                     shantytowns.hid,
                 shantytowns.shantytown_id,
                 shantytowns.population_total,
+                shantytowns.population_minors,
                 shantytowns.minors_in_school,
                 COALESCE(shantytowns.updated_at, shantytowns.created_at) AS input_date,
                 shantytowns_today.known_since,

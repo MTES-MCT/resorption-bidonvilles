@@ -237,7 +237,7 @@ const description = computed(() => {
 
 const icon = computed(() => {
     if (activity.value.entity === "shantytown") {
-        return "map-marker-alt";
+        return "tent";
     }
 
     if (activity.value.entity === "user") {

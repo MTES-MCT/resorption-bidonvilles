@@ -5,28 +5,24 @@
         <div v-if="data !== undefined" class="flex mt-4 space-x-6">
             <ChartBigFigure
                 v-if="chartType === 'towns'"
-                icon="location-dot"
-                :figure="formatStat(data.figures.towns_total.value)"
-                :evolution="formatStat(data.figures.towns_total.evolution)"
+                icon="tent"
+                :figure="data.figures.towns_total.value"
+                :evolution="data.figures.towns_total.evolution"
                 >Nombre total de sites</ChartBigFigure
             >
 
             <ChartBigFigure
                 v-if="chartType === 'inhabitants'"
                 icon="people-group"
-                :figure="formatStat(data.figures.inhabitants_total.value)"
-                :evolution="
-                    formatStat(data.figures.inhabitants_total.evolution)
-                "
+                :figure="data.figures.inhabitants_total.value"
+                :evolution="data.figures.inhabitants_total.evolution"
                 >Nombre total de personnes</ChartBigFigure
             >
 
             <ChartBigFigure
                 :icon="icon"
-                :figure="formatStat(data.figures[livingConditionType].value)"
-                :evolution="
-                    formatStat(data.figures[livingConditionType].evolution)
-                "
+                :figure="data.figures[livingConditionType].value"
+                :evolution="data.figures[livingConditionType].evolution"
                 invert
                 >{{ chartLabel }}</ChartBigFigure
             >
@@ -42,7 +38,6 @@
 </template>
 
 <script setup>
-import formatStat from "@/utils/formatStat";
 import { computed, toRefs } from "vue";
 import LineChart from "@/components/Graphs/GraphBase.vue";
 import ChartBigFigure from "./ChartBigFigure.vue";

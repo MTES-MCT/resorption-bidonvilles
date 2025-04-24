@@ -7,6 +7,7 @@ import config from '#server/config';
 import userService from '#server/services/user/index';
 import cleanAttachmentArchives from '#server/services/attachment/cleanArchives';
 import anonymizeUser from '#server/services/user/anonymizeUser';
+import anonymizeOwners from '#server/services/shantytown/anonymizeOwners';
 
 const {
     sendUserDemoInvitation,
@@ -15,7 +16,9 @@ const {
     sendUserShare,
     sendUserReview,
 } = mailUtils;
-const { sendActivitySummary, sendActionAlerts, checkInactiveUsers } = config;
+const {
+    sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners: shouldAnonymizeOwners, anonymizeInactiveUsers,
+} = config;
 
 export default (agenda) => {
     agenda.define(
@@ -131,14 +134,27 @@ export default (agenda) => {
     agenda.define(
         'clean_attachments_archives',
         async () => {
-            await cleanAttachmentArchives();
+            if (cleanAttachmentsArchives) {
+                await cleanAttachmentArchives();
+            }
+        },
+    );
+
+    agenda.define(
+        'anonymize_owners',
+        async () => {
+            if (shouldAnonymizeOwners) {
+                await anonymizeOwners();
+            }
         },
     );
 
     agenda.define(
         'anonymize_inactive_users',
         async () => {
-            await anonymizeUser();
+            if (anonymizeInactiveUsers) {
+                await anonymizeUser();
+            }
         },
     );
 };

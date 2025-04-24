@@ -4,9 +4,16 @@
 
         <div class="flex mt-4 space-x-6">
             <ChartBigFigure
+                icon="children"
+                :figure="data.figures.minors.value"
+                :evolution="data.figures.minors.evolution"
+                neutral
+                >Mineurs</ChartBigFigure
+            >
+            <ChartBigFigure
                 icon="school"
-                :figure="formatStat(data.figures.minors_in_school.value)"
-                :evolution="formatStat(data.figures.minors_in_school.evolution)"
+                :figure="data.figures.minors_in_school.value"
+                :evolution="data.figures.minors_in_school.evolution"
                 :invert="true"
                 >Mineurs scolarisés</ChartBigFigure
             >
@@ -22,7 +29,6 @@
 </template>
 
 <script setup>
-import formatStat from "@/utils/formatStat";
 import { computed } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import LineChart from "@/components/Graphs/GraphBase.vue";
@@ -35,9 +41,14 @@ const data = departementMetricsStore.evolution.data.inhabitants.towns;
 
 const chartData = computed(() => {
     const datasets = [
+        generateDataset("Nombre de mineurs", "0, 0, 255", data.charts.minors, {
+            lineStyle: { opacity: 1 },
+            area: true,
+            symbolSize: 1,
+        }),
         generateDataset(
             "Nombre de mineurs scolarisés",
-            "0, 0, 255",
+            "0, 255, 0",
             data.charts.minors_in_school,
             {
                 lineStyle: { opacity: 1 },

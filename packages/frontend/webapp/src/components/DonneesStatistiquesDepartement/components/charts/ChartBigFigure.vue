@@ -6,7 +6,7 @@
         >
             <img v-if="img" :src="img" width="40" :alt="alt" />
             <Icon v-else class="text-xl" :icon="icon" />
-            <span class="font-bold text-3xl">{{ figure }}</span>
+            <span class="font-bold text-3xl">{{ formatStat(figure) }}</span>
             <span class="font-bold text-lg" :class="color"
                 >({{ formatedEvolution }})</span
             >
@@ -18,6 +18,7 @@
 <script setup>
 import { computed, toRefs } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
+import formatStat from "@/utils/formatStat";
 
 const props = defineProps({
     icon: {
@@ -47,8 +48,13 @@ const props = defineProps({
         required: false,
         default: false,
     },
+    neutral: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
-const { icon, img, alt, figure, evolution, invert } = toRefs(props);
+const { icon, img, alt, figure, evolution, invert, neutral } = toRefs(props);
 
 const colors = {
     positive: {
@@ -67,7 +73,9 @@ const colors = {
 
 const background = computed(() => {
     return (
-        evolution.value == 0
+        neutral.value
+            ? colors.neutral
+            : evolution.value == 0
             ? colors.neutral
             : evolution.value < 0
             ? !invert.value
@@ -80,7 +88,9 @@ const background = computed(() => {
 });
 const color = computed(() => {
     return (
-        evolution.value == 0
+        neutral.value
+            ? colors.neutral
+            : evolution.value == 0
             ? colors.neutral
             : evolution.value < 0
             ? !invert.value
@@ -93,8 +103,12 @@ const color = computed(() => {
 });
 
 const formatedEvolution = computed(() => {
-    return `${evolution.value >= 0 ? "+ " : "- "}${Math.abs(
-        evolution.value
-    )} %`;
+    if (evolution.value !== null) {
+        return `${evolution.value >= 0 ? "+ " : "- "}${formatStat(
+            Math.abs(evolution.value)
+        )} %`;
+    } else {
+        return "N/A";
+    }
 });
 </script>

@@ -1,13 +1,13 @@
-{{var:departementName}} - Un nouveau site a été déclaré
+Nouveau site déclaré - {{var:title}}
 Bonjour {{var:recipientName}},
-Un nouveau site a été déclaré aujourd’hui à {{var:hour}} sur la plateforme
-Résorption-bidonvilles [{{var:webappUrl}}?{{var:utm}}] par {{var:creatorName}} :
-{{var:townFullAddress}} [{{var:townUrl}}]
+Un nouveau site a été déclaré le {{var:hour}} sur la plateforme
+Résorption-bidonvilles [{{var:webappUrl}}?{{var:utm}}] par {{var:creatorName}} à
+l'adresse suivante: {{var:townAddress}} [{{var:townUrl}}]
 Connaissez-vous ce site ? Avez-vous effectué des actions sur ce site ?
 Connectez-vous dès maintenant à la plateforme et participez à la résorption des
 bidonvilles en partageant les changements dont vous auriez eu connaissance.
 
-Me connecter et voir le site [{{var:connexionUrl}}]
+Me connecter et voir le site [{{var:townUrl}}?{{var:utm}}]
 
 Le partage d’information entre tous les partenaires est essentiel pour accélérer
 la résorption des bidonvilles.

@@ -13,6 +13,7 @@ const queryGenerator: SequelizeQueryGenerator = sequelize.getQueryInterface().qu
 export default () => query(
     queryGenerator.getWhereConditions({
         [Op.and]: [
+            { to_be_tracked: true },
             { fk_status: 'active' },
             { inactivity_alert_sent_at: null },
             {
