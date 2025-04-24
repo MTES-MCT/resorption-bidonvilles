@@ -100,7 +100,7 @@
         />
 
         <FicheAccesColumnAccessDate
-            v-if="user.anonymized"
+            v-if="user.anonymized_at"
             text="Anonymisé"
             :date="user.anonymized_at"
             icon="user-secret"
