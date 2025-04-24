@@ -31,6 +31,13 @@
                     >
                     avec une procédure administrative
                 </p>
+                <p v-if="userStore.hasJusticePermission">
+                    {{ insalubrityOrderTotal }} site<template
+                        v-if="insalubrityOrderTotal > 1"
+                        >s</template
+                    >
+                    avec une opération RHI
+                </p>
             </div>
         </section>
     </div>
@@ -67,8 +74,13 @@ const justiceTotal = computed(() => {
 
 const administrativeOrderTotal = computed(() => {
     return townsStore.filteredTowns.filter(
-        ({ evacuationUnderTimeLimit, insalubrityOrder }) =>
-            evacuationUnderTimeLimit === true || insalubrityOrder === true
+        ({ evacuationUnderTimeLimit }) => evacuationUnderTimeLimit === true
+    ).length;
+});
+
+const insalubrityOrderTotal = computed(() => {
+    return townsStore.filteredTowns.filter(
+        ({ insalubrityOrder }) => insalubrityOrder === true
     ).length;
 });
 </script>
