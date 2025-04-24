@@ -42,7 +42,7 @@
                 variant="primaryText"
                 @click="cancelReason"
                 :disabled="isLoading"
-                class="hover:!bg-primary hover:!text-white"
+                class="!border-2 !border-primary hover:!bg-primary hover:!text-white"
                 >Annuler</Button
             >
             <Button
@@ -149,5 +149,9 @@ async function deactivate() {
 <style scoped>
 .fr-fieldset__element {
     margin-bottom: 0;
+}
+
+button {
+    border: inherit;
 }
 </style>
