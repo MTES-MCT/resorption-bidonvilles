@@ -4,7 +4,7 @@ import config from '#server/config';
 import PrometheusMetricsHandler from '#server/middlewares/prometheusMiddleware';
 
 const {
-    port, sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners,
+    port, sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners, anonymizeInactiveUsers,
 } = config;
 
 const sentryContextHandlers = (app) => {
@@ -101,7 +101,11 @@ export default {
                 await agenda.every('0 0 1 * * 1', 'anonymize_owners'); // tous les lundi à 1:00
             }
 
-            await agenda.every('0 02 11 * * *', 'anonymize_inactive_users');
+            if (anonymizeInactiveUsers) {
+                // eslint-disable-next-line no-console
+                console.log('Anonymize inactive users job is enabled');
+                await agenda.every('0 0 2 * * *', 'anonymize_inactive_users');
+            }
 
             // eslint-disable-next-line no-console
             console.log('Scheduled jobs set up');
