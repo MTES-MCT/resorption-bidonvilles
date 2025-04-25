@@ -76,7 +76,7 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
                     bcc: nationalAdmins,
                 });
             } else {
-                await Promise.all(nationalAdmins.map(nationalAdmin => mails.sendUserCommentDeletion(nationalAdmin, {
+                await Promise.all(nationalAdmins.map(nationalAdmin => mails.sendAdminCommentDeletion(nationalAdmin, {
                     variables: {
                         town: {
                             usename: town.usename,
@@ -90,6 +90,7 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
                         },
                         message,
                     },
+                    preserveRecipient: false,
                 })));
             }
         }
