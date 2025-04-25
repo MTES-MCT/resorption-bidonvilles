@@ -13,8 +13,7 @@ export default async (transaction: Transaction = undefined): Promise<void> => {
             password = '',
             salt = '',
             phone = NULL,
-            fk_status = 'inactive',
-            anonymization_requested = null
+            fk_status = 'inactive'
         WHERE
             (fk_status = 'inactive' AND DATE(deactivated_at) < DATE(NOW() - INTERVAL '6 months'))
             OR
