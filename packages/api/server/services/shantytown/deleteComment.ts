@@ -58,22 +58,24 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
     try {
         if (!isOwner) {
             const nationalAdmins = await userModel.getNationalAdmins();
-            await mails.sendUserCommentDeletion(author, {
-                variables: {
-                    town: {
-                        usename: town.usename,
-                        city: {
-                            name: town.city.name,
+            if (author.status === 'active') {
+                await mails.sendUserCommentDeletion(author, {
+                    variables: {
+                        town: {
+                            usename: town.usename,
+                            city: {
+                                name: town.city.name,
+                            },
                         },
+                        comment: {
+                            description: comment.description,
+                            created_at: tsToString(comment.createdAt, 'd/m/Y'),
+                        },
+                        message,
                     },
-                    comment: {
-                        description: comment.description,
-                        created_at: tsToString(comment.createdAt, 'd/m/Y'),
-                    },
-                    message,
-                },
-                bcc: nationalAdmins,
-            });
+                    bcc: nationalAdmins,
+                });
+            }
         }
     } catch (error) {
         // ignore
