@@ -1,4 +1,4 @@
-Un de vos partenaire vous invite à partager sur le site {{var:siteAddress}}
+Un de vos partenaires vous invite à partager sur le site {{var:siteAddress}}
 Bonjour,
 {{var:inviterName}} vous a invité à rejoindre la communauté des acteurs de
 terrain sur la plateforme Résorption-bidonvilles [{{var:webappUrl}}] en
