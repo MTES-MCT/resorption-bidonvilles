@@ -75,6 +75,22 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
                     },
                     bcc: nationalAdmins,
                 });
+            } else {
+                await Promise.all(nationalAdmins.map(nationalAdmin => mails.sendUserCommentDeletion(nationalAdmin, {
+                    variables: {
+                        town: {
+                            usename: town.usename,
+                            city: {
+                                name: town.city.name,
+                            },
+                        },
+                        comment: {
+                            description: comment.description,
+                            created_at: tsToString(comment.createdAt, 'd/m/Y'),
+                        },
+                        message,
+                    },
+                })));
             }
         }
     } catch (error) {
