@@ -13,7 +13,7 @@ export default async (variant: ActionAlertVariant): Promise<void> => {
         year -= 1;
     }
 
-    const actors = await actionActorModel.findAll(year);
+    const actors = await actionActorModel.findAll(year, true);
     await Promise.all(
         actors.map(actor => sender[variant](
             { email: actor.email, first_name: actor.first_name, last_name: actor.last_name },
