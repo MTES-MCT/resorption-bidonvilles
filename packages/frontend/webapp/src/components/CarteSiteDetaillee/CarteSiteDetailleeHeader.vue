@@ -96,7 +96,7 @@ const attachmentsLabel = computed(() => {
         "shantytown_justice.access",
         shantytown
     )
-        ? shantytown.value.attachments.length
+        ? shantytown.value.attachments?.length
         : 0;
 
     const totalAttachments = commentsAttachments + justiceAttachments;
