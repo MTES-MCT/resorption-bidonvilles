@@ -48,7 +48,7 @@
             <Button
                 variant="tertiaryA11Yalt"
                 @click="deactivate"
-                :disabled="deactivationReason.length === 0"
+                :disabled="deactivationReason.length === 0 || isLoading"
                 :loading="isLoading"
                 class="hover:!bg-tertiaryA11Yalt"
                 >{{ wording.button }}</Button
@@ -80,7 +80,7 @@ const { user } = toRefs(props);
 
 const deactivationReason = ref("");
 const anonymizationRequested = ref(false);
-const isLoading = ref(null);
+const isLoading = ref(false);
 const error = ref(null);
 const errorSummary = ref(null);
 const wordings = {
@@ -105,10 +105,11 @@ const wording = computed(() => {
 function cancelReason() {
     deactivationReason.value = "";
     anonymizationRequested.value = false;
+    error.value = null;
 }
 
 async function deactivate() {
-    if (isLoading.value === true) {
+    if (isLoading.value) {
         return;
     }
     console.log("Anonymization?", anonymizationRequested.value);
@@ -140,9 +141,9 @@ async function deactivate() {
                 {}
             );
         }
+    } finally {
+        isLoading.value = false;
     }
-
-    isLoading.value = false;
 }
 </script>
 
