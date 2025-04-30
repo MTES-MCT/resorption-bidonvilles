@@ -40,7 +40,10 @@ export default function useLastUpdated(town) {
         ) {
             return "bg-green";
         }
-        return coloreUpdatedSince(town.value);
+        return coloreUpdatedSince(
+            town.value.updatedAt,
+            town.value.lastUpdatedAt
+        );
     });
 
     const lastUpdatedAt = computed(() => {
