@@ -72,7 +72,8 @@ const userStore = useUserStore();
 
 const pinVariant = computed(() => {
     const { months } = getSince(shantytown.value.lastUpdatedAt);
-    if (months > 6) {
+
+    if (months >= 6) {
         return "pin_red";
     } else if (months >= 3) {
         return "pin_orange";
