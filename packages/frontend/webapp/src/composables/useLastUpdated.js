@@ -7,6 +7,7 @@ export default function useLastUpdated(town) {
     const townForLastUpdate = ref({
         createdAt: town.value.createdAt,
         updatedAt: town.value.lastUpdatedAt,
+        lastUpdatedAt: town.value.lastUpdatedAt,
     });
 
     function updateTownStatus() {
@@ -39,7 +40,7 @@ export default function useLastUpdated(town) {
         ) {
             return "bg-green";
         }
-        return coloreUpdatedSince(town.value.lastUpdatedAt);
+        return coloreUpdatedSince(town.value);
     });
 
     const lastUpdatedAt = computed(() => {
@@ -54,7 +55,7 @@ export default function useLastUpdated(town) {
         lastUpdatedAt,
         (newValue) => {
             if (newValue) {
-                townForLastUpdate.value.updatedAt = newValue;
+                townForLastUpdate.value.lastUpdatedAt = newValue;
             }
         },
         { immediate: true }
