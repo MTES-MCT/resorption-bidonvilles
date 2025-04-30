@@ -33,10 +33,10 @@
                     <div class="grid grid-cols-1 content-start">
                         <div
                             class=""
-                            v-for="displayedLegendItem in displayedLegend[
-                                activeTab
-                            ].icons"
-                            :key="displayedLegendItem"
+                            v-for="(
+                                displayedLegendItem, index
+                            ) in displayedLegend[activeTab].icons"
+                            :key="`${displayedLegendItem}-${index}`"
                         >
                             <Icon class="mx-2" :icon="displayedLegendItem" />
                         </div>
@@ -98,6 +98,7 @@ const legende = ref(null);
 const legendeStatus = ref(false);
 
 const drawMap = () => {
+    console.log("Création de la carte, de la légende et des marqueurs");
     carto.value.map.addLayer(markersGroup.value);
     carto.value.map.on("move", onMove);
     carto.value.addControl("legende", createLegende());
@@ -114,7 +115,7 @@ watch(activeTab, () => {
     drawMap();
 });
 
-const displayedLegend = {
+const displayedLegend = ref({
     livingConditionsByTown: null,
     livingConditionsByInhabitant: null,
     summary: {
@@ -152,10 +153,11 @@ const displayedLegend = {
             { style: "bg-G400 w-10 border", label: "Pas de mineurs" },
         ],
     },
-};
+});
 // Pas de différence entre summary et livingConditions (temporaire)
-displayedLegend.livingConditionsByTown = displayedLegend.summary;
-displayedLegend.livingConditionsByInhabitant = displayedLegend.summary;
+displayedLegend.value.livingConditionsByTown = displayedLegend.value.summary;
+displayedLegend.value.livingConditionsByInhabitant =
+    displayedLegend.value.summary;
 
 function onMove() {
     const { map } = carto.value;
