@@ -33,10 +33,10 @@
                     <div class="grid grid-cols-1 content-start">
                         <div
                             class=""
-                            v-for="(
-                                displayedLegendItem, index
-                            ) in displayedLegend[activeTab].icons"
-                            :key="`${displayedLegendItem}-${index}`"
+                            v-for="displayedLegendItem in displayedLegend[
+                                activeTab
+                            ].icons"
+                            :key="displayedLegendItem"
                         >
                             <Icon class="mx-2" :icon="displayedLegendItem" />
                         </div>
@@ -44,9 +44,7 @@
 
                     <div class="grid grid-cols-1 content-start">
                         <div
-                            v-for="displayedLegendLabel in displayedLegend[
-                                activeTab
-                            ].labels"
+                            v-for="displayedLegendLabel in displayedLegendByActiveTab.labels"
                             :key="displayedLegendLabel"
                         >
                             {{ displayedLegendLabel }}
@@ -98,7 +96,6 @@ const legende = ref(null);
 const legendeStatus = ref(false);
 
 const drawMap = () => {
-    console.log("Création de la carte, de la légende et des marqueurs");
     carto.value.map.addLayer(markersGroup.value);
     carto.value.map.on("move", onMove);
     carto.value.addControl("legende", createLegende());
@@ -115,7 +112,7 @@ watch(activeTab, () => {
     drawMap();
 });
 
-const displayedLegend = ref({
+const displayedLegend = {
     livingConditionsByTown: null,
     livingConditionsByInhabitant: null,
     summary: {
@@ -153,11 +150,14 @@ const displayedLegend = ref({
             { style: "bg-G400 w-10 border", label: "Pas de mineurs" },
         ],
     },
-});
+};
 // Pas de différence entre summary et livingConditions (temporaire)
-displayedLegend.value.livingConditionsByTown = displayedLegend.value.summary;
-displayedLegend.value.livingConditionsByInhabitant =
-    displayedLegend.value.summary;
+displayedLegend.livingConditionsByTown = displayedLegend.summary;
+displayedLegend.livingConditionsByInhabitant = displayedLegend.summary;
+
+const displayedLegendByActiveTab = computed(() => {
+    return displayedLegend[activeTab.value];
+});
 
 function onMove() {
     const { map } = carto.value;
