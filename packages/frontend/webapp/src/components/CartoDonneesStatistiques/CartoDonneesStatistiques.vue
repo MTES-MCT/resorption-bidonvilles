@@ -97,12 +97,21 @@ const markersGroup = ref(L.geoJSON([], {}));
 const legende = ref(null);
 const legendeStatus = ref(false);
 
+const drawMap = () => {
+    carto.value.map.addLayer(markersGroup.value);
+    carto.value.map.on("move", onMove);
+    carto.value.addControl("legende", createLegende());
+};
+
 watch(carto, () => {
     if (carto.value) {
-        carto.value.map.addLayer(markersGroup.value);
-        carto.value.map.on("move", onMove);
-        carto.value.addControl("legende", createLegende());
+        drawMap();
     }
+});
+
+watch(activeTab, () => {
+    carto.value.map.removeLayer(markersGroup.value);
+    drawMap();
 });
 
 const displayedLegend = {
