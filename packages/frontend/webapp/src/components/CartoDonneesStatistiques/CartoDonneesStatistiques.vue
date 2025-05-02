@@ -44,7 +44,9 @@
 
                     <div class="grid grid-cols-1 content-start">
                         <div
-                            v-for="displayedLegendLabel in displayedLegendByActiveTab.labels"
+                            v-for="displayedLegendLabel in displayedLegend[
+                                activeTab
+                            ].labels"
                             :key="displayedLegendLabel"
                         >
                             {{ displayedLegendLabel }}
@@ -146,10 +148,6 @@ const displayedLegend = {
 displayedLegend.livingConditionsByTown = displayedLegend.summary;
 displayedLegend.livingConditionsByInhabitant = displayedLegend.summary;
 
-const displayedLegendByActiveTab = computed(() => {
-    return displayedLegend[activeTab.value];
-});
-
 function onMove() {
     const { map } = carto.value;
     const { lat: latitude, lng: longitude } = map.getCenter();
@@ -183,8 +181,6 @@ defineExpose({
     }),
     setView(...args) {
         if (carto.value) {
-            console.log("setView", args);
-
             return carto.value.setView(...args);
         }
 
