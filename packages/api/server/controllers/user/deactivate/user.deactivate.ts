@@ -20,7 +20,7 @@ interface UserDeactivateRequest extends Request {
 
 export default async (req: UserDeactivateRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const updatedUser = await userService.deactivate(req.body.user.id, req.user.id === req.body.user.id, req.body.reason, req.body.anonymizationRequested);
+        const updatedUser = await userService.deactivate(req.body.user.id, req.user.id === req.body.user.id, req.body.user, req.body.reason, req.body.anonymizationRequested);
         res.status(200).send(updatedUser);
     } catch (error) {
         const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
