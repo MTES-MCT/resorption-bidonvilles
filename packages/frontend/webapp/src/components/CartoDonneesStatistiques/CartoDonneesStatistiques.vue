@@ -29,7 +29,7 @@
                 <div class="font-bold mx-2">Légende</div>
             </div>
             <div v-if="legendeStatus === true" class="flex">
-                <div :key="activeTab" class="flex">
+                <div class="flex">
                     <div class="grid grid-cols-1 content-start">
                         <div
                             class=""
@@ -95,21 +95,12 @@ const markersGroup = ref(L.geoJSON([], {}));
 const legende = ref(null);
 const legendeStatus = ref(false);
 
-const drawMap = () => {
-    carto.value.map.addLayer(markersGroup.value);
-    carto.value.map.on("move", onMove);
-    carto.value.addControl("legende", createLegende());
-};
-
 watch(carto, () => {
     if (carto.value) {
-        drawMap();
+        carto.value.map.addLayer(markersGroup.value);
+        carto.value.map.on("move", onMove);
+        carto.value.addControl("legende", createLegende());
     }
-});
-
-watch(activeTab, () => {
-    carto.value.map.removeLayer(markersGroup.value);
-    drawMap();
 });
 
 const displayedLegend = {
@@ -192,6 +183,8 @@ defineExpose({
     }),
     setView(...args) {
         if (carto.value) {
+            console.log("setView", args);
+
             return carto.value.setView(...args);
         }
 

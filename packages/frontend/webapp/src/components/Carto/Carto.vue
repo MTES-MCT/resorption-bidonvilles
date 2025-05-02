@@ -411,7 +411,7 @@ function skipMap(skipMapFunc, el) {
     }
 }
 
-watch(towns, syncTownMarkers);
+watch(towns, syncTownMarkers, activeTab);
 
 defineExpose({
     addControl,
