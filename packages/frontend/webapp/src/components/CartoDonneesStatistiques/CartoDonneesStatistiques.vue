@@ -29,7 +29,7 @@
                 <div class="font-bold mx-2">Légende</div>
             </div>
             <div v-if="legendeStatus === true" class="flex">
-                <div class="flex">
+                <div :key="activeTab" class="flex">
                     <div class="grid grid-cols-1 content-start">
                         <div
                             class=""
