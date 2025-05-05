@@ -4,12 +4,12 @@ export default function (updatedAt, lastUpdatedAt) {
     let bgColor = "bg-green";
 
     const { months } = getSince(lastUpdatedAt);
-    const { months: monthsUpdate } = getSince(updatedAt);
+    const { months: monthsSinceLastUpdate } = getSince(updatedAt);
 
-    if (monthsUpdate >= 6) {
+    if (monthsSinceLastUpdate >= 6) {
         bgColor = "bg-red600";
     }
-    if (monthsUpdate >= 3 && monthsUpdate < 6 && months >= 3 && months < 6) {
+    if (monthsSinceLastUpdate >= 3 && monthsSinceLastUpdate < 6 && months >= 3 && months < 6) {
         bgColor = "bg-warningOrange";
     }
     return bgColor;
