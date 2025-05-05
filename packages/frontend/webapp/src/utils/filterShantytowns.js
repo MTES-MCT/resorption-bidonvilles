@@ -275,7 +275,6 @@ function checkAdministrativeOrder(shantytown, filters) {
             return shantytown.evacuationUnderTimeLimit === false;
         }
 
-        // value === null (inconnu)
         return typeof shantytown.evacuationUnderTimeLimit !== "boolean";
     });
 }
