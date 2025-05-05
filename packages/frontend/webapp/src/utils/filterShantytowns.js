@@ -258,7 +258,6 @@ function checkJustice(shantytown, filters) {
             );
         }
 
-        // value === null (inconnu)
         return (
             typeof shantytown.ownerComplaint !== "boolean" &&
             typeof shantytown.justiceProcedure !== "boolean"
@@ -291,7 +290,6 @@ function checkRhi(shantytown, filters) {
             return shantytown.insalubrityOrder === false;
         }
 
-        // value === null (inconnu)
         return typeof shantytown.insalubrityOrder !== "boolean";
     });
 }
