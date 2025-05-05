@@ -14,6 +14,7 @@ export type ActionFinancesReaderRow = {
     position: string | null,
     role_admin: string | null,
     role_regular: string,
+    user_status: string,
     id: number,
     name: string,
     abbreviation: string | null,
@@ -70,6 +71,7 @@ export default async (actionId?: number, managers?: number[], departement?: Depa
             users.position,
             users.fk_role AS role_admin,
             users.fk_role_regular AS role_regular,
+            users.fk_status AS user_status,
             organizations.organization_id as id,
             organizations.name,
             organizations.abbreviation,
@@ -158,6 +160,7 @@ export default async (actionId?: number, managers?: number[], departement?: Depa
             phone: row.phone,
             position: row.position,
             expertise_topics: [],
+            status: row.user_status,
         });
 
         return acc;
