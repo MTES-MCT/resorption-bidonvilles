@@ -9,7 +9,12 @@ export default function (updatedAt, lastUpdatedAt) {
     if (monthsSinceLastUpdate >= 6) {
         bgColor = "bg-red600";
     }
-    if (monthsSinceLastUpdate >= 3 && monthsSinceLastUpdate < 6 && months >= 3 && months < 6) {
+    if (
+        monthsSinceLastUpdate >= 3 &&
+        monthsSinceLastUpdate < 6 &&
+        months >= 3 &&
+        months < 6
+    ) {
         bgColor = "bg-warningOrange";
     }
     return bgColor;
