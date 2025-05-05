@@ -1,13 +1,20 @@
 import getSince from "@/utils/getSince";
 
-export default function (lastUpdatedAt) {
+export default function (updatedAt, lastUpdatedAt) {
     let bgColor = "bg-green";
-    const { months } = getSince(lastUpdatedAt);
 
-    if (months >= 6) {
+    const { months } = getSince(lastUpdatedAt);
+    const { months: monthsSinceLastUpdate } = getSince(updatedAt);
+
+    if (monthsSinceLastUpdate >= 6) {
         bgColor = "bg-red600";
     }
-    if (months >= 3 && months < 6) {
+    if (
+        monthsSinceLastUpdate >= 3 &&
+        monthsSinceLastUpdate < 6 &&
+        months >= 3 &&
+        months < 6
+    ) {
         bgColor = "bg-warningOrange";
     }
     return bgColor;
