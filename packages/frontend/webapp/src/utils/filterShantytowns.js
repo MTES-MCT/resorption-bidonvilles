@@ -258,7 +258,6 @@ function checkJustice(shantytown, filters) {
             );
         }
 
-        // value === null (inconnu)
         return (
             typeof shantytown.ownerComplaint !== "boolean" &&
             typeof shantytown.justiceProcedure !== "boolean"
