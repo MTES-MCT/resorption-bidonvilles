@@ -23,10 +23,13 @@
                             >Rechercher</Button
                         >
                     </div>
-                    <div class="mt-2 text-left text-sm">
-                        <p class="font-bold">Mes territoires :</p>
+                    <div
+                        class="flex flex-col xs:flex-row gap-1 xs:gap-2 mt-2 text-left text-sm"
+                    >
+                        <p class="col-span-1 font-bold">Mes territoires :</p>
                         <Link
                             v-for="(area, idx) in searchAreas"
+                            class="flex flex-row"
                             :class="
                                 ((inputLocation.data === null &&
                                     area.type === 'nation') ||
