@@ -10,8 +10,11 @@
             name="adminComments"
             v-model="adminComments"
             placeholder="Votre commentaire..."
-            :disabled="isLoading"
+            :disabled="isLoading || user.anonymized_at"
             class="bg-white"
+            :class="{
+                '!bg-G300': user.anonymized_at,
+            }"
         />
         <ErrorSummary v-if="error" :message="error" />
         <div class="flex items-center justify-end">

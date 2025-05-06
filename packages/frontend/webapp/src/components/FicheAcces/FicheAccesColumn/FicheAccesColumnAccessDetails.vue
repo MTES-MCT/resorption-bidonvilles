@@ -89,6 +89,24 @@
             color="text-g600"
             class="mb-2"
         />
+
+        <FicheAccesColumnAccessDate
+            v-if="user.deactivation_type"
+            :text="`Désactivé ${typeDeDesactivation}`"
+            :date="user.deactivated_at"
+            icon="lock"
+            color="text-G700"
+            class="mb-2"
+        />
+
+        <FicheAccesColumnAccessDate
+            v-if="user.anonymized_at"
+            text="Anonymisé"
+            :date="user.anonymized_at"
+            icon="user-secret"
+            color="text-G700"
+            class="mb-2"
+        />
     </div>
 </template>
 
@@ -128,4 +146,13 @@ function hasExpired(userAccessIndex) {
 
     return expiredAt < invalidatedAt;
 }
+
+const typeDeDesactivation = computed(() => {
+    if (user.value.deactivation_type === "admin") {
+        return "manuellement";
+    } else if (user.value.deactivation_type === "auto") {
+        return "automatiquement";
+    }
+    return "";
+});
 </script>
