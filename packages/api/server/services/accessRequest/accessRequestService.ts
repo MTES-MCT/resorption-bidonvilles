@@ -134,7 +134,6 @@ export default {
         // notify the user
         await sendEmail.toUser.accessPending(
             user,
-            user.user_accesses[0].sent_by,
             getAccountActivationLink(user.user_accesses[0].id),
             new Date(user.user_accesses[0].expires_at * 1000),
         );
