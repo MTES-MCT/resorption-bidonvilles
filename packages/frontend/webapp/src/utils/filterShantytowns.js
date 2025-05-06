@@ -183,9 +183,13 @@ function checkLocation(shantytown, filters) {
         return true;
     }
 
+    const overseasRegions = ["01", "02", "03", "04", "06"];
     if (filters.location.typeUid === "metropole") {
-        const overseasRegions = ["01", "02", "03", "04", "06"];
         return !overseasRegions.includes(shantytown.region?.code);
+    }
+
+    if (filters.location.typeUid === "outremer") {
+        return overseasRegions.includes(shantytown.region.code);
     }
 
     const l = shantytown[filters.location.typeUid];
