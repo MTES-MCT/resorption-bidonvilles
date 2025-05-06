@@ -4,6 +4,7 @@ import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
 import mattermost from '#server/utils/mattermost';
 import can from '#server/utils/permission/can';
+import agendaFactory from '#server/loaders/agendaLoader';
 import { User } from '#root/types/resources/User.d';
 
 function checkUser(user: User): void {
@@ -75,6 +76,41 @@ async function sendNotifications(user: User, selfDeactivation: boolean, reason: 
     }
 }
 
+/**
+ * Vérifie l'existence d'un job par son nom et l'ID de l'utilisateur, puis l'annule s'il existe
+ * @param agenda - Instance Agenda
+ * @param jobName - Nom du job à annuler
+ * @param userId - ID de l'utilisateur
+ */async function checkAndCancelJob(agenda, jobName: string, userId: number): Promise<void> {
+    try {
+    // On recherche le job par son nom et l'identifiant du compte utilisateur
+        const jobs = await agenda.jobs({
+            name: jobName,
+            'data.user.id': userId,
+        });
+
+        // On vérifie que le job existe
+        if (jobs && jobs.length > 0) {
+            // On annule le job
+            await agenda.cancel({
+                name: jobName,
+                'data.user.id': userId,
+            });
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+// Ces jobs sont créés par accessActivatedOnboarding
+// dès l'activation du compte utilisateur
+const onboardingJob = [
+    'demo_invitation',
+    'entraide_invitation',
+    'user_features',
+    'user_share',
+];
+
 export default async (id: number, selfDeactivation: boolean, author: User, reason: string = null, anonymizationRequested: boolean = false): Promise<User> => {
     if (!can(author).do('deactivate', 'user')) {
         throw new ServiceError('deactivation_permission_failure', Error('Erreur de permission'));
@@ -82,6 +118,16 @@ export default async (id: number, selfDeactivation: boolean, author: User, reaso
 
     const user = await findAndValidateUser(id);
     const updatedUser = await deactivateUserWithTransaction(id, anonymizationRequested, user);
+
+    // Désactivation éventuelle des jobs programmé par accessActivatedOnboarding s'ils sont actifs
     await sendNotifications(updatedUser, selfDeactivation, reason);
+    const agenda = agendaFactory();
+    await Promise.all(onboardingJob.map(async (jobName) => {
+        try {
+            await checkAndCancelJob(agenda, jobName, id);
+        } catch (error) {
+            // Do nothing
+        }
+    }));
     return updatedUser;
 };
