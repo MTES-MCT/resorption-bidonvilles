@@ -33,6 +33,6 @@ export default async (req: UserAnonymizeRequest, res: Response, next: NextFuncti
             user_message: message,
         });
 
-        next(error?.nativeError || error);
+        next(error?.nativeError ?? error);
     }
 };
