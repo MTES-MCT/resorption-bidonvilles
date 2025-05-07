@@ -5,7 +5,6 @@
         >
 
         <p class="mb-6">{{ wording.description }}</p>
-
         <TextArea
             rows="5"
             label="Raison de la désactivation"
@@ -16,15 +15,34 @@
             placeholder="Raison pour laquelle vous désactivez cet accès..."
             :disabled="isLoading"
             class="bg-white"
+            tabindex="0"
         />
+        <div
+            v-if="deactivationReason.length > 0"
+            class="flex bg-blue200 items-center content-center p-1 pt-2 mt-2 mb-6 h-10"
+            :class="{ 'bg-blue300': anonymizationRequested }"
+        >
+            <DsfrCheckbox
+                :disabled="deactivationReason.length === 0"
+                v-model="anonymizationRequested"
+                :value="true"
+                name="anonymizationRequested"
+                id="anonymizationRequested"
+                label="Souhaitez-vous anonymiser le compte?"
+                tabindex="0"
+                small
+                inline
+                class="!flex !mb-0 self-center items-center"
+            />
+        </div>
         <ErrorSummary v-if="error" :message="error" :summary="errorSummary" />
-        <div class="flex items-center justify-end">
+        <div class="flex items-center justify-end gap-2">
             <Button
                 v-if="deactivationReason.length > 0"
                 variant="primaryText"
                 @click="cancelReason"
                 :disabled="isLoading"
-                class="hover:!bg-G200"
+                class="!border-2 !border-primary hover:!bg-primary hover:!text-white"
                 >Annuler</Button
             >
             <Button
@@ -61,6 +79,7 @@ const props = defineProps({
 const { user } = toRefs(props);
 
 const deactivationReason = ref("");
+const anonymizationRequested = ref(false);
 const isLoading = ref(null);
 const error = ref(null);
 const errorSummary = ref(null);
@@ -78,18 +97,21 @@ const wordings = {
         button: "Désactiver l'accès",
     },
 };
+
 const wording = computed(() => {
     return user.value.status === "new" ? wordings.delete : wordings.deactivate;
 });
 
 function cancelReason() {
     deactivationReason.value = "";
+    anonymizationRequested.value = false;
 }
 
 async function deactivate() {
     if (isLoading.value === true) {
         return;
     }
+    console.log("Anonymization?", anonymizationRequested.value);
 
     isLoading.value = true;
     error.value = null;
@@ -99,7 +121,8 @@ async function deactivate() {
         const accesStore = useAccesStore();
         const updatedUser = await deactivateUser(
             user.value.id,
-            deactivationReason.value
+            deactivationReason.value,
+            anonymizationRequested.value
         );
         accesStore.updateUser(user.value.id, updatedUser);
         notificationStore.success(
@@ -122,3 +145,13 @@ async function deactivate() {
     isLoading.value = false;
 }
 </script>
+
+<style scoped>
+.fr-fieldset__element {
+    margin-bottom: 0;
+}
+
+button {
+    border: inherit;
+}
+</style>

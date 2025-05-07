@@ -413,6 +413,14 @@ function skipMap(skipMapFunc, el) {
 
 watch(towns, syncTownMarkers);
 
+watch(
+    activeTab,
+    () => {
+        syncTownMarkers();
+    },
+    { immediate: true }
+);
+
 defineExpose({
     addControl,
     currentMarkerGroup,

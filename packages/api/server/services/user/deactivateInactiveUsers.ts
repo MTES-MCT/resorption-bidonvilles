@@ -7,7 +7,7 @@ export default async (): Promise<void> => {
         return;
     }
 
-    await userModel.deactivate(users.map(({ id }) => id));
+    await userModel.deactivate(users.map(({ id }) => id), 'auto');
     await Promise.all(
         users.map(user => mails.sendInactiveUserDeactivationAlert(user)),
     );

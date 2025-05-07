@@ -13,6 +13,7 @@ import r93 from "./93.svg";
 import r94 from "./94.svg";
 import rfallback from "./fallback.svg";
 import rfrance from "./france.svg";
+import routremer from "./outremer.svg";
 
 export default {
     11: r11,
@@ -30,4 +31,5 @@ export default {
     94: r94,
     fallback: rfallback,
     france: rfrance,
+    outremer: routremer,
 };
