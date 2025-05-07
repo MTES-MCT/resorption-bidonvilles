@@ -1,5 +1,6 @@
 import userModel from '#server/models/userModel/index';
 import authUtils from '#server/utils/auth';
+import getActiveAdminWhoGrantedAccess from '#server/utils/getActiveAdminWhoGrantedAccess';
 import { User } from '#root/types/resources/User.d';
 import sendEmail from './mailer';
 import scheduler from './scheduler';
@@ -145,23 +146,28 @@ export default {
      * @param {Number} accessId
      */
     async handleAccessExpired(accessId) {
-        // fetch data
         const user = await userModel.findOneByAccessId(accessId);
         if (user === null || !isAccessExpired(user)) {
             return;
         }
 
-        // notify the user and the admin
-        await Promise.all([
-            sendEmail.toUser.accessExpired(
-                user,
-            ),
-            sendEmail.toAdmin.accessExpired(
-                user.user_accesses[0].sent_by,
-                user,
-                new Date(user.user_accesses[0].created_at * 1000),
-            ),
-        ]);
+        const mailPromises = [];
+
+        mailPromises.push(
+            sendEmail.toUser.accessExpired(user),
+        );
+
+        const activeAdmin = await getActiveAdminWhoGrantedAccess(user);
+        if (activeAdmin !== null) {
+            mailPromises.push(
+                sendEmail.toAdmin.accessExpired(
+                    user.user_accesses[0].sent_by,
+                    user,
+                    new Date(user.user_accesses[0].created_at * 1000),
+                ),
+            );
+        }
+        await Promise.all(mailPromises);
     },
 
     /**
@@ -170,12 +176,23 @@ export default {
      * @param {User} user
      */
     async handleAccessActivated(user) {
-        await Promise.all([
-            sendEmail.toAdmin.accessActivated(user.user_accesses[0].sent_by, user),
+        const mailPromises = [];
+        mailPromises.push(
             sendEmail.toUser.accessActivated(user),
-            scheduleEvent.accessActivatedOnboarding(user),
-        ]);
+        );
 
+        const activeAdmin = await getActiveAdminWhoGrantedAccess(user);
+        if (activeAdmin !== null) {
+            mailPromises.push(
+                sendEmail.toAdmin.accessActivated(user.user_accesses[0].sent_by, user),
+            );
+        }
+        mailPromises.push(
+            scheduleEvent.accessActivatedOnboarding(user),
+        );
+        await Promise.all(mailPromises);
+
+        // cancel scheduled events
         await Promise.all([
             cancelEvent.accessPending(user.user_accesses[0].id),
             cancelEvent.accessExpired(user.user_accesses[0].id),
