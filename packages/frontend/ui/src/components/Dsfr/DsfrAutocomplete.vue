@@ -9,6 +9,12 @@
                 @update:modelValue="onInput"
             />
         </form>
+        <div v-if="isLoading" class="absolute top-10 w-full z-[2000] border-1 border-G300 bg-white">
+            <div class="flex items-center justify-center px-3 py-2 text-sm text-G700 border-b">
+                <Spinner class="loader" />
+                <span class="ml-2">Chargement...</span>
+            </div>
+        </div>
         <div class="absolute top-10 w-full z-[2000] border-1 border-G300 bg-white" v-if="rawResults.length > 0">
             <div v-if="showCategory" class="flex" v-for="section in results" :key="section.title">
                 <div class="w-40 px-3 py-2 text-right text-sm text-G700 border-r border-G200 border-b">
@@ -28,6 +34,7 @@
 <script setup>
 import { toRefs, ref, computed, onMounted, watch } from "vue";
 import debounce from "../../utils/debounce";
+import { Spinner } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     name: String,
