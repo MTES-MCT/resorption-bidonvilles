@@ -91,4 +91,12 @@ export type User = {
     // filter: app
     last_version?: string | null,
     last_changelog?: string | null
+
+    // anonymisation
+    anonymized_at?: number | null,
+    anonymization_requested: boolean | null,
+
+    // deactivation
+    deactivated_at?: number | null,
+    deactivation_type?: string | null,
 };

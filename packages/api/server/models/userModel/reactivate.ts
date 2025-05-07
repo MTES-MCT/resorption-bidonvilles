@@ -11,6 +11,7 @@ export default async (id: number, transaction: Transaction = undefined): Promise
                 ELSE 'active'
             END,
             updated_at = NOW(),
+            anonymization_requested = NULL,
 
             -- les deux lignes suivantes sont nécessaires pour éviter
             -- que l'utilisateur ne soit identifié comme utilisateur inactif

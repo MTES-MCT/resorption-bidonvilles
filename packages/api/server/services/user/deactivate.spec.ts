@@ -67,7 +67,7 @@ describe('userService.deactivate()', () => {
 
     it('exécute l\'ensemble des requêtes dans une transaction', async () => {
         await deactivateUser(42, true);
-        expect(userModel.deactivate).to.have.been.calledWith([42], transaction);
+        expect(userModel.deactivate).to.have.been.calledWith([42], 'admin', false, transaction);
         expect(userModel.findOne).to.have.been.calledWith(42, {}, null, 'deactivate', transaction);
         expect(transaction.commit).to.have.been.calledOnce;
     });

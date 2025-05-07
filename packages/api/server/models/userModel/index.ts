@@ -1,3 +1,5 @@
+import anonymizationRequest from './anonymizationRequest';
+import anonymizeUser from './anonymize';
 import autocomplete from './autocomplete';
 import create from './create';
 import deactivate from './deactivate';
@@ -33,6 +35,8 @@ import update from './update';
 import upgradeLocalAdmin from './upgradeLocalAdmin';
 
 export default {
+    anonymizationRequest,
+    anonymizeUser,
     autocomplete,
     refuse,
     create,

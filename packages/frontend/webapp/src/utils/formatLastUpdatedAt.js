@@ -11,9 +11,15 @@ function compute(date) {
 }
 
 export default (town) => {
-    const { months } = getSince(Math.abs(town.updatedAt));
+    const { months } = getSince(Math.abs(town.lastUpdatedAt));
 
-    if (months >= 3) {
+    const { months: monthsUpdate } = getSince(Math.abs(town.updatedAt));
+
+    if (monthsUpdate >= 1 && monthsUpdate < 6 && months >= 1 && months < 6) {
+        return `Dernière activité il y a ${formatDateSinceActivity(
+            Math.max(town.lastUpdatedAt, town.updatedAt) || town.updatedAt
+        )}`;
+    } else if (monthsUpdate >= 6) {
         return `Pas de mise à jour depuis ${formatDateSinceActivity(
             town.updatedAt
         )}`;
@@ -21,5 +27,7 @@ export default (town) => {
         return `Ajouté ${compute(town.createdAt)}`;
     }
 
-    return `Mis à jour ${compute(town.updatedAt)}`;
+    return `Dernière activité ${compute(
+        Math.max(town.lastUpdatedAt, town.updatedAt) || town.updatedAt
+    )}`;
 };

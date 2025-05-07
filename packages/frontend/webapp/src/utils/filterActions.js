@@ -65,6 +65,10 @@ function checkLocation(action, filters) {
         return !overseasRegions.includes(action.location.region.code);
     }
 
+    if (filters.location.typeUid === "outremer") {
+        return overseasRegions.includes(action.location.region.code);
+    }
+
     const l = action.location[filters.location.typeUid];
 
     if (!l) {

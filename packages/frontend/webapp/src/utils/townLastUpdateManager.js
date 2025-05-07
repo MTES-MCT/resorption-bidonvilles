@@ -1,3 +1,5 @@
+import getSince from "./getSince";
+
 function getMostRecentComment(comments) {
     return comments.reduce((newest, current) => {
         return current.createdAt > newest.createdAt ? current : newest;
@@ -5,6 +7,12 @@ function getMostRecentComment(comments) {
 }
 
 function getMostRecentUpdateOnTown(mostRecentComment, townUpdatedAt) {
+    const { months } = getSince(townUpdatedAt);
+
+    if (months >= 6) {
+        return townUpdatedAt;
+    }
+
     return mostRecentComment.createdAt > townUpdatedAt
         ? mostRecentComment.createdAt
         : townUpdatedAt;

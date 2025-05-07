@@ -23,10 +23,13 @@
                             >Rechercher</Button
                         >
                     </div>
-                    <div class="mt-2 text-left text-sm">
-                        <p class="font-bold">Mes territoires :</p>
+                    <div
+                        class="flex flex-col xs:flex-row gap-1 xs:gap-2 mt-2 text-left text-sm"
+                    >
+                        <p class="col-span-1 font-bold">Mes territoires :</p>
                         <Link
                             v-for="(area, idx) in searchAreas"
+                            class="flex flex-row"
                             :class="
                                 ((inputLocation.data === null &&
                                     area.type === 'nation') ||
@@ -85,7 +88,7 @@ const props = defineProps({
         required: false,
         default: () => undefined,
     },
-    displayMetropole: {
+    displayMetropoleOutremer: {
         type: Boolean,
         required: false,
         default: true,
@@ -97,7 +100,7 @@ const {
     allowFreeSearch,
     searchPlaceholder,
     location,
-    displayMetropole,
+    displayMetropoleOutremer,
 } = toRefs(props);
 const emit = defineEmits(["update:location"]);
 const userStore = useUserStore();
@@ -135,9 +138,9 @@ function emptySearch() {
 }
 
 const searchAreas = computed(() => {
-    if (displayMetropole.value === false) {
+    if (displayMetropoleOutremer.value === false) {
         const filtered = userStore.user.intervention_areas.areas.filter(
-            (area) => area.type !== "metropole"
+            (area) => !["metropole", "outremer"].includes(area.type)
         );
         return filtered;
     } else {

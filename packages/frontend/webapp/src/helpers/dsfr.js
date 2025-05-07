@@ -3,6 +3,7 @@ import {
     DsfrTile,
     DsfrSearchBar,
     DsfrInput,
+    DsfrCheckbox
 } from "@gouvminint/vue-dsfr";
 
 import "@gouvfr/dsfr/dist/dsfr.min.css";
@@ -13,4 +14,5 @@ export function useDsfr(app) {
     app.component("DsfrTile", DsfrTile);
     app.component("DsfrSearchBar", DsfrSearchBar);
     app.component("DsfrInput", DsfrInput);
+    app.component("DsfrCheckbox", DsfrCheckbox);
 }

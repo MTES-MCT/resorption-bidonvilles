@@ -72,7 +72,8 @@ const userStore = useUserStore();
 
 const pinVariant = computed(() => {
     const { months } = getSince(shantytown.value.lastUpdatedAt);
-    if (months > 6) {
+
+    if (months >= 6) {
         return "pin_red";
     } else if (months >= 3) {
         return "pin_orange";
@@ -95,7 +96,7 @@ const attachmentsLabel = computed(() => {
         "shantytown_justice.access",
         shantytown
     )
-        ? shantytown.value.attachments.length
+        ? shantytown.value.attachments?.length
         : 0;
 
     const totalAttachments = commentsAttachments + justiceAttachments;

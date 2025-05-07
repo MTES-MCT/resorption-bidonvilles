@@ -6,6 +6,7 @@ import sendActionAlert from '#server/services/action/sendAlert';
 import config from '#server/config';
 import userService from '#server/services/user/index';
 import cleanAttachmentArchives from '#server/services/attachment/cleanArchives';
+import anonymizeUser from '#server/services/user/anonymizeUser';
 import anonymizeOwners from '#server/services/shantytown/anonymizeOwners';
 
 const {
@@ -16,7 +17,7 @@ const {
     sendUserReview,
 } = mailUtils;
 const {
-    sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners: shouldAnonymizeOwners,
+    sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners: shouldAnonymizeOwners, anonymizeInactiveUsers,
 } = config;
 
 export default (agenda) => {
@@ -144,6 +145,15 @@ export default (agenda) => {
         async () => {
             if (shouldAnonymizeOwners) {
                 await anonymizeOwners();
+            }
+        },
+    );
+
+    agenda.define(
+        'anonymize_inactive_users',
+        async () => {
+            if (anonymizeInactiveUsers) {
+                await anonymizeUser();
             }
         },
     );
