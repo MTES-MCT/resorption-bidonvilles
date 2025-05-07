@@ -91,8 +91,18 @@ const props = defineProps({
         required: false,
         default: false,
     },
+    defaultView: {
+        type: Object,
+        required: false,
+        default() {
+            return {
+                center: [46.7755829, 2.0497727],
+                zoom: 6,
+            };
+        },
+    },
 });
-const { pois, showAddresses } = toRefs(props);
+const { pois, showAddresses, defaultView } = toRefs(props);
 const emit = defineEmits([
     "poiclick",
     "viewchange",
@@ -101,6 +111,10 @@ const emit = defineEmits([
 ]);
 const carto = ref(null);
 const addressToggler = ref(null);
+const initialView = ref({
+    center: defaultView.value.center,
+    zoom: defaultView.value.zoom,
+});
 const showAddressesModel = computed({
     get() {
         return showAddresses.value;
@@ -185,6 +199,12 @@ const updateAddress = () => {
         searchMarker.setLatLng(searchAddress.value.data.coordinates);
         carto.value.map.setView(searchAddress.value.data.coordinates, 20);
         trackEvent("Cartographie", "Recherche");
+    } else {
+        searchMarker.remove();
+        carto.value.map.setView(
+            initialView.value.center,
+            initialView.value.zoom
+        );
     }
 };
 
