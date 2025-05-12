@@ -19,5 +19,6 @@ export default function raw(): JusticeReaderRow {
         type_category: 'association',
         type_name: 'Association',
         type_abbreviation: null,
+        user_status: 'active',
     };
 }
