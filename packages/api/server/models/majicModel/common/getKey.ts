@@ -22,7 +22,6 @@ export default async () => {
 
         return result.encryption_key;
     } catch (error) {
-        console.error('Erreur lors de la récupération de la clé:', error);
         throw new Error('Impossible de récupérer la clé de chiffrement');
     }
 };
