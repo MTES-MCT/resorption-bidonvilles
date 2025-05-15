@@ -4,11 +4,12 @@ const pg = require('pg');
 dotenv.config();
 
 function getConfig(database) {
+    const host = database === 'majic' ? `${process.env.RB_API_MAJIC_POSTGRES_HOST}` : `${process.env.RB_API_POSTGRES_HOST}`;
     const port = database === 'majic' ? `${process.env.RB_API_MAJIC_POSTGRES_PORT}` : `${process.env.RB_API_POSTGRES_PORT}`;
     return {
         username: process.env.RB_API_POSTGRES_USER,
         password: process.env.RB_API_POSTGRES_PASSWORD,
-        host: process.env.RB_API_POSTGRES_HOST,
+        host,
         port: parseInt(port, 10),
         database,
         dialect: 'postgres',
