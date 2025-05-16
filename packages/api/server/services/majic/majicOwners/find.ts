@@ -56,6 +56,9 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
             throw new ServiceError('owner_fetch_failed', new Error(`Propriétaire de la parcelle ${parcelId} introuvable.`));
         }
     } catch (ownersError) {
+        if (ownersError.code === 'owner_fetch_failed') {
+            throw new ServiceError('owner_fetch_failed', ownersError.nativeError);
+        }
         throw new ServiceError('owners_fetch_failed', new Error(`Une erreur s'est produite lors de la recherche des propiétaires de la parcelle ${parcelId}.`));
     }
 
