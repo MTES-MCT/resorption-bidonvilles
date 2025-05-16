@@ -20,9 +20,7 @@
                     notre travail
                 </li>
                 <li>
-                    <Link to="/statistiques-publiques"
-                        >quelques statistiques</Link
-                    >
+                    <Link to="/stats">quelques statistiques</Link>
                     sur notre mesure d'impact
                 </li>
             </ul>

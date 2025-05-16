@@ -24,7 +24,7 @@
                 </FooterBarFootLink>
                 <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
 
-                <FooterBarFootLink :to="`${(URL || '')}/statistiques-publiques`"
+                <FooterBarFootLink :to="`${(URL || '')}/stats`"
                     title="Afficher les statistiques publiques de la plateforme">
                     {{ $t('footer.statistics') }}
                 </FooterBarFootLink>
