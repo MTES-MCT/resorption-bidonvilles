@@ -24,7 +24,7 @@ export default async (req: majicParcelGetRequest, res: Response, next: NextFunct
     } catch (error) {
         const { code } = ERROR_RESPONSES[error?.code] || ERROR_RESPONSES.undefined;
         res.status(code).send({
-            user_message: `(back) ${error.nativeError?.message || error.message || 'Une erreur inconnue est survenue'}`,
+            user_message: `${error.nativeError?.message || error.message || 'Une erreur inconnue est survenue'}`,
         });
         return next(error.nativeError || error);
     }
