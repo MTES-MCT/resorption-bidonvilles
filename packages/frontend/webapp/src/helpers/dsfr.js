@@ -3,7 +3,7 @@ import {
     DsfrTile,
     DsfrSearchBar,
     DsfrInput,
-    DsfrCheckbox
+    DsfrCheckbox,
 } from "@gouvminint/vue-dsfr";
 
 import "@gouvfr/dsfr/dist/dsfr.min.css";
