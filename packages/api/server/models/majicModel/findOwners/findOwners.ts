@@ -3,7 +3,7 @@ import { QueryTypes } from 'sequelize';
 import { RawOwner } from './RawOwner';
 import getOwnersTableName from '../common/getFullTableName';
 
-export default async (idcom: string, dnupro: string, dept: string, schema: string, shortTableName: string, tableName: string): Promise<RawOwner[]> => {
+export default async (idcom: string, dnupro: string, dept: string, schema: string, shortTableName: string, tableName: string): Promise<RawOwner[] | null> => {
     const fullTableName = `${getOwnersTableName(dept, schema, shortTableName, tableName)}_encrypted`;
 
     const owners: RawOwner[] = await sequelize.query(
