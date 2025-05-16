@@ -7,6 +7,7 @@ const ERROR_RESPONSES = {
     log_insert_failed: { code: 400 },
     parcel_fetch_failed: { code: 400 },
     owner_fetch_failed: { code: 400 },
+    owners_fetch_failed: { code: 400 },
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
