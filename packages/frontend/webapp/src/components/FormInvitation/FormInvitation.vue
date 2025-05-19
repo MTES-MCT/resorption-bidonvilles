@@ -111,11 +111,10 @@ const props = defineProps({
     },
     from: {
         type: String,
-        required: true,
+        default: "unknown",
     },
     showSkip: {
         type: Boolean,
-        required: false,
         default: false,
     },
 });
