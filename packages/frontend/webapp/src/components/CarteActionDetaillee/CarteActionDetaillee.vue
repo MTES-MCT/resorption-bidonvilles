@@ -12,7 +12,9 @@
             @mouseenter="isHover = true"
             @mouseleave="isHover = false"
         >
-            <div class="mb-4 px-6 -mt-1 pt-px flex gap-2">
+            <div
+                class="mb-4 px-6 -mt-1 pt-px flex lg:flex-row justify-between gap-2"
+            >
                 <div>
                     <Tag
                         tabindex="0"
@@ -36,10 +38,7 @@
                         </span>
                     </Tag>
                 </div>
-                <div
-                    class="flex sm:absolute sm:right-14 mt-[3px]"
-                    v-if="attachmentsLabel"
-                >
+                <div class="flex right-14 mt-[3px]" v-if="attachmentsLabel">
                     <Tag
                         tabindex="1"
                         :aria-label="attachmentsLabel"
