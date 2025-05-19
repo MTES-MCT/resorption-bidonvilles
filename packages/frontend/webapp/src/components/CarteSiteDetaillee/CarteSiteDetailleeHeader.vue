@@ -30,7 +30,7 @@
                 class="mt-1 items-center py-2"
             />
         </div>
-        <div class="flex lg:absolute lg:right-14" v-if="attachmentsLabel">
+        <div class="flex right-14" v-if="attachmentsLabel">
             <Tag
                 variant="highlight"
                 :class="[
