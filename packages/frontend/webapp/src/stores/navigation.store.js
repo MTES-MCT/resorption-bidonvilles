@@ -19,7 +19,7 @@ const topItems = [
     {
         icon: "fa-regular fa-user-plus",
         label: "Inviter des utilisateurs",
-        route: "/invitation",
+        route: "/invitation?from=navbar",
         authRequirement: "signedIn",
     },
     {
