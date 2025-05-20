@@ -13,7 +13,7 @@
             @mouseleave="isHover = false"
         >
             <div
-                class="mb-4 px-6 -mt-1 pt-px flex lg:flex-row justify-between gap-2"
+                class="mb-4 px-6 -mt-1 pt-px flex flex-col sm:flex-row justify-between sm:gap-2"
             >
                 <div>
                     <Tag
@@ -38,7 +38,7 @@
                         </span>
                     </Tag>
                 </div>
-                <div class="flex right-14 mt-[3px]" v-if="attachmentsLabel">
+                <div class="mt-[3px]" v-if="attachmentsLabel">
                     <Tag
                         tabindex="1"
                         :aria-label="attachmentsLabel"
@@ -57,7 +57,9 @@
                 {{ action.name }}
             </div>
 
-            <div class="md:grid cardGridTemplateColumns gap-10 px-6 py-4">
+            <div
+                class="lg:grid cardGridTemplateColumnsSmall lg:cardGridTemplateColumnsLarge gap-10 px-6 py-4"
+            >
                 <CarteActionColonneChampsIntervention :topics="action.topics" />
                 <CarteActionDetailleeColonneDepartement
                     :departement="action.location.departement"
@@ -138,7 +140,10 @@ const attachmentsLabel = computed(() => {
 </script>
 
 <style scoped lang="scss">
-.cardGridTemplateColumns {
+.cardGridTemplateColumnsLarge {
     grid-template-columns: 222px 208px auto 300px 200px;
+}
+.cardGridTemplateColumnsSmall {
+    grid-template-columns: 111px 104px auto 200px 150px;
 }
 </style>
