@@ -15,7 +15,7 @@
                 inscrites sur la plateforme
             </template>
             <template v-slot:actions>
-                <Link to="/invitation"
+                <Link to="/invitation?from=annuaire"
                     ><Icon icon="user-plus" /> Inviter des utilisateurs</Link
                 >
             </template>
