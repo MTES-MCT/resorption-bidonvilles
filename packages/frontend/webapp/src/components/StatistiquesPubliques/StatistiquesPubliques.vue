@@ -33,7 +33,7 @@
             <h2 class="text-display-lg font-bold text-secondary mt-16">
                 Répartition des utilisateurs
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 mt-4">
+            <div class="grid grid-cols-1 xl:grid-cols-2 mt-4">
                 <div>
                     <RepartitionUtilisateurs
                         v-if="numberOfPublicEstablishmentUsers !== '...'"
