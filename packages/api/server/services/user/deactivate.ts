@@ -36,7 +36,6 @@ async function deactivateUserWithTransaction(id: number, anonymizationRequested:
     const transaction = await sequelize.transaction();
 
     try {
-        // (ids: number[], deactivationType: string = 'auto', anonymizationRequested: boolean = false, transaction: Transaction = undefined): Promise<UserStatus[]> => {
         const updatedUsers = await userModel.deactivate([id], 'admin', anonymizationRequested, transaction);
 
         if (!updatedUsers || updatedUsers.length !== 1) {
@@ -119,7 +118,7 @@ export default async (id: number, selfDeactivation: boolean, author: User, reaso
     const user = await findAndValidateUser(id);
     const updatedUser = await deactivateUserWithTransaction(id, anonymizationRequested, user);
 
-    // Désactivation éventuelle des jobs programmé par accessActivatedOnboarding s'ils sont actifs
+    // Désactivation éventuelle des jobs programmés par accessActivatedOnboarding s'ils sont actifs
     await sendNotifications(updatedUser, selfDeactivation, reason);
     const agenda = agendaFactory();
     await Promise.all(onboardingJob.map(async (jobName) => {
