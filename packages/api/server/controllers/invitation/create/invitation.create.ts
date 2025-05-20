@@ -81,8 +81,6 @@ export default async (req, res, next) => {
 
     // Send a mattermost alert for each guest
     try {
-        // La méthode qui suit attend l'id de l'utilisateur pour l'accès à sa fiche sur la lateforme. 
-        // Or, l'id n'est pas contenu dans l'objet "greeter"
         await sendMattermostNotifications(guests, greeter, invite_from);
     } catch (err) {
         // ignore
