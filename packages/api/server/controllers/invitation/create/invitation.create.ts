@@ -38,9 +38,20 @@ async function sendMattermostNotifications(guests, greeter, invite_from) {
     if (invite_from === 'access_request') {
         from = "via le formulaire de demande d'accès";
     } else if (invite_from === 'contact_others') {
-        from = "via le formulaire de contact (signaler / aider / demande d'info / demander de l'aide)";
+        from = "via le formulaire de contact (signaler / aider / demander des infos / demander de l'aide / demander un accès)";
     } else if (invite_from === 'push_mail') {
         from = 'via push mail J+15';
+    } else if (invite_from === 'navbar') {
+        from = 'via le menu de navigation';
+    } else if (invite_from === 'annuaire') {
+        from = 'via l\'annuaire';
+    } else {
+        from = 'via une origine inconnue';
+    }
+
+    const greeterUser = await userModel.findOneByEmail(greeter.email);
+    if (greeterUser !== null) {
+        greeter.id = greeterUser.id;
     }
 
     for (let i = 0; i < guests.length; i += 1) {
@@ -70,6 +81,8 @@ export default async (req, res, next) => {
 
     // Send a mattermost alert for each guest
     try {
+        // La méthode qui suit attend l'id de l'utilisateur pour l'accès à sa fiche sur la lateforme. 
+        // Or, l'id n'est pas contenu dans l'objet "greeter"
         await sendMattermostNotifications(guests, greeter, invite_from);
     } catch (err) {
         // ignore
