@@ -1,4 +1,4 @@
-// import deleteAnswer from '#server/models/answerModel/delete';
+import deleteAnswer from '#server/models/answerModel/delete';
 import getNationalAdmins from '#server/models/userModel/_common/getNationalAdmins';
 import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
@@ -10,7 +10,7 @@ import { User } from '#root/types/resources/User.d';
 
 export default async (question: EnrichedQuestion, answer: RawAnswer, reason?: string): Promise<void> => {
     try {
-        // await deleteAnswer(answer.id);
+        await deleteAnswer(answer.id);
     } catch (error) {
         throw new ServiceError('delete_failed', error);
     }
