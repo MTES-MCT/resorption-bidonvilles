@@ -111,7 +111,7 @@ const handleSolutions = (newValue) => {
             parseInt(town.value.populationTotal)
         ) {
             error.value =
-                "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site";
+                "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site. Si besoin, avant de procéder à la fermeture du site, veuillez mettre à jour la population totale dans la rubrique habitants.";
             return;
         } else {
             error.value = null;
@@ -192,7 +192,7 @@ defineExpose({
         // if (peopleWithSolutions.value > 100) {
         if (totalPeopleAffected.value > town.value.populationTotal) {
             error.value =
-                "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site";
+                "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site. Si besoin, avant de procéder à la fermeture du site, veuillez mettre à jour la population totale dans la rubrique habitants.";
             return;
         }
 
