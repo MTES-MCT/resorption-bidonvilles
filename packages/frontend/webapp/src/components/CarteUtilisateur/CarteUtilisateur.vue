@@ -45,7 +45,7 @@
         </div>
         <div
             v-if="user.expertise_topics?.length > 0"
-            class="col-span-2 flex flex-col xs:grid xs:grid-cols-2 gap-4"
+            class="col-span-2 flex flex-col md:grid md:grid-cols-2 gap-4"
         >
             <div v-if="getTopicsByLevel('expertise').length > 0" class="flex">
                 <Icon icon="arrow-turn-down-right" class="text-info mr-2" />
