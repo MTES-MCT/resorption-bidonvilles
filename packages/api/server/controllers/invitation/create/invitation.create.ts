@@ -50,15 +50,16 @@ async function sendMattermostNotifications(guests, greeter, invite_from) {
     }
 
     const greeterUser = await userModel.findOneByEmail(greeter.email);
+    let greeterWithId = greeter;
     if (greeterUser !== null) {
-        greeter.id = greeterUser.id;
+        greeterWithId = { ...greeter, id: greeterUser.id };
     }
 
     for (let i = 0; i < guests.length; i += 1) {
         // Send a mattermost alert, if it fails, do nothing
         try {
             // eslint-disable-next-line no-await-in-loop
-            await triggerPeopleInvitedAlert(guests[i], greeter, from);
+            await triggerPeopleInvitedAlert(guests[i], greeterWithId, from);
         } catch (err) {
             // eslint-disable-next-line no-console
             console.log(`Error with invited people mattermost webhook : ${Object.entries(err.message).flat()}`);

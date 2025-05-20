@@ -302,7 +302,7 @@ async function triggerPeopleInvitedAlert(guest: User, greeter: User, msg: string
         // channel: '#notif-personnes-invitées',
         username: 'Alerte Résorption Bidonvilles',
         icon_emoji: ':robot:',
-        text: `:rotating_light: Personne invitée sur la plateforme par ${greeterName} ${msg ? msg : ''}`,
+        text: `:rotating_light: Personne invitée sur la plateforme par ${greeterName} ${msg || ''}`,
         attachments: [
             {
                 color: '#f2c744',
