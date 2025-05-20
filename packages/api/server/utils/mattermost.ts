@@ -299,7 +299,7 @@ async function triggerPeopleInvitedAlert(guest: User, greeter: User, msg: string
 
     const mattermostMessage = {
         // Don't initialize the channel name because the incoming webhook has been designed for this one
-        channel: '#notif-personnes-invitées',
+        // channel: '#notif-personnes-invitées',
         username: 'Alerte Résorption Bidonvilles',
         icon_emoji: ':robot:',
         text: `:rotating_light: Personne invitée sur la plateforme par ${greeterName} ${msg ? msg : ''}`,
