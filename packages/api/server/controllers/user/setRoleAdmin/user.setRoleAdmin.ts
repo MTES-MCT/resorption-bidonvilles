@@ -17,7 +17,9 @@ export default async (req, res, next) => {
 
         if (user && admin) {
             await userModel.upgradeLocalAdmin(req.params.id);
-            await sendAdminWelcome(user);
+            if (['active', 'new'].includes(user.status)) {
+                await sendAdminWelcome(user);
+            }
         } else if (user) {
             await userModel.downgradeLocalAdmin(req.params.id);
         }

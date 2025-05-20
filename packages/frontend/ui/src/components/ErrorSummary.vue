@@ -28,6 +28,9 @@ const props = defineProps({
 
 const { message, summary } = toRefs(props);
 const summaryErrors = computed(() => {
+    if (!summary.value) {
+        return [];
+    }
     return Object.keys(summary.value).map((key) => ({
         key,
         message: summary.value[key]
