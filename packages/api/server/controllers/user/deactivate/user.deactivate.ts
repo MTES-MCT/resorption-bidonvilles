@@ -4,7 +4,7 @@ import { User } from '#root/types/resources/User.d';
 
 const ERRORS = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
-    deactivation_permission_failure: { code: 500, message: 'Vous n\'avez pas la perlmission de désactiver ce compte' },
+    deactivation_permission_failure: { code: 500, message: 'Vous n\'avez pas la permission de désactiver ce compte' },
     deactivation_failure: { code: 500, message: 'Une erreur est survenue lors de la désactivation du compte' },
     refresh_failure: { code: 500, message: 'Une erreur est survenue lors de la lecture des données en base' },
     transaction_failure: { code: 500, message: 'Une erreur est survenue lors de la validation de la désactivation' },
