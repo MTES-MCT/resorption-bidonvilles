@@ -29,7 +29,7 @@ export default async (req: MajicParcelGetRequest, res: Response, next: NextFunct
         const { code } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
 
         res.status(code).send({
-            user_message: `${error.nativeError?.message || error.message || 'Une erreur inconnue est survenue'}`,
+            user_message: `${error.nativeError?.message ?? error.message ?? 'Une erreur inconnue est survenue'}`,
         });
         return next(error.nativeError || error);
     }
