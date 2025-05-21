@@ -1043,4 +1043,21 @@ export default {
             },
         });
     },
+    sendParcelOwner(recipient, options: MailOptions = {}) {
+        const { preserveRecipient = false, variables } = options;
+        return mailService.send('parcel_owner', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient),
+                parcel: variables.parcel,
+                owners: variables.owners,
+                owners_length: variables.owners.length,
+                majicYear: variables.majicYear,
+                webappUrl: `${webappUrl}`,
+                backUrl,
+                blogUrl,
+            },
+            preserveRecipient,
+        });
+    },
 };
