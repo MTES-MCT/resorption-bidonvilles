@@ -11,11 +11,11 @@ const ERROR_RESPONSES = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
-interface majicParcelGetRequest extends Request {
+interface MajicParcelGetRequest extends Request {
     user: AuthUser,
 }
 
-export default async (req: majicParcelGetRequest, res: Response, next: NextFunction) => {
+export default async (req: MajicParcelGetRequest, res: Response, next: NextFunction) => {
     const {
         parcelid,
         departmentid,
