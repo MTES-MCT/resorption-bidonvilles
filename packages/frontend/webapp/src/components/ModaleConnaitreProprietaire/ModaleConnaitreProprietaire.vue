@@ -84,7 +84,10 @@
         </template>
 
         <template v-slot:footer>
-            <Button variant="primaryText" @click="() => modale.close()"
+            <Button
+                variant="primaryOutline"
+                class="!border-2 !border-primary hover:!bg-primary"
+                @click="() => modale.close()"
                 >Annuler</Button
             >
             <Button class="ml-5" :loading="loading" @click="fetchParcelOwners">
@@ -153,3 +156,8 @@ async function fetchParcelOwners() {
     loading.value = false;
 }
 </script>
+<style scoped>
+button {
+    border: inherit;
+}
+</style>
