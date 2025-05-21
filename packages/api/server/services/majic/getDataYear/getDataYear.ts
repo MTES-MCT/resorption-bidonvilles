@@ -15,7 +15,9 @@ export default async (departementId: string, user: AuthUser) => {
     try {
         majicYear = await majicModel.getMajicYear();
     } catch (e) {
-        throw new ServiceError('fetch_error', new Error('Une erreur est survenue lors de la récupération du millésime du registre foncier.'));
+        // eslint-disable-next-line no-console
+        console.log('Error while fetching majic year', e);
+        throw new ServiceError('fetch_error', new Error(`Une erreur est survenue lors de la récupération du millésime du registre foncier: ${e}`));
     }
     return majicYear;
 };
