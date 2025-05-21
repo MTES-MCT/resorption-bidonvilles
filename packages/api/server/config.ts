@@ -31,6 +31,9 @@ export default {
     sendActivitySummary: process.env.RB_API_SEND_ACTIVITY_SUMMARY === '1',
     sendActionAlerts: process.env.RB_API_SEND_ACTION_ALERTS === '1',
     checkInactiveUsers: process.env.RB_API_CHECK_INACTIVE_USERS === '1',
+    cleanAttachmentsArchives: process.env.RB_API_CLEAN_ATTACHMENTS_ARCHIVES === '1',
+    anonymizeOwners: process.env.RB_API_ANONYMIZE_OWNERS === '1',
+    anonymizeInactiveUsers: process.env.RB_API_ANONYMIZE_INACTIVE_USERS === '1',
     inactivityAlert: {
         delayBeforeAlert: '6 month',
         delayBeforeDeactivation: '1 month',

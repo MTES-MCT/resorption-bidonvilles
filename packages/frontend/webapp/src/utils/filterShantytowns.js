@@ -192,6 +192,15 @@ function checkLocation(shantytown, filters) {
         return true;
     }
 
+    const overseasRegions = ["01", "02", "03", "04", "06"];
+    if (filters.location.typeUid === "metropole") {
+        return !overseasRegions.includes(shantytown.region?.code);
+    }
+
+    if (filters.location.typeUid === "outremer") {
+        return overseasRegions.includes(shantytown.region.code);
+    }
+
     const l = shantytown[filters.location.typeUid];
 
     if (!l) {
@@ -262,7 +271,6 @@ function checkJustice(shantytown, filters) {
             );
         }
 
-        // value === null (inconnu)
         return (
             typeof shantytown.ownerComplaint !== "boolean" &&
             typeof shantytown.justiceProcedure !== "boolean"

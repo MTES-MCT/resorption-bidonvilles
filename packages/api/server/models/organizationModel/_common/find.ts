@@ -21,6 +21,8 @@ type OrganizationRow = {
     user_position: string,
     user_topics: (`${string};${UserExpertiseTopicType};${string}`)[],
     user_role_regular: string,
+    user_status: string,
+    user_to_be_tracked: boolean,
     type_id: number,
     type_category: string,
     type_name: string,
@@ -30,6 +32,7 @@ type OrganizationRow = {
 type OrganizationFindOptions = {
     ids?: number[],
     activeOnly?: boolean,
+    nonEmpty?: boolean,
 };
 
 export default async (options: OrganizationFindOptions = {}, transaction?: Transaction): Promise<Organization[]> => {
@@ -40,7 +43,7 @@ export default async (options: OrganizationFindOptions = {}, transaction?: Trans
         replacements.ids = options.ids;
     }
 
-    if (options.activeOnly === true) {
+    if (options.nonEmpty === true) {
         where.push(`
             organizations.active = TRUE
             AND
@@ -74,6 +77,8 @@ export default async (options: OrganizationFindOptions = {}, transaction?: Trans
             users.email AS "user_email",
             users.phone AS "user_phone",
             users.position AS "user_position",
+            users.fk_status AS "user_status",
+            users.to_be_tracked AS "user_to_be_tracked",
             COALESCE(user_expertise_topics.topics, array[]::text[]) AS "user_topics",
             user_roles_regular.name AS user_role_regular,
             organizations.fk_type AS "type_id",
@@ -124,7 +129,7 @@ export default async (options: OrganizationFindOptions = {}, transaction?: Trans
             organizations.push(hash[user.organization_id]);
         }
 
-        if (user.user_id !== null) {
+        if (user.user_id !== null && (options.activeOnly ? user.user_status === 'active' && user.user_to_be_tracked : true)) {
             hash[user.organization_id].users.push({
                 id: user.user_id,
                 is_admin: user.user_role_admin !== null,
@@ -138,6 +143,7 @@ export default async (options: OrganizationFindOptions = {}, transaction?: Trans
                     const [uid, type, label] = topic.split(';') as [string, UserExpertiseTopicType, string];
                     return { uid, type, label };
                 }),
+                status: user.user_status,
             });
         }
     });

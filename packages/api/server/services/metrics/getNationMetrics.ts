@@ -31,7 +31,7 @@ export default async (user: User, argFrom: Date, argTo: Date):Promise<NationMetr
     const metropoleData:NationMetrics = {
         level: 'nation',
         uid: 'metropole',
-        name: 'Métropole',
+        name: 'Hexagone',
         metrics: {
             number_of_towns_with_water: 0,
             number_of_persons_with_water: 0,

@@ -2,16 +2,38 @@
     <section>
         <ContentWrapper>
             <div>
+                <h1 class="text-display-xl font-bold">Impacts</h1>
+            </div>
+            <div class="flex flex-col gap-2 mt-4 mb-16">
+                <p>
+                    Plus de
+                    <strong class="text-xl text-secondary">90</strong>
+                    sites résorbés et
+                    <strong class="text-xl text-secondary">6&nbsp;500</strong>
+                    personnes relogées entre 2019 et 2023.
+                </p>
+                <p>
+                    <strong class="text-xl text-secondary">55&nbsp;%</strong>
+                    des personnes vivant en bidonvilles ont accès à l’eau en
+                    2023, contre 37&nbsp;% en 2020.
+                </p>
+                <p>
+                    <strong class="text-xl text-secondary">45&nbsp;%</strong>
+                    des utilisateurs affirment gagner du temps dans leur travail
+                    grâce à la plateforme.
+                </p>
+            </div>
+            <div>
                 <h1 class="text-display-xl font-bold">Statistiques</h1>
                 <div>
-                    Depuis l'ouverture nationale de la plateforme en juin 2019
+                    Depuis l'ouverture nationale de la plateforme en juin 2019.
                 </div>
             </div>
 
             <h2 class="text-display-lg font-bold text-secondary mt-16">
                 Répartition des utilisateurs
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 mt-4">
+            <div class="grid grid-cols-1 xl:grid-cols-2 mt-4">
                 <div>
                     <RepartitionUtilisateurs
                         v-if="numberOfPublicEstablishmentUsers !== '...'"

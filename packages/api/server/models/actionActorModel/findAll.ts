@@ -23,7 +23,7 @@ type ActionActor = {
     actions: Action[]
 };
 
-export default async (year: number): Promise<ActionActor[]> => {
+export default async (year: number, activeOnly: boolean = false): Promise<ActionActor[]> => {
     const rows: ActionActorRow[] = await sequelize.query(
         `
         SELECT
@@ -47,6 +47,7 @@ export default async (year: number): Promise<ActionActor[]> => {
         LEFT JOIN actions ON t.fk_action = actions.action_id
         LEFT JOIN users ON t.fk_user = users.user_id
         WHERE actions.started_at < :maxStartedAt AND (actions.ended_at IS NULL OR actions.ended_at >= :minEndedAt)
+        ${activeOnly ? 'AND users.fk_active = \'active\'' : ''}
         `,
         {
             type: QueryTypes.SELECT,

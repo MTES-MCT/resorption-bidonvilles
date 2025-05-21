@@ -36,7 +36,7 @@
     </p>
     <Button
         class="mt-2 !border-2 !border-primary hover:!bg-primaryDark"
-        v-if="userStore.user?.is_superuser"
+        v-if="userStore.user?.is_superuser && !user.anonymized_at"
         size="sm"
         icon="user-pen"
         iconPosition="left"
@@ -44,7 +44,7 @@
         >Modifier ces informations</Button
     >
     <Button
-        v-if="userStore.user?.is_superuser"
+        v-if="userStore.user?.is_superuser && !user.anonymized_at"
         class="mt-2 !border-2 !border-primary hover:!bg-primaryDark"
         size="sm"
         icon="building-user"

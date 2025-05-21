@@ -33,7 +33,7 @@
                     <Button 
                         size="sm"
                         variant="custom" 
-                        class="flex items-center whitespace-nowrap text-sm menuWidth pl-3 text-primary text-primary focusClasses.ring"
+                        class="flex items-center whitespace-nowrap text-sm menuWidth pl-3 text-primary focusClasses.ring"
                         @click="clear">
                         Effacer
                     </Button>

@@ -634,6 +634,26 @@ export default {
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
      */
+    sendAdminCommentDeletion: (recipient, options: MailOptions = {}) => {
+        const { variables, preserveRecipient } = options;
+
+        return mailService.send('admin_comment_from_deactivated_user_deletion', {
+            recipient,
+            variables: {
+                town: variables.town,
+                comment: variables.comment,
+                message: variables.message,
+                backUrl,
+                blogUrl,
+            },
+            preserveRecipient,
+        });
+    },
+
+    /**
+     * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
+     * @param {Object} options
+     */
     sendUserFeatures: (recipient, options: MailOptions = {}) => {
         const { preserveRecipient } = options;
 

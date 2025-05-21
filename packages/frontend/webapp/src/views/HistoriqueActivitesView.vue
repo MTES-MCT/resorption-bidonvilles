@@ -5,6 +5,7 @@
         searchPlaceholder="Nom d'une commune, d'un département, d'une région..."
         v-model:location="location"
         :paddingTop="false"
+        :displayMetropoleOutremer="false"
     >
         <ContentWrapper class="pt-8">
             <FilArianne :items="ariane" class="mb-8" />

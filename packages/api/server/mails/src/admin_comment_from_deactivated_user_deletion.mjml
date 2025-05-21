@@ -1,0 +1,34 @@
+<mjml>
+    <mj-head>
+        <mj-title>[Résorption-bidonvilles] - Un commentaire a été supprimé</mj-title>
+        <mj-include path='common/attributes.mjml' />
+        <mj-include path='common/styles.mjml' />
+    </mj-head>
+    <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
+
+        <mj-section>
+            <mj-column>
+                <mj-text mj-class="pb-4">Bonjour,</mj-text>
+                <mj-text mj-class="pb-4">
+                    Le commentaire ci-dessous, posté par un utilisateur désactivé, a été supprimé par un administrateur.
+                </mj-text>
+                <mj-text>
+                    La raison mentionnée par celui-ci est :
+                </mj-text>
+                <mj-text>
+                    "{{var:message}}".
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section>
+            <mj-column padding="1rem" background-color="#dddddd">
+                <mj-text mj-class="pb-4">
+                    "{{var:comment.description}}".
+                </mj-text>
+                <mj-text>Écrit le {{var:comment.created_at}}, concernant le site : {{var:town.usename}}, {{var:town.city.name}}</mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-include path='common/footer.mjml' />
+    </mj-body>
+</mjml>

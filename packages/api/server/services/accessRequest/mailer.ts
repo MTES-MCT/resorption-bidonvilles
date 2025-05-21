@@ -103,7 +103,7 @@ export default {
             });
         },
 
-        accessPending(user, admin, activationLink, expiracyDate) {
+        accessPending(user, activationLink, expiracyDate) {
             return sendUserAccessPending(user, {
                 variables: {
                     activationUrl: activationLink,

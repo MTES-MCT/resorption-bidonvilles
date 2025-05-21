@@ -29,6 +29,7 @@
                     @unhighlightTown="onMouseLeave"
                     @townClick="onTownRowClick"
                     @townZoom="onTownRowZoom"
+                    :highlightedTown="highlightedTown"
                 />
             </div>
             <div class="w-1 bg-blue300">
@@ -76,6 +77,8 @@
                     :isLoading="isLoading"
                     :towns="towns"
                     @townclick="onTownClick"
+                    @highlightTownLine="toggleTownHighlight"
+                    :activeTab="departementMetricsStore.activeTab"
                 />
             </div>
         </div>
@@ -150,6 +153,7 @@ const tables = {
     schooling: SchoolingTable,
     justice: JusticeTable,
 };
+const highlightedTown = ref(null);
 
 const userTabs = computed(() => {
     if (!userStore.hasJusticePermission) {
@@ -280,6 +284,17 @@ function onTownClick(town) {
 }
 
 const { currentFormat } = toRefs(departementMetricsStore);
+
+const toggleTownHighlight = (townId, cityCode) => {
+    highlightedTown.value = townId;
+    if (townId === null) {
+        onMouseLeave();
+    } else if (highlightedTown.value === townId) {
+        onMouseEnter(townId, cityCode);
+    } else {
+        onMouseEnter(townId, cityCode);
+    }
+};
 watch(currentFormat, () => {
     loadGeojson();
 });

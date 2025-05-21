@@ -8,6 +8,7 @@ import { User } from '#root/types/resources/User.d';
 const { mattermost, webappUrl } = config;
 const formatAddress = (town: Shantytown): string => `${town.address} ${town.name ? `« ${town.name} » ` : ''}`;
 const formatUsername = (user: { id: number, first_name: string, last_name: string }): string => `[${user.first_name} ${user.last_name}](${webappUrl}/nouvel-utilisateur/${user.id}) `;
+const formatUsernameWithEmailLink = (user: { first_name: string, last_name: string, email: string, }): string => `[${user.first_name} ${user.last_name}](mailto:${user.email}) `;
 const formatTownLink = (townID: number, text: string): string => `[${text}](${webappUrl}/site/${townID})`;
 const formatActionLink = (actionID: number, text: string): string => `[${text}](${webappUrl}/action/${actionID})`;
 
@@ -287,22 +288,28 @@ async function triggerPeopleInvitedAlert(guest: User, greeter: User, msg: string
 
     const peopleInvitedAlert = new IncomingWebhook(mattermost);
 
-    const guestName = formatUsername(guest);
-    const greeterName = formatUsername(greeter);
+    const guestName = formatUsernameWithEmailLink(guest);
+
+    let greeterName = '';
+    if (greeter.id) {
+        greeterName = formatUsername(greeter);
+    } else {
+        greeterName = formatUsernameWithEmailLink(greeter);
+    }
 
     const mattermostMessage = {
         // Don't initialize the channel name because the incoming webhook has been designed for this one
         // channel: '#notif-personnes-invitées',
         username: 'Alerte Résorption Bidonvilles',
         icon_emoji: ':robot:',
-        text: `:rotating_light: Personne invitée sur la plateforme par ${greeterName} ${msg}`,
+        text: `:rotating_light: Personne invitée sur la plateforme par ${greeterName} ${msg || ''}`,
         attachments: [
             {
                 color: '#f2c744',
                 fields: [
                     {
                         short: 'false',
-                        value: `*Personne invitée*: ${guestName} <${guest.email}>`,
+                        value: `*Personne invitée*: ${guestName}`,
                     },
                 ],
             }],
@@ -450,6 +457,75 @@ export async function triggerAttachmentArchiveCleanupError(): Promise<void> {
     await webhook.send(mattermostMessage);
 }
 
+async function triggerNotifyOwnersAnonymization(shantytownLines: number, shantytownHistoryLines: number): Promise<void> {
+    if (!mattermost) {
+        return;
+    }
+
+    const webhook = new IncomingWebhook(mattermost);
+
+    const createLinesMessage = (count: number): string => {
+        if (count <= 0) {
+            return 'Aucune ligne';
+        }
+        return count === 1 ? `${count} ligne` : `${count} lignes`;
+    };
+
+    const shantytownLinesMessage = createLinesMessage(shantytownLines);
+    const shantytownHistoryLinesMessage = createLinesMessage(shantytownHistoryLines);
+
+    const mattermostMessage = {
+        channel: '#notif-anonymisation',
+        username: 'Information Résorption Bidonvilles',
+        icon_emoji: ':robot:',
+        text: ':rotating_light: Une anonymisation automatique des propriétaires vient d\'être lancée:',
+        attachments: [
+            {
+                color: '#f2c744',
+                fields: [
+                    {
+                        short: false,
+                        value: `*${shantytownLinesMessage} ${shantytownLines > 1 ? ' traitées ' : ' traitée '} dans la table des sites`,
+                    },
+                    {
+                        short: false,
+                        value: `*${shantytownHistoryLinesMessage} ${shantytownHistoryLines > 1 ? ' traitées ' : ' traitée '} dans l'historique des sites`,
+                    },
+                ],
+            },
+        ],
+    };
+
+    await webhook.send(mattermostMessage);
+}
+
+export async function triggerNotifyOwnersAnonymizationError(message: string): Promise<void> {
+    if (!mattermost) {
+        return;
+    }
+
+    const webhook = new IncomingWebhook(mattermost);
+    const mattermostMessage = {
+        channel: '#notif-anonymisation',
+        username: 'Alerte Résorption Bidonvilles',
+        icon_emoji: ':robot:',
+        text: ':rotating_light: Une erreur est survenue lors de l\'anonymisation des propriétaires en base de données',
+        attachments: [
+            {
+                color: '#d63232',
+                fields: [
+                    {
+                        short: false,
+                        value: `*Erreur: * ${message}`,
+                    },
+                ],
+            },
+        ],
+    };
+
+    await webhook.send(mattermostMessage);
+}
+
 export default {
     triggerShantytownCloseAlert,
     triggerShantytownCreationAlert,
@@ -465,4 +541,6 @@ export default {
     triggerRemoveDeclaredActor,
     triggerNotifyNewUserFromRectorat,
     triggerNotifyNewUserSelfDeactivation,
+    triggerNotifyOwnersAnonymization,
+    triggerNotifyOwnersAnonymizationError,
 };

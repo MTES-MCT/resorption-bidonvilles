@@ -26,6 +26,16 @@ const locationImg = computed(() => {
         return regionsImg.france;
     }
 
+    // hexagone
+    if (location.value.typeUid === "metropole") {
+        return regionsImg.hexagone;
+    }
+
+    // outremer
+    if (location.value?.typeUid === "outremer") {
+        return regionsImg.outremer;
+    }
+
     // régional
     if (location.value?.typeUid === "region") {
         const unsupportedRegions = ["01", "02", "03", "04", "06"];

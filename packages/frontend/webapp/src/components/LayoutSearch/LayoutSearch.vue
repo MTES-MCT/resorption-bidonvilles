@@ -1,10 +1,7 @@
 <template>
     <Layout v-bind="$attrs">
         <template v-slot:banner>
-            <div
-                class="pt-6 text-center print:hidden"
-                :class="showReset ? 'pb-4' : 'pb-10'"
-            >
+            <div class="pt-6 text-center print:hidden pb-10">
                 <p class="text-lg xl:text-xl font-bold">{{ searchTitle }}</p>
                 <span class="sr-only"
                     >Saisissez une valeur dans le champ qui suit pour rechercher
@@ -26,31 +23,31 @@
                             >Rechercher</Button
                         >
                     </div>
-                    <div class="mt-2 text-left text-sm">
-                        <p class="font-bold">Mes territoires :</p>
-                        <p class="space-x-2">
-                            <Link
-                                v-for="(area, idx) in userStore.user
-                                    .intervention_areas.areas"
-                                :class="
-                                    ((inputLocation.data === null &&
-                                        area.type === 'nation') ||
-                                        inputLocation.data?.typeUid ===
-                                            area.type) &&
-                                    inputLocation.data?.code ===
-                                        area[area.type]?.code
-                                        ? 'text-primary font-bold '
-                                        : ''
-                                "
-                                @click="setSearch(area)"
-                                :key="idx"
-                                >{{
-                                    area.type === "nation"
-                                        ? "France entière"
-                                        : area[area.type].name
-                                }}</Link
-                            >
-                        </p>
+                    <div
+                        class="flex flex-col xs:flex-row gap-1 xs:gap-2 mt-2 text-left text-sm"
+                    >
+                        <p class="col-span-1 font-bold">Mes territoires :</p>
+                        <Link
+                            v-for="(area, idx) in searchAreas"
+                            class="flex flex-row"
+                            :class="
+                                ((inputLocation.data === null &&
+                                    area.type === 'nation') ||
+                                    inputLocation.data?.typeUid ===
+                                        area.type) &&
+                                inputLocation.data?.code ===
+                                    area[area.type]?.code
+                                    ? 'text-primary font-bold '
+                                    : ''
+                            "
+                            @click="setSearch(area)"
+                            :key="idx"
+                            >{{
+                                area.type === "nation"
+                                    ? "France entière"
+                                    : area[area.type].name
+                            }}</Link
+                        >
                     </div>
                 </ContentWrapper>
             </div>
@@ -91,14 +88,19 @@ const props = defineProps({
         required: false,
         default: () => undefined,
     },
+    displayMetropoleOutremer: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
 });
 
 const {
     searchTitle,
     allowFreeSearch,
     searchPlaceholder,
-    showNationalWording,
     location,
+    displayMetropoleOutremer,
 } = toRefs(props);
 const emit = defineEmits(["update:location"]);
 const userStore = useUserStore();
@@ -110,20 +112,6 @@ const inputLocation = computed({
     set(newValue) {
         emit("update:location", newValue);
     },
-});
-const showReset = computed(() => {
-    if (isNotOnDefaultFilter.value) {
-        return true;
-    }
-
-    return (
-        showNationalWording.value &&
-        !userStore.user.intervention_areas.is_national
-    );
-});
-
-const isNotOnDefaultFilter = computed(() => {
-    return !userStore.isMyLocation(inputLocation.value);
 });
 
 function setSearch(area) {
@@ -148,4 +136,15 @@ function emptySearch() {
         data: null,
     };
 }
+
+const searchAreas = computed(() => {
+    if (displayMetropoleOutremer.value === false) {
+        const filtered = userStore.user.intervention_areas.areas.filter(
+            (area) => !["metropole", "outremer"].includes(area.type)
+        );
+        return filtered;
+    } else {
+        return userStore.user.intervention_areas.areas;
+    }
+});
 </script>

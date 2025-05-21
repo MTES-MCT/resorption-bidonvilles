@@ -29,6 +29,7 @@ import enrichShantytown from "@/utils/enrichShantytown";
 import filterShantytowns from "@/utils/filterShantytowns";
 import { deleteAttachment } from "@/api/attachments.api";
 import { getMostRecentComment } from "@/utils/townLastUpdateManager";
+import getSince from "@/utils/getSince";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -288,9 +289,13 @@ export const useTownsStore = defineStore("towns", () => {
                 comment,
                 attachments
             );
+            const { months } = getSince(hash.value[shantytownId].updatedAt);
             updateShantytownComments(shantytownId, comments.comments);
             setTowns(shantytownId);
-            const maxCreatedAt = getLastCommentCreatedAt(comments.comments);
+            const maxCreatedAt =
+                months < 6
+                    ? getLastCommentCreatedAt(comments.comments)
+                    : hash.value[shantytownId].updatedAt;
             updateLastUpdatedAt(shantytownId, maxCreatedAt);
             trackEvent("Site", "Création commentaire", `S${shantytownId}`);
             notificationStore.success(
@@ -310,12 +315,18 @@ export const useTownsStore = defineStore("towns", () => {
                 commentId,
                 reason
             );
+
             updateShantytownComments(shantytownId, comments);
             setTowns(shantytownId);
-            const maxCreatedAt = getLastCommentCreatedAt(comments);
+            let maxCreatedAt = hash.value[shantytownId].updatedAt;
+            // Ici, on va mettre à jour la date de mise à jour mais il ne faut pas le faire si updatedAt > 6 mois
+            const { months } = getSince(hash.value[shantytownId].updatedAt);
+            if (comments.length > 0) {
+                maxCreatedAt = getLastCommentCreatedAt(comments);
+            }
             updateLastUpdatedAt(
                 shantytownId,
-                maxCreatedAt > hash.value[shantytownId].updatedAt
+                months < 6 && maxCreatedAt > hash.value[shantytownId].updatedAt
                     ? maxCreatedAt
                     : hash.value[shantytownId].updatedAt
             );

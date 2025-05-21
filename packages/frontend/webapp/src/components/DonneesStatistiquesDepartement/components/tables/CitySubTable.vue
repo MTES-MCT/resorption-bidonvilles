@@ -12,6 +12,9 @@
             @click="$emit('townClick', town, data.city)"
             @townZoom="$emit('townZoom', town, data.city)"
             @unhighlightTown="onUnhighlight"
+            :class="{
+                'bg-blue200': highlightedTown === town.id,
+            }"
         />
     </template>
 </template>
@@ -34,8 +37,13 @@ const props = defineProps({
         type: Boolean,
         required: true,
     },
+    highlightedTown: {
+        type: Number,
+        required: false,
+    },
 });
-const { data, columns, showTowns } = toRefs(props);
+const { data, columns, showTowns, highlightedTown } = toRefs(props);
+
 const emit = defineEmits([
     "highlightTown",
     "townZoom",

@@ -655,7 +655,7 @@ const router = createRouter({
             },
         },
         {
-            path: "/statistiques-publiques",
+            path: "/stats",
             component: () => import("@/views/StatistiquesPubliques.vue"),
             meta: {
                 title: "Statistiques publiques",

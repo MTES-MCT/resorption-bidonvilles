@@ -5,7 +5,7 @@ on:
 
 jobs:
   upgrade-version:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     outputs:
       new_tag: ${{ steps.version.outputs.new_tag }}
     steps:
@@ -67,7 +67,7 @@ jobs:
 
   build-www:
     needs: upgrade-version
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v2
         with:
@@ -103,7 +103,7 @@ jobs:
 
   build-webapp:
     needs: upgrade-version
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v2
         with:
@@ -139,7 +139,7 @@ jobs:
 
   build-api:
     needs: upgrade-version
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v2
         with:
