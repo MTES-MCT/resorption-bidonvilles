@@ -2,9 +2,9 @@
     <CarteUtilisateurWrapper
         :user="user"
         :linkToUser="linkToUser"
-        class="hover:bg-blue200 border p-4 grid grid-cols-2 gap-4"
+        class="hover:!bg-blue200 border p-4 flex flex-col sm:grid sm:grid-cols-2 gap-4"
         :class="{
-            'bg-blue100': user.is_admin,
+            '!bg-blue100': user.is_admin,
             [`${focusClasses.ring}`]: true,
         }"
     >
@@ -32,9 +32,12 @@
         </div>
         <div>
             <CarteUtilisateurDetailsIcon icon="envelope">
-                <Link :to="`mailto:${user.email}`" @click="trackEmail">{{
-                    user.email
-                }}</Link>
+                <Link
+                    class="overflow-hidden whitespace-nowrap text-ellipsis min-w-24 w-32 sm:w-64 lg:w-40 xl:w-64"
+                    :to="`mailto:${user.email}`"
+                    @click="trackEmail"
+                    >{{ user.email }}</Link
+                >
             </CarteUtilisateurDetailsIcon>
             <CarteUtilisateurDetailsIcon v-if="user.phone" icon="phone">{{
                 user.phone
@@ -42,12 +45,12 @@
         </div>
         <div
             v-if="user.expertise_topics?.length > 0"
-            class="col-span-2 grid grid-cols-2 gap-4"
+            class="col-span-2 flex flex-col md:grid md:grid-cols-2 gap-4"
         >
             <div v-if="getTopicsByLevel('expertise').length > 0" class="flex">
-                <Icon icon="arrow-turn-down-right" class="text-info mr-2" />
+                <Icon icon="arrow-turn-down-right" class="text-primary mr-2" />
                 <ul>
-                    <span class="text-info">Expert(e) en</span>
+                    <span class="text-primary">Expert(e) en</span>
                     <li
                         v-for="topic in getTopicsByLevel('expertise')"
                         :key="topic.uid"
@@ -58,9 +61,9 @@
                 </ul>
             </div>
             <div v-if="getTopicsByLevel('interest').length > 0" class="flex">
-                <Icon icon="arrow-turn-down-right" class="text-info mr-2" />
+                <Icon icon="arrow-turn-down-right" class="text-primary mr-2" />
                 <ul>
-                    <span class="text-info">Intéressé(e) par</span>
+                    <span class="text-primary">Intéressé(e) par</span>
                     <li
                         v-for="topic in getTopicsByLevel('interest')"
                         :key="topic.uid"

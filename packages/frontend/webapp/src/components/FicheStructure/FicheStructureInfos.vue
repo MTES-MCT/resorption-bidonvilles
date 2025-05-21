@@ -1,33 +1,33 @@
 <template>
     <div
-        class="grid mb-8"
+        class="flex flex-col md:grid mb-8 gap-4 md:gap-8"
         :class="
             userStore.user?.is_admin && secondaryAreas
-                ? 'grid-cols-4'
-                : 'grid-cols-3'
+                ? 'md:grid-cols-4'
+                : 'md:grid-cols-3'
         "
     >
         <div>
-            <div>Territoire(s) d'intervention :</div>
-            <div class="text-lg">
+            <div class="font-bold">Territoire(s) d'intervention :</div>
+            <div class="text-md">
                 {{ mainAreas }}
             </div>
         </div>
         <div v-if="userStore.user?.is_admin && secondaryAreas">
-            <div>Autres territoires :</div>
-            <div class="text-lg">
+            <div class="font-bold">Autres territoires :</div>
+            <div class="text-md">
                 {{ secondaryAreas }}
             </div>
         </div>
         <div v-if="userStore.user?.is_superuser">
-            <div>Financement:</div>
-            <div class="text-lg">
+            <div class="font-bold">Financement:</div>
+            <div class="text-md">
                 {{ organization.being_funded ? "Oui" : "Non" }}
             </div>
         </div>
         <div v-if="userStore.user?.is_superuser">
-            <div>Date de mise à jour:</div>
-            <div class="text-lg">
+            <div class="font-bold">Date de mise à jour:</div>
+            <div class="text-md">
                 {{ beingFundedDate }}
             </div>
         </div>

@@ -1,6 +1,6 @@
 <template>
-    <router-link v-if="isLocalLink" :to="to" :title="title" :class="classes"><slot /></router-link>
-    <a v-else :href="to" :title="title" :class="classes"><slot /></a>
+    <router-link v-if="isLocalLink" :to="to" :target="target" :title="title" :class="classes"><slot /></router-link>
+    <a v-else :href="to" :target="target" :title="title" :class="classes"><slot /></a>
 </template>
 
 <script setup>
@@ -12,10 +12,14 @@ const props = defineProps({
     title: {
         type: String,
         default: "",
-    }
+    },
+    target: {
+        type: String,
+        default: "_self",
+    },
 });
 
-const { to, title } = toRefs(props);
+const { to, title, target } = toRefs(props);
 const isLocalLink = computed(() => to.value[0] === '/' && to.value.slice(-4) !== '.pdf');
 const classes = [
     'text-xs border-b-2 border-transparent hover:border-G500',

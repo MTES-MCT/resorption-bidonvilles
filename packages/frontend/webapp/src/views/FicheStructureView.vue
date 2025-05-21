@@ -78,7 +78,7 @@ async function load() {
     try {
         organization.value = await directoryStore.get(
             organizationId.value,
-            false
+            true
         );
 
         if (organization.value) {

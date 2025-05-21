@@ -1,6 +1,7 @@
 <template>
     <div>
         <Tab v-for="tab in tabs" :key="tab.id" :active="activeTab === tab.id" @click="onTabClick(tab.id)">
+            <template v-if="tab.id === 'inProgress'" v-slot:ofwhich>dont</template>
             <template v-if="tab.total !== undefined" v-slot:prefix>{{ tab.total }}</template>
             {{ tab.label }}
         </Tab>

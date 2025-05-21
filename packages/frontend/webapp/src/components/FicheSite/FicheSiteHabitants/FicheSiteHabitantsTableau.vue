@@ -22,6 +22,7 @@
                     :class="{
                         'font-bold': colIndex === 0,
                         'bg-blue200': colIndex === 0,
+                        'bg-sky-200': closestEntryDate === col.fullDate,
                     }"
                 >
                     {{ col.date }}<br />{{ col.year }}
@@ -84,6 +85,7 @@
                         'border-b border-b-black':
                             sections[index + 1]?.icon !== undefined,
                         'bg-blue100': colIndex === 0,
+                        'bg-sky-200': closestEntryDate === col.fullDate,
                     }"
                 >
                     {{ col[section.data] }}
@@ -91,10 +93,14 @@
             </tr>
         </tbody>
     </table>
+    <div class="flex mt-2 gap-2" v-if="closestEntryDate">
+        <div class="relative w-5 h-5 bg-sky-200"></div>
+        Recensement de la population au démarrage de la résorption
+    </div>
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { ref, defineProps, toRefs, computed, watch } from "vue";
 import formatInt from "@/utils/formatInt";
 import formatDate from "@common/utils/formatDate.js";
 
@@ -199,6 +205,35 @@ const sections = [
         section: "housing",
     },
 ];
+const closestEntryDate = ref(null);
+
+watch(
+    () => town.value?.preparatoryPhasesTowardResorption,
+    (phases) => {
+        if (!phases?.length) {
+            return;
+        }
+
+        const officialOpeningDate = phases.find(
+            (phase) => phase.preparatoryPhaseId === "official_opening"
+        )?.completedAt;
+
+        if (officialOpeningDate) {
+            const entriesAfterOpening = town.value.changelog.filter(
+                (entry) =>
+                    new Date(entry.date * 1000).setHours(0, 0, 0, 0) >=
+                    new Date(officialOpeningDate * 1000).setHours(0, 0, 0, 0)
+            );
+
+            if (entriesAfterOpening.length > 0) {
+                closestEntryDate.value =
+                    entriesAfterOpening[entriesAfterOpening.length - 1].date *
+                    1000;
+            }
+        }
+    },
+    { immediate: true }
+);
 
 const populationHistory = computed(() => {
     let ref = {
@@ -229,7 +264,7 @@ const populationHistory = computed(() => {
         mattresses: formatInt(town.value.mattresses, "-"),
     };
 
-    // on traite le changelog pour n'y conserver que les étapes qui contiennent au moins un
+    // On traite le changelog pour n'y conserver que les étapes qui contiennent au moins un
     // changement sur les champs de population
     const entries = town.value.changelog
         .map((entry) => {
@@ -247,11 +282,9 @@ const populationHistory = computed(() => {
                 ),
             };
         })
-        .filter(({ diff }) => {
-            return diff.length > 0;
-        });
+        .filter(({ diff }) => diff.length > 0);
 
-    // s'il n'y a jamais eu de changement sur les champs de population, on a une seule entrée dans
+    // S'il n'y a jamais eu de changement sur les champs de population, on a une seule entrée dans
     // l'historique, à savoir les valeurs présentes, à la date de déclaration du site sur la
     // plateforme
     if (entries.length === 0) {
@@ -260,28 +293,31 @@ const populationHistory = computed(() => {
                 ...ref,
                 date: formatDate(town.value.createdAt, "d B"),
                 year: formatDate(town.value.createdAt, "y"),
+                fullDate: new Date(town.value.createdAt).setHours(0, 0, 0, 0),
             },
         ];
     }
 
-    // s'il y a eu au moins une modification
+    // S'il y a eu au moins une modification
     return [
-        // la première entrée dans l'historique correspond aux valeurs présentes
+        // La première entrée dans l'historique correspond aux valeurs présentes
         // à la date de dernière modification
         {
             ...ref,
             date: formatDate(entries[0].date, "d B"),
             year: formatDate(entries[0].date, "y"),
+            fullDate: entries[0].date * 1000,
         },
 
-        // puis on ajoute une entrée dans l'historique pour chaque entrée dans le changelog
+        // Puis on ajoute une entrée dans l'historique pour chaque entrée dans le changelog
         ...entries.map(({ diff }, index) => {
-            // on reconstitue l'état "old" à ajouter dans l'historique
+            // On reconstitue l'état "old" à ajouter dans l'historique
             diff.forEach(({ fieldKey, oldValue }) => {
                 ref[fieldKey] = oldValue === "non renseigné" ? "-" : oldValue;
             });
 
-            // la date associée à cet état "old" est soit la date de l'entrée suivante dans le changelog s'il y en a une, soit la date de déclaration du site
+            // La date associée à cet état "old" est soit la date de l'entrée suivante dans le changelog
+            // s'il y en a une, soit la date de déclaration du site
             let date;
             if (index < entries.length - 1) {
                 ({ date } = entries[index + 1]);
@@ -293,6 +329,7 @@ const populationHistory = computed(() => {
                 ...ref,
                 date: formatDate(date, "d B"),
                 year: formatDate(date, "y"),
+                fullDate: date * 1000,
             };
         }),
     ];

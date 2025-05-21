@@ -1,0 +1,53 @@
+Bonjour,
+Vous avez demandé les informations relatives à la propriété de la parcelle:
+{{var:parcel.idpar}}.
+
+Nous vous rappelons que les fichiers fonciers non anonymisés contiennent des
+données personnelles directes (nom des propriétaires personnes physiques). Leur
+utilisation est donc soumise à une réglementation particulière et des
+obligations strictes. Nous devons être en mesure de fournir, sur demande de la
+DGALN* ou de la DGFIP**, les nom, prénom, structure, territoires d’intervention
+du demandeur et référence de la parcelle cadastrale faisant l'objet de la
+demande. Ces informations sont donc enregistrées.
+En tant qu'utilisateur de la plateforme Résorption-bidonvilles, vous vous
+engagez donc à ne demander que les informations strictement utiles dans le cadre
+de vos missions.
+* Direction générale de l'aménagement, du logement et de la nature
+** Direction générale des Finances publiques
+
+Voici les informations relatives à la propriété de la parcelle
+{{var:parcel.idpar}}.
+Ces données sont extraites des éléments du cadastre de l'année
+{{var:majicYear}}.
+Adresse de la parcelle cadastrale:
+{% if var:parcel.dnuvoi %}{{ var:parcel.dnuvoi }},{% endif %} {{
+var:parcel.cconvo }} {{ var:parcel.dvoilib }}
+{{ var:parcel.idcomtxt }}
+
+{% if var:owners_length > 0 %}
+{{ var:owners_length }} propriétaire{% if var:owners_length > 1 %}s{% endif %}:
+
+{% for owner in var:owners %}
+{% if owner.dqualp %}{{ owner.dqualp }}{% endif %} {% if owner.dnomus %}{{
+owner.dnomus }}{% endif %} {% if owner.dprnus %}{{ owner.dprnus }}{% endif %}
+Classification de personne morale: {{ owner.catpro2txt }}
+{{ owner.dlign3 }}
+{{ owner.dlign4 }}
+{{ owner.dlign5 }}
+{{ owner.dlign6 }}
+
+{% endfor %}{% endif %}
+Cordialement,
+L'équipe Résorption-bidonvilles
+
+
+
+Résorption-bidonvilles
+Agir pour résorber les bidonvilles
+contact-resorption-bidonvilles@dihal.gouv.fr [
+contact-resorption-bidonvilles@dihal.gouv.fr]
+Suivez toute l'actualité de la résorption des bidonvilles et retrouvez tous vos
+outils méthodologiques sur votre blog [{{var:blogUrl}}]
+Abonnez-vous à la lettre d'info
+[https://a757ac69.sibforms.com/serve/MUIFALVz73sp9nySQNDVaSPuG57ypOIGQrx7oMDqyu-lukbiAq1DqhoTh4UQfghOgE-jTVCzMUDQJ6CAQG5GtpsztQ3C3hPleVgcZDEEU0Y_3aPMffVdQjm_YRNdGAnjF4sET4aCQynW4QVbe1bjXnRuyTR0ETJCNgdje0QbaxOzYTKMIAPCdKNJkcYdS3Boj9Vsbj1RXYTzE_Q=]
+Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]
