@@ -33,6 +33,8 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
     try {
         await majicLogsService.insert(user.id, user.organization.id, parcelId);
     } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log(e);
         throw new ServiceError('log_insert_failed', new Error('Une erreur est survenue lors de l\'enregistrement de la demande.'));
     }
 
@@ -44,6 +46,8 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
             throw new ServiceError('parcel_fetch_failed', new Error('Impossible de retrouver la parcelle en base de données.'));
         }
     } catch (parcelError) {
+        // eslint-disable-next-line no-console
+        console.log(parcelError);
         throw new ServiceError('parcel_fetch_failed', new Error(`Une erreur s'est produite lors de la recherche de la parcelle ${parcelId}.`));
     }
 
@@ -74,6 +78,8 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
             },
         );
     } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log(e);
         throw new ServiceError('mail_send_failed', new Error('Une erreur est survenue lors de l\'envoi du courriel.'));
     }
 
@@ -86,6 +92,7 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
     try {
         await triggerLandRegistryRequest(user, parcelId, majicYear);
     } catch (e) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.log(e);
     }
 };
