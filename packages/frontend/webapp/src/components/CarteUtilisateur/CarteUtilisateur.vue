@@ -31,13 +31,13 @@
             </p>
         </div>
         <div>
-            <CarteUtilisateurDetailsIcon
-                icon="envelope"
-                class="truncate overflow-hidden text-ellipsis"
-            >
-                <Link :to="`mailto:${user.email}`" @click="trackEmail">{{
-                    user.email
-                }}</Link>
+            <CarteUtilisateurDetailsIcon icon="envelope">
+                <Link
+                    class="overflow-hidden whitespace-nowrap text-ellipsis w-32 sm:w-64 lg:w-40 xl:w-64"
+                    :to="`mailto:${user.email}`"
+                    @click="trackEmail"
+                    >{{ user.email }}</Link
+                >
             </CarteUtilisateurDetailsIcon>
             <CarteUtilisateurDetailsIcon v-if="user.phone" icon="phone">{{
                 user.phone
