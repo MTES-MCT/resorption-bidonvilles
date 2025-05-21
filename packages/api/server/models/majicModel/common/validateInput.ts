@@ -1,4 +1,4 @@
 export default (input: string): boolean => {
-    const dangerousCharactersRegex = /[;'"\\]/;
+    const dangerousCharactersRegex = /[;'"\\%]/;
     return !dangerousCharactersRegex.test(input);
 };
