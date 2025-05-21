@@ -2,9 +2,9 @@
     <CarteUtilisateurWrapper
         :user="user"
         :linkToUser="linkToUser"
-        class="hover:bg-blue200 border p-4 grid grid-cols-2 gap-4"
+        class="hover:!bg-blue200 border p-4 flex flex-col sm:grid sm:grid-cols-2 gap-4"
         :class="{
-            'bg-blue100': user.is_admin,
+            '!bg-blue100': user.is_admin,
             [`${focusClasses.ring}`]: true,
         }"
     >
@@ -31,7 +31,10 @@
             </p>
         </div>
         <div>
-            <CarteUtilisateurDetailsIcon icon="envelope">
+            <CarteUtilisateurDetailsIcon
+                icon="envelope"
+                class="truncate overflow-hidden text-ellipsis"
+            >
                 <Link :to="`mailto:${user.email}`" @click="trackEmail">{{
                     user.email
                 }}</Link>
@@ -42,7 +45,7 @@
         </div>
         <div
             v-if="user.expertise_topics?.length > 0"
-            class="col-span-2 grid grid-cols-2 gap-4"
+            class="col-span-2 flex flex-col md:grid md:grid-cols-2 gap-4"
         >
             <div v-if="getTopicsByLevel('expertise').length > 0" class="flex">
                 <Icon icon="arrow-turn-down-right" class="text-info mr-2" />

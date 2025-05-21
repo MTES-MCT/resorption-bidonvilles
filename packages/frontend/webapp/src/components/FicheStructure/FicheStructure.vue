@@ -32,7 +32,7 @@
         />
 
         <div
-            class="grid grid-cols-1 lg:grid-cols-2 gap-4 auto-rows-fr"
+            class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:auto-rows-fr"
             v-if="filteredUsers.length > 0"
         >
             <CarteUtilisateur
