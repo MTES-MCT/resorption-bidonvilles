@@ -64,7 +64,7 @@
     "sequelize-mock": "^0.10.2",
     "sequelize-temporal": "^1.0.6",
     "set-value": "^4.0.1",
-    "sharp": "^0.33.5",
+    "sharp": "^0.34.1",
     "ts-node": "^10.9.1",
     "tsc-alias": "^1.4.0",
     "typescript": "^5.0.0",
