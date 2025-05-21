@@ -11,7 +11,6 @@ import { RawParcel } from '#server/models/majicModel/findParcel/RawParcel.d';
 import { RawOwner } from '#server/models/majicModel/findOwners/RawOwner.d';
 
 export default async (parcelId: string, departementId: string, user: AuthUser) => {
-    // TODO: vérifier les droits de l'utilisateur => access.land_registry
     if (!permissionUtils.can(user).do('access', 'land_registry').on(
         { type: 'departement', departement: { code: departementId } } as Departement,
     )) {
