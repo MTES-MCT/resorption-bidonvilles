@@ -74,7 +74,7 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
             },
         );
     } catch (e) {
-        throw new ServiceError('mail_send_failed', new Error('Une erreur est survenue lors de l\'envoi du courriel'));
+        throw new ServiceError('mail_send_failed', new Error('Une erreur est survenue lors de l\'envoi du courriel.'));
     }
 
     // Envoyer la notification mattermost
