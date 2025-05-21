@@ -527,7 +527,7 @@ async function triggerLandRegistryRequest(user: User, parcel: string, dataYear: 
     const newLandRegistryEnquiryAlert = new IncomingWebhook(mattermost);
 
     const username = formatUsername(user);
-    const usernameLink = `<${webappUrl}/nouvel-utilisateur/${user.id}|${username}>`;
+    const usernameLink = `<${webappUrl}/acces/${user.id}|${username}>`;
 
     let locationText = 'Inconnu';
     if (user.intervention_areas.is_national) {
