@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable newline-per-chained-call */
 import { body, param } from 'express-validator';
 import validator from 'validator';
@@ -9,8 +10,12 @@ import fieldTypeModel from '#server/models/fieldTypeModel';
 import geoModel from '#server/models/geoModel';
 import ownerTypeModel from '#server/models/ownerTypeModel';
 import socialOriginModel from '#server/models/socialOriginModel';
+import preparatoryPhasesTowardResorptionModel from '#server/models/preparatoryPhasesTowardResorptionModel';
+// types
 import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
+import { PreparatoryPhaseTowardResorption } from '#root/types/resources/PreparatoryPhaseTowardResorption.d';
+import { SimplifiedPhase } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
 
 const { isLatLong, trim } = validator;
 const { can } = permissionUtils;
@@ -99,8 +104,24 @@ export default mode => ([
      ********************************************************************************************* */
     body('updated_without_any_change')
         .isBoolean().withMessage('Le champ "updated_without_any_change" doit être un booléen')
-        .custom((value, { req }) => {
+        .custom(async (value, { req }) => {
             let hasChanges = false;
+
+            let existingPreparatoryPhasesTowardResorption = [];
+            let updatedPreparatoryPhasesTowardResorption = [];
+            if (mode !== 'create') {
+                existingPreparatoryPhasesTowardResorption = req.town.preparatoryPhasesTowardResorption.map((phase: SimplifiedPhase) => ({
+                    preparatoryPhaseId: phase.preparatoryPhaseId,
+                    completedAt: phase.completedAt,
+                }));
+
+                updatedPreparatoryPhasesTowardResorption = req.body.preparatory_phases_toward_resorption.map(phase => ({
+                    preparatoryPhaseId: phase,
+                    completedAt: req.body.terminated_preparatory_phases_toward_resorption[phase] ? new Date(req.body.terminated_preparatory_phases_toward_resorption[phase]).getTime() / 1000 : null,
+                }));
+            }
+
+
             if (req.town) {
                 const fieldsToCheck = [
                     {
@@ -519,6 +540,14 @@ export default mode => ([
                         storedValue: req.town.attachments ? JSON.stringify(req.town.attachments, excludeSignedUrls) : '[]',
                     },
                 ];
+
+                if (mode !== 'create') {
+                    fieldsToCheck.push({
+                        key: 'preparatory_phases_toward_resorption',
+                        submitedValue: updatedPreparatoryPhasesTowardResorption ? JSON.stringify(updatedPreparatoryPhasesTowardResorption) : null,
+                        storedValue: existingPreparatoryPhasesTowardResorption ? JSON.stringify(existingPreparatoryPhasesTowardResorption) : null,
+                    });
+                }
 
                 // Y at'il des modifications des données dans les champs du formulaire ?
                 hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
@@ -1986,4 +2015,46 @@ export default mode => ([
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Un diagnostic prévention incendie a-t-il été réalisé ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
 
+    /* **********************************************************************************************
+     * Phases transitoires vers la résorption
+     ********************************************************************************************* */
+    body('preparatory_phases_toward_resorption')
+        .customSanitizer((value) => {
+            if (value === undefined || value === null) {
+                return [];
+            }
+
+            return value;
+        })
+        .isArray().bail().withMessage('Le champ "Phases transitoires vers la résorption" est invalide')
+        .custom(async (value) => {
+            // On vérifie si les uid des phases transiqstoires existent en base de données dans les types de phases
+            let preparatoryPhasesTowrdResorption: PreparatoryPhaseTowardResorption[] = [];
+            if (value.length > 0) {
+                try {
+                    preparatoryPhasesTowrdResorption = await preparatoryPhasesTowardResorptionModel.getSome(value);
+                } catch (error) {
+                    throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Phases transitoires vers la résorption"');
+                }
+
+                if (preparatoryPhasesTowrdResorption.length !== value.length) {
+                    throw new Error('Certaines phases transitoires vers la résorption sélectionnées n\'existent pas en base de données');
+                }
+            }
+
+            return true;
+        }),
+    body('active_preparatory_phases_toward_resorption')
+        .customSanitizer((value) => {
+            if (value === undefined || value === null) {
+                return [];
+            }
+
+            return value;
+        })
+        .isArray().bail().withMessage('La valeur des "Phases préparatoires à la résorption" est invalide')
+        .custom(async (value, { req }) => {
+            req.body.active_preparatory_phases_toward_resorption = value;
+            return true;
+        }),
 ]);

@@ -1,5 +1,6 @@
 import fakeFile from './file';
 
+// eslint-disable-next-line import/prefer-default-export
 export function serialized(override = {}) {
     const defaultObj = {
         id: 1,
