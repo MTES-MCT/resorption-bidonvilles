@@ -26,7 +26,8 @@ export default async (req: MajicParcelGetRequest, res: Response, next: NextFunct
     try {
         await majicService.find(parcelid as string, departmentid as string, user);
     } catch (error) {
-        const { code } = ERROR_RESPONSES[error?.code] || ERROR_RESPONSES.undefined;
+        const { code } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
+
         res.status(code).send({
             user_message: `${error.nativeError?.message || error.message || 'Une erreur inconnue est survenue'}`,
         });
