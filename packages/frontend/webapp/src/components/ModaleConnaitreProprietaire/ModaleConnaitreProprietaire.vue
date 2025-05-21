@@ -72,7 +72,7 @@
             </template>
             <template v-else>
                 <div>
-                    Il semblerait que ne disposiez pas des permissions
+                    Il semblerait que vous ne disposiez pas des permissions
                     nécessaires à l'utilisation de cette fonctionalité.
                 </div>
                 <div>
