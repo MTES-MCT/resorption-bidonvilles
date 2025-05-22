@@ -10,6 +10,7 @@ const iconMap = {
         fire_prevention: "fire-extinguisher",
         working_toilets: "toilet",
         absence_of_pest_animals: "bug-slash",
+        heatwave: "temperature-high",
     },
     schooling: {
         number_of_schooled_minors: "school",
@@ -47,7 +48,11 @@ export default (town, activeTab) => {
                     schoolingPercentage
                 );
             } else {
-                if (town[key] === "bad" || town[key] === "unknown") {
+                if (
+                    town[key] === "bad" ||
+                    town[key] === "unknown" ||
+                    !town[key]
+                ) {
                     return acc;
                 }
 
