@@ -116,6 +116,7 @@ const displayedLegend = {
             "fire-extinguisher",
             "toilet",
             "bug-slash",
+            "temperature-high",
         ],
         labels: [
             "Accès à l'eau",
@@ -124,6 +125,7 @@ const displayedLegend = {
             "Prévention incendie",
             "Accès aux toilettes",
             "Absence de nuisibles",
+            "Alerte canicule",
         ],
         levelsTitle: null,
         levels: [
