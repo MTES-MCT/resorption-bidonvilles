@@ -65,6 +65,7 @@
                             v-if="actionsExportIsSelected"
                             variant="primaryOutline"
                             size="md"
+                            class="!border-2 !border-primary hover:!bg-primaryDark !py-1.5"
                             @click.stop="toggleActionsExportIsSelected"
                         >
                             Annuler</Button
@@ -129,3 +130,8 @@ const title = computed(() => {
     return actionsExportIsSelected.value ? "Export des actions" : "Exports";
 });
 </script>
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

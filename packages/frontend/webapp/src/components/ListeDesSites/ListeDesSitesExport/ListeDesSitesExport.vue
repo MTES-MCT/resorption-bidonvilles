@@ -12,7 +12,7 @@
             <Button
                 variant="primaryOutline"
                 @click="() => modale.close()"
-                class="mr-2"
+                class="!border-2 !border-primary hover:!bg-primaryDark mr-2"
                 >Annuler</Button
             >
             <Button
@@ -108,3 +108,8 @@ async function download() {
     isLoading.value = false;
 }
 </script>
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

@@ -20,6 +20,7 @@
                 variant="primaryText"
                 :loading="loading"
                 @click="() => modale.close()"
+                class="!border-2 !border-primary hover:!bg-primaryDark hover:!text-white"
                 >Annuler</Button
             >
             <Button
@@ -118,3 +119,8 @@ async function updateUserRole() {
     return true;
 }
 </script>
+<style scoped>
+button {
+    border: inherit;
+}
+</style>
