@@ -7,7 +7,7 @@ const changelog = {
         {
             title: 'Droit à l\'oubli',
             description: '<p>Conformément au RGPD, la plateforme met en place le droit à l’oubli. Vos données personnelles (nom, prénom, adresse mel, téléphone) sont automatiquement effacées 6 mois après la désactivation de votre compte.</p><p>La désactivation de votre compte intervient 6 mois après votre dernière connexion à la plateforme.</p><p>Vous pouvez également, à tout moment, demander la désactivation de votre compte depuis la page “Mon profil”.</p>',
-            image: `${backUrl}/assets/changelog/2.32.1/item_1.png`,
+            image: `${backUrl}/assets/changelog/2.32.2/item_1.png`,
         },
     ],
 };
