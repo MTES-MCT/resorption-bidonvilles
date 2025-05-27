@@ -24,17 +24,8 @@
                             isHover ? 'shadow-md' : '',
                         ]"
                     >
-                        <span aria-hidden="true" v-if="action.ended_at"
-                            >du
-                            {{ formatDate(action.started_at / 1000, "d/m/y") }}
-                            au
-                            {{
-                                formatDate(action.ended_at / 1000, "d/m/y")
-                            }}</span
-                        >
-                        <span aria-hidden="true" v-else>
-                            depuis le
-                            {{ formatDate(action.started_at / 1000, "d/m/y") }}
+                        <span>
+                            {{ actionPeriod }}
                         </span>
                     </Tag>
                 </div>
