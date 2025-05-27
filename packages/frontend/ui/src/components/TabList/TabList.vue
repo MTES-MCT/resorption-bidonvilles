@@ -8,7 +8,7 @@
         >
             <template v-if="tab.id === 'inProgress'" v-slot:ofwhich>dont</template>
             <template v-if="tab.total !== undefined" v-slot:prefix>
-                {{ formatNumber(tab.total) }}
+                {{ formatStat(tab.total) }}
             </template>
             {{ tab.label }}
         </Tab>
@@ -18,7 +18,7 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
 import Tab from "./Tab.vue"
-import useNumberFormat from '../../composables/useNumberFormat'
+import formatStat from "@/utils/formatStat";
 
 const props = defineProps({
     tabs: {
@@ -30,8 +30,6 @@ const props = defineProps({
         required: false
     }
 });
-
-const { formatNumber } = useNumberFormat()
 
 const emit = defineEmits(['update:modelValue'])
 
