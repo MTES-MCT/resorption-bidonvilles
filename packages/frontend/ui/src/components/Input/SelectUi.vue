@@ -2,7 +2,7 @@
     <InputWrapper :hasErrors="!!error" :withoutMargin="withoutMargin" :id="name">
         <InputLabel :label="label" :info="info" :showMandatoryStar="showMandatoryStar" :for="id" />
 
-        <div class="relative" :class="width">
+        <div class="relative border-1 border-G500" :class="width">
             <InputIcon position="before" :icon="icon" />
             <select :class="[focusClasses.ring, classes]" :value="modelValue" :disabled="disabled || isLoading" @change="onChange" :id="id">
                 <slot />
