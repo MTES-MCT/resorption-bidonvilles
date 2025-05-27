@@ -58,5 +58,3 @@ export { default as TextInput } from './components/Input/TextInput.vue';
 export { default as Title } from './components/Title.vue';
 export { default as ToolTip } from './components/ToolTip.vue';
 export { default as Warning } from './components/Warning.vue';
-// Composables
-export { default as useNumberFormat } from './composables/useNumberFormat.js';
