@@ -18,7 +18,7 @@
 <script setup>
 import { computed, toRefs } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
-import formatStat from "@/utils/formatStat";
+import formatStat from "@common/utils/formatStat";
 
 const props = defineProps({
     icon: {
