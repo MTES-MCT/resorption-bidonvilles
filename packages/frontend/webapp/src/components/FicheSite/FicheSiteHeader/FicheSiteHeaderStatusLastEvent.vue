@@ -111,7 +111,6 @@ function getLatestEvent(townEvents, comments) {
             };
         }
 
-        // Récupérer toutes les catégories uniques de l'événement
         const categories = [...new Set(
                 townEvent.diff.map((diff) => getEventCategory(diff.fieldKey))
             ),
@@ -141,9 +140,9 @@ function getLatestEvent(townEvents, comments) {
         return null;
     }
 
-    return allEvents.reduce((latest, current) =>
-        current.date > latest.date ? current : latest
-    );
+    return allEvents.reduce((latest, current) => {
+        return current.date > latest.date ? current : latest;
+    }, allEvents[0]);
 }
 
 const lastEvent = computed(() => {
