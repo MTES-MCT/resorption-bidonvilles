@@ -1,23 +1,21 @@
 <template>
-    <div
-        :class="[
-            'rounded-sm cursor-pointer border-1 border-cardBorder preventPrintBreak print:h-[17.3rem]',
-            isHover ? 'bg-blue200 border-transparent' : '',
-            !isOpen ? 'closedShantytown' : '',
-        ]"
-        @mouseenter="isHover = true"
-        @mouseleave="isHover = false"
-    >
-        <RouterLink
-            :to="`/site/${shantytown.id}`"
-            :class="focusClasses.outline"
+    <RouterLink custom v-slot="{ navigate }" :to="`/site/${shantytown.id}`">
+        <div
+            :class="[
+                'rounded-sm cursor-pointer border-1 border-cardBorder preventPrintBreak print:h-[17.3rem]',
+                isHover ? 'bg-blue200 border-transparent' : '',
+                !isOpen ? 'closedShantytown' : '',
+                focusClasses.outline,
+            ]"
+            :aria-label="`Fiche site ${shantytown.addressSimple} ${
+                shantytown.name ? shantytown.name : ''
+            } ${shantytown.city.name}`"
+            tabindex="0"
+            @click="navigate"
+            @mouseenter="isHover = true"
+            @mouseleave="isHover = false"
         >
-            <div
-                class="-mt-1 print:mt-0"
-                :aria-label="`Fiche site ${shantytown.addressSimple} ${
-                    shantytown.name ? shantytown.name : ''
-                } ${shantytown.city.name}`"
-            >
+            <div class="-mt-1 print:mt-0">
                 <CarteSiteDetailleeHeader
                     class="mb-4"
                     :shantytown="shantytown"
@@ -68,8 +66,8 @@
                     :isHover="isHover"
                 />
             </div>
-        </RouterLink>
-    </div>
+        </div>
+    </RouterLink>
 </template>
 
 <script setup>
