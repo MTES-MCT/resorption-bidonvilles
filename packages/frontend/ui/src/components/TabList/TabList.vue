@@ -18,7 +18,8 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
 import Tab from "./Tab.vue"
-import formatStat from "../../../../webapp/src/utils/formatStat"; 
+import formatStat from "@common/utils/formatStat";
+; 
 
 const props = defineProps({
     tabs: {

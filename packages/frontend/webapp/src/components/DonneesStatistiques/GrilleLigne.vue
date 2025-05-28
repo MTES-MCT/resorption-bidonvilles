@@ -101,7 +101,7 @@
 <script setup>
 import { computed, toRefs } from "vue";
 import { useMetricsStore } from "@/stores/metrics.store";
-import formatStat from "@/utils/formatStat";
+import formatStat from "@common/utils/formatStat";
 
 import GrilleCellule from "./GrilleCellule.vue";
 import GrilleCelluleHeader from "./GrilleCelluleHeader.vue";

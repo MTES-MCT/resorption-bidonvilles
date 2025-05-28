@@ -118,7 +118,7 @@
 <script setup>
 import { defineProps, toRefs, ref, computed, onMounted } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
-import formatStat from "@/utils/formatStat";
+import formatStat from "@common/utils/formatStat";
 import TableauDeBordValeurStatistique from "./TableauDeBordValeurStatistique.vue";
 import TableauDeBordBarreHistogramme from "./TableauDeBordBarreHistogramme.vue";
 
