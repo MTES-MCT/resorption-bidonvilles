@@ -10,7 +10,7 @@
 
 <script setup>
 import { defineProps, toRefs } from "vue";
-import formatStat from "@/utils/formatStat";
+import formatStat from "@common/utils/formatStat";
 
 const props = defineProps({
     figure: {

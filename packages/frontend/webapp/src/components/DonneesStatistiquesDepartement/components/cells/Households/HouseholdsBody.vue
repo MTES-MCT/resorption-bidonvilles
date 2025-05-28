@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import formatStat from "@/utils/formatStat";
+import formatStat from "@common/utils/formatStat";
 import { toRefs } from "vue";
 import IntCell from "../IntCell.vue";
 

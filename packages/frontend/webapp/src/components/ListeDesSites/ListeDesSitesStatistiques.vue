@@ -50,7 +50,7 @@ import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
 import computeLocationSearchTitle from "@/utils/computeLocationSearchTitle";
 import MiniCarte from "@/components/MiniCarte/MiniCarte.vue";
-import formatStat from "@/utils/formatStat";
+import formatStat from "@common/utils/formatStat";
 
 const townsStore = useTownsStore();
 const userStore = useUserStore();

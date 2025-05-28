@@ -13,7 +13,7 @@
 
 <script setup>
 import { computed, toRefs } from "vue";
-import formatStat from "@/utils/formatStat";
+import formatStat from "@common/utils/formatStat";
 
 const props = defineProps({
     columns: {
