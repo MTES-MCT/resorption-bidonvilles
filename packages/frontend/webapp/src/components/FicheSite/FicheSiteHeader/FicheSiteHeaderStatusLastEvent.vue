@@ -111,7 +111,8 @@ function getLatestEvent(townEvents, comments) {
             };
         }
 
-        const categories = [...new Set(
+        const categories = [
+            ...new Set(
                 townEvent.diff.map((diff) => getEventCategory(diff.fieldKey))
             ),
         ];
