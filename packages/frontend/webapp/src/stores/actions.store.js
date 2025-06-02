@@ -4,12 +4,15 @@ import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
 import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";
+import { useActivitiesStore } from "./activities.store";
+import { useDashboardActivitiesStore } from "./dashboard.activities.store";
 import {
     create,
     edit,
     fetchList,
     fetchOne,
     addComment,
+    deleteComment,
 } from "@/api/actions.api";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
 import filterActions from "@/utils/filterActions";
@@ -139,6 +142,12 @@ export const useActionsStore = defineStore("actions", () => {
         }
     }
 
+    function updateActionComments(id, comments) {
+        if (hash.value[id]) {
+            hash.value[id].comments = comments;
+        }
+    }
+
     return {
         actions,
         isLoading,
@@ -194,6 +203,28 @@ export const useActionsStore = defineStore("actions", () => {
                 "Publication d'un message",
                 getCommentNotificationMessage(response.numberOfObservers)
             );
+        },
+        async deleteComment(actionId, commentId, reason = "") {
+            const activitiesStore = useActivitiesStore();
+            const dashboardActivitiesStore = useDashboardActivitiesStore();
+            console.log(
+                `Deleting comment ${commentId} from action ${actionId} for reason: ${reason}`
+            );
+
+            const { comments } = await deleteComment(
+                actionId,
+                commentId,
+                reason
+            );
+
+            updateActionComments(commentId, comments);
+            if (hash.value[actionId]) {
+                hash.value[actionId].comments = hash.value[
+                    actionId
+                ].comments.filter((comment) => comment.id !== commentId);
+            }
+            activitiesStore.removeComment(commentId);
+            dashboardActivitiesStore.removeComment(commentId);
         },
         async deleteCommentAttachment(file, { actionId, commentId }) {
             await deleteAttachment(file.id);

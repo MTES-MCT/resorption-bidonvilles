@@ -35,6 +35,7 @@ import { defineProps, toRefs, ref, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
+import { useActionsStore } from "@/stores/actions.store"; // Assuming this store exists for action comments
 import {
     Button,
     ErrorSummary,
@@ -48,8 +49,12 @@ const props = defineProps({
     comment: {
         type: Object,
     },
+    commentType: {
+        type: String,
+        default: "shantytown",
+    },
 });
-const { comment } = toRefs(props);
+const { comment, commentType } = toRefs(props);
 
 const modale = ref(null);
 const loading = ref(false);
@@ -78,11 +83,20 @@ async function remove() {
 
     loading.value = true;
     error.value = null;
+
     try {
         const notificationStore = useNotificationStore();
-        const townsStore = useTownsStore();
-        await townsStore.deleteComment(
-            comment.value.shantytown,
+        const selectedStore =
+            commentType.value === "shantytown"
+                ? useTownsStore()
+                : useActionsStore();
+        const sourceId =
+            commentType.value === "shantytown"
+                ? comment.value.shantytown
+                : comment.value.actionId;
+
+        await selectedStore.deleteComment(
+            sourceId,
             comment.value.id,
             reason.value
         );
