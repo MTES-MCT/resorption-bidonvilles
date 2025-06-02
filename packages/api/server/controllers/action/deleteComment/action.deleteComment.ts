@@ -11,15 +11,15 @@ const ERROR_RESPONSES = {
 
 
 export default async (req, res, next) => {
-    let comments;
+    let comments: boolean;
     try {
         comments = await deleteComment(req.user, req.params.id, req.params.commentId, req.body.message);
     } catch (error) {
-        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
+        const { code, message }: { code: number; message: string } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
         res.status(code).send({
             user_message: message,
         });
-        return next(error.nativeError || error);
+        return next(error.nativeError ?? error);
     }
 
     return res.status(200).send(comments);
