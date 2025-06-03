@@ -58,10 +58,11 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
     try {
         if (!isOwner) {
             const nationalAdmins = await userModel.getNationalAdmins();
-            const mailVariables = {
-                town: {
-                    usename: town.usename,
-                    city: {
+            const mailVariables: { [key: string]: any } = {
+                entity: {
+                    type: 'le site',
+                    name: town.usename,
+                    location: {
                         name: town.city.name,
                     },
                 },
@@ -84,7 +85,8 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
             }
         }
     } catch (error) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.log(error);
     }
 
     // on retourne la liste mise à jour des commentaires du site
@@ -94,7 +96,8 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
         const rawComments = town.comments.filter(({ id }) => id !== parseInt(commentId, 10));
         commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => enrichCommentsAttachments(rawComment)));
     } catch (error) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.log(error);
     }
 
     return {
