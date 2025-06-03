@@ -7,42 +7,46 @@ import dateUtils from '#server/utils/date';
 import ServiceError from '#server/errors/ServiceError';
 import { Location } from '#server/models/geoModel/Location.d';
 import deleteComment from '#server/models/actionModel/deleteComment/deleteComment';
+import Action, { Comment } from '#root/types/resources/Action.d';
+import { User } from '#root/types/resources/User.d';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 
 export default async (user, actionId, commentId, deletionMessage) => {
-    let action;
+    let actions: Action[];
     try {
-        action = await actionModel.fetch(user, actionId);
+        actions = await actionModel.fetch(user, [actionId]);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
 
-    const comment = action[0].comments.find(({ id }) => id === parseInt(commentId, 10));
+    const comment: Comment = actions[0].comments.find(({ id }) => id === parseInt(commentId, 10));
 
     if (comment === undefined) {
         throw new ServiceError('fetch_failed', new Error('Le commentaire à supprimer n\'a pas été retrouvé en base de données'));
     }
-    let author;
+    let author: User;
     try {
         author = await userModel.findOne(comment.createdBy.id);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
+
     const location: Location = {
-        type: 'city',
-        region: action.region,
-        departement: action.departement,
-        epci: action.epci,
-        city: action.city,
+        type: 'departement',
+        region: actions[0].location.region,
+        departement: actions[0].location.departement,
+        epci: actions[0].location.epci,
+        city: actions[0].location.city,
     };
 
-    const isOwner = author.id === user.id;
+
+    const isOwner: boolean = author.id === user.id;
     if (!isOwner && !permissionUtils.can(user).do('moderate', 'data').on(location)) {
         throw new ServiceError('permission_denied', new Error('Vous n\'avez pas accès à ces données'));
     }
 
-    let message;
+    let message: string;
     if (!isOwner) {
         message = validator.trim(deletionMessage || '');
         if (message === '') {
@@ -58,12 +62,13 @@ export default async (user, actionId, commentId, deletionMessage) => {
 
     try {
         if (!isOwner) {
-            const nationalAdmins = await userModel.getNationalAdmins();
-            const mailVariables = {
-                town: {
-                    usename: action.usename,
-                    city: {
-                        name: action.city.name,
+            const nationalAdmins: User[] = await userModel.getNationalAdmins();
+            const mailVariables: { [key: string]: any } = {
+                entity: {
+                    type: 'l\'action',
+                    name: actions[0].name,
+                    location: {
+                        name: actions[0].location.departement.name,
                     },
                 },
                 comment: {
