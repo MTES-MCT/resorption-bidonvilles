@@ -90,7 +90,8 @@ export default async (user, actionId, commentId, deletionMessage) => {
             }
         }
     } catch (error) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.log(error);
     }
 
     return true;
