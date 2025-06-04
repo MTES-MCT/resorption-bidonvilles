@@ -207,9 +207,6 @@ export const useActionsStore = defineStore("actions", () => {
         async deleteComment(actionId, commentId, reason = "") {
             const activitiesStore = useActivitiesStore();
             const dashboardActivitiesStore = useDashboardActivitiesStore();
-            console.log(
-                `Deleting comment ${commentId} from action ${actionId} for reason: ${reason}`
-            );
 
             const { comments } = await deleteComment(
                 actionId,
