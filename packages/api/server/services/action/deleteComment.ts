@@ -8,7 +8,10 @@ import ServiceError from '#server/errors/ServiceError';
 import { Location } from '#server/models/geoModel/Location.d';
 import deleteComment from '#server/models/actionModel/deleteComment/deleteComment';
 import Action, { Comment } from '#root/types/resources/Action.d';
+import { ActionRawComment } from '#root/types/resources/ActionCommentRaw.d';
+import { ActionEnrichedComment } from '#root/types/resources/ActionCommentEnriched.d';
 import { User } from '#root/types/resources/User.d';
+import enrichCommentsAttachments from './enrichCommentsAttachments';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 
@@ -94,5 +97,17 @@ export default async (user, actionId, commentId, deletionMessage) => {
         console.log(error);
     }
 
-    return true;
+    // on retourne la liste mise à jour des commentaires de l'action
+    let commentsWithEnrichedAttachments: ActionEnrichedComment[] = [];
+    try {
+        const rawComments: ActionRawComment[] = actions[0].comments.filter(({ id }) => id !== parseInt(commentId, 10));
+        commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => enrichCommentsAttachments(rawComment)));
+    } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
+    }
+
+    return {
+        comments: commentsWithEnrichedAttachments,
+    };
 };
