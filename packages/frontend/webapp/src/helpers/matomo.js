@@ -69,12 +69,27 @@ export function trackLogout() {
     $piwik.value.setCustomVariable(5, "departement_code", null);
 }
 
-export function trackEvent(...args) {
-    if (!$piwik.value) {
+export function trackEvent(category, action, name, value) {
+    if (typeof window === "undefined") {
+        console.warn("[Matomo Debug] trackEvent called in non-browser environment.");
         return;
     }
 
-    return $piwik.value.trackEvent(...args);
+    // Assure que window._paq est initialisé comme un tableau
+    window._paq = window._paq || [];
+
+    const eventDetails = ['trackEvent', category, action];
+
+    // Ajoute name et value seulement s'ils sont définis, car Matomo les attend dans cet ordre.
+    if (name !== undefined) {
+        eventDetails.push(name);
+        if (value !== undefined) {
+            eventDetails.push(value);
+        }
+    }
+    
+    console.log("[Matomo Debug] Pushing to _paq:", eventDetails);
+    window._paq.push(eventDetails);
 }
 
 export function optOut() {
