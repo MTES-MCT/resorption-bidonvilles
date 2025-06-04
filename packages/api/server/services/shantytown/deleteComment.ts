@@ -92,7 +92,6 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
     // on retourne la liste mise à jour des commentaires du site
     let commentsWithEnrichedAttachments = [];
     try {
-        // comments = await shantytownModel.getComments(author, [shantytown.id]);
         const rawComments = town.comments.filter(({ id }) => id !== parseInt(commentId, 10));
         commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => enrichCommentsAttachments(rawComment)));
     } catch (error) {
