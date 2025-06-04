@@ -27,8 +27,7 @@ export function useMatomo(app, router) {
             return { ...to, fullPath: modifiedPath };
         };
     }
-
-    app.use(VueMatomo, {
+    const matomoConfig = {
         host: MATOMO.HOST,
         siteId: MATOMO.SITE_ID,
         router,
@@ -36,7 +35,12 @@ export function useMatomo(app, router) {
         cookieDomain: `*.${MATOMO.DOMAIN}`,
         domains: `*.${MATOMO.DOMAIN}`,
         trackerFileName: MATOMO.TRACKER_FILENAME,
-    });
+    };
+    console.log(
+        "[Matomo Debug] Initializing VueMatomo with config:",
+        matomoConfig
+    );
+    app.use(VueMatomo, matomoConfig);
 }
 
 export function trackLogin(user) {
@@ -71,14 +75,16 @@ export function trackLogout() {
 
 export function trackEvent(category, action, name, value) {
     if (typeof window === "undefined") {
-        console.warn("[Matomo Debug] trackEvent called in non-browser environment.");
+        console.warn(
+            "[Matomo Debug] trackEvent called in non-browser environment."
+        );
         return;
     }
 
     // Assure que window._paq est initialisé comme un tableau
     window._paq = window._paq || [];
 
-    const eventDetails = ['trackEvent', category, action];
+    const eventDetails = ["trackEvent", category, action];
 
     // Ajoute name et value seulement s'ils sont définis, car Matomo les attend dans cet ordre.
     if (name !== undefined) {
@@ -87,7 +93,7 @@ export function trackEvent(category, action, name, value) {
             eventDetails.push(value);
         }
     }
-    
+
     console.log("[Matomo Debug] Pushing to _paq:", eventDetails);
     window._paq.push(eventDetails);
 }
