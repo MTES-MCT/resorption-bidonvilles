@@ -1,11 +1,3 @@
-// Log pour déboguer VITE_MATOMO_ENABLE - placé au début du module pour exécution
-const meta_matomo_enable =
-    import.meta.env.VITE_MATOMO_ENABLE || "${VITE_MATOMO_ENABLE}";
-console.log(
-    "[ENV Debug] Raw import.meta.env.VITE_MATOMO_ENABLE:",
-    meta_matomo_enable
-);
-
 const MATOMO_CONFIG = {
     ENABLE: import.meta.env.VITE_MATOMO_ENABLE || "${VITE_MATOMO_ENABLE}",
     HOST: import.meta.env.VITE_MATOMO_HOST || "${VITE_MATOMO_HOST}",
@@ -18,8 +10,6 @@ const MATOMO_CONFIG = {
         import.meta.env.VITE_MATOMO_DESCRIPTION_PAGE_SEPARATOR ||
         "${VITE_MATOMO_DESCRIPTION_PAGE_SEPARATOR}",
 };
-
-console.log("[ENV Debug] Final MATOMO_CONFIG:", MATOMO_CONFIG);
 
 const SENTRY_CONFIG = {
     DSN: import.meta.env.VITE_SENTRY_DSN || "${VITE_SENTRY_DSN}",
