@@ -39,7 +39,6 @@ const stubs = {
 
 rewiremock('#server/models/actionModel').with({
     fetch: stubs.fetchAction,
-    fetchComments: sandbox.stub().resolves([]),
 });
 rewiremock('#server/mails/mails').with(stubs.mails);
 rewiremock('#server/models/userModel').with(stubs.userModel);
