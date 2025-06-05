@@ -17,10 +17,8 @@ chai.use(chaiSubset);
 const sandbox = sinon.createSandbox();
 const stubs = {
     deleteComment: sandbox.stub().resolves({ comments: [] }),
-    fetchCommentsModel: sandbox.stub(),
     fetchAction: sandbox.stub(),
     userModel: { findOne: sandbox.stub(), getNationalAdmins: sandbox.stub() },
-    canDeleteComment: sandbox.stub(),
     enrichCommentsAttachments: sandbox.stub().resolves([]),
     validator: {
         trim: sandbox.stub().callsFake(value => value.trim()),
