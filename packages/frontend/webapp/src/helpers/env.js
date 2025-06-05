@@ -1,5 +1,6 @@
 // Log pour déboguer VITE_MATOMO_ENABLE - placé au début du module pour exécution
-const meta_matomo_enable = import.meta.env.VITE_MATOMO_ENABLE;
+const meta_matomo_enable =
+    import.meta.env.VITE_MATOMO_ENABLE || "${VITE_MATOMO_ENABLE}";
 console.log(
     "[ENV Debug] Raw import.meta.env.VITE_MATOMO_ENABLE:",
     meta_matomo_enable

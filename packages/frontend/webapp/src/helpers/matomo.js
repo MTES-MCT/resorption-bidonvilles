@@ -2,39 +2,47 @@ import VueMatomo from "vue-matomo";
 import { computed } from "vue";
 import ENV from "@/helpers/env.js";
 
-const { MATOMO } = ENV;
+// const { MATOMO } = ENV; // Supprimé pour utiliser ENV.MATOMO directement dans useMatomo
 const $piwik = computed(() => {
     return typeof window !== "undefined" ? window.Piwik?.getTracker() : null;
 });
 
 export function useMatomo(app, router) {
-    if (!MATOMO) {
+    // Accéder à ENV.MATOMO directement ici
+    if (!ENV.MATOMO || ENV.MATOMO.ENABLE !== "true") {
+        // Vérifier aussi explicitement ENABLE
+        console.warn(
+            "[Matomo Debug] Matomo not initialized because ENV.MATOMO is not defined or not enabled.",
+            ENV.MATOMO
+        );
         return;
     }
 
     // Si on utilise le serveur matomo DNUM, il faut modifier l'URL
     // avant l'envoi à Matomo pour rester compatible avec Xiti
     // Le séparateur original "/" est remplacé par "::"
+    // Utiliser ENV.MATOMO au lieu de la variable MATOMO déstructurée
     if (
-        typeof MATOMO.DESCRIPTION_PAGE_SEPARATOR !== "undefined" &&
-        MATOMO.DESCRIPTION_PAGE_SEPARATOR !== "/"
+        typeof ENV.MATOMO.DESCRIPTION_PAGE_SEPARATOR !== "undefined" &&
+        ENV.MATOMO.DESCRIPTION_PAGE_SEPARATOR !== "/"
     ) {
         router.beforeTrack = (to) => {
             const modifiedPath = to.fullPath.replace(
                 /\//g,
-                MATOMO.DESCRIPTION_PAGE_SEPARATOR
+                ENV.MATOMO.DESCRIPTION_PAGE_SEPARATOR
             );
             return { ...to, fullPath: modifiedPath };
         };
     }
     const matomoConfig = {
-        host: MATOMO.HOST,
-        siteId: MATOMO.SITE_ID,
+        host: ENV.MATOMO.HOST,
+        siteId: ENV.MATOMO.SITE_ID,
         router,
         trackInitialView: false,
-        cookieDomain: `*.${MATOMO.DOMAIN}`,
-        domains: `*.${MATOMO.DOMAIN}`,
-        trackerFileName: MATOMO.TRACKER_FILENAME,
+        cookieDomain: `*.${ENV.MATOMO.DOMAIN}`,
+        domains: `*.${ENV.MATOMO.DOMAIN}`,
+        trackerFileName: ENV.MATOMO.TRACKER_FILENAME,
+        debug: true,
     };
     console.log(
         "[Matomo Debug] Initializing VueMatomo with config:",
