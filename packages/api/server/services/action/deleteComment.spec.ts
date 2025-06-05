@@ -20,7 +20,6 @@ const stubs = {
     fetchCommentsModel: sandbox.stub(),
     fetchAction: sandbox.stub(),
     userModel: { findOne: sandbox.stub(), getNationalAdmins: sandbox.stub() },
-    fetchUserModel: sandbox.stub(),
     canDeleteComment: sandbox.stub(),
     enrichCommentsAttachments: sandbox.stub().resolves([]),
     validator: {
@@ -83,7 +82,6 @@ describe('services/action.deleteComment()', () => {
             },
         };
 
-        stubs.fetchUserModel.resolves(user);
         stubs.userModel.findOne.resolves(user);
         stubs.fetchAction.resolves([fakeAction()]);
         stubs.can.returns({
