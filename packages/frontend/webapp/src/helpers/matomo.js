@@ -9,14 +9,38 @@ const $piwik = computed(() => {
 
 export function useMatomo(app, router) {
     // Accéder à ENV.MATOMO directement ici
-    if (!ENV.MATOMO || ENV.MATOMO.ENABLE !== "true") {
-        // Vérifier aussi explicitement ENABLE
+    if (!ENV.MATOMO) {
         console.warn(
-            "[Matomo Debug] Matomo not initialized because ENV.MATOMO is not defined or not enabled.",
+            "[Matomo Debug] Matomo not initialized because ENV.MATOMO is not defined.",
             ENV.MATOMO
         );
         return;
     }
+
+    // Logguer la valeur et le type de ENABLE avant de comparer
+    console.log(
+        "[Matomo Debug] Checking ENV.MATOMO.ENABLE: ",
+        `'${ENV.MATOMO.ENABLE}'`,
+        "(type:",
+        typeof ENV.MATOMO.ENABLE,
+        ")"
+    );
+
+    // Utiliser .trim() pour enlever les espaces potentiels avant la comparaison
+    if (
+        typeof ENV.MATOMO.ENABLE !== "string" ||
+        ENV.MATOMO.ENABLE.trim() !== "true"
+    ) {
+        console.warn(
+            "[Matomo Debug] Matomo not initialized because ENV.MATOMO.ENABLE is not 'true'. Actual value:",
+            `'${ENV.MATOMO.ENABLE}'` // Affiche la valeur avec des apostrophes pour voir les espaces
+        );
+        return;
+    }
+
+    console.log(
+        "[Matomo Debug] Conditions passed, proceeding with Matomo initialization."
+    ); // Nouveau log
 
     // Si on utilise le serveur matomo DNUM, il faut modifier l'URL
     // avant l'envoi à Matomo pour rester compatible avec Xiti

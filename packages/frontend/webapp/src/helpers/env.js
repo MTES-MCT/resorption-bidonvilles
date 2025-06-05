@@ -30,7 +30,7 @@ export default {
     API_URL: import.meta.env.VITE_API_URL || "${VITE_API_URL}",
     CONTACT_EMAIL:
         import.meta.env.VITE_CONTACT_EMAIL || "${VITE_CONTACT_EMAIL}",
-    MATOMO: MATOMO_CONFIG.ENABLE === "true" ? MATOMO_CONFIG : null,
+    MATOMO: MATOMO_CONFIG, // Toujours assigner MATOMO_CONFIG, la vérification de ENABLE est dans matomo.js
     SENTRY:
         (import.meta.env.VITE_SENTRY_ENABLE || "${VITE_SENTRY_ENABLE}") ===
         "true"
