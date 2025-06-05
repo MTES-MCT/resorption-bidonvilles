@@ -15,7 +15,7 @@ import enrichCommentsAttachments from './enrichCommentsAttachments';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 
-export default async (user, actionId, commentId, deletionMessage) => {
+export default async (user, actionId, commentId, deletionMessage): Promise<{ comments: ActionEnrichedComment[] }> => {
     let actions: Action[];
     try {
         actions = await actionModel.fetch(user, [actionId]);
