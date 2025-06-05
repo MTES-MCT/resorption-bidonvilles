@@ -1,5 +1,6 @@
 
 import deleteComment from '#server/services/action/deleteComment';
+import { ActionEnrichedComment } from '#root/types/resources/ActionCommentEnriched.d';
 
 const ERROR_RESPONSES = {
     fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
@@ -11,7 +12,7 @@ const ERROR_RESPONSES = {
 
 
 export default async (req, res, next) => {
-    let comments: boolean;
+    let comments: { comments: ActionEnrichedComment[] };
     try {
         comments = await deleteComment(req.user, req.params.id, req.params.commentId, req.body.message);
     } catch (error) {
