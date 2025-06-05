@@ -108,7 +108,6 @@ describe('services/action.deleteComment()', () => {
         }
         expect(stubs.can).to.have.been.calledOnceWith(fakeTestUser);
         expect(stubs.do).to.have.been.calledOnceWith('moderate', 'data');
-        // eslint-disable-next-line no-unused-expressions
         expect(stubs.on).to.have.been.calledOnce;
     });
 
