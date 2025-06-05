@@ -2,41 +2,48 @@ import VueMatomo from "vue-matomo";
 import { computed } from "vue";
 import ENV from "@/helpers/env.js";
 
-const { MATOMO } = ENV;
 const $piwik = computed(() => {
     return typeof window !== "undefined" ? window.Piwik?.getTracker() : null;
 });
 
 export function useMatomo(app, router) {
-    if (!MATOMO) {
+    if (!ENV.MATOMO) {
+        return;
+    }
+
+    if (
+        typeof ENV.MATOMO.ENABLE !== "string" ||
+        ENV.MATOMO.ENABLE.trim() !== "true"
+    ) {
         return;
     }
 
     // Si on utilise le serveur matomo DNUM, il faut modifier l'URL
     // avant l'envoi à Matomo pour rester compatible avec Xiti
     // Le séparateur original "/" est remplacé par "::"
+    // Utiliser ENV.MATOMO au lieu de la variable MATOMO déstructurée
     if (
-        typeof MATOMO.DESCRIPTION_PAGE_SEPARATOR !== "undefined" &&
-        MATOMO.DESCRIPTION_PAGE_SEPARATOR !== "/"
+        typeof ENV.MATOMO.DESCRIPTION_PAGE_SEPARATOR !== "undefined" &&
+        ENV.MATOMO.DESCRIPTION_PAGE_SEPARATOR !== "/"
     ) {
         router.beforeTrack = (to) => {
             const modifiedPath = to.fullPath.replace(
                 /\//g,
-                MATOMO.DESCRIPTION_PAGE_SEPARATOR
+                ENV.MATOMO.DESCRIPTION_PAGE_SEPARATOR
             );
             return { ...to, fullPath: modifiedPath };
         };
     }
-
-    app.use(VueMatomo, {
-        host: MATOMO.HOST,
-        siteId: MATOMO.SITE_ID,
+    const matomoConfig = {
+        host: ENV.MATOMO.HOST,
+        siteId: ENV.MATOMO.SITE_ID,
         router,
         trackInitialView: false,
-        cookieDomain: `*.${MATOMO.DOMAIN}`,
-        domains: `*.${MATOMO.DOMAIN}`,
-        trackerFileName: MATOMO.TRACKER_FILENAME,
-    });
+        cookieDomain: `*.${ENV.MATOMO.DOMAIN}`,
+        domains: `*.${ENV.MATOMO.DOMAIN}`,
+        trackerFileName: ENV.MATOMO.TRACKER_FILENAME,
+    };
+    app.use(VueMatomo, matomoConfig);
 }
 
 export function trackLogin(user) {
@@ -69,12 +76,23 @@ export function trackLogout() {
     $piwik.value.setCustomVariable(5, "departement_code", null);
 }
 
-export function trackEvent(...args) {
-    if (!$piwik.value) {
+export function trackEvent(category, action, name, value) {
+    if (typeof window === "undefined") {
         return;
     }
 
-    return $piwik.value.trackEvent(...args);
+    window._paq = window._paq || [];
+
+    const eventDetails = ["trackEvent", category, action];
+
+    if (name !== undefined) {
+        eventDetails.push(name);
+        if (value !== undefined) {
+            eventDetails.push(value);
+        }
+    }
+
+    window._paq.push(eventDetails);
 }
 
 export function optOut() {

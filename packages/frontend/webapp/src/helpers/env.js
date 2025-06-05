@@ -1,4 +1,5 @@
-const MATOMO = {
+const MATOMO_CONFIG = {
+    ENABLE: import.meta.env.VITE_MATOMO_ENABLE || "${VITE_MATOMO_ENABLE}",
     HOST: import.meta.env.VITE_MATOMO_HOST || "${VITE_MATOMO_HOST}",
     SITE_ID: import.meta.env.VITE_MATOMO_SITE_ID || "${VITE_MATOMO_SITE_ID}",
     DOMAIN: import.meta.env.VITE_MATOMO_DOMAIN || "${VITE_MATOMO_DOMAIN}",
@@ -10,7 +11,7 @@ const MATOMO = {
         "${VITE_MATOMO_DESCRIPTION_PAGE_SEPARATOR}",
 };
 
-const SENTRY = {
+const SENTRY_CONFIG = {
     DSN: import.meta.env.VITE_SENTRY_DSN || "${VITE_SENTRY_DSN}",
 };
 
@@ -19,14 +20,10 @@ export default {
     API_URL: import.meta.env.VITE_API_URL || "${VITE_API_URL}",
     CONTACT_EMAIL:
         import.meta.env.VITE_CONTACT_EMAIL || "${VITE_CONTACT_EMAIL}",
-    MATOMO:
-        (import.meta.env.VITE_MATOMO_ENABLE || "${VITE_MATOMO_ENABLE}") ===
-        "true"
-            ? MATOMO
-            : null,
+    MATOMO: MATOMO_CONFIG, // Toujours assigner MATOMO_CONFIG, la vérification de ENABLE est dans matomo.js
     SENTRY:
         (import.meta.env.VITE_SENTRY_ENABLE || "${VITE_SENTRY_ENABLE}") ===
         "true"
-            ? SENTRY
+            ? SENTRY_CONFIG
             : null,
 };
