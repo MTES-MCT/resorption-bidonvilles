@@ -7,6 +7,7 @@ const useFocusTrap = () => {
     let focusableElements = [];
     let $firstFocusable;
     let $lastFocusable;
+    let hasFocused = false;
     const trapRef = customRef((track, trigger) => {
         let $trapEl = null;
         return {
@@ -51,7 +52,12 @@ const useFocusTrap = () => {
         $firstFocusable = focusableElements[0];
         $lastFocusable = focusableElements[focusableElements.length - 1];
         document.addEventListener("keydown", keyHandler);
-        $firstFocusable.focus();
+
+        // Si aucun focus n'a été initialisé, on focus le premier élément
+        if (!hasFocused && $firstFocusable) {
+            $firstFocusable.focus();
+            hasFocused = true;
+        }
     }
 
     function clearFocusTrap() {

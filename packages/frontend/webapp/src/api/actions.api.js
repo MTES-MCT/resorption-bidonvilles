@@ -17,6 +17,15 @@ export function addComment(actionId, comment, attachments) {
     });
 }
 
+export function deleteComment(actionId, commentId, message) {
+    return axios.delete(
+        `/actions/${encodeURI(actionId)}/comments/${encodeURI(commentId)}`,
+        {
+            data: { message },
+        }
+    );
+}
+
 export function create(data) {
     return axios.post(`/actions`, data);
 }

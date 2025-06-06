@@ -26,7 +26,7 @@
                 <mj-text mj-class="pb-4">
                     "{{var:comment.description}}".
                 </mj-text>
-                <mj-text>Écrit le {{var:comment.created_at}}, concernant le site : {{var:town.usename}}, {{var:town.city.name}}</mj-text>
+                <mj-text>Écrit le {{var:comment.created_at}}, concernant {{ var:entity.type }} : {{var:entity.name}}, {{var:entity.location.name}}</mj-text>
             </mj-column>
         </mj-section>
         <mj-include path='common/footer.mjml' />

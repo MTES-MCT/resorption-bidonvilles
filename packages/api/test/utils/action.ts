@@ -75,7 +75,21 @@ export function serialized(override = {}): Action {
             },
         ],
         metrics: [],
-        comments: [],
+        comments: [
+            {
+                attachments: [],
+                createdAt: (new Date(2022, 0, 1)).getTime(),
+                createdBy: {
+                    id: 1,
+                    first_name: 'Jean',
+                    last_name: 'Dupont',
+                    organization: 'structure',
+                    organization_id: 1,
+                },
+                description: 'Un commentaire',
+                id: 1,
+            },
+        ],
         created_at: (new Date(2022, 0, 1)).getTime(),
         created_by: {
             id: 1,

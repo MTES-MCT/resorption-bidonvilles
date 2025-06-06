@@ -24,7 +24,10 @@
         </template>
 
         <template v-slot:footer>
-            <Button variant="primaryText" @click="() => modale.close()"
+            <Button
+                variant="primaryText"
+                class="!border-2 !border-primary hover:!bg-primaryDark hover:!text-white"
+                @click="() => modale.close()"
                 >Annuler</Button
             >
             <Button class="ml-5" :loading="loading" @click="remove"
@@ -112,3 +115,8 @@ async function remove() {
     loading.value = false;
 }
 </script>
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

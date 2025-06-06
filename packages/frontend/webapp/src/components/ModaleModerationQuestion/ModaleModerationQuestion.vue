@@ -13,6 +13,7 @@
             <Button
                 variant="primaryText"
                 :loading="loading"
+                class="!border-2 !border-primary hover:!bg-primaryDark hover:!text-white"
                 @click="() => modale.close()"
                 >Annuler</Button
             >
@@ -92,3 +93,8 @@ async function remove() {
     return true;
 }
 </script>
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

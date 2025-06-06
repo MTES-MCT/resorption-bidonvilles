@@ -20,7 +20,10 @@
         </template>
 
         <template v-slot:footer>
-            <Button variant="primaryText" @click="() => modale.close()"
+            <Button
+                variant="primaryText"
+                class="!border-2 !border-primary hover:!bg-primaryDark hover:!text-white"
+                @click="() => modale.close()"
                 >Annuler</Button
             >
             <Button class="ml-5" :loading="loading" @click="remove"
@@ -35,6 +38,7 @@ import { defineProps, toRefs, ref, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
+import { useActionsStore } from "@/stores/actions.store";
 import {
     Button,
     ErrorSummary,
@@ -48,8 +52,12 @@ const props = defineProps({
     comment: {
         type: Object,
     },
+    commentType: {
+        type: String,
+        default: "shantytown",
+    },
 });
-const { comment } = toRefs(props);
+const { comment, commentType } = toRefs(props);
 
 const modale = ref(null);
 const loading = ref(false);
@@ -61,28 +69,38 @@ const isOwner = computed(() => {
     return comment.value.createdBy.id === userStore.user.id;
 });
 
-function reset() {
+const reset = () => {
     loading.value = false;
     error.value = null;
     reason.value = "";
-}
+};
 
-function onClose() {
+const onClose = () => {
     reset();
-}
+};
 
-async function remove() {
+const remove = async () => {
     if (loading.value === true) {
         return;
     }
 
     loading.value = true;
     error.value = null;
+
     try {
         const notificationStore = useNotificationStore();
-        const townsStore = useTownsStore();
-        await townsStore.deleteComment(
-            comment.value.shantytown,
+        let selectedStore;
+        let sourceId;
+        if (commentType.value === "shantytown") {
+            selectedStore = useTownsStore();
+            sourceId = comment.value.shantytown;
+        } else {
+            selectedStore = useActionsStore();
+            sourceId = comment.value.actionId;
+        }
+
+        await selectedStore.deleteComment(
+            sourceId,
             comment.value.id,
             reason.value
         );
@@ -99,5 +117,10 @@ async function remove() {
     }
 
     loading.value = false;
-}
+};
 </script>
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

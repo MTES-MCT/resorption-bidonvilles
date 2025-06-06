@@ -619,7 +619,7 @@ export default {
         return mailService.send('user_comment_deletion', {
             recipient,
             variables: {
-                town: variables.town,
+                entity: variables.entity,
                 comment: variables.comment,
                 message: variables.message,
                 backUrl,
@@ -640,7 +640,7 @@ export default {
         return mailService.send('admin_comment_from_deactivated_user_deletion', {
             recipient,
             variables: {
-                town: variables.town,
+                entity: variables.entity,
                 comment: variables.comment,
                 message: variables.message,
                 backUrl,
