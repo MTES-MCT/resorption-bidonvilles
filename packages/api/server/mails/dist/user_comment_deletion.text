@@ -4,8 +4,8 @@ La raison mentionnée par celui-ci est :
 "{{var:message}}".
 
 "{{var:comment.description}}".
-Écrit le {{var:comment.created_at}}, concernant le site : {{var:town.usename}},
-{{var:town.city.name}}
+Écrit le {{var:comment.created_at}}, concernant {{ var:entity.type }} :
+{{var:entity.name}}, {{var:entity.location.name}}
 
 Pour rappel, conformément à la réglementation relative aux données à caractère
 personnel, un commentaire doit :
