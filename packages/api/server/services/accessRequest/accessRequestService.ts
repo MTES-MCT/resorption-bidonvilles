@@ -64,7 +64,7 @@ export default {
      * @param {Boolean} firstNotification Wether this is the first or the second pending notification
      * @param {Number}  userId
      */
-    async handleAccessRequestPending(firstNotification, userId) {
+    async handleAccessRequestPending(firstNotification: boolean, userId: number) {
         // fetch data
         const user = await userModel.findOne(userId, {
             extended: true,
