@@ -6,7 +6,6 @@ import { rewiremock } from '#test/rewiremock';
 import { serialized as serializedQuestion } from '#test/utils/question';
 import { serialized as fakeUser } from '#test/utils/userSimplified';
 import ServiceError from '#server/errors/ServiceError';
-import findOne from './findOne';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -17,6 +16,11 @@ const sandbox = sinon.createSandbox();
 const enrichQuestion = sandbox.stub();
 
 rewiremock('#server/services/question/common/enrichQuestion').withDefault(enrichQuestion);
+
+rewiremock.enable();
+// eslint-disable-next-line import/newline-after-import, import/first
+import findOne from './findOne';
+rewiremock.disable();
 
 const question = serializedQuestion({
     answers: [
