@@ -1,42 +1,36 @@
 <template>
     <div class="flex justify-end h-14 items-center mr-4 space-x-4 print:hidden">
-        <Button
-            variant="primaryOutline"
-            icon="temperature-high"
-            iconPosition="left"
-            type="button"
+        <DsfrButton
+            v-if="isOpen"
             size="sm"
-            :loading="heatwaveRequestStatus?.loading === true"
-            @click.prevent="toggleHeatwave"
-            class="!border-2 !border-primary hover:!bg-primary"
-        >
-            <template v-if="heatwaveStatus === false">Alerte Canicule</template>
-            <template v-else>Supprimer l'alerte Canicule</template>
-        </Button>
-        <Button
+            :label="
+                heatwaveStatus
+                    ? 'Supprimer l\'alerte Canicule'
+                    : 'Alerte Canicule'
+            "
+            icon="fr-icon-thermometer-line"
+            class="fr-secondary-btn !border-1 !border-secondary !text-secondary hover:!bg-secondary hover:!text-white"
+            tertiary
+            no-outline
+            :disabled="heatwaveRequestStatus?.loading"
+            @click.prevent.stop="toggleHeatwave"
+        />
+        <DsfrButton
             v-if="isOpen && hasUpdateShantytownPermission"
-            variant="primaryOutline"
             size="sm"
-            icon="pencil-alt"
-            iconPosition="left"
-            :href="`/site/${shantytown.id}/mise-a-jour`"
-            class="!border-2 !border-primary hover:!bg-primary"
-            >Mettre à jour</Button
-        >
-        <Link :to="`/site/${shantytown.id}`">
-            <Icon
-                :aria-label="`Voir la fiche du site ${
-                    shantytown.addressSimple
-                } ${shantytown.name ? shantytown.name : ''} ${
-                    shantytown.city.name
-                }
-                }`"
-                icon="arrow-right"
-            />
-            <span class="ml-2" aria-hidden="true"
-                >Voir la fiche du site</span
-            ></Link
-        >
+            label="Mettre à jour"
+            icon="fr-icon-pencil-line"
+            secondary
+            class="hover:!text-white"
+            @click.prevent.stop="navigateTo('mise-a-jour')"
+        />
+        <DsfrButton
+            size="sm"
+            label="Voir la fiche du site"
+            icon="fr-icon-arrow-right-line"
+            primary
+            @click.prevent.stop="navigateTo(null)"
+        />
     </div>
 </template>
 
@@ -46,7 +40,7 @@ import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
 
-import { Icon, Button, Link } from "@resorptionbidonvilles/ui";
+import router from "@/helpers/router";
 
 const props = defineProps({
     shantytown: Object,
@@ -77,6 +71,9 @@ async function toggleHeatwave() {
             !heatwaveStatus.value
         );
     } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log("Erreur lors de la modification du statut canicule :", e);
+
         notificationStore.error(
             "Risque canicule",
             "Une erreur inconnue est survenue"
@@ -98,10 +95,22 @@ async function toggleHeatwave() {
         );
     }
 }
+
+const navigateTo = (target) => {
+    console.log("Navigate to:", `/site/${shantytown.value.id}/${target}`);
+
+    if (shantytown.value && shantytown.value.id) {
+        router.push(`/site/${shantytown.value.id}/${target}`);
+    }
+};
 </script>
 
 <style scoped>
 button {
     border: inherit;
+}
+
+button.fr-secondary-btn:hover {
+    background-color: var(--warning-425-625-hover) !important;
 }
 </style>
