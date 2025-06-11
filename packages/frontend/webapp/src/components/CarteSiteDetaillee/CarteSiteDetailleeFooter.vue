@@ -97,8 +97,6 @@ async function toggleHeatwave() {
 }
 
 const navigateTo = (target) => {
-    console.log("Navigate to:", `/site/${shantytown.value.id}/${target}`);
-
     if (shantytown.value && shantytown.value.id) {
         router.push(`/site/${shantytown.value.id}/${target}`);
     }
