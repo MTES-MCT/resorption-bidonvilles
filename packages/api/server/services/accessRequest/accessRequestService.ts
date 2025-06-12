@@ -36,6 +36,7 @@ export default {
             await Promise.all([
                 cancelEvent.accessPending(user.user_accesses[0].id),
                 cancelEvent.accessExpired(user.user_accesses[0].id),
+                cancelEvent.accessAboutToExpire(user.user_accesses[0].id),
             ]);
         }
     },
@@ -125,18 +126,36 @@ export default {
      *
      * @param {Number} accessId
      */
-    async handleAccessPending(accessId) {
-        // fetch data
+    async handleAccessPending(accessId: number) {
         const user = await userModel.findOneByAccessId(accessId);
         if (user === null || !isAccessPending(user)) {
             return;
         }
 
-        // notify the user
         await sendEmail.toUser.accessPending(
             user,
             getAccountActivationLink(user.user_accesses[0].id),
             new Date(user.user_accesses[0].expires_at * 1000),
+            null,
+        );
+    },
+
+    /**
+     * Handle access is about to expire
+     *
+     * @param {Number} accessId
+     */
+    async handleAccessAboutToExpire(accessId: number, hoursBeforeExpirationDate) {
+        const user = await userModel.findOneByAccessId(accessId);
+        if (user === null || !isAccessPending(user)) {
+            return;
+        }
+
+        await sendEmail.toUser.accessPending(
+            user,
+            getAccountActivationLink(user.user_accesses[0].id),
+            new Date(user.user_accesses[0].expires_at * 1000),
+            hoursBeforeExpirationDate,
         );
     },
 
@@ -196,6 +215,7 @@ export default {
         await Promise.all([
             cancelEvent.accessPending(user.user_accesses[0].id),
             cancelEvent.accessExpired(user.user_accesses[0].id),
+            cancelEvent.accessAboutToExpire(user.user_accesses[0].id),
         ]);
     },
 };
