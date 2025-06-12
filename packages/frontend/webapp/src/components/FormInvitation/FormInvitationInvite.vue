@@ -5,7 +5,7 @@
         </div>
         <div class="flex-1 flex flex-col justify-center px-4 relative">
             <a
-                class="absolute right-2 top-2 text-primary text-sm hover:underline cursor-pointer"
+                class="absolute right-2 top-2 text-primary text-sm hover:underline !cursor-pointer"
                 @click="$emit('remove')"
                 ><Icon icon="fa-regular fa-trash-alt" /> Retirer</a
             >
