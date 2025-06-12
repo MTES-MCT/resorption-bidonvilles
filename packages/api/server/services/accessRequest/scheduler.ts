@@ -22,6 +22,13 @@ export default {
             });
         },
 
+        async accessAboutToExpire(accessId, oneDayBeforeExpirationDate, hoursBeforeExpirationDate) {
+            await agenda.schedule(oneDayBeforeExpirationDate, 'access_is_about_to_expire', {
+                accessId,
+                hoursBeforeExpirationDate,
+            });
+        },
+
         async accessExpired(accessId) {
             await agenda.schedule('in 8 days', 'access_is_expired', {
                 accessId,
@@ -70,18 +77,21 @@ export default {
         async accessPending(accessId) {
             await agenda.cancel({
                 name: 'access_is_pending',
-                attrs: {
-                    accessId,
-                },
+                'data.accessId': accessId,
             });
         },
 
         async accessExpired(accessId) {
             await agenda.cancel({
                 name: 'access_is_expired',
-                attrs: {
-                    accessId,
-                },
+                'data.accessId': accessId,
+            });
+        },
+
+        async accessAboutToExpire(accessId) {
+            await agenda.cancel({
+                name: 'access_is_about_to_expire',
+                'data.accessId': accessId,
             });
         },
     },
