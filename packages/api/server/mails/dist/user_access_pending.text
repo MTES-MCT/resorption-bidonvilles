@@ -4,7 +4,8 @@ Bonjour {{var:recipientName}},
 Sauf erreur de notre part, vous n’avez pas encore activé votre lien d’accès à la
 plateforme Résorption-bidonvilles [{{var:wwwUrl}}].
 Nous vous invitons à l'activer dès maintenant.
-Le lien expirera dans 48h ({{var:activationUrlExpDate}}).
+Le lien expirera dans {{var:whenDoesExpirationOccurs}}
+({{var:activationUrlExpDate}}).
 
 Activer mon compte [{{var:activationUrl}}]
 

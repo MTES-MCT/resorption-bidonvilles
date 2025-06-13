@@ -103,11 +103,14 @@ export default {
             });
         },
 
-        accessPending(user, activationLink, expiracyDate) {
+        accessPending(user, activationLink, expiracyDate, hoursBeforeExpirationDate?) {
             return sendUserAccessPending(user, {
                 variables: {
                     activationUrl: activationLink,
                     activationUrlExpDate: dateToString(expiracyDate, true),
+                    hoursBeforeExpirationDate: hoursBeforeExpirationDate !== undefined
+                        ? `${hoursBeforeExpirationDate} heures`
+                        : undefined,
                 },
             });
         },
