@@ -11,7 +11,7 @@
         :loading="isLoading"
         :disabled="disabled"
         @click="openChangeRoleModale"
-        class="!border-2 !border-primary hover:!bg-primary"
+        class="!border-2 !border-primary hover:!bg-primaryDark"
         >Changer le rôle</Button
     >
 </template>
