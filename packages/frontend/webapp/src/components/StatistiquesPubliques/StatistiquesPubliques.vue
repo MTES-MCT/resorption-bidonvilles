@@ -60,7 +60,7 @@
                             subtitle="départements"
                         />
                         <span
-                            class="flex justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                            class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
                             v-else
                             ><Spinner
                         /></span>
@@ -76,7 +76,7 @@
                             "
                         />
                         <span
-                            class="flex justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                            class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
                             v-else
                             ><Spinner
                         /></span>
@@ -95,7 +95,7 @@
                         class="h-60 w-full"
                     />
                     <span
-                        class="flex justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                        class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
                         v-else
                         ><Spinner
                     /></span>
@@ -113,7 +113,7 @@
                         class="h-60 w-full"
                     />
                     <span
-                        class="flex justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                        class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
                         v-else
                         ><Spinner
                     /></span>
@@ -130,7 +130,7 @@
                         info="Les exports Excel permettent aux acteurs locaux d'utiliser et d'analyser les données afin de suivre, communiquer et optimiser les actions de résorption depuis le 15/11/2019."
                     />
                     <span
-                        class="flex justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                        class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
                         v-else
                         ><Spinner
                     /></span>
@@ -144,7 +144,7 @@
                         info="Au delà du suivi des chiffrés, les commentaires permettent de suivre et de partager des informations qualitative utiles dans une action multi-partenariale."
                     />
                     <span
-                        class="flex justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                        class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
                         v-else
                         ><Spinner
                     /></span>
@@ -158,7 +158,7 @@
                         info="L'annuaire permet d'accéder aux coordonnées de tous les utilisateurs de la plateforme. Son utilisation participe à la mise en réseau partenaires locaux ou des pairs depuis le 15/11/2019"
                     />
                     <span
-                        class="flex justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                        class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
                         v-else
                         ><Spinner
                     /></span>
@@ -182,7 +182,7 @@
                             info="Médiane depuis le 01/09/2019."
                         />
                         <span
-                            class="flex justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                            class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
                             v-else
                             ><Spinner
                         /></span>
@@ -195,7 +195,7 @@
                             info="Médiane depuis le 01/09/2019."
                         />
                         <span
-                            class="flex justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                            class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
                             v-else
                             ><Spinner
                         /></span>
@@ -208,7 +208,7 @@
                             info="Toutes opérations confondues : création, modification, fermeture"
                         />
                         <span
-                            class="flex justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                            class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
                             v-else
                             ><Spinner
                         /></span>
