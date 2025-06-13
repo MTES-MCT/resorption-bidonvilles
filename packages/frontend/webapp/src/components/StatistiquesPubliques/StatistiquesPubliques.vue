@@ -33,28 +33,54 @@
             <h2 class="text-display-lg font-bold text-secondary mt-16">
                 Répartition des utilisateurs
             </h2>
-            <div class="grid grid-cols-1 xl:grid-cols-2 mt-4">
-                <div>
+            <div class="grid grid-cols-1 xl:grid-cols-2 mt-4 gap-4">
+                <div
+                    class="flex justify-center content-center"
+                    :class="{
+                        'grid animate-pulse bg-gray-300 rounded-lg h-32':
+                            numberOfPublicEstablishmentUsers === '...',
+                    }"
+                >
                     <RepartitionUtilisateurs
                         v-if="numberOfPublicEstablishmentUsers !== '...'"
                         :data="organizationRepartitionData"
                     />
-                    <span class="text-display-lg font-bold" v-else>...</span>
+                    <span class="text-display-lg font-bold" v-else
+                        ><Spinner
+                    /></span>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-                    <StatsBlock
-                        :title="numberOfDepartements"
-                        icon="flag"
-                        subtitle="départements"
-                    />
-                    <StatsBlock
-                        :title="numberOfNewUsers.total"
-                        icon="user-plus"
-                        :subtitle="
-                            'nouveaux utilisateurs en ' +
-                            numberOfNewUsers.month.toLowerCase()
-                        "
-                    />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <StatsBlock
+                            v-if="
+                                numberOfTerritorialCollectivitieUsers !== '...'
+                            "
+                            :title="numberOfDepartements"
+                            icon="flag"
+                            subtitle="départements"
+                        />
+                        <span
+                            class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                            v-else
+                            ><Spinner
+                        /></span>
+                    </div>
+                    <div>
+                        <StatsBlock
+                            v-if="numberOfNewUsers.total !== '...'"
+                            :title="numberOfNewUsers.total"
+                            icon="user-plus"
+                            :subtitle="
+                                'nouveaux utilisateurs en ' +
+                                numberOfNewUsers.month.toLowerCase()
+                            "
+                        />
+                        <span
+                            class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                            v-else
+                            ><Spinner
+                        /></span>
+                    </div>
                 </div>
             </div>
 
@@ -68,7 +94,11 @@
                         v-if="numberOfNewUsersPerMonth !== null"
                         class="h-60 w-full"
                     />
-                    <span class="text-display-lg font-bold" v-else>...</span>
+                    <span
+                        class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                        v-else
+                        ><Spinner
+                    /></span>
                 </div>
             </div>
 
@@ -82,29 +112,57 @@
                         v-if="wauData !== null"
                         class="h-60 w-full"
                     />
-                    <span class="text-display-lg font-bold" v-else>...</span>
+                    <span
+                        class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                        v-else
+                        ><Spinner
+                    /></span>
                 </div>
             </div>
 
             <StatsSection title="Usage" class="mt-16">
-                <StatsBlock
-                    :title="numberOfExports"
-                    icon="file-download"
-                    subtitle="extractions de données réalisées"
-                    info="Les exports Excel permettent aux acteurs locaux d'utiliser et d'analyser les données afin de suivre, communiquer et optimiser les actions de résorption depuis le 15/11/2019."
-                />
-                <StatsBlock
-                    :title="numberOfComments"
-                    icon="comment"
-                    subtitle="commentaires créés"
-                    info="Au delà du suivi des chiffrés, les commentaires permettent de suivre et de partager des informations qualitative utiles dans une action multi-partenariale."
-                />
-                <StatsBlock
-                    :title="numberOfDirectoryViews"
-                    icon="address-book"
-                    subtitle="fiches contact consultées"
-                    info="L'annuaire permet d'accéder aux coordonnées de tous les utilisateurs de la plateforme. Son utilisation participe à la mise en réseau partenaires locaux ou des pairs depuis le 15/11/2019"
-                />
+                <div>
+                    <StatsBlock
+                        v-if="numberOfExports !== '...'"
+                        :title="numberOfExports"
+                        icon="file-download"
+                        subtitle="extractions de données réalisées"
+                        info="Les exports Excel permettent aux acteurs locaux d'utiliser et d'analyser les données afin de suivre, communiquer et optimiser les actions de résorption depuis le 15/11/2019."
+                    />
+                    <span
+                        class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                        v-else
+                        ><Spinner
+                    /></span>
+                </div>
+                <div>
+                    <StatsBlock
+                        v-if="numberOfComments !== '...'"
+                        :title="numberOfComments"
+                        icon="comment"
+                        subtitle="commentaires créés"
+                        info="Au delà du suivi des chiffrés, les commentaires permettent de suivre et de partager des informations qualitative utiles dans une action multi-partenariale."
+                    />
+                    <span
+                        class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                        v-else
+                        ><Spinner
+                    /></span>
+                </div>
+                <div>
+                    <StatsBlock
+                        v-if="numberOfDirectoryViews !== '...'"
+                        :title="numberOfDirectoryViews"
+                        icon="address-book"
+                        subtitle="fiches contact consultées"
+                        info="L'annuaire permet d'accéder aux coordonnées de tous les utilisateurs de la plateforme. Son utilisation participe à la mise en réseau partenaires locaux ou des pairs depuis le 15/11/2019"
+                    />
+                    <span
+                        class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                        v-else
+                        ><Spinner
+                    /></span>
+                </div>
             </StatsSection>
 
             <StatsSection title="Fréquence de mise à jour" class="mt-16">
@@ -116,21 +174,45 @@
                     informations justes à tous les acteurs.</template
                 >
                 <template v-slot:default>
-                    <StatsBlock
-                        :title="medianTimeBeforeCreationDeclaration"
-                        subtitle="jours entre l'installation d'un bidonville ou squat et sa déclaration"
-                        info="Médiane depuis le 01/09/2019."
-                    />
-                    <StatsBlock
-                        :title="medianTimeBeforeClosingDeclaration"
-                        subtitle="jours entre la fermeture du site et sa déclaration"
-                        info="Médiane depuis le 01/09/2019."
-                    />
-                    <StatsBlock
-                        :title="numberOfShantytownOperations"
-                        subtitle="mises à jour de bidonvilles et squats"
-                        info="Toutes opérations confondues : création, modification, fermeture"
-                    />
+                    <div>
+                        <StatsBlock
+                            v-if="medianTimeBeforeCreationDeclaration !== '...'"
+                            :title="medianTimeBeforeCreationDeclaration"
+                            subtitle="jours entre l'installation d'un bidonville ou squat et sa déclaration"
+                            info="Médiane depuis le 01/09/2019."
+                        />
+                        <span
+                            class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                            v-else
+                            ><Spinner
+                        /></span>
+                    </div>
+                    <div>
+                        <StatsBlock
+                            v-if="medianTimeBeforeClosingDeclaration !== '...'"
+                            :title="medianTimeBeforeClosingDeclaration"
+                            subtitle="jours entre la fermeture du site et sa déclaration"
+                            info="Médiane depuis le 01/09/2019."
+                        />
+                        <span
+                            class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                            v-else
+                            ><Spinner
+                        /></span>
+                    </div>
+                    <div>
+                        <StatsBlock
+                            v-if="numberOfShantytownOperations !== '...'"
+                            :title="numberOfShantytownOperations"
+                            subtitle="mises à jour de bidonvilles et squats"
+                            info="Toutes opérations confondues : création, modification, fermeture"
+                        />
+                        <span
+                            class="justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
+                            v-else
+                            ><Spinner
+                        /></span>
+                    </div>
                 </template>
             </StatsSection>
         </ContentWrapper>
@@ -140,7 +222,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import ENV from "@/helpers/env.js";
-import { ContentWrapper, Icon } from "@resorptionbidonvilles/ui";
+import { ContentWrapper, Icon, Spinner } from "@resorptionbidonvilles/ui";
 import StatsBlock from "./StatsBlock.vue";
 import StatsSection from "./StatsSection.vue";
 import RepartitionUtilisateurs from "./Graphs/RepartitionUtilisateurs.vue";
