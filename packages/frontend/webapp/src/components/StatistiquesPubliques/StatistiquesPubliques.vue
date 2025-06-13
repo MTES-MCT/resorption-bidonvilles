@@ -58,11 +58,6 @@
                             :title="numberOfDepartements"
                             icon="flag"
                             subtitle="départements"
-                            class="flex justify-center content-center p-2"
-                            :class="{
-                                'grid animate-pulse bg-gray-300 rounded-lg h-32':
-                                    numberOfDepartements === '...',
-                            }"
                         />
                         <span
                             class="flex justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
@@ -79,7 +74,6 @@
                                 'nouveaux utilisateurs en ' +
                                 numberOfNewUsers.month.toLowerCase()
                             "
-                            class="flex justify-center content-center p-2"
                         />
                         <span
                             class="flex justify-center content-center text-display-lg font-bold grid animate-pulse bg-gray-300 rounded-lg h-32"
