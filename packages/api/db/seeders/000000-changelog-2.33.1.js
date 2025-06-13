@@ -6,8 +6,8 @@ const changelog = {
     items: [
         {
             title: 'Plus que quelques jours pour donner votre avis !',
-            description: '<p>Chers utilisateurs de la plateforme Résorption Bidonvilles,</p><p>Nous vous invitons à répondre à notre questionnaire de satisfaction sur le lien ci-dessous avant le 18 juin&nbsp;</p><p>Questionnaire de satisfaction - Résorption Bidonvilles (lien Questionnaire de satisfaction de la plateforme Résorption Bidonvilles | Framaforms.org )</p><p>Sachez que vos retours sont très précieux et nous comptons sur chacun de vous pour nous aider dans notre mission d’amélioration de la plateforme.</p><p>Un grand merci à vous !</p>',
-            image: `${backUrl}/assets/changelog/2.33.1/item_1.png`,
+            description: '<p>Chers utilisateurs de la plateforme Résorption bidonvilles,</p><p>Nous vous invitons à répondre à notre questionnaire de satisfaction sur le lien ci-dessous avant le 18 juin&nbsp;</p><p><a href="https://framaforms.org/questionnaire-de-satisfaction-de-la-plateforme-resorption-bidonvilles-1747728953"  style="color: blue !important; text-decoration: underline !important;">Questionnaire de satisfaction de la plateforme Résorption bidonvilles</a></p><p>Sachez que vos retours sont très précieux et nous comptons sur chacun de vous pour nous aider dans notre mission d’amélioration de la plateforme.</p><p>Un grand merci à vous !</p>',
+            image: `${backUrl}/assets/changelog/2.33.1/item_1.jpg`,
         },
     ],
 };
