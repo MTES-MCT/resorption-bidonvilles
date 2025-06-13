@@ -2,6 +2,7 @@
     <Button
         v-if="userStore.user?.is_superuser && hasPendingAccess"
         variant="primaryOutline"
+        class="!border-2 !border-primary hover:!text-white hover:!bg-primaryDark"
         :loading="isLoading"
         :disabled="disabled"
         >Copier le lien d'activation</Button
@@ -31,3 +32,8 @@ const hasPendingAccess = computed(() => {
     );
 });
 </script>
+<style scoped>
+button {
+    border: inherit;
+}
+</style>
