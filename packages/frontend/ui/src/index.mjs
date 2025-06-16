@@ -58,3 +58,4 @@ export { default as TextInput } from './components/Input/TextInput.vue';
 export { default as Title } from './components/Title.vue';
 export { default as ToolTip } from './components/ToolTip.vue';
 export { default as Warning } from './components/Warning.vue';
+export { default as BasicAutocompletePage } from './components/Input/BasicAutocompletePage.vue';

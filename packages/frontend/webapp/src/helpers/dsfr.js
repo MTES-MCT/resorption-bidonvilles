@@ -3,7 +3,9 @@ import {
     DsfrTile,
     DsfrSearchBar,
     DsfrInput,
-    DsfrCheckbox,
+    DsfrPagination,
+    DsfrRadioButton,
+    DsfrCheckbox
 } from "@gouvminint/vue-dsfr";
 
 import "@gouvfr/dsfr/dist/dsfr.min.css";
@@ -15,4 +17,6 @@ export function useDsfr(app) {
     app.component("DsfrSearchBar", DsfrSearchBar);
     app.component("DsfrInput", DsfrInput);
     app.component("DsfrCheckbox", DsfrCheckbox);
+    app.component("DsfrPagination", DsfrPagination);
+    app.component("DsfrRadioButton", DsfrRadioButton)
 }
