@@ -13,6 +13,8 @@ export type OrganizationAutocompleteRow = {
     departements_codes: string[],
     similarity: number,
     type_name: string,
+    fk_category?: string | null,
+    type_abbreviation: string | null,
 };
 
 export default async (search: string, departementCode: string = null, organizationCategoryUid: string = null): Promise<OrganizationAutocompleteRow[]> => sequelize.query(
@@ -39,6 +41,8 @@ export default async (search: string, departementCode: string = null, organizati
         organizations.name,
         organizations.abbreviation,
         organization_types.name_singular AS type_name,
+        organization_types.abbreviation AS type_abbreviation,
+        organization_types.fk_category AS fk_category,
         v_organization_areas.is_national,
         COALESCE(main_territories.regions_names, ARRAY[]::varchar[]) AS main_regions_names,
         COALESCE(main_territories.departements_names, ARRAY[]::varchar[]) AS main_departements_names,
