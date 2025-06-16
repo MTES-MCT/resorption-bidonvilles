@@ -1,13 +1,5 @@
 <template>
-    <DsfrCheckbox
-        v-model="checkedModel"
-        :value="value"
-        :name="name"
-        :labelClass="labelClass"
-        :disabled="disabled"
-        :active="active"
-        :small="small"
-    />
+    <CheckboxUi v-model="checkedModel" :isSubmitting="isSubmitting" :active="active" :disabled="disabled" :labelClass="labelClass" />
 </template> 
 
 <script setup>
