@@ -8,6 +8,10 @@
             v-else-if="canSetUpdatedAt"
             :minDate="minUpdatedAt"
         />
+        <FormDeclarationDeSiteResorption
+            v-if="town && hasPreparatoryPhases"
+            class="mt-6"
+        />
         <FormDeclarationDeSiteAdresse :townId="town?.id" class="mt-6" />
         <FormDeclarationDeSiteCaracteristiques class="mt-6" />
         <FormDeclarationDeSiteHabitants
@@ -70,6 +74,7 @@ import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
 import FormDeclarationDeSiteInfo from "./sections/FormDeclarationDeSiteInfo.vue";
 import FormDeclarationDeSiteDateDeMaj from "./sections/FormDeclarationDeSiteDateDeMaj.vue";
+import FormDeclarationDeSiteResorption from "./sections/FormDeclarationDeSiteResorption.vue";
 import FormDeclarationDeSiteAdresse from "./sections/FormDeclarationDeSiteAdresse.vue";
 import FormDeclarationDeSiteCaracteristiques from "./sections/FormDeclarationDeSiteCaracteristiques.vue";
 import FormDeclarationDeSiteHabitants from "./sections/FormDeclarationDeSiteHabitants.vue";
@@ -170,7 +175,7 @@ const { handleSubmit, values, errors, setErrors, isSubmitting } = useForm({
     initialValues,
 });
 
-const originalValues = formatValuesForApi(values);
+const originalValues = formatValuesForApi(values, "init");
 const error = ref(null);
 const address = toRef(values, "address");
 
@@ -191,6 +196,11 @@ watch(address, async () => {
 
 const tabs = computed(() => {
     const arr = [
+        {
+            id: "resorption",
+            label: "Phases préparatoires à la résorption",
+            route: "#resorption",
+        },
         {
             id: "adresse",
             label: "Localisation",
@@ -229,7 +239,9 @@ const tabs = computed(() => {
         });
     }
 
-    return arr;
+    return town.value?.preparatoryPhasesTowardResorption.length > 0
+        ? arr
+        : arr.filter((tab) => tab.id !== "resorption");
 });
 
 const config = {
@@ -261,14 +273,10 @@ const config = {
             trackEvent("Site", "Mise à jour site", `S${id}`);
             return town;
         },
-        notification: {
-            title: "Mise à jour réussie",
-            content: "Le site a bien été mis à jour",
-        },
     },
 };
 
-function formatValuesForApi(v) {
+function formatValuesForApi(v, initOrEdit) {
     let citycode = null;
     let label = null;
     if (v.address?.data) {
@@ -348,12 +356,43 @@ function formatValuesForApi(v) {
         coordinates: `${v.coordinates[0]},${v.coordinates[1]}`,
         existingAttachments: Array.from(v.attachments),
         newAttachments: completeAttachments,
+        preparatory_phases_toward_resorption:
+            v.preparatory_phases_toward_resorption,
+        terminated_preparatory_phases_toward_resorption:
+            buildTerminatedPreparatoryPhases(initOrEdit),
     };
 }
 
 const deleteOriginalAttachment = (attachments) => {
     originalValues.existingAttachments = attachments;
 };
+
+function buildTerminatedPreparatoryPhases(initOrEdit) {
+    const terminatedPreparatoryPhases = {};
+    if (initOrEdit === "init") {
+        for (const phase of values.active_preparatory_phases_toward_resorption) {
+            if (phase.completedAt !== null) {
+                terminatedPreparatoryPhases[phase.preparatoryPhaseId] =
+                    phase.completedAt;
+            }
+        }
+    } else if (initOrEdit === "edit") {
+        for (const phase of values.preparatory_phases_toward_resorption) {
+            if (values[`phase_${phase}_completed_at`] !== null) {
+                terminatedPreparatoryPhases[phase] =
+                    values[`phase_${phase}_completed_at`];
+            } else if (phase.completedAt !== null) {
+                terminatedPreparatoryPhases[phase.preparatoryPhaseId] =
+                    phase.completedAt;
+            }
+        }
+    }
+    return terminatedPreparatoryPhases;
+}
+
+const hasPreparatoryPhases = computed(() => {
+    return town.value?.preparatoryPhasesTowardResorption?.length > 0;
+});
 
 // Méthode pour définir le focus sur le composant ErrorSummary en cas d'erreur remontée par le backend
 const focusOnErrorSummary = async () => {
@@ -371,7 +410,7 @@ const focusOnErrorSummary = async () => {
 
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
-        const formattedValues = formatValuesForApi(sentValues);
+        const formattedValues = formatValuesForApi(sentValues, "edit");
 
         /* eslint-disable no-unused-vars */
         let {
@@ -400,11 +439,21 @@ defineExpose({
 
         const notificationStore = useNotificationStore();
         try {
-            const { submit, notification } = config[mode.value];
+            let respondedTown;
+            if (mode.value === "edit") {
+                const { submit } = config[mode.value];
+                respondedTown = await submit(formattedValues, town.value?.id);
+            } else {
+                const notificationStore = useNotificationStore();
+                const { submit, notification } = config[mode.value];
+                respondedTown = await submit(formattedValues, town.value?.id);
 
-            const respondedTown = await submit(formattedValues, town.value?.id);
+                notificationStore.success(
+                    notification.title,
+                    notification.content
+                );
+            }
 
-            notificationStore.success(notification.title, notification.content);
             if (mode.value === "report") {
                 backOrReplace("/liste-des-sites");
             } else {

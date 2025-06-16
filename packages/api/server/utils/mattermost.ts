@@ -8,6 +8,7 @@ import { User } from '#root/types/resources/User.d';
 const { mattermost, webappUrl } = config;
 const formatAddress = (town: Shantytown): string => `${town.address} ${town.name ? `« ${town.name} » ` : ''}`;
 const formatUsername = (user: { id: number, first_name: string, last_name: string }): string => `[${user.first_name} ${user.last_name}](${webappUrl}/nouvel-utilisateur/${user.id}) `;
+const formatUsernameWithEmailLink = (user: { first_name: string, last_name: string, email: string, }): string => `[${user.first_name} ${user.last_name}](mailto:${user.email}) `;
 const formatTownLink = (townID: number, text: string): string => `[${text}](${webappUrl}/site/${townID})`;
 const formatActionLink = (actionID: number, text: string): string => `[${text}](${webappUrl}/action/${actionID})`;
 
@@ -287,22 +288,28 @@ async function triggerPeopleInvitedAlert(guest: User, greeter: User, msg: string
 
     const peopleInvitedAlert = new IncomingWebhook(mattermost);
 
-    const guestName = formatUsername(guest);
-    const greeterName = formatUsername(greeter);
+    const guestName = formatUsernameWithEmailLink(guest);
+
+    let greeterName = '';
+    if (greeter.id) {
+        greeterName = formatUsername(greeter);
+    } else {
+        greeterName = formatUsernameWithEmailLink(greeter);
+    }
 
     const mattermostMessage = {
         // Don't initialize the channel name because the incoming webhook has been designed for this one
         // channel: '#notif-personnes-invitées',
         username: 'Alerte Résorption Bidonvilles',
         icon_emoji: ':robot:',
-        text: `:rotating_light: Personne invitée sur la plateforme par ${greeterName} ${msg}`,
+        text: `:rotating_light: Personne invitée sur la plateforme par ${greeterName} ${msg || ''}`,
         attachments: [
             {
                 color: '#f2c744',
                 fields: [
                     {
                         short: 'false',
-                        value: `*Personne invitée*: ${guestName} <${guest.email}>`,
+                        value: `*Personne invitée*: ${guestName}`,
                     },
                 ],
             }],
@@ -519,6 +526,63 @@ export async function triggerNotifyOwnersAnonymizationError(message: string): Pr
     await webhook.send(mattermostMessage);
 }
 
+async function triggerLandRegistryRequest(user: User, parcel: string, dataYear: string): Promise<void> {
+    if (!mattermost) {
+        return;
+    }
+
+    const newLandRegistryEnquiryAlert = new IncomingWebhook(mattermost);
+
+    const username = formatUsername(user);
+    const usernameLink = `<${webappUrl}/acces/${user.id}|${username}>`;
+
+    let locationText = 'Inconnu';
+    if (user.intervention_areas.is_national) {
+        locationText = 'National';
+    } else {
+        const area = user.intervention_areas.areas.find(a => a.is_main_area && a.type !== 'nation');
+        if (area !== undefined) {
+            locationText = area[area.type].name;
+        }
+    }
+
+    const mattermostMessage = {
+        channel: '#notif-requetes-cadastre',
+        username: 'Alerte Résorption Bidonvilles',
+        icon_emoji: ':robot:',
+        text: `:world_map: Demande d'information cadastre de: ${usernameLink} <${user.email}>`,
+        attachments: [
+            {
+                color: '#f2c744',
+                fields: [
+                    {
+                        short: false,
+                        value: `*Territoire de rattachement*: ${locationText}`,
+                    },
+                    {
+                        short: false,
+                        value: `*Organisation*: ${user.organization.name}`,
+                    },
+                    {
+                        short: false,
+                        value: `*Fonction*: ${user.position}`,
+                    },
+                    {
+                        short: false,
+                        value: `*Parcelle concernée*: ${parcel}`,
+                    },
+                    {
+                        short: false,
+                        value: `*Millésime des données du cadastre*: ${dataYear}`,
+                    },
+                ],
+            },
+        ],
+    };
+
+    await newLandRegistryEnquiryAlert.send(mattermostMessage);
+}
+
 export default {
     triggerShantytownCloseAlert,
     triggerShantytownCreationAlert,
@@ -536,4 +600,6 @@ export default {
     triggerNotifyNewUserSelfDeactivation,
     triggerNotifyOwnersAnonymization,
     triggerNotifyOwnersAnonymizationError,
+    triggerLandRegistryRequest,
+
 };

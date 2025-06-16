@@ -7,32 +7,33 @@
             <div>
                 <p class="text-3xl text-info font-bold">{{ title }}</p>
                 <p>
-                    {{ populationTotal }} personne<template
+                    {{ formatStat(populationTotal) }} personne<template
                         v-if="populationTotal > 1"
                         >s</template
                     >
                 </p>
                 <p>
-                    {{ townsStore.filteredTowns.length }}
+                    {{ formatStat(townsStore.filteredTowns.length) }}
                     site<template v-if="townsStore.filteredTowns.length > 1"
                         >s</template
                     >
                 </p>
                 <p v-if="userStore.hasJusticePermission">
-                    {{ justiceTotal }} site<template v-if="justiceTotal > 1"
+                    {{ formatStat(justiceTotal) }} site<template
+                        v-if="justiceTotal > 1"
                         >s</template
                     >
                     avec une procédure judiciaire
                 </p>
                 <p v-if="userStore.hasJusticePermission">
-                    {{ administrativeOrderTotal }} site<template
+                    {{ formatStat(administrativeOrderTotal) }} site<template
                         v-if="administrativeOrderTotal > 1"
                         >s</template
                     >
                     avec une procédure administrative
                 </p>
                 <p v-if="userStore.hasJusticePermission">
-                    {{ insalubrityOrderTotal }} site<template
+                    {{ formatStat(insalubrityOrderTotal) }} site<template
                         v-if="insalubrityOrderTotal > 1"
                         >s</template
                     >
@@ -49,6 +50,7 @@ import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
 import computeLocationSearchTitle from "@/utils/computeLocationSearchTitle";
 import MiniCarte from "@/components/MiniCarte/MiniCarte.vue";
+import formatStat from "@common/utils/formatStat";
 
 const townsStore = useTownsStore();
 const userStore = useUserStore();

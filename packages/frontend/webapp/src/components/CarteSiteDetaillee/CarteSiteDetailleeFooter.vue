@@ -1,7 +1,6 @@
 <template>
     <div class="flex justify-end h-14 items-center mr-4 space-x-4 print:hidden">
         <Button
-            v-if="isHover"
             variant="primaryOutline"
             icon="temperature-high"
             iconPosition="left"
@@ -15,7 +14,7 @@
             <template v-else>Supprimer l'alerte Canicule</template>
         </Button>
         <Button
-            v-if="isHover && isOpen && hasUpdateShantytownPermission"
+            v-if="isOpen && hasUpdateShantytownPermission"
             variant="primaryOutline"
             size="sm"
             icon="pencil-alt"
@@ -51,15 +50,11 @@ import { Icon, Button, Link } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     shantytown: Object,
-    isHover: {
-        type: Boolean,
-        default: false,
-    },
 });
 const userStore = useUserStore();
 const notificationStore = useNotificationStore();
 const townsStore = useTownsStore();
-const { shantytown, isHover } = toRefs(props);
+const { shantytown } = toRefs(props);
 
 const hasUpdateShantytownPermission = computed(() => {
     return userStore.hasUpdateShantytownPermission(shantytown.value);

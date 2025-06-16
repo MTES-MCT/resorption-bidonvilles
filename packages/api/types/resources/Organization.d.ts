@@ -30,4 +30,5 @@ export type OrganizationUser = {
     phone: string | null,
     position: string,
     expertise_topics: UserExpertiseTopic[],
+    status: string,
 };

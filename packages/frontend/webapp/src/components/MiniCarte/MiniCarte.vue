@@ -21,9 +21,14 @@ const locationImg = computed(() => {
         return regionsImg.fallback;
     }
 
-    // national et hexagone
-    if (["nation", "metropole"].includes(location.value.typeUid)) {
+    // national
+    if (location.value.typeUid === "nation") {
         return regionsImg.france;
+    }
+
+    // hexagone
+    if (location.value.typeUid === "metropole") {
+        return regionsImg.hexagone;
     }
 
     // outremer

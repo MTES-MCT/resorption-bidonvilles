@@ -14,6 +14,7 @@ import r94 from "./94.svg";
 import rfallback from "./fallback.svg";
 import rfrance from "./france.svg";
 import routremer from "./outremer.svg";
+import rhexagone from "./hexagone.svg";
 
 export default {
     11: r11,
@@ -32,4 +33,5 @@ export default {
     fallback: rfallback,
     france: rfrance,
     outremer: routremer,
+    hexagone: rhexagone,
 };

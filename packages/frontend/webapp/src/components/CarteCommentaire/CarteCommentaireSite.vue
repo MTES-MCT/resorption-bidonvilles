@@ -30,7 +30,10 @@ const { townId, comment } = toRefs(props);
 
 function openModerationModal() {
     const modaleStore = useModaleStore();
-    modaleStore.open(ModaleModerationCommentaire, { comment: comment.value });
+    modaleStore.open(ModaleModerationCommentaire, {
+        comment: comment.value,
+        commentType: "shantytown",
+    });
 }
 
 function onDeleteAttachment(file) {

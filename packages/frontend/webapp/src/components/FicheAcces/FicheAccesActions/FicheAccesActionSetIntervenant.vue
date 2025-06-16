@@ -11,7 +11,7 @@
         variant="primaryOutline"
         :loading="isLoading"
         :disabled="disabled"
-        class="!border-2 !border-primary hover:!bg-primary"
+        class="!border-2 !border-primary hover:!bg-primaryDark"
         >Définir comme « Intervenant »
     </Button>
 </template>

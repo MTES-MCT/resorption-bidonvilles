@@ -27,6 +27,8 @@ export default async (req, res) => {
                 },
             });
         }
+        // On exclu d'emblée les utilisateurs anonymisés
+        search.push({ anonymized_at: { query: 'users.anonymized_at', operator: 'IS', value: null } });
         const users = await userModel.findAll(req.user, search);
         res.status(200).send(users);
     } catch (error) {

@@ -247,14 +247,14 @@ const router = createRouter({
         {
             path: "/mon-compte",
             redirect: "/mon-compte/informations-personnelles",
-        },
-        {
-            path: "/mon-compte/:tab(informations-personnelles|identifiants|abonnements|desactiver-compte|domaines-competence)",
-            component: () => import("@/views/MonCompteView.vue"),
             meta: {
                 title: "Modifier les informations liées à mon compte",
                 displayOrderOnSiteMap: 3,
             },
+        },
+        {
+            path: "/mon-compte/:tab(informations-personnelles|identifiants|abonnements|desactiver-compte|domaines-competence)",
+            component: () => import("@/views/MonCompteView.vue"),
         },
         {
             path: "/nouvel-utilisateur",
@@ -655,7 +655,7 @@ const router = createRouter({
             },
         },
         {
-            path: "/statistiques-publiques",
+            path: "/stats",
             component: () => import("@/views/StatistiquesPubliques.vue"),
             meta: {
                 title: "Statistiques publiques",

@@ -619,7 +619,7 @@ export default {
         return mailService.send('user_comment_deletion', {
             recipient,
             variables: {
-                town: variables.town,
+                entity: variables.entity,
                 comment: variables.comment,
                 message: variables.message,
                 backUrl,
@@ -627,6 +627,26 @@ export default {
             },
             preserveRecipient,
             bcc,
+        });
+    },
+
+    /**
+     * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
+     * @param {Object} options
+     */
+    sendAdminCommentDeletion: (recipient, options: MailOptions = {}) => {
+        const { variables, preserveRecipient } = options;
+
+        return mailService.send('admin_comment_from_deactivated_user_deletion', {
+            recipient,
+            variables: {
+                entity: variables.entity,
+                comment: variables.comment,
+                message: variables.message,
+                backUrl,
+                blogUrl,
+            },
+            preserveRecipient,
         });
     },
 
@@ -1021,6 +1041,23 @@ export default {
                 first_name: variables.creator.first_name,
                 last_name: variables.creator.last_name,
             },
+        });
+    },
+    sendParcelOwner(recipient, options: MailOptions = {}) {
+        const { preserveRecipient = false, variables } = options;
+        return mailService.send('parcel_owner', {
+            recipient,
+            variables: {
+                recipientName: formatName(recipient),
+                parcel: variables.parcel,
+                owners: variables.owners,
+                owners_length: variables.owners.length,
+                majicYear: variables.majicYear,
+                webappUrl: `${webappUrl}`,
+                backUrl,
+                blogUrl,
+            },
+            preserveRecipient,
         });
     },
 };

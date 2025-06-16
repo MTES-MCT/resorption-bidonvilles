@@ -59,6 +59,7 @@ watch(values, () => {
 watch(options, () => {
     if (
         options.value &&
+        values.options &&
         options.value.length === values.options.length &&
         options.value.every((v) => values.options.includes(v))
     ) {

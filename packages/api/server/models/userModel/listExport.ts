@@ -107,7 +107,8 @@ export default async (permission?: Permission): Promise<UserListExportRow[]> => 
             LEFT JOIN v_user_areas ON v_user_areas.user_id = u.user_id AND v_user_areas.is_main_area IS TRUE
             LEFT JOIN roles_regular rr ON rr.role_id = u.fk_role_regular
             LEFT JOIN user_last_connection ulc ON ulc.fk_user = u.user_id
-            ${where !== null ? `WHERE (${where})` : ''}
+            WHERE u.anonymized_at IS NULL
+            ${where !== null ? `AND (${where})` : ''}
             ORDER BY
                 "Statut calculé",
                 used_at ASC,

@@ -228,7 +228,7 @@
 
 <script setup>
 import { toRefs } from "vue";
-import formatStat from "@/utils/formatStat";
+import formatStat from "@common/utils/formatStat";
 import formatDate from "@common/utils/formatDate";
 
 import { Icon } from "@resorptionbidonvilles/ui";
