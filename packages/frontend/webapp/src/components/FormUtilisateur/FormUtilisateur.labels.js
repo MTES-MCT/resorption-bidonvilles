@@ -21,7 +21,9 @@ export default (variant) => ({
         organization_administration: "Nom de la structure",
         private_organization: "Nom de l'organisme privé",
         organization_other:
-            "Précisez le nom et le territoire de votre structure",
+            "Précisez le nom de votre structure",
+        organization_other_territory:
+            "Précisez le territoire de votre structure",
         position:
             variant === "demande-acces"
                 ? "Votre fonction"

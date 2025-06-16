@@ -23,6 +23,12 @@ export function autocompleteAssociation(str) {
     );
 }
 
+export function autocompleOrganization(str) {
+    return axios.get(
+        `/organizations/organizations/search?query=${encodeURIComponent(str)}`
+    );
+}
+
 export function autocompletePrivateOrganization(str) {
     return axios.get(
         `/organizations/private-organizations/search?query=${encodeURIComponent(

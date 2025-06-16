@@ -121,20 +121,6 @@ export default (
         private_organization: allowPrivateOrganization,
         other: allowNewOrganization,
     });
-    function makeOrganizationCategoryRequired(schema) {
-        return schema
-            .required()
-            .oneOf(organizationCategories.map(({ value }) => value));
-    }
-    if (variant === "demande-acces") {
-        schema.organization_category = organizationCategory.when("is_actor", {
-            is: true,
-            then: makeOrganizationCategoryRequired,
-        });
-    } else {
-        schema.organization_category =
-            makeOrganizationCategoryRequired(organizationCategory);
-    }
 
     // organization type
     schema.organization_type = number()
@@ -201,7 +187,12 @@ export default (
             then: (schema) => schema.required(),
         })
         .label(labels.organization_other);
-
+    schema.organization_other_territory = string()
+        .when("organization_category", {
+            is: "other",
+            then: (schema) => schema.required(),
+        })
+        .label(labels.organization_other_territory);
     const position = string().label(labels.position);
     function makePositionRequired(schema) {
         return schema.required();
