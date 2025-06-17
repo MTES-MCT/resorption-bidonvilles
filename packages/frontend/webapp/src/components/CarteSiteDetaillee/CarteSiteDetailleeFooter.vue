@@ -9,7 +9,7 @@
                     : 'Alerte Canicule'
             "
             icon="fr-icon-thermometer-line"
-            class="fr-secondary-btn !border-1 !border-secondary !text-secondary hover:!bg-secondary hover:!text-white"
+            class="fr-secondary-btn !border-1 !border-secondary !text-secondary hover:!text-white"
             tertiary
             no-outline
             :disabled="heatwaveRequestStatus?.loading"
@@ -113,6 +113,6 @@ button {
 }
 
 button.fr-secondary-btn:hover {
-    background-color: var(--warning-425-625-hover) !important;
+    background-color: rgb(191, 83, 57) !important;
 }
 </style>
