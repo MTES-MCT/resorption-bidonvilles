@@ -61,9 +61,9 @@
                     <slot name="structureTitle" />
                 </p>
                 <FormUtilisateurInputStructure
-                :label="labels.organization_category"
-                @change="onOrganizationChange"
-                ref="organisationInput"
+                    :label="labels.organization_category"
+                    @change="onOrganizationChange"
+                    ref="organisationInput"
                 />
             </section>
             <FormUtilisateurInputOrganizationOther
@@ -74,10 +74,12 @@
                 v-if="values.organization_category === 'other'"
                 :label="labels.organization_other_territory"
             />
-            <FormUtilisateurInputPosition   
-            v-if="values.is_actor === true || variant === 'creer-utilisateur'"
-            :label="labels.position"
-            /> 
+            <FormUtilisateurInputPosition
+                v-if="
+                    values.is_actor === true || variant === 'creer-utilisateur'
+                "
+                :label="labels.position"
+            />
             <FormUtilisateurInputMessage
                 v-if="variant === 'demande-acces'"
                 :label="labels.access_request_message"
@@ -209,11 +211,11 @@ function onOrganizationChange(value) {
     }
 }
 
-
 function intermediateSubmit(values) {
     const formattedValues = { ...values };
     console.log("intermediateSubmit", formattedValues);
-    formattedValues.territorial_collectivity = formattedValues.territorial_collectivity?.data
+    formattedValues.territorial_collectivity = formattedValues
+        .territorial_collectivity?.data
         ? formattedValues.territorial_collectivity.data.id
         : null;
 
@@ -221,12 +223,14 @@ function intermediateSubmit(values) {
         ? formattedValues.association.data.id
         : null;
 
-    formattedValues.private_organization = formattedValues.private_organization?.data
+    formattedValues.private_organization = formattedValues.private_organization
+        ?.data
         ? formattedValues.private_organization.data.id
         : null;
 
     if (formattedValues.organisation && formattedValues.organisation.data) {
-        const category = formattedValues.organisation.data.category?.toLowerCase();
+        const category =
+            formattedValues.organisation.data.category?.toLowerCase();
         formattedValues.organization_category = category;
         formattedValues.organisation = formattedValues.organisation.data.id;
         if (category === "association") {
@@ -234,9 +238,11 @@ function intermediateSubmit(values) {
         } else if (category === "private_organization") {
             formattedValues.private_organization = formattedValues.organisation;
         } else if (category === "territorial_collectivity") {
-            formattedValues.territorial_collectivity = formattedValues.organisation;
+            formattedValues.territorial_collectivity =
+                formattedValues.organisation;
         } else if (category === "administration") {
-            formattedValues.organization_administration = formattedValues.organisation;
+            formattedValues.organization_administration =
+                formattedValues.organisation;
         } else if (category === "public_establishment") {
             formattedValues.organization_public = formattedValues.organisation;
         }

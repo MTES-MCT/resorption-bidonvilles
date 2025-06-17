@@ -16,7 +16,6 @@ type OrganizationAutocompleteResult = {
 export default async (search: string): Promise<OrganizationAutocompleteResult[]> => {
     try {
         const organizations = await autocomplete(search, null, null);
-        console.log('organizations', organizations);
 
         return Object.values(
             organizations.reduce((acc, row) => {

@@ -18,5 +18,5 @@ export function useDsfr(app) {
     app.component("DsfrInput", DsfrInput);
     app.component("DsfrCheckbox", DsfrCheckbox);
     app.component("DsfrPagination", DsfrPagination);
-    app.component("DsfrRadioButton", DsfrRadioButton)
+    app.component("DsfrRadioButton", DsfrRadioButton);
 }

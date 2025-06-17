@@ -53,8 +53,12 @@ async function autocompleteFn(value) {
     const results = await autocompleOrganization(value);
     const mappedResults = results.map((org) => ({
         id: org.id,
-        label: `${org.abbreviation ? `${org.abbreviation} — ` : ""}${org.label}`,
-        selectedLabel: `${org.abbreviation ? `${org.abbreviation} — ` : ""}${org.label}`,
+        label: `${org.abbreviation ? `${org.abbreviation} — ` : ""}${
+            org.label
+        }`,
+        selectedLabel: `${org.abbreviation ? `${org.abbreviation} — ` : ""}${
+            org.label
+        }`,
         category: org.type_abbreviation || org.type,
         data: {
             id: org.id,
