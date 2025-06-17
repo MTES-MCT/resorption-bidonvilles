@@ -16,6 +16,8 @@ export default defineConfig({
             port: 18092,
             path: "/socket",
         },
+        allowedHosts: ["host.docker.internal"]
+
     },
     build: {
         sourcemap: true,
