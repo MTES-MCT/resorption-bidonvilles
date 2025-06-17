@@ -5,7 +5,9 @@ import {
     DsfrInput,
     DsfrPagination,
     DsfrRadioButton,
-    DsfrCheckbox
+    DsfrCheckbox,
+    DsfrPagination,
+    DsfrRadioButton,
 } from "@gouvminint/vue-dsfr";
 
 import "@gouvfr/dsfr/dist/dsfr.min.css";
