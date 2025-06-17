@@ -13,7 +13,6 @@ import { fr } from "yup-locales";
 import labelsFn from "./FormUtilisateur.labels.js";
 
 import requestTypes from "@/utils/access_request_types";
-import organizationCategoriesFn from "@/utils/organization_categories";
 import referrals from "@/utils/contact_referrals";
 
 const locales = {
@@ -114,13 +113,6 @@ export default (
             })
             .label(labels.is_actor);
     }
-
-    // organization category
-    const organizationCategory = string().label(labels.organization_category);
-    const organizationCategories = organizationCategoriesFn({
-        private_organization: allowPrivateOrganization,
-        other: allowNewOrganization,
-    });
 
     // organization type
     schema.organization_type = number()
