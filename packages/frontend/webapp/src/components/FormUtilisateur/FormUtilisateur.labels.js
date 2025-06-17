@@ -20,8 +20,7 @@ export default (variant) => ({
         association: "Nom de l'association",
         organization_administration: "Nom de la structure",
         private_organization: "Nom de l'organisme privé",
-        organization_other:
-            "Précisez le nom de votre structure",
+        organization_other: "Précisez le nom de votre structure",
         organization_other_territory:
             "Précisez le territoire de votre structure",
         position:
