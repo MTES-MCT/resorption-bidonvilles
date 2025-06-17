@@ -55,9 +55,9 @@
                     <slot name="structureTitle" />
                 </p>
                 <FormUtilisateurInputStructure
-                :label="labels.organization_category"
-                @change="onOrganizationChange"
-                ref="organisationInput"
+                    :label="labels.organization_category"
+                    @change="onOrganizationChange"
+                    ref="organisationInput"
                 />
             </section>
             <div style="margin-left: 50px">
@@ -78,8 +78,8 @@
                 v-if="
                     values.is_actor === true || variant === 'creer-utilisateur'
                 "
-            :label="labels.position"
-            /> 
+                :label="labels.position"
+            />
             <FormUtilisateurInputMessage
                 v-if="variant === 'demande-acces'"
                 :label="labels.access_request_message"
@@ -233,7 +233,8 @@ function intermediateSubmit(values) {
         : null;
 
     if (formattedValues.organisation && formattedValues.organisation.data) {
-        const category = formattedValues.organisation.data.category?.toLowerCase();
+        const category =
+            formattedValues.organisation.data.category?.toLowerCase();
         formattedValues.organization_category = category;
         formattedValues.organisation = formattedValues.organisation.data.id;
         if (category === "association") {
@@ -241,9 +242,11 @@ function intermediateSubmit(values) {
         } else if (category === "private_organization") {
             formattedValues.private_organization = formattedValues.organisation;
         } else if (category === "territorial_collectivity") {
-            formattedValues.territorial_collectivity = formattedValues.organisation;
+            formattedValues.territorial_collectivity =
+                formattedValues.organisation;
         } else if (category === "administration") {
-            formattedValues.organization_administration = formattedValues.organisation;
+            formattedValues.organization_administration =
+                formattedValues.organisation;
         } else if (category === "public_establishment") {
             formattedValues.organization_public = formattedValues.organisation;
         }
