@@ -1,7 +1,7 @@
 # ====
 # Development
 # ====
-FROM node:16.20.1-slim AS development
+FROM node:22-alpine AS development
 
 RUN mkdir /home/node/app/ && chown node:node /home/node/app/
 
@@ -15,7 +15,7 @@ RUN yarn install --silent && yarn cache clean
 # ====
 # Production (build)
 # ====
-FROM node:16.20.1-slim AS production
+FROM node:22-alpine AS production
 
 RUN mkdir /home/node/app/ && chown node:node /home/node/app/
 
