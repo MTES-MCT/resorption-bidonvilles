@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col">
+    <div class="flex flex-col ml-4">
         <TableauDeBordFiltre
             v-for="section in sections"
             :key="section.id"

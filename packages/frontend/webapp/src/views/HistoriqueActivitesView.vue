@@ -10,9 +10,9 @@
         <ContentWrapper class="pt-8">
             <FilArianne :items="ariane" class="mb-8" />
             <HistoriqueActivitesHeader
-                class="sticky top-0 bg-white pt-2 pb-10 !mb-0"
+                class="sticky top-0 bg-white pt-2 pb-10 !mb-0 z-10"
             />
-            <TableauDeBordActivites class="mt-8" />
+            <TableauDeBordActivites class="mt-8 md:mt-2 z-[9]" />
         </ContentWrapper>
     </LayoutSearch>
 </template>
