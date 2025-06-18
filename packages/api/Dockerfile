@@ -17,8 +17,6 @@ WORKDIR /home/node/app/
 
 COPY --chown=node:node package.json yarn.lock .yarnrc.yml ./.yarn/releases/ ./.yarn/plugins/ ./
 
-RUN echo "DEBUG: Contenu de .yarn/releases/ AVANT yarn install:" && ls -la .yarn/releases/ && echo "DEBUG: Contenu de .yarn/ AVANT yarn install:" && ls -la .yarn/
-
 RUN node .yarn/releases/yarn-3.2.0.cjs install --immutable && node .yarn/releases/yarn-3.2.0.cjs cache clean
 # ====
 # Production (build)
