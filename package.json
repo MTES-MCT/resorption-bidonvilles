@@ -1,5 +1,5 @@
 {
-  "packageManager": "yarn@3.2.0",
+  "packageManager": "yarn@3.8.7",
   "name": "@resorptionbidonvilles/fullstack",
   "description": "Dépôt fullstack de la plateforme Résorption Bidonvilles, par la DIHAL",
   "version": "2.33.1",
