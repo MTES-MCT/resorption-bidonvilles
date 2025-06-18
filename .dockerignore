@@ -16,7 +16,9 @@
 **/dist
 !packages/api/server/mails/dist
 **/.editorconfig
-.yarn/*
-!.yarn/cache
-!.yarn/plugins
-!.yarn/releases
+# .yarn/*
+# Ignore seulement le cache et les fichiers temporaires de .yarn
+.yarn/cache/*
+.yarn/unplugged/*
+.yarn/build-state.yml
+.yarn/install-state.gz
