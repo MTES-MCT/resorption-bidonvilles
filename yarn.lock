@@ -5199,6 +5199,7 @@ __metadata:
     "@sentry/node": ^7.54.0
     "@sentry/tracing": ^7.54.0
     "@supercharge/promise-pool": ^2.4.0
+    "@types/chai": ^4.3.11
     "@types/chai-as-promised": ^7.1.5
     "@types/chai-subset": ^1.3.3
     "@types/mime-types": ^2.1.4
@@ -9010,7 +9011,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chai@npm:4":
+"@types/chai@npm:4, @types/chai@npm:^4.3.11":
   version: 4.3.20
   resolution: "@types/chai@npm:4.3.20"
   checksum: 7c5b0c9148f1a844a8d16cb1e16c64f2e7749cab2b8284155b9e494a6b34054846e22fb2b38df6b290f9bf57e6beebb2e121940c5896bc086ad7bab7ed429f06
