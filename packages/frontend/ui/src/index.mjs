@@ -2,7 +2,6 @@ export { default as Accordion } from './components/Accordion/Accordion.vue';
 export { default as AccordionItem } from './components/Accordion/AccordionItem.vue';
 export { default as AsyncSelect } from './components/Input/AsyncSelect.vue';
 export { default as Autocomplete } from './components/Input/Autocomplete.vue';
-export { default as BasicAutocomplete } from './components/Input/BasicAutocomplete.vue';
 export { default as BottomPagination } from './components/BottomPagination.vue';
 export { default as Button } from './components/Button.vue';
 export { default as Callout } from './components/Callout.vue';
