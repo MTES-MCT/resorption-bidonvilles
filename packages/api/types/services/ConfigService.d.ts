@@ -23,6 +23,7 @@ export type ConfigServiceFetchResponse = {
     actor_themes: {
         [key: string]: string,
     },
+    blog_url: string,
     changelog: Changelog[],
     closing_solutions: ClosingSolution[],
     departements: Departement[],

@@ -67,6 +67,7 @@ export default async (user: User): Promise<ConfigServiceFetchResponse> => {
             action_finance_types: actionFinanceTypes,
             activation_token_expires_in: parseInt(config.activationTokenExpiresIn, 10) * 3600,
             actor_themes: actorThemes,
+            blog_url: config.blogUrl,
             changelog,
             closing_solutions: closingSolutions,
             departements,
