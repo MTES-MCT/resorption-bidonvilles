@@ -4,9 +4,7 @@ import {
     DsfrSearchBar,
     DsfrInput,
     DsfrPagination,
-    DsfrRadioButton,
     DsfrCheckbox,
-    DsfrPagination,
     DsfrRadioButton,
 } from "@gouvminint/vue-dsfr";
 
