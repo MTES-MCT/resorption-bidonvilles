@@ -1,6 +1,6 @@
 <mjml>
     <mj-head>
-        <mj-title>[Résorption-bidonvilles] - Votre lien expire dans 48h</mj-title>
+        <mj-title>[Résorption-bidonvilles] - Votre lien expire dans {{var:whenDoesExpirationOccurs}}</mj-title>
         <mj-include path='common/attributes.mjml' />
         <mj-include path='common/styles.mjml' />
     </mj-head>
@@ -20,7 +20,7 @@
                     Nous vous invitons à l'activer dès maintenant.
                 </mj-text>
                 <mj-text mj-class="font-bold">
-                    Le lien expirera dans 48h ({{var:activationUrlExpDate}}).
+                    Le lien expirera dans {{var:whenDoesExpirationOccurs}} ({{var:activationUrlExpDate}}).
                 </mj-text>
                 <mj-button mj-class="button-primary" href="{{var:activationUrl}}" rel="noopener noreferrer">
                     Activer mon compte
