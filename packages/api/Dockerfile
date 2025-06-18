@@ -7,7 +7,7 @@ FROM node:22-alpine AS development
 RUN corepack enable
 
 # Installer les dépendances système nécessaires pour la compilation des modules natifs
-RUN apk add --no-cache build-base python3 make g++ vips-dev fftw-dev
+RUN apk update && apk add --no-cache build-base py3-setuptools libc6-compat vips-dev fftw-dev vips
 
 RUN mkdir /home/node/app/ && chown node:node /home/node/app/
 
@@ -17,7 +17,7 @@ WORKDIR /home/node/app/
 
 COPY --chown=node:node package.json yarn.lock .yarnrc.yml ./.yarn/releases/ ./.yarn/plugins/ ./
 
-RUN node .yarn/releases/yarn-3.2.0.cjs install --immutable && node .yarn/releases/yarn-3.2.0.cjs cache clean
+RUN yarn install --immutable && yarn cache clean
 # ====
 # Production (build)
 # ====
@@ -28,7 +28,7 @@ RUN corepack enable
 
 # Installer les dépendances système nécessaires pour la compilation des modules natifs
 # et les dépendances d'exécution pour sharp (vips)
-RUN apk add --no-cache build-base python3 make g++ vips-dev fftw-dev vips
+RUN apk update && apk add --no-cache build-base py3-setuptools libc6-compat vips-dev fftw-dev vips
 
 RUN mkdir /home/node/app/ && chown node:node /home/node/app/
 

@@ -9,7 +9,8 @@ ENV NODE_ENV=production
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 # python3, make, and g++ are needed for building node-gyp (itself required by a bunch of our dependencies)
-RUN apk update && apk add --no-cache python3 make g++ libc6-compat vips-dev fftw-dev
+# Installer les dépendances système requises pour la compilation (notamment pour sharp)
+RUN apk update && apk add --no-cache build-base py3-setuptools libc6-compat vips-dev fftw-dev vips
 
 RUN mkdir -p \
     /home/node/app/ \
@@ -23,7 +24,7 @@ COPY --chown=node:node packages/api/package.json packages/api/.sequelizerc ./pac
 COPY --chown=node:node package.json yarn.lock .yarnrc.yml ./
 COPY --chown=node:node .yarn ./.yarn/
 
-RUN node .yarn/releases/yarn-3.2.0.cjs install --immutable && node .yarn/releases/yarn-3.2.0.cjs cache clean
+RUN yarn install --immutable && yarn cache clean
 
 ADD ./packages/api ./packages/api/
 ADD --chown=node:node ./packages/frontend/common ./packages/frontend/common/
