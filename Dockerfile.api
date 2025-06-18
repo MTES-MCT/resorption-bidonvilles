@@ -25,7 +25,7 @@ COPY --chown=node:node .yarn ./.yarn/
 
 RUN echo "DEBUG: Contenu de .yarn/releases/ AVANT yarn install:" && ls -la .yarn/releases/ && echo "DEBUG: Contenu de .yarn/ AVANT yarn install:" && ls -la .yarn/
 
-RUN yarn install --immutable && yarn cache clean
+RUN node .yarn/releases/yarn-3.2.0.cjs install --immutable && node .yarn/releases/yarn-3.2.0.cjs cache clean
 
 ADD ./packages/api ./packages/api/
 ADD --chown=node:node ./packages/frontend/common ./packages/frontend/common/
