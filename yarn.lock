@@ -3602,10 +3602,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gouvfr/dsfr@npm:1.13.0":
-  version: 1.13.0
-  resolution: "@gouvfr/dsfr@npm:1.13.0"
-  checksum: b4b8012cee9dbd73446ac30c4ac594c3719c80e0e451e462ba63cf1ddc9e4152ffd1d390c04cdfbee5849901551c9a01e3b817c01e38c76a989a37156c57a8af
+"@gouvfr/dsfr@npm:1.13.1":
+  version: 1.13.1
+  resolution: "@gouvfr/dsfr@npm:1.13.1"
+  checksum: 5372089de76a23107e2146f89be35b149ca8774e0d156493e713cd2f4092e1f00cafabb6323e58ff185c096f346640b12d59e3f4870b211577e2e94c19289966
   languageName: node
   linkType: hard
 
@@ -5715,7 +5715,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@resorptionbidonvilles/webapp3@workspace:packages/frontend/webapp"
   dependencies:
-    "@gouvfr/dsfr": 1.13.0
+    "@gouvfr/dsfr": 1.13.1
     "@gouvminint/vue-dsfr": ^5.19.0
     "@rushstack/eslint-patch": ^1.1.4
     "@sentry/vue": ^7.54.0
