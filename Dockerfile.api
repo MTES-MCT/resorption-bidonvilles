@@ -31,7 +31,7 @@ RUN yarn build
 ###
 # PRODUCTION STAGE
 ###
-FROM node:18-alpine AS production
+FROM node:18.19-alpine AS production
 ENV NODE_ENV=production
 
 RUN mkdir -p \
