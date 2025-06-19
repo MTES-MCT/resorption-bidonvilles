@@ -44,23 +44,28 @@ RUN yarn build
 ###
 FROM node:22-alpine AS production
 
-# Activer Corepack pour utiliser la bonne version de Yarn
-RUN corepack enable
-
-# Installer les dépendances d'exécution pour sharp
-RUN apk add --no-cache vips
 ENV NODE_ENV=production
 
-RUN mkdir -p \
-    /home/node/app/ \
-    && chown -R node:node /home/node/app/
+# Installer les dépendances d'exécution pour sharp (léger)
+RUN apk add --no-cache vips
+
+# Créer l'utilisateur et le répertoire de l'application
+RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
 USER node
+WORKDIR /home/node/app
 
-WORKDIR /home/node/app/
-COPY --chown=node:node package.json ./
+# Copier les dépendances de production depuis l'étage de build
+# Note: On ne copie plus le package.json racine ni .yarnrc.yml car yarn n'est plus utilisé pour lancer l'appli.
 COPY --from=build --chown=node:node /home/node/app/node_modules ./node_modules
-COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./packages/
-COPY --chown=node:node packages/api/package.json ./packages/api/
 
-WORKDIR /home/node/app/packages/api
-ENTRYPOINT ["yarn", "serve"]
+# Copier le code compilé de l'application
+COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./dist
+
+# Copier le package.json de l'API (packages/api/package.json) pour référence, 
+# mais il n'est plus utilisé pour le script start.
+COPY --chown=node:node packages/api/package.json ./
+
+# Le script "start" dans package.json était "node dist/api/server/index.js".
+# Nous avons réorganisé les fichiers, le chemin est maintenant "dist/server/index.js"
+# et nous lançons directement node.
+ENTRYPOINT ["node", "dist/server/index.js"]
