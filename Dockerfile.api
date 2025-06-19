@@ -1,7 +1,7 @@
 ###
 # BUILD STAGE
 ###
-FROM node:20-alpine AS build
+FROM node:18-alpine AS build
 ENV NODE_ENV=production
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -31,7 +31,7 @@ RUN yarn build
 ###
 # PRODUCTION STAGE
 ###
-FROM node:16-alpine AS production
+FROM node:18-alpine AS production
 ENV NODE_ENV=production
 
 RUN mkdir -p \
