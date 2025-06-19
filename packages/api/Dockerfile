@@ -1,7 +1,13 @@
 # ====
 # Development
 # ====
-FROM node:16.20.1-slim AS development
+FROM node:18-alpine AS development
+
+# Activer Corepack pour utiliser la bonne version de Yarn
+RUN corepack enable
+
+# Installer les dépendances système requises pour la compilation (notamment pour sharp)
+RUN apk update && apk add --no-cache build-base py3-setuptools libc6-compat vips-dev fftw-dev vips
 
 RUN mkdir /home/node/app/ && chown node:node /home/node/app/
 
@@ -15,7 +21,13 @@ RUN yarn install --silent && yarn cache clean
 # ====
 # Production (build)
 # ====
-FROM node:16.20.1-slim AS production
+FROM node:18-alpine AS production
+
+# Activer Corepack pour utiliser la bonne version de Yarn
+RUN corepack enable
+
+# Installer uniquement les dépendances nécessaires pour l'exécution (plus léger)
+RUN apk add --no-cache vips
 
 RUN mkdir /home/node/app/ && chown node:node /home/node/app/
 
