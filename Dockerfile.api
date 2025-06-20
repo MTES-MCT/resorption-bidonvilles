@@ -49,4 +49,4 @@ WORKDIR /home/node/app/packages/api
 COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./dist
 
 # Définir la commande de démarrage
-CMD ["node", "dist/server/index.js"]
+CMD ["node", "dist/api/server/index.js"]
