@@ -37,19 +37,16 @@ RUN yarn build
 FROM node:20-alpine AS production
 ENV NODE_ENV=production
 
-# Activer Corepack pour utiliser la bonne version de Yarn
-RUN corepack enable
+# Installer les dépendances système nécessaires pour l'exécution
+RUN apk add --no-cache vips
 
-RUN mkdir -p \
-    /home/node/app/ \
-    && chown -R node:node /home/node/app/
+# Préparer le répertoire de l'application
+RUN mkdir -p /home/node/app/packages/api && chown -R node:node /home/node/app
 USER node
-
-WORKDIR /home/node/app/
-COPY --chown=node:node package.json ./
-COPY --from=build --chown=node:node /home/node/app/node_modules ./node_modules
-COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./packages/
-COPY --chown=node:node packages/api/package.json ./packages/api/
-
 WORKDIR /home/node/app/packages/api
-ENTRYPOINT ["yarn", "serve"]
+
+# Copier les fichiers compilés depuis l'étape de build
+COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./dist
+
+# Définir la commande de démarrage
+CMD ["node", "dist/server/index.js"]
