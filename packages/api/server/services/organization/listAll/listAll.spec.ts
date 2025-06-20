@@ -4,6 +4,8 @@ import sinonChai from 'sinon-chai';
 import rewiremock from 'rewiremock';
 import ServiceError from '#server/errors/ServiceError';
 
+import organizationAutocomplete from './listAll';
+
 const { expect } = chai;
 chai.use(sinonChai);
 
@@ -15,8 +17,6 @@ const stubs = {
 
 rewiremock('#server/models/organizationModel/autocomplete').with(stubs.autocomplete);
 rewiremock.enable();
-
-import organizationAutocomplete from './listAll';
 
 rewiremock.disable();
 
@@ -54,7 +54,7 @@ describe('organizationAutocomplete()', () => {
                 main_departements_names: ['Paris'],
                 main_epci_names: ['EPCI'],
                 main_cities_names: ['Paris 5e'],
-            }
+            },
         ]);
 
         const results = await organizationAutocomplete('org');
@@ -69,7 +69,7 @@ describe('organizationAutocomplete()', () => {
                 category: 'cat1',
                 similarity: 0.8,
                 type_abbreviation: 'ASSO',
-            }
+            },
         ]);
     });
 
@@ -88,7 +88,7 @@ describe('organizationAutocomplete()', () => {
                 main_departements_names: ['Finistère'],
                 main_epci_names: ['EPCI Ouest'],
                 main_cities_names: ['Quimper'],
-            }
+            },
         ]);
 
         const results = await organizationAutocomplete('loc');
@@ -103,7 +103,7 @@ describe('organizationAutocomplete()', () => {
                 category: null,
                 similarity: 0.85,
                 type_abbreviation: null,
-            }
+            },
         ]);
     });
 
@@ -137,7 +137,7 @@ describe('organizationAutocomplete()', () => {
                 main_departements_names: [],
                 main_epci_names: [],
                 main_cities_names: [],
-            }
+            },
         ]);
 
         const results = await organizationAutocomplete('zzz');
@@ -159,13 +159,13 @@ describe('organizationAutocomplete()', () => {
                 main_departements_names: ['Loire'],
                 main_epci_names: [],
                 main_cities_names: ['Roanne'],
-            }
+            },
         ]);
-    
+
         const results = await organizationAutocomplete('partial');
         expect(results[0].label).to.equal('Loire, Roanne');
     });
-    
+
     it('groupe plusieurs organisations du même type_name dans le même tableau', async () => {
         stubs.autocomplete.resolves([
             {
@@ -195,14 +195,14 @@ describe('organizationAutocomplete()', () => {
                 main_departements_names: [],
                 main_epci_names: [],
                 main_cities_names: [],
-            }
+            },
         ]);
-    
+
         const results = await organizationAutocomplete('coop');
         expect(results).to.have.lengthOf(2);
         expect(results.map(r => r.type)).to.eql(['Coopérative', 'Coopérative']);
     });
-    
+
 
     it('retourne des organisations de types différents', async () => {
         stubs.autocomplete.resolves([
@@ -233,11 +233,10 @@ describe('organizationAutocomplete()', () => {
                 main_departements_names: [],
                 main_epci_names: [],
                 main_cities_names: [],
-            }
+            },
         ]);
-    
+
         const results = await organizationAutocomplete('multi');
         expect(results.map(r => r.type)).to.include.members(['Société', 'Collectivité']);
-    });    
-    
+    });
 });
