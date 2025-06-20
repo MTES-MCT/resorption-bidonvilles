@@ -41,7 +41,7 @@ export default async (question: QuestionInput, author: AuthorData, files: Expres
             await uploadAttachments('question', questionId, author.id, files, transaction);
         } catch (error) {
             await transaction.rollback();
-            throw new ServiceError(error?.message || '500', scanAttachmentErrors[error?.message].message || 'upload_failed');
+            throw new ServiceError(error?.message ?? '500', scanAttachmentErrors[error?.message]?.message ?? 'upload_failed');
         }
     }
 
@@ -66,7 +66,8 @@ export default async (question: QuestionInput, author: AuthorData, files: Expres
     try {
         await userQuestionSubscriptionModel.createSubscription(author.id, questionId);
     } catch (error) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.error(error);
     }
 
     // on notifie tous les utilisateurs concernés
@@ -81,7 +82,8 @@ export default async (question: QuestionInput, author: AuthorData, files: Expres
             })),
         );
     } catch (error) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.error(error);
     }
 
     return enrichedQuestion;
