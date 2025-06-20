@@ -55,7 +55,7 @@ RUN npm install --production --no-fund --no-audit --legacy-peer-deps
 # Copier les fichiers compilés depuis l'étape de build
 COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./dist
 
-# Créer un fichier de configuration PM2 plus simple
+# Créer un fichier de configuration PM2
 RUN echo "module.exports = {" > ecosystem.config.js
 RUN echo "  apps: [" >> ecosystem.config.js
 RUN echo "    {" >> ecosystem.config.js
