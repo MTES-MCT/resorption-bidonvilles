@@ -55,19 +55,8 @@ RUN npm install --production --no-fund --no-audit --legacy-peer-deps
 # Copier les fichiers compilés depuis l'étape de build
 COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./dist
 
-# Créer un fichier de configuration PM2
-RUN echo '{\
-  \"apps\": [{\
-    \"name\": \"api\",\
-    \"script\": \"dist/api/server/index.js\",\
-    \"instances\": 1,\
-    \"exec_mode\": \"fork\",\
-    \"watch\": false,\
-    \"env\": {\
-      \"NODE_ENV\": \"production\"\
-    }\
-  }]\
-}' > ecosystem.config.js
+# Créer un fichier de configuration PM2 plus simple
+RUN printf '{"apps":[{"name":"api","script":"dist/api/server/index.js","instances":1,"exec_mode":"fork","watch":false,"env":{"NODE_ENV":"production"}}]}' > ecosystem.config.js
 
 # Définir la commande de démarrage avec PM2
 CMD ["pm2-runtime", "ecosystem.config.js"]
