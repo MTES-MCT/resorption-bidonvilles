@@ -19,15 +19,14 @@ describe('organizationAutocomplete - test d\'intégration', () => {
 
     it('retourne une liste d\'organisations avec une similarité >= 0.75', async () => {
         const results = await organizationAutocomplete('loire');
-    
+
         const highSimilarity = results.filter(o => o.similarity >= 0.75);
-    
+
         expect(highSimilarity.length).to.be.greaterThan(0);
-    
+
         const first = highSimilarity[0];
         expect(first.similarity).to.be.at.least(0.75);
         expect(first).to.have.property('name');
         expect(first).to.have.property('type');
     });
-    
 });
