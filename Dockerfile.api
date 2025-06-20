@@ -49,8 +49,25 @@ WORKDIR /home/node/app/packages/api
 COPY --chown=node:node packages/api/package.json ./
 RUN npm install --production --no-fund --no-audit --legacy-peer-deps
 
+# Installer PM2 globalement pour la gestion des processus
+RUN npm install -g pm2
+
 # Copier les fichiers compilés depuis l'étape de build
 COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./dist
 
-# Définir la commande de démarrage
-CMD ["node", "dist/api/server/index.js"]
+# Créer un fichier de configuration PM2
+RUN echo '{
+  "apps": [{
+    "name": "api",
+    "script": "dist/api/server/index.js",
+    "instances": 1,
+    "exec_mode": "fork",
+    "watch": false,
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }]
+}' > ecosystem.config.js
+
+# Définir la commande de démarrage avec PM2
+CMD ["pm2-runtime", "ecosystem.config.js"]
