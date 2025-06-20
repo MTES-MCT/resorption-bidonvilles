@@ -45,6 +45,10 @@ RUN mkdir -p /home/node/app/packages/api && chown -R node:node /home/node/app
 USER node
 WORKDIR /home/node/app/packages/api
 
+# Copier les fichiers package.json et installer les dépendances
+COPY --chown=node:node packages/api/package.json ./
+RUN npm install --production --no-fund --no-audit
+
 # Copier les fichiers compilés depuis l'étape de build
 COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./dist
 
