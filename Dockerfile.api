@@ -1,12 +1,15 @@
 ###
 # BUILD STAGE
 ###
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
 ENV NODE_ENV=production
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 # python3, make, and g++ are needed for building node-gyp (itself required by a bunch of our dependencies)
 RUN apk update && apk add --no-cache python3 make g++ libc6-compat
+
+# Activer Corepack pour utiliser la bonne version de Yarn
+RUN corepack enable
 
 RUN mkdir -p \
     /home/node/app/ \
@@ -31,8 +34,11 @@ RUN yarn build
 ###
 # PRODUCTION STAGE
 ###
-FROM node:18.19-alpine AS production
+FROM node:20-alpine AS production
 ENV NODE_ENV=production
+
+# Activer Corepack pour utiliser la bonne version de Yarn
+RUN corepack enable
 
 RUN mkdir -p \
     /home/node/app/ \

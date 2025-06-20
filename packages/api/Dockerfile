@@ -1,7 +1,7 @@
 # ====
 # Development
 # ====
-FROM node:18-alpine AS development
+FROM node:20-alpine AS development
 
 # Activer Corepack pour utiliser la bonne version de Yarn
 RUN corepack enable
@@ -21,7 +21,7 @@ RUN yarn install --silent && yarn cache clean
 # ====
 # Production (build)
 # ====
-FROM node:18-alpine AS production
+FROM node:20-alpine AS production
 
 # Activer Corepack pour utiliser la bonne version de Yarn
 RUN corepack enable
