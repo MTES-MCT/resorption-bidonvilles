@@ -47,7 +47,7 @@ WORKDIR /home/node/app/packages/api
 
 # Copier les fichiers package.json et installer les dépendances
 COPY --chown=node:node packages/api/package.json ./
-RUN npm install --production --no-fund --no-audit
+RUN npm install --production --no-fund --no-audit --legacy-peer-deps
 
 # Copier les fichiers compilés depuis l'étape de build
 COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./dist
