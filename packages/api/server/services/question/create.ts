@@ -66,8 +66,7 @@ export default async (question: QuestionInput, author: AuthorData, files: Expres
     try {
         await userQuestionSubscriptionModel.createSubscription(author.id, questionId);
     } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+        // ignore
     }
 
     // on notifie tous les utilisateurs concernés
@@ -82,8 +81,7 @@ export default async (question: QuestionInput, author: AuthorData, files: Expres
             })),
         );
     } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+        // ignore
     }
 
     return enrichedQuestion;
