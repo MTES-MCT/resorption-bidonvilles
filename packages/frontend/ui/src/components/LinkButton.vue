@@ -44,7 +44,7 @@ export default {
 
     computed: {
         toRB() {
-            return /(\/\/|\.)resorption-bidonvilles\./.test(this.to) === true;
+            return /(\/\/|(?<!blog)\.)resorption-bidonvilles\./.test(this.to) === true;
         },
         internalLink() {
             return this.to && this.to[0] === "/";
