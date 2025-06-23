@@ -1,7 +1,10 @@
 # ====
 # Development
 # ====
-FROM node:20-alpine AS development
+FROM node:22-alpine AS development
+
+# Mettre à jour les paquets Alpine pour corriger les vulnérabilités connues
+RUN apk update && apk upgrade
 
 # Activer Corepack pour utiliser la bonne version de Yarn
 RUN corepack enable
@@ -21,7 +24,10 @@ RUN yarn install --silent && yarn cache clean
 # ====
 # Production (build)
 # ====
-FROM node:20-alpine AS production
+FROM node:22-alpine AS production
+
+# Mettre à jour les paquets Alpine pour corriger les vulnérabilités connues
+RUN apk update && apk upgrade
 
 # Activer Corepack pour utiliser la bonne version de Yarn
 RUN corepack enable
