@@ -27,7 +27,7 @@ FROM node:20-alpine AS production
 RUN corepack enable
 
 # Installer PM2 globalement pour la gestion des processus (en tant que root)
-RUN npm install -g pm2
+RUN yarn global add pm2
 
 # Installer uniquement les dépendances nécessaires pour l'exécution (plus léger)
 RUN apk add --no-cache vips

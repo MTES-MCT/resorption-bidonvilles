@@ -41,7 +41,7 @@ ENV NODE_ENV=production
 RUN apk add --no-cache vips
 
 # Installer PM2 globalement pour la gestion des processus (en tant que root)
-RUN npm install -g pm2
+RUN yarn global add pm2
 
 # Préparer le répertoire de l'application
 RUN mkdir -p /home/node/app/packages/api && chown -R node:node /home/node/app
@@ -50,7 +50,7 @@ WORKDIR /home/node/app/packages/api
 
 # Copier les fichiers package.json et installer les dépendances
 COPY --chown=node:node packages/api/package.json ./
-RUN npm install --production --no-fund --no-audit --legacy-peer-deps
+RUN yarn install --production --non-interactive --ignore-scripts --ignore-peer-dependencies
 
 # Copier les fichiers compilés depuis l'étape de build
 COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./dist
