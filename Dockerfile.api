@@ -37,18 +37,15 @@ RUN yarn build
 FROM node:22-alpine AS production
 ENV NODE_ENV=production
 
-# Mettre à jour les paquets Alpine pour corriger les vulnérabilités connues
-# Installer les dépendances système nécessaires pour l'exécution
 RUN apk update && apk upgrade \
     && apk add --no-cache vips \
     && yarn global add pm2 \
     && mkdir -p /home/node/app/packages/api
 
-# Copier les fichiers en tant que root
 COPY packages/api/package.json /home/node/app/packages/api/
+RUN chown node:node /home/node/app/packages/api/package.json
 COPY --from=build /home/node/app/packages/api/dist /home/node/app/packages/api/dist
 
-# Définir des permissions restrictives
 RUN chown -R root:root /home/node/app && \
     chmod -R 755 /home/node/app && \
     chmod -R 550 /home/node/app/packages/api/dist && \
