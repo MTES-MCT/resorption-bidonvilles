@@ -22,7 +22,7 @@ function createBlogRoute(baseUrl, path, params = {}) {
 
 const blogRessourceRoute = createBlogRoute(
     getBlogUrl(),
-    "/blog-résorption-bidonville/",
+    "/blog-résorption-bidonvilles/",
     {
         category: "ressources",
     }
@@ -88,11 +88,7 @@ function filterByAuthRequirement(item, { isLoggedIn, isLoaded }) {
         return false;
     }
 
-    if (configRequired === true && !isLoaded) {
-        return false;
-    }
-
-    return true;
+    return !(configRequired === true && !isLoaded);
 }
 
 export const useNavigationStore = defineStore("navigation", {
