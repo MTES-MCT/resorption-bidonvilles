@@ -38,5 +38,4 @@ COPY --chown=node:node . .
 RUN yarn install \
     && yarn build
 
-# Définir la commande de démarrage avec PM2
 CMD ["pm2-runtime", "dist/server/index.js", "--name", "api"]

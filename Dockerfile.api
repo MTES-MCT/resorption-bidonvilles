@@ -43,14 +43,17 @@ RUN apk update && apk upgrade \
     && mkdir -p /home/node/app/packages/api
 
 COPY packages/api/package.json /home/node/app/packages/api/
-RUN chown node:node /home/node/app/packages/api/package.json
 COPY --from=build /home/node/app/packages/api/dist /home/node/app/packages/api/dist
 
 RUN chown -R root:root /home/node/app && \
     chmod -R 755 /home/node/app && \
     chmod -R 550 /home/node/app/packages/api/dist && \
     chmod 440 /home/node/app/packages/api/package.json && \
-    chown -R node:node /home/node/app/packages/api/dist
+    chown -R node:node /home/node/app/packages/api/dist && \
+    chown node:node /home/node/app/packages/api/package.json && \
+    mkdir -p /home/node/app/packages/api/node_modules && \
+    chown node:node /home/node/app/packages/api/node_modules
+    
 
 USER node
 WORKDIR /home/node/app/packages/api
