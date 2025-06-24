@@ -52,12 +52,14 @@ RUN chown -R root:root /home/node/app && \
     chown -R node:node /home/node/app/packages/api/dist && \
     chown node:node /home/node/app/packages/api/package.json && \
     mkdir -p /home/node/app/packages/api/node_modules && \
-    chown node:node /home/node/app/packages/api/node_modules
+    chown node:node /home/node/app/packages/api/node_modules && \
+    chown -R node:node /home/node/app/packages/api && \
+    chmod 755 /home/node/app/packages/api
 
 USER node
 WORKDIR /home/node/app/packages/api
 
-RUN yarn install --production --non-interactive --ignore-scripts --ignore-peer-dependencies --no-lockfile \
+RUN yarn install --production --non-interactive --ignore-scripts --ignore-peer-dependencies \
   && echo "module.exports = {" > ecosystem.config.js \
   && echo "  apps: [" >> ecosystem.config.js \
   && echo "    {" >> ecosystem.config.js \
