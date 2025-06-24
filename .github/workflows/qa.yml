@@ -16,10 +16,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: '0'
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@master
-
+        id: buildx
+        with:
+          install: true
       - name: Cache Docker layers
         uses: actions/cache@v4
         with:
