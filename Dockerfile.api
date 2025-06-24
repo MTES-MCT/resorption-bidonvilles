@@ -53,7 +53,6 @@ RUN chown -R root:root /home/node/app && \
     chown node:node /home/node/app/packages/api/package.json && \
     mkdir -p /home/node/app/packages/api/node_modules && \
     chown node:node /home/node/app/packages/api/node_modules
-    
 
 USER node
 WORKDIR /home/node/app/packages/api
