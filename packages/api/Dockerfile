@@ -15,8 +15,11 @@ USER node
 
 WORKDIR /home/node/app/
 
-COPY --chown=node:node package.json yarn.lock ./
-RUN yarn install --silent && yarn cache clean
+# Copier les fichiers sans spécifier le propriétaire
+COPY package.json yarn.lock ./
+# Changer le propriétaire explicitement
+RUN chown node:node package.json yarn.lock && \
+    yarn install --silent && yarn cache clean
 
 # ====
 # Production (build)
@@ -33,9 +36,29 @@ USER node
 
 WORKDIR /home/node/app/
 
-COPY --chown=node:node . .
+# Copier d'abord les fichiers de configuration sans spécifier le propriétaire
+COPY package.json yarn.lock .sequelizerc ./
+RUN chown node:node package.json yarn.lock .sequelizerc
 
-RUN yarn install \
+# S'assurer que les répertoires nécessaires existent
+RUN mkdir -p /home/node/app/packages/frontend \
+    && mkdir -p /home/node/app/server \
+    && mkdir -p /home/node/app/db \
+    && mkdir -p /home/node/app/assets
+
+# Copier les fichiers de code source nécessaires sans spécifier le propriétaire
+COPY tsconfig*.json ./
+COPY server/ ./server/
+COPY db/ ./db/
+COPY assets/ ./assets/
+
+# Copier les fichiers frontend/common depuis le répertoire parent
+COPY ../frontend/common ./packages/frontend/common/
+
+# Changer le propriétaire de tous les fichiers copiés
+RUN chown -R node:node /home/node/app/
+
+RUN yarn install --ignore-scripts \
     && yarn build
 
 CMD ["pm2-runtime", "dist/server/index.js", "--name", "api"]
