@@ -6,7 +6,7 @@ const changelog = {
     items: [
         {
             title: 'Le blog est de retour avec un nouveau design !',
-            description: '<p>Retrouverez toutes les actualités de la résorption des bidonvilles au niveau national et dans les territoires, ainsi que des ressources que nous mettons à votre disposition (fiches repères, guides pratiques, conseils) et des contenus exclusifs autour de thématiques variées (insertion, scolarisation, santé, traite des êtres humains...)</p>',
+            description: '<p>Retrouvez toutes les actualités de la résorption des bidonvilles au niveau national et dans les territoires, ainsi que des ressources que nous mettons à votre disposition (fiches repères, guides pratiques, conseils) et des contenus exclusifs autour de thématiques variées (insertion, scolarisation, santé, traite des êtres humains...)</p>',
             image: `${backUrl}/assets/changelog/2.33.4/item_1.jpg`,
         },
     ],
