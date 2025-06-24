@@ -16,20 +16,16 @@ RUN mkdir -p \
     /home/node/app/packages/api \
     /home/node/app/packages/frontend/common \
     && chown -R node:node /home/node/app/
-USER node
 
 WORKDIR /home/node/app/
 COPY packages/api/package.json packages/api/.sequelizerc ./packages/api/
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn ./.yarn/
 
-RUN chown node:node ./packages/api/package.json \
-    ./packages/api/.sequelizerc \
-    ./package.json \
-    ./yarn.lock \
-    ./yarnrc.yml \
-    ./.yarn/.yarn
+USER root
+RUN chown -R node:node /home/node/app/
 
+USER node
 RUN yarn install --silent && yarn cache clean
 
 COPY ./packages/api ./packages/api/
