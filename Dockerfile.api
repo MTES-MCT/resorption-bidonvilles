@@ -57,7 +57,7 @@ RUN chown -R root:root /home/node/app && \
 USER node
 WORKDIR /home/node/app/packages/api
 
-RUN yarn install --production --non-interactive --ignore-scripts --ignore-peer-dependencies \
+RUN yarn install --production --non-interactive --ignore-scripts --ignore-peer-dependencies --no-lockfile \
   && echo "module.exports = {" > ecosystem.config.js \
   && echo "  apps: [" >> ecosystem.config.js \
   && echo "    {" >> ecosystem.config.js \
