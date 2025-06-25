@@ -25,7 +25,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-api-buildx-qa-${{ github.event.inputs.tag }}
+          key: ${{ runner.os }}-api-buildx-qa-${{ github.event.inputs.tag || 'latest' }}
           restore-keys: |
             ${{ runner.os }}-api-buildx
 
@@ -42,7 +42,7 @@ jobs:
           context: .
           file: Dockerfile.api
           push: true
-          tags: resorptionbidonvilles/api:qa-${{ github.event.inputs.tag }}
+          tags: resorptionbidonvilles/api:qa-${{ github.event.inputs.tag || 'latest' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -64,7 +64,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-api-buildx-qa-${{ github.event.inputs.tag }}
+          key: ${{ runner.os }}-api-buildx-qa-${{ github.event.inputs.tag || 'latest' }}
           restore-keys: |
             ${{ runner.os }}-api-buildx
 
@@ -81,7 +81,7 @@ jobs:
           context: .
           file: Dockerfile.www
           push: true
-          tags: resorptionbidonvilles/www:qa-${{ github.event.inputs.tag }}
+          tags: resorptionbidonvilles/www:qa-${{ github.event.inputs.tag || 'latest' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -103,7 +103,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-api-buildx-qa-${{ github.event.inputs.tag }}
+          key: ${{ runner.os }}-api-buildx-qa-${{ github.event.inputs.tag || 'latest' }}
           restore-keys: |
             ${{ runner.os }}-api-buildx
 
@@ -120,7 +120,7 @@ jobs:
           context: .
           file: Dockerfile.webapp
           push: true
-          tags: resorptionbidonvilles/frontend:qa-${{ github.event.inputs.tag }}
+          tags: resorptionbidonvilles/frontend:qa-${{ github.event.inputs.tag || 'latest' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
