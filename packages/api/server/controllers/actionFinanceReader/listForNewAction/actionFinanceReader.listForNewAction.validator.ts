@@ -10,6 +10,8 @@ export default [
             try {
                 location = await geoModel.getLocation('departement', value);
             } catch (e) {
+                // eslint-disable-next-line no-console
+                console.error('Erreur lors de la lecture en base de données:', e);
                 throw new Error('Une erreur est survenue lors de la lecture en base de données');
             }
 
