@@ -1,12 +1,13 @@
 /* eslint-disable newline-per-chained-call */
 import { param, query } from 'express-validator';
 import geoModel from '#server/models/geoModel/index';
+import type { Location as GeoLocation } from '#server/models/geoModel/Location';
 
 export default [
     param('departement')
         .exists({ checkNull: true }).bail().withMessage('La localisation est obligatoire')
         .custom(async (value, { req }) => {
-            let location;
+            let location: GeoLocation;
             try {
                 location = await geoModel.getLocation('departement', value);
             } catch (e) {
