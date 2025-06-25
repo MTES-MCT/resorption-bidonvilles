@@ -20,11 +20,11 @@ export default async (req: SubscribeQuestionRequest, res: Response, next: NextFu
     try {
         await questionService.subscribe(req.user, req.question.id);
     } catch (error) {
-        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
+        const { code, message } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
         res.status(code).send({
             user_message: message,
         });
-        next(error.nativeError || error);
+        next(error.nativeError ?? error);
     }
 
     res.status(200).send({});

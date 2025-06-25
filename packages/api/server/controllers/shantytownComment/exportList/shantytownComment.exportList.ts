@@ -8,7 +8,7 @@ export default async (req, res, next) => {
         comments = await shantytownCommentService.exportAll(req.user);
     } catch (error) {
         let message;
-        if (error && error.code === 'select_failed') {
+        if (error?.code === 'select_failed') {
             message = 'Une erreur est survenue lors de la lecture en base de données';
         } else {
             message = 'Une erreur inconnue est survenue.';
@@ -17,7 +17,7 @@ export default async (req, res, next) => {
         res.status(500).send({
             user_message: message,
         });
-        return next((error && error.nativeError) || error);
+        return next((error?.nativeError) ?? error);
     }
 
     return res.status(200).send({
