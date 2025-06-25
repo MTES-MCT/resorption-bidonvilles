@@ -79,9 +79,8 @@ const tabs = computed(() => {
                 ...item,
                 label: item.label(action.value),
                 postIcon:
-                    item.id === "journal_de_l_action" && commentsAttachments > 0
-                        ? true
-                        : false,
+                    item.id === "journal_de_l_action" &&
+                    commentsAttachments > 0,
             };
         });
 });
