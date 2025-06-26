@@ -50,7 +50,7 @@ describe('services/action.getActionReport()', () => {
     });
 
     afterEach(() => {
-        sandbox.reset();
+        sandbox.restore();
     });
 
     it('vérifie que l\'utilisateur a le droit d\'exporter les commentaires des actions au niveau national', async () => {
