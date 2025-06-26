@@ -447,7 +447,7 @@ export default (mode: 'create' | 'update') => [
 
     // indicateurs santé
     body('indicateurs.*.sante_nombre_personnes')
-        .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('health'))
+        .if((value, { req }) => req.body.topics?.includes?.('health'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de personnes ayant eu un accompagnement vers la santé" doit être un nombre')
