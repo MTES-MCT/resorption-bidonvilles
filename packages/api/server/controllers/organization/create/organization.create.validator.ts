@@ -39,7 +39,7 @@ export default [
         .trim()
         .isLength({ max: 250 }).bail().withMessage('Le champ "Acronyme" ne peut excéder 250 caractères'),
     body('abbreviation')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     body('type')
         .if(value => value !== 'new')
@@ -119,7 +119,7 @@ export default [
         .trim()
         .isLength({ max: 250 }).bail().withMessage('Le champ "Acronyme du nouveau type de structure" ne peut excéder 250 caractères'),
     body('new_type_abbreviation')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     body('new_type_default_role')
         .if((value, { req }) => req.body.type === 'new')
@@ -161,7 +161,7 @@ export default [
                     return acc;
                 }
 
-                acc.push(v[index]?.name || 'nom inconnu');
+                acc.push(v[index]?.name ?? 'nom inconnu');
                 return acc;
             }, []);
             if (errors.length > 0) {
