@@ -75,6 +75,8 @@ export default (mode: 'create' | 'update') => [
             try {
                 existingTopics = await topicModel.findAll();
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Champs d\'intervention"');
             }
 
@@ -107,6 +109,8 @@ export default (mode: 'create' | 'update') => [
             try {
                 location = await geoModel.getLocation('departement', value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une lecture en base de données a échoué lors de la validation du champ "Département d\'intervention principal"');
             }
 
@@ -149,6 +153,8 @@ export default (mode: 'create' | 'update') => [
             try {
                 city = await geoModel.getLocation('city', req.body.location_eti_citycode);
             } catch (e) {
+                // eslint-disable-next-line no-console
+                console.error(e);
                 throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du code communal');
             }
 
@@ -197,6 +203,8 @@ export default (mode: 'create' | 'update') => [
                     { shantytown_id: value },
                 ]);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la validation des sites');
             }
 
