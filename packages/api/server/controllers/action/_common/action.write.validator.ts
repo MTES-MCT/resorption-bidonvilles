@@ -64,7 +64,7 @@ export default (mode: 'create' | 'update') => [
             return true;
         }),
     body('ended_at')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     body('topics')
         .exists({ checkNull: true }).bail().withMessage('Le champ "Champs d\'intervention" est obligatoire')
@@ -213,7 +213,7 @@ export default (mode: 'create' | 'update') => [
         .trim()
         .notEmpty().withMessage('Vous devez préciser où se déroule l\'action'),
     body('location_autre')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     body('managers')
         .customSanitizer((value, { req }) => {
@@ -328,7 +328,7 @@ export default (mode: 'create' | 'update') => [
         .customSanitizer(value => (typeof value === 'number' ? value : null)),
 
     body('finances.*.rows.*.comments')
-        .customSanitizer(value => value || '')
+        .customSanitizer(value => value ?? '')
         .isString().bail().withMessage('Le champ "Commentaires" doit être une chaîne de caractères')
         .isLength({ max: 255 }).bail().withMessage('Le champ "Commentaires" ne doit pas dépasser 255 caractères')
         .trim(),
