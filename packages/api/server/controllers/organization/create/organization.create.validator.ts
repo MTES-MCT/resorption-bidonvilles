@@ -18,6 +18,8 @@ export default [
             try {
                 similarOrganizations = await organizationModel.findByName(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification que cette structure n\'existe pas déjà');
             }
 
@@ -48,6 +50,8 @@ export default [
             try {
                 organizationType = await organizationTypeModel.findOneById(value as number);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification du type de la structure');
             }
 
@@ -67,6 +71,8 @@ export default [
             try {
                 organizationCategory = await organizationCategoryModel.findOneById(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification de la catégorie du nouveau type de structure');
             }
 
@@ -91,6 +97,8 @@ export default [
             try {
                 similarOrganizationType = await organizationTypeModel.findOneByUid(uid);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification que cette structure n\'existe pas déjà');
             }
 
@@ -121,6 +129,8 @@ export default [
             try {
                 role = await roleModel.findOne(value, 'regular');
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification du rôle par défaut du nouveau type de structure');
             }
 
@@ -141,6 +151,8 @@ export default [
                     value.map(({ code, type }) => geoModel.getLocation(type, code)),
                 );
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification des territoires d\'intervention');
             }
 
