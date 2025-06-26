@@ -46,8 +46,9 @@ describe('services/shantytown', () => {
             });
         });
         afterEach(() => {
-            sandbox.reset();
+            sandbox.restore();
         });
+
         it('retourne la liste de tous les sites', async () => {
             stubs.shantytownModel.findAll.resolves(towns);
             let shantytownsResponse;
