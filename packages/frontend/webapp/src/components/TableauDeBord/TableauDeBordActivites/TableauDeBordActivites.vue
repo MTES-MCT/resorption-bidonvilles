@@ -24,11 +24,13 @@
             </template>
         </ViewErrorInline>
 
-        <section v-else class="flex">
-            <div class="sticky self-start top-28">
-                <TableauDeBordFiltres class="w-48 pt-0 -mt-0" />
+        <section v-else class="flex flex-col md:flex-row gap-2">
+            <div class="sticky top-[120px] w-full md:w-auto self-start top-64">
+                <TableauDeBordFiltres class="pt-0 -mt-0" />
             </div>
-            <TableauDeBordActivitesListe class="ml-24 -mt-1 flex-1" />
+            <TableauDeBordActivitesListe
+                class="overflow-auto md:ml-24 -mt-1 flex-1"
+            />
         </section>
     </div>
 </template>
