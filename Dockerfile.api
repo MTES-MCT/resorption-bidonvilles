@@ -63,20 +63,6 @@ RUN chown -R root:root /home/node/app && \
 USER node
 WORKDIR /home/node/app/packages/api
 
-RUN yarn install --production --non-interactive --ignore-scripts --ignore-peer-dependencies \
-  && echo "module.exports = {" > ecosystem.config.js \
-  && echo "  apps: [" >> ecosystem.config.js \
-  && echo "    {" >> ecosystem.config.js \
-  && echo "      name: 'api'," >> ecosystem.config.js \
-  && echo "      script: 'dist/api/server/index.js'," >> ecosystem.config.js \
-  && echo "      instances: 1," >> ecosystem.config.js \
-  && echo "      exec_mode: 'fork'," >> ecosystem.config.js \
-  && echo "      watch: false," >> ecosystem.config.js \
-  && echo "      env: {" >> ecosystem.config.js \
-  && echo "        NODE_ENV: 'production'" >> ecosystem.config.js \
-  && echo "      }" >> ecosystem.config.js \
-  && echo "    }" >> ecosystem.config.js \
-  && echo "  ]" >> ecosystem.config.js \
-  && echo "};" >> ecosystem.config.js
-
-CMD ["pm2-runtime", "ecosystem.config.js"]
+COPY packages/api/pm2.config.js .
+RUN yarn install --production --non-interactive --ignore-scripts --ignore-peer-dependencies
+CMD ["pm2-runtime", "pm2.config.js"]
