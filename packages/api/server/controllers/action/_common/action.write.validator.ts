@@ -466,7 +466,7 @@ export default (mode: 'create' | 'update') => [
 
     // indicateurs travail
     body('indicateurs.*.travail_nombre_personnes')
-        .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('work'))
+        .if((value, { req }) => req.body.topics?.includes?.('work'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de personnes ayant eu au moins 1 contrat de travail" doit être un nombre')
@@ -483,7 +483,7 @@ export default (mode: 'create' | 'update') => [
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('indicateurs.*.travail_nombre_femmes')
-        .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('work'))
+        .if((value, { req }) => req.body.topics?.includes?.('work'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de femmes ayant eu au moins 1 contrat de travail" doit être un nombre')
@@ -510,7 +510,7 @@ export default (mode: 'create' | 'update') => [
 
     // indicateurs hébergement
     body('indicateurs.*.hebergement_nombre_personnes')
-        .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('housing'))
+        .if((value, { req }) => req.body.topics?.includes?.('housing'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de personnes ayant eu accès à un hébergement" doit être un nombre')
@@ -527,7 +527,7 @@ export default (mode: 'create' | 'update') => [
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('indicateurs.*.hebergement_nombre_menages')
-        .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('housing'))
+        .if((value, { req }) => req.body.topics?.includes?.('housing'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de ménages ayant eu accès à un hébergement" doit être un nombre')
@@ -552,7 +552,7 @@ export default (mode: 'create' | 'update') => [
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('indicateurs.*.logement_nombre_personnes')
-        .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('housing'))
+        .if((value, { req }) => req.body.topics?.includes?.('housing'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de personnes ayant eu accès à un logement" doit être un nombre')
@@ -569,7 +569,7 @@ export default (mode: 'create' | 'update') => [
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('indicateurs.*.logement_nombre_menages')
-        .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('housing'))
+        .if((value, { req }) => req.body.topics?.includes?.('housing'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de ménages ayant eu accès à un logement" doit être un nombre')
@@ -596,7 +596,7 @@ export default (mode: 'create' | 'update') => [
 
     // indicateurs scolaires
     body('indicateurs.*.scolaire_mineurs_scolarisables')
-        .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('school'))
+        .if((value, { req }) => req.body.topics?.includes?.('school'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de mineurs en âge d\'être scolarisés" doit être un nombre')
@@ -617,7 +617,7 @@ export default (mode: 'create' | 'update') => [
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('indicateurs.*.scolaire_mineurs_en_mediation')
-        .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('school'))
+        .if((value, { req }) => req.body.topics?.includes?.('school'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de mineurs bénéficiant d\'une médiation" doit être un nombre')
@@ -638,7 +638,7 @@ export default (mode: 'create' | 'update') => [
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('indicateurs.*.scolaire_nombre_maternelle')
-        .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('school'))
+        .if((value, { req }) => req.body.topics?.includes?.('school'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de scolarisés en maternelle" doit être un nombre')
@@ -659,7 +659,7 @@ export default (mode: 'create' | 'update') => [
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('indicateurs.*.scolaire_nombre_elementaire')
-        .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('school'))
+        .if((value, { req }) => req.body.topics?.includes?.('school'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de scolarisés en élémentaire" doit être un nombre')
@@ -680,7 +680,7 @@ export default (mode: 'create' | 'update') => [
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('indicateurs.*.scolaire_nombre_college')
-        .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('school'))
+        .if((value, { req }) => req.body.topics?.includes?.('school'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de scolarisés au collège" doit être un nombre')
@@ -701,7 +701,7 @@ export default (mode: 'create' | 'update') => [
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('indicateurs.*.scolaire_nombre_lycee')
-        .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('school'))
+        .if((value, { req }) => req.body.topics?.includes?.('school'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Nombre de scolarisés au lycée" doit être un nombre')
@@ -722,7 +722,7 @@ export default (mode: 'create' | 'update') => [
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('indicateurs.*.scolaire_nombre_autre')
-        .if((value, { req }) => req.body.topics?.includes && req.body.topics.includes('school'))
+        .if((value, { req }) => req.body.topics?.includes?.('school'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
         .isInt().bail().withMessage('Le champ "Autre" doit être un nombre')
