@@ -112,7 +112,6 @@ async function deactivate() {
     if (isLoading.value) {
         return;
     }
-    console.log("Anonymization?", anonymizationRequested.value);
 
     isLoading.value = true;
     error.value = null;
