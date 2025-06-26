@@ -19,7 +19,8 @@ async function registerNewsletter(data: ContactBody): Promise<void> {
         try {
             await contactService.notifyNewsletterRegistration(data);
         } catch (error) {
-            // @todo: register error to Sentry
+            // eslint-disable-next-line no-console
+            console.error('Error registering newsletter:', error);
         }
     }
 }
