@@ -1,19 +1,39 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
+import chaiSubset from 'chai-subset';
 
+import { rewiremock } from '#test/rewiremock';
 import { serialized as fakeUser } from '#test/utils/user';
-import locationUtils from '#test/utils/location';
-import { serialized as fakeShantytown } from '#test/utils/shantytown';
-import shantytownModel from '#server/models/shantytownModel';
-import ServiceError from '#server/errors/ServiceError';
 
-import fixClosedStatusService from './fixClosedStatus';
+import { serialized as fakeShantytown } from '#test/utils/shantytown';
+import ServiceError from '#server/errors/ServiceError';
+import locationUtils from '#test/utils/location';
+import permissionUtils from '#server/utils/permission';
 
 const { expect } = chai;
 chai.use(sinonChai);
+chai.use(chaiSubset);
 
-const { paris } = locationUtils;
+const sandbox = sinon.createSandbox();
+const stubs = {
+    shantytownModel: {
+        fixClosedStatus: sinon.stub(),
+        findOne: sinon.stub(),
+    },
+    can: sandbox.stub(),
+    do: sandbox.stub(),
+    on: sandbox.stub(),
+    paris: locationUtils.paris,
+};
+
+rewiremock('#server/models/shantytownModel').with(stubs.shantytownModel);
+rewiremock('#server/utils/permission').with(permissionUtils);
+
+rewiremock.enable();
+// eslint-disable-next-line import/newline-after-import, import/first
+import fixClosedStatusService from './fixClosedStatus';
+rewiremock.disable();
 
 describe('services/shantytown', () => {
     describe('fixClosedStatus()', () => {
@@ -25,30 +45,30 @@ describe('services/shantytown', () => {
         };
 
         const data = {
-            shantytown: fakeShantytown(paris.city(), { closed_with_solutions: false }),
+            shantytown: fakeShantytown(stubs.paris.city(), { closed_with_solutions: false }),
             closed_with_solutions: 'yes',
         };
 
-        let stubs;
-
         beforeEach(() => {
-            stubs = {
-                fixClosedStatus: sinon.stub(shantytownModel, 'fixClosedStatus'),
-                findOne: sinon.stub(shantytownModel, 'findOne'),
-            };
+            stubs.can.returns({
+                do: stubs.do,
+            });
+            stubs.do.returns({
+                on: stubs.on,
+            });
         });
 
         afterEach(() => {
-            sinon.restore();
+            sandbox.restore();
         });
 
 
         it('met à jour le site en changeant le statut et renvoie le site ainsi modifié', async () => {
-            const updatedTown = fakeShantytown(paris.city(), { closed_with_solutions: true });
-            stubs.findOne.resolves(updatedTown);
+            const updatedTown = fakeShantytown(stubs.paris.city(), { closed_with_solutions: true });
+            stubs.shantytownModel.findOne.resolves(updatedTown);
 
             const response = await fixClosedStatusService(user, data);
-            expect(stubs.fixClosedStatus).to.have.been.calledOnceWith(data.shantytown.id, data.closed_with_solutions);
+            expect(stubs.shantytownModel.fixClosedStatus).to.have.been.calledOnceWith(data.shantytown.id, data.closed_with_solutions);
             expect(response).to.be.eql(updatedTown);
         });
 
