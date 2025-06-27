@@ -98,8 +98,7 @@ export default [
 
     query('locationType')
         .custom((value, { req }) => {
-            if (!req.body.location) {
-                req.body.location = {
+            req.body.location ??= {
                     type: 'nation',
                     region: null,
                     departement: null,
