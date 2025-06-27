@@ -4,7 +4,12 @@ on:
   workflow_dispatch:
 
 jobs:
+  prebuild-qa:
+    uses: ./.github/workflows/qa.yml
+    secrets: inherit
+
   upgrade-version:
+    needs: prebuild-qa
     runs-on: ubuntu-24.04
     outputs:
       new_tag: ${{ steps.version.outputs.new_tag }}
