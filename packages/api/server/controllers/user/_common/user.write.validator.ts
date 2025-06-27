@@ -42,6 +42,8 @@ export default (
             try {
                 user = await userModel.findOneByEmail(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification du courriel');
             }
 
@@ -87,6 +89,8 @@ export default (
             try {
                 organizationCategory = await organizationCategoryModel.findOneById(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification de la structure');
             }
 
@@ -124,6 +128,8 @@ export default (
             try {
                 organizationType = await organizationTypeModel.findOneById(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification du type de structure');
             }
 
@@ -151,6 +157,8 @@ export default (
             try {
                 organization = await organizationModel.findOneById(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification du territoire de rattachement');
             }
 
@@ -173,6 +181,8 @@ export default (
             try {
                 organization = await organizationModel.findOneById(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification de l\'existence de la structure');
             }
 
@@ -199,6 +209,8 @@ export default (
             try {
                 organization = await organizationModel.findOneById(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification du nom de la structure');
             }
 
@@ -221,6 +233,8 @@ export default (
             try {
                 organization = await organizationModel.findOneById(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification de l\'existence de la structure');
             }
 
@@ -243,6 +257,8 @@ export default (
             try {
                 organization = await organizationModel.findOneById(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification de l\'existence de la structure');
             }
 

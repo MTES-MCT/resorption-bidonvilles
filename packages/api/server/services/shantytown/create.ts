@@ -172,7 +172,8 @@ export default async (townData, user) => {
                 });
             });
     } catch (error) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.error(error);
     }
 
     return town;

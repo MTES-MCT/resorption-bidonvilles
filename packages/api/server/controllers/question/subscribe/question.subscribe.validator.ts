@@ -8,6 +8,8 @@ export default [
             try {
                 question = await questionModel.findOne(parseInt(value, 10));
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur de lecture en base de données est survenue');
             }
 

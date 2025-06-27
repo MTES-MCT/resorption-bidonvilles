@@ -26,11 +26,11 @@ export default async (req: UserDeactivateRequest, res: Response, next: NextFunct
         const updatedUser = await userService.deactivate(userId, userId === req.user.id, req.user, req.body.reason, req.body.anonymizationRequested);
         res.status(200).send(updatedUser);
     } catch (error) {
-        const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
+        const { code, message } = ERRORS[error?.code] ?? ERRORS.undefined;
         res.status(code).send({
             user_message: message,
         });
 
-        next(error?.nativeError || error);
+        next(error?.nativeError ?? error);
     }
 };

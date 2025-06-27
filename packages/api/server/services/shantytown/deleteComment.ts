@@ -43,7 +43,7 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
 
     let message;
     if (!isOwner) {
-        message = validator.trim(deletionMessage || '');
+        message = validator.trim(deletionMessage ?? '');
         if (message === '') {
             throw new ServiceError('data_incomplete', new Error('Vous devez préciser le motif de suppression du commentaire'));
         }

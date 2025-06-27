@@ -28,7 +28,8 @@ export default async (activator: User, id: number): Promise<User> => {
         try {
             await mails.sendUserReactivationAlert(user);
         } catch (error) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
     } else {
         try {

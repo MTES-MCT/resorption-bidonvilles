@@ -28,8 +28,9 @@ export default async (user, data) => {
     // Send a notification to all users of the related departement, if it fails, do nothing
     try {
         await sendMailForClosedTown(data.shantytown, updatedTown, user);
-    } catch (ignore) {
-        // ignore
+    } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
     }
     return updatedTown;
 };

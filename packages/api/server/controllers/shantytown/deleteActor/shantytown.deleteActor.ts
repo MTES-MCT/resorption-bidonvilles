@@ -30,7 +30,8 @@ export default async (req, res, next) => {
     try {
         await triggerRemoveDeclaredActor(req.shantytown, req.user);
     } catch (error) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.error(error);
     }
 
     return res.status(200).send({

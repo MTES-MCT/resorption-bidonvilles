@@ -14,6 +14,8 @@ export default async (req, res) => {
     try {
         decoded = jwt.verify(req.params.token, CONFIG.auth.secret);
     } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Erreur lors de la vérification du jeton:', error);
         return res.status(400).send({
             user_message: 'Le jeton d\'identification est invalide ou expiré.\nNous vous invitons à reprendre le formulaire de demande de renouvelement de mot de passe.',
             code: 'Jeton invalide ou expiré',

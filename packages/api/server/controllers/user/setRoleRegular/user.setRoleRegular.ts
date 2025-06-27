@@ -11,11 +11,11 @@ export default async (req, res, next) => {
         const updatedUser = await setRoleRegularService(req.user, req.body.user.id, req.body.role.id);
         return res.status(200).send(updatedUser);
     } catch (error) {
-        const { code, message } = ERROR_RESPONSES[error?.code] || ERROR_RESPONSES.undefined;
+        const { code, message } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
         res.status(code).send({
             user_message: message,
         });
 
-        return next(error.nativeError || error);
+        return next(error.nativeError ?? error);
     }
 };

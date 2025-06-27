@@ -7,7 +7,7 @@ export default async (req, res, next) => {
     const { id: paramId } = req.params;
     const { id: connectedUserId } = req.user;
 
-    const userId = paramId || connectedUserId;
+    const userId = paramId ?? connectedUserId;
 
     const {
         first_name: firstName, last_name: lastName, email, phone, position,

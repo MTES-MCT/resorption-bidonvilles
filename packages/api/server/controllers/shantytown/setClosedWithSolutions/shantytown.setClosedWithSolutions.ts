@@ -12,10 +12,10 @@ export default async (req, res, next) => {
         const updatedTown = await fixClosedStatus(req.user, req.body);
         return res.status(200).send(updatedTown);
     } catch (error) {
-        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
+        const { code, message } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
         res.status(code).send({
             user_message: message,
         });
-        return next(error.nativeError || error);
+        return next(error.nativeError ?? error);
     }
 };

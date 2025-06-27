@@ -5,7 +5,7 @@
                 <h1 class="text-3xl text-tertiaryA11Y mb-8">
                     <Icon icon="comment" /> Journal de l'action
                     <span
-                        >— {{ action.comments.length }} message{{
+                        >- {{ action.comments.length }} message{{
                             action.comments.length > 1 ? "s" : ""
                         }}</span
                     >

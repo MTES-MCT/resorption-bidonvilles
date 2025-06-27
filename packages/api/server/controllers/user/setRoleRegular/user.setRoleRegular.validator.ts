@@ -12,6 +12,8 @@ export default [
             try {
                 user = await userModel.findOne(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la recherche de l\'utilisateur en base de données');
             }
 
@@ -31,6 +33,8 @@ export default [
             try {
                 role = await roleModel.findOne(value, 'regular');
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la recherche du rôle en base de données');
             }
 

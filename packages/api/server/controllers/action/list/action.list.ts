@@ -9,11 +9,11 @@ export default async (req, res, next) => {
         const actions = await actionService.fetch(req.user);
         return res.status(200).send(actions);
     } catch (error) {
-        const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
+        const { code, message } = ERRORS[error?.code] ?? ERRORS.undefined;
         res.status(code).send({
             user_message: message,
         });
 
-        return next(error?.nativeError || error);
+        return next(error?.nativeError ?? error);
     }
 };

@@ -9,6 +9,8 @@ export default [
             try {
                 question = await questionModel.findOne(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Impossible de retrouver la question concernée en base de données');
             }
 

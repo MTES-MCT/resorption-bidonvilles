@@ -83,7 +83,7 @@ const headers = [
 function regrouperParDepartement(data: ActionReportRow[]): DepartementObject[] {
     const groupedData: { [key: string]: DepartementObject } = data.reduce((acc, item) => {
         const { departement_code, ...rest } = item;
-        acc[departement_code] = acc[departement_code] || {
+        acc[departement_code] = acc[departement_code] ?? {
             departement: departement_code,
             data: [],
         };

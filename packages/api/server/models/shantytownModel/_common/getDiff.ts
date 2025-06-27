@@ -6,7 +6,7 @@ import toiletTypes from '#server/models/shantytownToiletTypesModel/_common/toile
 const { fromTsToFormat } = dateUtils;
 
 function getDeepProperty(obj, path) {
-    return path.split('.').reduce((acc, curr) => acc && acc[curr], obj);
+    return path.split('.').reduce((acc, curr) => acc?.[curr], obj);
 }
 
 export type Diff = {
@@ -555,7 +555,7 @@ export default (oldVersion, newVersion): Diff[] => {
     return [
         ...finalDiff,
         ...Object.keys(toDiff).reduce((diff, serializedKey) => {
-            const processor = toDiff[serializedKey].processor || baseProcessors.default;
+            const processor = toDiff[serializedKey].processor ?? baseProcessors.default;
             const oldValue = processor(getDeepProperty(oldVersion, serializedKey));
             const newValue = processor(getDeepProperty(newVersion, serializedKey));
 

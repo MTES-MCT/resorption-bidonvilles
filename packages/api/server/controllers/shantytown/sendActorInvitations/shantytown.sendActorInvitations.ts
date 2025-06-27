@@ -24,7 +24,8 @@ export default async (req, res, next) => {
     try {
         await triggerActorInvitedAlert(req.shantytown, req.user, req.body.email);
     } catch (error) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.error(error);
     }
 
     return res.status(204).send({});

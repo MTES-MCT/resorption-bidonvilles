@@ -190,6 +190,8 @@ describe.skip('userService.deactivate()', () => {
         try {
             await deactivateUser(42, true, user);
         } catch (e) {
+            // eslint-disable-next-line no-console
+            console.error(e);
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -222,6 +224,8 @@ describe.skip('userService.deactivate()', () => {
         try {
             await deactivateUser(42, true, user);
         } catch (e) {
+            // eslint-disable-next-line no-console
+            console.error(e);
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -254,6 +258,8 @@ describe.skip('userService.deactivate()', () => {
         try {
             await deactivateUser(42, true, user);
         } catch (e) {
+            // eslint-disable-next-line no-console
+            console.error(e);
             expect(transaction.rollback).to.have.been.called;
             return;
         }

@@ -18,6 +18,8 @@ export default [
             try {
                 user = await findOneUser(value, undefined, req.user, 'activate');
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la recherche de l\'utilisateur en base de données');
             }
 
@@ -38,6 +40,8 @@ export default [
                     value.map(({ code, type }) => getLocation(type, code)),
                 );
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification des territoires d\'intervention de la structure');
             }
 
@@ -46,7 +50,7 @@ export default [
                     return acc;
                 }
 
-                acc.push(v[index]?.name || 'nom inconnu');
+                acc.push(v[index]?.name ?? 'nom inconnu');
                 return acc;
             }, []);
             if (errors.length > 0) {
@@ -67,6 +71,8 @@ export default [
                     value.map(({ code, type }) => getLocation(type, code)),
                 );
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification des territoires d\'intervention de la structure');
             }
 
@@ -75,7 +81,7 @@ export default [
                     return acc;
                 }
 
-                acc.push(v[index]?.name || 'nom inconnu');
+                acc.push(v[index]?.name ?? 'nom inconnu');
                 return acc;
             }, []);
             if (errors.length > 0) {
@@ -86,5 +92,5 @@ export default [
             return true;
         }),
     body('user_areas')
-        .customSanitizer(value => value || []),
+        .customSanitizer(value => value ?? []),
 ];

@@ -4,9 +4,7 @@ import { Transaction } from 'sequelize';
 
 export default async (editor, shantytownId: number, data, argTransaction: Transaction = undefined): Promise<void> => {
     let transaction: Transaction = argTransaction;
-    if (transaction === undefined) {
-        transaction = await sequelize.transaction();
-    }
+    transaction ??= await sequelize.transaction();
 
     try {
         // save the current state of the shantytown

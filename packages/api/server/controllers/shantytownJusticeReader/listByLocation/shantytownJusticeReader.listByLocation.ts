@@ -19,10 +19,10 @@ export default async (req: FindJusticeReadersRequest, res: Response, next: NextF
             await organizationService.findJusticeReadersByLocation(req.body.location),
         );
     } catch (error) {
-        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
+        const { code, message } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
         res.status(code).send({
             user_message: message,
         });
-        next(error.nativeError || error);
+        next(error.nativeError ?? error);
     }
 };

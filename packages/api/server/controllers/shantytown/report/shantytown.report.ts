@@ -20,10 +20,10 @@ export default async (req: ReportTownRequest, res: Response, next: NextFunction)
         await report(req.body, req.user);
         res.status(200).send({});
     } catch (error) {
-        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
+        const { code, message } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
         res.status(code).send({
             user_message: message,
         });
-        next(error.nativeError || error);
+        next(error.nativeError ?? error);
     }
 };

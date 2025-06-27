@@ -40,11 +40,11 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
     };
 
     const selection = {
-        ...(additionalSQL.selection || {}),
+        ...(additionalSQL.selection ?? {}),
         ...SQL.selection,
     };
     const joins = [
-        ...(additionalSQL.joins || []),
+        ...(additionalSQL.joins ?? []),
         ...SQL.joins,
     ];
 
@@ -228,7 +228,7 @@ export default async (
 
     // @todo: move the serialization of these entities to their own model component
     Object.keys(serializedTowns.hash).forEach((shantytownId) => {
-        serializedTowns.hash[shantytownId].comments = comments[shantytownId] || [];
+        serializedTowns.hash[shantytownId].comments = comments[shantytownId] ?? [];
     });
 
     if (closingSolutions !== undefined) {

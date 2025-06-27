@@ -21,6 +21,6 @@ export default async (req: ListRolePermissionRequest, res: Response, next: NextF
         res.status(500).send({
             user_message: 'Une erreur inconnue est survenue',
         });
-        next(error?.nativeError || error);
+        next(error?.nativeError ?? error);
     }
 };

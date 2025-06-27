@@ -4,7 +4,7 @@ import geoModel from '#server/models/geoModel';
 const { trim } = validator;
 
 export default async (req, res, next) => {
-    const query = trim(req.query.q || '');
+    const query = trim(req.query.q ?? '');
 
     if (query === null || query === '') {
         return res.status(400).send({

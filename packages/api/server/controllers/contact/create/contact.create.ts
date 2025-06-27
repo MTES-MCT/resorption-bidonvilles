@@ -19,7 +19,8 @@ async function registerNewsletter(data: ContactBody): Promise<void> {
         try {
             await contactService.notifyNewsletterRegistration(data);
         } catch (error) {
-            // @todo: register error to Sentry
+            // eslint-disable-next-line no-console
+            console.error('Error registering newsletter:', error);
         }
     }
 }
@@ -32,7 +33,8 @@ async function registerReferral(data: ContactBody, userId: number): Promise<void
                 user_id: userId,
             });
         } catch (error) {
-            // @todo register error to Sentry
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
     }
 }
@@ -57,9 +59,9 @@ export default async (req: ContactRequest, res: Response, next): Promise<void> =
     try {
         createdUser = await processRequest(req.body);
     } catch (error) {
-        const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
+        const { code, message } = ERRORS[error?.code] ?? ERRORS.undefined;
         res.status(code).send({ user_message: message });
-        next(error?.nativeError || error);
+        next(error?.nativeError ?? error);
         return;
     }
 

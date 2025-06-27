@@ -70,7 +70,7 @@ export default (user: RawUser, userAccesses: RawUserAccess[], interventionAreas:
     }
 
     if (filters.extended === true) {
-        const permissions = (permissionMap && permissionMap[user.id]) || {};
+        const permissions = permissionMap?.[user.id] || {};
 
         Object.assign(serialized, {
             access_request_message: user.access_request_message,

@@ -25,11 +25,11 @@ export default async (req: UserReactivateRequest, res: Response, next: NextFunct
         const updatedUser = await userService.reactivate(req.user, req.body.user.id);
         res.status(200).send(updatedUser);
     } catch (error) {
-        const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
+        const { code, message } = ERRORS[error?.code] ?? ERRORS.undefined;
         res.status(code).send({
             user_message: message,
         });
 
-        next(error?.nativeError || error);
+        next(error?.nativeError ?? error);
     }
 };

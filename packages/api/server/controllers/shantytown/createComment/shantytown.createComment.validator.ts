@@ -12,6 +12,8 @@ export default [
             try {
                 shantytown = await shantytownModel.findOne(req.user, value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Impossible de retrouver le site concerné en base de données');
             }
 
@@ -55,7 +57,7 @@ export default [
 
             return value;
         })
-        .if((value, { req }) => req.body.targets && req.body.targets.mode && req.body.targets.mode !== 'public')
+        .if((value, { req }) => req.body.targets?.mode && req.body.targets.mode !== 'public')
         .isArray().bail().withMessage('Le format des structures ciblées n\'est pas valide')
         .if(value => value.length > 0)
         .custom(async (value) => {
@@ -78,7 +80,7 @@ export default [
 
             return value;
         })
-        .if((value, { req }) => req.body.targets && req.body.targets.mode && req.body.targets.mode !== 'public')
+        .if((value, { req }) => req.body.targets?.mode && req.body.targets.mode !== 'public')
         .isArray().bail().withMessage('Le format des utilisateurs ciblés n\'est pas valide')
         .if(value => value.length > 0)
         .custom(async (value) => {
@@ -99,8 +101,8 @@ export default [
         .custom((value, { req }) => {
             let total = 0;
             if (req.body.targets) {
-                total += (req.body.targets.organizations && req.body.targets.organizations.length) || 0;
-                total += (req.body.targets.users && req.body.targets.users.length) || 0;
+                total += req.body.targets.organizations?.length ?? 0;
+                total += req.body.targets.users?.length ?? 0;
             }
 
             if (total === 0) {
@@ -126,6 +128,8 @@ export default [
                         ids: value,
                     });
                 } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.error(error);
                     throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Tags"');
                 }
 

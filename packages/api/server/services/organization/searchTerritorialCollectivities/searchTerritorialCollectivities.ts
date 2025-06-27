@@ -14,9 +14,7 @@ export default async (search: string): Promise<OrganizationAutocompleteResult[]>
 
         return Object.values(
             organizations.reduce((acc, row) => {
-                if (acc[row.type_name] === undefined) {
-                    acc[row.type_name] = [];
-                }
+                acc[row.type_name] ??= [];
 
                 if (acc[row.type_name].length < 5 && row.similarity >= 0.8) {
                     const dep = row.departements_codes.length === 1 ? ` (${row.departements_codes.join(', ')})` : '';
