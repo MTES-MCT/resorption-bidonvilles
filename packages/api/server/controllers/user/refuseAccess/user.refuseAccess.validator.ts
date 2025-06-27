@@ -16,6 +16,8 @@ export default [
             try {
                 user = await userModel.findOne(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la lecture en base de données');
             }
 
@@ -34,6 +36,8 @@ export default [
                     throw new Error('Vous n\'avez pas le droit de classer cette demande sans suite');
                 }
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification de vos droits');
             }
 

@@ -12,6 +12,8 @@ export default [
             try {
                 user = await findOneUser(value, { extended: true }, req.user, 'activate');
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la lecture en base de données');
             }
 

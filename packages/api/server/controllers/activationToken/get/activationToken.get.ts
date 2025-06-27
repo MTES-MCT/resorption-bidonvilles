@@ -13,6 +13,8 @@ export default async (req, res) => {
     try {
         decoded = jwt.verify(req.params.token, CONFIG.auth.secret);
     } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
         return res.status(400).send({
             user_message: 'Le jeton d\'activation est invalide ou expiré.\nNous vous invitons à contacter l\'administrateur local qui vous a envoyé le mail avec ce lien d\'activation.',
         });

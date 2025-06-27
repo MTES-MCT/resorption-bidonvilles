@@ -18,6 +18,8 @@ export default [
             try {
                 user = await userModel.findOne(value, undefined, req.user, 'edit');
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la recherche de l\'utilisateur en base de données');
             }
 
@@ -43,6 +45,8 @@ export default [
                 try {
                     req.fullTopics = await expertiseTopicsModel.findAll();
                 } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.error(error);
                     throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Domaines de compétence"');
                 }
 
@@ -70,6 +74,8 @@ export default [
                     try {
                         req.fullTopics = await expertiseTopicsModel.findAll();
                     } catch (error) {
+                        // eslint-disable-next-line no-console
+                        console.error(error);
                         throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Sujets d\'intérêts"');
                     }
                 }

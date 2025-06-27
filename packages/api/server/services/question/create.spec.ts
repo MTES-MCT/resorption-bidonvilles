@@ -115,7 +115,8 @@ describe('services/question/create', () => {
         try {
             await create(fakeQuestionInput(), fakeUser(), files);
         } catch (error) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
 
         expect(transaction.rollback).to.have.been.calledOnce;

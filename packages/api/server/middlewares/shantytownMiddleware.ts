@@ -12,6 +12,8 @@ export default {
         try {
             req.shantytown = await shantytownModel.findOne(req.user, parseInt(req.params.id, 10));
         } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
             res.status(500).send({
                 user_message: 'Une erreur de lecture en base de données est survenue',
             });

@@ -12,6 +12,8 @@ export default async (req, res) => {
             csv,
         });
     } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
         res.status(500).send({
             user_message: 'Une erreur est survenue lors de la récupération des données en base',
         });

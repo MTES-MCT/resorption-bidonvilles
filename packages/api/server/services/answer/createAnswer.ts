@@ -109,7 +109,8 @@ export default async (answer: AnswerData, question: EnrichedQuestion, author: Us
             }),
         );
     } catch (error) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.error(error);
     }
 
     // on essaie d'abonner l'auteur de la réponse à la question
@@ -120,7 +121,8 @@ export default async (answer: AnswerData, question: EnrichedQuestion, author: Us
             subscribed = true;
         }
     } catch (error) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.error(error);
     }
 
     return {

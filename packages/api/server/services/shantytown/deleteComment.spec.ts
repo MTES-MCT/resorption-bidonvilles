@@ -64,7 +64,8 @@ describe('services/shantytown', () => {
             try {
                 await deleteCommentService(user, shantytownId, commentId, deletionMessage);
             } catch (error) {
-                // ignore
+                // eslint-disable-next-line no-console
+                console.error(error);
             }
             expect(stubs.can).to.have.been.calledOnceWith(user);
             expect(stubs.do).to.have.been.calledOnceWith('moderate', 'data');
@@ -157,7 +158,8 @@ describe('services/shantytown', () => {
             try {
                 await deleteCommentService(user, shantytownId, commentId, deletionMessage);
             } catch (error) {
-                // ignore
+                // eslint-disable-next-line no-console
+                console.error(error);
             }
 
             expect(stubs.sendUserCommentDeletion).to.have.been.calledOnce;

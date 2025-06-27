@@ -18,6 +18,8 @@ export default [
             try {
                 user = await findOneUser(value, undefined, req.user, 'activate');
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la recherche de l\'utilisateur en base de données');
             }
 
@@ -38,6 +40,8 @@ export default [
                     value.map(({ code, type }) => getLocation(type, code)),
                 );
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification des territoires d\'intervention de la structure');
             }
 
@@ -67,6 +71,8 @@ export default [
                     value.map(({ code, type }) => getLocation(type, code)),
                 );
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la vérification des territoires d\'intervention de la structure');
             }
 

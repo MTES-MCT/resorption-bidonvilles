@@ -51,6 +51,8 @@ export default [
                 try {
                     fullTags = await questionTagModel.findAll();
                 } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.error(error);
                     throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Thématiques"');
                 }
 

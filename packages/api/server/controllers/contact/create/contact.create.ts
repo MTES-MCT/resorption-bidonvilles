@@ -33,7 +33,8 @@ async function registerReferral(data: ContactBody, userId: number): Promise<void
                 user_id: userId,
             });
         } catch (error) {
-            // @todo register error to Sentry
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
     }
 }

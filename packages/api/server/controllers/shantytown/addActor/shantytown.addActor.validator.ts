@@ -19,6 +19,8 @@ export default [
                 try {
                     user = await userModel.findOne(value);
                 } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.error(error);
                     throw new Error('Une erreur de lecture en base de données est survenue lors de la validation de l\'intervenant à ajouter');
                 }
 
