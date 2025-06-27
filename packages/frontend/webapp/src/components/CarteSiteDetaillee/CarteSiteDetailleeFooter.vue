@@ -9,8 +9,8 @@
                     : 'Alerte Canicule'
             "
             icon="fr-icon-thermometer-line"
-            class="fr-secondary-btn !border-1 !border-secondary !text-secondary hover:!text-white"
-            tertiary
+            class="hover:!text-white"
+            secondary
             no-outline
             :disabled="heatwaveRequestStatus?.loading"
             @click.prevent.stop="toggleHeatwave"
@@ -110,9 +110,5 @@ const navigateTo = (target) => {
 <style scoped>
 button {
     border: inherit;
-}
-
-button.fr-secondary-btn:hover {
-    background-color: rgb(191, 83, 57) !important;
 }
 </style>
