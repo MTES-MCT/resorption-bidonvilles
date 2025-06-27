@@ -90,7 +90,8 @@ describe('services/answer.createAnswer()', () => {
         try {
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
         } catch (error) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
 
         expect(transaction.commit, 'Le commit() a été appellé').to.not.have.been.called;
@@ -121,7 +122,8 @@ describe('services/answer.createAnswer()', () => {
         try {
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
         } catch (error) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
 
         expect(transaction.rollback, 'Le rollback() n\'a pas été appellé').to.have.been.calledOnce;
@@ -186,6 +188,8 @@ describe('services/answer.createAnswer()', () => {
                 [],
             );
         } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
             fail('Une exception a été lancée');
         }
     });
@@ -276,6 +280,8 @@ describe('services/answer.createAnswer()', () => {
                 [],
             );
         } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
             fail('Une exception a été lancée');
         }
     });
@@ -381,7 +387,8 @@ describe('services/answer.createAnswer()', () => {
             answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
         } catch (error) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
 
         expect(transaction.commit, 'Le commit() de la transaction a été appelé').to.not.have.been.called;

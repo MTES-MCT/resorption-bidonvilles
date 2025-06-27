@@ -71,7 +71,8 @@ async function sendNotifications(user: User, selfDeactivation: boolean, reason: 
             });
         }
     } catch (error) {
-        // ignore errors
+        // eslint-disable-next-line no-console
+        console.error(error);
     }
 }
 
@@ -125,7 +126,8 @@ export default async (id: number, selfDeactivation: boolean, author: User, reaso
         try {
             await checkAndCancelJob(agenda, jobName, id);
         } catch (error) {
-            // Do nothing
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
     }));
     return updatedUser;

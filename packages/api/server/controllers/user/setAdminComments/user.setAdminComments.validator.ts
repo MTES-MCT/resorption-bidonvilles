@@ -21,6 +21,8 @@ export default [
             try {
                 user = await userModel.findOne(value, { auth: true });
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Erreur lors du contrôle de l\'existence de l\'utlisateur à partir de son identifiant');
             }
 

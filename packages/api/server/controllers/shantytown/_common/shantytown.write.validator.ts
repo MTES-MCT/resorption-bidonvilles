@@ -88,6 +88,8 @@ export default mode => ([
             try {
                 town = await shantytownService.find(req.user, value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur de lecture en base de données est survenue');
             }
 
@@ -603,6 +605,8 @@ export default mode => ([
             try {
                 city = await geoModel.getLocation('city', req.body.citycode);
             } catch (e) {
+                // eslint-disable-next-line no-console
+                console.error(e);
                 throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du code communal');
             }
 
@@ -782,6 +786,8 @@ export default mode => ([
             try {
                 fieldType = await fieldTypeModel.findOne(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Type de site"');
             }
 
@@ -805,6 +811,8 @@ export default mode => ([
             try {
                 ownerType = await ownerTypeModel.findOne(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Type de propriétaire"');
             }
 
@@ -873,6 +881,8 @@ export default mode => ([
                     { shantytown_id: value },
                 ]);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la validation des sites dont sont originaires les habitant(e)s');
             }
 
@@ -1104,6 +1114,8 @@ export default mode => ([
                 try {
                     socialOrigins = await socialOriginModel.find(value);
                 } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.error(error);
                     throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Origines"');
                 }
 
@@ -2032,6 +2044,8 @@ export default mode => ([
                 try {
                     preparatoryPhasesTowrdResorption = await preparatoryPhasesTowardResorptionModel.getSome(value);
                 } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.error(error);
                     throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Phases transitoires vers la résorption"');
                 }
 

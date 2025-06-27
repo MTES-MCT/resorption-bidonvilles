@@ -84,6 +84,8 @@ export default [
             try {
                 location = await geoModel.getLocation(type, code);
             } catch (e) {
+                // eslint-disable-next-line no-console
+                console.error(e);
                 throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du périmètre géographique');
             }
 
@@ -99,13 +101,12 @@ export default [
     query('locationType')
         .custom((value, { req }) => {
             req.body.location ??= {
-                    type: 'nation',
-                    region: null,
-                    departement: null,
-                    epci: null,
-                    city: null,
-                };
-            }
+                type: 'nation',
+                region: null,
+                departement: null,
+                epci: null,
+                city: null,
+            };
 
             return true;
         }),

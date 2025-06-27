@@ -77,7 +77,8 @@ describe('services/action.createComment()', () => {
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [] });
         } catch (e) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(e);
         }
 
         expect(transaction.rollback).to.have.been.calledOnce;
@@ -143,6 +144,8 @@ describe('services/action.createComment()', () => {
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [fakeFile()] });
         } catch (e) {
+            // eslint-disable-next-line no-console
+            console.error(e);
             // ignore
         }
 
@@ -187,7 +190,8 @@ describe('services/action.createComment()', () => {
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [fakeFile()] });
         } catch (e) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(e);
         }
 
         expect(transaction.rollback).to.have.been.calledOnce;
@@ -215,7 +219,8 @@ describe('services/action.createComment()', () => {
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [fakeFile()] });
         } catch (e) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(e);
         }
 
         expect(transaction.rollback).to.have.been.calledOnce;

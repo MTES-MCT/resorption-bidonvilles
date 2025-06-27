@@ -49,6 +49,8 @@ async function authenticateUser(req) {
         try {
             decoded = jwt.verify(token, authConfig.secret);
         } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
             throw new AuthenticateError({
                 code: 2,
                 user_message: 'Votre session a expiré',

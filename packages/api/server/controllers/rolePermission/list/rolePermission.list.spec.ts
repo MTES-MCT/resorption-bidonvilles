@@ -68,6 +68,8 @@ describe('rolePermissionController.list()', () => {
         try {
             await list(req, res, nextFn);
         } catch (e) {
+            // eslint-disable-next-line no-console
+            console.error(e);
             expect.fail('L\'erreur aurait dû être interceptée par le contrôleur');
             return;
         }
@@ -93,6 +95,8 @@ describe('rolePermissionController.list()', () => {
         try {
             await list(req, res, nextFn);
         } catch (e) {
+            // eslint-disable-next-line no-console
+            console.error(e);
             expect.fail('L\'erreur aurait dû être interceptée par le contrôleur');
             return;
         }

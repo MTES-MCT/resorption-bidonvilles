@@ -12,6 +12,8 @@ export default [
             try {
                 shantytown = await shantytownModel.findOne(req.user, value, 'close');
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la recherche du site en base de données');
             }
 
@@ -90,6 +92,8 @@ export default [
             try {
                 closingSolutions = await closingSolutionModel.findAll();
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la validation des orientations des ménages');
             }
 

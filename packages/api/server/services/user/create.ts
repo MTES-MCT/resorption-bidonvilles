@@ -25,7 +25,8 @@ export default async (data, createdBy: number = null): Promise<User> => {
             try {
                 await mattermostUtils.triggerNotifyNewUserFromRectorat(user);
             } catch (error) {
-            // ignore this error
+                // eslint-disable-next-line no-console
+                console.error(error);
             }
         }
 
