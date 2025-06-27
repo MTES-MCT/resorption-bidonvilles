@@ -32,7 +32,7 @@ export default {
                     variables: {
                         adminUrl: `${webappUrl}/nouvel-utilisateur/${user.id}`,
                         userName: formatName(user),
-                        orgName: user.organization.abbreviation || user.organization.name,
+                        orgName: user.organization.abbreviation ?? user.organization.name,
                     },
                 })),
             );
@@ -44,7 +44,7 @@ export default {
                     variables: {
                         adminUrl: `${webappUrl}/nouvel-utilisateur/${user.id}`,
                         userName: formatName(user),
-                        orgName: user.organization.abbreviation || user.organization.name,
+                        orgName: user.organization.abbreviation ?? user.organization.name,
                     },
                 })),
             );
@@ -56,7 +56,7 @@ export default {
                     variables: {
                         adminUrl: `${webappUrl}/nouvel-utilisateur/${user.id}`,
                         userName: formatName(user),
-                        orgName: user.organization.abbreviation || user.organization.name,
+                        orgName: user.organization.abbreviation ?? user.organization.name,
                     },
                 })),
             );

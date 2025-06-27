@@ -6,6 +6,6 @@ export default (shantytown) => {
 
     return createRow([
         'Accès à l\'électricité',
-        electricityAccessStatusLabels[status.status] || 'Aucune information concernant l\'accès à l\'électricité',
+        electricityAccessStatusLabels[status.status] ?? 'Aucune information concernant l\'accès à l\'électricité',
     ]);
 };

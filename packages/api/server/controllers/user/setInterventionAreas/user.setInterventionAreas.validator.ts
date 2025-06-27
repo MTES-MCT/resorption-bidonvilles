@@ -46,7 +46,7 @@ export default [
                     return acc;
                 }
 
-                acc.push(v[index]?.name || 'nom inconnu');
+                acc.push(v[index]?.name ?? 'nom inconnu');
                 return acc;
             }, []);
             if (errors.length > 0) {
@@ -75,7 +75,7 @@ export default [
                     return acc;
                 }
 
-                acc.push(v[index]?.name || 'nom inconnu');
+                acc.push(v[index]?.name ?? 'nom inconnu');
                 return acc;
             }, []);
             if (errors.length > 0) {
@@ -86,5 +86,5 @@ export default [
             return true;
         }),
     body('user_areas')
-        .customSanitizer(value => value || []),
+        .customSanitizer(value => value ?? []),
 ];

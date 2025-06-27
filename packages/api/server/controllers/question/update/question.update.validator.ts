@@ -4,7 +4,7 @@ import questionTagModel from '#server/models/questionTagModel';
 import questionModel from '#server/models/questionModel';
 import { QuestionTag } from '#root/types/resources/QuestionGeneric.d';
 
-const isOtherTagIncluded = (value, { req }) => req.body.tags.includes && req.body.tags.includes('other');
+const isOtherTagIncluded = (value, { req }) => req.body.tags?.includes?.('other');
 
 export default [
     param('id')

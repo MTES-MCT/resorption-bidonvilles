@@ -46,7 +46,7 @@ export default async (authorId: number, action: Action, commentInput: ActionComm
             );
         } catch (error) {
             await transaction.rollback();
-            throw new ServiceError(error?.message || '500', scanAttachmentErrors[error?.message].message || 'upload_failed');
+            throw new ServiceError(error?.message ?? '500', scanAttachmentErrors[error?.message].message ?? 'upload_failed');
         }
     }
 

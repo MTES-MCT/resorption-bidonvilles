@@ -40,7 +40,7 @@ export default [
             return value;
         })
         .custom((value, { req }) => {
-            if (req.body.shantytown && req.body.shantytown.declaredAt) {
+            if (req.body.shantytown?.declaredAt) {
                 const declaredDate = new Date(req.body.shantytown.declaredAt * 1000);
                 declaredDate.setHours(0, 0, 0, 0);
 
@@ -83,7 +83,7 @@ export default [
                 ? parseInt(peopleAffected, 10) : null,
             households_affected: householdsAffected !== undefined && householdsAffected !== null
                 ? parseInt(householdsAffected, 10) : null,
-            message: message !== undefined && message !== null ? message : null,
+            message: message ?? null,
         })))
         .custom(async (values) => {
             let closingSolutions;

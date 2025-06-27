@@ -261,7 +261,7 @@ export default mode => ([
                     },
                     {
                         key: 'census_conducted_at',
-                        submitedValue: req.body.census_conducted_at ? req.body.census_conducted_at : null,
+                        submitedValue: req.body.census_conducted_at ?? null,
                         storedValue: req.town.censusConductedAt ? formatDateToYYYYMMDD(new Date(req.town.censusConductedAt * 1000)) : null,
                     },
                     {
@@ -446,7 +446,7 @@ export default mode => ([
                     },
                     {
                         key: 'justice_rendered_at',
-                        submitedValue: req.body.justice_rendered_at ? req.body.justice_rendered_at : null,
+                        submitedValue: req.body.justice_rendered_at ?? null,
                         storedValue: req.town.justiceRenderedAt ? formatDateToYYYYMMDD(new Date(req.town.justiceRenderedAt * 1000)) : null,
                     },
                     {
@@ -461,7 +461,7 @@ export default mode => ([
                     },
                     {
                         key: 'administrative_order_decision_at',
-                        submitedValue: req.body.administrative_order_decision_at ? req.body.administrative_order_decision_at : null,
+                        submitedValue: req.body.administrative_order_decision_at ?? null,
                         storedValue: req.town.administrativeOrderDecisionAt ? formatDateToYYYYMMDD(new Date(req.town.administrativeOrderDecisionAt * 1000)) : null,
                     },
                     {
@@ -471,7 +471,7 @@ export default mode => ([
                     },
                     {
                         key: 'administrative_order_evacuation_at',
-                        submitedValue: req.body.administrative_order_evacuation_at ? req.body.administrative_order_evacuation_at : null,
+                        submitedValue: req.body.administrative_order_evacuation_at ?? null,
                         storedValue: req.town.administrativeOrderEvacuationAt ? formatDateToYYYYMMDD(new Date(req.town.administrativeOrderEvacuationAt * 1000)) : null,
                     },
                     {
@@ -496,7 +496,7 @@ export default mode => ([
                     },
                     {
                         key: 'insalubrity_order_at',
-                        submitedValue: req.body.insalubrity_order_at ? req.body.insalubrity_order_at : null,
+                        submitedValue: req.body.insalubrity_order_at ?? null,
                         storedValue: req.town.insalubrityOrderAt ? formatDateToYYYYMMDD(new Date(req.town.insalubrityOrderAt * 1000)) : null,
                     },
                     {
@@ -511,12 +511,12 @@ export default mode => ([
                     },
                     {
                         key: 'police_requested_at',
-                        submitedValue: req.body.police_requested_at ? req.body.police_requested_at : null,
+                        submitedValue: req.body.police_requested_at ?? null,
                         storedValue: req.town.policeRequestedAt ? formatDateToYYYYMMDD(new Date(req.town.policeRequestedAt * 1000)) : null,
                     },
                     {
                         key: 'police_granted_at',
-                        submitedValue: req.body.police_granted_at ? req.body.police_granted_at : null,
+                        submitedValue: req.body.police_granted_at ?? null,
                         storedValue: req.town.policeGrantedAt ? formatDateToYYYYMMDD(new Date(req.town.policeGrantedAt * 1000)) : null,
                     },
                     {
@@ -700,7 +700,7 @@ export default mode => ([
         .isLength({ max: 35 }).bail().withMessage('Le champ "Appellation du site" ne peut excéder 35 caractères'),
 
     body('name')
-        .customSanitizer(value => value || null)
+        .customSanitizer(value => value ?? null)
         .matches(/^[^<>]*$/, 'i').withMessage('Le champ "Appellation du site" n\'est pas correctement renseigné'),
 
     /* **********************************************************************************************
@@ -712,7 +712,7 @@ export default mode => ([
         .trim(),
 
     body('detailed_address')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     /* **********************************************************************************************
      * Date d'installation du site
@@ -837,7 +837,7 @@ export default mode => ([
         .trim(),
 
     body('owner')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     /* **********************************************************************************************
      * Reinstallation
@@ -857,7 +857,7 @@ export default mode => ([
         .trim(),
 
     body('reinstallation_comments')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     /* **********************************************************************************************
      * Sites d'origines de la réinstallation
@@ -885,9 +885,7 @@ export default mode => ([
 
     body('reinstallation_incoming_towns')
         .custom((value, { req }) => {
-            if (!req.body.reinstallation_incoming_towns_full) {
-                req.body.reinstallation_incoming_towns_full = [];
-            }
+            req.body.reinstallation_incoming_towns_full ??= [];
 
             return true;
         }),
@@ -900,7 +898,7 @@ export default mode => ([
         .isIn(['none', 'scheduled', 'done']).withMessage('Le champ "Statut du diagnostic social" est invalide'),
 
     body('census_status')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     /* **********************************************************************************************
      * Date du diagnostic
@@ -1053,7 +1051,7 @@ export default mode => ([
                 throw new Error('Le champ "Nombre de mineurs" ne peut pas être supérieur au champ "Nombre de personnes"');
             }
 
-            const detailedMinorsTotal = ['0_3', '3_6', '6_12', '12_16', '16_18'].reduce((total, ages) => total + (req.body[`population_minors_${ages}`] || 0), 0);
+            const detailedMinorsTotal = ['0_3', '3_6', '6_12', '12_16', '16_18'].reduce((total, ages) => total + (req.body[`population_minors_${ages}`] ?? 0), 0);
             if (detailedMinorsTotal > value) {
                 throw new Error('La somme du nombre de mineurs par tranche d\'âge est supérieure à la valeur du champ "Nombre de mineurs"');
             }
@@ -1299,7 +1297,7 @@ export default mode => ([
         .trim(),
 
     body('administrative_order_decision_rendered_by')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
 
     // Date de l'évacuation consécutive à l'arrêté prescrivant l'évacuation sous délai
@@ -1382,7 +1380,7 @@ export default mode => ([
         .trim(),
 
     body('insalubrity_order_type')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Qui a pris l'arrêté ?
     body('insalubrity_order_by')
@@ -1398,7 +1396,7 @@ export default mode => ([
         .trim(),
 
     body('insalubrity_order_by')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     // Arrêté d'insalubrité dans le cadre d'une opération RHI bidonville - Date de l'arrêté ?
     body('insalubrity_order_at')
@@ -1445,7 +1443,7 @@ export default mode => ([
         .trim(),
 
     body('insalubrity_parcels')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     /* **********************************************************************************************
      * Concours de la force publique
@@ -1477,7 +1475,7 @@ export default mode => ([
 
     // Sanitizer reste inchangé
     body('police_status')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     /* **********************************************************************************************
      * Date de la demande du CFP
@@ -1589,7 +1587,7 @@ export default mode => ([
         .trim(),
 
     body('bailiff')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     /* *********************************************************************************************
      * Conditions de vie
@@ -1646,7 +1644,7 @@ export default mode => ([
 
     body('water_access_is_public')
         .if((value, { req }) => req.body.living_conditions_version === 2 && ['autre', 'robinet_connecte_au_reseau'].includes(req.body.water_access_type))
-        .customSanitizer(value => (value === null || value === undefined ? -1 : value))
+        .customSanitizer(value => (value ?? -1))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Est-ce un point d\'eau sur la voie publique ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
@@ -1663,7 +1661,7 @@ export default mode => ([
 
     body('water_access_is_continuous')
         .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.water_access_is_public === false)
-        .customSanitizer(value => (value === null || value === undefined ? -1 : value))
+        .customSanitizer(value => (value ?? -1))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "L\'accès est-il continu ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
@@ -1696,7 +1694,7 @@ export default mode => ([
 
     body('water_access_is_local')
         .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.water_access_is_public === false)
-        .customSanitizer(value => (value === null || value === undefined ? -1 : value))
+        .customSanitizer(value => (value ?? -1))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Où se situe l’accès ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
@@ -1713,7 +1711,7 @@ export default mode => ([
 
     body('water_access_is_close')
         .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.water_access_is_local === true)
-        .customSanitizer(value => (value === null || value === undefined ? -1 : value))
+        .customSanitizer(value => (value ?? -1))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Distance point d’eau / habitation la plus éloignée ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
@@ -1730,7 +1728,7 @@ export default mode => ([
 
     body('water_access_is_unequal')
         .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.water_access_is_local === true)
-        .customSanitizer(value => (value === null || value === undefined ? -1 : value))
+        .customSanitizer(value => (value ?? -1))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Des inégalités d\'accès ont-elles été constatées ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
@@ -1763,7 +1761,7 @@ export default mode => ([
 
     body('water_access_has_stagnant_water')
         .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.water_access_is_local === true)
-        .customSanitizer(value => (value === null || value === undefined ? -1 : value))
+        .customSanitizer(value => (value ?? -1))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Existe-t-il des eaux stagnantes autour du point de distribution ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
@@ -1786,12 +1784,12 @@ export default mode => ([
 
     body('water_access_comments')
         .if((value, { req }) => req.body.living_conditions_version === 2)
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     // sanitary
     body('sanitary_open_air_defecation')
         .if((value, { req }) => req.body.living_conditions_version === 2)
-        .customSanitizer(value => (value === null || value === undefined ? -1 : value))
+        .customSanitizer(value => (value ?? -1))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Constate-t-on des marques de défécation à l’air libre ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
@@ -1805,7 +1803,7 @@ export default mode => ([
 
     body('sanitary_toilet_types')
         .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.sanitary_working_toilets === true)
-        .customSanitizer(value => (value === undefined || value === null ? [] : value))
+        .customSanitizer(value => (value ?? []))
         .isArray().bail().withMessage('Le champ "Quels sont les types de toilettes installées ?" est invalide')
         .custom((value) => {
             if (value.some(item => !['latrines', 'toilettes_chimiques', 'toilettes_seches', 'toilettes_a_chasse'].includes(item))) {
@@ -1827,7 +1825,7 @@ export default mode => ([
 
     body('sanitary_toilets_are_inside')
         .if((value, { req }) => req.body.living_conditions_version === 2 && (req.body.sanitary_toilet_types.length > 1 || (req.body.sanitary_toilet_types.length === 1 && !req.body.sanitary_toilet_types.includes('latrines'))))
-        .customSanitizer(value => (value === null || value === undefined ? -1 : value))
+        .customSanitizer(value => (value ?? -1))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Les toilettes sont-elles à l’intérieur du site ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
@@ -1844,7 +1842,7 @@ export default mode => ([
 
     body('sanitary_toilets_are_lighted')
         .if((value, { req }) => req.body.living_conditions_version === 2 && (req.body.sanitary_toilet_types.length > 1 || (req.body.sanitary_toilet_types.length === 1 && !req.body.sanitary_toilet_types.includes('latrines'))))
-        .customSanitizer(value => (value === null || value === undefined ? -1 : value))
+        .customSanitizer(value => (value ?? -1))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Ces toilettes sont-elles éclairées et verrouillables de l’intérieur ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
@@ -1861,7 +1859,7 @@ export default mode => ([
 
     body('sanitary_hand_washing')
         .if((value, { req }) => req.body.living_conditions_version === 2 && (req.body.sanitary_toilet_types.length > 1 || (req.body.sanitary_toilet_types.length === 1 && !req.body.sanitary_toilet_types.includes('latrines'))))
-        .customSanitizer(value => (value === null || value === undefined ? -1 : value))
+        .customSanitizer(value => (value ?? -1))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Y a-t-il un point de lavage des mains à proximité des toilettes ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
@@ -1886,7 +1884,7 @@ export default mode => ([
 
     body('electricity_access_types')
         .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.electricity_access === true)
-        .customSanitizer(value => (value === undefined || value === null ? [] : value))
+        .customSanitizer(value => (value ?? []))
         .isArray().bail().withMessage('Le champ "Quelle est la source de l’accès à l\'électricité ?" est invalide')
         .custom((value) => {
             if (value.some(item => !['electrogene', 'reseau_urbain', 'installation_du_bati'].includes(item))) {
@@ -1908,7 +1906,7 @@ export default mode => ([
 
     body('electricity_access_is_unequal')
         .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.electricity_access_types.length > 0)
-        .customSanitizer(value => (value === null || value === undefined ? -1 : value))
+        .customSanitizer(value => (value ?? -1))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Des inégalités d’accès ont-elles été constatées ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
@@ -1940,7 +1938,7 @@ export default mode => ([
 
     body('trash_evacuation_is_safe')
         .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.trash_evacuation_is_close === true)
-        .customSanitizer(value => (value === null || value === undefined ? -1 : value))
+        .customSanitizer(value => (value ?? -1))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Les dispositifs de ramassage des ordures ménagères sont-ils en bon état ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
@@ -1957,7 +1955,7 @@ export default mode => ([
 
     body('trash_evacuation_is_regular')
         .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.trash_evacuation_is_close === true)
-        .customSanitizer(value => (value === null || value === undefined ? -1 : value))
+        .customSanitizer(value => (value ?? -1))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "La collecte des poubelles est-elle réalisée de manière régulière ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
@@ -1974,7 +1972,7 @@ export default mode => ([
 
     body('trash_bulky_is_piling')
         .if((value, { req }) => req.body.living_conditions_version === 2 && req.body.trash_evacuation_is_close === true)
-        .customSanitizer(value => (value === null || value === undefined ? -1 : value))
+        .customSanitizer(value => (value ?? -1))
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Constate-t-on une accumulation de déchets type encombrants ?" est invalide')
         .customSanitizer(fromIntToBoolSanitizer),
@@ -2005,7 +2003,7 @@ export default mode => ([
 
     body('pest_animals_details')
         .if((value, { req }) => req.body.living_conditions_version === 2)
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     // fire prevention
     body('fire_prevention_diagnostic')

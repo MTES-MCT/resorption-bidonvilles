@@ -6,6 +6,6 @@ export default (shantytown) => {
 
     return createRow([
         'Accès à des toilettes fonctionnelles',
-        sanitaryAccessStatusLabels[status.status] || 'Aucune information concernant l\'accès aux toilettes',
+        sanitaryAccessStatusLabels[status.status] ?? 'Aucune information concernant l\'accès aux toilettes',
     ]);
 };

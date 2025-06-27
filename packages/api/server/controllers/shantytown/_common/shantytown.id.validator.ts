@@ -3,7 +3,7 @@ import findOneShantytown from '#server/models/shantytownModel/findOne';
 
 export default param('id')
     .custom(async (value, { req }) => {
-        if (!req.user || !req.user.isAllowedTo('read', 'shantytown')) {
+        if (!req.user?.isAllowedTo('read', 'shantytown')) {
             throw new Error('Vous n\'avez pas accès à ces données');
         }
 

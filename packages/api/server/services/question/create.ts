@@ -41,7 +41,7 @@ export default async (question: QuestionInput, author: AuthorData, files: Expres
             await uploadAttachments('question', questionId, author.id, files, transaction);
         } catch (error) {
             await transaction.rollback();
-            throw new ServiceError(error?.message || '500', scanAttachmentErrors[error?.message].message || 'upload_failed');
+            throw new ServiceError(error?.message ?? '500', scanAttachmentErrors[error?.message].message ?? 'upload_failed');
         }
     }
 

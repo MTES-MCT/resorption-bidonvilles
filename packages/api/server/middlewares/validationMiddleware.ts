@@ -7,7 +7,7 @@ export default (req, res, next) => {
         return res.status(400).send({
             user_message: 'Certaines données sont incorrectes',
             fields: errors.array().reduce((acc, { param, msg }) => Object.assign({}, acc, {
-                [param]: [...(acc[param] || []), msg],
+                [param]: [...(acc[param] ?? []), msg],
             }), {}),
         });
     }

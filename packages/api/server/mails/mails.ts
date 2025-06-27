@@ -978,7 +978,7 @@ export default {
             questions_with_answers: QuestionSummary[],
         }
 
-        const sortedQuestions: SortedQuestions = (variables?.questionSummary || []).reduce((acc, question: QuestionSummary) => {
+        const sortedQuestions: SortedQuestions = (variables?.questionSummary ?? []).reduce((acc, question: QuestionSummary) => {
             if (question.number_of_recent_answers > 0) {
                 acc.questions_with_answers.push(question);
             } else {
@@ -999,7 +999,7 @@ export default {
                 to: variables.to,
                 recipientName: formatName(recipient),
                 connexionUrl: `${connexionUrl}?${utm}`,
-                showDetails: variables.showDetails || false,
+                showDetails: variables.showDetails ?? false,
                 summaries: variables.summaries,
                 show_question_summary: sortedQuestions.questions_with_answers.length > 0 || sortedQuestions.questions_without_answers.length > 0,
                 questions_with_answers_length: sortedQuestions.questions_with_answers.length,

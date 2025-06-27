@@ -24,7 +24,7 @@ export default [
         }),
 
     body('options')
-        .customSanitizer(value => value || [])
+        .customSanitizer(value => value ?? [])
         .isArray().bail().withMessage('La liste des options est techniquement invalide')
         .customSanitizer((value, { req }) => {
             if (!req.body.user) {

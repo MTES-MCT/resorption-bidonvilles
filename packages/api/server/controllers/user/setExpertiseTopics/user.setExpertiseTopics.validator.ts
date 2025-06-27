@@ -89,5 +89,5 @@ export default [
         .trim(),
 
     body('expertise_comment')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 ];

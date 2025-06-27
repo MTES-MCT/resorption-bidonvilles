@@ -58,9 +58,9 @@ export default async (req: ContactRequest, res: Response, next): Promise<void> =
     try {
         createdUser = await processRequest(req.body);
     } catch (error) {
-        const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
+        const { code, message } = ERRORS[error?.code] ?? ERRORS.undefined;
         res.status(code).send({ user_message: message });
-        next(error?.nativeError || error);
+        next(error?.nativeError ?? error);
         return;
     }
 
