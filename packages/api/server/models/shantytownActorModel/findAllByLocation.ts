@@ -5,8 +5,8 @@ export default (where = []) => {
     const replacements = {};
     const whereClause = where.map((clauses, index) => {
         const clauseGroup = Object.keys(clauses).map((column) => {
-            replacements[`${column}${index}`] = clauses[column].value || clauses[column];
-            return `${clauses[column].query || `users.${column}`} ${clauses[column].operator || 'IN'} (:${column}${index})`;
+            replacements[`${column}${index}`] = clauses[column].value ?? clauses[column];
+            return `${clauses[column].query ?? `users.${column}`} ${clauses[column].operator ?? 'IN'} (:${column}${index})`;
         }).join(' OR ');
 
         return `(${clauseGroup})`;

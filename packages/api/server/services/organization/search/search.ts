@@ -44,7 +44,7 @@ export default async (search: string, departementCode: string = null, usersOnly:
         }));
         const serializedOrganizations = organizations.map((row): OrganizationAutocompleteResult => ({
             id: row.id,
-            label: row.abbreviation || row.name,
+            label: row.abbreviation ?? row.name,
             type: {
                 id: 'organization',
                 label: 'Structures',

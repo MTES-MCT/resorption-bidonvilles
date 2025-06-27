@@ -26,10 +26,10 @@ export default [
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('other_tag')
-        .if((value, { req }) => !req.body.tags.includes || !req.body.tags.includes('other'))
+        .if((value, { req }) => !req.body.tags?.includes?.('other'))
         .customSanitizer(() => null),
     body('other_tag')
-        .if((value, { req }) => req.body.tags.includes && req.body.tags.includes('other'))
+        .if((value, { req }) => req.body.tags?.includes?.('other'))
         .exists({ checkNull: true }).bail().withMessage('Le champ "Veuillez préciser votre thématique" est obligatoire')
         .isString().bail().withMessage('Le champ "Veuillez préciser votre thématique" doit être une chaîne de caractères')
         .trim()

@@ -2,7 +2,7 @@ import shantytownModel from '#server/models/shantytownModel';
 
 export default {
     async checkReadPermission(req, res, next) {
-        if (!req.user || !req.user.isAllowedTo('read', 'shantytown')) {
+        if (!req.user?.isAllowedTo('read', 'shantytown')) {
             res.status(400).send({
                 user_message: 'Vous n\'avez pas accès à ces données',
             });

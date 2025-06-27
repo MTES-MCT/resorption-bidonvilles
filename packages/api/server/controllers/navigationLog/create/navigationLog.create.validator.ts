@@ -11,5 +11,5 @@ export default [
         .isString().bail().withMessage('L\'origine doit être une chaîne de caractères')
         .trim(),
     body('origin')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 ];

@@ -29,11 +29,11 @@ export default async (req, res, next) => {
             permissions,
         });
     } catch (error) {
-        const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
+        const { code, message } = ERRORS[error?.code] ?? ERRORS.undefined;
         res.status(code).send({
             user_message: message,
         });
 
-        return next(error?.nativeError || error);
+        return next(error?.nativeError ?? error);
     }
 };

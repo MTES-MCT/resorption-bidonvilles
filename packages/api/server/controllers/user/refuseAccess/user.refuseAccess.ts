@@ -9,11 +9,11 @@ export default async (req, res, next) => {
         const updatedUser = await userService.refuse(req.params.id);
         res.status(200).send(updatedUser);
     } catch (error) {
-        const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
+        const { code, message } = ERRORS[error?.code] ?? ERRORS.undefined;
         res.status(code).send({
             user_message: message,
         });
 
-        next(error?.nativeError || error);
+        next(error?.nativeError ?? error);
     }
 };

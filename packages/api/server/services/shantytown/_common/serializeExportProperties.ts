@@ -286,7 +286,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         electricityAccessStatus: {
             title: "Statut de l'accès à l'électricité",
             data: (shantytown: ShantytownWithFinancedAction) => {
-                const data = electricityAccessStatusLabels[shantytown.livingConditions.electricity.status.status] || 'inconnu';
+                const data = electricityAccessStatusLabels[shantytown.livingConditions.electricity.status.status] ?? 'inconnu';
                 return data;
             },
             width: COLUMN_WIDTHS.MEDIUM,
@@ -351,7 +351,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         waterAccessStatus: {
             title: "Statut de l'accès à l'eau",
             data: (shantytown: ShantytownWithFinancedAction) => {
-                const data = waterAccessStatusLabels[shantytown.livingConditions.water.status.status] || 'inconnu';
+                const data = waterAccessStatusLabels[shantytown.livingConditions.water.status.status] ?? 'inconnu';
                 return data;
             },
             width: COLUMN_WIDTHS.MEDIUM,
@@ -539,7 +539,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         sanitaryAccessStatus: {
             title: 'Statut de l\'accès aux sanitaires',
             data: (shantytown: ShantytownWithFinancedAction) => {
-                const data = sanitaryAccessStatusLabels[shantytown.livingConditions.sanitary.status.status] || 'inconnu';
+                const data = sanitaryAccessStatusLabels[shantytown.livingConditions.sanitary.status.status] ?? 'inconnu';
                 return data;
             },
             width: COLUMN_WIDTHS.MEDIUM,
@@ -663,7 +663,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         trashEvacuationStatus: {
             title: 'Statut de l\'évacuation des déchets',
             data: (shantytown: ShantytownWithFinancedAction) => {
-                const data = trashEvacuationStatusLabels[shantytown.livingConditions.trash.status.status] || 'inconnu';
+                const data = trashEvacuationStatusLabels[shantytown.livingConditions.trash.status.status] ?? 'inconnu';
                 return data;
             },
             width: COLUMN_WIDTHS.MEDIUM,
@@ -775,7 +775,7 @@ export default (closingSolutions: ClosingSolution[]) => {
                     return 'inconnu';
                 }
 
-                const data = pestAnimalsStatusLabels[shantytown.livingConditions.pest_animals.status.status] || 'inconnu';
+                const data = pestAnimalsStatusLabels[shantytown.livingConditions.pest_animals.status.status] ?? 'inconnu';
                 return data;
             },
             width: COLUMN_WIDTHS.MEDIUM,
@@ -822,7 +822,7 @@ export default (closingSolutions: ClosingSolution[]) => {
                     return 'inconnu';
                 }
 
-                const data = firePreventionStatusLabels[shantytown.livingConditions.fire_prevention.status.status] || 'inconnu';
+                const data = firePreventionStatusLabels[shantytown.livingConditions.fire_prevention.status.status] ?? 'inconnu';
                 return data;
             },
             width: COLUMN_WIDTHS.MEDIUM,

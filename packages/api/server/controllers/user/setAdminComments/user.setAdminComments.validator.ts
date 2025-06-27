@@ -10,7 +10,7 @@ export default [
         .trim(),
 
     body('comment')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     param('id')
         .toInt()

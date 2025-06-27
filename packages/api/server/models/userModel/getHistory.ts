@@ -74,10 +74,8 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
 
     const hashInterventionAreas = interventionAreas.reduce((acc, row) => {
         const key = row.fk_user !== null ? 'users' : 'organizations';
-        const id = row.fk_user !== null ? row.fk_user : row.fk_organization;
-        if (acc[key][id] === undefined) {
-            acc[key][id] = [];
-        }
+        const id = row.fk_user ?? row.fk_organization;
+        acc[key][id] ??= [];
 
         acc[key][id].push(row);
         return acc;

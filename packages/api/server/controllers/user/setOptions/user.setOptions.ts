@@ -15,9 +15,9 @@ export default async (req, res, next) => {
         );
     } catch (error) {
         res.status(500).send({
-            user_message: ERROR_RESPONSES[error?.code] || ERROR_RESPONSES.undefined,
+            user_message: ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined,
         });
-        return next((error && error.nativeError) || error);
+        return next(error?.nativeError ?? error);
     }
 
     return res.status(201).send({

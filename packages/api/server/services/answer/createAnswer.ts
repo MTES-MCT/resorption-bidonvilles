@@ -45,7 +45,7 @@ export default async (answer: AnswerData, question: EnrichedQuestion, author: Us
             await uploadAttachments('answer', answerId, author.id, files, transaction);
         } catch (error) {
             await transaction.rollback();
-            throw new ServiceError(error?.message || '500', scanAttachmentErrors[error?.message].message || 'upload_failed');
+            throw new ServiceError(error?.message ?? '500', scanAttachmentErrors[error?.message].message ?? 'upload_failed');
         }
     }
 

@@ -18,7 +18,7 @@ export default [
         }),
 
     query('numberOfActivities')
-        .customSanitizer(value => value || 10),
+        .customSanitizer(value => value ?? 10),
 
     // max activity date
     query('maxActivityDate')
@@ -27,7 +27,7 @@ export default [
         .isInt().bail().withMessage('La date doit être un timestamp'),
 
     query('maxActivityDate')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     // last activity date
     query('lastActivityDate')
@@ -36,7 +36,7 @@ export default [
         .isInt().bail().withMessage('La date doit être un timestamp'),
 
     query('lastActivityDate')
-        .customSanitizer(value => value || Date.now()),
+        .customSanitizer(value => value ?? Date.now()),
 
     // filter
     query('filter')
@@ -62,7 +62,7 @@ export default [
         }),
 
     query('filter')
-        .customSanitizer(value => value || [
+        .customSanitizer(value => value ?? [
             'shantytownCreation',
             'shantytownClosing',
             'shantytownUpdate',

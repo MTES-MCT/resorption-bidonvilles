@@ -33,7 +33,7 @@ const MAGIC_TOKENS = {
 };
 
 async function authenticateUser(req) {
-    const token = (req.headers && req.headers['x-access-token']) || req.query.accessToken;
+    const token = req.headers?.['x-access-token'] ?? req.query.accessToken;
 
     if (!token) {
         throw new AuthenticateError({

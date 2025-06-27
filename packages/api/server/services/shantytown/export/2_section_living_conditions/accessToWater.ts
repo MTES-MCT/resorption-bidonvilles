@@ -16,7 +16,7 @@ export default (shantytown) => {
 
     const access_type = access_types[shantytown.livingConditions.water.access_type];
 
-    let text = waterAccessStatusLabels[status.status] || 'Aucune information concernant l\'accès à l\'eau';
+    let text = waterAccessStatusLabels[status.status] ?? 'Aucune information concernant l\'accès à l\'eau';
     if (comments) {
         text = `${text} - ${access_type}\n${comments}`;
     }

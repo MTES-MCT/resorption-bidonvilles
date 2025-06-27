@@ -51,7 +51,7 @@ export default async (comment, shantytown, author): Promise<{ comments: Shantyto
             );
         } catch (error) {
             await transaction.rollback();
-            throw new ServiceError(error?.message || '500', scanAttachmentErrors[error?.message].message || 'upload_failed');
+            throw new ServiceError(error?.message ?? '500', scanAttachmentErrors[error?.message].message ?? 'upload_failed');
         }
     }
 
