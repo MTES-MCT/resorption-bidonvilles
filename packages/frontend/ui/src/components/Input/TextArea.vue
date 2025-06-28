@@ -5,10 +5,9 @@
 
             <div class="relative">
                 <InputIcon position="before" :icon="prefixIcon" v-if="prefixIcon" />
-                <textarea ref="textarea" @input="$emit('input', $event.target.value)"
-                    v-bind="{ ...field, ...filteredProps }" :class="classes" :data-cy-field="cypressName"
-                    :disabled="isSubmitting || disabled" :readonly="isSubmitting || disabled" @focus="onFocus"
-                    @blur="onBlur" :id="`rb-select-${id}`" />
+                <DsfrInput isTextarea ref="input" :id="`rb-select-${id}`" :data-cy-field="cypressName" :disabled="isSubmitting || disabled"
+                :readonly="isSubmitting || disabled" :class="['bg-white', classes]" v-bind="{ ...field, ...filteredProps }" v-model="currentValue" 
+                @update:modelValue="(val) => { currentValue = val; $emit('input', val) }" @focus="onFocus" @blur="(e) => { onBlur(e); $emit('blur', e) }"/>
                 <InputIcon position="after" :icon="suffixIcon" v-if="suffixIcon" />
             </div>
             <InputError>{{ errors[0] }}</InputError>
