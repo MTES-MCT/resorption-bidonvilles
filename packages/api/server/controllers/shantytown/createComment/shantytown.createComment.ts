@@ -57,9 +57,9 @@ export default async (req: UserCreateCommentRequest, res: Response, next: NextFu
         const userMessage = nativeErrorKey
             ? ERROR_RESPONSES[nativeErrorKey].message
             : ERROR_RESPONSES.undefined.message;
-        const code = ERROR_RESPONSES[nativeErrorKey].code
+        const { code } = ERROR_RESPONSES[nativeErrorKey];
         res.status(code || 10).send({
-             user_message: userMessage,
+            user_message: userMessage,
         });
         return next(error.nativeError || error);
     }

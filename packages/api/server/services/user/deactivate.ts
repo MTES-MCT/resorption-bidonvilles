@@ -114,12 +114,12 @@ export default async (id: number, selfDeactivation: boolean, author: User, reaso
     if (!can(author).do('deactivate', 'user')) {
         throw new ServiceError('deactivation_permission_failure', Error('Erreur de permission'));
     }
-    let user: User; 
+    let user: User;
     try {
         user = await findAndValidateUser(id);
     } catch (e) {
-        throw new ServiceError('user_search_failure', Error(e.message))
-    }        
+        throw new ServiceError('user_search_failure', Error(e.message));
+    }
     const updatedUser = await deactivateUserWithTransaction(id, anonymizationRequested, user);
 
     // Désactivation éventuelle des jobs programmés par accessActivatedOnboarding s'ils sont actifs

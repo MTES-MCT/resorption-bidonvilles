@@ -9,6 +9,7 @@ import { serialized as fakeActionComment, row as fakeActionCommentRow } from '#t
 import fakeFile from '#test/utils/file';
 import ServiceError from '#server/errors/ServiceError';
 import scanAttachmentErrors from '../attachment/scanAttachmentErrors';
+
 const { expect } = chai;
 chai.use(sinonChai);
 chai.use(chaiSubset);

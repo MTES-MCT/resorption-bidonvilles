@@ -6,13 +6,13 @@ import fetchComments from '#server/models/actionModel/fetchComments/fetchComment
 import serializeComment from '#server/models/actionModel/fetchComments/serializeComment';
 import uploadAttachments from '#server/services/attachment/upload';
 import scanAttachmentErrors from '#server/services/attachment/scanAttachmentErrors';
+import { ActionRowComment } from '#server/models/actionModel/fetchComments/ActionCommentRow.d';
 import sendMattermostNotification from './createComment.sendMattermostNotification';
 import sendMailNotifications from './createComment.sendMailNotifications';
 import { ActionRawComment } from '#root/types/resources/ActionCommentRaw.d';
 import Action from '#root/types/resources/Action.d';
 import enrichCommentsAttachments from './enrichCommentsAttachments';
 import { ActionEnrichedComment } from '#root/types/resources/ActionCommentEnriched.d';
-import { ActionRowComment } from '#server/models/actionModel/fetchComments/ActionCommentRow.d';
 
 type ActionCommentInput = {
     description: string,
