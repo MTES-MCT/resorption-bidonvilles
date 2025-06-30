@@ -16,7 +16,7 @@ export default async (id: number): Promise<User> => {
     }
 
     try {
-        await userModel.refuse(id, transaction);
+        await userModel.refuse(user.id, transaction);
     } catch (error) {
         await transaction.rollback();
         throw new ServiceError('refusal_failure', error);
