@@ -8,36 +8,39 @@ import { serialized as fakeAction } from '#test/utils/action';
 import { serialized as fakeActionComment, row as fakeActionCommentRow } from '#test/utils/actionComment';
 import fakeFile from '#test/utils/file';
 import ServiceError from '#server/errors/ServiceError';
-
+import scanAttachmentErrors from '../attachment/scanAttachmentErrors';
 const { expect } = chai;
 chai.use(sinonChai);
 chai.use(chaiSubset);
 
 // stubs
 const sandbox = sinon.createSandbox();
-const sequelize = {
-    transaction: sandbox.stub(),
+const stubs = {
+    sequelize: {
+        transaction: sandbox.stub(),
+    },
+    transaction: {
+        commit: sandbox.stub(),
+        rollback: sandbox.stub(),
+    },
+    createCommentModel: sandbox.stub(),
+    fetchCommentsModel: sandbox.stub(),
+    uploadAttachments: sandbox.stub(),
+    serializeComment: sandbox.stub(),
+    sendMattermostNotification: sandbox.stub(),
+    sendMailNotifications: sandbox.stub(),
+    enrichCommentsAttachments: sandbox.stub(),
 };
-const transaction = {
-    commit: sandbox.stub(),
-    rollback: sandbox.stub(),
-};
-const createCommentModel = sandbox.stub();
-const fetchCommentsModel = sandbox.stub();
-const uploadAttachments = sandbox.stub();
-const serializeComment = sandbox.stub();
-const sendMattermostNotification = sandbox.stub();
-const sendMailNotifications = sandbox.stub();
-const enrichCommentsAttachments = sandbox.stub();
 
-rewiremock('#db/sequelize').with({ sequelize });
-rewiremock('#server/models/actionModel/createComment/createComment').with(createCommentModel);
-rewiremock('#server/models/actionModel/fetchComments/fetchComments').with(fetchCommentsModel);
-rewiremock('#server/models/actionModel/fetchComments/serializeComment').with(serializeComment);
-rewiremock('#server/services/attachment/upload').with(uploadAttachments);
-rewiremock('./createComment.sendMattermostNotification').with(sendMattermostNotification);
-rewiremock('./createComment.sendMailNotifications').with(sendMailNotifications);
-rewiremock('./enrichCommentsAttachments').with(enrichCommentsAttachments);
+rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
+rewiremock('#server/models/actionModel/createComment/createComment').with(stubs.createCommentModel);
+rewiremock('#server/models/actionModel/fetchComments/fetchComments').with(stubs.fetchCommentsModel);
+rewiremock('#server/models/actionModel/fetchComments/serializeComment').with(stubs.serializeComment);
+rewiremock('#server/services/attachment/upload').with(stubs.uploadAttachments);
+rewiremock('./createComment.sendMattermostNotification').with(stubs.sendMattermostNotification);
+rewiremock('./createComment.sendMailNotifications').with(stubs.sendMailNotifications);
+rewiremock('./enrichCommentsAttachments').with(stubs.enrichCommentsAttachments);
+rewiremock('#server/services/attachment/scanAttachmentErrors').with(scanAttachmentErrors);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -46,7 +49,7 @@ rewiremock.disable();
 
 describe('services/action.createComment()', () => {
     beforeEach(() => {
-        sequelize.transaction.resolves(transaction);
+        stubs.sequelize.transaction.resolves(stubs.transaction);
     });
 
     afterEach(() => {
@@ -54,7 +57,7 @@ describe('services/action.createComment()', () => {
     });
 
     it('insère le commentaire en base de données', async () => {
-        fetchCommentsModel.resolves([fakeActionCommentRow()]);
+        stubs.fetchCommentsModel.resolves([fakeActionCommentRow()]);
         await createComment(
             1,
             fakeAction(),
@@ -64,15 +67,15 @@ describe('services/action.createComment()', () => {
             },
         );
 
-        expect(createCommentModel).to.have.been.calledOnce;
-        expect(createCommentModel).to.have.been.calledOnceWith(1, {
+        expect(stubs.createCommentModel).to.have.been.calledOnce;
+        expect(stubs.createCommentModel).to.have.been.calledOnceWith(1, {
             description: 'description',
             created_by: 1,
-        }, transaction);
+        }, stubs.transaction);
     });
 
     it('en cas d\'échec d\'insertion du commentaire, rollback la transaction', async () => {
-        createCommentModel.rejects(new Error('fake error'));
+        stubs.createCommentModel.rejects(new Error('fake error'));
 
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [] });
@@ -80,12 +83,12 @@ describe('services/action.createComment()', () => {
             // ignore
         }
 
-        expect(transaction.rollback).to.have.been.calledOnce;
+        expect(stubs.transaction.rollback).to.have.been.calledOnce;
     });
 
     it('en cas d\'échec d\'insertion du commentaire, lance un ServiceError avec le code insert_failed', async () => {
         const nativeError = new Error('fake error');
-        createCommentModel.rejects(nativeError);
+        stubs.createCommentModel.rejects(nativeError);
 
         let caughtError;
         try {
@@ -100,8 +103,8 @@ describe('services/action.createComment()', () => {
     });
 
     it('enregistre les pièces-jointes', async () => {
-        createCommentModel.resolves(42);
-        fetchCommentsModel.resolves([fakeActionCommentRow()]);
+        stubs.createCommentModel.resolves(42);
+        stubs.fetchCommentsModel.resolves([fakeActionCommentRow()]);
         const files = [fakeFile(), fakeFile()];
         await createComment(
             1,
@@ -112,12 +115,12 @@ describe('services/action.createComment()', () => {
             },
         );
 
-        expect(uploadAttachments).to.have.been.calledOnce;
-        expect(uploadAttachments).to.have.been.calledOnceWith('action_comment', 42, 1, files, transaction);
+        expect(stubs.uploadAttachments).to.have.been.calledOnce;
+        expect(stubs.uploadAttachments).to.have.been.calledOnceWith('action_comment', 42, 1, files, stubs.transaction);
     });
 
     it('ne lance pas d\'erreur si aucune pièce-jointe n\'est fournie', async () => {
-        fetchCommentsModel.resolves([fakeActionCommentRow()]);
+        stubs.fetchCommentsModel.resolves([fakeActionCommentRow()]);
 
         let caughtError;
         try {
@@ -134,11 +137,11 @@ describe('services/action.createComment()', () => {
         }
 
         expect(caughtError).to.be.eql(undefined);
-        expect(uploadAttachments).to.not.have.been.called;
+        expect(stubs.uploadAttachments).to.not.have.been.called;
     });
 
     it('en cas d\'échec d\'enregistrement des pièces-jointes, rollback la transaction', async () => {
-        uploadAttachments.rejects(new Error('fake error'));
+        stubs.uploadAttachments.rejects(new Error('fake error'));
 
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [fakeFile()] });
@@ -146,12 +149,12 @@ describe('services/action.createComment()', () => {
             // ignore
         }
 
-        expect(transaction.rollback).to.have.been.calledOnce;
+        expect(stubs.transaction.rollback).to.have.been.calledOnce;
     });
 
     it('en cas d\'échec d\'enregistrement des pièces-jointes, lance un ServiceError avec le code upload_failed', async () => {
-        const nativeError = new Error('fake error');
-        uploadAttachments.rejects(new Error('fake error'));
+        const nativeError = new Error('420');
+        stubs.uploadAttachments.rejects(nativeError);
 
         let caughtError;
         try {
@@ -161,13 +164,13 @@ describe('services/action.createComment()', () => {
         }
 
         expect(caughtError).to.be.an.instanceOf(ServiceError);
-        expect(caughtError.code).to.be.eql('upload_failed');
-        expect(caughtError.nativeError).to.be.eql(nativeError);
+        expect(caughtError.code).to.be.eql(nativeError.message);
+        expect(caughtError.nativeError).to.be.eql('upload_failed');
     });
 
     it('commit la transaction une fois toutes les requêtes effectuées', async () => {
-        createCommentModel.resolves(42);
-        fetchCommentsModel.resolves([fakeActionCommentRow()]);
+        stubs.createCommentModel.resolves(42);
+        stubs.fetchCommentsModel.resolves([fakeActionCommentRow()]);
         await createComment(
             1,
             fakeAction(),
@@ -177,12 +180,12 @@ describe('services/action.createComment()', () => {
             },
         );
 
-        expect(transaction.commit).to.have.been.calledOnce;
-        expect(transaction.commit).to.have.been.calledAfter(fetchCommentsModel);
+        expect(stubs.transaction.commit).to.have.been.calledOnce;
+        expect(stubs.transaction.commit).to.have.been.calledAfter(stubs.fetchCommentsModel);
     });
 
     it('en cas d\'échec dans le fetch des commentaires, rollback la transaction', async () => {
-        fetchCommentsModel.rejects(new Error('fake error'));
+        stubs.fetchCommentsModel.rejects(new Error('fake error'));
 
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [fakeFile()] });
@@ -190,12 +193,12 @@ describe('services/action.createComment()', () => {
             // ignore
         }
 
-        expect(transaction.rollback).to.have.been.calledOnce;
+        expect(stubs.transaction.rollback).to.have.been.calledOnce;
     });
 
     it('en cas d\'échec dans le fetch des commentaires, lance un ServiceError avec le code commit_failed', async () => {
         const nativeError = new Error('fake error');
-        fetchCommentsModel.rejects(new Error('fake error'));
+        stubs.fetchCommentsModel.rejects(new Error('fake error'));
 
         let caughtError;
         try {
@@ -210,7 +213,7 @@ describe('services/action.createComment()', () => {
     });
 
     it('en cas d\'échec de commit, rollback la transaction', async () => {
-        transaction.commit.rejects(new Error('fake error'));
+        stubs.transaction.commit.rejects(new Error('fake error'));
 
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [fakeFile()] });
@@ -218,13 +221,13 @@ describe('services/action.createComment()', () => {
             // ignore
         }
 
-        expect(transaction.rollback).to.have.been.calledOnce;
+        expect(stubs.transaction.rollback).to.have.been.calledOnce;
     });
 
     it('en cas d\'échec de commit, lance un ServiceError avec le code commit_failed', async () => {
         const nativeError = new Error('fake error');
-        transaction.commit.rejects(new Error('fake error'));
-        fetchCommentsModel.resolves([fakeActionCommentRow()]);
+        stubs.transaction.commit.rejects(new Error('fake error'));
+        stubs.fetchCommentsModel.resolves([fakeActionCommentRow()]);
 
         let caughtError;
         try {
@@ -241,8 +244,8 @@ describe('services/action.createComment()', () => {
     it('envoie une notification mattermost', async () => {
         const action = fakeAction();
         const comment = fakeActionComment();
-        serializeComment.returns(comment);
-        fetchCommentsModel.resolves([fakeActionCommentRow()]);
+        stubs.serializeComment.returns(comment);
+        stubs.fetchCommentsModel.resolves([fakeActionCommentRow()]);
 
         await createComment(
             1,
@@ -253,16 +256,16 @@ describe('services/action.createComment()', () => {
             },
         );
 
-        expect(sendMattermostNotification).to.have.been.calledOnce;
-        expect(sendMattermostNotification).to.have.been.calledOnceWith(
+        expect(stubs.sendMattermostNotification).to.have.been.calledOnce;
+        expect(stubs.sendMattermostNotification).to.have.been.calledOnceWith(
             action,
             comment,
         );
     });
 
     it('ne lance pas d\'erreur en cas d\'échec d\'envoi de la notification mattermost', async () => {
-        fetchCommentsModel.resolves([fakeActionCommentRow()]);
-        sendMattermostNotification.rejects(new Error('fake error'));
+        stubs.fetchCommentsModel.resolves([fakeActionCommentRow()]);
+        stubs.sendMattermostNotification.rejects(new Error('fake error'));
 
         let caughtError;
         try {
@@ -284,8 +287,8 @@ describe('services/action.createComment()', () => {
     it('envoie une notification mail aux personnes concernées', async () => {
         const action = fakeAction();
         const comment = fakeActionComment();
-        serializeComment.returns(comment);
-        fetchCommentsModel.resolves([fakeActionCommentRow()]);
+        stubs.serializeComment.returns(comment);
+        stubs.fetchCommentsModel.resolves([fakeActionCommentRow()]);
 
         await createComment(
             1,
@@ -296,15 +299,15 @@ describe('services/action.createComment()', () => {
             },
         );
 
-        expect(sendMailNotifications).to.have.been.calledOnce;
-        expect(sendMailNotifications).to.have.been.calledOnceWith(
+        expect(stubs.sendMailNotifications).to.have.been.calledOnce;
+        expect(stubs.sendMailNotifications).to.have.been.calledOnceWith(
             action,
             comment,
         );
     });
     it('ne lance pas d\'erreur en cas d\'échec d\'envoi de la notification mail', async () => {
-        fetchCommentsModel.resolves([fakeActionCommentRow()]);
-        sendMailNotifications.rejects(new Error('fake error'));
+        stubs.fetchCommentsModel.resolves([fakeActionCommentRow()]);
+        stubs.sendMailNotifications.rejects(new Error('fake error'));
 
         let caughtError;
         try {
@@ -325,9 +328,9 @@ describe('services/action.createComment()', () => {
 
     it('retourne le commentaire fraîchement créé', async () => {
         const comment = fakeActionComment();
-        serializeComment.returns(comment);
-        enrichCommentsAttachments.resolves(comment);
-        fetchCommentsModel.resolves([fakeActionCommentRow()]);
+        stubs.serializeComment.returns(comment);
+        stubs.enrichCommentsAttachments.resolves(comment);
+        stubs.fetchCommentsModel.resolves([fakeActionCommentRow()]);
 
         const response = await createComment(
             1,
@@ -338,15 +341,15 @@ describe('services/action.createComment()', () => {
             },
         );
 
-        expect(enrichCommentsAttachments).to.have.been.calledOnce;
+        expect(stubs.enrichCommentsAttachments).to.have.been.calledOnce;
         expect(response).to.be.an('object');
         expect(response).to.have.property('comment');
         expect(response.comment).to.be.eql(comment);
     });
 
     it('retourne le nombre de personnes notifiées par mail', async () => {
-        fetchCommentsModel.resolves([fakeActionCommentRow()]);
-        sendMailNotifications.resolves(42);
+        stubs.fetchCommentsModel.resolves([fakeActionCommentRow()]);
+        stubs.sendMailNotifications.resolves(42);
 
         const response = await createComment(
             1,

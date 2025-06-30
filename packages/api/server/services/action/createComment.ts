@@ -12,6 +12,7 @@ import { ActionRawComment } from '#root/types/resources/ActionCommentRaw.d';
 import Action from '#root/types/resources/Action.d';
 import enrichCommentsAttachments from './enrichCommentsAttachments';
 import { ActionEnrichedComment } from '#root/types/resources/ActionCommentEnriched.d';
+import { ActionRowComment } from '#server/models/actionModel/fetchComments/ActionCommentRow.d';
 
 type ActionCommentInput = {
     description: string,
@@ -46,13 +47,13 @@ export default async (authorId: number, action: Action, commentInput: ActionComm
             );
         } catch (error) {
             await transaction.rollback();
-            throw new ServiceError(error?.message || '500', scanAttachmentErrors[error?.message].message || 'upload_failed');
+            throw new ServiceError(error?.message ?? '500', scanAttachmentErrors[error?.message]?.message ?? 'upload_failed');
         }
     }
 
     // on finalise
     try {
-        const [commentRow] = await fetchComments(null, [commentId], {}, transaction);
+        const [commentRow]: ActionRowComment[] = await fetchComments(null, [commentId], {}, transaction);
         comment = serializeComment(commentRow);
         await transaction.commit();
     } catch (error) {
@@ -69,10 +70,10 @@ export default async (authorId: number, action: Action, commentInput: ActionComm
     }
 
     // On récupère les fichiers joints avec les liens signés
-    const commentWithEnrichedAttachments = await enrichCommentsAttachments(comment);
+    const commentWithEnrichedAttachments: ActionEnrichedComment = await enrichCommentsAttachments(comment);
 
     // on tente d'envoyer un mail aux acteurs concernés
-    let numberOfObservers = 0;
+    let numberOfObservers: number = 0;
     try {
         numberOfObservers = await sendMailNotifications(action, comment);
     } catch (error) {
