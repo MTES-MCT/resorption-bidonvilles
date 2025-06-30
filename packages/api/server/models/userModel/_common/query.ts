@@ -14,7 +14,7 @@ import {
 
 const { getPermission } = permissionUtils;
 
-export default async (where: Where | String = [], filters: UserQueryFilters = {}, user: User = null, feature: string = undefined, transaction: Transaction = undefined): Promise<User[]> => {
+export default async (where: Where | string = [], filters: UserQueryFilters = {}, user: User = null, feature: string = undefined, transaction: Transaction = undefined): Promise<User[]> => {
     const replacements = {};
 
     const strWhere = typeof where === 'string' ? where : '';

@@ -98,6 +98,8 @@ async function sendNotifications(user: User, selfDeactivation: boolean, reason: 
             });
         }
     } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
         throw error;
     }
 }

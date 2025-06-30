@@ -67,7 +67,8 @@ export default async (comment, shantytown, author): Promise<{ comments: Shantyto
     try {
         await mattermostUtils.triggerNewComment(comment.description, comment.tags.map(tag => tag.label), shantytown, author);
     } catch (error) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.error(error);
     }
 
     // on tente d'envoyer une notification mail à tous les intervenants du site
@@ -90,7 +91,8 @@ export default async (comment, shantytown, author): Promise<{ comments: Shantyto
             );
         }
     } catch (error) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.error(error);
     }
 
     let commentsWithEnrichedAttachments = [];
