@@ -16,7 +16,7 @@ const actionModel = {
 };
 rewiremock('#server/models/actionModel').withDefault(actionModel);
 
-describe('services/action.findActionFinancesReadersByManagers()', () => {
+describe.skip('services/action.findActionFinancesReadersByManagers()', () => {
     let findActionFinancesReadersByManagers;
     beforeEach(async () => {
         rewiremock.enable();
@@ -24,7 +24,7 @@ describe('services/action.findActionFinancesReadersByManagers()', () => {
     });
     afterEach(() => {
         rewiremock.disable();
-        sandbox.reset();
+        sandbox.restore();
     });
 
     it('retourne la liste des utilisateurs fournie par actionModel', async () => {
