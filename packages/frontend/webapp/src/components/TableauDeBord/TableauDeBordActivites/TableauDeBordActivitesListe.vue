@@ -27,10 +27,6 @@
             :key="`${activity.entity}-${activity.action}-${activity.date}`"
             :activity="activity"
         />
-
-        <footer class="mt-10 text-center">
-            <Link to="/activites"> Voir toutes les activités </Link>
-        </footer>
     </div>
 </template>
 
@@ -38,7 +34,6 @@
 import { computed } from "vue";
 import { useDashboardStore } from "@/stores/dashboard.store";
 
-import { Link } from "@resorptionbidonvilles/ui";
 import TableauDeBordActivite from "./TableauDeBordActivite.vue";
 
 const dashboardStore = useDashboardStore();
