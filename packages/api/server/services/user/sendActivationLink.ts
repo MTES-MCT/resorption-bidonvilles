@@ -6,6 +6,7 @@ import accessRequestService from '#server/services/accessRequest/accessRequestSe
 import authUtils from '#server/utils/auth';
 import ServiceError from '#server/errors/ServiceError';
 import { Transaction } from 'sequelize';
+import scheduler from '#server/services/accessRequest/scheduler';
 import { User } from '#root/types/resources/User.d';
 
 const { getExpiracyDateForActivationTokenCreatedAt } = authUtils;
@@ -39,10 +40,13 @@ export default async (activator: User, user: User, options: string[] = [], argTr
             },
         );
 
-        // refresh the user
+        // on planifie un mail de relance 4 jours avanrt l'expiration de l'accès
+        const oneDayBeforeExpirationDate = new Date(expiresAt.getTime() - 1 * 24 * 60 * 60 * 1000);
+        const hoursBeforeExpirationDate = Math.floor((expiresAt.getTime() - oneDayBeforeExpirationDate.getTime()) / (60 * 60 * 1000));
+        await scheduler.scheduleEvent.accessAboutToExpire(userAccessId, oneDayBeforeExpirationDate, hoursBeforeExpirationDate);
+
         refreshedUser = await findSingleUser(user.id, undefined, undefined, undefined, transaction);
 
-        // on commit la transaction
         if (argTransaction === undefined) {
             await transaction.commit();
         }
