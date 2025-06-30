@@ -20,15 +20,15 @@ const stubs = {
         deactivate: sandbox.stub(),
         findOne: sandbox.stub(),
     },
-    mails :{
+    mails: {
         sendUserDeactivationConfirmation: sandbox.stub(),
         sendUserDeactivationByAdminAlert: sandbox.stub(),
     },
     mattermost: {
         triggerNotifyNewUserSelfDeactivation: sandbox.stub(),
-    }
-    
-}
+    },
+
+};
 
 rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
 rewiremock('#server/models/userModel/index').with(stubs.userModel);
@@ -57,7 +57,7 @@ describe('userService.deactivate()', () => {
     it('change le statut du compte à inactif en base de données', async () => {
         const user = fakeUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }])
+        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
         await deactivateUser(42, true, user);
         expect(stubs.userModel.deactivate).to.have.been.calledOnce;
@@ -67,9 +67,9 @@ describe('userService.deactivate()', () => {
     it('retourne le compte désactivé', async () => {
         const user = fakeUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }])
+        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
         const expectedUser = { ...user, status: 'inactive' };
-        
+
         const response = await deactivateUser(42, true, user);
         expect(response).to.be.eql(expectedUser);
     });
@@ -77,8 +77,8 @@ describe('userService.deactivate()', () => {
     it('exécute l\'ensemble des requêtes dans une transaction', async () => {
         const user = fakeUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }])
-      
+        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
+
         await deactivateUser(42, true, user);
         expect(stubs.userModel.deactivate).to.have.been.calledWith([42], 'admin', false, transaction);
         expect(transaction.commit).to.have.been.calledOnce;
@@ -87,7 +87,7 @@ describe('userService.deactivate()', () => {
     it('s\'il s\'agit d\'une auto-désactivation, envoie un mail de confirmation', async () => {
         const user = fakeUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }])
+        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
         const expectedUser = { ...user, status: 'inactive' };
 
         await deactivateUser(42, true, user);
@@ -98,7 +98,7 @@ describe('userService.deactivate()', () => {
     it('s\'il s\'agit d\'une auto-désactivation, n\'envoie pas un mail d\'alerte', async () => {
         const user = fakeUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }])
+        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
         await deactivateUser(42, true, user);
         expect(stubs.mails.sendUserDeactivationByAdminAlert).to.not.have.been.called;
@@ -107,7 +107,7 @@ describe('userService.deactivate()', () => {
     it('s\'il s\'agit d\'une auto-désactivation, envoie une notification mattermost', async () => {
         const user = fakeUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }])
+        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
         const expectedUser = { ...user, status: 'inactive' };
 
         await deactivateUser(42, true, user);
@@ -118,7 +118,7 @@ describe('userService.deactivate()', () => {
     it('s\'il ne s\'agit PAS d\'une auto-désactivation, envoie un mail avec la raison de la désactivation', async () => {
         const user = fakeUser();
         stubs.userModel.findOne.withArgs(42).resolves(user);
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }])
+        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
         const expectedUser = { ...user, status: 'inactive' };
 
         await deactivateUser(42, false, user, 'raison de désactivation');
@@ -133,7 +133,7 @@ describe('userService.deactivate()', () => {
     it('envoie le mail d\'alerte de désactivation avec une raison par défaut si la raison est manquante', async () => {
         const user = fakeUser();
         stubs.userModel.findOne.withArgs(42).resolves(user);
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }])
+        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
         const expectedUser = { ...user, status: 'inactive' };
 
         await deactivateUser(42, false, user);
@@ -148,7 +148,7 @@ describe('userService.deactivate()', () => {
     it('s\'il ne s\'agit PAS d\'une auto-désactivation, n\'envoie pas un mail de confirmation', async () => {
         const user = fakeUser();
         stubs.userModel.findOne.withArgs(42).resolves(user);
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }])
+        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
         await deactivateUser(42, false, user, 'raison de désactivation');
         expect(stubs.mails.sendUserDeactivationConfirmation).to.not.have.been.called;
@@ -157,7 +157,7 @@ describe('userService.deactivate()', () => {
     it('s\'il ne s\'agit PAS d\'une auto-désactivation, n\'envoie pas de notification mattermost', async () => {
         const user = fakeUser();
         stubs.userModel.findOne.withArgs(42).resolves(user);
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }])
+        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
         await deactivateUser(42, false, user);
         expect(stubs.mattermost.triggerNotifyNewUserSelfDeactivation).to.not.have.been.called;
@@ -167,7 +167,7 @@ describe('userService.deactivate()', () => {
         const user = fakeUser();
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.mails.sendUserDeactivationConfirmation.rejects(new Error('test'));
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }])
+        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
         await deactivateUser(42, true, user);
     });
@@ -176,7 +176,7 @@ describe('userService.deactivate()', () => {
         const user = fakeUser();
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.mattermost.triggerNotifyNewUserSelfDeactivation.rejects(new Error('test'));
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }])
+        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
         await deactivateUser(42, true, user);
     });
@@ -185,7 +185,7 @@ describe('userService.deactivate()', () => {
         const user = fakeUser();
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.mails.sendUserDeactivationByAdminAlert.rejects(new Error('test'));
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }])
+        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
         await deactivateUser(42, false, user);
     });
@@ -212,14 +212,14 @@ describe('userService.deactivate()', () => {
         const user = fakeUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.resolves(user);
         stubs.userModel.deactivate.rejects(error);
-    
+
         try {
             await deactivateUser(42, true, user);
         } catch (e) {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
-    
+
         expect.fail('should have thrown an error');
     });
 
@@ -227,16 +227,16 @@ describe('userService.deactivate()', () => {
         const error = new Error('utilisateur non trouvé');
         const user = fakeUser({ id: 42, status: 'inactive' });
         stubs.userModel.findOne.rejects(error);
-    
+
         try {
             await deactivateUser(42, true, user);
         } catch (e) {
             expect(e).to.be.an.instanceof(ServiceError);
             expect(e.message).to.equal('utilisateur non trouvé');
-            expect(e.code).to.equal('user_search_failure')
+            expect(e.code).to.equal('user_search_failure');
             return;
         }
-    
+
         expect.fail('should have thrown an error');
     });
 
@@ -260,7 +260,7 @@ describe('userService.deactivate()', () => {
         const user = fakeUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         transaction.commit.rejects(error);
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }])
+        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
         try {
             await deactivateUser(42, true, user);
@@ -279,7 +279,7 @@ describe('userService.deactivate()', () => {
         const user = fakeUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         transaction.commit.rejects(error);
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }])
+        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
         try {
             await deactivateUser(42, true, user);
