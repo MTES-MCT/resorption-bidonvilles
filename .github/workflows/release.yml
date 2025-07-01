@@ -27,25 +27,25 @@ jobs:
           DRY_RUN: true
           WITH_V: false
       - name: Update version in api package.json
-        uses: jossef/action-set-json-field@v1
+        uses: jossef/action-set-json-field@v2.2
         with:
           file: packages/api/package.json
           field: version
           value: ${{ steps.version.outputs.new_tag }}
       - name: Update version in webapp package.json
-        uses: jossef/action-set-json-field@v1
+        uses: jossef/action-set-json-field@v2.2
         with:
           file: packages/frontend/webapp/package.json
           field: version
           value: ${{ steps.version.outputs.new_tag }}
       - name: Update version in www package.json
-        uses: jossef/action-set-json-field@v1
+        uses: jossef/action-set-json-field@v2.2
         with:
           file: packages/frontend/www/package.json
           field: version
           value: ${{ steps.version.outputs.new_tag }}
       - name: Update version in root package.json
-        uses: jossef/action-set-json-field@v1
+        uses: jossef/action-set-json-field@v2.2
         with:
           file: package.json
           field: version
