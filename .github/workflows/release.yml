@@ -14,7 +14,7 @@ jobs:
     outputs:
       new_tag: ${{ steps.version.outputs.new_tag }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: '0'
       - name: Compute the new version number
@@ -74,7 +74,7 @@ jobs:
     needs: upgrade-version
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: 'master'
           fetch-depth: '0'
@@ -110,7 +110,7 @@ jobs:
     needs: upgrade-version
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: 'master'
           fetch-depth: '0'
@@ -146,7 +146,7 @@ jobs:
     needs: upgrade-version
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: 'master'
           fetch-depth: '0'
