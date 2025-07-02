@@ -86,7 +86,7 @@ describe.skip('controllers/shantytownComment', () => {
             let next;
             let error;
             beforeEach(async () => {
-                error = new Error('Une erreur');
+                error = new Error('insert_failed');
                 createCommentService.rejects(new ServiceError('insert_failed', error));
 
                 res = mockRes();
@@ -127,7 +127,7 @@ describe.skip('controllers/shantytownComment', () => {
             let next;
             let error;
             beforeEach(async () => {
-                error = new Error('Une erreur');
+                error = new Error('fetch_failed');
                 createCommentService.rejects(new ServiceError('fetch_failed', error));
 
                 res = mockRes();
