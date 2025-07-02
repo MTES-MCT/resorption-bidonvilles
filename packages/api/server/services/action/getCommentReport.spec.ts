@@ -4,7 +4,6 @@ import sinonChai from 'sinon-chai';
 import chaiSubset from 'chai-subset';
 
 import { rewiremock } from '#test/rewiremock';
-import permissionUtils from '#server/utils/permission';
 import moment from 'moment';
 import { row as fakeActionCommentRow } from '#test/utils/actionComment';
 import { serialized as fakeUser } from '#test/utils/user';
@@ -20,7 +19,7 @@ const stubs = {
     actionModel: {
         fetchComments: sandbox.stub(),
     },
-    can: sandbox.stub(permissionUtils, 'can'),
+    can: sandbox.stub(),
     do: sandbox.stub(),
     on: sandbox.stub(),
     moment: sandbox.stub(moment),
