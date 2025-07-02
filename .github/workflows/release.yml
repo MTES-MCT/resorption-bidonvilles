@@ -63,7 +63,7 @@ jobs:
           branch: ${{ github.ref }}
           tags: true
       - name: Merge develop into master
-        uses: devmasx/merge-branch@v1.3.1
+        uses: devmasx/merge-branch@v1.4.0
         with:
           github_token: ${{ github.token }}
           type: now
@@ -89,7 +89,7 @@ jobs:
             ${{ runner.os }}-www-buildx
           fail-on-cache-miss: false
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -125,7 +125,7 @@ jobs:
             ${{ runner.os }}-webapp-buildx
           fail-on-cache-miss: false
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -161,7 +161,7 @@ jobs:
             ${{ runner.os }}-api-buildx
           fail-on-cache-miss: false
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
