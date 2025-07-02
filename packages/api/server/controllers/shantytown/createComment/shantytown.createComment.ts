@@ -50,9 +50,9 @@ export default async (req: UserCreateCommentRequest, res: Response, next: NextFu
     } catch (error) {
         const { code, nativeError } = error;
         res.status(typeof code === 'string' ? parseInt(code, 10) : code).send({
-            user_message: ERROR_RESPONSES[nativeError].message || ERROR_RESPONSES.undefined.message,
+            user_message: ERROR_RESPONSES[nativeError]?.message ?? ERROR_RESPONSES.undefined.message,
         });
-        return next(error.nativeError || error);
+        return next(error.nativeError ?? error);
     }
 
     return res.status(200).send({
