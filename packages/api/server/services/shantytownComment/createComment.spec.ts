@@ -112,7 +112,7 @@ describe('services/shantytownComment.create', () => {
         stubs.sequelize.transaction.resolves(stubs.transaction);
     });
     afterEach(() => {
-        sandbox.restore();
+        sandbox.reset();
     });
 
     describe.skip('createComment()', () => {
