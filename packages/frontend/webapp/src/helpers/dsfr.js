@@ -25,5 +25,4 @@ export function useDsfr(app) {
     app.component("DsfrButtonGroup", DsfrButtonGroup);
     app.component("DsfrSegmented", DsfrSegmented);
     app.component("DsfrSegmentedSet", DsfrSegmentedSet);
-
 }
