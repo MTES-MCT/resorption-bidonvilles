@@ -4,7 +4,6 @@ import sinonChai from 'sinon-chai';
 import chaiSubset from 'chai-subset';
 
 import { rewiremock } from '#test/rewiremock';
-import permissionUtils from '#server/utils/permission';
 import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeTown } from '#test/utils/shantytown';
 import { AuthUser } from '#server/middlewares/authMiddleware';
@@ -34,7 +33,7 @@ const stubs = {
         fromTsToFormat: sandbox.stub().callsFake(ts => (ts ? new Date(ts).toISOString() : 'Invalid Date')),
         tsToString: sandbox.stub().callsFake(ts => (ts ? new Date(ts * 1000).toLocaleDateString('fr-FR') : 'Invalid Date')),
     },
-    can: sandbox.stub(permissionUtils, 'can'),
+    can: sandbox.stub(),
     do: sandbox.stub(),
     on: sandbox.stub(),
     validator: {
