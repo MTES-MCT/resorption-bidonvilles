@@ -14,12 +14,12 @@ jobs:
     outputs:
       new_tag: ${{ steps.version.outputs.new_tag }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: '0'
       - name: Compute the new version number
         id: version
-        uses: anothrNick/github-tag-action@1.36.0
+        uses: anothrNick/github-tag-action@1.73.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
@@ -27,25 +27,25 @@ jobs:
           DRY_RUN: true
           WITH_V: false
       - name: Update version in api package.json
-        uses: jossef/action-set-json-field@v1
+        uses: jossef/action-set-json-field@v2.2
         with:
           file: packages/api/package.json
           field: version
           value: ${{ steps.version.outputs.new_tag }}
       - name: Update version in webapp package.json
-        uses: jossef/action-set-json-field@v1
+        uses: jossef/action-set-json-field@v2.2
         with:
           file: packages/frontend/webapp/package.json
           field: version
           value: ${{ steps.version.outputs.new_tag }}
       - name: Update version in www package.json
-        uses: jossef/action-set-json-field@v1
+        uses: jossef/action-set-json-field@v2.2
         with:
           file: packages/frontend/www/package.json
           field: version
           value: ${{ steps.version.outputs.new_tag }}
       - name: Update version in root package.json
-        uses: jossef/action-set-json-field@v1
+        uses: jossef/action-set-json-field@v2.2
         with:
           file: package.json
           field: version
@@ -57,13 +57,13 @@ jobs:
           git commit -m "📦 Release v${{ steps.version.outputs.new_tag }}" -a
           git tag v${{ steps.version.outputs.new_tag }}
       - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0
+        uses: ad-m/github-push-action@v0.8.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
           tags: true
       - name: Merge develop into master
-        uses: devmasx/merge-branch@v1.3.1
+        uses: devmasx/merge-branch@v1.4.0
         with:
           github_token: ${{ github.token }}
           type: now
@@ -74,12 +74,12 @@ jobs:
     needs: upgrade-version
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: 'master'
           fetch-depth: '0'
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
       - name: Cache Docker layers
         uses: actions/cache@v4
         with:
@@ -89,13 +89,13 @@ jobs:
             ${{ runner.os }}-www-buildx
           fail-on-cache-miss: false
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: Dockerfile.www
@@ -110,12 +110,12 @@ jobs:
     needs: upgrade-version
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: 'master'
           fetch-depth: '0'
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
       - name: Cache Docker layers
         uses: actions/cache@v4
         with:
@@ -125,13 +125,13 @@ jobs:
             ${{ runner.os }}-webapp-buildx
           fail-on-cache-miss: false
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: Dockerfile.webapp
@@ -146,12 +146,12 @@ jobs:
     needs: upgrade-version
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: 'master'
           fetch-depth: '0'
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
       - name: Cache Docker layers
         uses: actions/cache@v4
         with:
@@ -161,13 +161,13 @@ jobs:
             ${{ runner.os }}-api-buildx
           fail-on-cache-miss: false
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: Dockerfile.api
