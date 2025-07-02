@@ -163,7 +163,6 @@ describe('services/action.createComment()', () => {
         } catch (error) {
             caughtError = error;
         }
-        console.log('Caught error:', caughtError);
 
         expect(caughtError).to.be.an.instanceOf(ServiceError);
         expect(caughtError.code).to.be.eql(nativeError.message);

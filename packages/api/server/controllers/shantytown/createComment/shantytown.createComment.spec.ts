@@ -149,8 +149,6 @@ describe.skip('controllers/shantytownComment', () => {
             });
 
             it('répond une 500', () => {
-                console.log(res.status);
-
                 expect(res.status).to.have.been.calledOnceWith(500);
             });
 
