@@ -6,6 +6,8 @@ import {
     DsfrCheckbox,
     DsfrButton,
     DsfrButtonGroup,
+    DsfrSegmented,
+    DsfrSegmentedSet,
 } from "@gouvminint/vue-dsfr";
 
 import "@gouvfr/dsfr/dist/dsfr.min.css";
@@ -21,4 +23,7 @@ export function useDsfr(app) {
     app.component("DsfrCheckbox", DsfrCheckbox);
     app.component("DsfrButton", DsfrButton);
     app.component("DsfrButtonGroup", DsfrButtonGroup);
+    app.component("DsfrSegmented", DsfrSegmented);
+    app.component("DsfrSegmentedSet", DsfrSegmentedSet);
+
 }

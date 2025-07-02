@@ -42,7 +42,6 @@
 
 <script setup>
 import { ref, watch } from "vue";
-import { DsfrSegmentedSet } from "@resorptionbidonvilles/ui";
 
 import updateDataRange from "../../utils/updateDataRange";
 

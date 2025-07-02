@@ -7,7 +7,8 @@
         />
 
         <main class="mt-6">
-            <ViewError v-if="metricsStore.error">
+            <FiltrageTemporel class="mt-5" v-model="dateRange" />
+            <!-- <ViewError v-if="metricsStore.error">
                 <template v-slot:title>Collecte des données échouée</template>
                 <template v-slot:content>{{ metricsStore.error }}</template>
                 <template v-slot:actions
@@ -20,10 +21,10 @@
                     >
                     <ButtonContact
                 /></template>
-            </ViewError>
+            </ViewError> -->
             <Loading
                 class="mt-6"
-                v-else-if="metricsStore.nationStatus !== 'loaded'"
+                v-if="metricsStore.nationStatus !== 'loaded'"
             />
             <template v-else>
                 <Onglets
@@ -52,6 +53,7 @@ import { useUserStore } from "@/stores/user.store";
 import { useMetricsStore } from "@/stores/metrics.store";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 
+import FiltrageTemporel from "../DonneesStatistiquesDepartement/components/header/FiltrageTemporel.vue";
 import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
 import Title from "./Title.vue";
 import Header from "./Header.vue";
