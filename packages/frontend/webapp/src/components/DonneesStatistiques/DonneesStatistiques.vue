@@ -23,7 +23,7 @@
             </ViewError>
             <Loading
                 class="mt-6"
-                v-if="metricsStore.nationStatus !== 'loaded'"
+                v-else-if="metricsStore.nationStatus !== 'loaded'"
             />
             <template v-else>
                 <Onglets
