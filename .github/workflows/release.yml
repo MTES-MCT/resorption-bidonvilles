@@ -25,7 +25,6 @@ jobs:
           DEFAULT_BUMP: patch
           RELEASE_BRANCHES: 'develop'
           DRY_RUN: true
-          TAG_PREFIX: 'v'
       - name: Update version in api package.json
         uses: jossef/action-set-json-field@v2.2
         with:
@@ -54,8 +53,8 @@ jobs:
         run: |
           git config --local user.email "admin@resorption-bidonvilles.beta.gouv.fr"
           git config --local user.name "GitHub Action"
-          git commit -m "📦 Release ${{ steps.version.outputs.new_tag }}" -a
-          git tag ${{ steps.version.outputs.new_tag }}
+          git commit -m "📦 Release v${{ steps.version.outputs.new_tag }}" -a
+          git tag v${{ steps.version.outputs.new_tag }}
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
         with:
@@ -84,7 +83,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-www-buildx-${{ needs['upgrade-version'].outputs.new_tag }}
+          key: ${{ runner.os }}-www-buildx-v${{ needs['upgrade-version'].outputs.new_tag }}
           restore-keys: |
             ${{ runner.os }}-www-buildx
           fail-on-cache-miss: false
@@ -100,7 +99,7 @@ jobs:
           context: .
           file: Dockerfile.www
           push: true
-          tags: resorptionbidonvilles/www:${{ needs['upgrade-version'].outputs.new_tag }}
+          tags: resorptionbidonvilles/www:v${{ needs['upgrade-version'].outputs.new_tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Image digest
@@ -120,7 +119,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-webapp-buildx-${{ needs['upgrade-version'].outputs.new_tag }}
+          key: ${{ runner.os }}-webapp-buildx-v${{ needs['upgrade-version'].outputs.new_tag }}
           restore-keys: |
             ${{ runner.os }}-webapp-buildx
           fail-on-cache-miss: false
@@ -136,7 +135,7 @@ jobs:
           context: .
           file: Dockerfile.webapp
           push: true
-          tags: resorptionbidonvilles/frontend:${{ needs['upgrade-version'].outputs.new_tag }}
+          tags: resorptionbidonvilles/frontend:v${{ needs['upgrade-version'].outputs.new_tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Image digest
@@ -156,7 +155,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-api-buildx-{{ needs['upgrade-version'].outputs.new_tag }}
+          key: ${{ runner.os }}-api-buildx-v${{ needs['upgrade-version'].outputs.new_tag }}
           restore-keys: |
             ${{ runner.os }}-api-buildx
           fail-on-cache-miss: false
