@@ -12,7 +12,8 @@ jobs:
     needs: prebuild-qa
     runs-on: ubuntu-24.04
     outputs:
-      new_tag: ${{ steps.version.outputs.new_tag }}
+      new_tag_with_v: ${{ steps.version.outputs.new_tag }}
+      new_tag: ${{ steps.version_no_v.outputs.new_tag }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -29,7 +30,7 @@ jobs:
       - name: Strip "v" prefix from tag
         id: version_no_v
         run: |
-          echo "tag=${steps_version_outputs_new_tag#v}" >> $GITHUB_OUTPUT
+          echo "new_tag=${steps_version_outputs_new_tag#v}" >> $GITHUB_OUTPUT
         env:
           steps_version_outputs_new_tag: ${{ steps.version.outputs.new_tag }}
       - name: Update version in api package.json
@@ -37,31 +38,31 @@ jobs:
         with:
           file: packages/api/package.json
           field: version
-          value: ${{ steps.version.outputs.new_tag }}
+          value: ${{ steps.version_no_v.outputs.new_tag }}
       - name: Update version in webapp package.json
         uses: jossef/action-set-json-field@v2.2
         with:
           file: packages/frontend/webapp/package.json
           field: version
-          value: ${{ steps.version.outputs.new_tag }}
+          value: ${{ steps.version_no_v.outputs.new_tag }}
       - name: Update version in www package.json
         uses: jossef/action-set-json-field@v2.2
         with:
           file: packages/frontend/www/package.json
           field: version
-          value: ${{ steps.version.outputs.new_tag }}
+          value: ${{ steps.version_no_v.outputs.new_tag }}
       - name: Update version in root package.json
         uses: jossef/action-set-json-field@v2.2
         with:
           file: package.json
           field: version
-          value: ${{ steps.version.outputs.new_tag }}
+          value: ${{ steps.version_no_v.outputs.new_tag }}
       - name: Commit change in package.json
         run: |
           git config --local user.email "admin@resorption-bidonvilles.beta.gouv.fr"
           git config --local user.name "GitHub Action"
-          git commit -m "📦 Release v${{ steps.version.outputs.new_tag }}" -a
-          git tag v${{ steps.version.outputs.new_tag }}
+          git commit -m "📦 Release ${{ steps.version.outputs.new_tag }}" -a
+          git tag ${{ steps.version.outputs.new_tag }}
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
         with:
@@ -90,7 +91,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-www-buildx-v${{ needs['upgrade-version'].outputs.new_tag }}
+          key: ${{ runner.os }}-www-buildx-${{ needs['upgrade-version'].outputs.new_tag_with_v }}
           restore-keys: |
             ${{ runner.os }}-www-buildx
           fail-on-cache-miss: false
@@ -106,7 +107,7 @@ jobs:
           context: .
           file: Dockerfile.www
           push: true
-          tags: resorptionbidonvilles/www:v${{ needs['upgrade-version'].outputs.new_tag }}
+          tags: resorptionbidonvilles/www:${{ needs['upgrade-version'].outputs.new_tag_with_v }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Image digest
@@ -126,7 +127,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-webapp-buildx-v${{ needs['upgrade-version'].outputs.new_tag }}
+          key: ${{ runner.os }}-webapp-buildx-${{ needs['upgrade-version'].outputs.new_tag_with_v }}
           restore-keys: |
             ${{ runner.os }}-webapp-buildx
           fail-on-cache-miss: false
@@ -142,7 +143,7 @@ jobs:
           context: .
           file: Dockerfile.webapp
           push: true
-          tags: resorptionbidonvilles/frontend:v${{ needs['upgrade-version'].outputs.new_tag }}
+          tags: resorptionbidonvilles/frontend:${{ needs['upgrade-version'].outputs.new_tag_with_v }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Image digest
@@ -162,7 +163,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-api-buildx-v${{ needs['upgrade-version'].outputs.new_tag }}
+          key: ${{ runner.os }}-api-buildx-${{ needs['upgrade-version'].outputs.new_tag_with_v }}
           restore-keys: |
             ${{ runner.os }}-api-buildx
           fail-on-cache-miss: false
@@ -178,7 +179,7 @@ jobs:
           context: .
           file: Dockerfile.api
           push: true
-          tags: resorptionbidonvilles/api:${{ needs['upgrade-version'].outputs.new_tag }}
+          tags: resorptionbidonvilles/api:${{ needs['upgrade-version'].outputs.new_tag_with_v }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Image digest
