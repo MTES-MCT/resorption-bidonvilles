@@ -31,7 +31,7 @@ async function sendEmailsInvitations(guests: { first_name: string; last_name: st
             });
         } catch (err) {
             // eslint-disable-next-line no-console
-            console.log('Error with invited people email :', err.message);
+            console.error('Error with invited people email :', err.message);
         }
     });
 }
@@ -57,11 +57,10 @@ async function sendMattermostNotifications(guests: { first_name: string; last_na
     }
 
     const greeterUser = await userModel.findOneByEmail(greeter.email);
-    const greeterWithId: Partial<User> = { ...greeter };
-    if (greeterUser !== null) {
-        greeterWithId.id = greeterUser.id;
-    }
-
+    const greeterWithId: Partial<User> = {
+        ...greeter,
+        id: greeterUser ? greeterUser.id : null,
+    };
 
     guests.forEach(async (guest) => {
         const user: Partial<User> = {
@@ -74,7 +73,7 @@ async function sendMattermostNotifications(guests: { first_name: string; last_na
             await triggerPeopleInvitedAlert(user as User, greeterWithId as User, from);
         } catch (err) {
             // eslint-disable-next-line no-console
-            console.log(err.message);
+            console.error(err.message);
         }
     });
 }
@@ -97,7 +96,7 @@ export default async (req, res, next) => {
         await sendMattermostNotifications(guests, greeter, invite_from);
     } catch (err) {
     // eslint-disable-next-line no-console
-        console.log(err);
+        console.error(err);
     }
 
     return res.status(200).send({});
