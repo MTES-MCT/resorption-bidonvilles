@@ -32,11 +32,11 @@ export default async (req: QuestionUpdateRequest, res, next) => {
 
         return res.status(200).send(enrichedQuestion);
     } catch (error) {
-        const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
+        const { code, message } = ERRORS[error?.code] ?? ERRORS.undefined;
         res.status(code).send({
             user_message: message,
         });
 
-        return next(error?.nativeError || error);
+        return next(error?.nativeError ?? error);
     }
 };

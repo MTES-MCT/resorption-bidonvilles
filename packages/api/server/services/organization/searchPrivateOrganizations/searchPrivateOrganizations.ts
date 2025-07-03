@@ -14,9 +14,7 @@ const searchPrivateOrganization = async (search: string): Promise<OrganizationAu
 
         return Object.values(
             organizations.reduce((acc, row) => {
-                if (acc[row.type_name] === undefined) {
-                    acc[row.type_name] = [];
-                }
+                acc[row.type_name] ??= [];
 
                 if (row.similarity >= 0.75) {
                     let territory;

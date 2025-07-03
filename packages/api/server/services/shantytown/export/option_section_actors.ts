@@ -35,7 +35,7 @@ export default shantytown => ({
                             font: 'Arial',
                         }),
                         new TextRun({
-                            text: `         ${actor.themes.map(theme => `«${theme.value || themes[theme.id]}»`).join(' , ')}`,
+                            text: `         ${actor.themes.map(theme => `«${theme.value ?? themes[theme.id]}»`).join(' , ')}`,
                             bold: false,
                             break: 1,
                             size: 22,

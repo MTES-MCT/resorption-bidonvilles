@@ -15,7 +15,7 @@ export default async (req, res, next) => {
         res.status(500).send({
             user_message: errorMessage,
         });
-        return next(error.nativeError || error);
+        return next(error.nativeError ?? error);
     }
 
     return res.status(200).send({

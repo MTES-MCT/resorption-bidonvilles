@@ -96,7 +96,8 @@ describe('services/user/setInterventionAreas', () => {
                 [],
             );
         } catch (error) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
 
         expect(transaction.rollback).to.have.been.calledOnce;

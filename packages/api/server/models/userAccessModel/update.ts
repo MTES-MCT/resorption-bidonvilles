@@ -21,9 +21,10 @@ export default (user_access_id, data, transaction = undefined) => {
             ${query}
         WHERE user_access_id = :user_access_id`,
         {
-            replacements: Object.assign({}, data, {
+            replacements: {
+                ...data,
                 user_access_id,
-            }),
+            },
             transaction,
         },
     );

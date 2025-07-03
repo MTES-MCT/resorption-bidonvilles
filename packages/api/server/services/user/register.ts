@@ -23,6 +23,8 @@ export default async (data: ContactBody): Promise<User> => {
     try {
         await accessRequestService.handleNewAccessRequest(user);
     } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
         // @todo register this error to Sentry
         // @todo: générer une transaction et conditionner le commit de la transaction à la réussite de handleNewAccessRequest
     }

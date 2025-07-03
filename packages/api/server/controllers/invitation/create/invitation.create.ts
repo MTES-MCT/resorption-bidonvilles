@@ -2,34 +2,41 @@ import mailsUtils from '#server/mails/mails';
 import mattermostUtils from '#server/utils/mattermost';
 import config from '#server/config';
 import userModel from '#server/models/userModel';
+import { User } from '#root/types/resources/User.d';
 
 const { sendUserPlatformInvitation } = mailsUtils;
 const { triggerPeopleInvitedAlert } = mattermostUtils;
 const { mattermost } = config;
 const { formatName } = userModel;
 
-async function sendEmailsInvitations(guests, greeter) {
-    for (let i = 0; i < guests.length; i += 1) {
+type Greeter = {
+    first_name: string,
+    last_name: string,
+    email: string,
+};
+
+async function sendEmailsInvitations(guests: { first_name: string; last_name: string; email: string }[], greeter: Greeter) {
+    guests.forEach((originalGuest) => {
         const guest = {
-            first_name: guests[i].first_name,
-            last_name: guests[i].last_name,
-            email: guests[i].email,
+            first_name: originalGuest.first_name,
+            last_name: originalGuest.last_name,
+            email: originalGuest.email,
         };
 
         try {
-            // eslint-disable-next-line no-await-in-loop
-            await sendUserPlatformInvitation(guest, {
+            sendUserPlatformInvitation(guest, {
                 variables: {
                     inviterName: formatName(greeter),
                 },
             });
         } catch (err) {
-            // Ignore
+            // eslint-disable-next-line no-console
+            console.error('Error with invited people email :', err.message);
         }
-    }
+    });
 }
 
-async function sendMattermostNotifications(guests, greeter, invite_from) {
+async function sendMattermostNotifications(guests: { first_name: string; last_name: string; email: string }[], greeter: Greeter, invite_from: string) {
     if (!mattermost) {
         return;
     }
@@ -50,21 +57,25 @@ async function sendMattermostNotifications(guests, greeter, invite_from) {
     }
 
     const greeterUser = await userModel.findOneByEmail(greeter.email);
-    let greeterWithId = greeter;
-    if (greeterUser !== null) {
-        greeterWithId = { ...greeter, id: greeterUser.id };
-    }
+    const greeterWithId: Partial<User> = {
+        ...greeter,
+        id: greeterUser ? greeterUser.id : null,
+    };
 
-    for (let i = 0; i < guests.length; i += 1) {
-        // Send a mattermost alert, if it fails, do nothing
+    guests.forEach(async (guest) => {
+        const user: Partial<User> = {
+            first_name: guest.first_name,
+            last_name: guest.last_name,
+            email: guest.email,
+        };
+
         try {
-            // eslint-disable-next-line no-await-in-loop
-            await triggerPeopleInvitedAlert(guests[i], greeterWithId, from);
+            await triggerPeopleInvitedAlert(user as User, greeterWithId as User, from);
         } catch (err) {
             // eslint-disable-next-line no-console
-            console.log(`Error with invited people mattermost webhook : ${Object.entries(err.message).flat()}`);
+            console.error(err.message);
         }
-    }
+    });
 }
 
 export default async (req, res, next) => {
@@ -84,7 +95,8 @@ export default async (req, res, next) => {
     try {
         await sendMattermostNotifications(guests, greeter, invite_from);
     } catch (err) {
-        // ignore
+    // eslint-disable-next-line no-console
+        console.error(err);
     }
 
     return res.status(200).send({});

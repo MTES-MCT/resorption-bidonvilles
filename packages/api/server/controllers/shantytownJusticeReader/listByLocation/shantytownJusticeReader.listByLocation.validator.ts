@@ -19,6 +19,8 @@ export default [
             try {
                 location = await geoModel.getLocation(req.params.locationType, value);
             } catch (e) {
+                // eslint-disable-next-line no-console
+                console.error(e);
                 throw new Error('Une erreur est survenue lors de la lecture en base de données');
             }
 

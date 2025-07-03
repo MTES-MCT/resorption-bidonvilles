@@ -12,6 +12,8 @@ export default [
             try {
                 question = await findQuestion(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Impossible de retrouver la question concernée en base de données');
             }
 
@@ -29,6 +31,8 @@ export default [
             try {
                 answer = await findAnswer(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Impossible de retrouver la réponse concernée en base de données');
             }
 

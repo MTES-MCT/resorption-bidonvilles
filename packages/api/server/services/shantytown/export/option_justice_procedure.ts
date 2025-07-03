@@ -147,7 +147,7 @@ export default town => ({
                     font: 'Arial',
                 }),
                 new TextRun({
-                    text: `${town.justiceRenderedBy || 'NC'}`,
+                    text: `${town.justiceRenderedBy ?? 'NC'}`,
                     bold: false,
                     size: 22,
                     font: 'Arial',
@@ -193,7 +193,7 @@ export default town => ({
                     font: 'Arial',
                 }),
                 new TextRun({
-                    text: `${town.administrativeOrderDecisionRenderedBy || 'NC'}`,
+                    text: `${town.administrativeOrderDecisionRenderedBy ?? 'NC'}`,
                     bold: false,
                     size: 22,
                     font: 'Arial',
@@ -252,7 +252,7 @@ export default town => ({
                     font: 'Arial',
                 }),
                 new TextRun({
-                    text: `${town.insalubrityOrderBy || 'NC'}`,
+                    text: `${town.insalubrityOrderBy ?? 'NC'}`,
                     bold: false,
                     size: 22,
                     font: 'Arial',
@@ -265,7 +265,7 @@ export default town => ({
                     font: 'Arial',
                 }),
                 new TextRun({
-                    text: `${town.insalubrityParcels || 'NC'}`,
+                    text: `${town.insalubrityParcels ?? 'NC'}`,
                     bold: false,
                     size: 22,
                     font: 'Arial',
@@ -299,7 +299,7 @@ export default town => ({
                     font: 'Arial',
                 }),
                 new TextRun({
-                    text: `${town.bailiff || 'NC'}`,
+                    text: `${town.bailiff ?? 'NC'}`,
                     bold: false,
                     size: 22,
                     font: 'Arial',

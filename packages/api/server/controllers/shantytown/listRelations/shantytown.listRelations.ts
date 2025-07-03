@@ -3,7 +3,7 @@ import userModel from '#server/models/userModel';
 export default async (req, res, next) => {
     let users;
     try {
-        users = await userModel.findForRegion(req.shantytown.region.code, req.query.q || undefined);
+        users = await userModel.findForRegion(req.shantytown.region.code, req.query.q ?? undefined);
     } catch (error) {
         res.status(500).send({
             user_message: 'Une erreur est survenue lors de la lecture en base de données',

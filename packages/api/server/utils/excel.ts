@@ -246,7 +246,7 @@ function writeHeader(workbook, sheet, lastFrozenColumn, locationName, title, dat
 function writeData(sheet, cellReference, data, link, style, borders = [], shouldFill = false) {
     align(sheet, cellReference, {
         vertical: 'middle',
-        horizontal: style.align || 'center',
+        horizontal: style.align ?? 'center',
         wrapText: true,
     });
 
