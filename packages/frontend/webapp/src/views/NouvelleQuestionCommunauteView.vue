@@ -8,7 +8,11 @@
             J'ai besoin de l'aide de la communauté.
         </template>
         <template v-slot:buttons>
-            <Button variant="primaryOutline" type="button" @click="back"
+            <Button
+                variant="primaryOutline"
+                type="button"
+                @click="back"
+                class="!border-2 !border-primary hover:!bg-primary"
                 >Annuler</Button
             >
             <Button @click="submit" :loading="form?.isSubmitting"
@@ -46,3 +50,9 @@ function back() {
     router.back();
 }
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>
