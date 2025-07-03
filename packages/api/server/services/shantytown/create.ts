@@ -84,10 +84,9 @@ export default async (townData, user) => {
     let shantytown_id;
     try {
         shantytown_id = await createShantytown(
-            Object.assign(
-                {},
-                baseTown,
-                user.isAllowedTo('access', 'shantytown_justice')
+            {
+                ...baseTown,
+                ...(user.isAllowedTo('access', 'shantytown_justice')
                     ? {
                         ownerComplaint: townData.owner_complaint,
                         justiceProcedure: townData.justice_procedure,
@@ -100,13 +99,13 @@ export default async (townData, user) => {
                         policeGrantedAt: townData.police_granted_at,
                         bailiff: townData.bailiff,
                     }
-                    : {},
-                user.isAllowedTo('access', 'shantytown_owner')
+                    : {}),
+                ...(user.isAllowedTo('access', 'shantytown_owner')
                     ? {
                         owner: townData.owner,
                     }
-                    : {},
-            ),
+                    : {}),
+            },
             transaction,
         );
 
@@ -153,7 +152,7 @@ export default async (townData, user) => {
         await triggerShantytownCreationAlert(town, user);
     } catch (err) {
         // eslint-disable-next-line no-console
-        console.log(`Error with shantytown creation Mattermost webhook : ${err.message}`);
+        console.error(`Error with shantytown creation Mattermost webhook : ${err.message}`);
     }
 
     // Send a notification to all users of the related departement
@@ -172,7 +171,8 @@ export default async (townData, user) => {
                 });
             });
     } catch (error) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.error(`Error sending shantytown creation email: ${error.message}`);
     }
 
     return town;

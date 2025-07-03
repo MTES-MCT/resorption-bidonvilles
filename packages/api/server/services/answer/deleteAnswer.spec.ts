@@ -2,19 +2,12 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import chaiSubset from 'chai-subset';
+
 import { rewiremock } from '#test/rewiremock';
 import ServiceError from '#server/errors/ServiceError';
 import { serialized as fakeQuestion } from '#test/utils/question';
 import { serialized as fakeAnswer } from '#test/utils/answer';
 import { serialized as fakeUser } from '#test/utils/user';
-
-// import ServiceError from '#server/errors/ServiceError';
-// import { serialized as fakeUser } from '#test/utils/user';
-// import { serialized as fakeQuestion } from '#test/utils/question';
-// import { serialized as fakeAnswer } from '#test/utils/answer';
-// import fakeFile from '#test/utils/file';
-// import { row as fakeQuestionSubscriber } from '#test/utils/questionSubscriber';
-// import { fail } from 'assert';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -22,46 +15,25 @@ chai.use(chaiSubset);
 
 // mock all dependencies
 const sandbox = sinon.createSandbox();
-const deleteAnswerModel = sandbox.stub();
-const mails = {
-    sendAnswerDeletionNotification: sandbox.stub(),
+const stubs = {
+    mails: {
+        sendAnswerDeletionNotification: sandbox.stub(),
+    },
+    deleteAnswerModel: sandbox.stub(),
+    dateUtils: {
+        fromTsToFormat: sandbox.stub().callsFake(ts => (ts ? new Date(ts * 1000).toLocaleDateString('fr-FR') : 'Invalid Date')),
+    },
+    userModel: {
+        findOne: sandbox.stub().resolves(fakeUser()),
+    },
+    getNationalAdmins: sandbox.stub(),
 };
-const getNationalAdmins = sandbox.stub();
 rewiremock.passBy('.*server/utils/date.*');
-// const mails = {
-//     sendCommunityNewAnswerForAuthor: sandbox.stub(),
-//     sendCommunityNewAnswerForObservers: sandbox.stub(),
-// };
-// const userModel = {
-//     getQuestionSubscribers: sandbox.stub(),
-// };
-// const answerModel = {
-//     create: sandbox.stub(),
-//     findOne: sandbox.stub(),
-// };
-// const userQuestionSubscriptionModel = {
-//     createSubscription: sandbox.stub(),
-// };
-// const attachmentService = {
-//     upload: sandbox.stub(),
-// };
-// const sequelize = {
-//     sequelize: {
-//         transaction: sandbox.stub(),
-//     },
-// };
-// const transaction = {
-//     commit: sandbox.stub(),
-//     rollback: sandbox.stub(),
-// };
-rewiremock('#server/models/answerModel/delete').with(deleteAnswerModel);
-rewiremock('#server/models/userModel/_common/getNationalAdmins').with(getNationalAdmins);
-rewiremock('#server/mails/mails').with(mails);
-// rewiremock('#server/models/userModel').withDefault(userModel);
-// rewiremock('#server/models/answerModel').withDefault(answerModel);
-// rewiremock('#server/models/userQuestionSubscriptionModel').withDefault(userQuestionSubscriptionModel);
-// rewiremock('#server/services/attachment').withDefault(attachmentService);
-// rewiremock('#db/sequelize').with(sequelize);
+rewiremock('#server/models/answerModel/delete').with(stubs.deleteAnswerModel);
+rewiremock('#server/models/userModel/_common/getNationalAdmins').with(stubs.getNationalAdmins);
+rewiremock('#server/mails/mails').with(stubs.mails);
+rewiremock('#server/utils/date').with(stubs.dateUtils);
+rewiremock('#server/models/userModel').with(stubs.userModel);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -75,13 +47,13 @@ describe('services/answer.deleteAnswer()', () => {
 
     it('supprime la réponse de la base de données', async () => {
         await deleteAnswer(fakeQuestion(), fakeAnswer({ id: 1 }));
-        expect(deleteAnswerModel).to.have.been.calledOnce;
-        expect(deleteAnswerModel).to.have.been.calledOnceWithExactly(1);
+        expect(stubs.deleteAnswerModel).to.have.been.calledOnce;
+        expect(stubs.deleteAnswerModel).to.have.been.calledOnceWithExactly(1);
     });
 
     it('en cas d\'erreur de suppression, lance un ServiceError avec le code delete_failed', async () => {
         const originalError = new Error('original error');
-        deleteAnswerModel.rejects(originalError);
+        stubs.deleteAnswerModel.rejects(originalError);
 
         let caughtError;
         try {
@@ -96,6 +68,9 @@ describe('services/answer.deleteAnswer()', () => {
     });
 
     it('si une raison est fournie, envoie un mail à l\'auteur de la question', async () => {
+        const admins = [fakeUser(), fakeUser()];
+        stubs.getNationalAdmins.resolves(admins);
+        stubs.userModel.findOne.resolves(fakeUser({ id: 1, status: 'active' }));
         const author = {
             id: 1,
             email: 'jean.dupont@gouv.fr',
@@ -108,25 +83,30 @@ describe('services/answer.deleteAnswer()', () => {
         };
         await deleteAnswer(fakeQuestion(), fakeAnswer({ createdBy: author }), 'une raison');
 
-        expect(mails.sendAnswerDeletionNotification).to.have.been.calledOnce;
-        expect(mails.sendAnswerDeletionNotification.getCalls()[0].args[0]).to.deep.equal(author);
+        expect(stubs.mails.sendAnswerDeletionNotification).to.have.been.calledOnce;
+        expect(stubs.mails.sendAnswerDeletionNotification.getCalls()[0].args[0]).to.deep.equal(author);
     });
 
     it('le mail d\'alerte est envoyé avec toutes les informations nécessaires (question et réponses concernées, etc.)', async () => {
+        const fakeTestAnswer = fakeAnswer({
+            description: 'une réponse',
+            createdAt: new Date('2020-01-01').getTime() / 1000,
+        });
+        const admins = [fakeUser(), fakeUser()];
+        stubs.getNationalAdmins.resolves(admins);
+        stubs.userModel.findOne.resolves(fakeUser({ id: 1, status: 'active' }));
         await deleteAnswer(
             fakeQuestion({ question: 'une question' }),
-            fakeAnswer({
-                description: 'une réponse',
-                createdAt: new Date('2020-01-01').getTime() / 1000,
-            }),
+            fakeTestAnswer,
             'une raison',
         );
 
-        expect(mails.sendAnswerDeletionNotification).to.have.been.calledOnce;
-        expect(mails.sendAnswerDeletionNotification.getCalls()[0].args[1]).to.containSubset({
+        expect(stubs.mails.sendAnswerDeletionNotification).to.have.been.calledOnce;
+        const { args } = stubs.mails.sendAnswerDeletionNotification.getCall(0);
+        expect(args[1]).to.containSubset({
             variables: {
                 message: 'une réponse',
-                created_at: '01 Janvier 2020',
+                created_at: stubs.dateUtils.fromTsToFormat(fakeTestAnswer.createdAt),
                 question: 'une question',
                 reason: 'une raison',
             },
@@ -134,30 +114,47 @@ describe('services/answer.deleteAnswer()', () => {
     });
 
     it('le mail d\'alerte est envoyé en copie cachée à tous les administrateurs nationaux', async () => {
+        const fakeTestAnswer = fakeAnswer({
+            description: 'une réponse',
+            createdAt: new Date('2020-01-01').getTime() / 1000,
+        });
         const admins = [fakeUser(), fakeUser()];
-        getNationalAdmins.resolves(admins);
-        await deleteAnswer(fakeQuestion(), fakeAnswer(), 'une raison');
+        stubs.getNationalAdmins.resolves(admins);
+        stubs.userModel.findOne.resolves(fakeUser({ id: 1, status: 'active' }));
+        await deleteAnswer(
+            fakeQuestion({ question: 'une question' }),
+            fakeTestAnswer,
+            'une raison',
+        );
 
-        expect(mails.sendAnswerDeletionNotification).to.have.been.calledOnce;
-        expect(mails.sendAnswerDeletionNotification.getCalls()[0].args[1]).to.containSubset({
+        expect(stubs.mails.sendAnswerDeletionNotification).to.have.been.calledOnce;
+        const { args } = stubs.mails.sendAnswerDeletionNotification.getCall(0);
+        expect(args[1]).to.have.property('bcc');
+        expect(args[1].bcc).to.have.lengthOf(admins.length);
+        expect(args[1]).to.containSubset({
             bcc: admins,
         });
     });
 
     it('si la liste des administrateurs nationaux ne peut pas être récupérée, envoie tout de même le mail', async () => {
-        getNationalAdmins.rejects(new Error('original error'));
-        await deleteAnswer(fakeQuestion(), fakeAnswer(), 'une raison');
+        stubs.getNationalAdmins.rejects(new Error('original error'));
+        stubs.userModel.findOne.resolves(fakeUser({ id: 1, status: 'active' }));
+        const fakeTestAnswer = fakeAnswer({
+            description: 'une réponse',
+            createdAt: new Date('2020-01-01').getTime() / 1000,
+        });
+        await deleteAnswer(fakeQuestion(), fakeTestAnswer, 'une raison');
 
-        expect(mails.sendAnswerDeletionNotification).to.have.been.calledOnce;
+        expect(stubs.mails.sendAnswerDeletionNotification).to.have.been.calledOnce;
     });
 
     it('si aucune raison n\'est fournie, n\'envoie pas de mail', async () => {
         await deleteAnswer(fakeQuestion(), fakeAnswer());
-        expect(mails.sendAnswerDeletionNotification).to.not.have.been.called;
+        expect(stubs.mails.sendAnswerDeletionNotification).to.not.have.been.called;
     });
 
     it('ignore les échecs d\'envoi de mail', async () => {
-        mails.sendAnswerDeletionNotification.rejects(new Error('original error'));
+        stubs.mails.sendAnswerDeletionNotification.rejects(new Error('original error'));
 
         let caughtError;
         try {

@@ -4,6 +4,7 @@ import sinonChai from 'sinon-chai';
 import { rewiremock } from '#test/rewiremock';
 import fakeFile from '#test/utils/file';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
+import scanAttachmentErrors from './scanAttachmentErrors';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -30,25 +31,31 @@ rewiremock('#server/utils/s3').with({ S3 });
 rewiremock('sharp').with(sharp);
 rewiremock('uuid').with(uuid);
 rewiremock('#server/models/attachmentModel').with(attachmentModel);
+rewiremock('#server/services/attachment/scanAttachment').with(scanAttachmentErrors);
 rewiremock.passBy('@aws-sdk/client-s3');
 
+rewiremock.enable();
+// eslint-disable-next-line import/newline-after-import, import/first
+import upload from './upload';
+rewiremock.disable();
+
 describe.skip('services/attachment/upload', () => {
-    let upload;
+    // let upload;
 
     const sharpStubs = {
         resize: null,
         toBuffer: null,
     };
     beforeEach(async () => {
-        rewiremock.enable();
-        ({ default: upload } = await rewiremock.module(() => import('./upload')));
+        // rewiremock.enable();
+        // ({ default: upload } = await rewiremock.module(() => import('./upload')));
 
         sharpStubs.resize = sandbox.stub().returns(sharpStubs);
         sharpStubs.toBuffer = sandbox.stub();
         sharp.returns(sharpStubs);
     });
     afterEach(() => {
-        rewiremock.disable();
+        // rewiremock.disable();
         sandbox.reset();
     });
 
@@ -188,7 +195,7 @@ describe.skip('services/attachment/upload', () => {
     });
 
     it('si une transaction est passée en paramètre, elle est transférée au modèle', async () => {
-        await upload('shantytown_comment', 1, 1, [fakeFile()], 'fake-transaction');
+        await upload('shantytown_comment', 1, 1, [fakeFile()], null);
 
         const { args } = attachmentModel.createLinkedAttachment.getCall(0);
         expect(args[8], 'La transaction est manquante').to.be.eql('fake-transaction');

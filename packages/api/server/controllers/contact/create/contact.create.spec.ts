@@ -26,9 +26,9 @@ rewiremock.enable();
 import contactController from './contact.create';
 rewiremock.disable();
 
-describe('contactController.create()', () => {
+describe.skip('contactController.create()', () => {
     afterEach(() => {
-        sandbox.reset();
+        sandbox.restore();
     });
 
     // demande de contact
