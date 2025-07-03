@@ -146,7 +146,8 @@ describe('services/organization/create', () => {
                 new_type_default_role: null,
             });
         } catch (error) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
 
         expect(transaction.rollback).to.have.been.calledOnce;

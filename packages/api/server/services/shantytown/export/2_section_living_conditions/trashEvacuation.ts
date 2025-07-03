@@ -6,6 +6,6 @@ export default (shantytown) => {
 
     return createRow([
         'Ramassage des déchets',
-        trashEvacuationStatusLabels[status.status] || 'Aucune information concernant le ramassage des déchets',
+        trashEvacuationStatusLabels[status.status] ?? 'Aucune information concernant le ramassage des déchets',
     ]);
 };

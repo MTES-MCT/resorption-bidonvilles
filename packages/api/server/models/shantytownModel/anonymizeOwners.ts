@@ -3,9 +3,7 @@ import { QueryTypes, Transaction } from 'sequelize';
 
 export default async (argTransaction: Transaction = undefined): Promise<{ shantytownLines: number, shantytownHistoryLines: number }> => {
     let transaction: Transaction = argTransaction;
-    if (transaction === undefined) {
-        transaction = await sequelize.transaction();
-    }
+    transaction ??= await sequelize.transaction();
 
     let shantytownResult: any[] | number = [];
     let historyResult: any[] | number = [];

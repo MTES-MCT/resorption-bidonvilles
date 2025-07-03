@@ -13,11 +13,11 @@ export default [
         .isString().bail().withMessage('Le département de recherche doit être une chaîne de caractère')
         .trim(),
     query('departementCode')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     query('usersOnly')
         .optional()
         .isIn(['0', '1']).bail().withMessage('La valeur de userOnly est invalide'),
     query('usersOnly')
-        .customSanitizer(value => value || '0'),
+        .customSanitizer(value => value ?? '0'),
 ];

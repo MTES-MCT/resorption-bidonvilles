@@ -59,7 +59,7 @@ export default {
         } catch (error) {
             if (error.Code !== 'BucketAlreadyOwnedByYou') {
                 // eslint-disable-next-line no-console
-                console.log('Initialisation S3 échouée :(', error);
+                console.error('Initialisation S3 échouée :', error);
             }
         }
 
@@ -111,7 +111,7 @@ export default {
             console.log('Scheduled jobs set up');
         } catch (error) {
             // eslint-disable-next-line no-console
-            console.log('Failed settings up scheduled jobs');
+            console.error('Failed settings up scheduled jobs', error);
         }
 
         return app;

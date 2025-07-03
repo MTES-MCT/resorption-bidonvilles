@@ -21,10 +21,10 @@ export default async (req: DeleteAnswerRequest, res: Response, next: NextFunctio
         await deleteAnswer(req.question, req.answer, req.body.reason);
         res.status(201).send({});
     } catch (error) {
-        const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
+        const { code, message } = ERRORS[error?.code] ?? ERRORS.undefined;
         res.status(code).send({
             user_message: message,
         });
-        next(error?.nativeError || error);
+        next(error?.nativeError ?? error);
     }
 };

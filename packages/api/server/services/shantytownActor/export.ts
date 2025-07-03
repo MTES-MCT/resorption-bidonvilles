@@ -34,7 +34,7 @@ export default async (user) => {
             'Marqué(e) intervenant(e) le': createdAt.format('DD/MM/YYYY'),
             "Champs d'intervention": row.themes,
             Département: row.departementName,
-            Structure: row.organizationAbbreviation || row.organizationName,
+            Structure: row.organizationAbbreviation ?? row.organizationName,
             Role: row.userRole,
             'Objectif de résorption': row.shantytownResorptionTarget,
         };

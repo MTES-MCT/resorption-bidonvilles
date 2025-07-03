@@ -12,6 +12,8 @@ export default [
             try {
                 shantytown = await shantytownModel.findOne(req.user, value, 'close');
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la recherche du site en base de données');
             }
 
@@ -40,7 +42,7 @@ export default [
             return value;
         })
         .custom((value, { req }) => {
-            if (req.body.shantytown && req.body.shantytown.declaredAt) {
+            if (req.body.shantytown?.declaredAt) {
                 const declaredDate = new Date(req.body.shantytown.declaredAt * 1000);
                 declaredDate.setHours(0, 0, 0, 0);
 
@@ -83,13 +85,15 @@ export default [
                 ? parseInt(peopleAffected, 10) : null,
             households_affected: householdsAffected !== undefined && householdsAffected !== null
                 ? parseInt(householdsAffected, 10) : null,
-            message: message !== undefined && message !== null ? message : null,
+            message: message ?? null,
         })))
         .custom(async (values) => {
             let closingSolutions;
             try {
                 closingSolutions = await closingSolutionModel.findAll();
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur est survenue lors de la validation des orientations des ménages');
             }
 

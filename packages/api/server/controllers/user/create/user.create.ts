@@ -32,6 +32,8 @@ export default async (req: UserCreateRequest, res: Response) => {
             req.user.id,
         );
     } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
         return res.status(500).send({
             user_message: 'Une erreur est survenue lors de l\'écriture en base de données',
         });

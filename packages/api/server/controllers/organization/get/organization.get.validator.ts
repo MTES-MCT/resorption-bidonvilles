@@ -13,6 +13,8 @@ export default [
             try {
                 organization = await findOneById(value, req.query.activeOnly === 'true');
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error('Une erreur est survenue lors de la lecture en base de données:', error);
                 throw new Error('Une erreur est survenue lors de la lecture en base de données');
             }
 

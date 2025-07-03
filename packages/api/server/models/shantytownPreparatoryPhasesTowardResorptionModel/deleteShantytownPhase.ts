@@ -8,9 +8,7 @@ type Phase = {
 
 export default async (phase: Phase, argTransaction: Transaction = undefined): Promise<void> => {
     let transaction: Transaction = argTransaction;
-    if (transaction === undefined) {
-        transaction = await sequelize.transaction();
-    }
+    transaction ??= await sequelize.transaction();
 
     try {
         const response = await sequelize.query(
