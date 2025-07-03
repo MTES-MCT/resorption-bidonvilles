@@ -57,20 +57,21 @@ async function sendMattermostNotifications(guests: { first_name: string; last_na
     }
 
     const greeterUser = await userModel.findOneByEmail(greeter.email);
-    let greeterWithId: User;
+    const greeterWithId: Partial<User> = { ...greeter };
     if (greeterUser !== null) {
         greeterWithId.id = greeterUser.id;
     }
 
 
     guests.forEach(async (guest) => {
-        let user: User;
-        user.first_name = guest.first_name;
-        user.last_name = guest.last_name;
-        user.email = guest.email;
+        const user: Partial<User> = {
+            first_name: guest.first_name,
+            last_name: guest.last_name,
+            email: guest.email,
+        };
 
         try {
-            await triggerPeopleInvitedAlert(user, greeterWithId, from);
+            await triggerPeopleInvitedAlert(user as User, greeterWithId as User, from);
         } catch (err) {
             // eslint-disable-next-line no-console
             console.log(err.message);
