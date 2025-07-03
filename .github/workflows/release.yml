@@ -25,7 +25,7 @@ jobs:
           DEFAULT_BUMP: patch
           RELEASE_BRANCHES: 'develop'
           DRY_RUN: true
-          WITH_V: false
+          WITH_V: true
       - name: Update version in api package.json
         uses: jossef/action-set-json-field@v2.2
         with:
