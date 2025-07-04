@@ -1,14 +1,14 @@
 <template>
-    <div class="mb-10 border border-orange400 px-5 py-3" v-if="mode === 'fix'">
-        <Warning :autohide="false"
-            >Ce site ayant déjà été déclaré comme fermé, ce formulaire ne vous
-            permet que de corriger la déclaration de résorption. Pour toute
-            autre modification,
-            <Link :to="`mailto:${CONTACT_EMAIL}`"
-                >veuillez prendre contact directement avec nous</Link
-            >.</Warning
-        >
-    </div>
+    <DsfrAlert small title="Titre alerte" type="warning">
+        Ce site ayant déjà été déclaré comme fermé, ce formulaire ne vous permet
+        que de corriger la déclaration de résorption. Pour toute autre
+        modification,
+        <span class="inline-link-wrapper">
+            <Link :to="`mailto:${CONTACT_EMAIL}`" style="white-space: nowrap">
+                veuillez prendre contact directement avec nous</Link
+            >.
+        </span>
+    </DsfrAlert>
 
     <FormSection>
         <template v-slot:title>Déclaration de fermeture</template>
@@ -47,7 +47,7 @@ import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
 import schemaFn from "./FormFermetureDeSite.schema";
 
-import { ErrorSummary, Link, Warning } from "@resorptionbidonvilles/ui";
+import { ErrorSummary, Link } from "@resorptionbidonvilles/ui";
 import FormSection from "@/components/FormSection/FormSection.vue";
 import FormFermetureDeSiteInputClosedAt from "./inputs/FormFermetureDeSiteInputClosedAt.vue";
 import FormFermetureDeSiteInputStatus from "./inputs/FormFermetureDeSiteInputStatus.vue";
@@ -189,7 +189,6 @@ defineExpose({
                 return;
             }
         }
-        // if (peopleWithSolutions.value > 100) {
         if (totalPeopleAffected.value > town.value.populationTotal) {
             error.value =
                 "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site. Si besoin, avant de procéder à la fermeture du site, veuillez mettre à jour la population totale dans la rubrique habitants.";
@@ -217,3 +216,14 @@ defineExpose({
     isSubmitting,
 });
 </script>
+<style scoped>
+.inline-link-wrapper {
+    display: inline-block;
+}
+
+.inline-link-wrapper :deep(p) {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+</style>
