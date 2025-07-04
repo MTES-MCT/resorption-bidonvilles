@@ -4,7 +4,7 @@
         que de corriger la déclaration de résorption. Pour toute autre
         modification,
         <span class="inline-link-wrapper">
-            <Link :to="`mailto:${CONTACT_EMAIL}`" style="white-space: nowrap">
+            <Link :to="`mailto:${CONTACT_EMAIL}`">
                 veuillez prendre contact directement avec nous</Link
             >.
         </span>
