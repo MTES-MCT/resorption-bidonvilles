@@ -152,7 +152,7 @@ export default async (townData, user) => {
         await triggerShantytownCreationAlert(town, user);
     } catch (err) {
         // eslint-disable-next-line no-console
-        console.log(`Error with shantytown creation Mattermost webhook : ${err.message}`);
+        console.error(`Error with shantytown creation Mattermost webhook : ${err.message}`);
     }
 
     // Send a notification to all users of the related departement
@@ -172,7 +172,7 @@ export default async (townData, user) => {
             });
     } catch (error) {
         // eslint-disable-next-line no-console
-        console.error(error);
+        console.error(`Error sending shantytown creation email: ${error.message}`);
     }
 
     return town;

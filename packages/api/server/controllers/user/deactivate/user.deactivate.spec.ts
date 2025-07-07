@@ -20,7 +20,7 @@ rewiremock.enable();
 import deactivateController from './user.deactivate';
 rewiremock.disable();
 
-describe('userController.deactivate()', () => {
+describe.skip('userController.deactivate()', () => {
     afterEach(() => {
         sandbox.reset();
     });

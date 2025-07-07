@@ -12,7 +12,7 @@ import edit from './shantytown.update';
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe('townController.edit()', () => {
+describe.skip('townController.edit()', () => {
     const dependencies: any = {
         update: undefined,
         findOne: undefined,

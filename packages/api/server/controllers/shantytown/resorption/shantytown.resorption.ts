@@ -1,4 +1,6 @@
+import ServiceError from '#server/errors/ServiceError';
 import shantytownResorptionService from '#server/services/shantytownResorption';
+import { ShantytownPreparatoryPhasesTowardResorption } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
 
 const ERROR_RESPONSES = {
     fetch_failed: { code: 500, message: 'Les étapes de lancement d\'une résorption n\'ont pas été trouvées...' },
@@ -8,17 +10,18 @@ const ERROR_RESPONSES = {
 };
 export default async (req, res, next) => {
     const currentUser = req.user;
-    let resorptionStartingPhases = [];
+    let resorptionStartingPhases: ShantytownPreparatoryPhasesTowardResorption[] = [];
     try {
-        const town = req.params;
+        const town: { id: number } = req.params;
         const result = await shantytownResorptionService.start(town.id, currentUser);
         resorptionStartingPhases = result.phases;
-    } catch (error) {
-        const { code, message } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
+    } catch (error: unknown) {
+        const serviceError = error as ServiceError;
+        const { code, message } = ERROR_RESPONSES[serviceError?.code] ?? ERROR_RESPONSES.undefined;
         res.status(code).send({
             user_message: message,
         });
-        return next(error.nativeError ?? error);
+        return next(serviceError.nativeError ?? serviceError);
     }
     return res.status(200).send({ resorptionStartingPhases });
 };

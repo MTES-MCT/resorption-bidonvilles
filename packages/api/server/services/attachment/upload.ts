@@ -15,10 +15,9 @@ export default async (entityType: AttachmentEntityType, entityId: number, create
     const results = await Promise.all(files.map(scanAttachment));
 
     if (results.length > 0) {
-        for (let i = 0; i < results.length; i += 1) {
-            if (results[i].status !== 200) {
-                throw new Error(results[i].status.toString());
-            }
+        const failedResult = results.find(result => result.status !== 200);
+        if (failedResult) {
+            throw new Error(failedResult.status.toString());
         }
     }
 
