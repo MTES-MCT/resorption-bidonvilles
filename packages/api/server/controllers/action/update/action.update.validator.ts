@@ -10,6 +10,8 @@ export default [
             try {
                 action = await actionModel.fetch(req.user, [value]);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur de lecture en base de données est survenue');
             }
 

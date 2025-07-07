@@ -84,6 +84,14 @@ export default (agenda) => {
     );
 
     agenda.define(
+        'access_is_about_to_expire',
+        (job) => {
+            const { accessId, hoursBeforeExpirationDate } = job.attrs.data;
+            accessRequestService.handleAccessAboutToExpire(parseInt(accessId, 10), hoursBeforeExpirationDate);
+        },
+    );
+
+    agenda.define(
         'access_is_expired',
         (job) => {
             const { accessId } = job.attrs.data;

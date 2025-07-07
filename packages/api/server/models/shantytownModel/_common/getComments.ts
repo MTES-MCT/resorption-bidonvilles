@@ -109,9 +109,7 @@ export default async (user: AuthUser, shantytownIds: string[]): Promise<CommentO
     }
 
     return rows.reduce((acc, row: ShantytownCommentRow) => {
-        if (!acc[row.shantytownId]) {
-            acc[row.shantytownId] = [];
-        }
+        acc[row.shantytownId] ??= [];
 
         acc[row.shantytownId].push(serializeComment({
             ...row,

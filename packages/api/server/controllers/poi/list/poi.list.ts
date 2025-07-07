@@ -30,7 +30,7 @@ export default async (req, res, next) => {
         const parsedResponses: any[] = await Promise.all(rawResponses.map(response => response.data));
         const mergedPlaces = parsedResponses.reduce((acc, { places }) => [...acc, ...places], []);
 
-        return res.status(200).send(mergedPlaces || []);
+        return res.status(200).send(mergedPlaces ?? []);
     } catch (error) {
         res.status(500).send({ user_message: 'Une erreur est survenue lors de la récupération des points de distribution alimentaire' });
         return next(error);

@@ -37,7 +37,8 @@ export default async (req, res, next) => {
         try {
             await triggerDeclaredActor(req.shantytown, req.user);
         } catch (error) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
 
         return res.status(201).send({
@@ -63,7 +64,8 @@ export default async (req, res, next) => {
     try {
         await triggerInvitedActor(req.shantytown, req.user, req.body.user);
     } catch (error) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.error(error);
     }
 
     return res.status(200).send({});

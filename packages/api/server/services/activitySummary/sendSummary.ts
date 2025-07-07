@@ -21,7 +21,7 @@ export default async (argFrom: Date, argTo: Date, questionSummary: QuestionSumma
             let subScribedsummaries = [];
             if (subscriber.intervention_areas.is_national) {
                 subScribedsummaries = Object.values(summaries).reduce((acc, departements) => {
-                    Object.keys(departements).sort().forEach((code) => {
+                    Object.keys(departements).sort((a, b) => a.localeCompare(b)).forEach((code) => {
                         acc.push(departements[code]);
                     });
                     return acc;

@@ -10,9 +10,7 @@ type ShantytownPreparatoryPhaseTowardResorptionParam = {
 
 export default async (data: ShantytownPreparatoryPhaseTowardResorptionParam, argTransaction: Transaction = undefined): Promise<number> => {
     let transaction: Transaction = argTransaction;
-    if (transaction === undefined) {
-        transaction = await sequelize.transaction();
-    }
+    transaction ??= await sequelize.transaction();
 
     try {
         const query = `

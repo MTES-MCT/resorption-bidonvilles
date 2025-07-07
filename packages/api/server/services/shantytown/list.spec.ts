@@ -55,7 +55,8 @@ describe('services/shantytown', () => {
             try {
                 shantytownsResponse = await listService(user);
             } catch (error) {
-                // ignore
+                // eslint-disable-next-line no-console
+                console.error(error);
             }
             expect(shantytownsResponse).to.be.eql(towns);
         });

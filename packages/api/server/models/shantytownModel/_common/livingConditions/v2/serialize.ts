@@ -13,7 +13,7 @@ export default (town): LivingConditionsV2 => {
                 unknown: [],
             },
             access: town.electricityAccess,
-            access_types: town.electricityAccessTypes || [],
+            access_types: town.electricityAccessTypes ?? [],
             access_is_unequal: town.electricityAccessIsUnequal,
         },
         water: {
@@ -57,7 +57,7 @@ export default (town): LivingConditionsV2 => {
             },
             open_air_defecation: town.sanitaryAccessOpenAirDefecation,
             working_toilets: town.sanitaryAccessWorkingToilets,
-            toilet_types: town.toiletTypes || [],
+            toilet_types: town.toiletTypes ?? [],
             toilets_are_inside: town.sanitaryAccessToiletsAreInside,
             toilets_are_lighted: town.sanitaryAccessToiletsAreLighted,
             hand_washing: town.sanitaryAccessHandWashing,

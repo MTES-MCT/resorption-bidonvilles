@@ -19,11 +19,11 @@ export default async (req: UserSendActivationLinkRequest, res: Response, next: N
         const updatedUser = await sendActivationLink(req.user, req.userToBeActivated, req.body.options);
         res.status(200).send(updatedUser);
     } catch (error) {
-        const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
+        const { code, message } = ERRORS[error?.code] ?? ERRORS.undefined;
         res.status(code).send({
             user_message: message,
         });
 
-        next(error?.nativeError || error);
+        next(error?.nativeError ?? error);
     }
 };

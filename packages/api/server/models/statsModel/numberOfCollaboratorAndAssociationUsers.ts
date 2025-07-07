@@ -22,7 +22,8 @@ export default async () => {
         },
     );
 
-    return rows.reduce((hash, row: any) => Object.assign({}, hash, {
+    return rows.reduce((hash, row: any) => ({
+        ...hash,
         [row.fk_category]: row.total,
     }), {});
 };

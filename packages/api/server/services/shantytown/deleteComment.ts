@@ -92,7 +92,7 @@ export default async (user: AuthUser, shantytownId: number, commentId: number, d
         }
     } catch (error) {
         // eslint-disable-next-line no-console
-        console.log(error);
+        console.error(error);
     }
 
     // on retourne la liste mise à jour des commentaires du site
@@ -102,7 +102,7 @@ export default async (user: AuthUser, shantytownId: number, commentId: number, d
         commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => enrichCommentsAttachments(rawComment)));
     } catch (error) {
         // eslint-disable-next-line no-console
-        console.log(error);
+        console.error(error);
     }
 
     return {

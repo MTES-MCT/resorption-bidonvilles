@@ -284,7 +284,7 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
                 },
             };
 
-            const previousVersion = previousVersions[activity.id] || null;
+            const previousVersion = previousVersions[activity.id] ?? null;
             const serializedShantytown = serializeShantytown(activity, user);
             previousVersions[activity.id] = serializedShantytown;
             let o:ShantytownActivity;

@@ -564,9 +564,18 @@ export default {
     sendUserAccessPending: (recipient, options: MailOptions = {}) => {
         const { variables, preserveRecipient } = options;
 
+        const { hoursBeforeExpirationDate } = variables;
+
+        let whenDoesExpirationOccurs = '48 heures';
+        if (hoursBeforeExpirationDate !== undefined && hoursBeforeExpirationDate === '24 heures') {
+            whenDoesExpirationOccurs = '24 heures';
+        }
+
         const utm = generateTrackingUTM(
             REQUESTER_CAMPAIGN,
-            'activer-mon-compte-48h',
+            hoursBeforeExpirationDate !== undefined && hoursBeforeExpirationDate === '24 heures'
+                ? 'activer-mon-compte-24h'
+                : 'activer-mon-compte-48h"',
         );
 
         return mailService.send('user_access_pending', {
@@ -579,11 +588,11 @@ export default {
                 wwwUrl: `${wwwUrl}?${utm}`,
                 backUrl,
                 blogUrl,
+                whenDoesExpirationOccurs,
             },
             preserveRecipient,
         });
     },
-
 
     /**
    * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
@@ -969,7 +978,7 @@ export default {
             questions_with_answers: QuestionSummary[],
         }
 
-        const sortedQuestions: SortedQuestions = (variables?.questionSummary || []).reduce((acc, question: QuestionSummary) => {
+        const sortedQuestions: SortedQuestions = (variables?.questionSummary ?? []).reduce((acc, question: QuestionSummary) => {
             if (question.number_of_recent_answers > 0) {
                 acc.questions_with_answers.push(question);
             } else {
@@ -990,7 +999,7 @@ export default {
                 to: variables.to,
                 recipientName: formatName(recipient),
                 connexionUrl: `${connexionUrl}?${utm}`,
-                showDetails: variables.showDetails || false,
+                showDetails: variables.showDetails ?? false,
                 summaries: variables.summaries,
                 show_question_summary: sortedQuestions.questions_with_answers.length > 0 || sortedQuestions.questions_without_answers.length > 0,
                 questions_with_answers_length: sortedQuestions.questions_with_answers.length,

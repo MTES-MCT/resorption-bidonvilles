@@ -9,6 +9,8 @@ export default [
             try {
                 actions = await actionModel.fetch(req.user, [value]);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Impossible de retrouver l\'action concernée en base de données');
             }
 

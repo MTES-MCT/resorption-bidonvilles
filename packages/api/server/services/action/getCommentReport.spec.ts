@@ -56,7 +56,8 @@ describe('services/action.getActionReport()', () => {
         try {
             await getCommentReport(user);
         } catch (e) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(e);
         }
         expect(stubs.can).to.have.been.calledOnceWith(user);
         expect(stubs.do).to.have.been.calledOnceWith('export', 'action_comment');

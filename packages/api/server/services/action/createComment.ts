@@ -66,7 +66,8 @@ export default async (authorId: number, action: Action, commentInput: ActionComm
     try {
         await sendMattermostNotification(action, comment);
     } catch (error) {
-    // ignore
+        // eslint-disable-next-line no-console
+        console.error(error);
     }
 
     // On récupère les fichiers joints avec les liens signés
@@ -77,7 +78,8 @@ export default async (authorId: number, action: Action, commentInput: ActionComm
     try {
         numberOfObservers = await sendMailNotifications(action, comment);
     } catch (error) {
-        // ignore
+        // eslint-disable-next-line no-console
+        console.error(error);
     }
 
     return { comment: commentWithEnrichedAttachments, numberOfObservers };

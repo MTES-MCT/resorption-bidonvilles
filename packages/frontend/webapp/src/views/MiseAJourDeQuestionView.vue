@@ -24,7 +24,11 @@
     <LayoutForm v-else size="large">
         <template v-slot:title>Mise à jour de la question</template>
         <template v-slot:buttons>
-            <Button variant="primaryOutline" type="button" @click="back"
+            <Button
+                variant="primaryOutline"
+                type="button"
+                @click="back"
+                class="!border-2 !border-primary hover:!bg-primary"
                 >Annuler</Button
             >
             <Button @click="submit" :loading="form?.isSubmitting"
@@ -91,3 +95,9 @@ function back() {
     }
 }
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>

@@ -10,8 +10,7 @@
             :aria-label="`Fiche site ${shantytown.addressSimple} ${
                 shantytown.name ? shantytown.name : ''
             } ${shantytown.city.name}`"
-            tabindex="0"
-            @click="navigate"
+            @click="(event) => handleClickOnCard(event, navigate)"
             @mouseenter="isHover = true"
             @mouseleave="isHover = false"
         >
@@ -114,6 +113,22 @@ const displayPhasesPreparatoiresResorption = computed(() => {
 const nbCol = computed(() => {
     return userStore.hasJusticePermission ? "5" : "4";
 });
+
+function handleClickOnCard(event, navigateFunction) {
+    // On vérifie si le clic vient d'un bouton du footer ou d'un click sur intervenant ou sur la tuile complète
+    let targetElement = event.target;
+    while (targetElement && targetElement !== event.currentTarget) {
+        if (
+            targetElement.tagName === "BUTTON" ||
+            targetElement.tagName === "A" ||
+            targetElement.closest(".carte-site-detaillee-footer-wrapper")
+        ) {
+            return; // Ne pas naviguer si le clic vient d'un bouton du footer
+        }
+        targetElement = targetElement.parentElement;
+    }
+    navigateFunction();
+}
 </script>
 
 <style scoped lang="scss">

@@ -16,10 +16,10 @@ export default async (req: ConfigListRequest, res: Response, next: NextFunction)
         const config = await configService.fetch(req.user);
         res.status(200).send(config);
     } catch (error) {
-        const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
+        const { code, message } = ERRORS[error?.code] ?? ERRORS.undefined;
         res.status(code).send({
             user_message: message,
         });
-        next(error?.nativeError || error);
+        next(error?.nativeError ?? error);
     }
 };

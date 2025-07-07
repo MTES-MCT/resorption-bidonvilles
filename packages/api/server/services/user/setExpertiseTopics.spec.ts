@@ -93,6 +93,8 @@ describe('userService.setExpertiseTopics()', () => {
         try {
             await setExpertiseTopics(42, [], []);
         } catch (e) {
+            // eslint-disable-next-line no-console
+            console.error(e);
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -123,6 +125,8 @@ describe('userService.setExpertiseTopics()', () => {
         try {
             await setExpertiseTopics(42, [], []);
         } catch (e) {
+            // eslint-disable-next-line no-console
+            console.error(e);
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -153,6 +157,8 @@ describe('userService.setExpertiseTopics()', () => {
         try {
             await setExpertiseTopics(42, [], []);
         } catch (e) {
+            // eslint-disable-next-line no-console
+            console.error(e);
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -183,6 +189,8 @@ describe('userService.setExpertiseTopics()', () => {
         try {
             await setExpertiseTopics(42, [], []);
         } catch (e) {
+            // eslint-disable-next-line no-console
+            console.error(e);
             expect(transaction.rollback).to.have.been.called;
             return;
         }

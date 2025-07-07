@@ -24,11 +24,11 @@ export default async (req: UserSetTagsRequest, res: Response, next: NextFunction
         const user = await userService.setExpertiseTopics(req.body.user.id, req.body.expertise_topics, req.body.interest_topics, req.body.expertise_comment);
         res.status(200).send(user);
     } catch (error) {
-        const { code, message } = ERRORS[error?.code] || ERRORS.undefined;
+        const { code, message } = ERRORS[error?.code] ?? ERRORS.undefined;
         res.status(code).send({
             user_message: message,
         });
 
-        next(error?.nativeError || error);
+        next(error?.nativeError ?? error);
     }
 };
