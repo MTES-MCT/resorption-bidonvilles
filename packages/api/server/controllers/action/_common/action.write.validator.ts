@@ -221,8 +221,13 @@ export default (mode: 'create' | 'update') => [
         .trim()
         .notEmpty().withMessage('Vous devez préciser où se déroule l\'action'),
     body('location_autre')
-        .customSanitizer(value => value ?? null),
-
+        .customSanitizer((value) => {
+            // Convertit les chaînes vides, null ou undefined en null
+            if (value === '' || value === null || value === undefined) {
+                return null;
+            }
+            return value;
+        }),
     body('managers')
         .customSanitizer((value, { req }) => {
             // en cas de mise à jour, si l'utilisateur n'a pas le droit de modifier les managers
