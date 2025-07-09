@@ -51,7 +51,7 @@ export default [
         route: "#conditions_de_vie",
     },
     {
-        id: "procedures",
+        id: "procedure",
         label: () => "Procédures",
         route: "#procedure",
         condition() {
