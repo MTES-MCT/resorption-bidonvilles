@@ -53,7 +53,7 @@ export default [
         iconColor: "secondary",
     },
     {
-        id: "procedures",
+        id: "procedure",
         label: () => "Procédures",
         route: "#procedure",
         postIcon: "paperclip",
