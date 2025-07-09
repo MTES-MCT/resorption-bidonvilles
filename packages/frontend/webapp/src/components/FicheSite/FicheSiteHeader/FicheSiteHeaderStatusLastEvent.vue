@@ -4,7 +4,7 @@
             v-if="lastEvent.type === 'comment'"
             :to="`/site/${town.id}#journal_du_site`"
         >
-            <span class="font-semibold">
+            <span class="text-primary">
                 {{ lastEvent.data }}
             </span>
             <span> le {{ formatDate(lastEvent.date, "d M y") }}</span>
@@ -69,6 +69,8 @@ function getEventCategory(fieldKey) {
             "fieldType",
             "ownerType",
             "owner",
+            "latitude",
+            "longitude",
         ],
         inhabitants: [
             "minorsInSchool",
@@ -107,7 +109,6 @@ function getEventCategory(fieldKey) {
             "insalubrityOrderAt",
             "insalubrityParcels",
         ],
-        location: ["latitude", "longitude"],
     };
 
     if (categories.characteristics.includes(fieldKey)) {
@@ -125,11 +126,8 @@ function getEventCategory(fieldKey) {
     if (categories.procedures.includes(fieldKey)) {
         return "Procédures";
     }
-    if (categories.location.includes(fieldKey)) {
-        return "Localisation";
-    }
 
-    return "Informations";
+    return "Caractéristiques du site";
 }
 
 function getLatestEvent(townEvents, comments) {
@@ -142,6 +140,8 @@ function getLatestEvent(townEvents, comments) {
                 date: new Date(townEvent.date),
             };
         }
+
+        console.log("Processing town event:", townEvent);
 
         const categories = [
             ...new Set(
@@ -180,7 +180,6 @@ function getAnchorForCategory(category) {
         Habitants: "#habitants",
         "Conditions de vie": "#conditions_de_vie",
         Procédures: "#procedure",
-        Localisation: "#localisation",
     };
 
     return categoryToAnchor[category] || "";
