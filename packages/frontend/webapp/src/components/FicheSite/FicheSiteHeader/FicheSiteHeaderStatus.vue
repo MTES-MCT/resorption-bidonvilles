@@ -20,7 +20,7 @@
             :town="town"
         />
         <div v-else>
-            <p class="font-semibold text-black">
+            <p class="text-black">
                 Site déclaré le
                 {{ formatDate(town.createdAt, "d M y") }}
             </p>
