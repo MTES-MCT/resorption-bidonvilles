@@ -7,6 +7,7 @@ import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw
 import { ShantytownAction } from '#root/types/resources/Action.d';
 import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
 import { ShantytownPreparatoryPhaseTowardResorption } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
+import { ParcelOwners } from '#root/types/resources/ParcelOwner.d';
 
 type ShantytownUser = {
     id: number,
@@ -113,7 +114,7 @@ type BaseShantytown =
         id: number,
         label: string,
     },
-    ownerType: {
+    ownerType: { // à supprimer
         id: number,
         label: string,
     },
@@ -161,7 +162,7 @@ type ShantytownWithJustice = BaseShantytown & {
 };
 
 type ShantytownWithOwner = BaseShantytown & {
-    owner: string | null
+    owner: ParcelOwners | null,
 };
 
 export type ShantytownAttachmentObject = {
