@@ -5,7 +5,7 @@ import config from '#server/config';
 import electricityAccessTypes from '#server/models/electricityAccessTypesModel/_common/electricityAccessTypes';
 import waterAccessTypes from '#server/models/_common/waterAccessTypes';
 import toiletTypes from '#server/models/shantytownToiletTypesModel/_common/toiletTypes';
-import { ShantytownWithFinancedAction } from '#root/types/resources/Shantytown.d';
+import { ShantytownWithFinancedAction, ShantytownWithOwner } from '#root/types/resources/Shantytown.d';
 import electricityAccessStatusLabels from './livingConditionsStatusLabels/electricityAccessStatusLabels';
 import waterAccessStatusLabels from './livingConditionsStatusLabels/waterAccessStatusLabels';
 import sanitaryAccessStatusLabels from './livingConditionsStatusLabels/sanitaryAccessStatusLabels';
@@ -135,7 +135,15 @@ export default (closingSolutions: ClosingSolution[]) => {
         },
         owner: {
             title: 'Identité du propriétaire',
-            data: (shantytown: ShantytownWithFinancedAction) => ('owner' in shantytown ? shantytown.owner : null),
+            // data: (shantytown: ShantytownWithFinancedAction) => ('owner' in shantytown ? shantytown.owner : null),
+            data: (shantytown) => { // désactivation temporaire, à finaliser avant MEP
+                console.log(shantytown);
+
+                // if (Array.isArray(owner) && owner.length > 0) {
+                //     return owner.map(o => o.name).join('; ');
+                // }
+                return null;
+            },
             width: COLUMN_WIDTHS.MEDIUM,
         },
         isReinstallation: {
