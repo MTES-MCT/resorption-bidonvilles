@@ -19,7 +19,7 @@ export default {
             .post('send', { version: 'v3.1' })
             .request({
                 Messages: [
-                    Object.assign({
+                    {
                         From: {
                             Email: 'contact-resorption-bidonvilles@dihal.gouv.fr',
                             Name: 'Résorption Bidonvilles',
@@ -40,7 +40,8 @@ export default {
                             Email: r.email,
                             Name: `${r.last_name.toUpperCase()} ${r.first_name}`,
                         })) : undefined,
-                    }, mailContent),
+                        ...mailContent,
+                    },
                 ],
             });
     },

@@ -7,7 +7,7 @@ export default async (req, res, next) => {
         userNavigationLogsId = await userNavigationLogs.insert(req.user.id, req.body.page);
     } catch (error) {
         let message;
-        switch (error && error.code) {
+        switch (error?.code) {
             case 'insert_failed':
                 message = 'Le log n\'a pas pu être enregistré.';
                 break;
@@ -27,7 +27,7 @@ export default async (req, res, next) => {
         res.status(500).send({
             user_message: message,
         });
-        return next((error && error.nativeError) || error);
+        return next((error?.nativeError) ?? error);
     }
 
     return res.status(201).send({

@@ -6,6 +6,6 @@ export default (shantytown) => {
 
     return createRow([
         'Diagnostic prévention incendie',
-        firePreventionStatusLabels[status.status] || 'Aucune information concernant le diagnostic',
+        firePreventionStatusLabels[status.status] ?? 'Aucune information concernant le diagnostic',
     ]);
 };

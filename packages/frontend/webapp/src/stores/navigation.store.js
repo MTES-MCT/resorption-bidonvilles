@@ -2,6 +2,31 @@ import { defineStore } from "pinia";
 import router from "@/helpers/router";
 import { useConfigStore } from "@/stores/config.store.js";
 import { useUserStore } from "@/stores/user.store.js";
+import getBlogUrl from "@/utils/environment";
+
+function createBlogRoute(baseUrl, path, params = {}) {
+    const cleanBaseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
+    const cleanPath = path.startsWith("/") ? path : `/${path}`;
+
+    let fullUrl = `${cleanBaseUrl}${cleanPath}`;
+
+    if (Object.keys(params).length > 0) {
+        const searchParams = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+            searchParams.append(key, value);
+        });
+        fullUrl += `?${searchParams.toString()}`;
+    }
+    return fullUrl;
+}
+
+const blogRessourceRoute = createBlogRoute(
+    getBlogUrl(),
+    "/blog-résorption-bidonvilles/",
+    {
+        category: "ressources",
+    }
+);
 
 const topItems = [
     {
@@ -25,13 +50,13 @@ const topItems = [
     {
         icon: "fa-newspaper fa-regular",
         label: "Blog",
-        route: "https://www.blog-resorption-bidonvilles.fr",
+        route: getBlogUrl(),
         authRequirement: "none",
     },
     {
         icon: "fa-book fa-regular",
         label: "Ressources",
-        route: "https://www.blog-resorption-bidonvilles.fr/accueil/categories/ressources",
+        route: `${blogRessourceRoute}`,
         authRequirement: "none",
     },
     {
@@ -63,11 +88,7 @@ function filterByAuthRequirement(item, { isLoggedIn, isLoaded }) {
         return false;
     }
 
-    if (configRequired === true && !isLoaded) {
-        return false;
-    }
-
-    return true;
+    return !(configRequired === true && !isLoaded);
 }
 
 export const useNavigationStore = defineStore("navigation", {

@@ -14,7 +14,7 @@ export default async (attachment: string): Promise<Attachment> => {
             original: key ? await getSignedUrl(key) : null,
             preview: previewKey ? await getSignedUrl(previewKey) : null,
         },
-        extension: fromMimeToExtension[mimetype] || 'inconnu',
+        extension: fromMimeToExtension[mimetype] ?? 'inconnu',
         created_by,
     };
 };

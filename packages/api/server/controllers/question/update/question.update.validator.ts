@@ -4,7 +4,7 @@ import questionTagModel from '#server/models/questionTagModel';
 import questionModel from '#server/models/questionModel';
 import { QuestionTag } from '#root/types/resources/QuestionGeneric.d';
 
-const isOtherTagIncluded = (value, { req }) => req.body.tags.includes && req.body.tags.includes('other');
+const isOtherTagIncluded = (value, { req }) => req.body.tags?.includes?.('other');
 
 export default [
     param('id')
@@ -14,6 +14,8 @@ export default [
             try {
                 question = await questionModel.findOne(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Une erreur de lecture en base de données est survenue lors de la validation de l\'identifiant de la question');
             }
             req.question = question;
@@ -66,6 +68,8 @@ export default [
                 try {
                     fullTags = await questionTagModel.findAll();
                 } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.error(error);
                     throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Thématiques"');
                 }
 

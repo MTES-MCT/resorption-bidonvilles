@@ -20,7 +20,8 @@ export default async (question: EnrichedQuestion, answer: RawAnswer, reason?: st
         try {
             nationalAdmins = await getNationalAdmins();
         } catch (e) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(e);
         }
 
         try {
@@ -39,7 +40,8 @@ export default async (question: EnrichedQuestion, answer: RawAnswer, reason?: st
                 bcc: nationalAdmins,
             });
         } catch (e) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(e);
         }
     }
 };

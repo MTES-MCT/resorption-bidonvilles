@@ -7,22 +7,28 @@ import permissionUtils from '#server/utils/permission';
 import dateUtils from '#server/utils/date';
 import ServiceError from '#server/errors/ServiceError';
 import { Location } from '#server/models/geoModel/Location.d';
+import { AuthUser } from '#server/middlewares/authMiddleware';
+import { User } from '#root/types/resources/User.d';
+import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
+import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
 import enrichCommentsAttachments from './_common/enrichCommentsAttachments';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 
-export default async (user, shantytownId, commentId, deletionMessage) => {
-    let town;
+export default async (user: AuthUser, shantytownId: number, commentId: number, deletionMessage: string): Promise<{ comments: ShantytownEnrichedComment[] }> => {
+    let town: Shantytown;
     try {
         town = await shantytownModel.findOne(user, shantytownId);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
-    const comment = town.comments.find(({ id }) => id === parseInt(commentId, 10));
+
+    const comment: ShantytownRawComment = town.comments.find(({ id }) => id === commentId);
     if (comment === undefined) {
         throw new ServiceError('fetch_failed', new Error('Le commentaire à supprimer n\'a pas été retrouvé en base de données'));
     }
-    let author;
+    let author: User;
     try {
         author = await userModel.findOne(comment.createdBy.id);
     } catch (error) {
@@ -41,9 +47,9 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
         throw new ServiceError('permission_denied', new Error('Vous n\'avez pas accès à ces données'));
     }
 
-    let message;
+    let message: string;
     if (!isOwner) {
-        message = validator.trim(deletionMessage || '');
+        message = validator.trim(deletionMessage ?? '');
         if (message === '') {
             throw new ServiceError('data_incomplete', new Error('Vous devez préciser le motif de suppression du commentaire'));
         }
@@ -57,7 +63,7 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
 
     try {
         if (!isOwner) {
-            const nationalAdmins = await userModel.getNationalAdmins();
+            const nationalAdmins: User[] = await userModel.getNationalAdmins();
             const mailVariables: { [key: string]: any } = {
                 entity: {
                     type: 'le site',
@@ -86,17 +92,17 @@ export default async (user, shantytownId, commentId, deletionMessage) => {
         }
     } catch (error) {
         // eslint-disable-next-line no-console
-        console.log(error);
+        console.error(error);
     }
 
     // on retourne la liste mise à jour des commentaires du site
-    let commentsWithEnrichedAttachments = [];
+    let commentsWithEnrichedAttachments: ShantytownEnrichedComment[] = [];
     try {
-        const rawComments = town.comments.filter(({ id }) => id !== parseInt(commentId, 10));
+        const rawComments: ShantytownRawComment[] = town.comments.filter(({ id }) => id !== commentId);
         commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => enrichCommentsAttachments(rawComment)));
     } catch (error) {
         // eslint-disable-next-line no-console
-        console.log(error);
+        console.error(error);
     }
 
     return {

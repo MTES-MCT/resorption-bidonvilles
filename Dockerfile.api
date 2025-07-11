@@ -1,29 +1,36 @@
 ###
 # BUILD STAGE
 ###
-FROM node:20-alpine AS build
+FROM node:22-alpine AS build
 ENV NODE_ENV=production
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 # python3, make, and g++ are needed for building node-gyp (itself required by a bunch of our dependencies)
-RUN apk update && apk add --no-cache python3 make g++ libc6-compat
+RUN apk update && apk add --no-cache g++ libc6-compat make python3
+
+# Activer Corepack pour utiliser la bonne version de Yarn
+RUN corepack enable
 
 RUN mkdir -p \
     /home/node/app/ \
     /home/node/app/packages/api \
     /home/node/app/packages/frontend/common \
     && chown -R node:node /home/node/app/
-USER node
 
 WORKDIR /home/node/app/
-COPY --chown=node:node packages/api/package.json packages/api/.sequelizerc ./packages/api/
-COPY --chown=node:node package.json yarn.lock .yarnrc.yml ./
-COPY --chown=node:node .yarn ./.yarn/
+COPY packages/api/package.json packages/api/.sequelizerc ./packages/api/
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn ./.yarn/
 
+USER root
+RUN chown -R node:node /home/node/app/
+
+USER node
 RUN yarn install --silent && yarn cache clean
 
-ADD ./packages/api ./packages/api/
-ADD --chown=node:node ./packages/frontend/common ./packages/frontend/common/
+COPY ./packages/api ./packages/api/
+COPY ./packages/frontend/common ./packages/frontend/common/
+RUN chown node:node ./packages/api ./packages/frontend/common
 
 WORKDIR /home/node/app/packages/api/
 RUN yarn build
@@ -31,19 +38,31 @@ RUN yarn build
 ###
 # PRODUCTION STAGE
 ###
-FROM node:16-alpine AS production
+FROM node:22-alpine AS production
 ENV NODE_ENV=production
 
-RUN mkdir -p \
-    /home/node/app/ \
-    && chown -R node:node /home/node/app/
+RUN apk update && apk upgrade \
+    && apk add --no-cache vips \
+    && yarn global add pm2 \
+    && mkdir -p /home/node/app/packages/api
+
+COPY packages/api/package.json /home/node/app/packages/api/
+COPY --from=build /home/node/app/packages/api/dist /home/node/app/packages/api/dist
+
+RUN chown -R root:root /home/node/app && \
+    chmod -R 755 /home/node/app && \
+    chmod -R 550 /home/node/app/packages/api/dist && \
+    chmod 440 /home/node/app/packages/api/package.json && \
+    chown -R node:node /home/node/app/packages/api/dist && \
+    chown node:node /home/node/app/packages/api/package.json && \
+    mkdir -p /home/node/app/packages/api/node_modules && \
+    chown node:node /home/node/app/packages/api/node_modules && \
+    chown -R node:node /home/node/app/packages/api && \
+    chmod 755 /home/node/app/packages/api
+
 USER node
-
-WORKDIR /home/node/app/
-COPY --chown=node:node package.json ./
-COPY --from=build --chown=node:node /home/node/app/node_modules ./node_modules
-COPY --from=build --chown=node:node /home/node/app/packages/api/dist ./packages/
-COPY --chown=node:node packages/api/package.json ./packages/api/
-
 WORKDIR /home/node/app/packages/api
-ENTRYPOINT ["yarn", "serve"]
+
+COPY packages/api/pm2.config.js .
+RUN yarn install --production --non-interactive --ignore-scripts --ignore-peer-dependencies
+CMD ["pm2-runtime", "pm2.config.js"]

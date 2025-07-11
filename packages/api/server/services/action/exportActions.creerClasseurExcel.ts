@@ -83,7 +83,7 @@ const headers = [
 function regrouperParDepartement(data: ActionReportRow[]): DepartementObject[] {
     const groupedData: { [key: string]: DepartementObject } = data.reduce((acc, item) => {
         const { departement_code, ...rest } = item;
-        acc[departement_code] = acc[departement_code] || {
+        acc[departement_code] = acc[departement_code] ?? {
             departement: departement_code,
             data: [],
         };
@@ -141,7 +141,8 @@ function findSection(sectionLabel: string) {
 
 function findSectionIndex() {
     return sectionTitles.map((section) => {
-        const lastColumnLetter = section.range.to.match(/[A-Z]+/)[0];
+        const match = /[A-Z]+/.exec(section.range.to);
+        const lastColumnLetter = match ? match[0] : '';
         return columnToNumber(lastColumnLetter);
     });
 }
@@ -313,8 +314,8 @@ export default (data: ActionReportRow[]) => {
     const financementSection = findSection('FINANCEMENT');
 
     // Extraire les numéros de colonnes
-    const fromColumn = columnToNumber(financementSection.range.from.match(/[A-Z]+/)[0]);
-    const toColumn = columnToNumber(financementSection.range.to.match(/[A-Z]+/)[0]);
+    const fromColumn = columnToNumber(/[A-Z]+/.exec(financementSection.range.from)[0]);
+    const toColumn = columnToNumber(/[A-Z]+/.exec(financementSection.range.to)[0]);
 
     // Créer un tableau avec les numéros de colonnes
     const financementColumns = createFinancementColumns(fromColumn, toColumn);

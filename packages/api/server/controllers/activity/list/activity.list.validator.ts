@@ -18,7 +18,7 @@ export default [
         }),
 
     query('numberOfActivities')
-        .customSanitizer(value => value || 10),
+        .customSanitizer(value => value ?? 10),
 
     // max activity date
     query('maxActivityDate')
@@ -27,7 +27,7 @@ export default [
         .isInt().bail().withMessage('La date doit être un timestamp'),
 
     query('maxActivityDate')
-        .customSanitizer(value => value || null),
+        .customSanitizer(value => value ?? null),
 
     // last activity date
     query('lastActivityDate')
@@ -36,7 +36,7 @@ export default [
         .isInt().bail().withMessage('La date doit être un timestamp'),
 
     query('lastActivityDate')
-        .customSanitizer(value => value || Date.now()),
+        .customSanitizer(value => value ?? Date.now()),
 
     // filter
     query('filter')
@@ -62,7 +62,7 @@ export default [
         }),
 
     query('filter')
-        .customSanitizer(value => value || [
+        .customSanitizer(value => value ?? [
             'shantytownCreation',
             'shantytownClosing',
             'shantytownUpdate',
@@ -84,6 +84,8 @@ export default [
             try {
                 location = await geoModel.getLocation(type, code);
             } catch (e) {
+                // eslint-disable-next-line no-console
+                console.error(e);
                 throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du périmètre géographique');
             }
 
@@ -98,15 +100,13 @@ export default [
 
     query('locationType')
         .custom((value, { req }) => {
-            if (!req.body.location) {
-                req.body.location = {
-                    type: 'nation',
-                    region: null,
-                    departement: null,
-                    epci: null,
-                    city: null,
-                };
-            }
+            req.body.location ??= {
+                type: 'nation',
+                region: null,
+                departement: null,
+                epci: null,
+                city: null,
+            };
 
             return true;
         }),

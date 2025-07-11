@@ -1,6 +1,7 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
+import chaiSubset from 'chai-subset';
 import { rewiremock } from '#test/rewiremock';
 
 import ServiceError from '#server/errors/ServiceError';
@@ -11,49 +12,58 @@ import { serialized as serializedAnswer } from '#test/utils/answerSerialized';
 import fakeFile from '#test/utils/file';
 import { row as fakeQuestionSubscriber } from '#test/utils/questionSubscriber';
 import { fail } from 'assert';
-import createAnswer from './createAnswer';
+import scanAttachmentErrors from '../attachment/scanAttachmentErrors';
 
 const { expect } = chai;
 chai.use(sinonChai);
+chai.use(chaiSubset);
 
 // mock all dependencies
 const sandbox = sinon.createSandbox();
-const mails = {
-    sendMail: sinon.stub(),
-    sendCommunityNewAnswerForAuthor: sandbox.stub(),
-    sendCommunityNewAnswerForObservers: sandbox.stub(),
+const stubs = {
+    mails: {
+        sendMail: sandbox.stub(),
+        sendCommunityNewAnswerForAuthor: sandbox.stub(),
+        sendCommunityNewAnswerForObservers: sandbox.stub(),
+    },
+    sequelize: {
+        transaction: sandbox.stub(),
+    },
+    transaction: {
+        commit: sandbox.stub(),
+        rollback: sandbox.stub(),
+    },
+    userModel: {
+        getQuestionSubscribers: sandbox.stub(),
+    },
+    answerModel: {
+        create: sandbox.stub(),
+        findOne: sandbox.stub(),
+    },
+    userQuestionSubscriptionModel: {
+        createSubscription: sandbox.stub(),
+    },
+    uploadAttachments: sandbox.stub(),
+    serializeAttachment: sandbox.stub(),
 };
-const sequelize = {
-    transaction: sandbox.stub(),
-};
-const transaction = {
-    commit: sandbox.stub(),
-    rollback: sandbox.stub(),
-};
-const userModel = {
-    getQuestionSubscribers: sandbox.stub(),
-};
-const answerModel = {
-    create: sandbox.stub(),
-    findOne: sandbox.stub(),
-};
-const userQuestionSubscriptionModel = {
-    createSubscription: sandbox.stub(),
-};
-const uploadAttachments = sandbox.stub();
-const serializeAttachment = sandbox.stub();
 
-rewiremock('#server/mails/mails').withDefault(mails);
-rewiremock('#server/models/userModel').withDefault(userModel);
-rewiremock('#server/models/answerModel').withDefault(answerModel);
-rewiremock('#server/models/userQuestionSubscriptionModel').withDefault(userQuestionSubscriptionModel);
-rewiremock('#db/sequelize').with({ sequelize });
-rewiremock('#server/services/attachment/upload').withDefault(uploadAttachments);
-rewiremock('#server/services/attachment/serializeAttachment').withDefault(serializeAttachment);
+rewiremock('#server/mails/mails').withDefault(stubs.mails);
+rewiremock('#server/models/userModel').withDefault(stubs.userModel);
+rewiremock('#server/models/answerModel').withDefault(stubs.answerModel);
+rewiremock('#server/models/userQuestionSubscriptionModel').withDefault(stubs.userQuestionSubscriptionModel);
+rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
+rewiremock('#server/services/attachment/upload').withDefault(stubs.uploadAttachments);
+rewiremock('#server/services/attachment/serializeAttachment').withDefault(stubs.serializeAttachment);
+rewiremock('#server/services/attachment/scanAttachmentErrors').with(scanAttachmentErrors);
+
+rewiremock.enable();
+// eslint-disable-next-line import/newline-after-import, import/first
+import createAnswer from './createAnswer';
+rewiremock.disable();
 
 describe('services/answer.createAnswer()', () => {
     beforeEach(async () => {
-        sequelize.transaction.resolves(transaction);
+        stubs.sequelize.transaction.resolves(stubs.transaction);
     });
     afterEach(() => {
         sandbox.reset();
@@ -65,40 +75,41 @@ describe('services/answer.createAnswer()', () => {
         const author = fakeUser();
         const files = [];
 
-        answerModel.create.resolves(1);
-        answerModel.findOne.resolves(serializedAnswer);
+        stubs.answerModel.create.resolves(1);
+        stubs.answerModel.findOne.resolves(serializedAnswer);
 
         await createAnswer(answerData, question, author, files);
 
-        expect(answerModel.create).to.have.been.calledOnce;
-        expect(answerModel.create).to.have.been.calledWith({
+        expect(stubs.answerModel.create).to.have.been.calledOnce;
+        expect(stubs.answerModel.create).to.have.been.calledWith({
             description: 'Une réponse',
             fk_question: 1,
             created_by: 2,
-        }, transaction);
+        }, stubs.transaction);
     });
 
 
     it('commit la transaction si l\'insertion de la réponse réussit', async () => {
-        answerModel.findOne.resolves(serializedAnswer);
+        stubs.answerModel.findOne.resolves(serializedAnswer);
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
-        expect(transaction.commit).to.have.been.calledOnce;
+        expect(stubs.transaction.commit).to.have.been.calledOnce;
     });
 
     it('rollback la transaction si l\'insertion de la réponse échoue', async () => {
-        answerModel.create.rejects(new Error('Une erreur'));
+        stubs.answerModel.create.rejects(new Error('Une erreur'));
         try {
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
         } catch (error) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
 
-        expect(transaction.commit, 'Le commit() a été appellé').to.not.have.been.called;
-        expect(transaction.rollback, 'Le rollback() n\'a pas été appellé').to.have.been.calledOnce;
+        expect(stubs.transaction.commit, 'Le commit() a été appellé').to.not.have.been.called;
+        expect(stubs.transaction.rollback, 'Le rollback() n\'a pas été appellé').to.have.been.calledOnce;
     });
 
     it('lance une exception insert_failed si l\'insertion de la réponse échoue', async () => {
-        answerModel.create.rejects(new Error('Une erreur'));
+        stubs.answerModel.create.rejects(new Error('Une erreur'));
         try {
             await createAnswer(
                 { description: 'Une réponse' },
@@ -117,20 +128,22 @@ describe('services/answer.createAnswer()', () => {
     });
 
     it('rollback la transaction si le commit échoue', async () => {
-        transaction.commit.rejects(new Error('Une erreur'));
+        stubs.transaction.commit.rejects(new Error('Une erreur'));
         try {
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
         } catch (error) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
 
-        expect(transaction.rollback, 'Le rollback() n\'a pas été appellé').to.have.been.calledOnce;
+        expect(stubs.transaction.rollback, 'Le rollback() n\'a pas été appellé').to.have.been.calledOnce;
     });
 
     it('lance une exception commit_failed si le commit de la transaction échoue', async () => {
-        answerModel.findOne.resolves(serializedAnswer);
+        stubs.answerModel.create.resolves(1);
+        stubs.answerModel.findOne.resolves(serializedAnswer);
         const originalError = new Error('Une erreur');
-        transaction.commit.rejects(originalError);
+        stubs.transaction.commit.rejects(originalError);
         try {
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
         } catch (error) {
@@ -144,23 +157,24 @@ describe('services/answer.createAnswer()', () => {
     });
 
     it('abonne l\'auteur de la réponse s\'il n\'est pas déjà abonné à la question et retourne cette information', async () => {
-        answerModel.create.resolves(2);
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.answerModel.create.resolves(2);
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.transaction.commit.resolves();
         const response = await createAnswer(
             { description: 'Une réponse' },
             fakeQuestion({ id: 1 }),
             fakeUser({ id: 2 }),
             [],
         );
-        expect(userQuestionSubscriptionModel.createSubscription).to.have.been.calledOnce;
-        expect(userQuestionSubscriptionModel.createSubscription).to.have.been.calledWith(2, 1);
+        expect(stubs.userQuestionSubscriptionModel.createSubscription).to.have.been.calledOnce;
+        expect(stubs.userQuestionSubscriptionModel.createSubscription).to.have.been.calledWith(2, 1);
 
         expect(response.subscribed).to.be.true;
     });
 
     it('n\'abonne pas l\'auteur de la réponse si il est déjà abonné à la question et retourne cette information', async () => {
-        answerModel.create.resolves(2);
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.answerModel.create.resolves(2);
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         const response = await createAnswer(
             { description: 'Une réponse' },
             fakeQuestion({ id: 1 }),
@@ -168,15 +182,15 @@ describe('services/answer.createAnswer()', () => {
             fakeUser({ id: 2, question_subscriptions: { 1: false } }),
             [],
         );
-        expect(userQuestionSubscriptionModel.createSubscription).to.not.have.been.called;
+        expect(stubs.userQuestionSubscriptionModel.createSubscription).to.not.have.been.called;
 
         expect(response.subscribed).to.be.false;
     });
 
     it('ignore une erreur d\'abonnement de l\'auteur de la réponse', async () => {
-        answerModel.create.resolves(2);
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
-        userQuestionSubscriptionModel.createSubscription.rejects(new Error('une erreur'));
+        stubs.answerModel.create.resolves(2);
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.userQuestionSubscriptionModel.createSubscription.rejects(new Error('une erreur'));
 
         try {
             await createAnswer(
@@ -186,6 +200,8 @@ describe('services/answer.createAnswer()', () => {
                 [],
             );
         } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
             fail('Une exception a été lancée');
         }
     });
@@ -193,18 +209,18 @@ describe('services/answer.createAnswer()', () => {
     it('envoie une notification mail spéciale à l\'auteur de la question', async () => {
         const subscriber = fakeQuestionSubscriber({ user_id: 1, is_author: true });
         const answerAuthor = fakeUser({ id: 2 });
-        answerModel.create.resolves(2);
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
-        userModel.getQuestionSubscribers.withArgs(1).resolves([subscriber]);
+        stubs.answerModel.create.resolves(2);
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.userModel.getQuestionSubscribers.withArgs(1).resolves([subscriber]);
         await createAnswer(
             { description: 'Une réponse' },
             fakeQuestion({ id: 1 }),
             answerAuthor,
             [],
         );
-        expect(mails.sendCommunityNewAnswerForAuthor).to.have.been.calledOnce;
+        expect(stubs.mails.sendCommunityNewAnswerForAuthor).to.have.been.calledOnce;
 
-        const { args } = mails.sendCommunityNewAnswerForAuthor.getCall(0);
+        const { args } = stubs.mails.sendCommunityNewAnswerForAuthor.getCall(0);
         expect(args[0]).to.be.eql(subscriber);
         expect(args[1]).to.be.eql({
             preserveRecipient: false,
@@ -222,18 +238,18 @@ describe('services/answer.createAnswer()', () => {
             fakeQuestionSubscriber({ user_id: 4, is_author: false }),
         ];
         const answerAuthor = fakeUser({ id: 5 });
-        answerModel.create.resolves(2);
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
-        userModel.getQuestionSubscribers.withArgs(1).resolves(subscribers);
+        stubs.answerModel.create.resolves(2);
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.userModel.getQuestionSubscribers.withArgs(1).resolves(subscribers);
         await createAnswer(
             { description: 'Une réponse' },
             fakeQuestion({ id: 1, question: 'Une question' }),
             answerAuthor,
             [],
         );
-        expect(mails.sendCommunityNewAnswerForObservers).to.have.callCount(3);
+        expect(stubs.mails.sendCommunityNewAnswerForObservers).to.have.callCount(3);
 
-        const { args } = mails.sendCommunityNewAnswerForObservers.getCall(0);
+        const { args } = stubs.mails.sendCommunityNewAnswerForObservers.getCall(0);
         expect(args[0]).to.be.eql(subscribers[0]);
         expect(args[1]).to.be.eql({
             preserveRecipient: false,
@@ -247,26 +263,26 @@ describe('services/answer.createAnswer()', () => {
 
     it('n\'envoie pas de notification mail à l\'auteur de la réponse', async () => {
         const subscriber = fakeQuestionSubscriber({ user_id: 2 });
-        answerModel.create.resolves(2);
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
-        userModel.getQuestionSubscribers.withArgs(1).resolves([subscriber]);
+        stubs.answerModel.create.resolves(2);
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.userModel.getQuestionSubscribers.withArgs(1).resolves([subscriber]);
         await createAnswer(
             { description: 'Une réponse' },
             fakeQuestion({ id: 1 }),
             fakeUser({ id: 2 }),
             [],
         );
-        expect(mails.sendCommunityNewAnswerForAuthor).to.not.have.been.called;
-        expect(mails.sendCommunityNewAnswerForObservers).to.not.have.been.called;
+        expect(stubs.mails.sendCommunityNewAnswerForAuthor).to.not.have.been.called;
+        expect(stubs.mails.sendCommunityNewAnswerForObservers).to.not.have.been.called;
     });
 
     it('ignore une erreur d\'envoi de notifications mail', async () => {
         const subscriber = fakeQuestionSubscriber({ user_id: 1, is_author: true });
         const answerAuthor = fakeUser({ id: 2 });
-        answerModel.create.resolves(2);
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
-        userModel.getQuestionSubscribers.withArgs(1).resolves([subscriber]);
-        mails.sendCommunityNewAnswerForAuthor.rejects(new Error('Une erreur'));
+        stubs.answerModel.create.resolves(2);
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.userModel.getQuestionSubscribers.withArgs(1).resolves([subscriber]);
+        stubs.mails.sendCommunityNewAnswerForAuthor.rejects(new Error('Une erreur'));
 
         try {
             await createAnswer(
@@ -276,15 +292,17 @@ describe('services/answer.createAnswer()', () => {
                 [],
             );
         } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
             fail('Une exception a été lancée');
         }
     });
 
     it('retourne la réponse nouvelle créée', async () => {
         const answer = fakeAnswer({ id: 2 });
-        answerModel.create.resolves(2);
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
-        answerModel.findOne.withArgs(2).resolves(answer);
+        stubs.answerModel.create.resolves(2);
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.answerModel.findOne.withArgs(2).resolves(answer);
         const response = await createAnswer(
             { description: answer.description },
             fakeQuestion({ id: 1 }),
@@ -295,9 +313,9 @@ describe('services/answer.createAnswer()', () => {
     });
 
     it('lance une exception fetch_failed si la récupération de la réponse échoue', async () => {
-        answerModel.create.resolves(2);
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
-        answerModel.findOne.rejects(new Error('Une erreur'));
+        stubs.answerModel.create.resolves(2);
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.answerModel.findOne.rejects(new Error('Une erreur'));
 
         try {
             await createAnswer(
@@ -318,88 +336,89 @@ describe('services/answer.createAnswer()', () => {
 
     it('fait appel au service d\'upload', async () => {
         const files = [fakeFile()];
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
-        expect(uploadAttachments).to.have.been.calledOnce;
+        expect(stubs.uploadAttachments).to.have.been.calledOnce;
     });
 
     it('enregistre chaque fichier en tant que pièce-jointe d\'une réponse', async () => {
         const files = [fakeFile()];
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
-        expect(uploadAttachments.getCall(0).args[0]).to.be.eql('answer');
+        expect(stubs.uploadAttachments.getCall(0).args[0]).to.be.eql('answer');
     });
 
     it('enregistre chaque fichier avec le bon identifiant de réponse', async () => {
         const answerId = 42;
-        answerModel.create.resolves(answerId);
+        stubs.answerModel.create.resolves(answerId);
 
         const files = [fakeFile()];
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
-        expect(uploadAttachments.getCall(0).args[1]).to.be.eql(42);
+        expect(stubs.uploadAttachments.getCall(0).args[1]).to.be.eql(42);
     });
 
     it('enregistre chaque fichier avec le bon identifiant utilisateur', async () => {
         const files = [fakeFile()];
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser({ id: 42 }), files);
-        expect(uploadAttachments.getCall(0).args[2]).to.be.eql(42);
+        expect(stubs.uploadAttachments.getCall(0).args[2]).to.be.eql(42);
     });
 
     it('passe bien la liste de tous les fichiers au service d\'upload', async () => {
         const files = [fakeFile(), fakeFile(), fakeFile()];
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
-        expect(uploadAttachments.getCall(0).args[3]).to.be.eql(files);
+        expect(stubs.uploadAttachments.getCall(0).args[3]).to.be.eql(files);
     });
 
     it('enregistre chaque fichier avec la bonne transaction', async () => {
         const files = [fakeFile()];
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
-        expect(uploadAttachments.getCall(0).args[4]).to.be.eql(transaction);
+        expect(stubs.uploadAttachments.getCall(0).args[4]).to.be.eql(stubs.transaction);
     });
 
     it('n\'appelle pas le service d\'upload si aucun fichier n\'est fourni', async () => {
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
-        expect(uploadAttachments).to.not.have.been.called;
+        expect(stubs.uploadAttachments).to.not.have.been.called;
     });
 
     it('ne commit l\'enregistrement de la réponse qu\'une fois les fichiers uploadés', async () => {
         const files = [fakeFile()];
-        answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
-        expect(transaction.commit).to.have.been.calledAfter(uploadAttachments);
+        expect(stubs.transaction.commit).to.have.been.calledAfter(stubs.uploadAttachments);
     });
 
     it('fait un rollback si l\'upload des fichiers échoue', async () => {
         const files = [fakeFile()];
-        uploadAttachments.rejects(new Error('une erreur'));
+        stubs.uploadAttachments.rejects(new Error('une erreur'));
         try {
-            answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+            stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
         } catch (error) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
 
-        expect(transaction.commit, 'Le commit() de la transaction a été appelé').to.not.have.been.called;
-        expect(transaction.rollback).to.have.been.calledOnce;
+        expect(stubs.transaction.commit, 'Le commit() de la transaction a été appelé').to.not.have.been.called;
+        expect(stubs.transaction.rollback).to.have.been.calledOnce;
     });
 
     it('lance une exception upload_failed si l\'upload des fichiers échoue', async () => {
         const files = [fakeFile()];
-        const originalError = new Error('une erreur');
-        uploadAttachments.rejects(originalError);
+        const originalError = new Error('420');
+        stubs.uploadAttachments.rejects(originalError);
 
         try {
-            answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
+            stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
         } catch (error) {
             expect(error).to.be.an.instanceof(ServiceError);
-            expect(error.code, 'Le code de l\'exception est incorrect').to.be.eql('upload_failed');
-            expect(error.nativeError, 'L\'erreur native associée à l\'exception incorrect').to.be.eql(originalError);
+            expect(error.code).to.be.eql(originalError.message);
+            expect(error.nativeError).to.be.eql('upload_failed');
             return;
         }
 

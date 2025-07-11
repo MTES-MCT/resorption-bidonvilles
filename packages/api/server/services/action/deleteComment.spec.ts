@@ -4,7 +4,6 @@ import sinonChai from 'sinon-chai';
 import chaiSubset from 'chai-subset';
 
 import { rewiremock } from '#test/rewiremock';
-import permissionUtils from '#server/utils/permission';
 import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeAction } from '#test/utils/action';
 import { AuthUser } from '#server/middlewares/authMiddleware';
@@ -30,7 +29,7 @@ const stubs = {
     mails: {
         sendUserCommentDeletion: sandbox.stub().resolves(),
     },
-    can: sandbox.stub(permissionUtils, 'can'),
+    can: sandbox.stub(),
     do: sandbox.stub(),
     on: sandbox.stub(),
 };
@@ -90,7 +89,8 @@ describe('services/action.deleteComment()', () => {
     });
 
     afterEach(() => {
-        sandbox.reset();
+        user = null;
+        sandbox.restore();
     });
 
     it('vérifie que l\'utilisateur a le droit de supprimer le commentaire', async () => {
@@ -99,7 +99,8 @@ describe('services/action.deleteComment()', () => {
         try {
             await deleteActionComment(fakeTestUser, fakeAction().id, 1, deletionMessage);
         } catch (error) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
         expect(stubs.can).to.have.been.calledOnceWith(fakeTestUser);
         expect(stubs.do).to.have.been.calledOnceWith('moderate', 'data');
@@ -151,9 +152,9 @@ describe('services/action.deleteComment()', () => {
     });
 
     it('renvoie une exception ServiceError \'permission_denied\' si l\'utilisateur n\' pas la permission de supprimer le commentaire', async () => {
-        user.id = 1;
         const fakeTestUser = fakeUser();
-
+        fakeTestUser.id = 999; // Surcharge l'ID pour ne pas être le propriétaire du message
+        stubs.on.returns(false);
         stubs.deleteComment.resolves({ id: 1, comments: [] });
         let responseError: ServiceError | undefined;
         try {
@@ -200,11 +201,14 @@ describe('services/action.deleteComment()', () => {
         const fakeTestUser = fakeUser();
         const nationalAdmins = [fakeUser(), fakeUser()];
         stubs.userModel.getNationalAdmins.resolves(nationalAdmins);
+        stubs.deleteComment.resolves({ id: 1, comments: [] });
+        stubs.validator.trim.returns(deletionMessage);
 
         try {
             await deleteActionComment(fakeTestUser, fakeAction().id, 1, deletionMessage);
         } catch (error) {
-            // ignore
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
 
         expect(stubs.mails.sendUserCommentDeletion).to.have.been.calledOnce;

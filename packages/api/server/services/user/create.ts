@@ -11,11 +11,9 @@ const { generateSalt } = authUtils;
 export default async (data, createdBy: number = null): Promise<User> => {
     try {
         const userId = await sequelize.transaction(async (t) => {
-            // get fk_type from organization_types to initialize fk_role_regular field
             const fk_role_regular = await organizationTypeModel.findRoleByOrganizationId(parseInt(data.organization, 10), t);
             Object.assign(data, { fk_role_regular });
 
-            // create the user himself
             return userModel.create(Object.assign(data, {
                 created_by: createdBy,
                 salt: generateSalt(),
@@ -27,7 +25,8 @@ export default async (data, createdBy: number = null): Promise<User> => {
             try {
                 await mattermostUtils.triggerNotifyNewUserFromRectorat(user);
             } catch (error) {
-            // ignore this error
+                // eslint-disable-next-line no-console
+                console.error(error);
             }
         }
 

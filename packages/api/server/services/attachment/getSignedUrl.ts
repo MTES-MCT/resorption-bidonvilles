@@ -20,6 +20,8 @@ export default async (key: string): Promise<string> => {
         const url = await getSignedUrl(S3, command, { expiresIn });
         return url;
     } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err);
         throw new Error('Could not generate presigned URL');
     }
 };

@@ -65,9 +65,7 @@ function comparePreparatoryPhases(existing: SimplifiedPhase[], updated: Simplifi
 
 export default async (shantytownId: string, preparatoryPhasesTowardResorption, terminatedPreparatoryPhasesTowardResorption, user, argTransaction: Transaction = undefined) => {
     let transaction: Transaction = argTransaction;
-    if (transaction === undefined) {
-        transaction = await sequelize.transaction();
-    }
+    transaction ??= await sequelize.transaction();
 
     try {
         const result = await shantytownPreparatoryPhasesTowardResorptionModel.find(user, [shantytownId], transaction);

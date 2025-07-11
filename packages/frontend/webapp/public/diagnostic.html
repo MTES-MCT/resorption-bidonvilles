@@ -1,9 +1,10 @@
 <!doctype html>
-<html>
+<html lang="fr" xml:lang="fr">
     <head>
         <title>Résorption-bidonvilles — Diagnostic de débug</title>
         <meta name="robots" content="noindex">
         <meta name="googlebot" content="noindex">
+        <meta charset="UTF-8">
     </head>
 
     <body>
@@ -69,8 +70,8 @@
             function getContent() {
                 var keys = Object.keys(elements);
                 var content = '';
-                for (var i = 0; i < keys.length; i += 1) {
-                    content += keys[i] + '\n' + elements[keys[i]].innerHTML + '\n\n';
+                for (const key of keys) {
+                    content += key + '\n' + elements[key].innerHTML + '\n\n';
                 }
 
                 return content;

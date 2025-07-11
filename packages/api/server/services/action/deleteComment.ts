@@ -43,7 +43,6 @@ export default async (user, actionId, commentId, deletionMessage): Promise<{ com
         city: actions[0].location.city,
     };
 
-
     const isOwner: boolean = author.id === user.id;
     if (!isOwner && !permissionUtils.can(user).do('moderate', 'data').on(location)) {
         throw new ServiceError('permission_denied', new Error('Vous n\'avez pas accès à ces données'));
@@ -80,6 +79,7 @@ export default async (user, actionId, commentId, deletionMessage): Promise<{ com
                 },
                 message,
             };
+
             if (author.status === 'active') {
                 await mails.sendUserCommentDeletion(author, {
                     variables: mailVariables,
@@ -94,7 +94,7 @@ export default async (user, actionId, commentId, deletionMessage): Promise<{ com
         }
     } catch (error) {
         // eslint-disable-next-line no-console
-        console.log(error);
+        console.error(error);
     }
 
     // on retourne la liste mise à jour des commentaires de l'action
@@ -104,7 +104,7 @@ export default async (user, actionId, commentId, deletionMessage): Promise<{ com
         commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => enrichCommentsAttachments(rawComment)));
     } catch (error) {
         // eslint-disable-next-line no-console
-        console.log(error);
+        console.error(error);
     }
 
     return {

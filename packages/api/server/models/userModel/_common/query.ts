@@ -14,7 +14,7 @@ import {
 
 const { getPermission } = permissionUtils;
 
-export default async (where: Where | String = [], filters: UserQueryFilters = {}, user: User = null, feature: string = undefined, transaction: Transaction = undefined): Promise<User[]> => {
+export default async (where: Where | string = [], filters: UserQueryFilters = {}, user: User = null, feature: string = undefined, transaction: Transaction = undefined): Promise<User[]> => {
     const replacements = {};
 
     const strWhere = typeof where === 'string' ? where : '';
@@ -246,10 +246,7 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
     ]);
 
     const hashedUserAccesses = userAccesses.reduce((acc, row) => {
-        if (acc[row.fk_user] === undefined) {
-            acc[row.fk_user] = [];
-        }
-
+        acc[row.fk_user] ??= [];
         acc[row.fk_user].push(row);
         return acc;
     }, {} as {
@@ -258,10 +255,8 @@ export default async (where: Where | String = [], filters: UserQueryFilters = {}
 
     const hashInterventionAreas = interventionAreas.reduce((acc, row) => {
         const key = row.fk_user !== null ? 'users' : 'organizations';
-        const id = row.fk_user !== null ? row.fk_user : row.fk_organization;
-        if (acc[key][id] === undefined) {
-            acc[key][id] = [];
-        }
+        const id = row.fk_user ?? row.fk_organization;
+        acc[key][id] ??= [];
 
         acc[key][id].push(row);
         return acc;

@@ -28,9 +28,9 @@ export default async (req, res, next) => {
         const { code, nativeError } = error;
 
         res.status(typeof code === 'string' ? parseInt(code, 10) : code).send({
-            user_message: ERRORS[nativeError].message || ERRORS.undefined.message,
+            user_message: ERRORS[nativeError].message ?? ERRORS.undefined.message,
         });
-        return next(error.nativeError || error);
+        return next(error.nativeError ?? error);
     }
 
     return res.status(201).send(

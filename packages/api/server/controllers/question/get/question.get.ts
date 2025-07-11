@@ -10,11 +10,11 @@ export default async (req, res, next) => {
     try {
         question = await questionService.findOne(req.params.id);
     } catch (error) {
-        const { code, message } = ERROR_RESPONSES[error && error.code] || ERROR_RESPONSES.undefined;
+        const { code, message } = ERROR_RESPONSES[error?.error.code] ?? ERROR_RESPONSES.undefined;
         res.status(code).send({
             user_message: message,
         });
-        return next(error.nativeError || error);
+        return next(error.nativeError ?? error);
     }
     return res.status(200).send(question);
 };

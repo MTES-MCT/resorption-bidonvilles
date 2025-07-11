@@ -75,6 +75,8 @@ export default [
             try {
                 user = await userModel.findOneByEmail(value);
             } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
                 throw new Error('Erreur lors du contrôle de l\'existence d\'un utilisateur à partir de son courriel');
             }
             if (user !== null) {

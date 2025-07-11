@@ -38,7 +38,7 @@ export default async (file: Express.Multer.File): Promise<ClamAVResponse> => {
             if (errorCodes.includes(error.response.status.toString())) {
                 return {
                     status: error.response?.status || 500,
-                    message: scanAttachmentErrors[error.response?.status].message || 'undefined',
+                    message: scanAttachmentErrors[error.response?.status].message ?? 'undefined',
                 };
             }
         }

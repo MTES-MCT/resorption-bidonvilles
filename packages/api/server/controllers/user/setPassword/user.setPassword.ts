@@ -17,6 +17,8 @@ export default async (req, res, next) => {
     try {
         decoded = jwt.verify(req.body.token, CONFIG.auth.secret);
     } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
         return res.status(400).send({
             user_message: 'Le jeton d\'identification est invalide ou expiré',
         });

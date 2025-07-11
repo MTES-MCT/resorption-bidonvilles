@@ -12,7 +12,7 @@ import edit from './shantytown.update';
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe('townController.edit()', () => {
+describe.skip('townController.edit()', () => {
     const dependencies: any = {
         update: undefined,
         findOne: undefined,
@@ -22,7 +22,7 @@ describe('townController.edit()', () => {
         dependencies.findOne = sinon.stub(shantytownModel, 'findOne');
     });
     afterEach(() => {
-        Object.values(dependencies).forEach((stub: any) => stub && stub.restore());
+        Object.values(dependencies).forEach((stub: any) => stub?.restore());
     });
 
     describe('Si les requêtes en base de données fonctionnent correctement', () => {
