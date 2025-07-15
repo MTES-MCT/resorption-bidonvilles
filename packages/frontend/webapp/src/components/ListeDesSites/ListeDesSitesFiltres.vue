@@ -46,6 +46,13 @@
                         class="border-1 !border-primary rounded hover:bg-blue200"
                     />
                 </template>
+                <DsfrButton
+                    v-if="isFiltered"
+                    size="sm"
+                    label="Supprimer les filtres"
+                    :disabled="isProcessing"
+                    @click="resetFilters"
+                />
             </div>
         </article>
 
@@ -74,6 +81,13 @@ import { Filter, Icon, Link, Sort } from "@resorptionbidonvilles/ui";
 const townsStore = useTownsStore();
 const userStore = useUserStore();
 const displayOptionalFilters = ref(false);
+
+const isFiltered = computed(() => {
+    const filteredValues = Object.values(townsStore.filters.properties);
+    return filteredValues.some(
+        (value) => Array.isArray(value) && value.length > 0
+    );
+});
 
 const groupedFilters = {
     open: {
@@ -166,6 +180,15 @@ function trackFilter(eventAction, { label: eventName }) {
 
 const isProcessing = ref(false);
 const isUeOnly = ref(false);
+
+const resetFilters = async () => {
+    try {
+        await townsStore.resetFilters();
+    } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error("Erreur lors de la suppression des filtres:", error);
+    }
+};
 
 watch(isUeOnly, (newValue) => {
     if (newValue) {
