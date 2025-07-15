@@ -11,6 +11,7 @@ type OrganizationAutocompleteResult = {
     similarity: number,
     fk_category?: string | null
     type_abbreviation?: string | null
+    organization_type_id: number,
 };
 
 export default async (search: string): Promise<OrganizationAutocompleteResult[]> => {
@@ -44,6 +45,7 @@ export default async (search: string): Promise<OrganizationAutocompleteResult[]>
                         category: row.fk_category,
                         similarity: row.similarity,
                         type_abbreviation: row.type_abbreviation,
+                        organization_type_id: row.organization_type_id,
                     });
                 }
 

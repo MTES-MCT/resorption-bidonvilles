@@ -51,20 +51,24 @@ const organisation = computed({
 
 async function autocompleteFn(value) {
     const results = await autocompleOrganization(value);
-    const mappedResults = results.map((org) => ({
-        id: org.id,
-        label: `${org.abbreviation ? `${org.abbreviation} — ` : ""}${
-            org.label
-        }`,
-        selectedLabel: `${org.abbreviation ? `${org.abbreviation} — ` : ""}${
-            org.label
-        }`,
-        category: org.type_abbreviation || org.type,
-        data: {
+    const allowedTypeIds = [8, 9, 10, 11, 19, 29, 35, 44, 45];
+
+    const mappedResults = results.map((org) => {
+        const prefix = org.abbreviation ? `${org.abbreviation}` : `${org.name}`;
+        const showLabel = allowedTypeIds.includes(org.organization_type_id);
+        const label = showLabel ? `${prefix} - ${org.label}` : prefix;
+
+        return {
             id: org.id,
-            category: org.category,
-        },
-    }));
+            label: label,
+            selectedLabel: label,
+            category: org.type_abbreviation || org.type,
+            data: {
+                id: org.id,
+                category: org.category,
+            },
+        };
+    });
     mappedResults.unshift({
         id: "autre",
         selectedLabel: "",
