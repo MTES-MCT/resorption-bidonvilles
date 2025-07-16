@@ -2,7 +2,7 @@ module.exports = {
     apps: [
         {
             name: 'api',
-            script: 'dist/api/server/index.js',
+            script: 'server/index.js',
             instances: 1,
             exec_mode: 'fork',
             watch: false,
