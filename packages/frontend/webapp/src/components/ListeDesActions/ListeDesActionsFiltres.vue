@@ -10,7 +10,7 @@
                         :title="filter.label"
                         :options="filter.options"
                         v-model="actionsStore.filters.properties[filter.id]"
-                        class="!border-primary rounded hover:bg-blue200"
+                        class="!border !border-primary rounded hover:bg-blue200"
                     />
                 </div>
             </div>
