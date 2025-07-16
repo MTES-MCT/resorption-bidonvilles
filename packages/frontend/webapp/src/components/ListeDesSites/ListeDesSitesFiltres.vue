@@ -4,55 +4,62 @@
     >
         <article>
             <p>Filtrer par</p>
-            <div class="flex flex-col flex-wrap sm:flex-row gap-2 items-start">
-                <Filter
-                    v-for="filter in currentFilters.default"
-                    :key="filter.id"
-                    :title="filter.label"
-                    :options="filter.options"
-                    v-model="townsStore.filters.properties[filter.id]"
-                    @checkedItem="trackFilter(filter.label, $event)"
-                    class="border-1 !border-primary rounded hover:bg-blue200 text-sm"
+            <div class="flex flex-col flex-wrap gap-2 items-start">
+                <div
+                    class="flex flex-col flex-wrap sm:flex-row gap-2 items-start"
                 >
-                    <template
-                        v-if="filter.id === 'conditions'"
-                        v-slot:default="{ label }"
-                    >
-                        <div class="text-red flex items-center">
-                            <div class="mr-2">
-                                <Icon icon="times" />/
-                                <Icon icon="question" class="text-xs" />
-                            </div>
-                            {{ label }}
-                        </div>
-                    </template>
-                </Filter>
-
-                <Link
-                    class="sm:self-end"
-                    v-if="displayOptionalFilters === false"
-                    @click="showOptional"
-                >
-                    Voir plus de filtres
-                </Link>
-                <template v-else>
                     <Filter
-                        v-for="filter in currentFilters.optional"
+                        v-for="filter in currentFilters.default"
                         :key="filter.id"
                         :title="filter.label"
                         :options="filter.options"
                         v-model="townsStore.filters.properties[filter.id]"
                         @checkedItem="trackFilter(filter.label, $event)"
-                        class="border-1 !border-primary rounded hover:bg-blue200"
+                        class="border-1 !border-primary rounded hover:bg-blue200 text-sm"
+                    >
+                        <template
+                            v-if="filter.id === 'conditions'"
+                            v-slot:default="{ label }"
+                        >
+                            <div class="text-red flex items-center">
+                                <div class="mr-2">
+                                    <Icon icon="times" />/
+                                    <Icon icon="question" class="text-xs" />
+                                </div>
+                                {{ label }}
+                            </div>
+                        </template>
+                    </Filter>
+
+                    <Link
+                        class="sm:self-end"
+                        v-if="displayOptionalFilters === false"
+                        @click="showOptional"
+                    >
+                        Voir plus de filtres
+                    </Link>
+                    <template v-else>
+                        <Filter
+                            v-for="filter in currentFilters.optional"
+                            :key="filter.id"
+                            :title="filter.label"
+                            :options="filter.options"
+                            v-model="townsStore.filters.properties[filter.id]"
+                            @checkedItem="trackFilter(filter.label, $event)"
+                            class="border-1 !border-primary rounded hover:bg-blue200"
+                        />
+                    </template>
+                </div>
+                <div>
+                    <DsfrButton
+                        v-if="isFiltered"
+                        class="justify-self-end"
+                        size="sm"
+                        label="Effacer les filtres"
+                        :disabled="isProcessing"
+                        @click="resetFilters"
                     />
-                </template>
-                <DsfrButton
-                    v-if="isFiltered"
-                    size="sm"
-                    label="Supprimer les filtres"
-                    :disabled="isProcessing"
-                    @click="resetFilters"
-                />
+                </div>
             </div>
         </article>
 
@@ -84,9 +91,11 @@ const displayOptionalFilters = ref(false);
 
 const isFiltered = computed(() => {
     const filteredValues = Object.values(townsStore.filters.properties);
-    return filteredValues.some(
+    const activeFiltersCount = filteredValues.filter(
         (value) => Array.isArray(value) && value.length > 0
-    );
+    ).length;
+
+    return activeFiltersCount >= 2;
 });
 
 const groupedFilters = {
