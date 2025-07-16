@@ -65,14 +65,13 @@
             </div>
 
             <div class="flex justify-end px-4 py-4">
-                <div>
-                    <Link
-                        :to="`/action/${action.id}`"
-                        :aria-label="`Voir la fiche de l'action ${action.name}`"
-                    >
-                        <Icon icon="arrow-right" /> Voir la fiche de l'action
-                    </Link>
-                </div>
+                <DsfrButton
+                    size="sm"
+                    label="Voir la fiche de l'action"
+                    icon="fr-icon-arrow-right-line"
+                    primary
+                    @click.prevent.stop="navigateTo(null)"
+                />
             </div>
         </div>
     </RouterLink>

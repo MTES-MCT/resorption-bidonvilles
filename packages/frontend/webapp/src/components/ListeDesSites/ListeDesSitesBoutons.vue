@@ -1,14 +1,12 @@
 <template>
     <p class="flex flex-col gap-2 items-start xs:flex-row">
-        <Button
-            icon="print"
-            iconPosition="left"
-            variant="primaryOutline"
+        <DsfrButton
+            icon="fr-icon-printer-line"
+            secondary
             :disabled="townsStore.filteredTowns.length === 0"
             @click="print"
             size="sm"
-            class="!border-2 !border-primary hover:!bg-primary"
-            >Imprimer</Button
+            >Imprimer</DsfrButton
         >
         <Button
             v-if="userStore.hasPermission('shantytown.export')"
@@ -18,30 +16,25 @@
             :disabled="townsStore.filteredTowns.length === 0"
             @click="showExport"
             size="sm"
-            class="!border-2 !border-primary hover:!bg-primary"
+            class="!border !border-primary hover:!bg-primary"
             >Exporter</Button
         >
-        <Button
+        <DsfrButton
             v-if="userStore.hasPermission('shantytown.create')"
-            href="/site/nouveau"
-            icon="plus"
-            iconPosition="left"
-            variant="primary"
+            @click.prevent.stop="router.push('/site/nouveau')"
+            icon="fr-icon-add-line"
             size="sm"
-            class="!border-2 !border-primary hover:!bg-primaryDark"
         >
             Déclarer un nouveau site
-        </Button>
-        <Button
+        </DsfrButton>
+        <DsfrButton
             v-else
-            href="/site/signalement"
-            icon="plus"
-            iconPosition="left"
-            variant="primary"
+            @click.prevent.stop="router.push('/site/signalement')"
+            icon="fr-icon-add-line"
             size="sm"
         >
             Informer d'un nouveau site
-        </Button>
+        </DsfrButton>
     </p>
 </template>
 
@@ -49,7 +42,7 @@
 import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
 import { trackEvent } from "@/helpers/matomo";
-
+import router from "@/helpers/router"
 import { Button } from "@resorptionbidonvilles/ui";
 import ListeDesSitesExport from "./ListeDesSitesExport/ListeDesSitesExport.vue";
 import { useModaleStore } from "@/stores/modale.store";
