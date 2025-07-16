@@ -3,14 +3,14 @@
         <article class="flex flex-col gap-2">
             <div>
                 <p>Filtrer par</p>
-                <div class="flex space-x-2">
+                <div class="flex flex-col xs:flex-row gap-2 flex-wrap shrink-0">
                     <Filter
                         v-for="filter in filters"
                         :key="filter.id"
                         :title="filter.label"
                         :options="filter.options"
                         v-model="actionsStore.filters.properties[filter.id]"
-                        class="border-1 !border-primary rounded hover:bg-blue200"
+                        class="!border-primary rounded hover:bg-blue200"
                     />
                 </div>
             </div>
