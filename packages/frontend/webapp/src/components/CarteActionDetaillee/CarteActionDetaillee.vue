@@ -83,7 +83,7 @@ import formatDate from "@common/utils/formatDate";
 import focusClasses from "@common/utils/focus_classes";
 
 import { RouterLink } from "vue-router";
-import { Icon, Link, Tag } from "@resorptionbidonvilles/ui";
+import { Icon, Tag } from "@resorptionbidonvilles/ui";
 import CarteActionColonneChampsIntervention from "./CarteActionColonneChampsIntervention.vue";
 import CarteActionDetailleeColonneDepartement from "./CarteActionDetailleeColonneDepartement.vue";
 import CarteActionDetailleeColonneLocalisation from "./CarteActionDetailleeColonneLocalisation.vue";

@@ -42,7 +42,7 @@
 import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
 import { trackEvent } from "@/helpers/matomo";
-import router from "@/helpers/router"
+import router from "@/helpers/router";
 import { Button } from "@resorptionbidonvilles/ui";
 import ListeDesSitesExport from "./ListeDesSitesExport/ListeDesSitesExport.vue";
 import { useModaleStore } from "@/stores/modale.store";
