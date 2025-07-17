@@ -8,16 +8,13 @@
             size="sm"
             >Imprimer</DsfrButton
         >
-        <Button
+        <DsfrButton
             v-if="userStore.hasPermission('shantytown.export')"
-            icon="file-excel"
-            iconPosition="left"
-            variant="primaryOutline"
+            icon="ri:file-excel-fill"
             :disabled="townsStore.filteredTowns.length === 0"
             @click="showExport"
             size="sm"
-            class="!border !border-primary hover:!bg-primary"
-            >Exporter</Button
+            >Exporter</DsfrButton
         >
         <DsfrButton
             v-if="userStore.hasPermission('shantytown.create')"
@@ -46,6 +43,7 @@ import router from "@/helpers/router";
 import { Button } from "@resorptionbidonvilles/ui";
 import ListeDesSitesExport from "./ListeDesSitesExport/ListeDesSitesExport.vue";
 import { useModaleStore } from "@/stores/modale.store";
+import { VIcon } from "@gouvminint/vue-dsfr";
 
 const townsStore = useTownsStore();
 const userStore = useUserStore();
@@ -60,9 +58,3 @@ function showExport() {
     modaleStore.open(ListeDesSitesExport);
 }
 </script>
-
-<style scoped>
-button {
-    border: inherit;
-}
-</style>
