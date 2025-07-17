@@ -9,7 +9,6 @@
                     : 'Alerte Canicule'
             "
             icon="fr-icon-thermometer-line"
-            class="hover:!text-white"
             secondary
             no-outline
             :disabled="heatwaveRequestStatus?.loading"
@@ -21,7 +20,6 @@
             label="Mettre à jour"
             icon="fr-icon-pencil-line"
             secondary
-            class="hover:!text-white"
             @click.prevent.stop="navigateTo('mise-a-jour')"
         />
         <DsfrButton
