@@ -10,16 +10,22 @@
                     l'aide des flèches directionnelles</span
                 >
                 <ContentWrapper class="mt-3" size="medium">
-                    <div role="search" class="flex items-center space-x-2">
+                    <div
+                        role="search"
+                        class="flex flex-col sm:flex-row items-center sm:space-x-2"
+                    >
                         <InputLocation
-                            class="flex-1"
+                            class="flex-1 w-full"
                             name="territorial_collectivity"
                             :placeholder="searchPlaceholder"
                             withoutMargin
                             :allowFreeSearch="allowFreeSearch"
                             v-model="inputLocation"
                         />
-                        <Button size="sm" type="button" class="py-1.5"
+                        <Button
+                            size="sm"
+                            type="button"
+                            class="py-1.5 items-center justify-center sm:w-auto w-full"
                             >Rechercher</Button
                         >
                     </div>

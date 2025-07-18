@@ -1,19 +1,26 @@
 <template>
-    <div class="m-auto w-1/2 pb-10 text-center print:hidden">
+    <div class="sm:m-auto sm:w-1/2 w-full pb-10 text-center print:hidden">
         <h2 class="text-lg xl:text-xl font-bold text-primary">
             Rechercher un contact, un acteur, une structure...
         </h2>
         <ContentWrapper class="mt-3" size="medium">
-            <div class="flex items-center space-x-2">
+            <div
+                class="flex flex-col sm:flex-row w-full items-center sm:space-x-2"
+            >
                 <InputCommunauteSearch
-                    class="flex-1"
+                    class="flex-1 w-full"
                     placeholder="Nom d'un territoire, d'une structure, d'un acteur..."
                     withoutMargin
                     :allowFreeSearch="true"
                     name="search"
                     @update:modelValue="handleEmit"
                 />
-                <Button size="sm" type="button">Rechercher</Button>
+                <Button
+                    size="sm"
+                    type="button"
+                    class="py-1.5 w-full items-center justify-center sm:w-auto"
+                    >Rechercher</Button
+                >
             </div>
             <p class="mt-1 text-right text-sm font-bold" v-if="showReset">
                 <Link v-if="isNotOnDefaultFilter" @click="resetSearch">

@@ -1,10 +1,16 @@
 <template>
-    <CheckboxUi v-model="checkedModel" :isSubmitting="isSubmitting" :active="active" :disabled="disabled" :labelClass="labelClass" />
+    <DsfrCheckbox
+        v-model="checkedModel"
+        :value="value"
+        :name="name"
+        :labelClass="labelClass"
+        :disabled="disabled"
+        :active="active"
+        :small="small"
+    />
 </template> 
 
 <script setup>
-import CheckboxUi from "./CheckboxUi.vue";
-
 import { defineProps, toRefs, computed } from 'vue';
 import { useField, useIsSubmitting } from 'vee-validate';
 
@@ -26,7 +32,12 @@ const props = defineProps({
         type: Boolean,
         required: false,
         default: true
-    }
+    },
+    small: {
+        type: Boolean,
+        required: false,
+        default: true
+    },
 });
 const { name, value, modelValue, disabled, active } = toRefs(props);
 const isSubmitting = useIsSubmitting();
