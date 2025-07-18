@@ -1,5 +1,5 @@
 <template>
-    <DsfrRadioButtonSet>
+    <DsfrRadioButtonSet class="bg-blue200 border-2 hover:bg-blue300 hover:border-blue500 content-center p-1 pt-1.5 h-10" >
         <DsfrRadioButton
             :v-model="props.modelValue"
             :label="label"
@@ -7,6 +7,7 @@
             :disabled="isSubmitting || disabled"
             :value="value"
             @click="onClick"
+            :small="small"
         />
     </DsfrRadioButtonSet>
 </template>
@@ -33,6 +34,11 @@ const props = defineProps({
         type: [Object, String, Boolean, Number],
         required: false,
         default: undefined
+    },
+    small: {
+        type: Boolean,
+        required: false,
+        default: true
     },
 });
 
