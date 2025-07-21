@@ -40,7 +40,7 @@ button.bg-primary:hover {
     background-color: rgb(0 0 108 / var(--tw-bg-opacity)) !important;
 }
 
-button.fr-btn:hover {
+button.fr-btn--primary:hover {
     background-color: rgb(0 0 108) !important;
 }
 
@@ -49,7 +49,7 @@ p {
 }
 
 @media (hover:hover) {
-    a[href]:hover, button:not(:disabled):hover, input[type=button]:not(:disabled):hover, input[type=image]:not(:disabled):hover, input[type=reset]:not(:disabled):hover, input[type=submit]:not(:disabled):hover {
+    a[href]:hover, button:not(:disabled):hover:not(.fr-btn), input[type=button]:not(:disabled):hover, input[type=image]:not(:disabled):hover, input[type=reset]:not(:disabled):hover, input[type=submit]:not(:disabled):hover {
         background: none;
     }
 }
