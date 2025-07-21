@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/webapp3",
-  "version": "2.34.5",
+  "version": "2.34.6",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "@gouvfr/dsfr": "1.13.2",
-    "@gouvminint/vue-dsfr": "^5.19.0",
+    "@gouvminint/vue-dsfr": "^8.6.0",
+    "@iconify/vue": "latest",
     "@sentry/vue": "^7.54.0",
     "@turf/turf": "^6.5.0",
     "@vuepic/vue-datepicker": "^3.5.3",
