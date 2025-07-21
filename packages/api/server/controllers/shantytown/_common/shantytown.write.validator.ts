@@ -111,7 +111,7 @@ export default mode => ([
 
             let existingPreparatoryPhasesTowardResorption = [];
             let updatedPreparatoryPhasesTowardResorption = [];
-            if (mode !== 'create') {
+            if (mode !== 'create' && mode !== 'report') {
                 existingPreparatoryPhasesTowardResorption = req.town.preparatoryPhasesTowardResorption.map((phase: SimplifiedPhase) => ({
                     preparatoryPhaseId: phase.preparatoryPhaseId,
                     completedAt: phase.completedAt,
@@ -543,7 +543,7 @@ export default mode => ([
                     },
                 ];
 
-                if (mode !== 'create') {
+                if (mode !== 'create' && mode !== 'report') {
                     fieldsToCheck.push({
                         key: 'preparatory_phases_toward_resorption',
                         submitedValue: updatedPreparatoryPhasesTowardResorption ? JSON.stringify(updatedPreparatoryPhasesTowardResorption) : null,
