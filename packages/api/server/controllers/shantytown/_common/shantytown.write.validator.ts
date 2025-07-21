@@ -1156,7 +1156,7 @@ export default mode => ([
 
             return value;
         })
-        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_justice'))
+        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_justice') && can(req.user).do(mode, 'shantytown').on(req.body.city))
         .exists({ checkNull: true }).bail().withMessage('Le champ "Existence d\'une procédure judiciaire" est obligatoire')
         .toInt()
         .isInt({ min: -1, max: 1 }).withMessage('Le champ "Existence d\'une procédure judiciaire" est invalide')
