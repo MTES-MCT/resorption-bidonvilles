@@ -1,5 +1,11 @@
 <template>
     <ContentWrapper>
+        <BandeauNotice
+            title="Prévenir les risques lors des vagues de chaleur"
+            description='Pensez à identifier les sites nécessitant une intervention urgente via le bouton "Alerte canicule" sur la liste des sites, et suivez les actions mises en œuvre via le journal du site.'
+            type="warning"
+            fullWidth
+        />
         <TableauDeBordGrille :cards="cards" />
     </ContentWrapper>
 </template>
@@ -8,6 +14,7 @@
 import { ref, onMounted } from "vue";
 import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import TableauDeBordGrille from "./TableauDeBordGrille.vue";
+import BandeauNotice from "@/components/BandeauNotice/BandeauNotice.vue";
 import { useUserStore } from "@/stores/user.store";
 
 import { default as baseCards } from "@/utils/TableauDeBordCardsList";
