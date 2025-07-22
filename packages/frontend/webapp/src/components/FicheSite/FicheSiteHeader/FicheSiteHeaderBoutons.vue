@@ -58,6 +58,7 @@
             >Mettre à jour</DsfrButton  
         >
         <DsfrButton
+            v-if="displayStartResorptionButton"
             size="sm"
             icon="mdi:play"
             @click="startResorption"
