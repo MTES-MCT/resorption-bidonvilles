@@ -1,79 +1,105 @@
 <template>
-    <p class="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
-        <RouterLink
-            to="#journal_du_site"
-            v-if="
-                userStore.hasLocalizedPermission(
-                    'shantytown_comment.list',
-                    town
-                )
-            "
+    <div
+        class="flex flex-col justify-between items-start gap-2 sm:flex-row sm:items-center"
+    >
+        <div
+            class="flex flex-col items-start gap-2 sm:flex-row sm:items-center"
         >
+            <RouterLink
+                to="#journal_du_site"
+                v-if="
+                    userStore.hasLocalizedPermission(
+                        'shantytown_comment.list',
+                        town
+                    )
+                "
+            >
+                <DsfrButton
+                    size="sm"
+                    icon="fr-icon-chat-3-fill"
+                    secondary
+                    tabindex="-1"
+                    >Journal du site</DsfrButton
+                >
+            </RouterLink>
             <DsfrButton
                 size="sm"
-                icon="fr-icon-chat-3-fill"
+                icon="ri-file-excel-fill"
                 secondary
-                tabindex="-1"
-                >Journal du site</DsfrButton
+                @click="openExportModal"
+                >Exporter</DsfrButton
             >
-        </RouterLink>
-        <DsfrButton
-            size="sm"
-            icon="ri-file-excel-fill"
-            secondary
-            @click="openExportModal"
-            >Exporter</DsfrButton
-        >
-        <DsfrButton
-            v-if="
-                userStore.hasLocalizedPermission('shantytown.close', town) &&
-                town.status === 'open'
-            "
-            size="sm"
-            icon="mdi:home-remove-outline"
-            @click="navigateTo(town.id, 'fermeture')"
-            >Fermer le site</DsfrButton
-        >
+            <DsfrButton
+                v-if="
+                    userStore.hasLocalizedPermission(
+                        'shantytown.close',
+                        town
+                    ) && town.status === 'open'
+                "
+                size="sm"
+                icon="mdi:home-remove-outline"
+                @click="navigateTo(town.id, 'fermeture')"
+                >Fermer le site</DsfrButton
+            >
 
-        <DsfrButton
-            v-if="
-                userStore.hasLocalizedPermission(
-                    'shantytown.fix_status',
-                    town
-                ) && town.status !== 'open'
-            "
-            size="sm"
-            icon="mdi:home-remove-outline"
-            @click="navigateTo(town.id, 'fermeture')"
-            >Corriger la fermeture du site</DsfrButton
-        >
-        <DsfrButton
-            size="sm"
-            icon="fr-icon-pencil-line"
-            v-if="
-                userStore.hasLocalizedPermission('shantytown.update', town) &&
-                town.status === 'open'
-            "
-            @click="navigateTo(town.id, 'mise-a-jour')"
-            >Mettre à jour</DsfrButton
-        >
-        <DsfrButton
-            v-if="displayStartResorptionButton"
-            size="sm"
-            icon="mdi:play"
-            @click="startResorption"
-            :loading="startResorptionIsLoading"
-            >Démarrer la résorption</DsfrButton
-        >
-        <DsfrButton
-            v-if="userStore.hasLocalizedPermission('shantytown.delete', town)"
-            size="sm"
-            icon="mdi:delete-outline"
-            @click="deleteTown"
-            :loading="deleteIsLoading"
-            >Supprimer le site</DsfrButton
-        >
-    </p>
+            <DsfrButton
+                v-if="
+                    userStore.hasLocalizedPermission(
+                        'shantytown.fix_status',
+                        town
+                    ) && town.status !== 'open'
+                "
+                size="sm"
+                icon="mdi:home-remove-outline"
+                @click="navigateTo(town.id, 'fermeture')"
+                >Corriger la fermeture du site</DsfrButton
+            >
+            <DsfrButton
+                size="sm"
+                icon="fr-icon-pencil-line"
+                v-if="
+                    userStore.hasLocalizedPermission(
+                        'shantytown.update',
+                        town
+                    ) && town.status === 'open'
+                "
+                @click="navigateTo(town.id, 'mise-a-jour')"
+                >Mettre à jour</DsfrButton
+            >
+            <DsfrButton
+                v-if="displayStartResorptionButton"
+                size="sm"
+                icon="mdi:play"
+                @click="startResorption"
+                :loading="startResorptionIsLoading"
+                >Démarrer la résorption</DsfrButton
+            >
+            <DsfrButton
+                v-if="
+                    userStore.hasLocalizedPermission('shantytown.delete', town)
+                "
+                size="sm"
+                icon="mdi:delete-outline"
+                @click="deleteTown"
+                :loading="deleteIsLoading"
+                >Supprimer le site</DsfrButton
+            >
+        </div>
+        <div>
+            <DsfrButton
+                size="sm"
+                :label="
+                    heatwaveStatus
+                        ? 'Supprimer l\'alerte Canicule'
+                        : 'Activer l\'alerte Canicule'
+                "
+                icon="fr-icon-thermometer-line"
+                secondary
+                :disabled="heatwaveRequestStatus?.loading"
+                @click.prevent.stop="toggleHeatwave"
+            />
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -95,6 +121,8 @@ const props = defineProps({
 });
 const { town } = toRefs(props);
 const userStore = useUserStore();
+const notificationStore = useNotificationStore();
+const townsStore = useTownsStore();
 
 const { displayPhasesPreparatoiresResorption } =
     usePhasesPreparatoiresResorption(town);
@@ -200,9 +228,6 @@ async function startResorption() {
 
     startResorptionIsLoading.value = true;
 
-    const notificationStore = useNotificationStore();
-    const townsStore = useTownsStore();
-
     nextTick(async () => {
         try {
             await townsStore.startResorption(town.value.id);
@@ -231,6 +256,46 @@ const displayStartResorptionButton = computed(() => {
         !townIsClosed.value
     );
 });
+
+const heatwaveStatus = computed(() => {
+    return town.value.heatwaveStatus;
+});
+
+const heatwaveRequestStatus = computed(() => {
+    return townsStore.heatwaveStatuses[town.value.id] || null;
+});
+
+async function toggleHeatwave() {
+    try {
+        await townsStore.setHeatwaveStatus(
+            town.value.id,
+            !town.value.heatwaveStatus
+        );
+    } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log("Erreur lors de la modification du statut canicule :", e);
+
+        notificationStore.error(
+            "Risque canicule",
+            "Une erreur inconnue est survenue"
+        );
+        return;
+    }
+
+    if (heatwaveRequestStatus.value?.error !== null) {
+        notificationStore.error(
+            "Risque canicule",
+            heatwaveRequestStatus.value.error
+        );
+    } else {
+        notificationStore.success(
+            "Risque canicule",
+            town.value.heatwaveStatus === true
+                ? "Le site a été marqué comme particulièrement exposé à la canicule"
+                : "Le site n'est plus marqué comme à risque"
+        );
+    }
+}
 </script>
 
 <style scoped>
