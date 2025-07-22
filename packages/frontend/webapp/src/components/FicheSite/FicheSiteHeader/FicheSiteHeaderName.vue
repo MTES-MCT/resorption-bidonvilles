@@ -2,7 +2,14 @@
     <p class="text-sm font-normal">
         {{ town.city.name }}, {{ town.epci.name }} ({{ town.departement.name }})
     </p>
-    <h1>{{ town.addressSimple }}</h1>
+    <div class="flex flex-row gap-2 items-center">
+        <h1>{{ town.addressSimple }}</h1>
+        <DsfrBadge
+            v-if="town.heatwaveStatus"
+            label="Alerte canicule"
+            type="warning"
+        />
+    </div>
     <span v-if="town.name" class="text-md">&nbsp; « {{ town.name }} »</span>
 </template>
 
