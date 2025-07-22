@@ -1,23 +1,19 @@
 <template>
     <section class="flex space-x-3">
-        <Button
+        <DsfrButton
             v-if="departementMetricsStore.activeTab === 'tableau'"
-            variant="primaryOutline"
-            :icon="parametresIcon"
-            iconPosition="left"
+            secondary
+            icon="fr-icon-filter-fill"
             @click="toggleParametres"
             size="sm"
-            class="!border-2 !border-primary hover:!bg-primaryDark"
-            >{{ parametresWording }}</Button
+            >{{ parametresWording }}</DsfrButton
         >
-        <Button
-            variant="primaryOutline"
-            icon="file-excel"
-            iconPosition="left"
+        <DsfrButton
+            secondary
+            icon="ri-file-excel-fill"
             @click="print"
             size="sm"
-            class="!border-2 !border-primary hover:!bg-primaryDark"
-            >Exporter</Button
+            >Exporter</DsfrButton
         >
     </section>
 </template>

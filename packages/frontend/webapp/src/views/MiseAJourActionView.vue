@@ -31,15 +31,13 @@
             {{ action.name }}
         </template>
         <template v-slot:buttons>
-            <Button
-                variant="primaryOutline"
-                type="button"
-                @click="back"
-                class="!border-2 !border-primary hover:!bg-primary"
-                >Annuler</Button
+            <DsfrButton
+                secondary
+                @click.prevent.stop="back"
+                >Annuler</DsfrButton
             >
-            <Button @click="submit" :loading="form?.isSubmitting"
-                >Mettre à jour l'action</Button
+            <DsfrButton @click="submit" :loading="form?.isSubmitting"
+                >Mettre à jour l'action</DsfrButton
             >
         </template>
 

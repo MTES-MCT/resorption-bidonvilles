@@ -25,10 +25,9 @@
                     name="question"
                     label="En une phrase, comment résumeriez-vous votre question ?"
                 />
-                <Button
+                <DsfrButton
                     size="sm"
-                    class="!border-2 !border-primary hover:!bg-primaryDark !py-1.5"
-                    >Demander</Button
+                    >Demander</DsfrButton
                 >
             </form>
         </div>

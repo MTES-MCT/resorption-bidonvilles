@@ -18,13 +18,14 @@
         />
         <ErrorSummary v-if="error" :message="error" />
         <div class="flex items-center justify-end">
-            <Button
+            <DsfrButton
                 v-if="pendingAdminCommentsChanges"
+                tertiary
+                no-outline
                 variant="primaryText"
                 @click="cancelAdminComments"
                 :disabled="isLoading"
-                class="hover:!bg-G200"
-                >Annuler mes changements</Button
+                >Annuler mes changements</DsfrButton
             >
             <Button
                 variant="tertiaryA11Yalt"

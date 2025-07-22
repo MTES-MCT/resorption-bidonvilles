@@ -8,15 +8,13 @@
             J'ai besoin de l'aide de la communauté.
         </template>
         <template v-slot:buttons>
-            <Button
-                variant="primaryOutline"
-                type="button"
+            <DsfrButton
+                secondary
                 @click="back"
-                class="!border-2 !border-primary hover:!bg-primary"
-                >Annuler</Button
+                >Annuler</DsfrButton
             >
-            <Button @click="submit" :loading="form?.isSubmitting"
-                >Publier</Button
+            <DsfrButton @click="submit" :loading="form?.isSubmitting"
+                >Publier</DsfrButton
             >
         </template>
 

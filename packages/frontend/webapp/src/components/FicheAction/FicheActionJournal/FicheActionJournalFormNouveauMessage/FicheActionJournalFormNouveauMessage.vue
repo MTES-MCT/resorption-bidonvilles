@@ -8,12 +8,11 @@
 
             <ErrorSummary v-if="error" :message="error" class="mt-2" />
             <p class="text-right">
-                <Button
+                <DsfrButton
                     :loading="isLoading"
-                    icon="paper-plane"
-                    iconPosition="left"
+                    icon="fr-icon-send-plane-fill"
                     @click="submit"
-                    >Publier le message</Button
+                    >Publier le message</DsfrButton
                 >
             </p>
         </DragZone>

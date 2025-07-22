@@ -9,40 +9,33 @@
                 )
             "
         >
-            <Button
+            <DsfrButton
                 size="sm"
-                variant="primaryOutline"
-                icon="comment"
-                iconPosition="left"
+                icon="fr-icon-chat-3-fill"
+                secondary
                 tabindex="-1"
-                class="!border-2 !border-primary hover:!bg-primary"
-                >Journal du site</Button
+                >Journal du site</DsfrButton
             >
         </RouterLink>
-        <Button
+        <DsfrButton
             size="sm"
-            icon="file-word"
-            iconPosition="left"
-            variant="primaryOutline"
+            icon="ri-file-excel-fill"
+            secondary
             @click="openExportModal"
-            class="!border-2 !border-primary hover:!bg-primary"
-            >Exporter</Button
+            >Exporter</DsfrButton
         >
-        <Button
+        <DsfrButton
             v-if="
                 userStore.hasLocalizedPermission('shantytown.close', town) &&
                 town.status === 'open'
             "
             size="sm"
-            variant="primary"
-            icon="house-circle-xmark"
-            iconPosition="left"
-            :href="`/site/${town.id}/fermeture`"
-            class="hover:!bg-primaryDark"
-            >Fermer le site</Button
+            icon="mdi:home-remove-outline"
+            @click="navigateTo(town.id, 'fermeture')"
+            >Fermer le site</DsfrButton
         >
 
-        <Button
+        <DsfrButton
             v-if="
                 userStore.hasLocalizedPermission(
                     'shantytown.fix_status',
@@ -50,46 +43,34 @@
                 ) && town.status !== 'open'
             "
             size="sm"
-            variant="primary"
-            icon="house-circle-xmark"
-            iconPosition="left"
-            :href="`/site/${town.id}/fermeture`"
-            class="hover:!bg-primaryDark"
-            >Corriger la fermeture du site</Button
+            icon="mdi:home-remove-outline"
+            @click="navigateTo(town.id, 'fermeture')"
+            >Corriger la fermeture du site</DsfrButton
         >
-        <Button
+        <DsfrButton
             size="sm"
-            variant="primary"
-            icon="pencil"
-            iconPosition="left"
+            icon="fr-icon-pencil-line"
             v-if="
                 userStore.hasLocalizedPermission('shantytown.update', town) &&
                 town.status === 'open'
             "
-            :href="`/site/${town.id}/mise-a-jour`"
-            class="hover:!bg-primaryDark"
-            >Mettre à jour</Button
+            @click="navigateTo(town.id, 'mise-a-jour')"
+            >Mettre à jour</DsfrButton  
         >
-        <Button
-            v-if="displayStartResorptionButton"
+        <DsfrButton
             size="sm"
-            variant="primary"
-            icon="fa-regular fa-play"
-            iconPosition="left"
+            icon="mdi:play"
             @click="startResorption"
             :loading="startResorptionIsLoading"
-            >Démarrer la résorption</Button
+            >Démarrer la résorption</DsfrButton
         >
-        <Button
+        <DsfrButton
             v-if="userStore.hasLocalizedPermission('shantytown.delete', town)"
             size="sm"
-            variant="primary"
-            icon="fa-regular fa-trash-alt"
-            iconPosition="left"
+            icon="mdi:delete-outline"
             @click="deleteTown"
             :loading="deleteIsLoading"
-            class="!border-2 !border-primary hover:!bg-primaryDark"
-            >Supprimer le site</Button
+            >Supprimer le site</DsfrButton
         >
     </p>
 </template>
@@ -103,7 +84,6 @@ import { useTownsStore } from "@/stores/towns.store";
 import { useModaleStore } from "@/stores/modale.store";
 import router from "@/helpers/router";
 
-import { Button } from "@resorptionbidonvilles/ui";
 import FicheSiteModaleExport from "../FicheSiteModaleExport/FicheSiteModaleExport.vue";
 
 import { useConfigStore } from "@/stores/config.store";
@@ -122,6 +102,10 @@ function openExportModal() {
     const modaleStore = useModaleStore();
     modaleStore.open(FicheSiteModaleExport, { town: town.value });
 }
+
+const navigateTo = (target, target2) => {
+    router.push(`/site/${target}/${target2}`);
+};
 
 const deleteIsLoading = ref(false);
 async function deleteTown() {

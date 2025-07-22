@@ -4,24 +4,19 @@
             to="#journal_de_l_action"
             v-if="userStore.hasActionPermission('action_comment.read', action)"
         >
-            <Button
+            <DsfrButton
                 size="sm"
-                variant="primaryOutline"
-                icon="comment"
-                iconPosition="left"
-                class="!border-2 !border-primary hover:!bg-primary"
-                >Journal de l'action</Button
+                secondary
+                icon="fr-icon-chat-3-fill"
+                >Journal de l'action</DsfrButton
             >
         </RouterLink>
-        <Button
+        <DsfrButton
             v-if="userStore.hasActionPermission('action.update', action)"
             size="sm"
-            variant="primary"
-            icon="pencil"
-            iconPosition="left"
-            :href="`/action/${action.id}/mise-a-jour`"
-            class="hover:!bg-primaryDark"
-            >Mettre à jour</Button
+            icon="fr-icon-pencil-line"
+            @click.prevent.stop="navigateTo('mise-a-jour')"
+            >Mettre à jour</DsfrButton
         >
     </p>
 </template>
@@ -30,13 +25,26 @@
 import { defineProps, toRefs } from "vue";
 import { RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
-import { Button } from "@resorptionbidonvilles/ui";
+import { useRouter } from 'vue-router';
 
 const props = defineProps({
     action: Object,
 });
+
+const router = useRouter();
 const { action } = toRefs(props);
 const userStore = useUserStore();
+
+const navigateTo = (target) => {
+    console.log("shantytown.value = ", action.value )
+    if (action.value && action.value.id) {
+        let path = `/action/${action.value.id}`;
+        if (target) {
+            path += `/${target}`;
+        }
+        router.push(path);
+    }
+};
 </script>
 
 <style scoped>

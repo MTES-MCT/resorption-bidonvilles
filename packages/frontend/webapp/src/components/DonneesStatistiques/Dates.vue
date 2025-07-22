@@ -21,12 +21,11 @@
             :section="departementMetricsStore.activeTab"
             @update:modelValue="(date) => updateDate('to', date)"
         />
-        <Button
+        <DsfrButton
             @click="update"
-            class="h-9"
             :loading="['init', 'refresh'].includes(metricsStore.nationStatus)"
             v-if="datesAreNotLoaded && from && to"
-            >Valider</Button
+            >Valider</DsfrButton
         >
     </section>
 </template>

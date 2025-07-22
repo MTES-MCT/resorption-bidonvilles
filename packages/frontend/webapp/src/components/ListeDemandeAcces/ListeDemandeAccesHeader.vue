@@ -6,46 +6,36 @@
         >
         <template v-slot:actions>
             <p class="flex space-x-2">
-                <Button
-                    icon="file-pdf"
-                    iconPosition="left"
-                    variant="primaryOutline"
+                <DsfrButton
+                    icon="bxs:file-pdf"
+                    secondary
                     size="sm"
                     @click="downloadGuide"
-                    class="!border-2 !border-primary hover:!bg-primary"
                 >
-                    Guide des accès</Button
+                    Guide des accès</DsfrButton
                 >
-                <Button
+                <DsfrButton
                     v-if="exportList.length > 0"
                     @click="openModalExport"
-                    icon="file-excel"
-                    iconPosition="left"
-                    variant="primaryOutline"
+                    icon="ri-file-excel-fill"
+                    secondary
                     size="sm"
-                    class="!border-2 !border-primary hover:!bg-primary"
                 >
-                    Exporter</Button
+                    Exporter</DsfrButton
                 >
-                <Button
-                    href="/nouvel-utilisateur"
-                    icon="user-plus"
-                    iconPosition="left"
-                    variant="primary"
+                <DsfrButton
+                    @click="navigateTo('/nouvel-utilisateur')"
+                    icon="fr-icon-user-add-fill"
                     size="sm"
-                    class="!border-2 !border-primary hover:!bg-primaryDark"
                 >
-                    Ajouter un utilisateur</Button
+                    Ajouter un utilisateur</DsfrButton
                 >
-                <Button
-                    href="/nouvelle-structure"
-                    icon="building"
-                    iconPosition="left"
-                    variant="primary"
+                <DsfrButton
+                    @click="navigateTo('/nouvelle-structure')"
+                    icon="fr-icon-hotel-line"
                     size="sm"
-                    class="!border-2 !border-primary hover:!bg-primaryDark"
                 >
-                    Créer une structure</Button
+                    Créer une structure</DsfrButton
                 >
             </p>
         </template>
@@ -55,14 +45,19 @@
 <script setup>
 import { useModaleStore } from "@/stores/modale.store";
 import exportList from "./ListeDemandeAcces.exports";
-
-import { Button } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import ModalExport from "@/components/ModalExport/ModalExport.vue";
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 function downloadGuide() {
     window.location = "/doc/guide_de_l_administrateur.pdf";
 }
+
+const navigateTo = (target) => {
+    router.push(`${target}`);
+};
 
 function openModalExport() {
     const modaleStore = useModaleStore();

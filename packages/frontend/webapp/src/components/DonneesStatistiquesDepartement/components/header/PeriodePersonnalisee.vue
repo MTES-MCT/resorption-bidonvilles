@@ -27,16 +27,15 @@
                 />
             </div>
 
-            <Button
+            <DsfrButton
                 v-if="
                     !departementMetricsStore.evolution.isLoading &&
                     datesAreNotLoaded &&
                     values.from &&
                     values.to
                 "
-                class="h-9 mb-px place-self-end"
                 @click="update"
-                >Valider</Button
+                >Valider</DsfrButton
             >
         </div>
     </div>
@@ -46,7 +45,7 @@
 import { toRefs, computed, watch } from "vue";
 import { useForm } from "vee-validate";
 
-import { Button, DatepickerInput, Icon } from "@resorptionbidonvilles/ui";
+import { DatepickerInput, Icon } from "@resorptionbidonvilles/ui";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store.js";
 import updateDataRange from "../../utils/updateDataRange";
 

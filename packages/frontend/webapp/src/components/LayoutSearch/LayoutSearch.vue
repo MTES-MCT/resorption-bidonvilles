@@ -19,8 +19,8 @@
                             :allowFreeSearch="allowFreeSearch"
                             v-model="inputLocation"
                         />
-                        <Button size="sm" type="button" class="py-1.5"
-                            >Rechercher</Button
+                        <DsfrButton size="sm"
+                            >Rechercher</DsfrButton
                         >
                     </div>
                     <div
