@@ -3729,6 +3729,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@iconify-json/bxs@npm:latest":
+  version: 1.2.2
+  resolution: "@iconify-json/bxs@npm:1.2.2"
+  dependencies:
+    "@iconify/types": "*"
+  checksum: 5e6518a182ee78d9bf09fbbac72965bbf14c573dea434f9d34ec6ac3f5ef3fcb55d944583fa8858a5d7a8584f91c697fc3c8cf330b7ac6dd7523db2fb671a459
+  languageName: node
+  linkType: hard
+
+"@iconify-json/fa@npm:latest":
+  version: 1.2.1
+  resolution: "@iconify-json/fa@npm:1.2.1"
+  dependencies:
+    "@iconify/types": "*"
+  checksum: b16d9b5fc77ea4f5aa184c1ea11aa6681be02a8d22ef727ec08210acef7c086c6bc7abf614957ffdf585d30ac4469cbc04f29a084f558250eb7f201884f3c23d
+  languageName: node
+  linkType: hard
+
 "@iconify-json/mdi@npm:latest":
   version: 1.2.3
   resolution: "@iconify-json/mdi@npm:1.2.3"
@@ -5806,6 +5824,8 @@ __metadata:
   dependencies:
     "@gouvfr/dsfr": 1.13.2
     "@gouvminint/vue-dsfr": ^8.6.0
+    "@iconify-json/bxs": latest
+    "@iconify-json/fa": latest
     "@iconify-json/mdi": latest
     "@iconify-json/ri": latest
     "@iconify-json/uil": latest
