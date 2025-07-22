@@ -122,8 +122,10 @@ const tabs = computed(() => {
                 postIcon:
                     (item.id === "journal_du_site" &&
                         commentsAttachments > 0) ||
-                    (item.id === "procedures" && proceduresAttachments > 0)
-                        ? true
+                    (item.id === "procedures" && proceduresAttachments > 0) ||
+                    (item.id === "conditions_de_vie" &&
+                        town.value.heatwaveStatus)
+                        ? item.postIcon
                         : false,
             };
         });
