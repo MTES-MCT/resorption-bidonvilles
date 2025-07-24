@@ -118,9 +118,11 @@ const triggerHeatwaveStatusChange = async (user: User, town: Shantytown, heatwav
 
     const alertColor: string = heatwaveStatus === true ? '#d63232' : '#f2c744';
     const alertStatus: string = heatwaveStatus === true ? '**activée** :high_brightness:' : '**désactivée** :negative_squared_cross_mark:';
+    const organizationAbbreviation: string = user.organization.abbreviation ? `(${user.organization.abbreviation})` : '';
+    const notifChannel: string = `#notif-canicule${config.environnement === 'development' ? '-test' : ''}`;
 
     const mattermostMessage = {
-        channel: `#notif-canicule${config.environnement === 'development' ? '-test' : ''}`,
+        channel: notifChannel,
         username: 'Alerte Résorption Bidonvilles',
         icon_emoji: ':robot:',
         text: `:thermometer: Une alerte canicule a été ${alertStatus} par ${usernameLink} <${user.email}>`,
@@ -134,7 +136,7 @@ const triggerHeatwaveStatusChange = async (user: User, town: Shantytown, heatwav
                     },
                     {
                         short: false,
-                        value: `*Organisation*: ${user.organization.name} ${user.organization.abbreviation ? `(${user.organization.abbreviation})` : ''}`,
+                        value: `*Organisation*: ${user.organization.name}${organizationAbbreviation}`,
                     },
                     {
                         short: false,
