@@ -23,6 +23,19 @@ const formatUsernameWithEmailLink = (user: { first_name: string, last_name: stri
 const formatTownLink = (townID: number, text: string): string => `[${text}](${webappUrl}/site/${townID})`;
 const formatActionLink = (actionID: number, text: string): string => `[${text}](${webappUrl}/action/${actionID})`;
 
+const checkLocation: (user: User) => string = (user) => {
+    let locationText: string = 'Inconnu';
+    if (user.intervention_areas.is_national) {
+        locationText = 'National';
+    } else {
+        const area = user.intervention_areas.areas.find(a => a.is_main_area && a.type !== 'nation');
+        if (area !== undefined) {
+            locationText = area[area.type].name;
+        }
+    }
+    return locationText;
+};
+
 const formatDate = ((dateToFormat: Date): string => {
     const day = dateToFormat.getDate();
     const month = dateToFormat.getMonth() + 1;
@@ -198,15 +211,7 @@ async function triggerLandRegistryRequest(user: User, parcel: string, dataYear: 
     const username = formatUsername(user);
     const usernameLink = `<${webappUrl}/acces/${user.id}|${username}>`;
 
-    let locationText = 'Inconnu';
-    if (user.intervention_areas.is_national) {
-        locationText = 'National';
-    } else {
-        const area = user.intervention_areas.areas.find(a => a.is_main_area && a.type !== 'nation');
-        if (area !== undefined) {
-            locationText = area[area.type].name;
-        }
-    }
+    const locationText = checkLocation(user);
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
         '#notif-requetes-cadastre',
@@ -307,15 +312,7 @@ async function triggerNewUserAlert(user: User): Promise<void> {
     const username = formatUsername(user);
     const usernameLink = `<${webappUrl}/nouvel-utilisateur/${user.id}|${username}>`;
 
-    let locationText = 'Inconnu';
-    if (user.intervention_areas.is_national) {
-        locationText = 'National';
-    } else {
-        const area = user.intervention_areas.areas.find(a => a.is_main_area && a.type !== 'nation');
-        if (area !== undefined) {
-            locationText = area[area.type].name;
-        }
-    }
+    const locationText = checkLocation(user);
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
         '#notif-nouveaux-utilisateurs',
