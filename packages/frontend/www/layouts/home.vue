@@ -6,7 +6,7 @@
                 résorption</a>
             <a href="#faq" aria-label="Accéder à la foire aux questions">FAQ</a>
             <a href="#equipe" aria-label="Accéder au paragraphe présentant l'équipe'">{{ $t("aboutUs") }}</a>
-            <a href="https://blog.resorption-bidonvilles.dihal.gouv.fr" target="_blank" aria-label="Accéder au blog">Blog</a>
+            <a href="https://blog.resorption-bidonvilles.dihal.gouv.fr" target="_blank" aria-label="Accéder au blog"> Blog <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
         </template>
 
         <slot />
