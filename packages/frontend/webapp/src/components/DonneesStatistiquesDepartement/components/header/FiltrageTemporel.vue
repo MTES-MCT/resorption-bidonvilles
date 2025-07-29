@@ -6,32 +6,32 @@
                 {
                     label: 'Les 2 années écoulées',
                     value: '2-annees-ecoulees',
-                    icon: 'chart-simple',
+                    icon: 'fr-icon-bar-chart-box-line',
                 },
                 {
                     label: 'L\'année écoulée',
                     value: 'annee-ecoulee',
-                    icon: 'chart-simple',
+                    icon: 'fr-icon-bar-chart-box-line',
                 },
                 {
                     label: 'Le mois passé',
                     value: 'mois-passe',
-                    icon: 'chart-simple',
+                    icon: 'fr-icon-bar-chart-box-line',
                 },
                 {
                     label: 'Les 7 derniers jours',
                     value: '7-derniers-jours',
-                    icon: 'chart-simple',
+                    icon: 'fr-icon-bar-chart-box-line',
                 },
                 {
                     label: 'Période personnalisée',
                     value: 'periode-personnalisee',
-                    icon: 'chart-simple',
+                    icon: 'fr-icon-bar-chart-box-line',
                 },
                 {
                     label: 'Situation à date',
                     value: 'situation-a-date',
-                    icon: 'table-list',
+                    icon: 'fr-icon-table-line',
                 },
             ]"
             v-model="selectedOption"
