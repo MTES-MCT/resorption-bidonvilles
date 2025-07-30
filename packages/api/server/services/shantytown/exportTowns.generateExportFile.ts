@@ -10,7 +10,7 @@ import serializeExportProperties from './_common/serializeExportProperties';
 import createExportSections, { type ShantytownExportListOption } from './_common/createExportSections';
 
 export default async (user: AuthUser, data: Shantytown[], options: ShantytownExportListOption[], locations: Location[], closedTowns: boolean, date: Date): Promise<Excel.Buffer> => {
-    const isNationalExport = locations.some(l => l.type === 'nation');
+    const isNationalExport = locations.some(l => ['nation', 'metropole', 'outremer'].includes(l.type));
     const closingSolutions = await closingSolutionModel.findAll();
     const properties = serializeExportProperties(closingSolutions);
     const sections = await createExportSections(user, options, properties, closedTowns, closingSolutions);
@@ -18,6 +18,15 @@ export default async (user: AuthUser, data: Shantytown[], options: ShantytownExp
     let locationName = '';
     if (isNationalExport) {
         locationName = 'France';
+        const hasMetropole = locations.some(l => l.type === 'metropole');
+        const hasOutremer = locations.some(l => l.type === 'outremer');
+
+        if (hasMetropole) {
+            locationName = 'Hexagone';
+        }
+        if (hasOutremer) {
+            locationName = 'Outremer';
+        }
     } else {
         locationName = locations.map((l) => {
             if (l.type === 'departement' || l.type === 'city') {
