@@ -162,7 +162,7 @@ type ShantytownWithJustice = BaseShantytown & {
 };
 
 type ShantytownWithOwner = BaseShantytown & {
-    owner: ParcelOwners | null,
+    owner: ParcelOwners | [],
 };
 
 export type ShantytownAttachmentObject = {
