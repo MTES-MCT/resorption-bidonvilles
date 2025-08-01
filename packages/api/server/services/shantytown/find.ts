@@ -35,7 +35,7 @@ export default async (user: User, townId: number): Promise<Shantytown> => {
         }));
     }
     // On récupère les infos de propriétaires
-    const ownersResult: RawParcelOwner = await parcelOwners.find(user as AuthUser, town);
+    const ownersResult: RawParcelOwner[] = await parcelOwners.find(user as AuthUser, town);
     // Puis on les sérialise
     const owners: ParcelOwners | [] = Array.isArray(ownersResult) ? await serializeOwners(user as AuthUser, ownersResult) : null;
 
