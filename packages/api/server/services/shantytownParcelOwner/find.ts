@@ -5,12 +5,12 @@ import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { RawParcelOwner } from '#root/types/resources/ParcelOwner.d';
 
-export default async (user: AuthUser, shantytown: Shantytown): Promise<RawParcelOwner> => {
+export default async (user: AuthUser, shantytown: Shantytown): Promise<RawParcelOwner[]> => {
     if (!permissionUtils.can(user).do('access', 'shantytown_owner').on(shantytown)) {
         throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission de lire les propriétaires de parcelles'));
     }
 
-    let parcelOwners: RawParcelOwner;
+    let parcelOwners: RawParcelOwner[];
     try {
         parcelOwners = await shantytownParcelOwner.findAll(user, shantytown.id);
 
