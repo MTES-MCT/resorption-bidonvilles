@@ -9,6 +9,7 @@ export function serialized(override: Partial<ParcelOwners> = {}): ParcelOwners {
                 ownerId: 1,
                 name: 'Jean Bon',
                 type: 2,
+                active: true,
                 createdAt: '2025-07-07 12:00:00.000000+00',
                 createdBy: {
                     authorId: 2,
@@ -22,6 +23,7 @@ export function serialized(override: Partial<ParcelOwners> = {}): ParcelOwners {
                 ownerId: 2,
                 name: 'Pierre Quiroul',
                 type: 2,
+                active: false,
                 createdAt: '2025-07-07 12:10:00.000000+00',
                 createdBy: {
                     authorId: 2,
