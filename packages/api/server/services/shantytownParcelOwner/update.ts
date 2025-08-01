@@ -2,7 +2,7 @@ import permissionUtils from '#server/utils/permission';
 import { Transaction } from 'sequelize';
 import shantytownParcelOwner from '#server/models/shantytownParcelOwnerModel';
 import ServiceError from '#server/errors/ServiceError';
-// import { sequelize } from '#db/sequelize';
+import { sequelize } from '#db/sequelize';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Location } from '#server/models/geoModel/Location.d';
 // import serializeOwners from './serializeOwners';
@@ -10,9 +10,9 @@ import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { ParcelOwnerInsert, RawParcelOwner } from '#root/types/resources/ParcelOwner.d';
 
 // export default async (user: AuthUser, shantytown: Shantytown, owners: ParcelOwnerInsert[], argTransaction: Transaction | undefined = undefined): Promise<ParcelOwners> => {
-export default async (user: AuthUser, shantytown: Shantytown, owners: ParcelOwnerInsert[], transaction: Transaction | undefined = undefined): Promise<void> => {
-    // let transaction: Transaction = argTransaction;
-    // transaction ??= await sequelize.transaction();
+export default async (user: AuthUser, shantytown: Shantytown, owners: ParcelOwnerInsert[], argTransaction: Transaction | undefined = undefined): Promise<void> => {
+    let transaction: Transaction = argTransaction;
+    transaction ??= await sequelize.transaction();
 
     // let updatedParcelOwner: RawParcelOwner[];
 
@@ -31,7 +31,7 @@ export default async (user: AuthUser, shantytown: Shantytown, owners: ParcelOwne
     // On récupère les propriétaires existants pour le site
     let actualOwners: RawParcelOwner[] = [];
     try {
-        actualOwners = await shantytownParcelOwner.findAll(user, shantytown.id, null);
+        actualOwners = await shantytownParcelOwner.findAll(user, shantytown.id, transaction);
     } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Erreur lors de la récupération des propriétaires existants :', error);
@@ -84,15 +84,15 @@ export default async (user: AuthUser, shantytown: Shantytown, owners: ParcelOwne
             }
         }
 
-        // if (argTransaction === undefined) {
-        //     console.log('Commiting transaction (argTransaction):', transaction);
+        if (argTransaction === undefined) {
+            console.log('Commiting transaction (argTransaction):', transaction);
 
-        //     await transaction.commit();
-        // }
+            await transaction.commit();
+        }
     } catch (error) {
-        // if (argTransaction === undefined) {
-        //     await transaction.rollback();
-        // }
+        if (argTransaction === undefined) {
+            await transaction.rollback();
+        }
         console.log('Erreur, on rollback');
 
         throw new ServiceError('parcel_owner_update_failed', new Error(error?.message));
