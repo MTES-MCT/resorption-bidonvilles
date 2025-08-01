@@ -3,6 +3,7 @@ import { sequelize } from '#db/sequelize';
 import shantytownResorptionService from '#server/services/shantytownResorption';
 import shantytownModel from '#server/models/shantytownModel';
 import attachmentService from '#server/services/attachment';
+import shantytownParcelOwnerService from '#server/services/shantytownParcelOwner';
 import ServiceError from '#server/errors/ServiceError';
 import find from './find';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
@@ -19,6 +20,7 @@ type DecreeAttachments = {
 };
 
 export default async (shantytown, user, decreeAttachments: DecreeAttachments): Promise<Shantytown> => {
+// export default async (shantytown, user, decreeAttachments: DecreeAttachments): Promise<void> => {
     const transaction = await sequelize.transaction();
 
     try {
@@ -57,7 +59,7 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
                 fk_field_type: shantytown.field_type,
                 fk_owner_type: shantytown.owner_type,
                 fk_city: shantytown.citycode,
-                owner: shantytown.owner,
+                // owner: shantytown.owner,
                 declared_at: shantytown.declared_at,
                 census_status: shantytown.census_status,
                 census_conducted_at: shantytown.census_conducted_at,
@@ -169,7 +171,7 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
     }
 
     // on tente d'enregistrer les fichiers joints
-    if (decreeAttachments.files.length > 0) {
+    if (decreeAttachments.files?.length > 0) {
         try {
             await attachmentService.upload(
                 'shantytown_decree',
@@ -182,6 +184,21 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
         } catch (error) {
             await transaction.rollback();
             throw new ServiceError('upload_failed', error);
+        }
+    }
+
+    // On met à jour les propriétaires de parcelles liés au site
+    if (shantytown.owner?.owners.length > 0) {
+        try {
+            await shantytownParcelOwnerService.update(
+                user,
+                shantytown,
+                shantytown.owner.owners,
+                transaction,
+            );
+        } catch (error) {
+            // await transaction.rollback();
+            throw new ServiceError('parcel_owner_update_failed', error);
         }
     }
 
@@ -216,11 +233,14 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
 
     // on finalise
     try {
+        console.log('On commit la transaction');
         await transaction.commit();
+        console.log('CHECK! Transaction committed successfully');
     } catch (commitError) {
         await transaction.rollback();
         throw new ServiceError('commit_failed', commitError);
     }
+    console.log('Is there a FUCKING transaction?', transaction);
 
     let updatedShantytown: Shantytown = null;
 
