@@ -11,7 +11,7 @@ import { ParcelOwnerInsert } from '#root/types/resources/ParcelOwner.d';
 export default async (user: AuthUser, shantytownId: number, owners: ParcelOwnerInsert[]): Promise<{ parcelOwnerId: number }> => {
     const transaction = await sequelize.transaction();
 
-    let parcelOwnerId; // Simulated ID for the created parcel owner
+    let parcelOwnerId;
     let shantytown: Shantytown;
     try {
         shantytown = await shantytownModel.findOne(user, shantytownId, null);
@@ -27,8 +27,8 @@ export default async (user: AuthUser, shantytownId: number, owners: ParcelOwnerI
         city: null,
     };
 
-    if (!permissionUtils.can(user).do('create', 'shantytown_owner').on(location)) {
-        throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission de créer un site'));
+    if (!permissionUtils.can(user).do('access', 'shantytown_owner').on(location)) {
+        throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission de créer un propriétaire de parcelle'));
     }
 
     try {
