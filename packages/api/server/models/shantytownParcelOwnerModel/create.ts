@@ -20,20 +20,19 @@ export default async (user: AuthUser, shantytownId: number, owners: ParcelOwnerI
 
     try {
         const [results]: [any[], any] = await sequelize.query(`
-            INSERT INTO shantytown_parcel_owners (fk_user, fk_shantytown, owner_name, fk_owner_type)
-            SELECT
-                :userId,
-                :shantytownId,
-                owner_data.name,
-                owner_data.type
-            FROM unnest(
-                :names::text[],
-                :types::int[]
-            ) AS owner_data(name, type)
-            RETURNING shantytown_parcel_owner_id`, {
-            replacements: {
-                userId: user.id,
-                shantytownId,
+            INSERT INTO shantytown_parcel_owners (fk_shantytown, owner_name, fk_owner_type, fk_user)
+        SELECT
+            ${shantytownId},
+            u_name.name,
+            u_type.type,
+            ${user.id}
+        FROM
+            unnest($names::text[]) WITH ORDINALITY AS u_name(name, ord)
+        JOIN
+            unnest($types::int[]) WITH ORDINALITY AS u_type(type, ord) ON u_name.ord = u_type.ord
+        RETURNING shantytown_parcel_owner_id, fk_shantytown, owner_name, fk_owner_type;
+    `, {
+            bind: {
                 names,
                 types,
             },

@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 import { Transaction } from 'sequelize';
 import ServiceError from '#server/errors/ServiceError';
 
-export default async (shantytownId: number, ownerIds: number[], argTransaction: Transaction | undefined = undefined) => {
+export default async (shantytownId: number, ownerIds: number[], argTransaction: Transaction | undefined = undefined): Promise<boolean> => {
     let transaction: Transaction = argTransaction;
     transaction ??= await sequelize.transaction();
 
