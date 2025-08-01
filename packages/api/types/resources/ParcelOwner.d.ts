@@ -2,6 +2,7 @@ export type SerializedOwner = {
     ownerId?: number;
     name: string;
     type: number;
+    active: boolean;
     createdAt: string;
     createdBy: {
         authorId: number;
@@ -13,8 +14,10 @@ export type SerializedOwner = {
 };
 
 export type ParcelOwnerInsert = {
+    ownerId: number;
     name: string;
     type: number;
+    active?: boolean;
 };
 
 export type RawParcelOwner = {
@@ -25,7 +28,7 @@ export type RawParcelOwner = {
     fk_owner_type: number;
     active: boolean;
     created_at: string;
-}[];
+};
 
 export type ParcelOwners = {
     parcelOwnerId: number;

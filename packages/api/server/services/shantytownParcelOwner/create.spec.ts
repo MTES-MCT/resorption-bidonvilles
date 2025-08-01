@@ -52,6 +52,7 @@ describe('services/shantytownParcelOwners.create()', () => {
 
     beforeEach(() => {
         fakeOwner = [{
+            ownerId: 1,
             name: 'Jean Bon',
             type: 1,
         }];
@@ -146,7 +147,7 @@ describe('services/shantytownParcelOwners.create()', () => {
 
     it('créé plusieurs propriétaires de parcelles pour le même site', async () => {
         stubs.on.returns(true);
-        const fakeOwners: ParcelOwnerInsert[] = [...fakeOwner, { name: 'Pierre Quiroul', type: 2 }];
+        const fakeOwners: ParcelOwnerInsert[] = [...fakeOwner, { ownerId: 2, name: 'Pierre Quiroul', type: 2 }];
         stubs.shantytownParcelOwnerModel.create.resolves({ parcelOwnerId: 123 });
         fakeTown.id = 2; // Simulate a different town ID for this test
         let parcelOwnerId: { parcelOwnerId: number };
