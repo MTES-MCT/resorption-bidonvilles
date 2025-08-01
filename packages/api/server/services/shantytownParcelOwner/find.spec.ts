@@ -94,7 +94,7 @@ describe('services/shantytownParcelOwners.create()', () => {
         stubs.on.returns(true);
         stubs.shantytownParcelOwnerModel.findAll.resolves(fakeOwners);
 
-        let parcelOwners: RawParcelOwner;
+        let parcelOwners: RawParcelOwner[];
         try {
             parcelOwners = await find(fakeTestUser, fakeTown);
         } catch (error) {
