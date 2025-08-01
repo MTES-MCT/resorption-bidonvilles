@@ -65,14 +65,30 @@ export default function (
                 .label(labels.detailed_address),
             owner_type: number().required().label(labels.owner_type),
             owner: hasOwnerPermission.value
-                ? string()
+                ? object({
+                      owners: array().of(
+                          object({
+                              name: string()
+                                  .required(
+                                      "Le nom du propriétaire est obligatoire"
+                                  )
+                                  .matches(
+                                      /^[^<>{}]*$/,
+                                      "Le nom du propriétaire contient des caractères non valides"
+                                  ),
+                              type: number().required(
+                                  "Le type du propriétaire est obligatoire"
+                              ),
+                          })
+                      ),
+                  })
                       .nullable()
                       .label(labels.owner)
-                      .matches(
-                          /^[^<>{}]*$/,
-                          `Le contenu du champ "${labels.owner}" n'est pas valide`
-                      )
-                : undefined,
+                : //   .matches(
+                  //       /^[^<>{}]*$/,
+                  //       `Le contenu du champ "${labels.owner}" n'est pas valide`
+                  //   )
+                  undefined,
             population_total: number()
                 .nullable()
                 .min(1)

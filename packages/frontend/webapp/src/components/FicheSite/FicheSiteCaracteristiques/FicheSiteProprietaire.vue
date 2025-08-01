@@ -6,7 +6,7 @@
             <p class="font-bold">{{ ownerTitles.type }}</p>
         </div>
         <div
-            v-for="owner in town.owner.owners"
+            v-for="owner in ownersList"
             :key="owner.ownerId"
             class="flex flex-row justify-between"
         >
@@ -32,14 +32,18 @@ const props = defineProps({
 const { town } = toRefs(props);
 const configStore = useConfigStore();
 
+const ownersList = computed(() => {
+    return town.value.owner.owners.filter((owner) => owner.active);
+});
+
 const ownerTitles = computed(() => {
     return {
         nom:
-            town.value.owner.owners.length > 1
+            ownersList.value.length > 1
                 ? "Noms des propriétaires"
                 : "Nom du propriétaire",
         type:
-            town.value.owner.owners.length > 1
+            ownersList.value.length > 1
                 ? "Types de propriétaires"
                 : "Type de propriétaire",
     };
