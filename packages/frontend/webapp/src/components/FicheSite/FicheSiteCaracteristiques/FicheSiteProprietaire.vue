@@ -17,6 +17,9 @@
                 {{ ownerType(owner.type) }}
             </p>
         </div>
+        <div v-if="!ownersList">
+            <p class="break-words">Aucun propriétaire connu.</p>
+        </div>
     </FicheSousRubrique>
 </template>
 
@@ -33,10 +36,13 @@ const { town } = toRefs(props);
 const configStore = useConfigStore();
 
 const ownersList = computed(() => {
-    return town.value.owner.owners.filter((owner) => owner.active);
+    return town.value.owner.owners?.filter((owner) => owner.active);
 });
 
 const ownerTitles = computed(() => {
+    if (!ownersList.value) {
+        return {};
+    }
     return {
         nom:
             ownersList.value.length > 1
