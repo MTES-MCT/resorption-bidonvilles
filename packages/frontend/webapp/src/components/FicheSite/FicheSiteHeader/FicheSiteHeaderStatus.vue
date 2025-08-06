@@ -1,14 +1,12 @@
 <template>
     <div class="flex flex-col">
         <div class="flex items-center uppercase text-sm">
-            <div
-                class="rounded-full h-3 w-3 mr-2"
-                :class="lastUpdatedAtDotColor"
+            <DsfrBadge
+                :type="badgeType"
+                noIcon
+                :label="townStatus"
+                class="mr-4 text-xs"
             />
-
-            <p class="mr-4">
-                {{ townStatus }}
-            </p>
             <TagObjectifResorption
                 v-if="town.resorptionTarget"
                 :target="town.resorptionTarget"
@@ -23,15 +21,28 @@
 </template>
 
 <script setup>
-import { toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import useLastUpdated from "@/composables/useLastUpdated";
 import FicheSiteHeaderStatusLastEvent from "@/components/FicheSite/FicheSiteHeader/FicheSiteHeaderStatusLastEvent.vue";
 import TagObjectifResorption from "@/components/TagObjectifResorption/TagObjectifResorption.vue";
+import getStatusBadgeType from "@/utils/getStatusBadgeType";
 
 const props = defineProps({
     town: Object,
 });
 const { town } = toRefs(props);
 
-const { townStatus, lastUpdatedAtDotColor } = useLastUpdated(town);
+const { townStatus } = useLastUpdated(town);
+
+const badgeType = computed(() => {
+    if (town.value.closedAt && town.value.closedWithSolutions !== "yes") {
+        return "error";
+    } else if (
+        town.value.closedAt &&
+        town.value.closedWithSolutions === "yes"
+    ) {
+        return "success";
+    }
+    return getStatusBadgeType(town.value.updatedAt, town.value.lastUpdatedAt);
+});
 </script>
