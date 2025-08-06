@@ -1,5 +1,6 @@
 import {
     DsfrAlert,
+    DsfrBadge,
     DsfrButton,
     DsfrButtonGroup,
     DsfrCard,
@@ -20,6 +21,7 @@ import "@gouvfr/dsfr/dist/component/component.main.min.css";
 
 export function useDsfr(app) {
     app.component("DsfrAlert", DsfrAlert);
+    app.component("DsfrBadge", DsfrBadge);
     app.component("DsfrButton", DsfrButton);
     app.component("DsfrButtonGroup", DsfrButtonGroup);
     app.component("DsfrCard", DsfrCard);
