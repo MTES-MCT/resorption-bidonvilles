@@ -57,9 +57,7 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
                 cars: shantytown.cars,
                 mattresses: shantytown.mattresses,
                 fk_field_type: shantytown.field_type,
-                fk_owner_type: shantytown.owner_type,
                 fk_city: shantytown.citycode,
-                // owner: shantytown.owner,
                 declared_at: shantytown.declared_at,
                 census_status: shantytown.census_status,
                 census_conducted_at: shantytown.census_conducted_at,
@@ -197,7 +195,7 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
                 transaction,
             );
         } catch (error) {
-            // await transaction.rollback();
+            await transaction.rollback();
             throw new ServiceError('parcel_owner_update_failed', error);
         }
     }
@@ -222,14 +220,11 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
 
     // on finalise
     try {
-        console.log('On commit la transaction');
         await transaction.commit();
-        console.log('CHECK! Transaction committed successfully');
     } catch (commitError) {
         await transaction.rollback();
         throw new ServiceError('commit_failed', commitError);
     }
-    console.log('Is there a FUCKING transaction?', transaction);
 
     let updatedShantytown: Shantytown = null;
 
