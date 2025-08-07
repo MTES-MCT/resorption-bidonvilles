@@ -18,7 +18,7 @@
             </p>
         </div>
         <div v-if="!ownersList">
-            <p class="break-words">Aucun propriétaire connu.</p>
+            <p class="break-words">Aucun propriétaire connu</p>
         </div>
     </FicheSousRubrique>
 </template>
