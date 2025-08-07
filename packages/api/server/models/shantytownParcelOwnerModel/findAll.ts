@@ -17,8 +17,6 @@ export default async (user: AuthUser, shantytownId: number, argTransaction: Tran
         });
 
         if (argTransaction === undefined) {
-            console.log('Commiting transaction (argTransaction):', transaction);
-
             await transaction.commit();
         }
         return results;
@@ -26,7 +24,6 @@ export default async (user: AuthUser, shantytownId: number, argTransaction: Tran
         if (argTransaction === undefined) {
             await transaction.rollback();
         }
-        console.log('Erreur, on rollback');
         throw new ServiceError('parcel_owner_fetch_failed', new Error(error?.message));
     }
 };
