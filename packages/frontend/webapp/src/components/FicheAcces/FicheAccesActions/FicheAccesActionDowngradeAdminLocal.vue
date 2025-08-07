@@ -9,7 +9,7 @@
         no-outline
         :loading="isLoading"
         :disabled="disabled"
-        >Retirer rôle « Administrateur local »
+        >Retirer le rôle « Administrateur local »
     </DsfrButton>
 </template>
 

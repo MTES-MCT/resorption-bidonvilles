@@ -55,7 +55,7 @@
                 town.status === 'open'
             "
             @click="navigateTo(town.id, 'mise-a-jour')"
-            >Mettre à jour</DsfrButton  
+            >Mettre à jour</DsfrButton
         >
         <DsfrButton
             v-if="displayStartResorptionButton"

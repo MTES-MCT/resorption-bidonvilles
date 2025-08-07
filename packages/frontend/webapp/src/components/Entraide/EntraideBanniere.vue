@@ -1,6 +1,6 @@
 <template>
     <div class="w-2/3 px-6 mx-auto flex items-center md:flex-row md:space-x-8">
-        <img :src="img" class="h-48" />
+        <img :src="img" alt="" class="h-48" />
         <div class="mt-10 mb-10">
             <h1 class="text-xl text-primary font-bold">Demander de l'aide</h1>
             <p class="mt-2">
@@ -25,10 +25,7 @@
                     name="question"
                     label="En une phrase, comment résumeriez-vous votre question ?"
                 />
-                <DsfrButton
-                    size="sm"
-                    >Demander</DsfrButton
-                >
+                <DsfrButton size="sm">Demander</DsfrButton>
             </form>
         </div>
     </div>
@@ -40,7 +37,7 @@ import { useForm } from "vee-validate";
 import img from "@/assets/img/illustrations/communaute.svg";
 import { useDirectoryStore } from "@/stores/directory.store";
 
-import { Button, Spinner, TextInput } from "@resorptionbidonvilles/ui";
+import { Spinner, TextInput } from "@resorptionbidonvilles/ui";
 
 const directoryStore = useDirectoryStore();
 const { values } = useForm({

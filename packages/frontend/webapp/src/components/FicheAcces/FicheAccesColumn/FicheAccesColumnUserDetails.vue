@@ -56,12 +56,7 @@
 import { defineProps, toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import avatarImg from "@/assets/img/illustrations/avatar.svg";
-import {
-    Button,
-    Icon,
-    Link,
-    LinkOrganization,
-} from "@resorptionbidonvilles/ui";
+import { Icon, Link, LinkOrganization } from "@resorptionbidonvilles/ui";
 import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
 
