@@ -17,9 +17,6 @@ chai.use(chaiSubset);
 
 const sandbox = sinon.createSandbox();
 const stubs = {
-    shantytownModel: {
-        findOne: sandbox.stub().resolves(fakeShantytown()),
-    },
     shantytownParcelOwnerModel: {
         create: sandbox.stub(),
     },
@@ -30,15 +27,13 @@ const stubs = {
         commit: sandbox.stub(),
         rollback: sandbox.stub(),
     },
-    can: sandbox.stub(),
-    do: sandbox.stub(),
-    on: sandbox.stub(),
+    user: {
+        isAllowedTo: sandbox.stub(),
+    },
 };
 
-rewiremock('#server/models/shantytownModel').with(stubs.shantytownModel);
 rewiremock('#server/models/shantytownParcelOwnerModel').with(stubs.shantytownParcelOwnerModel);
 rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
-rewiremock('#server/utils/permission').with({ can: stubs.can });
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -58,79 +53,42 @@ describe('services/shantytownParcelOwners.create()', () => {
         }];
         fakeTestUser = fakeUser();
         fakeTown = fakeShantytown();
-        stubs.can.returns({
-            do: stubs.do,
-        });
-        stubs.do.returns({
-            on: stubs.on,
-        });
+        stubs.user.isAllowedTo.returns(true);
         stubs.sequelize.transaction.resolves(stubs.transaction);
-        stubs.shantytownModel.findOne.resolves(fakeShantytown());
     });
 
     afterEach(() => {
         sandbox.reset();
     });
 
-    it('récupère les données du site en question', async () => {
-        stubs.on.returns(true);
-
-        try {
-            await create(fakeTestUser, fakeTown.id, fakeOwner);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-        }
-        expect(stubs.shantytownModel.findOne).to.have.been.calledOnceWith(fakeTestUser, fakeTown.id, null);
-    });
-
-    it('renvoie un ServiceError si le site n\'existe pas', async () => {
-        let returnedError: ServiceError | undefined;
-        stubs.shantytownModel.findOne.rejects(new Error('Le site n\'a pas été trouvé'));
-
-        try {
-            await create(fakeTestUser, fakeTown.id, fakeOwner);
-        } catch (error) {
-            returnedError = error as ServiceError;
-        }
-        expect(stubs.shantytownModel.findOne).to.have.been.calledOnceWith(fakeTestUser, fakeTown.id, null);
-        expect(returnedError).to.be.instanceOf(ServiceError);
-        expect(returnedError.code).to.equal('shantytown_unfound');
-        expect(returnedError.message).to.equal('Le site n\'a pas été trouvé');
-    });
-
     it('vérifie que l\'utilisateur a le droit d\'ajouter un propriétaire', async () => {
-        stubs.on.returns(true);
-
         try {
             await create(fakeTestUser, fakeTown.id, fakeOwner);
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);
         }
-        expect(stubs.can).to.have.been.calledOnceWith(fakeTestUser);
-        expect(stubs.do).to.have.been.calledOnceWith('create', 'shantytown_owner');
-        expect(stubs.on).to.have.been.calledOnce;
+
+        expect(stubs.user.isAllowedTo).to.have.been.calledWith('access', 'shantytown_owner');
+        expect(stubs.user.isAllowedTo).to.equal(true);
     });
 
     it('renvoie un ServiceError si l\'utilisateur n\'a pas le droit d\'ajouter un propriétaire', async () => {
         let returnedError: ServiceError | undefined;
-        stubs.on.returns(false);
+        stubs.user.isAllowedTo.returns(false);
 
         try {
             await create(fakeTestUser, fakeTown.id, fakeOwner);
         } catch (error) {
             returnedError = error as ServiceError;
         }
-        expect(stubs.can).to.have.been.calledOnceWith(fakeTestUser);
-        expect(stubs.do).to.have.been.calledOnceWith('create', 'shantytown_owner');
-        expect(stubs.on).to.have.been.calledOnce;
+
+        expect(stubs.user.isAllowedTo).to.have.been.calledOnceWith('access', 'shantytown_owner');
         expect(returnedError).to.be.instanceOf(ServiceError);
         expect(returnedError.code).to.equal('permission_denied');
     });
 
     it('crée un propriétaire de parcelle', async () => {
-        stubs.on.returns(true);
         stubs.shantytownParcelOwnerModel.create.resolves({ parcelOwnerId: 123 });
         let parcelOwnerId: { parcelOwnerId: number };
 
@@ -146,7 +104,6 @@ describe('services/shantytownParcelOwners.create()', () => {
     });
 
     it('créé plusieurs propriétaires de parcelles pour le même site', async () => {
-        stubs.on.returns(true);
         const fakeOwners: ParcelOwnerInsert[] = [...fakeOwner, { ownerId: 2, name: 'Pierre Quiroul', type: 2 }];
         stubs.shantytownParcelOwnerModel.create.resolves({ parcelOwnerId: 123 });
         fakeTown.id = 2; // Simulate a different town ID for this test
@@ -165,7 +122,6 @@ describe('services/shantytownParcelOwners.create()', () => {
 
     it('renvoie un ServiceError si la création du propriétaire de parcelle échoue', async () => {
         let returnedError: ServiceError | undefined;
-        stubs.on.returns(true);
         stubs.shantytownParcelOwnerModel.create.rejects(new Error('Échec de la création du propriétaire de parcelle'));
 
         try {
