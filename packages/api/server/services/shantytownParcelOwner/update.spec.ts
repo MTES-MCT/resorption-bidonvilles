@@ -9,7 +9,7 @@ import { serialized as fakeShantytown } from '#test/utils/shantytown';
 import ServiceError from '#server/errors/ServiceError';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
-import { ParcelOwnerInsert, ParcelOwners } from '#root/types/resources/ParcelOwner.d';
+import { ParcelOwnerInsert } from '#root/types/resources/ParcelOwner.d';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -21,10 +21,10 @@ const stubs = {
         findOne: sandbox.stub().resolves(fakeShantytown()),
     },
     shantytownParcelOwnerModel: {
-        update: sandbox.stub(),
+        create: sandbox.stub(),
         findAll: sandbox.stub(),
+        update: sandbox.stub(),
     },
-    serializeOwners: sandbox.stub(),
     sequelize: {
         transaction: sandbox.stub(),
     },
@@ -41,7 +41,6 @@ const stubs = {
 rewiremock('#server/models/shantytownParcelOwnerModel').with(stubs.shantytownParcelOwnerModel);
 rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
 rewiremock('#server/utils/permission').with({ can: stubs.can });
-rewiremock('./serializeOwners').with(stubs.serializeOwners);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -78,6 +77,7 @@ describe('services/shantytownParcelOwners.update()', () => {
 
     it('vérifie que l\'utilisateur a le droit d\'accéder aux données de propriétaires', async () => {
         stubs.on.returns(true);
+        stubs.shantytownParcelOwnerModel.findAll.resolves([]);
 
         try {
             await update(fakeTestUser, fakeTown, fakeOwner);
@@ -119,26 +119,7 @@ describe('services/shantytownParcelOwners.update()', () => {
             active: true,
             created_at: creationDate.toISOString(),
         }]);
-        stubs.serializeOwners.resolves({
-            parcelOwnerId: 1,
-            shantytownId: 3657,
-            owners: [{
-                ownerId: 1,
-                name: 'Jean Bono',
-                type: 1,
-                active: true,
-                createdAt: creationDate.toISOString(),
-                createdBy: {
-                    authorId: 1,
-                    authorFirstName: fakeTestUser.first_name,
-                    authorLastName: fakeTestUser.last_name,
-                    organizationName: fakeTestUser.organization.name,
-                    organizationId: fakeTestUser.organization.id,
-                },
-            }],
-        } as ParcelOwners);
         fakeOwner[0].name = 'Jean Bono'; // On modifie le nom du propriétaire
-        // let parcelOwners: ParcelOwners;
 
         try {
             await update(fakeTestUser, fakeTown, fakeOwner);
@@ -147,24 +128,6 @@ describe('services/shantytownParcelOwners.update()', () => {
             console.error(error);
         }
 
-        // expect(parcelOwners).to.deep.equal({
-        //     parcelOwnerId: 1,
-        //     shantytownId: 3657,
-        //     owners: [{
-        //         ownerId: 1,
-        //         name: 'Jean Bono',
-        //         type: 1,
-        //         active: true,
-        //         createdAt: creationDate.toISOString(),
-        //         createdBy: {
-        //             authorId: 1,
-        //             authorFirstName: fakeTestUser.first_name,
-        //             authorLastName: fakeTestUser.last_name,
-        //             organizationName: fakeTestUser.organization.name,
-        //             organizationId: fakeTestUser.organization.id,
-        //         },
-        //     }],
-        // } as ParcelOwners);
         expect(stubs.transaction.commit).to.have.been.calledOnce;
     });
 
@@ -190,37 +153,6 @@ describe('services/shantytownParcelOwners.update()', () => {
             active: true,
             created_at: creationDate.toISOString(),
         }]);
-        stubs.serializeOwners.resolves({
-            parcelOwnerId: 1,
-            shantytownId: 1,
-            owners: [{
-                ownerId: 1,
-                name: 'Jean Bono',
-                type: 1,
-                active: true,
-                createdAt: creationDate.toISOString(),
-                createdBy: {
-                    authorId: 1,
-                    authorFirstName: fakeTestUser.first_name,
-                    authorLastName: fakeTestUser.last_name,
-                    organizationName: fakeTestUser.organization.name,
-                    organizationId: fakeTestUser.organization.id,
-                },
-            }, {
-                ownerId: 2,
-                name: 'Pierre Elelou',
-                type: 3,
-                active: true,
-                createdAt: creationDate.toISOString(),
-                createdBy: {
-                    authorId: 1,
-                    authorFirstName: fakeTestUser.first_name,
-                    authorLastName: fakeTestUser.last_name,
-                    organizationName: fakeTestUser.organization.name,
-                    organizationId: fakeTestUser.organization.id,
-                },
-            }],
-        } as ParcelOwners);
         fakeOwners[0].name = 'Jean Bono'; // On modifie le nom du propriétaire
         fakeOwners[1].name = 'Pierre Elelou'; // On modifie le nom du propriétaire
 
@@ -231,41 +163,10 @@ describe('services/shantytownParcelOwners.update()', () => {
             console.error(error);
         }
 
-        // expect(parcelOwnerId).to.deep.equal({
-        //     parcelOwnerId: 1,
-        //     shantytownId: 1,
-        //     owners: [{
-        //         ownerId: 1,
-        //         name: 'Jean Bono',
-        //         type: 1,
-        //         active: true,
-        //         createdAt: creationDate.toISOString(),
-        //         createdBy: {
-        //             authorId: 1,
-        //             authorFirstName: fakeTestUser.first_name,
-        //             authorLastName: fakeTestUser.last_name,
-        //             organizationName: fakeTestUser.organization.name,
-        //             organizationId: fakeTestUser.organization.id,
-        //         },
-        //     }, {
-        //         ownerId: 2,
-        //         name: 'Pierre Elelou',
-        //         type: 3,
-        //         active: true,
-        //         createdAt: creationDate.toISOString(),
-        //         createdBy: {
-        //             authorId: 1,
-        //             authorFirstName: fakeTestUser.first_name,
-        //             authorLastName: fakeTestUser.last_name,
-        //             organizationName: fakeTestUser.organization.name,
-        //             organizationId: fakeTestUser.organization.id,
-        //         },
-        //     }],
-        // } as ParcelOwners);
         expect(stubs.transaction.commit).to.have.been.calledOnce;
     });
 
-    it('modifie la liste de propriétaires de parcelles en en supprimant un', async () => {
+    it('modifie la liste de propriétaires de parcelles en en supprimant/désactivant un', async () => {
         const creationDate = new Date();
         stubs.on.returns(true);
         const fakeOwners: ParcelOwnerInsert[] = [...fakeOwner, { ownerId: 2, name: 'Pierre Quiroul', type: 3 }];
@@ -289,39 +190,7 @@ describe('services/shantytownParcelOwners.update()', () => {
             active: false,
             created_at: creationDate.toISOString(),
         }]);
-        stubs.serializeOwners.resolves({
-            parcelOwnerId: 1,
-            shantytownId: 1,
-            owners: [{
-                ownerId: 1,
-                name: 'Jean Bon',
-                type: 1,
-                active: true,
-                createdAt: creationDate.toISOString(),
-                createdBy: {
-                    authorId: 1,
-                    authorFirstName: fakeTestUser.first_name,
-                    authorLastName: fakeTestUser.last_name,
-                    organizationName: fakeTestUser.organization.name,
-                    organizationId: fakeTestUser.organization.id,
-                },
-            }, {
-                ownerId: 2,
-                name: 'Pierre Quiroul',
-                type: 3,
-                active: false,
-                createdAt: creationDate.toISOString(),
-                createdBy: {
-                    authorId: 1,
-                    authorFirstName: fakeTestUser.first_name,
-                    authorLastName: fakeTestUser.last_name,
-                    organizationName: fakeTestUser.organization.name,
-                    organizationId: fakeTestUser.organization.id,
-                },
-            }],
-        } as ParcelOwners);
         fakeOwners[1].active = false; // On modifie l'état du propriétaire
-        // let parcelOwners: ParcelOwners;
 
         try {
             await update(fakeTestUser, fakeTown, fakeOwners);
@@ -330,37 +199,27 @@ describe('services/shantytownParcelOwners.update()', () => {
             console.error(error);
         }
 
-        // expect(parcelOwners).to.deep.equal({
-        //     parcelOwnerId: 1,
-        //     shantytownId: 1,
-        //     owners: [{
-        //         ownerId: 1,
-        //         name: 'Jean Bon',
-        //         type: 1,
-        //         active: true,
-        //         createdAt: creationDate.toISOString(),
-        //         createdBy: {
-        //             authorId: 1,
-        //             authorFirstName: fakeTestUser.first_name,
-        //             authorLastName: fakeTestUser.last_name,
-        //             organizationName: fakeTestUser.organization.name,
-        //             organizationId: fakeTestUser.organization.id,
-        //         },
-        //     }, {
-        //         ownerId: 2,
-        //         name: 'Pierre Quiroul',
-        //         type: 3,
-        //         active: false,
-        //         createdAt: creationDate.toISOString(),
-        //         createdBy: {
-        //             authorId: 1,
-        //             authorFirstName: fakeTestUser.first_name,
-        //             authorLastName: fakeTestUser.last_name,
-        //             organizationName: fakeTestUser.organization.name,
-        //             organizationId: fakeTestUser.organization.id,
-        //         },
-        //     }],
-        // } as ParcelOwners);
+        expect(stubs.transaction.commit).to.have.been.calledOnce;
+    });
+
+    it('modifie la liste de propriétaires de parcelles en en ajoutant un', async () => {
+        // const creationDate = new Date();
+        stubs.on.returns(true);
+        const fakeOwners: ParcelOwnerInsert[] = [{ ownerId: null, name: 'Pierre Quiroul', type: 3 }];
+        // console.log('New owners to create:', fakeOwners);
+
+        stubs.shantytownParcelOwnerModel.findAll.resolves([]);
+        stubs.shantytownParcelOwnerModel.update.resolves([]);
+        stubs.shantytownParcelOwnerModel.create.resolves({ parcelOwnerId: 2 });
+
+        try {
+            await update(fakeTestUser, fakeTown, fakeOwners);
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+        }
+
+        expect(stubs.shantytownParcelOwnerModel.create).to.have.been.calledOnceWith(fakeTestUser, fakeTown.id, fakeOwners, stubs.transaction);
         expect(stubs.transaction.commit).to.have.been.calledOnce;
     });
 
@@ -383,9 +242,10 @@ describe('services/shantytownParcelOwners.update()', () => {
         } catch (error) {
             returnedError = error as ServiceError;
         }
+
         expect(stubs.shantytownParcelOwnerModel.update).to.have.been.calledOnceWith(fakeTestUser, fakeTown.id, fakeOwner, stubs.transaction);
         expect(stubs.transaction.rollback).to.have.been.calledOnce;
         expect(returnedError).to.be.instanceOf(ServiceError);
-        expect(returnedError.code).to.equal('parcel_owner_creation_failed');
+        expect(returnedError.code).to.equal('parcel_owner_update_failed');
     });
 });
