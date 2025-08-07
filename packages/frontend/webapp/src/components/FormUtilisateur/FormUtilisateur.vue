@@ -44,17 +44,11 @@
                 :label="labels.request_type"
                 :language="language"
             />
-            <FormUtilisateurInputIsActor
-                v-if="
-                    values.request_type &&
-                    values.request_type.includes('access-request')
-                "
-                :class="{ hidden: demandeAccesOnly }"
-                :label="labels.is_actor"
-            />
             <section
                 v-if="
-                    values.is_actor === true || variant === 'creer-utilisateur'
+                    (values.request_type &&
+                        values.request_type.includes('access-request')) ||
+                    variant === 'creer-utilisateur'
                 "
             >
                 <p class="font-bold text-xl">
@@ -66,14 +60,20 @@
                     ref="organisationInput"
                 />
             </section>
-            <FormUtilisateurInputOrganizationOther
-                v-if="values.organization_category === 'other'"
-                :label="labels.organization_other"
-            />
-            <FormUtilisateurInputOrganizationOtherTerritory
-                v-if="values.organization_category === 'other'"
-                :label="labels.organization_other_territory"
-            />
+            <div style="margin-left: 50px">
+                <FormUtilisateurInputOrganizationOther
+                    v-if="values.organization_category === 'other'"
+                    :label="labels.organization_other"
+                />
+                <FormUtilisateurInputOrganizationOtherAcronyme
+                    v-if="values.organization_category === 'other'"
+                    :label="labels.organization_other_acronyme"
+                />
+                <FormUtilisateurInputOrganizationOtherTerritory
+                    v-if="values.organization_category === 'other'"
+                    :label="labels.organization_other_territory"
+                />
+            </div>
             <FormUtilisateurInputPosition
                 v-if="
                     values.is_actor === true || variant === 'creer-utilisateur'
@@ -125,6 +125,7 @@ import FormUtilisateurInputRequestType from "./inputs/FormUtilisateurInputReques
 import FormUtilisateurInputIsActor from "./inputs/FormUtilisateurInputIsActor.vue";
 import FormUtilisateurInputStructure from "./inputs/FormUtilisateurInputStructure.vue";
 import FormUtilisateurInputOrganizationOther from "./inputs/FormUtilisateurInputOrganizationOther.vue";
+import FormUtilisateurInputOrganizationOtherAcronyme from "./inputs/FormUtilisateurInputOrganizationOtherAcronyme.vue";
 import FormUtilisateurInputOrganizationOtherTerritory from "./inputs/FormUtilisateurInputOrganizationOtherTerritory.vue";
 import FormUtilisateurInputPosition from "./inputs/FormUtilisateurInputPosition.vue";
 import FormUtilisateurInputMessage from "./inputs/FormUtilisateurInputMessage.vue";
@@ -190,7 +191,7 @@ const demandeAccesOnly = computed(() => {
 onMounted(() => {
     if (demandeAccesOnly.value === true) {
         form.value.setFieldValue("is_actor", true);
-        form.value.setFieldValue("request_type", ["access-request"]);
+        form.value.setFieldValue("request_type", "access-request");
     }
 });
 
@@ -198,7 +199,10 @@ watch(values.value.association, (newAssociation) => {
     onOrganizationChange(newAssociation);
 });
 function onOrganizationChange(value) {
-    if (value?.data === null) {
+    console.log("value=", value.data);
+    if (value?.data !== null) {
+        form.value.setFieldValue("organization_category", "");
+    } else if (value?.data === null) {
         if (allowNewOrganization.value === true) {
             form.value.setFieldValue("organization_category", "other");
         } else {

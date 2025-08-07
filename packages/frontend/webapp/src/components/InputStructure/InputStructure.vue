@@ -54,13 +54,14 @@ async function autocompleteFn(value) {
     const allowedTypeIds = [8, 9, 10, 11, 19, 29, 35, 44, 45];
 
     const mappedResults = results.map((org) => {
-        const prefix = org.abbreviation ? `${org.abbreviation}` : `${org.name}`;
+        const prefix = org.name.length < 35 || !org.abbreviation ? `${org.name}` : `${org.abbreviation}`;
         const showLabel = allowedTypeIds.includes(org.organization_type_id);
         const label = showLabel ? `${prefix} - ${org.label}` : prefix;
 
         return {
             id: org.id,
             label: label,
+            name: org.name,
             selectedLabel: label,
             category: org.type_abbreviation || org.type,
             data: {
@@ -69,10 +70,10 @@ async function autocompleteFn(value) {
             },
         };
     });
-    mappedResults.unshift({
+    mappedResults.push({
         id: "autre",
         selectedLabel: "",
-        label: "Je ne trouve pas mon organisation ou mon territoire",
+        label: "Je ne trouve pas ma structure",
         category: "",
         data: null,
     });

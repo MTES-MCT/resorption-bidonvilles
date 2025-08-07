@@ -8,6 +8,7 @@
             v-bind="$attrs"
             autocomplete="off"
             @input="onInput"
+            @focus="onFocus"
             :disabled="isDisabled"
             @blur="onBlur"
             @keydown.stop="onKeydown"
@@ -23,7 +24,8 @@
                     <div class="border-b border-G200 flex-1">
                         <div v-for="item in section.items" class="hover:bg-blue100 cursor-pointer px-3 py-2"
                             :class="focusedItemId === item.id ? 'bg-blue100' : ''"
-                            :key="item.id" @click="selectItem(item)">
+                            :key="item.id" @click="selectItem(item)"
+                            :title="item.name">
                             {{ item.label }}
                         </div>
                     </div>
@@ -34,6 +36,7 @@
                     @mouseleave="isClickInsideDropdown = false"
                 >
                 <DsfrPagination
+                    v-if="totalPages > 1"
                     v-model:current-page="currentPage"
                     :pages="pages"
                     :truncLimit="2"
@@ -163,23 +166,45 @@ watch(modelValue, () => {
 let timeout = null;
 async function onInput({ target }) {
     const { value } = target;
+
+    if (selectedItem.value !== null) {
+        selectedItem.value = null;
+        input.value.setValue("");
+        target.value = "";
+        emit("update:modelValue", undefined);
+        return;
+    }
+
     currentPage.value = 0;
     rawResults.value = [];
     focusedItemIndex.value = null;
-
     error.value = false;
+
     if (value.length < 2) {
         abort();
         return;
     }
 
-    if(lastPromise.value !== null){
+    if (lastPromise.value !== null) {
         lastPromise.value.catch(() => {
         // ignore
         });
     }
-   
+
     lastPromise.value = debouncedGetResults(value, callId);
+}
+
+
+function onFocus(event) {
+    const value = event.target.value;
+    if (
+        value &&
+        value.length >= 2 &&
+        rawResults.value.length === 0 
+    ) {
+        currentPage.value = 0;
+        debouncedGetResults(value, callId);
+    }
 }
 
 async function getResults(value, originalCallId) {
@@ -227,6 +252,10 @@ function onBlur(event) {
                     search: event.target.value,
                     data: undefined
                 });
+                return;
+            }
+
+            if (event.target.value.length > 0) {
                 return;
             }
 

@@ -6,7 +6,7 @@ export type ContactServiceNotifyData = {
     first_name: string,
     last_name: string,
     access_request_message: string,
-    request_type: ContactRequestType[],
+    request_type: ContactRequestType,
     is_new_organization: boolean,
     organization_other: string,
 };

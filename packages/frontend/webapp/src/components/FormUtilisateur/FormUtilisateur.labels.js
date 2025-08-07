@@ -8,8 +8,6 @@ export default (variant) => ({
         last_name: "Nom de famille",
         phone: "Téléphone",
         request_type: "Vous souhaitez...",
-        is_actor:
-            "Faites-vous partie d'une association, d'une collectivité ou d'un service de l'État ?",
         organization_category:
             variant === "demande-acces"
                 ? "Quelle structure ?"
@@ -21,13 +19,14 @@ export default (variant) => ({
         organization_administration: "Nom de la structure",
         private_organization: "Nom de l'organisme privé",
         organization_other: "Précisez le nom de votre structure",
+        organization_other_acronyme: "Précisez l'acronyme de votre structure",
         organization_other_territory:
             "Précisez le territoire de votre structure",
         position:
             variant === "demande-acces"
                 ? "Votre fonction"
                 : "Fonction de l'utilisateur",
-        access_request_message: "Votre message",
+        access_request_message: "Expliquez-nous pourquoi vous voulez accéder à notre plate-forme",
         referral:
             "Comment avez-vous connu la plateforme Résorption-bidonvilles ?",
         referral_other:

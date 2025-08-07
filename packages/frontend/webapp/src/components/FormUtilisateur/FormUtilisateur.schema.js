@@ -12,8 +12,8 @@ import {
 import { fr } from "yup-locales";
 import labelsFn from "./FormUtilisateur.labels.js";
 
-import requestTypes from "@/utils/access_request_types";
 import referrals from "@/utils/contact_referrals";
+import access_request_types from "@/utils/access_request_types";
 
 const locales = {
     fr: {
@@ -99,19 +99,10 @@ export default (
 
     // request-type and is-actor
     if (variant === "demande-acces") {
-        schema.request_type = array()
-            .of(
-                string().oneOf(requestTypes[language].map(({ value }) => value))
-            )
+        schema.request_type = string()
             .required()
-            .min(1, ({ label }) => `${label} est un champ obligatoire`)
+            .oneOf(access_request_types[language].map(({ value }) => value))
             .label(labels.request_type);
-        schema.is_actor = boolean()
-            .when("request_type", {
-                is: (val) => val?.includes("access-request"),
-                then: (schema) => schema.required(),
-            })
-            .label(labels.is_actor);
     }
 
     // organization type
@@ -179,28 +170,18 @@ export default (
             then: (schema) => schema.required(),
         })
         .label(labels.organization_other);
+    schema.organization_other_acronyme = string()
+        .when("organization_category", {
+            is: "other",
+            then: (schema) => schema.required(),
+        })
+        .label(labels.organization_other_acronyme);
     schema.organization_other_territory = string()
         .when("organization_category", {
             is: "other",
             then: (schema) => schema.required(),
         })
         .label(labels.organization_other_territory);
-    const position = string().label(labels.position);
-    function makePositionRequired(schema) {
-        return schema.required();
-    }
-    if (variant === "demande-acces") {
-        schema.position = position.when(["is_actor", "organization_category"], {
-            is: (is_actor, organization_category) =>
-                is_actor === true && !!organization_category,
-            then: makePositionRequired,
-        });
-    } else {
-        schema.position = position.when("organization_category", {
-            is: (organization_category) => !!organization_category,
-            then: makePositionRequired,
-        });
-    }
 
     if (variant === "demande-acces" && language === "fr") {
         schema.access_request_message = string()
