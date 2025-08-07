@@ -89,6 +89,7 @@ import CarteActionDetailleeColonneDepartement from "./CarteActionDetailleeColonn
 import CarteActionDetailleeColonneLocalisation from "./CarteActionDetailleeColonneLocalisation.vue";
 import CarteActionDetailleeColonnePilote from "./CarteActionDetailleeColonnePilote.vue";
 import CarteActionDetailleeColonneOperateur from "./CarteActionDetailleeColonneOperateur.vue";
+import router from "@/helpers/router";
 
 const props = defineProps({
     action: {
@@ -127,6 +128,16 @@ const attachmentsLabel = computed(() => {
         ? null
         : `${commentsAttachments} Document partagé`;
 });
+
+const navigateTo = (target) => {
+    if (action.value && action.value.id) {
+        let path = `/action/${action.value.id}`;
+        if (target) {
+            path += `/${target}`;
+        }
+        router.push(path);
+    }
+};
 </script>
 
 <style scoped lang="scss">
