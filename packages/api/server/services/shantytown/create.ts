@@ -4,12 +4,16 @@ import findOneShantytown from '#server/models/shantytownModel/findOne';
 import insertSocialOrigin from '#server/models/socialOriginModel/create';
 import insertToiletType from '#server/models/shantytownToiletTypesModel/create';
 import insertElectricityAccessType from '#server/models/electricityAccessTypesModel/create';
+import shantytownParcelOwnerService from '#server/services/shantytownParcelOwner';
 import insertIncomingTown from '#server/models/incomingTownsModel/create';
 import getLocationWatchers from '#server/models/userModel/getLocationWatchers';
 import { triggerShantytownCreationAlert } from '#server/utils/mattermost';
+import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
 
 export default async (townData, user) => {
+    console.log('Ajout du site');
+
     const baseTown = {
         name: townData.name,
         latitude: townData.latitude,
@@ -34,7 +38,7 @@ export default async (townData, user) => {
         cars: townData.cars,
         mattresses: townData.mattresses,
         fieldType: townData.field_type,
-        ownerType: townData.owner_type,
+        // ownerType: townData.owner_type,
         isReinstallation: townData.is_reinstallation,
         reinstallationComments: townData.reinstallation_comments,
         city: townData.citycode,
@@ -100,14 +104,15 @@ export default async (townData, user) => {
                         bailiff: townData.bailiff,
                     }
                     : {}),
-                ...(user.isAllowedTo('access', 'shantytown_owner')
-                    ? {
-                        owner: townData.owner,
-                    }
-                    : {}),
+                // ...(user.isAllowedTo('access', 'shantytown_owner')
+                //     ? {
+                //         owner: townData.owner,
+                //     }
+                //     : {}),
             },
             transaction,
         );
+        console.log('Ajout OK, on continue avec les données liées');
 
         const promises = [];
         if (townData.social_origins.length > 0) {
@@ -136,6 +141,25 @@ export default async (townData, user) => {
                 townData.reinstallation_incoming_towns_full.map(({ id }) => id),
                 transaction,
             ));
+        }
+
+        // On ajoute les propriétaires de parcelles liés au site
+        if (townData.owner?.owners && townData.owner.owners.length > 0) {
+            console.log('Ajout des propriétaires');
+
+            try {
+                await shantytownParcelOwnerService.create(
+                    user,
+                    shantytown_id,
+                    townData.owner.owners,
+                    transaction,
+                );
+            } catch (error) {
+                console.log('Erreur dans la création propriétaires', error);
+
+                await transaction.rollback();
+                throw new ServiceError('parcel_owner_creation_failed', error);
+            }
         }
 
         await Promise.all(promises);
