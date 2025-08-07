@@ -8,11 +8,7 @@
             J'ai besoin de l'aide de la communauté.
         </template>
         <template v-slot:buttons>
-            <DsfrButton
-                secondary
-                @click="back"
-                >Annuler</DsfrButton
-            >
+            <DsfrButton secondary @click="back">Annuler</DsfrButton>
             <DsfrButton @click="submit" :loading="form?.isSubmitting"
                 >Publier</DsfrButton
             >
@@ -28,7 +24,7 @@
 import { ref, computed } from "vue";
 import router from "@/helpers/router";
 
-import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import LayoutForm from "@/components/LayoutForm/LayoutForm.vue";
 import FormNouvelleQuestion from "@/components/FormNouvelleQuestion/FormNouvelleQuestion.vue";
 

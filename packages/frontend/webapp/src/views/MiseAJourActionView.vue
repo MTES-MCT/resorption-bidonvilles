@@ -31,9 +31,7 @@
             {{ action.name }}
         </template>
         <template v-slot:buttons>
-            <DsfrButton
-                secondary
-                @click.prevent.stop="back"
+            <DsfrButton secondary @click.prevent.stop="back"
                 >Annuler</DsfrButton
             >
             <DsfrButton @click="submit" :loading="form?.isSubmitting"

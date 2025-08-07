@@ -42,7 +42,7 @@ import { useForm } from "vee-validate";
 import { useMetricsStore } from "@/stores/metrics.store";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { trackEvent } from "@/helpers/matomo";
-import { Button, DatepickerInput } from "@resorptionbidonvilles/ui";
+import { DatepickerInput } from "@resorptionbidonvilles/ui";
 
 const metricsStore = useMetricsStore();
 const departementMetricsStore = useDepartementMetricsStore();

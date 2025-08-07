@@ -15,11 +15,11 @@ import "@gouvfr/dsfr/dist/dsfr.min.css";
 import "@gouvminint/vue-dsfr/styles";
 import "@gouvfr/dsfr/dist/utility/utility.main.min.css";
 import "@gouvfr/dsfr/dist/component/component.main.min.css";
-import collections from "../utils/icon-collections.js"
-import { addCollection } from "@iconify/vue"
+import collections from "../utils/icon-collections.js";
+import { addCollection } from "@iconify/vue";
 
 for (const collection of collections) {
-  addCollection(collection)
+    addCollection(collection);
 }
 
 export function useDsfr(app) {
