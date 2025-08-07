@@ -9,22 +9,15 @@
             <InputDetailedAddress />
         </Fieldset>
 
-        <Fieldset legend="Quel est le propriétaire ?" showMandatoryStar>
-            <!-- <InputOwnerType />
-            <InputOwner
-                v-if="
-                    values.owner_type &&
-                    values.owner_type !== unknownOwnerTypeId &&
-                    userStore.hasOwnerPermission
-                "
-            /> -->
+        <Fieldset
+            legend="Quel est le propriétaire ?"
+            showMandatoryStar
+            id="owner"
+        >
             <div v-if="userStore.hasOwnerPermission">
-                <div
-                    v-for="(owner, index) in sortedOwners"
-                    :key="owner.ownerId ?? getOriginalIndex(owner)"
-                >
+                <div v-for="(owner, index) in sortedOwners" :key="owner._key">
                     <div
-                        v-if="
+                        v-show="
                             (!showDeletedOwners && owner.active) ||
                             showDeletedOwners
                         "
@@ -48,6 +41,7 @@
                                 Propriétaire {{ index + 1 }}
                             </p>
                             <DsfrButton
+                                v-if="owner.active"
                                 class=""
                                 icon="fr-icon-delete-line"
                                 icon-only
@@ -55,7 +49,9 @@
                                 no-outline
                                 tertiary
                                 size="sm"
-                                @click.prevent="removeOwner(owner, index)"
+                                @click.prevent="
+                                    removeOwner(owner, getOriginalIndex(owner))
+                                "
                             />
                         </div>
                         <div
@@ -63,7 +59,9 @@
                         >
                             <InputOwner
                                 class="w-2/3 !mb-0"
-                                :id="`owner.owners[${getOriginalIndex(owner)}]`"
+                                :id="`owner.owners[${getOriginalIndex(
+                                    owner
+                                )}].name`"
                                 :name="`owner.owners[${getOriginalIndex(
                                     owner
                                 )}].name`"
@@ -71,6 +69,9 @@
                             />
                             <InputOwnerType
                                 class="w-auto !mb-0"
+                                :id="`owner.owners[${getOriginalIndex(
+                                    owner
+                                )}].type`"
                                 :name="`owner.owners[${getOriginalIndex(
                                     owner
                                 )}].type`"
@@ -83,14 +84,7 @@
                     <DsfrButton
                         icon="fr-icon-user-add-fill"
                         label="Ajouter un propriétaire"
-                        @click.prevent="
-                            values.owner.owners.push({
-                                ownerId: null,
-                                name: '',
-                                type: unknownOwnerTypeId,
-                                active: true,
-                            })
-                        "
+                        @click.prevent="addOwner"
                     />
                     <DsfrButton
                         :icon="
@@ -111,7 +105,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { useFormValues } from "vee-validate";
 import { useConfigStore } from "@/stores/config.store";
 import { useUserStore } from "@/stores/user.store";
@@ -125,20 +119,40 @@ import InputDetailedAddress from "../inputs/FormDeclarationDeSiteInputDetailedAd
 import InputOwnerType from "../inputs/FormDeclarationDeSiteInputOwnerType.vue";
 import InputOwner from "../inputs/FormDeclarationDeSiteInputOwner.vue";
 
+const props = defineProps({
+    set_field_value: {
+        type: Function,
+        required: false,
+    },
+});
+
 const values = useFormValues();
 const userStore = useUserStore();
 const showDeletedOwners = ref(false);
-const sortedOwners = ref([]);
 
-if (!values.value.owner.owners?.length) {
-    values.value.owner.owners = [];
+const generateUniqueKey = () =>
+    `key_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+
+onMounted(() => {
+    if (!values.value.owner?.owners) {
+        props.set_field_value("owner.owners", []);
+    } else {
+        const ownersWithKeys = values.value.owner.owners.map((owner) => ({
+            ...owner,
+            _key: owner._key || generateUniqueKey(),
+        }));
+        props.set_field_value("owner.owners", ownersWithKeys, false);
+    }
+});
+
+// Initialisation des owners si nécessaire
+if (!values.value.owner.owners) {
+    values.value.owner = { owners: [] };
 }
 
-const sortOwners = (owners) => {
-    // const owners = values.value.owner?.owners ?? [];
-    console.log("Propriétaires connus:", owners);
+const sortedOwners = computed(() => {
+    const owners = values.value.owner?.owners ?? [];
 
-    // On crée une copie pour ne pas muter l'état original
     return [...owners].sort((a, b) => {
         if (a.active !== b.active) {
             return a.active ? -1 : 1;
@@ -149,41 +163,26 @@ const sortOwners = (owners) => {
         }
         return 0;
     });
-};
+});
 
 const getOriginalIndex = (ownerToFind) => {
-    return values.value.owner?.owners.findIndex((o) => o === ownerToFind);
+    if (!ownerToFind?._key || !values.value.owner?.owners) {
+        return -1;
+    }
+    return values.value.owner.owners.findIndex(
+        (o) => o._key === ownerToFind._key
+    );
 };
 
 const removeOwner = (ownerToRemove, sortedIndex) => {
-    // const index = getOriginalIndex(ownerToRemove);
-    // if (index !== -1) {
-    //     values.value.owner.owners.splice(index, 1);
-    // }
-    console.log("Owner to remove:", ownerToRemove, sortedIndex);
-    console.log("Sorted owners:", sortedOwners.value);
-    console.log("values:", values.value.owner.owners);
-
-    const ownerFromSortedArray = sortedOwners.value[sortedIndex];
-
-    // On trouve son index dans le tableau d'origine
-    ownerFromSortedArray.ownerId = ownerToRemove.ownerId;
-    let indexToDelete = sortedIndex;
     if (ownerToRemove.ownerId) {
-        indexToDelete = getOriginalIndex(ownerFromSortedArray);
-    }
-    console.log("DELETING INDEX:", indexToDelete);
-
-    if (indexToDelete !== -1) {
-        if (ownerToRemove.ownerId) {
-            // On supprime l'élément du tableau d'origine
-            values.value.owner.owners.splice(indexToDelete, 1);
-        } else {
-            console.log("Suppression depuis le tableau rangé");
-            console.log(values.value.owner.owners);
-
-            values.value.owner.owners.splice(sortedIndex, 1);
-        }
+        const updatedOwner = {
+            ...ownerToRemove,
+            active: false,
+        };
+        props.set_field_value(`owner.owners[${sortedIndex}]`, updatedOwner);
+    } else {
+        values.value.owner.owners.splice(sortedIndex, 1);
     }
 };
 
@@ -195,26 +194,19 @@ const unknownOwnerTypeId = computed(() => {
     return type.id;
 });
 
-const displayFullOwnersList = () => {
-    // showDeletedOwners.value = !showDeletedOwners.value;
-    // if (!showDeletedOwners.value) {
-    //     values.value.owner.owners = values.value.owner.owners.filter(
-    //         (owner) => owner.active
-    //     );
-    // }
-    showDeletedOwners.value = !showDeletedOwners.value;
+const addOwner = () => {
+    const newOwner = {
+        _key: generateUniqueKey(),
+        ownerId: null,
+        name: "",
+        type: unknownOwnerTypeId.value,
+        active: true,
+    };
+    const newOwners = [...(values.value.owner.owners || []), newOwner];
+    props.set_field_value("owner.owners", newOwners);
 };
 
-watch(
-    values.value.owner.owners,
-    (newOwners) => {
-        console.log("New owner: ", newOwners);
-
-        // if (!newOwners || !Array.isArray(newOwners)) {
-        //     values.value.owner.owners = [];
-        // }
-        sortedOwners.value = sortOwners(newOwners);
-    },
-    { immediate: true }
-);
+const displayFullOwnersList = () => {
+    showDeletedOwners.value = !showDeletedOwners.value;
+};
 </script>
