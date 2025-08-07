@@ -47,7 +47,7 @@ import { useModaleStore } from "@/stores/modale.store";
 import exportList from "./ListeDemandeAcces.exports";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import ModalExport from "@/components/ModalExport/ModalExport.vue";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 
