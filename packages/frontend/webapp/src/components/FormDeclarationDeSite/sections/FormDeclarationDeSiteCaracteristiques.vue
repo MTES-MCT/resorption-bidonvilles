@@ -146,7 +146,7 @@ onMounted(() => {
 });
 
 // Initialisation des owners si nécessaire
-if (!values.value.owner.owners) {
+if (!values.value.owner?.owners) {
     values.value.owner = { owners: [] };
 }
 
