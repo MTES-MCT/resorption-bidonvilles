@@ -1,11 +1,5 @@
 <template>
-    <DsfrAlert
-        v-if="mode === 'fix'"
-        class="my-8"
-        small
-        title="Titre alerte"
-        type="warning"
-    >
+    <DsfrAlert class="my-8" small title="Titre alerte" type="warning">
         Ce site ayant déjà été déclaré comme fermé, ce formulaire ne vous permet
         que de corriger la déclaration de résorption. Pour toute autre
         modification,

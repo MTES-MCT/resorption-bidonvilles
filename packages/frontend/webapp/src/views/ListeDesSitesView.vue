@@ -7,12 +7,6 @@
         v-model:location="location"
     >
         <ContentWrapper>
-            <BandeauNotice
-                class="-mt-6"
-                type="warning"
-                title="Prévenir les risques lors des vagues de chaleur"
-                description='Pensez à identifier les sites nécessitant une intervention urgente via le bouton "Alerte canicule" sur la liste des sites, et suivez les actions mises en œuvre via le journal du site.'
-            />
             <FilArianne :items="ariane" class="mb-8" />
         </ContentWrapper>
         <ListeDesSites />
@@ -27,7 +21,6 @@ import { trackEvent } from "@/helpers/matomo";
 import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import ListeDesSites from "@/components/ListeDesSites/ListeDesSites.vue";
-import BandeauNotice from "@/components/BandeauNotice/BandeauNotice.vue";
 
 const ariane = [{ label: "Accueil", to: "/" }, { label: "Sites" }];
 const townsStore = useTownsStore();

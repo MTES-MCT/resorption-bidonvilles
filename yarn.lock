@@ -1157,6 +1157,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/helper-string-parser@npm:^7.27.1":
+  version: 7.27.1
+  resolution: "@babel/helper-string-parser@npm:7.27.1"
+  checksum: 0a8464adc4b39b138aedcb443b09f4005d86207d7126e5e079177e05c3116107d856ec08282b365e9a79a9872f40f4092a6127f8d74c8a01c1ef789dacfc25d6
+  languageName: node
+  linkType: hard
+
 "@babel/helper-validator-identifier@npm:^7.24.7":
   version: 7.24.7
   resolution: "@babel/helper-validator-identifier@npm:7.24.7"
@@ -3729,14 +3736,41 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@iconify/types@npm:^2.0.0":
+"@iconify-json/mdi@npm:latest":
+  version: 1.2.3
+  resolution: "@iconify-json/mdi@npm:1.2.3"
+  dependencies:
+    "@iconify/types": "*"
+  checksum: cf229936c9941b9f022e24423a5a6b0953869c701ca36fef021cef08be1b59571de879568302b168d4912962c6ad17f93d3eb43fe9722b00bf9967b22d9cbb79
+  languageName: node
+  linkType: hard
+
+"@iconify-json/ri@npm:latest":
+  version: 1.2.5
+  resolution: "@iconify-json/ri@npm:1.2.5"
+  dependencies:
+    "@iconify/types": "*"
+  checksum: db3e3c67d4b48b28b7b0f59738a451bbff2af40f741f8e5dd075f88660d193d74d275d2aac767e7474eb76d2a578f5981fc7e6f0e02a4368c3ed2b596c8672bd
+  languageName: node
+  linkType: hard
+
+"@iconify-json/uil@npm:latest":
+  version: 1.2.3
+  resolution: "@iconify-json/uil@npm:1.2.3"
+  dependencies:
+    "@iconify/types": "*"
+  checksum: b13dfcba496d5825170e92751a99d8a6147fa6ad54867e809ce885ab7b36e552b88e483ed9955f3829d84b253a24cfb5ab88f1d8bcd74d08567156d2770eb299
+  languageName: node
+  linkType: hard
+
+"@iconify/types@npm:*, @iconify/types@npm:^2.0.0":
   version: 2.0.0
   resolution: "@iconify/types@npm:2.0.0"
   checksum: 029f58542c160e9d4a746869cf2e475b603424d3adf3994c5cc8d0406c47e6e04a3b898b2707840c1c5b9bd5563a1660a34b110d89fce43923baca5222f4e597
   languageName: node
   linkType: hard
 
-"@iconify/vue@npm:latest":
+"@iconify/vue@npm:^5.0.0":
   version: 5.0.0
   resolution: "@iconify/vue@npm:5.0.0"
   dependencies:
@@ -5779,7 +5813,10 @@ __metadata:
   dependencies:
     "@gouvfr/dsfr": 1.13.2
     "@gouvminint/vue-dsfr": ^8.6.0
-    "@iconify/vue": latest
+    "@iconify-json/mdi": latest
+    "@iconify-json/ri": latest
+    "@iconify-json/uil": latest
+    "@iconify/vue": ^5.0.0
     "@rushstack/eslint-patch": ^1.1.4
     "@sentry/vue": ^7.54.0
     "@turf/turf": ^6.5.0

@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/webapp3",
-  "version": "2.34.7",
+  "version": "2.34.5",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -9,12 +9,16 @@
     "test:e2e": "start-server-and-test preview http://localhost:8092/ 'cypress open --e2e'",
     "test:e2e:ci": "start-server-and-test preview http://localhost:8092/ 'cypress run --e2e'",
     "lint": "eslint --max-warnings=0 --ext .vue,.js,.jsx,.cjs,.mjs",
-    "lint:all": "eslint --no-error-on-unmatched-pattern --max-warnings=0 --ext .vue,.js,.jsx,.cjs,.mjs src cypress public"
+    "lint:all": "eslint --no-error-on-unmatched-pattern --max-warnings=0 --ext .vue,.js,.jsx,.cjs,.mjs src cypress public",
+    "icons": "vue-dsfr-icons -s scripts/icons.js -t src/utils/icon-collections.js"
   },
   "dependencies": {
     "@gouvfr/dsfr": "1.13.2",
     "@gouvminint/vue-dsfr": "^8.6.0",
-    "@iconify/vue": "latest",
+    "@iconify-json/mdi": "latest",
+    "@iconify-json/ri": "latest",
+    "@iconify-json/uil": "latest",
+    "@iconify/vue": "^5.0.0",
     "@sentry/vue": "^7.54.0",
     "@turf/turf": "^6.5.0",
     "@vuepic/vue-datepicker": "^3.5.3",

@@ -1,11 +1,4 @@
 <template>
-    <BandeauNotice
-        class="-mt-6"
-        type="warning"
-        title="Prévenir les risques lors des vagues de chaleur"
-        description='Pensez à identifier les sites nécessitant une intervention urgente via le bouton "Alerte canicule" sur la liste des sites, et suivez les actions mises en œuvre via le journal du site.'
-        width="w-3/4"
-    />
     <FicheSiteHeader
         :town="town"
         v-on:openCancel="openCancel"
@@ -86,7 +79,6 @@ import FicheSiteProcedures from "./FicheSiteProcedures/FicheSiteProcedures.vue";
 import FicheSiteIntervenants from "./FicheSiteIntervenants/FicheSiteIntervenants.vue";
 import FicheSiteJournal from "./FicheSiteJournal/FicheSiteJournal.vue";
 import FicheSiteHistorique from "./FicheSiteHistorique/FicheSiteHistorique.vue";
-import BandeauNotice from "@/components/BandeauNotice/BandeauNotice.vue";
 import { usePhasesPreparatoiresResorption } from "@/utils/usePhasesPreparatoiresResorption";
 
 const props = defineProps({

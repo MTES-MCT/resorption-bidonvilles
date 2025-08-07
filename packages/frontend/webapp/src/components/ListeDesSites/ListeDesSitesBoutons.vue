@@ -1,37 +1,47 @@
 <template>
     <p class="flex flex-col gap-2 items-start xs:flex-row">
-        <DsfrButton
-            icon="fr-icon-printer-line"
-            secondary
+        <Button
+            icon="print"
+            iconPosition="left"
+            variant="primaryOutline"
             :disabled="townsStore.filteredTowns.length === 0"
             @click="print"
             size="sm"
-            >Imprimer</DsfrButton
+            class="!border-2 !border-primary hover:!bg-primary"
+            >Imprimer</Button
         >
-        <DsfrButton
+        <Button
             v-if="userStore.hasPermission('shantytown.export')"
-            icon="ri:file-excel-fill"
+            icon="file-excel"
+            iconPosition="left"
+            variant="primaryOutline"
             :disabled="townsStore.filteredTowns.length === 0"
             @click="showExport"
             size="sm"
-            >Exporter</DsfrButton
+            class="!border-2 !border-primary hover:!bg-primary"
+            >Exporter</Button
         >
-        <DsfrButton
+        <Button
             v-if="userStore.hasPermission('shantytown.create')"
-            @click.prevent.stop="router.push('/site/nouveau')"
-            icon="fr-icon-add-line"
+            href="/site/nouveau"
+            icon="plus"
+            iconPosition="left"
+            variant="primary"
             size="sm"
+            class="!border-2 !border-primary hover:!bg-primaryDark"
         >
             Déclarer un nouveau site
-        </DsfrButton>
-        <DsfrButton
+        </Button>
+        <Button
             v-else
-            @click.prevent.stop="router.push('/site/signalement')"
-            icon="fr-icon-add-line"
+            href="/site/signalement"
+            icon="plus"
+            iconPosition="left"
+            variant="primary"
             size="sm"
         >
             Informer d'un nouveau site
-        </DsfrButton>
+        </Button>
     </p>
 </template>
 
@@ -39,7 +49,8 @@
 import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
 import { trackEvent } from "@/helpers/matomo";
-import router from "@/helpers/router";
+
+import { Button } from "@resorptionbidonvilles/ui";
 import ListeDesSitesExport from "./ListeDesSitesExport/ListeDesSitesExport.vue";
 import { useModaleStore } from "@/stores/modale.store";
 
@@ -56,3 +67,9 @@ function showExport() {
     modaleStore.open(ListeDesSitesExport);
 }
 </script>
+
+<style scoped>
+button {
+    border: inherit;
+}
+</style>
