@@ -25,7 +25,7 @@
                     name="question"
                     label="En une phrase, comment résumeriez-vous votre question ?"
                 />
-                <DsfrButton size="sm">Demander</DsfrButton>
+                <DsfrButton size="md">Demander</DsfrButton>
             </form>
         </div>
     </div>
