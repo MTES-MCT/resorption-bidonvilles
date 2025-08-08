@@ -3,7 +3,7 @@
         <DsfrButton
             v-if="departementMetricsStore.activeTab === 'tableau'"
             secondary
-            icon="fr-icon-filter-fill"
+            :icon="parametresIcon"
             @click="toggleParametres"
             size="sm"
             >{{ parametresWording }}</DsfrButton
@@ -35,6 +35,12 @@ const parametresWording = computed(() => {
     return metricsStore.showParametres
         ? "Masquer les paramètres"
         : "Voir les paramètres";
+});
+
+const parametresIcon = computed(() => {
+    return metricsStore.showParametres
+        ? "fr-icon-filter-line"
+        : "fr-icon-filter-fill";
 });
 
 function toggleParametres() {
