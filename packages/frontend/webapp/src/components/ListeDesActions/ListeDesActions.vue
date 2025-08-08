@@ -33,10 +33,23 @@ import ListeDesActionsVide from "./ListeDesActionsVide.vue";
 
 const actionsStore = useActionsStore();
 
-const tabs = [
-    { id: "open", label: "Actions en cours" },
-    { id: "closed", label: "Actions terminées" },
-];
+const tabs = computed(() => {
+    const initialTabs = [
+        {
+            id: "open",
+            label: "Actions en cours",
+            total: actionsCount.value.open,
+        },
+        {
+            id: "closed",
+            label: "Actions terminées",
+            total: actionsCount.value.closed,
+        },
+    ];
+
+    return initialTabs;
+});
+
 const currentTab = computed({
     get() {
         return actionsStore.filters.status;
@@ -65,4 +78,16 @@ const getUniqueYears = (actionsData) => {
 
 // Liste des années uniques extraites des dates de début et de fin d'action
 const years = computed(() => getUniqueYears(actionsStore.filteredActions));
+
+const actionsCount = computed(() => {
+    let actions = { open: 0, closed: 0 };
+    actionsStore.actions.map((action) => {
+        if (action.ended_at === null || new Date() < action.ended_at) {
+            actions.open++;
+        } else {
+            actions.closed++;
+        }
+    });
+    return actions;
+});
 </script>
