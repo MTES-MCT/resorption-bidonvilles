@@ -45,7 +45,7 @@
             <p
                 class="flex flex-col items-center space-y-4 sm:flex-row sm:space-y-0 sm:justify-center sm:space-x-6"
             >
-                <Link to="/contact">Demander un accès</Link>
+                <Link to="/contact?language=fr&acces">Demander un accès</Link>
                 <Link to="/nouveau-mot-de-passe">Mot de passe oublié</Link>
             </p>
         </template>
