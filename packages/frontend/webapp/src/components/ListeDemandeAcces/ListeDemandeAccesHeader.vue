@@ -52,7 +52,7 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 function downloadGuide() {
-    window.location = "/doc/guide_de_l_administrateur.pdf";
+    window.open("/doc/guide_de_l_administrateur.pdf");
 }
 
 const navigateTo = (target) => {
@@ -66,9 +66,3 @@ function openModalExport() {
     });
 }
 </script>
-
-<style scoped>
-button {
-    border: inherit;
-}
-</style>
