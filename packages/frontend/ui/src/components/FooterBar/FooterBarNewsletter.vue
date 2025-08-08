@@ -6,7 +6,7 @@
         <DsfrButton
             size="sm"
             icon="fr-icon-external-link-fill"
-            :iconRight="true"
+            iconRight
             :priority="'secondary'"
             :is-external="true"
             @click="goToNewsletter"
