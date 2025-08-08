@@ -5,6 +5,8 @@ import {
     DsfrCard,
     DsfrCheckbox,
     DsfrInput,
+    DsfrPagination,
+    DsfrRadioButton,
     DsfrSearchBar,
     DsfrSegmented,
     DsfrSegmentedSet,
@@ -29,6 +31,8 @@ export function useDsfr(app) {
     app.component("DsfrCard", DsfrCard);
     app.component("DsfrCheckbox", DsfrCheckbox);
     app.component("DsfrInput", DsfrInput);
+    app.component("DsfrPagination", DsfrPagination);
+    app.component("DsfrRadioButton", DsfrRadioButton);
     app.component("DsfrSearchBar", DsfrSearchBar);
     app.component("DsfrSegmented", DsfrSegmented);
     app.component("DsfrSegmentedSet", DsfrSegmentedSet);
