@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default {
+    environnement: process.env.NODE_ENV || 'production',
     assetsSrc: path.resolve(__dirname, '../assets'),
     wwwUrl: `https://${process.env.RB_API_FRONT_DOMAIN}`,
     webappUrl: `https://app.${process.env.RB_API_FRONT_DOMAIN}`,
