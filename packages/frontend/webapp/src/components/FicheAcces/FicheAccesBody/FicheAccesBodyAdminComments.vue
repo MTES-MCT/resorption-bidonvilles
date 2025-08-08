@@ -17,11 +17,10 @@
             }"
         />
         <ErrorSummary v-if="error" :message="error" />
-        <div class="flex items-center justify-end">
+        <div class="flex items-center gap-4 justify-end">
             <DsfrButton
                 v-if="pendingAdminCommentsChanges"
-                tertiary
-                no-outline
+                secondary
                 variant="primaryText"
                 @click="cancelAdminComments"
                 :disabled="isLoading"

@@ -13,6 +13,7 @@
             icon="ri:file-excel-fill"
             :disabled="townsStore.filteredTowns.length === 0"
             @click="showExport"
+            secondary
             size="sm"
             >Exporter</DsfrButton
         >
