@@ -34,6 +34,7 @@
                     values.from &&
                     values.to
                 "
+                class="place-self-end"
                 @click="update"
                 >Valider</DsfrButton
             >
