@@ -5,8 +5,7 @@
             user.role_id === 'local_admin' &&
             user.status !== 'inactive'
         "
-        tertiary
-        no-outline
+        secondary
         :loading="isLoading"
         :disabled="disabled"
         >Retirer le rôle « Administrateur local »
