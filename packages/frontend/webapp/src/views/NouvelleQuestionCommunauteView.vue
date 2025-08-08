@@ -41,12 +41,6 @@ function submit(...args) {
 }
 
 function back() {
-    router.back();
+    router.push(`/communaute`);
 }
 </script>
-
-<style scoped>
-button {
-    border: inherit;
-}
-</style>
