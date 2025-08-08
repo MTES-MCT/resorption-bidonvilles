@@ -6,6 +6,7 @@ import {
     DsfrCheckbox,
     DsfrInput,
     DsfrNotice,
+    DsfrPagination,
     DsfrSearchBar,
     DsfrSegmented,
     DsfrSegmentedSet,
@@ -26,6 +27,7 @@ export function useDsfr(app) {
     app.component("DsfrCheckbox", DsfrCheckbox);
     app.component("DsfrInput", DsfrInput);
     app.component("DsfrNotice", DsfrNotice);
+    app.component("DsfrPagination", DsfrPagination);
     app.component("DsfrSearchBar", DsfrSearchBar);
     app.component("DsfrSegmented", DsfrSegmented);
     app.component("DsfrSegmentedSet", DsfrSegmentedSet);
