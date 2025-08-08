@@ -14,7 +14,7 @@ import { FinancedShantytownAction } from '#root/types/resources/Action.d';
 
 
 export default async (user: AuthUser, locations: Location[], closedTowns: boolean): Promise<ShantytownWithFinancedAction[]> => {
-    const isNationalExport = locations.some(l => l.type === 'nation');
+    const isNationalExport = locations.some(l => ['nation', 'metropole', 'outremer'].includes(l.type));
     const filters: Where = [
         {
             status: {
@@ -42,6 +42,26 @@ export default async (user: AuthUser, locations: Location[], closedTowns: boolea
                 return acc;
             }, {} as WhereClauseGroup),
         );
+    } else {
+        const outremer = ['971', '972', '973', '974', '975', '976', '977', '978', '984', '986', '987', '988', '989'];
+        locations.forEach((l) => {
+            if (l.type === 'metropole') {
+                filters.push({
+                    status: {
+                        query: 'departements.code',
+                        not: true,
+                        value: outremer,
+                    },
+                });
+            } else if (l.type === 'outremer') {
+                filters.push({
+                    status: {
+                        query: 'departements.code',
+                        value: outremer,
+                    },
+                });
+            }
+        });
     }
 
     const towns = await shantytownModel.findAll(user, filters, 'export');

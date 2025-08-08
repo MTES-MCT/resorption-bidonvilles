@@ -1,1 +1,1 @@
-export type LocationType = 'nation' | 'region' | 'departement' | 'epci' | 'city';
+export type LocationType = 'nation' | 'metropole' | 'outremer' | 'region' | 'departement' | 'epci' | 'city';

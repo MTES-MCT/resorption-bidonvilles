@@ -1,13 +1,27 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import {
-    Location, Nation, Region, Departement, EPCI, City,
+    Location, Nation, Region, Departement, EPCI, City, Metropole, Outremer,
 } from './Location.d';
 import { LocationType } from './LocationType.d';
 
 const methods = {
     nation: (): Promise<Nation> => Promise.resolve({
         type: 'nation',
+        region: null,
+        departement: null,
+        epci: null,
+        city: null,
+    }),
+    metropole: (): Promise<Metropole> => Promise.resolve({
+        type: 'metropole',
+        region: null,
+        departement: null,
+        epci: null,
+        city: null,
+    }),
+    outremer: (): Promise<Outremer> => Promise.resolve({
+        type: 'outremer',
         region: null,
         departement: null,
         epci: null,
