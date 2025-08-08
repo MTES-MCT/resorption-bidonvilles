@@ -13,7 +13,7 @@
                     name="search"
                     @update:modelValue="handleEmit"
                 />
-                <Button size="sm" type="button">Rechercher</Button>
+                <DsfrButton size="md">Rechercher</DsfrButton>
             </div>
             <p class="mt-1 text-right text-sm font-bold" v-if="showReset">
                 <Link v-if="isNotOnDefaultFilter" @click="resetSearch">
@@ -34,7 +34,7 @@ import { useUserStore } from "@/stores/user.store";
 import { useDirectoryStore } from "@/stores/directory.store";
 
 import InputCommunauteSearch from "../InputCommunauteSearch/InputCommunauteSearch.vue";
-import { Button, ContentWrapper, Icon, Link } from "@resorptionbidonvilles/ui";
+import { ContentWrapper, Icon, Link } from "@resorptionbidonvilles/ui";
 import { toRef } from "vue";
 import { watch } from "vue";
 
