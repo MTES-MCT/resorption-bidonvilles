@@ -8,15 +8,9 @@
             J'ai besoin de l'aide de la communauté.
         </template>
         <template v-slot:buttons>
-            <Button
-                variant="primaryOutline"
-                type="button"
-                @click="back"
-                class="!border-2 !border-primary hover:!bg-primary"
-                >Annuler</Button
-            >
-            <Button @click="submit" :loading="form?.isSubmitting"
-                >Publier</Button
+            <DsfrButton secondary @click="back">Annuler</DsfrButton>
+            <DsfrButton @click="submit" :loading="form?.isSubmitting"
+                >Publier</DsfrButton
             >
         </template>
 
@@ -30,7 +24,7 @@
 import { ref, computed } from "vue";
 import router from "@/helpers/router";
 
-import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import LayoutForm from "@/components/LayoutForm/LayoutForm.vue";
 import FormNouvelleQuestion from "@/components/FormNouvelleQuestion/FormNouvelleQuestion.vue";
 
@@ -47,12 +41,6 @@ function submit(...args) {
 }
 
 function back() {
-    router.back();
+    router.push(`/communaute`);
 }
 </script>
-
-<style scoped>
-button {
-    border: inherit;
-}
-</style>

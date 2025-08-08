@@ -32,11 +32,11 @@
 
         <template v-slot:button>
             <p class="text-center">
-                <Button
+                <DsfrButton
                     type="submit"
                     aria-label="Valider les informations saisies,"
                     :disabled="isFormDisabled || isLoading"
-                    >Me connecter</Button
+                    >Me connecter</DsfrButton
                 >
             </p>
         </template>
@@ -45,8 +45,18 @@
             <p
                 class="flex flex-col items-center space-y-4 sm:flex-row sm:space-y-0 sm:justify-center sm:space-x-6"
             >
-                <Link to="/contact">Demander un accès</Link>
-                <Link to="/nouveau-mot-de-passe">Mot de passe oublié</Link>
+                <DsfrButton
+                    @click.prevent.stop="router.push('/contact')"
+                    tertiary
+                    no-outline
+                    >Demander un accès</DsfrButton
+                >
+                <DsfrButton
+                    @click.prevent.stop="router.push('/nouveau-mot-de-passe')"
+                    tertiary
+                    no-outline
+                    >Mot de passe oublié</DsfrButton
+                >
             </p>
         </template>
     </FormPublic>
@@ -61,7 +71,7 @@ import router from "@/helpers/router.js";
 import { trackEvent } from "@/helpers/matomo.js";
 
 // components
-import { Button, ContentWrapper, Link, Icon } from "@resorptionbidonvilles/ui";
+import { ContentWrapper, Icon } from "@resorptionbidonvilles/ui";
 import FormPublic from "@/components/FormPublic/FormPublic.vue";
 import FormConnexionInputEmail from "./inputs/FormConnexionInputEmail.vue";
 import FormConnexionInputPassword from "./inputs/FormConnexionInputPassword.vue";

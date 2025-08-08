@@ -1,21 +1,20 @@
 <template>
-    <Button
+    <DsfrButton
         v-if="
             userStore.user?.is_superuser &&
             user.role_id === 'local_admin' &&
             user.status !== 'inactive'
         "
-        variant="primaryOutline"
+        secondary
         :loading="isLoading"
         :disabled="disabled"
-        >Retirer rôle « Administrateur local »
-    </Button>
+        >Retirer le rôle « Administrateur local »
+    </DsfrButton>
 </template>
 
 <script setup>
 import { defineProps, toRefs } from "vue";
 import { useUserStore } from "@/stores/user.store";
-import { Button } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     user: Object,

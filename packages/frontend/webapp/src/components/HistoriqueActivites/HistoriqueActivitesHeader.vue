@@ -18,15 +18,13 @@
                 >
                     Voir les règles de modération
                 </Button>
-                <Button
+                <DsfrButton
                     v-if="userStore.hasPermission('shantytown_comment.export')"
-                    icon="file-excel"
-                    iconPosition="left"
-                    variant="primary"
+                    icon="ri:file-excel-fill"
                     :loading="exportLoading"
                     @click="exportShantytownComments"
                     size="sm"
-                    >Exporter tous les commentaires</Button
+                    >Exporter tous les commentaires</DsfrButton
                 >
             </p>
         </template>

@@ -8,28 +8,22 @@
 
         <template v-slot:actions>
             <p class="flex space-x-2">
-                <Button
+                <DsfrButton
                     v-if="exportList.length > 0"
-                    icon="file-excel"
-                    iconPosition="left"
-                    variant="primaryOutline"
+                    icon="ri:file-excel-fill"
+                    secondary
                     @click="openModalExport"
                     size="sm"
-                    class="!border-2 !border-primary hover:!bg-primary"
-                    >Exporter</Button
+                    >Exporter</DsfrButton
                 >
-                <Button
+                <DsfrButton
                     v-if="userStore.hasPermission('action.create')"
-                    type="button"
-                    href="/action/nouveau"
-                    icon="plus"
-                    iconPosition="left"
-                    variant="primary"
+                    @click.prevent.stop="router.push('/action/nouveau')"
+                    icon="fr-icon-add-line"
                     size="sm"
-                    class="!border-2 !border-primary hover:!bg-primaryDark"
                 >
                     Déclarer une nouvelle action
-                </Button>
+                </DsfrButton>
             </p>
         </template>
     </ViewHeader>
@@ -41,7 +35,7 @@ import { useUserStore } from "@/stores/user.store";
 import { useModaleStore } from "@/stores/modale.store";
 import { exportComments, exportActions } from "@/api/actions.api";
 
-import { Button } from "@resorptionbidonvilles/ui";
+import router from "@/helpers/router";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import ModalExport from "@/components/ListeDesActions/ListeDesActionsExport/ListeDesActionsExportModal.vue";
 

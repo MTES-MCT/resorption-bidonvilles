@@ -7,7 +7,6 @@
                 focusClasses.ring,
             ]"
             :aria-label="`Fiche action ${action.name}`"
-            tabindex="0"
             @click="navigate"
             @mouseenter="isHover = true"
             @mouseleave="isHover = false"
@@ -31,7 +30,7 @@
                 </div>
                 <div class="mt-[3px]" v-if="attachmentsLabel">
                     <Tag
-                        tabindex="1"
+                        tabindex="0"
                         :aria-label="attachmentsLabel"
                         variant="highlight"
                         :class="[
@@ -65,14 +64,13 @@
             </div>
 
             <div class="flex justify-end px-4 py-4">
-                <div>
-                    <Link
-                        :to="`/action/${action.id}`"
-                        :aria-label="`Voir la fiche de l'action ${action.name}`"
-                    >
-                        <Icon icon="arrow-right" /> Voir la fiche de l'action
-                    </Link>
-                </div>
+                <DsfrButton
+                    size="sm"
+                    label="Voir la fiche de l'action"
+                    icon="fr-icon-arrow-right-line"
+                    primary
+                    @click.prevent.stop="navigateTo(null)"
+                />
             </div>
         </div>
     </RouterLink>
@@ -84,12 +82,13 @@ import formatDate from "@common/utils/formatDate";
 import focusClasses from "@common/utils/focus_classes";
 
 import { RouterLink } from "vue-router";
-import { Icon, Link, Tag } from "@resorptionbidonvilles/ui";
+import { Icon, Tag } from "@resorptionbidonvilles/ui";
 import CarteActionColonneChampsIntervention from "./CarteActionColonneChampsIntervention.vue";
 import CarteActionDetailleeColonneDepartement from "./CarteActionDetailleeColonneDepartement.vue";
 import CarteActionDetailleeColonneLocalisation from "./CarteActionDetailleeColonneLocalisation.vue";
 import CarteActionDetailleeColonnePilote from "./CarteActionDetailleeColonnePilote.vue";
 import CarteActionDetailleeColonneOperateur from "./CarteActionDetailleeColonneOperateur.vue";
+import router from "@/helpers/router";
 
 const props = defineProps({
     action: {
@@ -128,6 +127,16 @@ const attachmentsLabel = computed(() => {
         ? null
         : `${commentsAttachments} Document partagé`;
 });
+
+const navigateTo = (target) => {
+    if (action.value && action.value.id) {
+        let path = `/action/${action.value.id}`;
+        if (target) {
+            path += `/${target}`;
+        }
+        router.push(path);
+    }
+};
 </script>
 
 <style scoped lang="scss">
