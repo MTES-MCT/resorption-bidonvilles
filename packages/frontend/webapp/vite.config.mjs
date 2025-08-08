@@ -16,7 +16,6 @@ export default defineConfig({
             port: 18092,
             path: "/socket",
         },
-
     },
     build: {
         sourcemap: true,
