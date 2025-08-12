@@ -2,7 +2,7 @@
     <section class="flex space-x-3 items-end">
         <DatepickerInput
             name="from"
-            :maxDate="to - 1"
+            :maxDate="addDays(to, -1)"
             :label="
                 departementMetricsStore.activeTab === 'evolution' ? 'De' : 'Du'
             "
@@ -12,7 +12,7 @@
         />
         <DatepickerInput
             name="to"
-            :minDate="new Date(from).setDate(from.getDate() + 1)"
+            :minDate="addDays(from, 1)"
             :maxDate="today"
             :label="
                 departementMetricsStore.activeTab === 'evolution' ? 'À' : 'Au'
@@ -43,6 +43,7 @@ import { useMetricsStore } from "@/stores/metrics.store";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { trackEvent } from "@/helpers/matomo";
 import { DatepickerInput } from "@resorptionbidonvilles/ui";
+import { addDays } from 'date-fns';
 
 const metricsStore = useMetricsStore();
 const departementMetricsStore = useDepartementMetricsStore();
