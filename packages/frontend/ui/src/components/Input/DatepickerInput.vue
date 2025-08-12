@@ -1,13 +1,27 @@
 <template>
     <InputWrapper :hasErrors="!!errors.length" :withoutMargin="withoutMargin">
-        <InputLabel :label="label" :info="info" :inlineInfo="inlineInfo" :showMandatoryStar="showMandatoryStar" :for="`dp-input-${id}`" />
+        <InputLabel
+            :label="label"
+            :info="info"
+            :inlineInfo="inlineInfo"
+            :showMandatoryStar="showMandatoryStar"
+            :for="`dp-input-${id}`"
+        />
 
         <div :class="width">
-            <DatePicker v-model="date" locale="fr" :format-locale="fr" :format="section === 'evolution' ? 'LLLL yyyy' : 'dd LLLL yyyy'"
-                :disabled="isSubmitting || disabled" autoApply :enableTimePicker="false"
+            <DatePicker
+                v-model="date"
+                locale="fr"
+                :format-locale="fr"
+                :format="section === 'evolution' ? 'LLLL yyyy' : 'dd LLLL yyyy'"
+                :disabled="isSubmitting || disabled"
+                autoApply
+                :enableTimePicker="false"
                 :input-class-name="focusClasses.ring"
-                :preventMinMaxNavigation="!!$attrs.maxDate || !!$attrs.minDate" v-bind="$attrs" :uid="id">
-            </DatePicker>
+                :preventMinMaxNavigation="!!$attrs.maxDate || !!$attrs.minDate"
+                v-bind="$attrs"
+                :uid="id"
+            />
         </div>
         <InputError v-if="errors.length">{{ errors[0] }}</InputError>
     </InputWrapper>
