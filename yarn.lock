@@ -3125,6 +3125,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@iconify-json/carbon@npm:^1.2.13":
+  version: 1.2.13
+  resolution: "@iconify-json/carbon@npm:1.2.13"
+  dependencies:
+    "@iconify/types": "*"
+  checksum: d0f9c0bd625a43d6ff47942f3d4af5b2505c46a2c2df802872880e3b232f39986fc8c465e32a4b651f4cd6e90f32b2409ed841eac50743a27cb9d48813905047
+  languageName: node
+  linkType: hard
+
 "@iconify-json/mdi@npm:latest":
   version: 1.2.3
   resolution: "@iconify-json/mdi@npm:1.2.3"
@@ -5838,6 +5847,7 @@ __metadata:
     "@gouvfr/dsfr": 1.13.2
     "@gouvminint/vue-dsfr": ^8.6.0
     "@iconify-json/bxs": latest
+    "@iconify-json/carbon": ^1.2.13
     "@iconify-json/mdi": latest
     "@iconify-json/ri": latest
     "@iconify-json/uil": latest
