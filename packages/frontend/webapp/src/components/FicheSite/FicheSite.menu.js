@@ -56,6 +56,7 @@ export default [
         id: "procedures",
         label: () => "Procédures",
         route: "#procedure",
+        postIcon: "paperclip",
         condition() {
             const userStore = useUserStore();
             return userStore.hasJusticePermission === true;
