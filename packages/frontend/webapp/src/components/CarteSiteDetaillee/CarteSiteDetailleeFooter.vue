@@ -8,7 +8,7 @@
                     ? 'Supprimer l\'alerte Canicule'
                     : 'Alerte Canicule'
             "
-            icon="fr-icon-thermometer-line"
+            icon="carbon:temperature-hot"
             secondary
             no-outline
             :disabled="heatwaveRequestStatus?.loading"

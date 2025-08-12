@@ -93,7 +93,7 @@
                         ? 'Supprimer l\'alerte Canicule'
                         : 'Activer l\'alerte Canicule'
                 "
-                icon="fr-icon-thermometer-line"
+                icon="carbon:temperature-hot"
                 secondary
                 :disabled="heatwaveRequestStatus?.loading"
                 @click.prevent.stop="toggleHeatwave"
