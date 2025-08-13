@@ -1,5 +1,12 @@
 <template>
     <section>
+        <DsfrPagination
+            v-if="comments.length > itemsPerPage"
+            v-model:current-page="currentPage"
+            :pages="pages"
+            :trunc-limit="4"
+            class="mt-4"
+        />
         <CarteCommentaireSite
             v-for="comment in paginatedResults"
             :key="comment.id"
@@ -7,6 +14,7 @@
             :comment="comment"
         />
         <DsfrPagination
+            v-if="comments.length > itemsPerPage"
             v-model:current-page="currentPage"
             :pages="pages"
             :trunc-limit="4"
@@ -25,7 +33,7 @@ const props = defineProps({
 });
 const { comments, townId } = toRefs(props);
 const currentPage = ref(0);
-const itemsPerPage = 5;
+const itemsPerPage = 10;
 const totalPages = computed(() => {
     return Math.ceil(comments.value.length / itemsPerPage);
 });
@@ -49,7 +57,7 @@ const paginatedResults = computed(() => {
 });
 
 watch(currentPage, () => {
-    const element = document.getElementById("journal_du_site");
+    const element = document.getElementById("messages_du_site");
     if (element) {
         element.scrollIntoView({ behavior: "smooth" });
     }

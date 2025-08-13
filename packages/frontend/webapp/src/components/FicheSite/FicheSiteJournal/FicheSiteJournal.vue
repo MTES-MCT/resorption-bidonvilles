@@ -37,7 +37,7 @@
             </template>
         </FicheJournalLayout>
 
-        <FicheJournalLayout>
+        <FicheJournalLayout id="messages_du_site">
             <template v-slot:aside
                 ><div
                     class="flex sticky justify-center top-8 py-2 mb-2 bg-orange200"
