@@ -26,7 +26,7 @@
                 {
                     label: 'Période personnalisée',
                     value: 'periode-personnalisee',
-                    icon: 'fr-icon-bar-chart-box-line',
+                    icon: 'fr-icon-calendar-event-line',
                 },
                 {
                     label: 'Situation à date',

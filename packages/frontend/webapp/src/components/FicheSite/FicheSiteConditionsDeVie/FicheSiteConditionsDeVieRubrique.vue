@@ -135,18 +135,24 @@ const COLORS = {
     toImprove: "text-secondary",
     bad: "text-secondary",
     unknown: "text-secondary",
+    activeHeatwave: "text-warning",
+    inactiveHeatwave: "text-G700",
 };
 const ICONS = {
     good: "check",
     toImprove: "exclamation-triangle",
     bad: "times",
     unknown: "question",
+    activeHeatwave: "sun",
+    inactiveHeatwave: "temperature-half",
 };
 const TEXTS = {
     good: "oui",
     toImprove: "à améliorer",
     bad: "non",
     unknown: "inconnu",
+    activeHeatwave: "activée",
+    inactiveHeatwave: "désactivée",
 };
 const realStatus = computed(() => {
     let s = status.value.status;

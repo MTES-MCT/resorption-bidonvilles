@@ -13,8 +13,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { ContentWrapper } from "@resorptionbidonvilles/ui";
-import TableauDeBordGrille from "./TableauDeBordGrille.vue";
 import BandeauNotice from "@/components/BandeauNotice/BandeauNotice.vue";
+import TableauDeBordGrille from "./TableauDeBordGrille.vue";
 import { useUserStore } from "@/stores/user.store";
 
 import { default as baseCards } from "@/utils/TableauDeBordCardsList";

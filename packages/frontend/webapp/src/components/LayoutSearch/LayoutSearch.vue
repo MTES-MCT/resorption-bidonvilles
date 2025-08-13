@@ -19,9 +19,7 @@
                             :allowFreeSearch="allowFreeSearch"
                             v-model="inputLocation"
                         />
-                        <Button size="sm" type="button" class="py-1.5"
-                            >Rechercher</Button
-                        >
+                        <DsfrButton size="sm">Rechercher</DsfrButton>
                     </div>
                     <div
                         class="flex flex-col xs:flex-row gap-1 xs:gap-2 mt-2 text-left text-sm"
@@ -62,7 +60,7 @@ import { useUserStore } from "@/stores/user.store";
 
 import Layout from "@/components/Layout/Layout.vue";
 import InputLocation from "@/components/InputLocation/InputLocation.vue";
-import { Button, ContentWrapper, Link } from "@resorptionbidonvilles/ui";
+import { ContentWrapper, Link } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     searchTitle: {

@@ -7,13 +7,13 @@
         </p>
 
         <template v-for="tab in tabs" :key="tab.id">
-            <Button
+            <DsfrButton
                 v-if="tab.action"
                 size="sm"
                 @click="tab.action"
                 class="self-start"
                 ><Icon v-if="tab.icon" :icon="tab.icon" />
-                {{ tab.label }}</Button
+                {{ tab.label }}</DsfrButton
             >
 
             <RouterLink
@@ -29,8 +29,12 @@
                 ]"
                 replace
                 ><Icon v-if="tab.icon" :icon="tab.icon" /> {{ tab.label }}
-                <Icon v-if="tab.postIcon" icon="paperclip"
-            /></RouterLink>
+                <Icon
+                    v-if="tab.postIcon"
+                    :icon="tab.postIcon"
+                    :class="tab.iconColor ? `text-${tab.iconColor}` : ''"
+                />
+            </RouterLink>
         </template>
     </nav>
 </template>
@@ -38,7 +42,7 @@
 <script setup>
 import { defineProps, toRefs } from "vue";
 import { RouterLink } from "vue-router";
-import { Icon, Button } from "@resorptionbidonvilles/ui";
+import { Icon } from "@resorptionbidonvilles/ui";
 import focusClasses from "@common/utils/focus_classes";
 
 const props = defineProps({

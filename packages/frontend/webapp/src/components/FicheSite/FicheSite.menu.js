@@ -49,11 +49,14 @@ export default [
         id: "conditions_de_vie",
         label: () => "Conditions de vie et environnement",
         route: "#conditions_de_vie",
+        postIcon: "warning",
+        iconColor: "secondary",
     },
     {
         id: "procedures",
         label: () => "Procédures",
         route: "#procedure",
+        postIcon: "paperclip",
         condition() {
             const userStore = useUserStore();
             return userStore.hasJusticePermission === true;
@@ -72,6 +75,7 @@ export default [
         },
         route: "#journal_du_site",
         icon: "comment",
+        postIcon: "paperclip",
         variant: "secondary",
         condition(town) {
             const userStore = useUserStore();

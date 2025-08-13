@@ -17,6 +17,12 @@
             v-if="town.changelog.length || town.comments.length"
             :town="town"
         />
+        <div v-else>
+            <p class="text-black">
+                Site déclaré le
+                {{ formatDate(town.createdAt, "d M y") }}
+            </p>
+        </div>
     </div>
 </template>
 
@@ -26,6 +32,7 @@ import useLastUpdated from "@/composables/useLastUpdated";
 import FicheSiteHeaderStatusLastEvent from "@/components/FicheSite/FicheSiteHeader/FicheSiteHeaderStatusLastEvent.vue";
 import TagObjectifResorption from "@/components/TagObjectifResorption/TagObjectifResorption.vue";
 import getStatusBadgeType from "@/utils/getStatusBadgeType";
+import formatDate from "@common/utils/formatDate";
 
 const props = defineProps({
     town: Object,
