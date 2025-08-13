@@ -16,7 +16,7 @@
                     {{ formatStat(townsStore.filteredTowns.length) }}
                     site<template v-if="townsStore.filteredTowns.length > 1"
                         >s</template
-                    ><template v-if="updatedSitesInTheLastSixMonths > 0">
+                    ><template v-if="updatedSitesInTheLastSixMonths !== null">
                         <DsfrBadge
                             class="ml-1"
                             small
@@ -137,7 +137,7 @@ const badgeLabel = computed(() => {
             updatedSitesInTheLastSixMonths.value
         }) mis à jour dans les 6 derniers mois`;
     }
-    return "";
+    return "Aucun site mis à jour au cours des 6 derniers mois";
 });
 
 const badgeVariant = computed(() => {
