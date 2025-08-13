@@ -4,7 +4,7 @@
             v-if="lastEvent.type === 'comment'"
             :to="`/site/${town.id}#journal_du_site`"
         >
-            <span class="inline-ink text-primary">
+            <span class="text-primary">
                 {{ lastEvent.data }}
             </span>
             <span> le {{ formatDate(lastEvent.date, "d M y") }}</span>
