@@ -133,17 +133,6 @@ const hasUpdateShantytownPermission = computed(() => {
     return userStore.hasUpdateShantytownPermission(action.value);
 });
 
-const navigateTo = (target) => {
-    console.log("shantytown.value = ", action.value);
-    if (action.value && action.value.id) {
-        let path = `/action/${action.value.id}`;
-        if (target) {
-            path += `/${target}`;
-        }
-        router.push(path);
-    }
-};
-
 const attachmentsLabel = computed(() => {
     const commentsAttachments = action.value.comments.reduce((sum, comment) => {
         return sum + (comment.attachments ? comment.attachments.length : 0);
