@@ -8,12 +8,11 @@
 
             <ErrorSummary v-if="error" :message="error" class="mt-2" />
             <p class="text-right">
-                <Button
+                <DsfrButton
                     :loading="isLoading"
-                    icon="paper-plane"
-                    iconPosition="left"
+                    icon="fr-icon-send-plane-fill"
                     @click="submit"
-                    >Publier le message</Button
+                    >Publier le message</DsfrButton
                 >
             </p>
         </DragZone>
@@ -27,7 +26,7 @@ import { useActionsStore } from "@/stores/actions.store";
 import schema from "./FicheActionJournalFormNouveauMessage.schema";
 import getFileFromPasteEvent from "@/utils/getFileFromPasteEvent";
 
-import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
+import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import DragZone from "@/components/DragZone/DragZone.vue";
 import FormNouveauMessageInputMessage from "./inputs/FormNouveauMessageInputMessage.vue";
 import FormNouveauMessageInputAttachments from "./inputs/FormNouveauMessageInputAttachments.vue";

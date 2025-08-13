@@ -1,97 +1,105 @@
 <template>
-    <p class="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
-        <RouterLink
-            to="#journal_du_site"
-            v-if="
-                userStore.hasLocalizedPermission(
-                    'shantytown_comment.list',
-                    town
-                )
-            "
+    <div
+        class="flex flex-col justify-between items-start gap-2 sm:flex-row sm:items-center"
+    >
+        <div
+            class="flex flex-col items-start gap-2 sm:flex-row sm:items-center"
         >
-            <Button
-                size="sm"
-                variant="primaryOutline"
-                icon="comment"
-                iconPosition="left"
-                tabindex="-1"
-                class="!border-2 !border-primary hover:!bg-primary"
-                >Journal du site</Button
+            <RouterLink
+                to="#journal_du_site"
+                v-if="
+                    userStore.hasLocalizedPermission(
+                        'shantytown_comment.list',
+                        town
+                    )
+                "
             >
-        </RouterLink>
-        <Button
-            size="sm"
-            icon="file-word"
-            iconPosition="left"
-            variant="primaryOutline"
-            @click="openExportModal"
-            class="!border-2 !border-primary hover:!bg-primary"
-            >Exporter</Button
-        >
-        <Button
-            v-if="
-                userStore.hasLocalizedPermission('shantytown.close', town) &&
-                town.status === 'open'
-            "
-            size="sm"
-            variant="primary"
-            icon="house-circle-xmark"
-            iconPosition="left"
-            :href="`/site/${town.id}/fermeture`"
-            class="hover:!bg-primaryDark"
-            >Fermer le site</Button
-        >
+                <DsfrButton
+                    size="sm"
+                    icon="fr-icon-chat-3-fill"
+                    secondary
+                    tabindex="-1"
+                    >Journal du site</DsfrButton
+                >
+            </RouterLink>
+            <DsfrButton
+                size="sm"
+                icon="ri-file-excel-fill"
+                secondary
+                @click="openExportModal"
+                >Exporter</DsfrButton
+            >
+            <DsfrButton
+                v-if="
+                    userStore.hasLocalizedPermission(
+                        'shantytown.close',
+                        town
+                    ) && town.status === 'open'
+                "
+                size="sm"
+                icon="mdi:home-remove-outline"
+                @click="navigateTo(town.id, 'fermeture')"
+                >Fermer le site</DsfrButton
+            >
 
-        <Button
-            v-if="
-                userStore.hasLocalizedPermission(
-                    'shantytown.fix_status',
-                    town
-                ) && town.status !== 'open'
-            "
-            size="sm"
-            variant="primary"
-            icon="house-circle-xmark"
-            iconPosition="left"
-            :href="`/site/${town.id}/fermeture`"
-            class="hover:!bg-primaryDark"
-            >Corriger la fermeture du site</Button
-        >
-        <Button
-            size="sm"
-            variant="primary"
-            icon="pencil"
-            iconPosition="left"
-            v-if="
-                userStore.hasLocalizedPermission('shantytown.update', town) &&
-                town.status === 'open'
-            "
-            :href="`/site/${town.id}/mise-a-jour`"
-            class="hover:!bg-primaryDark"
-            >Mettre à jour</Button
-        >
-        <Button
-            v-if="displayStartResorptionButton"
-            size="sm"
-            variant="primary"
-            icon="fa-regular fa-play"
-            iconPosition="left"
-            @click="startResorption"
-            :loading="startResorptionIsLoading"
-            >Démarrer la résorption</Button
-        >
-        <Button
-            v-if="userStore.hasLocalizedPermission('shantytown.delete', town)"
-            size="sm"
-            variant="primary"
-            icon="fa-regular fa-trash-alt"
-            iconPosition="left"
-            @click="deleteTown"
-            :loading="deleteIsLoading"
-            class="!border-2 !border-primary hover:!bg-primaryDark"
-            >Supprimer le site</Button
-        >
-    </p>
+            <DsfrButton
+                v-if="
+                    userStore.hasLocalizedPermission(
+                        'shantytown.fix_status',
+                        town
+                    ) && town.status !== 'open'
+                "
+                size="sm"
+                icon="mdi:home-remove-outline"
+                @click="navigateTo(town.id, 'fermeture')"
+                >Corriger la fermeture du site</DsfrButton
+            >
+            <DsfrButton
+                size="sm"
+                icon="fr-icon-pencil-line"
+                v-if="
+                    userStore.hasLocalizedPermission(
+                        'shantytown.update',
+                        town
+                    ) && town.status === 'open'
+                "
+                @click="navigateTo(town.id, 'mise-a-jour')"
+                >Mettre à jour</DsfrButton
+            >
+            <DsfrButton
+                v-if="displayStartResorptionButton"
+                size="sm"
+                icon="mdi:play"
+                @click="startResorption"
+                :loading="startResorptionIsLoading"
+                >Démarrer la résorption</DsfrButton
+            >
+            <DsfrButton
+                v-if="
+                    userStore.hasLocalizedPermission('shantytown.delete', town)
+                "
+                size="sm"
+                icon="mdi:delete-outline"
+                @click="deleteTown"
+                :loading="deleteIsLoading"
+                >Supprimer le site</DsfrButton
+            >
+        </div>
+        <div>
+            <DsfrButton
+                size="sm"
+                :label="
+                    heatwaveStatus
+                        ? 'Supprimer l\'alerte Canicule'
+                        : 'Activer l\'alerte Canicule'
+                "
+                icon="carbon:temperature-hot"
+                secondary
+                :disabled="heatwaveRequestStatus?.loading"
+                @click.prevent.stop="toggleHeatwave"
+            />
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -103,7 +111,6 @@ import { useTownsStore } from "@/stores/towns.store";
 import { useModaleStore } from "@/stores/modale.store";
 import router from "@/helpers/router";
 
-import { Button } from "@resorptionbidonvilles/ui";
 import FicheSiteModaleExport from "../FicheSiteModaleExport/FicheSiteModaleExport.vue";
 
 import { useConfigStore } from "@/stores/config.store";
@@ -114,6 +121,8 @@ const props = defineProps({
 });
 const { town } = toRefs(props);
 const userStore = useUserStore();
+const notificationStore = useNotificationStore();
+const townsStore = useTownsStore();
 
 const { displayPhasesPreparatoiresResorption } =
     usePhasesPreparatoiresResorption(town);
@@ -122,6 +131,10 @@ function openExportModal() {
     const modaleStore = useModaleStore();
     modaleStore.open(FicheSiteModaleExport, { town: town.value });
 }
+
+const navigateTo = (target, target2) => {
+    router.push(`/site/${target}/${target2}`);
+};
 
 const deleteIsLoading = ref(false);
 async function deleteTown() {
@@ -215,9 +228,6 @@ async function startResorption() {
 
     startResorptionIsLoading.value = true;
 
-    const notificationStore = useNotificationStore();
-    const townsStore = useTownsStore();
-
     nextTick(async () => {
         try {
             await townsStore.startResorption(town.value.id);
@@ -246,6 +256,46 @@ const displayStartResorptionButton = computed(() => {
         !townIsClosed.value
     );
 });
+
+const heatwaveStatus = computed(() => {
+    return town.value.heatwaveStatus;
+});
+
+const heatwaveRequestStatus = computed(() => {
+    return townsStore.heatwaveStatuses[town.value.id] || null;
+});
+
+async function toggleHeatwave() {
+    try {
+        await townsStore.setHeatwaveStatus(
+            town.value.id,
+            !town.value.heatwaveStatus
+        );
+    } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log("Erreur lors de la modification du statut canicule :", e);
+
+        notificationStore.error(
+            "Risque canicule",
+            "Une erreur inconnue est survenue"
+        );
+        return;
+    }
+
+    if (heatwaveRequestStatus.value?.error !== null) {
+        notificationStore.error(
+            "Risque canicule",
+            heatwaveRequestStatus.value.error
+        );
+    } else {
+        notificationStore.success(
+            "Risque canicule",
+            town.value.heatwaveStatus === true
+                ? "Le site a été marqué comme particulièrement exposé à la canicule"
+                : "Le site n'est plus marqué comme à risque"
+        );
+    }
+}
 </script>
 
 <style scoped>

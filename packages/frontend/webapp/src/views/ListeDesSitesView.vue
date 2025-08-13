@@ -25,9 +25,9 @@ import { useTownsStore } from "@/stores/towns.store";
 import { trackEvent } from "@/helpers/matomo";
 
 import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
+import BandeauNotice from "@/components/BandeauNotice/BandeauNotice.vue";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import ListeDesSites from "@/components/ListeDesSites/ListeDesSites.vue";
-import BandeauNotice from "@/components/BandeauNotice/BandeauNotice.vue";
 
 const ariane = [{ label: "Accueil", to: "/" }, { label: "Sites" }];
 const townsStore = useTownsStore();

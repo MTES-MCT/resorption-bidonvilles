@@ -1,23 +1,15 @@
 <template>
     <section class="flex space-x-3">
-        <Button
+        <DsfrButton
             v-if="departementMetricsStore.activeTab === 'tableau'"
-            variant="primaryOutline"
+            secondary
             :icon="parametresIcon"
-            iconPosition="left"
             @click="toggleParametres"
             size="sm"
-            class="!border-2 !border-primary hover:!bg-primaryDark"
-            >{{ parametresWording }}</Button
+            >{{ parametresWording }}</DsfrButton
         >
-        <Button
-            variant="primaryOutline"
-            icon="file-excel"
-            iconPosition="left"
-            @click="print"
-            size="sm"
-            class="!border-2 !border-primary hover:!bg-primaryDark"
-            >Exporter</Button
+        <DsfrButton secondary icon="ri-file-excel-fill" @click="print" size="sm"
+            >Exporter</DsfrButton
         >
     </section>
 </template>
@@ -31,7 +23,6 @@ export default {
 <script setup>
 import domtoimage from "dom-to-image-more";
 import downloadBlob from "@/utils/downloadBlob";
-import { Button } from "@resorptionbidonvilles/ui";
 import { useMetricsStore } from "@/stores/metrics.store";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import formatDate from "@common/utils/formatDate";
@@ -40,13 +31,16 @@ import { trackEvent } from "@/helpers/matomo";
 
 const metricsStore = useMetricsStore();
 const departementMetricsStore = useDepartementMetricsStore();
-const parametresIcon = computed(() => {
-    return metricsStore.showParametres ? "filter-circle-xmark" : "filter";
-});
 const parametresWording = computed(() => {
     return metricsStore.showParametres
         ? "Masquer les paramètres"
         : "Voir les paramètres";
+});
+
+const parametresIcon = computed(() => {
+    return metricsStore.showParametres
+        ? "fr-icon-filter-line"
+        : "fr-icon-filter-fill";
 });
 
 function toggleParametres() {

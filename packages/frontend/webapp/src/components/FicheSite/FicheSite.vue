@@ -75,6 +75,7 @@ import menu from "./FicheSite.menu";
 
 import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
+import BandeauNotice from "@/components/BandeauNotice/BandeauNotice.vue";
 import FicheSiteHeader from "./FicheSiteHeader/FicheSiteHeader.vue";
 import FicheSiteResorption from "./FicheSiteResorption/FicheSiteResorption.vue";
 import FicheSiteCaracteristiques from "./FicheSiteCaracteristiques/FicheSiteCaracteristiques.vue";
@@ -86,7 +87,6 @@ import FicheSiteProcedures from "./FicheSiteProcedures/FicheSiteProcedures.vue";
 import FicheSiteIntervenants from "./FicheSiteIntervenants/FicheSiteIntervenants.vue";
 import FicheSiteJournal from "./FicheSiteJournal/FicheSiteJournal.vue";
 import FicheSiteHistorique from "./FicheSiteHistorique/FicheSiteHistorique.vue";
-import BandeauNotice from "@/components/BandeauNotice/BandeauNotice.vue";
 import { usePhasesPreparatoiresResorption } from "@/utils/usePhasesPreparatoiresResorption";
 
 const props = defineProps({
@@ -122,8 +122,10 @@ const tabs = computed(() => {
                 postIcon:
                     (item.id === "journal_du_site" &&
                         commentsAttachments > 0) ||
-                    (item.id === "procedures" && proceduresAttachments > 0)
-                        ? true
+                    (item.id === "procedures" && proceduresAttachments > 0) ||
+                    (item.id === "conditions_de_vie" &&
+                        town.value.heatwaveStatus)
+                        ? item.postIcon
                         : false,
             };
         });
