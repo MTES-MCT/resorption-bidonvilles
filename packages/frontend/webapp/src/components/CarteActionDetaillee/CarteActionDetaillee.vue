@@ -63,7 +63,17 @@
                 />
             </div>
 
-            <div class="flex justify-end px-4 py-4">
+            <div
+                class="flex justify-end h-14 items-center mr-4 space-x-4 print:hidden"
+            >
+                <DsfrButton
+                    v-if="hasUpdateShantytownPermission"
+                    size="sm"
+                    label="Mettre à jour"
+                    icon="fr-icon-pencil-line"
+                    secondary
+                    @click.prevent.stop="navigateTo('mise-a-jour')"
+                />
                 <DsfrButton
                     size="sm"
                     label="Voir la fiche de l'action"
@@ -88,7 +98,8 @@ import CarteActionDetailleeColonneDepartement from "./CarteActionDetailleeColonn
 import CarteActionDetailleeColonneLocalisation from "./CarteActionDetailleeColonneLocalisation.vue";
 import CarteActionDetailleeColonnePilote from "./CarteActionDetailleeColonnePilote.vue";
 import CarteActionDetailleeColonneOperateur from "./CarteActionDetailleeColonneOperateur.vue";
-import router from "@/helpers/router";
+import { useUserStore } from "@/stores/user.store";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
     action: {
@@ -97,6 +108,8 @@ const props = defineProps({
 });
 
 const { action } = toRefs(props);
+const userStore = useUserStore();
+const router = useRouter();
 
 const isHover = ref(false);
 
@@ -114,6 +127,10 @@ const actionPeriod = computed(() => {
             formatDate(action.value.started_at / 1000, "d/m/y")
         );
     }
+});
+
+const hasUpdateShantytownPermission = computed(() => {
+    return userStore.hasUpdateShantytownPermission(action.value);
 });
 
 const attachmentsLabel = computed(() => {
