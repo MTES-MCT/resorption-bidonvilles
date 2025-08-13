@@ -6,6 +6,22 @@ export type Nation = {
     city: null
 };
 
+export type Metropole = {
+    type: 'metropole',
+    region: null,
+    departement: null,
+    epci: null,
+    city: null
+};
+
+export type Outremer = {
+    type: 'outremer',
+    region: null,
+    departement: null,
+    epci: null,
+    city: null
+};
+
 export type Region = {
     type: 'region',
     region: {
@@ -69,7 +85,7 @@ export type City = {
     }
 };
 
-export type Location = Nation | Region | Departement | EPCI | City;
+export type Location = Nation | Metropole | Outremer | Region | Departement | EPCI | City;
 export type InterventionArea = Location & {
     area_of: 'organization' | 'user';
     latitude: number;
