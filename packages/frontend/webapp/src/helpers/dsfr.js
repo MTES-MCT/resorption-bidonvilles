@@ -1,5 +1,6 @@
 import {
     DsfrAlert,
+    DsfrBadge,
     DsfrButton,
     DsfrButtonGroup,
     DsfrCard,
@@ -17,9 +18,16 @@ import "@gouvminint/vue-dsfr/styles";
 import "@gouvfr/dsfr/dist/utility/utility.main.min.css";
 import "@gouvfr/dsfr/dist/utility/utility.min.css";
 import "@gouvfr/dsfr/dist/component/component.main.min.css";
+import collections from "../utils/icon-collections.js";
+import { addCollection } from "@iconify/vue";
+
+for (const collection of collections) {
+    addCollection(collection);
+}
 
 export function useDsfr(app) {
     app.component("DsfrAlert", DsfrAlert);
+    app.component("DsfrBadge", DsfrBadge);
     app.component("DsfrButton", DsfrButton);
     app.component("DsfrButtonGroup", DsfrButtonGroup);
     app.component("DsfrCard", DsfrCard);

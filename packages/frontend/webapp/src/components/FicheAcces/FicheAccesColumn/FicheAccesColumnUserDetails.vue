@@ -34,23 +34,21 @@
         ><br />
         <Icon icon="phone" class="text-G400 mr-2" /> {{ phone }}
     </p>
-    <Button
-        class="mt-2 !border-2 !border-primary hover:!bg-primaryDark"
+    <DsfrButton
+        class="mt-2"
         v-if="userStore.user?.is_superuser && !user.anonymized_at"
         size="sm"
-        icon="user-pen"
-        iconPosition="left"
-        :href="`/utilisateur/${user.id}`"
-        >Modifier ces informations</Button
+        icon="mdi-account-edit"
+        @click.prevent.stop="router.push(`/utilisateur/${user.id}`)"
+        >Modifier ces informations</DsfrButton
     >
-    <Button
+    <DsfrButton
         v-if="userStore.user?.is_superuser && !user.anonymized_at"
-        class="mt-2 !border-2 !border-primary hover:!bg-primaryDark"
+        class="mt-2"
         size="sm"
-        icon="building-user"
-        iconPosition="left"
-        :href="`/utilisateur/${user.id}/territoires`"
-        >Modifier le(s) territoire(s) d'intervention</Button
+        icon="fr-icon-hotel-line"
+        @click.prevent.stop="router.push(`/utilisateur/${user.id}/territoires`)"
+        >Modifier le(s) territoire(s) d'intervention</DsfrButton
     >
 </template>
 
@@ -58,13 +56,9 @@
 import { defineProps, toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import avatarImg from "@/assets/img/illustrations/avatar.svg";
-import {
-    Button,
-    Icon,
-    Link,
-    LinkOrganization,
-} from "@resorptionbidonvilles/ui";
+import { Icon, Link, LinkOrganization } from "@resorptionbidonvilles/ui";
 import { trackEvent } from "@/helpers/matomo";
+import router from "@/helpers/router";
 
 const props = defineProps({
     user: {

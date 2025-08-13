@@ -23,6 +23,15 @@
         </p>
 
         <FicheSiteConditionsDeVieRubrique
+            :border="true"
+            :marginTop="false"
+            title="Alerte canicule"
+            info="L'alerte canicule peut être déclenchée lorsque la température dépasse un seuil critique, mettant en danger la santé des populations vulnérables."
+            :status="heatwaveStatus"
+            :answers="[]"
+        />
+
+        <FicheSiteConditionsDeVieRubrique
             :border="false"
             :marginTop="false"
             title="Accès à l’eau"
@@ -115,5 +124,17 @@ const pestAnimalsWording = computed(() => {
     return town.value.livingConditions[key].status.status === "good"
         ? "Absence de nuisible"
         : "Présence de nuisibles";
+});
+
+const heatwaveStatus = computed(() => {
+    return {
+        negative: [],
+        positive: [],
+        unknown: [],
+        status:
+            town.value.heatwaveStatus === true
+                ? "activeHeatwave"
+                : "inactiveHeatwave",
+    };
 });
 </script>

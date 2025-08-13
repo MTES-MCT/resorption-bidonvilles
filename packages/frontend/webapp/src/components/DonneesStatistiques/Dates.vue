@@ -21,12 +21,11 @@
             :section="departementMetricsStore.activeTab"
             @update:modelValue="(date) => updateDate('to', date)"
         />
-        <Button
+        <DsfrButton
             @click="update"
-            class="h-9"
             :loading="['init', 'refresh'].includes(metricsStore.nationStatus)"
             v-if="datesAreNotLoaded && from && to"
-            >Valider</Button
+            >Valider</DsfrButton
         >
     </section>
 </template>
@@ -43,7 +42,7 @@ import { useForm } from "vee-validate";
 import { useMetricsStore } from "@/stores/metrics.store";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store";
 import { trackEvent } from "@/helpers/matomo";
-import { Button, DatepickerInput } from "@resorptionbidonvilles/ui";
+import { DatepickerInput } from "@resorptionbidonvilles/ui";
 
 const metricsStore = useMetricsStore();
 const departementMetricsStore = useDepartementMetricsStore();
