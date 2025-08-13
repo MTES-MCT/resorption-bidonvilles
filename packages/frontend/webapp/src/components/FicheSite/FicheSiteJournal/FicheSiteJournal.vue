@@ -5,7 +5,7 @@
                 <h2 class="text-3xl text-secondary mb-8">
                     <Icon icon="comment" /> Journal du site
                     <span
-                        >— {{ comments.length }} message{{
+                        >- {{ comments.length }} message{{
                             comments.length > 1 ? "s" : ""
                         }}</span
                     >
@@ -37,7 +37,7 @@
             </template>
         </FicheJournalLayout>
 
-        <FicheJournalLayout>
+        <FicheJournalLayout id="messages_du_site">
             <template v-slot:aside
                 ><div
                     class="flex sticky justify-center top-8 py-2 mb-2 bg-orange200"
