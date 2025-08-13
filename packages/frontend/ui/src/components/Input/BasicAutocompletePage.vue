@@ -30,13 +30,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-end items-center gap-2 p-2 border-t border-G200"
+                <div class="flex justify-center items-center gap-2 pt-4 h-9 border-t border-G200"
                     @mousedown.prevent.stop="isClickInsideDropdown = true"
                     @mouseup="isClickInsideDropdown = false"
                     @mouseleave="isClickInsideDropdown = false"
+                    v-if="totalPages > 1"
                 >
                 <DsfrPagination
-                    v-if="totalPages > 1"
+                    
                     v-model:current-page="currentPage"
                     :pages="pages"
                     :truncLimit="2"
