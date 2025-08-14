@@ -12,8 +12,6 @@ import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
 
 export default async (townData, user) => {
-    console.log('Ajout du site');
-
     const baseTown = {
         name: townData.name,
         latitude: townData.latitude,
@@ -38,7 +36,6 @@ export default async (townData, user) => {
         cars: townData.cars,
         mattresses: townData.mattresses,
         fieldType: townData.field_type,
-        // ownerType: townData.owner_type,
         isReinstallation: townData.is_reinstallation,
         reinstallationComments: townData.reinstallation_comments,
         city: townData.citycode,
@@ -85,7 +82,7 @@ export default async (townData, user) => {
     };
 
     const transaction = await sequelize.transaction();
-    let shantytown_id;
+    let shantytown_id: number;
     try {
         shantytown_id = await createShantytown(
             {
@@ -104,15 +101,9 @@ export default async (townData, user) => {
                         bailiff: townData.bailiff,
                     }
                     : {}),
-                // ...(user.isAllowedTo('access', 'shantytown_owner')
-                //     ? {
-                //         owner: townData.owner,
-                //     }
-                //     : {}),
             },
             transaction,
         );
-        console.log('Ajout OK, on continue avec les données liées');
 
         const promises = [];
         if (townData.social_origins.length > 0) {
@@ -145,8 +136,6 @@ export default async (townData, user) => {
 
         // On ajoute les propriétaires de parcelles liés au site
         if (townData.owner?.owners && townData.owner.owners.length > 0) {
-            console.log('Ajout des propriétaires');
-
             try {
                 await shantytownParcelOwnerService.create(
                     user,
@@ -155,8 +144,6 @@ export default async (townData, user) => {
                     transaction,
                 );
             } catch (error) {
-                console.log('Erreur dans la création propriétaires', error);
-
                 await transaction.rollback();
                 throw new ServiceError('parcel_owner_creation_failed', error);
             }
