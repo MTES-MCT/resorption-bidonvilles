@@ -1,7 +1,10 @@
+import { OwnerType } from '#root/types/resources/OwnerType.d';
+
 export type SerializedOwner = {
     ownerId?: number;
     name: string;
     type: number;
+    typeDetails?: OwnerType;
     active: boolean;
     createdAt: string;
     createdBy: {

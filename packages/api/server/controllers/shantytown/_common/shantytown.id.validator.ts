@@ -1,5 +1,7 @@
 import { param } from 'express-validator';
 import findOneShantytown from '#server/models/shantytownModel/findOne';
+import shantytownParcelOwnerService from '#server/services/shantytownParcelOwner';
+import serializeOwners from '#server/services/shantytownParcelOwner/serializeOwners';
 
 export default param('id')
     .custom(async (value, { req }) => {
@@ -13,6 +15,15 @@ export default param('id')
             // eslint-disable-next-line no-console
             console.error(error);
             throw new Error('Une erreur de lecture en base de données est survenue');
+        }
+
+        try {
+            const owners = await shantytownParcelOwnerService.find(req.user, req.shantytown) || null;
+            req.shantytown.owner = owners.length > 0 ? await serializeOwners(req.user, owners, true) : {};
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+            throw new Error('Une erreur est survenue lors de la récupération des propriétaires');
         }
 
         if (req.shantytown === null) {
