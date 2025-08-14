@@ -80,9 +80,7 @@ export default function (
                           owners: array().of(
                               object({
                                   name: string()
-                                      .required(
-                                          "Le nom du propriétaire est obligatoire"
-                                      )
+                                      .nullable()
                                       .matches(
                                           /^[^<>{}]*$/,
                                           "Le nom du propriétaire contient des caractères non valides"
