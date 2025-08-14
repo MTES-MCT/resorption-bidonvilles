@@ -364,12 +364,27 @@ function formatValuesForApi(v, initOrEdit) {
             v.preparatory_phases_toward_resorption,
         terminated_preparatory_phases_toward_resorption:
             buildTerminatedPreparatoryPhases(initOrEdit),
+        owner: buildOwners(v.owner),
     };
 }
 
 const deleteOriginalAttachment = (attachments) => {
     originalValues.existingAttachments = attachments;
 };
+
+function buildOwners(ownerDatas) {
+    if (!ownerDatas || !ownerDatas.owners) {
+        return [];
+    }
+    return {
+        ...ownerDatas,
+        owners: ownerDatas.owners.map((owner) => {
+            const newOwner = { ...owner };
+            delete newOwner._key;
+            return newOwner;
+        }),
+    };
+}
 
 function buildTerminatedPreparatoryPhases(initOrEdit) {
     const terminatedPreparatoryPhases = {};
