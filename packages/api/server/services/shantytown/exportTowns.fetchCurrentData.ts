@@ -112,7 +112,7 @@ export default async function fetchCurrentData(user: AuthUser, locations: Locati
 
     // Récupération des owners
     const townIds = towns.map(t => t.id);
-    const allOwners = await shantytownParcelOwner.find(user, towns);
+    const allOwners = await shantytownParcelOwner.find(user, townIds);
     const serializedOwners = await serializeOwners(user, allOwners, true);
 
     const ownersByShantytownId = serializedOwners.reduce((acc, owner) => {
