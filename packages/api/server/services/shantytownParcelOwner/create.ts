@@ -10,16 +10,14 @@ export default async (user: AuthUser, shantytownId: number, owners: ParcelOwnerI
     transaction ??= await sequelize.transaction();
 
     let parcelOwnerId;
-    console.log('User Allowances:', user.isAllowedTo('access', 'shantytown_owner'));
-
     if (!user.isAllowedTo('access', 'shantytown_owner')) {
         throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission de créer un propriétaire de parcelle'));
     }
     try {
         parcelOwnerId = await shantytownParcelOwner.create(user, shantytownId, owners, transaction);
-        await transaction.commit();
+        if (!argTransaction) { await transaction.commit(); }
     } catch (error) {
-        await transaction.rollback();
+        if (!argTransaction) { await transaction.rollback(); }
         throw new ServiceError('parcel_owner_creation_failed', new Error(error?.message));
     }
 
