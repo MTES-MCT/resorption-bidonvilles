@@ -95,7 +95,7 @@ const date = computed({
     get() {
         if (monthPicker.value && value.value instanceof Date) {
             const d = value.value;
-            if (isNaN(d.getTime())) return null; // Guard against invalid dates
+            if (!isValidDate(d)) return null;
             return {
                 month: d.getMonth(),
                 year: d.getFullYear()
@@ -104,18 +104,29 @@ const date = computed({
         return value.value;
     },
     set(newValue) {
-    let out;
-    if (monthPicker.value && newValue && typeof newValue === 'object' && 'month' in newValue) {
-        out = new Date(newValue.year, newValue.month, 1);
-        if (isNaN(out.getTime())) {
-            console.warn('Invalid date created from month picker:', newValue);
-            return; // Don't emit invalid dates
+        const out = processDateValue(newValue, monthPicker.value);
+        if (out !== null) {
+            handleChange(out);
+            emit("update:modelValue", out);
         }
-    } else {
-        out = (newValue != null && !(newValue instanceof Date)) ? new Date(newValue) : newValue;
-    }
-    handleChange(out);
-    emit("update:modelValue", out);
     }
 });
+
+function isValidDate(date) {
+    return date instanceof Date && !isNaN(date.getTime());
+}
+
+function processDateValue(newValue, isMonthPicker) {
+    if (isMonthPicker && newValue && typeof newValue === 'object' && 'month' in newValue) {
+        const date = new Date(newValue.year, newValue.month, 1);
+        return isValidDate(date) ? date : null;
+    }
+    
+    if (newValue != null && !(newValue instanceof Date)) {
+        const date = new Date(newValue);
+        return isValidDate(date) ? date : null;
+    }
+    
+    return newValue;
+}
 </script>
