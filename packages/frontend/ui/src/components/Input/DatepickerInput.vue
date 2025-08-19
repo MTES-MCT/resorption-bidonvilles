@@ -13,12 +13,13 @@
                 v-model="date"
                 locale="fr"
                 :format-locale="fr"
-                :format="section === 'evolution' ? 'LLLL yyyy' : 'dd LLLL yyyy'"
+                :format="(monthPicker || section === 'evolution') ? 'LLLL yyyy' : 'dd LLLL yyyy'"
                 :disabled="isSubmitting || disabled"
                 autoApply
                 :enableTimePicker="false"
                 :input-class-name="focusClasses.ring"
                 :preventMinMaxNavigation="!!$attrs.maxDate || !!$attrs.minDate"
+                :monthPicker="monthPicker"
                 v-bind="$attrs"
                 :uid="id"
             />
@@ -75,10 +76,15 @@ const props = defineProps({
     section: {
         required: false,
         type: String
+    },
+    monthPicker: {
+        type: Boolean,
+        required: false,
+        default: false
     }
 });
 
-const { id, name, label, info, inlineInfo, showMandatoryStar, rules, disabled, modelValue, width, withoutMargin, section } = toRefs(props);
+const { id, name, label, info, inlineInfo, showMandatoryStar, rules, disabled, modelValue, width, withoutMargin, section, monthPicker } = toRefs(props);
 const isSubmitting = useIsSubmitting();
 const { handleChange, errors, value } = useField(name.value, rules.value, {
     initialValue: modelValue.value
@@ -87,11 +93,29 @@ const emit = defineEmits(["update:modelValue"]);
 
 const date = computed({
     get() {
+        if (monthPicker.value && value.value instanceof Date) {
+            const d = value.value;
+            if (isNaN(d.getTime())) return null; // Guard against invalid dates
+            return {
+                month: d.getMonth(),
+                year: d.getFullYear()
+            };
+        }
         return value.value;
     },
     set(newValue) {
-        handleChange(newValue);
-        emit("update:modelValue", newValue);
+    let out;
+    if (monthPicker.value && newValue && typeof newValue === 'object' && 'month' in newValue) {
+        out = new Date(newValue.year, newValue.month, 1);
+        if (isNaN(out.getTime())) {
+            console.warn('Invalid date created from month picker:', newValue);
+            return; // Don't emit invalid dates
+        }
+    } else {
+        out = (newValue != null && !(newValue instanceof Date)) ? new Date(newValue) : newValue;
+    }
+    handleChange(out);
+    emit("update:modelValue", out);
     }
 });
 </script>
