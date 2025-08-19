@@ -84,8 +84,9 @@ function toDateOrNull(d) {
     if (d instanceof Date) {
         return isNaN(d.getTime()) ? null : d;
     }
-    // Guard contre les strings vides ou invalides
-    if (typeof d === 'string' && d.trim() === '') return null;
+    if (typeof d === "string" && d.trim() === "") {
+        return null;
+    }
     const t = new Date(d);
     return isNaN(t.getTime()) ? null : t;
 }
