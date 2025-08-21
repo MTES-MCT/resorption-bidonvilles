@@ -1,6 +1,7 @@
 <template>
     <div
         class="border-t border-b flex items-stretch justify-end py-3 cursor-pointer hover:bg-G100"
+        @click="handleSort"
     >
         <div
             class="flex space-x-2 px-3 items-end"
