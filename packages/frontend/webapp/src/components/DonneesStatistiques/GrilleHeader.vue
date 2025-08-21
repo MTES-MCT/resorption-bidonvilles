@@ -8,7 +8,28 @@
             :class="separator ? 'border-r' : ''"
         >
             <p><slot /></p>
-            <Icon icon="chevron-down" v-if="$slots.default" />
+            <div class="flex items-center space-x-1" v-if="sortable">
+                <span
+                    v-if="sortPriority"
+                    class="text-xs bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center"
+                >
+                    {{ sortPriority }}
+                </span>
+                <Icon
+                    :icon="
+                        sortDirection === 'asc'
+                            ? 'chevron-up'
+                            : sortDirection === 'desc'
+                            ? 'chevron-down'
+                            : 'chevron-down'
+                    "
+                    :class="{
+                        'text-primary': sortDirection,
+                        'text-gray-300': !sortDirection,
+                    }"
+                />
+            </div>
+            <Icon icon="chevron-down" v-else-if="$slots.default" />
         </div>
     </div>
 </template>
