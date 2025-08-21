@@ -7,7 +7,6 @@
             :class="separator ? 'border-r' : ''"
         >
             <p><slot /></p>
-            <Icon icon="chevron-down" v-if="$slots.default" />
         </div>
     </div>
 </template>
