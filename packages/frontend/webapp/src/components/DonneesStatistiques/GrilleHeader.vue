@@ -21,7 +21,32 @@ const props = defineProps({
         type: Boolean,
         default: true,
     },
+    sortable: {
+        type: Boolean,
+        default: false,
+    },
+    sortKey: {
+        type: String,
+        default: null,
+    },
+    sortDirection: {
+        type: String,
+        default: null, // null, 'asc', 'desc'
+    },
+    sortPriority: {
+        type: Number,
+        default: null,
+    },
 });
 
-const { separator } = toRefs(props);
+const emit = defineEmits(["sort"]);
+
+const { separator, sortable, sortKey, sortDirection, sortPriority } =
+    toRefs(props);
+
+const handleSort = () => {
+    if (sortable.value && sortKey.value) {
+        emit("sort", sortKey.value);
+    }
+};
 </script>
