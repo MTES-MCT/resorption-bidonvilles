@@ -7,7 +7,7 @@ import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw
 import { ShantytownAction } from '#root/types/resources/Action.d';
 import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
 import { ShantytownPreparatoryPhaseTowardResorption } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
-import { RawParcelOwner, ParcelOwners } from '#root/types/resources/ParcelOwner.d';
+import { ParcelOwners } from '#root/types/resources/ParcelOwner.d';
 
 type ShantytownUser = {
     id: number,
@@ -114,10 +114,6 @@ type BaseShantytown =
         id: number,
         label: string,
     },
-    ownerType: { // à supprimer
-        id: number,
-        label: string,
-    },
     socialOrigins: SocialOrigin[],
     comments: ShantytownRawComment[],
     actors: Actor[],
@@ -163,10 +159,6 @@ type ShantytownWithJustice = BaseShantytown & {
 
 type ShantytownWithOwner = BaseShantytown & {
     owner: ParcelOwners | [],
-};
-
-export type ShantytownExportedWithOwner = Shantytown & {
-    owner: RawParcelOwner[] | [],
 };
 
 export type ShantytownAttachmentObject = {

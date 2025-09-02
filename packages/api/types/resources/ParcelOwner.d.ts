@@ -34,7 +34,6 @@ export type RawParcelOwner = {
 };
 
 export type ParcelOwners = {
-    parcelOwnerId: number;
     shantytownId: number;
     owners: SerializedOwner[];
 };
