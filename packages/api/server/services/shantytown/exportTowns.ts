@@ -32,7 +32,6 @@ export default async (user: AuthUser, location: Location, options: ShantytownExp
     if (data.length === 0) {
         throw new ServiceError('fetch_failed', new Error('Il n\'y a aucun site à exporter pour le périmètre géographique demandé'));
     }
-
     const buffer = await generateExportFile(user, data, options, locations, closedTowns, date);
 
     // on enregistre cet export dans notre table de statistiques

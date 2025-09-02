@@ -4,16 +4,46 @@
             v-if="lastEvent.type === 'comment'"
             :to="`/site/${town.id}#journal_du_site`"
         >
-            <span class="font-semibold text-primary">
+            <span class="text-primary">
                 {{ lastEvent.data }}
             </span>
-            <span> le {{ formatDate(lastEvent.date, "d M y à h:i") }}</span>
+            <span> le {{ formatDate(lastEvent.date, "d M y") }}</span>
         </RouterLink>
         <template v-else>
-            <span class="font-semibold text-primary">
-                {{ lastEvent.data }}
-            </span>
-            <span> le {{ formatDate(lastEvent.date, "d M y à h:i") }}</span>
+            <template
+                v-if="lastEvent.categories && lastEvent.categories.length === 1"
+            >
+                <span>Mise à jour de la rubrique </span>
+                <span class="inline-link-wrapper">
+                    <Link
+                        :to="`/site/${town.id}${getAnchorForCategory(
+                            lastEvent.categories[0]
+                        )}`"
+                        class="inline-link"
+                    >
+                        "{{ lastEvent.categories[0] }}"
+                    </Link>
+                </span>
+            </template>
+            <template v-else>
+                <span>Mise à jour des rubriques </span>
+                <span class="inline-link-wrapper">
+                    <Link
+                        v-for="(category, index) in lastEvent.categories"
+                        :key="index"
+                        :to="`/site/${town.id}${getAnchorForCategory(
+                            category
+                        )}`"
+                        class="inline-link"
+                    >
+                        "{{ category }}"
+                        <span v-if="index < lastEvent.categories.length - 1"
+                            >,
+                        </span>
+                    </Link>
+                </span>
+            </template>
+            <span> le {{ formatDate(lastEvent.date, "d M y") }}</span>
         </template>
     </p>
 </template>
@@ -21,6 +51,7 @@
 import { computed, toRefs } from "vue";
 import { RouterLink } from "vue-router";
 import formatDate from "@common/utils/formatDate";
+import { Link } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     town: Object,
@@ -107,6 +138,7 @@ function getLatestEvent(townEvents, comments) {
             return {
                 type: "townEvent",
                 data: "Mise à jour des informations",
+                categories: [],
                 date: new Date(townEvent.date),
             };
         }
@@ -119,12 +151,7 @@ function getLatestEvent(townEvents, comments) {
 
         return {
             type: "townEvent",
-            data:
-                categories.length === 1
-                    ? `Mise à jour de la rubrique "${categories[0]}"`
-                    : `Mise à jour des rubriques : "${categories
-                          .map((c) => c)
-                          .join(", ")}"`,
+            categories: categories,
             date: new Date(townEvent.date),
         };
     });
@@ -132,6 +159,7 @@ function getLatestEvent(townEvents, comments) {
     const normalizedComments = comments.map((comment) => ({
         type: "comment",
         data: "Message dans le journal du site",
+        categories: [],
         date: new Date(comment.createdAt),
     }));
 
@@ -146,7 +174,26 @@ function getLatestEvent(townEvents, comments) {
     }, allEvents[0]);
 }
 
+function getAnchorForCategory(category) {
+    const categoryToAnchor = {
+        "Caractéristiques du site": "#caracteristiques",
+        Habitants: "#habitants",
+        "Conditions de vie": "#conditions_de_vie",
+        Procédures: "#procedure",
+        Localisation: "#localisation",
+    };
+
+    return categoryToAnchor[category] || "";
+}
+
 const lastEvent = computed(() => {
     return getLatestEvent(town.value.changelog, town.value.comments);
 });
 </script>
+<style scoped>
+.inline-link-wrapper :deep(p) {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+</style>

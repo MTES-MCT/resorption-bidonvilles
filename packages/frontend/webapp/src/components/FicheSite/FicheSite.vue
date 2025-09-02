@@ -1,4 +1,11 @@
 <template>
+    <BandeauNotice
+        class="-mt-6"
+        type="warning"
+        title="Prévenir les risques lors des vagues de chaleur"
+        description='Pensez à identifier les sites nécessitant une intervention urgente via le bouton "Alerte canicule" sur la liste des sites, et suivez les actions mises en œuvre via le journal du site.'
+        width="w-3/4"
+    />
     <FicheSiteHeader
         :town="town"
         v-on:openCancel="openCancel"
@@ -68,6 +75,7 @@ import menu from "./FicheSite.menu";
 
 import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
+import BandeauNotice from "@/components/BandeauNotice/BandeauNotice.vue";
 import FicheSiteHeader from "./FicheSiteHeader/FicheSiteHeader.vue";
 import FicheSiteResorption from "./FicheSiteResorption/FicheSiteResorption.vue";
 import FicheSiteCaracteristiques from "./FicheSiteCaracteristiques/FicheSiteCaracteristiques.vue";
@@ -114,8 +122,10 @@ const tabs = computed(() => {
                 postIcon:
                     (item.id === "journal_du_site" &&
                         commentsAttachments > 0) ||
-                    (item.id === "procedures" && proceduresAttachments > 0)
-                        ? true
+                    (item.id === "procedures" && proceduresAttachments > 0) ||
+                    (item.id === "conditions_de_vie" &&
+                        town.value.heatwaveStatus)
+                        ? item.postIcon
                         : false,
             };
         });

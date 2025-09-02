@@ -236,12 +236,13 @@ const policeStatus = computed(() => {
     );
 });
 
+const existingLitigationText =
+    town.value.existingLitigation === true ? "oui" : "non";
+
 const existingLitigationStatus = computed(() => {
     return town.value.existingLitigation === null
         ? "non communiqué"
-        : town.value.existingLitigation
-        ? "oui"
-        : "non";
+        : existingLitigationText;
 });
 
 const administrativeOrderStatus = computed(() => {

@@ -14,7 +14,7 @@ type StatRow = {
 
 export default async (user: User, locations: Location[], closedTowns: boolean): Promise<void> => {
     const stats: StatRow[] = [];
-    const isNationalExport = locations.some(l => l.type === 'nation');
+    const isNationalExport = locations.some(l => ['nation', 'metropole', 'outremer'].includes(l.type));
 
     if (isNationalExport) {
         stats.push({

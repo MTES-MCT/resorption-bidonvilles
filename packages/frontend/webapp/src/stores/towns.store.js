@@ -236,6 +236,7 @@ export const useTownsStore = defineStore("towns", () => {
         }),
         prefilteredTowns,
         filteredTowns,
+        resetFilters,
         async fetchTowns() {
             if (isLoading.value === true) {
                 return;

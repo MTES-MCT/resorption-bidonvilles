@@ -50,7 +50,7 @@ export default async (where: Where | string = [], filters: UserQueryFilters = {}
 
     const finalArrWhere = arrWhere.map((clauses, index) => {
         const clauseGroup = Object.keys(clauses).map((column) => {
-            replacements[`${column}${index}`] = clauses[column].value ?? clauses[column];
+            replacements[`${column}${index}`] = clauses[column].value !== undefined ? clauses[column].value : clauses[column];
             if (clauses[column].anyOperator !== undefined) {
                 const clause = `(:${column}${index}) ${clauses[column].anyOperator} ANY(${clauses[column].query || `users.${column}`})`;
                 if (clauses[column].not === true) {

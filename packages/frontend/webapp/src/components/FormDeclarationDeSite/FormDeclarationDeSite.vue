@@ -193,7 +193,7 @@ watch(address, async () => {
                 address.value.data.citycode
             );
         } catch (e) {
-            console.log("Failed fetching more information about the city");
+            console.log("Failed fetching more information about the city", e);
         }
     }
 });
