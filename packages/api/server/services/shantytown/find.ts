@@ -3,11 +3,7 @@ import ServiceError from '#server/errors/ServiceError';
 import findJusticeReaders from '#server/services/shantytown/findJusticeReaders';
 import shantytownDecree from '#server/services/shantytownDecree/findAll';
 import serializeAttachment from '#server/services/attachment/serializeAttachment';
-import parcelOwners from '#server/services/shantytownParcelOwner/index';
-import { AuthUser } from '#server/middlewares/authMiddleware';
-import serializeOwners from '../shantytownParcelOwner/serializeOwners';
 import enrichCommentsAttachments from './_common/enrichCommentsAttachments';
-import { RawParcelOwner, ParcelOwners } from '#root/types/resources/ParcelOwner.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { Attachment } from '../attachment/Attachment';
 import { User } from '#root/types/resources/User.d';
@@ -34,15 +30,10 @@ export default async (user: User, townId: number): Promise<Shantytown> => {
             return { ...await serializeAttachment(decreeArray), type: decree.attachmentType, mimetype: decree.type };
         }));
     }
-    // On récupère les infos de propriétaires
-    const ownersResult: RawParcelOwner[] = await parcelOwners.find(user as AuthUser, town);
-    // Puis on les sérialise
-    const owners: ParcelOwners | [] = ownersResult.length > 0 ? await serializeOwners(user as AuthUser, ownersResult) : [];
 
     return {
         ...townWithoutComments,
         comments: commentsWithEnrichedAttachments,
         attachments: enrichedDecrees,
-        owner: owners,
     };
 };
