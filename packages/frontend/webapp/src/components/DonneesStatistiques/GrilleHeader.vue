@@ -13,7 +13,6 @@
 
 <script setup>
 import { toRefs } from "vue";
-import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     separator: {
