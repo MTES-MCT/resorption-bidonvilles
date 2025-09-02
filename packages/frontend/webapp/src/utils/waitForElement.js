@@ -3,7 +3,7 @@ export default function waitForElement(selector, callback, starter = null) {
         starter = Date.now();
     }
 
-    if ((Date.now() - starter) / 1000 >= 15) {
+    if ((Date.now() - starter) / 1000 >= 30) {
         throw new Error(`Never found element ${selector}`);
     }
 
