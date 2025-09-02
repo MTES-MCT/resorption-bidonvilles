@@ -118,13 +118,11 @@ const getMetricValue = (item, key) => {
 // Fonction de tri récursive qui applique tous les critères
 const sortItemsRecursively = (items) => {
     if (!items || items.length === 0) {
-        return items;
+        return;
     }
 
     // Trier les éléments du niveau actuel
-    const sortedItems = [...items].sort((a, b) => {
-        // Pas de tri hiérarchique ici - on traite déjà chaque nation séparément
-
+    items.sort((a, b) => {
         // Si aucun critère de tri utilisateur, tri alphabétique direct
         if (sortCriteria.value.length === 0) {
             return a.name.localeCompare(b.name, "fr", { sensitivity: "base" });
@@ -152,10 +150,11 @@ const sortItemsRecursively = (items) => {
     });
 
     // Appliquer récursivement le tri aux enfants
-    return sortedItems.map((item) => ({
-        ...item,
-        children: item.children ? sortItemsRecursively(item.children) : [],
-    }));
+    for (const item of items) {
+        if (item.children) {
+            sortItemsRecursively(item.children);
+        }
+    }
 };
 
 // Métriques triées (computed)
@@ -164,10 +163,13 @@ const sortedMetrics = computed(() => {
         return metrics.value;
     }
 
+    // Crée une copie profonde une seule fois pour éviter de muter les props
+    const metricsCopy = JSON.parse(JSON.stringify(metrics.value));
+
     // Si c'est un tableau (les 3 objets nation), traiter chaque objet séparément
-    if (Array.isArray(metrics.value)) {
+    if (Array.isArray(metricsCopy)) {
         // D'abord trier les objets nation eux-mêmes
-        const sortedNations = [...metrics.value].sort((a, b) => {
+        metricsCopy.sort((a, b) => {
             // Maintenir l'ordre hiérarchique par défaut pour les nations
             const nationOrder = {
                 france: 1,
@@ -207,25 +209,20 @@ const sortedMetrics = computed(() => {
         });
 
         // Puis trier les enfants de chaque nation
-        return sortedNations.map((nationItem) => {
+        for (const nationItem of metricsCopy) {
             if (nationItem.level === "nation" && nationItem.children) {
-                return {
-                    ...nationItem,
-                    children: sortItemsRecursively(nationItem.children),
-                };
+                sortItemsRecursively(nationItem.children);
             }
-            return nationItem;
-        });
+        }
+
+        return metricsCopy;
     }
 
     // Si c'est un objet unique avec children
-    if (metrics.value.children) {
-        return {
-            ...metrics.value,
-            children: sortItemsRecursively(metrics.value.children),
-        };
+    if (metricsCopy.children) {
+        sortItemsRecursively(metricsCopy.children);
     }
 
-    return metrics.value;
+    return metricsCopy;
 });
 </script>
