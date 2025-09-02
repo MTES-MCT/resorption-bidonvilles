@@ -75,6 +75,42 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
             LEFT JOIN "${tables.shantytown_toilet_types}" stt ON stt.fk_shantytown = s.${tables.toilet_types_foreign_key}
             GROUP BY s.${tables.toilet_types_foreign_key}),
 
+            shantytown_parcel_owners AS (SELECT
+                s.shantytown_id AS fk_shantytown,
+                COALESCE(
+                    jsonb_build_object(
+                        'shantytownId', s.shantytown_id::integer,
+                        'owners', jsonb_agg(
+                            jsonb_build_object(
+                                'ownerId', po.shantytown_parcel_owner_id::integer,
+                                'name', po.owner_name::text,
+                                'type', po.fk_owner_type::integer,
+                                'typeDetails', jsonb_build_object(
+                                    'id', ot.owner_type_id::integer,
+                                    'label', ot.label::text,
+                                    'position', ot.position::integer
+                                ),
+                                'active', po.active::boolean,
+                                'createdAt', po.created_at,
+                                'createdBy', jsonb_build_object(
+                                    'authorId', u.user_id::integer,
+                                    'authorFirstName', u.first_name::text,
+                                    'authorLastName', u.last_name::text,
+                                    'organizationName', COALESCE(org.name, '')::text,
+                                    'organizationId', org.organization_id::integer
+                                )
+                            )
+                        ) FILTER (WHERE po.shantytown_parcel_owner_id IS NOT NULL)
+                    ),
+                    jsonb_build_object('shantytownId', s.shantytown_id, 'owners', '[]'::jsonb)
+                ) AS owner
+            FROM "${tables.shantytowns}" s
+            LEFT JOIN "shantytown_parcel_owners" po ON po.fk_shantytown = s.shantytown_id
+            LEFT JOIN "users" u ON u.user_id = po.fk_user
+            LEFT JOIN "organizations" org ON org.organization_id = u.fk_organization
+            LEFT JOIN "owner_types" ot ON ot.owner_type_id = po.fk_owner_type
+            GROUP BY s.shantytown_id),
+
             shantytown_resorption_phases AS (SELECT
                 s.${tables.resorption_phases_foreign_key} AS fk_shantytown,
                 COALESCE(
@@ -113,6 +149,7 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
             sco.origins AS "socialOrigins",
             eat.electricity_access_types AS "electricityAccessTypes",
             stt.toilet_types AS "toiletTypes",
+            po.owner AS "owners",
             srp.resorption_phases AS "preparatoryPhasesTowardResorption"
         FROM "${tables.shantytowns}" AS shantytowns
         ${joins.map(({ table: t, on }) => `LEFT JOIN ${t} ON ${on}`).join('\n')}
@@ -120,6 +157,7 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
         LEFT JOIN electricity_access_types eat ON eat.fk_shantytown = shantytowns.${tables.electricity_foreign_key}
         LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.${tables.toilet_types_foreign_key}
         LEFT JOIN shantytown_resorption_phases srp ON srp.fk_shantytown = shantytowns.${tables.resorption_phases_foreign_key}
+        LEFT JOIN shantytown_parcel_owners po ON po.fk_shantytown = shantytowns.shantytown_id
         ${whereClause !== null ? `WHERE ${whereClause}` : ''}
         ${order !== null ? `ORDER BY ${order}` : ''}
     `;
