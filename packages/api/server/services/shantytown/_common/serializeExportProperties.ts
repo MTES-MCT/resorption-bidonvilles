@@ -5,7 +5,6 @@ import config from '#server/config';
 import electricityAccessTypes from '#server/models/electricityAccessTypesModel/_common/electricityAccessTypes';
 import waterAccessTypes from '#server/models/_common/waterAccessTypes';
 import toiletTypes from '#server/models/shantytownToiletTypesModel/_common/toiletTypes';
-import { isArray } from 'lodash';
 import { ShantytownWithFinancedAction, ShantytownWithOwner } from '#root/types/resources/Shantytown.d';
 import electricityAccessStatusLabels from './livingConditionsStatusLabels/electricityAccessStatusLabels';
 import waterAccessStatusLabels from './livingConditionsStatusLabels/waterAccessStatusLabels';
@@ -14,7 +13,7 @@ import trashEvacuationStatusLabels from './livingConditionsStatusLabels/trashEva
 import pestAnimalsStatusLabels from './livingConditionsStatusLabels/pestAnimalsStatusLabels';
 import firePreventionStatusLabels from './livingConditionsStatusLabels/firePreventionStatusLabels';
 import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
-import { ParcelOwners, RawParcelOwner, SerializedOwner } from '#root/types/resources/ParcelOwner.d';
+import { SerializedOwner } from '#root/types/resources/ParcelOwner.d';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 const { webappUrl } = config;
@@ -139,62 +138,28 @@ export default (closingSolutions: ClosingSolution[]) => {
             data: ({ closingContext }: ShantytownWithFinancedAction) => closingContext,
             width: COLUMN_WIDTHS.SMALL,
         },
-        // ownerType: {
-        //     title: 'Type de propriétaire',
-        //     data: ({ ownerType }: ShantytownWithFinancedAction) => ownerType.label,
-        //     width: COLUMN_WIDTHS.SMALL,
-        // },
         owner: {
             title: 'Propriétaires de parcelles du site',
-            // data: (shantytown: ShantytownWithFinancedAction) => ('owner' in shantytown ? shantytown.owner : null),
-            // data: (shantytown) => { // désactivation temporaire, à finaliser avant MEP
-            //     console.log(shantytown);
-
-            //     // if (Array.isArray(owner) && owner.length > 0) {
-            //     //     return owner.map(o => o.name).join('; ');
-            //     // }
-            //     return null;
-            // },
             data: (shantytown: ShantytownWithOwner) => {
-                console.log('Shantytown: ', shantytown.owner);
-                if (shantytown.owner && shantytown.owner as ParcelOwners) {
-                    const test = (shantytown.owner as SerializedOwner[]).map((o: SerializedOwner) => {
-                        const name = o.name ?? 'inconnu';
-                        const typeLabel = o.typeDetails?.label;
-                        return typeLabel ? `${name} (${typeLabel})` : name;
-                    }).join('; ');
-                    console.log('RESULT: ', test);
-
-                    return test;
+                if (
+                    shantytown.owner
+                    && !Array.isArray(shantytown.owner)
+                    && 'owners' in shantytown.owner
+                    && Array.isArray(shantytown.owner.owners)
+                ) {
+                    let result: string;
+                    try {
+                        result = (shantytown.owner.owners as SerializedOwner[]).map((o: SerializedOwner) => {
+                            const name: string = o.name ?? 'inconnu';
+                            const typeLabel: string = o.typeDetails?.label;
+                            return typeLabel ? `${name} (${typeLabel})` : name;
+                        }).join('; ');
+                    } catch (error) {
+                        // eslint-disable-next-line no-console
+                        console.error('Error while getting owner informations: ', error);
+                    }
+                    return result;
                 }
-                // if (
-                //     'owner' in shantytown
-                //     && shantytown.owner
-                //     && 'owners' in shantytown.owner
-                //     && Array.isArray(shantytown.owner.owners)
-                //     && shantytown.owner.owners.length > 0
-                // ) {
-                //     let serializedOwners: ParcelOwners;
-                //     if (Array.isArray(shantytown.owner)) {
-                //         console.log('On sérialize');
-
-                //         serializedOwners = await serializeOwners(user, shantytown.owner as RawParcelOwner[]);
-                //     } else {
-                //         console.log("C'est sensé déjà être sérializé");
-
-                //         serializedOwners = shantytown.owner as ParcelOwners;
-                //     }
-                //     console.log('Serialized owners:', serializedOwners);
-
-                //     const test = serializedOwners.owners.map((o: SerializedOwner) => {
-                //         const name = o.name ?? 'inconnu';
-                //         const typeLabel = o.typeDetails?.label;
-                //         return typeLabel ? `${name} (${typeLabel})` : name;
-                //     }).join('; ');
-                //     console.log('RESULT: ', test);
-
-                //     return test;
-                // }
                 return null;
             },
             width: COLUMN_WIDTHS.MEDIUM,

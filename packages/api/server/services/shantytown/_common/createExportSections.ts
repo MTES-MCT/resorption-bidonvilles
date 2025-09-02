@@ -65,9 +65,6 @@ export default async (
 
     if (options.indexOf('owner') !== -1 && user.isAllowedTo('access', 'shantytown_owner')) {
         // Ajout des propriétés liées aux propriétaires
-        // Sérialiser pour récupérer les données de "ownerType" via typeDetails
-        // const serializedOwners: ParcelOwners = await serializeOwners(user, owners, true) as ParcelOwners;
-        // section.properties.push(properties.ownerType);
         section.properties.push(properties.owner);
     }
 

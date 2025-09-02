@@ -11,9 +11,6 @@ import actionModel from '#server/models/actionModel';
 import enrichShantytown from '#server/services/shantytown/_common/enrichShantytownWithALeastOneActionFinanced';
 import { ShantytownWithFinancedAction } from '#root/types/resources/Shantytown.d';
 import { FinancedShantytownAction } from '#root/types/resources/Action.d';
-import shantytownParcelOwner from '../shantytownParcelOwner';
-import serializeOwners from '../shantytownParcelOwner/serializeOwners';
-import { ParcelOwners, RawParcelOwner } from '#root/types/resources/ParcelOwner.d';
 
 
 export default async (user: AuthUser, locations: Location[], closedTowns: boolean): Promise<ShantytownWithFinancedAction[]> => {
@@ -57,32 +54,12 @@ export default async (user: AuthUser, locations: Location[], closedTowns: boolea
     const townsWithFinancedActions = await actionModel.fetchFinancedActionsByYear(null, parseInt(currentYear, 10), clauseGroup);
     const transformedShantytowns = enrichShantytown(townsWithFinancedActions);
 
-    // Récupération des owners
-    const townIds = towns.map(t => t.id);
-    const allOwners = await shantytownParcelOwner.find(user, townIds);
-    const serializedOwners = await serializeOwners(user, allOwners, true);
-
-    const ownersByShantytownId = serializedOwners.reduce((acc, owner) => {
-        const shantytownId = owner.shantytown.id;
-        if (!acc[shantytownId]) {
-            acc[shantytownId] = { owners: [] };
-        }
-        acc[shantytownId].owners.push(owner);
-        return acc;
-    }, {} as Record<number, ParcelOwners>);
-
     return Promise.all(towns.map(async (town: ShantytownWithFinancedAction) => {
-        // const owners: RawParcelOwner[] = await shantytownParcelOwner.find(user, town);
         const townWithFinancedActions: FinancedShantytownAction = transformedShantytowns.find((t:FinancedShantytownAction) => t.shantytown_id === town.id);
-        const owner = ownersByShantytownId[town.id];
 
-        // if (townWithFinancedActions) {
         return {
             ...town,
             hasAtLeastOneActionFinanced: townWithFinancedActions ? townWithFinancedActions.hasAtLeastOneActionFinanced : undefined,
-            owner: owner || undefined,
         };
-        // }
-        // return town;
     }));
 };
