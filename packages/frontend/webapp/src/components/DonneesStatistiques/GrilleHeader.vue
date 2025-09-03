@@ -15,7 +15,7 @@
                 >
                     {{ sortPriority }}
                 </span>
-                <IconComponent
+                <Icon
                     :icon="
                         sortDirection === 'asc'
                             ? 'chevron-up'
@@ -29,16 +29,14 @@
                     }"
                 />
             </div>
-            <IconComponent icon="chevron-down" v-else-if="$slots.default" />
+            <Icon icon="chevron-down" v-else-if="$slots.default" />
         </div>
     </div>
 </template>
 
 <script setup>
 import { toRefs } from "vue";
-import { Icon } from "@resorptionbidonvilles/ui";
-
-const IconComponent = Icon;
+import Icon from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     separator: {
