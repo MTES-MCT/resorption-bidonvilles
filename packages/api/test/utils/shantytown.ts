@@ -382,10 +382,6 @@ export function serialized(location: City = defaultLocation, override = {}): Sha
             id: 1,
             label: 'Inconnu',
         },
-        ownerType: {
-            id: 1,
-            label: 'Inconnu',
-        },
         socialOrigins: [],
         comments: [],
         actors: [],
