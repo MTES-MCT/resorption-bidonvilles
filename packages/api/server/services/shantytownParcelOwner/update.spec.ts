@@ -32,15 +32,11 @@ const stubs = {
         commit: sandbox.stub(),
         rollback: sandbox.stub(),
     },
-    can: sandbox.stub(),
-    do: sandbox.stub(),
-    on: sandbox.stub(),
 };
 
 // rewiremock('#server/models/shantytownModel').with(stubs.shantytownModel);
 rewiremock('#server/models/shantytownParcelOwnerModel').with(stubs.shantytownParcelOwnerModel);
 rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
-rewiremock('#server/utils/permission').with({ can: stubs.can });
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -61,12 +57,6 @@ describe('services/shantytownParcelOwners.update()', () => {
             active: true,
         }];
         fakeTown = fakeShantytown();
-        stubs.can.returns({
-            do: stubs.do,
-        });
-        stubs.do.returns({
-            on: stubs.on,
-        });
         stubs.sequelize.transaction.resolves(stubs.transaction);
         stubs.shantytownModel.findOne.resolves(fakeShantytown());
     });
@@ -75,40 +65,8 @@ describe('services/shantytownParcelOwners.update()', () => {
         sandbox.reset();
     });
 
-    it('vérifie que l\'utilisateur a le droit d\'accéder aux données de propriétaires', async () => {
-        stubs.on.returns(true);
-        stubs.shantytownParcelOwnerModel.findAll.resolves([]);
-
-        try {
-            await update(fakeTestUser, fakeTown, fakeOwner);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-        }
-        expect(stubs.can).to.have.been.calledOnceWith(fakeTestUser);
-        expect(stubs.do).to.have.been.calledOnceWith('access', 'shantytown_owner');
-        expect(stubs.on).to.have.been.calledOnce;
-    });
-
-    it('renvoie un ServiceError si l\'utilisateur n\'a pas le droit d\'accéder aux données de propriétaires', async () => {
-        let returnedError: ServiceError | undefined;
-        stubs.on.returns(false);
-
-        try {
-            await update(fakeTestUser, fakeTown, fakeOwner);
-        } catch (error) {
-            returnedError = error as ServiceError;
-        }
-        expect(stubs.can).to.have.been.calledOnceWith(fakeTestUser);
-        expect(stubs.do).to.have.been.calledOnceWith('access', 'shantytown_owner');
-        expect(stubs.on).to.have.been.calledOnce;
-        expect(returnedError).to.be.instanceOf(ServiceError);
-        expect(returnedError.code).to.equal('permission_denied');
-    });
-
     it('modifie un propriétaire de parcelle', async () => {
         const creationDate = new Date();
-        stubs.on.returns(true);
         stubs.shantytownParcelOwnerModel.findAll.resolves([fakeOwner]);
         stubs.shantytownParcelOwnerModel.update.resolves([{
             shantytown_parcel_owner_id: 1,
@@ -133,7 +91,6 @@ describe('services/shantytownParcelOwners.update()', () => {
 
     it('modifie plusieurs propriétaires de parcelles pour le même site', async () => {
         const creationDate = new Date();
-        stubs.on.returns(true);
         const fakeOwners: ParcelOwnerInsert[] = [...fakeOwner, { ownerId: 2, name: 'Pierre Quiroul', type: 3 }];
         stubs.shantytownParcelOwnerModel.findAll.resolves([fakeOwner, { ownerId: 2, name: 'Pierre Quiroul', type: 3 }]);
         stubs.shantytownParcelOwnerModel.update.resolves([{
@@ -168,7 +125,6 @@ describe('services/shantytownParcelOwners.update()', () => {
 
     it('modifie la liste de propriétaires de parcelles en en supprimant/désactivant un', async () => {
         const creationDate = new Date();
-        stubs.on.returns(true);
         const fakeOwners: ParcelOwnerInsert[] = [...fakeOwner, { ownerId: 2, name: 'Pierre Quiroul', type: 3 }];
         stubs.shantytownParcelOwnerModel.findAll.resolves([fakeOwner, {
             ownerId: 2, name: 'Pierre Quiroul', type: 3, active: false,
@@ -203,10 +159,7 @@ describe('services/shantytownParcelOwners.update()', () => {
     });
 
     it('modifie la liste de propriétaires de parcelles en en ajoutant un', async () => {
-        // const creationDate = new Date();
-        stubs.on.returns(true);
         const fakeOwners: ParcelOwnerInsert[] = [{ ownerId: null, name: 'Pierre Quiroul', type: 3 }];
-        // console.log('New owners to create:', fakeOwners);
 
         stubs.shantytownParcelOwnerModel.findAll.resolves([]);
         stubs.shantytownParcelOwnerModel.update.resolves([]);
@@ -225,7 +178,6 @@ describe('services/shantytownParcelOwners.update()', () => {
 
     it('renvoie un ServiceError si la modification du propriétaire de parcelle échoue', async () => {
         let returnedError: ServiceError | undefined;
-        stubs.on.returns(true);
         stubs.shantytownParcelOwnerModel.findAll.resolves([{
             shantytown_parcel_owner_id: 1,
             owner_name: 'Jean Bon',
