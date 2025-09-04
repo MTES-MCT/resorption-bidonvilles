@@ -1,28 +1,15 @@
-import permissionUtils from '#server/utils/permission';
 import { Transaction } from 'sequelize';
 import shantytownParcelOwner from '#server/models/shantytownParcelOwnerModel';
 import ServiceError from '#server/errors/ServiceError';
 import { sequelize } from '#db/sequelize';
 import { AuthUser } from '#server/middlewares/authMiddleware';
-import { Location } from '#server/models/geoModel/Location.d';
+// import { Location } from '#server/models/geoModel/Location.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { ParcelOwnerInsert, RawParcelOwner } from '#root/types/resources/ParcelOwner.d';
 
 export default async (user: AuthUser, shantytown: Shantytown, owners: ParcelOwnerInsert[], argTransaction: Transaction | undefined = undefined): Promise<void> => {
     let transaction: Transaction = argTransaction;
     transaction ??= await sequelize.transaction();
-
-    const location: Location = {
-        type: 'departement',
-        region: shantytown.region,
-        departement: shantytown.departement,
-        epci: null,
-        city: null,
-    };
-
-    if (!permissionUtils.can(user).do('access', 'shantytown_owner').on(location)) {
-        throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission de modifier un propriétaire de parcelle'));
-    }
 
     // On récupère les propriétaires existants pour le site
     let actualOwners: RawParcelOwner[] = [];

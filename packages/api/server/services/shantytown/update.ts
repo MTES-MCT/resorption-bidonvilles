@@ -20,7 +20,6 @@ type DecreeAttachments = {
 };
 
 export default async (shantytown, user, decreeAttachments: DecreeAttachments): Promise<Shantytown> => {
-// export default async (shantytown, user, decreeAttachments: DecreeAttachments): Promise<void> => {
     const transaction = await sequelize.transaction();
 
     try {
@@ -188,12 +187,14 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
     // On met à jour les propriétaires de parcelles liés au site
     if (shantytown.owner?.owners.length > 0) {
         try {
-            await shantytownParcelOwnerService.update(
-                user,
-                shantytown,
-                shantytown.owner.owners,
-                transaction,
-            );
+            if (user.isAllowedTo('access', 'shantytown_owner')) {
+                await shantytownParcelOwnerService.update(
+                    user,
+                    shantytown,
+                    shantytown.owner.owners,
+                    transaction,
+                );
+            }
         } catch (error) {
             await transaction.rollback();
             throw new ServiceError('parcel_owner_update_failed', error);
