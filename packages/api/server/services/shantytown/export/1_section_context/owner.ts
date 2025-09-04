@@ -3,7 +3,7 @@ import { Paragraph, TextRun } from 'docx';
 export default (owners) => {
     const ownerLines = [];
     if (owners?.owners) {
-        owners.owners.map((owner, index) => ownerLines.push(
+        owners.owners.filter(o => o.active).map((owner, index) => ownerLines.push(
             new TextRun({
                 text: `Propriétaire ${index + 1} :`,
                 bold: true,
