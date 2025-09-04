@@ -39,10 +39,14 @@ export function creationInput() {
         census_status: global.generate('string'),
         census_conducted_at: global.generate('string'),
         census_conducted_by: global.generate('string'),
-        social_origins: global.generate('string'),
+        social_origins: [2],
 
         owner_complaint: global.generate('string'),
-        owner: global.generate('string'),
+        owner: [{
+            ownerId: 1,
+            name: 'Jean Bon',
+            type: 1,
+        }],
         justice_procedure: global.generate('string'),
         justice_rendered: global.generate('string'),
         justice_rendered_by: global.generate('string'),
@@ -68,10 +72,10 @@ export function creationInput() {
 
         sanitary_open_air_defecation: true,
         sanitary_toilet_types: ['latrines', 'toilettes_chimiques'],
-        sanitary_access_working_toilets: true,
-        sanitary_access_toilets_are_inside: true,
-        sanitary_access_toilets_are_lighted: true,
-        sanitary_access_hand_washing: true,
+        sanitary_working_toilets: true,
+        sanitary_toilets_are_inside: true,
+        sanitary_toilets_are_lighted: true,
+        sanitary_hand_washing: true,
 
         electricity_access: true,
         electricity_access_is_unequal: true,
@@ -83,10 +87,10 @@ export function creationInput() {
         trash_evacuation_is_regular: true,
         trash_bulky_is_piling: true,
 
-        pest_animals: true,
+        pest_animals_presence: true,
         pest_animals_details: 'comment',
 
-        fire_prevention: true,
+        fire_prevention_diagnostic: true,
     };
 }
 
