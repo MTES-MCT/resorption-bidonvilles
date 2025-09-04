@@ -1,21 +1,23 @@
 <template>
     <FicheSousRubrique>
         <p class="font-bold mb-4">Propriétaires</p>
-        <div class="flex flex-row justify-between">
-            <p class="font-bold">{{ ownerTitles.nom }}</p>
-            <p class="font-bold">{{ ownerTitles.type }}</p>
-        </div>
-        <div
-            v-for="owner in ownersList"
-            :key="owner.ownerId"
-            class="flex flex-row justify-between"
-        >
-            <p class="break-words">
-                {{ owner.name || "non communiqué" }}
-            </p>
-            <p class="break-words">
-                {{ ownerType(owner.type) }}
-            </p>
+        <div class="flex flex-row sm:flex-col gap-2">
+            <div class="flex flex-col sm:flex-row justify-between">
+                <p class="font-bold">{{ ownerTitles.nom }}</p>
+                <p class="font-bold">{{ ownerTitles.type }}</p>
+            </div>
+            <div
+                v-for="owner in ownersList"
+                :key="owner.ownerId"
+                class="flex flex-col sm:flex-row justify-between"
+            >
+                <p class="break-words">
+                    {{ owner.name || "non communiqué" }}
+                </p>
+                <p class="break-words">
+                    {{ ownerType(owner.type) }}
+                </p>
+            </div>
         </div>
         <div v-if="!ownersList">
             <p class="break-words">Aucun propriétaire connu</p>

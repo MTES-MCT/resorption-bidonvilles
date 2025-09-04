@@ -55,10 +55,10 @@
                             />
                         </div>
                         <div
-                            class="flex flex-row justify-evenly items-center gap-4 w-full pb-4"
+                            class="flex flex-col sm:flex-row justify-evenly items-center gap-0 sm:gap-4 w-full pb-4"
                         >
                             <InputOwner
-                                class="w-2/3 !mb-0"
+                                class="w-full sm:w-2/3"
                                 :id="`owner.owners[${getOriginalIndex(
                                     owner
                                 )}].name`"
@@ -68,7 +68,7 @@
                                 :disabled="!owner.active"
                             />
                             <InputOwnerType
-                                class="w-auto"
+                                class="w-full sm:w-auto"
                                 :id="`owner.owners[${getOriginalIndex(
                                     owner
                                 )}].type`"
