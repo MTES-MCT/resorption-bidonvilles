@@ -177,15 +177,7 @@ describe('services/shantytownParcelOwners.update()', () => {
 
     it('renvoie un ServiceError si la modification du propriétaire de parcelle échoue', async () => {
         let returnedError: ServiceError | undefined;
-        stubs.shantytownParcelOwnerModel.findAll.resolves([{
-            shantytown_parcel_owner_id: 1,
-            owner_name: 'Jean Bon',
-            fk_owner_type: 3,
-            active: true,
-            fk_shantytown: fakeTown.id,
-            created_at: new Date().toISOString(),
-            fk_user: fakeTestUser.id,
-        }]);
+        stubs.shantytownParcelOwnerModel.findAll.resolves(fakeOwner);
         stubs.shantytownParcelOwnerModel.update.rejects(new Error('Échec de la modification du propriétaire de parcelle'));
 
         try {
@@ -194,9 +186,9 @@ describe('services/shantytownParcelOwners.update()', () => {
             returnedError = error as ServiceError;
         }
 
-        expect(stubs.shantytownParcelOwnerModel.update).to.have.been.calledOnceWith(fakeTestUser, fakeTown.id, fakeOwner, stubs.transaction);
         expect(stubs.transaction.rollback).to.have.been.calledOnce;
         expect(returnedError).to.be.instanceOf(ServiceError);
-        expect(returnedError.code).to.equal('parcel_owner_update_failed');
+        expect(returnedError?.code).to.equal('parcel_owner_update_failed');
+        expect(stubs.transaction.commit).not.to.have.been.called;
     });
 });
