@@ -823,31 +823,6 @@ export default mode => ([
         }),
 
     /* **********************************************************************************************
-     * Type de propriétaire
-     ********************************************************************************************* */
-    // body('owner_type')
-    //     .exists({ checkNull: true }).bail().withMessage('Le champ "Type de propriétaire" est obligatoire')
-    //     .toInt()
-    //     .isInt().bail().withMessage('Le champ "Type de propriétaire" est invalide')
-    //     .custom(async (value, { req }) => {
-    //         let ownerType;
-    //         try {
-    //             ownerType = await ownerTypeModel.findOne(value);
-    //         } catch (error) {
-    //             // eslint-disable-next-line no-console
-    //             console.error(error);
-    //             throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Type de propriétaire"');
-    //         }
-
-    //         if (ownerType === null) {
-    //             throw new Error('Le type de propriétaire sélectionné n\'existe pas en base de données');
-    //         }
-
-    //         req.body.owner_type_full = ownerType;
-    //         return true;
-    //     }),
-
-    /* **********************************************************************************************
      * Identité du propriétaire
      ********************************************************************************************* */
     body('owner')
