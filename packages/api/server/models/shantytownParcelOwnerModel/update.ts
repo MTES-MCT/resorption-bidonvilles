@@ -1,10 +1,9 @@
 import { sequelize } from '#db/sequelize';
 import { Transaction } from 'sequelize';
 import ServiceError from '#server/errors/ServiceError';
-import { AuthUser } from '#server/middlewares/authMiddleware';
 import { ParcelOwnerInsert, RawParcelOwner } from '#root/types/resources/ParcelOwner.d';
 
-export default async (user: AuthUser, shantytownId: number, owners: ParcelOwnerInsert[], transaction: Transaction | undefined = undefined): Promise<RawParcelOwner[]> => {
+export default async (owners: ParcelOwnerInsert[], transaction: Transaction | undefined = undefined): Promise<RawParcelOwner[]> => {
     if (!owners || owners.length === 0) {
         throw new ServiceError('invalid_data', new Error('Au moins un propriétaire de parcelle doit être fourni'));
     }
