@@ -2,8 +2,12 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import chaiSubset from 'chai-subset';
-
+import { creationInput as fakeShantytown } from '#test/utils/shantytown';
+import { serialized as fakeUser } from '#test/utils/user';
 import { rewiremock } from '#test/rewiremock';
+
+import { AuthUser } from '#server/middlewares/authMiddleware';
+import { ParcelOwnerInsert } from '#root/types/resources/ParcelOwner.d';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -13,6 +17,9 @@ const sandbox = sinon.createSandbox();
 const stubs = {
     electricityAccessTypesCreate: sandbox.stub(),
     shantytownToiletTypesCreate: sandbox.stub(),
+    shantytownParcelOwnerService: {
+        create: sandbox.stub(),
+    },
     shantytownCreate: sandbox.stub(),
     findOne: sandbox.stub(),
     triggerShantytownCreationAlert: sandbox.stub(),
@@ -35,12 +42,13 @@ rewiremock('#server/models/shantytownModel/findOne').with(stubs.findOne);
 rewiremock('#server/models/shantytownToiletTypesModel/create').with(stubs.shantytownToiletTypesCreate);
 rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
 rewiremock('#server/models/electricityAccessTypesModel/create').with(stubs.electricityAccessTypesCreate);
+rewiremock('#server/services/shantytownParcelOwner').with(stubs.shantytownParcelOwnerService);
 rewiremock('#server/utils/mattermost').with({
     triggerShantytownCreationAlert: stubs.triggerShantytownCreationAlert,
 });
 rewiremock('#server/models/incomingTownsModel/create').with(stubs.incomingTownsCreate);
 rewiremock('#server/models/userModel/getLocationWatchers').with(stubs.getLocationWatchers);
-rewiremock('#server/mails/mails').with(stubs.sendUserShantytownDeclared);
+rewiremock('#server/mails/mails').with({ sendUserShantytownDeclared: stubs.sendUserShantytownDeclared });
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -51,9 +59,9 @@ describe('services/shantytown', () => {
     describe('create()', () => {
         let shantytownId: string;
         let user: any;
+        let fakeUserData: AuthUser;
         let townData: any;
-        let justiceData: any;
-        let owner: string;
+        let owners: ParcelOwnerInsert[];
         let social_origins: string;
         let town: any;
 
@@ -63,92 +71,35 @@ describe('services/shantytown', () => {
                 id: global.generate('string'),
                 isAllowedTo: sinon.stub(),
             };
-            townData = {
-                name: global.generate('string'),
-                latitude: global.generate('string'),
-                longitude: global.generate('string'),
-                address: global.generate('string'),
-                detailed_address: global.generate('string'),
-                built_at: global.generate('string'),
-                population_total: global.generate('string'),
-                population_total_females: global.generate('string'),
-                population_couples: global.generate('string'),
-                population_minors: global.generate('string'),
-                population_minors_girls: global.generate('string'),
-                population_minors_0_3: global.generate('string'),
-                population_minors_3_6: global.generate('string'),
-                population_minors_6_12: global.generate('string'),
-                population_minors_12_16: global.generate('string'),
-                population_minors_16_18: global.generate('string'),
-                minors_in_school: global.generate('string'),
-                caravans: global.generate('string'),
-                huts: global.generate('string'),
-                tents: global.generate('string'),
-                cars: global.generate('string'),
-                mattresses: global.generate('string'),
-                field_type: global.generate('string'),
-                owner_type: global.generate('string'),
-                is_reinstallation: global.generate('string'),
-                reinstallation_comments: global.generate('string'),
-                reinstallation_incoming_towns_full: [{ id: 1 }, { id: 2 }, { id: 3 }],
-                citycode: global.generate('string'),
-                departement: global.generate('string'),
-                createdBy: user.id,
-                declared_at: global.generate('string'),
-                census_status: global.generate('string'),
-                census_conducted_at: global.generate('string'),
-                census_conducted_by: global.generate('string'),
-                living_conditions_version: 2,
-                water_access_type: 'autre',
-                water_access_type_details: 'comment',
-                water_access_is_public: false,
-                water_access_is_continuous: false,
-                water_access_is_continuous_details: 'comment',
-                water_access_is_local: true,
-                water_access_is_close: true,
-                water_access_is_unequal: true,
-                water_access_is_unequal_details: 'comment',
-                water_access_has_stagnant_water: true,
-                water_access_comments: 'comment',
-
-                sanitary_open_air_defecation: true,
-                sanitary_toilet_types: ['latrines', 'toilettes_chimiques'],
-                sanitary_access_working_toilets: true,
-                sanitary_access_toilets_are_inside: true,
-                sanitary_access_toilets_are_lighted: true,
-                sanitary_access_hand_washing: true,
-
-                electricity_access: true,
-                electricity_access_is_unequal: true,
-                electricity_access_types: ['electrogene', 'reseau_urbain', 'installation_du_bati'],
-
-                trash_is_piling: true,
-                trash_evacuation_is_close: true,
-                trash_evacuation_is_safe: true,
-                trash_evacuation_is_regular: true,
-                trash_bulky_is_piling: true,
-
-                pest_animals_presence: true,
-                pest_animals_details: 'comment',
-
-                fire_prevention: true,
-            };
-
-            justiceData = {
-                owner_complaint: global.generate('string'),
-                justice_procedure: global.generate('string'),
-                justice_rendered: global.generate('string'),
-                justice_rendered_by: global.generate('string'),
-                justice_rendered_at: global.generate('string'),
-                justice_challenged: global.generate('string'),
-                police_status: global.generate('string'),
-                police_requested_at: global.generate('string'),
-                police_granted_at: global.generate('string'),
-                bailiff: global.generate('string'),
-            };
-            owner = global.generate('string');
+            fakeUserData = fakeUser();
+            stubs.getLocationWatchers.returns([{
+                user_id: fakeUserData.id,
+                email: fakeUserData.email,
+                first_name: fakeUserData.first_name,
+                last_name: fakeUserData.last_name,
+            }]);
+            townData = fakeShantytown();
             social_origins = global.generate('string');
-            town = { shantytownId };
+            town = {
+                shantytownId,
+                city: {
+                    code: townData.citycode,
+                    name: 'Fake City',
+                    departement: {
+                        code: townData.departement,
+                        name: 'Fake Departement',
+                    },
+                },
+            };
+            owners = [{
+                ownerId: 1,
+                name: 'Jean Bon',
+                type: 1,
+            }, {
+                ownerId: 2,
+                name: 'Pierre Quiroul',
+                type: 2,
+            }];
             stubs.sequelize.transaction.resolves(stubs.transaction);
         });
 
@@ -160,11 +111,9 @@ describe('services/shantytown', () => {
             user.isAllowedTo.returns(true);
             stubs.shantytownCreate.resolves(shantytownId);
             stubs.findOne.resolves(town);
-            await createService({
-                ...townData, ...justiceData, owner, social_origins,
-            }, user);
-            expect(stubs.shantytownCreate).to.have.been.calledOnceWith({
-                ...{
+            await createService(townData, user);
+            expect(stubs.shantytownCreate).to.have.been.calledOnceWith(
+                {
                     name: townData.name,
                     latitude: townData.latitude,
                     longitude: townData.longitude,
@@ -188,8 +137,6 @@ describe('services/shantytown', () => {
                     cars: townData.cars,
                     mattresses: townData.mattresses,
                     fieldType: townData.field_type,
-                    ownerType: townData.owner_type,
-                    owner,
                     isReinstallation: townData.is_reinstallation,
                     reinstallationComments: townData.reinstallation_comments,
                     city: townData.citycode,
@@ -198,8 +145,7 @@ describe('services/shantytown', () => {
                     censusStatus: townData.census_status,
                     censusConductedAt: townData.census_conducted_at,
                     censusConductedBy: townData.census_conducted_by,
-                },
-                ...{
+
                     living_conditions_version: 2,
 
                     water_access_type: townData.water_access_type,
@@ -233,29 +179,28 @@ describe('services/shantytown', () => {
                     pest_animals_details: townData.pest_animals_details,
 
                     fire_prevention: townData.fire_prevention_diagnostic,
+
+                    ownerComplaint: townData.owner_complaint,
+                    justiceProcedure: townData.justice_procedure,
+                    justiceRendered: townData.justice_rendered,
+                    justiceRenderedBy: townData.justice_rendered_by,
+                    justiceRenderedAt: townData.justice_rendered_at,
+                    justiceChallenged: townData.justice_challenged,
+                    policeStatus: townData.police_status,
+                    policeRequestedAt: townData.police_requested_at,
+                    policeGrantedAt: townData.police_granted_at,
+                    bailiff: townData.bailiff,
+
                 },
-                ...{
-                    ownerComplaint: justiceData.owner_complaint,
-                    justiceProcedure: justiceData.justice_procedure,
-                    justiceRendered: justiceData.justice_rendered,
-                    justiceRenderedBy: justiceData.justice_rendered_by,
-                    justiceRenderedAt: justiceData.justice_rendered_at,
-                    justiceChallenged: justiceData.justice_challenged,
-                    policeStatus: justiceData.police_status,
-                    policeRequestedAt: justiceData.police_requested_at,
-                    policeGrantedAt: justiceData.police_granted_at,
-                    bailiff: justiceData.bailiff,
-                },
-            });
+                stubs.transaction,
+            );
         });
 
         it('n\'enregistre pas les données judiciaires et du propriétaire si l\'utilisateur n\'y a pas accès', async () => {
             user.isAllowedTo.returns(false);
             stubs.shantytownCreate.resolves(shantytownId);
             stubs.findOne.resolves(town);
-            await createService({
-                ...townData, ...justiceData, owner, social_origins,
-            }, user);
+            await createService(townData, user);
             expect(stubs.electricityAccessTypesCreate).to.have.been.calledOnceWith(
                 shantytownId,
                 townData.electricity_access_types,
@@ -289,7 +234,6 @@ describe('services/shantytown', () => {
                     cars: townData.cars,
                     mattresses: townData.mattresses,
                     fieldType: townData.field_type,
-                    ownerType: townData.owner_type,
                     isReinstallation: townData.is_reinstallation,
                     reinstallationComments: townData.reinstallation_comments,
                     city: townData.citycode,
@@ -331,7 +275,7 @@ describe('services/shantytown', () => {
                     pest_animals_details: townData.pest_animals_details,
 
                     fire_prevention: townData.fire_prevention_diagnostic,
-                },
+                }, stubs.transaction,
             );
             expect(stubs.incomingTownsCreate).to.have.been.calledOnceWith(shantytownId, [1, 2, 3]);
         });
@@ -341,34 +285,43 @@ describe('services/shantytown', () => {
             stubs.shantytownCreate.resolves(shantytownId);
             stubs.findOne.resolves(town);
             await createService({
-                ...townData, ...justiceData, owner, social_origins,
+                ...townData, social_origins,
             }, user);
             // eslint-disable-next-line no-unused-expressions
             expect(stubs.socialOriginCreate).to.have.been.calledOnceWith(shantytownId, social_origins);
+        });
+
+        it('enregistre les propriétaires de parcelles en bdd si elles sont indiquées par l\'utilisateur', async () => {
+            user.isAllowedTo.returns(true);
+            stubs.shantytownCreate.resolves(shantytownId);
+            stubs.findOne.resolves(town);
+            // townData.owner = owners;
+            await createService({
+                ...townData,
+                owner: { owners },
+            }, user);
+            // eslint-disable-next-line no-unused-expressions
+            expect(stubs.shantytownParcelOwnerService.create).to.have.been.calledOnceWith(user, shantytownId, owners, stubs.transaction);
         });
 
         it('si la connexion à mattermost est établie, envoie une alerte', async () => {
             user.isAllowedTo.returns(true);
             stubs.shantytownCreate.resolves(shantytownId);
             stubs.findOne.resolves(town);
-            await createService({
-                ...townData, ...justiceData, owner, social_origins,
-            }, user);
+            await createService(townData, user);
 
             // eslint-disable-next-line no-unused-expressions
             expect(stubs.triggerShantytownCreationAlert).to.have.been.calledOnceWith(town, user);
         });
 
-        it.skip('envoie une alerte mail à tous les utilisateurs du département', async () => {
+        it('envoie une alerte mail à tous les utilisateurs du département', async () => {
             townData.city = { code: townData.citycode, departement: townData.departement };
             const watchers = [{ user_id: 0 }, { user_id: 1 }, { user_id: 2 }];
             stubs.getLocationWatchers.resolves(watchers);
             user.isAllowedTo.returns(true);
             stubs.shantytownCreate.resolves(shantytownId);
             stubs.findOne.resolves({ ...town, city: { code: townData.citycode, departement: townData.departement } });
-            await createService({
-                ...townData, ...justiceData, owner, social_origins,
-            }, user);
+            await createService(townData, user);
             // eslint-disable-next-line no-unused-expressions
             expect(stubs.getLocationWatchers).to.have.been.calledOnce;
             expect(stubs.sendUserShantytownDeclared).to.have.callCount(watchers.length);
