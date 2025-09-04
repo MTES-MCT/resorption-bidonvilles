@@ -49,7 +49,7 @@ export default async (user: AuthUser, shantytown: Shantytown, owners: ParcelOwne
     // On commence par la modification des propriétaires existants
         if (allOwnersForUpdate.length > 0) {
             try {
-                await shantytownParcelOwner.update(user, shantytown.id, allOwnersForUpdate, transaction);
+                await shantytownParcelOwner.update(allOwnersForUpdate, transaction);
             } catch (error) {
                 throw new ServiceError('parcel_owner_update_failed', new Error(error?.message));
             }
