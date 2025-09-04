@@ -34,7 +34,6 @@ const stubs = {
     },
 };
 
-// rewiremock('#server/models/shantytownModel').with(stubs.shantytownModel);
 rewiremock('#server/models/shantytownParcelOwnerModel').with(stubs.shantytownParcelOwnerModel);
 rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
 
