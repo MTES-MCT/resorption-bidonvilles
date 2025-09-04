@@ -68,7 +68,7 @@
                                 :disabled="!owner.active"
                             />
                             <InputOwnerType
-                                class="w-auto !mb-0"
+                                class="w-auto"
                                 :id="`owner.owners[${getOriginalIndex(
                                     owner
                                 )}].type`"
