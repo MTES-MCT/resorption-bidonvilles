@@ -150,7 +150,7 @@ export default (closingSolutions: ClosingSolution[]) => {
                 ) {
                     let result: string;
                     try {
-                        result = (shantytown.owner.owners as SerializedOwner[]).map((o: SerializedOwner) => {
+                        result = (shantytown.owner.owners as SerializedOwner[]).filter(o => o.active).map((o: SerializedOwner) => {
                             const name: string = o.name ?? 'inconnu';
                             const typeLabel: string = o.typeDetails?.label;
                             return typeLabel ? `${name} (${typeLabel})` : name;
