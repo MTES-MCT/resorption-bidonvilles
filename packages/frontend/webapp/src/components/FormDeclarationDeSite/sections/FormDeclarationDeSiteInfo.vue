@@ -8,21 +8,31 @@
         formulaire afin que ce site soit déclaré.
     </p>
 
-    <PanelInfo icon="flag">
-        <template v-slot:title>Qu'est-ce qu'un site ?</template>
-        <template v-slot:content>
-            Un site est un bidonville ou squat occupé de manière informelle à
-            des fins d'habitation par plusieurs familles ou personnes, les
-            services de base (eau, électricité, gestion des déchets…) y sont
-            généralement absents. Tous les sites, quelles que soient l'origine
-            et le nombre des personnes, peuvent être renseignés.
+    <DsfrAccordion>
+        <template #title>
+            <!-- <p
+                class="rounded-full inline-flex items-center justify-center bg-primary text-white w-6 h-6 text-center text-xs align-middle mr-2"
+            >
+                <Icon icon="flag" />
+            </p> -->
+            <p class="font-bold">Qu'est-ce qu'un site ?</p>
         </template>
-    </PanelInfo>
+        <template v-slot:default>
+            <DsfrNotice>
+                Un site est un bidonville ou squat occupé de manière informelle
+                à des fins d'habitation par plusieurs familles ou personnes, les
+                services de base (eau, électricité, gestion des déchets…) y sont
+                généralement absents. Tous les sites, quelle que soit l'origine
+                et quel que soit le nombre de personnes, peuvent être
+                renseignés.
+            </DsfrNotice>
+        </template>
+    </DsfrAccordion>
 </template>
 
 <script setup>
 import { toRefs } from "vue";
-import { Icon, PanelInfo } from "@resorptionbidonvilles/ui";
+import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     mode: {
