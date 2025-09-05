@@ -2,8 +2,7 @@
     <ViewHeader icon="handshake-angle">
         <template v-slot:title>Liste des actions</template>
         <template v-slot:description
-            >Consultez et gérez la liste des actions au national ou sur votre
-            territoire</template
+            >Consultez et gérez la liste des actions</template
         >
 
         <template v-slot:actions>
