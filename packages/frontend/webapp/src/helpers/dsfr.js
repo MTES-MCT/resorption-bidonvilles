@@ -1,4 +1,5 @@
 import {
+    DsfrAccordion,
     DsfrAlert,
     DsfrBadge,
     DsfrButton,
@@ -27,6 +28,7 @@ for (const collection of collections) {
 }
 
 export function useDsfr(app) {
+    app.component("DsfrAccordion", DsfrAccordion);
     app.component("DsfrAlert", DsfrAlert);
     app.component("DsfrBadge", DsfrBadge);
     app.component("DsfrButton", DsfrButton);
