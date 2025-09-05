@@ -2,7 +2,6 @@ import { ParcelOwners } from '#root/types/resources/ParcelOwner.d';
 
 export function serialized(override: Partial<ParcelOwners> = {}): ParcelOwners {
     const defaultObj: ParcelOwners = {
-        parcelOwnerId: 1,
         shantytownId: 1,
         owners: [
             {
