@@ -65,19 +65,21 @@ export default async (user: AuthUser, locations: Location[], closedTowns: boolea
     }
 
     const towns = await shantytownModel.findAll(user, filters, 'export');
+    if (towns.length === 0) {
+        return [];
+    }
 
     const clauseGroup = where().can(user).do('read', 'action');
     const currentYear = moment(new Date()).format('YYYY');
     const townsWithFinancedActions = await actionModel.fetchFinancedActionsByYear(null, parseInt(currentYear, 10), clauseGroup);
     const transformedShantytowns = enrichShantytown(townsWithFinancedActions);
-    return towns.map((town: ShantytownWithFinancedAction) => {
+
+    return Promise.all(towns.map(async (town: ShantytownWithFinancedAction) => {
         const townWithFinancedActions: FinancedShantytownAction = transformedShantytowns.find((t:FinancedShantytownAction) => t.shantytown_id === town.id);
-        if (townWithFinancedActions) {
-            return {
-                ...town,
-                hasAtLeastOneActionFinanced: townWithFinancedActions.hasAtLeastOneActionFinanced,
-            };
-        }
-        return town;
-    });
+
+        return {
+            ...town,
+            hasAtLeastOneActionFinanced: townWithFinancedActions ? townWithFinancedActions.hasAtLeastOneActionFinanced : undefined,
+        };
+    }));
 };

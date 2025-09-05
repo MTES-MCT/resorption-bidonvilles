@@ -14,6 +14,8 @@ import preparatoryPhasesTowardResorptionModel from '#server/models/preparatoryPh
 // types
 import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
+import { SerializedOwner } from '#root/types/resources/ParcelOwner.d';
+import { OwnerType } from '#root/types/resources/OwnerType.d';
 import { PreparatoryPhaseTowardResorption } from '#root/types/resources/PreparatoryPhaseTowardResorption.d';
 import { SimplifiedPhase } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
 
@@ -78,6 +80,32 @@ const excludeSignedUrls = (key: string, value: any): any => {
         return undefined;
     }
     return value;
+};
+
+const normalizeOwnerComparison = (ownerData: { owners: any[] } | null): string | null => {
+    if (!ownerData || !ownerData.owners) {
+        return null;
+    }
+
+    // On nettoie chaque propriétaire en passant les dates en ISO et en triant pourêtre sûr de la comparaison
+    const cleanedOwners = ownerData.owners.map((owner) => {
+        const { _key, ...rest } = owner;
+        return {
+            ...rest,
+            createdAt: owner.createdAt ? new Date(owner.createdAt).toISOString() : null,
+            updatedAt: owner.updatedAt ? new Date(owner.updatedAt).toISOString() : null,
+        };
+    });
+
+    cleanedOwners.sort((a, b) => {
+        if (a.ownerId && b.ownerId) {
+            return a.ownerId - b.ownerId;
+        }
+        // Pour les nouveaux propriétaires sans ownerId, on trie par nom
+        return (a.name || '').localeCompare(b.name || '');
+    });
+
+    return JSON.stringify({ owners: cleanedOwners });
 };
 
 export default mode => ([
@@ -162,14 +190,9 @@ export default mode => ([
                         storedValue: getStringOrNull(req.town.addressDetails),
                     },
                     {
-                        key: 'owner_type',
-                        submitedValue: req.body.owner_type,
-                        storedValue: req.town.ownerType.id,
-                    },
-                    {
                         key: 'owner',
-                        submitedValue: getStringOrNull(req.body.owner),
-                        storedValue: getStringOrNull(req.town.owner),
+                        submitedValue: req.body.owner?.owners.length > 0 ? normalizeOwnerComparison(req.body.owner) : null,
+                        storedValue: req.town.owner ? normalizeOwnerComparison(req.town.owner) : null,
                     },
                     {
                         key: 'population_total',
@@ -800,42 +823,32 @@ export default mode => ([
         }),
 
     /* **********************************************************************************************
-     * Type de propriétaire
-     ********************************************************************************************* */
-    body('owner_type')
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Type de propriétaire" est obligatoire')
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Type de propriétaire" est invalide')
-        .custom(async (value, { req }) => {
-            let ownerType;
-            try {
-                ownerType = await ownerTypeModel.findOne(value);
-            } catch (error) {
-                // eslint-disable-next-line no-console
-                console.error(error);
-                throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Type de propriétaire"');
-            }
-
-            if (ownerType === null) {
-                throw new Error('Le type de propriétaire sélectionné n\'existe pas en base de données');
-            }
-
-            req.body.owner_type_full = ownerType;
-            return true;
-        }),
-
-    /* **********************************************************************************************
      * Identité du propriétaire
      ********************************************************************************************* */
     body('owner')
-        .customSanitizer((value, { req }) => {
+        .customSanitizer(async (value, { req }) => {
             if (!req.user.isAllowedTo('access', 'shantytown_owner')) {
                 return null;
             }
 
-            if (!req.body.owner_type_full || req.body.owner_type_full.label === 'Inconnu') {
-                return null;
-            }
+            let ownerType: OwnerType | null = null;
+            await Promise.all(req.body.owner.owners.map(async (owner: SerializedOwner) => {
+                try {
+                    ownerType = await ownerTypeModel.findOne(owner.type || 1);
+                } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.error(error);
+                    throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Type de propriétaire"');
+                }
+                if (ownerType === null) {
+                    throw new Error('Le type de propriétaire sélectionné n\'existe pas en base de données');
+                }
+
+                if (!ownerType || ownerType.label === 'Inconnu') {
+                    return null;
+                }
+                return true;
+            }));
 
             return value;
         })

@@ -1,3 +1,5 @@
+import { ParcelOwners } from '#root/types/resources/ParcelOwner.d';
+
 export type ShantytownRow = {
     id: number,
     updatedWithoutAnyChange: boolean,
@@ -163,8 +165,8 @@ export type ShantytownRow = {
     socialOrigins: string[],
     electricityAccessTypes: string[],
     toiletTypes: string[],
-    distance?: number | null
-
+    distance?: number | null,
+    owners: ParcelOwners | null
 };
 
 export default {

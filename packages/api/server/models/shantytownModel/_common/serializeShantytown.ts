@@ -91,10 +91,6 @@ export default (town: ShantytownRow, user): Shantytown => {
             id: town.fieldTypeId,
             label: town.fieldTypeLabel,
         },
-        ownerType: {
-            id: town.ownerTypeId,
-            label: town.ownerTypeLabel,
-        },
         socialOrigins: (town.socialOrigins || []).map((socialOrigin) => {
             const [id, uid, label] = socialOrigin.split('|');
             return {
@@ -214,9 +210,10 @@ export default (town: ShantytownRow, user): Shantytown => {
         serializedTown = {
             ...serializedTown,
             ...{
-                owner: town.owner,
+                owner: town.owners,
             },
         };
     }
+
     return serializedTown;
 };

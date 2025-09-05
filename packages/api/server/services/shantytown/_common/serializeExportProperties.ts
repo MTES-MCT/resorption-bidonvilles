@@ -5,7 +5,7 @@ import config from '#server/config';
 import electricityAccessTypes from '#server/models/electricityAccessTypesModel/_common/electricityAccessTypes';
 import waterAccessTypes from '#server/models/_common/waterAccessTypes';
 import toiletTypes from '#server/models/shantytownToiletTypesModel/_common/toiletTypes';
-import { ShantytownWithFinancedAction } from '#root/types/resources/Shantytown.d';
+import { ShantytownWithFinancedAction, ShantytownWithOwner } from '#root/types/resources/Shantytown.d';
 import electricityAccessStatusLabels from './livingConditionsStatusLabels/electricityAccessStatusLabels';
 import waterAccessStatusLabels from './livingConditionsStatusLabels/waterAccessStatusLabels';
 import sanitaryAccessStatusLabels from './livingConditionsStatusLabels/sanitaryAccessStatusLabels';
@@ -13,13 +13,14 @@ import trashEvacuationStatusLabels from './livingConditionsStatusLabels/trashEva
 import pestAnimalsStatusLabels from './livingConditionsStatusLabels/pestAnimalsStatusLabels';
 import firePreventionStatusLabels from './livingConditionsStatusLabels/firePreventionStatusLabels';
 import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
+import { SerializedOwner } from '#root/types/resources/ParcelOwner.d';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 const { webappUrl } = config;
 
 export type ShantytownExportListProperty = {
     title: string,
-    data: (shantytown: ShantytownWithFinancedAction) => string | number | Date | null,
+    data: (shantytown: ShantytownWithFinancedAction | ShantytownWithOwner) => string | number | Date | null,
     width: number,
     align?: 'left' | 'center' | 'right',
     bold?: boolean,
@@ -137,14 +138,30 @@ export default (closingSolutions: ClosingSolution[]) => {
             data: ({ closingContext }: ShantytownWithFinancedAction) => closingContext,
             width: COLUMN_WIDTHS.SMALL,
         },
-        ownerType: {
-            title: 'Type de propriétaire',
-            data: ({ ownerType }: ShantytownWithFinancedAction) => ownerType.label,
-            width: COLUMN_WIDTHS.SMALL,
-        },
         owner: {
-            title: 'Identité du propriétaire',
-            data: (shantytown: ShantytownWithFinancedAction) => ('owner' in shantytown ? shantytown.owner : null),
+            title: 'Propriétaires de parcelles du site',
+            data: (shantytown: ShantytownWithOwner) => {
+                if (
+                    shantytown.owner
+                    && !Array.isArray(shantytown.owner)
+                    && 'owners' in shantytown.owner
+                    && Array.isArray(shantytown.owner.owners)
+                ) {
+                    let result: string;
+                    try {
+                        result = (shantytown.owner.owners as SerializedOwner[]).filter(o => o.active).map((o: SerializedOwner) => {
+                            const name: string = o.name ?? 'inconnu';
+                            const typeLabel: string = o.typeDetails?.label;
+                            return typeLabel ? `${name} (${typeLabel})` : name;
+                        }).join('; ');
+                    } catch (error) {
+                        // eslint-disable-next-line no-console
+                        console.error('Error while getting owner informations: ', error);
+                    }
+                    return result;
+                }
+                return null;
+            },
             width: COLUMN_WIDTHS.MEDIUM,
         },
         isReinstallation: {

@@ -6,42 +6,53 @@ module.exports = {
 
         try {
             await queryInterface.createTable(
-                'land_registry_enquiries',
+                'shantytown_parcel_owners',
                 {
-                    enquiry_id: {
+                    shantytown_parcel_owner_id: {
                         type: Sequelize.INTEGER,
                         allowNull: false,
                         autoIncrement: true,
                         primaryKey: true,
                     },
+                    fk_shantytown: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
                     fk_user: {
                         type: Sequelize.INTEGER,
                         allowNull: false,
                     },
-                    fk_organization: {
+                    owner_name: {
+                        type: Sequelize.STRING,
+                        allowNull: true,
+                    },
+                    fk_owner_type: {
                         type: Sequelize.INTEGER,
                         allowNull: false,
                     },
-                    fk_parcel: {
-                        type: Sequelize.STRING,
+                    active: {
+                        type: Sequelize.BOOLEAN,
                         allowNull: false,
+                        defaultValue: true,
                     },
                     created_at: {
                         type: Sequelize.DATE,
                         allowNull: false,
+                        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
                     },
                 },
                 { transaction },
             );
 
-            await addForeignKey(queryInterface, 'land_registry_enquiries', ['fk_user'], 'users', 'user_id', 'cascade', 'cascade', transaction);
-            await addForeignKey(queryInterface, 'land_registry_enquiries', ['fk_organization'], 'organizations', 'organization_id', 'cascade', 'cascade', transaction);
+            await addForeignKey(queryInterface, 'shantytown_parcel_owners', ['fk_user'], 'users', 'user_id', 'cascade', 'cascade', transaction);
+            await addForeignKey(queryInterface, 'shantytown_parcel_owners', ['fk_shantytown'], 'shantytowns', 'shantytown_id', 'cascade', 'cascade', transaction);
+            await addForeignKey(queryInterface, 'shantytown_parcel_owners', ['fk_owner_type'], 'owner_types', 'owner_type_id', 'cascade', 'cascade', transaction);
 
             await queryInterface.addIndex(
-                'land_registry_enquiries',
-                ['fk_parcel'],
+                'shantytown_parcel_owners',
+                ['fk_shantytown'],
                 {
-                    name: 'id__land_registry_enquiries__fk_parcel',
+                    name: 'id__shantytown_parcel_owners__fk_shantytown',
                     using: 'BTREE',
                     schema: 'public',
                     transaction,
@@ -58,9 +69,10 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
 
         try {
-            await removeForeignKey(queryInterface, 'land_registry_enquiries', 'users', transaction);
-            await removeForeignKey(queryInterface, 'land_registry_enquiries', 'organizations', transaction);
-            await queryInterface.dropTable('land_registry_enquiries', { transaction });
+            await removeForeignKey(queryInterface, 'shantytown_parcel_owners', 'users', transaction);
+            await removeForeignKey(queryInterface, 'shantytown_parcel_owners', 'shantytowns', transaction);
+            await removeForeignKey(queryInterface, 'shantytown_parcel_owners', 'owner_types', transaction);
+            await queryInterface.dropTable('shantytown_parcel_owners', { transaction });
             await transaction.commit();
         } catch (error) {
             await transaction.rollback();

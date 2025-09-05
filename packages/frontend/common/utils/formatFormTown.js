@@ -32,7 +32,6 @@ export default function (data) {
             : undefined,
         field_type: data.fieldType ? data.fieldType.id : undefined,
         detailed_address: data.addressDetails,
-        owner_type: data.ownerType ? data.ownerType.id : undefined,
         owner: data.owner,
         population_total: formatIntToStr(data.populationTotal),
         population_total_females: formatIntToStr(data.populationTotalFemales),
