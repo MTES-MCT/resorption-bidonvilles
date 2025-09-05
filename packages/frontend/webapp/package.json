@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@gouvfr/dsfr": "1.13.2",
-    "@gouvminint/vue-dsfr": "^8.6.0",
+    "@gouvminint/vue-dsfr": "^8.8.0",
     "@iconify-json/bxs": "latest",
     "@iconify-json/carbon": "^1.2.13",
     "@iconify-json/mdi": "latest",
