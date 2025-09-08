@@ -7,7 +7,7 @@
                 :label="townStatus"
                 class="mr-4 text-xs"
             />
-            <TagObjectifResorption
+            <BadgeSiteObjectifResorption
                 v-if="town.resorptionTarget"
                 :target="town.resorptionTarget"
                 class="mr-4"
@@ -30,7 +30,7 @@
 import { computed, toRefs } from "vue";
 import useLastUpdated from "@/composables/useLastUpdated";
 import FicheSiteHeaderStatusLastEvent from "@/components/FicheSite/FicheSiteHeader/FicheSiteHeaderStatusLastEvent.vue";
-import TagObjectifResorption from "@/components/TagObjectifResorption/TagObjectifResorption.vue";
+import BadgeSiteObjectifResorption from "@/composables/BadgeSiteOjectifResorption.vue";
 import getStatusBadgeType from "@/utils/getStatusBadgeType";
 import formatDate from "@common/utils/formatDate";
 
