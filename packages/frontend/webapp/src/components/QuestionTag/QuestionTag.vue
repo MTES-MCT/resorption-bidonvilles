@@ -1,15 +1,14 @@
 <template>
-    <Tag
-        tabindex="0"
-        :aria-label="`Etiquette ${tag.name}`"
-        :variant="tag.uid === 'other' ? 'outline' : 'primary'"
-        >{{ tag.name }}</Tag
-    >
+    <DsfrBadge
+        noIcon
+        :label="tag.label"
+        :type="tag.uid === 'other' ? 'new' : 'info'"
+        class="text-xs"
+    />
 </template>
 
 <script setup>
 import { defineProps, toRefs } from "vue";
-import { Tag } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     tag: Object,
