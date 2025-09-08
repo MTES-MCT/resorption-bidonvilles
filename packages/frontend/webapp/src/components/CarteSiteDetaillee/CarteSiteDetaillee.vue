@@ -154,9 +154,6 @@ function handleClickOnCard(event, navigateFunction) {
             grid-template-columns: 140px 91px 150px 154px 0px;
         }
     }
-}
-
-.closedShantytown {
     position: relative;
     overflow: hidden;
 }
