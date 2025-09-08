@@ -42,12 +42,11 @@
                 aria-label="Liste des étiquettes caractérisant la question"
             >
                 <QuestionTag
-                    v-for="tag in question.tags"
-                    :key="tag.uid"
+                    v-for="(tag, index) in tags"
+                    :key="index"
+                    class="px-3 mr-2 text-sm"
                     :tag="tag"
-                >
-                    {{ tag.name }}
-                </QuestionTag>
+                />
             </div>
             <CarteQuestionFooter :question="question" />
         </div>
@@ -55,7 +54,7 @@
 </template>
 
 <script setup>
-import { toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import focusClasses from "@common/utils/focus_classes";
 
 import CarteQuestionQuestion from "./CarteQuestionQuestion.vue";
@@ -71,4 +70,14 @@ const props = defineProps({
     },
 });
 const { question } = toRefs(props);
+const tags = computed(() => {
+    if (!question.value.tags) {
+        return [];
+    }
+    return question.value.tags.map((tag) => ({
+        uid: tag.uid,
+        label: tag.name,
+        selected: true,
+    }));
+});
 </script>
