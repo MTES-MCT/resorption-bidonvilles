@@ -14,20 +14,8 @@
             </Tag>
             <Tag
                 v-if="heatwaveStatus === true"
-                variant="highlight"
-                :class="[
-                    'mt-1 text-xs uppercase text-primary items-center py-2 mr-2',
-                    isHover ? 'shadow-md' : '',
-                ]"
-            >
-                Risque Canicule
-            </Tag>
-
-            <ResorptionTargetTag
-                v-if="shantytown.resorptionTarget"
-                :target="shantytown.resorptionTarget"
-                :isHover="isHover"
-                class="mt-1 items-center py-2"
+            <BadgeSiteOjectifResorption
+                :resorption-target="shantytown.resorptionTarget"
             />
         </div>
         <div class="flex right-14" v-if="attachmentsLabel">
@@ -56,6 +44,8 @@ import ResorptionTargetTag from "@/components/TagObjectifResorption/TagObjectifR
 import { useUserStore } from "@/stores/user.store";
 
 import useLastUpdated from "@/composables/useLastUpdated";
+import BadgeSiteOjectifResorption from "@/composables/BadgeSiteOjectifResorption.vue";
+import getStatusBadgeType from "@/utils/getStatusBadgeType";
 
 const props = defineProps({
     shantytown: Object,
