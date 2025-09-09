@@ -1,7 +1,7 @@
 <template>
     <DsfrBadge
         noIcon
-        :label="tag.label"
+        :label="tag.name"
         :type="tag.uid === 'other' ? 'new' : 'info'"
         class="text-xs"
     />
