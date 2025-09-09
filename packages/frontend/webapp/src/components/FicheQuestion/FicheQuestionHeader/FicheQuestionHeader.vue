@@ -20,14 +20,12 @@
             </template>
         </template>
         <template v-slot:actions>
-            <div class="md:flex justify-between items-start">
-                <div>
-                    <FicheQuestionTags
-                        :question="question"
-                        v-if="question.tags.length > 0"
-                        class="mb-4"
-                    />
-                </div>
+            <div class="md:flex justify-between items-start gap-2">
+                <FicheQuestionTags
+                    :question="question"
+                    v-if="question.tags.length > 0"
+                    class="mb-4"
+                />
                 <div
                     class="flex flex-col shrink-0 sm:flex-row items-start gap-2"
                 >
