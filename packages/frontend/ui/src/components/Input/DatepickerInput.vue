@@ -1,13 +1,28 @@
 <template>
     <InputWrapper :hasErrors="!!errors.length" :withoutMargin="withoutMargin">
-        <InputLabel :label="label" :info="info" :inlineInfo="inlineInfo" :showMandatoryStar="showMandatoryStar" :for="`dp-input-${id}`" />
+        <InputLabel
+            :label="label"
+            :info="info"
+            :inlineInfo="inlineInfo"
+            :showMandatoryStar="showMandatoryStar"
+            :for="`dp-input-${id}`"
+        />
 
         <div :class="width">
-            <DatePicker v-model="date" locale="fr" :format-locale="fr" :format="section === 'evolution' ? 'LLLL yyyy' : 'dd LLLL yyyy'"
-                :disabled="isSubmitting || disabled" autoApply :enableTimePicker="false"
+            <DatePicker
+                v-model="date"
+                locale="fr"
+                :format-locale="fr"
+                :format="(monthPicker || section === 'evolution') ? 'LLLL yyyy' : 'dd LLLL yyyy'"
+                :disabled="isSubmitting || disabled"
+                autoApply
+                :enableTimePicker="false"
                 :input-class-name="focusClasses.ring"
-                :preventMinMaxNavigation="!!$attrs.maxDate || !!$attrs.minDate" v-bind="$attrs" :uid="id">
-            </DatePicker>
+                :preventMinMaxNavigation="!!$attrs.maxDate || !!$attrs.minDate"
+                :monthPicker="monthPicker"
+                v-bind="$attrs"
+                :uid="id"
+            />
         </div>
         <InputError v-if="errors.length">{{ errors[0] }}</InputError>
     </InputWrapper>
@@ -61,10 +76,15 @@ const props = defineProps({
     section: {
         required: false,
         type: String
+    },
+    monthPicker: {
+        type: Boolean,
+        required: false,
+        default: false
     }
 });
 
-const { id, name, label, info, inlineInfo, showMandatoryStar, rules, disabled, modelValue, width, withoutMargin, section } = toRefs(props);
+const { id, name, label, info, inlineInfo, showMandatoryStar, rules, disabled, modelValue, width, withoutMargin, section, monthPicker } = toRefs(props);
 const isSubmitting = useIsSubmitting();
 const { handleChange, errors, value } = useField(name.value, rules.value, {
     initialValue: modelValue.value
@@ -73,11 +93,40 @@ const emit = defineEmits(["update:modelValue"]);
 
 const date = computed({
     get() {
+        if (monthPicker.value && value.value instanceof Date) {
+            const d = value.value;
+            if (!isValidDate(d)) return null;
+            return {
+                month: d.getMonth(),
+                year: d.getFullYear()
+            };
+        }
         return value.value;
     },
     set(newValue) {
-        handleChange(newValue);
-        emit("update:modelValue", newValue);
+        const out = processDateValue(newValue, monthPicker.value);
+        if (out !== null) {
+            handleChange(out);
+            emit("update:modelValue", out);
+        }
     }
 });
+
+function isValidDate(date) {
+    return date instanceof Date && !isNaN(date.getTime());
+}
+
+function processDateValue(newValue, isMonthPicker) {
+    if (isMonthPicker && newValue && typeof newValue === 'object' && 'month' in newValue) {
+        const date = new Date(newValue.year, newValue.month, 1);
+        return isValidDate(date) ? date : null;
+    }
+    
+    if (newValue != null && !(newValue instanceof Date)) {
+        const date = new Date(newValue);
+        return isValidDate(date) ? date : null;
+    }
+    
+    return newValue;
+}
 </script>
