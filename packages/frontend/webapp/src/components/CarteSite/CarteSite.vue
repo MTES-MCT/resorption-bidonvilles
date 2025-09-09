@@ -11,7 +11,6 @@
             <h2 class="font-bold text-lg">{{ shantytown.usename }}</h2>
             <p class="text-lg">{{ shantytown.city.name }}</p>
 
-            <p class="m-0"></p>
             <p class="m-0" v-if="shantytown.completionRate < 0.8">
                 <Tag
                     display="inline-block"
