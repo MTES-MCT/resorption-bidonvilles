@@ -1,7 +1,7 @@
 <template>
     <DsfrBadge
         v-if="resorptionTarget"
-        :noIcon="noicon ? true : false"
+        :noIcon="noicon"
         :label="objectifResorptionLabel(resorptionTarget)"
         type="info"
         class="mt-1 text-xs py-2 mr-2"
