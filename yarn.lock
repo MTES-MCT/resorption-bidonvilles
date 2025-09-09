@@ -3031,9 +3031,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gouvminint/vue-dsfr@npm:^8.6.0":
-  version: 8.6.0
-  resolution: "@gouvminint/vue-dsfr@npm:8.6.0"
+"@gouvminint/vue-dsfr@npm:^8.8.0":
+  version: 8.8.0
+  resolution: "@gouvminint/vue-dsfr@npm:8.8.0"
   dependencies:
     "@gouvfr/dsfr": ~1.13.0
     focus-trap: ^7.6.4
@@ -3046,7 +3046,7 @@ __metadata:
     vue-router: ^4.5.0
   bin:
     vue-dsfr-icons: meta/custom-icon-collections-creator-bin.js
-  checksum: 2b5060226e62af1d7badecab54d424921d23eaa047e38ac42041147a0325c6de27b66caf74498fb9b910c72ca1aa8c122cb8957d1558eedfc6bfa770b1b0d062
+  checksum: c1fc27befa8a9fbf9131aec877dcd5c295bdb8306fca80654deb247ce86524a05e31c9315f0699a1b76844c372999b1ed43e301ef2451873414dfb994fc11829
   languageName: node
   linkType: hard
 
@@ -5845,7 +5845,7 @@ __metadata:
   resolution: "@resorptionbidonvilles/webapp3@workspace:packages/frontend/webapp"
   dependencies:
     "@gouvfr/dsfr": 1.13.2
-    "@gouvminint/vue-dsfr": ^8.6.0
+    "@gouvminint/vue-dsfr": ^8.8.0
     "@iconify-json/bxs": latest
     "@iconify-json/carbon": ^1.2.13
     "@iconify-json/mdi": latest
