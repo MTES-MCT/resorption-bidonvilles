@@ -14,32 +14,20 @@
             <div
                 class="mb-4 px-6 -mt-1 pt-px flex flex-col sm:flex-row justify-between sm:gap-2"
             >
-                <div>
-                    <Tag
-                        tabindex="0"
-                        :aria-label="actionPeriod"
-                        :class="[
-                            'text-xs uppercase text-primary',
-                            isHover ? 'shadow-md' : '',
-                        ]"
-                    >
-                        <span>
-                            {{ actionPeriod }}
-                        </span>
-                    </Tag>
+                <div class="-mt-[1px]">
+                    <DsfrBadge
+                        :label="actionPeriod"
+                        noIcon
+                        type="info"
+                        class="mt-1 gap-2 lg:place-self-end text-xs items-center py-2"
+                    />
                 </div>
                 <div class="mt-[3px]" v-if="attachmentsLabel">
-                    <Tag
-                        tabindex="0"
-                        :aria-label="attachmentsLabel"
-                        variant="highlight"
-                        :class="[
-                            'text-xs uppercase text-primary justify-self-end items-center gap-2',
-                            isHover ? 'shadow-md' : '',
-                        ]"
-                        ><Icon icon="paperclip" class="text-xs md:text-md" />
-                        {{ attachmentsLabel }}</Tag
-                    >
+                    <DsfrBadge
+                        :label="attachmentsLabel"
+                        type="info"
+                        class="lg:place-self-end text-xs items-center py-1.5"
+                    />
                 </div>
             </div>
 
@@ -92,7 +80,6 @@ import formatDate from "@common/utils/formatDate";
 import focusClasses from "@common/utils/focus_classes";
 
 import { RouterLink } from "vue-router";
-import { Icon, Tag } from "@resorptionbidonvilles/ui";
 import CarteActionColonneChampsIntervention from "./CarteActionColonneChampsIntervention.vue";
 import CarteActionDetailleeColonneDepartement from "./CarteActionDetailleeColonneDepartement.vue";
 import CarteActionDetailleeColonneLocalisation from "./CarteActionDetailleeColonneLocalisation.vue";
