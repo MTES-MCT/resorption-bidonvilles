@@ -11,16 +11,7 @@
             <h2 class="font-bold text-lg">{{ shantytown.usename }}</h2>
             <p class="text-lg">{{ shantytown.city.name }}</p>
 
-            <p class="m-0">
-                <!-- <Tag
-                    class="mt-2"
-                    display="inline-block"
-                    variant="short"
-                    v-if="shantytown.resorptionTarget"
-                >
-                    {{ shantytown.resorptionTarget }}
-                </Tag> -->
-            </p>
+            <p class="m-0"></p>
             <p class="m-0" v-if="shantytown.completionRate < 0.8">
                 <Tag
                     display="inline-block"
@@ -111,7 +102,7 @@ const props = defineProps({
     },
 });
 const { shantytown } = toRefs(props);
-console.log("shantytown resorptionTarget: ", shantytown.value.resorptionTarget);
+
 const stableConditions = getStableConditions(shantytown);
 const pinVariant = computed(() => {
     const { months } = getSince(shantytown.value.updatedAt);
