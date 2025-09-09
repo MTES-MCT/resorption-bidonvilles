@@ -12,13 +12,14 @@
             <p class="text-lg">{{ shantytown.city.name }}</p>
 
             <p class="m-0">
-                <TagObjectifResorption
+                <!-- <Tag
                     class="mt-2"
                     display="inline-block"
                     variant="short"
                     v-if="shantytown.resorptionTarget"
-                    :target="shantytown.resorptionTarget"
-                />
+                >
+                    {{ shantytown.resorptionTarget }}
+                </Tag> -->
             </p>
             <p class="m-0" v-if="shantytown.completionRate < 0.8">
                 <Tag
@@ -102,7 +103,6 @@ import getStableConditions from "@/utils/getStableConditions";
 
 import { Icon, Link, Tag } from "@resorptionbidonvilles/ui";
 import NombreHabitants from "@/components/NombreHabitants/NombreHabitants.vue";
-import TagObjectifResorption from "@/components/TagObjectifResorption/TagObjectifResorption.vue";
 
 const props = defineProps({
     shantytown: {
@@ -111,6 +111,7 @@ const props = defineProps({
     },
 });
 const { shantytown } = toRefs(props);
+console.log("shantytown resorptionTarget: ", shantytown.value.resorptionTarget);
 const stableConditions = getStableConditions(shantytown);
 const pinVariant = computed(() => {
     const { months } = getSince(shantytown.value.updatedAt);

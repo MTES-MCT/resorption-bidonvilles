@@ -32,10 +32,6 @@
             <p class="mt-1" v-if="activity.actionEntity">
                 <span class="font-bold">{{ activity.actionEntity.name }}</span>
             </p>
-            <TagObjectifResorption
-                v-if="resorptionTarget"
-                :target="resorptionTarget"
-            />
             <p class="text-G700">{{ formatActivityDate(activity.date) }}</p>
             <!-- eslint-disable prettier/prettier -->
             <blockquote v-if="description" class="mt-3 border-l-4 border-primary py-1 pl-2 italic whitespace-pre-line">
@@ -53,7 +49,6 @@ import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
 
 import { Icon } from "@resorptionbidonvilles/ui";
-import TagObjectifResorption from "@/components/TagObjectifResorption/TagObjectifResorption.vue";
 
 const props = defineProps({
     activity: {
@@ -209,14 +204,6 @@ const subtitle = computed(() => {
         default:
             return "";
     }
-});
-
-const resorptionTarget = computed(() => {
-    if (activity.value.entity === "shantytown") {
-        return activity.value.shantytown.resorptionTarget || null;
-    }
-
-    return null;
 });
 
 const description = computed(() => {
