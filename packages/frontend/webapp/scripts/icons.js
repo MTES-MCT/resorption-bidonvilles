@@ -5,7 +5,7 @@ const { icons: uilCollection } = require("@iconify-json/uil");
 const { icons: bxsCollection } = require("@iconify-json/bxs");
 const { icons: carbonCollection } = require("@iconify-json/carbon");
 
-const riIconNames = ["file-excel-fill"];
+const riIconNames = ["file-excel-fill", "flag-fill"];
 
 const mdiIconNames = [
     "account-edit",

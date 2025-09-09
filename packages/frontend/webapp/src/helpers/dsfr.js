@@ -1,4 +1,5 @@
 import {
+    DsfrAccordion,
     DsfrAlert,
     DsfrBadge,
     DsfrButton,
@@ -12,6 +13,7 @@ import {
     DsfrSegmented,
     DsfrSegmentedSet,
     DsfrTile,
+    VIcon,
 } from "@gouvminint/vue-dsfr";
 
 import "@gouvfr/dsfr/dist/dsfr.min.css";
@@ -27,6 +29,7 @@ for (const collection of collections) {
 }
 
 export function useDsfr(app) {
+    app.component("DsfrAccordion", DsfrAccordion);
     app.component("DsfrAlert", DsfrAlert);
     app.component("DsfrBadge", DsfrBadge);
     app.component("DsfrButton", DsfrButton);
@@ -40,4 +43,5 @@ export function useDsfr(app) {
     app.component("DsfrSegmented", DsfrSegmented);
     app.component("DsfrSegmentedSet", DsfrSegmentedSet);
     app.component("DsfrTile", DsfrTile);
+    app.component("VIcon", VIcon);
 }

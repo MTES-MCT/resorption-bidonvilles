@@ -5,6 +5,9 @@ const collections = [
             "file-excel-fill": {
                 body: '<path fill="currentColor" d="m16 2l5 5v14.008a.993.993 0 0 1-.993.992H3.993A1 1 0 0 1 3 21.008V2.992C3 2.444 3.445 2 3.993 2zm-2.8 10L16 8h-2.4L12 10.286L10.4 8H8l2.8 4L8 16h2.4l1.6-2.286L13.6 16H16z"/>',
             },
+            "flag-fill": {
+                body: '<path fill="currentColor" d="M3 3h9.382a1 1 0 0 1 .894.553L14 5h6a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-6.382a1 1 0 0 1-.894-.553L12 16H5v6H3z"/>',
+            },
         },
         width: 24,
         height: 24,
@@ -21,7 +24,9 @@ const collections = [
             "home-remove-outline": {
                 body: '<path fill="currentColor" d="m14.46 15.88l1.42-1.42L18 16.59l2.12-2.12l1.42 1.41L19.41 18l2.13 2.12l-1.42 1.42L18 19.41l-2.12 2.13l-1.42-1.42L16.59 18l-2.12-2.12M5 20v-8H2l10-9l10 9h-5v-1.81l-5-4.5l-5 4.5V18h5c0 .7.12 1.37.34 2z"/>',
             },
-            play: { body: '<path fill="currentColor" d="M8 5.14v14l11-7z"/>' },
+            play: {
+                body: '<path fill="currentColor" d="M8 5.14v14l11-7z"/>',
+            },
         },
         width: 24,
         height: 24,
@@ -57,7 +62,11 @@ const collections = [
         height: 32,
     },
 ];
-export const ri = { fileExcelFill: "ri:file-excel-fill" };
+
+export const ri = {
+    fileExcelFill: "ri:file-excel-fill",
+    flagFill: "ri:flag-fill",
+};
 export const mdi = {
     accountEdit: "mdi:account-edit",
     deleteOutline: "mdi:delete-outline",
