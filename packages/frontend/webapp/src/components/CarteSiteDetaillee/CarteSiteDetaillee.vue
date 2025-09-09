@@ -149,13 +149,13 @@ function handleClickOnCard(event, navigateFunction) {
 }
 
 .closedShantytown {
+    position: relative;
+    overflow: hidden;
     .cardGridTemplateColumns {
         @media print {
             grid-template-columns: 140px 91px 150px 154px 0px;
         }
     }
-    position: relative;
-    overflow: hidden;
 }
 
 @media not print {
