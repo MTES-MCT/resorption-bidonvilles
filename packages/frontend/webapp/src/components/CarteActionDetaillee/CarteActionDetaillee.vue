@@ -14,7 +14,7 @@
             <div
                 class="mb-4 px-6 -mt-1 pt-px flex flex-col sm:flex-row justify-between sm:gap-2"
             >
-                <div>
+                <div class="-mt-[1px]">
                     <DsfrBadge
                         :label="actionPeriod"
                         noIcon
@@ -26,7 +26,7 @@
                     <DsfrBadge
                         :label="attachmentsLabel"
                         type="info"
-                        class="mt-1 gap-2 lg:place-self-end text-xs items-center py-2"
+                        class="lg:place-self-end text-xs items-center py-1.5"
                     />
                 </div>
             </div>
