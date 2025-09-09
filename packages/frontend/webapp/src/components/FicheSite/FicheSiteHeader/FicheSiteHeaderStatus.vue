@@ -9,7 +9,8 @@
             />
             <BadgeSiteObjectifResorption
                 v-if="town.resorptionTarget"
-                :target="town.resorptionTarget"
+                :resorptionTarget="town.resorptionTarget"
+                small
                 class="mr-4"
             />
         </div>
