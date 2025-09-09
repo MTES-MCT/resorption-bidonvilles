@@ -1,85 +1,53 @@
 <template>
     <header class="px-6 flex flex-col lg:flex-row justify-between">
         <div class="flex-col sm:flex-row">
-            <Tag
-                :variant="pinVariant"
-                :class="[
-                    'text-xs uppercase',
-                    isHover ? 'shadow-md' : '',
-                    'lastUpdatedAtDotColor',
-                ]"
-                class="mt-1 items-center py-2 mr-2"
-            >
-                {{ formatLastUpdatedAt(townForLastUpdate) }}
-            </Tag>
-            <Tag
+            <DsfrBadge
+                :type="badgeType"
+                :label="townStatus"
+                class="mt-1 items-center text-xs py-2 mr-2"
+            />
+            <DsfrBadge
                 v-if="heatwaveStatus === true"
-                variant="highlight"
-                :class="[
-                    'mt-1 text-xs uppercase text-primary items-center py-2 mr-2',
-                    isHover ? 'shadow-md' : '',
-                ]"
-            >
-                Risque Canicule
-            </Tag>
-
-            <ResorptionTargetTag
-                v-if="shantytown.resorptionTarget"
-                :target="shantytown.resorptionTarget"
-                :isHover="isHover"
-                class="mt-1 items-center py-2"
+                label="Risque Canicule"
+                type="warning"
+                class="mt-1 items-center text-xs py-2 mr-2"
+            />
+            <BadgeSiteOjectifResorption
+                :resorption-target="shantytown.resorptionTarget"
             />
         </div>
         <div class="flex right-14" v-if="attachmentsLabel">
-            <Tag
-                variant="highlight"
-                :class="[
-                    'text-xs lg:text-xs uppercase text-primary',
-                    isHover ? 'shadow-md' : '',
-                ]"
-                class="mt-1 gap-2 lg:place-self-end items-center py-0"
-            >
-                <Icon icon="paperclip" class="text-sm lg:text-md" />
-                {{ attachmentsLabel }}
-            </Tag>
+            <DsfrBadge
+                :label="attachmentsLabel"
+                type="info"
+                class="mt-1 lg:place-self-end text-xs py-2"
+            />
         </div>
     </header>
 </template>
 
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
-import getSince from "@/utils/getSince";
-import formatLastUpdatedAt from "@/utils/formatLastUpdatedAt";
 
-import { Tag, Icon } from "@resorptionbidonvilles/ui";
-import ResorptionTargetTag from "@/components/TagObjectifResorption/TagObjectifResorption.vue";
 import { useUserStore } from "@/stores/user.store";
-
 import useLastUpdated from "@/composables/useLastUpdated";
+import BadgeSiteOjectifResorption from "@/composables/BadgeSiteOjectifResorption.vue";
+import getStatusBadgeType from "@/utils/getStatusBadgeType";
 
 const props = defineProps({
-    shantytown: Object,
+    shantytown: {
+        type: Object,
+        required: true,
+    },
     isHover: {
         type: Boolean,
         default: false,
     },
 });
-const { shantytown, isHover } = toRefs(props);
-
-const { townForLastUpdate } = useLastUpdated(shantytown);
+const { shantytown } = toRefs(props);
+const { townStatus } = useLastUpdated(shantytown);
 
 const userStore = useUserStore();
-
-const pinVariant = computed(() => {
-    const { months } = getSince(shantytown.value.lastUpdatedAt);
-
-    if (months >= 6) {
-        return "pin_red";
-    } else if (months >= 3) {
-        return "pin_orange";
-    }
-    return "pin_green";
-});
 
 const heatwaveStatus = computed(() => {
     return shantytown.value.heatwaveStatus;
@@ -106,5 +74,23 @@ const attachmentsLabel = computed(() => {
         : totalAttachments === 0
         ? null
         : `${totalAttachments} Document partagé`;
+});
+
+const badgeType = computed(() => {
+    if (
+        shantytown.value.closedAt &&
+        shantytown.value.closedWithSolutions !== "yes"
+    ) {
+        return "error";
+    } else if (
+        shantytown.value.closedAt &&
+        shantytown.value.closedWithSolutions === "yes"
+    ) {
+        return "success";
+    }
+    return getStatusBadgeType(
+        shantytown.value.updatedAt,
+        shantytown.value.lastUpdatedAt
+    );
 });
 </script>

@@ -36,7 +36,6 @@ export { default as MandatoryStar } from './components/Input/utils/MandatoryStar
 export { default as Menu } from './components/Menu/Menu.vue';
 export { default as MenuItem } from './components/Menu/MenuItem.vue';
 export { default as Modal } from './components/Modal.vue';
-export { default as PanelInfo } from './components/PanelInfo.vue';
 export { default as Radio } from './components/Input/Radio.vue';
 export { default as RbLogo } from './components/RbLogo.vue';
 export { default as Spinner } from './components/Spinner.vue';

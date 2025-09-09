@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex flex-col xs:flex-row gap-2">
         <QuestionTag v-for="tag in question.tags" :key="tag.uid" :tag="tag" />
     </div>
 </template>

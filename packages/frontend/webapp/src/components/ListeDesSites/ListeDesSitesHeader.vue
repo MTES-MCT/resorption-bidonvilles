@@ -2,8 +2,7 @@
     <ViewHeader icon="tent">
         <template v-slot:title>Liste des sites</template>
         <template v-slot:description
-            >Consultez et gérez la liste des sites au national ou sur votre
-            territoire</template
+            >Consultez et gérez la liste des sites</template
         >
         <template v-slot:actions>
             <ListeDesSitesBoutons />

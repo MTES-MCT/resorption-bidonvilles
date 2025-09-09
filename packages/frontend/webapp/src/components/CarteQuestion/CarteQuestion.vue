@@ -10,7 +10,6 @@
         >
             <div class="absolute right-4 text-secondary px-2">
                 <div
-                    tabindex="0"
                     class="text-sm font-bold"
                     v-if="
                         question.peopleAffected && question.peopleAffected > 0
@@ -37,17 +36,13 @@
                     {{ formatUserName(question.createdBy) }}
                 </LinkOrganization>
             </div>
-            <div
-                tabindex="0"
-                aria-label="Liste des étiquettes caractérisant la question"
-            >
+            <div aria-label="Liste des étiquettes caractérisant la question">
                 <QuestionTag
-                    v-for="tag in question.tags"
-                    :key="tag.uid"
+                    v-for="(tag, index) in tags"
+                    :key="index"
+                    class="px-3 mr-2 text-sm"
                     :tag="tag"
-                >
-                    {{ tag.name }}
-                </QuestionTag>
+                />
             </div>
             <CarteQuestionFooter :question="question" />
         </div>
@@ -55,7 +50,7 @@
 </template>
 
 <script setup>
-import { toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import focusClasses from "@common/utils/focus_classes";
 
 import CarteQuestionQuestion from "./CarteQuestionQuestion.vue";
@@ -71,4 +66,14 @@ const props = defineProps({
     },
 });
 const { question } = toRefs(props);
+const tags = computed(() => {
+    if (!question.value.tags) {
+        return [];
+    }
+    return question.value.tags.map((tag) => ({
+        uid: tag.uid,
+        name: tag.name,
+        selected: true,
+    }));
+});
 </script>
