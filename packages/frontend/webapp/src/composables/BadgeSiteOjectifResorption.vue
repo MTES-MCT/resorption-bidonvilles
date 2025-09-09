@@ -4,14 +4,15 @@
         :noIcon="noicon"
         :label="objectifResorptionLabel(resorptionTarget)"
         type="info"
-        class="mt-1 text-xs py-2 mr-2"
+        :small="small"
+        class="text-xs py-1.5 mr-2"
+        :class="{ 'mt-1': !small, '!py-2': !small }"
     />
 </template>
 
 <script setup>
-import { defineProps } from "vue";
-
-defineProps({
+import { toRefs } from "vue";
+const props = defineProps({
     resorptionTarget: {
         type: String,
         default: null,
@@ -20,7 +21,13 @@ defineProps({
         type: Boolean,
         default: false,
     },
+    small: {
+        type: Boolean,
+        default: false,
+    },
 });
+const { resorptionTarget, noicon } = toRefs(props);
+console.log("resorptionTarget: ", resorptionTarget.value);
 
 function objectifResorptionLabel(target) {
     return `Objectif résorption ${target} par la Préfecture`;
