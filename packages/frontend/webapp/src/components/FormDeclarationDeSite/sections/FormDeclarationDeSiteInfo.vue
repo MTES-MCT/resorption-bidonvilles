@@ -10,6 +10,7 @@
 
     <DsfrAccordion>
         <template #title>
+            <VIcon name="ri-flag-fill" class="mr-2" />
             <p class="font-bold">Qu'est-ce qu'un site ?</p>
         </template>
         <template v-slot:default>
