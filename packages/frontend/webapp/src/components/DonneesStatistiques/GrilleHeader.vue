@@ -7,14 +7,12 @@
             :class="separator ? 'border-r' : ''"
         >
             <p><slot /></p>
-            <Icon icon="chevron-down" v-if="$slots.default" />
         </div>
     </div>
 </template>
 
 <script setup>
 import { toRefs } from "vue";
-import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     separator: {
