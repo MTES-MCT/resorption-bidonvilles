@@ -10,6 +10,7 @@ import parametres from "../components/DonneesStatistiques/DonneesStatistiques.pa
 export const useMetricsStore = defineStore("metrics", () => {
     const nationStatus = ref(null); // null: lancement, 'init': initialisation, 'loaded': chargé, 'refresh': màj
     const error = ref(null);
+    const hexagoneMetrics = ref({});
     const metrics = ref([]);
     const evolution = {
         from: ref(
@@ -38,6 +39,29 @@ export const useMetricsStore = defineStore("metrics", () => {
     });
     const showParametres = ref(false);
     const parametresDeVue = ref([]);
+
+    const createHexagoneTileMetrics = (fullMetrics) => {
+        hexagoneMetrics.value = {
+            summary: {
+                number_of_towns: {
+                    all: fullMetrics.metrics.number_of_towns.to,
+                    eu_only:
+                        fullMetrics.metrics.number_of_towns_european_10_and_over
+                            .to,
+                    out_of_date:
+                        fullMetrics.metrics.number_of_towns_out_of_date.to,
+                    unknown_population:
+                        fullMetrics.metrics.number_of_towns_unknown_origin.to,
+                },
+                number_of_persons: {
+                    all: fullMetrics.metrics.number_of_persons.to,
+                    eu_only:
+                        fullMetrics.metrics
+                            .number_of_persons_european_10_and_over.to,
+                },
+            },
+        };
+    };
 
     const filteredMetrics = computed(() => {
         return filterMetrics(
@@ -76,6 +100,7 @@ export const useMetricsStore = defineStore("metrics", () => {
         to,
         loadedDates: loaded,
         filteredMetrics,
+        hexagoneMetrics,
         metrics,
         evolution,
         collapsedStatuses,
@@ -103,12 +128,16 @@ export const useMetricsStore = defineStore("metrics", () => {
 
             nationStatus.value =
                 nationStatus.value === "loaded" ? "refresh" : "init";
+            hexagoneMetrics.value = {};
             metrics.value = [];
             try {
                 metrics.value = await getNationMetrics(from.value, to.value);
                 nationStatus.value = "loaded";
                 loaded.value.from = new Date(from.value);
                 loaded.value.to = new Date(to.value);
+                createHexagoneTileMetrics(
+                    metrics.value.filter((m) => m.uid === "metropole")[0]
+                );
                 return metrics.value;
             } catch (e) {
                 error.value =
