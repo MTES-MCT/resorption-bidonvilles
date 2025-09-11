@@ -12,6 +12,7 @@ import {
     DsfrSearchBar,
     DsfrSegmented,
     DsfrSegmentedSet,
+    DsfrTag,
     DsfrTile,
     VIcon,
 } from "@gouvminint/vue-dsfr";
@@ -42,6 +43,7 @@ export function useDsfr(app) {
     app.component("DsfrSearchBar", DsfrSearchBar);
     app.component("DsfrSegmented", DsfrSegmented);
     app.component("DsfrSegmentedSet", DsfrSegmentedSet);
+    app.component("DsfrTag", DsfrTag);
     app.component("DsfrTile", DsfrTile);
     app.component("VIcon", VIcon);
 }
