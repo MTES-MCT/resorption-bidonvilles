@@ -134,16 +134,16 @@ export default {
             },
         ],
     },
-    solvedOrClosed: {
+    resorbedOrClosed: {
         label: "Résorbé / fermé",
-        id: "solvedOrClosed",
+        id: "resorbedOrClosed",
         options: [
             {
                 value: "closed",
                 label: "Fermé",
             },
             {
-                value: "solved",
+                value: "resorbed",
                 label: "Résorbé",
             },
         ],

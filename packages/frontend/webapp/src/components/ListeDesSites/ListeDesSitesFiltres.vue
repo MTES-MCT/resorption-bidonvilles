@@ -127,7 +127,7 @@ const groupedFilters = {
         ],
     },
     close: {
-        default: [filters.solvedOrClosed],
+        default: [filters.resorbedOrClosed],
         optional: [
             filters.target,
             filters.origin,

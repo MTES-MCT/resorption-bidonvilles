@@ -165,7 +165,7 @@ export const useTownsStore = defineStore("towns", () => {
         filters.properties.value.heatwave = [];
         // Filtres spécifiques aux sites fermés
         filters.properties.value.closingReason = [];
-        filters.properties.value.solvedOrClosed = [];
+        filters.properties.value.resorbedOrClosed = [];
     }
 
     function reset() {

@@ -1,5 +1,5 @@
 import isShantytownClosed from "./isShantytownClosed";
-import isShantytownSolved from "./isShantytownSolved";
+import isShantytownResorbed from "./isShantytownResorbed";
 
 export default function (shantytowns, filters) {
     return shantytowns.filter((shantytown) => {
@@ -114,8 +114,8 @@ export default function (shantytowns, filters) {
 
         if (
             filters.status === "close" &&
-            filters.solvedOrClosed.length > 0 &&
-            !checkSolvedOrClosed(shantytown, filters.solvedOrClosed)
+            filters.resorbedOrClosed.length > 0 &&
+            !checkResorbedOrClosed(shantytown, filters.resorbedOrClosed)
         ) {
             return false;
         }
@@ -318,10 +318,10 @@ function checkClosingReason(shantytown, filters) {
 }
 
 /**
- * Filter on "solved or closed ?"
+ * Filter on "resorbed or closed ?"
  */
-function checkSolvedOrClosed(shantytown, filters) {
-    if (filters.includes("solved") && isShantytownSolved(shantytown)) {
+function checkResorbedOrClosed(shantytown, filters) {
+    if (filters.includes("resorbed") && isShantytownResorbed(shantytown)) {
         return true;
     }
     if (filters.includes("closed") && isShantytownClosed(shantytown)) {
