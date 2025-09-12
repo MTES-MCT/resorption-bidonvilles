@@ -1,24 +1,28 @@
 <template>
-    <article class="border border-G400 flex w-96 hover:border-G500">
-        <div class="w-32 h-32 bg-G200 flex items-center justify-center">
-            <img :src="avatarImg" class="w-28" alt="invité" />
-        </div>
-        <div class="flex-1 flex flex-col justify-center px-4 relative">
-            <a
-                class="absolute right-2 top-2 !text-primary text-sm hover:underline !cursor-pointer"
-                @click="$emit('remove')"
-                ><Icon icon="fa-regular fa-trash-alt" /> Retirer</a
-            >
-            <p class="font-bold">{{ first_name }} {{ last_name }}</p>
-            <p>{{ email }}</p>
-        </div>
-    </article>
+    <div class="relative w-96">
+        <DsfrButton
+            size="sm"
+            tertiary
+            no-outline
+            icon="fr-icon-delete-line"
+            class="absolute top-1 right-1 z-10"
+            @click="$emit('remove')"
+            >Retirer</DsfrButton
+        >
+        <DsfrTile
+            :title="`${ellipsis(first_name + ' ' + last_name)}`"
+            :description="email"
+            :icon="false"
+            horizontal
+            :img-src="avatarImg"
+            class="pointer-events-none text-wrap"
+        />
+    </div>
 </template>
 
 <script setup>
 import avatarImg from "@/assets/img/illustrations/avatar.svg";
 import { defineProps, toRefs } from "vue";
-import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     first_name: String,
@@ -27,4 +31,7 @@ const props = defineProps({
 });
 
 const { first_name, last_name, email } = toRefs(props);
+
+const ellipsis = (str, max = 20) =>
+    str.length > max ? str.slice(0, max - 1) + "…" : str;
 </script>
