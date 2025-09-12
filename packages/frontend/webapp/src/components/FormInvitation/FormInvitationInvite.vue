@@ -11,7 +11,7 @@
         >
         <DsfrTile
             :title="`${ellipsis(first_name + ' ' + last_name)}`"
-            :description="email"
+            :description="`&#9993; ${ellipsis(email, 22)}`"
             :icon="false"
             horizontal
             :img-src="avatarImg"
