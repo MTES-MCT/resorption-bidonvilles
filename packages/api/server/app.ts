@@ -4,7 +4,7 @@ import config from '#server/config';
 import PrometheusMetricsHandler from '#server/middlewares/prometheusMiddleware';
 
 const {
-    port, sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners, anonymizeInactiveUsers,
+    port, sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners, anonymizeInactiveUsers, logInProd,
 } = config;
 
 const sentryContextHandlers = (app) => {
@@ -72,8 +72,9 @@ export default {
 
             if (sendActivitySummary) {
                 // eslint-disable-next-line no-console
-                console.log('Activity summary job is enabled');
-                await agenda.every('0 0 7 * * 1', 'send_activity_summary'); // every monday at 7AM
+                console.log('Activity summary job is enabled every minute');
+                // await agenda.every('0 0 7 * * 1', 'send_activity_summary'); // every monday at 7AM
+                await agenda.every('0 30 15 * * 1', 'send_activity_summary'); // every monday at 3:30PM
             }
 
             if (checkInactiveUsers) {
@@ -109,6 +110,10 @@ export default {
 
             // eslint-disable-next-line no-console
             console.log('Scheduled jobs set up');
+            if (logInProd) {
+                // eslint-disable-next-line no-console
+                console.log('Agenda Jobs:', await agenda.jobs());
+            }
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error('Failed settings up scheduled jobs', error);

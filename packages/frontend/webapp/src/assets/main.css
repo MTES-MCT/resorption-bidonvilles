@@ -49,7 +49,7 @@ p {
 }
 
 @media (hover:hover) {
-     a[href]:hover, button:not(:disabled):hover:not(.fr-btn), input[type=button]:not(:disabled):hover, input[type=image]:not(:disabled):hover, input[type=reset]:not(:disabled):hover, input[type=submit]:not(:disabled):hover {
+     a[href]:hover, button:not(:disabled):not(.fr-tag):hover:not(.fr-btn), input[type=button]:not(:disabled):hover, input[type=image]:not(:disabled):hover, input[type=reset]:not(:disabled):hover, input[type=submit]:not(:disabled):hover {
         background: none;
     }
 }
