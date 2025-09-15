@@ -27,7 +27,6 @@ const props = defineProps({
     },
 });
 const { resorptionTarget, noicon } = toRefs(props);
-console.log("resorptionTarget: ", resorptionTarget.value);
 
 function objectifResorptionLabel(target) {
     return `Objectif résorption ${target} par la Préfecture`;

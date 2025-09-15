@@ -7,9 +7,7 @@
             : 'cursor-pointer border-transparent'
     ]">
         <span v-if="$slots.ofwhich" class="mr-2 text-sm"><slot name="ofwhich" /></span>
-        <span v-if="$slots.prefix" class="mr-1 rounded text-sm px-1 border" :class="[
-            active ? 'border-transparent text-white bg-primary' : 'border-primary text-primary',
-        ]"><slot name="prefix" /></span>
+        <DsfrTag small selectable :selected="active"><slot name="prefix" /></DsfrTag>
         <slot />
     </button>
 </template>
