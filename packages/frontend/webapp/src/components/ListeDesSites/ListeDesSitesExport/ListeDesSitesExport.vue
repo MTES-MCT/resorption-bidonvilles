@@ -54,9 +54,17 @@ const userStore = useUserStore();
 const modale = ref(null);
 const isLoading = ref(false);
 const error = ref(null);
-const isClosed = computed(() => townsStore.filters.status === "close");
 const title = computed(() => {
-    return isClosed.value ? "sites fermés" : "sites existants";
+    switch (townsStore.filters.status) {
+        case "open":
+            return "sites existants";
+        case "close":
+            return "sites fermés";
+        case "inProgress":
+            return "sites en cours de résorption";
+        default:
+            return "sites";
+    }
 });
 const canExportHistory = computed(() => {
     return userStore.hasPermission("shantytown_history.export");
@@ -85,15 +93,30 @@ async function download() {
                 type: townsStore.filters.location?.typeUid || "nation",
                 code: townsStore.filters.location?.code || null,
             },
-            isClosed.value,
+            townsStore.filters.status,
+            // isClosed.value,
             townsStore.exportOptions,
-            values.date
+            values.date,
+            townsStore.filters.properties
         );
+        const exportedSitesStatus = (() => {
+            switch (townsStore.filters.status) {
+                case "open":
+                    return "existants";
+                case "close":
+                    return "fermés";
+                case "inProgress":
+                    return "en cours";
+                default:
+                    return "existants";
+            }
+        })();
         downloadBlob(
             new Blob([data]),
-            `${formatDate(values.date.getTime() / 1000, "y-m-d")}-sites-${
-                isClosed.value ? "fermés" : "existants"
-            }-resorption-bidonvilles.xlsx`
+            `${formatDate(
+                values.date.getTime() / 1000,
+                "y-m-d"
+            )}-sites-${exportedSitesStatus}-resorption-bidonvilles.xlsx`
         );
         trackEvent("Export", "Export sites");
         notificationStore.success(
