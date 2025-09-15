@@ -49,16 +49,16 @@
             <p
                 class="flex flex-col items-center space-y-2 lg:flex-row-reverse lg:space-y-0"
             >
-                <Button type="submit" class="ml-2" :loading="isLoading"
-                    >Ajouter ce contact</Button
+                <DsfrButton type="submit" class="ml-2" :loading="isLoading"
+                    >Ajouter ce contact</DsfrButton
                 >
-                <Button
+                <DsfrButton
                     type="button"
                     variant="primaryOutline"
                     class="ml-2"
                     v-if="guests.length === 0 && showSkip"
                     @click="backHome"
-                    >Ignorer cette étape</Button
+                    >Ignorer cette étape</DsfrButton
                 >
             </p>
         </template>
@@ -70,10 +70,12 @@
         </h1>
 
         <ContentWrapper
-            size="medium"
-            class="flex flex-col items-center space-y-4"
+            size="large"
+            class="flex flex-col items-center space-y-4 w-full p-2"
         >
-            <section class="flex flex-col space-y-4">
+            <section
+                class="w-full flex flex-row flex-wrap gap-4 justify-center"
+            >
                 <FormInvitationInvite
                     v-for="(guest, index) in guests"
                     :key="guest.email"
@@ -81,8 +83,11 @@
                     @remove="removeGuest(index)"
                 />
             </section>
-            <Button type="button" @click="sendInvitations" :loading="isLoading"
-                >Envoyer les invitations</Button
+            <DsfrButton
+                type="button"
+                @click="sendInvitations"
+                :loading="isLoading"
+                >Envoyer les invitations</DsfrButton
             >
         </ContentWrapper>
     </div>
@@ -97,7 +102,7 @@ import { useNotificationStore } from "@/stores/notification.store";
 import { create } from "@/api/invitations.api.js";
 
 // components
-import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import FormPublic from "@/components/FormPublic/FormPublic.vue";
 import FormInvitationInputEmail from "./inputs/FormInvitationInputEmail.vue";
 import FormInvitationInputFirstName from "./inputs/FormInvitationInputFirstName.vue";
