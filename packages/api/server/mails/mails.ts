@@ -9,7 +9,7 @@ import generateTrackingUTM from './generateTrackingUTM';
 
 const { formatName } = userModel;
 const {
-    wwwUrl, webappUrl, backUrl, blogUrl,
+    wwwUrl, webappUrl, backUrl, blogUrl, logInProd,
 } = config;
 
 const formationUrl = 'https://framaforms.org/sinscrire-a-une-session-de-prise-en-main-resorption-bidonvilles-1702635472';
@@ -992,26 +992,31 @@ export default {
         } as SortedQuestions);
 
         const utm = generateTrackingUTM(SUMMARY_CAMPAIGN, variables.campaign);
+        const sentVariables = {
+            from: variables.from,
+            to: variables.to,
+            recipientName: formatName(recipient),
+            connexionUrl: `${connexionUrl}?${utm}`,
+            showDetails: variables.showDetails ?? false,
+            summaries: variables.summaries,
+            show_question_summary: sortedQuestions.questions_with_answers.length > 0 || sortedQuestions.questions_without_answers.length > 0,
+            questions_with_answers_length: sortedQuestions.questions_with_answers.length,
+            questions_with_answers: sortedQuestions.questions_with_answers,
+            questions_without_answers_length: sortedQuestions.questions_without_answers.length,
+            questions_without_answers: sortedQuestions.questions_without_answers,
+            backUrl,
+            wwwUrl,
+            webappUrl,
+            utm,
+            blogUrl,
+        };
+        if (logInProd) {
+            // eslint-disable-next-line no-console
+            console.log('Envoi du récap hebdo au mailservice');
+        }
         return mailService.send('activity_summary', {
             recipient,
-            variables: {
-                from: variables.from,
-                to: variables.to,
-                recipientName: formatName(recipient),
-                connexionUrl: `${connexionUrl}?${utm}`,
-                showDetails: variables.showDetails ?? false,
-                summaries: variables.summaries,
-                show_question_summary: sortedQuestions.questions_with_answers.length > 0 || sortedQuestions.questions_without_answers.length > 0,
-                questions_with_answers_length: sortedQuestions.questions_with_answers.length,
-                questions_with_answers: sortedQuestions.questions_with_answers,
-                questions_without_answers_length: sortedQuestions.questions_without_answers.length,
-                questions_without_answers: sortedQuestions.questions_without_answers,
-                backUrl,
-                wwwUrl,
-                webappUrl,
-                utm,
-                blogUrl,
-            },
+            sentVariables,
             preserveRecipient,
         });
     },

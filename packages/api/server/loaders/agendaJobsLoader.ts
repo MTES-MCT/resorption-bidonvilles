@@ -17,7 +17,7 @@ const {
     sendUserReview,
 } = mailUtils;
 const {
-    sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners: shouldAnonymizeOwners, anonymizeInactiveUsers,
+    sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners: shouldAnonymizeOwners, anonymizeInactiveUsers, logInProd,
 } = config;
 
 export default (agenda) => {
@@ -42,6 +42,10 @@ export default (agenda) => {
     agenda.define(
         'send_activity_summary',
         async () => {
+            if (logInProd) {
+                // eslint-disable-next-line no-console
+                console.log("Début du job d'envoi du récap hebdo");
+            }
             if (sendActivitySummary) {
                 const now = moment().utcOffset(2).subtract(7, 'days');
                 await activitySummary.sendAll(now.date(), now.month(), now.year());
