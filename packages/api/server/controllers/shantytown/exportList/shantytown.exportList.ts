@@ -3,6 +3,7 @@ import shantytownService from '#server/services/shantytown';
 import { Location } from '#server/models/geoModel/Location.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { ShantytownExportListOption } from '#server/services/shantytown/_common/createExportSections';
+import { ExportedSitesStatus } from '#root/types/resources/exportedSitesStatus.d';
 
 const { exportTowns } = shantytownService;
 
@@ -17,7 +18,7 @@ interface ExportTownsRequest extends Request {
     user: AuthUser,
     body: {
         date: Date,
-        closedTowns: boolean,
+        exportedSitesStatus: ExportedSitesStatus,
         location: Location,
     },
     query: {
@@ -30,8 +31,8 @@ export default async (req: ExportTownsRequest, res: Response, next: NextFunction
         const buffer = await exportTowns(
             req.user,
             req.body.location,
+            req.body.exportedSitesStatus,
             req.query.options,
-            req.body.closedTowns,
             req.body.date,
         );
         res.end(buffer);

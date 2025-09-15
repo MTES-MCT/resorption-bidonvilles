@@ -5,15 +5,28 @@ import closingSolutionModel from '#server/models/closingSolutionModel';
 import { Location } from '#server/models/geoModel/Location.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
+import { ExportedSitesStatus } from '#root/types/resources/exportedSitesStatus.d';
 
 import serializeExportProperties from './_common/serializeExportProperties';
 import createExportSections, { type ShantytownExportListOption } from './_common/createExportSections';
 
-export default async (user: AuthUser, data: Shantytown[], options: ShantytownExportListOption[], locations: Location[], closedTowns: boolean, date: Date): Promise<Excel.Buffer> => {
+function exportedTownsStatus(exportedSitesStatus: ExportedSitesStatus) {
+    if (!exportedSitesStatus) {
+        return '';
+    }
+    const statusLibs = {
+        open: 'existants',
+        inProgress: 'en cours de résorption',
+        close: 'fernés',
+    };
+    return statusLibs[exportedSitesStatus];
+}
+
+export default async (user: AuthUser, data: Shantytown[], options: ShantytownExportListOption[], locations: Location[], exportedSitesStatus: ExportedSitesStatus, date: Date): Promise<Excel.Buffer> => {
     const isNationalExport = locations.some(l => ['nation', 'metropole', 'outremer'].includes(l.type));
     const closingSolutions = await closingSolutionModel.findAll();
     const properties = serializeExportProperties(closingSolutions);
-    const sections = await createExportSections(user, options, properties, closedTowns, closingSolutions);
+    const sections = await createExportSections(user, options, properties, exportedSitesStatus, closingSolutions);
 
     let locationName = '';
     if (isNationalExport) {
@@ -38,7 +51,7 @@ export default async (user: AuthUser, data: Shantytown[], options: ShantytownExp
     }
 
     return excelUtils.createExport(
-        closedTowns ? 'fermés' : 'existants',
+        exportedTownsStatus,
         locationName,
         sections,
         data,

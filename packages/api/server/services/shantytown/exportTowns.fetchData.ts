@@ -4,8 +4,10 @@ import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import fetchPastData from './exportTowns.fetchPastData';
 import fetchCurrentData from './exportTowns.fetchCurrentData';
+import { ExportedSitesStatus } from '#root/types/resources/exportedSitesStatus.d';
 
-export default async (user: AuthUser, locations: Location[], closedTowns: boolean, date: Date): Promise<Shantytown[]> => {
+export default async (user: AuthUser, locations: Location[], exportedSitesStatus: ExportedSitesStatus, date: Date): Promise<Shantytown[]> => {
+    const closedTowns = exportedSitesStatus !== 'close' && exportedSitesStatus !== 'inProgress';
     // export de données passées
     if (moment(date).format('YYYY-MM-DD') !== moment(new Date()).format('YYYY-MM-DD')) {
         return fetchPastData(user, locations, closedTowns, date);

@@ -2,6 +2,7 @@ import { AuthUser } from '#server/middlewares/authMiddleware';
 import organizationModel from '#server/models/organizationModel';
 import { ShantytownExportListProperty } from '#server/services/shantytown/_common/serializeExportProperties';
 import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
+import { ExportedSitesStatus } from '#root/types/resources/exportedSitesStatus.d';
 
 export type ShantytownExportListOption = 'address_details' | 'owner' | 'living_conditions' | 'demographics' | 'justice' | 'actors' | 'comments';
 type ShantytownExportSection = {
@@ -11,13 +12,18 @@ type ShantytownExportSection = {
     subsections?: ShantytownExportSection[],
 };
 
+function isClosedTowns(exportedSitesStatus: ExportedSitesStatus): boolean {
+    return exportedSitesStatus !== 'close' && exportedSitesStatus !== 'inProgress';
+}
+
 export default async (
     user: AuthUser,
     options: ShantytownExportListOption[],
     properties: { [key: string]: ShantytownExportListProperty },
-    closedTowns: boolean,
+    exportedSitesStatus: ExportedSitesStatus,
     closingSolutions: ClosingSolution[],
 ): Promise<ShantytownExportSection[]> => {
+    const closedTowns = isClosedTowns(exportedSitesStatus);
     const sections: ShantytownExportSection[] = [];
 
     const localizationSection: ShantytownExportSection = {
