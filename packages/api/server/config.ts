@@ -35,6 +35,7 @@ export default {
     cleanAttachmentsArchives: process.env.RB_API_CLEAN_ATTACHMENTS_ARCHIVES === '1',
     anonymizeOwners: process.env.RB_API_ANONYMIZE_OWNERS === '1',
     anonymizeInactiveUsers: process.env.RB_API_ANONYMIZE_INACTIVE_USERS === '1',
+    logInProd: (process.env.NODE_ENV === 'production' && process.env.RB_API_LOG_IN_PROD === '1') || true,
     inactivityAlert: {
         delayBeforeAlert: '6 month',
         delayBeforeDeactivation: '1 month',

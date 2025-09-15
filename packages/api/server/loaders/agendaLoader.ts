@@ -14,6 +14,7 @@ export default () => {
                 options: { useUnifiedTopology: true },
             },
             processEvery: '40 seconds',
+            defaultLockLifetime: 20 * 1000, // 20 seconds
         });
     }
 

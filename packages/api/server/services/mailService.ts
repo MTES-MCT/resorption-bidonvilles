@@ -5,7 +5,7 @@ import mailsUtils from '#server/utils/mail';
 
 const { send: sendMail } = mailsUtils;
 const {
-    wwwUrl, webappUrl, backUrl, testEmail,
+    wwwUrl, webappUrl, backUrl, testEmail, logInProd,
 } = config;
 
 export default {
@@ -36,6 +36,11 @@ export default {
         const htmlContent = fs.readFileSync(path.join(__dirname, '../mails/dist', `${templateName}.html`));
         const textContent = fs.readFileSync(path.join(__dirname, '../mails/dist', `${templateName}.text`));
         const subject = fs.readFileSync(path.join(__dirname, '../mails/dist', `${templateName}.subject.text`));
+
+        if (logInProd) {
+            // eslint-disable-next-line no-console
+            console.log('Envoi du mail', templateName, 'à', finalRecipient.email, 'avec un fichier HTML', htmlContent.length, 'octets et un fichier texte de', textContent.length, 'octets');
+        }
 
         return sendMail(
             finalRecipient,
