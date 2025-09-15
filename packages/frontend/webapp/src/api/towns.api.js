@@ -75,23 +75,43 @@ export function edit(id, data) {
 
 export function exportList(
     location,
-    closedTowns,
+    exportedSitesStatus,
     options = [],
-    date = new Date()
+    date = new Date(),
+    filters = {}
 ) {
+    console.log("Appel exportList");
     const query = {
         locationType: location.type,
         locationCode: location.code,
-        closedTowns: closedTowns ? "1" : "0",
+        exportedSitesStatus, // "open", "inProgress", "close"
         date: date.getTime(),
     };
+
     if (options?.length > 0) {
         query.options = options.join(",");
     }
 
+    Object.keys(filters).forEach((filterKey) => {
+        const filterValue = filters[filterKey];
+        if (Array.isArray(filterValue) && filterValue.length > 0) {
+            query[filterKey] = filterValue.join(",");
+        } else if (
+            filterValue !== null &&
+            filterValue !== undefined &&
+            filterValue !== "" &&
+            filterValue.length !== 0
+        ) {
+            query[filterKey] = filterValue;
+        }
+    });
+
     const queryString = Object.keys(query)
         .map((key) => `${key}=${encodeURIComponent(query[key])}`)
         .join("&");
+
+    console.log(queryString);
+
     return axios.get(`/towns/export/excel?${queryString}`, {
         responseType: "blob",
     });
