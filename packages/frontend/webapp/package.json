@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/webapp3",
-  "version": "2.35.4",
+  "version": "2.35.5",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
