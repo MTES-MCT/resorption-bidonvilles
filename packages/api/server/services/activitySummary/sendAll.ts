@@ -19,14 +19,14 @@ export default async (day: number, month: number, year: number): Promise<void> =
     sunday.setDate(sunday.getDate() + 6);
 
     // ensure the given date is actually a monday
-    if (monday.getDay() !== 1) {
-        if (logInProd) {
-            // eslint-disable-next-line no-console
-            console.error("Le jour donné n'est pas un lundi:", monday);
-        }
+    // if (monday.getDay() !== 1) {
+    //     if (logInProd) {
+    //         // eslint-disable-next-line no-console
+    //         console.error("Le jour donné n'est pas un lundi:", monday);
+    //     }
 
-        throw new Error('Veuillez donner une date correspondant à un Lundi');
-    }
+    //     throw new Error('Veuillez donner une date correspondant à un Lundi');
+    // }
 
     // ensure the given date is not part of current week, or future
     const today = new Date();

@@ -4,7 +4,7 @@ import config from '#server/config';
 import PrometheusMetricsHandler from '#server/middlewares/prometheusMiddleware';
 
 const {
-    port, sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners, anonymizeInactiveUsers, logInProd,
+    port, sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners, anonymizeInactiveUsers, logInProd, recapHebdoCron,
 } = config;
 
 const sentryContextHandlers = (app) => {
@@ -73,7 +73,7 @@ export default {
             if (sendActivitySummary) {
                 // eslint-disable-next-line no-console
                 console.log('Activity summary job is enabled');
-                await agenda.every('0 30 14 * * 2', 'send_activity_summary'); // every monday at 3PM
+                await agenda.every(recapHebdoCron, 'send_activity_summary'); // every monday at 3PM
             }
 
             if (checkInactiveUsers) {
