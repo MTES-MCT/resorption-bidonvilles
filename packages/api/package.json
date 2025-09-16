@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/api",
-  "version": "2.35.5",
+  "version": "2.35.6",
   "description": "API d'Action Bidonvilles",
   "main": "server/index.ts",
   "repository": "git+https://github.com/MTES-MCT/action-bidonvilles.git",
@@ -97,6 +97,9 @@
     "sinon-chai": "^3.7.0",
     "sinon-express-mock": "^2.1.0",
     "ts-node-dev": "^2.0.0"
+  },
+  "resolutions": {
+    "agenda/cron": "1.8.2"
   },
   "husky": {
     "hooks": {

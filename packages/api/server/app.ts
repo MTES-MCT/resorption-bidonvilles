@@ -73,7 +73,7 @@ export default {
             if (sendActivitySummary) {
                 // eslint-disable-next-line no-console
                 console.log('Activity summary job is enabled');
-                await agenda.every('0 0 8 * * 2', 'send_activity_summary'); // every monday at 7AM
+                await agenda.every('0 30 14 * * 2', 'send_activity_summary'); // every monday at 3PM
             }
 
             if (checkInactiveUsers) {
