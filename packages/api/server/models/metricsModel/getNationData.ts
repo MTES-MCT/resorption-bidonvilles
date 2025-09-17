@@ -55,7 +55,8 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
                     departements.code AS departement_code,
                     departements.name AS departement_name,
                     cities.code AS city_code,
-                    epci.code AS epci_code
+                    epci.code AS epci_code,
+                    shantytowns.status AS status
                 FROM shantytowns
                 LEFT JOIN cities ON shantytowns.fk_city = cities.code
                 LEFT JOIN epci ON cities.fk_epci = epci.code
@@ -73,6 +74,7 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
                 shantytowns_today.is_oversea,
                 shantytowns_today.departement_code,
                 shantytowns_today.departement_name,
+                shantytowns_today.status,
                 computed_origins.origins,
                 CASE
                     WHEN 
@@ -96,7 +98,7 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
             WHERE
                 shantytowns_today.known_since <= :to
             AND
-                (shantytowns_today.closed_at IS NULL OR shantytowns_today.closed_at > :from)
+                (shantytowns_today.closed_at IS NULL OR (shantytowns_today.closed_at > :from AND shantytowns_today.status <> 'open'))
             ${permissionWhereClause !== '()' ? `AND ${permissionWhereClause}` : ''})
             UNION
             
@@ -120,7 +122,8 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
                     departements.code AS departement_code,
                     departements.name AS departement_name,
                     cities.code AS city_code,
-                    epci.code AS epci_code
+                    epci.code AS epci_code,
+                    shantytowns.status AS status
                 FROM shantytowns
                 LEFT JOIN cities ON shantytowns.fk_city = cities.code
                 LEFT JOIN epci ON cities.fk_epci = epci.code
@@ -138,6 +141,7 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
                 shantytowns_today.is_oversea,
                 shantytowns_today.departement_code,
                 shantytowns_today.departement_name,
+                shantytowns_today.status,
                 computed_origins.origins,
                 CASE
                     WHEN 
@@ -161,7 +165,7 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
             WHERE
                 shantytowns_today.known_since <= :to
             AND
-                (shantytowns_today.closed_at IS NULL OR shantytowns_today.closed_at > :from)
+                (shantytowns_today.closed_at IS NULL OR (shantytowns_today.closed_at > :from AND shantytowns_today.status <> 'open'))
             ${permissionWhereClause !== '()' ? `AND ${permissionWhereClause}` : ''})
         ) t
         ORDER BY t.shantytown_id ASC, t.input_date DESC`,
