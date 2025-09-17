@@ -1,7 +1,7 @@
 import Mailjet from 'node-mailjet';
 import config from '#server/config';
 
-const { mail: mailConfig, logInProd } = config;
+const { mail: mailConfig } = config;
 const mailjet = mailConfig.publicKey
     ? new Mailjet({
         apiKey: mailConfig.publicKey,
@@ -15,7 +15,7 @@ export default {
             return null;
         }
 
-        const sendingMail = mailjet
+        return mailjet
             .post('send', { version: 'v3.1' })
             .request({
                 Messages: [
@@ -43,13 +43,6 @@ export default {
                         ...mailContent,
                     },
                 ],
-            }).then((result) => {
-                if (logInProd) {
-                    // eslint-disable-next-line no-console
-                    console.log('Envoi du mail à', user.email, 'Retour:', result.body);
-                }
             });
-
-        return sendingMail;
     },
 };
