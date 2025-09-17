@@ -1,6 +1,10 @@
 <template>
     <ContentWrapper id="printable-content">
-        <Title class="mt-6">Visualisation des données</Title>
+        <Title class="mt-6">Hexagone</Title>
+        <DonneesStatistiquesDepartementBigFigures
+            v-if="['loaded', 'refresh'].includes(metricsStore.nationStatus)"
+            :metrics="metricsStore.hexagoneMetrics"
+        />
         <Header
             class="mt-4"
             v-if="['loaded', 'refresh'].includes(metricsStore.nationStatus)"
@@ -61,6 +65,7 @@ import EvolutionNationale from "./EvolutionNationale.vue";
 import Loading from "@/components/Loading/Loading.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 import ViewError from "@/components/ViewError/ViewError.vue";
+import DonneesStatistiquesDepartementBigFigures from "../DonneesStatistiquesDepartement/components/header/DonneesStatistiquesDepartementBigFigures.vue";
 
 const activeTab = ref("tableau");
 const departementMetricsStore = useDepartementMetricsStore();
