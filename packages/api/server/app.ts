@@ -4,7 +4,7 @@ import config from '#server/config';
 import PrometheusMetricsHandler from '#server/middlewares/prometheusMiddleware';
 
 const {
-    port, sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners, anonymizeInactiveUsers, logInProd, recapHebdoCron,
+    port, sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners, anonymizeInactiveUsers,
 } = config;
 
 const sentryContextHandlers = (app) => {
@@ -73,7 +73,7 @@ export default {
             if (sendActivitySummary) {
                 // eslint-disable-next-line no-console
                 console.log('Activity summary job is enabled');
-                await agenda.every(recapHebdoCron, 'send_activity_summary'); // every monday at 3PM
+                await agenda.every('0 0 7 * * 1', 'send_activity_summary'); // every monday at 7AM
             }
 
             if (checkInactiveUsers) {
@@ -109,20 +109,6 @@ export default {
 
             // eslint-disable-next-line no-console
             console.log('Scheduled jobs set up');
-            if (logInProd) {
-                const jobs = await agenda.jobs();
-                let compteur = 0;
-                jobs.map(job => job.attrs).forEach((attrs) => {
-                    if (attrs.name === 'send_activity_summary') {
-                        // eslint-disable-next-line no-console
-                        console.log('Agenda Jobs:', attrs);
-                    } else {
-                        compteur += 1;
-                    }
-                });
-                // eslint-disable-next-line no-console
-                console.log(`Il y a ${compteur} autres jobs planifiés.`);
-            }
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error('Failed settings up scheduled jobs', error);

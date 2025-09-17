@@ -9,7 +9,7 @@ import generateTrackingUTM from './generateTrackingUTM';
 
 const { formatName } = userModel;
 const {
-    wwwUrl, webappUrl, backUrl, blogUrl, logInProd,
+    wwwUrl, webappUrl, backUrl, blogUrl,
 } = config;
 
 const formationUrl = 'https://framaforms.org/sinscrire-a-une-session-de-prise-en-main-resorption-bidonvilles-1702635472';
@@ -992,10 +992,6 @@ export default {
         } as SortedQuestions);
 
         const utm = generateTrackingUTM(SUMMARY_CAMPAIGN, variables.campaign);
-        if (logInProd) {
-            // eslint-disable-next-line no-console
-            console.log('Envoi du récap hebdo au mailservice');
-        }
         return mailService.send('activity_summary', {
             recipient,
             variables: {
