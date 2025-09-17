@@ -1,4 +1,3 @@
-import config from '#server/config';
 import { ActivityNationalSummary } from '#server/models/activityModel/types/ActivityNationalSummary';
 import mailsUtils from '#server/mails/mails';
 import moment from 'moment';
@@ -9,15 +8,10 @@ import { User } from '#root/types/resources/User.d';
 moment.locale('fr');
 
 const { sendActivitySummary } = mailsUtils;
-const { logInProd } = config;
 
 export default async (argFrom: Date, argTo: Date, questionSummary: QuestionSummary[], summaries: ActivityNationalSummary, subscribers: Array<User>): Promise<any> => {
     const from = moment(argFrom);
     const to = moment(argTo);
-    if (logInProd) {
-        // eslint-disable-next-line no-console
-        console.log("Activation de l'envoi du récap hebdo à", subscribers.length, 'abonnés');
-    }
 
     return PromisePool
         .for(subscribers)
@@ -40,10 +34,6 @@ export default async (argFrom: Date, argTo: Date, questionSummary: QuestionSumma
                         subScribedsummaries.push(summaries[area.region.code][area.departement.code]);
                     }
                 });
-            }
-            if (logInProd) {
-                // eslint-disable-next-line no-console
-                console.log('Envoi du récap hebdo à', subscriber.email, 'avec', subScribedsummaries.length, 'résumés');
             }
             return sendActivitySummary(subscriber, {
                 variables: {

@@ -19,7 +19,8 @@ export type NationMetricsRawData = {
     region_name: string,
     is_oversea: boolean,
     departement_code: string,
-    departement_name: string
+    departement_name: string,
+    origins?: string[],
 };
 
 export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[]> => {
@@ -34,7 +35,16 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
         `SELECT 
             t.*
         FROM (
-            (WITH shantytowns_today AS (
+            (WITH shantytown_computed_origins AS (
+                SELECT
+                    s.shantytown_id AS fk_shantytown,
+                    array_agg(soo.uid) AS origins
+                FROM shantytowns s
+                LEFT JOIN shantytown_origins so ON so.fk_shantytown = s.shantytown_id
+                LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
+                GROUP BY s.shantytown_id
+            ),
+            shantytowns_today AS (
                 SELECT
                     shantytowns.shantytown_id,
                     LEAST(shantytowns.built_at, shantytowns.declared_at, shantytowns.created_at) AS known_since,
@@ -45,7 +55,8 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
                     departements.code AS departement_code,
                     departements.name AS departement_name,
                     cities.code AS city_code,
-                    epci.code AS epci_code
+                    epci.code AS epci_code,
+                    shantytowns.status AS status
                 FROM shantytowns
                 LEFT JOIN cities ON shantytowns.fk_city = cities.code
                 LEFT JOIN epci ON cities.fk_epci = epci.code
@@ -63,6 +74,8 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
                 shantytowns_today.is_oversea,
                 shantytowns_today.departement_code,
                 shantytowns_today.departement_name,
+                shantytowns_today.status,
+                computed_origins.origins,
                 CASE
                     WHEN 
                         (shantytowns.water_access_type = 'robinet_connecte_au_reseau' OR shantytowns.water_access_type = 'autre')
@@ -81,14 +94,24 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
             LEFT JOIN departements ON departements.code = shantytowns_today.departement_code
             LEFT JOIN epci ON epci.code = shantytowns_today.epci_code
             LEFT JOIN cities ON cities.code = shantytowns_today.city_code
+            LEFT JOIN shantytown_computed_origins AS computed_origins ON computed_origins.fk_shantytown = shantytowns.shantytown_id
             WHERE
                 shantytowns_today.known_since <= :to
             AND
-                (shantytowns_today.closed_at IS NULL OR shantytowns_today.closed_at > :from)
+                (shantytowns_today.closed_at IS NULL OR (shantytowns_today.closed_at > :from AND shantytowns_today.status <> 'open'))
             ${permissionWhereClause !== '()' ? `AND ${permissionWhereClause}` : ''})
             UNION
             
-            (WITH shantytowns_today AS (
+            (WITH shantytown_computed_origins AS (
+                SELECT
+                    s.shantytown_id AS fk_shantytown,
+                    array_agg(soo.uid) AS origins
+                FROM shantytowns s
+                LEFT JOIN shantytown_origins so ON so.fk_shantytown = s.shantytown_id
+                LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
+                GROUP BY s.shantytown_id
+            ),
+            shantytowns_today AS (
                 SELECT
                     shantytowns.shantytown_id,
                     LEAST(shantytowns.built_at, shantytowns.declared_at, shantytowns.created_at) AS known_since,
@@ -99,7 +122,8 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
                     departements.code AS departement_code,
                     departements.name AS departement_name,
                     cities.code AS city_code,
-                    epci.code AS epci_code
+                    epci.code AS epci_code,
+                    shantytowns.status AS status
                 FROM shantytowns
                 LEFT JOIN cities ON shantytowns.fk_city = cities.code
                 LEFT JOIN epci ON cities.fk_epci = epci.code
@@ -117,6 +141,8 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
                 shantytowns_today.is_oversea,
                 shantytowns_today.departement_code,
                 shantytowns_today.departement_name,
+                shantytowns_today.status,
+                computed_origins.origins,
                 CASE
                     WHEN 
                         (shantytowns.water_access_type = 'robinet_connecte_au_reseau' OR shantytowns.water_access_type = 'autre')
@@ -135,10 +161,11 @@ export default async (user, from: Date, to: Date): Promise<NationMetricsRawData[
             LEFT JOIN departements ON departements.code = shantytowns_today.departement_code
             LEFT JOIN epci ON epci.code = shantytowns_today.epci_code
             LEFT JOIN cities ON cities.code = shantytowns_today.city_code
+            LEFT JOIN shantytown_computed_origins AS computed_origins ON computed_origins.fk_shantytown = shantytowns.shantytown_id
             WHERE
                 shantytowns_today.known_since <= :to
             AND
-                (shantytowns_today.closed_at IS NULL OR shantytowns_today.closed_at > :from)
+                (shantytowns_today.closed_at IS NULL OR (shantytowns_today.closed_at > :from AND shantytowns_today.status <> 'open'))
             ${permissionWhereClause !== '()' ? `AND ${permissionWhereClause}` : ''})
         ) t
         ORDER BY t.shantytown_id ASC, t.input_date DESC`,

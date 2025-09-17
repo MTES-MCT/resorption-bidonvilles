@@ -35,8 +35,6 @@ export default {
     cleanAttachmentsArchives: process.env.RB_API_CLEAN_ATTACHMENTS_ARCHIVES === '1',
     anonymizeOwners: process.env.RB_API_ANONYMIZE_OWNERS === '1',
     anonymizeInactiveUsers: process.env.RB_API_ANONYMIZE_INACTIVE_USERS === '1',
-    logInProd: (process.env.NODE_ENV === 'production' && process.env.RB_API_LOG_IN_PROD === '1') || true,
-    recapHebdoCron: process.env.RB_API_RECAP_HEBDO_CRON || '0 0 7 * * 1', // par défaut tous les lundis à 7h
     inactivityAlert: {
         delayBeforeAlert: '6 month',
         delayBeforeDeactivation: '1 month',
