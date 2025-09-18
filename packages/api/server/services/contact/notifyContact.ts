@@ -39,7 +39,7 @@ async function sendEmailNewContactMessageToAdmins(message: MessageData): Promise
     }
 }
 
-function getObjetForContactMessage(requestType: ContactRequestType[]): string {
+function getObjetForContactMessage(requestType: ContactRequestType): string {
     const types: { [key in ContactRequestType]: string } = {
         'access-request': 'Demande de création de compte',
         help: 'Aider',
@@ -50,7 +50,7 @@ function getObjetForContactMessage(requestType: ContactRequestType[]): string {
         'submit-blog-post': 'Proposer un article pour le blog',
     };
 
-    return requestType.map(type => types[type]).join(' - ');
+    return types[requestType];
 }
 
 export default (data: ContactServiceNotifyData): Promise<void> => sendEmailNewContactMessageToAdmins({

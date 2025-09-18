@@ -5,16 +5,24 @@ type OrganizationAutocompleteResult = {
     id: number,
     label: string
     name: string,
+    type: string,
+    category: string,
+    abbreviation?: string,
     similarity: number,
+    fk_category?: string | null
+    type_abbreviation?: string | null
+    organization_type_id: number,
 };
 
 export default async (search: string): Promise<OrganizationAutocompleteResult[]> => {
     try {
-        const organizations = await autocomplete(search, null, 'association');
+        const organizations = await autocomplete(search, null, null);
 
         return Object.values(
             organizations.reduce((acc, row) => {
-                acc[row.type_name] ??= [];
+                if (acc[row.type_name] === undefined) {
+                    acc[row.type_name] = [];
+                }
 
                 if (row.similarity >= 0.75) {
                     let territory;
@@ -31,8 +39,13 @@ export default async (search: string): Promise<OrganizationAutocompleteResult[]>
                     acc[row.type_name].push({
                         id: row.id,
                         label: territory,
-                        name: row.abbreviation || row.name,
+                        name: row.name,
+                        abbreviation: row.abbreviation,
+                        type: row.type_name,
+                        category: row.fk_category,
                         similarity: row.similarity,
+                        type_abbreviation: row.type_abbreviation,
+                        organization_type_id: row.organization_type_id,
                     });
                 }
 

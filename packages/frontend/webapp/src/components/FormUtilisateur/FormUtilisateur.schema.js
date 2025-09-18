@@ -1,20 +1,9 @@
-import {
-    object,
-    array,
-    string,
-    boolean,
-    mixed,
-    number,
-    ref,
-    addMethod,
-    setLocale,
-} from "yup";
+import { object, string, mixed, number, ref, addMethod, setLocale } from "yup";
 import { fr } from "yup-locales";
 import labelsFn from "./FormUtilisateur.labels.js";
 
-import requestTypes from "@/utils/access_request_types";
-import organizationCategoriesFn from "@/utils/organization_categories";
 import referrals from "@/utils/contact_referrals";
+import access_request_types from "@/utils/access_request_types";
 
 const locales = {
     fr: {
@@ -100,40 +89,10 @@ export default (
 
     // request-type and is-actor
     if (variant === "demande-acces") {
-        schema.request_type = array()
-            .of(
-                string().oneOf(requestTypes[language].map(({ value }) => value))
-            )
+        schema.request_type = string()
             .required()
-            .min(1, ({ label }) => `${label} est un champ obligatoire`)
+            .oneOf(access_request_types[language].map(({ value }) => value))
             .label(labels.request_type);
-        schema.is_actor = boolean()
-            .when("request_type", {
-                is: (val) => val?.includes("access-request"),
-                then: (schema) => schema.required(),
-            })
-            .label(labels.is_actor);
-    }
-
-    // organization category
-    const organizationCategory = string().label(labels.organization_category);
-    const organizationCategories = organizationCategoriesFn({
-        private_organization: allowPrivateOrganization,
-        other: allowNewOrganization,
-    });
-    function makeOrganizationCategoryRequired(schema) {
-        return schema
-            .required()
-            .oneOf(organizationCategories.map(({ value }) => value));
-    }
-    if (variant === "demande-acces") {
-        schema.organization_category = organizationCategory.when("is_actor", {
-            is: true,
-            then: makeOrganizationCategoryRequired,
-        });
-    } else {
-        schema.organization_category =
-            makeOrganizationCategoryRequired(organizationCategory);
     }
 
     // organization type
@@ -201,23 +160,18 @@ export default (
             then: (schema) => schema.required(),
         })
         .label(labels.organization_other);
-
-    const position = string().label(labels.position);
-    function makePositionRequired(schema) {
-        return schema.required();
-    }
-    if (variant === "demande-acces") {
-        schema.position = position.when(["is_actor", "organization_category"], {
-            is: (is_actor, organization_category) =>
-                is_actor === true && !!organization_category,
-            then: makePositionRequired,
-        });
-    } else {
-        schema.position = position.when("organization_category", {
-            is: (organization_category) => !!organization_category,
-            then: makePositionRequired,
-        });
-    }
+    schema.organization_other_acronyme = string()
+        .when("organization_category", {
+            is: "other",
+            then: (schema) => schema.required(),
+        })
+        .label(labels.organization_other_acronyme);
+    schema.organization_other_territory = string()
+        .when("organization_category", {
+            is: "other",
+            then: (schema) => schema.required(),
+        })
+        .label(labels.organization_other_territory);
 
     if (variant === "demande-acces" && language === "fr") {
         schema.access_request_message = string()

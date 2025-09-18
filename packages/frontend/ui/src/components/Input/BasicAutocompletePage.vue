@@ -8,6 +8,7 @@
             v-bind="$attrs"
             autocomplete="off"
             @input="onInput"
+            @focus="onFocus"
             :disabled="isDisabled"
             @blur="onBlur"
             @keydown.stop="onKeydown"
@@ -15,23 +16,32 @@
             ref="input"
         >
         <div class="absolute top-10 w-full z-[2000] border-1 border-G300 bg-white" v-if="results.length > 0">
-            <div v-if="showCategory" class="flex" v-for="section in results" :key="section.title">
-                <div class="w-40 px-3 py-2 text-right text-sm text-G700 border-r border-G200 border-b">
+            <div v-if="showCategory" class="flex flex-col">
+                <div v-for="section in paginatedResults" :key="section.title" class="flex">
+                    <div class="w-40 px-3 py-2 text-right text-sm text-G700 border-r border-G200 border-b">
                     {{ section.title }}
-                </div>
-                <div class="border-b border-G200 flex-1">
-                    <div v-for="item in section.items" class="hover:bg-blue100 cursor-pointer px-3 py-2"
-                        :class="focusedItemId === item.id ? 'bg-blue100' : ''" :key="item.id" @click="selectItem(item)">
-                        {{ item.label }}
+                    </div>
+                    <div class="border-b border-G200 flex-1">
+                        <div v-for="item in section.items" class="hover:bg-blue100 cursor-pointer px-3 py-2"
+                            :class="focusedItemId === item.id ? 'bg-blue100' : ''"
+                            :key="item.id" @click="selectItem(item)"
+                            :title="item.name">
+                            {{ item.label }}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div v-else>
-                <div class="border-b border-G200 flex-1">
-                    <div v-for="item in rawResults" class="hover:bg-blue100 cursor-pointer px-3 py-2"
-                        :class="focusedItemId === item.id ? 'bg-blue100' : ''" :key="item.id" @click="selectItem(item)">
-                        {{ item.label }}
-                    </div>
+                <div class="flex justify-center items-center gap-2 pt-4 h-9 border-t border-G200"
+                    @mousedown.prevent.stop="isClickInsideDropdown = true"
+                    @mouseup="isClickInsideDropdown = false"
+                    @mouseleave="isClickInsideDropdown = false"
+                    v-if="totalPages > 1"
+                >
+                <DsfrPagination
+                    
+                    v-model:current-page="currentPage"
+                    :pages="pages"
+                    :truncLimit="2"
+                    />
                 </div>
             </div>
         </div>
@@ -47,6 +57,62 @@ import { toRefs, ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
 import Input from "./Input.vue";
 import Icon from "../Icon.vue";
 import debounce from "../../utils/debounce";
+
+const currentPage = ref(0);
+const isClickInsideDropdown = ref(false);
+const itemsPerPage = 10;
+const totalPages = computed(() => {
+    return Math.ceil(flatResults.value.length / itemsPerPage);
+});
+
+const pages = computed(() => {
+    let results = [];
+
+    for(let i = 1; i < totalPages.value + 1; i++) {
+        results.push({
+            title: `${i}`,
+            href: `${i}`,
+            label: i,
+        });
+    }
+    console.log("pages= ", results);
+    return results;
+});
+
+const flatResults = computed(() => {
+    if (showCategory.value) {
+        return results.value.map(r => r.items).flat();
+    }
+    return rawResults.value;
+});
+
+const paginatedResults = computed(() => {
+    const start = (currentPage.value) * itemsPerPage;
+    const end = start + itemsPerPage;
+
+    if (showCategory.value) {
+        const categorizedItems = results.value.flatMap(section =>
+            section.items.map(item => ({ ...item, categoryTitle: section.title }))
+        );
+
+        const pageItems = categorizedItems.slice(start, end);
+
+        const grouped = {};
+        pageItems.forEach(item => {
+            if (!grouped[item.categoryTitle]) {
+                grouped[item.categoryTitle] = {
+                    title: item.categoryTitle,
+                    items: [],
+                };
+            }
+            grouped[item.categoryTitle].items.push(item);
+        });
+
+        return Object.values(grouped);
+    } else {
+        return flatResults.value.slice(start, end);
+    }
+});
 
 const props = defineProps({
     name: String,
@@ -101,22 +167,45 @@ watch(modelValue, () => {
 let timeout = null;
 async function onInput({ target }) {
     const { value } = target;
+
+    if (selectedItem.value !== null) {
+        selectedItem.value = null;
+        input.value.setValue("");
+        target.value = "";
+        emit("update:modelValue", undefined);
+        return;
+    }
+
+    currentPage.value = 0;
     rawResults.value = [];
     focusedItemIndex.value = null;
-
     error.value = false;
+
     if (value.length < 2) {
         abort();
         return;
     }
 
-    if(lastPromise.value !== null){
+    if (lastPromise.value !== null) {
         lastPromise.value.catch(() => {
         // ignore
         });
     }
-   
+
     lastPromise.value = debouncedGetResults(value, callId);
+}
+
+
+function onFocus(event) {
+    const value = event.target.value;
+    if (
+        value &&
+        value.length >= 2 &&
+        rawResults.value.length === 0 
+    ) {
+        currentPage.value = 0;
+        debouncedGetResults(value, callId);
+    }
 }
 
 async function getResults(value, originalCallId) {
@@ -150,11 +239,11 @@ function abort() {
 
 function onBlur(event) {
     clearTimeout(timeout);
-    focusedItemIndex.value = null;
+    if (isClickInsideDropdown.value) {
+        return;
+    }
 
-    // un timeout est nécessaire pour éviter que le blur ne fasse disparaître les résultats
-    // de recherche juste avant qu'on ait le temps de cliquer dessus
-    // (en effet, réinitialiser rawResults provoque la disparaître des résultats)
+    focusedItemIndex.value = null;
     timeout = setTimeout(() => {
         rawResults.value = [];
         abort();
@@ -164,6 +253,10 @@ function onBlur(event) {
                     search: event.target.value,
                     data: undefined
                 });
+                return;
+            }
+
+            if (event.target.value.length > 0) {
                 return;
             }
 
@@ -183,11 +276,10 @@ function onBlur(event) {
                 search: event.target.value,
                 data: undefined
             });
-            return;
         }
-        input.value.setValue(selectedItem.value.selectedLabel || selectedItem.value.label);
-    }, 250);
+    }, 200); // délai pour permettre les clics
 }
+
 
 function selectItem(item) {
     rawResults.value = [];
