@@ -3,6 +3,7 @@
 </template> 
 
 <script setup>
+import CheckboxUi from "./CheckboxUi.vue";
 import { defineProps, toRefs, computed } from 'vue';
 import { useField, useIsSubmitting } from 'vee-validate';
 
