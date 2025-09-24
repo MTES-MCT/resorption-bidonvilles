@@ -17,6 +17,7 @@
     "@gouvminint/vue-dsfr": "^8.8.0",
     "@iconify-json/bxs": "latest",
     "@iconify-json/carbon": "^1.2.13",
+    "@iconify-json/fa-solid": "latest",
     "@iconify-json/mdi": "latest",
     "@iconify-json/ri": "latest",
     "@iconify-json/uil": "latest",

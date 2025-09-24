@@ -3134,6 +3134,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@iconify-json/fa-solid@npm:latest":
+  version: 1.2.2
+  resolution: "@iconify-json/fa-solid@npm:1.2.2"
+  dependencies:
+    "@iconify/types": "*"
+  checksum: e397f391d27dbcbba8c35ebaae67ef93881a7933b3a4bfce9ef6337f7871160be4b64ed7c7a85814c93555ee8c0df3ecb508038a697da25576cf382fdf1fab5e
+  languageName: node
+  linkType: hard
+
 "@iconify-json/mdi@npm:latest":
   version: 1.2.3
   resolution: "@iconify-json/mdi@npm:1.2.3"
@@ -5858,6 +5867,7 @@ __metadata:
     "@gouvminint/vue-dsfr": ^8.8.0
     "@iconify-json/bxs": latest
     "@iconify-json/carbon": ^1.2.13
+    "@iconify-json/fa-solid": latest
     "@iconify-json/mdi": latest
     "@iconify-json/ri": latest
     "@iconify-json/uil": latest
