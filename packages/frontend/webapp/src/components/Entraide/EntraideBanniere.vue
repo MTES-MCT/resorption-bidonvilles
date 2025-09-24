@@ -34,7 +34,7 @@
 import router from "@/helpers/router";
 import { computed } from "vue";
 import { useForm } from "vee-validate";
-import img from "@/assets/img/illustrati                ons/communaute.svg";
+import img from "@/assets/img/illustrations/communaute.svg";
 import { useDirectoryStore } from "@/stores/directory.store";
 
 import { Spinner, TextInput } from "@resorptionbidonvilles/ui";
