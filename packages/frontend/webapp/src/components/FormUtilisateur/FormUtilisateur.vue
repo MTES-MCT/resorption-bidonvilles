@@ -57,20 +57,19 @@
                 <FormUtilisateurInputStructure
                     :label="labels.organization_category"
                     @change="onOrganizationChange"
-                    ref="organisationInput"
                 />
             </section>
-            <div style="margin-left: 50px">
+            <div
+                class="ml-10 mb-4"
+                v-if="values.organization_category === 'other'"
+            >
                 <FormUtilisateurInputOrganizationOther
-                    v-if="values.organization_category === 'other'"
                     :label="labels.organization_other"
                 />
                 <FormUtilisateurInputOrganizationOtherAcronyme
-                    v-if="values.organization_category === 'other'"
                     :label="labels.organization_other_acronyme"
                 />
                 <FormUtilisateurInputOrganizationOtherTerritory
-                    v-if="values.organization_category === 'other'"
                     :label="labels.organization_other_territory"
                 />
             </div>
@@ -154,8 +153,6 @@ const props = defineProps({
 });
 
 const form = ref(null);
-const organisationInput = ref(null);
-const organizationInput = ref(null);
 const { variant, submit, language } = toRefs(props);
 const values = ref({
     organization_category: "",
@@ -197,10 +194,11 @@ onMounted(() => {
 watch(values.value.association, (newAssociation) => {
     onOrganizationChange(newAssociation);
 });
-function onOrganizationChange(value) {
-    console.log("value=", value.data);
+
+const onOrganizationChange = (value) => {
     if (value?.data !== null) {
-        form.value.setFieldValue("organization_category", "");
+        form.value.setFieldValue("organization_category", value.data.category);
+        form.value.setFieldValue(value.data.category, value);
     } else if (value?.data === null) {
         if (allowNewOrganization.value === true) {
             form.value.setFieldValue("organization_category", "other");
@@ -209,14 +207,11 @@ function onOrganizationChange(value) {
                 "Vous devez créer une nouvelle structure ou en faire la demande aux administrateurs nationaux."
             );
         }
-
-        organizationInput.value.clear();
     }
-}
+};
 
 function intermediateSubmit(values) {
     const formattedValues = { ...values };
-    console.log("intermediateSubmit", formattedValues);
     formattedValues.territorial_collectivity = formattedValues
         .territorial_collectivity?.data
         ? formattedValues.territorial_collectivity.data.id
