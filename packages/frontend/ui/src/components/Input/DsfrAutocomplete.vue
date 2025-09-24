@@ -1,21 +1,51 @@
 <template>
-        <Input
-            prefixIcon="magnifying-glass"
-            :suffixIcon="isLoading ? 'spinner' : ''" :withoutMargin="true"
-            :spinSuffixIcon="true"
-            :clear="!isLoading"
-            :id="name"
-            v-bind="$attrs"
-            autocomplete="off"
-            @input="onInput"
-            @focus="onFocus"
-            :disabled="isDisabled"
-            @blur="onBlur"
-            @keydown.stop="onKeydown"
-            @clear="clear"
-            ref="input"
-        >
-        <div class="absolute top-10 w-full z-[2000] border-1 border-G300 bg-white" v-if="results.length > 0">
+    <div class="relative">
+    <DsfrInputGroup
+        :descriptionId=name
+        :errorMessage="errors.length > 0 ? errors : ''"
+        :disabled="isDisabled"
+        type="text"
+        required
+    >
+        <template #before-input>
+            <span class="font-bold not-italic" aria-hidden="true">{{ label }}</span>
+        </template>
+        <template #default>
+            <div class="relative flex flex-row gap-0">
+                <DsfrButton
+                    icon-only
+                    tertiary
+                    no-outline
+                    disabled
+                    size="md"
+                    icon="fr-icon-search-line"
+                    class="absolute left-0 top-2 !cursor-default"
+                />
+                <DsfrInput 
+                    :placeholder="placeholder"
+                    ref="input"
+                    v-model="organizationSearchLabel"
+                    @input="onInput"
+                    @focus="onFocus"
+                    :disabled="isDisabled"
+                    @keydown.stop="onKeydown"
+                    @clear="clear"
+                    class="pl-10"
+                />
+                <DsfrButton
+                    label="Vider"
+                    tertiary
+                    no-outline
+                    size="sm"
+                    :icon="isLoading ? { name: 'fa-solid:spinner', animation: 'spin' } : 'fr-icon-delete-line'"
+                    class="absolute right-0 top-2 pt-2"
+                    @click.prevent="clear"
+                />
+                
+            </div>
+        </template>
+    </DsfrInputGroup>
+        <div class="absolute top-16 mt-2 w-full z-[2000] border-1 border-G300 bg-white" v-if="results.length > 0">
             <div v-if="showCategory" class="flex flex-col">
                 <div v-for="section in paginatedResults" :key="section.title" class="flex">
                     <div class="w-40 px-3 py-2 text-right text-sm text-G700 border-r border-G200 border-b">
@@ -45,22 +75,78 @@
                 </div>
             </div>
         </div>
-        </Input>
-
-        <p v-if="error" class="text-secondary mb-5 text-right">
-            <Icon icon="triangle-exclamation" /> Le chargement des données a échoué
-        </p>
+    </div>
 </template>
 
 <script setup>
 import { toRefs, ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
-import Input from "./Input.vue";
-import Icon from "../Icon.vue";
 import debounce from "../../utils/debounce";
+import { useIsSubmitting } from "vee-validate";
 
+const props = defineProps({
+    name: String,
+    fn: Function,
+    errors: {
+        type: [Array, String],
+        required: false,
+        default: () => []
+    },
+    modelValue: {
+        type: Object,
+        required: false,
+        default: () => undefined
+    },
+    allowFreeSearch: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+    autoClear: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    showCategory: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+    placeholder: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    label: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    disabled: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+});
+const emit = defineEmits(['update:modelValue']);
+const { fn, name, allowFreeSearch, showCategory, modelValue, errors, placeholder, label, disabled, autoClear } = toRefs(props);
+
+const rawResults = ref([]);
+const isLoading = ref(false);
+const lastPromise = ref(null);
+const input = ref(null);
+const selectedItem = ref(null);
+const focusedItemIndex = ref(null);
+const error = ref(false);
 const currentPage = ref(0);
 const isClickInsideDropdown = ref(false);
 const itemsPerPage = 10;
+let lastEvent = undefined;
+let callId = 0;
+
+const isSubmitting = useIsSubmitting();
+
+const organizationSearchLabel = computed(() => modelValue.value?.search || "");
+
 const totalPages = computed(() => {
     return Math.ceil(flatResults.value.length / itemsPerPage);
 });
@@ -75,7 +161,6 @@ const pages = computed(() => {
             label: i,
         });
     }
-    console.log("pages= ", results);
     return results;
 });
 
@@ -99,6 +184,8 @@ const paginatedResults = computed(() => {
 
         const grouped = {};
         pageItems.forEach(item => {
+            console.log("Item categoryTitle:", item.categoryTitle);
+            
             if (!grouped[item.categoryTitle]) {
                 grouped[item.categoryTitle] = {
                     title: item.categoryTitle,
@@ -107,6 +194,18 @@ const paginatedResults = computed(() => {
             }
             grouped[item.categoryTitle].items.push(item);
         });
+        grouped[""] ={
+            title: "",
+            items: [
+                {
+                    id: "autre",
+                    selectedLabel: "",
+                    label: "Je ne trouve pas ma structure",
+                    category: "",
+                    data: null,
+                }
+            ]
+        };
 
         return Object.values(grouped);
     } else {
@@ -114,54 +213,8 @@ const paginatedResults = computed(() => {
     }
 });
 
-const props = defineProps({
-    name: String,
-    fn: Function,
-    modelValue: {
-        type: Object,
-        required: false,
-        default: () => undefined
-    },
-    allowFreeSearch: {
-        type: Boolean,
-        required: false,
-        default: false
-    },
-    autoClear: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
-    showCategory: {
-        type: Boolean,
-        required: false,
-        default: false
-    },
-    disabled: {
-        type: Boolean,
-        required: false,
-        default: false
-    },
-});
-const emit = defineEmits(['update:modelValue']);
-const { fn, name, allowFreeSearch, showCategory, modelValue, disabled, autoClear } = toRefs(props);
-
-const rawResults = ref([]);
-const isLoading = ref(false);
-const lastPromise = ref(null);
-const isSubmitting = false;
-const input = ref(null);
-const selectedItem = ref(null);
-const focusedItemIndex = ref(null);
-const error = ref(false);
-let lastEvent = undefined;
-let callId = 0;
 const isDisabled = computed(() => {
     return disabled.value === true || isSubmitting.value === true;
-});
-
-watch(modelValue, () => {
-    input.value.setValue(modelValue.value?.search || "");
 });
 
 let timeout = null;
@@ -170,7 +223,6 @@ async function onInput({ target }) {
 
     if (selectedItem.value !== null) {
         selectedItem.value = null;
-        input.value.setValue("");
         target.value = "";
         emit("update:modelValue", undefined);
         return;
@@ -217,7 +269,7 @@ async function getResults(value, originalCallId) {
             rawResults.value = results;
         }
     } catch (e) {
-        error.value = true;
+        errors.value.push("Le chargement des données a échoué");
     }
 
     isLoading.value = false;
@@ -240,6 +292,7 @@ function abort() {
 function onBlur(event) {
     clearTimeout(timeout);
     if (isClickInsideDropdown.value) {
+        isClickInsideDropdown.value = false;
         return;
     }
 
@@ -260,7 +313,6 @@ function onBlur(event) {
                 return;
             }
 
-            input.value.setValue("");
             emit("update:modelValue", undefined);
             return;
         }
@@ -286,29 +338,21 @@ function selectItem(item) {
     isLoading.value = false;
     lastPromise.value = null;
     selectedItem.value = item;
-    
+
+    if (autoClear.value === true) {
+        clear({ sendEvent: false });
+    }
     sendEvent({
         search: item.selectedLabel || item.label,
         data: item.data
     });
-
-    if (autoClear.value === true) {
-        clear({ sendEvent: false });
-    } else {
-        input.value.setValue(item.selectedLabel || item.label);
-    }
 }
 
 function clear(options = {}) {
     rawResults.value = [];
     selectedItem.value = null;
     abort();
-
-    if (options.sendEvent !== false) {
-        sendEvent(undefined);
-    }
-
-    input.value.setValue("");
+    sendEvent(undefined);
 }
 
 function sendEvent(data) {
@@ -319,10 +363,6 @@ function sendEvent(data) {
     emit("update:modelValue", data);
     lastEvent = { ...data };
 }
-
-onMounted(() => {
-    input.value.setValue(modelValue.value?.search || "");
-});
 
 onBeforeUnmount(() => {
     clearTimeout(timeout);
@@ -387,6 +427,7 @@ const focusedItemId = computed(() => {
 
 const results = computed(() => {
     const categories = {};
+    
     return rawResults.value.reduce((acc, item) => {
         const { category } = item;
 

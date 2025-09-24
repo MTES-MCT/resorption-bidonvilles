@@ -24,9 +24,7 @@ const collections = [
             "home-remove-outline": {
                 body: '<path fill="currentColor" d="m14.46 15.88l1.42-1.42L18 16.59l2.12-2.12l1.42 1.41L19.41 18l2.13 2.12l-1.42 1.42L18 19.41l-2.12 2.13l-1.42-1.42L16.59 18l-2.12-2.12M5 20v-8H2l10-9l10 9h-5v-1.81l-5-4.5l-5 4.5V18h5c0 .7.12 1.37.34 2z"/>',
             },
-            play: {
-                body: '<path fill="currentColor" d="M8 5.14v14l11-7z"/>',
-            },
+            play: { body: '<path fill="currentColor" d="M8 5.14v14l11-7z"/>' },
         },
         width: 24,
         height: 24,
@@ -61,6 +59,16 @@ const collections = [
         width: 32,
         height: 32,
     },
+    {
+        prefix: "fa-solid",
+        icons: {
+            spinner: {
+                body: '<path fill="currentColor" d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48s21.49-48 48-48s48 21.49 48 48m-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48s48-21.49 48-48s-21.49-48-48-48m208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48s48-21.49 48-48s-21.49-48-48-48M96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48s48-21.49 48-48m12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48s48-21.49 48-48c0-26.509-21.491-48-48-48m294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48s48-21.49 48-48c0-26.509-21.49-48-48-48M108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48s48-21.49 48-48s-21.491-48-48-48"/>',
+            },
+        },
+        width: 512,
+        height: 512,
+    },
 ];
 
 export const ri = {
@@ -76,4 +84,5 @@ export const mdi = {
 export const uil = { temperaturePlus: "uil:temperature-plus" };
 export const bxs = { filePdf: "bxs:file-pdf" };
 export const carbon = { temperatureHot: "carbon:temperature-hot" };
+export const faSolid = { spinner: "fa-solid:spinner" };
 export default collections;
