@@ -4,9 +4,9 @@
 
         <div class="relative" :class="width ">
             <InputIcon position="before" :icon="prefixIcon" v-if="prefixIcon" />
-            <DsfrInput :id="id" v-bind="filteredProps" :data-cy-field="cypressName" :step="step"
-                :disabled="disabled" ref="input" @blur="$emit('blur', $event)" class="bg-white" :class="{'pl-10': prefixIcon}" @update:modelvalue="setValue" v-model="currentValue" />
-                <InputIcon position="after" v-if="(clear && currentValue) || suffixIcon || $slots.suffix">
+            <input :id="id" v-bind="filteredProps" class="bg-white" :class="classes" :data-cy-field="cypressName" :step="step"
+                :disabled="disabled" ref="input" @blur="$emit('blur', $event)" @change="setValue($refs.input.value)" />
+            <InputIcon position="after" v-if="(clear && currentValue) || suffixIcon || $slots.suffix">
                 <slot name="suffix" v-if="$slots.suffix" />
                 <template v-else>
                     <span v-if="clear" @click="$emit('clear')" class="cursor-pointer hover:text-G800 text-sm text-G700">
@@ -177,6 +177,7 @@ export default {
             this.$refs.input.blur();
         },
         setValue(str, silentMode = false) {
+            this.$refs.input.value = str;
             this.currentValue = str;
 
             if (silentMode !== true) {

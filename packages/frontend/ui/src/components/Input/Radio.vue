@@ -26,14 +26,16 @@
     </template>
 </template>
 <script setup>
-import { toRefs } from 'vue';
+import { toRefs, computed, watch } from 'vue';
 import { useField, useIsSubmitting } from 'vee-validate';
+import Icon from "../Icon.vue";
 
 const props = defineProps({
     name: String,
     label: String,
     value: [String, Boolean, Number],
     modelValue: String,
+    variant: String, // soit "default", soit "checkbox", soit "radio"
     disabled: {
         type: Boolean,
         required: false,
@@ -49,21 +51,61 @@ const props = defineProps({
         required: false,
         default: undefined
     },
-    small: {
-        type: Boolean,
-        required: false,
-        default: true
-    },
 });
 
-const { name, disabled } = toRefs(props);
+const { name, variant, disabled, allowNull, nullValue } = toRefs(props);
 const isSubmitting = useIsSubmitting();
 const emit = defineEmits(['update:modelValue']);
 
-const { handleChange } = useField(name, undefined, {
+const { checked, handleChange } = useField(name, undefined, {
     type: 'radio',
     checkedValue: props.value,
     initialValue: props.modelValue
+});
+
+const variants = {
+    default: {
+        base: 'px-4 py-1 border border-blue200',
+        checked: {
+            [true]: 'bg-primary text-white border-blue500',
+            [false]: 'bg-blue200 text-primary'
+        },
+        disabled: {
+            [true]: 'opacity-85',
+            [false]: 'hover:border-blue500'
+        }
+    },
+    check: {
+        base: 'inline-block cursor-pointer pr-4 py-2 text-primary space-x-10 hover:bg-blue200',
+        checked: {
+            [true]: '',
+            [false]: ''
+        },
+        disabled: {
+            [true]: 'opacity-85 cursor-default',
+            [false]: ''
+        }
+    },
+    radio: {
+        base: 'appearance-none inline-block rounded-full mr-2 text-white border border-G500 w-3 h-3',
+        checked: {
+            [true]: 'bg-primary border-primary',
+            [false]: 'bg-white border_G600'
+        },
+        disabled: {
+            [true]: 'opacity-85 cursor-default',
+            [false]: ''
+        }
+    }
+};
+const classes = computed(() => {
+    let actualVariant = variant.value;
+    if (!variants[variant.value]) {
+        actualVariant = 'default';
+    }
+
+    const v = variants[actualVariant];
+    return `${v.base} ${v.checked[checked.value === true]} ${v.disabled[(disabled.value || isSubmitting.value) === true]}`;
 });
 
 async function onClick() {
