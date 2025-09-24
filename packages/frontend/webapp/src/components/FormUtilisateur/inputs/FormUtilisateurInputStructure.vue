@@ -1,13 +1,64 @@
 <template>
-    <InputStructure
-        name="Structures"
+    <DsfrComplexAutocomplete
+        :disabled="isSubmitting || disabled"
+        name="organization"
         :label="label"
-        placeholder="Nom de votre Structure, Collectivité territoriale, Association, Autre ?"
+        :errors="errors.length > 0 ? errors : []"
+        placeholder="Nom ou acronyme de votre organisation"
+        :fn="autocompleteFn"
+        v-model="organization"
         showCategory
+        ref="autocompleteInput"
         showMandatoryStar
+        @update:modelValue="updateOrganization"
+        @blur="handleBlur"
+        class="mb-4"
     />
 </template>
 
 <script setup>
-import InputStructure from "@/components/InputStructure/InputStructure.vue";
+import { DsfrComplexAutocomplete } from "@resorptionbidonvilles/ui";
+import { autocompleOrganization } from "@/api/organizations.api.js";
+import { useField, useIsSubmitting } from "vee-validate";
+
+const emit = defineEmits(["update:modelValue", "change"]);
+const isSubmitting = useIsSubmitting();
+const {
+    value: organization,
+    errors,
+    handleBlur,
+} = useField("organization", "required|regex:^[0-9 ]+$");
+
+const updateOrganization = (value) => {
+    emit("update:modelValue", value);
+    emit("change", value);
+};
+
+const autocompleteFn = async (value) => {
+    const results = await autocompleOrganization(value);
+    const allowedTypeIds = [8, 9, 10, 11, 19, 29, 35, 44, 45];
+
+    const mappedResults = results.map((org) => {
+        const prefix =
+            org.name.length < 35 || !org.abbreviation
+                ? `${org.name}`
+                : `${org.abbreviation}`;
+        const showLabel = allowedTypeIds.includes(org.organization_type_id);
+        const label = showLabel ? `${prefix} - ${org.label}` : prefix;
+
+        return {
+            id: org.id,
+            label: label,
+            name: org.name,
+            selectedLabel: label,
+            category: org.type_abbreviation || org.type,
+            data: {
+                id: org.id,
+                category: org.category,
+            },
+        };
+    });
+
+    return mappedResults;
+};
 </script>

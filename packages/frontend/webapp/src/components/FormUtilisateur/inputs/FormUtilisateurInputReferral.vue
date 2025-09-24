@@ -1,17 +1,23 @@
 <template>
-    <CheckableGroup id="referral" :label="label" class="!mb-2">
-        <DsfrRadioButtonSet
-            name="referral"
-            :options="radioItems"
-            small
-            v-model="values"
-            class="!mb-0"
-        />
-    </CheckableGroup>
+    <DsfrRadioButtonSet
+        name="referral"
+        id="referral"
+        :options="radioItems"
+        :errorMessage="errors.length > 0 ? errors[0] : ''"
+        small
+        v-model="values"
+        @blur="handleBlur"
+        class="!mb-0"
+    >
+        <template #legend>
+            <span class="font-bold not-italic" aria-hidden="true">{{
+                label
+            }}</span>
+        </template>
+    </DsfrRadioButtonSet>
 </template>
 
 <script setup>
-import { CheckableGroup } from "@resorptionbidonvilles/ui";
 import items from "@/utils/contact_referrals.js";
 import { defineProps, toRefs, computed } from "vue";
 import { useField } from "vee-validate";
@@ -25,11 +31,11 @@ const props = defineProps({
 });
 const { label, language } = toRefs(props);
 
-const { value: values } = useField("referral");
-
 const radioItems = computed(() => {
     return items[language.value];
 });
+
+const { value: values, errors, handleBlur } = useField("referral", "required");
 </script>
 
 <style scoped>
