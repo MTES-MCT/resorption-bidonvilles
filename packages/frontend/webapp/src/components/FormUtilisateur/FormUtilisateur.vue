@@ -101,7 +101,7 @@
 
         <template v-slot:button>
             <p class="text-center">
-                <Button type="submit"><slot name="submit" /></Button>
+                <DsfrButton type="submit"><slot name="submit" /></DsfrButton>
             </p>
         </template>
     </FormPublic>
@@ -113,7 +113,6 @@ import { defineProps, toRefs, computed, ref, onMounted, watch } from "vue";
 import router from "@/helpers/router";
 
 // components
-import { Button } from "@resorptionbidonvilles/ui";
 import FormPublic from "@/components/FormPublic/FormPublic.vue";
 import FormUtilisateurInputEmail from "./inputs/FormUtilisateurInputEmail.vue";
 import FormUtilisateurInputEmailConfirmation from "./inputs/FormUtilisateurInputEmailConfirmation.vue";
