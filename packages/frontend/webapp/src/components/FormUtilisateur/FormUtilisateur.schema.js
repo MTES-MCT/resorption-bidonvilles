@@ -108,9 +108,9 @@ export default (
         .customSchema(
             object({
                 data: object({
-                    id: number().required(),
-                    category: string().required(),
-                }).required(),
+                    id: number(),
+                    category: string(),
+                }).nullable(),
             })
         )
         .required()

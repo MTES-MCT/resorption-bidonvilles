@@ -27,6 +27,7 @@
                     v-model="organizationSearchLabel"
                     @input="onInput"
                     @focus="onFocus"
+                    @blur="onBlur"
                     :disabled="isDisabled"
                     @keydown.stop="onKeydown"
                     @clear="clear"
@@ -184,8 +185,6 @@ const paginatedResults = computed(() => {
 
         const grouped = {};
         pageItems.forEach(item => {
-            console.log("Item categoryTitle:", item.categoryTitle);
-            
             if (!grouped[item.categoryTitle]) {
                 grouped[item.categoryTitle] = {
                     title: item.categoryTitle,

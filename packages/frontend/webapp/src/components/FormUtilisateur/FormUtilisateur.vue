@@ -196,6 +196,14 @@ watch(values.value.association, (newAssociation) => {
 });
 
 const onOrganizationChange = (value) => {
+    if (value === undefined) {
+        form.value.setFieldValue("organisation", null);
+        form.value.setFieldValue("organization_category", "");
+        form.value.setFieldValue("territorial_collectivity", "");
+        form.value.setFieldValue("association", "");
+        form.value.setFieldValue("private_organization", "");
+        return;
+    }
     if (value?.data !== null) {
         form.value.setFieldValue("organization_category", value.data.category);
         form.value.setFieldValue(value.data.category, value);
