@@ -82,9 +82,17 @@ export default (
             .oneOf([ref("email")], locales[language].string.verif_email)
             .label(labels.verif_email);
     }
-    schema.first_name = string().required().label(labels.first_name);
-    schema.last_name = string().required().label(labels.last_name);
-    const phone = string().label(labels.phone);
+    schema.first_name = string()
+        .matches(/^[^0-9]*$/, "Le prénom ne doit pas contenir de chiffres")
+        .required()
+        .label(labels.first_name);
+    schema.last_name = string()
+        .matches(/^[^0-9]*$/, "Le nom ne doit pas contenir de chiffres")
+        .required()
+        .label(labels.last_name);
+    const phone = string()
+        .matches(/^[0-9 ]*$/, "Le numéro de téléphone n'est pas valide")
+        .label(labels.phone);
     schema.phone = variant === "demande-acces" ? phone.required() : phone;
 
     // request-type and is-actor
@@ -96,6 +104,17 @@ export default (
     }
 
     // organization type
+    schema.organization = object()
+        .customSchema(
+            object({
+                data: object({
+                    id: number().required(),
+                    category: string().required(),
+                }).required(),
+            })
+        )
+        .required()
+        .label(labels.organization);
     schema.organization_type = number()
         .when("organization_category", {
             is: "public_establishment",
@@ -172,6 +191,10 @@ export default (
             then: (schema) => schema.required(),
         })
         .label(labels.organization_other_territory);
+
+    if (variant === "demande-acces") {
+        schema.position = string().required().label(labels.position);
+    }
 
     if (variant === "demande-acces" && language === "fr") {
         schema.access_request_message = string()
