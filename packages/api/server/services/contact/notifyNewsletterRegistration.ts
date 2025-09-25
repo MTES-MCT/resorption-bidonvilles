@@ -4,8 +4,8 @@ import { EmailRecipient } from '#root/types/resources/EmailRecipient.d';
 export default async (recipient: EmailRecipient): Promise<void> => {
     await mailsUtils.sendContactNewsletterRegistration(
         {
-            email: 'sales@resorption-bidonvilles.dihal.gouv.fr',
-            first_name: 'Équipe Sales',
+            email: 'contact-resorption-bidonvilles@dihal.gouv.fr',
+            first_name: 'L\'Équipe Plateforme',
             last_name: 'Résorption Bidonvilles',
         },
         {
