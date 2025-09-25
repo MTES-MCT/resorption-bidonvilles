@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { toRefs, ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
+import { toRefs, ref, computed, onBeforeUnmount } from "vue";
 import debounce from "../../utils/debounce";
 import { useIsSubmitting } from "vee-validate";
 
@@ -141,7 +141,7 @@ const error = ref(false);
 const currentPage = ref(0);
 const isClickInsideDropdown = ref(false);
 const itemsPerPage = 10;
-let lastEvent = undefined;
+let lastEvent;
 let callId = 0;
 
 const isSubmitting = useIsSubmitting();
@@ -167,7 +167,7 @@ const pages = computed(() => {
 
 const flatResults = computed(() => {
     if (showCategory.value) {
-        return results.value.map(r => r.items).flat();
+        return results.value.flatMap(r => r.items);
     }
     return rawResults.value;
 });
@@ -421,7 +421,7 @@ const focusedItemId = computed(() => {
         return;
     }
 
-    return results.value.map(({ items }) => items).flat()[focusedItemIndex.value].id;
+    return results.value.flatMap(({ items }) => items)[focusedItemIndex.value].id;
 });
 
 const results = computed(() => {
