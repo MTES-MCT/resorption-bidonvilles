@@ -8,14 +8,14 @@
         />
 
         <FormUtilisateur
-            variant="demande-acces"
+            :variant="demandeAccesOnly ? 'demande-acces' : 'demande-contact'"
             :submit="submit"
             :language="language"
         >
             <template v-slot:subtitle>{{
                 translations[language].subtitle
             }}</template>
-            <template v-slot:title>{{ translations[language].title }}</template>
+            <template v-slot:title>{{ formTitle }}</template>
             <template v-slot:alert>{{ translations[language].alert }}</template>
             <template v-slot:structureTitle>{{
                 translations[language].structure
@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { requestCreation } from "@/api/contact.api.js";
 import { trackEvent } from "@/helpers/matomo.js";
@@ -47,6 +47,12 @@ const demandeAccesOnly = computed(() => {
     return acces !== undefined;
 });
 
+const formTitle = computed(() => {
+    return !demandeAccesOnly.value && language.value === "fr"
+        ? translations[language.value].title_contact_request
+        : translations[language.value].title;
+});
+
 async function submit(values) {
     await requestCreation(values);
 
@@ -54,6 +60,8 @@ async function submit(values) {
     const isAccessRequest =
         values.request_type.includes("access-request") &&
         values.is_actor === true;
+    console.log("AccessRequest?", isAccessRequest);
+
     if (isAccessRequest) {
         trackEvent("Demande d accès", "Demande d accès");
     } else {
@@ -83,4 +91,18 @@ async function submit(values) {
         )}&last_name=${encodeURIComponent(values.last_name)}&from=${from}`
     );
 }
+const changePageTitle = () => {
+    document.title =
+        !demandeAccesOnly.value && language.value === "fr"
+            ? "Contacter l'équipe"
+            : "Demander un accès";
+};
+
+watch(demandeAccesOnly, () => {
+    changePageTitle();
+});
+
+onMounted(() => {
+    changePageTitle();
+});
 </script>

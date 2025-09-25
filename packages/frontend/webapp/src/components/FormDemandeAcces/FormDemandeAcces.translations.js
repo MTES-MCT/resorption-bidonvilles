@@ -3,6 +3,7 @@ export default {
         subtitle:
             "Acteur de terrain, médiateur, association, service de l'État, collectivité... Demandez un accès à votre outil collaboratif.",
         title: "Demandez un accès",
+        title_contact_request: "Contacter l'équipe Résorption Bidonvilles",
         alert: "(Tous les champs du formulaire doivent être renseignés)",
         structure: "Votre structure",
         submit: "Envoyer ma demande",

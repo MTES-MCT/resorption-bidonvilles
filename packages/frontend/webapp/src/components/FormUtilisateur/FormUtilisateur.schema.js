@@ -76,7 +76,7 @@ export default (
 
     // personal information
     schema.email = string().required().email().label(labels.email);
-    if (variant === "demande-acces") {
+    if (["demande-acces", "demande-contact"].includes(variant)) {
         schema.verif_email = string()
             .required()
             .oneOf([ref("email")], locales[language].string.verif_email)
@@ -93,10 +93,12 @@ export default (
     const phone = string()
         .matches(/^[0-9 ]*$/, "Le numéro de téléphone n'est pas valide")
         .label(labels.phone);
-    schema.phone = variant === "demande-acces" ? phone.required() : phone;
+    schema.phone = ["demande-acces", "demande-contact"].includes(variant)
+        ? phone.required()
+        : phone;
 
     // request-type and is-actor
-    if (variant === "demande-acces") {
+    if (variant === "demande-contact") {
         schema.request_type = string()
             .required()
             .oneOf(access_request_types[language].map(({ value }) => value))
@@ -104,99 +106,102 @@ export default (
     }
 
     // organization type
-    schema.organization = object()
-        .customSchema(
-            object({
-                data: object({
-                    id: number(),
-                    category: string(),
-                }).nullable(),
-            })
-        )
-        .required()
-        .label(labels.organization);
-    schema.organization_type = number()
-        .when("organization_category", {
-            is: "public_establishment",
-            then: (schema) => schema.required(),
-        })
-        .label(labels.organization_type);
-
-    schema.organization_public = number()
-        .when("organization_type", {
-            is: (type) => !!type,
-            then: (schema) => schema.required(),
-        })
-        .label(labels.organization_public);
-    schema.territorial_collectivity = object()
-        .when("organization_category", {
-            is: "territorial_collectivity",
-            then: (schema) =>
-                schema.required().customSchema(
-                    object({
-                        data: object({
-                            id: number().required(),
-                        }).required(),
-                    })
-                ),
-        })
-        .label(labels.territorial_collectivity);
-    schema.association = object()
-        .when("organization_category", {
-            is: "association",
-            then: (schema) =>
-                schema.required().customSchema(
-                    object({
-                        data: object({
-                            id: number().required(),
-                        }).required(),
-                    })
-                ),
-        })
-        .label(labels.association);
-    schema.organization_administration = string()
-        .when("organization_category", {
-            is: "administration",
-            then: (schema) => schema.required(),
-        })
-        .label(labels.organization_administration);
-    schema.private_organization = object()
-        .when("organization_category", {
-            is: "private_organization",
-            then: (schema) =>
-                schema.required().customSchema(
-                    object({
-                        data: object({
-                            id: number().required(),
-                        }).required(),
-                    })
-                ),
-        })
-        .label(labels.private_organization);
-    schema.organization_other = string()
-        .when("organization_category", {
-            is: "other",
-            then: (schema) => schema.required(),
-        })
-        .label(labels.organization_other);
-    schema.organization_other_acronyme = string()
-        .when("organization_category", {
-            is: "other",
-            then: (schema) => schema.required(),
-        })
-        .label(labels.organization_other_acronyme);
-    schema.organization_other_territory = string()
-        .when("organization_category", {
-            is: "other",
-            then: (schema) => schema.required(),
-        })
-        .label(labels.organization_other_territory);
-
     if (variant === "demande-acces") {
+        schema.organization = object()
+            .customSchema(
+                object({
+                    data: object({
+                        id: number(),
+                        category: string(),
+                    }).nullable(),
+                })
+            )
+            .required()
+            .label(labels.organization);
+        schema.organization_type = number()
+            .when("organization_category", {
+                is: "public_establishment",
+                then: (schema) => schema.required(),
+            })
+            .label(labels.organization_type);
+
+        schema.organization_public = number()
+            .when("organization_type", {
+                is: (type) => !!type,
+                then: (schema) => schema.required(),
+            })
+            .label(labels.organization_public);
+        schema.territorial_collectivity = object()
+            .when("organization_category", {
+                is: "territorial_collectivity",
+                then: (schema) =>
+                    schema.required().customSchema(
+                        object({
+                            data: object({
+                                id: number().required(),
+                            }).required(),
+                        })
+                    ),
+            })
+            .label(labels.territorial_collectivity);
+        schema.association = object()
+            .when("organization_category", {
+                is: "association",
+                then: (schema) =>
+                    schema.required().customSchema(
+                        object({
+                            data: object({
+                                id: number().required(),
+                            }).required(),
+                        })
+                    ),
+            })
+            .label(labels.association);
+        schema.organization_administration = string()
+            .when("organization_category", {
+                is: "administration",
+                then: (schema) => schema.required(),
+            })
+            .label(labels.organization_administration);
+        schema.private_organization = object()
+            .when("organization_category", {
+                is: "private_organization",
+                then: (schema) =>
+                    schema.required().customSchema(
+                        object({
+                            data: object({
+                                id: number().required(),
+                            }).required(),
+                        })
+                    ),
+            })
+            .label(labels.private_organization);
+        schema.organization_other = string()
+            .when("organization_category", {
+                is: "other",
+                then: (schema) => schema.required(),
+            })
+            .label(labels.organization_other);
+        schema.organization_other_acronyme = string()
+            .when("organization_category", {
+                is: "other",
+                then: (schema) => schema.required(),
+            })
+            .label(labels.organization_other_acronyme);
+        schema.organization_other_territory = string()
+            .when("organization_category", {
+                is: "other",
+                then: (schema) => schema.required(),
+            })
+            .label(labels.organization_other_territory);
+
         schema.position = string().required().label(labels.position);
     }
 
-    if (variant === "demande-acces" && language === "fr") {
+    if (
+        ["demande-acces", "demande-contact"].includes(variant) &&
+        language === "fr"
+    ) {
         schema.access_request_message = string()
             .required()
             .label(labels.access_request_message);

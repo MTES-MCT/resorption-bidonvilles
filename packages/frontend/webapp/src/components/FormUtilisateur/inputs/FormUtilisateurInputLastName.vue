@@ -9,9 +9,14 @@
         @blur="handleBlur"
     >
         <template #before-input>
-            <span class="font-bold not-italic" aria-hidden="true">{{
-                label
-            }}</span>
+            <div class="flex items-center gap-1">
+                <span class="font-bold not-italic" aria-hidden="true">{{
+                    label
+                }}</span>
+                <span v-if="showMandatoryStar" class="text-red500 font-bold"
+                    >*</span
+                >
+            </div>
         </template>
     </DsfrInputGroup>
 </template>
@@ -22,6 +27,9 @@ import { useField, useIsSubmitting } from "vee-validate";
 
 const props = defineProps({
     label: String,
+    value: String,
+    showMandatoryStar: Boolean,
+    "aria-label": String,
 });
 const { label } = toRefs(props);
 

@@ -21,7 +21,7 @@
                 :autocomplete="email"
             />
             <FormUtilisateurInputEmailConfirmation
-                v-if="variant === 'demande-acces'"
+                v-if="['demande-acces', 'demande-contact'].includes(variant)"
                 :label="labels.verif_email"
             />
             <FormUtilisateurInputFirstName
@@ -39,7 +39,7 @@
                 :autocomplete="tel"
             />
             <FormUtilisateurInputRequestType
-                v-if="variant === 'demande-acces'"
+                v-if="variant === 'demande-contact'"
                 :class="{ hidden: demandeAccesOnly }"
                 :label="labels.request_type"
                 :language="language"
@@ -48,7 +48,7 @@
                 v-if="
                     (values.request_type &&
                         values.request_type.includes('access-request')) ||
-                    variant === 'creer-utilisateur'
+                    ['creer-utilisateur', 'demande-acces'].includes(variant)
                 "
             >
                 <p class="font-bold text-xl">
@@ -75,16 +75,17 @@
             </div>
             <FormUtilisateurInputPosition
                 v-if="
-                    values.is_actor === true || variant === 'creer-utilisateur'
+                    values.is_actor === true ||
+                    ['creer-utilisateur', 'demande-acces'].includes(variant)
                 "
                 :label="labels.position"
             />
             <FormUtilisateurInputMessage
-                v-if="variant === 'demande-acces'"
+                v-if="['demande-acces', 'demande-contact'].includes(variant)"
                 :label="labels.access_request_message"
             />
             <FormUtilisateurInputReferral
-                v-if="variant === 'demande-acces'"
+                v-if="['demande-acces', 'demande-contact'].includes(variant)"
                 :label="labels.referral"
                 :language="language"
             />
@@ -138,7 +139,7 @@ import labelsFn from "./FormUtilisateur.labels";
 
 const props = defineProps({
     variant: {
-        type: String, // soit "demande-acces", soit "creer-utilisateur"
+        type: String, // soit "demande-acces", soit "demande-contact", soit "creer-utilisateur"
         required: true,
     },
     submit: {

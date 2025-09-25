@@ -525,7 +525,7 @@ const router = createRouter({
             path: "/contact",
             component: () => import("@/views/DemandeAccesView.vue"),
             meta: {
-                title: "Demander un accès",
+                title: "Contacter l'équipe",
                 requirements: {
                     auth: "signedOut",
                     configLoaded: false,
