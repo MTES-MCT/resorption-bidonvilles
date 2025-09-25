@@ -5,6 +5,7 @@
         title="Prévenir les risques lors des vagues de chaleur"
         description='Pensez à identifier les sites nécessitant une intervention urgente via le bouton "Alerte canicule" sur la liste des sites, et suivez les actions mises en œuvre via le journal du site.'
         width="w-3/4"
+        :enabled="false"
     />
     <FicheSiteHeader
         :town="town"

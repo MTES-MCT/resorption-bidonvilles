@@ -16,7 +16,7 @@
     </div>
 </template>
 <script setup>
-import { ref, toRefs } from "vue";
+import { computed, toRefs } from "vue";
 
 const props = defineProps({
     type: {
@@ -57,10 +57,17 @@ const props = defineProps({
         required: false,
         default: "w-full",
     },
+    enabled: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
 });
-const { type, title, description, closeable } = toRefs(props);
+const { type, title, description, closeable, enabled } = toRefs(props);
 
-const isClosed = ref(false);
+const isClosed = computed(() => {
+    return !enabled.value || false;
+});
 const closeNotice = () => {
     isClosed.value = true;
 };
