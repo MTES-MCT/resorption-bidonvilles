@@ -1,7 +1,7 @@
 import mailsUtils from '#server/mails/mails';
 import { EmailRecipient } from '#root/types/resources/EmailRecipient.d';
 
-export default async (recipient: EmailRecipient): Promise<void> => {
+const notifyNewsletterRegistration = async (recipient: EmailRecipient): Promise<void> => {
     await mailsUtils.sendContactNewsletterRegistration(
         {
             email: 'contact-resorption-bidonvilles@dihal.gouv.fr',
@@ -21,3 +21,5 @@ export default async (recipient: EmailRecipient): Promise<void> => {
         },
     );
 };
+
+export default notifyNewsletterRegistration;
