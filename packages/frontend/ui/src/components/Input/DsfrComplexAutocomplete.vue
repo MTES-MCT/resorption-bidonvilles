@@ -184,7 +184,7 @@ const paginatedResults = computed(() => {
         const pageItems = categorizedItems.slice(start, end);
 
         const grouped = {};
-        pageItems.forEach(item => {
+        for (const item of pageItems) {
             if (!grouped[item.categoryTitle]) {
                 grouped[item.categoryTitle] = {
                     title: item.categoryTitle,
@@ -192,8 +192,8 @@ const paginatedResults = computed(() => {
                 };
             }
             grouped[item.categoryTitle].items.push(item);
-        });
-        grouped[""] ={
+        }
+        grouped[""] = {
             title: "",
             items: [
                 {
@@ -268,6 +268,8 @@ async function getResults(value, originalCallId) {
             rawResults.value = results;
         }
     } catch (e) {
+        //eslint-disable-next-line no-console
+        console.error(e);
         errors.value.push("Le chargement des données a échoué");
     }
 
