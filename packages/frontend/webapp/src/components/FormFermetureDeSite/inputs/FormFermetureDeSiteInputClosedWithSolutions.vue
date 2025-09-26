@@ -1,35 +1,39 @@
 <template>
-    <CheckableGroup
-        id="closed_with_solutions"
-        :label="labels.closed_with_solutions"
-        :info="info"
-        validationName="Est-ce que ce site a été résorbé définitivement ?"
-    >
+    <div class="flex flex-col gap-2 -mb-2">
+        <p class="font-bold -mb-0">{{ labels.closed_with_solutions }}</p>
+        <span v-if="peopleWithSolutions != null">
+            D'après les informations renseignées, environ
+            <DsfrBadge
+                small
+                :type="calculatedValue.color"
+                :label="`${peopleWithSolutions}%`"
+                noIcon
+            />
+            des habitants du site ont été orienté·es vers une solution longue
+            durée d’hébergement ou de logement adapté avec accompagnement, dont
+            espace temporaire d'accompagnement
+        </span>
         <span class="mb-4"
             >Un site est considéré comme résorbé si une solution pérenne en
             logement ou hébergement est mise en place pour 66 % des habitants du
             site.
         </span>
-
-        <Radio
-            :value="true"
-            label="Oui"
-            variant="card"
-            class="mr-1"
-            name="closed_with_solutions"
-        />
-        <Radio
-            :value="false"
-            label="Non"
-            variant="card"
-            name="closed_with_solutions"
-        />
-    </CheckableGroup>
+    </div>
+    <DsfrRadioButtonSet
+        v-model="calculatedValue.value"
+        name="closed_with_solutions"
+        id="closed_with_solutions"
+        small
+        class="!-mb-6"
+        :options="[
+            { label: 'Oui', value: true },
+            { label: 'Non', value: false },
+        ]"
+    />
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs } from "vue";
-import { CheckableGroup, Radio } from "@resorptionbidonvilles/ui";
+import { computed, toRefs } from "vue";
 import labels from "../FormFermetureDeSite.labels";
 
 const props = defineProps({
@@ -40,19 +44,16 @@ const props = defineProps({
 });
 const { peopleWithSolutions } = toRefs(props);
 
-const info = computed(() => {
-    if (
-        peopleWithSolutions.value === undefined ||
-        peopleWithSolutions.value === null
-    ) {
-        return "";
+const calculatedValue = computed(() => {
+    if (peopleWithSolutions.value === undefined) {
+        return { color: "default", value: false };
     }
-
-    return `D'après les informations renseignées, environ 
-        ${peopleWithSolutions.value} %
-        des habitants du site ont été
-        orientées vers une solution longue durée d’hébergement ou de
-        logement adapté avec accompagnement,
-        dont espace temporaire d'accompagnement`;
+    if (peopleWithSolutions.value >= 66) {
+        return { color: "success", value: true };
+    }
+    if (peopleWithSolutions.value >= 33) {
+        return { color: "warning", value: false };
+    }
+    return { color: "error", value: false };
 });
 </script>
