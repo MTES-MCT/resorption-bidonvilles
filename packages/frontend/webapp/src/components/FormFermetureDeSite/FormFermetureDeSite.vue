@@ -21,7 +21,10 @@
 
         <FormFermetureDeSiteInputClosedAt :disabled="mode === 'fix'" />
         <FormFermetureDeSiteInputStatus :disabled="mode === 'fix'" />
-        <FormFermetureDeSiteInputClosingContext :disabled="mode === 'fix'" />
+        <FormFermetureDeSiteInputClosingContext
+            :disabled="mode === 'fix'"
+            class="mb-6"
+        />
         <FormFermetureDeSiteInputSolutions
             :disabled="mode === 'fix'"
             @update:solutions="handleSolutions"
