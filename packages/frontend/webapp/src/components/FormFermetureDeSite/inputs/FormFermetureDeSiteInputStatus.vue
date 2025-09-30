@@ -8,7 +8,7 @@
         :errorMessage="errors.length > 0 ? errors[0] : ''"
     >
         <template #legend>
-            <p class="font-bold">{{ labels.status }}</p>
+            <p class="font-bold mb-4">{{ labels.status }}</p>
         </template>
     </DsfrRadioButtonSet>
 </template>

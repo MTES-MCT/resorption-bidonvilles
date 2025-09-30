@@ -1,5 +1,10 @@
 <template>
-    <DsfrCheckboxSet name="solutions" id="solutions" small>
+    <DsfrCheckboxSet
+        name="solutions"
+        id="solutions"
+        :errorMessage="errors ? errors : ''"
+        small
+    >
         <template #legend>
             <span class="font-bold">{{ labels.solutions }}</span>
         </template>
@@ -20,7 +25,7 @@
                 />
                 <div
                     v-if="values.solutions.includes(item.id)"
-                    class="mb-3 bg-blue100 p-3 rounded-sm border-2 border-G200"
+                    class="ml-8 mb-3 bg-blue100 p-3 rounded-sm border-2 border-G200"
                 >
                     <div class="flex items-center justify-between space-x-3">
                         <span>Ménages</span>
@@ -61,10 +66,20 @@
 </template>
 
 <script setup>
-import { watch } from "vue";
+import { watch, toRefs } from "vue";
 import { useFormValues } from "vee-validate";
 import { useConfigStore } from "@/stores/config.store";
 import labels from "../FormFermetureDeSite.labels";
+
+const props = defineProps({
+    errors: {
+        type: Array,
+        required: false,
+        default: () => [],
+    },
+});
+
+const { errors } = toRefs(props);
 
 const emit = defineEmits(["update:solutions"]);
 const configStore = useConfigStore();
