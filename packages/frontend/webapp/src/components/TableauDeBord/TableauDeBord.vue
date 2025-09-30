@@ -5,6 +5,7 @@
             description='Pensez à identifier les sites nécessitant une intervention urgente via le bouton "Alerte canicule" sur la liste des sites, et suivez les actions mises en œuvre via le journal du site.'
             type="warning"
             fullWidth
+            :enabled="false"
         />
         <TableauDeBordGrille :cards="cards" />
     </ContentWrapper>
