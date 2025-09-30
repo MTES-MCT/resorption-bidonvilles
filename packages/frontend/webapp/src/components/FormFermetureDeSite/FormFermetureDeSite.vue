@@ -28,6 +28,7 @@
         <FormFermetureDeSiteInputSolutions
             :disabled="mode === 'fix'"
             @update:solutions="handleSolutions"
+            :errors="error"
         />
         <FormFermetureDeSiteInputClosedWithSolutions
             :peopleWithSolutions="peopleWithSolutions"
@@ -37,16 +38,15 @@
     <ErrorSummary
         id="erreurs"
         class="mt-12"
-        v-if="error || Object.keys(errors).length > 0"
-        :message="error"
+        v-if="Object.keys(errors).length > 0"
         :summary="errors"
     />
 </template>
 
 <script setup>
 import ENV from "@/helpers/env.js";
-import { defineProps, defineExpose, ref, toRefs, computed } from "vue";
-import { useForm, useFormErrors } from "vee-validate";
+import { ref, toRefs, computed } from "vue";
+import { useForm } from "vee-validate";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
 import formatDate from "@common/utils/formatDate";
@@ -69,9 +69,8 @@ const props = defineProps({
     town: Object,
 });
 const { town } = toRefs(props);
-const errors = useFormErrors();
 const error = ref(null);
-const peopleWithSolutions = ref(0);
+const peopleWithSolutions = ref(null);
 const totalPeopleAffected = ref(0);
 
 const mode = computed(() => {
@@ -81,7 +80,7 @@ const schema = computed(() => {
     return schemaFn(mode.value);
 });
 
-const { handleSubmit, setErrors, isSubmitting } = useForm({
+const { handleSubmit, setErrors, errors, isSubmitting } = useForm({
     validationSchema: schema,
     initialValues: {
         closed_at: town.value.closedAt
@@ -141,6 +140,10 @@ const handleSolutions = (newValue) => {
         0
     );
 
+    if (newValue.length === 0 || actualPeopleAffected === 0) {
+        peopleWithSolutions.value = null;
+        return;
+    }
     peopleWithSolutions.value = (
         (actualPeopleAffected / town.value.populationTotal) *
         100
