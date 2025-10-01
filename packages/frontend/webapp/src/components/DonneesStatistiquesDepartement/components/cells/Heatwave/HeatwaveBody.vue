@@ -1,14 +1,13 @@
 <template>
-    <Icon
-        class="text-red600"
-        icon="temperature-high"
+    <VIcon
+        class="!text-secondary"
+        name="ri:sun-fill"
         v-if="town.heatwave === true"
     />
 </template>
 
 <script setup>
 import { toRefs } from "vue";
-import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({ town: Object });
 const { town } = toRefs(props);
