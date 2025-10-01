@@ -21,7 +21,6 @@
             site.
         </span>
     </div>
-    {{ calculatedValue.value }}
     <DsfrRadioButtonSet
         v-model="closedWithSolutions"
         name="closed_with_solutions"
