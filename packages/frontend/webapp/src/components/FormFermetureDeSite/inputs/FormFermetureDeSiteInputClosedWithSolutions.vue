@@ -9,7 +9,7 @@
                 ><span class="font-normal">
                     D'après les informations renseignées, environ
                     <span class="font-bold">{{ peopleWithSolutions }}%</span>
-                    des habitants du site ont été orienté·es vers une solution
+                    des habitants du site ont été orientés vers une solution
                     longue durée d’hébergement ou de logement adapté avec
                     accompagnement, dont espace temporaire d'accompagnement
                 </span>
