@@ -51,8 +51,12 @@ const { value: closedWithSolutions, setValue } = useField(
     "closed_with_solutions"
 );
 
+if (peopleWithSolutions.value === null) {
+    setValue(false);
+}
+
 const calculatedValue = computed(() => {
-    if (peopleWithSolutions.value >= 66) {
+    if (peopleWithSolutions.value >= 66 && peopleWithSolutions.value <= 100) {
         setValue(true);
         return { color: "info", value: true };
     }
