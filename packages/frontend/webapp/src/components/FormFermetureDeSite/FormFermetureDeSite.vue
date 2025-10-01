@@ -120,7 +120,6 @@ const handleSolutions = (newValue) => {
         ) {
             error.value =
                 "Le nombre de personnes réorientées ne peut pas être supérieur à la population totale du site. Si besoin, avant de procéder à la fermeture du site, veuillez mettre à jour la population totale dans la rubrique habitants.";
-            return;
         } else {
             error.value = null;
         }
@@ -221,6 +220,8 @@ defineExpose({
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             if (e?.fields) {
+                console.log("Field errors: ", e.fields);
+
                 setErrors(e.fields);
             }
         }
