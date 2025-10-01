@@ -8,6 +8,12 @@ const collections = [
             "flag-fill": {
                 body: '<path fill="currentColor" d="M3 3h9.382a1 1 0 0 1 .894.553L14 5h6a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-6.382a1 1 0 0 1-.894-.553L12 16H5v6H3z"/>',
             },
+            "sun-fill": {
+                body: '<path fill="currentColor" d="M12 18a6 6 0 1 1 0-12a6 6 0 0 1 0 12M11 1h2v3h-2zm0 19h2v3h-2zM3.515 4.929l1.414-1.414L7.05 5.636L5.636 7.05zM16.95 18.364l1.414-1.414l2.121 2.121l-1.414 1.414zm2.121-14.85l1.414 1.415l-2.121 2.121l-1.414-1.414zM5.636 16.95l1.414 1.414l-2.121 2.121l-1.414-1.414zM23 11v2h-3v-2zM4 11v2H1v-2z"/>',
+            },
+            "sun-line": {
+                body: '<path fill="currentColor" d="M12 18a6 6 0 1 1 0-12a6 6 0 0 1 0 12m0-2a4 4 0 1 0 0-8a4 4 0 0 0 0 8M11 1h2v3h-2zm0 19h2v3h-2zM3.515 4.929l1.414-1.414L7.05 5.636L5.636 7.05zM16.95 18.364l1.414-1.414l2.121 2.121l-1.414 1.414zm2.121-14.85l1.414 1.415l-2.121 2.121l-1.414-1.414zM5.636 16.95l1.414 1.414l-2.121 2.121l-1.414-1.414zM23 11v2h-3v-2zM4 11v2H1v-2z"/>',
+            },
         },
         width: 24,
         height: 24,
@@ -24,9 +30,7 @@ const collections = [
             "home-remove-outline": {
                 body: '<path fill="currentColor" d="m14.46 15.88l1.42-1.42L18 16.59l2.12-2.12l1.42 1.41L19.41 18l2.13 2.12l-1.42 1.42L18 19.41l-2.12 2.13l-1.42-1.42L16.59 18l-2.12-2.12M5 20v-8H2l10-9l10 9h-5v-1.81l-5-4.5l-5 4.5V18h5c0 .7.12 1.37.34 2z"/>',
             },
-            play: {
-                body: '<path fill="currentColor" d="M8 5.14v14l11-7z"/>',
-            },
+            play: { body: '<path fill="currentColor" d="M8 5.14v14l11-7z"/>' },
         },
         width: 24,
         height: 24,
@@ -62,10 +66,11 @@ const collections = [
         height: 32,
     },
 ];
-
 export const ri = {
     fileExcelFill: "ri:file-excel-fill",
     flagFill: "ri:flag-fill",
+    sunFill: "ri:sun-fill",
+    sunLine: "ri:sun-line",
 };
 export const mdi = {
     accountEdit: "mdi:account-edit",
