@@ -8,7 +8,7 @@
                     ? 'Supprimer l\'alerte Canicule'
                     : 'Alerte Canicule'
             "
-            icon="carbon:temperature-hot"
+            icon="ri:sun-fill"
             secondary
             no-outline
             :disabled="heatwaveRequestStatus?.loading"

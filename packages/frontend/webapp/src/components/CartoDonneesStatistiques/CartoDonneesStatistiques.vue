@@ -38,7 +38,16 @@
                             ].icons"
                             :key="displayedLegendItem"
                         >
-                            <Icon class="mx-2" :icon="displayedLegendItem" />
+                            <VIcon
+                                v-if="displayedLegendItem === 'ri:sun-fill'"
+                                :name="displayedLegendItem"
+                                class="mx-2"
+                            />
+                            <Icon
+                                v-else
+                                class="mx-2"
+                                :icon="displayedLegendItem"
+                            />
                         </div>
                     </div>
 
@@ -116,7 +125,7 @@ const displayedLegend = {
             "fire-extinguisher",
             "toilet",
             "bug-slash",
-            "temperature-high",
+            "ri:sun-fill",
         ],
         labels: [
             "Accès à l'eau",

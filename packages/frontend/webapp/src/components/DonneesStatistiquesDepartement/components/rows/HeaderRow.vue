@@ -41,9 +41,17 @@
                 extraStyle="bg-black/80 rounded-md shadow-md text-white text-left py-3 px-3"
             >
                 <Icon
-                    v-if="!Object.keys(flagMap).includes(col.icon)"
+                    v-if="
+                        !Object.keys(flagMap).includes(col.icon) &&
+                        col.icon !== 'ri:sun-fill'
+                    "
                     class="text-lg text-black"
                     :icon="col.icon"
+                />
+                <!-- Double run pour préparer le passage aux icons DSFR (et parce qu'il n'y a pas de version gratuite de l'icône côté Font-Awsome) -->
+                <VIcon
+                    v-else-if="col.icon === 'ri:sun-fill'"
+                    name="ri:sun-fill"
                 />
 
                 <img v-else :src="flagMap[col.icon].icon" class="w-6 ml-auto" />
