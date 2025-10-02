@@ -3031,6 +3031,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@gouvfr/dsfr@npm:~1.13.0":
+  version: 1.13.2
+  resolution: "@gouvfr/dsfr@npm:1.13.2"
+  checksum: 4945aaa693fe33e843e7497a465ed9a3681e99b5563b0ea92f466dbaeb911b7ba647f5ccccd16f615211063d2cbc9a6f46ae07d745df4e7b5878fcc27b9db24a
+  languageName: node
+  linkType: hard
+
 "@gouvminint/vue-dsfr@npm:^8.8.0":
   version: 8.8.0
   resolution: "@gouvminint/vue-dsfr@npm:8.8.0"
