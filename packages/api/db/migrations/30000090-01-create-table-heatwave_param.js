@@ -7,7 +7,7 @@ module.exports = {
                 'heatwave_param',
                 {
                     start_date: {
-                        type: Sequelize.INTEGER,
+                        type: Sequelize.DATE,
                         allowNull: false,
                     },
                     end_date: {
