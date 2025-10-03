@@ -18,6 +18,7 @@
                         >s</template
                     ><template v-if="updatedSitesInTheLastSixMonths !== null">
                         <DsfrBadge
+                            v-if="currentTab !== 'close'"
                             class="ml-1"
                             small
                             :type="badgeVariant"
@@ -67,9 +68,15 @@ import MiniCarte from "@/components/MiniCarte/MiniCarte.vue";
 import formatStat from "@common/utils/formatStat";
 import getSince from "@/utils/getSince";
 
+const props = defineProps({
+    currentTab: {
+        type: String,
+    },
+});
 const townsStore = useTownsStore();
 const userStore = useUserStore();
 const { location, search } = toRefs(townsStore.filters);
+const { currentTab } = toRefs(props);
 
 const mapLocation = computed(() => {
     return location.value || { typeUid: "nation" };
