@@ -4,11 +4,15 @@ import {
     DsfrBadge,
     DsfrButton,
     DsfrButtonGroup,
+    DsfrCallout,
     DsfrCard,
     DsfrCheckbox,
+    DsfrCheckboxSet,
     DsfrInput,
+    DsfrInputGroup,
     DsfrNotice,
     DsfrPagination,
+    DsfrRadioButtonSet,
     DsfrSearchBar,
     DsfrSegmented,
     DsfrSegmentedSet,
@@ -35,11 +39,15 @@ export function useDsfr(app) {
     app.component("DsfrBadge", DsfrBadge);
     app.component("DsfrButton", DsfrButton);
     app.component("DsfrButtonGroup", DsfrButtonGroup);
+    app.component("DsfrCallout", DsfrCallout);
     app.component("DsfrCard", DsfrCard);
     app.component("DsfrCheckbox", DsfrCheckbox);
+    app.component("DsfrCheckboxSet", DsfrCheckboxSet);
     app.component("DsfrInput", DsfrInput);
+    app.component("DsfrInputGroup", DsfrInputGroup);
     app.component("DsfrNotice", DsfrNotice);
     app.component("DsfrPagination", DsfrPagination);
+    app.component("DsfrRadioButtonSet", DsfrRadioButtonSet);
     app.component("DsfrSearchBar", DsfrSearchBar);
     app.component("DsfrSegmented", DsfrSegmented);
     app.component("DsfrSegmentedSet", DsfrSegmentedSet);
