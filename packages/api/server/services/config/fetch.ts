@@ -18,8 +18,9 @@ import topicModel from '#server/models/topicModel/index';
 import userModel from '#server/models/userModel/index';
 import roleModel from '#server/models/roleModel/index';
 import preparatoryPhasesTowardResorptionModel from '#server/models/preparatoryPhasesTowardResorptionModel/index';
-
 import ServiceError from '#server/errors/ServiceError';
+import heatwaveService from '#server/services/heatwave/index';
+
 import { ConfigServiceFetchResponse } from '#root/types/services/ConfigService.d';
 import { User } from '#root/types/resources/User.d';
 
@@ -43,6 +44,7 @@ export default async (user: User): Promise<ConfigServiceFetchResponse> => {
             topics,
             roles,
             preparatoryPhasesTowardResorption,
+            heatwave,
         ] = await Promise.all([
             actionFinanceTypeModel.findAll(),
             changelogModel.getChangelogFor(user),
@@ -61,6 +63,7 @@ export default async (user: User): Promise<ConfigServiceFetchResponse> => {
             topicModel.findAll(),
             roleModel.findAll('regular'),
             preparatoryPhasesTowardResorptionModel.getAll(),
+            heatwaveService.get(),
         ]);
 
         return {
@@ -85,6 +88,7 @@ export default async (user: User): Promise<ConfigServiceFetchResponse> => {
             user: extendedUser,
             version_charte_engagement: latestCharte,
             preparatory_phases_toward_resorption: preparatoryPhasesTowardResorption,
+            heatwave,
         };
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
