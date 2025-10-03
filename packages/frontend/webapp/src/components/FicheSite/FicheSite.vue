@@ -9,7 +9,7 @@
     />
     <BandeauNotice
         v-if="
-            town.heatwaveStatus && configStore.config.heatwave?.isPeriodActive
+            town.heatwaveStatus && !configStore.config.heatwave?.isPeriodActive
         "
         class="-mt-6"
         type="warning"
