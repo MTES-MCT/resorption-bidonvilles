@@ -7,6 +7,18 @@
         width="w-3/4"
         :enabled="false"
     />
+    <BandeauNotice
+        v-if="
+            town.heatwaveStatus && configStore.config.heatwave?.isPeriodActive
+        "
+        class="-mt-6"
+        type="warning"
+        title="L'alerte canicule est toujours active sur ce site."
+        description="Nous avons détecté que l'alerte canicule est toujours active sur ce site alors que la période de canicule semble être passée.
+        Pensez à supprimer l'alerte si nécessaire."
+        width="w-3/4"
+    >
+    </BandeauNotice>
     <FicheSiteHeader
         :town="town"
         v-on:openCancel="openCancel"
@@ -72,6 +84,7 @@ import { defineProps, toRefs, computed, watch, ref } from "vue";
 import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
 import { useTownsStore } from "@/stores/towns.store";
+import { useConfigStore } from "@/stores/config.store";
 import menu from "./FicheSite.menu";
 
 import { ContentWrapper } from "@resorptionbidonvilles/ui";
@@ -96,6 +109,7 @@ const props = defineProps({
 const { town } = toRefs(props);
 const userStore = useUserStore();
 const townsStore = useTownsStore();
+const configStore = useConfigStore();
 const { bus } = useEventBus();
 const historique = ref(null);
 
