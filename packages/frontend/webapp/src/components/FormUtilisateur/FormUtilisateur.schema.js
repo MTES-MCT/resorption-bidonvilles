@@ -1,20 +1,9 @@
-import {
-    object,
-    array,
-    string,
-    boolean,
-    mixed,
-    number,
-    ref,
-    addMethod,
-    setLocale,
-} from "yup";
+import { object, string, mixed, number, ref, addMethod, setLocale } from "yup";
 import { fr } from "yup-locales";
 import labelsFn from "./FormUtilisateur.labels.js";
 
-import requestTypes from "@/utils/access_request_types";
-import organizationCategoriesFn from "@/utils/organization_categories";
 import referrals from "@/utils/contact_referrals";
+import access_request_types from "@/utils/access_request_types";
 
 const locales = {
     fr: {
@@ -87,139 +76,132 @@ export default (
 
     // personal information
     schema.email = string().required().email().label(labels.email);
-    if (variant === "demande-acces") {
+    if (["demande-acces", "demande-contact"].includes(variant)) {
         schema.verif_email = string()
             .required()
             .oneOf([ref("email")], locales[language].string.verif_email)
             .label(labels.verif_email);
     }
-    schema.first_name = string().required().label(labels.first_name);
-    schema.last_name = string().required().label(labels.last_name);
-    const phone = string().label(labels.phone);
-    schema.phone = variant === "demande-acces" ? phone.required() : phone;
+    schema.first_name = string()
+        .matches(/^[^0-9]*$/, "Le prénom ne doit pas contenir de chiffres")
+        .required()
+        .label(labels.first_name);
+    schema.last_name = string()
+        .matches(/^[^0-9]*$/, "Le nom ne doit pas contenir de chiffres")
+        .required()
+        .label(labels.last_name);
+    const phone = string()
+        .matches(/^[0-9 ]*$/, "Le numéro de téléphone n'est pas valide")
+        .label(labels.phone);
+    schema.phone = ["demande-acces", "demande-contact"].includes(variant)
+        ? phone.required()
+        : phone;
 
     // request-type and is-actor
-    if (variant === "demande-acces") {
-        schema.request_type = array()
-            .of(
-                string().oneOf(requestTypes[language].map(({ value }) => value))
-            )
+    if (variant === "demande-contact") {
+        schema.request_type = string()
             .required()
-            .min(1, ({ label }) => `${label} est un champ obligatoire`)
+            .oneOf(access_request_types[language].map(({ value }) => value))
             .label(labels.request_type);
-        schema.is_actor = boolean()
-            .when("request_type", {
-                is: (val) => val?.includes("access-request"),
-                then: (schema) => schema.required(),
-            })
-            .label(labels.is_actor);
-    }
-
-    // organization category
-    const organizationCategory = string().label(labels.organization_category);
-    const organizationCategories = organizationCategoriesFn({
-        private_organization: allowPrivateOrganization,
-        other: allowNewOrganization,
-    });
-    function makeOrganizationCategoryRequired(schema) {
-        return schema
-            .required()
-            .oneOf(organizationCategories.map(({ value }) => value));
-    }
-    if (variant === "demande-acces") {
-        schema.organization_category = organizationCategory.when("is_actor", {
-            is: true,
-            then: makeOrganizationCategoryRequired,
-        });
-    } else {
-        schema.organization_category =
-            makeOrganizationCategoryRequired(organizationCategory);
     }
 
     // organization type
-    schema.organization_type = number()
-        .when("organization_category", {
-            is: "public_establishment",
-            then: (schema) => schema.required(),
-        })
-        .label(labels.organization_type);
-
-    schema.organization_public = number()
-        .when("organization_type", {
-            is: (type) => !!type,
-            then: (schema) => schema.required(),
-        })
-        .label(labels.organization_public);
-    schema.territorial_collectivity = object()
-        .when("organization_category", {
-            is: "territorial_collectivity",
-            then: (schema) =>
-                schema.required().customSchema(
-                    object({
-                        data: object({
-                            id: number().required(),
-                        }).required(),
-                    })
-                ),
-        })
-        .label(labels.territorial_collectivity);
-    schema.association = object()
-        .when("organization_category", {
-            is: "association",
-            then: (schema) =>
-                schema.required().customSchema(
-                    object({
-                        data: object({
-                            id: number().required(),
-                        }).required(),
-                    })
-                ),
-        })
-        .label(labels.association);
-    schema.organization_administration = string()
-        .when("organization_category", {
-            is: "administration",
-            then: (schema) => schema.required(),
-        })
-        .label(labels.organization_administration);
-    schema.private_organization = object()
-        .when("organization_category", {
-            is: "private_organization",
-            then: (schema) =>
-                schema.required().customSchema(
-                    object({
-                        data: object({
-                            id: number().required(),
-                        }).required(),
-                    })
-                ),
-        })
-        .label(labels.private_organization);
-    schema.organization_other = string()
-        .when("organization_category", {
-            is: "other",
-            then: (schema) => schema.required(),
-        })
-        .label(labels.organization_other);
-
-    const position = string().label(labels.position);
-    function makePositionRequired(schema) {
-        return schema.required();
-    }
     if (variant === "demande-acces") {
-        schema.position = position.when(["is_actor", "organization_category"], {
-            is: (is_actor, organization_category) =>
-                is_actor === true && !!organization_category,
-            then: makePositionRequired,
-        });
-    } else {
-        schema.position = position.when("organization_category", {
-            is: (organization_category) => !!organization_category,
-            then: makePositionRequired,
-        });
+        schema.organization = object()
+            .customSchema(
+                object({
+                    data: object({
+                        id: number(),
+                        category: string(),
+                    }).nullable(),
+                })
+            )
+            .required()
+            .label(labels.organization);
+        schema.organization_type = number()
+            .when("organization_category", {
+                is: "public_establishment",
+                then: (schema) => schema.required(),
+            })
+            .label(labels.organization_type);
+
+        schema.organization_public = number()
+            .when("organization_type", {
+                is: (type) => !!type,
+                then: (schema) => schema.required(),
+            })
+            .label(labels.organization_public);
+        schema.territorial_collectivity = object()
+            .when("organization_category", {
+                is: "territorial_collectivity",
+                then: (schema) =>
+                    schema.required().customSchema(
+                        object({
+                            data: object({
+                                id: number().required(),
+                            }).required(),
+                        })
+                    ),
+            })
+            .label(labels.territorial_collectivity);
+        schema.association = object()
+            .when("organization_category", {
+                is: "association",
+                then: (schema) =>
+                    schema.required().customSchema(
+                        object({
+                            data: object({
+                                id: number().required(),
+                            }).required(),
+                        })
+                    ),
+            })
+            .label(labels.association);
+        schema.organization_administration = string()
+            .when("organization_category", {
+                is: "administration",
+                then: (schema) => schema.required(),
+            })
+            .label(labels.organization_administration);
+        schema.private_organization = object()
+            .when("organization_category", {
+                is: "private_organization",
+                then: (schema) =>
+                    schema.required().customSchema(
+                        object({
+                            data: object({
+                                id: number().required(),
+                            }).required(),
+                        })
+                    ),
+            })
+            .label(labels.private_organization);
+        schema.organization_other = string()
+            .when("organization_category", {
+                is: "other",
+                then: (schema) => schema.required(),
+            })
+            .label(labels.organization_other);
+        schema.organization_other_acronyme = string()
+            .when("organization_category", {
+                is: "other",
+                then: (schema) => schema.required(),
+            })
+            .label(labels.organization_other_acronyme);
+        schema.organization_other_territory = string()
+            .when("organization_category", {
+                is: "other",
+                then: (schema) => schema.required(),
+            })
+            .label(labels.organization_other_territory);
+
+        schema.position = string().required().label(labels.position);
     }
 
-    if (variant === "demande-acces" && language === "fr") {
+    if (
+        ["demande-acces", "demande-contact"].includes(variant) &&
+        language === "fr"
+    ) {
         schema.access_request_message = string()
             .required()
             .label(labels.access_request_message);

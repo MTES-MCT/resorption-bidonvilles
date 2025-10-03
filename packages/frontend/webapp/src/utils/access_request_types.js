@@ -1,6 +1,5 @@
 export default {
     fr: [
-        { value: "access-request", label: "Demander un accès à la plateforme" },
         { value: "help", label: "Aider" },
         { value: "report", label: "Signaler" },
         { value: "help-request", label: "Demander de l'aide" },

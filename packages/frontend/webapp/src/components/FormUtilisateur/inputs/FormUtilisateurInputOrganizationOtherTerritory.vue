@@ -1,10 +1,10 @@
 <template>
     <DsfrInputGroup
-        id="phone"
-        :errorMessage="errors[0]"
+        id="organization_other_territory"
+        :errorMessage="errors.length > 0 ? errors : ''"
         :disabled="isSubmitting || disabled"
-        type="tel"
-        v-model="phone"
+        type="text"
+        v-model="organizationOtherTerritory"
         required
         @blur="handleBlur"
     >
@@ -24,11 +24,10 @@ const props = defineProps({
     label: String,
 });
 const { label } = toRefs(props);
-
 const isSubmitting = useIsSubmitting();
 const {
-    value: phone,
+    value: organizationOtherTerritory,
     errors,
     handleBlur,
-} = useField("phone", "required|regex:^[0-9 ]+$");
+} = useField("organization_other_territory", "required");
 </script>
