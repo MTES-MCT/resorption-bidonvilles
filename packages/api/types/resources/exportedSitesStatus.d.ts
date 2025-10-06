@@ -1,1 +1,1 @@
-export type ExportedSitesStatus = 'open' | 'inProgress' | 'close';
+export type ExportedSitesStatus = 'open' | 'inProgress' | 'closed' | 'resorbed';
