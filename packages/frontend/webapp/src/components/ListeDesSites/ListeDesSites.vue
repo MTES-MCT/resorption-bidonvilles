@@ -7,7 +7,7 @@
         <ListeDesSitesErreur v-else-if="townsStore.error" />
 
         <template v-else>
-            <ListeDesSitesStatistiques />
+            <ListeDesSitesStatistiques :currentTab="currentTab" />
             <ListeDesSitesFiltres class="mt-4" />
             <ListeDesSitesListe
                 class="mt-4"
