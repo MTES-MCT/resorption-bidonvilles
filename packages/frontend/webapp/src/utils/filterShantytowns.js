@@ -214,16 +214,10 @@ function checkLocation(shantytown, filters) {
     return l.main === `${filters.location.code}`;
 }
 
-/**
- *
- */
 function checkFieldType(shantytown, filters) {
     return filters.indexOf(shantytown.fieldType.id.toString()) !== -1;
 }
 
-/**
- *
- */
 function checkPopulation(shantytown, filters) {
     return filters.some((value) => {
         if (value === "unknown") {
@@ -247,9 +241,6 @@ function checkPopulation(shantytown, filters) {
     });
 }
 
-/**
- *
- */
 function checkJustice(shantytown, filters) {
     return filters.some((value) => {
         if (value === "ownerComplaint") {
@@ -306,20 +297,22 @@ function checkRhi(shantytown, filters) {
     });
 }
 
-/**
- * Filter on closingReasons
- */
 function checkClosingReason(shantytown, filters) {
-    if (filters.includes(shantytown.status)) {
-        return true;
-    }
-
-    return false;
+    return filters.some((value) => {
+        if (value === "closed_by_admin") {
+            return (
+                shantytown.status === "closed_by_pref_admin" ||
+                shantytown.status === "closed_by_city_admin"
+            );
+        } else {
+            if (filters.includes(shantytown.status)) {
+                return true;
+            }
+        }
+        return false;
+    });
 }
 
-/**
- * Filter on "resorbed or closed ?"
- */
 function checkResorbedOrClosed(shantytown, filters) {
     if (filters.includes("resorbed") && isShantytownResorbed(shantytown)) {
         return true;
@@ -330,9 +323,6 @@ function checkResorbedOrClosed(shantytown, filters) {
     return false;
 }
 
-/**
- *
- */
 function checkActors(shantytown, filters) {
     if (filters.includes("yes") && shantytown.actors.length > 0) {
         return true;
@@ -345,9 +335,6 @@ function checkActors(shantytown, filters) {
     return filters.length === 0;
 }
 
-/**
- *
- */
 function checkTarget(shantytown, filters) {
     if (filters.includes("yes") && shantytown.resorptionTarget !== null) {
         return true;
@@ -360,9 +347,6 @@ function checkTarget(shantytown, filters) {
     return filters.length === 0;
 }
 
-/**
- *
- */
 function checkHeatwave(shantytown, filters) {
     if (filters.includes("yes") && shantytown.heatwaveStatus === true) {
         return true;
