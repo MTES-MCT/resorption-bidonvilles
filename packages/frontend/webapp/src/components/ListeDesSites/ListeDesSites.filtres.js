@@ -108,6 +108,10 @@ export default {
         id: "conditions",
         options: [
             {
+                type: "label",
+                label: "Valeur(s) à améliorer",
+            },
+            {
                 value: "accessToWater",
                 label: "eau",
             },
