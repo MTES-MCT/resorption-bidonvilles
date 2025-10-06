@@ -80,11 +80,10 @@ export function exportList(
     date = new Date(),
     filters = {}
 ) {
-    console.log("Appel exportList");
     const query = {
         locationType: location.type,
         locationCode: location.code,
-        exportedSitesStatus, // "open", "inProgress", "close"
+        exportedSitesStatus, // "open", "inProgress", "resorbed", "close"
         date: date.getTime(),
     };
 
@@ -109,8 +108,6 @@ export function exportList(
     const queryString = Object.keys(query)
         .map((key) => `${key}=${encodeURIComponent(query[key])}`)
         .join("&");
-
-    console.log(queryString);
 
     return axios.get(`/towns/export/excel?${queryString}`, {
         responseType: "blob",
