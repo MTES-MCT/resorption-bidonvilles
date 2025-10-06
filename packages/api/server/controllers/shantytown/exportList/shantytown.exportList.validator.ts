@@ -29,10 +29,13 @@ export default [
             return true;
         }),
 
-    query('closedTowns')
-        .customSanitizer(value => value === '1')
+    // Placer le statut des sites exportés dans le body pour exploitation ultérieure par le contrôleur
+    query('exportedSitesStatus')
+        .exists({ checkNull: true }).bail().withMessage('Le statut des sites exportés est obligatoire')
+        .isString()
+        .isIn(['open', 'inProgress', 'closed', 'resorbed'])
         .custom((value, { req }) => {
-            req.body.closedTowns = value;
+            req.body.exportedSitesStatus = value;
             return true;
         }),
 
@@ -48,8 +51,6 @@ export default [
             try {
                 location = await geoModel.getLocation(type, code);
             } catch (e) {
-                // eslint-disable-next-line no-console
-                console.error(e);
                 throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du périmètre géographique');
             }
 
