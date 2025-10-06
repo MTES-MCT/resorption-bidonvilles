@@ -7,6 +7,7 @@ import serializeShantytown from '#server/models/shantytownModel/_common/serializ
 import { ActorRow } from '#server/models/shantytownActorModel/ActorRow.d';
 import serializeActor from '#server/models/shantytownActorModel/serializeActor';
 import { Location } from '#server/models/geoModel/Location.d';
+import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import SQL, { ShantytownRow } from './_common/SQL';
 import { ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
@@ -17,33 +18,218 @@ const { fromGeoLevelToTableName } = geoUtils;
 const { restrict } = permissionUtils;
 
 type ShantytownObject = { [key: number]: ShantytownRow };
-export default async (user: User, locations: Location[], lastDate: string, closedTowns: boolean): Promise<Shantytown[]> => {
-    const where = [];
-    const replacements: any = {
-        userId: user.id,
+
+async function applyStatusFilters(shantytownHistory: ShantytownRow[], statusFilter: string, user: AuthUser): Promise<ShantytownRow[]> {
+    if (!statusFilter) {
+        return shantytownHistory;
+    }
+
+    const statusFilters = {
+        open: (towns: ShantytownRow[]) => towns.filter(el => el.status === 'open' && el.closedAt === null),
+        inProgress: async (towns: ShantytownRow[]) => {
+            const preparatoryPhases = await shantytownPreparatoryPhasesTowardResorptionModel.find(
+                user,
+                towns.map(row => String(row.id)),
+            );
+            return preparatoryPhases.length > 0
+                ? towns.filter(el => el.status === 'open' && el.closedAt === null
+                    && preparatoryPhases.some(phase => phase.townId === el.id))
+                : [];
+        },
+
+        closed: (towns: ShantytownRow[]) => towns.filter(el => el.status !== 'open' && el.closedAt !== null),
+        resorbed: (towns: ShantytownRow[]) => towns.filter(el => el.status !== 'open' && el.closedWithSolutions === 'yes' && el.closedAt !== null),
     };
 
-    const restrictedLocations = locations.map(l => restrict(l).for(user).askingTo('list', 'shantytown')).flat();
-    if (restrictedLocations.length === 0) {
-        return [];
+    const filterFn = statusFilters[statusFilter];
+    return filterFn ? filterFn(shantytownHistory) : shantytownHistory;
+}
+
+function applyPopulationFilters(shantytownHistory: ShantytownRow[], populationFilter: string): ShantytownRow[] {
+    if (!populationFilter) {
+        return shantytownHistory;
     }
 
-    if (!restrictedLocations.some(l => l.type === 'nation')) {
-        where.push(
-            restrictedLocations.map((l, index) => {
-                replacements[`shantytownLocationCode${index}`] = l[l.type].code;
-                const arr = [`${fromGeoLevelToTableName(l.type)}.code = :shantytownLocationCode${index}`];
-                if (l.type === 'city') {
-                    arr.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :shantytownLocationCode${index}`);
-                }
+    const conditions = decodeURIComponent(populationFilter).split(',');
 
-                return arr;
-            }).flat().join(' OR '),
-        );
+    const populationCheckers = {
+        unknown: (town: ShantytownRow) => town.populationTotal === null,
+        '-9': (town: ShantytownRow) => town.populationTotal !== null && town.populationTotal < 10,
+        '10-99': (town: ShantytownRow) => town.populationTotal !== null && town.populationTotal >= 10 && town.populationTotal <= 99,
+        '100-': (town: ShantytownRow) => town.populationTotal !== null && town.populationTotal >= 100,
+    };
+
+    return shantytownHistory.filter(town => conditions.some(condition => populationCheckers[condition]?.(town) ?? false));
+}
+
+function applyFieldTypeFilters(shantytownHistory: ShantytownRow[], fieldTypeFilter: string): ShantytownRow[] {
+    let filteredShantytownHistory = shantytownHistory;
+    if (fieldTypeFilter) {
+        const fieldTypeIds = fieldTypeFilter.split(',').map(Number);
+        filteredShantytownHistory = filteredShantytownHistory.filter(town => fieldTypeIds.includes(town.fieldTypeId));
+    }
+    return filteredShantytownHistory;
+}
+
+function applyOriginFilters(shantytownHistory: ShantytownRow[], originFilter: string): ShantytownRow[] {
+    if (!originFilter) {
+        return shantytownHistory;
     }
 
-    const rows: ShantytownRow[] = await sequelize.query(
-        `
+    const conditions = decodeURIComponent(originFilter).split(',');
+
+    const originCheckers = {
+        unknown: (town: ShantytownRow) => town.socialOrigins === null,
+        1: (town: ShantytownRow) => town.socialOrigins?.some(origin => origin.startsWith('1|')) ?? false,
+        2: (town: ShantytownRow) => town.socialOrigins?.some(origin => origin.startsWith('2|')) ?? false,
+        3: (town: ShantytownRow) => town.socialOrigins?.some(origin => origin.startsWith('3|')) ?? false,
+    };
+
+    return shantytownHistory.filter(town => conditions.some(condition => originCheckers[condition]?.(town) ?? false));
+}
+
+function applyTargetFilters(shantytownHistory: ShantytownRow[], targetFilter: string): ShantytownRow[] {
+    if (!targetFilter) {
+        return shantytownHistory;
+    }
+
+    const targetCheckers = {
+        yes: (town: ShantytownRow) => town.resorptionTarget !== null,
+        no: (town: ShantytownRow) => town.resorptionTarget === null,
+    };
+
+    const checker = targetCheckers[targetFilter];
+    return checker ? shantytownHistory.filter(checker) : shantytownHistory;
+}
+
+function checkJusticeCondition(town: ShantytownRow, condition: string): boolean {
+    const checks = {
+        unknown: () => town.justiceProcedure === null,
+        none: () => town.justiceProcedure === false,
+        justiceProcedure: () => town.justiceProcedure === true,
+        ownerComplaint: () => town.ownerComplaint === true,
+        justiceRendered: () => town.justiceRendered === true,
+    };
+
+    return checks[condition]?.() ?? false;
+}
+
+function applyJusticeFilters(shantytownHistory: ShantytownRow[], justiceFilter: string): ShantytownRow[] {
+    if (!justiceFilter) {
+        return shantytownHistory;
+    }
+
+    const conditions = decodeURIComponent(justiceFilter).split(',');
+    return shantytownHistory.filter(town => conditions.some(condition => checkJusticeCondition(town, condition)));
+}
+
+function applyAdministrativeOrderFilters(shantytownHistory: ShantytownRow[], administrativeOrderFilter: string): ShantytownRow[] {
+    const conditions = decodeURIComponent(administrativeOrderFilter).split(',');
+
+    const conditionCheckers = {
+        unknown: (town: ShantytownRow) => town.evacuationUnderTimeLimit === null,
+        none: (town: ShantytownRow) => town.evacuationUnderTimeLimit === false,
+        evacuationUnderTimeLimit: (town: ShantytownRow) => town.evacuationUnderTimeLimit === true,
+    };
+
+    return shantytownHistory.filter(town => conditions.some(condition => conditionCheckers[condition]?.(town) ?? false));
+}
+
+function checkRhiCondition(town: ShantytownRow, condition: string): boolean {
+    const checks = {
+        unknown: () => town.insalubrityOrder === null,
+        none: () => town.insalubrityOrder === false,
+        insalubrityOrder: () => town.insalubrityOrder === true,
+    };
+
+    return checks[condition]?.() ?? false;
+}
+
+function applyRhiFilters(shantytownHistory: ShantytownRow[], rhiFilter: string): ShantytownRow[] {
+    if (!rhiFilter) {
+        return shantytownHistory;
+    }
+
+    const conditions = decodeURIComponent(rhiFilter).split(',');
+    return shantytownHistory.filter(town => conditions.some(condition => checkRhiCondition(town, condition)));
+}
+
+function checkHeatwaveCondition(town: ShantytownRow, condition: string): boolean {
+    const checks = {
+        no: () => town.heatwaveStatus === false,
+        yes: () => town.heatwaveStatus === true,
+    };
+
+    return checks[condition]?.() ?? false;
+}
+
+function applyHeatwaveFilters(shantytownHistory: ShantytownRow[], heatwaveFilter: string): ShantytownRow[] {
+    if (!heatwaveFilter) {
+        return shantytownHistory;
+    }
+
+    const conditions = decodeURIComponent(heatwaveFilter).split(',');
+    return shantytownHistory.filter(town => conditions.some(condition => checkHeatwaveCondition(town, condition)));
+}
+
+const functionsForFiltersArray = [
+    {
+        name: 'exportedSitesStatus',
+        fn: applyStatusFilters,
+    },
+    {
+        name: 'population',
+        fn: applyPopulationFilters,
+    },
+    {
+        name: 'fieldType',
+        fn: applyFieldTypeFilters,
+    },
+    {
+        name: 'origin',
+        fn: applyOriginFilters,
+    },
+    {
+        name: 'target',
+        fn: applyTargetFilters,
+    },
+    {
+        name: 'justice',
+        fn: applyJusticeFilters,
+    },
+    {
+        name: 'administrativeOrder',
+        fn: applyAdministrativeOrderFilters,
+    },
+    {
+        name: 'rhi',
+        fn: applyRhiFilters,
+    },
+    {
+        name: 'heatwave',
+        fn: applyHeatwaveFilters,
+    },
+];
+
+
+async function applyFilters(shantytownHistory: ShantytownRow[], filters: ShantytownFilters, user: AuthUser): Promise<ShantytownRow[]> {
+    // Utiliser reduce pour traiter séquentiellement les filtres
+    const filteredShantytownHistory = await functionsForFiltersArray.reduce(
+        async (accPromise, { name, fn }) => {
+            const acc = await accPromise;
+            if (filters[name]) {
+                return fn(acc, filters[name], user);
+            }
+            return acc;
+        },
+        Promise.resolve(shantytownHistory),
+    );
+
+    return filteredShantytownHistory;
+}
+
+function getQueryString(where: string[]): string {
+    return `
             SELECT
                 shantytown_history.*
             FROM
@@ -131,32 +317,132 @@ export default async (user: User, locations: Location[], lastDate: string, close
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE (${where.join(') OR (')})` : ''}
                 )) shantytown_history
-            WHERE shantytown_history.date < '${lastDate}'  
-            `,
+                WHERE shantytown_history.date < :lastDate
+            `;
+}
+
+async function getRows(queryString: string, replacements: { userId: number; lastDate: string }): Promise<ShantytownRow[]> {
+    const rows: ShantytownRow[] = await sequelize.query(
+        queryString,
         {
             type: QueryTypes.SELECT,
             replacements,
         },
     );
+    return rows;
+}
+
+async function loadActorsIntoShantytowns(shantytownHistory: ShantytownRow[], user: AuthUser): Promise<Shantytown[]> {
+    const actorRows: ActorRow[] = await shantytownActorModel.findAll(shantytownHistory.map(row => row.id));
+
+    const serializedTowns = shantytownHistory.map((town) => {
+        const serializedTown = serializeShantytown(town, user);
+        const matchingElements = actorRows.filter(item => item.shantytownId === serializedTown.id).map(actor => serializeActor(actor));
+        return {
+            ...serializedTown,
+            actors: matchingElements,
+        };
+    });
+    return serializedTowns;
+}
+
+async function applyLivingConditionsFilters(serializedTowns: Shantytown[], livingConditionFilters: string) {
+    const filterToCondition = {
+        accessToSanitary: ['sanitary'],
+        accessToWater: ['water'],
+        accessToTrash: ['trash'],
+        accessToElectricity: ['electricity'],
+        vermin: ['vermin', 'pest_animals'],
+        firePreventionMeasures: ['firePrevention', 'fire_prevention'],
+    };
+
+    const livingConditionsFilters = decodeURIComponent(livingConditionFilters).split(',');
+
+    return serializedTowns.filter(town => livingConditionsFilters.some(filter => filterToCondition[filter].some(key => town.livingConditions[key]
+            && ['bad', 'unknown'].includes(town.livingConditions[key].status.status))));
+}
 
 
+function applyActorsFilters(serializedTowns: Shantytown[], filters: ShantytownFilters) {
+    let filteredTowns = serializedTowns;
+    if (filters.actors === 'yes') {
+        filteredTowns = serializedTowns.filter(town => town.actors.length > 0);
+    }
+    if (filters.actors === 'no') {
+        filteredTowns = serializedTowns.filter(town => town.actors.length < 1 || town.actors === null);
+    }
+    return filteredTowns;
+}
+
+function getShantytownHistoryArray(rows: ShantytownRow[]): ShantytownRow[] {
     const acc: ShantytownObject = {};
     rows.forEach((row) => {
         if (!acc[row.id] || row.updatedAt > acc[row.id].updatedAt) {
             acc[row.id] = row;
         }
-        return {};
     });
-    const shantytown_history = Object.values(acc).filter((el:ShantytownRow) => ((closedTowns && (el.closedAt !== null)) || (!closedTowns && (el.closedAt === null))));
+    return Object.values(acc);
+}
 
-    // On récupère les intervenants
-    const actorRows: ActorRow[] = await shantytownActorModel.findAll(rows.map(row => row.id));
+async function serializeTowns(shantytownHistory: ShantytownRow[], filters: ShantytownFilters, options: ShantytownExportListOption[], user: AuthUser): Promise<Shantytown[]> {
+    let serializedTowns: Shantytown[];
+    if (filters.actors || options.includes('actors')) {
+        serializedTowns = await loadActorsIntoShantytowns(shantytownHistory, user);
 
-    return shantytown_history.map(town => serializeShantytown(town, user)).map((element) => {
-        const matchingElements = actorRows.filter(item => item.shantytownId === element.id).map(actor => serializeActor(actor));
-        return {
-            ...element,
-            actors: matchingElements,
-        };
-    });
+        // Filtrer sur les intervenants
+        if (filters.actors) {
+            serializedTowns = applyActorsFilters(serializedTowns, filters);
+        }
+    } else {
+        serializedTowns = shantytownHistory.map(town => serializeShantytown(town, user));
+    }
+    return serializedTowns;
+}
+
+export default async (user: AuthUser, options: ShantytownExportListOption[], locations: Location[], lastDate: string, filters: ShantytownFilters): Promise<Shantytown[]> => {
+    const where = [];
+    const replacements: { userId: number; lastDate: string } = {
+        userId: user.id,
+        lastDate,
+    };
+
+    const restrictedLocations = locations.map(l => restrict(l).for(user).askingTo('list', 'shantytown')).flat();
+    if (restrictedLocations.length === 0) {
+        return [];
+    }
+
+    if (!restrictedLocations.some(l => l.type === 'nation')) {
+        where.push(
+            restrictedLocations.map((l, index) => {
+                replacements[`shantytownLocationCode${index}`] = l[l.type].code;
+                const arr = [`${fromGeoLevelToTableName(l.type)}.code = :shantytownLocationCode${index}`];
+                if (l.type === 'city') {
+                    arr.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :shantytownLocationCode${index}`);
+                }
+
+                return arr;
+            }).flat().join(' OR '),
+        );
+    }
+
+    const queryString = getQueryString(where);
+    const rows: ShantytownRow[] = await getRows(
+        queryString,
+        replacements,
+    );
+
+    let shantytownHistory = getShantytownHistoryArray(rows);
+
+    // Appliquer les filtres
+    shantytownHistory = await applyFilters(shantytownHistory, filters, user);
+
+    // Charger les intervenants
+    let serializedTowns: Shantytown[];
+    serializedTowns = await serializeTowns(shantytownHistory, filters, options, user);
+
+    // Filtrer sur les conditions de vie
+    if (filters.conditions) {
+        serializedTowns = await applyLivingConditionsFilters(serializedTowns, filters.conditions);
+    }
+    return serializedTowns;
 };
