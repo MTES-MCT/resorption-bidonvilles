@@ -12,7 +12,7 @@
                 :checked="isChecked"
                 :key="phase.uid"
                 :label="phase.name"
-                name="preparatory_phases_toward_resorption"
+                :name="`preparatory_phases_toward_resorption_${phase.uid}`"
                 :disabled="isDisabled"
                 v-model="modelValue"
                 @change="handleCheckboxChange"
