@@ -37,6 +37,8 @@ export default async (user: User): Promise<Changelog[]> => {
             regexp_split_to_array(changelogs.app_version, '\\.')::int[] > regexp_split_to_array(:minVersion, '\\.')::int[]
             AND
             regexp_split_to_array(changelogs.app_version, '\\.')::int[] <= regexp_split_to_array(:maxVersion, '\\.')::int[]
+            AND
+            CURRENT_DATE <= (changelogs.date::date + INTERVAL '2 months')
         ORDER BY regexp_split_to_array(changelogs.app_version, '\\.')::int[] ASC, items.position ASC`,
         {
             type: QueryTypes.SELECT,
