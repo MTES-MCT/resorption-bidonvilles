@@ -1,6 +1,8 @@
 <template>
     <Modal closeWhenClickOutside @close="onClose" ref="modale">
-        <template v-slot:title>Exporter les {{ title }}</template>
+        <template v-slot:title
+            >Exporter les sites {{ whichTownsAreExported.label }}</template
+        >
         <template v-slot:body>
             <ListeDesSitesExportSummary />
             <ListeDesSitesExportDate v-if="canExportHistory" />
@@ -28,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { useForm } from "vee-validate";
 import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import { useNotificationStore } from "@/stores/notification.store";
@@ -42,6 +44,7 @@ import { exportList } from "@/api/towns.api";
 import ListeDesSitesExportSummary from "./ListeDesSitesExportSummary.vue";
 import ListeDesSitesExportDate from "./ListeDesSitesExportDate.vue";
 import ListeDesSitesExportOptions from "./ListeDesSitesExportOptions.vue";
+
 onMounted(() => {
     townsStore.exportOptions.splice(0);
 });
@@ -57,16 +60,38 @@ const userStore = useUserStore();
 const modale = ref(null);
 const isLoading = ref(false);
 const error = ref(null);
-const title = computed(() => {
+const whichTownsAreExported = computed(() => {
     switch (townsStore.filters.status) {
         case "open":
-            return "sites existants";
+            return {
+                status: "open",
+                label: "existants",
+            };
         case "close":
-            return "sites fermés";
+            if (
+                townsStore.filters.properties.resorbedOrClosed.includes(
+                    "resorbed"
+                ) &&
+                !townsStore.filters.properties.resorbedOrClosed.includes(
+                    "closed"
+                )
+            ) {
+                return {
+                    status: "resorbed",
+                    label: "résorbés",
+                };
+            }
+            return {
+                status: "closed",
+                label: "fermés",
+            };
         case "inProgress":
-            return "sites en cours de résorption";
+            return {
+                status: "inProgress",
+                label: "en cours de résorption",
+            };
         default:
-            return "sites";
+            return "";
     }
 });
 const canExportHistory = computed(() => {
@@ -96,30 +121,16 @@ async function download() {
                 type: townsStore.filters.location?.typeUid || "nation",
                 code: townsStore.filters.location?.code || null,
             },
-            townsStore.filters.status,
-            // isClosed.value,
+            whichTownsAreExported.value.status,
             townsStore.exportOptions,
             values.date,
             townsStore.filters.properties
         );
-        const exportedSitesStatus = (() => {
-            switch (townsStore.filters.status) {
-                case "open":
-                    return "existants";
-                case "close":
-                    return "fermés";
-                case "inProgress":
-                    return "en cours";
-                default:
-                    return "existants";
-            }
-        })();
         downloadBlob(
             new Blob([data]),
-            `${formatDate(
-                values.date.getTime() / 1000,
-                "y-m-d"
-            )}-sites-${exportedSitesStatus}-resorption-bidonvilles.xlsx`
+            `${formatDate(values.date.getTime() / 1000, "y-m-d")}-sites-${
+                whichTownsAreExported.value.label
+            }-resorption-bidonvilles.xlsx`
         );
         trackEvent("Export", "Export sites");
         notificationStore.success(
