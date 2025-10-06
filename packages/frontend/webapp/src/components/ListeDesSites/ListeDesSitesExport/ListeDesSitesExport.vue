@@ -42,6 +42,9 @@ import { exportList } from "@/api/towns.api";
 import ListeDesSitesExportSummary from "./ListeDesSitesExportSummary.vue";
 import ListeDesSitesExportDate from "./ListeDesSitesExportDate.vue";
 import ListeDesSitesExportOptions from "./ListeDesSitesExportOptions.vue";
+onMounted(() => {
+    townsStore.exportOptions.splice(0);
+});
 
 const { values } = useForm({
     initialValues: {
