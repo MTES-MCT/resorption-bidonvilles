@@ -113,28 +113,28 @@ export default {
             },
             {
                 value: "accessToWater",
-                label: "eau",
+                label: "Eau",
             },
             {
                 value: "accessToSanitary",
-                label: "toilettes",
+                label: "Toilettes",
             },
             {
                 value: "accessToElectricity",
-                label: "électricité",
+                label: "Électricité",
             },
             {
                 value: "accessToTrash",
-                label: "évac. des déchets",
+                label: "Évac. des déchets",
             },
 
             {
                 value: "vermin",
-                label: "pres. de nuisibles",
+                label: "Prés. de nuisibles",
             },
             {
                 value: "firePreventionMeasures",
-                label: "prev. incendie",
+                label: "Prév. incendie",
             },
         ],
     },
