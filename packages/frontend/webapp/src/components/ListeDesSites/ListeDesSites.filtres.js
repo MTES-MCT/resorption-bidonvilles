@@ -156,13 +156,18 @@ export default {
         label: "Cause de la fermeture",
         id: "closingReason",
         options: [
+            { value: "resorbed", label: "Résorption progressive du site" },
             {
                 value: "closed_by_justice",
-                label: "Exécution d'une décision de justice",
+                label: "Décision de justice suite à une plainte du proriétaire",
             },
             {
-                value: "closed_by_admin",
-                label: "Exécution d'une décision administrative",
+                value: "closed_by_pref_admin",
+                label: "Décision administrative de la préfecture",
+            },
+            {
+                value: "closed_by_city_admin",
+                label: "Décision administrative de la commune.",
             },
             { value: "other", label: "Autre" },
             { value: "unknown", label: "Raison inconnue" },
