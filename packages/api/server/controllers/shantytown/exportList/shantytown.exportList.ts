@@ -4,6 +4,7 @@ import { Location } from '#server/models/geoModel/Location.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { ShantytownExportListOption } from '#root/types/resources/ShantytownExportTypes.d';
 import { ExportedSitesStatus } from '#root/types/resources/exportedSitesStatus.d';
+import shantytownFiltersAsQueryParamList from './shantytownFiltersAsQueryParamList';
 
 const { exportTowns } = shantytownService;
 
@@ -12,6 +13,18 @@ const ERROR_RESPONSES = {
     permission_denied: { code: 403, message: 'Accès refusé' },
     write_failed: { code: 500, message: 'Une écriture en base de données a échoué' },
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
+};
+
+type FilterKeysForStatus<T extends ExportedSitesStatus> = T extends 'open'
+    ? keyof typeof shantytownFiltersAsQueryParamList.open
+    : T extends 'inProgress' ? keyof typeof shantytownFiltersAsQueryParamList.inProgress
+        : T extends 'closed' ? keyof typeof shantytownFiltersAsQueryParamList.closed
+            : never;
+
+type FilterValues = string[];
+
+type DynamicFilters<T extends ExportedSitesStatus> = {
+    [K in FilterKeysForStatus<T>]?: FilterValues;
 };
 
 interface ExportTownsRequest extends Request {
@@ -23,15 +36,29 @@ interface ExportTownsRequest extends Request {
     },
     query: {
         options: ShantytownExportListOption[],
-    },
+    } & DynamicFilters<ExportedSitesStatus>,
 }
 
 export default async (req: ExportTownsRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
+        const { exportedSitesStatus } = req.body;
+
+        const filters = {
+            exportedSitesStatus,
+            ...Object.keys(req.query)
+                .filter(key => key !== 'options')
+                .reduce((acc, key) => {
+                    if (req.query[key]) {
+                        acc[key] = req.query[key];
+                    }
+                    return acc;
+                }, {} as Record<string, string[]>),
+        };
+
         const buffer = await exportTowns(
             req.user,
             req.body.location,
-            req.body.exportedSitesStatus,
+            filters,
             req.query.options,
             req.body.date,
         );
