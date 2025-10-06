@@ -9,7 +9,9 @@ import serializeActor from '#server/models/shantytownActorModel/serializeActor';
 import { Location } from '#server/models/geoModel/Location.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import SQL, { ShantytownRow } from './_common/SQL';
-import { User } from '#root/types/resources/User.d';
+import { ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
+import shantytownPreparatoryPhasesTowardResorptionModel from '../shantytownPreparatoryPhasesTowardResorptionModel';
+import { ShantytownExportListOption } from '#root/types/resources/ShantytownExportTypes.d';
 
 const { fromGeoLevelToTableName } = geoUtils;
 const { restrict } = permissionUtils;

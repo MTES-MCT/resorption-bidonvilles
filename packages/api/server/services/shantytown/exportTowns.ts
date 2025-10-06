@@ -3,13 +3,14 @@ import ServiceError from '#server/errors/ServiceError';
 
 import { Location } from '#server/models/geoModel/Location.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
-import { ShantytownExportListOption } from '#server/services/shantytown/_common/createExportSections';
+import { ShantytownExportListOption } from '#root/types/resources/ShantytownExportTypes.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import getAllowedLocations from './exportTowns.getAllowedLocations';
 import fetchData from './exportTowns.fetchData';
 import generateExportFile from './exportTowns.generateExportFile';
 import saveStats from './exportTowns.saveStats';
-import { ExportedSitesStatus } from '#root/types/resources/exportedSitesStatus.d';
+import { ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
+
 
 export default async (user: AuthUser, location: Location, exportedSitesStatus: ExportedSitesStatus, options: ShantytownExportListOption[] = [], date: Date = new Date()) => {
     const isPastExport = moment(date).format('YYYY-MM-DD') !== moment(new Date()).format('YYYY-MM-DD');

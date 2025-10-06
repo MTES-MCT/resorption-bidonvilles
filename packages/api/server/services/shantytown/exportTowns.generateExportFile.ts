@@ -6,6 +6,8 @@ import { Location } from '#server/models/geoModel/Location.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { ExportedSitesStatus } from '#root/types/resources/exportedSitesStatus.d';
+import { ShantytownExportListOption } from '#root/types/resources/ShantytownExportTypes.d';
+import createExportSections from './_common/createExportSections';
 
 import serializeExportProperties from './_common/serializeExportProperties';
 import createExportSections, { type ShantytownExportListOption } from './_common/createExportSections';

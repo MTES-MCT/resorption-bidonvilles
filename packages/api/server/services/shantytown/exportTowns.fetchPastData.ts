@@ -7,6 +7,9 @@ import actionModel from '#server/models/actionModel';
 import { User } from '#root/types/resources/User.d';
 import { ShantytownWithFinancedAction, Shantytown } from '#root/types/resources/Shantytown.d';
 import { FinancedShantytownAction } from '#root/types/resources/Action.d';
+import { ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
+import { ShantytownExportListOption } from '#root/types/resources/ShantytownExportTypes.d';
+
 
 export default async (user: User, locations: Location[], closedTowns: boolean, date: Date): Promise<Shantytown[]> => {
     const towns = await shantytownModel.getHistoryAtGivenDate(

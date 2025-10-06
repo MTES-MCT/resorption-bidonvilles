@@ -2,7 +2,7 @@ import { type Request, Response, NextFunction } from 'express';
 import shantytownService from '#server/services/shantytown';
 import { Location } from '#server/models/geoModel/Location.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
-import { ShantytownExportListOption } from '#server/services/shantytown/_common/createExportSections';
+import { ShantytownExportListOption } from '#root/types/resources/ShantytownExportTypes.d';
 import { ExportedSitesStatus } from '#root/types/resources/exportedSitesStatus.d';
 
 const { exportTowns } = shantytownService;

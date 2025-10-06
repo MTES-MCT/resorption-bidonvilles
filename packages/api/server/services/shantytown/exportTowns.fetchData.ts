@@ -4,7 +4,8 @@ import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import fetchPastData from './exportTowns.fetchPastData';
 import fetchCurrentData from './exportTowns.fetchCurrentData';
-import { ExportedSitesStatus } from '#root/types/resources/exportedSitesStatus.d';
+import { ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
+import { ShantytownExportListOption } from '#root/types/resources/ShantytownExportTypes.d';
 
 export default async (user: AuthUser, locations: Location[], exportedSitesStatus: ExportedSitesStatus, date: Date): Promise<Shantytown[]> => {
     const closedTowns = exportedSitesStatus !== 'close' && exportedSitesStatus !== 'inProgress';
