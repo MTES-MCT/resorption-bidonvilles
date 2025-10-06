@@ -10,7 +10,6 @@ import { ShantytownExportListOption } from '#root/types/resources/ShantytownExpo
 import createExportSections from './_common/createExportSections';
 
 import serializeExportProperties from './_common/serializeExportProperties';
-import createExportSections, { type ShantytownExportListOption } from './_common/createExportSections';
 
 function exportedTownsStatus(exportedSitesStatus: ExportedSitesStatus) {
     if (!exportedSitesStatus) {
@@ -19,7 +18,8 @@ function exportedTownsStatus(exportedSitesStatus: ExportedSitesStatus) {
     const statusLibs = {
         open: 'existants',
         inProgress: 'en cours de résorption',
-        close: 'fernés',
+        closed: 'fermés',
+        resorbed: 'résorbés',
     };
     return statusLibs[exportedSitesStatus];
 }
@@ -53,7 +53,7 @@ export default async (user: AuthUser, data: Shantytown[], options: ShantytownExp
     }
 
     return excelUtils.createExport(
-        exportedTownsStatus,
+        exportedTownsStatus(exportedSitesStatus),
         locationName,
         sections,
         data,
