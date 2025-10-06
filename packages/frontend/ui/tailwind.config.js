@@ -154,7 +154,7 @@ module.exports = {
                 success: "#008941",
                 info: "#0762C8",
                 warning: "#FA5C00",
-                error: "#E10600",
+                error: "#CE0500",
 
                 // UI colors /  text
                 G800: "#1E1E1E",
