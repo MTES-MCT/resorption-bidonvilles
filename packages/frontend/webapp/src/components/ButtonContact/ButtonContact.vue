@@ -1,16 +1,22 @@
 <template>
-    <Button
-        variant="primaryOutline"
-        class="!border-2 !border-primary hover:!bg-primaryDark"
-        :href="`mailto:${CONTACT_EMAIL}`"
-        >Contactez-nous</Button
-    >
+    <DsfrButton secondary @click.prevent="openMail">Contactez-nous</DsfrButton>
 </template>
 
 <script setup>
+import { computed } from "vue";
 import ENV from "@/helpers/env.js";
-import { Button } from "@resorptionbidonvilles/ui";
+
 const { CONTACT_EMAIL } = ENV;
+const mailtoHref = computed(() =>
+    CONTACT_EMAIL ? `mailto:${CONTACT_EMAIL}` : ""
+);
+
+const openMail = () => {
+    if (!mailtoHref.value) {
+        return;
+    }
+    window.location.href = mailtoHref.value;
+};
 </script>
 <style scoped>
 button {

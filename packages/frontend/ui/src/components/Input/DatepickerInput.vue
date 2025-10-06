@@ -6,9 +6,10 @@
             :inlineInfo="inlineInfo"
             :showMandatoryStar="showMandatoryStar"
             :for="`dp-input-${id}`"
+            :error="!!errors.length"
         />
 
-        <div :class="width">
+        <div :class="width" class="mt-3">
             <DatePicker
                 v-model="date"
                 locale="fr"
