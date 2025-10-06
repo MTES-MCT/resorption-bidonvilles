@@ -12,7 +12,13 @@ import saveStats from './exportTowns.saveStats';
 import { ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
 
 
-export default async (user: AuthUser, location: Location, exportedSitesStatus: ExportedSitesStatus, options: ShantytownExportListOption[] = [], date: Date = new Date()) => {
+export default async (
+    user: AuthUser,
+    location: Location,
+    filters: ShantytownFilters,
+    options: ShantytownExportListOption[] = [],
+    date: Date = new Date(),
+) => {
     const isPastExport = moment(date).format('YYYY-MM-DD') !== moment(new Date()).format('YYYY-MM-DD');
 
     const locations = getAllowedLocations(user, location, isPastExport);
@@ -23,10 +29,10 @@ export default async (user: AuthUser, location: Location, exportedSitesStatus: E
         );
     }
 
-    // on collecte les données et on génère le fichier excel
     let data: Shantytown[];
     try {
-        data = await fetchData(user, locations, exportedSitesStatus, date);
+        // Récupérer les données à exporter
+        data = await fetchData(user, options, locations, filters, date);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
@@ -34,10 +40,11 @@ export default async (user: AuthUser, location: Location, exportedSitesStatus: E
     if (data.length === 0) {
         throw new ServiceError('fetch_failed', new Error('Il n\'y a aucun site à exporter pour le périmètre géographique demandé'));
     }
-    const buffer = await generateExportFile(user, data, options, locations, exportedSitesStatus, date);
 
-    // on enregistre cet export dans notre table de statistiques
-    await saveStats(user, locations, exportedSitesStatus);
+    // Générer le fichier Excel
+    const buffer = await generateExportFile(user, data, options, locations, filters.exportedSitesStatus, date);
 
+    // Enregistrer l'export dans la table de statistiques
+    await saveStats(user, locations, filters.exportedSitesStatus);
     return buffer;
 };
