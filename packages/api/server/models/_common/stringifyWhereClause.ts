@@ -12,8 +12,8 @@ function stringify(table: string, where: Where, replacements: { [key: string]: a
             const rawValue = clause.value;
             const selector = clause.query ?? `${table}.${column}`;
             const isOperator = rawValue === null || typeof rawValue === 'boolean';
-            const notOperator = (clause as any).not === true; // 'not' is not in the type, but used in the old code
-            const operator = clause.operator ?? (!isOperator ? 'IN' : '');
+            const notOperator = (clause as any).not === true;
+            const operator = clause.operator ?? (isOperator ? '' : 'IN');
             const placeholder = `:${column}${index}`;
 
             let value: string;
