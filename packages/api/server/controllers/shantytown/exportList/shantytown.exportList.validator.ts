@@ -51,6 +51,8 @@ export default [
             try {
                 location = await geoModel.getLocation(type, code);
             } catch (e) {
+                // eslint-disable-next-line no-console
+                console.error(e);
                 throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du périmètre géographique');
             }
 
