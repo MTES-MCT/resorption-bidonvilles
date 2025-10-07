@@ -304,10 +304,8 @@ function checkClosingReason(shantytown, filters) {
                 shantytown.status === "closed_by_pref_admin" ||
                 shantytown.status === "closed_by_city_admin"
             );
-        } else {
-            if (filters.includes(shantytown.status)) {
-                return true;
-            }
+        } else if (filters.includes(shantytown.status)) {
+            return true;
         }
         return false;
     });
