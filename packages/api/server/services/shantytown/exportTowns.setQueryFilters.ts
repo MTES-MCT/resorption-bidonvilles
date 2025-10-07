@@ -82,7 +82,6 @@ function addPopulationFilter(filters: ShantytownFilters): Where {
     const conditions = decodeURIComponent(filters.population).split(',');
     const populationClauses: WhereClauseGroup = {};
 
-    // eslint-disable-next-line no-restricted-syntax
     conditions.forEach((condition, index) => {
         switch (condition) {
             case 'unknown':
@@ -184,7 +183,6 @@ function addOriginFilter(filters: ShantytownFilters): Where {
 
     const orConditions: string[] = [];
 
-    // eslint-disable-next-line no-restricted-syntax
     conditions.forEach((condition) => {
         switch (condition) {
             case 'unknown':
@@ -260,7 +258,6 @@ function addJusticeFilter(filters: ShantytownFilters): Where {
     const conditions = decodeURIComponent(filters.justice).split(',');
     const justiceClauses: WhereClauseGroup = {};
 
-    // eslint-disable-next-line no-restricted-syntax
     conditions.forEach((condition, index) => {
         switch (condition) {
             case 'unknown':
@@ -362,7 +359,6 @@ function addRhiFilter(filters: ShantytownFilters): Where {
     const conditions = decodeURIComponent(filters.rhi).split(',');
     const rhiClauses: WhereClauseGroup = {};
 
-    // eslint-disable-next-line no-restricted-syntax
     conditions.forEach((condition, index) => {
         switch (condition) {
             case 'unknown':
@@ -406,7 +402,6 @@ function addHeatwaveFilter(filters: ShantytownFilters): Where {
     const conditions = decodeURIComponent(filters.heatwave).split(',');
     const heatwaveClauses: WhereClauseGroup = {};
 
-    // eslint-disable-next-line no-restricted-syntax
     conditions.forEach((condition, index) => {
         switch (condition) {
             case 'no':
@@ -443,7 +438,6 @@ function addClosingReasonFilter(filters: ShantytownFilters): Where {
     const conditions = decodeURIComponent(filters.closingReason).split(',');
     const closingReasonClauses: WhereClauseGroup = {};
 
-    // eslint-disable-next-line no-restricted-syntax
     conditions.forEach((condition, index) => {
         switch (condition) {
             case 'resorbed':
@@ -516,7 +510,6 @@ export default (filters: ShantytownFilters): Where => {
         addClosingReasonFilter,
     ];
 
-    // eslint-disable-next-line no-restricted-syntax
     filterFunctions.forEach((filterFn) => {
         townsFilters.push(...filterFn(filters));
     });
