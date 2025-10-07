@@ -246,7 +246,6 @@ export default function (shantytown, fieldTypes) {
     };
 }
 
-// TODO: supprimer cette redondance avec packages/frontend/webapp/src/utils/closing_reasons.js
 const statusDetails = closingReasons.reduce(
     (acc, reason) => Object.assign(acc, { [reason.value]: reason.label }),
     {}
