@@ -5,7 +5,6 @@ function stringify(table: string, where: Where, replacements: { [key: string]: a
         const clauseGroup = Object.keys(clauses).map((column) => {
             const clause = clauses[column];
 
-            // Gère les clauses "AND" recursivement
             if (clause.andClauses) {
                 return `(${stringify(table, clause.andClauses, replacements)})`;
             }
@@ -18,7 +17,6 @@ function stringify(table: string, where: Where, replacements: { [key: string]: a
 
             let value: string;
             if (isOperator) {
-                // Pour les valeurs booléennes et null, utiliser directement la valeur
                 if (rawValue === null) {
                     value = 'NULL';
                 } else if (typeof rawValue === 'boolean') {
@@ -41,4 +39,6 @@ function stringify(table: string, where: Where, replacements: { [key: string]: a
     }).join(' AND ');
 }
 
-export default (table: string, where: Where, replacements: { [key: string]: any }): string => stringify(table, where, replacements);
+export default function stringifyWhereClause(table: string, where: Where, replacements: { [key: string]: any }): string {
+    return stringify(table, where, replacements);
+}
