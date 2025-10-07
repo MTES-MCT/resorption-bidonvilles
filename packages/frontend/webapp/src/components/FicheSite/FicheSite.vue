@@ -15,7 +15,7 @@
         type="warning"
         title="L'alerte canicule est toujours active sur ce site"
         description='Nous avons détecté que l’alerte canicule est toujours active sur ce site alors que la période de canicule semble être passée.
-        Vous pouvez retirer cette alerte en cliquant sur le bouton "Supprimer l&apos;alerte canicule"'
+        Vous pouvez retirer cette alerte en cliquant sur le bouton "Supprimer l&apos;alerte canicule".'
         width="w-3/4"
     >
     </BandeauNotice>
