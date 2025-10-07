@@ -16,6 +16,7 @@ import { SocialOrigin } from '../resources/SocialOrigin.d';
 import { Topic } from '../resources/Topic.d';
 import { User } from '../resources/User.d';
 import { PreparatoryPhaseTowardResorption } from '../resources/PreparatoryPhaseTowardResorption';
+import { Heatwave } from '../resources/Heatwave';
 
 export type ConfigServiceFetchResponse = {
     action_finance_types: ActionFinanceType[],
@@ -41,4 +42,5 @@ export type ConfigServiceFetchResponse = {
     version_charte_engagement: CharteEngagement,
     roles: Role[],
     preparatory_phases_toward_resorption: PreparatoryPhaseTowardResorption[],
+    heatwave: Heatwave,
 };

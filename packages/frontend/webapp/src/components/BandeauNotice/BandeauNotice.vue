@@ -1,14 +1,13 @@
 <template>
-    <div class="relative mb-4 m-auto" :class="width">
+    <div v-if="!isClosed" class="relative mb-4 m-auto" :class="width">
         <DsfrNotice
-            v-if="!isClosed"
             :type="type"
             :title="title"
             :closeable="closeable"
             @close="closeNotice"
         >
             <template v-slot:desc>
-                <p class="mt-2 -mb-4">
+                <p class="mt-2 -mb-4 whitespace-pre-line">
                     {{ description }}
                 </p>
             </template>
