@@ -11,8 +11,6 @@ function addStatusFilters(filters: ShantytownFilters): Where {
                 query: 'shantytowns.status',
                 value: 'open',
             },
-        });
-        townsFilters.push({
             closed_at: {
                 query: 'shantytowns.closed_at',
                 value: null,
