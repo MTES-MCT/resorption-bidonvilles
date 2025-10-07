@@ -51,7 +51,10 @@ const { value: closedWithSolutions, setValue } = useField(
     "closed_with_solutions"
 );
 
-if (peopleWithSolutions.value === null) {
+if (
+    peopleWithSolutions.value === null &&
+    closedWithSolutions.value === undefined
+) {
     setValue(false);
 }
 
