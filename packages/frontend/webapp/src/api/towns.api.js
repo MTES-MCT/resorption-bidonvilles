@@ -91,6 +91,7 @@ export function exportList(
         query.options = options.join(",");
     }
 
+    // eslint-disable-next-line no-restricted-syntax
     Object.keys(filters).forEach((filterKey) => {
         const filterValue = filters[filterKey];
         if (Array.isArray(filterValue) && filterValue.length > 0) {
