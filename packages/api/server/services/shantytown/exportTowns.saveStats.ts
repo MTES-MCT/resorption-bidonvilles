@@ -13,7 +13,7 @@ type StatRow = {
     exported_by: number,
 };
 
-export default async (user: User, locations: Location[], exportedSitesStatus: ExportedSitesStatus): Promise<void> => {
+export default async function saveStats(user: User, locations: Location[], exportedSitesStatus: ExportedSitesStatus): Promise<void> {
     const stats: StatRow[] = [];
     const isNationalExport = locations.some(l => ['nation', 'metropole', 'outremer'].includes(l.type));
     const closedTowns = exportedSitesStatus !== 'open' && exportedSitesStatus !== 'inProgress';
@@ -48,4 +48,4 @@ export default async (user: User, locations: Location[], exportedSitesStatus: Ex
     } catch (error) {
         throw new ServiceError('write_failed', error);
     }
-};
+}

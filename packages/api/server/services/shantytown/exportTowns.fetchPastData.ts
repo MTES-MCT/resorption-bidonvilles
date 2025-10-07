@@ -10,7 +10,7 @@ import { FinancedShantytownAction } from '#root/types/resources/Action.d';
 import { ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
 import { ShantytownExportListOption } from '#root/types/resources/ShantytownExportTypes.d';
 
-export default async (user: AuthUser, options: ShantytownExportListOption[], locations: Location[], filters: ShantytownFilters, date: Date): Promise<Shantytown[]> => {
+export default async function fetchPastData(user: AuthUser, options: ShantytownExportListOption[], locations: Location[], filters: ShantytownFilters, date: Date): Promise<Shantytown[]> {
     const lastDate = moment(date).format('YYYY-MM-DD HH:mm:ss ZZ');
 
     const towns = await shantytownModel.getHistoryAtGivenDate(
@@ -37,4 +37,4 @@ export default async (user: AuthUser, options: ShantytownExportListOption[], loc
         }
         return town;
     });
-};
+}

@@ -24,7 +24,7 @@ function exportedTownsStatus(exportedSitesStatus: ExportedSitesStatus) {
     return statusLibs[exportedSitesStatus];
 }
 
-export default async (user: AuthUser, data: Shantytown[], options: ShantytownExportListOption[], locations: Location[], exportedSitesStatus: ExportedSitesStatus, date: Date): Promise<Excel.Buffer> => {
+export default async function generateExportFile(user: AuthUser, data: Shantytown[], options: ShantytownExportListOption[], locations: Location[], exportedSitesStatus: ExportedSitesStatus, date: Date): Promise<Excel.Buffer> {
     const isNationalExport = locations.some(l => ['nation', 'metropole', 'outremer'].includes(l.type));
     const closingSolutions = await closingSolutionModel.findAll();
     const properties = serializeExportProperties(closingSolutions);
@@ -59,4 +59,4 @@ export default async (user: AuthUser, data: Shantytown[], options: ShantytownExp
         data,
         moment(date).format('DD/MM/YYYY'),
     );
-};
+}

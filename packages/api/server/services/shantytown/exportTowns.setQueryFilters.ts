@@ -494,7 +494,7 @@ function addClosingReasonFilter(filters: ShantytownFilters): Where {
     return [closingReasonClauses];
 }
 
-export default (filters: ShantytownFilters): Where => {
+export default function setQueryFilters(filters: ShantytownFilters): Where {
     const townsFilters: Where = [];
 
     const filterFunctions = [
@@ -515,4 +515,4 @@ export default (filters: ShantytownFilters): Where => {
     });
 
     return townsFilters;
-};
+}

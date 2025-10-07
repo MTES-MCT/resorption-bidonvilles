@@ -399,7 +399,7 @@ async function serializeTowns(shantytownHistory: ShantytownRow[], filters: Shant
     return serializedTowns;
 }
 
-export default async (user: AuthUser, options: ShantytownExportListOption[], locations: Location[], lastDate: string, filters: ShantytownFilters): Promise<Shantytown[]> => {
+export default async function getHistoryAtGivenDate(user: AuthUser, options: ShantytownExportListOption[], locations: Location[], lastDate: string, filters: ShantytownFilters): Promise<Shantytown[]> {
     const where = [];
     const replacements: { userId: number; lastDate: string } = {
         userId: user.id,
@@ -445,4 +445,4 @@ export default async (user: AuthUser, options: ShantytownExportListOption[], loc
         serializedTowns = await applyLivingConditionsFilters(serializedTowns, filters.conditions);
     }
     return serializedTowns;
-};
+}

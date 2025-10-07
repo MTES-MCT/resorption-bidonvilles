@@ -2,7 +2,7 @@ import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import query from './_common/query';
 
-export default async (user: AuthUser, shantytownId: number, feature = 'read') => {
+export default async function findOne(user: AuthUser, shantytownId: number, feature = 'read') {
     let towns: Shantytown[] = [];
     towns = await query(
         user,
@@ -12,4 +12,4 @@ export default async (user: AuthUser, shantytownId: number, feature = 'read') =>
         true, // include changelog
     );
     return towns.length === 1 ? towns[0] : null;
-};
+}

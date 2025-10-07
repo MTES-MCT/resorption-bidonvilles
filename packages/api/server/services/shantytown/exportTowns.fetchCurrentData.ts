@@ -13,7 +13,7 @@ import { FinancedShantytownAction } from '#root/types/resources/Action.d';
 import { PostSqlFilters, ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
 import setQueryFilters from './exportTowns.setQueryFilters';
 
-export default async (user: AuthUser, locations: Location[], filters: ShantytownFilters): Promise<ShantytownWithFinancedAction[]> => {
+export default async function fetchCurrentData(user: AuthUser, locations: Location[], filters: ShantytownFilters): Promise<ShantytownWithFinancedAction[]> {
     const queryFilters: Where = setQueryFilters(filters);
 
     // Extraire les filtres post-SQL
@@ -113,4 +113,4 @@ export default async (user: AuthUser, locations: Location[], filters: Shantytown
         }
         return town;
     });
-};
+}
