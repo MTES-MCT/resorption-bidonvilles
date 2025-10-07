@@ -106,6 +106,6 @@ const handleCheckboxChange = (checked) => {
 
 const canUpdate = computed(() => {
     const userStore = useUserStore();
-    return userStore.hasPermission("shantytown_resorption.update");
+    return userStore.hasPermission("shantytown.update");
 });
 </script>
