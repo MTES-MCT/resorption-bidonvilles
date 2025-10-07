@@ -66,7 +66,7 @@ function applyFieldTypeFilters(shantytownHistory: ShantytownRow[], fieldTypeFilt
     let filteredShantytownHistory = shantytownHistory;
     if (fieldTypeFilter) {
         const fieldTypeIds = fieldTypeFilter.split(',').map(Number);
-        filteredShantytownHistory = filteredShantytownHistory.filter(town => fieldTypeIds.includes(town.fieldTypeId));
+        filteredShantytownHistory = filteredShantytownHistory.filter(town => fieldTypeIds.has(town.fieldTypeId));
     }
     return filteredShantytownHistory;
 }
