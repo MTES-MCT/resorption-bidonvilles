@@ -2,6 +2,7 @@
 import { query } from 'express-validator';
 import geoModel from '#server/models/geoModel';
 import { Location } from '#server/models/geoModel/Location.d';
+import shantytownFiltersAsQueryParamList from './shantytownFiltersAsQueryParamList';
 
 export default [
     query('date')
@@ -93,4 +94,35 @@ export default [
 
     query('options')
         .customSanitizer(value => (Array.isArray(value) ? value : [])),
+
+    // Validation globale : rejeter tout paramètre de requête non reconnu
+    query()
+        .custom((_value, { req }) => {
+            const { exportedSitesStatus } = req.body;
+
+            // Paramètres déjà validés explicitement
+            const validatedParams = new Set([
+                'date',
+                'exportedSitesStatus',
+                'locationType',
+                'locationCode',
+                'options',
+            ]);
+
+            // Récupérer les filtres autorisés selon le statut
+            const allowedFilters = shantytownFiltersAsQueryParamList[exportedSitesStatus] || {};
+            const allowedFilterKeys = new Set(Object.keys(allowedFilters));
+
+            // Vérifier tous les paramètres de la requête
+            const queryParams = Object.keys(req.query);
+            const invalidParams = queryParams.filter(
+                param => !validatedParams.has(param) && !allowedFilterKeys.has(param),
+            );
+
+            if (invalidParams.length > 0) {
+                throw new Error(`Paramètres non reconnus : ${invalidParams.join(', ')}`);
+            }
+
+            return true;
+        }),
 ];
