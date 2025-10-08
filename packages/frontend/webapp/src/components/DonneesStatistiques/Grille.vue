@@ -1,3 +1,4 @@
+vue
 <template>
     <section>
         <div class="z-10 grid grid-template text-sm bg-white sticky top-0">
@@ -65,39 +66,29 @@ const props = defineProps({
 
 const { metrics, collapseByDefault } = toRefs(props);
 
-// État du tri : tableau ordonné des critères de tri avec leur direction
-const sortCriteria = ref([]);
+// État du tri : un seul critère actif à la fois
+const sortCriteria = ref(null);
 
-// Gestion du tri multi-critères
+// Gestion du tri à critère unique
 const handleSort = (sortKey) => {
-    const existingIndex = sortCriteria.value.findIndex(
-        (criteria) => criteria.key === sortKey
-    );
-    if (existingIndex !== -1) {
-        const currentCriteria = sortCriteria.value[existingIndex];
-        if (currentCriteria.direction === "asc") {
-            // Passer de croissant à décroissant
-            sortCriteria.value[existingIndex].direction = "desc";
-        } else if (currentCriteria.direction === "desc") {
-            // Supprimer le critère de tri
-            sortCriteria.value.splice(existingIndex, 1);
+    if (sortCriteria.value && sortCriteria.value.key === sortKey) {
+        // Même critère : passer de croissant à décroissant à null
+        if (sortCriteria.value.direction === "asc") {
+            sortCriteria.value.direction = "desc";
+        } else {
+            sortCriteria.value = null;
         }
     } else {
-        // Ajouter un nouveau critère de tri (par défaut croissant)
-        sortCriteria.value.push({ key: sortKey, direction: "asc" });
+        // Nouveau critère : remplacer par croissant
+        sortCriteria.value = { key: sortKey, direction: "asc" };
     }
 };
 
 // Obtenir la direction de tri pour un critère donné
 const getSortDirection = (sortKey) => {
-    const criteria = sortCriteria.value.find((c) => c.key === sortKey);
-    return criteria ? criteria.direction : null;
-};
-
-// Obtenir la priorité de tri pour un critère donné (position dans la liste + 1)
-const getSortPriority = (sortKey) => {
-    const index = sortCriteria.value.findIndex((c) => c.key === sortKey);
-    return index !== -1 ? index + 1 : null;
+    return sortCriteria.value && sortCriteria.value.key === sortKey
+        ? sortCriteria.value.direction
+        : null;
 };
 
 // Fonction pour extraire la valeur numérique d'une métrique
@@ -112,7 +103,7 @@ const getMetricValue = (item, key) => {
     return 0;
 };
 
-// Fonction de tri récursive qui applique tous les critères
+// Fonction de tri récursive qui applique le critère
 const sortItemsRecursively = (items) => {
     if (!items || items.length === 0) {
         return;
@@ -121,28 +112,28 @@ const sortItemsRecursively = (items) => {
     // Trier les éléments du niveau actuel
     items.sort((a, b) => {
         // Si aucun critère de tri utilisateur, tri alphabétique direct
-        if (sortCriteria.value.length === 0) {
+        if (!sortCriteria.value) {
             return a.name.localeCompare(b.name, "fr", { sensitivity: "base" });
         }
 
-        // Tri par les critères sélectionnés par l'utilisateur
-        for (const criteria of sortCriteria.value) {
-            const valueA = getMetricValue(a, criteria.key);
-            const valueB = getMetricValue(b, criteria.key);
+        // Tri par le critère sélectionné
+        const valueA = getMetricValue(a, sortCriteria.value.key);
+        const valueB = getMetricValue(b, sortCriteria.value.key);
 
-            let comparison = 0;
-            if (valueA < valueB) {
-                comparison = -1;
-            } else if (valueA > valueB) {
-                comparison = 1;
-            }
-
-            if (comparison !== 0) {
-                return criteria.direction === "asc" ? comparison : -comparison;
-            }
+        let comparison = 0;
+        if (valueA < valueB) {
+            comparison = -1;
+        } else if (valueA > valueB) {
+            comparison = 1;
         }
 
-        // En cas d'égalité sur tous les critères, tri alphabétique
+        if (comparison !== 0) {
+            return sortCriteria.value.direction === "asc"
+                ? comparison
+                : -comparison;
+        }
+
+        // En cas d'égalité, tri alphabétique
         return a.name.localeCompare(b.name, "fr", { sensitivity: "base" });
     });
 
@@ -175,28 +166,26 @@ const sortedMetrics = computed(() => {
             };
 
             // Si aucun critère de tri, ordre par défaut
-            if (sortCriteria.value.length === 0) {
+            if (!sortCriteria.value) {
                 const orderA = nationOrder[a.uid] || 999;
                 const orderB = nationOrder[b.uid] || 999;
                 return orderA - orderB;
             }
 
-            // Sinon, trier par les critères utilisateur
-            for (const criteria of sortCriteria.value) {
-                const valueA = getMetricValue(a, criteria.key);
-                const valueB = getMetricValue(b, criteria.key);
+            // Sinon, trier par le critère utilisateur
+            const valueA = getMetricValue(a, sortCriteria.value.key);
+            const valueB = getMetricValue(b, sortCriteria.value.key);
 
-                let comparison = 0;
-                if (valueA < valueB) {
-                    comparison = -1;
-                } else if (valueA > valueB) {
-                    comparison = 1;
-                }
-                if (comparison !== 0) {
-                    return criteria.direction === "asc"
-                        ? comparison
-                        : -comparison;
-                }
+            let comparison = 0;
+            if (valueA < valueB) {
+                comparison = -1;
+            } else if (valueA > valueB) {
+                comparison = 1;
+            }
+            if (comparison !== 0) {
+                return sortCriteria.value.direction === "asc"
+                    ? comparison
+                    : -comparison;
             }
 
             // En cas d'égalité, maintenir l'ordre par défaut
