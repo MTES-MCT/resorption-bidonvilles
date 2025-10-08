@@ -23,7 +23,10 @@
                 @click="download"
                 :loading="isLoading"
                 >Exporter les
-                {{ townsStore.filteredTowns.length }} sites</Button
+                <span v-if="isExportToday">{{
+                    townsStore.filteredTowns.length
+                }}</span>
+                sites</Button
             >
         </template>
     </Modal>
