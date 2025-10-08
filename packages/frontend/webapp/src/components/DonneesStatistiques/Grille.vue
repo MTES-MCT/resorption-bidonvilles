@@ -48,7 +48,7 @@ export default {
 </script>
 
 <script setup>
-import { toRefs, computed, ref } from "vue";
+import { toRefs, computed, ref, toRaw } from "vue";
 import GrilleHeader from "./GrilleHeader.vue";
 import GrilleLigne from "./GrilleLigne.vue";
 
@@ -152,7 +152,8 @@ const sortedMetrics = computed(() => {
     }
 
     // Crée une copie profonde une seule fois pour éviter de muter les props
-    const metricsCopy = JSON.parse(JSON.stringify(metrics.value));
+    // toRaw() convertit l'objet réactif Vue en objet JavaScript brut, permettant à structuredClone() de fonctionner correctement
+    const metricsCopy = structuredClone(toRaw(metrics.value));
 
     // Si c'est un tableau (les 3 objets nation), traiter chaque objet séparément
     if (Array.isArray(metricsCopy)) {
