@@ -6,7 +6,6 @@
                 sortable
                 sortKey="number_of_towns_with_water"
                 :sortDirection="getSortDirection('number_of_towns_with_water')"
-                :sortPriority="getSortPriority('number_of_towns_with_water')"
                 @sort="handleSort"
                 >Sites avec accès à l'eau<br />(nbre hab.
                 couverts)</GrilleHeader
@@ -15,7 +14,6 @@
                 sortable
                 sortKey="number_of_persons"
                 :sortDirection="getSortDirection('number_of_persons')"
-                :sortPriority="getSortPriority('number_of_persons')"
                 @sort="handleSort"
                 >Habitants</GrilleHeader
             >
@@ -24,7 +22,6 @@
                 sortable
                 sortKey="number_of_towns"
                 :sortDirection="getSortDirection('number_of_towns')"
-                :sortPriority="getSortPriority('number_of_towns')"
                 @sort="handleSort"
                 >Nombre de sites</GrilleHeader
             >
