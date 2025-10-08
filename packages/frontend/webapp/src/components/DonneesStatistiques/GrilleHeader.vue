@@ -9,12 +9,6 @@
         >
             <p><slot /></p>
             <div class="flex items-center space-x-1" v-if="sortable">
-                <span
-                    v-if="sortPriority"
-                    class="text-xs bg-primary text-white rounded-full w-4 h-4 flex items-center justify-center"
-                >
-                    {{ sortPriority }}
-                </span>
                 <IconComponent
                     :icon="
                         sortDirection === 'asc'
@@ -57,16 +51,11 @@ const props = defineProps({
         type: String,
         default: null, // null, 'asc', 'desc'
     },
-    sortPriority: {
-        type: Number,
-        default: null,
-    },
 });
 
 const emit = defineEmits(["sort"]);
 
-const { separator, sortable, sortKey, sortDirection, sortPriority } =
-    toRefs(props);
+const { separator, sortable, sortKey, sortDirection } = toRefs(props);
 
 const handleSort = () => {
     if (sortable.value && sortKey.value) {
