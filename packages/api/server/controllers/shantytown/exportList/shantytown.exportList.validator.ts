@@ -98,7 +98,7 @@ export default [
     // Validation globale : rejeter tout paramètre de requête non reconnu
     query()
         .custom((_value, { req }) => {
-            const { exportedSitesStatus } = req.body;
+            const { exportedSitesStatus } = req.query;
 
             // Paramètres déjà validés explicitement
             const validatedParams = new Set([
@@ -109,11 +109,9 @@ export default [
                 'options',
             ]);
 
-            // Récupérer les filtres autorisés selon le statut
             const allowedFilters = shantytownFiltersAsQueryParamList[exportedSitesStatus] || {};
             const allowedFilterKeys = new Set(Object.keys(allowedFilters));
 
-            // Vérifier tous les paramètres de la requête
             const queryParams = Object.keys(req.query);
             const invalidParams = queryParams.filter(
                 param => !validatedParams.has(param) && !allowedFilterKeys.has(param),
