@@ -32,4 +32,8 @@ export default {
         ...all,
         ...closeOrResobed,
     },
+    resorbed: {
+        ...all,
+        ...closeOrResobed,
+    },
 };
