@@ -1,5 +1,42 @@
-import { Where, WhereClauseGroup } from '#server/models/_common/types/Where';
+import { Where, WhereClauseGroup, WhereClause } from '#server/models/_common/types/Where';
 import { ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
+
+// Helper générique pour décoder et construire des clauses à partir d'un mapping
+type ClauseMapping = Record<string, (index: number) => { key: string; clause: WhereClause }>;
+
+function buildClausesFromConditions(
+    filterValue: string | undefined,
+    mapping: ClauseMapping,
+): Where {
+    if (!filterValue) {
+        return [];
+    }
+
+    const conditions = decodeURIComponent(filterValue).split(',');
+    const clauses: WhereClauseGroup = {};
+
+    conditions.forEach((condition, index) => {
+        const builder = mapping[condition];
+        if (builder) {
+            const { key, clause } = builder(index);
+            clauses[key] = clause;
+        }
+    });
+
+    return Object.keys(clauses).length > 0 ? [clauses] : [];
+}
+
+// Helper pour créer une clause simple
+function createSimpleClause(query: string, value: any, operator?: string, not?: boolean): WhereClause {
+    const clause: WhereClause = { query, value };
+    if (operator) {
+        clause.operator = operator;
+    }
+    if (not) {
+        clause.not = not;
+    }
+    return clause;
+}
 
 function addStatusFilters(filters: ShantytownFilters): Where {
     const townsFilters: Where = [];
@@ -75,70 +112,35 @@ function addStatusFilters(filters: ShantytownFilters): Where {
 }
 
 function addPopulationFilter(filters: ShantytownFilters): Where {
-    if (!filters.population) {
-        return [];
-    }
+    const mapping: ClauseMapping = {
+        unknown: index => ({
+            key: `pop_unknown_${index}`,
+            clause: createSimpleClause('shantytowns.population_total', null),
+        }),
+        '-9': index => ({
+            key: `pop_minus9_${index}`,
+            clause: createSimpleClause('shantytowns.population_total', 10, '<'),
+        }),
+        '10-99': index => ({
+            key: `pop_range_${index}`,
+            clause: {
+                andClauses: [
+                    {
+                        pop_gte: createSimpleClause('shantytowns.population_total', 10, '>='),
+                    },
+                    {
+                        pop_lte: createSimpleClause('shantytowns.population_total', 99, '<='),
+                    },
+                ],
+            },
+        }),
+        '100-': index => ({
+            key: `pop_more100_${index}`,
+            clause: createSimpleClause('shantytowns.population_total', 100, '>='),
+        }),
+    };
 
-    const conditions = decodeURIComponent(filters.population).split(',');
-    const populationClauses: WhereClauseGroup = {};
-
-    conditions.forEach((condition, index) => {
-        switch (condition) {
-            case 'unknown':
-                populationClauses[`pop_unknown_${index}`] = {
-                    query: 'shantytowns.population_total',
-                    value: null,
-                };
-                break;
-
-            case '-9':
-                populationClauses[`pop_minus9_${index}`] = {
-                    query: 'shantytowns.population_total',
-                    operator: '<',
-                    value: 10,
-                };
-                break;
-
-            case '10-99':
-                populationClauses[`pop_range_${index}`] = {
-                    // condition AND imbriquée
-                    andClauses: [
-                        {
-                            pop_gte: {
-                                query: 'shantytowns.population_total',
-                                operator: '>=',
-                                value: 10,
-                            },
-                        },
-                        {
-                            pop_lte: {
-                                query: 'shantytowns.population_total',
-                                operator: '<=',
-                                value: 99,
-                            },
-                        },
-                    ],
-                };
-                break;
-
-            case '100-':
-                populationClauses[`pop_more100_${index}`] = {
-                    query: 'shantytowns.population_total',
-                    operator: '>=',
-                    value: 100,
-                };
-                break;
-
-            default:
-                break;
-        }
-    });
-
-    if (Object.keys(populationClauses).length === 0) {
-        return [];
-    }
-
-    return [populationClauses];
+    return buildClausesFromConditions(filters.population, mapping);
 }
 
 function addFieldTypeFilter(filters: ShantytownFilters): Where {
@@ -146,21 +148,13 @@ function addFieldTypeFilter(filters: ShantytownFilters): Where {
         return [];
     }
 
-    const fieldTypeFilter: Where = [];
-    fieldTypeFilter.push({
-        fieldType:
-        {
+    return [{
+        fieldType: {
             query: 'field_types.field_type_id',
             operator: 'IN',
             value: filters.fieldType.split(',').map(Number),
         },
-    });
-
-    if (fieldTypeFilter.length === 0) {
-        return [];
-    }
-
-    return fieldTypeFilter;
+    }];
 }
 
 
@@ -219,279 +213,128 @@ function addTargetFilter(filters: ShantytownFilters): Where {
     if (!filters.target) {
         return [];
     }
-    // target=yes,no
-    const townsFilters: Where = [];
 
-    if (filters.target === 'yes') {
-        townsFilters.push(
-            {
-                resorption_target:
-                {
-                    query: 'shantytowns.resorption_target',
-                    not: true,
-                    value: null,
-                },
-            },
-        );
-    }
+    const targetMapping: Record<string, WhereClauseGroup> = {
+        yes: {
+            resorption_target: createSimpleClause('shantytowns.resorption_target', null, undefined, true),
+        },
+        no: {
+            resorption_target: createSimpleClause('shantytowns.resorption_target', null),
+        },
+    };
 
-    if (filters.target === 'no') {
-        townsFilters.push(
-            {
-                resorption_target:
-                {
-                    query: 'shantytowns.resorption_target',
-                    value: null,
-                },
-            },
-        );
-    }
-
-    return townsFilters;
+    return targetMapping[filters.target] ? [targetMapping[filters.target]] : [];
 }
 
 function addJusticeFilter(filters: ShantytownFilters): Where {
-    if (!filters.justice) {
-        return [];
-    }
+    const mapping: ClauseMapping = {
+        unknown: index => ({
+            key: `justice_unknown_${index}`,
+            clause: createSimpleClause('shantytowns.justice_procedure', null),
+        }),
+        none: index => ({
+            key: `justice_none_${index}`,
+            clause: createSimpleClause('shantytowns.justice_procedure', false),
+        }),
+        justiceProcedure: index => ({
+            key: `justice_procedure_${index}`,
+            clause: createSimpleClause('shantytowns.justice_procedure', true),
+        }),
+        ownerComplaint: index => ({
+            key: `justice_procedure_${index}`,
+            clause: createSimpleClause('shantytowns.owner_complaint', true),
+        }),
+        justiceRendered: index => ({
+            key: `justice_procedure_${index}`,
+            clause: createSimpleClause('shantytowns.justice_rendered', true),
+        }),
+    };
 
-    const conditions = decodeURIComponent(filters.justice).split(',');
-    const justiceClauses: WhereClauseGroup = {};
-
-    conditions.forEach((condition, index) => {
-        switch (condition) {
-            case 'unknown':
-                justiceClauses[`justice_unknown_${index}`] = {
-                    query: 'shantytowns.justice_procedure',
-                    value: null,
-                };
-                break;
-
-            case 'none':
-                justiceClauses[`justice_none_${index}`] = {
-                    query: 'shantytowns.justice_procedure',
-                    value: false,
-                };
-                break;
-
-            case 'justiceProcedure':
-                justiceClauses[`justice_procedure_${index}`] = {
-                    query: 'shantytowns.justice_procedure',
-                    value: true,
-                };
-                break;
-
-            case 'ownerComplaint':
-                justiceClauses[`justice_procedure_${index}`] = {
-                    query: 'shantytowns.owner_complaint',
-                    value: true,
-                };
-                break;
-
-            case 'justiceRendered':
-                justiceClauses[`justice_procedure_${index}`] = {
-                    query: 'shantytowns.justice_rendered',
-                    value: true,
-                };
-
-                break;
-
-            default:
-                break;
-        }
-    });
-
-    if (Object.keys(justiceClauses).length === 0) {
-        return [];
-    }
-
-    return [justiceClauses];
+    return buildClausesFromConditions(filters.justice, mapping);
 }
 
 function addAdministrativeOrderFilter(filters: ShantytownFilters): Where {
-    if (!filters.administrativeOrder) {
-        return [];
-    }
+    const mapping: ClauseMapping = {
+        unknown: index => ({
+            key: `administrative_order_unknown_${index}`,
+            clause: createSimpleClause('shantytowns.evacuation_under_time_limit', null),
+        }),
+        none: index => ({
+            key: `administrative_order_none_${index}`,
+            clause: createSimpleClause('shantytowns.evacuation_under_time_limit', false),
+        }),
+        evacuationUnderTimeLimit: index => ({
+            key: `administrative_order_procedure_${index}`,
+            clause: createSimpleClause('shantytowns.evacuation_under_time_limit', true),
+        }),
+    };
 
-    const conditions = decodeURIComponent(filters.administrativeOrder).split(',');
-    const administrativeOrderClauses: WhereClauseGroup = {};
-
-    conditions.forEach((condition, index) => {
-        switch (condition) {
-            case 'unknown':
-                administrativeOrderClauses[`administrative_order_unknown_${index}`] = {
-                    query: 'shantytowns.evacuation_under_time_limit',
-                    value: null,
-                };
-                break;
-
-            case 'none':
-                administrativeOrderClauses[`administrative_order_none_${index}`] = {
-                    query: 'shantytowns.evacuation_under_time_limit',
-                    value: false,
-                };
-                break;
-
-            case 'evacuationUnderTimeLimit':
-                administrativeOrderClauses[`administrative_order_procedure_${index}`] = {
-                    query: 'shantytowns.evacuation_under_time_limit',
-                    value: true,
-                };
-                break;
-
-            default:
-                break;
-        }
-    });
-
-    if (Object.keys(administrativeOrderClauses).length === 0) {
-        return [];
-    }
-
-    return [administrativeOrderClauses];
+    return buildClausesFromConditions(filters.administrativeOrder, mapping);
 }
 
 function addRhiFilter(filters: ShantytownFilters): Where {
-    if (!filters.rhi) {
-        return [];
-    }
+    const mapping: ClauseMapping = {
+        unknown: index => ({
+            key: `rhi_unknown_${index}`,
+            clause: createSimpleClause('shantytowns.insalubrity_order', null),
+        }),
+        none: index => ({
+            key: `rhi_none_${index}`,
+            clause: createSimpleClause('shantytowns.insalubrity_order', false),
+        }),
+        insalubrityOrder: index => ({
+            key: `rhi_procedure_${index}`,
+            clause: createSimpleClause('shantytowns.insalubrity_order', true),
+        }),
+    };
 
-    const conditions = decodeURIComponent(filters.rhi).split(',');
-    const rhiClauses: WhereClauseGroup = {};
-
-    conditions.forEach((condition, index) => {
-        switch (condition) {
-            case 'unknown':
-                rhiClauses[`rhi_unknown_${index}`] = {
-                    query: 'shantytowns.insalubrity_order',
-                    value: null,
-                };
-                break;
-
-            case 'none':
-                rhiClauses[`rhi_none_${index}`] = {
-                    query: 'shantytowns.insalubrity_order',
-                    value: false,
-                };
-                break;
-
-            case 'insalubrityOrder':
-                rhiClauses[`rhi_procedure_${index}`] = {
-                    query: 'shantytowns.insalubrity_order',
-                    value: true,
-                };
-                break;
-
-            default:
-                break;
-        }
-    });
-
-    if (Object.keys(rhiClauses).length === 0) {
-        return [];
-    }
-
-    return [rhiClauses];
+    return buildClausesFromConditions(filters.rhi, mapping);
 }
 
 function addHeatwaveFilter(filters: ShantytownFilters): Where {
-    if (!filters.heatwave) {
-        return [];
-    }
+    const mapping: ClauseMapping = {
+        no: index => ({
+            key: `heatwave_none_${index}`,
+            clause: createSimpleClause('shantytowns.heatwave_status', false),
+        }),
+        yes: index => ({
+            key: `heatwave_procedure_${index}`,
+            clause: createSimpleClause('shantytowns.heatwave_status', true),
+        }),
+    };
 
-    const conditions = decodeURIComponent(filters.heatwave).split(',');
-    const heatwaveClauses: WhereClauseGroup = {};
-
-    conditions.forEach((condition, index) => {
-        switch (condition) {
-            case 'no':
-                heatwaveClauses[`heatwave_none_${index}`] = {
-                    query: 'shantytowns.heatwave_status',
-                    value: false,
-                };
-                break;
-
-            case 'yes':
-                heatwaveClauses[`heatwave_procedure_${index}`] = {
-                    query: 'shantytowns.heatwave_status',
-                    value: true,
-                };
-                break;
-
-            default:
-                break;
-        }
-    });
-
-    if (Object.keys(heatwaveClauses).length === 0) {
-        return [];
-    }
-
-    return [heatwaveClauses];
+    return buildClausesFromConditions(filters.heatwave, mapping);
 }
 
 function addClosingReasonFilter(filters: ShantytownFilters): Where {
-    if (!filters.closingReason) {
-        return [];
-    }
+    const mapping: ClauseMapping = {
+        resorbed: index => ({
+            key: `gradual_resorption_${index}`,
+            clause: createSimpleClause('shantytowns.status', 'resorbed'),
+        }),
+        closed_by_justice: index => ({
+            key: `closed_by_justice_${index}`,
+            clause: createSimpleClause('shantytowns.status', 'closed_by_justice'),
+        }),
+        closed_by_pref_admin: index => ({
+            key: `closed_by_pref_admin_${index}`,
+            clause: createSimpleClause('shantytowns.status', 'closed_by_pref_admin'),
+        }),
+        closed_by_city_admin: index => ({
+            key: `closed_by_city_admin_${index}`,
+            clause: createSimpleClause('shantytowns.status', 'closed_by_city_admin'),
+        }),
+        other: index => ({
+            key: `closing_reason_other_${index}`,
+            clause: createSimpleClause('shantytowns.status', 'other'),
+        }),
+        unknown: index => ({
+            key: `closing_reason_unknown_${index}`,
+            clause: createSimpleClause('shantytowns.status', 'unknown'),
+        }),
+    };
 
-    const conditions = decodeURIComponent(filters.closingReason).split(',');
-    const closingReasonClauses: WhereClauseGroup = {};
-
-    conditions.forEach((condition, index) => {
-        switch (condition) {
-            case 'resorbed':
-                closingReasonClauses[`gradual_resorption_${index}`] = {
-                    query: 'shantytowns.status',
-                    value: 'resorbed',
-                };
-                break;
-
-            case 'closed_by_justice':
-                closingReasonClauses[`closed_by_justice_${index}`] = {
-                    query: 'shantytowns.status',
-                    value: 'closed_by_justice',
-                };
-                break;
-
-            case 'closed_by_pref_admin':
-                closingReasonClauses[`closed_by_pref_admin_${index}`] = {
-                    query: 'shantytowns.status',
-                    value: 'closed_by_pref_admin',
-                };
-                break;
-
-            case 'closed_by_city_admin':
-                closingReasonClauses[`closed_by_city_admin_${index}`] = {
-                    query: 'shantytowns.status',
-                    value: 'closed_by_city_admin',
-                };
-                break;
-
-            case 'other':
-                closingReasonClauses[`closing_reason_other_${index}`] = {
-                    query: 'shantytowns.status',
-                    value: 'other',
-                };
-                break;
-
-            case 'unknown':
-                closingReasonClauses[`closing_reason_unknown_${index}`] = {
-                    query: 'shantytowns.status',
-                    value: 'unknown',
-                };
-                break;
-
-            default:
-                break;
-        }
-    });
-
-    if (Object.keys(closingReasonClauses).length === 0) {
-        return [];
-    }
-
-    return [closingReasonClauses];
+    return buildClausesFromConditions(filters.closingReason, mapping);
 }
 
 export default function setQueryFilters(filters: ShantytownFilters): Where {
