@@ -22,11 +22,7 @@
                 iconPosition="left"
                 @click="download"
                 :loading="isLoading"
-                >Exporter les
-                <span v-if="isExportToday">{{
-                    townsStore.filteredTowns.length
-                }}</span>
-                sites</Button
+                >{{ exportButtonLabel }}</Button
             >
         </template>
     </Modal>
@@ -104,6 +100,17 @@ const isExportToday = computed(() => {
     const today = formatDate(Date.now() / 1000, "d/m/y");
     const exportDate = formatDate(values.date?.getTime() / 1000, "d/m/y");
     return today === exportDate;
+});
+
+const exportButtonLabel = computed(() => {
+    if (isExportToday.value) {
+        const count = townsStore.filteredTowns.length;
+        if (count === 1) {
+            return "Exporter le site";
+        }
+        return `Exporter les ${count} sites`;
+    }
+    return "Exporter les sites";
 });
 
 function onClose() {
