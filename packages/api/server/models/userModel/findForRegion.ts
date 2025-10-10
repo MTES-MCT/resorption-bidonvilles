@@ -1,4 +1,4 @@
-import { Where } from '#server/models/_common/types/Where';
+import { Where } from '#server/models/_common/types/Where.d';
 import query from './_common/query';
 
 export default async (regionCode, name = undefined) => {

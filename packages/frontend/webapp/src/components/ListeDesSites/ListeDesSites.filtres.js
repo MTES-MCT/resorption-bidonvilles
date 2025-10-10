@@ -108,42 +108,46 @@ export default {
         id: "conditions",
         options: [
             {
+                type: "label",
+                label: "Valeur(s) à améliorer",
+            },
+            {
                 value: "accessToWater",
-                label: "eau",
+                label: "Eau",
             },
             {
                 value: "accessToSanitary",
-                label: "toilettes",
+                label: "Toilettes",
             },
             {
                 value: "accessToElectricity",
-                label: "électricité",
+                label: "Électricité",
             },
             {
                 value: "accessToTrash",
-                label: "évac. des déchets",
+                label: "Évac. des déchets",
             },
 
             {
                 value: "vermin",
-                label: "pres. de nuisibles",
+                label: "Prés. de nuisibles",
             },
             {
                 value: "firePreventionMeasures",
-                label: "prev. incendie",
+                label: "Prév. incendie",
             },
         ],
     },
-    solvedOrClosed: {
+    resorbedOrClosed: {
         label: "Résorbé / fermé",
-        id: "solvedOrClosed",
+        id: "resorbedOrClosed",
         options: [
             {
                 value: "closed",
                 label: "Fermé",
             },
             {
-                value: "solved",
+                value: "resorbed",
                 label: "Résorbé",
             },
         ],
@@ -152,13 +156,18 @@ export default {
         label: "Cause de la fermeture",
         id: "closingReason",
         options: [
+            { value: "resorbed", label: "Résorption progressive du site" },
             {
                 value: "closed_by_justice",
-                label: "Exécution d'une décision de justice",
+                label: "Décision de justice suite à une plainte du proriétaire",
             },
             {
-                value: "closed_by_admin",
-                label: "Exécution d'une décision administrative",
+                value: "closed_by_pref_admin",
+                label: "Décision administrative de la préfecture",
+            },
+            {
+                value: "closed_by_city_admin",
+                label: "Décision administrative de la commune.",
             },
             { value: "other", label: "Autre" },
             { value: "unknown", label: "Raison inconnue" },

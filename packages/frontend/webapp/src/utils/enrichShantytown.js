@@ -8,6 +8,7 @@
 
 import formatDateSince from "./formatDateSince";
 import getLabelForLivingConditionDetail from "./getLabelForLivingConditionDetail";
+import closingReasons from "./closing_reasons";
 import { getTownLastUpdatedAt } from "@/utils/townLastUpdateManager";
 
 export default function (shantytown, fieldTypes) {
@@ -245,12 +246,7 @@ export default function (shantytown, fieldTypes) {
     };
 }
 
-const statusDetails = {
-    resorbed: "Résorption progressive du site",
-    closed_by_justice:
-        "Décision de justice suite à une plainte du propriétaire",
-    closed_by_pref_admin: "Décision administrative de la Préfecture",
-    closed_by_city_admin: "Décision administrative de la Commune",
-    other: "Autre",
-    unknown: "Raison inconnue",
-};
+const statusDetails = closingReasons.reduce(
+    (acc, reason) => Object.assign(acc, { [reason.value]: reason.label }),
+    {}
+);

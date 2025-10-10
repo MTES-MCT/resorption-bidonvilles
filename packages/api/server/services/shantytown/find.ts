@@ -3,12 +3,12 @@ import ServiceError from '#server/errors/ServiceError';
 import findJusticeReaders from '#server/services/shantytown/findJusticeReaders';
 import shantytownDecree from '#server/services/shantytownDecree/findAll';
 import serializeAttachment from '#server/services/attachment/serializeAttachment';
+import { AuthUser } from '#server/middlewares/authMiddleware';
 import enrichCommentsAttachments from './_common/enrichCommentsAttachments';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { Attachment } from '../attachment/Attachment';
-import { User } from '#root/types/resources/User.d';
 
-export default async (user: User, townId: number): Promise<Shantytown> => {
+export default async (user: AuthUser, townId: number): Promise<Shantytown> => {
     const town = await shantytownModel.findOne(user, townId);
 
     /*

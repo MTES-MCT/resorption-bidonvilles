@@ -13,19 +13,10 @@ import trashEvacuationStatusLabels from './livingConditionsStatusLabels/trashEva
 import pestAnimalsStatusLabels from './livingConditionsStatusLabels/pestAnimalsStatusLabels';
 import firePreventionStatusLabels from './livingConditionsStatusLabels/firePreventionStatusLabels';
 import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
+import { ShantytownExportListProperty } from '#root/types/resources/ShantytownExportTypes.d';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 const { webappUrl } = config;
-
-export type ShantytownExportListProperty = {
-    title: string,
-    data: (shantytown: ShantytownWithFinancedAction) => string | number | Date | null,
-    width: number,
-    align?: 'left' | 'center' | 'right',
-    bold?: boolean,
-    sum?: boolean,
-    link?: (shantytown: ShantytownWithFinancedAction) => string,
-};
 
 export default (closingSolutions: ClosingSolution[]) => {
     const COLUMN_WIDTHS = {

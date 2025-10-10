@@ -21,7 +21,7 @@
 <script setup>
 import { toRefs } from "vue";
 import formatDate from "@common/utils/formatDate.js";
-import isSolved from "@/utils/isShantytownSolved";
+import isSolved from "@/utils/isShantytownResorbed";
 import isClosed from "@/utils/isShantytownClosed";
 
 const props = defineProps({
