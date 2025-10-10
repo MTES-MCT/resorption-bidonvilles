@@ -32,14 +32,16 @@ export default [
 
     // Placer le statut des sites exportés dans le body pour exploitation ultérieure par le contrôleur
     query('exportedSitesStatus')
-        .exists({ checkNull: true }).bail().withMessage('Le statut des sites exportés est obligatoire')
-        .isString()
+        .exists({ checkNull: true, checkFalsy: true })
+        .withMessage('Le statut des sites exportés est obligatoire')
+        .bail()
         .isIn(['open', 'inProgress', 'closed', 'resorbed'])
+        .withMessage('Statut invalide')
+        .bail()
         .custom((value, { req }) => {
             req.body.exportedSitesStatus = value;
             return true;
         }),
-
     query('locationType')
         .optional()
         .custom(async (type, { req }) => {
@@ -101,7 +103,7 @@ export default [
             const { exportedSitesStatus } = req.query;
 
             // Paramètres déjà validés explicitement
-            const validatedParams = new Set([
+            const validatedParams: Set<string> = new Set([
                 'date',
                 'exportedSitesStatus',
                 'locationType',
@@ -109,11 +111,11 @@ export default [
                 'options',
             ]);
 
-            const allowedFilters = shantytownFiltersAsQueryParamList[exportedSitesStatus] || {};
-            const allowedFilterKeys = new Set(Object.keys(allowedFilters));
+            const allowedFilters: Record<string, string> = shantytownFiltersAsQueryParamList[exportedSitesStatus] || {};
+            const allowedFilterKeys: Set<string> = new Set(Object.keys(allowedFilters));
 
-            const queryParams = Object.keys(req.query);
-            const invalidParams = queryParams.filter(
+            const queryParams: string[] = Object.keys(req.query);
+            const invalidParams: string[] = queryParams.filter(
                 param => !validatedParams.has(param) && !allowedFilterKeys.has(param),
             );
 
