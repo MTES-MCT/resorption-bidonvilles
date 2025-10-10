@@ -4,7 +4,7 @@
             >Exporter les sites {{ whichTownsAreExported.label }}</template
         >
         <template v-slot:body>
-            <ListeDesSitesExportSummary v-if="isExportToday" />
+            <ListeDesSitesExportSummary :isExportToday="isExportToday" />
             <ListeDesSitesExportDate v-if="canExportHistory" />
             <ListeDesSitesExportOptions :disabled="!isExportToday" />
             <ErrorSummary class="mt-4" v-if="error" :message="error" />
