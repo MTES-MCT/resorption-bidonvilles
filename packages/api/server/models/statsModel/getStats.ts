@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 import { BindOrReplacements, QueryTypes } from 'sequelize';
 import permissionUtils from '#server/utils/permission';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
-import { WhereClauseGroup } from '#server/models/_common/types/Where';
+import { WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import { Location } from '#server/models/geoModel/Location.d';
 import decomposeForDiagramm from './_common/decomposeForDiagramm';
 import getArrayOfDates from './_common/getArrayOfDates';

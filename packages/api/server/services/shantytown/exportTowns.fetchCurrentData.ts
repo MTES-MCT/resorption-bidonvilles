@@ -3,7 +3,7 @@ import geoUtils from '#server/utils/geo';
 import shantytownModel from '#server/models/shantytownModel';
 import where from '#server/utils/permission/where';
 
-import { Where, WhereClauseGroup } from '#server/models/_common/types/Where';
+import { Where, WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import { Location } from '#server/models/geoModel/Location.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import actionModel from '#server/models/actionModel';

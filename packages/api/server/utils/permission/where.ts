@@ -1,4 +1,4 @@
-import { WhereClauseGroup } from '#server/models/_common/types/Where';
+import { WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import getPermission from './getPermission';
 import { User } from '#root/types/resources/User.d';
 

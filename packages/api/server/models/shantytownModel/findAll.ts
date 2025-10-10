@@ -1,4 +1,4 @@
-import { Where } from '#server/models/_common/types/Where';
+import { Where } from '#server/models/_common/types/Where.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import query from './_common/query';
 

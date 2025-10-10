@@ -1,4 +1,4 @@
-import { Where, WhereClause } from './types/Where';
+import { Where, WhereClause } from './types/Where.d';
 
 type ValueResult = {
     value: string;

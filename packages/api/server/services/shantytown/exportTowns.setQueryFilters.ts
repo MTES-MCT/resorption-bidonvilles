@@ -1,4 +1,4 @@
-import { Where, WhereClauseGroup, WhereClause } from '#server/models/_common/types/Where';
+import { Where, WhereClauseGroup, WhereClause } from '#server/models/_common/types/Where.d';
 import { ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
 
 // Helper générique pour décoder et construire des clauses à partir d'un mapping
