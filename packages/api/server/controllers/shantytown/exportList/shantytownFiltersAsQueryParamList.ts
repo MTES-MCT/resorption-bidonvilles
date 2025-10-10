@@ -1,6 +1,4 @@
-type FilterLabel = string;
-
-type FilterMap = Record<string, FilterLabel>;
+type FilterMap = Record<string, string>;
 
 type SiteStatus = 'open' | 'inProgress' | 'closed' | 'resorbed';
 
