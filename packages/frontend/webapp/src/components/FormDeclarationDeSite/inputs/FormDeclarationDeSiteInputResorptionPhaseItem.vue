@@ -12,7 +12,7 @@
                 :checked="isChecked"
                 :key="phase.uid"
                 :label="phase.name"
-                name="preparatory_phases_toward_resorption"
+                :name="`preparatory_phases_toward_resorption_${phase.uid}`"
                 :disabled="isDisabled"
                 v-model="modelValue"
                 @change="handleCheckboxChange"
@@ -106,6 +106,6 @@ const handleCheckboxChange = (checked) => {
 
 const canUpdate = computed(() => {
     const userStore = useUserStore();
-    return userStore.hasPermission("shantytown_resorption.update");
+    return userStore.hasPermission("shantytown.update");
 });
 </script>

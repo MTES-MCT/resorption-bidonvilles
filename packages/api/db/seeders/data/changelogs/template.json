@@ -1,0 +1,16 @@
+{
+  "release": "X.X.X",
+  "date": "YYYY-MM-DDTHH:mm:ss",
+  "items": [
+    {
+      "title": "Titre de la fonctionnalité",
+      "description": "<p>Description de la fonctionnalité...</p>",
+      "image": "item_1.jpg"
+    },
+    {
+      "title": "Autre fonctionnalité",
+      "description": "<p>Description de l'autre fonctionnalité...</p>",
+      "image": "item_2.jpg"
+    }
+  ]
+}

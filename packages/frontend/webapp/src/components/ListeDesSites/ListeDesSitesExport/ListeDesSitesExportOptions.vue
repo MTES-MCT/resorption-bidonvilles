@@ -36,11 +36,10 @@
 </template>
 
 <script setup>
-import { computed, defineProps, ref, toRefs, watch } from "vue";
+import { computed, defineProps, toRefs } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
 import options from "./options";
-
 import { Checkbox, Warning } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
@@ -50,36 +49,31 @@ const props = defineProps({
         default: true,
     },
 });
+
 const { disabled } = toRefs(props);
 
 const townsStore = useTownsStore();
 const userStore = useUserStore();
 
-const selectedOptions = ref(townsStore.exportOptions);
+const selectedOptions = townsStore.exportOptions;
 
 const toggleOption = (optionId) => {
-    const index = selectedOptions.value.indexOf(optionId);
+    const index = selectedOptions.indexOf(optionId);
     if (index > -1) {
-        selectedOptions.value.splice(index, 1);
+        selectedOptions.splice(index, 1);
     } else {
-        selectedOptions.value.push(optionId);
+        selectedOptions.push(optionId);
     }
 };
-
-watch(selectedOptions, (newValue) => {
-    townsStore.exportOptions = newValue;
-});
 
 const availableOptions = computed(() => {
     return options.filter(({ closedTowns, permission }) => {
         const isClosed = townsStore.filters.status === "close";
 
-        // on filtre les options selon le statut fermé/ouvert du site
         if (closedTowns !== undefined && closedTowns !== isClosed) {
             return false;
         }
 
-        // on filtre par permission
         if (permission === undefined) {
             return true;
         }

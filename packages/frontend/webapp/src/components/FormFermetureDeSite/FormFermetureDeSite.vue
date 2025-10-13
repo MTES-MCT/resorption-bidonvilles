@@ -220,8 +220,6 @@ defineExpose({
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             if (e?.fields) {
-                console.log("Field errors: ", e.fields);
-
                 setErrors(e.fields);
             }
         }

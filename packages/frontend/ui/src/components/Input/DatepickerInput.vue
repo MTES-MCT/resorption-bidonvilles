@@ -23,6 +23,7 @@
                 :monthPicker="monthPicker"
                 v-bind="$attrs"
                 :uid="id"
+                @cleared="handleChange(null)"
             />
         </div>
         <InputError v-if="errors.length">{{ errors[0] }}</InputError>

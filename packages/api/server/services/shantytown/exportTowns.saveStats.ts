@@ -2,6 +2,7 @@ import ServiceError from '#server/errors/ServiceError';
 import statsExportsModel from '#server/models/statsExportsModel';
 import { Location } from '#server/models/geoModel/Location.d';
 import { User } from '#root/types/resources/User.d';
+import { ExportedSitesStatus } from '#root/types/resources/exportedSitesStatus.d';
 
 type StatRow = {
     fk_region: string | null,
@@ -12,9 +13,10 @@ type StatRow = {
     exported_by: number,
 };
 
-export default async (user: User, locations: Location[], closedTowns: boolean): Promise<void> => {
+export default async function saveStats(user: User, locations: Location[], exportedSitesStatus: ExportedSitesStatus): Promise<void> {
     const stats: StatRow[] = [];
     const isNationalExport = locations.some(l => ['nation', 'metropole', 'outremer'].includes(l.type));
+    const closedTowns = exportedSitesStatus !== 'open' && exportedSitesStatus !== 'inProgress';
 
     if (isNationalExport) {
         stats.push({
@@ -46,4 +48,4 @@ export default async (user: User, locations: Location[], closedTowns: boolean): 
     } catch (error) {
         throw new ServiceError('write_failed', error);
     }
-};
+}
