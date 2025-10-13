@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
+/* eslint-disable no-restricted-syntax */
 
 /**
  * Script pour valider un fichier JSON de changelog
@@ -7,8 +8,8 @@
  * Exemple: node validate-changelog-json.js 2.35.0
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const version = process.argv[2];
 
@@ -45,21 +46,21 @@ try {
 
 // 2. Vérifier la structure
 const requiredFields = ['release', 'date', 'items'];
-requiredFields.forEach((field) => {
-    if (!changelogData[field]) {
+for (const field of requiredFields) {
+    if (changelogData[field]) {
+        console.log(`✅ Champ présent : ${field}`);
+    } else {
         console.error(`❌ Champ manquant : ${field}`);
         hasErrors = true;
-    } else {
-        console.log(`✅ Champ présent : ${field}`);
     }
-});
+}
 
 // 3. Vérifier le type de items
-if (!Array.isArray(changelogData.items)) {
+if (Array.isArray(changelogData.items)) {
+    console.log(`✅ Items est un tableau (${changelogData.items.length} éléments)`);
+} else {
     console.error('❌ Le champ "items" doit être un tableau');
     hasErrors = true;
-} else {
-    console.log(`✅ Items est un tableau (${changelogData.items.length} éléments)`);
 }
 
 // 4. Vérifier la date
@@ -78,24 +79,24 @@ try {
 
 // 5. Vérifier chaque item
 if (Array.isArray(changelogData.items)) {
-    changelogData.items.forEach((item, index) => {
+    for (const [index, item] of changelogData.items.entries()) {
         console.log(`\n📝 Item ${index + 1}:`);
 
         const itemRequiredFields = ['title', 'description', 'image'];
-        itemRequiredFields.forEach((field) => {
-            if (!item[field]) {
+        for (const field of itemRequiredFields) {
+            if (item[field]) {
+                console.log(`   ✅ ${field}: ${item[field].substring(0, 50)}${item[field].length > 50 ? '...' : ''}`);
+            } else {
                 console.error(`   ❌ Champ manquant : ${field}`);
                 hasErrors = true;
-            } else {
-                console.log(`   ✅ ${field}: ${item[field].substring(0, 50)}${item[field].length > 50 ? '...' : ''}`);
             }
-        });
+        }
 
         // Vérifier que la description contient du HTML
         if (item.description && !item.description.includes('<')) {
             console.warn('   ⚠️  La description ne semble pas contenir de HTML');
         }
-    });
+    }
 }
 
 // 6. Vérifier la cohérence de la version

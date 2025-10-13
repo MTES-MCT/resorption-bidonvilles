@@ -7,8 +7,8 @@
  * Exemple: node create-changelog.js 2.35.0
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const version = process.argv[2];
 
