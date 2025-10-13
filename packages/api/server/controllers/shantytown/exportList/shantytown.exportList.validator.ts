@@ -2,6 +2,7 @@
 import { query } from 'express-validator';
 import geoModel from '#server/models/geoModel';
 import { Location } from '#server/models/geoModel/Location.d';
+import shantytownFiltersAsQueryParamList from './shantytownFiltersAsQueryParamList';
 
 export default [
     query('date')
@@ -29,13 +30,18 @@ export default [
             return true;
         }),
 
-    query('closedTowns')
-        .customSanitizer(value => value === '1')
+    // Placer le statut des sites exportés dans le body pour exploitation ultérieure par le contrôleur
+    query('exportedSitesStatus')
+        .exists({ checkNull: true, checkFalsy: true })
+        .withMessage('Le statut des sites exportés est obligatoire')
+        .bail()
+        .isIn(['open', 'inProgress', 'closed', 'resorbed'])
+        .withMessage('Statut invalide')
+        .bail()
         .custom((value, { req }) => {
-            req.body.closedTowns = value;
+            req.body.exportedSitesStatus = value;
             return true;
         }),
-
     query('locationType')
         .optional()
         .custom(async (type, { req }) => {
@@ -90,4 +96,33 @@ export default [
 
     query('options')
         .customSanitizer(value => (Array.isArray(value) ? value : [])),
+
+    // Validation globale : rejeter tout paramètre de requête non reconnu
+    query()
+        .custom((_value, { req }) => {
+            const { exportedSitesStatus } = req.query;
+
+            // Paramètres déjà validés explicitement
+            const validatedParams: Set<string> = new Set([
+                'date',
+                'exportedSitesStatus',
+                'locationType',
+                'locationCode',
+                'options',
+            ]);
+
+            const allowedFilters: Record<string, string> = shantytownFiltersAsQueryParamList[exportedSitesStatus] || {};
+            const allowedFilterKeys: Set<string> = new Set(Object.keys(allowedFilters));
+
+            const queryParams: string[] = Object.keys(req.query);
+            const invalidParams: string[] = queryParams.filter(
+                param => !validatedParams.has(param) && !allowedFilterKeys.has(param),
+            );
+
+            if (invalidParams.length > 0) {
+                throw new Error(`Paramètres non reconnus : ${invalidParams.join(', ')}`);
+            }
+
+            return true;
+        }),
 ];

@@ -3,7 +3,7 @@ import { QueryTypes, Transaction } from 'sequelize';
 import charteEngagementModel from '#server/models/charteEngagementModel';
 import permissionModel from '#server/models/permissionModel';
 import permissionUtils from '#server/utils/permission';
-import { Where } from '#server/models/_common/types/Where';
+import { Where } from '#server/models/_common/types/Where.d';
 import { PermissionHash } from '#server/models/permissionModel/find';
 import interventionAreaModel from '#server/models/interventionAreaModel/index';
 import serializeUser from './serializeUser';

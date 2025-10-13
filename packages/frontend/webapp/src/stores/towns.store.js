@@ -125,7 +125,22 @@ export const useTownsStore = defineStore("towns", () => {
     };
     watch(filters.search, resetPagination);
     watch(filters.location, resetPagination);
-    watch(filters.status, resetPagination);
+    watch(filters.status, () => {
+        resetPagination();
+        // Nettoyer les filtres incompatibles lors du changement d'onglet
+        const status = filters.status.value;
+        if (status === "close") {
+            // Nettoyer les filtres spécifiques aux sites ouverts/en cours
+            filters.properties.value.conditions = [];
+            filters.properties.value.actors = [];
+            filters.properties.value.heatwave = [];
+        }
+        if (status === "open" || status === "inProgress") {
+            // Nettoyer les filtres spécifiques aux sites fermés
+            filters.properties.value.closingReason = [];
+            filters.properties.value.resorbedOrClosed = [];
+        }
+    });
     watch(filters.properties, resetPagination, { deep: true });
     watch(
         [() => filteredTowns.value, () => sort.value],
@@ -165,7 +180,7 @@ export const useTownsStore = defineStore("towns", () => {
         filters.properties.value.heatwave = [];
         // Filtres spécifiques aux sites fermés
         filters.properties.value.closingReason = [];
-        filters.properties.value.solvedOrClosed = [];
+        filters.properties.value.resorbedOrClosed = [];
     }
 
     function reset() {
