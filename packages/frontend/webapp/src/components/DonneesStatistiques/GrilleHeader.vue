@@ -9,30 +9,26 @@
         >
             <p><slot /></p>
             <div class="flex items-center space-x-1" v-if="sortable">
-                <IconComponent
-                    :icon="
+                <span
+                    :class="
                         sortDirection === 'asc'
-                            ? 'chevron-up'
+                            ? 'fr-icon-arrow-up-s-line'
                             : sortDirection === 'desc'
-                            ? 'chevron-down'
-                            : 'chevron-down'
+                            ? 'fr-icon-arrow-down-s-line'
+                            : 'fr-icon-arrow-down-s-line text-gray-300'
                     "
-                    :class="{
-                        'text-primary': sortDirection,
-                        'text-gray-300': !sortDirection,
-                    }"
-                />
+                ></span>
             </div>
-            <IconComponent icon="chevron-down" v-else-if="$slots.default" />
+            <span
+                class="fr-icon-arrow-down-s-line"
+                v-else-if="$slots.default"
+            ></span>
         </div>
     </div>
 </template>
 
 <script setup>
 import { toRefs } from "vue";
-import { Icon } from "@resorptionbidonvilles/ui";
-
-const IconComponent = Icon;
 
 const props = defineProps({
     separator: {
