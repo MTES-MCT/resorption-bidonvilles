@@ -1,19 +1,3 @@
-const { backUrl } = require('./config/config');
-const createChangelogSeeder = require('./helpers/seederHandler');
+const createChangelogSeederFromJson = require('./helpers/createChangelogSeederFromJson');
 
-const versionNumber = '2.34.4';
-
-const changelog = {
-    app_version: versionNumber,
-    date: new Date('2025-07-15T02:24:00'),
-    items: [
-        {
-            title: 'Connaître le nom du propriétaire du terrain',
-            description:
-        '<p>Vos correspondants en DDETS peuvent maintenant obtenir le nom du propriétaire du terrain sur lequel est installé le bidonville, dans l’objectif de faciliter les contacts et accélérer la mise en place des premières mesures.</p><p>Cette nouvelle fonctionnalité de la plate-forme se base sur la localisation du site par rapport au cadastre et sur les données de la DGFIP.</p><p>N’hésitez pas à les contacter.</p>',
-            image: `${backUrl}/assets/changelog/${versionNumber}/item_1.jpg`,
-        },
-    ],
-};
-
-module.exports = createChangelogSeeder(changelog);
+module.exports = createChangelogSeederFromJson('X.X.X.json');
