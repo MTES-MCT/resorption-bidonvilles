@@ -43,6 +43,7 @@ yarn sequelize db:seed --seed 000000-changelog-X.X.X.js
 
 1. Crée le fichier `X.X.X.json` dans `data/changelogs/` avec les données du changelog.
 2. Crée le fichier seeder dans `/db/seeders/`.
+3. 3. Crée le répertoire `X.X.X` dans lequel téléverser l'image liée dans `../../../assets/changelog/`.
 
 ### Lancer la commande:
 
