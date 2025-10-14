@@ -878,7 +878,7 @@ export default mode => ([
         .custom(async (value, { req }) => {
             try {
                 req.body.reinstallation_incoming_towns_full = await shantytownModel.findAll(req.user, [
-                    { shantytown_id: value },
+                    { shantytown_id: { value } },
                 ]);
             } catch (error) {
                 // eslint-disable-next-line no-console
