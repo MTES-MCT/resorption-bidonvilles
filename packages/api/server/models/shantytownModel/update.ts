@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 import incomingTownsModel from '#server/models/incomingTownsModel';
 import { Transaction } from 'sequelize';
 
-export default async (editor, shantytownId: number, data, argTransaction: Transaction = undefined): Promise<void> => {
+export default async (editor, shantytownId: number, data, argTransaction: Transaction = undefined): Promise<number> => {
     let transaction: Transaction = argTransaction;
     transaction ??= await sequelize.transaction();
 
@@ -334,6 +334,30 @@ export default async (editor, shantytownId: number, data, argTransaction: Transa
                     transaction,
                 },
             ),
+            sequelize.query(
+                `INSERT INTO
+                    "shantytown_resorption_phases_history"(
+                        fk_shantytown,
+                        fk_preparatory_phase,
+                        created_at,
+                        completed_at,
+                        archived_at
+                    )
+                SELECT
+                    :hid,
+                    fk_preparatory_phase,
+                    created_at,
+                    completed_at,
+                    NOW()
+                FROM shantytown_preparatory_phases_toward_resorption WHERE fk_shantytown = :id`,
+                {
+                    replacements: {
+                        hid,
+                        id: shantytownId,
+                    },
+                    transaction,
+                },
+            ),
         ]);
 
         // now, update the shantytown
@@ -370,6 +394,7 @@ export default async (editor, shantytownId: number, data, argTransaction: Transa
                     'sanitary_toilet_types',
                     'electricity_access_types',
                     'reinstallation_incoming_towns',
+                    'preparatory_phases',
                 ].includes(key)) {
                     return acc;
                 }
@@ -565,9 +590,15 @@ export default async (editor, shantytownId: number, data, argTransaction: Transa
             }
         }
 
+        // Note: Les phases préparatoires sont gérées par shantytownResorptionService.update()
+        // et non ici. On garde juste 'preparatory_phases' dans la liste des clés exclues (ligne 402)
+        // pour éviter qu'il soit traité comme un champ normal du shantytown.
+
         if (argTransaction === undefined) {
             await transaction.commit();
         }
+
+        return hid;
     } catch (error) {
         if (argTransaction === undefined) {
             await transaction.rollback();
