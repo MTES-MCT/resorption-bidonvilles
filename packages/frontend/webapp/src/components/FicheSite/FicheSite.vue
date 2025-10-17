@@ -153,7 +153,9 @@ const townIsClosed = computed(
 watch(
     () => bus.value.get("fichesite:openHistorique"),
     (data) => {
-        townsStore.townCategoryFilter = [...data];
+        townsStore.townCategoryFilter = Array.isArray(data)
+            ? [...data]
+            : [data];
         historique.value.open();
     }
 );
