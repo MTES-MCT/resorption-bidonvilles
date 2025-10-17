@@ -185,8 +185,8 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
         }
     }
 
-    // on tente d'enregistrer les phases transitoires vers la résorption
-    if (shantytown.preparatory_phases_toward_resorption.length > 0) {
+    // on tente d'enregistrer les phases transitoires vers la résorption APRÈS l'historisation
+    if (shantytown.preparatory_phases_toward_resorption && shantytown.preparatory_phases_toward_resorption.length > 0) {
         try {
             if (user.isAllowedTo('update', 'shantytown')) {
                 await shantytownResorptionService.update(
@@ -194,6 +194,17 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
                     shantytown.preparatory_phases_toward_resorption,
                     shantytown.terminated_preparatory_phases_toward_resorption,
                     user,
+                    transaction,
+                );
+
+                // Créer un second hid pour capturer l'état avec les phases
+                // Cela permet d'avoir un hid avec les bonnes métadonnées (user, date)
+                await shantytownModel.update(
+                    user,
+                    shantytown.id,
+                    {
+                        updated_at: new Date(),
+                    },
                     transaction,
                 );
             }
