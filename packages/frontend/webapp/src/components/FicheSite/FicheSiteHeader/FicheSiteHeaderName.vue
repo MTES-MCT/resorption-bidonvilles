@@ -1,9 +1,12 @@
 <template>
     <p class="text-sm font-normal">
-        {{ town.city.name }}, {{ town.epci.name }} ({{ town.departement.name }})
+        {{ town.city.name }}, {{ town.epci.name }} ({{
+            town.departement.code
+        }}
+        - {{ town.departement.name }})
     </p>
     <div class="flex flex-row gap-2 items-center">
-        <h1>{{ town.addressSimple }} ({{ town.departement.code }})</h1>
+        <h1>{{ town.addressSimple }}</h1>
         <DsfrBadge
             v-if="town.heatwaveStatus"
             label="Alerte canicule"
