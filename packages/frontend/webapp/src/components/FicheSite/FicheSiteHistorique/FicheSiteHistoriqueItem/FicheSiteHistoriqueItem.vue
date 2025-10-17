@@ -18,10 +18,23 @@
                     v-if="item.fieldKey !== 'updatedWithoutAnyChange'"
                     class="break-words whitespace-pre-wrap"
                 >
-                    <span> {{ item.newValue || "non renseigné" }}, </span>
-                    <span class="line-through text-G700 hover:text-G700">{{
-                        item.oldValue || "non renseigné"
-                    }}</span>
+                    <span> {{ item.newValue || "non renseigné" }}</span>
+                    <template
+                        v-if="
+                            item.oldValue &&
+                            typeof item.oldValue === 'string' &&
+                            ![
+                                'non renseignées',
+                                'non renseigné',
+                                'non renseignés',
+                            ].includes(item.oldValue.trim())
+                        "
+                    >
+                        <span>, </span>
+                        <span class="line-through text-G700 hover:text-G700">{{
+                            item.oldValue
+                        }}</span>
+                    </template>
                 </p>
             </article>
         </div>
