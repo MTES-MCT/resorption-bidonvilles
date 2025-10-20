@@ -3024,10 +3024,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gouvfr/dsfr@npm:1.14.0":
-  version: 1.14.0
-  resolution: "@gouvfr/dsfr@npm:1.14.0"
-  checksum: f5ccfaa5fe2cbb346d5030197593caac8524a50a49421779d2aca35ac3d97a801d6e5fd121a492079455c54b2af18436bd8d63f9d637833750c286f2e4bf8fa3
+"@gouvfr/dsfr@npm:1.14.1":
+  version: 1.14.1
+  resolution: "@gouvfr/dsfr@npm:1.14.1"
+  checksum: cc1221549e2e9b822bb2d1416bba4b2ead35d6050b7254fa86beac480080947efde701e6890082c7115ebbd7498de6dd920933d5deb92e227e7fcc4ad2c05a66
   languageName: node
   linkType: hard
 
@@ -5861,7 +5861,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@resorptionbidonvilles/webapp3@workspace:packages/frontend/webapp"
   dependencies:
-    "@gouvfr/dsfr": 1.14.0
+    "@gouvfr/dsfr": 1.14.1
     "@gouvminint/vue-dsfr": ^8.8.0
     "@iconify-json/bxs": latest
     "@iconify-json/carbon": ^1.2.13
