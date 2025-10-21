@@ -590,10 +590,6 @@ export default async (editor, shantytownId: number, data, argTransaction: Transa
             }
         }
 
-        // Note: Les phases préparatoires sont gérées par shantytownResorptionService.update()
-        // et non ici. On garde juste 'preparatory_phases' dans la liste des clés exclues (ligne 402)
-        // pour éviter qu'il soit traité comme un champ normal du shantytown.
-
         if (argTransaction === undefined) {
             await transaction.commit();
         }
