@@ -1,9 +1,5 @@
-import fs from 'fs';
-import path from 'path';
 import Excel, { Color, Worksheet } from 'exceljs';
-import config from '#server/config';
 
-const { assetsSrc } = config;
 
 enum FONT_SIZES {
     DEFAULT = 10,
@@ -220,16 +216,6 @@ function writeHeader(workbook, sheet, lastFrozenColumn, locationName, title, dat
         bold: true,
         text: `à la date du ${dateOfExport}`,
     });
-
-    // logo
-    const logoColRef = column(lastFrozenColumn + 1);
-    sheet.addImage(
-        workbook.addImage({
-            buffer: fs.readFileSync(path.join(assetsSrc, 'logo_rb.png')),
-            extension: 'png',
-        }),
-        `${logoColRef}1:${logoColRef}4`,
-    );
 }
 
 /**
