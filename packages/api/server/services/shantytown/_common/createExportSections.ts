@@ -28,7 +28,6 @@ export default async (
             properties.address,
             properties.name,
         ],
-        lastFrozen: true,
     };
     sections.push(localizationSection);
 
