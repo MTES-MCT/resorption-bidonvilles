@@ -195,6 +195,18 @@ export default async (
         });
     }
 
+    // Section Phases de résorption : uniquement pour les sites "en cours de résorption" ou "résorbés"
+    // et si l'utilisateur a la permission d'accès ou est superuser (admin national)
+    const isResorptionOrResorbedSites = ['inProgress', 'resorbed'].includes(exportedSitesStatus);
+    if (isResorptionOrResorbedSites && (user.is_superuser || user.isAllowedTo('access', 'shantytown_resorption'))) {
+        sections.push({
+            title: 'Phases de résorption',
+            properties: [
+                properties.preparatoryPhasesTowardResorption,
+            ],
+        });
+    }
+
     if (closedTowns === true) {
         const subSections: ShantytownExportSection[] = [];
         closingSolutions.forEach(({ id: solutionId, label }) => {
