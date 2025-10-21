@@ -49,17 +49,8 @@ type MultipartCellContent = CellMultipart[];
  * @property {String}       [align='center'] Horizontal alignment (@see exceljs)
  */
 
-/**
- * @enum {'top'|'bottom'|'left'|'right'} BorderPosition
- */
+type BorderPosition = 'top' | 'bottom' | 'left' | 'right';
 
-/**
- * Index of the last frozen row
- *
- * Index starts from 1
- *
- * @const {Number}
- */
 const LAST_FROZEN_ROW = 7;
 
 /**
