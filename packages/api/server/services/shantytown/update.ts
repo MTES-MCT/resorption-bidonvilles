@@ -186,7 +186,7 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
     }
 
     // on tente d'enregistrer les phases transitoires vers la résorption APRÈS l'historisation
-    if (shantytown.preparatory_phases_toward_resorption && shantytown.preparatory_phases_toward_resorption.length > 0) {
+    if (shantytown.preparatory_phases_toward_resorption?.length > 0) {
         try {
             if (user.isAllowedTo('update', 'shantytown')) {
                 await shantytownResorptionService.update(
