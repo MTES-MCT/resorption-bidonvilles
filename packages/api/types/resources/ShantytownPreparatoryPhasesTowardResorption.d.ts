@@ -37,6 +37,14 @@ export type SimplifiedPhase = {
     completedAt: number | null,
 };
 
+export type RawPhase = {
+    uid: string,
+    name: string,
+    createdAt: Date,
+    dateLabel: string,
+    completedAt: Date | null,
+};
+
 export type Differences = {
     addedPhases: SimplifiedPhase[],
     removedPhases: SimplifiedPhase[],

@@ -10,6 +10,7 @@ import { Where } from '#server/models/_common/types/Where.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { ShantytownAction } from '#root/types/resources/Action.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
+import { ShantytownPreparatoryPhaseTowardResorption, RawPhase } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
 import getComments from './getComments';
 import serializeShantytown from './serializeShantytown';
 import getDiff from './getDiff';
@@ -228,7 +229,7 @@ export default async (
 
     // Remplir les phases préparatoires AVANT de calculer le changelog
     townsPhasesTowardResorption.forEach((elt) => {
-        if (elt.preparatoryPhases && elt.preparatoryPhases.length > 0) {
+        if (elt.preparatoryPhases?.length > 0) {
             // Filtrer les éléments null/undefined
             const validPhases = elt.preparatoryPhases.filter(p => p !== null && p !== undefined);
             serializedTowns.hash[elt.townId].preparatoryPhasesTowardResorption = validPhases.length > 0 ? validPhases : [];
@@ -237,8 +238,8 @@ export default async (
 
     // Nettoyer les phases qui contiennent [null] ou [undefined] de la requête SQL
     Object.keys(serializedTowns.hash).forEach((shantytownId) => {
-        const phases = serializedTowns.hash[shantytownId].preparatoryPhasesTowardResorption;
-        if (phases && phases.length > 0) {
+        const phases: ShantytownPreparatoryPhaseTowardResorption[] = serializedTowns.hash[shantytownId].preparatoryPhasesTowardResorption;
+        if (phases?.length > 0) {
             const validPhases = phases.filter(p => p !== null && p !== undefined);
             serializedTowns.hash[shantytownId].preparatoryPhasesTowardResorption = validPhases;
         }
@@ -248,9 +249,9 @@ export default async (
         const serializedHistory = history.map((h) => {
             const serialized = serializeShantytown(h, user);
             // Remplir les phases préparatoires à partir des données SQL historisées
-            if (h.preparatoryPhasesTowardResorption && h.preparatoryPhasesTowardResorption.length > 0) {
+            if (h.preparatoryPhasesTowardResorption?.length > 0) {
                 // Filtrer les null/undefined
-                const validPhases = (h.preparatoryPhasesTowardResorption as any[]).filter(p => p !== null && p !== undefined);
+                const validPhases: RawPhase[] = (h.preparatoryPhasesTowardResorption as any[]).filter(p => p !== null && p !== undefined);
                 serialized.preparatoryPhasesTowardResorption = validPhases.length > 0 ? validPhases as any : [];
             }
             return serialized;
