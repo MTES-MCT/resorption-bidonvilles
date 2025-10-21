@@ -145,14 +145,19 @@ export function fill(sheet: Worksheet, cellReference: string, color: Partial<Col
  * @param {Sheet}                  sheet
  * @param {String}                 cellReference
  * @param {Array.<BorderPosition>} positions
+ * @param {String}                 [thickness='thick'] Épaisseur de la bordure: 'thin', 'medium', 'thick'
  */
-function setBorder(sheet, cellReference, positions) {
+function setBorder(sheet: Worksheet, cellReference: string, positions: BorderPosition[], thickness: 'thin' | 'medium' | 'thick' = 'thick') {
     const cell = sheet.getCell(cellReference);
-    cell.border = {};
+
+    // Préserver les bordures existantes au lieu de les écraser
+    if (!cell.border) {
+        cell.border = {};
+    }
 
     positions.forEach((position) => {
         cell.border[position] = {
-            style: 'thick',
+            style: thickness,
             color: COLORS.BLACK,
         };
     });
@@ -262,8 +267,10 @@ function writeData(sheet, cellReference, data, link, style, borders = [], should
  * @param {Number}             columnIndex Starting from 1
  * @param {Boolean}            drawBorder
  * @param {Array.<Shantytown>} shantytowns
+ * @param {Boolean}            isFirstInSection
+ * @param {Boolean}            isLastInSection
  */
-function writeProperty(sheet, property, columnIndex, drawBorder, shantytowns) {
+function writeProperty(sheet, property, columnIndex, drawBorder, shantytowns, isFirstInSection = false, isLastInSection = false) {
     const {
         title, width, data, link,
     } = property;
@@ -287,30 +294,67 @@ function writeProperty(sheet, property, columnIndex, drawBorder, shantytowns) {
         wrapText: true,
     });
 
-    if (drawBorder === true) {
-        setBorder(sheet, cellRef, ['right']);
+    // Bordures de section (épaisses)
+    const headerThickBorders: BorderPosition[] = [];
+    if (isFirstInSection) {
+        headerThickBorders.push('left');
+    }
+    if (isLastInSection || drawBorder === true) {
+        headerThickBorders.push('right');
+    }
+    if (headerThickBorders.length > 0) {
+        setBorder(sheet, cellRef, headerThickBorders, 'thick');
+    }
+
+    // Bordures fines entre les colonnes (sauf dernière de section)
+    const headerThinBorders: BorderPosition[] = [];
+    if (!isLastInSection && drawBorder !== true) {
+        headerThinBorders.push('right');
+    }
+    if (headerThinBorders.length > 0) {
+        setBorder(sheet, cellRef, headerThinBorders, 'thin');
     }
 
     // write the content for each shantytown
     shantytowns.forEach((shantytown, shantytownIndex) => {
-        const borders = [];
-        if (drawBorder === true) {
-            borders.push('right');
-        }
-
-        if (shantytownIndex === shantytowns.length - 1) {
-            borders.push('bottom');
-        }
+        const dataCellRef = `${colRef}${rowIndex + shantytownIndex + 1}`;
 
         writeData(
             sheet,
-            `${colRef}${rowIndex + shantytownIndex + 1}`,
+            dataCellRef,
             data(shantytown),
             link ? link(shantytown) : null,
             property,
-            borders,
+            [],
             shantytownIndex % 2 !== 0,
         );
+
+        // Ajouter les bordures de section et de ligne
+        // Bordures épaisses pour délimiter les sections (gauche/droite)
+        const thickBorders: BorderPosition[] = [];
+        if (isFirstInSection) {
+            thickBorders.push('left');
+        }
+        if (isLastInSection || drawBorder === true) {
+            thickBorders.push('right');
+        }
+
+        // Bordures fines pour séparer les colonnes et lignes
+        const thinBorders: BorderPosition[] = ['bottom'];
+
+        // Ajouter une bordure fine à droite pour toutes les colonnes sauf la dernière de la section
+        // (car la dernière a déjà une bordure épaisse)
+        if (!isLastInSection && drawBorder !== true) {
+            thinBorders.push('right');
+        }
+
+        // Appliquer les bordures épaisses si nécessaire
+        if (thickBorders.length > 0) {
+            setBorder(sheet, dataCellRef, thickBorders, 'thick');
+        }
+
+        // Appliquer les bordures fines
+        setBorder(sheet, dataCellRef, thinBorders, 'thin');
     });
 
     // write a sum, if requested
@@ -356,6 +400,9 @@ function writeSectionTitle(sheet, rowIndex, colIndex, sectionLength, sectionType
             wrapText: true,
         });
         fill(sheet, firstCellRef, COLORS.BLACK);
+
+        // Ajouter des bordures épaisses à gauche et à droite de la section
+        setBorder(sheet, firstCellRef, ['left', 'right'], 'thick');
     }
 }
 
@@ -375,12 +422,16 @@ function writeSection(sheet, lastFrozenColumn, { title, properties }, columnInde
 
     // write each property of this section
     properties.forEach((property, propertyIndex) => {
+        const isFirstInSection = propertyIndex === 0;
+        const isLastInSection = propertyIndex === properties.length - 1;
         writeProperty(
             sheet,
             property,
             columnIndex + propertyIndex,
-            columnIndex + propertyIndex > lastFrozenColumn && propertyIndex === properties.length - 1,
+            columnIndex + propertyIndex > lastFrozenColumn && isLastInSection,
             shantytowns,
+            isFirstInSection,
+            isLastInSection,
         );
     });
 }
