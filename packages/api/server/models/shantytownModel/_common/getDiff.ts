@@ -324,7 +324,7 @@ export default (oldVersion, newVersion): Diff[] => {
                 };
 
                 // Gérer les différentes orthographes de "non renseigné(e)(s)"
-                const isNotFilled = value => typeof value === 'string' && ['non renseignées', 'non renseigné', 'non renseignés'].includes(value);
+                const isNotFilled = value => typeof value === 'string' && ['non renseignée', 'non renseignées', 'non renseigné', 'non renseignés'].includes(value);
                 const oldMap = isNotFilled(oldPhasesMap) ? {} : oldPhasesMap;
                 const newMap = isNotFilled(newPhasesMap) ? {} : newPhasesMap;
 
