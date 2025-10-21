@@ -229,7 +229,7 @@ export default async (
     }
 
     sections.push({
-        title: null,
+        title: 'Mise à jour',
         properties: [
             properties.updatedAt,
         ],
