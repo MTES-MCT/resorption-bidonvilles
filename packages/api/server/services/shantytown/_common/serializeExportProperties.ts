@@ -1230,6 +1230,25 @@ export default (closingSolutions: ClosingSolution[]) => {
             width: COLUMN_WIDTHS.SMALL,
         },
 
+        preparatoryPhasesTowardResorption: {
+            title: 'Phases préparatoires à la résorption',
+            data: ({ preparatoryPhasesTowardResorption }: ShantytownWithFinancedAction) => {
+                if (!preparatoryPhasesTowardResorption || preparatoryPhasesTowardResorption.length === 0) {
+                    return null;
+                }
+
+                return preparatoryPhasesTowardResorption
+                    .map((phase) => {
+                        const completedStatus = phase.completedAt
+                            ? `${phase.preparatoryPhaseDateLabel.toLowerCase()} ${tsToString(phase.completedAt, 'd/m/Y')}`
+                            : 'en cours';
+                        return `- ${phase.preparatoryPhaseName} : ${completedStatus}`;
+                    })
+                    .join('\n');
+            },
+            width: COLUMN_WIDTHS.LARGE,
+        },
+
     };
 
     closingSolutions.forEach(({ id: solutionId }) => {
