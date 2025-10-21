@@ -353,10 +353,19 @@ export default (oldVersion, newVersion): Diff[] => {
                     return null; // Pas de changement
                 }
 
-                // Retourner les valeurs dans le bon ordre
+                // Retourner les valeurs avec un séparateur spécial pour chaque ligne
+                // Format: "nouvelle1|||ancienne1\nnouvelle2|||ancienne2"
+                const newValues = [];
+                const oldValues = [];
+
+                changeLines.forEach((line) => {
+                    newValues.push(line.new);
+                    oldValues.push(line.old || '');
+                });
+
                 return {
-                    oldValue: changeLines.map(l => l.old).filter(Boolean).join('\n') || 'non renseignés',
-                    newValue: changeLines.map(l => l.new).join('\n'),
+                    oldValue: oldValues.join('|||'),
+                    newValue: newValues.join('|||'),
                 };
             },
         },
