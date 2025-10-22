@@ -274,6 +274,101 @@ export default (oldVersion, newVersion): Diff[] => {
         longitude: {
             label: 'Coordonnées GPS : Longitude',
         },
+        preparatoryPhasesTowardResorption: {
+            label: 'Phases préparatoires à la résorption',
+            processor(phases) {
+                if (!phases || phases.length === 0) {
+                    return 'non renseignées';
+                }
+
+                try {
+                    // Transformer les objets JSON en un objet indexé par uid pour comparaison
+                    const phasesMap = {};
+                    phases.forEach((phase) => {
+                        if (typeof phase === 'string') {
+                            // Ancien format : on ne peut pas comparer individuellement
+                            phasesMap[phase] = phase;
+                        } else if (typeof phase === 'object' && phase !== null) {
+                            // Gérer les deux formats : historique (uid/name) et actuel (preparatoryPhaseId/preparatoryPhaseName)
+                            const uid = phase.uid || phase.preparatoryPhaseId || phase.name || phase.preparatoryPhaseName;
+                            if (uid) {
+                                phasesMap[uid] = phase;
+                            }
+                        }
+                    });
+                    return phasesMap;
+                } catch (error) {
+                    return {};
+                }
+            },
+            comparator(oldPhasesMap, newPhasesMap) {
+                // Fonction personnalisée pour comparer phase par phase
+                const formatPhase = (phase) => {
+                    if (typeof phase === 'string') {
+                        return phase;
+                    }
+                    // Gérer les deux formats
+                    let result = phase.name || phase.preparatoryPhaseName || '';
+                    if (phase.completedAt) {
+                        // completedAt peut être une string ISO ou un timestamp
+                        const date = typeof phase.completedAt === 'number'
+                            ? new Date(phase.completedAt * 1000)
+                            : new Date(phase.completedAt);
+                        const formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+                        const dateLabel = phase.dateLabel || phase.preparatoryPhaseDateLabel || '';
+                        if (dateLabel) {
+                            result += ` ${dateLabel.charAt(0).toLowerCase()}${dateLabel.slice(1)} ${formattedDate}`;
+                        }
+                    }
+                    return result;
+                };
+
+                // Gérer les différentes orthographes de "non renseigné(e)(s)"
+                const isNotFilled = value => typeof value === 'string' && ['non renseignée', 'non renseignées', 'non renseigné', 'non renseignés'].includes(value);
+                const oldMap = isNotFilled(oldPhasesMap) ? {} : oldPhasesMap;
+                const newMap = isNotFilled(newPhasesMap) ? {} : newPhasesMap;
+
+                const allUids = new Set([...Object.keys(oldMap), ...Object.keys(newMap)]);
+                const changeLines = [];
+
+                allUids.forEach((uid) => {
+                    const oldPhase = oldMap[uid];
+                    const newPhase = newMap[uid];
+
+                    const oldFormatted = oldPhase ? formatPhase(oldPhase) : null;
+                    const newFormatted = newPhase ? formatPhase(newPhase) : null;
+
+                    if (oldFormatted !== newFormatted) {
+                        // Pour chaque phase modifiée, créer une ligne avec le format:
+                        // "nouvelle valeur, ~~ancienne valeur~~"
+                        // Si pas d'ancienne valeur, ne rien afficher après la virgule
+                        changeLines.push({
+                            new: newFormatted || 'non renseigné',
+                            old: oldFormatted,
+                        });
+                    }
+                });
+
+                if (changeLines.length === 0) {
+                    return null; // Pas de changement
+                }
+
+                // Retourner les valeurs avec un séparateur spécial pour chaque ligne
+                // Format: "nouvelle1|||ancienne1\nnouvelle2|||ancienne2"
+                const newValues = [];
+                const oldValues = [];
+
+                changeLines.forEach((line) => {
+                    newValues.push(line.new);
+                    oldValues.push(line.old || '');
+                });
+
+                return {
+                    oldValue: oldValues.join('|||'),
+                    newValue: newValues.join('|||'),
+                };
+            },
+        },
     };
 
     const finalDiff = [];
@@ -552,14 +647,36 @@ export default (oldVersion, newVersion): Diff[] => {
         };
     }
 
-    return [
+    const result = [
         ...finalDiff,
         ...Object.keys(toDiff).reduce((diff, serializedKey) => {
-            const processor = toDiff[serializedKey].processor ?? baseProcessors.default;
-            const oldValue = processor(getDeepProperty(oldVersion, serializedKey));
-            const newValue = processor(getDeepProperty(newVersion, serializedKey));
+            const config = toDiff[serializedKey];
+            const processor = config.processor ?? baseProcessors.default;
+            const oldProcessed = processor(getDeepProperty(oldVersion, serializedKey));
+            const newProcessed = processor(getDeepProperty(newVersion, serializedKey));
 
-            if (oldValue === newValue) {
+            // Si un comparator personnalisé est défini, l'utiliser
+            if (config.comparator) {
+                const comparisonResult = config.comparator(oldProcessed, newProcessed);
+
+                if (comparisonResult === null) {
+                    // Pas de changement
+                    return diff;
+                }
+
+                return [
+                    ...diff,
+                    {
+                        fieldKey: serializedKey,
+                        field: config.label,
+                        oldValue: comparisonResult.oldValue,
+                        newValue: comparisonResult.newValue,
+                    },
+                ];
+            }
+
+            // Sinon, utiliser la comparaison par défaut
+            if (oldProcessed === newProcessed) {
                 return diff;
             }
 
@@ -567,11 +684,13 @@ export default (oldVersion, newVersion): Diff[] => {
                 ...diff,
                 {
                     fieldKey: serializedKey,
-                    field: toDiff[serializedKey].label,
-                    oldValue,
-                    newValue,
+                    field: config.label,
+                    oldValue: oldProcessed,
+                    newValue: newProcessed,
                 },
             ];
         }, []),
     ];
+
+    return result;
 };

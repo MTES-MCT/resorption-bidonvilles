@@ -18,10 +18,60 @@
                     v-if="item.fieldKey !== 'updatedWithoutAnyChange'"
                     class="break-words whitespace-pre-wrap"
                 >
-                    <span> {{ item.newValue || "non renseigné" }}, </span>
-                    <span class="line-through text-G700 hover:text-G700">{{
-                        item.oldValue || "non renseigné"
-                    }}</span>
+                    <template
+                        v-if="
+                            item.fieldKey ===
+                                'preparatoryPhasesTowardResorption' &&
+                            item.newValue &&
+                            item.newValue.includes('|||')
+                        "
+                    >
+                        <!-- Gérer l'affichage spécial pour les phases avec correspondance -->
+                        <template
+                            v-for="(newVal, index) in item.newValue.split(
+                                '|||'
+                            )"
+                            :key="index"
+                        >
+                            <span v-if="index > 0"><br /></span>
+                            <span>{{ newVal }}</span>
+                            <template
+                                v-if="
+                                    item.oldValue &&
+                                    item.oldValue.split('|||')[index] &&
+                                    item.oldValue.split('|||')[index].trim() !==
+                                        ''
+                                "
+                            >
+                                <span>, </span>
+                                <span
+                                    class="line-through text-G700 hover:text-G700"
+                                    >{{
+                                        item.oldValue.split("|||")[index]
+                                    }}</span
+                                >
+                            </template>
+                        </template>
+                    </template>
+                    <template v-else>
+                        <span> {{ item.newValue || "non renseigné" }}</span>
+                        <template
+                            v-if="
+                                item.oldValue &&
+                                typeof item.oldValue === 'string' &&
+                                ![
+                                    'non renseignées',
+                                    'non renseigné',
+                                    'non renseignés',
+                                ].includes(item.oldValue.trim())
+                            "
+                        >
+                            <span>, </span>
+                            <span class="line-through text-G700 hover:text-G700"
+                                >{{ item.oldValue }}
+                            </span>
+                        </template>
+                    </template>
                 </p>
             </article>
         </div>

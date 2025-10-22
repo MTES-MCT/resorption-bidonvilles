@@ -10,6 +10,7 @@ import { Where } from '#server/models/_common/types/Where.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { ShantytownAction } from '#root/types/resources/Action.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
+import { ShantytownPreparatoryPhaseTowardResorption, RawPhase } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
 import getComments from './getComments';
 import serializeShantytown from './serializeShantytown';
 import getDiff from './getDiff';
@@ -37,6 +38,8 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
         toilet_types_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
         electricity_access_types: table === 'regular' ? 'electricity_access_types' : 'electricity_access_types_history',
         electricity_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
+        shantytown_resorption_phases: table === 'regular' ? 'shantytown_preparatory_phases_toward_resorption' : 'shantytown_resorption_phases_history',
+        resorption_phases_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
     };
 
     const selection = {
@@ -70,18 +73,53 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
                 array_remove(array_agg(stt.toilet_type::text), NULL) AS toilet_types
             FROM "${tables.shantytowns}" s
             LEFT JOIN "${tables.shantytown_toilet_types}" stt ON stt.fk_shantytown = s.${tables.toilet_types_foreign_key}
-            GROUP BY s.${tables.toilet_types_foreign_key})
+            GROUP BY s.${tables.toilet_types_foreign_key}),
+
+            shantytown_resorption_phases AS (SELECT
+                s.${tables.resorption_phases_foreign_key} AS fk_shantytown,
+                COALESCE(
+                    NULLIF(
+                        array_agg(
+                            CASE 
+                                WHEN srp.fk_preparatory_phase IS NOT NULL THEN
+                                    json_build_object(
+                                        'uid', pptr.uid,
+                                        'name', pptr.name,
+                                        'dateLabel', pptr.date_label,
+                                        'completedAt', srp.completed_at,
+                                        'createdAt', srp.created_at
+                                    )::jsonb
+                                ELSE NULL
+                            END
+                        ) FILTER (WHERE srp.fk_preparatory_phase IS NOT NULL),
+                        ARRAY[]::jsonb[]
+                    ),
+                    ARRAY[]::jsonb[]
+                ) AS resorption_phases
+            FROM "${tables.shantytowns}" s
+            LEFT JOIN ${table === 'history' ? 'shantytown_resorption_phases_history' : `"${tables.shantytown_resorption_phases}"`} srp 
+                ON srp.fk_shantytown = s.${tables.resorption_phases_foreign_key}
+                ${table === 'history' ? `AND srp.archived_at = (
+                    SELECT MIN(srph.archived_at) 
+                    FROM shantytown_resorption_phases_history srph 
+                    WHERE srph.fk_shantytown = s.${tables.resorption_phases_foreign_key} 
+                    AND srph.archived_at >= s.updated_at
+                )` : ''}
+            LEFT JOIN preparatory_phases_toward_resorption pptr ON pptr.uid = srp.fk_preparatory_phase
+            GROUP BY s.${tables.resorption_phases_foreign_key})
 
         SELECT
             ${Object.keys(selection).map(key => `${key} AS "${selection[key]}"`).join(',')},
             sco.origins AS "socialOrigins",
             eat.electricity_access_types AS "electricityAccessTypes",
-            stt.toilet_types AS "toiletTypes"
+            stt.toilet_types AS "toiletTypes",
+            srp.resorption_phases AS "preparatoryPhasesTowardResorption"
         FROM "${tables.shantytowns}" AS shantytowns
         ${joins.map(({ table: t, on }) => `LEFT JOIN ${t} ON ${on}`).join('\n')}
         LEFT JOIN shantytown_computed_origins sco ON sco.fk_shantytown = shantytowns.${tables.origin_foreign_key}
         LEFT JOIN electricity_access_types eat ON eat.fk_shantytown = shantytowns.${tables.electricity_foreign_key}
         LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.${tables.toilet_types_foreign_key}
+        LEFT JOIN shantytown_resorption_phases srp ON srp.fk_shantytown = shantytowns.${tables.resorption_phases_foreign_key}
         ${whereClause !== null ? `WHERE ${whereClause}` : ''}
         ${order !== null ? `ORDER BY ${order}` : ''}
     `;
@@ -189,8 +227,36 @@ export default async (
 
     const [history, comments, closingSolutions, actors, actions, incomingTowns, townsPhasesTowardResorption] = await Promise.all([historyPromise, commentsPromise, closingSolutionsPromise, actorsPromise, actionsPromise, incomingTownsPromise, townsPhasesTowardResorptionPromise]);
 
+    // Remplir les phases préparatoires AVANT de calculer le changelog
+    townsPhasesTowardResorption.forEach((elt) => {
+        if (elt.preparatoryPhases?.length > 0) {
+            // Filtrer les éléments null/undefined
+            const validPhases = elt.preparatoryPhases.filter(p => p !== null && p !== undefined);
+            serializedTowns.hash[elt.townId].preparatoryPhasesTowardResorption = validPhases.length > 0 ? validPhases : [];
+        }
+    });
+
+    // Nettoyer les phases qui contiennent [null] ou [undefined] de la requête SQL
+    Object.keys(serializedTowns.hash).forEach((shantytownId) => {
+        const phases: ShantytownPreparatoryPhaseTowardResorption[] = serializedTowns.hash[shantytownId].preparatoryPhasesTowardResorption;
+        if (phases?.length > 0) {
+            const validPhases = phases.filter(p => p !== null && p !== undefined);
+            serializedTowns.hash[shantytownId].preparatoryPhasesTowardResorption = validPhases;
+        }
+    });
+
     if (history !== undefined && history.length > 0) {
-        const serializedHistory = history.map(h => serializeShantytown(h, user));
+        const serializedHistory = history.map((h) => {
+            const serialized = serializeShantytown(h, user);
+            // Remplir les phases préparatoires à partir des données SQL historisées
+            if (h.preparatoryPhasesTowardResorption?.length > 0) {
+                // Filtrer les null/undefined
+                const validPhases: RawPhase[] = (h.preparatoryPhasesTowardResorption as any[]).filter(p => p !== null && p !== undefined);
+                serialized.preparatoryPhasesTowardResorption = validPhases.length > 0 ? validPhases as any : [];
+            }
+            return serialized;
+        });
+
         for (let i = 1, { id } = serializedHistory[0]; i <= serializedHistory.length; i += 1) {
             if (!serializedHistory[i] || id !== serializedHistory[i].id) {
                 if (!serializedTowns.hash[id]) {
@@ -200,7 +266,7 @@ export default async (
 
                 const diff = getDiff(serializedHistory[i - 1], serializedTowns.hash[id]);
                 if (diff.length > 0) {
-                    serializedTowns.hash[id].changelog.unshift({
+                    serializedTowns.hash[id].changelog.push({
                         author: serializedTowns.hash[id].updatedBy,
                         date: serializedTowns.hash[id].updatedAt,
                         diff,
@@ -217,13 +283,18 @@ export default async (
 
             const diff = getDiff(serializedHistory[i - 1], serializedHistory[i]);
             if (diff.length > 0) {
-                serializedTowns.hash[id].changelog.unshift({
+                serializedTowns.hash[id].changelog.push({
                     author: serializedHistory[i].updatedBy,
                     date: serializedHistory[i].updatedAt,
                     diff,
                 });
             }
         }
+
+        // Inverser le changelog pour avoir les modifications les plus récentes en premier
+        Object.keys(serializedTowns.hash).forEach((shantytownId) => {
+            serializedTowns.hash[shantytownId].changelog = serializedTowns.hash[shantytownId].changelog.slice().reverse();
+        });
     }
 
     // @todo: move the serialization of these entities to their own model component
@@ -262,13 +333,5 @@ export default async (
         serializedTowns.hash[incomingTown.shantytownId].reinstallationIncomingTowns.push(incomingTown);
     });
 
-    townsPhasesTowardResorption.forEach((elt) => {
-        if (elt.preparatoryPhases.length > 0) {
-            serializedTowns.hash[elt.townId].preparatoryPhasesTowardResorption = [];
-            elt.preparatoryPhases.forEach((prepElt) => {
-                serializedTowns.hash[elt.townId].preparatoryPhasesTowardResorption.push(prepElt);
-            });
-        }
-    });
     return serializedTowns.ordered;
 };
