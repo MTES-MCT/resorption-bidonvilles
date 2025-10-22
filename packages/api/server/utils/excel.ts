@@ -188,8 +188,8 @@ export function column(i: number): string {
 function writeHeader(workbook, sheet, lastFrozenColumn, locationName, title, dateOfExport) {
     // first row
     writeTo(sheet, 'A1', [
-        { bold: true, color: COLORS.WHITE, text: 'SITUATION DES BIDONVILLES' },
-        { bold: true, color: COLORS.YELLOW, text: ` ${title.toUpperCase()}` },
+        { bold: true, color: COLORS.BLACK, text: 'SITUATION DES BIDONVILLES' },
+        { bold: true, color: COLORS.BLACK, text: ` ${title.toUpperCase()}` },
     ]);
 
     for (let i = 1; i <= lastFrozenColumn; i += 1) {
