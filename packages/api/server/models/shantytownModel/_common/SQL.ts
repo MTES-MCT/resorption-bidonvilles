@@ -163,6 +163,7 @@ export type ShantytownRow = {
     socialOrigins: string[],
     electricityAccessTypes: string[],
     toiletTypes: string[],
+    preparatoryPhasesTowardResorption?: string[],
     distance?: number | null
 
 };

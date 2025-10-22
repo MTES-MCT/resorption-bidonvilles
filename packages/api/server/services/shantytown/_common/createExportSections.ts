@@ -28,7 +28,6 @@ export default async (
             properties.address,
             properties.name,
         ],
-        lastFrozen: true,
     };
     sections.push(localizationSection);
 
@@ -160,7 +159,6 @@ export default async (
                 properties.justiceRenderedAt,
                 properties.justiceRenderedBy,
                 properties.justiceChallenged,
-                properties.policeStatus,
                 properties.evacuationUnderTimeLimit,
                 properties.administrativeOrderEvacuationAt,
                 properties.administrativeOrderDecisionRenderedBy,
@@ -171,6 +169,7 @@ export default async (
                 properties.insalubrityOrderBy,
                 properties.insalubrityOrderAt,
                 properties.insalubrityParcels,
+                properties.policeStatus,
                 properties.policeRequestedAt,
                 properties.policeGrantedAt,
                 properties.bailiff,
@@ -192,6 +191,18 @@ export default async (
                     width: 20,
                     sum: true,
                 },
+            ],
+        });
+    }
+
+    // Section Phases de résorption : uniquement pour les sites "en cours de résorption" ou "résorbés"
+    // et si l'utilisateur a la permission d'accès ou est superuser (admin national)
+    const isResorptionOrResorbedSites = ['inProgress', 'resorbed'].includes(exportedSitesStatus);
+    if (isResorptionOrResorbedSites && (user.is_superuser || user.isAllowedTo('access', 'shantytown_resorption'))) {
+        sections.push({
+            title: 'Phases de résorption',
+            properties: [
+                properties.preparatoryPhasesTowardResorption,
             ],
         });
     }
@@ -229,7 +240,7 @@ export default async (
     }
 
     sections.push({
-        title: null,
+        title: 'Mise à jour',
         properties: [
             properties.updatedAt,
         ],

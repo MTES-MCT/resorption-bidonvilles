@@ -1,5 +1,8 @@
 <template>
-    <FicheRubrique title="Phases préparatoires à la résorption">
+    <FicheRubrique
+        title="Phases préparatoires à la résorption"
+        category="resorption"
+    >
         <FicheSiteResorptionPhasesListeVide
             v-if="town.preparatoryPhasesTowardResorption?.length === 0"
             :town="town"

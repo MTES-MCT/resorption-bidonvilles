@@ -1,9 +1,5 @@
-import fs from 'fs';
-import path from 'path';
 import Excel, { Color, Worksheet } from 'exceljs';
-import config from '#server/config';
 
-const { assetsSrc } = config;
 
 enum FONT_SIZES {
     DEFAULT = 10,
@@ -53,17 +49,8 @@ type MultipartCellContent = CellMultipart[];
  * @property {String}       [align='center'] Horizontal alignment (@see exceljs)
  */
 
-/**
- * @enum {'top'|'bottom'|'left'|'right'} BorderPosition
- */
+type BorderPosition = 'top' | 'bottom' | 'left' | 'right';
 
-/**
- * Index of the last frozen row
- *
- * Index starts from 1
- *
- * @const {Number}
- */
 const LAST_FROZEN_ROW = 7;
 
 /**
@@ -158,14 +145,19 @@ export function fill(sheet: Worksheet, cellReference: string, color: Partial<Col
  * @param {Sheet}                  sheet
  * @param {String}                 cellReference
  * @param {Array.<BorderPosition>} positions
+ * @param {String}                 [thickness='thick'] Épaisseur de la bordure: 'thin', 'medium', 'thick'
  */
-function setBorder(sheet, cellReference, positions) {
+function setBorder(sheet: Worksheet, cellReference: string, positions: BorderPosition[], thickness: 'thin' | 'medium' | 'thick' = 'thick') {
     const cell = sheet.getCell(cellReference);
-    cell.border = {};
+
+    // Préserver les bordures existantes au lieu de les écraser
+    if (!cell.border) {
+        cell.border = {};
+    }
 
     positions.forEach((position) => {
         cell.border[position] = {
-            style: 'thick',
+            style: thickness,
             color: COLORS.BLACK,
         };
     });
@@ -196,8 +188,8 @@ export function column(i: number): string {
 function writeHeader(workbook, sheet, lastFrozenColumn, locationName, title, dateOfExport) {
     // first row
     writeTo(sheet, 'A1', [
-        { bold: true, color: COLORS.WHITE, text: 'SITUATION DES BIDONVILLES' },
-        { bold: true, color: COLORS.YELLOW, text: ` ${title.toUpperCase()}` },
+        { bold: true, color: COLORS.BLACK, text: 'SITUATION DES BIDONVILLES' },
+        { bold: true, color: COLORS.BLACK, text: ` ${title.toUpperCase()}` },
     ]);
 
     for (let i = 1; i <= lastFrozenColumn; i += 1) {
@@ -220,16 +212,6 @@ function writeHeader(workbook, sheet, lastFrozenColumn, locationName, title, dat
         bold: true,
         text: `à la date du ${dateOfExport}`,
     });
-
-    // logo
-    const logoColRef = column(lastFrozenColumn + 1);
-    sheet.addImage(
-        workbook.addImage({
-            buffer: fs.readFileSync(path.join(assetsSrc, 'logo_rb.png')),
-            extension: 'png',
-        }),
-        `${logoColRef}1:${logoColRef}4`,
-    );
 }
 
 /**
@@ -285,8 +267,10 @@ function writeData(sheet, cellReference, data, link, style, borders = [], should
  * @param {Number}             columnIndex Starting from 1
  * @param {Boolean}            drawBorder
  * @param {Array.<Shantytown>} shantytowns
+ * @param {Boolean}            isFirstInSection
+ * @param {Boolean}            isLastInSection
  */
-function writeProperty(sheet, property, columnIndex, drawBorder, shantytowns) {
+function writeProperty(sheet, property, columnIndex, drawBorder, shantytowns, isFirstInSection = false, isLastInSection = false) {
     const {
         title, width, data, link,
     } = property;
@@ -310,30 +294,67 @@ function writeProperty(sheet, property, columnIndex, drawBorder, shantytowns) {
         wrapText: true,
     });
 
-    if (drawBorder === true) {
-        setBorder(sheet, cellRef, ['right']);
+    // Bordures de section (épaisses)
+    const headerThickBorders: BorderPosition[] = [];
+    if (isFirstInSection) {
+        headerThickBorders.push('left');
+    }
+    if (isLastInSection || drawBorder === true) {
+        headerThickBorders.push('right');
+    }
+    if (headerThickBorders.length > 0) {
+        setBorder(sheet, cellRef, headerThickBorders, 'thick');
+    }
+
+    // Bordures fines entre les colonnes (sauf dernière de section)
+    const headerThinBorders: BorderPosition[] = [];
+    if (!isLastInSection && drawBorder !== true) {
+        headerThinBorders.push('right');
+    }
+    if (headerThinBorders.length > 0) {
+        setBorder(sheet, cellRef, headerThinBorders, 'thin');
     }
 
     // write the content for each shantytown
     shantytowns.forEach((shantytown, shantytownIndex) => {
-        const borders = [];
-        if (drawBorder === true) {
-            borders.push('right');
-        }
-
-        if (shantytownIndex === shantytowns.length - 1) {
-            borders.push('bottom');
-        }
+        const dataCellRef = `${colRef}${rowIndex + shantytownIndex + 1}`;
 
         writeData(
             sheet,
-            `${colRef}${rowIndex + shantytownIndex + 1}`,
+            dataCellRef,
             data(shantytown),
             link ? link(shantytown) : null,
             property,
-            borders,
+            [],
             shantytownIndex % 2 !== 0,
         );
+
+        // Ajouter les bordures de section et de ligne
+        // Bordures épaisses pour délimiter les sections (gauche/droite)
+        const thickBorders: BorderPosition[] = [];
+        if (isFirstInSection) {
+            thickBorders.push('left');
+        }
+        if (isLastInSection || drawBorder === true) {
+            thickBorders.push('right');
+        }
+
+        // Bordures fines pour séparer les colonnes et lignes
+        const thinBorders: BorderPosition[] = ['bottom'];
+
+        // Ajouter une bordure fine à droite pour toutes les colonnes sauf la dernière de la section
+        // (car la dernière a déjà une bordure épaisse)
+        if (!isLastInSection && drawBorder !== true) {
+            thinBorders.push('right');
+        }
+
+        // Appliquer les bordures épaisses si nécessaire
+        if (thickBorders.length > 0) {
+            setBorder(sheet, dataCellRef, thickBorders, 'thick');
+        }
+
+        // Appliquer les bordures fines
+        setBorder(sheet, dataCellRef, thinBorders, 'thin');
     });
 
     // write a sum, if requested
@@ -379,6 +400,9 @@ function writeSectionTitle(sheet, rowIndex, colIndex, sectionLength, sectionType
             wrapText: true,
         });
         fill(sheet, firstCellRef, COLORS.BLACK);
+
+        // Ajouter des bordures épaisses à gauche et à droite de la section
+        setBorder(sheet, firstCellRef, ['left', 'right'], 'thick');
     }
 }
 
@@ -398,12 +422,16 @@ function writeSection(sheet, lastFrozenColumn, { title, properties }, columnInde
 
     // write each property of this section
     properties.forEach((property, propertyIndex) => {
+        const isFirstInSection = propertyIndex === 0;
+        const isLastInSection = propertyIndex === properties.length - 1;
         writeProperty(
             sheet,
             property,
             columnIndex + propertyIndex,
-            columnIndex + propertyIndex > lastFrozenColumn && propertyIndex === properties.length - 1,
+            columnIndex + propertyIndex > lastFrozenColumn && isLastInSection,
             shantytowns,
+            isFirstInSection,
+            isLastInSection,
         );
     });
 }
@@ -423,15 +451,14 @@ export default {
         // create a whole workbook
         const workbook = new Excel.Workbook();
 
-        // calculate the index of the last frozen column
-        let lastFrozenColumn = 0;
-        for (let i = 0; i < sections.length; i += 1) {
-            lastFrozenColumn += sections[i].properties.length;
-
-            if (sections[i].lastFrozen === true) {
-                break;
-            }
-        }
+        // On vérifie si l'une des section doit être figée
+        const lastFrozenIndex = sections.findIndex(section => section.lastFrozen === true);
+        // Si on a pas trouvé de section à figer, on renvoie null sinon calcule la colonne à figer
+        const lastFrozenColumn = lastFrozenIndex === -1
+            ? null
+            : sections
+                .slice(0, lastFrozenIndex + 1)
+                .reduce((total, section) => total + section.properties.length, 0);
 
         // create a single sheet
         const sheet = workbook.addWorksheet(
@@ -439,7 +466,7 @@ export default {
             {
                 views: [{
                     state: 'frozen',
-                    xSplit: lastFrozenColumn,
+                    xSplit: lastFrozenColumn ?? 0,
                     ySplit: LAST_FROZEN_ROW,
                 }],
             },

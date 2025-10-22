@@ -6,7 +6,7 @@
                 <span v-if="shantytown.name">« {{ shantytown.name }} » </span>
             </span>
             <span class="font-normal">
-                {{ shantytown.city.name }}
+                {{ shantytown.city.name }} ({{ shantytown.departement.code }})
             </span>
         </div>
     </div>
