@@ -451,15 +451,14 @@ export default {
         // create a whole workbook
         const workbook = new Excel.Workbook();
 
-        // calculate the index of the last frozen column
-        let lastFrozenColumn = 0;
-        for (let i = 0; i < sections.length; i += 1) {
-            lastFrozenColumn += sections[i].properties.length;
-
-            if (sections[i].lastFrozen === true) {
-                break;
-            }
-        }
+        // On vérifie si l'une des section doit être figée
+        const lastFrozenIndex = sections.findIndex(section => section.lastFrozen === true);
+        // Si on a pas trouvé de section à figer, on renvoie null sinon calcule la colonne à figer
+        const lastFrozenColumn = lastFrozenIndex === -1
+            ? null
+            : sections
+                .slice(0, lastFrozenIndex + 1)
+                .reduce((total, section) => total + section.properties.length, 0);
 
         // create a single sheet
         const sheet = workbook.addWorksheet(
@@ -467,7 +466,7 @@ export default {
             {
                 views: [{
                     state: 'frozen',
-                    xSplit: lastFrozenColumn,
+                    xSplit: lastFrozenColumn ?? 0,
                     ySplit: LAST_FROZEN_ROW,
                 }],
             },
