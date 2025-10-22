@@ -1092,7 +1092,7 @@ export default (closingSolutions: ClosingSolution[]) => {
             width: COLUMN_WIDTHS.MEDIUM,
         },
         policeStatus: {
-            title: 'Concours de la force publique',
+            title: 'Concours de la force publique (CFP)',
             data: (shantytown: ShantytownWithFinancedAction) => {
                 if (!('policeStatus' in shantytown)) {
                     return null;
