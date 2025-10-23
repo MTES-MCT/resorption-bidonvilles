@@ -19,16 +19,6 @@ import { SerializedOwner } from '#root/types/resources/ParcelOwner.d';
 const { fromTsToFormat: tsToString } = dateUtils;
 const { webappUrl } = config;
 
-export type ShantytownExportListProperty = {
-    title: string,
-    data: (shantytown: ShantytownWithFinancedAction | ShantytownWithOwner) => string | number | Date | null,
-    width: number,
-    align?: 'left' | 'center' | 'right',
-    bold?: boolean,
-    sum?: boolean,
-    link?: (shantytown: ShantytownWithFinancedAction) => string,
-};
-
 export default (closingSolutions: ClosingSolution[]) => {
     const COLUMN_WIDTHS = {
         XSMALL: 15,
