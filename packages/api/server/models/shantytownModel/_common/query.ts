@@ -40,6 +40,8 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
         electricity_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
         shantytown_resorption_phases: table === 'regular' ? 'shantytown_preparatory_phases_toward_resorption' : 'shantytown_resorption_phases_history',
         resorption_phases_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
+        shantytown_parcel_owners: table === 'regular' ? 'shantytown_parcel_owners' : 'shantytown_parcel_owners_history',
+        parcel_owners_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
     };
 
     const selection = {
@@ -76,7 +78,7 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
             GROUP BY s.${tables.toilet_types_foreign_key}),
 
             shantytown_parcel_owners AS (SELECT
-                s.shantytown_id AS fk_shantytown,
+                s.${tables.parcel_owners_foreign_key} AS fk_shantytown,
                 COALESCE(
                     jsonb_build_object(
                         'shantytownId', s.shantytown_id::integer,
@@ -105,11 +107,11 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
                     jsonb_build_object('shantytownId', s.shantytown_id, 'owners', '[]'::jsonb)
                 ) AS owner
             FROM "${tables.shantytowns}" s
-            LEFT JOIN "shantytown_parcel_owners" po ON po.fk_shantytown = s.shantytown_id
+            LEFT JOIN ${table === 'history' ? 'shantytown_parcel_owners_history' : `"${tables.shantytown_parcel_owners}"`} po ON po.fk_shantytown = s.shantytown_id
             LEFT JOIN "users" u ON u.user_id = po.fk_user
             LEFT JOIN "organizations" org ON org.organization_id = u.fk_organization
             LEFT JOIN "owner_types" ot ON ot.owner_type_id = po.fk_owner_type
-            GROUP BY s.shantytown_id),
+            GROUP BY s.${tables.parcel_owners_foreign_key}),
 
             shantytown_resorption_phases AS (SELECT
                 s.${tables.resorption_phases_foreign_key} AS fk_shantytown,
