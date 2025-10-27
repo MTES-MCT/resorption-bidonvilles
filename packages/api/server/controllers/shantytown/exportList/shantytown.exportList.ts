@@ -27,19 +27,19 @@ type DynamicFilters<T extends ExportedSitesStatus> = {
     [K in FilterKeysForStatus<T>]?: FilterValues;
 };
 
-interface ExportTownsRequest extends Request {
+interface ExportTownsRequest<T extends ExportedSitesStatus> extends Request {
     user: AuthUser,
     body: {
         date: Date,
-        exportedSitesStatus: ExportedSitesStatus,
+        exportedSitesStatus: T,
         location: Location,
     },
     query: {
         options: ShantytownExportListOption[],
-    } & DynamicFilters<ExportedSitesStatus>,
+    } & DynamicFilters<T>,
 }
 
-export default async (req: ExportTownsRequest, res: Response, next: NextFunction): Promise<void> => {
+export default async <T extends ExportedSitesStatus>(req: ExportTownsRequest<T>, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { exportedSitesStatus } = req.body;
 
