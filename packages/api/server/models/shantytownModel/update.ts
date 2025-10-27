@@ -358,6 +358,37 @@ export default async (editor, shantytownId: number, data, argTransaction: Transa
                     transaction,
                 },
             ),
+            // On historise la data des propriétaires
+            sequelize.query(
+                `INSERT INTO
+                    "shantytown_parcel_owners_history"(
+                        shantytown_parcel_owner_id,
+                        fk_shantytown,
+                        fk_user,
+                        owner_name,
+                        fk_owner_type,
+                        active,
+                        created_at,
+                        archived_at
+                    )
+                SELECT
+                    shantytown_parcel_owner_id,
+                    :hid,
+                    fk_user,
+                    owner_name,
+                    fk_owner_type,
+                    active,
+                    created_at,
+                    NOW()
+                FROM shantytown_parcel_owners WHERE fk_shantytown = :id`,
+                {
+                    replacements: {
+                        hid,
+                        id: shantytownId,
+                    },
+                    transaction,
+                },
+            ),
         ]);
 
         // now, update the shantytown
