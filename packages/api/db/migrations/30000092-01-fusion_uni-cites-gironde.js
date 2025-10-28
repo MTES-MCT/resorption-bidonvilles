@@ -9,7 +9,7 @@ module.exports = {
                 { transaction },
             );
 
-            const userCount = parseInt(results[0].count, 10);
+            const userCount = Number.parseInt(results[0].count, 10);
 
             // Si aucun utilisateur n'est affecté à l'organisation 43036
             if (userCount === 0) {
