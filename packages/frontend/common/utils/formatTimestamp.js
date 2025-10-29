@@ -5,7 +5,7 @@ const DAYS = [
     "Mercredi",
     "Jeudi",
     "Vendredi",
-    "Samedi"
+    "Samedi",
 ];
 
 const MONTHS = [
@@ -20,10 +20,19 @@ const MONTHS = [
     { long: "Septembre", short: "sep." },
     { long: "Octobre", short: "oct." },
     { long: "Novembre", short: "nov." },
-    { long: "Décembre", short: "déc." }
+    { long: "Décembre", short: "déc." },
 ];
 
-export default function(timestamp, format = "d/m/y") {
+/**
+ * Formate un timestamp en utilisant le fuseau horaire LOCAL de l'utilisateur.
+ * À utiliser pour les événements horodatés (commentaires, modifications, etc.)
+ * où l'heure locale est importante.
+ * 
+ * @param {number} timestamp - Timestamp Unix (en secondes)
+ * @param {string} format - Format de sortie (d/m/y h:i)
+ * @returns {string} Date formatée dans le fuseau horaire local
+ */
+export default function (timestamp, format = "d/m/y") {
     const date = new Date(timestamp * 1000);
     return format
         .replace("d", `0${date.getDate()}`.slice(-2))
@@ -34,4 +43,4 @@ export default function(timestamp, format = "d/m/y") {
         .replace("M", MONTHS[date.getMonth()].long)
         .replace("B", MONTHS[date.getMonth()].short)
         .replace("U", DAYS[date.getDay()]);
-};
+}
