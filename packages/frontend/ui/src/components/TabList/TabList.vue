@@ -3,7 +3,8 @@
         <Tab 
             v-for="tab in tabs" 
             :key="tab.id" 
-            :active="activeTab === tab.id" 
+            :active="activeTab === tab.id"
+            :clickable="clickable"
             @click="onTabClick(tab.id)"
         >
             <template v-if="tab.id === 'inProgress'" v-slot:ofwhich>dont</template>
@@ -29,6 +30,10 @@ const props = defineProps({
     modelValue: {
         type: [String, Number],
         required: false
+    },
+    clickable: {
+        type: Boolean,
+        default: true
     }
 });
 

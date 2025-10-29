@@ -7,7 +7,7 @@
             : 'cursor-pointer border-transparent'
     ]">
         <span v-if="$slots.ofwhich" class="mr-2 text-sm"><slot name="ofwhich" /></span>
-        <DsfrTag small selectable :selected="active"><slot name="prefix" /></DsfrTag>
+        <DsfrTag small :selectable="clickable" :selected="active" @select.stop.prevent="null"><slot name="prefix"/></DsfrTag>
         <slot />
     </button>
 </template>
@@ -19,7 +19,12 @@ import focusClasses from '../../../../common/utils/focus_classes';
 const props = defineProps({
     active: {
         type: Boolean
-    }
+    },
+    clickable: {
+        type: Boolean,
+        default: true
+    },
 });
-const { active } = toRefs(props);
+const { active, clickable } = toRefs(props);
+
 </script>
