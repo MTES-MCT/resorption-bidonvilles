@@ -4,7 +4,7 @@ import formatDateSince from '../../_common/formatDateSince';
 
 
 export default (declaredAt) => {
-    const builtDate = declaredAt ? moment(declaredAt * 1000).utcOffset(2).locale('fr') : null;
+    const builtDate = declaredAt ? moment(declaredAt * 1000).utc().locale('fr') : null;
     return new Paragraph({
         children: [
             new TextRun({
