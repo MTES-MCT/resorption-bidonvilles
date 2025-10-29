@@ -23,7 +23,7 @@ export default (shantytown) => {
                     },
                     children: [
                         new TextRun({
-                            text: `${moment(comment.createdAt * 1000).utcOffset(2).locale('fr').format('DD MMMM YYYY')} à ${moment(comment.createdAt * 1000).utcOffset(2).locale('fr').format('HH:mm')}`,
+                            text: `${moment(comment.createdAt * 1000).locale('fr').format('DD MMMM YYYY [à] HH:mm')}`,
                             break: 1,
                             bold: false,
                             size: 22,
