@@ -13,7 +13,12 @@
             >
         </div>
         <div v-else>
-            <TabList :tabs="tabs" v-model="currentTab" class="mb-3" />
+            <TabList
+                :tabs="tabs"
+                v-model="currentTab"
+                class="mb-3"
+                :clickable="false"
+            />
             <TextInput
                 :name="`${name}_search`"
                 prefixIcon="search"
@@ -109,13 +114,34 @@ const checked = ref(
 );
 
 const tabs = computed(() => {
+    const totalOpen = data.value.filter(
+        ({ status }) => status === "open"
+    ).length;
+    const totalClosed = data.value.filter(
+        ({ status }) => status !== "open"
+    ).length;
     return [
         {
             id: "selected",
-            label: `Sites sélectionnés (${value.value?.length || 0})`,
+            label: `Site${value.value?.length > 1 ? "s" : ""} sélectionné${
+                value.value?.length > 1 ? "s" : ""
+            }`,
+            total: value.value ? value.value.length : 0,
         },
-        { id: "open", label: "Sites ouverts" },
-        { id: "closed", label: "Sites fermés" },
+        {
+            id: "open",
+            label: `Site${totalOpen > 1 ? "s" : ""} ouvert${
+                totalOpen > 1 ? "s" : ""
+            }`,
+            total: totalOpen,
+        },
+        {
+            id: "closed",
+            label: `Site${totalClosed > 1 ? "s" : ""} fermé${
+                totalClosed > 1 ? "s" : ""
+            }`,
+            total: totalClosed,
+        },
     ];
 });
 
