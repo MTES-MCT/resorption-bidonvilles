@@ -7,7 +7,7 @@
             : 'cursor-pointer border-transparent'
     ]">
         <span v-if="$slots.ofwhich" class="mr-2 text-sm"><slot name="ofwhich" /></span>
-        <DsfrTag small :selectable="clickable" :selected="active" @select.stop.prevent="null"><slot name="prefix"/></DsfrTag>
+        <DsfrTag small selectable :selected="active" :class="[clickable ? '' : 'pointer-events-none cursor-default']"><slot name="prefix"/></DsfrTag>
         <slot />
     </button>
 </template>
@@ -26,5 +26,4 @@ const props = defineProps({
     },
 });
 const { active, clickable } = toRefs(props);
-
 </script>
