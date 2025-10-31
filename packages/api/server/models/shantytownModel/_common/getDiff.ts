@@ -2,7 +2,6 @@ import dateUtils from '#server/utils/date';
 import electricityAccessTypes from '#server/models/electricityAccessTypesModel/_common/electricityAccessTypes';
 import waterAccessTypes from '#server/models/_common/waterAccessTypes';
 import toiletTypes from '#server/models/shantytownToiletTypesModel/_common/toiletTypes';
-import { SerializedOwner } from '#root/types/resources/ParcelOwner.d';
 
 const { fromTsToFormat } = dateUtils;
 
@@ -72,136 +71,107 @@ export default (oldVersion, newVersion): Diff[] => {
                 return f.label;
             },
         },
-        // ownerType: {
-        //     label: 'Type de propriétaire',
-        //     processor(o) {
-        //         if (!o) {
-        //             return 'non renseigné';
-        //         }
-
-        //         return o.label;
-        //     },
-        // },
         owner: {
             label: 'Propriétaires',
             processor(o) {
-                console.log('Owners: ', o.owners);
-                if (o.owners?.length === 0 || o.owners === null) {
-                    return 'non renseignées';
+                // Toujours retourner un objet pour que le comparator puisse fonctionner
+                if (!o || !o.owners || o.owners.length === 0) {
+                    return {};
                 }
 
-                const ownerNames = [];
-                const ownerTypes = [];
-                const ownerActive = [];
-                o.owners?.map(({ name, active, typeDetails }) => {
-                    console.log('Name', name, 'Type', typeDetails.label, 'Active', active);
-
-                    ownerNames.push(name);
-                    ownerTypes.push(typeDetails.label);
-                    ownerActive.push(active);
-                    return null;
-                });
-                console.log('OwnerNames', ownerNames, 'OwnerTypes', ownerTypes, 'OwnerActive', ownerActive);
-
-                // if (ownerNames?.length === 1) {
-                //     return ownerNames[0];
-                // }
-
-                // return [
-                //     ownerNames?.slice(0, ownerNames.length - 1).join(', '),
-                //     ownerNames?.slice(ownerNames.length - 1),
-                // ].join(', et ');
-                return [ownerNames, ownerTypes, ownerActive];
+                try {
+                    // Transformer les objets JSON en un objet indexé par ownerId pour comparaison
+                    const ownersMap = {};
+                    o.owners.forEach((owner) => {
+                        if (typeof owner === 'string') {
+                            // Ancien format : on ne peut pas comparer individuellement
+                            ownersMap[owner] = owner;
+                        } else if (typeof owner === 'object' && owner !== null) {
+                            // Utiliser UNIQUEMENT ownerId comme clé pour garantir la correspondance
+                            // Ne JAMAIS utiliser le nom comme fallback sinon on ne peut pas détecter les changements de nom
+                            if (owner.ownerId) {
+                                ownersMap[owner.ownerId] = owner;
+                            }
+                        }
+                    });
+                    return ownersMap;
+                } catch (error) {
+                    return {};
+                }
             },
-            // comparator(oldOwnersMap, newOwnersMap) {
-            //     console.log('Oldmap:', oldOwnersMap, 'Newmap', newOwnersMap);
-            // },
-            // processor(o) {
-            //     if (!o) {
-            //         return 'non renseigné';
-            //     }
-            //     // console.log('Owners:', o.owners, 'old:', oldVersion, 'new:', newVersion);
-            //     // console.log('OldVersion:', oldVersion.owner, 'NewVerison:', newVersion.owner);
+            comparator(oldOwnersMap, newOwnersMap) {
+                // Fonction personnalisée pour comparer propriétaire par propriétaire
+                const formatOwner = (owner) => {
+                    if (typeof owner === 'string') {
+                        return owner;
+                    }
+                    // Gérer le format objet
+                    let result = owner.name || 'inconnu';
+                    const typeLabel = owner.typeDetails?.label;
+                    if (typeLabel) {
+                        result += ` (${typeLabel})`;
+                    }
+                    // Ajouter le statut actif/inactif
+                    if (owner.active === false) {
+                        result += ' [inactif]';
+                    }
+                    return result;
+                };
 
-            //     return o.owners;
-            // },
-            // comparator(oldOwnersMap, newOwnersMap) {
-            //     // console.log('Oldmap:', oldOwnersMap, 'Newmap', newOwnersMap);
+                // S'assurer que oldOwnersMap et newOwnersMap sont des objets
+                const oldMap = (typeof oldOwnersMap === 'object' && oldOwnersMap !== null && !Array.isArray(oldOwnersMap)) ? oldOwnersMap : {};
+                const newMap = (typeof newOwnersMap === 'object' && newOwnersMap !== null && !Array.isArray(newOwnersMap)) ? newOwnersMap : {};
 
-            //     // let i = 1;
-            //     // console.log("Checking owners' differences...", i);
-            //     // i += 1;
-            //     // Fonction personnalisée pour comparer propriétaire par propriétaire
-            //     const formatOwner = (owner) => {
-            //         if (typeof owner === 'string') {
-            //             return owner;
-            //         }
-            //         // Gérer les deux formats
-            //         let result = owner.name || '';
-            //         console.log('First result:', result);
-            //         if (owner.type) {
-            //             result += ` (${owner.type})`;
-            //         }
-            //         console.log('Result:', result);
+                const allOwnerIds = new Set([...Object.keys(oldMap), ...Object.keys(newMap)]);
+                const changeLines = [];
 
-            //         return result;
-            //     };
-            //         // Gérer les différentes orthographes de "non renseigné(e)(s)"
-            //     const isNotFilled = value => typeof value === 'string' && ['non renseignée', 'non renseignées', 'non renseigné', 'non renseignés'].includes(value);
+                allOwnerIds.forEach((ownerId) => {
+                    const oldOwner = oldMap[ownerId];
+                    const newOwner = newMap[ownerId];
 
-            //     const oldMap: SerializedOwner[] = isNotFilled(oldOwnersMap) ? [] : oldOwnersMap;
-            //     const newMap: SerializedOwner[] = isNotFilled(newOwnersMap) ? [] : newOwnersMap;
-            //     // console.log('Old OWNERS map:', oldMap, 'New OWNERS map:', newMap);
+                    const oldFormatted = oldOwner ? formatOwner(oldOwner) : null;
+                    const newFormatted = newOwner ? formatOwner(newOwner) : null;
 
-            //     // const allUids = new Set([...(oldMap !== null ? Object.keys(oldMap) : []), ...(newMap !== null ? Object.keys(newMap) : [])]);
-            //     const changeLines = [];
-            //     // console.log('AllUids:', allUids);
+                    // Cas 1: Propriétaire supprimé (existe dans old mais pas dans new)
+                    if (oldOwner && !newOwner) {
+                        changeLines.push({
+                            new: 'supprimé',
+                            old: oldFormatted,
+                        });
+                    } else if (!oldOwner && newOwner) {
+                        // Cas 2: Propriétaire ajouté (existe dans new mais pas dans old)
+                        changeLines.push({
+                            new: newFormatted,
+                            old: '', // Pas d'ancienne valeur pour un ajout
+                        });
+                    } else if (oldFormatted !== newFormatted) {
+                        // Cas 3: Propriétaire modifié (existe dans les deux mais différent)
+                        changeLines.push({
+                            new: newFormatted || 'non renseigné',
+                            old: oldFormatted,
+                        });
+                    }
+                });
 
-            //     if (!newMap || newMap.length === 0) {
-            //         return null;
-            //     }
-            //     console.log('On boucle sur newMap', newMap.length);
+                if (changeLines.length === 0) {
+                    return null; // Pas de changement
+                }
 
-            //     newMap.forEach((owner, index) => {
-            //     // allUids.forEach((uid: string) => {
-            //         console.log('On tourne sur les UIDS', index, owner);
-            //         console.log('OldMap[uid]', oldMap && oldMap[index]);
+                // Retourner les valeurs avec un séparateur spécial pour chaque ligne
+                // Format: "nouvelle1|||ancienne1\nnouvelle2|||ancienne2"
+                const newValues = [];
+                const oldValues = [];
 
-            //         const oldFormatted = oldMap && oldMap[index] ? formatOwner(oldMap[index]) : null;
-            //         console.log('Old Formatted: ', oldFormatted);
-            //         const newFormatted = newMap[index] ? formatOwner(newMap[index]) : null;
-            //         console.log('NewFormatted:', newFormatted);
+                changeLines.forEach((line) => {
+                    newValues.push(line.new);
+                    oldValues.push(line.old || '');
+                });
 
-            //         if (oldFormatted !== newFormatted) {
-            //             // Pour chaque propriétaire modifié, créer une ligne avec le format:
-            //             // "nouvelle valeur, ~~ancienne valeur~~"
-            //             // Si pas d'ancienne valeur, ne rien afficher après la virgule
-            //             changeLines.push({
-            //                 new: newFormatted || 'non renseigné',
-            //                 old: oldFormatted,
-            //             });
-            //         }
-            //     });
-
-            //     if (changeLines.length === 0) {
-            //         return null; // Pas de changement
-            //     }
-
-            //     // Retourner les valeurs avec un séparateur spécial pour chaque ligne
-            //     // Format: "nouvelle1|||ancienne1\nnouvelle2|||ancienne2"
-            //     const newValues = [];
-            //     const oldValues = [];
-
-            //     changeLines.forEach((line) => {
-            //         newValues.push(line.new);
-            //         oldValues.push(line.old || '');
-            //     });
-
-            //     return {
-            //         oldValue: oldValues.join('|||'),
-            //         newValue: newValues.join('|||'),
-            //     };
-            // },
+                return {
+                    oldValue: oldValues.join('|||'),
+                    newValue: newValues.join('|||'),
+                };
+            },
         },
         isReinstallation: {
             label: "S'agit-il d'une réinstallation ?",
@@ -213,8 +183,6 @@ export default (oldVersion, newVersion): Diff[] => {
         censusStatus: {
             label: 'Statut du diagnostic',
             processor(c) {
-                console.log('Census: ', c);
-
                 const statuses = {
                     none: 'non prévu',
                     scheduled: 'prévu',
@@ -778,10 +746,7 @@ export default (oldVersion, newVersion): Diff[] => {
 
             // Si un comparator personnalisé est défini, l'utiliser
             if (config.comparator) {
-                console.log('Y a un comparator');
-
                 const comparisonResult = config.comparator(oldProcessed, newProcessed);
-                console.log('result', comparisonResult);
 
                 if (comparisonResult === null) {
                     // Pas de changement
