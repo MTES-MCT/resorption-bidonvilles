@@ -25,7 +25,7 @@ function transformDates(data) {
     if (data !== null && typeof data === "object") {
         const transformed = {};
         for (const key in data) {
-            if (Object.prototype.hasOwnProperty.call(data, key)) {
+            if (Object.hasOwn(data, key)) {
                 transformed[key] = transformDates(data[key]);
             }
         }
