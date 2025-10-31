@@ -53,37 +53,37 @@
                             </template>
                         </template>
                     </template>
-                    <template v-else-if="item.fieldKey === 'owner'">
-                        <!-- Gérer l'affichage spécial pour les propriétaires -->
+                    <template
+                        v-else-if="
+                            item.fieldKey === 'owner' &&
+                            item.newValue &&
+                            item.newValue.includes('|||')
+                        "
+                    >
                         <template
-                            v-for="(newVal, index) in item.newValue"
+                            v-for="(newVal, index) in item.newValue.split(
+                                '|||'
+                            )"
                             :key="index"
                         >
-                            {{ newVal }}
-                            <!-- <span>
-                                {{ newValue.typeDetails?.label }} -
-                                {{ newValue.name }}
-                            </span> -->
-                        </template>
-                        <template
-                            v-if="
-                                item.oldValue?.name &&
-                                ![
-                                    'non renseignées',
-                                    'non renseigné',
-                                    'non renseignés',
-                                ].includes(item.oldValue.name.trim())
-                            "
-                        >
-                            <span>, </span>
-                            <span
-                                class="line-through text-G700 hover:text-G700"
-                                >{{
-                                    item.oldValue.ownerType +
-                                    " - " +
-                                    item.oldValue.ownerName
-                                }}</span
+                            <span v-if="index > 0"><br /></span>
+                            <span>{{ newVal }}</span>
+                            <template
+                                v-if="
+                                    item.oldValue &&
+                                    item.oldValue.split('|||')[index] &&
+                                    item.oldValue.split('|||')[index].trim() !==
+                                        ''
+                                "
                             >
+                                <span>, </span>
+                                <span
+                                    class="line-through text-G700 hover:text-G700"
+                                    >{{
+                                        item.oldValue.split("|||")[index]
+                                    }}</span
+                                >
+                            </template>
                         </template>
                     </template>
                     <template v-else>
