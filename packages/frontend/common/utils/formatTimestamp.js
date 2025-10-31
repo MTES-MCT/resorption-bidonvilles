@@ -1,27 +1,4 @@
-const DAYS = [
-    "Dimanche",
-    "Lundi",
-    "Mardi",
-    "Mercredi",
-    "Jeudi",
-    "Vendredi",
-    "Samedi",
-];
-
-const MONTHS = [
-    { long: "Janvier", short: "jan." },
-    { long: "Février", short: "fév." },
-    { long: "Mars", short: "mars" },
-    { long: "Avril", short: "avr." },
-    { long: "Mai", short: "mai" },
-    { long: "Juin", short: "juin" },
-    { long: "Juillet", short: "juil." },
-    { long: "Août", short: "août" },
-    { long: "Septembre", short: "sep." },
-    { long: "Octobre", short: "oct." },
-    { long: "Novembre", short: "nov." },
-    { long: "Décembre", short: "déc." },
-];
+import { DAYS, MONTHS } from "./dateConstants.js";
 
 /**
  * Formate un timestamp en utilisant le fuseau horaire LOCAL de l'utilisateur.
@@ -32,7 +9,7 @@ const MONTHS = [
  * @param {string} format - Format de sortie (d/m/y h:i)
  * @returns {string} Date formatée dans le fuseau horaire local
  */
-export default function (timestamp, format = "d/m/y") {
+export default function formatTimestamp(timestamp, format = "d/m/y") {
     const date = new Date(timestamp * 1000);
     return format
         .replace("d", `0${date.getDate()}`.slice(-2))
