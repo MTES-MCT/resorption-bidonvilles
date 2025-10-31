@@ -1,10 +1,11 @@
-import moment from 'moment';
 import { Paragraph, TextRun } from 'docx';
+import formatDate from '#server/utils/formatDate';
 import formatDateSince from '../../_common/formatDateSince';
 
 
 export default (declaredAt) => {
-    const builtDate = declaredAt ? moment(declaredAt * 1000).utc().locale('fr') : null;
+    const builtDate = declaredAt ? formatDate(declaredAt, 'd/m/y') : null;
+
     return new Paragraph({
         children: [
             new TextRun({
@@ -14,7 +15,7 @@ export default (declaredAt) => {
                 font: 'Arial',
             }),
             new TextRun({
-                text: builtDate ? builtDate.format('DD/MM/YYYY') : 'non renseignée',
+                text: builtDate || 'non renseignée',
                 size: 22,
                 font: 'Arial',
             }),
