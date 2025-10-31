@@ -1,27 +1,4 @@
-const DAYS = [
-    'Dimanche',
-    'Lundi',
-    'Mardi',
-    'Mercredi',
-    'Jeudi',
-    'Vendredi',
-    'Samedi',
-];
-
-const MONTHS = [
-    { long: 'Janvier', short: 'jan.' },
-    { long: 'Février', short: 'fév.' },
-    { long: 'Mars', short: 'mars' },
-    { long: 'Avril', short: 'avr.' },
-    { long: 'Mai', short: 'mai' },
-    { long: 'Juin', short: 'juin' },
-    { long: 'Juillet', short: 'juil.' },
-    { long: 'Août', short: 'août' },
-    { long: 'Septembre', short: 'sep.' },
-    { long: 'Octobre', short: 'oct.' },
-    { long: 'Novembre', short: 'nov.' },
-    { long: 'Décembre', short: 'déc.' },
-];
+import { DAYS, MONTHS } from './dateConstants';
 
 /**
  * Formate un timestamp en utilisant le fuseau horaire UTC.
@@ -34,7 +11,7 @@ const MONTHS = [
  * @param format - Format de sortie (d/m/y)
  * @returns Date formatée en UTC
  */
-export default (timestamp: number, format = 'd/m/y') => {
+export default function formatDate(timestamp: number, format = 'd/m/y') {
     const date = new Date(timestamp * 1000);
     return format
         .replace('d', `0${date.getUTCDate()}`.slice(-2))
@@ -45,4 +22,4 @@ export default (timestamp: number, format = 'd/m/y') => {
         .replace('M', MONTHS[date.getUTCMonth()].long)
         .replace('B', MONTHS[date.getUTCMonth()].short)
         .replace('U', DAYS[date.getUTCDay()]);
-};
+}
