@@ -16,7 +16,7 @@
  * date.toISOString().slice(0, 10); // "2025-08-10" ❌ (car minuit France = 22h UTC veille)
  */
 export default function dateToString(date) {
-    if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
+    if (!date || !(date instanceof Date) || Number.isNaN(date.getTime())) {
         return null;
     }
 
