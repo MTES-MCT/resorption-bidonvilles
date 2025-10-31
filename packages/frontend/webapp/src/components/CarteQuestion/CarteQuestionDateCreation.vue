@@ -1,6 +1,5 @@
 <template>
     <div
-        tabindex="0"
         :aria-label="`Question créée le ${formatTimestamp(
             question.createdAt,
             'd M y'
