@@ -3,7 +3,7 @@
  * Si le champ n'est pas trouvé, scroll vers le résumé des erreurs
  *
  * @param {Object} errors - Objet des erreurs de vee-validate
- * @param {string} errorSummaryId - ID de l'élément ErrorSummary (défaut: "erreurs")
+ * @param {string} errorSummaryId - ID de l'élément ErrorSummary
  */
 export default async function focusFirstErrorField(
     errors,
