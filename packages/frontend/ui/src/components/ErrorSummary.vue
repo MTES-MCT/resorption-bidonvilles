@@ -8,7 +8,13 @@
         <ul v-if="summaryErrors.length > 0" class="mt-2 pl-5 list-disc">
             <li v-for="error in summaryErrors" :key="error.key" class="list-none flex flex-row gap-1">
                 <span class="fr-icon-error-fill fr-icon--xs" aria-hidden="true"></span>
-                <Link :to="`#${error.key}`" color="text-error">{{ error.message }}</Link>
+                <a 
+                    href="#" 
+                    @click.prevent="focusField(error.key)"
+                    class="text-error underline hover:no-underline"
+                >
+                    {{ error.message }}
+                </a>
             </li>
         </ul>
     </div>
@@ -16,7 +22,6 @@
 
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
-import Link from "./Link.vue";
 
 const props = defineProps({
     message: {
@@ -40,4 +45,31 @@ const summaryErrors = computed(() => {
         message: summary.value[key]
     }));
 });
+
+const focusField = (fieldKey) => {
+    // Essayer de trouver l'élément par son ID
+    let field = document.getElementById(fieldKey);
+    
+    // Si non trouvé, essayer avec le préfixe du DatePicker
+    if (!field) {
+        field = document.getElementById(`dp-input-${fieldKey}`);
+    }
+    
+    if (field) {
+        // Scroller vers le champ
+        field.scrollIntoView({ behavior: "smooth", block: "center" });
+        
+        // Focus après le scroll
+        setTimeout(() => {
+            if (field.tagName === "INPUT" || field.tagName === "TEXTAREA" || field.tagName === "SELECT") {
+                field.focus();
+            } else {
+                const input = field.querySelector("input, textarea, select");
+                if (input) {
+                    input.focus();
+                }
+            }
+        }, 500);
+    }
+};
 </script>
