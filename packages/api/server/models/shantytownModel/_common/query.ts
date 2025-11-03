@@ -107,7 +107,7 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
                     jsonb_build_object('shantytownId', s.shantytown_id, 'owners', '[]'::jsonb)
                 ) AS owner
             FROM "${tables.shantytowns}" s
-            LEFT JOIN ${table === 'history' ? 'shantytown_parcel_owners_history' : `"${tables.shantytown_parcel_owners}"`} po ON po.fk_shantytown = s.shantytown_id
+            LEFT JOIN ${table === 'history' ? 'shantytown_parcel_owners_history' : `"${tables.shantytown_parcel_owners}"`} po ON po.fk_shantytown = s.${tables.parcel_owners_foreign_key}
             LEFT JOIN "users" u ON u.user_id = po.fk_user
             LEFT JOIN "organizations" org ON org.organization_id = u.fk_organization
             LEFT JOIN "owner_types" ot ON ot.owner_type_id = po.fk_owner_type
@@ -159,7 +159,7 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
         LEFT JOIN electricity_access_types eat ON eat.fk_shantytown = shantytowns.${tables.electricity_foreign_key}
         LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.${tables.toilet_types_foreign_key}
         LEFT JOIN shantytown_resorption_phases srp ON srp.fk_shantytown = shantytowns.${tables.resorption_phases_foreign_key}
-        LEFT JOIN shantytown_parcel_owners po ON po.fk_shantytown = shantytowns.shantytown_id
+        LEFT JOIN shantytown_parcel_owners po ON po.fk_shantytown = shantytowns.${tables.parcel_owners_foreign_key}
         ${whereClause !== null ? `WHERE ${whereClause}` : ''}
         ${order !== null ? `ORDER BY ${order}` : ''}
     `;
