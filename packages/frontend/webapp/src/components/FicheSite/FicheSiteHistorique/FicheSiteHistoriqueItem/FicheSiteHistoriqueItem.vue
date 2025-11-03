@@ -53,17 +53,38 @@
                             </template>
                         </template>
                     </template>
-                    <template v-else-if="item.fieldKey === 'owner'">
+                    <template
+                        v-else-if="
+                            item.fieldKey === 'owner' &&
+                            item.newValue &&
+                            item.newValue.includes('|||')
+                        "
+                    >
                         <!-- Gérer l'affichage spécial pour les propriétaires -->
                         <template
-                            v-for="(newVal, index) in item.newValue"
+                            v-for="(newVal, index) in item.newValue.split(
+                                '|||'
+                            )"
                             :key="index"
                         >
-                            {{ newVal }}
-                            <!-- <span>
-                                {{ newValue.typeDetails?.label }} -
-                                {{ newValue.name }}
-                            </span> -->
+                            <span v-if="index > 0"><br /></span>
+                            <span>{{ newVal }}</span>
+                            <template
+                                v-if="
+                                    item.oldValue &&
+                                    item.oldValue.split('|||')[index] &&
+                                    item.oldValue.split('|||')[index].trim() !==
+                                        ''
+                                "
+                            >
+                                <span>, </span>
+                                <span
+                                    class="line-through text-G700 hover:text-G700"
+                                    >{{
+                                        item.oldValue.split("|||")[index]
+                                    }}</span
+                                >
+                            </template>
                         </template>
                         <template
                             v-if="
