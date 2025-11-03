@@ -52,7 +52,6 @@ import {
     computed,
     defineExpose,
     defineProps,
-    nextTick,
     ref,
     toRef,
     toRefs,
@@ -69,6 +68,7 @@ import isDeepEqual from "@/utils/isDeepEqual";
 import backOrReplace from "@/utils/backOrReplace";
 import formatFormTown from "@common/utils/formatFormTown";
 import formatFormDate from "@common/utils/formatFormDate";
+import focusFirstErrorField from "@/utils/focusFirstErrorField";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
@@ -394,20 +394,6 @@ const hasPreparatoryPhases = computed(() => {
     return town.value?.preparatoryPhasesTowardResorption?.length > 0;
 });
 
-// Méthode pour définir le focus sur le composant ErrorSummary en cas d'erreur remontée par le backend
-const focusOnErrorSummary = async () => {
-    await nextTick();
-
-    const errorSummary = document.getElementById("erreurs");
-
-    if (errorSummary) {
-        errorSummary
-            .scrollIntoView({ behavior: "smooth", block: "start" })
-            .setAttribute("tabindex", "-1")
-            .focus();
-    }
-};
-
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
         const formattedValues = formatValuesForApi(sentValues, "edit");
@@ -463,8 +449,8 @@ defineExpose({
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             if (e?.fields) {
                 setErrors(e.fields);
+                focusFirstErrorField(e.fields);
             }
-            focusOnErrorSummary();
 
             notificationStore.error(
                 "Echec de la création ou mise à jour du site",
