@@ -113,6 +113,8 @@ const checked = ref(
     }, {})
 );
 
+const pluralize = (count, singular, plural) => (count > 1 ? plural : singular);
+
 const tabs = computed(() => {
     const totalOpen = data.value.filter(
         ({ status }) => status === "open"
@@ -123,23 +125,21 @@ const tabs = computed(() => {
     return [
         {
             id: "selected",
-            label: `Site${value.value?.length > 1 ? "s" : ""} sélectionné${
-                value.value?.length > 1 ? "s" : ""
-            }`,
+            label: pluralize(
+                value.value?.length || 0,
+                "Site sélectionné",
+                "Sites sélectionnés"
+            ),
             total: value.value ? value.value.length : 0,
         },
         {
             id: "open",
-            label: `Site${totalOpen > 1 ? "s" : ""} ouvert${
-                totalOpen > 1 ? "s" : ""
-            }`,
+            label: pluralize(totalOpen, "Site ouvert", "Sites ouverts"),
             total: totalOpen,
         },
         {
             id: "closed",
-            label: `Site${totalClosed > 1 ? "s" : ""} fermé${
-                totalClosed > 1 ? "s" : ""
-            }`,
+            label: pluralize(totalClosed, "Site fermé", "Sites fermés"),
             total: totalClosed,
         },
     ];
