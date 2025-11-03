@@ -134,8 +134,15 @@ const values = useFormValues();
 const userStore = useUserStore();
 const showDeletedOwners = ref(false);
 
-const generateUniqueKey = () =>
-    `key_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+const generateUniqueKey = () => {
+    if (
+        typeof crypto !== "undefined" &&
+        typeof crypto.randomUUID === "function"
+    ) {
+        return crypto.randomUUID();
+    }
+    return `key_${Date.now()}_${Math.random()}`;
+};
 
 onMounted(() => {
     if (!values.value.owner?.owners) {
