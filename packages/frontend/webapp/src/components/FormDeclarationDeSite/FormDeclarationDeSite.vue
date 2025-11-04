@@ -119,6 +119,7 @@ const canSetUpdatedAt = computed(() => {
 
     return updatedAt < yesterday;
 });
+
 const minUpdatedAt = computed(() => {
     if (!town.value) {
         return null;
@@ -144,6 +145,7 @@ const location = ref(
           }
         : null
 );
+
 const hasJusticePermission = computed(() => {
     if (!location.value) {
         return false;
@@ -154,6 +156,7 @@ const hasJusticePermission = computed(() => {
         location.value
     );
 });
+
 const hasOwnerPermission = computed(() => {
     if (!location.value) {
         return false;
@@ -170,6 +173,7 @@ const validationSchema = schemaFn(
     hasOwnerPermission,
     mode.value
 );
+
 const { handleSubmit, values, errors, setErrors, isSubmitting } = useForm({
     validationSchema,
     initialValues,
@@ -342,9 +346,10 @@ function formatValuesForApi(v, initOrEdit) {
         }
     });
 
-    return {
+    const result = {
         ...Object.keys(validationSchema.value.fields).reduce((acc, key) => {
-            acc[key] = v[key];
+            // Normaliser undefined en null pour la cohérence
+            acc[key] = v[key] === undefined ? null : v[key];
             return acc;
         }, {}),
         ...formatDateFields(dateFields, v),
@@ -354,13 +359,28 @@ function formatValuesForApi(v, initOrEdit) {
         citycode,
         address: label,
         coordinates: `${v.coordinates[0]},${v.coordinates[1]}`,
-        existingAttachments: Array.from(v.attachments),
+        existingAttachments: Array.from(v.attachments || []),
         newAttachments: completeAttachments,
-        preparatory_phases_toward_resorption:
-            v.preparatory_phases_toward_resorption,
+        preparatory_phases_toward_resorption: Array.from(
+            v.preparatory_phases_toward_resorption || []
+        ),
         terminated_preparatory_phases_toward_resorption:
             buildTerminatedPreparatoryPhases(initOrEdit),
     };
+
+    // Normaliser les tableaux (convertir Proxy en Array)
+    Object.keys(result).forEach((key) => {
+        if (
+            result[key] &&
+            typeof result[key] === "object" &&
+            typeof result[key][Symbol.iterator] === "function" &&
+            !Array.isArray(result[key])
+        ) {
+            result[key] = Array.from(result[key]);
+        }
+    });
+
+    return result;
 }
 
 const deleteOriginalAttachment = (attachments) => {
