@@ -8,12 +8,12 @@
         <ul v-if="summaryErrors.length > 0" class="mt-2 pl-5 list-disc">
             <li v-for="error in summaryErrors" :key="error.key" class="list-none flex flex-row gap-1">
                 <span class="fr-icon-error-fill fr-icon--xs" aria-hidden="true"></span>
-                <a 
+                <span 
                     @click="focusField(error.key)"
-                    class="text-error underline hover:no-underline"
+                    class="text-error hover:underline cursor-pointer"
                 >
                     {{ error.message }}
-                </a>
+                </span>
             </li>
         </ul>
     </div>
