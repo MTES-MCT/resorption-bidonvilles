@@ -74,9 +74,7 @@ export default (oldVersion, newVersion): Diff[] => {
         owner: {
             label: 'Propriétaires',
             processor(o) {
-                if (!o || !o.owners || o.owners.length === 0) {
-                    return {};
-                }
+                if (!o?.owners?.length) { return {}; }
 
                 try {
                     const ownersMap = {};
@@ -92,6 +90,8 @@ export default (oldVersion, newVersion): Diff[] => {
                     });
                     return ownersMap;
                 } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.error('Erreur lors du traitement des propriétaires :', error);
                     return {};
                 }
             },
@@ -378,6 +378,8 @@ export default (oldVersion, newVersion): Diff[] => {
                     });
                     return phasesMap;
                 } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.error('Erreur lors du traitement des phases de la résorption :', error);
                     return {};
                 }
             },
