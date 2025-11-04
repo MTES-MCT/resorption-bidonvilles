@@ -194,6 +194,13 @@ watch(address, async () => {
     }
 });
 
+// Watch pour le focus automatique sur les erreurs de validation
+watch(errors, (newErrors) => {
+    if (Object.keys(newErrors).length > 0) {
+        focusFirstErrorField(newErrors);
+    }
+});
+
 const tabs = computed(() => {
     const arr = [
         {
@@ -449,7 +456,6 @@ defineExpose({
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             if (e?.fields) {
                 setErrors(e.fields);
-                focusFirstErrorField(e.fields);
             }
 
             notificationStore.error(
