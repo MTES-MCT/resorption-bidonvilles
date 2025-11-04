@@ -9,8 +9,7 @@
             <li v-for="error in summaryErrors" :key="error.key" class="list-none flex flex-row gap-1">
                 <span class="fr-icon-error-fill fr-icon--xs" aria-hidden="true"></span>
                 <a 
-                    href="#" 
-                    @click.prevent="focusField(error.key)"
+                    @click="focusField(error.key)"
                     class="text-error underline hover:no-underline"
                 >
                     {{ error.message }}
