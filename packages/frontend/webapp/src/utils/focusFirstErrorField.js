@@ -37,9 +37,9 @@ export default async function focusFirstErrorField(
             setTimeout(() => {
                 // Si c'est un input direct, on focus
                 if (
-                    firstErrorField.tagName === "INPUT" ||
-                    firstErrorField.tagName === "TEXTAREA" ||
-                    firstErrorField.tagName === "SELECT"
+                    firstErrorField instanceof HTMLInputElement ||
+                    firstErrorField instanceof HTMLTextAreaElement ||
+                    firstErrorField instanceof HTMLSelectElement
                 ) {
                     firstErrorField.focus();
                 } else {
