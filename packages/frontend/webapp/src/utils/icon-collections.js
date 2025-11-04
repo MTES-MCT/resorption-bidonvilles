@@ -5,6 +5,9 @@ const collections = [
             "file-excel-fill": {
                 body: '<path fill="currentColor" d="m16 2l5 5v14.008a.993.993 0 0 1-.993.992H3.993A1 1 0 0 1 3 21.008V2.992C3 2.444 3.445 2 3.993 2zm-2.8 10L16 8h-2.4L12 10.286L10.4 8H8l2.8 4L8 16h2.4l1.6-2.286L13.6 16H16z"/>',
             },
+            "file-word-fill": {
+                body: '<path fill="currentColor" d="m16 2l5 5v14.008a.993.993 0 0 1-.993.992H3.993A1 1 0 0 1 3 21.008V2.992C3 2.444 3.445 2 3.993 2zm-2 6v4.989L12 11l-1.99 2L10 8H8v8h2l2-2l2 2h2V8z"/>',
+            },
             "flag-fill": {
                 body: '<path fill="currentColor" d="M3 3h9.382a1 1 0 0 1 .894.553L14 5h6a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-6.382a1 1 0 0 1-.894-.553L12 16H5v6H3z"/>',
             },
@@ -68,6 +71,7 @@ const collections = [
 ];
 export const ri = {
     fileExcelFill: "ri:file-excel-fill",
+    fileWordFill: "ri:file-word-fill",
     flagFill: "ri:flag-fill",
     sunFill: "ri:sun-fill",
     sunLine: "ri:sun-line",
