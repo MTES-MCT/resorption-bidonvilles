@@ -369,7 +369,7 @@ function formatValuesForApi(v, initOrEdit) {
     };
 
     // Normaliser les tableaux (convertir Proxy en Array)
-    Object.keys(result).forEach((key) => {
+    for (const key of Object.keys(result)) {
         if (
             result[key] &&
             typeof result[key] === "object" &&
@@ -378,7 +378,7 @@ function formatValuesForApi(v, initOrEdit) {
         ) {
             result[key] = Array.from(result[key]);
         }
-    });
+    }
 
     return result;
 }
