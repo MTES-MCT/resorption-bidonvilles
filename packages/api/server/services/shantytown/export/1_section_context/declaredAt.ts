@@ -4,7 +4,7 @@ import formatDateSince from '../../_common/formatDateSince';
 
 
 export default (declaredAt) => {
-    const builtDate = declaredAt ? formatDate(declaredAt, 'd/m/y') : null;
+    const declaredDate = declaredAt ? formatDate(declaredAt, 'd/m/y') : 'non renseignée';
 
     return new Paragraph({
         children: [
@@ -15,7 +15,7 @@ export default (declaredAt) => {
                 font: 'Arial',
             }),
             new TextRun({
-                text: builtDate || 'non renseignée',
+                text: declaredDate,
                 size: 22,
                 font: 'Arial',
             }),
