@@ -455,7 +455,8 @@ defineExpose({
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             if (e?.fields) {
-                setErrors(e.fields);
+                const mergedErrors = { ...errors.value, ...e.fields };
+                setErrors(mergedErrors);
             }
 
             notificationStore.error(
