@@ -11,18 +11,14 @@
         </template>
 
         <template v-slot:footer>
-            <Button
-                variant="primaryOutline"
-                @click="() => modale.close()"
-                class="!border-2 !border-primary hover:!bg-primaryDark mr-2"
-                >Annuler</Button
+            <DsfrButton secondary @click="() => modale.close()" class="mr-2"
+                >Annuler</DsfrButton
             >
-            <Button
-                icon="file-excel"
-                iconPosition="left"
+            <DsfrButton
+                icon="ri-file-excel-fill"
                 @click="download"
                 :loading="isLoading"
-                >{{ exportButtonLabel }}</Button
+                >{{ exportButtonLabel }}</DsfrButton
             >
         </template>
     </Modal>
@@ -31,7 +27,7 @@
 <script setup>
 import { computed, ref, onMounted } from "vue";
 import { useForm } from "vee-validate";
-import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
+import { ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
@@ -155,8 +151,3 @@ async function download() {
     isLoading.value = false;
 }
 </script>
-<style scoped>
-button {
-    border: inherit;
-}
-</style>
