@@ -9,11 +9,7 @@
             <InputDetailedAddress />
         </Fieldset>
 
-        <Fieldset
-            legend="Quel est le propriétaire ?"
-            showMandatoryStar
-            id="owner"
-        >
+        <Fieldset :legend="ownersLegend" showMandatoryStar id="owner">
             <div v-if="userStore.hasOwnerPermission">
                 <div v-for="(owner, index) in sortedOwners" :key="owner._key">
                     <div
@@ -220,4 +216,10 @@ const addOwner = () => {
 const displayFullOwnersList = () => {
     showDeletedOwners.value = !showDeletedOwners.value;
 };
+
+const ownersLegend = computed(() => {
+    return sortedOwners.value.length > 1
+        ? "Quels sont les propriétaires ?"
+        : "Quel est le propriétaire ?";
+});
 </script>
