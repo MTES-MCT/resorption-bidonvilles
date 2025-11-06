@@ -36,7 +36,7 @@ export default async function focusFirstErrorField(
             field.classList.add("field-error-highlight");
 
             // Ajouter un attribut data pour identifier les champs qu'on a mis en évidence
-            field.setAttribute("data-error-highlighted", "true");
+            field.dataset.errorHighlighted = "true";
         }
     }
 
@@ -72,12 +72,12 @@ export default async function focusFirstErrorField(
 
         // Nettoyer les mises en évidence après 10 secondes ou au prochain focus
         const cleanupHighlights = () => {
-            document
-                .querySelectorAll('[data-error-highlighted="true"]')
-                .forEach((el) => {
-                    el.classList.remove("field-error-highlight");
-                    el.removeAttribute("data-error-highlighted");
-                });
+            for (const el of document.querySelectorAll(
+                '[data-error-highlighted="true"]'
+            )) {
+                el.classList.remove("field-error-highlight");
+                el.dataset.errorHighlighted = "false";
+            }
         };
 
         // Nettoyer après 10 secondes
@@ -93,7 +93,7 @@ export default async function focusFirstErrorField(
     const errorSummary = document.getElementById(errorSummaryId);
     if (errorSummary) {
         errorSummary.scrollIntoView({ behavior: "smooth", block: "start" });
-        errorSummary.setAttribute("tabindex", "-1");
+        errorSummary.dataset.tabindex = "-1";
         errorSummary.focus();
     }
 }
