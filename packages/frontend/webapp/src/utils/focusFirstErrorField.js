@@ -33,10 +33,10 @@ export default async function focusFirstErrorField(
             highlightedFields.push(field);
 
             // Ajouter une classe CSS pour mettre en évidence le champ en erreur
-            field.classList.add('field-error-highlight');
+            field.classList.add("field-error-highlight");
 
             // Ajouter un attribut data pour identifier les champs qu'on a mis en évidence
-            field.setAttribute('data-error-highlighted', 'true');
+            field.setAttribute("data-error-highlighted", "true");
         }
     }
 
