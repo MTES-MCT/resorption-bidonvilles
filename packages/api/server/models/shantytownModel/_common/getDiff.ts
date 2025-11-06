@@ -2,6 +2,7 @@ import dateUtils from '#server/utils/date';
 import electricityAccessTypes from '#server/models/electricityAccessTypesModel/_common/electricityAccessTypes';
 import waterAccessTypes from '#server/models/_common/waterAccessTypes';
 import toiletTypes from '#server/models/shantytownToiletTypesModel/_common/toiletTypes';
+import { SerializedOwner } from '#root/types/resources/ParcelOwner.d';
 
 const { fromTsToFormat } = dateUtils;
 
@@ -95,8 +96,8 @@ export default (oldVersion, newVersion): Diff[] => {
                     return {};
                 }
             },
-            comparator(oldOwnersMap, newOwnersMap) {
-                const formatOwner = (owner) => {
+            comparator(oldOwnersMap: Record<string, SerializedOwner | string>, newOwnersMap: Record<string, SerializedOwner | string>) {
+                const formatOwner = (owner: SerializedOwner | string): string => {
                     if (typeof owner === 'string') {
                         return owner;
                     }
@@ -113,8 +114,8 @@ export default (oldVersion, newVersion): Diff[] => {
                     return result;
                 };
                 // Gérer les différentes orthographes de "non renseigné(e)(s)"
-                const oldMap = (typeof oldOwnersMap === 'object' && oldOwnersMap !== null && !Array.isArray(oldOwnersMap)) ? oldOwnersMap : {};
-                const newMap = (typeof newOwnersMap === 'object' && newOwnersMap !== null && !Array.isArray(newOwnersMap)) ? newOwnersMap : {};
+                const oldMap = oldOwnersMap || {};
+                const newMap = newOwnersMap || {};
 
                 const allOwnerIds = new Set([...Object.keys(oldMap), ...Object.keys(newMap)]);
                 const changeLines = [];
