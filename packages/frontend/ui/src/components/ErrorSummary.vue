@@ -21,7 +21,7 @@
 
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
-import focusFirstErrorField from "../../../webapp/src/utils/focusFirstErrorField";
+import focusFirstErrorField from "@webapp/utils/focusFirstErrorField";
 
 const props = defineProps({
     message: {
