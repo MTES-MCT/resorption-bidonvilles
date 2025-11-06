@@ -69,6 +69,9 @@ export default async function fetchCurrentData(user: AuthUser, locations: Locati
     }
 
     let towns = await shantytownModel.findAll(user, townsFilters, 'export');
+    if (towns.length === 0) {
+        return [];
+    }
 
     // Filtre les sites en cours de résorption
     if (postSqlFilters.exportedSitesStatus === 'inProgress') {
@@ -103,14 +106,12 @@ export default async function fetchCurrentData(user: AuthUser, locations: Locati
     const currentYear = moment(new Date()).format('YYYY');
     const townsWithFinancedActions = await actionModel.fetchFinancedActionsByYear(null, parseInt(currentYear, 10), clauseGroup);
     const transformedShantytowns = enrichShantytown(townsWithFinancedActions);
-    return towns.map((town: ShantytownWithFinancedAction) => {
+
+    return Promise.all(towns.map(async (town: ShantytownWithFinancedAction) => {
         const townWithFinancedActions: FinancedShantytownAction = transformedShantytowns.find((t:FinancedShantytownAction) => t.shantytown_id === town.id);
-        if (townWithFinancedActions) {
-            return {
-                ...town,
-                hasAtLeastOneActionFinanced: townWithFinancedActions.hasAtLeastOneActionFinanced,
-            };
-        }
-        return town;
-    });
+        return {
+            ...town,
+            hasAtLeastOneActionFinanced: townWithFinancedActions ? townWithFinancedActions.hasAtLeastOneActionFinanced : undefined,
+        };
+    }));
 }

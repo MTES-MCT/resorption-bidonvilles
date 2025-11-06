@@ -6,6 +6,8 @@ import rewiremock from 'rewiremock/node';
 import { serialized as fakeUser } from '#test/utils/user';
 import ServiceError from '#server/errors/ServiceError';
 
+import { TownInput } from './_common/serializeReport';
+
 const { expect } = chai;
 chai.use(sinonChai);
 
@@ -32,8 +34,9 @@ describe('shantytownService.report()', () => {
         sandbox.reset();
     });
 
-    const townData = {
+    const townData: TownInput = {
         address: 'Adresse test',
+        citycode: '44000',
         latitude: 47.202436,
         longitude: -1.580545,
         name: 'Appellation test',

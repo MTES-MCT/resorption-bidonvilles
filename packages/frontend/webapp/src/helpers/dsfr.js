@@ -18,6 +18,7 @@ import {
     DsfrSegmentedSet,
     DsfrTag,
     DsfrTile,
+    DsfrTiles,
     VIcon,
 } from "@gouvminint/vue-dsfr";
 
@@ -53,5 +54,6 @@ export function useDsfr(app) {
     app.component("DsfrSegmentedSet", DsfrSegmentedSet);
     app.component("DsfrTag", DsfrTag);
     app.component("DsfrTile", DsfrTile);
+    app.component("DsfrTiles", DsfrTiles);
     app.component("VIcon", VIcon);
 }

@@ -43,7 +43,7 @@ export default (agenda) => {
         'send_activity_summary',
         async () => {
             if (sendActivitySummary) {
-                const now = moment().utcOffset(2).subtract(7, 'days');
+                const now = moment().subtract(7, 'days');
                 await activitySummary.sendAll(now.date(), now.month(), now.year());
             }
         },

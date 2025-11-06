@@ -1,22 +1,21 @@
 <template>
     <div
-        tabindex="0"
-        :aria-label="`Question créée le ${formatDate(
+        :aria-label="`Question créée le ${formatTimestamp(
             question.createdAt,
             'd M y'
-        )} à ${formatDate(question.createdAt, 'h')} heure ${formatDate(
+        )} à ${formatTimestamp(
             question.createdAt,
-            'i'
-        )}`"
+            'h'
+        )} heure ${formatTimestamp(question.createdAt, 'i')}`"
         class="flex justify-start text-G700"
     >
-        Le {{ formatDate(question.createdAt, "d M y à h:i") }}
+        Le {{ formatTimestamp(question.createdAt, "d M y à h:i") }}
     </div>
 </template>
 
 <script setup>
 import { toRefs } from "vue";
-import formatDate from "@common/utils/formatDate.js";
+import formatTimestamp from "@common/utils/formatTimestamp.js";
 
 const props = defineProps({
     question: {

@@ -4,7 +4,7 @@ import mailService from '#server/services/mailService';
 import config from '#server/config';
 
 import { QuestionSummary } from '#server/models/activityModel/types/QuestionNationalSummary';
-import formatDate from '#server/utils/formatDate';
+import formatTimestamp from '#server/utils/formatTimestamp';
 import generateTrackingUTM from './generateTrackingUTM';
 
 const { formatName } = userModel;
@@ -887,7 +887,7 @@ export default {
             variables: {
                 recipientName: formatName(recipient),
                 departementName: variables.departement.name,
-                hour: formatDate(variables.shantytown.createdAt, 'd M y à h:i'),
+                hour: formatTimestamp(variables.shantytown.createdAt, 'd M y à h:i'),
                 creatorName: formatName(variables.creator),
                 townAddress: variables.shantytown.address,
                 title: title(),
@@ -917,7 +917,7 @@ export default {
             variables: {
                 recipientName: formatName(recipient),
                 departementName: variables.departement.name,
-                hour: moment(variables.shantytown.closedAt).utcOffset(2).format('HH:mm'),
+                hour: moment(variables.shantytown.closedAt).format('HH:mm'),
                 editorName: formatName(variables.editor),
                 townFullAddress: variables.shantytown.address,
                 webappUrl,

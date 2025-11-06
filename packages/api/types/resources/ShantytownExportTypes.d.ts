@@ -1,10 +1,10 @@
-import { ShantytownWithFinancedAction } from '#root/types/resources/Shantytown.d';
+import { ShantytownWithFinancedAction, ShantytownWithOwner } from '#root/types/resources/Shantytown.d';
 
 export type ShantytownExportListOption = 'address_details' | 'owner' | 'living_conditions' | 'demographics' | 'justice' | 'actors' | 'comments';
 
 export type ShantytownExportListProperty = {
     title: string,
-    data: (shantytown: ShantytownWithFinancedAction) => string | number | Date | null,
+    data: (shantytown: ShantytownWithFinancedAction | ShantytownWithOwner) => string | number | Date | null,
     width: number,
     align?: 'left' | 'center' | 'right',
     bold?: boolean,

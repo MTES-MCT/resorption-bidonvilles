@@ -3,7 +3,8 @@
         <Tab 
             v-for="tab in tabs" 
             :key="tab.id" 
-            :active="activeTab === tab.id" 
+            :active="activeTab === tab.id"
+            :clickable="clickable"
             @click="onTabClick(tab.id)"
         >
             <template v-if="tab.id === 'inProgress'" v-slot:ofwhich>dont</template>
@@ -17,9 +18,8 @@
 
 <script setup>
 import { ref, watch, computed } from 'vue'
-import Tab from "./Tab.vue"
-import formatStat from "@common/utils/formatStat";
-; 
+import Tab from './Tab.vue'
+import formatStat from '@common/utils/formatStat';
 
 const props = defineProps({
     tabs: {
@@ -29,26 +29,32 @@ const props = defineProps({
     modelValue: {
         type: [String, Number],
         required: false
+    },
+    clickable: {
+        type: Boolean,
+        default: true
     }
 });
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue']);
 
 const defaultActiveTab = computed(() => 
     props.tabs.length > 0 ? props.tabs[0].id : undefined
-)
+);
 
-const activeTab = ref(props.modelValue !== undefined ? props.modelValue : defaultActiveTab.value)
+const activeTab = ref(props.modelValue ?? defaultActiveTab.value);
 
 watch(() => props.modelValue, (newValue) => {
-    activeTab.value = newValue
-})
+    if (newValue !== undefined) {
+        activeTab.value = newValue;
+    }
+});
 
 watch(() => props.tabs, () => {
     if (!props.tabs.some(({ id }) => id === activeTab.value)) {
         activeTab.value = props.tabs.length > 0 ? props.tabs[0].id : undefined
     }
-}, { deep: true })
+});
 
 const onTabClick = (id) => {
     activeTab.value = id
