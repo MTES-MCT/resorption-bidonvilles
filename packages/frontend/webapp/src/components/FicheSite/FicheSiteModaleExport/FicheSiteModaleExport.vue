@@ -10,18 +10,14 @@
         </template>
 
         <template v-slot:footer>
-            <Button
-                variant="primaryOutline"
-                @click="() => modale.close()"
-                class="mr-2"
-                >Annuler</Button
+            <DsfrButton secondary @click="() => modale.close()" class="mr-2"
+                >Annuler</DsfrButton
             >
-            <Button
-                icon="file-word"
-                iconPosition="left"
+            <DsfrButton
+                icon="ri-file-word-fill"
                 @click="download"
                 :loading="isLoading"
-                >Exporter la fiche du site</Button
+                >Exporter la fiche du site</DsfrButton
             >
         </template>
     </Modal>
@@ -29,7 +25,7 @@
 
 <script setup>
 import { defineProps, toRefs, ref } from "vue";
-import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
+import { ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import { useNotificationStore } from "@/stores/notification.store";
 import { trackEvent } from "@/helpers/matomo";
 import formatDate from "@common/utils/formatDate";

@@ -8,7 +8,6 @@ export default {
     declared_at: "Date de signalement",
     field_type: "Type de site",
     detailed_address: "Informations d'accès",
-    owner_type: "Quel est le propriétaire",
     owner: "Nom du propriétaire",
     population_total: "Personnes",
     population_total_females: "dont femmes et filles",

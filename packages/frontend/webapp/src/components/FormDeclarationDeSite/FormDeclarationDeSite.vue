@@ -13,7 +13,10 @@
             class="mt-6"
         />
         <FormDeclarationDeSiteAdresse :townId="town?.id" class="mt-6" />
-        <FormDeclarationDeSiteCaracteristiques class="mt-6" />
+        <FormDeclarationDeSiteCaracteristiques
+            class="mt-6"
+            :set_field_value="setFieldValue"
+        />
         <FormDeclarationDeSiteHabitants
             :location="location"
             :townId="town?.id"
@@ -173,11 +176,11 @@ const validationSchema = schemaFn(
     hasOwnerPermission,
     mode.value
 );
-
-const { handleSubmit, values, errors, setErrors, isSubmitting } = useForm({
-    validationSchema,
-    initialValues,
-});
+const { handleSubmit, values, errors, setErrors, isSubmitting, setFieldValue } =
+    useForm({
+        validationSchema,
+        initialValues,
+    });
 
 const originalValues = formatValuesForApi(values, "init");
 const error = ref(null);
@@ -373,6 +376,7 @@ function formatValuesForApi(v, initOrEdit) {
         ),
         terminated_preparatory_phases_toward_resorption:
             buildTerminatedPreparatoryPhases(initOrEdit),
+        owner: buildOwners(v.owner),
     };
 
     // Normaliser les tableaux (convertir Proxy en Array)
@@ -393,6 +397,20 @@ function formatValuesForApi(v, initOrEdit) {
 const deleteOriginalAttachment = (attachments) => {
     originalValues.existingAttachments = attachments;
 };
+
+function buildOwners(ownerDatas) {
+    if (!ownerDatas || !ownerDatas.owners) {
+        return [];
+    }
+    return {
+        ...ownerDatas,
+        owners: ownerDatas.owners.map((owner) => {
+            const newOwner = { ...owner };
+            delete newOwner._key;
+            return newOwner;
+        }),
+    };
+}
 
 function buildTerminatedPreparatoryPhases(initOrEdit) {
     const terminatedPreparatoryPhases = {};

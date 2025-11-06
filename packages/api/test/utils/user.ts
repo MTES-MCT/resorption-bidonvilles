@@ -122,6 +122,20 @@ export function serialized(override: Partial<User> = {}): AuthUser {
                     allowed: true, allowed_on_national: true, allowed_on: null,
                 },
             },
+            shantytown_owner: {
+                create: {
+                    allowed: true, allowed_on_national: true, allowed_on: null,
+                },
+                access: {
+                    allowed: true, allowed_on_national: true, allowed_on: null,
+                },
+                update: {
+                    allowed: true, allowed_on_national: true, allowed_on: null,
+                },
+                delete: {
+                    allowed: true, allowed_on_national: true, allowed_on: null,
+                },
+            },
             user: {},
             stats: {},
         },

@@ -6,7 +6,7 @@ export default [
     },
     {
         id: "owner",
-        label: "Propriétaire",
+        label: "Propriétaires",
         permission: {
             entity: "shantytown_owner",
             feature: "access",

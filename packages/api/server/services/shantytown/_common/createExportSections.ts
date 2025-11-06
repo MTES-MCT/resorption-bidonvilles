@@ -61,7 +61,6 @@ export default async (
     }
 
     if (options.indexOf('owner') !== -1 && user.isAllowedTo('access', 'shantytown_owner')) {
-        section.properties.push(properties.ownerType);
         section.properties.push(properties.owner);
     }
 

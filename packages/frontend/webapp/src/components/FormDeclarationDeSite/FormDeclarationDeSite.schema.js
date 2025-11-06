@@ -1,4 +1,4 @@
-import { object, string, date, number, array, ref } from "yup";
+import { object, string, date, number, array, ref, lazy } from "yup";
 import { computed } from "vue";
 import labels from "@/components/Common/FormEtFicheSite.labels";
 
@@ -63,15 +63,37 @@ export default function (
             detailed_address: string()
                 .nullable()
                 .label(labels.detailed_address),
-            owner_type: number().required().label(labels.owner_type),
             owner: hasOwnerPermission.value
-                ? string()
-                      .nullable()
-                      .label(labels.owner)
-                      .matches(
-                          /^[^<>{}]*$/,
-                          `Le contenu du champ "${labels.owner}" n'est pas valide`
-                      )
+                ? // On utilise yup.lazy pour rendre la validation de "owner" conditionnelle
+                  lazy((value) => {
+                      const owners = value?.owners;
+
+                      if (
+                          Array.isArray(owners) &&
+                          owners.length === 1 &&
+                          !owners[0].name
+                      ) {
+                          return object().nullable();
+                      }
+
+                      return object({
+                          owners: array().of(
+                              object({
+                                  name: string()
+                                      .nullable()
+                                      .matches(
+                                          /^[^<>{}]*$/,
+                                          "Le nom du propriétaire contient des caractères non valides"
+                                      ),
+                                  type: number().required(
+                                      "Le type du propriétaire est obligatoire"
+                                  ),
+                              })
+                          ),
+                      })
+                          .nullable()
+                          .label(labels.owner);
+                  })
                 : undefined,
             population_total: number()
                 .nullable()

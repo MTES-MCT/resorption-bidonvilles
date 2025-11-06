@@ -1,6 +1,8 @@
 import toiletTypes from '#server/models/shantytownToiletTypesModel/_common/toiletTypes';
 import electricityAccessTypes from '#server/models/electricityAccessTypesModel/_common/electricityAccessTypes';
 import waterAccessTypes from '#server/models/_common/waterAccessTypes';
+import { City } from '#server/models/geoModel/Location.d';
+import { ParcelOwnerInsert } from '#root/types/resources/ParcelOwner.d';
 
 const census_statuses = {
     done: 'Réalisé',
@@ -32,11 +34,14 @@ function boolToStr(bool: boolean, ifTrue: string = 'Oui', ifFalse:string = 'Non'
 
 export type TownInput = {
     address: string,
+    city?: City,
+    citycode: string,
     latitude: number,
     longitude: number,
     name?: string,
     built_at?: Date,
     declared_at: Date,
+    field_type?: string,
     field_type_full: {
         label: string,
     },
@@ -44,7 +49,7 @@ export type TownInput = {
     owner_type_full: {
         label: string,
     },
-    owner?: string,
+    owner?: { owners: ParcelOwnerInsert[] },
     population_total?: number,
     population_total_females?: number,
     population_couples?: number,
@@ -64,6 +69,7 @@ export type TownInput = {
     census_conducted_by?: string,
     is_reinstallation?: boolean,
     reinstallation_comments?: string,
+    social_origins?: number[],
     social_origins_full: { label: string }[],
     census_status: string,
     census_conducted_at?: Date,

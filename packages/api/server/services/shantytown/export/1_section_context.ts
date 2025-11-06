@@ -20,6 +20,6 @@ export default (user, shantytown) => ({
         declaredAt(shantytown.declaredAt),
         fieldType(shantytown.fieldType.label),
         coordinates(shantytown.latitude, shantytown.longitude),
-        owner(shantytown.ownerType.label, can(user).do('access', 'shantytown_owner').on(shantytown) ? shantytown.owner : 'non renseigné'),
+        owner(can(user).do('access', 'shantytown_owner').on(shantytown) ? shantytown.owner : 'donnée masquée'),
     ],
 });

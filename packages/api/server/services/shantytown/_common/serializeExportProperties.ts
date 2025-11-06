@@ -5,7 +5,7 @@ import config from '#server/config';
 import electricityAccessTypes from '#server/models/electricityAccessTypesModel/_common/electricityAccessTypes';
 import waterAccessTypes from '#server/models/_common/waterAccessTypes';
 import toiletTypes from '#server/models/shantytownToiletTypesModel/_common/toiletTypes';
-import { ShantytownWithFinancedAction } from '#root/types/resources/Shantytown.d';
+import { ShantytownWithFinancedAction, ShantytownWithOwner } from '#root/types/resources/Shantytown.d';
 import electricityAccessStatusLabels from './livingConditionsStatusLabels/electricityAccessStatusLabels';
 import waterAccessStatusLabels from './livingConditionsStatusLabels/waterAccessStatusLabels';
 import sanitaryAccessStatusLabels from './livingConditionsStatusLabels/sanitaryAccessStatusLabels';
@@ -14,6 +14,7 @@ import pestAnimalsStatusLabels from './livingConditionsStatusLabels/pestAnimalsS
 import firePreventionStatusLabels from './livingConditionsStatusLabels/firePreventionStatusLabels';
 import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
 import { ShantytownExportListProperty } from '#root/types/resources/ShantytownExportTypes.d';
+import { SerializedOwner } from '#root/types/resources/ParcelOwner.d';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 const { webappUrl } = config;
@@ -128,14 +129,24 @@ export default (closingSolutions: ClosingSolution[]) => {
             data: ({ closingContext }: ShantytownWithFinancedAction) => closingContext,
             width: COLUMN_WIDTHS.SMALL,
         },
-        ownerType: {
-            title: 'Type de propriétaire',
-            data: ({ ownerType }: ShantytownWithFinancedAction) => ownerType.label,
-            width: COLUMN_WIDTHS.SMALL,
-        },
         owner: {
-            title: 'Identité du propriétaire',
-            data: (shantytown: ShantytownWithFinancedAction) => ('owner' in shantytown ? shantytown.owner : null),
+            title: 'Propriétaires de parcelles du site',
+            data: (shantytown: ShantytownWithOwner) => {
+                if (
+                    shantytown.owner
+                    && !Array.isArray(shantytown.owner)
+                    && 'owners' in shantytown.owner
+                    && Array.isArray(shantytown.owner.owners)
+                ) {
+                    const result: string = (shantytown.owner.owners as SerializedOwner[]).filter(o => o.active).map((o: SerializedOwner) => {
+                        const name: string = o.name ?? 'inconnu';
+                        const typeLabel: string = o.typeDetails?.label;
+                        return typeLabel ? `${name} (${typeLabel})` : name;
+                    }).join('; ');
+                    return result;
+                }
+                return null;
+            },
             width: COLUMN_WIDTHS.MEDIUM,
         },
         isReinstallation: {

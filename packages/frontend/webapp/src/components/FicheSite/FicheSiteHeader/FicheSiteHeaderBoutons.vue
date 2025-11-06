@@ -24,7 +24,7 @@
             </RouterLink>
             <DsfrButton
                 size="sm"
-                icon="ri-file-excel-fill"
+                icon="ri-file-word-fill"
                 secondary
                 @click="openExportModal"
                 >Exporter</DsfrButton
