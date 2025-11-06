@@ -32,11 +32,13 @@ function boolToStr(bool: boolean, ifTrue: string = 'Oui', ifFalse:string = 'Non'
 
 export type TownInput = {
     address: string,
+    citycode: string,
     latitude: number,
     longitude: number,
     name?: string,
     built_at?: Date,
     declared_at: Date,
+    field_type: string,
     field_type_full: {
         label: string,
     },

@@ -1,4 +1,7 @@
-const baseShantytown = (townData, user) => ({
+import { TownInput } from './serializeReport';
+import { User } from '#root/types/resources/User.d';
+
+const baseShantytown = (townData: TownInput, user: User) => ({
     name: townData.name,
     latitude: townData.latitude,
     longitude: townData.longitude,
