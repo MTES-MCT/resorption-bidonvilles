@@ -78,12 +78,7 @@ describe('services/shantytownParcelOwners.update()', () => {
         }]);
         fakeOwner[0].name = 'Jean Bono'; // On modifie le nom du propriétaire
 
-        try {
-            await update(fakeTestUser, fakeTown, fakeOwner);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-        }
+        await update(fakeTestUser, fakeTown, fakeOwner);
 
         expect(stubs.transaction.commit).to.have.been.calledOnce;
     });
@@ -112,12 +107,7 @@ describe('services/shantytownParcelOwners.update()', () => {
         fakeOwners[0].name = 'Jean Bono'; // On modifie le nom du propriétaire
         fakeOwners[1].name = 'Pierre Elelou'; // On modifie le nom du propriétaire
 
-        try {
-            await update(fakeTestUser, fakeTown, fakeOwners);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-        }
+        await update(fakeTestUser, fakeTown, fakeOwners);
 
         expect(stubs.transaction.commit).to.have.been.calledOnce;
     });
@@ -147,12 +137,7 @@ describe('services/shantytownParcelOwners.update()', () => {
         }]);
         fakeOwners[1].active = false; // On modifie l'état du propriétaire
 
-        try {
-            await update(fakeTestUser, fakeTown, fakeOwners);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-        }
+        await update(fakeTestUser, fakeTown, fakeOwners);
 
         expect(stubs.transaction.commit).to.have.been.calledOnce;
     });
@@ -164,12 +149,7 @@ describe('services/shantytownParcelOwners.update()', () => {
         stubs.shantytownParcelOwnerModel.update.resolves([]);
         stubs.shantytownParcelOwnerModel.create.resolves({ parcelOwnerId: 2 });
 
-        try {
-            await update(fakeTestUser, fakeTown, fakeOwners);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-        }
+        await update(fakeTestUser, fakeTown, fakeOwners);
 
         expect(stubs.shantytownParcelOwnerModel.create).to.have.been.calledOnceWith(fakeTestUser, fakeTown.id, fakeOwners, stubs.transaction);
         expect(stubs.transaction.commit).to.have.been.calledOnce;
