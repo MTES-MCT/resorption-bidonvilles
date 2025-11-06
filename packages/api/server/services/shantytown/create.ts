@@ -11,8 +11,10 @@ import { triggerShantytownCreationAlert } from '#server/utils/mattermost';
 import baseShantytown from '#server/services/shantytown/_common/baseShantytown';
 import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
+import { AuthUser } from '#server/middlewares/authMiddleware';
+import { TownInput } from './_common/serializeReport';
 
-export default async (townData, user) => {
+export default async (townData: TownInput, user: AuthUser) => {
     const baseTown = baseShantytown(townData, user);
 
     const transaction = await sequelize.transaction();
