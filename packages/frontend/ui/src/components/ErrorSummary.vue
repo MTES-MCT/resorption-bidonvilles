@@ -20,8 +20,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
-import focusFirstErrorField from "../../../webapp/src/utils/focusFirstErrorField";
+import { toRefs, computed } from "vue";
 
 const props = defineProps({
     message: {
@@ -47,6 +46,29 @@ const summaryErrors = computed(() => {
 });
 
 const focusField = (fieldKey) => {
-    focusFirstErrorField({ [fieldKey]: ["error"] });
+    // Essayer de trouver l'élément par son ID
+    let field = document.getElementById(fieldKey);
+    
+    // Si non trouvé, essayer avec le préfixe du DatePicker
+    if (!field) {
+        field = document.getElementById(`dp-input-${fieldKey}`);
+    }
+    
+    if (field) {
+        // Scroller vers le champ
+        field.scrollIntoView({ behavior: "smooth", block: "center" });
+        
+        // Focus après le scroll
+        setTimeout(() => {
+            const focusable =
+                field instanceof HTMLInputElement ||
+                field instanceof HTMLTextAreaElement ||
+                field instanceof HTMLSelectElement
+                ? field
+                : field.querySelector("input, textarea, select");
+
+            focusable?.focus({ preventScroll: true });
+        }, 500);
+    }
 };
 </script>
