@@ -45,7 +45,6 @@ rewiremock.disable();
 
 describe('services/shantytownParcelOwners.create()', () => {
     let fakeOwner: ParcelOwnerInsert[];
-    // let fakeTestUser: AuthUser;
     let fakeTown: Shantytown;
 
     beforeEach(() => {
@@ -54,9 +53,7 @@ describe('services/shantytownParcelOwners.create()', () => {
             name: 'Jean Bon',
             type: 1,
         }];
-        // fakeTestUser = fakeUser();
         fakeTown = fakeShantytown();
-        // stubs.user = { ...stubs.user, ...fakeTestUser };
         stubs.user.isAllowedTo.returns(true);
         stubs.sequelize.transaction.resolves(stubs.transaction);
     });
@@ -66,12 +63,7 @@ describe('services/shantytownParcelOwners.create()', () => {
     });
 
     it('vérifie que l\'utilisateur a le droit d\'ajouter un propriétaire', async () => {
-        try {
-            await create(stubs.user, fakeTown.id, fakeOwner);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-        }
+        await create(stubs.user, fakeTown.id, fakeOwner);
 
         expect(stubs.user.isAllowedTo).to.have.been.calledWith('access', 'shantytown_owner');
         expect(stubs.user.isAllowedTo.firstCall.returnValue).to.equal(true);
@@ -111,14 +103,7 @@ describe('services/shantytownParcelOwners.create()', () => {
         const fakeOwners: ParcelOwnerInsert[] = [...fakeOwner, { ownerId: 2, name: 'Pierre Quiroul', type: 2 }];
         stubs.shantytownParcelOwnerModel.create.resolves({ parcelOwnerId: 123 });
         fakeTown.id = 2; // Simulate a different town ID for this test
-        let parcelOwnerId: { parcelOwnerId: number };
-
-        try {
-            parcelOwnerId = await create(stubs.user, fakeTown.id, fakeOwners);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-        }
+        const parcelOwnerId: { parcelOwnerId: number } = await create(stubs.user, fakeTown.id, fakeOwners);
 
         expect(parcelOwnerId).to.deep.equal({ parcelOwnerId: 123 });
         expect(stubs.transaction.commit).to.have.been.calledOnce;
