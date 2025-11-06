@@ -30,7 +30,7 @@ export default async (user: AuthUser): Promise<string> => {
     // build excel file
     return JSONToCSV.parse(
         comments.map((row) => {
-            const createdAt = moment(row.created_at).utcOffset(2);
+            const createdAt = moment(row.created_at);
 
             return {
                 S: createdAt.format('w'),

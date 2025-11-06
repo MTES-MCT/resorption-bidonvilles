@@ -6,7 +6,7 @@
     >
         <div class="flex justify-between">
             <div class="text-G700 text-sm mb-1">
-                {{ formatDate(comment.createdAt, "d M y à h:i") }}
+                {{ formatTimestamp(comment.createdAt, "d M y à h:i") }}
             </div>
             <span
                 class="text-red font-bold cursor-pointer"
@@ -69,7 +69,7 @@
 import { defineProps, defineEmits, toRefs, ref, computed } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 import { useUserStore } from "@/stores/user.store";
-import formatDate from "@common/utils/formatDate.js";
+import formatTimestamp from "@common/utils/formatTimestamp.js";
 
 import {
     FilePreviewList,
