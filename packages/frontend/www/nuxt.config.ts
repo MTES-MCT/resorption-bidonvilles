@@ -40,7 +40,6 @@ export default defineNuxtConfig({
     alias: {
         "@common": fileURLToPath(new URL("../common/", import.meta.url)),
         "@stores": fileURLToPath(new URL("../webapp/src/stores", import.meta.url)),
-        "@webapp": fileURLToPath(new URL("../webapp/src", import.meta.url)),
     },
     compatibilityDate: "2024-08-30"
 });
