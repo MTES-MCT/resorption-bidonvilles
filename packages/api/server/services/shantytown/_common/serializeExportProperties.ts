@@ -138,17 +138,11 @@ export default (closingSolutions: ClosingSolution[]) => {
                     && 'owners' in shantytown.owner
                     && Array.isArray(shantytown.owner.owners)
                 ) {
-                    let result: string;
-                    try {
-                        result = (shantytown.owner.owners as SerializedOwner[]).filter(o => o.active).map((o: SerializedOwner) => {
-                            const name: string = o.name ?? 'inconnu';
-                            const typeLabel: string = o.typeDetails?.label;
-                            return typeLabel ? `${name} (${typeLabel})` : name;
-                        }).join('; ');
-                    } catch (error) {
-                        // eslint-disable-next-line no-console
-                        console.error('Error while getting owner informations: ', error);
-                    }
+                    const result: string = (shantytown.owner.owners as SerializedOwner[]).filter(o => o.active).map((o: SerializedOwner) => {
+                        const name: string = o.name ?? 'inconnu';
+                        const typeLabel: string = o.typeDetails?.label;
+                        return typeLabel ? `${name} (${typeLabel})` : name;
+                    }).join('; ');
                     return result;
                 }
                 return null;
