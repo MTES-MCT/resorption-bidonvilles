@@ -9,7 +9,7 @@ import serializeLivingConditions from './livingConditions/serializeLivingConditi
 const { can } = permissionUtils;
 
 function fromDateToTimestamp(date) {
-    return date !== null ? (new Date(`${date}T02:00:00`).getTime() / 1000) : null;
+    return date !== null ? (new Date(`${date}T00:00:00Z`).getTime() / 1000) : null;
 }
 
 export default (town: ShantytownRow, user): Shantytown => {

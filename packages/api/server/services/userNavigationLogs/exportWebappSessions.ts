@@ -29,7 +29,7 @@ function serializeSession(user: number, session: WebappSessionRow, beginning: Da
         'Catégorie de structure de l\'utilisateur': session.organization_category,
         'Type de structure de l\'utilisateur': session.organization_type,
         'Rôle de l\'utilisateur': session.role,
-        'Début de la session': moment(beginning).utcOffset(2).format('DD/MM/YYYY-HH:mm:ss'),
+        'Début de la session': moment(beginning).format('DD/MM/YYYY-HH:mm:ss'),
         'Durée de la session (en minutes)': Math.round(duration / 60000),
     };
 }

@@ -250,9 +250,11 @@ export default function (
                           .when("justice_rendered", {
                               is: 1,
                               then: (schema) =>
-                                  schema.typeError(
-                                      `${labels.justice_rendered_at} est obligatoire`
-                                  ),
+                                  schema
+                                      .required()
+                                      .typeError(
+                                          `${labels.justice_rendered_at} est obligatoire`
+                                      ),
                               otherwise: (schema) => schema.nullable(),
                           })
                           .label(labels.justice_rendered_at),

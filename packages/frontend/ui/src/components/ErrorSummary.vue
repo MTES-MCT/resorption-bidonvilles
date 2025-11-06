@@ -8,7 +8,12 @@
         <ul v-if="summaryErrors.length > 0" class="mt-2 pl-5 list-disc">
             <li v-for="error in summaryErrors" :key="error.key" class="list-none flex flex-row gap-1">
                 <span class="fr-icon-error-fill fr-icon--xs" aria-hidden="true"></span>
-                <Link :to="`#${error.key}`" color="text-error">{{ error.message }}</Link>
+                <span 
+                    @click="focusField(error.key)"
+                    class="text-error hover:underline cursor-pointer"
+                >
+                    {{ error.message }}
+                </span>
             </li>
         </ul>
     </div>
@@ -16,7 +21,7 @@
 
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
-import Link from "./Link.vue";
+import focusFirstErrorField from "@/utils/focusFirstErrorField";
 
 const props = defineProps({
     message: {
@@ -40,4 +45,8 @@ const summaryErrors = computed(() => {
         message: summary.value[key]
     }));
 });
+
+const focusField = (fieldKey) => {
+    focusFirstErrorField({ [fieldKey]: ["error"] });
+};
 </script>

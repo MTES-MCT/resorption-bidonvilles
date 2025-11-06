@@ -22,7 +22,7 @@ export default async (user) => {
     }
 
     return actors.map((row) => {
-        const createdAt = moment(row.created_at).utcOffset(2);
+        const createdAt = moment(row.created_at);
 
         return {
             S: createdAt.format('w'),

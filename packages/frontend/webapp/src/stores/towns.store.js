@@ -479,21 +479,14 @@ export const useTownsStore = defineStore("towns", () => {
 
         async edit(townId, data) {
             const notificationStore = useNotificationStore();
-            try {
-                const town = await edit(townId, data);
-                setTown(townId, town);
+            const town = await edit(townId, data);
+            setTown(townId, town);
 
-                notificationStore.success(
-                    "Mise à jour réussie",
-                    "Le site a bien été mis à jour"
-                );
-                return hash.value[townId];
-            } catch (error) {
-                notificationStore.error(
-                    "Echec de la mise à jour du site",
-                    error?.user_message || "Une erreur inconnue est survenue"
-                );
-            }
+            notificationStore.success(
+                "Mise à jour réussie",
+                "Le site a bien été mis à jour"
+            );
+            return hash.value[townId];
         },
 
         async deleteCommentAttachment(file, { townId, commentId }) {

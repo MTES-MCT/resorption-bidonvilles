@@ -6,7 +6,7 @@
             {{ author.organization.abbreviation || author.organization.name }}
         </LinkOrganization>
         <p class="text-sm text-G700">
-            le {{ formatDate(date, "d M y à h:i") }}
+            le {{ formatTimestamp(date, "d M y à h:i") }}
         </p>
 
         <div class="my-2 flex flex-col space-y-2">
@@ -134,7 +134,7 @@
 
 <script setup>
 import { toRefs } from "vue";
-import formatDate from "@common/utils/formatDate.js";
+import formatTimestamp from "@common/utils/formatTimestamp.js";
 import { LinkOrganization } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({

@@ -55,7 +55,6 @@ import {
     computed,
     defineExpose,
     defineProps,
-    nextTick,
     ref,
     toRef,
     toRefs,
@@ -72,6 +71,7 @@ import isDeepEqual from "@/utils/isDeepEqual";
 import backOrReplace from "@/utils/backOrReplace";
 import formatFormTown from "@common/utils/formatFormTown";
 import formatFormDate from "@common/utils/formatFormDate";
+import focusFirstErrorField from "@/utils/focusFirstErrorField";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
@@ -122,6 +122,7 @@ const canSetUpdatedAt = computed(() => {
 
     return updatedAt < yesterday;
 });
+
 const minUpdatedAt = computed(() => {
     if (!town.value) {
         return null;
@@ -147,6 +148,7 @@ const location = ref(
           }
         : null
 );
+
 const hasJusticePermission = computed(() => {
     if (!location.value) {
         return false;
@@ -157,6 +159,7 @@ const hasJusticePermission = computed(() => {
         location.value
     );
 });
+
 const hasOwnerPermission = computed(() => {
     if (!location.value) {
         return false;
@@ -195,6 +198,13 @@ watch(address, async () => {
         } catch (e) {
             console.log("Failed fetching more information about the city", e);
         }
+    }
+});
+
+// Watch pour le focus automatique sur les erreurs de validation
+watch(errors, (newErrors) => {
+    if (Object.keys(newErrors).length > 0) {
+        focusFirstErrorField(newErrors);
     }
 });
 
@@ -346,9 +356,10 @@ function formatValuesForApi(v, initOrEdit) {
         }
     });
 
-    return {
+    const result = {
         ...Object.keys(validationSchema.value.fields).reduce((acc, key) => {
-            acc[key] = v[key];
+            // Normaliser undefined en null pour la cohérence
+            acc[key] = v[key] === undefined ? null : v[key];
             return acc;
         }, {}),
         ...formatDateFields(dateFields, v),
@@ -358,14 +369,29 @@ function formatValuesForApi(v, initOrEdit) {
         citycode,
         address: label,
         coordinates: `${v.coordinates[0]},${v.coordinates[1]}`,
-        existingAttachments: Array.from(v.attachments),
+        existingAttachments: Array.from(v.attachments || []),
         newAttachments: completeAttachments,
-        preparatory_phases_toward_resorption:
-            v.preparatory_phases_toward_resorption,
+        preparatory_phases_toward_resorption: Array.from(
+            v.preparatory_phases_toward_resorption || []
+        ),
         terminated_preparatory_phases_toward_resorption:
             buildTerminatedPreparatoryPhases(initOrEdit),
         owner: buildOwners(v.owner),
     };
+
+    // Normaliser les tableaux (convertir Proxy en Array)
+    for (const key of Object.keys(result)) {
+        if (
+            result[key] &&
+            typeof result[key] === "object" &&
+            typeof result[key][Symbol.iterator] === "function" &&
+            !Array.isArray(result[key])
+        ) {
+            result[key] = Array.from(result[key]);
+        }
+    }
+
+    return result;
 }
 
 const deleteOriginalAttachment = (attachments) => {
@@ -412,20 +438,6 @@ function buildTerminatedPreparatoryPhases(initOrEdit) {
 const hasPreparatoryPhases = computed(() => {
     return town.value?.preparatoryPhasesTowardResorption?.length > 0;
 });
-
-// Méthode pour définir le focus sur le composant ErrorSummary en cas d'erreur remontée par le backend
-const focusOnErrorSummary = async () => {
-    await nextTick();
-
-    const errorSummary = document.getElementById("erreurs");
-
-    if (errorSummary) {
-        errorSummary
-            .scrollIntoView({ behavior: "smooth", block: "start" })
-            .setAttribute("tabindex", "-1")
-            .focus();
-    }
-};
 
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
@@ -481,9 +493,9 @@ defineExpose({
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             if (e?.fields) {
-                setErrors(e.fields);
+                const mergedErrors = { ...errors.value, ...e.fields };
+                setErrors(mergedErrors);
             }
-            focusOnErrorSummary();
 
             notificationStore.error(
                 "Echec de la création ou mise à jour du site",
