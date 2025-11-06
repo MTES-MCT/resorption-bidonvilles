@@ -43,10 +43,12 @@ export type TownInput = {
     declared_at: Date,
     field_type?: string,
     field_type_full: {
+        id?: string,
         label: string,
     },
     detailed_address?: string,
     owner_type_full: {
+        id?: string,
         label: string,
     },
     owner?: { owners: ParcelOwnerInsert[] },
