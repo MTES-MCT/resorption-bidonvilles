@@ -3,7 +3,6 @@ import shantytownParcelOwner from '#server/models/shantytownParcelOwnerModel';
 import ServiceError from '#server/errors/ServiceError';
 import { sequelize } from '#db/sequelize';
 import { AuthUser } from '#server/middlewares/authMiddleware';
-// import { Location } from '#server/models/geoModel/Location.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { ParcelOwnerInsert, RawParcelOwner } from '#root/types/resources/ParcelOwner.d';
 
