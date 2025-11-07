@@ -10,7 +10,7 @@ export default computed(() => {
             "fieldType",
             "population",
             "status",
-            "ownerType",
+            // "ownerType",
             "poi",
         ],
         definition: {
@@ -92,17 +92,17 @@ export default computed(() => {
                     { value: "open", label: "Existants", checked: true },
                 ],
             },
-            ownerType: {
-                icon: "users",
-                label: "Type de propriétaire",
-                options: (configStore.config?.owner_types || []).map(
-                    (type) => ({
-                        value: type.id,
-                        label: type.label,
-                        checked: true,
-                    })
-                ),
-            },
+            // ownerType: {
+            //     icon: "users",
+            //     label: "Type de propriétaire",
+            //     options: (configStore.config?.owner_types || []).map(
+            //         (type) => ({
+            //             value: type.id,
+            //             label: type.label,
+            //             checked: true,
+            //         })
+            //     ),
+            // },
             poi: {
                 icon: "map-marker-alt",
                 label: "Points d'intérêts",
