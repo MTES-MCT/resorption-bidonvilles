@@ -55,10 +55,12 @@ const filterBy = {
     },
 
     ownerType(shantytown, checked) {
-        return (
-            shantytown.ownerType &&
-            checked.indexOf(shantytown.ownerType.id) !== -1
-        );
+        const owners = shantytown.owner?.owners;
+        if (!Array.isArray(owners) || checked.length === 0) {
+            return false;
+        }
+
+        return owners.some((owner) => checked.includes(owner?.type ?? null));
     },
 };
 
@@ -68,8 +70,9 @@ export default function (shantytowns, filters) {
     );
 
     return shantytowns.filter((shantytown) => {
-        return filterIds.every((filterId) =>
-            filterBy[filterId](shantytown, filters[filterId])
-        );
+        const toReturn = filterIds.every((filterId) => {
+            return filterBy[filterId](shantytown, filters[filterId]);
+        });
+        return toReturn;
     });
 }
