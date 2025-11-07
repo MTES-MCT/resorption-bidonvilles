@@ -9,6 +9,7 @@
     >
         <template #before-input>
             <span class="font-bold not-italic" aria-hidden="true">{{ label }}</span>
+            <span v-if="hint" class="fr-hint-text block mb-1">{{ hint }}</span>
         </template>
         <template #default>
             <div class="relative flex flex-row gap-0">
@@ -34,7 +35,8 @@
                     class="pl-10"
                 />
                 <DsfrButton
-                    label="Vider"
+                    v-if="isLoading || organizationSearchLabel?.length > 2"
+                    :label="!isLoading ? 'Vider' : ''"
                     tertiary
                     no-outline
                     size="sm"
@@ -80,7 +82,7 @@
 </template>
 
 <script setup>
-import { toRefs, ref, computed, onBeforeUnmount } from "vue";
+import { toRefs, ref, computed, onBeforeUnmount, watch } from "vue";
 import debounce from "../../utils/debounce";
 import { useIsSubmitting } from "vee-validate";
 
@@ -91,6 +93,11 @@ const props = defineProps({
         type: [Array, String],
         required: false,
         default: () => []
+    },
+    hint: {
+        type: String,
+        required: false,
+        default: ""
     },
     modelValue: {
         type: Object,
@@ -146,7 +153,8 @@ let callId = 0;
 
 const isSubmitting = useIsSubmitting();
 
-const organizationSearchLabel = computed(() => modelValue.value?.search || "");
+// const organizationSearchLabel = computed(() => modelValue.value?.search || "");
+const organizationSearchLabel = ref(modelValue.value?.search || "");
 
 const totalPages = computed(() => {
     return Math.ceil(flatResults.value.length / itemsPerPage);
@@ -349,15 +357,16 @@ function selectItem(item) {
     });
 }
 
-function clear(options = {}) {
+function clear(options = {}) {    
     rawResults.value = [];
     selectedItem.value = null;
+    organizationSearchLabel.value = null;
     abort();
     sendEvent(undefined);
 }
 
 function sendEvent(data) {
-    if (data !== undefined && lastEvent?.search === data.search && lastEvent?.data === data.data) {
+    if (data !== undefined && lastEvent?.search === data?.search && lastEvent?.data === data?.data) {
         return;
     }
 
@@ -444,6 +453,13 @@ const results = computed(() => {
         return acc;
     }, []);
 });
+
+watch(() => modelValue.value,
+    (value) => {
+        organizationSearchLabel.value = value?.search ?? "";
+    },
+    { immediate: true },
+);
 
 defineExpose({
     clear,

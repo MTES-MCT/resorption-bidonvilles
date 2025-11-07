@@ -10,8 +10,8 @@ export default (variant) => ({
         request_type: "Vous souhaitez...",
         organization_category:
             variant === "demande-acces"
-                ? "Quelle structure ?"
-                : "Quelle est la structure de l'utilisateur ?",
+                ? "Dénomination de la structure"
+                : "Dénomination de la structure de l'utilisateur",
         organization_type: "Précisez la structure",
         organization_public: "Territoire de rattachement",
         territorial_collectivity: "Territoire de la collectivité",

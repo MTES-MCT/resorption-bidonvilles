@@ -4,6 +4,7 @@
         name="organization"
         :label="label"
         :errors="errors.length > 0 ? errors : []"
+        hint="3 caractères minimum"
         placeholder="Nom ou acronyme de votre organisation"
         :fn="autocompleteFn"
         v-model="organization"
