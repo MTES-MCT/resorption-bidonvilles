@@ -207,7 +207,7 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
                 array_remove(array_agg(stt.toilet_type::text), NULL) AS toilet_types
             FROM "ShantytownHistories" s
             LEFT JOIN shantytown_toilet_types_history stt ON stt.fk_shantytown = s.hid
-            GROUP BY s.hid)
+            GROUP BY s.hid),
             shantytown_parcel_owners AS (SELECT
                 s.hid AS fk_shantytown,
                 COALESCE(
