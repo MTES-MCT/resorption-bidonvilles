@@ -3,7 +3,6 @@ import { useConfigStore } from "@/stores/config.store";
 
 export default computed(() => {
     const configStore = useConfigStore();
-    console.log("Config Store:", configStore.config);
 
     return {
         order: [
