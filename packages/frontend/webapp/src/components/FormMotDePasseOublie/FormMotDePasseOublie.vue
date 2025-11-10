@@ -12,7 +12,9 @@
 
         <template v-slot:button>
             <p class="text-center">
-                <Button type="submit">Renouveler mon mot de passe</Button>
+                <DsfrButton type="submit"
+                    >Renouveler mon mot de passe</DsfrButton
+                >
             </p>
         </template>
     </FormPublic>
@@ -23,7 +25,6 @@
 import router from "@/helpers/router";
 
 // components
-import { Button } from "@resorptionbidonvilles/ui";
 import FormPublic from "@/components/FormPublic/FormPublic.vue";
 import FormMotDePasseOublieInputEmail from "./inputs/FormMotDePasseOublieInputEmail.vue";
 
