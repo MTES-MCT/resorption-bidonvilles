@@ -75,7 +75,13 @@ export default (
     }
 
     // personal information
-    schema.email = string().required().email().label(labels.email);
+    schema.email = string()
+        .required()
+        .matches(
+            /^(([^<()>[\]\\.,;:\s@"]+(\.[^<()>[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            `${labels.email} n'est pas valide`
+        )
+        .label(labels.email);
     if (["demande-acces", "demande-contact"].includes(variant)) {
         schema.verif_email = string()
             .required()
@@ -91,7 +97,25 @@ export default (
         .required()
         .label(labels.last_name);
     const phone = string()
-        .matches(/^[0-9 ]*$/, "Le numéro de téléphone n'est pas valide")
+        .test(
+            "phone-fr",
+            "Le numéro de téléphone n'est pas valide",
+            (value = "") => {
+                const sanitized = value.replace(/[\s.-]/g, "");
+                if (sanitized.length === 0) {
+                    return true;
+                }
+
+                const metropolitan =
+                    /^0\d{9}$/.test(sanitized) || /^\+33\d{9}$/.test(sanitized);
+                const dom =
+                    /^\+(262|269|590|594|596|508|681|687|689)\d{9}$/.test(
+                        sanitized
+                    );
+
+                return metropolitan || dom;
+            }
+        )
         .label(labels.phone);
     schema.phone = ["demande-acces", "demande-contact"].includes(variant)
         ? phone.required()
@@ -108,12 +132,17 @@ export default (
     // organization type
     if (variant === "demande-acces") {
         schema.organization = object()
+            .nullable()
+            .transform((value, originalValue) =>
+                originalValue === "" ? null : value
+            )
             .customSchema(
                 object({
                     data: object({
                         id: number(),
                         category: string(),
                     }).nullable(),
+                    search: string().min(3).max(100).required(),
                 })
             )
             .required()
@@ -132,10 +161,23 @@ export default (
             })
             .label(labels.organization_public);
         schema.territorial_collectivity = object()
-            .when("organization_category", {
-                is: "territorial_collectivity",
+            .nullable()
+            .transform((value, originalValue) =>
+                originalValue === "" ? null : value
+            )
+            .when(["organization_category", "organization"], {
+                is: (category, organization) =>
+                    category === "territorial_collectivity" && !!organization,
                 then: (schema) =>
                     schema.required().customSchema(
+                        object({
+                            data: object({
+                                id: number().required(),
+                            }).required(),
+                        })
+                    ),
+                otherwise: (schema) =>
+                    schema.nullable().customSchema(
                         object({
                             data: object({
                                 id: number().required(),
@@ -145,10 +187,23 @@ export default (
             })
             .label(labels.territorial_collectivity);
         schema.association = object()
-            .when("organization_category", {
-                is: "association",
+            .nullable()
+            .transform((value, originalValue) =>
+                originalValue === "" ? null : value
+            )
+            .when(["organization_category", "organization"], {
+                is: (category, organization) =>
+                    category === "association" && !!organization,
                 then: (schema) =>
                     schema.required().customSchema(
+                        object({
+                            data: object({
+                                id: number().required(),
+                            }).required(),
+                        })
+                    ),
+                otherwise: (schema) =>
+                    schema.nullable().customSchema(
                         object({
                             data: object({
                                 id: number().required(),
@@ -164,10 +219,23 @@ export default (
             })
             .label(labels.organization_administration);
         schema.private_organization = object()
-            .when("organization_category", {
-                is: "private_organization",
+            .nullable()
+            .transform((value, originalValue) =>
+                originalValue === "" ? null : value
+            )
+            .when(["organization_category", "organization"], {
+                is: (category, organization) =>
+                    category === "private_organization" && !!organization,
                 then: (schema) =>
                     schema.required().customSchema(
+                        object({
+                            data: object({
+                                id: number().required(),
+                            }).required(),
+                        })
+                    ),
+                otherwise: (schema) =>
+                    schema.nullable().customSchema(
                         object({
                             data: object({
                                 id: number().required(),
