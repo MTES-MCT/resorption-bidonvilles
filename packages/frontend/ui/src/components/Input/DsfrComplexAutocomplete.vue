@@ -7,7 +7,7 @@
         type="text"
         required
         :valid-message="
-            modelValue?.data?.id || modelValue?.search === 'Je ne trouve pas ma structure' && errors.length === 0 && `${label} valide`
+            (modelValue?.data?.id || modelValue?.search === 'Je ne trouve pas ma structure') && errors.length === 0 && `${label} valide`
         "
     >
         <template #before-input>
