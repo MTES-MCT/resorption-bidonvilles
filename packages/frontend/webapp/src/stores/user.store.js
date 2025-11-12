@@ -45,14 +45,40 @@ export const useUserStore = defineStore("user", {
                     allowedRegions.includes(region)
             );
         },
+        departementsForMetrics() {
+            const configStore = useConfigStore();
+            const { departements } = configStore.config;
+            const permission = this.user.permissions.shantytown.list;
+
+            if (permission.allowed_on_national === true) {
+                return departements;
+            }
+
+            // Granularité minimum pour la visualisation des données: département
+            const allowedDepartements = [
+                ...permission.allowed_on.cities.map((c) => c.departement.code),
+                ...permission.allowed_on.epci.map((e) => e.departement.code),
+                ...permission.allowed_on.departements.map(
+                    (d) => d.departement.code
+                ),
+            ];
+            const allowedRegions = permission.allowed_on.regions.map(
+                (r) => r.region.code
+            );
+            return departements.filter(
+                ({ code, region }) =>
+                    allowedDepartements.includes(code) ||
+                    allowedRegions.includes(region)
+            );
+        },
         firstMainArea() {
             if (!this.user?.intervention_areas) {
                 return null;
             }
 
-            return this.user.intervention_areas.areas.find(
-                (area) => area.is_main_area === true
-            );
+            return this.user.intervention_areas.areas.find((area) => {
+                return area.is_main_area === true;
+            });
         },
         hasAcceptedCharte() {
             return this.user?.charte_engagement_a_jour === true;
