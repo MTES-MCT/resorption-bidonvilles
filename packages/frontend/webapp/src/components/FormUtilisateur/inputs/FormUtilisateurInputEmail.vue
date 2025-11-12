@@ -8,6 +8,9 @@
         required
         :autocomplete="autocomplete"
         @blur="handleBlur"
+        :valid-message="
+            email?.length > 0 && errors.length === 0 && `${label} valide`
+        "
     >
         <template #before-input>
             <div class="flex items-center gap-1">
@@ -18,6 +21,7 @@
                     >*</span
                 >
             </div>
+            <span v-if="hint" class="fr-hint-text">{{ hint }}</span>
         </template>
     </DsfrInputGroup>
 </template>
@@ -32,6 +36,11 @@ const props = defineProps({
     showMandatoryStar: Boolean,
     "aria-label": String,
     autocomplete: String,
+    hint: {
+        type: String,
+        required: false,
+        default: "",
+    },
 });
 
 const { label } = toRefs(props);

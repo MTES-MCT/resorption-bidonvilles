@@ -7,6 +7,11 @@
         v-model="organizationOther"
         required
         @blur="handleBlur"
+        :valid-message="
+            organizationOther?.length > 1 &&
+            errors.length === 0 &&
+            `Dénomination de la structure valide`
+        "
     >
         <template #before-input>
             <span class="font-bold not-italic" aria-hidden="true">{{

@@ -6,10 +6,13 @@
         :disabled="isDisabled"
         type="text"
         required
+        :valid-message="
+            modelValue?.data?.id || modelValue?.search === 'Je ne trouve pas ma structure' && errors.length === 0 && `${label} valide`
+        "
     >
         <template #before-input>
             <span class="font-bold not-italic" aria-hidden="true">{{ label }}</span>
-            <span v-if="hint" class="fr-hint-text block mb-1">{{ hint }}</span>
+            <span v-if="hint" class="fr-hint-text">{{ hint }}</span>
         </template>
         <template #default>
             <div class="relative flex flex-row gap-0">
@@ -48,7 +51,7 @@
             </div>
         </template>
     </DsfrInputGroup>
-        <div class="absolute top-16 mt-2 w-full z-[2000] border-1 border-G300 bg-white" v-if="results.length > 0">
+        <div class="absolute left-0 top-full mt-2 w-full z-[2000] border-1 border-G300 bg-white" v-if="results.length > 0">
             <div v-if="showCategory" class="flex flex-col">
                 <div v-for="section in paginatedResults" :key="section.title" class="flex">
                     <div class="w-40 px-3 py-2 text-right text-sm text-G700 border-r border-G200 border-b">

@@ -9,6 +9,11 @@
         inline
         v-model="legal"
         @update="handleBlur"
+        :valid-message="
+            legal === true &&
+            errors.length === 0 &&
+            `Le champ '${label}' est valide`
+        "
     />
 </template>
 

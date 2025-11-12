@@ -7,6 +7,11 @@
         v-model="organizationOtherAcronyme"
         required
         @blur="handleBlur"
+        :valid-message="
+            organizationOtherAcronyme?.length > 0 &&
+            errors.length === 0 &&
+            `Acronyme de la structure valide`
+        "
     >
         <template #before-input>
             <span class="font-bold not-italic" aria-hidden="true">{{

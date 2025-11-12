@@ -7,6 +7,9 @@
         v-model="email"
         required
         @blur="handleBlur"
+        :valid-message="
+            email?.length > 0 && errors.length === 0 && `${label} valide`
+        "
     >
         <template #before-input>
             <span class="font-bold not-italic" aria-hidden="true">{{

@@ -7,6 +7,9 @@
         small
         v-model="values"
         @blur="handleBlur"
+        :valid-message="
+            values && errors.length === 0 && `Le champ '${label}' est valide`
+        "
         class="!mb-0"
     >
         <template #legend>

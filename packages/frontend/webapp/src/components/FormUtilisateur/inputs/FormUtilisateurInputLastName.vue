@@ -7,6 +7,11 @@
         v-model="lastName"
         required
         @blur="handleBlur"
+        :spellcheck="false"
+        autocomplete="family-name"
+        :valid-message="
+            lastName?.length > 1 && errors.length === 0 && `${label} valide`
+        "
     >
         <template #before-input>
             <div class="flex items-center gap-1">

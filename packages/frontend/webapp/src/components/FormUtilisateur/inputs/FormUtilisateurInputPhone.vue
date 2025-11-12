@@ -7,11 +7,17 @@
         v-model="phone"
         required
         @blur="handleBlur"
+        :valid-message="
+            phone?.length > 0 && errors.length === 0 && `${label} valide`
+        "
     >
         <template #before-input>
             <span class="font-bold not-italic" aria-hidden="true">{{
                 label
             }}</span>
+            <span class="fr-hint-text"
+                >Format attendu : (+33) 1 22 33 44 55</span
+            >
         </template>
     </DsfrInputGroup>
 </template>

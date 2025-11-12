@@ -7,6 +7,11 @@
         v-model="organizationOtherTerritory"
         required
         @blur="handleBlur"
+        :valid-message="
+            organizationOtherTerritory?.length > 0 &&
+            errors.length === 0 &&
+            `Territoire de la structure valide`
+        "
     >
         <template #before-input>
             <span class="font-bold not-italic" aria-hidden="true">{{

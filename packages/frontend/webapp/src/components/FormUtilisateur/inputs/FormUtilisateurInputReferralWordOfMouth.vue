@@ -7,6 +7,11 @@
         v-model="referralWordOfMouth"
         required
         @blur="handleBlur"
+        :valid-message="
+            referralWordOfMouth?.length > 0 &&
+            errors.length === 0 &&
+            `Le champ '${label}' est valide`
+        "
     >
         <template #before-input>
             <span class="font-bold not-italic" aria-hidden="true">{{

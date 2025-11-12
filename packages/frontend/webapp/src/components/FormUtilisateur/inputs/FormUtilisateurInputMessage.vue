@@ -9,6 +9,11 @@
         isTextarea
         rows="8"
         @blur="handleBlur"
+        :valid-message="
+            accessRequestMessage?.length > 9 &&
+            errors.length === 0 &&
+            `Le champ '${label}' est valide`
+        "
     >
         <template #before-input>
             <span class="font-bold not-italic" aria-hidden="true">{{

@@ -5,8 +5,13 @@
         :disabled="isSubmitting || disabled"
         type="text"
         v-model="firstName"
+        autocomplete="given-name"
+        :spellcheck="false"
         required
         @blur="handleBlur"
+        :valid-message="
+            firstName?.length > 1 && errors.length === 0 && `${label} valide`
+        "
     >
         <template #before-input>
             <div class="flex items-center gap-1">

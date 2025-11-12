@@ -6,11 +6,18 @@
         type="text"
         v-model="position"
         required
+        :valid-message="
+            position?.length > 2 && errors.length === 0 && `${label} valide`
+        "
     >
         <template #before-input>
             <span class="font-bold not-italic" aria-hidden="true">{{
                 label
             }}</span>
+            <span class="fr-hint-text"
+                >Exemple : Directeur.trice, Chargé.e de mission... 3 caractères
+                minimum</span
+            >
         </template>
     </DsfrInputGroup>
 </template>
