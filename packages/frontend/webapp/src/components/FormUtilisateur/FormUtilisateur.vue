@@ -19,20 +19,21 @@
                 :label="labels.email"
                 :aria-label="labels.aria_email"
                 :autocomplete="email"
+                hint="Format attendu : nom@domaine.fr"
             />
             <FormUtilisateurInputEmailConfirmation
                 v-if="['demande-acces', 'demande-contact'].includes(variant)"
                 :label="labels.verif_email"
             />
-            <FormUtilisateurInputFirstName
-                :showMandatoryStar="variant === 'creer-utilisateur'"
-                :label="labels.first_name"
-                :autocomplete="first_name"
-            />
             <FormUtilisateurInputLastName
                 :showMandatoryStar="variant === 'creer-utilisateur'"
                 :label="labels.last_name"
                 :autocomplete="last_name"
+            />
+            <FormUtilisateurInputFirstName
+                :showMandatoryStar="variant === 'creer-utilisateur'"
+                :label="labels.first_name"
+                :autocomplete="first_name"
             />
             <FormUtilisateurInputPhone
                 :label="labels.phone"
@@ -100,9 +101,11 @@
             <FormUtilisateurInputLegal :label="labels.legal" />
         </template>
 
-        <template v-slot:button>
+        <template v-slot:button="{ disabled }">
             <p class="text-center">
-                <DsfrButton type="submit"><slot name="submit" /></DsfrButton>
+                <DsfrButton :disabled="disabled" type="submit"
+                    ><slot name="submit"
+                /></DsfrButton>
             </p>
         </template>
     </FormPublic>
