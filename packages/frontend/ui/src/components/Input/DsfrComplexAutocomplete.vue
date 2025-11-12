@@ -2,7 +2,7 @@
     <div class="relative">
     <DsfrInputGroup
         :descriptionId=name
-        :errorMessage="errors.length > 0 ? errors : ''"
+        :errorMessage="errors.length > 0 && results?.length === 0 ? errors : ''"
         :disabled="isDisabled"
         type="text"
         required
