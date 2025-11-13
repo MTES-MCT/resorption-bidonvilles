@@ -200,7 +200,7 @@ export default (mode: 'create' | 'update') => [
             let shantytowns = [];
             try {
                 shantytowns = await shantytownModel.findAll(req.user, [
-                    { shantytown_id: value },
+                    { shantytown_id: { value } },
                 ]);
             } catch (error) {
                 // eslint-disable-next-line no-console

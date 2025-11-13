@@ -6,7 +6,7 @@
                 <span v-if="shantytown.name">« {{ shantytown.name }} » </span>
             </span>
             <span class="font-normal">
-                {{ shantytown.city.name }}
+                {{ shantytown.city.name }} ({{ shantytown.departement.code }})
             </span>
         </div>
     </div>
@@ -21,7 +21,7 @@
 <script setup>
 import { toRefs } from "vue";
 import formatDate from "@common/utils/formatDate.js";
-import isSolved from "@/utils/isShantytownSolved";
+import isSolved from "@/utils/isShantytownResorbed";
 import isClosed from "@/utils/isShantytownClosed";
 
 const props = defineProps({

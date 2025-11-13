@@ -2,7 +2,7 @@ import moment from 'moment';
 import { Paragraph, TextRun, AlignmentType } from 'docx';
 
 export default (shantytown) => {
-    const currentDate = moment().utcOffset(2).locale('fr');
+    const currentDate = moment().utc().locale('fr');
     const lastUpdate = moment(new Date(shantytown.updatedAt * 1000)).format('DD/MM/YYYY');
 
     return [

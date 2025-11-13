@@ -127,11 +127,13 @@ const groupedFilters = {
         ],
     },
     close: {
-        default: [filters.solvedOrClosed],
-        optional: [
-            filters.target,
-            filters.origin,
+        default: [
+            filters.resorbedOrClosed,
             filters.closingReason,
+            filters.target,
+        ],
+        optional: [
+            filters.origin,
             ...(userStore.hasJusticePermission ? [filters.justice] : []),
             ...(userStore.hasJusticePermission
                 ? [filters.administrativeOrder]

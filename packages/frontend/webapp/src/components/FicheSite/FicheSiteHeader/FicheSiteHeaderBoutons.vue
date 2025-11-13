@@ -24,7 +24,7 @@
             </RouterLink>
             <DsfrButton
                 size="sm"
-                icon="ri-file-excel-fill"
+                icon="ri-file-word-fill"
                 secondary
                 @click="openExportModal"
                 >Exporter</DsfrButton
@@ -93,7 +93,7 @@
                         ? 'Supprimer l\'alerte Canicule'
                         : 'Activer l\'alerte Canicule'
                 "
-                icon="carbon:temperature-hot"
+                icon="ri:sun-fill"
                 secondary
                 :disabled="heatwaveRequestStatus?.loading"
                 @click.prevent.stop="toggleHeatwave"

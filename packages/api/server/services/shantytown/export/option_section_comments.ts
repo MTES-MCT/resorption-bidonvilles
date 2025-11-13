@@ -3,6 +3,7 @@ import {
 } from 'docx';
 
 import moment from 'moment';
+import formatTimestamp from '#server/utils/formatTimestamp';
 import heading from './heading';
 
 export default (shantytown) => {
@@ -23,7 +24,7 @@ export default (shantytown) => {
                     },
                     children: [
                         new TextRun({
-                            text: `${moment(comment.createdAt * 1000).utcOffset(2).locale('fr').format('DD MMMM YYYY')} à ${moment(comment.createdAt * 1000).utcOffset(2).locale('fr').format('HH:mm')}`,
+                            text: `${formatTimestamp(comment.createdAt, 'd M y à h:i')}`,
                             break: 1,
                             bold: false,
                             size: 22,

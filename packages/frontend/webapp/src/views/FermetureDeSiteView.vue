@@ -11,12 +11,8 @@
             d'urgence.</template
         >
         <template v-slot:actions>
-            <Button
-                icon="rotate-right"
-                iconPosition="left"
-                type="button"
-                @click="load"
-                >Réessayer</Button
+            <DsfrButton icon="fr-icon-refresh-line" @click="load"
+                >Réessayer</DsfrButton
             >
             <ButtonContact />
         </template>
@@ -29,16 +25,10 @@
             }}<template v-if="town.name"> « {{ town.name }} »</template>
         </template>
         <template v-slot:buttons>
-            <Button
-                variant="primaryOutline"
-                type="button"
-                @click="back"
-                class="!border-2 !border-primary hover:!bg-primary"
-                >Annuler</Button
-            >
-            <Button @click="submit" :loading="form?.isSubmitting">{{
+            <DsfrButton secondary @click.prevent="back">Annuler</DsfrButton>
+            <DsfrButton @click="submit" :loading="form?.isSubmitting">{{
                 submitWording
-            }}</Button>
+            }}</DsfrButton>
         </template>
 
         <ContentWrapper size="intermediate">
@@ -53,7 +43,7 @@ import { useTownsStore } from "@/stores/towns.store.js";
 import { useUserStore } from "@/stores/user.store";
 import router, { setDocumentTitle } from "@/helpers/router";
 
-import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
 import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
 import LayoutForm from "@/components/LayoutForm/LayoutForm.vue";

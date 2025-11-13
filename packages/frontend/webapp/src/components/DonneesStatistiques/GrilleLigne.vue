@@ -86,7 +86,7 @@
         >
             <GrilleLigne
                 v-for="m in metrics.children"
-                :key="`${m.level}-${m.code}`"
+                :key="m.uid"
                 class="mt-2"
                 :metrics="m"
                 :variant="variant === 'primary' ? 'secondary' : 'tertiary'"

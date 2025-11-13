@@ -13,7 +13,12 @@
             >
         </div>
         <div v-else>
-            <TabList :tabs="tabs" v-model="currentTab" class="mb-3" />
+            <TabList
+                :tabs="tabs"
+                v-model="currentTab"
+                class="mb-3"
+                :clickable="false"
+            />
             <TextInput
                 :name="`${name}_search`"
                 prefixIcon="search"
@@ -58,7 +63,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, onMounted, computed, nextTick } from "vue";
+import { toRefs, ref, onMounted, computed, nextTick } from "vue";
 import { useField, useFieldValue } from "vee-validate";
 import { useTownsStore } from "@/stores/towns.store";
 import formatDate from "@common/utils/formatDate.js";
@@ -108,14 +113,35 @@ const checked = ref(
     }, {})
 );
 
+const pluralize = (count, singular, plural) => (count > 1 ? plural : singular);
+
 const tabs = computed(() => {
+    const totalOpen = data.value.filter(
+        ({ status }) => status === "open"
+    ).length;
+    const totalClosed = data.value.filter(
+        ({ status }) => status !== "open"
+    ).length;
     return [
         {
             id: "selected",
-            label: `Sites sélectionnés (${value.value?.length || 0})`,
+            label: pluralize(
+                value.value?.length || 0,
+                "Site sélectionné",
+                "Sites sélectionnés"
+            ),
+            total: value.value ? value.value.length : 0,
         },
-        { id: "open", label: "Sites ouverts" },
-        { id: "closed", label: "Sites fermés" },
+        {
+            id: "open",
+            label: pluralize(totalOpen, "Site ouvert", "Sites ouverts"),
+            total: totalOpen,
+        },
+        {
+            id: "closed",
+            label: pluralize(totalClosed, "Site fermé", "Sites fermés"),
+            total: totalClosed,
+        },
     ];
 });
 

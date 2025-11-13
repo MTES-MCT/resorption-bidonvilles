@@ -3,12 +3,12 @@
     <NavBar />
     <main
         id="contenu-principal"
-        :class="!hero && !$slots.banner && paddingTop ? 'pt-12' : ''"
+        :class="!hero && !$slots.banner && paddingTop ? 'pt-8' : ''"
     >
         <div
             v-if="hero"
             class="h-44 bg-G300 text-white text-3xl sm:text-4xl lg:text-5xl bg-illustration"
-            :class="!$slots.banner && paddingTop ? 'mb-12' : ''"
+            :class="!$slots.banner && paddingTop ? 'mb-8' : ''"
         >
             <div
                 class="bg-G800 bg-opacity-85 h-full font-bold flex items-center drop-shadow-lg"
@@ -21,7 +21,7 @@
         <div
             v-if="$slots.banner"
             class="relative bg-G200"
-            :class="paddingTop ? 'mb-12' : ''"
+            :class="paddingTop ? 'mb-8' : ''"
         >
             <slot name="banner" />
         </div>

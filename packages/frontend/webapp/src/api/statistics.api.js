@@ -1,4 +1,5 @@
 import { axios } from "@/helpers/axios";
+import dateToString from "@common/utils/dateToString";
 
 export function getDashboard(locationType, locationCode) {
     const query = {};
@@ -18,8 +19,8 @@ export function getDashboard(locationType, locationCode) {
 export function exportTownsReport(from, to) {
     return axios.get(
         `/statistics/town-report?from=${encodeURIComponent(
-            from.toISOString().slice(0, 10)
-        )}&to=${encodeURIComponent(to.toISOString().slice(0, 10))}`,
+            dateToString(from)
+        )}&to=${encodeURIComponent(dateToString(to))}`,
         { responseType: "blob" }
     );
 }

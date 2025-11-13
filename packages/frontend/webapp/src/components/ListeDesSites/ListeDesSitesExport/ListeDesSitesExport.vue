@@ -1,36 +1,33 @@
 <template>
     <Modal closeWhenClickOutside @close="onClose" ref="modale">
-        <template v-slot:title>Exporter les {{ title }}</template>
+        <template v-slot:title
+            >Exporter les sites {{ whichTownsAreExported.label }}</template
+        >
         <template v-slot:body>
-            <ListeDesSitesExportSummary />
+            <ListeDesSitesExportSummary :isExportToday="isExportToday" />
             <ListeDesSitesExportDate v-if="canExportHistory" />
             <ListeDesSitesExportOptions :disabled="!isExportToday" />
             <ErrorSummary class="mt-4" v-if="error" :message="error" />
         </template>
 
         <template v-slot:footer>
-            <Button
-                variant="primaryOutline"
-                @click="() => modale.close()"
-                class="!border-2 !border-primary hover:!bg-primaryDark mr-2"
-                >Annuler</Button
+            <DsfrButton secondary @click="() => modale.close()" class="mr-2"
+                >Annuler</DsfrButton
             >
-            <Button
-                icon="file-excel"
-                iconPosition="left"
+            <DsfrButton
+                icon="ri-file-excel-fill"
                 @click="download"
                 :loading="isLoading"
-                >Exporter les
-                {{ townsStore.filteredTowns.length }} sites</Button
+                >{{ exportButtonLabel }}</DsfrButton
             >
         </template>
     </Modal>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { useForm } from "vee-validate";
-import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
+import { ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
@@ -43,6 +40,10 @@ import ListeDesSitesExportSummary from "./ListeDesSitesExportSummary.vue";
 import ListeDesSitesExportDate from "./ListeDesSitesExportDate.vue";
 import ListeDesSitesExportOptions from "./ListeDesSitesExportOptions.vue";
 
+onMounted(() => {
+    townsStore.exportOptions.splice(0);
+});
+
 const { values } = useForm({
     initialValues: {
         date: new Date(),
@@ -54,9 +55,39 @@ const userStore = useUserStore();
 const modale = ref(null);
 const isLoading = ref(false);
 const error = ref(null);
-const isClosed = computed(() => townsStore.filters.status === "close");
-const title = computed(() => {
-    return isClosed.value ? "sites fermés" : "sites existants";
+const whichTownsAreExported = computed(() => {
+    switch (townsStore.filters.status) {
+        case "open":
+            return {
+                status: "open",
+                label: "existants",
+            };
+        case "close":
+            if (
+                townsStore.filters.properties.resorbedOrClosed.includes(
+                    "resorbed"
+                ) &&
+                !townsStore.filters.properties.resorbedOrClosed.includes(
+                    "closed"
+                )
+            ) {
+                return {
+                    status: "resorbed",
+                    label: "résorbés",
+                };
+            }
+            return {
+                status: "closed",
+                label: "fermés",
+            };
+        case "inProgress":
+            return {
+                status: "inProgress",
+                label: "en cours de résorption",
+            };
+        default:
+            return "";
+    }
 });
 const canExportHistory = computed(() => {
     return userStore.hasPermission("shantytown_history.export");
@@ -65,6 +96,17 @@ const isExportToday = computed(() => {
     const today = formatDate(Date.now() / 1000, "d/m/y");
     const exportDate = formatDate(values.date?.getTime() / 1000, "d/m/y");
     return today === exportDate;
+});
+
+const exportButtonLabel = computed(() => {
+    if (isExportToday.value) {
+        const count = townsStore.filteredTowns.length;
+        if (count === 1) {
+            return "Exporter le site";
+        }
+        return `Exporter les ${count} sites`;
+    }
+    return "Exporter les sites";
 });
 
 function onClose() {
@@ -85,14 +127,15 @@ async function download() {
                 type: townsStore.filters.location?.typeUid || "nation",
                 code: townsStore.filters.location?.code || null,
             },
-            isClosed.value,
+            whichTownsAreExported.value.status,
             townsStore.exportOptions,
-            values.date
+            values.date,
+            townsStore.filters.properties
         );
         downloadBlob(
             new Blob([data]),
             `${formatDate(values.date.getTime() / 1000, "y-m-d")}-sites-${
-                isClosed.value ? "fermés" : "existants"
+                whichTownsAreExported.value.label
             }-resorption-bidonvilles.xlsx`
         );
         trackEvent("Export", "Export sites");
@@ -108,8 +151,3 @@ async function download() {
     isLoading.value = false;
 }
 </script>
-<style scoped>
-button {
-    border: inherit;
-}
-</style>

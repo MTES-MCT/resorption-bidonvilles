@@ -1,4 +1,5 @@
 import L from "leaflet";
+import collections from "../utils/icon-collections.js";
 
 const iconMap = {
     livingConditionsByTown: null,
@@ -10,13 +11,15 @@ const iconMap = {
         fire_prevention: "fire-extinguisher",
         working_toilets: "toilet",
         absence_of_pest_animals: "bug-slash",
-        heatwave: "temperature-high",
+        heatwave: collections.filter((c) => c.prefix === "ri")[0].icons[
+            "sun-fill"
+        ].body,
     },
     schooling: {
         number_of_schooled_minors: "school",
     },
 };
-// On donne temporairement les mêmes valeurs que summary aux lovingConditions
+// On donne temporairement les mêmes valeurs que summary aux livingConditions
 iconMap.livingConditionsByInhabitant = iconMap.summary;
 iconMap.livingConditionsByTown = iconMap.summary;
 
@@ -58,9 +61,29 @@ export default (town, activeTab) => {
 
                 color = town[key] === "good" ? "text-green" : "text-red";
             }
-            acc.push(
-                `<i class="fa-solid fa-${iconMap[activeTab][key]} ${color} ml-1"></i>`
-            );
+
+            // Double run temporaire tant que toutes les icônes ne sont pas DSFR
+            if (key === "heatwave") {
+                acc.push(
+                    `<svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        aria-hidden="true"
+                        role="img"
+                        width=".8em"
+                        height=".8em"
+                        viewBox="0 0 26 26"
+                        class="iconify iconify--ri vicon !text-secondary ml-1"
+                        style="font-size: 1.2rem; vertical-align: -0.2em; display: inline-block; color: inherit;"
+                    >
+                        ${iconMap[activeTab][key]}
+                    </svg>`
+                );
+            } else {
+                acc.push(
+                    `<i class="fa-solid fa-${iconMap[activeTab][key]} ${color} ml-1"></i>`
+                );
+            }
             return acc;
         }, [])
         .join("");

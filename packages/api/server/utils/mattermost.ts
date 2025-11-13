@@ -37,9 +37,9 @@ const checkLocation: (user: User) => string = (user) => {
 };
 
 const formatDate = ((dateToFormat: Date): string => {
-    const day = dateToFormat.getDate();
-    const month = dateToFormat.getMonth() + 1;
-    const year = dateToFormat.getFullYear();
+    const day = dateToFormat.getUTCDate();
+    const month = dateToFormat.getUTCMonth() + 1;
+    const year = dateToFormat.getUTCFullYear();
     return `${day}/${month}/${year}`;
 });
 

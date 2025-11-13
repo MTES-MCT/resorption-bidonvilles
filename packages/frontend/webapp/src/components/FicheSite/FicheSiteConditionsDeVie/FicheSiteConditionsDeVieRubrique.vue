@@ -1,7 +1,12 @@
 <template>
     <FicheSousRubrique>
         <div class="flex items-center" :class="colorClass">
-            <Icon class="mr-1 font-bold" :icon="icon" />
+            <VIcon
+                v-if="title === 'Alerte canicule'"
+                :name="icon"
+                class="mr-1 font-bold"
+            />
+            <Icon v-else class="mr-1 font-bold" :icon="icon" />
             <div>
                 <div class="flex items-center">
                     <div :class="[colorClass, 'font-bold', 'mr-1']">
@@ -143,8 +148,8 @@ const ICONS = {
     toImprove: "exclamation-triangle",
     bad: "times",
     unknown: "question",
-    activeHeatwave: "sun",
-    inactiveHeatwave: "temperature-half",
+    activeHeatwave: "ri:sun-fill",
+    inactiveHeatwave: "ri:sun-line",
 };
 const TEXTS = {
     good: "oui",

@@ -9,15 +9,30 @@ export default (variant) => {
             .label(labels.closed_with_solutions),
     };
 
+    const formatDateFR = (d) =>
+        new Intl.DateTimeFormat("fr-FR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        }).format(d);
+
     if (variant === "declare") {
         const maxClosedAt = new Date();
         maxClosedAt.setDate(maxClosedAt.getDate() + 1);
         maxClosedAt.setHours(0, 0, 0, 0);
+        const displayMaxClosedAt = new Date(maxClosedAt);
+        displayMaxClosedAt.setDate(displayMaxClosedAt.getDate() - 1);
 
         schema.closed_at = date()
             .typeError(`${labels.closed_at} est obligatoire`)
             .required()
-            .max(new Date())
+            .max(
+                maxClosedAt,
+                ({ label }) =>
+                    `${label} ne peut pas être postérieure au ${formatDateFR(
+                        displayMaxClosedAt
+                    )}`
+            )
             .label(labels.closed_at);
         schema.status = string()
             .required()

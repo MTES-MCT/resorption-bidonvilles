@@ -6,9 +6,10 @@
             :inlineInfo="inlineInfo"
             :showMandatoryStar="showMandatoryStar"
             :for="`dp-input-${id}`"
+            :error="!!errors.length"
         />
 
-        <div :class="width">
+        <div :class="width" class="mt-3">
             <DatePicker
                 v-model="date"
                 locale="fr"
@@ -22,6 +23,7 @@
                 :monthPicker="monthPicker"
                 v-bind="$attrs"
                 :uid="id"
+                @cleared="handleChange(null)"
             />
         </div>
         <InputError v-if="errors.length">{{ errors[0] }}</InputError>

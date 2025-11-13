@@ -3,29 +3,33 @@ import geoUtils from '#server/utils/geo';
 import shantytownModel from '#server/models/shantytownModel';
 import where from '#server/utils/permission/where';
 
-import { WhereClauseGroup } from '#server/models/_common/types/WhereClauseGroup';
-import { Where } from '#server/models/_common/types/Where';
+import { Where, WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import { Location } from '#server/models/geoModel/Location.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import actionModel from '#server/models/actionModel';
 import enrichShantytown from '#server/services/shantytown/_common/enrichShantytownWithALeastOneActionFinanced';
 import { ShantytownWithFinancedAction } from '#root/types/resources/Shantytown.d';
 import { FinancedShantytownAction } from '#root/types/resources/Action.d';
+import { PostSqlFilters, ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
+import setQueryFilters from './exportTowns.setQueryFilters';
+
+export default async function fetchCurrentData(user: AuthUser, locations: Location[], filters: ShantytownFilters): Promise<ShantytownWithFinancedAction[]> {
+    const queryFilters: Where = setQueryFilters(filters);
+
+    // Extraire les filtres post-SQL
+    const postSqlFilters: PostSqlFilters = {
+        exportedSitesStatus: filters.exportedSitesStatus,
+        actors: filters.actors,
+        conditions: filters.conditions,
+    };
 
 
-export default async (user: AuthUser, locations: Location[], closedTowns: boolean): Promise<ShantytownWithFinancedAction[]> => {
     const isNationalExport = locations.some(l => ['nation', 'metropole', 'outremer'].includes(l.type));
-    const filters: Where = [
-        {
-            status: {
-                not: closedTowns === true,
-                value: 'open',
-            },
-        },
-    ];
+
+    const townsFilters: Where = [...queryFilters]; // Copie des filtres reçus
 
     if (!isNationalExport) {
-        filters.push(
+        townsFilters.push(
             locations.reduce((acc, l, index) => {
                 acc[`location_${index}`] = {
                     query: `${geoUtils.fromGeoLevelToTableName(l.type)}.code`,
@@ -46,7 +50,7 @@ export default async (user: AuthUser, locations: Location[], closedTowns: boolea
         const outremer = ['971', '972', '973', '974', '975', '976', '977', '978', '984', '986', '987', '988', '989'];
         locations.forEach((l) => {
             if (l.type === 'metropole') {
-                filters.push({
+                townsFilters.push({
                     status: {
                         query: 'departements.code',
                         not: true,
@@ -54,7 +58,7 @@ export default async (user: AuthUser, locations: Location[], closedTowns: boolea
                     },
                 });
             } else if (l.type === 'outremer') {
-                filters.push({
+                townsFilters.push({
                     status: {
                         query: 'departements.code',
                         value: outremer,
@@ -64,20 +68,50 @@ export default async (user: AuthUser, locations: Location[], closedTowns: boolea
         });
     }
 
-    const towns = await shantytownModel.findAll(user, filters, 'export');
+    let towns = await shantytownModel.findAll(user, townsFilters, 'export');
+    if (towns.length === 0) {
+        return [];
+    }
 
+    // Filtre les sites en cours de résorption
+    if (postSqlFilters.exportedSitesStatus === 'inProgress') {
+        towns = towns.filter(town => town.preparatoryPhasesTowardResorption.length > 0);
+    }
+
+    // Filtre sur les intervenants
+    if (postSqlFilters.actors === 'yes') {
+        towns = towns.filter(town => town.actors.length > 0);
+    }
+    if (postSqlFilters.actors === 'no') {
+        towns = towns.filter(town => town.actors.length < 1 || town.actors === null);
+    }
+
+    // Filtres sur les conditions de vie
+    if (postSqlFilters.conditions) {
+        const filterToCondition = {
+            accessToSanitary: ['sanitary'],
+            accessToWater: ['water'],
+            accessToTrash: ['trash'],
+            accessToElectricity: ['electricity'],
+            vermin: ['vermin', 'pest_animals'],
+            firePreventionMeasures: ['firePrevention', 'fire_prevention'],
+        };
+
+        const livingConditionsFilters = decodeURIComponent(postSqlFilters.conditions).split(',');
+
+        towns = towns.filter(town => livingConditionsFilters.some(filter => filterToCondition[filter].some(key => town.livingConditions[key]
+                && ['bad', 'unknown'].includes(town.livingConditions[key].status.status))));
+    }
     const clauseGroup = where().can(user).do('read', 'action');
     const currentYear = moment(new Date()).format('YYYY');
     const townsWithFinancedActions = await actionModel.fetchFinancedActionsByYear(null, parseInt(currentYear, 10), clauseGroup);
     const transformedShantytowns = enrichShantytown(townsWithFinancedActions);
-    return towns.map((town: ShantytownWithFinancedAction) => {
+
+    return Promise.all(towns.map(async (town: ShantytownWithFinancedAction) => {
         const townWithFinancedActions: FinancedShantytownAction = transformedShantytowns.find((t:FinancedShantytownAction) => t.shantytown_id === town.id);
-        if (townWithFinancedActions) {
-            return {
-                ...town,
-                hasAtLeastOneActionFinanced: townWithFinancedActions.hasAtLeastOneActionFinanced,
-            };
-        }
-        return town;
-    });
-};
+        return {
+            ...town,
+            hasAtLeastOneActionFinanced: townWithFinancedActions ? townWithFinancedActions.hasAtLeastOneActionFinanced : undefined,
+        };
+    }));
+}

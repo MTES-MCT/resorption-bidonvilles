@@ -1,23 +1,21 @@
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import organizationModel from '#server/models/organizationModel';
-import { ShantytownExportListProperty } from '#server/services/shantytown/_common/serializeExportProperties';
+import { ShantytownExportListOption, ShantytownExportListProperty, ShantytownExportSection } from '#root/types/resources/ShantytownExportTypes.d';
 import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
+import { ExportedSitesStatus } from '#root/types/resources/exportedSitesStatus.d';
 
-export type ShantytownExportListOption = 'address_details' | 'owner' | 'living_conditions' | 'demographics' | 'justice' | 'actors' | 'comments';
-type ShantytownExportSection = {
-    title: string,
-    properties?: ShantytownExportListProperty[],
-    lastFrozen?: boolean,
-    subsections?: ShantytownExportSection[],
-};
+function isClosedTowns(exportedSitesStatus: ExportedSitesStatus): boolean {
+    return exportedSitesStatus !== 'open' && exportedSitesStatus !== 'inProgress';
+}
 
 export default async (
     user: AuthUser,
     options: ShantytownExportListOption[],
     properties: { [key: string]: ShantytownExportListProperty },
-    closedTowns: boolean,
+    exportedSitesStatus: ExportedSitesStatus,
     closingSolutions: ClosingSolution[],
 ): Promise<ShantytownExportSection[]> => {
+    const closedTowns = isClosedTowns(exportedSitesStatus);
     const sections: ShantytownExportSection[] = [];
 
     const localizationSection: ShantytownExportSection = {
@@ -30,7 +28,6 @@ export default async (
             properties.address,
             properties.name,
         ],
-        lastFrozen: true,
     };
     sections.push(localizationSection);
 
@@ -64,7 +61,6 @@ export default async (
     }
 
     if (options.indexOf('owner') !== -1 && user.isAllowedTo('access', 'shantytown_owner')) {
-        section.properties.push(properties.ownerType);
         section.properties.push(properties.owner);
     }
 
@@ -162,7 +158,6 @@ export default async (
                 properties.justiceRenderedAt,
                 properties.justiceRenderedBy,
                 properties.justiceChallenged,
-                properties.policeStatus,
                 properties.evacuationUnderTimeLimit,
                 properties.administrativeOrderEvacuationAt,
                 properties.administrativeOrderDecisionRenderedBy,
@@ -173,6 +168,7 @@ export default async (
                 properties.insalubrityOrderBy,
                 properties.insalubrityOrderAt,
                 properties.insalubrityParcels,
+                properties.policeStatus,
                 properties.policeRequestedAt,
                 properties.policeGrantedAt,
                 properties.bailiff,
@@ -194,6 +190,18 @@ export default async (
                     width: 20,
                     sum: true,
                 },
+            ],
+        });
+    }
+
+    // Section Phases de résorption : uniquement pour les sites "en cours de résorption" ou "résorbés"
+    // et si l'utilisateur a la permission d'accès ou est superuser (admin national)
+    const isResorptionOrResorbedSites = ['inProgress', 'resorbed'].includes(exportedSitesStatus);
+    if (isResorptionOrResorbedSites && (user.is_superuser || user.isAllowedTo('access', 'shantytown_resorption'))) {
+        sections.push({
+            title: 'Phases de résorption',
+            properties: [
+                properties.preparatoryPhasesTowardResorption,
             ],
         });
     }
@@ -231,7 +239,7 @@ export default async (
     }
 
     sections.push({
-        title: null,
+        title: 'Mise à jour',
         properties: [
             properties.updatedAt,
         ],
