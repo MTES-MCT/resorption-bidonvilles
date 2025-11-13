@@ -78,7 +78,7 @@ export default (
     schema.email = string()
         .required()
         .matches(
-            /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
+            /^[A-Za-z0-9._%+-]{1,30}@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
             `${labels.email} n'est pas valide`
         )
         .label(labels.email);
