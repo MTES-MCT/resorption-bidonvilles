@@ -25,7 +25,15 @@ export default {
 
     computed: {
         iconFull() {
-            return this.icon.includes("fa-") ? this.icon : `fa-solid fa-${this.icon}`;
+            if (Array.isArray(this.icon)) {
+                return this.icon.join(" ");
+            }
+            if (typeof this.icon === "string") {
+                return this.icon.includes("fa-")
+                    ? this.icon
+                    : `fa-solid fa-${this.icon}`;
+            }
+            return "";
         },
         classes() {
             return this.iconFull + (this.spin ? " fa-spin" : "");
