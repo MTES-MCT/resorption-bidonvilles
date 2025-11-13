@@ -7,6 +7,27 @@ import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
 import compareLocations from "@/utils/compareLocations";
 import logout from "@/utils/logout";
 
+function getAllowedDepartements(permission) {
+    const configStore = useConfigStore();
+    const { departements } = configStore.config;
+    if (permission.allowed_on_national === true) {
+        return departements;
+    }
+
+    const allowedDepartements = new Set([
+        ...permission.allowed_on.cities.map((c) => c.departement.code),
+        ...permission.allowed_on.epci.map((e) => e.departement.code),
+        ...permission.allowed_on.departements.map((d) => d.departement.code),
+    ]);
+    const allowedRegions = new Set(
+        permission.allowed_on.regions.map((r) => r.region.code)
+    );
+    return departements.filter(
+        ({ code, region }) =>
+            allowedDepartements.has(code) || allowedRegions.has(region)
+    );
+}
+
 export const useUserStore = defineStore("user", {
     state: () => {
         const tokenCreatedAt = localStorage.getItem("tokenCreatedAt");
@@ -21,55 +42,12 @@ export const useUserStore = defineStore("user", {
             return getDefaultLocationFilter(this.user);
         },
         departementsForActions() {
-            const configStore = useConfigStore();
-            const { departements } = configStore.config;
             const permission = this.user.permissions.action.create;
-
-            if (permission.allowed_on_national === true) {
-                return departements;
-            }
-
-            const allowedDepartements = [
-                ...permission.allowed_on.cities.map((c) => c.departement.code),
-                ...permission.allowed_on.epci.map((e) => e.departement.code),
-                ...permission.allowed_on.departements.map(
-                    (d) => d.departement.code
-                ),
-            ];
-            const allowedRegions = permission.allowed_on.regions.map(
-                (r) => r.region.code
-            );
-            return departements.filter(
-                ({ code, region }) =>
-                    allowedDepartements.includes(code) ||
-                    allowedRegions.includes(region)
-            );
+            return getAllowedDepartements(permission);
         },
         departementsForMetrics() {
-            const configStore = useConfigStore();
-            const { departements } = configStore.config;
             const permission = this.user.permissions.shantytown.list;
-
-            if (permission.allowed_on_national === true) {
-                return departements;
-            }
-
-            // Granularité minimum pour la visualisation des données: département
-            const allowedDepartements = [
-                ...permission.allowed_on.cities.map((c) => c.departement.code),
-                ...permission.allowed_on.epci.map((e) => e.departement.code),
-                ...permission.allowed_on.departements.map(
-                    (d) => d.departement.code
-                ),
-            ];
-            const allowedRegions = permission.allowed_on.regions.map(
-                (r) => r.region.code
-            );
-            return departements.filter(
-                ({ code, region }) =>
-                    allowedDepartements.includes(code) ||
-                    allowedRegions.includes(region)
-            );
+            return getAllowedDepartements(permission);
         },
         firstMainArea() {
             if (!this.user?.intervention_areas) {
