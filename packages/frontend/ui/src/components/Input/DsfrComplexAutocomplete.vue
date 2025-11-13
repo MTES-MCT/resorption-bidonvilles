@@ -61,14 +61,14 @@
       class="absolute left-0 top-full mt-2 w-full z-[2000] border-1 border-G300 bg-white"
       v-if="results.length > 0"
     >
-      <div v-if="showCategory"  class="flex flex-col">
+      <div v-if="showCategory" class="flex flex-col">
         <div
           class="flex w-full border-b border-g200 min-h-8 gap-2 p-2 pb-0"
           v-if="categoriesInSearch"
           @mouseup="isClickInsideDropdown = false"
           @mouseleave="isClickInsideDropdown = false"
         >
-            <p class="fr-hint-text">Filtrer par:</p>
+          <p class="fr-hint-text">Filtrer par:</p>
           <DsfrTags
             :tags="categoriesInSearch"
             v-model="filteredCategories"
@@ -501,8 +501,9 @@ const focusedItemId = computed(() => {
 
 const results = computed(() => {
   const categories = {};
-  // On réinitialise les catégories à chaque calcul
+  // On réinitialise les catégories et catégories sélectionnées à chaque calcul
   categoriesInSearch.value = new Set();
+  filteredCategories.value = [];
   return rawResults.value.reduce((acc, item) => {
     const { category } = item;
 
@@ -543,6 +544,6 @@ defineExpose({
 </script>
 <style scoped>
 :deep(.fr-tags-group > li) {
-    line-height: 0.2rem !important;
+  line-height: 0.2rem !important;
 }
 </style>
