@@ -16,6 +16,7 @@
                     :model-value="field.value"
                     @update:model-value="handleChange"
                     @blur="onBlur"
+                    @focus="focus"
                 />
                 <InputIcon position="after" :icon="suffixIcon" v-if="suffixIcon" />
             </div>
@@ -59,10 +60,11 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['blur']);
+const emit = defineEmits(['blur', 'focus']);
 
 const isSubmitting = useIsSubmitting();
 const textarea = ref(null);
+const isFocused = ref(false);
 
 const classes = computed(() => {
     const inputOptions = {
@@ -78,15 +80,20 @@ const classes = computed(() => {
 });
 
 const onBlur = (event) => {
+    isFocused.value = false;
     emit('blur', event);
 };
 
 const focus = () => {
+    isFocused.value = true;
+    emit('focus');
     textarea.value?.focus();
 };
+
 
 // Exposer la méthode 'focus' au composant parent
 defineExpose({
     focus,
+    isFocused,
 });
 </script>

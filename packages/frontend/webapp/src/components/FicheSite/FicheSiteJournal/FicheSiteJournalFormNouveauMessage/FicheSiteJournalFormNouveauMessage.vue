@@ -28,22 +28,25 @@
                 </p>
                 <ErrorSummary v-if="error" :message="error" class="mt-2" />
                 <p class="text-right space-x-2">
-                    <Button
-                        type="button"
-                        icon="rotate-left"
-                        iconPosition="left"
-                        variant="primaryOutline"
+                    <DsfrButton
+                        icon="fr-icon-arrow-go-back-fill"
+                        :disabled="isLoading"
+                        secondary
                         @click="resetForm"
-                        class="!border-2 !border-primary hover:!bg-primary"
-                        >Annuler</Button
+                        >Annuler</DsfrButton
                     >
-                    <Button
-                        :loading="isLoading"
-                        icon="paper-plane"
-                        iconPosition="left"
+                    <DsfrButton
+                        :disabled="isLoading"
+                        :icon="
+                            isLoading
+                                ? {
+                                      name: 'fa-solid:spinner',
+                                      animation: 'spin',
+                                  }
+                                : 'fr-icon-send-plane-fill'
+                        "
                         @click="submit"
-                        class="!border-2 !border-primary"
-                        >Publier le message</Button
+                        >Publier le message</DsfrButton
                     >
                 </p>
             </div>
@@ -69,7 +72,7 @@ import getHiddenHeight from "@/utils/getHiddenHeight";
 import isDeepEqual from "@/utils/isDeepEqual";
 import getFileFromPasteEvent from "@/utils/getFileFromPasteEvent";
 
-import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
+import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import DragZone from "@/components/DragZone/DragZone.vue";
 import FormNouveauMessageInputMessage from "./inputs/FormNouveauMessageInputMessage.vue";
 import FormNouveauMessageInputTags from "./inputs/FormNouveauMessageInputTags.vue";
