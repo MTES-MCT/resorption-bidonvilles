@@ -66,17 +66,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-center items-center gap-2 pt-4 h-9 border-t border-G200"
+                <div class="justify-center items-center pt-[1.75px] gap-2 h-9 w-full border-t border-G200 bg-white"
                     @mousedown.prevent.stop="isClickInsideDropdown = true"
                     @mouseup="isClickInsideDropdown = false"
                     @mouseleave="isClickInsideDropdown = false"
                     v-if="totalPages > 1"
                 >
-                <DsfrPagination
-                    
-                    v-model:current-page="currentPage"
-                    :pages="pages"
-                    :truncLimit="2"
+                    <DsfrPagination
+                        v-model:current-page="currentPage"
+                        :pages="pages"
+                        :truncLimit="2"
                     />
                 </div>
             </div>
