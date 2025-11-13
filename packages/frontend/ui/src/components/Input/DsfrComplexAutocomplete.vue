@@ -209,6 +209,8 @@ const isSubmitting = useIsSubmitting();
 const organizationSearchLabel = ref(modelValue.value?.search || "");
 
 const totalPages = computed(() => {
+    console.log("TotalPages:", Math.ceil(flatResults.value.length / itemsPerPage));
+    
   return Math.ceil(flatResults.value.length / itemsPerPage);
 });
 
@@ -222,11 +224,14 @@ const pages = computed(() => {
       label: i,
     });
   }
+  
   return results;
 });
 
 const flatResults = computed(() => {
   if (showCategory.value) {
+    console.log("Actual results:", results);
+    
     return results.value.flatMap((r) => r.items);
   }
   return rawResults.value;
@@ -416,6 +421,7 @@ function selectItem(item) {
 
 function clear(options = {}) {
   rawResults.value = [];
+  filteredCategories.value = [];
   selectedItem.value = null;
   organizationSearchLabel.value = null;
   abort();
@@ -501,9 +507,8 @@ const focusedItemId = computed(() => {
 
 const results = computed(() => {
   const categories = {};
-  // On réinitialise les catégories et catégories sélectionnées à chaque calcul
+  // On réinitialise les catégories à chaque calcul
   categoriesInSearch.value = new Set();
-  filteredCategories.value = [];
   return rawResults.value.reduce((acc, item) => {
     const { category } = item;
 
@@ -522,7 +527,7 @@ const results = computed(() => {
       });
     }
 
-    categories[category].items.push(item);
+    (filteredCategories.value.includes(category) || filteredCategories.value.length === 0) && categories[category].items.push(item);
     return acc;
   }, []);
 });
@@ -530,6 +535,7 @@ const results = computed(() => {
 watch(
   () => modelValue.value,
   (value) => {
+    filteredCategories.value = [];
     organizationSearchLabel.value = value?.search ?? "";
   },
   { immediate: true }
