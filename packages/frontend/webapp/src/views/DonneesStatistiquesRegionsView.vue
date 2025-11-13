@@ -47,10 +47,10 @@ const userStore = useUserStore();
 const ariane = computed(() => {
     const items = [{ label: "Visualisation des données" }];
 
-    if (!userStore.user.intervention_areas.is_national) {
-        items.push({ label: "Départements" });
-    } else {
+    if (userStore.user.intervention_areas.is_national) {
         items.push({ label: "Hexagone" });
+    } else {
+        items.push({ label: "Départements" });
     }
 
     return items;
