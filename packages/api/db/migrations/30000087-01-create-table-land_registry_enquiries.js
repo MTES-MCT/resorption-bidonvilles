@@ -1,21 +1,8 @@
+const { addForeignKey, removeForeignKey } = require('./common/manageForeignKeys');
+
 module.exports = {
     async up(queryInterface, Sequelize) {
         const transaction = await queryInterface.sequelize.transaction();
-
-        async function addForeignKey(table, fields, refTable, refField, onUpdate, onDelete, pTransaction) {
-            return queryInterface.addConstraint(table, {
-                fields,
-                type: 'foreign key',
-                name: `fk__${table}__${refTable}`,
-                references: {
-                    table: `${refTable}`,
-                    field: `${refField}`,
-                },
-                onUpdate: `${onUpdate}`,
-                onDelete: `${onDelete}`,
-                transaction: pTransaction,
-            });
-        }
 
         try {
             await queryInterface.createTable(
@@ -47,8 +34,8 @@ module.exports = {
                 { transaction },
             );
 
-            await addForeignKey('land_registry_enquiries', ['fk_user'], 'users', 'user_id', 'cascade', 'cascade', transaction);
-            await addForeignKey('land_registry_enquiries', ['fk_organization'], 'organizations', 'organization_id', 'cascade', 'cascade', transaction);
+            await addForeignKey(queryInterface, 'land_registry_enquiries', ['fk_user'], 'users', 'user_id', 'cascade', 'cascade', transaction);
+            await addForeignKey(queryInterface, 'land_registry_enquiries', ['fk_organization'], 'organizations', 'organization_id', 'cascade', 'cascade', transaction);
 
             await queryInterface.addIndex(
                 'land_registry_enquiries',
@@ -70,14 +57,9 @@ module.exports = {
     async down(queryInterface) {
         const transaction = await queryInterface.sequelize.transaction();
 
-        function removeForeignKey(table, refTable) {
-            return queryInterface.removeConstraint(`${table}`, `fk__${table}__${refTable}`,
-                { transaction });
-        }
-
         try {
-            await removeForeignKey('land_registry_enquiries', 'users');
-            await removeForeignKey('land_registry_enquiries', 'organizations');
+            await removeForeignKey(queryInterface, 'land_registry_enquiries', 'users', transaction);
+            await removeForeignKey(queryInterface, 'land_registry_enquiries', 'organizations', transaction);
             await queryInterface.dropTable('land_registry_enquiries', { transaction });
             await transaction.commit();
         } catch (error) {

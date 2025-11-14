@@ -49,7 +49,7 @@ export default async (user: User): Promise<ShantytownCommentExport[]> => {
 
     // build excel file
     return comments.map((raw): ShantytownCommentExport => {
-        const createdAt = moment(raw.commentCreatedAt).utcOffset(2);
+        const createdAt = moment(raw.commentCreatedAt);
 
         // Replaces the problematic sharps characters in the csv file
         const stringToReplace = /#/gi;

@@ -64,10 +64,14 @@ const props = defineProps({
 const { town } = toRefs(props);
 const panneauLateral = ref(null);
 
-defineExpose({
-    open() {
+const open = () => {
+    if (panneauLateral.value) {
         panneauLateral.value.open();
-    },
+    }
+};
+
+defineExpose({
+    open,
 });
 
 function checkFilter(field) {

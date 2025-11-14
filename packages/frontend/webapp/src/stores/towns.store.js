@@ -125,7 +125,22 @@ export const useTownsStore = defineStore("towns", () => {
     };
     watch(filters.search, resetPagination);
     watch(filters.location, resetPagination);
-    watch(filters.status, resetPagination);
+    watch(filters.status, () => {
+        resetPagination();
+        // Nettoyer les filtres incompatibles lors du changement d'onglet
+        const status = filters.status.value;
+        if (status === "close") {
+            // Nettoyer les filtres spécifiques aux sites ouverts/en cours
+            filters.properties.value.conditions = [];
+            filters.properties.value.actors = [];
+            filters.properties.value.heatwave = [];
+        }
+        if (status === "open" || status === "inProgress") {
+            // Nettoyer les filtres spécifiques aux sites fermés
+            filters.properties.value.closingReason = [];
+            filters.properties.value.resorbedOrClosed = [];
+        }
+    });
     watch(filters.properties, resetPagination, { deep: true });
     watch(
         [() => filteredTowns.value, () => sort.value],
@@ -165,7 +180,7 @@ export const useTownsStore = defineStore("towns", () => {
         filters.properties.value.heatwave = [];
         // Filtres spécifiques aux sites fermés
         filters.properties.value.closingReason = [];
-        filters.properties.value.solvedOrClosed = [];
+        filters.properties.value.resorbedOrClosed = [];
     }
 
     function reset() {
@@ -464,21 +479,14 @@ export const useTownsStore = defineStore("towns", () => {
 
         async edit(townId, data) {
             const notificationStore = useNotificationStore();
-            try {
-                const town = await edit(townId, data);
-                setTown(townId, town);
+            const town = await edit(townId, data);
+            setTown(townId, town);
 
-                notificationStore.success(
-                    "Mise à jour réussie",
-                    "Le site a bien été mis à jour"
-                );
-                return hash.value[townId];
-            } catch (error) {
-                notificationStore.error(
-                    "Echec de la mise à jour du site",
-                    error?.user_message || "Une erreur inconnue est survenue"
-                );
-            }
+            notificationStore.success(
+                "Mise à jour réussie",
+                "Le site a bien été mis à jour"
+            );
+            return hash.value[townId];
         },
 
         async deleteCommentAttachment(file, { townId, commentId }) {

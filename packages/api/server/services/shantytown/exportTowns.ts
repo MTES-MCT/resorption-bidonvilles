@@ -3,14 +3,22 @@ import ServiceError from '#server/errors/ServiceError';
 
 import { Location } from '#server/models/geoModel/Location.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
-import { ShantytownExportListOption } from '#server/services/shantytown/_common/createExportSections';
+import { ShantytownExportListOption } from '#root/types/resources/ShantytownExportTypes.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import getAllowedLocations from './exportTowns.getAllowedLocations';
 import fetchData from './exportTowns.fetchData';
 import generateExportFile from './exportTowns.generateExportFile';
 import saveStats from './exportTowns.saveStats';
+import { ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
 
-export default async (user: AuthUser, location: Location, options: ShantytownExportListOption[] = [], closedTowns: boolean = false, date: Date = new Date()) => {
+
+export default async (
+    user: AuthUser,
+    location: Location,
+    filters: ShantytownFilters,
+    options: ShantytownExportListOption[] = [],
+    date: Date = new Date(),
+) => {
     const isPastExport = moment(date).format('YYYY-MM-DD') !== moment(new Date()).format('YYYY-MM-DD');
 
     const locations = getAllowedLocations(user, location, isPastExport);
@@ -21,10 +29,10 @@ export default async (user: AuthUser, location: Location, options: ShantytownExp
         );
     }
 
-    // on collecte les données et on génère le fichier excel
     let data: Shantytown[];
     try {
-        data = await fetchData(user, locations, closedTowns, date);
+        // Récupérer les données à exporter
+        data = await fetchData(user, options, locations, filters, date);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
@@ -32,10 +40,11 @@ export default async (user: AuthUser, location: Location, options: ShantytownExp
     if (data.length === 0) {
         throw new ServiceError('fetch_failed', new Error('Il n\'y a aucun site à exporter pour le périmètre géographique demandé'));
     }
-    const buffer = await generateExportFile(user, data, options, locations, closedTowns, date);
 
-    // on enregistre cet export dans notre table de statistiques
-    await saveStats(user, locations, closedTowns);
+    // Générer le fichier Excel
+    const buffer = await generateExportFile(user, data, options, locations, filters.exportedSitesStatus, date);
 
+    // Enregistrer l'export dans la table de statistiques
+    await saveStats(user, locations, filters.exportedSitesStatus);
     return buffer;
 };

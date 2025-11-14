@@ -207,11 +207,47 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
                 array_remove(array_agg(stt.toilet_type::text), NULL) AS toilet_types
             FROM "ShantytownHistories" s
             LEFT JOIN shantytown_toilet_types_history stt ON stt.fk_shantytown = s.hid
+            GROUP BY s.hid),
+            shantytown_parcel_owners AS (SELECT
+                s.hid AS fk_shantytown,
+                COALESCE(
+                    jsonb_build_object(
+                        'shantytownId', s.shantytown_id::integer,
+                        'owners', jsonb_agg(
+                            jsonb_build_object(
+                                'ownerId', po.shantytown_parcel_owner_id::integer,
+                                'name', po.owner_name::text,
+                                'type', po.fk_owner_type::integer,
+                                'typeDetails', jsonb_build_object(
+                                    'id', ot.owner_type_id::integer,
+                                    'label', ot.label::text,
+                                    'position', ot.position::integer
+                                ),
+                                'active', po.active::boolean,
+                                'createdAt', po.created_at,
+                                'createdBy', jsonb_build_object(
+                                    'authorId', u.user_id::integer,
+                                    'authorFirstName', u.first_name::text,
+                                    'authorLastName', u.last_name::text,
+                                    'organizationName', COALESCE(org.name, '')::text,
+                                    'organizationId', org.organization_id::integer
+                                )
+                            )
+                        ) FILTER (WHERE po.shantytown_parcel_owner_id IS NOT NULL)
+                    ),
+                    jsonb_build_object('shantytownId', s.shantytown_id, 'owners', '[]'::jsonb)
+                ) AS owner
+            FROM "ShantytownHistories" s
+            LEFT JOIN shantytown_parcel_owners_history po ON po.fk_shantytown = s.hid
+            LEFT JOIN "users" u ON u.user_id = po.fk_user
+            LEFT JOIN "organizations" org ON org.organization_id = u.fk_organization
+            LEFT JOIN "owner_types" ot ON ot.owner_type_id = po.fk_owner_type
             GROUP BY s.hid)
             SELECT
                 sco.origins AS "socialOrigins",
                 eat.electricity_access_types AS "electricityAccessTypes",
                 stt.toilet_types AS "toiletTypes",
+                po.owner AS "owners",
                 COALESCE(shantytowns.updated_by, shantytowns.created_by) AS authorId,
                 ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(', ')}
             FROM
@@ -220,6 +256,7 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
             LEFT JOIN shantytown_computed_origins sco ON sco.fk_shantytown = shantytowns.hid
             LEFT JOIN electricity_access_types eat ON eat.fk_shantytown = shantytowns.hid
             LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.hid
+            LEFT JOIN shantytown_parcel_owners po ON po.fk_shantytown = shantytowns.hid
             LEFT JOIN users author ON COALESCE(shantytowns.updated_by, shantytowns.created_by) = author.user_id
             ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
             WHERE (shantytowns.shantytown_id, shantytowns.updated_at) IN

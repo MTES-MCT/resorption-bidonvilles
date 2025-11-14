@@ -13,8 +13,8 @@
                 :key="phase.uid"
                 :label="phase.name"
                 name="preparatory_phases_toward_resorption"
+                :modelValue="modelValue"
                 :disabled="isDisabled"
-                v-model="modelValue"
                 @change="handleCheckboxChange"
             />
             <DatepickerInput
@@ -59,7 +59,7 @@ const props = defineProps({
     },
 });
 
-const { phase, modelValue, activePhases, withBorder } = props;
+const { phase, activePhases, withBorder } = props;
 
 const isDisabled = computed(
     () => phase.is_a_starting_phase || canUpdate.value === false
@@ -86,6 +86,8 @@ if (activePhase && activePhase.completedAt) {
 
 const handleCheckboxChange = (checked) => {
     isChecked.value = checked;
+
+    // Mettre à jour activePhases pour la gestion des dates
     if (checked) {
         if (
             !activePhases.some(
@@ -102,10 +104,13 @@ const handleCheckboxChange = (checked) => {
             activePhases.splice(index, 1);
         }
     }
+
+    // Le v-model gère déjà l'ajout/suppression dans preparatory_phases_toward_resorption
+    // Pas besoin de le faire manuellement
 };
 
 const canUpdate = computed(() => {
     const userStore = useUserStore();
-    return userStore.hasPermission("shantytown_resorption.update");
+    return userStore.hasPermission("shantytown.update");
 });
 </script>

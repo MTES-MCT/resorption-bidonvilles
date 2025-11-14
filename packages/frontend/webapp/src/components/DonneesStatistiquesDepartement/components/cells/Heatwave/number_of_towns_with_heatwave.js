@@ -2,7 +2,7 @@ import HeatwaveBody from "./HeatwaveBody.vue";
 import HeatwaveHead from "./HeatwaveHeadByTown.vue";
 
 export default {
-    icon: "temperature-high",
+    icon: "ri:sun-fill",
     title: "Nombre de sites sous alerte canicule",
     headComponent: HeatwaveHead,
     bodyComponent: HeatwaveBody,

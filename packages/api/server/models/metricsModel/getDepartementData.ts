@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import permissionUtils from '#server/utils/permission';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
-import { WhereClauseGroup } from '#server/models/_common/types/WhereClauseGroup';
+import { WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import { Origin } from '#root/types/resources/DepartementMetrics.d';
 
 const { where: pWhere } = permissionUtils;

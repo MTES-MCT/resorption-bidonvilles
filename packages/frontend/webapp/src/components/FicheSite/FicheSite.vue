@@ -5,7 +5,20 @@
         title="Prévenir les risques lors des vagues de chaleur"
         description='Pensez à identifier les sites nécessitant une intervention urgente via le bouton "Alerte canicule" sur la liste des sites, et suivez les actions mises en œuvre via le journal du site.'
         width="w-3/4"
+        :enabled="false"
     />
+    <BandeauNotice
+        v-if="
+            town.heatwaveStatus && !configStore.config.heatwave?.isPeriodActive
+        "
+        class="-mt-6"
+        type="warning"
+        title="L'alerte canicule est toujours active sur ce site"
+        description='Nous avons détecté que l’alerte canicule est toujours active sur ce site alors que la période de canicule semble être passée.
+        Vous pouvez retirer cette alerte en cliquant sur le bouton "Supprimer l&apos;alerte canicule".'
+        width="w-3/4"
+    >
+    </BandeauNotice>
     <FicheSiteHeader
         :town="town"
         v-on:openCancel="openCancel"
@@ -71,6 +84,7 @@ import { defineProps, toRefs, computed, watch, ref } from "vue";
 import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
 import { useTownsStore } from "@/stores/towns.store";
+import { useConfigStore } from "@/stores/config.store";
 import menu from "./FicheSite.menu";
 
 import { ContentWrapper } from "@resorptionbidonvilles/ui";
@@ -95,6 +109,7 @@ const props = defineProps({
 const { town } = toRefs(props);
 const userStore = useUserStore();
 const townsStore = useTownsStore();
+const configStore = useConfigStore();
 const { bus } = useEventBus();
 const historique = ref(null);
 
@@ -138,7 +153,9 @@ const townIsClosed = computed(
 watch(
     () => bus.value.get("fichesite:openHistorique"),
     (data) => {
-        townsStore.townCategoryFilter = [...data];
+        townsStore.townCategoryFilter = Array.isArray(data)
+            ? [...data]
+            : [data];
         historique.value.open();
     }
 );

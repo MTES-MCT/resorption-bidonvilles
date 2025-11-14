@@ -4,6 +4,7 @@ import {
     DsfrBadge,
     DsfrButton,
     DsfrButtonGroup,
+    DsfrCallout,
     DsfrCard,
     DsfrCheckbox,
     DsfrCheckboxSet,
@@ -19,6 +20,7 @@ import {
     DsfrTag,
     DsfrTags,
     DsfrTile,
+    DsfrTiles,
     VIcon,
 } from "@gouvminint/vue-dsfr";
 
@@ -40,6 +42,7 @@ export function useDsfr(app) {
     app.component("DsfrBadge", DsfrBadge);
     app.component("DsfrButton", DsfrButton);
     app.component("DsfrButtonGroup", DsfrButtonGroup);
+    app.component("DsfrCallout", DsfrCallout);
     app.component("DsfrCard", DsfrCard);
     app.component("DsfrCheckbox", DsfrCheckbox);
     app.component("DsfrCheckboxSet", DsfrCheckboxSet);
@@ -55,5 +58,6 @@ export function useDsfr(app) {
     app.component("DsfrTag", DsfrTag);
     app.component("DsfrTags", DsfrTags);
     app.component("DsfrTile", DsfrTile);
+    app.component("DsfrTiles", DsfrTiles);
     app.component("VIcon", VIcon);
 }

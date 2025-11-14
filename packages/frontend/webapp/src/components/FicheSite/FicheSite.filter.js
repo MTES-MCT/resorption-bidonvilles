@@ -1,5 +1,6 @@
 export default {
     categories: [
+        { value: "resorption", label: "Résorption" },
         { value: "caracteristics", label: "Caractéristiques" },
         { value: "people", label: "Habitants" },
         { value: "living_conditions", label: "Conditions de vie" },
@@ -124,6 +125,8 @@ export default {
             "insalubrityOrderAt",
             "insalubrityParcels",
         ],
+
+        resorption: ["preparatoryPhasesTowardResorption"],
 
         localisation: ["latitude", "longitude"],
     },
