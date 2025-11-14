@@ -209,8 +209,6 @@ const isSubmitting = useIsSubmitting();
 const organizationSearchLabel = ref(modelValue.value?.search || "");
 
 const totalPages = computed(() => {
-    console.log("TotalPages:", Math.ceil(flatResults.value.length / itemsPerPage));
-    
   return Math.ceil(flatResults.value.length / itemsPerPage);
 });
 
@@ -230,8 +228,6 @@ const pages = computed(() => {
 
 const flatResults = computed(() => {
   if (showCategory.value) {
-    console.log("Actual results:", results);
-    
     return results.value.flatMap((r) => r.items);
   }
   return rawResults.value;
