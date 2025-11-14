@@ -108,21 +108,36 @@ export const useNavigationStore = defineStore("navigation", {
             });
         },
         metricsItem: () => {
+            const userStore = useUserStore();
             const metricsItem = {
                 label: "Visualisation des données",
                 route: "/visualisation-donnees",
             };
 
-            const userStore = useUserStore();
-            let departementArea;
-            if (!userStore.user.intervention_areas.is_national) {
-                departementArea = userStore.user.intervention_areas.areas.find(
-                    (area) =>
-                        area.departement !== null && area.is_main_area === true
-                );
+            if (
+                userStore.user.intervention_areas.is_national ||
+                userStore.hasMoreThanOneDepartementForMetrics
+            ) {
+                return metricsItem;
             }
 
-            if (departementArea !== undefined) {
+            let departementArea;
+            const mainArea = userStore.firstMainArea;
+            if (mainArea && mainArea.departement) {
+                departementArea = mainArea;
+            } else {
+                const allowedDepartements = userStore.departementsForMetrics;
+                if (allowedDepartements.length === 1) {
+                    departementArea = {
+                        departement: {
+                            code: allowedDepartements[0].code,
+                            name: allowedDepartements[0].name,
+                        },
+                    };
+                }
+            }
+
+            if (departementArea) {
                 metricsItem.route = `/visualisation-donnees/departement/${departementArea.departement.code}`;
             }
 

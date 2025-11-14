@@ -2,21 +2,41 @@
     <LayoutLoading v-if="isLoading !== false" />
 
     <LayoutError v-else-if="error !== null">
-        <template v-slot:title>Statistiques inaccessibles</template>
+        <template v-slot:title>
+            <span v-if="error === 'ACCES_INTERDIT'">Accès non autorisé</span>
+            <span v-else>Statistiques inaccessibles</span>
+        </template>
         <template v-slot:code>{{ error }}</template>
-        <template v-slot:content
-            >Vous souhaitiez consulter les données statistiques d'un
-            département, mais nous ne parvenons pas à collecter les informations
-            nécessaires. Vous pouvez réessayer un peu plus tard ou nous
-            contacter en cas d'urgence.</template
-        >
+        <template v-slot:content>
+            <span v-if="error === 'ACCES_INTERDIT'">
+                Vous ne disposez pas des droits nécessaires pour accéder aux
+                données statistiques de ce département. Vous pouvez uniquement
+                consulter les départements pour lesquels vous avez une
+                autorisation.
+            </span>
+            <span v-else>
+                Vous souhaitiez consulter les données statistiques d'un
+                département, mais nous ne parvenons pas à collecter les
+                informations nécessaires. Vous pouvez réessayer un peu plus tard
+                ou nous contacter en cas d'urgence.
+            </span>
+        </template>
         <template v-slot:actions>
             <Button
                 icon="rotate-right"
                 iconPosition="left"
                 type="button"
                 @click="load"
+                v-if="error !== 'ACCES_INTERDIT'"
                 >Réessayer</Button
+            >
+            <Button
+                icon="arrow-left"
+                iconPosition="left"
+                type="button"
+                @click="$router.push('/visualisation-donnees')"
+                v-if="error === 'ACCES_INTERDIT'"
+                >Retour à la liste des départements</Button
             >
             <ButtonContact />
         </template>
@@ -93,6 +113,21 @@ onMounted(load);
 watch(departementCode, load);
 
 async function load() {
+    // Vérifier si l'utilisateur a accès à ce département
+    const userStore = useUserStore();
+    if (!userStore.user.intervention_areas.is_national) {
+        const allowedDepartements = userStore.departementsForMetrics;
+        const isAllowed = allowedDepartements.some(
+            (d) => d.code === departementCode.value
+        );
+
+        if (!isAllowed) {
+            error.value = "ACCES_INTERDIT";
+            isLoading.value = false;
+            return;
+        }
+    }
+
     if (
         isCurrentRouteBack() &&
         departementMetricsStore.filteredMetrics !== null
