@@ -40,13 +40,13 @@ async function registerReferral(data: ContactBody, userId: number): Promise<void
 }
 
 async function processRequest(data: ContactBody): Promise<User | null> {
-    if (data.request_type.includes('access-request') && data.is_actor && data.organization_category !== 'other') {
+    if (data.request_type === 'access-request' && data.is_actor && data.organization_category !== 'other') {
         return userService.register(data);
     }
 
     await contactService.notifyContact({
         ...data,
-        is_new_organization: data.request_type.includes('access-request') && data.is_actor && data.organization_category === 'other',
+        is_new_organization: data.request_type === 'access-request' && data.is_actor && data.organization_category === 'other',
     });
     return null;
 }
