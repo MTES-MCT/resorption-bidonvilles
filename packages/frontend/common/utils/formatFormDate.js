@@ -1,9 +1,9 @@
-import formatDate from "./formatDate";
+import dateToString from "./dateToString";
 
 export default function (date) {
     if (!date || !(date instanceof Date)) {
         return date;
     }
 
-    return formatDate(date.getTime() / 1000, "y-m-d");
+    return dateToString(date);
 }
