@@ -70,14 +70,10 @@ describe('services/blog/get', () => {
         expect(blog.isBadgeActive).to.be.false;
     });
 
-    it('renvoie un ServiceError si aucune période d\'affichage n\'est trouvée en DB', async () => {
+    it('renvoie isBadgeActive à false si aucune période d\'affichage n\'est trouvée en DB', async () => {
         stubs.blogModel.get.resolves([]);
-        try {
-            await get();
-        } catch (error) {
-            expect(error).to.be.instanceOf(ServiceError);
-            expect(error).to.have.property('code', 'badge_not_found');
-        }
+        const blog = await get();
+        expect(blog.isBadgeActive).to.be.false;
     });
 
     it('renvoie un ServiceError si la récupération en DB échoue', async () => {
