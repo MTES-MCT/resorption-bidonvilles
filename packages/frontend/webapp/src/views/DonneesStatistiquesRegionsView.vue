@@ -15,7 +15,7 @@
                         départements suivants :
                     </p>
 
-                    <DsfrTiles :small :tiles="tiles" />
+                    <DsfrTiles :tiles="tiles" :horizontal="horizontal" />
                     <div
                         v-if="userStore.departementsForMetrics.length === 0"
                         class="fr-alert fr-alert--warning"
@@ -36,13 +36,30 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref, onMounted, onBeforeUnmount } from "vue";
 import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
 import DonneesStatistiques from "@/components/DonneesStatistiques/DonneesStatistiques.vue";
 import { useUserStore } from "@/stores/user.store";
 
 const userStore = useUserStore();
+
+// On prend en compte la responsivness pour passer le bloc DsfrTiles en horizontal en dessous du breakpoint "SM" de tailwind
+const horizontal = ref(false);
+const breakpoint = 640; // sm
+
+const updateLayout = () => {
+    horizontal.value = window.innerWidth < breakpoint;
+};
+
+onMounted(() => {
+    updateLayout();
+    window.addEventListener("resize", updateLayout, { passive: true });
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener("resize", updateLayout);
+});
 
 const ariane = computed(() => {
     const items = [{ label: "Visualisation des données" }];
