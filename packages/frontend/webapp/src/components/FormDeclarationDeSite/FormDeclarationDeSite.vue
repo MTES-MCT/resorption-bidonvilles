@@ -55,6 +55,8 @@ import {
     computed,
     defineExpose,
     defineProps,
+    markRaw,
+    onBeforeUnmount,
     ref,
     toRef,
     toRefs,
@@ -532,5 +534,11 @@ defineExpose({
         }
     }),
     isSubmitting,
+});
+
+// Fermer la modale lorsque le composant est détruit pour éviter qu'elle reste affichée lors de la navigation
+onBeforeUnmount(() => {
+    const modaleStore = useModaleStore();
+    modaleStore.close();
 });
 </script>
