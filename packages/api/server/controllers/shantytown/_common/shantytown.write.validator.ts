@@ -851,12 +851,21 @@ export default mode => ([
             return value;
         })
         .optional({ nullable: true })
-        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_owner') && req.body.owner_type_full && req.body.owner_type_full.label !== 'Inconnu')
-        .isString().bail().withMessage('Le champ "Identité du propriétaire" est invalide')
-        .trim(),
+    body('owners')
+        .customSanitizer(value => value ?? [])
+        .custom((owners: SerializedOwner[]) => {
+            // Valider que chaque propriétaire a soit un nom, soit un type différent de "Inconnu"
+            for (const owner of owners) {
+                const hasName = owner.name && owner.name.trim() !== '';
+                const isUnknownType = owner.type === 1;
 
-    body('owner')
-        .customSanitizer(value => value ?? null),
+                // Rejeter si : pas de nom ET type "Inconnu"
+                if (!hasName && isUnknownType) {
+                    throw new Error('Un propriétaire doit avoir un nom ou un type différent de "Inconnu"');
+                }
+            }
+            return true;
+        }),
 
     /* **********************************************************************************************
      * Reinstallation
