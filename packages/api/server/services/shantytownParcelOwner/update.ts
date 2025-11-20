@@ -9,7 +9,14 @@ import { ParcelOwnerInsert, RawParcelOwner } from '#root/types/resources/ParcelO
 export default async (user: AuthUser, shantytown: Shantytown, owners: ParcelOwnerInsert[], argTransaction: Transaction | undefined = undefined): Promise<void> => {
     let transaction: Transaction = argTransaction;
     transaction ??= await sequelize.transaction();
+
+    // Filtrer les propriétaires vides (sans nom avec type "Inconnu" ou sans type)
+    const validOwners = owners.filter((owner) => {
         const hasName = owner.name && owner.name.trim() !== '';
+        const isUnknownType = owner.type === 1;
+        // Garder seulement si : a un nom OU (pas de nom mais type différent de "Inconnu")
+        return hasName || (!hasName && !isUnknownType && owner.type);
+    });
 
     // On récupère les propriétaires existants pour le site
     let actualOwners: RawParcelOwner[] = [];
