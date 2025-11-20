@@ -82,13 +82,12 @@ const excludeSignedUrls = (key: string, value: any): any => {
     return value;
 };
 
-const normalizeOwnerComparison = (ownerData: { owners: any[] } | null): string | null => {
-    if (!ownerData || !ownerData.owners) {
+const normalizeOwnerComparison = (owners: any[] | null): string | null => {
+    if (!owners || !Array.isArray(owners) || owners.length === 0) {
         return null;
     }
 
-    // On nettoie chaque propriétaire en passant les dates en ISO et en triant pourêtre sûr de la comparaison
-    const cleanedOwners = ownerData.owners.map((owner) => {
+    const cleanedOwners = owners.map((owner) => {
         const { _key, ...rest } = owner;
         return {
             ...rest,
@@ -101,7 +100,6 @@ const normalizeOwnerComparison = (ownerData: { owners: any[] } | null): string |
         if (a.ownerId && b.ownerId) {
             return a.ownerId - b.ownerId;
         }
-        // Pour les nouveaux propriétaires sans ownerId, on trie par nom
         return (a.name || '').localeCompare(b.name || '');
     });
 
@@ -821,16 +819,19 @@ export default mode => ([
         }),
 
     /* **********************************************************************************************
-     * Identité du propriétaire
+     * Identité des propriétaires
      ********************************************************************************************* */
-    body('owner')
+    body('owners')
         .customSanitizer(async (value, { req }) => {
             if (!req.user.isAllowedTo('access', 'shantytown_owner')) {
-                return null;
+                return [];
             }
 
             let ownerType: OwnerType | null = null;
-            await Promise.all(req.body.owner.owners.map(async (owner: SerializedOwner) => {
+            if (!req.body.owners?.length) {
+                return [];
+            }
+            await Promise.all(req.body.owners.map(async (owner: SerializedOwner) => {
                 try {
                     ownerType = await ownerTypeModel.findOne(owner.type || 1);
                 } catch (error) {
