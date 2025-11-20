@@ -38,7 +38,7 @@ const { town } = toRefs(props);
 const configStore = useConfigStore();
 
 const ownersList = computed(() => {
-    return town.value.owner.owners?.filter((owner) => owner.active);
+    return town.value.owners?.filter((owner) => owner.active);
 });
 
 const ownerTitles = computed(() => {
