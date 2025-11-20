@@ -376,7 +376,7 @@ function formatValuesForApi(v, initOrEdit) {
         ),
         terminated_preparatory_phases_toward_resorption:
             buildTerminatedPreparatoryPhases(initOrEdit),
-        owner: buildOwners(v.owner),
+        owners: buildOwners(v.owners),
     };
 
     // Normaliser les tableaux (convertir Proxy en Array)
@@ -399,7 +399,7 @@ const deleteOriginalAttachment = (attachments) => {
 };
 
 function buildOwners(ownerDatas) {
-    if (!ownerDatas || !ownerDatas.owners) {
+    if (!ownerDatas || !Array.isArray(ownerDatas)) {
         return [];
     }
     return {
