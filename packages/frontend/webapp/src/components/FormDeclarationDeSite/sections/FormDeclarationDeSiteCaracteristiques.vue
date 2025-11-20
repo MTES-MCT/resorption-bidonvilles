@@ -9,7 +9,7 @@
             <InputDetailedAddress />
         </Fieldset>
 
-        <Fieldset :legend="ownersLegend" showMandatoryStar id="owner">
+        <Fieldset :legend="ownersLegend" id="owner">
             <div v-if="userStore.hasOwnerPermission">
                 <div v-for="(owner, index) in sortedOwners" :key="owner._key">
                     <div
