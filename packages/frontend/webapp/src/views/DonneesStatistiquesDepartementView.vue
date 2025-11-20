@@ -22,21 +22,17 @@
             </span>
         </template>
         <template v-slot:actions>
-            <Button
-                icon="rotate-right"
-                iconPosition="left"
-                type="button"
+            <DsfrButton
+                icon="fr-icon-refresh-line"
                 @click="load"
                 v-if="error !== 'ACCES_INTERDIT'"
-                >Réessayer</Button
+                >Réessayer</DsfrButton
             >
-            <Button
-                icon="arrow-left"
-                iconPosition="left"
-                type="button"
+            <DsfrButton
+                icon="fr-icon-arrow-left-line"
                 @click="$router.push('/visualisation-donnees')"
                 v-if="error === 'ACCES_INTERDIT'"
-                >Retour à la liste des départements</Button
+                >Retour à la liste des départements</DsfrButton
             >
             <ButtonContact />
         </template>
@@ -64,7 +60,7 @@ import { onMounted, ref, computed, watch } from "vue";
 import { useDepartementMetricsStore } from "@/stores/metrics.departement.store.js";
 import router, { isCurrentRouteBack, setDocumentTitle } from "@/helpers/router";
 
-import { Button, ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
+import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
 import Layout from "@/components/Layout/Layout.vue";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
