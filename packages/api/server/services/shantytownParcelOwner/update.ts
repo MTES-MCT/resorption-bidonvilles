@@ -41,9 +41,9 @@ export default async (user: AuthUser, shantytown: Shantytown, owners: ParcelOwne
         && oldOwnerIds.includes(o.ownerId));
 
     // Propriétaires à DÉSACTIVER (uniquement parmi les actifs)
-    const newOwnerIds = validOwners.map(o => o.ownerId);
-    const ownersToSoftDelete = activeOwners
-        .filter(oldOwner => !newOwnerIds.includes(oldOwner.shantytown_parcel_owner_id))
+    const newOwnerIds = new Set(validOwners.map(o => o.ownerId));
+    const ownersToSoftDelete: ParcelOwnerInsert[] = activeOwners
+        .filter(oldOwner => !newOwnerIds.has(oldOwner.shantytown_parcel_owner_id))
         .map(oldOwner => ({
             ownerId: oldOwner.shantytown_parcel_owner_id,
             name: oldOwner.owner_name,
