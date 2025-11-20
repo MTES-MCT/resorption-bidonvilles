@@ -111,6 +111,23 @@
       "yarn lint"
     ]
   },
+  "imports": {
+    "#server/*": {
+      "node": "./server/*"
+    },
+    "#db/*": {
+      "node": "./db/*"
+    },
+    "#root/*": {
+      "node": "./*"
+    },
+    "#test/*": {
+      "node": "./test/*"
+    },
+    "#common/*": {
+      "node": "../frontend/common/*"
+    }
+  },
   "scripts": {
     "db:create": "sequelize db:migrate && sequelize db:seed:all",
     "e2e:db:create": "sequelize --env test db:drop && sequelize --env test db:create && sequelize --env test db:migrate",
