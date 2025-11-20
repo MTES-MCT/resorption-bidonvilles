@@ -71,12 +71,12 @@ export default async (townData: TownInput, user: AuthUser) => {
         }
 
         // On ajoute les propriétaires de parcelles liés au site
-        if (townData.owner?.owners && townData.owner.owners.length > 0) {
+        if (townData.owners && townData.owners.length > 0) {
             try {
                 await shantytownParcelOwnerService.create(
                     user,
                     shantytown_id,
-                    townData.owner.owners,
+                    townData.owners,
                     transaction,
                 );
             } catch (error) {
