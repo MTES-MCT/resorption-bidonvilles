@@ -9,6 +9,7 @@ import { ParcelOwnerInsert, RawParcelOwner } from '#root/types/resources/ParcelO
 export default async (user: AuthUser, shantytown: Shantytown, owners: ParcelOwnerInsert[], argTransaction: Transaction | undefined = undefined): Promise<void> => {
     let transaction: Transaction = argTransaction;
     transaction ??= await sequelize.transaction();
+        const hasName = owner.name && owner.name.trim() !== '';
 
     // On récupère les propriétaires existants pour le site
     let actualOwners: RawParcelOwner[] = [];
