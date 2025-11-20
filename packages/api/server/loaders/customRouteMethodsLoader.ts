@@ -68,6 +68,7 @@ function addRoute(
                     req.body = JSON.parse(req.body.content);
                     next();
                 } catch (error) {
+                    // eslint-disable-next-line no-console
                     console.error('[MULTIPART ERROR]', error.message, req.body);
                     res.status(400).send({ error: 'Champ multipart invalide' });
                 }
