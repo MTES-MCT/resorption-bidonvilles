@@ -66,6 +66,7 @@ import { useForm } from "vee-validate";
 import { useUserStore } from "@/stores/user.store";
 import { useTownsStore } from "@/stores/towns.store";
 import { useNotificationStore } from "@/stores/notification.store";
+import { useModaleStore } from "@/stores/modale.store";
 import * as locationsApi from "@/api/locations.api";
 import { report } from "@/api/towns.api";
 import { trackEvent } from "@/helpers/matomo";
@@ -419,8 +420,7 @@ function buildOwners(ownerDatas) {
             const newOwner = { ...owner };
             delete newOwner._key;
             return newOwner;
-        }),
-    };
+        });
 }
 
 function buildTerminatedPreparatoryPhases(initOrEdit) {
@@ -452,6 +452,10 @@ const hasPreparatoryPhases = computed(() => {
 
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
+        error.value = null;
+
+        const notificationStore = useNotificationStore();
+        try {
             // Vérifier d'abord s'il y a des propriétaires invalides (avant formatage)
             if (mode.value === "edit" && sentValues.owners?.length) {
                 const hasInvalidOwners = sentValues.owners.some((owner) => {
@@ -472,36 +476,55 @@ defineExpose({
                 }
             }
 
+            const formattedValues = formatValuesForApi(sentValues, "edit");
 
-        /* eslint-disable no-unused-vars */
-        let {
-            updated_at: _1,
-            update_to_date: _2,
-            ...originalValuesRest
-        } = originalValues;
-        let {
-            updated_at: _3,
-            update_to_date: _4,
-            ...formattedValuesRest
-        } = formattedValues;
-        /* eslint-enable no-unused-vars */
+            /* eslint-disable no-unused-vars */
+            let {
+                updated_at: _1,
+                update_to_date: _2,
+                ...originalValuesRest
+            } = originalValues;
+            let {
+                updated_at: _3,
+                update_to_date: _4,
+                ...formattedValuesRest
+            } = formattedValues;
+            /* eslint-enable no-unused-vars */
 
-        if (
-            // Cas où l'on souhaite indiquer qu'un site est à jour sans modifier de donnée
-            mode.value === "edit" &&
-            isDeepEqual(originalValuesRest, formattedValuesRest)
-        ) {
-            formattedValues.updated_without_any_change = true;
-        } else {
-            formattedValues.updated_without_any_change = false;
-        }
-
-        error.value = null;
-
-        const notificationStore = useNotificationStore();
-        try {
+            if (
+                // Cas où l'on souhaite indiquer qu'un site est à jour sans modifier de donnée
+                mode.value === "edit" &&
+                isDeepEqual(originalValuesRest, formattedValuesRest)
+            ) {
+                formattedValues.updated_without_any_change = true;
+            } else {
+                formattedValues.updated_without_any_change = false;
+            }
             let respondedTown;
             if (mode.value === "edit") {
+                // Si aucune donnée n'est modifiée, afficher la modale de confirmation
+                if (formattedValues.updated_without_any_change) {
+                    const modaleStore = useModaleStore();
+                    const { default: ModaleMajSiteSansModification } =
+                        await import(
+                            "@/components/ModaleMajSiteSansModification/ModaleMajSiteSansModification.vue"
+                        );
+
+                    const submitWithoutChanges = async () => {
+                        const { submit } = config[mode.value];
+                        const respondedTown = await submit(
+                            formattedValues,
+                            town.value?.id
+                        );
+                        backOrReplace(`/site/${respondedTown.id}`);
+                    };
+
+                    modaleStore.open(markRaw(ModaleMajSiteSansModification), {
+                        onConfirm: submitWithoutChanges,
+                    });
+                    return;
+                }
+
                 const { submit } = config[mode.value];
                 respondedTown = await submit(formattedValues, town.value?.id);
             } else {
