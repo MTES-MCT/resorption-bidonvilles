@@ -370,12 +370,22 @@ export default function (
 
         if (mode === "edit") {
             schema.update_to_date = number()
-                .required()
-                .oneOf([0, 1], "La valeur est invalide")
+                .when("updated_without_any_change", {
+                    is: false,
+                    then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.nullable(),
+                })
+                .oneOf([0, 1, null], "La valeur est invalide")
                 .label(labels.update_to_date);
             schema.updated_at = date()
+                .when("updated_without_any_change", {
+                    is: false,
+                    then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.nullable(),
+                })
                 .typeError(`${labels.updated_at} est obligatoire`)
                 .label(labels.updated_at);
+            schema.updated_without_any_change = number().nullable();
         }
 
         schema.water_access_type = makeNullableIfEdit(
