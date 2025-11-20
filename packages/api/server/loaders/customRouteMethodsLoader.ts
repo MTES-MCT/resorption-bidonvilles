@@ -64,8 +64,13 @@ function addRoute(
             upload.array('attachments'),
             fileValidator,
             (req, res, next) => {
-                req.body = JSON.parse(req.body.content);
-                next();
+                try {
+                    req.body = JSON.parse(req.body.content);
+                    next();
+                } catch (error) {
+                    console.error('[MULTIPART ERROR]', error.message, req.body);
+                    res.status(400).send({ error: 'Champ multipart invalide' });
+                }
             },
         );
     } else {
