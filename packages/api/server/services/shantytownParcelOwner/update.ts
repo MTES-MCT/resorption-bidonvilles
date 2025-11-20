@@ -21,19 +21,21 @@ export default async (user: AuthUser, shantytown: Shantytown, owners: ParcelOwne
         throw new ServiceError('parcel_owner_fetch_failed', new Error('Erreur lors de la récupération des propriétaires existants'));
     }
 
-    const oldOwnerIds = actualOwners?.map(o => o.shantytown_parcel_owner_id);
+    // Ne considérer que les propriétaires actifs
+    const activeOwners = actualOwners.filter(o => o.active);
+    const oldOwnerIds = activeOwners?.map(o => o.shantytown_parcel_owner_id);
 
     // Propriétaires à CRÉER
-    const ownersToCreate: ParcelOwnerInsert[] = owners.filter(o => o.ownerId === null || o.ownerId === undefined);
+    const ownersToCreate: ParcelOwnerInsert[] = validOwners.filter(o => o.ownerId === null || o.ownerId === undefined);
 
     // Propriétaires à METTRE À JOUR
-    const ownersToUpdate: ParcelOwnerInsert[] = owners.filter(o => o.ownerId !== null
+    const ownersToUpdate: ParcelOwnerInsert[] = validOwners.filter(o => o.ownerId !== null
         && o.ownerId !== undefined
         && oldOwnerIds.includes(o.ownerId));
 
-    // Propriétaires à DÉSACTIVER
-    const newOwnerIds = owners.map(o => o.ownerId);
-    const ownersToSoftDelete = actualOwners
+    // Propriétaires à DÉSACTIVER (uniquement parmi les actifs)
+    const newOwnerIds = validOwners.map(o => o.ownerId);
+    const ownersToSoftDelete = activeOwners
         .filter(oldOwner => !newOwnerIds.includes(oldOwner.shantytown_parcel_owner_id))
         .map(oldOwner => ({
             ownerId: oldOwner.shantytown_parcel_owner_id,
