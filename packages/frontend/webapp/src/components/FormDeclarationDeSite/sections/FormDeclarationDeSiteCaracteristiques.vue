@@ -9,92 +9,87 @@
             <InputDetailedAddress />
         </Fieldset>
 
-        <Fieldset :legend="ownersLegend" id="owner">
-            <div v-if="userStore.hasOwnerPermission">
-                <div v-for="(owner, index) in sortedOwners" :key="owner._key">
+        <Fieldset
+            :legend="ownersLegend"
+            id="owner"
+            v-if="userStore.hasOwnerPermission"
+        >
+            <div v-for="(owner, index) in sortedOwners" :key="owner._key">
+                <div
+                    v-show="
+                        (!showDeletedOwners && owner.active) ||
+                        showDeletedOwners
+                    "
+                    class="flex flex-col justify-evenly items-center border border-primary rounded mb-4 px-4"
+                    :class="
+                        (!owner.ownerId ? 'shadow-lg' : '',
+                        !owner.active ? 'opacity-50 bg-G200' : '')
+                    "
+                >
                     <div
-                        v-show="
-                            (!showDeletedOwners && owner.active) ||
-                            showDeletedOwners
-                        "
-                        class="flex flex-col justify-evenly items-center border border-primary rounded mb-4 px-4"
-                        :class="
-                            (!owner.ownerId ? 'shadow-lg' : '',
-                            !owner.active ? 'opacity-50 bg-G200' : '')
-                        "
+                        class="w-full p-2 rounded text-sm font-bold mt-2 mb-3 space-between flex flex-row justify-between items-center"
+                        :class="owner.ownerId ? 'bg-G200' : 'bg-blue200'"
                     >
-                        <div
-                            class="w-full p-2 rounded text-sm font-bold mt-2 mb-3 space-between flex flex-row justify-between items-center"
-                            :class="owner.ownerId ? 'bg-G200' : 'bg-blue200'"
-                        >
-                            <p v-if="!owner.ownerId" class="font-bold">
-                                <i
-                                    class="fa-solid fa-circle-plus text-blue500"
-                                />
-                                Nouveau propriétaire
-                            </p>
-                            <p v-else class="font-bold">
-                                Propriétaire {{ index + 1 }}
-                            </p>
-                            <DsfrButton
-                                v-if="owner.active"
-                                class=""
-                                icon="fr-icon-delete-line"
-                                icon-only
-                                label="Effacer le propriétaire"
-                                no-outline
-                                tertiary
-                                size="sm"
-                                @click.prevent="
-                                    removeOwner(owner, getOriginalIndex(owner))
-                                "
-                            />
-                        </div>
-                        <div
-                            class="flex flex-col sm:flex-row justify-evenly items-center gap-0 sm:gap-4 w-full pb-4"
-                        >
-                            <InputOwner
-                                class="w-full sm:w-2/3"
-                                :id="`owners[${getOriginalIndex(owner)}].name`"
-                                :name="`owners[${getOriginalIndex(
-                                    owner
-                                )}].name`"
-                                :disabled="!owner.active"
-                            />
-                            <InputOwnerType
-                                class="w-full sm:w-auto"
-                                :id="`owners[${getOriginalIndex(owner)}].type`"
-                                :name="`owners[${getOriginalIndex(
-                                    owner
-                                )}].type`"
-                                :disabled="!owner.active"
-                            />
-                        </div>
+                        <p v-if="!owner.ownerId" class="font-bold">
+                            <i class="fa-solid fa-circle-plus text-blue500" />
+                            Nouveau propriétaire
+                        </p>
+                        <p v-else class="font-bold">
+                            Propriétaire {{ index + 1 }}
+                        </p>
+                        <DsfrButton
+                            v-if="owner.active"
+                            class=""
+                            icon="fr-icon-delete-line"
+                            icon-only
+                            label="Effacer le propriétaire"
+                            no-outline
+                            tertiary
+                            size="sm"
+                            @click.prevent="
+                                removeOwner(owner, getOriginalIndex(owner))
+                            "
+                        />
+                    </div>
+                    <div
+                        class="flex flex-col sm:flex-row justify-evenly items-center gap-0 sm:gap-4 w-full pb-4"
+                    >
+                        <InputOwner
+                            class="w-full sm:w-2/3"
+                            :id="`owners[${getOriginalIndex(owner)}].name`"
+                            :name="`owners[${getOriginalIndex(owner)}].name`"
+                            :disabled="!owner.active"
+                        />
+                        <InputOwnerType
+                            class="w-full sm:w-auto"
+                            :id="`owners[${getOriginalIndex(owner)}].type`"
+                            :name="`owners[${getOriginalIndex(owner)}].type`"
+                            :disabled="!owner.active"
+                        />
                     </div>
                 </div>
-                <div class="flex flex-row items-center gap-2 justify-between">
-                    <DsfrButton
-                        icon="fr-icon-user-add-fill"
-                        label="Ajouter un propriétaire"
-                        @click.prevent="addOwner"
-                    />
-                    <DsfrButton
-                        v-if="
-                            sortedOwners.filter((owner) => !owner.active)
-                                .length > 0
-                        "
-                        :icon="
-                            showDeletedOwners
-                                ? 'fr-icon-eye-off-line'
-                                : 'fr-icon-eye-fill'
-                        "
-                        :label="`${
-                            showDeletedOwners ? 'Masquer' : 'Afficher'
-                        } les anciens propriétaires connus`"
-                        tertiary
-                        @click.prevent="displayFullOwnersList"
-                    />
-                </div>
+            </div>
+            <div class="flex flex-row items-center gap-2 justify-between">
+                <DsfrButton
+                    icon="fr-icon-user-add-fill"
+                    label="Ajouter un propriétaire"
+                    @click.prevent="addOwner"
+                />
+                <DsfrButton
+                    v-if="
+                        sortedOwners.filter((owner) => !owner.active).length > 0
+                    "
+                    :icon="
+                        showDeletedOwners
+                            ? 'fr-icon-eye-off-line'
+                            : 'fr-icon-eye-fill'
+                    "
+                    :label="`${
+                        showDeletedOwners ? 'Masquer' : 'Afficher'
+                    } les anciens propriétaires connus`"
+                    tertiary
+                    @click.prevent="displayFullOwnersList"
+                />
             </div>
         </Fieldset>
     </FormSection>
