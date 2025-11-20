@@ -123,7 +123,7 @@ export const useNavigationStore = defineStore("navigation", {
 
             let departementArea;
             const mainArea = userStore.firstMainArea;
-            if (mainArea && mainArea.departement) {
+            if (mainArea?.departement) {
                 departementArea = mainArea;
             } else {
                 const allowedDepartements = userStore.departementsForMetrics;
