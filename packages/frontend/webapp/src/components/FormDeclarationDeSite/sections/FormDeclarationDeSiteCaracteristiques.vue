@@ -55,20 +55,16 @@
                         >
                             <InputOwner
                                 class="w-full sm:w-2/3"
-                                :id="`owner.owners[${getOriginalIndex(
-                                    owner
-                                )}].name`"
-                                :name="`owner.owners[${getOriginalIndex(
+                                :id="`owners[${getOriginalIndex(owner)}].name`"
+                                :name="`owners[${getOriginalIndex(
                                     owner
                                 )}].name`"
                                 :disabled="!owner.active"
                             />
                             <InputOwnerType
                                 class="w-full sm:w-auto"
-                                :id="`owner.owners[${getOriginalIndex(
-                                    owner
-                                )}].type`"
-                                :name="`owner.owners[${getOriginalIndex(
+                                :id="`owners[${getOriginalIndex(owner)}].type`"
+                                :name="`owners[${getOriginalIndex(
                                     owner
                                 )}].type`"
                                 :disabled="!owner.active"
@@ -141,24 +137,24 @@ const generateUniqueKey = () => {
 };
 
 onMounted(() => {
-    if (!values.value.owner?.owners) {
-        props.set_field_value("owner.owners", []);
+    if (!values.value.owners) {
+        props.set_field_value("owners", []);
     } else {
-        const ownersWithKeys = values.value.owner.owners.map((owner) => ({
+        const ownersWithKeys = values.value.owners.map((owner) => ({
             ...owner,
             _key: owner._key || generateUniqueKey(),
         }));
-        props.set_field_value("owner.owners", ownersWithKeys, false);
+        props.set_field_value("owners", ownersWithKeys, false);
     }
 });
 
 // Initialisation des owners si nécessaire
-if (!values.value.owner?.owners) {
-    values.value.owner = { owners: [] };
+if (!values.value.owners) {
+    values.value.owners = [];
 }
 
 const sortedOwners = computed(() => {
-    const owners = values.value.owner?.owners ?? [];
+    const owners = values.value.owners ?? [];
 
     return [...owners].sort((a, b) => {
         if (a.active !== b.active) {
@@ -173,12 +169,10 @@ const sortedOwners = computed(() => {
 });
 
 const getOriginalIndex = (ownerToFind) => {
-    if (!ownerToFind?._key || !values.value.owner?.owners) {
+    if (!ownerToFind?._key || !values.value.owners) {
         return -1;
     }
-    return values.value.owner.owners.findIndex(
-        (o) => o._key === ownerToFind._key
-    );
+    return values.value.owners.findIndex((o) => o._key === ownerToFind._key);
 };
 
 const removeOwner = (ownerToRemove, sortedIndex) => {
@@ -187,9 +181,9 @@ const removeOwner = (ownerToRemove, sortedIndex) => {
             ...ownerToRemove,
             active: false,
         };
-        props.set_field_value(`owner.owners[${sortedIndex}]`, updatedOwner);
+        props.set_field_value(`owners[${sortedIndex}]`, updatedOwner);
     } else {
-        values.value.owner.owners.splice(sortedIndex, 1);
+        values.value.owners.splice(sortedIndex, 1);
     }
 };
 
@@ -209,8 +203,8 @@ const addOwner = () => {
         type: unknownOwnerTypeId.value,
         active: true,
     };
-    const newOwners = [...(values.value.owner.owners || []), newOwner];
-    props.set_field_value("owner.owners", newOwners);
+    const newOwners = [...(values.value.owners || []), newOwner];
+    props.set_field_value("owners", newOwners);
 };
 
 const displayFullOwnersList = () => {
