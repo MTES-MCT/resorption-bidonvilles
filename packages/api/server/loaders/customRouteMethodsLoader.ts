@@ -90,7 +90,10 @@ function addRoute(
 
     // on valide les données
     if (validator !== undefined && validator.length > 0) {
-        middlewares.push(validator, validation);
+        middlewares.push(
+            ...validator,
+            validation,
+        );
     }
 
     // on appelle le contrôleur
