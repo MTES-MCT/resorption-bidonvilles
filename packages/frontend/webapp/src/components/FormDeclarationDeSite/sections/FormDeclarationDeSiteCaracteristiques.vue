@@ -137,15 +137,16 @@ const generateUniqueKey = () => {
 };
 
 onMounted(() => {
-    if (!values.value.owners) {
-        props.set_field_value("owners", []);
-    } else {
+    if (values.value.owners) {
         const ownersWithKeys = values.value.owners.map((owner) => ({
             ...owner,
             _key: owner._key || generateUniqueKey(),
         }));
         props.set_field_value("owners", ownersWithKeys, false);
+        return;
     }
+
+    props.set_field_value("owners", []);
 });
 
 // Initialisation des owners si nécessaire
