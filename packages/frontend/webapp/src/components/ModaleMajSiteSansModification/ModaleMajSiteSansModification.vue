@@ -1,5 +1,5 @@
 <template>
-    <Modal closeWhenClickOutside @close="onClose" ref="modale">
+    <Modal closeWhenClickOutside ref="modale">
         <template v-slot:title>Mise à jour sans modification</template>
         <template v-slot:body>
             <div class="fr-text">
@@ -18,18 +18,20 @@
             </div>
         </template>
         <template v-slot:footer>
-            <Button variant="secondary" @click="cancelUpdate" class="fr-mr-2w">
-                Annuler
-            </Button>
-            <Button variant="primary" @click="confirmUpdate">
-                Confirmer la mise à jour
-            </Button>
+            <div class="flex justify-end gap-2">
+                <DsfrButton secondary @click="() => modale.close()"
+                    >Annuler</DsfrButton
+                >
+                <DsfrButton @click="confirmUpdate" variant="primary"
+                    >Confirmer la mise à jour</DsfrButton
+                >
+            </div>
         </template>
     </Modal>
 </template>
 <script setup>
 import { toRefs, ref } from "vue";
-import { Button, Modal } from "@resorptionbidonvilles/ui";
+import { Modal } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     onConfirm: {
@@ -41,18 +43,10 @@ const props = defineProps({
 const { onConfirm } = toRefs(props);
 const modale = ref(null);
 
-const onClose = () => {
-    modale.value.close();
-};
-
-const cancelUpdate = () => {
-    onClose();
-};
-
 const confirmUpdate = async () => {
     try {
         await onConfirm.value();
-        onClose();
+        modale.value.close();
     } catch (error) {
         console.error("Erreur lors de la mise à jour:", error);
     }
