@@ -76,9 +76,7 @@
                     @click.prevent="addOwner"
                 />
                 <DsfrButton
-                    v-if="
-                        sortedOwners.filter((owner) => !owner.active).length > 0
-                    "
+                    v-if="sortedOwners.some((owner) => !owner.active)"
                     :icon="
                         showDeletedOwners
                             ? 'fr-icon-eye-off-line'
