@@ -851,6 +851,8 @@ export default mode => ([
             return value;
         })
         .optional({ nullable: true })
+        .isArray().bail().withMessage('Le champ "Identité des propriétaires" doit être un tableau'),
+
     body('owners')
         .customSanitizer(value => value ?? [])
         .custom((owners: SerializedOwner[]) => {
