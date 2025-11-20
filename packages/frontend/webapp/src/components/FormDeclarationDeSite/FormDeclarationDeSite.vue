@@ -450,6 +450,85 @@ const hasPreparatoryPhases = computed(() => {
     return town.value?.preparatoryPhasesTowardResorption?.length > 0;
 });
 
+function validateOwnersBeforeSubmit(sentValues) {
+    if (mode.value === "edit" && sentValues.owners?.length) {
+        const hasInvalidOwners = sentValues.owners.some((owner) => {
+            const hasName = owner.name && owner.name.trim() !== "";
+            const isUnknownType = owner.type === 1 || owner.type === "1";
+            return !hasName && isUnknownType;
+        });
+
+        if (hasInvalidOwners) {
+            const validationError = new Error(
+                "Vous avez ajouté un propriétaire sans renseigner son nom ou son type. Veuillez compléter les informations ou supprimer cette ligne."
+            );
+            validationError.user_message =
+                "Vous avez ajouté un propriétaire sans renseigner son nom ou son type. Veuillez compléter les informations ou supprimer cette ligne.";
+            validationError.fields = {
+                owner: 'Un propriétaire doit avoir un nom ou un type différent de "Inconnu"',
+            };
+            throw validationError;
+        }
+    }
+}
+
+function computeNoChangeFlag(formattedValues, originalValues) {
+    /* eslint-disable no-unused-vars */
+    let {
+        updated_at: _1,
+        update_to_date: _2,
+        ...originalValuesRest
+    } = originalValues;
+    let {
+        updated_at: _3,
+        update_to_date: _4,
+        ...formattedValuesRest
+    } = formattedValues;
+    /* eslint-enable no-unused-vars */
+
+    if (
+        // Cas où l'on souhaite indiquer qu'un site est à jour sans modifier de donnée
+        mode.value === "edit" &&
+        isDeepEqual(originalValuesRest, formattedValuesRest)
+    ) {
+        formattedValues.updated_without_any_change = true;
+    } else {
+        formattedValues.updated_without_any_change = false;
+    }
+    return formattedValues;
+}
+
+function prepareFormattedValues(sentValues, originalValues) {
+    const formattedValues = formatValuesForApi(sentValues, "edit");
+    const { updated_without_any_change } = computeNoChangeFlag(
+        formattedValues,
+        originalValues
+    );
+    formattedValues.updated_without_any_change = updated_without_any_change;
+    return formattedValues;
+}
+
+async function handleNoChangeModalIfNeeded(formattedValues) {
+    if (formattedValues.updated_without_any_change) {
+        const modaleStore = useModaleStore();
+        const { default: ModaleMajSiteSansModification } = await import(
+            "@/components/ModaleMajSiteSansModification/ModaleMajSiteSansModification.vue"
+        );
+
+        const submitWithoutChanges = async () => {
+            const { submit } = config[mode.value];
+            const respondedTown = await submit(formattedValues, town.value?.id);
+            backOrReplace(`/site/${respondedTown.id}`);
+        };
+
+        modaleStore.open(markRaw(ModaleMajSiteSansModification), {
+            onConfirm: submitWithoutChanges,
+        });
+        return true;
+    }
+    return false;
+}
+
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
         error.value = null;
@@ -457,73 +536,18 @@ defineExpose({
         const notificationStore = useNotificationStore();
         try {
             // Vérifier d'abord s'il y a des propriétaires invalides (avant formatage)
-            if (mode.value === "edit" && sentValues.owners?.length) {
-                const hasInvalidOwners = sentValues.owners.some((owner) => {
-                    const hasName = owner.name && owner.name.trim() !== "";
-                    const isUnknownType =
-                        owner.type === 1 || owner.type === "1";
-                    return !hasName && isUnknownType;
-                });
+            validateOwnersBeforeSubmit(sentValues);
 
-                if (hasInvalidOwners) {
-                    const validationError = new Error(
-                        "Vous avez ajouté un propriétaire sans renseigner son nom ou son type. Veuillez compléter les informations ou supprimer cette ligne."
-                    );
-                    validationError.user_message =
-                        "Vous avez ajouté un propriétaire sans renseigner son nom ou son type. Veuillez compléter les informations ou supprimer cette ligne.";
-                    validationError.fields = {
-                        owner: 'Un propriétaire doit avoir un nom ou un type différent de "Inconnu"',
-                    };
-                    throw validationError;
-                }
-            }
-
-            const formattedValues = formatValuesForApi(sentValues, "edit");
-
-            /* eslint-disable no-unused-vars */
-            let {
-                updated_at: _1,
-                update_to_date: _2,
-                ...originalValuesRest
-            } = originalValues;
-            let {
-                updated_at: _3,
-                update_to_date: _4,
-                ...formattedValuesRest
-            } = formattedValues;
-            /* eslint-enable no-unused-vars */
-
-            if (
-                // Cas où l'on souhaite indiquer qu'un site est à jour sans modifier de donnée
-                mode.value === "edit" &&
-                isDeepEqual(originalValuesRest, formattedValuesRest)
-            ) {
-                formattedValues.updated_without_any_change = true;
-            } else {
-                formattedValues.updated_without_any_change = false;
-            }
+            const formattedValues = prepareFormattedValues(
+                sentValues,
+                originalValues
+            );
             let respondedTown;
             if (mode.value === "edit") {
                 // Si aucune donnée n'est modifiée, afficher la modale de confirmation
-                if (formattedValues.updated_without_any_change) {
-                    const modaleStore = useModaleStore();
-                    const { default: ModaleMajSiteSansModification } =
-                        await import(
-                            "@/components/ModaleMajSiteSansModification/ModaleMajSiteSansModification.vue"
-                        );
-
-                    const submitWithoutChanges = async () => {
-                        const { submit } = config[mode.value];
-                        const respondedTown = await submit(
-                            formattedValues,
-                            town.value?.id
-                        );
-                        backOrReplace(`/site/${respondedTown.id}`);
-                    };
-
-                    modaleStore.open(markRaw(ModaleMajSiteSansModification), {
-                        onConfirm: submitWithoutChanges,
-                    });
+                const hasNoChangeModalBeenShown =
+                    await handleNoChangeModalIfNeeded(formattedValues);
+                if (hasNoChangeModalBeenShown) {
                     return;
                 }
 
