@@ -402,9 +402,18 @@ function buildOwners(ownerDatas) {
     if (!ownerDatas || !Array.isArray(ownerDatas)) {
         return [];
     }
-    return {
-        ...ownerDatas,
-        owners: ownerDatas.owners.map((owner) => {
+    return ownerDatas
+        .filter((owner) => {
+            // Exclure les propriétaires sans information utile :
+            // - nom vide/null avec type "Inconnu" (id=1)
+            // - nom vide/null sans type
+            const hasName = owner.name && owner.name.trim() !== "";
+            const isUnknownType = owner.type === 1 || owner.type === "1";
+
+            // Garder seulement si : a un nom OU (pas de nom mais type différent de "Inconnu")
+            return hasName || (!hasName && !isUnknownType && owner.type);
+        })
+        .map((owner) => {
             const newOwner = { ...owner };
             delete newOwner._key;
             return newOwner;
@@ -441,7 +450,26 @@ const hasPreparatoryPhases = computed(() => {
 
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
-        const formattedValues = formatValuesForApi(sentValues, "edit");
+            // Vérifier d'abord s'il y a des propriétaires invalides (avant formatage)
+            if (mode.value === "edit" && sentValues.owners?.length) {
+                const hasInvalidOwners = sentValues.owners.some((owner) => {
+                    const hasName = owner.name && owner.name.trim() !== "";
+                    const isUnknownType =
+                        owner.type === 1 || owner.type === "1";
+                    return !hasName && isUnknownType;
+                });
+
+                if (hasInvalidOwners) {
+                    throw {
+                        user_message:
+                            "Vous avez ajouté un propriétaire sans renseigner son nom ou son type. Veuillez compléter les informations ou supprimer cette ligne.",
+                        fields: {
+                            owner: 'Un propriétaire doit avoir un nom ou un type différent de "Inconnu"',
+                        },
+                    };
+                }
+            }
+
 
         /* eslint-disable no-unused-vars */
         let {
