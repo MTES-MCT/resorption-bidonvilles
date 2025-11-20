@@ -211,32 +211,29 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
             shantytown_parcel_owners AS (SELECT
                 s.hid AS fk_shantytown,
                 COALESCE(
-                    jsonb_build_object(
-                        'shantytownId', s.shantytown_id::integer,
-                        'owners', jsonb_agg(
-                            jsonb_build_object(
-                                'ownerId', po.shantytown_parcel_owner_id::integer,
-                                'name', po.owner_name::text,
-                                'type', po.fk_owner_type::integer,
-                                'typeDetails', jsonb_build_object(
-                                    'id', ot.owner_type_id::integer,
-                                    'label', ot.label::text,
-                                    'position', ot.position::integer
-                                ),
-                                'active', po.active::boolean,
-                                'createdAt', po.created_at,
-                                'createdBy', jsonb_build_object(
-                                    'authorId', u.user_id::integer,
-                                    'authorFirstName', u.first_name::text,
-                                    'authorLastName', u.last_name::text,
-                                    'organizationName', COALESCE(org.name, '')::text,
-                                    'organizationId', org.organization_id::integer
-                                )
+                    jsonb_agg(
+                        jsonb_build_object(
+                            'ownerId', po.shantytown_parcel_owner_id::integer,
+                            'name', po.owner_name::text,
+                            'type', po.fk_owner_type::integer,
+                            'typeDetails', jsonb_build_object(
+                                'id', ot.owner_type_id::integer,
+                                'label', ot.label::text,
+                                'position', ot.position::integer
+                            ),
+                            'active', po.active::boolean,
+                            'createdAt', po.created_at,
+                            'createdBy', jsonb_build_object(
+                                'authorId', u.user_id::integer,
+                                'authorFirstName', u.first_name::text,
+                                'authorLastName', u.last_name::text,
+                                'organizationName', COALESCE(org.name, '')::text,
+                                'organizationId', org.organization_id::integer
                             )
-                        ) FILTER (WHERE po.shantytown_parcel_owner_id IS NOT NULL)
-                    ),
-                    jsonb_build_object('shantytownId', s.shantytown_id, 'owners', '[]'::jsonb)
-                ) AS owner
+                        )
+                    ) FILTER (WHERE po.shantytown_parcel_owner_id IS NOT NULL),
+                    '[]'::jsonb
+                ) AS owners
             FROM "ShantytownHistories" s
             LEFT JOIN shantytown_parcel_owners_history po ON po.fk_shantytown = s.hid
             LEFT JOIN "users" u ON u.user_id = po.fk_user
@@ -247,7 +244,7 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
                 sco.origins AS "socialOrigins",
                 eat.electricity_access_types AS "electricityAccessTypes",
                 stt.toilet_types AS "toiletTypes",
-                po.owner AS "owners",
+                po.owners AS "owners",
                 COALESCE(shantytowns.updated_by, shantytowns.created_by) AS authorId,
                 ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(', ')}
             FROM
