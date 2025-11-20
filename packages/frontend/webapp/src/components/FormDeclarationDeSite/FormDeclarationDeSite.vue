@@ -466,13 +466,15 @@ defineExpose({
                 });
 
                 if (hasInvalidOwners) {
-                    throw {
-                        user_message:
-                            "Vous avez ajouté un propriétaire sans renseigner son nom ou son type. Veuillez compléter les informations ou supprimer cette ligne.",
-                        fields: {
-                            owner: 'Un propriétaire doit avoir un nom ou un type différent de "Inconnu"',
-                        },
+                    const validationError = new Error(
+                        "Vous avez ajouté un propriétaire sans renseigner son nom ou son type. Veuillez compléter les informations ou supprimer cette ligne."
+                    );
+                    validationError.user_message =
+                        "Vous avez ajouté un propriétaire sans renseigner son nom ou son type. Veuillez compléter les informations ou supprimer cette ligne.";
+                    validationError.fields = {
+                        owner: 'Un propriétaire doit avoir un nom ou un type différent de "Inconnu"',
                     };
+                    throw validationError;
                 }
             }
 
