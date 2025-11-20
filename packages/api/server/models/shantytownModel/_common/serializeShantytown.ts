@@ -147,7 +147,8 @@ export default (town: ShantytownRow, user): Shantytown => {
     if (town.fieldTypeLabel !== 'Inconnu') {
         completionTotal += 1;
     }
-    if (town.ownerTypeLabel !== 'Inconnu') {
+    // Vérifier si au moins un propriétaire actif avec un type différent de "Inconnu" (type 1)
+    if (town.owners && Array.isArray(town.owners) && town.owners.some(o => o.active && o.type !== 1)) {
         completionTotal += 1;
     }
     if (town.censusStatus !== null) {
@@ -210,7 +211,7 @@ export default (town: ShantytownRow, user): Shantytown => {
         serializedTown = {
             ...serializedTown,
             ...{
-                owner: town.owners,
+                owners: town.owners,
             },
         };
     }
