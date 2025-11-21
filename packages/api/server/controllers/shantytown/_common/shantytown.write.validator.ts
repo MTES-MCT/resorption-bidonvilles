@@ -106,6 +106,13 @@ const normalizeOwnerComparison = (owners: any[] | null): string | null => {
     return JSON.stringify({ owners: cleanedOwners });
 };
 
+const normalizeValue = (value: any): any => {
+    if (value === null || value === undefined) {
+        return null;
+    }
+    return value;
+};
+
 export default mode => ([
     param('id')
         .if(() => mode === 'update')
@@ -187,11 +194,6 @@ export default mode => ([
                             key: 'detailed_address',
                             submitedValue: getStringOrNull(req.body.detailed_address),
                             storedValue: getStringOrNull(req.town.addressDetails),
-                        },
-                        {
-                            key: 'owners',
-                            submitedValue: normalizeOwnerComparison(req.body.owners),
-                            storedValue: normalizeOwnerComparison(req.town.owners),
                         },
                         {
                             key: 'population_total',
@@ -525,8 +527,8 @@ export default mode => ([
                         },
                         {
                             key: 'police_status',
-                            submitedValue: req.body.police_status,
-                            storedValue: req.town.policeStatus,
+                            submitedValue: normalizeValue(req.body.police_status),
+                            storedValue: normalizeValue(req.town.policeStatus),
                         },
                         {
                             key: 'police_requested_at',
@@ -560,12 +562,28 @@ export default mode => ([
                         },
                     ];
 
+                    // Ajouter owners seulement si l'utilisateur a la permission
+                    if (req.user.isAllowedTo('access', 'shantytown_owner')) {
+                        fieldsToCheck.push({
+                            key: 'owners',
+                            submitedValue: normalizeOwnerComparison(req.body.owners),
+                            storedValue: normalizeOwnerComparison(req.town.owners),
+                        });
+                    }
+
                     if (mode !== 'create' && mode !== 'report') {
                         fieldsToCheck.push({
                             key: 'preparatory_phases_toward_resorption',
                             submitedValue: updatedPreparatoryPhasesTowardResorption ? JSON.stringify(updatedPreparatoryPhasesTowardResorption) : null,
                             storedValue: existingPreparatoryPhasesTowardResorption ? JSON.stringify(existingPreparatoryPhasesTowardResorption) : null,
                         });
+                    }
+
+                    // DEBUG: log les champs qui diffèrent
+                    const changedFields = fieldsToCheck.filter(field => field.submitedValue !== field.storedValue);
+                    if (changedFields.length > 0) {
+                        // eslint-disable-next-line no-console
+                        console.log('[DEBUG] Changed fields:', changedFields.map(f => ({ key: f.key, submitted: f.submitedValue, stored: f.storedValue })));
                     }
 
                     hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
