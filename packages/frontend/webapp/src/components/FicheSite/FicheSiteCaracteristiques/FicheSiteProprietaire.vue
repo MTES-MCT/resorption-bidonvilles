@@ -1,7 +1,7 @@
 <template>
     <FicheSousRubrique>
         <p class="font-bold mb-4">Propriétaires</p>
-        <div class="flex flex-row sm:flex-col gap-2">
+        <div v-if="ownersList.length" class="flex flex-row sm:flex-col gap-2">
             <div class="flex flex-col sm:flex-row justify-between">
                 <p class="font-bold">{{ ownerTitles.nom }}</p>
                 <p class="font-bold">{{ ownerTitles.type }}</p>
@@ -19,7 +19,7 @@
                 </p>
             </div>
         </div>
-        <div v-if="!ownersList">
+        <div v-else>
             <p class="break-words">Aucun propriétaire connu</p>
         </div>
     </FicheSousRubrique>
@@ -38,11 +38,11 @@ const { town } = toRefs(props);
 const configStore = useConfigStore();
 
 const ownersList = computed(() => {
-    return town.value.owners?.filter((owner) => owner.active);
+    return town.value.owners?.filter((owner) => owner.active) ?? [];
 });
 
 const ownerTitles = computed(() => {
-    if (!ownersList.value) {
+    if (!ownersList.value.length) {
         return {};
     }
     return {
