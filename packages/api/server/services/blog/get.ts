@@ -2,10 +2,15 @@ import ServiceError from '#server/errors/ServiceError';
 import blogModel from '#server/models/blogModel';
 import { Blog } from '#root/types/resources/Blog.d';
 
+const toLocalDate = (value?: string | Date | null): Date | null => {
+    const date = new Date(value || Date.now());
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+};
+
 const isBadgeActive = (blogRecord: Blog[]): boolean => {
-    const currentDate: Date = new Date();
+    const currentDate: Date = toLocalDate();
     let activeBadgePeriod: boolean = false;
-    if (currentDate >= new Date(blogRecord[0].from_date) && currentDate <= new Date(blogRecord[0].to_date)) {
+    if (currentDate >= toLocalDate(blogRecord[0].from_date) && currentDate <= toLocalDate(blogRecord[0].to_date)) {
         activeBadgePeriod = true;
     }
 
