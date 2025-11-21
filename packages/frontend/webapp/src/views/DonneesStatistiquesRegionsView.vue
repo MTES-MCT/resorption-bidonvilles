@@ -41,6 +41,7 @@ import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
 import DonneesStatistiques from "@/components/DonneesStatistiques/DonneesStatistiques.vue";
 import { useUserStore } from "@/stores/user.store";
+import departementSvg from "@/assets/img/departements/export.js";
 
 const userStore = useUserStore();
 
@@ -72,12 +73,14 @@ const ariane = computed(() => {
 
     return items;
 });
+
 const tiles = computed(() => {
     return userStore.departementsForMetrics.map((departement) => {
         return {
             title: departement.name,
             description: `Code : ${departement.code}`,
             to: `/visualisation-donnees/departement/${departement.code}`,
+            imgSrc: departementSvg[departement.code],
         };
     });
 });
