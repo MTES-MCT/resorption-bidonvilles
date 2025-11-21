@@ -579,13 +579,6 @@ export default mode => ([
                         });
                     }
 
-                    // DEBUG: log les champs qui diffèrent
-                    const changedFields = fieldsToCheck.filter(field => field.submitedValue !== field.storedValue);
-                    if (changedFields.length > 0) {
-                        // eslint-disable-next-line no-console
-                        console.log('[DEBUG] Changed fields:', changedFields.map(f => ({ key: f.key, submitted: f.submitedValue, stored: f.storedValue })));
-                    }
-
                     hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
                 }
 
