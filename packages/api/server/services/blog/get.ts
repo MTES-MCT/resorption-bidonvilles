@@ -17,7 +17,7 @@ const isBadgeActive = (blogRecord: Blog[]): boolean => {
     return activeBadgePeriod;
 };
 
-export default async (): Promise<Blog> => {
+export default async function get(): Promise<Blog> {
     let blogRecord: Blog[];
     try {
         blogRecord = await blogModel.get();
@@ -32,4 +32,4 @@ export default async (): Promise<Blog> => {
     }
 
     return blogRecord[0];
-};
+}

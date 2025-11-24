@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import { Blog } from '#root/types/resources/Blog.d';
 
-export default async (): Promise<Blog[]> => {
+export default async function get(): Promise<Blog[]> {
     const rows: Blog[] = await sequelize.query(
         `SELECT
             *
@@ -13,4 +13,4 @@ export default async (): Promise<Blog[]> => {
         },
     );
     return rows;
-};
+}
