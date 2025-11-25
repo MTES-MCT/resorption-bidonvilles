@@ -82,13 +82,12 @@ const excludeSignedUrls = (key: string, value: any): any => {
     return value;
 };
 
-const normalizeOwnerComparison = (ownerData: { owners: any[] } | null): string | null => {
-    if (!ownerData || !ownerData.owners) {
+const normalizeOwnerComparison = (owners: any[] | null): string | null => {
+    if (!owners || !Array.isArray(owners) || owners.length === 0) {
         return null;
     }
 
-    // On nettoie chaque propriétaire en passant les dates en ISO et en triant pourêtre sûr de la comparaison
-    const cleanedOwners = ownerData.owners.map((owner) => {
+    const cleanedOwners = owners.map((owner) => {
         const { _key, ...rest } = owner;
         return {
             ...rest,
@@ -101,11 +100,17 @@ const normalizeOwnerComparison = (ownerData: { owners: any[] } | null): string |
         if (a.ownerId && b.ownerId) {
             return a.ownerId - b.ownerId;
         }
-        // Pour les nouveaux propriétaires sans ownerId, on trie par nom
         return (a.name || '').localeCompare(b.name || '');
     });
 
     return JSON.stringify({ owners: cleanedOwners });
+};
+
+const normalizeValue = (value: any): any => {
+    if (value === null || value === undefined) {
+        return null;
+    }
+    return value;
 };
 
 export default mode => ([
@@ -135,460 +140,462 @@ export default mode => ([
     body('updated_without_any_change')
         .isBoolean().withMessage('Le champ "updated_without_any_change" doit être un booléen')
         .custom(async (value, { req }) => {
-            let hasChanges = false;
+            try {
+                let hasChanges = false;
 
-            let existingPreparatoryPhasesTowardResorption = [];
-            let updatedPreparatoryPhasesTowardResorption = [];
-            if (mode !== 'create' && mode !== 'report') {
-                existingPreparatoryPhasesTowardResorption = req.town.preparatoryPhasesTowardResorption.map((phase: SimplifiedPhase) => ({
-                    preparatoryPhaseId: phase.preparatoryPhaseId,
-                    completedAt: phase.completedAt,
-                }));
-
-                updatedPreparatoryPhasesTowardResorption = req.body.preparatory_phases_toward_resorption.map(phase => ({
-                    preparatoryPhaseId: phase,
-                    completedAt: req.body.terminated_preparatory_phases_toward_resorption[phase] ? new Date(req.body.terminated_preparatory_phases_toward_resorption[phase]).getTime() / 1000 : null,
-                }));
-            }
-
-
-            if (req.town) {
-                const fieldsToCheck = [
-                    {
-                        key: 'address',
-                        submitedValue: getStringOrNull(req.body.address),
-                        storedValue: getStringOrNull(req.town.address),
-                    },
-                    {
-                        key: 'name',
-                        submitedValue: getStringOrNull(req.body.name),
-                        storedValue: getStringOrNull(req.town.name),
-                    },
-                    {
-                        key: 'coordinates',
-                        submitedValue: req.body.coordinates,
-                        storedValue: `${req.town.latitude},${req.town.longitude}`,
-                    },
-                    {
-                        key: 'built_at',
-                        submitedValue: getStringOrNull(req.body.built_at),
-                        storedValue: req.town.builtAt ? formatDateToYYYYMMDD(new Date(req.town.builtAt * 1000)) : null,
-                    },
-                    {
-                        key: 'declared_at',
-                        submitedValue: getStringOrNull(req.body.declared_at),
-                        storedValue: req.town.declaredAt ? formatDateToYYYYMMDD(new Date(req.town.declaredAt * 1000)) : null,
-                    },
-                    {
-                        key: 'field_type',
-                        submitedValue: req.body.field_type,
-                        storedValue: req.town.fieldType.id,
-                    },
-                    {
-                        key: 'detailed_address',
-                        submitedValue: getStringOrNull(req.body.detailed_address),
-                        storedValue: getStringOrNull(req.town.addressDetails),
-                    },
-                    {
-                        key: 'owner',
-                        submitedValue: req.body.owner?.owners.length > 0 ? normalizeOwnerComparison(req.body.owner) : null,
-                        storedValue: req.town.owner ? normalizeOwnerComparison(req.town.owner) : null,
-                    },
-                    {
-                        key: 'population_total',
-                        submitedValue: getNumberOrNull(req.body.population_total),
-                        storedValue: getNumberOrNull(req.town.populationTotal),
-                    },
-                    {
-                        key: 'population_total_females',
-                        submitedValue: getNumberOrNull(req.body.population_total_females),
-                        storedValue: getNumberOrNull(req.town.populationTotalFemales),
-                    },
-                    {
-                        key: 'population_couples',
-                        submitedValue: getNumberOrNull(req.body.population_couples),
-                        storedValue: getNumberOrNull(req.town.populationCouples),
-                    },
-                    {
-                        key: 'population_minors',
-                        submitedValue: getNumberOrNull(req.body.population_minors),
-                        storedValue: getNumberOrNull(req.town.populationMinors),
-                    },
-                    {
-                        key: 'population_minors_girls',
-                        submitedValue: getNumberOrNull(req.body.population_minors_girls),
-                        storedValue: getNumberOrNull(req.town.populationMinorsGirls),
-                    },
-                    {
-                        key: 'population_minors_0_3',
-                        submitedValue: getNumberOrNull(req.body.population_minors_0_3),
-                        storedValue: getNumberOrNull(req.town.populationMinors0To3),
-                    },
-                    {
-                        key: 'population_minors_3_6',
-                        submitedValue: getNumberOrNull(req.body.population_minors_3_6),
-                        storedValue: getNumberOrNull(req.town.populationMinors3To6),
-                    },
-                    {
-                        key: 'population_minors_6_12',
-                        submitedValue: getNumberOrNull(req.body.population_minors_6_12),
-                        storedValue: getNumberOrNull(req.town.populationMinors6To12),
-                    },
-                    {
-                        key: 'population_minors_12_16',
-                        submitedValue: getNumberOrNull(req.body.population_minors_12_16),
-                        storedValue: getNumberOrNull(req.town.populationMinors12To16),
-                    },
-                    {
-                        key: 'population_minors_16_18',
-                        submitedValue: getNumberOrNull(req.body.population_minors_16_18),
-                        storedValue: getNumberOrNull(req.town.populationMinors16To18),
-                    },
-                    {
-                        key: 'minors_in_school',
-                        submitedValue: getNumberOrNull(req.body.minors_in_school),
-                        storedValue: getNumberOrNull(req.town.minorsInSchool),
-                    },
-                    {
-                        key: 'social_origins',
-                        submitedValue: req.body.social_origins ? JSON.stringify(req.body.social_origins.sort()) : null,
-                        storedValue: req.town.socialOrigins ? JSON.stringify(req.town.socialOrigins.map((so: SocialOrigin) => so.id).sort()) : null,
-                    },
-                    {
-                        key: 'caravans',
-                        submitedValue: getNumberOrNull(req.body.caravans),
-                        storedValue: getNumberOrNull(req.town.caravans),
-                    },
-                    {
-                        key: 'huts',
-                        submitedValue: getNumberOrNull(req.body.huts),
-                        storedValue: getNumberOrNull(req.town.huts),
-                    },
-                    {
-                        key: 'tents',
-                        submitedValue: getNumberOrNull(req.body.tents),
-                        storedValue: getNumberOrNull(req.town.tents),
-                    },
-                    {
-                        key: 'cars',
-                        submitedValue: getNumberOrNull(req.body.cars),
-                        storedValue: getNumberOrNull(req.town.cars),
-                    },
-                    {
-                        key: 'mattresses',
-                        submitedValue: getNumberOrNull(req.body.mattresses),
-                        storedValue: getNumberOrNull(req.town.mattresses),
-                    },
-                    {
-                        key: 'census_status',
-                        submitedValue: req.body.census_status,
-                        storedValue: req.town.censusStatus,
-                    },
-                    {
-                        key: 'census_conducted_at',
-                        submitedValue: req.body.census_conducted_at ?? null,
-                        storedValue: req.town.censusConductedAt ? formatDateToYYYYMMDD(new Date(req.town.censusConductedAt * 1000)) : null,
-                    },
-                    {
-                        key: 'census_conducted_by',
-                        submitedValue: req.body.census_conducted_by,
-                        storedValue: req.town.censusConductedBy,
-                    },
-                    {
-                        key: 'is_reinstallation',
-                        submitedValue: checkForInValueMap(req.body.is_reinstallation),
-                        storedValue: req.town.isReinstallation,
-                    },
-                    {
-                        key: 'reinstallation_comments',
-                        submitedValue: getStringOrNull(req.body.reinstallation_comments),
-                        storedValue: getStringOrNull(req.town.reinstallationComments),
-                    },
-                    {
-                        key: 'reinstallation_incoming_towns',
-                        submitedValue: req.body.reinstallation_incoming_towns ? JSON.stringify(req.body.reinstallation_incoming_towns.sort()) : null,
-                        storedValue: req.town.reinstallationIncomingTowns ? JSON.stringify(req.town.reinstallationIncomingTowns.map(rit => rit.id).sort()) : null,
-                    },
-                    {
-                        key: 'water_access_type',
-                        submitedValue: getStringOrNull(req.body.water_access_type),
-                        storedValue: getStringOrNull(req.town.livingConditions.water.access_type),
-                    },
-                    {
-                        key: 'water_access_type_details',
-                        submitedValue: getStringOrNull(req.body.water_access_type_details),
-                        storedValue: getStringOrNull(req.town.livingConditions.water.access_type_details),
-                    },
-                    {
-                        key: 'water_access_is_public',
-                        submitedValue: checkForInValueMap(req.body.water_access_is_public),
-                        storedValue: req.town.livingConditions.water.access_is_public,
-                    },
-                    {
-                        key: 'water_access_is_continuous',
-                        submitedValue: checkForInValueMap(req.body.water_access_is_continuous),
-                        storedValue: req.town.livingConditions.water.access_is_continuous,
-                    },
-                    {
-                        key: 'water_access_is_continuous_details',
-                        submitedValue: req.body.water_access_is_continuous_details,
-                        storedValue: req.town.livingConditions.water.access_is_continuous_details,
-                    },
-                    {
-                        key: 'water_access_is_local',
-                        submitedValue: checkForInValueMap(req.body.water_access_is_local),
-                        storedValue: req.town.livingConditions.water.access_is_local,
-                    },
-                    {
-                        key: 'water_access_is_close',
-                        submitedValue: checkForInValueMap(req.body.water_access_is_close),
-                        storedValue: req.town.livingConditions.water.access_is_close,
-                    },
-                    {
-                        key: 'water_access_is_unequal',
-                        submitedValue: checkForInValueMap(req.body.water_access_is_unequal),
-                        storedValue: req.town.livingConditions.water.access_is_unequal,
-                    },
-                    {
-                        key: 'water_access_is_unequal_details',
-                        submitedValue: req.body.water_access_is_unequal_details,
-                        storedValue: req.town.livingConditions.water.access_is_unequal_details,
-                    },
-                    {
-                        key: 'water_access_has_stagnant_water',
-                        submitedValue: checkForInValueMap(req.body.water_access_has_stagnant_water),
-                        storedValue: req.town.livingConditions.water.access_has_stagnant_water,
-                    },
-                    {
-                        key: 'water_access_comments',
-                        submitedValue: getStringOrNull(req.body.water_access_comments),
-                        storedValue: getStringOrNull(req.town.livingConditions.water.access_comments),
-                    },
-                    {
-                        key: 'sanitary_working_toilets',
-                        submitedValue: checkForInValueMap(req.body.sanitary_working_toilets),
-                        storedValue: req.town.livingConditions.sanitary.working_toilets,
-                    },
-                    {
-                        key: 'sanitary_open_air_defecation',
-                        submitedValue: checkForInValueMap(req.body.sanitary_open_air_defecation),
-                        storedValue: req.town.livingConditions.sanitary.open_air_defecation,
-                    },
-                    {
-                        key: 'sanitary_toilet_types',
-                        submitedValue: req.body.sanitary_toilet_types && req.body.sanitary_toilet_types.length > 0 ? JSON.stringify(req.body.sanitary_toilet_types.sort()) : '[]',
-                        storedValue: req.town.livingConditions.sanitary.toilet_types ? JSON.stringify(req.town.livingConditions.sanitary.toilet_types.sort()) : '[]',
-                    },
-                    {
-                        key: 'sanitary_toilets_are_inside',
-                        submitedValue: checkForInValueMap(req.body.sanitary_toilets_are_inside),
-                        storedValue: req.town.livingConditions.sanitary.toilets_are_inside,
-                    },
-                    {
-                        key: 'sanitary_toilets_are_lighted',
-                        submitedValue: checkForInValueMap(req.body.sanitary_toilets_are_lighted),
-                        storedValue: req.town.livingConditions.sanitary.toilets_are_lighted,
-                    },
-                    {
-                        key: 'sanitary_hand_washing',
-                        submitedValue: checkForInValueMap(req.body.sanitary_hand_washing),
-                        storedValue: req.town.livingConditions.sanitary.hand_washing,
-                    },
-                    {
-                        key: 'electricity_access',
-                        submitedValue: checkForInValueMap(req.body.electricity_access),
-                        storedValue: req.town.livingConditions.electricity.access,
-                    },
-                    {
-                        key: 'electricity_access_types',
-                        submitedValue: req.body.electricity_access_types && req.body.electricity_access_types?.length > 0 ? JSON.stringify(req.body.electricity_access_types.sort()) : '[]',
-                        storedValue: req.town.livingConditions.electricity.access_types ? JSON.stringify(req.town.livingConditions.electricity.access_types.sort()) : '[]',
-                    },
-                    {
-                        key: 'electricity_access_is_unequal',
-                        submitedValue: checkForInValueMap(req.body.electricity_access_is_unequal),
-                        storedValue: req.town.livingConditions.electricity.access_is_unequal,
-                    },
-                    {
-                        key: 'trash_is_piling',
-                        submitedValue: checkForInValueMap(req.body.trash_is_piling),
-                        storedValue: req.town.livingConditions.trash.is_piling,
-                    },
-                    {
-                        key: 'trash_evacuation_is_close',
-                        submitedValue: checkForInValueMap(req.body.trash_evacuation_is_close),
-                        storedValue: req.town.livingConditions.trash.evacuation_is_close,
-                    },
-                    {
-                        key: 'trash_evacuation_is_safe',
-                        submitedValue: checkForInValueMap(req.body.trash_evacuation_is_safe),
-                        storedValue: req.town.livingConditions.trash.evacuation_is_safe,
-                    },
-                    {
-                        key: 'trash_evacuation_is_regular',
-                        submitedValue: checkForInValueMap(req.body.trash_evacuation_is_regular),
-                        storedValue: req.town.livingConditions.trash.evacuation_is_regular,
-                    },
-                    {
-                        key: 'trash_bulky_is_piling',
-                        submitedValue: checkForInValueMap(req.body.trash_bulky_is_piling),
-                        storedValue: req.town.livingConditions.trash.bulky_is_piling,
-                    },
-                    {
-                        key: 'pest_animals_presence',
-                        submitedValue: checkForInValueMap(req.body.pest_animals_presence),
-                        storedValue: req.town.livingConditions.pest_animals ? req.town.livingConditions.pest_animals.presence : null,
-                    },
-                    {
-                        key: 'pest_animals_details',
-                        submitedValue: getStringOrNull(req.body.pest_animals_details),
-                        storedValue: req.town.livingConditions.pest_animals ? getStringOrNull(req.town.livingConditions.pest_animals.details) : null,
-                    },
-                    {
-                        key: 'fire_prevention_diagnostic',
-                        submitedValue: checkForInValueMap(req.body.fire_prevention_diagnostic),
-                        storedValue: req.town.livingConditions.fire_prevention ? req.town.livingConditions.fire_prevention.diagnostic : null,
-                    },
-                    {
-                        key: 'owner_complaint',
-                        submitedValue: checkForInValueMap(req.body.owner_complaint),
-                        storedValue: req.town.ownerComplaint,
-                    },
-                    {
-                        key: 'justice_procedure',
-                        submitedValue: checkForInValueMap(req.body.justice_procedure),
-                        storedValue: req.town.justiceProcedure,
-                    },
-                    {
-                        key: 'justice_rendered',
-                        submitedValue: checkForInValueMap(req.body.justice_rendered),
-                        storedValue: req.town.justiceRendered,
-                    },
-                    {
-                        key: 'justice_rendered_by',
-                        submitedValue: getStringOrNull(req.body.justice_rendered_by),
-                        storedValue: getStringOrNull(req.town.justiceRenderedBy),
-                    },
-                    {
-                        key: 'justice_rendered_at',
-                        submitedValue: req.body.justice_rendered_at ?? null,
-                        storedValue: req.town.justiceRenderedAt ? formatDateToYYYYMMDD(new Date(req.town.justiceRenderedAt * 1000)) : null,
-                    },
-                    {
-                        key: 'justice_challenged',
-                        submitedValue: checkForInValueMap(req.body.justice_challenged),
-                        storedValue: req.town.justiceChallenged,
-                    },
-                    {
-                        key: 'evacuation_under_time_limit',
-                        submitedValue: checkForInValueMap(req.body.evacuation_under_time_limit),
-                        storedValue: req.town.evacuationUnderTimeLimit,
-                    },
-                    {
-                        key: 'administrative_order_decision_at',
-                        submitedValue: req.body.administrative_order_decision_at ?? null,
-                        storedValue: req.town.administrativeOrderDecisionAt ? formatDateToYYYYMMDD(new Date(req.town.administrativeOrderDecisionAt * 1000)) : null,
-                    },
-                    {
-                        key: 'administrative_order_decision_rendered_by',
-                        submitedValue: getStringOrNull(req.body.administrative_order_decision_rendered_by),
-                        storedValue: getStringOrNull(req.town.administrativeOrderDecisionRenderedBy),
-                    },
-                    {
-                        key: 'administrative_order_evacuation_at',
-                        submitedValue: req.body.administrative_order_evacuation_at ?? null,
-                        storedValue: req.town.administrativeOrderEvacuationAt ? formatDateToYYYYMMDD(new Date(req.town.administrativeOrderEvacuationAt * 1000)) : null,
-                    },
-                    {
-                        key: 'insalubrity_order',
-                        submitedValue: checkForInValueMap(req.body.insalubrity_order),
-                        storedValue: req.town.insalubrityOrder,
-                    },
-                    {
-                        key: 'insalubrity_order_displayed',
-                        submitedValue: checkForInValueMap(req.body.insalubrity_order_displayed),
-                        storedValue: req.town.insalubrityOrderDisplayed,
-                    },
-                    {
-                        key: 'insalubrity_order_type',
-                        submitedValue: getStringOrNull(req.body.insalubrity_order_type),
-                        storedValue: getStringOrNull(req.town.insalubrityOrderType),
-                    },
-                    {
-                        key: 'insalubrity_order_by',
-                        submitedValue: getStringOrNull(req.body.insalubrity_order_by),
-                        storedValue: getStringOrNull(req.town.insalubrityOrderBy),
-                    },
-                    {
-                        key: 'insalubrity_order_at',
-                        submitedValue: req.body.insalubrity_order_at ?? null,
-                        storedValue: req.town.insalubrityOrderAt ? formatDateToYYYYMMDD(new Date(req.town.insalubrityOrderAt * 1000)) : null,
-                    },
-                    {
-                        key: 'insalubrity_parcels',
-                        submitedValue: getStringOrNull(req.body.insalubrity_parcels),
-                        storedValue: getStringOrNull(req.town.insalubrityParcels),
-                    },
-                    {
-                        key: 'police_status',
-                        submitedValue: req.body.police_status,
-                        storedValue: req.town.policeStatus,
-                    },
-                    {
-                        key: 'police_requested_at',
-                        submitedValue: req.body.police_requested_at ?? null,
-                        storedValue: req.town.policeRequestedAt ? formatDateToYYYYMMDD(new Date(req.town.policeRequestedAt * 1000)) : null,
-                    },
-                    {
-                        key: 'police_granted_at',
-                        submitedValue: req.body.police_granted_at ?? null,
-                        storedValue: req.town.policeGrantedAt ? formatDateToYYYYMMDD(new Date(req.town.policeGrantedAt * 1000)) : null,
-                    },
-                    {
-                        key: 'existing_litigation',
-                        submitedValue: checkForInValueMap(req.body.existing_litigation),
-                        storedValue: req.town.existingLitigation,
-                    },
-                    {
-                        key: 'bailiff',
-                        submitedValue: getStringOrNull(req.body.bailiff),
-                        storedValue: getStringOrNull(req.town.bailiff),
-                    },
-                    {
-                        key: 'newAttachments',
-                        submitedValue: req.body.newAttachments && req.body.newAttachments.length > 0 ? JSON.stringify(req.body.newAttachments) : null,
-                        storedValue: req.town.newAttachments ? JSON.stringify(req.town.newAttachments) : null,
-                    },
-                    {
-                        key: 'attachments',
-                        submitedValue: req.body.existingAttachments && req.body.existingAttachments.length > 0 ? JSON.stringify(req.body.existingAttachments, excludeSignedUrls) : '[]',
-                        storedValue: req.town.attachments ? JSON.stringify(req.town.attachments, excludeSignedUrls) : '[]',
-                    },
-                ];
-
+                let existingPreparatoryPhasesTowardResorption = [];
+                let updatedPreparatoryPhasesTowardResorption = [];
                 if (mode !== 'create' && mode !== 'report') {
-                    fieldsToCheck.push({
-                        key: 'preparatory_phases_toward_resorption',
-                        submitedValue: updatedPreparatoryPhasesTowardResorption ? JSON.stringify(updatedPreparatoryPhasesTowardResorption) : null,
-                        storedValue: existingPreparatoryPhasesTowardResorption ? JSON.stringify(existingPreparatoryPhasesTowardResorption) : null,
-                    });
+                    existingPreparatoryPhasesTowardResorption = req.town.preparatoryPhasesTowardResorption.map((phase: SimplifiedPhase) => ({
+                        preparatoryPhaseId: phase.preparatoryPhaseId,
+                        completedAt: phase.completedAt,
+                    }));
+
+                    updatedPreparatoryPhasesTowardResorption = req.body.preparatory_phases_toward_resorption.map(phase => ({
+                        preparatoryPhaseId: phase,
+                        completedAt: req.body.terminated_preparatory_phases_toward_resorption[phase] ? new Date(req.body.terminated_preparatory_phases_toward_resorption[phase]).getTime() / 1000 : null,
+                    }));
                 }
 
-                // Y at'il des modifications des données dans les champs du formulaire ?
-                hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
-            }
 
-            // Si update_without_any_change est à true, alors aucun champ ne doit être modifié
-            if (value) {
-                // Vérifier qu'aucun autre champ n'a été modifié
-                if (hasChanges) {
-                    throw new Error('Aucun autre champ ne doit être modifié s\'il s\'agit d\'une mise à jour de site sans modification de données');
+                if (req.town) {
+                    const fieldsToCheck = [
+                        {
+                            key: 'address',
+                            submitedValue: getStringOrNull(req.body.address),
+                            storedValue: getStringOrNull(req.town.address),
+                        },
+                        {
+                            key: 'name',
+                            submitedValue: getStringOrNull(req.body.name),
+                            storedValue: getStringOrNull(req.town.name),
+                        },
+                        {
+                            key: 'coordinates',
+                            submitedValue: req.body.coordinates,
+                            storedValue: `${req.town.latitude},${req.town.longitude}`,
+                        },
+                        {
+                            key: 'built_at',
+                            submitedValue: getStringOrNull(req.body.built_at),
+                            storedValue: req.town.builtAt ? formatDateToYYYYMMDD(new Date(req.town.builtAt * 1000)) : null,
+                        },
+                        {
+                            key: 'declared_at',
+                            submitedValue: getStringOrNull(req.body.declared_at),
+                            storedValue: req.town.declaredAt ? formatDateToYYYYMMDD(new Date(req.town.declaredAt * 1000)) : null,
+                        },
+                        {
+                            key: 'field_type',
+                            submitedValue: req.body.field_type,
+                            storedValue: req.town.fieldType.id,
+                        },
+                        {
+                            key: 'detailed_address',
+                            submitedValue: getStringOrNull(req.body.detailed_address),
+                            storedValue: getStringOrNull(req.town.addressDetails),
+                        },
+                        {
+                            key: 'population_total',
+                            submitedValue: getNumberOrNull(req.body.population_total),
+                            storedValue: getNumberOrNull(req.town.populationTotal),
+                        },
+                        {
+                            key: 'population_total_females',
+                            submitedValue: getNumberOrNull(req.body.population_total_females),
+                            storedValue: getNumberOrNull(req.town.populationTotalFemales),
+                        },
+                        {
+                            key: 'population_couples',
+                            submitedValue: getNumberOrNull(req.body.population_couples),
+                            storedValue: getNumberOrNull(req.town.populationCouples),
+                        },
+                        {
+                            key: 'population_minors',
+                            submitedValue: getNumberOrNull(req.body.population_minors),
+                            storedValue: getNumberOrNull(req.town.populationMinors),
+                        },
+                        {
+                            key: 'population_minors_girls',
+                            submitedValue: getNumberOrNull(req.body.population_minors_girls),
+                            storedValue: getNumberOrNull(req.town.populationMinorsGirls),
+                        },
+                        {
+                            key: 'population_minors_0_3',
+                            submitedValue: getNumberOrNull(req.body.population_minors_0_3),
+                            storedValue: getNumberOrNull(req.town.populationMinors0To3),
+                        },
+                        {
+                            key: 'population_minors_3_6',
+                            submitedValue: getNumberOrNull(req.body.population_minors_3_6),
+                            storedValue: getNumberOrNull(req.town.populationMinors3To6),
+                        },
+                        {
+                            key: 'population_minors_6_12',
+                            submitedValue: getNumberOrNull(req.body.population_minors_6_12),
+                            storedValue: getNumberOrNull(req.town.populationMinors6To12),
+                        },
+                        {
+                            key: 'population_minors_12_16',
+                            submitedValue: getNumberOrNull(req.body.population_minors_12_16),
+                            storedValue: getNumberOrNull(req.town.populationMinors12To16),
+                        },
+                        {
+                            key: 'population_minors_16_18',
+                            submitedValue: getNumberOrNull(req.body.population_minors_16_18),
+                            storedValue: getNumberOrNull(req.town.populationMinors16To18),
+                        },
+                        {
+                            key: 'minors_in_school',
+                            submitedValue: getNumberOrNull(req.body.minors_in_school),
+                            storedValue: getNumberOrNull(req.town.minorsInSchool),
+                        },
+                        {
+                            key: 'social_origins',
+                            submitedValue: req.body.social_origins ? JSON.stringify(req.body.social_origins.sort()) : null,
+                            storedValue: req.town.socialOrigins ? JSON.stringify(req.town.socialOrigins.map((so: SocialOrigin) => so.id).sort()) : null,
+                        },
+                        {
+                            key: 'caravans',
+                            submitedValue: getNumberOrNull(req.body.caravans),
+                            storedValue: getNumberOrNull(req.town.caravans),
+                        },
+                        {
+                            key: 'huts',
+                            submitedValue: getNumberOrNull(req.body.huts),
+                            storedValue: getNumberOrNull(req.town.huts),
+                        },
+                        {
+                            key: 'cars',
+                            submitedValue: getNumberOrNull(req.body.cars),
+                            storedValue: getNumberOrNull(req.town.cars),
+                        },
+                        {
+                            key: 'mattresses',
+                            submitedValue: getNumberOrNull(req.body.mattresses),
+                            storedValue: getNumberOrNull(req.town.mattresses),
+                        },
+                        {
+                            key: 'census_status',
+                            submitedValue: req.body.census_status,
+                            storedValue: req.town.censusStatus,
+                        },
+                        {
+                            key: 'census_conducted_at',
+                            submitedValue: req.body.census_conducted_at ?? null,
+                            storedValue: req.town.censusConductedAt ? formatDateToYYYYMMDD(new Date(req.town.censusConductedAt * 1000)) : null,
+                        },
+                        {
+                            key: 'census_conducted_by',
+                            submitedValue: req.body.census_conducted_by,
+                            storedValue: req.town.censusConductedBy,
+                        },
+                        {
+                            key: 'is_reinstallation',
+                            submitedValue: checkForInValueMap(req.body.is_reinstallation),
+                            storedValue: req.town.isReinstallation,
+                        },
+                        {
+                            key: 'reinstallation_comments',
+                            submitedValue: getStringOrNull(req.body.reinstallation_comments),
+                            storedValue: getStringOrNull(req.town.reinstallationComments),
+                        },
+                        {
+                            key: 'reinstallation_incoming_towns',
+                            submitedValue: req.body.reinstallation_incoming_towns ? JSON.stringify(req.body.reinstallation_incoming_towns.sort()) : null,
+                            storedValue: req.town.reinstallationIncomingTowns ? JSON.stringify(req.town.reinstallationIncomingTowns.map(rit => rit.id).sort()) : null,
+                        },
+                        {
+                            key: 'water_access_type',
+                            submitedValue: getStringOrNull(req.body.water_access_type),
+                            storedValue: getStringOrNull(req.town.livingConditions.water.access_type),
+                        },
+                        {
+                            key: 'water_access_type_details',
+                            submitedValue: getStringOrNull(req.body.water_access_type_details),
+                            storedValue: getStringOrNull(req.town.livingConditions.water.access_type_details),
+                        },
+                        {
+                            key: 'water_access_is_public',
+                            submitedValue: checkForInValueMap(req.body.water_access_is_public),
+                            storedValue: req.town.livingConditions.water.access_is_public,
+                        },
+                        {
+                            key: 'water_access_is_continuous',
+                            submitedValue: checkForInValueMap(req.body.water_access_is_continuous),
+                            storedValue: req.town.livingConditions.water.access_is_continuous,
+                        },
+                        {
+                            key: 'water_access_is_continuous_details',
+                            submitedValue: req.body.water_access_is_continuous_details,
+                            storedValue: req.town.livingConditions.water.access_is_continuous_details,
+                        },
+                        {
+                            key: 'water_access_is_local',
+                            submitedValue: checkForInValueMap(req.body.water_access_is_local),
+                            storedValue: req.town.livingConditions.water.access_is_local,
+                        },
+                        {
+                            key: 'water_access_is_close',
+                            submitedValue: checkForInValueMap(req.body.water_access_is_close),
+                            storedValue: req.town.livingConditions.water.access_is_close,
+                        },
+                        {
+                            key: 'water_access_is_unequal',
+                            submitedValue: checkForInValueMap(req.body.water_access_is_unequal),
+                            storedValue: req.town.livingConditions.water.access_is_unequal,
+                        },
+                        {
+                            key: 'water_access_is_unequal_details',
+                            submitedValue: req.body.water_access_is_unequal_details,
+                            storedValue: req.town.livingConditions.water.access_is_unequal_details,
+                        },
+                        {
+                            key: 'water_access_has_stagnant_water',
+                            submitedValue: checkForInValueMap(req.body.water_access_has_stagnant_water),
+                            storedValue: req.town.livingConditions.water.access_has_stagnant_water,
+                        },
+                        {
+                            key: 'water_access_comments',
+                            submitedValue: getStringOrNull(req.body.water_access_comments),
+                            storedValue: getStringOrNull(req.town.livingConditions.water.access_comments),
+                        },
+                        {
+                            key: 'sanitary_working_toilets',
+                            submitedValue: checkForInValueMap(req.body.sanitary_working_toilets),
+                            storedValue: req.town.livingConditions.sanitary.working_toilets,
+                        },
+                        {
+                            key: 'sanitary_open_air_defecation',
+                            submitedValue: checkForInValueMap(req.body.sanitary_open_air_defecation),
+                            storedValue: req.town.livingConditions.sanitary.open_air_defecation,
+                        },
+                        {
+                            key: 'sanitary_toilet_types',
+                            submitedValue: req.body.sanitary_toilet_types && req.body.sanitary_toilet_types.length > 0 ? JSON.stringify(req.body.sanitary_toilet_types.sort()) : '[]',
+                            storedValue: req.town.livingConditions.sanitary.toilet_types ? JSON.stringify(req.town.livingConditions.sanitary.toilet_types.sort()) : '[]',
+                        },
+                        {
+                            key: 'sanitary_toilets_are_inside',
+                            submitedValue: checkForInValueMap(req.body.sanitary_toilets_are_inside),
+                            storedValue: req.town.livingConditions.sanitary.toilets_are_inside,
+                        },
+                        {
+                            key: 'sanitary_toilets_are_lighted',
+                            submitedValue: checkForInValueMap(req.body.sanitary_toilets_are_lighted),
+                            storedValue: req.town.livingConditions.sanitary.toilets_are_lighted,
+                        },
+                        {
+                            key: 'sanitary_hand_washing',
+                            submitedValue: checkForInValueMap(req.body.sanitary_hand_washing),
+                            storedValue: req.town.livingConditions.sanitary.hand_washing,
+                        },
+                        {
+                            key: 'electricity_access',
+                            submitedValue: checkForInValueMap(req.body.electricity_access),
+                            storedValue: req.town.livingConditions.electricity.access,
+                        },
+                        {
+                            key: 'electricity_access_types',
+                            submitedValue: req.body.electricity_access_types && req.body.electricity_access_types?.length > 0 ? JSON.stringify(req.body.electricity_access_types.sort()) : '[]',
+                            storedValue: req.town.livingConditions.electricity.access_types ? JSON.stringify(req.town.livingConditions.electricity.access_types.sort()) : '[]',
+                        },
+                        {
+                            key: 'electricity_access_is_unequal',
+                            submitedValue: checkForInValueMap(req.body.electricity_access_is_unequal),
+                            storedValue: req.town.livingConditions.electricity.access_is_unequal,
+                        },
+                        {
+                            key: 'trash_is_piling',
+                            submitedValue: checkForInValueMap(req.body.trash_is_piling),
+                            storedValue: req.town.livingConditions.trash.is_piling,
+                        },
+                        {
+                            key: 'trash_evacuation_is_close',
+                            submitedValue: checkForInValueMap(req.body.trash_evacuation_is_close),
+                            storedValue: req.town.livingConditions.trash.evacuation_is_close,
+                        },
+                        {
+                            key: 'trash_evacuation_is_safe',
+                            submitedValue: checkForInValueMap(req.body.trash_evacuation_is_safe),
+                            storedValue: req.town.livingConditions.trash.evacuation_is_safe,
+                        },
+                        {
+                            key: 'trash_evacuation_is_regular',
+                            submitedValue: checkForInValueMap(req.body.trash_evacuation_is_regular),
+                            storedValue: req.town.livingConditions.trash.evacuation_is_regular,
+                        },
+                        {
+                            key: 'trash_bulky_is_piling',
+                            submitedValue: checkForInValueMap(req.body.trash_bulky_is_piling),
+                            storedValue: req.town.livingConditions.trash.bulky_is_piling,
+                        },
+                        {
+                            key: 'pest_animals_presence',
+                            submitedValue: checkForInValueMap(req.body.pest_animals_presence),
+                            storedValue: req.town.livingConditions.pest_animals ? req.town.livingConditions.pest_animals.presence : null,
+                        },
+                        {
+                            key: 'pest_animals_details',
+                            submitedValue: getStringOrNull(req.body.pest_animals_details),
+                            storedValue: req.town.livingConditions.pest_animals ? getStringOrNull(req.town.livingConditions.pest_animals.details) : null,
+                        },
+                        {
+                            key: 'fire_prevention_diagnostic',
+                            submitedValue: checkForInValueMap(req.body.fire_prevention_diagnostic),
+                            storedValue: req.town.livingConditions.fire_prevention ? req.town.livingConditions.fire_prevention.diagnostic : null,
+                        },
+                        {
+                            key: 'owner_complaint',
+                            submitedValue: checkForInValueMap(req.body.owner_complaint),
+                            storedValue: req.town.ownerComplaint,
+                        },
+                        {
+                            key: 'justice_procedure',
+                            submitedValue: checkForInValueMap(req.body.justice_procedure),
+                            storedValue: req.town.justiceProcedure,
+                        },
+                        {
+                            key: 'justice_rendered',
+                            submitedValue: checkForInValueMap(req.body.justice_rendered),
+                            storedValue: req.town.justiceRendered,
+                        },
+                        {
+                            key: 'justice_rendered_by',
+                            submitedValue: getStringOrNull(req.body.justice_rendered_by),
+                            storedValue: getStringOrNull(req.town.justiceRenderedBy),
+                        },
+                        {
+                            key: 'justice_rendered_at',
+                            submitedValue: req.body.justice_rendered_at ?? null,
+                            storedValue: req.town.justiceRenderedAt ? formatDateToYYYYMMDD(new Date(req.town.justiceRenderedAt * 1000)) : null,
+                        },
+                        {
+                            key: 'justice_challenged',
+                            submitedValue: checkForInValueMap(req.body.justice_challenged),
+                            storedValue: req.town.justiceChallenged,
+                        },
+                        {
+                            key: 'evacuation_under_time_limit',
+                            submitedValue: checkForInValueMap(req.body.evacuation_under_time_limit),
+                            storedValue: req.town.evacuationUnderTimeLimit,
+                        },
+                        {
+                            key: 'administrative_order_decision_at',
+                            submitedValue: req.body.administrative_order_decision_at ?? null,
+                            storedValue: req.town.administrativeOrderDecisionAt ? formatDateToYYYYMMDD(new Date(req.town.administrativeOrderDecisionAt * 1000)) : null,
+                        },
+                        {
+                            key: 'administrative_order_decision_rendered_by',
+                            submitedValue: getStringOrNull(req.body.administrative_order_decision_rendered_by),
+                            storedValue: getStringOrNull(req.town.administrativeOrderDecisionRenderedBy),
+                        },
+                        {
+                            key: 'administrative_order_evacuation_at',
+                            submitedValue: req.body.administrative_order_evacuation_at ?? null,
+                            storedValue: req.town.administrativeOrderEvacuationAt ? formatDateToYYYYMMDD(new Date(req.town.administrativeOrderEvacuationAt * 1000)) : null,
+                        },
+                        {
+                            key: 'insalubrity_order',
+                            submitedValue: checkForInValueMap(req.body.insalubrity_order),
+                            storedValue: req.town.insalubrityOrder,
+                        },
+                        {
+                            key: 'insalubrity_order_displayed',
+                            submitedValue: checkForInValueMap(req.body.insalubrity_order_displayed),
+                            storedValue: req.town.insalubrityOrderDisplayed,
+                        },
+                        {
+                            key: 'insalubrity_order_type',
+                            submitedValue: getStringOrNull(req.body.insalubrity_order_type),
+                            storedValue: getStringOrNull(req.town.insalubrityOrderType),
+                        },
+                        {
+                            key: 'insalubrity_order_by',
+                            submitedValue: getStringOrNull(req.body.insalubrity_order_by),
+                            storedValue: getStringOrNull(req.town.insalubrityOrderBy),
+                        },
+                        {
+                            key: 'insalubrity_order_at',
+                            submitedValue: req.body.insalubrity_order_at ?? null,
+                            storedValue: req.town.insalubrityOrderAt ? formatDateToYYYYMMDD(new Date(req.town.insalubrityOrderAt * 1000)) : null,
+                        },
+                        {
+                            key: 'insalubrity_parcels',
+                            submitedValue: getStringOrNull(req.body.insalubrity_parcels),
+                            storedValue: getStringOrNull(req.town.insalubrityParcels),
+                        },
+                        {
+                            key: 'police_status',
+                            submitedValue: normalizeValue(req.body.police_status),
+                            storedValue: normalizeValue(req.town.policeStatus),
+                        },
+                        {
+                            key: 'police_requested_at',
+                            submitedValue: req.body.police_requested_at ?? null,
+                            storedValue: req.town.policeRequestedAt ? formatDateToYYYYMMDD(new Date(req.town.policeRequestedAt * 1000)) : null,
+                        },
+                        {
+                            key: 'police_granted_at',
+                            submitedValue: req.body.police_granted_at ?? null,
+                            storedValue: req.town.policeGrantedAt ? formatDateToYYYYMMDD(new Date(req.town.policeGrantedAt * 1000)) : null,
+                        },
+                        {
+                            key: 'existing_litigation',
+                            submitedValue: checkForInValueMap(req.body.existing_litigation),
+                            storedValue: req.town.existingLitigation,
+                        },
+                        {
+                            key: 'bailiff',
+                            submitedValue: getStringOrNull(req.body.bailiff),
+                            storedValue: getStringOrNull(req.town.bailiff),
+                        },
+                        {
+                            key: 'newAttachments',
+                            submitedValue: req.body.newAttachments && req.body.newAttachments.length > 0 ? JSON.stringify(req.body.newAttachments) : null,
+                            storedValue: req.town.newAttachments ? JSON.stringify(req.town.newAttachments) : null,
+                        },
+                        {
+                            key: 'attachments',
+                            submitedValue: req.body.existingAttachments && req.body.existingAttachments.length > 0 ? JSON.stringify(req.body.existingAttachments, excludeSignedUrls) : '[]',
+                            storedValue: req.town.attachments ? JSON.stringify(req.town.attachments, excludeSignedUrls) : '[]',
+                        },
+                    ];
+
+                    // Ajouter owners seulement si l'utilisateur a la permission
+                    if (req.user.isAllowedTo('access', 'shantytown_owner')) {
+                        fieldsToCheck.push({
+                            key: 'owners',
+                            submitedValue: normalizeOwnerComparison(req.body.owners),
+                            storedValue: normalizeOwnerComparison(req.town.owners),
+                        });
+                    }
+
+                    if (mode !== 'create' && mode !== 'report') {
+                        fieldsToCheck.push({
+                            key: 'preparatory_phases_toward_resorption',
+                            submitedValue: updatedPreparatoryPhasesTowardResorption ? JSON.stringify(updatedPreparatoryPhasesTowardResorption) : null,
+                            storedValue: existingPreparatoryPhasesTowardResorption ? JSON.stringify(existingPreparatoryPhasesTowardResorption) : null,
+                        });
+                    }
+
+                    hasChanges = fieldsToCheck.some(field => field.submitedValue !== field.storedValue);
                 }
-            // Si update_without_any_change est à false, alors au moins un champ doit être modifié
-            } else if (req.town && !hasChanges) {
-                throw new Error('Au moins un champ doit être modifié s\'il ne s\'agit pas d\'une mise à jour de site sans modification de données');
+
+                if (value) {
+                    // Vérifier qu'aucun autre champ n'a été modifié
+                    if (hasChanges) {
+                        throw new Error('Aucun autre champ ne doit être modifié s\'il s\'agit d\'une mise à jour de site sans modification de données');
+                    }
+                } else if (req.town && !hasChanges) {
+                    throw new Error('Au moins un champ doit être modifié s\'il ne s\'agit pas d\'une mise à jour de site sans modification de données');
+                }
+                return true;
+            } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error('[VALIDATOR updated_without_any_change] EXCEPTION:', error);
+                throw error;
             }
-            return true;
         }),
 
 
@@ -823,16 +830,19 @@ export default mode => ([
         }),
 
     /* **********************************************************************************************
-     * Identité du propriétaire
+     * Identité des propriétaires
      ********************************************************************************************* */
-    body('owner')
+    body('owners')
         .customSanitizer(async (value, { req }) => {
             if (!req.user.isAllowedTo('access', 'shantytown_owner')) {
-                return null;
+                return [];
             }
 
             let ownerType: OwnerType | null = null;
-            await Promise.all(req.body.owner.owners.map(async (owner: SerializedOwner) => {
+            if (!req.body.owners?.length) {
+                return [];
+            }
+            await Promise.all(req.body.owners.map(async (owner: SerializedOwner) => {
                 try {
                     ownerType = await ownerTypeModel.findOne(owner.type || 1);
                 } catch (error) {
@@ -853,12 +863,23 @@ export default mode => ([
             return value;
         })
         .optional({ nullable: true })
-        .if((value, { req }) => req.user.isAllowedTo('access', 'shantytown_owner') && req.body.owner_type_full && req.body.owner_type_full.label !== 'Inconnu')
-        .isString().bail().withMessage('Le champ "Identité du propriétaire" est invalide')
-        .trim(),
+        .isArray().bail().withMessage('Le champ "Identité des propriétaires" doit être un tableau'),
 
-    body('owner')
-        .customSanitizer(value => value ?? null),
+    body('owners')
+        .customSanitizer(value => value ?? [])
+        .custom((owners: SerializedOwner[]) => {
+            // Valider que chaque propriétaire a soit un nom, soit un type différent de "Inconnu"
+            for (const owner of owners) {
+                const hasName = owner.name && owner.name.trim() !== '';
+                const isUnknownType = owner.type === 1;
+
+                // Rejeter si : pas de nom ET type "Inconnu"
+                if (!hasName && isUnknownType) {
+                    throw new Error('Un propriétaire doit avoir un nom ou un type différent de "Inconnu"');
+                }
+            }
+            return true;
+        }),
 
     /* **********************************************************************************************
      * Reinstallation
@@ -918,10 +939,17 @@ export default mode => ([
      ********************************************************************************************* */
     body('census_status')
         .optional({ nullable: true })
-        .isIn(['none', 'scheduled', 'done']).withMessage('Le champ "Statut du diagnostic social" est invalide'),
+        .custom((value) => {
+            // Traiter la string "null" comme équivalent à null (envoyée par formatNullableStr du frontend)
+            if (value === null || value === undefined || value === 'null') {
+                return true;
+            }
+            return ['none', 'scheduled', 'done'].includes(value);
+        })
+        .withMessage('Le champ "Statut du diagnostic social" est invalide'),
 
     body('census_status')
-        .customSanitizer(value => value ?? null),
+        .customSanitizer(value => (value === 'null' ? null : value ?? null)),
 
     /* **********************************************************************************************
      * Date du diagnostic
@@ -1476,7 +1504,8 @@ export default mode => ([
     body('police_status')
         .optional({ nullable: true })
         .custom((value, { req }) => {
-            if (value === null || value === undefined) {
+            // Traiter la string "null" comme équivalent à null (envoyée par formatNullableStr du frontend)
+            if (value === null || value === undefined || value === 'null') {
                 return true;
             }
             // Si aucune procédure n'est active mais que police_status est renseigné
@@ -1486,21 +1515,15 @@ export default mode => ([
                 throw new Error('Veuillez renseigner une procédure judiciaire ou administrative pour justifier du recours à la force publique');
             }
             if (!['none', 'requested', 'granted', 'refused'].includes(value)) {
-                req.policeStatusErrorType = 'invalidValue'; // Stocker le type d'erreur
                 return false;
             }
             return true;
         })
-        .withMessage((value, { req }) => {
-            if (req.policeStatusErrorType === 'noProcedure') {
-                return 'Veuillez renseigner une procédure judiciaire ou administrative pour justifier du concours de la force publique';
-            }
-            return 'Le champ "Concours de la force publique" est invalide';
-        }),
+        .withMessage(() => 'Le champ "Concours de la force publique" est invalide'),
 
-    // Sanitizer reste inchangé
+    // Sanitizer pour convertir "null" string en null
     body('police_status')
-        .customSanitizer(value => value ?? null),
+        .customSanitizer(value => (value === 'null' ? null : value ?? null)),
 
     /* **********************************************************************************************
      * Date de la demande du CFP

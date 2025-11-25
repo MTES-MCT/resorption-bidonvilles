@@ -185,13 +185,13 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
     }
 
     // On met à jour les propriétaires de parcelles liés au site
-    if (shantytown.owner?.owners.length > 0) {
+    if (shantytown.owners?.length > 0) {
         try {
             if (user.isAllowedTo('access', 'shantytown_owner')) {
                 await shantytownParcelOwnerService.update(
                     user,
                     shantytown,
-                    shantytown.owner.owners,
+                    shantytown.owners,
                     transaction,
                 );
             }

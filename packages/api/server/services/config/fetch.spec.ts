@@ -60,6 +60,9 @@ const userModel = {
 const preparatoryPhasesTowardResorptionModel = {
     getAll: sandbox.stub(),
 };
+const heatwaveService = {
+    get: sandbox.stub(),
+};
 
 rewiremock('#server/config').withDefault({
     activationTokenExpiresIn: '1',
@@ -86,6 +89,7 @@ rewiremock('#server/models/socialOriginModel/index').with(socialOriginModel);
 rewiremock('#server/models/topicModel/index').with(topicModel);
 rewiremock('#server/models/userModel/index').with(userModel);
 rewiremock('#server/models/preparatoryPhasesTowardResorptionModel/index').with(preparatoryPhasesTowardResorptionModel);
+rewiremock('#server/services/heatwave/index').with(heatwaveService);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -212,6 +216,14 @@ describe('configService.fetch()', () => {
         preparatoryPhasesTowardResorptionModel.getAll.resolves(['A', 'B']);
         const result = await fetch(fakeUser());
         expect(result.preparatory_phases_toward_resorption).to.be.eql(['A', 'B']);
+    });
+
+    it('retourne les données de la vague de chaleur en cours', async () => {
+        const fakeHeatwave = { start_date: new Date(), end_date: new Date(), isPeriodActive: true };
+        heatwaveService.get.resolves(fakeHeatwave);
+        const result = await fetch(fakeUser());
+        expect(heatwaveService.get).to.have.been.calledOnce;
+        expect(result.heatwave).to.eql(fakeHeatwave);
     });
 
     it('lance un ServiceError si une requête échoue', async () => {

@@ -2,7 +2,7 @@
     <section class="max-w-md">
         <h2 class="font-bold text-lg">{{ $t('footer.newsletterTitle') }}</h2>
         <p class="text-sm">{{ $t('footer.newsletterBody') }}</p>
-
+        <DsfrTooltip content="Temporairement désactivé" on-hover>
         <DsfrButton
             size="sm"
             icon="fr-icon-external-link-fill"
@@ -10,9 +10,11 @@
             :priority="'secondary'"
             :is-external="true"
             @click="goToNewsletter"
+            disabled
             >
             {{ $t('footer.newsletterCta') }}
         </DsfrButton>
+        </DsfrTooltip>
     </section>
 </template>
 

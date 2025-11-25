@@ -107,6 +107,7 @@ describe('services/shantytown', () => {
                 bailiff: townData.bailiff,
             };
             stubs.sequelize.transaction.resolves(stubs.transaction);
+            stubs.getLocationWatchers.resolves([]);
         });
 
         afterEach(() => {
@@ -163,7 +164,7 @@ describe('services/shantytown', () => {
             stubs.findOne.resolves(town);
             await createService({
                 ...townData,
-                owner: { owners },
+                owners,
             }, fakeUserData);
             // eslint-disable-next-line no-unused-expressions
             expect(stubs.shantytownParcelOwnerService.create).to.have.been.calledOnceWith(fakeUserData, shantytownId, owners, stubs.transaction);
