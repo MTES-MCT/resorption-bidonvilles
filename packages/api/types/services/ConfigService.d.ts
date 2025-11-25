@@ -17,6 +17,7 @@ import { Topic } from '../resources/Topic.d';
 import { User } from '../resources/User.d';
 import { PreparatoryPhaseTowardResorption } from '../resources/PreparatoryPhaseTowardResorption';
 import { Heatwave } from '../resources/Heatwave';
+import { Blog } from '../resources/Blog';
 
 export type ConfigServiceFetchResponse = {
     action_finance_types: ActionFinanceType[],
@@ -43,4 +44,5 @@ export type ConfigServiceFetchResponse = {
     roles: Role[],
     preparatory_phases_toward_resorption: PreparatoryPhaseTowardResorption[],
     heatwave: Heatwave,
+    blog: Blog,
 };
