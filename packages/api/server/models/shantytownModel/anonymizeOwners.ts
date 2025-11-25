@@ -8,46 +8,35 @@ export default async (argTransaction: Transaction = undefined): Promise<{ shanty
     let shantytownResult: any[] | number = [];
     let historyResult: any[] | number = [];
 
+    const factorizedQuery = (type: string | null): string => `
+            UPDATE ${type === 'history' ? 'shantytown_parcel_owners_history' : 'shantytown_parcel_owners'} 
+            SET owner_name = 'Anonymisé le ' || TO_CHAR(CURRENT_TIMESTAMP, 'DD/MM/YYYY à HH24:MI')
+            WHERE fk_owner_type = 3 
+            AND owner_name IS NOT NULL
+            AND owner_name != ''
+            AND owner_name NOT ILIKE 'Anonymisé le %'
+            AND fk_shantytown IN (
+                SELECT ${type === 'history' ? 'hid' : 'shantytown_id'} 
+                FROM ${type === 'history' ? '"ShantytownHistories"' : 'shantytowns'} 
+                WHERE status NOT LIKE 'open' 
+                AND closed_at < CURRENT_DATE - INTERVAL '1 year'
+            )
+            RETURNING shantytown_parcel_owner_id`;
+
     try {
         // Anonymiser les propriétaires privés (type 3) dans shantytown_parcel_owners
-        [shantytownResult] = await sequelize.query(`
-            UPDATE shantytown_parcel_owners 
-            SET owner_name = 'Anonymisé le ' || TO_CHAR(CURRENT_TIMESTAMP, 'DD/MM/YYYY à HH24:MI')
-            WHERE fk_owner_type = 3 
-            AND owner_name IS NOT NULL
-            AND owner_name != ''
-            AND owner_name NOT ILIKE 'Anonymisé le %'
-            AND fk_shantytown IN (
-                SELECT shantytown_id 
-                FROM shantytowns 
-                WHERE status NOT LIKE 'open' 
-                AND closed_at < CURRENT_DATE - INTERVAL '1 year'
-            )
-            RETURNING shantytown_parcel_owner_id`,
-        {
-            type: QueryTypes.UPDATE,
-            transaction,
-        });
+        [shantytownResult] = await sequelize.query(factorizedQuery(null),
+            {
+                type: QueryTypes.UPDATE,
+                transaction,
+            });
 
         // Anonymiser les propriétaires privés (type 3) dans shantytown_parcel_owners_history
-        [historyResult] = await sequelize.query(`
-            UPDATE shantytown_parcel_owners_history
-            SET owner_name = 'Anonymisé le ' || TO_CHAR(CURRENT_TIMESTAMP, 'DD/MM/YYYY à HH24:MI')
-            WHERE fk_owner_type = 3 
-            AND owner_name IS NOT NULL
-            AND owner_name != ''
-            AND owner_name NOT ILIKE 'Anonymisé le %'
-            AND fk_shantytown IN (
-                SELECT hid 
-                FROM "ShantytownHistories" 
-                WHERE status NOT LIKE 'open' 
-                AND closed_at < CURRENT_DATE - INTERVAL '1 year'
-            )
-            RETURNING shantytown_parcel_owner_id`,
-        {
-            type: QueryTypes.UPDATE,
-            transaction,
-        });
+        [historyResult] = await sequelize.query(factorizedQuery('history'),
+            {
+                type: QueryTypes.UPDATE,
+                transaction,
+            });
 
         let shantytownLines = 0;
         let shantytownHistoryLines = 0;
