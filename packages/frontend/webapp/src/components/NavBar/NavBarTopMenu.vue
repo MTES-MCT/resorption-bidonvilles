@@ -25,15 +25,15 @@
                     item.label === 'Blog' &&
                     configStore.config?.blog?.isBadgeActive
                 "
-                class="absolute -top-2 left-0 ml-1 text-[#fe1744] text-3xl z-2"
+                class="absolute h-4 w-4 top-1 left-0 ml-1 text-[#fe1744] text-3xl z-2"
                 content="Nouvel article"
                 on-hover
                 @click.stop.prevent="openTooltipLink(item.route)"
             >
                 <div class="relative items-center leading-3 cursor-pointer">
-                    <p class="absolute top-1">●</p>
+                    <p class="absolute -top-2 -left-0.5">●</p>
                     <p
-                        class="absolute top-1.5 ml-[.7px] left-1.5 items-center justify-center text-white text-[9px]"
+                        class="absolute -top-1.5 ml-[.7px] left-1 items-center justify-center text-white text-[9px]"
                     >
                         1
                     </p>
