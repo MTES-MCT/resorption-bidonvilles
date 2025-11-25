@@ -1,7 +1,5 @@
 module.exports = {
     async up(queryInterface, Sequelize) {
-        const transaction = await queryInterface.sequelize.transaction();
-
         try {
             await queryInterface.createTable(
                 'blog_params',
@@ -17,24 +15,16 @@ module.exports = {
                         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP + INTERVAL \'10 days\''),
                     },
                 },
-                { transaction },
             );
-
-            await transaction.commit();
         } catch (error) {
-            await transaction.rollback();
             throw error;
         }
     },
 
     async down(queryInterface) {
-        const transaction = await queryInterface.sequelize.transaction();
-
         try {
-            await queryInterface.dropTable('blog_params', { transaction });
-            await transaction.commit();
+            await queryInterface.dropTable('blog_params');
         } catch (error) {
-            await transaction.rollback();
             throw error;
         }
     },
