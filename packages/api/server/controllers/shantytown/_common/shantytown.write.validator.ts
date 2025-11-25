@@ -939,10 +939,17 @@ export default mode => ([
      ********************************************************************************************* */
     body('census_status')
         .optional({ nullable: true })
-        .isIn(['none', 'scheduled', 'done']).withMessage('Le champ "Statut du diagnostic social" est invalide'),
+        .custom((value) => {
+            // Traiter la string "null" comme équivalent à null (envoyée par formatNullableStr du frontend)
+            if (value === null || value === undefined || value === 'null') {
+                return true;
+            }
+            return ['none', 'scheduled', 'done'].includes(value);
+        })
+        .withMessage('Le champ "Statut du diagnostic social" est invalide'),
 
     body('census_status')
-        .customSanitizer(value => value ?? null),
+        .customSanitizer(value => (value === 'null' ? null : value ?? null)),
 
     /* **********************************************************************************************
      * Date du diagnostic
@@ -1497,7 +1504,8 @@ export default mode => ([
     body('police_status')
         .optional({ nullable: true })
         .custom((value, { req }) => {
-            if (value === null || value === undefined) {
+            // Traiter la string "null" comme équivalent à null (envoyée par formatNullableStr du frontend)
+            if (value === null || value === undefined || value === 'null') {
                 return true;
             }
             // Si aucune procédure n'est active mais que police_status est renseigné
@@ -1507,21 +1515,15 @@ export default mode => ([
                 throw new Error('Veuillez renseigner une procédure judiciaire ou administrative pour justifier du recours à la force publique');
             }
             if (!['none', 'requested', 'granted', 'refused'].includes(value)) {
-                req.policeStatusErrorType = 'invalidValue'; // Stocker le type d'erreur
                 return false;
             }
             return true;
         })
-        .withMessage((value, { req }) => {
-            if (req.policeStatusErrorType === 'noProcedure') {
-                return 'Veuillez renseigner une procédure judiciaire ou administrative pour justifier du concours de la force publique';
-            }
-            return 'Le champ "Concours de la force publique" est invalide';
-        }),
+        .withMessage(() => 'Le champ "Concours de la force publique" est invalide'),
 
-    // Sanitizer reste inchangé
+    // Sanitizer pour convertir "null" string en null
     body('police_status')
-        .customSanitizer(value => value ?? null),
+        .customSanitizer(value => (value === 'null' ? null : value ?? null)),
 
     /* **********************************************************************************************
      * Date de la demande du CFP
