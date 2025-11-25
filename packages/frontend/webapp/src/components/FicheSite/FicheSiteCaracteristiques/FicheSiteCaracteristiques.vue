@@ -22,7 +22,10 @@
                 <FicheSiteTypeDeSite :town="town" />
                 <FicheSiteInfosAcces v-if="town.addressDetails" :town="town" />
                 <FicheSiteGPS :town="town" />
-                <FicheSiteProprietaire :town="town" />
+                <FicheSiteProprietaire
+                    v-if="userStore.hasOwnerPermission"
+                    :town="town"
+                />
                 <FicheSiteSitesAProximite
                     v-if="town.nearbyTowns?.length > 0"
                     :towns="town.nearbyTowns"

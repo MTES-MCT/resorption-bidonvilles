@@ -229,7 +229,7 @@ function writeData(sheet, cellReference, data, link, style, borders = [], should
     align(sheet, cellReference, {
         vertical: 'middle',
         horizontal: style.align ?? 'center',
-        wrapText: true,
+        wrapText: style.wrapText ?? false,
     });
 
     let text = data;

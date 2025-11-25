@@ -80,32 +80,29 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
             shantytown_parcel_owners AS (SELECT
                 s.${tables.parcel_owners_foreign_key} AS fk_shantytown,
                 COALESCE(
-                    jsonb_build_object(
-                        'shantytownId', s.shantytown_id::integer,
-                        'owners', jsonb_agg(
-                            jsonb_build_object(
-                                'ownerId', po.shantytown_parcel_owner_id::integer,
-                                'name', po.owner_name::text,
-                                'type', po.fk_owner_type::integer,
-                                'typeDetails', jsonb_build_object(
-                                    'id', ot.owner_type_id::integer,
-                                    'label', ot.label::text,
-                                    'position', ot.position::integer
-                                ),
-                                'active', po.active::boolean,
-                                'createdAt', po.created_at,
-                                'createdBy', jsonb_build_object(
-                                    'authorId', u.user_id::integer,
-                                    'authorFirstName', u.first_name::text,
-                                    'authorLastName', u.last_name::text,
-                                    'organizationName', COALESCE(org.name, '')::text,
-                                    'organizationId', org.organization_id::integer
-                                )
+                    jsonb_agg(
+                        jsonb_build_object(
+                            'ownerId', po.shantytown_parcel_owner_id::integer,
+                            'name', po.owner_name::text,
+                            'type', po.fk_owner_type::integer,
+                            'typeDetails', jsonb_build_object(
+                                'id', ot.owner_type_id::integer,
+                                'label', ot.label::text,
+                                'position', ot.position::integer
+                            ),
+                            'active', po.active::boolean,
+                            'createdAt', po.created_at,
+                            'createdBy', jsonb_build_object(
+                                'authorId', u.user_id::integer,
+                                'authorFirstName', u.first_name::text,
+                                'authorLastName', u.last_name::text,
+                                'organizationName', COALESCE(org.name, '')::text,
+                                'organizationId', org.organization_id::integer
                             )
-                        ) FILTER (WHERE po.shantytown_parcel_owner_id IS NOT NULL)
-                    ),
-                    jsonb_build_object('shantytownId', s.shantytown_id, 'owners', '[]'::jsonb)
-                ) AS owner
+                        )
+                    ) FILTER (WHERE po.shantytown_parcel_owner_id IS NOT NULL),
+                    '[]'::jsonb
+                ) AS owners
             FROM "${tables.shantytowns}" s
             LEFT JOIN ${table === 'history' ? 'shantytown_parcel_owners_history' : `"${tables.shantytown_parcel_owners}"`} po ON po.fk_shantytown = s.${tables.parcel_owners_foreign_key}
             LEFT JOIN "users" u ON u.user_id = po.fk_user
@@ -151,7 +148,7 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
             sco.origins AS "socialOrigins",
             eat.electricity_access_types AS "electricityAccessTypes",
             stt.toilet_types AS "toiletTypes",
-            po.owner AS "owners",
+            po.owners AS "owners",
             srp.resorption_phases AS "preparatoryPhasesTowardResorption"
         FROM "${tables.shantytowns}" AS shantytowns
         ${joins.map(({ table: t, on }) => `LEFT JOIN ${t} ON ${on}`).join('\n')}

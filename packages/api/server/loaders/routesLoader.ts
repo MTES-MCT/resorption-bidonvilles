@@ -6,12 +6,13 @@ import { ApplicationWithCustomRoutes } from '#server/loaders/customRouteMethodsL
 async function importAllRoutesInside(directory: string, app: ApplicationWithCustomRoutes): Promise<void> {
     const files = fs.readdirSync(directory);
     const importPromises = [];
+    const nestedDirectoryPromises = [];
 
     for (let i = 0; i < files.length; i += 1) {
         const fullPath = path.join(directory, files[i]);
 
         if (fs.statSync(fullPath).isDirectory()) {
-            importAllRoutesInside(fullPath, app);
+            nestedDirectoryPromises.push(importAllRoutesInside(fullPath, app));
         } else if (files[i].endsWith('.route.ts') || files[i].endsWith('.route.js')) {
             importPromises.push(import(fullPath));
         }
@@ -19,6 +20,8 @@ async function importAllRoutesInside(directory: string, app: ApplicationWithCust
 
     const routes = await Promise.all(importPromises);
     routes.forEach(route => route.default(app));
+
+    await Promise.all(nestedDirectoryPromises);
 }
 
 export default async (app: ApplicationWithCustomRoutes) => {

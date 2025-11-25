@@ -129,25 +129,25 @@ export default (closingSolutions: ClosingSolution[]) => {
             data: ({ closingContext }: ShantytownWithFinancedAction) => closingContext,
             width: COLUMN_WIDTHS.SMALL,
         },
-        owner: {
+        owners: {
             title: 'Propriétaires de parcelles du site',
             data: (shantytown: ShantytownWithOwner) => {
                 if (
-                    shantytown.owner
-                    && !Array.isArray(shantytown.owner)
-                    && 'owners' in shantytown.owner
-                    && Array.isArray(shantytown.owner.owners)
+                    shantytown.owners
+                    && Array.isArray(shantytown.owners)
                 ) {
-                    const result: string = (shantytown.owner.owners as SerializedOwner[]).filter(o => o.active).map((o: SerializedOwner) => {
+                    const result: string = (shantytown.owners as SerializedOwner[]).filter(o => o.active).map((o: SerializedOwner) => {
                         const name: string = o.name ?? 'inconnu';
                         const typeLabel: string = o.typeDetails?.label;
-                        return typeLabel ? `${name} (${typeLabel})` : name;
-                    }).join('; ');
+                        return typeLabel ? `- ${name} (${typeLabel})` : `- ${name}`;
+                    }).join('\n');
                     return result;
                 }
                 return null;
             },
-            width: COLUMN_WIDTHS.MEDIUM,
+            width: COLUMN_WIDTHS.LARGE,
+            align: 'left',
+            wrapText: true,
         },
         isReinstallation: {
             title: 'S\'agit-il d\'une réinstallation ?',

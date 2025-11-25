@@ -51,7 +51,7 @@ export type TownInput = {
         id?: string,
         label: string,
     },
-    owner?: { owners: ParcelOwnerInsert[] },
+    owners?: ParcelOwnerInsert[],
     population_total?: number,
     population_total_females?: number,
     population_couples?: number,
@@ -129,7 +129,7 @@ export default async (town: TownInput) => [
             { label: 'Type de site', value: town.field_type_full.label },
             { label: 'Informations d\'accès', value: town.detailed_address },
             { label: 'Quel est le propriétaire ?', value: town.owner_type_full.label },
-            { label: 'Nom du propriétaire', value: town.owner },
+            { label: 'Nom du propriétaire', value: town.owners?.map(o => o.name).join(', ') },
         ],
     },
     {

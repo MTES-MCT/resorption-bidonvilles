@@ -10,6 +10,7 @@ export type ShantytownExportListProperty = {
     bold?: boolean,
     sum?: boolean,
     link?: (shantytown: ShantytownWithFinancedAction) => string,
+    wrapText?: boolean,
 };
 
 export type ShantytownExportSection = {

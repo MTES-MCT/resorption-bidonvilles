@@ -63,21 +63,19 @@ export default function (
             detailed_address: string()
                 .nullable()
                 .label(labels.detailed_address),
-            owner: hasOwnerPermission.value
-                ? // On utilise yup.lazy pour rendre la validation de "owner" conditionnelle
+            owners: hasOwnerPermission.value
+                ? // On utilise yup.lazy pour rendre la validation de "owners" conditionnelle
                   lazy((value) => {
-                      const owners = value?.owners;
-
                       if (
-                          Array.isArray(owners) &&
-                          owners.length === 1 &&
-                          !owners[0].name
+                          Array.isArray(value) &&
+                          value.length === 1 &&
+                          !value[0].name
                       ) {
-                          return object().nullable();
+                          return array().nullable();
                       }
 
-                      return object({
-                          owners: array().of(
+                      return array()
+                          .of(
                               object({
                                   name: string()
                                       .nullable()
@@ -89,10 +87,12 @@ export default function (
                                       "Le type du propriétaire est obligatoire"
                                   ),
                               })
-                          ),
-                      })
+                              // Note: La validation des propriétaires vides (nom vide + type "Inconnu")
+                              // est gérée par le filtrage dans buildOwners() et les validations backend.
+                              // On ne valide pas ici pour éviter les erreurs pendant la saisie.
+                          )
                           .nullable()
-                          .label(labels.owner);
+                          .label(labels.owners);
                   })
                 : undefined,
             population_total: number()
@@ -370,12 +370,22 @@ export default function (
 
         if (mode === "edit") {
             schema.update_to_date = number()
-                .required()
-                .oneOf([0, 1], "La valeur est invalide")
+                .when("updated_without_any_change", {
+                    is: false,
+                    then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.nullable(),
+                })
+                .oneOf([0, 1, null], "La valeur est invalide")
                 .label(labels.update_to_date);
             schema.updated_at = date()
+                .when("updated_without_any_change", {
+                    is: false,
+                    then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.nullable(),
+                })
                 .typeError(`${labels.updated_at} est obligatoire`)
                 .label(labels.updated_at);
+            schema.updated_without_any_change = number().nullable();
         }
 
         schema.water_access_type = makeNullableIfEdit(

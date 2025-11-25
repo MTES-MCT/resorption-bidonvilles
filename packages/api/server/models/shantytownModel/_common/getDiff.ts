@@ -72,14 +72,14 @@ export default (oldVersion, newVersion): Diff[] => {
                 return f.label;
             },
         },
-        owner: {
+        owners: {
             label: 'Propriétaires',
             processor(o) {
-                if (!o?.owners?.length) { return {}; }
+                if (!o?.length) { return {}; }
 
                 try {
                     const ownersMap = {};
-                    o.owners.forEach((owner) => {
+                    o.forEach((owner) => {
                         if (typeof owner === 'string') {
                             ownersMap[owner] = owner;
                         } else if (typeof owner === 'object' && owner !== null) {
@@ -101,19 +101,14 @@ export default (oldVersion, newVersion): Diff[] => {
                     if (typeof owner === 'string') {
                         return owner;
                     }
-                    // Gérer les deux formats
                     let result = owner.name || 'inconnu';
                     const typeLabel = owner.typeDetails?.label;
                     if (typeLabel) {
                         result += ` (${typeLabel})`;
                     }
-                    if (owner.active === false) {
-                        result += ' [supprimé]';
-                    }
-
                     return result;
                 };
-                // Gérer les différentes orthographes de "non renseigné(e)(s)"
+
                 const oldMap = oldOwnersMap || {};
                 const newMap = newOwnersMap || {};
 
@@ -124,31 +119,37 @@ export default (oldVersion, newVersion): Diff[] => {
                     const oldOwner = oldMap[ownerId];
                     const newOwner = newMap[ownerId];
 
+                    // Ignorer les propriétaires désactivés dans l'ancienne version
+                    if (oldOwner && typeof oldOwner === 'object' && oldOwner.active === false) {
+                        return;
+                    }
+
                     const oldFormatted = oldOwner ? formatOwner(oldOwner) : null;
                     const newFormatted = newOwner ? formatOwner(newOwner) : null;
 
-                    // Cas 1: Propriétaire supprimé (à vérifier car on ne supprime pas, on désactive)
-                    if (oldOwner && !newOwner) {
+                    // Propriétaire désactivé (marqué comme inactif)
+                    if (newOwner && typeof newOwner === 'object' && newOwner.active === false) {
                         changeLines.push({
-                            new: 'supprimé',
-                            old: oldFormatted,
+                            new: `Supprimé : ${oldFormatted || formatOwner(newOwner)}`,
+                            old: null,
                         });
                     } else if (!oldOwner && newOwner) {
-                        // Cas 2: Propriétaire ajouté (présent dans new mais pas dans old)
+                        // Propriétaire ajouté
+                        changeLines.push({
+                            new: `Ajouté : ${newFormatted}`,
+                            old: null,
+                        });
+                    } else if (oldOwner && newOwner && oldFormatted !== newFormatted) {
+                        // Propriétaire modifié - format : nouveau, ~~ancien~~
                         changeLines.push({
                             new: newFormatted,
-                            old: '',
-                        });
-                    } else if (oldFormatted !== newFormatted) {
-                        // Cas 3: Propriétaire modifié (présent dans les deux)
-                        changeLines.push({
-                            new: newFormatted || 'non renseigné',
                             old: oldFormatted,
                         });
                     }
                 });
+
                 if (changeLines.length === 0) {
-                    return null; // Pas de changement
+                    return null;
                 }
 
                 const newValues = [];

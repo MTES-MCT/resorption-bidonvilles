@@ -55,6 +55,8 @@ import {
     computed,
     defineExpose,
     defineProps,
+    markRaw,
+    onBeforeUnmount,
     ref,
     toRef,
     toRefs,
@@ -64,6 +66,7 @@ import { useForm } from "vee-validate";
 import { useUserStore } from "@/stores/user.store";
 import { useTownsStore } from "@/stores/towns.store";
 import { useNotificationStore } from "@/stores/notification.store";
+import { useModaleStore } from "@/stores/modale.store";
 import * as locationsApi from "@/api/locations.api";
 import { report } from "@/api/towns.api";
 import { trackEvent } from "@/helpers/matomo";
@@ -376,7 +379,7 @@ function formatValuesForApi(v, initOrEdit) {
         ),
         terminated_preparatory_phases_toward_resorption:
             buildTerminatedPreparatoryPhases(initOrEdit),
-        owner: buildOwners(v.owner),
+        owners: buildOwners(v.owners),
     };
 
     // Normaliser les tableaux (convertir Proxy en Array)
@@ -399,17 +402,25 @@ const deleteOriginalAttachment = (attachments) => {
 };
 
 function buildOwners(ownerDatas) {
-    if (!ownerDatas || !ownerDatas.owners) {
+    if (!ownerDatas || !Array.isArray(ownerDatas)) {
         return [];
     }
-    return {
-        ...ownerDatas,
-        owners: ownerDatas.owners.map((owner) => {
+    return ownerDatas
+        .filter((owner) => {
+            // Exclure les propriétaires sans information utile :
+            // - nom vide/null avec type "Inconnu" (id=1)
+            // - nom vide/null sans type
+            const hasName = owner.name && owner.name.trim() !== "";
+            const isUnknownType = owner.type === 1 || owner.type === "1";
+
+            // Garder seulement si : a un nom OU (pas de nom mais type différent de "Inconnu")
+            return hasName || (!hasName && !isUnknownType && owner.type);
+        })
+        .map((owner) => {
             const newOwner = { ...owner };
             delete newOwner._key;
             return newOwner;
-        }),
-    };
+        });
 }
 
 function buildTerminatedPreparatoryPhases(initOrEdit) {
@@ -439,39 +450,107 @@ const hasPreparatoryPhases = computed(() => {
     return town.value?.preparatoryPhasesTowardResorption?.length > 0;
 });
 
+function validateOwnersBeforeSubmit(sentValues) {
+    if (mode.value === "edit" && sentValues.owners?.length) {
+        const hasInvalidOwners = sentValues.owners.some((owner) => {
+            const hasName = owner.name && owner.name.trim() !== "";
+            const isUnknownType = owner.type === 1 || owner.type === "1";
+            return !hasName && isUnknownType;
+        });
+
+        if (hasInvalidOwners) {
+            const validationError = new Error(
+                "Vous avez ajouté un propriétaire sans renseigner son nom ou son type. Veuillez compléter les informations ou supprimer cette ligne."
+            );
+            validationError.user_message =
+                "Vous avez ajouté un propriétaire sans renseigner son nom ou son type. Veuillez compléter les informations ou supprimer cette ligne.";
+            validationError.fields = {
+                owner: 'Un propriétaire doit avoir un nom ou un type différent de "Inconnu"',
+            };
+            throw validationError;
+        }
+    }
+}
+
+function computeNoChangeFlag(formattedValues, originalValues) {
+    /* eslint-disable no-unused-vars */
+    let {
+        updated_at: _1,
+        update_to_date: _2,
+        ...originalValuesRest
+    } = originalValues;
+    let {
+        updated_at: _3,
+        update_to_date: _4,
+        ...formattedValuesRest
+    } = formattedValues;
+    /* eslint-enable no-unused-vars */
+
+    if (
+        // Cas où l'on souhaite indiquer qu'un site est à jour sans modifier de donnée
+        mode.value === "edit" &&
+        isDeepEqual(originalValuesRest, formattedValuesRest)
+    ) {
+        formattedValues.updated_without_any_change = true;
+    } else {
+        formattedValues.updated_without_any_change = false;
+    }
+    return formattedValues;
+}
+
+function prepareFormattedValues(sentValues, originalValues) {
+    const formattedValues = formatValuesForApi(sentValues, "edit");
+    const { updated_without_any_change } = computeNoChangeFlag(
+        formattedValues,
+        originalValues
+    );
+    formattedValues.updated_without_any_change = updated_without_any_change;
+    return formattedValues;
+}
+
+async function handleNoChangeModalIfNeeded(formattedValues) {
+    if (formattedValues.updated_without_any_change) {
+        const modaleStore = useModaleStore();
+        const { default: ModaleMajSiteSansModification } = await import(
+            "@/components/ModaleMajSiteSansModification/ModaleMajSiteSansModification.vue"
+        );
+
+        const submitWithoutChanges = async () => {
+            const { submit } = config[mode.value];
+            const respondedTown = await submit(formattedValues, town.value?.id);
+            backOrReplace(`/site/${respondedTown.id}`);
+        };
+
+        modaleStore.open(markRaw(ModaleMajSiteSansModification), {
+            onConfirm: submitWithoutChanges,
+        });
+        return true;
+    }
+    return false;
+}
+
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
-        const formattedValues = formatValuesForApi(sentValues, "edit");
-
-        /* eslint-disable no-unused-vars */
-        let {
-            updated_at: _1,
-            update_to_date: _2,
-            ...originalValuesRest
-        } = originalValues;
-        let {
-            updated_at: _3,
-            update_to_date: _4,
-            ...formattedValuesRest
-        } = formattedValues;
-        /* eslint-enable no-unused-vars */
-
-        if (
-            // Cas où l'on souhaite indiquer qu'un site est à jour sans modifier de donnée
-            mode.value === "edit" &&
-            isDeepEqual(originalValuesRest, formattedValuesRest)
-        ) {
-            formattedValues.updated_without_any_change = true;
-        } else {
-            formattedValues.updated_without_any_change = false;
-        }
-
         error.value = null;
 
         const notificationStore = useNotificationStore();
         try {
+            // Vérifier d'abord s'il y a des propriétaires invalides (avant formatage)
+            validateOwnersBeforeSubmit(sentValues);
+
+            const formattedValues = prepareFormattedValues(
+                sentValues,
+                originalValues
+            );
             let respondedTown;
             if (mode.value === "edit") {
+                // Si aucune donnée n'est modifiée, afficher la modale de confirmation
+                const hasNoChangeModalBeenShown =
+                    await handleNoChangeModalIfNeeded(formattedValues);
+                if (hasNoChangeModalBeenShown) {
+                    return;
+                }
+
                 const { submit } = config[mode.value];
                 respondedTown = await submit(formattedValues, town.value?.id);
             } else {
@@ -504,5 +583,11 @@ defineExpose({
         }
     }),
     isSubmitting,
+});
+
+// Fermer la modale lorsque le composant est détruit pour éviter qu'elle reste affichée lors de la navigation
+onBeforeUnmount(() => {
+    const modaleStore = useModaleStore();
+    modaleStore.close();
 });
 </script>
