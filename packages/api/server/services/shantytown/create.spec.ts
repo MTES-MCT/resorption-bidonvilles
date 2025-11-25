@@ -107,6 +107,7 @@ describe('services/shantytown', () => {
                 bailiff: townData.bailiff,
             };
             stubs.sequelize.transaction.resolves(stubs.transaction);
+            stubs.getLocationWatchers.resolves([]);
         });
 
         afterEach(() => {
