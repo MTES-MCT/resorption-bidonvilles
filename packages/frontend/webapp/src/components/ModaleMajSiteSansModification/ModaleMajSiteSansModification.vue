@@ -22,7 +22,7 @@
                 <DsfrButton secondary @click="() => modale.close()"
                     >Annuler</DsfrButton
                 >
-                <DsfrButton @click="confirmUpdate" variant="primary"
+                <DsfrButton @click="confirmUpdate"
                     >Confirmer la mise à jour</DsfrButton
                 >
             </div>
