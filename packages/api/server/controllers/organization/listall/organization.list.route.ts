@@ -1,9 +1,8 @@
 import { type ApplicationWithCustomRoutes } from '#server/loaders/customRouteMethodsLoader';
-import validator from './organization.searchAssociations.validator';
-import controller from './organization.searchAssociations';
+import controller from './organization.list';
 
 export default (app: ApplicationWithCustomRoutes): void => {
-    app.customRoutes.get('/organizations/associations/search', controller, validator, {
+    app.customRoutes.get('/organizations/organizations/search', controller, undefined, {
         authenticate: false,
         multipart: false,
     });
