@@ -30,7 +30,14 @@
                 on-hover
                 @click.stop.prevent="openTooltipLink(item.route)"
             >
-                ●
+                <div class="relative items-center leading-3 cursor-pointer">
+                    <p class="absolute top-1">●</p>
+                    <p
+                        class="absolute top-1.5 ml-[.7px] left-1.5 items-center justify-center text-white text-[9px]"
+                    >
+                        1
+                    </p>
+                </div>
             </DsfrTooltip>
         </LinkButton>
     </nav>
