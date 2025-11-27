@@ -15,13 +15,15 @@
                 >
             </p>
         </div>
-        <Button @click="openSelfThemes">J'interviens sur ce site</Button>
+        <DsfrButton @click="openSelfThemes"
+            >J'interviens sur ce site</DsfrButton
+        >
     </div>
 </template>
 
 <script setup>
 import { useEventBus } from "@common/helpers/event-bus.js";
-import { Button, Icon } from "@resorptionbidonvilles/ui";
+import { Icon } from "@resorptionbidonvilles/ui";
 
 const { emit } = useEventBus();
 function openSelfThemes() {
