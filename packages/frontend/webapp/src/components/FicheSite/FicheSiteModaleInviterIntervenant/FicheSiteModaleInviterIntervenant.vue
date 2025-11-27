@@ -56,8 +56,6 @@ const { handleSubmit, isSubmitting, setErrors, errors, resetForm, values } =
     });
 const error = ref(null);
 const mode = computed(() => {
-    console.log("Values:", values);
-
     if (values.user?.data?.id !== undefined) {
         return "inviteExisting";
     }
@@ -104,8 +102,6 @@ const submit = handleSubmit(async (values) => {
     error.value = null;
 
     try {
-        console.log("Value:", values);
-
         await submit(values);
         notificationStore.success("Inviter un intervenant", successWording);
         modale.value.close();

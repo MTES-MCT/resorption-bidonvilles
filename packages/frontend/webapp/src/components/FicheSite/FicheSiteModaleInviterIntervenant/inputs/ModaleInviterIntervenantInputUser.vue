@@ -34,7 +34,6 @@ async function autocompleteFn(value) {
         label: formatUserName(relation),
         data: {
             id: relation.id,
-            email: relation.email,
         },
     }));
 }
