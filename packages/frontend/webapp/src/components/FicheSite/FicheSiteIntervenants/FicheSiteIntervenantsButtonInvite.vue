@@ -1,18 +1,17 @@
 <template>
-    <Button
+    <DsfrButton
         class="font-bold"
-        variant="primaryOutlineAlt"
-        icon="plus"
-        iconPosition="left"
+        tertiary
+        no-outline
+        icon="fr-icon-add-line"
         @click="openInviteActorModal"
     >
         <slot>Inviter un intervenant</slot>
-    </Button>
+    </DsfrButton>
 </template>
 
 <script setup>
 import { useEventBus } from "@common/helpers/event-bus.js";
-import { Button } from "@resorptionbidonvilles/ui";
 
 function openInviteActorModal() {
     const { emit } = useEventBus();
