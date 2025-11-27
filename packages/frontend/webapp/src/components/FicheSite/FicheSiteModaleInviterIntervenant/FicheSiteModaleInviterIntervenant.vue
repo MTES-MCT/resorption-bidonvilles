@@ -17,14 +17,16 @@
         </template>
 
         <template v-slot:footer>
-            <Button
-                variant="primaryOutline"
+            <DsfrButton
+                secondary
                 @click="() => modale.close()"
                 class="mr-2"
                 type="button"
-                >Annuler</Button
+                >Annuler</DsfrButton
             >
-            <Button @click="submit" :loading="isSubmitting">Inviter</Button>
+            <DsfrButton @click="submit" :loading="isSubmitting"
+                >Inviter</DsfrButton
+            >
         </template>
     </Modal>
 </template>
@@ -37,7 +39,7 @@ import { useNotificationStore } from "@/stores/notification.store";
 import { trackEvent } from "@/helpers/matomo";
 import schema from "./FicheSiteModaleInviterIntervenant.schema";
 
-import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
+import { ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import FicheSiteModaleSubtitle from "../FicheSiteModaleSubtitle/FicheSiteModaleSubtitle.vue";
 import ModaleInviterIntervenantInputEmail from "./inputs/ModaleInviterIntervenantInputEmail.vue";
 import ModaleInviterIntervenantInputUser from "./inputs/ModaleInviterIntervenantInputUser.vue";
