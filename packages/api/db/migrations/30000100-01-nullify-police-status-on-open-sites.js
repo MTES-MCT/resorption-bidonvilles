@@ -5,7 +5,7 @@ module.exports = {
         try {
             await queryInterface.sequelize.query(
                 `
-                    UPDATE shantytowns
+                    UPDATE shantytowns s
                        SET police_status = NULL
                      WHERE s.police_status IS NOT NULL 
                      AND 
