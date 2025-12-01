@@ -29,7 +29,7 @@ rewiremock.enable();
 import deactivateExpiredUsers from './deactivateExpiredUsers';
 rewiremock.disable();
 
-describe('userService.deactivate()', () => {
+describe('userService.deactivateExpiredUsers()', () => {
     let transaction;
     beforeEach(() => {
         transaction = {
