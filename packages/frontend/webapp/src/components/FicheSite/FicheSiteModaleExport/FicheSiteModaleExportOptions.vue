@@ -24,18 +24,59 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, defineProps, toRefs } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import options from "./FicheSiteModaleExport.options";
+import departementsInResorptionPhases from "@/utils/departements_in_resorption_phases";
 
 import { Checkbox } from "@resorptionbidonvilles/ui";
+
+const props = defineProps({
+    town: Object,
+});
+const { town } = toRefs(props);
 
 const userStore = useUserStore();
 
 const availableOptions = computed(() => {
-    return options.filter(({ permission }) => {
-        // on filtre par permission
+    const isNationalAdmin =
+        userStore.user?.intervention_areas?.is_national === true;
+
+    return options.filter(({ id, permission }) => {
+        // Filtre spécifique pour les phases de résorption
+        if (id === "resorption_phases") {
+            // Vérifier si le site est dans un département concerné
+            const isInExperimentDepartement =
+                departementsInResorptionPhases.includes(
+                    parseInt(town.value.departement.code, 10)
+                );
+
+            if (!isInExperimentDepartement) {
+                return false;
+            }
+
+            // Les admins nationaux ont accès sans permission explicite
+            if (isNationalAdmin) {
+                return true;
+            }
+
+            // Sinon vérifier la permission
+            if (permission) {
+                return userStore.hasPermission(
+                    `${permission.entity}.${permission.feature}`
+                );
+            }
+
+            return false;
+        }
+
+        // Filtre par permission pour les autres options
         if (permission === undefined) {
+            return true;
+        }
+
+        // Les admins nationaux ont toutes les permissions
+        if (isNationalAdmin) {
             return true;
         }
 
