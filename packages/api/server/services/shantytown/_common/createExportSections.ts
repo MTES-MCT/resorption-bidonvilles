@@ -1,8 +1,10 @@
 import { AuthUser } from '#server/middlewares/authMiddleware';
+import { Location } from '#server/models/geoModel/Location.d';
 import organizationModel from '#server/models/organizationModel';
-import { ShantytownExportListOption, ShantytownExportListProperty, ShantytownExportSection } from '#root/types/resources/ShantytownExportTypes.d';
 import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
 import { ExportedSitesStatus } from '#root/types/resources/exportedSitesStatus.d';
+import { ShantytownExportListOption, ShantytownExportListProperty, ShantytownExportSection } from '#root/types/resources/ShantytownExportTypes.d';
+import departementsInResorptionPhases from './departements_in_resorption_phases';
 
 function isClosedTowns(exportedSitesStatus: ExportedSitesStatus): boolean {
     return exportedSitesStatus !== 'open' && exportedSitesStatus !== 'inProgress';
@@ -14,6 +16,7 @@ export default async (
     properties: { [key: string]: ShantytownExportListProperty },
     exportedSitesStatus: ExportedSitesStatus,
     closingSolutions: ClosingSolution[],
+    locations: Location[],
 ): Promise<ShantytownExportSection[]> => {
     const closedTowns = isClosedTowns(exportedSitesStatus);
     const sections: ShantytownExportSection[] = [];
@@ -194,16 +197,29 @@ export default async (
         });
     }
 
-    // Section Phases de résorption : uniquement pour les sites "en cours de résorption" ou "résorbés"
+    // Section Phases de résorption : uniquement pour les sites "ouverts", "en cours de résorption" ou "résorbés"
+    // et si l'utilisateur a coché l'option dans la modale d'export
     // et si l'utilisateur a la permission d'accès ou est superuser (admin national)
-    const isResorptionOrResorbedSites = ['inProgress', 'resorbed'].includes(exportedSitesStatus);
-    if (isResorptionOrResorbedSites && (user.is_superuser || user.isAllowedTo('access', 'shantytown_resorption'))) {
-        sections.push({
-            title: 'Phases de résorption',
-            properties: [
-                properties.preparatoryPhasesTowardResorption,
-            ],
+    // et si l'export inclut un département concerné par l'expérimentation (département 44)
+    if (options.indexOf('resorption_phases') !== -1) {
+        const isResorptionOrResorbedSites = ['open', 'inProgress', 'resorbed'].includes(exportedSitesStatus);
+        const includesResorptionDepartement = locations.some((l) => {
+            // Si l'export est limité à un ou plusieurs départements spécifiques
+            if (l.type === 'departement') {
+                return departementsInResorptionPhases.includes(parseInt(l.departement.code, 10));
+            }
+            // Si l'export concerne une zone plus large (région, nation, etc.), on affiche la colonne
+            // car elle peut contenir des départements concernés
+            return ['region', 'epci', 'nation', 'metropole', 'outremer'].includes(l.type);
         });
+        if (isResorptionOrResorbedSites && includesResorptionDepartement && (user.is_superuser || user.isAllowedTo('export', 'shantytown_resorption'))) {
+            sections.push({
+                title: 'Phases de résorption',
+                properties: [
+                    properties.preparatoryPhasesTowardResorption,
+                ],
+            });
+        }
     }
 
     if (closedTowns === true) {
