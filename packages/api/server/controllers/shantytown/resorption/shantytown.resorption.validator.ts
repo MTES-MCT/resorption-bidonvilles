@@ -4,7 +4,11 @@ import shantytownModel from '#server/models/shantytownModel';
 export default [
     param('id')
         .custom(async (value, { req }) => {
-            if (!req.user?.isAllowedTo('create', 'shantytown_resorption')) {
+            // Les admins nationaux peuvent créer des phases de résorption partout
+            const isNationalAdmin = req.user?.is_superuser === true;
+            const hasPermission = req.user?.isAllowedTo('create', 'shantytown_resorption');
+
+            if (!isNationalAdmin && !hasPermission) {
                 throw new Error('Vous n\'avez pas le droit de démarrer une résorption');
             }
 
