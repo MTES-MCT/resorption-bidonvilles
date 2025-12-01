@@ -12,7 +12,13 @@ module.exports = {
                         deactivated_at = NOW(),
                         updated_at = NOW()
                     FROM user_accesses ua
-                    WHERE u.user_id = ua.fk_user
+                    WHERE ua.user_access_id = (
+                        SELECT user_access_id
+                        FROM user_accesses
+                        WHERE fk_user = u.user_id
+                        ORDER BY expires_at DESC
+                        LIMIT 1
+                    )
                     AND u.fk_status = 'new'
                     AND ua.expires_at < NOW() - INTERVAL '3 months';
 
