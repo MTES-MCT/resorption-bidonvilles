@@ -6,13 +6,15 @@ module.exports = {
                 DECLARE
                     updated_count INTEGER;
                 BEGIN
-                    UPDATE "users"
+                    UPDATE users u
                     SET fk_status = 'inactive',
                         deactivation_type = 'expired',
                         deactivated_at = NOW(),
                         updated_at = NOW()
-                    WHERE fk_status = 'new'
-                    AND created_at < NOW() - INTERVAL '3 months';
+                    FROM user_accesses ua
+                    WHERE u.user_id = ua.fk_user
+                    AND u.fk_status = 'new'
+                    AND ua.expires_at < NOW() - INTERVAL '3 months';
 
                     GET DIAGNOSTICS updated_count = ROW_COUNT;
 
