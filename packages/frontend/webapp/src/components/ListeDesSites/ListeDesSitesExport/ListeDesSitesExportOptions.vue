@@ -39,8 +39,10 @@
 import { computed, defineProps, toRefs } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
+import { useConfigStore } from "@/stores/config.store";
 import options from "./options";
 import { Checkbox, Warning } from "@resorptionbidonvilles/ui";
+import departementsInResorptionPhases from "@/utils/departements_in_resorption_phases";
 
 const props = defineProps({
     disabled: {
@@ -54,6 +56,7 @@ const { disabled } = toRefs(props);
 
 const townsStore = useTownsStore();
 const userStore = useUserStore();
+const configStore = useConfigStore();
 
 const selectedOptions = townsStore.exportOptions;
 
@@ -66,15 +69,64 @@ const toggleOption = (optionId) => {
     }
 };
 
+const locationIncludesResorptionDepartement = computed(() => {
+    const location = townsStore.filters.location;
+
+    // Si aucun filtre de localisation, on affiche l'option
+    if (!location) {
+        return true;
+    }
+
+    // Si le filtre est un département spécifique
+    if (location.typeUid === "departement") {
+        const deptCode = location.code;
+        return departementsInResorptionPhases.includes(parseInt(deptCode, 10));
+    }
+
+    // Si le filtre est une région spécifique, vérifier si elle contient un département concerné
+    if (location.typeUid === "region") {
+        const allDepartements = configStore.config?.departements || [];
+        const regionCode = location.code;
+
+        // Vérifier si au moins un département de cette région est concerné
+        return allDepartements.some(
+            (dept) =>
+                dept.region === regionCode &&
+                departementsInResorptionPhases.includes(parseInt(dept.code, 10))
+        );
+    }
+
+    // Pour les zones plus larges (EPCI, nation, metropole, outremer),
+    // on affiche l'option car elles peuvent contenir les départements concernés
+    return ["epci", "nation", "metropole", "outremer"].includes(
+        location.typeUid
+    );
+});
+
 const availableOptions = computed(() => {
-    return options.filter(({ closedTowns, permission }) => {
+    const isNationalAdmin =
+        userStore.user?.intervention_areas?.is_national === true;
+
+    return options.filter(({ id, closedTowns, permission }) => {
         const isClosed = townsStore.filters.status === "close";
 
         if (closedTowns !== undefined && closedTowns !== isClosed) {
             return false;
         }
 
+        // Filtre spécifique pour les phases de résorption : vérifier le territoire
+        if (id === "resorption_phases") {
+            if (!locationIncludesResorptionDepartement.value) {
+                return false;
+            }
+        }
+
         if (permission === undefined) {
+            return true;
+        }
+
+        // Les admins nationaux ont accès à toutes les options
+        if (isNationalAdmin) {
             return true;
         }
 
