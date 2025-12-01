@@ -255,6 +255,40 @@ function getQueryString(where: string[]): string {
                             array_remove(array_agg(stt.toilet_type::text), NULL) AS toilet_types
                         FROM "ShantytownHistories" s
                         LEFT JOIN shantytown_toilet_types_history stt ON stt.fk_shantytown = s.hid
+                        GROUP BY s.hid),
+
+                        shantytown_resorption_phases AS (SELECT
+                            s.hid AS fk_shantytown,
+                            COALESCE(
+                                NULLIF(
+                                    array_agg(
+                                        CASE 
+                                            WHEN srp.fk_preparatory_phase IS NOT NULL THEN
+                                                json_build_object(
+                                                    'uid', pptr.uid,
+                                                    'name', pptr.name,
+                                                    'dateLabel', pptr.date_label,
+                                                    'completedAt', srp.completed_at,
+                                                    'createdAt', srp.created_at,
+                                                    'isAStartingPhase', pptr.is_a_starting_phase
+                                                )::jsonb
+                                            ELSE NULL
+                                        END
+                                    ) FILTER (WHERE srp.fk_preparatory_phase IS NOT NULL),
+                                    ARRAY[]::jsonb[]
+                                ),
+                                ARRAY[]::jsonb[]
+                            ) AS resorption_phases
+                        FROM "ShantytownHistories" s
+                        LEFT JOIN shantytown_resorption_phases_history srp 
+                            ON srp.fk_shantytown = s.hid
+                            AND srp.archived_at = (
+                                SELECT MIN(srph.archived_at) 
+                                FROM shantytown_resorption_phases_history srph 
+                                WHERE srph.fk_shantytown = s.hid 
+                                AND srph.archived_at >= s.updated_at
+                            )
+                        LEFT JOIN preparatory_phases_toward_resorption pptr ON pptr.uid = srp.fk_preparatory_phase
                         GROUP BY s.hid)
 
                     SELECT
@@ -265,6 +299,7 @@ function getQueryString(where: string[]): string {
                         sco.origins AS "socialOrigins",
                         eat.electricity_access_types AS "electricityAccessTypes",
                         stt.toilet_types AS "toiletTypes",
+                        srp.resorption_phases AS "preparatoryPhasesTowardResorption",
                         COALESCE(shantytowns.updated_by, shantytowns.created_by) AS author_id,
                         ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(',')}
                     FROM "ShantytownHistories" shantytowns
@@ -272,6 +307,7 @@ function getQueryString(where: string[]): string {
                     LEFT JOIN shantytown_computed_origins sco ON sco.fk_shantytown = shantytowns.hid
                     LEFT JOIN electricity_access_types eat ON eat.fk_shantytown = shantytowns.hid
                     LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.hid
+                    LEFT JOIN shantytown_resorption_phases srp ON srp.fk_shantytown = shantytowns.hid
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE ((${where.join(') OR (')}))` : ''}
                 )
@@ -298,6 +334,34 @@ function getQueryString(where: string[]): string {
                             array_remove(array_agg(stt.toilet_type::text), NULL) AS toilet_types
                         FROM shantytowns s
                         LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = s.shantytown_id
+                        GROUP BY s.shantytown_id),
+
+                        shantytown_resorption_phases AS (SELECT
+                            s.shantytown_id AS fk_shantytown,
+                            COALESCE(
+                                NULLIF(
+                                    array_agg(
+                                        CASE 
+                                            WHEN srp.fk_preparatory_phase IS NOT NULL THEN
+                                                json_build_object(
+                                                    'uid', pptr.uid,
+                                                    'name', pptr.name,
+                                                    'dateLabel', pptr.date_label,
+                                                    'completedAt', srp.completed_at,
+                                                    'createdAt', srp.created_at,
+                                                    'isAStartingPhase', pptr.is_a_starting_phase
+                                                )::jsonb
+                                            ELSE NULL
+                                        END
+                                    ) FILTER (WHERE srp.fk_preparatory_phase IS NOT NULL),
+                                    ARRAY[]::jsonb[]
+                                ),
+                                ARRAY[]::jsonb[]
+                            ) AS resorption_phases
+                        FROM shantytowns s
+                        LEFT JOIN shantytown_preparatory_phases_toward_resorption srp 
+                            ON srp.fk_shantytown = s.shantytown_id
+                        LEFT JOIN preparatory_phases_toward_resorption pptr ON pptr.uid = srp.fk_preparatory_phase
                         GROUP BY s.shantytown_id)
 
                     SELECT
@@ -308,12 +372,14 @@ function getQueryString(where: string[]): string {
                         sco.origins AS "socialOrigins",
                         eat.electricity_access_types AS "electricityAccessTypes",
                         stt.toilet_types AS "toiletTypes",
+                        srp.resorption_phases AS "preparatoryPhasesTowardResorption",
                         COALESCE(shantytowns.updated_by, shantytowns.created_by) AS author_id,
                         ${Object.keys(SQL.selection).map(key => `${key} AS "${SQL.selection[key]}"`).join(', ')}
                     FROM shantytowns
                     LEFT JOIN shantytown_computed_origins sco ON sco.fk_shantytown = shantytowns.shantytown_id
                     LEFT JOIN electricity_access_types eat ON eat.fk_shantytown = shantytowns.shantytown_id
                     LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.shantytown_id
+                    LEFT JOIN shantytown_resorption_phases srp ON srp.fk_shantytown = shantytowns.shantytown_id
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE (${where.join(') OR (')})` : ''}
                 )) shantytown_history
