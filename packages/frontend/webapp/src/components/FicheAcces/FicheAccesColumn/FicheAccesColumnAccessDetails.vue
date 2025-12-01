@@ -144,12 +144,13 @@ function hasExpired(userAccessIndex) {
     return expiredAt < today.getTime();
 }
 
+const deactivationLabels = {
+    admin: "manuellement",
+    auto: "automatiquement",
+    expired: "après expiration",
+};
+
 const typeDeDesactivation = computed(() => {
-    if (user.value.deactivation_type === "admin") {
-        return "manuellement";
-    } else if (user.value.deactivation_type === "auto") {
-        return "automatiquement";
-    }
-    return "";
+    return deactivationLabels[user.value.deactivation_type] ?? "";
 });
 </script>
