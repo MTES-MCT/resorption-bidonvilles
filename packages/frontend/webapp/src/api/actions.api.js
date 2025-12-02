@@ -55,3 +55,7 @@ export function fetchOne(actionId) {
 export function getActionFinancementsReadersByAction(actionId) {
     return axios.get(`/actions/${encodeURI(actionId)}/action-finances-readers`);
 }
+
+export function requestPilot(actionId) {
+    return axios.get(`/actions/${encodeURI(actionId)}/requestPilot`);
+}
