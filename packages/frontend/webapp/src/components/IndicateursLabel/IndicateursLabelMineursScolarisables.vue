@@ -1,8 +1,5 @@
 <template>
-    <IndicateursLabel
-        >Mineurs en âge d'être scolarisés ou de suivre une
-        formation</IndicateursLabel
-    >
+    <IndicateursLabel>Mineurs identifiés sur site</IndicateursLabel>
 </template>
 
 <script setup>

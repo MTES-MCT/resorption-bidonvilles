@@ -55,7 +55,7 @@ const headers = [
     { label: 'Nombre de ménages ayant eu accès à une solution longue durée en hébergement ou logement adapté avec accompagnement, dont espace temporaire d\'accompagnement', width: '5' },
     { label: 'Nombre de personnes ayant eu accès à un logement', width: '5' },
     { label: 'Nombre de ménages ayant eu accès à un logement', width: '5' },
-    { label: 'Nombre de mineurs en âge d\'être scolarisés ou de suivre une formation', width: '5' },
+    { label: 'Nombre de mineurs identifiés sur site', width: '5' },
     { label: 'Nombre de mineurs bénéficiant d\'une action de médiation (3 - 18 ans)', width: '5' },
     { label: 'Nombre de mineurs scolarisés en maternelle', width: '5' },
     { label: 'Nombre de mineurs scolarisés en élémentaire', width: '5' },

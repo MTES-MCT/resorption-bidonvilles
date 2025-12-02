@@ -168,7 +168,7 @@ export default function () {
                                     .transform(emptyStringToNull),
                                 scolaire_mineurs_scolarisables: number()
                                     .typeError(
-                                        `${key} — Nombre de mineurs en âge d'être scolarisés doit être un nombre`
+                                        `${key} — Nombre de mineurs identifiés sur site doit être un nombre`
                                     )
                                     .nullable()
                                     .transform(emptyStringToNull),

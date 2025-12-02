@@ -604,16 +604,16 @@ export default (mode: 'create' | 'update') => [
         .if((value, { req }) => req.body.topics?.includes?.('school'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de mineurs en âge d\'être scolarisés" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs en âge d\'être scolarisés" ne peut pas être inférieur à 0')
+        .isInt().bail().withMessage('Le champ "Nombre de mineurs identifiés sur site" doit être un nombre')
+        .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs identifiés sur site" ne peut pas être inférieur à 0')
         .custom((value, { req, path }) => {
             const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
             if (Number.isInteger(req.body.indicateurs[key].nombre_mineurs)) {
                 if (value > req.body.indicateurs[key].nombre_mineurs) {
-                    throw new Error('Le nombre de mineurs en âge d\'être scolarisés ne peut être supérieur au nombre de mineurs concernés par l\'action');
+                    throw new Error('Le nombre de mineurs identifiés sur site ne peut être supérieur au nombre de mineurs concernés par l\'action');
                 }
             } else if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de mineurs en âge d\'être scolarisés ne peut être supérieur au nombre de personnes concernées par l\'action');
+                throw new Error('Le nombre de mineurs identifiés sur site ne peut être supérieur au nombre de personnes concernées par l\'action');
             }
 
             return true;
