@@ -13,7 +13,7 @@ import comments from './export/option_section_comments';
 import changelog from './export/option_section_changelog';
 import resorptionPhases from './export/option_section_resorption_phases';
 
-export default (user: AuthUser, shantytown: Shantytown, options) => {
+const buildShantytownExport = (user: AuthUser, shantytown: Shantytown, options) => {
     const uniformMargin = convertInchesToTwip(1.75 / 2.54);
     const pageMargins = {
         top: uniformMargin,
@@ -48,7 +48,7 @@ export default (user: AuthUser, shantytown: Shantytown, options) => {
     // et si l'utilisateur a la permission ou est admin national
     if (options.includes('resorption_phases')) {
         const isInExperimentDepartement = departementsInResorptionPhases.includes(
-            parseInt(shantytown.departement.code, 10),
+            Number.parseInt(shantytown.departement.code, 10),
         );
         const hasPermission = user.is_superuser || user.isAllowedTo('export', 'shantytown_resorption');
 
@@ -72,3 +72,5 @@ export default (user: AuthUser, shantytown: Shantytown, options) => {
 
     return Packer.toBuffer(doc);
 };
+
+export default buildShantytownExport;
