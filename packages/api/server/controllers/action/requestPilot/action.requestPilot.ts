@@ -4,7 +4,7 @@ const ERRORS = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
-export default async (req, res, next) => {
+const requestPilotForAction = async (req, res, next) => {
     try {
         const action = await actionService.fetch(req.user, [req.params.id]);
 
@@ -24,3 +24,5 @@ export default async (req, res, next) => {
         return next(error?.nativeError ?? error);
     }
 };
+
+export default requestPilotForAction;

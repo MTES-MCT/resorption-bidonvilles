@@ -5,7 +5,7 @@ import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
 
 const { triggerRequestActionPilot } = mattermostUtils;
 
-export default async (action: EnrichedAction, user: AuthUser) => {
+const requestPilot = async (action: EnrichedAction, user: AuthUser) => {
     try {
         if (!action) {
             throw new Error('Aucune action spécifiée');
@@ -24,3 +24,5 @@ export default async (action: EnrichedAction, user: AuthUser) => {
         throw new ServiceError('action_pilot_request_failed', error);
     }
 };
+
+export default requestPilot;
