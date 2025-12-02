@@ -9,8 +9,13 @@
             :linkToUser="false"
             includeOrganization
         />
-        <div v-if="users.length === 0" class="flex flex-col gap-2">
-            <p class="italic">Aucun pilote assigné à cette action.</p>
+        <div
+            v-if="users.length === 0 || onlyDeactivatedUsers"
+            class="flex flex-col gap-2"
+        >
+            <p class="italic" v-if="users.length === 0">
+                Aucun pilote assigné à cette action.
+            </p>
             <DsfrButton
                 label="Demander un pilote"
                 @click="requestPilot"
@@ -45,6 +50,14 @@ const actionsStore = useActionsStore();
 const users = computed(() => {
     return action.value.managers.map(({ users }) => users).flat();
 });
+const onlyDeactivatedUsers = computed(() => {
+    return users.value.every(
+        (user) =>
+            user.first_name === "Utilisateur" && user.last_name === "Désactivé"
+    );
+});
+console.log("Only deactivated users?", onlyDeactivatedUsers.value);
+
 const pilotHasBeenRequested = computed(() => {
     return actionsStore.requestedPilotsForActions.includes(action.value.id);
 });
