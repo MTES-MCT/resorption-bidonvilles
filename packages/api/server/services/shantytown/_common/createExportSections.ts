@@ -201,12 +201,12 @@ export default async (
     // et si l'utilisateur a coché l'option dans la modale d'export
     // et si l'utilisateur a la permission d'accès ou est superuser (admin national)
     // et si l'export inclut un département concerné par l'expérimentation (département 44)
-    if (options.indexOf('resorption_phases') !== -1) {
+    if (options.includes('resorption_phases')) {
         const isResorptionOrResorbedSites = ['open', 'inProgress', 'resorbed'].includes(exportedSitesStatus);
         const includesResorptionDepartement = locations.some((l) => {
             // Si l'export est limité à un ou plusieurs départements spécifiques
             if (l.type === 'departement') {
-                return departementsInResorptionPhases.includes(parseInt(l.departement.code, 10));
+                return departementsInResorptionPhases.includes(Number.parseInt(l.departement.code, 10));
             }
             // Si l'export concerne une zone plus large (région, nation, etc.), on affiche la colonne
             // car elle peut contenir des départements concernés
