@@ -80,7 +80,7 @@ const locationIncludesResorptionDepartement = computed(() => {
     // Si le filtre est un département spécifique
     if (location.typeUid === "departement") {
         const deptCode = location.code;
-        return departementsInResorptionPhases.includes(parseInt(deptCode, 10));
+        return departementsInResorptionPhases.includes(Number.parseInt(deptCode, 10));
     }
 
     // Si le filtre est une région spécifique, vérifier si elle contient un département concerné
@@ -92,7 +92,7 @@ const locationIncludesResorptionDepartement = computed(() => {
         return allDepartements.some(
             (dept) =>
                 dept.region === regionCode &&
-                departementsInResorptionPhases.includes(parseInt(dept.code, 10))
+                departementsInResorptionPhases.includes(Number.parseInt(dept.code, 10))
         );
     }
 
