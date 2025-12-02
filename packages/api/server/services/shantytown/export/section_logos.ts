@@ -24,6 +24,30 @@ export default () => {
         },
     });
 
+    type AlignmentValue = typeof AlignmentType[keyof typeof AlignmentType];
+
+    const createLogoCell = (alignment: AlignmentValue, image: ImageRun) => new TableCell({
+        borders: {
+            top: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+            bottom: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+            left: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+            right: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+        },
+        margins: {
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+        },
+        children: [
+            new Paragraph({
+                alignment,
+                spacing: { before: 0, after: 0 },
+                children: [image],
+            }),
+        ],
+    });
+
     const logosTable = new Table({
         width: {
             size: 100,
@@ -40,48 +64,8 @@ export default () => {
         rows: [
             new TableRow({
                 children: [
-                    new TableCell({
-                        borders: {
-                            top: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
-                            bottom: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
-                            left: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
-                            right: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
-                        },
-                        margins: {
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                        },
-                        children: [
-                            new Paragraph({
-                                alignment: AlignmentType.LEFT,
-                                spacing: { before: 0, after: 0 },
-                                children: [marianne],
-                            }),
-                        ],
-                    }),
-                    new TableCell({
-                        borders: {
-                            top: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
-                            bottom: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
-                            left: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
-                            right: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
-                        },
-                        margins: {
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                        },
-                        children: [
-                            new Paragraph({
-                                alignment: AlignmentType.RIGHT,
-                                spacing: { before: 0, after: 0 },
-                                children: [logoRb],
-                            }),
-                        ],
-                    }),
+                    createLogoCell(AlignmentType.LEFT, marianne),
+                    createLogoCell(AlignmentType.RIGHT, logoRb),
                 ],
             }),
         ],
