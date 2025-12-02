@@ -48,7 +48,7 @@ export interface ActionInput {
             hebergement_nombre_menages: number | null,
             logement_nombre_personnes: number | null,
             logement_nombre_menages: number | null,
-            scolaire_mineurs_scolarisables: number | null,
+            scolaire_mineurs_trois_ans_et_plus: number | null,
             scolaire_mineurs_en_mediation: number | null,
             scolaire_nombre_maternelle: number | null,
             scolaire_nombre_elementaire: number | null,
