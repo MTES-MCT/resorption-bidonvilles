@@ -12,7 +12,7 @@ export const fields = [
     "hebergement_nombre_menages",
     "logement_nombre_personnes",
     "logement_nombre_menages",
-    "scolaire_mineurs_scolarisables",
+    "scolaire_mineurs_trois_ans_et_plus",
     "scolaire_mineurs_en_mediation",
     "scolaire_nombre_maternelle",
     "scolaire_nombre_elementaire",

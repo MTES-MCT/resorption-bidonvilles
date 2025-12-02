@@ -175,7 +175,7 @@ const indicateursFields = [
     // Scolaire
     ...createFields([
         [
-            "scolaire_mineurs_scolarisables",
+            "scolaire_mineurs_trois_ans_et_plus",
             "Nombre de mineurs identifiés sur site",
         ],
         [

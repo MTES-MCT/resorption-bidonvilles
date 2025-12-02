@@ -31,7 +31,7 @@ export default function mergeMetrics(hash: ActionHash, metrics: ActionMetricsRow
             hebergement_nombre_menages: row.hebergement_nombre_menages,
             logement_nombre_personnes: row.logement_nombre_personnes,
             logement_nombre_menages: row.logement_nombre_menages,
-            scolaire_mineurs_scolarisables: row.scolaire_mineurs_scolarisables,
+            scolaire_mineurs_trois_ans_et_plus: row.scolaire_mineurs_trois_ans_et_plus,
             scolaire_mineurs_en_mediation: row.scolaire_mineurs_en_mediation,
             scolaire_nombre_maternelle: row.scolaire_nombre_maternelle,
             scolaire_nombre_elementaire: row.scolaire_nombre_elementaire,

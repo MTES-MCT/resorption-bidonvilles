@@ -169,7 +169,7 @@ const data = action.value.metrics.reduce(
 
         if (topicUids.value.includes("school")) {
             acc.data.ecole.scolarisables.push([
-                metrics.scolaire_mineurs_scolarisables,
+                metrics.scolaire_mineurs_trois_ans_et_plus,
             ]);
             acc.data.ecole.en_mediation.push([
                 metrics.scolaire_mineurs_en_mediation,
