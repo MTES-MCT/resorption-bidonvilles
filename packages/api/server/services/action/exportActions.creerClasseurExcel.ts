@@ -200,7 +200,7 @@ function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet) {
             item.hebergement_nombre_menages,
             item.logement_nombre_personnes,
             item.logement_nombre_menages,
-            item.scolaire_mineurs_scolarisables,
+            item.scolaire_mineurs_trois_ans_et_plus,
             item.scolaire_mineurs_en_mediation,
             item.scolaire_nombre_maternelle,
             item.scolaire_nombre_elementaire,

@@ -600,7 +600,7 @@ export default (mode: 'create' | 'update') => [
 
 
     // indicateurs scolaires
-    body('indicateurs.*.scolaire_mineurs_scolarisables')
+    body('indicateurs.*.scolaire_mineurs_trois_ans_et_plus')
         .if((value, { req }) => req.body.topics?.includes?.('school'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
@@ -618,7 +618,7 @@ export default (mode: 'create' | 'update') => [
 
             return true;
         }),
-    body('indicateurs.*.scolaire_mineurs_scolarisables')
+    body('indicateurs.*.scolaire_mineurs_trois_ans_et_plus')
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('indicateurs.*.scolaire_mineurs_en_mediation')

@@ -57,7 +57,7 @@ export default [
         inputs: {
             // les labels pour la scolarisation sont dans des composants dédiés
             // @see ./InputIndicateursScolaires.vue
-            scolarisables: [{ id: "scolaire_mineurs_scolarisables" }],
+            scolarisables: [{ id: "scolaire_mineurs_trois_ans_et_plus" }],
             mediation: [{ id: "scolaire_mineurs_en_mediation" }],
             maternelle: [{ id: "scolaire_nombre_maternelle" }],
             elementaire: [{ id: "scolaire_nombre_elementaire" }],

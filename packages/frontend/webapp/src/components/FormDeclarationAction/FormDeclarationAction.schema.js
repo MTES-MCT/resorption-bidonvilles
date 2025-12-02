@@ -166,7 +166,7 @@ export default function () {
                                     )
                                     .nullable()
                                     .transform(emptyStringToNull),
-                                scolaire_mineurs_scolarisables: number()
+                                scolaire_mineurs_trois_ans_et_plus: number()
                                     .typeError(
                                         `${key} — Nombre de mineurs identifiés sur site doit être un nombre`
                                     )
