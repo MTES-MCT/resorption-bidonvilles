@@ -34,7 +34,7 @@ export default async (
     };
     sections.push(localizationSection);
 
-    if (options.indexOf('address_details') !== -1 && !closedTowns) {
+    if (options.includes('address_details') && !closedTowns) {
         localizationSection.properties.push(properties.addressDetails);
     }
 
@@ -63,7 +63,7 @@ export default async (
         section.properties.push(properties.closingContext);
     }
 
-    if (options.indexOf('owner') !== -1 && user.isAllowedTo('access', 'shantytown_owner')) {
+    if (options.includes('owner') && user.isAllowedTo('access', 'shantytown_owner')) {
         section.properties.push(properties.owners);
     }
 
@@ -93,7 +93,7 @@ export default async (
         ],
     });
 
-    if (options.indexOf('living_conditions') !== -1) {
+    if (options.includes('living_conditions')) {
         sections.push({
             title: 'Conditions de vie',
             properties: [
@@ -135,7 +135,7 @@ export default async (
             ],
         });
     }
-    if (options.indexOf('demographics') !== -1) {
+    if (options.includes('demographics')) {
         section = {
             title: 'Diagnostic',
             properties: [
@@ -151,7 +151,7 @@ export default async (
         sections.push(section);
     }
 
-    if (options.indexOf('justice') !== -1 && user.isAllowedTo('access', 'shantytown_justice')) {
+    if (options.includes('justice') && user.isAllowedTo('access', 'shantytown_justice')) {
         sections.push({
             title: 'Procédure judiciaire ou administrative',
             properties: [
@@ -180,7 +180,7 @@ export default async (
         });
     }
 
-    if (options.indexOf('actors') !== -1) {
+    if (options.includes('actors')) {
         const allOrganizations = (await organizationModel.findByName(user.organization.name)).map(organization => organization.id);
 
         sections.push({
@@ -242,7 +242,7 @@ export default async (
     }
 
     const commentProps: ShantytownExportListProperty[] = [];
-    if (options.indexOf('comments') !== -1 && user.isAllowedTo('list', 'shantytown_comment')) {
+    if (options.includes('comments') && user.isAllowedTo('list', 'shantytown_comment')) {
         commentProps.push(properties.comments);
         commentProps.push(properties.last_comment_date);
     }
