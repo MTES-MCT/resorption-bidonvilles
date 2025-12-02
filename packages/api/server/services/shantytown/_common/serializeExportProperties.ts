@@ -1295,8 +1295,7 @@ export default (closingSolutions: ClosingSolution[]) => {
                 // Section des phases initiales
                 if (startingPhases.length > 0) {
                     const sortedStartingPhases = sortPhases(startingPhases);
-                    result.push('Phases initiales');
-                    result.push(...sortedStartingPhases.map(formatPhase));
+                    result.push('Phases initiales', ...sortedStartingPhases.map(formatPhase));
                 }
 
                 // Ligne vide de séparation entre les deux groupes
