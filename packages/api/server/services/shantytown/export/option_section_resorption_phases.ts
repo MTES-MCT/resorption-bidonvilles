@@ -5,9 +5,9 @@ import {
 import heading from './heading';
 import formatDate from '../_common/formatDate';
 
-const STARTING_PHASE_UIDS = ['sociological_diagnosis', 'social_assessment', 'political_validation'];
+const STARTING_PHASE_UIDS = new Set(['sociological_diagnosis', 'social_assessment', 'political_validation']);
 
-export default shantytown => ({
+const buildResorptionPhasesSection = shantytown => ({
     properties: {
         type: SectionType.CONTINUOUS,
     },
@@ -34,8 +34,8 @@ export default shantytown => ({
                 ];
             }
 
-            const startingPhases = phases.filter(phase => STARTING_PHASE_UIDS.includes(phase.preparatoryPhaseId));
-            const otherPhases = phases.filter(phase => !STARTING_PHASE_UIDS.includes(phase.preparatoryPhaseId));
+            const startingPhases = phases.filter(phase => STARTING_PHASE_UIDS.has(phase.preparatoryPhaseId));
+            const otherPhases = phases.filter(phase => !STARTING_PHASE_UIDS.has(phase.preparatoryPhaseId));
 
             const sortPhases = phaseList => phaseList.sort((a, b) => {
                 const aDate = a.completedAt || a.createdAt;
@@ -106,3 +106,5 @@ export default shantytown => ({
         })(),
     ],
 });
+
+export default buildResorptionPhasesSection;
