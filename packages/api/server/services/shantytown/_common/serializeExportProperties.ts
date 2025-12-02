@@ -1246,7 +1246,7 @@ export default (closingSolutions: ClosingSolution[]) => {
             title: 'Phases préparatoires à la résorption',
             data: ({ preparatoryPhasesTowardResorption, departement }: ShantytownWithFinancedAction) => {
                 // Si le site n'est pas dans un département concerné par l'expérimentation, on ne le remplit pas
-                if (!departement || !departementsInResorptionPhases.includes(parseInt(departement.code, 10))) {
+                if (!departement || !departementsInResorptionPhases.includes(Number.parseInt(departement.code, 10))) {
                     return null;
                 }
 
@@ -1255,14 +1255,18 @@ export default (closingSolutions: ClosingSolution[]) => {
                 }
 
                 // UIDs des phases initiales (définis dans la migration 30000084-03)
-                const STARTING_PHASE_UIDS = ['sociological_diagnosis', 'social_assessment', 'political_validation'];
+                const STARTING_PHASE_UIDS = new Set([
+                    'sociological_diagnosis',
+                    'social_assessment',
+                    'political_validation',
+                ]);
 
                 // Séparer les phases initiales des autres phases en utilisant l'UID
                 const startingPhases = preparatoryPhasesTowardResorption.filter(
-                    phase => STARTING_PHASE_UIDS.includes(phase.preparatoryPhaseId),
+                    phase => STARTING_PHASE_UIDS.has(phase.preparatoryPhaseId),
                 );
                 const otherPhases = preparatoryPhasesTowardResorption.filter(
-                    phase => !STARTING_PHASE_UIDS.includes(phase.preparatoryPhaseId),
+                    phase => !STARTING_PHASE_UIDS.has(phase.preparatoryPhaseId),
                 );
 
                 // Fonction de tri : phases complétées en premier (date décroissante), puis phases en cours (date de création décroissante)
