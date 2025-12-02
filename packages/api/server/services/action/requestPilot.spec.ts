@@ -52,8 +52,6 @@ describe('services/action.requestPilot()', () => {
     });
 
     it('renvoi une ServiceError si la requête ne contient pas d\'action', async () => {
-        // stubs.mattermost.triggerRequestActionPilot.rejects(new Error('Mattermost error'));
-
         let caughtError: ServiceError | null = null;
         try {
             await requestPilot(null as any, user);
