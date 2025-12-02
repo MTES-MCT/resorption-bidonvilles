@@ -48,7 +48,7 @@ const availableOptions = computed(() => {
             // Vérifier si le site est dans un département concerné
             const isInExperimentDepartement =
                 departementsInResorptionPhases.includes(
-                    parseInt(town.value.departement.code, 10)
+                    Number.parseInt(town.value.departement.code, 10)
                 );
 
             if (!isInExperimentDepartement) {
