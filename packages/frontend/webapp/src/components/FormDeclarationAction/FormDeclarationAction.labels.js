@@ -39,8 +39,7 @@ export default {
         raw: "Nombre de personnes ayant accédé à un logement",
         formatted: "_à un logement_",
     },
-    indicateurs_mineurs_scolarisables:
-        "Mineurs en âge d'être scolarisés ou de suivre une formation",
+    indicateurs_mineurs_scolarisables: "Mineurs identifiés sur site",
     indicateurs_mineurs_mediation:
         "Mineurs bénéficiant d'une action de médiation (3 - 18 ans)",
     indicateurs_mineurs_scolarises: {
