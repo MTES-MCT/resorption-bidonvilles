@@ -100,7 +100,7 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
                 SELECT
                     action_metrics.fk_action AS action_id,
                     action_metrics.date,
-                    action_metrics.scolaire_mineurs_scolarisables,
+                    action_metrics.scolaire_mineurs_trois_ans_et_plus,
                     action_metrics.scolaire_mineurs_en_mediation,
                     action_metrics.scolaire_nombre_maternelle,
                     action_metrics.scolaire_nombre_elementaire,
@@ -116,7 +116,7 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
                 action_metrics
                 WHERE
                 (
-                    action_metrics.scolaire_mineurs_scolarisables IS NOT NULL OR
+                    action_metrics.scolaire_mineurs_trois_ans_et_plus IS NOT NULL OR
                     action_metrics.scolaire_mineurs_en_mediation IS NOT NULL OR
                     action_metrics.scolaire_nombre_maternelle IS NOT NULL OR
                     action_metrics.scolaire_nombre_elementaire IS NOT NULL OR
@@ -187,7 +187,7 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
         m.hebergement_nombre_menages,
         m.logement_nombre_personnes,
         m.logement_nombre_menages,
-        sm.scolaire_mineurs_scolarisables,
+        sm.scolaire_mineurs_trois_ans_et_plus,
         sm.scolaire_mineurs_en_mediation,
         sm.scolaire_nombre_maternelle,
         sm.scolaire_nombre_elementaire,
