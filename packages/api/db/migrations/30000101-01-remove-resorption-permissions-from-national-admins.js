@@ -35,9 +35,9 @@ module.exports = {
             const nationalAdmins = await queryInterface.sequelize.query(
                 `SELECT DISTINCT
                     ur.user_id,
-                    u.fk_organization
+                    ur.fk_organization
                 FROM users ur
-                WHERE u.fk_role = 'national_admin'`,
+                WHERE ur.fk_role = 'national_admin' AND ur.fk_status = 'active'`,
                 {
                     transaction,
                     type: QueryTypes.SELECT,
@@ -47,8 +47,7 @@ module.exports = {
             if (nationalAdmins.length > 0) {
                 // Recréer les permissions 'create' pour les admins nationaux
                 const createPermissions = nationalAdmins.map(admin => ({
-                    fk_user: admin.fk_user,
-                    fk_organization: admin.fk_organization,
+                    fk_user: admin.user_id,
                     fk_feature: 'create',
                     fk_entity: 'shantytown_resorption',
                     allowed: true,
@@ -61,8 +60,7 @@ module.exports = {
 
                 // Recréer les permissions 'update' pour les admins nationaux
                 const updatePermissions = nationalAdmins.map(admin => ({
-                    fk_user: admin.fk_user,
-                    fk_organization: admin.fk_organization,
+                    fk_user: admin.user_id,
                     fk_feature: 'update',
                     fk_entity: 'shantytown_resorption',
                     allowed: true,
