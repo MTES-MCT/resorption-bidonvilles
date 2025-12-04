@@ -122,7 +122,7 @@ export default computed(() => {
                 checked: true,
             })),
         };
-        filters.order.splice(filters.order.length - 1, 0, "ownerType");
+        filters.order.splice(-1, 0, "ownerType");
     }
 
     return filters;
