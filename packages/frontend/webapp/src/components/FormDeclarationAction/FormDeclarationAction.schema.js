@@ -175,12 +175,20 @@ const indicateursFields = [
     // Scolaire
     ...createFields([
         [
-            "scolaire_mineurs_trois_ans_et_plus",
-            "Nombre de mineurs identifiés sur site",
+            "scolaire_mineurs_moins_de_trois_ans",
+            "Nombre de mineurs de moins de 3 ans identifiés sur site",
         ],
         [
-            "scolaire_mineurs_en_mediation",
-            "Nombre de mineurs bénéficiant d'une action de médiation",
+            "scolaire_mineurs_trois_ans_et_plus",
+            "Nombre de mineurs de 3 ans et plus identifiés sur site",
+        ],
+        [
+            "scolaire_mediation_moins_de_trois_ans",
+            "Nombre de mineurs de moins de 3 ans bénéficiant d'une médiation",
+        ],
+        [
+            "scolaire_mediation_trois_ans_et_plus",
+            "Nombre de mineurs de 3 ans et plus bénéficiant d'une médiation",
         ],
         [
             "scolaire_nombre_maternelle",
@@ -193,6 +201,10 @@ const indicateursFields = [
         ["scolaire_nombre_college", "Nombre de mineurs scolarisés au collège"],
         ["scolaire_nombre_lycee", "Nombre de mineurs scolarisés au lycée"],
         ["scolaire_nombre_autre", 'Nombre de mineurs scolarisés "autre"'],
+        [
+            "scolaire_mineur_scolarise_dans_annee",
+            "Nombre de mineurs scolarisés dans l'année",
+        ],
     ]),
 ];
 
