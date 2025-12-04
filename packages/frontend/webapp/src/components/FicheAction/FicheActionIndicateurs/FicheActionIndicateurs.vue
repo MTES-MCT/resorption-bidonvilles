@@ -163,21 +163,33 @@ const data = action.value.metrics.reduce(
         }
 
         if (topicUids.value.includes("school")) {
-            acc.data.ecole.scolarisables.push([
+            acc.data.ecole.mineurs_identifies.push([
+                metrics.scolaire_mineurs_moins_de_trois_ans,
                 metrics.scolaire_mineurs_trois_ans_et_plus,
             ]);
-            acc.data.ecole.en_mediation.push([
-                metrics.scolaire_mineurs_en_mediation,
+            acc.data.ecole.mineurs_mediation.push([
+                metrics.scolaire_mediation_moins_de_trois_ans,
+                metrics.scolaire_mediation_trois_ans_et_plus,
             ]);
-            acc.data.ecole.maternelle.push([
+
+            const totalScolarises =
+                (metrics.scolaire_nombre_maternelle || 0) +
+                (metrics.scolaire_nombre_elementaire || 0) +
+                (metrics.scolaire_nombre_college || 0) +
+                (metrics.scolaire_nombre_lycee || 0);
+
+            acc.data.ecole.scolarises.push([
+                totalScolarises || null,
                 metrics.scolaire_nombre_maternelle,
-            ]);
-            acc.data.ecole.elementaire.push([
                 metrics.scolaire_nombre_elementaire,
+                metrics.scolaire_nombre_college,
+                metrics.scolaire_nombre_lycee,
             ]);
-            acc.data.ecole.college.push([metrics.scolaire_nombre_college]);
-            acc.data.ecole.lycee.push([metrics.scolaire_nombre_lycee]);
+
             acc.data.ecole.autre.push([metrics.scolaire_nombre_autre]);
+            acc.data.ecole.scolarises_dans_annee.push([
+                metrics.scolaire_mineur_scolarise_dans_annee,
+            ]);
         }
 
         return acc;
@@ -191,13 +203,11 @@ const data = action.value.metrics.reduce(
             hebergement: [],
             logement: [],
             ecole: {
-                scolarisables: [],
-                en_mediation: [],
-                maternelle: [],
-                elementaire: [],
-                college: [],
-                lycee: [],
+                mineurs_identifies: [],
+                mineurs_mediation: [],
+                scolarises: [],
                 autre: [],
+                scolarises_dans_annee: [],
             },
         },
     }
