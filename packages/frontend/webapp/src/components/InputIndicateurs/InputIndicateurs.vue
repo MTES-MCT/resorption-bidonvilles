@@ -24,7 +24,7 @@
                     <p class="px-4 pb-2">
                         <span class="font-bold"
                             >Résultats pour l'année {{ focusedYear }}</span
-                        ><br />(à remplir en fin d'année)
+                        >
                     </p>
                 </template>
             </IndicateursRow>
