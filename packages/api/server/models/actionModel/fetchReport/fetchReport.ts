@@ -110,13 +110,16 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
                 SELECT
                     action_metrics.fk_action AS action_id,
                     action_metrics.date,
+                    action_metrics.scolaire_mineurs_moins_de_trois_ans,
                     action_metrics.scolaire_mineurs_trois_ans_et_plus,
-                    action_metrics.scolaire_mineurs_en_mediation,
+                    action_metrics.scolaire_mediation_moins_de_trois_ans,
+                    action_metrics.scolaire_mediation_trois_ans_et_plus,
                     action_metrics.scolaire_nombre_maternelle,
                     action_metrics.scolaire_nombre_elementaire,
                     action_metrics.scolaire_nombre_college,
                     action_metrics.scolaire_nombre_lycee,
                     action_metrics.scolaire_nombre_autre,
+                    action_metrics.scolaire_mineur_scolarise_dans_annee,
                     action_metrics.created_at,
                     RANK() OVER(
                         PARTITION BY action_metrics.fk_action
@@ -126,13 +129,16 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
                 action_metrics
                 WHERE
                 (
+                    action_metrics.scolaire_mineurs_moins_de_trois_ans IS NOT NULL OR
                     action_metrics.scolaire_mineurs_trois_ans_et_plus IS NOT NULL OR
-                    action_metrics.scolaire_mineurs_en_mediation IS NOT NULL OR
+                    action_metrics.scolaire_mediation_moins_de_trois_ans IS NOT NULL OR
+                    action_metrics.scolaire_mediation_trois_ans_et_plus IS NOT NULL OR
                     action_metrics.scolaire_nombre_maternelle IS NOT NULL OR
                     action_metrics.scolaire_nombre_elementaire IS NOT NULL OR
                     action_metrics.scolaire_nombre_college IS NOT NULL OR
                     action_metrics.scolaire_nombre_lycee IS NOT NULL OR
-                    action_metrics.scolaire_nombre_autre IS NOT NULL
+                    action_metrics.scolaire_nombre_autre IS NOT NULL OR
+                    action_metrics.scolaire_mineur_scolarise_dans_annee IS NOT NULL
                 )
                 AND
                     action_metrics.date <= TO_DATE(:annee || '-09-01', 'YYYY-MM-DD') + INTERVAL '1 year'
@@ -197,13 +203,16 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
         m.hebergement_nombre_menages,
         m.logement_nombre_personnes,
         m.logement_nombre_menages,
+        sm.scolaire_mineurs_moins_de_trois_ans,
         sm.scolaire_mineurs_trois_ans_et_plus,
-        sm.scolaire_mineurs_en_mediation,
+        sm.scolaire_mediation_moins_de_trois_ans,
+        sm.scolaire_mediation_trois_ans_et_plus,
         sm.scolaire_nombre_maternelle,
         sm.scolaire_nombre_elementaire,
         sm.scolaire_nombre_college,
         sm.scolaire_nombre_lycee,
         sm.scolaire_nombre_autre,
+        sm.scolaire_mineur_scolarise_dans_annee,
         fi.finance_etatique,
         fi.finance_dedie,
         fi.finance_collectivite,
