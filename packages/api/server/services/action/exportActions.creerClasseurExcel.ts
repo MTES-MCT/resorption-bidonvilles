@@ -253,7 +253,7 @@ const setDepartementHeader = (worksheet: ExcelJS.Worksheet, departement: Departe
 function sumNumbers(values: Array<number | null | undefined>): number | null {
     const numericValues = values
         .map(value => (typeof value === 'number' ? value : Number(value)))
-        .filter(value => Number.isFinite(value)) as number[];
+        .filter(value => Number.isFinite(value));
 
     if (numericValues.length === 0) {
         return null;
