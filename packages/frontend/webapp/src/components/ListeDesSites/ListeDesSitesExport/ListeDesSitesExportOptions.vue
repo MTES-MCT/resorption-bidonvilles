@@ -109,8 +109,7 @@ const locationIncludesResorptionDepartement = computed(() => {
 });
 
 const availableOptions = computed(() => {
-    const isNationalAdmin =
-        userStore.user?.intervention_areas?.is_national === true;
+    const isNationalAdmin = userStore.user?.intervention_areas?.is_national;
 
     return options.filter(({ id, closedTowns, permission }) => {
         const isClosed = townsStore.filters.status === "close";
