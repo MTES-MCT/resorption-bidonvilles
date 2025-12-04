@@ -36,10 +36,10 @@ const sectionTitles = [
     { name: 'SANTÉ', range: { from: 'P6', to: 'P6' } },
     { name: 'EMPLOI', range: { from: 'Q6', to: 'R6' } },
     { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'S6', to: 'V6' } },
-    { name: 'SCOLARISATION', range: { from: 'W6', to: 'AC6' } },
-    { name: 'FINANCEMENT', range: { from: 'AD6', to: 'AO6' } },
-    { name: 'COMMENTAIRES', range: { from: 'AP6', to: 'AR6' } },
-    { name: 'MISE À JOUR', range: { from: 'AS6', to: 'AT6' } },
+    { name: 'SCOLARISATION', range: { from: 'W6', to: 'AH6' } },
+    { name: 'FINANCEMENT', range: { from: 'AI6', to: 'AT6' } },
+    { name: 'COMMENTAIRES', range: { from: 'AU6', to: 'AW6' } },
+    { name: 'MISE À JOUR', range: { from: 'AX6', to: 'AX6' } },
 ];
 
 const headers = [
@@ -65,13 +65,18 @@ const headers = [
     { label: 'Nombre de ménages ayant eu accès à une solution longue durée en hébergement ou logement adapté avec accompagnement, dont espace temporaire d\'accompagnement', width: '5' },
     { label: 'Nombre de personnes ayant eu accès à un logement', width: '5' },
     { label: 'Nombre de ménages ayant eu accès à un logement', width: '5' },
-    { label: 'Nombre de mineurs identifiés sur site', width: '5' },
-    { label: 'Nombre de mineurs bénéficiant d\'une action de médiation (3 - 18 ans)', width: '5' },
-    { label: 'Nombre de mineurs scolarisés en maternelle', width: '5' },
-    { label: 'Nombre de mineurs scolarisés en élémentaire', width: '5' },
-    { label: 'Nombre de mineurs scolarisés au collège', width: '5' },
-    { label: 'Nombre de mineurs scolarisés au lycée ou en formation professionnelle', width: '5' },
-    { label: 'Nombre de mineurs scolarisés: autre', width: '5' },
+    { label: 'Mineurs identifiés sur site (3-18 ans)', width: '5' },
+    { label: 'Mineurs de moins de 3 ans identifiés sur site', width: '5' },
+    { label: 'Mineurs de 3 ans et plus identifiés sur site', width: '5' },
+    { label: 'Mineurs bénéficiant d\'une action de médiation (3-18 ans)', width: '5' },
+    { label: 'Mineurs de moins de 3 ans bénéficiant d\'une action de médiation', width: '5' },
+    { label: 'Mineurs de 3 ans et plus bénéficiant d\'une action de médiation', width: '5' },
+    { label: 'Mineurs dont la scolarité a débuté cette année', width: '5' },
+    { label: 'Mineurs en maternelle', width: '5' },
+    { label: 'Mineurs en élémentaire', width: '5' },
+    { label: 'Mineurs au collège', width: '5' },
+    { label: 'Mineurs au lycée ou en formation professionnelle', width: '5' },
+    { label: 'Mineurs scolarisés : autre', width: '5' },
     { label: 'Financement étatique hors crédits dédiés', width: '5' },
     { label: 'Dépense sur financement étatique hors crédits dédiés', width: '5' },
     { label: 'Crédits dédiés à la résorption des bidonvilles', width: '5' },
@@ -245,9 +250,31 @@ const setDepartementHeader = (worksheet: ExcelJS.Worksheet, departement: Departe
     }
 };
 
+function sumNumbers(values: Array<number | null | undefined>): number | null {
+    const numericValues = values
+        .map(value => (typeof value === 'number' ? value : Number(value)))
+        .filter(value => Number.isFinite(value)) as number[];
+
+    if (numericValues.length === 0) {
+        return null;
+    }
+
+    return numericValues.reduce((acc, value) => acc + value, 0);
+}
+
 // Ajouter les lignes de données
 function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, includeFinances: boolean = true) {
     data.forEach((item: ActionItem) => {
+        const mineursIdentifiesTotal = sumNumbers([
+            item.scolaire_mineurs_moins_de_trois_ans,
+            item.scolaire_mineurs_trois_ans_et_plus,
+        ]);
+
+        const mineursMediationTotal = sumNumbers([
+            item.scolaire_mediation_moins_de_trois_ans,
+            item.scolaire_mediation_trois_ans_et_plus,
+        ]);
+
         // Construire la ligne de données selon les permissions
         const rowData = [
             item.departement_name,
@@ -272,8 +299,13 @@ function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, in
             item.hebergement_nombre_menages,
             item.logement_nombre_personnes,
             item.logement_nombre_menages,
+            mineursIdentifiesTotal,
+            item.scolaire_mineurs_moins_de_trois_ans,
             item.scolaire_mineurs_trois_ans_et_plus,
-            item.scolaire_mineurs_en_mediation,
+            mineursMediationTotal,
+            item.scolaire_mediation_moins_de_trois_ans,
+            item.scolaire_mediation_trois_ans_et_plus,
+            item.scolaire_mineur_scolarise_dans_annee,
             item.scolaire_nombre_maternelle,
             item.scolaire_nombre_elementaire,
             item.scolaire_nombre_college,
@@ -347,7 +379,7 @@ function formatWorksheetCells(worksheet: ExcelJS.Worksheet, columnNumbers: numbe
 }
 
 function formatCommentCol(worksheet: ExcelJS.Worksheet) {
-    const commentsCol = worksheet.getColumn('AO');
+    const commentsCol = worksheet.getColumn('AU');
     commentsCol.eachCell((cell) => {
         if (cell.value) {
             formaterCommentaires(cell, cell.value);
