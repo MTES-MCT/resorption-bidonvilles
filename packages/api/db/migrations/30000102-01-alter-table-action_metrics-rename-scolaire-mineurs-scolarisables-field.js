@@ -1,9 +1,9 @@
 // Renommage du champ scolaire_mineurs_scolarisables en scolaire_mineurs_trois_ans_et_plus
+const runWithinTransaction = require('./common/helpers/transaction');
+
 module.exports = {
     async up(queryInterface) {
-        const transaction = await queryInterface.sequelize.transaction();
-
-        try {
+        await runWithinTransaction(queryInterface, async (transaction) => {
             // Supprimer l'ancienne contrainte check
             await queryInterface.removeConstraint(
                 'action_metrics',
@@ -29,18 +29,11 @@ module.exports = {
                 ),
                 transaction,
             });
-
-            await transaction.commit();
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
+        });
     },
 
     async down(queryInterface) {
-        const transaction = await queryInterface.sequelize.transaction();
-
-        try {
+        await runWithinTransaction(queryInterface, async (transaction) => {
             // Supprimer la nouvelle contrainte check
             await queryInterface.removeConstraint(
                 'action_metrics',
@@ -66,11 +59,6 @@ module.exports = {
                 ),
                 transaction,
             });
-
-            await transaction.commit();
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
+        });
     },
 };

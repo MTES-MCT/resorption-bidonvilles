@@ -1,4 +1,4 @@
-const { addForeignKey, removeForeignKey } = require('./common/manageForeignKeys');
+const { addForeignKey, removeForeignKey } = require('./common/helpers/manageForeignKeys');
 
 module.exports = {
     async up(queryInterface, Sequelize) {
