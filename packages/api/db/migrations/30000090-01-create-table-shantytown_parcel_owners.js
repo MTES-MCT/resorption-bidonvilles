@@ -44,9 +44,33 @@ module.exports = {
                 { transaction },
             );
 
-            await addForeignKey(queryInterface, 'shantytown_parcel_owners', ['fk_user'], 'users', 'user_id', 'cascade', 'cascade', transaction);
-            await addForeignKey(queryInterface, 'shantytown_parcel_owners', ['fk_shantytown'], 'shantytowns', 'shantytown_id', 'cascade', 'cascade', transaction);
-            await addForeignKey(queryInterface, 'shantytown_parcel_owners', ['fk_owner_type'], 'owner_types', 'owner_type_id', 'cascade', 'cascade', transaction);
+            await addForeignKey(queryInterface, {
+                table: 'shantytown_parcel_owners',
+                fields: ['fk_user'],
+                refTable: 'users',
+                refField: 'user_id',
+                onUpdate: 'cascade',
+                onDelete: 'cascade',
+                transaction,
+            });
+            await addForeignKey(queryInterface, {
+                table: 'shantytown_parcel_owners',
+                fields: ['fk_shantytown'],
+                refTable: 'shantytowns',
+                refField: 'shantytown_id',
+                onUpdate: 'cascade',
+                onDelete: 'cascade',
+                transaction,
+            });
+            await addForeignKey(queryInterface, {
+                table: 'shantytown_parcel_owners',
+                fields: ['fk_owner_type'],
+                refTable: 'owner_types',
+                refField: 'owner_type_id',
+                onUpdate: 'cascade',
+                onDelete: 'cascade',
+                transaction,
+            });
 
             await queryInterface.addIndex(
                 'shantytown_parcel_owners',
@@ -70,8 +94,16 @@ module.exports = {
 
         try {
             await removeForeignKey(queryInterface, 'shantytown_parcel_owners', 'users', transaction);
-            await removeForeignKey(queryInterface, 'shantytown_parcel_owners', 'shantytowns', transaction);
-            await removeForeignKey(queryInterface, 'shantytown_parcel_owners', 'owner_types', transaction);
+            await removeForeignKey(queryInterface, {
+                table: 'shantytown_parcel_owners',
+                refTable: 'shantytowns',
+                transaction,
+            });
+            await removeForeignKey(queryInterface, {
+                table: 'shantytown_parcel_owners',
+                refTable: 'owner_types',
+                transaction,
+            });
             await queryInterface.dropTable('shantytown_parcel_owners', { transaction });
             await transaction.commit();
         } catch (error) {
