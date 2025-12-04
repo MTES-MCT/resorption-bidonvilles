@@ -55,19 +55,6 @@ module.exports = {
                 ),
                 transaction,
             });
-
-            // Lignes suivantes mises en commentaires pour éviter des erreurs de contrainte non corrigées en bdd
-            // scolaire_mediation_trois_ans_et_plus <= scolaire_mineurs_trois_ans_et_plus // NOSONAR
-            // await queryInterface.addConstraint('action_metrics', { // NOSONAR
-            //     fields: ['scolaire_mediation_trois_ans_et_plus', 'scolaire_mineurs_trois_ans_et_plus'], // NOSONAR
-            //     type: 'check', // NOSONAR
-            //     name: 'check__scolaire_mediation_trois_ans_et_plus_lte_scolaire_mineurs_trois_ans_et_plus', // NOSONAR
-            //     where: lessOrEqualColumnOrNull( // NOSONAR
-            //         'scolaire_mediation_trois_ans_et_plus', // NOSONAR
-            //         'scolaire_mineurs_trois_ans_et_plus', // NOSONAR
-            //     ), // NOSONAR
-            //     transaction, // NOSONAR
-            // }); // NOSONAR
         });
     },
 
@@ -85,12 +72,6 @@ module.exports = {
                 'check__scolaire_mediation_moins_de_trois_ans_lte_scolaire_mineurs_moins_de_trois_ans',
                 { transaction },
             );
-
-            // await queryInterface.removeConstraint( // NOSONAR
-            //     'action_metrics', // NOSONAR
-            //     'check__scolaire_mediation_trois_ans_et_plus_lte_scolaire_mineurs_trois_ans_et_plus', // NOSONAR
-            //     { transaction }, // NOSONAR
-            // ); // NOSONAR
 
             // Supprimer les colonnes ajoutées
             await queryInterface.removeColumn(
