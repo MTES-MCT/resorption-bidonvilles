@@ -5,7 +5,7 @@ export default [
     param('id')
         .custom(async (value, { req }) => {
             // Les admins nationaux peuvent créer des phases de résorption partout
-            const isNationalAdmin = req.user?.is_superuser === true;
+            const isNationalAdmin = req.user?.is_superuser;
             const hasPermission = req.user?.isAllowedTo('create', 'shantytown_resorption');
 
             if (!isNationalAdmin && !hasPermission) {

@@ -2076,7 +2076,7 @@ export default mode => ([
         .custom(async (value, { req }) => {
             // Vérifier les permissions pour modifier les phases de résorption
             // Les admins nationaux peuvent modifier les phases partout
-            const isNationalAdmin = req.user?.is_superuser === true;
+            const isNationalAdmin = req.user?.is_superuser;
             const hasPermission = req.user?.isAllowedTo('update', 'shantytown_resorption');
 
             if (!isNationalAdmin && !hasPermission) {
