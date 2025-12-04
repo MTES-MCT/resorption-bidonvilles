@@ -58,19 +58,19 @@ export default [
             // les labels pour la scolarisation sont dans des composants dédiés
             // @see ./InputIndicateursScolaires.vue
             scolarisables_moins_de_trois_ans: [
-                { 
+                {
                     id: "scolaire_mineurs_moins_de_trois_ans",
                     tableLabel: "Mineurs de moins de 3 ans",
                 },
             ],
             scolarisables_trois_ans_et_plus: [
-                { 
+                {
                     id: "scolaire_mineurs_trois_ans_et_plus",
                     tableLabel: "Mineurs de 3 ans et plus",
                 },
             ],
             mediation_moins_de_trois_ans: [
-                { 
+                {
                     id: "scolaire_mediation_moins_de_trois_ans",
                     tableLabel: "Mineurs de moins de 3 ans",
                 },
