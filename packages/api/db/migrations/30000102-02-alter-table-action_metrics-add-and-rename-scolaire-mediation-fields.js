@@ -1,9 +1,10 @@
 // Renommage de scolaire_mineurs_en_mediation et ajout des champs pour les mineurs de moins de 3 ans
+const runWithinTransaction = require('./common/helpers/transaction');
+const { lessOrEqualColumnOrNull } = require('./common/helpers/constraints');
+
 module.exports = {
     async up(queryInterface, Sequelize) {
-        const transaction = await queryInterface.sequelize.transaction();
-
-        try {
+        await runWithinTransaction(queryInterface, async (transaction) => {
             // Renommer scolaire_mineurs_en_mediation en scolaire_mediation_trois_ans_et_plus
             await queryInterface.renameColumn(
                 'action_metrics',
@@ -39,9 +40,7 @@ module.exports = {
                 fields: ['scolaire_mineurs_moins_de_trois_ans', 'nombre_mineurs'],
                 type: 'check',
                 name: 'check__scolaire_mineurs_moins_de_trois_ans_lte_nombre_mineurs',
-                where: queryInterface.sequelize.literal(
-                    'nombre_mineurs IS NULL OR scolaire_mineurs_moins_de_trois_ans IS NULL OR scolaire_mineurs_moins_de_trois_ans <= nombre_mineurs',
-                ),
+                where: lessOrEqualColumnOrNull('scolaire_mineurs_moins_de_trois_ans'),
                 transaction,
             });
 
@@ -50,8 +49,9 @@ module.exports = {
                 fields: ['scolaire_mediation_moins_de_trois_ans', 'scolaire_mineurs_moins_de_trois_ans'],
                 type: 'check',
                 name: 'check__scolaire_mediation_moins_de_trois_ans_lte_scolaire_mineurs_moins_de_trois_ans',
-                where: queryInterface.sequelize.literal(
-                    'scolaire_mineurs_moins_de_trois_ans IS NULL OR scolaire_mediation_moins_de_trois_ans IS NULL OR scolaire_mediation_moins_de_trois_ans <= scolaire_mineurs_moins_de_trois_ans',
+                where: lessOrEqualColumnOrNull(
+                    'scolaire_mediation_moins_de_trois_ans',
+                    'scolaire_mineurs_moins_de_trois_ans',
                 ),
                 transaction,
             });
@@ -62,23 +62,17 @@ module.exports = {
             //     fields: ['scolaire_mediation_trois_ans_et_plus', 'scolaire_mineurs_trois_ans_et_plus'],
             //     type: 'check',
             //     name: 'check__scolaire_mediation_trois_ans_et_plus_lte_scolaire_mineurs_trois_ans_et_plus',
-            //     where: queryInterface.sequelize.literal(
-            //         'scolaire_mineurs_trois_ans_et_plus IS NULL OR scolaire_mediation_trois_ans_et_plus IS NULL OR scolaire_mediation_trois_ans_et_plus <= scolaire_mineurs_trois_ans_et_plus',
+            //     where: lessOrEqualColumnOrNull(
+            //         'scolaire_mediation_trois_ans_et_plus',
+            //         'scolaire_mineurs_trois_ans_et_plus',
             //     ),
             //     transaction,
             // });
-
-            await transaction.commit();
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
+        });
     },
 
     async down(queryInterface) {
-        const transaction = await queryInterface.sequelize.transaction();
-
-        try {
+        await runWithinTransaction(queryInterface, async (transaction) => {
             // Supprimer les contraintes check
             await queryInterface.removeConstraint(
                 'action_metrics',
@@ -118,11 +112,6 @@ module.exports = {
                 'scolaire_mineurs_en_mediation',
                 { transaction },
             );
-
-            await transaction.commit();
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
+        });
     },
 };
