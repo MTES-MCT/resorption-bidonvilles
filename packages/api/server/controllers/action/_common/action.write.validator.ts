@@ -649,7 +649,7 @@ export default (mode: 'create' | 'update') => [
         .isInt().bail().withMessage('Le champ "Nombre de mineurs de moins de 3 ans bénéficiant d\'une médiation" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs de moins de 3 ans bénéficiant d\'une médiation" ne peut pas être inférieur à 0')
         .custom((value, { req, path }) => {
-            const key = RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
+            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
             if (Number.isInteger(req.body.indicateurs[key].scolaire_mineurs_moins_de_trois_ans)) {
                 if (value > req.body.indicateurs[key].scolaire_mineurs_moins_de_trois_ans) {
                     throw new Error('Le nombre de mineurs de moins de 3 ans bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de moins de 3 ans identifiés sur site');
@@ -668,7 +668,7 @@ export default (mode: 'create' | 'update') => [
         .isInt().bail().withMessage('Le champ "Nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation" ne peut pas être inférieur à 0')
         .custom((value, { req, path }) => {
-            const key = RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
+            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
             if (Number.isInteger(req.body.indicateurs[key].scolaire_mineurs_trois_ans_et_plus)) {
                 if (value > req.body.indicateurs[key].scolaire_mineurs_trois_ans_et_plus) {
                     throw new Error('Le nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de 3 ans et plus identifiés sur site');
@@ -792,7 +792,7 @@ export default (mode: 'create' | 'update') => [
         .isInt().bail().withMessage('Le champ "Mineurs scolarisés dans l\'année" doit être un nombre')
         .isInt({ min: 0 }).withMessage('Le champ "Mineurs scolarisés dans l\'année" ne peut pas être inférieur à 0')
         .custom((value, { req, path }) => {
-            const key = RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
+            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
             if (Number.isInteger(req.body.indicateurs[key].nombre_mineurs)) {
                 if (value > req.body.indicateurs[key].nombre_mineurs) {
                     throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut être supérieur au nombre de mineurs concernés par l\'action');
