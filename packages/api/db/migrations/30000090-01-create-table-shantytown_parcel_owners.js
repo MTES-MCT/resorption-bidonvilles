@@ -1,4 +1,4 @@
-const { addForeignKey, removeForeignKey } = require('./common/manageForeignKeys');
+const { addForeignKey, removeForeignKey } = require('./common/helpers/manageForeignKeys');
 
 module.exports = {
     async up(queryInterface, Sequelize) {
@@ -44,9 +44,33 @@ module.exports = {
                 { transaction },
             );
 
-            await addForeignKey(queryInterface, 'shantytown_parcel_owners', ['fk_user'], 'users', 'user_id', 'cascade', 'cascade', transaction);
-            await addForeignKey(queryInterface, 'shantytown_parcel_owners', ['fk_shantytown'], 'shantytowns', 'shantytown_id', 'cascade', 'cascade', transaction);
-            await addForeignKey(queryInterface, 'shantytown_parcel_owners', ['fk_owner_type'], 'owner_types', 'owner_type_id', 'cascade', 'cascade', transaction);
+            const foreignKeys = [
+                {
+                    fields: ['fk_user'],
+                    refTable: 'users',
+                    refField: 'user_id',
+                },
+                {
+                    fields: ['fk_shantytown'],
+                    refTable: 'shantytowns',
+                    refField: 'shantytown_id',
+                },
+                {
+                    fields: ['fk_owner_type'],
+                    refTable: 'owner_types',
+                    refField: 'owner_type_id',
+                },
+            ];
+
+            await Promise.all(
+                foreignKeys.map(fk => addForeignKey(queryInterface, {
+                    table: 'shantytown_parcel_owners',
+                    onUpdate: 'cascade',
+                    onDelete: 'cascade',
+                    transaction,
+                    ...fk,
+                })),
+            );
 
             await queryInterface.addIndex(
                 'shantytown_parcel_owners',
@@ -69,9 +93,13 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
 
         try {
-            await removeForeignKey(queryInterface, 'shantytown_parcel_owners', 'users', transaction);
-            await removeForeignKey(queryInterface, 'shantytown_parcel_owners', 'shantytowns', transaction);
-            await removeForeignKey(queryInterface, 'shantytown_parcel_owners', 'owner_types', transaction);
+            await Promise.all(
+                ['users', 'shantytowns', 'owner_types'].map(refTable => removeForeignKey(queryInterface, {
+                    table: 'shantytown_parcel_owners',
+                    refTable,
+                    transaction,
+                })),
+            );
             await queryInterface.dropTable('shantytown_parcel_owners', { transaction });
             await transaction.commit();
         } catch (error) {

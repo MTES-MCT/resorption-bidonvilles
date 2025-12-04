@@ -1,4 +1,4 @@
-const { addForeignKey, removeForeignKey } = require('./common/manageForeignKeys');
+const { addForeignKey, removeForeignKey } = require('./common/helpers/manageForeignKeys');
 
 module.exports = {
     async up(queryInterface, Sequelize) {
@@ -34,8 +34,28 @@ module.exports = {
                 { transaction },
             );
 
-            await addForeignKey(queryInterface, 'land_registry_enquiries', ['fk_user'], 'users', 'user_id', 'cascade', 'cascade', transaction);
-            await addForeignKey(queryInterface, 'land_registry_enquiries', ['fk_organization'], 'organizations', 'organization_id', 'cascade', 'cascade', transaction);
+            const foreignKeys = [
+                {
+                    fields: ['fk_user'],
+                    refTable: 'users',
+                    refField: 'user_id',
+                },
+                {
+                    fields: ['fk_organization'],
+                    refTable: 'organizations',
+                    refField: 'organization_id',
+                },
+            ];
+
+            await Promise.all(
+                foreignKeys.map(fk => addForeignKey(queryInterface, {
+                    table: 'land_registry_enquiries',
+                    onUpdate: 'cascade',
+                    onDelete: 'cascade',
+                    transaction,
+                    ...fk,
+                })),
+            );
 
             await queryInterface.addIndex(
                 'land_registry_enquiries',
@@ -58,8 +78,13 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
 
         try {
-            await removeForeignKey(queryInterface, 'land_registry_enquiries', 'users', transaction);
-            await removeForeignKey(queryInterface, 'land_registry_enquiries', 'organizations', transaction);
+            await Promise.all(
+                ['users', 'organizations'].map(refTable => removeForeignKey(queryInterface, {
+                    table: 'land_registry_enquiries',
+                    refTable,
+                    transaction,
+                })),
+            );
             await queryInterface.dropTable('land_registry_enquiries', { transaction });
             await transaction.commit();
         } catch (error) {

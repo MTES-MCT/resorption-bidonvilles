@@ -6,14 +6,16 @@
                 <p
                     v-for="(label, index) in labels"
                     :key="label"
-                    class="flex items-center h-8 bg-G200"
-                    :class="{
-                        'px-4': label !== '' && label !== undefined,
-                        'border-b border-b-G400': index < labels.length - 1,
-                    }"
-                >
-                    {{ label }}
-                </p>
+                    class="flex items-center min-h-20"
+                    :class="[
+                        label !== '' && label !== undefined ? 'px-4' : null,
+                        index < labels.length - 1
+                            ? 'border-b border-b-G400'
+                            : null,
+                        hasBackground(index) ? 'bg-G200' : 'bg-transparent',
+                    ]"
+                    v-html="label"
+                />
             </div>
         </template>
 
@@ -28,7 +30,7 @@
                         <p
                             v-for="(figure, index2) in year"
                             :key="index2"
-                            class="flex items-center justify-center h-8 bg-G200"
+                            class="flex items-center justify-center min-h-20 bg-G200"
                             :class="{
                                 'border-b border-b-G400':
                                     index2 < year.length - 1,
@@ -57,6 +59,13 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    labelsWithoutBackground: {
+        type: Array,
+        default: () => [],
+    },
 });
-const { labels, data } = toRefs(props);
+const { labels, data, labelsWithoutBackground } = toRefs(props);
+
+const hasBackground = (index) =>
+    labelsWithoutBackground.value.includes(index) === false;
 </script>
