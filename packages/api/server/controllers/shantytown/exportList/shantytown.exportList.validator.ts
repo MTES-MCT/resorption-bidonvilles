@@ -87,7 +87,7 @@ export default [
         .trim()
         .customSanitizer(value => (value ? value.split(',') : []))
         .custom((value) => {
-            if (value.some(option => !['address_details', 'owner', 'living_conditions', 'demographics', 'justice', 'actors', 'comments'].includes(option))) {
+            if (value.some(option => !['address_details', 'owner', 'living_conditions', 'demographics', 'justice', 'actors', 'comments', 'resorption_phases'].includes(option))) {
                 throw new Error('Certaines options ne sont pas reconnues');
             }
 

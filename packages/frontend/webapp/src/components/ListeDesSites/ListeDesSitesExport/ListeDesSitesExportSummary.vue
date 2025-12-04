@@ -35,7 +35,6 @@ const props = defineProps({
     },
 });
 const { isExportToday } = toRefs(props);
-console.log("Valeur de isExportToday:", isExportToday.value);
 const townsStore = useTownsStore();
 
 const territory = computed(() => {

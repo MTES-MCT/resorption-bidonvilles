@@ -2073,7 +2073,16 @@ export default mode => ([
             return value;
         })
         .isArray().bail().withMessage('Le champ "Phases transitoires vers la résorption" est invalide')
-        .custom(async (value) => {
+        .custom(async (value, { req }) => {
+            // Vérifier les permissions pour modifier les phases de résorption
+            // Les admins nationaux peuvent modifier les phases partout
+            const isNationalAdmin = req.user?.is_superuser;
+            const hasPermission = req.user?.isAllowedTo('update', 'shantytown_resorption');
+
+            if (!isNationalAdmin && !hasPermission) {
+                throw new Error('Vous n\'avez pas le droit de modifier les phases de résorption');
+            }
+
             // On vérifie si les uid des phases transiqstoires existent en base de données dans les types de phases
             let preparatoryPhasesTowrdResorption: PreparatoryPhaseTowardResorption[] = [];
             if (value.length > 0) {
@@ -2102,6 +2111,15 @@ export default mode => ([
         })
         .isArray().bail().withMessage('La valeur des "Phases préparatoires à la résorption" est invalide')
         .custom(async (value, { req }) => {
+            // Vérifier les permissions pour modifier les phases de résorption
+            // Les admins nationaux peuvent modifier les phases partout
+            const isNationalAdmin = req.user?.is_superuser === true;
+            const hasPermission = req.user?.isAllowedTo('update', 'shantytown_resorption');
+
+            if (!isNationalAdmin && !hasPermission) {
+                throw new Error('Vous n\'avez pas le droit de modifier les phases de résorption');
+            }
+
             req.body.active_preparatory_phases_toward_resorption = value;
             return true;
         }),

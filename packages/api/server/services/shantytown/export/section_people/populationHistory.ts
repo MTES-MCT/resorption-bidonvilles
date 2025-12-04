@@ -9,6 +9,8 @@ const intToStr = (int, nullValue = 'NC') => {
     return int;
 };
 
+const formatPopulationHistoryDate = (timestamp: number) => formatDate(timestamp, 'DD/MM/YYYY');
+
 type TownExportPopulationHistoryRow = {
     date: string,
     populationTotal: number,
@@ -95,7 +97,7 @@ export default (town: Shantytown): TownExportPopulationHistoryRow[] => {
         return [
             {
                 ...ref,
-                date: formatDate(town.createdAt, 'DD MMMM YYYY'),
+                date: formatPopulationHistoryDate(town.createdAt),
             },
         ];
     }
@@ -105,7 +107,7 @@ export default (town: Shantytown): TownExportPopulationHistoryRow[] => {
         // la première entrée dans l'historique correspond aux valeurs présentes, à la date de dernière modification
         {
             ...ref,
-            date: formatDate(entries[0].date, 'DD MMMM YYYY'),
+            date: formatPopulationHistoryDate(entries[0].date),
         },
 
         // puis on ajoute une entrée dans l'historique pour chaque entrée dans le changelog
@@ -125,7 +127,7 @@ export default (town: Shantytown): TownExportPopulationHistoryRow[] => {
 
             return {
                 ...ref,
-                date: formatDate(date, 'DD MMMM YYYY'),
+                date: formatPopulationHistoryDate(date),
             };
         }),
     ];

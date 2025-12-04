@@ -1,6 +1,6 @@
 import { ShantytownWithFinancedAction, ShantytownWithOwner } from '#root/types/resources/Shantytown.d';
 
-export type ShantytownExportListOption = 'address_details' | 'owner' | 'living_conditions' | 'demographics' | 'justice' | 'actors' | 'comments';
+export type ShantytownExportListOption = 'address_details' | 'owner' | 'living_conditions' | 'demographics' | 'justice' | 'actors' | 'comments' | 'resorption_phases';
 
 export type ShantytownExportListProperty = {
     title: string,

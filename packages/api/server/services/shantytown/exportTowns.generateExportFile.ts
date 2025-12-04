@@ -28,7 +28,7 @@ export default async function generateExportFile(user: AuthUser, data: Shantytow
     const isNationalExport = locations.some(l => ['nation', 'metropole', 'outremer'].includes(l.type));
     const closingSolutions = await closingSolutionModel.findAll();
     const properties = serializeExportProperties(closingSolutions);
-    const sections = await createExportSections(user, options, properties, exportedSitesStatus, closingSolutions);
+    const sections = await createExportSections(user, options, properties, exportedSitesStatus, closingSolutions, locations);
 
     let locationName = '';
     if (isNationalExport) {

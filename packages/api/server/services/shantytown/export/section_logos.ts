@@ -3,7 +3,7 @@ import path from 'path';
 import config from '#server/config';
 
 import {
-    SectionType, Paragraph, ImageRun, HorizontalPositionRelativeFrom,
+    SectionType, Paragraph, ImageRun, Table, TableRow, TableCell, WidthType, AlignmentType, BorderStyle,
 } from 'docx';
 
 const { assetsSrc } = config;
@@ -22,25 +22,58 @@ export default () => {
             width: 144,
             height: 80,
         },
-        floating: {
-            horizontalPosition: {
-                relative: HorizontalPositionRelativeFrom.RIGHT_MARGIN,
-                offset: -1514400,
-            },
-            verticalPosition: {
-                offset: 914400,
-            },
-        },
+    });
 
+    type AlignmentValue = typeof AlignmentType[keyof typeof AlignmentType];
+
+    const createLogoCell = (alignment: AlignmentValue, image: ImageRun) => new TableCell({
+        borders: {
+            top: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+            bottom: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+            left: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+            right: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+        },
+        margins: {
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+        },
+        children: [
+            new Paragraph({
+                alignment,
+                spacing: { before: 0, after: 0 },
+                children: [image],
+            }),
+        ],
+    });
+
+    const logosTable = new Table({
+        width: {
+            size: 100,
+            type: WidthType.PERCENTAGE,
+        },
+        borders: {
+            top: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+            bottom: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+            left: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+            right: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+            insideHorizontal: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+            insideVertical: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+        },
+        rows: [
+            new TableRow({
+                children: [
+                    createLogoCell(AlignmentType.LEFT, marianne),
+                    createLogoCell(AlignmentType.RIGHT, logoRb),
+                ],
+            }),
+        ],
     });
     return {
         properties: {
             type: SectionType.CONTINUOUS,
         },
-        children: [
-            new Paragraph({
-                children: [marianne, logoRb],
-            }),
-        ],
+        children: [logosTable],
     };
 };

@@ -122,7 +122,8 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
                                         'name', pptr.name,
                                         'dateLabel', pptr.date_label,
                                         'completedAt', srp.completed_at,
-                                        'createdAt', srp.created_at
+                                        'createdAt', srp.created_at,
+                                        'isAStartingPhase', pptr.is_a_starting_phase
                                     )::jsonb
                                 ELSE NULL
                             END

@@ -1,4 +1,5 @@
 import { ParcelOwners } from '#root/types/resources/ParcelOwner.d';
+import { ShantytownPreparatoryPhaseTowardResorption } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
 
 export type ShantytownRow = {
     id: number,
@@ -163,7 +164,7 @@ export type ShantytownRow = {
     socialOrigins: string[],
     electricityAccessTypes: string[],
     toiletTypes: string[],
-    preparatoryPhasesTowardResorption?: string[],
+    preparatoryPhasesTowardResorption?: ShantytownPreparatoryPhaseTowardResorption[],
     distance?: number | null,
     owners: ParcelOwners | null
 };

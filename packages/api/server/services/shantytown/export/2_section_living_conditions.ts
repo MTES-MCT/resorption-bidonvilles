@@ -8,13 +8,18 @@ import heading from './heading';
 import firePrevention from './2_section_living_conditions/firePrevention';
 
 const {
-    Table, SectionType, Paragraph, TextRun,
+    Table, SectionType, Paragraph, TextRun, PageOrientation,
 } = docx;
 
 export default (shantytown) => {
     const section: any = {
         properties: {
-            type: SectionType.CONTINUOUS,
+            type: SectionType.NEXT_PAGE,
+            page: {
+                size: {
+                    orientation: PageOrientation.PORTRAIT,
+                },
+            },
         },
         children: [
             heading('Conditions de vie'),
