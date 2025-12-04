@@ -621,25 +621,63 @@ export default (mode: 'create' | 'update') => [
     body('indicateurs.*.scolaire_mineurs_trois_ans_et_plus')
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
-    body('indicateurs.*.scolaire_mineurs_en_mediation')
+    body('indicateurs.*.scolaire_mineurs_moins_de_trois_ans')
         .if((value, { req }) => req.body.topics?.includes?.('school'))
         .optional({ nullable: true, checkFalsy: true })
         .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de mineurs bénéficiant d\'une médiation" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs bénéficiant d\'une médiation" ne peut pas être inférieur à 0')
+        .isInt().bail().withMessage('Le champ "Nombre de mineurs de moins de 3 ans identifiés sur site" doit être un nombre')
+        .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs de moins de 3 ans identifiés sur site" ne peut pas être inférieur à 0')
         .custom((value, { req, path }) => {
             const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
             if (Number.isInteger(req.body.indicateurs[key].nombre_mineurs)) {
                 if (value > req.body.indicateurs[key].nombre_mineurs) {
-                    throw new Error('Le nombre de mineurs bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs concernés par l\'action');
+                    throw new Error('Le nombre de mineurs de moins de 3 ans identifiés sur site ne peut être supérieur au nombre de mineurs concernés par l\'action');
                 }
             } else if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de mineurs bénéficiant d\'une médiation ne peut être supérieur au nombre de personnes concernées par l\'action');
+                throw new Error('Le nombre de mineurs de moins de 3 ans identifiés sur site ne peut être supérieur au nombre de personnes concernées par l\'action');
             }
 
             return true;
         }),
-    body('indicateurs.*.scolaire_mineurs_en_mediation')
+    body('indicateurs.*.scolaire_mineurs_moins_de_trois_ans')
+        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+
+    body('indicateurs.*.scolaire_mediation_moins_de_trois_ans')
+        .if((value, { req }) => req.body.topics?.includes?.('school'))
+        .optional({ nullable: true, checkFalsy: true })
+        .toInt()
+        .isInt().bail().withMessage('Le champ "Nombre de mineurs de moins de 3 ans bénéficiant d\'une médiation" doit être un nombre')
+        .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs de moins de 3 ans bénéficiant d\'une médiation" ne peut pas être inférieur à 0')
+        .custom((value, { req, path }) => {
+            const key = RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
+            if (Number.isInteger(req.body.indicateurs[key].scolaire_mineurs_moins_de_trois_ans)) {
+                if (value > req.body.indicateurs[key].scolaire_mineurs_moins_de_trois_ans) {
+                    throw new Error('Le nombre de mineurs de moins de 3 ans bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de moins de 3 ans identifiés sur site');
+                }
+            }
+
+            return true;
+        }),
+    body('indicateurs.*.scolaire_mediation_moins_de_trois_ans')
+        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+
+    body('indicateurs.*.scolaire_mediation_trois_ans_et_plus')
+        .if((value, { req }) => req.body.topics?.includes?.('school'))
+        .optional({ nullable: true, checkFalsy: true })
+        .toInt()
+        .isInt().bail().withMessage('Le champ "Nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation" doit être un nombre')
+        .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation" ne peut pas être inférieur à 0')
+        .custom((value, { req, path }) => {
+            const key = RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
+            if (Number.isInteger(req.body.indicateurs[key].scolaire_mineurs_trois_ans_et_plus)) {
+                if (value > req.body.indicateurs[key].scolaire_mineurs_trois_ans_et_plus) {
+                    throw new Error('Le nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de 3 ans et plus identifiés sur site');
+                }
+            }
+
+            return true;
+        }),
+    body('indicateurs.*.scolaire_mediation_trois_ans_et_plus')
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
     body('indicateurs.*.scolaire_nombre_maternelle')
@@ -745,5 +783,26 @@ export default (mode: 'create' | 'update') => [
             return true;
         }),
     body('indicateurs.*.scolaire_nombre_autre')
+        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
+
+    body('indicateurs.*.scolaire_mineur_scolarise_dans_annee')
+        .if((value, { req }) => req.body.topics?.includes?.('school'))
+        .optional({ nullable: true, checkFalsy: true })
+        .toInt()
+        .isInt().bail().withMessage('Le champ "Mineurs scolarisés dans l\'année" doit être un nombre')
+        .isInt({ min: 0 }).withMessage('Le champ "Mineurs scolarisés dans l\'année" ne peut pas être inférieur à 0')
+        .custom((value, { req, path }) => {
+            const key = RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
+            if (Number.isInteger(req.body.indicateurs[key].nombre_mineurs)) {
+                if (value > req.body.indicateurs[key].nombre_mineurs) {
+                    throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut être supérieur au nombre de mineurs concernés par l\'action');
+                }
+            } else if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
+                throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut être supérieur au nombre de personnes concernées par l\'action');
+            }
+
+            return true;
+        }),
+    body('indicateurs.*.scolaire_mineur_scolarise_dans_annee')
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 ];
