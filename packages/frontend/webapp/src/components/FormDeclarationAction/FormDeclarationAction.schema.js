@@ -166,15 +166,27 @@ export default function () {
                                     )
                                     .nullable()
                                     .transform(emptyStringToNull),
-                                scolaire_mineurs_trois_ans_et_plus: number()
+                                scolaire_mineurs_moins_de_trois_ans: number()
                                     .typeError(
-                                        `${key} — Nombre de mineurs identifiés sur site doit être un nombre`
+                                        `${key} — Nombre de mineurs de moins de 3 ans identifiés sur site doit être un nombre`
                                     )
                                     .nullable()
                                     .transform(emptyStringToNull),
-                                scolaire_mineurs_en_mediation: number()
+                                scolaire_mineurs_trois_ans_et_plus: number()
                                     .typeError(
-                                        `${key} — Nombre de mineurs bénéficiant d'une action de médiation doit être un nombre`
+                                        `${key} — Nombre de mineurs de 3 ans et plus identifiés sur site doit être un nombre`
+                                    )
+                                    .nullable()
+                                    .transform(emptyStringToNull),
+                                scolaire_mediation_moins_de_trois_ans: number()
+                                    .typeError(
+                                        `${key} — Nombre de mineurs de moins de 3 ans bénéficiant d'une médiation doit être un nombre`
+                                    )
+                                    .nullable()
+                                    .transform(emptyStringToNull),
+                                scolaire_mediation_trois_ans_et_plus: number()
+                                    .typeError(
+                                        `${key} — Nombre de mineurs de 3 ans et plus bénéficiant d'une médiation doit être un nombre`
                                     )
                                     .nullable()
                                     .transform(emptyStringToNull),
@@ -205,6 +217,12 @@ export default function () {
                                 scolaire_nombre_autre: number()
                                     .typeError(
                                         `${key} — Nombre de mineurs scolarisés "autre" doit être un nombre`
+                                    )
+                                    .nullable()
+                                    .transform(emptyStringToNull),
+                                scolaire_mineur_scolarise_dans_annee: number()
+                                    .typeError(
+                                        `${key} — Nombre de mineurs scolarisés dans l'année doit être un nombre`
                                     )
                                     .nullable()
                                     .transform(emptyStringToNull),
