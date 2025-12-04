@@ -34,8 +34,24 @@ module.exports = {
                 { transaction },
             );
 
-            await addForeignKey(queryInterface, 'land_registry_enquiries', ['fk_user'], 'users', 'user_id', 'cascade', 'cascade', transaction);
-            await addForeignKey(queryInterface, 'land_registry_enquiries', ['fk_organization'], 'organizations', 'organization_id', 'cascade', 'cascade', transaction);
+            await addForeignKey(queryInterface, {
+                table: 'land_registry_enquiries',
+                fields: ['fk_user'],
+                refTable: 'users',
+                refField: 'user_id',
+                onUpdate: 'cascade',
+                onDelete: 'cascade',
+                transaction,
+            });
+            await addForeignKey(queryInterface, {
+                table: 'land_registry_enquiries',
+                fields: ['fk_organization'],
+                refTable: 'organizations',
+                refField: 'organization_id',
+                onUpdate: 'cascade',
+                onDelete: 'cascade',
+                transaction,
+            });
 
             await queryInterface.addIndex(
                 'land_registry_enquiries',
@@ -58,8 +74,16 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
 
         try {
-            await removeForeignKey(queryInterface, 'land_registry_enquiries', 'users', transaction);
-            await removeForeignKey(queryInterface, 'land_registry_enquiries', 'organizations', transaction);
+            await removeForeignKey(queryInterface, {
+                table: 'land_registry_enquiries',
+                refTable: 'users',
+                transaction,
+            });
+            await removeForeignKey(queryInterface, {
+                table: 'land_registry_enquiries',
+                refTable: 'organizations',
+                transaction,
+            });
             await queryInterface.dropTable('land_registry_enquiries', { transaction });
             await transaction.commit();
         } catch (error) {
