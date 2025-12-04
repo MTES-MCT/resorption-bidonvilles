@@ -23,7 +23,6 @@ export default (shantytown: Shantytown) => {
         children: [
             heading('Habitants'),
             new Table({
-                // columnWidths: [880, 880, 880, 880, 880, 880, 880, 880, 880, 880, 880], // total page width is 9638 DXA for A4 portrait
                 columnWidths: [1100, 1200, 1100, 1000, 1000, 1000, 1000, 1000, 1100, 1200, 1100, 1000, 1000, 1000],
                 rows: [
                     createRow(['Date', 'Personnes', 'Ménages', '0-3 ans', '3-6 ans', '6-12 ans', '12-16 ans', '16-18 ans', 'Inscrits dans un établissement scolaire', 'Caravanes', 'Cabanes', 'Tentes', 'Voitures dortoir', 'Matelas'], 18, true, [0]),
