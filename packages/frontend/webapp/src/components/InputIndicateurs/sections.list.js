@@ -57,13 +57,38 @@ export default [
         inputs: {
             // les labels pour la scolarisation sont dans des composants dédiés
             // @see ./InputIndicateursScolaires.vue
-            scolarisables: [{ id: "scolaire_mineurs_trois_ans_et_plus" }],
-            mediation: [{ id: "scolaire_mineurs_en_mediation" }],
+            scolarisables_moins_de_trois_ans: [
+                { 
+                    id: "scolaire_mineurs_moins_de_trois_ans",
+                    tableLabel: "Mineurs de moins de 3 ans",
+                },
+            ],
+            scolarisables_trois_ans_et_plus: [
+                { 
+                    id: "scolaire_mineurs_trois_ans_et_plus",
+                    tableLabel: "Mineurs de 3 ans et plus",
+                },
+            ],
+            mediation_moins_de_trois_ans: [
+                { 
+                    id: "scolaire_mediation_moins_de_trois_ans",
+                    tableLabel: "Mineurs de moins de 3 ans",
+                },
+            ],
+            mediation_trois_ans_et_plus: [
+                {
+                    id: "scolaire_mediation_trois_ans_et_plus",
+                    tableLabel: "Mineurs de 3 ans et plus",
+                },
+            ],
             maternelle: [{ id: "scolaire_nombre_maternelle" }],
             elementaire: [{ id: "scolaire_nombre_elementaire" }],
             college: [{ id: "scolaire_nombre_college" }],
             lycee: [{ id: "scolaire_nombre_lycee" }],
             autre: [{ id: "scolaire_nombre_autre" }],
+            scolarises_dans_annee: [
+                { id: "scolaire_mineur_scolarise_dans_annee" },
+            ],
         },
     },
 ];
