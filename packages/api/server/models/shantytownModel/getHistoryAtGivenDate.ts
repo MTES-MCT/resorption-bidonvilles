@@ -398,11 +398,28 @@ async function getRows(queryString: string, replacements: { userId: number; last
     return rows;
 }
 
+function serializeTownWithPhases(town: ShantytownRow, user: AuthUser): Shantytown {
+    const preparatoryPhases = ((town as any).preparatoryPhasesTowardResorption || []).map((phase: any) => ({
+        preparatoryPhaseId: phase.uid,
+        preparatoryPhaseName: phase.name,
+        preparatoryPhaseDateLabel: phase.dateLabel,
+        completedAt: phase.completedAt ? new Date(phase.completedAt).getTime() / 1000 : null,
+        createdAt: phase.createdAt ? new Date(phase.createdAt).getTime() / 1000 : null,
+        isAStartingPhase: phase.isAStartingPhase,
+        createdBy: null, // Information non disponible dans l'historique agrégé
+    }));
+
+    return serializeShantytown({
+        ...town,
+        preparatoryPhasesTowardResorption: preparatoryPhases,
+    }, user);
+}
+
 async function loadActorsIntoShantytowns(shantytownHistory: ShantytownRow[], user: AuthUser): Promise<Shantytown[]> {
     const actorRows: ActorRow[] = await shantytownActorModel.findAll(shantytownHistory.map(row => row.id));
 
     const serializedTowns = shantytownHistory.map((town) => {
-        const serializedTown = serializeShantytown(town, user);
+        const serializedTown = serializeTownWithPhases(town, user);
         const matchingElements = actorRows.filter(item => item.shantytownId === serializedTown.id).map(actor => serializeActor(actor));
         return {
             ...serializedTown,
@@ -460,8 +477,9 @@ async function serializeTowns(shantytownHistory: ShantytownRow[], filters: Shant
             serializedTowns = applyActorsFilters(serializedTowns, filters);
         }
     } else {
-        serializedTowns = shantytownHistory.map(town => serializeShantytown(town, user));
+        serializedTowns = shantytownHistory.map(town => serializeTownWithPhases(town, user));
     }
+
     return serializedTowns;
 }
 
@@ -492,6 +510,7 @@ export default async function getHistoryAtGivenDate(user: AuthUser, options: Sha
     }
 
     const queryString = getQueryString(where);
+
     const rows: ShantytownRow[] = await getRows(
         queryString,
         replacements,

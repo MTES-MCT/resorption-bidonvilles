@@ -26,7 +26,8 @@
                 :disabled="
                     disabled &&
                     option.id !== 'living_conditions' &&
-                    option.id !== 'actors'
+                    option.id !== 'actors' &&
+                    option.id !== 'resorption_phases'
                 "
                 :checked="selectedOptions.includes(option.id)"
                 @change="toggleOption(option.id)"
