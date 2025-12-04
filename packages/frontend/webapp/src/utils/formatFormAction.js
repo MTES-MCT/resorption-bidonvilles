@@ -77,13 +77,16 @@ export default function (data) {
             "hebergement_nombre_menages",
             "logement_nombre_personnes",
             "logement_nombre_menages",
+            "scolaire_mineurs_moins_de_trois_ans",
             "scolaire_mineurs_trois_ans_et_plus",
-            "scolaire_mineurs_en_mediation",
+            "scolaire_mediation_moins_de_trois_ans",
+            "scolaire_mediation_trois_ans_et_plus",
             "scolaire_nombre_maternelle",
             "scolaire_nombre_elementaire",
             "scolaire_nombre_college",
             "scolaire_nombre_lycee",
             "scolaire_nombre_autre",
+            "scolaire_mineur_scolarise_dans_annee",
         ];
 
         data.metrics.forEach((metrics) => {
