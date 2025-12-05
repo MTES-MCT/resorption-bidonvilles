@@ -14,18 +14,16 @@ type OrganizationAutocompleteResult = {
     organization_type_id: number,
 };
 
-export default async (search: string): Promise<OrganizationAutocompleteResult[]> => {
+const listAll = async (search: string): Promise<OrganizationAutocompleteResult[]> => {
     try {
         const organizations = await autocomplete(search, null, null);
 
         return Object.values(
             organizations.reduce((acc, row) => {
-                if (acc[row.type_name] === undefined) {
-                    acc[row.type_name] = [];
-                }
+                acc[row.type_name] ??= [];
 
                 if (row.similarity >= 0.75) {
-                    let territory;
+                    let territory: string;
                     if (row.is_national === true) {
                         territory = 'National';
                     } else {
@@ -56,3 +54,5 @@ export default async (search: string): Promise<OrganizationAutocompleteResult[]>
         throw new ServiceError('db_read_error', error);
     }
 };
+
+export default listAll;
