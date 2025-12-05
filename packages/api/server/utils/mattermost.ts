@@ -1,6 +1,7 @@
 import IncomingWebhook from 'node-mattermost';
 import config from '#server/config';
 import Action from '#root/types/resources/Action.d';
+import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
 import { CommentAuthor } from '#root/types/resources/CommentAuthor.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { User } from '#root/types/resources/User.d';
@@ -483,6 +484,26 @@ async function triggerRemoveDeclaredActor(town: Shantytown, user: User): Promise
     await removeDeclaredActor.send(mattermostMessage);
 }
 
+async function triggerRequestActionPilot(action: EnrichedAction, user: User): Promise<boolean> {
+    if (!mattermost) {
+        return false;
+    }
+    const notifChannel: string = config.environnement === 'development' ? '#notif-dev-test' : '#notif-absence-pilote-action';
+    const requestActionPilot = new IncomingWebhook(mattermost);
+
+    const username = formatUsername(user);
+    const actionLink = formatActionLink(action.id, action.name);
+
+    const mattermostMessage: MattermostMsg = buildMattermostMessage(
+        notifChannel,
+        `:question: ${username} a demandé un pilote pour l'action ${actionLink}`,
+        '#f2c744',
+        [],
+    );
+    await requestActionPilot.send(mattermostMessage);
+    return true;
+}
+
 async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promise<void> {
     if (!mattermost) {
         return;
@@ -602,6 +623,7 @@ export default {
     triggerNotifyOwnersAnonymizationError,
     triggerPeopleInvitedAlert,
     triggerRemoveDeclaredActor,
+    triggerRequestActionPilot,
     triggerShantytownCloseAlert,
     triggerShantytownCreationAlert,
 };

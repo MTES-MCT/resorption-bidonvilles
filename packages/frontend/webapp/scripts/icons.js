@@ -9,6 +9,7 @@ const riIconNames = [
     "file-word-fill",
     "file-excel-fill",
     "flag-fill",
+    "refresh-line",
     "sun-fill",
     "sun-line",
 ];
