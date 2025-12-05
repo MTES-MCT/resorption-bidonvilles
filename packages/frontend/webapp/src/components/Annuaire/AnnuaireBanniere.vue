@@ -30,15 +30,13 @@
 </template>
 
 <script setup>
-import { toRefs, computed, defineEmits } from "vue";
+import { toRefs, computed, toRef, watch } from "vue";
 import { useForm } from "vee-validate";
 import { useUserStore } from "@/stores/user.store";
 import { useDirectoryStore } from "@/stores/directory.store";
 
 import InputCommunauteSearch from "../InputCommunauteSearch/InputCommunauteSearch.vue";
 import { ContentWrapper, Icon, Link } from "@resorptionbidonvilles/ui";
-import { toRef } from "vue";
-import { watch } from "vue";
 
 const directoryStore = useDirectoryStore();
 const userStore = useUserStore();
