@@ -1,10 +1,8 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import rewiremock from 'rewiremock';
+import { rewiremock } from '#test/rewiremock';
 import ServiceError from '#server/errors/ServiceError';
-
-import organizationAutocomplete from './listAll';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -17,7 +15,8 @@ const stubs = {
 
 rewiremock('#server/models/organizationModel/autocomplete').with(stubs.autocomplete);
 rewiremock.enable();
-
+// eslint-disable-next-line import/newline-after-import, import/first
+import organizationAutocomplete from './listAll';
 rewiremock.disable();
 
 describe('organizationAutocomplete()', () => {
@@ -40,6 +39,7 @@ describe('organizationAutocomplete()', () => {
                 main_departements_names: [],
                 main_epci_names: [],
                 main_cities_names: [],
+                organization_type_id: 1,
             },
             {
                 id: 2,
@@ -54,6 +54,7 @@ describe('organizationAutocomplete()', () => {
                 main_departements_names: ['Paris'],
                 main_epci_names: ['EPCI'],
                 main_cities_names: ['Paris 5e'],
+                organization_type_id: 1,
             },
         ]);
 
@@ -69,6 +70,7 @@ describe('organizationAutocomplete()', () => {
                 category: 'cat1',
                 similarity: 0.8,
                 type_abbreviation: 'ASSO',
+                organization_type_id: 1,
             },
         ]);
     });
@@ -88,6 +90,7 @@ describe('organizationAutocomplete()', () => {
                 main_departements_names: ['Finistère'],
                 main_epci_names: ['EPCI Ouest'],
                 main_cities_names: ['Quimper'],
+                organization_type_id: 2,
             },
         ]);
 
@@ -103,6 +106,7 @@ describe('organizationAutocomplete()', () => {
                 category: null,
                 similarity: 0.85,
                 type_abbreviation: null,
+                organization_type_id: 2,
             },
         ]);
     });
@@ -137,6 +141,7 @@ describe('organizationAutocomplete()', () => {
                 main_departements_names: [],
                 main_epci_names: [],
                 main_cities_names: [],
+                organization_type_id: 99,
             },
         ]);
 
@@ -159,6 +164,7 @@ describe('organizationAutocomplete()', () => {
                 main_departements_names: ['Loire'],
                 main_epci_names: [],
                 main_cities_names: ['Roanne'],
+                organization_type_id: 1,
             },
         ]);
 
@@ -181,6 +187,7 @@ describe('organizationAutocomplete()', () => {
                 main_departements_names: [],
                 main_epci_names: [],
                 main_cities_names: [],
+                organization_type_id: 3,
             },
             {
                 id: 7,
@@ -195,6 +202,7 @@ describe('organizationAutocomplete()', () => {
                 main_departements_names: [],
                 main_epci_names: [],
                 main_cities_names: [],
+                organization_type_id: 3,
             },
         ]);
 
@@ -219,6 +227,7 @@ describe('organizationAutocomplete()', () => {
                 main_departements_names: [],
                 main_epci_names: [],
                 main_cities_names: [],
+                organization_type_id: 4,
             },
             {
                 id: 11,
@@ -233,6 +242,7 @@ describe('organizationAutocomplete()', () => {
                 main_departements_names: [],
                 main_epci_names: [],
                 main_cities_names: [],
+                organization_type_id: 2,
             },
         ]);
 
