@@ -53,13 +53,15 @@ addMethod(object, "customSchema", function (schema) {
                 await schema.validate(value);
                 return true;
             } catch (error) {
+                //eslint-disable-next-line no-console
+                console.error(error);
                 return false;
             }
         }
     );
 });
 
-export default (
+const schema = (
     variant,
     allowNewOrganization,
     allowPrivateOrganization,
@@ -101,7 +103,7 @@ export default (
             "phone-fr",
             "Le numéro de téléphone n'est pas valide",
             (value = "") => {
-                const sanitized = value.replace(/[\s.-]/g, "");
+                const sanitized = value.replaceAll(/[\s.-]/g, "");
                 if (sanitized.length === 0) {
                     return true;
                 }
@@ -294,3 +296,5 @@ export default (
     schema.legal = mixed().required().label(labels.legal);
     return object(schema);
 };
+
+export default schema;
