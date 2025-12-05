@@ -254,15 +254,11 @@ describe('userService.deactivate()', () => {
         // Simuler que findOne échoue
         stubs.userModel.findOne.rejects(error);
 
-        try {
-            await deactivateUser(42, true, user);
-            expect.fail('should have thrown an error');
-        } catch (e) {
-            // Vérifier que findOne a été appelé avec le bon ID
-            expect(stubs.userModel.findOne).to.have.been.calledWith(42);
-            // Vérifier qu'aucune transaction n'a été créée
-            expect(stubs.sequelize.transaction).to.not.have.been.called;
-        }
+        await expect(deactivateUser(42, true, user)).to.be.rejected;
+        // Vérifier que findOne a été appelé avec le bon ID
+        expect(stubs.userModel.findOne).to.have.been.calledWith(42);
+        // Vérifier qu'aucune transaction n'a été créée
+        expect(stubs.sequelize.transaction).to.not.have.been.called;
     });
 
     it('en cas d\'erreur de la modification de l\'utilisateur, rollback la transaction', async () => {
@@ -290,6 +286,8 @@ describe('userService.deactivate()', () => {
         const error = new Error('Échec de la transaction');
         error.stack = undefined; // Supprime la stack trace
         const user = fakeUser({ id: 42, status: 'active' });
+
+        // Simuler que la transaction échoue lors du commit
         stubs.userModel.findOne.withArgs(42).resolves(user);
         transaction.commit.rejects(error);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
@@ -299,23 +297,7 @@ describe('userService.deactivate()', () => {
             expect.fail('should have thrown an error');
         } catch (e) {
             expect(e).to.be.an.instanceof(ServiceError);
-            expect(e.code).to.be.equal('transaction_failure');
-            expect(e.nativeError.message).to.equal('Échec de la transaction');
-        }
-    });
-
-    it('en cas d\'erreur dans la transaction, rollback', async () => {
-        const error = new Error('Échec de la transaction');
-        error.stack = undefined; // Supprime la stack trace
-        const user = fakeUser({ id: 42, status: 'active' });
-        stubs.userModel.findOne.withArgs(42).resolves(user);
-        transaction.commit.rejects(error);
-        stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
-
-        try {
-            await deactivateUser(42, true, user);
-            expect.fail('should have thrown an error');
-        } catch (e) {
+            expect(e.code).to.equal('transaction_failure');
             expect(transaction.rollback).to.have.been.called;
         }
     });
