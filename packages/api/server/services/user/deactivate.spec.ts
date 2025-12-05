@@ -262,23 +262,27 @@ describe('userService.deactivate()', () => {
     });
 
     it('en cas d\'erreur de la modification de l\'utilisateur, rollback la transaction', async () => {
+        // Given
         const user = fakeUser({ id: 42, status: 'active' });
-        const error = new Error('test');
 
-        // Simulate successful user find
+        // Simuler une erreur de mise à jour
+        const error = new Error('Erreur de mise à jour');
+        error.stack = undefined; // Supprime la stack trace
+
+        // Configuration des stubs
         stubs.userModel.findOne.withArgs(42).resolves(user);
-
-        // Simulate error during deactivation
         stubs.userModel.deactivate.rejects(error);
 
+        // When/Then
         try {
             await deactivateUser(42, true, user);
-            expect.fail('should have thrown an error');
+            expect.fail('Une erreur aurait dû être levée');
         } catch (e) {
-            // Verify transaction was created
+            // Vérifications
             expect(stubs.sequelize.transaction).to.have.been.calledOnce;
-            // Verify rollback was called
             expect(transaction.rollback).to.have.been.calledOnce;
+            expect(e).to.be.an.instanceof(ServiceError);
+            expect(e.code).to.equal('deactivation_failure');
         }
     });
 
