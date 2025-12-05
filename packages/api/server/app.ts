@@ -4,7 +4,7 @@ import config from '#server/config';
 import PrometheusMetricsHandler from '#server/middlewares/prometheusMiddleware';
 
 const {
-    port, sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners, anonymizeInactiveUsers,
+    port, sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners, anonymizeInactiveUsers, deactivateExpiredUsersInDB,
 } = config;
 
 const sentryContextHandlers = (app) => {
@@ -105,6 +105,12 @@ export default {
                 // eslint-disable-next-line no-console
                 console.log('Anonymize inactive users job is enabled');
                 await agenda.every('0 0 2 * * *', 'anonymize_inactive_users');
+            }
+
+            if (deactivateExpiredUsersInDB) {
+                // eslint-disable-next-line no-console
+                console.log('Deactivate expired users job is enabled');
+                await agenda.every('0 0 3 * * *', 'deactivate_expired_users');
             }
 
             // eslint-disable-next-line no-console

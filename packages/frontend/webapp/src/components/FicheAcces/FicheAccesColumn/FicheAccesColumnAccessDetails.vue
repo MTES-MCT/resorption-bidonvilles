@@ -7,7 +7,6 @@
             color="text-redA11Y"
             class="mb-2"
         />
-
         <div v-for="(userAccess, index) in oldUserAccesses" v-bind:key="index">
             <FicheAccesColumnAccessDate
                 text="Envoyé"
@@ -138,21 +137,20 @@ function hasExpired(userAccessIndex) {
         return isUserAccessExpired(user.value);
     }
 
-    // old user access: considered as expired only if it actually reached expiracy before
-    // the sending of the next user access
+    // on affiche les expirations des anciens accès
     const expiredAt = user.value.user_accesses[userAccessIndex].expires_at;
-    const invalidatedAt =
-        user.value.user_accesses[userAccessIndex - 1].created_at;
-
-    return expiredAt < invalidatedAt;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return expiredAt < today.getTime();
 }
 
+const deactivationLabels = {
+    admin: "manuellement",
+    auto: "automatiquement",
+    expired: "après expiration",
+};
+
 const typeDeDesactivation = computed(() => {
-    if (user.value.deactivation_type === "admin") {
-        return "manuellement";
-    } else if (user.value.deactivation_type === "auto") {
-        return "automatiquement";
-    }
-    return "";
+    return deactivationLabels[user.value.deactivation_type] ?? "";
 });
 </script>
