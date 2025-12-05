@@ -60,7 +60,6 @@ async function submit(values) {
     const isAccessRequest =
         values.request_type.includes("access-request") &&
         values.is_actor === true;
-    console.log("AccessRequest?", isAccessRequest);
 
     if (isAccessRequest) {
         trackEvent("Demande d accès", "Demande d accès");
