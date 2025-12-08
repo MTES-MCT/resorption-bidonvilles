@@ -71,12 +71,12 @@ export default async (townData: TownInput, user: AuthUser) => {
         }
 
         // On ajoute les propriétaires de parcelles liés au site
-        if (townData.owner?.owners && townData.owner.owners.length > 0) {
+        if (townData.owners?.length > 0) {
             try {
                 await shantytownParcelOwnerService.create(
                     user,
                     shantytown_id,
-                    townData.owner.owners,
+                    townData.owners,
                     transaction,
                 );
             } catch (error) {
@@ -102,25 +102,34 @@ export default async (townData: TownInput, user: AuthUser) => {
         console.error(`Error with shantytown creation Mattermost webhook : ${err.message}`);
     }
 
-    // Send a notification to all users of the related departement
-    try {
-        const watchers = await getLocationWatchers(townData.city, 'shantytown_creation');
-        watchers
-            .filter(({ user_id }: any) => user_id !== user.id) // do not send an email to the user who created the town
-            .forEach((watcher) => {
-                mails.sendUserShantytownDeclared(watcher, {
+    // Send a notification to all users of the related departement (asynchronously, don't wait)
+    getLocationWatchers(townData.city, 'shantytown_creation')
+        .then((watchers) => {
+            const emailPromises = watchers
+                .filter(({ user_id }: any) => user_id !== user.id) // do not send an email to the user who created the town
+                .map(watcher => mails.sendUserShantytownDeclared(watcher, {
                     variables: {
                         departement: townData.city.departement,
                         shantytown: town,
                         creator: user,
                     },
                     preserveRecipient: false,
-                });
+                }));
+
+            return Promise.allSettled(emailPromises);
+        })
+        .then((results) => {
+            results.forEach((result, index) => {
+                if (result.status === 'rejected') {
+                    // eslint-disable-next-line no-console
+                    console.error(`Error sending shantytown creation email ${index}: ${result.reason}`);
+                }
             });
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(`Error sending shantytown creation email: ${error.message}`);
-    }
+        })
+        .catch((error) => {
+            // eslint-disable-next-line no-console
+            console.error(`Error sending shantytown creation emails: ${error.message}`);
+        });
 
     return town;
 };

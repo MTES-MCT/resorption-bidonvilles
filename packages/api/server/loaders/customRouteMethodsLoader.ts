@@ -64,8 +64,14 @@ function addRoute(
             upload.array('attachments'),
             fileValidator,
             (req, res, next) => {
-                req.body = JSON.parse(req.body.content);
-                next();
+                try {
+                    req.body = JSON.parse(req.body.content);
+                    next();
+                } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.error('[MULTIPART ERROR]', error.message, req.body);
+                    res.status(400).send({ error: 'Champ multipart invalide' });
+                }
             },
         );
     } else {
@@ -84,7 +90,10 @@ function addRoute(
 
     // on valide les données
     if (validator !== undefined && validator.length > 0) {
-        middlewares.push(validator, validation);
+        middlewares.push(
+            ...validator,
+            validation,
+        );
     }
 
     // on appelle le contrôleur

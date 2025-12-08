@@ -17,14 +17,16 @@
         </template>
 
         <template v-slot:footer>
-            <div class="flex justify-end gap-2">
-                <DsfrButton secondary @click="() => modale.close()"
-                    >Annuler</DsfrButton
-                >
-                <DsfrButton @click="submit" :disabled="isSubmitting"
-                    >Inviter</DsfrButton
-                >
-            </div>
+            <DsfrButton
+                secondary
+                @click="() => modale.close()"
+                class="mr-2"
+                type="button"
+                >Annuler</DsfrButton
+            >
+            <DsfrButton @click="submit" :loading="isSubmitting"
+                >Inviter</DsfrButton
+            >
         </template>
     </Modal>
 </template>

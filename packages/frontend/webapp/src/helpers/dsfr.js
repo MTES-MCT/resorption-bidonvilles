@@ -21,6 +21,7 @@ import {
     DsfrTags,
     DsfrTile,
     DsfrTiles,
+    DsfrTooltip,
     VIcon,
 } from "@gouvminint/vue-dsfr";
 
@@ -59,5 +60,6 @@ export function useDsfr(app) {
     app.component("DsfrTags", DsfrTags);
     app.component("DsfrTile", DsfrTile);
     app.component("DsfrTiles", DsfrTiles);
+    app.component("DsfrTooltip", DsfrTooltip);
     app.component("VIcon", VIcon);
 }

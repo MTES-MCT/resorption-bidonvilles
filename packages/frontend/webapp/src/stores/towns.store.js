@@ -474,7 +474,7 @@ export const useTownsStore = defineStore("towns", () => {
             hash.value[town.id] = enrichedTown;
             towns.value.push(enrichedTown);
 
-            return town;
+            return enrichedTown;
         },
 
         async edit(townId, data) {

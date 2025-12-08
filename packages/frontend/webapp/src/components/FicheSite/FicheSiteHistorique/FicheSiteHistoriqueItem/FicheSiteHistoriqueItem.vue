@@ -55,7 +55,7 @@
                     </template>
                     <template
                         v-else-if="
-                            item.fieldKey === 'owner' &&
+                            item.fieldKey === 'owners' &&
                             item.newValue &&
                             item.newValue.includes('|||')
                         "
@@ -85,26 +85,6 @@
                                     }}</span
                                 >
                             </template>
-                        </template>
-                        <template
-                            v-if="
-                                item.oldValue?.name &&
-                                ![
-                                    'non renseignées',
-                                    'non renseigné',
-                                    'non renseignés',
-                                ].includes(item.oldValue.name.trim())
-                            "
-                        >
-                            <span>, </span>
-                            <span
-                                class="line-through text-G700 hover:text-G700"
-                                >{{
-                                    item.oldValue.ownerType +
-                                    " - " +
-                                    item.oldValue.ownerName
-                                }}</span
-                            >
                         </template>
                     </template>
                     <template v-else>

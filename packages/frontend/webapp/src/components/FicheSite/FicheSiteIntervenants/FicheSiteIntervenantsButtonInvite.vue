@@ -1,8 +1,9 @@
 <template>
     <DsfrButton
         class="font-bold"
-        secondary
-        icon="fr-icon-user-add-fill"
+        tertiary
+        no-outline
+        icon="fr-icon-add-line"
         @click="openInviteActorModal"
     >
         <slot>Inviter un intervenant</slot>

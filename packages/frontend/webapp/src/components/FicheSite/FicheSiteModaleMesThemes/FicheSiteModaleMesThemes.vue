@@ -17,14 +17,16 @@
         </template>
 
         <template v-slot:footer>
-            <Button
-                variant="primaryOutline"
+            <DsfrButton
+                secondary
                 @click="() => modale.close()"
                 class="mr-2"
                 type="button"
-                >Annuler</Button
+                >Annuler</DsfrButton
             >
-            <Button @click="submit" :loading="isSubmitting">Valider</Button>
+            <DsfrButton @click="submit" :loading="isSubmitting"
+                >Valider</DsfrButton
+            >
         </template>
     </Modal>
 </template>
@@ -38,7 +40,7 @@ import { useNotificationStore } from "@/stores/notification.store";
 import { trackEvent } from "@/helpers/matomo";
 import schema from "./FicheSiteModaleMesThemes.schema";
 
-import { Button, ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
+import { ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 import FicheSiteModaleSubtitle from "../FicheSiteModaleSubtitle/FicheSiteModaleSubtitle.vue";
 import ModaleMesThemesInputThemes from "./inputs/ModaleMesThemesInputThemes.vue";
 import ModaleMesThemesInputOtherTheme from "./inputs/ModaleMesThemesInputOtherTheme.vue";

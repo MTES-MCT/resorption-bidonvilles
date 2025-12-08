@@ -55,7 +55,7 @@ const filterBy = {
     },
 
     ownerType(shantytown, checked) {
-        const owners = shantytown.owner?.owners;
+        const owners = shantytown.owners;
         if (!Array.isArray(owners) || checked.length === 0) {
             return false;
         }

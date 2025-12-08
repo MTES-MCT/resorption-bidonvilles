@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/api",
-  "version": "2.38.1",
+  "version": "2.39.1",
   "description": "API d'Action Bidonvilles",
   "main": "server/index.ts",
   "repository": "git+https://github.com/MTES-MCT/action-bidonvilles.git",
@@ -110,6 +110,23 @@
     "server/**/*.js": [
       "yarn lint"
     ]
+  },
+  "imports": {
+    "#server/*": {
+      "node": "./server/*"
+    },
+    "#db/*": {
+      "node": "./db/*"
+    },
+    "#root/*": {
+      "node": "./*"
+    },
+    "#test/*": {
+      "node": "./test/*"
+    },
+    "#common/*": {
+      "node": "../frontend/common/*"
+    }
   },
   "scripts": {
     "db:create": "sequelize db:migrate && sequelize db:seed:all",
