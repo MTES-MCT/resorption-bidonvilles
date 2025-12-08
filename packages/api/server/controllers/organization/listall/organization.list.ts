@@ -7,7 +7,7 @@ interface OrganizationSearchRequest extends Request {
     }
 }
 
-export default async (req: OrganizationSearchRequest, res: Response, next: NextFunction): Promise<void> => {
+const listAll = async (req: OrganizationSearchRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const result = await organizationService.listAll(
             req.query.query,
@@ -21,3 +21,5 @@ export default async (req: OrganizationSearchRequest, res: Response, next: NextF
         next(error.nativeError);
     }
 };
+
+export default listAll;

@@ -46,14 +46,14 @@ const updateOrganization = (value) => {
 
 const autocompleteFn = async (value) => {
     const results = await autocompleOrganization(value);
-    const allowedTypeIds = [8, 9, 10, 11, 19, 29, 35, 44, 45];
+    const allowedTypeIds = new Set([8, 9, 10, 11, 19, 29, 35, 44, 45]);
 
     const mappedResults = results.map((org) => {
         const prefix =
             org.name.length < 35 || !org.abbreviation
                 ? `${org.name}`
                 : `${org.abbreviation}`;
-        const showLabel = allowedTypeIds.includes(org.organization_type_id);
+        const showLabel = allowedTypeIds.has(org.organization_type_id);
         const label = showLabel ? `${prefix} - ${org.label}` : prefix;
 
         return {

@@ -91,11 +91,11 @@ const schema = (
             .label(labels.verif_email);
     }
     schema.first_name = string()
-        .matches(/^[^0-9]*$/, "Le prénom ne doit pas contenir de chiffres")
+        .matches(/^\D*$/, "Le prénom ne doit pas contenir de chiffres")
         .required()
         .label(labels.first_name);
     schema.last_name = string()
-        .matches(/^[^0-9]*$/, "Le nom ne doit pas contenir de chiffres")
+        .matches(/^\D*$/, "Le nom ne doit pas contenir de chiffres")
         .required()
         .label(labels.last_name);
     const phone = string()

@@ -38,7 +38,7 @@
             :disabled="isDisabled"
             @keydown.stop="onKeydown"
             @clear="clear"
-            class="pl-10"
+            class="pl-10 pr-20"
           />
           <DsfrButton
             v-if="isLoading || organizationSearchLabel?.length > 2"
@@ -546,6 +546,6 @@ defineExpose({
 </script>
 <style scoped>
 :deep(.fr-tags-group > li) {
-  line-height: 0.2rem !important;
+  line-height: 0.2rem;
 }
 </style>
