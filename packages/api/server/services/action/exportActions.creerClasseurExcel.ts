@@ -66,7 +66,7 @@ const headers = [
     { label: 'Mineurs en élémentaire', width: '5' },
     { label: 'Mineurs au collège', width: '5' },
     { label: 'Mineurs au lycée ou en formation professionnelle', width: '5' },
-    { label: 'Autre - jeunes en dispositif d\'insertion (service civique, contrat d\'engagement jeune…)', width: '5' },
+    { label: 'Autre - jeunes en dispositif d\'insertion', width: '5' },
     { label: 'Financement étatique hors crédits dédiés', width: '5' },
     { label: 'Dépense sur financement étatique hors crédits dédiés', width: '5' },
     { label: 'Crédits dédiés à la résorption des bidonvilles', width: '5' },
