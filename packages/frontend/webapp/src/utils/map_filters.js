@@ -6,7 +6,7 @@ export default computed(() => {
     const configStore = useConfigStore();
     const userStore = useUserStore();
 
-    let filters = {
+    const filters = {
         order: [
             "waterAccessConditions",
             "fieldType",
@@ -110,7 +110,7 @@ export default computed(() => {
 
     // On ajoute le filtrage sur les propriétaires si et seulement si l'utilisateur a le droit d'y accéder
     const userAccessToOwners =
-        userStore.user?.permissions.shantytown_owner?.access?.allowed;
+        userStore.user?.permissions?.shantytown_owner?.access?.allowed;
 
     if (userStore.user?.is_admin || userAccessToOwners) {
         filters.definition.ownerType = {
