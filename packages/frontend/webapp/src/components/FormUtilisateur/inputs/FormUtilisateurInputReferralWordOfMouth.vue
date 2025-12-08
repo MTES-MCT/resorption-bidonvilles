@@ -26,9 +26,13 @@ import { defineProps, toRefs } from "vue";
 import { useField, useIsSubmitting } from "vee-validate";
 
 const props = defineProps({
-    label: String,
+    label: {
+        type: String,
+        required: true,
+    },
+    disabled: Boolean,
 });
-const { label } = toRefs(props);
+const { label, disabled } = toRefs(props);
 
 const isSubmitting = useIsSubmitting();
 const {

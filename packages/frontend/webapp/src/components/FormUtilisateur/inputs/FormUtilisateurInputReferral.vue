@@ -35,7 +35,7 @@ const props = defineProps({
 const { label, language } = toRefs(props);
 
 const radioItems = computed(() => {
-    return items[language.value];
+    return items[language.value] ?? items.fr;
 });
 
 const { value: values, errors, handleBlur } = useField("referral", "required");
