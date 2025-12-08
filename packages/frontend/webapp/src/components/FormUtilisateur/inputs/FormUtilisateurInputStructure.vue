@@ -3,7 +3,7 @@
         :disabled="isSubmitting || disabled"
         name="organization"
         :label="label"
-        :errors="errors.length > 0 ? errors : []"
+        :errors="errors"
         hint="3 caractères minimum"
         placeholder="Nom ou acronyme de votre organisation"
         :fn="autocompleteFn"
@@ -18,17 +18,26 @@
 </template>
 
 <script setup>
+import { toRefs } from "vue";
 import { DsfrComplexAutocomplete } from "@resorptionbidonvilles/ui";
 import { autocompleOrganization } from "@/api/organizations.api.js";
 import { useField, useIsSubmitting } from "vee-validate";
 
+const props = defineProps({
+    label: {
+        type: String,
+        required: true,
+    },
+    disabled: Boolean,
+});
+const { label, disabled } = toRefs(props);
 const emit = defineEmits(["update:modelValue", "change"]);
 const isSubmitting = useIsSubmitting();
 const {
     value: organization,
     errors,
     handleBlur,
-} = useField("organization", "required|regex:^[0-9 ]+$");
+} = useField("organization", "required");
 
 const updateOrganization = (value) => {
     emit("update:modelValue", value);
