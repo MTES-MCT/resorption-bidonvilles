@@ -55,10 +55,10 @@ const headers = [
     { label: 'Nombre de ménages ayant eu accès à une solution longue durée en hébergement ou logement adapté avec accompagnement, dont espace temporaire d\'accompagnement', width: '5' },
     { label: 'Nombre de personnes ayant eu accès à un logement', width: '5' },
     { label: 'Nombre de ménages ayant eu accès à un logement', width: '5' },
-    { label: 'Mineurs identifiés sur site (3-18 ans)', width: '5' },
+    { label: 'Mineurs identifiés sur le site', width: '5' },
     { label: 'Mineurs de moins de 3 ans identifiés sur site', width: '5' },
     { label: 'Mineurs de 3 ans et plus identifiés sur site', width: '5' },
-    { label: 'Mineurs bénéficiant d\'une action de médiation (3-18 ans)', width: '5' },
+    { label: 'Mineurs bénéficiant d\'une action de médiation', width: '5' },
     { label: 'Mineurs de moins de 3 ans bénéficiant d\'une action de médiation', width: '5' },
     { label: 'Mineurs de 3 ans et plus bénéficiant d\'une action de médiation', width: '5' },
     { label: 'Mineurs dont la scolarité a débuté cette année', width: '5' },
@@ -193,6 +193,7 @@ function sumNumbers(values: Array<number | null | undefined>): number | null {
 
 function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet) {
     data.forEach((item: ActionItem) => {
+        // Calcul des totaux pour les colonnes ajoutées
         const mineursIdentifiesTotal = sumNumbers([
             item.scolaire_mineurs_moins_de_trois_ans,
             item.scolaire_mineurs_trois_ans_et_plus,
