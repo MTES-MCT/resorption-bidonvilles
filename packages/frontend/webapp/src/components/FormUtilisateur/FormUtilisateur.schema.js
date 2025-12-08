@@ -265,7 +265,7 @@ const schema = (
             })
             .label(labels.organization_other_territory);
 
-        schema.position = string().required().label(labels.position);
+        schema.position = string().required().min(3).label(labels.position);
     }
 
     if (
