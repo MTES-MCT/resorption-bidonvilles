@@ -30,6 +30,33 @@ function canWriteManagersAndDepartement(mode: 'create' | 'update', req) {
     return canWriteFinances(mode, req);
 }
 
+// Fonction factory qui génère un validateur d'utilisateurs
+const createUserValidator = (fieldName, displayName) => body(fieldName)
+    .exists({ checkNull: true }).bail()
+    .withMessage(`Le champ "${displayName}" est obligatoire`)
+    .isArray().bail()
+    .withMessage('Le format des utilisateurs ciblés n\'est pas valide')
+    .isLength({ min: 1 }).bail()
+    .withMessage(`Le champ "${displayName}" est obligatoire`)
+    .customSanitizer(async (value) => {
+        const users = await userModel.findByIds(null, value);
+        if (users.length !== value.length) {
+            return null;
+        }
+
+        return users.map(u => ({
+            id: u.id,
+            organization_id: u.organization.id,
+        }));
+    })
+    .custom((value) => {
+        if (value === null) {
+            throw new Error('Un ou plusieurs utilisateurs ciblés n\'existent pas');
+        }
+
+        return true;
+    });
+
 export default (mode: 'create' | 'update') => [
     body('name')
         .isString().bail().withMessage('Le champ "Quel est le nom de l\'action ?" est obligatoire')
@@ -228,61 +255,8 @@ export default (mode: 'create' | 'update') => [
             }
             return value;
         }),
-    body('managers')
-        .customSanitizer((value, { req }) => {
-            // en cas de mise à jour, si l'utilisateur n'a pas le droit de modifier les managers
-            // on conserve les managers actuels
-            if (mode === 'update' && !canWriteManagersAndDepartement(mode, req)) {
-                return req.action.managers.flatMap(({ users }) => users.map(({ id }) => id));
-            }
-
-            return value;
-        })
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Pilotes de l\'action" est obligatoire')
-        .isArray().bail().withMessage('Le format des utilisateurs ciblés n\'est pas valide')
-        .isLength({ min: 1 }).bail().withMessage('Le champ "Pilotes de l\'action" est obligatoire')
-        .customSanitizer(async (value) => {
-            const users = await userModel.findByIds(null, value);
-            if (users.length !== value.length) {
-                return null;
-            }
-
-            return users.map(u => ({
-                id: u.id,
-                organization_id: u.organization.id,
-            }));
-        })
-        .custom((value) => {
-            if (value === null) {
-                throw new Error('Un ou plusieurs utilisateurs ciblés n\'existent pas');
-            }
-
-            return true;
-        }),
-
-    body('operators')
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Opérateurs de l\'action" est obligatoire')
-        .isArray().bail().withMessage('Le format des utilisateurs ciblés n\'est pas valide')
-        .isLength({ min: 1 }).bail().withMessage('Le champ "Opérateurs de l\'action" est obligatoire')
-        .customSanitizer(async (value) => {
-            const users = await userModel.findByIds(null, value);
-            if (users.length !== value.length) {
-                return null;
-            }
-
-            return users.map(u => ({
-                id: u.id,
-                organization_id: u.organization.id,
-            }));
-        })
-        .custom((value) => {
-            if (value === null) {
-                throw new Error('Un ou plusieurs utilisateurs ciblés n\'existent pas');
-            }
-
-            return true;
-        }),
-
+    createUserValidator('managers', 'Pilotes de l\'action'),
+    createUserValidator('operators', 'Opérateurs de l\'action'),
     // financements
     // transformer finances en un array pour faciliter la validation plus bas
     body('finances')
