@@ -4,8 +4,10 @@
         :errorMessage="errors.length > 0 ? errors : ''"
         :disabled="isSubmitting || disabled"
         type="text"
+        autocomplete="organization-title"
         v-model="position"
         required
+        @blur="handleBlur"
         :valid-message="
             position?.length > 2 && errors.length === 0 && `${label} valide`
         "
@@ -28,9 +30,14 @@ import { useField, useIsSubmitting } from "vee-validate";
 
 const props = defineProps({
     label: String,
+    disabled: Boolean,
 });
 const { label } = toRefs(props);
 
 const isSubmitting = useIsSubmitting();
-const { value: position, errors } = useField("position", "required");
+const {
+    value: position,
+    errors,
+    handleBlur,
+} = useField("position", "required");
 </script>
