@@ -13,6 +13,7 @@ import {
     fetchOne,
     addComment,
     deleteComment,
+    requestPilot,
 } from "@/api/actions.api";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
 import filterActions from "@/utils/filterActions";
@@ -31,6 +32,7 @@ export const useActionsStore = defineStore("actions", () => {
         location: ref(null),
         properties: ref({}),
     };
+    const requestedPilotsForActions = ref([]);
 
     const filteredActions = computed(() => {
         return filterActions(actions.value, {
@@ -156,6 +158,7 @@ export const useActionsStore = defineStore("actions", () => {
         filteredActions,
         currentPage,
         hash,
+        requestedPilotsForActions,
         resetFilters,
         numberOfPages: computed(() => {
             if (filteredActions.value.length === 0) {
@@ -245,6 +248,24 @@ export const useActionsStore = defineStore("actions", () => {
                 fileIndex,
                 1
             );
+        },
+        async requestPilotAction(actionId) {
+            const notificationStore = useNotificationStore();
+            const response = await requestPilot(actionId);
+
+            if (response) {
+                requestedPilotsForActions.value.push(actionId);
+                notificationStore.success(
+                    "Succès",
+                    "Votre demande de pilote sur l'action a bien été transmise."
+                );
+                return response;
+            } else {
+                notificationStore.error(
+                    "Erreur",
+                    "Nous n'avons pas pu transmettre votre demande de pilote. Veuillez réessayer plus tard."
+                );
+            }
         },
     };
 });
