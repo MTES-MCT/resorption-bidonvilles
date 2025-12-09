@@ -1,16 +1,17 @@
 import { computed } from "vue";
 import { useConfigStore } from "@/stores/config.store";
+import { useUserStore } from "@/stores/user.store";
 
 export default computed(() => {
     const configStore = useConfigStore();
+    const userStore = useUserStore();
 
-    return {
+    const filters = {
         order: [
             "waterAccessConditions",
             "fieldType",
             "population",
             "status",
-            "ownerType",
             "poi",
         ],
         definition: {
@@ -92,17 +93,6 @@ export default computed(() => {
                     { value: "open", label: "Existants", checked: true },
                 ],
             },
-            ownerType: {
-                icon: "users",
-                label: "Type de propriétaire",
-                options: (configStore.config?.owner_types || []).map(
-                    (type) => ({
-                        value: type.id,
-                        label: type.label,
-                        checked: true,
-                    })
-                ),
-            },
             poi: {
                 icon: "map-marker-alt",
                 label: "Points d'intérêts",
@@ -117,4 +107,23 @@ export default computed(() => {
             },
         },
     };
+
+    // On ajoute le filtrage sur les propriétaires si et seulement si l'utilisateur a le droit d'y accéder
+    const userAccessToOwners =
+        userStore.user?.permissions?.shantytown_owner?.access?.allowed;
+
+    if (userStore.user?.is_admin || userAccessToOwners) {
+        filters.definition.ownerType = {
+            icon: "users",
+            label: "Type de propriétaire",
+            options: (configStore.config?.owner_types || []).map((type) => ({
+                value: type.id,
+                label: type.label,
+                checked: true,
+            })),
+        };
+        filters.order.splice(-1, 0, "ownerType");
+    }
+
+    return filters;
 });
