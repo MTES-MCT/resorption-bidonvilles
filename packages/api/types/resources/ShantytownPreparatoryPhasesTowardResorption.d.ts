@@ -18,6 +18,7 @@ export type ShantytownPreparatoryPhaseTowardResorption = {
     preparatoryPhaseDateLabel: string,
     completedAt: number | null,
     createdAt: number,
+    isAStartingPhase?: boolean,
     createdBy: {
         authorId: number,
         authorFirstName: string,
@@ -43,6 +44,7 @@ export type RawPhase = {
     createdAt: Date,
     dateLabel: string,
     completedAt: Date | null,
+    isAStartingPhase?: boolean,
 };
 
 export type Differences = {
