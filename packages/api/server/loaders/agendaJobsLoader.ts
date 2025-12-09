@@ -8,6 +8,7 @@ import userService from '#server/services/user/index';
 import cleanAttachmentArchives from '#server/services/attachment/cleanArchives';
 import anonymizeUser from '#server/services/user/anonymizeUser';
 import anonymizeOwners from '#server/services/shantytown/anonymizeOwners';
+import deactivateExpiredUsers from '#server/services/user/deactivateExpiredUsers';
 
 const {
     sendUserDemoInvitation,
@@ -17,10 +18,112 @@ const {
     sendUserReview,
 } = mailUtils;
 const {
-    sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners: shouldAnonymizeOwners, anonymizeInactiveUsers,
+    deactivateExpiredUsersInDB, sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners: shouldAnonymizeOwners, anonymizeInactiveUsers,
 } = config;
 
 export default (agenda) => {
+    agenda.define(
+        'access_is_about_to_expire',
+        (job) => {
+            const { accessId, hoursBeforeExpirationDate } = job.attrs.data;
+            accessRequestService.handleAccessAboutToExpire(parseInt(accessId, 10), hoursBeforeExpirationDate);
+        },
+    );
+
+    agenda.define(
+        'access_is_expired',
+        (job) => {
+            const { accessId } = job.attrs.data;
+            accessRequestService.handleAccessExpired(parseInt(accessId, 10));
+        },
+    );
+
+    agenda.define(
+        'access_is_pending',
+        (job) => {
+            const { accessId } = job.attrs.data;
+            accessRequestService.handleAccessPending(parseInt(accessId, 10));
+        },
+    );
+
+    agenda.define(
+        'access_request_pending_1st',
+        (job) => {
+            const { userId } = job.attrs.data;
+            accessRequestService.handleAccessRequestPending(true, parseInt(userId, 10));
+        },
+    );
+
+    agenda.define(
+        'access_request_pending_2nd',
+        (job) => {
+            const { userId } = job.attrs.data;
+            accessRequestService.handleAccessRequestPending(false, parseInt(userId, 10));
+        },
+    );
+
+    agenda.define(
+        'anonymize_inactive_users',
+        async () => {
+            if (anonymizeInactiveUsers) {
+                await anonymizeUser();
+            }
+        },
+    );
+
+    agenda.define(
+        'anonymize_owners',
+        async () => {
+            if (shouldAnonymizeOwners) {
+                await anonymizeOwners();
+            }
+        },
+    );
+
+    agenda.define(
+        'clean_attachments_archives',
+        async () => {
+            if (cleanAttachmentsArchives) {
+                await cleanAttachmentArchives();
+            }
+        },
+    );
+
+    agenda.define(
+        'deactivate_expired_users',
+        async () => {
+            if (deactivateExpiredUsersInDB) {
+                await deactivateExpiredUsers();
+            }
+        },
+    );
+
+    agenda.define(
+        'demo_invitation',
+        (job) => {
+            const { user } = job.attrs.data;
+            sendUserDemoInvitation(user);
+        },
+    );
+
+    agenda.define(
+        'entraide_invitation',
+        (job) => {
+            const { user } = job.attrs.data;
+            sendUserEntraideInvitation(user);
+        },
+    );
+
+    agenda.define(
+        'inactive_users_check',
+        async () => {
+            if (checkInactiveUsers) {
+                await userService.sendInactiveUserAlerts();
+                await userService.deactivateInactiveUsers();
+            }
+        },
+    );
+
     agenda.define(
         'send_action_alert_postshot',
         async () => {
@@ -50,84 +153,10 @@ export default (agenda) => {
     );
 
     agenda.define(
-        'inactive_users_check',
-        async () => {
-            if (checkInactiveUsers) {
-                await userService.sendInactiveUserAlerts();
-                await userService.deactivateInactiveUsers();
-            }
-        },
-    );
-
-    agenda.define(
-        'access_request_pending_1st',
-        (job) => {
-            const { userId } = job.attrs.data;
-            accessRequestService.handleAccessRequestPending(true, parseInt(userId, 10));
-        },
-    );
-
-    agenda.define(
-        'access_request_pending_2nd',
-        (job) => {
-            const { userId } = job.attrs.data;
-            accessRequestService.handleAccessRequestPending(false, parseInt(userId, 10));
-        },
-    );
-
-    agenda.define(
-        'access_is_pending',
-        (job) => {
-            const { accessId } = job.attrs.data;
-            accessRequestService.handleAccessPending(parseInt(accessId, 10));
-        },
-    );
-
-    agenda.define(
-        'access_is_about_to_expire',
-        (job) => {
-            const { accessId, hoursBeforeExpirationDate } = job.attrs.data;
-            accessRequestService.handleAccessAboutToExpire(parseInt(accessId, 10), hoursBeforeExpirationDate);
-        },
-    );
-
-    agenda.define(
-        'access_is_expired',
-        (job) => {
-            const { accessId } = job.attrs.data;
-            accessRequestService.handleAccessExpired(parseInt(accessId, 10));
-        },
-    );
-
-    agenda.define(
-        'demo_invitation',
-        (job) => {
-            const { user } = job.attrs.data;
-            sendUserDemoInvitation(user);
-        },
-    );
-
-    agenda.define(
-        'entraide_invitation',
-        (job) => {
-            const { user } = job.attrs.data;
-            sendUserEntraideInvitation(user);
-        },
-    );
-
-    agenda.define(
         'user_features',
         (job) => {
             const { user } = job.attrs.data;
             sendUserFeatures(user);
-        },
-    );
-
-    agenda.define(
-        'user_share',
-        (job) => {
-            const { user } = job.attrs.data;
-            sendUserShare(user);
         },
     );
 
@@ -140,29 +169,10 @@ export default (agenda) => {
     );
 
     agenda.define(
-        'clean_attachments_archives',
-        async () => {
-            if (cleanAttachmentsArchives) {
-                await cleanAttachmentArchives();
-            }
-        },
-    );
-
-    agenda.define(
-        'anonymize_owners',
-        async () => {
-            if (shouldAnonymizeOwners) {
-                await anonymizeOwners();
-            }
-        },
-    );
-
-    agenda.define(
-        'anonymize_inactive_users',
-        async () => {
-            if (anonymizeInactiveUsers) {
-                await anonymizeUser();
-            }
+        'user_share',
+        (job) => {
+            const { user } = job.attrs.data;
+            sendUserShare(user);
         },
     );
 };

@@ -3,6 +3,7 @@ import anonymizeUser from './anonymize';
 import autocomplete from './autocomplete';
 import create from './create';
 import deactivate from './deactivate';
+import deactivateExpiredUsers from './deactivateExpiredUsers';
 import deleteUser from './delete';
 import downgradeLocalAdmin from './downgradeLocalAdmin';
 import findAll from './findAll';
@@ -41,6 +42,7 @@ export default {
     refuse,
     create,
     deactivate,
+    deactivateExpiredUsers,
     delete: deleteUser,
     downgradeLocalAdmin,
     findAll,
