@@ -27,4 +27,12 @@ export default [
         id: "history",
         label: "Historique des modifications",
     },
+    {
+        id: "resorption_phases",
+        label: "Phases préparatoires à la résorption",
+        permission: {
+            entity: "shantytown_resorption",
+            feature: "export",
+        },
+    },
 ];

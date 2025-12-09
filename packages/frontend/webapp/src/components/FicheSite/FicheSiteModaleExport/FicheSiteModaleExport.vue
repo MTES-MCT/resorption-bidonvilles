@@ -5,7 +5,7 @@
             ><FicheSiteModaleSubtitle :town="town"
         /></template>
         <template v-slot:body>
-            <FicheSiteModaleExportOptions />
+            <FicheSiteModaleExportOptions :town="town" />
             <ErrorSummary class="mt-4" v-if="error" :message="error" />
         </template>
 
