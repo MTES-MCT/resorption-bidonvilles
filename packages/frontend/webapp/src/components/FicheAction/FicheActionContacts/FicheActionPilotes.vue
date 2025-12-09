@@ -51,12 +51,15 @@ const users = computed(() => {
     return action.value.managers.map(({ users }) => users).flat();
 });
 const onlyDeactivatedUsers = computed(() => {
-    return users.value.every(
-        (user) =>
-            user.first_name === "Utilisateur" && user.last_name === "Désactivé"
+    return (
+        users.value.length > 0 &&
+        users.value.every(
+            (user) =>
+                user.first_name === "Utilisateur" &&
+                user.last_name === "Désactivé"
+        )
     );
 });
-console.log("Only deactivated users?", onlyDeactivatedUsers.value);
 
 const pilotHasBeenRequested = computed(() => {
     return actionsStore.requestedPilotsForActions.includes(action.value.id);
