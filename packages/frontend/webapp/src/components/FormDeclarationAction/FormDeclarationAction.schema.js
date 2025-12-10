@@ -40,11 +40,12 @@ function addMaxMineursValidation(schema) {
                 return true;
             }
             const { nombre_mineurs, nombre_personnes } = this.parent;
-            const max = Number.isInteger(nombre_mineurs)
-                ? nombre_mineurs
-                : Number.isInteger(nombre_personnes)
-                ? nombre_personnes
-                : Infinity;
+            let max = Infinity;
+            if (Number.isInteger(nombre_mineurs)) {
+                max = nombre_mineurs;
+            } else if (Number.isInteger(nombre_personnes)) {
+                max = nombre_personnes;
+            }
             return value <= max;
         }
     );
@@ -87,6 +88,189 @@ addMethod(object, "usersIsNotEmpty", function () {
         }
     );
 });
+
+function createScolaireMineurScolariseDansAnneeValidator(key) {
+    return createNumberValidator(
+        key,
+        "Nombre de mineurs scolarisés dans l'année"
+    ).when("$topics", (topics, schema) => {
+        if (!topics?.includes("school")) {
+            return schema;
+        }
+
+        return schema
+            .test(
+                "max-mineurs",
+                "Ne peut pas dépasser le nombre de mineurs de 3 ans et plus",
+                function (value) {
+                    if (value === null) {
+                        return true;
+                    }
+                    const { scolaire_mineurs_trois_ans_et_plus } = this.parent;
+                    return (
+                        !Number.isInteger(scolaire_mineurs_trois_ans_et_plus) ||
+                        value <= scolaire_mineurs_trois_ans_et_plus
+                    );
+                }
+            )
+            .test(
+                "min-somme-niveaux",
+                "Ne peut pas être inférieur à la somme des mineurs par niveau",
+                function (value) {
+                    if (value === null) {
+                        return true;
+                    }
+                    const sum = calculateSchoolLevelsSum(this.parent);
+                    return value >= sum;
+                }
+            );
+    });
+}
+
+function buildIndicateurYearSchema(key) {
+    return object()
+        .required()
+        .shape({
+            nombre_personnes: number()
+                .typeError(`${key} - Nombre de personnes doit être un nombre`)
+                .nullable()
+                .transform(emptyStringToNull)
+                .label("Nombre de personnes"),
+            nombre_menages: number()
+                .typeError(`${key} - Nombre de ménages doit être un nombre`)
+                .nullable()
+                .transform(emptyStringToNull),
+            nombre_femmes: createNumberValidator(key, "Nombre de femmes"),
+            nombre_mineurs: createNumberValidator(key, "Nombre de mineurs"),
+            sante_nombre_personnes: number()
+                .typeError(
+                    `${key} - Nombre de personnes ayant bénéficié d'un accompagnement vers la santé doit être un nombre`
+                )
+                .nullable()
+                .transform(emptyStringToNull),
+            travail_nombre_personnes: number()
+                .typeError(
+                    `${key} - Nombre de personnes ayant eu au moins 1 contrat de travail doit être un nombre`
+                )
+                .nullable()
+                .transform(emptyStringToNull),
+            travail_nombre_femmes: createNumberValidator(
+                key,
+                "Nombre de femmes ayant eu au moins 1 contrat de travail"
+            ),
+            hebergement_nombre_personnes: number()
+                .typeError(
+                    `${key} - Nombre de personnes ayant eu accès à un hébergement doit être un nombre`
+                )
+                .nullable()
+                .transform(emptyStringToNull),
+            hebergement_nombre_menages: number()
+                .typeError(
+                    `${key} - Nombre de ménages ayant eu accès à un hébergement doit être un nombre`
+                )
+                .nullable()
+                .transform(emptyStringToNull),
+            logement_nombre_personnes: number()
+                .typeError(
+                    `${key} - Nombre de personnes ayant eu accès à un logement doit être un nombre`
+                )
+                .nullable()
+                .transform(emptyStringToNull),
+            logement_nombre_menages: number()
+                .typeError(
+                    `${key} - Nombre de ménages ayant eu accès à un logement doit être un nombre`
+                )
+                .nullable()
+                .transform(emptyStringToNull),
+            scolaire_mineurs_moins_de_trois_ans: createNumberValidator(
+                key,
+                "Nombre de mineurs de moins de 3 ans identifiés sur site"
+            ).when("$topics", (topics, schema) => {
+                if (topics?.includes("school")) {
+                    return addMaxMineursValidation(schema);
+                }
+                return schema;
+            }),
+            scolaire_mineurs_trois_ans_et_plus: createNumberValidator(
+                key,
+                "Nombre de mineurs de 3 ans et plus identifiés sur site"
+            ).when("$topics", (topics, schema) => {
+                if (topics?.includes("school")) {
+                    return addMaxMineursValidation(schema);
+                }
+                return schema;
+            }),
+            scolaire_mediation_moins_de_trois_ans: number()
+                .typeError(
+                    `${key} - Nombre de mineurs de moins de 3 ans bénéficiant d'une médiation doit être un nombre`
+                )
+                .nullable()
+                .transform(emptyStringToNull),
+            scolaire_mediation_trois_ans_et_plus: number()
+                .typeError(
+                    `${key} - Nombre de mineurs de 3 ans et plus bénéficiant d'une médiation doit être un nombre`
+                )
+                .nullable()
+                .transform(emptyStringToNull),
+            scolaire_nombre_maternelle: createNumberValidator(
+                key,
+                "Nombre de mineurs scolarisés en maternelle"
+            ).when("$topics", (topics, schema) => {
+                if (topics?.includes("school")) {
+                    return addSchoolLevelsSumValidation(schema);
+                }
+                return schema;
+            }),
+            scolaire_nombre_elementaire: createNumberValidator(
+                key,
+                "Nombre de mineurs scolarisés en élémentaire"
+            ).when("$topics", (topics, schema) => {
+                if (topics?.includes("school")) {
+                    return addSchoolLevelsSumValidation(schema);
+                }
+                return schema;
+            }),
+            scolaire_nombre_college: createNumberValidator(
+                key,
+                "Nombre de mineurs scolarisés au collège"
+            ).when("$topics", (topics, schema) => {
+                if (topics?.includes("school")) {
+                    return addSchoolLevelsSumValidation(schema);
+                }
+                return schema;
+            }),
+            scolaire_nombre_lycee: createNumberValidator(
+                key,
+                "Nombre de mineurs scolarisés au lycée"
+            ).when("$topics", (topics, schema) => {
+                if (topics?.includes("school")) {
+                    return addSchoolLevelsSumValidation(schema);
+                }
+                return schema;
+            }),
+            scolaire_nombre_autre: createNumberValidator(
+                key,
+                'Nombre de mineurs scolarisés "autre"'
+            ).when("$topics", (topics, schema) => {
+                if (topics?.includes("school")) {
+                    return addSchoolLevelsSumValidation(schema);
+                }
+                return schema;
+            }),
+            scolaire_mineur_scolarise_dans_annee:
+                createScolaireMineurScolariseDansAnneeValidator(key),
+        })
+        .label("Indicateurs " + key);
+}
+
+function buildIndicateursSchema(value) {
+    const shape = Object.keys(value || {}).reduce((acc, key) => {
+        acc[key] = buildIndicateurYearSchema(key);
+        return acc;
+    }, {});
+
+    return object().shape(shape).required().label("Indicateurs");
+}
 
 export default function () {
     const configStore = useConfigStore();
@@ -148,218 +332,7 @@ export default function () {
             .usersIsNotEmpty()
             .label(labels.operators),
         finances: object(),
-        indicateurs: lazy((value) => {
-            return object()
-                .shape(
-                    Object.keys(value || {}).reduce((acc, key) => {
-                        acc[key] = object()
-                            .required()
-                            .shape({
-                                nombre_personnes: number()
-                                    .typeError(
-                                        `${key} - Nombre de personnes doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull)
-                                    .label("Nombre de personnes"),
-                                nombre_menages: number()
-                                    .typeError(
-                                        `${key} - Nombre de ménages doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                nombre_femmes: createNumberValidator(
-                                    key,
-                                    "Nombre de femmes"
-                                ),
-                                nombre_mineurs: createNumberValidator(
-                                    key,
-                                    "Nombre de mineurs"
-                                ),
-                                sante_nombre_personnes: number()
-                                    .typeError(
-                                        `${key} - Nombre de personnes ayant bénéficié d'un accompagnement vers la santé doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                travail_nombre_personnes: number()
-                                    .typeError(
-                                        `${key} - Nombre de personnes ayant eu au moins 1 contrat de travail doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                travail_nombre_femmes: createNumberValidator(
-                                    key,
-                                    "Nombre de femmes ayant eu au moins 1 contrat de travail"
-                                ),
-                                hebergement_nombre_personnes: number()
-                                    .typeError(
-                                        `${key} - Nombre de personnes ayant eu accès à un hébergement doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                hebergement_nombre_menages: number()
-                                    .typeError(
-                                        `${key} - Nombre de ménages ayant eu accès à un hébergement doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                logement_nombre_personnes: number()
-                                    .typeError(
-                                        `${key} - Nombre de personnes ayant eu accès à un logement doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                logement_nombre_menages: number()
-                                    .typeError(
-                                        `${key} - Nombre de ménages ayant eu accès à un logement doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                scolaire_mineurs_moins_de_trois_ans:
-                                    createNumberValidator(
-                                        key,
-                                        "Nombre de mineurs de moins de 3 ans identifiés sur site"
-                                    ).when("$topics", (topics, schema) => {
-                                        if (topics?.includes("school")) {
-                                            return addMaxMineursValidation(
-                                                schema
-                                            );
-                                        }
-                                        return schema;
-                                    }),
-                                scolaire_mineurs_trois_ans_et_plus:
-                                    createNumberValidator(
-                                        key,
-                                        "Nombre de mineurs de 3 ans et plus identifiés sur site"
-                                    ).when("$topics", (topics, schema) => {
-                                        if (topics?.includes("school")) {
-                                            return addMaxMineursValidation(
-                                                schema
-                                            );
-                                        }
-                                        return schema;
-                                    }),
-                                scolaire_mediation_moins_de_trois_ans: number()
-                                    .typeError(
-                                        `${key} - Nombre de mineurs de moins de 3 ans bénéficiant d'une médiation doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                scolaire_mediation_trois_ans_et_plus: number()
-                                    .typeError(
-                                        `${key} - Nombre de mineurs de 3 ans et plus bénéficiant d'une médiation doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                scolaire_nombre_maternelle:
-                                    createNumberValidator(
-                                        key,
-                                        "Nombre de mineurs scolarisés en maternelle"
-                                    ).when("$topics", (topics, schema) => {
-                                        if (topics?.includes("school")) {
-                                            return addSchoolLevelsSumValidation(
-                                                schema
-                                            );
-                                        }
-                                        return schema;
-                                    }),
-                                scolaire_nombre_elementaire:
-                                    createNumberValidator(
-                                        key,
-                                        "Nombre de mineurs scolarisés en élémentaire"
-                                    ).when("$topics", (topics, schema) => {
-                                        if (topics?.includes("school")) {
-                                            return addSchoolLevelsSumValidation(
-                                                schema
-                                            );
-                                        }
-                                        return schema;
-                                    }),
-                                scolaire_nombre_college: createNumberValidator(
-                                    key,
-                                    "Nombre de mineurs scolarisés au collège"
-                                ).when("$topics", (topics, schema) => {
-                                    if (topics?.includes("school")) {
-                                        return addSchoolLevelsSumValidation(
-                                            schema
-                                        );
-                                    }
-                                    return schema;
-                                }),
-                                scolaire_nombre_lycee: createNumberValidator(
-                                    key,
-                                    "Nombre de mineurs scolarisés au lycée"
-                                ).when("$topics", (topics, schema) => {
-                                    if (topics?.includes("school")) {
-                                        return addSchoolLevelsSumValidation(
-                                            schema
-                                        );
-                                    }
-                                    return schema;
-                                }),
-                                scolaire_nombre_autre: createNumberValidator(
-                                    key,
-                                    'Nombre de mineurs scolarisés "autre"'
-                                ).when("$topics", (topics, schema) => {
-                                    if (topics?.includes("school")) {
-                                        return addSchoolLevelsSumValidation(
-                                            schema
-                                        );
-                                    }
-                                    return schema;
-                                }),
-                                scolaire_mineur_scolarise_dans_annee:
-                                    createNumberValidator(
-                                        key,
-                                        "Nombre de mineurs scolarisés dans l'année"
-                                    ).when("$topics", (topics, schema) => {
-                                        if (topics?.includes("school")) {
-                                            return schema
-                                                .test(
-                                                    "max-mineurs",
-                                                    "Ne peut pas dépasser le nombre de mineurs de 3 ans et plus",
-                                                    function (value) {
-                                                        if (value === null) {
-                                                            return true;
-                                                        }
-                                                        const {
-                                                            scolaire_mineurs_trois_ans_et_plus,
-                                                        } = this.parent;
-                                                        return (
-                                                            !Number.isInteger(
-                                                                scolaire_mineurs_trois_ans_et_plus
-                                                            ) ||
-                                                            value <=
-                                                                scolaire_mineurs_trois_ans_et_plus
-                                                        );
-                                                    }
-                                                )
-                                                .test(
-                                                    "min-somme-niveaux",
-                                                    "Ne peut pas être inférieur à la somme des mineurs par niveau",
-                                                    function (value) {
-                                                        if (value === null) {
-                                                            return true;
-                                                        }
-                                                        const sum =
-                                                            calculateSchoolLevelsSum(
-                                                                this.parent
-                                                            );
-                                                        return value >= sum;
-                                                    }
-                                                );
-                                        }
-                                        return schema;
-                                    }),
-                            })
-                            .label("Indicateurs " + key);
-                        return acc;
-                    }, {})
-                )
-                .required()
-                .label("Indicateurs");
-        }),
+        indicateurs: lazy((value) => buildIndicateursSchema(value)),
     };
 
     return object(schema);

@@ -85,7 +85,7 @@ const createIndicatorValidator = (
 
     indicatorValidator = indicatorValidator
         .optional({ nullable: true, checkFalsy: false })
-        .customSanitizer(value => (value === '' || value === null || value === undefined ? null : parseInt(value, 10)))
+        .customSanitizer(value => (value === '' || value === null || value === undefined ? null : Number.parseInt(value, 10)))
         .custom((value) => {
             // eslint-disable-next-line no-console
             console.log('Test de ', fieldName, 'dont la valeur est ', value);
@@ -93,13 +93,14 @@ const createIndicatorValidator = (
                 return true; // La valeur est optionnelle, donc null/undefined est valide
             }
             if (!Number.isInteger(value)) {
-                throw new Error(`Le champ "${displayName}" doit être un nombre`);
+                throw new TypeError(`Le champ "${displayName}" doit être un nombre`);
             }
             if (value < minValue) {
                 throw new Error(`Le champ "${displayName}" ne peut pas être inférieur à ${minValue}`);
             }
             return true;
-        });
+        })
+        .customSanitizer(value => (Number.isInteger(value) ? value : null));
 
     // Ajouter les comparaisons personnalisées
     if (maxComparisons.length > 0) {
@@ -134,13 +135,360 @@ const createIndicatorValidator = (
 
     validators.push(indicatorValidator);
 
-    // Ajouter le customSanitizer pour convertir les valeurs invalides en null
-    validators.push(
-        body(fieldName).customSanitizer(value => (Number.isInteger(value) ? value : null)),
-    );
-
     return validators;
 };
+
+type IndicatorConfig = {
+    fieldName: string;
+    displayName: string;
+    options?: {
+        topic?: string | null;
+        minValue?: number;
+        maxComparisons?: Array<{ field: string; errorMessage: string; priority?: number }>;
+    };
+};
+
+const INDICATOR_CONFIGS: IndicatorConfig[] = [
+    {
+        fieldName: 'indicateurs.*.nombre_personnes',
+        displayName: 'Nombre de personnes',
+        options: { minValue: 1 },
+    },
+    {
+        fieldName: 'indicateurs.*.nombre_menages',
+        displayName: 'Nombre de ménages',
+        options: {
+            minValue: 1,
+            maxComparisons: [
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de ménages ne peut être supérieur au nombre de personnes',
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.nombre_femmes',
+        displayName: 'Nombre de femmes',
+        options: {
+            maxComparisons: [
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de femmes ne peut être supérieur au nombre de personnes',
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.nombre_mineurs',
+        displayName: 'Nombre de mineurs',
+        options: {
+            maxComparisons: [
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de mineurs ne peut être supérieur au nombre de personnes',
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.sante_nombre_personnes',
+        displayName: 'Nombre de personnes ayant eu un accompagnement vers la santé',
+        options: {
+            topic: 'health',
+            maxComparisons: [
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de personnes ayant eu un accompagnement vers la santé ne peut être supérieur au nombre de personnes concernées par l\'action',
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.travail_nombre_personnes',
+        displayName: 'Nombre de personnes ayant eu au moins 1 contrat de travail',
+        options: {
+            topic: 'work',
+            maxComparisons: [
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de personnes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de personnes concernées par l\'action',
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.travail_nombre_femmes',
+        displayName: 'Nombre de femmes ayant eu au moins 1 contrat de travail',
+        options: {
+            topic: 'work',
+            maxComparisons: [
+                {
+                    field: 'travail_nombre_personnes',
+                    errorMessage: 'Le nombre de femmes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de personnes',
+                    priority: 1,
+                },
+                {
+                    field: 'nombre_femmes',
+                    errorMessage: 'Le nombre de femmes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de femmes concernées par l\'action',
+                    priority: 2,
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.hebergement_nombre_personnes',
+        displayName: 'Nombre de personnes ayant eu accès à un hébergement',
+        options: {
+            topic: 'housing',
+            maxComparisons: [
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de personnes ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes concernées par l\'action',
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.hebergement_nombre_menages',
+        displayName: 'Nombre de ménages ayant eu accès à un hébergement',
+        options: {
+            topic: 'housing',
+            maxComparisons: [
+                {
+                    field: 'hebergement_nombre_personnes',
+                    errorMessage: 'Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes',
+                    priority: 1,
+                },
+                {
+                    field: 'nombre_menages',
+                    errorMessage: 'Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de ménages concernés par l\'action',
+                    priority: 2,
+                },
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes concernées par l\'action',
+                    priority: 3,
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.logement_nombre_personnes',
+        displayName: 'Nombre de personnes ayant eu accès à un logement',
+        options: {
+            topic: 'housing',
+            maxComparisons: [
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de personnes ayant eu accès à un logement ne peut être supérieur au nombre de personnes concernées par l\'action',
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.logement_nombre_menages',
+        displayName: 'Nombre de ménages ayant eu accès à un logement',
+        options: {
+            topic: 'housing',
+            maxComparisons: [
+                {
+                    field: 'logement_nombre_personnes',
+                    errorMessage: 'Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes',
+                    priority: 1,
+                },
+                {
+                    field: 'nombre_menages',
+                    errorMessage: 'Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de ménages concernés par l\'action',
+                    priority: 2,
+                },
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes concernées par l\'action',
+                    priority: 3,
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_mineurs_trois_ans_et_plus',
+        displayName: 'Nombre de mineurs identifiés sur site',
+        options: {
+            topic: 'school',
+            maxComparisons: [
+                {
+                    field: 'nombre_mineurs',
+                    errorMessage: 'Le nombre de mineurs identifiés sur site ne peut être supérieur au nombre de mineurs concernés par l\'action',
+                    priority: 1,
+                },
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de mineurs identifiés sur site ne peut être supérieur au nombre de personnes concernées par l\'action',
+                    priority: 2,
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_mineurs_moins_de_trois_ans',
+        displayName: 'Nombre de mineurs de moins de 3 ans identifiés sur site',
+        options: {
+            topic: 'school',
+            maxComparisons: [
+                {
+                    field: 'nombre_mineurs',
+                    errorMessage: 'Le nombre de mineurs de moins de 3 ans identifiés sur site ne peut être supérieur au nombre de mineurs concernés par l\'action',
+                    priority: 1,
+                },
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de mineurs de moins de 3 ans identifiés sur site ne peut être supérieur au nombre de personnes concernées par l\'action',
+                    priority: 2,
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'scolaire_mediation_moins_de_trois_ans',
+        displayName: 'Nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation',
+        options: {
+            topic: 'school',
+            maxComparisons: [
+                {
+                    field: 'scolaire_mineurs_moins_de_trois_ans',
+                    errorMessage: 'Le nombre de mineurs de moins de 3 ans bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de moins de 3 ans identifiés sur site',
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'scolaire_mediation_trois_ans_et_plus',
+        displayName: 'Nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation',
+        options: {
+            topic: 'school',
+            maxComparisons: [
+                {
+                    field: 'scolaire_mineurs_trois_ans_et_plus',
+                    errorMessage: 'Le nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de 3 ans et plus identifiés sur site',
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_nombre_maternelle',
+        displayName: 'Nombre de scolarisés en maternelle',
+        options: {
+            topic: 'school',
+            maxComparisons: [
+                {
+                    field: 'nombre_mineurs',
+                    errorMessage: 'Le nombre de scolarisés en maternelle ne peut être supérieur au nombre de mineurs concernés par l\'action',
+                    priority: 1,
+                },
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de scolarisés en maternelle ne peut être supérieur au nombre de personnes concernées par l\'action',
+                    priority: 2,
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_nombre_elementaire',
+        displayName: 'Nombre de scolarisés en élémentaire',
+        options: {
+            topic: 'school',
+            maxComparisons: [
+                {
+                    field: 'nombre_mineurs',
+                    errorMessage: 'Le nombre de scolarisés en élémentaire ne peut être supérieur au nombre de mineurs concernés par l\'action',
+                    priority: 1,
+                },
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de scolarisés en élémentaire ne peut être supérieur au nombre de personnes concernées par l\'action',
+                    priority: 2,
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_nombre_college',
+        displayName: 'Nombre de scolarisés au collège',
+        options: {
+            topic: 'school',
+            maxComparisons: [
+                {
+                    field: 'nombre_mineurs',
+                    errorMessage: 'Le nombre de scolarisés au collège ne peut être supérieur au nombre de mineurs concernés par l\'action',
+                    priority: 1,
+                },
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de scolarisés au collège ne peut être supérieur au nombre de personnes concernées par l\'action',
+                    priority: 2,
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_nombre_lycee',
+        displayName: 'Nombre de scolarisés au lycée',
+        options: {
+            topic: 'school',
+            maxComparisons: [
+                {
+                    field: 'nombre_mineurs',
+                    errorMessage: 'Le nombre de scolarisés au lycée ne peut être supérieur au nombre de mineurs concernés par l\'action',
+                    priority: 1,
+                },
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de scolarisés au lycée ne peut être supérieur au nombre de personnes concernées par l\'action',
+                    priority: 2,
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_nombre_autre',
+        displayName: 'Autre',
+        options: {
+            topic: 'school',
+            maxComparisons: [
+                {
+                    field: 'nombre_mineurs',
+                    errorMessage: 'Le nombre d\'autres scolarisations ne peut être supérieur au nombre de mineurs concernés par l\'action',
+                    priority: 1,
+                },
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre d\'autres scolarisations ne peut être supérieur au nombre de personnes concernées par l\'action',
+                    priority: 2,
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_mineur_scolarise_dans_annee',
+        displayName: 'Mineurs scolarisés dans l\'année',
+        options: {
+            topic: 'school',
+            maxComparisons: [
+                {
+                    field: 'nombre_mineurs',
+                    errorMessage: 'Le nombre de mineurs scolarisés dans l\'année ne peut pas être supérieur au nombre de mineurs concernés par l\'action',
+                    priority: 1,
+                },
+                {
+                    field: 'nombre_personnes',
+                    errorMessage: 'Le nombre de mineurs scolarisés dans l\'année ne peut pas être supérieur au nombre de personnes concernées par l\'action',
+                    priority: 2,
+                },
+            ],
+        },
+    },
+];
 
 export default (mode: 'create' | 'update') => [
     body('name')
@@ -453,364 +801,11 @@ export default (mode: 'create' | 'update') => [
             return true;
         }),
 
-    ...createIndicatorValidator(
-        'indicateurs.*.nombre_personnes',
-        'Nombre de personnes',
-        { minValue: 1 },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.nombre_menages',
-        'Nombre de ménages',
-        {
-            minValue: 1,
-            maxComparisons: [
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de ménages ne peut être supérieur au nombre de personnes',
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.nombre_femmes',
-        'Nombre de femmes',
-        {
-            maxComparisons: [
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de femmes ne peut être supérieur au nombre de personnes',
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.nombre_mineurs',
-        'Nombre de mineurs',
-        {
-            maxComparisons: [
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de mineurs ne peut être supérieur au nombre de personnes',
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.sante_nombre_personnes',
-        'Nombre de personnes ayant eu un accompagnement vers la santé',
-        {
-            topic: 'health',
-            maxComparisons: [
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de personnes ayant eu un accompagnement vers la santé ne peut être supérieur au nombre de personnes concernées par l\'action',
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.travail_nombre_personnes',
-        'Nombre de personnes ayant eu au moins 1 contrat de travail',
-        {
-            topic: 'work',
-            maxComparisons: [
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de personnes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de personnes concernées par l\'action',
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.travail_nombre_femmes',
-        'Nombre de femmes ayant eu au moins 1 contrat de travail',
-        {
-            topic: 'work',
-            maxComparisons: [
-                {
-                    field: 'travail_nombre_personnes',
-                    errorMessage: 'Le nombre de femmes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de personnes',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_femmes',
-                    errorMessage: 'Le nombre de femmes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de femmes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.hebergement_nombre_personnes',
-        'Nombre de personnes ayant eu accès à un hébergement',
-        {
-            topic: 'housing',
-            maxComparisons: [
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de personnes ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes concernées par l\'action',
-                },
-            ],
-        },
-    ),
-    ...createIndicatorValidator(
-        'indicateurs.*.hebergement_nombre_menages',
-        'Nombre de ménages ayant eu accès à un hébergement',
-        {
-            topic: 'housing',
-            maxComparisons: [
-                {
-                    field: 'hebergement_nombre_personnes',
-                    errorMessage: 'Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_menages',
-                    errorMessage: 'Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de ménages concernés par l\'action',
-                    priority: 2,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 3,
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.logement_nombre_personnes',
-        'Nombre de personnes ayant eu accès à un logement',
-        {
-            topic: 'housing',
-            maxComparisons: [
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de personnes ayant eu accès à un logement ne peut être supérieur au nombre de personnes concernées par l\'action',
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.logement_nombre_menages',
-        'Nombre de ménages ayant eu accès à un logement',
-        {
-            topic: 'housing',
-            maxComparisons: [
-                {
-                    field: 'logement_nombre_personnes',
-                    errorMessage: 'Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_menages',
-                    errorMessage: 'Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de ménages concernés par l\'action',
-                    priority: 2,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 3,
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.scolaire_mineurs_trois_ans_et_plus',
-        'Nombre de mineurs identifiés sur site',
-        {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre de mineurs identifiés sur site ne peut être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de mineurs identifiés sur site ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.scolaire_mineurs_moins_de_trois_ans',
-        'Nombre de mineurs de moins de 3 ans identifiés sur site',
-        {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre de mineurs de moins de 3 ans identifiés sur site ne peut être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de mineurs de moins de 3 ans identifiés sur site ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'scolaire_mediation_moins_de_trois_ans',
-        'Nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation',
-        {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'scolaire_mineurs_moins_de_trois_ans',
-                    errorMessage: 'Le nombre de mineurs de moins de 3 ans bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de moins de 3 ans identifiés sur site',
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'scolaire_mediation_trois_ans_et_plus',
-        'Nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation',
-        {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'scolaire_mineurs_trois_ans_et_plus',
-                    errorMessage: 'Le nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de 3 ans et plus identifiés sur site',
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.scolaire_nombre_maternelle',
-        'Nombre de scolarisés en maternelle',
-        {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre de scolarisés en maternelle ne peut être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de scolarisés en maternelle ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.scolaire_nombre_elementaire',
-        'Nombre de scolarisés en élémentaire',
-        {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre de scolarisés en élémentaire ne peut être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de scolarisés en élémentaire ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.scolaire_nombre_college',
-        'Nombre de scolarisés au collège',
-        {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre de scolarisés au collège ne peut être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de scolarisés au collège ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.scolaire_nombre_lycee',
-        'Nombre de scolarisés au lycée',
-        {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre de scolarisés au lycée ne peut être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de scolarisés au lycée ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.scolaire_nombre_autre',
-        'Autre',
-        {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre d\'autres scolarisations ne peut être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre d\'autres scolarisations ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
-    ),
-
-    ...createIndicatorValidator(
-        'indicateurs.*.scolaire_mineur_scolarise_dans_annee',
-        'Mineurs scolarisés dans l\'année',
-        {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre de mineurs scolarisés dans l\'année ne peut pas être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de mineurs scolarisés dans l\'année ne peut pas être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
-    ),
+    ...INDICATOR_CONFIGS.flatMap(config => createIndicatorValidator(
+        config.fieldName,
+        config.displayName,
+        config.options,
+    )),
     body('indicateurs.*.scolaire_mineur_scolarise_dans_annee')
         .custom((value, { req, path }) => {
             if (value === null || value === undefined) {
