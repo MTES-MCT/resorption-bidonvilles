@@ -46,7 +46,7 @@ const formatDate = ((dateToFormat: Date): string => {
 
 const formatTownStatus = (status: string): string => {
     const statusMapping: { [key: string]: string } = {
-        resorbed: 'Résorbé',
+        resorbed: 'Fermé suite à une résorption progressive du site',
         closed_by_city_admin: 'Fermé sur décision municipale',
         other: 'Autre',
         unknown: 'Inconnu',
