@@ -32,11 +32,12 @@ function addMaxMineursValidation(schema) {
                 return true;
             }
             const { nombre_mineurs, nombre_personnes } = this.parent;
-            const max = Number.isInteger(nombre_mineurs)
-                ? nombre_mineurs
-                : Number.isInteger(nombre_personnes)
-                ? nombre_personnes
-                : Infinity;
+            let max = Infinity;
+            if (Number.isInteger(nombre_mineurs)) {
+                max = nombre_mineurs;
+            } else if (Number.isInteger(nombre_personnes)) {
+                max = nombre_personnes;
+            }
             return value <= max;
         }
     );
@@ -342,7 +343,8 @@ const createIndicateurFields = () => {
                                 return (
                                     !Number.isInteger(
                                         scolaire_mineurs_trois_ans_et_plus
-                                    ) || value <= scolaire_mineurs_trois_ans_et_plus
+                                    ) ||
+                                    value <= scolaire_mineurs_trois_ans_et_plus
                                 );
                             }
                         )
@@ -353,7 +355,9 @@ const createIndicateurFields = () => {
                                 if (value === null) {
                                     return true;
                                 }
-                                const sum = calculateSchoolLevelsSum(this.parent);
+                                const sum = calculateSchoolLevelsSum(
+                                    this.parent
+                                );
                                 return value >= sum;
                             }
                         );
