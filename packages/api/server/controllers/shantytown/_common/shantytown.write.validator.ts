@@ -2079,7 +2079,7 @@ export default mode => ([
             const isNationalAdmin = req.user?.is_superuser;
             const hasPermission = req.user?.isAllowedTo('update', 'shantytown_resorption');
 
-            if (!isNationalAdmin && !hasPermission) {
+            if (!isNationalAdmin && !hasPermission && value.length > 0) {
                 throw new Error('Vous n\'avez pas le droit de modifier les phases de résorption');
             }
 
@@ -2116,7 +2116,7 @@ export default mode => ([
             const isNationalAdmin = req.user?.is_superuser === true;
             const hasPermission = req.user?.isAllowedTo('update', 'shantytown_resorption');
 
-            if (!isNationalAdmin && !hasPermission) {
+            if (!isNationalAdmin && !hasPermission && value.length > 0) {
                 throw new Error('Vous n\'avez pas le droit de modifier les phases de résorption');
             }
 
