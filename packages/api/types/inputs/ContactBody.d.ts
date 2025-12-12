@@ -16,7 +16,7 @@ type ContactBodyNewOrganization = {
 type ContactBodyOrganization = ContactBodyNewOrganization | ContactBodyExistingOrganization;
 
 export type ContactBody = {
-    request_type: ContactRequestType[],
+    request_type: ContactRequestType,
     is_actor: boolean,
     referral: ContactReferral,
     referral_other: string,

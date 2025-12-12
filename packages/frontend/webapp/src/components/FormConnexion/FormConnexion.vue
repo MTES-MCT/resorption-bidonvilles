@@ -49,7 +49,7 @@
                     @click.prevent.stop="router.push('/contact')"
                     tertiary
                     no-outline
-                    >Demander un accès</DsfrButton
+                    >Nous contacter</DsfrButton
                 >
                 <DsfrButton
                     @click.prevent.stop="router.push('/nouveau-mot-de-passe')"

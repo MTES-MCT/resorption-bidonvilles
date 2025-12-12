@@ -1,16 +1,16 @@
 <template>
     <DsfrInputGroup
-        id="referral_other"
+        id="organization_other_territory"
         :errorMessage="errors.length > 0 ? errors : ''"
         :disabled="isSubmitting || disabled"
         type="text"
-        v-model="referralOther"
+        v-model="organizationOtherTerritory"
         required
         @blur="handleBlur"
         :valid-message="
-            referralOther?.length > 0 &&
+            organizationOtherTerritory?.length > 0 &&
             errors.length === 0 &&
-            `Le champ '${label}' est valide`
+            `Territoire de la structure valide`
         "
     >
         <template #before-input>
@@ -27,14 +27,12 @@ import { useField, useIsSubmitting } from "vee-validate";
 
 const props = defineProps({
     label: String,
-    disabled: Boolean,
 });
-const { label, disabled } = toRefs(props);
-
+const { label } = toRefs(props);
 const isSubmitting = useIsSubmitting();
 const {
-    value: referralOther,
+    value: organizationOtherTerritory,
     errors,
     handleBlur,
-} = useField("referral_other", "required");
+} = useField("organization_other_territory", "required");
 </script>
