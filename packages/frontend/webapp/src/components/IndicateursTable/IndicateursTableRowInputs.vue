@@ -7,12 +7,15 @@
                     v-for="(input, index) in inputs"
                     :key="input.id"
                     class="flex items-center h-8 bg-G200"
-                    :class="{
-                        'px-4':
-                            input.tableLabel !== '' &&
-                            input.tableLabel !== undefined,
-                        'border-b border-b-G400': index < inputs.length - 1,
-                    }"
+                    :class="[
+                        input.tableLabel !== '' &&
+                        input.tableLabel !== undefined
+                            ? labelPaddingClass
+                            : null,
+                        index < inputs.length - 1
+                            ? 'border-b border-b-G400'
+                            : null,
+                    ]"
                 >
                     {{ input.tableLabel }}
                 </p>
@@ -65,6 +68,10 @@ const props = defineProps({
             return {};
         },
     },
+    labelPaddingClass: {
+        type: String,
+        default: "px-4",
+    },
 });
-const { data, inputs, errors } = toRefs(props);
+const { data, inputs, errors, labelPaddingClass } = toRefs(props);
 </script>

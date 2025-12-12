@@ -1,5 +1,9 @@
 <template>
-    <IndicateursLabel class="text-tertiaryA11Y">Autre</IndicateursLabel>
+    <IndicateursLabel>
+        <span class="text-tertiaryA11Y pl-12">Autre</span>
+    </IndicateursLabel>
+    : jeunes en dispositif d'insertion (service civique, contrat d'engagement
+    jeune…)
 </template>
 
 <script setup>
