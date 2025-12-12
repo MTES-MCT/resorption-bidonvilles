@@ -138,13 +138,35 @@ const createIndicatorValidator = (
     return validators;
 };
 
+// Helpers pour réduire la duplication dans INDICATOR_CONFIGS
+type MaxComparison = { field: string; errorMessage: string; priority?: number };
+
+function maxComp(field: string, errorMessage: string, priority?: number): MaxComparison {
+    return priority !== undefined ? { field, errorMessage, priority } : { field, errorMessage };
+}
+
+function simpleMax(indicatorLabel: string, targetField: string, targetLabel: string): MaxComparison[] {
+    return [maxComp(targetField, `Le nombre de ${indicatorLabel} ne peut être supérieur au nombre de ${targetLabel}`)];
+}
+
+function actionMax(indicatorLabel: string): MaxComparison[] {
+    return [maxComp('nombre_personnes', `Le nombre de ${indicatorLabel} ne peut être supérieur au nombre de personnes concernées par l'action`)];
+}
+
+function schoolMinorsMax(indicatorLabel: string): MaxComparison[] {
+    return [
+        maxComp('nombre_mineurs', `Le nombre de ${indicatorLabel} ne peut être supérieur au nombre de mineurs concernés par l'action`, 1),
+        maxComp('nombre_personnes', `Le nombre de ${indicatorLabel} ne peut être supérieur au nombre de personnes concernées par l'action`, 2),
+    ];
+}
+
 type IndicatorConfig = {
     fieldName: string;
     displayName: string;
     options?: {
         topic?: string | null;
         minValue?: number;
-        maxComparisons?: Array<{ field: string; errorMessage: string; priority?: number }>;
+        maxComparisons?: MaxComparison[];
     };
 };
 
@@ -157,65 +179,27 @@ const INDICATOR_CONFIGS: IndicatorConfig[] = [
     {
         fieldName: 'indicateurs.*.nombre_menages',
         displayName: 'Nombre de ménages',
-        options: {
-            minValue: 1,
-            maxComparisons: [
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de ménages ne peut être supérieur au nombre de personnes',
-                },
-            ],
-        },
+        options: { minValue: 1, maxComparisons: simpleMax('ménages', 'nombre_personnes', 'personnes') },
     },
     {
         fieldName: 'indicateurs.*.nombre_femmes',
         displayName: 'Nombre de femmes',
-        options: {
-            maxComparisons: [
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de femmes ne peut être supérieur au nombre de personnes',
-                },
-            ],
-        },
+        options: { maxComparisons: simpleMax('femmes', 'nombre_personnes', 'personnes') },
     },
     {
         fieldName: 'indicateurs.*.nombre_mineurs',
         displayName: 'Nombre de mineurs',
-        options: {
-            maxComparisons: [
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de mineurs ne peut être supérieur au nombre de personnes',
-                },
-            ],
-        },
+        options: { maxComparisons: simpleMax('mineurs', 'nombre_personnes', 'personnes') },
     },
     {
         fieldName: 'indicateurs.*.sante_nombre_personnes',
         displayName: 'Nombre de personnes ayant eu un accompagnement vers la santé',
-        options: {
-            topic: 'health',
-            maxComparisons: [
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de personnes ayant eu un accompagnement vers la santé ne peut être supérieur au nombre de personnes concernées par l\'action',
-                },
-            ],
-        },
+        options: { topic: 'health', maxComparisons: actionMax('personnes ayant eu un accompagnement vers la santé') },
     },
     {
         fieldName: 'indicateurs.*.travail_nombre_personnes',
         displayName: 'Nombre de personnes ayant eu au moins 1 contrat de travail',
-        options: {
-            topic: 'work',
-            maxComparisons: [
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de personnes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de personnes concernées par l\'action',
-                },
-            ],
-        },
+        options: { topic: 'work', maxComparisons: actionMax('personnes ayant eu au moins 1 contrat de travail') },
     },
     {
         fieldName: 'indicateurs.*.travail_nombre_femmes',
@@ -239,15 +223,7 @@ const INDICATOR_CONFIGS: IndicatorConfig[] = [
     {
         fieldName: 'indicateurs.*.hebergement_nombre_personnes',
         displayName: 'Nombre de personnes ayant eu accès à un hébergement',
-        options: {
-            topic: 'housing',
-            maxComparisons: [
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de personnes ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes concernées par l\'action',
-                },
-            ],
-        },
+        options: { topic: 'housing', maxComparisons: actionMax('personnes ayant eu accès à un hébergement') },
     },
     {
         fieldName: 'indicateurs.*.hebergement_nombre_menages',
@@ -255,36 +231,16 @@ const INDICATOR_CONFIGS: IndicatorConfig[] = [
         options: {
             topic: 'housing',
             maxComparisons: [
-                {
-                    field: 'hebergement_nombre_personnes',
-                    errorMessage: 'Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_menages',
-                    errorMessage: 'Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de ménages concernés par l\'action',
-                    priority: 2,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 3,
-                },
+                maxComp('hebergement_nombre_personnes', 'Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes', 1),
+                maxComp('nombre_menages', 'Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de ménages concernés par l\'action', 2),
+                maxComp('nombre_personnes', 'Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes concernées par l\'action', 3),
             ],
         },
     },
     {
         fieldName: 'indicateurs.*.logement_nombre_personnes',
         displayName: 'Nombre de personnes ayant eu accès à un logement',
-        options: {
-            topic: 'housing',
-            maxComparisons: [
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de personnes ayant eu accès à un logement ne peut être supérieur au nombre de personnes concernées par l\'action',
-                },
-            ],
-        },
+        options: { topic: 'housing', maxComparisons: actionMax('personnes ayant eu accès à un logement') },
     },
     {
         fieldName: 'indicateurs.*.logement_nombre_menages',
@@ -292,73 +248,28 @@ const INDICATOR_CONFIGS: IndicatorConfig[] = [
         options: {
             topic: 'housing',
             maxComparisons: [
-                {
-                    field: 'logement_nombre_personnes',
-                    errorMessage: 'Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_menages',
-                    errorMessage: 'Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de ménages concernés par l\'action',
-                    priority: 2,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 3,
-                },
+                maxComp('logement_nombre_personnes', 'Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes', 1),
+                maxComp('nombre_menages', 'Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de ménages concernés par l\'action', 2),
+                maxComp('nombre_personnes', 'Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes concernées par l\'action', 3),
             ],
         },
     },
     {
         fieldName: 'indicateurs.*.scolaire_mineurs_trois_ans_et_plus',
         displayName: 'Nombre de mineurs identifiés sur site',
-        options: {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre de mineurs identifiés sur site ne peut être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de mineurs identifiés sur site ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('mineurs identifiés sur site') },
     },
     {
         fieldName: 'indicateurs.*.scolaire_mineurs_moins_de_trois_ans',
         displayName: 'Nombre de mineurs de moins de 3 ans identifiés sur site',
-        options: {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre de mineurs de moins de 3 ans identifiés sur site ne peut être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de mineurs de moins de 3 ans identifiés sur site ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('mineurs de moins de 3 ans identifiés sur site') },
     },
     {
         fieldName: 'scolaire_mediation_moins_de_trois_ans',
         displayName: 'Nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation',
         options: {
             topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'scolaire_mineurs_moins_de_trois_ans',
-                    errorMessage: 'Le nombre de mineurs de moins de 3 ans bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de moins de 3 ans identifiés sur site',
-                },
-            ],
+            maxComparisons: [maxComp('scolaire_mineurs_moins_de_trois_ans', 'Le nombre de mineurs de moins de 3 ans bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de moins de 3 ans identifiés sur site')],
         },
     },
     {
@@ -366,127 +277,38 @@ const INDICATOR_CONFIGS: IndicatorConfig[] = [
         displayName: 'Nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation',
         options: {
             topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'scolaire_mineurs_trois_ans_et_plus',
-                    errorMessage: 'Le nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de 3 ans et plus identifiés sur site',
-                },
-            ],
+            maxComparisons: [maxComp('scolaire_mineurs_trois_ans_et_plus', 'Le nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de 3 ans et plus identifiés sur site')],
         },
     },
     {
         fieldName: 'indicateurs.*.scolaire_nombre_maternelle',
         displayName: 'Nombre de scolarisés en maternelle',
-        options: {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre de scolarisés en maternelle ne peut être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de scolarisés en maternelle ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('scolarisés en maternelle') },
     },
     {
         fieldName: 'indicateurs.*.scolaire_nombre_elementaire',
         displayName: 'Nombre de scolarisés en élémentaire',
-        options: {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre de scolarisés en élémentaire ne peut être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de scolarisés en élémentaire ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('scolarisés en élémentaire') },
     },
     {
         fieldName: 'indicateurs.*.scolaire_nombre_college',
         displayName: 'Nombre de scolarisés au collège',
-        options: {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre de scolarisés au collège ne peut être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de scolarisés au collège ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('scolarisés au collège') },
     },
     {
         fieldName: 'indicateurs.*.scolaire_nombre_lycee',
         displayName: 'Nombre de scolarisés au lycée',
-        options: {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre de scolarisés au lycée ne peut être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de scolarisés au lycée ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('scolarisés au lycée') },
     },
     {
         fieldName: 'indicateurs.*.scolaire_nombre_autre',
         displayName: 'Autre',
-        options: {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre d\'autres scolarisations ne peut être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre d\'autres scolarisations ne peut être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('d\'autres scolarisations') },
     },
     {
         fieldName: 'indicateurs.*.scolaire_mineur_scolarise_dans_annee',
         displayName: 'Mineurs scolarisés dans l\'année',
-        options: {
-            topic: 'school',
-            maxComparisons: [
-                {
-                    field: 'nombre_mineurs',
-                    errorMessage: 'Le nombre de mineurs scolarisés dans l\'année ne peut pas être supérieur au nombre de mineurs concernés par l\'action',
-                    priority: 1,
-                },
-                {
-                    field: 'nombre_personnes',
-                    errorMessage: 'Le nombre de mineurs scolarisés dans l\'année ne peut pas être supérieur au nombre de personnes concernées par l\'action',
-                    priority: 2,
-                },
-            ],
-        },
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('mineurs scolarisés dans l\'année') },
     },
 ];
 
