@@ -26,10 +26,10 @@ const sectionTitles = [
     { name: 'SANTÉ', range: { from: 'P1', to: 'P1' } },
     { name: 'EMPLOI', range: { from: 'Q1', to: 'R1' } },
     { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'S1', to: 'V1' } },
-    { name: 'SCOLARISATION', range: { from: 'W1', to: 'AH1' } },
-    { name: 'FINANCEMENT', range: { from: 'AI1', to: 'AT1' } },
-    { name: 'COMMENTAIRES', range: { from: 'AU1', to: 'AW1' } },
-    { name: 'MISE À JOUR', range: { from: 'AX1', to: 'AX1' } },
+    { name: 'SCOLARISATION', range: { from: 'W1', to: 'AG1' } },
+    { name: 'FINANCEMENT', range: { from: 'AH1', to: 'AS1' } },
+    { name: 'COMMENTAIRES', range: { from: 'AT1', to: 'AV1' } },
+    { name: 'MISE À JOUR', range: { from: 'AW1', to: 'AW1' } },
 ];
 
 const headers = [
@@ -55,13 +55,12 @@ const headers = [
     { label: 'Nombre de ménages ayant eu accès à une solution longue durée en hébergement ou logement adapté avec accompagnement, dont espace temporaire d\'accompagnement', width: '5' },
     { label: 'Nombre de personnes ayant eu accès à un logement', width: '5' },
     { label: 'Nombre de ménages ayant eu accès à un logement', width: '5' },
-    { label: 'Mineurs identifiés sur le site', width: '5' },
     { label: 'Mineurs de moins de 3 ans identifiés sur site', width: '5' },
     { label: 'Mineurs de 3 ans et plus identifiés sur site', width: '5' },
-    { label: 'Mineurs bénéficiant d\'une action de médiation', width: '5' },
     { label: 'Mineurs de moins de 3 ans bénéficiant d\'une action de médiation', width: '5' },
     { label: 'Mineurs de 3 ans et plus bénéficiant d\'une action de médiation', width: '5' },
     { label: 'Mineurs dont la scolarité a débuté cette année', width: '5' },
+    { label: 'Total mineurs scolarisés (maternelle/élémentaire/collège/lycée ou formation professionnelle, hors "Autre")', width: '5' },
     { label: 'Mineurs en maternelle', width: '5' },
     { label: 'Mineurs en élémentaire', width: '5' },
     { label: 'Mineurs au collège', width: '5' },
@@ -193,15 +192,12 @@ function sumNumbers(values: Array<number | null | undefined>): number | null {
 
 function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet) {
     data.forEach((item: ActionItem) => {
-        // Calcul des totaux pour les colonnes ajoutées
-        const mineursIdentifiesTotal = sumNumbers([
-            item.scolaire_mineurs_moins_de_trois_ans,
-            item.scolaire_mineurs_trois_ans_et_plus,
-        ]);
-
-        const mineursMediationTotal = sumNumbers([
-            item.scolaire_mediation_moins_de_trois_ans,
-            item.scolaire_mediation_trois_ans_et_plus,
+        // Calcul du total des mineurs scolarisés (hors "Autre")
+        const mineursScolarisesTotal = sumNumbers([
+            item.scolaire_nombre_maternelle,
+            item.scolaire_nombre_elementaire,
+            item.scolaire_nombre_college,
+            item.scolaire_nombre_lycee,
         ]);
 
         // Traiter les opérateurs (nom, prénom, organisation)
@@ -228,13 +224,12 @@ function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet) {
             item.hebergement_nombre_menages,
             item.logement_nombre_personnes,
             item.logement_nombre_menages,
-            mineursIdentifiesTotal,
             item.scolaire_mineurs_moins_de_trois_ans,
             item.scolaire_mineurs_trois_ans_et_plus,
-            mineursMediationTotal,
             item.scolaire_mediation_moins_de_trois_ans,
             item.scolaire_mediation_trois_ans_et_plus,
             item.scolaire_mineur_scolarise_dans_annee,
+            mineursScolarisesTotal,
             item.scolaire_nombre_maternelle,
             item.scolaire_nombre_elementaire,
             item.scolaire_nombre_college,
@@ -316,7 +311,6 @@ function setSectionHeadersHeight(worksheet: ExcelJS.Worksheet) {
 
 function setColumnHeadersHeight(worksheet: ExcelJS.Worksheet) {
     const secondRow = worksheet.getRow(2);
-    secondRow.height = 100;
     secondRow.eachCell((cell) => {
         cell.fill = {
             type: 'pattern',
