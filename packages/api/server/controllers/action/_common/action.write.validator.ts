@@ -142,7 +142,7 @@ const createIndicatorValidator = (
 type MaxComparison = { field: string; errorMessage: string; priority?: number };
 
 function maxComp(field: string, errorMessage: string, priority?: number): MaxComparison {
-    return priority !== undefined ? { field, errorMessage, priority } : { field, errorMessage };
+    return priority === undefined ? { field, errorMessage } : { field, errorMessage, priority };
 }
 
 function simpleMax(indicatorLabel: string, targetField: string, targetLabel: string): MaxComparison[] {
