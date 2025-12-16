@@ -415,8 +415,8 @@ function serializeTownWithPhases(town: ShantytownRow, user: AuthUser): Shantytow
     }, user);
 }
 
-async function loadActorsIntoShantytowns(shantytownHistory: ShantytownRow[], user: AuthUser): Promise<Shantytown[]> {
-    const actorRows: ActorRow[] = await shantytownActorModel.findAll(shantytownHistory.map(row => row.id));
+async function loadActorsIntoShantytowns(shantytownHistory: ShantytownRow[], user: AuthUser, exportDate: string): Promise<Shantytown[]> {
+    const actorRows: ActorRow[] = await shantytownActorModel.findAllAtDate(shantytownHistory.map(row => row.id), exportDate);
 
     const serializedTowns = shantytownHistory.map((town) => {
         const serializedTown = serializeTownWithPhases(town, user);
@@ -467,10 +467,10 @@ function getShantytownHistoryArray(rows: ShantytownRow[]): ShantytownRow[] {
     return Object.values(acc);
 }
 
-async function serializeTowns(shantytownHistory: ShantytownRow[], filters: ShantytownFilters, options: ShantytownExportListOption[], user: AuthUser): Promise<Shantytown[]> {
+async function serializeTowns(shantytownHistory: ShantytownRow[], filters: ShantytownFilters, options: ShantytownExportListOption[], user: AuthUser, exportDate: string): Promise<Shantytown[]> {
     let serializedTowns: Shantytown[];
     if (filters.actors || options.includes('actors')) {
-        serializedTowns = await loadActorsIntoShantytowns(shantytownHistory, user);
+        serializedTowns = await loadActorsIntoShantytowns(shantytownHistory, user, exportDate);
 
         // Filtrer sur les intervenants
         if (filters.actors) {
@@ -523,7 +523,7 @@ export default async function getHistoryAtGivenDate(user: AuthUser, options: Sha
 
     // Charger les intervenants
     let serializedTowns: Shantytown[];
-    serializedTowns = await serializeTowns(shantytownHistory, filters, options, user);
+    serializedTowns = await serializeTowns(shantytownHistory, filters, options, user, lastDate);
 
     // Filtrer sur les conditions de vie
     if (filters.conditions) {
