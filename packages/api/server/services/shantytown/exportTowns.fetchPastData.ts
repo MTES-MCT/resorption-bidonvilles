@@ -11,7 +11,7 @@ import { ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
 import { ShantytownExportListOption } from '#root/types/resources/ShantytownExportTypes.d';
 
 export default async function fetchPastData(user: AuthUser, options: ShantytownExportListOption[], locations: Location[], filters: ShantytownFilters, date: Date): Promise<Shantytown[]> {
-    const lastDate = moment(date).format('YYYY-MM-DD HH:mm:ss ZZ');
+    const lastDate = moment(date).add(1, 'day').format('YYYY-MM-DD HH:mm:ss ZZ');
 
     const towns = await shantytownModel.getHistoryAtGivenDate(
         user,
