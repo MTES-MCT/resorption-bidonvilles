@@ -237,11 +237,17 @@ function checkPopulation(shantytown, filters) {
         }
 
         const [min, max] = value.split("-");
-        if (min !== "" && parseInt(min, 10) > shantytown.populationTotal) {
+        if (
+            min !== "" &&
+            Number.parseInt(min, 10) > shantytown.populationTotal
+        ) {
             return false;
         }
 
-        if (max !== "" && parseInt(max, 10) < shantytown.populationTotal) {
+        if (
+            max !== "" &&
+            Number.parseInt(max, 10) < shantytown.populationTotal
+        ) {
             return false;
         }
 
@@ -393,5 +399,5 @@ function checkClosureYear(shantytown, filters) {
     }
 
     const closureYear = closedAtDate.getFullYear();
-    return filters.some((year) => parseInt(year, 10) === closureYear);
+    return filters.some((year) => Number.parseInt(year, 10) === closureYear);
 }
