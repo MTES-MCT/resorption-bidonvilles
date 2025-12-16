@@ -1,7 +1,7 @@
 import isShantytownClosed from "./isShantytownClosed";
 import isShantytownResorbed from "./isShantytownResorbed";
 
-export default function (shantytowns, filters) {
+export default function filterShantytowns(shantytowns, filters) {
     return shantytowns.filter((shantytown) => {
         if (filters.status === "open" && shantytown.status !== "open") {
             return false;
@@ -200,13 +200,13 @@ function checkLocation(shantytown, filters) {
         return true;
     }
 
-    const overseasRegions = ["01", "02", "03", "04", "06"];
+    const overseasRegions = new Set(["01", "02", "03", "04", "06"]);
     if (filters.location.typeUid === "metropole") {
-        return !overseasRegions.includes(shantytown.region?.code);
+        return !overseasRegions.has(shantytown.region?.code);
     }
 
     if (filters.location.typeUid === "outremer") {
-        return overseasRegions.includes(shantytown.region.code);
+        return overseasRegions.has(shantytown.region.code);
     }
 
     const l = shantytown[filters.location.typeUid];
@@ -379,15 +379,17 @@ function checkClosureYear(shantytown, filters) {
     const closedAtDate = (() => {
         // closedAt peut être un ISO string, un timestamp en ms, ou un timestamp en secondes
         if (typeof shantytown.closedAt === "number") {
-            const timestamp = shantytown.closedAt < 10000000000
-                ? shantytown.closedAt * 1000
-                : shantytown.closedAt;
+            const timestamp =
+                shantytown.closedAt < 10000000000
+                    ? shantytown.closedAt * 1000
+                    : shantytown.closedAt;
             return new Date(timestamp);
         }
 
         const asNumber = Number(shantytown.closedAt);
         if (Number.isFinite(asNumber)) {
-            const timestamp = asNumber < 10000000000 ? asNumber * 1000 : asNumber;
+            const timestamp =
+                asNumber < 10000000000 ? asNumber * 1000 : asNumber;
             return new Date(timestamp);
         }
 
