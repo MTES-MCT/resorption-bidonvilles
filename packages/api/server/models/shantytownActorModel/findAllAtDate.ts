@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import { ActorRow } from './ActorRow';
 
-export default (shantytownIds, exportDate: string, transaction = undefined): Promise<ActorRow[]> => {
+export default function findAllAtDate(shantytownIds, exportDate: string, transaction = undefined): Promise<ActorRow[]> {
     const ids = Array.isArray(shantytownIds) ? shantytownIds : [shantytownIds];
 
     return sequelize.query(
@@ -36,4 +36,4 @@ export default (shantytownIds, exportDate: string, transaction = undefined): Pro
             transaction,
         },
     );
-};
+}
