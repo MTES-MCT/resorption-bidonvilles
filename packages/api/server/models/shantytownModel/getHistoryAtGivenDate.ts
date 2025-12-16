@@ -177,7 +177,7 @@ function applyClosureYearFilter(shantytownHistory: ShantytownRow[], closureYearF
         return shantytownHistory;
     }
 
-    const year = parseInt(closureYearFilter, 10);
+    const year = Number.parseInt(closureYearFilter, 10);
     if (Number.isNaN(year)) {
         return shantytownHistory;
     }
