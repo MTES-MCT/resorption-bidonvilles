@@ -172,6 +172,25 @@ function applyHeatwaveFilters(shantytownHistory: ShantytownRow[], heatwaveFilter
     return shantytownHistory.filter(town => conditions.some(condition => checkHeatwaveCondition(town, condition)));
 }
 
+function applyClosureYearFilter(shantytownHistory: ShantytownRow[], closureYearFilter: string): ShantytownRow[] {
+    if (!closureYearFilter) {
+        return shantytownHistory;
+    }
+
+    const year = parseInt(closureYearFilter, 10);
+    if (Number.isNaN(year)) {
+        return shantytownHistory;
+    }
+
+    return shantytownHistory.filter((town) => {
+        if (!town.closedAt) {
+            return false;
+        }
+        const closedAtDate = new Date(town.closedAt);
+        return closedAtDate.getFullYear() === year;
+    });
+}
+
 const functionsForFiltersArray = [
     {
         name: 'exportedSitesStatus',
@@ -208,6 +227,10 @@ const functionsForFiltersArray = [
     {
         name: 'heatwave',
         fn: applyHeatwaveFilters,
+    },
+    {
+        name: 'closureYear',
+        fn: applyClosureYearFilter,
     },
 ];
 
