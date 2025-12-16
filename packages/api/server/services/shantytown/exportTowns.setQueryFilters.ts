@@ -337,6 +337,25 @@ function addClosingReasonFilter(filters: ShantytownFilters): Where {
     return buildClausesFromConditions(filters.closingReason, mapping);
 }
 
+function addClosureYearFilter(filters: ShantytownFilters): Where {
+    if (!filters.closureYear) {
+        return [];
+    }
+
+    const year = parseInt(filters.closureYear, 10);
+    if (Number.isNaN(year)) {
+        return [];
+    }
+
+    return [{
+        closure_year: {
+            query: 'EXTRACT(YEAR FROM shantytowns.closed_at)::integer',
+            operator: '=',
+            value: year,
+        },
+    }];
+}
+
 export default function setQueryFilters(filters: ShantytownFilters): Where {
     const townsFilters: Where = [];
 
@@ -351,6 +370,7 @@ export default function setQueryFilters(filters: ShantytownFilters): Where {
         addRhiFilter,
         addHeatwaveFilter,
         addClosingReasonFilter,
+        addClosureYearFilter,
     ];
 
     filterFunctions.forEach((filterFn) => {
