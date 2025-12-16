@@ -119,6 +119,14 @@ export default function (shantytowns, filters) {
         ) {
             return false;
         }
+
+        if (
+            filters.status === "close" &&
+            filters.closureYear.length > 0 &&
+            !checkClosureYear(shantytown, filters.closureYear)
+        ) {
+            return false;
+        }
         return true;
     });
 }
@@ -355,4 +363,35 @@ function checkHeatwave(shantytown, filters) {
     }
 
     return filters.length === 0;
+}
+
+function checkClosureYear(shantytown, filters) {
+    if (!shantytown.closedAt) {
+        return false;
+    }
+
+    const closedAtDate = (() => {
+        // closedAt peut être un ISO string, un timestamp en ms, ou un timestamp en secondes
+        if (typeof shantytown.closedAt === "number") {
+            const timestamp = shantytown.closedAt < 10000000000
+                ? shantytown.closedAt * 1000
+                : shantytown.closedAt;
+            return new Date(timestamp);
+        }
+
+        const asNumber = Number(shantytown.closedAt);
+        if (Number.isFinite(asNumber)) {
+            const timestamp = asNumber < 10000000000 ? asNumber * 1000 : asNumber;
+            return new Date(timestamp);
+        }
+
+        return new Date(shantytown.closedAt);
+    })();
+
+    if (Number.isNaN(closedAtDate.getTime())) {
+        return false;
+    }
+
+    const closureYear = closedAtDate.getFullYear();
+    return filters.some((year) => parseInt(year, 10) === closureYear);
 }

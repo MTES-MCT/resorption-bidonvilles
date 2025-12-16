@@ -139,6 +139,7 @@ export const useTownsStore = defineStore("towns", () => {
             // Nettoyer les filtres spécifiques aux sites fermés
             filters.properties.value.closingReason = [];
             filters.properties.value.resorbedOrClosed = [];
+            filters.properties.value.closureYear = [];
         }
     });
     watch(filters.properties, resetPagination, { deep: true });
@@ -181,6 +182,7 @@ export const useTownsStore = defineStore("towns", () => {
         // Filtres spécifiques aux sites fermés
         filters.properties.value.closingReason = [];
         filters.properties.value.resorbedOrClosed = [];
+        filters.properties.value.closureYear = [];
     }
 
     function reset() {
