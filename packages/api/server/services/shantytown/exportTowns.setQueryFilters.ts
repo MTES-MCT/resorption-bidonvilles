@@ -342,7 +342,7 @@ function addClosureYearFilter(filters: ShantytownFilters): Where {
         return [];
     }
 
-    const year = parseInt(filters.closureYear, 10);
+    const year = Number.parseInt(filters.closureYear, 10);
     if (Number.isNaN(year)) {
         return [];
     }
