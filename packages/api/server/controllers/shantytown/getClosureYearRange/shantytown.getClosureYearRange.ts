@@ -1,3 +1,4 @@
+import { type Request, Response, NextFunction } from 'express';
 import shantytownService from '#server/services/shantytown';
 
 const { getClosureYearRange } = shantytownService;
@@ -7,7 +8,7 @@ const ERROR_RESPONSES = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
-export default async (_req, res, next) => {
+export default async (_req: Request, res: Response, next: NextFunction) => {
     try {
         const yearRange = await getClosureYearRange();
         return res.status(200).send(yearRange);
