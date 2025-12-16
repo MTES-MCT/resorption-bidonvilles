@@ -82,12 +82,14 @@ import { useUserStore } from "@/stores/user.store";
 import { trackEvent } from "@/helpers/matomo";
 import filters from "./ListeDesSites.filtres";
 import sorts from "./ListeDesSites.tris";
+import useClosureYears from "@/composables/useClosureYears";
 
 import { Filter, Icon, Link, Sort } from "@resorptionbidonvilles/ui";
 
 const townsStore = useTownsStore();
 const userStore = useUserStore();
 const displayOptionalFilters = ref(false);
+const { closureYears } = useClosureYears();
 
 const isFiltered = computed(() => {
     const filteredValues = Object.values(townsStore.filters.properties);
@@ -98,7 +100,7 @@ const isFiltered = computed(() => {
     return activeFiltersCount >= 2;
 });
 
-const groupedFilters = {
+const groupedFilters = computed(() => ({
     open: {
         default: [
             filters.population,
@@ -133,6 +135,7 @@ const groupedFilters = {
             filters.target,
         ],
         optional: [
+            { ...filters.closureYear, options: closureYears.value },
             filters.origin,
             ...(userStore.hasJusticePermission ? [filters.justice] : []),
             ...(userStore.hasJusticePermission
@@ -143,7 +146,7 @@ const groupedFilters = {
             filters.population,
         ],
     },
-};
+}));
 const groupedSorts = {
     open: [sorts.cityName, sorts.builtAt, sorts.updatedAt, sorts.declaredAt],
     inProgress: [
@@ -156,7 +159,7 @@ const groupedSorts = {
 };
 
 const currentFilters = computed(() => {
-    return groupedFilters[townsStore.filters.status];
+    return groupedFilters.value[townsStore.filters.status];
 });
 
 function showOptional() {
@@ -237,5 +240,18 @@ watch(
         }
     },
     { immediate: true }
+);
+
+watch(
+    () => townsStore.filters.properties.closureYear,
+    (newValue) => {
+        if (!isProcessing.value && newValue.length > 1) {
+            isProcessing.value = true;
+            townsStore.filters.properties.closureYear = [
+                newValue[newValue.length - 1],
+            ];
+            isProcessing.value = false;
+        }
+    }
 );
 </script>
