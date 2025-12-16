@@ -15,7 +15,7 @@ export default function useClosureYears() {
             const maxYear = Number(data?.maxYear ?? data?.max_year);
 
             if (!Number.isFinite(minYear) || !Number.isFinite(maxYear)) {
-                throw new Error("Invalid closure year range");
+                throw new TypeError("Invalid closure year range");
             }
 
             const startYear = Math.max(minYear, maxYear);
