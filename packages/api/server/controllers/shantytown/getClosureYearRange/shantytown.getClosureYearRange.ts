@@ -8,7 +8,7 @@ const ERROR_RESPONSES = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
-export default async (_req: Request, res: Response, next: NextFunction) => {
+async function shantytownGetClosureYearRange(_req: Request, res: Response, next: NextFunction) {
     try {
         const yearRange = await getClosureYearRange();
         return res.status(200).send(yearRange);
@@ -19,4 +19,6 @@ export default async (_req: Request, res: Response, next: NextFunction) => {
         });
         return next(error.nativeError ?? error);
     }
-};
+}
+
+export default shantytownGetClosureYearRange;
