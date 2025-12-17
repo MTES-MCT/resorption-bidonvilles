@@ -131,7 +131,6 @@ const schema = (
             .label(labels.request_type);
     }
 
-    // organization type
     if (variant === "demande-acces") {
         schema.organization = object()
             .nullable()
@@ -150,6 +149,10 @@ const schema = (
             .required()
             .label(labels.organization);
         schema.organization_type = number()
+            .nullable()
+            .transform((value, originalValue) =>
+                originalValue === "" ? null : value
+            )
             .when("organization_category", {
                 is: "public_establishment",
                 then: (schema) => schema.required(),
@@ -157,10 +160,10 @@ const schema = (
             .label(labels.organization_type);
 
         schema.organization_public = number()
-            .when("organization_type", {
-                is: (type) => !!type,
-                then: (schema) => schema.required(),
-            })
+            .nullable()
+            .transform((value, originalValue) =>
+                originalValue === "" ? null : value
+            )
             .label(labels.organization_public);
         schema.territorial_collectivity = object()
             .nullable()
@@ -214,10 +217,29 @@ const schema = (
                     ),
             })
             .label(labels.association);
-        schema.organization_administration = string()
-            .when("organization_category", {
+        schema.organization_administration = object()
+            .nullable()
+            .transform((value, originalValue) =>
+                originalValue === "" ? null : value
+            )
+            .when(["organization_category", "organization"], {
                 is: "administration",
-                then: (schema) => schema.required(),
+                then: (schema) =>
+                    schema.required().customSchema(
+                        object({
+                            data: object({
+                                id: number().required(),
+                            }).required(),
+                        })
+                    ),
+                otherwise: (schema) =>
+                    schema.nullable().customSchema(
+                        object({
+                            data: object({
+                                id: number().required(),
+                            }).required(),
+                        })
+                    ),
             })
             .label(labels.organization_administration);
         schema.private_organization = object()
