@@ -2,7 +2,7 @@
   <div class="relative">
     <DsfrInputGroup
       :descriptionId="name"
-      :errorMessage="errors.length > 0 && results?.length === 0 ? errors : ''"
+      :errorMessage="errors.length > 0 && results?.length === 0 && !organizationSearchLabel ? errors : ''"
       :disabled="isDisabled"
       type="text"
       required
@@ -59,12 +59,12 @@
     </DsfrInputGroup>
     <div
       class="absolute left-0 top-full mt-2 w-full z-[2000] border-1 border-G300 bg-white"
-      v-if="results.length > 0"
+      v-if="organizationSearchLabel?.length >= 3 && !isLoading && !modelValue"
     >
       <div v-if="showCategory" class="flex flex-col">
         <div
           class="flex w-full border-b border-g200 min-h-8 gap-2 p-2 pb-0"
-          v-if="categoriesInSearch"
+          v-if="categoriesInSearch && results.length > 0"
           @mouseup="isClickInsideDropdown = false"
           @mouseleave="isClickInsideDropdown = false"
         >
@@ -93,9 +93,9 @@
               :class="focusedItemId === item.id ? 'bg-blue100' : ''"
               :key="item.id"
               @click="selectItem(item)"
-              :title="item.name"
+              :title="getItemLabel(item)"
             >
-              {{ item.label }}
+              {{ getItemLabel(item) }}
             </div>
           </div>
         </div>
@@ -240,10 +240,11 @@ const paginatedResults = computed(() => {
   if (showCategory.value) {
     const categorizedItems = results.value.flatMap((section) => {
       if (
-        filteredCategories.value.includes(section.title) ||
+        filteredCategories.value.includes(section.category) ||
         filteredCategories.value.length === 0
       ) {
-        return section.items.map((item) => ({
+        return section.items.map((item) =>
+          ({
           ...item,
           categoryTitle: section.title,
         }));
@@ -272,7 +273,7 @@ const paginatedResults = computed(() => {
           id: "autre",
           selectedLabel: "",
           label: "Je ne trouve pas ma structure",
-          category: "",
+          category: "other",
           data: null,
         },
       ],
@@ -400,6 +401,18 @@ function onBlur(event) {
   }, 200); // délai pour permettre les clics
 }
 
+function getItemLabel(item) {
+  if (!item?.label) {
+    return '';
+  }
+
+  if (item.category === 'territorial_collectivity' && item.departement_code) {
+    return `${item.label} (${item.departement_code})`;
+  }
+
+  return item.label;
+}
+
 function selectItem(item) {
   rawResults.value = [];
   isLoading.value = false;
@@ -410,8 +423,8 @@ function selectItem(item) {
     clear({ sendEvent: false });
   }
   sendEvent({
-    search: item.selectedLabel || item.label,
-    data: item.data,
+    search: getItemLabel(item),
+    data: {...item.data, type: item.type, category: item.category},
   });
 }
 
@@ -506,16 +519,17 @@ const results = computed(() => {
   // On réinitialise les catégories à chaque calcul
   categoriesInSearch.value = new Set();
   return rawResults.value.reduce((acc, item) => {
-    const { category } = item;
+    const { category, category_label } = item;
 
     if (!categories[category]) {
       categories[category] = {
-        title: category,
+        title: category_label,
+        category,
         items: [],
       };
       acc.push(categories[category]);
       categoriesInSearch.value.add({
-        label: category,
+        label: category_label,
         selectable: true,
         selected: false,
         small: true,
