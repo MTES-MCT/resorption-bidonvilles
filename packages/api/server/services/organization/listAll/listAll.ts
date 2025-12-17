@@ -12,6 +12,7 @@ type OrganizationAutocompleteResult = {
     fk_category?: string | null
     type_abbreviation?: string | null
     organization_type_id: number,
+    departement_code?: number | null
 };
 
 const listAll = async (search: string): Promise<OrganizationAutocompleteResult[]> => {
@@ -44,6 +45,7 @@ const listAll = async (search: string): Promise<OrganizationAutocompleteResult[]
                         similarity: row.similarity,
                         type_abbreviation: row.type_abbreviation,
                         organization_type_id: row.organization_type_id,
+                        departement_code: parseInt(row.departements_codes[0], 10) ?? null,
                     });
                 }
 
