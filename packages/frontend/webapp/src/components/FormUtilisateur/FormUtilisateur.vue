@@ -103,7 +103,7 @@
 
         <template v-slot:button="{ disabled }">
             <p class="text-center">
-                <DsfrButton :disabled="disabled" type="submit"
+                <DsfrButton type="submit" :disabled="disabled"
                     ><slot name="submit"
                 /></DsfrButton>
             </p>
@@ -202,13 +202,16 @@ const onOrganizationChange = (value) => {
     if (value === undefined) {
         form.value.setFieldValue("organisation", null);
         form.value.setFieldValue("organization_category", "");
+        form.value.setFieldValue("organization_public", "");
         form.value.setFieldValue("territorial_collectivity", "");
         form.value.setFieldValue("association", "");
         form.value.setFieldValue("private_organization", "");
         return;
     }
     if (value?.data !== null) {
+        form.value.setFieldValue("organization_type", value.data.type);
         form.value.setFieldValue("organization_category", value.data.category);
+        form.value.setFieldValue("organization_public", value.data.id);
         form.value.setFieldValue(value.data.category, value);
     } else if (value?.data === null) {
         if (allowNewOrganization.value === true) {
