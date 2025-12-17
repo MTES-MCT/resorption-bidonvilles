@@ -61,7 +61,10 @@ const autocompleteFn = async (value) => {
             label: label,
             name: org.name,
             selectedLabel: label,
-            category: org.type_abbreviation || org.type,
+            category: org.category,
+            category_label: org.type_abbreviation || org.type,
+            departement_code: org.departement_code || null,
+            type: org.organization_type_id || null,
             data: {
                 id: org.id,
                 category: org.category,
