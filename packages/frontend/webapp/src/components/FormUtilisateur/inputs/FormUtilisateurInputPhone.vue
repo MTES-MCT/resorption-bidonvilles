@@ -15,15 +15,12 @@
             <span class="font-bold not-italic" aria-hidden="true">{{
                 label
             }}</span>
-            <span class="fr-hint-text"
-                >Format attendu : (+33) 1 22 33 44 55</span
-            >
         </template>
     </DsfrInputGroup>
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { defineProps, toRefs, watch } from "vue";
 import { useField, useIsSubmitting } from "vee-validate";
 
 const props = defineProps({
@@ -33,9 +30,11 @@ const props = defineProps({
 const { label, disabled } = toRefs(props);
 
 const isSubmitting = useIsSubmitting();
-const {
-    value: phone,
-    errors,
-    handleBlur,
-} = useField("phone", "required|regex:^[0-9 ]+$");
+const { value: phone, errors, handleBlur } = useField("phone", "required");
+
+watch(phone, (newValue) => {
+    if (newValue) {
+        phone.value = newValue.replace(/[^0-9+]/g, "");
+    }
+});
 </script>
