@@ -2,6 +2,7 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import permissionUtils from '#server/utils/permission';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
+import validateSafeWhereClause from '#server/models/_common/validateSafeWhereClause';
 import { WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import { Origin } from '#root/types/resources/DepartementMetrics.d';
 import { ShantytownLivingConditionsRawData } from '#root/types/resources/ShantytownLivingConditionsRawData.d';
@@ -38,6 +39,8 @@ export default async (user, departementCode: string): Promise<DepartementMetrics
         departementCode,
     };
     const permissionWhereClause = stringifyWhereClause('shantytowns', [permissionWhereClauseGroup], replacements);
+
+    validateSafeWhereClause(permissionWhereClause);
 
     return sequelize.query(
         `

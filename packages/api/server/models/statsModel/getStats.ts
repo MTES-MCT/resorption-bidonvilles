@@ -2,6 +2,7 @@ import { sequelize } from '#db/sequelize';
 import { BindOrReplacements, QueryTypes } from 'sequelize';
 import permissionUtils from '#server/utils/permission';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
+import validateSafeWhereClause from '#server/models/_common/validateSafeWhereClause';
 import { WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import { Location } from '#server/models/geoModel/Location.d';
 import decomposeForDiagramm from './_common/decomposeForDiagramm';
@@ -15,6 +16,8 @@ export default async (user: User, location: Location) => {
     const permissionWhereClauseGroup:WhereClauseGroup = pWhere().can(user).do('list', 'shantytown');
     const replacements: BindOrReplacements = { userId: user.id };
     const permissionWhereClause = stringifyWhereClause('shantytowns', [permissionWhereClauseGroup], replacements);
+
+    validateSafeWhereClause(permissionWhereClause);
 
     let where = '';
     let shantytownWhere = '';

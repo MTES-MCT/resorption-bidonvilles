@@ -4,6 +4,7 @@ import permissionUtils from '#server/utils/permission';
 import getAddressSimpleOf from '#server/models/shantytownModel/_common/getAddressSimpleOf';
 import getUsenameOf from '#server/models/shantytownModel/_common/getUsenameOf';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
+import validateSafeWhereClause from '#server/models/_common/validateSafeWhereClause';
 
 const { where } = permissionUtils;
 
@@ -44,7 +45,9 @@ export default async (user, shantytownIds): Promise<IncomingTown[]> => {
     const replacements = {};
     const whereClauses = ['incoming.fk_shantytown IN (:ids)'];
     if (Object.keys(clauseGroup).length > 0) {
-        whereClauses.push(stringifyWhereClause('shantytowns', [clauseGroup], replacements));
+        const permissionWhereClause = stringifyWhereClause('shantytowns', [clauseGroup], replacements);
+        validateSafeWhereClause(permissionWhereClause);
+        whereClauses.push(permissionWhereClause);
     }
 
     const raw: IncomingTownRow[] = await sequelize.query(

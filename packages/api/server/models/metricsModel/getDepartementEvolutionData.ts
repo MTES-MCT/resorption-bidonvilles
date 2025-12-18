@@ -3,6 +3,7 @@ import { QueryTypes } from 'sequelize';
 import moment from 'moment';
 import permissionUtils from '#server/utils/permission';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
+import validateSafeWhereClause from '#server/models/_common/validateSafeWhereClause';
 import { WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import { Origin } from '#root/types/resources/DepartementMetrics.d';
 import { ShantytownLivingConditionsRawData } from '#root/types/resources/ShantytownLivingConditionsRawData.d';
@@ -31,6 +32,8 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
         to: `${moment(to).format('YYYY-MM-DD')} 23:59:59`,
     };
     const permissionWhereClause = stringifyWhereClause('shantytowns', [permissionWhereClauseGroup], replacements);
+
+    validateSafeWhereClause(permissionWhereClause);
 
     return sequelize.query(
         `SELECT

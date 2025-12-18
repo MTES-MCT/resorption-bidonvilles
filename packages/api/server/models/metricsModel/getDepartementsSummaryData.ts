@@ -2,6 +2,7 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import permissionUtils from '#server/utils/permission';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
+import validateSafeWhereClause from '#server/models/_common/validateSafeWhereClause';
 import { WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Origin } from '#root/types/resources/DepartementMetrics.d';
@@ -30,6 +31,9 @@ const getDepartementsSummaryData = async (user: AuthUser, departementCodes: stri
     };
 
     const permissionWhereClause = stringifyWhereClause('shantytowns', [permissionWhereClauseGroup], replacements);
+
+    // Valider la clause WHERE avant de l'injecter dans la requête SQL
+    validateSafeWhereClause(permissionWhereClause);
 
     return sequelize.query(
         `
