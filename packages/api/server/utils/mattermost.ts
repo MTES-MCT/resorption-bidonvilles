@@ -1,5 +1,6 @@
 import IncomingWebhook from 'node-mattermost';
 import config from '#server/config';
+import statusDetails from '#server/utils/statusDetails';
 import Action from '#root/types/resources/Action.d';
 import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
 import { CommentAuthor } from '#root/types/resources/CommentAuthor.d';
@@ -45,15 +46,7 @@ const formatDate = ((dateToFormat: Date): string => {
 });
 
 const formatTownStatus = (status: string): string => {
-    const statusMapping: { [key: string]: string } = {
-        resorbed: 'Fermé suite à une résorption progressive du site',
-        closed_by_city_admin: 'Fermé sur décision municipale',
-        other: 'Autre',
-        unknown: 'Inconnu',
-        open: 'Ouvert',
-        closed_by_pref_admin: 'Fermé sur décision préfectorale',
-        closed_by_justice: 'Fermé sur une décision de justice',
-    };
+    const statusMapping: { [key: string]: string } = statusDetails;
     return statusMapping[status] || status;
 };
 
