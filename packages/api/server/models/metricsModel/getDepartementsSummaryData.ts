@@ -5,6 +5,7 @@ import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 import { WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Origin } from '#root/types/resources/DepartementMetrics.d';
+import { ShantytownLivingConditionsRawData } from '#root/types/resources/ShantytownLivingConditionsRawData.d';
 
 const { where: pWhere } = permissionUtils;
 
@@ -19,31 +20,8 @@ export type DepartementsSummaryRawData = {
     police_status: string,
     origins: Origin[],
     out_of_date: boolean,
-    waterAccessType: string,
-    waterAccessIsPublic: boolean | null,
-    waterAccessIsContinuous: boolean | null,
-    waterAccessIsLocal: boolean | null,
-    waterAccessIsClose: boolean | null,
-    waterAccessIsUnequal: boolean | null,
-    waterAccessHasStagnantWater: boolean | null,
-    toiletTypes: string[],
-    sanitaryAccessOpenAirDefecation: boolean | null,
-    sanitaryAccessWorkingToilets: boolean | null,
-    sanitaryAccessToiletsAreInside: boolean | null,
-    sanitaryAccessToiletsAreLighted: boolean | null,
-    sanitaryAccessHandWashing: boolean | null,
-    electricityAccess: boolean | null,
-    electricityAccessTypes: string[],
-    electricityAccessIsUnequal: boolean | null,
-    trashIsPiling: boolean | null,
-    trashEvacuationIsClose: boolean | null,
-    trashEvacuationIsSafe: boolean | null,
-    trashEvacuationIsRegular: boolean | null,
-    trashBulkyIsPiling: boolean | null,
-    pestAnimals: boolean | null,
-    firePrevention: boolean | null,
     heatwave_status: boolean,
-};
+} & ShantytownLivingConditionsRawData;
 
 const getDepartementsSummaryData = async (user: AuthUser, departementCodes: string[]): Promise<DepartementsSummaryRawData[]> => {
     const permissionWhereClauseGroup: WhereClauseGroup = pWhere().can(user).do('list', 'shantytown');

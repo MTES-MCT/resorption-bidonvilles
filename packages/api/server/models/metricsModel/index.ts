@@ -1,13 +1,13 @@
 import getDepartementData from './getDepartementData';
-import getDepartementsSummaryData from './getDepartementsSummaryData';
 import getDepartementEvolutionData from './getDepartementEvolutionData';
+import getDepartementsSummaryData from './getDepartementsSummaryData';
 import getNationData from './getNationData';
 import getNationalEvolutionData from './getNationalEvolutionData';
 
 export default {
     getDepartementData,
-    getDepartementsSummaryData,
     getDepartementEvolutionData,
+    getDepartementsSummaryData,
     getNationData,
     getNationalEvolutionData,
 };
