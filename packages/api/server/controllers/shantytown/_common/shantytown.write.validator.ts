@@ -659,13 +659,14 @@ export default mode => ([
                     case 'create':
                         wording = 'de déclarer un';
                         break;
-                    case 'edit':
+                    case 'update':
                         wording = 'de modifier un';
                         break;
                     case 'report':
                         wording = 'd\'informer d\'un nouveau';
                         break;
                     default:
+                        wording = 'd\'agir sur un';
                         break;
                 }
                 throw new Error(`Vous n'avez pas le droit ${wording} site sur ce territoire`);
