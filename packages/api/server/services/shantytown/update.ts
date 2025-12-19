@@ -5,6 +5,7 @@ import shantytownModel from '#server/models/shantytownModel';
 import attachmentService from '#server/services/attachment';
 import shantytownParcelOwnerService from '#server/services/shantytownParcelOwner';
 import ServiceError from '#server/errors/ServiceError';
+import { triggerReinstallationAlert } from '#server/utils/mattermost';
 import find from './find';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 
@@ -20,6 +21,12 @@ type DecreeAttachments = {
 };
 
 export default async (shantytown, user, decreeAttachments: DecreeAttachments): Promise<Shantytown> => {
+    // Récupérer le site avant modification pour comparer les changements
+    const originalShantytown = await find(user, shantytown.id);
+    if (!originalShantytown) {
+        throw new ServiceError('fetch_failed', new Error('Impossible de retrouver le site en base de données'));
+    }
+
     const transaction = await sequelize.transaction();
 
     try {
@@ -249,6 +256,21 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
         }
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
+    }
+
+    // Envoie une notification Mattermost seulement si l'une des informlations liées à la réinstallation change
+    const reinstallationChanged = originalShantytown.isReinstallation !== updatedShantytown.isReinstallation
+        || originalShantytown.reinstallationComments !== updatedShantytown.reinstallationComments
+        || JSON.stringify(originalShantytown.reinstallationIncomingTowns.map(t => t.id))
+        !== JSON.stringify(updatedShantytown.reinstallationIncomingTowns.map(t => t.id));
+
+    if (updatedShantytown.isReinstallation === true && reinstallationChanged) {
+        try {
+            await triggerReinstallationAlert(updatedShantytown, user);
+        } catch (err) {
+            // eslint-disable-next-line no-console
+            console.error(`Error with reinstallation Mattermost webhook : ${err.message}`);
+        }
     }
 
     return updatedShantytown;
