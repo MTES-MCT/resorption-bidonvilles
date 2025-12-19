@@ -7,7 +7,7 @@ import insertElectricityAccessType from '#server/models/electricityAccessTypesMo
 import shantytownParcelOwnerService from '#server/services/shantytownParcelOwner';
 import insertIncomingTown from '#server/models/incomingTownsModel/create';
 import getLocationWatchers from '#server/models/userModel/getLocationWatchers';
-import { triggerShantytownCreationAlert } from '#server/utils/mattermost';
+import { triggerShantytownCreationAlert, triggerReinstallationAlert } from '#server/utils/mattermost';
 import baseShantytown from '#server/services/shantytown/_common/baseShantytown';
 import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
@@ -100,6 +100,16 @@ export default async (townData: TownInput, user: AuthUser) => {
     } catch (err) {
         // eslint-disable-next-line no-console
         console.error(`Error with shantytown creation Mattermost webhook : ${err.message}`);
+    }
+
+    // Send a Mattermost alert for reinstallation, if it fails, do nothing
+    if (town.isReinstallation === true) {
+        try {
+            await triggerReinstallationAlert(town, user);
+        } catch (err) {
+            // eslint-disable-next-line no-console
+            console.error(`Error with reinstallation Mattermost webhook : ${err.message}`);
+        }
     }
 
     // Send a notification to all users of the related departement (asynchronously, don't wait)
