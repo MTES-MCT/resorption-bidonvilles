@@ -51,7 +51,7 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
         if (parcelError.code === 'parcel_fetch_failed') {
             throw parcelError;
         }
-        throw new ServiceError('parcel_fetch_failed', new Error(`Parcelle ${parcelId} introuvable dans la base des propriétaires fonciers non anonymisés.`));
+        throw new ServiceError('parcel_fetch_failed', new Error(`Parcelle ${parcelId} introuvable dans la base des propriétaires fonciers.`));
     }
 
     // Récupérer la liste des propriétaires de la parcelle
@@ -65,7 +65,7 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
     }
 
     if (!owners) {
-        throw new ServiceError('owner_fetch_failed', new Error(`Propriétaire de la parcelle ${parcelId} introuvable dans la base des propriétaires fonciers non anonymisés.`));
+        throw new ServiceError('owner_fetch_failed', new Error(`Propriétaire de la parcelle ${parcelId} introuvable dans la base des propriétaires fonciers.`));
     }
 
     // Envoyer le mail
