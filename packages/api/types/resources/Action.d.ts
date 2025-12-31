@@ -176,6 +176,7 @@ export interface ShantytownAction extends IAction {
 
 interface GenericAction extends IAction {
     type: 'action',
+    displayId: string,
     started_at: number,
     ended_at: number | null,
     goals: string | null,

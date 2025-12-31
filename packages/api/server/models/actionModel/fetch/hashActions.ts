@@ -5,9 +5,11 @@ export type ActionHash = { [key: number]: Action };
 
 export default function hashActions(actions: ActionSelectRow[]): ActionHash {
     return actions.reduce((acc, row) => {
+        const paddedActionId = String(row.action_id).padStart(4, '0');
         acc[row.action_id] = {
             type: 'action',
             id: row.action_id,
+            displayId,
             name: row.name,
             started_at: new Date(row.started_at).getTime(),
             ended_at: row.ended_at !== null ? new Date(row.ended_at).getTime() : null,
