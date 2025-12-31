@@ -5,7 +5,10 @@ export type ActionHash = { [key: number]: Action };
 
 export default function hashActions(actions: ActionSelectRow[]): ActionHash {
     return actions.reduce((acc, row) => {
+        const createdYear = new Date(row.created_at).getFullYear();
         const paddedActionId = String(row.action_id).padStart(4, '0');
+        const displayId = `ID${row.departement_code}${createdYear}${paddedActionId}`;
+
         acc[row.action_id] = {
             type: 'action',
             id: row.action_id,
