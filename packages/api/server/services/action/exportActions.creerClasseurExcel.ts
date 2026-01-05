@@ -360,7 +360,6 @@ export default (data: ActionReportRow[]) => {
     // Itérer sur chaque data de département
     donneesParDepartement.forEach((donneeParDepartement: DepartementObject) => {
         const worksheet = addDepartmentWorksheet(workbook, donneeParDepartement.departement);
-        // const worksheet = workbook.addWorksheet(donneeParDepartement.departement === 'Tous' ? `${donneeParDepartement.departement}` : `Dépt ${donneeParDepartement.departement}`);
         worksheet.properties.defaultColWidth = 25; // Largeur par défaut des colonnes
 
         // Ajouter les entêtes de sections
