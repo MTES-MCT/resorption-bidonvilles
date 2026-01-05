@@ -96,8 +96,7 @@ const {
     readonlyValues,
 } = toRefs(props);
 
-const hasBackground = (index) =>
-    labelsWithoutBackground.value.includes(index) === false;
+const hasBackground = (index) => !labelsWithoutBackground.value.includes(index);
 
 const displayValue = (index) =>
     readonlyValues.value[index] !== undefined &&
