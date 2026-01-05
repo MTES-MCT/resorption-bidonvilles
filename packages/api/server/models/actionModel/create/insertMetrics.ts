@@ -27,7 +27,7 @@ const COLUMNS = [
     'scolaire_nombre_autre',
     'scolaire_mineur_scolarise_dans_annee',
     'created_by',
-];
+] as const;
 
 export default (actionId: number, authorId: number, data: ActionInput, transaction: Transaction) => {
     const numberOfRows = Object.keys(data.indicateurs).length;
