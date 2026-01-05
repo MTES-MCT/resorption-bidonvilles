@@ -131,7 +131,7 @@ const totalLabels = [
     "Tous niveaux scolaires confondus (3-18 ans)",
     `<span class='text-tertiaryA11Y'>En maternelle</span>`,
     `<span class='text-tertiaryA11Y'>En élémentaire</span>`,
-    `<span class='text-tertiaryA11Y'>En collège</span>`,
+    `<span class='text-tertiaryA11Y'>Au collège</span>`,
     `<span class='text-tertiaryA11Y'>Au lycée ou en formation professionnelle</span>`,
 ];
 
