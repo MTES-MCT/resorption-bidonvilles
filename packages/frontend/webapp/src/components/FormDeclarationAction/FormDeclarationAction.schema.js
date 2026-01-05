@@ -358,7 +358,7 @@ const createIndicateurFields = () => {
                                 const sum = calculateSchoolLevelsSum(
                                     this.parent
                                 );
-                                return value >= sum;
+                                return Number.isInteger(value) && value >= sum;
                             }
                         );
                 }
