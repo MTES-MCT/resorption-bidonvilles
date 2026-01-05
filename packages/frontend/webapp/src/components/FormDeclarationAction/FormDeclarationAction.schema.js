@@ -123,6 +123,31 @@ function createScolaireMineurScolariseDansAnneeValidator(key) {
                     const sum = calculateSchoolLevelsSum(this.parent);
                     return Number.isInteger(value) && value >= sum;
                 }
+            )
+            .test(
+                "requires-nombre-mineurs",
+                "Ne peut être renseigné que si le nombre total de mineurs concernés par l'action est également renseigné",
+                function (value) {
+                    if (value === null) {
+                        return true;
+                    }
+                    const { nombre_mineurs } = this.parent;
+                    return Number.isInteger(nombre_mineurs);
+                }
+            )
+            .test(
+                "max-nombre-mineurs",
+                "Ne peut pas dépasser le nombre total de mineurs concernés par l'action",
+                function (value) {
+                    if (value === null) {
+                        return true;
+                    }
+                    const { nombre_mineurs } = this.parent;
+                    return (
+                        !Number.isInteger(nombre_mineurs) ||
+                        value <= nombre_mineurs
+                    );
+                }
             );
     });
 }

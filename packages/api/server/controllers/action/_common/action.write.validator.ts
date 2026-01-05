@@ -635,6 +635,16 @@ export default (mode: 'create' | 'update') => [
             const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
             const indicateur = req.body.indicateurs[key];
 
+            // Vérifier que nombre_mineurs est renseigné
+            if (!Number.isInteger(indicateur.nombre_mineurs)) {
+                throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut être renseigné que si le nombre total de mineurs concernés par l\'action est également renseigné');
+            }
+
+            // Vérifier que la valeur ne dépasse pas le nombre de mineurs
+            if (value > indicateur.nombre_mineurs) {
+                throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut pas dépasser le nombre total de mineurs concernés par l\'action');
+            }
+
             // Vérifier par rapport au nombre total d'enfants scolarisés
             const totalScolarises = [
                 'scolaire_nombre_maternelle',
