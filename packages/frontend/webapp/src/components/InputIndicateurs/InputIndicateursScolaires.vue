@@ -58,17 +58,26 @@
                     <span class="text-tertiaryA11Y">cette année scolaire</span>
                 </IndicateursLabel>
             </template>
+
+            <template v-slot:right>
+                <div class="grid grid-cols-1 flex-1 w-full">
+                    <div class="flex items-center px-4 min-h-20 bg-G200 w-full">
+                        <TextInputUi
+                            name="scolaire_mineur_scolarise_dans_annee"
+                            v-model="data.scolaire_mineur_scolarise_dans_annee"
+                            withoutMargin
+                            variant="minimal"
+                            size="sm"
+                            :inlineError="true"
+                            :errors="
+                                errors.scolaire_mineur_scolarise_dans_annee ||
+                                []
+                            "
+                        />
+                    </div>
+                </div>
+            </template>
         </IndicateursTableRow>
-        <IndicateursTableRowDataInputs
-            :labels="[
-                `<span>Mineurs dont la scolarité a débuté <span class='text-tertiaryA11Y'>cette année scolaire</span></span>`,
-            ]"
-            :fields="['scolaire_mineur_scolarise_dans_annee']"
-            :data="data"
-            :errors="errors"
-            :labels-without-background="[0]"
-            withoutTopBorder
-        />
 
         <IndicateursTableRow>
             <template v-slot:label>
@@ -109,6 +118,7 @@ import IndicateursTableRowDataInputs from "@/components/IndicateursTable/Indicat
 import IndicateursTableRow from "@/components/IndicateursTable/IndicateursTableRow.vue";
 import IndicateursLabel from "@/components/IndicateursLabel/IndicateursLabel.vue";
 
+import { TextInputUi } from "@resorptionbidonvilles/ui";
 import IndicateursGrid from "@/components/IndicateursGrid/IndicateursGrid.vue";
 import IndicateursLabelAutres from "@/components/IndicateursLabel/IndicateursLabelAutres.vue";
 const props = defineProps({
