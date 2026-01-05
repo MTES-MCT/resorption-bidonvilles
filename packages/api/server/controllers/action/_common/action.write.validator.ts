@@ -5,7 +5,7 @@ import shantytownModel from '#server/models/shantytownModel';
 import topicModel from '#server/models/topicModel';
 import userModel from '#server/models/userModel';
 import can from '#server/utils/permission/can';
-import { body } from 'express-validator';
+import { body, ValidationChain } from 'express-validator';
 import validator from 'validator';
 
 const { isLatLong } = validator;
@@ -73,7 +73,7 @@ const createIndicatorValidator = (
         maxComparisons = [], // Tableau de comparaisons: [{ field, errorMessage, priority }]
     } = options;
 
-    const validators = [];
+    const validators: ValidationChain[] = [];
 
     // Validation principale
     let indicatorValidator = body(fieldName);
