@@ -87,8 +87,6 @@ const createIndicatorValidator = (
         .optional({ nullable: true, checkFalsy: false })
         .customSanitizer(value => (value === '' || value === null || value === undefined ? null : Number.parseInt(value, 10)))
         .custom((value) => {
-            // eslint-disable-next-line no-console
-            console.log('Test de ', fieldName, 'dont la valeur est ', value);
             if (value === null || value === undefined) {
                 return true; // La valeur est optionnelle, donc null/undefined est valide
             }
