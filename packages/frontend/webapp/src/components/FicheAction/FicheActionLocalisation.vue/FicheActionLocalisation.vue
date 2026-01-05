@@ -4,6 +4,12 @@
             <p>
                 <Icon icon="location-dot" class="mr-2" />
                 <span class="font-bold">{{ label }}</span>
+                <span
+                    v-if="action.location_type === 'sur_site'"
+                    class="ml-1 font-bold"
+                >
+                    ({{ action.location_shantytowns?.length || 0 }})
+                </span>
             </p>
 
             <FicheActionLocalisationAdresse
