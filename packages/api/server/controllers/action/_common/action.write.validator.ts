@@ -34,7 +34,7 @@ function canWriteManagersAndDepartement(mode: 'create' | 'update', req) {
 // Fonction factory qui génère un validateur d'utilisateurs
 // initialSanitizer (optionnel) est appliqué avant les contrôles de format,
 // par exemple pour conserver les pilotes actuels quand l'utilisateur n'a pas le droit de les modifier
-const createUserValidator = (fieldName, displayName, initialSanitizer) => {
+const createUserValidator = (fieldName: string | string[] | undefined, displayName: string, initialSanitizer?) => {
     let validator = body(fieldName);
 
     if (initialSanitizer) {
