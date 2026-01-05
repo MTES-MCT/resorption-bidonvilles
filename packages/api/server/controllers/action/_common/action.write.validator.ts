@@ -6,7 +6,7 @@ import topicModel from '#server/models/topicModel';
 import userModel from '#server/models/userModel';
 import can from '#server/utils/permission/can';
 import hasMetricValues from '#server/services/action/_common/hasMetricValues';
-import { body } from 'express-validator';
+import { body, ValidationChain } from 'express-validator';
 import validator from 'validator';
 
 const { isLatLong } = validator;
@@ -35,13 +35,13 @@ function canWriteManagersAndDepartement(mode: 'create' | 'update', req) {
 // initialSanitizer (optionnel) est appliqué avant les contrôles de format,
 // par exemple pour conserver les pilotes actuels quand l'utilisateur n'a pas le droit de les modifier
 const createUserValidator = (fieldName: string | string[] | undefined, displayName: string, initialSanitizer?) => {
-    let validator = body(fieldName);
+    let chain = body(fieldName);
 
     if (initialSanitizer) {
-        validator = validator.customSanitizer(initialSanitizer);
+        chain = chain.customSanitizer(initialSanitizer);
     }
 
-    return validator
+    return chain
         .exists({ checkNull: true }).bail()
         .withMessage(`Le champ "${displayName}" est obligatoire`)
         .isArray().bail()
@@ -89,7 +89,7 @@ const createIndicatorValidator = (
         maxComparisons = [], // Tableau de comparaisons: [{ field, errorMessage, priority }]
     } = options;
 
-    const validators = [];
+    const validators: ValidationChain[] = [];
 
     // Validation principale
     let indicatorValidator = body(fieldName);
