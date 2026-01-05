@@ -31,7 +31,7 @@ function canWriteManagersAndDepartement(mode: 'create' | 'update', req) {
 }
 
 // Fonction factory qui génère un validateur d'utilisateurs
-const createUserValidator = (fieldName, displayName) => body(fieldName)
+const createUserValidator = (fieldName: string | string[] | undefined, displayName: string) => body(fieldName)
     .exists({ checkNull: true }).bail()
     .withMessage(`Le champ "${displayName}" est obligatoire`)
     .isArray().bail()
