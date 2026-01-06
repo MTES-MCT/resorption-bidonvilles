@@ -59,6 +59,6 @@ export default function validateSafeWhereClause(whereClause: string): void {
     });
 
     if (hasUnauthorizedKeyword) {
-        throw new Error('Clause WHERE invalidc: contient des mots-clés SQL non autorisés');
+        throw new Error('Clause WHERE invalide: contient des mots-clés SQL non autorisés');
     }
 }
