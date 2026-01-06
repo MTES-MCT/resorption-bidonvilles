@@ -34,7 +34,7 @@ export type DepartementMetricsRawData = {
 } & ShantytownLivingConditionsRawData;
 
 export default async (user, departementCode: string): Promise<DepartementMetricsRawData[]> => {
-    const permissionWhereClauseGroup:WhereClauseGroup = pWhere().can(user).do('list', 'shantytown');
+    const permissionWhereClauseGroup: WhereClauseGroup = pWhere().can(user).do('list', 'shantytown');
     const replacements = {
         departementCode,
     };
