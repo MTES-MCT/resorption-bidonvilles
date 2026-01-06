@@ -4,6 +4,8 @@ import sinonChai from 'sinon-chai';
 
 import { rewiremock } from '#test/rewiremock';
 import ServiceError from '#server/errors/ServiceError';
+import { AuthUser } from '#server/middlewares/authMiddleware';
+import { serialized as fakeUser } from '#test/utils/user';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -37,7 +39,7 @@ rewiremock.disable();
 
 describe('services/metrics', () => {
     describe('getDepartementsSummaryMetrics()', () => {
-        const user: any = {};
+        const user: AuthUser = fakeUser();
         const departementCodes = ['04', '13'];
 
         beforeEach(() => {
