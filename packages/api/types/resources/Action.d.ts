@@ -50,6 +50,7 @@ export type ActionItem = {
     last_comment: string | null,
     last_comment_date: string | null,
     last_update: string | null,
+    metrics_updated_at: string | null,
 };
 
 export type ActionReportRow = {
@@ -190,6 +191,7 @@ interface GenericAction extends IAction {
     location_shantytowns: ActionShantytown[] | null,
     managers: ActionOrganization[],
     metrics: ActionMetrics[],
+    metricsUpdatedAt: number | null,
     finances?: ActionFinances,
     created_at: number,
     created_by: ActionUser,
