@@ -52,11 +52,10 @@ export default function validateSafeWhereClause(whereClause: string): void {
     }
 
     const words = whereClause.match(/\b[a-zA-Z]+\b/g) || [];
-    const allowedWords = ['AND', 'OR', 'IN', 'NOT', 'IS', 'NULL', 'TRUE', 'FALSE'];
-
+    const allowedWords = new Set(['AND', 'OR', 'IN', 'NOT', 'IS', 'NULL', 'TRUE', 'FALSE']);
     const hasUnauthorizedKeyword = words.some((word) => {
         const upperWord = word.toUpperCase();
-        return word === upperWord && !allowedWords.includes(upperWord);
+        return word === upperWord && !allowedWords.has(upperWord);
     });
 
     if (hasUnauthorizedKeyword) {
