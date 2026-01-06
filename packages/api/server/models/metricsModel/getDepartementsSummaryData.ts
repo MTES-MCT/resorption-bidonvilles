@@ -81,8 +81,9 @@ const getDepartementsSummaryData = async (user: AuthUser, departementCodes: stri
             shantytowns.police_status,
             shantytown_computed_origins.origins,
             CASE
-                WHEN last_comments.last_comment_at IS NOT NULL AND last_comments.last_comment_at > COALESCE(shantytowns.updated_at, shantytowns.created_at)
-                    THEN COALESCE(shantytowns.updated_at, shantytowns.created_at)
+                WHEN last_comments.last_comment_at IS NOT NULL 
+                AND last_comments.last_comment_at > COALESCE(shantytowns.updated_at, shantytowns.created_at)
+                THEN last_comments.last_comment_at
                 ELSE COALESCE(shantytowns.updated_at, shantytowns.created_at)
             END < (CURRENT_DATE - INTERVAL '6 month') AS out_of_date,
             shantytowns.water_access_type::text AS "waterAccessType",
