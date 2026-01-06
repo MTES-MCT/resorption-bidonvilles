@@ -14,11 +14,17 @@
             <div
                 class="mb-4 px-6 -mt-1 pt-px flex flex-col sm:flex-row justify-between sm:gap-2"
             >
-                <div class="-mt-[1px]">
+                <div class="flex flex-col sm:flex-row gap-2 -mt-[1px]">
                     <DsfrBadge
                         :label="actionPeriod"
                         noIcon
                         type="info"
+                        class="mt-1 gap-2 lg:place-self-end text-xs items-center py-2"
+                    />
+                    <DsfrBadge
+                        :label="metricsUpdatedAtLabel"
+                        noIcon
+                        :type="metricsUpdatedAtBadgeType"
                         class="mt-1 gap-2 lg:place-self-end text-xs items-center py-2"
                     />
                 </div>
@@ -77,6 +83,8 @@
 <script setup>
 import { computed, toRefs, ref } from "vue";
 import formatDate from "@common/utils/formatDate";
+import formatMetricsUpdatedAt from "@/utils/formatMetricsUpdatedAt";
+import getSince from "@/utils/getSince";
 import focusClasses from "@common/utils/focus_classes";
 
 import { RouterLink } from "vue-router";
@@ -130,6 +138,18 @@ const attachmentsLabel = computed(() => {
         : commentsAttachments === 0
         ? null
         : `${commentsAttachments} Document partagé`;
+});
+
+const metricsUpdatedAtLabel = computed(() => {
+    return formatMetricsUpdatedAt(action.value);
+});
+
+const metricsUpdatedAtBadgeType = computed(() => {
+    if (!action.value.metricsUpdatedAt) {
+        return "warning";
+    }
+    const { months } = getSince(action.value.metricsUpdatedAt / 1000);
+    return months >= 3 ? "error" : "success";
 });
 
 const navigateTo = (target) => {
