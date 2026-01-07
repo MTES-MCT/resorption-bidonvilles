@@ -51,6 +51,11 @@ function getDefaultPropertiesFilters() {
     };
 }
 
+function getLastCommentCreatedAt(comments) {
+    const lastComment = getMostRecentComment(comments);
+    return lastComment.createdAt;
+}
+
 export const useTownsStore = defineStore("towns", () => {
     const towns = ref([]);
     const hash = ref({});
@@ -206,11 +211,6 @@ export const useTownsStore = defineStore("towns", () => {
         }
     }
 
-    function getLastCommentCreatedAt(comments) {
-        const lastComment = getMostRecentComment(comments);
-        return lastComment.createdAt;
-    }
-
     function updateLastUpdatedAt(shantytownId, lastCommentDate) {
         if (hash.value[shantytownId]) {
             hash.value[shantytownId].lastUpdatedAt = lastCommentDate;
@@ -258,7 +258,7 @@ export const useTownsStore = defineStore("towns", () => {
         filteredTowns,
         resetFilters,
         async fetchTowns() {
-            if (isLoading.value === true) {
+            if (isLoading.value) {
                 return;
             }
 
