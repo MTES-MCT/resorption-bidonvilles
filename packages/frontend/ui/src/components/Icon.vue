@@ -25,13 +25,10 @@ export default {
 
     computed: {
         iconFull() {
-            if (!this.icon) {
-                return "fa-solid fa-question";
-            }
             if (Array.isArray(this.icon)) {
                 return this.icon.join(" ");
             }
-            if (typeof this.icon !== 'string') {
+            if (!this.icon || typeof this.icon !== 'string') {
                 return "fa-solid fa-question";
             }
             return this.icon.includes("fa-") ? this.icon : `fa-solid fa-${this.icon}`;
