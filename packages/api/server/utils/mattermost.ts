@@ -1,5 +1,6 @@
 import IncomingWebhook from 'node-mattermost';
 import config from '#server/config';
+import statusDetails from '#server/utils/statusDetails';
 import Action from '#root/types/resources/Action.d';
 import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
 import { CommentAuthor } from '#root/types/resources/CommentAuthor.d';
@@ -38,11 +39,16 @@ const checkLocation: (user: User) => string = (user) => {
 };
 
 const formatDate = ((dateToFormat: Date): string => {
-    const day = dateToFormat.getUTCDate();
-    const month = dateToFormat.getUTCMonth() + 1;
+    const day = String(dateToFormat.getUTCDate()).padStart(2, '0');
+    const month = String(dateToFormat.getUTCMonth() + 1).padStart(2, '0');
     const year = dateToFormat.getUTCFullYear();
     return `${day}/${month}/${year}`;
 });
+
+const formatTownStatus = (status: string): string => {
+    const statusMapping: { [key: string]: string } = statusDetails;
+    return statusMapping[status] || status;
+};
 
 const buildMattermostMessage = (channel: string, text: string, color: string, fields: { short: boolean, value: string }[]): MattermostMsg => ({
     channel,
@@ -515,9 +521,12 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
     const userfullname = formatUsername(user);
     const townLink = formatTownLink(town.id, address);
 
-    const builtAtStr = formatDate(new Date(town.builtAt * 1000));
+    const builtAtStr = town.builtAt ? formatDate(new Date(town.builtAt * 1000)) : 'Non renseignée';
     const declaredAtStr = formatDate(new Date(town.declaredAt * 1000));
     const closedAtStr = formatDate(new Date(town.closedAt * 1000));
+
+    const townStatus = formatTownStatus(town.status);
+
     const resorptionTarget = !town.resorptionTarget ? 'non' : town.resorptionTarget;
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
@@ -527,11 +536,11 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
         [
             {
                 short: false,
-                value: `*Status* : ${town.closedWithSolutions && town.closedWithSolutions !== 'no' ? 'Résorbé' : 'Disparu'}`,
+                value: `*Statut* : ${town.closedWithSolutions && town.closedWithSolutions !== 'no' ? 'Résorbé' : 'Disparu'}`,
             },
             {
                 short: false,
-                value: `*Cause de la fermeture* : ${town.status}`,
+                value: `*Cause de la fermeture* : ${townStatus}`,
             },
             {
                 short: false,
