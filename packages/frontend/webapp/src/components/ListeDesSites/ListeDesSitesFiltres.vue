@@ -39,15 +39,31 @@
                         Voir plus de filtres
                     </Link>
                     <template v-else>
-                        <Filter
+                        <template
                             v-for="filter in currentFilters.optional"
                             :key="filter.id"
-                            :title="filter.label"
-                            :options="filter.options"
-                            v-model="townsStore.filters.properties[filter.id]"
-                            @checkedItem="trackFilter(filter.label, $event)"
-                            class="border-1 !border-primary rounded hover:bg-blue200"
-                        />
+                        >
+                            <FilterClosureYear
+                                v-if="filter.id === 'closureYear'"
+                                :title="filter.label"
+                                :options="filter.options"
+                                v-model="
+                                    townsStore.filters.properties[filter.id]
+                                "
+                                @checkedItem="trackFilter(filter.label, $event)"
+                                class="border-1 !border-primary rounded hover:bg-blue200"
+                            />
+                            <Filter
+                                v-else
+                                :title="filter.label"
+                                :options="filter.options"
+                                v-model="
+                                    townsStore.filters.properties[filter.id]
+                                "
+                                @checkedItem="trackFilter(filter.label, $event)"
+                                class="border-1 !border-primary rounded hover:bg-blue200"
+                            />
+                        </template>
                     </template>
                 </div>
                 <div>
@@ -82,12 +98,15 @@ import { useUserStore } from "@/stores/user.store";
 import { trackEvent } from "@/helpers/matomo";
 import filters from "./ListeDesSites.filtres";
 import sorts from "./ListeDesSites.tris";
+import useClosureYears from "@/composables/useClosureYears";
+import FilterClosureYear from "./FilterClosureYear.vue";
 
 import { Filter, Icon, Link, Sort } from "@resorptionbidonvilles/ui";
 
 const townsStore = useTownsStore();
 const userStore = useUserStore();
 const displayOptionalFilters = ref(false);
+const { closureYears } = useClosureYears();
 
 const isFiltered = computed(() => {
     const filteredValues = Object.values(townsStore.filters.properties);
@@ -98,7 +117,7 @@ const isFiltered = computed(() => {
     return activeFiltersCount >= 2;
 });
 
-const groupedFilters = {
+const groupedFilters = computed(() => ({
     open: {
         default: [
             filters.population,
@@ -133,6 +152,7 @@ const groupedFilters = {
             filters.target,
         ],
         optional: [
+            { ...filters.closureYear, options: closureYears.value },
             filters.origin,
             ...(userStore.hasJusticePermission ? [filters.justice] : []),
             ...(userStore.hasJusticePermission
@@ -143,7 +163,7 @@ const groupedFilters = {
             filters.population,
         ],
     },
-};
+}));
 const groupedSorts = {
     open: [sorts.cityName, sorts.builtAt, sorts.updatedAt, sorts.declaredAt],
     inProgress: [
@@ -156,7 +176,7 @@ const groupedSorts = {
 };
 
 const currentFilters = computed(() => {
-    return groupedFilters[townsStore.filters.status];
+    return groupedFilters.value[townsStore.filters.status];
 });
 
 function showOptional() {
@@ -194,7 +214,7 @@ const isUeOnly = ref(false);
 
 const resetFilters = async () => {
     try {
-        await townsStore.resetFilters();
+        townsStore.resetFilters();
     } catch (error) {
         // eslint-disable-next-line no-console
         console.error("Erreur lors de la suppression des filtres:", error);
@@ -234,6 +254,18 @@ watch(
                 isUeOnly.value = newValue[0] === "0";
             }
             isProcessing.value = false;
+        }
+    },
+    { immediate: true }
+);
+watch(
+    () => townsStore.filters.status,
+    (status) => {
+        if (status === "close") {
+            console.log(
+                "[DEBUG] closureYear initial:",
+                townsStore.filters.properties.closureYear
+            );
         }
     },
     { immediate: true }

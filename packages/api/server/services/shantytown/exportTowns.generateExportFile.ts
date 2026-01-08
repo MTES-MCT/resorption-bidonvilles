@@ -24,11 +24,48 @@ function exportedTownsStatus(exportedSitesStatus: ExportedSitesStatus) {
     return statusLibs[exportedSitesStatus];
 }
 
+function calculateUpdatedSitesStats(data: Shantytown[], exportDate: Date): { updatedCount: number; totalCount: number; percentage: number } {
+    const exportDateTimestamp = exportDate.getTime() / 1000;
+
+    const updatedCount = data.filter((town) => {
+        let lastUpdatedAt = town.updatedAt;
+
+        if (town?.comments?.length > 0) {
+            const mostRecentComment = town.comments.reduce((newest, current) => (
+                current.createdAt > newest.createdAt ? current : newest
+            ), town.comments[0]);
+
+            const daysSinceUpdate = Math.floor(Math.abs(exportDateTimestamp - town.updatedAt) / (3600 * 24));
+            const monthsSinceUpdate = Math.floor(daysSinceUpdate / 30);
+
+            if (monthsSinceUpdate < 6) {
+                lastUpdatedAt = Math.max(mostRecentComment.createdAt, town.updatedAt);
+            }
+        }
+
+        if (!lastUpdatedAt) {
+            return false;
+        }
+
+        const daysSinceLastUpdate = Math.floor(Math.abs(exportDateTimestamp - lastUpdatedAt) / (3600 * 24));
+        const monthsSinceLastUpdate = Math.floor(daysSinceLastUpdate / 30);
+
+        return monthsSinceLastUpdate < 6;
+    }).length;
+
+    const totalCount = data.length;
+    const percentage = totalCount > 0 ? Math.round((updatedCount / totalCount) * 1000) / 10 : 0;
+
+    return { updatedCount, totalCount, percentage };
+}
+
 export default async function generateExportFile(user: AuthUser, data: Shantytown[], options: ShantytownExportListOption[], locations: Location[], exportedSitesStatus: ExportedSitesStatus, date: Date): Promise<Excel.Buffer> {
     const isNationalExport = locations.some(l => ['nation', 'metropole', 'outremer'].includes(l.type));
     const closingSolutions = await closingSolutionModel.findAll();
     const properties = serializeExportProperties(closingSolutions);
     const sections = await createExportSections(user, options, properties, exportedSitesStatus, closingSolutions, locations);
+
+    const updatedSitesStats = calculateUpdatedSitesStats(data, date);
 
     let locationName = '';
     if (isNationalExport) {
@@ -58,5 +95,6 @@ export default async function generateExportFile(user: AuthUser, data: Shantytow
         sections,
         data,
         moment(date).format('DD/MM/YYYY'),
+        updatedSitesStats,
     );
 }
