@@ -14,6 +14,7 @@ export type ShantytownFilters = {
     heatwave?: string;
     resorbedOrClosed?: string;
     closingReason?: string;
+    closureYear?: string;
 };
 
 export type PostSqlFilters = Pick<ShantytownFilters, 'exportedSitesStatus' | 'actors' | 'conditions'>;

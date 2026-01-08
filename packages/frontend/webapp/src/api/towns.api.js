@@ -189,3 +189,7 @@ export function updateActorThemes(townId, userId, themes) {
 export function startResorption(townId) {
     return axios.post(`/towns/${encodeURI(townId)}/resorption`);
 }
+
+export function getClosureYearRange() {
+    return axios.get("/towns-metadata/closure-year-range");
+}

@@ -33,6 +33,29 @@ import getSince from "@/utils/getSince";
 
 const ITEMS_PER_PAGE = 20;
 
+function getDefaultPropertiesFilters() {
+    return {
+        population: [],
+        fieldType: [],
+        justice: [],
+        administrativeOrder: [],
+        rhi: [],
+        origin: [],
+        target: [],
+        conditions: [],
+        actors: [],
+        heatwave: [],
+        closingReason: [],
+        resorbedOrClosed: [],
+        closureYear: [],
+    };
+}
+
+function getLastCommentCreatedAt(comments) {
+    const lastComment = getMostRecentComment(comments);
+    return lastComment.createdAt;
+}
+
 export const useTownsStore = defineStore("towns", () => {
     const towns = ref([]);
     const hash = ref({});
@@ -42,7 +65,7 @@ export const useTownsStore = defineStore("towns", () => {
         status: ref("open"),
         search: ref(""),
         location: ref(null),
-        properties: ref({}),
+        properties: ref(getDefaultPropertiesFilters()),
     };
     const heatwaveStatuses = ref({});
     const exportOptions = ref([]);
@@ -139,6 +162,7 @@ export const useTownsStore = defineStore("towns", () => {
             // Nettoyer les filtres spécifiques aux sites fermés
             filters.properties.value.closingReason = [];
             filters.properties.value.resorbedOrClosed = [];
+            filters.properties.value.closureYear = [];
         }
     });
     watch(filters.properties, resetPagination, { deep: true });
@@ -163,24 +187,10 @@ export const useTownsStore = defineStore("towns", () => {
         const userStore = useUserStore();
         const { search: searchFilter, data: locationFilter } =
             getDefaultLocationFilter(userStore.user);
-        // Filtres communs sites ouverts/sites fermés
         filters.search.value = searchFilter;
         filters.location.value = locationFilter;
         filters.status.value = "open";
-        filters.properties.value.population = [];
-        filters.properties.value.fieldType = [];
-        filters.properties.value.justice = [];
-        filters.properties.value.administrativeOrder = [];
-        filters.properties.value.rhi = [];
-        filters.properties.value.origin = [];
-        filters.properties.value.target = [];
-        // Filtres spécifiques aux sites ouverts
-        filters.properties.value.conditions = [];
-        filters.properties.value.actors = [];
-        filters.properties.value.heatwave = [];
-        // Filtres spécifiques aux sites fermés
-        filters.properties.value.closingReason = [];
-        filters.properties.value.resorbedOrClosed = [];
+        filters.properties.value = getDefaultPropertiesFilters();
     }
 
     function reset() {
@@ -199,11 +209,6 @@ export const useTownsStore = defineStore("towns", () => {
         if (hash.value[id]) {
             hash.value[id].comments = comments;
         }
-    }
-
-    function getLastCommentCreatedAt(comments) {
-        const lastComment = getMostRecentComment(comments);
-        return lastComment.createdAt;
     }
 
     function updateLastUpdatedAt(shantytownId, lastCommentDate) {
@@ -253,7 +258,7 @@ export const useTownsStore = defineStore("towns", () => {
         filteredTowns,
         resetFilters,
         async fetchTowns() {
-            if (isLoading.value === true) {
+            if (isLoading.value) {
                 return;
             }
 
