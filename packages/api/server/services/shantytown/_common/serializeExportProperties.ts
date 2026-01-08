@@ -1179,6 +1179,7 @@ export default (closingSolutions: ClosingSolution[]) => {
 
                 return `- ${name} (${themes})`;
             }).join('\n'),
+            wrapText: true,
             width: COLUMN_WIDTHS.LARGE,
         },
         comments: {
