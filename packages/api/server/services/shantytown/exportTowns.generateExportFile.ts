@@ -30,7 +30,7 @@ function calculateUpdatedSitesStats(data: Shantytown[], exportDate: Date): { upd
     const updatedCount = data.filter((town) => {
         let lastUpdatedAt = town.updatedAt;
 
-        if (town.comments && town.comments.length > 0) {
+        if (town?.comments?.length > 0) {
             const mostRecentComment = town.comments.reduce((newest, current) => (
                 current.createdAt > newest.createdAt ? current : newest
             ), town.comments[0]);
