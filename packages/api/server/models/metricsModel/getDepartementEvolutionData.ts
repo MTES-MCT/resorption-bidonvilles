@@ -3,8 +3,10 @@ import { QueryTypes } from 'sequelize';
 import moment from 'moment';
 import permissionUtils from '#server/utils/permission';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
+import validateSafeWhereClause from '#server/models/_common/validateSafeWhereClause';
 import { WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import { Origin } from '#root/types/resources/DepartementMetrics.d';
+import { ShantytownLivingConditionsRawData } from '#root/types/resources/ShantytownLivingConditionsRawData.d';
 
 const { where: pWhere } = permissionUtils;
 
@@ -18,32 +20,9 @@ export type DepartementEvolutionMetricsRawData = {
     known_since: Date,
     closed_at: Date,
     origins: Origin[],
-    waterAccessType: string,
-    waterAccessIsPublic: boolean | null,
-    waterAccessIsContinuous: boolean | null,
-    waterAccessIsLocal: boolean | null,
-    waterAccessIsClose: boolean | null,
-    waterAccessIsUnequal: boolean | null,
-    waterAccessHasStagnantWater: boolean | null,
-    toiletTypes: string[],
-    sanitaryAccessOpenAirDefecation: boolean | null,
-    sanitaryAccessWorkingToilets: boolean | null,
-    sanitaryAccessToiletsAreInside: boolean | null,
-    sanitaryAccessToiletsAreLighted: boolean | null,
-    sanitaryAccessHandWashing: boolean | null,
-    electricityAccess: boolean | null,
-    electricityAccessTypes: string[],
-    electricityAccessIsUnequal: boolean | null,
-    trashIsPiling: boolean | null,
-    trashEvacuationIsClose: boolean | null,
-    trashEvacuationIsSafe: boolean | null,
-    trashEvacuationIsRegular: boolean | null,
-    trashBulkyIsPiling: boolean | null,
-    pestAnimals: boolean | null,
-    firePrevention: boolean | null,
     owner_complaint: boolean | null,
     police_status: string,
-};
+} & ShantytownLivingConditionsRawData;
 
 export default async (user, departementCode, from: Date, to: Date): Promise<DepartementEvolutionMetricsRawData[]> => {
     const permissionWhereClauseGroup:WhereClauseGroup = pWhere().can(user).do('list', 'shantytown');
@@ -53,6 +32,8 @@ export default async (user, departementCode, from: Date, to: Date): Promise<Depa
         to: `${moment(to).format('YYYY-MM-DD')} 23:59:59`,
     };
     const permissionWhereClause = stringifyWhereClause('shantytowns', [permissionWhereClauseGroup], replacements);
+
+    validateSafeWhereClause(permissionWhereClause);
 
     return sequelize.query(
         `SELECT

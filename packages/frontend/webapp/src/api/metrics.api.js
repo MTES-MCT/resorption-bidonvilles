@@ -37,6 +37,14 @@ export function getDepartementMetrics(departementCode, from, to) {
     );
 }
 
+export function getDepartementsSummaryMetrics(departementCodes) {
+    return axios.get(
+        `/metrics/departements/summary?departements=${encodeURIComponent(
+            departementCodes.join(",")
+        )}`
+    );
+}
+
 export function getDepartementMetricsEvolution(departementCode, from, to) {
     return axios.get(
         `/metrics/departement/${encodeURI(

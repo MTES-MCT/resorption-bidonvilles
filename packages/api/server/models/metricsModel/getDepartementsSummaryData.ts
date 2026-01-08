@@ -4,22 +4,14 @@ import permissionUtils from '#server/utils/permission';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 import validateSafeWhereClause from '#server/models/_common/validateSafeWhereClause';
 import { WhereClauseGroup } from '#server/models/_common/types/Where.d';
+import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Origin } from '#root/types/resources/DepartementMetrics.d';
 import { ShantytownLivingConditionsRawData } from '#root/types/resources/ShantytownLivingConditionsRawData.d';
 
 const { where: pWhere } = permissionUtils;
 
-
-export type DepartementMetricsRawData = {
-    shantytown_id: number,
-    name: string,
-    address: string,
-    latitude: number,
-    longitude: number,
-    city_code: string,
-    city_name: string,
-    city_latitude: number,
-    city_longitude: number,
+export type DepartementsSummaryRawData = {
+    departement_code: string,
     population_total: number | null,
     population_couples: number | null,
     population_minors: number | null,
@@ -27,19 +19,20 @@ export type DepartementMetricsRawData = {
     owner_complaint: boolean | null,
     justice_procedure: boolean | null,
     police_status: string,
-    field_type: string,
     origins: Origin[],
     out_of_date: boolean,
     heatwave_status: boolean,
 } & ShantytownLivingConditionsRawData;
 
-export default async (user, departementCode: string): Promise<DepartementMetricsRawData[]> => {
+const getDepartementsSummaryData = async (user: AuthUser, departementCodes: string[]): Promise<DepartementsSummaryRawData[]> => {
     const permissionWhereClauseGroup: WhereClauseGroup = pWhere().can(user).do('list', 'shantytown');
     const replacements = {
-        departementCode,
+        departementCodes,
     };
+
     const permissionWhereClause = stringifyWhereClause('shantytowns', [permissionWhereClauseGroup], replacements);
 
+    // Valider la clause WHERE avant de l'injecter dans la requête SQL
     validateSafeWhereClause(permissionWhereClause);
 
     return sequelize.query(
@@ -78,15 +71,7 @@ export default async (user, departementCode: string): Promise<DepartementMetrics
         )
 
         SELECT
-            shantytowns.shantytown_id,
-            shantytowns.name,
-            shantytowns.address,
-            shantytowns.latitude,
-            shantytowns.longitude,
-            cities.code AS city_code,
-            cities.name AS city_name,
-            cities.latitude AS city_latitude,
-            cities.longitude AS city_longitude,
+            departements.code AS departement_code,
             shantytowns.population_total,
             shantytowns.population_couples,
             shantytowns.population_minors,
@@ -94,11 +79,11 @@ export default async (user, departementCode: string): Promise<DepartementMetrics
             shantytowns.owner_complaint,
             shantytowns.justice_procedure,
             shantytowns.police_status,
-            field_types.label AS field_type,
             shantytown_computed_origins.origins,
             CASE
-                WHEN last_comments.last_comment_at IS NOT NULL AND last_comments.last_comment_at > COALESCE(shantytowns.updated_at, shantytowns.created_at)
-                    THEN COALESCE(shantytowns.updated_at, shantytowns.created_at)
+                WHEN last_comments.last_comment_at IS NOT NULL 
+                AND last_comments.last_comment_at > COALESCE(shantytowns.updated_at, shantytowns.created_at)
+                THEN last_comments.last_comment_at
                 ELSE COALESCE(shantytowns.updated_at, shantytowns.created_at)
             END < (CURRENT_DATE - INTERVAL '6 month') AS out_of_date,
             shantytowns.water_access_type::text AS "waterAccessType",
@@ -126,7 +111,6 @@ export default async (user, departementCode: string): Promise<DepartementMetrics
             shantytowns.fire_prevention AS "firePrevention",
             shantytowns.heatwave_status
         FROM shantytowns
-        LEFT JOIN field_types ON shantytowns.fk_field_type = field_types.field_type_id
         LEFT JOIN shantytown_computed_origins ON shantytown_computed_origins.fk_shantytown = shantytowns.shantytown_id
         LEFT JOIN computed_toilet_types ON computed_toilet_types.fk_shantytown = shantytowns.shantytown_id
         LEFT JOIN computed_electricity_types ON computed_electricity_types.fk_shantytown = shantytowns.shantytown_id
@@ -136,8 +120,8 @@ export default async (user, departementCode: string): Promise<DepartementMetrics
         LEFT JOIN regions ON regions.code = departements.fk_region
         LEFT JOIN last_comments ON last_comments.fk_shantytown = shantytowns.shantytown_id
         WHERE closed_at IS NULL
-        AND departements.code = :departementCode
-        ${permissionWhereClause !== '()' ? `AND ${permissionWhereClause}` : ''}
+        AND departements.code IN (:departementCodes)
+        ${permissionWhereClause === '()' ? '' : `AND ${permissionWhereClause}`}
         `,
         {
             type: QueryTypes.SELECT,
@@ -145,3 +129,5 @@ export default async (user, departementCode: string): Promise<DepartementMetrics
         },
     );
 };
+
+export default getDepartementsSummaryData;
