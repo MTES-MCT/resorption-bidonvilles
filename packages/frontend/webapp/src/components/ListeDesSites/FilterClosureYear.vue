@@ -27,15 +27,6 @@
         </template>
         <template v-slot:menu>
             <Menu containerClasses="py-0">
-                <div class="px-3 py-2 border-b-1">
-                    <DsfrPagination
-                        v-if="totalPages > 1"
-                        v-model:current-page="currentPage"
-                        :pages="pages"
-                        :trunc-limit="3"
-                        small
-                    />
-                </div>
                 <div
                     v-for="option in paginatedOptions"
                     :key="option.value"
@@ -72,6 +63,17 @@
                         Effacer
                     </Button>
                 </div>
+                <div class="px-3 py-2 mt-2">
+                    <DsfrPagination
+                        v-if="totalPages > 1"
+                        v-model:current-page="currentPage"
+                        :pages="pages"
+                        nextPageTitle="Suivante"
+                        prevPageTitle="Précédente"
+                        :truncLimit="1"
+                        small
+                    />
+                </div>
             </Menu>
         </template>
     </Dropdown>
@@ -79,7 +81,7 @@
 
 <style scoped>
 .menuWidth {
-    min-width: 660px;
+    min-width: 480px;
 }
 </style>
 
