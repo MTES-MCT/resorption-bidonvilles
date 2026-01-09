@@ -68,11 +68,11 @@ function getNumberOrNull(value: string | number | null | undefined): number | nu
         return null;
     }
     const stringValue = value.toString();
-    return stringValue !== '' ? parseInt(stringValue, 10) : null;
+    return stringValue === '' ? null : Number.parseInt(stringValue, 10);
 }
 
 function checkForInValueMap(value: number | undefined): boolean | undefined {
-    return value !== undefined ? valueMap[value + 1] : undefined;
+    return value === undefined ? undefined : valueMap[value + 1];
 }
 
 const excludeSignedUrls = (key: string, value: any): any => {
@@ -610,7 +610,7 @@ export default mode => ([
             }
 
             if (typeof value !== 'string') {
-                throw new Error('Le champ "Localisation géographique" est invalide');
+                throw new TypeError('Le champ "Localisation géographique" est invalide');
             }
 
             const trimmed = trim(value);
@@ -628,7 +628,7 @@ export default mode => ([
             }
 
             if (typeof req.body.citycode !== 'string') {
-                throw new Error('Le code communal est invalide');
+                throw new TypeError('Le code communal est invalide');
             }
 
             let city;
@@ -685,8 +685,8 @@ export default mode => ([
             }
 
             const [latitude, longitude] = req.body.coordinates.split(',');
-            req.body.latitude = parseFloat(latitude);
-            req.body.longitude = parseFloat(longitude);
+            req.body.latitude = Number.parseFloat(latitude);
+            req.body.longitude = Number.parseFloat(longitude);
 
             return true;
         }),
@@ -785,7 +785,7 @@ export default mode => ([
         .exists({ checkNull: true }).bail().withMessage('Le champ "Date de signalement du site" est obligatoire')
         .isDate().bail().withMessage('Le champ "Date de signalement du site" est invalide')
         .toDate()
-        .if((value, { req }) => mode !== 'update' || !req.town || value.getTime() / 1000 !== req.town.declaredAt)
+        .if((value, { req }) => mode !== 'update' || value.getTime() / 1000 !== req.town?.declaredAt)
         .customSanitizer((value) => {
             value.setHours(0, 0, 0, 0);
             return value;
@@ -909,7 +909,7 @@ export default mode => ([
         .optional({ nullable: true })
         .isArray().bail().withMessage('Le champ "Sites dont sont originaires les habitant(e)s" est invalide')
         .if(value => value.length > 0)
-        .customSanitizer(value => value.map(id => parseInt(id, 10)))
+        .customSanitizer(value => value.map(id => Number.parseInt(id, 10)))
         .custom(async (value, { req }) => {
             try {
                 req.body.reinstallation_incoming_towns_full = await shantytownModel.findAll(req.user, [
@@ -967,7 +967,7 @@ export default mode => ([
         .exists({ checkNull: true }).bail().withMessage('Le champ "Date du diagnostic" est obligatoire')
         .isDate().bail().withMessage('Le champ "Date du diagnostic" est invalide')
         .toDate()
-        .if((value, { req }) => mode !== 'update' || !req.town || value.getTime() / 1000 !== req.town.censusConductedAt)
+        .if((value, { req }) => mode !== 'update' || value.getTime() / 1000 !== req.town?.censusConductedAt)
         .customSanitizer((value) => {
             value.setHours(0, 0, 0, 0);
             return value;
