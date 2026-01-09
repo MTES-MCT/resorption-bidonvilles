@@ -1,14 +1,16 @@
 <template>
     <DsfrInputGroup
-        id="phone"
-        :errorMessage="errors[0]"
+        id="organization_other_territory"
+        :errorMessage="errors.length > 0 ? errors : ''"
         :disabled="isSubmitting || disabled"
-        type="tel"
-        v-model="phone"
+        type="text"
+        v-model="organizationOtherTerritory"
         required
         @blur="handleBlur"
         :valid-message="
-            phone?.length > 0 && errors.length === 0 && `${label} valide`
+            organizationOtherTerritory?.length > 0 &&
+            errors.length === 0 &&
+            `Territoire de la structure valide`
         "
     >
         <template #before-input>
@@ -20,21 +22,17 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, watch } from "vue";
+import { defineProps, toRefs } from "vue";
 import { useField, useIsSubmitting } from "vee-validate";
 
 const props = defineProps({
     label: String,
-    disabled: Boolean,
 });
-const { label, disabled } = toRefs(props);
-
+const { label } = toRefs(props);
 const isSubmitting = useIsSubmitting();
-const { value: phone, errors, handleBlur } = useField("phone", "required");
-
-watch(phone, (newValue) => {
-    if (newValue) {
-        phone.value = newValue.replace(/[^0-9+]/g, "");
-    }
-});
+const {
+    value: organizationOtherTerritory,
+    errors,
+    handleBlur,
+} = useField("organization_other_territory", "required");
 </script>

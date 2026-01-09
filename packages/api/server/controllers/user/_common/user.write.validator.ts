@@ -137,17 +137,13 @@ export default (
                 throw new Error('Le type de structure que vous avez sélectionné n\'existe pas en base de données');
             }
 
-            if (organizationType.organization_category !== 'public_establishment') {
-                throw new Error('Le type de structure que vous avez sélectionné est invalide');
-            }
-
             req.body.organization_type_full = organizationType;
             return true;
         }),
 
     body('organization_public')
         .toInt()
-        .if((value, { req }) => req.body.organization_type_full !== undefined)
+        .if((value, { req }) => req.body.organization_category !== undefined && req.body.organization_category === 'public_establishment')
         .custom(async (value, { req }) => {
             if (!value) {
                 throw new Error('Vous devez préciser le territoire de rattachement de la structure');
@@ -198,7 +194,7 @@ export default (
             return true;
         }),
 
-    body('organization_administration')
+    body('administration')
         .if((value, { req }) => req.body.organization_category_full.uid === 'administration')
         .custom(async (value, { req }) => {
             if (!value) {
@@ -207,7 +203,7 @@ export default (
 
             let organization: Organization;
             try {
-                organization = await organizationModel.findOneById(value);
+                organization = await organizationModel.findOneById(value?.data?.id);
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error(error);

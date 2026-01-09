@@ -9,7 +9,10 @@
                 <Icon :icon="toggleIcon" />
             </span>
         </LinkButton>
-        <main v-if="mapStore.filters[id].opened" class="pb-4 pl-3">
+        <main
+            v-if="mapStore.filters[id].opened"
+            class="pb-4 pl-3 flex flex-col space-y-0"
+        >
             <Checkbox
                 v-for="option in definition.options"
                 :key="option.value"
@@ -19,6 +22,7 @@
                 variant="checkbox"
                 direction="col"
                 @change="$emit('change')"
+                small
             />
         </main>
     </article>
@@ -61,3 +65,8 @@ function toggle() {
     mapStore.filters[id.value].opened = !mapStore.filters[id.value].opened;
 }
 </script>
+<style scoped>
+.fr-fieldset__element {
+    margin-bottom: 0 !important;
+}
+</style>
