@@ -1021,6 +1021,29 @@ export default mode => ([
         .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
+     * Nombre de femmes
+     ********************************************************************************************* */
+    body('population_total_females')
+        .optional({ nullable: true, checkFalsy: true })
+        .toInt()
+        .isInt().bail().withMessage('Le champ "Nombre de femmes" est invalide')
+        .isInt({ min: 0 }).withMessage('Le champ "Nombre de femmes" ne peut pas être inférieur à 0')
+        .custom((value, { req }) => {
+            if (!Number.isInteger(req.body.population_total)) {
+                return true;
+            }
+
+            if (value > req.body.population_total) {
+                throw new Error('Le champ "Nombre de femmes" ne peut pas être supérieur au champ "Nombre de personnes"');
+            }
+
+            return true;
+        }),
+
+    body('population_total_females')
+        .customSanitizer(validateInteger),
+
+    /* **********************************************************************************************
      * Nombre de caravanes
      ********************************************************************************************* */
     ...validateIntegerWithMinValue('caravans', 0, validateNull, validateInteger),
@@ -1136,6 +1159,29 @@ export default mode => ([
         }),
 
     body('minors_in_school')
+        .customSanitizer(validateInteger),
+
+    /* **********************************************************************************************
+     * Nombre de filles mineures
+     ********************************************************************************************* */
+    body('population_minors_girls')
+        .optional({ nullable: true, checkFalsy: true })
+        .toInt()
+        .isInt().bail().withMessage('Le champ "Nombre de filles mineures" est invalide')
+        .isInt({ min: 0 }).withMessage('Le champ "Nombre de filles mineures" ne peut pas être inférieur à 0')
+        .custom((value, { req }) => {
+            if (!Number.isInteger(req.body.population_minors)) {
+                return true;
+            }
+
+            if (value > req.body.population_minors) {
+                throw new Error('Le champ "Nombre de filles mineures" ne peut pas être supérieur au champ "Nombre de mineurs"');
+            }
+
+            return true;
+        }),
+
+    body('population_minors_girls')
         .customSanitizer(validateInteger),
 
     /* **********************************************************************************************
