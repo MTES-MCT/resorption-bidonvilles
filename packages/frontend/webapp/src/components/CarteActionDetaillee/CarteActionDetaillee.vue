@@ -32,7 +32,7 @@
             </div>
 
             <div class="px-6 text-primary text-display-md font-bold">
-                {{ action.name }}
+                {{ action.name }} - {{ action.displayId }}
             </div>
 
             <div
