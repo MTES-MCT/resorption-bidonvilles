@@ -7,9 +7,17 @@
             <div>
                 <h1 class="text-3xl text-info font-bold">{{ title }}</h1>
                 <p>
-                    {{ actionsStore.filteredActions.length }}
+                    {{
+                        actionsStore.filteredActions[
+                            actionsStore.filters.status
+                        ].length
+                    }}
                     action<template
-                        v-if="actionsStore.filteredActions.length > 1"
+                        v-if="
+                            actionsStore.filteredActions[
+                                actionsStore.filters.status
+                            ].length > 1
+                        "
                         >s</template
                     >
                     <template v-if="actionsStore.filters.status === 'open'"
@@ -17,7 +25,11 @@
                     >
                     <template v-else
                         >&nbsp;terminée<template
-                            v-if="actionsStore.filteredActions.length > 1"
+                            v-if="
+                                actionsStore.filteredActions[
+                                    actionsStore.filters.status
+                                ].length > 1
+                            "
                             >s</template
                         ></template
                     >
