@@ -19,13 +19,13 @@
                         :label="actionPeriod"
                         noIcon
                         type="info"
-                        class="mt-1 gap-2 lg:place-self-end text-xs items-center py-2"
+                        class="mt-1 lg:place-self-end text-xs py-2"
                     />
                     <DsfrBadge
                         :label="metricsUpdatedAtLabel"
                         noIcon
                         :type="metricsUpdatedAtBadgeType"
-                        class="mt-1 gap-2 lg:place-self-end text-xs items-center py-2"
+                        class="mt-1 lg:place-self-end text-xs py-2"
                     />
                 </div>
                 <div class="mt-[3px]" v-if="attachmentsLabel">
