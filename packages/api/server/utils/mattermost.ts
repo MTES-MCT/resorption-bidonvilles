@@ -530,7 +530,7 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
 
     const townStatus = formatTownStatus(town.status);
 
-    const resorptionTarget = !town.resorptionTarget ? 'non' : town.resorptionTarget;
+    const resorptionTarget = town.resorptionTarget ? town.resorptionTarget : 'non';
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
         '#notif-fermeture-sites',
