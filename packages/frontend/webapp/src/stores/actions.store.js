@@ -54,7 +54,7 @@ export const useActionsStore = defineStore("actions", () => {
 
     const filteredActions = computed(() => {
         const STATUSES = ["open", "closed"];
-        const filtered = Object.fromEntries(
+        return Object.fromEntries(
             STATUSES.map((status) => [
                 status,
                 filterActions(actions.value, {
@@ -67,8 +67,6 @@ export const useActionsStore = defineStore("actions", () => {
                 }),
             ])
         );
-
-        return filtered;
     });
 
     const currentPage = {
