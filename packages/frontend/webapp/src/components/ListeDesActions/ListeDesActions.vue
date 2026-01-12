@@ -61,6 +61,9 @@ const currentTab = computed({
 
 // Fonction pour récupérer les années uniques depuis les dates de lancement et de fin d'action
 const getUniqueYears = (actionsData) => {
+    if (!actionsData || actionsData.length === 0) {
+        return [];
+    }
     const allStartedAtYears = actionsData.map((action) =>
         new Date(action.started_at).getFullYear()
     );
