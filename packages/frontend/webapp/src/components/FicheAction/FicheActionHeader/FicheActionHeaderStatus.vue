@@ -23,9 +23,9 @@
                 </template>
             </span>
         </p>
-        <p class="text-black text-sm" v-if="action.metricsUpdatedAt">
+        <p class="text-black text-sm" v-if="action.metrics_updated_at">
             Indicateurs mis à jour le
-            {{ formatDate(action.metricsUpdatedAt / 1000, "d/m/y") }}
+            {{ formatDate(action.metrics_updated_at / 1000, "d/m/y") }}
         </p>
         <p class="text-black text-sm" v-else>Aucun indicateur renseigné</p>
     </div>

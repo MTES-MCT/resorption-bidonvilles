@@ -10,9 +10,9 @@ function compute(date) {
 }
 
 export default (action) => {
-    if (!action.metricsUpdatedAt) {
+    if (!action.metrics_updated_at) {
         return "Aucun indicateur renseigné";
     }
 
-    return `Indicateurs mis à jour ${compute(action.metricsUpdatedAt)}`;
+    return `Indicateurs mis à jour ${compute(action.metrics_updated_at)}`;
 };

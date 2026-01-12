@@ -145,10 +145,10 @@ const metricsUpdatedAtLabel = computed(() => {
 });
 
 const metricsUpdatedAtBadgeType = computed(() => {
-    if (!action.value.metricsUpdatedAt) {
+    if (!action.value.metrics_updated_at) {
         return "warning";
     }
-    const { months } = getSince(action.value.metricsUpdatedAt / 1000);
+    const { months } = getSince(action.value.metrics_updated_at / 1000);
     return months >= 3 ? "error" : "success";
 });
 
