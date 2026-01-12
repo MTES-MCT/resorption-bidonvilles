@@ -9,10 +9,11 @@ function compute(date) {
     return `il y a ${since}`;
 }
 
-export default (action) => {
+const formatMetricsUpdatedAt = (action) => {
     if (!action.metrics_updated_at) {
         return "Aucun indicateur renseigné";
     }
 
     return `Indicateurs mis à jour ${compute(action.metrics_updated_at)}`;
 };
+export default formatMetricsUpdatedAt;
