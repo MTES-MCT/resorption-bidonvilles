@@ -87,7 +87,7 @@ import formatMetricsUpdatedAt from "@/utils/formatMetricsUpdatedAt";
 import getSince from "@/utils/getSince";
 import focusClasses from "@common/utils/focus_classes";
 
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import CarteActionColonneChampsIntervention from "./CarteActionColonneChampsIntervention.vue";
 import CarteActionDetailleeColonneDepartement from "./CarteActionDetailleeColonneDepartement.vue";
 import CarteActionDetailleeColonneLocalisation from "./CarteActionDetailleeColonneLocalisation.vue";
