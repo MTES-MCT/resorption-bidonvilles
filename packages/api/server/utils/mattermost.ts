@@ -19,7 +19,10 @@ type MattermostMsg = {
 };
 
 const { mattermost, webappUrl } = config;
-const formatAddress = (town: Shantytown): string => `${town.address} ${town.name ? `« ${town.name} » ` : ''}`;
+const formatAddress = (town: Shantytown): string => {
+    const nameSection = town.name ? `« ${town.name} » ` : '';
+    return `${town.address} ${nameSection}`;
+};
 const formatUsername = (user: { id: number, first_name: string, last_name: string }): string => `[${user.first_name} ${user.last_name}](${webappUrl}/nouvel-utilisateur/${user.id}) `;
 const formatUsernameWithEmailLink = (user: { first_name: string, last_name: string, email: string, }): string => `[${user.first_name} ${user.last_name}](mailto:${user.email}) `;
 const formatTownLink = (townID: number, text: string): string => `[${text}](${webappUrl}/site/${townID})`;
