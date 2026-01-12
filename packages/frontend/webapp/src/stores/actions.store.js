@@ -35,20 +35,18 @@ export const useActionsStore = defineStore("actions", () => {
     const requestedPilotsForActions = ref([]);
 
     const filteredActions = computed(() => {
-        return {
-            open: filterActions(actions.value, {
-                status: "open",
-                search: filters.search.value,
-                location: filters.location.value,
-                ...filters.properties.value,
-            }),
-            closed: filterActions(actions.value, {
-                status: "closed",
-                search: filters.search.value,
-                location: filters.location.value,
-                ...filters.properties.value,
-            }),
-        };
+        const STATUSES = ["open", "closed"];
+        return Object.fromEntries(
+            STATUSES.map((status) => [
+                status,
+                filterActions(actions.value, {
+                    status,
+                    search: filters.search.value,
+                    location: filters.location.value,
+                    ...filters.properties.value,
+                }),
+            ])
+        );
     });
 
     const currentPage = {
