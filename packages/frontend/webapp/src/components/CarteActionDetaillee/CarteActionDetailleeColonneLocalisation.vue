@@ -5,7 +5,16 @@
         aria-label="Localisations de l'action"
     >
         <Icon icon="map-marker-alt" class="text-lg" style="color: #000091" />
-        <span class="text-dark font-bold"> Lieu </span>
+        <span class="text-dark font-bold">
+            Lieu
+            <template
+                v-if="
+                    action.location_shantytowns &&
+                    action.location_shantytowns.length > 0
+                "
+                >({{ action.location_shantytowns.length }})</template
+            ></span
+        >
         <div>
             <span v-if="action.location_type === 'sur_site'">
                 <span
