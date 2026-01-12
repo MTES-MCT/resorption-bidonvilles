@@ -1,5 +1,7 @@
 <template>
-    <section class="flex items-end flex-wrap space-x-4">
+    <section
+        class="flex flex-col sm:flex-row gap-4 items-start justify-between"
+    >
         <article class="flex flex-col gap-2">
             <div>
                 <p>Filtrer par</p>
@@ -23,6 +25,16 @@
                 />
             </div>
         </article>
+
+        <article class="shrink-0">
+            <p>Trier par</p>
+            <Sort
+                v-model="actionsStore.sort"
+                name="actions_list_sort"
+                :options="sortOptions"
+                class="border-1 !border-primary rounded hover:bg-blue200"
+            />
+        </article>
     </section>
 </template>
 
@@ -30,11 +42,12 @@
 import { computed } from "vue";
 import { useActionsStore } from "@/stores/actions.store";
 import filters from "./ListeDesActions.filtres";
-
-import { Filter } from "@resorptionbidonvilles/ui";
+import sorts from "./ListeDesActions.tris";
+import { Filter, Sort } from "@resorptionbidonvilles/ui";
 
 const actionsStore = useActionsStore();
 
+const sortOptions = [sorts.startedAt, sorts.updatedAt, sorts.lastMetricUpdate];
 const isFiltered = computed(() => {
     const filterValues = Object.values(actionsStore.filters.properties);
     const activeFiltersCount = filterValues.filter(

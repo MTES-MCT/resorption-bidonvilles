@@ -3,6 +3,7 @@ import Action from '#root/types/resources/Action.d';
 export function serialized(override = {}): Action {
     const action: Action = {
         type: 'action',
+        displayId: 'ACTION-1',
         id: 1,
         name: 'Une action',
         started_at: (new Date(2023, 0, 1)).getTime(),
@@ -75,6 +76,7 @@ export function serialized(override = {}): Action {
             },
         ],
         metrics: [],
+        metrics_updated_at: null,
         comments: [
             {
                 attachments: [],

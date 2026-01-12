@@ -19,7 +19,10 @@ type MattermostMsg = {
 };
 
 const { mattermost, webappUrl } = config;
-const formatAddress = (town: Shantytown): string => `${town.address} ${town.name ? `« ${town.name} » ` : ''}`;
+const formatAddress = (town: Shantytown): string => {
+    const nameSection = town.name ? `« ${town.name} » ` : '';
+    return `${town.address} ${nameSection}`;
+};
 const formatUsername = (user: { id: number, first_name: string, last_name: string }): string => `[${user.first_name} ${user.last_name}](${webappUrl}/nouvel-utilisateur/${user.id}) `;
 const formatUsernameWithEmailLink = (user: { first_name: string, last_name: string, email: string, }): string => `[${user.first_name} ${user.last_name}](mailto:${user.email}) `;
 const formatTownLink = (townID: number, text: string): string => `[${text}](${webappUrl}/site/${townID})`;
@@ -527,7 +530,7 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
 
     const townStatus = formatTownStatus(town.status);
 
-    const resorptionTarget = !town.resorptionTarget ? 'non' : town.resorptionTarget;
+    const resorptionTarget = town.resorptionTarget ? town.resorptionTarget : 'non';
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
         '#notif-fermeture-sites',
@@ -566,6 +569,55 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
     );
 
     await shantytownCloseAlert.send(mattermostMessage);
+}
+
+export async function triggerReinstallationAlert(town: Shantytown, user: User): Promise<void> {
+    if (!mattermost) {
+        return;
+    }
+
+    const webhook = new IncomingWebhook(mattermost);
+
+    const address = formatAddress(town);
+    const username = formatUsername(user);
+    const townLink = formatTownLink(town.id, address);
+
+    let incomingTownsMessage = 'Aucun site n\'a été désigné comme origine de la réinstallation';
+    if (town.reinstallationIncomingTowns.length > 0) {
+        incomingTownsMessage = [
+            'Le(s) site(s) suivant(s) ont été désigné(s) comme origine(s) de la réinstallation :',
+            '\n\n- ',
+            town.reinstallationIncomingTowns.map(({ id, usename }) => formatTownLink(id, usename)).join('\n- '),
+        ].join('');
+    }
+
+    const fields = [
+        {
+            short: false,
+            value: `*Nombre d'habitants* : ${town.populationTotal || 'Nombre inconnu'}`,
+        },
+        {
+            short: false,
+            value: incomingTownsMessage,
+        },
+    ];
+
+    if (town.reinstallationComments) {
+        fields.push({
+            short: false,
+            value: `*Commentaire* : ${town.reinstallationComments}`,
+        });
+    }
+
+    const notifChannel: string = config.environnement === 'development' ? '#notif-dev-test' : '#notif-reinstallation';
+    const mattermostMessage: MattermostMsg = buildMattermostMessage(
+        notifChannel,
+        `:warning: Réinstallation signalée sur le site ${townLink} par ${username}`,
+        '#d63232',
+        fields,
+    );
+
+    await webhook.send(mattermostMessage);
 }
 
 export async function triggerShantytownCreationAlert(town: Shantytown, user: User): Promise<void> {
@@ -631,6 +683,7 @@ export default {
     triggerNotifyOwnersAnonymization,
     triggerNotifyOwnersAnonymizationError,
     triggerPeopleInvitedAlert,
+    triggerReinstallationAlert,
     triggerRemoveDeclaredActor,
     triggerRequestActionPilot,
     triggerShantytownCloseAlert,

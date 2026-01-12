@@ -1,10 +1,21 @@
 import { ActionHash } from './hashActions';
 import { ActionMetricsRow } from './fetchMetrics';
 
+/* eslint-disable no-param-reassign */
 export default function mergeMetrics(hash: ActionHash, metrics: ActionMetricsRow[]): void {
     metrics.forEach((row) => {
         if (row.rank > 1) {
             return;
+        }
+
+        if (!hash[row.action_id]) {
+            return;
+        }
+
+        const metricCreatedAt = row.created_at.getTime();
+
+        if (hash[row.action_id].metrics_updated_at === null || metricCreatedAt > hash[row.action_id].metrics_updated_at) {
+            hash[row.action_id].metrics_updated_at = metricCreatedAt;
         }
 
         hash[row.action_id].metrics.push({

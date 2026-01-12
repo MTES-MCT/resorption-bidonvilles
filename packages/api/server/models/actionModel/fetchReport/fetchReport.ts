@@ -94,6 +94,16 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
                 FROM ranked_metrics
                 WHERE rank = 1
         ),
+        metrics_last_update AS
+        (
+            SELECT
+                action_metrics.fk_action AS action_id,
+                MAX(action_metrics.created_at) AS last_metrics_update
+            FROM action_metrics
+            WHERE
+                TO_CHAR(action_metrics.date, 'YYYY') = :annee::varchar
+            GROUP BY action_metrics.fk_action
+        ),
         scolarmetrics AS
         (
             WITH ranked_metrics AS (
@@ -209,7 +219,8 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
         cm.description AS "comments",
         cm2.description AS "last_comment",
         cm2.last_comment_date AS "last_comment_date",
-        actions.updated_at AS "last_update"
+        actions.updated_at AS "last_update",
+        mlu.last_metrics_update AS "metrics_updated_at"
     FROM 
         actions
     LEFT JOIN
@@ -230,6 +241,8 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
         last_comments cm2 ON cm2.fk_action = actions.action_id
     LEFT JOIN
         finances fi ON fi.action_id = actions.action_id
+    LEFT JOIN
+        metrics_last_update mlu ON mlu.action_id = actions.action_id
     WHERE
         actions.started_at <= TO_DATE(:annee::varchar || '-12-31', 'YYYY-MM-DD')
     AND

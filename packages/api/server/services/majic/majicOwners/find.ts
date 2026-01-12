@@ -48,21 +48,24 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
     } catch (parcelError) {
         // eslint-disable-next-line no-console
         console.error(parcelError);
-        throw new ServiceError('parcel_fetch_failed', new Error(`Une erreur s'est produite lors de la recherche de la parcelle ${parcelId}.`));
+        if (parcelError.code === 'parcel_fetch_failed') {
+            throw parcelError;
+        }
+        throw new ServiceError('parcel_fetch_failed', new Error(`Parcelle ${parcelId} introuvable dans la base des propriétaires fonciers.`));
     }
 
     // Récupérer la liste des propriétaires de la parcelle
     let owners: RawOwner[];
     try {
         owners = await majicModel.findOwners(parcel.idcom, parcel.dnupro, dept, schema, shortOwnerTableName, ownerTableName);
-        if (!owners) {
-            throw new ServiceError('owner_fetch_failed', new Error(`Propriétaire de la parcelle ${parcelId} introuvable.`));
-        }
     } catch (ownersError) {
-        if (ownersError.code === 'owner_fetch_failed') {
-            throw Error(ownersError.nativeError.message);
-        }
+        // eslint-disable-next-line no-console
+        console.error(ownersError);
         throw new ServiceError('owners_fetch_failed', new Error(`Une erreur s'est produite lors de la recherche des propiétaires de la parcelle ${parcelId}.`));
+    }
+
+    if (!owners) {
+        throw new ServiceError('owner_fetch_failed', new Error(`Propriétaire de la parcelle ${parcelId} introuvable dans la base des propriétaires fonciers.`));
     }
 
     // Envoyer le mail
