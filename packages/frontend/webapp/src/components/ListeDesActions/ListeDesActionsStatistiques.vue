@@ -7,32 +7,13 @@
             <div>
                 <h1 class="text-3xl text-info font-bold">{{ title }}</h1>
                 <p>
-                    {{
-                        actionsStore.filteredActions[
-                            actionsStore.filters.status
-                        ].length
-                    }}
-                    action<template
-                        v-if="
-                            actionsStore.filteredActions[
-                                actionsStore.filters.status
-                            ].length > 1
-                        "
-                        >s</template
-                    >
+                    {{ currentActionsCount }} action{{ isPlural ? "s" : "" }}
                     <template v-if="actionsStore.filters.status === 'open'"
-                        >&nbsp;en cours</template
+                        >en cours</template
                     >
                     <template v-else
-                        >&nbsp;terminée<template
-                            v-if="
-                                actionsStore.filteredActions[
-                                    actionsStore.filters.status
-                                ].length > 1
-                            "
-                            >s</template
-                        ></template
-                    >
+                        >terminée{{ isPlural ? "s" : "" }}
+                    </template>
                 </p>
             </div>
         </section>
@@ -53,5 +34,14 @@ const mapLocation = computed(() => {
 });
 const title = computed(() => {
     return computeLocationSearchTitle(search.value, location.value);
+});
+const currentActions = computed(() => {
+    return actionsStore.filteredActions[actionsStore.filters.status];
+});
+const currentActionsCount = computed(() => {
+    return currentActions.value.length;
+});
+const isPlural = computed(() => {
+    return currentActionsCount.value > 1;
 });
 </script>
