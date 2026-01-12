@@ -54,17 +54,21 @@ export const useActionsStore = defineStore("actions", () => {
 
     const filteredActions = computed(() => {
         const STATUSES = ["open", "closed"];
-        return Object.fromEntries(
+        const filtered = Object.fromEntries(
             STATUSES.map((status) => [
                 status,
                 filterActions(actions.value, {
                     status,
                     search: filters.search.value,
                     location: filters.location.value,
-                    ...filters.properties.value,
+                    topic: filters.properties.value.topic || [],
+                    interventionLocation:
+                        filters.properties.value.interventionLocation || [],
                 }),
             ])
         );
+
+        return filtered;
     });
 
     const currentPage = {
@@ -91,10 +95,12 @@ export const useActionsStore = defineStore("actions", () => {
                 return [];
             }
 
-            return filteredActions.value[filters.status.value].slice(
-                (currentPage.index.value - 1) * ITEMS_PER_PAGE,
-                currentPage.index.value * ITEMS_PER_PAGE
-            );
+            return filteredActions.value[filters.status.value]
+                .sort(sortFn.value)
+                .slice(
+                    (currentPage.index.value - 1) * ITEMS_PER_PAGE,
+                    currentPage.index.value * ITEMS_PER_PAGE
+                );
         }),
     };
     watch(filters.search, resetPagination);
