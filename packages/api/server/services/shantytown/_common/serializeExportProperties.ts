@@ -5,6 +5,7 @@ import config from '#server/config';
 import electricityAccessTypes from '#server/models/electricityAccessTypesModel/_common/electricityAccessTypes';
 import waterAccessTypes from '#server/models/_common/waterAccessTypes';
 import toiletTypes from '#server/models/shantytownToiletTypesModel/_common/toiletTypes';
+import statusDetails from '#server/utils/statusDetails';
 import { ShantytownWithFinancedAction, ShantytownWithOwner } from '#root/types/resources/Shantytown.d';
 import electricityAccessStatusLabels from './livingConditionsStatusLabels/electricityAccessStatusLabels';
 import waterAccessStatusLabels from './livingConditionsStatusLabels/waterAccessStatusLabels';
@@ -28,14 +29,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         LARGE: 35,
     };
 
-    const STATUS_DETAILS = {
-        resorbed: 'Résorption progressive du site',
-        closed_by_justice: 'Décision de justice suite à une plainte du propriétaire',
-        closed_by_pref_admin: 'Décision administrative de la Préfecture',
-        closed_by_city_admin: 'Décision administrative de la Commune',
-        other: 'Autre',
-        unknown: 'Raison inconnue',
-    };
+    const STATUS_DETAILS = statusDetails;
 
     const properties: { [key: string]: ShantytownExportListProperty } = {
         departement: {
@@ -1185,6 +1179,7 @@ export default (closingSolutions: ClosingSolution[]) => {
 
                 return `- ${name} (${themes})`;
             }).join('\n'),
+            wrapText: true,
             width: COLUMN_WIDTHS.LARGE,
         },
         comments: {

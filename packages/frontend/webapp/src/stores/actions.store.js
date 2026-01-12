@@ -33,6 +33,24 @@ export const useActionsStore = defineStore("actions", () => {
         properties: ref({}),
     };
     const requestedPilotsForActions = ref([]);
+    const sort = ref("updated_at");
+
+    const sortFn = computed(() => {
+        return (a, b) => {
+            const aValue = a[sort.value];
+            const bValue = b[sort.value];
+            if (!aValue && !bValue) {
+                return 0;
+            }
+            if (!aValue) {
+                return 1;
+            }
+            if (!bValue) {
+                return -1;
+            }
+            return new Date(bValue).getTime() - new Date(aValue).getTime();
+        };
+    });
 
     const filteredActions = computed(() => {
         const STATUSES = ["open", "closed"];
@@ -166,6 +184,7 @@ export const useActionsStore = defineStore("actions", () => {
         currentPage,
         hash,
         requestedPilotsForActions,
+        sort,
         resetFilters,
         numberOfPages: computed(() => {
             if (filteredActions.value[filters.status.value].length === 0) {

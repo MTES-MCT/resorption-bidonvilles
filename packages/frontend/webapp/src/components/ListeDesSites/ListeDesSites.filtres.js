@@ -197,4 +197,10 @@ export default {
             },
         ],
     },
+    closureYear: {
+        label: "Année de fermeture",
+        id: "closureYear",
+        options: [],
+        singleSelection: true,
+    },
 };

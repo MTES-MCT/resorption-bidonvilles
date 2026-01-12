@@ -1,5 +1,6 @@
 import IncomingWebhook from 'node-mattermost';
 import config from '#server/config';
+import statusDetails from '#server/utils/statusDetails';
 import Action from '#root/types/resources/Action.d';
 import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
 import { CommentAuthor } from '#root/types/resources/CommentAuthor.d';
@@ -18,7 +19,10 @@ type MattermostMsg = {
 };
 
 const { mattermost, webappUrl } = config;
-const formatAddress = (town: Shantytown): string => `${town.address} ${town.name ? `« ${town.name} » ` : ''}`;
+const formatAddress = (town: Shantytown): string => {
+    const nameSection = town.name ? `« ${town.name} » ` : '';
+    return `${town.address} ${nameSection}`;
+};
 const formatUsername = (user: { id: number, first_name: string, last_name: string }): string => `[${user.first_name} ${user.last_name}](${webappUrl}/nouvel-utilisateur/${user.id}) `;
 const formatUsernameWithEmailLink = (user: { first_name: string, last_name: string, email: string, }): string => `[${user.first_name} ${user.last_name}](mailto:${user.email}) `;
 const formatTownLink = (townID: number, text: string): string => `[${text}](${webappUrl}/site/${townID})`;
@@ -38,11 +42,16 @@ const checkLocation: (user: User) => string = (user) => {
 };
 
 const formatDate = ((dateToFormat: Date): string => {
-    const day = dateToFormat.getUTCDate();
-    const month = dateToFormat.getUTCMonth() + 1;
+    const day = String(dateToFormat.getUTCDate()).padStart(2, '0');
+    const month = String(dateToFormat.getUTCMonth() + 1).padStart(2, '0');
     const year = dateToFormat.getUTCFullYear();
     return `${day}/${month}/${year}`;
 });
+
+const formatTownStatus = (status: string): string => {
+    const statusMapping: { [key: string]: string } = statusDetails;
+    return statusMapping[status] || status;
+};
 
 const buildMattermostMessage = (channel: string, text: string, color: string, fields: { short: boolean, value: string }[]): MattermostMsg => ({
     channel,
@@ -515,10 +524,13 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
     const userfullname = formatUsername(user);
     const townLink = formatTownLink(town.id, address);
 
-    const builtAtStr = formatDate(new Date(town.builtAt * 1000));
+    const builtAtStr = town.builtAt ? formatDate(new Date(town.builtAt * 1000)) : 'Non renseignée';
     const declaredAtStr = formatDate(new Date(town.declaredAt * 1000));
     const closedAtStr = formatDate(new Date(town.closedAt * 1000));
-    const resorptionTarget = !town.resorptionTarget ? 'non' : town.resorptionTarget;
+
+    const townStatus = formatTownStatus(town.status);
+
+    const resorptionTarget = town.resorptionTarget ? town.resorptionTarget : 'non';
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
         '#notif-fermeture-sites',
@@ -527,11 +539,11 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
         [
             {
                 short: false,
-                value: `*Status* : ${town.closedWithSolutions && town.closedWithSolutions !== 'no' ? 'Résorbé' : 'Disparu'}`,
+                value: `*Statut* : ${town.closedWithSolutions && town.closedWithSolutions !== 'no' ? 'Résorbé' : 'Disparu'}`,
             },
             {
                 short: false,
-                value: `*Cause de la fermeture* : ${town.status}`,
+                value: `*Cause de la fermeture* : ${townStatus}`,
             },
             {
                 short: false,
@@ -557,6 +569,55 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
     );
 
     await shantytownCloseAlert.send(mattermostMessage);
+}
+
+export async function triggerReinstallationAlert(town: Shantytown, user: User): Promise<void> {
+    if (!mattermost) {
+        return;
+    }
+
+    const webhook = new IncomingWebhook(mattermost);
+
+    const address = formatAddress(town);
+    const username = formatUsername(user);
+    const townLink = formatTownLink(town.id, address);
+
+    let incomingTownsMessage = 'Aucun site n\'a été désigné comme origine de la réinstallation';
+    if (town.reinstallationIncomingTowns.length > 0) {
+        incomingTownsMessage = [
+            'Le(s) site(s) suivant(s) ont été désigné(s) comme origine(s) de la réinstallation :',
+            '\n\n- ',
+            town.reinstallationIncomingTowns.map(({ id, usename }) => formatTownLink(id, usename)).join('\n- '),
+        ].join('');
+    }
+
+    const fields = [
+        {
+            short: false,
+            value: `*Nombre d'habitants* : ${town.populationTotal || 'Nombre inconnu'}`,
+        },
+        {
+            short: false,
+            value: incomingTownsMessage,
+        },
+    ];
+
+    if (town.reinstallationComments) {
+        fields.push({
+            short: false,
+            value: `*Commentaire* : ${town.reinstallationComments}`,
+        });
+    }
+
+    const notifChannel: string = config.environnement === 'development' ? '#notif-dev-test' : '#notif-reinstallation';
+    const mattermostMessage: MattermostMsg = buildMattermostMessage(
+        notifChannel,
+        `:warning: Réinstallation signalée sur le site ${townLink} par ${username}`,
+        '#d63232',
+        fields,
+    );
+
+    await webhook.send(mattermostMessage);
 }
 
 export async function triggerShantytownCreationAlert(town: Shantytown, user: User): Promise<void> {
@@ -622,6 +683,7 @@ export default {
     triggerNotifyOwnersAnonymization,
     triggerNotifyOwnersAnonymizationError,
     triggerPeopleInvitedAlert,
+    triggerReinstallationAlert,
     triggerRemoveDeclaredActor,
     triggerRequestActionPilot,
     triggerShantytownCloseAlert,
