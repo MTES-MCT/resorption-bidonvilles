@@ -10,7 +10,9 @@
         <BottomPagination
             :from="actionsStore.currentPage.from"
             :to="actionsStore.currentPage.to"
-            :total="actionsStore.filteredActions.length"
+            :total="
+                actionsStore.filteredActions[actionsStore.filters.status].length
+            "
             :currentPage="actionsStore.currentPage.index"
             :numberOfPages="actionsStore.numberOfPages"
             @pagechange="changePage"
