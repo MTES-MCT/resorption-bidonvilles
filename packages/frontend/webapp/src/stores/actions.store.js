@@ -61,9 +61,7 @@ export const useActionsStore = defineStore("actions", () => {
                     status,
                     search: filters.search.value,
                     location: filters.location.value,
-                    topic: filters.properties.value.topic || [],
-                    interventionLocation:
-                        filters.properties.value.interventionLocation || [],
+                    ...filters.properties.value,
                 }),
             ])
         );
