@@ -133,11 +133,13 @@ const attachmentsLabel = computed(() => {
         return sum + (comment.attachments ? comment.attachments.length : 0);
     }, 0);
 
-    return commentsAttachments > 1
-        ? `${commentsAttachments} Documents partagés`
-        : commentsAttachments === 0
-        ? null
-        : `${commentsAttachments} Document partagé`;
+    if (commentsAttachments > 1) {
+        return `${commentsAttachments} Documents partagés`;
+    }
+    if (commentsAttachments === 0) {
+        return null;
+    }
+    return `${commentsAttachments} Document partagé`;
 });
 
 const metricsUpdatedAtLabel = computed(() => {
