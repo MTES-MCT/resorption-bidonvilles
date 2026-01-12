@@ -35,13 +35,22 @@ export const useActionsStore = defineStore("actions", () => {
     const requestedPilotsForActions = ref([]);
 
     const filteredActions = computed(() => {
-        return filterActions(actions.value, {
-            status: filters.status.value,
-            search: filters.search.value,
-            location: filters.location.value,
-            ...filters.properties.value,
-        });
+        return {
+            open: filterActions(actions.value, {
+                status: "open",
+                search: filters.search.value,
+                location: filters.location.value,
+                ...filters.properties.value,
+            }),
+            closed: filterActions(actions.value, {
+                status: "closed",
+                search: filters.search.value,
+                location: filters.location.value,
+                ...filters.properties.value,
+            }),
+        };
     });
+
     const currentPage = {
         index: ref(-1), // index = 1 pour la première page
         from: computed(() => {
@@ -57,7 +66,7 @@ export const useActionsStore = defineStore("actions", () => {
             }
 
             return Math.min(
-                filteredActions.value.length,
+                filteredActions.value[filters.status.value].length,
                 currentPage.index.value * ITEMS_PER_PAGE
             );
         }),
@@ -66,7 +75,7 @@ export const useActionsStore = defineStore("actions", () => {
                 return [];
             }
 
-            return filteredActions.value.slice(
+            return filteredActions.value[filters.status.value].slice(
                 (currentPage.index.value - 1) * ITEMS_PER_PAGE,
                 currentPage.index.value * ITEMS_PER_PAGE
             );
@@ -78,7 +87,7 @@ export const useActionsStore = defineStore("actions", () => {
     watch(filters.properties, resetPagination, { deep: true });
 
     function resetPagination() {
-        if (filteredActions.value.length === 0) {
+        if (filteredActions.value[filters.status.value].length === 0) {
             currentPage.index.value = -1;
         } else {
             currentPage.index.value = 1;
@@ -161,11 +170,14 @@ export const useActionsStore = defineStore("actions", () => {
         requestedPilotsForActions,
         resetFilters,
         numberOfPages: computed(() => {
-            if (filteredActions.value.length === 0) {
+            if (filteredActions.value[filters.status.value].length === 0) {
                 return 0;
             }
 
-            return Math.ceil(filteredActions.value.length / ITEMS_PER_PAGE);
+            return Math.ceil(
+                filteredActions.value[filters.status.value].length /
+                    ITEMS_PER_PAGE
+            );
         }),
         async create(data) {
             const { action, permissions } = await create(data);
