@@ -33,14 +33,33 @@ export const useActionsStore = defineStore("actions", () => {
         properties: ref({}),
     };
     const requestedPilotsForActions = ref([]);
+    const sort = ref("updated_at");
+
+    const sortFn = computed(() => {
+        return (a, b) => {
+            const aValue = a[sort.value];
+            const bValue = b[sort.value];
+            if (!aValue && !bValue) {
+                return 0;
+            }
+            if (!aValue) {
+                return 1;
+            }
+            if (!bValue) {
+                return -1;
+            }
+            return new Date(bValue).getTime() - new Date(aValue).getTime();
+        };
+    });
 
     const filteredActions = computed(() => {
-        return filterActions(actions.value, {
+        const filtered = filterActions(actions.value, {
             status: filters.status.value,
             search: filters.search.value,
             location: filters.location.value,
             ...filters.properties.value,
         });
+        return filtered.sort(sortFn.value);
     });
     const currentPage = {
         index: ref(-1), // index = 1 pour la première page
@@ -159,6 +178,7 @@ export const useActionsStore = defineStore("actions", () => {
         currentPage,
         hash,
         requestedPilotsForActions,
+        sort,
         resetFilters,
         numberOfPages: computed(() => {
             if (filteredActions.value.length === 0) {
