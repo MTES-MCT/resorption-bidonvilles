@@ -14,12 +14,18 @@
             <div
                 class="mb-4 px-6 -mt-1 pt-px flex flex-col sm:flex-row justify-between sm:gap-2"
             >
-                <div class="-mt-[1px]">
+                <div class="flex flex-col sm:flex-row gap-2 -mt-[1px]">
                     <DsfrBadge
                         :label="actionPeriod"
                         noIcon
                         type="info"
-                        class="mt-1 gap-2 lg:place-self-end text-xs items-center py-2"
+                        class="mt-1 lg:place-self-end text-xs py-2"
+                    />
+                    <DsfrBadge
+                        :label="metricsUpdatedAtLabel"
+                        noIcon
+                        :type="metricsUpdatedAtBadgeType"
+                        class="mt-1 lg:place-self-end text-xs py-2"
                     />
                 </div>
                 <div class="mt-[3px]" v-if="attachmentsLabel">
@@ -77,16 +83,17 @@
 <script setup>
 import { computed, toRefs, ref } from "vue";
 import formatDate from "@common/utils/formatDate";
+import formatMetricsUpdatedAt from "@/utils/formatMetricsUpdatedAt";
+import getSince from "@/utils/getSince";
 import focusClasses from "@common/utils/focus_classes";
 
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import CarteActionColonneChampsIntervention from "./CarteActionColonneChampsIntervention.vue";
 import CarteActionDetailleeColonneDepartement from "./CarteActionDetailleeColonneDepartement.vue";
 import CarteActionDetailleeColonneLocalisation from "./CarteActionDetailleeColonneLocalisation.vue";
 import CarteActionDetailleeColonnePilote from "./CarteActionDetailleeColonnePilote.vue";
 import CarteActionDetailleeColonneOperateur from "./CarteActionDetailleeColonneOperateur.vue";
 import { useUserStore } from "@/stores/user.store";
-import { useRouter } from "vue-router";
 
 const props = defineProps({
     action: {
@@ -125,11 +132,25 @@ const attachmentsLabel = computed(() => {
         return sum + (comment.attachments ? comment.attachments.length : 0);
     }, 0);
 
-    return commentsAttachments > 1
-        ? `${commentsAttachments} Documents partagés`
-        : commentsAttachments === 0
-        ? null
-        : `${commentsAttachments} Document partagé`;
+    if (commentsAttachments > 1) {
+        return `${commentsAttachments} Documents partagés`;
+    }
+    if (commentsAttachments === 0) {
+        return null;
+    }
+    return `${commentsAttachments} Document partagé`;
+});
+
+const metricsUpdatedAtLabel = computed(() => {
+    return formatMetricsUpdatedAt(action.value);
+});
+
+const metricsUpdatedAtBadgeType = computed(() => {
+    if (!action.value.metrics_updated_at) {
+        return "warning";
+    }
+    const { months } = getSince(action.value.metrics_updated_at / 1000);
+    return months >= 3 ? "error" : "success";
 });
 
 const navigateTo = (target) => {

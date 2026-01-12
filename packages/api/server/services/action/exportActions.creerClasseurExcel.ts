@@ -29,7 +29,7 @@ const sectionTitles = [
     { name: 'SCOLARISATION', range: { from: 'W1', to: 'AC1' } },
     { name: 'FINANCEMENT', range: { from: 'AD1', to: 'AO1' } },
     { name: 'COMMENTAIRES', range: { from: 'AP1', to: 'AR1' } },
-    { name: 'MISE À JOUR', range: { from: 'AS1', to: 'AS1' } },
+    { name: 'MISE À JOUR', range: { from: 'AS1', to: 'AT1' } },
 ];
 
 const headers = [
@@ -78,6 +78,7 @@ const headers = [
     { label: 'Dernier commentaire', width: '10' },
     { label: 'Date du dernier commentaire', width: '5' },
     { label: 'Action mise à jour le', width: '5' },
+    { label: 'Indicateurs mis à jour le', width: '5' },
 ];
 
 function regrouperParDepartement(data: ActionReportRow[]): DepartementObject[] {
@@ -222,6 +223,7 @@ function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet) {
             item.last_comment,
             item.last_comment_date,
             item.last_update,
+            item.metrics_updated_at,
         ]);
     });
 }
