@@ -94,7 +94,6 @@ import CarteActionDetailleeColonneLocalisation from "./CarteActionDetailleeColon
 import CarteActionDetailleeColonnePilote from "./CarteActionDetailleeColonnePilote.vue";
 import CarteActionDetailleeColonneOperateur from "./CarteActionDetailleeColonneOperateur.vue";
 import { useUserStore } from "@/stores/user.store";
-import { useRouter } from "vue-router";
 
 const props = defineProps({
     action: {
