@@ -264,7 +264,7 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
         || JSON.stringify(originalShantytown.reinstallationIncomingTowns.map(t => t.id))
         !== JSON.stringify(updatedShantytown.reinstallationIncomingTowns.map(t => t.id));
 
-    if (updatedShantytown.isReinstallation === true && reinstallationChanged) {
+    if (updatedShantytown.isReinstallation && reinstallationChanged) {
         try {
             await triggerReinstallationAlert(updatedShantytown, user);
         } catch (err) {

@@ -582,7 +582,7 @@ export async function triggerReinstallationAlert(town: Shantytown, user: User): 
     let incomingTownsMessage = 'Aucun site n\'a été désigné comme origine de la réinstallation';
     if (town.reinstallationIncomingTowns.length > 0) {
         incomingTownsMessage = [
-            'Le(s) site(s) suivant(s) ont été désigné(s) comme origine de la réinstallation :',
+            'Le(s) site(s) suivant(s) ont été désigné(s) comme origine(s) de la réinstallation :',
             '\n\n- ',
             town.reinstallationIncomingTowns.map(({ id, usename }) => formatTownLink(id, usename)).join('\n- '),
         ].join('');
@@ -606,8 +606,9 @@ export async function triggerReinstallationAlert(town: Shantytown, user: User): 
         });
     }
 
+    const notifChannel: string = config.environnement === 'development' ? '#notif-dev-test' : '#notif-reinstallation';
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
-        '#notif-reinstallation',
+        notifChannel,
         `:warning: Réinstallation signalée sur le site ${townLink} par ${username}`,
         '#d63232',
         fields,
