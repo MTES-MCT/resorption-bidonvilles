@@ -59,7 +59,7 @@ const headers = [
     { label: 'Mineurs de 3 ans et plus identifiés sur site', width: '5' },
     { label: 'Mineurs de moins de 3 ans bénéficiant d\'une action de médiation', width: '5' },
     { label: 'Mineurs de 3 ans et plus bénéficiant d\'une action de médiation', width: '5' },
-    { label: 'Mineurs dont la scolarité a débuté cette année', width: '5' },
+    { label: 'Mineurs nouvellement scolarisés depuis la rentrée scolaire', width: '5' },
     { label: 'Total mineurs scolarisés (maternelle/élémentaire/collège/lycée ou formation professionnelle, hors "Autre")', width: '5' },
     { label: 'Mineurs en maternelle', width: '5' },
     { label: 'Mineurs en élémentaire', width: '5' },

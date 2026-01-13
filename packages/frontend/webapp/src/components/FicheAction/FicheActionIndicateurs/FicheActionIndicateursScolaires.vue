@@ -30,7 +30,7 @@
 
     <IndicateursTableRowData
         :labels="[
-            `<span>Mineurs dont la scolarité a débuté <span class='text-tertiaryA11Y'>cette année scolaire</span></span>`,
+            `<span>Mineurs nouvellement scolarisés depuis <span class='text-tertiaryA11Y'>la rentrée scolaire</span></span>`,
         ]"
         :data="data.scolarises_dans_annee"
         :labels-without-background="[0]"
