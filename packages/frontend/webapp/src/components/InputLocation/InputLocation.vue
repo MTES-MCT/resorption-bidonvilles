@@ -50,9 +50,9 @@ async function autocompleteFn(value) {
 
     if (actionIdPattern.test(value.trim())) {
         const last4Chars = value.trim().slice(-4);
-        const actionId = parseInt(last4Chars, 10);
+        const actionId = Number.parseInt(last4Chars, 10);
 
-        if (!isNaN(actionId) && actionId > 0) {
+        if (!Number.isNaN(actionId) && actionId > 0) {
             try {
                 const action = await fetchOne(actionId);
                 allResults.push({
@@ -66,10 +66,9 @@ async function autocompleteFn(value) {
                         displayId: action.displayId,
                     },
                 });
-            } catch (_error) {
-                // Action non trouvée, on ignore silencieusement
-                // Le préfixe _ est une convention universelle
-                // qui indique qu'on ignore intentionnellement le paramètre.
+            } catch {
+                // NOSONAR javascript:S2486 - L'échec de la recherche d'action est intentionnel
+                // La recherche de locations doit continuer même si l'action n'existe pas
             }
         }
     }
