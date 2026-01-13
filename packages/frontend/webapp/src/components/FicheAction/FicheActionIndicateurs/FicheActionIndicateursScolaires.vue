@@ -51,7 +51,7 @@
             `<span class='text-tertiaryA11Y'>Au lycée ou en formation professionnelle</span>`,
             `<span class='font-bold'>Tous niveaux scolaires confondus (3-18 ans)</span>`,
         ]"
-        :data="data.scolarises"
+        :data="scolarisesAvecTotal"
         :labels-without-background="[0, 1, 2, 3, 4]"
         withoutTopBorder
     />
@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { defineProps, toRefs, computed } from "vue";
 import icons from "@/utils/action_metrics_icons";
 
 import IndicateursTableRow from "@/components/IndicateursTable/IndicateursTableRow.vue";
@@ -82,4 +82,21 @@ const props = defineProps({
     },
 });
 const { data } = toRefs(props);
+
+// Calcul du total pour chaque année
+const scolarisesAvecTotal = computed(() => {
+    return data.value.scolarises.map((yearData) => {
+        if (!yearData || yearData.length < 4) {
+            return yearData;
+        }
+        
+        // Calculer la somme des 4 premières catégories
+        const sum = yearData
+            .slice(0, 4)
+            .reduce((acc, value) => acc + (Number(value) || 0), 0);
+        
+        // Retourner les données originales avec le total calculé à la fin
+        return [...yearData.slice(0, 4), Number.isFinite(sum) ? sum : 0];
+    });
+});
 </script>
