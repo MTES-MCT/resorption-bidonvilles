@@ -16,6 +16,7 @@
 <script setup>
 import { computed, onMounted } from "vue";
 import { useActionsStore } from "@/stores/actions.store";
+import { useRouter } from "vue-router";
 
 import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
@@ -24,6 +25,8 @@ import ListeDesActions from "@/components/ListeDesActions/ListeDesActions.vue";
 const ariane = [{ label: "Accueil", to: "/" }, { label: "Actions" }];
 
 const actionsStore = useActionsStore();
+const router = useRouter();
+
 const location = computed({
     get() {
         return {
@@ -36,6 +39,10 @@ const location = computed({
             actionsStore.filters.search = "";
             actionsStore.filters.location = null;
         } else {
+            if (newValue?.data?.type === "action") {
+                router.push(`/action/${newValue.data.actionId}`);
+                return;
+            }
             actionsStore.filters.search = newValue?.search;
             actionsStore.filters.location = newValue?.data;
         }
