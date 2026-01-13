@@ -49,7 +49,7 @@
             `<span class='text-tertiaryA11Y'>En élémentaire</span>`,
             `<span class='text-tertiaryA11Y'>Au collège</span>`,
             `<span class='text-tertiaryA11Y'>Au lycée ou en formation professionnelle</span>`,
-            'Tous niveaux scolaires confondus (3-18 ans)',
+            `<span class='font-bold'>Tous niveaux scolaires confondus (3-18 ans)</span>`,
         ]"
         :data="data.scolarises"
         :labels-without-background="[0, 1, 2, 3, 4]"
