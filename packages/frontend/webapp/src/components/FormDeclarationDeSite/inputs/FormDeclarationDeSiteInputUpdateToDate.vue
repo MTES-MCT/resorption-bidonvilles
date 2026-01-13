@@ -3,6 +3,7 @@
         id="update_to_date"
         direction="horizontal"
         :label="labels.update_to_date"
+        :info="labels.update_to_date_details"
         icon="calendar"
         showMandatoryStar
     >
