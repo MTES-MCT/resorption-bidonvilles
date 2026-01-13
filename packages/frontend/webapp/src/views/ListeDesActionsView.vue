@@ -34,17 +34,18 @@ const location = computed({
             data: actionsStore.filters.location,
         };
     },
+
     set(newValue) {
-        if (!newValue) {
-            actionsStore.filters.search = "";
-            actionsStore.filters.location = null;
-        } else {
+        if (newValue) {
             if (newValue?.data?.type === "action") {
                 router.push(`/action/${newValue.data.actionId}`);
                 return;
             }
             actionsStore.filters.search = newValue?.search;
             actionsStore.filters.location = newValue?.data;
+        } else {
+            actionsStore.filters.search = "";
+            actionsStore.filters.location = null;
         }
     },
 });
