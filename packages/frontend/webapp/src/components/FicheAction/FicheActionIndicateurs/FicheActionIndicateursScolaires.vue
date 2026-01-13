@@ -90,13 +90,9 @@ const scolarisesAvecTotal = computed(() => {
             return yearData;
         }
 
-        // Calculer la somme des 4 premières catégories
-        const sum = yearData
-            .slice(0, 4)
-            .reduce((acc, value) => acc + (Number(value) || 0), 0);
-
-        // Retourner les données originales avec le total calculé à la fin
-        return [...yearData.slice(0, 4), Number.isFinite(sum) ? sum : 0];
+        // Les 4 premières catégories sont maintenant dans le bon ordre
+        // Le total est déjà calculé par le backend à la position 4
+        return yearData;
     });
 });
 </script>

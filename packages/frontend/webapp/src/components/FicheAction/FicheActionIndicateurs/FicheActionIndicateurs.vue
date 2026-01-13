@@ -179,11 +179,11 @@ const data = action.value.metrics.reduce(
                 (metrics.scolaire_nombre_lycee || 0);
 
             acc.data.ecole.scolarises.push([
-                totalScolarises || null,
                 metrics.scolaire_nombre_maternelle,
                 metrics.scolaire_nombre_elementaire,
                 metrics.scolaire_nombre_college,
                 metrics.scolaire_nombre_lycee,
+                totalScolarises || null,
             ]);
 
             acc.data.ecole.autre.push([metrics.scolaire_nombre_autre]);
