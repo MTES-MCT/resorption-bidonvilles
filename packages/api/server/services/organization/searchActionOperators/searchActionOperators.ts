@@ -12,7 +12,7 @@ interface ActionOperatorOrganizationResult {
     }
 }
 
-export default async (search: string): Promise<ActionOperatorOrganizationResult[]> => {
+export default async function searchActionOperators(search: string): Promise<ActionOperatorOrganizationResult[]> {
     try {
         const organizations = await organizationModel.searchActionOperators(search);
 
@@ -29,4 +29,4 @@ export default async (search: string): Promise<ActionOperatorOrganizationResult[
     } catch (error) {
         throw new ServiceError('db_read_error', error);
     }
-};
+}
