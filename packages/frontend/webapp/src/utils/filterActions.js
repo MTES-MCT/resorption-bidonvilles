@@ -1,6 +1,17 @@
-export default function (actions, filters) {
+export default function filterActions(actions, filters) {
     return actions.filter((action) => {
-        if (filters.location && !checkLocation(action, filters)) {
+        if (
+            filters.location?.type === "organization" &&
+            !checkOrganization(action, filters.location.organizationId)
+        ) {
+            return false;
+        }
+
+        if (
+            filters.location &&
+            filters.location.type !== "organization" &&
+            !checkLocation(action, filters)
+        ) {
             return false;
         }
 
@@ -60,13 +71,13 @@ function checkLocation(action, filters) {
         return true;
     }
 
-    const overseasRegions = ["01", "02", "03", "04", "06"];
+    const overseasRegions = new Set(["01", "02", "03", "04", "06"]);
     if (filters.location.typeUid === "metropole") {
-        return !overseasRegions.includes(action.location.region.code);
+        return !overseasRegions.has(action.location.region.code);
     }
 
     if (filters.location.typeUid === "outremer") {
-        return overseasRegions.includes(action.location.region.code);
+        return overseasRegions.has(action.location.region.code);
     }
 
     const l = action.location[filters.location.typeUid];
@@ -88,4 +99,8 @@ function checkTopic(action, filters) {
 
 function checkInterventionLocation(action, filters) {
     return filters.includes(action.location_type);
+}
+
+function checkOrganization(action, organizationId) {
+    return action.operators?.some((op) => op.id === organizationId);
 }
