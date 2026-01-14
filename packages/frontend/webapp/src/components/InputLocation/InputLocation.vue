@@ -14,6 +14,7 @@ import { defineProps, toRefs, computed, defineEmits, ref } from "vue";
 import { Autocomplete } from "@resorptionbidonvilles/ui";
 import { autocomplete } from "@/api/locations.api.js";
 import { fetchOne } from "@/api/actions.api.js";
+import { searchActionOperators } from "@/api/organizations.api.js";
 import formatLocationLabel from "@/utils/formatLocationLabel.js";
 import { trackEvent } from "@/helpers/matomo";
 
@@ -91,6 +92,29 @@ async function autocompleteFn(value) {
         allResults.push(...locationResults);
     } catch (error) {
         console.error("Error fetching locations:", error);
+    }
+
+    try {
+        const organizations = await searchActionOperators(value);
+        const organizationResults = organizations.map((org) => {
+            const label = org.abbreviation
+                ? `${org.name} (${org.abbreviation})`
+                : org.name;
+            return {
+                id: `organization-${org.id}`,
+                label,
+                category: "Structure",
+                data: {
+                    type: "organization",
+                    organizationId: org.id,
+                    organizationName: org.name,
+                    organizationAbbreviation: org.abbreviation,
+                },
+            };
+        });
+        allResults.push(...organizationResults);
+    } catch (error) {
+        console.error("Error fetching organizations:", error);
     }
 
     return allResults;
