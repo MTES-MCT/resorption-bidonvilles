@@ -11,7 +11,7 @@ export type ActionOperatorOrganizationRow = {
     similarity: number,
 };
 
-export default async (search: string, user: User): Promise<ActionOperatorOrganizationRow[]> => {
+async function searchActionOperators(search: string, user: User): Promise<ActionOperatorOrganizationRow[]> {
     // Récupérer les clauses de permissions
     const permissionClauseGroup = where().can(user).do('read', 'action');
 
@@ -83,4 +83,6 @@ export default async (search: string, user: User): Promise<ActionOperatorOrganiz
             replacements,
         },
     );
-};
+}
+
+export default searchActionOperators;
