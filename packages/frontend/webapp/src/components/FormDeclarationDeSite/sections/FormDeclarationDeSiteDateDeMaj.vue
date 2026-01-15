@@ -1,5 +1,8 @@
 <template>
     <FormSection id="date" variant="gray">
+        <template #title>
+            Renseignement de la date de mise à jour des données
+        </template>
         <InputUpdateToDate :withoutMargin="values.update_to_date === 1" />
         <InputUpdatedAt
             v-if="values.update_to_date === 0"

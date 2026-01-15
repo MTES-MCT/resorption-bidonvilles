@@ -67,7 +67,7 @@
                 class="sticky top-0"
                 :class="{
                     'w-0 overflow-hidden': mapSize === 'hidden',
-                    'w-1/3': mapSize === 'half',
+                    'w-1/2': mapSize === 'half',
                     'flex-1': mapSize === 'full',
                     'h-screen': mapSize === 'half' || mapSize === 'full',
                 }"

@@ -1,6 +1,8 @@
 export default {
     update_to_date:
-        "Les informations que je mets à jour correspondent à la situation du site aujourd'hui",
+        "Les informations que je mets à jour correspondent à la situation du site aujourd'hui ?",
+    update_to_date_details:
+        "Si non, vous pourrez saisir une date de mise à jour des données différente de la date du jour.",
     updated_at: "La situation correspond à la date du",
     address: "Adresse",
     name: "Appellation du site",

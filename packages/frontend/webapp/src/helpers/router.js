@@ -5,7 +5,6 @@ import { useUserStore } from "@/stores/user.store.js";
 import { useConfigStore } from "@/stores/config.store.js";
 import { useNavigationStore } from "@/stores/navigation.store";
 import { useNotificationStore } from "@/stores/notification.store";
-import { createNavigationLog } from "@/api/me.api";
 import logout from "@/utils/logout";
 import waitForElement from "@/utils/waitForElement";
 const defaultTitle = "Résorption Bidonvilles"; // Titre par défaut
@@ -699,7 +698,7 @@ router.setHashWithoutScroll = (hash) => {
     });
 };
 
-router.beforeEach((to, from) => {
+router.beforeEach(async (to, from) => {
     currentRouteIsBacked = window.popStateDetected === true;
     window.popStateDetected = false;
 
@@ -794,8 +793,7 @@ router.beforeEach((to, from) => {
 
     // if logged, register navigation log
     if (userStore.isLoggedIn && router.currentRoute.value?.path !== to.path) {
-        createNavigationLog(to.path);
-        userStore.refreshToken();
+        await userStore.refreshToken(to.path);
     }
 
     // Update html title element

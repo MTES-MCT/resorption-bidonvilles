@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { signin } from "@/api/signin.api";
+import { createNavigationLog } from "@/api/me.api";
 import { checkActualPassword } from "@/api/checkActualPassword.api";
 import { get as refreshToken } from "@/api/refresh_token.api";
 import { useConfigStore } from "@/stores/config.store.js";
@@ -271,10 +272,11 @@ export const useUserStore = defineStore("user", {
 
             return permission !== null;
         },
-        async refreshToken() {
+        async refreshToken(route = null) {
             const response = await refreshToken();
             if (response?.token) {
                 this.setToken(response.token);
+                createNavigationLog(route || "/");
             } else {
                 logout("/connexion?reason=invalid_token");
             }
