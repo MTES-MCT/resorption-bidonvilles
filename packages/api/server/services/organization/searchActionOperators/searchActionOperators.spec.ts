@@ -3,6 +3,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import { rewiremock } from '#test/rewiremock';
 import ServiceError from '#server/errors/ServiceError';
+import { User } from '#root/types/resources/User.d';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -14,6 +15,25 @@ const stubs = {
         searchActionOperators: sandbox.stub(),
     },
 };
+
+// Mock users avec différents profils de permissions
+const mockUser = {} as User;
+
+const mockUserNational = {
+    ...mockUser,
+    intervention_areas: {
+        is_national: true,
+        areas: [],
+    },
+} as User;
+
+const mockUserTerritorialOrRestricted = {
+    ...mockUser,
+    intervention_areas: {
+        is_national: false,
+        areas: [],
+    },
+} as User;
 
 rewiremock('#server/models/organizationModel/index').with(stubs.organizationModel);
 
@@ -33,7 +53,6 @@ describe('services/organization.searchActionOperators()', () => {
 
     describe('service.searchActionOperators', () => {
         it('retourne les organisations formatées avec leurs actions', async () => {
-            // Arrange
             const mockOrganizations = [
                 {
                     id: 1,
@@ -53,11 +72,9 @@ describe('services/organization.searchActionOperators()', () => {
 
             stubs.organizationModel.searchActionOperators.resolves(mockOrganizations);
 
-            // Act
-            const result = await searchActionOperators('ddets');
+            const result = await searchActionOperators('ddets', mockUser);
 
-            // Assert
-            expect(stubs.organizationModel.searchActionOperators).to.have.been.calledOnceWith('ddets');
+            expect(stubs.organizationModel.searchActionOperators).to.have.been.calledOnceWith('ddets', mockUser);
             expect(result).to.deep.equal([
                 {
                     id: 1,
@@ -83,7 +100,6 @@ describe('services/organization.searchActionOperators()', () => {
         });
 
         it('convertit action_count en nombre', async () => {
-            // Arrange
             const mockOrganizations = [
                 {
                     id: 1,
@@ -96,36 +112,135 @@ describe('services/organization.searchActionOperators()', () => {
 
             stubs.organizationModel.searchActionOperators.resolves(mockOrganizations);
 
-            // Act
-            const result = await searchActionOperators('ddets');
+            const result = await searchActionOperators('ddets', mockUser);
 
-            // Assert
             expect(result[0].actionCount).to.be.a('number');
             expect(result[0].actionCount).to.equal(5);
         });
 
         it('retourne un tableau vide si aucune organisation trouvée', async () => {
-            // Arrange
             stubs.organizationModel.searchActionOperators.resolves([]);
 
-            // Act
-            const result = await searchActionOperators('inconnu');
+            const result = await searchActionOperators('inconnu', mockUser);
 
-            // Assert
             expect(result).to.be.an('array');
             expect(result).to.have.length(0);
+        });
+
+        it('retourne un tableau vide si l\'utilisateur n\'a aucune permission', async () => {
+            stubs.organizationModel.searchActionOperators.resolves([]);
+
+            const result = await searchActionOperators('test', mockUser);
+
+            expect(stubs.organizationModel.searchActionOperators).to.have.been.calledOnceWith('test', mockUser);
+            expect(result).to.be.an('array');
+            expect(result).to.have.length(0);
+        });
+
+        it('appelle le modèle avec les bons paramètres', async () => {
+            const mockOrganizations = [
+                {
+                    id: 1,
+                    name: 'Test Org',
+                    abbreviation: 'TO',
+                    action_count: 2,
+                    similarity: 0.9,
+                },
+            ];
+
+            stubs.organizationModel.searchActionOperators.resolves(mockOrganizations);
+
+            await searchActionOperators('test', mockUser);
+
+            expect(stubs.organizationModel.searchActionOperators).to.have.been.calledOnceWith('test', mockUser);
+        });
+
+        describe('tests des permissions', () => {
+            it('utilisateur national peut voir toutes les organisations', async () => {
+                const mockOrganizations = [
+                    {
+                        id: 1,
+                        name: 'Org Nationale',
+                        abbreviation: 'ON',
+                        action_count: 5,
+                        similarity: 0.9,
+                    },
+                ];
+
+                stubs.organizationModel.searchActionOperators.resolves(mockOrganizations);
+
+                const result = await searchActionOperators('test', mockUserNational);
+
+                expect(stubs.organizationModel.searchActionOperators).to.have.been.calledOnceWith('test', mockUserNational);
+                expect(result).to.have.length(1);
+                expect(result[0].name).to.equal('Org Nationale');
+            });
+
+            it('utilisateur territorial voit seulement les organisations de ses territoires', async () => {
+                const mockOrganizations = [
+                    {
+                        id: 1,
+                        name: 'Org Territoriale',
+                        abbreviation: 'OT',
+                        action_count: 3,
+                        similarity: 0.8,
+                    },
+                ];
+
+                stubs.organizationModel.searchActionOperators.resolves(mockOrganizations);
+
+                const result = await searchActionOperators('test', mockUserTerritorialOrRestricted);
+
+                expect(stubs.organizationModel.searchActionOperators).to.have.been.calledOnceWith('test', mockUserTerritorialOrRestricted);
+                expect(result).to.have.length(1);
+                expect(result[0].name).to.equal('Org Territoriale');
+            });
+
+            it('utilisateur restreint ne voit aucune organisation si aucune action dans ses territoires', async () => {
+                stubs.organizationModel.searchActionOperators.resolves([]);
+
+                const result = await searchActionOperators('test', mockUserTerritorialOrRestricted);
+
+                expect(stubs.organizationModel.searchActionOperators).to.have.been.calledOnceWith('test', mockUserTerritorialOrRestricted);
+                expect(result).to.have.length(0);
+            });
+
+            it('différents utilisateurs obtiennent des résultats différents selon leurs permissions', async () => {
+                stubs.organizationModel.searchActionOperators
+                    .withArgs('test', mockUserNational).resolves([
+                        {
+                            id: 1,
+                            name: 'Org 1',
+                            abbreviation: 'O1',
+                            action_count: 2,
+                            similarity: 0.9,
+                        },
+                        {
+                            id: 2,
+                            name: 'Org 2',
+                            abbreviation: 'O2',
+                            action_count: 1,
+                            similarity: 0.7,
+                        },
+                    ])
+                    .withArgs('test', mockUserTerritorialOrRestricted).resolves([]);
+
+                const resultNational = await searchActionOperators('test', mockUserNational);
+                const resultRestricted = await searchActionOperators('test', mockUserTerritorialOrRestricted);
+
+                expect(resultNational).to.have.length(2);
+                expect(resultRestricted).to.have.length(0);
+            });
         });
     });
 
     describe('service saerchActionOperators - cas d\'erreur', () => {
         it('lance une ServiceError si le modèle échoue', async () => {
-            // Arrange
             const dbError = new Error('Database connection failed');
             stubs.organizationModel.searchActionOperators.rejects(dbError);
 
-            // Act & Assert
             try {
-                await searchActionOperators('ddets');
+                await searchActionOperators('ddets', mockUser);
                 expect.fail('Should have thrown ServiceError');
             } catch (error) {
                 expect(error).to.be.instanceOf(ServiceError);
@@ -135,13 +250,11 @@ describe('services/organization.searchActionOperators()', () => {
         });
 
         it('passe l\'erreur native à ServiceError', async () => {
-            // Arrange
             const nativeError = new Error('Native error');
             stubs.organizationModel.searchActionOperators.rejects(nativeError);
 
-            // Act
             try {
-                await searchActionOperators('ddets');
+                await searchActionOperators('ddets', mockUser);
                 expect.fail('Should have thrown ServiceError');
             } catch (error) {
                 expect(error.nativeError).to.equal(nativeError);
@@ -151,7 +264,6 @@ describe('services/organization.searchActionOperators()', () => {
 
     describe('formatage des données', () => {
         it('conserve l\'abbréviation si elle existe', async () => {
-            // Arrange
             const mockOrganizations = [
                 {
                     id: 1,
@@ -164,15 +276,12 @@ describe('services/organization.searchActionOperators()', () => {
 
             stubs.organizationModel.searchActionOperators.resolves(mockOrganizations);
 
-            // Act
-            const result = await searchActionOperators('ddets');
+            const result = await searchActionOperators('ddets', mockUser);
 
-            // Assert
             expect(result[0].abbreviation).to.equal('DDETS44');
         });
 
         it('gére l\'abbréviation nulle', async () => {
-            // Arrange
             const mockOrganizations = [
                 {
                     id: 2,
@@ -185,15 +294,12 @@ describe('services/organization.searchActionOperators()', () => {
 
             stubs.organizationModel.searchActionOperators.resolves(mockOrganizations);
 
-            // Act
-            const result = await searchActionOperators('ddets');
+            const result = await searchActionOperators('ddets', mockUser);
 
-            // Assert
             expect(result[0].abbreviation).to.be.null;
         });
 
         it('retourne toujours le type "Structure"', async () => {
-            // Arrange
             const mockOrganizations = [
                 {
                     id: 1,
@@ -206,10 +312,8 @@ describe('services/organization.searchActionOperators()', () => {
 
             stubs.organizationModel.searchActionOperators.resolves(mockOrganizations);
 
-            // Act
-            const result = await searchActionOperators('ddets');
+            const result = await searchActionOperators('ddets', mockUser);
 
-            // Assert
             expect(result[0].type).to.deep.equal({
                 id: 'action_operator_organization',
                 label: 'Structure',
