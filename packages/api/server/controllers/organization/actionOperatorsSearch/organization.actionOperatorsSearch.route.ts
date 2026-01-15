@@ -4,7 +4,7 @@ import controller from './organization.actionOperatorsSearch';
 
 function registerActionOperatorsSearchRoute(app: ApplicationWithCustomRoutes): void {
     app.customRoutes.get('/organizations/search-action-operators', controller, validator, {
-        authenticate: false,
+        authenticate: true,
         multipart: false,
     });
 }
