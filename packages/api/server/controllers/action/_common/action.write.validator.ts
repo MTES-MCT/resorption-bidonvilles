@@ -5,7 +5,7 @@ import shantytownModel from '#server/models/shantytownModel';
 import topicModel from '#server/models/topicModel';
 import userModel from '#server/models/userModel';
 import can from '#server/utils/permission/can';
-import { body } from 'express-validator';
+import { body, ValidationChain } from 'express-validator';
 import validator from 'validator';
 
 const { isLatLong } = validator;
@@ -29,6 +29,286 @@ function canWriteManagersAndDepartement(mode: 'create' | 'update', req) {
 
     return canWriteFinances(mode, req);
 }
+
+// Fonction factory qui génère un validateur d'utilisateurs
+const createUserValidator = (fieldName: string | string[] | undefined, displayName: string) => body(fieldName)
+    .exists({ checkNull: true }).bail()
+    .withMessage(`Le champ "${displayName}" est obligatoire`)
+    .isArray().bail()
+    .withMessage('Le format des utilisateurs ciblés n\'est pas valide')
+    .isLength({ min: 1 }).bail()
+    .withMessage(`Le champ "${displayName}" est obligatoire`)
+    .customSanitizer(async (value) => {
+        const users = await userModel.findByIds(null, value);
+        if (users.length !== value.length) {
+            return null;
+        }
+
+        return users.map(u => ({
+            id: u.id,
+            organization_id: u.organization.id,
+        }));
+    })
+    .custom((value) => {
+        if (value === null) {
+            throw new Error('Un ou plusieurs utilisateurs ciblés n\'existent pas');
+        }
+
+        return true;
+    });
+
+// Fonction factory qui génère un validateur d'indicateur numérique
+const createIndicatorValidator = (
+    fieldName: string,
+    displayName: string,
+    options: {
+        topic?: string | null;
+        minValue?: number;
+        maxComparisons?: Array<{ field: string; errorMessage: string; priority?: number }>;
+    } = {},
+) => {
+    const {
+        topic = null, // Topic requis (ex: 'school', 'health', 'work')
+        minValue = 0, // Valeur minimale acceptée
+        maxComparisons = [], // Tableau de comparaisons: [{ field, errorMessage, priority }]
+    } = options;
+
+    const validators: ValidationChain[] = [];
+
+    // Validation principale
+    let indicatorValidator = body(fieldName);
+
+    // Si un topic est requis, ajouter la condition
+    if (topic) {
+        indicatorValidator = indicatorValidator.if((value, { req }) => req.body.topics?.includes?.(topic));
+    }
+
+    indicatorValidator = indicatorValidator
+        .optional({ nullable: true, checkFalsy: false })
+        .customSanitizer(value => (value === '' || value === null || value === undefined ? null : Number.parseInt(value, 10)))
+        .custom((value) => {
+            if (value === null || value === undefined) {
+                return true; // La valeur est optionnelle, donc null/undefined est valide
+            }
+            if (!Number.isInteger(value)) {
+                throw new TypeError(`Le champ "${displayName}" doit être un nombre`);
+            }
+            if (value < minValue) {
+                throw new Error(`Le champ "${displayName}" ne peut pas être inférieur à ${minValue}`);
+            }
+            return true;
+        })
+        .customSanitizer(value => (Number.isInteger(value) ? value : null));
+
+    // Ajouter les comparaisons personnalisées
+    if (maxComparisons.length > 0) {
+        indicatorValidator = indicatorValidator.custom((value, { req, path }) => {
+            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
+            const indicateur = req.body.indicateurs[key];
+
+            // Trier les comparaisons par priorité (si fournie)
+            const sortedComparisons = [...maxComparisons].sort((a, b) => (a.priority || 0) - (b.priority || 0));
+
+            // Vérifier chaque comparaison dans l'ordre de priorité
+            let comparisonMatched = false;
+            sortedComparisons.forEach((comparison) => {
+                if (comparisonMatched) {
+                    return;
+                }
+
+                const { field, errorMessage } = comparison;
+
+                if (Number.isInteger(indicateur[field])) {
+                    if (value > indicateur[field]) {
+                        throw new Error(errorMessage);
+                    }
+                    // Si une comparaison réussit, on s'arrête (pour gérer les fallbacks)
+                    comparisonMatched = true;
+                }
+            });
+
+            return true;
+        });
+    }
+
+    validators.push(indicatorValidator);
+
+    return validators;
+};
+
+// Helpers pour réduire la duplication dans INDICATOR_CONFIGS
+type MaxComparison = { field: string; errorMessage: string; priority?: number };
+
+function maxComp(field: string, errorMessage: string, priority?: number): MaxComparison {
+    return priority === undefined ? { field, errorMessage } : { field, errorMessage, priority };
+}
+
+function simpleMax(indicatorLabel: string, targetField: string, targetLabel: string): MaxComparison[] {
+    return [maxComp(targetField, `Le nombre de ${indicatorLabel} ne peut être supérieur au nombre de ${targetLabel}`)];
+}
+
+function actionMax(indicatorLabel: string): MaxComparison[] {
+    return [maxComp('nombre_personnes', `Le nombre de ${indicatorLabel} ne peut être supérieur au nombre de personnes concernées par l'action`)];
+}
+
+function schoolMinorsMax(indicatorLabel: string): MaxComparison[] {
+    return [
+        maxComp('nombre_mineurs', `Le nombre de ${indicatorLabel} ne peut être supérieur au nombre de mineurs concernés par l'action`, 1),
+        maxComp('nombre_personnes', `Le nombre de ${indicatorLabel} ne peut être supérieur au nombre de personnes concernées par l'action`, 2),
+    ];
+}
+
+type IndicatorConfig = {
+    fieldName: string;
+    displayName: string;
+    options?: {
+        topic?: string | null;
+        minValue?: number;
+        maxComparisons?: MaxComparison[];
+    };
+};
+
+const INDICATOR_CONFIGS: IndicatorConfig[] = [
+    {
+        fieldName: 'indicateurs.*.nombre_personnes',
+        displayName: 'Nombre de personnes',
+        options: { minValue: 1 },
+    },
+    {
+        fieldName: 'indicateurs.*.nombre_menages',
+        displayName: 'Nombre de ménages',
+        options: { minValue: 1, maxComparisons: simpleMax('ménages', 'nombre_personnes', 'personnes') },
+    },
+    {
+        fieldName: 'indicateurs.*.nombre_femmes',
+        displayName: 'Nombre de femmes',
+        options: { maxComparisons: simpleMax('femmes', 'nombre_personnes', 'personnes') },
+    },
+    {
+        fieldName: 'indicateurs.*.nombre_mineurs',
+        displayName: 'Nombre de mineurs',
+        options: { maxComparisons: simpleMax('mineurs', 'nombre_personnes', 'personnes') },
+    },
+    {
+        fieldName: 'indicateurs.*.sante_nombre_personnes',
+        displayName: 'Nombre de personnes ayant eu un accompagnement vers la santé',
+        options: { topic: 'health', maxComparisons: actionMax('personnes ayant eu un accompagnement vers la santé') },
+    },
+    {
+        fieldName: 'indicateurs.*.travail_nombre_personnes',
+        displayName: 'Nombre de personnes ayant eu au moins 1 contrat de travail',
+        options: { topic: 'work', maxComparisons: actionMax('personnes ayant eu au moins 1 contrat de travail') },
+    },
+    {
+        fieldName: 'indicateurs.*.travail_nombre_femmes',
+        displayName: 'Nombre de femmes ayant eu au moins 1 contrat de travail',
+        options: {
+            topic: 'work',
+            maxComparisons: [
+                {
+                    field: 'travail_nombre_personnes',
+                    errorMessage: 'Le nombre de femmes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de personnes',
+                    priority: 1,
+                },
+                {
+                    field: 'nombre_femmes',
+                    errorMessage: 'Le nombre de femmes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de femmes concernées par l\'action',
+                    priority: 2,
+                },
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.hebergement_nombre_personnes',
+        displayName: 'Nombre de personnes ayant eu accès à un hébergement',
+        options: { topic: 'housing', maxComparisons: actionMax('personnes ayant eu accès à un hébergement') },
+    },
+    {
+        fieldName: 'indicateurs.*.hebergement_nombre_menages',
+        displayName: 'Nombre de ménages ayant eu accès à un hébergement',
+        options: {
+            topic: 'housing',
+            maxComparisons: [
+                maxComp('hebergement_nombre_personnes', 'Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes', 1),
+                maxComp('nombre_menages', 'Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de ménages concernés par l\'action', 2),
+                maxComp('nombre_personnes', 'Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes concernées par l\'action', 3),
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.logement_nombre_personnes',
+        displayName: 'Nombre de personnes ayant eu accès à un logement',
+        options: { topic: 'housing', maxComparisons: actionMax('personnes ayant eu accès à un logement') },
+    },
+    {
+        fieldName: 'indicateurs.*.logement_nombre_menages',
+        displayName: 'Nombre de ménages ayant eu accès à un logement',
+        options: {
+            topic: 'housing',
+            maxComparisons: [
+                maxComp('logement_nombre_personnes', 'Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes', 1),
+                maxComp('nombre_menages', 'Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de ménages concernés par l\'action', 2),
+                maxComp('nombre_personnes', 'Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes concernées par l\'action', 3),
+            ],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_mineurs_trois_ans_et_plus',
+        displayName: 'Nombre de mineurs identifiés sur site',
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('mineurs identifiés sur site') },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_mineurs_moins_de_trois_ans',
+        displayName: 'Nombre de mineurs de moins de 3 ans identifiés sur site',
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('mineurs de moins de 3 ans identifiés sur site') },
+    },
+    {
+        fieldName: 'scolaire_mediation_moins_de_trois_ans',
+        displayName: 'Nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation',
+        options: {
+            topic: 'school',
+            maxComparisons: [maxComp('scolaire_mineurs_moins_de_trois_ans', 'Le nombre de mineurs de moins de 3 ans bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de moins de 3 ans identifiés sur site')],
+        },
+    },
+    {
+        fieldName: 'scolaire_mediation_trois_ans_et_plus',
+        displayName: 'Nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation',
+        options: {
+            topic: 'school',
+            maxComparisons: [maxComp('scolaire_mineurs_trois_ans_et_plus', 'Le nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de 3 ans et plus identifiés sur site')],
+        },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_nombre_maternelle',
+        displayName: 'Nombre de scolarisés en maternelle',
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('scolarisés en maternelle') },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_nombre_elementaire',
+        displayName: 'Nombre de scolarisés en élémentaire',
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('scolarisés en élémentaire') },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_nombre_college',
+        displayName: 'Nombre de scolarisés au collège',
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('scolarisés au collège') },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_nombre_lycee',
+        displayName: 'Nombre de scolarisés au lycée',
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('scolarisés au lycée') },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_nombre_autre',
+        displayName: 'Autre',
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('d\'autres scolarisations') },
+    },
+    {
+        fieldName: 'indicateurs.*.scolaire_mineur_scolarise_dans_annee',
+        displayName: 'Mineurs scolarisés dans l\'année',
+        options: { topic: 'school', maxComparisons: schoolMinorsMax('mineurs scolarisés dans l\'année') },
+    },
+];
 
 export default (mode: 'create' | 'update') => [
     body('name')
@@ -228,61 +508,8 @@ export default (mode: 'create' | 'update') => [
             }
             return value;
         }),
-    body('managers')
-        .customSanitizer((value, { req }) => {
-            // en cas de mise à jour, si l'utilisateur n'a pas le droit de modifier les managers
-            // on conserve les managers actuels
-            if (mode === 'update' && !canWriteManagersAndDepartement(mode, req)) {
-                return req.action.managers.flatMap(({ users }) => users.map(({ id }) => id));
-            }
-
-            return value;
-        })
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Pilotes de l\'action" est obligatoire')
-        .isArray().bail().withMessage('Le format des utilisateurs ciblés n\'est pas valide')
-        .isLength({ min: 1 }).bail().withMessage('Le champ "Pilotes de l\'action" est obligatoire')
-        .customSanitizer(async (value) => {
-            const users = await userModel.findByIds(null, value);
-            if (users.length !== value.length) {
-                return null;
-            }
-
-            return users.map(u => ({
-                id: u.id,
-                organization_id: u.organization.id,
-            }));
-        })
-        .custom((value) => {
-            if (value === null) {
-                throw new Error('Un ou plusieurs utilisateurs ciblés n\'existent pas');
-            }
-
-            return true;
-        }),
-
-    body('operators')
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Opérateurs de l\'action" est obligatoire')
-        .isArray().bail().withMessage('Le format des utilisateurs ciblés n\'est pas valide')
-        .isLength({ min: 1 }).bail().withMessage('Le champ "Opérateurs de l\'action" est obligatoire')
-        .customSanitizer(async (value) => {
-            const users = await userModel.findByIds(null, value);
-            if (users.length !== value.length) {
-                return null;
-            }
-
-            return users.map(u => ({
-                id: u.id,
-                organization_id: u.organization.id,
-            }));
-        })
-        .custom((value) => {
-            if (value === null) {
-                throw new Error('Un ou plusieurs utilisateurs ciblés n\'existent pas');
-            }
-
-            return true;
-        }),
-
+    createUserValidator('managers', 'Pilotes de l\'action'),
+    createUserValidator('operators', 'Opérateurs de l\'action'),
     // financements
     // transformer finances en un array pour faciliter la validation plus bas
     body('finances')
@@ -394,356 +621,86 @@ export default (mode: 'create' | 'update') => [
             return true;
         }),
 
-    body('indicateurs.*.nombre_personnes')
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de personnes" doit être un nombre')
-        .isInt({ min: 1 }).withMessage('Le champ "Nombre de personnes" ne peut pas être inférieur à 1'),
-    body('indicateurs.*.nombre_personnes')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
-    body('indicateurs.*.nombre_menages')
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de ménages" doit être un nombre')
-        .isInt({ min: 1 }).withMessage('Le champ "Nombre de ménages" ne peut pas être inférieur à 1')
+    ...INDICATOR_CONFIGS.flatMap(config => createIndicatorValidator(
+        config.fieldName,
+        config.displayName,
+        config.options,
+    )),
+    body('indicateurs.*.scolaire_mineur_scolarise_dans_annee')
         .custom((value, { req, path }) => {
+            if (value === null || value === undefined) {
+                return true;
+            }
+
             const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de ménages ne peut être supérieur au nombre de personnes');
+            const indicateur = req.body.indicateurs[key];
+
+            // Vérifier que nombre_mineurs est renseigné
+            if (!Number.isInteger(indicateur.nombre_mineurs)) {
+                throw new TypeError('Le nombre de mineurs scolarisés dans l\'année ne peut être renseigné que si le nombre total de mineurs concernés par l\'action est également renseigné');
+            }
+
+            // Vérifier que la valeur ne dépasse pas le nombre de mineurs
+            if (value > indicateur.nombre_mineurs) {
+                throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut pas dépasser le nombre total de mineurs concernés par l\'action');
+            }
+
+            // Vérifier par rapport au nombre total d'enfants scolarisés
+            const totalScolarises = [
+                'scolaire_nombre_maternelle',
+                'scolaire_nombre_elementaire',
+                'scolaire_nombre_college',
+                'scolaire_nombre_lycee',
+                'scolaire_nombre_autre',
+            ].reduce((total, field) => {
+                const val = indicateur[field];
+                return Number.isInteger(val) ? total + val : total;
+            }, 0);
+
+            if (value < totalScolarises) {
+                throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut pas être inférieur à la somme des mineurs scolarisés par niveau');
             }
 
             return true;
-        }),
-    body('indicateurs.*.nombre_menages')
+        })
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
-    body('indicateurs.*.nombre_femmes')
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de femmes" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de femmes" ne peut pas être inférieur à 0')
-        .custom((value, { req, path }) => {
-            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de femmes ne peut être supérieur au nombre de personnes');
-            }
-
-            return true;
-        }),
-    body('indicateurs.*.nombre_femmes')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
-    body('indicateurs.*.nombre_mineurs')
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de mineurs" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs" ne peut pas être inférieur à 0')
-        .custom((value, { req, path }) => {
-            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de mineurs ne peut être supérieur au nombre de personnes');
-            }
-
-            return true;
-        }),
-    body('indicateurs.*.nombre_mineurs')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
-    // indicateurs santé
-    body('indicateurs.*.sante_nombre_personnes')
-        .if((value, { req }) => req.body.topics?.includes?.('health'))
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de personnes ayant eu un accompagnement vers la santé" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de personnes ayant eu un accompagnement vers la santé" ne peut pas être inférieur à 0')
-        .custom((value, { req, path }) => {
-            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de personnes ayant eu un accompagnement vers la santé ne peut être supérieur au nombre de personnes concernées par l\'action');
-            }
-
-            return true;
-        }),
-    body('indicateurs.*.sante_nombre_personnes')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
-
-    // indicateurs travail
-    body('indicateurs.*.travail_nombre_personnes')
-        .if((value, { req }) => req.body.topics?.includes?.('work'))
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de personnes ayant eu au moins 1 contrat de travail" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de personnes ayant eu au moins 1 contrat de travail" ne peut pas être inférieur à 0')
-        .custom((value, { req, path }) => {
-            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de personnes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de personnes concernées par l\'action');
-            }
-
-            return true;
-        }),
-    body('indicateurs.*.travail_nombre_personnes')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
-    body('indicateurs.*.travail_nombre_femmes')
-        .if((value, { req }) => req.body.topics?.includes?.('work'))
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de femmes ayant eu au moins 1 contrat de travail" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de femmes ayant eu au moins 1 contrat de travail" ne peut pas être inférieur à 0')
-        .custom((value, { req, path }) => {
-            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].travail_nombre_personnes)) {
-                if (value > req.body.indicateurs[key].travail_nombre_personnes) {
-                    throw new Error('Le nombre de femmes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de personnes');
-                }
-            } else if (Number.isInteger(req.body.indicateurs[key].nombre_femmes)) {
-                if (value > req.body.indicateurs[key].nombre_femmes) {
-                    throw new Error('Le nombre de femmes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de femmes concernées par l\'action');
-                }
-            } else if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de femmes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de personnes concernées par l\'action');
-            }
-
-            return true;
-        }),
-    body('indicateurs.*.travail_nombre_femmes')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
-
-    // indicateurs hébergement
-    body('indicateurs.*.hebergement_nombre_personnes')
-        .if((value, { req }) => req.body.topics?.includes?.('housing'))
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de personnes ayant eu accès à un hébergement" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de personnes ayant eu accès à un hébergement" ne peut pas être inférieur à 0')
-        .custom((value, { req, path }) => {
-            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de personnes ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes concernées par l\'action');
-            }
-
-            return true;
-        }),
-    body('indicateurs.*.hebergement_nombre_personnes')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
-    body('indicateurs.*.hebergement_nombre_menages')
-        .if((value, { req }) => req.body.topics?.includes?.('housing'))
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de ménages ayant eu accès à un hébergement" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de ménages ayant eu accès à un hébergement" ne peut pas être inférieur à 0')
-        .custom((value, { req, path }) => {
-            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].hebergement_nombre_personnes)) {
-                if (value > req.body.indicateurs[key].hebergement_nombre_personnes) {
-                    throw new Error('Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes');
-                }
-            } else if (Number.isInteger(req.body.indicateurs[key].nombre_menages)) {
-                if (value > req.body.indicateurs[key].nombre_menages) {
-                    throw new Error('Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de ménages concernés par l\'action');
-                }
-            } else if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes concernées par l\'action');
-            }
-
-            return true;
-        }),
-    body('indicateurs.*.hebergement_nombre_menages')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
-    body('indicateurs.*.logement_nombre_personnes')
-        .if((value, { req }) => req.body.topics?.includes?.('housing'))
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de personnes ayant eu accès à un logement" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de personnes ayant eu accès à un logement" ne peut pas être inférieur à 0')
-        .custom((value, { req, path }) => {
-            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de personnes ayant eu accès à un logement ne peut être supérieur au nombre de personnes concernées par l\'action');
-            }
-
-            return true;
-        }),
-    body('indicateurs.*.logement_nombre_personnes')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
-    body('indicateurs.*.logement_nombre_menages')
-        .if((value, { req }) => req.body.topics?.includes?.('housing'))
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de ménages ayant eu accès à un logement" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de ménages ayant eu accès à un logement" ne peut pas être inférieur à 0')
-        .custom((value, { req, path }) => {
-            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].logement_nombre_personnes)) {
-                if (value > req.body.indicateurs[key].logement_nombre_personnes) {
-                    throw new Error('Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes');
-                }
-            } else if (Number.isInteger(req.body.indicateurs[key].nombre_menages)) {
-                if (value > req.body.indicateurs[key].nombre_menages) {
-                    throw new Error('Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de ménages concernés par l\'action');
-                }
-            } else if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes concernées par l\'action');
-            }
-
-            return true;
-        }),
-    body('indicateurs.*.logement_nombre_menages')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
-
-    // indicateurs scolaires
-    body('indicateurs.*.scolaire_mineurs_scolarisables')
-        .if((value, { req }) => req.body.topics?.includes?.('school'))
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de mineurs en âge d\'être scolarisés" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs en âge d\'être scolarisés" ne peut pas être inférieur à 0')
-        .custom((value, { req, path }) => {
-            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].nombre_mineurs)) {
-                if (value > req.body.indicateurs[key].nombre_mineurs) {
-                    throw new Error('Le nombre de mineurs en âge d\'être scolarisés ne peut être supérieur au nombre de mineurs concernés par l\'action');
-                }
-            } else if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de mineurs en âge d\'être scolarisés ne peut être supérieur au nombre de personnes concernées par l\'action');
-            }
-
-            return true;
-        }),
-    body('indicateurs.*.scolaire_mineurs_scolarisables')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
-    body('indicateurs.*.scolaire_mineurs_en_mediation')
-        .if((value, { req }) => req.body.topics?.includes?.('school'))
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de mineurs bénéficiant d\'une médiation" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de mineurs bénéficiant d\'une médiation" ne peut pas être inférieur à 0')
-        .custom((value, { req, path }) => {
-            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].nombre_mineurs)) {
-                if (value > req.body.indicateurs[key].nombre_mineurs) {
-                    throw new Error('Le nombre de mineurs bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs concernés par l\'action');
-                }
-            } else if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de mineurs bénéficiant d\'une médiation ne peut être supérieur au nombre de personnes concernées par l\'action');
-            }
-
-            return true;
-        }),
-    body('indicateurs.*.scolaire_mineurs_en_mediation')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
+    // Validation de la cohérence entre la somme des niveaux scolaires et le nombre total de scolarisés
     body('indicateurs.*.scolaire_nombre_maternelle')
         .if((value, { req }) => req.body.topics?.includes?.('school'))
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de scolarisés en maternelle" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de scolarisés en maternelle" ne peut pas être inférieur à 0')
         .custom((value, { req, path }) => {
             const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].nombre_mineurs)) {
-                if (value > req.body.indicateurs[key].nombre_mineurs) {
-                    throw new Error('Le nombre de scolarisés en maternelle ne peut être supérieur au nombre de mineurs concernés par l\'action');
-                }
-            } else if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de scolarisés en maternelle ne peut être supérieur au nombre de personnes concernées par l\'action');
+            const indicateur = req.body.indicateurs[key];
+
+            // Vérifier si le champ scolaire_mineur_scolarise_dans_annee est défini
+            if (indicateur.scolaire_mineur_scolarise_dans_annee === null || indicateur.scolaire_mineur_scolarise_dans_annee === undefined) {
+                return true; // Ne pas valider si le champ n'est pas défini
+            }
+
+            // Calculer la somme des niveaux scolaires
+            const niveauxScolaires = [
+                'scolaire_nombre_maternelle',
+                'scolaire_nombre_elementaire',
+                'scolaire_nombre_college',
+                'scolaire_nombre_lycee',
+                'scolaire_nombre_autre',
+            ];
+
+            const totalNiveaux = niveauxScolaires.reduce((sum, niveau) => {
+                const val = indicateur[niveau];
+                return sum + (Number.isInteger(val) ? val : 0);
+            }, 0);
+
+            // Vérifier que la somme des niveaux ne dépasse pas le nombre total de scolarisés
+            if (totalNiveaux > indicateur.scolaire_mineur_scolarise_dans_annee) {
+                throw new Error('La somme des mineurs scolarisés par niveau ne peut pas dépasser le nombre total de mineurs scolarisés dans l\'année');
+            }
+
+            // Vérifier que la somme ne dépasse pas le nombre total de mineurs de 3 ans et plus
+            if (Number.isInteger(indicateur.scolaire_mineurs_trois_ans_et_plus) && totalNiveaux > indicateur.scolaire_mineurs_trois_ans_et_plus) {
+                throw new Error('La somme des enfants scolarisés par niveau ne peut pas dépasser le nombre total de mineurs de 3 ans et plus identifiés sur site');
             }
 
             return true;
         }),
-    body('indicateurs.*.scolaire_nombre_maternelle')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
-    body('indicateurs.*.scolaire_nombre_elementaire')
-        .if((value, { req }) => req.body.topics?.includes?.('school'))
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de scolarisés en élémentaire" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de scolarisés en élémentaire" ne peut pas être inférieur à 0')
-        .custom((value, { req, path }) => {
-            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].nombre_mineurs)) {
-                if (value > req.body.indicateurs[key].nombre_mineurs) {
-                    throw new Error('Le nombre de scolarisés en élémentaire ne peut être supérieur au nombre de mineurs concernés par l\'action');
-                }
-            } else if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de scolarisés en élémentaire ne peut être supérieur au nombre de personnes concernées par l\'action');
-            }
-
-            return true;
-        }),
-    body('indicateurs.*.scolaire_nombre_elementaire')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
-    body('indicateurs.*.scolaire_nombre_college')
-        .if((value, { req }) => req.body.topics?.includes?.('school'))
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de scolarisés au collège" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de scolarisés au collège" ne peut pas être inférieur à 0')
-        .custom((value, { req, path }) => {
-            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].nombre_mineurs)) {
-                if (value > req.body.indicateurs[key].nombre_mineurs) {
-                    throw new Error('Le nombre de scolarisés au collège ne peut être supérieur au nombre de mineurs concernés par l\'action');
-                }
-            } else if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de scolarisés au collège ne peut être supérieur au nombre de personnes concernées par l\'action');
-            }
-
-            return true;
-        }),
-    body('indicateurs.*.scolaire_nombre_college')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
-    body('indicateurs.*.scolaire_nombre_lycee')
-        .if((value, { req }) => req.body.topics?.includes?.('school'))
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Nombre de scolarisés au lycée" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Nombre de scolarisés au lycée" ne peut pas être inférieur à 0')
-        .custom((value, { req, path }) => {
-            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].nombre_mineurs)) {
-                if (value > req.body.indicateurs[key].nombre_mineurs) {
-                    throw new Error('Le nombre de scolarisés au lycée ne peut être supérieur au nombre de mineurs concernés par l\'action');
-                }
-            } else if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre de scolarisés au lycée ne peut être supérieur au nombre de personnes concernées par l\'action');
-            }
-
-            return true;
-        }),
-    body('indicateurs.*.scolaire_nombre_lycee')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
-
-    body('indicateurs.*.scolaire_nombre_autre')
-        .if((value, { req }) => req.body.topics?.includes?.('school'))
-        .optional({ nullable: true, checkFalsy: true })
-        .toInt()
-        .isInt().bail().withMessage('Le champ "Autre" doit être un nombre')
-        .isInt({ min: 0 }).withMessage('Le champ "Autre" ne peut pas être inférieur à 0')
-        .custom((value, { req, path }) => {
-            const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
-            if (Number.isInteger(req.body.indicateurs[key].nombre_mineurs)) {
-                if (value > req.body.indicateurs[key].nombre_mineurs) {
-                    throw new Error('Le nombre d\'autres scolarisations ne peut être supérieur au nombre de mineurs concernés par l\'action');
-                }
-            } else if (Number.isInteger(req.body.indicateurs[key].nombre_personnes) && value > req.body.indicateurs[key].nombre_personnes) {
-                throw new Error('Le nombre d\'autres scolarisations ne peut être supérieur au nombre de personnes concernées par l\'action');
-            }
-
-            return true;
-        }),
-    body('indicateurs.*.scolaire_nombre_autre')
-        .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 ];
