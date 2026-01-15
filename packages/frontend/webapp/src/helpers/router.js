@@ -698,7 +698,7 @@ router.setHashWithoutScroll = (hash) => {
     });
 };
 
-router.beforeEach((to, from) => {
+router.beforeEach(async (to, from) => {
     currentRouteIsBacked = window.popStateDetected === true;
     window.popStateDetected = false;
 
@@ -793,7 +793,7 @@ router.beforeEach((to, from) => {
 
     // if logged, register navigation log
     if (userStore.isLoggedIn && router.currentRoute.value?.path !== to.path) {
-        userStore.refreshToken(to.path);
+        await userStore.refreshToken(to.path);
     }
 
     // Update html title element
