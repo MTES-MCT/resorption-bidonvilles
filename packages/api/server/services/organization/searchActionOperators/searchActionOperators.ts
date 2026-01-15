@@ -1,5 +1,6 @@
 import ServiceError from '#server/errors/ServiceError';
 import organizationModel from '#server/models/organizationModel/index';
+import { User } from '#root/types/resources/User.d';
 
 interface ActionOperatorOrganizationResult {
     id: number,
@@ -12,9 +13,9 @@ interface ActionOperatorOrganizationResult {
     }
 }
 
-export default async function searchActionOperators(search: string): Promise<ActionOperatorOrganizationResult[]> {
+export default async function searchActionOperators(search: string, user: User): Promise<ActionOperatorOrganizationResult[]> {
     try {
-        const organizations = await organizationModel.searchActionOperators(search);
+        const organizations = await organizationModel.searchActionOperators(search, user);
 
         return organizations.map((row): ActionOperatorOrganizationResult => ({
             id: row.id,
