@@ -10,12 +10,20 @@
             </span>
         </LinkButton>
         <main v-if="mapStore.filters[id].opened" class="pb-4 pl-3">
+            <!-- <DsfrCheckboxSet
+                :name="id"
+                v-model="values[id]"
+                :options="definition.options"
+                small
+                @change="$emit('change')"
+            /> -->
             <Checkbox
                 v-for="option in definition.options"
                 :key="option.value"
                 :name="id"
                 :label="option.label"
                 :value="option.value"
+                :checked="true"
                 variant="checkbox"
                 direction="col"
                 @change="$emit('change')"
@@ -42,11 +50,13 @@ const { id } = toRefs(props);
 
 defineEmits(["change"]);
 const definition = mapFilters.value.definition[id.value];
+
 const mapStore = useMapStore();
 const { values } = useForm({
     initialValues: {
         [id.value]: mapStore.filters[id.value].checked,
     },
+    keepValuesOnUnmount: true,
 });
 
 watch(values, () => {
