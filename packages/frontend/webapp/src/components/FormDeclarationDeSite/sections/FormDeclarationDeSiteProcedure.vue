@@ -153,7 +153,6 @@
                         :label="labels.police_requested_at"
                         :minDate="values.built_at || undefined"
                         :maxDate="new Date()"
-                        showMandatoryStar
                         modelName="values.police_requested_at"
                     />
                     <InputProcedureDatepicker
@@ -163,7 +162,6 @@
                         :label="labels.police_granted_at"
                         :minDate="values.police_requested_at"
                         :maxDate="new Date()"
-                        showMandatoryStar
                         modelName="values.police_granted_at"
                     />
                     <InputExistingLitigation />
