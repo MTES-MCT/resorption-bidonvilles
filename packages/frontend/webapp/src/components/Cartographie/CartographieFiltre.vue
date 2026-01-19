@@ -9,23 +9,12 @@
                 <Icon :icon="toggleIcon" />
             </span>
         </LinkButton>
-        <main v-if="mapStore.filters[id].opened" class="pb-4 pl-3">
-            <!-- <DsfrCheckboxSet
+        <main v-show="mapStore.filters[id].opened" class="pb-4 pl-3">
+            <DsfrCheckboxSet
                 :name="id"
-                v-model="values[id]"
-                :options="definition.options"
+                v-model="selectedValues"
+                :options="options"
                 small
-                @change="$emit('change')"
-            /> -->
-            <Checkbox
-                v-for="option in definition.options"
-                :key="option.value"
-                :name="id"
-                :label="option.label"
-                :value="option.value"
-                :checked="true"
-                variant="checkbox"
-                direction="col"
                 @change="$emit('change')"
             />
         </main>
@@ -33,12 +22,11 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, watch } from "vue";
+import { defineProps, toRefs, computed, ref, watch } from "vue";
 import { useMapStore } from "@/stores/map.store";
 import mapFilters from "@/utils/map_filters";
-import { useForm } from "vee-validate";
 
-import { Checkbox, Icon, LinkButton } from "@resorptionbidonvilles/ui";
+import { Icon, LinkButton } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     id: {
@@ -50,18 +38,28 @@ const { id } = toRefs(props);
 
 defineEmits(["change"]);
 const definition = mapFilters.value.definition[id.value];
+const options = computed(() =>
+    definition.options.map((option) => ({
+        label: option.label,
+        value: option.value,
+        id: `${id.value}-${option.value}`,
+        name: id.value,
+    }))
+);
 
 const mapStore = useMapStore();
-const { values } = useForm({
-    initialValues: {
-        [id.value]: mapStore.filters[id.value].checked,
-    },
-    keepValuesOnUnmount: true,
+const selectedValues = ref(mapStore.filters[id.value].checked);
+
+watch(selectedValues, () => {
+    mapStore.filters[id.value].checked = selectedValues.value;
 });
 
-watch(values, () => {
-    mapStore.filters[id.value].checked = values[id.value];
-});
+watch(
+    () => mapStore.filters[id.value].checked,
+    () => {
+        selectedValues.value = mapStore.filters[id.value].checked;
+    }
+);
 
 const toggleIcon = computed(() => {
     return mapStore.filters[id.value].opened ? "minus" : "plus";
