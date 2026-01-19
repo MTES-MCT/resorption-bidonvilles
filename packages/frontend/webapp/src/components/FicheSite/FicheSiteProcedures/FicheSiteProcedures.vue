@@ -214,7 +214,10 @@ function getPoliceStatus(policeStatus, policeRequestedAt, policeGrantedAt) {
     }
 
     if (policeStatus === "requested") {
-        return `demandé le ${formatDate(policeRequestedAt, "d/m/y")}`;
+        if (policeRequestedAt) {
+            return `demandé le ${formatDate(policeRequestedAt, "d/m/y")}`;
+        }
+        return "demandé";
     }
 
     if (policeStatus === "refused") {
@@ -222,7 +225,10 @@ function getPoliceStatus(policeStatus, policeRequestedAt, policeGrantedAt) {
     }
 
     if (policeStatus === "granted") {
-        return `accordé le ${formatDate(policeGrantedAt, "d/m/y")}`;
+        if (policeGrantedAt) {
+            return `accordé le ${formatDate(policeGrantedAt, "d/m/y")}`;
+        }
+        return "accordé";
     }
 
     return "non communiqué";
