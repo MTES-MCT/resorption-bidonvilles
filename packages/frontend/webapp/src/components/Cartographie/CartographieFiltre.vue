@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, ref, watch } from "vue";
+import { defineProps, toRefs, computed } from "vue";
 import { useMapStore } from "@/stores/map.store";
 import mapFilters from "@/utils/map_filters";
 
@@ -37,9 +37,9 @@ const props = defineProps({
 const { id } = toRefs(props);
 
 defineEmits(["change"]);
-const definition = mapFilters.value.definition[id.value];
+const definition = computed(() => mapFilters.value.definition[id.value]);
 const options = computed(() =>
-    definition.options.map((option) => ({
+    (definition.value?.options || []).map((option) => ({
         label: option.label,
         value: option.value,
         id: `${id.value}-${option.value}`,
@@ -48,18 +48,13 @@ const options = computed(() =>
 );
 
 const mapStore = useMapStore();
-const selectedValues = ref(mapStore.filters[id.value].checked);
 
-watch(selectedValues, () => {
-    mapStore.filters[id.value].checked = selectedValues.value;
+const selectedValues = computed({
+    get: () => mapStore.filters[id.value].checked,
+    set: (values) => {
+        mapStore.filters[id.value].checked = values;
+    },
 });
-
-watch(
-    () => mapStore.filters[id.value].checked,
-    () => {
-        selectedValues.value = mapStore.filters[id.value].checked;
-    }
-);
 
 const toggleIcon = computed(() => {
     return mapStore.filters[id.value].opened ? "minus" : "plus";
