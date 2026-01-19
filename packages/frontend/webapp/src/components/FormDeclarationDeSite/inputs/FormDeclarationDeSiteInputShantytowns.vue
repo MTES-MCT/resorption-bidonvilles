@@ -23,7 +23,7 @@ import labels from "@/components/Common/FormEtFicheSite.labels";
 
 const props = defineProps({
     departement: {
-        type: String,
+        type: Object,
         required: true,
     },
     id: {
