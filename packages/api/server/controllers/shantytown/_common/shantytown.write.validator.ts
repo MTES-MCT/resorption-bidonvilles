@@ -1576,6 +1576,7 @@ export default mode => ([
      * Date de la demande du CFP
      ********************************************************************************************* */
     body('police_requested_at')
+        .optional({ nullable: true })
         .customSanitizer((value, { req }) => {
             if (!['requested', 'granted', 'refused'].includes(req.body.police_status)) {
                 return null;
@@ -1584,7 +1585,6 @@ export default mode => ([
             return value;
         })
         .if((value, { req }) => ['requested', 'granted', 'refused'].includes(req.body.police_status))
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Date de la demande du CFP" est obligatoire')
         .isDate().bail().withMessage('Le champ "Date de la demande du CFP" est invalide')
         .toDate()
         .customSanitizer((value) => {
@@ -1610,6 +1610,7 @@ export default mode => ([
      * Date d'octroi du CFP
      ********************************************************************************************* */
     body('police_granted_at')
+        .optional({ nullable: true })
         .customSanitizer((value, { req }) => {
             if (req.body.police_status !== 'granted') {
                 return null;
@@ -1618,7 +1619,6 @@ export default mode => ([
             return value;
         })
         .if((value, { req }) => req.body.police_status === 'granted')
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Date d\'octroi du CFP" est obligatoire')
         .isDate().bail().withMessage('Le champ "Date d\'octroi du CFP" est invalide')
         .toDate()
         .customSanitizer((value) => {
