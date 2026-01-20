@@ -48,7 +48,7 @@ export const useMapStore = defineStore("map", () => {
             return [];
         }
 
-        return poiStore.pois;
+        return [...poiStore.pois];
     });
 
     function reset() {
