@@ -214,11 +214,9 @@ const onZoomEnd = () => {
                 if (!map.hasLayer(markersGroup.pois)) {
                     map.addLayer(markersGroup.pois);
                 }
-            } else {
+            } else if (map.hasLayer(markersGroup.pois)) {
                 // Zoom en dessous du seuil : juste masquer la couche, PAS supprimer les marqueurs
-                if (map.hasLayer(markersGroup.pois)) {
-                    map.removeLayer(markersGroup.pois);
-                }
+                map.removeLayer(markersGroup.pois);
                 // NE PAS nettoyer les marqueurs - ils doivent suivre la carte
             }
         }
