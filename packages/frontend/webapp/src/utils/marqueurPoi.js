@@ -3,7 +3,8 @@ import cutlery from "@/assets/img/map/cutlery.png";
 
 export default (poi) => {
     // Longitude/latitudes returned by soliguide are in the wrong order
-    const coordinates = poi.position.location.coordinates.reverse();
+    // Créer une copie pour éviter de modifier l'original
+    const coordinates = [...poi.position.location.coordinates].reverse();
 
     return L.marker(coordinates, {
         title: poi.address,
