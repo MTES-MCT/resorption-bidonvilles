@@ -115,6 +115,53 @@ const initialView = ref({
     center: defaultView.value.center,
     zoom: defaultView.value.zoom,
 });
+
+let isSyncing = false;
+
+const createPoiMarker = (poi) => {
+    const marker = marqueurPoi(poi);
+
+    marker.on("click", () => {
+        emit("poiclick", poi);
+    });
+
+    marker.addTo(markersGroup.pois);
+};
+
+const syncPoiMarkers = () => {
+    // Éviter les exécutions multiples
+    if (isSyncing) {
+        return;
+    }
+
+    isSyncing = true;
+
+    // Ne rien faire si les POIs sont vides
+    if (pois.value.length === 0) {
+        markersGroup.pois.clearLayers();
+        isSyncing = false;
+        return;
+    }
+
+    markersGroup.pois.clearLayers();
+
+    // Vérifier le zoom avant d'ajouter les POIs
+    const currentZoom = carto.value?.map?.getZoom() || 6;
+
+    if (currentZoom <= POI_ZOOM_LEVEL) {
+        isSyncing = false;
+        return;
+    }
+
+    // Filtrer les POIs avec des coordonnées
+    const validPois = pois.value.filter(
+        (poi) => poi?.position?.location?.coordinates
+    );
+
+    // Ajouter les marqueurs
+    validPois.forEach(createPoiMarker);
+    isSyncing = false;
+};
 const showAddressesModel = computed({
     get() {
         return showAddresses.value;
@@ -126,9 +173,7 @@ const showAddressesModel = computed({
 
 const POI_ZOOM_LEVEL = 13;
 const markersGroup = {
-    pois: L.markerClusterGroup({
-        disableClusteringAtZoom: POI_ZOOM_LEVEL,
-    }),
+    pois: L.layerGroup(),
     search: L.layerGroup(),
 };
 const searchMarker = marqueurRecherche();
@@ -151,43 +196,48 @@ const onZoomEnd = () => {
     const { map } = carto.value;
     const zoomLevel = map.getZoom();
 
-    if (zoomLevel > POI_ZOOM_LEVEL) {
-        const poiIsVisible = map.hasLayer(markersGroup.pois);
-        if (!poiIsVisible) {
-            map.addLayer(markersGroup.pois);
-        }
-    } else if (map.hasLayer(markersGroup.pois)) {
-        map.removeLayer(markersGroup.pois);
-    }
-
-    carto.value.addControl("addressToggler", createAddressTogglerControl());
-    emit("zoomend");
-};
-
-const createPoiMarker = (poi) => {
-    const marker = marqueurPoi(poi);
-    marker.on("click", () => {
-        emit("poiclick", poi);
-    });
-
-    marker.addTo(markersGroup.pois);
-};
-
-const syncPoiMarkers = () => {
-    markersGroup.pois.clearLayers();
-
-    // sans le timeout, les nouveaux marqueurs n'apparaissent jamais :/
+    // Attendre un peu pour être certain que toutes les animations sont terminées
     setTimeout(() => {
-        pois.value.forEach(createPoiMarker);
-    }, 1000);
+        // Vérifications de sécurité
+        if (!map || !map._container || map._animatingZoom) {
+            return;
+        }
+
+        // Gérer les POI seulement s'il y en a à afficher
+        if (pois.value.length > 0) {
+            if (zoomLevel > POI_ZOOM_LEVEL) {
+                // Zoom au-dessus du seuil : synchroniser les POI si nécessaire
+                if (markersGroup.pois.getLayers().length === 0) {
+                    syncPoiMarkers();
+                }
+                // S'assurer que la couche est visible
+                if (!map.hasLayer(markersGroup.pois)) {
+                    map.addLayer(markersGroup.pois);
+                }
+            } else {
+                // Zoom en dessous du seuil : juste masquer la couche, PAS supprimer les marqueurs
+                if (map.hasLayer(markersGroup.pois)) {
+                    map.removeLayer(markersGroup.pois);
+                }
+                // NE PAS nettoyer les marqueurs - ils doivent suivre la carte
+            }
+        }
+
+        carto.value.addControl("addressToggler", createAddressTogglerControl());
+        emit("zoomend");
+    }, 100);
 };
+
+// Click sur un POI
 
 const onMove = () => {
     const { map } = carto.value;
-    const { lat: latitude, lng: longitude } = map.getCenter();
+    const { lat, lng } = map.getCenter();
+    const currentZoom = map.getZoom();
+
     emit("viewchange", {
-        center: [latitude, longitude],
-        zoom: map.getZoom(),
+        center: [lat, lng],
+        zoom: currentZoom,
     });
 };
 
@@ -208,11 +258,42 @@ const updateAddress = () => {
     }
 };
 
-watch(pois, syncPoiMarkers);
-watch(carto, () => {
+watch(
+    () => carto.value,
+    (newCarto) => {
+        if (newCarto) {
+            // Désactiver les animations de zoom problématiques
+            newCarto.map.options.zoomAnimation = false;
+            newCarto.map.options.markerZoomAnimation = false;
+
+            newCarto.map.on("move", onMove);
+            newCarto.map.addLayer(markersGroup.search);
+        }
+    }
+);
+
+// Watcher sur pois pour gérer le coché/décoché du filtre
+watch(pois, (newPois, oldPois) => {
     if (carto.value) {
-        carto.value.map.on("move", onMove);
-        carto.value.map.addLayer(markersGroup.search);
+        if (newPois.length === 0 && oldPois.length > 0) {
+            // Filtre décoché : nettoyer les marqueurs
+            markersGroup.pois.clearLayers();
+        } else if (newPois.length > 0 && oldPois.length === 0) {
+            // Filtre coché : vérifier le zoom avant de synchroniser
+            const currentZoom = carto.value?.map?.getZoom() || 6;
+            if (currentZoom > POI_ZOOM_LEVEL) {
+                syncPoiMarkers();
+            }
+        } else if (newPois.length > 0 && oldPois.length > 0) {
+            // POI existent déjà : vérifier s'ils doivent être affichés
+            const currentZoom = carto.value?.map?.getZoom() || 6;
+            if (
+                currentZoom > POI_ZOOM_LEVEL &&
+                markersGroup.pois.getLayers().length === 0
+            ) {
+                syncPoiMarkers();
+            }
+        }
     }
 });
 
