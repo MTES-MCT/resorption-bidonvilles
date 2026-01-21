@@ -17,8 +17,8 @@ export default defineNuxtConfig({
     ],
     vite: {
         server: {
-            port: 8091,
             hmr: {
+                port: 8091,
                 protocol: "ws",
                 host: "localhost"
             }
