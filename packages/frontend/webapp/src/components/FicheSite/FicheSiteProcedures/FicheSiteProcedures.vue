@@ -190,6 +190,7 @@ const props = defineProps({
 });
 const { town } = toRefs(props);
 const { bus } = useEventBus();
+const modaleStore = useModaleStore();
 
 const justiceRendered = computed(() => {
     if (town.value.justiceRendered === null) {
@@ -352,7 +353,6 @@ const titleSupplements = computed(() => {
 watch(
     () => bus.value.get("fichesitepj:openListAccesPJ"),
     () => {
-        const modaleStore = useModaleStore();
         modaleStore.open(ModaleListeAccesPJ, {
             future: false,
             townId: town.value.id,
