@@ -45,64 +45,64 @@ const location = computed({
 });
 
 async function autocompleteFn(value) {
-    const allResults = [];
-
+    const trimmedSearch = value.trim();
     const actionIdPattern = /^ID\d{8,}$/i;
 
-    if (actionIdPattern.test(value.trim())) {
-        const last4Chars = value.trim().slice(-4);
+    // 1. Recherche d'action par ID
+    let actionPromise = Promise.resolve([]);
+    if (actionIdPattern.test(trimmedSearch)) {
+        const last4Chars = trimmedSearch.slice(-4);
         const actionId = Number.parseInt(last4Chars, 10);
 
         if (!Number.isNaN(actionId) && actionId > 0) {
-            try {
-                const action = await fetchOne(actionId);
-                allResults.push({
-                    id: `action-${action.id}`,
-                    label: `${action.name} - ${action.displayId}`,
-                    category: "Action",
-                    data: {
-                        type: "action",
-                        actionId: action.id,
-                        actionName: action.name,
-                        displayId: action.displayId,
+            actionPromise = fetchOne(actionId)
+                .then((action) => [
+                    {
+                        id: `action-${action.id}`,
+                        label: `${action.name} - ${action.displayId}`,
+                        category: "Action",
+                        data: {
+                            type: "action",
+                            actionId: action.id,
+                            actionName: action.name,
+                            displayId: action.displayId,
+                        },
                     },
-                });
-            } catch {
-                // NOSONAR javascript:S2486 - L'échec de la recherche d'action est intentionnel
-                // La recherche de locations doit continuer même si l'action n'existe pas
-            }
+                ])
+                .catch(() => []);
         }
     }
 
-    try {
-        const results = await autocomplete(value);
-        const locationResults = results.map((location) => ({
-            id: location.code,
-            label: formatLocationLabel(location),
-            category: location.label,
-            data: {
-                code: location.code,
-                departement: location.departement,
-                typeName: location.label,
-                typeUid: location.type,
-                latitude: location.latitude,
-                longitude: location.longitude,
-            },
-        }));
-        allResults.push(...locationResults);
-    } catch (error) {
-        console.error("Error fetching locations:", error);
-    }
+    // 2. Recherche géographique
+    const locationPromise = autocomplete(value)
+        .then((items) =>
+            items.map((loc) => ({
+                id: loc.code,
+                label: formatLocationLabel(loc),
+                category: loc.label,
+                data: {
+                    code: loc.code,
+                    departement: loc.departement,
+                    typeName: loc.label,
+                    typeUid: loc.type,
+                    latitude: loc.latitude,
+                    longitude: loc.longitude,
+                },
+            }))
+        )
+        .catch((error) => {
+            console.error("Error fetching locations:", error);
+            return [];
+        });
 
-    try {
-        const organizations = await searchActionOperators(value);
-        const organizationResults = organizations.map((org) => {
-            const label = org.abbreviation
-                ? `${org.name} (${org.abbreviation})`
-                : org.name;
-            return {
+    // 3. Recherche de structures
+    const organizationPromise = searchActionOperators(value)
+        .then((organizations) =>
+            organizations.map((org) => ({
                 id: `organization-${org.id}`,
-                label,
+                label: org.abbreviation
+                    ? `${org.name} (${org.abbreviation})`
+                    : org.name,
                 category: "Structure",
                 data: {
                     type: "organization",
@@ -110,14 +110,19 @@ async function autocompleteFn(value) {
                     organizationName: org.name,
                     organizationAbbreviation: org.abbreviation,
                 },
-            };
+            }))
+        )
+        .catch((error) => {
+            console.error("Error fetching organizations:", error);
+            return [];
         });
-        allResults.push(...organizationResults);
-    } catch (error) {
-        console.error("Error fetching organizations:", error);
-    }
 
-    return allResults;
+    const [actions, locations, organizations] = await Promise.all([
+        actionPromise,
+        locationPromise,
+        organizationPromise,
+    ]);
+    return [...actions, ...locations, ...organizations];
 }
 
 defineExpose({
