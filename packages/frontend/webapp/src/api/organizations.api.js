@@ -51,3 +51,11 @@ export function get(id, activeOnly) {
 export function list() {
     return axios.get("/organizations");
 }
+
+export function searchActionOperators(str) {
+    return axios.get(
+        `/organizations/search-action-operators?query=${encodeURIComponent(
+            str
+        )}`
+    );
+}

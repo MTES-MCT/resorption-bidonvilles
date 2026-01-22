@@ -10,6 +10,7 @@ import findJusticeReadersByShantytown from './findJusticeReadersByShantytown';
 import findJusticeReadersByUserId from './findJusticeReadersByUserId';
 import findOneById from './findOneById';
 import findPrefAndDdets from './findPrefAndDdets';
+import searchActionOperators from './searchActionOperators';
 
 export default {
     activate,
@@ -24,4 +25,5 @@ export default {
     findJusticeReadersByUserId,
     findOneById,
     findPrefAndDdets,
+    searchActionOperators,
 };
