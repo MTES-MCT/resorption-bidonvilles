@@ -242,13 +242,11 @@ const policeStatus = computed(() => {
     );
 });
 
-const existingLitigationText =
-    town.value.existingLitigation === true ? "oui" : "non";
-
 const existingLitigationStatus = computed(() => {
-    return town.value.existingLitigation === null
-        ? "non communiqué"
-        : existingLitigationText;
+    if (town.value.existingLitigation === null) {
+        return "non communiqué";
+    }
+    return town.value.existingLitigation === true ? "oui" : "non";
 });
 
 const administrativeOrderStatus = computed(() => {
@@ -286,7 +284,7 @@ const insalubrityOrderStatus = computed(() => {
     }`;
 });
 
-const ProcedureJudiciaire = computed(() => {
+const filteredProcedureJudiciaire = computed(() => {
     return [
         {
             icon: "scroll",
@@ -316,11 +314,7 @@ const ProcedureJudiciaire = computed(() => {
             condition: town.value.justiceRendered,
             value: formatBool(town.value.justiceChallenged),
         },
-    ];
-});
-
-const filteredProcedureJudiciaire = computed(() => {
-    return ProcedureJudiciaire.value.filter((procedure) => procedure.condition);
+    ].filter((procedure) => procedure.condition);
 });
 
 const filteredDecreesAttachments = (type) => {
