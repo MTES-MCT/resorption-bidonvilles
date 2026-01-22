@@ -1,4 +1,6 @@
 export default function filterActions(actions, filters) {
+    const now = new Date();
+
     return actions.filter((action) => {
         if (
             filters.location?.type === "organization" &&
@@ -15,7 +17,7 @@ export default function filterActions(actions, filters) {
             return false;
         }
 
-        if (filters.status && !checkStatus(action, filters.status)) {
+        if (filters.status && !checkStatus(action, filters.status, now)) {
             return false;
         }
 
@@ -42,12 +44,12 @@ export default function filterActions(actions, filters) {
     });
 }
 
-function checkStatus(action, status) {
+function checkStatus(action, status, now) {
     if (status === "open") {
-        return action.ended_at === null || new Date() < action.ended_at;
+        return action.ended_at === null || now < action.ended_at;
     }
 
-    return action.ended_at !== null && new Date() > action.ended_at;
+    return action.ended_at !== null && now > action.ended_at;
 }
 
 function checkSearch(action, search) {
@@ -66,12 +68,12 @@ function checkSearch(action, search) {
     );
 }
 
+const overseasRegions = new Set(["01", "02", "03", "04", "06"]);
 function checkLocation(action, filters) {
     if (!filters.location) {
         return true;
     }
 
-    const overseasRegions = new Set(["01", "02", "03", "04", "06"]);
     if (filters.location.typeUid === "metropole") {
         return !overseasRegions.has(action.location.region.code);
     }
