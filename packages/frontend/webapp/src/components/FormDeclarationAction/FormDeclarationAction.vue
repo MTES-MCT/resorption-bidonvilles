@@ -621,6 +621,9 @@ function createAddressKey(addr) {
 }
 
 async function performSubmit(sentValues) {
+    error.value = null;
+    setErrors({});
+
     const formattedValues = formatValuesForApi(sentValues);
 
     // Vérifier les doublons d'adresses ETI (validation finale avant soumission)
