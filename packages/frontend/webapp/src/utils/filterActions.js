@@ -1,5 +1,8 @@
 export default function filterActions(actions, filters) {
     const now = new Date();
+    const searchRegex = filters.search
+        ? new RegExp(filters.search, "ig")
+        : null;
 
     return actions.filter((action) => {
         if (
@@ -24,7 +27,7 @@ export default function filterActions(actions, filters) {
         if (
             !filters.location &&
             filters.search &&
-            !checkSearch(action, filters.search)
+            !checkSearch(action, searchRegex)
         ) {
             return false;
         }
@@ -52,18 +55,18 @@ function checkStatus(action, status, now) {
     return action.ended_at !== null && now > action.ended_at;
 }
 
-function checkSearch(action, search) {
+function checkSearch(action, searchRegex) {
     return (
-        !!action.name?.match(new RegExp(search, "ig")) ||
+        !!action.name?.match(searchRegex) ||
         !!action.operators?.find(
             ({ name, abbreviation }) =>
-                name.match(new RegExp(search, "ig")) ||
-                (abbreviation && abbreviation.match(new RegExp(search, "ig")))
+                name.match(searchRegex) ||
+                (abbreviation && abbreviation.match(searchRegex))
         ) ||
         !!action.managers?.find(
             ({ name, abbreviation }) =>
-                name.match(new RegExp(search, "ig")) ||
-                (abbreviation && abbreviation.match(new RegExp(search, "ig")))
+                name.match(searchRegex) ||
+                (abbreviation && abbreviation.match(searchRegex))
         )
     );
 }
