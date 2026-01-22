@@ -13,7 +13,7 @@
     "icons": "vue-dsfr-icons -s scripts/icons.js -t src/utils/icon-collections.js"
   },
   "dependencies": {
-    "@gouvfr/dsfr": "1.14.2",
+    "@gouvfr/dsfr": "1.14.3",
     "@gouvminint/vue-dsfr": "^8.8.0",
     "@iconify-json/bxs": "latest",
     "@iconify-json/carbon": "^1.2.13",
