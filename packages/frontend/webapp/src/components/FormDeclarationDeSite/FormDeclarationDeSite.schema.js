@@ -319,21 +319,6 @@ export default function (
                               `Le contenu du champ "${labels.insalubrity_parcels}" n'est pas valide`
                           ),
                       police_status: string().label(labels.police_status),
-                      police_requested_at: string()
-                          .when("police_status", {
-                              is: (value) =>
-                                  ["requested", "granted", "refused"].includes(
-                                      value
-                                  ),
-                              then: (schema) => schema.required(),
-                          })
-                          .label(labels.police_requested_at),
-                      police_granted_at: string()
-                          .when("police_status", {
-                              is: "granted",
-                              then: (schema) => schema.required(),
-                          })
-                          .label(labels.police_granted_at),
                       bailiff: string()
                           .label(labels.bailiff)
                           .matches(

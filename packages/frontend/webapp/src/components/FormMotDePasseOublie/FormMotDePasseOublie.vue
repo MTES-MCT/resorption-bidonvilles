@@ -3,7 +3,9 @@
         <template v-slot:title>Mot de passe oublié ?</template>
         <template v-slot:description
             >Pas d'inquiétude, nous allons vous envoyer la marche à suivre pour
-            renouveler votre mot de passe par courriel.</template
+            renouveler votre mot de passe par courriel.<br />
+            Le délai de réception du courriel peut prendre jusqu'à 15
+            minutes.</template
         >
 
         <template v-slot:body>
