@@ -1,20 +1,25 @@
 import L from "leaflet";
-import cutlery from "@/assets/img/map/cutlery.png";
 
-// Créer une icône unique réutilisée pour tous les POI
-const poiIcon = L.divIcon({
-    className: "my-marker",
-    html: `<img src="${cutlery}" width="12" height="12" />`,
-    iconAnchor: [13, 28],
-});
+// Canvas renderer pour optimiser l'affichage de nombreux marqueurs
+const canvasRenderer = L.canvas({ padding: 0.5 });
 
 const createMarqueurPoi = (poi) => {
     // Longitude/latitudes returned by soliguide are in the wrong order
     const coordinates = [...poi.position.location.coordinates].reverse();
 
-    return L.marker(coordinates, {
+    // Utiliser circleMarker pour un vrai rendu Canvas ultra-rapide
+    return L.circleMarker(coordinates, {
         title: poi.address,
-        icon: poiIcon, // Réutiliser la même icône
+        renderer: canvasRenderer,
+        radius: 8,
+        // fillColor: "#e74c3c", // Rouge pour "distribution alimentaire"
+        fillColor: "#3498db", // Bleu pour "distribution alimentaire"
+        // fillColor: "#2ecc71", // Vert pour "distribution alimentaire"
+        // fillColor: "#f1c40f", // Jaune pour "distribution alimentaire"
+        // fillColor: "#000000", // Noir pour "distribution alimentaire"
+        fillOpacity: 0.8,
+        color: "#fff", // Bordure blanche
+        weight: 2,
     });
 };
 
