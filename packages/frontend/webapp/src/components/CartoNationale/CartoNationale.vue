@@ -121,101 +121,43 @@ let cachedPoiMarkers = null;
 let lastPoiIds = null;
 
 const syncPoiMarkers = () => {
-    const perfStart = performance.now();
-    console.log("🔵 syncPoiMarkers: == DEBUT ==");
-
     if (isSyncing) {
-        console.log("⏸️ syncPoiMarkers: Déjà synchro, on skippe");
         return;
     }
 
     isSyncing = true;
 
-    // Ne rien faire si les POIs sont vides
     if (pois.value.length === 0) {
-        console.log("⚪ syncPoiMarkers: Pas de POIs, on nettoie");
         markersGroup.pois.clearLayers();
         cachedPoiMarkers = null;
         lastPoiIds = null;
         isSyncing = false;
-        console.log(
-            `✅ syncPoiMarkers: Effectué en ${(
-                performance.now() - perfStart
-            ).toFixed(2)}ms`
-        );
         return;
     }
 
-    console.log(`📊 syncPoiMarkers: ${pois.value.length} POIs à générer`);
-
-    // Vérifier le zoom avant d'ajouter les POIs
     const currentZoom = carto.value?.map?.getZoom() || 6;
     if (currentZoom <= POI_ZOOM_LEVEL) {
-        console.log(
-            `⚪ syncPoiMarkers: Zoom ${currentZoom} <= ${POI_ZOOM_LEVEL}, on skippe`
-        );
         isSyncing = false;
-        console.log(
-            `✅ syncPoiMarkers: REALISE EN ${(
-                performance.now() - perfStart
-            ).toFixed(2)}ms`
-        );
         return;
     }
 
-    const filterStart = performance.now();
-    // Filtrer les POIs avec des coordonnées
     const validPois = pois.value.filter(
         (poi) => poi?.position?.location?.coordinates
     );
-    console.log(
-        `🔍 Filtrage: ${(performance.now() - filterStart).toFixed(2)}ms - ${
-            validPois.length
-        } POIs valides`
-    );
 
-    const signatureStart = performance.now();
-    // Créer une signature unique des POI actuels
     const currentPoiIds = validPois.map((poi) => poi.lieu_id).join(",");
-    console.log(
-        `🔑 Signature: ${(performance.now() - signatureStart).toFixed(2)}ms`
-    );
 
-    // Si les POI n'ont pas changé ET qu'on a un cache, réutiliser
     if (cachedPoiMarkers && currentPoiIds === lastPoiIds) {
-        console.log("♻️ Using cached markers");
-        const clearStart = performance.now();
         markersGroup.pois.clearLayers();
-        console.log(
-            `🗑️ Nettoyage: ${(performance.now() - clearStart).toFixed(2)}ms`
-        );
-        const addStart = performance.now();
         cachedPoiMarkers.forEach((marker) =>
             markersGroup.pois.addLayer(marker)
         );
-        console.log(
-            `➕ Ajout des marqueurs: ${(performance.now() - addStart).toFixed(
-                2
-            )}ms`
-        );
         isSyncing = false;
-        console.log(
-            `✅ syncPoiMarkers: == FIN == (en cache) en ${(
-                performance.now() - perfStart
-            ).toFixed(2)}ms`
-        );
         return;
     }
 
-    console.log("🆕 Creations des marqueurs");
-    // Sinon, recréer les marqueurs et mettre en cache
-    const clearStart = performance.now();
     markersGroup.pois.clearLayers();
-    console.log(
-        `🗑️ Nettoyage: ${(performance.now() - clearStart).toFixed(2)}ms`
-    );
 
-    const createStart = performance.now();
     cachedPoiMarkers = validPois.map((poi) => {
         const marker = marqueurPoi(poi);
         marker.on("click", () => {
@@ -223,27 +165,12 @@ const syncPoiMarkers = () => {
         });
         return marker;
     });
-    console.log(
-        `🏗️ Creation des marqueurs: ${(performance.now() - createStart).toFixed(
-            2
-        )}ms`
-    );
 
     lastPoiIds = currentPoiIds;
 
-    const addStart = performance.now();
-    // Ajouter tous les marqueurs d'un seul coup
     cachedPoiMarkers.forEach((marker) => markersGroup.pois.addLayer(marker));
-    console.log(
-        `➕ Ajout à la carte: ${(performance.now() - addStart).toFixed(2)}ms`
-    );
 
     isSyncing = false;
-    console.log(
-        `✅ syncPoiMarkers: FAIT (nouveau) en ${(
-            performance.now() - perfStart
-        ).toFixed(2)}ms`
-    );
 };
 const showAddressesModel = computed({
     get() {
@@ -279,34 +206,26 @@ const onZoomEnd = () => {
     const { map } = carto.value;
     const zoomLevel = map.getZoom();
 
-    // Vérifications de sécurité rapides
     if (!map || map._animatingZoom) {
         return;
     }
 
-    // Gérer les POI seulement s'il y en a à afficher
     if (pois.value.length > 0) {
         if (zoomLevel > POI_ZOOM_LEVEL) {
-            // Zoom au-dessus du seuil : synchroniser les POI si nécessaire
             if (markersGroup.pois.getLayers().length === 0) {
                 syncPoiMarkers();
             }
-            // S'assurer que la couche est visible
             if (!map.hasLayer(markersGroup.pois)) {
                 map.addLayer(markersGroup.pois);
             }
         } else if (map.hasLayer(markersGroup.pois)) {
-            // Zoom en dessous du seuil : juste masquer la couche, PAS supprimer les marqueurs
             map.removeLayer(markersGroup.pois);
-            // NE PAS nettoyer les marqueurs - ils doivent suivre la carte
         }
     }
 
     carto.value.addControl("addressToggler", createAddressTogglerControl());
     emit("zoomend");
 };
-
-// Click sur un POI
 
 const onMove = () => {
     const { map } = carto.value;
@@ -340,7 +259,6 @@ watch(
     () => carto.value,
     (newCarto) => {
         if (newCarto) {
-            // Désactiver les animations de zoom problématiques
             newCarto.map.options.zoomAnimation = false;
             newCarto.map.options.markerZoomAnimation = false;
 
@@ -350,52 +268,32 @@ watch(
     }
 );
 
-// Watcher sur pois pour gérer le coché/décoché du filtre
 watch(pois, (newPois, oldPois) => {
     if (carto.value) {
         const { map } = carto.value;
 
         if (newPois.length === 0 && oldPois.length > 0) {
-            // Filtre décoché : retirer la couche et nettoyer les marqueurs
             if (map.hasLayer(markersGroup.pois)) {
                 map.removeLayer(markersGroup.pois);
             }
             markersGroup.pois.clearLayers();
         } else if (newPois.length > 0 && oldPois.length === 0) {
-            // Filtre coché : vérifier le zoom avant de synchroniser
             const currentZoom = map.getZoom();
             if (currentZoom > POI_ZOOM_LEVEL) {
                 syncPoiMarkers();
-                // IMPORTANT : Ajouter la couche à la carte
                 if (!map.hasLayer(markersGroup.pois)) {
-                    console.log("🗺️ Adding POI layer to map...");
-                    const addLayerStart = performance.now();
                     map.addLayer(markersGroup.pois);
-                    console.log(
-                        `✅ Couche des POIs ajoutée en ${(
-                            performance.now() - addLayerStart
-                        ).toFixed(2)}ms`
-                    );
                 }
             }
         } else if (newPois.length > 0 && oldPois.length > 0) {
-            // POI existent déjà : vérifier s'ils doivent être affichés
             const currentZoom = map.getZoom();
             if (
                 currentZoom > POI_ZOOM_LEVEL &&
                 markersGroup.pois.getLayers().length === 0
             ) {
                 syncPoiMarkers();
-                // IMPORTANT : Ajouter la couche à la carte
                 if (!map.hasLayer(markersGroup.pois)) {
-                    console.log("🗺️ Adding POI layer to map...");
-                    const addLayerStart = performance.now();
                     map.addLayer(markersGroup.pois);
-                    console.log(
-                        `✅ Couche des POIs ajoutée en ${(
-                            performance.now() - addLayerStart
-                        ).toFixed(2)}ms`
-                    );
                 }
             }
         }
