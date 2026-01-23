@@ -143,11 +143,8 @@ const syncPoiMarkers = () => {
         return;
     }
 
-    markersGroup.pois.clearLayers();
-
     // Vérifier le zoom avant d'ajouter les POIs
     const currentZoom = carto.value?.map?.getZoom() || 6;
-
     if (currentZoom <= POI_ZOOM_LEVEL) {
         isSyncing = false;
         return;
@@ -158,7 +155,16 @@ const syncPoiMarkers = () => {
         (poi) => poi?.position?.location?.coordinates
     );
 
-    // Ajouter les marqueurs
+    // Optimisation : vérifier si on a vraiment besoin de recréer
+    const currentMarkersCount = markersGroup.pois.getLayers().length;
+    if (currentMarkersCount === validPois.length && currentMarkersCount > 0) {
+        // Même nombre de marqueurs, probablement déjà synchronisés
+        isSyncing = false;
+        return;
+    }
+
+    // Recréer seulement si nécessaire
+    markersGroup.pois.clearLayers();
     validPois.forEach(createPoiMarker);
     isSyncing = false;
 };
@@ -196,34 +202,31 @@ const onZoomEnd = () => {
     const { map } = carto.value;
     const zoomLevel = map.getZoom();
 
-    // Attendre un peu pour être certain que toutes les animations sont terminées
-    setTimeout(() => {
-        // Vérifications de sécurité
-        if (!map || !map._container || map._animatingZoom) {
-            return;
-        }
+    // Vérifications de sécurité rapides
+    if (!map || map._animatingZoom) {
+        return;
+    }
 
-        // Gérer les POI seulement s'il y en a à afficher
-        if (pois.value.length > 0) {
-            if (zoomLevel > POI_ZOOM_LEVEL) {
-                // Zoom au-dessus du seuil : synchroniser les POI si nécessaire
-                if (markersGroup.pois.getLayers().length === 0) {
-                    syncPoiMarkers();
-                }
-                // S'assurer que la couche est visible
-                if (!map.hasLayer(markersGroup.pois)) {
-                    map.addLayer(markersGroup.pois);
-                }
-            } else if (map.hasLayer(markersGroup.pois)) {
-                // Zoom en dessous du seuil : juste masquer la couche, PAS supprimer les marqueurs
-                map.removeLayer(markersGroup.pois);
-                // NE PAS nettoyer les marqueurs - ils doivent suivre la carte
+    // Gérer les POI seulement s'il y en a à afficher
+    if (pois.value.length > 0) {
+        if (zoomLevel > POI_ZOOM_LEVEL) {
+            // Zoom au-dessus du seuil : synchroniser les POI si nécessaire
+            if (markersGroup.pois.getLayers().length === 0) {
+                syncPoiMarkers();
             }
+            // S'assurer que la couche est visible
+            if (!map.hasLayer(markersGroup.pois)) {
+                map.addLayer(markersGroup.pois);
+            }
+        } else if (map.hasLayer(markersGroup.pois)) {
+            // Zoom en dessous du seuil : juste masquer la couche, PAS supprimer les marqueurs
+            map.removeLayer(markersGroup.pois);
+            // NE PAS nettoyer les marqueurs - ils doivent suivre la carte
         }
+    }
 
-        carto.value.addControl("addressToggler", createAddressTogglerControl());
-        emit("zoomend");
-    }, 100);
+    carto.value.addControl("addressToggler", createAddressTogglerControl());
+    emit("zoomend");
 };
 
 // Click sur un POI
