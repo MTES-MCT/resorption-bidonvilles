@@ -329,23 +329,50 @@ watch(
 // Watcher sur pois pour gérer le coché/décoché du filtre
 watch(pois, (newPois, oldPois) => {
     if (carto.value) {
+        const { map } = carto.value;
+
         if (newPois.length === 0 && oldPois.length > 0) {
-            // Filtre décoché : nettoyer les marqueurs
+            // Filtre décoché : retirer la couche et nettoyer les marqueurs
+            if (map.hasLayer(markersGroup.pois)) {
+                map.removeLayer(markersGroup.pois);
+            }
             markersGroup.pois.clearLayers();
         } else if (newPois.length > 0 && oldPois.length === 0) {
             // Filtre coché : vérifier le zoom avant de synchroniser
-            const currentZoom = carto.value?.map?.getZoom() || 6;
+            const currentZoom = map.getZoom();
             if (currentZoom > POI_ZOOM_LEVEL) {
                 syncPoiMarkers();
+                // IMPORTANT : Ajouter la couche à la carte
+                if (!map.hasLayer(markersGroup.pois)) {
+                    console.log("🗺️ Adding POI layer to map...");
+                    const addLayerStart = performance.now();
+                    map.addLayer(markersGroup.pois);
+                    console.log(
+                        `✅ Couche des POIs ajoutée en ${(
+                            performance.now() - addLayerStart
+                        ).toFixed(2)}ms`
+                    );
+                }
             }
         } else if (newPois.length > 0 && oldPois.length > 0) {
             // POI existent déjà : vérifier s'ils doivent être affichés
-            const currentZoom = carto.value?.map?.getZoom() || 6;
+            const currentZoom = map.getZoom();
             if (
                 currentZoom > POI_ZOOM_LEVEL &&
                 markersGroup.pois.getLayers().length === 0
             ) {
                 syncPoiMarkers();
+                // IMPORTANT : Ajouter la couche à la carte
+                if (!map.hasLayer(markersGroup.pois)) {
+                    console.log("🗺️ Adding POI layer to map...");
+                    const addLayerStart = performance.now();
+                    map.addLayer(markersGroup.pois);
+                    console.log(
+                        `✅ Couche des POIs ajoutée en ${(
+                            performance.now() - addLayerStart
+                        ).toFixed(2)}ms`
+                    );
+                }
             }
         }
     }
