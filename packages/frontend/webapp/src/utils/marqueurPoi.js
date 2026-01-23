@@ -11,7 +11,7 @@ const createMarqueurPoi = (poi) => {
     return L.circleMarker(coordinates, {
         title: poi.address,
         renderer: canvasRenderer,
-        radius: 8,
+        radius: 10,
         // fillColor: "#e74c3c", // Rouge pour "distribution alimentaire"
         fillColor: "#3498db", // Bleu pour "distribution alimentaire"
         // fillColor: "#2ecc71", // Vert pour "distribution alimentaire"
