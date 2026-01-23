@@ -172,6 +172,38 @@ const syncPoiMarkers = () => {
 
     isSyncing = false;
 };
+
+const addPoiLayerIfNeeded = (map) => {
+    if (!map.hasLayer(markersGroup.pois)) {
+        map.addLayer(markersGroup.pois);
+    }
+};
+
+const handlePoisRemoved = (map) => {
+    if (map.hasLayer(markersGroup.pois)) {
+        map.removeLayer(markersGroup.pois);
+    }
+    markersGroup.pois.clearLayers();
+};
+
+const handlePoisAdded = (map) => {
+    const currentZoom = map.getZoom();
+    if (currentZoom > POI_ZOOM_LEVEL) {
+        syncPoiMarkers();
+        addPoiLayerIfNeeded(map);
+    }
+};
+
+const handlePoisUpdated = (map) => {
+    const currentZoom = map.getZoom();
+    const hasMarkers = markersGroup.pois.getLayers().length > 0;
+
+    if (currentZoom > POI_ZOOM_LEVEL && !hasMarkers) {
+        syncPoiMarkers();
+        addPoiLayerIfNeeded(map);
+    }
+};
+
 const showAddressesModel = computed({
     get() {
         return showAddresses.value;
@@ -269,34 +301,21 @@ watch(
 );
 
 watch(pois, (newPois, oldPois) => {
-    if (carto.value) {
-        const { map } = carto.value;
+    if (!carto.value) {
+        return;
+    }
 
-        if (newPois.length === 0 && oldPois.length > 0) {
-            if (map.hasLayer(markersGroup.pois)) {
-                map.removeLayer(markersGroup.pois);
-            }
-            markersGroup.pois.clearLayers();
-        } else if (newPois.length > 0 && oldPois.length === 0) {
-            const currentZoom = map.getZoom();
-            if (currentZoom > POI_ZOOM_LEVEL) {
-                syncPoiMarkers();
-                if (!map.hasLayer(markersGroup.pois)) {
-                    map.addLayer(markersGroup.pois);
-                }
-            }
-        } else if (newPois.length > 0 && oldPois.length > 0) {
-            const currentZoom = map.getZoom();
-            if (
-                currentZoom > POI_ZOOM_LEVEL &&
-                markersGroup.pois.getLayers().length === 0
-            ) {
-                syncPoiMarkers();
-                if (!map.hasLayer(markersGroup.pois)) {
-                    map.addLayer(markersGroup.pois);
-                }
-            }
-        }
+    const { map } = carto.value;
+    const wasEmpty = oldPois.length === 0;
+    const isEmpty = newPois.length === 0;
+    const hasChanged = wasEmpty !== isEmpty;
+
+    if (isEmpty && !wasEmpty) {
+        handlePoisRemoved(map);
+    } else if (!isEmpty && wasEmpty) {
+        handlePoisAdded(map);
+    } else if (!isEmpty && !hasChanged) {
+        handlePoisUpdated(map);
     }
 });
 
