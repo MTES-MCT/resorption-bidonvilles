@@ -117,10 +117,15 @@ const initialView = ref({
 });
 
 let isSyncing = false;
+let cachedPoiMarkers = null;
+let lastPoiIds = null;
 
 const syncPoiMarkers = () => {
-    // Éviter les exécutions multiples
+    const perfStart = performance.now();
+    console.log("🔵 syncPoiMarkers: == DEBUT ==");
+
     if (isSyncing) {
+        console.log("⏸️ syncPoiMarkers: Déjà synchro, on skippe");
         return;
     }
 
@@ -128,18 +133,37 @@ const syncPoiMarkers = () => {
 
     // Ne rien faire si les POIs sont vides
     if (pois.value.length === 0) {
+        console.log("⚪ syncPoiMarkers: Pas de POIs, on nettoie");
         markersGroup.pois.clearLayers();
+        cachedPoiMarkers = null;
+        lastPoiIds = null;
         isSyncing = false;
+        console.log(
+            `✅ syncPoiMarkers: Effectué en ${(
+                performance.now() - perfStart
+            ).toFixed(2)}ms`
+        );
         return;
     }
+
+    console.log(`📊 syncPoiMarkers: ${pois.value.length} POIs à générer`);
 
     // Vérifier le zoom avant d'ajouter les POIs
     const currentZoom = carto.value?.map?.getZoom() || 6;
     if (currentZoom <= POI_ZOOM_LEVEL) {
+        console.log(
+            `⚪ syncPoiMarkers: Zoom ${currentZoom} <= ${POI_ZOOM_LEVEL}, on skippe`
+        );
         isSyncing = false;
+        console.log(
+            `✅ syncPoiMarkers: REALISE EN ${(
+                performance.now() - perfStart
+            ).toFixed(2)}ms`
+        );
         return;
     }
 
+    const filterStart = performance.now();
     // Filtrer les POIs avec des coordonnées
     const validPois = pois.value.filter(
         (poi) => poi?.position?.location?.coordinates
