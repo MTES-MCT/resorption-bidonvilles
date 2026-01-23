@@ -183,18 +183,31 @@ const syncPoiMarkers = () => {
         return;
     }
 
-    // Recréer seulement si nécessaire
+    console.log("🆕 Creations des marqueurs");
+    // Sinon, recréer les marqueurs et mettre en cache
+    const clearStart = performance.now();
     markersGroup.pois.clearLayers();
+    console.log(
+        `🗑️ Nettoyage: ${(performance.now() - clearStart).toFixed(2)}ms`
+    );
 
-    // Optimisation : créer tous les marqueurs d'abord, puis ajouter d'un coup
-    const markers = validPois.map((poi) => {
+    const createStart = performance.now();
+    cachedPoiMarkers = validPois.map((poi) => {
         const marker = marqueurPoi(poi);
         marker.on("click", () => {
             emit("poiclick", poi);
         });
         return marker;
     });
+    console.log(
+        `🏗️ Creation des marqueurs: ${(performance.now() - createStart).toFixed(
+            2
+        )}ms`
+    );
 
+    lastPoiIds = currentPoiIds;
+
+    const addStart = performance.now();
     // Ajouter tous les marqueurs d'un seul coup
     markers.forEach((marker) => markersGroup.pois.addLayer(marker));
 
