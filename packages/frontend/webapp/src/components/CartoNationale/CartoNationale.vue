@@ -144,12 +144,42 @@ const syncPoiMarkers = () => {
     const validPois = pois.value.filter(
         (poi) => poi?.position?.location?.coordinates
     );
+    console.log(
+        `🔍 Filtrage: ${(performance.now() - filterStart).toFixed(2)}ms - ${
+            validPois.length
+        } POIs valides`
+    );
 
-    // Optimisation : vérifier si on a vraiment besoin de recréer
-    const currentMarkersCount = markersGroup.pois.getLayers().length;
-    if (currentMarkersCount === validPois.length && currentMarkersCount > 0) {
-        // Même nombre de marqueurs, probablement déjà synchronisés
+    const signatureStart = performance.now();
+    // Créer une signature unique des POI actuels
+    const currentPoiIds = validPois.map((poi) => poi.lieu_id).join(",");
+    console.log(
+        `🔑 Signature: ${(performance.now() - signatureStart).toFixed(2)}ms`
+    );
+
+    // Si les POI n'ont pas changé ET qu'on a un cache, réutiliser
+    if (cachedPoiMarkers && currentPoiIds === lastPoiIds) {
+        console.log("♻️ Using cached markers");
+        const clearStart = performance.now();
+        markersGroup.pois.clearLayers();
+        console.log(
+            `🗑️ Nettoyage: ${(performance.now() - clearStart).toFixed(2)}ms`
+        );
+        const addStart = performance.now();
+        cachedPoiMarkers.forEach((marker) =>
+            markersGroup.pois.addLayer(marker)
+        );
+        console.log(
+            `➕ Ajout des marqueurs: ${(performance.now() - addStart).toFixed(
+                2
+            )}ms`
+        );
         isSyncing = false;
+        console.log(
+            `✅ syncPoiMarkers: == FIN == (en cache) en ${(
+                performance.now() - perfStart
+            ).toFixed(2)}ms`
+        );
         return;
     }
 
