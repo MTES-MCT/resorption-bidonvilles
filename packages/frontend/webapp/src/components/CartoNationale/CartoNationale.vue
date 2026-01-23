@@ -118,16 +118,6 @@ const initialView = ref({
 
 let isSyncing = false;
 
-const createPoiMarker = (poi) => {
-    const marker = marqueurPoi(poi);
-
-    marker.on("click", () => {
-        emit("poiclick", poi);
-    });
-
-    marker.addTo(markersGroup.pois);
-};
-
 const syncPoiMarkers = () => {
     // Éviter les exécutions multiples
     if (isSyncing) {
@@ -165,7 +155,19 @@ const syncPoiMarkers = () => {
 
     // Recréer seulement si nécessaire
     markersGroup.pois.clearLayers();
-    validPois.forEach(createPoiMarker);
+
+    // Optimisation : créer tous les marqueurs d'abord, puis ajouter d'un coup
+    const markers = validPois.map((poi) => {
+        const marker = marqueurPoi(poi);
+        marker.on("click", () => {
+            emit("poiclick", poi);
+        });
+        return marker;
+    });
+
+    // Ajouter tous les marqueurs d'un seul coup
+    markers.forEach((marker) => markersGroup.pois.addLayer(marker));
+
     isSyncing = false;
 };
 const showAddressesModel = computed({
