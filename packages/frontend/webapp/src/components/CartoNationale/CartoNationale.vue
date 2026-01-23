@@ -209,9 +209,17 @@ const syncPoiMarkers = () => {
 
     const addStart = performance.now();
     // Ajouter tous les marqueurs d'un seul coup
-    markers.forEach((marker) => markersGroup.pois.addLayer(marker));
+    cachedPoiMarkers.forEach((marker) => markersGroup.pois.addLayer(marker));
+    console.log(
+        `➕ Ajout à la carte: ${(performance.now() - addStart).toFixed(2)}ms`
+    );
 
     isSyncing = false;
+    console.log(
+        `✅ syncPoiMarkers: FAIT (nouveau) en ${(
+            performance.now() - perfStart
+        ).toFixed(2)}ms`
+    );
 };
 const showAddressesModel = computed({
     get() {
