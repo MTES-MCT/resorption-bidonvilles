@@ -11,7 +11,7 @@ export async function searchAddress(search, limit = 5) {
 
     const queries = [`q=${encodeURIComponent(normalizedSearch)}`];
 
-    const parsedLimit = parseInt(limit, 10);
+    const parsedLimit = Number.parseInt(limit, 10);
     if (!Number.isNaN(parsedLimit)) {
         queries.push(`limit=${parsedLimit}`);
     }
@@ -20,6 +20,7 @@ export async function searchAddress(search, limit = 5) {
     try {
         ({ data } = await axios.get(`${ADRESSE_API_URL}?${queries.join("&")}`));
     } catch (e) {
+        console.log("Erreur lors de la recherche de l'adresse", e);
         return [];
     }
 
