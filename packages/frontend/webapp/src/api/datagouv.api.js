@@ -1,18 +1,29 @@
 import axios from "axios";
+import ENV from "@/helpers/env.js";
+
+const { ADRESSE_API_URL } = ENV;
 
 export async function searchAddress(search, limit = 5) {
-    const queries = [`q=${encodeURIComponent(search)}`];
+    const normalizedSearch = (search ?? "").toString().trim();
+    if (normalizedSearch.length < 3) {
+        return [];
+    }
+
+    const queries = [`q=${encodeURIComponent(normalizedSearch)}`];
 
     const parsedLimit = parseInt(limit, 10);
     if (!Number.isNaN(parsedLimit)) {
         queries.push(`limit=${parsedLimit}`);
     }
 
-    const {
-        data: { features },
-    } = await axios.get(
-        `https://api-adresse.data.gouv.fr/search/?${queries.join("&")}`
-    );
+    let data;
+    try {
+        ({ data } = await axios.get(`${ADRESSE_API_URL}?${queries.join("&")}`));
+    } catch (e) {
+        return [];
+    }
+
+    const features = Array.isArray(data?.features) ? data.features : [];
 
     const usedUids = {};
     return features.reduce((acc, feature) => {
@@ -41,7 +52,7 @@ export async function searchAddress(search, limit = 5) {
                 citycode: properties.citycode,
                 city: properties.city,
                 label: `${properties.label}, ${properties.context}`,
-                coordinates: geometry.coordinates.reverse(),
+                coordinates: [...geometry.coordinates].reverse(),
             },
         });
         return acc;
