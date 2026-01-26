@@ -17,7 +17,7 @@ export default function validateSafeWhereClause(whereClause: string): void {
         return;
     }
 
-    const safePattern = /^[\sa-zA-Z0-9_.:()]+$/;
+    const safePattern = /^[\sa-zA-Z0-9_.:\-+*/<>,()]+$/;
 
     if (!safePattern.test(whereClause)) {
         throw new Error('Clause WHERE invalide: contient des caractères non autorisés');
@@ -52,7 +52,7 @@ export default function validateSafeWhereClause(whereClause: string): void {
     }
 
     const words = whereClause.match(/\b[a-zA-Z]+\b/g) || [];
-    const allowedWords = new Set(['AND', 'OR', 'IN', 'NOT', 'IS', 'NULL', 'TRUE', 'FALSE']);
+    const allowedWords = new Set(['AND', 'OR', 'IN', 'NOT', 'IS', 'NULL', 'TRUE', 'FALSE', 'ASIN', 'SQRT', 'POWER', 'SIN', 'COS']);
     const hasUnauthorizedKeyword = words.some((word) => {
         const upperWord = word.toUpperCase();
         return word === upperWord && !allowedWords.has(upperWord);
