@@ -85,7 +85,18 @@
                 >Supprimer le site</DsfrButton
             >
         </div>
-        <div>
+        <div
+            class="flex flex-col items-start gap-2 sm:flex-row sm:items-center"
+        >
+            <DsfrButton
+                v-if="canMarkAsResorptionTarget"
+                size="sm"
+                icon="ri-focus-2-line"
+                secondary
+                @click="markAsResorptionTarget"
+                :loading="resorptionTargetIsLoading"
+                >Objectif résorption</DsfrButton
+            >
             <DsfrButton
                 size="sm"
                 :label="
@@ -269,6 +280,61 @@ const heatwaveStatus = computed(() => {
 const heatwaveRequestStatus = computed(() => {
     return townsStore.heatwaveStatuses[town.value.id] || null;
 });
+
+const canMarkAsResorptionTarget = computed(() => {
+    if (town.value.closedAt !== null) {
+        return false;
+    }
+
+    if (town.value.resorptionTarget !== null) {
+        return false;
+    }
+
+    const userRoles = userStore.user?.role_id;
+    console.log("userRoles: ", userRoles);
+    console.log("userStore.user: ", userStore.user);
+    const allowedRoles = [
+        "national_admin",
+        "local_admin",
+        "direct_collaborator",
+    ];
+
+    return allowedRoles.includes(userRoles);
+});
+
+const resorptionTargetIsLoading = ref(false);
+
+async function markAsResorptionTarget() {
+    if (resorptionTargetIsLoading.value === true) {
+        return;
+    }
+
+    const currentYear = new Date().getFullYear();
+    if (
+        !confirm(
+            `Êtes-vous sûr(e) de vouloir marquer ce site comme "Objectif résorption ${currentYear}" ?`
+        )
+    ) {
+        return;
+    }
+
+    resorptionTargetIsLoading.value = true;
+
+    try {
+        await townsStore.setResorptionTarget(town.value.id);
+        notificationStore.success(
+            "Objectif résorption",
+            `Le site a été marqué "Objectif résorption ${currentYear}"`
+        );
+    } catch (e) {
+        notificationStore.error(
+            "Objectif résorption",
+            e?.user_message || "Une erreur inconnue est survenue"
+        );
+    }
+
+    resorptionTargetIsLoading.value = false;
+}
 
 async function toggleHeatwave() {
     try {
