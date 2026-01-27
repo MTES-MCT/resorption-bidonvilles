@@ -1,6 +1,6 @@
 import { sequelize } from '#db/sequelize';
 
-export default async (shantytownId: number, resorptionTarget: number) => {
+export default async function setResorptionTarget(shantytownId: number, resorptionTarget: number) {
     await sequelize.query(
         `UPDATE shantytowns
         SET 
@@ -13,4 +13,4 @@ export default async (shantytownId: number, resorptionTarget: number) => {
             },
         },
     );
-};
+}
