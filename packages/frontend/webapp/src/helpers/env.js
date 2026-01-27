@@ -26,4 +26,6 @@ export default {
         "true"
             ? SENTRY_CONFIG
             : null,
+    ADRESSE_API_URL:
+        import.meta.env.VITE_ADRESSE_API_URL || "${VITE_ADRESSE_API_URL}",
 };

@@ -15,6 +15,15 @@
             @click.prevent.stop="toggleHeatwave"
         />
         <DsfrButton
+            v-if="canMarkAsResorptionTarget"
+            size="sm"
+            label="Objectif résorption"
+            icon="ri-focus-2-line"
+            secondary
+            :loading="resorptionTargetIsLoading"
+            @click.prevent.stop="markAsResorptionTarget"
+        />
+        <DsfrButton
             v-if="isOpen && hasUpdateShantytownPermission"
             size="sm"
             label="Mettre à jour"
@@ -33,7 +42,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { defineProps, toRefs, computed, ref } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
@@ -61,6 +70,27 @@ const heatwaveRequestStatus = computed(() => {
 const isOpen = computed(() => {
     return shantytown.value.status === "open";
 });
+
+const canMarkAsResorptionTarget = computed(() => {
+    if (shantytown.value.closedAt !== null) {
+        return false;
+    }
+
+    if (shantytown.value.resorptionTarget !== null) {
+        return false;
+    }
+
+    const userRoles = userStore.user?.role_id;
+    const allowedRoles = [
+        "national_admin",
+        "local_admin",
+        "direct_collaborator",
+    ];
+
+    return allowedRoles.includes(userRoles);
+});
+
+const resorptionTargetIsLoading = ref(false);
 
 async function toggleHeatwave() {
     try {
@@ -92,6 +122,38 @@ async function toggleHeatwave() {
                 : "Le site n'est plus marqué comme à risque"
         );
     }
+}
+
+async function markAsResorptionTarget() {
+    if (resorptionTargetIsLoading.value === true) {
+        return;
+    }
+
+    const currentYear = new Date().getFullYear();
+    if (
+        !confirm(
+            `Êtes-vous sûr(e) de vouloir marquer ce site comme "Objectif résorption ${currentYear}" ?`
+        )
+    ) {
+        return;
+    }
+
+    resorptionTargetIsLoading.value = true;
+
+    try {
+        await townsStore.setResorptionTarget(shantytown.value.id);
+        notificationStore.success(
+            "Objectif résorption",
+            `Le site a été marqué "Objectif résorption ${currentYear}"`
+        );
+    } catch (e) {
+        notificationStore.error(
+            "Objectif résorption",
+            e?.user_message || "Une erreur inconnue est survenue"
+        );
+    }
+
+    resorptionTargetIsLoading.value = false;
 }
 
 const navigateTo = (target) => {

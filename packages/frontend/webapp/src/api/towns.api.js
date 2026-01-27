@@ -179,6 +179,10 @@ export function setHeatwaveStatus(id, status) {
     });
 }
 
+export function setResorptionTarget(id) {
+    return axios.put(`/towns/${encodeURI(id)}/resorption-target`);
+}
+
 export function updateActorThemes(townId, userId, themes) {
     return axios.put(
         `/towns/${encodeURI(townId)}/actors/${encodeURI(userId)}`,
