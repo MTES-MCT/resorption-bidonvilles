@@ -11,7 +11,7 @@ export default [
             let shantytown: Shantytown | null;
             try {
                 shantytown = await shantytownModel.findOne(req.user, value);
-            } catch (error) {
+            } catch {
                 throw new Error('Une erreur est survenue lors de la recherche du site en base de données');
             }
 
