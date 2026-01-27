@@ -14,7 +14,7 @@ export default async function setResorptionTarget(user, data) {
             data.shantytown.id,
             currentYear,
         );
-    } catch (error) {
+    } catch {
         throw new ServiceError('write_failed', new Error('Une erreur est survenue pendant l\'écriture en base de données'));
     }
 
