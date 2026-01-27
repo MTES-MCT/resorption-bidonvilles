@@ -13,6 +13,7 @@ import serializeComment from './_common/serializeComment';
 import deleteShantytown from './delete';
 import fixClosedStatus from './fixClosedStatus';
 import setHeatwaveStatus from './setHeatwaveStatus';
+import setResorptionTarget from './setResorptionTarget';
 
 export default {
     anonymizeOwners,
@@ -29,5 +30,6 @@ export default {
     getUsenameOf,
     serializeComment,
     setHeatwaveStatus,
+    setResorptionTarget,
     update,
 };
