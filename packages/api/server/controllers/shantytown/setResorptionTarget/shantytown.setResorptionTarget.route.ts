@@ -2,9 +2,11 @@ import { type ApplicationWithCustomRoutes } from '#server/loaders/customRouteMet
 import validator from './shantytown.setResorptionTarget.validator';
 import controller from './shantytown.setResorptionTarget';
 
-export default (app: ApplicationWithCustomRoutes): void => {
+function setResorptionTargetRoute(app: ApplicationWithCustomRoutes): void {
     app.customRoutes.put('/towns/:id/resorption-target', controller, validator, {
         authenticate: true,
         multipart: false,
     });
-};
+}
+
+export default setResorptionTargetRoute;
