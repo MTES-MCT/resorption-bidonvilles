@@ -2,7 +2,7 @@ import shantytownModel from '#server/models/shantytownModel';
 import ServiceError from '#server/errors/ServiceError';
 import permissionUtils from '#server/utils/permission';
 
-export default async (user, data) => {
+export default async function setResorptionTarget(user, data) {
     if (!permissionUtils.can(user).do('update', 'shantytown').on(data.shantytown)) {
         throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission de marquer ce site comme "Objectif résorption"'));
     }
@@ -19,4 +19,4 @@ export default async (user, data) => {
     }
 
     return shantytownModel.findOne(user, data.shantytown.id);
-};
+}
