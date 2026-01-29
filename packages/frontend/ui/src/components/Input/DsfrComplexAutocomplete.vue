@@ -2,7 +2,7 @@
   <div class="relative">
     <DsfrInputGroup
       :descriptionId="name"
-      :errorMessage="errors.length > 0 && results?.length === 0 && !organizationSearchLabel ? errors : ''"
+      :errorMessage="errors.length > 0 && results?.length === 0 && !organizationSearchLabel?.length ? errors : ''"
       :disabled="isDisabled"
       type="text"
       required
@@ -122,9 +122,9 @@
 </template>
 
 <script setup>
-import { toRefs, ref, computed, onBeforeUnmount, watch } from "vue";
-import debounce from "../../utils/debounce";
+import { toRefs, ref, computed, watch } from "vue";
 import { useIsSubmitting } from "vee-validate";
+import useAutocomplete from "../../composables/useAutocomplete";
 
 const props = defineProps({
   name: String,
@@ -189,24 +189,58 @@ const {
   autoClear,
 } = toRefs(props);
 
-const rawResults = ref([]);
-const categoriesInSearch = ref(new Set());
+const categoriesInSearch = ref([]);
 const filteredCategories = ref([]);
-const isLoading = ref(false);
-const lastPromise = ref(null);
-const input = ref(null);
-const selectedItem = ref(null);
-const focusedItemIndex = ref(null);
-const error = ref(false);
 const currentPage = ref(0);
 const isClickInsideDropdown = ref(false);
 const itemsPerPage = 10;
-let lastEvent;
-let callId = 0;
 
 const isSubmitting = useIsSubmitting();
 
 const organizationSearchLabel = ref(modelValue.value?.search || "");
+
+const buildResults = (rawItems, { showCategory }) => {
+  if (!showCategory?.value) {
+    return [
+      {
+        title: "",
+        items: rawItems,
+      },
+    ];
+  }
+
+  const categories = {};
+  categoriesInSearch.value = [];
+
+  rawItems.forEach((item) => {    
+    const { category } = item;
+
+    if (!categories[category]) {
+      categories[category] = {
+        title: category,
+        items: [],
+      };
+      categoriesInSearch.value.push({
+        label: category,
+        selectable: true,
+        selected: false,
+        small: true,
+        value: category,
+      });
+    }
+
+    if (
+      filteredCategories.value.length === 0 ||
+      filteredCategories.value.includes(category)
+    ) {
+      categories[category].items.push(item);
+    }
+  });
+
+  return Object.values(categories);
+};
+
+const input = ref(null);
 
 const totalPages = computed(() => {
   return Math.ceil(flatResults.value.length / itemsPerPage);
@@ -226,30 +260,19 @@ const pages = computed(() => {
   return results;
 });
 
-const flatResults = computed(() => {
-  if (showCategory.value) {
-    return results.value.flatMap((r) => r.items);
-  }
-  return rawResults.value;
-});
+const flatResults = computed(() => results.value.flatMap((r) => r.items));
 
 const paginatedResults = computed(() => {
   const start = currentPage.value * itemsPerPage;
   const end = start + itemsPerPage;
 
   if (showCategory.value) {
-    const categorizedItems = results.value.flatMap((section) => {
-      if (
-        filteredCategories.value.includes(section.category) ||
-        filteredCategories.value.length === 0
-      ) {
-        return section.items.map((item) =>
-          ({
-          ...item,
-          categoryTitle: section.title,
-        }));
-      }
-    });
+    const categorizedItems = results.value.flatMap((section) =>
+      section.items.map((item) => ({
+        ...item,
+        categoryTitle: section.title,
+      }))
+    );
 
     const pageItems = categorizedItems.slice(start, end);
 
@@ -266,18 +289,20 @@ const paginatedResults = computed(() => {
         grouped[item.categoryTitle].items.push(item);
       }
     }
-    grouped[""] = {
-      title: "",
-      items: [
-        {
-          id: "autre",
-          selectedLabel: "",
-          label: "Je ne trouve pas ma structure",
-          category: "other",
-          data: null,
-        },
-      ],
-    };
+    if (name.value === "organization") {
+      grouped[""] = {
+        title: "",
+        items: [
+          {
+            id: "autre",
+            selectedLabel: "",
+            label: "Je ne trouve pas ma structure",
+            category: "",
+            data: null,
+          },
+        ],
+      };
+    }
 
     return Object.values(grouped);
   } else {
@@ -285,120 +310,84 @@ const paginatedResults = computed(() => {
   }
 });
 
+const {
+  rawResults,
+  results,
+  isLoading,
+  selectedItem,
+  focusedItemIndex,
+  focusedItemId,
+  error,
+  onInput: baseOnInput,
+  onBlur: baseOnBlur,
+  onKeydown,
+  selectItem,
+  clear,
+  abort,
+  search,
+} = useAutocomplete({
+  fn,
+  modelValue,
+  allowFreeSearch,
+  autoClear,
+  showCategory,
+  emit,
+  inputAdapter: {
+    setValue: (val = "") => {
+      organizationSearchLabel.value = val ?? "";
+    },
+    blur: () => input.value?.blur?.(),
+    focus: () => input.value?.focus?.(),
+    getValue: () => organizationSearchLabel.value ?? "",
+  },
+  options: {
+    blurDelay: 200,
+    onClear: () => {
+      filteredCategories.value = [];
+      currentPage.value = 0;
+    },
+    onFetchError: () => {
+      if (Array.isArray(errors.value)) {
+        errors.value.push("Le chargement des données a échoué");
+      }
+    },
+    buildResults,
+  },
+});
+
 const isDisabled = computed(() => {
   return disabled.value === true || isSubmitting.value === true;
 });
 
-let timeout = null;
-async function onInput({ target }) {
-  const { value } = target;
-
-  if (selectedItem.value !== null) {
-    selectedItem.value = null;
-    target.value = "";
-    emit("update:modelValue", undefined);
+function onBlur(event) {
+  if (isClickInsideDropdown.value) {
+    isClickInsideDropdown.value = false;
     return;
   }
 
-  currentPage.value = 0;
-  rawResults.value = [];
-  focusedItemIndex.value = null;
-  error.value = false;
-
-  if (value.length < 2) {
-    abort();
-    return;
-  }
-
-  if (lastPromise.value !== null) {
-    lastPromise.value.catch(() => {
-      // ignore
-    });
-  }
-
-  lastPromise.value = debouncedGetResults(value, callId);
+  baseOnBlur(event);
 }
 
 function onFocus(event) {
   const value = event.target.value;
   if (value && value.length >= 2 && rawResults.value.length === 0) {
     currentPage.value = 0;
-    debouncedGetResults(value, callId);
+    search(value);
   }
 }
 
-async function getResults(value, originalCallId) {
-  try {
-    isLoading.value = true;
-    const results = await fn.value(value);
+function onInput(event) {
+  const value = event?.target?.value ?? "";
 
-    if (callId === originalCallId) {
-      rawResults.value = results;
-    }
-  } catch (e) {
-    //eslint-disable-next-line no-console
-    console.error(e);
-    errors.value.push("Le chargement des données a échoué");
-  }
-
-  isLoading.value = false;
-  lastPromise.value = null;
-}
-
-const debouncedGetResults = debounce(getResults, 300);
-
-function abort() {
-  if (lastPromise.value !== null) {
-    lastPromise.value.abort();
-  }
-
-  callId++;
-  isLoading.value = false;
-  error.value = false;
-  lastPromise.value = null;
-}
-
-function onBlur(event) {
-  clearTimeout(timeout);
-  if (isClickInsideDropdown.value) {
-    isClickInsideDropdown.value = false;
+  if (selectedItem.value !== null) {
+    selectedItem.value = null;
+    organizationSearchLabel.value = "";
+    emit("update:modelValue", undefined);
     return;
   }
 
-  focusedItemIndex.value = null;
-  timeout = setTimeout(() => {
-    rawResults.value = [];
-    abort();
-    if (selectedItem.value === null) {
-      if (allowFreeSearch.value === true) {
-        sendEvent({
-          search: event.target.value,
-          data: undefined,
-        });
-        return;
-      }
-
-      if (event.target.value.length > 0) {
-        return;
-      }
-
-      emit("update:modelValue", undefined);
-      return;
-    }
-
-    if (selectedItem.value.label === event.target.value) {
-      return;
-    }
-
-    if (allowFreeSearch.value === true) {
-      selectedItem.value = null;
-
-      sendEvent({
-        search: event.target.value,
-        data: undefined,
-      });
-    }
-  }, 200); // délai pour permettre les clics
+  currentPage.value = 0;
+  baseOnInput(event);
 }
 
 function getItemLabel(item) {
@@ -413,143 +402,21 @@ function getItemLabel(item) {
   return item.label;
 }
 
-function selectItem(item) {
-  rawResults.value = [];
-  isLoading.value = false;
-  lastPromise.value = null;
-  selectedItem.value = item;
-
-  if (autoClear.value === true) {
-    clear({ sendEvent: false });
-  }
-  sendEvent({
-    search: getItemLabel(item),
-    data: {...item.data, type: item.type, category: item.category},
-  });
-}
-
-function clear(options = {}) {
-  rawResults.value = [];
-  filteredCategories.value = [];
-  selectedItem.value = null;
-  organizationSearchLabel.value = null;
-  abort();
-  sendEvent(undefined);
-}
-
-function sendEvent(data) {
-  if (
-    data !== undefined &&
-    lastEvent?.search === data?.search &&
-    lastEvent?.data === data?.data
-  ) {
-    return;
-  }
-
-  emit("update:modelValue", data);
-  lastEvent = { ...data };
-}
-
-onBeforeUnmount(() => {
-  clearTimeout(timeout);
-});
-
-function onKeydown(event) {
-  const keys = {
-    [38]: () => focusPreviousItem(event),
-    [40]: () => focusNextItem(event),
-    [13]: () => {
-      if (focusedItemIndex.value !== null) {
-        selectItem(rawResults.value[focusedItemIndex.value]);
-        input.value.blur();
-        event.stopPropagation();
-        event.preventDefault();
-      } else if (allowFreeSearch.value === true) {
-        input.value.blur();
-      }
-    },
-  };
-
-  const handler = keys[event.keyCode];
-  if (handler) {
-    handler();
-  }
-}
-
-function focusPreviousItem(event) {
-  if (rawResults.value.length === 0 || focusedItemIndex.value === null) {
-    return;
-  }
-
-  event.preventDefault();
-  if (focusedItemIndex.value === 0) {
-    focusedItemIndex.value = null;
-  } else {
-    focusedItemIndex.value -= 1;
-  }
-}
-
-function focusNextItem(event) {
-  if (rawResults.value.length === 0) {
-    return;
-  }
-
-  event.preventDefault();
-  if (focusedItemIndex.value === null) {
-    focusedItemIndex.value = 0;
-    return;
-  }
-
-  focusedItemIndex.value = Math.min(
-    rawResults.value.length - 1,
-    focusedItemIndex.value + 1
-  );
-}
-
-const focusedItemId = computed(() => {
-  if (focusedItemIndex.value === null) {
-    return;
-  }
-
-  return results.value.flatMap(({ items }) => items)[focusedItemIndex.value].id;
-});
-
-const results = computed(() => {
-  const categories = {};
-  // On réinitialise les catégories à chaque calcul
-  categoriesInSearch.value = new Set();
-  return rawResults.value.reduce((acc, item) => {
-    const { category, category_label } = item;
-
-    if (!categories[category]) {
-      categories[category] = {
-        title: category_label,
-        category,
-        items: [],
-      };
-      acc.push(categories[category]);
-      categoriesInSearch.value.add({
-        label: category_label,
-        selectable: true,
-        selected: false,
-        small: true,
-        value: category,
-      });
-    }
-
-    (filteredCategories.value.includes(category) || filteredCategories.value.length === 0) && categories[category].items.push(item);
-    return acc;
-  }, []);
-});
-
 watch(
   () => modelValue.value,
   (value) => {
     filteredCategories.value = [];
     organizationSearchLabel.value = value?.search ?? "";
+    currentPage.value = 0;
   },
   { immediate: true }
 );
+
+watch(isClickInsideDropdown, (isInside) => {
+  if (!isInside) {
+    selectedItem.value = selectedItem.value;
+  }
+});
 
 defineExpose({
   clear,
@@ -560,6 +427,6 @@ defineExpose({
 </script>
 <style scoped>
 :deep(.fr-tags-group > li) {
-  line-height: 0.2rem;
+  line-height: 0.2rem !important;
 }
 </style>

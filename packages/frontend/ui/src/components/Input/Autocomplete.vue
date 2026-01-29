@@ -34,13 +34,13 @@
 </template>
 
 <script setup>
-import { toRefs, ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
+import { toRefs, ref, computed } from "vue";
 import { useForm, useIsSubmitting, useField } from "vee-validate";
 import InputWrapper from "./utils/InputWrapper.vue";
 import InputError from "./utils/InputError.vue";
 import Input from "./Input.vue";
 import Icon from "../Icon.vue";
-import debounce from "../../utils/debounce";
+import useAutocomplete from "../../composables/useAutocomplete";
 
 const props = defineProps({
     name: String,
@@ -79,265 +79,48 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 const { fn, name, withoutMargin, allowFreeSearch, showCategory, modelValue, disabled, autoClear } = toRefs(props);
 
-const rawResults = ref([]);
-const isLoading = ref(false);
-const lastPromise = ref(null);
-// Vee-validate form context
 const form = useForm();
 const isSubmitting = form ? useIsSubmitting() : false;
 
 const { handleChange, errors, validate, value } = useField(name, undefined, {
     ...(modelValue.value ? { initialValue: modelValue } : {}),
 });
+
 const input = ref(null);
-const selectedItem = ref(value.value ? {
-    label: value.value.search,
-    data: value.value.data
-} : null);
-const focusedItemIndex = ref(null);
-const error = ref(false);
-let lastEvent = undefined;
-let callId = 0;
-const isDisabled = computed(() => {
-    return disabled.value === true || isSubmitting.value === true;
+
+const {
+    rawResults,
+    results,
+    isLoading,
+    focusedItemId,
+    error,
+    onInput,
+    onBlur,
+    onKeydown,
+    selectItem,
+    clear,
+} = useAutocomplete({
+    fn,
+    modelValue,
+    allowFreeSearch,
+    autoClear,
+    showCategory,
+    emit,
+    fieldContext: { handleChange, errors, validate, value },
+    inputAdapter: {
+        setValue: (val = "") => input.value?.setValue?.(val ?? ""),
+        blur: () => input.value?.blur?.(),
+        focus: () => input.value?.focus?.(),
+        getValue: () => input.value?.$refs?.input?.value ?? "",
+    },
 });
 
-watch(modelValue, () => {
-    input.value.setValue(modelValue.value?.search || "");
-});
-watch(value, () => {
-    if (value.value === undefined) {
-        clear();
-    }
-
-    input.value.setValue(value.value?.search || "");
-});
-
-let timeout = null;
-async function onInput({ target }) {
-    const { value } = target;
-    rawResults.value = [];
-    focusedItemIndex.value = null;
-
-    error.value = false;
-    if (value.length < 2) {
-        abort();
-        return;
-    }
-
-    if(lastPromise.value !== null){
-        lastPromise.value.catch(() => {
-        // ignore
-        });
-    }
-   
-    lastPromise.value = debouncedGetResults(value, callId);
-}
-
-async function getResults(value, originalCallId) {
-    try {
-        isLoading.value = true;
-        const results = await fn.value(value);
-
-        if (callId === originalCallId) {
-            rawResults.value = results;
-        }
-    } catch (e) {
-        error.value = true;
-    }
-
-    isLoading.value = false;
-    lastPromise.value = null;
-}
-
-const debouncedGetResults = debounce(getResults, 300);
-
-function abort() {
-    if (lastPromise.value !== null) {
-        lastPromise.value.abort();
-    }
-
-    callId++;
-    isLoading.value = false;
-    error.value = false;
-    lastPromise.value = null;
-}
-
-function onBlur(event) {
-    clearTimeout(timeout);
-    focusedItemIndex.value = null;
-
-    // un timeout est nécessaire pour éviter que le blur ne fasse disparaître les résultats
-    // de recherche juste avant qu'on ait le temps de cliquer dessus
-    // (en effet, réinitialiser rawResults provoque la disparaître des résultats)
-    timeout = setTimeout(() => {
-        rawResults.value = [];
-        abort();
-        if (selectedItem.value === null) {
-            if (allowFreeSearch.value === true) {
-                sendEvent({
-                    search: event.target.value,
-                    data: undefined
-                });
-                return;
-            }
-
-            input.value.setValue("");
-            return;
-        }
-
-        if (selectedItem.value.label === event.target.value) {
-            return;
-        }
-
-        if (allowFreeSearch.value === true) {
-            selectedItem.value = null;
-            handleChange({
-                search: event.target.value,
-                data: undefined
-            });
-            sendEvent({
-                search: event.target.value,
-                data: undefined
-            });
-            return;
-        }
-
-        input.value.setValue(selectedItem.value.selectedLabel || selectedItem.value.label);
-    }, 250);
-    validate();
-}
-
-function selectItem(item) {
-    rawResults.value = [];
-    isLoading.value = false;
-    lastPromise.value = null;
-    selectedItem.value = item;
-    handleChange({
-        search: item.selectedLabel || item.label,
-        data: item.data
-    });
-    sendEvent({
-        search: item.selectedLabel || item.label,
-        data: item.data
-    });
-
-    if (autoClear.value === true) {
-        clear({ sendEvent: false });
-    } else {
-        input.value.setValue(item.selectedLabel || item.label);
-    }
-}
-
-function clear(options = {}) {
-    rawResults.value = [];
-    selectedItem.value = null;
-    abort();
-
-    if (options.sendEvent !== false) {
-        handleChange(undefined);
-        sendEvent(undefined);
-    }
-
-    input.value.setValue("");
-}
-
-function sendEvent(data) {
-    if (data !== undefined && lastEvent?.search === data.search && lastEvent?.data === data.data) {
-        return;
-    }
-
-    emit("update:modelValue", data);
-    lastEvent = { ...data };
-}
-
-onMounted(() => {
-    input.value.setValue(value?.value?.search || "");
-});
-
-onBeforeUnmount(() => {
-    clearTimeout(timeout);
-});
-
-function onKeydown(event) {
-    const keys = {
-        [38]: () => focusPreviousItem(event),
-        [40]: () => focusNextItem(event),
-        [13]: () => {
-            if (focusedItemIndex.value !== null) {
-                selectItem(rawResults.value[focusedItemIndex.value]);
-                input.value.blur();
-                event.stopPropagation();
-                event.preventDefault();
-            } else if (allowFreeSearch.value === true) {
-                input.value.blur();
-            }
-        },
-    };
-
-    const handler = keys[event.keyCode];
-    if (handler) {
-        handler();
-    }
-}
-
-function focusPreviousItem(event) {
-    if (rawResults.value.length === 0 || focusedItemIndex.value === null) {
-        return;
-    }
-
-    event.preventDefault();
-    if (focusedItemIndex.value === 0) {
-        focusedItemIndex.value = null;
-    } else {
-        focusedItemIndex.value -= 1;
-    }
-}
-
-function focusNextItem(event) {
-    if (rawResults.value.length === 0) {
-        return;
-    }
-
-    event.preventDefault();
-    if (focusedItemIndex.value === null) {
-        focusedItemIndex.value = 0;
-        return;
-    }
-
-    focusedItemIndex.value = Math.min(rawResults.value.length - 1, focusedItemIndex.value + 1);
-}
-
-const focusedItemId = computed(() => {
-    if (focusedItemIndex.value === null) {
-        return;
-    }
-
-    return results.value.map(({ items }) => items).flat()[focusedItemIndex.value].id;
-});
-
-const results = computed(() => {
-    const categories = {};
-    return rawResults.value.reduce((acc, item) => {
-        const { category } = item;
-
-        if (!categories[category]) {
-            categories[category] = {
-                title: category,
-                items: [],
-            };
-            acc.push(categories[category]);
-        }
-
-        categories[category].items.push(item);
-        return acc;
-    }, []);
-});
+const isDisabled = computed(() => disabled.value === true || isSubmitting.value === true);
 
 defineExpose({
     clear,
     focus() {
-        return input.value.focus();
+        return input.value?.focus?.();
     }
 });
 </script>
