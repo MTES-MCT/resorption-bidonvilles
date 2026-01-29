@@ -1,8 +1,9 @@
 <template>
     <AdministrationHeader
-        title="Gestion des accès"
-        description="Traitez les demandes d'accès sur votre territoire"
+        title="Logs de connexion"
+        description="Consultez les tentatives de connexion des utilisateurs"
         icon="key"
+        :showLogsButton="false"
     />
 </template>
 
