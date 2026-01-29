@@ -122,7 +122,7 @@
 </template>
 
 <script setup>
-import { toRefs, ref, computed, watch } from "vue";
+import { toRefs, ref, computed, triggerRef, watch } from "vue";
 import { useIsSubmitting } from "vee-validate";
 import useAutocomplete from "../../composables/useAutocomplete";
 
@@ -414,7 +414,7 @@ watch(
 
 watch(isClickInsideDropdown, (isInside) => {
   if (!isInside) {
-    selectedItem.value = selectedItem.value;
+    triggerRef(selectedItem);
   }
 });
 
