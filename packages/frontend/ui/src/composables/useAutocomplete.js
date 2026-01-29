@@ -21,6 +21,22 @@ const defaultBuildResults = (rawResults) => {
 
 const defaultGetFlatItems = (results) => results.flatMap(({ items }) => items);
 
+const normalizePayload = (payload) => {
+    if (typeof payload === "string") {
+        return payload;
+    }
+
+    if (payload?.target) {
+        return payload.target.value;
+    }
+
+    if (typeof payload?.value === "string") {
+        return payload.value;
+    }
+
+    return String(payload ?? "");
+}
+
 export default function useAutocomplete({
     fn,
     modelValue,
@@ -106,22 +122,6 @@ export default function useAutocomplete({
 
             setInputValue(getInitialLabel(val));
         });
-    }
-
-    function normalizePayload(payload) {
-        if (typeof payload === "string") {
-            return payload;
-        }
-
-        if (payload?.target) {
-            return payload.target.value;
-        }
-
-        if (typeof payload?.value === "string") {
-            return payload.value;
-        }
-
-        return String(payload ?? "");
     }
 
     async function onInput(payload) {

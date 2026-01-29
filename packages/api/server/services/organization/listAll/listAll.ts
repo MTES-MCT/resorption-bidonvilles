@@ -45,7 +45,7 @@ const listAll = async (search: string): Promise<OrganizationAutocompleteResult[]
                         similarity: row.similarity,
                         type_abbreviation: row.type_abbreviation,
                         organization_type_id: row.organization_type_id,
-                        departement_code: parseInt(row.departements_codes[0], 10) ?? null,
+                        departement_code: Number.parseInt(row.departements_codes[0], 10) ?? null,
                     });
                 }
 

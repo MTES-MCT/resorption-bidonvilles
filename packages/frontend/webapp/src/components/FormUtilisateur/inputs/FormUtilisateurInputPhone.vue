@@ -34,7 +34,7 @@ const { value: phone, errors, handleBlur } = useField("phone", "required");
 
 watch(phone, (newValue) => {
     if (newValue) {
-        phone.value = newValue.replace(/[^0-9+]/g, "");
+        phone.value = newValue.replaceAll(/[^0-9+]/g, "");
     }
 });
 </script>

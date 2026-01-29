@@ -63,7 +63,7 @@
     >
       <div v-if="showCategory" class="flex flex-col">
         <div
-          class="flex w-full border-b border-g200 min-h-8 gap-2 p-2 pb-0"
+          class="flex w-full border-b border-G200 min-h-8 gap-2 p-2 pb-0"
           v-if="categoriesInSearch && results.length > 0"
           @mouseup="isClickInsideDropdown = false"
           @mouseleave="isClickInsideDropdown = false"
@@ -210,18 +210,18 @@ const buildResults = (rawItems, { showCategory }) => {
   }
 
   const categories = {};
-  categoriesInSearch.value = [];
+  categoriesInSearch.value = new Set();
 
   rawItems.forEach((item) => {    
-    const { category } = item;
+    const { category, category_label } = item;
 
     if (!categories[category]) {
       categories[category] = {
-        title: category,
+        title: category_label,
         items: [],
       };
-      categoriesInSearch.value.push({
-        label: category,
+      categoriesInSearch.value.add({
+        label: category_label,
         selectable: true,
         selected: false,
         small: true,
@@ -377,8 +377,6 @@ function onFocus(event) {
 }
 
 function onInput(event) {
-  const value = event?.target?.value ?? "";
-
   if (selectedItem.value !== null) {
     selectedItem.value = null;
     organizationSearchLabel.value = "";
@@ -425,8 +423,3 @@ defineExpose({
   },
 });
 </script>
-<style scoped>
-:deep(.fr-tags-group > li) {
-  line-height: 0.2rem !important;
-}
-</style>
