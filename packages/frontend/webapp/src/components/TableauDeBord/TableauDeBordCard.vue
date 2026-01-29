@@ -14,7 +14,6 @@
                     }"
                     :key="index"
                     :id="`card_${cardKey}`"
-                    :icon="true"
                     :noBackground="false"
                     :download="false"
                     :shadow="true"

@@ -50,6 +50,7 @@ export type ActionItem = {
     last_comment: string | null,
     last_comment_date: string | null,
     last_update: string | null,
+    metrics_updated_at: string | null,
 };
 
 export type ActionReportRow = {
@@ -176,6 +177,7 @@ export interface ShantytownAction extends IAction {
 
 interface GenericAction extends IAction {
     type: 'action',
+    displayId: string,
     started_at: number,
     ended_at: number | null,
     goals: string | null,
@@ -190,6 +192,7 @@ interface GenericAction extends IAction {
     location_shantytowns: ActionShantytown[] | null,
     managers: ActionOrganization[],
     metrics: ActionMetrics[],
+    metrics_updated_at: number | null,
     finances?: ActionFinances,
     created_at: number,
     created_by: ActionUser,
@@ -197,7 +200,7 @@ interface GenericAction extends IAction {
     updated_by: ActionUser | null,
 }
 
-interface Action extends GenericAction {
+export interface Action extends GenericAction {
     comments: ActionRawComment[],
 }
 

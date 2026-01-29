@@ -153,7 +153,7 @@ export const useNavigationStore = defineStore("navigation", {
                 { label: "Accueil", route: "/" },
                 { label: "Sites", route: "/liste-des-sites" },
                 { label: "Actions", route: "/liste-des-actions" },
-                this.metricsItem,
+                { ...this.metricsItem, active: false },
                 { label: "Entraide", route: "/communaute" },
                 { label: "Carte", route: "/cartographie" },
                 { label: "Dernières activités", route: "/activites" },

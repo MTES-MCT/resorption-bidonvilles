@@ -5,7 +5,7 @@
                 <p class="px-4 pb-2">
                     <span class="font-bold"
                         >Année scolaire {{ year - 1 }} - {{ year }}</span
-                    ><br />(à remplir en juin {{ year }})
+                    >
                 </p>
             </template>
         </IndicateursRow>

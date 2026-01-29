@@ -184,8 +184,10 @@ export function column(i: number): string {
  * @param {Number}   lastFrozenColumn Index of the last frozen column (starting from 1)
  * @param {String}   locationName
  * @param {String}   title
+ * @param {String}   dateOfExport
+ * @param {Object}   updatedSitesStats Statistiques des sites mis à jour dans les 6 derniers mois
  */
-function writeHeader(workbook, sheet, lastFrozenColumn, locationName, title, dateOfExport) {
+function writeHeader(workbook, sheet, lastFrozenColumn, locationName, title, dateOfExport, updatedSitesStats) {
     // first row
     writeTo(sheet, 'A1', [
         { bold: true, color: COLORS.BLACK, text: 'SITUATION DES BIDONVILLES' },
@@ -212,6 +214,13 @@ function writeHeader(workbook, sheet, lastFrozenColumn, locationName, title, dat
         bold: true,
         text: `à la date du ${dateOfExport}`,
     });
+
+    if (updatedSitesStats) {
+        writeTo(sheet, 'A5', {
+            bold: true,
+            text: `${updatedSitesStats.updatedCount} site${updatedSitesStats.updatedCount > 1 ? 's' : ''} sur ${updatedSitesStats.totalCount} mis à jour dans les 6 derniers mois (${updatedSitesStats.percentage}%)`,
+        });
+    }
 }
 
 /**
@@ -444,10 +453,12 @@ export default {
      * @param {String}             locationName Name of the geographic location
      * @param {Array.<Section>}    sections
      * @param {Array.<Shantytown>} shantytowns
+     * @param {String}             dateOfExport Date d'export au format DD/MM/YYYY
+     * @param {Object}             updatedSitesStats Statistiques des sites mis à jour dans les 6 derniers mois
      *
      * @returns {Promise} The promise responds with a Buffer
      */
-    createExport(title, locationName, sections, shantytowns, dateOfExport) {
+    createExport(title, locationName, sections, shantytowns, dateOfExport, updatedSitesStats) {
         // create a whole workbook
         const workbook = new Excel.Workbook();
 
@@ -473,7 +484,7 @@ export default {
         );
 
         // create the header
-        writeHeader(workbook, sheet, lastFrozenColumn, locationName, title, dateOfExport);
+        writeHeader(workbook, sheet, lastFrozenColumn, locationName, title, dateOfExport, updatedSitesStats);
 
         // write each section
         const lastColumnIndex = sections.reduce((colIndex, section) => {

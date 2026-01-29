@@ -5,6 +5,7 @@ import config from '#server/config';
 import electricityAccessTypes from '#server/models/electricityAccessTypesModel/_common/electricityAccessTypes';
 import waterAccessTypes from '#server/models/_common/waterAccessTypes';
 import toiletTypes from '#server/models/shantytownToiletTypesModel/_common/toiletTypes';
+import statusDetails from '#server/utils/statusDetails';
 import { ShantytownWithFinancedAction, ShantytownWithOwner } from '#root/types/resources/Shantytown.d';
 import electricityAccessStatusLabels from './livingConditionsStatusLabels/electricityAccessStatusLabels';
 import waterAccessStatusLabels from './livingConditionsStatusLabels/waterAccessStatusLabels';
@@ -15,6 +16,7 @@ import firePreventionStatusLabels from './livingConditionsStatusLabels/firePreve
 import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
 import { ShantytownExportListProperty } from '#root/types/resources/ShantytownExportTypes.d';
 import { SerializedOwner } from '#root/types/resources/ParcelOwner.d';
+import departementsInResorptionPhases from './departements_in_resorption_phases';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 const { webappUrl } = config;
@@ -27,14 +29,7 @@ export default (closingSolutions: ClosingSolution[]) => {
         LARGE: 35,
     };
 
-    const STATUS_DETAILS = {
-        resorbed: 'Résorption progressive du site',
-        closed_by_justice: 'Décision de justice suite à une plainte du propriétaire',
-        closed_by_pref_admin: 'Décision administrative de la Préfecture',
-        closed_by_city_admin: 'Décision administrative de la Commune',
-        other: 'Autre',
-        unknown: 'Raison inconnue',
-    };
+    const STATUS_DETAILS = statusDetails;
 
     const properties: { [key: string]: ShantytownExportListProperty } = {
         departement: {
@@ -1184,6 +1179,7 @@ export default (closingSolutions: ClosingSolution[]) => {
 
                 return `- ${name} (${themes})`;
             }).join('\n'),
+            wrapText: true,
             width: COLUMN_WIDTHS.LARGE,
         },
         comments: {
@@ -1243,21 +1239,76 @@ export default (closingSolutions: ClosingSolution[]) => {
 
         preparatoryPhasesTowardResorption: {
             title: 'Phases préparatoires à la résorption',
-            data: ({ preparatoryPhasesTowardResorption }: ShantytownWithFinancedAction) => {
+            data: ({ preparatoryPhasesTowardResorption, departement }: ShantytownWithFinancedAction) => {
+                // Si le site n'est pas dans un département concerné par l'expérimentation, on ne le remplit pas
+                if (!departement || !departementsInResorptionPhases.includes(Number.parseInt(departement.code, 10))) {
+                    return null;
+                }
+
                 if (!preparatoryPhasesTowardResorption || preparatoryPhasesTowardResorption.length === 0) {
                     return null;
                 }
 
-                return preparatoryPhasesTowardResorption
-                    .map((phase) => {
-                        const completedStatus = phase.completedAt
-                            ? `${phase.preparatoryPhaseDateLabel.toLowerCase()} ${tsToString(phase.completedAt, 'd/m/Y')}`
-                            : 'en cours';
-                        return `- ${phase.preparatoryPhaseName} : ${completedStatus}`;
-                    })
-                    .join('\n');
+                // UIDs des phases initiales (définis dans la migration 30000084-03)
+                const STARTING_PHASE_UIDS = new Set([
+                    'sociological_diagnosis',
+                    'social_assessment',
+                    'political_validation',
+                ]);
+
+                // Séparer les phases initiales des autres phases en utilisant l'UID
+                const startingPhases = preparatoryPhasesTowardResorption.filter(
+                    phase => STARTING_PHASE_UIDS.has(phase.preparatoryPhaseId),
+                );
+                const otherPhases = preparatoryPhasesTowardResorption.filter(
+                    phase => !STARTING_PHASE_UIDS.has(phase.preparatoryPhaseId),
+                );
+
+                // Fonction de tri : phases complétées en premier (date décroissante), puis phases en cours (date de création décroissante)
+                const sortPhases = phases => [...phases].sort((a, b) => {
+                    if (a.completedAt !== null && b.completedAt !== null) {
+                        return b.completedAt - a.completedAt;
+                    }
+                    if (a.completedAt !== null && b.completedAt === null) {
+                        return -1;
+                    }
+                    if (a.completedAt === null && b.completedAt !== null) {
+                        return 1;
+                    }
+                    return b.createdAt - a.createdAt;
+                });
+
+                const formatPhase = (phase) => {
+                    const completedStatus = phase.completedAt
+                        ? `${phase.preparatoryPhaseDateLabel.toLowerCase()} ${tsToString(phase.completedAt, 'd/m/Y')}`
+                        : 'en cours';
+                    return `- ${phase.preparatoryPhaseName} : ${completedStatus}`;
+                };
+
+                const result = [];
+
+                // Section des phases initiales
+                if (startingPhases.length > 0) {
+                    const sortedStartingPhases = sortPhases(startingPhases);
+                    result.push('Phases initiales', ...sortedStartingPhases.map(formatPhase));
+                }
+
+                // Ligne vide de séparation entre les deux groupes
+                if (startingPhases.length > 0 && otherPhases.length > 0) {
+                    result.push('');
+                }
+
+                // Section des autres phases
+                if (otherPhases.length > 0) {
+                    const sortedOtherPhases = sortPhases(otherPhases);
+                    result.push(...sortedOtherPhases.map(formatPhase));
+                }
+
+                return result.join('\n');
             },
             width: COLUMN_WIDTHS.LARGE,
+            align: 'left',
+            wrapText: true,
         },
 
     };

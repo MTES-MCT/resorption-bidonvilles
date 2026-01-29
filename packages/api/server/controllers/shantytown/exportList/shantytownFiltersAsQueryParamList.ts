@@ -23,6 +23,7 @@ const openOrInProgress: FilterMap = {
 const closeOrResobed: FilterMap = {
     resorbedOrClosed: 'Résorbé / fermé',
     closingReason: 'Cause de la fermeture',
+    closureYear: 'Année de fermeture',
 } as const;
 
 const shantytownFiltersAsQueryParamList: ShantytownFiltersAsQueryParamList = {

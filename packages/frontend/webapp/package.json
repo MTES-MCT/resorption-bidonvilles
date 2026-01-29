@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/webapp3",
-  "version": "2.39.1",
+  "version": "2.43.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -13,7 +13,7 @@
     "icons": "vue-dsfr-icons -s scripts/icons.js -t src/utils/icon-collections.js"
   },
   "dependencies": {
-    "@gouvfr/dsfr": "1.14.1",
+    "@gouvfr/dsfr": "1.14.3",
     "@gouvminint/vue-dsfr": "^8.8.0",
     "@iconify-json/bxs": "latest",
     "@iconify-json/carbon": "^1.2.13",
@@ -25,7 +25,7 @@
     "@sentry/vue": "^7.54.0",
     "@turf/turf": "^6.5.0",
     "@vuepic/vue-datepicker": "^11.0.2",
-    "axios": "^1.7.4",
+    "axios": "^1.12.0",
     "date-fns": "^4.1.0",
     "dom-to-image-more": "^2.12.0",
     "echarts": "^5.5.0",
@@ -60,7 +60,7 @@
     "prettier": "^2.7.1",
     "start-server-and-test": "^2.0.3",
     "tailwindcss": "^3.1.8",
-    "vite": "^6.1.1",
+    "vite": "^7.0.8",
     "vitest": "^1.6.1"
   },
   "lint-staged": {

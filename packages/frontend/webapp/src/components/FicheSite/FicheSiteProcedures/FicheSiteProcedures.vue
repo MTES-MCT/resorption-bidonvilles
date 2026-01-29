@@ -190,6 +190,7 @@ const props = defineProps({
 });
 const { town } = toRefs(props);
 const { bus } = useEventBus();
+const modaleStore = useModaleStore();
 
 const justiceRendered = computed(() => {
     if (town.value.justiceRendered === null) {
@@ -214,7 +215,10 @@ function getPoliceStatus(policeStatus, policeRequestedAt, policeGrantedAt) {
     }
 
     if (policeStatus === "requested") {
-        return `demandé le ${formatDate(policeRequestedAt, "d/m/y")}`;
+        if (policeRequestedAt) {
+            return `demandé le ${formatDate(policeRequestedAt, "d/m/y")}`;
+        }
+        return "demandé";
     }
 
     if (policeStatus === "refused") {
@@ -222,7 +226,10 @@ function getPoliceStatus(policeStatus, policeRequestedAt, policeGrantedAt) {
     }
 
     if (policeStatus === "granted") {
-        return `accordé le ${formatDate(policeGrantedAt, "d/m/y")}`;
+        if (policeGrantedAt) {
+            return `accordé le ${formatDate(policeGrantedAt, "d/m/y")}`;
+        }
+        return "accordé";
     }
 
     return "non communiqué";
@@ -236,13 +243,11 @@ const policeStatus = computed(() => {
     );
 });
 
-const existingLitigationText =
-    town.value.existingLitigation === true ? "oui" : "non";
-
 const existingLitigationStatus = computed(() => {
-    return town.value.existingLitigation === null
-        ? "non communiqué"
-        : existingLitigationText;
+    if (town.value.existingLitigation === null) {
+        return "non communiqué";
+    }
+    return town.value.existingLitigation === true ? "oui" : "non";
 });
 
 const administrativeOrderStatus = computed(() => {
@@ -280,7 +285,7 @@ const insalubrityOrderStatus = computed(() => {
     }`;
 });
 
-const ProcedureJudiciaire = computed(() => {
+const filteredProcedureJudiciaire = computed(() => {
     return [
         {
             icon: "scroll",
@@ -310,11 +315,7 @@ const ProcedureJudiciaire = computed(() => {
             condition: town.value.justiceRendered,
             value: formatBool(town.value.justiceChallenged),
         },
-    ];
-});
-
-const filteredProcedureJudiciaire = computed(() => {
-    return ProcedureJudiciaire.value.filter((procedure) => procedure.condition);
+    ].filter((procedure) => procedure.condition);
 });
 
 const filteredDecreesAttachments = (type) => {
@@ -352,7 +353,6 @@ const titleSupplements = computed(() => {
 watch(
     () => bus.value.get("fichesitepj:openListAccesPJ"),
     () => {
-        const modaleStore = useModaleStore();
         modaleStore.open(ModaleListeAccesPJ, {
             future: false,
             townId: town.value.id,

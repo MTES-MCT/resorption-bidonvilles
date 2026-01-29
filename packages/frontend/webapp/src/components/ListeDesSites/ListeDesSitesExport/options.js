@@ -41,4 +41,13 @@ export default [
             feature: "list",
         },
     },
+    {
+        id: "resorption_phases",
+        label: "Phases préparatoires à la résorption",
+        closedTowns: false,
+        permission: {
+            entity: "shantytown_resorption",
+            feature: "export",
+        },
+    },
 ];

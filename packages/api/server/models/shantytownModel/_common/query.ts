@@ -5,6 +5,7 @@ import actionModel from '#server/models/actionModel';
 import incomingTownsModel from '#server/models/incomingTownsModel';
 import shantytownPreparatoryPhasesTowardResorptionModel from '#server/models/shantytownPreparatoryPhasesTowardResorptionModel';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
+import validateSafeWhereClause from '#server/models/_common/validateSafeWhereClause';
 import permissionUtils from '#server/utils/permission';
 import { Where } from '#server/models/_common/types/Where.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
@@ -122,7 +123,8 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
                                         'name', pptr.name,
                                         'dateLabel', pptr.date_label,
                                         'completedAt', srp.completed_at,
-                                        'createdAt', srp.created_at
+                                        'createdAt', srp.created_at,
+                                        'isAStartingPhase', pptr.is_a_starting_phase
                                     )::jsonb
                                 ELSE NULL
                             END
@@ -182,6 +184,8 @@ export default async (
 
     const replacements = { ...argReplacements, userId: user.id };
     const whereClause = stringifyWhereClause('shantytowns', where, replacements);
+
+    validateSafeWhereClause(whereClause);
 
     const towns: ShantytownRow[] = await sequelize.query(
         getBaseSql(

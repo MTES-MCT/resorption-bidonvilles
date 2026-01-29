@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { signin } from "@/api/signin.api";
+import { createNavigationLog } from "@/api/me.api";
 import { checkActualPassword } from "@/api/checkActualPassword.api";
 import { get as refreshToken } from "@/api/refresh_token.api";
 import { useConfigStore } from "@/stores/config.store.js";
@@ -28,13 +29,59 @@ function getAllowedDepartements(permission) {
     );
 }
 
+function getDepartementsFromInterventionAreas(user) {
+    const configStore = useConfigStore();
+    const departements = configStore.config?.departements || [];
+
+    if (!user || user.intervention_areas?.is_national === true) {
+        return departements;
+    }
+
+    const codes = new Set();
+    (user.intervention_areas?.areas || []).forEach((area) => {
+        if (!area?.type) {
+            return;
+        }
+
+        if (area.type === "departement" && area.departement?.code) {
+            codes.add(area.departement.code);
+            return;
+        }
+
+        if (area.type === "region" && area.region?.code) {
+            departements
+                .filter((d) => d.region === area.region.code)
+                .forEach((d) => codes.add(d.code));
+            return;
+        }
+
+        if (
+            (area.type === "epci" || area.type === "city") &&
+            area.departement?.code
+        ) {
+            codes.add(area.departement.code);
+        }
+    });
+
+    return departements.filter((d) => codes.has(d.code));
+}
+
+function mergeDepartements(a, b) {
+    const byCode = new Map();
+    (a || []).forEach((d) => byCode.set(d.code, d));
+    (b || []).forEach((d) => byCode.set(d.code, d));
+    return Array.from(byCode.values());
+}
+
 export const useUserStore = defineStore("user", {
     state: () => {
         const tokenCreatedAt = localStorage.getItem("tokenCreatedAt");
         return {
             accessToken: localStorage.getItem("token"),
             accessTokenCreatedAt:
-                tokenCreatedAt !== null ? parseInt(tokenCreatedAt, 10) : null,
+                tokenCreatedAt === null
+                    ? null
+                    : Number.parseInt(tokenCreatedAt, 10),
         };
     },
     getters: {
@@ -47,7 +94,10 @@ export const useUserStore = defineStore("user", {
         },
         departementsForMetrics() {
             const permission = this.user.permissions.shantytown.list;
-            return getAllowedDepartements(permission);
+            return mergeDepartements(
+                getAllowedDepartements(permission),
+                getDepartementsFromInterventionAreas(this.user)
+            );
         },
         firstMainArea() {
             if (!this.user?.intervention_areas) {
@@ -65,19 +115,15 @@ export const useUserStore = defineStore("user", {
             return this.hasPermission("shantytown_justice.access");
         },
         hasMoreThanOneDepartementForMetrics() {
-            const permission = this.user.permissions.shantytown.list;
-            if (permission.allowed === false) {
+            if (!this.user?.permissions?.shantytown?.list?.allowed) {
                 return false;
             }
 
-            if (permission.allowed_on_national === true) {
+            if (this.user.intervention_areas?.is_national === true) {
                 return true;
             }
 
-            return (
-                permission.allowed_on.departements.length > 1 ||
-                permission.allowed_on.regions.length > 0
-            );
+            return this.departementsForMetrics.length > 1;
         },
         hasOwnerPermission() {
             return this.hasPermission("shantytown_owner.access");
@@ -135,7 +181,7 @@ export const useUserStore = defineStore("user", {
         },
         showDepartementCode() {
             return (code) => {
-                return !this.user.intervention_areas.areas.find(
+                return !this.user.intervention_areas.areas.some(
                     (area) => area.departement?.code === code
                 );
             };
@@ -148,10 +194,7 @@ export const useUserStore = defineStore("user", {
         },
         getPermission(permissionName) {
             const [entity, feature] = permissionName.split(".");
-            if (
-                !this.user?.permissions[entity] ||
-                !this.user?.permissions[entity][feature]
-            ) {
+            if (!this.user?.permissions[entity]?.[feature]) {
                 return null;
             }
 
@@ -229,10 +272,11 @@ export const useUserStore = defineStore("user", {
 
             return permission !== null;
         },
-        async refreshToken() {
+        async refreshToken(route = null) {
             const response = await refreshToken();
             if (response?.token) {
                 this.setToken(response.token);
+                createNavigationLog(route || "/");
             } else {
                 logout("/connexion?reason=invalid_token");
             }

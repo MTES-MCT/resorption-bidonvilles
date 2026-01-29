@@ -246,11 +246,16 @@ async function startResorption() {
 }
 
 const displayStartResorptionButton = computed(() => {
+    // Les admins nationaux peuvent créer des phases partout sans permission explicite
+    const isNationalAdmin =
+        userStore.user?.intervention_areas?.is_national === true;
+    const hasPermission = userStore.hasLocalizedPermission(
+        "shantytown_resorption.create",
+        town.value
+    );
+
     return (
-        userStore.hasLocalizedPermission(
-            "shantytown_resorption.create",
-            town.value
-        ) &&
+        (isNationalAdmin || hasPermission) &&
         displayPhasesPreparatoiresResorption.value &&
         !hasRequiredPhasesStartingResorption.value &&
         !townIsClosed.value

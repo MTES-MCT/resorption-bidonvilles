@@ -132,7 +132,7 @@ export default (town: ShantytownRow, user): Shantytown => {
         heatwaveStatus: town.heatwaveStatus,
         resorptionTarget: town.resorptionTarget,
         completionRate: 0,
-        preparatoryPhasesTowardResorption: [],
+        preparatoryPhasesTowardResorption: town.preparatoryPhasesTowardResorption,
     };
 
     // generé par findNearby

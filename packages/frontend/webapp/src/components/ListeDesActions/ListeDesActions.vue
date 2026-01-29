@@ -11,7 +11,7 @@
             <ListeDesActionsFiltres class="mt-4" />
             <ListeDesActionsListe
                 class="mt-4"
-                v-if="actionsStore.filteredActions.length > 0"
+                v-if="actionsStore.filteredActions[currentTab].length > 0"
             />
 
             <ListeDesActionsVide v-else class="mt-10" />
@@ -38,12 +38,12 @@ const tabs = computed(() => {
         {
             id: "open",
             label: "Actions en cours",
-            total: actionsCount.value.open,
+            total: actionsStore.filteredActions["open"].length,
         },
         {
             id: "closed",
             label: "Actions terminées",
-            total: actionsCount.value.closed,
+            total: actionsStore.filteredActions["closed"].length,
         },
     ];
 
@@ -61,6 +61,9 @@ const currentTab = computed({
 
 // Fonction pour récupérer les années uniques depuis les dates de lancement et de fin d'action
 const getUniqueYears = (actionsData) => {
+    if (!actionsData || actionsData.length === 0) {
+        return [];
+    }
     const allStartedAtYears = actionsData.map((action) =>
         new Date(action.started_at).getFullYear()
     );
@@ -77,17 +80,7 @@ const getUniqueYears = (actionsData) => {
 };
 
 // Liste des années uniques extraites des dates de début et de fin d'action
-const years = computed(() => getUniqueYears(actionsStore.filteredActions));
-
-const actionsCount = computed(() => {
-    let actions = { open: 0, closed: 0 };
-    actionsStore.actions.map((action) => {
-        if (action.ended_at === null || new Date() < action.ended_at) {
-            actions.open++;
-        } else {
-            actions.closed++;
-        }
-    });
-    return actions;
-});
+const years = computed(() =>
+    getUniqueYears(actionsStore.filteredActions[currentTab.value])
+);
 </script>

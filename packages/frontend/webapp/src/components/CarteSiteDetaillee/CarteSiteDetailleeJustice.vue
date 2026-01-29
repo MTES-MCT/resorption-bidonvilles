@@ -29,10 +29,7 @@
                 :key="status.label"
             >
                 <span
-                    :class="[
-                        'flex rounded-full text-xs border-2 mr-1 mb-1 h-6 w-6 items-center justify-center',
-                        colorClass,
-                    ]"
+                    class="flex rounded-full text-xs border-2 mr-1 mb-1 h-6 w-6 items-center justify-center"
                     style="padding: 0.2em"
                     ariaHidden="true"
                 >

@@ -28,12 +28,10 @@ export default {
             if (Array.isArray(this.icon)) {
                 return this.icon.join(" ");
             }
-            if (typeof this.icon === "string") {
-                return this.icon.includes("fa-")
-                    ? this.icon
-                    : `fa-solid fa-${this.icon}`;
+            if (!this.icon || typeof this.icon !== 'string') {
+                return "fa-solid fa-question";
             }
-            return "";
+            return this.icon.includes("fa-") ? this.icon : `fa-solid fa-${this.icon}`;
         },
         classes() {
             return this.iconFull + (this.spin ? " fa-spin" : "");
