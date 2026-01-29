@@ -114,6 +114,16 @@ const router = createRouter({
             },
         },
         {
+            path: "/logs-connexion",
+            component: () => import("@/views/LogsConnexionView.vue"),
+            meta: {
+                title: "Logs de connexion",
+                navTab: "administration",
+                permissions: ["user.list"],
+                displayOrderOnSiteMap: 0,
+            },
+        },
+        {
             path: "/acces/:id",
             component: () => import("@/views/AccesView.vue"),
             meta: {
