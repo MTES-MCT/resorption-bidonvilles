@@ -16,7 +16,6 @@
                 :options="options"
                 small
                 @change="$emit('change')"
-                small
             />
         </main>
     </article>
