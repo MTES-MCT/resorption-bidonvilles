@@ -12,9 +12,6 @@
             :submit="submit"
             :language="language"
         >
-            <template v-slot:subtitle>{{
-                translations[language].subtitle
-            }}</template>
             <template v-slot:title>{{ formTitle }}</template>
             <template v-slot:alert>{{ translations[language].alert }}</template>
             <template v-slot:structureTitle>{{
