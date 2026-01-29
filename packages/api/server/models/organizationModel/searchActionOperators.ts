@@ -12,7 +12,6 @@ export type ActionOperatorOrganizationRow = {
 };
 
 async function searchActionOperators(search: string, user: User): Promise<ActionOperatorOrganizationRow[]> {
-    // Récupérer les clauses de permissions
     const permissionClauseGroup = where().can(user).do('read', 'action');
 
     const hasNoPermissions = permissionClauseGroup === null;
@@ -62,7 +61,7 @@ async function searchActionOperators(search: string, user: User): Promise<Action
         replacements = { ...replacements, ...permissionReplacements };
     }
 
-    const fullSql = `SELECT DISTINCT
+    const fullSql = `SELECT
             organizations.organization_id AS id,
             organizations.name,
             organizations.abbreviation,
