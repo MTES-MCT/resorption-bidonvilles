@@ -21,8 +21,12 @@ export default (variant) => ({
         organization: "Dénomination de la structure",
         organization_other: "Précisez le nom de votre structure",
         organization_other_acronyme: "Précisez l'acronyme de votre structure",
-        organization_other_territory:
+        organization_other_territory_type:
             "Précisez le territoire de votre structure",
+        organization_other_territory: {
+            Régional: "Précisez la région de la structure",
+            Départemental: "Précisez le département de la structure",
+        },
         position:
             variant === "demande-acces"
                 ? "Votre fonction"

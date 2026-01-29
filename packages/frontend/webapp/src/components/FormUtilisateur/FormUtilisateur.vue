@@ -13,6 +13,16 @@
             <IndicationCaractereObligatoire
                 v-if="variant === 'creer-utilisateur'"
             />
+            <FormUtilisateurInputLastName
+                :showMandatoryStar="variant === 'creer-utilisateur'"
+                :label="labels.last_name"
+                :autocomplete="last_name"
+            />
+            <FormUtilisateurInputFirstName
+                :showMandatoryStar="variant === 'creer-utilisateur'"
+                :label="labels.first_name"
+                :autocomplete="first_name"
+            />
             <FormUtilisateurInputEmail
                 :value="$route.query.email"
                 :showMandatoryStar="variant === 'creer-utilisateur'"
@@ -24,16 +34,6 @@
             <FormUtilisateurInputEmailConfirmation
                 v-if="['demande-acces', 'demande-contact'].includes(variant)"
                 :label="labels.verif_email"
-            />
-            <FormUtilisateurInputLastName
-                :showMandatoryStar="variant === 'creer-utilisateur'"
-                :label="labels.last_name"
-                :autocomplete="last_name"
-            />
-            <FormUtilisateurInputFirstName
-                :showMandatoryStar="variant === 'creer-utilisateur'"
-                :label="labels.first_name"
-                :autocomplete="first_name"
             />
             <FormUtilisateurInputPhone
                 :label="labels.phone"
@@ -64,14 +64,30 @@
                 class="ml-10 mb-4"
                 v-if="values.organization_category === 'other'"
             >
+                <DsfrAlert type="warning" small class="mb-4">
+                    Pour rappel, cette plateforme n'est accessible qu'aux
+                    acteurs de la résorption des bidonvilles
+                </DsfrAlert>
                 <FormUtilisateurInputOrganizationOther
                     :label="labels.organization_other"
                 />
                 <FormUtilisateurInputOrganizationOtherAcronyme
                     :label="labels.organization_other_acronyme"
                 />
+                <FormUtilisateurInputOrganizationOtherTerritoryType
+                    :label="labels.organization_other_territory_type"
+                />
                 <FormUtilisateurInputOrganizationOtherTerritory
-                    :label="labels.organization_other_territory"
+                    v-if="
+                        values.organization_other_territory_type &&
+                        values.organization_other_territory_type !== 'National'
+                    "
+                    :label="
+                        labels.organization_other_territory[
+                            values.organization_other_territory_type
+                        ]
+                    "
+                    :type="values.organization_other_territory_type"
                 />
             </div>
             <FormUtilisateurInputPosition
@@ -113,7 +129,7 @@
 
 <script setup>
 // utils
-import { defineProps, toRefs, computed, ref, onMounted, watch } from "vue";
+import { toRefs, computed, ref, onMounted, watch } from "vue";
 import router from "@/helpers/router";
 
 // components
@@ -128,6 +144,7 @@ import FormUtilisateurInputStructure from "./inputs/FormUtilisateurInputStructur
 import FormUtilisateurInputOrganizationOther from "./inputs/FormUtilisateurInputOrganizationOther.vue";
 import FormUtilisateurInputOrganizationOtherAcronyme from "./inputs/FormUtilisateurInputOrganizationOtherAcronyme.vue";
 import FormUtilisateurInputOrganizationOtherTerritory from "./inputs/FormUtilisateurInputOrganizationOtherTerritory.vue";
+import FormUtilisateurInputOrganizationOtherTerritoryType from "./inputs/FormUtilisateurInputOrganizationOtherTerritoryType.vue";
 import FormUtilisateurInputPosition from "./inputs/FormUtilisateurInputPosition.vue";
 import FormUtilisateurInputMessage from "./inputs/FormUtilisateurInputMessage.vue";
 import FormUtilisateurInputReferral from "./inputs/FormUtilisateurInputReferral.vue";

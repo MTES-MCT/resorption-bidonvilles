@@ -19,6 +19,10 @@
             <span class="font-bold not-italic" aria-hidden="true">{{
                 label
             }}</span>
+            <span class="fr-hint-text"
+                >Pour rappel, cette plateforme n'est accessible qu'aux acteurs
+                de la résorption des bidonvilles</span
+            >
         </template>
     </DsfrInputGroup>
 </template>

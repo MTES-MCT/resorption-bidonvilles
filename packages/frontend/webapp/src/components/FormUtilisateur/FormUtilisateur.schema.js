@@ -280,13 +280,27 @@ const schema = (
                 then: (schema) => schema.required(),
             })
             .label(labels.organization_other_acronyme);
-        schema.organization_other_territory = string()
+        schema.organization_other_territory_type = string()
             .when("organization_category", {
                 is: "other",
                 then: (schema) => schema.required(),
             })
-            .label(labels.organization_other_territory);
+            .label(labels.organization_other_territory_type);
+        schema.organization_other_territory = string()
+            .when("organization_other_territory_type", ([value], schema) => {
+                const label = labels.organization_other_territory[value];
 
+                if (["Régional", "Départemental"].includes(value)) {
+                    return schema.label(label).required();
+                }
+
+                if (label) {
+                    return schema.label(label);
+                }
+
+                return schema;
+            })
+            .label(labels.organization_other_territory);
         schema.position = string().required().min(3).label(labels.position);
     }
 
