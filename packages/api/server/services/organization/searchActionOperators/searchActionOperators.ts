@@ -8,7 +8,6 @@ interface ActionOperatorOrganizationResult {
     abbreviation: string | null,
     enriched_name: string,
     enriched_abbreviation: string | null,
-    actionCount: number,
     type: {
         id: 'action_operator_organization',
         label: 'Structure'
@@ -25,7 +24,6 @@ export default async function searchActionOperators(search: string, user: User):
             abbreviation: row.abbreviation,
             enriched_name: row.enriched_name,
             enriched_abbreviation: row.enriched_abbreviation,
-            actionCount: Number(row.action_count),
             type: {
                 id: 'action_operator_organization',
                 label: 'Structure',

@@ -12,7 +12,6 @@ export type ActionOperatorOrganizationRow = {
     territory_label: string | null,
     enriched_name: string,
     enriched_abbreviation: string | null,
-    action_count: number,
     similarity: number,
 };
 
@@ -27,19 +26,26 @@ async function searchActionOperators(search: string, user: User): Promise<Action
     }
 
     let whereClause = `
-        unaccent(:search) % ANY(
-            string_to_array(unaccent(organizations.name), ' ')
-            ||
-            string_to_array(unaccent(COALESCE(organizations.abbreviation, '')), ' ')
+        (
+            unaccent(:search) % ANY(
+                string_to_array(unaccent(organizations.name), ' ')
+                ||
+                string_to_array(unaccent(COALESCE(organizations.abbreviation, '')), ' ')
+            )
+            OR unaccent(organizations.name) ILIKE unaccent(:search_pattern)
+            OR unaccent(COALESCE(organizations.abbreviation, '')) ILIKE unaccent(:search_pattern)
         )
     `;
 
-    let replacements = { search };
+    let replacements = {
+        search,
+        search_pattern: `%${search}%`,
+    };
+
+    let permissionSql = '';
+    const permissionReplacements: any = {};
 
     if (!hasNationalAccess) {
-        let permissionSql = '';
-        const permissionReplacements: any = {};
-
         if (permissionClauseGroup.departements) {
             permissionSql += 'a.fk_departement IN (:departements)';
             permissionReplacements.departements = permissionClauseGroup.departements.value;
@@ -52,19 +58,19 @@ async function searchActionOperators(search: string, user: User): Promise<Action
             permissionSql += 'a.action_id IN (:actions)';
             permissionReplacements.actions = permissionClauseGroup.actions.value;
         }
-
-        whereClause += `
-            AND EXISTS (
-                SELECT 1
-                FROM users u
-                INNER JOIN action_operators ao ON ao.fk_user = u.user_id
-                INNER JOIN actions a ON a.action_id = ao.fk_action
-                WHERE u.fk_organization = organizations.organization_id
-                AND (${permissionSql})
-            )
-        `;
-        replacements = { ...replacements, ...permissionReplacements };
     }
+
+    whereClause += `
+        AND EXISTS (
+            SELECT 1
+            FROM users u
+            INNER JOIN action_operators ao ON ao.fk_user = u.user_id
+            INNER JOIN actions a ON a.action_id = ao.fk_action
+            WHERE u.fk_organization = organizations.organization_id
+            ${permissionSql ? `AND (${permissionSql})` : ''}
+        )
+    `;
+    replacements = { ...replacements, ...permissionReplacements };
 
     const fullSql = `SELECT
             organizations.organization_id AS id,
@@ -131,7 +137,6 @@ async function searchActionOperators(search: string, user: User): Promise<Action
                 ))
                 ELSE organizations.abbreviation
             END AS enriched_abbreviation,
-            0 AS action_count,
             GREATEST(
                 word_similarity(unaccent(:search), unaccent(organizations.name)),
                 word_similarity(unaccent(:search), unaccent(COALESCE(organizations.abbreviation, '')))

@@ -58,14 +58,16 @@ describe('services/organization.searchActionOperators()', () => {
                     id: 1,
                     name: 'DDETS 44',
                     abbreviation: 'DDETS44',
-                    action_count: 5,
+                    enriched_name: 'DDETS 44 - Loire-Atlantique',
+                    enriched_abbreviation: 'DDETS44 - Loire-Atlantique',
                     similarity: 0.8,
                 },
                 {
                     id: 2,
                     name: 'Direction Départementale de la Cohésion Sociale',
                     abbreviation: null,
-                    action_count: 3,
+                    enriched_name: 'Direction Départementale de la Cohésion Sociale - Pays de la Loire',
+                    enriched_abbreviation: null,
                     similarity: 0.6,
                 },
             ];
@@ -80,7 +82,8 @@ describe('services/organization.searchActionOperators()', () => {
                     id: 1,
                     name: 'DDETS 44',
                     abbreviation: 'DDETS44',
-                    actionCount: 5,
+                    enriched_name: 'DDETS 44 - Loire-Atlantique',
+                    enriched_abbreviation: 'DDETS44 - Loire-Atlantique',
                     type: {
                         id: 'action_operator_organization',
                         label: 'Structure',
@@ -90,7 +93,8 @@ describe('services/organization.searchActionOperators()', () => {
                     id: 2,
                     name: 'Direction Départementale de la Cohésion Sociale',
                     abbreviation: null,
-                    actionCount: 3,
+                    enriched_name: 'Direction Départementale de la Cohésion Sociale - Pays de la Loire',
+                    enriched_abbreviation: null,
                     type: {
                         id: 'action_operator_organization',
                         label: 'Structure',
@@ -99,13 +103,14 @@ describe('services/organization.searchActionOperators()', () => {
             ]);
         });
 
-        it('convertit action_count en nombre', async () => {
+        it('retourne les propriétés enrichies correctement', async () => {
             const mockOrganizations = [
                 {
                     id: 1,
                     name: 'DDETS 44',
                     abbreviation: 'DDETS44',
-                    action_count: '5', // string au lieu de number
+                    enriched_name: 'DDETS 44 - Loire-Atlantique',
+                    enriched_abbreviation: 'DDETS44 - Loire-Atlantique',
                     similarity: 0.8,
                 },
             ];
@@ -114,8 +119,8 @@ describe('services/organization.searchActionOperators()', () => {
 
             const result = await searchActionOperators('ddets', mockUser);
 
-            expect(result[0].actionCount).to.be.a('number');
-            expect(result[0].actionCount).to.equal(5);
+            expect(result[0].enriched_name).to.equal('DDETS 44 - Loire-Atlantique');
+            expect(result[0].enriched_abbreviation).to.equal('DDETS44 - Loire-Atlantique');
         });
 
         it('retourne un tableau vide si aucune organisation trouvée', async () => {
@@ -125,6 +130,27 @@ describe('services/organization.searchActionOperators()', () => {
 
             expect(result).to.be.an('array');
             expect(result).to.have.length(0);
+        });
+
+        it('gère les organisations de type city sans territoire dans le nom enrichi', async () => {
+            const mockOrganizations = [
+                {
+                    id: 3,
+                    name: 'Mairie de Nantes',
+                    abbreviation: 'Mairie Nantes',
+                    enriched_name: 'Mairie de Nantes', // Pas de territoire pour type city
+                    enriched_abbreviation: 'Mairie Nantes', // Pas de territoire pour type city
+                    similarity: 0.7,
+                },
+            ];
+
+            stubs.organizationModel.searchActionOperators.resolves(mockOrganizations);
+
+            const result = await searchActionOperators('mairie', mockUser);
+
+            expect(result[0].enriched_name).to.equal('Mairie de Nantes');
+            expect(result[0].enriched_abbreviation).to.equal('Mairie Nantes');
+            expect(result[0].enriched_name).to.not.include('-'); // Pas de territoire ajouté
         });
 
         it('retourne un tableau vide si l\'utilisateur n\'a aucune permission', async () => {
