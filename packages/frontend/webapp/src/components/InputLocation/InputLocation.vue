@@ -100,15 +100,15 @@ async function autocompleteFn(value) {
         .then((organizations) =>
             organizations.map((org) => ({
                 id: `organization-${org.id}`,
-                label: org.abbreviation
-                    ? `${org.name} (${org.abbreviation})`
-                    : org.name,
+                label: org.enriched_abbreviation
+                    ? org.enriched_abbreviation
+                    : org.enriched_name,
                 category: "Structure",
                 data: {
                     type: "organization",
                     organizationId: org.id,
-                    organizationName: org.name,
-                    organizationAbbreviation: org.abbreviation,
+                    organizationName: org.enriched_name,
+                    organizationAbbreviation: org.enriched_abbreviation,
                 },
             }))
         )
