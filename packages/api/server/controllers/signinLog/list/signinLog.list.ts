@@ -1,15 +1,16 @@
+import { Request, Response, NextFunction } from 'express';
 import signinLogModel from '#server/models/signinLogModel';
 
-export default async (req, res, next) => {
+const signinLogListController = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const filters: any = {};
 
         if (req.query.email) {
-            filters.email = req.query.email;
+            filters.email = req.query.email as string;
         }
 
         if (req.query.ipAddress) {
-            filters.ipAddress = req.query.ipAddress;
+            filters.ipAddress = req.query.ipAddress as string;
         }
 
         if (req.query.success !== undefined) {
@@ -17,11 +18,11 @@ export default async (req, res, next) => {
         }
 
         if (req.query.dateFrom) {
-            filters.dateFrom = new Date(req.query.dateFrom);
+            filters.dateFrom = new Date(req.query.dateFrom as string);
         }
 
         if (req.query.dateTo) {
-            filters.dateTo = new Date(req.query.dateTo);
+            filters.dateTo = new Date(req.query.dateTo as string);
         }
 
         const logs = await signinLogModel.findAll(filters);
@@ -33,3 +34,5 @@ export default async (req, res, next) => {
         return next(error);
     }
 };
+
+export default signinLogListController;
