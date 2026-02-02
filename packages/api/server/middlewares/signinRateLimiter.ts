@@ -21,7 +21,7 @@ const signinRateLimiter = rateLimit({
             try {
                 const user = await userModel.findOneByEmail(email);
                 userId = user?.id || null;
-            } catch (error) {
+            } catch {
                 // Ignore errors, keep userId as null
             }
         }
