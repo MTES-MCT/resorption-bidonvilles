@@ -12,7 +12,7 @@ type FindAllFilters = {
     dateTo?: Date;
 };
 
-export default async (filters: FindAllFilters = {}): Promise<SigninLog[]> => {
+const findAll = async (filters: FindAllFilters = {}): Promise<SigninLog[]> => {
     const where = [];
     const replacements: any = {};
 
@@ -75,3 +75,5 @@ export default async (filters: FindAllFilters = {}): Promise<SigninLog[]> => {
 
     return rows.map(serializeSigninLog);
 };
+
+export default findAll;
