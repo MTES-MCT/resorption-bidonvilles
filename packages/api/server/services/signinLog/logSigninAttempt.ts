@@ -11,7 +11,7 @@ type LogSigninAttemptParams = {
     userAgent: string | null;
 };
 
-export default async ({
+const logSigninAttempt = async ({
     email,
     userId,
     success,
@@ -56,3 +56,5 @@ export default async ({
         console.error('Failed to log signin attempt:', error);
     }
 };
+
+export default logSigninAttempt;
