@@ -15,7 +15,7 @@ type RawSigninLog = {
     user_last_name: string | null;
 };
 
-export default (raw: RawSigninLog): SigninLog => ({
+const serializeSigninLog = (raw: RawSigninLog): SigninLog => ({
     id: raw.signin_log_id,
     email: raw.email,
     userId: raw.fk_user,
@@ -31,3 +31,5 @@ export default (raw: RawSigninLog): SigninLog => ({
         lastName: raw.user_last_name,
     } : null,
 });
+
+export default serializeSigninLog;
