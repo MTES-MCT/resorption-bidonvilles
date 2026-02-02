@@ -6,7 +6,7 @@ import { sequelize } from '#db/sequelize';
  * Cette fonction est exécutée automatiquement par un job Agenda planifié
  * pour nettoyer régulièrement les anciens logs et limiter la croissance de la table.
  */
-export default async (): Promise<{ deletedCount: number }> => {
+const purgeOldLogs = async (): Promise<{ deletedCount: number }> => {
     const retentionDays = 30;
 
     try {
@@ -27,3 +27,5 @@ export default async (): Promise<{ deletedCount: number }> => {
         throw error;
     }
 };
+
+export default purgeOldLogs;
