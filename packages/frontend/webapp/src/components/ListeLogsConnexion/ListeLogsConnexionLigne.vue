@@ -41,6 +41,7 @@
 
 <script setup>
 import { defineProps } from "vue";
+import formatTimestamp from "@/utils/formatTimestamp";
 
 defineProps({
     log: {
@@ -49,14 +50,9 @@ defineProps({
     },
 });
 
-function formatDate(isoString) {
-    const date = new Date(isoString);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    return `${day}/${month}/${year} à ${hours}:${minutes}`;
+function formatDate(dateValue) {
+    const timestamp = new Date(dateValue).getTime() / 1000;
+    return formatTimestamp(timestamp, "d/m/y à h:i");
 }
 
 function formatFailureReason(reason) {
