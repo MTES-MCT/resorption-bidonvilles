@@ -2,6 +2,7 @@ import { QueryTypes } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 import { SigninLog } from '#root/types/resources/SigninLog.d';
 import serializeSigninLog from './_common/serializeSigninLog';
+import validateSafeWhereClause from '../_common/validateSafeWhereClause';
 
 type FindAllFilters = {
     email?: string;
@@ -40,7 +41,12 @@ export default async (filters: FindAllFilters = {}): Promise<SigninLog[]> => {
         replacements.dateTo = filters.dateTo;
     }
 
-    const whereClause = where.length > 0 ? `WHERE ${where.join(' AND ')}` : '';
+    const whereConditions = where.join(' AND ');
+    const whereClause = where.length > 0 ? `WHERE ${whereConditions}` : '';
+
+    if (whereConditions) {
+        validateSafeWhereClause(whereConditions);
+    }
 
     const rows = await sequelize.query(
         `SELECT
