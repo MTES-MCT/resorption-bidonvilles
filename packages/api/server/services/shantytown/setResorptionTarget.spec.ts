@@ -1,30 +1,43 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
+import { rewiremock } from '#test/rewiremock';
 
 import locationUtils from '#test/utils/location';
 import { serialized as fakeShantytown } from '#test/utils/shantytown';
 import { serialized as fakeUser } from '#test/utils/user';
 
-import shantytownModel from '#server/models/shantytownModel';
+import permissionUtils from '#server/utils/permission';
 import ServiceError from '#server/errors/ServiceError';
 import { AuthUser } from '#server/middlewares/authMiddleware';
-
-import setResorptionTargetService from './setResorptionTarget';
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-const { paris } = locationUtils;
+const sandbox = sinon.createSandbox();
+const stubs = {
+    shantytownModel: {
+        setResorptionTarget: sandbox.stub(),
+        findOne: sandbox.stub(),
+    },
+    can: sandbox.stub(),
+    do: sandbox.stub(),
+    on: sandbox.stub(),
+    paris: locationUtils.paris,
+};
+
+rewiremock('#server/models/shantytownModel').with(stubs.shantytownModel);
+rewiremock('#server/utils/permission').with(permissionUtils);
+
+rewiremock.enable();
+// eslint-disable-next-line import/newline-after-import, import/first
+import setResorptionTargetService from './setResorptionTarget';
+rewiremock.disable();
 
 describe('services/shantytown', () => {
     describe('setResorptionTarget()', () => {
         let user: AuthUser;
         let data: { shantytown: any };
-        let stubs: {
-            setResorptionTarget: sinon.SinonStub;
-            findOne: sinon.SinonStub;
-        };
         let currentYear: number;
 
         beforeEach(() => {
@@ -36,11 +49,7 @@ describe('services/shantytown', () => {
                 allowed_on: null,
             };
             data = {
-                shantytown: fakeShantytown(paris.city(), { resorption_target: null }),
-            };
-            stubs = {
-                setResorptionTarget: sinon.stub(shantytownModel, 'setResorptionTarget'),
-                findOne: sinon.stub(shantytownModel, 'findOne'),
+                shantytown: fakeShantytown(stubs.paris.city(), { resorption_target: null }),
             };
         });
 
@@ -49,10 +58,10 @@ describe('services/shantytown', () => {
         });
 
         it('met à jour le site en définissant l\'année courante comme objectif de résorption et renvoie le site ainsi modifié', async () => {
-            const updatedTown = fakeShantytown(paris.city(), { resorption_target: currentYear });
-            stubs.findOne.resolves(updatedTown);
+            const updatedTown = fakeShantytown(stubs.paris.city(), { resorption_target: currentYear });
+            stubs.shantytownModel.findOne.resolves(updatedTown);
             const response = await setResorptionTargetService(user, data);
-            expect(stubs.setResorptionTarget).to.have.been.calledOnceWith(data.shantytown.id, currentYear);
+            expect(stubs.shantytownModel.setResorptionTarget).to.have.been.calledOnceWith(data.shantytown.id, currentYear);
             expect(response).to.be.eql(updatedTown);
         });
 
