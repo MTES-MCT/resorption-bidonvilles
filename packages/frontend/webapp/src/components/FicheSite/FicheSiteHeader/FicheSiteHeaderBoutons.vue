@@ -342,10 +342,7 @@ async function toggleHeatwave() {
             town.value.id,
             !town.value.heatwaveStatus
         );
-    } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log("Erreur lors de la modification du statut canicule :", e);
-
+    } catch {
         notificationStore.error(
             "Risque canicule",
             "Une erreur inconnue est survenue"
