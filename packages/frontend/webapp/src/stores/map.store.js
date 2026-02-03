@@ -44,7 +44,11 @@ export const useMapStore = defineStore("map", () => {
 
     const poiStore = usePoiStore();
     const filteredPois = computed(() => {
-        if (filters.value.poi.checked.length === 0) {
+        if (
+            !filters.value.poi ||
+            !filters.value.poi.checked ||
+            filters.value.poi.checked.length === 0
+        ) {
             return [];
         }
 
