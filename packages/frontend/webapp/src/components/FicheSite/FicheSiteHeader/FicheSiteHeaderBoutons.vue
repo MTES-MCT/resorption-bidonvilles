@@ -291,8 +291,6 @@ const canMarkAsResorptionTarget = computed(() => {
     }
 
     const userRoles = userStore.user?.role_id;
-    console.log("userRoles: ", userRoles);
-    console.log("userStore.user: ", userStore.user);
     const allowedRoles = [
         "national_admin",
         "local_admin",
