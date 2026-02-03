@@ -71,7 +71,7 @@
                 size="sm"
                 icon="mdi:play"
                 @click="startResorption"
-                :loading="startResorptionIsLoading"
+                :disabled="startResorptionIsLoading"
                 >Démarrer la résorption</DsfrButton
             >
             <DsfrButton
@@ -81,7 +81,7 @@
                 size="sm"
                 icon="mdi:delete-outline"
                 @click="deleteTown"
-                :loading="deleteIsLoading"
+                :disabled="deleteIsLoading"
                 >Supprimer le site</DsfrButton
             >
         </div>
@@ -94,7 +94,7 @@
                 icon="ri-focus-2-line"
                 secondary
                 @click="markAsResorptionTarget"
-                :loading="resorptionTargetIsLoading"
+                :disabled="resorptionTargetIsLoading"
                 >Objectif résorption</DsfrButton
             >
             <DsfrButton
