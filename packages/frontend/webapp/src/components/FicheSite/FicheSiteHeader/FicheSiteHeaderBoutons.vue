@@ -126,6 +126,7 @@ import FicheSiteModaleExport from "../FicheSiteModaleExport/FicheSiteModaleExpor
 
 import { useConfigStore } from "@/stores/config.store";
 import { usePhasesPreparatoiresResorption } from "@/utils/usePhasesPreparatoiresResorption";
+import { useResorptionTarget } from "@/utils/useResorptionTarget";
 
 const props = defineProps({
     town: Object,
@@ -137,6 +138,10 @@ const townsStore = useTownsStore();
 
 const { displayPhasesPreparatoiresResorption } =
     usePhasesPreparatoiresResorption(town);
+
+const townId = computed(() => town.value.id);
+const { resorptionTargetIsLoading, markAsResorptionTarget } =
+    useResorptionTarget(townId);
 
 function openExportModal() {
     const modaleStore = useModaleStore();
@@ -299,40 +304,6 @@ const canMarkAsResorptionTarget = computed(() => {
 
     return allowedRoles.includes(userRoles);
 });
-
-const resorptionTargetIsLoading = ref(false);
-
-async function markAsResorptionTarget() {
-    if (resorptionTargetIsLoading.value === true) {
-        return;
-    }
-
-    const currentYear = new Date().getFullYear();
-    if (
-        !confirm(
-            `Êtes-vous sûr(e) de vouloir marquer ce site comme "Objectif résorption ${currentYear}" ?`
-        )
-    ) {
-        return;
-    }
-
-    resorptionTargetIsLoading.value = true;
-
-    try {
-        await townsStore.setResorptionTarget(town.value.id);
-        notificationStore.success(
-            "Objectif résorption",
-            `Le site a été marqué "Objectif résorption ${currentYear}"`
-        );
-    } catch (e) {
-        notificationStore.error(
-            "Objectif résorption",
-            e?.user_message || "Une erreur inconnue est survenue"
-        );
-    }
-
-    resorptionTargetIsLoading.value = false;
-}
 
 async function toggleHeatwave() {
     try {
