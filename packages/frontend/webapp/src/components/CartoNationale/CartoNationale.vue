@@ -148,10 +148,22 @@ const syncPoiMarkers = () => {
     const currentPoiIds = validPois.map((poi) => poi.lieu_id).join(",");
 
     if (cachedPoiMarkers && currentPoiIds === lastPoiIds) {
+        const map = carto.value?.map;
+        const wasAttached = map && map.hasLayer(markersGroup.pois);
+
+        if (wasAttached) {
+            map.removeLayer(markersGroup.pois);
+        }
+
         markersGroup.pois.clearLayers();
         cachedPoiMarkers.forEach((marker) =>
             markersGroup.pois.addLayer(marker)
         );
+
+        if (wasAttached) {
+            map.addLayer(markersGroup.pois);
+        }
+
         isSyncing = false;
         return;
     }
