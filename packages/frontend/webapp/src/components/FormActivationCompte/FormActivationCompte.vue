@@ -9,7 +9,7 @@
 
         <template v-slot:button>
             <p class="text-center">
-                <Button type="submit">Activer mon compte</Button>
+                <DsfrButton type="submit">Activer mon compte</DsfrButton>
             </p>
         </template>
     </FormPublic>
@@ -23,7 +23,6 @@ import { useNotificationStore } from "@/stores/notification.store";
 import { activate } from "@/api/users.api.js";
 import schema from "./FormActivationCompte.schema";
 
-import { Button } from "@resorptionbidonvilles/ui";
 import FormPublic from "@/components/FormPublic/FormPublic.vue";
 import FormActivationCompteInputEmail from "./inputs/FormActivationCompteInputEmail.vue";
 import FormActivationCompteInputPassword from "./inputs/FormActivationCompteInputPassword.vue";

@@ -45,9 +45,13 @@
 
         <!-- form buttons -->
         <ContentWrapper :size="size">
-            <slot name="button">
+            <slot
+                name="button"
+                class="border-2 border-red400"
+                :disabled="Boolean(error) || Object.keys(errors).length > 0"
+            >
                 <p class="text-center">
-                    <Button type="submit">Envoyer</Button>
+                    <DsfrButton type="submit">Envoyer</DsfrButton>
                 </p>
             </slot>
         </ContentWrapper>
@@ -63,11 +67,7 @@
 import { defineProps, defineExpose, toRefs, ref } from "vue";
 import { Form } from "vee-validate";
 
-import {
-    Button,
-    ContentWrapper,
-    ErrorSummary,
-} from "@resorptionbidonvilles/ui";
+import { ContentWrapper, ErrorSummary } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     schema: Object,

@@ -64,3 +64,8 @@ function toggle() {
     mapStore.filters[id.value].opened = !mapStore.filters[id.value].opened;
 }
 </script>
+<style scoped>
+.fr-fieldset__element {
+    margin-bottom: 0 !important;
+}
+</style>

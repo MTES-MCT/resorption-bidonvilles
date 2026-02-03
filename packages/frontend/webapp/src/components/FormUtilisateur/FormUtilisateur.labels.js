@@ -1,32 +1,38 @@
 export default (variant) => ({
     fr: {
-        email: variant === "demande-acces" ? "Votre courriel" : "Courriel",
+        email: "Adresse électronique",
         aria_email:
             "Veuillez saisir l'adresse de messagerie à laquelle vous recontacter et qui vous servira d'identifiant",
-        verif_email: "Confirmation de votre courriel",
+        verif_email: "Confirmation de votre adresse électronique",
         first_name: "Prénom",
         last_name: "Nom de famille",
-        phone: "Téléphone",
+        phone: "Numéro de téléphone",
         request_type: "Vous souhaitez...",
-        is_actor:
-            "Faites-vous partie d'une association, d'une collectivité ou d'un service de l'État ?",
         organization_category:
             variant === "demande-acces"
-                ? "Quelle structure ?"
-                : "Quelle est la structure de l'utilisateur ?",
+                ? "Dénomination de la structure"
+                : "Dénomination de la structure de l'utilisateur",
         organization_type: "Précisez la structure",
         organization_public: "Territoire de rattachement",
         territorial_collectivity: "Territoire de la collectivité",
-        association: "Nom de l'association",
-        organization_administration: "Nom de la structure",
-        private_organization: "Nom de l'organisme privé",
-        organization_other:
-            "Précisez le nom et le territoire de votre structure",
+        association: "Dénomination de l'association",
+        organization_administration: "Dénomination de la structure",
+        private_organization: "Dénomination de l'organisme privé",
+        organization: "Dénomination de la structure",
+        organization_other: "Précisez le nom de votre structure",
+        organization_other_acronyme: "Précisez l'acronyme de votre structure",
+        organization_other_territory_type:
+            "Précisez le territoire de votre structure",
+        organization_other_territory: {
+            Régional: "Précisez la région de la structure",
+            Départemental: "Précisez le département de la structure",
+        },
         position:
             variant === "demande-acces"
                 ? "Votre fonction"
                 : "Fonction de l'utilisateur",
-        access_request_message: "Votre message",
+        access_request_message:
+            "Expliquez nous pourquoi vous voulez accéder à notre plate-forme",
         referral:
             "Comment avez-vous connu la plateforme Résorption-bidonvilles ?",
         referral_other:

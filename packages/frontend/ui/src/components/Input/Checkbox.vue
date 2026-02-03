@@ -4,7 +4,6 @@
 
 <script setup>
 import CheckboxUi from "./CheckboxUi.vue";
-
 import { defineProps, toRefs, computed } from 'vue';
 import { useField, useIsSubmitting } from 'vee-validate';
 
@@ -26,7 +25,12 @@ const props = defineProps({
         type: Boolean,
         required: false,
         default: true
-    }
+    },
+    small: {
+        type: Boolean,
+        required: false,
+        default: true
+    },
 });
 const { name, value, modelValue, disabled, active } = toRefs(props);
 const isSubmitting = useIsSubmitting();

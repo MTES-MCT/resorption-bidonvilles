@@ -10,16 +10,21 @@
                     l'aide des flèches directionnelles</span
                 >
                 <ContentWrapper class="mt-3" size="medium">
-                    <div role="search" class="flex items-center space-x-2">
+                    <div
+                        role="search"
+                        class="flex flex-col sm:flex-row items-center sm:space-x-2 gap-2 md:gap-0"
+                    >
                         <InputLocation
-                            class="flex-1"
+                            class="flex-1 w-full"
                             name="territorial_collectivity"
                             :placeholder="searchPlaceholder"
                             withoutMargin
                             :allowFreeSearch="allowFreeSearch"
                             v-model="inputLocation"
                         />
-                        <DsfrButton size="sm">Rechercher</DsfrButton>
+                        <DsfrButton size="sm" class="-mt-1.5"
+                            >Rechercher</DsfrButton
+                        >
                     </div>
                     <div
                         class="flex flex-col xs:flex-row gap-1 xs:gap-2 mt-2 text-left text-sm"

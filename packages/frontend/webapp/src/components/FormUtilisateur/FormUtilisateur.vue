@@ -13,137 +13,96 @@
             <IndicationCaractereObligatoire
                 v-if="variant === 'creer-utilisateur'"
             />
+            <FormUtilisateurInputLastName
+                :showMandatoryStar="variant === 'creer-utilisateur'"
+                :label="labels.last_name"
+                :autocomplete="last_name"
+            />
+            <FormUtilisateurInputFirstName
+                :showMandatoryStar="variant === 'creer-utilisateur'"
+                :label="labels.first_name"
+                :autocomplete="first_name"
+            />
             <FormUtilisateurInputEmail
                 :value="$route.query.email"
                 :showMandatoryStar="variant === 'creer-utilisateur'"
                 :label="labels.email"
                 :aria-label="labels.aria_email"
-                autocomplete="email"
+                :autocomplete="email"
+                hint="Format attendu : nom@domaine.fr"
             />
             <FormUtilisateurInputEmailConfirmation
-                v-if="variant === 'demande-acces'"
+                v-if="['demande-acces', 'demande-contact'].includes(variant)"
                 :label="labels.verif_email"
-            />
-            <FormUtilisateurInputFirstName
-                :showMandatoryStar="variant === 'creer-utilisateur'"
-                :label="labels.first_name"
-                autocomplete="given-name"
-            />
-            <FormUtilisateurInputLastName
-                :showMandatoryStar="variant === 'creer-utilisateur'"
-                :label="labels.last_name"
-                autocomplete="family-name"
             />
             <FormUtilisateurInputPhone
                 :label="labels.phone"
-                autocomplete="tel"
+                :autocomplete="tel"
             />
             <FormUtilisateurInputRequestType
-                v-if="variant === 'demande-acces'"
+                v-if="variant === 'demande-contact'"
                 :class="{ hidden: demandeAccesOnly }"
                 :label="labels.request_type"
                 :language="language"
             />
-            <FormUtilisateurInputIsActor
-                v-if="
-                    values.request_type &&
-                    values.request_type.includes('access-request')
-                "
-                :class="{ hidden: demandeAccesOnly }"
-                :label="labels.is_actor"
-            />
             <section
                 v-if="
-                    values.is_actor === true || variant === 'creer-utilisateur'
+                    (values.request_type &&
+                        values.request_type.includes('access-request')) ||
+                    ['creer-utilisateur', 'demande-acces'].includes(variant)
                 "
             >
                 <p class="font-bold text-xl">
                     <slot name="structureTitle" />
                 </p>
-                <FormUtilisateurInputOrganizationCategory
-                    :showMandatoryStar="variant === 'creer-utilisateur'"
+                <FormUtilisateurInputStructure
                     :label="labels.organization_category"
-                    :allowNewOrganization="allowNewOrganization"
-                    :allowPrivateOrganization="allowPrivateOrganization"
-                />
-
-                <!-- Administrations centrales -->
-                <template
-                    v-if="values.organization_category === 'administration'"
-                >
-                    <FormUtilisateurInputOrganizationAdministration
-                        :label="labels.organization_administration"
-                    />
-                </template>
-
-                <!-- Services de l'état -->
-                <template
-                    v-if="
-                        values.organization_category === 'public_establishment'
-                    "
-                >
-                    <FormUtilisateurInputOrganizationType
-                        :label="labels.organization_type"
-                    />
-                    <FormUtilisateurInputOrganizationPublic
-                        v-if="values.organization_type"
-                        :label="labels.organization_public"
-                    />
-                </template>
-
-                <!-- Collectivités -->
-                <template
-                    v-if="
-                        values.organization_category ===
-                        'territorial_collectivity'
-                    "
-                >
-                    <FormUtilisateurInputTerritorialCollectivity
-                        :label="labels.territorial_collectivity"
-                    />
-                </template>
-
-                <!-- Associations -->
-                <template v-if="values.organization_category === 'association'">
-                    <FormUtilisateurInputAssociation
-                        :label="labels.association"
-                        @change="onAssociationChange"
-                        ref="associationInput"
-                    />
-                </template>
-
-                <!-- Organisme Privé -->
-                <template
-                    v-if="
-                        values.organization_category === 'private_organization'
-                    "
-                >
-                    <FormUtilisateurInputOrganizationPrivate
-                        :label="labels.private_organization"
-                        @change="onPrivateOrganizationChange"
-                        ref="privateOrganizationInput"
-                    />
-                </template>
-
-                <!-- Autres -->
-                <template v-if="values.organization_category === 'other'">
-                    <FormUtilisateurInputOrganizationOther
-                        :label="labels.organization_other"
-                    />
-                </template>
-
-                <FormUtilisateurInputPosition
-                    v-if="values.organization_category"
-                    :label="labels.position"
+                    @change="onOrganizationChange"
                 />
             </section>
-
+            <div
+                class="ml-10 mb-4"
+                v-if="values.organization_category === 'other'"
+            >
+                <DsfrAlert type="warning" small class="mb-4">
+                    Pour rappel, cette plateforme n'est accessible qu'aux
+                    acteurs de la résorption des bidonvilles
+                </DsfrAlert>
+                <FormUtilisateurInputOrganizationOther
+                    :label="labels.organization_other"
+                />
+                <FormUtilisateurInputOrganizationOtherAcronyme
+                    :label="labels.organization_other_acronyme"
+                />
+                <FormUtilisateurInputOrganizationOtherTerritoryType
+                    :label="labels.organization_other_territory_type"
+                />
+                <FormUtilisateurInputOrganizationOtherTerritory
+                    v-if="
+                        values.organization_other_territory_type &&
+                        values.organization_other_territory_type !== 'National'
+                    "
+                    :label="
+                        labels.organization_other_territory[
+                            values.organization_other_territory_type
+                        ]
+                    "
+                    :type="values.organization_other_territory_type"
+                />
+            </div>
+            <FormUtilisateurInputPosition
+                v-if="
+                    values.is_actor === true ||
+                    ['creer-utilisateur', 'demande-acces'].includes(variant)
+                "
+                :label="labels.position"
+            />
             <FormUtilisateurInputMessage
-                v-if="variant === 'demande-acces'"
+                v-if="['demande-acces', 'demande-contact'].includes(variant)"
                 :label="labels.access_request_message"
             />
             <FormUtilisateurInputReferral
-                v-if="variant === 'demande-acces'"
+                v-if="['demande-acces', 'demande-contact'].includes(variant)"
                 :label="labels.referral"
                 :language="language"
             />
@@ -158,9 +117,11 @@
             <FormUtilisateurInputLegal :label="labels.legal" />
         </template>
 
-        <template v-slot:button>
+        <template v-slot:button="{ disabled }">
             <p class="text-center">
-                <Button type="submit"><slot name="submit" /></Button>
+                <DsfrButton type="submit" :disabled="disabled"
+                    ><slot name="submit"
+                /></DsfrButton>
             </p>
         </template>
     </FormPublic>
@@ -168,11 +129,10 @@
 
 <script setup>
 // utils
-import { defineProps, toRefs, computed, ref, onMounted, watch } from "vue";
+import { toRefs, computed, ref, onMounted, watch } from "vue";
 import router from "@/helpers/router";
 
 // components
-import { Button } from "@resorptionbidonvilles/ui";
 import FormPublic from "@/components/FormPublic/FormPublic.vue";
 import FormUtilisateurInputEmail from "./inputs/FormUtilisateurInputEmail.vue";
 import FormUtilisateurInputEmailConfirmation from "./inputs/FormUtilisateurInputEmailConfirmation.vue";
@@ -180,15 +140,11 @@ import FormUtilisateurInputFirstName from "./inputs/FormUtilisateurInputFirstNam
 import FormUtilisateurInputLastName from "./inputs/FormUtilisateurInputLastName.vue";
 import FormUtilisateurInputPhone from "./inputs/FormUtilisateurInputPhone.vue";
 import FormUtilisateurInputRequestType from "./inputs/FormUtilisateurInputRequestType.vue";
-import FormUtilisateurInputIsActor from "./inputs/FormUtilisateurInputIsActor.vue";
-import FormUtilisateurInputOrganizationCategory from "./inputs/FormUtilisateurInputOrganizationCategory.vue";
-import FormUtilisateurInputOrganizationType from "./inputs/FormUtilisateurInputOrganizationType.vue";
-import FormUtilisateurInputOrganizationPublic from "./inputs/FormUtilisateurInputOrganizationPublic.vue";
-import FormUtilisateurInputOrganizationPrivate from "./inputs/FormUtilisateurInputOrganizationPrivate.vue";
-import FormUtilisateurInputTerritorialCollectivity from "./inputs/FormUtilisateurInputTerritorialCollectivity.vue";
-import FormUtilisateurInputAssociation from "./inputs/FormUtilisateurInputAssociation.vue";
-import FormUtilisateurInputOrganizationAdministration from "./inputs/FormUtilisateurInputOrganizationAdministration.vue";
+import FormUtilisateurInputStructure from "./inputs/FormUtilisateurInputStructure.vue";
 import FormUtilisateurInputOrganizationOther from "./inputs/FormUtilisateurInputOrganizationOther.vue";
+import FormUtilisateurInputOrganizationOtherAcronyme from "./inputs/FormUtilisateurInputOrganizationOtherAcronyme.vue";
+import FormUtilisateurInputOrganizationOtherTerritory from "./inputs/FormUtilisateurInputOrganizationOtherTerritory.vue";
+import FormUtilisateurInputOrganizationOtherTerritoryType from "./inputs/FormUtilisateurInputOrganizationOtherTerritoryType.vue";
 import FormUtilisateurInputPosition from "./inputs/FormUtilisateurInputPosition.vue";
 import FormUtilisateurInputMessage from "./inputs/FormUtilisateurInputMessage.vue";
 import FormUtilisateurInputReferral from "./inputs/FormUtilisateurInputReferral.vue";
@@ -203,7 +159,7 @@ import labelsFn from "./FormUtilisateur.labels";
 
 const props = defineProps({
     variant: {
-        type: String, // soit "demande-acces", soit "creer-utilisateur"
+        type: String, // soit "demande-acces", soit "demande-contact", soit "creer-utilisateur"
         required: true,
     },
     submit: {
@@ -217,8 +173,6 @@ const props = defineProps({
 });
 
 const form = ref(null);
-const associationInput = ref(null);
-const privateOrganizationInput = ref(null);
 const { variant, submit, language } = toRefs(props);
 const values = ref({
     organization_category: "",
@@ -253,15 +207,30 @@ const demandeAccesOnly = computed(() => {
 onMounted(() => {
     if (demandeAccesOnly.value === true) {
         form.value.setFieldValue("is_actor", true);
-        form.value.setFieldValue("request_type", ["access-request"]);
+        form.value.setFieldValue("request_type", "access-request");
     }
 });
 
 watch(values.value.association, (newAssociation) => {
-    onAssociationChange(newAssociation);
+    onOrganizationChange(newAssociation);
 });
-function onAssociationChange(value) {
-    if (value?.data === null) {
+
+const onOrganizationChange = (value) => {
+    if (value === undefined) {
+        form.value.setFieldValue("organisation", null);
+        form.value.setFieldValue("organization_category", "");
+        form.value.setFieldValue("organization_public", "");
+        form.value.setFieldValue("territorial_collectivity", "");
+        form.value.setFieldValue("association", "");
+        form.value.setFieldValue("private_organization", "");
+        return;
+    }
+    if (value?.data !== null) {
+        form.value.setFieldValue("organization_type", value.data.type);
+        form.value.setFieldValue("organization_category", value.data.category);
+        form.value.setFieldValue("organization_public", value.data.id);
+        form.value.setFieldValue(value.data.category, value);
+    } else if (value?.data === null) {
         if (allowNewOrganization.value === true) {
             form.value.setFieldValue("organization_category", "other");
         } else {
@@ -269,24 +238,8 @@ function onAssociationChange(value) {
                 "Vous devez créer une nouvelle structure ou en faire la demande aux administrateurs nationaux."
             );
         }
-
-        associationInput.value.clear();
     }
-}
-
-function onPrivateOrganizationChange(value) {
-    if (value?.data === null) {
-        if (allowPrivateOrganization.value === true) {
-            form.value.setFieldValue("organization_category", "other");
-        } else {
-            alert(
-                "Vous devez créer une nouvelle structure ou en faire la demande aux administrateurs nationaux."
-            );
-        }
-
-        privateOrganizationInput.value.clear();
-    }
-}
+};
 
 function intermediateSubmit(values) {
     const formattedValues = { ...values };
@@ -294,13 +247,37 @@ function intermediateSubmit(values) {
         .territorial_collectivity?.data
         ? formattedValues.territorial_collectivity.data.id
         : null;
+
     formattedValues.association = formattedValues.association?.data
         ? formattedValues.association.data.id
         : null;
+
     formattedValues.private_organization = formattedValues.private_organization
         ?.data
         ? formattedValues.private_organization.data.id
         : null;
+
+    if (formattedValues.organisation && formattedValues.organisation.data) {
+        const category =
+            formattedValues.organisation.data.category?.toLowerCase();
+        formattedValues.organization_category = category;
+        formattedValues.organisation = formattedValues.organisation.data.id;
+        if (category === "association") {
+            formattedValues.association = formattedValues.organisation;
+        } else if (category === "private_organization") {
+            formattedValues.private_organization = formattedValues.organisation;
+        } else if (category === "territorial_collectivity") {
+            formattedValues.territorial_collectivity =
+                formattedValues.organisation;
+        } else if (category === "administration") {
+            formattedValues.organization_administration =
+                formattedValues.organisation;
+        } else if (category === "public_establishment") {
+            formattedValues.organization_public = formattedValues.organisation;
+        }
+
+        delete formattedValues.organisation;
+    }
     return submit.value(formattedValues);
 }
 </script>

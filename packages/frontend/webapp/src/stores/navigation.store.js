@@ -38,7 +38,7 @@ const topItems = [
     {
         icon: "fa-user fa-regular",
         label: "Demander un accès",
-        route: "/contact",
+        route: "/contact?language=fr&acces",
         authRequirement: "signedOut",
     },
     {

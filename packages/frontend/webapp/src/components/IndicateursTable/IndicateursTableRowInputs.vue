@@ -37,6 +37,7 @@
                         size="sm"
                         :inlineError="true"
                         :errors="errors[input.id] || []"
+                        class="!max-h-[2em] !mt-0"
                     />
                 </p>
             </div>

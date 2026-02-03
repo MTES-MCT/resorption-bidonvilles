@@ -25,7 +25,7 @@
             :message="error || 'Certaines données sont incorrectes'"
         />
 
-        <Button type="submit" @click="onSubmit">Sauvegarder</Button>
+        <DsfrButton type="submit" @click="onSubmit">Sauvegarder</DsfrButton>
     </form>
 </template>
 
@@ -40,7 +40,7 @@ import schema from "./FormSujets.schema";
 import { setExpertiseTopics } from "@/api/users.api";
 
 // components
-import { Button, ErrorSummary, Icon } from "@resorptionbidonvilles/ui";
+import { ErrorSummary, Icon } from "@resorptionbidonvilles/ui";
 import FormSujetsInputSujetsExpertise from "./inputs/FormSujetsInputSujetsExpertise.vue";
 import FormSujetsInputSujetsInteret from "./inputs/FormSujetsInputSujetsInteret.vue";
 import FormSujetsInputCommentaire from "./inputs/FormSujetsInputCommentaire.vue";

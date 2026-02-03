@@ -1,13 +1,40 @@
 <template>
-    <TextInput id="referral_other" :label="label" />
+    <DsfrInputGroup
+        id="referral_other"
+        :errorMessage="errors.length > 0 ? errors : ''"
+        :disabled="isSubmitting || disabled"
+        type="text"
+        v-model="referralOther"
+        required
+        @blur="handleBlur"
+        :valid-message="
+            referralOther?.length > 0 &&
+            errors.length === 0 &&
+            `Le champ '${label}' est valide`
+        "
+    >
+        <template #before-input>
+            <span class="font-bold not-italic" aria-hidden="true">{{
+                label
+            }}</span>
+        </template>
+    </DsfrInputGroup>
 </template>
 
 <script setup>
-import { TextInput } from "@resorptionbidonvilles/ui";
 import { defineProps, toRefs } from "vue";
+import { useField, useIsSubmitting } from "vee-validate";
 
 const props = defineProps({
     label: String,
+    disabled: Boolean,
 });
-const { label } = toRefs(props);
+const { label, disabled } = toRefs(props);
+
+const isSubmitting = useIsSubmitting();
+const {
+    value: referralOther,
+    errors,
+    handleBlur,
+} = useField("referral_other", "required");
 </script>

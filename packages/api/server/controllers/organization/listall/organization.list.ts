@@ -1,15 +1,15 @@
-import searchPrivateOrganization from '#server/services/organization/searchPrivateOrganizations/searchPrivateOrganizations';
+import organizationService from '#server/services/organization/organizationService';
 import { Request, NextFunction, Response } from 'express';
 
-interface PrivateOrganizationSearchRequest extends Request {
+interface OrganizationSearchRequest extends Request {
     query: {
         query: string,
     }
 }
 
-export default async (req: PrivateOrganizationSearchRequest, res: Response, next: NextFunction): Promise<void> => {
+const listAll = async (req: OrganizationSearchRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const result = await searchPrivateOrganization(
+        const result = await organizationService.listAll(
             req.query.query,
         );
         res.status(200).send(result);
@@ -21,3 +21,5 @@ export default async (req: PrivateOrganizationSearchRequest, res: Response, next
         next(error.nativeError);
     }
 };
+
+export default listAll;

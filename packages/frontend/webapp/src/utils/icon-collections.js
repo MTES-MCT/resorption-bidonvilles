@@ -74,6 +74,16 @@ const collections = [
         width: 32,
         height: 32,
     },
+    {
+        prefix: "fa-solid",
+        icons: {
+            spinner: {
+                body: '<path fill="currentColor" d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48s21.49-48 48-48s48 21.49 48 48m-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48s48-21.49 48-48s-21.49-48-48-48m208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48s48-21.49 48-48s-21.49-48-48-48M96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48s48-21.49 48-48m12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48s48-21.49 48-48c0-26.509-21.491-48-48-48m294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48s48-21.49 48-48c0-26.509-21.49-48-48-48M108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48s48-21.49 48-48s-21.491-48-48-48"/>',
+            },
+        },
+        width: 512,
+        height: 512,
+    },
 ];
 export const ri = {
     fileExcelFill: "ri:file-excel-fill",
@@ -92,4 +102,5 @@ export const mdi = {
 export const uil = { temperaturePlus: "uil:temperature-plus" };
 export const bxs = { filePdf: "bxs:file-pdf" };
 export const carbon = { temperatureHot: "carbon:temperature-hot" };
+export const faSolid = { spinner: "fa-solid:spinner" };
 export default collections;
