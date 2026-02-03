@@ -22,6 +22,7 @@ import {
     removeActor,
     removeActorTheme,
     setHeatwaveStatus,
+    setResorptionTarget,
     updateActorThemes,
     startResorption,
 } from "@/api/towns.api";
@@ -556,6 +557,13 @@ export const useTownsStore = defineStore("towns", () => {
                     error
                 );
             }
+        },
+
+        async setResorptionTarget(townId) {
+            await setResorptionTarget(townId);
+            const town = await this.fetchTown(townId);
+            setTown(townId, town);
+            trackEvent("Site", "Marquage Objectif résorption", `S${townId}`);
         },
     };
 });
