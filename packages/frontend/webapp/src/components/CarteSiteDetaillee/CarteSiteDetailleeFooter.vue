@@ -1,5 +1,7 @@
 <template>
-    <div class="flex justify-end h-14 items-center mr-4 space-x-4 print:hidden">
+    <div
+        class="flex flex-wrap justify-end md:h-10 items-end m-4 gap-3 print:hidden sm:flex-row"
+    >
         <DsfrButton
             v-if="isOpen"
             size="sm"
