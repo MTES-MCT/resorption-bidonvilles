@@ -267,7 +267,6 @@ const onZoomEnd = () => {
         }
     }
 
-    carto.value.addControl("addressToggler", createAddressTogglerControl());
     emit("zoomend");
 };
 
@@ -308,6 +307,10 @@ watch(
 
             newCarto.map.on("move", onMove);
             newCarto.map.addLayer(markersGroup.search);
+            newCarto.addControl(
+                "addressToggler",
+                createAddressTogglerControl()
+            );
         }
     }
 );
