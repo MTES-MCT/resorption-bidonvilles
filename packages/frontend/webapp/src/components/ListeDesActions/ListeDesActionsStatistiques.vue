@@ -62,13 +62,11 @@ const updatedActionsInTheLastSixMonths = computed(() => {
     return currentActions.value.filter((action) => {
         // Utiliser getSince pour obtenir les mois écoulés
         const lastUpdate = {
-            // createdAt: getSince(action.created_at / 1000).months > 6,
             metricUpdatedAt:
                 getSince(action.metrics_updated_at / 1000).months < 6,
         };
 
         // Un site est considéré comme mis à jour récemment si moins de 6 mois se sont écoulés
-        // return lastUpdate.createdAt && lastUpdate.metricUpdatedAt;
         return lastUpdate.metricUpdatedAt;
     }).length;
 });
