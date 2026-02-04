@@ -39,13 +39,13 @@ async function searchActionOperators(search: string, user: User): Promise<Action
         search_pattern: `%${search}%`,
     };
 
-    let permissionSql = '';
-    const permissionReplacements: any = {};
+    let permissionSql: string = '';
+    const permissionReplacements: Record<string, (string | number)[]> = {};
 
     if (!hasNationalAccess) {
         if (permissionClauseGroup.departements) {
             permissionSql += 'a.fk_departement IN (:departements)';
-            permissionReplacements.departements = permissionClauseGroup.departements.value;
+            permissionReplacements.departements = permissionClauseGroup.departements.value as (string | number)[];
         }
 
         if (permissionClauseGroup.actions) {
@@ -53,7 +53,7 @@ async function searchActionOperators(search: string, user: User): Promise<Action
                 permissionSql += ' OR ';
             }
             permissionSql += 'a.action_id IN (:actions)';
-            permissionReplacements.actions = permissionClauseGroup.actions.value;
+            permissionReplacements.actions = permissionClauseGroup.actions.value as (string | number)[];
         }
     }
 
