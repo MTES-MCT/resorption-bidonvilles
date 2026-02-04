@@ -2,16 +2,18 @@ import ServiceError from '#server/errors/ServiceError';
 import organizationModel from '#server/models/organizationModel/index';
 import { User } from '#root/types/resources/User.d';
 
+const ACTION_OPERATOR_TYPE = {
+    id: 'action_operator_organization',
+    label: 'Structure',
+} as const;
+
 interface ActionOperatorOrganizationResult {
     id: number,
     name: string,
     abbreviation: string | null,
     enriched_name: string,
     enriched_abbreviation: string | null,
-    type: {
-        id: 'action_operator_organization',
-        label: 'Structure'
-    }
+    type: typeof ACTION_OPERATOR_TYPE
 }
 
 export default async function searchActionOperators(search: string, user: User): Promise<ActionOperatorOrganizationResult[]> {
@@ -24,10 +26,7 @@ export default async function searchActionOperators(search: string, user: User):
             abbreviation: row.abbreviation,
             enriched_name: row.enriched_name,
             enriched_abbreviation: row.enriched_abbreviation,
-            type: {
-                id: 'action_operator_organization',
-                label: 'Structure',
-            },
+            type: ACTION_OPERATOR_TYPE,
         }));
     } catch (error) {
         throw new ServiceError('db_read_error', error);
