@@ -7,7 +7,9 @@
             <div>
                 <h1 class="text-3xl text-info font-bold">{{ title }}</h1>
                 <p>
-                    {{ currentActionsCount }} action{{ isPlural ? "s" : "" }}
+                    {{ currentActionsCount }} action{{
+                        isPlural(currentActionsCount) ? "s" : ""
+                    }}
                     <template v-if="actionsStore.filters.status === 'open'"
                         >en cours
                         <template
@@ -19,19 +21,11 @@
                                 :type="badgeVariant"
                                 :label="badgeLabel"
                                 noIcon
-                            >
-                                dont {{ updatedActionsPercentage }}% d'action{{
-                                    updatedActionsInTheLastSixMonths > 1
-                                        ? "s"
-                                        : ""
-                                }}
-                                ({{ updatedActionsInTheLastSixMonths }}) mises à
-                                jour dans les 6 derniers mois
-                            </DsfrBadge>
+                            />
                         </template>
                     </template>
                     <template v-else
-                        >terminée{{ isPlural ? "s" : "" }}
+                        >terminée{{ isPlural(currentActionsCount) ? "s" : "" }}
                     </template>
                 </p>
             </div>
@@ -46,6 +40,7 @@ import computeLocationSearchTitle from "@/utils/computeLocationSearchTitle";
 import MiniCarte from "@/components/MiniCarte/MiniCarte.vue";
 import formatStat from "@common/utils/formatStat";
 import getSince from "@/utils/getSince";
+import isPlural from "@/utils/isPlural";
 
 const actionsStore = useActionsStore();
 const { location, search } = toRefs(actionsStore.filters);
@@ -62,22 +57,19 @@ const currentActions = computed(() => {
 const currentActionsCount = computed(() => {
     return formatStat(currentActions.value.length);
 });
-const isPlural = computed(() => {
-    return currentActionsCount.value > 1;
-});
 
 const updatedActionsInTheLastSixMonths = computed(() => {
     return currentActions.value.filter((action) => {
         // Utiliser getSince pour obtenir les mois écoulés
         const lastUpdate = {
-            createdAt: getSince(action.created_at / 1000).months < 6,
-            updatedAt: getSince(action.updated_at / 1000).months < 6,
+            // createdAt: getSince(action.created_at / 1000).months > 6,
             metricUpdatedAt:
                 getSince(action.metrics_updated_at / 1000).months < 6,
         };
 
         // Un site est considéré comme mis à jour récemment si moins de 6 mois se sont écoulés
-        return Object.values(lastUpdate).some((value) => value === true);
+        // return lastUpdate.createdAt && lastUpdate.metricUpdatedAt;
+        return lastUpdate.metricUpdatedAt;
     }).length;
 });
 
@@ -97,10 +89,10 @@ const updatedActionsPercentage = computed(() => {
 const badgeLabel = computed(() => {
     if (updatedActionsPercentage.value > 0) {
         return `dont ${updatedActionsPercentage.value}% d'action${
-            updatedActionsInTheLastSixMonths.value > 1 ? "s" : ""
+            isPlural(updatedActionsInTheLastSixMonths.value) ? "s" : ""
         } (${
             updatedActionsInTheLastSixMonths.value
-        }) mises à jour dans les 6 derniers mois`;
+        })  ayant des indicateurs mis à jour dans les 6 derniers mois`;
     }
     return "Aucune action mise à jour au cours des 6 derniers mois";
 });
