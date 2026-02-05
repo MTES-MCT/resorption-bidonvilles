@@ -34,9 +34,7 @@ const checkRateLimit = async (email: string): Promise<CheckRateLimitResult> => {
 
     const consecutiveFailures = failures.length;
     const lastFailureDate = failures.length > 0
-        ? failures.reduce((latest, attempt) => (
-            attempt.attemptedAt > latest ? attempt.attemptedAt : latest
-        ), failures[0].attemptedAt)
+        ? new Date(Math.max(...failures.map(attempt => attempt.attemptedAt.getTime())))
         : null;
 
     // Si 2 échecs ou plus, bloquer la prochaine tentative échouée (qui sera la 3ème)
