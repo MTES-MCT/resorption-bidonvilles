@@ -58,16 +58,16 @@ describe('services/organization.searchActionOperators()', () => {
                     id: 1,
                     name: 'DDETS 44',
                     abbreviation: 'DDETS44',
-                    enriched_name: 'DDETS 44 - Loire-Atlantique',
-                    enriched_abbreviation: 'DDETS44 - Loire-Atlantique',
+                    territory_type: 'departement',
+                    territory_name: 'Loire-Atlantique',
                     similarity: 0.8,
                 },
                 {
                     id: 2,
                     name: 'Direction Départementale de la Cohésion Sociale',
                     abbreviation: null,
-                    enriched_name: 'Direction Départementale de la Cohésion Sociale - Pays de la Loire',
-                    enriched_abbreviation: null,
+                    territory_type: 'region',
+                    territory_name: 'Pays de la Loire',
                     similarity: 0.6,
                 },
             ];
@@ -109,8 +109,8 @@ describe('services/organization.searchActionOperators()', () => {
                     id: 1,
                     name: 'DDETS 44',
                     abbreviation: 'DDETS44',
-                    enriched_name: 'DDETS 44 - Loire-Atlantique',
-                    enriched_abbreviation: 'DDETS44 - Loire-Atlantique',
+                    territory_type: 'departement',
+                    territory_name: 'Loire-Atlantique',
                     similarity: 0.8,
                 },
             ];
@@ -138,8 +138,8 @@ describe('services/organization.searchActionOperators()', () => {
                     id: 3,
                     name: 'Mairie de Nantes',
                     abbreviation: 'Mairie Nantes',
-                    enriched_name: 'Mairie de Nantes', // Pas de territoire pour type city
-                    enriched_abbreviation: 'Mairie Nantes', // Pas de territoire pour type city
+                    territory_type: 'city',
+                    territory_name: null,
                     similarity: 0.7,
                 },
             ];
