@@ -14,12 +14,7 @@ const purgeOldLogs = async (): Promise<{ deletedCount: number }> => {
             `DELETE FROM signin_logs 
              WHERE attempted_at < NOW() - INTERVAL '${retentionDays} days'`,
         );
-
         const deletedCount = (metadata as any).rowCount || 0;
-
-        // eslint-disable-next-line no-console
-        console.log(`[purgeOldLogs] ${deletedCount} signin log(s) older than ${retentionDays} days have been deleted`);
-
         return { deletedCount };
     } catch (error) {
         // eslint-disable-next-line no-console
