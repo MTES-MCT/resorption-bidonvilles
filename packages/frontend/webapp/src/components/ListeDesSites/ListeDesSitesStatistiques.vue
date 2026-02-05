@@ -7,16 +7,14 @@
             <div>
                 <p class="text-3xl text-info font-bold">{{ title }}</p>
                 <p>
-                    {{ formatStat(populationTotal) }} personne<template
-                        v-if="populationTotal > 1"
-                        >s</template
-                    >
+                    {{ formatStat(populationTotal) }} personne{{
+                        isPlural(populationTotal) ? "s" : ""
+                    }}
                 </p>
                 <p>
                     {{ formatStat(townsStore.filteredTowns.length) }}
-                    site<template v-if="townsStore.filteredTowns.length > 1"
-                        >s</template
-                    ><template v-if="updatedSitesInTheLastSixMonths !== null">
+                    site{{ isPlural(townsStore.filteredTowns.length) ? "s" : ""
+                    }}<template v-if="updatedSitesInTheLastSixMonths !== null">
                         <DsfrBadge
                             v-if="currentTab !== 'close'"
                             class="ml-1"
@@ -24,34 +22,25 @@
                             :type="badgeVariant"
                             :label="badgeLabel"
                             noIcon
-                        >
-                            dont {{ updatedSitesPercentage }}% de site{{
-                                updatedSitesInTheLastSixMonths > 1 ? "s" : ""
-                            }}
-                            ({{ updatedSitesInTheLastSixMonths }}) mis à jour
-                            dans les 6 derniers mois
-                        </DsfrBadge>
+                        />
                     </template>
                 </p>
                 <p v-if="userStore.hasJusticePermission">
-                    {{ formatStat(justiceTotal) }} site<template
-                        v-if="justiceTotal > 1"
-                        >s</template
-                    >
+                    {{ formatStat(justiceTotal) }} site{{
+                        isPlural(justiceTotal) ? "s" : ""
+                    }}
                     avec une procédure judiciaire
                 </p>
                 <p v-if="userStore.hasJusticePermission">
-                    {{ formatStat(administrativeOrderTotal) }} site<template
-                        v-if="administrativeOrderTotal > 1"
-                        >s</template
-                    >
+                    {{ formatStat(administrativeOrderTotal) }} site{{
+                        isPlural(administrativeOrderTotal) ? "s" : ""
+                    }}
                     avec une procédure administrative
                 </p>
                 <p v-if="userStore.hasJusticePermission">
-                    {{ formatStat(insalubrityOrderTotal) }} site<template
-                        v-if="insalubrityOrderTotal > 1"
-                        >s</template
-                    >
+                    {{ formatStat(insalubrityOrderTotal) }} site{{
+                        isPlural(insalubrityOrderTotal) ? "s" : ""
+                    }}
                     avec une opération RHI
                 </p>
             </div>
@@ -67,6 +56,7 @@ import computeLocationSearchTitle from "@/utils/computeLocationSearchTitle";
 import MiniCarte from "@/components/MiniCarte/MiniCarte.vue";
 import formatStat from "@common/utils/formatStat";
 import getSince from "@/utils/getSince";
+import isPlural from "@/utils/isPlural";
 
 const props = defineProps({
     currentTab: {
@@ -139,7 +129,7 @@ const updatedSitesPercentage = computed(() => {
 const badgeLabel = computed(() => {
     if (updatedSitesInTheLastSixMonths.value > 0) {
         return `dont ${updatedSitesPercentage.value}% de site${
-            updatedSitesInTheLastSixMonths.value > 1 ? "s" : ""
+            isPlural(updatedSitesInTheLastSixMonths.value) ? "s" : ""
         } (${
             updatedSitesInTheLastSixMonths.value
         }) mis à jour dans les 6 derniers mois`;
