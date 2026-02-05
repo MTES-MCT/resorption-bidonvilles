@@ -13,6 +13,8 @@
 import { defineProps, toRefs, computed, defineEmits, ref } from "vue";
 import { Autocomplete } from "@resorptionbidonvilles/ui";
 import { autocomplete } from "@/api/locations.api.js";
+import { fetchOne } from "@/api/actions.api.js";
+import { searchActionOperators } from "@/api/organizations.api.js";
 import formatLocationLabel from "@/utils/formatLocationLabel.js";
 import { trackEvent } from "@/helpers/matomo";
 
@@ -43,20 +45,84 @@ const location = computed({
 });
 
 async function autocompleteFn(value) {
-    const results = await autocomplete(value);
-    return results.map((location) => ({
-        id: location.code,
-        label: formatLocationLabel(location),
-        category: location.label,
-        data: {
-            code: location.code,
-            departement: location.departement,
-            typeName: location.label,
-            typeUid: location.type,
-            latitude: location.latitude,
-            longitude: location.longitude,
-        },
-    }));
+    const trimmedSearch = value.trim();
+    const actionIdPattern = /^ID\d{8,}$/i;
+
+    // 1. Recherche d'action par ID
+    let actionPromise = Promise.resolve([]);
+    if (actionIdPattern.test(trimmedSearch)) {
+        const last4Chars = trimmedSearch.slice(-4);
+        const actionId = Number.parseInt(last4Chars, 10);
+
+        if (!Number.isNaN(actionId) && actionId > 0) {
+            actionPromise = fetchOne(actionId)
+                .then((action) => [
+                    {
+                        id: `action-${action.id}`,
+                        label: `${action.name} - ${action.displayId}`,
+                        category: "Action",
+                        data: {
+                            type: "action",
+                            actionId: action.id,
+                            actionName: action.name,
+                            displayId: action.displayId,
+                        },
+                    },
+                ])
+                .catch(() => []);
+        }
+    }
+
+    // 2. Recherche géographique
+    const locationPromise = autocomplete(value)
+        .then((items) =>
+            items.map((loc) => ({
+                id: loc.code,
+                label: formatLocationLabel(loc),
+                category: loc.label,
+                data: {
+                    code: loc.code,
+                    departement: loc.departement,
+                    typeName: loc.label,
+                    typeUid: loc.type,
+                    latitude: loc.latitude,
+                    longitude: loc.longitude,
+                },
+            }))
+        )
+        .catch((error) => {
+            console.error("Error fetching locations:", error);
+            return [];
+        });
+
+    // 3. Recherche de structures
+    const organizationPromise = searchActionOperators(value)
+        .then((organizations) =>
+            organizations.map((org) => ({
+                id: `organization-${org.id}`,
+                label: org.enriched_abbreviation
+                    ? org.enriched_abbreviation
+                    : org.enriched_name,
+                category: "Structure",
+                data: {
+                    type: "organization",
+                    organizationId: org.id,
+                    organizationName: org.enriched_name,
+                    organizationAbbreviation: org.enriched_abbreviation,
+                },
+            }))
+        )
+        .catch((error) => {
+            console.error("Error fetching organizations:", error);
+            return [];
+        });
+
+    const [actions, locations, organizations] = await Promise.all([
+        actionPromise,
+        locationPromise,
+        organizationPromise,
+    ]);
+    return [...actions, ...locations, ...organizations];
 }
 
 defineExpose({

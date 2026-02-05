@@ -5,7 +5,7 @@ import { Organization } from '#root/types/resources/Organization.d';
 
 export default [
     param('id')
-        .if(value => value !== 'search')
+        .if(value => value !== 'search' && value !== 'search-action-operators')
         .toInt()
         .isInt().bail().withMessage('L\'identifiant de la structure est invalide')
         .custom(async (value, { req }) => {
