@@ -1,6 +1,7 @@
 import userModel from '#server/models/userModel';
 import authUtils from '#server/utils/auth';
 import signinLogService from '#server/services/signinLog';
+import signinRateLimitService from '#server/services/signinRateLimit';
 import { SigninLogFailureReason } from '#root/types/resources/SigninLog.d';
 
 const { generateAccessTokenFor, hashPassword } = authUtils;
@@ -55,6 +56,16 @@ export default async (req, res) => {
     }
 
     if (user === null) {
+        // Vérifier le rate limit pour les emails inexistants
+        const rateLimitCheck = await signinRateLimitService.checkRateLimit(email);
+        if (rateLimitCheck.isBlocked) {
+            await logAttempt(null, false, 'rate_limited');
+            return res.status(429).send({
+                user_message: '<strong>Trop de tentatives de connexion</strong><br>Votre compte est bloqué pour une durée de 15 minutes.',
+                code: 'rate_limited',
+            });
+        }
+
         await logAttempt(null, false, 'user_not_found');
         return res.status(403).send({
             user_message: 'Ces identifiants sont incorrects',
@@ -70,6 +81,20 @@ export default async (req, res) => {
 
     const hashedPassword = hashPassword(password, user.salt);
     if (hashedPassword !== user.password) {
+        let rateLimitCheck: { isBlocked: boolean; attemptCount?: number; blockUntil?: Date };
+        try {
+            rateLimitCheck = await signinRateLimitService.checkRateLimit(email);
+        } catch (err) {
+            rateLimitCheck = { isBlocked: false };
+        }
+        if (rateLimitCheck.isBlocked) {
+            await logAttempt(user.id, false, 'rate_limited');
+            return res.status(429).send({
+                user_message: '<strong>Trop de tentatives de connexion</strong><br>Votre compte est bloqué pour une durée de 15 minutes.',
+                code: 'rate_limited',
+            });
+        }
+
         await logAttempt(user.id, false, 'wrong_password');
         return res.status(403).send({
             user_message: 'Ces identifiants sont incorrects',
