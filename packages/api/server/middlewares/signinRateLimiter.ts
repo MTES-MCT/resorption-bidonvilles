@@ -4,8 +4,8 @@ import userModel from '#server/models/userModel';
 
 const signinRateLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 2,
-    skipSuccessfulRequests: false,
+    max: 3,
+    skipSuccessfulRequests: true,
     keyGenerator: (req) => {
         const email = req.body?.email?.toLowerCase() || 'unknown';
         return email;
