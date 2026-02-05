@@ -17,8 +17,8 @@ const findAll = async (filters: FindAllFilters = {}): Promise<SigninLog[]> => {
     const replacements: any = {};
 
     if (filters.email) {
-        where.push('signin_logs.email ILIKE :email');
-        replacements.email = `%${filters.email}%`;
+        where.push('LOWER(signin_logs.email) = LOWER(:email)');
+        replacements.email = filters.email;
     }
 
     if (filters.ipAddress) {

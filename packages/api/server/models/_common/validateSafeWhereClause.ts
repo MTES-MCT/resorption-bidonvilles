@@ -48,7 +48,7 @@ export default function validateSafeWhereClause(whereClause: string): void {
 
     const hasDangerousPattern = dangerousPatterns.some(pattern => pattern.test(whereClause));
     if (hasDangerousPattern) {
-        throw new Error('Clause WHERE invalidc: contient des motifs potentiellement dangereux');
+        throw new Error('Clause WHERE invalide: contient des motifs potentiellement dangereux');
     }
 
     const words = whereClause.match(/\b[a-zA-Z]+\b/g) || [];
