@@ -13,8 +13,7 @@ export default function filterActions(actions, filters) {
         }
 
         if (
-            filters.location &&
-            filters.location.type !== "organization" &&
+            filters.location?.type !== "organization" &&
             !checkLocation(action, filters)
         ) {
             return false;
