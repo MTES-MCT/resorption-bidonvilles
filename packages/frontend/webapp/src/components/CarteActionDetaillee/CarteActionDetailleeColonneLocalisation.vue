@@ -12,7 +12,7 @@
                     action.location_shantytowns &&
                     action.location_shantytowns.length > 0
                 "
-                >({{ action.location_shantytowns.length }})</template
+                >({{ numberOfSites }})</template
             ></span
         >
         <div>
@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
@@ -57,4 +57,10 @@ const props = defineProps({
     },
 });
 const { action } = toRefs(props);
+
+const numberOfSites = computed(() => {
+    return `${action.value.location_shantytowns?.length} site${
+        action.value.location_shantytowns?.length > 1 ? "s" : ""
+    }`;
+});
 </script>
