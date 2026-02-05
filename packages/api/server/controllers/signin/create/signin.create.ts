@@ -84,7 +84,7 @@ export default async (req, res) => {
         let rateLimitCheck: { isBlocked: boolean; attemptCount?: number; blockUntil?: Date };
         try {
             rateLimitCheck = await signinRateLimitService.checkRateLimit(email);
-        } catch (err) {
+        } catch {
             rateLimitCheck = { isBlocked: false };
         }
         if (rateLimitCheck.isBlocked) {
