@@ -6,6 +6,15 @@ import { SigninLogFailureReason } from '#root/types/resources/SigninLog.d';
 
 const { generateAccessTokenFor, hashPassword } = authUtils;
 
+// Messages centralisés
+const ERROR_MESSAGES = {
+    invalidCredentials: 'Ces identifiants sont incorrects',
+    rateLimited: '<strong>Trop de tentatives de connexion</strong><br>Votre compte est bloqué pour une durée de 15 minutes.',
+    inactiveAccount: 'Votre compte doit être actif pour permettre la connexion',
+    invalidEmail: ['L\'adresse e-mail est invalide'],
+    invalidPassword: ['Le mot de passe est invalide'],
+} as const;
+
 export default async (req, res) => {
     const startTime = Date.now();
     const { email, password } = req.body;
@@ -28,9 +37,9 @@ export default async (req, res) => {
     if (typeof email !== 'string') {
         await logAttempt(null, false, 'invalid_email_format');
         return res.status(400).send({
-            user_message: 'Ces identifiants sont incorrects',
+            user_message: ERROR_MESSAGES.invalidCredentials,
             fields: {
-                email: ['L\'adresse e-mail est invalide'],
+                email: ERROR_MESSAGES.invalidEmail,
             },
         });
     }
@@ -38,9 +47,9 @@ export default async (req, res) => {
     if (typeof password !== 'string') {
         await logAttempt(null, false, 'invalid_password_format');
         return res.status(400).send({
-            user_message: 'Ces identifiants sont incorrects',
+            user_message: ERROR_MESSAGES.invalidCredentials,
             fields: {
-                password: ['Le mot de passe est invalide'],
+                password: ERROR_MESSAGES.invalidPassword,
             },
         });
     }
@@ -49,7 +58,7 @@ export default async (req, res) => {
     if (rateLimitCheck.isBlocked) {
         await logAttempt(null, false, 'rate_limited');
         return res.status(429).send({
-            user_message: '<strong>Trop de tentatives de connexion</strong><br>Votre compte est bloqué pour une durée de 15 minutes.',
+            user_message: ERROR_MESSAGES.rateLimited,
             code: 'rate_limited',
         });
     }
@@ -68,19 +77,19 @@ export default async (req, res) => {
         await logAttempt(null, false, 'user_not_found');
         if (rateLimitCheck.attemptCount >= 2) {
             return res.status(429).send({
-                user_message: '<strong>Trop de tentatives de connexion</strong><br>Votre compte est bloqué pour une durée de 15 minutes.',
+                user_message: ERROR_MESSAGES.rateLimited,
                 code: 'rate_limited',
             });
         }
         return res.status(403).send({
-            user_message: 'Ces identifiants sont incorrects',
+            user_message: ERROR_MESSAGES.invalidCredentials,
         });
     }
 
     if (user.status !== 'active') {
         await logAttempt(user.id, false, 'inactive_account');
         return res.status(400).send({
-            user_message: 'Votre compte doit être actif pour permettre la connexion',
+            user_message: ERROR_MESSAGES.inactiveAccount,
         });
     }
 
@@ -89,12 +98,12 @@ export default async (req, res) => {
         await logAttempt(user.id, false, 'wrong_password');
         if (rateLimitCheck.attemptCount >= 2) {
             return res.status(429).send({
-                user_message: '<strong>Trop de tentatives de connexion</strong><br>Votre compte est bloqué pour une durée de 15 minutes.',
+                user_message: ERROR_MESSAGES.rateLimited,
                 code: 'rate_limited',
             });
         }
         return res.status(403).send({
-            user_message: 'Ces identifiants sont incorrects',
+            user_message: ERROR_MESSAGES.invalidCredentials,
         });
     }
 
