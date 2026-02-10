@@ -17,7 +17,8 @@ export default function validateSafeWhereClause(whereClause: string): void {
         return;
     }
 
-    const safePattern = /^[\sa-zA-Z0-9_.:()<>=,\-+*/%]+$/;
+    // eslint-disable-next-line no-useless-escape
+    const safePattern = /^[\sa-zA-Z0-9_.:()<>=,\-+*/%'{}\[\]|]+$/;
 
     if (!safePattern.test(whereClause)) {
         throw new Error('Clause WHERE invalide: contient des caractères non autorisés');
@@ -33,14 +34,10 @@ export default function validateSafeWhereClause(whereClause: string): void {
         /\bINSERT\b/i, // INSERT
         /\bEXEC\b/i, // EXEC
         /\bUNION\b/i, // UNION (injection classique)
-        /\bSELECT\b/i, // SELECT imbriqué
-        /\bFROM\b/i, // FROM imbriqué
-        /\bWHERE\b/i, // WHERE imbriqué
         /\bCREATE\b/i, // CREATE
         /\bALTER\b/i, // ALTER
         /\bGRANT\b/i, // GRANT
         /\bREVOKE\b/i, // REVOKE
-        /'[^']*'/, // Chaînes entre guillemets simples (non attendues)
         /"[^"]*"/, // Chaînes entre guillemets doubles (non attendues)
         /\$\{/, // Template string injection
         /\\/, // Backslash (échappement)
@@ -52,11 +49,11 @@ export default function validateSafeWhereClause(whereClause: string): void {
     }
 
     const words = whereClause.match(/\b[a-zA-Z]+\b/g) || [];
-    const allowedWords = new Set(['AND', 'OR', 'IN', 'NOT', 'IS', 'NULL', 'TRUE', 'FALSE', 'ILIKE', 'LIKE', 'BETWEEN', 'ASC', 'DESC', 'LOWER', 'UPPER', 'ASIN', 'SQRT', 'POWER', 'SIN', 'COS']);
+    const allowedWords = new Set(['AND', 'OR', 'IN', 'NOT', 'IS', 'NULL', 'TRUE', 'FALSE', 'ILIKE', 'LIKE', 'BETWEEN', 'ASC', 'DESC', 'LOWER', 'UPPER', 'ASIN', 'SQRT', 'POWER', 'SIN', 'COS', 'EXISTS', 'SELECT', 'FROM', 'WHERE', 'UNNEST', 'AS', 'EXTRACT', 'YEAR', 'ARRAY']);
     const hasUnauthorizedKeyword = words.some((word) => {
         const upperWord = word.toUpperCase();
         // Vérifie les mots SQL (tout en majuscules) ET les patterns dangereux (insensibles à la casse)
-        const sqlKeywords = ['DROP', 'DELETE', 'UPDATE', 'INSERT', 'EXEC', 'UNION', 'SELECT', 'FROM', 'WHERE', 'CREATE', 'ALTER', 'GRANT', 'REVOKE'];
+        const sqlKeywords = ['DROP', 'DELETE', 'UPDATE', 'INSERT', 'EXEC', 'UNION', 'CREATE', 'ALTER', 'GRANT', 'REVOKE'];
         if (sqlKeywords.includes(upperWord)) {
             return true;
         }
