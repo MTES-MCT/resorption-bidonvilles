@@ -1,18 +1,11 @@
 import { QueryTypes } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 import { SigninLog } from '#root/types/resources/SigninLog.d';
+import { SigninLogFilters } from '#root/types/resources/SigninLogFilters.d';
 import serializeSigninLog from './_common/serializeSigninLog';
 import validateSafeWhereClause from '../_common/validateSafeWhereClause';
 
-type FindAllFilters = {
-    email?: string;
-    ipAddress?: string;
-    success?: boolean;
-    dateFrom?: Date;
-    dateTo?: Date;
-};
-
-const findAll = async (filters: FindAllFilters = {}): Promise<SigninLog[]> => {
+const findAll = async (filters: SigninLogFilters = {}): Promise<SigninLog[]> => {
     const where = [];
     const replacements: any = {};
 

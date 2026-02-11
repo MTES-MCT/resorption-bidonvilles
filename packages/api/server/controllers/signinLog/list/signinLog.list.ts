@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import signinLogModel from '#server/models/signinLogModel';
+import { SigninLogFilters } from '#root/types/resources/SigninLogFilters.d';
 
 const signinLogListController = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const filters: any = {};
+        const filters: SigninLogFilters = {};
 
         if (req.query.email) {
             filters.email = req.query.email as string;
