@@ -157,7 +157,6 @@ export const useAccesStore = defineStore("acces", () => {
                 // si l'utilisateur n'est pas dans le hash, on ignore car on ne peut pas facilement
                 // intégrer ce nouvel utilisateur à la liste sortedAccess, car le tri n'est pas géré
                 // côté front pour l'instant
-                // @todo
             }
         },
 
