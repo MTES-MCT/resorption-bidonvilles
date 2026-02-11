@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed, watch } from "vue";
+import { toRefs, ref, computed, watch } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
