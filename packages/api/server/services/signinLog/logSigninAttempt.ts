@@ -41,7 +41,7 @@ const logSigninAttempt = async ({
             )`,
             {
                 replacements: {
-                    email,
+                    email: email.toLowerCase(),
                     userId,
                     success,
                     failureReason,
