@@ -731,6 +731,27 @@ export default (oldVersion, newVersion): Diff[] => {
         };
     }
 
+    // Champs de population à dupliquer lors d'une mise à jour sans modification
+    const populationFields = [
+        'populationTotal',
+        'populationTotalFemales',
+        'populationCouples',
+        'populationMinors',
+        'populationMinorsGirls',
+        'populationMinors0To3',
+        'populationMinors3To6',
+        'populationMinors6To12',
+        'populationMinors12To16',
+        'populationMinors16To18',
+        'minorsInSchool',
+        'caravans',
+        'huts',
+        'tents',
+        'cars',
+        'mattresses',
+    ];
+    const isUpdateWithoutChange = newVersion.updatedWithoutAnyChange === true;
+
     const result = [
         ...finalDiff,
         ...Object.keys(toDiff).reduce((diff, serializedKey) => {
@@ -760,6 +781,20 @@ export default (oldVersion, newVersion): Diff[] => {
 
             // Sinon, utiliser la comparaison par défaut
             if (oldProcessed === newProcessed) {
+                // Lors d'une mise à jour sans modification, forcer les diffs
+                // sur les champs de population pour dupliquer les données du
+                // dernier recensement dans l'historique
+                if (isUpdateWithoutChange && populationFields.includes(serializedKey)) {
+                    return [
+                        ...diff,
+                        {
+                            fieldKey: serializedKey,
+                            field: config.label,
+                            oldValue: oldProcessed,
+                            newValue: newProcessed,
+                        },
+                    ];
+                }
                 return diff;
             }
 
