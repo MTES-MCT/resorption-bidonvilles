@@ -193,11 +193,11 @@ export const useAccesStore = defineStore("acces", () => {
 
             const user = await get(userId);
             if (!user) {
-                throw {
-                    code: "Utilisateur introuvable",
-                    user_message:
-                        "L'utilisateur demandé n'existe pas en base de données",
-                };
+                const error = new Error("Utilisateur introuvable");
+                error.code = "Utilisateur introuvable";
+                error.user_message =
+                    "L'utilisateur demandé n'existe pas en base de données";
+                throw error;
             }
 
             hash.value[user.id] = user;
