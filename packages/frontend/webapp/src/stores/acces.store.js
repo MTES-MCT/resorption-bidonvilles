@@ -94,10 +94,10 @@ export const useAccesStore = defineStore("acces", () => {
     }
 
     function resetFilters() {
-        const defaultFilters = ["refused"];
+        const defaultFilters = new Set(["refused"]);
         filters.search.value = "";
         filters.status.value = Object.keys(accessStatuses).filter(
-            (status) => !defaultFilters.includes(status)
+            (status) => !defaultFilters.has(status)
         );
     }
 
