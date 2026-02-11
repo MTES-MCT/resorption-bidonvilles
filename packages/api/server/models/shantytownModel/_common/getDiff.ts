@@ -16,7 +16,7 @@ export type Diff = {
     oldValue: string,
     newValue: string
 };
-export default (oldVersion, newVersion): Diff[] => {
+export default function getDiff(oldVersion, newVersion): Diff[] {
     const baseProcessors = {
         default(value) {
             if (value === null || value === '' || value === undefined) {
@@ -811,4 +811,4 @@ export default (oldVersion, newVersion): Diff[] => {
     ];
 
     return result;
-};
+}
