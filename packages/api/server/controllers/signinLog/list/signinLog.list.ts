@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import signinLogModel from '#server/models/signinLogModel';
 import { SigninLogFilters } from '#root/types/resources/SigninLogFilters.d';
 
+
 const signinLogListController = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const filters: SigninLogFilters = {};
@@ -19,11 +20,17 @@ const signinLogListController = async (req: Request, res: Response, next: NextFu
         }
 
         if (req.query.dateFrom) {
-            filters.dateFrom = new Date(req.query.dateFrom as string);
+            const date = new Date(String(req.query.dateFrom));
+            if (!Number.isNaN(date.getTime())) {
+                filters.dateFrom = date;
+            }
         }
 
         if (req.query.dateTo) {
-            filters.dateTo = new Date(req.query.dateTo as string);
+            const date = new Date(String(req.query.dateTo));
+            if (!Number.isNaN(date.getTime())) {
+                filters.dateTo = date;
+            }
         }
 
         const logs = await signinLogModel.findAll(filters);
