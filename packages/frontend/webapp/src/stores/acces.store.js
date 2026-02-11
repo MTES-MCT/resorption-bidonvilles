@@ -125,13 +125,19 @@ export const useAccesStore = defineStore("acces", () => {
         }),
         total: computed(() => filteredAcces.value.length),
 
-        async updateUserRole(userId, newRole, roles) {
+        async updateUserRole(userId, newRole) {
             const updatedUser = await setRoleRegular(userId, newRole);
             if (updatedUser && hash.value[userId]) {
-                hash.value[userId].role = roles.find(
-                    (role) => role.id === newRole
-                ).name;
-                hash.value[userId].role_id = newRole;
+                enrichUserWithAccessStatus(updatedUser);
+                enrichUserWithLocationName(updatedUser);
+                hash.value[userId] = updatedUser;
+
+                const index = sortedAcces.value.findIndex(
+                    ({ id }) => id === userId
+                );
+                if (index !== -1) {
+                    sortedAcces.value.splice(index, 1, updatedUser);
+                }
             }
         },
 
