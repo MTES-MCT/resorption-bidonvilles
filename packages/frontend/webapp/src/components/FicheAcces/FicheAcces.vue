@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed } from "vue";
+import { defineProps, toRefs, ref, computed, watch } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
@@ -45,5 +45,12 @@ const options = ref(
     user.value.user_accesses.length > 0
         ? user.value.permission_options || []
         : optionList.value
+);
+
+watch(
+    () => user.value.role_id,
+    () => {
+        options.value = optionList.value;
+    }
 );
 </script>
