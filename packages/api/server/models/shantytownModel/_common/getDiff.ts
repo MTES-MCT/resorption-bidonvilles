@@ -255,8 +255,8 @@ export default function getDiff(oldVersion, newVersion): Diff[] {
                 }
 
                 return [
-                    originLabels.slice(0, originLabels.length - 1).join(', '),
-                    originLabels.slice(originLabels.length - 1),
+                    originLabels.slice(0, -1).join(', '),
+                    originLabels.slice(-1),
                 ].join(', et ');
             },
         },
@@ -484,8 +484,8 @@ export default function getDiff(oldVersion, newVersion): Diff[] {
                         }
 
                         return [
-                            labels.slice(0, labels.length - 1).join(', '),
-                            labels.slice(labels.length - 1),
+                            labels.slice(0, -1).join(', '),
+                            labels.slice(-1),
                         ].join(', et ');
                     },
                 },
@@ -560,8 +560,8 @@ export default function getDiff(oldVersion, newVersion): Diff[] {
                         }
 
                         return [
-                            labels.slice(0, labels.length - 1).join(', '),
-                            labels.slice(labels.length - 1),
+                            labels.slice(0, -1).join(', '),
+                            labels.slice(-1),
                         ].join(', et ');
                     },
                 },
