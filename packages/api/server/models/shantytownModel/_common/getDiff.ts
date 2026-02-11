@@ -732,7 +732,7 @@ export default function getDiff(oldVersion, newVersion): Diff[] {
     }
 
     // Champs de population à dupliquer lors d'une mise à jour sans modification
-    const populationFields = [
+    const populationFields = new Set([
         'populationTotal',
         'populationTotalFemales',
         'populationCouples',
@@ -749,7 +749,7 @@ export default function getDiff(oldVersion, newVersion): Diff[] {
         'tents',
         'cars',
         'mattresses',
-    ];
+    ]);
     const isUpdateWithoutChange = newVersion.updatedWithoutAnyChange === true;
 
     const result = [
@@ -784,7 +784,7 @@ export default function getDiff(oldVersion, newVersion): Diff[] {
                 // Lors d'une mise à jour sans modification, forcer les diffs
                 // sur les champs de population pour dupliquer les données du
                 // dernier recensement dans l'historique
-                if (isUpdateWithoutChange && populationFields.includes(serializedKey)) {
+                if (isUpdateWithoutChange && populationFields.has(serializedKey)) {
                     return [
                         ...diff,
                         {
