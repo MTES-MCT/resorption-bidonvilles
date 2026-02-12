@@ -68,9 +68,36 @@ const self = computed(() => {
     return user.value.id === userStore.user?.id;
 });
 
+const isAdmin = computed(() => {
+    const userStore = useUserStore();
+    return (
+        userStore.user?.is_superuser === true ||
+        userStore.hasPermission("user.activate")
+    );
+});
+
+const hasOptionsForRole = computed(() => {
+    const roleDescription =
+        configStore.config.permissions_description?.[user.value.role_id];
+    return (roleDescription?.options || []).length > 0;
+});
+
 const tabs = computed(() => {
+    const userStore = useUserStore();
     return tabsDefinition
         .filter(({ selfOnly }) => selfOnly !== true || self.value === true)
+        .filter(({ adminOnly }) => {
+            if (adminOnly !== true) {
+                return true;
+            }
+            if (!hasOptionsForRole.value) {
+                return false;
+            }
+            if (self.value === true) {
+                return userStore.user?.is_superuser === true;
+            }
+            return isAdmin.value;
+        })
         .map((tab) => {
             tab.active = tab.id === currentTabId.value;
             tab.route = buildTabRoute.value(tab.id);

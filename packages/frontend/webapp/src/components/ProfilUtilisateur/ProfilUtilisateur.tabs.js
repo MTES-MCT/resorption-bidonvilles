@@ -3,6 +3,7 @@ import FormIdentifiants from "./FormIdentifiants/FormIdentifiants.vue";
 import FormSujets from "./FormSujets/FormSujets.vue";
 import FormAbonnements from "./FormAbonnements/FormAbonnements.vue";
 import FormDesactiverCompte from "./FormDesactiverCompte/FormDesactiverCompte.vue";
+import FormOptions from "./FormOptions/FormOptions.vue";
 
 export default [
     {
@@ -27,6 +28,12 @@ export default [
         label: "Courriels automatiques",
         selfOnly: false,
         component: FormAbonnements,
+    },
+    {
+        id: "options",
+        label: "Modifier les options",
+        adminOnly: true,
+        component: FormOptions,
     },
     {
         id: "desactiver-compte",
