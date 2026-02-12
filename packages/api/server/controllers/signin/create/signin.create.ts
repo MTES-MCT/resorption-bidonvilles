@@ -24,7 +24,7 @@ export default async (req, res) => {
     const logAttempt = async (userId: number | null, success: boolean, failureReason: SigninLogFailureReason | null) => {
         const responseTimeMs = Date.now() - startTime;
         await signinLogService.logSigninAttempt({
-            email: email || 'unknown',
+            email: email || 'inconnu',
             userId,
             success,
             failureReason,
