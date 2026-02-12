@@ -1,9 +1,6 @@
 <template>
     <ContentWrapper size="medium" class="mb-10" v-if="message !== null">
-        <p class="bg-red200 p-4 flex items-center justify-center space-x-2">
-            <Icon icon="circle-info" class="text-red600" />
-            <span>{{ message }}</span>
-        </p>
+        <DsfrAlert type="warning" :description="message" />
     </ContentWrapper>
     <FormPublic
         :schema="schema"
@@ -67,7 +64,7 @@ import router from "@/helpers/router.js";
 import { trackEvent } from "@/helpers/matomo.js";
 
 // components
-import { ContentWrapper, Icon } from "@resorptionbidonvilles/ui";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import FormPublic from "@/components/FormPublic/FormPublic.vue";
 import FormConnexionInputEmail from "./inputs/FormConnexionInputEmail.vue";
 import FormConnexionInputPassword from "./inputs/FormConnexionInputPassword.vue";
