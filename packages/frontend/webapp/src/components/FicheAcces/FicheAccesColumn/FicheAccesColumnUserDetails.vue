@@ -40,7 +40,7 @@
         size="sm"
         icon="mdi-account-edit"
         @click.prevent.stop="router.push(`/utilisateur/${user.id}`)"
-        >Modifier ces informations</DsfrButton
+        >Modifier la fiche</DsfrButton
     >
     <DsfrButton
         v-if="userStore.user?.is_superuser && !user.anonymized_at"
