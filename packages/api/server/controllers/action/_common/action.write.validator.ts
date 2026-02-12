@@ -242,8 +242,13 @@ export default (mode: 'create' | 'update') => [
         .isArray().bail().withMessage('Le format des utilisateurs ciblés n\'est pas valide')
         .isLength({ min: 1 }).bail().withMessage('Le champ "Pilotes de l\'action" est obligatoire')
         .customSanitizer(async (value) => {
-            const users = await userModel.findByIds(null, value);
-            if (users.length !== value.length) {
+            const filteredValue = value.filter(id => id !== undefined && id !== null);
+            if (filteredValue.length === 0) {
+                return null;
+            }
+
+            const users = await userModel.findByIds(null, filteredValue);
+            if (users.length !== filteredValue.length) {
                 return null;
             }
 
@@ -265,8 +270,13 @@ export default (mode: 'create' | 'update') => [
         .isArray().bail().withMessage('Le format des utilisateurs ciblés n\'est pas valide')
         .isLength({ min: 1 }).bail().withMessage('Le champ "Opérateurs de l\'action" est obligatoire')
         .customSanitizer(async (value) => {
-            const users = await userModel.findByIds(null, value);
-            if (users.length !== value.length) {
+            const filteredValue = value.filter(id => id !== undefined && id !== null);
+            if (filteredValue.length === 0) {
+                return null;
+            }
+
+            const users = await userModel.findByIds(null, filteredValue);
+            if (users.length !== filteredValue.length) {
                 return null;
             }
 
