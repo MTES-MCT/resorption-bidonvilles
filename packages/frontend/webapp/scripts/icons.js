@@ -10,6 +10,7 @@ const riIconNames = [
     "file-excel-fill",
     "flag-fill",
     "focus-2-line",
+    "key-fill",
     "refresh-line",
     "sun-fill",
     "sun-line",

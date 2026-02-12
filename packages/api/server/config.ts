@@ -36,6 +36,7 @@ export default {
     anonymizeOwners: process.env.RB_API_ANONYMIZE_OWNERS === '1',
     anonymizeInactiveUsers: process.env.RB_API_ANONYMIZE_INACTIVE_USERS === '1',
     deactivateExpiredUsersInDB: process.env.RB_API_DEACTIVATE_EXPIRED_USERS === '1',
+    purgeOldSigninLogs: process.env.RB_API_PURGE_OLD_SIGNIN_LOGS === '1',
     inactivityAlert: {
         delayBeforeAlert: '6 month',
         delayBeforeDeactivation: '1 month',
