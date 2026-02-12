@@ -8,11 +8,11 @@ const signinLogListController = async (req: Request, res: Response, next: NextFu
         const filters: SigninLogFilters = {};
 
         if (req.query.email) {
-            filters.email = req.query.email as string;
+            filters.email = typeof req.query.email === 'string' ? req.query.email : undefined;
         }
 
         if (req.query.ipAddress) {
-            filters.ipAddress = req.query.ipAddress as string;
+            filters.ipAddress = typeof req.query.ipAddress === 'string' ? req.query.ipAddress : undefined;
         }
 
         if (req.query.success !== undefined) {
