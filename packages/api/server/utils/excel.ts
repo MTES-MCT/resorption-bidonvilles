@@ -459,7 +459,6 @@ export default {
      * @returns {Promise} The promise responds with a Buffer
      */
     createExport(title, locationName, sections, shantytowns, dateOfExport, updatedSitesStats) {
-        // const sheet2 = workbook.addWorksheet('Données Techniques');
         // create a whole workbook
         const workbook = new Excel.Workbook();
 
@@ -519,7 +518,7 @@ export default {
 
         if (departementsDistincts > 1) {
             sheet2 = workbook.addWorksheet(
-                'Taux départementaux de MAJ',
+                'Taux de MAJ par département',
                 {
                     views: [{
                         state: 'frozen',
