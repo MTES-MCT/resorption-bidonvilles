@@ -10,10 +10,12 @@ const riIconNames = [
     "file-excel-fill",
     "flag-fill",
     "focus-2-line",
+    "loader-4-line",
     "refresh-line",
     "sun-fill",
     "sun-line",
 ];
+
 
 const mdiIconNames = [
     "account-edit",

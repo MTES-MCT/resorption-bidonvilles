@@ -252,7 +252,7 @@ const router = createRouter({
             },
         },
         {
-            path: "/mon-compte/:tab(informations-personnelles|identifiants|abonnements|desactiver-compte|domaines-competence)",
+            path: "/mon-compte/:tab(informations-personnelles|identifiants|abonnements|desactiver-compte|domaines-competence|options)",
             component: () => import("@/views/MonCompteView.vue"),
         },
         {
@@ -371,7 +371,7 @@ const router = createRouter({
             },
         },
         {
-            path: "/utilisateur/:id/:tab(informations-personnelles|identifiants|abonnements|domaines-competence)",
+            path: "/utilisateur/:id/:tab(informations-personnelles|identifiants|abonnements|domaines-competence|options)",
             component: () => import("@/views/ProfilUtilisateurView.vue"),
             meta: {
                 title: "Consulter, modifier un compte utilisateur",
