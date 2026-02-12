@@ -3,7 +3,7 @@
         <span class="absolute -left-4 bg-error w-0.5 h-full top-0"></span>
         <div class="flex flex-row gap-1" v-if="message">
         <span class="fr-icon-error-fill fr-icon--sm" aria-hidden="true"></span>
-        <span class="font-normal">{{ message }}</span>
+        <span class="font-normal" v-html="message"></span>
         </div>
         <ul v-if="summaryErrors.length > 0" class="mt-2 pl-5 list-disc">
             <li v-for="error in summaryErrors" :key="error.key" class="list-none flex flex-row gap-1">

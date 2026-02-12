@@ -4,7 +4,7 @@ import config from '#server/config';
 import PrometheusMetricsHandler from '#server/middlewares/prometheusMiddleware';
 
 const {
-    port, sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners, anonymizeInactiveUsers, deactivateExpiredUsersInDB,
+    port, sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners, anonymizeInactiveUsers, deactivateExpiredUsersInDB, purgeOldSigninLogs,
 } = config;
 
 const sentryContextHandlers = (app) => {
@@ -111,6 +111,12 @@ export default {
                 // eslint-disable-next-line no-console
                 console.log('Deactivate expired users job is enabled');
                 await agenda.every('0 0 3 * * *', 'deactivate_expired_users');
+            }
+
+            if (purgeOldSigninLogs) {
+                // eslint-disable-next-line no-console
+                console.log('Purge old signin logs job is enabled');
+                await agenda.every('0 0 2 * * *', 'purge_old_signin_logs'); // every day at 2AM
             }
 
             // eslint-disable-next-line no-console
