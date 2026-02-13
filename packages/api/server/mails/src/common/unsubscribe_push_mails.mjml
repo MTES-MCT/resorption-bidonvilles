@@ -1,7 +1,7 @@
 <mj-section>
     <mj-column>
         <mj-text mj-class='text-sm font-italic pt-4'>
-            Pour ne plus recevoir les courriels envoyés automatiquement, veuillez <a href="{{var:webappUrl}}/mon-compte/abonnements?{{var:utm}}" target="_blank" rel="noopener noreferrer" class="link">le signaler dans votre espace "Mon compte"</a>.
+            Pour ne plus recevoir ce courriel, rendez-vous <a href="{{var:webappUrl}}/mon-compte/abonnements?{{var:utm}}" target="_blank" rel="noopener noreferrer" class="link">dans votre profil de la plateforme - espace courriels automatiques</a>.
         </mj-text>
     </mj-column>
 </mj-section>

@@ -22,6 +22,6 @@ Suivez toute l'actualité de la résorption des bidonvilles et retrouvez tous vo
 outils méthodologiques sur votre blog [{{var:blogUrl}}]
 Développé par la Dihal [https://www.gouvernement.fr/resorption-des-bidonvilles]
 
-Pour ne plus recevoir les courriels envoyés automatiquement, veuillez le
-signaler dans votre espace "Mon compte"
+Pour ne plus recevoir ce courriel, rendez-vous dans votre profil de la
+plateforme - espace courriels automatiques
 [{{var:webappUrl}}/mon-compte/abonnements?{{var:utm}}].
