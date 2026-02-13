@@ -153,10 +153,6 @@ const schema = (
             .transform((value, originalValue) =>
                 originalValue === "" ? null : value
             )
-            .when("organization_category", {
-                is: "public_establishment",
-                then: (schema) => schema.required(),
-            })
             .label(labels.organization_type);
 
         schema.organization_public = number()
