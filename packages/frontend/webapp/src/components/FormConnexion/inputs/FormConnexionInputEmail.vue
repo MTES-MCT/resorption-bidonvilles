@@ -2,8 +2,8 @@
     <Field name="email" v-slot="{ field, errors }">
         <DsfrInputGroup :error-message="errors[0]">
             <DsfrInput
-                v-bind="field"
                 id="email"
+                :name="field.name"
                 :label="label"
                 label-visible
                 placeholder="marcel.dupont@exemple.fr"
@@ -13,6 +13,9 @@
                 :is-invalid="!!errors.length"
                 :disabled="disabled"
                 :model-value="field.value"
+                @blur="field.onBlur"
+                @change="field.onChange"
+                @input="field.onChange"
             />
         </DsfrInputGroup>
     </Field>
