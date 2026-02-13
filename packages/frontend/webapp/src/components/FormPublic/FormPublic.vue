@@ -35,7 +35,7 @@
         </ContentWrapper>
 
         <!-- form errors (always small) -->
-        <ContentWrapper size="small">
+        <ContentWrapper size="small" class="mt-4">
             <ErrorSummary
                 v-if="error || Object.keys(errors).length > 0"
                 :message="error || 'Certaines données sont incorrectes'"
