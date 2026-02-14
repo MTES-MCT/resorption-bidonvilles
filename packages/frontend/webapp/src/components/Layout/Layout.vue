@@ -39,9 +39,21 @@
 
 <style scoped>
 .bg-illustration {
-    background-image: url("@/assets/img/illustrations/bidonville.jpg");
+    background-image: url("@/assets/img/illustrations/bidonville-1920.webp");
     background-size: cover;
     background-position: 0% 70%;
+}
+
+@media (min-width: 1920px) and (min-resolution: 1.5dppx) {
+    .bg-illustration {
+        background-image: url("@/assets/img/illustrations/bidonville-2560.webp");
+    }
+}
+
+@media (min-width: 2560px) and (min-resolution: 2dppx) {
+    .bg-illustration {
+        background-image: url("@/assets/img/illustrations/bidonville-3249.webp");
+    }
 }
 </style>
 
