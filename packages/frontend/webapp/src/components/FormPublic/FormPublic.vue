@@ -36,15 +36,30 @@
 
         <!-- form errors (always small) -->
         <ContentWrapper size="small" class="mt-4">
-            <ErrorSummary
+            <DsfrAlert
                 v-if="error || Object.keys(errors).length > 0"
-                :message="error || 'Certaines données sont incorrectes'"
-                :summary="showErrorSummary ? errors : {}"
-            />
+                type="error"
+                :description="error || 'Certaines données sont incorrectes'"
+            >
+                <ul
+                    v-if="showErrorSummary && Object.keys(errors).length > 0"
+                    class="mt-2"
+                >
+                    <li v-for="(msg, key) in errors" :key="key">
+                        <button
+                            type="button"
+                            class="fr-link fr-link--sm"
+                            @click="focusField(key)"
+                        >
+                            {{ msg }}
+                        </button>
+                    </li>
+                </ul>
+            </DsfrAlert>
         </ContentWrapper>
 
         <!-- form buttons -->
-        <ContentWrapper :size="size">
+        <ContentWrapper :size="size" class="mt-4">
             <slot name="button">
                 <p class="text-center">
                     <Button type="submit">Envoyer</Button>
@@ -63,11 +78,7 @@
 import { defineProps, defineExpose, toRefs, ref } from "vue";
 import { Form } from "vee-validate";
 
-import {
-    Button,
-    ContentWrapper,
-    ErrorSummary,
-} from "@resorptionbidonvilles/ui";
+import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     schema: Object,
@@ -87,6 +98,25 @@ const props = defineProps({
 });
 
 const form = ref(null);
+
+const focusField = (fieldKey) => {
+    let field = document.getElementById(fieldKey);
+    if (!field) {
+        field = document.getElementById(`dp-input-${fieldKey}`);
+    }
+    if (field) {
+        field.scrollIntoView({ behavior: "smooth", block: "center" });
+        setTimeout(() => {
+            const focusable =
+                field instanceof HTMLInputElement ||
+                field instanceof HTMLTextAreaElement ||
+                field instanceof HTMLSelectElement
+                    ? field
+                    : field.querySelector("input, textarea, select");
+            focusable?.focus({ preventScroll: true });
+        }, 500);
+    }
+};
 const error = ref(null);
 const { schema, submit, size, showErrorSummary, language } = toRefs(props);
 
