@@ -63,19 +63,27 @@ const { password: label } = labels;
 <style scoped>
 .password-toggle {
     position: absolute;
-    right: 0.75rem;
+    right: 0;
     top: 50%;
     transform: translateY(-50%);
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0;
+    padding: 0.75rem;
+    min-width: 48px;
+    min-height: 48px;
     color: var(--text-action-high-grey);
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .password-toggle:hover {
     color: var(--text-action-high-blue-france);
+}
+
+.password-toggle:focus-visible {
+    outline: 2px solid var(--border-action-high-blue-france);
+    outline-offset: 2px;
 }
 </style>
