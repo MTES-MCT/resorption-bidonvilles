@@ -8,7 +8,7 @@
                     :label="label"
                     label-visible
                     :type="hidden ? 'password' : 'text'"
-                    autocomplete="current-password"
+                    :autocomplete="'current-password'"
                     required
                     :is-invalid="!!errors.length"
                     :disabled="disabled"
@@ -70,6 +70,10 @@ const { password: label } = labels;
     right: 0.25rem;
     top: 70%;
     transform: translateY(-50%);
+}
+
+.password-toggle:hover {
+    background-color: transparent !important;
 }
 
 .password-toggle :deep(svg) {
