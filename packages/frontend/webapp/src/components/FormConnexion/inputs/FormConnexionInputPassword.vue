@@ -1,13 +1,7 @@
 <template>
     <Field name="password" v-slot="{ field, errors }">
-        <div
-            class="fr-input-group"
-            :class="{ 'fr-input-group--error': errors.length }"
-        >
-            <label class="fr-label" for="password">
-                {{ label }}&nbsp;<span class="required">*</span>
-            </label>
-            <div class="fr-input-wrap" style="position: relative">
+        <DsfrInputGroup :error-message="errors[0]" :label="label" label-visible>
+            <div class="fr-input-wrap password-input-wrapper">
                 <input
                     id="password"
                     :name="field.name"
@@ -18,7 +12,6 @@
                     required
                     :disabled="disabled"
                     :value="field.value"
-                    style="padding-right: 2.5rem"
                     @blur="field.onBlur"
                     @change="field.onChange"
                     @input="field.onChange"
@@ -36,10 +29,7 @@
                     <VIcon :name="hidden ? 'ri:eye-line' : 'ri:eye-off-line'" />
                 </button>
             </div>
-            <p v-if="errors.length" class="fr-error-text">
-                {{ errors[0] }}
-            </p>
-        </div>
+        </DsfrInputGroup>
     </Field>
 </template>
 
@@ -61,6 +51,14 @@ const { password: label } = labels;
 </script>
 
 <style scoped>
+.password-input-wrapper {
+    position: relative;
+}
+
+.password-input-wrapper input {
+    padding-right: 3.5rem;
+}
+
 .password-toggle {
     position: absolute;
     right: 0;
