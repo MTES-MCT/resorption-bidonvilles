@@ -1,5 +1,5 @@
 <template>
-    <Button
+    <DsfrButton
         v-if="
             userStore.user?.is_admin &&
             !userStore.user?.is_superuser &&
@@ -8,17 +8,15 @@
             user.status !== 'inactive' &&
             user.status !== 'refused'
         "
-        variant="primaryOutline"
         :loading="isLoading"
         :disabled="disabled"
-        class="!border-2 !border-primary hover:!bg-primaryDark"
+        secondary
         >Définir comme « Intervenant »
-    </Button>
+    </DsfrButton>
 </template>
 
 <script setup>
 import { defineProps, toRefs } from "vue";
-import { Button } from "@resorptionbidonvilles/ui";
 import { useUserStore } from "@/stores/user.store";
 
 const props = defineProps({
@@ -29,9 +27,3 @@ const props = defineProps({
 const { user, isLoading, disabled } = toRefs(props);
 const userStore = useUserStore();
 </script>
-
-<style scoped>
-button {
-    border: inherit;
-}
-</style>
