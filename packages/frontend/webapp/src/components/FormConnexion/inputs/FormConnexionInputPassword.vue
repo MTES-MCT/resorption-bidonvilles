@@ -1,33 +1,33 @@
 <template>
     <Field name="password" v-slot="{ field, errors }">
         <DsfrInputGroup :error-message="errors[0]" :label="label" label-visible>
-            <div class="fr-input-wrap password-input-wrapper">
-                <input
+            <div class="password-input-wrapper">
+                <DsfrInput
                     id="password"
                     :name="field.name"
-                    class="fr-input"
-                    :class="{ 'fr-input--error': errors.length }"
                     :type="hidden ? 'password' : 'text'"
                     autocomplete="current-password"
                     required
+                    :is-invalid="!!errors.length"
                     :disabled="disabled"
-                    :value="field.value"
+                    :model-value="field.value"
                     @blur="field.onBlur"
                     @change="field.onChange"
                     @input="field.onChange"
                 />
-                <button
+                <DsfrButton
                     type="button"
+                    tertiary
+                    no-outline
                     class="password-toggle"
+                    :icon="hidden ? 'ri-eye-line' : 'ri-eye-off-line'"
                     :aria-label="
                         hidden
                             ? 'Afficher le mot de passe'
                             : 'Masquer le mot de passe'
                     "
                     @click="hidden = !hidden"
-                >
-                    <VIcon :name="hidden ? 'ri:eye-line' : 'ri:eye-off-line'" />
-                </button>
+                />
             </div>
         </DsfrInputGroup>
     </Field>
@@ -55,33 +55,14 @@ const { password: label } = labels;
     position: relative;
 }
 
-.password-input-wrapper input {
+.password-input-wrapper :deep(input) {
     padding-right: 3.5rem;
 }
 
 .password-toggle {
     position: absolute;
-    right: 0;
+    right: 0.25rem;
     top: 50%;
     transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.75rem;
-    min-width: 48px;
-    min-height: 48px;
-    color: var(--text-action-high-grey);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.password-toggle:hover {
-    color: var(--text-action-high-blue-france);
-}
-
-.password-toggle:focus-visible {
-    outline: 2px solid var(--border-action-high-blue-france);
-    outline-offset: 2px;
 }
 </style>
