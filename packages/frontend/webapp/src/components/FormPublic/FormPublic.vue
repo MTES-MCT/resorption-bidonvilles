@@ -79,7 +79,7 @@ import { defineProps, defineExpose, toRefs, ref } from "vue";
 import { Form } from "vee-validate";
 
 import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
-import focusFieldById from "@resorptionbidonvilles/common/utils/focusFieldById";
+import focusFieldById from "@common/utils/focusFieldById";
 
 const props = defineProps({
     schema: Object,

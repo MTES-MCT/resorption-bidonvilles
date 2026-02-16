@@ -21,7 +21,7 @@
 
 <script setup>
 import { toRefs, computed } from "vue";
-import focusFieldById from "@resorptionbidonvilles/common/utils/focusFieldById";
+import focusFieldById from "@common/utils/focusFieldById";
 
 const props = defineProps({
     message: {
