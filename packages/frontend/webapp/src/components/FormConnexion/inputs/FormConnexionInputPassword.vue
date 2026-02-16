@@ -1,10 +1,12 @@
 <template>
     <Field name="password" v-slot="{ field, errors }">
-        <DsfrInputGroup :error-message="errors[0]" :label="label" label-visible>
+        <DsfrInputGroup :error-message="errors[0]">
             <div class="password-input-wrapper">
                 <DsfrInput
                     id="password"
                     :name="field.name"
+                    :label="label"
+                    label-visible
                     :type="hidden ? 'password' : 'text'"
                     autocomplete="current-password"
                     required
@@ -59,10 +61,19 @@ const { password: label } = labels;
     padding-right: 3.5rem;
 }
 
+.password-input-wrapper :deep(.fr-input-wrap) {
+    position: relative;
+}
+
 .password-toggle {
     position: absolute;
     right: 0.25rem;
-    top: 50%;
+    top: 70%;
     transform: translateY(-50%);
+}
+
+.password-toggle :deep(svg) {
+    width: 1.5rem;
+    height: 1.5rem;
 }
 </style>
