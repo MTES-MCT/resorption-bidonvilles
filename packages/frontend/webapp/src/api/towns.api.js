@@ -9,8 +9,8 @@ export function addComment(id, data, attachments) {
     formData.append("content", JSON.stringify(data));
 
     if (attachments?.length) {
-        for (let i = 0; i < attachments.length; i += 1) {
-            formData.append("attachments", attachments[i]);
+        for (const attachment of attachments) {
+            formData.append("attachments", attachment);
         }
     }
 
@@ -50,13 +50,13 @@ export function edit(id, data) {
     const formData = new FormData();
     let attachmentsTable = [];
     if (data.newAttachments?.length) {
-        for (let i = 0; i < data.newAttachments.length; i += 1) {
-            formData.append("attachments", data.newAttachments[i].file);
+        for (const newAttachment of data.newAttachments) {
+            formData.append("attachments", newAttachment.file);
             attachmentsTable.push({
-                file: data.newAttachments[i].file.name,
-                size: data.newAttachments[i].file.size,
-                lastModified: data.newAttachments[i].file.lastModified,
-                decreeType: data.newAttachments[i].type,
+                file: newAttachment.file.name,
+                size: newAttachment.file.size,
+                lastModified: newAttachment.file.lastModified,
+                decreeType: newAttachment.type,
             });
         }
     }
@@ -78,7 +78,8 @@ export function exportList(
     exportedSitesStatus,
     options = [],
     date = new Date(),
-    filters = {}
+    filters = {},
+    sort = null
 ) {
     const query = {
         locationType: location.type,
@@ -89,6 +90,11 @@ export function exportList(
 
     if (options?.length > 0) {
         query.options = options.join(",");
+    }
+
+    if (sort?.sortBy) {
+        query.sortBy = sort.sortBy;
+        query.sortOrder = sort.sortOrder || "DESC";
     }
 
     Object.keys(filters).forEach((filterKey) => {
