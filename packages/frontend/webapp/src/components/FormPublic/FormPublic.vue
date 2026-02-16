@@ -49,7 +49,7 @@
                         <button
                             type="button"
                             class="fr-link fr-link--sm"
-                            @click="focusField(key)"
+                            @click="focusFieldById(key)"
                         >
                             {{ msg }}
                         </button>
@@ -79,6 +79,7 @@ import { defineProps, defineExpose, toRefs, ref } from "vue";
 import { Form } from "vee-validate";
 
 import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
+import focusFieldById from "@resorptionbidonvilles/common/utils/focusFieldById";
 
 const props = defineProps({
     schema: Object,
@@ -98,26 +99,8 @@ const props = defineProps({
 });
 
 const form = ref(null);
-
-const focusField = (fieldKey) => {
-    let field = document.getElementById(fieldKey);
-    if (!field) {
-        field = document.getElementById(`dp-input-${fieldKey}`);
-    }
-    if (field) {
-        field.scrollIntoView({ behavior: "smooth", block: "center" });
-        setTimeout(() => {
-            const focusable =
-                field instanceof HTMLInputElement ||
-                field instanceof HTMLTextAreaElement ||
-                field instanceof HTMLSelectElement
-                    ? field
-                    : field.querySelector("input, textarea, select");
-            focusable?.focus({ preventScroll: true });
-        }, 500);
-    }
-};
 const error = ref(null);
+
 const { schema, submit, size, showErrorSummary, language } = toRefs(props);
 
 async function formSubmit(...args) {

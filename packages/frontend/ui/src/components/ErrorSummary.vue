@@ -9,7 +9,7 @@
             <li v-for="error in summaryErrors" :key="error.key" class="list-none flex flex-row gap-1">
                 <span class="fr-icon-error-fill fr-icon--xs" aria-hidden="true"></span>
                 <span 
-                    @click="focusField(error.key)"
+                    @click="focusFieldById(error.key)"
                     class="text-error hover:underline cursor-pointer"
                 >
                     {{ error.message }}
@@ -21,6 +21,7 @@
 
 <script setup>
 import { toRefs, computed } from "vue";
+import focusFieldById from "@resorptionbidonvilles/common/utils/focusFieldById";
 
 const props = defineProps({
     message: {
@@ -44,31 +45,4 @@ const summaryErrors = computed(() => {
         message: summary.value[key]
     }));
 });
-
-const focusField = (fieldKey) => {
-    // Essayer de trouver l'élément par son ID
-    let field = document.getElementById(fieldKey);
-    
-    // Si non trouvé, essayer avec le préfixe du DatePicker
-    if (!field) {
-        field = document.getElementById(`dp-input-${fieldKey}`);
-    }
-    
-    if (field) {
-        // Scroller vers le champ
-        field.scrollIntoView({ behavior: "smooth", block: "center" });
-        
-        // Focus après le scroll
-        setTimeout(() => {
-            const focusable =
-                field instanceof HTMLInputElement ||
-                field instanceof HTMLTextAreaElement ||
-                field instanceof HTMLSelectElement
-                ? field
-                : field.querySelector("input, textarea, select");
-
-            focusable?.focus({ preventScroll: true });
-        }, 500);
-    }
-};
 </script>
