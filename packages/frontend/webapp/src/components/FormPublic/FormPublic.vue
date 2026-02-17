@@ -39,8 +39,8 @@
             <DsfrAlert
                 v-if="error || Object.keys(errors).length > 0"
                 type="error"
-                :description="error || 'Certaines données sont incorrectes'"
             >
+                <p v-html="error || 'Certaines données sont incorrectes'"></p>
                 <ul
                     v-if="showErrorSummary && Object.keys(errors).length > 0"
                     class="mt-2"
