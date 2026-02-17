@@ -21,7 +21,10 @@
                     type="button"
                     tertiary
                     no-outline
-                    class="password-toggle"
+                    :class="[
+                        'password-toggle',
+                        { 'password-error-icon': !!errors.length },
+                    ]"
                     :icon="hidden ? 'ri-eye-line' : 'ri-eye-off-line'"
                     :aria-label="
                         hidden
@@ -79,5 +82,9 @@ const { password: label } = labels;
 .password-toggle :deep(svg) {
     width: 1.5rem;
     height: 1.5rem;
+}
+
+.password-error-icon :deep(svg) {
+    color: #ce0500 !important;
 }
 </style>
