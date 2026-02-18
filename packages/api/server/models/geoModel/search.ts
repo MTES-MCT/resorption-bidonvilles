@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-function generateSearch(table) {
+function generateSearch(table: string) {
     const map = {
         cities: {
             label: 'Commune',

@@ -59,7 +59,7 @@ function openModalExport() {
 const exportList = computed(() => {
     const list = [];
 
-    if (userStore.hasPermission("action.export")) {
+    if (userStore.hasPermission("action.export") || userStore.user.is_admin) {
         list.push({
             shape: "button",
             displayedOn: "footer",
@@ -71,7 +71,10 @@ const exportList = computed(() => {
         });
     }
 
-    if (userStore.hasPermission("action_comment.export")) {
+    if (
+        userStore.hasPermission("action_comment.export") ||
+        userStore.user.is_admin
+    ) {
         list.push({
             displayedOn: "body",
             label: "Export des commentaires",

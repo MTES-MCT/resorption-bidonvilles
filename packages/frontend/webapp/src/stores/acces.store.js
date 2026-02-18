@@ -94,10 +94,10 @@ export const useAccesStore = defineStore("acces", () => {
     }
 
     function resetFilters() {
-        const defaultFilters = ["refused"];
+        const defaultFilters = new Set(["refused"]);
         filters.search.value = "";
         filters.status.value = Object.keys(accessStatuses).filter(
-            (status) => !defaultFilters.includes(status)
+            (status) => !defaultFilters.has(status)
         );
     }
 
@@ -125,13 +125,19 @@ export const useAccesStore = defineStore("acces", () => {
         }),
         total: computed(() => filteredAcces.value.length),
 
-        async updateUserRole(userId, newRole, roles) {
+        async updateUserRole(userId, newRole) {
             const updatedUser = await setRoleRegular(userId, newRole);
             if (updatedUser && hash.value[userId]) {
-                hash.value[userId].role = roles.find(
-                    (role) => role.id === newRole
-                ).name;
-                hash.value[userId].role_id = newRole;
+                enrichUserWithAccessStatus(updatedUser);
+                enrichUserWithLocationName(updatedUser);
+                hash.value[userId] = updatedUser;
+
+                const index = sortedAcces.value.findIndex(
+                    ({ id }) => id === userId
+                );
+                if (index !== -1) {
+                    sortedAcces.value.splice(index, 1, updatedUser);
+                }
             }
         },
 
@@ -151,7 +157,6 @@ export const useAccesStore = defineStore("acces", () => {
                 // si l'utilisateur n'est pas dans le hash, on ignore car on ne peut pas facilement
                 // intégrer ce nouvel utilisateur à la liste sortedAccess, car le tri n'est pas géré
                 // côté front pour l'instant
-                // @todo
             }
         },
 
@@ -188,11 +193,11 @@ export const useAccesStore = defineStore("acces", () => {
 
             const user = await get(userId);
             if (!user) {
-                throw {
-                    code: "Utilisateur introuvable",
-                    user_message:
-                        "L'utilisateur demandé n'existe pas en base de données",
-                };
+                const error = new Error("Utilisateur introuvable");
+                error.code = "Utilisateur introuvable";
+                error.user_message =
+                    "L'utilisateur demandé n'existe pas en base de données";
+                throw error;
             }
 
             hash.value[user.id] = user;

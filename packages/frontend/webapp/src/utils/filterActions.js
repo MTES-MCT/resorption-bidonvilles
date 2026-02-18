@@ -1,17 +1,32 @@
-export default function (actions, filters) {
+export default function filterActions(actions, filters) {
+    const now = new Date();
+    const searchRegex = filters.search
+        ? new RegExp(filters.search, "ig")
+        : null;
+
     return actions.filter((action) => {
-        if (filters.location && !checkLocation(action, filters)) {
+        if (
+            filters.location?.type === "organization" &&
+            !checkOrganization(action, filters.location.organizationId)
+        ) {
             return false;
         }
 
-        if (filters.status && !checkStatus(action, filters.status)) {
+        if (
+            filters.location?.type !== "organization" &&
+            !checkLocation(action, filters)
+        ) {
+            return false;
+        }
+
+        if (filters.status && !checkStatus(action, filters.status, now)) {
             return false;
         }
 
         if (
             !filters.location &&
             filters.search &&
-            !checkSearch(action, filters.search)
+            !checkSearch(action, searchRegex)
         ) {
             return false;
         }
@@ -31,42 +46,42 @@ export default function (actions, filters) {
     });
 }
 
-function checkStatus(action, status) {
+function checkStatus(action, status, now) {
     if (status === "open") {
-        return action.ended_at === null || new Date() < action.ended_at;
+        return action.ended_at === null || now < action.ended_at;
     }
 
-    return action.ended_at !== null && new Date() > action.ended_at;
+    return action.ended_at !== null && now > action.ended_at;
 }
 
-function checkSearch(action, search) {
+function checkSearch(action, searchRegex) {
     return (
-        !!action.name?.match(new RegExp(search, "ig")) ||
+        !!action.name?.match(searchRegex) ||
         !!action.operators?.find(
             ({ name, abbreviation }) =>
-                name.match(new RegExp(search, "ig")) ||
-                (abbreviation && abbreviation.match(new RegExp(search, "ig")))
+                name.match(searchRegex) ||
+                (abbreviation && abbreviation.match(searchRegex))
         ) ||
         !!action.managers?.find(
             ({ name, abbreviation }) =>
-                name.match(new RegExp(search, "ig")) ||
-                (abbreviation && abbreviation.match(new RegExp(search, "ig")))
+                name.match(searchRegex) ||
+                (abbreviation && abbreviation.match(searchRegex))
         )
     );
 }
 
+const overseasRegions = new Set(["01", "02", "03", "04", "06"]);
 function checkLocation(action, filters) {
     if (!filters.location) {
         return true;
     }
 
-    const overseasRegions = ["01", "02", "03", "04", "06"];
     if (filters.location.typeUid === "metropole") {
-        return !overseasRegions.includes(action.location.region.code);
+        return !overseasRegions.has(action.location.region.code);
     }
 
     if (filters.location.typeUid === "outremer") {
-        return overseasRegions.includes(action.location.region.code);
+        return overseasRegions.has(action.location.region.code);
     }
 
     const l = action.location[filters.location.typeUid];
@@ -88,4 +103,8 @@ function checkTopic(action, filters) {
 
 function checkInterventionLocation(action, filters) {
     return filters.includes(action.location_type);
+}
+
+function checkOrganization(action, organizationId) {
+    return action.operators?.some((op) => op.id === organizationId);
 }

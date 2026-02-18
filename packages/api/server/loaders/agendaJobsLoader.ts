@@ -9,6 +9,7 @@ import cleanAttachmentArchives from '#server/services/attachment/cleanArchives';
 import anonymizeUser from '#server/services/user/anonymizeUser';
 import anonymizeOwners from '#server/services/shantytown/anonymizeOwners';
 import deactivateExpiredUsers from '#server/services/user/deactivateExpiredUsers';
+import signinLogService from '#server/services/signinLog';
 
 const {
     sendUserDemoInvitation,
@@ -18,7 +19,7 @@ const {
     sendUserReview,
 } = mailUtils;
 const {
-    deactivateExpiredUsersInDB, sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners: shouldAnonymizeOwners, anonymizeInactiveUsers,
+    deactivateExpiredUsersInDB, sendActivitySummary, sendActionAlerts, checkInactiveUsers, cleanAttachmentsArchives, anonymizeOwners: shouldAnonymizeOwners, anonymizeInactiveUsers, purgeOldSigninLogs,
 } = config;
 
 export default (agenda) => {
@@ -94,6 +95,15 @@ export default (agenda) => {
         async () => {
             if (deactivateExpiredUsersInDB) {
                 await deactivateExpiredUsers();
+            }
+        },
+    );
+
+    agenda.define(
+        'purge_old_signin_logs',
+        async () => {
+            if (purgeOldSigninLogs) {
+                await signinLogService.purgeOldLogs();
             }
         },
     );
