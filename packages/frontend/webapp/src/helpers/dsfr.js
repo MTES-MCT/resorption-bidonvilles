@@ -12,12 +12,15 @@ import {
     DsfrInputGroup,
     DsfrNotice,
     DsfrPagination,
+    DsfrRadioButton,
     DsfrRadioButtonSet,
     DsfrSearchBar,
     DsfrSegmented,
     DsfrSegmentedSet,
+    DsfrSelect,
     DsfrTable,
     DsfrTag,
+    DsfrTags,
     DsfrTile,
     DsfrTiles,
     DsfrTooltip,
@@ -50,12 +53,15 @@ export function useDsfr(app) {
     app.component("DsfrInputGroup", DsfrInputGroup);
     app.component("DsfrNotice", DsfrNotice);
     app.component("DsfrPagination", DsfrPagination);
+    app.component("DsfrRadioButton", DsfrRadioButton);
     app.component("DsfrRadioButtonSet", DsfrRadioButtonSet);
     app.component("DsfrSearchBar", DsfrSearchBar);
     app.component("DsfrSegmented", DsfrSegmented);
     app.component("DsfrSegmentedSet", DsfrSegmentedSet);
+    app.component("DsfrSelect", DsfrSelect);
     app.component("DsfrTable", DsfrTable);
     app.component("DsfrTag", DsfrTag);
+    app.component("DsfrTags", DsfrTags);
     app.component("DsfrTile", DsfrTile);
     app.component("DsfrTiles", DsfrTiles);
     app.component("DsfrTooltip", DsfrTooltip);

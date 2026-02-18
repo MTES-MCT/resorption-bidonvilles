@@ -1,37 +1,44 @@
 export default (variant) => ({
     fr: {
-        email: variant === "demande-acces" ? "Votre courriel" : "Courriel",
+        email: "Adresse électronique",
         aria_email:
             "Veuillez saisir l'adresse de messagerie à laquelle vous recontacter et qui vous servira d'identifiant",
-        verif_email: "Confirmation de votre courriel",
+        verif_email: "Confirmation de votre adresse électronique",
         first_name: "Prénom",
         last_name: "Nom de famille",
-        phone: "Téléphone",
+        phone: "Numéro de téléphone",
         request_type: "Vous souhaitez...",
-        is_actor:
-            "Faites-vous partie d'une association, d'une collectivité ou d'un service de l'État ?",
         organization_category:
             variant === "demande-acces"
-                ? "Quelle structure ?"
-                : "Quelle est la structure de l'utilisateur ?",
+                ? "Dénomination de la structure"
+                : "Dénomination de la structure de l'utilisateur",
         organization_type: "Précisez la structure",
         organization_public: "Territoire de rattachement",
         territorial_collectivity: "Territoire de la collectivité",
-        association: "Nom de l'association",
-        organization_administration: "Nom de la structure",
-        private_organization: "Nom de l'organisme privé",
-        organization_other:
-            "Précisez le nom et le territoire de votre structure",
+        association: "Dénomination de l'association",
+        organization_administration: "Dénomination de la structure",
+        private_organization: "Dénomination de l'organisme privé",
+        organization: "Dénomination de la structure",
+        organization_other: "Précisez le nom de votre structure",
+        organization_other_acronyme: "Précisez l'acronyme de votre structure",
+        organization_other_territory_type:
+            "Précisez le territoire de votre structure",
+        organization_other_territory: {
+            Régional: "Précisez la région de la structure",
+            Départemental: "Précisez le département de la structure",
+        },
         position:
             variant === "demande-acces"
                 ? "Votre fonction"
                 : "Fonction de l'utilisateur",
-        access_request_message: "Votre message",
+        access_request_message:
+            "Expliquez nous pourquoi vous voulez accéder à notre plate-forme",
         referral:
             "Comment avez-vous connu la plateforme Résorption-bidonvilles ?",
         referral_other:
             "Pouvez-vous préciser comment vous avez connu la plateforme ?",
-        referral_word_of_mouth: "Qui vous a recommandé la plateforme ?",
+        referral_word_of_mouth:
+            "À quelle structure appartient l'utilisateur qui vous a recommandé la plateforme ?",
         legal:
             variant === "demande-acces"
                 ? "Je certifie que ces données personnelles ont été saisies avec mon accord"
@@ -47,10 +54,10 @@ export default (variant) => ({
         phone: "Phone number",
         request_type: "You want to...",
         access_request_message: "Your message",
-        referral:
-            "How did you hear about the Résorption-bidonvilles platform ?",
+        referral: "How did you hear about the Résorption-bidonvilles platform?",
         referral_other: "Can you specify how you found out about the platform?",
-        referral_word_of_mouth: "Who recommended the platform to you ?",
+        referral_word_of_mouth:
+            "To which organization does the user who recommended the platform belong?",
         legal: "I certify that this personal data has been entered with my consent",
     },
     ro: {
@@ -63,9 +70,10 @@ export default (variant) => ({
         phone: "Număr de telefon",
         request_type: "Doriţi",
         access_request_message: "Mesajul dumneavoastră",
-        referral: "Cum ai auzit de platforma Résorbtion-bidonvilles ?",
-        referral_other: "Puteți specifica cum ați aflat despre platformă ?",
-        referral_word_of_mouth: "Cine ți-a recomandat platforma ?",
+        referral: "Cum ați aflat despre platforma Résorption-Bidonvilles?",
+        referral_other: "Puteți specifica cum ați aflat despre platformă?",
+        referral_word_of_mouth:
+            "Cărei organizații îi aparține utilizatorul care ți-a recomandat platforma?",
         legal: "Certific faptul că aceste date cu caracter personal au fost introduse cu consimțământul meu.",
     },
     bg: {
@@ -78,9 +86,10 @@ export default (variant) => ({
         phone: "Телефонен номер",
         request_type: "Желаете да...",
         access_request_message: "Вашето съобщение",
-        referral: "Как научихте за платформата Résorption-bidonvilles ?",
+        referral: "Как научихте за платформата Résorption-bidonvilles?",
         referral_other: "Можете ли да посочите как разбрахте за платформата?",
-        referral_word_of_mouth: "Кой ви препоръча платформата ?",
+        referral_word_of_mouth:
+            "Към коя организация принадлежи потребителят, който ви препоръча платформата?",
         legal: "Декларирам, че личните ми данни са въведени с мое съгласие.",
     },
 });

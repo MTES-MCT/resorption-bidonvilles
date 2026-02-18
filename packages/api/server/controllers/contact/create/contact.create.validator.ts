@@ -15,17 +15,11 @@ export default newUser(
                 return true;
             }),
         body('request_type')
-            .isArray({ min: 1 }).withMessage('Vous devez préciser la ou les raisons de votre prise de contact')
-            .custom((requestTypes) => {
-                if (!Array.isArray(requestTypes)) {
-                    return true;
+            .isString().withMessage('Vous devez préciser la raison de votre prise de contact')
+            .custom((requestType) => {
+                if (!ALLOWED_TYPES.includes(requestType)) {
+                    throw new Error('La raison sélectionnée n’est pas reconnue');
                 }
-
-                const improperValues = requestTypes.filter(type => !ALLOWED_TYPES.includes(type));
-                if (improperValues.length > 0) {
-                    throw new Error('Certaines raisons sélectionnées ne sont pas reconnues');
-                }
-
                 return true;
             }),
 
@@ -70,7 +64,7 @@ export default newUser(
                 return value;
             })
             .optional({ nullable: true })
-            .isString().bail().withMessage('Le champ "Qui vous a recommandé la plateforme ?" est invalide')
+            .isString().bail().withMessage('Le champ "À quelle structure appartient l\'utilisateur qui vous a recommandé la plateforme ?" est invalide')
             .trim(),
 
         body('phone')
