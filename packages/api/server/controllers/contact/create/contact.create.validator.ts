@@ -64,7 +64,7 @@ export default newUser(
                 return value;
             })
             .optional({ nullable: true })
-            .isString().bail().withMessage('Le champ "Qui vous a recommandé la plateforme ?" est invalide')
+            .isString().bail().withMessage('Le champ "À quelle structure appartient l\'utilisateur qui vous a recommandé la plateforme ?" est invalide')
             .trim(),
 
         body('phone')

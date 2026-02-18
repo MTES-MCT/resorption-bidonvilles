@@ -37,7 +37,8 @@ export default (variant) => ({
             "Comment avez-vous connu la plateforme Résorption-bidonvilles ?",
         referral_other:
             "Pouvez-vous préciser comment vous avez connu la plateforme ?",
-        referral_word_of_mouth: "Qui vous a recommandé la plateforme ?",
+        referral_word_of_mouth:
+            "À quelle structure appartient l'utilisateur qui vous a recommandé la plateforme ?",
         legal:
             variant === "demande-acces"
                 ? "Je certifie que ces données personnelles ont été saisies avec mon accord"
@@ -53,10 +54,10 @@ export default (variant) => ({
         phone: "Phone number",
         request_type: "You want to...",
         access_request_message: "Your message",
-        referral:
-            "How did you hear about the Résorption-bidonvilles platform ?",
+        referral: "How did you hear about the Résorption-bidonvilles platform?",
         referral_other: "Can you specify how you found out about the platform?",
-        referral_word_of_mouth: "Who recommended the platform to you ?",
+        referral_word_of_mouth:
+            "To which organization does the user who recommended the platform belong?",
         legal: "I certify that this personal data has been entered with my consent",
     },
     ro: {
@@ -69,9 +70,10 @@ export default (variant) => ({
         phone: "Număr de telefon",
         request_type: "Doriţi",
         access_request_message: "Mesajul dumneavoastră",
-        referral: "Cum ai auzit de platforma Résorbtion-bidonvilles ?",
-        referral_other: "Puteți specifica cum ați aflat despre platformă ?",
-        referral_word_of_mouth: "Cine ți-a recomandat platforma ?",
+        referral: "Cum ați aflat despre platforma Résorption-Bidonvilles?",
+        referral_other: "Puteți specifica cum ați aflat despre platformă?",
+        referral_word_of_mouth:
+            "Cărei organizații îi aparține utilizatorul care ți-a recomandat platforma?",
         legal: "Certific faptul că aceste date cu caracter personal au fost introduse cu consimțământul meu.",
     },
     bg: {
@@ -84,9 +86,10 @@ export default (variant) => ({
         phone: "Телефонен номер",
         request_type: "Желаете да...",
         access_request_message: "Вашето съобщение",
-        referral: "Как научихте за платформата Résorption-bidonvilles ?",
+        referral: "Как научихте за платформата Résorption-bidonvilles?",
         referral_other: "Можете ли да посочите как разбрахте за платформата?",
-        referral_word_of_mouth: "Кой ви препоръча платформата ?",
+        referral_word_of_mouth:
+            "Към коя организация принадлежи потребителят, който ви препоръча платформата?",
         legal: "Декларирам, че личните ми данни са въведени с мое съгласие.",
     },
 });
