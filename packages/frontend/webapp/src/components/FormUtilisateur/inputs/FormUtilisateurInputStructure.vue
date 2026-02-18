@@ -22,6 +22,9 @@ import { toRefs } from "vue";
 import { DsfrComplexAutocomplete } from "@resorptionbidonvilles/ui";
 import { autocompleOrganization } from "@/api/organizations.api.js";
 import { useField, useIsSubmitting } from "vee-validate";
+import { useUserStore } from "@/stores/user.store";
+
+const userStore = useUserStore();
 
 const props = defineProps({
     label: {
@@ -47,32 +50,41 @@ const updateOrganization = (value) => {
 const autocompleteFn = async (value) => {
     const results = await autocompleOrganization(value);
     const allowedTypeIds = new Set([8, 9, 10, 11, 19, 29, 35, 44, 45]);
+    const adminOnlyTypes = new Set([17, 45, 51]);
 
-    const mappedResults = results.map((org) => {
-        const prefix =
-            org.name.length < 35 || !org.abbreviation
-                ? `${org.name}`
-                : `${org.abbreviation}`;
-        const showLabel = allowedTypeIds.has(org.organization_type_id);
-        const label = showLabel ? `${prefix} - ${org.label}` : prefix;
+    const mappedResults = results
+        .map((org) => {
+            const prefix =
+                org.name.length < 35 || !org.abbreviation
+                    ? `${org.name}`
+                    : `${org.abbreviation}`;
 
-        return {
-            id: org.id,
-            label: label,
-            name: org.name,
-            selectedLabel: label,
-            category: org.category,
-            category_label: org.type_abbreviation || org.type,
-            departement_code: org.departement_code || null,
-            type: org.organization_type_id || null,
-            data: {
-                id: org.id,
-                category: org.category,
-                type: org.organization_type_id || null,
-                type_label: org.type_abbreviation || org.type,
-            },
-        };
-    });
+            const showLabel = allowedTypeIds.has(org.organization_type_id);
+            const label = showLabel ? `${prefix} - ${org.label}` : prefix;
+
+            if (
+                userStore?.user?.is_admin ||
+                !adminOnlyTypes.has(org.organization_type_id)
+            ) {
+                return {
+                    id: org.id,
+                    label: label,
+                    name: org.name,
+                    selectedLabel: label,
+                    category: org.category,
+                    category_label: org.type_abbreviation || org.type,
+                    departement_code: org.departement_code || null,
+                    type: org.organization_type_id || null,
+                    data: {
+                        id: org.id,
+                        category: org.category,
+                        type: org.organization_type_id || null,
+                        type_label: org.type_abbreviation || org.type,
+                    },
+                };
+            }
+        })
+        .filter(Boolean);
 
     return mappedResults;
 };
