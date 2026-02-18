@@ -278,7 +278,7 @@ export default (
     body('legal')
         .custom((value) => {
             if (value !== true) {
-                throw new Error('Vous devez certifier que ces données personnelles ont été saisies avec l\'accord de leur propriétaire');
+                throw new Error('Vous devez certifier de la validité des données personnelles que vous avez saisies');
             }
 
             return true;
