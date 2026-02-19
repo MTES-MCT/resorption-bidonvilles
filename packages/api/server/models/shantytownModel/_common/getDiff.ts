@@ -16,7 +16,7 @@ export type Diff = {
     oldValue: string,
     newValue: string
 };
-export default (oldVersion, newVersion): Diff[] => {
+export default function getDiff(oldVersion, newVersion): Diff[] {
     const baseProcessors = {
         default(value) {
             if (value === null || value === '' || value === undefined) {
@@ -255,8 +255,8 @@ export default (oldVersion, newVersion): Diff[] => {
                 }
 
                 return [
-                    originLabels.slice(0, originLabels.length - 1).join(', '),
-                    originLabels.slice(originLabels.length - 1),
+                    originLabels.slice(0, -1).join(', '),
+                    originLabels.slice(-1),
                 ].join(', et ');
             },
         },
@@ -484,8 +484,8 @@ export default (oldVersion, newVersion): Diff[] => {
                         }
 
                         return [
-                            labels.slice(0, labels.length - 1).join(', '),
-                            labels.slice(labels.length - 1),
+                            labels.slice(0, -1).join(', '),
+                            labels.slice(-1),
                         ].join(', et ');
                     },
                 },
@@ -560,8 +560,8 @@ export default (oldVersion, newVersion): Diff[] => {
                         }
 
                         return [
-                            labels.slice(0, labels.length - 1).join(', '),
-                            labels.slice(labels.length - 1),
+                            labels.slice(0, -1).join(', '),
+                            labels.slice(-1),
                         ].join(', et ');
                     },
                 },
@@ -731,6 +731,27 @@ export default (oldVersion, newVersion): Diff[] => {
         };
     }
 
+    // Champs de population à dupliquer lors d'une mise à jour sans modification
+    const populationFields = new Set([
+        'populationTotal',
+        'populationTotalFemales',
+        'populationCouples',
+        'populationMinors',
+        'populationMinorsGirls',
+        'populationMinors0To3',
+        'populationMinors3To6',
+        'populationMinors6To12',
+        'populationMinors12To16',
+        'populationMinors16To18',
+        'minorsInSchool',
+        'caravans',
+        'huts',
+        'tents',
+        'cars',
+        'mattresses',
+    ]);
+    const isUpdateWithoutChange = newVersion.updatedWithoutAnyChange === true;
+
     const result = [
         ...finalDiff,
         ...Object.keys(toDiff).reduce((diff, serializedKey) => {
@@ -760,6 +781,20 @@ export default (oldVersion, newVersion): Diff[] => {
 
             // Sinon, utiliser la comparaison par défaut
             if (oldProcessed === newProcessed) {
+                // Lors d'une mise à jour sans modification, forcer les diffs
+                // sur les champs de population pour dupliquer les données du
+                // dernier recensement dans l'historique
+                if (isUpdateWithoutChange && populationFields.has(serializedKey)) {
+                    return [
+                        ...diff,
+                        {
+                            fieldKey: serializedKey,
+                            field: config.label,
+                            oldValue: oldProcessed,
+                            newValue: newProcessed,
+                        },
+                    ];
+                }
                 return diff;
             }
 
@@ -776,4 +811,4 @@ export default (oldVersion, newVersion): Diff[] => {
     ];
 
     return result;
-};
+}
