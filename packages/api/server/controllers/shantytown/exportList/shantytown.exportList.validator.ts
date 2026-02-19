@@ -97,6 +97,26 @@ export default [
     query('options')
         .customSanitizer(value => (Array.isArray(value) ? value : [])),
 
+    query('sortBy')
+        .optional()
+        .isIn(['cityName', 'builtAt', 'lastUpdatedAt', 'declaredAt', 'closedAt'])
+        .withMessage('Critère de tri invalide')
+        .bail()
+        .custom((value, { req }) => {
+            req.body.sortBy = value;
+            return true;
+        }),
+
+    query('sortOrder')
+        .optional()
+        .isIn(['ASC', 'DESC'])
+        .withMessage('Ordre de tri invalide')
+        .bail()
+        .custom((value, { req }) => {
+            req.body.sortOrder = value;
+            return true;
+        }),
+
     // Validation globale : rejeter tout paramètre de requête non reconnu
     query()
         .custom((_value, { req }) => {
@@ -109,6 +129,8 @@ export default [
                 'locationType',
                 'locationCode',
                 'options',
+                'sortBy',
+                'sortOrder',
             ]);
 
             const allowedFilters: Record<string, string> = shantytownFiltersAsQueryParamList[exportedSitesStatus] || {};

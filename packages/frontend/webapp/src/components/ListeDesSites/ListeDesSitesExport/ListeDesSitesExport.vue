@@ -130,7 +130,11 @@ async function download() {
             whichTownsAreExported.value.status,
             townsStore.exportOptions,
             values.date,
-            townsStore.filters.properties
+            townsStore.filters.properties,
+            {
+                sortBy: townsStore.sort,
+                sortOrder: townsStore.sort === "cityName" ? "ASC" : "DESC",
+            }
         );
         downloadBlob(
             new Blob([data]),
