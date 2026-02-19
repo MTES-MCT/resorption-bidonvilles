@@ -9,8 +9,9 @@ import { ShantytownWithFinancedAction, Shantytown } from '#root/types/resources/
 import { FinancedShantytownAction } from '#root/types/resources/Action.d';
 import { ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
 import { ShantytownExportListOption } from '#root/types/resources/ShantytownExportTypes.d';
+import { ShantytownExportSort } from '#root/types/resources/ShantytownExportSort.d';
 
-export default async function fetchPastData(user: AuthUser, options: ShantytownExportListOption[], locations: Location[], filters: ShantytownFilters, date: Date): Promise<Shantytown[]> {
+export default async function fetchPastData(user: AuthUser, options: ShantytownExportListOption[], locations: Location[], filters: ShantytownFilters, date: Date, sort?: ShantytownExportSort): Promise<Shantytown[]> {
     const lastDate = moment(date).add(1, 'day').format('YYYY-MM-DD HH:mm:ss ZZ');
 
     const towns = await shantytownModel.getHistoryAtGivenDate(
@@ -19,12 +20,13 @@ export default async function fetchPastData(user: AuthUser, options: ShantytownE
         locations,
         lastDate,
         filters,
+        sort,
     );
 
     // Récupérer les financements d'actions (comme avant)
     const clauseGroup = where().can(user).do('read', 'action');
     const passedYear = moment(date).format('YYYY');
-    const townsWithFinancedActions = await actionModel.fetchFinancedActionsByYear(null, parseInt(passedYear, 10), clauseGroup);
+    const townsWithFinancedActions = await actionModel.fetchFinancedActionsByYear(null, Number.parseInt(passedYear, 10), clauseGroup);
     const transformedShantytowns = enrichShantytown(townsWithFinancedActions);
 
     return towns.map((town: ShantytownWithFinancedAction) => {

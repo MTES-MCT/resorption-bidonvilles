@@ -19,13 +19,19 @@
             <div class="w-full sm:flex-1">
                 <DsfrSearchBar
                     v-model="logsStore.filters.search"
+                    label="Rechercher par email"
+                    label-visible
                     placeholder="Par mail"
+                    class="search-with-hidden-label"
                 />
             </div>
             <div class="w-full sm:flex-1">
                 <DsfrSearchBar
                     v-model="logsStore.filters.ipAddress"
+                    label="Rechercher par adresse IP"
+                    label-visible
                     placeholder="Par IP"
+                    class="search-with-hidden-label"
                 />
             </div>
         </article>
@@ -67,3 +73,18 @@ watch(ipFilter, () => {
     logsStore.filters.ipAddress = ipFilter.value;
 });
 </script>
+
+<style scoped>
+:deep(.search-with-hidden-label .fr-label) {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    visibility: visible !important;
+}
+</style>
