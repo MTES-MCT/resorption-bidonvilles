@@ -29,6 +29,7 @@ import denyAccess from "./actions/denyAccess.action";
 import refuseAccess from "./actions/refuseAccess.action";
 import anonymizationRequest from "./actions/anonymizationRequest.action";
 import grantAccess from "./actions/grantAccess.action";
+import activateOptionsModification from "./actions/activateOptionsModification";
 import ACTION_DESCRIPTIONS from "./FicheAccesActions.descriptions";
 
 // boutons d'action
@@ -42,6 +43,7 @@ import FicheAccesActionDenyAccess from "./FicheAccesActionDenyAccess.vue";
 import FicheAccesActionRefuseAccess from "./FicheAccesActionRefuseAccess.vue";
 import FicheAccesActionGrantAccess from "./FicheAccesActionGrantAccess.vue";
 import FicheAccesActionSetRole from "./FicheAccesActionSetRole.vue";
+import FicheAccesActionModifyOptions from "./FicheAccesActionModifyOptions.vue";
 
 const props = defineProps({
     user: {
@@ -56,6 +58,11 @@ const props = defineProps({
 const { user, options } = toRefs(props);
 
 const actions = [
+    {
+        id: "modify_options",
+        component: FicheAccesActionModifyOptions,
+        action: activateOptionsModification,
+    },
     {
         id: "set_intervenant",
         component: FicheAccesActionSetIntervenant,

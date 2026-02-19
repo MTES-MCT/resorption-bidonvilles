@@ -12,7 +12,11 @@ const ITEMS_PER_PAGE = 50;
 export const useAccesStore = defineStore("acces", () => {
     const sortedAcces = ref([]);
     const hash = ref({});
+    const activatedOptions = ref(false);
 
+    const toggleOptions = () => {
+        activatedOptions.value = !activatedOptions.value;
+    };
     // filtres
     const fuse = computed(() => {
         return new Fuse(sortedAcces.value, {
@@ -113,6 +117,8 @@ export const useAccesStore = defineStore("acces", () => {
     reset();
 
     return {
+        activatedOptions,
+        toggleOptions,
         loaded: computed(() => sortedAcces.value.length > 0),
         filters,
         currentPage,

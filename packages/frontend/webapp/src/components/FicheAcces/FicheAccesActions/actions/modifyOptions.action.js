@@ -1,10 +1,12 @@
 import { modifyOptions } from "@/api/users.api";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useInputsStore } from "@/stores/inputs.store";
+import { useAccesStore } from "@/stores/acces.store";
 
 export default async function (user, options) {
     const notificationStore = useNotificationStore();
     const inputStore = useInputsStore();
+    const accessStore = useAccesStore();
     if (options === undefined) {
         options = inputStore.options;
     }
@@ -14,6 +16,7 @@ export default async function (user, options) {
             "Succès",
             "Les options de l'utilisateur ont bien été modifiées"
         );
+        accessStore.activatedOptions = false;
         return true;
     } catch (error) {
         notificationStore.error(

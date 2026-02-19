@@ -10,14 +10,16 @@
         "
         :loading="isLoading"
         :disabled="disabled"
-        secondary
-        >Définir comme « Intervenant »
+        :secondary="!accesStore.activatedOptions"
+        :primary="accesStore.activatedOptions"
+        >Modifier les options
     </DsfrButton>
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { useUserStore } from "@/stores/user.store";
+import { useAccesStore } from "@/stores/acces.store";
 
 const props = defineProps({
     user: Object,
@@ -26,4 +28,5 @@ const props = defineProps({
 });
 const { user, isLoading, disabled } = toRefs(props);
 const userStore = useUserStore();
+const accesStore = useAccesStore();
 </script>
