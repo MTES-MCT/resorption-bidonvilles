@@ -14,6 +14,8 @@ const riIconNames = [
     "refresh-line",
     "sun-fill",
     "sun-line",
+    "eye-line",
+    "eye-off-line",
 ];
 
 const mdiIconNames = [
