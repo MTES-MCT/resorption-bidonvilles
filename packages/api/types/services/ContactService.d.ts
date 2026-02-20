@@ -9,6 +9,8 @@ export type ContactServiceNotifyData = {
     request_type: ContactRequestType,
     is_new_organization: boolean,
     organization_other: string,
+    organization_other_territory_type?: string,
+    organization_other_territory?: string,
 };
 
 export type ContactServiceReferralData = {
