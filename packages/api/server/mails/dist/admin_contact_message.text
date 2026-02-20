@@ -12,6 +12,8 @@ Message :
 {% if var:message.is_organization_other %}
 Nom de la structure à créer :
 {{var:message.organization_other}}
+Localisation de la structure :
+{{var:message.organization_other_localisation}}
 {% endif %}
 
 Cordialement,
