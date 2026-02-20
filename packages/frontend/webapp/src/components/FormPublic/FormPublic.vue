@@ -2,6 +2,7 @@
     <Form
         :validation-schema="schema"
         @submit="formSubmit"
+        @input="error = null"
         ref="form"
         v-slot="{ values, errors }"
         :lang="language"
