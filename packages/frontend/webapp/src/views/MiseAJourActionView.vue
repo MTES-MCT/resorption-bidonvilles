@@ -42,6 +42,32 @@
         <ContentWrapper size="large">
             <FormDeclarationAction ref="form" :action="action" />
         </ContentWrapper>
+
+        <Transition name="floating-update-bar-slide">
+            <div
+                v-if="!isLoading && hasFormChanged"
+                class="floating-update-bar bg-yellow-200"
+            >
+                <div
+                    class="floating-update-bar__inner p-4 flex flex-row justify-between"
+                >
+                    <p class="content-center">
+                        Des modifications ont été apportées à l'action, pensez à
+                        les enregistrer
+                    </p>
+                    <p class="flex flex-row gap-3">
+                        <DsfrButton secondary @click.prevent.stop="back"
+                            >Annuler</DsfrButton
+                        >
+                        <DsfrButton
+                            @click="submit"
+                            :loading="form?.isSubmitting"
+                            >Mettre à jour l'action</DsfrButton
+                        >
+                    </p>
+                </div>
+            </div>
+        </Transition>
     </LayoutForm>
 </template>
 
@@ -65,6 +91,7 @@ const isLoading = ref(null);
 const error = ref(null);
 const action = ref(null);
 const form = ref(null);
+const hasFormChanged = computed(() => form.value?.hasChanges ?? false);
 
 onMounted(load);
 
@@ -107,5 +134,41 @@ function back() {
 <style scoped>
 button {
     border: inherit;
+}
+
+.floating-update-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    pointer-events: none;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.floating-update-bar__inner {
+    pointer-events: auto;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.floating-update-bar-slide-enter-active,
+.floating-update-bar-slide-leave-active {
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.floating-update-bar-slide-enter-from,
+.floating-update-bar-slide-leave-to {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+.floating-update-bar-slide-enter-to,
+.floating-update-bar-slide-leave-from {
+    transform: translateY(0);
+    opacity: 1;
 }
 </style>

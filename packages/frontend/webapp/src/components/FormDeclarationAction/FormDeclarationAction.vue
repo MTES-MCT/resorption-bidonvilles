@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { toRefs, toRef, computed, ref, watch } from "vue";
+import { toRefs, toRef, computed, ref, watch, nextTick } from "vue";
 import { useForm, useFieldValue, useFormErrors } from "vee-validate";
 import { useActionsStore } from "@/stores/actions.store";
 import { useUserStore } from "@/stores/user.store";
@@ -70,16 +70,38 @@ const mode = computed(() => {
     return action.value === null ? "create" : "edit";
 });
 const validationSchema = schemaFn(mode.value);
-const { handleSubmit, values, errors, setErrors, isSubmitting } = useForm({
-    validationSchema,
-    initialValues: formatFormAction(
-        action.value || {
-            location_departement: userStore.departementsForActions[0]?.code,
-        }
-    ),
-});
+const { handleSubmit, values, errors, setErrors, isSubmitting, resetForm } =
+    useForm({
+        validationSchema,
+        initialValues: formatFormAction(
+            action.value || {
+                location_departement: userStore.departementsForActions[0]?.code,
+            }
+        ),
+    });
 
 const managerIds = ref([]);
+
+const INDICATEURS_YEAR_KEYS = [
+    "nombre_personnes",
+    "nombre_menages",
+    "nombre_femmes",
+    "nombre_mineurs",
+    "sante_nombre_personnes",
+    "travail_nombre_personnes",
+    "travail_nombre_femmes",
+    "hebergement_nombre_personnes",
+    "hebergement_nombre_menages",
+    "logement_nombre_personnes",
+    "logement_nombre_menages",
+    "scolaire_mineurs_scolarisables",
+    "scolaire_mineurs_en_mediation",
+    "scolaire_nombre_maternelle",
+    "scolaire_nombre_elementaire",
+    "scolaire_nombre_college",
+    "scolaire_nombre_lycee",
+    "scolaire_nombre_autre",
+];
 
 watch(
     toRef(values, "managers"),
@@ -89,7 +111,8 @@ watch(
     { deep: true }
 );
 
-const originalValues = formatValuesForApi(values);
+const originalValues = ref(null);
+
 const actionsStore = useActionsStore();
 const error = ref(null);
 const departement = useFieldValue("location_departement");
@@ -110,6 +133,33 @@ const canAccessFinances = computed(() => {
             },
         },
     });
+});
+
+async function initFromAction(initialFormValues) {
+    resetForm({ values: initialFormValues });
+    await nextTick();
+    originalValues.value = formatValuesForApi(values);
+}
+
+watch(
+    action,
+    (newAction) => {
+        const initialFormValues = formatFormAction(
+            newAction || {
+                location_departement: userStore.departementsForActions[0]?.code,
+            }
+        );
+        initFromAction(initialFormValues);
+    },
+    { immediate: true }
+);
+
+const hasChanges = computed(() => {
+    if (originalValues.value === null) {
+        return false;
+    }
+
+    return !isDeepEqual(originalValues.value, formatValuesForApi(values));
 });
 
 const tabs = computed(() => {
@@ -181,7 +231,7 @@ function formatValuesForApi(v) {
         ({ citycode, label } = v.location_eti.data);
     }
 
-    return {
+    const formatted = {
         ...Object.keys(validationSchema.fields).reduce((acc, key) => {
             acc[key] = v[key] ? JSON.parse(JSON.stringify(v[key])) : v[key];
             return acc;
@@ -198,6 +248,28 @@ function formatValuesForApi(v) {
                 : "",
         },
     };
+
+    // Analyse des indicateurs : on s'assure que les années attendues sont présentes, même si elles n'ont pas de données
+    if (formatted.indicateurs && typeof formatted.indicateurs === "object") {
+        formatted.indicateurs = Object.entries(formatted.indicateurs).reduce(
+            (acc, [year, yearValues]) => {
+                const source = yearValues || {};
+
+                acc[year] = {
+                    ...source,
+                    ...INDICATEURS_YEAR_KEYS.reduce((yearAcc, key) => {
+                        yearAcc[key] = source[key] ?? null;
+                        return yearAcc;
+                    }, {}),
+                };
+
+                return acc;
+            },
+            {}
+        );
+    }
+
+    return formatted;
 }
 
 watch(useFormErrors(), () => {
@@ -212,7 +284,7 @@ defineExpose({
 
         if (
             mode.value === "edit" &&
-            isDeepEqual(originalValues, formattedValues)
+            isDeepEqual(originalValues.value, formattedValues)
         ) {
             router.replace("#erreurs");
             error.value =
@@ -240,6 +312,7 @@ defineExpose({
             }
         }
     }),
+    hasChanges,
     isSubmitting,
 });
 </script>
