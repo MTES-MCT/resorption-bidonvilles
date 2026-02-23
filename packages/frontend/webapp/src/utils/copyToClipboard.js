@@ -5,4 +5,5 @@ export default function (value) {
     input.select();
     document.execCommand("copy");
     document.body.removeChild(input);
+    return true;
 }
