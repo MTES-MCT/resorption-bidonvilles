@@ -12,7 +12,7 @@ export default function hashActions(actions: ActionSelectRow[]): ActionHash {
         acc[row.action_id] = {
             type: 'action',
             id: row.action_id,
-            displayId,
+            displayId: row.action_ref || displayId,
             name: row.name,
             started_at: new Date(row.started_at).getTime(),
             ended_at: row.ended_at !== null ? new Date(row.ended_at).getTime() : null,
