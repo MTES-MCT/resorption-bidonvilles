@@ -25,7 +25,13 @@ export default function (data) {
             ? [data.eti.latitude, data.eti.longitude]
             : [],
         location_shantytowns: data.location_shantytowns
-            ? data.location_shantytowns.map(({ id }) => id)
+            ? data.location_shantytowns
+                  .map(({ id }) => id)
+                  .sort((a, b) =>
+                      `${a}`.localeCompare(`${b}`, "fr", {
+                          sensitivity: "base",
+                      })
+                  )
             : [],
         location_autre: data.location_other || "",
         managers: {
@@ -84,7 +90,7 @@ export default function (data) {
             "scolaire_nombre_college",
             "scolaire_nombre_lycee",
             "scolaire_nombre_autre",
-        ];
+        ].sort((a, b) => a.localeCompare(b, "fr", { sensitivity: "base" }));
 
         data.metrics.forEach((metrics) => {
             const d = new Date(metrics.date);

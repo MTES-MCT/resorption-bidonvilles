@@ -73,6 +73,7 @@ const validationSchema = schemaFn(mode.value);
 const { handleSubmit, values, errors, setErrors, isSubmitting, resetForm } =
     useForm({
         validationSchema,
+        keepValuesOnUnmount: true,
         initialValues: formatFormAction(
             action.value || {
                 location_departement: userStore.departementsForActions[0]?.code,
@@ -138,7 +139,7 @@ const canAccessFinances = computed(() => {
 async function initFromAction(initialFormValues) {
     resetForm({ values: initialFormValues });
     await nextTick();
-    originalValues.value = formatValuesForApi(values);
+    originalValues.value = formatValuesForApi(initialFormValues);
 }
 
 watch(
@@ -227,18 +228,38 @@ const config = {
 function formatValuesForApi(v) {
     let citycode = null;
     let label = null;
+    const endedAt = formatFormDate(v.ended_at);
+
     if (v.location_eti?.data) {
         ({ citycode, label } = v.location_eti.data);
     }
 
     const formatted = {
         ...Object.keys(validationSchema.fields).reduce((acc, key) => {
+            if (key === "ended_at") {
+                return acc;
+            }
             acc[key] = v[key] ? JSON.parse(JSON.stringify(v[key])) : v[key];
             return acc;
         }, {}),
         ...{
             started_at: formatFormDate(v.started_at),
-            ended_at: formatFormDate(v.ended_at),
+            ended_at: endedAt !== null ? endedAt : undefined,
+            topics: Array.isArray(v.topics)
+                ? [...v.topics].sort((a, b) =>
+                      a.localeCompare(b, "fr", { sensitivity: "base" })
+                  )
+                : v.topics,
+            location_shantytowns: Array.isArray(v.location_shantytowns)
+                ? [...v.location_shantytowns]
+                      .sort((a, b) =>
+                          `${a}`.localeCompare(`${b}`, "fr", {
+                              sensitivity: "base",
+                          })
+                      )
+                      .map((id) => Number.parseInt(id, 10))
+                      .filter((id) => !Number.isNaN(id))
+                : v.location_shantytowns,
             managers: v.managers.users.map(({ id }) => id),
             operators: v.operators.users.map(({ id }) => id),
             location_eti_citycode: citycode,
@@ -249,19 +270,52 @@ function formatValuesForApi(v) {
         },
     };
 
+    if (formatted.finances && typeof formatted.finances === "object") {
+        formatted.finances = Object.entries(formatted.finances).reduce(
+            (acc, [year, rows]) => {
+                const normalizedRows = (rows || []).map((row) => {
+                    const amount = Number.parseInt(row?.amount, 10);
+                    const realAmount = Number.parseInt(row?.real_amount, 10);
+
+                    return {
+                        ...row,
+                        amount: Number.isNaN(amount) ? null : amount,
+                        real_amount: Number.isNaN(realAmount)
+                            ? null
+                            : realAmount,
+                    };
+                });
+
+                // Ne renvoyer que les années avec des données
+                if (normalizedRows.length > 0) {
+                    acc[year] = normalizedRows;
+                }
+
+                return acc;
+            },
+            {}
+        );
+    }
+
     // Analyse des indicateurs : on s'assure que les années attendues sont présentes, même si elles n'ont pas de données
     if (formatted.indicateurs && typeof formatted.indicateurs === "object") {
         formatted.indicateurs = Object.entries(formatted.indicateurs).reduce(
             (acc, [year, yearValues]) => {
                 const source = yearValues || {};
+                const sortedKeys = [
+                    ...new Set([
+                        ...Object.keys(source),
+                        ...INDICATEURS_YEAR_KEYS,
+                    ]),
+                ].sort((a, b) =>
+                    a.localeCompare(b, "fr", { sensitivity: "base" })
+                );
 
-                acc[year] = {
-                    ...source,
-                    ...INDICATEURS_YEAR_KEYS.reduce((yearAcc, key) => {
-                        yearAcc[key] = source[key] ?? null;
-                        return yearAcc;
-                    }, {}),
-                };
+                acc[year] = sortedKeys.reduce((yearAcc, key) => {
+                    const value = source[key];
+                    yearAcc[key] = value === "" ? null : value ?? null;
+                    return yearAcc;
+                }, {});
 
                 return acc;
             },
