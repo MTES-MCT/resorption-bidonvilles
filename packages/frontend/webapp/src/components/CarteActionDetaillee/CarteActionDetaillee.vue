@@ -169,6 +169,6 @@ const navigateTo = (target) => {
     grid-template-columns: 222px 208px auto 300px 200px;
 }
 .cardGridTemplateColumnsSmall {
-    grid-template-columns: 111px 104px auto 200px 150px;
+    grid-template-columns: 300px 104px auto 200px 150px;
 }
 </style>
