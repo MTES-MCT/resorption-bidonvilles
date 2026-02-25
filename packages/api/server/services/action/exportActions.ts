@@ -7,13 +7,13 @@ import { Nation } from '#server/models/geoModel/Location.d';
 import generateExportFile from './exportActions.generateExportFile';
 import { ActionReportRow } from '#root/types/resources/Action.d';
 
-export default async (user: AuthUser, year: string) => {
+const exportActions = async (user: AuthUser, year: string) => {
     const nationalLevel: Nation = {
         type: 'nation', region: null, departement: null, epci: null, city: null,
     };
 
-    if (!permissionUtils.can(user).do('export', 'action_comment').on(nationalLevel)) {
-        throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission d\'exporter les commentaires'));
+    if (!permissionUtils.can(user).do('export', 'action').on(nationalLevel)) {
+        throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission d\'exporter les actions'));
     }
 
     // on collecte les données et on génère le fichier excel
@@ -22,7 +22,7 @@ export default async (user: AuthUser, year: string) => {
     // Si l'année n'est pas précisée, calcul de l'année en cours
     let fetchedYear = new Date().getFullYear() - 1;
     if (year) {
-        fetchedYear = parseInt(year, 10);
+        fetchedYear = Number.parseInt(year, 10);
     }
     try {
         // Récupération des données
@@ -38,3 +38,5 @@ export default async (user: AuthUser, year: string) => {
     const buffer = await generateExportFile(data);
     return buffer;
 };
+
+export default exportActions;
