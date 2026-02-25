@@ -1,6 +1,6 @@
 <template>
     <FicheRubrique title="Lieu" id="localisation">
-        <FicheSousRubrique>
+        <div class="mt-8">
             <p>
                 <Icon icon="location-dot" class="mr-2" />
                 <span class="font-bold">{{ label }}</span>
@@ -25,7 +25,7 @@
                 v-if="action.location_type === 'autre'"
                 :action="action"
             />
-        </FicheSousRubrique>
+        </div>
     </FicheRubrique>
 </template>
 
@@ -35,7 +35,6 @@ import locationTypes from "@/utils/action_location_types";
 
 import { Icon } from "@resorptionbidonvilles/ui";
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
-import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
 import FicheActionLocalisationAdresse from "./FicheActionLocalisationAdresse.vue";
 import FicheActionLocalisationSites from "./FicheActionLocalisationSites.vue";
 import FicheActionLocalisationDivers from "./FicheActionLocalisationDivers.vue";
