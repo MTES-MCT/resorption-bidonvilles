@@ -39,7 +39,7 @@ const props = defineProps({
 });
 const { action } = toRefs(props);
 const configStore = useConfigStore();
-const itemsPerPage = 4;
+const itemsPerPage = 6;
 
 // Gestion du resize / responsivness
 const viewportWidth = ref(window.innerWidth);
