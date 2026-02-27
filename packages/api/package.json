@@ -54,6 +54,7 @@
     "node-mailjet": "^6.0.5",
     "node-mattermost": "^0.0.1",
     "nodemon": "^2.0.7",
+    "nunjucks": "^3.2.4",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.2",
     "prom-client": "^15.1.3",
@@ -143,6 +144,7 @@
     "test:integration:all": "yarn mocha -r ts-node/register --require ./test/globalFixtures.ts --require ./test/bootstrap.int.ts './server/**/*.int.spec.ts' --bail --exit",
     "lint": "eslint --max-warnings=0 --ext .ts",
     "lint:all": "eslint --no-error-on-unmatched-pattern --max-warnings=0 --ext .ts server",
-    "emails:build": "ts-node server/mails/build.ts"
+    "emails:build": "ts-node server/mails/build.ts",
+    "emails:preview": "ts-node server/mails/preview.ts"
   }
 }
