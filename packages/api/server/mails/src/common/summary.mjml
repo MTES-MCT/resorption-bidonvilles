@@ -3,6 +3,20 @@
         <mj-text mj-class='text-display font-bold'>
             {{ summary.code }} – {{ summary.name }}
         </mj-text>
+        <mj-text mj-class='text-body'>
+            <span class='text-secondary font-bold'>{{ summary.shantytowns_total }}</span> sites dont
+            <mj-raw>{% if summary.shantytowns_total == 0 %}</mj-raw>
+            <span class="rate-span rate-bad">0%</span>
+            <mj-raw>{% elseif (summary.updated_shantytowns_6_months*100/summary.shantytowns_total) <= 30 %}</mj-raw>
+            <span class="rate-span rate-bad">{{ summary.updated_shantytowns_6_months*100/summary.shantytowns_total }}%</span>
+            <mj-raw>{% elseif (summary.updated_shantytowns_6_months*100/summary.shantytowns_total) <= 60 %}</mj-raw>
+            <span class="rate-span rate-medium">{{ summary.updated_shantytowns_6_months*100/summary.shantytowns_total }}%</span>
+            <mj-raw>{% else %}</mj-raw>
+            <span class="rate-span rate-good">{{ summary.updated_shantytowns_6_months*100/summary.shantytowns_total }}%</span>
+            <mj-raw>{% endif %}</mj-raw>
+            de sites ({{ summary.updated_shantytowns_6_months }}) mis à jour au cours des 6 derniers mois
+        </mj-text>
+        <mj-text><span class='text-secondary font-bold'>{{ summary.population_total }}</span> habitants en bidonvilles ou squats</mj-text>
 
         <mj-raw>{% if var:showDetails %}</mj-raw>
             <mj-include path="summary_full_activities.mjml" />

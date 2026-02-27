@@ -33,4 +33,30 @@
       font-size: 0.75rem;
       font-weight: bold;
   }
+
+  .rate-span {
+      display: inline-block;
+      padding: 0.15em 0.4em;
+      border-radius: 0.25rem;
+      font-size: 1rem;
+      font-weight: bold;
+  }
+
+  .rate-good {
+      background-color: #C6EFCE;
+      color: #006100;
+      font-weight: bold;
+  }
+
+  .rate-medium {
+      background-color: #FFEB9C;
+      color: #000000;
+      font-weight: bold;
+  }
+
+  .rate-bad {
+      background-color: #ffc7ce;
+      color: #9c0006;
+      font-weight: bold;
+  }
 </mj-style>

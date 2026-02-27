@@ -25,6 +25,9 @@ attend dans l'espace d'entraide [{{var:webappUrl}}/communaute?{{var:utm}}] :
 
 {% endif %}{% for summary in var:summaries %}
 {{ summary.code }} – {{ summary.name }}
+{{ summary.updated_shantytowns_6_months*100/summary.shantytowns_total }}% ({{
+summary.updated_shantytowns_6_months}}) de sites mis à jour au cours des 6
+derniers mois
 {% if var:showDetails %}{% if summary.new_shantytowns_length > 1 %}
 {{ summary.new_shantytowns_length }} nouveaux sites
 {% else %}
