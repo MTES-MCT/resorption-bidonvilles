@@ -16,6 +16,7 @@ type Row = {
     regionCode: string,
     shantytownsTotal: number,
     populationTotal: number,
+    updatedLessThan6MonthsTotal: number,
     activityType: string,
     city: string,
     departement: string,
@@ -182,7 +183,10 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
                 SELECT
                     c.fk_departement,
                     COUNT(s.*) AS "shantytownsTotal",
-                    COALESCE(SUM(s.population_total), 0) AS "populationTotal"
+                    COALESCE(SUM(s.population_total), 0) AS "populationTotal",
+                    COUNT(*) FILTER (
+                        WHERE s.updated_at >= (CURRENT_DATE - INTERVAL '6 months')
+                    ) AS "updatedLessThan6MonthsTotal"
                 FROM shantytowns s
                 LEFT JOIN cities c ON s.fk_city = c.code
                 WHERE closed_at IS NULL
@@ -194,6 +198,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
             d.fk_region                            AS "regionCode",
             COALESCE(totals."shantytownsTotal", 0) AS "shantytownsTotal",
             COALESCE(totals."populationTotal", 0)  AS "populationTotal",
+            COALESCE(totals."updatedLessThan6MonthsTotal", 0)  AS "updatedLessThan6MonthsTotal",
             activities.*
         FROM departements d
         LEFT JOIN totals ON totals.fk_departement = d.code
@@ -233,6 +238,8 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
                 new_users_length: 0,
                 shantytowns_total: row.shantytownsTotal,
                 population_total: row.populationTotal,
+                updated_shantytowns_6_months:
+                    row.updatedLessThan6MonthsTotal,
             };
         }
 
