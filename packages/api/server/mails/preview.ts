@@ -20,13 +20,14 @@ const outputPathArg = getArg(['--output', '-o']);
 const strictMode = args.includes('--strict');
 
 if (!templateName || !variablesPath) {
+    // eslint-disable-next-line no-console
     console.error('Usage: yarn emails:preview --template <name> --variables <path/to/variables.json> [--output <path/to/output.html>]');
     process.exit(1);
 }
 
 const normalizeMailjetSyntax = (template: string): string => template
-    .replace(/\bvar:([A-Za-z0-9_.]+)/g, 'var.$1')
-    .replace(/{%\s*elseif\b/g, '{% elif');
+    .replaceAll(/\bvar:([A-Za-z0-9_.]+)/g, 'var.$1')
+    .replaceAll(/{%\s*elseif\b/g, '{% elif');
 
 const run = (): void => {
     const templatePath = path.resolve(__dirname, 'src', `${templateName}.mjml`);
@@ -46,6 +47,7 @@ const run = (): void => {
 
     if (compiled.errors.length > 0) {
         compiled.errors.forEach((error) => {
+            // eslint-disable-next-line no-console
             console.warn(`[MJML] ${error.formattedMessage}`);
         });
         if (strictMode) {
@@ -67,6 +69,7 @@ const run = (): void => {
         : path.join(outputDir, `${templateName}.preview.html`);
 
     fs.writeFileSync(outputPath, html, 'utf-8');
+    // eslint-disable-next-line no-console
     console.log(`Preview générée: ${outputPath}`);
 };
 
