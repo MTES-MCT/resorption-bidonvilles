@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import mjml2html from 'mjml';
-import nunjucks from 'nunjucks';
+import { Liquid } from 'liquidjs';
 
 const args = process.argv.slice(2);
 
@@ -27,9 +27,9 @@ if (!templateName || !variablesPath) {
 
 const normalizeMailjetSyntax = (template: string): string => template
     .replaceAll(/\bvar:([A-Za-z0-9_.]+)/g, 'var.$1')
-    .replaceAll(/{%\s*elseif\b/g, '{% elif');
+    .replaceAll(/{%\s*elseif\b/g, '{% elsif');
 
-const run = (): void => {
+const run = async (): Promise<void> => {
     const templatePath = path.resolve(__dirname, 'src', `${templateName}.mjml`);
 
     if (!fs.existsSync(templatePath)) {
@@ -55,22 +55,35 @@ const run = (): void => {
         }
     }
 
-    const environment = nunjucks.configure({ autoescape: false });
-    const html = environment.renderString(normalizeMailjetSyntax(compiled.html), {
-        var: variables,
-        ...variables,
+    const engine = new Liquid({
+        cache: false,
+        strictVariables: false,
     });
+    try {
+        const html = await engine.parseAndRender(normalizeMailjetSyntax(compiled.html), {
+            var: variables,
+            ...variables,
+        });
 
-    const outputDir = path.resolve(__dirname, 'preview');
-    fs.mkdirSync(outputDir, { recursive: true });
+        const outputDir = path.resolve(__dirname, 'preview');
+        fs.mkdirSync(outputDir, { recursive: true });
 
-    const outputPath = outputPathArg
-        ? path.resolve(process.cwd(), outputPathArg)
-        : path.join(outputDir, `${templateName}.preview.html`);
+        const outputPath = outputPathArg
+            ? path.resolve(process.cwd(), outputPathArg)
+            : path.join(outputDir, `${templateName}.preview.html`);
 
-    fs.writeFileSync(outputPath, html, 'utf-8');
-    // eslint-disable-next-line no-console
-    console.log(`Preview générée: ${outputPath}`);
+        fs.writeFileSync(outputPath, html, 'utf-8');
+        /* eslint-disable no-console */
+        console.log(`\n✅ Preview générée avec succès: ${outputPath}`);
+        console.log(`Fichier: ${outputPath}`);
+        /* eslint-disable no-console */
+    } catch (err) {
+        /* eslint-disable no-console */
+        console.error('❌ Erreur lors du rendu Liquid :');
+        console.error(err);
+        /* eslint-disable no-console */
+        process.exit(1);
+    }
 };
 
 run();
