@@ -9,7 +9,7 @@
         <div>
             <span v-if="action.location_type === 'sur_site'">
                 <span
-                    v-if="numberOfSites?.length > 0"
+                    v-if="action.value.location_shantytowns?.length > 0"
                     tabindex="0"
                     :aria-label="`Localisation: sur ${numberOfSites} `"
                     >{{ numberOfSites }}<br
