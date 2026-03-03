@@ -1,5 +1,9 @@
 <template>
-    <section class="grid grrid-cols-1 lg:grid-cols-2 gap-4">
+    <section
+        class="grid grid-cols-1 lg:grid-cols-2 gap-4"
+        aria-live="polite"
+        aria-atomic="true"
+    >
         <article
             v-for="shantytown in paginatedShantytowns"
             :key="shantytown.id"
@@ -27,6 +31,7 @@
 
 <script setup>
 import { toRefs, computed, ref, onMounted, onBeforeUnmount } from "vue";
+import { debounce } from "lodash-es";
 import { useConfigStore } from "@/stores/config.store";
 import enrichShantytown from "@/utils/enrichShantytown";
 import svgMap from "@gouvfr/dsfr/dist/artwork/pictograms/map/map.svg?url";
@@ -43,9 +48,9 @@ const itemsPerPage = 6;
 
 // Gestion du resize / responsivness
 const viewportWidth = ref(window.innerWidth);
-const onResize = () => {
+const onResize = debounce(() => {
     viewportWidth.value = window.innerWidth;
-};
+});
 onMounted(() => {
     window.addEventListener("resize", onResize);
 });
@@ -53,7 +58,7 @@ onBeforeUnmount(() => {
     window.removeEventListener("resize", onResize);
 });
 
-const getTrunkLimit = () => {
+const getTruncLimit = () => {
     if (viewportWidth.value < 520) {
         return 1;
     }
@@ -63,7 +68,7 @@ const getTrunkLimit = () => {
     return 5;
 };
 
-const trunkLimit = computed(() => getTrunkLimit());
+const trunkLimit = computed(() => getTruncLimit());
 
 // Conversion entre index 1-based (action) et 0-based (DsfrPagination)
 const currentPageIndex = computed({
@@ -89,14 +94,23 @@ const pages = computed(() => {
     return results;
 });
 
-const shantytowns = computed(() => {
-    if (!Array.isArray(action.value.location_shantytowns)) {
-        return [];
-    }
+const enrichmentCache = new Map();
 
-    return action.value.location_shantytowns.map((shantytown) =>
-        enrichShantytown(shantytown, configStore.config?.field_types || [])
-    );
+const shantytowns = computed(() => {
+    return action.value.location_shantytowns.map((shantytown) => {
+        const cacheKey = `${shantytown.id}-${shantytown.updatedAt || ""}`;
+
+        if (enrichmentCache.has(cacheKey)) {
+            return enrichmentCache.get(cacheKey);
+        }
+
+        const enriched = enrichShantytown(
+            shantytown,
+            configStore.config?.field_types || []
+        );
+        enrichmentCache.set(cacheKey, enriched);
+        return enriched;
+    });
 });
 
 const paginatedShantytowns = computed(() => {
