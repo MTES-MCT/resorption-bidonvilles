@@ -1,4 +1,4 @@
-export default async function (value) {
+const copyToClipboard = async (value) => {
     try {
         await navigator.clipboard.writeText(value);
         return true;
@@ -12,4 +12,6 @@ export default async function (value) {
         document.body.removeChild(input);
         return success;
     }
-}
+};
+
+export default copyToClipboard;
