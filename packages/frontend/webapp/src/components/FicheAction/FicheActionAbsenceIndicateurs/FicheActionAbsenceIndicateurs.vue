@@ -11,23 +11,21 @@
                 userStore.hasActionPermission('action.update', action)
             "
         >
-            <Button
-                variant="primary"
-                class="ml-8"
-                icon="pen"
-                iconPosition="left"
-                :href="`/action/${action.id}/mise-a-jour`"
-                >Mettre à jour</Button
-            >
+            <DsfrButton
+                primary
+                icon="fr-icon-pencil-line"
+                @click="moveToUpdate"
+                label="Mettre à jour"
+            />
         </p>
     </FicheRubrique>
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
-import { Button } from "@resorptionbidonvilles/ui";
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
+import router from "@/helpers/router";
 
 const props = defineProps({
     action: Object,
@@ -38,4 +36,8 @@ const userStore = useUserStore();
 const isClosed = computed(() => {
     return action.value.ended_at && action.value.ended_at < Date.now();
 });
+
+const moveToUpdate = () => {
+    router.push(`/action/${action.value.id}/mise-a-jour`);
+};
 </script>
