@@ -1,10 +1,18 @@
 import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 import { ActionInput } from '#server/services/action/ActionInput.d';
+import hasMetricValues from '#server/services/action/_common/hasMetricValues';
 
 export default (actionId: number, authorId: number, data: ActionInput, transaction: Transaction) => {
-    const numberOfRows = Object.keys(data.indicateurs).length;
     const today = new Date();
+
+    const yearsWithData = Object.keys(data.indicateurs).filter(strYear => hasMetricValues(data.indicateurs[strYear]));
+
+    if (yearsWithData.length === 0) {
+        return Promise.resolve();
+    }
+
+    const numberOfRows = yearsWithData.length;
 
     return sequelize.query(
         `INSERT INTO action_metrics(
@@ -34,7 +42,7 @@ export default (actionId: number, authorId: number, data: ActionInput, transacti
         {
             type: QueryTypes.INSERT,
             transaction,
-            replacements: Object.keys(data.indicateurs).map((strYear) => {
+            replacements: yearsWithData.map((strYear) => {
                 const year = parseInt(strYear, 10);
 
                 return [
