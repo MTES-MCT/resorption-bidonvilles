@@ -20,8 +20,9 @@ const { label, dataType } = toRefs(props);
 const copied = ref(false);
 const notificationStore = useNotificationStore();
 
-const copy = () => {
-    if (copyToClipboard(label.value)) {
+const copy = async () => {
+    const success = await copyToClipboard(label.value);
+    if (success) {
         copied.value = true;
         notificationStore.success(
             "Élément copié dans le presse-papier",

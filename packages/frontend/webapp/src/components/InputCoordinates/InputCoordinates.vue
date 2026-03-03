@@ -115,14 +115,22 @@ function handleParcelle(feature, layer) {
         `N°${numero}<br/>Feuille ${feuille}<br/>Section ${section}<br/>N°INSEE ${code_insee}`
     );
 
-    layer.on("click", () => {
-        copyToClipboard(
+    layer.on("click", async () => {
+        const result = await copyToClipboard(
             `N°${numero}\nFeuille ${feuille}\nSection ${section}\nN°INSEE ${code_insee}`
         );
-        notificationStore.success(
-            "Copie de la parcelle cadastrale",
-            "Les données de cette parcelle cadastrale ont bien été copiées dans votre presse-papier"
-        );
+
+        if (result) {
+            notificationStore.success(
+                "Copie de la parcelle cadastrale",
+                "Les données de cette parcelle cadastrale ont bien été copiées dans votre presse-papier"
+            );
+        } else {
+            notificationStore.error(
+                "Copie de la parcelle cadastrale",
+                "Les données de cette parcelle cadastrale n'ont pas été copiées dans votre presse-papier"
+            );
+        }
     });
 }
 
