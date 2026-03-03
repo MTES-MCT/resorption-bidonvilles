@@ -42,7 +42,7 @@ export default (actionId: number, authorId: number, data: ActionInput, transacti
         {
             type: QueryTypes.INSERT,
             transaction,
-            replacements: yearsWithData.map((strYear) => {
+            replacements: yearsWithData.flatMap((strYear) => {
                 const year = parseInt(strYear, 10);
 
                 return [
@@ -68,7 +68,7 @@ export default (actionId: number, authorId: number, data: ActionInput, transacti
                     data.indicateurs[strYear].scolaire_nombre_autre,
                     authorId,
                 ];
-            }).flat(),
+            }),
         },
     );
 };
