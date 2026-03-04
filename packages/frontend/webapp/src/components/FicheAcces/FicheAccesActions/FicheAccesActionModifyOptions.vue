@@ -1,12 +1,12 @@
 <template>
     <DsfrButton
         v-if="
-            userStore.user?.is_admin &&
-            !userStore.user?.is_superuser &&
+            (userStore.user?.is_admin || userStore.user?.is_superuser) &&
             !user.is_admin &&
             user.role_id !== 'intervener' &&
             user.status !== 'inactive' &&
-            user.status !== 'refused'
+            user.status !== 'refused' &&
+            user.status !== 'new'
         "
         :loading="isLoading"
         :disabled="disabled"
