@@ -1,4 +1,25 @@
-export default function (data) {
+export const fields = [
+    "nombre_personnes",
+    "nombre_menages",
+    "nombre_femmes",
+    "nombre_mineurs",
+    "sante_nombre_personnes",
+    "travail_nombre_personnes",
+    "travail_nombre_femmes",
+    "hebergement_nombre_personnes",
+    "hebergement_nombre_menages",
+    "logement_nombre_personnes",
+    "logement_nombre_menages",
+    "scolaire_mineurs_scolarisables",
+    "scolaire_mineurs_en_mediation",
+    "scolaire_nombre_maternelle",
+    "scolaire_nombre_elementaire",
+    "scolaire_nombre_college",
+    "scolaire_nombre_lycee",
+    "scolaire_nombre_autre",
+];
+
+export const formatFormAction = (data) => {
     const formatted = {
         name: data.name || "",
         started_at: data.started_at ? new Date(data.started_at) : undefined,
@@ -32,6 +53,8 @@ export default function (data) {
                           sensitivity: "base",
                       })
                   )
+                  .map((id) => Number.parseInt(id, 10))
+                  .filter((id) => !Number.isNaN(id))
             : [],
         location_autre: data.location_other || "",
         managers: {
@@ -71,36 +94,19 @@ export default function (data) {
     };
 
     if (data.metrics) {
-        const fields = [
-            "nombre_personnes",
-            "nombre_menages",
-            "nombre_femmes",
-            "nombre_mineurs",
-            "sante_nombre_personnes",
-            "travail_nombre_personnes",
-            "travail_nombre_femmes",
-            "hebergement_nombre_personnes",
-            "hebergement_nombre_menages",
-            "logement_nombre_personnes",
-            "logement_nombre_menages",
-            "scolaire_mineurs_scolarisables",
-            "scolaire_mineurs_en_mediation",
-            "scolaire_nombre_maternelle",
-            "scolaire_nombre_elementaire",
-            "scolaire_nombre_college",
-            "scolaire_nombre_lycee",
-            "scolaire_nombre_autre",
-        ].sort((a, b) => a.localeCompare(b, "fr", { sensitivity: "base" }));
+        const sortedFields = [...fields].sort((a, b) =>
+            a.localeCompare(b, "fr", { sensitivity: "base" })
+        );
 
         data.metrics.forEach((metrics) => {
             const d = new Date(metrics.date);
             formatted.indicateurs[d.getFullYear()] = {};
 
-            fields.forEach((field) => {
+            sortedFields.forEach((field) => {
                 formatted.indicateurs[d.getFullYear()][field] = metrics[field];
             });
         });
     }
 
     return formatted;
-}
+};

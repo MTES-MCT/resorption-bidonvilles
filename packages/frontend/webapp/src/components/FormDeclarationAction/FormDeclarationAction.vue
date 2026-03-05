@@ -50,7 +50,10 @@ import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
 import _ from "lodash-es";
 import backOrReplace from "@/utils/backOrReplace";
-import formatFormAction from "@/utils/formatFormAction";
+import {
+    formatFormAction,
+    fields as INDICATEURS_YEAR_KEYS,
+} from "@/utils/formatFormAction";
 import formatFormDate from "@common/utils/formatFormDate";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
@@ -91,27 +94,6 @@ const { handleSubmit, values, errors, setErrors, isSubmitting, resetForm } =
     });
 
 const managerIds = ref([]);
-
-const INDICATEURS_YEAR_KEYS = [
-    "nombre_personnes",
-    "nombre_menages",
-    "nombre_femmes",
-    "nombre_mineurs",
-    "sante_nombre_personnes",
-    "travail_nombre_personnes",
-    "travail_nombre_femmes",
-    "hebergement_nombre_personnes",
-    "hebergement_nombre_menages",
-    "logement_nombre_personnes",
-    "logement_nombre_menages",
-    "scolaire_mineurs_scolarisables",
-    "scolaire_mineurs_en_mediation",
-    "scolaire_nombre_maternelle",
-    "scolaire_nombre_elementaire",
-    "scolaire_nombre_college",
-    "scolaire_nombre_lycee",
-    "scolaire_nombre_autre",
-];
 
 watch(
     toRef(values, "managers"),
