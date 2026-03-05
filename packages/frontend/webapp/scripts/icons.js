@@ -23,6 +23,7 @@ const mdiIconNames = [
     "home-remove-outline",
     "play",
     "delete-outline",
+    "content-copy",
 ];
 
 const uilIconNames = ["temperature-plus"];

@@ -28,7 +28,7 @@
                         class="mt-1 lg:place-self-end text-xs py-2"
                     />
                 </div>
-                <div class="mt-[3px]" v-if="attachmentsLabel">
+                <div class="mt-[3px] flex gap-2" v-if="attachmentsLabel">
                     <DsfrBadge
                         :label="attachmentsLabel"
                         type="info"
@@ -38,7 +38,14 @@
             </div>
 
             <div class="px-6 text-primary text-display-md font-bold">
-                {{ action.name }} - {{ action.displayId }}
+                {{ action.name }}
+            </div>
+            <div class="px-6 text-primary text-md font-normal">
+                Identifiant de l'action :
+                <DsfrTagCopy
+                    :label="action.displayId"
+                    dataType="L'identifiant de l'action"
+                />
             </div>
 
             <div
@@ -93,6 +100,7 @@ import CarteActionDetailleeColonneDepartement from "./CarteActionDetailleeColonn
 import CarteActionDetailleeColonneLocalisation from "./CarteActionDetailleeColonneLocalisation.vue";
 import CarteActionDetailleeColonnePilote from "./CarteActionDetailleeColonnePilote.vue";
 import CarteActionDetailleeColonneOperateur from "./CarteActionDetailleeColonneOperateur.vue";
+import DsfrTagCopy from "@/components/DsfrTagCopy/DsfrTagCopy.vue";
 import { useUserStore } from "@/stores/user.store";
 
 const props = defineProps({

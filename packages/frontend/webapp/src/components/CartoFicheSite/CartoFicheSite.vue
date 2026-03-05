@@ -36,9 +36,8 @@
 import { ref, toRefs, watch } from "vue";
 import L from "leaflet";
 import { Icon } from "@resorptionbidonvilles/ui";
-import { useNotificationStore } from "@/stores/notification.store";
-import copyToClipboard from "@/utils/copyToClipboard";
 import Carto from "@/components/Carto/Carto.vue";
+import handleParcelle from "@/utils/handle_parcels";
 import marqueurSiteEau from "@/utils/marqueurSiteEau";
 
 const props = defineProps({
@@ -54,7 +53,6 @@ const { cadastre, defaultView } = toRefs(props);
 const carto = ref(null);
 const cadastreToggler = ref(null);
 const showCadastre = ref(false);
-const notificationStore = useNotificationStore();
 const markersGroup = ref(
     L.geoJSON([], {
         onEachFeature: handleParcelle,
@@ -73,23 +71,6 @@ function createCadastreControl() {
     });
 
     return new CadastreToggler();
-}
-
-function handleParcelle(feature, layer) {
-    const { numero, feuille, section, code_insee } = feature.properties;
-    layer.bindTooltip(
-        `N°${numero}<br/>Feuille ${feuille}<br/>Section ${section}<br/>N°INSEE ${code_insee}`
-    );
-
-    layer.on("click", () => {
-        copyToClipboard(
-            `N°${numero}\nFeuille ${feuille}\nSection ${section}\nN°INSEE ${code_insee}`
-        );
-        notificationStore.success(
-            "Copie de la parcelle cadastrale",
-            "Les données de cette parcelle cadastrale ont bien été copiées dans votre presse-papier"
-        );
-    });
 }
 
 watch(carto, () => {
