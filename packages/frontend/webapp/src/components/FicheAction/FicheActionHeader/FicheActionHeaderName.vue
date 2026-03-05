@@ -2,7 +2,7 @@
     <span class="text-sm font-normal">
         {{ action.location.departement.name }} </span
     ><br />
-    <span> {{ action.name }} - {{ action.displayId }} </span>
+    <span>{{ action.name }}</span>
 </template>
 
 <script setup>

@@ -50,10 +50,9 @@ import Carto from "@/components/Carto/Carto.vue";
 import L from "leaflet";
 import marqueurInput from "@/utils/marqueurInput";
 import InputCoordinatesTooltip from "./InputCoordinatesTooltip.vue";
-import { useNotificationStore } from "@/stores/notification.store";
-import copyToClipboard from "@/utils/copyToClipboard";
 import { getCadastre } from "@/api/ign.api";
 import generateSquare from "@/utils/generateSquare";
+import handleParcelle from "@/utils/handle_parcels";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 const DEFAULT_ZOOM = 14;
@@ -69,7 +68,6 @@ const { name } = toRefs(props);
 const showCadastre = ref(false);
 const cadastre = ref(null);
 const cadastreIsLoading = ref(null);
-const notificationStore = useNotificationStore();
 const isSubmitting = useIsSubmitting();
 const markersGroup = ref(
     L.geoJSON([], {
@@ -109,23 +107,6 @@ function createCadastreControl() {
     return new CadastreToggler();
 }
 
-function handleParcelle(feature, layer) {
-    const { numero, feuille, section, code_insee } = feature.properties;
-    layer.bindTooltip(
-        `N°${numero}<br/>Feuille ${feuille}<br/>Section ${section}<br/>N°INSEE ${code_insee}`
-    );
-
-    layer.on("click", () => {
-        copyToClipboard(
-            `N°${numero}\nFeuille ${feuille}\nSection ${section}\nN°INSEE ${code_insee}`
-        );
-        notificationStore.success(
-            "Copie de la parcelle cadastrale",
-            "Les données de cette parcelle cadastrale ont bien été copiées dans votre presse-papier"
-        );
-    });
-}
-
 async function loadCadastre() {
     if (cadastreIsLoading.value === true) {
         return;
@@ -143,7 +124,7 @@ async function loadCadastre() {
         ) {
             cadastre.value = response;
         }
-    } catch (error) {
+    } catch {
         // ignore
     }
 

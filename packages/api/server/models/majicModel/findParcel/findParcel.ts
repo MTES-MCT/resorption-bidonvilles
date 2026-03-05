@@ -6,6 +6,10 @@ import getParcelTableName from '../common/getFullTableName';
 export default async (id: string, dept: string, schema: string, shortTableName: string, tableName: string): Promise<RawParcel> => {
     const fullTableName = getParcelTableName(dept, schema, shortTableName, tableName);
 
+    if (!fullTableName) {
+        throw new Error(`Impossible de construire le nom de la table des parcelles pour le département ${dept}`);
+    }
+
     const parcelles: RawParcel[] = await sequelize.query(
         `SELECT idpar, idcom, dnupro, dnuvoi, cconvo, dvoilib, idcomtxt
             FROM ${fullTableName} fpp 

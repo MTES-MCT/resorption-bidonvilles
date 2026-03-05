@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/webapp3",
-  "version": "2.47.0",
+  "version": "2.47.1",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -32,6 +32,7 @@
     "leaflet": "^1.9.3",
     "leaflet-providers": "^1.13.0",
     "leaflet.markercluster": "^1.5.3",
+    "lodash-es": "^4.17.23",
     "pinia": "^2.0.21",
     "sass": "^1.55.0",
     "vee-validate": "^4.13.2",

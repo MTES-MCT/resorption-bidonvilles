@@ -5,9 +5,16 @@ import copyToClipboard from "@/utils/copyToClipboard";
 export default async function (user) {
     const notificationStore = useNotificationStore();
     const { link } = await getLatestActivationLink(user.id);
-    copyToClipboard(link);
-    notificationStore.success(
-        "Lien d'activation",
-        "Le lien d'activation a été copié dans votre presse-papier"
-    );
+    const result = await copyToClipboard(link);
+    if (result) {
+        notificationStore.success(
+            "Lien d'activation",
+            "Le lien d'activation a été copié dans votre presse-papier"
+        );
+    } else {
+        notificationStore.error(
+            "Lien d'activation",
+            "Le lien d'activation n'a pas pu être copié dans votre presse-papier"
+        );
+    }
 }
