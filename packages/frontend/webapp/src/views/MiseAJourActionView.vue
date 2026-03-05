@@ -40,22 +40,34 @@
         </template>
 
         <ContentWrapper size="large">
-            <FormDeclarationAction ref="form" :action="action" />
+            <FormDeclarationAction
+                ref="form"
+                :action="action"
+                @submitted-successfully="allowLeaveWithoutConfirmOnce = true"
+            />
         </ContentWrapper>
 
+        <div class="visually-hidden" aria-live="polite" aria-atomic="true">
+            {{ politeLiveMessage }}
+        </div>
+        <div class="visually-hidden" aria-live="assertive" aria-atomic="true">
+            {{ assertiveLiveMessage }}
+        </div>
+
         <Transition name="floating-update-bar-slide">
-            <div
+            <section
                 v-if="!isLoading && hasFormChanged"
+                aria-label="Changements non enregistrés"
                 class="floating-update-bar bg-yellow-200"
             >
                 <div
                     class="floating-update-bar__inner p-4 flex flex-row justify-between"
                 >
-                    <p class="content-center">
+                    <div class="content-center">
                         Des modifications ont été apportées à l'action, pensez à
                         les enregistrer
-                    </p>
-                    <p class="flex flex-row gap-3">
+                    </div>
+                    <div class="flex flex-row gap-3">
                         <DsfrButton secondary @click.prevent.stop="back"
                             >Annuler</DsfrButton
                         >
@@ -64,15 +76,16 @@
                             :loading="form?.isSubmitting"
                             >Mettre à jour l'action</DsfrButton
                         >
-                    </p>
+                    </div>
                 </div>
-            </div>
+            </section>
         </Transition>
     </LayoutForm>
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, watch, nextTick } from "vue";
+import { onBeforeRouteLeave } from "vue-router";
 import { useActionsStore } from "@/stores/actions.store.js";
 import router, { setDocumentTitle } from "@/helpers/router";
 import backOrReplace from "@/utils/backOrReplace";
@@ -91,7 +104,15 @@ const isLoading = ref(null);
 const error = ref(null);
 const action = ref(null);
 const form = ref(null);
+const politeLiveMessage = ref("");
+const assertiveLiveMessage = ref("");
+const allowLeaveWithoutConfirmOnce = ref(false);
 const hasFormChanged = computed(() => form.value?.hasChanges ?? false);
+
+const FORM_CHANGED_MESSAGE =
+    "Des modifications ont été apportées à l'action, pensez à les enregistrer";
+const LEAVE_CONFIRM_MESSAGE =
+    "Des modifications n'ont pas été enregistrées. Voulez-vous vraiment quitter ?";
 
 onMounted(load);
 
@@ -129,11 +150,62 @@ function back() {
         router.back();
     }
 }
+
+async function announcePolite(message) {
+    politeLiveMessage.value = "";
+    await nextTick();
+    politeLiveMessage.value = message;
+}
+
+async function announceAssertive(message) {
+    assertiveLiveMessage.value = "";
+    await nextTick();
+    assertiveLiveMessage.value = message;
+}
+
+watch(hasFormChanged, async (hasChanged, hadChanged) => {
+    if (hasChanged && !hadChanged) {
+        await announcePolite(FORM_CHANGED_MESSAGE);
+    }
+});
+
+onBeforeRouteLeave(async () => {
+    if (allowLeaveWithoutConfirmOnce.value) {
+        allowLeaveWithoutConfirmOnce.value = false;
+        return true;
+    }
+
+    if (!hasFormChanged.value) {
+        return;
+    }
+
+    // Annonce pour les lecteurs d'écran que des changements n'ont pas été enregistrés, puis délai pour laisser le temps à l'annonce d'être lue avant d'afficher la boîte de confirmation
+    await announceAssertive(LEAVE_CONFIRM_MESSAGE);
+    await new Promise((resolve) => {
+        setTimeout(resolve, 150);
+    });
+
+    return typeof confirm === "function"
+        ? confirm(LEAVE_CONFIRM_MESSAGE)
+        : true;
+});
 </script>
 
 <style scoped>
 button {
     border: inherit;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 .floating-update-bar {
