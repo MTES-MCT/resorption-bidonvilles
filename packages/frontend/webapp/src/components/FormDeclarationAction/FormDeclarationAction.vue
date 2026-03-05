@@ -38,6 +38,7 @@ import { useActionsStore } from "@/stores/actions.store";
 import { useUserStore } from "@/stores/user.store";
 import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";
+import { useModaleStore } from "@/stores/modale.store";
 import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
 import isDeepEqual from "@/utils/isDeepEqual";
@@ -53,6 +54,7 @@ import FormDeclarationActionContacts from "./sections/FormDeclarationActionConta
 import FormDeclarationActionFinances from "./sections/FormDeclarationActionFinances.vue";
 import FormDeclarationActionIndicateurs from "./sections/FormDeclarationActionIndicateurs.vue";
 import IndicationCaractereObligatoire from "@/components/IndicationCaractereObligatoire/IndicationCaractereObligatoire.vue";
+import ModaleConfirmationSuppressionFinancements from "@/components/ModaleConfirmationSuppressionFinancements/ModaleConfirmationSuppressionFinancements.vue";
 import schemaFn from "./FormDeclarationAction.schema";
 
 const props = defineProps({
@@ -65,6 +67,9 @@ const props = defineProps({
 const { action } = toRefs(props);
 
 const userStore = useUserStore();
+const modaleStore = useModaleStore();
+const pendingSubmit = ref(null);
+const originalFinances = ref(null);
 
 const mode = computed(() => {
     return action.value === null ? "create" : "edit";
@@ -80,6 +85,10 @@ const { handleSubmit, values, errors, setErrors, isSubmitting } = useForm({
 });
 
 const managerIds = ref([]);
+
+if (action.value && action.value.finances) {
+    originalFinances.value = JSON.parse(JSON.stringify(action.value.finances));
+}
 
 watch(
     toRef(values, "managers"),
@@ -206,38 +215,111 @@ watch(useFormErrors(), () => {
     }
 });
 
+function checkFundingDeletions(sentValues) {
+    if (mode.value !== "edit" || !action.value || !originalFinances.value) {
+        return null;
+    }
+
+    const oldStartYear = action.value.started_at
+        ? new Date(action.value.started_at).getFullYear()
+        : null;
+    const oldEndYear = action.value.ended_at
+        ? new Date(action.value.ended_at).getFullYear()
+        : null;
+    const newStartYear = sentValues.started_at
+        ? sentValues.started_at.getFullYear()
+        : null;
+    const newEndYear = sentValues.ended_at
+        ? sentValues.ended_at.getFullYear()
+        : null;
+
+    const minYearChanged = oldStartYear !== newStartYear;
+    const maxYearChanged = oldEndYear !== newEndYear;
+
+    if (!minYearChanged && !maxYearChanged) {
+        return null;
+    }
+
+    const yearsBeforeMin = [];
+    const yearsAfterMax = [];
+
+    Object.keys(originalFinances.value).forEach((strYear) => {
+        const year = parseInt(strYear, 10);
+        const hasData =
+            originalFinances.value[strYear] &&
+            originalFinances.value[strYear].length > 0;
+
+        if (hasData && newStartYear && year < newStartYear) {
+            yearsBeforeMin.push(strYear);
+        }
+        if (hasData && newEndYear && year > newEndYear) {
+            yearsAfterMax.push(strYear);
+        }
+    });
+
+    if (yearsBeforeMin.length === 0 && yearsAfterMax.length === 0) {
+        return null;
+    }
+
+    return {
+        yearsBeforeMin,
+        yearsAfterMax,
+        minYear: newStartYear,
+        maxYear: newEndYear,
+        minYearChanged,
+        maxYearChanged,
+        finances: originalFinances.value,
+    };
+}
+
+async function performSubmit(sentValues) {
+    const formattedValues = formatValuesForApi(sentValues);
+
+    if (mode.value === "edit" && isDeepEqual(originalValues, formattedValues)) {
+        router.replace("#erreurs");
+        error.value = "Modification impossible : aucun champ n'a été modifié";
+        return;
+    }
+
+    error.value = null;
+
+    try {
+        const notificationStore = useNotificationStore();
+
+        const { submit, notification } = config[mode.value];
+        const respondedAction = await submit(formattedValues, action.value?.id);
+
+        notificationStore.success(notification.title, notification.content);
+        backOrReplace(`/action/${respondedAction.id}`);
+    } catch (e) {
+        error.value = e?.user_message || "Une erreur inconnue est survenue";
+        if (e?.fields) {
+            setErrors(e.fields);
+        }
+    } finally {
+        pendingSubmit.value = null;
+    }
+}
+
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
-        const formattedValues = formatValuesForApi(sentValues);
+        const deletionInfo = checkFundingDeletions(sentValues);
 
-        if (
-            mode.value === "edit" &&
-            isDeepEqual(originalValues, formattedValues)
-        ) {
-            router.replace("#erreurs");
-            error.value =
-                "Modification impossible : aucun champ n'a été modifié";
-            return;
-        }
-
-        error.value = null;
-
-        try {
-            const notificationStore = useNotificationStore();
-
-            const { submit, notification } = config[mode.value];
-            const respondedAction = await submit(
-                formattedValues,
-                action.value?.id
-            );
-
-            notificationStore.success(notification.title, notification.content);
-            backOrReplace(`/action/${respondedAction.id}`);
-        } catch (e) {
-            error.value = e?.user_message || "Une erreur inconnue est survenue";
-            if (e?.fields) {
-                setErrors(e.fields);
-            }
+        if (deletionInfo) {
+            pendingSubmit.value = sentValues;
+            modaleStore.open(ModaleConfirmationSuppressionFinancements, {
+                ...deletionInfo,
+                onConfirm: () => {
+                    modaleStore.close();
+                    performSubmit(pendingSubmit.value);
+                },
+                onCancel: () => {
+                    modaleStore.close();
+                    pendingSubmit.value = null;
+                },
+            });
+        } else {
+            await performSubmit(sentValues);
         }
     }),
     isSubmitting,
