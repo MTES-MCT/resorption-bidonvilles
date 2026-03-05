@@ -264,7 +264,7 @@ function formatValuesForApi(v) {
         }, {}),
         ...{
             started_at: formatFormDate(v.started_at),
-            ended_at: endedAt !== null ? endedAt : undefined,
+            ended_at: endedAt === null ? undefined : endedAt,
             topics: Array.isArray(v.topics)
                 ? [...v.topics].sort((a, b) =>
                       a.localeCompare(b, "fr", { sensitivity: "base" })
