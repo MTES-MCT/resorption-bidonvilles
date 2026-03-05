@@ -32,7 +32,15 @@
 </template>
 
 <script setup>
-import { toRefs, toRef, computed, ref, watch, nextTick } from "vue";
+import {
+    toRefs,
+    toRef,
+    computed,
+    ref,
+    watch,
+    nextTick,
+    onBeforeUnmount,
+} from "vue";
 import { useForm, useFieldValue, useFormErrors } from "vee-validate";
 import { useActionsStore } from "@/stores/actions.store";
 import { useUserStore } from "@/stores/user.store";
@@ -40,7 +48,7 @@ import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
-import isDeepEqual from "@/utils/isDeepEqual";
+import _ from "lodash-es";
 import backOrReplace from "@/utils/backOrReplace";
 import formatFormAction from "@/utils/formatFormAction";
 import formatFormDate from "@common/utils/formatFormDate";
@@ -62,6 +70,7 @@ const props = defineProps({
         default: null,
     },
 });
+const emit = defineEmits(["submitted-successfully"]);
 const { action } = toRefs(props);
 
 const userStore = useUserStore();
@@ -155,12 +164,41 @@ watch(
     { immediate: true }
 );
 
-const hasChanges = computed(() => {
+const hasChanges = ref(false);
+
+function updateHasChanges() {
     if (originalValues.value === null) {
-        return false;
+        hasChanges.value = false;
+        return;
     }
 
-    return !isDeepEqual(originalValues.value, formatValuesForApi(values));
+    hasChanges.value = !_.isEqual(
+        originalValues.value,
+        formatValuesForApi(values)
+    );
+}
+
+const debouncedUpdateHasChanges = _.debounce(updateHasChanges, 250);
+
+watch(
+    originalValues,
+    () => {
+        debouncedUpdateHasChanges.cancel();
+        updateHasChanges();
+    },
+    { immediate: true }
+);
+
+watch(
+    values,
+    () => {
+        debouncedUpdateHasChanges();
+    },
+    { deep: true }
+);
+
+onBeforeUnmount(() => {
+    debouncedUpdateHasChanges.cancel();
 });
 
 const tabs = computed(() => {
@@ -338,7 +376,7 @@ defineExpose({
 
         if (
             mode.value === "edit" &&
-            isDeepEqual(originalValues.value, formattedValues)
+            _.isEqual(originalValues.value, formattedValues)
         ) {
             router.replace("#erreurs");
             error.value =
@@ -358,6 +396,7 @@ defineExpose({
             );
 
             notificationStore.success(notification.title, notification.content);
+            emit("submitted-successfully", respondedAction?.id);
             backOrReplace(`/action/${respondedAction.id}`);
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
