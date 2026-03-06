@@ -7,7 +7,7 @@ import enrichUserWithLocationName from "@/utils/enrichUserWithLocationName";
 import accessStatuses from "@/utils/access_statuses";
 import Fuse from "fuse.js";
 
-const ITEMS_PER_PAGE = 50;
+const ITEMS_PER_PAGE = 20;
 
 export const useAccesStore = defineStore("acces", () => {
     const sortedAcces = ref([]);
