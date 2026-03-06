@@ -223,7 +223,6 @@ function applyNewTimeRange() {
         const year = parseInt(strYear, 10);
         if (year < minYear.value || year > maxYear.value) {
             delete value.value[strYear];
-            value.value[strYear] = undefined;
         }
     });
 
