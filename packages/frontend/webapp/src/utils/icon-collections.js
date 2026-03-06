@@ -105,7 +105,7 @@ const collections = [
  * Exemple: "eye-line" -> "eyeLine", "file-excel-fill" -> "fileExcelFill"
  */
 function toCamelCase(str) {
-    return str.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+    return str.replaceAll(/-([a-z])/g, (_, letter) => letter.toUpperCase());
 }
 
 /**
