@@ -99,26 +99,41 @@ const collections = [
         height: 32,
     },
 ];
-export const ri = {
-    eyeLine: "ri:eye-line",
-    eyeOffLine: "ri:eye-off-line",
-    fileExcelFill: "ri:file-excel-fill",
-    fileWordFill: "ri:file-word-fill",
-    flagFill: "ri:flag-fill",
-    focus2Line: "ri:focus-2-line",
-    keyFill: "ri:key-fill",
-    refreshLine: "ri:refresh-line",
-    sunFill: "ri:sun-fill",
-    sunLine: "ri:sun-line",
-};
-export const mdi = {
-    accountEdit: "mdi:account-edit",
-    contentCopy: "mdi:content-copy",
-    deleteOutline: "mdi:delete-outline",
-    homeRemoveOutline: "mdi:home-remove-outline",
-    play: "mdi:play",
-};
-export const uil = { temperaturePlus: "uil:temperature-plus" };
-export const bxs = { filePdf: "bxs:file-pdf" };
-export const carbon = { temperatureHot: "carbon:temperature-hot" };
+
+/**
+ * Convertit un nom d'icône en camelCase
+ * Exemple: "eye-line" -> "eyeLine", "file-excel-fill" -> "fileExcelFill"
+ */
+function toCamelCase(str) {
+    return str.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+}
+
+/**
+ * Génère automatiquement les exports nommés à partir des collections
+ * pour éviter la duplication de code
+ */
+function generateExports() {
+    const exports = {};
+
+    collections.forEach((collection) => {
+        const prefix = collection.prefix;
+        exports[prefix] = {};
+
+        Object.keys(collection.icons).forEach((iconName) => {
+            const camelCaseName = toCamelCase(iconName);
+            exports[prefix][camelCaseName] = `${prefix}:${iconName}`;
+        });
+    });
+
+    return exports;
+}
+
+const generatedExports = generateExports();
+
+export const ri = generatedExports.ri;
+export const mdi = generatedExports.mdi;
+export const uil = generatedExports.uil;
+export const bxs = generatedExports.bxs;
+export const carbon = generatedExports.carbon;
+
 export default collections;
