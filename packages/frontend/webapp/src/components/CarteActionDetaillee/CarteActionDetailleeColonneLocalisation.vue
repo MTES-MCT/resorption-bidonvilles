@@ -9,7 +9,7 @@
         <div>
             <span v-if="action.location_type === 'sur_site'">
                 <span
-                    v-if="action.value.location_shantytowns?.length > 0"
+                    v-if="action.location_shantytowns?.length > 0"
                     tabindex="0"
                     :aria-label="`Localisation: sur ${numberOfSites} `"
                     >{{ numberOfSites }}<br
@@ -47,6 +47,7 @@ const props = defineProps({
     },
 });
 const { action } = toRefs(props);
+console.log("Action:", action.value);
 
 const numberOfSites = computed(() => {
     return `${action.value.location_shantytowns?.length} site${
