@@ -45,14 +45,15 @@ export default function (value) {
     now.setUTCHours(0, 0, 0, 0);
     then.setUTCHours(0, 0, 0, 0);
 
-    const olderDate = new Date(Math.min(then.getTime(), now.getTime()));
-    const newerDate = new Date(Math.max(then.getTime(), now.getTime()));
+    const olderTime = Math.min(then.getTime(), now.getTime());
+    const newerTime = Math.max(then.getTime(), now.getTime());
+    const days = Math.floor((newerTime - olderTime) / (1000 * 3600 * 24));
 
-    const days = Math.floor(
-        (newerDate.getTime() - olderDate.getTime()) / (1000 * 3600 * 24)
-    );
     const weeks = Math.floor(days / 7);
-    const months = diffInCalendarMonths(olderDate, newerDate);
+    const months = diffInCalendarMonths(
+        then.getTime() < now.getTime() ? then : now,
+        then.getTime() < now.getTime() ? now : then
+    );
     const years = Math.floor(months / 12);
 
     return {
