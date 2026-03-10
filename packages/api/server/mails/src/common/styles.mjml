@@ -55,8 +55,8 @@
   }
 
   .rate-bad {
-      background-color: #ffc7ce;
-      color: #9c0006;
+      background-color: #ffe9e9;
+      color: #ce0500;
       font-weight: bold;
   }
 </mj-style>
