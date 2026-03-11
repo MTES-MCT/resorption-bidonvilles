@@ -54,6 +54,7 @@ import {
     formatFormAction,
     fields as INDICATEURS_YEAR_KEYS,
 } from "@/utils/formatFormAction";
+import { normalizeShantytownIds } from "@/utils/normalizeShantytownIds";
 import formatFormDate from "@common/utils/formatFormDate";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
@@ -270,16 +271,9 @@ function formatValuesForApi(v) {
                       a.localeCompare(b, "fr", { sensitivity: "base" })
                   )
                 : v.topics,
-            location_shantytowns: Array.isArray(v.location_shantytowns)
-                ? [...v.location_shantytowns]
-                      .sort((a, b) =>
-                          `${a}`.localeCompare(`${b}`, "fr", {
-                              sensitivity: "base",
-                          })
-                      )
-                      .map((id) => Number.parseInt(id, 10))
-                      .filter((id) => !Number.isNaN(id))
-                : v.location_shantytowns,
+            location_shantytowns: normalizeShantytownIds(
+                v.location_shantytowns
+            ),
             managers: v.managers.users.map(({ id }) => id),
             operators: v.operators.users.map(({ id }) => id),
             location_eti_citycode: citycode,

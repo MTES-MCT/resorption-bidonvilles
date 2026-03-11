@@ -1,3 +1,5 @@
+import { normalizeShantytownIds } from "./normalizeShantytownIds";
+
 export const fields = [
     "nombre_personnes",
     "nombre_menages",
@@ -46,10 +48,7 @@ export const formatFormAction = (data) => {
             ? [data.eti.latitude, data.eti.longitude]
             : [],
         location_shantytowns: data.location_shantytowns
-            ? data.location_shantytowns
-                  .map(({ id }) => Number.parseInt(id, 10))
-                  .filter((id) => !Number.isNaN(id))
-                  .sort((a, b) => a - b)
+            ? normalizeShantytownIds(data.location_shantytowns)
             : [],
         location_autre: data.location_other || "",
         managers: {
