@@ -38,7 +38,6 @@
             :disabled="isDisabled"
             @keydown.stop="onKeydown"
             @keydown.tab="onTab"
-            @clear="clear"
             class="pl-10 pr-20"
             role="combobox"
             :aria-controls="`${name}-listbox`"
@@ -151,7 +150,7 @@
 </template>
 
 <script setup>
-import { toRefs, ref, computed, triggerRef, watch } from "vue";
+import { toRefs, ref, computed, triggerRef, watch, nextTick } from "vue";
 import { useIsSubmitting } from "vee-validate";
 import useAutocomplete from "../../composables/useAutocomplete";
 
@@ -549,9 +548,26 @@ watch(isClickInsideDropdown, (isInside) => {
   }
 });
 
-watch(currentPage, () => {
-  // Réinitialiser l'index de focus lors d'un changement de page
-  focusedItemIndex.value = null;
+watch(currentPage, async () => {
+  // Mettre le focus sur le premier élément de la nouvelle page
+  focusedItemIndex.value = currentPageStartIndex.value;
+  
+  // Attendre le prochain tick pour que le DOM soit mis à jour
+  await nextTick();
+  
+  // Récupérer le premier élément de la page courante
+  const firstItem = flatResults.value[currentPageStartIndex.value];
+  if (firstItem) {
+    const optionElement = document.getElementById(`option-${firstItem.id}`);
+    if (optionElement) {
+      // Faire défiler jusqu'à l'élément
+      optionElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }
+  
+  // Ramener le focus sur l'input pour permettre la navigation au clavier
+  // L'élément actif sera indiqué via aria-activedescendant
+  input.value?.focus();
 });
 
 defineExpose({
