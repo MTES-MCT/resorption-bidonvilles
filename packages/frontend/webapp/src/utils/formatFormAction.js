@@ -47,14 +47,9 @@ export const formatFormAction = (data) => {
             : [],
         location_shantytowns: data.location_shantytowns
             ? data.location_shantytowns
-                  .map(({ id }) => id)
-                  .sort((a, b) =>
-                      `${a}`.localeCompare(`${b}`, "fr", {
-                          sensitivity: "base",
-                      })
-                  )
-                  .map((id) => Number.parseInt(id, 10))
+                  .map(({ id }) => Number.parseInt(id, 10))
                   .filter((id) => !Number.isNaN(id))
+                  .sort((a, b) => a - b)
             : [],
         location_autre: data.location_other || "",
         managers: {
