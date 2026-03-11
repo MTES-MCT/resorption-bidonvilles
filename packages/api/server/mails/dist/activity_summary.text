@@ -25,9 +25,18 @@ attend dans l'espace d'entraide [{{var:webappUrl}}/communaute?{{var:utm}}] :
 
 {% endif %}{% for summary in var:summaries %}
 {{ summary.code }} – {{ summary.name }}
-{{ summary.updated_shantytowns_6_months*100/summary.shantytowns_total }}% ({{
-summary.updated_shantytowns_6_months}}) de sites mis à jour au cours des 6
-derniers mois
+{% assign updated_rate = 0 %} {% if summary.shantytowns_total > 0 %} {% assign
+updated_rate = summary.updated_shantytowns_6_months | times: 100.0 | divided_by:
+summary.shantytowns_total %} {% endif %} {% assign updated_rate_rounded =
+updated_rate | round: 0 %} {% if summary.shantytowns_total == 0 %} 0% {% elseif
+updated_rate <= 30 %} {{ updated_rate_rounded }}% {% elseif updated_rate <= 60
+%} {{ updated_rate_rounded }}% {% else %} {{ updated_rate_rounded }}% {% endif
+%} de sites (soit {{ summary.updated_shantytowns_6_months }} sur {{
+summary.shantytowns_total }}, représentant {% if summary.shantytowns_total == 0
+%} un taux faible) {% elseif updated_rate <= 30 %} un taux faible) {% elseif
+updated_rate <= 60 %} un taux moyen) {% else %} un très bon taux) {% endif %}
+ont été mis à jour au cours des 6 derniers mois
+{{ summary.population_total }} habitants en bidonvilles ou squats
 {% if var:showDetails %}{% if summary.new_shantytowns_length > 1 %}
 {{ summary.new_shantytowns_length }} nouveaux sites
 {% else %}
@@ -63,13 +72,7 @@ derniers mois
 {% endif %}{% for user in summary.new_users %}
 {{ user.name }}
 [{{var:webappUrl}}/annuaire/{{user.organizationId}}?{{var:utm}}-nouvel-utilisateur]
-{% endfor %}{% if summary.shantytowns_total > 1 %}
-Pour rappel : {{ summary.shantytowns_total }} sites et {{
-summary.population_total }} habitants en bidonvilles ou squats
-{% else %}
-Pour rappel : {{ summary.shantytowns_total }} site et {{
-summary.population_total }} habitants en bidonvilles ou squats
-{% endif %}
+{% endfor %}
 
 Me connecter [{{var:connexionUrl}}]
 
@@ -108,25 +111,12 @@ Me connecter [{{var:connexionUrl}}]
 {% endif %}{% for user in summary.new_users %}
 {{ user.name }}
 [{{var:webappUrl}}/annuaire/{{user.organizationId}}?{{var:utm}}-nouvel-utilisateur]
-{% endfor %}{% if summary.shantytowns_total > 1 %}
-Pour rappel : {{ summary.shantytowns_total }} sites et {{
-summary.population_total }} habitants en bidonvilles ou squats
-{% else %}
-Pour rappel : {{ summary.shantytowns_total }} site et {{
-summary.population_total }} habitants en bidonvilles ou squats
-{% endif %}
+{% endfor %}
 
 Me connecter [{{var:connexionUrl}}]
 
 {% else %}
 Aucune activité
-{% if summary.shantytowns_total > 1 %}
-Pour rappel : {{ summary.shantytowns_total }} sites et {{
-summary.population_total }} habitants en bidonvilles ou squats
-{% else %}
-Pour rappel : {{ summary.shantytowns_total }} site et {{
-summary.population_total }} habitants en bidonvilles ou squats
-{% endif %}
 
 Me connecter [{{var:connexionUrl}}]
 

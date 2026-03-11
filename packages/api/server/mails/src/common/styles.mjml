@@ -43,10 +43,10 @@
   }
 
   .rate-good {
-      background-color: #C6EFCE;
-      color: #006100;
+      background-color: #b8fec9;
+      color: #18753c;
       font-weight: bold;
-  }
+  }s
 
   .rate-medium {
       background-color: #FFEB9C;
@@ -57,6 +57,12 @@
   .rate-bad {
       background-color: #ffe9e9;
       color: #ce0500;
+      font-weight: bold;
+  }
+
+  .rate-none {
+      background-color: #e8edff;
+      color: #0063cb;
       font-weight: bold;
   }
 </mj-style>
