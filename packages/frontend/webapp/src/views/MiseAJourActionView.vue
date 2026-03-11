@@ -151,21 +151,15 @@ function back() {
     }
 }
 
-async function announcePolite(message) {
-    politeLiveMessage.value = "";
+async function announce(messageRef, message) {
+    messageRef.value = "";
     await nextTick();
-    politeLiveMessage.value = message;
-}
-
-async function announceAssertive(message) {
-    assertiveLiveMessage.value = "";
-    await nextTick();
-    assertiveLiveMessage.value = message;
+    messageRef.value = message;
 }
 
 watch(hasFormChanged, async (hasChanged, hadChanged) => {
     if (hasChanged && !hadChanged) {
-        await announcePolite(FORM_CHANGED_MESSAGE);
+        await announce(politeLiveMessage, FORM_CHANGED_MESSAGE);
     }
 });
 
@@ -180,7 +174,7 @@ onBeforeRouteLeave(async () => {
     }
 
     // Annonce pour les lecteurs d'écran que des changements n'ont pas été enregistrés, puis délai pour laisser le temps à l'annonce d'être lue avant d'afficher la boîte de confirmation
-    await announceAssertive(LEAVE_CONFIRM_MESSAGE);
+    await announce(assertiveLiveMessage, LEAVE_CONFIRM_MESSAGE);
     await new Promise((resolve) => {
         setTimeout(resolve, 150);
     });
