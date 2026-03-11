@@ -37,8 +37,14 @@
             @blur="onBlur"
             :disabled="isDisabled"
             @keydown.stop="onKeydown"
+            @keydown.tab="onTab"
             @clear="clear"
             class="pl-10 pr-20"
+            role="combobox"
+            :aria-controls="`${name}-listbox`"
+            :aria-expanded="organizationSearchLabel?.length >= 3 && !isLoading && !modelValue ? 'true' : 'false'"
+            :aria-activedescendant="focusedItemId ? `option-${focusedItemId}` : undefined"
+            aria-autocomplete="list"
           />
           <DsfrButton
             v-if="isLoading || organizationSearchLabel?.length > 2"
@@ -58,23 +64,38 @@
       </template>
     </DsfrInputGroup>
     <div
+      :id="`${name}-listbox`"
       class="absolute left-0 top-full mt-2 w-full z-[2000] border-1 border-G300 bg-white"
       v-if="organizationSearchLabel?.length >= 3 && !isLoading && !modelValue"
+      role="listbox"
+      :aria-label="`Résultats de recherche pour ${label}`"
+      @keydown="onDropdownKeydown"
+      tabindex="-1"
     >
       <div v-if="showCategory" class="flex flex-col">
         <div
-          class="flex w-full border-b border-G200 min-h-8 gap-2 p-2 pb-0"
+          class="sticky top-0 bg-white z-10 flex w-full border-b border-G200 min-h-8 gap-2 p-2 pb-0"
           v-if="categoriesInSearch && results.length > 0"
           @mouseup="isClickInsideDropdown = false"
           @mouseleave="isClickInsideDropdown = false"
+          ref="filtersContainer"
+          role="group"
+          aria-label="Filtres par catégorie"
         >
-          <p class="fr-hint-text">Filtrer par:</p>
-          <DsfrTags
-            :tags="categoriesInSearch"
-            v-model="filteredCategories"
-            @mousedown.prevent.stop="isClickInsideDropdown = true"
-            @click.prevent.stop="isClickInsideDropdown = true"
-          />
+          <p class="fr-hint-text" id="filters-label">Filtrer par:</p>
+          <div
+            ref="tagsContainer"
+            @keydown.tab.shift.prevent="onShiftTab"
+            @keydown.up.down.stop
+          >
+            <DsfrTags
+              :tags="categoriesInSearch"
+              v-model="filteredCategories"
+              @mousedown.prevent.stop="isClickInsideDropdown = true"
+              @click.prevent.stop="isClickInsideDropdown = true"
+              aria-labelledby="filters-label"
+            />
+          </div>
         </div>
         <div
           v-for="section in paginatedResults"
@@ -94,26 +115,34 @@
               :key="item.id"
               @click="selectItem(item)"
               :title="getItemLabel(item)"
+              role="option"
+              :id="`option-${item.id}`"
+              :aria-selected="focusedItemId === item.id"
             >
               {{ getItemLabel(item) }}
             </div>
           </div>
         </div>
         <div
-          class="grid justify-center items-center pt-[1.75px] h-9 w-full px-1 border-t border-G200 bg-white"
+          class="flex flex-col items-center w-full px-2 py-2 border-t border-G200 bg-white"
           @mousedown.prevent.stop="isClickInsideDropdown = true"
           @mouseup="isClickInsideDropdown = false"
           @mouseleave="isClickInsideDropdown = false"
+          @keydown.enter.prevent.stop="onPaginationEnter"
+          @keydown.up.down.stop
           v-if="totalPages > 1"
+          role="navigation"
+          aria-label="Navigation dans les résultats"
         >
+          <div class="text-xs text-G700 mb-2" aria-live="polite">
+            Page {{ currentPage + 1 }} sur {{ totalPages }} ({{ flatResults.length }} résultats)
+          </div>
           <DsfrPagination
             v-model:current-page="currentPage"
             :pages="pages"
             :truncLimit="2"
-            :prevPageTitle="
-              currentPage < 1000 ? 'Page précédente' : 'Page préc.'
-            "
-            :nextPageTitle="currentPage < 1000 ? 'Page suivante' : 'Page suiv.'"
+            :prevPageTitle="'Page précédente'"
+            :nextPageTitle="'Page suivante'"
           />
         </div>
       </div>
@@ -194,6 +223,8 @@ const filteredCategories = ref([]);
 const currentPage = ref(0);
 const isClickInsideDropdown = ref(false);
 const itemsPerPage = 10;
+const filtersContainer = ref(null);
+const tagsContainer = ref(null);
 
 const isSubmitting = useIsSubmitting();
 
@@ -262,6 +293,13 @@ const pages = computed(() => {
 
 const flatResults = computed(() => results.value.flatMap((r) => r.items));
 
+// Index de début et fin de la page courante dans flatResults
+const currentPageStartIndex = computed(() => currentPage.value * itemsPerPage);
+const currentPageEndIndex = computed(() => {
+  const end = currentPageStartIndex.value + itemsPerPage;
+  return Math.min(end, flatResults.value.length);
+});
+
 const paginatedResults = computed(() => {
   const start = currentPage.value * itemsPerPage;
   const end = start + itemsPerPage;
@@ -317,14 +355,12 @@ const {
   selectedItem,
   focusedItemIndex,
   focusedItemId,
-  error,
   onInput: baseOnInput,
   onBlur: baseOnBlur,
-  onKeydown,
-  selectItem,
-  clear,
-  abort,
+  onKeydown: baseOnKeydown,
   search,
+  clear,
+  selectItem,
 } = useAutocomplete({
   fn,
   modelValue,
@@ -388,6 +424,103 @@ function onInput(event) {
   baseOnInput(event);
 }
 
+function onKeydown(event) {
+  const key = event.keyCode || event.which;
+  
+  // Flèches haut/bas : contraindre aux bornes de la page courante
+  if (key === 38) { // Flèche haut
+    event.preventDefault();
+    if (focusedItemIndex.value === null || focusedItemIndex.value <= currentPageStartIndex.value) {
+      // Bloquer au premier élément de la page (conforme RGAA)
+      focusedItemIndex.value = currentPageStartIndex.value;
+    } else {
+      focusedItemIndex.value -= 1;
+    }
+    return;
+  }
+  
+  if (key === 40) { // Flèche bas
+    event.preventDefault();
+    if (focusedItemIndex.value === null) {
+      focusedItemIndex.value = currentPageStartIndex.value;
+    } else if (focusedItemIndex.value >= currentPageEndIndex.value - 1) {
+      // Bloquer au dernier élément de la page (conforme RGAA)
+      focusedItemIndex.value = currentPageEndIndex.value - 1;
+    } else {
+      focusedItemIndex.value += 1;
+    }
+    return;
+  }
+  
+  // Autres touches : déléguer au composable
+  baseOnKeydown(event);
+}
+
+function onTab(event) {
+  // Si le dropdown est ouvert, empêcher Tab de fermer et naviguer vers les filtres/pagination
+  if (organizationSearchLabel.value?.length >= 3 && !isLoading.value && !modelValue.value) {
+    event.preventDefault();
+    isClickInsideDropdown.value = true;
+    
+    // Focus sur le premier élément focusable dans le dropdown
+    setTimeout(() => {
+      const dropdown = document.getElementById(`${name.value}-listbox`);
+      if (dropdown) {
+        // Chercher les tags d'abord, puis les boutons de pagination
+        const focusable = dropdown.querySelector('.fr-tag, button, [tabindex="0"], a');
+        if (focusable) {
+          focusable.focus();
+        }
+      }
+    }, 0);
+  }
+}
+
+function onShiftTab(event) {
+  // Shift+Tab depuis les filtres revient à l'input
+  event.preventDefault();
+  input.value?.focus();
+  isClickInsideDropdown.value = false;
+}
+
+function onPaginationEnter(event) {
+  // Gérer Entrée sur la pagination : cliquer sur l'élément focusé
+  const activeElement = document.activeElement;
+  if (activeElement && (activeElement.tagName === 'BUTTON' || activeElement.tagName === 'A')) {
+    activeElement.click();
+  }
+}
+
+function onDropdownKeydown(event) {
+  // Gérer les touches globales du dropdown
+  const key = event.keyCode || event.which;
+  
+  // Flèches haut/bas : naviguer dans les résultats même depuis filtres/pagination
+  if (key === 38 || key === 40) {
+    // Si on est sur les filtres ou la pagination, rediriger vers l'input pour navigation
+    const activeElement = document.activeElement;
+    const isOnFiltersOrPagination = activeElement && 
+      (activeElement.closest('[role="group"]') || activeElement.closest('[role="navigation"]'));
+    
+    if (isOnFiltersOrPagination) {
+      event.preventDefault();
+      // Remettre le focus sur l'input pour activer la navigation par flèches
+      input.value?.focus();
+      // Déclencher la navigation avec contraintes de page
+      setTimeout(() => {
+        onKeydown(event);
+      }, 0);
+    }
+  }
+  
+  // Échap : fermer le dropdown et revenir à l'input
+  if (key === 27) {
+    event.preventDefault();
+    input.value?.focus();
+    clear();
+  }
+}
+
 function getItemLabel(item) {
   if (!item?.label) {
     return '';
@@ -416,10 +549,17 @@ watch(isClickInsideDropdown, (isInside) => {
   }
 });
 
+watch(currentPage, () => {
+  // Réinitialiser l'index de focus lors d'un changement de page
+  focusedItemIndex.value = null;
+});
+
 defineExpose({
   clear,
   focus() {
     return input.value.focus();
   },
+  filtersContainer,
+  tagsContainer,
 });
 </script>
