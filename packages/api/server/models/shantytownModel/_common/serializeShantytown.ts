@@ -78,6 +78,9 @@ export default (town: ShantytownRow, user): Shantytown => {
         populationMinors12To16: town.populationMinors12To16,
         populationMinors16To18: town.populationMinors16To18,
         minorsInSchool: town.minorsInSchool,
+        populationUpdatedAt: town.populationUpdatedAt === null
+            ? null
+            : town.populationUpdatedAt.getTime() / 1000,
         caravans: town.caravans,
         huts: town.huts,
         tents: town.tents,
