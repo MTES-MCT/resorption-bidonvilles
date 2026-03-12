@@ -1,6 +1,6 @@
 import getSince from "@/utils/getSince";
 
-export default function (updatedAt, lastUpdatedAt) {
+export default function getStatusBadgeType(updatedAt, lastUpdatedAt) {
     let badgeType = "success";
 
     const { months } = getSince(lastUpdatedAt);
