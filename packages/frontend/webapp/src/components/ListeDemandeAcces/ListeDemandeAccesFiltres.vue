@@ -1,42 +1,20 @@
 <template>
-    <section class="flex items-end space-x-8">
-        <article>
-            <p>Filtrer par</p>
+    <section
+        class="flex flex-col sm:flex-row sm:items-end sm:space-x-8 space-y-4 sm:space-y-0 border-t border-b border-france-blue-925-100 py-4"
+    >
+        <article class="flex items-center space-x-2 h-10">
+            <p class="whitespace-nowrap">Filtrer par:</p>
             <Filter
                 v-model="statusFilter"
                 title="Statut du compte"
-                :options="[
-                    { value: 'requested', label: 'Demandé' },
-                    { value: 'expired', label: 'Expiré' },
-                    {
-                        value: 'sent',
-                        label: 'Envoyé',
-                    },
-                    {
-                        value: 'activated',
-                        label: 'Activé',
-                    },
-                    {
-                        value: 'refused',
-                        label: 'Sans suite',
-                    },
-                    {
-                        value: 'deactivated',
-                        label: 'Désactivé',
-                    },
-                ]"
+                :options="statusOptions"
             />
         </article>
-        <article class="flex-1">
-            <label
-                >Rechercher par utilisateur, structure, territoire, type
-                d'accès</label
-            >
-            <TextInput
-                :withoutMargin="true"
-                prefixIcon="search"
-                name="searchFilter"
-                variant="filter"
+        <article class="w-full sm:flex-1">
+            <DsfrSearchBar
+                v-model="accesStore.filters.search"
+                label="Rechercher par utilisateur, structure, territoire, type d'accès"
+                placeholder="Rechercher par utilisateur, structure, territoire, type d'accès"
             />
         </article>
     </section>
@@ -44,13 +22,20 @@
 
 <script setup>
 import { computed } from "vue";
-import { useForm } from "vee-validate";
 import { useAccesStore } from "@/stores/acces.store";
-import { Filter, TextInput } from "@resorptionbidonvilles/ui";
-import { watch } from "vue";
-import { toRef } from "vue";
+import { Filter } from "@resorptionbidonvilles/ui";
 
 const accesStore = useAccesStore();
+
+const statusOptions = [
+    { label: "Demandé", name: "requested", value: "requested" },
+    { label: "Expiré", name: "expired", value: "expired" },
+    { label: "Envoyé", name: "sent", value: "sent" },
+    { label: "Activé", name: "activated", value: "activated" },
+    { label: "Sans suite", name: "refused", value: "refused" },
+    { label: "Désactivé", name: "deactivated", value: "deactivated" },
+];
+
 const statusFilter = computed({
     get() {
         return accesStore.filters.status;
@@ -58,15 +43,5 @@ const statusFilter = computed({
     set(newValue) {
         accesStore.filters.status = newValue;
     },
-});
-
-const { values } = useForm({
-    initialValues: {
-        searchFilter: accesStore.filters.search,
-    },
-});
-const searchFilter = toRef(values, "searchFilter");
-watch(searchFilter, () => {
-    accesStore.filters.search = searchFilter.value;
 });
 </script>
