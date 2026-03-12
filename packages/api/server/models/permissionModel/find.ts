@@ -133,11 +133,10 @@ export default async (owners: number[]): Promise<PermissionHash> => {
                 cities.name AS city_name,
                 cities.fk_main AS city_main
             FROM user_actual_permissions
+            LEFT JOIN regions ON regions.code = user_actual_permissions.fk_region
+            LEFT JOIN departements ON departements.code = user_actual_permissions.fk_departement
+            LEFT JOIN epci ON epci.code = user_actual_permissions.fk_epci
             LEFT JOIN cities ON cities.code = user_actual_permissions.fk_city
-            LEFT JOIN epci ON epci.code = COALESCE(user_actual_permissions.fk_epci, cities.fk_epci)
-            LEFT JOIN epci_to_departement ON epci_to_departement.fk_epci = epci.code
-            LEFT JOIN departements ON departements.code = COALESCE(user_actual_permissions.fk_departement, epci_to_departement.fk_departement, cities.fk_departement)
-            LEFT JOIN regions ON regions.code = COALESCE(user_actual_permissions.fk_region, departements.fk_region)
             WHERE user_actual_permissions.fk_user IN (:owners)
             ORDER BY user_actual_permissions.fk_user ASC, fk_entity ASC, fk_feature ASC
         `, {
