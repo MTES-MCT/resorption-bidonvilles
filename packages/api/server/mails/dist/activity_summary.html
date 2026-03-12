@@ -65,7 +65,7 @@
   <body style="word-spacing:normal;background-color:#FFFFFF;">
     
     
-      <div style="background-color:#FFFFFF;" lang="und" dir="auto">
+      <div aria-label="[Résorption-bidonvilles] - Que s'est-t-il passé cette semaine ?" aria-roledescription="email" style="background-color:#FFFFFF;" role="article" lang="und" dir="auto">
         
       
       <!--[if mso | IE]><table align="center" border="0" cellpadding="0" cellspacing="0" class="" role="presentation" style="width:600px;" width="600" ><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
@@ -263,6 +263,47 @@
     
                 </td>
               </tr>
+            
+              <tr>
+                <td align="left" style="font-size:0px;padding:0;word-break:break-word;">
+                  
+      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;"><mj-raw>{% assign updated_rate = 0 %}</mj-raw>
+            <mj-raw>{% if summary.shantytowns_total > 0 %}</mj-raw>
+            <mj-raw>{% assign updated_rate = summary.updated_shantytowns_6_months | times: 100.0 | divided_by: summary.shantytowns_total %}</mj-raw>
+            <mj-raw>{% endif %}</mj-raw>
+            <mj-raw>{% assign updated_rate_rounded = updated_rate | round: 0 %}</mj-raw>
+            <!-- <span class='text-secondary font-bold'>{{ summary.shantytowns_total }}</span> sites dont -->
+            <mj-raw>{% if summary.shantytowns_total == 0 %}</mj-raw>
+            <span aria-label="Taux faible : 0 pour cent" class="rate-span rate-bad" title="Taux faible : 0 pour cent" style="display: inline-block; padding: 0.15em 0.4em; border-radius: 0.25rem; font-size: 1rem; background-color: #ffe9e9; color: #ce0500; font-weight: bold;">0%</span>
+            <mj-raw>{% elseif updated_rate <= 30 %}</mj-raw>
+            <span aria-label="Taux faible : {{ updated_rate_rounded }} pour cent" class="rate-span rate-bad" title="Taux faible : {{ updated_rate_rounded }} pour cent" style="display: inline-block; padding: 0.15em 0.4em; border-radius: 0.25rem; font-size: 1rem; background-color: #ffe9e9; color: #ce0500; font-weight: bold;">{{ updated_rate_rounded }}%</span>
+            <mj-raw>{% elseif updated_rate <= 60 %}</mj-raw>
+            <span aria-label="Taux moyen : {{ updated_rate_rounded }} pour cent" class="rate-span rate-medium" title="Taux moyen : {{ updated_rate_rounded }} pour cent" style="display: inline-block; padding: 0.15em 0.4em; border-radius: 0.25rem; font-size: 1rem; font-weight: bold;">{{ updated_rate_rounded }}%</span>
+            <mj-raw>{% else %}</mj-raw>
+            <span aria-label="Très bon taux : {{ updated_rate_rounded }} pour cent" class="rate-span rate-good" title="Très bon taux : {{ updated_rate_rounded }} pour cent" style="display: inline-block; padding: 0.15em 0.4em; border-radius: 0.25rem; font-size: 1rem; background-color: #b8fec9; color: #18753c; font-weight: bold;">{{ updated_rate_rounded }}%</span>
+            <mj-raw>{% endif %}</mj-raw>
+             de sites (soit {{ summary.updated_shantytowns_6_months }} sur {{ summary.shantytowns_total }}, représentant
+                <mj-raw>{% if summary.shantytowns_total == 0 %}</mj-raw>
+                un taux faible)
+                <mj-raw>{% elseif updated_rate <= 30 %}</mj-raw>
+                un taux faible)
+                <mj-raw>{% elseif updated_rate <= 60 %}</mj-raw>
+                un taux moyen)
+                <mj-raw>{% else %}</mj-raw>
+                un très bon taux)
+                <mj-raw>{% endif %}</mj-raw>
+             ont été mis à jour au cours des 6 derniers mois</div>
+    
+                </td>
+              </tr>
+            
+              <tr>
+                <td align="left" style="font-size:0px;padding:0;word-break:break-word;">
+                  
+      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;"><span aria-label="{{ summary.population_total }} habitants" class="rate-span rate-none" title="{{ summary.population_total }}" style="display: inline-block; padding: 0.15em 0.4em; border-radius: 0.25rem; font-size: 1rem; background-color: #e8edff; color: #0063cb; font-weight: bold;">{{ summary.population_total }}</span> habitants en bidonvilles ou squats</div>
+    
+                </td>
+              </tr>
             {% if var:showDetails %}{% if summary.new_shantytowns_length > 1 %}
               <tr>
                 <td align="left" style="font-size:0px;padding:0;padding-top:0.5rem;word-break:break-word;">
@@ -383,23 +424,7 @@
     
                 </td>
               </tr>
-            {% endfor %}{% if summary.shantytowns_total > 1 %}
-              <tr>
-                <td align="left" style="font-size:0px;padding:0;padding-top:1rem;word-break:break-word;">
-                  
-      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;">Pour rappel : <span class="text-secondary font-bold" style="font-weight: bold; color: #FF6F4c;">{{ summary.shantytowns_total }} sites</span> et <span class="text-secondary font-bold" style="font-weight: bold; color: #FF6F4c;">{{ summary.population_total }} habitants</span> en bidonvilles ou squats</div>
-    
-                </td>
-              </tr>
-            {% else %}
-              <tr>
-                <td align="left" style="font-size:0px;padding:0;padding-top:1rem;word-break:break-word;">
-                  
-      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;">Pour rappel : <span class="text-secondary font-bold" style="font-weight: bold; color: #FF6F4c;">{{ summary.shantytowns_total }} site</span> et <span class="text-secondary font-bold" style="font-weight: bold; color: #FF6F4c;">{{ summary.population_total }} habitants</span> en bidonvilles ou squats</div>
-    
-                </td>
-              </tr>
-            {% endif %}
+            {% endfor %}
               <tr>
                 <td align="left" style="font-size:0px;padding:2rem 0;word-break:break-word;">
                   
@@ -537,23 +562,7 @@
     
                 </td>
               </tr>
-            {% endfor %}{% if summary.shantytowns_total > 1 %}
-              <tr>
-                <td align="left" style="font-size:0px;padding:0;padding-top:1rem;word-break:break-word;">
-                  
-      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;">Pour rappel : <span class="text-secondary font-bold" style="font-weight: bold; color: #FF6F4c;">{{ summary.shantytowns_total }} sites</span> et <span class="text-secondary font-bold" style="font-weight: bold; color: #FF6F4c;">{{ summary.population_total }} habitants</span> en bidonvilles ou squats</div>
-    
-                </td>
-              </tr>
-            {% else %}
-              <tr>
-                <td align="left" style="font-size:0px;padding:0;padding-top:1rem;word-break:break-word;">
-                  
-      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;">Pour rappel : <span class="text-secondary font-bold" style="font-weight: bold; color: #FF6F4c;">{{ summary.shantytowns_total }} site</span> et <span class="text-secondary font-bold" style="font-weight: bold; color: #FF6F4c;">{{ summary.population_total }} habitants</span> en bidonvilles ou squats</div>
-    
-                </td>
-              </tr>
-            {% endif %}
+            {% endfor %}
               <tr>
                 <td align="left" style="font-size:0px;padding:2rem 0;word-break:break-word;">
                   
@@ -579,23 +588,7 @@
     
                 </td>
               </tr>
-            {% if summary.shantytowns_total > 1 %}
-              <tr>
-                <td align="left" style="font-size:0px;padding:0;padding-top:1rem;word-break:break-word;">
-                  
-      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;">Pour rappel : <span class="text-secondary font-bold" style="font-weight: bold; color: #FF6F4c;">{{ summary.shantytowns_total }} sites</span> et <span class="text-secondary font-bold" style="font-weight: bold; color: #FF6F4c;">{{ summary.population_total }} habitants</span> en bidonvilles ou squats</div>
-    
-                </td>
-              </tr>
-            {% else %}
-              <tr>
-                <td align="left" style="font-size:0px;padding:0;padding-top:1rem;word-break:break-word;">
-                  
-      <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:1.5em;text-align:left;color:#000000;">Pour rappel : <span class="text-secondary font-bold" style="font-weight: bold; color: #FF6F4c;">{{ summary.shantytowns_total }} site</span> et <span class="text-secondary font-bold" style="font-weight: bold; color: #FF6F4c;">{{ summary.population_total }} habitants</span> en bidonvilles ou squats</div>
-    
-                </td>
-              </tr>
-            {% endif %}
+            
               <tr>
                 <td align="left" style="font-size:0px;padding:2rem 0;word-break:break-word;">
                   

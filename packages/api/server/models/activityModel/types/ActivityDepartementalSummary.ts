@@ -31,5 +31,6 @@ export interface ActivityDepartementalSummary {
     new_users: Array<UserSummary>,
     new_users_length: number,
     shantytowns_total: number,
-    population_total: number
+    population_total: number,
+    updated_shantytowns_6_months: number
 }
