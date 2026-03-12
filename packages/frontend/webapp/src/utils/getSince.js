@@ -29,7 +29,7 @@ function diffInCalendarMonths(fromDate, toDate) {
 }
 
 // Exporte une fonction qui prend une date en entrée et retourne un objet avec le nombre de jours, semaines, mois et années écoulés depuis cette date
-export default function (value) {
+export default function getSince(value) {
     const now = new Date();
     const then = toDate(value);
 
