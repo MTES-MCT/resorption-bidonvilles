@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import { sequelize } from '#db/sequelize';
 import shantytownResorptionService from '#server/services/shantytownResorption';
 import shantytownModel from '#server/models/shantytownModel';
@@ -29,6 +28,30 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
 
     const transaction = await sequelize.transaction();
 
+    const checkPopulationUpdate = () => {
+        // On créé une matrice avec les champs de population à comparer entre l'original et le nouveau site, et les noms des champs correspondants dans le payload d'update
+        const populationFields: Array<[keyof typeof originalShantytown, string]> = [
+            ['populationTotal', 'population_total'],
+            ['populationTotalFemales', 'population_total_females'],
+            ['populationCouples', 'population_couples'],
+            ['populationMinors', 'population_minors'],
+            ['populationMinorsGirls', 'population_minors_girls'],
+            ['populationMinors0To3', 'population_minors_0_3'],
+            ['populationMinors3To6', 'population_minors_3_6'],
+            ['populationMinors6To12', 'population_minors_6_12'],
+            ['populationMinors12To16', 'population_minors_12_16'],
+            ['populationMinors16To18', 'population_minors_16_18'],
+            ['minorsInSchool', 'minors_in_school'],
+        ];
+
+        // On compare les champs de population entre l'original et le nouveau site, et si l'un d'entre eux a changé, on retourne la date de mise à jour, sinon on retourne undefined pour ne pas mettre à jour ce champ
+        const hasChanged = populationFields.some(
+            ([oldKey, newKey]) => originalShantytown[oldKey] !== shantytown[newKey],
+        );
+
+        return hasChanged || shantytown.updated_without_any_change ? new Date() : undefined;
+    };
+
     try {
         await shantytownModel.update(
             user,
@@ -57,6 +80,7 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
                 population_minors_12_16: shantytown.population_minors_12_16,
                 population_minors_16_18: shantytown.population_minors_16_18,
                 minors_in_school: shantytown.minors_in_school,
+                population_updated_at: checkPopulationUpdate(),
                 caravans: shantytown.caravans,
                 huts: shantytown.huts,
                 tents: shantytown.tents,
