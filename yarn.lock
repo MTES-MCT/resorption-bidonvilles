@@ -5940,6 +5940,7 @@ __metadata:
     json2csv: ^5.0.6
     jsonwebtoken: ^9.0.0
     lint-staged: ^13.2.2
+    liquidjs: ^10.24.0
     lodash: ^4.17.23
     mime-types: ^2.1.35
     mixin-deep: ^2.0.1
@@ -21510,6 +21511,18 @@ __metadata:
   bin:
     lint-staged: bin/lint-staged.js
   checksum: f7c146cc2849c9ce4f1d2808d990fcbdef5e0bb79e6e79cc895f53c91f5ac4dcefdb8c3465156b38a015dcb051f2795c6bda4f20a1e2f2fa654c7ba521b2d2e0
+  languageName: node
+  linkType: hard
+
+"liquidjs@npm:^10.24.0":
+  version: 10.24.0
+  resolution: "liquidjs@npm:10.24.0"
+  dependencies:
+    commander: ^10.0.0
+  bin:
+    liquid: bin/liquid.js
+    liquidjs: bin/liquid.js
+  checksum: a25638d1a52e34d64ad0ff8deb04d42dd2276913b277742b389b9f5e1a8ec8fc3b923228eb701d28f48b36e199c15466eb5bfee4d38464806a05050ff2c507ce
   languageName: node
   linkType: hard
 
