@@ -25,10 +25,19 @@ const descriptions: RolePermissionDescriptions = {
         description: 'L\'acteur national est en charge de la mise en oeuvre du cadre national. Pour cela, il suit et évalue les actions. Il peut, le cas échéant, apporter un soutien financier ou un appui technique.',
         national_permissions: [
             [{ type: 'view', label: 'Consulter les %sites%', comments: 'dont les procédures judiciaires' }],
-            [{ type: 'view', label: 'Consulter les %actions%', comments: 'dont les financements' }],
+            [
+                {
+                    type: 'view',
+                    label: 'Consulter les %actions%',
+                    comments: 'hors financements',
+                    option: 'access_action_finances',
+                },
+            ],
         ],
         local_permissions: [],
-        options: [],
+        options: [
+            { id: 'access_action_finances', label: 'Accéder aux financements des actions' },
+        ],
     },
     direct_collaborator: {
         description: 'Le correspondant est le représentant local de l\'Etat en charge de la question des bidonvilles à l\'échelle du territoire. Il pilote les actions menées et est également l\'interlocuteur privilégié de la Dihal sur le sujet.',
