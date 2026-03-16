@@ -1,9 +1,86 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import { WhereClauseGroup } from '#server/models/_common/types/Where.d';
+import enrichWhere from '../fetch/enrichWhere';
 import { ActionReportRow } from '#root/types/resources/Action.d';
 
-export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.query<ActionReportRow>(
-    `WITH
+export default (
+    requestedYear: number,
+    actionClauseGroup: WhereClauseGroup = {},
+    financeClauseGroup: WhereClauseGroup | null = {},
+): Promise<ActionReportRow[]> => {
+    const where: string[] = [];
+    const replacements: any = { annee: requestedYear };
+
+    // Ajouter les filtres territoriaux pour les actions
+    enrichWhere(where, replacements, actionClauseGroup, 'action');
+
+    // Construire la clause WHERE pour les actions
+    // Remplacer les noms de tables par leurs alias utilisés dans la requête SQL
+    const actionWhereClause = where.length > 0
+        ? `AND ${where.join(' AND ').replace(/departements\.code/g, 'd.code').replace(/regions\.code/g, 'r.code')}`
+        : '';
+
+    // Construire la CTE finances selon les permissions
+    let financesCTE: string;
+    if (financeClauseGroup === null) {
+        // Pas d'accès aux financements : retourner des NULL
+        financesCTE = `finances AS (
+            SELECT
+                NULL::integer as "action_id",
+                NULL::integer as "Année",
+                NULL::numeric as "finance_etatique",
+                NULL::numeric as "finance_dedie",
+                NULL::numeric as "finance_collectivite",
+                NULL::numeric as "finance_europeen",
+                NULL::numeric as "finance_prive",
+                NULL::numeric as "finance_autre",
+                NULL::numeric as "depense_finance_etatique",
+                NULL::numeric as "depense_finance_dedie",
+                NULL::numeric as "depense_finance_collectivite",
+                NULL::numeric as "depense_finance_europeen",
+                NULL::numeric as "depense_finance_prive",
+                NULL::numeric as "depense_finance_autre"
+            WHERE FALSE
+        )`;
+    } else {
+        // Construire les filtres pour les financements
+        const financeWhere: string[] = [];
+        enrichWhere(financeWhere, replacements, financeClauseGroup, 'finance');
+        const financeWhereClause = financeWhere.length > 0 ? `AND ${financeWhere.join(' AND ')}` : '';
+
+        financesCTE = `finances AS
+        (
+            SELECT
+            af.fk_action as "action_id",
+            af."year" as "Année",
+            SUM(CASE WHEN af.fk_action_finance_type = 'etatique' THEN af.amount ELSE 0 END) as "finance_etatique",
+            SUM(CASE WHEN af.fk_action_finance_type = 'dedie' THEN af.amount ELSE 0 END) as "finance_dedie",
+            SUM(CASE WHEN af.fk_action_finance_type = 'collectivite' THEN af.amount ELSE 0 END) as "finance_collectivite",
+            SUM(CASE WHEN af.fk_action_finance_type = 'europeen' THEN af.amount ELSE 0 END) as "finance_europeen",
+            SUM(CASE WHEN af.fk_action_finance_type = 'prive' THEN af.amount ELSE 0 END) as "finance_prive",
+            SUM(CASE WHEN af.fk_action_finance_type = 'autre' THEN af.amount ELSE 0 END) as "finance_autre",
+            SUM(CASE WHEN af.fk_action_finance_type = 'etatique' THEN af.real_amount ELSE 0 END) as "depense_finance_etatique",
+            SUM(CASE WHEN af.fk_action_finance_type = 'dedie' THEN af.real_amount ELSE 0 END) as "depense_finance_dedie",
+            SUM(CASE WHEN af.fk_action_finance_type = 'collectivite' THEN af.real_amount ELSE 0 END) as "depense_finance_collectivite",
+            SUM(CASE WHEN af.fk_action_finance_type = 'europeen' THEN af.real_amount ELSE 0 END) as "depense_finance_europeen",
+            SUM(CASE WHEN af.fk_action_finance_type = 'prive' THEN af.real_amount ELSE 0 END) as "depense_finance_prive",
+            SUM(CASE WHEN af.fk_action_finance_type = 'autre' THEN af.real_amount ELSE 0 END) as "depense_finance_autre"
+        FROM 
+            action_finances af
+        LEFT JOIN actions ON af.fk_action = actions.action_id
+        LEFT JOIN departements ON actions.fk_departement = departements.code
+        LEFT JOIN regions ON departements.fk_region = regions.code
+        WHERE
+            af."year" = :annee::integer
+            ${financeWhereClause}
+        GROUP BY
+        1, 2
+        )`;
+    }
+
+    return sequelize.query<ActionReportRow>(
+        `WITH
         last_comments AS (
             WITH actioncomments AS (
                 SELECT
@@ -40,30 +117,7 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
             GROUP BY
                 ac.fk_action
         ),
-        finances AS
-        (
-            SELECT
-            af.fk_action as "action_id",
-            af."year" as "Année",
-            SUM(CASE WHEN af.fk_action_finance_type = 'etatique' THEN af.amount ELSE 0 END) as "finance_etatique",
-            SUM(CASE WHEN af.fk_action_finance_type = 'dedie' THEN af.amount ELSE 0 END) as "finance_dedie",
-            SUM(CASE WHEN af.fk_action_finance_type = 'collectivite' THEN af.amount ELSE 0 END) as "finance_collectivite",
-            SUM(CASE WHEN af.fk_action_finance_type = 'europeen' THEN af.amount ELSE 0 END) as "finance_europeen",
-            SUM(CASE WHEN af.fk_action_finance_type = 'prive' THEN af.amount ELSE 0 END) as "finance_prive",
-            SUM(CASE WHEN af.fk_action_finance_type = 'autre' THEN af.amount ELSE 0 END) as "finance_autre",
-            SUM(CASE WHEN af.fk_action_finance_type = 'etatique' THEN af.real_amount ELSE 0 END) as "depense_finance_etatique",
-            SUM(CASE WHEN af.fk_action_finance_type = 'dedie' THEN af.real_amount ELSE 0 END) as "depense_finance_dedie",
-            SUM(CASE WHEN af.fk_action_finance_type = 'collectivite' THEN af.real_amount ELSE 0 END) as "depense_finance_collectivite",
-            SUM(CASE WHEN af.fk_action_finance_type = 'europeen' THEN af.real_amount ELSE 0 END) as "depense_finance_europeen",
-            SUM(CASE WHEN af.fk_action_finance_type = 'prive' THEN af.real_amount ELSE 0 END) as "depense_finance_prive",
-            SUM(CASE WHEN af.fk_action_finance_type = 'autre' THEN af.real_amount ELSE 0 END) as "depense_finance_autre"
-        FROM 
-            action_finances af
-        WHERE
-            af."year" = :annee::integer
-        GROUP BY
-        1, 2
-        ),
+        ${financesCTE},
         metrics AS
         (
             WITH ranked_metrics AS (
@@ -247,10 +301,12 @@ export default (requestedYear: number): Promise<ActionReportRow[]> => sequelize.
         actions.started_at <= TO_DATE(:annee::varchar || '-12-31', 'YYYY-MM-DD')
     AND
         (actions.ended_at IS NULL OR actions.ended_at >=  TO_DATE(:annee::varchar || '-01-01', 'YYYY-MM-DD'))
+        ${actionWhereClause}
     ORDER BY
         actions.action_id ;`,
-    {
-        type: QueryTypes.SELECT,
-        replacements: { annee: requestedYear },
-    },
-);
+        {
+            type: QueryTypes.SELECT,
+            replacements,
+        },
+    );
+};
