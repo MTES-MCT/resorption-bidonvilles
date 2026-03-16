@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import TableauDeBordView from "@/views/TableauDeBordView.vue";
 
 import { useUserStore } from "@/stores/user.store.js";
 import { useConfigStore } from "@/stores/config.store.js";
@@ -367,7 +366,7 @@ const router = createRouter({
         },
         {
             path: "/tableau-de-bord",
-            component: TableauDeBordView,
+            component: () => import("@/views/TableauDeBordView.vue"),
             meta: {
                 title: "Consulter le tableau de bord",
                 navTab: "tableau-de-bord",
