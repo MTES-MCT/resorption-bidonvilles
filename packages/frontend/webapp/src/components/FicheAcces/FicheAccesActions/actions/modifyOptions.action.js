@@ -1,4 +1,4 @@
-import { modifyOptions } from "@/api/users.api";
+import { modifyOptions, get } from "@/api/users.api";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useInputsStore } from "@/stores/inputs.store";
 import { useAccesStore } from "@/stores/acces.store";
@@ -12,6 +12,13 @@ export default async function (user, options) {
     }
     try {
         await modifyOptions(user.id, inputStore.options);
+
+        // Récupérer l'utilisateur mis à jour depuis le serveur
+        const updatedUser = await get(user.id);
+
+        // Mettre à jour les propriétés de l'objet existant pour préserver la réactivité
+        Object.assign(user, updatedUser);
+
         notificationStore.success(
             "Succès",
             "Les options de l'utilisateur ont bien été modifiées"

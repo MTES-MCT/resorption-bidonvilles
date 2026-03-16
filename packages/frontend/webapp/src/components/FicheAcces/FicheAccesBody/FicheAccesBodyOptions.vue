@@ -1,39 +1,36 @@
 <template>
     <div
         class="pt-2 pb-4 px-1 lg:px-4 bg-G300"
-        v-if="optionList && optionList.length > 0"
+        v-if="
+            optionList && optionList.length > 0 && accesStore.activatedOptions
+        "
     >
-        <p class="font-bold">Options</p>
-        <p class="ml-8">
+        <CheckableGroup id="user-options" label="Options">
             <Checkbox
                 v-for="option in optionList"
                 :key="option.id"
+                v-model="values.options"
                 :value="option.id"
                 :label="option.label"
                 name="options"
-                variant="checkbox"
-                direction="col"
                 :disabled="
                     user.status === 'inactive' || user.status === 'refused'
                 "
-                :active="
-                    user.status !== 'active' || accesStore.activatedOptions
-                "
             />
-            <DsfrButton
-                v-if="isModified && accesStore.activatedOptions"
-                label="Valider les modifications"
-                class="mt-2"
-                size="sm"
-                @click="modifyOptions(user, values.options)"
-            />
-        </p>
+        </CheckableGroup>
+        <DsfrButton
+            v-if="isModified"
+            label="Valider les modifications"
+            class="mt-2 ml-8"
+            size="sm"
+            @click="modifyOptions(user, values.options)"
+        />
     </div>
 </template>
 
 <script setup>
 import { toRefs, computed, watch } from "vue";
-import { Checkbox } from "@resorptionbidonvilles/ui";
+import { Checkbox, CheckableGroup } from "@resorptionbidonvilles/ui";
 import { useConfigStore } from "@/stores/config.store";
 import { useInputsStore } from "@/stores/inputs.store";
 import { useAccesStore } from "@/stores/acces.store";
@@ -90,7 +87,10 @@ const accessPermission = computed(() => {
 });
 
 watch(values, () => {
-    inputStore.handleOptions(values.options);
+    const optionsArray = Array.isArray(values.options) 
+        ? values.options 
+        : (values.options ? [values.options] : []);
+    inputStore.handleOptions(optionsArray);
 });
 
 watch(options, () => {
@@ -103,6 +103,13 @@ watch(options, () => {
         return;
     }
     setFieldValue("options", options.value);
+});
+
+watch(() => accesStore.activatedOptions, (isActivated) => {
+    if (isActivated) {
+        // Réinitialiser le formulaire avec les valeurs actuelles quand on active le mode édition
+        setFieldValue("options", options.value || []);
+    }
 });
 
 const optionList = computed(() => {

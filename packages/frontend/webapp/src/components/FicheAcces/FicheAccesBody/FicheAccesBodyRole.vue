@@ -10,8 +10,9 @@
             <FicheAccesBodyPermissionDetails
                 class="mb-4"
                 v-if="accessPermission.national_permissions?.length > 0"
-                title="À l’échelle nationale"
+                title="À l'échelle nationale"
                 :items="accessPermission.national_permissions"
+                :user="user"
                 :options="options"
             />
 
@@ -22,6 +23,8 @@
                 :user="user"
                 :options="options"
             />
+
+            <FicheAccesBodyOptions :user="user" :options="options" />
         </template>
         <div
             class="flex items-center justify-end"
@@ -47,6 +50,7 @@ import { isDeepEqual } from "@common/utils/isDeepEqual";
 import modifyOptions from "../FicheAccesActions/actions/modifyOptions.action";
 import FicheAccesBodySection from "./FicheAccesBodySection.vue";
 import FicheAccesBodyPermissionDetails from "./FicheAccesBodyPermissionDetails.vue";
+import FicheAccesBodyOptions from "./FicheAccesBodyOptions.vue";
 
 const props = defineProps({
     user: {

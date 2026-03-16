@@ -53,4 +53,13 @@ watch(
         options.value = optionList.value;
     }
 );
+
+watch(
+    () => user.value.permission_options,
+    (newPermissionOptions) => {
+        if (newPermissionOptions) {
+            options.value = newPermissionOptions;
+        }
+    }
+);
 </script>
