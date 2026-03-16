@@ -19,6 +19,7 @@
 <script setup>
 import { toRefs, ref, computed, watch } from "vue";
 import { useConfigStore } from "@/stores/config.store";
+import { useAccesStore } from "@/stores/acces.store";
 
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import InactiveUserWarning from "@/components/InactiveUserWarning/InactiveUserWarning.vue";
@@ -33,6 +34,10 @@ const props = defineProps({
     },
 });
 const { user } = toRefs(props);
+const accesStore = useAccesStore();
+
+// Réinitialiser le mode édition immédiatement
+accesStore.activatedOptions = false;
 
 const accessPermission = computed(() => {
     const configStore = useConfigStore();
@@ -60,6 +65,14 @@ watch(
         if (newPermissionOptions) {
             options.value = newPermissionOptions;
         }
+    }
+);
+
+// Désactiver le mode édition des options quand on change d'utilisateur
+watch(
+    () => user.value.id,
+    () => {
+        accesStore.activatedOptions = false;
     }
 );
 </script>
