@@ -2,16 +2,16 @@
     <div class="flex flex-col">
         <div class="flex flex-col items-start gap-1 uppercase text-sm">
             <DsfrBadge
-                :type="badgeType"
-                noIcon
-                :label="townStatus"
-                class="mr-4 text-xs"
-            />
-            <DsfrBadge
                 :type="populationUpdateTag"
                 :label="`Mise à jour du nombre d’habitants ${populationLastUpdate}`"
                 noIcon
                 class="text-xs"
+            />
+            <DsfrBadge
+                :type="badgeType"
+                noIcon
+                :label="townStatus"
+                class="mr-4 text-xs"
             />
             <BadgeSiteObjectifResorption
                 v-if="town.resorptionTarget"
