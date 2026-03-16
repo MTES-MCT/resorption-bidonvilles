@@ -87,9 +87,11 @@ const accessPermission = computed(() => {
 });
 
 watch(values, () => {
-    const optionsArray = Array.isArray(values.options) 
-        ? values.options 
-        : (values.options ? [values.options] : []);
+    const optionsArray = Array.isArray(values.options)
+        ? values.options
+        : values.options
+        ? [values.options]
+        : [];
     inputStore.handleOptions(optionsArray);
 });
 
@@ -105,12 +107,15 @@ watch(options, () => {
     setFieldValue("options", options.value);
 });
 
-watch(() => accesStore.activatedOptions, (isActivated) => {
-    if (isActivated) {
-        // Réinitialiser le formulaire avec les valeurs actuelles quand on active le mode édition
-        setFieldValue("options", options.value || []);
+watch(
+    () => accesStore.activatedOptions,
+    (isActivated) => {
+        if (isActivated) {
+            // Réinitialiser le formulaire avec les valeurs actuelles quand on active le mode édition
+            setFieldValue("options", options.value || []);
+        }
     }
-});
+);
 
 const optionList = computed(() => {
     return accessPermission.value?.options || [];
