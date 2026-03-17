@@ -7,7 +7,7 @@ import { Nation } from '#server/models/geoModel/Location.d';
 import generateExportFile from './exportActions.generateExportFile';
 import { ActionReportRow } from '#root/types/resources/Action.d';
 
-export default async (user: AuthUser, year: string) => {
+export default async (user: AuthUser, year: string, dihalFinancing = false) => {
     const nationalLevel: Nation = {
         type: 'nation', region: null, departement: null, epci: null, city: null,
     };
@@ -29,6 +29,11 @@ export default async (user: AuthUser, year: string) => {
         data = await actionModel.fetchReport(fetchedYear);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
+    }
+
+    // Filtrage par financement DIHAL si demandé
+    if (dihalFinancing) {
+        data = data.filter(action => action.finance_dedie > 0);
     }
 
     if (data.length === 0) {
