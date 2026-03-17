@@ -535,12 +535,14 @@ export default {
                 const limit = now - SIX_MONTHS_IN_SECONDS;
 
                 // 2. Grouper par département
-                const stats: Record<string, { name: string; total: number; updated: number }> = shantytowns.reduce((acc, town) => {
+                const stats: Record<string, { name: string; total: number; updated: number, updatedPopulation: number }> = shantytowns.reduce((acc, town) => {
                     const depCode = town.departement?.code || 'Inconnu';
                     const depName = town.departement?.name || 'Inconnu';
 
                     if (!acc[depCode]) {
-                        acc[depCode] = { name: depName, total: 0, updated: 0 };
+                        acc[depCode] = {
+                            name: depName, total: 0, updated: 0, updatedPopulation: 0,
+                        };
                     }
 
                     acc[depCode].total += 1;
@@ -549,6 +551,11 @@ export default {
                     if (town.updatedAt > limit) {
                         acc[depCode].updated += 1;
                     }
+                    // Vérification de la date de mise à jour de la population si la date de mise à jour du site est nulle ou ancienne
+                    if (town.populationUpdatedAt && town.populationUpdatedAt > limit) {
+                        acc[depCode].updatedPopulation += 1;
+                    }
+
 
                     return acc;
                 }, {});
@@ -562,7 +569,10 @@ export default {
                         total: data.total,
                         updatedCount: data.updated,
                         updateRate: `${((data.updated / data.total) * 100).toFixed(2)}`,
-                    }));
+                        updatedPopulationCount: data.updatedPopulation,
+                        populationUpdateRate: `${((data.updatedPopulation / data.total) * 100).toFixed(2)}`,
+                    }
+                ));
             };
 
             const results = analyzeUpdatesByDepartement();
@@ -573,6 +583,8 @@ export default {
                 'Nombre de sites',
                 'Mis à jour < 6 mois',
                 'Taux de MAJ (%)',
+                'Habitants mis à jour < 6 mois',
+                'Taux de MAJ sur population (%)',
             ];
             headerRow.font = {
                 color: { argb: 'FFFFFFFF' },
@@ -604,25 +616,32 @@ export default {
                     item.total,
                     item.updatedCount,
                     Number.parseFloat(item.updateRate),
+                    item.updatedPopulationCount,
+                    Number.parseFloat(item.populationUpdateRate),
+
                 ];
 
-                const rateValue = Number.parseFloat(item.updateRate);
-                const rateCell = row.getCell(4); // 4ème colonne pour le taux de MAJ
+                [
+                    { value: Number.parseFloat(item.updateRate), cell: row.getCell(4) },
+                    { value: Number.parseFloat(item.populationUpdateRate), cell: row.getCell(6) },
+                ].forEach((rateData) => {
+                    const rateValue = rateData.value;
+                    const rateCell = rateData.cell;
 
-                // Logique de colorisation
-                if (rateValue < 30) {
-                    // ROUGE : Fond clair, texte foncé
-                    rateCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFC7CE' } }; // Fond rouge clair
-                    rateCell.font = { color: { argb: 'FF9C0006' }, bold: true }; // Texte rouge foncé
-                } else if (rateValue >= 60) {
-                    // VERT : Fond vert clair, texte vert foncé
-                    rateCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFC6EFCE' } };
-                    rateCell.font = { color: { argb: 'FF006100' }, bold: true };
-                } else {
-                    // ORANGE : Fond orange clair, texte noir
-                    rateCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFEB9C' } };
-                    rateCell.font = { color: { argb: 'FF000000' }, bold: true };
-                }
+                    if (rateValue < 30) {
+                        // ROUGE : Fond clair, texte foncé
+                        rateCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFC7CE' } }; // Fond rouge clair
+                        rateCell.font = { color: { argb: 'FF9C0006' }, bold: true }; // Texte rouge foncé
+                    } else if (rateValue >= 60) {
+                        // VERT : Fond vert clair, texte vert foncé
+                        rateCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFC6EFCE' } };
+                        rateCell.font = { color: { argb: 'FF006100' }, bold: true };
+                    } else {
+                        // ORANGE : Fond orange clair, texte noir
+                        rateCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFEB9C' } };
+                        rateCell.font = { color: { argb: 'FF000000' }, bold: true };
+                    }
+                });
             });
             // Largeur des colonnes
             sheet2.columns.forEach((_col, index) => {
