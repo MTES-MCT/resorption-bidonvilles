@@ -49,7 +49,14 @@ export default async (shantytown, user, decreeAttachments: DecreeAttachments): P
             ([oldKey, newKey]) => originalShantytown[oldKey] !== shantytown[newKey],
         );
 
-        return hasChanged || shantytown.updated_without_any_change ? new Date() : undefined;
+        let hasNoChangesButHadData: boolean = false;
+        if (shantytown.updated_without_any_change && !hasChanged) {
+            hasNoChangesButHadData = populationFields.some(
+                ([oldKey]) => originalShantytown[oldKey] !== null && originalShantytown[oldKey] !== undefined,
+            );
+        }
+
+        return hasChanged || hasNoChangesButHadData ? new Date() : undefined;
     };
 
     try {
