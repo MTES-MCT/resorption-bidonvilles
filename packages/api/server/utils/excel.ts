@@ -584,7 +584,7 @@ export default {
                 'Mis à jour < 6 mois',
                 'Taux de MAJ (%)',
                 'Habitants mis à jour < 6 mois',
-                'Taux de MAJ sur population (%)',
+                'Taux de MAJ des habitants (%)',
             ];
             headerRow.font = {
                 color: { argb: 'FFFFFFFF' },
