@@ -122,7 +122,7 @@ function getMainMessage() {
 
 function getBeforeMinMessage() {
     const years = yearsBeforeMin.value.sort(
-        (a, b) => parseInt(a) - parseInt(b)
+        (a, b) => Number.parseInt(a) - Number.parseInt(b)
     );
     const yearsList = years.join(", ");
     const summary = formatFinancesSummary(years);
@@ -134,7 +134,9 @@ function getBeforeMinMessage() {
 }
 
 function getAfterMaxMessage() {
-    const years = yearsAfterMax.value.sort((a, b) => parseInt(a) - parseInt(b));
+    const years = yearsAfterMax.value.sort(
+        (a, b) => Number.parseInt(a) - Number.parseInt(b)
+    );
     const yearsList = years.join(", ");
     const summary = formatFinancesSummary(years);
 
