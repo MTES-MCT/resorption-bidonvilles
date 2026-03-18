@@ -2,11 +2,14 @@
     <Modal closeWhenClickOutside ref="modale">
         <template v-slot:title>Suppression de financements</template>
         <template v-slot:body>
-            <div class="fr-text">
+            <div class="fr-text" role="alert" aria-live="assertive">
                 <p class="fr-mb-3w">
                     {{ getMainMessage() }}
                 </p>
-                <ul class="fr-mb-3w">
+                <ul
+                    class="fr-mb-3w"
+                    aria-label="Détails des financements à supprimer"
+                >
                     <li
                         v-if="yearsBeforeMin.length > 0"
                         v-html="getBeforeMinMessage()"
@@ -16,7 +19,7 @@
                         v-html="getAfterMaxMessage()"
                     ></li>
                 </ul>
-                <p class="fr-text--bold text-red-600">
+                <p class="fr-text--bold text-red-600" role="status">
                     Cette suppression est irréversible. Voulez-vous continuer ?
                 </p>
             </div>
