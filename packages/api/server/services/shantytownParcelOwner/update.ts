@@ -22,9 +22,7 @@ export default async (user: AuthUser, shantytown: Shantytown, owners: ParcelOwne
     let actualOwners: RawParcelOwner[] = [];
     try {
         actualOwners = await shantytownParcelOwner.findAll(user, shantytown.id, transaction);
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Erreur lors de la récupération des propriétaires existants :', error);
+    } catch {
         throw new ServiceError('parcel_owner_fetch_failed', new Error('Erreur lors de la récupération des propriétaires existants'));
     }
 
