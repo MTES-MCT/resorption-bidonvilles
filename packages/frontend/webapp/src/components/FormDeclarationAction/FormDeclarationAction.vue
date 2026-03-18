@@ -229,23 +229,29 @@ watch(useFormErrors(), () => {
     }
 });
 
+function getYearFromDateValue(value) {
+    if (value == null || value === "") {
+        return null;
+    }
+
+    const dateValue = value instanceof Date ? value : new Date(value);
+
+    if (Number.isNaN(dateValue.getTime())) {
+        return null;
+    }
+
+    return dateValue.getFullYear();
+}
+
 function checkFundingDeletions(sentValues) {
     if (mode.value !== "edit" || !action.value || !originalFinances.value) {
         return null;
     }
 
-    const oldStartYear = action.value.started_at
-        ? new Date(action.value.started_at).getFullYear()
-        : null;
-    const oldEndYear = action.value.ended_at
-        ? new Date(action.value.ended_at).getFullYear()
-        : null;
-    const newStartYear = sentValues.started_at
-        ? sentValues.started_at.getFullYear()
-        : null;
-    const newEndYear = sentValues.ended_at
-        ? sentValues.ended_at.getFullYear()
-        : null;
+    const oldStartYear = getYearFromDateValue(action.value.started_at);
+    const oldEndYear = getYearFromDateValue(action.value.ended_at);
+    const newStartYear = getYearFromDateValue(sentValues.started_at);
+    const newEndYear = getYearFromDateValue(sentValues.ended_at);
 
     const minYearChanged = oldStartYear !== newStartYear;
     const maxYearChanged = oldEndYear !== newEndYear;
