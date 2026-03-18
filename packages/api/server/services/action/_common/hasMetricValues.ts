@@ -5,8 +5,7 @@
  * @returns true si au moins un indicateur a une valeur, false sinon
  */
 export default function hasMetricValues(yearMetrics: Record<string, any>): boolean {
-    return Object.keys(yearMetrics).some((key) => {
-        const val = yearMetrics[key];
-        return val !== null && val !== undefined && val !== '';
-    });
+    return Object.values(yearMetrics).some(
+        value => value !== '' && value != null,
+    );
 }
