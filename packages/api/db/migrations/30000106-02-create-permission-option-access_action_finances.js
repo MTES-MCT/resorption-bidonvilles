@@ -11,7 +11,26 @@ module.exports = {
         ],
     ),
 
-    down: queryInterface => queryInterface.sequelize.query(
-        'DELETE FROM permission_options WHERE uid = \'access_action_finances\'',
-    ),
+    async down(queryInterface) {
+        const transaction = await queryInterface.sequelize.transaction();
+
+        try {
+            // Supprimer les assignations de cette option aux utilisateurs
+            await queryInterface.sequelize.query(
+                'DELETE FROM user_permission_options WHERE fk_option = \'access_action_finances\'',
+                { transaction },
+            );
+
+            // Puis supprimer l'option elle-même
+            await queryInterface.sequelize.query(
+                'DELETE FROM permission_options WHERE uid = \'access_action_finances\'',
+                { transaction },
+            );
+
+            return transaction.commit();
+        } catch (error) {
+            await transaction.rollback();
+            throw error;
+        }
+    },
 };
