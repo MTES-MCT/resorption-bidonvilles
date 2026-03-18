@@ -3,7 +3,7 @@ import { sequelize } from '#db/sequelize';
 import { ActionInput } from '#server/services/action/ActionInput.d';
 import hasMetricValues from '#server/services/action/_common/hasMetricValues';
 
-export default (actionId: number, authorId: number, data: ActionInput, transaction: Transaction) => {
+export default function insertMetrics(actionId: number, authorId: number, data: ActionInput, transaction: Transaction) {
     const today = new Date();
 
     const yearsWithData = Object.keys(data.indicateurs).filter(strYear => hasMetricValues(data.indicateurs[strYear]));
@@ -71,4 +71,4 @@ export default (actionId: number, authorId: number, data: ActionInput, transacti
             }),
         },
     );
-};
+}
