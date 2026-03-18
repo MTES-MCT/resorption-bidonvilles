@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { toRefs, toRef, computed, ref, watch } from "vue";
+import { toRefs, toRef, toRaw, computed, ref, watch } from "vue";
 import { useForm, useFieldValue, useFormErrors } from "vee-validate";
 import { useActionsStore } from "@/stores/actions.store";
 import { useUserStore } from "@/stores/user.store";
@@ -86,8 +86,22 @@ const { handleSubmit, values, errors, setErrors, isSubmitting } = useForm({
 
 const managerIds = ref([]);
 
+function cloneValue(value) {
+    if (value == null) {
+        return value;
+    }
+
+    const rawValue = toRaw(value);
+
+    if (typeof structuredClone === "function") {
+        return structuredClone(rawValue);
+    }
+
+    return JSON.parse(JSON.stringify(rawValue));
+}
+
 if (action.value && action.value.finances) {
-    originalFinances.value = JSON.parse(JSON.stringify(action.value.finances));
+    originalFinances.value = cloneValue(action.value.finances);
 }
 
 watch(
