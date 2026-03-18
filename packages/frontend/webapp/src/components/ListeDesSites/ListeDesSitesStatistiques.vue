@@ -7,13 +7,31 @@
             <div>
                 <p class="text-3xl text-info font-bold">{{ title }}</p>
                 <p>
-                    {{ formatStat(populationTotal) }} personne{{
+                    {{ formatStat(townsStore.filteredTowns.length) }}
+                    site{{
+                        isPlural(townsStore.filteredTowns.length) ? "s" : ""
+                    }}
+                    représentant {{ formatStat(populationTotal) }} personne{{
                         isPlural(populationTotal) ? "s" : ""
                     }}
                 </p>
                 <p>
-                    {{ formatStat(townsStore.filteredTowns.length) }}
-                    site{{ isPlural(townsStore.filteredTowns.length) ? "s" : ""
+                    {{ updatedPopulationInTheLastThreeMonths }} sites<template
+                        v-if="updatedSitesInTheLastSixMonths !== null"
+                    >
+                        <DsfrBadge
+                            v-if="currentTab !== 'close'"
+                            class="ml-1"
+                            small
+                            :type="badgePopulationVariant"
+                            :label="badgePopulationLabel"
+                            noIcon
+                        />
+                    </template>
+                </p>
+                <p>
+                    {{ updatedSitesInTheLastSixMonths }}
+                    site{{ isPlural(updatedSitesInTheLastSixMonths) ? "s" : ""
                     }}<template v-if="updatedSitesInTheLastSixMonths !== null">
                         <DsfrBadge
                             v-if="currentTab !== 'close'"
@@ -98,52 +116,100 @@ const insalubrityOrderTotal = computed(() => {
     ).length;
 });
 
-const updatedSitesInTheLastSixMonths = computed(() => {
-    return townsStore.filteredTowns.filter((town) => {
-        if (!town.lastUpdatedAt) {
-            return false;
-        }
+const countRecentlyUpdatedTowns = (getDate, maxMonths) => {
+    return computed(() => {
+        return townsStore.filteredTowns.filter((town) => {
+            const date = getDate(town);
 
-        // Utiliser getSince pour obtenir les mois écoulés
-        const { months } = getSince(town.lastUpdatedAt);
+            if (!date) {
+                return false;
+            }
 
-        // Un site est considéré comme mis à jour récemment si moins de 6 mois se sont écoulés
-        return months < 6;
-    }).length;
-});
+            const { months } = getSince(date);
+            return months < maxMonths;
+        }).length;
+    });
+};
+
+const computePercentage = (count, total) => {
+    if (total === 0) {
+        return 0;
+    }
+
+    return Math.round((count / total) * 1000) / 10;
+};
+
+const getBadgeVariant = (value, successThreshold, warningThreshold) => {
+    if (value >= successThreshold) {
+        return "success";
+    }
+
+    if (value >= warningThreshold) {
+        return "warning";
+    }
+
+    return "error";
+};
+
+const getBadgeLabel = (count, percentage, positiveLabel, emptyLabel) => {
+    if (count > 0) {
+        return `(${percentage}%) ${positiveLabel}`;
+    }
+
+    return emptyLabel;
+};
+
+const totalSites = computed(() => townsStore.filteredTowns.length);
+
+const updatedSitesInTheLastSixMonths = countRecentlyUpdatedTowns(
+    ({ lastUpdatedAt }) => lastUpdatedAt,
+    6
+);
+
+const updatedPopulationInTheLastThreeMonths = countRecentlyUpdatedTowns(
+    ({ populationUpdatedAt }) => populationUpdatedAt,
+    3
+);
 
 // Pourcentage de sites mis à jour dans les 6 derniers mois
 const updatedSitesPercentage = computed(() => {
-    const totalSites = townsStore.filteredTowns.length;
-    if (totalSites === 0) {
-        return 0; // Éviter la division par zéro
-    }
+    return computePercentage(
+        updatedSitesInTheLastSixMonths.value,
+        totalSites.value
+    );
+});
 
-    const percentage =
-        (updatedSitesInTheLastSixMonths.value / totalSites) * 100;
-
-    // Arrondir à 1 décimale
-    return Math.round(percentage * 10) / 10;
+// Pourcentage de sites dont les habitants ont été mis à jour dans les 3 derniers mois
+const updatedPopulationPercentage = computed(() => {
+    return computePercentage(
+        updatedPopulationInTheLastThreeMonths.value,
+        totalSites.value
+    );
 });
 
 const badgeLabel = computed(() => {
-    if (updatedSitesInTheLastSixMonths.value > 0) {
-        return `dont ${updatedSitesPercentage.value}% de site${
-            isPlural(updatedSitesInTheLastSixMonths.value) ? "s" : ""
-        } (${
-            updatedSitesInTheLastSixMonths.value
-        }) mis à jour dans les 6 derniers mois`;
-    }
-    return "Aucun site mis à jour au cours des 6 derniers mois";
+    return getBadgeLabel(
+        updatedSitesInTheLastSixMonths.value,
+        updatedSitesPercentage.value,
+        "mis à jour dans les 6 derniers mois",
+        "Aucun site mis à jour au cours des 6 derniers mois"
+    );
+});
+
+const badgePopulationLabel = computed(() => {
+    return getBadgeLabel(
+        updatedPopulationInTheLastThreeMonths.value,
+        updatedPopulationPercentage.value,
+        "dont le nombre d’habitants a été mis à jour dans les 3 derniers mois",
+        "Aucun site dont les habitants ont été mis à jour au cours des 3 derniers mois"
+    );
+});
+
+const badgePopulationVariant = computed(() => {
+    return getBadgeVariant(updatedPopulationInTheLastThreeMonths.value, 95, 80);
 });
 
 const badgeVariant = computed(() => {
-    if (updatedSitesPercentage.value >= 80) {
-        return "success";
-    } else if (updatedSitesPercentage.value >= 60) {
-        return "warning";
-    } else {
-        return "error";
-    }
+    return getBadgeVariant(updatedSitesPercentage.value, 80, 60);
 });
 </script>
