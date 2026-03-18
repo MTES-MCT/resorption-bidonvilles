@@ -99,7 +99,7 @@ function formatFinancesSummary(years) {
         const yearFinances = finances.value[year] || [];
         totalLines += yearFinances.length;
         totalAmount += yearFinances.reduce(
-            (sum, f) => sum + (parseFloat(f.amount) || 0),
+            (sum, f) => sum + (Number.parseFloat(f.amount) || 0),
             0
         );
     });
