@@ -258,7 +258,7 @@ function checkFundingDeletions(sentValues) {
     const yearsAfterMax = [];
 
     Object.keys(originalFinances.value).forEach((strYear) => {
-        const year = parseInt(strYear, 10);
+        const year = Number.parseInt(strYear, 10);
         const hasData =
             originalFinances.value[strYear] &&
             originalFinances.value[strYear].length > 0;
