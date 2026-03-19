@@ -178,17 +178,9 @@ const { variant, submit, language } = toRefs(props);
 const allowNewOrganization = computed(() => {
     return variant.value === "demande-acces";
 });
-const allowPrivateOrganization = computed(() => {
-    return variant.value === "creer-utilisateur";
-});
 
 const schema = computed(() => {
-    return schemaFn(
-        variant.value,
-        allowNewOrganization.value,
-        allowPrivateOrganization.value,
-        language.value
-    );
+    return schemaFn(variant.value, language.value);
 });
 
 const labels = computed(() => {
