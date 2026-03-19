@@ -40,6 +40,23 @@ const locales = {
     },
 };
 
+const EMAIL_REGEX =
+    /^(?=.{1,254}$)(?=.{1,50}@)[A-Za-z0-9_%+-]+(?:\.[A-Za-z0-9_%+-]+)*@[A-Za-z0-9.-]+\.[A-Za-z0-9-]{2,63}$/;
+
+function isValidEmail(value) {
+    if (!EMAIL_REGEX.test(value)) {
+        return false;
+    }
+
+    const [, domain] = value.split("@");
+
+    return domain.split(".").every((label) => {
+        return (
+            label.length > 0 && !label.startsWith("-") && !label.endsWith("-")
+        );
+    });
+}
+
 addMethod(object, "customSchema", function (schema) {
     return this.test(
         "customSchema",
@@ -61,12 +78,7 @@ addMethod(object, "customSchema", function (schema) {
     );
 });
 
-const schema = (
-    variant,
-    allowNewOrganization,
-    allowPrivateOrganization,
-    language
-) => {
+const schema = (variant, language) => {
     const schema = {};
     const labels = labelsFn(variant)[language];
 
@@ -79,10 +91,7 @@ const schema = (
     // personal information
     schema.email = string()
         .required()
-        .matches(
-            /^[A-Za-z0-9._%+-]{1,50}@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
-            `${labels.email} n'est pas valide`
-        )
+        .test("email", `${labels.email} n'est pas valide`, isValidEmail)
         .label(labels.email);
     if (["demande-acces", "demande-contact"].includes(variant)) {
         schema.verif_email = string()

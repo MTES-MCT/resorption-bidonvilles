@@ -30,9 +30,5 @@ const { label } = toRefs(props);
 
 const isSubmitting = useIsSubmitting();
 
-const {
-    value: email,
-    errors,
-    handleBlur,
-} = useField("verif_email", "required|email");
+const { value: email, errors, handleBlur } = useField("verif_email");
 </script>

@@ -45,9 +45,5 @@ const props = defineProps({
 
 const { label } = toRefs(props);
 const isSubmitting = useIsSubmitting();
-const {
-    value: email,
-    errors,
-    handleBlur,
-} = useField("email", "required|email");
+const { value: email, errors, handleBlur } = useField("email");
 </script>
