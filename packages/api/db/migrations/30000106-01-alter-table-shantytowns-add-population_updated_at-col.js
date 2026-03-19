@@ -64,6 +64,7 @@ const hydratePopulationUpdatedAt = async (queryInterface, transaction) => {
                 hid,
                 updated_at,
                 0 AS source_order,
+                updated_without_any_change,
                 ${orderedPopulationColumns}
             FROM "ShantytownHistories"
 
@@ -74,6 +75,7 @@ const hydratePopulationUpdatedAt = async (queryInterface, transaction) => {
                 NULL AS hid,
                 updated_at,
                 1 AS source_order,
+                updated_without_any_change,
                 ${orderedPopulationColumns}
             FROM shantytowns
         ),
@@ -83,6 +85,7 @@ const hydratePopulationUpdatedAt = async (queryInterface, transaction) => {
                 hid,
                 updated_at,
                 source_order,
+                updated_without_any_change,
                 ${orderedPopulationColumns},
                 LAG(updated_at) OVER version_window AS previous_updated_at,
                 ${laggedPopulationColumns}
@@ -102,6 +105,7 @@ const hydratePopulationUpdatedAt = async (queryInterface, transaction) => {
                             previous_updated_at IS NULL
                             AND (${populationHasValueCondition})
                         ) OR (${populationHasChangedCondition})
+                          OR updated_without_any_change = true
                             THEN updated_at
                         ELSE NULL
                     END
