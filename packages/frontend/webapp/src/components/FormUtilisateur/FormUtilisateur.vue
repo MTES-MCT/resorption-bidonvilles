@@ -129,7 +129,7 @@
 
 <script setup>
 // utils
-import { toRefs, computed, ref, onMounted, watch } from "vue";
+import { toRefs, computed, ref, onMounted } from "vue";
 import router from "@/helpers/router";
 
 // components
@@ -174,12 +174,7 @@ const props = defineProps({
 
 const form = ref(null);
 const { variant, submit, language } = toRefs(props);
-const values = ref({
-    organization_category: "",
-    territorial_collectivity: "",
-    association: "",
-    private_organization: "",
-});
+
 const allowNewOrganization = computed(() => {
     return variant.value === "demande-acces";
 });
@@ -209,10 +204,6 @@ onMounted(() => {
         form.value.setFieldValue("is_actor", true);
         form.value.setFieldValue("request_type", "access-request");
     }
-});
-
-watch(values.value.association, (newAssociation) => {
-    onOrganizationChange(newAssociation);
 });
 
 const onOrganizationChange = (value) => {
