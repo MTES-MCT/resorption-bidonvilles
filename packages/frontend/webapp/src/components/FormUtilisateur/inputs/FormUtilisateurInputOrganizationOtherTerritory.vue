@@ -58,8 +58,14 @@ const unselectedOption = computed(() => {
 });
 
 const getTerritoryOptions = async () => {
-    const response = await get(matrice[type.value].search);
-    options.value = response.map((option) => option.name);
+    try {
+        const response = await get(matrice[type.value].search);
+        options.value = response.map((option) => option.name);
+    } catch {
+        options.value = [
+            "Une erreur est survenue lors du chargement des options",
+        ];
+    }
 };
 
 onMounted(() => {
