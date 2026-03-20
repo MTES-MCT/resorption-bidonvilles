@@ -2,7 +2,6 @@ import ServiceError from '#server/errors/ServiceError';
 import accessRequestService from '#server/services/accessRequest/accessRequestService';
 import { User } from '#root/types/resources/User.d';
 import { ContactBody } from '#root/types/inputs/ContactBody.d';
-import { Organization } from '#root/types/resources/Organization.d';
 import create from './create';
 
 export default async (data: ContactBody): Promise<User> => {
@@ -13,7 +12,7 @@ export default async (data: ContactBody): Promise<User> => {
             first_name: data.first_name,
             email: data.email,
             phone: data.phone,
-            organization: (data.organization_full as Organization | null)?.id ?? null,
+            organization: data.organization_full?.id ?? null,
             position: data.position,
             access_request_message: data.access_request_message,
         });
