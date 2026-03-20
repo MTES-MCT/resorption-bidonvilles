@@ -17,7 +17,7 @@
                 </p>
                 <p>
                     {{ updatedPopulationInTheLastThreeMonths }} sites<template
-                        v-if="updatedSitesInTheLastSixMonths !== null"
+                        v-if="updatedPopulationInTheLastThreeMonths !== null"
                     >
                         <DsfrBadge
                             v-if="currentTab !== 'close'"
@@ -206,7 +206,7 @@ const badgePopulationLabel = computed(() => {
 });
 
 const badgePopulationVariant = computed(() => {
-    return getBadgeVariant(updatedPopulationInTheLastThreeMonths.value, 95, 80);
+    return getBadgeVariant(updatedPopulationPercentage.value, 95, 80);
 });
 
 const badgeVariant = computed(() => {
