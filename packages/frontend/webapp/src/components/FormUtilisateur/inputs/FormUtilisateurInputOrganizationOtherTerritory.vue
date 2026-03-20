@@ -20,6 +20,7 @@
 import { computed, onMounted, ref, toRefs, watch } from "vue";
 import { useField, useIsSubmitting } from "vee-validate";
 import { get } from "@/api/territory";
+import { useNotificationStore } from "@/stores/notification.store";
 
 const props = defineProps({
     label: String,
@@ -28,6 +29,7 @@ const props = defineProps({
 });
 const { label, type, disabled } = toRefs(props);
 
+const notificationStore = useNotificationStore();
 const isSubmitting = useIsSubmitting();
 const {
     value: organizationOtherTerritory,
@@ -62,9 +64,10 @@ const getTerritoryOptions = async () => {
         const response = await get(matrice[type.value].search);
         options.value = response.map((option) => option.name);
     } catch {
-        options.value = [
-            "Une erreur est survenue lors du chargement des options",
-        ];
+        notificationStore.error(
+            "Une erreur est survenue",
+            "Une erreur inconnue s'est produite. Réessayez dans quelques instants ou contactez l'équipe support."
+        );
     }
 };
 
