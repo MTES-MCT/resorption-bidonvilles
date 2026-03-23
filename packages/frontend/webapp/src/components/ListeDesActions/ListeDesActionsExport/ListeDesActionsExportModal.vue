@@ -96,9 +96,9 @@ const actionsExportIsSelected = ref(false);
 const selectedYear = ref(new Date().getFullYear() - 1);
 
 const years = computed(() => {
-    const actionExport = exportList.value.filter(
+    const actionExport = exportList.value.find(
         (exportItem) => exportItem.filename === "actions"
-    )[0];
+    );
 
     if (!actionExport || !actionExport.years) {
         return [];
