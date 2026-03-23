@@ -4,11 +4,11 @@ import { WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import enrichWhere from '../fetch/enrichWhere';
 import { ActionReportRow } from '#root/types/resources/Action.d';
 
-export default (
+export default function fetchReport(
     requestedYear: number,
     actionClauseGroup: WhereClauseGroup = {},
     financeClauseGroup: WhereClauseGroup | null = {},
-): Promise<ActionReportRow[]> => {
+): Promise<ActionReportRow[]> {
     const where: string[] = [];
     const replacements: any = { annee: requestedYear };
 
@@ -309,4 +309,4 @@ export default (
             replacements,
         },
     );
-};
+}
