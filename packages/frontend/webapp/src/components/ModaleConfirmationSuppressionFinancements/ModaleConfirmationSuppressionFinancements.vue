@@ -19,9 +19,9 @@
                         v-html="getAfterMaxMessage()"
                     ></li>
                 </ul>
-                <p class="fr-text--bold text-red-600" role="status">
+                <output class="fr-text--bold text-red-600">
                     Cette suppression est irréversible. Voulez-vous continuer ?
-                </p>
+                </output>
             </div>
         </template>
         <template v-slot:footer>
