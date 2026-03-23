@@ -222,6 +222,10 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
         }
 
         if (acc[row.regionCode][row.departementCode] === undefined) {
+            const updatedPercentage = row.shantytownsTotal > 0
+                ? parseFloat(((row.updatedLessThan6MonthsTotal * 100) / row.shantytownsTotal).toFixed(2))
+                : 0;
+
             acc[row.regionCode][row.departementCode] = {
                 has_activity: false,
                 code: row.departementCode,
@@ -240,6 +244,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
                 population_total: row.populationTotal,
                 updated_shantytowns_6_months:
                     row.updatedLessThan6MonthsTotal,
+                updated_shantytowns_6_months_percentage: updatedPercentage,
             };
         }
 
