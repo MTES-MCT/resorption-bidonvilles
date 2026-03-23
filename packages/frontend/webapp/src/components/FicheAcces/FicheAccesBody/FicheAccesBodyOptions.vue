@@ -87,11 +87,14 @@ const accessPermission = computed(() => {
 });
 
 watch(values, () => {
-    const optionsArray = Array.isArray(values.options)
-        ? values.options
-        : values.options
-        ? [values.options]
-        : [];
+    let optionsArray;
+    if (Array.isArray(values.options)) {
+        optionsArray = values.options;
+    } else if (values.options) {
+        optionsArray = [values.options];
+    } else {
+        optionsArray = [];
+    }
     inputStore.handleOptions(optionsArray);
 });
 
