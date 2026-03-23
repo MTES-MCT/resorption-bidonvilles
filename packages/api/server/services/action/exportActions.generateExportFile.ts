@@ -4,8 +4,8 @@ import creerClasseurExcel from './exportActions.creerClasseurExcel';
 import { ActionReportRow } from '#root/types/resources/Action.d';
 
 
-export default async (
+export default async function exportActions(
     data: ActionReportRow[],
     includeFinances: boolean = true,
     allowedDepartements: string[] | null = null,
-): Promise<ExcelJS.Buffer> => creerClasseurExcel(data, includeFinances, allowedDepartements);
+): Promise<ExcelJS.Buffer> { return creerClasseurExcel(data, includeFinances, allowedDepartements); }
