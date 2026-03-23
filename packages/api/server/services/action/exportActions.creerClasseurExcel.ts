@@ -323,11 +323,11 @@ function hideThreeFirstColumns(worksheet: ExcelJS.Worksheet) {
     });
 }
 
-export default (
+export default function exportActions(
     data: ActionReportRow[],
     includeFinances: boolean = true,
     allowedDepartements: string[] | null = null,
-) => {
+) {
     // Déterminer les sections à inclure selon les permissions
     let sectionsToInclude: SectionTitle[];
     if (includeFinances) {
@@ -379,7 +379,6 @@ export default (
     // Itérer sur chaque data de département
     donneesParDepartement.forEach((donneeParDepartement: DepartementObject) => {
         const worksheet = addDepartmentWorksheet(workbook, donneeParDepartement.departement);
-        // const worksheet = workbook.addWorksheet(donneeParDepartement.departement === 'Tous' ? `${donneeParDepartement.departement}` : `Dépt ${donneeParDepartement.departement}`);
         worksheet.properties.defaultColWidth = 25; // Largeur par défaut des colonnes
 
         // Ajouter les entêtes de sections
@@ -390,7 +389,7 @@ export default (
 
         // Fixer la largeur des colonnes
         headersToInclude.forEach((header, index) => {
-            worksheet.getColumn(index + 1).width = parseInt(header.width, 10) * 5;
+            worksheet.getColumn(index + 1).width = Number.parseInt(header.width, 10) * 5;
         });
 
         // Ajouter les lignes de données
@@ -413,4 +412,4 @@ export default (
     });
 
     return workbook.xlsx.writeBuffer();
-};
+}
