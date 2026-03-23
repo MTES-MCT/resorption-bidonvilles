@@ -143,6 +143,7 @@
     "test:integration:all": "yarn mocha -r ts-node/register --require ./test/globalFixtures.ts --require ./test/bootstrap.int.ts './server/**/*.int.spec.ts' --bail --exit",
     "lint": "eslint --max-warnings=0 --ext .ts",
     "lint:all": "eslint --no-error-on-unmatched-pattern --max-warnings=0 --ext .ts server",
-    "emails:build": "ts-node server/mails/build.ts"
+    "emails:build": "ts-node server/mails/build.ts",
+    "test:activity-summary": "ts-node test/mails/testActivitySummary.ts"
   }
 }
