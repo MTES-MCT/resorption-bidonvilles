@@ -24,7 +24,7 @@ module.exports = function refreshViewCascade(views) {
                 );
 
                 // Recrée les vues en ordre inverse (les vues "bases" d'avord)
-                await views.reverse().reduce(
+                await views.toReversed().reduce(
                     (promise, view) => promise.then(() => queryInterface.sequelize.query(view.newView, { transaction })),
                     Promise.resolve(),
                 );
@@ -50,7 +50,7 @@ module.exports = function refreshViewCascade(views) {
                 );
 
                 // Recrée les anciennes views in en ordre inverse (vues "base" d'abord)
-                await views.reverse().reduce(
+                await views.toReversed().reduce(
                     (promise, view) => promise.then(() => queryInterface.sequelize.query(view.oldView, { transaction })),
                     Promise.resolve(),
                 );
