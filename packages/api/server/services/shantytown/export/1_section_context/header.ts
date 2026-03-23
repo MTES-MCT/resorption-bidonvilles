@@ -2,8 +2,8 @@ import moment from 'moment';
 import { Paragraph, TextRun, AlignmentType } from 'docx';
 import dateUtils from '#server/utils/date';
 
-const getUpdateTag = (monthsSinceUpdate: number): 'red' | 'orange' | 'green' => {
-    if (monthsSinceUpdate >= 6) {
+const getUpdateTag = (monthsSinceUpdate: number | null): 'red' | 'orange' | 'green' => {
+    if (monthsSinceUpdate === null || monthsSinceUpdate >= 6) {
         return 'red';
     }
 
@@ -28,7 +28,7 @@ export default (shantytown) => {
         : 'non renseigné';
     const monthsSincePopulationUpdate = populationUpdatedAtDate
         ? dateUtils.getMonthDiffBetween(populationUpdatedAtDate, now)
-        : 0;
+        : null;
     const monthsSinceLastUpdate = dateUtils.getMonthDiffBetween(updatedAtDate, now);
 
     const colors = {
