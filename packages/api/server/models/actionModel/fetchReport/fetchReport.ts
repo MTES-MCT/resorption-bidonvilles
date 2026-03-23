@@ -18,7 +18,7 @@ export default function fetchReport(
     // Construire la clause WHERE pour les actions
     // Remplacer les noms de tables par leurs alias utilisés dans la requête SQL
     const actionWhereClause = where.length > 0
-        ? `AND ${where.join(' AND ').replace(/departements\.code/g, 'd.code').replace(/regions\.code/g, 'r.code')}`
+        ? `AND ${where.join(' AND ').replaceAll('departements.code', 'd.code').replaceAll('regions.code', 'r.code')}`
         : '';
 
     // Construire la CTE finances selon les permissions
