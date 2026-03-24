@@ -5,6 +5,7 @@ import fetch from './fetch';
 import findActionFinancesReadersByAction from './findActionFinancesReadersByAction';
 import findActionFinancesReadersByManagers from './findActionFinancesReadersByManagers';
 import getCommentReport from './getCommentReport';
+import getHistory from './getHistory';
 import requestPilot from './requestPilot';
 import update from './update';
 
@@ -16,6 +17,7 @@ export default {
     findActionFinancesReadersByAction,
     findActionFinancesReadersByManagers,
     getCommentReport,
+    getHistory,
     requestPilot,
     update,
 };
