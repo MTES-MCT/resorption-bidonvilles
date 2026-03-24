@@ -1,5 +1,10 @@
 <template>
-    <FicheRubrique title="Lieu" id="localisation">
+    <FicheRubrique
+        title="Lieu"
+        id="localisation"
+        category="localisation"
+        entityType="action"
+    >
         <div class="mt-8">
             <p>
                 <Icon icon="location-dot" class="mr-2" />
