@@ -49,12 +49,20 @@ import { Button } from "@resorptionbidonvilles/ui";
 const props = defineProps({
     title: String,
     category: String,
+    entityType: {
+        type: String,
+        default: "site",
+    },
 });
-const { title, category } = toRefs(props);
+const { title, category, entityType } = toRefs(props);
 const { emit } = useEventBus();
 
 function openHistorique() {
-    emit("fichesite:openHistorique", category.value);
+    const eventName =
+        entityType.value === "action"
+            ? "ficheaction:openHistorique"
+            : "fichesite:openHistorique";
+    emit(eventName, category.value);
 }
 
 function openListAccesPJ() {

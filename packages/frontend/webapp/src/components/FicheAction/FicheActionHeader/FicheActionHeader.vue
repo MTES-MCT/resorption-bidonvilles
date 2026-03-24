@@ -15,7 +15,10 @@
                 <FicheActionHeaderStatus :action="action" />
             </template>
             <template v-slot:actions>
-                <FicheActionHeaderBoutons :action="action" />
+                <FicheActionHeaderBoutons
+                    :action="action"
+                    @openHistory="$emit('openHistory')"
+                />
             </template>
         </ViewHeader>
     </ContentWrapper>
@@ -34,4 +37,6 @@ const props = defineProps({
     action: Object,
 });
 const { action } = toRefs(props);
+
+defineEmits(["openHistory"]);
 </script>
