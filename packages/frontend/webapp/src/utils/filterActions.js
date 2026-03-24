@@ -116,8 +116,8 @@ function checkOrganization(action, organizationId) {
     return action.operators?.some((op) => op.id === organizationId);
 }
 
-function checkDihalFinancing(action, filters) {
-    if (filters.includes("dihal")) {
+function checkDihalFinancing(action, dihalFinancingFilters) {
+    if (dihalFinancingFilters.includes("dihal")) {
         return action.hasDihalFinancing === true;
     }
     return true;
