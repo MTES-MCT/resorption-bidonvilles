@@ -9,6 +9,7 @@ import findActionFinancesReaders from './findActionFinancesReaders/findActionFin
 import findActionFinancesReadersByAction from './findActionFinancesReaders/findActionFinancesReadersByAction';
 import findActionFinancesReadersByManagers from './findActionFinancesReaders/findActionFinancesReadersByManagers';
 import getCommentHistory from './getCommentHistory/getCommentHistory';
+import getHistory from './getHistory/getHistory';
 import update from './update/update';
 
 export default {
@@ -23,5 +24,6 @@ export default {
     findActionFinancesReadersByAction,
     findActionFinancesReadersByManagers,
     getCommentHistory,
+    getHistory,
     update,
 };
