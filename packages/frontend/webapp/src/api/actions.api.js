@@ -60,3 +60,7 @@ export function getActionFinancementsReadersByAction(actionId) {
 export function requestPilot(actionId) {
     return axios.get(`/actions/${encodeURI(actionId)}/requestPilot`);
 }
+
+export function getActionHistory(actionId) {
+    return axios.get(`/actions/${encodeURI(actionId)}/history`);
+}
