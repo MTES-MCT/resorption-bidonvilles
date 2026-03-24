@@ -1,5 +1,10 @@
 <template>
-    <FicheRubrique title="Financements" id="financements">
+    <FicheRubrique
+        title="Financements"
+        id="financements"
+        category="financements"
+        entityType="action"
+    >
         <ActionFinances
             :minYear="minYear"
             :maxYear="maxYear"

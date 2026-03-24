@@ -1,5 +1,10 @@
 <template>
-    <FicheRubrique title="Indicateurs" id="indicateurs">
+    <FicheRubrique
+        title="Indicateurs"
+        id="indicateurs"
+        category="indicateurs"
+        entityType="action"
+    >
         <p class="mt-6 text-center">
             Il n'y a aucun indicateur renseigné par l'opérateur pour le moment.
         </p>
