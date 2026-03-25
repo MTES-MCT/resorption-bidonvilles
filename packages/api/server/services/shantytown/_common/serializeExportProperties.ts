@@ -230,6 +230,11 @@ export default (closingSolutions: ClosingSolution[]) => {
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
         },
+        populationUpdatedAt: {
+            title: 'Habitants mis à jour le',
+            data: ({ populationUpdatedAt }: ShantytownWithFinancedAction) => (populationUpdatedAt ? new Date(populationUpdatedAt * 1000) : null),
+            width: COLUMN_WIDTHS.SMALL,
+        },
         caravans: {
             title: 'Nombre de caravanes',
             data: ({ caravans }: ShantytownWithFinancedAction) => caravans,

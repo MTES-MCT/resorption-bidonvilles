@@ -63,6 +63,7 @@ export type TownInput = {
     population_minors_12_16?: number,
     population_minors_16_18?: number,
     minors_in_school?: number,
+    population_updated_at?: Date,
     caravans?: number,
     huts?: number,
     tents?: number,

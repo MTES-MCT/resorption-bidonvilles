@@ -47,7 +47,6 @@ const props = defineProps({
     },
 });
 const { action } = toRefs(props);
-console.log("Action:", action.value);
 
 const numberOfSites = computed(() => {
     return `${action.value.location_shantytowns?.length} site${
