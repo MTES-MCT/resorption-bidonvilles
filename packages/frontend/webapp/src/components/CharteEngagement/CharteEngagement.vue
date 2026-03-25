@@ -20,8 +20,8 @@
 
         <template v-slot:button>
             <p class="text-center">
-                <Button type="submit" :disabled="formValid !== 2"
-                    >J'accepte et j'accède à la plateforme</Button
+                <DsfrButton type="submit" :disabled="formValid !== 2"
+                    >J'accepte et j'accède à la plateforme</DsfrButton
                 >
             </p>
         </template>
@@ -36,7 +36,6 @@ import { useNotificationStore } from "@/stores/notification.store";
 import { acceptCharter } from "@/api/users.api.js";
 import schema from "./CharteEngagement.schema";
 
-import { Button } from "@resorptionbidonvilles/ui";
 import FormPublic from "@/components/FormPublic/FormPublic.vue";
 import CharteEngagementInputCharteAgreement from "./inputs/CharteEngagementInputCharteAgreement.vue";
 import CharteEngagementInputConfidentialityAgreement from "./inputs/CharteEngagementInputConfidentialityAgreement.vue";

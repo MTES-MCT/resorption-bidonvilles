@@ -16,6 +16,7 @@ interface MessageData {
     objet: string,
     is_organization_other: boolean,
     organization_other: string,
+    organization_other_localisation: string,
 }
 
 async function sendEmailNewContactMessageToAdmins(message: MessageData): Promise<void> {
@@ -39,7 +40,7 @@ async function sendEmailNewContactMessageToAdmins(message: MessageData): Promise
     }
 }
 
-function getObjetForContactMessage(requestType: ContactRequestType[]): string {
+function getObjetForContactMessage(requestType: ContactRequestType): string {
     const types: { [key in ContactRequestType]: string } = {
         'access-request': 'Demande de création de compte',
         help: 'Aider',
@@ -50,8 +51,21 @@ function getObjetForContactMessage(requestType: ContactRequestType[]): string {
         'submit-blog-post': 'Proposer un article pour le blog',
     };
 
-    return requestType.map(type => types[type]).join(' - ');
+    return types[requestType];
 }
+
+const getLocalisationName = (territoryType: string, territory: string): string => {
+    if (territoryType === 'National') {
+        return 'France entière';
+    }
+    if (territoryType === 'Régional') {
+        return `Région ${territory.replace(/^\d+ - /, '')}`;
+    }
+    if (territoryType === 'Départemental') {
+        return `Département ${territory}`;
+    }
+    return territory;
+};
 
 export default (data: ContactServiceNotifyData): Promise<void> => sendEmailNewContactMessageToAdmins({
     email: data.email,
@@ -62,4 +76,5 @@ export default (data: ContactServiceNotifyData): Promise<void> => sendEmailNewCo
     objet: getObjetForContactMessage(data.request_type),
     is_organization_other: data.is_new_organization,
     organization_other: data.is_new_organization ? data.organization_other : '',
+    organization_other_localisation: data.is_new_organization ? getLocalisationName(data.organization_other_territory_type, data.organization_other_territory) : '',
 });

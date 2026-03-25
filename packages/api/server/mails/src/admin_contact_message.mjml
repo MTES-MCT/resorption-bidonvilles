@@ -30,6 +30,8 @@
                 <mj-raw>{% if var:message.is_organization_other %}</mj-raw>
                 <mj-text>Nom de la structure à créer :</mj-text>
                 <mj-text>{{var:message.organization_other}}</mj-text>
+                <mj-text>Localisation de la structure :</mj-text>
+                <mj-text>{{var:message.organization_other_localisation}}</mj-text>
                 <mj-raw>{% endif %}</mj-raw>
             </mj-column>
         </mj-section>
