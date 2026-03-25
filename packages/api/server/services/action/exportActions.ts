@@ -70,7 +70,7 @@ export default async (user: AuthUser, year: string) => {
     // Si l'année n'est pas précisée, calcul de l'année en cours
     let fetchedYear = new Date().getFullYear() - 1;
     if (year) {
-        fetchedYear = parseInt(year, 10);
+        fetchedYear = Number.parseInt(year, 10);
     }
     try {
         // Récupération des données avec filtres territoriaux
