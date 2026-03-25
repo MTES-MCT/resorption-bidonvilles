@@ -40,14 +40,11 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
     let parcel: RawParcel;
     try {
         parcel = await majicModel.findParcel(parcelId, dept, schema, shortParcelTableName, parcelTableName);
-        if (!parcel) {
-            throw new ServiceError('parcel_fetch_failed', new Error('Impossible de retrouver la parcelle en base de données.'));
-        }
-    } catch (parcelError) {
-        if (parcelError.code === 'parcel_fetch_failed') {
-            throw parcelError;
-        }
-        throw new ServiceError('parcel_fetch_failed', new Error(`Parcelle ${parcelId} introuvable dans la base des propriétaires fonciers.`));
+    } catch {
+        throw new ServiceError('parcel_fetch_error', new Error(`Une erreur s'est produite lors de la recherche de la parcelle ${parcelId}.`));
+    }
+    if (!parcel) {
+        throw new ServiceError('parcel_fetch_failed', new Error(`Parcelle ${parcelId} introuvable.`));
     }
 
     // Récupérer la liste des propriétaires de la parcelle
@@ -55,11 +52,11 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
     try {
         owners = await majicModel.findOwners(parcel.idcom, parcel.dnupro, dept, schema, shortOwnerTableName, ownerTableName);
     } catch {
-        throw new ServiceError('owners_fetch_failed', new Error(`Une erreur s'est produite lors de la recherche des propriétaires de la parcelle ${parcelId}.`));
+        throw new ServiceError('owners_fetch_error', new Error(`Une erreur s'est produite lors de la recherche des propriétaires de la parcelle ${parcelId}.`));
     }
 
     if (!owners) {
-        throw new ServiceError('owner_fetch_failed', new Error(`Propriétaire de la parcelle ${parcelId} introuvable dans la base des propriétaires fonciers.`));
+        throw new ServiceError('owners_fetch_failed', new Error(`Propriétaire de la parcelle ${parcelId} introuvable.`));
     }
 
     // Envoyer le mail

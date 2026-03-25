@@ -146,11 +146,19 @@ async function fetchParcelOwners() {
             "Les informations ont été envoyées à l'adresse renseignée dans votre profil. Cette demande est tracée."
         );
     } catch (e) {
-        notificationStore.error(
-            "Une erreur est survenue",
+        const errorMessage =
             e?.user_message ||
-                `Nous n'avons pu récupérer les informations relatives au propriétaire de la parcelle ${parcel.value}.`
-        );
+            `Nous n'avons pu récupérer les informations relatives au propriétaire de la parcelle ${parcel.value}.`;
+
+        const isNotFoundError =
+            e?.code === "parcel_fetch_failed" ||
+            e?.code === "owners_fetch_failed";
+
+        if (isNotFoundError) {
+            notificationStore.info("Information introuvable", errorMessage);
+        } else {
+            notificationStore.error("Une erreur est survenue", errorMessage);
+        }
     }
     modale.value.close();
     loading.value = false;
