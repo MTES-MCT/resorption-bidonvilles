@@ -78,6 +78,7 @@ const props = defineProps({
     },
 });
 const { action } = toRefs(props);
+const emit = defineEmits(["submitted-successfully"]);
 
 const userStore = useUserStore();
 const modaleStore = useModaleStore();
@@ -338,28 +339,27 @@ function formatValuesForApi(v) {
     if (formatted.indicateurs && typeof formatted.indicateurs === "object") {
         formatted.indicateurs = Object.entries(formatted.indicateurs).reduce(
             (acc, [year, yearValues]) => {
-                const source = yearValues || {};
-                const sortedKeys = [
-                    ...new Set([
-                        ...Object.keys(source),
-                        ...INDICATEURS_YEAR_KEYS,
-                    ]),
-                ].sort((a, b) =>
-                    a.localeCompare(b, "fr", { sensitivity: "base" })
-                );
+                if (yearValues && Object.keys(yearValues).length > 0) {
+                    const sortedKeys = [
+                        ...new Set([
+                            ...Object.keys(yearValues),
+                            ...INDICATEURS_YEAR_KEYS,
+                        ]),
+                    ].sort((a, b) =>
+                        a.localeCompare(b, "fr", { sensitivity: "base" })
+                    );
 
-                acc[year] = sortedKeys.reduce((yearAcc, key) => {
-                    const value = source[key];
-                    yearAcc[key] = value === "" ? null : value ?? null;
-                    return yearAcc;
-                }, {});
-
+                    acc[year] = sortedKeys.reduce((yearAcc, key) => {
+                        const value = yearValues[key];
+                        yearAcc[key] = value === "" ? null : value ?? null;
+                        return yearAcc;
+                    }, {});
+                }
                 return acc;
             },
             {}
         );
     }
-
     return formatted;
 }
 
@@ -453,6 +453,7 @@ async function performSubmit(sentValues) {
         const respondedAction = await submit(formattedValues, action.value?.id);
 
         notificationStore.success(notification.title, notification.content);
+        emit("submitted-successfully", respondedAction?.id);
         backOrReplace(`/action/${respondedAction.id}`);
     } catch (e) {
         error.value = e?.user_message || "Une erreur inconnue est survenue";
