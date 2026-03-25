@@ -34,8 +34,9 @@ export function edit(id, data) {
     return axios.patch(`/actions/${encodeURI(id)}`, data);
 }
 
-export function exportActions(year) {
+export function exportActions(year, dihalFinancing = false) {
     return axios.get(`/actions/export/excel/${encodeURI(year)}`, {
+        params: { dihalFinancing },
         responseType: "blob",
     });
 }
