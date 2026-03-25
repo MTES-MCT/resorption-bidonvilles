@@ -4,6 +4,7 @@ import { Location } from '#server/models/geoModel/Location.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { ShantytownExportListOption } from '#root/types/resources/ShantytownExportTypes.d';
 import { ExportedSitesStatus } from '#root/types/resources/exportedSitesStatus.d';
+import { ShantytownExportSortBy } from '#root/types/resources/ShantytownExportSort.d';
 import shantytownFiltersAsQueryParamList from './shantytownFiltersAsQueryParamList';
 
 const { exportTowns } = shantytownService;
@@ -33,20 +34,22 @@ interface ExportTownsRequest extends Request {
         date: Date,
         exportedSitesStatus: ExportedSitesStatus,
         location: Location,
+        sortBy?: ShantytownExportSortBy,
+        sortOrder?: 'ASC' | 'DESC',
     },
     query: {
         options: ShantytownExportListOption[],
     } & DynamicFilters<ExportedSitesStatus>,
 }
 
-export default async (req: ExportTownsRequest, res: Response, next: NextFunction): Promise<void> => {
+export default async function exportList(req: ExportTownsRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-        const { exportedSitesStatus } = req.body;
+        const { exportedSitesStatus, sortBy, sortOrder } = req.body;
 
         const filters = {
             exportedSitesStatus,
             ...Object.keys(req.query)
-                .filter(key => key !== 'options')
+                .filter(key => !['options', 'sortBy', 'sortOrder'].includes(key))
                 .reduce((acc, key) => {
                     if (req.query[key]) {
                         acc[key] = req.query[key];
@@ -55,12 +58,15 @@ export default async (req: ExportTownsRequest, res: Response, next: NextFunction
                 }, {} as Record<string, string[]>),
         };
 
+        const sort = sortBy ? { sortBy, sortOrder: sortOrder || 'DESC' } : undefined;
+
         const buffer = await exportTowns(
             req.user,
             req.body.location,
             filters,
             req.query.options,
             req.body.date,
+            sort,
         );
         res.end(buffer);
     } catch (error) {
@@ -70,4 +76,4 @@ export default async (req: ExportTownsRequest, res: Response, next: NextFunction
         });
         next(error.nativeError ?? error);
     }
-};
+}

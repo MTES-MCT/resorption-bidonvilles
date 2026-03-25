@@ -5,24 +5,14 @@
         aria-label="Localisations de l'action"
     >
         <Icon icon="map-marker-alt" class="text-lg" style="color: #000091" />
-        <span class="text-dark font-bold">
-            Lieu
-            <template
-                v-if="
-                    action.location_shantytowns &&
-                    action.location_shantytowns.length > 0
-                "
-                >({{ action.location_shantytowns.length }})</template
-            ></span
-        >
+        <span class="text-dark font-bold"> Lieu </span>
         <div>
             <span v-if="action.location_type === 'sur_site'">
                 <span
-                    v-for="shantytown in action.location_shantytowns"
-                    :key="shantytown.id"
+                    v-if="action.location_shantytowns?.length > 0"
                     tabindex="0"
-                    :aria-label="`Localisation: sur site ${shantytown.usename}`"
-                    >- {{ shantytown.usename }}<br
+                    :aria-label="`Localisation: sur ${numberOfSites} `"
+                    >{{ numberOfSites }}<br
                 /></span>
             </span>
             <span
@@ -48,7 +38,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
@@ -57,4 +47,11 @@ const props = defineProps({
     },
 });
 const { action } = toRefs(props);
+console.log("Action:", action.value);
+
+const numberOfSites = computed(() => {
+    return `${action.value.location_shantytowns?.length} site${
+        action.value.location_shantytowns?.length > 1 ? "s" : ""
+    }`;
+});
 </script>

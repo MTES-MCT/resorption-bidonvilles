@@ -12,8 +12,17 @@ import { ShantytownWithFinancedAction } from '#root/types/resources/Shantytown.d
 import { FinancedShantytownAction } from '#root/types/resources/Action.d';
 import { PostSqlFilters, ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
 import setQueryFilters from './exportTowns.setQueryFilters';
+import { ShantytownExportSort, ShantytownExportSortBy } from '#root/types/resources/ShantytownExportSort.d';
 
-export default async function fetchCurrentData(user: AuthUser, locations: Location[], filters: ShantytownFilters): Promise<ShantytownWithFinancedAction[]> {
+const SORT_BY_TO_SQL_COLUMN: Record<ShantytownExportSortBy, string> = {
+    cityName: 'cities.name',
+    builtAt: 'shantytowns.built_at',
+    lastUpdatedAt: 'shantytowns.updated_at',
+    declaredAt: 'shantytowns.declared_at',
+    closedAt: 'shantytowns.closed_at',
+};
+
+export default async function fetchCurrentData(user: AuthUser, locations: Location[], filters: ShantytownFilters, sort?: ShantytownExportSort): Promise<ShantytownWithFinancedAction[]> {
     const queryFilters: Where = setQueryFilters(filters);
 
     // Extraire les filtres post-SQL
@@ -28,25 +37,7 @@ export default async function fetchCurrentData(user: AuthUser, locations: Locati
 
     const townsFilters: Where = [...queryFilters]; // Copie des filtres reçus
 
-    if (!isNationalExport) {
-        townsFilters.push(
-            locations.reduce((acc, l, index) => {
-                acc[`location_${index}`] = {
-                    query: `${geoUtils.fromGeoLevelToTableName(l.type)}.code`,
-                    value: l[l.type].code,
-                };
-
-                if (l.type === 'city') {
-                    acc[`location_main_${index}`] = {
-                        query: 'cities.fk_main',
-                        value: l[l.type].code,
-                    };
-                }
-
-                return acc;
-            }, {} as WhereClauseGroup),
-        );
-    } else {
+    if (isNationalExport) {
         const outremer = ['971', '972', '973', '974', '975', '976', '977', '978', '984', '986', '987', '988', '989'];
         locations.forEach((l) => {
             if (l.type === 'metropole') {
@@ -66,9 +57,31 @@ export default async function fetchCurrentData(user: AuthUser, locations: Locati
                 });
             }
         });
+    } else {
+        townsFilters.push(
+            locations.reduce((acc, l, index) => {
+                acc[`location_${index}`] = {
+                    query: `${geoUtils.fromGeoLevelToTableName(l.type)}.code`,
+                    value: l[l.type].code,
+                };
+
+                if (l.type === 'city') {
+                    acc[`location_main_${index}`] = {
+                        query: 'cities.fk_main',
+                        value: l[l.type].code,
+                    };
+                }
+
+                return acc;
+            }, {} as WhereClauseGroup),
+        );
     }
 
-    let towns = await shantytownModel.findAll(user, townsFilters, 'export');
+    const order = sort
+        ? [`${SORT_BY_TO_SQL_COLUMN[sort.sortBy]} ${sort.sortOrder}`]
+        : undefined;
+
+    let towns = await shantytownModel.findAll(user, townsFilters, 'export', order);
     if (towns.length === 0) {
         return [];
     }
@@ -104,7 +117,7 @@ export default async function fetchCurrentData(user: AuthUser, locations: Locati
     }
     const clauseGroup = where().can(user).do('read', 'action');
     const currentYear = moment(new Date()).format('YYYY');
-    const townsWithFinancedActions = await actionModel.fetchFinancedActionsByYear(null, parseInt(currentYear, 10), clauseGroup);
+    const townsWithFinancedActions = await actionModel.fetchFinancedActionsByYear(null, Number.parseInt(currentYear, 10), clauseGroup);
     const transformedShantytowns = enrichShantytown(townsWithFinancedActions);
 
     return Promise.all(towns.map(async (town: ShantytownWithFinancedAction) => {

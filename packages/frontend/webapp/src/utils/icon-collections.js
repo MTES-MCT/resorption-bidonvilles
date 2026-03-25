@@ -2,6 +2,12 @@ const collections = [
     {
         prefix: "ri",
         icons: {
+            "eye-line": {
+                body: '<path fill="currentColor" d="M12 3c5.392 0 9.878 3.88 10.819 9c-.94 5.12-5.427 9-10.819 9s-9.878-3.88-10.818-9C2.122 6.88 6.608 3 12 3m0 16a9.005 9.005 0 0 0 8.778-7a9.005 9.005 0 0 0-17.555 0A9.005 9.005 0 0 0 12 19m0-2.5a4.5 4.5 0 1 1 0-9a4.5 4.5 0 0 1 0 9m0-2a2.5 2.5 0 1 0 0-5a2.5 2.5 0 0 0 0 5"/>',
+            },
+            "eye-off-line": {
+                body: '<path fill="currentColor" d="M17.883 19.297A10.95 10.95 0 0 1 12 21c-5.392 0-9.878-3.88-10.818-9A11 11 0 0 1 4.52 5.935L1.394 2.808l1.414-1.414l19.799 19.798l-1.414 1.415zM5.936 7.35A8.97 8.97 0 0 0 3.223 12a9.005 9.005 0 0 0 13.201 5.838l-2.028-2.028A4.5 4.5 0 0 1 8.19 9.604zm6.978 6.978l-3.242-3.241a2.5 2.5 0 0 0 3.241 3.241m7.893 2.265l-1.431-1.431A8.9 8.9 0 0 0 20.778 12A9.005 9.005 0 0 0 9.552 5.338L7.974 3.76C9.221 3.27 10.58 3 12 3c5.392 0 9.878 3.88 10.819 9a10.95 10.95 0 0 1-2.012 4.593m-9.084-9.084Q11.86 7.5 12 7.5a4.5 4.5 0 0 1 4.492 4.778z"/>',
+            },
             "file-excel-fill": {
                 body: '<path fill="currentColor" d="m16 2l5 5v14.008a.993.993 0 0 1-.993.992H3.993A1 1 0 0 1 3 21.008V2.992C3 2.444 3.445 2 3.993 2zm-2.8 10L16 8h-2.4L12 10.286L10.4 8H8l2.8 4L8 16h2.4l1.6-2.286L13.6 16H16z"/>',
             },
@@ -10,6 +16,21 @@ const collections = [
             },
             "flag-fill": {
                 body: '<path fill="currentColor" d="M3 3h9.382a1 1 0 0 1 .894.553L14 5h6a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-6.382a1 1 0 0 1-.894-.553L12 16H5v6H3z"/>',
+            },
+            "focus-2-line": {
+                body: '<path fill="currentColor" d="M12 20a8 8 0 1 0 0-16a8 8 0 0 0 0 16m0 2C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m0-6a4 4 0 1 0 0-8a4 4 0 0 0 0 8m0 2a6 6 0 1 1 0-12a6 6 0 0 1 0 12m0-4a2 2 0 1 1 0-4a2 2 0 0 1 0 4"/>',
+            },
+            "key-fill": {
+                body: '<path fill="currentColor" d="M17 14h-4.341a6 6 0 1 1 0-4H23v4h-2v4h-4zM7 14a2 2 0 1 0 0-4a2 2 0 0 0 0 4"/>',
+            },
+            "link-unlink": {
+                body: '<path fill="currentColor" d="M17 17H22V19H19V22H17V17ZM7 7H2V5H5V2H7V7ZM18.364 15.5355L16.9497 14.1213L18.364 12.7071C20.3166 10.7545 20.3166 7.58866 18.364 5.63604C16.4113 3.68342 13.2455 3.68342 11.2929 5.63604L9.87868 7.05025L8.46447 5.63604L9.87868 4.22183C12.6123 1.48816 17.0445 1.48816 19.7782 4.22183C22.5118 6.9555 22.5118 11.3877 19.7782 14.1213L18.364 15.5355ZM15.5355 18.364L14.1213 19.7782C11.3877 22.5118 6.9555 22.5118 4.22183 19.7782C1.48816 17.0445 1.48816 12.6123 4.22183 9.87868L5.63604 8.46447L7.05025 9.87868L5.63604 11.2929C3.68342 13.2455 3.68342 16.4113 5.63604 18.364C7.58866 20.3166 10.7545 20.3166 12.7071 18.364L14.1213 16.9497L15.5355 18.364ZM14.8284 7.75736L16.2426 9.17157L9.17157 16.2426L7.75736 14.8284L14.8284 7.75736Z"/>',
+            },
+            "plane-fill": {
+                body: '<path fill="currentColor" d="M1.94607 9.31543C1.42353 9.14125 1.4194 8.86022 1.95682 8.68108L21.043 2.31901C21.5715 2.14285 21.8746 2.43866 21.7265 2.95694L16.2733 22.0432C16.1223 22.5716 15.8177 22.59 15.5944 22.0876L11.9999 14L17.9999 6.00005L9.99992 12L1.94607 9.31543Z"/>',
+            },
+            "prohibited-line": {
+                body: '<path fill="currentColor" d="M7.0943 5.68009L18.3199 16.9057C19.3736 15.5506 20 13.8491 20 12C20 7.58172 16.4183 4 12 4C10.1509 4 8.44939 4.62644 7.0943 5.68009ZM16.9057 18.3199L5.68009 7.0943C4.62644 8.44939 4 10.1509 4 12C4 16.4183 7.58172 20 12 20C13.8491 20 15.5506 19.3736 16.9057 18.3199ZM4.92893 4.92893C6.73748 3.12038 9.23885 2 12 2C17.5228 2 22 6.47715 22 12C22 14.7611 20.8796 17.2625 19.0711 19.0711C17.2625 20.8796 14.7611 22 12 22C6.47715 22 2 17.5228 2 12C2 9.23885 3.12038 6.73748 4.92893 4.92893Z"/>',
             },
             "refresh-line": {
                 body: '<path fill="currentColor" d="M5.463 4.433A9.96 9.96 0 0 1 12 2c5.523 0 10 4.477 10 10c0 2.136-.67 4.116-1.81 5.74L17 12h3A8 8 0 0 0 6.46 6.228zm13.074 15.134A9.96 9.96 0 0 1 12 22C6.477 22 2 17.523 2 12c0-2.136.67-4.116 1.81-5.74L7 12H4a8 8 0 0 0 13.54 5.772z"/>',
@@ -20,6 +41,9 @@ const collections = [
             "sun-line": {
                 body: '<path fill="currentColor" d="M12 18a6 6 0 1 1 0-12a6 6 0 0 1 0 12m0-2a4 4 0 1 0 0-8a4 4 0 0 0 0 8M11 1h2v3h-2zm0 19h2v3h-2zM3.515 4.929l1.414-1.414L7.05 5.636L5.636 7.05zM16.95 18.364l1.414-1.414l2.121 2.121l-1.414 1.414zm2.121-14.85l1.414 1.415l-2.121 2.121l-1.414-1.414zM5.636 16.95l1.414 1.414l-2.121 2.121l-1.414-1.414zM23 11v2h-3v-2zM4 11v2H1v-2z"/>',
             },
+            "user-follow-fill": {
+                body: '<path fill="currentColor" d="M13 14.0619V22H4C4 17.5817 7.58172 14 12 14C12.3387 14 12.6724 14.021 13 14.0619ZM12 13C8.685 13 6 10.315 6 7C6 3.685 8.685 1 12 1C15.315 1 18 3.685 18 7C18 10.315 15.315 13 12 13ZM17.7929 19.9142L21.3284 16.3787L22.7426 17.7929L17.7929 22.7426L14.2574 19.2071L15.6716 17.7929L17.7929 19.9142Z"/>',
+            },
         },
         width: 24,
         height: 24,
@@ -29,6 +53,9 @@ const collections = [
         icons: {
             "account-edit": {
                 body: '<path fill="currentColor" d="m21.7 13.35l-1 1l-2.05-2.05l1-1a.55.55 0 0 1 .77 0l1.28 1.28c.21.21.21.56 0 .77M12 18.94l6.06-6.06l2.05 2.05L14.06 21H12zM12 14c-4.42 0-8 1.79-8 4v2h6v-1.89l4-4c-.66-.08-1.33-.11-2-.11m0-10a4 4 0 0 0-4 4a4 4 0 0 0 4 4a4 4 0 0 0 4-4a4 4 0 0 0-4-4"/>',
+            },
+            "content-copy": {
+                body: '<path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/>',
             },
             "delete-outline": {
                 body: '<path fill="currentColor" d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zM8 9h8v10H8zm7.5-5l-1-1h-5l-1 1H5v2h14V4z"/>',
@@ -82,22 +109,41 @@ const collections = [
         height: 512,
     },
 ];
-export const ri = {
-    fileExcelFill: "ri:file-excel-fill",
-    fileWordFill: "ri:file-word-fill",
-    flagFill: "ri:flag-fill",
-    refreshLine: "ri:refresh-line",
-    sunFill: "ri:sun-fill",
-    sunLine: "ri:sun-line",
-};
-export const mdi = {
-    accountEdit: "mdi:account-edit",
-    deleteOutline: "mdi:delete-outline",
-    homeRemoveOutline: "mdi:home-remove-outline",
-    play: "mdi:play",
-};
-export const uil = { temperaturePlus: "uil:temperature-plus" };
-export const bxs = { filePdf: "bxs:file-pdf" };
-export const carbon = { temperatureHot: "carbon:temperature-hot" };
-export const faSolid = { spinner: "fa-solid:spinner" };
+
+/**
+ * Convertit un nom d'icône en camelCase
+ * Exemple: "eye-line" -> "eyeLine", "file-excel-fill" -> "fileExcelFill"
+ */
+function toCamelCase(str) {
+    return str.replaceAll(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+}
+
+/**
+ * Génère automatiquement les exports nommés à partir des collections
+ * pour éviter la duplication de code
+ */
+function generateExports() {
+    const exports = {};
+
+    collections.forEach((collection) => {
+        const prefix = collection.prefix;
+        exports[prefix] = {};
+
+        Object.keys(collection.icons).forEach((iconName) => {
+            const camelCaseName = toCamelCase(iconName);
+            exports[prefix][camelCaseName] = `${prefix}:${iconName}`;
+        });
+    });
+
+    return exports;
+}
+
+const generatedExports = generateExports();
+
+export const ri = generatedExports.ri;
+export const mdi = generatedExports.mdi;
+export const uil = generatedExports.uil;
+export const bxs = generatedExports.bxs;
+export const carbon = generatedExports.carbon;
+
 export default collections;

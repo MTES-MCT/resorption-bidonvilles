@@ -10,9 +10,17 @@ const riIconNames = [
     "file-word-fill",
     "file-excel-fill",
     "flag-fill",
+    "focus-2-line",
+    "follow-fill",
+    "key-fill",
+    "link-unlink",
+    "plane-fill",
+    "prohibited-line",
     "refresh-line",
     "sun-fill",
     "sun-line",
+    "eye-line",
+    "eye-off-line",
 ];
 
 const mdiIconNames = [
@@ -20,6 +28,7 @@ const mdiIconNames = [
     "home-remove-outline",
     "play",
     "delete-outline",
+    "content-copy",
 ];
 
 const uilIconNames = ["temperature-plus"];

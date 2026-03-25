@@ -13,6 +13,7 @@ import SQL, { ShantytownRow } from './_common/SQL';
 import { ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
 import shantytownPreparatoryPhasesTowardResorptionModel from '../shantytownPreparatoryPhasesTowardResorptionModel';
 import { ShantytownExportListOption } from '#root/types/resources/ShantytownExportTypes.d';
+import { ShantytownExportSort, ShantytownExportSortBy } from '#root/types/resources/ShantytownExportSort.d';
 
 const { fromGeoLevelToTableName } = geoUtils;
 const { restrict } = permissionUtils;
@@ -99,7 +100,7 @@ function applyTargetFilters(shantytownHistory: ShantytownRow[], targetFilter: st
     };
 
     const checker = targetCheckers[targetFilter];
-    return checker ? shantytownHistory.filter(checker) : shantytownHistory;
+    return checker ? shantytownHistory.filter(town => checker(town)) : shantytownHistory;
 }
 
 function checkJusticeCondition(town: ShantytownRow, condition: string): boolean {
@@ -506,21 +507,53 @@ async function serializeTowns(shantytownHistory: ShantytownRow[], filters: Shant
     return serializedTowns;
 }
 
-export default async function getHistoryAtGivenDate(user: AuthUser, options: ShantytownExportListOption[], locations: Location[], lastDate: string, filters: ShantytownFilters): Promise<Shantytown[]> {
+function applySorting(towns: Shantytown[], sort?: ShantytownExportSort): Shantytown[] {
+    if (!sort) {
+        return towns;
+    }
+
+    const SORT_BY_TO_PROPERTY: Record<ShantytownExportSortBy, (town: Shantytown) => any> = {
+        cityName: town => town.city?.name?.toLowerCase() ?? '',
+        builtAt: town => town.builtAt ?? 0,
+        lastUpdatedAt: town => town.updatedAt ?? 0,
+        declaredAt: town => town.declaredAt ?? 0,
+        closedAt: town => town.closedAt ?? 0,
+    };
+
+    const accessor = SORT_BY_TO_PROPERTY[sort.sortBy];
+    if (!accessor) {
+        return towns;
+    }
+
+    const direction = sort.sortOrder === 'ASC' ? 1 : -1;
+
+    return [...towns].sort((a, b) => {
+        const valA = accessor(a);
+        const valB = accessor(b);
+
+        if (typeof valA === 'string') {
+            return direction * valA.localeCompare(valB as string);
+        }
+
+        return direction * ((valA as number) - (valB as number));
+    });
+}
+
+export default async function getHistoryAtGivenDate(user: AuthUser, options: ShantytownExportListOption[], locations: Location[], lastDate: string, filters: ShantytownFilters, sort?: ShantytownExportSort): Promise<Shantytown[]> {
     const where = [];
     const replacements: { userId: number; lastDate: string } = {
         userId: user.id,
         lastDate,
     };
 
-    const restrictedLocations = locations.map(l => restrict(l).for(user).askingTo('list', 'shantytown')).flat();
+    const restrictedLocations = locations.flatMap(l => restrict(l).for(user).askingTo('list', 'shantytown'));
     if (restrictedLocations.length === 0) {
         return [];
     }
 
     if (!restrictedLocations.some(l => l.type === 'nation')) {
         where.push(
-            restrictedLocations.map((l, index) => {
+            restrictedLocations.flatMap((l, index) => {
                 replacements[`shantytownLocationCode${index}`] = l[l.type].code;
                 const arr = [`${fromGeoLevelToTableName(l.type)}.code = :shantytownLocationCode${index}`];
                 if (l.type === 'city') {
@@ -528,7 +561,7 @@ export default async function getHistoryAtGivenDate(user: AuthUser, options: Sha
                 }
 
                 return arr;
-            }).flat().join(' OR '),
+            }).join(' OR '),
         );
     }
 
@@ -552,5 +585,7 @@ export default async function getHistoryAtGivenDate(user: AuthUser, options: Sha
     if (filters.conditions) {
         serializedTowns = await applyLivingConditionsFilters(serializedTowns, filters.conditions);
     }
-    return serializedTowns;
+
+    // Appliquer le tri
+    return applySorting(serializedTowns, sort);
 }

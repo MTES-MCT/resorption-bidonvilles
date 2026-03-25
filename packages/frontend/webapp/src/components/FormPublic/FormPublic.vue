@@ -36,21 +36,32 @@
         </ContentWrapper>
 
         <!-- form errors (always small) -->
-        <ContentWrapper size="small">
-            <ErrorSummary
+        <ContentWrapper size="small" class="mt-4">
+            <DsfrAlert
                 v-if="error || Object.keys(errors).length > 0"
-                :message="error || 'Certaines données sont incorrectes'"
-                :summary="showErrorSummary ? errors : {}"
-            />
+                type="error"
+            >
+                <p v-html="error || 'Certaines données sont incorrectes'"></p>
+                <ul
+                    v-if="showErrorSummary && Object.keys(errors).length > 0"
+                    class="mt-2"
+                >
+                    <li v-for="(msg, key) in errors" :key="key">
+                        <button
+                            type="button"
+                            class="fr-link fr-link--sm"
+                            @click="focusFieldById(key)"
+                        >
+                            {{ msg }}
+                        </button>
+                    </li>
+                </ul>
+            </DsfrAlert>
         </ContentWrapper>
 
         <!-- form buttons -->
-        <ContentWrapper :size="size">
-            <slot
-                name="button"
-                class="border-2 border-red400"
-                :disabled="Boolean(error) || Object.keys(errors).length > 0"
-            >
+        <ContentWrapper :size="size" class="mt-4">
+            <slot name="button">
                 <p class="text-center">
                     <DsfrButton type="submit">Envoyer</DsfrButton>
                 </p>
@@ -65,10 +76,11 @@
 </template>
 
 <script setup>
-import { defineProps, defineExpose, toRefs, ref } from "vue";
+import { toRefs, ref } from "vue";
 import { Form } from "vee-validate";
 
 import { ContentWrapper, ErrorSummary } from "@resorptionbidonvilles/ui";
+import focusFieldById from "@common/utils/focusFieldById";
 
 const props = defineProps({
     schema: Object,
@@ -89,6 +101,7 @@ const props = defineProps({
 
 const form = ref(null);
 const error = ref(null);
+
 const { schema, submit, size, showErrorSummary, language } = toRefs(props);
 
 async function formSubmit(...args) {

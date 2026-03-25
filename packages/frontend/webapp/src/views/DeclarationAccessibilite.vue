@@ -95,7 +95,7 @@
                             >
                         </p>
                     </li>
-                    <li class="mb-2">
+                    <li class="mb-2" v-if="!userStore.user">
                         Formulaire de contact:
                         <Link
                             to="https://app.resorption-bidonvilles.dihal.gouv.fr/contact?language=fr"
@@ -109,23 +109,7 @@
                             Cedex</span
                         >
                     </li>
-                    <li class="mb-2">
-                        <Link to="https://twitter.com/dihal_gouv"
-                            >Contactez-nous sur Twitter</Link
-                        >
-                        <Link
-                            to="https://www.facebook.com/DIHAL.delegation.interministerielle"
-                            >Contactez-nous sur Facebook</Link
-                        >
-                        <Link to="https://fr.linkedin.com/company/dihal"
-                            >Contactez-nous sur Linkedin</Link
-                        >
-                    </li>
                 </ul>
-                <p>
-                    Nous essayons de répondre dans les
-                    <span>2 jours ouvrés</span>.
-                </p>
             </div>
             <h3 class="text-display-md font-bold mt-8">Voie de recours</h3>
             <div class="mt-4">
@@ -178,4 +162,8 @@
 <script setup>
 import Layout from "@/components/Layout/Layout.vue";
 import { Link } from "@resorptionbidonvilles/ui";
+import { useUserStore } from "@/stores/user.store";
+
+const userStore = useUserStore();
+console.log("User:", userStore.user);
 </script>

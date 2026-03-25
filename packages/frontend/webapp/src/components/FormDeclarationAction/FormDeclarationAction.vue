@@ -32,7 +32,15 @@
 </template>
 
 <script setup>
-import { toRefs, toRef, computed, ref, watch } from "vue";
+import {
+    toRefs,
+    toRef,
+    computed,
+    ref,
+    watch,
+    nextTick,
+    onBeforeUnmount,
+} from "vue";
 import { useForm, useFieldValue, useFormErrors } from "vee-validate";
 import { useActionsStore } from "@/stores/actions.store";
 import { useUserStore } from "@/stores/user.store";
@@ -40,9 +48,13 @@ import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
-import isDeepEqual from "@/utils/isDeepEqual";
+import _ from "lodash-es";
 import backOrReplace from "@/utils/backOrReplace";
-import formatFormAction from "@/utils/formatFormAction";
+import {
+    formatFormAction,
+    fields as INDICATEURS_YEAR_KEYS,
+} from "@/utils/formatFormAction";
+import { normalizeShantytownIds } from "@/utils/normalizeShantytownIds";
 import formatFormDate from "@common/utils/formatFormDate";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
@@ -62,6 +74,7 @@ const props = defineProps({
         default: null,
     },
 });
+const emit = defineEmits(["submitted-successfully"]);
 const { action } = toRefs(props);
 
 const userStore = useUserStore();
@@ -70,14 +83,16 @@ const mode = computed(() => {
     return action.value === null ? "create" : "edit";
 });
 const validationSchema = schemaFn(mode.value);
-const { handleSubmit, values, errors, setErrors, isSubmitting } = useForm({
-    validationSchema,
-    initialValues: formatFormAction(
-        action.value || {
-            location_departement: userStore.departementsForActions[0]?.code,
-        }
-    ),
-});
+const { handleSubmit, values, errors, setErrors, isSubmitting, resetForm } =
+    useForm({
+        validationSchema,
+        keepValuesOnUnmount: true,
+        initialValues: formatFormAction(
+            action.value || {
+                location_departement: userStore.departementsForActions[0]?.code,
+            }
+        ),
+    });
 
 const managerIds = ref([]);
 
@@ -89,7 +104,8 @@ watch(
     { deep: true }
 );
 
-const originalValues = formatValuesForApi(values);
+const originalValues = ref(null);
+
 const actionsStore = useActionsStore();
 const error = ref(null);
 const departement = useFieldValue("location_departement");
@@ -110,6 +126,62 @@ const canAccessFinances = computed(() => {
             },
         },
     });
+});
+
+async function initFromAction(initialFormValues) {
+    resetForm({ values: initialFormValues });
+    await nextTick();
+    originalValues.value = formatValuesForApi(initialFormValues);
+}
+
+watch(
+    action,
+    (newAction) => {
+        const initialFormValues = formatFormAction(
+            newAction || {
+                location_departement: userStore.departementsForActions[0]?.code,
+            }
+        );
+        initFromAction(initialFormValues);
+    },
+    { immediate: true }
+);
+
+const hasChanges = ref(false);
+
+function updateHasChanges() {
+    if (originalValues.value === null) {
+        hasChanges.value = false;
+        return;
+    }
+
+    hasChanges.value = !_.isEqual(
+        originalValues.value,
+        formatValuesForApi(values)
+    );
+}
+
+const debouncedUpdateHasChanges = _.debounce(updateHasChanges, 250);
+
+watch(
+    originalValues,
+    () => {
+        debouncedUpdateHasChanges.cancel();
+        updateHasChanges();
+    },
+    { immediate: true }
+);
+
+watch(
+    values,
+    () => {
+        debouncedUpdateHasChanges();
+    },
+    { deep: true }
+);
+
+onBeforeUnmount(() => {
+    debouncedUpdateHasChanges.cancel();
 });
 
 const tabs = computed(() => {
@@ -177,18 +249,31 @@ const config = {
 function formatValuesForApi(v) {
     let citycode = null;
     let label = null;
+    const endedAt = formatFormDate(v.ended_at);
+
     if (v.location_eti?.data) {
         ({ citycode, label } = v.location_eti.data);
     }
 
-    return {
+    const formatted = {
         ...Object.keys(validationSchema.fields).reduce((acc, key) => {
+            if (key === "ended_at") {
+                return acc;
+            }
             acc[key] = v[key] ? JSON.parse(JSON.stringify(v[key])) : v[key];
             return acc;
         }, {}),
         ...{
             started_at: formatFormDate(v.started_at),
-            ended_at: formatFormDate(v.ended_at),
+            ended_at: endedAt === null ? undefined : endedAt,
+            topics: Array.isArray(v.topics)
+                ? [...v.topics].sort((a, b) =>
+                      a.localeCompare(b, "fr", { sensitivity: "base" })
+                  )
+                : v.topics,
+            location_shantytowns: normalizeShantytownIds(
+                v.location_shantytowns
+            ),
             managers: v.managers.users.map(({ id }) => id),
             operators: v.operators.users.map(({ id }) => id),
             location_eti_citycode: citycode,
@@ -198,6 +283,61 @@ function formatValuesForApi(v) {
                 : "",
         },
     };
+
+    if (formatted.finances && typeof formatted.finances === "object") {
+        formatted.finances = Object.entries(formatted.finances).reduce(
+            (acc, [year, rows]) => {
+                const normalizedRows = (rows || []).map((row) => {
+                    const amount = Number.parseInt(row?.amount, 10);
+                    const realAmount = Number.parseInt(row?.real_amount, 10);
+
+                    return {
+                        ...row,
+                        amount: Number.isNaN(amount) ? null : amount,
+                        real_amount: Number.isNaN(realAmount)
+                            ? null
+                            : realAmount,
+                    };
+                });
+
+                // Ne renvoyer que les années avec des données
+                if (normalizedRows.length > 0) {
+                    acc[year] = normalizedRows;
+                }
+
+                return acc;
+            },
+            {}
+        );
+    }
+
+    // Analyse des indicateurs : on s'assure que les années attendues sont présentes, même si elles n'ont pas de données
+    if (formatted.indicateurs && typeof formatted.indicateurs === "object") {
+        formatted.indicateurs = Object.entries(formatted.indicateurs).reduce(
+            (acc, [year, yearValues]) => {
+                const source = yearValues || {};
+                const sortedKeys = [
+                    ...new Set([
+                        ...Object.keys(source),
+                        ...INDICATEURS_YEAR_KEYS,
+                    ]),
+                ].sort((a, b) =>
+                    a.localeCompare(b, "fr", { sensitivity: "base" })
+                );
+
+                acc[year] = sortedKeys.reduce((yearAcc, key) => {
+                    const value = source[key];
+                    yearAcc[key] = value === "" ? null : value ?? null;
+                    return yearAcc;
+                }, {});
+
+                return acc;
+            },
+            {}
+        );
+    }
+
+    return formatted;
 }
 
 watch(useFormErrors(), () => {
@@ -212,7 +352,7 @@ defineExpose({
 
         if (
             mode.value === "edit" &&
-            isDeepEqual(originalValues, formattedValues)
+            _.isEqual(originalValues.value, formattedValues)
         ) {
             router.replace("#erreurs");
             error.value =
@@ -232,6 +372,7 @@ defineExpose({
             );
 
             notificationStore.success(notification.title, notification.content);
+            emit("submitted-successfully", respondedAction?.id);
             backOrReplace(`/action/${respondedAction.id}`);
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
@@ -240,6 +381,7 @@ defineExpose({
             }
         }
     }),
+    hasChanges,
     isSubmitting,
 });
 </script>

@@ -471,7 +471,7 @@ export default {
                 .slice(0, lastFrozenIndex + 1)
                 .reduce((total, section) => total + section.properties.length, 0);
 
-        // create a single sheet
+        // create first sheet
         const sheet = workbook.addWorksheet(
             `Sites ${title}`,
             {
@@ -511,6 +511,143 @@ export default {
                 column: lastColumnIndex - 1,
             },
         };
+
+        // 2e sheet pour les taux de MAJ de site par département s'il y a plus d'un département représenté
+        let sheet2: Worksheet;
+        const departementsDistincts = new Set(shantytowns.map(town => town.departement?.code)).size;
+
+        if (departementsDistincts > 1) {
+            sheet2 = workbook.addWorksheet(
+                'Taux de MAJ par département',
+                {
+                    views: [{
+                        state: 'frozen',
+                        ySplit: 5,
+                    }],
+                },
+            );
+
+            const analyzeUpdatesByDepartement = () => {
+                // 1. Définir le seuil de 6 mois en secondes
+                // (6 mois * 30 jours * 24h * 3600s)
+                const SIX_MONTHS_IN_SECONDS = 6 * 30 * 24 * 3600;
+                const now = Math.floor(Date.now() / 1000);
+                const limit = now - SIX_MONTHS_IN_SECONDS;
+
+                // 2. Grouper par département
+                const stats: Record<string, { name: string; total: number; updated: number }> = shantytowns.reduce((acc, town) => {
+                    const depCode = town.departement?.code || 'Inconnu';
+                    const depName = town.departement?.name || 'Inconnu';
+
+                    if (!acc[depCode]) {
+                        acc[depCode] = { name: depName, total: 0, updated: 0 };
+                    }
+
+                    acc[depCode].total += 1;
+
+                    // Vérification de la date (supérieure à la limite d'il y a 6 mois)
+                    if (town.updatedAt > limit) {
+                        acc[depCode].updated += 1;
+                    }
+
+                    return acc;
+                }, {});
+
+
+                // 3. Calculer le taux final
+                return Object.entries(stats).map(([code, data]) => (
+                    {
+                        departementCode: code,
+                        departementName: data.name,
+                        total: data.total,
+                        updatedCount: data.updated,
+                        updateRate: `${((data.updated / data.total) * 100).toFixed(2)}`,
+                    }));
+            };
+
+            const results = analyzeUpdatesByDepartement();
+            writeHeader(workbook, sheet2, lastFrozenColumn, `${shantytowns.length} sites sur ${departementsDistincts} départements`, ' - Taux de mise à jour par département', dateOfExport, null);
+            const headerRow = sheet2.getRow(5);
+            headerRow.values = [
+                'Département',
+                'Nombre de sites',
+                'Mis à jour < 6 mois',
+                'Taux de MAJ (%)',
+            ];
+            headerRow.font = {
+                color: { argb: 'FFFFFFFF' },
+                bold: true,
+                size: 12,
+            };
+            headerRow.height = 25;
+            headerRow.alignment = {
+                vertical: 'middle',
+                horizontal: 'center',
+                wrapText: true,
+            };
+            headerRow.eachCell((cell, colNumber) => {
+                const targetCell = headerRow.getCell(colNumber);
+                targetCell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: '434343' },
+                };
+            });
+
+            // On écrit les données et on applique la colorisation conditionnelle sur le taux de MAJ
+            results.forEach((item, index) => {
+                const rowIndex = 6 + index;
+                const row = sheet2.getRow(rowIndex);
+
+                row.values = [
+                    `${item.departementCode} - ${item.departementName}`,
+                    item.total,
+                    item.updatedCount,
+                    Number.parseFloat(item.updateRate),
+                ];
+
+                const rateValue = Number.parseFloat(item.updateRate);
+                const rateCell = row.getCell(4); // 4ème colonne pour le taux de MAJ
+
+                // Logique de colorisation
+                if (rateValue < 30) {
+                    // ROUGE : Fond clair, texte foncé
+                    rateCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFC7CE' } }; // Fond rouge clair
+                    rateCell.font = { color: { argb: 'FF9C0006' }, bold: true }; // Texte rouge foncé
+                } else if (rateValue >= 60) {
+                    // VERT : Fond vert clair, texte vert foncé
+                    rateCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFC6EFCE' } };
+                    rateCell.font = { color: { argb: 'FF006100' }, bold: true };
+                } else {
+                    // ORANGE : Fond orange clair, texte noir
+                    rateCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFEB9C' } };
+                    rateCell.font = { color: { argb: 'FF000000' }, bold: true };
+                }
+            });
+            // Largeur des colonnes
+            sheet2.columns.forEach((_col, index) => {
+                let maxLength = 0;
+                const column2 = sheet2.getColumn(index + 1);
+                // On parcourt chaque cellule de la colonne
+                column2.eachCell({ includeEmpty: true }, (cell) => {
+                    const columnLength = cell.value ? cell.value.toString().length : 0;
+                    if (columnLength > maxLength) {
+                        maxLength = columnLength;
+                    }
+                });
+
+                // On applique la largeur avec une petite marge de sécurité
+                column2.width = maxLength < 10 ? 10 : maxLength + 2;
+            });
+            // Activation du filtrage sur le tableau
+            sheet2.autoFilter = {
+                from: 'A5',
+                to: {
+                    row: 5 + results.length,
+                    column: 4,
+                },
+            };
+        }
 
         // respond
         return workbook.xlsx.writeBuffer();

@@ -1,9 +1,6 @@
 <template>
     <ContentWrapper size="medium" class="mb-10" v-if="message !== null">
-        <p class="bg-red200 p-4 flex items-center justify-center space-x-2">
-            <Icon icon="circle-info" class="text-red600" />
-            <span>{{ message }}</span>
-        </p>
+        <DsfrAlert type="warning" :description="message" />
     </ContentWrapper>
     <FormPublic
         :schema="schema"
@@ -16,16 +13,12 @@
         </template>
 
         <template v-slot:body>
-            <FormConnexionMessageAlerte
-                v-if="isFormDisabled"
-                :delayBeforeReactivation="delayBeforeReactivation"
-            />
             <FormConnexionInputEmail
-                :disabled="isFormDisabled || isLoading"
+                :disabled="isLoading"
                 aria-label="Veuillez saisir l'adresse de messagerie correspondant à votre identifiant sur la plateforme"
             />
             <FormConnexionInputPassword
-                :disabled="isFormDisabled || isLoading"
+                :disabled="isLoading"
                 aria-label="Veuillez saisir votre mot de passe"
             />
         </template>
@@ -35,7 +28,7 @@
                 <DsfrButton
                     type="submit"
                     aria-label="Valider les informations saisies,"
-                    :disabled="isFormDisabled || isLoading"
+                    :disabled="isLoading"
                     >Me connecter</DsfrButton
                 >
             </p>
@@ -64,18 +57,17 @@
 
 <script setup>
 // vue
-import { computed, defineProps, toRefs, watch, ref, onMounted } from "vue";
+import { computed, toRefs, ref } from "vue";
 
 // utils
 import router from "@/helpers/router.js";
 import { trackEvent } from "@/helpers/matomo.js";
 
 // components
-import { ContentWrapper, Icon } from "@resorptionbidonvilles/ui";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import FormPublic from "@/components/FormPublic/FormPublic.vue";
 import FormConnexionInputEmail from "./inputs/FormConnexionInputEmail.vue";
 import FormConnexionInputPassword from "./inputs/FormConnexionInputPassword.vue";
-import FormConnexionMessageAlerte from "./FormConnexionMessageAlerte.vue";
 
 // form
 import schema from "./FormConnexion.schema.js";
@@ -96,40 +88,21 @@ const props = defineProps({
 });
 
 const { reason } = toRefs(props);
-const blockedTimer = ref(localStorage.getItem("blockedTimer"));
-const isFormDisabled = ref(false);
 const isLoading = ref(false);
-const delayBeforeReactivation = ref(null);
-const timeoutReactivation = ref(null);
-
-watch(isFormDisabled, (newVal) => {
-    if (newVal === true) {
-        timerReactivation();
-    } else {
-        resetConnexionAttempts();
-    }
-});
-
-const timerReactivation = () => {
-    timeoutReactivation.value = setTimeout(() => {
-        isFormDisabled.value = false;
-    }, delayBeforeReactivation.value);
-};
 
 // methods
 async function submit({ email, password }) {
     isLoading.value = true;
     try {
         await userStore.signin(email, password);
+        trackEvent("Login", "Connection");
+        setTimeout(() => {
+            router.push("/chargement");
+        }, 1000);
     } catch (error) {
-        checkAttempt();
+        isLoading.value = false;
         throw error;
     }
-    resetConnexionAttempts();
-    trackEvent("Login", "Connection");
-    setTimeout(() => {
-        router.push("/chargement");
-    }, 1000);
 }
 
 const message = computed(() => {
@@ -141,42 +114,5 @@ const message = computed(() => {
         return "Veuillez vous connecter pour accéder à la page demandée";
     }
     return null;
-});
-
-const checkAttempt = () => {
-    if (!localStorage.getItem("connexionCounter")) {
-        localStorage.setItem("connexionCounter", 1);
-    } else {
-        let counter = parseInt(localStorage.getItem("connexionCounter"));
-        counter++;
-        localStorage.setItem("connexionCounter", counter);
-        if (counter >= 3) {
-            const now = Date.now();
-            const blockedTimer = now + 900000;
-            localStorage.setItem("blockedTimer", blockedTimer);
-            delayBeforeReactivation.value = parseInt(
-                localStorage.getItem("blockedTimer") - Date.now()
-            );
-            isFormDisabled.value = true;
-            return false;
-        }
-    }
-    isLoading.value = false;
-    return false;
-};
-
-const resetConnexionAttempts = () => {
-    localStorage.removeItem("connexionCounter");
-    localStorage.removeItem("blockedTimer");
-    clearTimeout(timeoutReactivation.value);
-};
-
-onMounted(() => {
-    if (blockedTimer.value > Date.now()) {
-        isFormDisabled.value = true;
-        delayBeforeReactivation.value =
-            parseInt(localStorage.getItem("blockedTimer")) - Date.now();
-        timerReactivation();
-    }
 });
 </script>

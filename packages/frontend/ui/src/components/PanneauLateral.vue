@@ -47,7 +47,7 @@ const zIndexes = {
     visible: "z-[2000]",
     hidden: "-z-50",
 };
-const emit = defineEmits(["emit"]);
+const emit = defineEmits(["close"]);
 
 watch(isOpen, () => {
     if (isOpen.value === true) {

@@ -71,7 +71,7 @@
                 size="sm"
                 icon="mdi:play"
                 @click="startResorption"
-                :loading="startResorptionIsLoading"
+                :disabled="startResorptionIsLoading"
                 >Démarrer la résorption</DsfrButton
             >
             <DsfrButton
@@ -81,11 +81,22 @@
                 size="sm"
                 icon="mdi:delete-outline"
                 @click="deleteTown"
-                :loading="deleteIsLoading"
+                :disabled="deleteIsLoading"
                 >Supprimer le site</DsfrButton
             >
         </div>
-        <div>
+        <div
+            class="flex flex-col items-start gap-2 sm:flex-row sm:items-center"
+        >
+            <DsfrButton
+                v-if="canMarkAsResorptionTarget"
+                size="sm"
+                icon="ri-focus-2-line"
+                secondary
+                @click="markAsResorptionTarget"
+                :disabled="resorptionTargetIsLoading"
+                >Objectif résorption</DsfrButton
+            >
             <DsfrButton
                 size="sm"
                 :label="
@@ -115,6 +126,7 @@ import FicheSiteModaleExport from "../FicheSiteModaleExport/FicheSiteModaleExpor
 
 import { useConfigStore } from "@/stores/config.store";
 import { usePhasesPreparatoiresResorption } from "@/utils/usePhasesPreparatoiresResorption";
+import { useResorptionTarget } from "@/utils/useResorptionTarget";
 
 const props = defineProps({
     town: Object,
@@ -126,6 +138,10 @@ const townsStore = useTownsStore();
 
 const { displayPhasesPreparatoiresResorption } =
     usePhasesPreparatoiresResorption(town);
+
+const townId = computed(() => town.value.id);
+const { resorptionTargetIsLoading, markAsResorptionTarget } =
+    useResorptionTarget(townId);
 
 function openExportModal() {
     const modaleStore = useModaleStore();
@@ -270,16 +286,32 @@ const heatwaveRequestStatus = computed(() => {
     return townsStore.heatwaveStatuses[town.value.id] || null;
 });
 
+const canMarkAsResorptionTarget = computed(() => {
+    if (town.value.closedAt !== null) {
+        return false;
+    }
+
+    if (town.value.resorptionTarget !== null) {
+        return false;
+    }
+
+    const userRoles = userStore.user?.role_id;
+    const allowedRoles = [
+        "national_admin",
+        "local_admin",
+        "direct_collaborator",
+    ];
+
+    return allowedRoles.includes(userRoles);
+});
+
 async function toggleHeatwave() {
     try {
         await townsStore.setHeatwaveStatus(
             town.value.id,
             !town.value.heatwaveStatus
         );
-    } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log("Erreur lors de la modification du statut canicule :", e);
-
+    } catch {
         notificationStore.error(
             "Risque canicule",
             "Une erreur inconnue est survenue"

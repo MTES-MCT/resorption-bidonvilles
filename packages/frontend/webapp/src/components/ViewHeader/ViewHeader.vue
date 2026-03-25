@@ -13,6 +13,12 @@
                 <p class="text-[1.5rem] font-bold leading-[1.8rem] break-all">
                     <slot name="title" />
                 </p>
+                <p
+                    v-if="$slots.actionId"
+                    class="text-sm text-black font-normal"
+                >
+                    <slot name="actionId" />
+                </p>
                 <p class="text-G700">
                     <slot name="description" />
                 </p>

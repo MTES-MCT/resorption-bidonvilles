@@ -1,5 +1,7 @@
 <template>
-    <div class="flex justify-end h-14 items-center mr-4 space-x-4 print:hidden">
+    <div
+        class="flex flex-wrap justify-end md:h-10 items-end m-4 gap-3 print:hidden sm:flex-row"
+    >
         <DsfrButton
             v-if="isOpen"
             size="sm"
@@ -13,6 +15,15 @@
             no-outline
             :disabled="heatwaveRequestStatus?.loading"
             @click.prevent.stop="toggleHeatwave"
+        />
+        <DsfrButton
+            v-if="canMarkAsResorptionTarget"
+            size="sm"
+            label="Objectif résorption"
+            icon="ri-focus-2-line"
+            secondary
+            :disabled="resorptionTargetIsLoading"
+            @click.prevent.stop="markAsResorptionTarget"
         />
         <DsfrButton
             v-if="isOpen && hasUpdateShantytownPermission"
@@ -37,6 +48,7 @@ import { defineProps, toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
+import { useResorptionTarget } from "@/utils/useResorptionTarget";
 
 import router from "@/helpers/router";
 
@@ -47,6 +59,10 @@ const userStore = useUserStore();
 const notificationStore = useNotificationStore();
 const townsStore = useTownsStore();
 const { shantytown } = toRefs(props);
+
+const shantytownId = computed(() => shantytown.value.id);
+const { resorptionTargetIsLoading, markAsResorptionTarget } =
+    useResorptionTarget(shantytownId);
 
 const hasUpdateShantytownPermission = computed(() => {
     return userStore.hasUpdateShantytownPermission(shantytown.value);
@@ -60,6 +76,25 @@ const heatwaveRequestStatus = computed(() => {
 });
 const isOpen = computed(() => {
     return shantytown.value.status === "open";
+});
+
+const canMarkAsResorptionTarget = computed(() => {
+    if (shantytown.value.closedAt !== null) {
+        return false;
+    }
+
+    if (shantytown.value.resorptionTarget !== null) {
+        return false;
+    }
+
+    const userRoles = userStore.user?.role_id;
+    const allowedRoles = [
+        "national_admin",
+        "local_admin",
+        "direct_collaborator",
+    ];
+
+    return allowedRoles.includes(userRoles);
 });
 
 async function toggleHeatwave() {

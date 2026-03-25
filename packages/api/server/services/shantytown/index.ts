@@ -10,6 +10,7 @@ import deleteComment from './deleteComment';
 import exportTowns from './exportTowns';
 import fixClosedStatus from './fixClosedStatus';
 import setHeatwaveStatus from './setHeatwaveStatus';
+import setResorptionTarget from './setResorptionTarget';
 import update from './update';
 import report from './report';
 
@@ -26,6 +27,7 @@ export default {
     exportTowns,
     fixClosedStatus,
     setHeatwaveStatus,
+    setResorptionTarget,
     report,
     update,
 };

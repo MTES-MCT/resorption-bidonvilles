@@ -10,6 +10,7 @@ import fetchData from './exportTowns.fetchData';
 import generateExportFile from './exportTowns.generateExportFile';
 import saveStats from './exportTowns.saveStats';
 import { ShantytownFilters } from '#root/types/resources/shantytownFilters.d';
+import { ShantytownExportSort } from '#root/types/resources/ShantytownExportSort.d';
 
 
 export default async (
@@ -18,6 +19,7 @@ export default async (
     filters: ShantytownFilters,
     options: ShantytownExportListOption[] = [],
     date: Date = new Date(),
+    sort?: ShantytownExportSort,
 ) => {
     const isPastExport = moment(date).format('YYYY-MM-DD') !== moment(new Date()).format('YYYY-MM-DD');
 
@@ -32,7 +34,7 @@ export default async (
     let data: Shantytown[];
     try {
         // Récupérer les données à exporter
-        data = await fetchData(user, options, locations, filters, date);
+        data = await fetchData(user, options, locations, filters, date, sort);
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }

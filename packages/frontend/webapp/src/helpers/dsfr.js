@@ -18,6 +18,7 @@ import {
     DsfrSegmented,
     DsfrSegmentedSet,
     DsfrSelect,
+    DsfrTable,
     DsfrTag,
     DsfrTags,
     DsfrTile,
@@ -58,6 +59,7 @@ export function useDsfr(app) {
     app.component("DsfrSegmented", DsfrSegmented);
     app.component("DsfrSegmentedSet", DsfrSegmentedSet);
     app.component("DsfrSelect", DsfrSelect);
+    app.component("DsfrTable", DsfrTable);
     app.component("DsfrTag", DsfrTag);
     app.component("DsfrTags", DsfrTags);
     app.component("DsfrTile", DsfrTile);

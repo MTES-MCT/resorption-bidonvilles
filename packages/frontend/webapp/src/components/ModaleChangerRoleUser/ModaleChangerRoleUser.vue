@@ -96,11 +96,7 @@ async function updateUserRole() {
     try {
         const modaleStore = useModaleStore();
         const accesStore = useAccesStore();
-        await accesStore.updateUserRole(
-            user.value.id,
-            role.value,
-            filteredRoles.value
-        );
+        await accesStore.updateUserRole(user.value.id, role.value);
 
         notificationStore.success(
             "Rôle mis à jour",
