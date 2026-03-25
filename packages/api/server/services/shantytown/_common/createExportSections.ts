@@ -258,6 +258,7 @@ export default async (
         title: 'Mise à jour',
         properties: [
             properties.updatedAt,
+            properties.populationUpdatedAt,
         ],
     });
 

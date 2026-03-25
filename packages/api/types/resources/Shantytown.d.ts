@@ -101,6 +101,7 @@ type BaseShantytown =
     populationMinors12To16: number | null,
     populationMinors16To18: number | null,
     minorsInSchool: number | null,
+    populationUpdatedAt: number | null,
     caravans: number | null,
     huts: number | null,
     tents: number | null,

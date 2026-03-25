@@ -42,6 +42,13 @@ export default function filterActions(actions, filters) {
             return false;
         }
 
+        if (
+            filters.dihalFinancing.length > 0 &&
+            !checkDihalFinancing(action, filters.dihalFinancing)
+        ) {
+            return false;
+        }
+
         return true;
     });
 }
@@ -107,4 +114,11 @@ function checkInterventionLocation(action, filters) {
 
 function checkOrganization(action, organizationId) {
     return action.operators?.some((op) => op.id === organizationId);
+}
+
+function checkDihalFinancing(action, dihalFinancingFilters) {
+    if (dihalFinancingFilters.includes("dihal")) {
+        return action.hasDihalFinancing === true;
+    }
+    return true;
 }

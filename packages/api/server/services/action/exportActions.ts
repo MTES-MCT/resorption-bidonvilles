@@ -6,6 +6,7 @@ import permissionUtils from '#server/utils/permission';
 import generateExportFile from './exportActions.generateExportFile';
 import { ActionReportRow } from '#root/types/resources/Action.d';
 
+
 /**
  * Calcule la liste des départements autorisés pour l'utilisateur
  * Si l'utilisateur a accès national, retourne null (tous les départements)
@@ -44,7 +45,7 @@ function calculateAllowedDepartements(user: AuthUser, actionClauseGroup: object)
 }
 
 
-export default async (user: AuthUser, year: string) => {
+const exportActions = async (user: AuthUser, year: string, dihalFinancing = false) => {
     // Vérifier si l'utilisateur a la permission d'exporter les actions
     const exportPermission = permissionUtils.getPermission(user, 'export', 'action');
     if (exportPermission === null) {
@@ -79,6 +80,11 @@ export default async (user: AuthUser, year: string) => {
         throw new ServiceError('fetch_failed', error);
     }
 
+    // Filtrage par financement DIHAL si demandé
+    if (dihalFinancing) {
+        data = data.filter(action => action.finance_dedie > 0);
+    }
+
     if (data.length === 0) {
         throw new ServiceError('fetch_failed', new Error('Il n\'y a aucune action à exporter'));
     }
@@ -86,3 +92,5 @@ export default async (user: AuthUser, year: string) => {
     const buffer = await generateExportFile(data, includeFinances, allowedDepartements);
     return buffer;
 };
+
+export default exportActions;

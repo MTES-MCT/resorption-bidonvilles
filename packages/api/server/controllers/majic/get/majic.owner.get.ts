@@ -5,8 +5,9 @@ import { AuthUser } from '#server/middlewares/authMiddleware';
 const ERROR_RESPONSES = {
     permission_denied: { code: 403 },
     log_insert_failed: { code: 400 },
+    parcel_fetch_error: { code: 400 },
     parcel_fetch_failed: { code: 400 },
-    owner_fetch_failed: { code: 400 },
+    owners_fetch_error: { code: 400 },
     owners_fetch_failed: { code: 400 },
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
@@ -29,6 +30,7 @@ export default async (req: MajicParcelGetRequest, res: Response, next: NextFunct
         const { code } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
 
         res.status(code).send({
+            code: error?.code,
             user_message: `${error.nativeError?.message ?? error.message ?? 'Une erreur inconnue est survenue'}`,
         });
         return next(error.nativeError ?? error);

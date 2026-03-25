@@ -27,6 +27,13 @@
                         :type="metricsUpdatedAtBadgeType"
                         class="mt-1 lg:place-self-end text-xs py-2"
                     />
+                    <DsfrBadge
+                        v-if="action.hasDihalFinancing"
+                        label="FINANCEMENT DIHAL"
+                        noIcon
+                        type="info"
+                        class="mt-1 lg:place-self-end text-xs py-2"
+                    />
                 </div>
                 <div class="mt-[3px] flex gap-2" v-if="attachmentsLabel">
                     <DsfrBadge
