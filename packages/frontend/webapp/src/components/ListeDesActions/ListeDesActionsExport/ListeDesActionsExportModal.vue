@@ -61,18 +61,19 @@
                         />
                     </li>
                     <li>
-                        <Button
+                        <DsfrButton
                             v-if="actionsExportIsSelected"
-                            variant="primaryOutline"
+                            secondary
                             size="md"
-                            class="!border-2 !border-primary hover:!bg-primaryDark !py-1.5"
                             @click.stop="toggleActionsExportIsSelected"
                         >
-                            Annuler</Button
+                            Annuler</DsfrButton
                         >
                     </li>
                     <li>
-                        <Button @click="() => modale.close()">Fermer</Button>
+                        <DsfrButton @click="() => modale.close()"
+                            >Fermer</DsfrButton
+                        >
                     </li>
                 </ul>
             </div>
@@ -82,7 +83,7 @@
 
 <script setup>
 import { ref, computed, defineProps, toRefs, watch } from "vue";
-import { Button, Icon, Link, Modal } from "@resorptionbidonvilles/ui";
+import { Icon, Link, Modal } from "@resorptionbidonvilles/ui";
 import ModalExportLien from "@/components/ModalExport/ModalExportLien.vue";
 import ModalExportListeAnnee from "@/components/ListeDesActions/ListeDesActionsExport/ListeDesActionsExportListeAnnees.vue";
 
@@ -178,8 +179,3 @@ const title = computed(() => {
     return actionsExportIsSelected.value ? "Export des actions" : "Exports";
 });
 </script>
-<style scoped>
-button {
-    border: inherit;
-}
-</style>
