@@ -77,7 +77,6 @@ const props = defineProps({
         default: null,
     },
 });
-const emit = defineEmits(["submitted-successfully"]);
 const { action } = toRefs(props);
 
 const userStore = useUserStore();
@@ -415,18 +414,6 @@ function checkFundingDeletions(sentValues) {
         }
         if (hasData && newEndYear && year > newEndYear) {
             yearsAfterMax.push(strYear);
-defineExpose({
-    submit: handleSubmit(async (sentValues) => {
-        const formattedValues = formatValuesForApi(sentValues);
-
-        if (
-            mode.value === "edit" &&
-            _.isEqual(originalValues.value, formattedValues)
-        ) {
-            router.replace("#erreurs");
-            error.value =
-                "Modification impossible : aucun champ n'a été modifié";
-            return;
         }
     });
 
@@ -448,7 +435,10 @@ defineExpose({
 async function performSubmit(sentValues) {
     const formattedValues = formatValuesForApi(sentValues);
 
-    if (mode.value === "edit" && isDeepEqual(originalValues, formattedValues)) {
+    if (
+        mode.value === "edit" &&
+        _.isEqual(originalValues.value, formattedValues)
+    ) {
         router.replace("#erreurs");
         error.value = "Modification impossible : aucun champ n'a été modifié";
         return;
@@ -493,23 +483,6 @@ defineExpose({
             });
         } else {
             await performSubmit(sentValues);
-        try {
-            const notificationStore = useNotificationStore();
-
-            const { submit, notification } = config[mode.value];
-            const respondedAction = await submit(
-                formattedValues,
-                action.value?.id
-            );
-
-            notificationStore.success(notification.title, notification.content);
-            emit("submitted-successfully", respondedAction?.id);
-            backOrReplace(`/action/${respondedAction.id}`);
-        } catch (e) {
-            error.value = e?.user_message || "Une erreur inconnue est survenue";
-            if (e?.fields) {
-                setErrors(e.fields);
-            }
         }
     }),
     hasChanges,
