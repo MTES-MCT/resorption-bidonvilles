@@ -35,6 +35,7 @@
 import {
     toRefs,
     toRef,
+    toRaw,
     computed,
     ref,
     watch,
@@ -46,6 +47,7 @@ import { useActionsStore } from "@/stores/actions.store";
 import { useUserStore } from "@/stores/user.store";
 import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";
+import { useModaleStore } from "@/stores/modale.store";
 import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
 import _ from "lodash-es";
@@ -65,6 +67,7 @@ import FormDeclarationActionContacts from "./sections/FormDeclarationActionConta
 import FormDeclarationActionFinances from "./sections/FormDeclarationActionFinances.vue";
 import FormDeclarationActionIndicateurs from "./sections/FormDeclarationActionIndicateurs.vue";
 import IndicationCaractereObligatoire from "@/components/IndicationCaractereObligatoire/IndicationCaractereObligatoire.vue";
+import ModaleConfirmationSuppressionFinancements from "@/components/ModaleConfirmationSuppressionFinancements/ModaleConfirmationSuppressionFinancements.vue";
 import schemaFn from "./FormDeclarationAction.schema";
 
 const props = defineProps({
@@ -74,10 +77,12 @@ const props = defineProps({
         default: null,
     },
 });
-const emit = defineEmits(["submitted-successfully"]);
 const { action } = toRefs(props);
 
 const userStore = useUserStore();
+const modaleStore = useModaleStore();
+const pendingSubmit = ref(null);
+const originalFinances = ref(null);
 
 const mode = computed(() => {
     return action.value === null ? "create" : "edit";
@@ -95,6 +100,24 @@ const { handleSubmit, values, errors, setErrors, isSubmitting, resetForm } =
     });
 
 const managerIds = ref([]);
+
+function cloneValue(value) {
+    if (value == null) {
+        return value;
+    }
+
+    const rawValue = toRaw(value);
+
+    if (typeof structuredClone === "function") {
+        return structuredClone(rawValue);
+    }
+
+    return JSON.parse(JSON.stringify(rawValue));
+}
+
+if (action.value && action.value.finances) {
+    originalFinances.value = cloneValue(action.value.finances);
+}
 
 watch(
     toRef(values, "managers"),
@@ -346,39 +369,120 @@ watch(useFormErrors(), () => {
     }
 });
 
+function getYearFromDateValue(value) {
+    if (value == null || value === "") {
+        return null;
+    }
+
+    const dateValue = value instanceof Date ? value : new Date(value);
+
+    if (Number.isNaN(dateValue.getTime())) {
+        return null;
+    }
+
+    return dateValue.getFullYear();
+}
+
+function checkFundingDeletions(sentValues) {
+    if (mode.value !== "edit" || !action.value || !originalFinances.value) {
+        return null;
+    }
+
+    const oldStartYear = getYearFromDateValue(action.value.started_at);
+    const oldEndYear = getYearFromDateValue(action.value.ended_at);
+    const newStartYear = getYearFromDateValue(sentValues.started_at);
+    const newEndYear = getYearFromDateValue(sentValues.ended_at);
+
+    const minYearChanged = oldStartYear !== newStartYear;
+    const maxYearChanged = oldEndYear !== newEndYear;
+
+    if (!minYearChanged && !maxYearChanged) {
+        return null;
+    }
+
+    const yearsBeforeMin = [];
+    const yearsAfterMax = [];
+
+    Object.keys(originalFinances.value).forEach((strYear) => {
+        const year = Number.parseInt(strYear, 10);
+        const hasData =
+            originalFinances.value[strYear] &&
+            originalFinances.value[strYear].length > 0;
+
+        if (hasData && newStartYear && year < newStartYear) {
+            yearsBeforeMin.push(strYear);
+        }
+        if (hasData && newEndYear && year > newEndYear) {
+            yearsAfterMax.push(strYear);
+        }
+    });
+
+    if (yearsBeforeMin.length === 0 && yearsAfterMax.length === 0) {
+        return null;
+    }
+
+    return {
+        yearsBeforeMin,
+        yearsAfterMax,
+        minYear: newStartYear,
+        maxYear: newEndYear,
+        minYearChanged,
+        maxYearChanged,
+        finances: originalFinances.value,
+    };
+}
+
+async function performSubmit(sentValues) {
+    const formattedValues = formatValuesForApi(sentValues);
+
+    if (
+        mode.value === "edit" &&
+        _.isEqual(originalValues.value, formattedValues)
+    ) {
+        router.replace("#erreurs");
+        error.value = "Modification impossible : aucun champ n'a été modifié";
+        return;
+    }
+
+    error.value = null;
+
+    try {
+        const notificationStore = useNotificationStore();
+
+        const { submit, notification } = config[mode.value];
+        const respondedAction = await submit(formattedValues, action.value?.id);
+
+        notificationStore.success(notification.title, notification.content);
+        backOrReplace(`/action/${respondedAction.id}`);
+    } catch (e) {
+        error.value = e?.user_message || "Une erreur inconnue est survenue";
+        if (e?.fields) {
+            setErrors(e.fields);
+        }
+    } finally {
+        pendingSubmit.value = null;
+    }
+}
+
 defineExpose({
     submit: handleSubmit(async (sentValues) => {
-        const formattedValues = formatValuesForApi(sentValues);
+        const deletionInfo = checkFundingDeletions(sentValues);
 
-        if (
-            mode.value === "edit" &&
-            _.isEqual(originalValues.value, formattedValues)
-        ) {
-            router.replace("#erreurs");
-            error.value =
-                "Modification impossible : aucun champ n'a été modifié";
-            return;
-        }
-
-        error.value = null;
-
-        try {
-            const notificationStore = useNotificationStore();
-
-            const { submit, notification } = config[mode.value];
-            const respondedAction = await submit(
-                formattedValues,
-                action.value?.id
-            );
-
-            notificationStore.success(notification.title, notification.content);
-            emit("submitted-successfully", respondedAction?.id);
-            backOrReplace(`/action/${respondedAction.id}`);
-        } catch (e) {
-            error.value = e?.user_message || "Une erreur inconnue est survenue";
-            if (e?.fields) {
-                setErrors(e.fields);
-            }
+        if (deletionInfo) {
+            pendingSubmit.value = sentValues;
+            modaleStore.open(ModaleConfirmationSuppressionFinancements, {
+                ...deletionInfo,
+                onConfirm: () => {
+                    modaleStore.close();
+                    performSubmit(pendingSubmit.value);
+                },
+                onCancel: () => {
+                    modaleStore.close();
+                    pendingSubmit.value = null;
+                },
+            });
+        } else {
+            await performSubmit(sentValues);
         }
     }),
     hasChanges,
