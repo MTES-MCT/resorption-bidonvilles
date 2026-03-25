@@ -1,6 +1,6 @@
 {
   "name": "@resorptionbidonvilles/api",
-  "version": "2.47.0",
+  "version": "2.48.1",
   "description": "API d'Action Bidonvilles",
   "main": "server/index.ts",
   "repository": "git+https://github.com/MTES-MCT/action-bidonvilles.git",
@@ -146,5 +146,6 @@
     "lint:all": "eslint --no-error-on-unmatched-pattern --max-warnings=0 --ext .ts server",
     "emails:build": "ts-node server/mails/build.ts",
     "emails:preview": "ts-node server/mails/preview.ts"
+    "test:activity-summary": "ts-node test/mails/testActivitySummary.ts"
   }
 }

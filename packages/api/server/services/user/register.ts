@@ -12,7 +12,7 @@ export default async (data: ContactBody): Promise<User> => {
             first_name: data.first_name,
             email: data.email,
             phone: data.phone,
-            organization: data.organization_full?.id || null,
+            organization: data.organization_full?.id ?? null,
             position: data.position,
             access_request_message: data.access_request_message,
         });

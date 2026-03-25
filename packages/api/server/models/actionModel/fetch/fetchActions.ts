@@ -5,6 +5,7 @@ import enrichWhere from './enrichWhere';
 
 export type ActionSelectRow = {
     action_id: number,
+    action_ref: string | null,
     name: string,
     started_at: string,
     ended_at: string | null,
@@ -47,6 +48,7 @@ export default function fetchActions(actionIds: number[] = null, clauseGroup: ob
     return sequelize.query(
         `SELECT
             actions.action_id,
+            actions.action_ref,
             actions.name,
             actions.started_at,
             actions.ended_at,

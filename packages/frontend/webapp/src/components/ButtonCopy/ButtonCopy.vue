@@ -1,28 +1,38 @@
 <template>
-    <Button
-        variant="primaryText"
-        icon="copy"
+    <DsfrButton
+        tertiary
+        :disabled="copied"
+        size="sm"
+        :icon="copied ? 'fr-icon-success-line' : 'mdi:content-copy'"
         iconPosition="left"
-        @click="copy"
+        @click.prevent="copy"
         href="#"
         :padding="false"
-        class="-ml-2 py-1 px-2 rounded hover:!bg-G200"
-        ><slot>Copier</slot></Button
-    >
+        :label="copyText"
+    />
 </template>
 
 <script setup>
-import { defineProps, toRefs, defineEmits } from "vue";
+import { toRefs, ref, computed } from "vue";
 import copyToClipboard from "@/utils/copyToClipboard";
-import { Button } from "@resorptionbidonvilles/ui";
+
 const props = defineProps({
     value: String,
 });
 const { value } = toRefs(props);
+const copied = ref(false);
+const copyText = computed(() => {
+    return copied.value ? "Copié" : "Copier";
+});
 const emit = defineEmits(["copied"]);
-function copy(e) {
-    copyToClipboard(value.value);
-    emit("copied");
-    e.preventDefault();
+async function copy() {
+    copied.value = true;
+    const result = await copyToClipboard(value.value);
+    if (result) {
+        emit("copied");
+    }
+    setTimeout(() => {
+        copied.value = false;
+    }, 2000);
 }
 </script>

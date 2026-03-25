@@ -2,6 +2,7 @@
     <Form
         :validation-schema="schema"
         @submit="formSubmit"
+        @input="error = null"
         ref="form"
         v-slot="{ values, errors }"
         :lang="language"
@@ -62,7 +63,7 @@
         <ContentWrapper :size="size" class="mt-4">
             <slot name="button">
                 <p class="text-center">
-                    <Button type="submit">Envoyer</Button>
+                    <DsfrButton type="submit">Envoyer</DsfrButton>
                 </p>
             </slot>
         </ContentWrapper>
@@ -75,10 +76,10 @@
 </template>
 
 <script setup>
-import { defineProps, defineExpose, toRefs, ref } from "vue";
+import { toRefs, ref } from "vue";
 import { Form } from "vee-validate";
 
-import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import focusFieldById from "@common/utils/focusFieldById";
 
 const props = defineProps({

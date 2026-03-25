@@ -17,25 +17,9 @@ export function autocomplete(str, departementCode = null, usersOnly = "0") {
     return axios.get(`/organizations/search?${queryString}`);
 }
 
-export function autocompleteAssociation(str) {
+export function autocompleOrganization(str) {
     return axios.get(
-        `/organizations/associations/search?query=${encodeURIComponent(str)}`
-    );
-}
-
-export function autocompletePrivateOrganization(str) {
-    return axios.get(
-        `/organizations/private-organizations/search?query=${encodeURIComponent(
-            str
-        )}`
-    );
-}
-
-export function autocompleteTerritorialCollectivity(str) {
-    return axios.get(
-        `/organizations/territorial-collectivities/search?query=${encodeURIComponent(
-            str
-        )}`
+        `/organizations/organizations/search?query=${encodeURIComponent(str)}`
     );
 }
 

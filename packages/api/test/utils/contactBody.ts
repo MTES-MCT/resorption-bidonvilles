@@ -2,11 +2,11 @@ import { serialized as fakeOrganization } from '#test/utils/organization';
 import { ContactBody } from '#root/types/inputs/ContactBody.d';
 
 export function existingOrganization(override: Partial<ContactBody> = {}): ContactBody {
-    const defaultObj = {
-        request_type: ['access-request'],
+    const defaultObj: ContactBody = {
+        request_type: 'access-request',
         is_actor: true,
         referral: 'dihal_event',
-        referral_other: null,
+        referral_other: '',
         last_name: 'Dupont',
         first_name: 'Jean',
         email: 'jean.dupont@beta.gouv.fr',
@@ -16,6 +16,10 @@ export function existingOrganization(override: Partial<ContactBody> = {}): Conta
         organization_category: 'public_establishment',
         organization_full: fakeOrganization(),
         organization_other: null,
+        territorial_collectivity: null,
+        association: null,
+        private_organization: null,
+        public_establishment: null,
     };
 
     return Object.assign(defaultObj, override);

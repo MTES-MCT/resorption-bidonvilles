@@ -15,7 +15,7 @@
 
         <template v-slot:button>
             <p class="text-center">
-                <Button type="submit">Changer mon mot de passe</Button>
+                <DsfrButton type="submit">Changer mon mot de passe</DsfrButton>
             </p>
         </template>
     </FormPublic>
@@ -27,7 +27,6 @@ import { defineProps, toRefs } from "vue";
 import router from "@/helpers/router";
 
 // components
-import { Button } from "@resorptionbidonvilles/ui";
 import FormPublic from "@/components/FormPublic/FormPublic.vue";
 import FormChangementMotDePasseInputPassword from "./inputs/FormChangementMotDePasseInputPassword.vue";
 import FormChangementMotDePasseInputPasswordConfirm from "./inputs/FormChangementMotDePasseInputPasswordConfirm.vue";
