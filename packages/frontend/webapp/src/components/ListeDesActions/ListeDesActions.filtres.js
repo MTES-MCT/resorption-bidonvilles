@@ -26,4 +26,9 @@ export default [
             },
         ],
     },
+    {
+        label: "Financement",
+        id: "dihalFinancing",
+        options: [{ value: "dihal", label: "Financement DIHAL" }],
+    },
 ];

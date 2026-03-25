@@ -31,6 +31,7 @@
 <script setup>
 import { computed, toRefs } from "vue";
 import { useUserStore } from "@/stores/user.store";
+import { useActionsStore } from "@/stores/actions.store";
 import { useModaleStore } from "@/stores/modale.store";
 import { exportComments, exportActions } from "@/api/actions.api";
 
@@ -39,6 +40,7 @@ import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import ModalExport from "@/components/ListeDesActions/ListeDesActionsExport/ListeDesActionsExportModal.vue";
 
 const userStore = useUserStore();
+const actionsStore = useActionsStore();
 
 const props = defineProps({
     years: {
@@ -60,12 +62,16 @@ const exportList = computed(() => {
     const list = [];
 
     if (userStore.hasPermission("action.export") || userStore.user.is_admin) {
+        const hasDihalFinancingFilter =
+            actionsStore.filters.properties.value?.dihalFinancing?.includes(
+                "dihal"
+            ) || false;
         list.push({
             shape: "button",
             displayedOn: "footer",
             label: "Export des actions",
             filename: "actions",
-            downloadFn: exportActions,
+            downloadFn: (year) => exportActions(year, hasDihalFinancingFilter),
             format: "xlsx",
             years: years,
         });
