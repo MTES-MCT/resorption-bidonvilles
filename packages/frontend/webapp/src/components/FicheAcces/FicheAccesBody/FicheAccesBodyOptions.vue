@@ -1,36 +1,39 @@
 <template>
     <div
         class="pt-2 pb-4 px-1 lg:px-4 bg-G300"
-        v-if="
-            optionList && optionList.length > 0 && accesStore.activatedOptions
-        "
+        v-if="optionList && optionList.length > 0"
     >
-        <CheckableGroup id="user-options" label="Options">
+        <p class="font-bold">Options</p>
+        <p class="ml-8">
             <Checkbox
                 v-for="option in optionList"
                 :key="option.id"
-                v-model="values.options"
                 :value="option.id"
                 :label="option.label"
                 name="options"
+                variant="checkbox"
+                direction="col"
                 :disabled="
                     user.status === 'inactive' || user.status === 'refused'
                 "
+                :active="
+                    user.status !== 'active' || accesStore.activatedOptions
+                "
             />
-        </CheckableGroup>
-        <DsfrButton
-            v-if="isModified"
-            label="Valider les modifications"
-            class="mt-2 ml-8"
-            size="sm"
-            @click="modifyOptions(user, values.options)"
-        />
+            <DsfrButton
+                v-if="isModified && accesStore.activatedOptions"
+                label="Valider les modifications"
+                class="mt-2"
+                size="sm"
+                @click="modifyOptions(user, values.options)"
+            />
+        </p>
     </div>
 </template>
 
 <script setup>
 import { toRefs, computed, watch } from "vue";
-import { Checkbox, CheckableGroup } from "@resorptionbidonvilles/ui";
+import { Checkbox } from "@resorptionbidonvilles/ui";
 import { useConfigStore } from "@/stores/config.store";
 import { useInputsStore } from "@/stores/inputs.store";
 import { useAccesStore } from "@/stores/acces.store";
