@@ -79,7 +79,7 @@
 import { toRefs, ref } from "vue";
 import { Form } from "vee-validate";
 
-import { ContentWrapper, ErrorSummary } from "@resorptionbidonvilles/ui";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import focusFieldById from "@common/utils/focusFieldById";
 
 const props = defineProps({
