@@ -1,3 +1,4 @@
+const refreshViewCascade = require('./common/refreshViewCascade');
 const createUserActualPermissions = require('./common/user_actual_permissions/10_reset');
 const createUserPermissionsByOption = require('./common/user_permissions_by_option/03_reset');
 const createFullUserPermissionsByUser = require('./common/full_user_permissions_by_user/01_initial_view');
@@ -6,58 +7,35 @@ const createUserPermissionsWithAttachments = require('./common/user_permissions_
 const createOldUserPermissionsByRole = require('./common/full_user_permissions_by_role/01_initial_view');
 const createNewUserPermissionsByRole = require('./common/full_user_permissions_by_role/02_fix_action_create');
 
-module.exports = {
-    async up(queryInterface) {
-        const transaction = await queryInterface.sequelize.transaction();
-
-        try {
-            // on supprime toutes les vues de permission pour recréer full_user_permissions_by_role
-            await queryInterface.sequelize.query('DROP VIEW user_actual_permissions', { transaction });
-            await queryInterface.sequelize.query('DROP VIEW user_permissions_by_option', { transaction });
-            await queryInterface.sequelize.query('DROP VIEW full_user_permissions_by_user', { transaction });
-            await queryInterface.sequelize.query('DROP VIEW full_user_permissions_by_organization', { transaction });
-            await queryInterface.sequelize.query('DROP VIEW user_permissions_with_attachments', { transaction });
-            await queryInterface.sequelize.query('DROP VIEW full_user_permissions_by_role', { transaction });
-
-            // on recrée les vues une par une
-            await queryInterface.sequelize.query(createNewUserPermissionsByRole, { transaction });
-            await queryInterface.sequelize.query(createUserPermissionsWithAttachments, { transaction });
-            await queryInterface.sequelize.query(createFullUserPermissionsByOrganization, { transaction });
-            await queryInterface.sequelize.query(createFullUserPermissionsByUser, { transaction });
-            await queryInterface.sequelize.query(createUserPermissionsByOption, { transaction });
-            await queryInterface.sequelize.query(createUserActualPermissions, { transaction });
-
-            return transaction.commit();
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
+module.exports = refreshViewCascade([
+    {
+        name: 'user_actual_permissions',
+        oldView: createUserActualPermissions,
+        newView: createUserActualPermissions,
     },
-
-    async down(queryInterface) {
-        const transaction = await queryInterface.sequelize.transaction();
-
-        try {
-            // on supprime toutes les vues de permission pour recréer full_user_permissions_by_role
-            await queryInterface.sequelize.query('DROP VIEW user_actual_permissions', { transaction });
-            await queryInterface.sequelize.query('DROP VIEW user_permissions_by_option', { transaction });
-            await queryInterface.sequelize.query('DROP VIEW full_user_permissions_by_user', { transaction });
-            await queryInterface.sequelize.query('DROP VIEW full_user_permissions_by_organization', { transaction });
-            await queryInterface.sequelize.query('DROP VIEW user_permissions_with_attachments', { transaction });
-            await queryInterface.sequelize.query('DROP VIEW full_user_permissions_by_role', { transaction });
-
-            // on recrée les vues une par une
-            await queryInterface.sequelize.query(createOldUserPermissionsByRole, { transaction });
-            await queryInterface.sequelize.query(createUserPermissionsWithAttachments, { transaction });
-            await queryInterface.sequelize.query(createFullUserPermissionsByOrganization, { transaction });
-            await queryInterface.sequelize.query(createFullUserPermissionsByUser, { transaction });
-            await queryInterface.sequelize.query(createUserPermissionsByOption, { transaction });
-            await queryInterface.sequelize.query(createUserActualPermissions, { transaction });
-
-            return transaction.commit();
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
+    {
+        name: 'user_permissions_by_option',
+        oldView: createUserPermissionsByOption,
+        newView: createUserPermissionsByOption,
     },
-};
+    {
+        name: 'full_user_permissions_by_user',
+        oldView: createFullUserPermissionsByUser,
+        newView: createFullUserPermissionsByUser,
+    },
+    {
+        name: 'full_user_permissions_by_organization',
+        oldView: createFullUserPermissionsByOrganization,
+        newView: createFullUserPermissionsByOrganization,
+    },
+    {
+        name: 'user_permissions_with_attachments',
+        oldView: createUserPermissionsWithAttachments,
+        newView: createUserPermissionsWithAttachments,
+    },
+    {
+        name: 'full_user_permissions_by_role',
+        oldView: createOldUserPermissionsByRole,
+        newView: createNewUserPermissionsByRole,
+    },
+]);

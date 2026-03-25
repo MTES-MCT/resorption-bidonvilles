@@ -1,7 +1,7 @@
 <template>
     <section>
         <FicheAccesBodyMessage :user="user" />
-        <FicheAccesBodyRole :user="user" :options="user.permission_options" />
+        <FicheAccesBodyRole :user="user" :options="options" />
         <FicheAccesBodyAdminComments
             v-if="userStore.user?.is_superuser"
             :user="user"
