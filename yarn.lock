@@ -3389,6 +3389,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@iconify-json/fa-solid@npm:latest":
+  version: 1.2.2
+  resolution: "@iconify-json/fa-solid@npm:1.2.2"
+  dependencies:
+    "@iconify/types": "*"
+  checksum: e397f391d27dbcbba8c35ebaae67ef93881a7933b3a4bfce9ef6337f7871160be4b64ed7c7a85814c93555ee8c0df3ecb508038a697da25576cf382fdf1fab5e
+  languageName: node
+  linkType: hard
+
 "@iconify-json/mdi@npm:latest":
   version: 1.2.3
   resolution: "@iconify-json/mdi@npm:1.2.3"
@@ -5940,6 +5949,8 @@ __metadata:
     json2csv: ^5.0.6
     jsonwebtoken: ^9.0.0
     lint-staged: ^13.2.2
+    liquidjs: ^10.24.0
+    lodash: ^4.17.23
     mime-types: ^2.1.35
     mixin-deep: ^2.0.1
     mjml: ^4.18.0
@@ -6022,6 +6033,7 @@ __metadata:
     "@gouvminint/vue-dsfr": ^8.8.0
     "@iconify-json/bxs": latest
     "@iconify-json/carbon": ^1.2.13
+    "@iconify-json/fa-solid": latest
     "@iconify-json/mdi": latest
     "@iconify-json/ri": latest
     "@iconify-json/uil": latest
@@ -21512,6 +21524,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"liquidjs@npm:^10.24.0":
+  version: 10.24.0
+  resolution: "liquidjs@npm:10.24.0"
+  dependencies:
+    commander: ^10.0.0
+  bin:
+    liquid: bin/liquid.js
+    liquidjs: bin/liquid.js
+  checksum: a25638d1a52e34d64ad0ff8deb04d42dd2276913b277742b389b9f5e1a8ec8fc3b923228eb701d28f48b36e199c15466eb5bfee4d38464806a05050ff2c507ce
+  languageName: node
+  linkType: hard
+
 "listenercount@npm:~1.0.1":
   version: 1.0.1
   resolution: "listenercount@npm:1.0.1"
@@ -21881,6 +21905,13 @@ __metadata:
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
+  languageName: node
+  linkType: hard
+
+"lodash@npm:^4.17.23":
+  version: 4.17.23
+  resolution: "lodash@npm:4.17.23"
+  checksum: 7daad39758a72872e94651630fbb54ba76868f904211089721a64516ce865506a759d9ad3d8ff22a2a49a50a09db5d27c36f22762d21766e47e3ba918d6d7bab
   languageName: node
   linkType: hard
 
