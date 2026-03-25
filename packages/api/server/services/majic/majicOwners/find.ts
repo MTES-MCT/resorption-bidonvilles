@@ -32,9 +32,7 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
     // Enregistrer la demande dans la table de logs
     try {
         await majicLogsService.insert(user.id, user.organization.id, parcelId);
-    } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error(e);
+    } catch {
         throw new ServiceError('log_insert_failed', new Error('Une erreur est survenue lors de l\'enregistrement de la demande.'));
     }
 
@@ -46,8 +44,6 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
             throw new ServiceError('parcel_fetch_failed', new Error('Impossible de retrouver la parcelle en base de données.'));
         }
     } catch (parcelError) {
-        // eslint-disable-next-line no-console
-        console.error(parcelError);
         if (parcelError.code === 'parcel_fetch_failed') {
             throw parcelError;
         }
@@ -58,10 +54,8 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
     let owners: RawOwner[];
     try {
         owners = await majicModel.findOwners(parcel.idcom, parcel.dnupro, dept, schema, shortOwnerTableName, ownerTableName);
-    } catch (ownersError) {
-        // eslint-disable-next-line no-console
-        console.error(ownersError);
-        throw new ServiceError('owners_fetch_failed', new Error(`Une erreur s'est produite lors de la recherche des propiétaires de la parcelle ${parcelId}.`));
+    } catch {
+        throw new ServiceError('owners_fetch_failed', new Error(`Une erreur s'est produite lors de la recherche des propriétaires de la parcelle ${parcelId}.`));
     }
 
     if (!owners) {
@@ -80,9 +74,7 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
                 },
             },
         );
-    } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error(e);
+    } catch {
         throw new ServiceError('mail_send_failed', new Error('Une erreur est survenue lors de l\'envoi du courriel.'));
     }
 

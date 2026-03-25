@@ -3389,6 +3389,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@iconify-json/fa-solid@npm:latest":
+  version: 1.2.2
+  resolution: "@iconify-json/fa-solid@npm:1.2.2"
+  dependencies:
+    "@iconify/types": "*"
+  checksum: e397f391d27dbcbba8c35ebaae67ef93881a7933b3a4bfce9ef6337f7871160be4b64ed7c7a85814c93555ee8c0df3ecb508038a697da25576cf382fdf1fab5e
+  languageName: node
+  linkType: hard
+
 "@iconify-json/mdi@npm:latest":
   version: 1.2.3
   resolution: "@iconify-json/mdi@npm:1.2.3"
@@ -5940,6 +5949,7 @@ __metadata:
     json2csv: ^5.0.6
     jsonwebtoken: ^9.0.0
     lint-staged: ^13.2.2
+    liquidjs: ^10.24.0
     lodash: ^4.17.23
     mime-types: ^2.1.35
     mixin-deep: ^2.0.1
@@ -6023,6 +6033,7 @@ __metadata:
     "@gouvminint/vue-dsfr": ^8.8.0
     "@iconify-json/bxs": latest
     "@iconify-json/carbon": ^1.2.13
+    "@iconify-json/fa-solid": latest
     "@iconify-json/mdi": latest
     "@iconify-json/ri": latest
     "@iconify-json/uil": latest
@@ -6049,6 +6060,7 @@ __metadata:
     leaflet-providers: ^1.13.0
     leaflet.markercluster: ^1.5.3
     lint-staged: ^13.2.2
+    lodash-es: ^4.17.23
     pinia: ^2.0.21
     postcss: ^8.5.3
     prettier: ^2.7.1
@@ -21512,6 +21524,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"liquidjs@npm:^10.24.0":
+  version: 10.24.0
+  resolution: "liquidjs@npm:10.24.0"
+  dependencies:
+    commander: ^10.0.0
+  bin:
+    liquid: bin/liquid.js
+    liquidjs: bin/liquid.js
+  checksum: a25638d1a52e34d64ad0ff8deb04d42dd2276913b277742b389b9f5e1a8ec8fc3b923228eb701d28f48b36e199c15466eb5bfee4d38464806a05050ff2c507ce
+  languageName: node
+  linkType: hard
+
 "listenercount@npm:~1.0.1":
   version: 1.0.1
   resolution: "listenercount@npm:1.0.1"
@@ -21692,6 +21716,13 @@ __metadata:
   dependencies:
     p-locate: ^6.0.0
   checksum: c1b653bdf29beaecb3d307dfb7c44d98a2a98a02ebe353c9ad055d1ac45d6ed4e1142563d222df9b9efebc2bcb7d4c792b507fad9e7150a04c29530b7db570f8
+  languageName: node
+  linkType: hard
+
+"lodash-es@npm:^4.17.23":
+  version: 4.17.23
+  resolution: "lodash-es@npm:4.17.23"
+  checksum: b1bd1d141bbde8ffc72978e34b364065675806b0ca42ab99477d247fb2ae795faeed81db9283bf18ae1f096c2b6611ec0589e0503fa9724bf82e3dce947bad69
   languageName: node
   linkType: hard
 

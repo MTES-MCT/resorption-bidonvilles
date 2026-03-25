@@ -28,6 +28,15 @@ Les autres variables utilisés plus spécifiques:
 - formationUrl => https://app.evalandgo.com/s/index.php?a=JTk2cCU5N2slOUElQjA=&id=JTk4ayU5QW4lOTYlQUY=
 - adminUrl => https://resorption-bidonvilles.dihal.gouv.fr/liste-des-utilisateurs
 
+## Développement
+ 
+### Prévisualiser un email
+```bash
+yarn emails:preview \
+  --template activity_summary \
+  --variables server/mails/preview/activity_summary.variables.example.json
+```
+
 ## Tracking 
 
 Tracking des activités proposées dans les mèls

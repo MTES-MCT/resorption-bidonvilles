@@ -1,12 +1,14 @@
 <template>
-    <div class="m-auto w-1/2 pb-10 text-center print:hidden">
+    <div class="sm:m-auto sm:w-1/2 w-full pb-10 text-center print:hidden">
         <h2 class="text-lg xl:text-xl font-bold text-primary">
             Rechercher un contact, un acteur, une structure...
         </h2>
         <ContentWrapper class="mt-3" size="medium">
-            <div class="flex items-center space-x-2">
+            <div
+                class="flex flex-col sm:flex-row w-full items-center sm:space-x-2"
+            >
                 <InputCommunauteSearch
-                    class="flex-1"
+                    class="flex-1 w-full"
                     placeholder="Nom d'un territoire, d'une structure, d'un acteur..."
                     withoutMargin
                     :allowFreeSearch="true"
@@ -28,15 +30,13 @@
 </template>
 
 <script setup>
-import { toRefs, computed, defineEmits } from "vue";
+import { toRefs, computed, toRef, watch } from "vue";
 import { useForm } from "vee-validate";
 import { useUserStore } from "@/stores/user.store";
 import { useDirectoryStore } from "@/stores/directory.store";
 
 import InputCommunauteSearch from "../InputCommunauteSearch/InputCommunauteSearch.vue";
 import { ContentWrapper, Icon, Link } from "@resorptionbidonvilles/ui";
-import { toRef } from "vue";
-import { watch } from "vue";
 
 const directoryStore = useDirectoryStore();
 const userStore = useUserStore();

@@ -1,0 +1,35 @@
+{
+    "from": "01",
+    "to": "07 janvier 2026",
+    "recipientName": "Utilisateur Test",
+    "showDetails": false,
+    "show_question_summary": false,
+    "questions_with_answers_length": 0,
+    "questions_with_answers": [],
+    "questions_without_answers_length": 0,
+    "questions_without_answers": [],
+    "wwwUrl": "https://www.resorption-bidonvilles.gouv.fr",
+    "webappUrl": "https://app.resorption-bidonvilles.gouv.fr",
+    "backUrl": "https://api.resorption-bidonvilles.gouv.fr",
+    "utm": "utm_source=test&utm_medium=email&utm_campaign=preview",
+    "summaries": [
+        {
+            "code": "75",
+            "name": "Paris",
+            "has_activity": false,
+            "new_shantytowns": [],
+            "new_shantytowns_length": 0,
+            "closed_shantytowns": [],
+            "closed_shantytowns_length": 0,
+            "updated_shantytowns": [],
+            "updated_shantytowns_length": 0,
+            "new_comments": [],
+            "new_comments_length": 0,
+            "new_users": [],
+            "new_users_length": 0,
+            "shantytowns_total": 10,
+            "population_total": 120,
+            "updated_shantytowns_6_months": 9
+        }
+    ]
+}

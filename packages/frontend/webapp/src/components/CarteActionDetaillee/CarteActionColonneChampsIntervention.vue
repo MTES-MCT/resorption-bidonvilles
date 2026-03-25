@@ -1,25 +1,24 @@
 <template>
     <div
-        class="items-center"
+        class="items-start flex flex-col gap-2"
         tabindex="0"
         aria-label="Liste des étiquettes caractérisant l'action"
     >
-        <Tag
-            variant="primary"
+        <DsfrTag
             v-for="topic in topics"
             v-bind:key="topic.name"
             tabindex="0"
             :aria-label="`Etiquette ${topic.name}`"
-        >
-            {{ topic.name }}
-        </Tag>
+            :tagName="`Etiquette ${topic.name}`"
+            :label="topic.name"
+            selectable
+            @click.prevent="() => {}"
+        />
     </div>
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
-
-import { Tag } from "@resorptionbidonvilles/ui";
+import { toRefs } from "vue";
 
 const props = defineProps({
     topics: {

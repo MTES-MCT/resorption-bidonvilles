@@ -5,6 +5,7 @@ import shantytownModel from '#server/models/shantytownModel';
 import topicModel from '#server/models/topicModel';
 import userModel from '#server/models/userModel';
 import can from '#server/utils/permission/can';
+import hasMetricValues from '#server/services/action/_common/hasMetricValues';
 import { body } from 'express-validator';
 import validator from 'validator';
 
@@ -221,8 +222,12 @@ export default (mode: 'create' | 'update') => [
         .trim()
         .notEmpty().withMessage('Vous devez préciser où se déroule l\'action'),
     body('location_autre')
-        .customSanitizer((value) => {
-            // Convertit les chaînes vides, null ou undefined en null
+        .customSanitizer((value, { req }) => {
+            // Force NULL pour les types 'sur_site' et 'logement' (contrainte DB)
+            if (req.body.location_type === 'sur_site' || req.body.location_type === 'logement') {
+                return null;
+            }
+            // Convertit les chaînes vides, null ou undefined en null pour les autres types
             if (value === '' || value === null || value === undefined) {
                 return null;
             }
@@ -395,9 +400,13 @@ export default (mode: 'create' | 'update') => [
             }
 
             years.forEach((strYear) => {
+                if (!hasMetricValues(value[strYear])) {
+                    return;
+                }
+
                 const year = Number.parseInt(strYear, 10);
                 if ((minYear && year < minYear) || (maxYear && year > maxYear)) {
-                    throw new Error(`L'année ${year} n'est pas valide`);
+                    throw new Error(`Indicateurs - L'année ${year} n'est pas comprise dans la période d'exécution de l'action`);
                 }
             });
 

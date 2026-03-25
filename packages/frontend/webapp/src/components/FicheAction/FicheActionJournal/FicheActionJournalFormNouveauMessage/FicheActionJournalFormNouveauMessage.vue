@@ -9,8 +9,15 @@
             <ErrorSummary v-if="error" :message="error" class="mt-2" />
             <p class="text-right">
                 <DsfrButton
-                    :loading="isLoading"
-                    icon="fr-icon-send-plane-fill"
+                    :disabled="isLoading"
+                    :icon="
+                        isLoading
+                            ? {
+                                  name: 'fa-solid:spinner',
+                                  animation: 'spin',
+                              }
+                            : 'fr-icon-send-plane-fill'
+                    "
                     @click="submit"
                     >Publier le message</DsfrButton
                 >
