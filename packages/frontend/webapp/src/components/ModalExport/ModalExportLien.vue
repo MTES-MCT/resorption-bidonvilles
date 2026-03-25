@@ -1,13 +1,12 @@
 <template>
     <p>
-        <Button
+        <DsfrButton
             v-if="isButton"
             @click="download"
-            :loading="isLoading"
-            :disabled="disabled"
+            :disabled="disabled || isLoading"
         >
             <Icon icon="file-excel" iconPosition="left" />
-            {{ label }}</Button
+            {{ label }}</DsfrButton
         >
         <template v-else>
             <Link @click="download" :class="isLoading ? 'text-G300' : ''">
@@ -24,13 +23,7 @@ import { toRefs, ref, computed } from "vue";
 import { useNotificationStore } from "@/stores/notification.store";
 import downloadCsv from "@/utils/downloadCsv";
 import downloadBlob from "@/utils/downloadBlob";
-import {
-    Button,
-    Icon,
-    Link,
-    Spinner,
-    Warning,
-} from "@resorptionbidonvilles/ui";
+import { Icon, Link, Spinner, Warning } from "@resorptionbidonvilles/ui";
 import formatDate from "@common/utils/formatDate";
 
 const props = defineProps({
