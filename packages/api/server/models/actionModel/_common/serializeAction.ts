@@ -98,6 +98,7 @@ export default (action: ActionRow, user: User): Action => {
         operators: action.operators || [],
         metrics: action.metrics || [],
         metrics_updated_at: null,
+        hasDihalFinancing: false,
         comments: [],
         created_at: action.created_at.getTime(),
         created_by: {
