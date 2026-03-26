@@ -165,7 +165,7 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
             const newFinances = newValue || {};
             const oldYears = Object.keys(oldFinances);
             const newYears = Object.keys(newFinances);
-            const allYears = [...new Set([...oldYears, ...newYears])].sort();
+            const allYears = [...new Set([...oldYears, ...newYears])].sort((a, b) => a.localeCompare(b));
 
             allYears.forEach((year) => {
                 const oldYearFinances = oldFinances[year] || [];
