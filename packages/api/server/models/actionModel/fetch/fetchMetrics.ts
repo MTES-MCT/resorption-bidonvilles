@@ -1,5 +1,6 @@
 import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
+import { CreatorInfo } from '#server/models/_common/types/UserInfoTypes.d';
 import enrichWhere from './enrichWhere';
 
 export type ActionMetricsRow = {
@@ -24,14 +25,7 @@ export type ActionMetricsRow = {
     scolaire_nombre_college: number | null,
     scolaire_nombre_lycee: number | null,
     scolaire_nombre_autre: number | null,
-    created_at: Date,
-    creator_id: number,
-    creator_first_name: string,
-    creator_last_name: string,
-    creator_organization_id: number,
-    creator_organization_name: string,
-    creator_organization_abbreviation: string | null,
-};
+} & CreatorInfo;
 
 export default function fetchMetrics(actionIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionMetricsRow[]> {
     const where = [];

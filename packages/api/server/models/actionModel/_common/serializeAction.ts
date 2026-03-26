@@ -1,4 +1,5 @@
 import permissionUtils from '#server/utils/permission';
+import { CreatorInfo, EditorInfo } from '#server/models/_common/types/UserInfoTypes.d';
 import Action from '#root/types/resources/Action.d';
 import { User } from '#root/types/resources/User.d';
 
@@ -22,27 +23,13 @@ export type ActionRow = {
     longitude: number | null,
     eti_fk_city: string | null,
     location_other: string | null,
-    creator_id: number,
-    creator_first_name: string,
-    creator_last_name: string,
-    creator_organization_id: number,
-    creator_organization_name: string,
-    creator_organization_abbreviation: string | null,
-    created_at: Date,
-    editor_id: number | null,
-    editor_first_name: string | null,
-    editor_last_name: string | null,
-    editor_organization_id: number | null,
-    editor_organization_name: string | null,
-    editor_organization_abbreviation: string | null,
-    updated_at: Date,
     topics?: Array<{ uid: string, name: string }>,
     managers?: Array<any>,
     operators?: Array<any>,
     shantytowns?: Array<any>,
     finances?: { [key: number]: any[] },
     metrics?: Array<any>,
-};
+} & CreatorInfo & EditorInfo;
 
 function fromDateToTimestamp(date: string | Date | null): number | null {
     if (date === null) {
