@@ -14,7 +14,7 @@ interface ActionHistoryRequest extends Request {
 
 export default async function getHistory(req: ActionHistoryRequest, res: Response, next: (arg0: any) => any) {
     try {
-        const history = await actionService.getHistory(req.user, parseInt(req.params.id, 10));
+        const history = await actionService.getHistory(req.user, Number.parseInt(req.params.id, 10));
         return res.status(200).send(history);
     } catch (error) {
         const { code, message } = ERRORS[error?.code] ?? ERRORS.undefined;
