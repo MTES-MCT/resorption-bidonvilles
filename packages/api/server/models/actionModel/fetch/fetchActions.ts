@@ -1,5 +1,6 @@
 import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
+import { CreatorInfo, EditorInfo } from '#server/models/_common/types/UserInfoTypes.d';
 import ActionLocationType from '#root/types/resources/ActionLocationType.d';
 import enrichWhere from './enrichWhere';
 
@@ -20,21 +21,7 @@ export type ActionSelectRow = {
     longitude: number | null,
     eti_fk_city: string | null,
     location_other: string | null,
-    creator_id: number,
-    creator_first_name: string,
-    creator_last_name: string,
-    creator_organization_id: number,
-    creator_organization_name: string,
-    creator_organization_abbreviation: string | null,
-    created_at: Date,
-    editor_id: number | null,
-    editor_first_name: string | null,
-    editor_last_name: string | null,
-    editor_organization_id: number | null,
-    editor_organization_name: string | null,
-    editor_organization_abbreviation: string | null,
-    updated_at: Date,
-};
+} & CreatorInfo & EditorInfo;
 
 export default function fetchActions(actionIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionSelectRow[]> {
     const where = [];
