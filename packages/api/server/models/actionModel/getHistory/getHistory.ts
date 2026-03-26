@@ -42,7 +42,7 @@ export type ActionActivity = {
     }>,
 };
 
-export default async (user: User, actionId: number): Promise<ActionActivity[]> => {
+export default async function getHistory(user: User, actionId: number): Promise<ActionActivity[]> {
     // Récupérer d'abord l'action pour vérifier les permissions sur sa vraie localisation
     const actionCheck = await sequelize.query(
         `SELECT a.action_id, d.code as departement_code, d.name as departement_name, r.code as region_code, r.name as region_name
@@ -473,4 +473,4 @@ export default async (user: User, actionId: number): Promise<ActionActivity[]> =
             return { ...base, action: 'update' as const, diff };
         })
         .filter(activity => activity !== null) as ActionActivity[];
-};
+}
