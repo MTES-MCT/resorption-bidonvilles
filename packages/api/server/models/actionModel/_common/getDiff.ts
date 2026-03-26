@@ -65,7 +65,7 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
             if (!finances || Object.keys(finances).length === 0) {
                 return 'non renseignés';
             }
-            const years = Object.keys(finances).sort();
+            const years = Object.keys(finances).sort((a, b) => a.localeCompare(b));
             return years.map((year) => {
                 const yearFinances = finances[year];
                 const total = yearFinances.reduce((sum: number, f: any) => sum + (f.amount || 0), 0);
