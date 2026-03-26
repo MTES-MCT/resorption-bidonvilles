@@ -25,20 +25,30 @@ const descriptions: RolePermissionDescriptions = {
         description: 'L\'acteur national est en charge de la mise en oeuvre du cadre national. Pour cela, il suit et évalue les actions. Il peut, le cas échéant, apporter un soutien financier ou un appui technique.',
         national_permissions: [
             [{ type: 'view', label: 'Consulter les %sites%', comments: 'dont les procédures judiciaires' }],
-            [{ type: 'view', label: 'Consulter les %actions%', comments: 'dont les financements' }],
+            [
+                {
+                    type: 'view',
+                    label: 'Consulter les %actions%',
+                    comments: 'hors financements',
+                    option: 'access_action_finances',
+                },
+            ],
         ],
         local_permissions: [],
-        options: [],
+        options: [
+            { id: 'access_action_finances', label: 'Accéder aux financements des actions' },
+        ],
     },
     direct_collaborator: {
         description: 'Le correspondant est le représentant local de l\'Etat en charge de la question des bidonvilles à l\'échelle du territoire. Il pilote les actions menées et est également l\'interlocuteur privilégié de la Dihal sur le sujet.',
         national_permissions: [
             [{ type: 'view', label: 'Consulter les %sites%', comments: 'dont les procédures judiciaires' }],
-            [{ type: 'view', label: 'Consulter les %actions%', comments: 'hors financements' }],
+            [{ type: 'view', label: 'Consulter les %actions%', comments: 'dont les financements' }],
         ],
         local_permissions: [
-            [{ type: 'edit', label: 'Créer, mettre à jour les %sites%', comments: 'dont les procédures judiciaires' }],
+            [{ type: 'edit', label: 'Créer, mettre à jour les %sites%', comments: 'dont les procédures judiciaires' }],
             [{ type: 'edit', label: 'Mettre à jour les %actions%', comments: 'dont les financements' }],
+            [{ type: 'edit', label: 'Exporter les actions', comments: 'dont les financements' }],
             [{ type: 'edit', label: 'Consulter et ajouter des %commentaires%', comments: null }],
         ],
         options: [],
@@ -48,6 +58,7 @@ const descriptions: RolePermissionDescriptions = {
         national_permissions: [],
         local_permissions: [
             [
+                { type: 'edit', label: 'Créer, mettre à jour les %sites%', comments: null },
                 { type: 'edit', label: 'Créer, mettre à jour les %sites%', comments: null },
                 {
                     type: 'deny', label: 'hors fermeture des sites', comments: null, option: 'close_shantytown',
@@ -80,6 +91,7 @@ const descriptions: RolePermissionDescriptions = {
                 },
             ],
             [{ type: 'view', label: 'Mettre à jour les %actions%', comments: 'hors financements' }],
+            [{ type: 'edit', label: 'Exporter les actions', comments: 'hors financements' }],
         ],
         options: [
             { id: 'create_shantytown', label: 'Autoriser l\'opérateur à déclarer un site' },

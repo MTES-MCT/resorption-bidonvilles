@@ -174,10 +174,10 @@ function setSectionTitles(sections: SectionTitle[], worksheet: ExcelJS.Worksheet
 }
 
 // Ajouter les lignes de données
-function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet) {
+function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, includeFinances: boolean = true) {
     data.forEach((item: ActionItem) => {
-        // Traiter les opérateurs (nom, prénom, organisation)
-        worksheet.addRow([
+        // Construire la ligne de données selon les permissions
+        const rowData = [
             item.departement_name,
             item.region_code,
             item.region_name,
@@ -207,24 +207,36 @@ function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet) {
             item.scolaire_nombre_college,
             item.scolaire_nombre_lycee,
             item.scolaire_nombre_autre,
-            item.finance_etatique,
-            item.depense_finance_etatique,
-            item.finance_dedie,
-            item.depense_finance_dedie,
-            item.finance_collectivite,
-            item.depense_finance_collectivite,
-            item.finance_europeen,
-            item.depense_finance_europeen,
-            item.finance_prive,
-            item.depense_finance_prive,
-            item.finance_autre,
-            item.depense_finance_autre,
+        ];
+
+        // Ajouter les colonnes de financement si l'utilisateur a les permissions
+        if (includeFinances) {
+            rowData.push(
+                item.finance_etatique,
+                item.depense_finance_etatique,
+                item.finance_dedie,
+                item.depense_finance_dedie,
+                item.finance_collectivite,
+                item.depense_finance_collectivite,
+                item.finance_europeen,
+                item.depense_finance_europeen,
+                item.finance_prive,
+                item.depense_finance_prive,
+                item.finance_autre,
+                item.depense_finance_autre,
+            );
+        }
+
+        // Ajouter les colonnes de commentaires et mises à jour
+        rowData.push(
             item.comments,
             item.last_comment,
             item.last_comment_date,
             item.last_update,
             item.metrics_updated_at,
-        ]);
+        );
+
+        worksheet.addRow(rowData);
     });
 }
 
@@ -311,21 +323,55 @@ function hideThreeFirstColumns(worksheet: ExcelJS.Worksheet) {
     });
 }
 
-export default (data: ActionReportRow[]) => {
-    // Trouver la section "FINANCEMENT"
-    const financementSection = findSection('FINANCEMENT');
+export default function exportActions(
+    data: ActionReportRow[],
+    includeFinances: boolean = true,
+    allowedDepartements: string[] | null = null,
+) {
+    // Déterminer les sections à inclure selon les permissions
+    let sectionsToInclude: SectionTitle[];
+    if (includeFinances) {
+        sectionsToInclude = sectionTitles;
+    } else {
+        // Filtrer la section FINANCEMENT et ajuster les positions des sections suivantes
+        sectionsToInclude = sectionTitles
+            .filter(s => s.name !== 'FINANCEMENT')
+            .map((section) => {
+                if (section.name === 'COMMENTAIRES') {
+                    return { name: section.name, range: { from: 'AD1', to: 'AF1' } };
+                }
+                if (section.name === 'MISE À JOUR') {
+                    return { name: section.name, range: { from: 'AG1', to: 'AH1' } };
+                }
+                return section;
+            });
+    }
 
-    // Extraire les numéros de colonnes
-    const fromColumn = columnToNumber(/[A-Z]+/.exec(financementSection.range.from)[0]);
-    const toColumn = columnToNumber(/[A-Z]+/.exec(financementSection.range.to)[0]);
+    // Déterminer les headers à inclure selon les permissions
+    // Les colonnes de financement vont de l'index 29 (finance_etatique) à 40 (depense_finance_autre)
+    const headersToInclude = includeFinances ? headers : headers.filter((_, index) => index < 29 || index > 40);
 
-    // Créer un tableau avec les numéros de colonnes
-    const financementColumns = createFinancementColumns(fromColumn, toColumn);
+    // Trouver la section "FINANCEMENT" si elle existe
+    const financementSection = includeFinances ? findSection('FINANCEMENT') : null;
+    let financementColumns: number[] = [];
+
+    if (financementSection) {
+        // Extraire les numéros de colonnes
+        const fromColumn = columnToNumber(/[A-Z]+/.exec(financementSection.range.from)[0]);
+        const toColumn = columnToNumber(/[A-Z]+/.exec(financementSection.range.to)[0]);
+        // Créer un tableau avec les numéros de colonnes
+        financementColumns = createFinancementColumns(fromColumn, toColumn);
+    }
 
     const workbook = new ExcelJS.Workbook();
 
     // Obtenir les données regroupées et triées par département
-    const donneesParDepartement = regrouperEtTrierParDepartement(data);
+    let donneesParDepartement = regrouperEtTrierParDepartement(data);
+
+    // Filtrer les départements selon les permissions
+    if (allowedDepartements !== null) {
+        donneesParDepartement = donneesParDepartement.filter(dept => dept.departement === 'Tous' || allowedDepartements.includes(dept.departement));
+    }
 
     // Indices de colonnes de fin des sections pour mise en gras
     const columnNumbers = findSectionIndex();
@@ -333,22 +379,21 @@ export default (data: ActionReportRow[]) => {
     // Itérer sur chaque data de département
     donneesParDepartement.forEach((donneeParDepartement: DepartementObject) => {
         const worksheet = addDepartmentWorksheet(workbook, donneeParDepartement.departement);
-        // const worksheet = workbook.addWorksheet(donneeParDepartement.departement === 'Tous' ? `${donneeParDepartement.departement}` : `Dépt ${donneeParDepartement.departement}`);
         worksheet.properties.defaultColWidth = 25; // Largeur par défaut des colonnes
 
         // Ajouter les entêtes de sections
-        setSectionTitles(sectionTitles, worksheet);
+        setSectionTitles(sectionsToInclude, worksheet);
 
         // Ajouter les entêtes de colonnes
-        worksheet.addRow(headers.map(header => header.label));
+        worksheet.addRow(headersToInclude.map(header => header.label));
 
         // Fixer la largeur des colonnes
-        headers.forEach((header, index) => {
-            worksheet.getColumn(index + 1).width = parseInt(header.width, 10) * 5;
+        headersToInclude.forEach((header, index) => {
+            worksheet.getColumn(index + 1).width = Number.parseInt(header.width, 10) * 5;
         });
 
         // Ajouter les lignes de données
-        addDataToWorksheet(donneeParDepartement.data, worksheet);
+        addDataToWorksheet(donneeParDepartement.data, worksheet, includeFinances);
 
         // Formater toutes les cellules
         formatWorksheetCells(worksheet, columnNumbers, financementColumns);
@@ -367,4 +412,4 @@ export default (data: ActionReportRow[]) => {
     });
 
     return workbook.xlsx.writeBuffer();
-};
+}

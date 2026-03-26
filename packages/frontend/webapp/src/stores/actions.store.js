@@ -123,6 +123,7 @@ export const useActionsStore = defineStore("actions", () => {
 
         filters.properties.value.topic = [];
         filters.properties.value.interventionLocation = [];
+        filters.properties.value.dihalFinancing = [];
     }
 
     function reset() {

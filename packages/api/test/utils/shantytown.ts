@@ -270,6 +270,7 @@ export function serialized(location: City = defaultLocation, override = {}): Sha
         populationMinors12To16: null,
         populationMinors16To18: null,
         minorsInSchool: null,
+        populationUpdatedAt: Math.floor(Date.now() / 1000),
         caravans: null,
         huts: null,
         tents: null,

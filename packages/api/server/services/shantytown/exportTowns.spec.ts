@@ -57,6 +57,7 @@ describe('services/shantytown.exportTowns()', () => {
             [region],
             { exportedSitesStatus: 'open' },
             date,
+            undefined,
         );
     });
 
@@ -72,6 +73,7 @@ describe('services/shantytown.exportTowns()', () => {
             [region],
             { exportedSitesStatus: 'open' },
             date,
+            undefined,
         );
     });
 
@@ -87,6 +89,7 @@ describe('services/shantytown.exportTowns()', () => {
             allowedLocations,
             { exportedSitesStatus: 'open' },
             sinon.match.instanceOf(Date),
+            undefined,
         );
     });
 

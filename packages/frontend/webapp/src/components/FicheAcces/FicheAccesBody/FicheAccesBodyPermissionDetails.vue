@@ -4,12 +4,6 @@
 
         <ul class="list-none">
             <li v-for="(item, index) in enrichedItems" :key="item.label">
-                <FicheAccesBodyOptions
-                    v-if="item.subsection && index > 0"
-                    :user="user"
-                    :options="options"
-                    @update:options="updateOptions"
-                />
                 <div
                     v-if="item.type !== 'deny'"
                     :class="[
@@ -30,7 +24,10 @@
 
                     <span v-html="item.label.replace(/%(.+?)%/gi, '$1')"></span>
                 </div>
-                <div v-if="item.comments" class="flex items-center">
+                <div
+                    v-if="item.comments && !isOptionActive(item)"
+                    class="flex items-center"
+                >
                     <div class="w-6">
                         <Icon
                             v-if="item.comments.startsWith('hors')"
@@ -43,6 +40,17 @@
                         {{ item.comments }}
                     </div>
                 </div>
+                <div
+                    v-if="item.comments && isOptionActive(item)"
+                    class="flex items-center"
+                >
+                    <div class="w-6">
+                        <Icon class="text-tertiary" icon="check" />
+                    </div>
+                    <div>
+                        {{ item.comments.replace("hors ", "") }}
+                    </div>
+                </div>
             </li>
         </ul>
     </div>
@@ -50,7 +58,6 @@
 
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
-import FicheAccesBodyOptions from "./FicheAccesBodyOptions.vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 const TYPES_TO_ICONS = {
@@ -69,14 +76,16 @@ const props = defineProps({
     },
     user: {
         type: Object,
-        required: true,
+        required: false,
+        default: null,
     },
     options: {
         type: Array,
-        required: true,
+        required: false,
+        default: () => [],
     },
 });
-const { title, items, options } = toRefs(props);
+const { title, items, user, options } = toRefs(props);
 
 const enrichedItems = computed(() => {
     return items.value.reduce((acc, arr) => {
@@ -90,5 +99,12 @@ const enrichedItems = computed(() => {
 
 function enrichItemWithIcon(item) {
     return { ...item, icon: TYPES_TO_ICONS[item.type] };
+}
+
+function isOptionActive(item) {
+    if (!item.option || !user.value || !options.value) {
+        return false;
+    }
+    return options.value.includes(item.option);
 }
 </script>

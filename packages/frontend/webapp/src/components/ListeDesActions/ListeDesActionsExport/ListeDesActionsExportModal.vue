@@ -61,18 +61,19 @@
                         />
                     </li>
                     <li>
-                        <Button
+                        <DsfrButton
                             v-if="actionsExportIsSelected"
-                            variant="primaryOutline"
+                            secondary
                             size="md"
-                            class="!border-2 !border-primary hover:!bg-primaryDark !py-1.5"
                             @click.stop="toggleActionsExportIsSelected"
                         >
-                            Annuler</Button
+                            Annuler</DsfrButton
                         >
                     </li>
                     <li>
-                        <Button @click="() => modale.close()">Fermer</Button>
+                        <DsfrButton @click="() => modale.close()"
+                            >Fermer</DsfrButton
+                        >
                     </li>
                 </ul>
             </div>
@@ -81,8 +82,8 @@
 </template>
 
 <script setup>
-import { ref, computed, defineProps, toRefs } from "vue";
-import { Button, Icon, Link, Modal } from "@resorptionbidonvilles/ui";
+import { ref, computed, defineProps, toRefs, watch } from "vue";
+import { Icon, Link, Modal } from "@resorptionbidonvilles/ui";
 import ModalExportLien from "@/components/ModalExport/ModalExportLien.vue";
 import ModalExportListeAnnee from "@/components/ListeDesActions/ListeDesActionsExport/ListeDesActionsExportListeAnnees.vue";
 
@@ -92,13 +93,61 @@ const props = defineProps({
 const { exports: exportList } = toRefs(props);
 const modale = ref(null);
 const actionsExportIsSelected = ref(false);
+
 const selectedYear = ref(new Date().getFullYear() - 1);
 
 const years = computed(() => {
-    return exportList.value
-        .filter((exportItem) => exportItem.filename === "actions")
-        .map((exportItem) => exportItem.years)[0];
+    const actionExport = exportList.value.find(
+        (exportItem) => exportItem.filename === "actions"
+    );
+
+    if (!actionExport || !actionExport.years) {
+        return [];
+    }
+
+    // Si years est une ref, accéder à sa valeur
+    const yearsValue = actionExport.years._object
+        ? actionExport.years._object.years
+        : actionExport.years;
+
+    return yearsValue || [];
 });
+
+// Calculer l'année par défaut : année en cours - 1, ou la première année disponible la plus proche
+const defaultYear = computed(() => {
+    const currentYear = new Date().getFullYear();
+    const targetYear = currentYear - 1;
+    const availableYears = years.value || [];
+
+    if (availableYears.length === 0) {
+        return targetYear;
+    }
+
+    // Si l'année cible existe dans la liste, l'utiliser
+    const availableYearsSet = new Set(availableYears);
+    if (availableYearsSet.has(targetYear)) {
+        return targetYear;
+    }
+
+    // Sinon, trouver l'année disponible la plus proche et antérieure à l'année en cours
+    const pastYears = availableYears.filter((year) => year < currentYear);
+    if (pastYears.length > 0) {
+        // Retourner l'année la plus récente parmi les années passées
+        return Math.max(...pastYears);
+    }
+
+    // Si aucune année passée n'est disponible, retourner la première année disponible
+    return Math.min(...availableYears);
+});
+
+// Mettre à jour selectedYear quand defaultYear change (quand les années sont chargées)
+watch(
+    defaultYear,
+    (newDefaultYear) => {
+        selectedYear.value = newDefaultYear;
+    },
+    { immediate: true }
+);
 
 function toggleActionsExportIsSelected() {
     actionsExportIsSelected.value = !actionsExportIsSelected.value;
@@ -130,8 +179,3 @@ const title = computed(() => {
     return actionsExportIsSelected.value ? "Export des actions" : "Exports";
 });
 </script>
-<style scoped>
-button {
-    border: inherit;
-}
-</style>

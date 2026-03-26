@@ -17,5 +17,10 @@ export default function mergeManagers(hash: ActionHash, finances: ActionFinanceR
             real_amount: row.real_amount,
             comments: row.comments,
         });
+
+        if (row.action_finance_type_uid === 'dedie') {
+            // eslint-disable-next-line no-param-reassign
+            hash[row.action_id].hasDihalFinancing = true;
+        }
     });
 }

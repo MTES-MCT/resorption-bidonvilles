@@ -16,8 +16,9 @@ interface ExportActionsRequest extends Request {
 
 export default async (req: ExportActionsRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
+        const dihalFinancing = req.query.dihalFinancing === 'true';
         const buffer = await exportActions(
-            req.user, req.params.year,
+            req.user, req.params.year, dihalFinancing,
         );
         // Terminer la réponse
         res.end(buffer);

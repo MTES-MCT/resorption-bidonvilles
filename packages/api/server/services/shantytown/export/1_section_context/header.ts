@@ -1,9 +1,44 @@
 import moment from 'moment';
 import { Paragraph, TextRun, AlignmentType } from 'docx';
+import dateUtils from '#server/utils/date';
+
+const getUpdateTag = (monthsSinceUpdate: number | null): 'red' | 'orange' | 'green' => {
+    if (monthsSinceUpdate === null || monthsSinceUpdate >= 6) {
+        return 'red';
+    }
+
+    if (monthsSinceUpdate >= 3) {
+        return 'orange';
+    }
+
+    return 'green';
+};
 
 export default (shantytown) => {
+    const now = new Date();
+    const updatedAtDate = shantytown.updatedAt ? new Date(shantytown.updatedAt * 1000) : now;
+    const populationUpdatedAtDate = shantytown.populationUpdatedAt
+        ? new Date(shantytown.populationUpdatedAt * 1000)
+        : null;
+
     const currentDate = moment().utc().locale('fr');
-    const lastUpdate = moment(new Date(shantytown.updatedAt * 1000)).format('DD/MM/YYYY');
+    const lastUpdate = moment(updatedAtDate).format('DD/MM/YYYY');
+    const populationLastUpdate = populationUpdatedAtDate
+        ? `mis à jour le ${moment(populationUpdatedAtDate).format('DD/MM/YYYY')}`
+        : 'non renseigné';
+    const monthsSincePopulationUpdate = populationUpdatedAtDate
+        ? dateUtils.getMonthDiffBetween(populationUpdatedAtDate, now)
+        : null;
+    const monthsSinceLastUpdate = dateUtils.getMonthDiffBetween(updatedAtDate, now);
+
+    const colors = {
+        red: 'AB0000',
+        orange: 'ffb347',
+        green: '008800',
+    };
+
+    const populationUpdateTag = getUpdateTag(monthsSincePopulationUpdate);
+    const lastUpdateTag = getUpdateTag(monthsSinceLastUpdate);
 
     return [
         new Paragraph({
@@ -67,7 +102,15 @@ export default (shantytown) => {
                     break: 1,
                     size: 20,
                     font: 'Arial',
-                    color: 'ff6f4c',
+                    color: colors.red,
+                }),
+                new TextRun({
+                    text: `Nombre d'habitants ${populationLastUpdate}`,
+                    bold: false,
+                    break: 1,
+                    size: 20,
+                    font: 'Arial',
+                    color: colors[populationUpdateTag],
                 }),
                 new TextRun({
                     text: `Dernière mise à jour des données le ${lastUpdate}`,
@@ -75,7 +118,7 @@ export default (shantytown) => {
                     break: 1,
                     size: 20,
                     font: 'Arial',
-                    color: 'ff6f4c',
+                    color: colors[lastUpdateTag],
                 }),
             ],
         }),
