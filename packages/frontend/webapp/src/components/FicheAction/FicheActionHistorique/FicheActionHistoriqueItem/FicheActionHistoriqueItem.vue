@@ -62,7 +62,7 @@ const formatFirstName = (firstName) => {
 
     // Gérer les prénoms composés séparés par "-" ou " "
     return firstName
-        .split(/(-| )/)
+        .split(/([- ])/)
         .map((part) => {
             // Garder les séparateurs tels quels
             if (part === "-" || part === " ") {
