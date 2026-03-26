@@ -3,11 +3,11 @@ import { ActionActivity } from '#server/models/actionModel/getHistory/getHistory
 import ServiceError from '#server/errors/ServiceError';
 import { User } from '#root/types/resources/User.d';
 
-export default async (user: User, actionId: number): Promise<ActionActivity[]> => {
+export default async function getHistory(user: User, actionId: number): Promise<ActionActivity[]> {
     try {
         const history = await actionModel.getHistory(user, actionId);
         return history;
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
-};
+}
