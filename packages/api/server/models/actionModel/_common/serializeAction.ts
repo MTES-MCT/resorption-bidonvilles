@@ -56,7 +56,7 @@ function fromDateToTimestamp(date: string | Date | null): number | null {
     return date.getTime();
 }
 
-export default (action: ActionRow, user: User): Action => {
+export default function serializeAction(action: ActionRow, user: User): Action {
     const location = {
         type: 'departement' as const,
         city: null,
@@ -130,4 +130,4 @@ export default (action: ActionRow, user: User): Action => {
     }
 
     return serializedAction;
-};
+}
