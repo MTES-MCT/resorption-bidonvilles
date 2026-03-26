@@ -112,7 +112,7 @@ export default function serializeAction(action: ActionRow, user: User): Action {
             },
         },
         updated_at: action.updated_at?.getTime() || null,
-        updated_by: action.editor_id !== null ? {
+        updated_by: action.editor_id === null ? null : {
             id: action.editor_id,
             first_name: action.editor_first_name,
             last_name: action.editor_last_name,
@@ -121,7 +121,7 @@ export default function serializeAction(action: ActionRow, user: User): Action {
                 name: action.editor_organization_name,
                 abbreviation: action.editor_organization_abbreviation,
             },
-        } : null,
+        },
     };
 
     // Ajouter les finances uniquement si l'utilisateur a la permission
