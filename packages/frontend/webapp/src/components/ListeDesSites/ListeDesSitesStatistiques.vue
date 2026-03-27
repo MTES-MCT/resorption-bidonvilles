@@ -75,6 +75,8 @@ import MiniCarte from "@/components/MiniCarte/MiniCarte.vue";
 import formatStat from "@common/utils/formatStat";
 import getSince from "@/utils/getSince";
 import isPlural from "@/utils/isPlural";
+import getBadgeLabel from "@/utils/getBadgeLabel";
+import getBadgeVariant from "@/utils/getBadgeVariant";
 
 const props = defineProps({
     currentTab: {
@@ -137,26 +139,6 @@ const computePercentage = (count, total) => {
     }
 
     return Math.round((count / total) * 1000) / 10;
-};
-
-const getBadgeVariant = (value, successThreshold, warningThreshold) => {
-    if (value >= successThreshold) {
-        return "success";
-    }
-
-    if (value >= warningThreshold) {
-        return "warning";
-    }
-
-    return "error";
-};
-
-const getBadgeLabel = (count, percentage, positiveLabel, emptyLabel) => {
-    if (count > 0) {
-        return `(${percentage}%) ${positiveLabel}`;
-    }
-
-    return emptyLabel;
 };
 
 const totalSites = computed(() => townsStore.filteredTowns.length);
