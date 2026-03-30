@@ -33,8 +33,10 @@ export default async (user: User, location: Location, numberOfActivities: number
     if (restrictedLocations.length === 0) {
         return [];
     }
+    const restrictedLocationTypes = new Set(['nation', 'metropole', 'outremer']);
 
-    if (!restrictedLocations.some(l => l.type === 'nation')) {
+    if (!restrictedLocations.some(l => restrictedLocationTypes.has(l.type))) {
+    // if (!restrictedLocations.some(l => l.type === 'nation')) {
         where.push(
             restrictedLocations.map((l, index) => {
                 if (l.type === 'region') {

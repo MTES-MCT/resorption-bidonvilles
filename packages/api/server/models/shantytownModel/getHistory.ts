@@ -42,7 +42,8 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
         return [];
     }
 
-    if (!restrictedLocations.some(l => l.type === 'nation')) {
+    const restrictedLocationTypes = new Set(['nation', 'metropole', 'outremer']);
+    if (!restrictedLocations.some(l => restrictedLocationTypes.has(l.type))) {
         where.push(
             restrictedLocations.map((l, index) => {
                 replacements[`shantytownLocationCode${index}`] = l[l.type].code;

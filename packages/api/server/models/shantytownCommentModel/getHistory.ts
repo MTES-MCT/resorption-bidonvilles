@@ -44,6 +44,7 @@ export default async (user: User, location: Location, numberOfActivities: number
         public: restrict(location).for(user).askingTo('list', 'shantytown_comment'),
         private: restrict(location).for(user).askingTo('listPrivate', 'shantytown_comment'),
     };
+    const restrictedLocationTypes = new Set(['nation', 'metropole', 'outremer']);
 
     if (restrictedLocations.public.length === 0 && restrictedLocations.private.length === 0) {
         return [];
@@ -63,7 +64,7 @@ export default async (user: User, location: Location, numberOfActivities: number
     // public comments
     if (restrictedLocations.public.length === 0) {
         permissionWhere.publicComments.push('false');
-    } else if (!restrictedLocations.public.some(l => l.type === 'nation')) {
+    } else if (!restrictedLocations.public.some(l => restrictedLocationTypes.has(l.type))) {
         // geo permission
         const publicCommentLocationClause = restrictedLocations.public.map((l, index) => {
             const arr = [`${fromGeoLevelToTableName(l.type)}.code = :shantytownCommentLocationCode${index}`];
@@ -82,7 +83,7 @@ export default async (user: User, location: Location, numberOfActivities: number
     // private comments
     const privateCommentLocationClause = [];
     if (restrictedLocations.private.length > 0) {
-        if (restrictedLocations.private.some(l => l.type === 'nation')) {
+        if (restrictedLocations.private.some(l => restrictedLocationTypes.has(l.type))) {
             privateCommentLocationClause.push('true');
         } else {
             restrictedLocations.private.forEach((l, index) => {
@@ -121,7 +122,7 @@ export default async (user: User, location: Location, numberOfActivities: number
 
     // on vérifie que le commentaire est bien sur le territoire de la recherche
     const searchLocationClause = [];
-    if (location.type !== 'nation') {
+    if (!restrictedLocationTypes.has(location.type)) {
         searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.code = :shantytownCommentSearchLocationCode`);
         if (location.type === 'city') {
             searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.fk_main = :shantytownCommentSearchLocationCode`);
