@@ -25,6 +25,18 @@ type UserActivityRow = {
 
 export default async (location: Location, numberOfActivities: number, lastDate: Date, maxDate: Date):Promise<UserActivity[]> => {
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
+    const outremerCondition = `(
+                EXISTS (
+                    SELECT 1
+                    FROM unnest(COALESCE(v_user_areas.departements, ARRAY[]::varchar[])) AS dep(code)
+                    WHERE btrim(dep.code::text) IN (${codesOutreMer.departements})
+                )
+                OR EXISTS (
+                    SELECT 1
+                    FROM unnest(COALESCE(v_user_areas.regions, ARRAY[]::varchar[])) AS region(code)
+                    WHERE btrim(region.code::text) IN (${codesOutreMer.regions})
+                )
+            )`;
 
     const activities: UserActivityRow[] = await sequelize.query(
         `
@@ -54,11 +66,9 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
             ${location.type === 'epci' ? 'AND :epci = ANY(v_user_areas.epci)' : ''}
             ${location.type === 'departement' ? 'AND :departement = ANY(v_user_areas.departements)' : ''}
             ${location.type === 'region' ? 'AND :region = ANY(v_user_areas.regions)' : ''}
-            ${location.type === 'outremer' ? `AND EXISTS (
-                SELECT 1
-                FROM unnest(v_user_areas.departements) AS dep(code)
-                WHERE btrim(dep.code::text) IN (${codesOutreMer})
-            )` : ''}
+            ${location.type === 'metropole' ? `AND NOT ${outremerCondition}` : ''}
+            ${location.type === 'outremer' ? `AND ${outremerCondition}` : ''}
+            
         ORDER BY lua.used_at DESC
         ${limit}
         `,
