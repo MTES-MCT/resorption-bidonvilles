@@ -70,7 +70,7 @@ export default async (user: User, location: Location, numberOfActivities: number
         const publicCommentLocationClause = restrictedLocations.public.map((l, index) => {
             // On fait l'exclusion ou inclusion si c'est metropole ou outremer
             if (restrictedLocationTypes.has(l.type)) {
-                return `departements.code ${l.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer})`;
+                return `departements.code ${l.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer.departements})`;
             }
             const arr = [`${fromGeoLevelToTableName(l.type)}.code = :shantytownCommentLocationCode${index}`];
             if (l.type === 'city') {
@@ -94,7 +94,7 @@ export default async (user: User, location: Location, numberOfActivities: number
             restrictedLocations.private.forEach((l, index) => {
                 // On fait l'exclusion ou inclusion si c'est metropole ou outremer
                 if (restrictedLocationTypes.has(l.type)) {
-                    privateCommentLocationClause.push(`departements.code ${l.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer})`);
+                    privateCommentLocationClause.push(`departements.code ${l.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer.departements})`);
                 } else {
                     privateCommentLocationClause.push(`${fromGeoLevelToTableName(l.type)}.code = :privateShantytownCommentLocationCode${index}`);
                     if (l.type === 'city') {
@@ -135,7 +135,7 @@ export default async (user: User, location: Location, numberOfActivities: number
     if (location.type !== 'nation') {
         // On fait l'exclusion ou inclusion si c'est metropole ou outremer
         if (restrictedLocationTypes.has(location.type)) {
-            searchLocationClause.push(`departements.code ${location.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer})`);
+            searchLocationClause.push(`departements.code ${location.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer.departements})`);
         } else {
             searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.code = :shantytownCommentSearchLocationCode`);
             if (location.type === 'city') {

@@ -47,7 +47,7 @@ export default async (user: User, location: Location, numberOfActivities: number
 
                 // On fait l'exclusion ou inclusion si c'est metropole ou outremer
                 if (restrictedLocationTypes.has(l.type)) {
-                    return `departements.code ${l.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer})`;
+                    return `departements.code ${l.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer.departements})`;
                 }
                 replacements[`locationCode${index}`] = l.departement.code;
 
