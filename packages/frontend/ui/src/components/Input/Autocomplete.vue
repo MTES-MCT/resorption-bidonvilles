@@ -10,7 +10,7 @@
                 </div>
                 <div class="border-b border-G200 flex-1">
                     <div v-for="item in section.items" class="hover:bg-blue100 cursor-pointer px-3 py-2"
-                        :class="focusedItemId === item.id ? 'bg-blue100' : ''" :key="item.id" @click="selectItem(item)">
+                        :class="focusedItemId === item.id ? 'bg-blue100' : ''" :key="item.id" @mousedown.stop.prevent="selectItem(item)">
                         {{ item.label }}
                     </div>
                 </div>
@@ -18,7 +18,7 @@
             <div v-else>
                 <div class="border-b border-G200 flex-1">
                     <div v-for="item in rawResults" class="hover:bg-blue100 cursor-pointer px-3 py-2"
-                        :class="focusedItemId === item.id ? 'bg-blue100' : ''" :key="item.id" @click="selectItem(item)">
+                        :class="focusedItemId === item.id ? 'bg-blue100' : ''" :key="item.id" @mousedown.stop.prevent="selectItem(item)">
                         {{ item.label }}
                     </div>
                 </div>
