@@ -8,6 +8,7 @@ import permissionUtils from '#server/utils/permission';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
 import getAddressSimpleOf from '#server/models//shantytownModel/_common/getAddressSimpleOf';
 import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
+import { codesOutreMer } from '#server/utils/permission/outremer';
 import { Location } from '#server/models/geoModel/Location.d';
 import { ShantytownCommentRow } from './ShantytownCommentRow.d';
 import { ShantytownCommentActivity } from '#root/types/resources/Activity.d';
@@ -44,7 +45,7 @@ export default async (user: User, location: Location, numberOfActivities: number
         public: restrict(location).for(user).askingTo('list', 'shantytown_comment'),
         private: restrict(location).for(user).askingTo('listPrivate', 'shantytown_comment'),
     };
-    const restrictedLocationTypes = new Set(['nation', 'metropole', 'outremer']);
+    const restrictedLocationTypes = new Set(['metropole', 'outremer']);
 
     if (restrictedLocations.public.length === 0 && restrictedLocations.private.length === 0) {
         return [];
@@ -64,9 +65,13 @@ export default async (user: User, location: Location, numberOfActivities: number
     // public comments
     if (restrictedLocations.public.length === 0) {
         permissionWhere.publicComments.push('false');
-    } else if (!restrictedLocations.public.some(l => restrictedLocationTypes.has(l.type))) {
+    } else if (!restrictedLocations.public.some(l => l.type === 'nation')) {
         // geo permission
         const publicCommentLocationClause = restrictedLocations.public.map((l, index) => {
+            // On fait l'exclusion ou inclusion si c'est metropole ou outremer
+            if (restrictedLocationTypes.has(l.type)) {
+                return `departements.code ${l.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer})`;
+            }
             const arr = [`${fromGeoLevelToTableName(l.type)}.code = :shantytownCommentLocationCode${index}`];
             if (l.type === 'city') {
                 arr.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :shantytownCommentLocationCode${index}`);
@@ -83,16 +88,21 @@ export default async (user: User, location: Location, numberOfActivities: number
     // private comments
     const privateCommentLocationClause = [];
     if (restrictedLocations.private.length > 0) {
-        if (restrictedLocations.private.some(l => restrictedLocationTypes.has(l.type))) {
+        if (restrictedLocations.private.some(l => l.type === 'nation')) {
             privateCommentLocationClause.push('true');
         } else {
             restrictedLocations.private.forEach((l, index) => {
-                privateCommentLocationClause.push(`${fromGeoLevelToTableName(l.type)}.code = :privateShantytownCommentLocationCode${index}`);
-                if (l.type === 'city') {
-                    privateCommentLocationClause.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :privateShantytownCommentLocationCode${index}`);
-                }
+                // On fait l'exclusion ou inclusion si c'est metropole ou outremer
+                if (restrictedLocationTypes.has(l.type)) {
+                    privateCommentLocationClause.push(`departements.code ${l.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer})`);
+                } else {
+                    privateCommentLocationClause.push(`${fromGeoLevelToTableName(l.type)}.code = :privateShantytownCommentLocationCode${index}`);
+                    if (l.type === 'city') {
+                        privateCommentLocationClause.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :privateShantytownCommentLocationCode${index}`);
+                    }
 
-                replacements[`privateShantytownCommentLocationCode${index}`] = l[l.type].code;
+                    replacements[`privateShantytownCommentLocationCode${index}`] = l[l.type].code;
+                }
             });
         }
     }
@@ -122,12 +132,17 @@ export default async (user: User, location: Location, numberOfActivities: number
 
     // on vérifie que le commentaire est bien sur le territoire de la recherche
     const searchLocationClause = [];
-    if (!restrictedLocationTypes.has(location.type)) {
-        searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.code = :shantytownCommentSearchLocationCode`);
-        if (location.type === 'city') {
-            searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.fk_main = :shantytownCommentSearchLocationCode`);
+    if (location.type !== 'nation') {
+        // On fait l'exclusion ou inclusion si c'est metropole ou outremer
+        if (restrictedLocationTypes.has(location.type)) {
+            searchLocationClause.push(`departements.code ${location.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer})`);
+        } else {
+            searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.code = :shantytownCommentSearchLocationCode`);
+            if (location.type === 'city') {
+                searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.fk_main = :shantytownCommentSearchLocationCode`);
+            }
+            replacements.shantytownCommentSearchLocationCode = location[location.type].code;
         }
-        replacements.shantytownCommentSearchLocationCode = location[location.type].code;
     } else {
         searchLocationClause.push('true');
     }

@@ -3,6 +3,7 @@ import { QueryTypes } from 'sequelize';
 import { Location } from '#server/models/geoModel/Location.d';
 import interventionAreaModel from '#server/models/interventionAreaModel';
 import { RawInterventionArea } from '#server/models/userModel/_common/query.d';
+import { codesOutreMer } from '#server/utils/permission/outremer';
 import { UserActivity } from '#root/types/resources/Activity.d';
 import formatName from './_common/formatName';
 
@@ -24,6 +25,7 @@ type UserActivityRow = {
 
 export default async (location: Location, numberOfActivities: number, lastDate: Date, maxDate: Date):Promise<UserActivity[]> => {
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
+
     const activities: UserActivityRow[] = await sequelize.query(
         `
         SELECT
@@ -52,6 +54,11 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
             ${location.type === 'epci' ? 'AND :epci = ANY(v_user_areas.epci)' : ''}
             ${location.type === 'departement' ? 'AND :departement = ANY(v_user_areas.departements)' : ''}
             ${location.type === 'region' ? 'AND :region = ANY(v_user_areas.regions)' : ''}
+            ${location.type === 'outremer' ? `AND EXISTS (
+                SELECT 1
+                FROM unnest(v_user_areas.departements) AS dep(code)
+                WHERE btrim(dep.code::text) IN (${codesOutreMer})
+            )` : ''}
         ORDER BY lua.used_at DESC
         ${limit}
         `,

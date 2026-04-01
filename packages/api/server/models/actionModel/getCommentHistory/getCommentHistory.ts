@@ -3,6 +3,7 @@ import { QueryTypes } from 'sequelize';
 
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
+import { codesOutreMer } from '#server/utils/permission/outremer';
 
 import { Location } from '#server/models/geoModel/Location.d';
 import { ActionCommentActivity } from '#root/types/resources/Activity.d';
@@ -33,10 +34,10 @@ export default async (user: User, location: Location, numberOfActivities: number
     if (restrictedLocations.length === 0) {
         return [];
     }
-    const restrictedLocationTypes = new Set(['nation', 'metropole', 'outremer']);
+    const restrictedLocationTypes = new Set(['metropole', 'outremer']);
 
-    if (!restrictedLocations.some(l => restrictedLocationTypes.has(l.type))) {
-    // if (!restrictedLocations.some(l => l.type === 'nation')) {
+
+    if (!restrictedLocations.some(l => l.type === 'nation')) {
         where.push(
             restrictedLocations.map((l, index) => {
                 if (l.type === 'region') {
@@ -44,7 +45,12 @@ export default async (user: User, location: Location, numberOfActivities: number
                     return `departements.fk_region = :locationCode${index}`;
                 }
 
+                // On fait l'exclusion ou inclusion si c'est metropole ou outremer
+                if (restrictedLocationTypes.has(l.type)) {
+                    return `departements.code ${l.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer})`;
+                }
                 replacements[`locationCode${index}`] = l.departement.code;
+
                 return `departements.code = :locationCode${index}`;
             }).join(' OR '),
         );
