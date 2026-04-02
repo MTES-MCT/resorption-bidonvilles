@@ -75,7 +75,6 @@
 </style>
 <style scoped>
 .modalWrapper {
-    min-height: 50vh;
     max-height: 60vh;
     @apply max-w-2xl;
     overflow: auto;
