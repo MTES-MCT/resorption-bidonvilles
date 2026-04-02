@@ -133,7 +133,7 @@
     "db:create": "sequelize db:migrate && sequelize db:seed:all",
     "e2e:db:create": "sequelize --env test db:drop && sequelize --env test db:create && sequelize --env test db:migrate",
     "dev": "ts-node-dev ./server/index.ts --watch server/**/*.d.ts",
-    "build": "rm -rf dist && tsc -p tsconfig.production.json && tsc-alias && cp -r server/mails/dist dist/api/server/mails && cp -r assets dist/api && cp .sequelizerc dist/api && cp -r db/data dist/api/db/data",
+    "build": "rm -rf dist && tsc -p tsconfig.production.json && tsc-alias && cp -r server/mails/dist dist/api/server/mails && cp -r assets dist/api && cp .sequelizerc dist/api && cp -r db/data dist/api/db/data && cp -r db/seeders/data dist/api/db/seeders/data",
     "serve": "nodemon server/index.js",
     "start": "node dist/api/server/index.js",
     "test": "yarn mocha -r ts-node/register --require ./test/bootstrap.ts --bail",
