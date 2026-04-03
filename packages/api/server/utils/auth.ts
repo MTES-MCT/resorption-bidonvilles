@@ -64,7 +64,9 @@ export default {
     getAccountActivationLink(userAccessId, expiresAt = null) {
         let expiresIn = activationTokenExpiresIn;
         if (expiresAt !== null) {
-            expiresIn = Math.round((expiresAt.getTime() - Date.now()) / 1000).toString();
+            const now = new Date();
+            const secondsUntilExpiration = Math.round((expiresAt.getTime() - now.getTime()) / 1000);
+            expiresIn = `${secondsUntilExpiration}s`;
         }
 
         const token = jwt.sign(
