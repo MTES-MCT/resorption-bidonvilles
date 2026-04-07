@@ -6,7 +6,10 @@
             <InputLocationDepartement :disable="disableDepartement" />
             <InputLocationType />
             <InputLocationAutre v-if="values.location_type === 'autre'" />
-            <InputLocationETI v-else-if="values.location_type === 'eti'" />
+            <InputLocationETIMultiple
+                v-else-if="values.location_type === 'eti'"
+                :setFieldValue="setFieldValue"
+            />
             <InputLocationShantytowns
                 v-else-if="values.location_type === 'sur_site'"
             />
@@ -24,13 +27,14 @@ import labels from "../FormDeclarationAction.labels";
 import InputLocationType from "../inputs/FormDeclarationActionInputLocationType.vue";
 import InputLocationDepartement from "../inputs/FormDeclarationActionInputLocationDepartement.vue";
 import InputLocationAutre from "../inputs/FormDeclarationActionInputLocationAutre.vue";
-import InputLocationETI from "../inputs/FormDeclarationActionInputLocationETI.vue";
+import InputLocationETIMultiple from "../inputs/FormDeclarationActionInputLocationETIMultiple.vue";
 import InputLocationShantytowns from "../inputs/FormDeclarationActionInputLocationShantytowns.vue";
 
 const props = defineProps({
     disableDepartement: Boolean,
+    setFieldValue: Function,
 });
-const { disableDepartement } = toRefs(props);
+const { disableDepartement, setFieldValue } = toRefs(props);
 
 const values = useFormValues();
 </script>
