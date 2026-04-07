@@ -43,7 +43,7 @@ export default function insertMetrics(actionId: number, authorId: number, data: 
             type: QueryTypes.INSERT,
             transaction,
             replacements: yearsWithData.flatMap((strYear) => {
-                const year = parseInt(strYear, 10);
+                const year = Number.parseInt(strYear, 10);
 
                 return [
                     actionId,
