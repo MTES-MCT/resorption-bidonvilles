@@ -154,6 +154,22 @@ export default async function getHistory(user: User, actionId: number): Promise<
                 LEFT JOIN shantytowns s ON ash.fk_shantytown = s.shantytown_id
                 LEFT JOIN cities c ON s.fk_city = c.code
                 GROUP BY ash.fk_action
+            ),
+            action_addresses_agg AS (
+                SELECT
+                    aah.action_hid AS hid,
+                    COALESCE(
+                        jsonb_agg(
+                            jsonb_build_object(
+                                'address', aah.address,
+                                'citycode', aah.fk_city,
+                                'coordinates', CONCAT(aah.latitude, ',', aah.longitude)
+                            )
+                        ) FILTER (WHERE aah.action_address_id IS NOT NULL),
+                        '[]'::jsonb
+                    ) AS location_eti_addresses
+                FROM action_addresses_history aah
+                GROUP BY aah.action_hid
             )
             ${canAccessFinances ? `,
             action_finances_agg AS (
@@ -201,10 +217,6 @@ export default async function getHistory(user: User, actionId: number): Promise<
             r.name AS region_name,
             r.code AS region_code,
             ah.location_type,
-            ah.address,
-            ah.latitude,
-            ah.longitude,
-            ah.eti_fk_city,
             ah.location_other,
             creator.user_id AS creator_id,
             creator.first_name AS creator_first_name,
@@ -227,7 +239,8 @@ export default async function getHistory(user: User, actionId: number): Promise<
             COALESCE(topics.topics, '[]'::jsonb) AS topics,
             COALESCE(managers.managers, '[]'::jsonb) AS managers,
             COALESCE(operators.operators, '[]'::jsonb) AS operators,
-            COALESCE(shantytowns.shantytowns, '[]'::jsonb) AS shantytowns
+            COALESCE(shantytowns.shantytowns, '[]'::jsonb) AS shantytowns,
+            COALESCE(addresses.location_eti_addresses, '[]'::jsonb) AS location_eti_addresses
             ${canAccessFinances ? ', COALESCE(finances.finances, \'{}\'::jsonb) AS finances' : ''}
         FROM actions_history ah
         LEFT JOIN departements d ON ah.fk_departement = d.code
@@ -242,6 +255,7 @@ export default async function getHistory(user: User, actionId: number): Promise<
         LEFT JOIN action_managers_agg managers ON ah.hid = managers.hid
         LEFT JOIN action_operators_agg operators ON ah.hid = operators.hid
         LEFT JOIN action_shantytowns_agg shantytowns ON ah.hid = shantytowns.hid
+        LEFT JOIN action_addresses_agg addresses ON ah.hid = addresses.hid
         ${canAccessFinances ? 'LEFT JOIN action_finances_agg finances ON ah.hid = finances.hid' : ''}
         WHERE ah.action_id = :actionId
         )
@@ -325,6 +339,24 @@ export default async function getHistory(user: User, actionId: number): Promise<
                         ),
                         '[]'::jsonb
                     ) AS shantytowns
+            ),
+            action_addresses_agg AS (
+                SELECT
+                    :actionId AS hid,
+                    COALESCE(
+                        (
+                            SELECT jsonb_agg(
+                                jsonb_build_object(
+                                    'address', aa.address,
+                                    'citycode', aa.fk_city,
+                                    'coordinates', CONCAT(aa.latitude, ',', aa.longitude)
+                                )
+                            )
+                            FROM action_addresses aa
+                            WHERE aa.fk_action = :actionId
+                        ),
+                        '[]'::jsonb
+                    ) AS location_eti_addresses
             )
             ${canAccessFinances ? `,
             action_finances_agg AS (
@@ -373,10 +405,6 @@ export default async function getHistory(user: User, actionId: number): Promise<
             r.name AS region_name,
             r.code AS region_code,
             a.location_type::text::enum_actions_history_location_type AS location_type,
-            a.address,
-            a.latitude,
-            a.longitude,
-            a.eti_fk_city,
             a.location_other,
             creator.user_id AS creator_id,
             creator.first_name AS creator_first_name,
@@ -399,7 +427,8 @@ export default async function getHistory(user: User, actionId: number): Promise<
             COALESCE(topics.topics, '[]'::jsonb) AS topics,
             COALESCE(managers.managers, '[]'::jsonb) AS managers,
             COALESCE(operators.operators, '[]'::jsonb) AS operators,
-            COALESCE(shantytowns.shantytowns, '[]'::jsonb) AS shantytowns
+            COALESCE(shantytowns.shantytowns, '[]'::jsonb) AS shantytowns,
+            COALESCE(addresses.location_eti_addresses, '[]'::jsonb) AS location_eti_addresses
             ${canAccessFinances ? ', COALESCE(finances.finances, \'{}\'::jsonb) AS finances' : ''}
         FROM actions a
         LEFT JOIN departements d ON a.fk_departement = d.code
@@ -414,6 +443,7 @@ export default async function getHistory(user: User, actionId: number): Promise<
         LEFT JOIN action_managers_agg managers ON a.action_id = managers.hid
         LEFT JOIN action_operators_agg operators ON a.action_id = operators.hid
         LEFT JOIN action_shantytowns_agg shantytowns ON a.action_id = shantytowns.hid
+        LEFT JOIN action_addresses_agg addresses ON a.action_id = addresses.hid
         ${canAccessFinances ? 'LEFT JOIN action_finances_agg finances ON a.action_id = finances.hid' : ''}
         WHERE a.action_id = :actionId
         )
@@ -426,14 +456,19 @@ export default async function getHistory(user: User, actionId: number): Promise<
     );
 
     // Parser les colonnes JSONB qui peuvent être retournées comme des strings
-    const activities: ActionHistoryRow[] = activitiesRaw.map((row: any) => ({
-        ...row,
-        topics: typeof row.topics === 'string' ? JSON.parse(row.topics) : row.topics,
-        managers: typeof row.managers === 'string' ? JSON.parse(row.managers) : row.managers,
-        operators: typeof row.operators === 'string' ? JSON.parse(row.operators) : row.operators,
-        shantytowns: typeof row.shantytowns === 'string' ? JSON.parse(row.shantytowns) : row.shantytowns,
-        finances: row.finances && typeof row.finances === 'string' ? JSON.parse(row.finances) : row.finances,
-    }));
+    const activities: ActionHistoryRow[] = activitiesRaw.map((row: any) => {
+        const parsed = {
+            ...row,
+            topics: typeof row.topics === 'string' ? JSON.parse(row.topics) : row.topics,
+            managers: typeof row.managers === 'string' ? JSON.parse(row.managers) : row.managers,
+            operators: typeof row.operators === 'string' ? JSON.parse(row.operators) : row.operators,
+            shantytowns: typeof row.shantytowns === 'string' ? JSON.parse(row.shantytowns) : row.shantytowns,
+            location_eti_addresses: typeof row.location_eti_addresses === 'string' ? JSON.parse(row.location_eti_addresses) : row.location_eti_addresses,
+            finances: row.finances && typeof row.finances === 'string' ? JSON.parse(row.finances) : row.finances,
+        };
+
+        return parsed;
+    });
 
     const previousVersions: { [key: number]: Action } = {};
 
