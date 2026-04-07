@@ -211,8 +211,8 @@ export default (mode: 'create' | 'update') => [
                 // Normaliser l'adresse pour gérer les apostrophes typographiques
                 const normalizedAddress = String(address.address || '')
                     .normalize('NFD')
-                    .replace(/[\u0300-\u036f]/g, '')
-                    .replace(/['''\u2019]/g, "'")
+                    .replaceAll(/[\u0300-\u036f]/g, '')
+                    .replaceAll(/['''\u2019]/g, "'")
                     .toLowerCase()
                     .trim();
                 const addressKey = `${normalizedAddress}|${String(address.citycode || '')}|${String(address.latitude || '')}|${String(address.longitude || '')}`;
@@ -256,7 +256,7 @@ export default (mode: 'create' | 'update') => [
                 shantytowns = await shantytownModel.findAll(req.user, [
                     { shantytown_id: { value } },
                 ]);
-            } catch (error) {
+            } catch {
                 throw new Error('Une erreur est survenue lors de la validation des sites');
             }
 
