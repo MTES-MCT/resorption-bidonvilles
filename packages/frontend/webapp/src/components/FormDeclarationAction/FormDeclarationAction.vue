@@ -184,10 +184,66 @@ watch(
 const hasChanges = ref(false);
 const hasDuplicates = ref(false);
 
+const DUPLICATE_ERROR_MESSAGE =
+    "Des adresses en double ont été détectées. Veuillez corriger les doublons avant de pouvoir enregistrer l'action.";
+
 // Computed property pour savoir s'il y a des erreurs
 const hasErrors = computed(
     () => error.value !== null || Object.keys(errors.value).length > 0
 );
+
+function normalizeAddressForComparison(address) {
+    return String(address)
+        .normalize("NFD")
+        .replaceAll(/[\u0300-\u036f]/g, "")
+        .replaceAll(/['''\u2019]/g, "'")
+        .toLowerCase()
+        .trim();
+}
+
+function createAddressKey(addr) {
+    const normalizedAddress = normalizeAddressForComparison(addr.address);
+    return `${normalizedAddress}|${addr.citycode}|${addr.coordinates}`;
+}
+
+function findDuplicateAddresses(addresses) {
+    if (!addresses || addresses.length <= 1) {
+        return [];
+    }
+
+    const seenAddresses = new Set();
+    const duplicates = [];
+
+    addresses.forEach((addr, index) => {
+        if (addr.address && addr.citycode && addr.coordinates) {
+            const addressKey = createAddressKey(addr);
+            if (seenAddresses.has(addressKey)) {
+                duplicates.push({ index, ...addr });
+            } else {
+                seenAddresses.add(addressKey);
+            }
+        }
+    });
+
+    return duplicates;
+}
+
+function addDuplicateErrorMessage() {
+    if (error.value && !error.value.includes(DUPLICATE_ERROR_MESSAGE)) {
+        error.value = `${error.value}\n\n${DUPLICATE_ERROR_MESSAGE}`;
+    } else if (!error.value) {
+        error.value = DUPLICATE_ERROR_MESSAGE;
+    }
+}
+
+function removeDuplicateErrorMessage() {
+    if (error.value?.includes(DUPLICATE_ERROR_MESSAGE)) {
+        error.value =
+            error.value
+                .replaceAll(`\n\n${DUPLICATE_ERROR_MESSAGE}`, "")
+                .trim() || null;
+    }
+}
 
 function updateHasChanges() {
     if (!originalValues.value) {
@@ -195,66 +251,17 @@ function updateHasChanges() {
     }
 
     const currentFormatted = formatValuesForApi(values);
+    const duplicates = findDuplicateAddresses(
+        currentFormatted.location_eti_addresses
+    );
 
-    // Détection des doublons dans les adresses ETI
-    if (
-        currentFormatted.location_eti_addresses &&
-        currentFormatted.location_eti_addresses.length > 1
-    ) {
-        const seenAddresses = new Set();
-        const duplicates = [];
-
-        currentFormatted.location_eti_addresses.forEach((addr, index) => {
-            if (addr.address && addr.citycode && addr.coordinates) {
-                // Normaliser la chaîne pour éviter les problèmes d'apostrophes typographiques
-                const normalizedAddress = String(addr.address)
-                    .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "")
-                    .replace(/['''\u2019]/g, "'")
-                    .toLowerCase()
-                    .trim();
-                const addressKey = String(
-                    `${normalizedAddress}|${String(addr.citycode)}|${String(
-                        addr.coordinates
-                    )}`
-                );
-                if (seenAddresses.has(addressKey)) {
-                    duplicates.push({
-                        index,
-                        address: addr.address,
-                        citycode: addr.citycode,
-                        coordinates: addr.coordinates,
-                    });
-                } else {
-                    seenAddresses.add(addressKey);
-                }
-            }
-        });
-
-        if (duplicates.length > 0) {
-            hasDuplicates.value = true;
-            // Forcer la détection de changements pour afficher l'alerte
-            hasChanges.value = true;
-            // Ajouter le message de doublons dans error pour ErrorSummary
-            error.value = error.value
-                ? `${error.value}\n\nDes adresses en double ont été détectées. Veuillez corriger les doublons avant de pouvoir enregistrer l'action.`
-                : "Des adresses en double ont été détectées. Veuillez corriger les doublons avant de pouvoir enregistrer l'action.";
-        } else {
-            hasDuplicates.value = false;
-            // Retirer le message de doublons de error s'il n'y a pas d'autres erreurs
-            if (
-                error.value &&
-                error.value.includes("Des adresses en double ont été détectées")
-            ) {
-                error.value = error.value.replace(
-                    /\n?\n?Des adresses en double ont été détectées\. Veuillez corriger les doublons avant de pouvoir enregistrer l'action\./,
-                    ""
-                );
-                if (error.value.trim() === "") {
-                    error.value = null;
-                }
-            }
-        }
+    if (duplicates.length > 0) {
+        hasDuplicates.value = true;
+        hasChanges.value = true;
+        addDuplicateErrorMessage();
+    } else {
+        hasDuplicates.value = false;
+        removeDuplicateErrorMessage();
     }
 
     hasChanges.value = !_.isEqual(originalValues.value, currentFormatted);
@@ -564,8 +571,8 @@ async function performSubmit(sentValues) {
                 // Normaliser la chaîne pour éviter les problèmes d'apostrophes typographiques
                 const normalizedAddress = String(addr.address)
                     .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "")
-                    .replace(/['''\u2019]/g, "'")
+                    .replaceAll(/[\u0300-\u036f]/g, "")
+                    .replaceAll(/['''\u2019]/g, "'")
                     .toLowerCase()
                     .trim();
                 const addressKey = String(
