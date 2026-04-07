@@ -2,6 +2,7 @@
     <div class="relative h-full">
         <InputCoordinatesTooltip />
         <Carto
+            :mapId="mapId"
             :defaultView="{ center: view, zoom: DEFAULT_ZOOM }"
             ref="carto"
             :layers="['Dessin', 'Satellite']"
@@ -59,12 +60,22 @@ const DEFAULT_ZOOM = 14;
 const carto = ref(null);
 const cadastreToggler = ref(null);
 const props = defineProps({
+    mapId: {
+        type: String,
+        required: false,
+        default: "input-coordinates-map",
+    },
     name: {
         type: String,
         required: true,
     },
+    initialCoordinates: {
+        type: Array,
+        required: false,
+        default: null,
+    },
 });
-const { name } = toRefs(props);
+const { mapId, name, initialCoordinates } = toRefs(props);
 const showCadastre = ref(false);
 const cadastre = ref(null);
 const cadastreIsLoading = ref(null);
@@ -83,13 +94,16 @@ watch(value, () => {
 });
 
 const view = computed(() => {
-    if (!value.value) {
-        return;
+    if (value.value) {
+        return value.value;
     }
-    return value.value;
+    if (initialCoordinates.value) {
+        return initialCoordinates.value;
+    }
+    return [0, 0];
 });
 
-const inputMarker = marqueurInput(value.value);
+let inputMarker = null;
 
 let clickTimeout = null;
 
@@ -157,7 +171,11 @@ watch(view, () => {
 watch(carto, () => {
     if (carto.value) {
         const { map } = carto.value;
+
+        // Créer le marqueur avec les coordonnées actuelles
+        inputMarker = marqueurInput(view.value);
         inputMarker.addTo(map);
+
         carto.value.addControl("cadastreToggler", createCadastreControl());
         inputMarker.addEventListener("dragend", () => {
             const { lat, lng } = inputMarker.getLatLng();

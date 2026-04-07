@@ -11,12 +11,8 @@
             d'urgence.</template
         >
         <template v-slot:actions>
-            <Button
-                icon="rotate-right"
-                iconPosition="left"
-                type="button"
-                @click="load"
-                >Réessayer</Button
+            <DsfrButton secondary type="button" @click="load"
+                >Réessayer</DsfrButton
             >
             <ButtonContact />
         </template>
@@ -34,7 +30,9 @@
             <DsfrButton secondary @click.prevent.stop="back"
                 >Annuler</DsfrButton
             >
-            <DsfrButton @click="submit" :loading="form?.isSubmitting"
+            <DsfrButton
+                @click="submit"
+                :disabled="isSubmitDisabled || form?.isSubmitting"
                 >Mettre à jour l'action</DsfrButton
             >
         </template>
@@ -73,7 +71,7 @@
                         >
                         <DsfrButton
                             @click="submit"
-                            :loading="form?.isSubmitting"
+                            :disabled="isSubmitDisabled || form?.isSubmitting"
                             >Mettre à jour l'action</DsfrButton
                         >
                     </div>
@@ -84,13 +82,13 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed, watch, nextTick } from "vue";
+import { ref, computed, onMounted, watch, nextTick } from "vue";
 import { onBeforeRouteLeave } from "vue-router";
 import { useActionsStore } from "@/stores/actions.store.js";
 import router, { setDocumentTitle } from "@/helpers/router";
 import backOrReplace from "@/utils/backOrReplace";
 
-import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
 import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
 import LayoutForm from "@/components/LayoutForm/LayoutForm.vue";
@@ -107,7 +105,18 @@ const form = ref(null);
 const politeLiveMessage = ref("");
 const assertiveLiveMessage = ref("");
 const allowLeaveWithoutConfirmOnce = ref(false);
-const hasFormChanged = computed(() => form.value?.hasChanges ?? false);
+const hasFormChanged = computed(() => {
+    const hasChanges = form.value?.hasChanges ?? false;
+    const hasErrors = form.value?.hasErrors ?? false;
+    const hasDuplicates = form.value?.hasDuplicates ?? false;
+    return hasChanges && !hasErrors && !hasDuplicates;
+});
+
+const isSubmitDisabled = computed(() => {
+    const hasErrors = form.value?.hasErrors ?? false;
+    const hasDuplicates = form.value?.hasDuplicates ?? false;
+    return hasErrors || hasDuplicates;
+});
 
 const FORM_CHANGED_MESSAGE =
     "Des modifications ont été apportées à l'action, pensez à les enregistrer";
@@ -115,6 +124,17 @@ const LEAVE_CONFIRM_MESSAGE =
     "Des modifications n'ont pas été enregistrées. Voulez-vous vraiment quitter ?";
 
 onMounted(load);
+
+// Watcher pour détecter les changements de route et recharger les données
+watch(
+    () => router.currentRoute.value,
+    (newRoute, oldRoute) => {
+        if (newRoute.params.id !== oldRoute?.params?.id) {
+            load();
+        }
+    },
+    { immediate: true, deep: true }
+);
 
 const actionId = computed(() => {
     return parseInt(router.currentRoute.value.params.id, 10);
@@ -207,7 +227,7 @@ button {
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 100;
+    z-index: 9999;
     pointer-events: none;
     width: 80%;
     margin-left: auto;
