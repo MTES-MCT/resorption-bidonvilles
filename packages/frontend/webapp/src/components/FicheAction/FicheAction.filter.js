@@ -14,6 +14,7 @@ export default {
             "eti.address",
             "eti.latitude",
             "eti.longitude",
+            "location_eti_addresses",
             "location_other",
             "location_shantytowns",
         ],

@@ -14,25 +14,21 @@
             <article v-else v-for="item in diff" :key="item.field">
                 <p class="text-green700">{{ item.field }}</p>
                 <p class="break-words whitespace-pre-wrap">
-                    <span>{{ item.newValue || "non renseigné" }}</span>
-                    <template
-                        v-if="
-                            item.oldValue &&
-                            typeof item.oldValue === 'string' &&
-                            ![
-                                'non renseignées',
-                                'non renseigné',
-                                'non renseignés',
-                            ].includes(item.oldValue.trim())
-                        "
-                    >
-                        <span>{{
-                            item.oldValue.includes("\n") ? "\n" : ", "
-                        }}</span>
-                        <span class="line-through text-G700 hover:text-G700">
-                            {{ item.oldValue }}
-                        </span>
-                    </template>
+                    {{ item.newValue || "non renseigné" }}
+                </p>
+                <p
+                    v-if="
+                        item.oldValue &&
+                        typeof item.oldValue === 'string' &&
+                        ![
+                            'non renseignées',
+                            'non renseigné',
+                            'non renseignés',
+                        ].includes(item.oldValue.trim())
+                    "
+                    class="break-words whitespace-pre-wrap line-through text-G700 hover:text-G700"
+                >
+                    {{ item.oldValue }}
                 </p>
             </article>
         </div>
