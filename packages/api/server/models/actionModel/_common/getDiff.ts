@@ -47,7 +47,13 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
             if (!users || users.length === 0) {
                 return 'non renseigné';
             }
-            return users.map(u => `${u.name || u.abbreviation || 'Organisation inconnue'}`).join(', ');
+            // Trier les organisations par nom pour éviter les faux positifs dus à l'ordre
+            const orgNames = users
+                .map(u => u.name || u.abbreviation || 'Organisation inconnue')
+                .sort((a, b) => a.localeCompare(b, 'fr', { sensitivity: 'base' }));
+            // Supprimer les doublons
+            const uniqueOrgNames = [...new Set(orgNames)];
+            return uniqueOrgNames.join(', ');
         },
         topicList(topics: any[]): string {
             if (!topics || topics.length === 0) {
@@ -59,7 +65,10 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
             if (!shantytowns || shantytowns.length === 0) {
                 return 'non renseignés';
             }
-            return shantytowns.map(s => s.usename || s.name || `Site #${s.id}`).join(', ');
+            if (shantytowns.length === 1) {
+                return shantytowns[0].usename || shantytowns[0].name || `Site #${shantytowns[0].id}`;
+            }
+            return shantytowns.map(s => `- ${s.usename || s.name || `Site #${s.id}`}`).join('\n');
         },
         finances(finances: any): string {
             if (!finances || Object.keys(finances).length === 0) {
@@ -112,14 +121,29 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
                 return types[value] || value;
             },
         },
-        'eti.address': {
-            label: 'Adresse',
+        eti: {
+            label: 'Adresses ETI',
+            processor(addresses: any[] | null): string {
+                if (!addresses || addresses.length === 0) {
+                    return 'non renseignées';
+                }
+                if (addresses.length === 1) {
+                    return addresses[0].address;
+                }
+                return addresses.map(addr => addr.address).join(', ');
+            },
         },
-        'eti.latitude': {
-            label: 'Latitude',
-        },
-        'eti.longitude': {
-            label: 'Longitude',
+        location_eti_addresses: {
+            label: 'Adresses ETI',
+            processor(addresses: any[] | null): string {
+                if (!addresses || addresses.length === 0) {
+                    return 'non renseignées';
+                }
+                if (addresses.length === 1) {
+                    return addresses[0].address;
+                }
+                return addresses.map(addr => addr.address).join('\n');
+            },
         },
         location_other: {
             label: 'Autre localisation',
