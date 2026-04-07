@@ -68,7 +68,10 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
             if (shantytowns.length === 1) {
                 return shantytowns[0].usename || shantytowns[0].name || `Site #${shantytowns[0].id}`;
             }
-            return shantytowns.map(s => `- ${s.usename || s.name || `Site #${s.id}`}`).join('\n');
+            return shantytowns.map((s) => {
+                const siteName = s.usename || s.name || `Site #${s.id}`;
+                return `- ${siteName}`;
+            }).join('\n');
         },
         finances(finances: any): string {
             if (!finances || Object.keys(finances).length === 0) {
