@@ -10,7 +10,7 @@
                 >&Eacute;viter la carte</a
             >
         </div>
-        <div id="map" class="h-full border">
+        <div :id="mapId" class="h-full border">
             <div
                 class="absolute w-full h-full top-0 left-0 z-[1001]"
                 v-if="isLoading"
@@ -70,9 +70,9 @@ import L from "leaflet";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/leaflet.markercluster";
+import "leaflet-providers";
 import { onBeforeUnmount, onMounted, ref, toRefs, watch } from "vue";
 import mapControls from "./Carte.controls";
-import mapLayers from "./Carte.layers";
 
 import { trackEvent } from "@/helpers/matomo";
 import { Icon, Spinner } from "@resorptionbidonvilles/ui";
@@ -83,6 +83,11 @@ import skipFocusPrevious from "@/utils/skipFocusPrevious";
 import { useNotificationStore } from "@/stores/notification.store";
 
 const props = defineProps({
+    mapId: {
+        type: String,
+        required: false,
+        default: "map",
+    },
     isLoading: {
         type: Boolean,
         required: false,
@@ -196,6 +201,9 @@ const markersGroup = {
 };
 const emit = defineEmits(["townclick", "zoomend"]);
 
+// Stocker les couches uniques pour cette carte
+const mapLayers = ref(null);
+
 onMounted(() => {
     createMap();
     syncTownMarkers();
@@ -207,10 +215,22 @@ onBeforeUnmount(() => {
     }
 });
 
+// Créer des instances de couches uniques pour cette carte
+function createMapLayers() {
+    return {
+        Satellite: L.tileLayer.provider("Esri.WorldImagery"),
+        Dessin: L.tileLayer.provider("OpenStreetMap.Mapnik"),
+        Light: L.tileLayer.provider("CartoDB.Positron"),
+    };
+}
+
 function createMap() {
+    // Créer des instances de couches uniques pour cette carte
+    mapLayers.value = createMapLayers();
+
     // on crée la carte
-    map.value = L.map("map", {
-        layers: [mapLayers[defaultLayer.value || layers.value[0]]], // fond de carte à afficher
+    map.value = L.map(props.mapId, {
+        layers: [mapLayers.value[defaultLayer.value || layers.value[0]]], // fond de carte à afficher
         scrollWheelZoom: false, // interdire le zoom via la molette de la souris
     });
     map.value.on("zoomend", onZoomEnd);
@@ -220,7 +240,18 @@ function createMap() {
     addControl("attribution", mapControls.attribution(map.value));
 
     if (layers.value.length > 1) {
-        addControl("layers", mapControls.layers(layers.value));
+        // Créer le contrôle des couches avec les couches locales de cette carte
+        const layersControl = L.control.layers(
+            layers.value.reduce((acc, key) => {
+                acc[key] = mapLayers.value[key];
+                return acc;
+            }, {}),
+            undefined,
+            {
+                collapsed: false,
+            }
+        );
+        addControl("layers", layersControl);
     }
 
     if (showPrinter.value) {
@@ -231,6 +262,13 @@ function createMap() {
     map.value.setView(defaultView.value.center, defaultView.value.zoom);
     map.value.on("baselayerchange", onLayerChange);
     cluster();
+
+    // Forcer le rendu correct de la carte
+    setTimeout(() => {
+        if (map.value) {
+            map.value.invalidateSize();
+        }
+    }, 300);
 }
 
 function addControl(name, control) {
@@ -282,7 +320,7 @@ async function printMapScreenshot() {
     });
 
     // on imprime
-    const container = document.getElementById("map");
+    const container = document.getElementById(props.mapId);
 
     try {
         const blob = await domtoimage.toBlob(container, {
