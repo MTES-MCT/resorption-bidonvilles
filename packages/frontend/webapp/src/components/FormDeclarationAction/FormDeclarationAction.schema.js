@@ -61,12 +61,24 @@ export default function () {
             .oneOf(locationTypes.map(({ uid }) => uid))
             .required()
             .label(labels.location_type),
-        location_eti: object()
+        location_eti_addresses: array()
+            .of(
+                object().shape({
+                    address: object().nullable(),
+                    coordinates: array().of(number()).nullable(),
+                })
+            )
             .when("location_type", {
                 is: "eti",
-                then: (schema) => schema.required(),
+                then: (schema) =>
+                    schema
+                        .required()
+                        .min(
+                            1,
+                            "Au moins une adresse est requise pour un Espace Temporaire d'Accompagnement"
+                        ),
             })
-            .label(labels.location_eti),
+            .label("Adresses des Espaces Temporaires d'Accompagnement"),
         location_shantytowns: array()
             .of(number())
             .when("location_type", {
