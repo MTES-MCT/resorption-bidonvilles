@@ -568,7 +568,11 @@ async function performSubmit(sentValues) {
                     .replace(/['''\u2019]/g, "'")
                     .toLowerCase()
                     .trim();
-                const addressKey = String(`${normalizedAddress}|${String(addr.citycode)}|${String(addr.coordinates)}`);
+                const addressKey = String(
+                    `${normalizedAddress}|${String(addr.citycode)}|${String(
+                        addr.coordinates
+                    )}`
+                );
                 if (seenAddresses.has(addressKey)) {
                     duplicates.push({
                         index,
