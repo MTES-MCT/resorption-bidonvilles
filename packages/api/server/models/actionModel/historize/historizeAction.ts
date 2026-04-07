@@ -1,7 +1,7 @@
 import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 
-export default async (id: number, transaction: Transaction): Promise<number> => {
+export default async function historizeAction(id: number, transaction: Transaction): Promise<number> {
     const response = await sequelize.query(`
         INSERT INTO actions_history(
             action_id,
@@ -11,10 +11,6 @@ export default async (id: number, transaction: Transaction): Promise<number> => 
             goals,
             fk_departement,
             location_type,
-            address,
-            latitude,
-            longitude,
-            eti_fk_city,
             location_other,
             created_by,
             created_at,
@@ -28,10 +24,6 @@ export default async (id: number, transaction: Transaction): Promise<number> => 
             goals,
             fk_departement,
             location_type::text::enum_actions_history_location_type,
-            address,
-            latitude,
-            longitude,
-            eti_fk_city,
             location_other,
             created_by,
             created_at,
@@ -50,4 +42,4 @@ export default async (id: number, transaction: Transaction): Promise<number> => 
     const rows: ReturnValue[] = (response[0] as unknown) as ReturnValue[];
 
     return rows[0].hid;
-};
+}
