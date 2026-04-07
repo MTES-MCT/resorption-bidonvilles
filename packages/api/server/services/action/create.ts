@@ -21,7 +21,12 @@ export default async (user: User, data: ActionInput): Promise<EnrichedAction> =>
         await transaction.rollback();
 
         // Détecter les doublons d'adresses ETI
-        if (error instanceof UniqueConstraintError && (error as any).parent?.constraint === 'uq__action_addresses__unique_address') {
+        if (
+            error instanceof UniqueConstraintError
+            && error.parent
+            && 'constraint' in error.parent
+            && error.parent.constraint === 'uq__action_addresses__unique_address'
+        ) {
             throw new ServiceError('duplicate_action_address', error);
         }
 
