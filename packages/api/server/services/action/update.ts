@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { UniqueConstraintError } from 'sequelize';
 import ServiceError from '#server/errors/ServiceError';
 import update from '#server/models/actionModel/update/update';
 import can from '#server/utils/permission/can';
@@ -15,11 +16,16 @@ export default async (action: Action, author: User, data: ActionInput): Promise<
     try {
         await update(action.id, {
             ...data,
-            address: data.location_eti,
             updated_by: author.id,
         }, transaction);
     } catch (error) {
         await transaction.rollback();
+
+        // Détecter les doublons d'adresses ETI
+        if (error instanceof UniqueConstraintError && (error as any).parent?.constraint === 'uq__action_addresses__unique_address') {
+            throw new ServiceError('duplicate_action_address', error);
+        }
+
         throw new ServiceError('action_insert_error', error);
     }
 
