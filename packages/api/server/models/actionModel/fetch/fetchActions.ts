@@ -16,10 +16,6 @@ export type ActionSelectRow = {
     region_name: string,
     region_code: string,
     location_type: ActionLocationType,
-    address: string | null,
-    latitude: number | null,
-    longitude: number | null,
-    eti_fk_city: string | null,
     location_other: string | null,
 } & CreatorInfo & EditorInfo;
 
@@ -45,10 +41,6 @@ export default function fetchActions(actionIds: number[] = null, clauseGroup: ob
             regions.name AS region_name,
             regions.code AS region_code,
             actions.location_type,
-            actions.address,
-            actions.latitude,
-            actions.longitude,
-            actions.eti_fk_city,
             actions.location_other,
             creator.user_id AS creator_id,
             creator.first_name AS creator_first_name,
