@@ -6,6 +6,7 @@
         <FormDeclarationActionCaracteristiques class="mt-6" :mode="mode" />
         <FormDeclarationActionLocalisation
             :disableDepartement="mode === 'edit' && !canAccessFinances"
+            :setFieldValue="setFieldValue"
             class="mt-6"
         />
         <FormDeclarationActionContacts
@@ -89,16 +90,23 @@ const mode = computed(() => {
     return action.value === null ? "create" : "edit";
 });
 const validationSchema = schemaFn(mode.value);
-const { handleSubmit, values, errors, setErrors, isSubmitting, resetForm } =
-    useForm({
-        validationSchema,
-        keepValuesOnUnmount: true,
-        initialValues: formatFormAction(
-            action.value || {
-                location_departement: userStore.departementsForActions[0]?.code,
-            }
-        ),
-    });
+const {
+    handleSubmit,
+    values,
+    errors,
+    setErrors,
+    isSubmitting,
+    resetForm,
+    setFieldValue,
+} = useForm({
+    validationSchema,
+    keepValuesOnUnmount: true,
+    initialValues: formatFormAction(
+        action.value || {
+            location_departement: userStore.departementsForActions[0]?.code,
+        }
+    ),
+});
 
 const managerIds = ref([]);
 
@@ -153,9 +161,11 @@ const canAccessFinances = computed(() => {
 });
 
 async function initFromAction(initialFormValues) {
-    resetForm({ values: initialFormValues });
+    // Transformer les données de l'API vers le format attendu par le formulaire
+    const formattedForForm = formatValuesFromApi(initialFormValues);
+    resetForm({ values: formattedForForm });
     await nextTick();
-    originalValues.value = formatValuesForApi(initialFormValues);
+    originalValues.value = formatValuesForApi(formattedForForm);
 }
 
 watch(
@@ -172,17 +182,82 @@ watch(
 );
 
 const hasChanges = ref(false);
+const hasDuplicates = ref(false);
+
+// Computed property pour savoir s'il y a des erreurs
+const hasErrors = computed(
+    () => error.value !== null || Object.keys(errors.value).length > 0
+);
 
 function updateHasChanges() {
-    if (originalValues.value === null) {
-        hasChanges.value = false;
+    if (!originalValues.value) {
         return;
     }
 
-    hasChanges.value = !_.isEqual(
-        originalValues.value,
-        formatValuesForApi(values)
-    );
+    const currentFormatted = formatValuesForApi(values);
+
+    // Détection des doublons dans les adresses ETI
+    if (
+        currentFormatted.location_eti_addresses &&
+        currentFormatted.location_eti_addresses.length > 1
+    ) {
+        const seenAddresses = new Set();
+        const duplicates = [];
+
+        currentFormatted.location_eti_addresses.forEach((addr, index) => {
+            if (addr.address && addr.citycode && addr.coordinates) {
+                // Normaliser la chaîne pour éviter les problèmes d'apostrophes typographiques
+                const normalizedAddress = String(addr.address)
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .replace(/['''\u2019]/g, "'")
+                    .toLowerCase()
+                    .trim();
+                const addressKey = String(
+                    `${normalizedAddress}|${String(addr.citycode)}|${String(
+                        addr.coordinates
+                    )}`
+                );
+                if (seenAddresses.has(addressKey)) {
+                    duplicates.push({
+                        index,
+                        address: addr.address,
+                        citycode: addr.citycode,
+                        coordinates: addr.coordinates,
+                    });
+                } else {
+                    seenAddresses.add(addressKey);
+                }
+            }
+        });
+
+        if (duplicates.length > 0) {
+            hasDuplicates.value = true;
+            // Forcer la détection de changements pour afficher l'alerte
+            hasChanges.value = true;
+            // Ajouter le message de doublons dans error pour ErrorSummary
+            error.value = error.value
+                ? `${error.value}\n\nDes adresses en double ont été détectées. Veuillez corriger les doublons avant de pouvoir enregistrer l'action.`
+                : "Des adresses en double ont été détectées. Veuillez corriger les doublons avant de pouvoir enregistrer l'action.";
+        } else {
+            hasDuplicates.value = false;
+            // Retirer le message de doublons de error s'il n'y a pas d'autres erreurs
+            if (
+                error.value &&
+                error.value.includes("Des adresses en double ont été détectées")
+            ) {
+                error.value = error.value.replace(
+                    /\n?\n?Des adresses en double ont été détectées\. Veuillez corriger les doublons avant de pouvoir enregistrer l'action\./,
+                    ""
+                );
+                if (error.value.trim() === "") {
+                    error.value = null;
+                }
+            }
+        }
+    }
+
+    hasChanges.value = !_.isEqual(originalValues.value, currentFormatted);
 }
 
 const debouncedUpdateHasChanges = _.debounce(updateHasChanges, 250);
@@ -270,13 +345,61 @@ const config = {
     },
 };
 
+// Transformer les données de l'API vers le format attendu par le formulaire
+function formatValuesFromApi(v) {
+    if (v.location_eti_addresses && Array.isArray(v.location_eti_addresses)) {
+        return {
+            ...v,
+            location_eti_addresses: v.location_eti_addresses.map((addr) => {
+                // Si address est déjà un objet avec data, on le garde
+                if (addr.address && typeof addr.address === "object") {
+                    return addr;
+                }
+                // Sinon, on reconstruit la structure attendue par InputAddress
+                return {
+                    ...addr,
+                    address: {
+                        data: {
+                            label: addr.address,
+                            citycode: addr.citycode,
+                            coordinates:
+                                addr.coordinates?.split(",").map(Number) || [],
+                        },
+                    },
+                };
+            }),
+        };
+    }
+    return v;
+}
+
 function formatValuesForApi(v) {
-    let citycode = null;
-    let label = null;
     const endedAt = formatFormDate(v.ended_at);
 
-    if (v.location_eti?.data) {
-        ({ citycode, label } = v.location_eti.data);
+    // Transformer les adresses ETI multiples pour l'API
+    let locationEtiAddresses = null;
+    if (
+        v.location_type === "eti" &&
+        v.location_eti_addresses &&
+        Array.isArray(v.location_eti_addresses)
+    ) {
+        const validAddresses = v.location_eti_addresses.filter(
+            (addr) => addr.address?.data?.label && addr.address?.data?.citycode
+        );
+
+        if (validAddresses.length > 0) {
+            locationEtiAddresses = validAddresses.map((addr) => {
+                const coords =
+                    addr.coordinates || addr.address.data.coordinates;
+                return {
+                    address: addr.address.data.label,
+                    citycode: addr.address.data.citycode,
+                    coordinates: Array.isArray(coords)
+                        ? `${coords[0]},${coords[1]}`
+                        : coords,
+                };
+            });
+        }
     }
 
     const formatted = {
@@ -300,11 +423,7 @@ function formatValuesForApi(v) {
             ),
             managers: v.managers.users.map(({ id }) => id),
             operators: v.operators.users.map(({ id }) => id),
-            location_eti_citycode: citycode,
-            location_eti: label,
-            location_eti_coordinates: v.location_eti_coordinates
-                ? `${v.location_eti_coordinates[0]},${v.location_eti_coordinates[1]}`
-                : "",
+            location_eti_addresses: locationEtiAddresses,
         },
     };
 
@@ -435,6 +554,42 @@ function checkFundingDeletions(sentValues) {
 async function performSubmit(sentValues) {
     const formattedValues = formatValuesForApi(sentValues);
 
+    // 🔍 Vérifier les doublons d'adresses ETI
+    if (formattedValues.location_eti_addresses) {
+        const seenAddresses = new Set();
+        const duplicates = [];
+
+        formattedValues.location_eti_addresses.forEach((addr, index) => {
+            if (addr.address && addr.citycode && addr.coordinates) {
+                // Normaliser la chaîne pour éviter les problèmes d'apostrophes typographiques
+                const normalizedAddress = String(addr.address)
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .replace(/['''\u2019]/g, "'")
+                    .toLowerCase()
+                    .trim();
+                const addressKey = String(`${normalizedAddress}|${String(addr.citycode)}|${String(addr.coordinates)}`);
+                if (seenAddresses.has(addressKey)) {
+                    duplicates.push({
+                        index,
+                        address: addr.address,
+                        citycode: addr.citycode,
+                        coordinates: addr.coordinates,
+                    });
+                } else {
+                    seenAddresses.add(addressKey);
+                }
+            }
+        });
+
+        if (duplicates.length > 0) {
+            router.replace("#erreurs");
+            error.value =
+                "Impossible de sauvegarder : des adresses en double ont été détectées";
+            return;
+        }
+    }
+
     if (
         mode.value === "edit" &&
         _.isEqual(originalValues.value, formattedValues)
@@ -487,6 +642,8 @@ defineExpose({
         }
     }),
     hasChanges,
+    hasErrors,
+    hasDuplicates,
     isSubmitting,
 });
 </script>
