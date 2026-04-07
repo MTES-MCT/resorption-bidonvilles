@@ -87,6 +87,7 @@ const loadHistory = async () => {
         changelog.value = history.filter((item) => item.action === "update");
     } catch (error) {
         console.error("Erreur lors du chargement de l'historique:", error);
+        changelog.value = [];
     } finally {
         loading.value = false;
     }
@@ -114,17 +115,23 @@ const filteredChangelog = computed(() => {
     if (actionCategoryFilter.value.length > 0) {
         changes = changes
             .map((change) => {
+                const filteredDiff = change.diff.filter((difference) => {
+                    return checkFilter(difference.fieldKey);
+                });
+
                 return {
                     ...change,
-                    diff: change.diff.filter((difference) => {
-                        return checkFilter(difference.fieldKey);
-                    }),
+                    diff: filteredDiff,
                 };
             })
             .filter((change) => change.diff.length !== 0);
     }
 
-    // Inverser l'ordre pour afficher les modifications les plus récentes en premier
-    return [...changes].reverse();
+    // Trier par date décroissante (plus récent en premier)
+    return [...changes].sort((a, b) => {
+        const aDate = a.date * 1000;
+        const bDate = b.date * 1000;
+        return bDate - aDate;
+    });
 });
 </script>
