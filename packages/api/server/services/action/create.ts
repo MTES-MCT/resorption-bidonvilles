@@ -1,4 +1,5 @@
 import { sequelize } from '#db/sequelize';
+import { UniqueConstraintError } from 'sequelize';
 import ServiceError from '#server/errors/ServiceError';
 import create from '#server/models/actionModel/create/create';
 import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
@@ -14,11 +15,16 @@ export default async (user: User, data: ActionInput): Promise<EnrichedAction> =>
     try {
         actionId = await create({
             ...data,
-            address: data.location_eti,
             created_by: user.id,
         }, transaction);
     } catch (error) {
         await transaction.rollback();
+
+        // Détecter les doublons d'adresses ETI
+        if (error instanceof UniqueConstraintError && (error as any).parent?.constraint === 'uq__action_addresses__unique_address') {
+            throw new ServiceError('duplicate_action_address', error);
+        }
+
         throw new ServiceError('insert_action_error', error);
     }
 
