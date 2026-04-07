@@ -75,9 +75,7 @@ export default (mode: 'create' | 'update') => [
             let existingTopics = [];
             try {
                 existingTopics = await topicModel.findAll();
-            } catch (error) {
-                // eslint-disable-next-line no-console
-                console.error(error);
+            } catch {
                 throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Champs d\'intervention"');
             }
 
@@ -109,9 +107,7 @@ export default (mode: 'create' | 'update') => [
             let location: Location;
             try {
                 location = await geoModel.getLocation('departement', value);
-            } catch (error) {
-                // eslint-disable-next-line no-console
-                console.error(error);
+            } catch {
                 throw new Error('Une lecture en base de données a échoué lors de la validation du champ "Département d\'intervention principal"');
             }
 
@@ -143,52 +139,109 @@ export default (mode: 'create' | 'update') => [
         .exists({ checkNull: true }).bail().withMessage('Le champ "Où se déroule l\'action ?" est obligatoire')
         .isIn(['eti', 'logement', 'sur_site', 'autre']).withMessage('Le champ "Où se déroule l\'action ?" est invalide'),
 
-    body('location_eti')
+    body('location_eti_addresses')
         .if((value, { req }) => req.body.location_type === 'eti')
-        .exists({ checkNull: true }).bail().withMessage('Le champ "Adresse de l\'Espace Temporaire d\'Accompagnement" est obligatoire')
-        .isString().bail().withMessage('Le champ "Où se déroule l\'action ?" est obligatoire')
-        .trim()
-        // ville
-        .custom(async (value, { req }) => {
-            let city;
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Adresses des Espaces Temporaires d\'Accompagnement" est obligatoire')
+        .isArray().bail().withMessage('Le champ "Adresses des Espaces Temporaires d\'Accompagnement" doit être un tableau')
+        .isLength({ min: 1 }).bail().withMessage('Au moins une adresse est requise pour un Espace Temporaire d\'Accompagnement')
+        .custom(async (addresses, { req }) => {
+            // Valider la structure de chaque adresse et parser les coordonnées
+            const parsedAddresses = addresses.map((address, i) => {
+                // Vérifier que l'adresse est un objet
+                if (!address || typeof address !== 'object') {
+                    throw new Error(`L'adresse ${i + 1} est invalide`);
+                }
+
+                // Vérifier l'adresse textuelle
+                if (!address.address || typeof address.address !== 'string' || address.address.trim() === '') {
+                    throw new Error(`L'adresse ${i + 1} : le champ adresse est obligatoire`);
+                }
+
+                // Vérifier le code commune
+                if (!address.citycode || typeof address.citycode !== 'string') {
+                    throw new Error(`L'adresse ${i + 1} : le code commune est obligatoire`);
+                }
+
+                // Vérifier les coordonnées GPS
+                if (!address.coordinates || typeof address.coordinates !== 'string') {
+                    throw new Error(`L'adresse ${i + 1} : les coordonnées GPS sont obligatoires`);
+                }
+
+                if (!isLatLong(address.coordinates)) {
+                    throw new Error(`L'adresse ${i + 1} : les coordonnées GPS sont invalides`);
+                }
+
+                // Parser les coordonnées
+                const [latitude, longitude] = address.coordinates.split(',');
+                return {
+                    ...address,
+                    latitude: Number.parseFloat(latitude),
+                    longitude: Number.parseFloat(longitude),
+                };
+            });
+
+            // Valider toutes les villes en parallèle
             try {
-                city = await geoModel.getLocation('city', req.body.location_eti_citycode);
+                const cities = await Promise.all(
+                    parsedAddresses.map(address => geoModel.getLocation('city', address.citycode)),
+                );
+
+                cities.forEach((city, i) => {
+                    if (city === null) {
+                        throw new Error(`L'adresse ${i + 1} : le code communal ne correspond à aucune commune référencée en base de données`);
+                    }
+
+                    if (city.departement.code !== req.body.location_departement) {
+                        throw new Error(`L'adresse ${i + 1} : l'adresse doit se situer dans le département d'intervention principal`);
+                    }
+                });
             } catch (e) {
-                // eslint-disable-next-line no-console
-                console.error(e);
-                throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du code communal');
+                if (e.message.startsWith('L\'adresse')) {
+                    throw e;
+                }
+                throw new Error('Une erreur de lecture en base de données est survenue lors de la validation des codes communaux');
             }
 
-            if (city === null) {
-                throw new Error('Le code communal ne correspond à aucune commune référencée en base de données');
-            }
+            // Stocker les adresses parsées pour le sanitizer
+            req.body.parsedAddresses = parsedAddresses;
 
-            if (city.departement.code !== req.body.location_departement) {
-                throw new Error('L\'adresse de l\'Espace Temporaire d\'Accompagnement doit se situer dans le département d\'intervention principal');
-            }
+            // Valider l'absence de doublons dans le formulaire
+            const addressKeys = new Set();
+            parsedAddresses.forEach((address, i) => {
+                // Normaliser l'adresse pour gérer les apostrophes typographiques
+                const normalizedAddress = String(address.address || '')
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/['''\u2019]/g, "'")
+                    .toLowerCase()
+                    .trim();
+                const addressKey = `${normalizedAddress}|${String(address.citycode || '')}|${String(address.latitude || '')}|${String(address.longitude || '')}`;
+                if (addressKeys.has(addressKey)) {
+                    throw new Error(`L'adresse ${i + 1} est un doublon d'une adresse déjà saisie`);
+                }
+                addressKeys.add(addressKey);
+            });
 
             return true;
         })
-        // coordonnées GPS
-        .custom((value, { req }) => {
-            if (!req.body.location_eti_coordinates) {
-                throw new Error('Les coordonnées GPS sont obligatoires');
+        .customSanitizer((addresses, { req }) => {
+            if (!addresses) {
+                return null;
             }
+            // Utiliser les adresses déjà parsées et validées
+            const parsedAddresses = req.body.parsedAddresses || addresses;
+            delete req.body.parsedAddresses;
 
-            if (!isLatLong(req.body.location_eti_coordinates)) {
-                throw new Error('Les coordonnées GPS sont invalides');
-            }
-
-            const [latitude, longitude] = req.body.location_eti_coordinates.split(',');
-            req.body.latitude = Number.parseFloat(latitude);
-            req.body.longitude = Number.parseFloat(longitude);
-
-            return true;
+            // Transformer en format attendu par le modèle
+            return parsedAddresses.map(addr => ({
+                address: addr.address.trim(),
+                latitude: addr.latitude,
+                longitude: addr.longitude,
+                citycode: addr.citycode,
+            }));
         }),
 
-    body('latitude')
-        .customSanitizer((value, { req }) => (req.body.location_type === 'eti' ? value : null)),
-    body('longitude')
+    body('location_eti_addresses')
         .customSanitizer((value, { req }) => (req.body.location_type === 'eti' ? value : null)),
 
     body('location_shantytowns')
@@ -204,8 +257,6 @@ export default (mode: 'create' | 'update') => [
                     { shantytown_id: { value } },
                 ]);
             } catch (error) {
-                // eslint-disable-next-line no-console
-                console.error(error);
                 throw new Error('Une erreur est survenue lors de la validation des sites');
             }
 
