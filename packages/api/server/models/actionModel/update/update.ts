@@ -6,7 +6,7 @@ import resetAsideData from './resetAsideData';
 import insertAsideData from '../create/insertAsideData';
 import updateAction from './updateAction';
 
-export default async (id: number, data: ActionUpdateInput, transaction: Transaction): Promise<void> => {
+export default async function updateActionModel(id: number, data: ActionUpdateInput, transaction: Transaction): Promise<void> {
     // save current state into history tables
     await historize(id, transaction);
 
@@ -16,4 +16,4 @@ export default async (id: number, data: ActionUpdateInput, transaction: Transact
     // update
     await updateAction(id, data, transaction);
     await insertAsideData(id, data.updated_by, data, transaction);
-};
+}
