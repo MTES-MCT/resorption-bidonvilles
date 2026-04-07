@@ -5,6 +5,14 @@ import { User } from '#root/types/resources/User.d';
 
 const { can } = permissionUtils;
 
+export type ActionAddress = {
+    action_address_id: number,
+    address: string,
+    latitude: number,
+    longitude: number,
+    fk_city: string,
+};
+
 export type ActionRow = {
     hid?: number,
     action_id: number,
@@ -18,11 +26,8 @@ export type ActionRow = {
     region_name: string,
     region_code: string,
     location_type: string,
-    address: string | null,
-    latitude: number | null,
-    longitude: number | null,
-    eti_fk_city: string | null,
     location_other: string | null,
+    addresses?: ActionAddress[],
     topics?: Array<{ uid: string, name: string }>,
     managers?: Array<any>,
     operators?: Array<any>,
@@ -73,12 +78,34 @@ export default function serializeAction(action: ActionRow, user: User): Action {
         topics: action.topics || [],
         location,
         location_type: action.location_type as any,
-        eti: action.location_type === 'eti' ? {
-            address: action.address,
-            latitude: action.latitude,
-            longitude: action.longitude,
-            citycode: action.eti_fk_city,
-        } : null,
+        eti: action.location_type === 'eti' && action.addresses
+            ? action.addresses.map(addr => ({
+                id: addr.action_address_id,
+                address: addr.address,
+                latitude: addr.latitude,
+                longitude: addr.longitude,
+                citycode: addr.fk_city,
+            }))
+            : null,
+        location_eti_addresses: (() => {
+            if (action.location_type !== 'eti') {
+                return [];
+            }
+            // Priorité 1 : utiliser location_eti_addresses si disponible (depuis getHistory)
+            if ((action as any).location_eti_addresses && (action as any).location_eti_addresses.length > 0) {
+                return (action as any).location_eti_addresses;
+            }
+            // Priorité 2 : utiliser eti si disponible (depuis fetch normal)
+            if ((action as any).eti && (action as any).eti.length > 0) {
+                return (action as any).eti.map((addr: any) => ({
+                    id: addr.id,
+                    address: addr.address,
+                    citycode: addr.citycode,
+                    coordinates: `${addr.latitude},${addr.longitude}`,
+                }));
+            }
+            return [];
+        })(),
         location_other: action.location_other,
         location_shantytowns: action.shantytowns || [],
         managers: action.managers || [],
