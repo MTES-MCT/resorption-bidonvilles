@@ -76,9 +76,11 @@ const exportActions = async (user: AuthUser, year: string, dihalFinancing = fals
     try {
         // Récupération des données avec filtres territoriaux
         data = await actionModel.fetchReport(fetchedYear, actionClauseGroup, financeClauseGroup);
-    } catch (error: unknown) {
-        const normalizedError = error instanceof Error ? error : new Error(String(error));
-        throw new ServiceError('fetch_failed', normalizedError);
+    } catch (error) {
+        throw new ServiceError(
+            'fetch_failed',
+            error instanceof Error ? error : new Error('Une erreur inconnue est survenue'),
+        );
     }
 
     // Filtrage par financement DIHAL si demandé

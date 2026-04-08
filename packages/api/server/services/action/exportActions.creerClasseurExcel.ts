@@ -218,9 +218,10 @@ const setDepartementHeader = (worksheet: ExcelJS.Worksheet, departement: Departe
         }];
         // On ajoute les financements DIHAL si l'on est dans l'année N-1 ou N
         if (dihalFinanceCampagn.has(year)) {
+            const updatedActionsFinanceesDihalPercentage = departement.data.length > 0 && actionFinanceesDihal > 0 ? `${Math.round((updatedActionsFinanceesDihal / actionFinanceesDihal) * 100)}%` : 'N/A';
             headerDatas.push({
                 cell: `${startingCol}5`,
-                value: `${updatedActionsFinanceesDihal} actions financées par la DIHAL sur ${actionFinanceesDihal} ont été mises à jour il y a moins de 3 mois (${departement.data.length > 0 && actionFinanceesDihal > 0 ? `${Math.round((updatedActionsFinanceesDihal / actionFinanceesDihal) * 100)}%` : 'N/A'})`,
+                value: `${updatedActionsFinanceesDihal} actions financées par la DIHAL sur ${actionFinanceesDihal} ont été mises à jour il y a moins de 3 mois (${updatedActionsFinanceesDihalPercentage})`,
                 fontSpecific: {
                     size: 10,
                 },
