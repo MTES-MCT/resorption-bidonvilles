@@ -21,7 +21,7 @@ export default {
         ],
         contacts: ["managers", "operators"],
         financements: ["finances"],
-        indicateurs: ["metrics"],
+        indicateurs: ["metrics", "indicateurs"],
         sites: ["location_shantytowns"],
         thematiques: ["topics"],
     },
