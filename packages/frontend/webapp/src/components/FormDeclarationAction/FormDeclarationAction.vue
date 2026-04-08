@@ -7,6 +7,7 @@
         <FormDeclarationActionLocalisation
             :disableDepartement="mode === 'edit' && !canAccessFinances"
             :setFieldValue="setFieldValue"
+            :setErrors="setErrors"
             class="mt-6"
         />
         <FormDeclarationActionContacts
@@ -20,7 +21,7 @@
             :managers="managerIds"
             :departement="departement"
         />
-        <FormDeclarationActionIndicateurs class="mt-6" />
+        <FormDeclarationActionIndicateurs class="mt-6" :errors="errors" />
 
         <ErrorSummary
             id="erreurs"
@@ -51,6 +52,7 @@ import { useNotificationStore } from "@/stores/notification.store";
 import { useModaleStore } from "@/stores/modale.store";
 import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
+import focusFirstErrorField from "@/utils/focusFirstErrorField";
 import _ from "lodash-es";
 import backOrReplace from "@/utils/backOrReplace";
 import {
@@ -98,6 +100,7 @@ const {
     isSubmitting,
     resetForm,
     setFieldValue,
+    validate,
 } = useForm({
     validationSchema,
     keepValuesOnUnmount: true,
@@ -135,6 +138,13 @@ watch(
     },
     { deep: true }
 );
+
+// Watch pour le focus automatique sur les erreurs de validation
+watch(errors, (newErrors) => {
+    if (Object.keys(newErrors).length > 0) {
+        focusFirstErrorField(newErrors);
+    }
+});
 
 const originalValues = ref(null);
 
@@ -182,68 +192,33 @@ watch(
 );
 
 const hasChanges = ref(false);
-const hasDuplicates = ref(false);
-
-const DUPLICATE_ERROR_MESSAGE =
-    "Des adresses en double ont été détectées. Veuillez corriger les doublons avant de pouvoir enregistrer l'action.";
 
 // Computed property pour savoir s'il y a des erreurs
 const hasErrors = computed(
     () => error.value !== null || Object.keys(errors.value).length > 0
 );
 
-function normalizeAddressForComparison(address) {
-    return String(address)
-        .normalize("NFD")
-        .replaceAll(/[\u0300-\u036f]/g, "")
-        .replaceAll(/['''\u2019]/g, "'")
-        .toLowerCase()
-        .trim();
-}
-
-function createAddressKey(addr) {
-    const normalizedAddress = normalizeAddressForComparison(addr.address);
-    return `${normalizedAddress}|${addr.citycode}|${addr.coordinates}`;
-}
-
-function findDuplicateAddresses(addresses) {
-    if (!addresses || addresses.length <= 1) {
-        return [];
+// Computed property pour savoir s'il y a des doublons d'adresses
+const hasDuplicates = computed(() => {
+    if (values.location_type !== "eti" || !values.location_eti_addresses) {
+        return false;
     }
 
-    const seenAddresses = new Set();
-    const duplicates = [];
+    const seenAddresses = new Map();
 
-    addresses.forEach((addr, index) => {
-        if (addr.address && addr.citycode && addr.coordinates) {
-            const addressKey = createAddressKey(addr);
+    for (const addr of values.location_eti_addresses) {
+        const addressKey = createAddressKey(addr);
+
+        if (addressKey) {
             if (seenAddresses.has(addressKey)) {
-                duplicates.push({ index, ...addr });
-            } else {
-                seenAddresses.add(addressKey);
+                return true; // Doublon détecté
             }
+            seenAddresses.set(addressKey, true);
         }
-    });
-
-    return duplicates;
-}
-
-function addDuplicateErrorMessage() {
-    if (error.value && !error.value.includes(DUPLICATE_ERROR_MESSAGE)) {
-        error.value = `${error.value}\n\n${DUPLICATE_ERROR_MESSAGE}`;
-    } else if (!error.value) {
-        error.value = DUPLICATE_ERROR_MESSAGE;
     }
-}
 
-function removeDuplicateErrorMessage() {
-    if (error.value?.includes(DUPLICATE_ERROR_MESSAGE)) {
-        error.value =
-            error.value
-                .replaceAll(`\n\n${DUPLICATE_ERROR_MESSAGE}`, "")
-                .trim() || null;
-    }
-}
+    return false;
+});
 
 function updateHasChanges() {
     if (!originalValues.value) {
@@ -251,19 +226,6 @@ function updateHasChanges() {
     }
 
     const currentFormatted = formatValuesForApi(values);
-    const duplicates = findDuplicateAddresses(
-        currentFormatted.location_eti_addresses
-    );
-
-    if (duplicates.length > 0) {
-        hasDuplicates.value = true;
-        hasChanges.value = true;
-        addDuplicateErrorMessage();
-    } else {
-        hasDuplicates.value = false;
-        removeDuplicateErrorMessage();
-    }
-
     hasChanges.value = !_.isEqual(originalValues.value, currentFormatted);
 }
 
@@ -285,6 +247,13 @@ watch(
     },
     { deep: true }
 );
+
+// Watch pour le focus automatique sur les erreurs de validation
+watch(errors, (newErrors) => {
+    if (Object.keys(newErrors).length > 0) {
+        focusFirstErrorField(newErrors);
+    }
+});
 
 onBeforeUnmount(() => {
     debouncedUpdateHasChanges.cancel();
@@ -495,6 +464,15 @@ watch(useFormErrors(), () => {
     }
 });
 
+// Valider les indicateurs en temps réel
+watch(
+    () => values.indicateurs,
+    () => {
+        validate();
+    },
+    { deep: true }
+);
+
 function getYearFromDateValue(value) {
     if (value == null || value === "") {
         return null;
@@ -558,45 +536,54 @@ function checkFundingDeletions(sentValues) {
     };
 }
 
+function normalizeAddressForComparison(address) {
+    return String(address)
+        .normalize("NFD")
+        .replaceAll(/[\u0300-\u036f]/g, "")
+        .replaceAll(/['''\u2019]/g, "'")
+        .toLowerCase()
+        .trim();
+}
+
+function createAddressKey(addr) {
+    if (!addr?.address?.data) {
+        return null;
+    }
+    const normalizedAddress = normalizeAddressForComparison(
+        addr.address.data.label
+    );
+    const coords = addr.address.data.coordinates || addr.coordinates;
+    return `${normalizedAddress}|${addr.address.data.citycode}|${
+        Array.isArray(coords) ? coords.join(",") : coords
+    }`;
+}
+
 async function performSubmit(sentValues) {
     const formattedValues = formatValuesForApi(sentValues);
 
-    // 🔍 Vérifier les doublons d'adresses ETI
-    if (formattedValues.location_eti_addresses) {
-        const seenAddresses = new Set();
-        const duplicates = [];
+    // Vérifier les doublons d'adresses ETI (validation finale avant soumission)
+    if (
+        sentValues.location_type === "eti" &&
+        sentValues.location_eti_addresses
+    ) {
+        const seenAddresses = new Map();
+        let hasDuplicates = false;
 
-        formattedValues.location_eti_addresses.forEach((addr, index) => {
-            if (addr.address && addr.citycode && addr.coordinates) {
-                // Normaliser la chaîne pour éviter les problèmes d'apostrophes typographiques
-                const normalizedAddress = String(addr.address)
-                    .normalize("NFD")
-                    .replaceAll(/[\u0300-\u036f]/g, "")
-                    .replaceAll(/['''\u2019]/g, "'")
-                    .toLowerCase()
-                    .trim();
-                const addressKey = String(
-                    `${normalizedAddress}|${String(addr.citycode)}|${String(
-                        addr.coordinates
-                    )}`
-                );
+        sentValues.location_eti_addresses.forEach((addr) => {
+            const addressKey = createAddressKey(addr);
+
+            if (addressKey) {
                 if (seenAddresses.has(addressKey)) {
-                    duplicates.push({
-                        index,
-                        address: addr.address,
-                        citycode: addr.citycode,
-                        coordinates: addr.coordinates,
-                    });
+                    hasDuplicates = true;
                 } else {
-                    seenAddresses.add(addressKey);
+                    seenAddresses.set(addressKey, addressKey);
                 }
             }
         });
 
-        if (duplicates.length > 0) {
-            router.replace("#erreurs");
+        if (hasDuplicates) {
             error.value =
-                "Impossible de sauvegarder : des adresses en double ont été détectées";
+                "Des adresses en double ont été détectées. Veuillez corriger avant de soumettre.";
             return;
         }
     }
