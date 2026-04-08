@@ -25,7 +25,7 @@ addMethod(object, "usersIsNotEmpty", function () {
                     .min(1, ({ label }) => `${label} est obligatoire`)
                     .validate(value.users);
                 return true;
-            } catch (error) {
+            } catch {
                 return false;
             }
         }
@@ -67,11 +67,11 @@ addMethod(object, "noDuplicateAddress", function () {
             const { from, path } = this;
 
             // Extraire l'index de ce champ depuis le path (ex: "location_eti_addresses[0].address")
-            const match = path.match(/\[(\d+)\]\.address$/);
+            const match = new RegExp(/\[(\d+)\]\.address$/).exec(path);
             if (!match) {
                 return true;
             }
-            const currentIndex = parseInt(match[1], 10);
+            const currentIndex = Number.parseInt(match[1], 10);
 
             // Récupérer toutes les adresses ETI depuis le formulaire parent
             const allAddresses = from[0]?.value?.location_eti_addresses;
@@ -100,9 +100,12 @@ addMethod(object, "noDuplicateAddress", function () {
 });
 
 // Helper pour créer un champ nombre standardisé
-const createNumberField = (key, label) =>
+// Utilise un format spécial pour encoder le fieldName dans le message
+// Format: "FIELD:fieldName|MESSAGE:message"
+// Le composant InputIndicateurs extrait le fieldName et affiche uniquement le message
+const createNumberField = (fieldName, label) =>
     number()
-        .typeError(`${key} - ${label} doit être un nombre`)
+        .typeError(`FIELD:${fieldName}|MESSAGE:${label} doit être un nombre`)
         .nullable()
         .transform(emptyStringToNull);
 
@@ -180,12 +183,12 @@ const indicateursFields = [
 ];
 
 // Helper pour créer les champs d'indicateurs par catégorie
-const createIndicateurFields = (key) => {
+const createIndicateurFields = () => {
     // Créer tous les champs de base
     const fields = {};
 
     indicateursFields.forEach(({ name, label, hasLabel }) => {
-        let field = createNumberField(key, name, label);
+        let field = createNumberField(name, label);
 
         // Ajouter le label explicite pour certains champs
         if (hasLabel) {
@@ -201,14 +204,14 @@ const createIndicateurFields = (key) => {
         then: (schema) =>
             schema.max(
                 ref("nombre_personnes"),
-                "Le nombre de femmes ne peut être supérieur au nombre de personnes"
+                "FIELD:nombre_femmes|MESSAGE:Le nombre de femmes ne peut être supérieur au nombre de personnes"
             ),
     });
 
     return fields;
 };
 
-export default function () {
+export default function formDeclarationAction() {
     const configStore = useConfigStore();
 
     const schema = {
@@ -220,7 +223,7 @@ export default function () {
             .nullable()
             .typeError(`${labels.ended_at} est invalide`)
             .when("started_at", {
-                is: (value) => value instanceof Date && !isNaN(value),
+                is: (value) => value instanceof Date && !Number.isNaN(value),
                 then: (schema) => schema.min(ref("started_at")),
             })
             .label(labels.ended_at),
@@ -286,7 +289,7 @@ export default function () {
                     Object.keys(value || {}).reduce((acc, key) => {
                         acc[key] = object()
                             .required()
-                            .shape(createIndicateurFields(key))
+                            .shape(createIndicateurFields())
                             .label("Indicateurs " + key);
                         return acc;
                     }, {})
