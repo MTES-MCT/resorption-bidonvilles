@@ -165,5 +165,4 @@ import { Link } from "@resorptionbidonvilles/ui";
 import { useUserStore } from "@/stores/user.store";
 
 const userStore = useUserStore();
-console.log("User:", userStore.user);
 </script>

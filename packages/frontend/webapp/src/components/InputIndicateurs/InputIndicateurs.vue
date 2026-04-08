@@ -132,9 +132,6 @@ const focusedYearErrors = computed(() => {
         return {};
     }
 
-    console.log("Errors object:", errorsObj);
-
-    // Accumuler toutes les erreurs au lieu de retourner immédiatement
     const allErrors = {};
 
     // Cas spécial : si l'erreur est stockée sous "indicateurs" (validation yup.when ou typeError)
