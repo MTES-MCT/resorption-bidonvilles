@@ -111,6 +111,7 @@ export default function serializeAction(action: ActionRow, user: User): Action {
         managers: action.managers || [],
         operators: action.operators || [],
         metrics: action.metrics || [],
+        indicateurs: (action as any).indicateurs || {},
         metrics_updated_at: null,
         hasDihalFinancing: false,
         comments: [],

@@ -170,6 +170,38 @@ export default async function getHistory(user: User, actionId: number): Promise<
                     ) AS location_eti_addresses
                 FROM action_addresses_history aah
                 GROUP BY aah.action_hid
+            ),
+            action_metrics_agg AS (
+                SELECT
+                    amh.fk_action AS hid,
+                    COALESCE(
+                        jsonb_object_agg(
+                            EXTRACT(YEAR FROM amh.date)::text,
+                            jsonb_build_object(
+                                'nombre_personnes', amh.nombre_personnes,
+                                'nombre_menages', amh.nombre_menages,
+                                'nombre_femmes', amh.nombre_femmes,
+                                'nombre_mineurs', amh.nombre_mineurs,
+                                'sante_nombre_personnes', amh.sante_nombre_personnes,
+                                'travail_nombre_personnes', amh.travail_nombre_personnes,
+                                'travail_nombre_femmes', amh.travail_nombre_femmes,
+                                'hebergement_nombre_personnes', amh.hebergement_nombre_personnes,
+                                'hebergement_nombre_menages', amh.hebergement_nombre_menages,
+                                'logement_nombre_personnes', amh.logement_nombre_personnes,
+                                'logement_nombre_menages', amh.logement_nombre_menages,
+                                'scolaire_mineurs_scolarisables', amh.scolaire_mineurs_scolarisables,
+                                'scolaire_mineurs_en_mediation', amh.scolaire_mineurs_en_mediation,
+                                'scolaire_nombre_maternelle', amh.scolaire_nombre_maternelle,
+                                'scolaire_nombre_elementaire', amh.scolaire_nombre_elementaire,
+                                'scolaire_nombre_college', amh.scolaire_nombre_college,
+                                'scolaire_nombre_lycee', amh.scolaire_nombre_lycee,
+                                'scolaire_nombre_autre', amh.scolaire_nombre_autre
+                            )
+                        ) FILTER (WHERE amh.date IS NOT NULL),
+                        '{}'::jsonb
+                    ) AS indicateurs
+                FROM action_metrics_history amh
+                GROUP BY amh.fk_action
             )
             ${canAccessFinances ? `,
             action_finances_agg AS (
@@ -240,7 +272,8 @@ export default async function getHistory(user: User, actionId: number): Promise<
             COALESCE(managers.managers, '[]'::jsonb) AS managers,
             COALESCE(operators.operators, '[]'::jsonb) AS operators,
             COALESCE(shantytowns.shantytowns, '[]'::jsonb) AS shantytowns,
-            COALESCE(addresses.location_eti_addresses, '[]'::jsonb) AS location_eti_addresses
+            COALESCE(addresses.location_eti_addresses, '[]'::jsonb) AS location_eti_addresses,
+            COALESCE(metrics.indicateurs, '{}'::jsonb) AS indicateurs
             ${canAccessFinances ? ', COALESCE(finances.finances, \'{}\'::jsonb) AS finances' : ''}
         FROM actions_history ah
         LEFT JOIN departements d ON ah.fk_departement = d.code
@@ -256,6 +289,7 @@ export default async function getHistory(user: User, actionId: number): Promise<
         LEFT JOIN action_operators_agg operators ON ah.hid = operators.hid
         LEFT JOIN action_shantytowns_agg shantytowns ON ah.hid = shantytowns.hid
         LEFT JOIN action_addresses_agg addresses ON ah.hid = addresses.hid
+        LEFT JOIN action_metrics_agg metrics ON ah.hid = metrics.hid
         ${canAccessFinances ? 'LEFT JOIN action_finances_agg finances ON ah.hid = finances.hid' : ''}
         WHERE ah.action_id = :actionId
         )
@@ -357,6 +391,40 @@ export default async function getHistory(user: User, actionId: number): Promise<
                         ),
                         '[]'::jsonb
                     ) AS location_eti_addresses
+            ),
+            action_metrics_agg AS (
+                SELECT
+                    :actionId AS hid,
+                    COALESCE(
+                        (
+                            SELECT jsonb_object_agg(
+                                EXTRACT(YEAR FROM am.date)::text,
+                                jsonb_build_object(
+                                    'nombre_personnes', am.nombre_personnes,
+                                    'nombre_menages', am.nombre_menages,
+                                    'nombre_femmes', am.nombre_femmes,
+                                    'nombre_mineurs', am.nombre_mineurs,
+                                    'sante_nombre_personnes', am.sante_nombre_personnes,
+                                    'travail_nombre_personnes', am.travail_nombre_personnes,
+                                    'travail_nombre_femmes', am.travail_nombre_femmes,
+                                    'hebergement_nombre_personnes', am.hebergement_nombre_personnes,
+                                    'hebergement_nombre_menages', am.hebergement_nombre_menages,
+                                    'logement_nombre_personnes', am.logement_nombre_personnes,
+                                    'logement_nombre_menages', am.logement_nombre_menages,
+                                    'scolaire_mineurs_scolarisables', am.scolaire_mineurs_scolarisables,
+                                    'scolaire_mineurs_en_mediation', am.scolaire_mineurs_en_mediation,
+                                    'scolaire_nombre_maternelle', am.scolaire_nombre_maternelle,
+                                    'scolaire_nombre_elementaire', am.scolaire_nombre_elementaire,
+                                    'scolaire_nombre_college', am.scolaire_nombre_college,
+                                    'scolaire_nombre_lycee', am.scolaire_nombre_lycee,
+                                    'scolaire_nombre_autre', am.scolaire_nombre_autre
+                                )
+                            )
+                            FROM action_metrics am
+                            WHERE am.fk_action = :actionId
+                        ),
+                        '{}'::jsonb
+                    ) AS indicateurs
             )
             ${canAccessFinances ? `,
             action_finances_agg AS (
@@ -428,7 +496,8 @@ export default async function getHistory(user: User, actionId: number): Promise<
             COALESCE(managers.managers, '[]'::jsonb) AS managers,
             COALESCE(operators.operators, '[]'::jsonb) AS operators,
             COALESCE(shantytowns.shantytowns, '[]'::jsonb) AS shantytowns,
-            COALESCE(addresses.location_eti_addresses, '[]'::jsonb) AS location_eti_addresses
+            COALESCE(addresses.location_eti_addresses, '[]'::jsonb) AS location_eti_addresses,
+            COALESCE(metrics.indicateurs, '{}'::jsonb) AS indicateurs
             ${canAccessFinances ? ', COALESCE(finances.finances, \'{}\'::jsonb) AS finances' : ''}
         FROM actions a
         LEFT JOIN departements d ON a.fk_departement = d.code
@@ -444,6 +513,7 @@ export default async function getHistory(user: User, actionId: number): Promise<
         LEFT JOIN action_operators_agg operators ON a.action_id = operators.hid
         LEFT JOIN action_shantytowns_agg shantytowns ON a.action_id = shantytowns.hid
         LEFT JOIN action_addresses_agg addresses ON a.action_id = addresses.hid
+        LEFT JOIN action_metrics_agg metrics ON a.action_id = metrics.hid
         ${canAccessFinances ? 'LEFT JOIN action_finances_agg finances ON a.action_id = finances.hid' : ''}
         WHERE a.action_id = :actionId
         )
@@ -464,6 +534,7 @@ export default async function getHistory(user: User, actionId: number): Promise<
             operators: typeof row.operators === 'string' ? JSON.parse(row.operators) : row.operators,
             shantytowns: typeof row.shantytowns === 'string' ? JSON.parse(row.shantytowns) : row.shantytowns,
             location_eti_addresses: typeof row.location_eti_addresses === 'string' ? JSON.parse(row.location_eti_addresses) : row.location_eti_addresses,
+            indicateurs: row.indicateurs && typeof row.indicateurs === 'string' ? JSON.parse(row.indicateurs) : row.indicateurs,
             finances: row.finances && typeof row.finances === 'string' ? JSON.parse(row.finances) : row.finances,
         };
 
