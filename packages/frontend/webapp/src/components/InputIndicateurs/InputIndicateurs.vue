@@ -77,7 +77,7 @@
 
 <script setup>
 import { defineProps, toRefs, watch, ref, computed } from "vue";
-import { useField, useFormErrors } from "vee-validate";
+import { useField } from "vee-validate";
 import { Button } from "@resorptionbidonvilles/ui";
 import sectionsList from "./sections.list";
 import inputsList from "./inputs.list";
@@ -102,44 +102,62 @@ const props = defineProps({
     },
     topics: {
         type: Array,
+        required: false,
         default() {
             return [];
         },
     },
+    errors: {
+        type: Object,
+        required: false,
+        default() {
+            return {};
+        },
+    },
 });
 
-const { name, minYear, maxYear, topics } = toRefs(props);
+const { name, minYear, maxYear, topics, errors } = toRefs(props);
 
 const { value } = useField(name.value);
 initializeYears(value.value);
-
-const errors = useFormErrors();
 
 const focusedYear = ref(Math.min(new Date().getFullYear(), maxYear.value));
 const focusedYearData = computed(() => {
     return value.value?.[focusedYear.value] || {};
 });
 const focusedYearErrors = computed(() => {
-    return (
-        Object.keys(errors.value)
-            // l'erreur peut-être sous deux formats différents selon que c'est Yup ou l'API qui a
-            // généré l'erreur
-            // - yup: indicateurs.2023.nombre_personnes
-            // - api : indicateurs[2023].nombre_personnes
-            .filter((key) =>
-                new RegExp(
-                    `indicateurs(\\[|\\.)${focusedYear.value}(\\]|\\.)`
-                ).test(key)
-            )
-            .reduce((acc, key) => {
-                const fieldName = key.match(
-                    /^indicateurs(?:\[|\.).+\]?\.(.+)$/
-                )[1];
-                acc[fieldName] = [errors.value[key]];
-                return acc;
-            }, {})
-    );
+    const errorsObj = errors.value;
+    if (!errorsObj || Object.keys(errorsObj).length === 0) {
+        return {};
+    }
+
+    // Cas spécial : si l'erreur est stockée sous "indicateurs" (validation yup.when)
+    // on doit parser le message pour extraire l'année et le champ
+    if (errorsObj.indicateurs && typeof errorsObj.indicateurs === "string") {
+        // Pour l'instant, on assume que c'est une erreur sur nombre_femmes
+        // car c'est la seule validation cross-field active
+        return {
+            nombre_femmes: [errorsObj.indicateurs],
+        };
+    }
+
+    const filtered = Object.keys(errorsObj).filter((key) => {
+        const regex = new RegExp(
+            `indicateurs(\\[|\\.)${focusedYear.value}(\\]|\\.)`
+        );
+        return regex.test(key);
+    });
+
+    return filtered.reduce((acc, key) => {
+        const match = key.match(/^indicateurs(?:\[|\.).+\]?\.(.+)$/);
+        if (match) {
+            const fieldName = match[1];
+            acc[fieldName] = [errorsObj[key]];
+        }
+        return acc;
+    }, {});
 });
+
 const sections = computed(() => {
     return sectionsList.filter(
         ({ topic }) =>
