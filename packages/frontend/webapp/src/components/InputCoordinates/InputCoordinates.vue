@@ -150,7 +150,9 @@ function refreshInput(center, emitInput = true) {
         return;
     }
 
-    inputMarker.setLatLng(center);
+    if (inputMarker) {
+        inputMarker.setLatLng(center);
+    }
     carto.value && carto.value.setView({ center });
 
     if (emitInput === true) {
@@ -169,7 +171,7 @@ watch(view, () => {
 });
 
 watch(carto, () => {
-    if (carto.value) {
+    if (carto.value && carto.value.map) {
         const { map } = carto.value;
 
         // Créer le marqueur avec les coordonnées actuelles
@@ -194,6 +196,10 @@ watch(carto, () => {
 });
 
 watch(showCadastre, () => {
+    if (!carto.value || !carto.value.map) {
+        return;
+    }
+
     const { map } = carto.value;
 
     if (showCadastre.value === false) {
