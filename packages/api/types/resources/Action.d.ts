@@ -198,6 +198,7 @@ interface GenericAction extends IAction {
     location_shantytowns: ActionShantytown[] | null,
     managers: ActionOrganization[],
     metrics: ActionMetrics[],
+    indicateurs?: { [year: string]: { [field: string]: number | null } },
     metrics_updated_at: number | null,
     finances?: ActionFinances,
     hasDihalFinancing: boolean,

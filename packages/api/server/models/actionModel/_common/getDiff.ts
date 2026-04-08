@@ -171,10 +171,31 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
             label: 'Financements',
             processor: baseProcessors.finances,
         },
-        metrics: {
+        indicateurs: {
             label: 'Indicateurs',
             processor: baseProcessors.metrics,
         },
+    };
+
+    const indicateursLabels: { [key: string]: string } = {
+        nombre_personnes: 'Nombre de personnes',
+        nombre_menages: 'Nombre de ménages',
+        nombre_femmes: 'Nombre de femmes',
+        nombre_mineurs: 'Nombre de mineurs',
+        sante_nombre_personnes: 'Santé - Nombre de personnes',
+        travail_nombre_personnes: 'Travail - Nombre de personnes',
+        travail_nombre_femmes: 'Travail - Nombre de femmes',
+        hebergement_nombre_personnes: 'Hébergement - Nombre de personnes',
+        hebergement_nombre_menages: 'Hébergement - Nombre de ménages',
+        logement_nombre_personnes: 'Logement - Nombre de personnes',
+        logement_nombre_menages: 'Logement - Nombre de ménages',
+        scolaire_mineurs_scolarisables: 'Scolaire - Mineurs scolarisables',
+        scolaire_mineurs_en_mediation: 'Scolaire - Mineurs en médiation',
+        scolaire_nombre_maternelle: 'Scolaire - Nombre en maternelle',
+        scolaire_nombre_elementaire: 'Scolaire - Nombre en élémentaire',
+        scolaire_nombre_college: 'Scolaire - Nombre au collège',
+        scolaire_nombre_lycee: 'Scolaire - Nombre au lycée',
+        scolaire_nombre_autre: 'Scolaire - Nombre autre',
     };
 
     const result: Diff[] = [];
@@ -186,8 +207,38 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
         const oldValue = getDeepProperty(oldVersion, serializedKey);
         const newValue = getDeepProperty(newVersion, serializedKey);
 
-        // Traitement spécial pour les finances : comparer type par type, année par année
-        if (serializedKey === 'finances') {
+        // Traitement spécial pour les indicateurs : comparer champ par champ, année par année
+        if (serializedKey === 'indicateurs') {
+            const oldIndicateurs = oldValue || {};
+            const newIndicateurs = newValue || {};
+            const oldYears = Object.keys(oldIndicateurs);
+            const newYears = Object.keys(newIndicateurs);
+            const allYears = [...new Set([...oldYears, ...newYears])].sort((a, b) => a.localeCompare(b));
+
+            allYears.forEach((year) => {
+                const oldYearIndicateurs = oldIndicateurs[year] || {};
+                const newYearIndicateurs = newIndicateurs[year] || {};
+
+                // Comparer chaque champ d'indicateur
+                Object.keys(indicateursLabels).forEach((fieldKey) => {
+                    const oldFieldValue = oldYearIndicateurs[fieldKey];
+                    const newFieldValue = newYearIndicateurs[fieldKey];
+
+                    // Comparer les valeurs (null et undefined sont considérés comme équivalents)
+                    const oldVal = oldFieldValue ?? null;
+                    const newVal = newFieldValue ?? null;
+
+                    if (oldVal !== newVal) {
+                        result.push({
+                            fieldKey: `indicateurs.${year}.${fieldKey}`,
+                            field: `Indicateurs ${year} - ${indicateursLabels[fieldKey]}`,
+                            oldValue: oldVal !== null ? String(oldVal) : 'non renseigné',
+                            newValue: newVal !== null ? String(newVal) : 'non renseigné',
+                        });
+                    }
+                });
+            });
+        } else if (serializedKey === 'finances') {
             const oldFinances = oldValue || {};
             const newFinances = newValue || {};
             const oldYears = Object.keys(oldFinances);
