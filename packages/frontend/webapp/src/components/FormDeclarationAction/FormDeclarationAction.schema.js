@@ -109,77 +109,91 @@ const createNumberField = (fieldName, label) =>
         .nullable()
         .transform(emptyStringToNull);
 
+// Helper pour créer les champs indicateurs à partir d'un format compact
+// Format: [name, label, hasLabel?]
+const createFields = (baseFields) =>
+    baseFields.map(([name, label, hasLabel]) => ({
+        name,
+        label,
+        ...(hasLabel && { hasLabel }),
+    }));
+
 // Définition des champs d'indicateurs avec leurs labels
 const indicateursFields = [
     // Démographie
-    { name: "nombre_personnes", label: "Nombre de personnes", hasLabel: true },
-    { name: "nombre_menages", label: "Nombre de ménages" },
-    { name: "nombre_femmes", label: "Nombre de femmes" },
-    { name: "nombre_mineurs", label: "Nombre de mineurs" },
+    ...createFields([
+        ["nombre_personnes", "Nombre de personnes", true],
+        ["nombre_menages", "Nombre de ménages"],
+        ["nombre_femmes", "Nombre de femmes"],
+        ["nombre_mineurs", "Nombre de mineurs"],
+    ]),
 
     // Santé
-    {
-        name: "sante_nombre_personnes",
-        label: "Nombre de personnes ayant bénéficié d'un accompagnement vers la santé",
-    },
+    ...createFields([
+        [
+            "sante_nombre_personnes",
+            "Nombre de personnes ayant bénéficié d'un accompagnement vers la santé",
+        ],
+    ]),
 
     // Travail
-    {
-        name: "travail_nombre_personnes",
-        label: "Nombre de personnes ayant eu au moins 1 contrat de travail",
-    },
-    {
-        name: "travail_nombre_femmes",
-        label: "Nombre de femmes ayant eu au moins 1 contrat de travail",
-    },
+    ...createFields([
+        [
+            "travail_nombre_personnes",
+            "Nombre de personnes ayant eu au moins 1 contrat de travail",
+        ],
+        [
+            "travail_nombre_femmes",
+            "Nombre de femmes ayant eu au moins 1 contrat de travail",
+        ],
+    ]),
+
     // Hébergement
-    {
-        name: "hebergement_nombre_personnes",
-        label: "Nombre de personnes ayant eu accès à un hébergement",
-    },
-    {
-        name: "hebergement_nombre_menages",
-        label: "Nombre de ménages ayant eu accès à un hébergement",
-    },
+    ...createFields([
+        [
+            "hebergement_nombre_personnes",
+            "Nombre de personnes ayant eu accès à un hébergement",
+        ],
+        [
+            "hebergement_nombre_menages",
+            "Nombre de ménages ayant eu accès à un hébergement",
+        ],
+    ]),
+
     // Logement
-    {
-        name: "logement_nombre_personnes",
-        label: "Nombre de personnes ayant eu accès à un logement",
-    },
-    {
-        name: "logement_nombre_menages",
-        label: "Nombre de ménages ayant eu accès à un logement",
-    },
+    ...createFields([
+        [
+            "logement_nombre_personnes",
+            "Nombre de personnes ayant eu accès à un logement",
+        ],
+        [
+            "logement_nombre_menages",
+            "Nombre de ménages ayant eu accès à un logement",
+        ],
+    ]),
 
     // Scolaire
-    {
-        name: "scolaire_mineurs_scolarisables",
-        label: "Nombre de mineurs en âge d'être scolarisés",
-    },
-    {
-        name: "scolaire_mineurs_en_mediation",
-        label: "Nombre de mineurs bénéficiant d'une action de médiation",
-    },
-    {
-        name: "scolaire_nombre_maternelle",
-        label: "Nombre de mineurs scolarisés en maternelle",
-    },
-    {
-        name: "scolaire_nombre_elementaire",
-        label: "Nombre de mineurs scolarisés en élémentaire",
-    },
-    {
-        name: "scolaire_nombre_college",
-        label: "Nombre de mineurs scolarisés au collège",
-    },
-    {
-        name: "scolaire_nombre_lycee",
-        label: "Nombre de mineurs scolarisés au lycée",
-    },
-    {
-        name: "scolaire_nombre_autre",
-        label: 'Nombre de mineurs scolarisés "autre"',
-    },
+    ...createFields([
+        [
+            "scolaire_mineurs_scolarisables",
+            "Nombre de mineurs en âge d'être scolarisés",
+        ],
+        [
+            "scolaire_mineurs_en_mediation",
+            "Nombre de mineurs bénéficiant d'une action de médiation",
+        ],
+        [
+            "scolaire_nombre_maternelle",
+            "Nombre de mineurs scolarisés en maternelle",
+        ],
+        [
+            "scolaire_nombre_elementaire",
+            "Nombre de mineurs scolarisés en élémentaire",
+        ],
+        ["scolaire_nombre_college", "Nombre de mineurs scolarisés au collège"],
+        ["scolaire_nombre_lycee", "Nombre de mineurs scolarisés au lycée"],
+        ["scolaire_nombre_autre", 'Nombre de mineurs scolarisés "autre"'],
+    ]),
 ];
 
 // Helper pour créer les champs d'indicateurs par catégorie
