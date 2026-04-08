@@ -3,6 +3,41 @@ module.exports = {
     async up(queryInterface, Sequelize) {
         const transaction = await queryInterface.sequelize.transaction();
 
+        // Helper pour créer une colonne INTEGER nullable (évite la duplication)
+        const nullableInteger = () => ({
+            type: Sequelize.INTEGER,
+            allowNull: true,
+        });
+
+        // Liste des champs de métriques (tous INTEGER nullable)
+        const metricFields = [
+            'nombre_personnes',
+            'nombre_menages',
+            'nombre_femmes',
+            'nombre_mineurs',
+            'sante_nombre_personnes',
+            'travail_nombre_personnes',
+            'travail_nombre_femmes',
+            'hebergement_nombre_personnes',
+            'hebergement_nombre_menages',
+            'logement_nombre_personnes',
+            'logement_nombre_menages',
+            'scolaire_mineurs_scolarisables',
+            'scolaire_mineurs_en_mediation',
+            'scolaire_nombre_maternelle',
+            'scolaire_nombre_elementaire',
+            'scolaire_nombre_college',
+            'scolaire_nombre_lycee',
+            'scolaire_nombre_autre',
+            'scolaire_mineur_scolarise_dans_annee',
+        ];
+
+        // Construire l'objet des colonnes de métriques
+        const metricColumns = metricFields.reduce((acc, fieldName) => {
+            acc[fieldName] = nullableInteger();
+            return acc;
+        }, {});
+
         try {
             // Création de la table action_metrics_history
             await queryInterface.createTable(
@@ -18,82 +53,7 @@ module.exports = {
                         allowNull: false,
                         primaryKey: true,
                     },
-                    nombre_personnes: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    nombre_menages: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    nombre_femmes: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    nombre_mineurs: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    sante_nombre_personnes: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    travail_nombre_personnes: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    travail_nombre_femmes: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    hebergement_nombre_personnes: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    hebergement_nombre_menages: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    logement_nombre_personnes: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    logement_nombre_menages: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    scolaire_mineurs_scolarisables: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    scolaire_mineurs_en_mediation: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    scolaire_nombre_maternelle: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    scolaire_nombre_elementaire: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    scolaire_nombre_college: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    scolaire_nombre_lycee: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    scolaire_nombre_autre: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
-                    scolaire_mineur_scolarise_dans_annee: {
-                        type: Sequelize.INTEGER,
-                        allowNull: true,
-                    },
+                    ...metricColumns,
                     created_at: {
                         type: Sequelize.DATE,
                         allowNull: false,
