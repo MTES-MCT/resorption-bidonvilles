@@ -28,7 +28,7 @@
             class="mt-12"
             v-if="error || Object.keys(errors).length > 0"
             :message="error"
-            :summary="errors"
+            :summary="cleanedErrors"
         />
     </ArrangementLeftMenu>
 </template>
@@ -151,6 +151,34 @@ const originalValues = ref(null);
 const actionsStore = useActionsStore();
 const error = ref(null);
 const departement = useFieldValue("location_departement");
+
+// Nettoyer les erreurs pour l'affichage dans ErrorSummary
+// Extrait uniquement les messages utilisateur depuis le format "FIELD:...|MESSAGE:..."
+const cleanedErrors = computed(() => {
+    const cleaned = {};
+
+    Object.keys(errors.value).forEach((key) => {
+        const errorMessage = errors.value[key];
+
+        if (typeof errorMessage === "string") {
+            // Parser le format "FIELD:fieldName|MESSAGE:message"
+            const match = errorMessage.match(/^FIELD:([^|]+)\|MESSAGE:(.+)$/);
+
+            if (match) {
+                // Extraire uniquement le message utilisateur
+                cleaned[key] = match[2];
+            } else {
+                // Si pas de format structuré, garder le message tel quel
+                cleaned[key] = errorMessage;
+            }
+        } else {
+            // Conserver les erreurs non-string telles quelles
+            cleaned[key] = errorMessage;
+        }
+    });
+
+    return cleaned;
+});
 const canAccessFinances = computed(() => {
     const configStore = useConfigStore();
     const fullDepartement = configStore.config.departements.find(
