@@ -3,8 +3,8 @@
         <form @submit.prevent>
             <DsfrSearchBar
                 placeholder="Recherchez un lieu en saisissant une adresse"
-                id="address"
-                name="address"
+                :id="$attrs.id || 'address'"
+                :name="name || 'address'"
                 v-model="searchString"
                 @update:modelValue="onInput"
             />
@@ -65,8 +65,9 @@ const props = defineProps({
         default: false
     },
 });
+
 const emit = defineEmits(['update:modelValue']);
-const { fn, name, allowFreeSearch, showCategory, modelValue, disabled, autoClear } = toRefs(props);
+const { fn, name, showCategory, modelValue, autoClear } = toRefs(props);
 
 const rawResults = ref([]);
 const searchString = ref(null)

@@ -66,12 +66,20 @@ import marqueurLocationDefault from "@/utils/marqueurLocationDefault";
 import marqueurSiteDefault from "@/utils/marqueurSiteDefault";
 import formatDate from "@common/utils/formatDate";
 import domtoimage from "dom-to-image-more";
-import L from "leaflet";
+import * as L from "leaflet";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/leaflet.markercluster";
 import "leaflet-providers";
-import { onBeforeUnmount, onMounted, ref, toRefs, watch } from "vue";
+import {
+    defineProps,
+    toRefs,
+    ref,
+    onMounted,
+    onBeforeUnmount,
+    nextTick,
+    watch,
+} from "vue";
 import mapControls from "./Carte.controls";
 
 import { trackEvent } from "@/helpers/matomo";
@@ -205,8 +213,10 @@ const emit = defineEmits(["townclick", "zoomend"]);
 const mapLayers = ref(null);
 
 onMounted(() => {
-    createMap();
-    syncTownMarkers();
+    nextTick(() => {
+        createMap();
+        syncTownMarkers();
+    });
 });
 
 onBeforeUnmount(() => {
