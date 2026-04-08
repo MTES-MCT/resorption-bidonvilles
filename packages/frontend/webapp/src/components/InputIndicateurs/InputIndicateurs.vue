@@ -143,13 +143,15 @@ const focusedYearErrors = computed(() => {
 
     const filtered = Object.keys(errorsObj).filter((key) => {
         const regex = new RegExp(
-            `indicateurs(\\[|\\.)${focusedYear.value}(\\]|\\.)`
+            String.raw`indicateurs(\[|\.)${focusedYear.value}(\]|\.)`
         );
         return regex.test(key);
     });
 
     return filtered.reduce((acc, key) => {
-        const match = key.match(/^indicateurs(?:\[|\.).+\]?\.(.+)$/);
+        // const match = key.match(/^indicateurs(?:\[|\.).+\]?\.(.+)$/); <= on veut extraire le nom du champ après l'année, qui peut être suivi d'un ] ou d'un . Conservé en cas de souci après correction imposée par SonarQube.
+        const match = key.match(/^indicateurs[[.].*?\.(.+)$/);
+
         if (match) {
             const fieldName = match[1];
             acc[fieldName] = [errorsObj[key]];
@@ -194,7 +196,7 @@ function applyNewTimeRange() {
 
     // on supprime les données des années en-dehors de l'intervalle autorisé
     Object.keys(value.value).forEach((strYear) => {
-        const year = parseInt(strYear, 10);
+        const year = Number.parseInt(strYear, 10);
         if (year < minYear.value || year > maxYear.value) {
             delete value.value[strYear];
             value.value[strYear] = undefined;
