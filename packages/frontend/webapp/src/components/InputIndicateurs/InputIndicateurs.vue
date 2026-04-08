@@ -157,11 +157,17 @@ const focusedYearErrors = computed(() => {
     });
 
     filtered.forEach((key) => {
-        // const match = key.match(/^indicateurs(?:\[|\.).+\]?\.(.+)$/); <= on veut extraire le nom du champ après l'année, qui peut être suivi d'un ] ou d'un . Conservé en cas de souci après correction imposée par SonarQube.
-        const match = key.match(/^indicateurs[[.].*?\.(.+)$/);
+        // Regex sécurisée : évite le backtracking catastrophique
+        // Supporte deux formats : "indicateurs[2024].nombre_personnes" OU "indicateurs.2024.nombre_personnes"
+        // Utilise une alternation explicite au lieu de .*? pour éviter le backtracking
+        const match = key.match(
+            /^indicateurs(?:\[([^\]]+)\]|\.([^.]+))\.(.+)$/
+        );
 
         if (match) {
-            const fieldName = match[1];
+            // match[1] = année (format crochet) OU match[2] = année (format point)
+            // match[3] = nom du champ
+            const fieldName = match[3];
             const errorMessage = errorsObj[key];
 
             // Parser le message pour extraire uniquement la partie utilisateur
