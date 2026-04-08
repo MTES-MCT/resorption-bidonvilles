@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import ServiceError from '#server/errors/ServiceError';
 import ExcelJS from 'exceljs';
 import departementsOrdonnes from '#server/utils/departementsOrdonnes';
 import columnToNumber from '#server/utils/excelUtils';
@@ -6,6 +7,7 @@ import { ActionReportRow, ActionItem } from '#root/types/resources/Action.d';
 
 type DepartementObject = {
     departement: string,
+    departement_name?: string,
     data: ActionItem[]
 };
 
@@ -19,17 +21,25 @@ type SectionTitle = {
     range: Range
 };
 
+type HeaderCell = {
+    cell: string,
+    value: string,
+    fontSpecific: {
+        [key: string]: string | number,
+    },
+};
+
 const sectionTitles = [
-    { name: 'ACTION', range: { from: 'A1', to: 'J1' } },
-    { name: 'OPÉRATEURS', range: { from: 'K1', to: 'K1' } },
-    { name: 'INDICATEURS GÉNÉRAUX', range: { from: 'L1', to: 'O1' } },
-    { name: 'SANTÉ', range: { from: 'P1', to: 'P1' } },
-    { name: 'EMPLOI', range: { from: 'Q1', to: 'R1' } },
-    { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'S1', to: 'V1' } },
-    { name: 'SCOLARISATION', range: { from: 'W1', to: 'AC1' } },
-    { name: 'FINANCEMENT', range: { from: 'AD1', to: 'AO1' } },
-    { name: 'COMMENTAIRES', range: { from: 'AP1', to: 'AR1' } },
-    { name: 'MISE À JOUR', range: { from: 'AS1', to: 'AT1' } },
+    { name: 'ACTION', range: { from: 'A6', to: 'J6' } },
+    { name: 'OPÉRATEURS', range: { from: 'K6', to: 'K6' } },
+    { name: 'INDICATEURS GÉNÉRAUX', range: { from: 'L6', to: 'O6' } },
+    { name: 'SANTÉ', range: { from: 'P6', to: 'P6' } },
+    { name: 'EMPLOI', range: { from: 'Q6', to: 'R6' } },
+    { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'S6', to: 'V6' } },
+    { name: 'SCOLARISATION', range: { from: 'W6', to: 'AC6' } },
+    { name: 'FINANCEMENT', range: { from: 'AD6', to: 'AO6' } },
+    { name: 'COMMENTAIRES', range: { from: 'AP6', to: 'AR6' } },
+    { name: 'MISE À JOUR', range: { from: 'AS6', to: 'AT6' } },
 ];
 
 const headers = [
@@ -82,13 +92,14 @@ const headers = [
 ];
 
 function regrouperParDepartement(data: ActionReportRow[]): DepartementObject[] {
-    const groupedData: { [key: string]: DepartementObject } = data.reduce((acc, item) => {
-        const { departement_code, ...rest } = item;
+    const groupedData: { [key: string]: DepartementObject } = data.reduce((acc: { [key: string]: DepartementObject }, item) => {
+        const { departement_code, departement_name, ...rest } = item;
         acc[departement_code] = acc[departement_code] ?? {
             departement: departement_code,
+            departement_name,
             data: [],
         };
-        acc[departement_code].data.push(rest);
+        acc[departement_code].data.push(rest as ActionItem);
         return acc;
     }, {});
 
@@ -96,7 +107,7 @@ function regrouperParDepartement(data: ActionReportRow[]): DepartementObject[] {
     const result: DepartementObject[] = Object.values(groupedData);
 
     // Créer l'objet "all"
-    const allData: ActionItem[] = result.reduce((acc, dept) => acc.concat(dept.data), []);
+    const allData: ActionItem[] = result.reduce((acc: ActionItem[], dept) => acc.concat(dept.data), []);
     result.push({ departement: 'Tous', data: allData });
 
     return result;
@@ -173,6 +184,66 @@ function setSectionTitles(sections: SectionTitle[], worksheet: ExcelJS.Worksheet
     });
 }
 
+const setDepartementHeader = (worksheet: ExcelJS.Worksheet, departement: DepartementObject, year: number) => {
+    const startingCol: string = departement.departement === 'Tous' ? 'A' : 'D';
+    const dihalFinanceCampagn: Set<number> = new Set([new Date().getFullYear() - 1, new Date().getFullYear()]);
+    const actionFinanceesDihal: number = departement.data.filter(action => action.finance_dedie !== null && action.finance_dedie > 0).length;
+    const updatedActionsFinanceesDihal: number = departement.data.filter(action => action.finance_dedie !== null && action.finance_dedie > 0 && action.metrics_updated_at !== null && (new Date(action.metrics_updated_at) >= new Date(Date.now() - 90 * 24 * 60 * 60 * 1000))).length;
+
+    try {
+        const headerDatas: HeaderCell[] = [{
+            cell: `${startingCol}1`,
+            value: `Actions de l'année ${year}`,
+            fontSpecific: {
+                size: 11,
+            },
+        }, {
+            cell: `${startingCol}2`,
+            value: departement.departement === 'Tous' ? 'Toutes les actions' : `Département ${departement.departement} - ${departement.departement_name}`,
+            fontSpecific: {
+                size: 14,
+            },
+        }, {
+            cell: `${startingCol}3`,
+            value: 'Extraction de la plateforme Résorption bidonvilles',
+            fontSpecific: {
+                size: 10,
+            },
+        }, {
+            cell: `${startingCol}4`,
+            value: `à la date du ${new Date().toLocaleDateString('fr-FR')}`,
+            fontSpecific: {
+                size: 10,
+            },
+        }];
+        // On ajoute les financements DIHAL si l'on est dans l'année N-1 ou N
+        if (dihalFinanceCampagn.has(year)) {
+            headerDatas.push({
+                cell: `${startingCol}5`,
+                value: `${updatedActionsFinanceesDihal} actions financées par la DIHAL sur ${actionFinanceesDihal} ont été mises à jour il y a moins de 3 mois (${departement.data.length > 0 && actionFinanceesDihal > 0 ? `${Math.round((updatedActionsFinanceesDihal / actionFinanceesDihal) * 100)}%` : 'N/A'})`,
+                fontSpecific: {
+                    size: 10,
+                },
+            });
+        }
+
+        headerDatas.forEach(({ cell, value, fontSpecific }) => {
+            const headerCell = worksheet.getCell(cell);
+            headerCell.value = value;
+            headerCell.font = {
+                name: 'Arial',
+                bold: true,
+                color: { argb: '000000' },
+                ...fontSpecific,
+            };
+            headerCell.alignment = { wrapText: false, horizontal: 'left', vertical: 'middle' };
+            headerCell.border = {};
+        });
+    } catch {
+        throw new ServiceError('fetch_failed', new Error('Erreur lors de la création de l\'entête du département'));
+    }
+};
+
 // Ajouter les lignes de données
 function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, includeFinances: boolean = true) {
     data.forEach((item: ActionItem) => {
@@ -186,9 +257,9 @@ function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, in
             item.started_at,
             item.ended_at,
             item.location_type,
-            item.topics.join(', '),
+            item.topics === null ? '' : item.topics.join(', '),
             item.goals,
-            item.operators.join('\n'),
+            item.operators === null ? '' : item.operators.join('\n'),
             item.nombre_personnes,
             item.nombre_menages,
             item.nombre_femmes,
@@ -294,8 +365,8 @@ function setSectionHeadersHeight(worksheet: ExcelJS.Worksheet) {
 }
 
 function setColumnHeadersHeight(worksheet: ExcelJS.Worksheet) {
-    const secondRow = worksheet.getRow(2);
-    secondRow.height = 100;
+    const secondRow = worksheet.getRow(7);
+    secondRow.height = 170;
     secondRow.eachCell((cell) => {
         cell.fill = {
             type: 'pattern',
@@ -306,7 +377,7 @@ function setColumnHeadersHeight(worksheet: ExcelJS.Worksheet) {
             name: 'Arial',
             size: 10,
             bold: true,
-            color: { argb: 'OOOOOO' },
+            color: { argb: '000000' },
         };
         cell.alignment = {
             wrapText: true, horizontal: 'center', vertical: 'middle', indent: 2,
@@ -315,9 +386,9 @@ function setColumnHeadersHeight(worksheet: ExcelJS.Worksheet) {
 }
 
 function hideThreeFirstColumns(worksheet: ExcelJS.Worksheet) {
-    const colsToHide = worksheet.name === 'Tous' ? [1, 2] : [0, 1, 2];
+    const colsToHide: Set<number> = worksheet.name === 'Tous' ? new Set([1, 2]) : new Set([0, 1, 2]);
     worksheet.columns.forEach((column, index) => {
-        if (colsToHide.includes(index)) {
+        if (colsToHide.has(index)) {
             column.hidden = true;
         }
     });
@@ -325,6 +396,7 @@ function hideThreeFirstColumns(worksheet: ExcelJS.Worksheet) {
 
 export default function exportActions(
     data: ActionReportRow[],
+    fetchedYear: number,
     includeFinances: boolean = true,
     allowedDepartements: string[] | null = null,
 ) {
@@ -338,10 +410,10 @@ export default function exportActions(
             .filter(s => s.name !== 'FINANCEMENT')
             .map((section) => {
                 if (section.name === 'COMMENTAIRES') {
-                    return { name: section.name, range: { from: 'AD1', to: 'AF1' } };
+                    return { name: section.name, range: { from: 'AD6', to: 'AF6' } };
                 }
                 if (section.name === 'MISE À JOUR') {
-                    return { name: section.name, range: { from: 'AG1', to: 'AH1' } };
+                    return { name: section.name, range: { from: 'AG6', to: 'AH6' } };
                 }
                 return section;
             });
@@ -357,10 +429,14 @@ export default function exportActions(
 
     if (financementSection) {
         // Extraire les numéros de colonnes
-        const fromColumn = columnToNumber(/[A-Z]+/.exec(financementSection.range.from)[0]);
-        const toColumn = columnToNumber(/[A-Z]+/.exec(financementSection.range.to)[0]);
-        // Créer un tableau avec les numéros de colonnes
-        financementColumns = createFinancementColumns(fromColumn, toColumn);
+        const fromMatch = /[A-Z]+/.exec(financementSection.range.from);
+        const toMatch = /[A-Z]+/.exec(financementSection.range.to);
+        if (fromMatch && toMatch) {
+            const fromColumn = columnToNumber(fromMatch[0]);
+            const toColumn = columnToNumber(toMatch[0]);
+            // Créer un tableau avec les numéros de colonnes
+            financementColumns = createFinancementColumns(fromColumn, toColumn);
+        }
     }
 
     const workbook = new ExcelJS.Workbook();
@@ -406,6 +482,10 @@ export default function exportActions(
 
         // Fixer la hauteur des lignes et formater les entêtes de colonnes
         setColumnHeadersHeight(worksheet);
+
+        // Ajouter l'entête du département après le formatage global
+        // pour conserver un texte non tronqué et sans bordure.
+        setDepartementHeader(worksheet, donneeParDepartement, fetchedYear);
 
         // Masquer les colonnes A, B et C
         hideThreeFirstColumns(worksheet);
