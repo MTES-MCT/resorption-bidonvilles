@@ -176,7 +176,6 @@ module.exports = {
                 transaction,
             });
         } catch (error) {
-            console.log(error);
             await transaction.rollback();
             throw error;
         }
