@@ -57,20 +57,108 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
-import { useFieldValue } from "vee-validate";
+import { ref, watch, computed } from "vue";
+import { useFieldValue, useFormErrors } from "vee-validate";
 import InputAddress from "@/components/InputAddress/InputAddress.vue";
 import InputCoordinates from "@/components/InputCoordinates/InputCoordinates.vue";
 import labels from "../FormDeclarationAction.labels";
+
+const formErrors = useFormErrors();
 
 const props = defineProps({
     setFieldValue: {
         type: Function,
         required: true,
     },
+    setErrors: {
+        type: Function,
+        required: true,
+    },
 });
 
 const locationEtiAddresses = useFieldValue("location_eti_addresses");
+const duplicateErrors = ref({});
+const hasDuplicates = computed(
+    () => Object.keys(duplicateErrors.value).length > 0
+);
+
+// Exposer hasDuplicates pour le composant parent
+defineExpose({
+    hasDuplicates,
+});
+
+function normalizeAddressForComparison(address) {
+    return String(address)
+        .normalize("NFD")
+        .replaceAll(/[\u0300-\u036f]/g, "")
+        .replaceAll(/['''\u2019]/g, "'")
+        .toLowerCase()
+        .trim();
+}
+
+function createAddressKey(addr) {
+    if (!addr?.address?.data) {
+        return null;
+    }
+    const normalizedAddress = normalizeAddressForComparison(
+        addr.address.data.label
+    );
+    const coords = addr.address.data.coordinates || addr.coordinates;
+    return `${normalizedAddress}|${addr.address.data.citycode}|${
+        Array.isArray(coords) ? coords.join(",") : coords
+    }`;
+}
+
+function checkDuplicates() {
+    const seenAddresses = new Map();
+    const duplicateIndices = new Set();
+
+    addresses.value.forEach((addr, index) => {
+        const addressKey = createAddressKey(addr);
+
+        if (addressKey) {
+            if (seenAddresses.has(addressKey)) {
+                duplicateIndices.add(index);
+                duplicateIndices.add(seenAddresses.get(addressKey));
+            } else {
+                seenAddresses.set(addressKey, index);
+            }
+        }
+    });
+
+    // Construire l'objet d'erreurs pour vee-validate
+    const errorsToSet = {};
+    const newErrors = {};
+
+    // Définir les erreurs de doublons
+    duplicateIndices.forEach((index) => {
+        const errorMessage = "Cette adresse est déjà présente dans la liste";
+        const fieldName = `location_eti_addresses[${index}].address`;
+        errorsToSet[fieldName] = errorMessage;
+        newErrors[index] = errorMessage;
+    });
+
+    // Nettoyer TOUTES les erreurs de doublons existantes
+    // puis réappliquer seulement celles qui sont valides
+    Object.keys(formErrors.value).forEach((fieldName) => {
+        if (
+            fieldName.startsWith("location_eti_addresses[") &&
+            fieldName.endsWith("].address") &&
+            formErrors.value[fieldName] ===
+                "Cette adresse est déjà présente dans la liste"
+        ) {
+            // Si ce champ n'est pas dans les erreurs actuelles, le nettoyer
+            if (!errorsToSet[fieldName]) {
+                errorsToSet[fieldName] = undefined;
+            }
+        }
+    });
+
+    // Appliquer toutes les erreurs en une seule fois
+    props.setErrors(errorsToSet);
+
+    duplicateErrors.value = newErrors;
+}
 
 // Générer un ID unique pour chaque adresse
 let uniqueIdCounter = 0;
@@ -104,9 +192,7 @@ const addresses = ref(
         : [{ address: null, coordinates: null, _uid: generateUniqueId() }]
 );
 
-console.log("📍 Initialisation addresses:", addresses.value);
-
-// Watch pour synchroniser avec vee-validate
+// Watch pour synchroniser avec vee-validate et vérifier les doublons
 watch(
     addresses,
     (newAddresses) => {
@@ -117,15 +203,15 @@ watch(
             return cleanedAddr;
         });
 
-        console.log("cleanedAddresses pour setFieldValue:", cleanedAddresses);
         props.setFieldValue("location_eti_addresses", cleanedAddresses);
+
+        // Vérifier les doublons après chaque modification
+        checkDuplicates();
     },
     { deep: true }
 );
 
 function addAddress() {
-    console.log("➕ addAddress appelé, avant:", addresses.value.length);
-
     // Ajouter une adresse vide
     const newAddress = {
         address: null,
@@ -134,14 +220,12 @@ function addAddress() {
     };
 
     addresses.value.push(newAddress);
-    console.log("➕ addAddress terminé, après:", addresses.value.length);
 
     // Forcer la mise à jour du champ du formulaire
     const cleanedAddresses = addresses.value.map(
         // eslint-disable-next-line no-unused-vars
         ({ _uid, ...addr }) => addr
     );
-    console.log("📝 Mise à jour forcée après addAddress:", cleanedAddresses);
     props.setFieldValue("location_eti_addresses", cleanedAddresses);
 }
 
