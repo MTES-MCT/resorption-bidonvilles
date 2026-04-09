@@ -234,9 +234,20 @@ watch(
 
 const hasChanges = ref(false);
 
-// Computed property pour savoir s'il y a des erreurs
+// Ref alimenté par le watch sur values.indicateurs (mode 'silent').
+// Séparé de errors.value car le mode 'silent' ne propage pas les erreurs
+// d'indicateurs dans vee-validate.
+const indicateursErrors = ref({});
+
+// Computed property pour savoir s'il y a des erreurs.
+// Les erreurs d'indicateurs sont lues depuis indicateursErrors (source yup directe)
+// plutôt que errors.value (vee-validate), car le watch utilise le mode 'silent'
+// qui ne propage pas les erreurs d'indicateurs dans errors.value.
 const hasErrors = computed(
-    () => error.value !== null || Object.keys(errors.value).length > 0
+    () =>
+        error.value !== null ||
+        Object.keys(errors.value).length > 0 ||
+        Object.keys(indicateursErrors.value).length > 0
 );
 
 // Computed property pour savoir s'il y a des doublons d'adresses
@@ -505,13 +516,12 @@ watch(useFormErrors(), () => {
     }
 });
 
-// Stocker les erreurs indicateurs issues directement de yup (clés format point),
-// pour éviter le bug de déduplication de vee-validate (format point vs crochet).
-const indicateursErrors = ref({});
 watch(
     () => values.indicateurs,
     async () => {
-        const result = await validate();
+        // mode 'silent' : ne marque pas les champs comme touchés,
+        // évite d'afficher prématurément les erreurs des champs non encore saisis.
+        const result = await validate({ mode: "silent" });
         const fieldResult = result.results["indicateurs"];
         if (!fieldResult || fieldResult.valid) {
             indicateursErrors.value = {};
