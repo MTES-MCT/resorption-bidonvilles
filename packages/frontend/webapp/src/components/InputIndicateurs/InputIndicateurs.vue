@@ -126,58 +126,19 @@ const focusedYearData = computed(() => {
     return value.value?.[focusedYear.value] || {};
 });
 
+// indicateursErrors est un objet plat { fieldName: message } reconstruit
+// depuis les messages yup encodés "FIELD:fieldName|MESSAGE:..." par le parent.
+// Il n'est pas filtré par année car la validation yup agit sur l'objet année
+// focalisé au moment de la saisie.
 const focusedYearErrors = computed(() => {
     const errorsObj = errors.value;
     if (!errorsObj || Object.keys(errorsObj).length === 0) {
         return {};
     }
-
-    const allErrors = {};
-
-    // Cas spécial : si l'erreur est stockée sous "indicateurs" (validation yup.when ou typeError)
-    // on doit extraire le fieldName depuis le format structuré "FIELD:fieldName|MESSAGE:message"
-    if (errorsObj.indicateurs && typeof errorsObj.indicateurs === "string") {
-        const { fieldName, userMessage } = parseStructuredError(
-            errorsObj.indicateurs
-        );
-        if (fieldName) {
-            allErrors[fieldName] = [userMessage];
-        }
-    }
-
-    // Traiter les erreurs avec clés structurées (ex: "indicateurs[2024].nombre_personnes")
-    const filtered = Object.keys(errorsObj).filter((key) => {
-        const regex = new RegExp(
-            String.raw`indicateurs(\[|\.)${focusedYear.value}(\]|\.)`
-        );
-        return regex.test(key);
-    });
-
-    filtered.forEach((key) => {
-        // Regex sécurisée : évite le backtracking catastrophique
-        // Supporte deux formats : "indicateurs[2024].nombre_personnes" OU "indicateurs.2024.nombre_personnes"
-        // Utilise une alternation explicite au lieu de .*? pour éviter le backtracking
-        const match = key.match(
-            /^indicateurs(?:\[([^\]]+)\]|\.([^.]+))\.(.+)$/
-        );
-
-        if (match) {
-            // match[1] = année (format crochet) OU match[2] = année (format point)
-            // match[3] = nom du champ
-            const fieldName = match[3];
-            const errorMessage = errorsObj[key];
-
-            // Parser le message pour extraire uniquement la partie utilisateur
-            if (typeof errorMessage === "string") {
-                const { userMessage } = parseStructuredError(errorMessage);
-                allErrors[fieldName] = [userMessage || errorMessage];
-            } else {
-                allErrors[fieldName] = [errorMessage];
-            }
-        }
-    });
-
-    return allErrors;
+    return Object.keys(errorsObj).reduce((acc, fieldName) => {
+        acc[fieldName] = [errorsObj[fieldName]];
+        return acc;
+    }, {});
 });
 
 const sections = computed(() => {
@@ -270,32 +231,4 @@ function applyNewTopics() {
 watch(minYear, applyNewTimeRange);
 watch(maxYear, applyNewTimeRange);
 watch(topics, applyNewTopics);
-
-/**
- * Extrait le nom du champ et le message utilisateur depuis le format structuré.
- * Format attendu: "FIELD:fieldName|MESSAGE:message"
- * @param {string} errorMessage - Le message d'erreur au format structuré
- * @returns {{ fieldName: string|null, userMessage: string }} - Le nom du champ et le message pour l'utilisateur
- */
-function parseStructuredError(errorMessage) {
-    if (!errorMessage) {
-        return { fieldName: null, userMessage: "" };
-    }
-
-    // Parser le format "FIELD:fieldName|MESSAGE:message"
-    const match = errorMessage.match(/^FIELD:([^|]+)\|MESSAGE:(.+)$/);
-
-    if (match) {
-        return {
-            fieldName: match[1],
-            userMessage: match[2],
-        };
-    }
-
-    // Fallback : si le format n'est pas reconnu, retourner le message tel quel
-    return {
-        fieldName: null,
-        userMessage: errorMessage,
-    };
-}
 </script>
