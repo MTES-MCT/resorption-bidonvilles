@@ -124,7 +124,9 @@ function cloneValue(value) {
         return structuredClone(rawValue);
     }
 
-    return JSON.parse(JSON.stringify(rawValue));
+    // Pour préserver la compatibilité avec les navigateurs antérieurs à 2022
+    // ne supportant pas structuredClone
+    return JSON.parse(JSON.stringify(rawValue)); // NOSONAR javascript:S7784
 }
 
 if (action.value && action.value.finances) {
