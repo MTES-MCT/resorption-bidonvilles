@@ -36,7 +36,7 @@ function normalizeAddressForComparison(address) {
     return String(address)
         .normalize("NFD")
         .replaceAll(/[\u0300-\u036f]/g, "")
-        .replaceAll(/['''\u2019]/g, "'")
+        .replaceAll(/[\u2018\u2019\u0027]/g, "'")
         .toLowerCase()
         .trim();
 }
