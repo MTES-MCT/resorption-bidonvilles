@@ -129,12 +129,13 @@ const updatedActionsFinancedByDIHAL = computed(() => {
 });
 
 const actionFinancedByDIHALPercentage = computed(() => {
-    if (currentActionsCount.value === 0) {
+    if (actionsFinancedByDIHAL.value === 0) {
         return 0; // Éviter la division par zéro
     }
 
     const percentage =
-        (updatedActionsFinancedByDIHAL.value / currentActionsCount.value) * 100;
+        (updatedActionsFinancedByDIHAL.value / actionsFinancedByDIHAL.value) *
+        100;
 
     // Arrondir à 1 décimale
     return Math.round(percentage * 10) / 10;
