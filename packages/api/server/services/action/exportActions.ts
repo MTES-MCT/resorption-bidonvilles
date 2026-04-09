@@ -77,19 +77,22 @@ const exportActions = async (user: AuthUser, year: string, dihalFinancing = fals
         // Récupération des données avec filtres territoriaux
         data = await actionModel.fetchReport(fetchedYear, actionClauseGroup, financeClauseGroup);
     } catch (error) {
-        throw new ServiceError('fetch_failed', error);
+        throw new ServiceError(
+            'fetch_failed',
+            error instanceof Error ? error : new Error('Une erreur inconnue est survenue'),
+        );
     }
 
     // Filtrage par financement DIHAL si demandé
     if (dihalFinancing) {
-        data = data.filter(action => action.finance_dedie > 0);
+        data = data.filter(action => action.finance_dedie !== null && action.finance_dedie > 0);
     }
 
     if (data.length === 0) {
         throw new ServiceError('fetch_failed', new Error('Il n\'y a aucune action à exporter'));
     }
 
-    const buffer = await generateExportFile(data, includeFinances, allowedDepartements);
+    const buffer = await generateExportFile(data, fetchedYear, includeFinances, allowedDepartements);
     return buffer;
 };
 
