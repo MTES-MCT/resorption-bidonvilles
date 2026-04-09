@@ -6086,6 +6086,8 @@ __metadata:
   dependencies:
     "@fortawesome/free-brands-svg-icons": ^6.1.1
     "@fortawesome/free-solid-svg-icons": ^6.1.1
+    "@gouvfr/dsfr": 1.14.3
+    "@gouvminint/vue-dsfr": ^8.8.0
     "@nuxtjs/i18n": ^9.2.0
     "@nuxtjs/tailwindcss": ^6.8.0
     nuxt: ^3.19.0
