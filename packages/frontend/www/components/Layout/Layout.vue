@@ -10,24 +10,32 @@
 
     </Html>
 
-    <SkipToMainContentLink />
-
-    <NavBar :stickyHeader="stickyHeader" :displayLanguagePicker="displayLanguagePicker">
-      <template v-slot:anchors>
-        <slot name="anchors"></slot>
+    <DsfrHeader
+      :logoText="logoText"
+      :homeTo="homeTo"
+      :homeLabel="homeLabel"
+      :serviceTitle="serviceTitle"
+      :serviceDescription="serviceDescription"
+      :quickLinks="quickLinks"
+    >
+      <template v-slot:mainnav>
+        <DsfrNavigation 
+          :nav-items="navItems"
+          label="Menu principal"
+        />
       </template>
-    </NavBar>
-    <slot />
-    <FooterBar id="pied-de-page" :URL="WEBAPP_URL" :CONTACT_EMAIL="CONTACT_EMAIL" />
+    </DsfrHeader>
+
+    <main id="contenu" role="main">
+      <slot />
+    </main>
+
+    <DsfrFooter descText="Un problème, une question ?"/>
   </div>
 </template>
 
 <script setup>
-import { toRefs } from "vue";
-import { SkipToMainContentLink, FooterBar } from "@resorptionbidonvilles/ui";
-import NavBar from "~/components/Layout/Navbar/Navbar.vue";
-
-const props = defineProps({
+defineProps({
   stickyHeader: {
     type: Boolean,
     default: true
@@ -37,6 +45,24 @@ const props = defineProps({
     default: true
   }
 });
-const { stickyHeader, displayLanguagePicker } = toRefs(props);
-const { WEBAPP_URL, CONTACT_EMAIL } = useRuntimeConfig().public;
+
+// Paramétrage du header DSFR
+const logoText = ["Délégation interministérielle", "à l'hébergement et à l'accès", "au logement"];
+const homeTo = "/";
+const homeLabel = "Accueil Résorption des bidonvilles";
+const serviceTitle = 'Plateforme Résorption-Bidonvilles';
+const serviceDescription = "L'accès à la plateforme est restreint aux acteurs de la résorption des bidonvilles"
+
+// Menu de navigation
+const navItems = [
+  {
+    to: '/login',
+    text: 'Se connecter',
+  },
+  {
+    to: '/access',
+    text: 'Demander un accès',
+  },
+]
+
 </script>
