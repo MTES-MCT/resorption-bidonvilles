@@ -14,7 +14,6 @@
                 {{ label }} </Link
             ><Spinner class="ml-2" v-if="isLoading" /><br />
         </template>
-        <Warning v-if="error" :autohide="false">{{ error }}</Warning>
     </p>
 </template>
 
@@ -23,7 +22,7 @@ import { toRefs, ref, computed } from "vue";
 import { useNotificationStore } from "@/stores/notification.store";
 import downloadCsv from "@/utils/downloadCsv";
 import downloadBlob from "@/utils/downloadBlob";
-import { Icon, Link, Spinner, Warning } from "@resorptionbidonvilles/ui";
+import { Icon, Link, Spinner } from "@resorptionbidonvilles/ui";
 import formatDate from "@common/utils/formatDate";
 
 const props = defineProps({
@@ -52,10 +51,14 @@ const props = defineProps({
     },
 });
 const { shape, label, filename, downloadFn, format, year } = toRefs(props);
+const emit = defineEmits(["export-error"]);
 const notificationStore = useNotificationStore();
 
 const isLoading = ref(null);
-const error = ref(null);
+
+function notifyParentError(message) {
+    emit("export-error", message);
+}
 
 async function download() {
     if (isLoading.value === true) {
@@ -63,24 +66,23 @@ async function download() {
     }
 
     isLoading.value = true;
-    error.value = null;
+    notifyParentError(null);
     try {
         const data = await downloadFn.value(year.value);
+        const exportDate = formatDate(Date.now() / 1000, "y-m-d");
 
         if (format.value === "xlsx") {
             downloadBlob(
                 new Blob([data]),
-                `${formatDate(new Date().getTime() / 1000, "y-m-d")}-${
-                    filename.value
-                }-${year.value ? year.value : ""}-resorption-bidonvilles.xlsx`
+                `${exportDate}-${filename.value}-${
+                    year.value ? year.value : ""
+                }-resorption-bidonvilles.xlsx`
             );
         } else {
             const { csv } = data;
             downloadCsv(
                 csv,
-                `${formatDate(new Date().getTime() / 1000, "y-m-d")}-${
-                    filename.value
-                }-resorption-bidonvilles.csv`
+                `${exportDate}-${filename.value}-resorption-bidonvilles.csv`
             );
         }
 
@@ -89,7 +91,9 @@ async function download() {
             "Le fichier d'export a bien été téléchargé"
         );
     } catch (e) {
-        error.value = "Le téléchargement des données a échoué";
+        notifyParentError(
+            e?.user_message || "Le téléchargement des données a échoué"
+        );
         notificationStore.error(
             label.value,
             e?.user_message || "Une erreur inconnue est survenue"
