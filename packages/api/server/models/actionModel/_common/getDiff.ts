@@ -232,8 +232,8 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
                         result.push({
                             fieldKey: `indicateurs.${year}.${fieldKey}`,
                             field: `Indicateurs ${year} - ${indicateursLabels[fieldKey]}`,
-                            oldValue: oldVal !== null ? String(oldVal) : 'non renseigné',
-                            newValue: newVal !== null ? String(newVal) : 'non renseigné',
+                            oldValue: oldVal === null ? 'non renseigné' : String(oldVal),
+                            newValue: newVal === null ? 'non renseigné' : String(newVal),
                         });
                     }
                 });

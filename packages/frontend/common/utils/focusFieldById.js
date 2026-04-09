@@ -17,7 +17,8 @@ export default function focusFieldById(fieldId) {
             // Échapper les caractères spéciaux pour le sélecteur CSS
             const escapedId = CSS.escape(fieldId);
             field = document.querySelector(`#${escapedId}`);
-        } catch (e) {
+        } catch {
+            // do nothing
         }
     }
     
@@ -25,10 +26,10 @@ export default function focusFieldById(fieldId) {
     if (!field) {
         try {
             // Remplacer les crochets et les points par des underscores, puis nettoyer les doubles underscores
-            const underscoredId = fieldId.replace(/[\[\]\.]/g, '_').replace(/__+/g, '_');
+            const underscoredId = fieldId.replaceAll(/[[\].]/g, '_').replaceAll(/__+/g, '_');
             field = document.getElementById(underscoredId);
-        } catch (e) {
-            console.warn(`Could not find field with underscored id: ${fieldId}`, e);
+        } catch {
+            // do nothing
         }
     }
 
