@@ -21,7 +21,10 @@
             :managers="managerIds"
             :departement="departement"
         />
-        <FormDeclarationActionIndicateurs class="mt-6" :errors="errors" />
+        <FormDeclarationActionIndicateurs
+            class="mt-6"
+            :errors="indicateursErrors"
+        />
 
         <ErrorSummary
             id="erreurs"
@@ -154,27 +157,35 @@ const actionsStore = useActionsStore();
 const error = ref(null);
 const departement = useFieldValue("location_departement");
 
-// Nettoyer les erreurs pour l'affichage dans ErrorSummary
-// Extrait uniquement les messages utilisateur depuis le format "FIELD:...|MESSAGE:..."
+// Nettoyer les erreurs pour l'affichage dans ErrorSummary.
+// Fusionne les erreurs non-indicateurs de vee-validate avec les erreurs indicateurs
+// issues directement de yup (indicateursErrors), pour éviter le bug de déduplication
+// de vee-validate sur les champs imbriqués non enregistrés individuellement.
 const cleanedErrors = computed(() => {
     const cleaned = {};
 
-    Object.keys(errors.value).forEach((key) => {
-        const errorMessage = errors.value[key];
-
-        if (typeof errorMessage === "string") {
-            // Parser le format "FIELD:fieldName|MESSAGE:message"
-            const match = errorMessage.match(/^FIELD:([^|]+)\|MESSAGE:(.+)$/);
-
-            if (match) {
-                // Extraire uniquement le message utilisateur
-                cleaned[key] = match[2];
+    // Erreurs non-indicateurs depuis vee-validate
+    Object.keys(errors.value)
+        .filter((key) => !key.startsWith("indicateurs"))
+        .forEach((key) => {
+            const errorMessage = errors.value[key];
+            if (typeof errorMessage === "string") {
+                const match = errorMessage.match(
+                    /^FIELD:([^|]+)\|MESSAGE:(.+)$/
+                );
+                cleaned[key] = match ? match[2] : errorMessage;
             } else {
-                // Si pas de format structuré, garder le message tel quel
                 cleaned[key] = errorMessage;
             }
+        });
+
+    // Erreurs indicateurs depuis la source yup fiable
+    Object.keys(indicateursErrors.value).forEach((key) => {
+        const errorMessage = indicateursErrors.value[key];
+        if (typeof errorMessage === "string") {
+            const match = errorMessage.match(/^FIELD:([^|]+)\|MESSAGE:(.+)$/);
+            cleaned[key] = match ? match[2] : errorMessage;
         } else {
-            // Conserver les erreurs non-string telles quelles
             cleaned[key] = errorMessage;
         }
     });
@@ -494,11 +505,32 @@ watch(useFormErrors(), () => {
     }
 });
 
-// Valider les indicateurs en temps réel
+// Stocker les erreurs indicateurs issues directement de yup (clés format point),
+// pour éviter le bug de déduplication de vee-validate (format point vs crochet).
+const indicateursErrors = ref({});
 watch(
     () => values.indicateurs,
-    () => {
-        validate();
+    async () => {
+        const result = await validate();
+        const fieldResult = result.results["indicateurs"];
+        if (!fieldResult || fieldResult.valid) {
+            indicateursErrors.value = {};
+            return;
+        }
+        // vee-validate stocke toutes les erreurs des sous-champs indicateurs
+        // dans un tableau plat sous la clé "indicateurs".
+        // Chaque message encode le nom du champ : "FIELD:fieldName|MESSAGE:..."
+        // On reconstruit un objet { fieldName: message } pour l'affichage inline.
+        indicateursErrors.value = fieldResult.errors.reduce((acc, msg) => {
+            const match =
+                typeof msg === "string"
+                    ? msg.match(/^FIELD:([^|]+)\|MESSAGE:(.+)$/)
+                    : null;
+            if (match) {
+                acc[match[1]] = match[2];
+            }
+            return acc;
+        }, {});
     },
     { deep: true }
 );
