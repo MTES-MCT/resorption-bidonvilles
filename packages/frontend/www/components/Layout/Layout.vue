@@ -70,7 +70,7 @@
           href: 'https://www.dihal.gouv.fr/'
         }
       ]"
-      operatorImgSrc="_nuxt/assets/img/LandingPage/logo.png"
+      :operatorImgSrc="operatorLogo"
       operatorImgAlt="Logo Résorption-bidonvilles"
       :beforeMandatoryLinks="[
         {
@@ -96,6 +96,8 @@
 </template>
 
 <script setup>
+import operatorLogo from "~/assets/img/LandingPage/logo.png";
+
 defineProps({
   stickyHeader: {
     type: Boolean,
