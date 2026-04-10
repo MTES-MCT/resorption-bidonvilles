@@ -1,9 +1,11 @@
 import {
     DsfrButton,
     DsfrCard,
+    DsfrFollow,
     DsfrFooter,
     DsfrHeader,
     DsfrNavigation,
+    DsfrPicture,
 } from "@gouvminint/vue-dsfr";
 
 import "@gouvfr/dsfr/dist/dsfr.min.css";
@@ -15,7 +17,9 @@ import "@gouvfr/dsfr/dist/component/component.main.min.css";
 export function useDsfr(app) {
     app.component("DsfrButton", DsfrButton);
     app.component("DsfrCard", DsfrCard);
+    app.component("DsfrFollow", DsfrFollow);
     app.component("DsfrFooter", DsfrFooter);
     app.component("DsfrHeader", DsfrHeader);
     app.component("DsfrNavigation", DsfrNavigation);
+    app.component("DsfrPicture", DsfrPicture);
 }
