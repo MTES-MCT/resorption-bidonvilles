@@ -4,7 +4,7 @@
             <ContentWrapper class="flex-1 bg-[#f5f5fe]">
                 <div class="flex flex-col items-center justify-center h-full px-6">
                      <DsfrPicture
-                        src="_nuxt/assets/img/LandingPage/carte.png"
+                        :src="carte"
                         alt="Impact des actions de résorption en France"
                         size="small"
                         
@@ -32,3 +32,6 @@
         </div>
     </section>
 </template>
+<script setup>
+import carte from "~/assets/img/LandingPage/carte.png";
+</script>
