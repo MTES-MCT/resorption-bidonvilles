@@ -25,6 +25,8 @@ export default defineNuxtConfig({
         }
     },
     runtimeConfig: {
+        debugLogs: process.env.NUXT_DEBUG_LOGS ?? "false",
+        debugRequestLogs: process.env.NUXT_DEBUG_REQUESTS ?? "false",
         public: {
             DOMAIN: process.env.NUXT_DOMAIN ?? "${NUXT_DOMAIN}",
             WEBAPP_URL: process.env.NUXT_WEBAPP_URL ?? "${NUXT_WEBAPP_URL}",
@@ -36,6 +38,10 @@ export default defineNuxtConfig({
             MATOMO_TRACKER_FILENAME: process.env.NUXT_MATOMO_TRACKER_FILENAME ?? "${NUXT_MATOMO_TRACKER_FILENAME}",
             MATOMO_DESCRIPTION_PAGE_SEPARATOR: process.env.NUXT_MATOMO_DESCRIPTION_PAGE_SEPARATOR ?? "${NUXT_MATOMO_DESCRIPTION_PAGE_SEPARATOR}",
         }
+    },
+    sourcemap: {
+        server: true,
+        client: false,
     },
     alias: {
         "@common": fileURLToPath(new URL("../common/", import.meta.url)),
