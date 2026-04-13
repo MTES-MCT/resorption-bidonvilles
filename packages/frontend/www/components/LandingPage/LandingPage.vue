@@ -1,8 +1,7 @@
 <template>
     <section id="main-content">
         <div class="flex flex-row">
-            Test
-            <!-- <ContentWrapper class="flex-1 bg-[#f5f5fe]">
+            <ContentWrapper class="flex-1 bg-[#f5f5fe]">
                 <div class="flex flex-col items-center justify-center h-full px-6">
                      <DsfrPicture
                         :src="carte"
@@ -29,7 +28,7 @@
                     label="Consulter le blog de la résorption"
                 />
                 </div>
-            </ContentWrapper> -->
+            </ContentWrapper>
         </div>
     </section>
 </template>
