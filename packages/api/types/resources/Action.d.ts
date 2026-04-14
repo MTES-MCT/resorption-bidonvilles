@@ -195,6 +195,7 @@ interface GenericAction extends IAction {
     metrics_updated_at: number | null,
     finances?: ActionFinances,
     hasDihalFinancing: boolean,
+    dihalFinancingYear: number | null,
     created_at: number,
     created_by: ActionUser,
     updated_at: number | null,
