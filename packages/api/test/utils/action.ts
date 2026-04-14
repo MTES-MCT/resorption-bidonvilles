@@ -24,6 +24,7 @@ export function serialized(override = {}): Action {
             },
         },
         location_type: 'logement',
+        location_eti_addresses: [],
         eti: null,
         location_other: null,
         location_shantytowns: [],
@@ -31,7 +32,7 @@ export function serialized(override = {}): Action {
             {
                 id: 1,
                 name: 'Structure',
-                abbreviation: null,
+                abbreviation: '',
                 users: [
                     {
                         id: 1,
@@ -45,7 +46,7 @@ export function serialized(override = {}): Action {
                         organization: {
                             id: 1,
                             name: 'Structure',
-                            abbreviation: null,
+                            abbreviation: '',
                         },
                     },
                 ],
@@ -55,7 +56,7 @@ export function serialized(override = {}): Action {
             {
                 id: 2,
                 name: 'Opérateur',
-                abbreviation: null,
+                abbreviation: '',
                 users: [
                     {
                         id: 2,
@@ -69,7 +70,7 @@ export function serialized(override = {}): Action {
                         organization: {
                             id: 2,
                             name: 'Structure',
-                            abbreviation: null,
+                            abbreviation: '',
                         },
                     },
                 ],
@@ -101,7 +102,7 @@ export function serialized(override = {}): Action {
             organization: {
                 id: 1,
                 name: 'Structure',
-                abbreviation: null,
+                abbreviation: '',
             },
         },
         updated_at: null,
