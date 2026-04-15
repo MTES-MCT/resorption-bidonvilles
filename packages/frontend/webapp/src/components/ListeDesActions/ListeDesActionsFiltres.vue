@@ -52,7 +52,9 @@ const sortOptions = [sorts.startedAt, sorts.updatedAt, sorts.lastMetricUpdate];
 const dihalYearOptions = computed(() => {
     const years = new Set();
     for (const action of actionsStore.actions) {
-        for (const [year, financeLines] of Object.entries(action.finances || {})) {
+        for (const [year, financeLines] of Object.entries(
+            action.finances || {}
+        )) {
             if (financeLines.some((line) => line.type?.uid === "dedie")) {
                 years.add(Number(year));
             }
@@ -66,7 +68,11 @@ const dihalYearOptions = computed(() => {
 const filters = computed(() =>
     staticFilters.map((filter) =>
         filter.id === "dihalFinancing"
-            ? { ...filter, label: "Financement DIHAL", options: dihalYearOptions.value }
+            ? {
+                  ...filter,
+                  label: "Financement DIHAL",
+                  options: dihalYearOptions.value,
+              }
             : filter
     )
 );

@@ -29,7 +29,11 @@
                     />
                     <DsfrBadge
                         v-if="action.hasDihalFinancing"
-                        :label="`FINANCEMENT DIHAL${action.dihalFinancingYear ? ' ' + action.dihalFinancingYear : ''}`"
+                        :label="`FINANCEMENT DIHAL${
+                            action.dihalFinancingYear
+                                ? ' ' + action.dihalFinancingYear
+                                : ''
+                        }`"
                         noIcon
                         type="info"
                         class="mt-1 lg:place-self-end text-xs py-2"
