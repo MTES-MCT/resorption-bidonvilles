@@ -42,6 +42,7 @@ export function useMatomo(app, router) {
         cookieDomain: `*.${ENV.MATOMO.DOMAIN}`,
         domains: `*.${ENV.MATOMO.DOMAIN}`,
         trackerFileName: ENV.MATOMO.TRACKER_FILENAME,
+        trackerScriptUrl: `/${ENV.MATOMO.TRACKER_FILENAME}.js`,
     };
     app.use(VueMatomo, matomoConfig);
 }
