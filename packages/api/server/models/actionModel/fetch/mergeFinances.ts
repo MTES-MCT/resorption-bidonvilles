@@ -1,24 +1,20 @@
 import { ActionHash } from './hashActions';
 import ActionFinanceRow from './ActionFinanceRow.d';
 
-export default function mergeManagers(hash: ActionHash, finances: ActionFinanceRow[]): void {
+export default function mergeFinances(hash: ActionHash, finances: ActionFinanceRow[]): void {
     finances.forEach((row) => {
         const action = hash[row.action_id];
         if (action === undefined) {
             return;
         }
 
-        if (action.finances === undefined) {
-            // eslint-disable-next-line no-param-reassign
-            action.finances = {};
-        }
+        // eslint-disable-next-line no-param-reassign
+        action.finances ??= {};
 
-        const finances = action.finances;
-        if (finances[row.year] === undefined) {
-            finances[row.year] = [];
-        }
+        const actionFinances = action.finances;
+        actionFinances[row.year] ??= [];
 
-        finances[row.year]!.push({
+        actionFinances[row.year].push({
             type: {
                 uid: row.action_finance_type_uid,
                 name: row.action_finance_type_name,
