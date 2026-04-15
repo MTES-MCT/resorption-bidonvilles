@@ -19,7 +19,7 @@ import mergeTopics from './mergeTopics';
 import Action from '#root/types/resources/Action.d';
 import { User } from '#root/types/resources/User.d';
 
-export default async function fetch(user: User, actionIds: number[] = null, transaction?: Transaction): Promise<Action[]> {
+export default async function fetch(user: User, actionIds?: number[], transaction?: Transaction): Promise<Action[]> {
     const clauseGroup = where().can(user).do('read', 'action');
     if (clauseGroup === null) {
         return [];
@@ -32,7 +32,7 @@ export default async function fetch(user: User, actionIds: number[] = null, tran
         fetchManagers(actionIds, clauseGroup, transaction),
         fetchOperators(actionIds, clauseGroup, transaction),
         fetchShantytowns(actionIds, clauseGroup, transaction),
-        fetchComments(actionIds, null, clauseGroup, transaction),
+        fetchComments(actionIds, undefined, clauseGroup, transaction),
         fetchMetrics(actionIds, clauseGroup, transaction),
         financeClauseGroup === null ? [] : fetchFinances(actionIds, clauseGroup, financeClauseGroup, transaction),
     ]);
