@@ -26,29 +26,27 @@ attend dans l'espace d'entraide [{{var:webappUrl}}/communaute?{{var:utm}}] :
 {% endif %}{% for summary in var:summaries %}
 {{ summary.code }} – {{ summary.name }}
 {% if summary.shantytowns_total == 0 %} 0% {% elseif
+summary.updated_population_3_months_percentage < 80 %} {{
+summary.updated_population_3_months_percentage }}% {% elseif
+summary.updated_population_3_months_percentage < 95 %} {{
+summary.updated_population_3_months_percentage }}% {% else %} {{
+summary.updated_population_3_months_percentage }}% {% endif %} de sites (soit {%
+if summary.shantytowns_total == 0 %} un taux faible) {% elseif
+summary.updated_population_3_months_percentage < 80 %} un taux faible) {% elseif
+summary.updated_population_3_months_percentage < 95 %} un taux moyen) {% else %}
+un très bon taux) {% endif %} ont fait l'objet d'une mise à jour du nombre
+d'habitants dans les 3 derniers mois
+{% if summary.shantytowns_total == 0 %} 0% {% elseif
 summary.updated_shantytowns_6_months_percentage <= 30 %} {{
 summary.updated_shantytowns_6_months_percentage }}% {% elseif
 summary.updated_shantytowns_6_months_percentage <= 60 %} {{
 summary.updated_shantytowns_6_months_percentage }}% {% else %} {{
 summary.updated_shantytowns_6_months_percentage }}% {% endif %} de sites (soit
-{{ summary.updated_shantytowns_6_months }} sur {{ summary.shantytowns_total }},
-représentant {% if summary.shantytowns_total == 0 %} un taux faible) {% elseif
+{% if summary.shantytowns_total == 0 %} un taux faible) {% elseif
 summary.updated_shantytowns_6_months_percentage <= 30 %} un taux faible) {%
 elseif summary.updated_shantytowns_6_months_percentage <= 60 %} un taux moyen)
 {% else %} un très bon taux) {% endif %} ont été mis à jour au cours des 6
 derniers mois
-{% if summary.shantytowns_total == 0 %} 0% {% elseif
-summary.updated_population_3_months_percentage < 80 %} {{
-summary.updated_population_3_months_percentage }}% {% elseif
-summary.updated_population_3_months_percentage < 95 %} {{
-summary.updated_population_3_months_percentage }}% {% else %} {{
-summary.updated_population_3_months_percentage }}% {% endif %} de sites (soit {{
-summary.updated_population_3_months }} sur {{ summary.shantytowns_total }},
-représentant {% if summary.shantytowns_total == 0 %} un taux faible) {% elseif
-summary.updated_population_3_months_percentage < 80 %} un taux faible) {% elseif
-summary.updated_population_3_months_percentage < 95 %} un taux moyen) {% else %}
-un très bon taux) {% endif %} ont fait l'objet d'une mise à jour du nombre
-d'habitants dans les 3 derniers mois
 {{ summary.population_total }} habitants en bidonvilles ou squats
 {% if var:showDetails %}{% if summary.new_shantytowns_length > 1 %}
 {{ summary.new_shantytowns_length }} nouveaux sites
