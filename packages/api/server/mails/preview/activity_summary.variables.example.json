@@ -29,7 +29,10 @@
             "new_users_length": 0,
             "shantytowns_total": 10,
             "population_total": 120,
-            "updated_shantytowns_6_months": 9
+            "updated_shantytowns_6_months": 9,
+            "updated_shantytowns_6_months_percentage": 90,
+            "updated_population_3_months": 8,
+            "updated_population_3_months_percentage": 80
         }
     ]
 }
