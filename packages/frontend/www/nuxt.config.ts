@@ -30,6 +30,8 @@ export default defineNuxtConfig({
         public: {
             DOMAIN: process.env.NUXT_DOMAIN ?? "${NUXT_DOMAIN}",
             WEBAPP_URL: process.env.NUXT_WEBAPP_URL ?? "${NUXT_WEBAPP_URL}",
+            BLOG_URL: process.env.NUXT_BLOG_URL ?? "${NUXT_BLOG_URL}",
+            FORMATION_URL: process.env.NUXT_FORMATION_URL ?? "${NUXT_FORMATION_URL}",
             CONTACT_EMAIL: process.env.NUXT_CONTACT_EMAIL ?? "${NUXT_CONTACT_EMAIL}",
             MATOMO_ENABLE: process.env.NUXT_MATOMO_ENABLE ?? "${NUXT_MATOMO_ENABLE}",
             MATOMO_HOST: process.env.NUXT_MATOMO_HOST ?? "${NUXT_MATOMO_HOST}",
@@ -42,6 +44,13 @@ export default defineNuxtConfig({
     sourcemap: {
         server: true,
         client: false,
+    },
+    app: {
+        head: {
+            htmlAttrs: {
+                lang: "fr"
+            }
+        }
     },
     alias: {
         "@common": fileURLToPath(new URL("../common/", import.meta.url)),
