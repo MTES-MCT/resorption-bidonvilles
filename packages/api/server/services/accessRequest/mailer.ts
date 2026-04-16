@@ -32,6 +32,7 @@ export default {
                     variables: {
                         adminUrl: `${webappUrl}/nouvel-utilisateur/${user.id}`,
                         userName: formatName(user),
+                        userEmail: user.email,
                         orgName: user.organization.abbreviation ?? user.organization.name,
                     },
                 })),
