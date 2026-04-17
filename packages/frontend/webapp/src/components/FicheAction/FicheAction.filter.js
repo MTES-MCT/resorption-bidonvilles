@@ -5,11 +5,9 @@ export default {
         { value: "contacts", label: "Contacts" },
         { value: "financements", label: "Financements" },
         { value: "indicateurs", label: "Indicateurs" },
-        { value: "sites", label: "Sites concernés" },
-        { value: "thematiques", label: "Thématiques" },
     ],
     fields: {
-        caracteristiques: ["name", "started_at", "ended_at", "goals"],
+        caracteristiques: ["name", "started_at", "ended_at", "goals", "topics"],
         localisation: [
             "location.departement.name",
             "location_type",
@@ -17,11 +15,10 @@ export default {
             "eti.latitude",
             "eti.longitude",
             "location_other",
+            "location_shantytowns",
         ],
         contacts: ["managers", "operators"],
         financements: ["finances"],
         indicateurs: ["metrics"],
-        sites: ["location_shantytowns"],
-        thematiques: ["topics"],
     },
 };
