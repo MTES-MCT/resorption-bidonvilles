@@ -17,6 +17,7 @@ type Row = {
     shantytownsTotal: number,
     populationTotal: number,
     updatedLessThan6MonthsTotal: number,
+    populationUpdatedLessThan3MonthsTotal: number,
     activityType: string,
     city: string,
     departement: string,
@@ -186,7 +187,10 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
                     COALESCE(SUM(s.population_total), 0) AS "populationTotal",
                     COUNT(*) FILTER (
                         WHERE s.updated_at >= (CURRENT_DATE - INTERVAL '6 months')
-                    ) AS "updatedLessThan6MonthsTotal"
+                    ) AS "updatedLessThan6MonthsTotal",
+                    COUNT(*) FILTER (
+                        WHERE s.population_updated_at >= (CURRENT_DATE - INTERVAL '3 months')
+                    ) AS "populationUpdatedLessThan3MonthsTotal"
                 FROM shantytowns s
                 LEFT JOIN cities c ON s.fk_city = c.code
                 WHERE closed_at IS NULL
@@ -199,6 +203,7 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
             COALESCE(totals."shantytownsTotal", 0) AS "shantytownsTotal",
             COALESCE(totals."populationTotal", 0)  AS "populationTotal",
             COALESCE(totals."updatedLessThan6MonthsTotal", 0)  AS "updatedLessThan6MonthsTotal",
+            COALESCE(totals."populationUpdatedLessThan3MonthsTotal", 0)  AS "populationUpdatedLessThan3MonthsTotal",
             activities.*
         FROM departements d
         LEFT JOIN totals ON totals.fk_departement = d.code
@@ -225,6 +230,9 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
             const updatedPercentage = row.shantytownsTotal > 0
                 ? Number.parseFloat(((row.updatedLessThan6MonthsTotal * 100) / row.shantytownsTotal).toFixed(2))
                 : 0;
+            const populationUpdatedPercentage = row.shantytownsTotal > 0
+                ? Number.parseFloat(((row.populationUpdatedLessThan3MonthsTotal * 100) / row.shantytownsTotal).toFixed(2))
+                : 0;
             acc[row.regionCode][row.departementCode] = {
                 has_activity: false,
                 code: row.departementCode,
@@ -244,6 +252,9 @@ export default async (argFrom: Date, argTo: Date): Promise<ActivityNationalSumma
                 updated_shantytowns_6_months:
                     row.updatedLessThan6MonthsTotal,
                 updated_shantytowns_6_months_percentage: updatedPercentage,
+                updated_population_3_months:
+                    row.populationUpdatedLessThan3MonthsTotal,
+                updated_population_3_months_percentage: populationUpdatedPercentage,
             };
         }
 
