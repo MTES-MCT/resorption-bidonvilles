@@ -26,7 +26,9 @@
                             ].includes(item.oldValue.trim())
                         "
                     >
-                        <span>, </span>
+                        <span>{{
+                            item.oldValue.includes("\n") ? "\n" : ", "
+                        }}</span>
                         <span class="line-through text-G700 hover:text-G700">
                             {{ item.oldValue }}
                         </span>
