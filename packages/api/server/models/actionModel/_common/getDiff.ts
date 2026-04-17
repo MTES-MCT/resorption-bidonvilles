@@ -53,7 +53,7 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
             if (!topics || topics.length === 0) {
                 return 'non renseignées';
             }
-            return topics.map(t => t.name).join(', ');
+            return topics.map(t => `• ${t.name}`).join('\n');
         },
         shantytownList(shantytowns: any[]): string {
             if (!shantytowns || shantytowns.length === 0) {
