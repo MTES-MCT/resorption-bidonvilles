@@ -1,47 +1,13 @@
-import { expect } from 'chai';
+import chai from 'chai';
+import { rewiremock } from '#test/rewiremock';
+import { serialized as fakeAction } from '#test/utils/action';
 import { ActionHash } from './hashActions';
-import mergeFinances from './mergeFinances';
 import ActionFinanceRow from './ActionFinanceRow.d';
 
+const { expect } = chai;
+
 function makeAction(id: number): ActionHash[number] {
-    return {
-        type: 'action',
-        id,
-        displayId: `ID${String(id).padStart(4, '0')}`,
-        name: `Action ${id}`,
-        started_at: new Date('2024-01-01').getTime(),
-        ended_at: null,
-        goals: null,
-        topics: [],
-        location: {
-            type: 'departement',
-            city: null,
-            epci: null,
-            departement: { code: '75', name: 'Paris' },
-            region: { code: '11', name: 'Île-de-France' },
-        },
-        location_type: 'departement',
-        eti: null,
-        location_other: null,
-        location_shantytowns: [],
-        managers: [],
-        operators: [],
-        finances: {},
-        hasDihalFinancing: false,
-        dihalFinancingYear: null,
-        metrics: [],
-        metrics_updated_at: null,
-        comments: [],
-        created_at: new Date('2024-01-01').getTime(),
-        created_by: {
-            id: 1,
-            first_name: 'Jean',
-            last_name: 'Dupont',
-            organization: { id: 1, name: 'Org', abbreviation: null },
-        },
-        updated_at: null,
-        updated_by: null,
-    } as unknown as ActionHash[number];
+    return fakeAction(id);
 }
 
 function makeFinanceRow(overrides: Partial<ActionFinanceRow> = {}): ActionFinanceRow {
@@ -57,6 +23,11 @@ function makeFinanceRow(overrides: Partial<ActionFinanceRow> = {}): ActionFinanc
     };
 }
 
+rewiremock.enable();
+// eslint-disable-next-line import/newline-after-import, import/first
+import mergeFinances from './mergeFinances';
+rewiremock.disable();
+
 describe('models/actionModel/fetch/mergeFinances()', () => {
     describe('hasDihalFinancing', () => {
         it('une action sans aucun financement conserve hasDihalFinancing à false', () => {
@@ -68,7 +39,7 @@ describe('models/actionModel/fetch/mergeFinances()', () => {
         it('une action avec un financement de type dedie passe hasDihalFinancing à true', () => {
             const hash: ActionHash = { 1: makeAction(1) };
             const finances: ActionFinanceRow[] = [
-                makeFinanceRow({ action_id: 1, action_finance_type_uid: 'dedie', action_finance_type_name: 'Financement dédié DIHAL' }),
+                makeFinanceRow({ action_finance_type_uid: 'dedie', action_finance_type_name: 'Financement dédié DIHAL' }),
             ];
             mergeFinances(hash, finances);
             expect(hash[1].hasDihalFinancing).to.equal(true);
@@ -77,7 +48,7 @@ describe('models/actionModel/fetch/mergeFinances()', () => {
         it('une action avec uniquement un financement de type etatique conserve hasDihalFinancing à false', () => {
             const hash: ActionHash = { 1: makeAction(1) };
             const finances: ActionFinanceRow[] = [
-                makeFinanceRow({ action_id: 1, action_finance_type_uid: 'etatique', action_finance_type_name: 'Financement étatique' }),
+                makeFinanceRow({ action_finance_type_name: 'Financement étatique' }),
             ];
             mergeFinances(hash, finances);
             expect(hash[1].hasDihalFinancing).to.equal(false);
@@ -95,7 +66,7 @@ describe('models/actionModel/fetch/mergeFinances()', () => {
             const hash: ActionHash = { 1: makeAction(1) };
             const finances: ActionFinanceRow[] = [
                 makeFinanceRow({
-                    action_id: 1, year: 2024, action_finance_type_uid: 'dedie', action_finance_type_name: 'Financement dédié DIHAL',
+                    action_finance_type_uid: 'dedie', action_finance_type_name: 'Financement dédié DIHAL',
                 }),
             ];
             mergeFinances(hash, finances);
@@ -106,10 +77,10 @@ describe('models/actionModel/fetch/mergeFinances()', () => {
             const hash: ActionHash = { 1: makeAction(1) };
             const finances: ActionFinanceRow[] = [
                 makeFinanceRow({
-                    action_id: 1, year: 2023, action_finance_type_uid: 'dedie', action_finance_type_name: 'Financement dédié DIHAL',
+                    year: 2023, action_finance_type_uid: 'dedie', action_finance_type_name: 'Financement dédié DIHAL',
                 }),
                 makeFinanceRow({
-                    action_id: 1, year: 2025, action_finance_type_uid: 'dedie', action_finance_type_name: 'Financement dédié DIHAL',
+                    year: 2025, action_finance_type_uid: 'dedie', action_finance_type_name: 'Financement dédié DIHAL',
                 }),
             ];
             mergeFinances(hash, finances);
@@ -119,9 +90,7 @@ describe('models/actionModel/fetch/mergeFinances()', () => {
         it('une action avec uniquement un financement etatique conserve dihalFinancingYear à null', () => {
             const hash: ActionHash = { 1: makeAction(1) };
             const finances: ActionFinanceRow[] = [
-                makeFinanceRow({
-                    action_id: 1, year: 2024, action_finance_type_uid: 'etatique', action_finance_type_name: 'Financement étatique',
-                }),
+                makeFinanceRow(),
             ];
             mergeFinances(hash, finances);
             expect(hash[1].dihalFinancingYear).to.equal(null);
@@ -134,7 +103,7 @@ describe('models/actionModel/fetch/mergeFinances()', () => {
             };
             const finances: ActionFinanceRow[] = [
                 makeFinanceRow({
-                    action_id: 1, year: 2024, action_finance_type_uid: 'dedie', action_finance_type_name: 'Financement dédié DIHAL',
+                    action_finance_type_uid: 'dedie', action_finance_type_name: 'Financement dédié DIHAL',
                 }),
                 makeFinanceRow({
                     action_id: 2, year: 2022, action_finance_type_uid: 'dedie', action_finance_type_name: 'Financement dédié DIHAL',
