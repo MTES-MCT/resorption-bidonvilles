@@ -6,10 +6,6 @@ import ActionFinanceRow from './ActionFinanceRow.d';
 
 const { expect } = chai;
 
-function makeAction(id: number): ActionHash[number] {
-    return fakeAction(id);
-}
-
 function makeFinanceRow(overrides: Partial<ActionFinanceRow> = {}): ActionFinanceRow {
     return {
         action_id: 1,
@@ -31,13 +27,13 @@ rewiremock.disable();
 describe('models/actionModel/fetch/mergeFinances()', () => {
     describe('hasDihalFinancing', () => {
         it('une action sans aucun financement conserve hasDihalFinancing à false', () => {
-            const hash: ActionHash = { 1: makeAction(1) };
+            const hash: ActionHash = { 1: fakeAction(1) };
             mergeFinances(hash, []);
             expect(hash[1].hasDihalFinancing).to.equal(false);
         });
 
         it('une action avec un financement de type dedie passe hasDihalFinancing à true', () => {
-            const hash: ActionHash = { 1: makeAction(1) };
+            const hash: ActionHash = { 1: fakeAction(1) };
             const finances: ActionFinanceRow[] = [
                 makeFinanceRow({ action_finance_type_uid: 'dedie', action_finance_type_name: 'Financement dédié DIHAL' }),
             ];
@@ -46,7 +42,7 @@ describe('models/actionModel/fetch/mergeFinances()', () => {
         });
 
         it('une action avec uniquement un financement de type etatique conserve hasDihalFinancing à false', () => {
-            const hash: ActionHash = { 1: makeAction(1) };
+            const hash: ActionHash = { 1: fakeAction(1) };
             const finances: ActionFinanceRow[] = [
                 makeFinanceRow({ action_finance_type_name: 'Financement étatique' }),
             ];
@@ -57,13 +53,13 @@ describe('models/actionModel/fetch/mergeFinances()', () => {
 
     describe('dihalFinancingYear', () => {
         it('une action sans financement dedie conserve dihalFinancingYear à null', () => {
-            const hash: ActionHash = { 1: makeAction(1) };
+            const hash: ActionHash = { 1: fakeAction(1) };
             mergeFinances(hash, []);
             expect(hash[1].dihalFinancingYear).to.equal(null);
         });
 
         it('une action avec un seul financement dedie en 2024 positionne dihalFinancingYear à 2024', () => {
-            const hash: ActionHash = { 1: makeAction(1) };
+            const hash: ActionHash = { 1: fakeAction(1) };
             const finances: ActionFinanceRow[] = [
                 makeFinanceRow({
                     action_finance_type_uid: 'dedie', action_finance_type_name: 'Financement dédié DIHAL',
@@ -74,7 +70,7 @@ describe('models/actionModel/fetch/mergeFinances()', () => {
         });
 
         it('une action avec des financements dedie en 2023 et 2025 positionne dihalFinancingYear à 2025 (max)', () => {
-            const hash: ActionHash = { 1: makeAction(1) };
+            const hash: ActionHash = { 1: fakeAction(1) };
             const finances: ActionFinanceRow[] = [
                 makeFinanceRow({
                     year: 2023, action_finance_type_uid: 'dedie', action_finance_type_name: 'Financement dédié DIHAL',
@@ -88,7 +84,7 @@ describe('models/actionModel/fetch/mergeFinances()', () => {
         });
 
         it('une action avec uniquement un financement etatique conserve dihalFinancingYear à null', () => {
-            const hash: ActionHash = { 1: makeAction(1) };
+            const hash: ActionHash = { 1: fakeAction(1) };
             const finances: ActionFinanceRow[] = [
                 makeFinanceRow(),
             ];
@@ -98,8 +94,8 @@ describe('models/actionModel/fetch/mergeFinances()', () => {
 
         it('deux actions distinctes calculent chacune leur propre dihalFinancingYear indépendamment', () => {
             const hash: ActionHash = {
-                1: makeAction(1),
-                2: makeAction(2),
+                1: fakeAction(1),
+                2: fakeAction(2),
             };
             const finances: ActionFinanceRow[] = [
                 makeFinanceRow({
