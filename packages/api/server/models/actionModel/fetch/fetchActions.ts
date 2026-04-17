@@ -19,10 +19,10 @@ export type ActionSelectRow = {
     location_other: string | null,
 } & CreatorInfo & EditorInfo;
 
-export default function fetchActions(actionIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionSelectRow[]> {
+export default function fetchActions(actionIds?: number[], clauseGroup: object = {}, transaction?: Transaction): Promise<ActionSelectRow[]> {
     const where = [];
     const replacements = { actionIds };
-    if (actionIds !== null) {
+    if (actionIds !== undefined) {
         where.push('actions.action_id IN (:actionIds)');
     }
 

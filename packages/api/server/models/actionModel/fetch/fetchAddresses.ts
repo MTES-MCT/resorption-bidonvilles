@@ -10,7 +10,7 @@ export type ActionAddressRow = {
     fk_city: string,
 };
 
-export default function fetchAddresses(actionIds: number[], transaction?: Transaction): Promise<ActionAddressRow[]> {
+export default function fetchAddresses(actionIds?: number[], transaction?: Transaction): Promise<ActionAddressRow[]> {
     if (!actionIds || actionIds.length === 0) {
         // Pour la liste (actionIds = null), charger toutes les adresses ETI
         return sequelize.query(

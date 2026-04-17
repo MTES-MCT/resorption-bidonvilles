@@ -21,7 +21,7 @@ import mergeTopics from './mergeTopics';
 import Action from '#root/types/resources/Action.d';
 import { User } from '#root/types/resources/User.d';
 
-export default async function fetch(user: User, actionIds: number[] | null, transaction?: Transaction): Promise<Action[]> {
+export default async function fetch(user: User, actionIds?: number[], transaction?: Transaction): Promise<Action[]> {
     const clauseGroup = where().can(user).do('read', 'action');
     if (clauseGroup === null) {
         return [];
@@ -29,15 +29,15 @@ export default async function fetch(user: User, actionIds: number[] | null, tran
 
     const financeClauseGroup = where().can(user).do('access', 'action_finances');
     const [actions, addresses, topics, managers, operators, shantytowns, comments, metrics, finances] = await Promise.all([
-        fetchActions(actionIds || [], clauseGroup, transaction),
-        fetchAddresses(actionIds || [], transaction), // Toujours charger les adresses pour les ETI
-        fetchTopics(actionIds || [], clauseGroup, transaction),
-        fetchManagers(actionIds || [], clauseGroup, transaction),
-        fetchOperators(actionIds || [], clauseGroup, transaction),
-        fetchShantytowns(actionIds || [], clauseGroup, transaction),
-        fetchComments(actionIds || [], undefined, clauseGroup, transaction),
-        fetchMetrics(actionIds || [], clauseGroup, transaction),
-        financeClauseGroup === null ? [] : fetchFinances(actionIds || [], clauseGroup, financeClauseGroup, transaction),
+        fetchActions(actionIds, clauseGroup, transaction),
+        fetchAddresses(actionIds, transaction), // Toujours charger les adresses pour les ETI
+        fetchTopics(actionIds, clauseGroup, transaction),
+        fetchManagers(actionIds, clauseGroup, transaction),
+        fetchOperators(actionIds, clauseGroup, transaction),
+        fetchShantytowns(actionIds, clauseGroup, transaction),
+        fetchComments(actionIds, undefined, clauseGroup, transaction),
+        fetchMetrics(actionIds, clauseGroup, transaction),
+        financeClauseGroup === null ? [] : fetchFinances(actionIds, clauseGroup, financeClauseGroup, transaction),
     ]);
 
     const hash = hashActions(actions);

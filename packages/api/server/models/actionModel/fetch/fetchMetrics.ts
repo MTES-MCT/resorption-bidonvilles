@@ -27,10 +27,10 @@ export type ActionMetricsRow = {
     scolaire_nombre_autre: number | null,
 } & CreatorInfo;
 
-export default function fetchMetrics(actionIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionMetricsRow[]> {
+export default function fetchMetrics(actionIds?: number[], clauseGroup: object = {}, transaction?: Transaction): Promise<ActionMetricsRow[]> {
     const where = [];
     const replacements = { actionIds };
-    if (actionIds !== null) {
+    if (actionIds !== undefined) {
         where.push('action_metrics.fk_action IN (:actionIds)');
     }
 

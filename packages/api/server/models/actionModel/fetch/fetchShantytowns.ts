@@ -13,10 +13,10 @@ export type ActionShantytownRow = {
     city_name: string
 };
 
-export default function fetchShantytowns(actionIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionShantytownRow[]> {
+export default function fetchShantytowns(actionIds?: number[], clauseGroup: object = {}, transaction?: Transaction): Promise<ActionShantytownRow[]> {
     const where = [];
     const replacements = { actionIds };
-    if (actionIds !== null) {
+    if (actionIds !== undefined) {
         where.push('action_shantytowns.fk_action IN (:actionIds)');
     }
 
