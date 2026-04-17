@@ -93,6 +93,7 @@ export function serialized(override = {}): Action {
             },
         ],
         hasDihalFinancing: false,
+        dihalFinancingYear: null,
         created_at: (new Date(2022, 0, 1)).getTime(),
         created_by: {
             id: 1,
