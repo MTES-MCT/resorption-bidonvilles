@@ -77,6 +77,7 @@
             <template v-if="yearsWithData.length > 0">
                 Années avec financements renseignés :
                 <Link
+                    @click.stop.prevent
                     class="mr-1"
                     v-for="year in yearsWithData"
                     :key="year"

@@ -44,6 +44,7 @@ export default function hashActions(actions: ActionSelectRow[]): ActionHash {
             operators: [],
             finances: {},
             hasDihalFinancing: false,
+            dihalFinancingYear: null,
             metrics: [],
             metrics_updated_at: null,
             comments: [],

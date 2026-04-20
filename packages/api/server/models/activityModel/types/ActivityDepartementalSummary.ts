@@ -33,5 +33,7 @@ export interface ActivityDepartementalSummary {
     shantytowns_total: number,
     population_total: number,
     updated_shantytowns_6_months: number,
-    updated_shantytowns_6_months_percentage: number
+    updated_shantytowns_6_months_percentage: number,
+    updated_population_3_months: number,
+    updated_population_3_months_percentage: number
 }
