@@ -114,6 +114,7 @@ export default function serializeAction(action: ActionRow, user: User): Action {
         indicateurs: (action as any).indicateurs || {},
         metrics_updated_at: null,
         hasDihalFinancing: false,
+        dihalFinancingYear: null,
         comments: [],
         created_at: action.created_at.getTime(),
         created_by: {
