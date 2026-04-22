@@ -142,7 +142,7 @@ export default (mode: 'create' | 'update') => [
     body('location_eti_addresses')
         .if((value, { req }) => req.body.location_type === 'eti')
         .exists({ checkNull: true }).bail().withMessage('Le champ "Adresses des Espaces Temporaires d\'Accompagnement" est obligatoire')
-        .isArray().bail().withMessage('Le champ "Adresses des Espaces Temporaires d\'Accompagnement" doit être un tableau')
+        .isArray().bail().withMessage('Le format du champ "Adresses des Espaces Temporaires d\'Accompagnement" n\'est pas correct')
         .isLength({ min: 1 }).bail().withMessage('Au moins une adresse est requise pour un Espace Temporaire d\'Accompagnement')
         .custom(async (addresses, { req }) => {
             // Valider la structure de chaque adresse et parser les coordonnées
