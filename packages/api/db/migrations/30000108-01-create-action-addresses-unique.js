@@ -185,5 +185,6 @@ module.exports = {
     async down() {
         // Cette migration ne peut pas être inversée car elle supprime des données
         // et des structures de base de données.
+        throw new Error('This migration cannot be rolled back as it deletes data and database structures');
     },
 };
