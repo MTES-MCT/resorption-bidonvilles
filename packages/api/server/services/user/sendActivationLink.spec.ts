@@ -22,6 +22,11 @@ const accessRequestService = {
 const authUtils = {
     getExpiracyDateForActivationTokenCreatedAt: sandbox.stub(),
 };
+const scheduler = {
+    scheduleEvent: {
+        accessAboutToExpire: sandbox.stub(),
+    },
+};
 
 rewiremock('#db/config/sequelize').with(sequelize);
 rewiremock('#server/models/userModel/setPermissionOptions').with(setPermissionOptions);
@@ -29,6 +34,7 @@ rewiremock('#server/models/userModel/findOne').with(findSingleUser);
 rewiremock('#server/models/userAccessModel/create').with(createUserAccess);
 rewiremock('#server/services/accessRequest/accessRequestService').with(accessRequestService);
 rewiremock('#server/utils/auth').with(authUtils);
+rewiremock('#server/services/accessRequest/scheduler').with(scheduler);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
