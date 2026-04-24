@@ -107,7 +107,7 @@ describe('services/answer.createAnswer()', () => {
         stubs.answerModel.create.rejects(new Error('Une erreur'));
         try {
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
-        } catch (error) {
+        } catch {
             // expected error
         }
 
@@ -138,7 +138,7 @@ describe('services/answer.createAnswer()', () => {
         stubs.transaction.commit.rejects(new Error('Une erreur'));
         try {
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
-        } catch (error) {
+        } catch {
             // expected error
         }
 
@@ -392,7 +392,7 @@ describe('services/answer.createAnswer()', () => {
         stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         try {
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
-        } catch (error) {
+        } catch {
             // expected error
         }
 
