@@ -126,7 +126,7 @@ describe('userService.refuse()', () => {
 
         try {
             await refuseUserAccess(42);
-        } catch (e) {
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -156,7 +156,7 @@ describe('userService.refuse()', () => {
 
         try {
             await refuseUserAccess(42);
-        } catch (e) {
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
