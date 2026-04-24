@@ -151,7 +151,7 @@ describe('services/organization/create', () => {
                 new_type_abbreviation: null,
                 new_type_default_role: null,
             });
-        } catch (error) {
+        } catch {
             // expected error
         }
 
