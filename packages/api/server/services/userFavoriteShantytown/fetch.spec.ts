@@ -63,8 +63,8 @@ describe('services/userFavoriteShantytown', () => {
 
                 try {
                     await fetch(user);
-                } catch (err) {
-                    // expected
+                } catch {
+                    // do nothing
                 }
 
                 expect(stubs.userFavoriteShantytownModel.findByUser).to.not.have.been.called;
@@ -75,8 +75,8 @@ describe('services/userFavoriteShantytown', () => {
 
                 try {
                     await fetch(user);
-                } catch (err) {
-                    // expected
+                } catch {
+                    // do nothing
                 }
 
                 expect(stubs.userFavoriteShantytownModel.findByUser).to.not.have.been.called;

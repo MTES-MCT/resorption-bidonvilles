@@ -65,8 +65,8 @@ describe('services/userFavoriteShantytown', () => {
 
                 try {
                     await remove(user, shantytownId);
-                } catch (err) {
-                    // expected
+                } catch {
+                    // do nothing
                 }
 
                 expect(stubs.userFavoriteShantytownModel.removeFavorite).to.not.have.been.called;
@@ -77,8 +77,8 @@ describe('services/userFavoriteShantytown', () => {
 
                 try {
                     await remove(user, shantytownId);
-                } catch (err) {
-                    // expected
+                } catch {
+                    // do nothing
                 }
 
                 expect(stubs.userFavoriteShantytownModel.removeFavorite).to.not.have.been.called;
