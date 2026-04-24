@@ -5,7 +5,7 @@ import { rewiremock } from '#test/rewiremock';
 
 import { serialized as fakeUser } from '#test/utils/user';
 import ServiceError from '#server/errors/ServiceError';
-import { expectPermissionDenied, expectVoidReturn } from './testHelpers.spec';
+import { expectVoidReturn, testForbiddenRolesPermissions } from './testHelpers.spec';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -33,26 +33,7 @@ describe('services/userFavoriteShantytown', () => {
         });
 
         describe('contrôle des permissions', () => {
-            const forbiddenRoles = ['intervener', 'external_observator'] as const;
-
-            forbiddenRoles.forEach((roleId) => {
-                it(`rejette avec permission_denied si l'utilisateur a le rôle ${roleId}`, async () => {
-                    const user = fakeUser({ role_id: roleId });
-                    await expectPermissionDenied(() => remove(user, shantytownId));
-                });
-
-                it(`n'appelle pas le modèle si l'utilisateur a le rôle ${roleId}`, async () => {
-                    const user = fakeUser({ role_id: roleId });
-
-                    try {
-                        await remove(user, shantytownId);
-                    } catch {
-                        // do nothing
-                    }
-
-                    expect(stubs.userFavoriteShantytownModel.removeFavorite).to.not.have.been.called;
-                });
-            });
+            testForbiddenRolesPermissions(remove, stubs.userFavoriteShantytownModel.removeFavorite, shantytownId);
         });
 
         describe('cas nominal', () => {
