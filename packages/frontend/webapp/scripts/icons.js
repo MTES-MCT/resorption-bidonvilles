@@ -17,6 +17,8 @@ const riIconNames = [
     "plane-fill",
     "prohibited-line",
     "refresh-line",
+    "star-fill",
+    "star-line",
     "sun-fill",
     "sun-line",
     "eye-line",
