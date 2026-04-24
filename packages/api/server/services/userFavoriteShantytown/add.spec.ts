@@ -5,6 +5,7 @@ import { rewiremock } from '#test/rewiremock';
 
 import { serialized as fakeUser } from '#test/utils/user';
 import ServiceError from '#server/errors/ServiceError';
+import { expectPermissionDenied, expectVoidReturn } from './testHelpers.spec';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -32,56 +33,25 @@ describe('services/userFavoriteShantytown', () => {
         });
 
         describe('contrôle des permissions', () => {
-            it('rejette avec permission_denied si l\'utilisateur a le rôle intervener', async () => {
-                const user = fakeUser({ role_id: 'intervener' });
-                let error: any;
+            const forbiddenRoles = ['intervener', 'external_observator'] as const;
 
-                try {
-                    await add(user, shantytownId);
-                } catch (err) {
-                    error = err;
-                }
+            forbiddenRoles.forEach((roleId) => {
+                it(`rejette avec permission_denied si l'utilisateur a le rôle ${roleId}`, async () => {
+                    const user = fakeUser({ role_id: roleId });
+                    await expectPermissionDenied(() => add(user, shantytownId));
+                });
 
-                expect(error).to.be.an.instanceOf(ServiceError);
-                expect(error.code).to.equal('permission_denied');
-            });
+                it(`n'appelle pas le modèle si l'utilisateur a le rôle ${roleId}`, async () => {
+                    const user = fakeUser({ role_id: roleId });
 
-            it('rejette avec permission_denied si l\'utilisateur a le rôle external_observator', async () => {
-                const user = fakeUser({ role_id: 'external_observator' });
-                let error: any;
+                    try {
+                        await add(user, shantytownId);
+                    } catch {
+                        // do nothing
+                    }
 
-                try {
-                    await add(user, shantytownId);
-                } catch (err) {
-                    error = err;
-                }
-
-                expect(error).to.be.an.instanceOf(ServiceError);
-                expect(error.code).to.equal('permission_denied');
-            });
-
-            it('n\'appelle pas le modèle si l\'utilisateur a le rôle intervener', async () => {
-                const user = fakeUser({ role_id: 'intervener' });
-
-                try {
-                    await add(user, shantytownId);
-                } catch {
-                    // do nothing
-                }
-
-                expect(stubs.userFavoriteShantytownModel.addFavorite).to.not.have.been.called;
-            });
-
-            it('n\'appelle pas le modèle si l\'utilisateur a le rôle external_observator', async () => {
-                const user = fakeUser({ role_id: 'external_observator' });
-
-                try {
-                    await add(user, shantytownId);
-                } catch {
-                    // do nothing
-                }
-
-                expect(stubs.userFavoriteShantytownModel.addFavorite).to.not.have.been.called;
+                    expect(stubs.userFavoriteShantytownModel.addFavorite).to.not.have.been.called;
+                });
             });
         });
 
@@ -99,9 +69,7 @@ describe('services/userFavoriteShantytown', () => {
                 const user = fakeUser({ role_id: 'national_admin' });
                 stubs.userFavoriteShantytownModel.addFavorite.resolves();
 
-                const result = await add(user, shantytownId);
-
-                expect(result).to.be.undefined;
+                await expectVoidReturn(() => add(user, shantytownId));
             });
         });
 
