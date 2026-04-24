@@ -15,7 +15,7 @@ const ERRORS = {
     undefined: { status: 500, message: 'Une erreur inconnue est survenue' },
 };
 
-export default async (req: RemoveFavoriteRequest, res: Response, next: NextFunction) => {
+export default async function removeFavoriteController(req: RemoveFavoriteRequest, res: Response, next: NextFunction) {
     try {
         await userFavoriteShantytown.remove(req.user, Number.parseInt(req.params.id, 10));
         return res.status(200).json({});
@@ -24,4 +24,4 @@ export default async (req: RemoveFavoriteRequest, res: Response, next: NextFunct
         res.status(status).send({ user_message: message });
         return next(error.nativeError ?? error);
     }
-};
+}
