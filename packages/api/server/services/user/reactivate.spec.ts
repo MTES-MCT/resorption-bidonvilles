@@ -147,7 +147,7 @@ describe('userService.reactivate()', () => {
 
         try {
             await reactivateUser(fakeUser(), 42);
-        } catch (e) {
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -177,7 +177,7 @@ describe('userService.reactivate()', () => {
 
         try {
             await reactivateUser(fakeUser(), 42);
-        } catch (e) {
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -207,7 +207,7 @@ describe('userService.reactivate()', () => {
 
         try {
             await reactivateUser(fakeUser(), 42);
-        } catch (e) {
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -241,7 +241,7 @@ describe('userService.reactivate()', () => {
 
         try {
             await reactivateUser(fakeUser(), 42);
-        } catch (e) {
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
