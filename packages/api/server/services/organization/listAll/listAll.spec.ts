@@ -40,6 +40,7 @@ describe('organizationAutocomplete()', () => {
                 main_epci_names: [],
                 main_cities_names: [],
                 organization_type_id: 1,
+                departements_codes: [],
             },
             {
                 id: 2,
@@ -55,6 +56,7 @@ describe('organizationAutocomplete()', () => {
                 main_epci_names: ['EPCI'],
                 main_cities_names: ['Paris 5e'],
                 organization_type_id: 1,
+                departements_codes: ['75'],
             },
         ]);
 
@@ -71,6 +73,7 @@ describe('organizationAutocomplete()', () => {
                 similarity: 0.8,
                 type_abbreviation: 'ASSO',
                 organization_type_id: 1,
+                departement_code: null,
             },
         ]);
     });
@@ -91,6 +94,7 @@ describe('organizationAutocomplete()', () => {
                 main_epci_names: ['EPCI Ouest'],
                 main_cities_names: ['Quimper'],
                 organization_type_id: 2,
+                departements_codes: ['29'],
             },
         ]);
 
@@ -107,6 +111,7 @@ describe('organizationAutocomplete()', () => {
                 similarity: 0.85,
                 type_abbreviation: null,
                 organization_type_id: 2,
+                departement_code: 29,
             },
         ]);
     });
@@ -142,6 +147,7 @@ describe('organizationAutocomplete()', () => {
                 main_epci_names: [],
                 main_cities_names: [],
                 organization_type_id: 99,
+                departements_codes: [],
             },
         ]);
 
@@ -165,6 +171,7 @@ describe('organizationAutocomplete()', () => {
                 main_epci_names: [],
                 main_cities_names: ['Roanne'],
                 organization_type_id: 1,
+                departements_codes: ['42'],
             },
         ]);
 
@@ -188,6 +195,7 @@ describe('organizationAutocomplete()', () => {
                 main_epci_names: [],
                 main_cities_names: [],
                 organization_type_id: 3,
+                departements_codes: [],
             },
             {
                 id: 7,
@@ -203,6 +211,7 @@ describe('organizationAutocomplete()', () => {
                 main_epci_names: [],
                 main_cities_names: [],
                 organization_type_id: 3,
+                departements_codes: [],
             },
         ]);
 
@@ -228,6 +237,7 @@ describe('organizationAutocomplete()', () => {
                 main_epci_names: [],
                 main_cities_names: [],
                 organization_type_id: 4,
+                departements_codes: [],
             },
             {
                 id: 11,
@@ -243,6 +253,7 @@ describe('organizationAutocomplete()', () => {
                 main_epci_names: [],
                 main_cities_names: [],
                 organization_type_id: 2,
+                departements_codes: [],
             },
         ]);
 
