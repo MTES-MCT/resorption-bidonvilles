@@ -49,16 +49,25 @@ import createComment from './createComment';
 rewiremock.disable();
 
 describe('services/action.createComment()', () => {
+    let consoleErrorStub;
+
     beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
         stubs.sequelize.transaction.resolves(stubs.transaction);
+        stubs.createCommentModel.resolves(42);
+        stubs.fetchCommentsModel.resolves([fakeActionCommentRow()]);
+        stubs.serializeComment.returns(fakeActionComment());
+        stubs.enrichCommentsAttachments.resolves(fakeActionComment());
+        stubs.sendMattermostNotification.resolves();
+        stubs.sendMailNotifications.resolves(0);
     });
 
     afterEach(() => {
+        consoleErrorStub.restore();
         sandbox.reset();
     });
 
     it('insère le commentaire en base de données', async () => {
-        stubs.fetchCommentsModel.resolves([fakeActionCommentRow()]);
         await createComment(
             1,
             fakeAction(),
@@ -80,9 +89,9 @@ describe('services/action.createComment()', () => {
 
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [] });
-        } catch (e) {
+        } catch {
             // eslint-disable-next-line no-console
-            console.error(e);
+            // do nothing
         }
 
         expect(stubs.transaction.rollback).to.have.been.calledOnce;
@@ -147,9 +156,8 @@ describe('services/action.createComment()', () => {
 
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [fakeFile()] });
-        } catch (e) {
+        } catch {
             // eslint-disable-next-line no-console
-            console.error(e);
             // ignore
         }
 
@@ -193,9 +201,9 @@ describe('services/action.createComment()', () => {
 
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [fakeFile()] });
-        } catch (e) {
+        } catch {
             // eslint-disable-next-line no-console
-            console.error(e);
+            // ignore
         }
 
         expect(stubs.transaction.rollback).to.have.been.calledOnce;
@@ -222,9 +230,9 @@ describe('services/action.createComment()', () => {
 
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [fakeFile()] });
-        } catch (e) {
+        } catch {
             // eslint-disable-next-line no-console
-            console.error(e);
+            // ignore
         }
 
         expect(stubs.transaction.rollback).to.have.been.calledOnce;
@@ -288,6 +296,7 @@ describe('services/action.createComment()', () => {
         }
 
         expect(caughtError).to.be.eql(undefined);
+        expect(consoleErrorStub).to.have.been.calledOnce;
     });
 
     it('envoie une notification mail aux personnes concernées', async () => {
@@ -330,6 +339,7 @@ describe('services/action.createComment()', () => {
         }
 
         expect(caughtError).to.be.eql(undefined);
+        expect(consoleErrorStub).to.have.been.calledOnce;
     });
 
     it('retourne le commentaire fraîchement créé', async () => {
