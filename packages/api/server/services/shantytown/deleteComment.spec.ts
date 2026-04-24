@@ -82,28 +82,28 @@ describe('services/shantytown', () => {
         const deletionMessage = 'Test supression message site';
         const town = fakeTown();
         town.comments = [comment];
+        let consoleErrorStub;
+
         beforeEach(() => {
+            consoleErrorStub = sandbox.stub(console, 'error');
             stubs.can.returns({
                 do: stubs.do,
             });
             stubs.do.returns({
                 on: stubs.on,
             });
+            stubs.on.returns(true);
             user = fakeUser();
             stubs.shantytownModel.findOne.resolves(town);
             stubs.userModel.findOne.resolves(author);
         });
 
         afterEach(() => {
+            consoleErrorStub.restore();
             sandbox.reset();
         });
         it('vérifie que l\'utilisateur a le droit de supprimer le commentaire', async () => {
-            try {
-                await deleteCommentService(user, shantytownId, commentId, deletionMessage);
-            } catch (error) {
-                // eslint-disable-next-line no-console
-                console.error(error);
-            }
+            await deleteCommentService(user, shantytownId, commentId, deletionMessage);
             expect(stubs.can).to.have.been.calledOnceWith(user);
             expect(stubs.do).to.have.been.calledOnceWith('moderate', 'data');
             // eslint-disable-next-line no-unused-expressions
