@@ -41,7 +41,17 @@ import deleteAnswer from './deleteAnswer';
 rewiremock.disable();
 
 describe('services/answer.deleteAnswer()', () => {
+    let consoleErrorStub;
+
+    beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
+        stubs.deleteAnswerModel.resolves();
+        stubs.getNationalAdmins.resolves([]);
+        stubs.userModel.findOne.resolves(fakeUser({ status: 'active' }));
+    });
+
     afterEach(() => {
+        consoleErrorStub.restore();
         sandbox.reset();
     });
 
