@@ -25,7 +25,14 @@ import deactivateInactiveUsers from './deactivateInactiveUsers';
 rewiremock.disable();
 
 describe('userService/deactivateInactiveUsers', () => {
+    let consoleErrorStub;
+
+    beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
+    });
+
     afterEach(() => {
+        consoleErrorStub.restore();
         sandbox.reset();
     });
 
@@ -61,9 +68,8 @@ describe('userService/deactivateInactiveUsers', () => {
 
         try {
             await deactivateInactiveUsers();
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
+            // expected error
         }
 
         expect(mails.sendInactiveUserDeactivationAlert).to.not.have.been.called;
