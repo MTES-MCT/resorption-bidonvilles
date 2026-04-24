@@ -1,9 +1,9 @@
 import { type ApplicationWithCustomRoutes } from '#server/loaders/customRouteMethodsLoader';
-import listFavoritesController from './user.listFavorites';
+import listUserFavoritesController from './user.listFavorites';
 
-export default (app: ApplicationWithCustomRoutes): void => {
-    app.customRoutes.get('/users/me/favorites', listFavoritesController, undefined, {
+export default function listUserFavoritesRoute(app: ApplicationWithCustomRoutes): void {
+    app.customRoutes.get('/users/me/favorites', listUserFavoritesController, undefined, {
         authenticate: true,
         multipart: false,
     });
-};
+}
