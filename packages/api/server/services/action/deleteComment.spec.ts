@@ -52,9 +52,11 @@ rewiremock.disable();
 
 describe('services/action.deleteComment()', () => {
     let user: AuthUser;
+    let consoleErrorStub;
     const deletionMessage = 'Test supression message action';
 
     beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
         user = fakeUser();
         user.permissions = {
             data: {
@@ -86,22 +88,19 @@ describe('services/action.deleteComment()', () => {
         stubs.do.returns({
             on: stubs.on,
         });
+        stubs.on.returns(true);
     });
 
     afterEach(() => {
         user = null;
-        sandbox.restore();
+        consoleErrorStub.restore();
+        sandbox.reset();
     });
 
     it('vérifie que l\'utilisateur a le droit de supprimer le commentaire', async () => {
         const fakeTestUser = fakeUser();
         fakeTestUser.id = 1; // Surcharge l'ID pour ne pas être le propriétaire du message
-        try {
-            await deleteActionComment(fakeTestUser, fakeAction().id, 1, deletionMessage);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-        }
+        await deleteActionComment(fakeTestUser, fakeAction().id, 1, deletionMessage);
         expect(stubs.can).to.have.been.calledOnceWith(fakeTestUser);
         expect(stubs.do).to.have.been.calledOnceWith('moderate', 'data');
         expect(stubs.on).to.have.been.calledOnce;
@@ -196,7 +195,6 @@ describe('services/action.deleteComment()', () => {
     });
 
     it('envoie une notification de suppression du message', async () => {
-        stubs.on.returns(true);
         user.id = 1;
         const fakeTestUser = fakeUser();
         const nationalAdmins = [fakeUser(), fakeUser()];
@@ -204,12 +202,7 @@ describe('services/action.deleteComment()', () => {
         stubs.deleteComment.resolves({ id: 1, comments: [] });
         stubs.validator.trim.returns(deletionMessage);
 
-        try {
-            await deleteActionComment(fakeTestUser, fakeAction().id, 1, deletionMessage);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-        }
+        await deleteActionComment(fakeTestUser, fakeAction().id, 1, deletionMessage);
 
         expect(stubs.mails.sendUserCommentDeletion).to.have.been.calledOnce;
 
