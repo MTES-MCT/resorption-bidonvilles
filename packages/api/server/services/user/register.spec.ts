@@ -25,7 +25,14 @@ import register from './register';
 rewiremock.disable();
 
 describe('userService/register', () => {
+    let consoleErrorStub;
+
+    beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
+    });
+
     afterEach(() => {
+        consoleErrorStub.restore();
         sandbox.reset();
     });
 
@@ -73,8 +80,7 @@ describe('userService/register', () => {
             await register(fakeContactBody());
             expect.fail('should have thrown an error');
         } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+            // expected error
         }
 
         expect(accessRequestService.handleNewAccessRequest).to.not.have.been.called;
