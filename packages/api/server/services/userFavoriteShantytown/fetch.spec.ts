@@ -25,7 +25,14 @@ rewiremock.disable();
 
 describe('services/userFavoriteShantytown', () => {
     describe('fetch()', () => {
+        let consoleErrorStub;
+
+        beforeEach(() => {
+            consoleErrorStub = sandbox.stub(console, 'error');
+        });
+
         afterEach(() => {
+            consoleErrorStub.restore();
             sandbox.reset();
         });
 
@@ -84,13 +91,13 @@ describe('services/userFavoriteShantytown', () => {
         });
 
         describe('cas nominal', () => {
-            it('appelle findByUser avec l\'utilisateur si le rôle est autorisé', async () => {
-                const user = fakeUser({ role_id: 'national_admin' });
+            it('appelle findByUser avec l\'id de l\'utilisateur si le rôle est autorisé', async () => {
+                const user = fakeUser({ id: 42, role_id: 'national_admin' });
                 stubs.userFavoriteShantytownModel.findByUser.resolves([]);
 
                 await fetch(user);
 
-                expect(stubs.userFavoriteShantytownModel.findByUser).to.have.been.calledOnceWith(user);
+                expect(stubs.userFavoriteShantytownModel.findByUser).to.have.been.calledOnceWith(42);
             });
 
             it('retourne le tableau fourni par le modèle', async () => {
