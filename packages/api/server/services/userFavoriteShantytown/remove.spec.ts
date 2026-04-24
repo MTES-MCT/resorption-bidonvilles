@@ -26,9 +26,15 @@ rewiremock.disable();
 
 describe('services/userFavoriteShantytown', () => {
     describe('remove()', () => {
+        let consoleErrorStub;
         const shantytownId = 42;
 
+        beforeEach(() => {
+            consoleErrorStub = sandbox.stub(console, 'error');
+        });
+
         afterEach(() => {
+            consoleErrorStub.restore();
             sandbox.reset();
         });
 
