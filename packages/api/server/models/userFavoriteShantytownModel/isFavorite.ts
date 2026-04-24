@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-export default async (userId: number, shantytownId: number): Promise<boolean> => {
+export default async function isFavorite(userId: number, shantytownId: number): Promise<boolean> {
     const rows: { is_favorite: boolean }[] = await sequelize.query(
         `SELECT EXISTS(
             SELECT 1 FROM user_favorite_shantytowns
@@ -13,4 +13,4 @@ export default async (userId: number, shantytownId: number): Promise<boolean> =>
         },
     );
     return rows[0].is_favorite;
-};
+}
