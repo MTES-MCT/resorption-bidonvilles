@@ -68,7 +68,7 @@ describe('userService/sendInactiveUserAlerts', () => {
 
         try {
             await sendInactiveUserAlerts();
-        } catch (e) {
+        } catch {
             // expected error
         }
 

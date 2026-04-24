@@ -79,7 +79,7 @@ describe('userService/register', () => {
         try {
             await register(fakeContactBody());
             expect.fail('should have thrown an error');
-        } catch (e) {
+        } catch {
             // expected error
         }
 
