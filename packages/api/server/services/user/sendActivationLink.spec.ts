@@ -42,8 +42,11 @@ import sendActivationLink from './sendActivationLink';
 rewiremock.disable();
 
 describe('userService/sendActivationLink', () => {
+    let consoleErrorStub;
     let transaction;
+
     beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
         transaction = {
             commit: sandbox.stub(),
             rollback: sandbox.stub(),
@@ -52,6 +55,7 @@ describe('userService/sendActivationLink', () => {
     });
 
     afterEach(() => {
+        consoleErrorStub.restore();
         sandbox.reset();
     });
 
