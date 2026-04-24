@@ -30,7 +30,14 @@ import reportService from './report';
 rewiremock.disable();
 
 describe('shantytownService.report()', () => {
+    let consoleErrorStub;
+
+    beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
+    });
+
     afterEach(() => {
+        consoleErrorStub.restore();
         sandbox.reset();
     });
 
@@ -70,14 +77,8 @@ describe('shantytownService.report()', () => {
     it('ne lève pas d\'exception si l\'accusé de réception du signalement n\'a pas pu être envoyé', async () => {
         userModel.getNationalAdmins.resolves([]);
         mails.sendConfirmationOfTownReporting.rejects(new Error());
-        try {
-            await reportService(townData, fakeUser());
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-
-            expect.fail('should not have thrown an error');
-        }
+        await reportService(townData, fakeUser());
+        // Si on arrive ici, c'est que l'exception n'a pas été lancée (ce qui est attendu)
     });
 
     it('renvoie une exception ServiceError \'sent_failed\' si le  service échoue à collecter les admins nationaux', async () => {
