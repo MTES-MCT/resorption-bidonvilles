@@ -65,7 +65,7 @@ describe('userService/sendActivationLink', () => {
     });
 
     it('crée un nouvel accès pour l\'utilisateur', async () => {
-        const clock = sinon.useFakeTimers(new Date().getTime());
+        const clock = sinon.useFakeTimers(Date.now());
 
         const activator = fakeUser({ id: 42 });
         const user = fakeUser({ id: 1 });
