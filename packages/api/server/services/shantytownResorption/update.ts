@@ -9,8 +9,41 @@ function convertCompletedAt(timestamp: number | null): string | null {
     return new Date(timestamp * 1000).toISOString();
 }
 
+function createPhaseEntry(phaseId: string, completedAt: number | null): SimplifiedPhase {
+    return {
+        preparatoryPhaseId: phaseId,
+        completedAt,
+    };
+}
+
+function createModifiedPhaseEntry(phaseId: string, oldCompletedAt: number | null, newCompletedAt: number | null) {
+    return {
+        preparatoryPhaseId: phaseId,
+        oldCompletedAt: convertCompletedAt(oldCompletedAt),
+        newCompletedAt: convertCompletedAt(newCompletedAt),
+    };
+}
+
+function findAddedPhases(existingMap: Map<string, number | null>, updatedMap: Map<string, number | null>) {
+    return Array.from(updatedMap.entries())
+        .filter(([phaseId]) => !existingMap.has(phaseId))
+        .map(([phaseId, completedAt]) => createPhaseEntry(phaseId, completedAt));
+}
+
+function findRemovedPhases(existingMap: Map<string, number | null>, updatedMap: Map<string, number | null>) {
+    return Array.from(existingMap.entries())
+        .filter(([phaseId]) => !updatedMap.has(phaseId))
+        .map(([phaseId, completedAt]) => createPhaseEntry(phaseId, completedAt));
+}
+
+function findModifiedPhases(existingMap: Map<string, number | null>, updatedMap: Map<string, number | null>) {
+    return Array.from(updatedMap.entries())
+        .filter(([phaseId]) => existingMap.has(phaseId))
+        .filter(([phaseId, newCompletedAt]) => existingMap.get(phaseId) !== newCompletedAt)
+        .map(([phaseId, newCompletedAt]) => createModifiedPhaseEntry(phaseId, existingMap.get(phaseId), newCompletedAt));
+}
+
 function comparePreparatoryPhases(existing: SimplifiedPhase[], updated: SimplifiedPhase[]): Differences {
-    // Convertir les tableaux en Map pour une comparaison plus facile
     const existingMap = new Map(
         existing.map(phase => [phase.preparatoryPhaseId, phase.completedAt]),
     );
@@ -19,48 +52,84 @@ function comparePreparatoryPhases(existing: SimplifiedPhase[], updated: Simplifi
         updated.map(phase => [phase.preparatoryPhaseId, phase.completedAt]),
     );
 
-    const differences = {
-        addedPhases: [],
-        removedPhases: [],
-        modifiedPhases: [],
+    return {
+        addedPhases: findAddedPhases(existingMap, updatedMap),
+        removedPhases: findRemovedPhases(existingMap, updatedMap),
+        modifiedPhases: findModifiedPhases(existingMap, updatedMap),
     };
+}
 
-    // Vérifier les phases ajoutées
-    for (const [phaseId, completedAt] of updatedMap) {
-        if (!existingMap.has(phaseId)) {
-            differences.addedPhases.push({
-                preparatoryPhaseId: phaseId,
-                completedAt: completedAt === null ? null : convertCompletedAt(completedAt),
-            });
-        }
+function createAddedPhasesPromises(
+    addedPhases: SimplifiedPhase[],
+    shantytownId: string,
+    userId: number,
+    transaction: Transaction,
+) {
+    return addedPhases.map(data => shantytownPreparatoryPhasesTowardResorptionModel.create(
+        {
+            fk_shantytown: Number.parseInt(shantytownId, 10),
+            fk_preparatory_phase: data.preparatoryPhaseId,
+            created_by: userId,
+            completed_at: data.completedAt,
+        },
+        transaction,
+    ));
+}
+
+function createRemovedPhasesPromises(
+    removedPhases: SimplifiedPhase[],
+    shantytownId: string,
+    transaction: Transaction,
+) {
+    return removedPhases.map(data => shantytownPreparatoryPhasesTowardResorptionModel.delete(
+        {
+            fk_shantytown: Number.parseInt(shantytownId, 10),
+            fk_preparatory_phase: data.preparatoryPhaseId,
+        },
+        transaction,
+    ));
+}
+
+function createModifiedPhasesPromises(
+    modifiedPhases: Differences['modifiedPhases'],
+    shantytownId: string,
+    transaction: Transaction,
+) {
+    return modifiedPhases.map(data => shantytownPreparatoryPhasesTowardResorptionModel.update(
+        {
+            shantytownId: Number.parseInt(shantytownId, 10),
+            preparatoryPhaseId: data.preparatoryPhaseId,
+            completedAt: data.newCompletedAt,
+        },
+        transaction,
+    ));
+}
+
+function extractExistingPhases(result): SimplifiedPhase[] {
+    if (!result) {
+        return [];
     }
+    return result[0].preparatoryPhases.map(phase => ({
+        preparatoryPhaseId: phase.preparatoryPhaseId,
+        completedAt: phase.completedAt,
+    }));
+}
 
-    // Vérifier les phases supprimées
-    for (const [phaseId, completedAt] of existingMap) {
-        if (!updatedMap.has(phaseId)) {
-            differences.removedPhases.push({
-                preparatoryPhaseId: phaseId,
-                completedAt: completedAt === null ? null : convertCompletedAt(completedAt),
-            });
-        }
-    }
+function buildUpdatedPhases(preparatoryPhasesTowardResorption, terminatedPreparatoryPhasesTowardResorption): SimplifiedPhase[] {
+    return preparatoryPhasesTowardResorption.map(phase => ({
+        preparatoryPhaseId: phase,
+        completedAt: terminatedPreparatoryPhasesTowardResorption[phase]
+            ? new Date(terminatedPreparatoryPhasesTowardResorption[phase]).getTime() / 1000
+            : null,
+    }));
+}
 
-
-    // Vérifier les phases modifiées
-    for (const [phaseId, completedAt] of updatedMap) {
-        if (existingMap.has(phaseId)) {
-            const existingCompletedAt = existingMap.get(phaseId);
-            if (existingCompletedAt !== completedAt) {
-                differences.modifiedPhases.push({
-                    preparatoryPhaseId: phaseId,
-                    oldCompletedAt: existingCompletedAt === null ? null : convertCompletedAt(existingCompletedAt),
-                    newCompletedAt: completedAt === null ? null : convertCompletedAt(completedAt),
-                });
-            }
-        }
-    }
-
-    return differences;
+function createAllPromises(differences: Differences, shantytownId: string, userId: number, transaction: Transaction) {
+    return [
+        ...createAddedPhasesPromises(differences.addedPhases, shantytownId, userId, transaction),
+        ...createRemovedPhasesPromises(differences.removedPhases, shantytownId, transaction),
+        ...createModifiedPhasesPromises(differences.modifiedPhases, shantytownId, transaction),
+    ];
 }
 
 export default async function update(shantytownId: string, preparatoryPhasesTowardResorption, terminatedPreparatoryPhasesTowardResorption, user, argTransaction: Transaction = undefined) {
@@ -70,67 +139,13 @@ export default async function update(shantytownId: string, preparatoryPhasesTowa
     try {
         const result = await shantytownPreparatoryPhasesTowardResorptionModel.find(user, [shantytownId], transaction);
 
-        let existingPreparatoryPhasesTowardResorption = [];
-        if (result) {
-            existingPreparatoryPhasesTowardResorption = result[0].preparatoryPhases.map(phase => ({
-                preparatoryPhaseId: phase.preparatoryPhaseId,
-                completedAt: phase.completedAt,
-            }));
-        }
+        const existingPhases = extractExistingPhases(result);
+        const updatedPhases = buildUpdatedPhases(preparatoryPhasesTowardResorption, terminatedPreparatoryPhasesTowardResorption);
+        const differences = comparePreparatoryPhases(existingPhases, updatedPhases);
 
-        const updatedPreparatoryPhasesTowardResorption = preparatoryPhasesTowardResorption.map(phase => ({
-            preparatoryPhaseId: phase,
-            completedAt: terminatedPreparatoryPhasesTowardResorption[phase]
-                ? new Date(terminatedPreparatoryPhasesTowardResorption[phase]).getTime() / 1000
-                : null,
-        }));
+        const promises = createAllPromises(differences, shantytownId, user.id, transaction);
 
-        const differences = comparePreparatoryPhases(
-            existingPreparatoryPhasesTowardResorption,
-            updatedPreparatoryPhasesTowardResorption,
-        );
-
-        const promises = [];
-        if (differences.addedPhases.length > 0) {
-            differences.addedPhases.forEach(async (data) => {
-                promises.push(shantytownPreparatoryPhasesTowardResorptionModel.create(
-                    {
-                        fk_shantytown: Number.parseInt(shantytownId, 10),
-                        fk_preparatory_phase: data.preparatoryPhaseId,
-                        created_by: user.id,
-                        completed_at: data.completedAt,
-                    },
-                    transaction,
-                ));
-            });
-        }
-
-        if (differences.removedPhases.length > 0) {
-            differences.removedPhases.forEach(async (data) => {
-                promises.push(shantytownPreparatoryPhasesTowardResorptionModel.delete(
-                    {
-                        fk_shantytown: Number.parseInt(shantytownId, 10),
-                        fk_preparatory_phase: data.preparatoryPhaseId,
-                    },
-                    transaction,
-                ));
-            });
-        }
-
-        if (differences.modifiedPhases.length > 0) {
-            differences.modifiedPhases.forEach(async (data) => {
-                promises.push(shantytownPreparatoryPhasesTowardResorptionModel.update(
-                    {
-                        shantytownId: Number.parseInt(shantytownId, 10),
-                        preparatoryPhaseId: data.preparatoryPhaseId,
-                        completedAt: data.newCompletedAt,
-                    },
-                    transaction,
-                ));
-            });
-        }
-
-        if (promises.length !== 0) {
+        if (promises.length > 0) {
             await Promise.all(promises);
         }
 
