@@ -38,7 +38,7 @@ async function deactivateUserWithTransaction(id: number, anonymizationRequested:
     try {
         const updatedUsers = await userModel.deactivate([id], 'admin', anonymizationRequested, transaction);
 
-        if (!updatedUsers || updatedUsers.length !== 1) {
+        if (updatedUsers?.length !== 1) {
             throw new Error('Erreur de mise à jour');
         }
 
@@ -113,15 +113,15 @@ const onboardingJob = [
     'user_share',
 ];
 
-export default async (id: number, selfDeactivation: boolean, author: User, reason: string = null, anonymizationRequested: boolean = false): Promise<User> => {
+export default async function deactivate(id: number, selfDeactivation: boolean, author: User, reason: string = null, anonymizationRequested: boolean = false): Promise<User> {
     if (!can(author).do('deactivate', 'user')) {
-        throw new ServiceError('deactivation_permission_failure', Error('Erreur de permission'));
+        throw new ServiceError('deactivation_permission_failure', new Error('Erreur de permission'));
     }
     let user: User;
     try {
         user = await findAndValidateUser(id);
     } catch (e) {
-        throw new ServiceError('user_search_failure', Error(e.message));
+        throw new ServiceError('user_search_failure', new Error(e.message));
     }
     const updatedUser = await deactivateUserWithTransaction(id, anonymizationRequested, user);
 
@@ -137,4 +137,4 @@ export default async (id: number, selfDeactivation: boolean, author: User, reaso
         }
     }));
     return updatedUser;
-};
+}
