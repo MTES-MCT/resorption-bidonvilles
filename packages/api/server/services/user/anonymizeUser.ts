@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 import userModel from '#server/models/userModel/index';
 import ServiceError from '#server/errors/ServiceError';
 
-export default async () => {
+export default async function anonymizeUser() {
     const transaction = await sequelize.transaction();
     try {
         await userModel.anonymizeUser(transaction);
@@ -12,4 +12,4 @@ export default async () => {
         throw new ServiceError('anonymization_failure', error);
     }
     return true;
-};
+}
