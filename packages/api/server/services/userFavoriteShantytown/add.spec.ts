@@ -5,6 +5,7 @@ import { rewiremock } from '#test/rewiremock';
 
 import { serialized as fakeUser } from '#test/utils/user';
 import ServiceError from '#server/errors/ServiceError';
+import { createTestSetup } from '#test/utils/testSetup';
 import { expectVoidReturn, testForbiddenRolesPermissions } from './testHelpers.spec';
 
 const { expect } = chai;
@@ -26,15 +27,15 @@ rewiremock.disable();
 
 describe('services/userFavoriteShantytown', () => {
     describe('add()', () => {
-        let consoleErrorStub;
+        const { setupConsoleErrorStub, restoreConsoleErrorStub } = createTestSetup(sandbox);
         const shantytownId = 42;
 
         beforeEach(() => {
-            consoleErrorStub = sandbox.stub(console, 'error');
+            setupConsoleErrorStub();
         });
 
         afterEach(() => {
-            consoleErrorStub.restore();
+            restoreConsoleErrorStub();
             sandbox.reset();
         });
 
