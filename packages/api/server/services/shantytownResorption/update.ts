@@ -63,7 +63,7 @@ function comparePreparatoryPhases(existing: SimplifiedPhase[], updated: Simplifi
     return differences;
 }
 
-export default async (shantytownId: string, preparatoryPhasesTowardResorption, terminatedPreparatoryPhasesTowardResorption, user, argTransaction: Transaction = undefined) => {
+export default async function update(shantytownId: string, preparatoryPhasesTowardResorption, terminatedPreparatoryPhasesTowardResorption, user, argTransaction: Transaction = undefined) {
     let transaction: Transaction = argTransaction;
     transaction ??= await sequelize.transaction();
 
@@ -95,7 +95,7 @@ export default async (shantytownId: string, preparatoryPhasesTowardResorption, t
             differences.addedPhases.forEach(async (data) => {
                 promises.push(shantytownPreparatoryPhasesTowardResorptionModel.create(
                     {
-                        fk_shantytown: parseInt(shantytownId, 10),
+                        fk_shantytown: Number.parseInt(shantytownId, 10),
                         fk_preparatory_phase: data.preparatoryPhaseId,
                         created_by: user.id,
                         completed_at: data.completedAt,
@@ -109,7 +109,7 @@ export default async (shantytownId: string, preparatoryPhasesTowardResorption, t
             differences.removedPhases.forEach(async (data) => {
                 promises.push(shantytownPreparatoryPhasesTowardResorptionModel.delete(
                     {
-                        fk_shantytown: parseInt(shantytownId, 10),
+                        fk_shantytown: Number.parseInt(shantytownId, 10),
                         fk_preparatory_phase: data.preparatoryPhaseId,
                     },
                     transaction,
@@ -121,7 +121,7 @@ export default async (shantytownId: string, preparatoryPhasesTowardResorption, t
             differences.modifiedPhases.forEach(async (data) => {
                 promises.push(shantytownPreparatoryPhasesTowardResorptionModel.update(
                     {
-                        shantytownId: parseInt(shantytownId, 10),
+                        shantytownId: Number.parseInt(shantytownId, 10),
                         preparatoryPhaseId: data.preparatoryPhaseId,
                         completedAt: data.newCompletedAt,
                     },
@@ -143,4 +143,4 @@ export default async (shantytownId: string, preparatoryPhasesTowardResorption, t
         }
         throw error;
     }
-};
+}
