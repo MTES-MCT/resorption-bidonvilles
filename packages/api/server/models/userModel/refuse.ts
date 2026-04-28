@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { Transaction } from 'sequelize';
 
-export default async (id: number, transaction: Transaction = undefined): Promise<void> => {
+export default async function refuse(id: number, transaction: Transaction = undefined): Promise<void> {
     await sequelize.query(
         `UPDATE
                 users
@@ -18,4 +18,4 @@ export default async (id: number, transaction: Transaction = undefined): Promise
             transaction,
         },
     );
-};
+}
