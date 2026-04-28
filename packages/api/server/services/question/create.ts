@@ -17,7 +17,7 @@ type AuthorData = {
 
 const { testEmail } = config;
 
-export default async (question: QuestionInput, author: AuthorData, files: Express.Multer.File[]): Promise<EnrichedQuestion> => {
+export default async function create(question: QuestionInput, author: AuthorData, files: Express.Multer.File[]): Promise<EnrichedQuestion> {
     const transaction = await sequelize.transaction();
     let questionId: number;
 
@@ -87,4 +87,4 @@ export default async (question: QuestionInput, author: AuthorData, files: Expres
     }
 
     return enrichedQuestion;
-};
+}
