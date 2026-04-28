@@ -36,9 +36,9 @@
                     <p>
                         La mission Résorption des bidonvilles accompagne les territoires concernés dans la mise en œuvre de stratégies locales adaptées à leurs réalités. Elle pilote également l’enveloppe nationale de crédits dédiée à cette politique publique, afin de soutenir chaque année les actions menées sur le terrain et d’apporter un appui technique aux acteurs locaux.
                     </p>
-                    <a :href="BLOG_URL" target="_blank" class="text-blue-600 mt-4 mb-10 inline-block place-self-center">
+                    <!-- <a :href="BLOG_URL" target="_blank" class="text-blue-600 mt-4 mb-10 inline-block place-self-center">
                         En savoir plus sur notre Blog
-                    </a>
+                    </a> -->
                     <h4>L’outil numérique Résorption-bidonvilles au service de l’action publique</h4>
                     <p>
                         Afin de soutenir la mise en œuvre des stratégies territoriales, l’outil numérique Résorption-bidonvilles constitue un appui opérationnel au pilotage local et national de la politique publique. Il vise à renforcer la coordination entre les acteurs, fiabiliser la connaissance des situations et améliorer le suivi des actions engagées.
