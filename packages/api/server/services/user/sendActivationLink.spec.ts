@@ -149,9 +149,7 @@ describe('userService/sendActivationLink', () => {
 
         try {
             await sendActivationLink(fakeUser({ id: 42 }), fakeUser({ id: 1 }), [], transaction);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.not.have.been.called;
             return;
         }
