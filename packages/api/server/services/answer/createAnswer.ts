@@ -23,7 +23,7 @@ export type CreateAnswerServiceResponse = {
     subscribed: boolean,
 };
 
-export default async (answer: AnswerData, question: EnrichedQuestion, author: User, files: Express.Multer.File[]): Promise<CreateAnswerServiceResponse> => {
+export default async function createAnswer(answer: AnswerData, question: EnrichedQuestion, author: User, files: Express.Multer.File[]): Promise<CreateAnswerServiceResponse> {
     // on démarre une transaction
     const transaction = await sequelize.transaction();
 
@@ -129,4 +129,4 @@ export default async (answer: AnswerData, question: EnrichedQuestion, author: Us
         answer: enrichedAnswer,
         subscribed,
     };
-};
+}
