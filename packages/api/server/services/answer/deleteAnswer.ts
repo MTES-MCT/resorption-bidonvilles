@@ -26,7 +26,7 @@ export default async function deleteAnswerService(question: EnrichedQuestion, an
 
         try {
             const fullUser = await userModel.findOne(answer.createdBy.id);
-            if (fullUser === null || fullUser.status !== 'active') {
+            if (fullUser?.status !== 'active') {
                 return;
             }
 
