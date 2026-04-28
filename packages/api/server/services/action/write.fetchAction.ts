@@ -15,11 +15,11 @@ async function fetchActions(user: User, actionId: number, canAccessFinances: boo
     );
 }
 
-export default async (user: User, actionId: number, canAccessFinances: boolean, transaction: Transaction): Promise<EnrichedAction> => {
+export default async function fetchAction(user: User, actionId: number, canAccessFinances: boolean, transaction: Transaction): Promise<EnrichedAction> {
     const actions = await fetchActions(user, actionId, canAccessFinances, transaction);
 
     if (actions.length !== 1) {
-        throw new ServiceError('action_not_found', Error('Action could not be found in database'));
+        throw new ServiceError('action_not_found', new Error('Action could not be found in database'));
     }
 
 
@@ -32,7 +32,7 @@ export default async (user: User, actionId: number, canAccessFinances: boolean, 
         };
     }));
     if (actions.length !== 1) {
-        throw new ServiceError('action_not_found', Error('Action could not be found in database'));
+        throw new ServiceError('action_not_found', new Error('Action could not be found in database'));
     }
     return enrichedActions[0];
-};
+}
