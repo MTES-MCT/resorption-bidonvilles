@@ -122,6 +122,75 @@ function processRowForPeriod(
     incrementMetrics(departementMetrics, row, period, includeWater);
 }
 
+const OUTREMER_REGION_CODES = ['01', '02', '03', '04', '06'];
+
+function isOutremerRegion(regionCode: string): boolean {
+    return OUTREMER_REGION_CODES.includes(regionCode);
+}
+
+function buildChildrenHierarchy(
+    franceData: NationMetrics,
+    metropoleData: NationMetrics,
+    outremerData: NationMetrics,
+    regionData: NationMetrics[],
+) {
+    franceData.children = regionData.map((regionMetric) => {
+        if (isOutremerRegion(regionMetric.uid)) {
+            return regionMetric.children[0];
+        }
+        return regionMetric;
+    });
+
+    metropoleData.children = regionData.filter(el => !isOutremerRegion(el.uid));
+    outremerData.children = regionData
+        .filter(el => isOutremerRegion(el.uid))
+        .map(regionMetric => regionMetric.children[0]);
+}
+
+function getUserRegionCodes(user: User): string[] {
+    return Object.keys(user.permissions.shantytown.list.allowed_on)
+        .flatMap(key => user.permissions.shantytown.list.allowed_on[key].reduce((acc, location) => {
+            if (location.region?.code) {
+                acc.push(location.region.code);
+            }
+            return acc;
+        }, []));
+}
+
+function determineUserTerritoryAccess(user: User): { hasMetropole: boolean; hasOutremer: boolean } {
+    if (user.permissions.shantytown.list.allowed_on_national) {
+        return { hasMetropole: true, hasOutremer: true };
+    }
+
+    const regionCodes = getUserRegionCodes(user);
+    return {
+        hasOutremer: regionCodes.some(code => isOutremerRegion(code)),
+        hasMetropole: regionCodes.some(code => !isOutremerRegion(code)),
+    };
+}
+
+function filterMetricsByPermissions(
+    franceData: NationMetrics,
+    metropoleData: NationMetrics,
+    outremerData: NationMetrics,
+    hasMetropole: boolean,
+    hasOutremer: boolean,
+): NationMetricsList {
+    if (hasMetropole && hasOutremer) {
+        return [franceData, metropoleData, outremerData];
+    }
+
+    if (hasMetropole) {
+        return metropoleData.children;
+    }
+
+    if (hasOutremer) {
+        return outremerData.children;
+    }
+
+    return [];
+}
+
 export default async function getNationMetrics(user: User, argFrom: Date, argTo: Date): Promise<NationMetricsList> {
     const franceData = baseMetrics('nation', 'france', 'France entière');
     const metropoleData = baseMetrics('nation', 'metropole', 'Hexagone');
@@ -174,51 +243,9 @@ export default async function getNationMetrics(user: User, argFrom: Date, argTo:
 
     const regionData = Object.values(hashRegions);
 
-    franceData.children = regionData.map((regionMetric) => {
-        if (['01', '02', '03', '04', '06'].includes(regionMetric.uid)) {
-            // on supprime le niveau régional pour les départements outremer
-            return regionMetric.children[0];
-        }
-        return regionMetric;
-    });
-    metropoleData.children = regionData.filter(el => !['01', '02', '03', '04', '06'].includes(el.uid));
-    // on supprime le niveau régional pour les départements outremer
-    outremerData.children = regionData.filter(el => ['01', '02', '03', '04', '06'].includes(el.uid)).map(regionMetric => regionMetric.children[0]);
+    buildChildrenHierarchy(franceData, metropoleData, outremerData, regionData);
 
-    // on fait le tri des lignes qu'il faut renvoyer à l'utilisateur, pour éviter de
-    // lui renvoyer des lignes vides juste parce qu'il n'a pas les permissions d'accès
-    // aux territoires considérés
-    // (typiquement, on ne veut pas renvoyer une ligne "Outremer" aux utilisateurs métropolitains, et
-    // inversement)
-    let hasMetropole = true;
-    let hasOutremer = true;
-    if (!user.permissions.shantytown.list.allowed_on_national) {
-        const regionCodes = Object.keys(user.permissions.shantytown.list.allowed_on)
-            .flatMap(key => user.permissions.shantytown.list.allowed_on[key].reduce((acc, location) => {
-                if (!location.region?.code) {
-                    return acc;
-                }
+    const { hasMetropole, hasOutremer } = determineUserTerritoryAccess(user);
 
-                acc.push(location.region.code);
-                return acc;
-            }, []));
-
-        hasOutremer = regionCodes.some(code => ['01', '02', '03', '04', '06'].includes(code));
-        hasMetropole = regionCodes.some(code => !['01', '02', '03', '04', '06'].includes(code));
-    }
-
-    // on retourne le résultat, bien filtré
-    if (hasMetropole && hasOutremer) {
-        return [franceData, metropoleData, outremerData];
-    }
-
-    if (hasMetropole) {
-        return metropoleData.children;
-    }
-
-    if (hasOutremer) {
-        return outremerData.children;
-    }
-
-    return [];
+    return filterMetricsByPermissions(franceData, metropoleData, outremerData, hasMetropole, hasOutremer);
 }
