@@ -2,7 +2,7 @@ import { ActionSelectRow } from '#server/models/actionModel/fetchByShantytown/fe
 import { FinancedShantytownAction } from '#root/types/resources/Action.d';
 
 
-export default (actions: ActionSelectRow[]): FinancedShantytownAction[] => {
+export default function enrichShantytown(actions: ActionSelectRow[]): FinancedShantytownAction[] {
     const shantytownMap = actions.reduce((acc, action) => {
         acc[action.shantytown_id] ??= {
             shantytown_id: action.shantytown_id,
@@ -12,4 +12,4 @@ export default (actions: ActionSelectRow[]): FinancedShantytownAction[] => {
     }, {});
 
     return Object.values(shantytownMap);
-};
+}
