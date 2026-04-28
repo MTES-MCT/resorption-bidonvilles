@@ -14,7 +14,7 @@ import {
 
 const { getPermission } = permissionUtils;
 
-export default async (where: Where | string = [], filters: UserQueryFilters = {}, user: User = null, feature: string = undefined, transaction: Transaction = undefined): Promise<User[]> => {
+export default async function query(where: Where | string = [], filters: UserQueryFilters = {}, user: User = null, feature: string = undefined, transaction: Transaction = undefined): Promise<User[]> {
     const replacements = {};
 
     const strWhere = typeof where === 'string' ? where : '';
@@ -50,7 +50,7 @@ export default async (where: Where | string = [], filters: UserQueryFilters = {}
 
     const finalArrWhere = arrWhere.map((clauses, index) => {
         const clauseGroup = Object.keys(clauses).map((column) => {
-            replacements[`${column}${index}`] = clauses[column].value !== undefined ? clauses[column].value : clauses[column];
+            replacements[`${column}${index}`] = clauses[column].value ?? clauses[column];
             if (clauses[column].anyOperator !== undefined) {
                 const clause = `(:${column}${index}) ${clauses[column].anyOperator} ANY(${clauses[column].query || `users.${column}`})`;
                 if (clauses[column].not === true) {
@@ -254,7 +254,7 @@ export default async (where: Where | string = [], filters: UserQueryFilters = {}
     });
 
     const hashInterventionAreas = interventionAreas.reduce((acc, row) => {
-        const key = row.fk_user !== null ? 'users' : 'organizations';
+        const key = row.fk_user === null ? 'organizations' : 'users';
         const id = row.fk_user ?? row.fk_organization;
         acc[key][id] ??= [];
 
@@ -294,10 +294,10 @@ export default async (where: Where | string = [], filters: UserQueryFilters = {}
         hashedUserAccesses[row.id] || [],
         mergeAreas(
             hashInterventionAreas.users[row.id] || [],
-            row.use_custom_intervention_area !== true ? hashInterventionAreas.organizations[row.organization_id] || [] : [],
+            row.use_custom_intervention_area === true ? [] : hashInterventionAreas.organizations[row.organization_id] || [],
         ),
         latestCharte,
         filters,
         permissionMap,
     ));
-};
+}
