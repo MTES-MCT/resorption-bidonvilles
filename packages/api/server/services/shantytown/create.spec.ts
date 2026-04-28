@@ -68,11 +68,11 @@ describe('services/shantytown', () => {
         const watchers = [{ user_id: 10 }, { user_id: 11 }, { user_id: 12 }];
 
         beforeEach(() => {
-            shantytownId = global.generate('string');
+            shantytownId = globalThis.generate('string');
             fakeUserData = fakeUser();
             fakeUserData.isAllowedTo = sandbox.stub();
             townData = fakeShantytown();
-            social_origins = global.generate('string');
+            social_origins = globalThis.generate('string');
             town = {
                 shantytownId,
                 city: {
