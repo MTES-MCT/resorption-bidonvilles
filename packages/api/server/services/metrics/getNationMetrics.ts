@@ -122,10 +122,10 @@ function processRowForPeriod(
     incrementMetrics(departementMetrics, row, period, includeWater);
 }
 
-const OUTREMER_REGION_CODES = ['01', '02', '03', '04', '06'];
+const OUTREMER_REGION_CODES = new Set(['01', '02', '03', '04', '06']);
 
 function isOutremerRegion(regionCode: string): boolean {
-    return OUTREMER_REGION_CODES.includes(regionCode);
+    return OUTREMER_REGION_CODES.has(regionCode);
 }
 
 function buildChildrenHierarchy(
