@@ -117,7 +117,7 @@ describe('services/action.deleteComment()', () => {
     });
 
     it('renvoie une exception ServiceError \'fetch_failed\' si le site correspondant au commentaire n\'existe pas en bdd', async () => {
-        stubs.fetchAction.rejects(new Error());
+        stubs.fetchAction.rejects(new Error('le site correspondant au commentaire n\'existe pas en bdd'));
         let responseError;
         try {
             await deleteActionComment(user, fakeAction().id, 1, deletionMessage);
@@ -140,7 +140,7 @@ describe('services/action.deleteComment()', () => {
     });
 
     it('renvoie une exception ServiceError \'fetch_failed\' si l\'auteur du commentaire n\'existe pas en bdd', async () => {
-        stubs.userModel.findOne.rejects(new Error());
+        stubs.userModel.findOne.rejects(new Error('l\'auteur du commentaire n\'existe pas en bdd'));
         let responseError;
         try {
             await deleteActionComment(user, fakeAction().id, 0, deletionMessage);
@@ -184,7 +184,7 @@ describe('services/action.deleteComment()', () => {
 
     it('renvoie une exception ServiceError \'delete_failed\' si le modèle deleteComment échoue', async () => {
         stubs.on.returns(true);
-        stubs.deleteComment.rejects(new Error());
+        stubs.deleteComment.rejects(new Error('Impossible de supprimer le commentaire'));
         let responseError;
         try {
             await deleteActionComment(user, fakeAction().id, 1, deletionMessage);
