@@ -61,7 +61,7 @@ describe('services/shantytown', () => {
             expect(shantytownsResponse).to.be.eql(towns);
         });
         it('renvoie une exception ServiceError \'fetch_failed\' si le modèle échoue à renvoyer les sites', async () => {
-            stubs.shantytownModel.findAll.rejects(new Error());
+            stubs.shantytownModel.findAll.rejects(new Error('fetch failed'));
             let responseError;
             try {
                 await listService(user);
