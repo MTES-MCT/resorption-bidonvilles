@@ -1,6 +1,6 @@
 import axios from 'axios';
 import FormData from 'form-data';
-import { Readable } from 'stream';
+import { Readable } from 'node:stream';
 import CONFIG from '#server/config';
 import scanAttachmentErrors from './scanAttachmentErrors';
 
@@ -9,12 +9,11 @@ export type ClamAVResponse = {
     message: string;
 };
 
-export default async (file: Express.Multer.File): Promise<ClamAVResponse> => {
+export default async function scanAttachment(file: Express.Multer.File): Promise<ClamAVResponse> {
     try {
         const formData = new FormData();
         const bufferStream = new Readable();
-        bufferStream.push(file.buffer);
-        bufferStream.push(null);
+        bufferStream.push(file.buffer, null);
 
         formData.append('file', bufferStream, {
             filename: file.originalname,
@@ -48,4 +47,4 @@ export default async (file: Express.Multer.File): Promise<ClamAVResponse> => {
             message: 'undefined',
         };
     }
-};
+}
