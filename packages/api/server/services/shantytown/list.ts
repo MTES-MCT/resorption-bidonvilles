@@ -1,13 +1,13 @@
 import shantytownModel from '#server/models/shantytownModel';
 import ServiceError from '#server/errors/ServiceError';
-import shantytownDecree from '#server/services/shantytownDecree/findAll';
+import shantytownDecreeFindAll from '#server/services/shantytownDecree/findAll';
 import { ShantytownDecree } from '#server/models/shantytownDecreeModel/shantytownDecrees.d';
 import serializeAttachment from '#server/services/attachment/serializeAttachment';
 import can from '#server/utils/permission/can';
 import { Attachment } from '../attachment/Attachment';
 
-export default async (user, search = undefined) => {
-    const filters = search !== undefined ? [
+export default async function list(user, search = undefined) {
+    const filters = search === undefined ? [] : [
         {
             name: {
                 operator: 'ILIKE',
@@ -18,7 +18,7 @@ export default async (user, search = undefined) => {
                 value: `%${search}%`,
             },
         },
-    ] : [];
+    ];
     let shantytowns;
     try {
         shantytowns = await shantytownModel.findAll(
@@ -28,7 +28,7 @@ export default async (user, search = undefined) => {
         );
 
         if (can(user).do('access', 'shantytown_justice').on(shantytowns)) {
-            const decrees: ShantytownDecree[] = await shantytownDecree(user, shantytowns.map(town => town.id));
+            const decrees: ShantytownDecree[] = await shantytownDecreeFindAll(shantytowns.map(town => town.id));
 
             shantytowns = await Promise.all(shantytowns.map(async (shantytown) => {
                 const updatedShantytown = { ...shantytown };
@@ -55,4 +55,4 @@ export default async (user, search = undefined) => {
     }
 
     return shantytowns;
-};
+}
