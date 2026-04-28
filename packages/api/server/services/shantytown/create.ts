@@ -14,7 +14,7 @@ import mails from '#server/mails/mails';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { TownInput } from './_common/serializeReport';
 
-export default async (townData: TownInput, user: AuthUser) => {
+export default async function create(townData: TownInput, user: AuthUser) {
     const baseTown = baseShantytown(townData, user);
 
     const transaction = await sequelize.transaction();
@@ -142,4 +142,4 @@ export default async (townData: TownInput, user: AuthUser) => {
         });
 
     return town;
-};
+}
