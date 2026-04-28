@@ -6,7 +6,7 @@ export type ActionCommentInsertionRow = {
     created_by: number,
 };
 
-export default async (actionId: number, comment: ActionCommentInsertionRow, transaction?: Transaction): Promise<number> => {
+export default async function createComment(actionId: number, comment: ActionCommentInsertionRow, transaction?: Transaction): Promise<number> {
     const data = await sequelize.query(
         `INSERT INTO action_comments(fk_action, description, created_by)
         VALUES (:actionId, :description, :created_by)
@@ -25,4 +25,4 @@ export default async (actionId: number, comment: ActionCommentInsertionRow, tran
     const rows: ReturnValue[] = (data[0] as unknown) as ReturnValue[];
 
     return rows[0].action_comment_id;
-};
+}
