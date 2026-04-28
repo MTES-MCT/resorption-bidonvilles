@@ -1,6 +1,6 @@
 import { S3 } from '#server/utils/s3';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { getSignedUrl as getSignedUrlFromS3 } from '@aws-sdk/s3-request-presigner';
 import config from '#server/config';
 
 const {
@@ -9,7 +9,7 @@ const {
 
 const expiresIn: number = Number(expirationTime);
 
-export default async (key: string): Promise<string> => {
+export default async function getSignedUrl(key: string): Promise<string> {
     const bucketParams = {
         Bucket: bucket,
         Key: key,
@@ -17,11 +17,11 @@ export default async (key: string): Promise<string> => {
 
     try {
         const command = new GetObjectCommand(bucketParams);
-        const url = await getSignedUrl(S3, command, { expiresIn });
+        const url = await getSignedUrlFromS3(S3, command, { expiresIn });
         return url;
     } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
         throw new Error('Could not generate presigned URL');
     }
-};
+}
