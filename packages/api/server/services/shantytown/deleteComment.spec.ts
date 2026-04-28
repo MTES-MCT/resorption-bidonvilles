@@ -119,7 +119,7 @@ describe('services/shantytown', () => {
         });
 
         it('renvoie une exception ServiceError \'fetch_failed\' si le site correspondant au commentaire n\'existe pas en bdd', async () => {
-            stubs.shantytownModel.findOne.rejects(new Error());
+            stubs.shantytownModel.findOne.rejects(new Error('le site correspondant au commentaire n\'existe pas en bdd'));
             let responseError;
             try {
                 await deleteCommentService(user, shantytownId, commentId, deletionMessage);
@@ -140,7 +140,7 @@ describe('services/shantytown', () => {
             expect(responseError.code).to.be.eql('fetch_failed');
         });
         it('renvoie une exception ServiceError \'fetch_failed\' si l\'auteur du commentaire n\'existe pas en bdd', async () => {
-            stubs.userModel.findOne.rejects(new Error());
+            stubs.userModel.findOne.rejects(new Error('l\'auteur du commentaire n\'existe pas en bdd'));
             let responseError;
             try {
                 await deleteCommentService(user, shantytownId, 0, deletionMessage);
@@ -175,7 +175,7 @@ describe('services/shantytown', () => {
         });
         it('renvoie une exception ServiceError \'delete_failed\' si le modèle deleteComment échoue', async () => {
             stubs.on.returns(true);
-            stubs.shantytownCommentModel.deleteComment.rejects(new Error());
+            stubs.shantytownCommentModel.deleteComment.rejects(new Error('le modèle deleteComment échoue'));
             let responseError;
             try {
                 await deleteCommentService(user, shantytownId, 0, deletionMessage);
