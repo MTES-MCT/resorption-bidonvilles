@@ -6,7 +6,7 @@ import type { RawQuestion } from '#root/types/resources/QuestionRaw';
 import findOne from './findOne';
 
 
-export default async (data: UpdateQuestionInput): Promise<RawQuestion> => {
+export default async function updateModel(data: UpdateQuestionInput): Promise<RawQuestion> {
     const transaction = await sequelize.transaction();
     let updatedQuestion: RawQuestion;
     try {
@@ -16,7 +16,7 @@ export default async (data: UpdateQuestionInput): Promise<RawQuestion> => {
             people_affected = :people_affected,
             updated_at = NOW(),
             updated_by = :updated_by
-        WHERE question_id = :question_id`,
+            WHERE question_id = :question_id`,
             {
                 type: QueryTypes.UPDATE,
                 transaction,
@@ -43,4 +43,4 @@ export default async (data: UpdateQuestionInput): Promise<RawQuestion> => {
     await transaction.commit();
 
     return updatedQuestion;
-};
+}
