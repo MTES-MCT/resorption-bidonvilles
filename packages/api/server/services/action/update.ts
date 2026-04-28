@@ -8,7 +8,7 @@ import { User } from '#root/types/resources/User.d';
 import fetchAction from './write.fetchAction';
 import { ActionInput } from './ActionInput.d';
 
-export default async (action: Action, author: User, data: ActionInput): Promise<EnrichedAction> => {
+export default async function updateAction(action: Action, author: User, data: ActionInput): Promise<EnrichedAction> {
     const canWriteFinances = can(author).do('access', 'action_finances').on(action);
 
     const transaction = await sequelize.transaction();
@@ -37,4 +37,4 @@ export default async (action: Action, author: User, data: ActionInput): Promise<
 
         throw new ServiceError('action_fetch_error', error);
     }
-};
+}
