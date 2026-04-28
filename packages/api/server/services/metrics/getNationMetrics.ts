@@ -147,7 +147,7 @@ export default async function getNationMetrics(user: User, argFrom: Date, argTo:
 
     data.forEach((row, index) => {
         const inputDate = normalizeDateToMidnight(row.input_date);
-        const previousInputDate = index !== 0 ? normalizeDateToMidnight(data[index - 1].input_date) : null;
+        const previousInputDate = index === 0 ? null : normalizeDateToMidnight(data[index - 1].input_date);
         const knownSince = normalizeDateToMidnight(row.known_since);
 
         const isMostRecent = index === 0 || row.shantytown_id !== data[index - 1].shantytown_id;
