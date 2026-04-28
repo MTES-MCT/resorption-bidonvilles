@@ -8,7 +8,7 @@ import { RawAnswer } from '#root/types/resources/AnswerRaw.d';
 import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 import { User } from '#root/types/resources/User.d';
 
-export default async (question: EnrichedQuestion, answer: RawAnswer, reason?: string): Promise<void> => {
+export default async function deleteAnswerService(question: EnrichedQuestion, answer: RawAnswer, reason?: string): Promise<void> {
     try {
         await deleteAnswer(answer.id);
     } catch (error) {
@@ -44,4 +44,4 @@ export default async (question: EnrichedQuestion, answer: RawAnswer, reason?: st
             console.error(e);
         }
     }
-};
+}
